@@ -1,0 +1,109 @@
+'Scripting system menu demo script
+' v0.6
+' Andy T (andy@stealthbot.net) 2007-06-24
+' Project StealthBot
+'
+
+' Global variables
+'
+Public lMenuID
+Public lCommandID3
+Public lCommandID4
+Public lCommandID5
+Public Menu4CheckState ' (vbs does not support static variables)
+Public Menu5CheckState
+
+
+''''''''''''''''''''''''''''''''''''''''''''''''
+' SETUP METHOD
+''''''''''''''''''''''''''''''''''''''''''''''''
+Sub Event_Load()
+	' Let the fun begin!
+	'
+	lMenuID = RegisterScriptMenu("Test Script Menu")
+
+	
+	' First, a normal menu item
+	'
+	AddScriptMenuItem lMenuID, "Test Item 1", "MenuItem1_Click"
+
+	' Next, a menu item that's a separator
+	'
+	AddScriptMenuItem lMenuID, "Test Item 2", "MenuItem2_Click", True
+
+	' Third, a menu item that's grayed out so you can't click it
+	'
+	lCommandID3 = AddScriptMenuItem(lMenuID, "Test Item 3", "MenuItem3_Click", False, True)
+
+	' Fourth, a menu item with a toggleable checkmark (see its callback sub below for detail)
+	' Notice how I record lCommandID4 as the Command ID for this menu -- that's needed if we need to
+	'  toggle the checkmark on it later
+	'
+	lCommandID4 = AddScriptMenuItem(lMenuID, "Test Item 4", "MenuItem4_Click", False, False, True)
+	Menu4CheckState = True
+
+	' Fifth, a menu item that toggles whether or not Menu Item 3 is enabled
+	' This is a combination of all the features of the scripting menu system :)
+	'
+	lCommandID5 = AddScriptMenuItem(lMenuID, "Item 3 Enabled", "MenuItem5_Click")
+	Menu5CheckState = False
+
+	AddChat vbGreen, "Menu loaded!"
+	'
+End Sub
+
+
+''''''''''''''''''''''''''''''''''''''''''''''''
+' CALLBACK METHODS (specified earlier)
+''''''''''''''''''''''''''''''''''''''''''''''''
+Sub MenuItem1_Click()
+	AddChat vbGreen, "The user clicked on Menu Item 1."
+End Sub
+
+Sub MenuItem2_Click()
+	AddChat vbGreen, "The user clicked on Menu Item 2."
+End Sub
+
+Sub MenuItem3_Click()
+	AddChat vbGreen, "The user clicked on menu item 3."
+End Sub
+
+Sub MenuItem4_Click()
+	Dim PreviousCheckStatus
+	
+	' First, normal verification that the menu item was clicked on
+	'
+	AddChat vbGreen, "The user clicked on menu item 4."
+	
+	' Next, I set the check mark to the opposite of our recorded check state earlier
+	'
+	PreviousCheckStatus = SetMenuCheck(lMenuID, lCommandID4, Not Menu4CheckState)
+
+	' PreviousCheckStatus will contain a 1 if the menu WAS checked and is now unchecked,
+	'  a 0 if it was unchecked and is now checked, and -1 if something crazy happened.
+	'
+	If PreviousCheckStatus = 1 Then
+		AddChat vbGreen, "The menu was previously CHECKED and is now unchecked."
+	ElseIf PreviousCheckStatus = 0 Then
+		AddChat vbGreen, "The menu was previously UNCHECKED and is now checked."
+	Else
+		AddChat vbRed, "There was an error trying to toggle the checkmark on the menu with id " & lMenuID & ", command ID " & lCommandID4 & "!"
+	End If
+	
+	' Lastly, so I keep my control variable up to date, I toggle it to its opposite as well.
+	'
+	Menu4CheckState = Not Menu4CheckState
+End Sub
+
+Sub MenuItem5_Click()
+	' First, toggle the checkmark on this menu
+	'
+	SetMenuCheck lMenuID, lCommandID5, Not Menu5CheckState
+
+	' Next, toggle the enabled status of Menu 3
+	'
+	SetMenuEnabled lMenuID, lCommandID3, Not Menu5CheckState
+
+	' Finally, internal control variable maintenance
+	Menu5CheckState = Not Menu5CheckState
+End Sub
