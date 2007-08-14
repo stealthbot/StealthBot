@@ -1,0 +1,5 @@
+Line 19: Class MSComctlLib.ListView of control lvChannel was not a loaded control class.
+Line 47: Class MSComctlLib.ImageList of control imlIcons was not a loaded control class.
+Line 185: Class SubclassCtl.Subclass of control Subclass1 was not a loaded control class.
+Line 209: Class CleanSlateBotOCX.CleanSlateBot of control Access was not a loaded control class.
+Line 224: Class RichTextLib.RichTextBox of control rtbChat was not a loaded control class.

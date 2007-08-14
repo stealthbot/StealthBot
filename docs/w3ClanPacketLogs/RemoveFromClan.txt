@@ -1,0 +1,799 @@
+Frame 19 (71 bytes on wire, 71 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:43.073474000
+    Time delta from previous packet: 2.282250000 seconds
+    Time relative to first packet: 2.282250000 seconds
+    Frame Number: 19
+    Packet Length: 71 bytes
+    Capture Length: 71 bytes
+Ethernet II, Src: 00:e0:4c:9d:47:c7, Dst: 00:50:f2:73:74:28
+    Destination: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Source: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 192.168.2.27 (192.168.2.27), Dst Addr: 63.240.202.122 (63.240.202.122)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 57
+    Identification: 0xf528
+    Flags: 0x04
+        .1.. = Don't fragment: Set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 128
+    Protocol: TCP (0x06)
+    Header checksum: 0x3868 (correct)
+    Source: 192.168.2.27 (192.168.2.27)
+    Destination: 63.240.202.122 (63.240.202.122)
+Transmission Control Protocol, Src Port: 4734 (4734), Dst Port: 6112 (6112), Seq: 1420575398, Ack: 3867228095, Len: 5
+    Source port: 4734 (4734)
+    Destination port: 6112 (6112)
+    Sequence number: 1420575398
+    Next sequence number: 1420575403
+    Acknowledgement number: 3867228095
+    Header length: 32 bytes
+    Flags: 0x0018 (PSH, ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 1... = Push: Set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 32399
+    Checksum: 0x436f (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 1958861, tsecr 5511660
+Data (5 bytes)
+
+0000  ff 66 05 00 05                                    .f...
+
+Frame 20 (66 bytes on wire, 66 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:43.147560000
+    Time delta from previous packet: 0.074086000 seconds
+    Time relative to first packet: 2.356336000 seconds
+    Frame Number: 20
+    Packet Length: 66 bytes
+    Capture Length: 66 bytes
+Ethernet II, Src: 00:50:f2:73:74:28, Dst: 00:e0:4c:9d:47:c7
+    Destination: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Source: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 63.240.202.122 (63.240.202.122), Dst Addr: 192.168.2.27 (192.168.2.27)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 52
+    Identification: 0xf0b4
+    Flags: 0x00
+        .0.. = Don't fragment: Not set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 113
+    Protocol: TCP (0x06)
+    Header checksum: 0x8be1 (correct)
+    Source: 63.240.202.122 (63.240.202.122)
+    Destination: 192.168.2.27 (192.168.2.27)
+Transmission Control Protocol, Src Port: 6112 (6112), Dst Port: 4734 (4734), Seq: 3867228095, Ack: 1420575403, Len: 0
+    Source port: 6112 (6112)
+    Destination port: 4734 (4734)
+    Sequence number: 3867228095
+    Acknowledgement number: 1420575403
+    Header length: 32 bytes
+    Flags: 0x0010 (ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 0... = Push: Not set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 65534
+    Checksum: 0xcb3b (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 5511711, tsecr 1958861
+
+Frame 21 (78 bytes on wire, 78 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:43.148188000
+    Time delta from previous packet: 0.000628000 seconds
+    Time relative to first packet: 2.356964000 seconds
+    Frame Number: 21
+    Packet Length: 78 bytes
+    Capture Length: 78 bytes
+Ethernet II, Src: 00:50:f2:73:74:28, Dst: 00:e0:4c:9d:47:c7
+    Destination: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Source: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 63.240.202.122 (63.240.202.122), Dst Addr: 192.168.2.27 (192.168.2.27)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 64
+    Identification: 0xf0b5
+    Flags: 0x00
+        .0.. = Don't fragment: Not set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 113
+    Protocol: TCP (0x06)
+    Header checksum: 0x8bd4 (correct)
+    Source: 63.240.202.122 (63.240.202.122)
+    Destination: 192.168.2.27 (192.168.2.27)
+Transmission Control Protocol, Src Port: 6112 (6112), Dst Port: 4734 (4734), Seq: 3867228095, Ack: 1420575403, Len: 12
+    Source port: 6112 (6112)
+    Destination port: 4734 (4734)
+    Sequence number: 3867228095
+    Next sequence number: 3867228107
+    Acknowledgement number: 1420575403
+    Header length: 32 bytes
+    Flags: 0x0018 (PSH, ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 1... = Push: Set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 65534
+    Checksum: 0xbac0 (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 5511711, tsecr 1958861
+Data (12 bytes)
+
+0000  ff 66 0c 00 05 00 00 00 00 00 00 00               .f..........
+
+Frame 22 (66 bytes on wire, 66 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:43.299270000
+    Time delta from previous packet: 0.151082000 seconds
+    Time relative to first packet: 2.508046000 seconds
+    Frame Number: 22
+    Packet Length: 66 bytes
+    Capture Length: 66 bytes
+Ethernet II, Src: 00:e0:4c:9d:47:c7, Dst: 00:50:f2:73:74:28
+    Destination: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Source: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 192.168.2.27 (192.168.2.27), Dst Addr: 63.240.202.122 (63.240.202.122)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 52
+    Identification: 0xf529
+    Flags: 0x04
+        .1.. = Don't fragment: Set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 128
+    Protocol: TCP (0x06)
+    Header checksum: 0x386c (correct)
+    Source: 192.168.2.27 (192.168.2.27)
+    Destination: 63.240.202.122 (63.240.202.122)
+Transmission Control Protocol, Src Port: 4734 (4734), Dst Port: 6112 (6112), Seq: 1420575403, Ack: 3867228107, Len: 0
+    Source port: 4734 (4734)
+    Destination port: 6112 (6112)
+    Sequence number: 1420575403
+    Acknowledgement number: 3867228107
+    Header length: 32 bytes
+    Flags: 0x0010 (ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 0... = Push: Not set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 32387
+    Checksum: 0x4ca8 (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 1958864, tsecr 5511711
+
+Frame 29 (88 bytes on wire, 88 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:45.402860000
+    Time delta from previous packet: 2.103590000 seconds
+    Time relative to first packet: 4.611636000 seconds
+    Frame Number: 29
+    Packet Length: 88 bytes
+    Capture Length: 88 bytes
+Ethernet II, Src: 00:e0:4c:9d:47:c7, Dst: 00:50:f2:73:74:28
+    Destination: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Source: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 192.168.2.27 (192.168.2.27), Dst Addr: 63.240.202.122 (63.240.202.122)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 74
+    Identification: 0xf52d
+    Flags: 0x04
+        .1.. = Don't fragment: Set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 128
+    Protocol: TCP (0x06)
+    Header checksum: 0x3852 (correct)
+    Source: 192.168.2.27 (192.168.2.27)
+    Destination: 63.240.202.122 (63.240.202.122)
+Transmission Control Protocol, Src Port: 4734 (4734), Dst Port: 6112 (6112), Seq: 1420575403, Ack: 3867228107, Len: 22
+    Source port: 4734 (4734)
+    Destination port: 6112 (6112)
+    Sequence number: 1420575403
+    Next sequence number: 1420575425
+    Acknowledgement number: 3867228107
+    Header length: 32 bytes
+    Flags: 0x0018 (PSH, ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 1... = Push: Set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 32387
+    Checksum: 0xced1 (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 1958885, tsecr 5511711
+Data (22 bytes)
+	          |DWORD "2"| 
+0000  ff 78 16 00 02 00 00 00 47 72 65 61 74 6e 65 73   .x......Greatnes
+0010  73 29 44 4b 28 00                                 s)DK(.
+
+Frame 30 (66 bytes on wire, 66 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:45.448920000
+    Time delta from previous packet: 0.046060000 seconds
+    Time relative to first packet: 4.657696000 seconds
+    Frame Number: 30
+    Packet Length: 66 bytes
+    Capture Length: 66 bytes
+Ethernet II, Src: 00:50:f2:73:74:28, Dst: 00:e0:4c:9d:47:c7
+    Destination: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Source: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 63.240.202.122 (63.240.202.122), Dst Addr: 192.168.2.27 (192.168.2.27)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 52
+    Identification: 0x0a24
+    Flags: 0x00
+        .0.. = Don't fragment: Not set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 113
+    Protocol: TCP (0x06)
+    Header checksum: 0x7272 (correct)
+    Source: 63.240.202.122 (63.240.202.122)
+    Destination: 192.168.2.27 (192.168.2.27)
+Transmission Control Protocol, Src Port: 6112 (6112), Dst Port: 4734 (4734), Seq: 3867228107, Ack: 1420575425, Len: 0
+    Source port: 6112 (6112)
+    Destination port: 4734 (4734)
+    Sequence number: 3867228107
+    Acknowledgement number: 1420575425
+    Header length: 32 bytes
+    Flags: 0x0010 (ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 0... = Push: Not set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 65534
+    Checksum: 0xcaea (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 5511734, tsecr 1958885
+
+Frame 31 (84 bytes on wire, 84 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:45.450389000
+    Time delta from previous packet: 0.001469000 seconds
+    Time relative to first packet: 4.659165000 seconds
+    Frame Number: 31
+    Packet Length: 84 bytes
+    Capture Length: 84 bytes
+Ethernet II, Src: 00:50:f2:73:74:28, Dst: 00:e0:4c:9d:47:c7
+    Destination: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Source: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 63.240.202.122 (63.240.202.122), Dst Addr: 192.168.2.27 (192.168.2.27)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 70
+    Identification: 0x0a26
+    Flags: 0x00
+        .0.. = Don't fragment: Not set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 113
+    Protocol: TCP (0x06)
+    Header checksum: 0x725e (correct)
+    Source: 63.240.202.122 (63.240.202.122)
+    Destination: 192.168.2.27 (192.168.2.27)
+Transmission Control Protocol, Src Port: 6112 (6112), Dst Port: 4734 (4734), Seq: 3867228107, Ack: 1420575425, Len: 18
+    Source port: 6112 (6112)
+    Destination port: 4734 (4734)
+    Sequence number: 3867228107
+    Next sequence number: 3867228125
+    Acknowledgement number: 1420575425
+    Header length: 32 bytes
+    Flags: 0x0018 (PSH, ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 1... = Push: Set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 65534
+    Checksum: 0x5327 (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 5511734, tsecr 1958885
+Data (18 bytes)
+
+0000  ff 7e 12 00 47 72 65 61 74 6e 65 73 73 29 44 4b   .~..Greatness)DK
+0010  28 00                                             (.
+
+Frame 32 (75 bytes on wire, 75 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:45.468124000
+    Time delta from previous packet: 0.017735000 seconds
+    Time relative to first packet: 4.676900000 seconds
+    Frame Number: 32
+    Packet Length: 75 bytes
+    Capture Length: 75 bytes
+Ethernet II, Src: 00:50:f2:73:74:28, Dst: 00:e0:4c:9d:47:c7
+    Destination: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Source: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 63.240.202.122 (63.240.202.122), Dst Addr: 192.168.2.27 (192.168.2.27)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 61
+    Identification: 0x0a67
+    Flags: 0x00
+        .0.. = Don't fragment: Not set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 113
+    Protocol: TCP (0x06)
+    Header checksum: 0x7226 (correct)
+    Source: 63.240.202.122 (63.240.202.122)
+    Destination: 192.168.2.27 (192.168.2.27)
+Transmission Control Protocol, Src Port: 6112 (6112), Dst Port: 4734 (4734), Seq: 3867228125, Ack: 1420575425, Len: 9
+    Source port: 6112 (6112)
+    Destination port: 4734 (4734)
+    Sequence number: 3867228125
+    Next sequence number: 3867228134
+    Acknowledgement number: 1420575425
+    Header length: 32 bytes
+    Flags: 0x0018 (PSH, ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 1... = Push: Set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 65534
+    Checksum: 0xc04e (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 5511734, tsecr 1958885
+Data (9 bytes)
+
+0000  ff 78 09 00 02 00 00 00 00                        .x.......
+
+Frame 33 (66 bytes on wire, 66 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:45.468202000
+    Time delta from previous packet: 0.000078000 seconds
+    Time relative to first packet: 4.676978000 seconds
+    Frame Number: 33
+    Packet Length: 66 bytes
+    Capture Length: 66 bytes
+Ethernet II, Src: 00:e0:4c:9d:47:c7, Dst: 00:50:f2:73:74:28
+    Destination: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Source: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 192.168.2.27 (192.168.2.27), Dst Addr: 63.240.202.122 (63.240.202.122)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 52
+    Identification: 0xf52e
+    Flags: 0x04
+        .1.. = Don't fragment: Set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 128
+    Protocol: TCP (0x06)
+    Header checksum: 0x3867 (correct)
+    Source: 192.168.2.27 (192.168.2.27)
+    Destination: 63.240.202.122 (63.240.202.122)
+Transmission Control Protocol, Src Port: 4734 (4734), Dst Port: 6112 (6112), Seq: 1420575425, Ack: 3867228134, Len: 0
+    Source port: 4734 (4734)
+    Destination port: 6112 (6112)
+    Sequence number: 1420575425
+    Acknowledgement number: 3867228134
+    Header length: 32 bytes
+    Flags: 0x0010 (ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 0... = Push: Not set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 32360
+    Checksum: 0x4c66 (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 1958885, tsecr 5511734
+
+Frame 38 (86 bytes on wire, 86 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:46.385504000
+    Time delta from previous packet: 0.917302000 seconds
+    Time relative to first packet: 5.594280000 seconds
+    Frame Number: 38
+    Packet Length: 86 bytes
+    Capture Length: 86 bytes
+Ethernet II, Src: 00:e0:4c:9d:47:c7, Dst: 00:50:f2:73:74:28
+    Destination: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Source: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 192.168.2.27 (192.168.2.27), Dst Addr: 63.240.202.122 (63.240.202.122)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 72
+    Identification: 0xf531
+    Flags: 0x04
+        .1.. = Don't fragment: Set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 128
+    Protocol: TCP (0x06)
+    Header checksum: 0x3850 (correct)
+    Source: 192.168.2.27 (192.168.2.27)
+    Destination: 63.240.202.122 (63.240.202.122)
+Transmission Control Protocol, Src Port: 4734 (4734), Dst Port: 6112 (6112), Seq: 1420575425, Ack: 3867228134, Len: 20
+    Source port: 4734 (4734)
+    Destination port: 6112 (6112)
+    Sequence number: 1420575425
+    Next sequence number: 1420575445
+    Acknowledgement number: 3867228134
+    Header length: 32 bytes
+    Flags: 0x0018 (PSH, ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 1... = Push: Set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 32360
+    Checksum: 0x392b (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 1958894, tsecr 5511734
+Data (20 bytes)
+
+0000  ff 15 14 00 00 00 00 00 00 00 00 00 00 00 00 00   ................
+0010  00 00 00 00                                       ....
+
+Frame 39 (66 bytes on wire, 66 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:46.468514000
+    Time delta from previous packet: 0.083010000 seconds
+    Time relative to first packet: 5.677290000 seconds
+    Frame Number: 39
+    Packet Length: 66 bytes
+    Capture Length: 66 bytes
+Ethernet II, Src: 00:50:f2:73:74:28, Dst: 00:e0:4c:9d:47:c7
+    Destination: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Source: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 63.240.202.122 (63.240.202.122), Dst Addr: 192.168.2.27 (192.168.2.27)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 52
+    Identification: 0x1543
+    Flags: 0x00
+        .0.. = Don't fragment: Not set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 113
+    Protocol: TCP (0x06)
+    Header checksum: 0x6753 (correct)
+    Source: 63.240.202.122 (63.240.202.122)
+    Destination: 192.168.2.27 (192.168.2.27)
+Transmission Control Protocol, Src Port: 6112 (6112), Dst Port: 4734 (4734), Seq: 3867228134, Ack: 1420575445, Len: 0
+    Source port: 6112 (6112)
+    Destination port: 4734 (4734)
+    Sequence number: 3867228134
+    Acknowledgement number: 1420575445
+    Header length: 32 bytes
+    Flags: 0x0010 (ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 0... = Push: Not set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 65534
+    Checksum: 0xcaa8 (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 5511744, tsecr 1958894
+
+Frame 57 (71 bytes on wire, 71 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:48.665944000
+    Time delta from previous packet: 2.197430000 seconds
+    Time relative to first packet: 7.874720000 seconds
+    Frame Number: 57
+    Packet Length: 71 bytes
+    Capture Length: 71 bytes
+Ethernet II, Src: 00:e0:4c:9d:47:c7, Dst: 00:50:f2:73:74:28
+    Destination: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Source: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 192.168.2.27 (192.168.2.27), Dst Addr: 63.240.202.122 (63.240.202.122)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 57
+    Identification: 0xf53a
+    Flags: 0x04
+        .1.. = Don't fragment: Set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 128
+    Protocol: TCP (0x06)
+    Header checksum: 0x3856 (correct)
+    Source: 192.168.2.27 (192.168.2.27)
+    Destination: 63.240.202.122 (63.240.202.122)
+Transmission Control Protocol, Src Port: 4734 (4734), Dst Port: 6112 (6112), Seq: 1420575445, Ack: 3867228134, Len: 5
+    Source port: 4734 (4734)
+    Destination port: 6112 (6112)
+    Sequence number: 1420575445
+    Next sequence number: 1420575450
+    Acknowledgement number: 3867228134
+    Header length: 32 bytes
+    Flags: 0x0018 (PSH, ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 1... = Push: Set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 32360
+    Checksum: 0x41b4 (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 1958917, tsecr 5511744
+Data (5 bytes)
+
+0000  ff 66 05 00 06                                    .f...
+
+Frame 58 (66 bytes on wire, 66 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:48.713943000
+    Time delta from previous packet: 0.047999000 seconds
+    Time relative to first packet: 7.922719000 seconds
+    Frame Number: 58
+    Packet Length: 66 bytes
+    Capture Length: 66 bytes
+Ethernet II, Src: 00:50:f2:73:74:28, Dst: 00:e0:4c:9d:47:c7
+    Destination: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Source: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 63.240.202.122 (63.240.202.122), Dst Addr: 192.168.2.27 (192.168.2.27)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 52
+    Identification: 0x30ba
+    Flags: 0x00
+        .0.. = Don't fragment: Not set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 113
+    Protocol: TCP (0x06)
+    Header checksum: 0x4bdc (correct)
+    Source: 63.240.202.122 (63.240.202.122)
+    Destination: 192.168.2.27 (192.168.2.27)
+Transmission Control Protocol, Src Port: 6112 (6112), Dst Port: 4734 (4734), Seq: 3867228134, Ack: 1420575450, Len: 0
+    Source port: 6112 (6112)
+    Destination port: 4734 (4734)
+    Sequence number: 3867228134
+    Acknowledgement number: 1420575450
+    Header length: 32 bytes
+    Flags: 0x0010 (ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 0... = Push: Not set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 65534
+    Checksum: 0xca75 (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 5511767, tsecr 1958917
+
+Frame 59 (78 bytes on wire, 78 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:48.714563000
+    Time delta from previous packet: 0.000620000 seconds
+    Time relative to first packet: 7.923339000 seconds
+    Frame Number: 59
+    Packet Length: 78 bytes
+    Capture Length: 78 bytes
+Ethernet II, Src: 00:50:f2:73:74:28, Dst: 00:e0:4c:9d:47:c7
+    Destination: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Source: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 63.240.202.122 (63.240.202.122), Dst Addr: 192.168.2.27 (192.168.2.27)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 64
+    Identification: 0x30bb
+    Flags: 0x00
+        .0.. = Don't fragment: Not set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 113
+    Protocol: TCP (0x06)
+    Header checksum: 0x4bcf (correct)
+    Source: 63.240.202.122 (63.240.202.122)
+    Destination: 192.168.2.27 (192.168.2.27)
+Transmission Control Protocol, Src Port: 6112 (6112), Dst Port: 4734 (4734), Seq: 3867228134, Ack: 1420575450, Len: 12
+    Source port: 6112 (6112)
+    Destination port: 4734 (4734)
+    Sequence number: 3867228134
+    Next sequence number: 3867228146
+    Acknowledgement number: 1420575450
+    Header length: 32 bytes
+    Flags: 0x0018 (PSH, ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 1... = Push: Set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 65534
+    Checksum: 0xb8fa (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 5511767, tsecr 1958917
+Data (12 bytes)
+
+0000  ff 66 0c 00 06 00 00 00 00 00 00 00               .f..........
+
+Frame 61 (66 bytes on wire, 66 bytes captured)
+    Arrival Time: Sep  9, 2003 21:22:48.907338000
+    Time delta from previous packet: 0.192775000 seconds
+    Time relative to first packet: 8.116114000 seconds
+    Frame Number: 61
+    Packet Length: 66 bytes
+    Capture Length: 66 bytes
+Ethernet II, Src: 00:e0:4c:9d:47:c7, Dst: 00:50:f2:73:74:28
+    Destination: 00:50:f2:73:74:28 (Microsof_73:74:28)
+    Source: 00:e0:4c:9d:47:c7 (Realtek__9d:47:c7)
+    Type: IP (0x0800)
+Internet Protocol, Src Addr: 192.168.2.27 (192.168.2.27), Dst Addr: 63.240.202.122 (63.240.202.122)
+    Version: 4
+    Header length: 20 bytes
+    Differentiated Services Field: 0x00 (DSCP 0x00: Default; ECN: 0x00)
+        0000 00.. = Differentiated Services Codepoint: Default (0x00)
+        .... ..0. = ECN-Capable Transport (ECT): 0
+        .... ...0 = ECN-CE: 0
+    Total Length: 52
+    Identification: 0xf53c
+    Flags: 0x04
+        .1.. = Don't fragment: Set
+        ..0. = More fragments: Not set
+    Fragment offset: 0
+    Time to live: 128
+    Protocol: TCP (0x06)
+    Header checksum: 0x3859 (correct)
+    Source: 192.168.2.27 (192.168.2.27)
+    Destination: 63.240.202.122 (63.240.202.122)
+Transmission Control Protocol, Src Port: 4734 (4734), Dst Port: 6112 (6112), Seq: 1420575450, Ack: 3867228146, Len: 0
+    Source port: 4734 (4734)
+    Destination port: 6112 (6112)
+    Sequence number: 1420575450
+    Acknowledgement number: 3867228146
+    Header length: 32 bytes
+    Flags: 0x0010 (ACK)
+        0... .... = Congestion Window Reduced (CWR): Not set
+        .0.. .... = ECN-Echo: Not set
+        ..0. .... = Urgent: Not set
+        ...1 .... = Acknowledgment: Set
+        .... 0... = Push: Not set
+        .... .0.. = Reset: Not set
+        .... ..0. = Syn: Not set
+        .... ...0 = Fin: Not set
+    Window size: 32348
+    Checksum: 0x4c09 (correct)
+    Options: (12 bytes)
+        NOP
+        NOP
+        Time stamp: tsval 1958920, tsecr 5511767
