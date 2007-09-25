@@ -164,4 +164,9 @@ Public Function GetPacket(PacketID As Byte) As String
     GetPacket = Chr(&HFF) & Chr(PacketID) & MakeWORD(Len(Buffer) + 4) & Buffer
     Call Clear
 End Function
+'09-24-07 - Added by Hdx. Pretty self evidant.
+Public Function GetBNLSPacket(PacketID As Byte) As String
+    GetBNLSPacket = MakeWORD(Len(Buffer) + 3) & Chr(PacketID) & Buffer
+    Call Clear
+End Function
 

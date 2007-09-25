@@ -26,7 +26,7 @@ Declare Function RegisterWindowMessage Lib "user32" Alias _
 
 Public Declare Function GetUserDefaultLCID Lib "kernel32" () As Long
 Public Declare Function GetUserDefaultLangID Lib "kernel32" () As Long
-Public Declare Function GetLocaleInfo Lib "kernel32" Alias "GetLocaleInfoA" (ByVal Locale As Long, ByVal LCType As Long, ByVal lpLCData As String, ByVal cchData As Long) As Long
+Public Declare Function GetLocaleInfo Lib "kernel32" Alias "GetLocaleInfoA" (ByVal locale As Long, ByVal LCType As Long, ByVal lpLCData As String, ByVal cchData As Long) As Long
 
 Public Declare Function SetTimer Lib "user32" (ByVal hWnd As Long, ByVal nIDEvent As Long, ByVal uElapse As Long, ByVal lpTimerFunc As Long) As Long
 Public Declare Function KillTimer Lib "user32" (ByVal hWnd As Long, ByVal nIDEvent As Long) As Long
@@ -48,7 +48,7 @@ Public Declare Function timeGetSystemTime Lib "winmm.dll" (lpTime As MMTIME, ByV
 
 Public Declare Function Send Lib "ws2_32.dll" Alias "send" _
    (ByVal s As Long, _
-    ByVal buf As String, _
+    ByVal Buf As String, _
     ByVal datalen As Long, _
     ByVal Flags As Long) As Long
     
@@ -94,7 +94,7 @@ Public Declare Function Shell_NotifyIcon Lib "shell32.dll" Alias "Shell_NotifyIc
 Public Declare Function FindWindowEx Lib "user32" Alias "FindWindowExA" (ByVal hWnd1 As Long, ByVal hWnd2 As Long, ByVal lpsz1 As String, ByVal lpsz2 As String) As Long
 
 Public Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
-Public Declare Function SetCursorPos Lib "user32" (ByVal X As Long, ByVal Y As Long) As Long
+Public Declare Function SetCursorPos Lib "user32" (ByVal x As Long, ByVal Y As Long) As Long
 
 Public Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" ( _
     ByVal hWnd As Long, _
@@ -104,7 +104,7 @@ Public Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" ( _
 Public Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" ( _
     Destination As Any, _
     Source As Any, _
-    ByVal Length As Long)
+    ByVal length As Long)
     
 Public Declare Function ShellExecute Lib "shell32" Alias "ShellExecuteA" ( _
     ByVal hWnd As Long, _
@@ -148,3 +148,13 @@ Public Declare Function SetActiveWindow Lib "user32" (ByVal hWnd As Long) As Lon
 '    a As MP_INT
 'End Type
 
+Public Declare Function GetComputerName Lib "kernel32" Alias "GetComputerNameA" (ByVal sBuffer As String, lSize As Long) As Long
+Public Declare Function GetUserName Lib "advapi32.dll" Alias "GetUserNameA" (ByVal lpBuffer As String, nSize As Long) As Long
+Public Declare Function GetSystemDefaultLCID Lib "kernel32" () As Long
+Public Declare Sub GetSystemTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
+Public Declare Function SystemTimeToFileTime Lib "kernel32" (lpSystemTime As SYSTEMTIME, lpFileTime As FILETIME) As Long
+
+Public Const LOCALE_SABBREVCTRYNAME As Long = &H7
+Public Const LOCALE_SENGCOUNTRY     As Long = &H1002
+Public Const LOCALE_SABBREVLANGNAME As Long = &H3
+Public Const LOCALE_SNATIVECTRYNAME As Long = &H8

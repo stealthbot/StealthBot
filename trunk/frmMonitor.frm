@@ -1,13 +1,12 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmMonitor 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "User Monitor"
    ClientHeight    =   4800
-   ClientLeft      =   75
-   ClientTop       =   420
+   ClientLeft      =   300
+   ClientTop       =   495
    ClientWidth     =   7575
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
@@ -16,6 +15,12 @@ Begin VB.Form frmMonitor
    ScaleHeight     =   4800
    ScaleWidth      =   7575
    StartUpPosition =   1  'CenterOwner
+   Begin StealthBot.ctlMonitor monConn 
+      Left            =   5640
+      Top             =   3000
+      _extentx        =   661
+      _extenty        =   661
+   End
    Begin VB.CommandButton cmdShutdown 
       Caption         =   "&Shutdown"
       BeginProperty Font 
@@ -187,13 +192,6 @@ Begin VB.Form frmMonitor
          Object.Width           =   2293
       EndProperty
    End
-   Begin MSWinsockLib.Winsock wskBNet 
-      Left            =   6120
-      Top             =   2520
-      _ExtentX        =   741
-      _ExtentY        =   741
-      _Version        =   393216
-   End
    Begin VB.TextBox txtAdd 
       BackColor       =   &H00993300&
       BeginProperty Font 
@@ -282,13 +280,10 @@ Private strUsers() As String
 Private LastCheck As Integer
 Private StatusWatch() As Byte
 Private Sent() As Byte
+Attribute Sent.VB_VarHelpID = -1
 
 Private Sub cmdConnect_Click()
-    If wskBNet.State = 0 Then
-        wskBNet.RemoteHost = ReadINI("Main", "Server", "config.ini")
-        wskBNet.RemotePort = 6112
-        wskBNet.Connect
-    End If
+    monConn.Connect
     cmdConnect.Enabled = False
     cmdDisc.Enabled = True
 End Sub
@@ -312,31 +307,16 @@ Private Sub cmdDisc_Click()
 End Sub
 
 Private Sub cmdShutdown_Click()
+    monConn.Disconnect
     Call frmChat.DeconstructMonitor
 End Sub
 
 Private Sub Form_Load()
     'On Error Resume Next
     Me.Icon = frmChat.Icon
-    
-    ReDim strUsers(0)
-    ReDim StatusWatch(0)
-    ReDim Sent(0)
-        
-    Call LoadList
-
     If Not DisableMonitor Then
-        If wskBNet.State <> 0 Then
-            wskBNet.Close
-        End If
-    
-        wskBNet.RemoteHost = ReadINI("Main", "Server", "config.ini")
-        wskBNet.RemotePort = 6112
-        
-        If lvMonitor.ListItems.Count > 0 Then
-            Call cmdConnect_Click
-        End If
-        
+      monConn.LoadMonitorConfig
+      monConn.Connect
     Else
         Call cmdDisc_Click
     End If
@@ -346,48 +326,6 @@ Private Sub Form_Load()
         .Icons = frmChat.imlIcons
         .View = lvwReport
     End With
-End Sub
-
-Sub LoadList()
-    Dim s As String, f As Integer
-    
-
-    f = FreeFile
-    
-    If Dir$(GetProfilePath() & "\monitor.txt") = vbNullString Then
-        Open (GetProfilePath() & "\monitor.txt") For Output As #f
-            Print #f, "Stealth"
-        Close #f
-        
-        AddUser "Stealth"
-        
-    Else
-    
-        Open (GetProfilePath() & "\monitor.txt") For Input As #f
-        
-        If LOF(f) > 1 Then
-        
-            lvMonitor.ListItems.Clear
-            Do
-                Input #f, s
-                
-                If s <> vbNullString And s <> " " Then
-                
-                    AddUser s, 1
-                
-                End If
-                
-            Loop Until EOF(f)
-            
-        Else
-            
-            AddUser "Stealth"
-            
-        End If
-        
-    End If
-    
-    Close #f
 End Sub
 
 Private Sub cmdDone_Click()
@@ -416,29 +354,44 @@ Private Sub Form_Unload(Cancel As Integer)
     If Cancel = 0 Then Exit Sub Else Call frmChat.DeconstructMonitor
 End Sub
 
-Private Sub tmrDelay_Timer()
-    On Error Resume Next
-    If wskBNet.State = 7 Then
-        Static SentFirst As Byte
-        
-        If SentFirst = 0 Then
-            SentFirst = 1
-            Exit Sub
-        ElseIf SentFirst = 1 Then
-            wskBNet.SendData "/dnd your StealthBot User Monitor at work" & vbCrLf
-            SentFirst = 2
-            Exit Sub
-        End If
-        
-        If LastCheck > UBound(strUsers) Then
-            LastCheck = 0
-        End If
-        
-        If Len(strUsers(LastCheck)) > 0 Then
-            wskBNet.SendData "/whois " & strUsers(LastCheck) & vbCrLf
-        End If
-        LastCheck = LastCheck + 1
-    End If
+Private Sub monConn_BNETClose()
+  Debug.Print "BNET Close"
+End Sub
+
+Private Sub monConn_BNETConnect()
+  Debug.Print "BNET Connect"
+End Sub
+
+Private Sub monConn_BNETError(ByVal Number As Integer, ByVal Description As String)
+  Debug.Print "BNET " & Number & " " & Description
+End Sub
+
+Private Sub monConn_BNLSClose()
+  Debug.Print "BNLS Close"
+End Sub
+
+Private Sub monConn_BNLSConnect()
+  Debug.Print "BNLS Connet"
+End Sub
+
+Private Sub monConn_BNLSError(ByVal Number As Integer, ByVal Description As String)
+  Debug.Print "BNLS " & Number & " " & Description
+End Sub
+
+Private Sub monConn_OnChatJoin(ByVal UniqueName As String)
+  Debug.Print "Logged in as " & UniqueName
+End Sub
+
+Private Sub monConn_OnLogin(ByVal Success As Boolean)
+  Debug.Print "Login " & IIf(Success, "Success", "Failed")
+End Sub
+
+Private Sub monConn_OnVersionCheck(ByVal result As Long, PatchFile As String)
+  Debug.Print "Version: 0x" & Hex(result)
+End Sub
+
+Private Sub monConn_UserInfo(ByVal Index As Integer, ByVal Username As String, ByVal Online As Boolean, ByVal Client As String, ByVal Channel As String)
+  Debug.Print Username & ", " & Online & ", " & Channel
 End Sub
 
 Private Sub txtAdd_KeyPress(KeyAscii As Integer)
@@ -447,74 +400,30 @@ Private Sub txtAdd_KeyPress(KeyAscii As Integer)
         KeyAscii = 0
     End If
 End Sub
-
-Private Sub wskBNet_Connect()
-    On Error Resume Next
-    wskBNet.SendData Chr(3) & "anonymous" & vbCrLf  'BotVars.Username & vbCrLf & BotVars.Password & vbCrLf
-    lblStatus.Caption = "Chat dummy connected, login sent."
-End Sub
-
-Private Sub wskBNet_DataArrival(ByVal bytesTotal As Long)
-    Dim s As String, i As Integer
-    Dim ary() As String
-    
-    wskBNet.GetData s, vbString
-    
-    'Debug.Print s
-    
-    ary = Split(s, Chr(13))
-    For i = LBound(ary) To UBound(ary)
-        If Left$(ary(i), 1) = Chr(10) Then ary(i) = Right(ary(i), Len(ary(i)) - 1)
-
-        Select Case Left$(ary(i), 4)
-            Case "1018"
-                If InStr(1, s, "using", vbTextCompare) <> 0 Then
-                    s = Right(s, Len(s) - 10)
-                    s = Replace(s, Chr(34), vbNullString)
-                    UpdateList s
-                End If
-            Case "2010"
-                lblStatus.Caption = "Connected and monitoring users."
-                'If InStr(1, s, "Public Chat 1", vbTextCompare) <> 0 Or InStr(1, s, "Public Chat 2", vbTextCompare) Then wskBNet.SendData "/join Public Chat SBUserMonitor-" & Int(Rnd * 50) & vbCrLf
-                tmrDelay.Interval = 4900
-            Case "1019"
-                s = Right(s, Len(s) - 10)
-                s = Replace(s, Chr(34), vbNullString)
-                UpdateList s, 1
-        End Select
-    Next i
-End Sub
-
-Private Sub wskBNet_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    lblStatus.Caption = Number & Space(1) & Description
-    lblStatus.Caption = "A winsock error, " & Number & ", has been encountered. Please manually reconnect the user monitor."
-    tmrDelay.Interval = 0
-End Sub
-
 Private Sub UpdateList(ByVal Msg As String, Optional Disable As Byte)
-    Dim X As ListItem, Holder As Integer, b As Byte
+    Dim x As ListItem, Holder As Integer, b As Byte
     
     If Disable = 1 Then
         If LastCheck = 0 Then
             If Len(strUsers(0)) > 0 Then
-                Set X = lvMonitor.FindItem(strUsers(0))
+                Set x = lvMonitor.FindItem(strUsers(0))
                 Sent(0) = 0
                 b = 1
             End If
         Else
             If Len(strUsers(LastCheck - 1)) > 0 Then
-                Set X = lvMonitor.FindItem(strUsers(LastCheck - 1))
+                Set x = lvMonitor.FindItem(strUsers(LastCheck - 1))
                 Sent(LastCheck - 1) = 0
                 b = 1
             End If
         End If
         
-        If b = 1 And (Not (X Is Nothing)) Then
+        If b = 1 And (Not (x Is Nothing)) Then
             With lvMonitor
-                .ListItems(X.Index).SmallIcon = ICSQUELCH
-                .ListItems(X.Index).ListSubItems.Clear
-                .ListItems(X.Index).ListSubItems.Add , "status", "Offline", MONITOR_OFFLINE
-                .ListItems(X.Index).ListSubItems.Add , "last", Time
+                .ListItems(x.Index).SmallIcon = ICSQUELCH
+                .ListItems(x.Index).ListSubItems.Clear
+                .ListItems(x.Index).ListSubItems.Add , "status", "Offline", MONITOR_OFFLINE
+                .ListItems(x.Index).ListSubItems.Add , "last", Time
             End With
         End If
     Else
@@ -573,13 +482,13 @@ Private Sub UpdateList(ByVal Msg As String, Optional Disable As Byte)
         If Holder = 0 Then Holder = ICUNKNOWN
         
         If LastCheck <> 0 Then
-            Set X = lvMonitor.FindItem(strUsers(LastCheck - 1))
+            Set x = lvMonitor.FindItem(strUsers(LastCheck - 1))
         Else
-            Set X = lvMonitor.FindItem(strUsers(0))
+            Set x = lvMonitor.FindItem(strUsers(0))
         End If
         
-        If Not X Is Nothing Then
-            With lvMonitor.ListItems(X.Index)
+        If Not x Is Nothing Then
+            With lvMonitor.ListItems(x.Index)
                 On Error Resume Next
                 .Tag = Msg
                 .SmallIcon = Holder
@@ -591,58 +500,9 @@ Private Sub UpdateList(ByVal Msg As String, Optional Disable As Byte)
     End If
 End Sub
 
-Sub RemUser(ByVal i As Integer)
-    Dim tmp() As String
-    Dim swtmp() As Byte
-    Dim sntmp() As Byte
-    Dim c As Integer
-    Dim f As Integer
-    Dim Username As String
-    
-    f = FreeFile
-    
-    If i < 1 Then Exit Sub
-    
-    With lvMonitor.ListItems
-        Username = .Item(i).text
-        .Item(i).ListSubItems.Clear
-        .Remove i
-    End With
-    
-    ReDim tmp(UBound(strUsers) - 1)
-    ReDim swtmp(UBound(strUsers) - 1)
-    ReDim sntmp(UBound(strUsers) - 1)
-    
-    Open GetProfilePath() & "\monitor.txt" For Output As #f
-    
-    For i = 0 To UBound(strUsers)
-        If StrComp(Username, strUsers(i), vbTextCompare) <> 0 Then
-            tmp(c) = strUsers(i)
-            swtmp(c) = StatusWatch(i)
-            sntmp(c) = Sent(i)
-            Print #f, strUsers(i)
-            c = c + 1
-        End If
-    Next i
-    
-    Close #f
-    
-    ReDim strUsers(UBound(tmp))
-    ReDim StatusWatch(UBound(tmp))
-    ReDim Sent(UBound(tmp))
-    
-    For i = 0 To UBound(tmp)
-        strUsers(i) = tmp(i)
-        StatusWatch(i) = swtmp(i)
-        Sent(i) = sntmp(i)
-    Next i
-End Sub
-
-Sub AddUser(ByVal Username As String, Optional ByVal DoNotWriteFile As Byte)
-    Dim f As Integer
-    f = FreeFile
-    
+Sub AddUser(ByVal Username As String)
     On Error Resume Next
+    If (Not monConn.AddAccount(Username)) Then Exit Sub
     With lvMonitor
         .ListItems.Add , Username, Username, , ICSQUELCH
         'Debug.Print .ListItems(.ListItems.Count).ListSubItems.Count
@@ -650,26 +510,6 @@ Sub AddUser(ByVal Username As String, Optional ByVal DoNotWriteFile As Byte)
         .ListItems(.ListItems.Count).ListSubItems.Add 1, "last", "None"
         .ListItems(.ListItems.Count).Tag = "0"
     End With
-    
-    ReDim Preserve strUsers(UBound(strUsers) + 1)
-    ReDim Preserve StatusWatch(UBound(StatusWatch) + 1)
-    ReDim Preserve Sent(UBound(Sent) + 1)
-    strUsers(UBound(strUsers)) = Username
-    
-    If Dir$(GetProfilePath() & "\monitor.txt") = vbNullString Then
-        Open GetProfilePath() & "\monitor.txt" For Output As #f
-        Close #f
-    End If
-    
-    If DoNotWriteFile = 0 Then
-    
-        Open GetProfilePath() & "\monitor.txt" For Append As #f
-        
-        Print #f, Username
-        
-        Close #f
-        
-    End If
 End Sub
 
 Function SetStatusWatch(ByVal Val As Byte, ByVal Username As String) As Byte
@@ -719,54 +559,50 @@ Function GetStatusWatch(ByVal Username As String) As Byte
 End Function
 
 Function GetUserStatus(ByVal Username As String) As Integer
-    Dim X As ListItem
+    Dim x As ListItem
     
-    Set X = lvMonitor.FindItem(Username)
+    Set x = lvMonitor.FindItem(Username)
     
-    If Not (X Is Nothing) Then
-        'Debug.Print "Is something! (" & X.Tag & ")"
-        If X.ListSubItems(1).text = "Online" Then
+    If Not (x Is Nothing) Then
+        If x.ListSubItems(1).text = "Online" Then
             GetUserStatus = 1
         Else
             GetUserStatus = 0
         End If
         
-        Set X = Nothing
+        Set x = Nothing
     Else
-        'Debug.Print "Is nothing!"
         GetUserStatus = -1
     End If
 End Function
 
 Function GetLastWhoisResponse(ByVal Username As String) As String
-    Dim X As ListItem
+    Dim x As ListItem
     
-    Set X = lvMonitor.FindItem(Username)
+    Set x = lvMonitor.FindItem(Username)
     
-    If Not (X Is Nothing) Then
-        GetLastWhoisResponse = X.Tag
+    If Not (x Is Nothing) Then
+        GetLastWhoisResponse = x.Tag
         
-        Set X = Nothing
+        Set x = Nothing
     End If
 End Function
 
 Function GetFullUserStatus(ByVal Username As String, ByRef Online As Boolean, ByRef LastChecked As String, ByRef LastWhois As String) As Integer
-    Dim X As ListItem
+    Dim x As ListItem
     
-    Set X = lvMonitor.FindItem(Username)
+    Set x = lvMonitor.FindItem(Username)
     
-    If Not (X Is Nothing) Then
-        LastWhois = X.Tag
-        Online = (X.ListSubItems(1).text = "Online")
-        LastChecked = X.ListSubItems(2).text
-        Set X = Nothing
-        
+    If Not (x Is Nothing) Then
+        LastWhois = x.Tag
+        Online = (x.ListSubItems(1).text = "Online")
+        LastChecked = x.ListSubItems(2).text
+        Set x = Nothing
         GetFullUserStatus = 0
     Else
         Online = False
-        LastChecked = ""
-        LastWhois = ""
-        
+        LastChecked = vbNullString
+        LastWhois = vbNullString
         GetFullUserStatus = 1
     End If
 End Function
