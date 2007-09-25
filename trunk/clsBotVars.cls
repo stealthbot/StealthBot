@@ -15,7 +15,7 @@ Attribute VB_Exposed = False
 ' Module    : clsBotVars
 ' DateTime  : 1/22/2005 16:09
 ' Author    : Andy (andy@stealthbot.net)
-'purpose   : stores bot variables at runtime and is exposed to the scripting subsystem
+' Purpose   : stores bot variables at runtime and is exposed to the scripting subsystem
 '---------------------------------------------------------------------------------------
 Option Explicit
 
