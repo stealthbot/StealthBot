@@ -5,8 +5,8 @@ Begin VB.Form frmMonitor
    BorderStyle     =   1  'Fixed Single
    Caption         =   "User Monitor"
    ClientHeight    =   4800
-   ClientLeft      =   345
-   ClientTop       =   510
+   ClientLeft      =   390
+   ClientTop       =   525
    ClientWidth     =   7575
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
@@ -18,8 +18,8 @@ Begin VB.Form frmMonitor
    Begin StealthBot.ctlMonitor monConn 
       Left            =   5640
       Top             =   3000
-      _extentx        =   661
-      _extenty        =   661
+      _ExtentX        =   661
+      _ExtentY        =   661
    End
    Begin VB.CommandButton cmdShutdown 
       Caption         =   "&Shutdown"
@@ -294,14 +294,7 @@ End Sub
 
 Private Sub cmdDisc_Click()
     On Error Resume Next
-    
-    If wskBNet.State <> 0 Then
-        wskBNet.Close
-        lblStatus.Caption = "User monitor manually disconnected."
-        cmdConnect.Enabled = True
-        tmrDelay.Interval = 0
-    End If
-    
+    monConn.Disconnect
     cmdConnect.Enabled = True
     cmdDisc.Enabled = False
 End Sub
@@ -401,29 +394,29 @@ Private Sub txtAdd_KeyPress(KeyAscii As Integer)
     End If
 End Sub
 Private Sub UpdateList(ByVal Msg As String, Optional Disable As Byte)
-    Dim x As ListItem, Holder As Integer, b As Byte
+    Dim X As ListItem, Holder As Integer, b As Byte
     
     If Disable = 1 Then
         If LastCheck = 0 Then
             If Len(strUsers(0)) > 0 Then
-                Set x = lvMonitor.FindItem(strUsers(0))
+                Set X = lvMonitor.FindItem(strUsers(0))
                 Sent(0) = 0
                 b = 1
             End If
         Else
             If Len(strUsers(LastCheck - 1)) > 0 Then
-                Set x = lvMonitor.FindItem(strUsers(LastCheck - 1))
+                Set X = lvMonitor.FindItem(strUsers(LastCheck - 1))
                 Sent(LastCheck - 1) = 0
                 b = 1
             End If
         End If
         
-        If b = 1 And (Not (x Is Nothing)) Then
+        If b = 1 And (Not (X Is Nothing)) Then
             With lvMonitor
-                .ListItems(x.Index).SmallIcon = ICSQUELCH
-                .ListItems(x.Index).ListSubItems.Clear
-                .ListItems(x.Index).ListSubItems.Add , "status", "Offline", MONITOR_OFFLINE
-                .ListItems(x.Index).ListSubItems.Add , "last", Time
+                .ListItems(X.Index).SmallIcon = ICSQUELCH
+                .ListItems(X.Index).ListSubItems.Clear
+                .ListItems(X.Index).ListSubItems.Add , "status", "Offline", MONITOR_OFFLINE
+                .ListItems(X.Index).ListSubItems.Add , "last", Time
             End With
         End If
     Else
@@ -482,13 +475,13 @@ Private Sub UpdateList(ByVal Msg As String, Optional Disable As Byte)
         If Holder = 0 Then Holder = ICUNKNOWN
         
         If LastCheck <> 0 Then
-            Set x = lvMonitor.FindItem(strUsers(LastCheck - 1))
+            Set X = lvMonitor.FindItem(strUsers(LastCheck - 1))
         Else
-            Set x = lvMonitor.FindItem(strUsers(0))
+            Set X = lvMonitor.FindItem(strUsers(0))
         End If
         
-        If Not x Is Nothing Then
-            With lvMonitor.ListItems(x.Index)
+        If Not X Is Nothing Then
+            With lvMonitor.ListItems(X.Index)
                 On Error Resume Next
                 .Tag = Msg
                 .SmallIcon = Holder
@@ -559,33 +552,33 @@ Function GetStatusWatch(ByVal Username As String) As Byte
 End Function
 
 Function GetUserStatus(ByVal Username As String) As Integer
-    Dim x As ListItem
+    Dim X As ListItem
     
-    Set x = lvMonitor.FindItem(Username)
+    Set X = lvMonitor.FindItem(Username)
     
-    If Not (x Is Nothing) Then
-        If x.ListSubItems(1).text = "Online" Then
+    If Not (X Is Nothing) Then
+        If X.ListSubItems(1).text = "Online" Then
             GetUserStatus = 1
         Else
             GetUserStatus = 0
         End If
         
-        Set x = Nothing
+        Set X = Nothing
     Else
         GetUserStatus = -1
     End If
 End Function
 
 Function GetFullUserStatus(ByVal Username As String, ByRef Online As Boolean, ByRef LastChecked As String, ByRef LastWhois As String) As Integer
-    Dim x As ListItem
+    Dim X As ListItem
     
-    Set x = lvMonitor.FindItem(Username)
+    Set X = lvMonitor.FindItem(Username)
     
-    If Not (x Is Nothing) Then
-        LastWhois = x.Tag
-        Online = (x.ListSubItems(1).text = "Online")
-        LastChecked = x.ListSubItems(2).text
-        Set x = Nothing
+    If Not (X Is Nothing) Then
+        LastWhois = X.Tag
+        Online = (X.ListSubItems(1).text = "Online")
+        LastChecked = X.ListSubItems(2).text
+        Set X = Nothing
         GetFullUserStatus = 0
     Else
         Online = False
