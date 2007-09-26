@@ -204,9 +204,11 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             
         
         Case SID_FRIENDMOVED
+            '(BYTE) Old Position
+            '(BYTE) New Position
             Set flTemp = Nothing
-            
             RaiseEvent FriendMoved
+            
     
     End Select
     
