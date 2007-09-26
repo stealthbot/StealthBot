@@ -129,7 +129,7 @@ Public TTTEngaged As String
 Public Protect As Boolean
 Public QC(0 To 8) As String
 
-'Public DisableMonitor As Boolean
+Public DisableMonitor As Boolean
 Public JoinMessagesOff As Boolean
 Public Filters As Boolean
 Public Mail As Boolean
@@ -192,7 +192,7 @@ Public ExReconTicks As Long
 Public ExReconMinutes As Long
 
 Public VoteDuration As Integer
-'Public MonitorForm As frmMonitor
+Public MonitorForm As frmMonitor
 Public PBuffer As New PacketBuffer
 Public ListToolTip As CTooltip
 Public AwaitingEmailReg As Byte
@@ -237,8 +237,8 @@ Public Const LAG_3 = 19
 Public Const LAG_4 = 20
 Public Const LAG_5 = 21
 Public Const LAG_6 = 22
-'Public Const MONITOR_ONLINE = 23
-'Public Const MONITOR_OFFLINE = 24
+Public Const MONITOR_ONLINE = 23
+Public Const MONITOR_OFFLINE = 24
 Public Const ICSCSW = 25
 
 'World Cyber Games icons
