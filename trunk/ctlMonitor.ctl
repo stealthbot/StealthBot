@@ -47,13 +47,13 @@ Private strUsername       As String
 Private strPassword       As String
 Private strServer         As String
 Private strBNLS           As String
-Private UserList()        As String
-Attribute UserList.VB_VarHelpID = -1
-Private Index             As Integer
+Attribute strBNLS.VB_VarHelpID = -1
+Private currentIndex      As Integer
 Private ServerToken       As Long
 Private ClientToken       As Long
 Private VersionByte       As Long
-Public Errored           As Integer
+Private colUserInfo       As Collection
+
 
 Public Event BNLSClose()
 Public Event BNETClose()
@@ -64,41 +64,51 @@ Public Event BNETError(ByVal Number As Integer, ByVal Description As String)
 Public Event OnVersionCheck(ByVal result As Long, PatchFile As String)
 Public Event OnLogin(ByVal Success As Boolean)
 Public Event OnChatJoin(ByVal UniqueName As String)
-Public Event UserInfo(ByVal Index As Integer, ByVal Username As String, ByVal Online As Boolean, ByVal Client As String, ByVal Channel As String)
+Public Event UserInfo(user As clsFriend)
 
 Public Sub LoadMonitorConfig()
   strUsername = ReadCFG("Monitor", "Username")
   strPassword = ReadCFG("Monitor", "Password")
   strServer = ReadCFG("Main", "Server")
-  strBNLS = "JBLS.org"
+  strBNLS = "Hdx.JBLS.org"
+  
   VersionByte = &H2A
-  Dim l As Integer, x As Integer
+  Dim l As Integer
   l = Val("&h" & ReadCFG("Monitor", "Verbyte"))
   If (l > 0) Then VersionByte = l
-  l = Val(ReadCFG("Monitor", "ListCount"))
-  If (l < 1) Then Exit Sub
-  ReDim UserList(0 To l - 1)
-  For x = 1 To l
-    UserList(x - 1) = ReadCFG("Monitor", "User" & x)
-  Next x
+  LoadList
+End Sub
+
+Public Sub LoadList()
+    Dim l As Integer, X As Integer
+    If (colUserInfo Is Nothing) Then Set colUserInfo = New Collection
+    l = Val(ReadCFG("Monitor", "ListCount"))
+    If (l < 1) Then Exit Sub
+    For X = 1 To l
+      Dim tmpUser As New clsFriend
+      tmpUser.Username = ReadCFG("Monitor", "User" & X)
+      colUserInfo.Add tmpUser, LCase(tmpUser.Username)
+    Next X
+End Sub
+Public Function getList() As Collection
+    Set getList = colUserInfo
+End Function
+
+Public Sub SaveList()
+    Dim X As Integer
+    If (colUserInfo Is Nothing) Then Exit Sub
+    WriteINI "Monitor", "ListCount", colUserInfo
+    For X = 0 To colUserInfo.Count
+      WriteINI "Monitor", "User" & (X + 1), colUserInfo.Item(X).Username
+    Next X
 End Sub
 
 Public Sub Connect()
     ClientToken = GetTickCount
     Debug.Print "[BNLS] Connecting " & strBNLS & ":9367"
     wsBnls.Close
-    wsBnls.Connect strBNLS, 9367
+    wsBnls.Connect strBNLS, 9368
 End Sub
-
-Public Function AddAccount(act As String) As Boolean
-  Dim x As Integer
-  For x = 0 To UBound(Users)
-    If (LCase(act) = LCase(Users(x))) Then Exit Function
-  Next x
-  ReDim Preserve Users(0 To UBound(Users) + 1)
-  Users(UBound(Users)) = act
-  AddAccount = True
-End Function
 
 Public Sub Disconnect()
     If wsBnls.State = sckConnected Then RaiseEvent BNLSClose
@@ -106,29 +116,27 @@ Public Sub Disconnect()
     wsBnls.Close
     wsBnet.Close
     tmr.Enabled = False
-    Index = 0
+    currentIndex = 1
 End Sub
 
 Private Sub tmr_Timer()
-    If UBound(UserList) < Index Then Index = 0
-    Call Send0x0E("/whereis " & UserList(Index))
+    If (currentIndex > colUserInfo.Count) Then currentIndex = 1
+    Debug.Print colUserInfo.Count
+    Call Send0x0E("/whereis " & colUserInfo.Item(1).Username)
 End Sub
 
 Private Sub UserControl_Initialize()
-    Dim optval  As Boolean
-    optval = False
     Call SetNagelStatus(wsBnet.SocketHandle, False)
     Call SetNagelStatus(wsBnls.SocketHandle, False)
     VersionByte = &H2A
-    ReDim UserList(0)
-    'LoadMonitorConfig
+    Set colUserInfo = New Collection
 End Sub
 
 Private Sub wsBnet_Close()
     Debug.Print "[BNET] Closed."
     RaiseEvent BNLSClose
     tmr.Enabled = False
-    Index = 0
+    currentIndex = 1
     wsBnet.Close
 End Sub
 
@@ -172,15 +180,13 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                 PBuffer.Advance 8 'remove the filetime
                 MPQName = PBuffer.DebuffNTString
                 VS = PBuffer.DebuffNTString
-                'Debug.Print "MPQ Name: " & MPQName
-                'Debug.Print "Value String: " & VS
                 Send0x1ABNLS MPQName, VS
     
             Case &H7
-                Dim result As Long, path As String
+                Dim result As Long, Path As String
                 result = PBuffer.DebuffDWORD
-                path = PBuffer.DebuffNTString
-                RaiseEvent OnVersionCheck(result, path)
+                Path = PBuffer.DebuffNTString
+                RaiseEvent OnVersionCheck(result, Path)
                 If (result = 2) Then
                     Send0x29
                 Else
@@ -216,11 +222,9 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                         Game = Mid(text, InStr(LCase(text), " using ") + 7)
                         Game = Left(Game, InStr(LCase(Game), " in ") - 1)
                     End If
-                    RaiseEvent UserInfo(Index, curName, True, Game, Channel)
                 ElseIf eventID = 19 Then
-                    RaiseEvent UserInfo(Index, UserList(Index), False, vbNullString, vbNullString)
                 End If
-                Index = Index + 1
+                currentIndex = currentIndex + 1
       
       
             Case &H1D
@@ -229,9 +233,9 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                 Debug.Print "Server token: 0x" & Hex(ServerToken)
       
             Case &H25
-                Dim PBuff As New PacketBuffer
-                PBuff.InsertDWORD PBuffer.DebuffDWORD
-                SendBNET PBuff.GetPacket(&H25)
+                Dim pBuff As New PacketBuffer
+                pBuff.InsertDWORD PBuffer.DebuffDWORD
+                SendBNET pBuff.GetPacket(&H25)
                 Debug.Print "[BNET] Send 0x25"
       
             Case &H29
@@ -290,7 +294,7 @@ Private Sub wsBnls_DataArrival(ByVal bytesTotal As Long)
         If Len(inBuff) < length Then Exit Sub
         ID = Asc(Mid(inBuff, 3, 1))
 
-     '   Debug.Print "[BNLS] Recived 0x" & Right("00" & Hex(ID), 2)
+        'Debug.Print "[BNLS] Recived 0x" & Right("00" & Hex(ID), 2)
 
         Dim PBuffer As New clsPacketDebuffer
         PBuffer.DebuffPacket Left(inBuff, length)
@@ -298,10 +302,10 @@ Private Sub wsBnls_DataArrival(ByVal bytesTotal As Long)
 
         Select Case ID
             Case &H1A
-                Dim exeVer As Long, check As Long, info As String, vb As Long
+                Dim exeVer As Long, Check As Long, info As String, vb As Long
                 PBuffer.Advance 4
                 exeVer = PBuffer.DebuffDWORD
-                check = PBuffer.DebuffDWORD
+                Check = PBuffer.DebuffDWORD
                 info = PBuffer.DebuffNTString
                 PBuffer.Advance 4
                 VersionByte = PBuffer.DebuffDWORD
@@ -309,7 +313,7 @@ Private Sub wsBnls_DataArrival(ByVal bytesTotal As Long)
                 'Debug.Print "Checksum: 0x" & Right("0000000" & Hex(check), 8)
                 'Debug.Print "EXE Info: " & info
                 'Debug.Print "VerByte: 0x" & Right("00" & Hex(VersionByte), 2)
-                Call Send0x07(exeVer, check, info, vb)
+                Call Send0x07(exeVer, Check, info, vb)
 
             Case Else
                 'Debug.Print "[BNLS] Unhandeled Packet 0x" & Right("00" & Hex(ID), 2)
@@ -331,14 +335,14 @@ Private Sub Send0x06()
     'Debug.Print "[BNET] Sent 0x06"
 End Sub
 
-Private Sub Send0x07(ver As Long, check As Long, info As String, vb As Long)
+Private Sub Send0x07(ver As Long, Check As Long, info As String, vb As Long)
     Dim PBuffer As New PacketBuffer
     With PBuffer
         .InsertDWORD PLATID
         .InsertDWORD PRODID
         .InsertDWORD VersionByte
         .InsertDWORD ver
-        .InsertDWORD check
+        .InsertDWORD Check
         .InsertNTString info
         SendBNET .GetPacket(7)
     End With
@@ -450,15 +454,15 @@ Private Function GetFTString(Optional LocalTime As Boolean = False) As String
 End Function
 
 Private Function LocaleInfo(ByVal locale As Long, ByVal lc_type As Long) As String
-    Dim length As Long, Buf As String * 1024
-    length = GetLocaleInfo(locale, lc_type, Buf, Len(Buf))
-    LocaleInfo = Left$(Buf, length - 1)
+    Dim length As Long, buf As String * 1024
+    length = GetLocaleInfo(locale, lc_type, buf, Len(buf))
+    LocaleInfo = Left$(buf, length - 1)
 End Function
 
-Private Function GetCompUserName(Optional User As Boolean = False) As String
+Private Function GetCompUserName(Optional user As Boolean = False) As String
     Dim strBuff As String, Rut As Long
     strBuff = String(255, Chr(&H0))
-    Rut = IIf(User, GetUserName(strBuff, Len(strBuff)), GetComputerName(strBuff, Len(strBuff)))
+    Rut = IIf(user, GetUserName(strBuff, Len(strBuff)), GetComputerName(strBuff, Len(strBuff)))
 
     Rut = InStr(strBuff, Chr$(&H0))
     GetCompUserName = Left(strBuff, Rut - 1)
