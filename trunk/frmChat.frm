@@ -5073,25 +5073,28 @@ End Sub
 
 'StealthLock (c) 2003 Stealth, Please do not remove this header
 Private Function GetAuth(ByVal Username As String) As Boolean
-    On Error Resume Next
-    Username = LCase(Username)
-    Dim s As String, A() As String, i As Integer
-    s = INet.OpenURL("http://www.stealthbot.net/beta/sbauth.txt")
-    If StrComp(INet.URL, "http://www.stealthbot.net/beta/sbauth.txt") <> 0 Then
-        MsgBox "The StealthLock authorization code has been tampered with. This program will now close.", vbCritical, "Error."
-        Call Form_Unload(0)
-    End If
+    On Error GoTo ERROR_HANDLER
+
+    Dim res As String ' string variable for storing beta authorization result
+                      ' 0 == unauthorized
+                      ' 1 == authorized
+                      
+    res = INet.OpenURL("http://www.stealthbot.net/board/sbauth.php?username=" & Username)
+
     Do While INet.StillExecuting
         DoEvents
     Loop
-    A() = Split(s, Chr(10))
-    For i = LBound(A) To UBound(A)
-       A(i) = Replace(A(i), Chr(10), vbNullString)
-        If StrComp(LCase(A(i)), LCase(Username), vbTextCompare) = 0 Then
-           GetAuth = True
-           Exit Function
-        End If
-    Next i
+    
+    If (res = "1") Then
+        GetAuth = True
+    Else
+        GetAuth = False
+    End If
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    GetAuth = False
 End Function
 
 Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
