@@ -5,8 +5,8 @@ Begin VB.Form frmMonitor
    BorderStyle     =   1  'Fixed Single
    Caption         =   "User Monitor"
    ClientHeight    =   4800
-   ClientLeft      =   300
-   ClientTop       =   495
+   ClientLeft      =   345
+   ClientTop       =   510
    ClientWidth     =   7575
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
@@ -390,8 +390,8 @@ Private Sub monConn_OnVersionCheck(ByVal result As Long, PatchFile As String)
   Debug.Print "Version: 0x" & Hex(result)
 End Sub
 
-Private Sub monConn_UserInfo(ByVal Index As Integer, ByVal Username As String, ByVal Online As Boolean, ByVal Client As String, ByVal Channel As String)
-  Debug.Print Username & ", " & Online & ", " & Channel
+Private Sub monConn_UserInfo(user As clsFriend)
+  Debug.Print user.Username & ": " & user.Status
 End Sub
 
 Private Sub txtAdd_KeyPress(KeyAscii As Integer)
@@ -573,18 +573,6 @@ Function GetUserStatus(ByVal Username As String) As Integer
         Set x = Nothing
     Else
         GetUserStatus = -1
-    End If
-End Function
-
-Function GetLastWhoisResponse(ByVal Username As String) As String
-    Dim x As ListItem
-    
-    Set x = lvMonitor.FindItem(Username)
-    
-    If Not (x Is Nothing) Then
-        GetLastWhoisResponse = x.Tag
-        
-        Set x = Nothing
     End If
 End Function
 
