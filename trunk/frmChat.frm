@@ -1370,6 +1370,7 @@ Begin VB.Form frmChat
    End
    Begin VB.Menu mnuFLpop 
       Caption         =   "flistpopup"
+      Visible         =   0   'False
       Begin VB.Menu mnuFLPopWhisper 
          Caption         =   "&Whisper"
       End
@@ -3446,6 +3447,7 @@ Private Sub mnuPopSquelch_Click()
     AddQ "/squelch " & IIf(Dii, "*", "") & GetSelectedUser
 End Sub
 
+
 Private Sub mnuPopUnsquelch_Click()
     On Error Resume Next
     
@@ -3515,6 +3517,7 @@ End Sub
 Private Sub mnuClearedTxt_Click()
     Shell "notepad " & GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt", vbNormalFocus
 End Sub
+
 
 Private Sub mnuQC_Click(Index As Integer)
     If Len(QC(Index)) > 0 Then
