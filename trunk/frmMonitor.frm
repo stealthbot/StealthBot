@@ -5,8 +5,8 @@ Begin VB.Form frmMonitor
    BorderStyle     =   1  'Fixed Single
    Caption         =   "User Monitor"
    ClientHeight    =   4800
-   ClientLeft      =   390
-   ClientTop       =   525
+   ClientLeft      =   435
+   ClientTop       =   540
    ClientWidth     =   7575
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
@@ -332,7 +332,6 @@ Private Sub cmdRem_CLick()
     End If
     
     If Not (lvMonitor.SelectedItem Is Nothing) Then
-        Call RemUser(lvMonitor.SelectedItem.Index)
     End If
 End Sub
 Sub cmdAdd_Click()
@@ -495,7 +494,7 @@ End Sub
 
 Sub AddUser(ByVal Username As String)
     On Error Resume Next
-    If (Not monConn.AddAccount(Username)) Then Exit Sub
+    'If (Not monConn.AddAccount(Username)) Then Exit Sub
     With lvMonitor
         .ListItems.Add , Username, Username, , ICSQUELCH
         'Debug.Print .ListItems(.ListItems.Count).ListSubItems.Count

@@ -97,7 +97,7 @@ End Function
 Public Sub SaveList()
     Dim X As Integer
     If (colUserInfo Is Nothing) Then Exit Sub
-    WriteINI "Monitor", "ListCount", colUserInfo
+    WriteINI "Monitor", "ListCount", colUserInfo.Count
     For X = 0 To colUserInfo.Count
       WriteINI "Monitor", "User" & (X + 1), colUserInfo.Item(X).Username
     Next X
