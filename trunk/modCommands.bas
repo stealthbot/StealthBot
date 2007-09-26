@@ -424,11 +424,27 @@ Public Function Commands(ByRef dbAccess As udtGetAccessResponse, ByVal Username 
                 GoTo theEnd
                 
             ElseIf Left$(cMsg, 6) = BotVars.Trigger & "math " Or Left$(cMsg, 6) = BotVars.Trigger & "eval " Then
-                u = Mid$(cMsg, 7)
-                
                 On Error GoTo evalError
-                
-                strSend = frmChat.SCRestricted.Eval(u)
+                'Math now has 3 levels.
+                '50: No UI, and no CreateObject()
+                '80: UI, no CreateObject()
+                '100: No restrictions
+                'Hdx - 09-25-07
+                u = Mid$(cMsg, 7)
+                If dbAccess.Access >= GetAccessINIValue("math80", 80) Then
+                    If dbAccess.Access >= GetAccessINIValue("math100", 100) Then
+                        frmChat.SCRestricted.AllowUI = True
+                        strSend = frmChat.SCRestricted.Eval(u)
+                    Else
+                        If (InStr(LCase(u), "createobject") > 0) Then GoTo evalError
+                        frmChat.SCRestricted.AllowUI = True
+                        strSend = frmChat.SCRestricted.Eval(u)
+                    End If
+                Else
+                    If (InStr(LCase(u), "createobject") > 0) Then GoTo evalError
+                    frmChat.SCRestricted.AllowUI = False
+                    strSend = frmChat.SCRestricted.Eval(u)
+                End If
                 
                 While Left$(strSend, 1) = "/"
                     strSend = Mid$(strSend, 2)
