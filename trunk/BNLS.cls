@@ -21,12 +21,12 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Public Sub ServToken(ByRef s As String, ByVal Setting As Byte)
+Public Sub ServToken(ByRef S As String, ByVal Setting As Byte)
     Static Token As String
     
     Select Case Setting
-        Case 0: s = Token
-        Case 1: Token = s
+        Case 0: S = Token
+        Case 1: Token = S
     End Select
 End Sub
 
@@ -173,9 +173,9 @@ Public Sub Send_0x1A(ByVal ProductID As Long, ByVal Flags As Long, ByVal Cookie 
     Packet.vLSendPacket &H1A
 End Sub
 
-Public Sub SendGenPacket(ByVal s As String, ByVal PacketID As Byte) 'Send back packets that consist
+Public Sub SendGenPacket(ByVal S As String, ByVal PacketID As Byte) 'Send back packets that consist
                                                                     'entirely of data from BNLS.
-    Packet.InsertNonNTString s
+    Packet.InsertNonNTString S
     Packet.SendPacket PacketID
     
 End Sub
@@ -388,28 +388,6 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
                 Call Send_BNLS0x51
             End If
         
-        '==================================================
-        ' CUSTOM JBLS PACKET
-        ' Added August 10, 2005 by request of HdxBmx27
-        '==================================================
-        Case &HFF 'JBLS_SERVERMESSAGE - JBLS server operator news
-            'DWORD: Number of enteries
-            'STRING[]: Message.
-            lTemp = Conv(Mid$(Data, 4, 4))
-            
-            If lTemp > 0 And lTemp < 10 Then
-                Splt() = Split(Mid$(Data, 8), Chr(0))
-                
-                frmChat.AddChat RTBColors.ServerInfoText, "And now, a message from the operator of the JBLS server you're connecting to:"
-                
-                For lTemp = LBound(Splt) To UBound(Splt)
-                    If Len(Splt(lTemp)) > 1 Then
-                        frmChat.AddChat RTBColors.ServerInfoText, Splt(lTemp)
-                    End If
-                Next lTemp
-            End If
-        ' NOT IMPLEMENTED
-        'Case &HFE 'JBLS_SERVERVER
         
     End Select
 End Sub
