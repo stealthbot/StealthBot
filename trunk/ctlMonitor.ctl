@@ -76,6 +76,10 @@ Public Sub LoadMonitorConfig()
   Dim l As Integer
   l = Val("&h" & ReadCFG("Monitor", "Verbyte"))
   If (l > 0) Then VersionByte = l
+  
+  For l = 1 To colUserInfo.Count
+      colUserInfo.Remove (1)
+  Next l
   LoadList
 End Sub
 
@@ -84,8 +88,9 @@ Public Sub LoadList()
     If (colUserInfo Is Nothing) Then Set colUserInfo = New Collection
     l = Val(ReadCFG("Monitor", "ListCount"))
     If (l < 1) Then Exit Sub
+    Dim tmpUser As clsFriend
     For X = 1 To l
-      Dim tmpUser As New clsFriend
+      Set tmpUser = New clsFriend
       tmpUser.Username = ReadCFG("Monitor", "User" & X)
       colUserInfo.Add tmpUser, LCase(tmpUser.Username)
     Next X
@@ -93,21 +98,44 @@ End Sub
 Public Function getList() As Collection
     Set getList = colUserInfo
 End Function
-
 Public Sub SaveList()
     Dim X As Integer
     If (colUserInfo Is Nothing) Then Exit Sub
     WriteINI "Monitor", "ListCount", colUserInfo.Count
-    For X = 0 To colUserInfo.Count
-      WriteINI "Monitor", "User" & (X + 1), colUserInfo.Item(X).Username
+    For X = 1 To colUserInfo.Count
+      WriteINI "Monitor", "User" & X, colUserInfo.Item(X).Username
     Next X
+End Sub
+
+Public Function AddUser(sUser As String) As Boolean
+    AddUser = False
+    If (InStr(sUser, " ") > 0) Then Exit Function
+    Dim X As Integer
+    For X = 1 To colUserInfo.Count
+      If (LCase(colUserInfo.Item(X).Username) = LCase(sUser)) Then Exit Function
+    Next X
+    Dim newUser As New clsFriend
+    newUser.Username = sUser
+    colUserInfo.Add newUser, LCase(sUser)
+    SaveList
+    AddUser = True
+End Function
+Public Sub RemoveUser(sUser As String)
+    Dim X As Integer
+    For X = 1 To colUserInfo.Count
+      If (LCase(colUserInfo.Item(X).Username) = LCase(sUser)) Then
+        colUserInfo.Remove (X)
+        Exit For
+      End If
+    Next X
+    SaveList
 End Sub
 
 Public Sub Connect()
     ClientToken = GetTickCount
     Debug.Print "[BNLS] Connecting " & strBNLS & ":9367"
     wsBnls.Close
-    wsBnls.Connect strBNLS, 9368
+    wsBnls.Connect strBNLS, 9367
 End Sub
 
 Public Sub Disconnect()
@@ -120,9 +148,11 @@ Public Sub Disconnect()
 End Sub
 
 Private Sub tmr_Timer()
-    If (currentIndex > colUserInfo.Count) Then currentIndex = 1
-    Debug.Print colUserInfo.Count
-    Call Send0x0E("/whereis " & colUserInfo.Item(1).Username)
+    If (currentIndex > colUserInfo.Count Or currentIndex < 1) Then currentIndex = 1
+    If (colUserInfo.Count > 0) Then
+        Debug.Print "Timer: " & colUserInfo.Item(currentIndex).Username
+        Call Send0x0E("/whereis " & colUserInfo.Item(currentIndex).Username)
+    End If
 End Sub
 
 Private Sub UserControl_Initialize()
@@ -209,22 +239,42 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                 PBuffer.Advance 20
                 Username = PBuffer.DebuffNTString
                 text = PBuffer.DebuffNTString
-                Dim curName As String, Game As String, Channel As String
-                curName = Split(text, Space(1))(0)
-                If eventID = 18 Then
-                    If InStr(LCase(text), " is refusing messages ") > 0 Then Exit Sub
-                    If InStr(LCase(text), " is away ") > 0 Then Exit Sub
-                    If InStr(LCase(text), " in the ") > 0 Then
-                        Channel = Mid(text, InStr(LCase(text), " in the ") + 8)
-                        Channel = Left(Channel, Len(Channel) - 1)
-                    End If
-                    If InStr(LCase(text), " using ") > 0 Then
-                        Game = Mid(text, InStr(LCase(text), " using ") + 7)
-                        Game = Left(Game, InStr(LCase(Game), " in ") - 1)
-                    End If
-                ElseIf eventID = 19 Then
+                If (currentIndex <= colUserInfo.Count) Then
+                    With colUserInfo.Item(currentIndex)
+                        If eventID = 18 Then
+                            .Status = 1
+                            Dim Channel As String, game As String
+                            If InStr(1, text, " in the ", vbTextCompare) > 0 Then
+                                Channel = Mid(text, InStr(LCase(text), " in the ", vbTextCompare) + 8)
+                                Channel = Left(Channel, Len(Channel) - 1)
+                            ElseIf InStr(1, text, " in a ", vbTextCompare) > 0 Then
+                                Channel = Mid(text, InStr(1, text, " in a ", vbTextCompare) + 6)
+                                Channel = Left(Channel, Len(Channel) - 1)
+                            Else
+                                Channel = "Unknown"
+                            End If
+                            If InStr(1, text, " using ", vbTextCompare) > 0 Then
+                                game = Mid(text, InStr(1, text, " using ", vbTextCompare) + 7)
+                                game = Left(game, InStr(1, game, " in ", vbTextCompare) - 1)
+                            End If
+                            .Product = game
+                            .Channel = Channel
+                            
+                            If (InStr(1, text, " is refusing messages ", vbTextCompare) = 0) Then
+                                If (InStr(1, text, " is away ", vbTextCompare) = 0) Then
+                                    RaiseEvent UserInfo(colUserInfo.Item(currentIndex))
+                                    currentIndex = currentIndex + 1
+                                End If
+                            End If
+                        ElseIf eventID = 19 Then
+                            .Status = 0
+                            .Product = vbNullString
+                            .Channel = "Offline"
+                            RaiseEvent UserInfo(colUserInfo.Item(currentIndex))
+                            currentIndex = currentIndex + 1
+                        End If
+                    End With
                 End If
-                currentIndex = currentIndex + 1
       
       
             Case &H1D

@@ -5,8 +5,8 @@ Begin VB.Form frmMonitor
    BorderStyle     =   1  'Fixed Single
    Caption         =   "User Monitor"
    ClientHeight    =   4800
-   ClientLeft      =   435
-   ClientTop       =   540
+   ClientLeft      =   1065
+   ClientTop       =   750
    ClientWidth     =   7575
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
@@ -89,10 +89,6 @@ Begin VB.Form frmMonitor
       Top             =   1320
       Width           =   2055
    End
-   Begin VB.Timer tmrDelay 
-      Left            =   5640
-      Top             =   2520
-   End
    Begin VB.CommandButton cmdDone 
       Caption         =   "&Close"
       BeginProperty Font 
@@ -154,6 +150,7 @@ Begin VB.Form frmMonitor
       _ExtentY        =   7435
       View            =   3
       Arrange         =   1
+      LabelEdit       =   1
       LabelWrap       =   0   'False
       HideSelection   =   -1  'True
       FullRowSelect   =   -1  'True
@@ -276,8 +273,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private strUsers() As String
-Private LastCheck As Integer
 Private StatusWatch() As Byte
 Private Sent() As Byte
 Attribute Sent.VB_VarHelpID = -1
@@ -307,17 +302,26 @@ End Sub
 Private Sub Form_Load()
     'On Error Resume Next
     Me.Icon = frmChat.Icon
+    monConn.LoadMonitorConfig
     If Not DisableMonitor Then
-      monConn.LoadMonitorConfig
-      monConn.Connect
+        monConn.Connect
     Else
         Call cmdDisc_Click
     End If
     
+    Dim users As Collection, X As Integer
     With lvMonitor
         .SmallIcons = frmChat.imlIcons
         .Icons = frmChat.imlIcons
         .View = lvwReport
+        .ListItems.Clear
+        Set users = monConn.getList
+        For X = 1 To users.Count
+            .ListItems.Add , users.Item(X).Username, users.Item(X).Username, , ICSQUELCH
+            .ListItems(.ListItems.Count).ListSubItems.Add 1, "status", "Offline", MONITOR_OFFLINE
+            .ListItems(.ListItems.Count).ListSubItems.Add 2, "last", "None"
+            .ListItems(.ListItems.Count).Tag = "0"
+        Next X
     End With
 End Sub
 
@@ -332,6 +336,8 @@ Private Sub cmdRem_CLick()
     End If
     
     If Not (lvMonitor.SelectedItem Is Nothing) Then
+        Call monConn.RemoveUser(lvMonitor.SelectedItem.text)
+        lvMonitor.ListItems.Remove (lvMonitor.SelectedItem.Index)
     End If
 End Sub
 Sub cmdAdd_Click()
@@ -348,14 +354,17 @@ End Sub
 
 Private Sub monConn_BNETClose()
   Debug.Print "BNET Close"
+  lblStatus.Caption = "Offline"
 End Sub
 
 Private Sub monConn_BNETConnect()
   Debug.Print "BNET Connect"
+  lblStatus.Caption = "Connecting..."
 End Sub
 
 Private Sub monConn_BNETError(ByVal Number As Integer, ByVal Description As String)
   Debug.Print "BNET " & Number & " " & Description
+  lblStatus.Caption = "[BNET] " & Number & ": " & Description
 End Sub
 
 Private Sub monConn_BNLSClose()
@@ -368,10 +377,12 @@ End Sub
 
 Private Sub monConn_BNLSError(ByVal Number As Integer, ByVal Description As String)
   Debug.Print "BNLS " & Number & " " & Description
+  lblStatus.Caption = "[BNLS] " & Number & ": " & Description
 End Sub
 
 Private Sub monConn_OnChatJoin(ByVal UniqueName As String)
   Debug.Print "Logged in as " & UniqueName
+  lblStatus.Caption = "[BNET] Connected as " & UniqueName
 End Sub
 
 Private Sub monConn_OnLogin(ByVal Success As Boolean)
@@ -383,7 +394,8 @@ Private Sub monConn_OnVersionCheck(ByVal result As Long, PatchFile As String)
 End Sub
 
 Private Sub monConn_UserInfo(user As clsFriend)
-  Debug.Print user.Username & ": " & user.Status
+  Debug.Print "User info: " & user.Username & ": " & user.Status
+  Call UpdateList(user)
 End Sub
 
 Private Sub txtAdd_KeyPress(KeyAscii As Integer)
@@ -392,109 +404,69 @@ Private Sub txtAdd_KeyPress(KeyAscii As Integer)
         KeyAscii = 0
     End If
 End Sub
-Private Sub UpdateList(ByVal Msg As String, Optional Disable As Byte)
+Private Sub UpdateList(user As clsFriend)
     Dim X As ListItem, Holder As Integer, b As Byte
     
-    If Disable = 1 Then
-        If LastCheck = 0 Then
-            If Len(strUsers(0)) > 0 Then
-                Set X = lvMonitor.FindItem(strUsers(0))
-                Sent(0) = 0
-                b = 1
+    If InStr(1, user.Product, "starcraft", vbTextCompare) <> 0 Then
+        If InStr(1, user.Product, "broodwar", vbTextCompare) <> 0 Then
+            Holder = ICSEXP
+        ElseIf InStr(1, user.Product, "japanese", vbTextCompare) <> 0 Then
+            Holder = ICJSTR
+        ElseIf InStr(1, user.Product, "shareware", vbTextCompare) <> 0 Then
+            Holder = ICSCSW
+        Else
+            Holder = ICSTAR
+        End If
+    ElseIf InStr(1, user.Product, "diablo", vbTextCompare) <> 0 Then
+        If InStr(1, user.Product, "ii", vbTextCompare) <> 0 Then
+            If InStr(1, user.Product, "lord of destruction", vbTextCompare) <> 0 Then
+                Holder = ICD2XP
+            Else
+                Holder = ICD2DV
             End If
         Else
-            If Len(strUsers(LastCheck - 1)) > 0 Then
-                Set X = lvMonitor.FindItem(strUsers(LastCheck - 1))
-                Sent(LastCheck - 1) = 0
-                b = 1
+            If InStr(1, user.Product, "shareware", vbTextCompare) <> 0 Then
+                Holder = ICDIABLOSW
+            Else
+                Holder = ICDIABLO
             End If
         End If
-        
-        If b = 1 And (Not (X Is Nothing)) Then
-            With lvMonitor
-                .ListItems(X.Index).SmallIcon = ICSQUELCH
-                .ListItems(X.Index).ListSubItems.Clear
-                .ListItems(X.Index).ListSubItems.Add , "status", "Offline", MONITOR_OFFLINE
-                .ListItems(X.Index).ListSubItems.Add , "last", Time
-            End With
-        End If
-    Else
-        
-        If LastCheck = 0 Then
-            If GetStatusWatch(strUsers(0)) = 1 And Not Sent(0) = 1 Then
-                StatusOnline strUsers(0)
-                Sent(0) = 1
+    ElseIf InStr(1, user.Product, "chat", vbTextCompare) <> 0 Then
+        Holder = ICCHAT
+    ElseIf InStr(1, user.Product, "warcraft", vbTextCompare) <> 0 Then
+        If InStr(1, user.Product, "iii", vbTextCompare) <> 0 Then
+            Holder = ICWAR3
+            If InStr(1, user.Product, "frozen throne", vbTextCompare) <> 0 Then
+                Holder = ICWAR3X
             End If
         Else
-            If GetStatusWatch(strUsers(LastCheck - 1)) = 1 And Not (Sent(LastCheck - 1) = 1) Then
-                StatusOnline strUsers(LastCheck - 1)
-                Sent(LastCheck - 1) = 1
-            End If
+            Holder = ICW2BN
         End If
-        
-        Msg = LCase(Right(Msg, Len(Msg) - InStr(1, Msg, "using", vbTextCompare)))
-        
-        If InStr(1, Msg, "starcraft", vbTextCompare) <> 0 Then
-            If InStr(1, Msg, "broodwar", vbTextCompare) <> 0 Then
-                Holder = ICSEXP
-            ElseIf InStr(1, Msg, "japanese", vbTextCompare) <> 0 Then
-                Holder = ICJSTR
-            ElseIf InStr(1, Msg, "shareware", vbTextCompare) <> 0 Then
-                Holder = ICSCSW
-            Else
-                Holder = ICSTAR
-            End If
-        ElseIf InStr(1, Msg, "diablo", vbTextCompare) <> 0 Then
-            If InStr(1, Msg, "ii", vbTextCompare) <> 0 Then
-                If InStr(1, Msg, "lord of destruction", vbTextCompare) <> 0 Then
-                    Holder = ICD2XP
-                Else
-                    Holder = ICD2DV
-                End If
-            Else
-                If InStr(1, Msg, "shareware", vbTextCompare) <> 0 Then
-                    Holder = ICDIABLOSW
-                Else
-                    Holder = ICDIABLO
-                End If
-            End If
-        ElseIf InStr(1, Msg, "chat", vbTextCompare) <> 0 Then
-            Holder = ICCHAT
-        ElseIf InStr(1, Msg, "warcraft", vbTextCompare) <> 0 Then
-            If InStr(1, Msg, "iii", vbTextCompare) <> 0 Then
-                Holder = ICWAR3
-                If InStr(1, Msg, "frozen throne", vbTextCompare) <> 0 Then
-                    Holder = ICWAR3X
-                End If
-            Else
-                Holder = ICW2BN
-            End If
+    End If
+    If Holder = 0 Then Holder = ICUNKNOWN
+    Set X = lvMonitor.FindItem(user.Username)
+    If Not X Is Nothing Then
+        If user.Location = 1 And Not (X.Icon = 1) Then
+            StatusOnline user.Username
+            X.Icon = 1
         End If
-
-        If Holder = 0 Then Holder = ICUNKNOWN
-        
-        If LastCheck <> 0 Then
-            Set X = lvMonitor.FindItem(strUsers(LastCheck - 1))
-        Else
-            Set X = lvMonitor.FindItem(strUsers(0))
-        End If
-        
-        If Not X Is Nothing Then
-            With lvMonitor.ListItems(X.Index)
-                On Error Resume Next
-                .Tag = Msg
-                .SmallIcon = Holder
-                .ListSubItems.Clear
+        With lvMonitor.ListItems(X.Index)
+            On Error Resume Next
+            .SmallIcon = Holder
+            .ListSubItems.Clear
+            If (user.Status = 1) Then
                 .ListSubItems.Add , "status", "Online", MONITOR_ONLINE
-                .ListSubItems.Add , "last", Time
-            End With
-        End If
+            Else
+                .ListSubItems.Add , "status", "Offline", MONITOR_OFFLINE
+            End If
+            .ListSubItems.Add , "last", Time
+        End With
     End If
 End Sub
 
 Sub AddUser(ByVal Username As String)
     On Error Resume Next
-    'If (Not monConn.AddAccount(Username)) Then Exit Sub
+    If (Not monConn.AddUser(Username)) Then Exit Sub
     With lvMonitor
         .ListItems.Add , Username, Username, , ICSQUELCH
         'Debug.Print .ListItems(.ListItems.Count).ListSubItems.Count
@@ -505,22 +477,14 @@ Sub AddUser(ByVal Username As String)
 End Sub
 
 Function SetStatusWatch(ByVal Val As Byte, ByVal Username As String) As Byte
-    Dim i As Integer
-        
-    On Error GoTo SetStatusWatch_Error
-
-    For i = 0 To UBound(strUsers)
-        Debug.Print "Comparing " & strUsers(i) & " to " & Username
-        
-        If StrComp(strUsers(i), Username, vbTextCompare) = 0 Then
-            StatusWatch(i) = Val
-            SetStatusWatch = 1
-            
-            Exit Function
-        End If
-    Next i
-
-    On Error GoTo 0
+    Dim X As ListItem
+    
+    Set X = lvMonitor.FindItem(Username)
+    
+    If Not (X Is Nothing) Then
+        X.Icon = Val
+        SetStatusWatch = 1
+    End If
     Exit Function
 
 SetStatusWatch_Error:
@@ -534,20 +498,15 @@ Sub StatusOnline(ByVal Username As String)
 End Sub
 
 Function GetStatusWatch(ByVal Username As String) As Byte
-
-    Dim i As Integer
+    Dim X As Collection, i As Integer
     
-    Username = LCase(Username)
-    
-    For i = 0 To UBound(strUsers)
-        If StrComp(Username, strUsers(i), vbTextCompare) = 0 Then
-            
-            GetStatusWatch = StatusWatch(i)
-            Exit Function
-            
+    Set X = monConn.getList
+    For i = 1 To X.Count
+        If (StrComp(Username, X.Item(i).Username, vbTextCompare) = 0) Then
+          GetStatusWatch = X.Item(i).Location
+          Exit Function
         End If
     Next i
-
 End Function
 
 Function GetUserStatus(ByVal Username As String) As Integer
