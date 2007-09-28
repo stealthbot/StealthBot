@@ -1,6 +1,7 @@
 StealthBot master to-do list, updated 11/27/06
 
-Key:	- : Pending item
+Key:
+	- : Pending item
 	+ : High-priority pending item
 	X : Completed item
 	| : In-progress item
@@ -18,30 +19,30 @@ ONGOING
 	- Connection problems under Unicode language settings
 
 NEXT VER / FUTURE
-    	- Install ctlConnection from Hdx
+    - Install ctlConnection from Hdx
 	- Improve the Watch system (multiple colors..?) (Jack)
  	- /setproduct command
 	- Password change feature (raylu)
 	- Name aliases ala Gaim (Jack)
 	- Guess gateways on moderation actions (Berzerker)
-	- Custom scriptable message variables (HdxBmx)
+	- Custom scriptable message variables (Hdx)
 	- Add a command to toggle ban evasion (Retain)
 	- Handle 0x0B and pass to scripters (Hdx)
    	- Add transparency (Distant.Echo)
-    	- An "undo" command system
-    	- Use the last channel as a home
-    	- Integrate /c commands like .openchannel
-    	- Autodetect massloads and give the user options to react accordingly
-    	- Auto-squelch command spammers for X seconds
-    	- Different icon when disconnected
-    	- Topic 8613
-    	- Outgoing filters for all info coming out of the bot? (localization?) - Snap
+    - An "undo" command system
+    - Use the last channel as a home
+    - Integrate /c commands like .openchannel
+    - Autodetect massloads and give the user options to react accordingly
+    - Auto-squelch command spammers for X seconds
+    - Different icon when disconnected
+    - Topic 8613
+    - Outgoing filters for all info coming out of the bot? (localization?) - Snap
 	- Add an expansion key manager (TankheaD)  
 	- Warcraft III icon changer
 
 COMPLETED
 	X Prevent realm logons to expansion characters when on Classic (LuC1Fr)
-    	X Improve the .add system so that who-added and time-added are tracked (Michichael)
+    X Improve the .add system so that who-added and time-added are tracked (Michichael)
 	X Add GetScriptControl() method to ssc (Hdx)
 	X Implement FrOzeN's code to prevent the scrollbar from being pulled back down to the bottom of the screen
 	X Add current time to idle message variables
@@ -49,15 +50,15 @@ COMPLETED
 	X Fix the Chat Filters interface which is not erasing old filters
 	X Make "Ignore Clan Invites" remember properly (Jack)
 	X Ensure that tray clicks are on mouseUp (Retain)
-    	X Make right-clicks on users in the Clan list select them [the channel list does this] (Retain)
+   	X Make right-clicks on users in the Clan list select them [the channel list does this] (Retain)
 	X Update all direct file references to use GetFilePath()
 	X Update documentation reflecting the above change, and where to put your pointers to other files
 	X Stop timer / clean up automatic selection code in the Realm window (Retain)
 	X Check that FlashWindow is being properly turned off (Jack)
 	X Make arrow keys stop the realm timer
 	X Add warning code in the CC Editor about adding > 999 access (LuC1Fr)
-    	X Try and get the SSC function Sleep working, or remove it (Draco)
-    	X Remove references to userlistpath / shitlistpath / safelistpath
+    X Try and get the SSC function Sleep working, or remove it (Draco)
+    X Remove references to userlistpath / shitlistpath / safelistpath
 	X Switch QuickChannels to an INI system (raylu)
 	X Update code for output in findattr to be more accurate with [more]s (copy from elsewhere)
   	X Remove deathknightz.net from the About page
@@ -69,11 +70,11 @@ COMPLETED
 		Wrong ver byte? increment by 1 and try again
 		store permanently in config.ini (Lord[nK])
 	X Raise the Event_Command() event appropriately
-    	X Mail cleanup feature (lemonhead)
+    X Mail cleanup feature (lemonhead)
   	X Fix GetConfigEntry() and WriteConfigEntry() to work with cpath hacks
-    	X Fix GetUserProfile() (Jack, Sinaps)
+    X Fix GetUserProfile() (Jack, Sinaps)
    	X Don't allow .ipban to squelch safelisted people (Retain)
-    	X Control different levels of .say through access.ini (raylu)
+    X Control different levels of .say through access.ini (raylu)
 	X Typing in a whisper window - press enter, bot creates another IWW for that message
 		(when on D2 realms) (Retain)
 	X Make default built-in safelist value customizable (currently 20) (Draco)
