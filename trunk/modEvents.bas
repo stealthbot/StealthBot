@@ -287,7 +287,7 @@ Repeat4:
         If InStr(1, KeyValue, " ", vbTextCompare) > 0 Then '// If it's a FILETIME
         
             Dim FT As FILETIME
-            Dim st As SYSTEMTIME
+            Dim sT As SYSTEMTIME
             
             FT.dwHighDateTime = CLng(Left$(KeyValue, InStr(1, KeyValue, " ", vbTextCompare)))
             
@@ -298,10 +298,10 @@ Repeat4:
             
             FT.dwLowDateTime = KeyValue 'CLng(KeyValue & "0")
             
-            FileTimeToSystemTime FT, st
+            FileTimeToSystemTime FT, sT
             
-            With st
-                Event_ServerInfo Right$(KeyName, Len(KeyName) - 7) & ": " & SystemTimeToString(st) & " (Battle.net time)"
+            With sT
+                Event_ServerInfo Right$(KeyName, Len(KeyName) - 7) & ": " & SystemTimeToString(sT) & " (Battle.net time)"
             End With
             
         Else    '// it's a SECONDS type
@@ -1385,9 +1385,7 @@ PhraseCleared:
             End If
         End If
         
-        If Left$(Message, 1) = BotVars.Trigger Or StrComp(LCase(Message), "?trigger") = 0 Then
-            ProcessCommand Message, Username, False
-        End If
+        Call ProcessCommand(Message, Username, False)
         
 theEnd:
         On Error Resume Next
@@ -1643,7 +1641,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
                 End If
             End If
         
-            ProcessCommand Message, Username, True
+            Call ProcessCommand(Message, Username, True)
         End If
         
         On Error Resume Next
@@ -1697,18 +1695,18 @@ Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, By
     End If
 End Sub
 
-Public Function Event_AccountCreateResponse(ByVal Result As Long) As Boolean
+Public Function Event_AccountCreateResponse(ByVal result As Long) As Boolean
     Dim Success As Boolean
     Dim sOut As String
     
-    Success = (Result = 0)
+    Success = (result = 0)
     
-    Select Case Result
+    Select Case result
         Case 1, 6: sOut = "Your desired account name does not contain enough alphanumeric characters."
         Case 2: sOut = "Your desired account name contains invalid characters."
         Case 3: sOut = "Your desired account name contains a banned word."
         Case 4: sOut = "Your desired account name already exists."
-        Case Else: sOut = "Unknown response to 0x3D. Result code: " & Result
+        Case Else: sOut = "Unknown response to 0x3D. Result code: " & result
     End Select
     
     If Success Then
