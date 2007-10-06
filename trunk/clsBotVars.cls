@@ -523,7 +523,7 @@ End Property
 Public Property Let Trigger(ByVal sTrigger As String)
 
     'Triggers longer or shorter than 1 character will break some stuff
-    If Len(sTrigger) = 1 Then m_sTrigger = sTrigger
+    m_sTrigger = sTrigger
 
 End Property
 
