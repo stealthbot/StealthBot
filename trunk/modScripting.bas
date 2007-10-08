@@ -27,8 +27,7 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
 
     If LenB(Dir$(Path)) = 0 Then
         AddChat vbRed, "No PluginSystem.dat file is present. It must exist in order to load plugins!"
-        AddChat vbGreen, "Developers, please use the PS dev code here: http://stealthbot.net/p/Users/Swent/ps-sbdev.txt"
-        AddChat vbGreen, "Save it to a text file named ""PluginSystem.dat"" in your trunk folder."
+        AddChat vbGreen, "Developers, please use the modified PluginSystem.dat that I've put in the repository."
         Exit Sub
     End If
     
