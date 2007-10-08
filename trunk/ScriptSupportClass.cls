@@ -16,6 +16,8 @@ Attribute VB_Exposed = False
 ' *
 ' * ScriptSupportClass.cls
 ' *
+' *     Last modified 8:45 PM 10/7/2007 by Swent
+' *
 ' * This class basically mirrors the signatures of several important StealthBot functions
 ' * for the purpose of allowing your scripts to interact with the rest of the program.
 ' *
@@ -86,6 +88,7 @@ Attribute VB_Exposed = False
 ' *     - Added DoStatstringParse() which allows you to parse a statstring from GetInternalData() out
 ' *         just like the bot does (thanks ZergMasterI)
 ' *     - Added a number of Windows API function mirrors (thanks FiftyToo)
+' *     - Added the Dsp() function (see notes below) - Swent
 ' *
 ' *
 ' *     (version 2.6R3, scripting system build 21)
@@ -156,6 +159,8 @@ Public myChannel As String  '// will contain the bot's current channel at runtim
 Public BotFlags As Long     '// will contain the bot's current battle.net flags at runtime.
 Public myUsername As String '// will contain the bot's current username at runtime.
                             '// NOTE: This may be different than the bot's config.ini username
+                            
+Public strSettingNotes      '// Used to display notes on your plugin settings
 
 '// myTrigger has been replaced by BotVars.Trigger
 'Public myTrigger As String '// contains the bot's current trigger at runtime
@@ -1071,7 +1076,7 @@ Public Function RegisterScriptMenu(ByVal sMenuCaption As String) As Long
     lMenu = GetMenu(frmChat.hWnd)
     
     If ScriptMenu_ParentID = 0 Then
-        ScriptMenu_ParentID = AddParentMenu(lMenu, "Scripts", , 5)
+        ScriptMenu_ParentID = AddParentMenu(lMenu, "Plugins", , 5)
         AddMenuItem ScriptMenu_ParentID, "(use at your own risk)", , , True
     End If
     
@@ -1211,4 +1216,123 @@ End Function
 Public Function WinSendMessage(ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     WinSendMessage = SendMessage(hWnd, wMsg, wParam, lParam)
 End Function
+
+
+'// SETSETTING
+'//     Creates and modifies plugin settings.
+'//     Overwrite is a boolean (True or False). Set to True if you want it to overwrite an existing value.
+'//     Use "" for the strDescription parameter and the existing description will be used.
+'//     Setting values of any length can now be set and retrieved properly (no 255 char max)
+Sub SetSetting(ByVal strPrefix As String, strName As String, varValue As Variant, strDescription As String, boolOverwrite As Boolean)
+    Dim strSettingsPath As String, arrSetting() As String, i As Integer
+    strSettingsPath = BotPath() & "plugins\settings.ini"
+
+    If Len(strDescription) > 0 Then
+        If InStr(strSettingNotes, LCase(strPrefix) & "|" & strName & "|") = 0 Then
+            strSettingNotes = strSettingNotes & LCase(strPrefix) & "|" & strName & "|" & strDescription & "||"
+        End If
+    End If
+    If boolOverwrite Or Len(GetConfigEntry(strPrefix, strName, strSettingsPath)) = 0 Then
+        If Len(strName & varValue) > 254 Then
+            WriteConfigEntry UCase(strPrefix), strName, Left(varValue, 254 - Len(strName)), strSettingsPath
+            arrSetting = Split(strName, "*")
+            If UBound(arrSetting) > 0 Then i = arrSetting(1) + 1 Else i = 1
+            SetSetting strPrefix, arrSetting(0) & "*" & i, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
+        Else
+            WriteConfigEntry UCase(strPrefix), strName, varValue, strSettingsPath
+        End If
+    End If
+End Sub
+
+
+'// GETSETTING
+'//   Retrieves plugin settings
+Function GetSetting(strPrefix, strName)
+    Dim strSettingsPath As String, i As Integer, strAppend As String, tmpValue As String, varValue As Variant
+    strSettingsPath = BotPath() & "plugins\settings.ini"
+    
+    Do
+        If i > 0 Then strAppend = "*" & i
+        tmpValue = GetConfigEntry(strPrefix, Left(strName, Len(strName)) & strAppend, strSettingsPath)
+        varValue = varValue & tmpValue
+        If Len(tmpValue) = 0 Then
+            GetSetting = varValue
+            Exit Do
+        End If
+        i = i + 1
+    Loop
+End Function
+
+
+'// DSP
+'// Displays messages via the specified output type and allows for unlimited message lengths.
+'//     intID (required) must be one of the following integer values:
+'//         1 = AddQ
+'//             Usage: Dsp 1, Message, [Delimiter]
+'//         2 = Emote
+'//             Usage: Dsp 2, Message, [Delimiter]
+'//         3 = Whisper
+'//             Usage: Dsp 3, Message, Username, [Delimiter]
+'//         4 = AddChat
+'//             Usage: Dsp 4, Message, Color
+'//     Color must be a vbColor or any RGB value
+Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVal strOption As String, Optional ByVal strDelimiter As String)
+
+    If intID < 4 Then
+        Dim arrQueue() As String, arrMessage() As String, tmpMsgPart As String, i As Integer
+        Dim strUsername As String, strDelim As String, strProduct As String, strD2 As String
+        ReDim arrQueue(0)
+        
+        '// Get username and delimiter if applicable
+        If intID < 3 Then
+            If Len(strOption) > 0 Then
+              strDelim = strOption
+            Else
+              strDelim = " "
+            End If
+        Else
+            strUsername = strOption
+            strProduct = GetInternalDataByUsername(strOption, 3)
+            If strProduct = "D2DV" Or strProduct = "D2PX" Then strUsername = "*" & strUsername
+            If Len(strDelimiter) > 0 Then
+                strDelim = strDelimiter
+            Else
+                strDelim = " "
+            End If
+        End If
+        
+        '// If message is too long to display in a single AddQ, split into multiple messages
+        If Len(strMessage) > 220 And InStr(strMessage, strDelim) Then
+            arrMessage = Split(strMessage)
+            
+            For i = 0 To UBound(arrMessage)
+                If Len(tmpMsgPart & arrMessage(i) & strDelim) < 205 Then
+                    tmpMsgPart = tmpMsgPart & arrMessage(i) & strDelim
+                Else
+                    arrQueue(UBound(arrQueue)) = tmpMsgPart & "[more]"
+                    ReDim Preserve arrQueue(UBound(arrQueue) + 1)
+                    tmpMsgPart = arrMessage(i) & strDelim
+                End If
+            Next
+            arrQueue(UBound(arrQueue)) = Left(tmpMsgPart, Len(tmpMsgPart) - 1)
+        Else
+            arrQueue(0) = strMessage
+        End If
+        If UBound(arrQueue) > 0 Then PadQueueCounter
+
+        '// Display the message(s)
+        For i = 0 To UBound(arrQueue)
+            If Len(arrQueue(i)) > 0 Then
+                Select Case intID
+                    Case 1: AddQ arrQueue(i)
+                    Case 2: AddQ "/me " & arrQueue(i)
+                    Case 3: AddQ "/w " & strUsername & " " & arrQueue(i)
+                End Select
+            End If
+        Next
+    Else
+        If Len(strDelimiter) > 0 Then strOption = strDelimiter
+        AddChat strOption, strMessage
+    End If
+End Sub
 
