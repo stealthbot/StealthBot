@@ -3,7 +3,7 @@ Attribute VB_Name = "modScripting"
 ' * ~~~~~~~~~~~~~~~~
 ' * StealthBot VBScript support module
 ' * ~~~~~~~~~~~~~~~~
-' * Modified by Swent 10/7/2007
+' * Modified by Swent 10/8/2007
 ' */
 Option Explicit
 
@@ -12,57 +12,42 @@ Public VetoNextMessage As Boolean
 '// Loads the Plugin System
 '//   Called from Form_Load() and mnuReloadScript_Click() in frmChat
 Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
+    Dim Path As String, intFile As Integer, strLine As String, strContent As String
 
    On Error GoTo LoadPluginSystem_Error
-   
-    Dim Path As String
-    Path = GetFilePath("PluginSystem.dat")
 
+    '// Reset the Script Control
     SC.Reset
-    SC.AllowUI = False
+    
+    '// Allow UI's unless they've been disabled by the user
+    If ReadINI("Other", "ScriptAllowUI", GetConfigFilePath()) <> "N" Then SC.AllowUI = True
 
-    If (LenB(ReadCFG("Other", "ScriptAllowUI")) > 0) Then
-        SC.AllowUI = True
-    End If
-
+    '// PluginSystem.dat exists?
+    Path = GetFilePath("PluginSystem.dat")
     If LenB(Dir$(Path)) = 0 Then
         AddChat vbRed, "No PluginSystem.dat file is present. It must exist in order to load plugins!"
-        AddChat vbGreen, "Developers, please use the modified PluginSystem.dat that I've put in the repository."
+        AddChat vbGreen, "Developers, please use the PS dev code here: http://stealthbot.net/p/Users/Swent/ps-sbdev.txt"
+        AddChat vbGreen, "Save it to a text file named ""PluginSystem.dat"" in your trunk folder."
         Exit Sub
     End If
     
+    '// Create scripting objects
     SC.AddObject "ssc", SharedScriptSupport, True
     SC.AddObject "scTimer", frmChat.scTimer
     SC.AddObject "scINet", frmChat.INet
     SC.AddObject "BotVars", BotVars
-
-    Dim f As Integer, s As String, Temp As String, File As String
-
-    If Dir$(Path) <> vbNullString And LenB(Path) > 0 Then
-
-        f = FreeFile
-
-        Open Path For Input As #f
-
-        Do While Not EOF(f)
-            Temp = vbNullString
-            Line Input #f, Temp
-
-            If Len(Temp) > 1 Then
-                
-                s = s & Temp & vbCrLf
-
-                If InStr(1, Temp, "End Sub", vbTextCompare) > 0 Then
-                    On Error GoTo errorLoadingPS
-                    SC.AddCode s
-errorLoadingPS:
-                    s = vbNullString
-                End If
-            End If
+    
+    '// Load PluginSystem.dat
+    intFile = FreeFile
+    Open Path For Input As #intFile
+    
+        Do While Not EOF(intFile)
+            strLine = vbNullString
+            Line Input #intFile, strLine
+            If Len(strLine) > 1 Then strContent = strContent & strLine & vbCrLf
         Loop
-    End If
-
-    Close #f
+    Close #intFile
+    SC.AddCode strContent
 
 LoadPluginSystem_Error:
 
