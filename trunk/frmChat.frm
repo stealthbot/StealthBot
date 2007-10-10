@@ -149,6 +149,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -726,6 +727,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4353,6 +4355,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                         frmProfile.Show
                                     
                                     ElseIf (LCase(Left$(s, 1)) = "/") Then
+                                        Dim commandResult As Boolean ' ..
+                                    
                                         If ((Left$(s, 3) = "/w ") Or (Left$(s, 3) = "/m ")) Then
                                             If (Dii) Then
                                                 If (StrComp(Mid$(s, 4, 1), "*") <> 0) Then
@@ -4367,7 +4371,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                         
                                         m = OutFilterMsg(s)
                                         
-                                        Call ProcessCommand(CurrentUsername, cboSend.text, True, False)
+                                        commandResult = ProcessCommand(CurrentUsername, cboSend.text, _
+                                            True, False)
+                                            
+                                        If (commandResult = False) Then
+                                            Call AddQ(OutFilterMsg(s))
+                                        End If
                                     Else
                                         Call AddQ(OutFilterMsg(s))
                                     End If
