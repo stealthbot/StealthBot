@@ -477,16 +477,31 @@ End Sub
 '//             use it to control whether or not your command responses display publicly.
 '// CC          CC controls whether or not the command string is passed to the Custom Command processor.
 '//             For scripting purposes I will not allow the user to set CC, it is always 0.
-Public Function Command(ByVal Username As String, ByVal Message As String, ByVal InBot As Boolean) As String
-
+Public Function Command(ByVal Username As String, ByVal Message As String, ByVal InBot As Boolean) As Boolean
     Dim dbAccess As udtGetAccessResponse
     '// GetAccess() will return the access type the commands sub needs
-    dbAccess = GetAccess(Username)
     
-    Message = Replace(Message, "%me", Username)
+    ' execute command
+    Command = ProcessCommand(Username, Message, InBot, False)
     
-    Command = Commands(dbAccess, Username, Message, InBot, 0)
+    ' backwards compatible (may be removed in future!)
+    If (Command = False) Then
+        Dim tmpMsg As String ' ...
+        
+        ' store local copy of message
+        tmpMsg = Message
     
+        ' manipulate message for deprecated
+        ' calling format
+        If (InBot) Then
+            tmpMsg = "/" & tmpMsg
+        Else
+            tmpMsg = BotVars.Trigger & tmpMsg
+        End If
+        
+        ' execute command
+        Command = ProcessCommand(Username, Message, InBot, False)
+    End If
 End Function
 
 
@@ -507,17 +522,15 @@ End Function
 '//         ALL uppercase and with no repeating letters, or the bot will become
 '//         somewhat confused.
 
-Public Function CommandEx(ByVal Username As String, ByVal Message As String, ByVal InBot As Boolean, ByVal uAccess As Integer, ByVal uFlags As String) As String
-
+Public Function CommandEx(ByVal Username As String, ByVal Message As String, ByVal InBot As Boolean, ByVal uAccess As Integer, ByVal uFlags As String, ByRef cmdRet() As String) As Boolean
     Dim dbAccess As udtGetAccessResponse
     '// GetAccess() will return the access type the commands sub needs
+    
     dbAccess.Access = uAccess
     dbAccess.Flags = uFlags
-    
-    Message = Replace(Message, "%me", Username)
-    
-    CommandEx = Commands(dbAccess, Username, Message, InBot, 0)
-    
+
+    ' execute command
+    CommandEx = ExecuteCommand(Username, dbAccess, Message, InBot, cmdRet())
 End Function
 
 
