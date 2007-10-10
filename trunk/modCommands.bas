@@ -114,7 +114,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                         If ((InBot) And (Not (publicOutput))) Then
                             Call AddChat(RTBColors.ConsoleText, cmdRet(j))
                         Else
-                            Call AddQ(cmdRet(i), 1)
+                            Call AddQ(cmdRet(j), 1)
                         End If
                     Next j
                 End If
