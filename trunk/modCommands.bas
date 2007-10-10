@@ -104,18 +104,20 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                     InBot, cmdRet())
             End If
             
-            ' display command response
-            If (cmdRet(0) <> vbNullString) Then
-                Dim j As Integer ' ...
-            
-                ' loop through command response
-                For j = 0 To UBound(cmdRet)
-                    If ((InBot) And (Not (publicOutput))) Then
-                        Call AddChat(RTBColors.ConsoleText, cmdRet(i))
-                    Else
-                        Call AddQ(cmdRet(i), 1)
-                    End If
-                Next j
+            If (ProcessCommand) Then
+                ' display command response
+                If (cmdRet(0) <> vbNullString) Then
+                    Dim j As Integer ' ...
+                
+                    ' loop through command response
+                    For j = 0 To UBound(cmdRet)
+                        If ((InBot) And (Not (publicOutput))) Then
+                            Call AddChat(RTBColors.ConsoleText, cmdRet(j))
+                        Else
+                            Call AddQ(cmdRet(i), 1)
+                        End If
+                    Next j
+                End If
             End If
         Next i
     Else
@@ -128,16 +130,18 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                 InBot, cmdRet())
         End If
         
-        ' display command response
-        If (cmdRet(0) <> vbNullString) Then
-            ' loop through command response
-            For i = 0 To UBound(cmdRet)
-                If ((InBot) And (Not (publicOutput))) Then
-                    Call AddChat(RTBColors.ConsoleText, cmdRet(i))
-                Else
-                    Call AddQ(cmdRet(i), 1)
-                End If
-            Next i
+        If (ProcessCommand) Then
+            ' display command response
+            If (cmdRet(0) <> vbNullString) Then
+                ' loop through command response
+                For i = 0 To UBound(cmdRet)
+                    If ((InBot) And (Not (publicOutput))) Then
+                        Call AddChat(RTBColors.ConsoleText, cmdRet(i))
+                    Else
+                        Call AddQ(cmdRet(i), 1)
+                    End If
+                Next i
+            End If
         End If
     End If
 End Function ' end function ProcessCommand
