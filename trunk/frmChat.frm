@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   225
-   ClientTop       =   825
+   ClientLeft      =   165
+   ClientTop       =   855
    ClientWidth     =   11400
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -149,7 +149,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -727,7 +726,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3428,7 +3426,8 @@ Private Sub mnuPopSafelist_Click()
     toSafe = GetSelectedUser
     
     gAcc.Access = 1000
-    Call Commands(gAcc, "%^console", "/safeadd " & toSafe, True)
+    
+    Call ProcessCommand(CurrentUsername, "/safeadd " & toSafe, True, False)
 End Sub
 
 Private Sub mnuPopShitlist_Click()
@@ -3440,7 +3439,8 @@ Private Sub mnuPopShitlist_Click()
     toBan = GetSelectedUser
     
     gAcc.Access = 1000
-    Call Commands(gAcc, "%^console", "/shitadd " & toBan, True)
+    
+    Call ProcessCommand(CurrentUsername, "/shitadd " & toBan, True, False)
 End Sub
 
 Private Sub mnuPopSquelch_Click()
@@ -4242,47 +4242,50 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 
                                 If Not Vetoed Then
                                 
-                                    If Left$(s, 6) = "/tell " And Len(s) > 6 Then
+                                    If ((Left$(s, 6) = "/tell ") And (Len(s) > 6)) Then
                                         s = "/w " & Mid$(s, 7)
                                     End If
                                     
                                     s = txtPre.text & cboSend.text & txtPost.text
                                     
-                                    If LCase(s) = "/rejoin" Then
+                                    If (LCase(s) = "/rejoin") Then
                                         RejoinChannel gChannel.Current
                                         
-                                    ElseIf LCase(s) = "/fl" And MDebug("debug") Then
+                                    ElseIf (LCase(s) = "/fl" And MDebug("debug")) Then
                                         For n = 1 To FriendListHandler.colFriends.Count
                                             AddChat vbMagenta, FriendListHandler.colFriends.Item(n).Username & " - " & FriendListHandler.colFriends.Item(n).Product
                                         Next n
                                     
-                                    ElseIf LCase(s) = "/accountinfo" Then
+                                    ElseIf (LCase(s) = "/accountinfo") Then
                                         RequestSystemKeys
+                                        
                                         GoTo theEnd
                                         
-                                    ElseIf LCase(s) = "/cls" Then
+                                    ElseIf (LCase(s) = "/cls") Then
                                         Call mnuClear_Click
+                                        
                                         GoTo theEnd
                                         
-                                    ElseIf LCase(s) = "/ds_list" Then
+                                    ElseIf (LCase(s) = "/ds_list") Then
                                         Call ds.List
+                                        
                                         GoTo theEnd
                                         
-                                    ElseIf Left$(LCase$(s), 7) = "/setcl " Then
+                                    ElseIf (Left$(LCase$(s), 7) = "/setcl ") Then
                                         CommandLine = Mid$(s, 8)
                                         frmChat.AddChat RTBColors.SuccessText, "The command line for this instance has been changed."
                                         
                                         GoTo theEnd
                                         
-                                    ElseIf s = "/force" And MDebug("debug") Then
+                                    ElseIf ((s = "/force") And (MDebug("debug"))) Then
                                         MyFlags = 2
                                         SharedScriptSupport.BotFlags = MyFlags
                                         AddChat RTBColors.ConsoleText, "Flags forced to 2."
                                     
-                                    ElseIf s = "/cmf" And MDebug("debug") Then
+                                    ElseIf ((s = "/cmf") And (MDebug("debug"))) Then
                                         AddChat RTBColors.ConsoleText, "MyFlags is currently " & MyFlags & "."
                                     
-                                    ElseIf s = "/nadn" Then
+                                    ElseIf (s = "/nadn") Then
                                         AddName "Test1", "PX3W", 0, 0
                                         AddName "Test2", "PX3W", 0, 0
                                         AddName "Test3", "PX3W", 0, 0
@@ -4290,8 +4293,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                         AddName "Test5", "PX3W", 0, 0
                                         AddName "Test6", "PX3W", 0, 0
                                         
-                        
-                                    ElseIf s = "/q" And MDebug("debug") Then
+                                    ElseIf ((s = "/q") And (MDebug("debug"))) Then
                                         If colQueue.Count > 0 Then
                                             For n = 1 To colQueue.Count
                                                 AddChat RTBColors.ConsoleText, colQueue.Item(n).Priority & "|" & colQueue.Item(n).Message
@@ -4303,7 +4305,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                         'AddChat vbBlue, IsBanned("Technique)DK(@USEast#2")
                                         GoTo theEnd
                                     
-                                    ElseIf s = "/flags" And MDebug("debug") Then
+                                    ElseIf ((s = "/flags") And (MDebug("debug"))) Then
                                         For n = 1 To colUsersInChannel.Count
                                             With colUsersInChannel.Item(n)
                                                 AddChat RTBColors.ConsoleText, .Username & Space(4) & .Flags
@@ -4311,54 +4313,51 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                         Next n
                                         
                                         n = 0
+                                        
                                         GoTo theEnd
                                         
                                     ElseIf LCase(Left$(s, 7)) = "/watch " Then
                                         WatchUser = LCase(Right(s, Len(s) - 7))
                                         AddChat RTBColors.ConsoleText, "Watching " & Right(s, Len(s) - 7)
+                                        
                                         GoTo theEnd
                                         
                                     ElseIf LCase(s) = "/watchoff" Then
                                         WatchUser = vbNullString
                                         AddChat RTBColors.ConsoleText, "Watch off."
+                                        
                                         GoTo theEnd
                                         
-'                                    ElseIf LCase(s) = "/li" Then
-'
-'                                        AddChat vbMagenta, "AWAITING_CHPW: " & IF_AWAITING_CHPW
-'                                        AddChat vbMagenta, "CHPW_AND_IDLEBANS: " & IF_CHPW_AND_IDLEBANS
-'                                        AddChat vbMagenta, "IDLEBANS: " & IF_SUBJECT_TO_IDLEBANS
-'
-'                                        For i = 1 To colUsersInChannel.Count
-'                                            AddChat vbMagenta, colUsersInChannel.Item(i).Username & "\" & colUsersInChannel.Item(i).InternalFlags
-'                                        Next i
-'                                        GoTo theEnd
-                                        
-                                    ElseIf LCase(Left$(s, 9)) = "/joinhome" Then
-                                        AddQ "/join " & BotVars.HomeChannel
-                                        
-                                    ElseIf LCase(s) = "/trigger" Then
-                                        AddChat RTBColors.ConsoleText, "Trigger is currently " & Chr(34) & BotVars.Trigger & Chr(34) & "."
-                                        GoTo theEnd
+                                    'ElseIf LCase(s) = "/li" Then
+                                    '
+                                    '    AddChat vbMagenta, "AWAITING_CHPW: " & IF_AWAITING_CHPW
+                                    '    AddChat vbMagenta, "CHPW_AND_IDLEBANS: " & IF_CHPW_AND_IDLEBANS
+                                    '    AddChat vbMagenta, "IDLEBANS: " & IF_SUBJECT_TO_IDLEBANS
+                                    '
+                                    '    For i = 1 To colUsersInChannel.Count
+                                    '        AddChat vbMagenta, colUsersInChannel.Item(i).Username & "\" & colUsersInChannel.Item(i).InternalFlags
+                                    '    Next i
+                                    '    GoTo theEnd
                                     
-                                    ElseIf LCase(s) = "//trigger" Then
-                                        AddQ "The bot's current trigger is " & Chr(34) & Space(1) & BotVars.Trigger & Space(1) & Chr(34) & " (Alt + 0" & Asc(BotVars.Trigger) & ")"
-                                        GoTo theEnd
-                                        
-                                    ElseIf LCase(Left$(s, 7)) = "/reply " Then
+                                    ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
                                         m = Right(s, (Len(s) - 7))
+                                        
                                         AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m)
                                         
-                                    ElseIf LCase(Left$(s, 9)) = "/profile " Then
-                                        If sckBNet.State = 7 Then RequestProfile Right(s, Len(s) - 9)
+                                    ElseIf (LCase(Left$(s, 9)) = "/profile ") Then
+                                        If (sckBNet.State = 7) Then
+                                            RequestProfile Right(s, Len(s) - 9)
+                                        End If
+                                        
                                         frmProfile.lblUsername.Caption = Right(s, Len(s) - 9)
                                         frmProfile.Show
                                     
-                                    ElseIf LCase(Left$(s, 1)) = "/" Then
-                                        If Left$(s, 3) = "/w " Or Left$(s, 3) = "/m " Then
-                                            If Dii Then
-                                                If StrComp(Mid$(s, 4, 1), "*") <> 0 Then
-                                                    s = Mid$(s, 1, 3) & "*" & Mid$(s, 4)
+                                    ElseIf (LCase(Left$(s, 1)) = "/") Then
+                                        If ((Left$(s, 3) = "/w ") Or (Left$(s, 3) = "/m ")) Then
+                                            If (Dii) Then
+                                                If (StrComp(Mid$(s, 4, 1), "*") <> 0) Then
+                                                    s = Mid$(s, 1, 3) & "*" & _
+                                                        Mid$(s, 4)
                                                 End If
                                             End If
                                         End If
@@ -4368,17 +4367,9 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                         
                                         m = OutFilterMsg(s)
                                         
-                                        ' Maybe this should be a ProcessCommand() call..
-                                        ' Maybe sometime when I'm not so tired I'll look to see if
-                                        '  ProcessCommand() does any crazy shit that inbot commands
-                                        '  should be excluded from..
-                                        If InStr(m, "%me") > 0 Then
-                                            m = Replace(m, "%me", "(console)")
-                                        End If
-                                        
-                                        Call Commands(Temp, CurrentUsername, m, True, , , (Mid$(cboSend.text, 2, 1) = "/"))
+                                        Call ProcessCommand(CurrentUsername, cboSend.text, True, False)
                                     Else
-                                        AddQ OutFilterMsg(s)
+                                        Call AddQ(OutFilterMsg(s))
                                     End If
                                 End If
 theEnd:
