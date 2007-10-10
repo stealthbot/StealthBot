@@ -20,6 +20,7 @@ Public floodCap As Byte   ' ...?
 Public Function ProcessCommand(ByVal Username As String, ByVal Message As String, _
     Optional ByVal InBot As Boolean = False, Optional ByVal WhisperedIn As Boolean = False) As Boolean
     
+    ' ...
     Dim ConsoleAccessResponse As udtGetAccessResponse
     
     Dim X()          As String  ' ...
@@ -31,6 +32,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     ' create single command data array element for safe bounds checking
     ReDim Preserve cmdRet(0)
     
+    ' create console access response structure
     With ConsoleAccessResponse
         .Access = 1001
         .Flags = "A"
@@ -179,152 +181,152 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
     If ((ValidateAccess(dbAccess, cmdName) = True) Or (InBot = True)) Then
         ' command switch
         Select Case (cmdName)
-            Case "quit":                         Call OnQuit(Username, msgData, cmdRet())
-            Case "locktext":                     Call OnLockText(Username, msgData, cmdRet())
-            Case "allowmp3":                     Call OnAllowMp3(Username, msgData, cmdRet())
-            Case "loadwinamp":                   Call OnLoadWinamp(Username, msgData, cmdRet())
-            Case "floodmode", "efp":             Call OnEfp(Username, msgData, cmdRet())
-            Case "home", "joinhome":             Call OnHome(Username, msgData, cmdRet())
-            Case "clan", "c":                    Call OnClan(Username, msgData, cmdRet())
-            Case "peonban":                      Call OnPeonBan(Username, msgData, cmdRet())
-            Case "invite":                       Call OnInvite(Username, msgData, cmdRet())
-            Case "setmotd":                      Call OnSetMotd(Username, msgData, cmdRet())
-            Case "where":                        Call OnWhere(Username, msgData, cmdRet())
-            Case "qt", "quiettime":              Call OnQuietTime(Username, msgData, cmdRet())
-            Case "roll":                         Call OnRoll(Username, msgData, cmdRet())
-            Case "sweepban", "cb":               Call OnSweepBan(Username, msgData, cmdRet())
-            Case "sweepignore", "cs":            Call OnSweepIgnore(Username, msgData, cmdRet())
-            Case "setname":                      Call OnSetName(Username, msgData, cmdRet())
-            Case "setpass":                      Call OnSetPass(Username, msgData, cmdRet())
-            Case "setkey":                       Call OnSetKey(Username, msgData, cmdRet())
-            Case "setexpkey":                    Call OnSetExpKey(Username, msgData, cmdRet())
-            Case "setserver":                    Call OnSetServer(Username, msgData, cmdRet())
-            Case "giveup", "op":                 Call OnGiveUp(Username, msgData, cmdRet())
-            Case "math", "eval":                 Call OnMath(Username, msgData, cmdRet())
-            Case "idlebans", "ib":               Call OnIdleBans(Username, msgData, cmdRet())
-            Case "chpw":                         Call OnChPw(Username, msgData, cmdRet())
-            Case "join":                         Call OnJoin(Username, msgData, cmdRet())
-            Case "sethome":                      Call OnSetHome(Username, msgData, cmdRet())
-            Case "resign":                       Call OnResign(Username, msgData, cmdRet())
-            Case "cbl", "clearbanlist":          Call OnClearBanList(Username, msgData, cmdRet())
-            Case "koy", "kickonyell":            Call OnKickOnYell(Username, msgData, cmdRet())
-            Case "rejoin", "rj":                 Call OnRejoin(Username, msgData, cmdRet())
-            Case "plugban":                      Call OnPlugBan(Username, msgData, cmdRet())
-            Case "clist", "clientbans", "cbans": Call OnClientBans(Username, msgData, cmdRet())
-            Case "setvol":                       Call OnSetVol(Username, msgData, cmdRet())
-            Case "cadd":                         Call OnCAdd(Username, msgData, cmdRet())
-            Case "cdel", "delclient":            Call OnCDel(Username, msgData, cmdRet())
-            Case "banned":                       Call OnBanned(Username, msgData, cmdRet())
-            Case "ipbans":                       Call OnIPBans(Username, msgData, cmdRet())
-            Case "ipban":                        Call OnIPBan(Username, msgData, cmdRet())
-            Case "unipban":                      Call OnUnIPBan(Username, msgData, cmdRet())
-            Case "designate", "des":             Call OnDesignate(Username, msgData, cmdRet())
-            Case "shuffle":                      Call OnShuffle(Username, msgData, cmdRet())
-            Case "repeat":                       Call OnRepeat(Username, msgData, cmdRet())
-            Case "next":                         Call OnNext(Username, msgData, cmdRet())
-            Case "prev":                         Call OnPrev(Username, msgData, cmdRet())
-            Case "protect":                      Call OnProtect(Username, msgData, cmdRet())
-            Case "whispercmds", "wc":            Call OnWhisperCmds(Username, msgData, cmdRet())
-            Case "stop":                         Call OnStop(Username, msgData, cmdRet())
-            Case "play":                         Call OnPlay(Username, msgData, cmdRet())
-            Case "useitunes":                    Call OnUseiTunes(Username, msgData, cmdRet())
-            Case "usewinamp":                    Call OnUseWinamp(Username, msgData, cmdRet())
-            Case "pause":                        Call OnPause(Username, msgData, cmdRet())
-            Case "fos":                          Call OnFos(Username, msgData, cmdRet())
-            Case "rem", "del":                   Call OnRem(Username, msgData, cmdRet())
-            Case "reconnect":                    Call OnReconnect(Username, msgData, cmdRet())
-            Case "unigpriv":                     Call OnUnIgPriv(Username, msgData, cmdRet())
-            Case "igpriv":                       Call OnIgPriv(Username, msgData, cmdRet())
-            Case "block":                        Call OnBlock(Username, msgData, cmdRet())
-            Case "idletime", "idlewait":         Call OnIdleTime(Username, msgData, cmdRet())
-            Case "idle":                         Call OnIdle(Username, msgData, cmdRet())
-            Case "shitdel":                      Call OnShitDel(Username, msgData, cmdRet())
-            Case "safedel":                      Call OnSafeDel(Username, msgData, cmdRet())
-            Case "tagdel":                       Call OnTagDel(Username, msgData, cmdRet())
-            Case "setidle":                      Call OnSetIdle(Username, msgData, cmdRet())
-            Case "idletype":                     Call OnIdleType(Username, msgData, cmdRet())
-            Case "filter":                       Call OnFilter(Username, msgData, cmdRet())
-            Case "trigger":                      Call OnTrigger(Username, msgData, cmdRet())
-            Case "settrigger":                   Call OnSetTrigger(Username, msgData, cmdRet())
-            Case "levelban":                     Call OnLevelBan(Username, msgData, cmdRet())
-            Case "d2levelban":                   Call OnD2LevelBan(Username, msgData, cmdRet())
-            Case "pon", "phrasebans on":         Call OnPhraseBans(Username, msgData, cmdRet())
-            Case "poff", "phrasebans off":       Call OnPhraseBans(Username, msgData, cmdRet())
-            Case "cbans":                        Call OnCBans(Username, msgData, cmdRet())
-            Case "pstatus", "phrasebans":        Call OnPhraseBans(Username, msgData, cmdRet())
-            Case "mimic":                        Call OnMimic(Username, msgData, cmdRet())
-            Case "nomimic":                      Call OnNoMimic(Username, msgData, cmdRet())
-            Case "setpmsg":                      Call OnSetPMsg(Username, msgData, cmdRet())
-            Case "setcmdaccess":                 Call OnSetCmdAccess(Username, msgData, cmdRet())
-            Case "cmdadd", "addcmd":             Call OnCmdAdd(Username, msgData, cmdRet())
-            Case "cmddel", "delcmd":             Call OnCmdDel(Username, msgData, cmdRet())
-            Case "cmdlist":                      Call OnCmdList(Username, msgData, cmdRet())
-            Case "phrases", "plist":             Call OnPhrases(Username, msgData, cmdRet())
-            Case "addphrase", "padd":            Call OnAddPhrase(Username, msgData, cmdRet())
-            Case "delphrase", "pdel":            Call OnDelPhrase(Username, msgData, cmdRet())
-            Case "tagban", "addtag", "tagadd":   Call OnTagBan(Username, msgData, cmdRet())
-            Case "fadd":                         Call OnFAdd(Username, msgData, cmdRet())
-            Case "frem":                         Call OnFRem(Username, msgData, cmdRet())
-            Case "safelist":                     Call OnSafeList(Username, msgData, cmdRet())
-            Case "safeadd":                      Call OnSafeAdd(Username, msgData, cmdRet())
-            Case "exile":                        Call OnExile(Username, msgData, cmdRet())
-            Case "unexile":                      Call OnUnExile(Username, msgData, cmdRet())
-            Case "shitlist", "sl":               Call OnShitList(Username, msgData, cmdRet())
-            Case "safelist":                     Call OnSafeList(Username, msgData, cmdRet())
-            Case "tagbans":                      Call OnTagBans(Username, msgData, cmdRet())
-            Case "shitadd", "pban":              Call OnShitAdd(Username, msgData, cmdRet())
-            Case "dnd":                          Call OnDND(Username, msgData, cmdRet())
-            Case "bancount":                     Call OnBanCount(Username, msgData, cmdRet())
-            Case "tagcheck":                     Call OnTagCheck(Username, msgData, cmdRet())
-            Case "slcheck", "shitcheck":         Call OnSLCheck(Username, msgData, cmdRet())
-            Case "readfile":                     Call OnReadFile(Username, msgData, cmdRet())
-            Case "levelban", "levelbans":        Call OnLevelBan(Username, msgData, cmdRet())
-            Case "d2levelban", "d2levelbans":    Call OnD2LevelBan(Username, msgData, cmdRet())
-            Case "greet":                        Call OnGreet(Username, msgData, cmdRet())
-            Case "allseen":                      Call OnAllSeen(Username, msgData, cmdRet())
-            Case "ban":                          Call OnBan(Username, msgData, cmdRet())
-            Case "unban":                        Call OnUnBan(Username, msgData, cmdRet())
-            Case "kick":                         Call OnKick(Username, msgData, cmdRet())
-            Case "lastwhisper", "lw":            Call OnLastWhisper(Username, msgData, cmdRet())
-            Case "say":                          Call OnSay(Username, msgData, cmdRet())
-            Case "expand":                       Call OnExpand(Username, msgData, cmdRet())
-            Case "detail", "dbd":                Call OnDetail(Username, msgData, cmdRet())
-            Case "info":                         Call OnInfo(Username, msgData, cmdRet())
-            Case "shout":                        Call OnShout(Username, msgData, cmdRet())
-            Case "voteban":                      Call OnVoteBan(Username, msgData, cmdRet())
-            Case "votekick":                     Call OnVoteKick(Username, msgData, cmdRet())
-            Case "vote":                         Call OnVote(Username, msgData, cmdRet())
-            Case "cancel":                       Call OnCancel(Username, msgData, cmdRet())
-            Case "back":                         Call OnBack(Username, msgData, cmdRet())
-            Case "uptime":                       Call OnUptime(Username, msgData, cmdRet())
-            Case "away":                         Call OnAway(Username, msgData, cmdRet())
-            Case "mp3":                          Call OnMP3(Username, msgData, cmdRet())
-            Case "deldef":                       Call OnDelDef(Username, msgData, cmdRet())
-            Case "define", "def":                Call OnDefine(Username, msgData, cmdRet())
-            Case "newdef":                       Call OnNewDef(Username, msgData, cmdRet())
-            Case "ping":                         Call OnPing(Username, msgData, cmdRet())
-            Case "addquote":                     Call OnAddQuote(Username, msgData, cmdRet())
-            Case "owner":                        Call OnOwner(Username, msgData, cmdRet())
-            Case "ignore", "ign":                Call OnIgnore(Username, msgData, cmdRet())
-            Case "quote":                        Call OnQuote(Username, msgData, cmdRet())
-            Case "unignore":                     Call OnUnignore(Username, msgData, cmdRet())
-            Case "cq", "scq":                    Call OnCQ(Username, msgData, cmdRet())
-            Case "time":                         Call OnTime(Username, msgData, cmdRet())
-            Case "getping", "pingme":            Call OnGetPing(Username, msgData, cmdRet())
-            Case "checkmail":                    Call OnCheckMail(Username, msgData, cmdRet())
-            Case "getmail":                      Call OnGetMail(Username, msgData, cmdRet())
-            Case "whoami":                       Call OnWhoAmI(Username, msgData, cmdRet())
-            Case "add", "set":                   Call OnAdd(Username, msgData, cmdRet())
-            Case "mmail":                        Call OnMMail(Username, msgData, cmdRet())
-            Case "bmail", "mail":                Call OnMail(Username, msgData, cmdRet())
-            Case "designated":                   Call OnDesignated(Username, msgData, cmdRet())
-            Case "flip":                         Call OnFlip(Username, msgData, cmdRet())
-            Case "ver", "about", "version":      Call OnAbout(Username, msgData, cmdRet())
-            Case "server":                       Call OnServer(Username, msgData, cmdRet())
-            Case "findr":                        Call OnFindR(Username, msgData, cmdRet())
-            Case "find":                         Call OnFind(Username, msgData, cmdRet())
-            Case "whois":                        Call OnWhoIs(Username, msgData, cmdRet())
-            Case "findattr", "findflag":         Call OnFindAttr(Username, msgData, cmdRet())
+            Case "quit":                         Call OnQuit(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "locktext":                     Call OnLockText(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "allowmp3":                     Call OnAllowMp3(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "loadwinamp":                   Call OnLoadWinamp(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "floodmode", "efp":             Call OnEfp(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "home", "joinhome":             Call OnHome(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "clan", "c":                    Call OnClan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "peonban":                      Call OnPeonBan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "invite":                       Call OnInvite(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "setmotd":                      Call OnSetMotd(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "where":                        Call OnWhere(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "qt", "quiettime":              Call OnQuietTime(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "roll":                         Call OnRoll(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "sweepban", "cb":               Call OnSweepBan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "sweepignore", "cs":            Call OnSweepIgnore(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "setname":                      Call OnSetName(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "setpass":                      Call OnSetPass(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "setkey":                       Call OnSetKey(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "setexpkey":                    Call OnSetExpKey(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "setserver":                    Call OnSetServer(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "giveup", "op":                 Call OnGiveUp(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "math", "eval":                 Call OnMath(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "idlebans", "ib":               Call OnIdleBans(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "chpw":                         Call OnChPw(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "join":                         Call OnJoin(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "sethome":                      Call OnSetHome(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "resign":                       Call OnResign(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "cbl", "clearbanlist":          Call OnClearBanList(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "koy", "kickonyell":            Call OnKickOnYell(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "rejoin", "rj":                 Call OnRejoin(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "plugban":                      Call OnPlugBan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "clist", "clientbans", "cbans": Call OnClientBans(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "setvol":                       Call OnSetVol(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "cadd":                         Call OnCAdd(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "cdel", "delclient":            Call OnCDel(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "banned":                       Call OnBanned(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "ipbans":                       Call OnIPBans(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "ipban":                        Call OnIPBan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "unipban":                      Call OnUnIPBan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "designate", "des":             Call OnDesignate(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "shuffle":                      Call OnShuffle(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "repeat":                       Call OnRepeat(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "next":                         Call OnNext(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "prev":                         Call OnPrev(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "protect":                      Call OnProtect(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "whispercmds", "wc":            Call OnWhisperCmds(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "stop":                         Call OnStop(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "play":                         Call OnPlay(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "useitunes":                    Call OnUseiTunes(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "usewinamp":                    Call OnUseWinamp(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "pause":                        Call OnPause(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "fos":                          Call OnFos(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "rem", "del":                   Call OnRem(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "reconnect":                    Call OnReconnect(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "unigpriv":                     Call OnUnIgPriv(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "igpriv":                       Call OnIgPriv(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "block":                        Call OnBlock(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "idletime", "idlewait":         Call OnIdleTime(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "idle":                         Call OnIdle(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "shitdel":                      Call OnShitDel(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "safedel":                      Call OnSafeDel(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "tagdel":                       Call OnTagDel(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "setidle":                      Call OnSetIdle(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "idletype":                     Call OnIdleType(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "filter":                       Call OnFilter(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "trigger":                      Call OnTrigger(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "settrigger":                   Call OnSetTrigger(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "levelban":                     Call OnLevelBan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "d2levelban":                   Call OnD2LevelBan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "pon", "phrasebans on":         Call OnPhraseBans(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "poff", "phrasebans off":       Call OnPhraseBans(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "cbans":                        Call OnCBans(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "pstatus", "phrasebans":        Call OnPhraseBans(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "mimic":                        Call OnMimic(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "nomimic":                      Call OnNoMimic(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "setpmsg":                      Call OnSetPMsg(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "setcmdaccess":                 Call OnSetCmdAccess(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "cmdadd", "addcmd":             Call OnCmdAdd(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "cmddel", "delcmd":             Call OnCmdDel(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "cmdlist":                      Call OnCmdList(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "phrases", "plist":             Call OnPhrases(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "addphrase", "padd":            Call OnAddPhrase(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "delphrase", "pdel":            Call OnDelPhrase(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "tagban", "addtag", "tagadd":   Call OnTagBan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "fadd":                         Call OnFAdd(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "frem":                         Call OnFRem(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "safelist":                     Call OnSafeList(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "safeadd":                      Call OnSafeAdd(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "exile":                        Call OnExile(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "unexile":                      Call OnUnExile(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "shitlist", "sl":               Call OnShitList(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "safelist":                     Call OnSafeList(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "tagbans":                      Call OnTagBans(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "shitadd", "pban":              Call OnShitAdd(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "dnd":                          Call OnDND(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "bancount":                     Call OnBanCount(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "tagcheck":                     Call OnTagCheck(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "slcheck", "shitcheck":         Call OnSLCheck(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "readfile":                     Call OnReadFile(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "levelban", "levelbans":        Call OnLevelBan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "d2levelban", "d2levelbans":    Call OnD2LevelBan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "greet":                        Call OnGreet(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "allseen":                      Call OnAllSeen(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "ban":                          Call OnBan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "unban":                        Call OnUnBan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "kick":                         Call OnKick(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "lastwhisper", "lw":            Call OnLastWhisper(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "say":                          Call OnSay(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "expand":                       Call OnExpand(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "detail", "dbd":                Call OnDetail(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "info":                         Call OnInfo(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "shout":                        Call OnShout(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "voteban":                      Call OnVoteBan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "votekick":                     Call OnVoteKick(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "vote":                         Call OnVote(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "cancel":                       Call OnCancel(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "back":                         Call OnBack(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "uptime":                       Call OnUptime(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "away":                         Call OnAway(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "mp3":                          Call OnMP3(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "deldef":                       Call OnDelDef(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "define", "def":                Call OnDefine(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "newdef":                       Call OnNewDef(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "ping":                         Call OnPing(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "addquote":                     Call OnAddQuote(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "owner":                        Call OnOwner(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "ignore", "ign":                Call OnIgnore(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "quote":                        Call OnQuote(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "unignore":                     Call OnUnignore(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "cq", "scq":                    Call OnCQ(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "time":                         Call OnTime(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "getping", "pingme":            Call OnGetPing(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "checkmail":                    Call OnCheckMail(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "getmail":                      Call OnGetMail(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "whoami":                       Call OnWhoAmI(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "add", "set":                   Call OnAdd(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "mmail":                        Call OnMMail(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "bmail", "mail":                Call OnMail(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "designated":                   Call OnDesignated(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "flip":                         Call OnFlip(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "ver", "about", "version":      Call OnAbout(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "server":                       Call OnServer(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "findr":                        Call OnFindR(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "find":                         Call OnFind(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "whois":                        Call OnWhoIs(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "findattr", "findflag":         Call OnFindAttr(Username, dbAccess, msgData, InBot, cmdRet())
             Case Else
                 blnNoCmd = True
         End Select
@@ -340,17 +342,23 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
 End Function
 
 ' handle quit command
-Private Function OnQuit(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnQuit(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Call frmChat.Form_Unload(0)
 End Function ' end function OnQuit
 
 ' handle locktext command
-Private Function OnLockText(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnLockText(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Call frmChat.mnuLock_Click
 End Function ' end function OnLockText
 
 ' handle allowmp3 command
-Private Function OnAllowMp3(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnAllowMp3(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     If (BotVars.DisableMP3Commands) Then
@@ -368,7 +376,9 @@ Private Function OnAllowMp3(ByVal Username As String, ByVal msgData As String, B
 End Function ' end function OnAllowMp3
 
 ' handle loadwinamp command
-Private Function OnLoadWinamp(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnLoadWinamp(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     tmpBuf = LoadWinamp(ReadCFG("Other", "WinampPath"))
@@ -382,7 +392,9 @@ Private Function OnLoadWinamp(ByVal Username As String, ByVal msgData As String,
 End Function ' end function OnLoadWinamp
 
 ' handle efp command
-Private Function OnEfp(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnEfp(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     If (Left$(msgData, 2) = "on") Then
@@ -409,12 +421,16 @@ Private Function OnEfp(ByVal Username As String, ByVal msgData As String, ByRef 
 End Function ' end function OnEfp
 
 ' handle home command
-Private Function OnHome(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnHome(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     AddQ "/join " & BotVars.HomeChannel, 1
 End Function ' end function OnHome
 
 ' handle clan command
-Private Function OnClan(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnClan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     ' is bot a channel operator?
@@ -442,7 +458,9 @@ Private Function OnClan(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnClan
 
 ' handle peonban command
-Private Function OnPeonBan(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnPeonBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
             
     Select Case (LCase$(msgData))
@@ -477,7 +495,9 @@ Private Function OnPeonBan(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnPeonBan
 
 ' handle invite command
-Private Function OnInvite(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnInvite(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     If (IsW3) Then
@@ -495,7 +515,9 @@ Private Function OnInvite(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnInvite
 
 ' handle setmotd command
-Private Function OnSetMotd(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSetMotd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     If (IsW3) Then
@@ -513,7 +535,9 @@ Private Function OnSetMotd(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnSetMotd
 
 ' handle where command
-Private Function OnWhere(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     tmpBuf = "I am currently in channel " & gChannel.Current & " (" & _
@@ -524,7 +548,9 @@ Private Function OnWhere(ByVal Username As String, ByVal msgData As String, ByRe
 End Function ' end function OnWhere
 
 ' handle quiettime command
-Private Function OnQuietTime(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnQuietTime(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     Select Case LCase$(msgData)
@@ -562,7 +588,9 @@ Private Function OnQuietTime(ByVal Username As String, ByVal msgData As String, 
 End Function ' end function OnQuietTime
 
 ' handle roll command
-Private Function OnRoll(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnRoll(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf  As String ' temporary output buffer
     Dim iWinamp As Long
     Dim Track   As Long
@@ -590,7 +618,9 @@ Private Function OnRoll(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnRoll
 
 ' handle sweepban command
-Private Function OnSweepBan(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSweepBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u As String
     Dim Y As String
 
@@ -600,7 +630,9 @@ Private Function OnSweepBan(ByVal Username As String, ByVal msgData As String, B
 End Function ' end function OnSweepBan
 
 ' handle sweepignore command
-Private Function OnSweepIgnore(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSweepIgnore(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u As String
     Dim Y As String
     
@@ -610,7 +642,9 @@ Private Function OnSweepIgnore(ByVal Username As String, ByVal msgData As String
 End Function ' end function OnSweepIgnore
 
 ' handle setname command
-Private Function OnSetName(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSetName(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     ' only allow use of setname command while on-line to prevent beta
@@ -632,7 +666,9 @@ Private Function OnSetName(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnSetName
 
 ' handle setpass command
-Private Function OnSetPass(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSetPass(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     ' write configuration entry
@@ -648,14 +684,16 @@ Private Function OnSetPass(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnSetPass
 
 ' handle math command
-Private Function OnMath(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnMath(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     'Math now has 3 levels.
     '50: No UI, and no CreateObject()
     '80: UI, no CreateObject()
     '100: No restrictions
     'Hdx - 09-25-07
 
-    Dim dbAccess As udtGetAccessResponse
+    'Dim dbAccess As udtGetAccessResponse
     
     Dim tmpBuf   As String ' temporary output buffer
 
@@ -694,7 +732,9 @@ Private Function OnMath(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnMath
 
 ' handle setkey command
-Private Function OnSetKey(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSetKey(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     ' clean data
@@ -714,7 +754,9 @@ Private Function OnSetKey(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnSetKey
 
 ' handle setexpkey command
-Private Function OnSetExpKey(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSetExpKey(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     ' clean data
@@ -734,7 +776,9 @@ Private Function OnSetExpKey(ByVal Username As String, ByVal msgData As String, 
 End Function ' end function OnSetExpKey
 
 ' handle setserver command
-Private Function OnSetServer(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSetServer(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     ' write configuration information
@@ -750,7 +794,9 @@ Private Function OnSetServer(ByVal Username As String, ByVal msgData As String, 
 End Function ' end function OnSetServer
 
 ' handle giveup command
-Private Function OnGiveUp(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     If (CheckChannel(msgData) > 0) Then
         AddQ "/designate " & IIf(Dii, "*", vbNullString) & msgData
         AddQ "/resign"
@@ -758,7 +804,9 @@ Private Function OnGiveUp(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnGiveUp
 
 ' handle idlebans command
-Private Function OnIdleBans(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnIdleBans(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim strArray() As String ' ...
     Dim tmpBuf     As String ' temporary output buffer
     Dim subCmd     As String
@@ -858,7 +906,9 @@ Private Function OnIdleBans(ByVal Username As String, ByVal msgData As String, B
 End Function ' end function OnIdleBans
 
 ' handle chpw command
-Private Function OnChPw(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnChPw(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim strArray() As String
     Dim tmpBuf     As String ' temporary output buffer
     
@@ -920,7 +970,9 @@ Private Function OnChPw(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnChPw
 
 ' handle join command
-Private Function OnJoin(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnJoin(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     If (LenB(msgData) > 0) Then
@@ -931,7 +983,9 @@ Private Function OnJoin(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnJoin
 
 ' handle sethome command
-Private Function OnSetHome(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSetHome(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     WriteINI "Main", "HomeChan", msgData
@@ -945,12 +999,16 @@ Private Function OnSetHome(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnSetHome
 
 ' handle resign command
-Private Function OnResign(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnResign(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     AddQ "/resign", 1
 End Function ' end function OnResign
 
 ' handle clearbanlist
-Private Function OnClearBanList(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnClearBanList(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     ReDim gBans(0)
@@ -962,7 +1020,9 @@ Private Function OnClearBanList(ByVal Username As String, ByVal msgData As Strin
 End Function ' end function OnClearBanList
 
 ' handle kickonyell command
-Private Function OnKickOnYell(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnKickOnYell(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     Select Case (LCase$(msgData))
@@ -986,13 +1046,17 @@ Private Function OnKickOnYell(ByVal Username As String, ByVal msgData As String,
 End Function ' end function OnKickOnYell
 
 ' handle rejoin command
-Private Function OnRejoin(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     AddQ "/join " & CurrentUsername & " Rejoin", 1
     AddQ "/join " & gChannel.Current, 1
 End Function ' end function OnRejoin
 
 ' handle plugban command
-Private Function OnPlugBan(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnPlugBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     Select Case (LCase$(msgData))
@@ -1037,7 +1101,9 @@ Private Function OnPlugBan(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnPlugBan
 
 ' handle clientbans command
-Private Function OnClientBans(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnClientBans(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf() As String ' temporary output buffer
     Dim tmpCount As Integer
     Dim BanCount As Integer
@@ -1078,7 +1144,9 @@ Private Function OnClientBans(ByVal Username As String, ByVal msgData As String,
 End Function ' end function OnClientBans
 
 ' handle setvol command
-Private Function OnSetVol(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSetVol(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     Dim hWndWA As Long
 
@@ -1107,7 +1175,9 @@ Private Function OnSetVol(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnSetVol
 
 ' handle cadd command
-Private Function OnCAdd(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnCAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf     As String ' temporary output buffer
     Dim cBans      As String
     Dim strArray() As String
@@ -1148,7 +1218,9 @@ Private Function OnCAdd(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnCAdd
 
 ' handle cdel command
-Private Function OnCDel(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnCDel(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     Dim i      As Integer
     Dim cBans  As String
@@ -1178,7 +1250,9 @@ Private Function OnCDel(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnCDel
 
 ' handle banned command
-Private Function OnBanned(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf() As String ' temporary output buffer
     Dim tmpCount As Integer
     Dim BanCount As Integer
@@ -1222,7 +1296,9 @@ Private Function OnBanned(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnBanned
 
 ' handle ipbans command
-Private Function OnIPBans(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnIPBans(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim i      As Integer
     Dim tmpBuf As String ' temporary output buffer
 
@@ -1264,9 +1340,11 @@ Private Function OnIPBans(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnIPBans
 
 ' handle ipban command
-Private Function OnIPBan(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim gAcc     As udtGetAccessResponse
-    Dim dbAccess As udtGetAccessResponse
+    'Dim dbAccess As udtGetAccessResponse
     
     Dim tmpBuf   As String ' temporary output buffer
 
@@ -1308,7 +1386,9 @@ Private Function OnIPBan(ByVal Username As String, ByVal msgData As String, ByRe
 End Function ' end function OnIPBan
 
 ' handle unipban command
-Private Function OnUnIPBan(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnUnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     If (Len(msgData) > 0) Then
@@ -1325,7 +1405,9 @@ Private Function OnUnIPBan(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnUnIPBan
 
 ' handle designate command
-Private Function OnDesignate(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnDesignate(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     If (Len(msgData) > 0) Then
@@ -1352,7 +1434,9 @@ Private Function OnDesignate(ByVal Username As String, ByVal msgData As String, 
 End Function ' end function OnDesignate
 
 ' handle shuffle command
-Private Function OnShuffle(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnShuffle(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     Dim hWndWA As Long
     
@@ -1373,7 +1457,9 @@ Private Function OnShuffle(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnShuffle
 
 ' handle repeat command
-Private Function OnRepeat(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnRepeat(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim hWndWA As Long
     Dim tmpBuf As String ' temporary output buffer
     
@@ -1394,7 +1480,9 @@ Private Function OnRepeat(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnRepeat
 
 ' handle next command
-Private Function OnNext(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnNext(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     Dim hWndWA As Long
 
@@ -1421,7 +1509,9 @@ Private Function OnNext(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnNext
 
 ' handle prev command
-Private Function OnPrev(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnPrev(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     Dim hWndWA As Long
 
@@ -1448,7 +1538,9 @@ Private Function OnPrev(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnPrev
 
 ' handle protect command
-Private Function OnProtect(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnProtect(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     Select Case (LCase$(msgData))
@@ -1488,7 +1580,9 @@ Private Function OnProtect(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnProtect
 
 ' handle whispercmds command
-Private Function OnWhisperCmds(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnWhisperCmds(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf      As String ' temporary output buffer
     Dim WhisperCmds As Boolean
     
@@ -1515,7 +1609,9 @@ Private Function OnWhisperCmds(ByVal Username As String, ByVal msgData As String
 End Function ' end function OnWhisperCmds
 
 ' handle stop command
-Private Function OnStop(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnStop(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     Dim hWndWA As Long
     
@@ -1542,7 +1638,9 @@ Private Function OnStop(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnStop
 
 ' handle play command
-Private Function OnPlay(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnPlay(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf  As String ' temporary output buffer
     Dim hWndWA  As Long
     Dim Track   As Long
@@ -1605,7 +1703,9 @@ Private Function OnPlay(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnPlay
 
 ' handle useitunes command
-Private Function OnUseiTunes(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnUseiTunes(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     If (iTunesReady) Then
@@ -1623,7 +1723,9 @@ Private Function OnUseiTunes(ByVal Username As String, ByVal msgData As String, 
 End Function ' end function OnUseiTunes
 
 ' handle usewinamp command
-Private Function OnUseWinamp(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnUseWinamp(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     If (iTunesReady) Then
@@ -1639,7 +1741,9 @@ Private Function OnUseWinamp(ByVal Username As String, ByVal msgData As String, 
 End Function ' end function OnUseWinamp
 
 ' handle pause command
-Private Function OnPause(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnPause(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     Dim hWndWA As Long
     
@@ -1666,7 +1770,9 @@ Private Function OnPause(ByVal Username As String, ByVal msgData As String, ByRe
 End Function ' end function OnPause
 
 ' handle fos command
-Private Function OnFos(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnFos(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim hWndWA As Long
     Dim tmpBuf As String ' temporary output buffer
 
@@ -1687,10 +1793,12 @@ Private Function OnFos(ByVal Username As String, ByVal msgData As String, ByRef 
 End Function ' end function OnFos
 
 ' handle rem command
-Private Function OnRem(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo sendz
     
-    Dim dbAccess As udtGetAccessResponse
+    'Dim dbAccess As udtGetAccessResponse
     
     Dim u        As String
     Dim tmpBuf   As String ' temporary output buffer
@@ -1733,7 +1841,9 @@ sendz:
 End Function ' end function OnRem
 
 ' handle reconnect command
-Private Function OnReconnect(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnReconnect(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     If (g_Online) Then
         BotVars.HomeChannel = gChannel.Current
         
@@ -1752,7 +1862,9 @@ Private Function OnReconnect(ByVal Username As String, ByVal msgData As String, 
 End Function ' end function OnReconnect
 
 ' handle unigpriv command
-Private Function OnUnIgPriv(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnUnIgPriv(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     AddQ "/o unigpriv", 1
@@ -1764,7 +1876,9 @@ Private Function OnUnIgPriv(ByVal Username As String, ByVal msgData As String, B
 End Function ' end function OnUnIgPriv
 
 ' handle igpriv command
-Private Function OnIgPriv(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnIgPriv(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     AddQ "/o igpriv", 1
@@ -1776,7 +1890,9 @@ Private Function OnIgPriv(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnIgPriv
 
 ' handle block command
-Private Function OnBlock(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnBlock(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
     Dim z      As String
@@ -1803,7 +1919,9 @@ Private Function OnBlock(ByVal Username As String, ByVal msgData As String, ByRe
 End Function ' end function OnBlock
 
 ' handle idletime command
-Private Function OnIdleTime(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnIdleTime(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
 
@@ -1821,7 +1939,9 @@ Private Function OnIdleTime(ByVal Username As String, ByVal msgData As String, B
 End Function ' end function OnIdleTime
 
 ' handle idle command
-Private Function OnIdle(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnIdle(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo IdleError
     
     Dim u      As String
@@ -1859,7 +1979,9 @@ IdleError:
 End Function ' end function OnIdle
 
 ' handle shitdel command
-Private Function OnShitDel(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnShitDel(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo IdleError23
     
     Dim u      As String
@@ -1887,7 +2009,9 @@ IdleError23:
 End Function ' end function OnShitDel
 
 ' handle safedel command
-Private Function OnSafeDel(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSafeDel(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim b      As Boolean
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
@@ -1907,7 +2031,9 @@ Private Function OnSafeDel(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnSafeDel
 
 ' handle tagdel command
-Private Function OnTagDel(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnTagDel(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
     
@@ -1925,7 +2051,9 @@ Private Function OnTagDel(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnTagDel
         
 ' handle profile command
-Private Function OnProfile(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnProfile(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo Error614
     
     Dim u      As String
@@ -1949,7 +2077,9 @@ Error614:
 End Function ' end function OnProfile
 
 ' handle setidle command
-Private Function OnSetIdle(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSetIdle(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo IdleError133
     
     Dim u      As String
@@ -1974,7 +2104,9 @@ IdleError133:
 End Function ' end function OnSetIdle
 
 ' handle idletype command
-Private Function OnIdleType(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnIdleType(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo IdleError2
     
     Dim u      As String
@@ -2006,7 +2138,9 @@ IdleError2:
 End Function ' end function OnIdleType
 
 ' handle filter command
-Private Function OnFilter(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnFilter(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u      As String
     Dim i      As Integer
     Dim tmpBuf As String ' temporary output buffer
@@ -2037,7 +2171,9 @@ Private Function OnFilter(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnFilter
 
 ' handle trigger command
-Private Function OnTrigger(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnTrigger(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     tmpBuf = "The bot's current trigger is " & Chr(34) & Space(1) & _
@@ -2048,7 +2184,9 @@ Private Function OnTrigger(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnTrigger
 
 ' handle settrigger command
-Private Function OnSetTrigger(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSetTrigger(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u          As String
     Dim tmpBuf     As String ' temporary output buffer
     Dim OldTrigger As String
@@ -2072,7 +2210,9 @@ Private Function OnSetTrigger(ByVal Username As String, ByVal msgData As String,
 End Function ' end function OnSetTrigger
 
 ' handle levelban command
-Private Function OnLevelBan(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnLevelBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo Error231
         
     Dim i      As Integer
@@ -2112,7 +2252,9 @@ Error231:
 End Function ' end function OnLevelBan
 
 ' handle d2levelban command
-Private Function OnD2LevelBan(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnD2LevelBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo Error231
     
     Dim i      As Integer
@@ -2150,7 +2292,8 @@ Error231:
 End Function ' end function OnD2LevelBans
 
 ' handle phrasebans command
-Private Function OnPhraseBans(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnPhraseBans(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
   
     Dim tmpBuf As String ' temporary output buffer
   
@@ -2183,7 +2326,9 @@ Private Function OnPhraseBans(ByVal Username As String, ByVal msgData As String,
 End Function ' end function OnPhraseBans
 
 ' handle cbans command
-Private Function OnCBans(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnCBans(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo cbansError
     
     Dim u      As String
@@ -2218,7 +2363,9 @@ cbansError:
 End Function ' end function OnCBans
 
 ' handle mimic command
-Private Function OnMimic(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnMimic(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
 
@@ -2236,7 +2383,9 @@ Private Function OnMimic(ByVal Username As String, ByVal msgData As String, ByRe
 End Function ' end function OnMimic
 
 ' handle nomimic command
-Private Function OnNoMimic(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnNoMimic(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     Mimic = vbNullString
@@ -2247,7 +2396,9 @@ Private Function OnNoMimic(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnNoMimic
 
 ' handle setpmsg command
-Private Function OnSetPMsg(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSetPMsg(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
 
@@ -2261,9 +2412,11 @@ Private Function OnSetPMsg(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnSetPMsg
 
 ' handle setcmdaccess command
-Private Function OnSetCmdAccess(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSetCmdAccess(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim ccOut    As udtCustomCommandData
-    Dim dbAccess As udtGetAccessResponse
+    'Dim dbAccess As udtGetAccessResponse
      
     Dim c        As Integer
     Dim iWinamp  As Long
@@ -2320,16 +2473,18 @@ Private Function OnSetCmdAccess(ByVal Username As String, ByVal msgData As Strin
 End Function ' end function OnSetCmdAccess
 
 ' handle cmdadd command
-Private Function OnCmdAdd(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnCmdAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo cmdAddError
     
-    Dim dbAccess   As udtGetAccessResponse
+    'Dim dbAccess   As udtGetAccessResponse
     Dim gAcc       As udtGetAccessResponse
     Dim ccOut      As udtCustomCommandData
     
     Dim tmpBuf     As String ' temporary output buffer
     Dim strArray() As String
-    Dim f          As File
+    Dim f          As Integer
     Dim c          As Integer
     
     dbAccess = GetAccess(Username)
@@ -2409,13 +2564,15 @@ cmdAddError:
 End Function ' end function OnCmdAdd
 
 ' handle cmddel command
-Private Function OnCmdDel(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnCmdDel(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim ccOut  As udtCustomCommandData
     
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
     Dim c      As Integer
-    Dim f      As File
+    Dim f      As Integer
     
     u = Right(msgData, Len(msgData) - 8)
         
@@ -2460,7 +2617,9 @@ NextRecord2:
 End Function ' end function OnCmdDel
 
 ' handle cmdlist command
-Private Function OnCmdList(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnCmdList(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim ccOut    As udtCustomCommandData
     
     Dim f        As Integer
@@ -2539,7 +2698,9 @@ Private Function OnCmdList(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnCmdList
 
 ' handle phrases command
-Private Function OnPhrases(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnPhrases(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf   As String ' temporary output buffer
     Dim response As String
     Dim c        As Integer
@@ -2574,8 +2735,10 @@ Private Function OnPhrases(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnPhrases
 
 ' handle addphrase command
-Private Function OnAddPhrase(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
-    Dim f      As File
+Private Function OnAddPhrase(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim f      As Integer
     
     Dim c      As Integer
     Dim tmpBuf As String ' temporary output buffer
@@ -2619,8 +2782,10 @@ Private Function OnAddPhrase(ByVal Username As String, ByVal msgData As String, 
 End Function ' end function OnAddPhrase
 
 ' handle delphrase command
-Private Function OnDelPhrase(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
-    Dim f      As File
+Private Function OnDelPhrase(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim f      As Integer
     
     Dim u      As String
     Dim Y      As String
@@ -2662,8 +2827,10 @@ Private Function OnDelPhrase(ByVal Username As String, ByVal msgData As String, 
 End Function ' end function OnDelPhrase
 
 ' handle tagban command
-Private Function OnTagBan(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
-    Dim f      As File
+Private Function OnTagBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim f      As Integer
 
     Dim tmpBuf As String ' temporary output buffer
     Dim u      As String
@@ -2678,7 +2845,7 @@ Private Function OnTagBan(ByVal Username As String, ByVal msgData As String, ByR
             ReDim Preserve saCmdRet(0)
         
             If ((InStr(1, u, "*", vbTextCompare) = 0) And (Len(u) > 4)) Then
-                Call OnShitAdd(Username, msgData, saCmdRet())
+                Call OnShitAdd(Username, dbAccess, msgData, InBot, saCmdRet())
             End If
             
             If (Dir$(GetFilePath("tagbans.txt")) = vbNullString) Then
@@ -2707,7 +2874,9 @@ Private Function OnTagBan(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnTagBan
 
 ' handle fadd command
-Private Function OnFAdd(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnFAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
     
@@ -2724,7 +2893,9 @@ Private Function OnFAdd(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnFAdd
 
 ' handle frem command
-Private Function OnFRem(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnFRem(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
     
@@ -2741,7 +2912,9 @@ Private Function OnFRem(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnFRem
 
 ' handle safelist command
-Private Function OnSafeList(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSafeList(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     Dim i      As Integer
 
@@ -2786,7 +2959,9 @@ Private Function OnSafeList(ByVal Username As String, ByVal msgData As String, B
 End Function ' end function OnSafeList
 
 ' handle safeadd command
-Private Function OnSafeAdd(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSafeAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     Dim u      As String
     
@@ -2803,7 +2978,9 @@ Private Function OnSafeAdd(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnSafeAdd
 
 ' handle exile command
-Private Function OnExile(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnExile(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim saCmdRet() As String
     Dim ibCmdRet() As String
     Dim u          As String
@@ -2818,12 +2995,14 @@ Private Function OnExile(ByVal Username As String, ByVal msgData As String, ByRe
         Y = Split(u, " ")(0)
     End If
     
-    Call OnShitAdd(Username, msgData, saCmdRet())
-    Call OnIPBan(Username, msgData, ibCmdRet())
+    Call OnShitAdd(Username, dbAccess, msgData, InBot, saCmdRet())
+    Call OnIPBan(Username, dbAccess, msgData, InBot, ibCmdRet())
 End Function ' end function OnExile
 
 ' handle unexile command
-Private Function OnUnExile(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnUnExile(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u          As String
     Dim sdCmdRet() As String
     Dim uiCmdRet() As String
@@ -2838,13 +3017,15 @@ Private Function OnUnExile(ByVal Username As String, ByVal msgData As String, By
         u = Split(u, " ")(0)
     End If
     
-    Call OnShitDel(Username, msgData, sdCmdRet())
-    Call OnUnignore(Username, msgData, uiCmdRet())
+    Call OnShitDel(Username, dbAccess, msgData, InBot, sdCmdRet())
+    Call OnUnignore(Username, dbAccess, msgData, InBot, uiCmdRet())
 End Function ' end function OnUnExile
 
 ' handle shitlist command
-Private Function OnShitList(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
-    Dim f          As File
+Private Function OnShitList(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim f          As Integer
     
     Dim strArray() As String
     Dim Y          As String
@@ -2914,7 +3095,9 @@ Private Function OnShitList(ByVal Username As String, ByVal msgData As String, B
 End Function ' end function OnShitList
 
 ' handle tagbans command
-Private Function OnTagBans(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnTagBans(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     'If Dir$(GetFilePath("tagbans.txt")) = vbNullString Then
     '    strSend = "No tagbans list found."
     '    b = True
@@ -2959,8 +3142,10 @@ Private Function OnTagBans(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnTagBans
 
 ' handle shitadd command
-Private Function OnShitAdd(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
-    Dim f          As File
+Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim f          As Integer
     
     Dim tmpBuf     As String ' temporary output buffer
     Dim i          As Integer
@@ -3021,7 +3206,9 @@ Private Function OnShitAdd(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnShitAdd
 
 ' handle dnd command
-Private Function OnDND(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnDND(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim DNDMsg As String
     
     If (Len(msgData) <= 5) Then
@@ -3034,7 +3221,9 @@ Private Function OnDND(ByVal Username As String, ByVal msgData As String, ByRef 
 End Function ' end function OnDND
 
 ' handle bancount command
-Private Function OnBanCount(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnBanCount(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     If (BanCount = 0) Then
@@ -3048,7 +3237,9 @@ Private Function OnBanCount(ByVal Username As String, ByVal msgData As String, B
 End Function ' end function OnBanCount
 
 ' handle tagcheck command
-Private Function OnTagCheck(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnTagCheck(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim Y      As String
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
@@ -3067,7 +3258,9 @@ Private Function OnTagCheck(ByVal Username As String, ByVal msgData As String, B
 End Function ' end function OnTagCheck
 
 ' handle slcheck command
-Private Function OnSLCheck(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnSLCheck(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim gAcc   As udtGetAccessResponse
     
     Dim Y      As String
@@ -3110,7 +3303,9 @@ Private Function OnSLCheck(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnSLCheck
 
 ' handle readfile command
-Private Function OnReadFile(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u      As String
     Dim Y      As String
     Dim tmpBuf As String ' temporary output buffer
@@ -3186,7 +3381,9 @@ readError:
 End Function ' end function OnReadFile
 
 ' handle greet command
-Private Function OnGreet(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnGreet(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim strArray() As String
     Dim tmpBuf     As String ' temporary output buffer
     
@@ -3246,7 +3443,9 @@ Private Function OnGreet(ByVal Username As String, ByVal msgData As String, ByRe
 End Function ' end function OnGreet
 
 ' handle allseen command
-Private Function OnAllSeen(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnAllSeen(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     Dim i      As Integer
 
@@ -3273,8 +3472,10 @@ Private Function OnAllSeen(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnAllSeen
 
 ' handle ban command
-Private Function OnBan(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
-    Dim dbAccess As udtGetAccessResponse
+Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    'Dim dbAccess As udtGetAccessResponse
     
     Dim u        As String
     Dim tmpBuf   As String ' temporary output buffer
@@ -3326,7 +3527,9 @@ sendit6:
 End Function ' end function OnBan
 
 ' handle unban command
-Private Function OnUnBan(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnUnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo sende
     
     Dim u      As String
@@ -3365,10 +3568,12 @@ sende:
 End Function ' end function OnUnBan
 
 ' handle kick command
-Private Function OnKick(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo sendit
     
-    Dim dbAccess As udtGetAccessResponse
+    'Dim dbAccess As udtGetAccessResponse
     
     Dim u      As String
     Dim i      As Integer
@@ -3420,7 +3625,9 @@ sendit:
 End Function ' end function OnKick
 
 ' handle lastwhisper command
-Private Function OnLastWhisper(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnLastWhisper(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     If (LastWhisper <> vbNullString) Then
@@ -3434,8 +3641,10 @@ Private Function OnLastWhisper(ByVal Username As String, ByVal msgData As String
 End Function ' end function OnLastWhisper
 
 ' handle say command
-Private Function OnSay(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
-    Dim dbAccess As udtGetAccessResponse
+Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    'Dim dbAccess As udtGetAccessResponse
     
     Dim tmpBuf   As String ' temporary output buffer
     Dim tmpSend  As String ' ...
@@ -3465,7 +3674,9 @@ Private Function OnSay(ByVal Username As String, ByVal msgData As String, ByRef 
 End Function ' end function OnSay
 
 ' handle expand command
-Private Function OnExpand(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnExpand(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
 
@@ -3490,7 +3701,9 @@ Private Function OnExpand(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnExpand
 
 ' handle detail command
-Private Function OnDetail(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnDetail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     tmpBuf = GetDBDetail(Split(msgData, " ")(1))
@@ -3500,7 +3713,9 @@ Private Function OnDetail(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnDetail
 
 ' handle info command
-Private Function OnInfo(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u      As String
     Dim i      As Integer
     Dim tmpBuf As String ' temporary output buffer
@@ -3537,10 +3752,12 @@ Private Function OnInfo(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnInfo
 
 ' handle shout command
-Private Function OnShout(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnShout(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo sendy
     
-    Dim dbAccess As udtGetAccessResponse
+    'Dim dbAccess As udtGetAccessResponse
     
     Dim u         As String
     Dim tmpBuf    As String ' temporary output buffer
@@ -3571,7 +3788,9 @@ sendy:
 End Function ' end function OnShout
 
 ' handle voteban command
-Private Function OnVoteBan(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnVoteBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     If (VoteDuration < 0) Then
@@ -3589,8 +3808,10 @@ Private Function OnVoteBan(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnVoteBan
 
 ' handle votekick command
-Private Function OnVoteKick(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
-    Dim dbAccess As udtGetAccessResponse
+Private Function OnVoteKick(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    'Dim dbAccess As udtGetAccessResponse
     
     Dim tmpBuf   As String ' temporary output buffer
     
@@ -3613,8 +3834,10 @@ Private Function OnVoteKick(ByVal Username As String, ByVal msgData As String, B
 End Function ' end function OnVoteKick
 
 ' handle vote command
-Private Function OnVote(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
-    Dim dbAccess As udtGetAccessResponse
+Private Function OnVote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    'Dim dbAccess As udtGetAccessResponse
     
     Dim tmpBuf   As String ' temporary output buffer
     
@@ -3643,7 +3866,9 @@ Private Function OnVote(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnVote
 
 ' handle cancel command
-Private Function OnCancel(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnCancel(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     If (VoteDuration > 0) Then
@@ -3657,7 +3882,9 @@ Private Function OnCancel(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnCancel
 
 ' handle back command
-Private Function OnBack(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnBack(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     Dim hWndWA As Long
     
@@ -3700,7 +3927,9 @@ sendf3:
 End Function ' end function OnBack
 
 ' handle uptime command
-Private Function OnUptime(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnUptime(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     tmpBuf = "System uptime " & ConvertTime(GetUptimeMS) & _
@@ -3711,7 +3940,9 @@ Private Function OnUptime(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnUptime
 
 ' handle away command
-Private Function OnAway(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnAway(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     If (LenB(AwayMsg) > 0) Then
@@ -3744,7 +3975,9 @@ sendcc:
 End Function ' end function OnAway
 
 ' handle MP3 command
-Private Function OnMP3(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnMP3(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim WindowTitle As String
     Dim tmpBuf      As String ' temporary output buffer
     
@@ -3761,7 +3994,9 @@ Private Function OnMP3(ByVal Username As String, ByVal msgData As String, ByRef 
 End Function ' end function OnMP3
 
 ' handle deldef command
-Private Function OnDelDef(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnDelDef(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo error_deldef
     
     Dim u      As String
@@ -3784,7 +4019,9 @@ error_deldef:
 End Function ' end function OnDelDef
 
 ' handle define command
-Private Function OnDefine(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnDefine(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo sendyz
     
     Dim response As String
@@ -3823,7 +4060,9 @@ sendyz:
 End Function ' end function OnDefine
 
 ' handle newdef command
-Private Function OnNewDef(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnNewDef(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo sendi2
         
     Dim Track  As Long
@@ -3854,7 +4093,9 @@ sendi2:
 End Function ' end function OnNewDef
 
 ' handle ping command
-Private Function OnPing(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnPing(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo sendc
     
     Dim u      As String
@@ -3880,7 +4121,9 @@ sendc:
 End Function ' end function OnPing
 
 ' handle addquote command
-Private Function OnAddQuote(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnAddQuote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim f      As Integer
     Dim u      As String
     Dim Y      As String
@@ -3913,7 +4156,9 @@ Private Function OnAddQuote(ByVal Username As String, ByVal msgData As String, B
 End Function ' end function OnAddQuote
 
 ' handle owner command
-Private Function OnOwner(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnOwner(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     If (LenB(BotVars.BotOwner) > 0) Then
@@ -3927,10 +4172,12 @@ Private Function OnOwner(ByVal Username As String, ByVal msgData As String, ByRe
 End Function ' end function OnOwner
 
 ' handle ignore command
-Private Function OnIgnore(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnIgnore(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo sendit9
     
-    Dim dbAccess As udtGetAccessResponse
+    'Dim dbAccess As udtGetAccessResponse
     
     Dim u        As String
     Dim tmpBuf   As String ' temporary output buffer
@@ -3961,7 +4208,9 @@ sendit9:
 End Function ' end function OnIgnore
 
 ' handle quote command
-Private Function OnQuote(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnQuote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     tmpBuf = GetRandomQuote
@@ -3985,7 +4234,9 @@ Private Function OnQuote(ByVal Username As String, ByVal msgData As String, ByRe
 End Function ' end function OnQuote
 
 ' handle unignore command
-Private Function OnUnignore(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnUnignore(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     On Error GoTo sendit7
     
     Dim u      As String
@@ -4011,7 +4262,9 @@ sendit7:
 End Function ' end function OnUnignore
 
 ' handle cq command
-Private Function OnCQ(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnCQ(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     While (colQueue.Count > 0)
@@ -4031,7 +4284,9 @@ Private Function OnCQ(ByVal Username As String, ByVal msgData As String, ByRef c
 End Function ' end function OnCQ
 
 ' handle time command
-Private Function OnTime(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnTime(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     tmpBuf = "The current time on this computer is " & Time & " on " & Format(Date, "MM-dd-yyyy") & "."
@@ -4041,7 +4296,9 @@ Private Function OnTime(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnTime
 
 ' handle getping command
-Private Function OnGetPing(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnGetPing(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf  As String ' temporary output buffer
     Dim latency As Long
 
@@ -4064,7 +4321,9 @@ Private Function OnGetPing(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnGetPing
 
 ' handle checkmail command
-Private Function OnCheckMail(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnCheckMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim Track  As Long
     Dim tmpBuf As String ' temporary output buffer
     
@@ -4087,7 +4346,9 @@ Private Function OnCheckMail(ByVal Username As String, ByVal msgData As String, 
 End Function ' end function OnCheckMail
 
 ' handle getmail command
-Private Function OnGetMail(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim Msg As udtMail
     
     Dim tmpBuf As String ' temporary output buffer
@@ -4109,8 +4370,10 @@ Private Function OnGetMail(ByVal Username As String, ByVal msgData As String, By
 End Function ' end function OnGetMail
 
 ' handle whoami command
-Private Function OnWhoAmI(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
-    Dim dbAccess As udtGetAccessResponse
+Private Function OnWhoAmI(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    'Dim dbAccess As udtGetAccessResponse
     
     Dim tmpBuf   As String ' temporary output buffer
     
@@ -4151,11 +4414,13 @@ Private Function OnWhoAmI(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnWhoAmI
 
 ' handle add command
-Private Function OnAdd(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     'On Error GoTo AddError
     
     Dim gAcc       As udtGetAccessResponse
-    Dim dbAccess   As udtGetAccessResponse
+    'Dim dbAccess   As udtGetAccessResponse
     
     Dim Track      As Long
     Dim strArray() As String
@@ -4548,7 +4813,9 @@ AddError:
 End Function ' end function OnAdd
 
 ' handle mmail command
-Private Function OnMMail(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim Temp As udtMail
     
     Dim strArray() As String
@@ -4609,7 +4876,9 @@ Private Function OnMMail(ByVal Username As String, ByVal msgData As String, ByRe
 End Function ' end function OnMMail
 
 ' handle mail command
-Private Function OnMail(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim Temp       As udtMail
 
     Dim strArray() As String
@@ -4639,7 +4908,9 @@ Private Function OnMail(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnMail
 
 ' handle designated command
-Private Function OnDesignated(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnDesignated(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     If ((MyFlags <> 2) And (MyFlags <> 18)) Then
@@ -4655,7 +4926,9 @@ Private Function OnDesignated(ByVal Username As String, ByVal msgData As String,
 End Function ' end function OnDesignated
 
 ' handle flip command
-Private Function OnFlip(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnFlip(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim i As Integer
     Dim tmpBuf As String ' temporary output buffer
 
@@ -4674,7 +4947,9 @@ Private Function OnFlip(ByVal Username As String, ByVal msgData As String, ByRef
 End Function ' end function OnFlip
 
 ' handle about command
-Private Function OnAbout(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnAbout(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
 
     tmpBuf = ".: " & CVERSION & " by Stealth."
@@ -4684,7 +4959,9 @@ Private Function OnAbout(ByVal Username As String, ByVal msgData As String, ByRe
 End Function ' end function OnAbout
 
 ' handle server command
-Private Function OnServer(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnServer(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim tmpBuf As String ' temporary output buffer
     
     tmpBuf = "I am currently connected to " & BotVars.Server & "."
@@ -4694,7 +4971,9 @@ Private Function OnServer(ByVal Username As String, ByVal msgData As String, ByR
 End Function ' end function OnServer
 
 ' handle findr command
-Private Function OnFindR(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnFindR(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim strArray() As String
     Dim tmpBuf     As String ' temporary output buffer
     Dim i          As Integer
@@ -4769,7 +5048,9 @@ Private Function OnFindR(ByVal Username As String, ByVal msgData As String, ByRe
 End Function ' end function OnFindR
 
 ' handle find command
-Private Function OnFind(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnFind(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim gAcc   As udtGetAccessResponse
 
     Dim u      As String
@@ -4820,7 +5101,9 @@ sendit2:
 End Function ' end function OnFind
 
 ' handle whois command
-Private Function OnWhoIs(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnWhoIs(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u As String
 
     u = Right(msgData, Len(msgData) - 7)
@@ -4833,7 +5116,9 @@ Private Function OnWhoIs(ByVal Username As String, ByVal msgData As String, ByRe
 End Function ' end function OnWhoIs
 
 ' handle findattr command
-Private Function OnFindAttr(ByVal Username As String, ByVal msgData As String, ByRef cmdRet() As String) As Boolean
+Private Function OnFindAttr(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
     Dim u                As String
     Dim Track            As Long
     Dim response         As String
