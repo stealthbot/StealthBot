@@ -693,12 +693,8 @@ Private Function OnMath(ByVal Username As String, ByRef dbAccess As udtGetAccess
     '100: No restrictions
     'Hdx - 09-25-07
 
-    'Dim dbAccess As udtGetAccessResponse
-    
     Dim tmpBuf   As String ' temporary output buffer
 
-    dbAccess = GetAccess(Username)
-    
     If (dbAccess.Access >= GetAccessINIValue("math80", 80)) Then
         If (dbAccess.Access >= GetAccessINIValue("math100", 100)) Then
             frmChat.SCRestricted.AllowUI = True
@@ -1344,13 +1340,11 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim gAcc     As udtGetAccessResponse
-    'Dim dbAccess As udtGetAccessResponse
-    
+
     Dim tmpBuf   As String ' temporary output buffer
 
     msgData = StripInvalidNameChars(msgData)
-    dbAccess = GetAccess(Username)
-    
+
     If (Len(msgData) > 0) Then
         If (InStr(1, msgData, "@") > 0) Then
             msgData = StripRealm(msgData)
@@ -1797,14 +1791,10 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     On Error GoTo sendz
-    
-    'Dim dbAccess As udtGetAccessResponse
-    
+
     Dim u        As String
     Dim tmpBuf   As String ' temporary output buffer
-    
-    dbAccess = GetAccess(Username)
-    
+
     u = Right(msgData, (Len(msgData) - 5))
     
     If (GetAccess(u).Access >= dbAccess.Access) Then
@@ -2416,8 +2406,7 @@ Private Function OnSetCmdAccess(ByVal Username As String, ByRef dbAccess As udtG
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim ccOut    As udtCustomCommandData
-    'Dim dbAccess As udtGetAccessResponse
-     
+
     Dim c        As Integer
     Dim iWinamp  As Long
     Dim tmpBuf   As String ' temporary output buffer
@@ -2425,7 +2414,6 @@ Private Function OnSetCmdAccess(ByVal Username As String, ByRef dbAccess As udtG
     Dim Track    As Long
     Dim z        As String
     
-    dbAccess = GetAccess(Username)
     c = 1
         
     If (Not (StrictIsNumeric(GetStringChunk(msgData, 3)))) Then
@@ -2477,8 +2465,7 @@ Private Function OnCmdAdd(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     On Error GoTo cmdAddError
-    
-    'Dim dbAccess   As udtGetAccessResponse
+
     Dim gAcc       As udtGetAccessResponse
     Dim ccOut      As udtCustomCommandData
     
@@ -2486,9 +2473,7 @@ Private Function OnCmdAdd(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Dim strArray() As String
     Dim f          As Integer
     Dim c          As Integer
-    
-    dbAccess = GetAccess(Username)
-    
+
     If ((InStr(1, msgData, "/add ", vbTextCompare) > 0) Or _
         (InStr(1, msgData, "/rem ", vbTextCompare) > 0) Or _
         (InStr(1, msgData, "/set ", vbTextCompare) > 0)) Then
@@ -2739,7 +2724,6 @@ Private Function OnAddPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim f      As Integer
-    
     Dim c      As Integer
     Dim tmpBuf As String ' temporary output buffer
     Dim u      As String
@@ -2786,7 +2770,6 @@ Private Function OnDelPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim f      As Integer
-    
     Dim u      As String
     Dim Y      As String
     Dim tmpBuf As String ' temporary output buffer
@@ -2831,7 +2814,6 @@ Private Function OnTagBan(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim f      As Integer
-
     Dim tmpBuf As String ' temporary output buffer
     Dim u      As String
     
@@ -3026,7 +3008,6 @@ Private Function OnShitList(ByVal Username As String, ByRef dbAccess As udtGetAc
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim f          As Integer
-    
     Dim strArray() As String
     Dim Y          As String
     Dim tmpBuf     As String ' temporary output buffer
@@ -3146,7 +3127,6 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim f          As Integer
-    
     Dim tmpBuf     As String ' temporary output buffer
     Dim i          As Integer
     Dim response   As String
@@ -3474,16 +3454,12 @@ End Function ' end function OnAllSeen
 ' handle ban command
 Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    'Dim dbAccess As udtGetAccessResponse
-    
+
     Dim u        As String
     Dim tmpBuf   As String ' temporary output buffer
     Dim banMsg   As String
     Dim Y        As String
     Dim i        As Integer
-
-    dbAccess = GetAccess(Username)
 
     If ((MyFlags <> 2) And (MyFlags <> 18)) Then
         'If (InBot) Then
@@ -3573,15 +3549,11 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     On Error GoTo sendit
     
-    'Dim dbAccess As udtGetAccessResponse
-    
     Dim u      As String
     Dim i      As Integer
     Dim banMsg As String
     Dim tmpBuf As String ' temporary output buffer
     Dim Y      As String
-    
-    dbAccess = GetAccess(Username)
     
     'If MyFlags <> 2 And MyFlags <> 18 Then
     '   If InBot Then
@@ -3643,13 +3615,9 @@ End Function ' end function OnLastWhisper
 ' handle say command
 Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    'Dim dbAccess As udtGetAccessResponse
-    
+
     Dim tmpBuf   As String ' temporary output buffer
     Dim tmpSend  As String ' ...
-        
-    dbAccess = GetAccess(Username)
     
     If (Len(msgData) > 0) Then
         If (dbAccess.Access >= GetAccessINIValue("say70", 70)) Then
@@ -3756,13 +3724,9 @@ Private Function OnShout(ByVal Username As String, ByRef dbAccess As udtGetAcces
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     On Error GoTo sendy
-    
-    'Dim dbAccess As udtGetAccessResponse
-    
+
     Dim u         As String
     Dim tmpBuf    As String ' temporary output buffer
-    
-    dbAccess = GetAccess(Username)
     
     u = UCase$(Right(msgData, (Len(msgData) - 7)))
 
@@ -3810,12 +3774,8 @@ End Function ' end function OnVoteBan
 ' handle votekick command
 Private Function OnVoteKick(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    'Dim dbAccess As udtGetAccessResponse
-    
+
     Dim tmpBuf   As String ' temporary output buffer
-    
-    dbAccess = GetAccess(Username)
     
     If (VoteDuration < 0) Then
         Call Voting(BVT_VOTE_START, BVT_VOTE_KICK, Right(msgData, Len(msgData) - 10))
@@ -3836,12 +3796,8 @@ End Function ' end function OnVoteKick
 ' handle vote command
 Private Function OnVote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    'Dim dbAccess As udtGetAccessResponse
-    
+ 
     Dim tmpBuf   As String ' temporary output buffer
-    
-    dbAccess = GetAccess(Username)
     
     If (VoteDuration < 0) Then
         If ((StrictIsNumeric(Right(msgData, Len(msgData) - 6))) And _
@@ -4176,13 +4132,9 @@ Private Function OnIgnore(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     On Error GoTo sendit9
-    
-    'Dim dbAccess As udtGetAccessResponse
-    
+
     Dim u        As String
     Dim tmpBuf   As String ' temporary output buffer
-    
-    dbAccess = GetAccess(Username)
         
     If (Mid$(msgData, 5, 1) = "o") Then
         u = Right(msgData, Len(msgData) - 8)
@@ -4372,12 +4324,8 @@ End Function ' end function OnGetMail
 ' handle whoami command
 Private Function OnWhoAmI(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    'Dim dbAccess As udtGetAccessResponse
-    
+
     Dim tmpBuf   As String ' temporary output buffer
-    
-    dbAccess = GetAccess(Username)
 
     If (Username = "(console)") Then
         tmpBuf = "You are the bot console."
@@ -4420,8 +4368,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     'On Error GoTo AddError
     
     Dim gAcc       As udtGetAccessResponse
-    'Dim dbAccess   As udtGetAccessResponse
-    
+
     Dim Track      As Long
     Dim strArray() As String
     Dim strUser    As String
@@ -4431,8 +4378,6 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim iWinamp    As Integer
     Dim tmpBuf     As String ' temporary output buffer
     Dim u          As String
-    
-    dbAccess = GetAccess(Username)
     
     Track = 0
     strArray() = Split(msgData, " ")
@@ -4816,13 +4761,13 @@ End Function ' end function OnAdd
 Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim Temp As udtMail
+    Dim Temp       As udtMail
     
     Dim strArray() As String
-    Dim tmpBuf As String ' temporary output buffer
-    Dim c As Integer
-    Dim f As Integer
-    Dim Track As Long
+    Dim tmpBuf     As String ' temporary output buffer
+    Dim c          As Integer
+    Dim f          As Integer
+    Dim Track      As Long
     
     strArray = Split(msgData, " ", 2)
             
