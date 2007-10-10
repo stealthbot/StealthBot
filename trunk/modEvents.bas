@@ -1385,7 +1385,7 @@ PhraseCleared:
             End If
         End If
         
-        Call ProcessCommand(Message, Username, False)
+        Call ProcessCommand(Username, Message, False, False)
         
 theEnd:
         On Error Resume Next
@@ -1641,7 +1641,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
                 End If
             End If
         
-            Call ProcessCommand(Message, Username, True)
+            Call ProcessCommand(Username, Message, False, True)
         End If
         
         On Error Resume Next
