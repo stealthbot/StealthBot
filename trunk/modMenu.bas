@@ -36,6 +36,8 @@ Private Const FIRST_MENU_NUMBER = 200
 
 Public dctCallbacks As Dictionary
 Public colDynamicMenus As Collection
+Public dictMenuIDs As Dictionary
+Public dictItemIDs As Dictionary
 
 'Menu Action Enum - possible user responses
 Public Enum MenuAction
@@ -287,7 +289,133 @@ Public Function FindMenuByID(ByVal hMenu As Long, ByVal lngFindMenuID As Long, _
   
 End Function
 
-'AddParentMenu: Append or Insert a new menu/sub-menu pair to hMenu.
+
+'// Written by Swent. Registers and populates menus for each plugin in the Plugins menu.
+'//   Also registers the Plugin System, Scripting Help, and Display menus
+Public Sub RegisterPluginMenus()
+    Dim lngHelpMenu As Long, strPrefixes() As String, strTitles() As String
+    Dim i As Integer
+    
+    Set dictMenuIDs = New Dictionary
+    Set dictItemIDs = New Dictionary
+    dictMenuIDs.CompareMode = TextCompare
+    dictItemIDs.CompareMode = TextCompare
+    
+    '// Add menu "The Plugin System" and populate with several commands
+    dictMenuIDs("ps") = RegisterScriptMenu("The Plugin System")
+    
+    dictItemIDs("ps|||Enabled") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Disable Plugins", _
+            "ps_GEnabled_Callback", 0, 0, Not SharedScriptSupport.GetSetting("ps", "enabled"))
+            
+    dictItemIDs("ps|||New Version Notification") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Disable NVN", _
+            "ps_GNVN_Callback", 0, 0, Not SharedScriptSupport.GetSetting("ps", "enabled"))
+            
+    dictItemIDs("ps|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Enable Plugin Backups", _
+            "ps_GBackups_Callback", 0, 0, SharedScriptSupport.GetSetting("ps", "enabled"))
+            
+    AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
+    AddScriptMenuItem dictMenuIDs("ps"), "Open PluginSystem.dat", "ps_OpenPS_Callback", False, False
+    AddScriptMenuItem dictMenuIDs("ps"), "Help", "ps_Help_Callback"
+    
+    '// Add menu "Plugin Menu Display"
+    If Not SharedScriptSupport.GetSetting("ps", "menusDisabled") Then
+        dictMenuIDs("#display") = RegisterScriptMenu("Plugin Menu Display")
+        AddItemToMenu ScriptMenu_ParentID, 0, True
+    End If
+    
+    '// Get plugin prefixes and titles
+    strPrefixes = Split(frmChat.SControl.Eval("Join(psPrefixes)"))
+    strTitles = Split(frmChat.SControl.Eval("psTitles"), ",")
+    
+    '// Register and populate a menu for each plugin
+    For i = 0 To UBound(strPrefixes)
+    
+        '// Are plugin menus enabled?
+        If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit For
+
+        '// Add an item in Plugin Menu Display for this plugin
+        dictItemIDs("#display|||" & strPrefixes(i)) = AddScriptMenuItem(dictMenuIDs("#display"), strTitles(i), _
+                    "ps_display_callback_" & strPrefixes(i), , , SharedScriptSupport.GetSetting(strPrefixes(i), "menu_display"))
+        frmChat.SControl.AddCode "Sub ps_display_callback_" & strPrefixes(i) & ":PluginMenus_Display_Callback """ & strPrefixes(i) & """: End " & "Sub"
+        
+        '// Should this plugin's menu be displayed?
+        If SharedScriptSupport.GetSetting(strPrefixes(i), "menu_display") Then
+            
+            '// Register a menu for this plugin and populate with several default items
+            dictMenuIDs(strPrefixes(i)) = RegisterScriptMenu(strTitles(i))
+            
+            dictItemIDs(strPrefixes(i) & "|||Enabled") = AddScriptMenuItem(dictMenuIDs(strPrefixes(i)), "Enabled", _
+                    "ps_enabled_callback_" & strPrefixes(i), , , SharedScriptSupport.GetSetting(strPrefixes(i), "enabled"))
+            
+            dictItemIDs(strPrefixes(i) & "|||New Version Notification") = AddScriptMenuItem(dictMenuIDs(strPrefixes(i)), _
+                    "New Version Notification", "ps_nvn_callback_" & strPrefixes(i), , , SharedScriptSupport.GetSetting(strPrefixes(i), "nvn"))
+            
+            dictItemIDs(strPrefixes(i) & "|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs(strPrefixes(i)), "Backup On Updates", _
+                    "ps_backup_callback_" & strPrefixes(i), , , SharedScriptSupport.GetSetting(strPrefixes(i), "backup"))
+            
+            AddScriptMenuItem dictMenuIDs(strPrefixes(i)), 0, 0, True
+            AddScriptMenuItem dictMenuIDs(strPrefixes(i)), "Open File", "ps_openfile_callback_" & strPrefixes(i)
+            AddScriptMenuItem dictMenuIDs(strPrefixes(i)), "Help", "ps_help_callback_" & strPrefixes(i)
+            
+            '// Create the callback subs
+            frmChat.SControl.AddCode "Sub ps_enabled_callback_" & strPrefixes(i) & ":PluginMenus_Enabled_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
+                                     "Sub ps_nvn_callback_" & strPrefixes(i) & ":PluginMenus_NVN_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
+                                     "Sub ps_backup_callback_" & strPrefixes(i) & ":PluginMenus_Backup_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
+                                     "Sub ps_openfile_callback_" & strPrefixes(i) & ":psPluginSystemCmds ""/pedit " & strPrefixes(i) & """, """ & BotVars.Username & """, 4:End " & "Sub" & vbCrLf & _
+                                     "Sub ps_help_callback_" & strPrefixes(i) & ":psPluginSystemCmds ""/phelp " & strPrefixes(i) & """, """ & BotVars.Username & """, 4:End " & "Sub"
+        End If
+        
+        If i = UBound(strPrefixes) Then AddItemToMenu ScriptMenu_ParentID, 0, True
+    Next
+    
+    '// Add 1st level command "Create New Plugin"
+    dictMenuIDs("#CreateNewPlugin") = AddItemToMenu(ScriptMenu_ParentID, "Create New Plugin", , , , "ps_CreatePlugin_Callback")
+    
+    '// Add help menu populated with links to some helpful forums/topics
+    lngHelpMenu = RegisterScriptMenu("Help")
+    AddScriptMenuItem lngHelpMenu, "Scripting Tutorials and FAQs", "ps_mainhelp1_callback"
+    AddScriptMenuItem lngHelpMenu, "Scripting and Plugins Support", "ps_mainhelp2_callback"
+    AddScriptMenuItem lngHelpMenu, "The Plugin System Guide", "ps_mainhelp3_callback"
+    AddScriptMenuItem lngHelpMenu, "The Plugin System FAQ", "ps_mainhelp4_callback"
+End Sub
+
+
+'// Get's the IDs of default 1st level menu items
+Public Function GetDefaultMenu(ByVal strKey As String) As Long
+
+    GetDefaultMenu = dictMenuIDs(strKey)
+End Function
+
+
+'// Get's the ID of a plugin menu menu
+Public Function GetPluginMenu(ByVal strPrefix As String) As Long
+    GetPluginMenu = dictMenuIDs(strPrefix)
+End Function
+
+
+'// Get's the ID of a plugin menu item
+Public Function GetPluginItem(ByVal strPrefix As String, ByVal strName As String) As Long
+    GetPluginItem = dictItemIDs(strPrefix & "|||" & strName)
+End Function
+
+
+'// Registers the ID of a new plugin menu item
+Public Function RegisterPluginItem(ByVal strPrefix As String, ByVal strName As String, ByVal intID As Integer) As Long
+    dictItemIDs(strPrefix & "|||" & strName) = intID
+End Function
+
+
+'// Returns the number of user-added items
+Public Function UserAddedItems(ByVal strPrefix As String) As Boolean
+    Dim strItems, intItemCount As Integer
+    
+    '// Get number of items in this plugin's menu
+    strItems = dictItemIDs.Items
+    UserAddedItems = UBound(Filter(strItems, strPrefix & "|||", False, vbTextCompare))
+End Function
+
+
+'Written by Andy. Append or Insert a new menu/sub-menu pair to hMenu.
 ' Modified to return the menu ID it creates.
 Public Function AddParentMenu(ByVal hMenu As Long, strItemCaption As String, _
                         Optional ByVal strSubItemCaption As String, Optional varPosition As Variant) As Long
@@ -319,11 +447,91 @@ Public Function AddParentMenu(ByVal hMenu As Long, strItemCaption As String, _
 End Function
 
 
-' Written by Andy
-Public Function AddMenuItem(ByVal hMenu As Long, ByVal strItemCaption As String, Optional ByVal Separator As Boolean = False, Optional ByVal Checked As Boolean = False, Optional ByVal Disabled As Boolean = False)
-    Dim lngRC As Long, lngMenuID As Long, lngFlags As Long
+'Written by Andy. Creates a first-level menu item under the Plugins menu item
+'   Modified by Swent 10/11/07
+Public Function RegisterScriptMenu(ByVal sMenuCaption As String) As Long
     
+    Dim lMenu As Long
+    Dim ThisScript_MenuID As Long
+    
+    lMenu = GetMenu(frmChat.hWnd)
+    
+    If ScriptMenu_ParentID = 0 Then
+        ScriptMenu_ParentID = AddParentMenu(lMenu, "Plugins", , 5)
+        AddItemToMenu ScriptMenu_ParentID, "Open plugins folder", , , , "ps_OpenPlugins_Callback"
+        AddItemToMenu ScriptMenu_ParentID, "Open settings.ini", , , , "ps_OpenSettings_Callback"
+        AddItemToMenu ScriptMenu_ParentID, 0, True
+    End If
+    
+    ThisScript_MenuID = AddParentMenu(ScriptMenu_ParentID, sMenuCaption)
+    
+    RegisterScriptMenu = ThisScript_MenuID
+        DrawMenuBar frmChat.hWnd
+    colDynamicMenus.Add ThisScript_MenuID
+    
+End Function
+
+
+'Written by Andy. Adds a second-level menu item to an already-created menu
+Public Function AddScriptMenuItem(ByVal lMenuHandle As Long, ByVal sItemCaption As String, ByVal sCallbackFunction As String, _
+        Optional ByVal MSeparator As Boolean, Optional ByVal MDisabled As Boolean, Optional ByVal MChecked As Boolean) As Long
+    
+    Dim lCallbackID As Long
+    lCallbackID = AddItemToMenu(lMenuHandle, sItemCaption, MSeparator, MChecked, MDisabled)
+    
+    dctCallbacks.Add CStr(lCallbackID), sCallbackFunction
+    
+    DrawMenuBar frmChat.hWnd
+    
+    AddScriptMenuItem = lCallbackID
+    
+End Function
+
+
+'Written by Andy. Toggles the checkmark on an item.
+'  Returns 1 if the item was previously checked, 0 if it was unchecked, and -1 if the menu item doesn't exist.
+Public Function SetMenuCheck(ByVal lMenuHandle As Long, ByVal lMenuCommandID As Long, ByVal bNewCheckState As Boolean) As Long
+    
+    Dim l As Long
+    
+    l = CheckMenuItem(lMenuHandle, lMenuCommandID, IIf(bNewCheckState, MF_CHECKED, MF_UNCHECKED))
+    
+    DrawMenuBar frmChat.hWnd
+    
+    If (l And MF_CHECKED) = MF_CHECKED Then
+        l = 1
+    End If
+    
+    SetMenuCheck = l
+    
+End Function
+
+
+
+'Written by Andy. Toggles whether or not a menu item is grayed out.
+Public Sub SetMenuEnabled(ByVal lMenuHandle As Long, ByVal lMenuCommandID As Long, ByVal bNewEnabledState As Boolean)
+    
+    Dim l As Long
+    Dim s As String
+    
+    s = GetMenuCaptionByCommand(frmChat.hWnd, lMenuCommandID)
+    l = ModifyMenu(lMenuHandle, lMenuCommandID, IIf(bNewEnabledState, MF_STRING, MF_GRAYED), lMenuCommandID, s)
+    
+    DrawMenuBar frmChat.hWnd
+    
+End Sub
+
+
+'Written by Andy. Adds an item to a menu.
+'   Modified by Swent 10/11/07
+Public Function AddItemToMenu(ByVal hMenu As Long, ByVal strItemCaption As String, Optional ByVal Separator As Boolean = False, _
+                                Optional ByVal Checked As Boolean = False, Optional ByVal Disabled As Boolean = False, Optional ByVal strCallback As String)
+    
+    Dim lngRC As Long, lngMenuID As Long, lngFlags As Long
+        
     lngMenuID = GetNextMenuNumber()
+    
+    If Len(strCallback) > 0 Then dctCallbacks.Add CStr(lngMenuID), strCallback
     
     lngFlags = MF_STRING
     
@@ -333,9 +541,8 @@ Public Function AddMenuItem(ByVal hMenu As Long, ByVal strItemCaption As String,
     
     lngRC = AppendMenu(hMenu, lngFlags, lngMenuID, strItemCaption)
     
-    AddMenuItem = lngMenuID
+    AddItemToMenu = lngMenuID
 End Function
-
 
 
 'DumpMenu: Accepts a Menu Handle,
