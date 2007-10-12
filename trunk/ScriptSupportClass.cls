@@ -16,7 +16,6 @@ Attribute VB_Exposed = False
 ' *
 ' * ScriptSupportClass.cls
 ' *
-' *     Last modified 8:45 PM 10/7/2007 by Swent
 ' *
 ' * This class basically mirrors the signatures of several important StealthBot functions
 ' * for the purpose of allowing your scripts to interact with the rest of the program.
@@ -81,14 +80,11 @@ Attribute VB_Exposed = False
 ' *          (thanks Snap)
 ' *     - SetBotProfile() no longer allows you to edit the Sex field (this is a
 ' *         Blizzard change)
-' *     - Added RegisterScriptMenu() and AddScriptMenuItem() [see end of changelog] which allow
-' *         scripts to have menus inside StealthBot. See those functions' comments for more
-' *         information along with their support functions (thanks FiftyToo)
 ' *     - Added GetApphInstance() which gives you the instance handle to StealthBot (thanks FrostWraith)
 ' *     - Added DoStatstringParse() which allows you to parse a statstring from GetInternalData() out
 ' *         just like the bot does (thanks ZergMasterI)
 ' *     - Added a number of Windows API function mirrors (thanks FiftyToo)
-' *     - Added the Dsp() function (see notes below) - Swent
+' *     - Added the Dsp, GetSetting, SetSetting, and five menu functions to work with the new Plugins menu
 ' *
 ' *
 ' *     (version 2.6R3, scripting system build 21)
@@ -159,8 +155,6 @@ Public myChannel As String  '// will contain the bot's current channel at runtim
 Public BotFlags As Long     '// will contain the bot's current battle.net flags at runtime.
 Public myUsername As String '// will contain the bot's current username at runtime.
                             '// NOTE: This may be different than the bot's config.ini username
-                            
-Public strSettingNotes      '// Used to display notes on your plugin settings
 
 '// myTrigger has been replaced by BotVars.Trigger
 'Public myTrigger As String '// contains the bot's current trigger at runtime
@@ -170,6 +164,10 @@ Public Enum BanTypes
     btKick = 1
     btUnban = 2
 End Enum
+
+Public strSettingNotes '// used to store notes on your plugin settings
+
+
 
 '/* ******************************************************************************************
 ' *
@@ -1076,99 +1074,6 @@ Public Sub RequestProfileKey(ByVal sUsername As String, ByVal sKey As String)
 End Sub
 
 
-
-'// REGISTERSCRIPTMENU
-'//     Creates a first-level menu item under the Scripts menu item
-'//     Call, then call AddScriptMenuItem to add menu items using the handle
-'//       this function returns to you
-Public Function RegisterScriptMenu(ByVal sMenuCaption As String) As Long
-    
-    Dim lMenu As Long
-    Dim ThisScript_MenuID As Long
-    
-    lMenu = GetMenu(frmChat.hWnd)
-    
-    If ScriptMenu_ParentID = 0 Then
-        ScriptMenu_ParentID = AddParentMenu(lMenu, "Plugins", , 5)
-        AddMenuItem ScriptMenu_ParentID, "(use at your own risk)", , , True
-    End If
-    
-    ThisScript_MenuID = AddParentMenu(ScriptMenu_ParentID, sMenuCaption)
-    
-    RegisterScriptMenu = ThisScript_MenuID
-        DrawMenuBar frmChat.hWnd
-    colDynamicMenus.Add ThisScript_MenuID
-    
-End Function
-
-
-
-'// ADDSCRIPTMENUITEM
-'//     Adds a second-level menu item to an already-created menu
-'//     ARGUMENTS:
-'//     lMenuHandle should be a menu handle returned by RegisterScriptMenu
-'//     sItemCaption is the caption of the menu item you are adding
-'//     sCallbackFunction is the name of the script.txt method you want called
-'//         when someone clicks on this menu item
-'//     PARAMETER VALUES
-'//         MSeparator      if true, this menu item will be a separator and all other values are ignored (for caption & callback)
-'//         MDisabled       if true, this menu item will be disabled
-'//         MChecked        if true, this menu item will be checked
-'//     RETURNS
-'//         Returns the menu item's individual Command ID for your tracking pleasure
-Public Function AddScriptMenuItem(ByVal lMenuHandle As Long, ByVal sItemCaption As String, ByVal sCallbackFunction As String, _
-        Optional ByVal MSeparator As Boolean, Optional ByVal MDisabled As Boolean, Optional ByVal MChecked As Boolean) As Long
-    
-    Dim lCallbackID As Long
-    lCallbackID = AddMenuItem(lMenuHandle, sItemCaption, MSeparator, MChecked, MDisabled)
-    
-    dctCallbacks.Add CStr(lCallbackID), sCallbackFunction
-    
-    DrawMenuBar frmChat.hWnd
-    
-    AddScriptMenuItem = lCallbackID
-    
-End Function
-
-
-
-'// SETMENUCHECK
-'//     Toggles the checkmark on an item.
-'//     Returns 1 if the item was previously checked, 0 if it was unchecked, and -1 if the menu item doesn't exist.
-Public Function SetMenuCheck(ByVal lMenuHandle As Long, ByVal lMenuCommandID As Long, ByVal bNewCheckState As Boolean) As Long
-    
-    Dim l As Long
-    
-    l = CheckMenuItem(lMenuHandle, lMenuCommandID, IIf(bNewCheckState, MF_CHECKED, MF_UNCHECKED))
-    
-    DrawMenuBar frmChat.hWnd
-    
-    If (l And MF_CHECKED) = MF_CHECKED Then
-        l = 1
-    End If
-    
-    SetMenuCheck = l
-    
-End Function
-
-
-
-'// SETMENUENABLED
-'//     Toggles whether or not a menu item is grayed out.
-Public Sub SetMenuEnabled(ByVal lMenuHandle As Long, ByVal lMenuCommandID As Long, ByVal bNewEnabledState As Boolean)
-    
-    Dim l As Long
-    Dim s As String
-    
-    s = GetMenuCaptionByCommand(frmChat.hWnd, lMenuCommandID)
-    l = ModifyMenu(lMenuHandle, lMenuCommandID, IIf(bNewEnabledState, MF_STRING, MF_GRAYED), lMenuCommandID, s)
-    
-    DrawMenuBar frmChat.hWnd
-    
-End Sub
-
-
-
 '// GETAPPHINSTANCE
 '//     Returns the App.hInstance value
 Public Function GetApphInstance() As Long
@@ -1232,11 +1137,11 @@ End Function
 
 
 '// SETSETTING
-'//     Creates and modifies plugin settings.
+'//     Written by Swent. Creates and modifies plugin settings.
 '//     Overwrite is a boolean (True or False). Set to True if you want it to overwrite an existing value.
 '//     Use "" for the strDescription parameter and the existing description will be used.
 '//     Setting values of any length can now be set and retrieved properly (no 255 char max)
-Sub SetSetting(ByVal strPrefix As String, strName As String, varValue As Variant, strDescription As String, boolOverwrite As Boolean)
+Public Sub SetSetting(ByVal strPrefix As String, strName As String, varValue As Variant, strDescription As String, boolOverwrite As Boolean)
     Dim strSettingsPath As String, arrSetting() As String, i As Integer
     strSettingsPath = BotPath() & "plugins\settings.ini"
 
@@ -1259,8 +1164,8 @@ End Sub
 
 
 '// GETSETTING
-'//   Retrieves plugin settings
-Function GetSetting(strPrefix, strName)
+'//   Written by Swent. Retrieves plugin settings
+Public Function GetSetting(ByVal strPrefix As String, ByVal strName As String)
     Dim strSettingsPath As String, i As Integer, strAppend As String, tmpValue As String, varValue As Variant
     strSettingsPath = BotPath() & "plugins\settings.ini"
     
@@ -1278,7 +1183,7 @@ End Function
 
 
 '// DSP
-'// Displays messages via the specified output type and allows for unlimited message lengths.
+'// Written by Swent. Displays messages via the specified output type and allows for unlimited message lengths.
 '//     intID (required) must be one of the following integer values:
 '//         1 = AddQ
 '//             Usage: Dsp 1, Message, [Delimiter]
@@ -1293,7 +1198,7 @@ Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVa
 
     If intID < 4 Then
         Dim arrQueue() As String, arrMessage() As String, tmpMsgPart As String, i As Integer
-        Dim strUsername As String, strDelim As String, strProduct As String, strD2 As String
+        Dim strUsername As String, strDelim As String, strProduct As String
         ReDim arrQueue(0)
         
         '// Get username and delimiter if applicable
@@ -1347,5 +1252,98 @@ Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVa
         If Len(strDelimiter) > 0 Then strOption = strDelimiter
         AddChat strOption, strMessage
     End If
+End Sub
+
+
+'// LOADMENUS
+'//   Loads the plugin menus
+Public Sub LoadMenus()
+ 
+    Call RegisterPluginMenus
+End Sub
+
+
+'// ADDMENUITEM
+'//   Written by Swent. Allows users to add items to a plugin's menu.
+'//   Syntax: AddMenuItem "prefix", "item name", [boolSeparator], [boolDisabled], [Checkmark]
+'//     If boolSeparator (optional, default False) is True, this item is a separator (all other parameters ignored)
+'//     If boolDisabled (optional, default False) is True, this item is greyed out and can't be clicked.
+'//     If Checkmark (optional, default -1) is -1: No checkmark, 0: Unchecked checkmark, 1: Checked checkmark
+'//   Add the following sub to your plugin which will be called when any user-added item is clicked:
+'//     Sub <prefix>_Menu_Callback(ItemName)
+Public Sub AddMenuItem(ByVal strPrefix As String, ByVal strName As String, Optional ByVal boolSeparator As Boolean, _
+                Optional ByVal boolDisabled As Boolean, Optional ByVal boolCheckmark As Boolean)
+
+    If GetSetting("ps", "menusDisabled") Then Exit Sub
+
+    Dim varCheckmark As Variant, strCallback As String
+    Dim lngMenu As Long, lngItem As Long, intItemCount As Integer
+    
+    lngMenu = GetPluginMenu(strPrefix)
+    intItemCount = GetMenuItemCount(lngMenu)
+
+    '// Insert a separator and warning if this is the first user-added item
+    If intItemCount < 7 Then
+        AddScriptMenuItem lngMenu, 0, 0, 1
+        AddScriptMenuItem lngMenu, "(use at your own risk)", 0, , 1
+    End If
+
+    '// Create the initial callback sub
+    strCallback = strPrefix & "_item" & intItemCount + 1 & "_callback"
+    frmChat.SControl.AddCode "Sub " & strCallback & ":" & strPrefix & "_Menu_Callback """ & strName & """:End " & "Sub"
+
+    '// Add the menu item
+    lngItem = AddScriptMenuItem(lngMenu, strName, strCallback, boolSeparator, boolDisabled, boolCheckmark)
+
+    RegisterPluginItem strPrefix, strName, lngItem
+End Sub
+
+
+'// SETMENUITEMCHECK
+'//   Written by Swent. Changes checked status of an item in a plugin menu.
+Public Sub SetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String, ByVal boolChecked As Boolean)
+    If GetSetting("ps", "menusDisabled") Then Exit Sub
+    
+    SetMenuCheck GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolChecked
+End Sub
+
+
+'// GETMENUITEMCHECK
+'//   Written by Swent. Get's the checked status of an item in a plugin menu.
+'//   Returns True (checked), False (unchecked), or -1 if it's not a checkmark item
+Public Function GetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
+    If GetSetting("ps", "menusDisabled") Then Exit Function
+    
+    Dim intChange As Integer
+    intChange = SetMenuCheck(GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), True)
+    
+    If intChange = 0 Then
+        SetMenuCheck GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), False
+        GetMenuItemCheck = False
+    ElseIf intChange = 1 Then
+        GetMenuItemCheck = True
+    Else
+        GetMenuItemCheck = -1
+    End If
+End Function
+
+
+'// TOGGLEMENUITEMCHECK
+'//   Written by Swent. Reverses the checked status of a plugin menu item.
+Public Sub ToggleMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
+
+    If GetSetting("ps", "menusDisabled") Then Exit Sub
+    
+    SetMenuItemCheck strPrefix, strName, Not GetMenuItemCheck(strPrefix, strName)
+End Sub
+
+
+'// SETMENUITEMENABLED
+'//   Written by Swent. Enables or disables a plugin menu item. Disabled items are greyed out and not clickable.
+Public Sub SetMenuItemEnabled(ByVal strPrefix As String, ByVal strName As String, ByVal boolEnabled As Boolean)
+
+    If GetSetting("ps", "menusDisabled") Then Exit Sub
+    
+    SetMenuEnabled GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolEnabled
 End Sub
 
