@@ -149,7 +149,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -727,7 +726,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1015,6 +1013,7 @@ Begin VB.Form frmChat
          End
          Begin VB.Menu mnuOpenPluginsFolder 
             Caption         =   "Open &Plugins Folder"
+            Visible         =   0   'False
          End
          Begin VB.Menu mnuSepA 
             Caption         =   "-"
@@ -3336,9 +3335,6 @@ Private Sub mnuOpenBotFolder_Click()
     Shell "explorer.exe " & App.Path, vbNormalFocus
 End Sub
 
-Private Sub mnuOpenPluginsFolder_Click()
-    Shell "explorer.exe " & App.Path & "\plugins\", vbNormalFocus
-End Sub
 
 Private Sub mnuPacketLog_Click()
     Dim f As Integer
@@ -4327,9 +4323,34 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     ElseIf LCase(s) = "/watchoff" Then
                                         WatchUser = vbNullString
                                         AddChat RTBColors.ConsoleText, "Watch off."
+<<<<<<< .mine
+=======
                                         
                                         GoTo theEnd
+>>>>>>> .r51
                                         
+<<<<<<< .mine
+                                        GoTo theEnd
+=======
+                                    'ElseIf LCase(s) = "/li" Then
+                                    '
+                                    '    AddChat vbMagenta, "AWAITING_CHPW: " & IF_AWAITING_CHPW
+                                    '    AddChat vbMagenta, "CHPW_AND_IDLEBANS: " & IF_CHPW_AND_IDLEBANS
+                                    '    AddChat vbMagenta, "IDLEBANS: " & IF_SUBJECT_TO_IDLEBANS
+                                    '
+                                    '    For i = 1 To colUsersInChannel.Count
+                                    '        AddChat vbMagenta, colUsersInChannel.Item(i).Username & "\" & colUsersInChannel.Item(i).InternalFlags
+                                    '    Next i
+                                    '    GoTo theEnd
+>>>>>>> .r51
+<<<<<<< .mine
+=======
+                                    
+                                    ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
+                                        m = Right(s, (Len(s) - 7))
+>>>>>>> .r51
+                                        
+<<<<<<< .mine
                                     'ElseIf LCase(s) = "/li" Then
                                     '
                                     '    AddChat vbMagenta, "AWAITING_CHPW: " & IF_AWAITING_CHPW
@@ -4343,6 +4364,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     
                                     ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
                                         m = Right(s, (Len(s) - 7))
+=======
+>>>>>>> .r51
                                         
                                         AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m)
                                         
@@ -5481,13 +5504,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.WhisperGreet = (ReadCFG(OT, "WhisperGreet") = "Y")
     
     BotVars.ProxyIP = ReadCFG(MN, "ProxyIP")
-    
-    ' This menu should only be visible if the plugins folder exists
-    Dim oDir As New Scripting.FileSystemObject
-        mnuOpenPluginsFolder.Visible = oDir.FolderExists(App.Path & "\plugins\")
-    Set oDir = Nothing
-    
-    
     
     If BotVars.Logging < 2 Then
         MakeLoggingDirectory
