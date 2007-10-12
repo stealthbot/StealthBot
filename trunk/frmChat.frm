@@ -1,16 +1,16 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
    ClientLeft      =   165
-   ClientTop       =   855
+   ClientTop       =   735
    ClientWidth     =   11400
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -35,6 +35,7 @@ Begin VB.Form frmChat
       Top             =   3840
       _ExtentX        =   1005
       _ExtentY        =   1005
+      AllowUI         =   -1  'True
    End
    Begin VB.Timer tmrFriendlistUpdate 
       Interval        =   5350
@@ -149,6 +150,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -726,6 +728,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4323,15 +4326,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     ElseIf LCase(s) = "/watchoff" Then
                                         WatchUser = vbNullString
                                         AddChat RTBColors.ConsoleText, "Watch off."
-<<<<<<< .mine
-=======
-                                        
                                         GoTo theEnd
->>>>>>> .r51
-                                        
-<<<<<<< .mine
-                                        GoTo theEnd
-=======
                                     'ElseIf LCase(s) = "/li" Then
                                     '
                                     '    AddChat vbMagenta, "AWAITING_CHPW: " & IF_AWAITING_CHPW
@@ -4342,15 +4337,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     '        AddChat vbMagenta, colUsersInChannel.Item(i).Username & "\" & colUsersInChannel.Item(i).InternalFlags
                                     '    Next i
                                     '    GoTo theEnd
->>>>>>> .r51
-<<<<<<< .mine
-=======
-                                    
                                     ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
                                         m = Right(s, (Len(s) - 7))
->>>>>>> .r51
-                                        
-<<<<<<< .mine
                                     'ElseIf LCase(s) = "/li" Then
                                     '
                                     '    AddChat vbMagenta, "AWAITING_CHPW: " & IF_AWAITING_CHPW
@@ -4364,9 +4352,6 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     
                                     ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
                                         m = Right(s, (Len(s) - 7))
-=======
->>>>>>> .r51
-                                        
                                         AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m)
                                         
                                     ElseIf (LCase(Left$(s, 9)) = "/profile ") Then
