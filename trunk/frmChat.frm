@@ -15,8 +15,8 @@ Begin VB.Form frmChat
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   11160
-   ScaleWidth      =   18960
+   ScaleHeight     =   7950
+   ScaleWidth      =   11400
    StartUpPosition =   3  'Windows Default
    Begin MSScriptControlCtl.ScriptControl SCRestricted 
       Left            =   6960
@@ -149,7 +149,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -727,7 +726,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4754,9 +4752,50 @@ Private Sub sckMCP_Error(ByVal Number As Integer, Description As String, ByVal S
     End If
 End Sub
 
+
+'// Written by Swent. Executes plugin timer subs.
 Private Sub scTimer_Timer()
+
+    If Not SharedScriptSupport.GetSetting("ps", "enabled") Then Exit Sub
+    
+    Dim strKeys() As String, strKey() As String, i As Integer
+    
     On Error Resume Next
-    SControl.Run "scTimer_Timer"
+    SControl.Error.Clear
+    strKeys = Split(modScripting.GetPTKeys)
+
+    '// Execute all existing plugin timer subs at the appropriate intervals
+    For i = 0 To modScripting.GetNumPT - 1
+        strKey = Split(strKeys(i), ":")
+        
+        '// Is this timer enabled?
+        If modScripting.GetPTEnabled(strKey(0), strKey(1)) Then
+            
+            '// Is the plugin that this timer belongs to enabled?
+            If SharedScriptSupport.GetSetting(strKey(0), "enabled") Then
+                
+                '// Has this timer reached the end of its interval countdown?
+                If modScripting.GetPTLeft(strKey(0), strKey(1)) = 1 Then
+                        
+                    '// Execute this timer sub
+                    frmChat.SControl.Run strKey(0) & "_" & strKey(1) & "_Timer"
+                    
+                    '// Handle errors
+                    If SControl.Error.Number <> 0 Then
+                        AddChat vbYellow, "The """ & strKey(1) & """ timer in your """ & strKey(0) & """ plugin has been disabled due to an error."
+                        modScripting.SetPTEnabled strKey(0), strKey(1), False
+                        SControl.Error.Clear
+                    End If
+                    
+                    '// Reset this timer's countdown
+                    modScripting.SetPTCount strKey(0), strKey(1), modScripting.GetPTInterval(strKey(0), strKey(1))
+                Else
+                    '// Subtract one second from this timer's countdown
+                    modScripting.SetPTCount strKey(0), strKey(1), modScripting.GetPTLeft(strKey(0), strKey(1)) - 1
+                End If
+            End If
+        End If
+    Next
 End Sub
 
 Private Sub Timer_Timer()
