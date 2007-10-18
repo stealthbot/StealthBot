@@ -239,6 +239,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
     ' convert command name to lcase
     cmdName = LCase$(cmdName)
 
+    ' initial access check
     If ((ValidateAccess(dbAccess, cmdName) = True) Or (InBot = True)) Then
         ' command switch
         Select Case (cmdName)
@@ -318,10 +319,6 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
             Case "mimic":                        Call OnMimic(Username, dbAccess, msgData, InBot, cmdRet())
             Case "nomimic":                      Call OnNoMimic(Username, dbAccess, msgData, InBot, cmdRet())
             Case "setpmsg":                      Call OnSetPMsg(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "setcmdaccess":                 Call OnSetCmdAccess(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "cmdadd", "addcmd":             Call OnCmdAdd(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "cmddel", "delcmd":             Call OnCmdDel(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "cmdlist":                      Call OnCmdList(Username, dbAccess, msgData, InBot, cmdRet())
             Case "phrases", "plist":             Call OnPhrases(Username, dbAccess, msgData, InBot, cmdRet())
             Case "addphrase", "padd":            Call OnAddPhrase(Username, dbAccess, msgData, InBot, cmdRet())
             Case "delphrase", "pdel":            Call OnDelPhrase(Username, dbAccess, msgData, InBot, cmdRet())
@@ -693,8 +690,10 @@ Private Function OnSweepBan(ByVal Username As String, ByRef dbAccess As udtGetAc
     Dim Y As String
 
     Caching = True
+    
     Call Cache(vbNullString, 255, "ban ")
-    AddQ "/who " & msgData, 1
+    
+    Call AddQ("/who " & msgData, 1)
 End Function ' end function OnSweepBan
 
 ' handle sweepignore command
@@ -724,7 +723,7 @@ Private Function OnSetName(ByVal Username As String, ByRef dbAccess As udtGetAcc
     End If
 
     ' write configuration entry
-    WriteINI "Main", "Username", msgData
+    Call WriteINI("Main", "Username", msgData)
     
     ' set username
     BotVars.Username = msgData
@@ -757,6 +756,7 @@ End Function ' end function OnSetPass
 Private Function OnMath(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
+    ' default error handler for math command
     On Error GoTo ERROR_HANDLER
     
     Dim tmpBuf As String ' temporary output buffer
@@ -866,8 +866,11 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     If (CheckChannel(msgData) > 0) Then
-        AddQ "/designate " & IIf(Dii, "*", vbNullString) & msgData
-        AddQ "/resign"
+        ' designate user
+        Call AddQ("/designate " & IIf(Dii, "*", vbNullString) & msgData)
+        
+        ' rejoin channel
+        Call AddQ("/resign")
     End If
 End Function ' end function OnGiveUp
 
@@ -2279,32 +2282,34 @@ Private Function OnLevelBan(ByVal Username As String, ByRef dbAccess As udtGetAc
     Dim i      As Integer
     Dim tmpBuf As String ' temporary output buffer
     
-    If (StrictIsNumeric(msgData)) Then
-        i = msgData
-        
-        If (i > 0) Then
-            tmpBuf = "Banning Warcraft III users under level " & i & "."
+    If (Len(msgData) > 0) Then
+        If (StrictIsNumeric(msgData)) Then
+            i = msgData
             
-            BotVars.BanUnderLevel = i
+            If (i > 0) Then
+                tmpBuf = "Banning Warcraft III users under level " & i & "."
+                
+                BotVars.BanUnderLevel = i
+            Else
+                tmpBuf = "Levelbans disabled."
+                
+                BotVars.BanUnderLevel = 0
+            End If
         Else
-            tmpBuf = "Levelbans disabled."
-            
             BotVars.BanUnderLevel = 0
+            
+            tmpBuf = "Levelbans disabled."
         End If
-    Else
-        BotVars.BanUnderLevel = 0
         
-        tmpBuf = "Levelbans disabled."
+        Call WriteINI("Other", "BanUnderLevel", BotVars.BanUnderLevel)
+    Else
+        If (BotVars.BanUnderLevel = 0) Then
+           tmpBuf = "Currently not banning Warcraft III users by level."
+        Else
+           tmpBuf = "Currently banning Warcraft III users under level " & BotVars.BanUnderLevel & "."
+        End If
     End If
     
-    Call WriteINI("Other", "BanUnderLevel", BotVars.BanUnderLevel)
-    
-    'If (BotVars.BanUnderLevel = 0) Then
-    '   tmpBuf = "Currently not banning Warcraft III users by level."
-    'Else
-    '   tmpBuf = "Currently banning Warcraft III users under level " & BotVars.BanUnderLevel & "."
-    'End If
-
     ' return message
     cmdRet(0) = tmpBuf
 End Function ' end function OnLevelBan
@@ -2315,33 +2320,37 @@ Private Function OnD2LevelBan(ByVal Username As String, ByRef dbAccess As udtGet
     
     Dim i      As Integer
     Dim tmpBuf As String ' temporary output buffer
-        
-    If (StrictIsNumeric(msgData)) Then
-        i = Val(msgData)
-        BotVars.BanD2UnderLevel = i
-        
-        If (i > 0) Then
-            tmpBuf = "Banning Diablo II characters under level " & i & "."
+    
+    If (Len(msgData) > 0) Then
+        If (StrictIsNumeric(msgData)) Then
+            i = Val(msgData)
             
             BotVars.BanD2UnderLevel = i
+            
+            If (i > 0) Then
+                tmpBuf = "Banning Diablo II characters under level " & i & "."
+                
+                BotVars.BanD2UnderLevel = i
+            Else
+                tmpBuf = "Diablo II Levelbans disabled."
+                
+                BotVars.BanD2UnderLevel = 0
+            End If
         Else
             tmpBuf = "Diablo II Levelbans disabled."
             
             BotVars.BanD2UnderLevel = 0
         End If
-    Else
-        tmpBuf = "Diablo II Levelbans disabled."
         
-        BotVars.BanD2UnderLevel = 0
-    End If
+        Call WriteINI("Other", "BanD2UnderLevel", BotVars.BanD2UnderLevel)
+    Else
     
-    WriteINI "Other", "BanD2UnderLevel", BotVars.BanD2UnderLevel
-
-    'If (BotVars.BanD2UnderLevel = 0) Then
-    '   tmpBuf = "Currently not banning Diablo II users by level."
-    'Else
-    '   tmpBuf = "Currently banning Diablo II users under level " & BotVars.BanD2UnderLevel & "."
-    'End If
+        If (BotVars.BanD2UnderLevel = 0) Then
+           tmpBuf = "Currently not banning Diablo II users by level."
+        Else
+           tmpBuf = "Currently banning Diablo II users under level " & BotVars.BanD2UnderLevel & "."
+        End If
+    End If
 
     ' return message
     cmdRet(0) = tmpBuf
@@ -2462,287 +2471,6 @@ Private Function OnSetPMsg(ByVal Username As String, ByRef dbAccess As udtGetAcc
     cmdRet(0) = tmpBuf
 End Function ' end function OnSetPMsg
 
-' handle setcmdaccess command
-Private Function OnSetCmdAccess(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-
-'    Dim ccOut    As udtCustomCommandData
-'
-'    Dim c        As Integer
-'    Dim iWinamp  As Long
-'    Dim tmpBuf   As String ' temporary output buffer
-'    Dim f        As Integer
-'    Dim Track    As Long
-'    Dim z        As String
-'
-'    c = 1
-'
-'    If (Not (StrictIsNumeric(GetStringChunk(msgData, 3)))) Then
-'        tmpBuf = "You must specify a numeric value to change a command's required access."
-'    End If
-'
-'    iWinamp = Val(GetStringChunk(msgData, 3))
-'    z = GetStringChunk(msgData, 2)
-'
-'    If (iWinamp > 999) Then
-'        tmpBuf = "Your new required access must be between 0 and 999."
-'    End If
-'
-'    Open (GetFilePath("commands.dat")) For Random As #f Len = LenB(ccOut)
-'        While ((Track = 0) And (Not (EOF(f))))
-'            Get #f, c, ccOut
-'
-'            If (StrComp(Trim(ccOut.Query), z) = 0) Then
-'                If ((dbAccess.Access < 100) And (InStr(dbAccess.flags, "A") = 0) And _
-'                    (ccOut.reqAccess >= dbAccess.Access) And (ccOut.reqAccess > iWinamp)) Then
-'
-'                    tmpBuf = "You cannot decrease the required access on a command" & _
-'                        " without 100 access or the A flag."
-'                Else
-'                    ccOut.reqAccess = iWinamp
-'
-'                    Put #f, c, ccOut
-'
-'                    tmpBuf = "Command modified successfully."
-'               End If
-'
-'               Track = 1
-'            End If
-'
-'            c = (c + 1)
-'        Wend
-'    Close #f
-'
-'    If (Track = 0) Then
-'        tmpBuf = "That command was not found."
-'    End If
-'
-'    ' return message
-'    cmdRet(0) = tmpBuf
-End Function ' end function OnSetCmdAccess
-
-' handle cmdadd command
-Private Function OnCmdAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-'    On Error GoTo cmdAddError
-'
-'    Dim gAcc       As udtGetAccessResponse
-'    Dim ccOut      As udtCustomCommandData
-'
-'    Dim tmpBuf     As String ' temporary output buffer
-'    Dim strArray() As String
-'    Dim f          As Integer
-'    Dim c          As Integer
-'
-'    If ((InStr(1, msgData, "/add ", vbTextCompare) > 0) Or _
-'        (InStr(1, msgData, "/rem ", vbTextCompare) > 0) Or _
-'        (InStr(1, msgData, "/set ", vbTextCompare) > 0)) Then
-'
-'            tmpBuf = "You cannot use '/add' or '/rem' in a custom command."
-'    End If
-'
-'    If (InStr(1, msgData, "/quit", vbTextCompare) > 0) Then
-'        tmpBuf = "You cannot use '/quit' in a custom command."
-'    End If
-'
-'    If ((InStr(1, msgData, "/shitadd", vbTextCompare) > 0) Or _
-'        (InStr(1, msgData, "/pban", vbTextCompare) > 0) Or _
-'        (InStr(1, msgData, "/shitlist", vbTextCompare) > 0)) Then
-'
-'        If ((dbAccess.Access < 100) And (InStr(dbAccess.flags, "A") = 0)) Then
-'            tmpBuf = "Shitlisting users through custom commands requires 100+ access."
-'        End If
-'    End If
-'
-'    gAcc.Access = 1000
-'    gAcc.flags = "A"
-'
-'    'If (ProcessCC(Username, gAcc, "/" & Split(msgData, " ")(2), False, False, True)) Then
-'    '    tmpBuf = "A command by that name already exists."
-'    'End If
-'
-'    gAcc.Access = 0
-'    gAcc.flags = ""
-'
-'    '0      1  2    3
-'    'cmdadd 10 fdsa actions
-'    strArray() = Split(msgData, " ", 4)
-'
-'    If (Not (StrictIsNumeric(strArray(1)))) Then
-'        tmpBuf = "Command format error."
-'    End If
-'
-'    If (UBound(strArray) > 2) Then
-'        If (Len(strArray(3)) < 1) Then
-'            tmpBuf = "Your command's actions cannot be blank."
-'        End If
-'    Else
-'        tmpBuf = "Your command's actions cannot be blank."
-'    End If
-'
-'    ccOut.Query = strArray(2)
-'    ccOut.reqAccess = Int(strArray(1))
-'
-'    ccOut.Action = strArray(3)
-'
-'    Open (GetFilePath("commands.dat")) For Random As #f Len = LenB(ccOut)
-'        c = LOF(f) \ LenB(ccOut)
-'
-'        If ((LOF(f)) Mod (LenB(ccOut) <> 0)) Then
-'            c = c + 1
-'        End If
-'
-'        If (c = 0) Then
-'            c = 1
-'        End If
-'
-'        Put #f, c + 1, ccOut
-'    Close #f
-'
-'    tmpBuf = "Command " & Chr(34) & strArray(2) & Chr(34) & " added."
-'
-'cmdAddError:
-'    tmpBuf = "Error adding your command."
-'
-'    ' return message
-'    cmdRet(0) = tmpBuf
-End Function ' end function OnCmdAdd
-
-' handle cmddel command
-Private Function OnCmdDel(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-'    Dim ccOut  As udtCustomCommandData
-'
-'    Dim u      As String
-'    Dim tmpBuf As String ' temporary output buffer
-'    Dim c      As Integer
-'    Dim f      As Integer
-'
-'    u = Right(msgData, Len(msgData) - 8)
-'
-'    If Dir$((GetFilePath("commands.dat"))) = vbNullString Then
-'        tmpBuf = "No commands list exists."
-'    End If
-'
-'    Open (GetFilePath("commands.dat")) For Random As #f Len = LenB(ccOut)
-'        If (LOF(f) < 2) Then
-'            Exit Function
-'        End If
-'
-'        c = (LOF(f) \ LenB(ccOut))
-'
-'        If (LOF(f) Mod LenB(ccOut) <> 0) Then
-'            c = c + 1
-'        End If
-'
-'        For c = 1 To c
-'            Get #f, c, ccOut
-'
-'            If (ccOut.reqAccess > 1000) Then
-'                GoTo NextRecord2
-'            End If
-'
-'            If (StrComp(LCase$(RTrim(ccOut.Query)), u, vbTextCompare) = 0) Then
-'                ccOut.reqAccess = 9999
-'                Put #f, c, ccOut
-'                tmpBuf = "Command " & Chr(34) & u & Chr(34) & " deleted."
-'            End If
-'
-'NextRecord2:
-'        Next c
-'    Close #f
-'
-'    If (LenB(tmpBuf) = 0) Then
-'        tmpBuf = "No such command exists."
-'    End If
-'
-'    ' return message
-'    cmdRet(0) = tmpBuf
-End Function ' end function OnCmdDel
-
-' handle cmdlist command
-Private Function OnCmdList(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-'    Dim ccOut    As udtCustomCommandData
-'
-'    Dim f        As Integer
-'    Dim tmpBuf   As String ' temporary output buffer
-'    Dim n        As Integer
-'    Dim response As String
-'    Dim Track    As Long
-'    Dim c        As Integer
-'
-'    f = FreeFile
-'
-'    If (Dir$((GetFilePath("commands.dat"))) = vbNullString) Then
-'        tmpBuf = "No custom commands available."
-'    End If
-'
-'    Open (GetFilePath("commands.dat")) For Random As #f Len = LenB(ccOut)
-'
-'        If (LOF(f) < 2) Then
-'            tmpBuf = "No custom commands available."
-'        End If
-'
-'        n = (LOF(f) \ LenB(ccOut))
-'
-'        If ((LOF(f)) Mod (LenB(ccOut) <> 0)) Then
-'            n = n + 1
-'        End If
-'
-'        response = "Found commands: "
-'
-'        For c = 1 To n
-'            Get #f, c, ccOut
-'
-'            If ((ccOut.reqAccess < 1001) And _
-'                (Len(RTrim(ccOut.Query)) > 0)) Then
-'
-'                response = response & ", " & RTrim(KillNull(ccOut.Query)) & _
-'                    " [" & ccOut.reqAccess & "]"
-'
-'                If (Len(response) > 100) Then
-'                    response = Replace(response, ", ", " ")
-'
-'                    If (c < n) Then
-'                        response = response & " [more]"
-'                    End If
-'
-'                    'If WhisperCmds And Not InBot Then
-'                    '    If Not Dii Then AddQ "/w " & Username & Space(1) & response Else AddQ "/w *" & Username & response
-'                    'ElseIf InBot And Not PublicOutput Then
-'                    '    frmChat.AddChat RTBColors.ConsoleText, response
-'                    'Else
-'                    '    AddQ response
-'                    'End If
-'
-'                    response = "Found commands: "
-'                End If
-'
-'                Track = 1
-'
-'            End If
-'        Next c
-'
-'    Close #f
-'
-'    tmpBuf = Replace(response, ", ", " ") & "."
-'
-'    If (StrComp(tmpBuf, "Found commands: .", vbBinaryCompare) = 0) Then
-'        If (Track = 0) Then
-'            tmpBuf = "No custom commands available."
-'        Else
-'            Exit Function
-'        End If
-'    End If
-'
-'    ' return message
-'    cmdRet(0) = tmpBuf
-End Function ' end function OnCmdList
-
 ' handle phrases command
 Private Function OnPhrases(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -2795,9 +2523,10 @@ Private Function OnAddPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     Dim u      As String
     Dim i      As Integer
     
-    u = msgData
-    
+    ' grab free file handle
     f = FreeFile
+    
+    u = msgData
     
     For i = LBound(Phrases) To UBound(Phrases)
         If (StrComp(u, Phrases(i), vbTextCompare) = 0) Then
@@ -2879,9 +2608,10 @@ Private Function OnTagBan(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Dim tmpBuf As String ' temporary output buffer
     Dim u      As String
     
-    u = msgData
-    
+    ' grab free file handle
     f = FreeFile
+    
+    u = msgData
     
     If (Len(u) > 0) Then
         If (Len(GetTagbans(u)) > 1) Then
@@ -2929,10 +2659,10 @@ Private Function OnFAdd(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
     
-    If (Len(msgData) > 0) Then
-        u = msgData
-        
-        AddQ "/f a " & u, 1
+    u = msgData
+    
+    If (Len(u) > 0) Then
+        Call AddQ("/f a " & u, 1)
         
         tmpBuf = "Added user " & Chr(34) & u & Chr(34) & " to this account's friends list."
     Else
@@ -2950,10 +2680,10 @@ Private Function OnFRem(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
     
-    If (Len(msgData) > 0) Then
-        u = msgData
-        
-        AddQ "/f r " & u, 1
+    u = msgData
+    
+    If (Len(u) > 0) Then
+        Call AddQ("/f r " & u, 1)
         
         tmpBuf = "Removed user " & Chr(34) & u & Chr(34) & " from this account's friends list."
     Else
@@ -2968,47 +2698,43 @@ End Function ' end function OnFRem
 Private Function OnSafeList(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim tmpBuf As String ' temporary output buffer
-    Dim i      As Integer
+    Dim tmpBuf() As String ' temporary output buffer
+    Dim i        As Integer
+    Dim tmpCount As Integer
+    
+    ReDim Preserve tmpBuf(tmpCount)
 
     If (colSafelist.Count = 0) Then
-        tmpBuf = "There are no safelisted users or tags."
+        tmpBuf(tmpCount) = "There are no safelisted users or tags."
     Else
-        tmpBuf = "Tags/users found: "
+        tmpBuf(tmpCount) = "Tags/users found: "
 
         For i = 1 To colSafelist.Count
             Debug.Print colSafelist.Item(i).Name
             
-            tmpBuf = tmpBuf & ReversePrepareCheck(colSafelist.Item(i).Name)
+            tmpBuf(tmpCount) = tmpBuf(tmpCount) & _
+                ReversePrepareCheck(colSafelist.Item(i).Name)
             
             If (i < colSafelist.Count) Then
-                tmpBuf = tmpBuf & ", "
+                tmpBuf(tmpCount) = tmpBuf(tmpCount) & ", "
             End If
             
-            If (Len(tmpBuf) > 70) Then
+            If (Len(tmpBuf(tmpCount)) > 70) Then
                 If (i < colSafelist.Count) Then
-                    tmpBuf = tmpBuf & " [more]"
+                    ReDim Preserve tmpBuf(tmpCount + 1)
+                    
+                    tmpBuf(tmpCount + 1) = "Tags/users found: "
+                
+                    tmpBuf(tmpCount) = tmpBuf(tmpCount) & " [more]"
+                    
+                    tmpCount = (tmpCount + 1)
                 End If
-                
-                'If WhisperCmds And Not InBot Then
-                '    If Dii Then
-                '        AddQ "/w *" & Username & Space(1) & tmpBuf
-                '    Else
-                '        AddQ "/w " & Username & Space(1) & tmpBuf
-                '    End If
-                'ElseIf InBot = True And Not PublicOutput Then
-                '    frmChat.AddChat RTBColors.ConsoleText, tmpBuf
-                'Else
-                '    AddQ tmpBuf
-                'End If
-                
-                tmpBuf = "Tags/users found: "
             End If
         Next i
     End If
     
     ' return message
-    cmdRet(0) = tmpBuf
+    cmdRet() = tmpBuf()
 End Function ' end function OnSafeList
 
 ' handle safeadd command
@@ -3066,6 +2792,7 @@ Private Function OnUnExile(ByVal Username As String, ByRef dbAccess As udtGetAcc
     Call OnUnignore(Username, dbAccess, u, InBot, uiCmdRet())
 End Function ' end function OnUnExile
 
+' TO DO:
 ' handle shitlist command
 Private Function OnShitList(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -3138,6 +2865,7 @@ Private Function OnShitList(ByVal Username As String, ByRef dbAccess As udtGetAc
     cmdRet(0) = tmpBuf
 End Function ' end function OnShitList
 
+' TO DO:
 ' handle tagbans command
 Private Function OnTagBans(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -3189,60 +2917,53 @@ End Function ' end function OnTagBans
 Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-'    u = msgdata
-'
-'    If LenB(GetShitlist(u)) > 0 Then
-'        strSend = "That user is already shitlisted."
-'        b = True
-'        GoTo Display
-'    End If
-'
-'    If InStr(1, Split(cMsg, " ")(1), "*", vbTextCompare) > 0 Then
-'        Call Commands(dbAccess, Username, BotVars.Trigger & "addtag " & u, InBot, CC, WhisperedIn, PublicOutput)
-'        GoTo theEnd
-'    End If
-'
-'    gAcc = GetAccess(Split(cMsg, " ")(1))
-'
-'    If dbAccess.Access <= gAcc.Access Then
-'        strSend = "You do not have access to do that."
-'    End If
-'
-'    If dbAccess.Access < 100 And InStr(gAcc.Access, "A") > 0 Then
-'        strSend = "You do not have access to do that."
-'    End If
-'
-'    If LenB(strSend) > 0 Then
-'        b = True
-'        GoTo Display
-'    End If
-'
-'    Y = GetFilePath("autobans.txt")
-'
-'    If Dir$(Y) = vbNullString Then
-'     Open (Y) For Output As #f
-'     Close #f
-'    End If
-'
-'    Open (Y) For Append As #f
-'    Print #f, u
-'    Close #f
-'
-'    If InStr(1, u, " ", vbTextCompare) = 0 Then
-'        If MyFlags = 2 Or MyFlags = 18 Then AddQ "/ban " & IIf(Dii, "*", "") & u & " Shitlisted.", 1
-'        strSend = "Added " & u & " to the shitlist."
-'    Else
-'   If MyFlags = 2 Or MyFlags = 18 Then AddQ "/ban " & IIf(Dii, "*", "") & u, 1
-'        strSend = "Added " & Left$(u, InStr(1, u, " ", vbTextCompare) - 1) & " to the shitlist."
-'    End If
-'
-'    b = True
-'    GoTo Display:
-'sendit4:
-'        strSend = "Who would you like to add to the shitlist?"
-'    b = True
-'    GoTo Display
+    Dim gAcc   As udtGetAccessResponse
     
+    Dim u      As String
+    Dim tmpBuf As String
+    Dim f      As Integer
+    Dim Y      As String
+    
+    f = FreeFile
+    
+    u = msgData
+
+    If LenB(GetShitlist(u)) > 0 Then
+        tmpBuf = "That user is already shitlisted."
+    Else
+        gAcc = GetAccess(u)
+    
+        If (InStr(1, u, "*", vbBinaryCompare) > 0) Then
+            Dim tbBuf() As String
+        
+            Call OnTagBan(Username, gAcc, msgData, InBot, tbBuf())
+        Else
+            If (dbAccess.Access <= gAcc.Access) Then
+                tmpBuf = "You do not have access to do that."
+            ElseIf ((dbAccess.Access < 100) And (InStr(gAcc.Access, "A") > 0)) Then
+                tmpBuf = "You do not have access to do that."
+            Else
+                Y = GetFilePath("autobans.txt")
+            
+                If (Dir$(Y) = vbNullString) Then
+                    Open (Y) For Output As #f
+                        ' ...
+                    Close #f
+                End If
+            
+                Open (Y) For Append As #f
+                    Print #f, u
+                Close #f
+            
+                If ((MyFlags = 2) Or (MyFlags = 18)) Then
+                    Call AddQ("/ban " & IIf(Dii, "*", "") & u, 1)
+                End If
+                
+                tmpBuf = "Added " & u & " to the shitlist."
+            End If
+        End If
+    End If
+   
     ' return message
     cmdRet(0) = tmpBuf
 End Function ' end function OnShitAdd
@@ -3433,6 +3154,7 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
     cmdRet() = tmpBuf()
 End Function ' end function OnReadFile
 
+' TO DO:
 ' handle greet command
 Private Function OnGreet(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -3491,6 +3213,7 @@ Private Function OnGreet(ByVal Username As String, ByRef dbAccess As udtGetAcces
     cmdRet(0) = tmpBuf
 End Function ' end function OnGreet
 
+' TO DO:
 ' handle allseen command
 Private Function OnAllSeen(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -3531,9 +3254,9 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim i        As Integer
 
     If ((MyFlags <> 2) And (MyFlags <> 18)) Then
-        'If (InBot) Then
-        '    tmpBuf = "You are not a channel operator."
-        'End If
+        If (InBot) Then
+            tmpBuf = "You are not a channel operator."
+        End If
     End If
 
     u = msgData
@@ -3606,11 +3329,11 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim tmpBuf As String ' temporary output buffer
     Dim Y      As String
     
-    'If MyFlags <> 2 And MyFlags <> 18 Then
-    '   If InBot Then
-    '       tmpBuf = "You are not a channel operator."
-    '   End If
-    'End If
+    If ((MyFlags <> 2) And (MyFlags <> 18)) Then
+       If InBot Then
+           tmpBuf = "You are not a channel operator."
+       End If
+    End If
     
     u = msgData
     
@@ -3661,8 +3384,8 @@ End Function ' end function OnLastWhisper
 Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
 
-    Dim tmpBuf   As String ' temporary output buffer
-    Dim tmpSend  As String ' ...
+    Dim tmpBuf  As String ' temporary output buffer
+    Dim tmpSend As String ' ...
     
     If (Len(msgData) > 0) Then
         If (dbAccess.Access >= GetAccessINIValue("say70", 70)) Then
@@ -4434,6 +4157,7 @@ Private Function OnWhoAmI(ByVal Username As String, ByRef dbAccess As udtGetAcce
     cmdRet(0) = tmpBuf
 End Function ' end function OnWhoAmI
 
+' TO DO:
 ' handle add command
 Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -4735,6 +4459,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     cmdRet(0) = tmpBuf
 End Function ' end function OnAdd
 
+' TO DO:
 ' handle mmail command
 Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -4808,11 +4533,6 @@ Private Function OnMail(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim tmpBuf     As String ' temporary output buffer
     
     strArray = Split(msgData, " ", 2)
-    
-    ' debug
-    'For iWinamp = 0 To UBound(strArray)
-    '    Debug.Print iWinamp & ": " & strArray(iWinamp)
-    'Next
     
     If (UBound(strArray) > 0) Then
         Temp.From = Username
@@ -5446,169 +5166,6 @@ Public Function GetPing(ByVal Username As String) As Long
     End If
 End Function
 
-Private Function ProcessCC(ByVal Speaker As String, ByRef SpeakerAccess As udtGetAccessResponse, RawmsgData As String, ByVal WhisperedIn As Boolean, ByVal PublicOutput As Boolean, Optional ByVal ExistenceCheckOnly As Boolean = False) As Boolean
-'    Dim Args() As String, Send() As String, Actions() As String
-'    Dim ccIn As udtCustomCommandData
-'    Dim n As Integer, HighestArgUsed As Integer, c As Integer, i As Integer, f As Integer
-'    Dim Found As Boolean, FirstTime As Boolean
-'    Dim Temp As String, ReplaceString As String
-'
-'    On Error GoTo ProcessCC_Error
-'
-'    f = FreeFile
-'
-'    ReDim Send(0)
-'
-'    If LenB(Dir$(GetFilePath("commands.dat"))) > 0 Then
-'
-'        Open (GetFilePath("commands.dat")) For Random As #f Len = LenB(ccIn)
-'
-'        If LOF(f) > 1 Then
-'
-'            ' /****** Step 1: Get data ******/
-'
-'            HighestArgUsed = -1
-'
-'            i = LOF(f) \ LenB(ccIn)
-'            If LOF(f) Mod LenB(ccIn) <> 0 Then i = i + 1
-'
-'            For i = 1 To i
-'
-'                Get #f, i, ccIn
-'
-'                If ccIn.reqAccess > 1000 Then GoTo NextItem
-'                If LenB(RTrim(ccIn.Action)) < 1 Then GoTo NextItem
-'                If LenB(RTrim(ccIn.Query)) < 1 Then GoTo NextItem
-'                If ccIn.reqAccess = 0 Then ccIn.reqAccess = -1 'zero-access command
-'
-'                If SpeakerAccess.Access >= ccIn.reqAccess Then
-'                    Args() = Split(RawmsgData, " ")
-'
-'                    '   0    1   2  3  4     5
-'                    ' .myCC say %1 is fat! %rest
-'                    If StrComp(RTrim(LCase$(ccIn.Query)), LCase$(Mid$(Args(0), 2))) = 0 Then
-'                        Found = True
-'                        ProcessCC = True
-'
-'                        If ExistenceCheckOnly Then GoTo theEnd
-'
-'                        Actions = Split(RTrim(Replace(ccIn.Action, vbCrLf, "")), "& ")
-'
-'                        If UBound(Actions) = 0 Then
-'
-'                            ReDim Send(0)
-'                            Send(0) = Actions(0)
-'
-'                        Else
-'                            ReDim Send(UBound(Actions))
-'
-'                            For c = 0 To UBound(Actions)
-'                                Send(c) = Actions(c)
-'                            Next c
-'                        End If
-'
-'
-'                        FirstTime = True
-'
-'                        For n = 0 To UBound(Send)
-'                            Send(n) = Replace(Send(n), "%0", Speaker)
-'                            Send(n) = Replace(Send(n), "%bc", BanCount)
-'
-'                            If UBound(Args) > 0 Then
-'                                If InStr(Send(n), "%") > 0 Then
-'                                    ' has probable arguments
-'                                    ' /****** Step 2: Do basic replacements ******/
-'                                    HighestArgUsed = 0
-'
-'                                    ' This was a normal FOR loop then it stopped working
-'                                    '  altogether. So, it's a while loop now..
-'                                    c = UBound(Args)
-'
-'                                    While c >= 0
-'                                        If InStr(Send(n), "%" & c) Then
-'                                            Send(n) = Replace(Send(n), "%" & (c), Args(c))
-'                                            If HighestArgUsed = 0 Then HighestArgUsed = c
-'                                        End If
-'
-'                                        c = c - 1
-'                                    Wend
-'
-'                                    ' Assemble the %rest string
-'                                   If FirstTime Then
-'                                        'Debug.Print "firsttime, highest: " & c
-'
-'                                        If HighestArgUsed > -1 And UBound(Args) > HighestArgUsed Then
-'                                            For c = HighestArgUsed + 1 To UBound(Args)
-'                                                ReplaceString = ReplaceString & Args(c) & IIf(c < UBound(Args), " ", "")
-'                                            Next c
-'                                        End If
-'
-'                                        FirstTime = False
-'                                    End If
-'
-'                                    ' /****** Step 3: Do advanced replacements ******/
-'                                    If LenB(ReplaceString) > 0 Then
-'                                        Send(n) = Replace(Send(n), "%rest", ReplaceString)
-'                                    End If
-'                                End If
-'                            End If
-'                        Next n
-'
-'                        ' /****** Step 4: Send and/or process normal command ******/
-'                        For c = 0 To UBound(Send)
-'                            'Debug.Print Send(c)
-'
-'                            If Left$(Send(c), 1) = "/" Then
-'                                Call ExecuteCommand(SpeakerAccess, Speaker, Send(c), False, 2, WhisperedIn, PublicOutput)
-'                            Else
-'                                If Left$(Send(c), 6) = "_call " Then
-'                                    Temp = Split(Mid$(Send(c), 7), " ")(0)
-'
-'                                    On Error Resume Next
-'                                    frmChat.SControl.Run Temp
-'                                Else
-'                                    If Left$(RawmsgData, 1) = "/" And Not PublicOutput Then
-'                                        frmChat.AddChat RTBColors.ConsoleText, Send(c)
-'                                    Else
-'                                        ' // including other term replacements
-'                                        Send(c) = DoReplacements(Send(c), Speaker, GetPing(Speaker))
-'                                        AddQ Send(c)
-'                                    End If
-'                                End If
-'                            End If
-'                        Next c
-'
-'                    End If 'strcomp
-'                End If 'speakeraccess
-'NextItem:
-'            Next i
-'
-'        End If 'lof
-'
-'    End If
-'
-'theEnd:
-'    If Not Found And Not ExistenceCheckOnly Then
-'        If StrComp(Left$(RawmsgData, 1), "/", vbTextCompare) = 0 Then _
-'            Call Commands(SpeakerAccess, Speaker, RawmsgData, False, 1, WhisperedIn, PublicOutput)
-'    ElseIf ExistenceCheckOnly Then
-'        ProcessCC = Found
-'    End If
-'
-'    Close #f
-'    Exit Function
-'Error:
-'    AddQ "Invalid argument(s) or incorrect number of arguments."
-'    Close #f
-'
-'    On Error GoTo 0
-'    Exit Function
-'
-'ProcessCC_Error:
-'
-'    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ProcessCC of Module modCommandCode"
-End Function
-
 ' requires public
 Public Function PrepareCheck(ByVal toCheck As String) As String
     toCheck = Replace(toCheck, "[", "ÿ")
@@ -6032,10 +5589,10 @@ Private Function GetDBDetail(ByVal Username As String) As String
                 
                 If LenB(sRetAdd) > 0 Or LenB(sRetMod) > 0 Then
                     If LenB(sRetAdd) > 0 Then
-                        GetDBDetail = Username & sRetAdd & " They" & sRetMod
+                        GetDBDetail = DB(i).Username & sRetAdd & " They" & sRetMod
                     Else
                         'no add, but we could have a modify
-                        GetDBDetail = Username & sRetMod
+                        GetDBDetail = DB(i).Username & sRetMod
                     End If
                 Else
                     GetDBDetail = "No detailed information is available for that user."
