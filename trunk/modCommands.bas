@@ -3213,34 +3213,60 @@ Private Function OnGreet(ByVal Username As String, ByRef dbAccess As udtGetAcces
     cmdRet(0) = tmpBuf
 End Function ' end function OnGreet
 
-' TO DO:
 ' handle allseen command
 Private Function OnAllSeen(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim tmpBuf As String ' temporary output buffer
-    Dim i      As Integer
+    Dim tmpBuf() As String ' temporary output buffer
+    Dim tmpCount As Integer
+    Dim i        As Integer
 
-    tmpBuf = "Last 15 users seen: "
-        
+    ' redefine array size
+    ReDim Preserve tmpBuf(tmpCount)
+
+    ' prefix message with "Last 15 users seen"
+    tmpBuf(tmpCount) = "Last 15 users seen: "
+    
+    ' were there any users seen?
     If (colLastSeen.Count = 0) Then
-        tmpBuf = tmpBuf & "(list is empty)"
+        tmpBuf(tmpCount) = tmpBuf(tmpCount) & "(list is empty)"
     Else
         For i = 1 To colLastSeen.Count
-            tmpBuf = tmpBuf & colLastSeen.Item(i)
+            ' append user to list
+            tmpBuf(tmpCount) = tmpBuf(tmpCount) & _
+                colLastSeen.Item(i) & ", "
             
-            If (Len(tmpBuf) > 90) Then
-                tmpBuf = tmpBuf & " [more]"
-                'FilteredSend Username, tmpBuf, WhisperCmds, InBot, PublicOutput
-                tmpBuf = ""
-            ElseIf (i < colLastSeen.Count) Then
-                tmpBuf = tmpBuf & ", "
+            If (Len(tmpBuf(tmpCount)) > 90) Then
+                If (i < colLastSeen.Count) Then
+                    ' redefine array size
+                    ReDim Preserve tmpBuf(tmpCount + 1)
+                    
+                    ' clear new array index
+                    tmpBuf(tmpCount + 1) = vbNullString
+                    
+                    ' remove ending comma from index
+                    tmpBuf(tmpCount) = Mid$(tmpBuf(tmpCount), 1, _
+                        Len(tmpBuf(tmpCount)) - Len(", "))
+                
+                    ' postfix [more] to end of entry
+                    tmpBuf(tmpCount) = tmpBuf(tmpCount) & " [more]"
+                    
+                    ' increment loop counter
+                    tmpCount = (tmpCount + 1)
+                End If
             End If
         Next i
+        
+        ' check for ending comma
+        If (Right$(tmpBuf(tmpCount), 2) = ", ") Then
+            ' remove ending comma from index
+            tmpBuf(tmpCount) = Mid$(tmpBuf(tmpCount), 1, _
+                Len(tmpBuf(tmpCount)) - Len(", "))
+        End If
     End If
     
     ' return message
-    cmdRet(0) = tmpBuf
+    cmdRet() = tmpBuf()
 End Function ' end function OnAllSeen
 
 ' handle ban command
