@@ -3,20 +3,20 @@ Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   165
-   ClientTop       =   735
+   ClientLeft      =   225
+   ClientTop       =   825
    ClientWidth     =   11400
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   7950
-   ScaleWidth      =   11400
+   ScaleHeight     =   11160
+   ScaleWidth      =   18960
    StartUpPosition =   3  'Windows Default
    Begin MSScriptControlCtl.ScriptControl SCRestricted 
       Left            =   6960
@@ -35,7 +35,6 @@ Begin VB.Form frmChat
       Top             =   3840
       _ExtentX        =   1005
       _ExtentY        =   1005
-      AllowUI         =   -1  'True
    End
    Begin VB.Timer tmrFriendlistUpdate 
       Interval        =   5350
@@ -1491,6 +1490,13 @@ Private Sub Form_Load()
         
     Set colDynamicMenus = New Collection
     
+    Set dictTimerInterval = New Dictionary
+    Set dictTimerEnabled = New Dictionary
+    Set dictTimerCount = New Dictionary
+    dictTimerInterval.CompareMode = TextCompare
+    dictTimerEnabled.CompareMode = TextCompare
+    dictTimerCount.CompareMode = TextCompare
+    
     With mnuTrayCaption
         .Caption = CVERSION
         .Enabled = False
@@ -2694,6 +2700,12 @@ Sub Form_Unload(Cancel As Integer)
     Set colSafelist = Nothing
     Set dctCallbacks = Nothing
     Set colDynamicMenus = Nothing
+    
+    Set dictMenuIDs = Nothing
+    Set dictItemIDs = Nothing
+    Set dictTimerInterval = Nothing
+    Set dictTimerCount = Nothing
+    Set dictTimerEnabled = Nothing
     
     Unload frmAbout
     Unload frmCatch
