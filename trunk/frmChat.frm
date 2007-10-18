@@ -3,14 +3,14 @@ Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   225
-   ClientTop       =   825
+   ClientLeft      =   195
+   ClientTop       =   735
    ClientWidth     =   11400
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -35,6 +35,7 @@ Begin VB.Form frmChat
       Top             =   3840
       _ExtentX        =   1005
       _ExtentY        =   1005
+      AllowUI         =   -1  'True
    End
    Begin VB.Timer tmrFriendlistUpdate 
       Interval        =   5350
@@ -86,7 +87,7 @@ Begin VB.Form frmChat
    Begin MSComctlLib.ListView lvFriendList 
       Height          =   6375
       Left            =   8880
-      TabIndex        =   9
+      TabIndex        =   8
       Top             =   240
       Width           =   2775
       _ExtentX        =   4895
@@ -134,14 +135,14 @@ Begin VB.Form frmChat
       EndProperty
       Height          =   1695
       Left            =   11160
-      TabIndex        =   5
+      TabIndex        =   4
       Top             =   6600
       Width           =   245
    End
    Begin RichTextLib.RichTextBox rtbWhispers 
       Height          =   1695
       Left            =   0
-      TabIndex        =   8
+      TabIndex        =   7
       TabStop         =   0   'False
       Top             =   6960
       Width           =   11175
@@ -674,7 +675,7 @@ Begin VB.Form frmChat
       Height          =   285
       Left            =   8280
       MaxLength       =   50
-      TabIndex        =   3
+      TabIndex        =   2
       Top             =   6600
       Width           =   615
    End
@@ -693,7 +694,7 @@ Begin VB.Form frmChat
       Height          =   285
       Left            =   0
       MaxLength       =   50
-      TabIndex        =   1
+      TabIndex        =   0
       Top             =   6600
       Width           =   615
    End
@@ -711,39 +712,14 @@ Begin VB.Form frmChat
       ForeColor       =   &H00FFFFFF&
       Height          =   315
       Left            =   600
-      TabIndex        =   2
+      TabIndex        =   1
       Top             =   6600
       Width           =   7695
-   End
-   Begin RichTextLib.RichTextBox rtbChat 
-      Height          =   6615
-      Left            =   0
-      TabIndex        =   0
-      TabStop         =   0   'False
-      Top             =   0
-      Width           =   8895
-      _ExtentX        =   15690
-      _ExtentY        =   11668
-      _Version        =   393217
-      BackColor       =   0
-      ReadOnly        =   -1  'True
-      ScrollBars      =   2
-      AutoVerbMenu    =   -1  'True
-      TextRTF         =   $"frmChat.frx":6AC38
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Tahoma"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
    End
    Begin TabDlg.SSTab ListviewTabs 
       Height          =   375
       Left            =   8880
-      TabIndex        =   4
+      TabIndex        =   3
       Top             =   6600
       Width           =   2805
       _ExtentX        =   4948
@@ -763,22 +739,22 @@ Begin VB.Form frmChat
          Strikethrough   =   0   'False
       EndProperty
       TabCaption(0)   =   "Channel  "
-      TabPicture(0)   =   "frmChat.frx":6ACB3
+      TabPicture(0)   =   "frmChat.frx":6AC38
       Tab(0).ControlEnabled=   0   'False
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "Friends  "
-      TabPicture(1)   =   "frmChat.frx":6ACCF
+      TabPicture(1)   =   "frmChat.frx":6AC54
       Tab(1).ControlEnabled=   -1  'True
       Tab(1).ControlCount=   0
       TabCaption(2)   =   "Clan  "
-      TabPicture(2)   =   "frmChat.frx":6ACEB
+      TabPicture(2)   =   "frmChat.frx":6AC70
       Tab(2).ControlEnabled=   0   'False
       Tab(2).ControlCount=   0
    End
    Begin MSComctlLib.ListView lvChannel 
       Height          =   6375
       Left            =   8880
-      TabIndex        =   7
+      TabIndex        =   6
       TabStop         =   0   'False
       Top             =   240
       Width           =   2775
@@ -817,7 +793,7 @@ Begin VB.Form frmChat
    Begin MSComctlLib.ListView lvClanList 
       Height          =   6375
       Left            =   8880
-      TabIndex        =   10
+      TabIndex        =   9
       Top             =   240
       Width           =   2775
       _ExtentX        =   4895
@@ -860,6 +836,31 @@ Begin VB.Form frmChat
          Object.Width           =   88
       EndProperty
    End
+   Begin RichTextLib.RichTextBox rtbChat 
+      Height          =   6615
+      Left            =   0
+      TabIndex        =   10
+      TabStop         =   0   'False
+      Top             =   0
+      Width           =   8895
+      _ExtentX        =   15690
+      _ExtentY        =   11668
+      _Version        =   393217
+      BackColor       =   0
+      ReadOnly        =   -1  'True
+      ScrollBars      =   2
+      AutoVerbMenu    =   -1  'True
+      TextRTF         =   $"frmChat.frx":6AC8C
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
    Begin VB.Label lblCurrentChannel 
       Alignment       =   2  'Center
       BackColor       =   &H00CC3300&
@@ -875,7 +876,7 @@ Begin VB.Form frmChat
       ForeColor       =   &H8000000E&
       Height          =   255
       Left            =   8880
-      TabIndex        =   6
+      TabIndex        =   5
       ToolTipText     =   "Currently in channel..."
       Top             =   0
       Width           =   2775
@@ -2433,9 +2434,9 @@ Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
     SControl.Run "Event_BotClanRankChanged", NewRank
 End Sub
 
-Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal Rank As Byte)
+Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal rank As Byte)
     Clan.DWName = RawClanTag
-    Clan.MyRank = Rank
+    Clan.MyRank = rank
     Clan.isUsed = True
     
     Call InitListviewTabs
@@ -2451,9 +2452,9 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
             
         SControl.Run "Event_BotJoinedClan", ClanTag
     Else
-        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(Rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
+        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
         
-        SControl.Run "Event_BotClanInfo", ClanTag, Rank
+        SControl.Run "Event_BotClanInfo", ClanTag, rank
     End If
     
     ClanHandler.RequestClanList
@@ -2494,19 +2495,19 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
     lblCurrentChannel.Caption = GetChannelString
 End Sub
 
-Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Integer)
+Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As Byte, ByVal IsOnline As Integer)
     Dim X As ListItem
     
     Set X = lvClanList.FindItem(Username)
 
     If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
-        Clan.MyRank = IIf(Rank = 0, Rank + 1, Rank)
+        Clan.MyRank = IIf(rank = 0, rank + 1, rank)
         AwaitingClanInfo = 1
     End If
     
     If AwaitingClanInfo = 1 Then
         AwaitingClanInfo = 0
-        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(Rank) & "."
+        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(rank) & "."
     End If
     
     If Not (X Is Nothing) Then
@@ -2514,10 +2515,10 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
         Set X = Nothing
     End If
     
-    AddClanMember Username, CInt(Rank), IsOnline
+    AddClanMember Username, CInt(rank), IsOnline
     
     On Error Resume Next
-    SControl.Run "Event_ClanMemberUpdate", Username, Rank, IsOnline
+    SControl.Run "Event_ClanMemberUpdate", Username, rank, IsOnline
 End Sub
 
 Private Sub ClanHandler_ClanMOTD(ByVal Message As String)
@@ -5491,7 +5492,12 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     If s = "Y" Then mnuFlash.Checked = True Else mnuFlash.Checked = False
     
     s = ReadCFG(MN, "UseProxy")
-    If s = "Y" Then BotVars.UseProxy = True Else BotVars.UseProxy = False
+    If s = "Y" Then
+        BotVars.UseProxy = True
+        If (sckBNet.State = sckConnected) Then BotVars.ProxyStatus = psOnline
+    Else
+        BotVars.UseProxy = False
+    End If
     
     s = ReadCFG(MN, "ProxyPort")
     If StrictIsNumeric(s) Then
@@ -6043,26 +6049,26 @@ Sub DisableListviewTabs()
     ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
 End Sub
 
-Sub AddClanMember(ByVal Name As String, Rank As Integer, Online As Integer)
+Sub AddClanMember(ByVal Name As String, rank As Integer, Online As Integer)
     
-    If Rank = 0 Then Rank = 1
-    If Rank > 4 Then Rank = 5 '// handle bad ranks
+    If rank = 0 Then rank = 1
+    If rank > 4 Then rank = 5 '// handle bad ranks
     
     '// add user
     
     Name = KillNull(Name)
     
     With lvClanList
-        .ListItems.Add .ListItems.Count + 1, , Name, , Rank
+        .ListItems.Add .ListItems.Count + 1, , Name, , rank
         .ListItems(.ListItems.Count).ListSubItems.Add , , , Online + 6
-        .ListItems(.ListItems.Count).ListSubItems.Add , , Rank
+        .ListItems(.ListItems.Count).ListSubItems.Add , , rank
         .SortKey = 2
         .SortOrder = lvwDescending
         .Sorted = True
     End With
     
     On Error Resume Next
-    SControl.Run "Event_ClanInfo", Name, Rank, Online
+    SControl.Run "Event_ClanInfo", Name, rank, Online
 End Sub
 
 Private Function GetClanSelectedUser() As String
