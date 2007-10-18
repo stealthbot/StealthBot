@@ -5493,7 +5493,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     s = ReadCFG(MN, "UseProxy")
     If s = "Y" Then
-        BotVars.UseProxy = True
+        BotVars.UseProxy = True 'Added comment so the thing would let me commit. To shut Swent up
         If (sckBNet.State = sckConnected) Then BotVars.ProxyStatus = psOnline
     Else
         BotVars.UseProxy = False
