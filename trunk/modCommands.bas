@@ -2818,7 +2818,7 @@ Private Function OnShitList(ByVal Username As String, ByRef dbAccess As udtGetAc
                 Line Input #f, response
                 
                 If (response <> vbNullString) Then
-                    ReDim Preserve strArray(0 To i)
+                    ReDim Preserve strArray(i)
                 
                     If (InStr(response, " ")) Then
                         strArray(i) = Mid$(response, 1, InStr(response, " ") - 1)
@@ -2878,62 +2878,57 @@ Private Function OnTagBans(ByVal Username As String, ByRef dbAccess As udtGetAcc
     If (Dir$(GetFilePath("tagbans.txt")) = vbNullString) Then
         tmpBuf = "No tagbans list found."
     Else
-        Dim f As Integer
+        Dim f        As Integer
+        Dim response As String
+        Dim i        As Integer
     
         f = FreeFile
     
         Open (GetFilePath("tagbans.txt")) For Input As #f
-            If (LOF(f) < 2) Then
-                tmpBuf = "No users are tagbanned."
-            Else
-                Dim response As String
-                Dim i        As Integer
+            Do While (Not (EOF(f)))
+                Input #f, response
                 
-                Do
-                    i = (i + 1)
-                    
-                    Input #f, response
-                    
-                    ReDim Preserve strArray(0 To i)
-                    
-                    If ((response <> vbNullString) And (Len(response) >= 2)) Then
-                        strArray(i) = response
-                    Else
-                        i = (i - 1)
-                    End If
-                    
-                Loop Until EOF(f)
-            End If
-        
+                ReDim Preserve strArray(i)
+                
+                If (response <> vbNullString) Then
+                    strArray(i) = response
+                End If
+                
+                i = (i + 1)
+            Loop
         Close #f
         
-        tmpBuf = "Tagbans found: "
-        
-        For i = (LBound(strArray) + 1) To UBound(strArray)
-            tmpBuf = tmpBuf & strArray(i) & ", "
+        If (i > 0) Then
+            tmpBuf = "Tagbans found: "
             
-            If (Len(tmpBuf) > 80) Then
-                tmpBuf = Left$(tmpBuf, Len(tmpBuf) - 2)
+            For i = LBound(strArray) To UBound(strArray)
+                tmpBuf = tmpBuf & strArray(i) & ", "
                 
-                tmpBuf = tmpBuf & " [more]"
-                
-                'If ((WhisperCmds) And (Not (InBot))) Then
-                '    If (Dii) Then
-                '        AddQ "/w *" & Username & Space(1) & tmpBuf
-                '    Else
-                '        AddQ "/w " & Username & Space(1) & tmpBuf
-                '    End If
-                'ElseIf ((InBot = True) And (Not (PublicOutput))) Then
-                '    frmChat.AddChat RTBColors.ConsoleText, tmpBuf
-                'Else
-                '    AddQ tmpBuf
-                'End If
-                
-                tmpBuf = "Tagbans found: "
-            End If
-        Next i
-        
-        tmpBuf = Left$(tmpBuf, Len(tmpBuf) - 2)
+                If (Len(tmpBuf) > 80) Then
+                    tmpBuf = Left$(tmpBuf, Len(tmpBuf) - 2)
+                    
+                    tmpBuf = tmpBuf & " [more]"
+                    
+                    'If ((WhisperCmds) And (Not (InBot))) Then
+                    '    If (Dii) Then
+                    '        AddQ "/w *" & Username & Space(1) & tmpBuf
+                    '    Else
+                    '        AddQ "/w " & Username & Space(1) & tmpBuf
+                    '    End If
+                    'ElseIf ((InBot = True) And (Not (PublicOutput))) Then
+                    '    frmChat.AddChat RTBColors.ConsoleText, tmpBuf
+                    'Else
+                    '    AddQ tmpBuf
+                    'End If
+                    
+                    tmpBuf = "Tagbans found: "
+                End If
+            Next i
+            
+            tmpBuf = Left$(tmpBuf, Len(tmpBuf) - 2)
+        Else
+            tmpBuf = "No users are tagbanned."
+        End If
     End If
     
     ' return message
