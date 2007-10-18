@@ -1,5 +1,6 @@
 Attribute VB_Name = "modWar3Clan"
 Option Explicit
+'10-18-07 - Hdx - Removed ClanInfoSplit - What was he thinking >.<
 
 'Public sDebugBuf As String
 Public AwaitingClanList As Byte
@@ -60,38 +61,6 @@ Public Sub DemoteMember(Username As String)
     End With
 End Sub
 
-Public Sub ClanInfoSplit(ByVal s As String, ByRef Output() As String)
-    
-    Dim i As Integer
-    Dim buf As String
-    Dim buf2 As String
-    
-    ReDim Output(0)
-    
-    Do While i < Len(s)
-        i = i + 1
-        If Asc(Mid$(s, i, 1)) > 4 Then
-            buf = buf & Mid$(s, i, 1)
-        Else
-            If Asc(Mid$(s, i, 1)) = 0 Then
-            
-                buf2 = buf2 & Asc(Mid$(s, i + 1, 1)) & Asc(Mid$(s, i + 2, 1))
-                
-                i = i + 3
-                
-                Output(UBound(Output)) = buf
-                ReDim Preserve Output(UBound(Output) + 2)
-                Output(UBound(Output) - 1) = buf2
-                buf = vbNullString: buf2 = vbNullString
-                
-            Else
-                buf2 = buf2 & Asc(Mid$(s, i, 1))
-            End If
-        End If
-    Loop
-    
-End Sub
-
 Public Function GetRank(ByVal i As Byte) As String
     Select Case i
         Case &H4: GetRank = "Chieftain"     'Chief
@@ -107,7 +76,7 @@ Public Function DebugOutput(ByVal sIn As String) As String
 
     Dim x1 As Long, y1 As Long
     Dim iLen As Long, iPos As Long
-    Dim sB As String, st As String
+    Dim sB As String, sT As String
     Dim sOut As String
     Dim Offset As Long, sOffset As String
     'build random string to display
@@ -126,7 +95,7 @@ Public Function DebugOutput(ByVal sIn As String) As String
     For x1 = 0 To ((iLen - 1) \ 16)
         sOffset = Right$("0000" & Hex(Offset), 4)
         sB = String(48, " ")
-        st = "................"
+        sT = "................"
         For y1 = 1 To 16
             iPos = 16 * x1 + y1
             If iPos > iLen Then Exit For
@@ -135,12 +104,12 @@ Public Function DebugOutput(ByVal sIn As String) As String
             Select Case Asc(Mid(sIn, iPos, 1))
                 Case 0, 9, 10, 13
                 Case Else
-                    Mid(st, y1, 1) = Mid(sIn, iPos, 1)
+                    Mid(sT, y1, 1) = Mid(sIn, iPos, 1)
             End Select
         Next y1
         If Len(sOut) > 0 Then sOut = sOut & vbCrLf
         sOut = sOut & sOffset & ":  "
-        sOut = sOut & sB & "  " & st
+        sOut = sOut & sB & "  " & sT
         Offset = Offset + 16
     Next x1
 

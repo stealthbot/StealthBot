@@ -36,17 +36,17 @@ Const SID_NEWRANKRECEIVED& = &H81
 Const SID_CLANUSERINFO& = &H82 '// arbitrary name
 
 
-Public Event CandidateList(ByVal Status As Byte, ByRef Users() As String)
+Public Event CandidateList(ByVal Status As Byte, ByRef users() As String)
 Public Event DisbandClanReply(ByVal Success As Boolean)
-Public Event ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal Rank As Byte)
+Public Event ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal rank As Byte)
 Public Event InviteUserReply(ByVal Status As Byte)
 Public Event ClanInvitation(ByVal Token As String, ByVal ClanTag As String, ByVal RawClanTag As String, ByVal ClanName As String, ByVal InvitedBy As String, ByVal NewClan As Boolean)
-Public Event ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Integer)
+Public Event ClanMemberUpdate(ByVal Username As String, ByVal rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
 Public Event ClanMemberList(ByRef Members() As String)
 Public Event UnknownClanEvent(ByVal PacketID As Byte, ByVal Data As String)
 Public Event DemoteUserReply(ByVal Success As Boolean)
 Public Event PromoteUserReply(ByVal Success As Boolean)
-Public Event RemoveUserReply(ByVal Result As Byte)
+Public Event RemoveUserReply(ByVal result As Byte)
 Public Event MyRankChange(ByVal NewRank As Byte)
 Public Event MemberLeaves(ByVal Member As String)
 Public Event RemovedFromClan(ByVal Status As Byte)
@@ -58,110 +58,114 @@ Public Sub RequestClanList()
     PBuffer.SendPacket &H7D
 End Sub
 
+'10-18-07 - Hdx - Changed to use clsPacketDebuffer
 Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
-    
+    On Error GoTo clanErr
     Dim ary() As String
     'Dim dwTemp As Long
     Dim ClanTag As String * 4
     Dim sTemp As String ', Token As String
+    Dim sTemp2 As String
+    Dim iTemp As Integer
     Dim bTemp As Byte
+    Dim bRank As Byte
+    Dim bStatus As Byte
+    
+    Dim inBuf As New clsPacketDebuffer
+    inBuf.Debuffer = Data
     
     Select Case PacketID
     
         Case SID_FINDCLANCANDIDATES 'Clan candidates
-        
-            bTemp = Asc(Mid$(Data, 1, 1))
-            
-            If bTemp = 0 Then
-                ary() = Split(Mid$(Data, 7), Chr(0))
+            inBuf.DebuffRaw 4 'Cookie
+            bStatus = inBuf.DebuffBYTE
+            bRank = inBuf.DebuffBYTE
+            If (bRank > 0) Then
+                ReDim ary(0 To bRank - 1)
+                For iTemp = 1 To bRank
+                    ary(iTemp - 1) = inBuf.DebuffNTString
+                Next iTemp
             End If
-            
-            RaiseEvent CandidateList(bTemp, ary())
+            RaiseEvent CandidateList(bStatus, ary())
             
     
         Case SID_CLANMEMBERUPDATE 'Clan Info Update
-        
-            sTemp = Mid$(Data, 1, InStr(1, Data, Chr(0)))
-            bTemp = Asc(Mid$(Data, InStr(1, Data, Chr(0)) + 1, 1))
-            
-            RaiseEvent ClanMemberUpdate(sTemp, bTemp, Asc(Mid$(Data, Len(Data) - 1, 1)))
+            sTemp = inBuf.DebuffNTString
+            bRank = inBuf.DebuffBYTE
+            bStatus = inBuf.DebuffBYTE
+            sTemp2 = inBuf.DebuffNTString
+            RaiseEvent ClanMemberUpdate(sTemp, bRank, bStatus, sTemp2)
             
             
         Case SID_CLANINFO   'Clan Info
-        
-            ClanTag = Mid$(Data, 2, 4)
-            bTemp = Asc(Mid$(Data, 6, 1))
-            
-            RaiseEvent ClanInfo(StrReverse(ClanTag), ClanTag, bTemp)
-            
-        Case SID_REMOVEDFROMCLAN
-        
-            bTemp = Asc(Mid$(Data, 1, 1))
-            RaiseEvent RemovedFromClan(bTemp)
-            
+            inBuf.RemoveBYTE 'Unknown (0)
+            ClanTag = inBuf.DebuffRaw(4)
+            bRank = inBuf.DebuffBYTE
+            RaiseEvent ClanInfo(StrReverse(ClanTag), ClanTag, bRank)
             
         Case SID_CHANGERANK 'Action Response
             
             'demote: 1; promote: 3
             
-            bTemp = Conv(Mid$(Data, 1, 4)) 'may overflow
+            iTemp = inBuf.DebuffDWORD
+            bStatus = inBuf.DebuffBYTE
             
-            Select Case Asc(Mid$(Data, 5, 1))
+            Select Case bStatus
                 Case 0  'success
-                    Select Case bTemp
+                    Select Case iTemp
                         Case 1: RaiseEvent DemoteUserReply(True)
                         Case 3: RaiseEvent PromoteUserReply(True)
                     End Select
                     
                 Case 2, 7, 8  'too soon
-                    Select Case bTemp
+                    Select Case iTemp
                         Case 1: RaiseEvent DemoteUserReply(False)
                         Case 3: RaiseEvent PromoteUserReply(False)
                     End Select
                     
             End Select
             
-            
-        Case SID_MEMBERLEFT
-            RaiseEvent MemberLeaves(KillNull(Mid$(Data, 1)))
-            
-            
         Case SID_CLANMEMBERLIST 'Clan listing
-            
-            ClanInfoSplit Right(Data, Len(Data) - 5), ary()
+            inBuf.RemoveDWORD
+            bTemp = inBuf.DebuffBYTE
+            ReDim ary(0 To bTemp * 2 - 1)
+            For iTemp = 0 To bTemp - 1
+              ary(iTemp * 2) = inBuf.DebuffNTString
+              ary(iTemp * 2 + 1) = inBuf.DebuffBYTE & inBuf.DebuffBYTE
+              inBuf.RemoveNTString
+            Next iTemp
             RaiseEvent ClanMemberList(ary())
             
             
-        Case SID_REMOVEMEMBER
-        
-            bTemp = Asc(Mid$(Data, 1, 1))
-            RaiseEvent RemoveUserReply(bTemp)
-            
+        Case SID_REMOVEMEMBER:    RaiseEvent RemoveUserReply(inBuf.GetBYTE)
+        Case SID_MEMBERLEFT:      RaiseEvent MemberLeaves(inBuf.GetNTString)
+        Case SID_REMOVEDFROMCLAN: RaiseEvent RemovedFromClan(inBuf.DebuffBYTE)
             
         Case SID_DISBANDCLAN
-            
-            RaiseEvent DisbandClanReply((Val(Mid$(Data, 5, 4)) = 0))
+            inBuf.RemoveDWORD 'cookie
+            RaiseEvent DisbandClanReply((inBuf.GetBYTE = 0))
             
             
         Case SID_CLANINVITE, SID_CLANINVITE2
         
-            sTemp = Mid$(Data, 1, 4)
-            ClanTag = Mid$(Data, 5, 4)
-            ary() = Split(Mid$(Data, 9), Chr(0))
+            sTemp = inBuf.DebuffRaw(4)
+            ClanTag = inBuf.DebuffRaw(4)
+            ReDim ary(2)
+            ary(0) = inBuf.DebuffNTString
+            ary(1) = inBuf.DebuffNTString
             
             RaiseEvent ClanInvitation(sTemp, StrReverse(ClanTag), ClanTag, ary(0), ary(1), (PacketID = SID_CLANINVITE2))
             
         Case SID_CLANREQUEST
-        
-            bTemp = Asc(Mid$(Data, 5, 1))
-            RaiseEvent InviteUserReply(bTemp)
+            inBuf.RemoveDWORD
+            RaiseEvent InviteUserReply(inBuf.GetBYTE)
             
         Case SID_NEWRANKRECEIVED
 '            (BYTE) - Old rank
 '            (BYTE) - New rank
 '            (STRING) - User who changed your rank
-            bTemp = Asc(Mid$(Data, 2, 1))
-            RaiseEvent MyRankChange(bTemp)
+            inBuf.RemoveBYTE
+            RaiseEvent MyRankChange(inBuf.GetBYTE)
             
         Case SID_CLANUSERINFO
             
@@ -171,5 +175,10 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             RaiseEvent UnknownClanEvent(PacketID, DebugOutput(Data))
             
     End Select
-
+    inBuf.Clear
+    Set inBuf = Nothing
+clanErr:
+  Debug.Print "ParseClanPacket Error: " & Err.Number & ": " & Err.Description
+  Debug.Print DebugOutput(Data)
+  Err.Clear
 End Sub

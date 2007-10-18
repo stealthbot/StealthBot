@@ -150,6 +150,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -847,6 +848,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2495,7 +2497,7 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
     lblCurrentChannel.Caption = GetChannelString
 End Sub
 
-Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As Byte, ByVal IsOnline As Integer)
+Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
     Dim X As ListItem
     
     Set X = lvClanList.FindItem(Username)
@@ -2515,7 +2517,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
         Set X = Nothing
     End If
     
-    AddClanMember Username, CInt(rank), IsOnline
+    AddClanMember Username, CInt(rank), CInt(IsOnline)
     
     On Error Resume Next
     SControl.Run "Event_ClanMemberUpdate", Username, rank, IsOnline
