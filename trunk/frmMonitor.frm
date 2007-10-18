@@ -4,22 +4,61 @@ Begin VB.Form frmMonitor
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
    Caption         =   "User Monitor"
-   ClientHeight    =   4800
-   ClientLeft      =   1065
-   ClientTop       =   750
+   ClientHeight    =   5160
+   ClientLeft      =   1425
+   ClientTop       =   870
    ClientWidth     =   7575
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   4800
+   ScaleHeight     =   5160
    ScaleWidth      =   7575
    StartUpPosition =   1  'CenterOwner
+   Begin VB.TextBox txtUsername 
+      BackColor       =   &H00993300&
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   285
+      IMEMode         =   3  'DISABLE
+      Left            =   5400
+      TabIndex        =   13
+      Top             =   2040
+      Width           =   2055
+   End
+   Begin VB.TextBox txtPassword 
+      BackColor       =   &H00993300&
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   285
+      IMEMode         =   3  'DISABLE
+      Left            =   5400
+      PasswordChar    =   "*"
+      TabIndex        =   12
+      Top             =   2760
+      Width           =   2055
+   End
    Begin StealthBot.ctlMonitor monConn 
-      Left            =   5640
-      Top             =   3000
-      _ExtentX        =   661
-      _ExtentY        =   661
+      Left            =   3000
+      Top             =   1800
+      _extentx        =   661
+      _extenty        =   661
    End
    Begin VB.CommandButton cmdShutdown 
       Caption         =   "&Shutdown"
@@ -35,7 +74,7 @@ Begin VB.Form frmMonitor
       Height          =   255
       Left            =   5400
       TabIndex        =   11
-      Top             =   4080
+      Top             =   4440
       Width           =   2055
    End
    Begin VB.CommandButton cmdDisc 
@@ -52,7 +91,7 @@ Begin VB.Form frmMonitor
       Height          =   255
       Left            =   5400
       TabIndex        =   10
-      Top             =   2520
+      Top             =   3600
       Width           =   2055
    End
    Begin VB.CommandButton cmdConnect 
@@ -69,7 +108,7 @@ Begin VB.Form frmMonitor
       Height          =   255
       Left            =   5400
       TabIndex        =   9
-      Top             =   2160
+      Top             =   3240
       Width           =   2055
    End
    Begin VB.CommandButton cmdRefresh 
@@ -103,7 +142,7 @@ Begin VB.Form frmMonitor
       Height          =   255
       Left            =   5400
       TabIndex        =   2
-      Top             =   3720
+      Top             =   4080
       Width           =   2055
    End
    Begin VB.CommandButton cmdRem 
@@ -140,14 +179,33 @@ Begin VB.Form frmMonitor
       Top             =   840
       Width           =   495
    End
+   Begin VB.TextBox txtAdd 
+      BackColor       =   &H00993300&
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   285
+      Left            =   5400
+      MultiLine       =   -1  'True
+      TabIndex        =   6
+      Top             =   840
+      Width           =   1575
+   End
    Begin MSComctlLib.ListView lvMonitor 
-      Height          =   4215
+      Height          =   4575
       Left            =   120
       TabIndex        =   3
       Top             =   120
       Width           =   5175
       _ExtentX        =   9128
-      _ExtentY        =   7435
+      _ExtentY        =   8070
       View            =   3
       Arrange         =   1
       LabelEdit       =   1
@@ -189,11 +247,12 @@ Begin VB.Form frmMonitor
          Object.Width           =   2293
       EndProperty
    End
-   Begin VB.TextBox txtAdd 
-      BackColor       =   &H00993300&
+   Begin VB.Label Label4 
+      BackColor       =   &H00000000&
+      Caption         =   "Username:"
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   11.25
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -201,12 +260,30 @@ Begin VB.Form frmMonitor
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   285
+      Height          =   615
       Left            =   5400
-      MultiLine       =   -1  'True
-      TabIndex        =   6
-      Top             =   840
-      Width           =   1575
+      TabIndex        =   15
+      Top             =   1680
+      Width           =   2055
+   End
+   Begin VB.Label Label3 
+      BackColor       =   &H00000000&
+      Caption         =   "Password:"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   11.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   255
+      Left            =   5400
+      TabIndex        =   14
+      Top             =   2400
+      Width           =   1095
    End
    Begin VB.Label Label1 
       BackColor       =   &H00000000&
@@ -243,7 +320,7 @@ Begin VB.Form frmMonitor
       Height          =   255
       Left            =   720
       TabIndex        =   5
-      Top             =   4440
+      Top             =   4800
       Width           =   6735
    End
    Begin VB.Label Label2 
@@ -262,7 +339,7 @@ Begin VB.Form frmMonitor
       Height          =   255
       Left            =   120
       TabIndex        =   4
-      Top             =   4440
+      Top             =   4800
       Width           =   495
    End
 End
@@ -303,11 +380,13 @@ Private Sub Form_Load()
     'On Error Resume Next
     Me.Icon = frmChat.Icon
     monConn.LoadMonitorConfig
-    If Not DisableMonitor Then
-        monConn.Connect
-    Else
+    txtUsername.text = monConn.Username
+    txtPassword.text = monConn.Password
+    'If Not DisableMonitor Then
+    '    monConn.Connect
+    'Else
         Call cmdDisc_Click
-    End If
+    'End If
     
     Dim users As Collection, X As Integer
     With lvMonitor
@@ -355,6 +434,7 @@ End Sub
 Private Sub monConn_BNETClose()
   Debug.Print "BNET Close"
   lblStatus.Caption = "Offline"
+  lblStatus.ToolTipText = "Discnnected"
 End Sub
 
 Private Sub monConn_BNETConnect()
@@ -378,19 +458,45 @@ End Sub
 Private Sub monConn_BNLSError(ByVal Number As Integer, ByVal Description As String)
   Debug.Print "BNLS " & Number & " " & Description
   lblStatus.Caption = "[BNLS] " & Number & ": " & Description
+  lblStatus.ToolTipText = "BNLS Hash encountered an error. The server may be down."
 End Sub
 
 Private Sub monConn_OnChatJoin(ByVal UniqueName As String)
   Debug.Print "Logged in as " & UniqueName
-  lblStatus.Caption = "[BNET] Connected as " & UniqueName
+  lblStatus.Caption = "Connected as " & UniqueName
+  lblStatus.ToolTipText = "Logged on an Monitoring Users"
+End Sub
+
+Private Sub monConn_OnCreateAccount(ByVal blSucces As Boolean)
+  If blSucces Then
+    lblStatus.Caption = "Account creation successful, Logging in"
+    lblStatus.ToolTipText = vbNullString
+  Else
+    lblStatus.Caption = "Account creation failed"
+    lblStatus.ToolTipText = "This could mean you have invalid charecters is your account (){}&*#@! or space. Or, It could mean that the account is already taken by someone else."
+  End If
 End Sub
 
 Private Sub monConn_OnLogin(ByVal Success As Boolean)
   Debug.Print "Login " & IIf(Success, "Success", "Failed")
+  If (Success) Then
+    lblStatus.Caption = "Login successful"
+    lblStatus.ToolTipText = vbNullString
+  Else
+    lblStatus.Caption = "Failed to login to account: Invalid password."
+    lblStatus.ToolTipText = "Enter a valid account/password in the text boxes to the right."
+  End If
 End Sub
 
 Private Sub monConn_OnVersionCheck(ByVal result As Long, PatchFile As String)
   Debug.Print "Version: 0x" & Hex(result)
+  If (result = 2) Then
+    lblStatus.Caption = "Version Check Passed"
+    lblStatus.ToolTipText = "Version check for Diablo Retail passed"
+  Else
+    lblStatus.Caption = "Version Check Failed: " & PatchFile
+    lblStatus.ToolTipText = "Faild to validate Diablo Retail version. BNLS Server is outdated."
+  End If
 End Sub
 
 Private Sub monConn_UserInfo(user As clsFriend)
@@ -546,3 +652,12 @@ Function GetFullUserStatus(ByVal Username As String, ByRef Online As Boolean, By
     End If
 End Function
 
+Private Sub txtPassword_Change()
+  Call WriteINI("Monitor", "Password", txtPassword.text)
+  monConn.Password = txtPassword.text
+End Sub
+
+Private Sub txtUsername_Change()
+  Call WriteINI("Monitor", "Username", txtUsername.text)
+  monConn.Username = txtUsername.text
+End Sub

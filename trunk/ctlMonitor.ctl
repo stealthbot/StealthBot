@@ -65,6 +65,20 @@ Public Event OnVersionCheck(ByVal result As Long, PatchFile As String)
 Public Event OnLogin(ByVal Success As Boolean)
 Public Event OnChatJoin(ByVal UniqueName As String)
 Public Event UserInfo(user As clsFriend)
+Public Event OnCreateAccount(ByVal blSucces As Boolean)
+
+Public Property Let Username(strData As String)
+  strUsername = strData
+End Property
+Public Property Get Username() As String
+  Username = strUsername
+End Property
+Public Property Let Password(strData As String)
+  strPassword = strData
+End Property
+Public Property Get Password() As String
+  Password = strPassword
+End Property
 
 Public Sub LoadMonitorConfig()
   strUsername = ReadCFG("Monitor", "Username")
@@ -134,6 +148,10 @@ End Sub
 Public Sub Connect()
     ClientToken = GetTickCount
     Debug.Print "[BNLS] Connecting " & strBNLS & ":9367"
+    If (Len(strBNLS) = 0 Or Len(strUsername) = 0 Or Len(strPassword) = 0 Or Len(strServer) = 0) Then
+      MsgBox "You have not provided enough Information for the Monitor to connect."
+      Exit Sub
+    End If
     wsBnls.Close
     wsBnls.Connect strBNLS, 9367
 End Sub
@@ -295,9 +313,17 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                     Call Send0x0A
                 Else
                     RaiseEvent OnLogin(False)
-                    Debug.Print "[BNET] Login failed"
-                    wsBnet.Close
+                    Call Send0x2A
+                End If
+                
+            Case &H2A
+                If PBuffer.DebuffDWORD = 1 Then
+                   RaiseEvent OnCreateAccount(True)
+                    Call Send0x29
+                Else
+                    RaiseEvent OnCreateAccount(False)
                     wsBnls.Close
+                    wsBnet.Close
                 End If
       
             Case Else
@@ -382,6 +408,7 @@ Private Sub Send0x06()
         .InsertDWORD &H0
         SendBNET .GetPacket(&H6)
     End With
+    Set PBuffer = Nothing
     'Debug.Print "[BNET] Sent 0x06"
 End Sub
 
@@ -396,6 +423,7 @@ Private Sub Send0x07(ver As Long, Check As Long, info As String, vb As Long)
         .InsertNTString info
         SendBNET .GetPacket(7)
     End With
+    Set PBuffer = Nothing
     'Debug.Print "[BNET] Sent 0x07"
 End Sub
 
@@ -406,6 +434,7 @@ Private Sub Send0x0A()
         .InsertNTString "LTRD 0 0 0 0 0 0 0 0 LTRD"
         SendBNET .GetPacket(&HA)
     End With
+    Set PBuffer = Nothing
     'Debug.Print "[BNET] Sent 0x0A"
 End Sub
 
@@ -415,6 +444,7 @@ Private Sub Send0x0E(text As String)
         .InsertNTString text
         SendBNET .GetPacket(&HE)
     End With
+    Set PBuffer = Nothing
     'Debug.Print "[BNET] Sent 0x0E"
 End Sub
 
@@ -437,6 +467,7 @@ Private Sub Send0x12()
         SendBNET .GetPacket(&H12)
         'Debug.Print "[BNET] Sent 0x12"
     End With
+    Set PBuffer = Nothing
 End Sub
 
 
@@ -452,18 +483,33 @@ Private Sub Send0x1E()
         .InsertNTString GetCompUserName(True)
         SendBNET .GetPacket(&H1E)
     End With
+    Set PBuffer = Nothing
     'Debug.Print "[BNET] Sent 0x1E"
 End Sub
 
 Private Sub Send0x29()
+    If (strPassword = vbNullString) Then Exit Sub
     Dim PBuffer As New PacketBuffer
     With PBuffer
         .InsertDWORD ClientToken
         .InsertDWORD ServerToken
-        .InsertNonNTString doubleHashPassword(strPassword, ClientToken, ServerToken)
+        .InsertNonNTString doubleHashPassword(LCase(strPassword), ClientToken, ServerToken)
         .InsertNTString strUsername
         SendBNET .GetPacket(&H29)
     End With
+    Set PBuffer = Nothing
+    'Debug.Print "[BNET] Sent 0x29"
+End Sub
+
+Private Sub Send0x2A()
+    If (strPassword = vbNullString) Then Exit Sub
+    Dim PBuffer As New PacketBuffer
+    With PBuffer
+        .InsertNonNTString hashPassword(LCase(strPassword))
+        .InsertNTString strUsername
+        SendBNET .GetPacket(&H2A)
+    End With
+    Set PBuffer = Nothing
     'Debug.Print "[BNET] Sent 0x29"
 End Sub
 
@@ -479,6 +525,7 @@ Private Sub Send0x1ABNLS(MPQ As String, Value As String)
         .InsertNTString Value
         SendBNLS .GetBNLSPacket(&H1A)
     End With
+    Set PBuffer = Nothing
     'Debug.Print "[BNLS] Sent 0x1A"
 End Sub
 
@@ -512,7 +559,7 @@ End Function
 Private Function GetCompUserName(Optional user As Boolean = False) As String
     Dim strBuff As String, Rut As Long
     strBuff = String(255, Chr(&H0))
-    Rut = IIf(user, GetUserName(strBuff, Len(strBuff)), GetComputerName(strBuff, Len(strBuff)))
+    Rut = IIf(user, GetUsername(strBuff, Len(strBuff)), GetComputerName(strBuff, Len(strBuff)))
 
     Rut = InStr(strBuff, Chr$(&H0))
     GetCompUserName = Left(strBuff, Rut - 1)
