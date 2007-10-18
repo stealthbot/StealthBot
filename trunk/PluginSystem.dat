@@ -6,7 +6,7 @@
 '////////////////////////////////////////////////////////////
 
 
-'//  Last modified 1:21 AM 10/9/2007 by Swent
+'//  Last modified 11:14 PM 10/17/2007 by Swent
 
 
 '//**********************************//
@@ -39,7 +39,6 @@
 '//      -In the external updates output, only prefixes are displayed. Key: New, [Updated], (Installed)
 '//   *Increased plugin load efficiency -- load time should be noticeably decreased (Thanks ZergMasterI)
 '//   *Replaced all Plugin System usaged of vbBlue with psLightBlue, which is much easier on the eyes
-'//   *Custom vbColor global names changed: psOrange, psBrown, psPink, psGrey, psLightBlue
 '//   *Plugin and Plugin System update checks now only take place once after connection
 '//   *Improved error handling during plugin load. Loading errors will now be more descriptive (Thanks ZergMaster)
 '//      -Plugins with errors on load will be disabled automatically (to avoid the constant error messages on every event)
@@ -64,14 +63,12 @@
 '//      -This will work for all Plugin System commands except /updates and /psnews
 '//   *Added Plugin System help in /phelp command -- displays command names and explanations (Thanks raylu)
 '//   *Added support for colons on the 4th phelp line (important notes) -- use "\c" for colon (Thanks ZergMasterI)
-'//   *Added a useful global: psConUptime - holds current connection uptime in seconds
 '//   *Added some helpful links at the completion of the installation (Thanks Snap)
-'//   *Added two more useful subs: PluginEnabled and GetPluginEnabled. See usage notes below.
 '//   *Added StealthBot menu support for the Plugin System
-'//      -In the new Scripts menu you'll find menus for each plugin
+'//      -In the new Plugins menu you'll find menus for each plugin
 '//      -In these menus you can change enabled, nvn, and backup statuses, as well items for help and opening the plugin file
 '//      -There is also a main help menu which provides links to revelant forums/threads.
-'//      -5 subs/functions have been added to help you add and work with menu items for your plugin. See development notes below.
+'//      -5 subs/functions have been added to help you add and work with menu items for your plugin. See the SSC.
 '//      -You can disable plugin menu creation by setting the menusDisabled PS setting to True (Thanks ZergMasterI)
 '//   *Implemented #define's Plugin Creator. Can be executed from the Plugin System menu (Thanks #define)
 
@@ -100,94 +97,15 @@
 '//   *Fixed a plugin converter error for users with certain language settings (Thanks fagju)
 
 
-'//******************************************************//
-'//  USEFUL NOTES FOR PLUGIN DEVELOPMENT                 //
-'//******************************************************//
-
-'// [ Settings Subs/Functions ]
- 
-'// - SetSetting
-'// - 	See the SSC
- 
-'// - GetSetting
-'// -   See the SSC
- 
- 
-'// [ Timer Subs/Functions ]
- 
-'// - TimerInterval
-'// Usage: Use to set a timer's interval.
-'// Syntax: TimerInterval Prefix, TimerName, Interval
-'//   Interval is in seconds (must be an integer).
-
-'// - TimerEnabled
-'// Use to enable or disable a timer.
-'// Syntax: TimerEnabled Prefix, TimerName, Enabled
-'//   Enabled is a boolean (True or False).
- 
-'// - GetTimerEnabled
-'// Use to get a timer's status.
-'// Syntax: Enabled = GetTimerEnabled(Prefix, TimerName)
-'//   Enabled will hold a boolean (True or False).
- 
-'// - GetTimeLeft
-'// Use to get time left (in seconds) until timer sub is executed.
-'// Syntax: timeLeft = GetTimeLeft(Prefix, TimerName)
- 
-'// - GetTimeWaiting
-'// Use to get time (in seconds) since the last time your timer sub was executed.
-'// Syntax: timeWaiting = GetTimeWaiting(Prefix, TimerName)
-
-
-'// [ Plugin Subs/Functions ]
-
-'// - PluginEnabled
-'// Use to enable or disable a plugin.
-'// Syntax: PluginEnabled Prefix, Enabled
-'//   Enabled is a boolean (True or False)
-
-'// - GetPluginEnabled
-'// Use to get a plugin's status. Note: This function doesn't account for status of global plugin disablement.
-'// Syntax: Enabled = GetPluginEnabled(Prefix)
-'//   Enabled will hold a boolean (True or False), or -1 if the plugin doesn't exist.
-
-
-'// [ Menu Subs/Functions ]
-
-'// - AddMenuItem
-'// -   See the SSC
-
-'// - SetMenuItemCheck
-'// -   See the SSC
-
-'// - GetMenuItemCheck
-'// -   See the SSC
-
-'// - ToggleMenuItemCheck
-'// -   See the SSC
-
-'// - SetMenuItemEnabled
-'// -   See the SSC
- 
- 
-'// [ Message Display Sub ]
- 
-'// - dsp
-'// -  See the SSC
-
-
 '// [ Useful Globals ]
 
 '// - psD2
 '// Holds "*" If Bot is using D2. Solves issue with whispering D2 Users.
 '//   Example usage: AddQ "/w " & psD2 & Username & " hey!"
 
-'// - psConUptime
-'// Holds current connection uptime in seconds
-
-'// - psOrange, psBrown, psPink, psGrey, psLightBlue
-'// Holds RBG color values (to supplement available vbColors)
-'//   Example usage: AddChat psOrange, "This is orange!"
+'// - vbOrange, vbBrown, vbPink, vbGrey, vbLightBlue
+'// Holds custom RBG color values (to supplement available vbColors)
+'//   Example usage: AddChat vbOrange, "This is orange!"
 
 
 '// [ Useful Objects ]
@@ -218,6 +136,9 @@
 '//**********************************//
 '//  THE PLUGIN SYSTEM               //
 '//**********************************//
+
+
+
  
 '// [[[ CONSTANT AND GLOBAL DECLARATIONS, OBJECT REFERENCES ]]]
 
@@ -239,11 +160,10 @@ Public psFirstRun       '// holds True if it's the first script load (so at bot 
 Public psArgsAdded      '// holds True if missing plugin event arguments were added during load
 Public psNewContent     '// holds modified plugin content after missing event arguments are added
 Public psEventNames     '// holds all possible plugin event names
-Public psConUptime      '// holds connection uptime in seconds
 Public psD2             '// holds "*" If bot is using D2
  
 '// Hold RGB values for custom vbColors (use with AddChat)
-Public psGrey, psBrown, psOrange, psPink, psLightBlue
+Public vbGrey, vbBrown, vbOrange, vbPink, vbLightBlue
 
 '// Hold RGB values that make up the color scheme
 Public psColor1, psColor2
@@ -256,68 +176,6 @@ Set psPlugins = CreateObject("Scripting.Dictionary")       '// holds plugin file
 Set psVersions = CreateObject("Scripting.Dictionary")      '// holds plugin versions
 Set psHelp = CreateObject("Scripting.Dictionary")          '// holds plugin help output
 Set psEvents = CreateObject("Scripting.Dictionary")        '// holds existing event names
-Set psTimerInterval = CreateObject("Scripting.Dictionary") '// holds timer intervals
-Set psTimerCount = CreateObject("Scripting.Dictionary")    '// holds timer counts
-Set psTimerEnabled = CreateObject("Scripting.Dictionary")  '// holds timer statuses
-
-
-'// [[[ TIMER SUBS/FUNCTIONS ]]]
- 
- 
-Sub TimerInterval(Prefix, TimerName, Interval)
- 
-   timerKey = Prefix & ":" & TimerName
-   psTimerInterval.Item(timerKey) = Interval
-   psTimerCount.Item(timerKey) = Interval
-End Sub
- 
- 
-Sub TimerEnabled(Prefix, TimerName, Enabled)
- 
-   psTimerEnabled.Item(Prefix & ":" & TimerName) = Enabled
-End Sub
- 
- 
-Function GetTimerEnabled(Prefix, TimerName)
- 
-   GetTimerEnabled = psTimerEnabled.Item(Prefix & ":" & TimerName)
-End Function
- 
- 
-Function GetTimeLeft(Prefix, TimerName)
- 
-   GetTimeLeft = psTimerCount.Item(Prefix & ":" & TimerName) - 1
-End Function
- 
- 
-Function GetTimerWaiting(Prefix, TimerName)
- 
-   timerKey = Prefix & ":" & TimerName
-   GetTimerWaiting = psTimerInterval.Item(timerKey) - psTimerCount.Item(timerKey) + 1
-End Function
-
-
-'// [[[ PLUGIN SUBS/FUNCTIONS ]]]
-
-
-Sub PluginEnabled(Prefix, Enabled)
-
-   SetSetting Prefix, "enabled", Enabled, "", True
-End Sub
-
-
-Function GetPluginEnabled(Prefix)
-
-   boolEnabled = GetSetting(Prefix, "enabled")
-   If Len(boolEnabled) > 0 Then
-      GetPluginEnabled = boolEnabled
-   Else
-      GetPluginEnabled = -1
-   End If
-End Function
-
-
-
 
 
 
@@ -420,7 +278,7 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, Lines)
    psSC.AddCode Content
 
    '// Handle loading errors
-   If Err.Number <> 0 And GetPluginEnabled(Prefix) Then
+   If Err.Number <> 0 Then
       psLoadError.Item(Prefix) = True
       AddChat vbRed, "Offending file: >> " & Path
       AddChat vbYellow, "Your " & Prefix & " plugin has been temporarily blocked due to a loading error."
@@ -471,7 +329,6 @@ Sub psAddArg(Prefix, Index, EventName, LastArg, NewArg, Lines, Path)
    pFile.Close
    psArgsAdded = True
 End Sub
-
 
 
 
@@ -556,7 +413,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
          End If
       Else
          dsp DisplayID, "The " & cmdPrefix & " plugin has been " & arrOnOff(1) & ".", Username, arrOnOff(2)
-         If arrOnOff(0) Then psTriggerLoadEvent(cmdPrefix)
+         'If arrOnOff(0) Then psTriggerLoadEvent(cmdPrefix)
       End If
 
       '// Toggle enabled checkmark in plugin menu
@@ -805,11 +662,9 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
             End If
          End If
       End If
-
       psAppShell.Open path
    End If
 End Sub
-
 
 
 
@@ -900,7 +755,6 @@ Sub psConvertToPlugin(Path, Lines)
       End If
    End If
 End Sub
-
 
 
 
@@ -1016,8 +870,7 @@ End Sub
 
 
 
-
-'// [[[[ PLUGIN MENUS -- DEFAULT ITEM CALLBACKS ]]]]
+'// [[[[ PLUGINS MENUS CALLBACKS ]]]]
 
 
 '// "Display" > "Plugin Title"
@@ -1030,7 +883,7 @@ Sub PluginMenus_Display_Callback(Prefix)
    '// Toggle backup checkmark in plugin menu
    SetMenuItemCheck "#display", Prefix, boolEnabled
 
-   AddChat psOrange, "Reloading Plugins...": ReloadScript()
+   AddChat vbOrange, "Reloading plugins...": Call ReloadScript()
 End Sub
 
 
@@ -1076,11 +929,22 @@ Sub PluginMenus_Backup_Callback(Prefix)
 End Sub
 
 
+'// "Reload Plugins"
+Sub ps_ReloadPlugins_Callback()
+   Call ReloadScript()
+End Sub
 
 
+'// "Open plugins folder"
+Sub ps_OpenPlugins_Callback()
+   psPluginSystemCmds "/pedit plugins", BotVars.Username, 4
+End Sub
 
 
-'// [[[ Default Plugins Menu Items -- Callbacks ]]]
+'// "Open settings.ini"
+Sub ps_OpenSettings_Callback()
+   psPluginSystemCmds "/pedit", BotVars.Username, 4
+End Sub
 
 
 '// "Scripting Help" > "Scripting Tutorials and FAQS"
@@ -1132,18 +996,6 @@ Sub ps_GBackups_Callback()
 End Sub
 
 
-'// "The Plugin System" > "Open settings.ini"
-Sub ps_OpenSettings_Callback()
-   psPluginSystemCmds "/pedit", BotVars.Username, 4
-End Sub
-
-
-'// "The Plugin System" > "Open plugins folder"
-Sub ps_OpenPlugins_Callback()
-   psPluginSystemCmds "/pedit plugins", BotVars.Username, 4
-End Sub
-
-
 '// "The Plugin System" > "Open PluginSystem.dat"
 Sub ps_OpenPS_Callback()
 
@@ -1170,7 +1022,6 @@ Sub ps_Help_Callback()
 
    psPluginSystemCmds "/phelp ps", BotVars.Username, 4
 End Sub
-
 
 
 
@@ -1238,6 +1089,7 @@ Sub psTriggerLoadEvent(Prefix)
       If Not GetSetting("ps", "debugmode") Then On Error Resume Next
       Execute(Prefix & "_event_load()")
       If Err.Number <> 0 Then
+addchat vbblue, "wtfux"
             AddChat vbRed, "Scripting runtime error '" & Err.Number & "' on """ & Prefix & "_Event_Load" & _
                             """ call in file """ & psFSO.GetFileName(psPlugins.Item(Prefix)) & """"
 	    AddChat vbRed, Err.Description & "."
@@ -1323,14 +1175,6 @@ Function psLatestSB()
       psLatestSB = True
    End If
 End Function
-
- 
-Sub psSetCompareMode()
-
-   psTimerInterval.CompareMode = 1
-   psTimerCount.CompareMode = 1
-   psTimerEnabled.CompareMode = 1
-End Sub
  
  
 Sub psCompleteInstall()
@@ -1365,7 +1209,7 @@ Sub psSetPSColors()
  
    psGrey = 9211020
    psBrown = 1262987
-   psOrange = 39423
+   vbOrange = 39423
    psPink = 13408767
    psLightBlue = 13395456
 
@@ -1456,11 +1300,12 @@ Sub psCreatePSSettings()
    SetSetting "#internal", "conup", 0, "Internal setting -- do not modify", False
 End Sub
 
+
+
+
  
 
-
-
-'// [[[ STEALTHBOT EVENTS ]]]
+'// [[[ EVENTS ]]]
 
 
 Sub Event_Load()
@@ -1471,20 +1316,17 @@ Sub Event_Load()
    '// Set color values
    Call psSetPSColors()
  
-   '// Make dictionaries non-case sensitive
-   Call psSetCompareMode()
- 
    '// Create the plugin system settings
    Call psCreatePSSettings()
 
    '// Display Plugin System news
-   Call psDisplayNews(psFirstRun)
+   'Call psDisplayNews(psFirstRun)
 
    '// Load the plugins
    Call psLoadPlugins()
 
    '// Register and populate the plugin menus
-   Call LoadMenus()
+   Call ReloadPluginMenus()
 
    '// Enable the script timer
    scTimer.Interval = 1000
@@ -1567,7 +1409,7 @@ End Sub
  
 Sub Event_LoggedOn(Username, Product)
  
-   psConUptime = GetSetting("#internal", "conup")
+   psConUptime = GetSetting("ps", "conup")
    Call psAutoUpdate()
    If Product = "VD2D" Or Product = "PX2D" Then psD2 = "*" Else psD2 = vbNullString End If   
    psExecuteEvent "LoggedOn", Array(Username,Product)
@@ -1593,6 +1435,12 @@ End Sub
  
  
 Sub Event_PressedEnter(Text)
+
+   If Left(LCase(Text), 5) = "/exec" Then
+      VetoThisMessage
+      ExecuteGlobal Mid(Text, 7)
+      Exit Sub
+   End If
 
    If Len(Text) > 220 Then psSplitOutgoingMsg Text
    psPluginSystemCmds psEcho(Text), BotVars.Username, 4
@@ -1668,62 +1516,6 @@ End Sub
 
 Sub Event_Close()
    
-   SetSetting "#internal", "conup", psConUptime, "", True
+   SetSetting "ps", "conup", psConUptime, "", True
    psExecuteEvent "Close", Array(vbNullString)
-End Sub
-
-
-Sub Event_Shutdown()
-
-   psExecuteEvent "Shutdown", Array(vbNullString)
-End Sub
- 
- 
-'// [[[ SCRIPT TIMER ]]]
- 
-Sub scTimer_Timer()
-
-   '// This sub executes every 1000 milliseconds (1 second)
-
-   '// Update connection uptime
-   If IsOnline() Then psConUptime = psConUptime + 1 Else psConUptime = 0 End If
-
-   If Not GetSetting("ps", "enabled") Then Exit Sub
-   Err.Clear: If Not GetSetting("ps", "debugmode") Then On Error Resume Next
-   teKeys = psTimerEnabled.Keys
- 
-   '// Execute all existing plugin timer subs at the appropriate intervals
-   For i = 0 to psTimerEnabled.Count - 1
-
-      '// Is this timer enabled?
-      If psTimerEnabled.Item(teKeys(i)) Then
-         arrTimerKey = Split(teKeys(i), ":")
-         strPrefix = arrTimerKey(0)
-         strTimerName = arrTimerKey(1)
-
-         '// Is the plugin that this timer belongs to enabled?
-         If GetSetting(strPrefix, "enabled") Then
-
-            '// Has this timer reached the end of its interval countdown?
-            If psTimerCount.Item(teKeys(i)) = 1 Then
-
-               '// Execute this timer sub!
-               Execute("Call " & strPrefix & "_" & strTimerName & "_timer()")
-
-               '// Handle errors
-               If Err.Number <> 0 Then
-                  AddChat vbRed, "Timer """ & strTimerName & """ Call Error On File> " & psPlugins.Item(strPrefix)
-                  AddChat vbRed, "Error Number: " & Err.Number & "   Description: " & Err.Description
-                  AddChat vbYellow, "The """ & strTimerName & """ timer in your " & strPrefix & " plugin has been disabled due to an error."
-                  TimerEnabled strPrefix, strTimerName, False
-                  Err.Clear
-               End If
-               psTimerCount.Item(teKeys(i)) = psTimerInterval.Item(teKeys(i))
-            Else
-               '// Subtract one second from the interval countdown
-               psTimerCount.Item(teKeys(i)) = psTimerCount.Item(teKeys(i)) - 1
-            End If
-         End If
-      End If
-   Next
 End Sub
