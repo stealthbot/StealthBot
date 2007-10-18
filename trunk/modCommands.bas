@@ -1461,8 +1461,8 @@ Private Function OnUnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
     Dim tmpBuf As String ' temporary output buffer
 
     If (Len(msgData) > 0) Then
-        AddQ "/unsquelch " & IIf(Dii, "*", "") & msgData, 1
-        AddQ "/unban " & IIf(Dii, "*", "") & msgData, 1
+        Call AddQ("/unsquelch " & IIf(Dii, "*", "") & msgData, 1)
+        Call AddQ("/unban " & IIf(Dii, "*", "") & msgData, 1)
         
         tmpBuf = "User " & Chr(34) & msgData & Chr(34) & " Un-IPBanned."
     Else
@@ -1488,7 +1488,7 @@ Private Function OnDesignate(ByVal Username As String, ByRef dbAccess As udtGetA
                 End If
             End If
             
-            AddQ "/designate " & msgData, 1
+            Call AddQ("/designate " & msgData, 1)
             
             tmpBuf = "I have designated [ " & msgData & " ]"
         Else
@@ -1619,9 +1619,9 @@ Private Function OnProtect(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 
                 tmpBuf = "Lockdown activated by " & Username & "."
                 
-                WildCardBan "*", ProtectMsg, 1
+                Call WildCardBan("*", ProtectMsg, 1)
                 
-                WriteINI "Main", "Protect", "Y"
+                Call WriteINI("Main", "Protect", "Y")
             Else
                 tmpBuf = "The bot does not have ops."
             End If
@@ -1632,13 +1632,13 @@ Private Function OnProtect(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 
                 tmpBuf = "Lockdown deactivated."
                 
-                WriteINI "Main", "Protect", "N"
+                Call WriteINI("Main", "Protect", "N")
             Else
                 tmpBuf = "Protection was not enabled."
             End If
             
         Case "status"
-            Select Case Protect
+            Select Case (Protect)
                 Case True: tmpBuf = "Lockdown is currently active."
                 Case Else: tmpBuf = "Lockdown is currently disabled."
             End Select
@@ -1737,7 +1737,7 @@ Private Function OnPlay(ByVal Username As String, ByRef dbAccess As udtGetAccess
                     
                     tmpBuf = "Skipped to track " & Track & "."
                 Else
-                    WinampJumpToFile msgData
+                    Call WinampJumpToFile(msgData)
                 End If
             End If
         End If
@@ -1962,18 +1962,19 @@ Private Function OnBlock(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Dim i      As Integer
 
     u = msgData
+    
     z = ReadINI("BlockList", "Total", "filters.ini")
     
     If (StrictIsNumeric(z)) Then
         i = z
     Else
-        WriteINI "BlockList", "Total", "Total=0", "filters.ini"
+        Call WriteINI("BlockList", "Total", "Total=0", "filters.ini")
         
         i = 0
     End If
     
-    WriteINI "BlockList", "Filter" & (i + 1), u, "filters.ini"
-    WriteINI "BlockList", "Total", i + 1, "filters.ini"
+    Call WriteINI("BlockList", "Filter" & (i + 1), u, "filters.ini")
+    Call WriteINI("BlockList", "Total", i + 1, "filters.ini")
     
     tmpBuf = "Added """ & u & """ to the username block list."
     
@@ -1993,7 +1994,8 @@ Private Function OnIdleTime(ByVal Username As String, ByRef dbAccess As udtGetAc
     If ((Not (StrictIsNumeric(u))) Or (Val(u) > 50000)) Then
         tmpBuf = "Error setting idle wait time."
     Else
-        WriteINI "Main", "IdleWait", 2 * Int(u)
+        Call WriteINI("Main", "IdleWait", 2 * Int(u))
+        
         tmpBuf = "Idle wait time set to " & Int(u) & " minutes."
     End If
 
@@ -2870,47 +2872,73 @@ End Function ' end function OnShitList
 Private Function OnTagBans(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    'If Dir$(GetFilePath("tagbans.txt")) = vbNullString Then
-    '    strSend = "No tagbans list found."
-    '    b = True
-    '    GoTo Display
-    'End If
+    Dim tmpBuf     As String  ' temporary output buffer
+    Dim tmpCount   As Integer
+    Dim strArray() As String
     
-    'Open (GetFilePath("tagbans.txt")) For Input As #f
-    'If LOF(f) < 2 Then
-    '    strSend = "No users are tagbanned."
-    '    b = True
-    '    GoTo Display
-    'End If
-    'Do
-    '    i = i + 1
-    '    Input #f, response
-    '    ReDim Preserve strArray(0 To i)
-    '    If response <> vbNullString And Len(response) >= 2 Then
-    '        strArray(i) = response
-    '    Else
-    '        i = i - 1
-    '    End If
-    'Loop Until EOF(f)
-    'strSend = "Tagbans found: "
-    'For i = (LBound(strArray) + 1) To UBound(strArray)
-    '    strSend = strSend & strArray(i) & ", "
-    '    If Len(strSend) > 80 Then
-    '        strSend = Left$(strSend, Len(strSend) - 2)
-    '        strSend = strSend & " [more]"
-    '        If WhisperCmds And Not InBot Then
-    '            If Dii Then AddQ "/w *" & Username & Space(1) & strSend Else AddQ "/w " & Username & Space(1) & strSend
-    '        ElseIf InBot = True And Not PublicOutput Then
-    '            frmChat.AddChat RTBColors.ConsoleText, strSend
-    '        Else
-    '            AddQ strSend
-    '        End If
-    '        strSend = "Tagbans found: "
-    '    End If
-    'Next i
-    'strSend = Left$(strSend, Len(strSend) - 2)
-    'b = True
-    'GoTo Display
+    If (Dir$(GetFilePath("tagbans.txt")) = vbNullString) Then
+        tmpBuf = "No tagbans list found."
+    Else
+        Dim f As Integer
+    
+        f = FreeFile
+    
+        Open (GetFilePath("tagbans.txt")) For Input As #f
+            If (LOF(f) < 2) Then
+                tmpBuf = "No users are tagbanned."
+            Else
+                Dim response As String
+                Dim i        As Integer
+                
+                Do
+                    i = (i + 1)
+                    
+                    Input #f, response
+                    
+                    ReDim Preserve strArray(0 To i)
+                    
+                    If ((response <> vbNullString) And (Len(response) >= 2)) Then
+                        strArray(i) = response
+                    Else
+                        i = (i - 1)
+                    End If
+                    
+                Loop Until EOF(f)
+            End If
+        
+        Close #f
+        
+        tmpBuf = "Tagbans found: "
+        
+        For i = (LBound(strArray) + 1) To UBound(strArray)
+            tmpBuf = tmpBuf & strArray(i) & ", "
+            
+            If (Len(tmpBuf) > 80) Then
+                tmpBuf = Left$(tmpBuf, Len(tmpBuf) - 2)
+                
+                tmpBuf = tmpBuf & " [more]"
+                
+                'If ((WhisperCmds) And (Not (InBot))) Then
+                '    If (Dii) Then
+                '        AddQ "/w *" & Username & Space(1) & tmpBuf
+                '    Else
+                '        AddQ "/w " & Username & Space(1) & tmpBuf
+                '    End If
+                'ElseIf ((InBot = True) And (Not (PublicOutput))) Then
+                '    frmChat.AddChat RTBColors.ConsoleText, tmpBuf
+                'Else
+                '    AddQ tmpBuf
+                'End If
+                
+                tmpBuf = "Tagbans found: "
+            End If
+        Next i
+        
+        tmpBuf = Left$(tmpBuf, Len(tmpBuf) - 2)
+    End If
+    
+    ' return message
+    cmdRet(0) = tmpBuf
 End Function ' end function OnTagBans
 
 ' handle shitadd command
