@@ -319,14 +319,14 @@ Public Sub RegisterPluginMenus()
     
     '// Add menu "Plugin Menu Display"
     If Not SharedScriptSupport.GetSetting("ps", "menusDisabled") Then
-        dictMenuIDs("#display") = RegisterScriptMenu("Plugin Menu Display")
+        dictMenuIDs("#Display") = RegisterScriptMenu("Plugin Menu Display")
         AddItemToMenu ScriptMenu_ParentID, 0, True
     End If
     
     '// Get plugin prefixes and titles
     strPrefixes = Split(frmChat.SControl.Eval("Join(psPrefixes)"))
     strTitles = Split(frmChat.SControl.Eval("psTitles"), ",")
-    
+
     '// Register and populate a menu for each plugin
     For i = 0 To UBound(strPrefixes)
     
@@ -334,7 +334,7 @@ Public Sub RegisterPluginMenus()
         If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit For
 
         '// Add an item in Plugin Menu Display for this plugin
-        dictItemIDs("#display|||" & strPrefixes(i)) = AddScriptMenuItem(dictMenuIDs("#display"), strTitles(i), _
+        dictItemIDs("#Display|||" & strPrefixes(i)) = AddScriptMenuItem(dictMenuIDs("#Display"), strTitles(i), _
                     "ps_display_callback_" & strPrefixes(i), , , SharedScriptSupport.GetSetting(strPrefixes(i), "menu_display"))
         frmChat.SControl.AddCode "Sub ps_display_callback_" & strPrefixes(i) & ":PluginMenus_Display_Callback """ & strPrefixes(i) & """: End " & "Sub"
         
@@ -369,7 +369,7 @@ Public Sub RegisterPluginMenus()
     Next
     
     '// Add 1st level command "Create New Plugin"
-    dictMenuIDs("#CreateNewPlugin") = AddItemToMenu(ScriptMenu_ParentID, "Create New Plugin", , , , "ps_CreatePlugin_Callback")
+    AddItemToMenu ScriptMenu_ParentID, "Create New Plugin", , , , "ps_CreatePlugin_Callback"
     
     '// Add help menu populated with links to some helpful forums/topics
     lngHelpMenu = RegisterScriptMenu("Help")
@@ -380,39 +380,46 @@ Public Sub RegisterPluginMenus()
 End Sub
 
 
-'// Get's the IDs of default 1st level menu items
-Public Function GetDefaultMenu(ByVal strKey As String) As Long
-
-    GetDefaultMenu = dictMenuIDs(strKey)
-End Function
-
-
-'// Get's the ID of a plugin menu menu
+'// Written by Swent. Get's the ID of a plugin menu menu
 Public Function GetPluginMenu(ByVal strPrefix As String) As Long
+
     GetPluginMenu = dictMenuIDs(strPrefix)
 End Function
 
 
-'// Get's the ID of a plugin menu item
+'// Written by Swent. Get's the ID of a plugin menu item
 Public Function GetPluginItem(ByVal strPrefix As String, ByVal strName As String) As Long
-    GetPluginItem = dictItemIDs(strPrefix & "|||" & strName)
+    Dim strKey As String
+    strKey = strPrefix & "|||" & strName
+
+    If dictItemIDs.Exists(strKey) Then
+        GetPluginItem = dictItemIDs(strKey)
+    Else
+        GetPluginItem = -1
+    End If
 End Function
 
 
-'// Registers the ID of a new plugin menu item
-Public Function RegisterPluginItem(ByVal strPrefix As String, ByVal strName As String, ByVal intID As Integer) As Long
-    dictItemIDs(strPrefix & "|||" & strName) = intID
+'// Written by Swent. Registers the ID of a new plugin menu item
+Public Function RegisterPluginItem(ByVal strPrefix As String, ByVal strName As String, ByVal lngItem As Long)
+    dictItemIDs(strPrefix & "|||" & strName) = lngItem
 End Function
 
 
-'// Returns the number of user-added items
-Public Function UserAddedItems(ByVal strPrefix As String) As Boolean
-    Dim strItems, intItemCount As Integer
+'// Written by Swent. Deletes all items in the Plugins menu.
+Public Sub DeletePluginMenus()
+    Dim intMenuCount As Integer, i As Integer
     
-    '// Get number of items in this plugin's menu
-    strItems = dictItemIDs.Items
-    UserAddedItems = UBound(Filter(strItems, strPrefix & "|||", False, vbTextCompare))
-End Function
+    intMenuCount = GetMenuItemCount(ScriptMenu_ParentID)
+
+    '// Is the Plugins menu already empty?
+    If intMenuCount < 0 Then Exit Sub
+
+    For i = 0 To intMenuCount
+        RemoveMenu ScriptMenu_ParentID, 0, MF_BYPOSITION
+    Next
+
+End Sub
 
 
 'Written by Andy. Append or Insert a new menu/sub-menu pair to hMenu.
@@ -458,6 +465,10 @@ Public Function RegisterScriptMenu(ByVal sMenuCaption As String) As Long
     
     If ScriptMenu_ParentID = 0 Then
         ScriptMenu_ParentID = AddParentMenu(lMenu, "Plugins", , 5)
+    End If
+    
+    If GetMenuItemCount(ScriptMenu_ParentID) = 0 Then
+        AddItemToMenu ScriptMenu_ParentID, "Reload Plugins", , , , "ps_ReloadPlugins_Callback"
         AddItemToMenu ScriptMenu_ParentID, "Open plugins folder", , , , "ps_OpenPlugins_Callback"
         AddItemToMenu ScriptMenu_ParentID, "Open settings.ini", , , , "ps_OpenSettings_Callback"
         AddItemToMenu ScriptMenu_ParentID, 0, True
