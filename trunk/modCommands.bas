@@ -2805,63 +2805,62 @@ Private Function OnShitList(ByVal Username As String, ByRef dbAccess As udtGetAc
     Dim tmpBuf     As String ' temporary output buffer
     Dim i          As Integer
     Dim response   As String
+    
+    f = FreeFile
 
     Y = GetFilePath("autobans.txt")
         
-    If LenB(Dir$(Y)) = 0 Then
+    If (LenB(Dir$(Y)) = 0) Then
         tmpBuf = "No shitlist found."
-    End If
-    
-    Open (Y) For Input As #f
-    
-        If (LOF(f) < 2) Then
-            tmpBuf = "There are no shitlisted users."
-        End If
-        
-        Do
-            i = i + 1
-            Line Input #f, response
-            
-            ReDim Preserve strArray(0 To i)
-            
-            If ((response <> vbNullString) And (Len(response) >= 2)) Then
-                If (InStr(response, " ")) Then
-                    strArray(i) = Mid$(response, 1, InStr(response, " ") - 1)
-                Else
-                    strArray(i) = response
+    Else
+        Open (Y) For Input As #f
+            Do While (Not (EOF(f)))
+                Line Input #f, response
+                
+                If (response <> vbNullString) Then
+                    ReDim Preserve strArray(0 To i)
+                
+                    If (InStr(response, " ")) Then
+                        strArray(i) = Mid$(response, 1, InStr(response, " ") - 1)
+                    Else
+                        strArray(i) = response
+                    End If
+                    
+                    i = (i + 1)
                 End If
-            Else
-                i = i - 1
-            End If
-        Loop While Not EOF(f)
-        
-    Close #f
-    
-    tmpBuf = "Tags/users found: "
-    
-    For i = (LBound(strArray) + 1) To UBound(strArray)
-        tmpBuf = tmpBuf & strArray(i)
-        
-        If (i <> UBound(strArray)) Then
-            tmpBuf = tmpBuf & ", "
-        End If
-        
-        If Len(tmpBuf) > 70 Then
-            If (i <> UBound(strArray)) Then
-                tmpBuf = tmpBuf & " [more]"
-            End If
-            
-            'If WhisperCmds And Not InBot Then
-            '    If Dii Then AddQ "/w *" & Username & Space(1) & tmpBuf Else AddQ "/w " & Username & Space(1) & tmpBuf
-            'ElseIf InBot = True And Not PublicOutput Then
-            '    frmChat.AddChat RTBColors.ConsoleText, tmpBuf
-            'Else
-            '    AddQ tmpBuf
-            'End If
-            
+            Loop
+        Close #f
+
+        If (i > 0) Then
             tmpBuf = "Tags/users found: "
+            
+            For i = LBound(strArray) To UBound(strArray)
+                tmpBuf = tmpBuf & strArray(i)
+                
+                If (i <> UBound(strArray)) Then
+                    tmpBuf = tmpBuf & ", "
+                End If
+                
+                If (Len(tmpBuf) > 70) Then
+                    If (i <> UBound(strArray)) Then
+                        tmpBuf = tmpBuf & " [more]"
+                    End If
+                    
+                    'If WhisperCmds And Not InBot Then
+                    '    If Dii Then AddQ "/w *" & Username & Space(1) & tmpBuf Else AddQ "/w " & Username & Space(1) & tmpBuf
+                    'ElseIf InBot = True And Not PublicOutput Then
+                    '    frmChat.AddChat RTBColors.ConsoleText, tmpBuf
+                    'Else
+                    '    AddQ tmpBuf
+                    'End If
+                    
+                    tmpBuf = "Tags/users found: "
+                End If
+            Next i
+        Else
+            tmpBuf = "No shitlisted users found"
         End If
-    Next i
+    End If
     
     ' return message
     cmdRet(0) = tmpBuf
