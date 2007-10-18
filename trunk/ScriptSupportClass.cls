@@ -84,7 +84,15 @@ Attribute VB_Exposed = False
 ' *     - Added DoStatstringParse() which allows you to parse a statstring from GetInternalData() out
 ' *         just like the bot does (thanks ZergMasterI)
 ' *     - Added a number of Windows API function mirrors (thanks FiftyToo)
-' *     - Added the Dsp, GetSetting, SetSetting, and five menu functions to work with the new Plugins menu
+' *     - Rewrote and integrated several Plugin System functions - Swent
+' *         Dsp(), GetSetting(), SetSetting(), TimerInterval(), TimerEnabled(),
+' *         GetTimerEnabled(), GetTimeLeft(), and GetTimeWaiting()
+' *         Note: All integrated functions are backwards compatiable. No current calls need to be modified.
+' *     - Added two functions to work with plugins - Swent
+' *         PluginEnabled(), GetPluginEnabled()
+' *     - Added six functions to work with the new Plugins menu - Swent
+' *         AddMenuItem(), SetMenuItemCheck(), GetMenuItemCheck(), ToggleMenuItemCheck(),
+' *         SetMenuItemEnabled(), and ReloadPluginMenus()
 ' *
 ' *
 ' *     (version 2.6R3, scripting system build 21)
@@ -1137,11 +1145,13 @@ End Function
 
 
 '// SETSETTING
-'//     Written by Swent. Creates and modifies plugin settings.
-'//     Overwrite is a boolean (True or False). Set to True if you want it to overwrite an existing value.
-'//     Use "" for the strDescription parameter and the existing description will be used.
-'//     Setting values of any length can now be set and retrieved properly (no 255 char max)
-Public Sub SetSetting(ByVal strPrefix As String, strName As String, varValue As Variant, strDescription As String, boolOverwrite As Boolean)
+'//   Written by Swent. Creates/modifies plugin settings.
+'//     Usage - New setting: SetSetting "prefix", "settingname", Value, "optional description", False
+'//     Usage - Existing setting:   SetSetting "prefix", "settingname", Value
+'//     Setting values of any length can be set and retrieved properly (no longer a 255 char max)
+Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal varValue As Variant, _
+                      Optional ByVal strDescription As String, Optional ByVal boolOverwrite As Boolean = True)
+                      
     Dim strSettingsPath As String, arrSetting() As String, i As Integer
     strSettingsPath = BotPath() & "plugins\settings.ini"
 
@@ -1164,7 +1174,7 @@ End Sub
 
 
 '// GETSETTING
-'//   Written by Swent. Retrieves plugin settings
+'//   Written by Swent. Retrieves plugin settings.
 Public Function GetSetting(ByVal strPrefix As String, ByVal strName As String)
     Dim strSettingsPath As String, i As Integer, strAppend As String, tmpValue As String, varValue As Variant
     strSettingsPath = BotPath() & "plugins\settings.ini"
@@ -1182,8 +1192,79 @@ Public Function GetSetting(ByVal strPrefix As String, ByVal strName As String)
 End Function
 
 
+'// PLUGINENABLED
+'//   Written by Swent. Enables or disables a plugin.
+Sub PluginEnabled(strPrefix As String, boolEnabled As Boolean)
+    
+    SetSetting strPrefix, "enabled", boolEnabled
+End Sub
+
+
+'// GETPLUGINENABLED
+'//   Written by Swent. Gets a plugin's enabled status. Returns -1 if the plugin doesn't exist.
+Function GetPluginEnabled(strPrefix As String)
+    Dim strEnabled As String
+    
+    strEnabled = GetSetting(strPrefix, "enabled")
+    If Len(strEnabled) > 0 Then
+        GetPluginEnabled = CBool(strEnabled)
+    Else
+        GetPluginEnabled = -1
+    End If
+End Function
+
+
+'// TIMERINTERVAL
+'//   Written by Swent. Sets a plugin timer's interval. The timer is created if it doesn't exist.
+Public Sub TimerInterval(ByVal strPrefix As String, ByVal strTimerName As String, ByVal intInterval As Integer)
+
+    SetPTInterval strPrefix, strTimerName, Int(intInterval)
+End Sub
+
+
+'// TIMERENABLED
+'//   Written by Swent. Enables or disables a plugin timer.
+Public Sub TimerEnabled(ByVal strPrefix As String, ByVal strTimerName As String, ByVal boolEnabled As Boolean)
+
+    SetPTEnabled strPrefix, strTimerName, boolEnabled
+End Sub
+
+
+'// TIMERCOUNT
+'//   Written by Swent. Allows you to modify the count in a running plugin timer.
+Public Sub TimerCount(ByVal strPrefix As String, ByVal strTimerName As String, ByVal intCount As Integer)
+
+    SetPTCount strPrefix, strTimerName, Int(intCount)
+End Sub
+
+
+'// GETTIMERENABLED
+'//   Written by Swent. Get's the time left (in seconds) until a plugin timer sub is executed.
+Public Function GetTimerEnabled(ByVal strPrefix As String, ByVal strTimerName As String)
+    
+    GetPTEnabled strPrefix, strTimerName
+End Function
+
+
+'// GETTIMELEFT
+'//   Written by Swent. Get's the time left (in seconds) until a plugin timer sub is executed.
+Public Function GetTimeLeft(ByVal strPrefix As String, ByVal strTimerName As String)
+
+    GetPTLeft strPrefix, strTimerName
+End Function
+
+
+'// GETTIMEWAITING
+'//   Written by Swent. Get's the time (in seconds) since a plugin timer sub was last executed.
+Public Function GetTimeWaiting(ByVal strPrefix As String, ByVal strTimerName As String)
+
+    GetPTWaiting strPrefix, strTimerName
+End Function
+
+
 '// DSP
 '// Written by Swent. Displays messages via the specified output type and allows for unlimited message lengths.
+'// This function is backwards compatiable -- you do not need to modify your current Dsp calls
 '//     intID (required) must be one of the following integer values:
 '//         1 = AddQ
 '//             Usage: Dsp 1, Message, [Delimiter]
@@ -1255,20 +1336,21 @@ Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVa
 End Sub
 
 
-'// LOADMENUS
-'//   Loads the plugin menus
-Public Sub LoadMenus()
- 
+'// RELOADPLUGINMENUS
+'//   Written by Swent. Reloads the Plugin menus. All user-added items will be cleared.
+Public Sub ReloadPluginMenus()
+
+    Call DeletePluginMenus
     Call RegisterPluginMenus
 End Sub
 
 
 '// ADDMENUITEM
-'//   Written by Swent. Allows users to add items to a plugin's menu.
+'//   Written by Swent. Allows users to add custom items to a plugin's menu.
 '//   Syntax: AddMenuItem "prefix", "item name", [boolSeparator], [boolDisabled], [Checkmark]
-'//     If boolSeparator (optional, default False) is True, this item is a separator (all other parameters ignored)
-'//     If boolDisabled (optional, default False) is True, this item is greyed out and can't be clicked.
-'//     If Checkmark (optional, default -1) is -1: No checkmark, 0: Unchecked checkmark, 1: Checked checkmark
+'//     If boolSeparator is True, this item is a separator and all other arguments are ignored.
+'//     If boolDisabled is True, this item is greyed out and can't be clicked.
+'//     If boolCheckmark is True, this item has a checkmark
 '//   Add the following sub to your plugin which will be called when any user-added item is clicked:
 '//     Sub <prefix>_Menu_Callback(ItemName)
 Public Sub AddMenuItem(ByVal strPrefix As String, ByVal strName As String, Optional ByVal boolSeparator As Boolean, _
@@ -1294,7 +1376,7 @@ Public Sub AddMenuItem(ByVal strPrefix As String, ByVal strName As String, Optio
 
     '// Add the menu item
     lngItem = AddScriptMenuItem(lngMenu, strName, strCallback, boolSeparator, boolDisabled, boolCheckmark)
-
+    
     RegisterPluginItem strPrefix, strName, lngItem
 End Sub
 
@@ -1346,4 +1428,3 @@ Public Sub SetMenuItemEnabled(ByVal strPrefix As String, ByVal strName As String
     
     SetMenuEnabled GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolEnabled
 End Sub
-
