@@ -5394,8 +5394,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         DisableURLDetect
     End If
     
-    If BotVars.MaxBacklogSize <= 0 Then BotVars.MaxBacklogSize = 10000
-    If BotVars.MaxLogfileSize <= 0 Then BotVars.MaxLogfileSize = 50000000
+    If BotVars.MaxBacklogSize < 0 Then BotVars.MaxBacklogSize = 10000
+    If BotVars.MaxLogfileSize < 0 Then BotVars.MaxLogfileSize = 50000000
     
     '// this section must read _absolutely correctly_ or the SetTimer API call will fail
     s = ReadCFG(MN, "ReconnectDelay")
