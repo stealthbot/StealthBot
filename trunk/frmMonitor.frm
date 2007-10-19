@@ -5,8 +5,8 @@ Begin VB.Form frmMonitor
    BorderStyle     =   1  'Fixed Single
    Caption         =   "User Monitor"
    ClientHeight    =   5160
-   ClientLeft      =   1425
-   ClientTop       =   870
+   ClientLeft      =   1470
+   ClientTop       =   885
    ClientWidth     =   7575
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
@@ -355,9 +355,10 @@ Private Sent() As Byte
 Attribute Sent.VB_VarHelpID = -1
 
 Private Sub cmdConnect_Click()
-    monConn.Connect
-    cmdConnect.Enabled = False
-    cmdDisc.Enabled = True
+    If (monConn.Connect) Then
+        cmdConnect.Enabled = False
+        cmdDisc.Enabled = True
+    End If
 End Sub
 
 Private Sub cmdRefresh_Click()

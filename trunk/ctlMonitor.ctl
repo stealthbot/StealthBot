@@ -145,16 +145,18 @@ Public Sub RemoveUser(sUser As String)
     SaveList
 End Sub
 
-Public Sub Connect()
+Public Function Connect() As Boolean
     ClientToken = GetTickCount
     Debug.Print "[BNLS] Connecting " & strBNLS & ":9367"
     If (Len(strBNLS) = 0 Or Len(strUsername) = 0 Or Len(strPassword) = 0 Or Len(strServer) = 0) Then
-      MsgBox "You have not provided enough Information for the Monitor to connect."
-      Exit Sub
+        MsgBox "You have not provided enough Information for the Monitor to connect."
+        Connect = False
+        Exit Function
     End If
     wsBnls.Close
     wsBnls.Connect strBNLS, 9367
-End Sub
+    Connect = True
+End Function
 
 Public Sub Disconnect()
     If wsBnls.State = sckConnected Then RaiseEvent BNLSClose
@@ -559,7 +561,7 @@ End Function
 Private Function GetCompUserName(Optional user As Boolean = False) As String
     Dim strBuff As String, Rut As Long
     strBuff = String(255, Chr(&H0))
-    Rut = IIf(user, GetUsername(strBuff, Len(strBuff)), GetComputerName(strBuff, Len(strBuff)))
+    Rut = IIf(user, GetUserName(strBuff, Len(strBuff)), GetComputerName(strBuff, Len(strBuff)))
 
     Rut = InStr(strBuff, Chr$(&H0))
     GetCompUserName = Left(strBuff, Rut - 1)
