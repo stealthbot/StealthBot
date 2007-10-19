@@ -16,7 +16,9 @@ Begin VB.Form frmSettings
    ScaleWidth      =   9735
    StartUpPosition =   1  'CenterOwner
    Begin VB.ComboBox cboProfile 
+      Appearance      =   0  'Flat
       BackColor       =   &H00993300&
+      Enabled         =   0   'False
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -239,9 +241,9 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   4440
+         Left            =   4560
          TabIndex        =   9
-         Top             =   1560
+         Top             =   1575
          Width           =   1935
       End
       Begin VB.ComboBox cboCDKey 
@@ -501,7 +503,7 @@ Begin VB.Form frmSettings
          TabIndex        =   8
          Text            =   "."
          Top             =   1560
-         Width           =   375
+         Width           =   615
       End
       Begin VB.ComboBox cboServer 
          BackColor       =   &H00993300&
@@ -3927,12 +3929,7 @@ Private Sub Form_Load()
     '##########################################
     
     With cboProfile
-        .Top = tvw.Top - .Height + 50
-        tvw.Top = .Top + .Height
-        tvw.Height = tvw.Height - 50
-        
         .text = "[default profile]"
-        .AddItem "(this feature is not yet implemented)"
     End With
     
     Set colProfiles = New Collection
