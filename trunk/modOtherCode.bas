@@ -123,15 +123,15 @@ Public Function GetGamePath(ByVal Client As String) As String
     Else
         Select Case StrReverse(UCase(Client))
             Case "W2BN"
-                GetGamePath = App.path & "\W2BN\"
+                GetGamePath = App.Path & "\W2BN\"
             Case "STAR", "SEXP"
-                GetGamePath = App.path & "\STAR\"
+                GetGamePath = App.Path & "\STAR\"
             Case "D2DV"
-                GetGamePath = App.path & "\D2DV\"
+                GetGamePath = App.Path & "\D2DV\"
             Case "D2XP"
-                GetGamePath = App.path & "\D2XP\"
+                GetGamePath = App.Path & "\D2XP\"
             Case "W3XP", "WAR3"
-                GetGamePath = App.path & "\WAR3\"
+                GetGamePath = App.Path & "\WAR3\"
             Case Else
                 frmChat.AddChat RTBColors.ErrorMessageText, "Warning: Invalid game client in GetGamePath()"
         End Select
@@ -301,13 +301,13 @@ Public Sub bnetSend(ByVal Message As String)
     End If
 End Sub
 
-Public Sub APISend(ByRef S As String) '// faster API-based sending for EFP
+Public Sub APISend(ByRef s As String) '// faster API-based sending for EFP
 
     Dim i As Long
     
-    i = Len(S) + 5
+    i = Len(s) + 5
     
-    Call Send(frmChat.sckBNet.SocketHandle, "ÿ" & "" & Chr(i) & Chr(0) & S & Chr(0), i, 0)
+    Call Send(frmChat.sckBNet.SocketHandle, "ÿ" & "" & Chr(i) & Chr(0) & s & Chr(0), i, 0)
     
 End Sub
 
@@ -406,20 +406,24 @@ Public Function Voting(ByVal Mode1 As Byte, Optional Mode2 As Byte, Optional Use
 End Function
 
 Public Function GetAccess(ByVal Username As String) As udtGetAccessResponse
-
-    Username = LCase(Username)
-    If Left$(Username, 1) = "*" Then Username = Mid$(Username, 2)
-    
     Dim i As Integer
 
+    Username = Username
+    
+    If (Left$(Username, 1) = "*") Then
+        Username = Mid$(Username, 2)
+    End If
+
     For i = LBound(DB) To UBound(DB)
-        If StrComp(DB(i).Username, Username, vbTextCompare) = 0 Then
+        If (StrComp(DB(i).Username, Username, vbTextCompare) = 0) Then
+            GetAccess.Username = DB(i).Username
             GetAccess.Access = DB(i).Access
-            GetAccess.Flags = DB(i).Flags
+            GetAccess.flags = DB(i).flags
             GetAccess.AddedBy = DB(i).AddedBy
             GetAccess.AddedOn = DB(i).AddedOn
             GetAccess.ModifiedBy = DB(i).ModifiedBy
             GetAccess.ModifiedOn = DB(i).ModifiedOn
+            
             Exit Function
         End If
     Next i
@@ -450,20 +454,20 @@ End Sub
 '//     mm/dd/yy, hh:mm:ss
 '//
 Public Function SystemTimeToString(ByRef sT As SYSTEMTIME) As String
-    Dim Buf As String
+    Dim buf As String
 
     With sT
     
-        Buf = Buf & .wMonth & "/"
-        Buf = Buf & .wDay & "/"
-        Buf = Buf & .wYear & ", "
-        Buf = Buf & IIf(.wHour > 9, .wHour, "0" & .wHour) & ":"
-        Buf = Buf & IIf(.wMinute > 9, .wMinute, "0" & .wMinute) & ":"
-        Buf = Buf & IIf(.wSecond > 9, .wSecond, "0" & .wSecond)
+        buf = buf & .wMonth & "/"
+        buf = buf & .wDay & "/"
+        buf = buf & .wYear & ", "
+        buf = buf & IIf(.wHour > 9, .wHour, "0" & .wHour) & ":"
+        buf = buf & IIf(.wMinute > 9, .wMinute, "0" & .wMinute) & ":"
+        buf = buf & IIf(.wSecond > 9, .wSecond, "0" & .wSecond)
     
     End With
     
-    SystemTimeToString = Buf
+    SystemTimeToString = buf
 End Function
 
 Public Function GetCurrentMS() As String
@@ -484,19 +488,19 @@ Public Function ZeroOffsetEx(ByVal lInpt As Long, ByVal lDigits As Long) As Stri
     ZeroOffsetEx = Right$(String(lDigits, "0") & lInpt, lDigits)
 End Function
 
-Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long) As Long
+Public Function GetSmallIcon(ByVal sProduct As String, ByVal flags As Long) As Long
     Dim i As Long
     
-    If ((Flags And USER_BLIZZREP) = USER_BLIZZREP) Then 'Flags = 1: blizzard rep
+    If ((flags And USER_BLIZZREP) = USER_BLIZZREP) Then 'Flags = 1: blizzard rep
         i = ICBLIZZ
         
-    ElseIf ((Flags And USER_SYSOP) = USER_SYSOP) Then 'Flags = 8: battle.net sysop
+    ElseIf ((flags And USER_SYSOP) = USER_SYSOP) Then 'Flags = 8: battle.net sysop
         i = ICSYSOP
         
-    ElseIf (Flags And USER_SQUELCHED) = USER_SQUELCHED Then 'squelched
+    ElseIf (flags And USER_SQUELCHED) = USER_SQUELCHED Then 'squelched
         i = ICSQUELCH
         
-    ElseIf (Flags And USER_CHANNELOP) = USER_CHANNELOP Then 'op
+    ElseIf (flags And USER_CHANNELOP) = USER_CHANNELOP Then 'op
         i = ICGAVEL
         
     ElseIf g_ThisIconCode <> -1 Then
@@ -578,19 +582,19 @@ Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long) As L
         
     End If
     
-    If (Flags = 2) Or (Flags = 18) Then
+    If (flags = 2) Or (flags = 18) Then
         i = ICGAVEL
     End If
     
     GetSmallIcon = i
 End Function
 
-Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flags As Long, ByVal Ping As Long, Optional Clan As String, Optional ForcePosition As Integer)
+Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal flags As Long, ByVal Ping As Long, Optional Clan As String, Optional ForcePosition As Integer)
     Dim i As Integer, LagIcon As Integer, isPriority As Integer
     Dim IsSelf As Boolean
     
     If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
-        MyFlags = Flags
+        MyFlags = flags
         SharedScriptSupport.BotFlags = MyFlags
         IsSelf = True
     End If
@@ -614,11 +618,11 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
             LagIcon = ICUNKNOWN
     End Select
     
-    If (Flags And USER_NOUDP) = USER_NOUDP Then LagIcon = LAG_PLUG
+    If (flags And USER_NOUDP) = USER_NOUDP Then LagIcon = LAG_PLUG
     
     isPriority = frmChat.lvChannel.ListItems.Count + 1
     
-    i = GetSmallIcon(Product, Flags)
+    i = GetSmallIcon(Product, flags)
     
     'Special Cases
     If i = ICSQUELCH Then
@@ -640,7 +644,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         .Item(isPriority).ListSubItems.Add , , , LagIcon
         
         If Not BotVars.NoColoring Then
-            .Item(isPriority).ForeColor = GetNameColor(Flags, 0, IsSelf)
+            .Item(isPriority).ForeColor = GetNameColor(flags, 0, IsSelf)
         End If
         
         g_ThisIconCode = -1
@@ -649,12 +653,12 @@ End Sub
 
 
 Public Function CheckBlock(ByVal Username As String) As Boolean
-    Dim S As String, i As Integer
+    Dim s As String, i As Integer
     
     If Dir$(GetFilePath("filters.ini")) <> vbNullString Then
-        S = ReadINI("BlockList", "Total", "filters.ini")
-        If StrictIsNumeric(S) Then
-            i = S
+        s = ReadINI("BlockList", "Total", "filters.ini")
+        If StrictIsNumeric(s) Then
+            i = s
         Else
             Exit Function
         End If
@@ -662,8 +666,8 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
         Username = PrepareCheck(Username)
         
         For i = 0 To i
-            S = ReadINI("BlockList", "Filter" & i, "filters.ini")
-            If Username Like PrepareCheck(S) Then
+            s = ReadINI("BlockList", "Filter" & i, "filters.ini")
+            If Username Like PrepareCheck(s) Then
                 CheckBlock = True
                 Exit Function
             End If
@@ -693,12 +697,12 @@ Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String,
 End Function
 
 Public Sub UpdateProfile()
-    Dim S As String
-    S = GetCurrentSongTitle(True)
-    If S = vbNullString Then Exit Sub
+    Dim s As String
+    s = GetCurrentSongTitle(True)
+    If s = vbNullString Then Exit Sub
     
     SetProfile "", ":[ ProfileAmp ]:" & vbCrLf & "WinAmp is currently playing: " & _
-        vbCrLf & S & vbCrLf & "Last updated " & Time & ", " & Format(Date, "d-MM-yyyy") & vbCrLf & CVERSION & " - http://www.stealthbot.net"
+        vbCrLf & s & vbCrLf & "Last updated " & Time & ", " & Format(Date, "d-MM-yyyy") & vbCrLf & CVERSION & " - http://www.stealthbot.net"
 End Sub
 
 Public Function FlashWindow() As Boolean
@@ -725,8 +729,8 @@ Public Function GetNewsURL() As String
     GetNewsURL = Chr(Asc("h")) & Chr(Asc("t")) & Chr(Asc("t")) & Chr(Asc("p")) & Chr(Asc(":")) & Chr(Asc("/")) & Chr(Asc("/")) & Chr(Asc("w")) & Chr(Asc("w")) & Chr(Asc("w")) & Chr(Asc(".")) & Chr(Asc("s")) & Chr(Asc("t")) & Chr(Asc("e")) & Chr(Asc("a")) & Chr(Asc("l")) & Chr(Asc("t")) & Chr(Asc("h")) & Chr(Asc("b")) & Chr(Asc("o")) & Chr(Asc("t")) & Chr(Asc(".")) & Chr(Asc("n")) & Chr(Asc("e")) & Chr(Asc("t")) & Chr(Asc("/")) & Chr(Asc("g")) & Chr(Asc("e")) & Chr(Asc("t")) & Chr(Asc("v")) & Chr(Asc("e")) & Chr(Asc("r")) & Chr(Asc("3")) & Chr(Asc(".")) & Chr(Asc("p")) & Chr(Asc("h")) & Chr(Asc("p")) & Chr(Asc("?")) & Chr(Asc("v")) & Chr(Asc("c")) & Chr(Asc("=")) & VERCODE
 End Function
 
-Public Function HTMLToRGBColor(ByVal S As String) As Long
-    HTMLToRGBColor = RGB(Val("&H" & Mid$(S, 1, 2)), Val("&H" & Mid$(S, 3, 2)), Val("&H" & Mid$(S, 5, 2)))
+Public Function HTMLToRGBColor(ByVal s As String) As Long
+    HTMLToRGBColor = RGB(Val("&H" & Mid$(s, 1, 2)), Val("&H" & Mid$(s, 3, 2)), Val("&H" & Mid$(s, 5, 2)))
 End Function
 
 Public Function StrictIsNumeric(ByVal sCheck As String) As Boolean
@@ -817,15 +821,15 @@ End Function
 Public Sub SetNagelStatus(ByVal lSocketHandle As Long, ByVal bEnabled As Boolean)
     If lSocketHandle > 0 Then
         If bEnabled Then
-            Call setsockopt(lSocketHandle, IPPROTO_TCP, TCP_NODELAY, NAGLE_ON, NAGLE_OPTLEN)
+            Call SetSockOpt(lSocketHandle, IPPROTO_TCP, TCP_NODELAY, NAGLE_ON, NAGLE_OPTLEN)
         Else
-            Call setsockopt(lSocketHandle, IPPROTO_TCP, TCP_NODELAY, NAGLE_OFF, NAGLE_OPTLEN)
+            Call SetSockOpt(lSocketHandle, IPPROTO_TCP, TCP_NODELAY, NAGLE_OFF, NAGLE_OPTLEN)
         End If
     End If
 End Sub
 
 Public Sub EnableSO_KEEPALIVE(ByVal lSocketHandle As Long)
-    Call setsockopt(lSocketHandle, IPPROTO_TCP, SO_KEEPALIVE, True, 4) 'thanks Eric
+    Call SetSockOpt(lSocketHandle, IPPROTO_TCP, SO_KEEPALIVE, True, 4) 'thanks Eric
 End Sub
 
 Function MonitorExists() As Boolean
@@ -918,18 +922,18 @@ End Sub
 
 Public Sub DoLastSeen(ByVal Username As String)
     Dim i As Integer
-    Dim Found As Boolean
+    Dim found As Boolean
     
     If colLastSeen.Count > 0 Then
         For i = 1 To colLastSeen.Count
             If StrComp(colLastSeen.Item(i), Username, vbTextCompare) = 0 Then
-                Found = True
+                found = True
                 Exit For
             End If
         Next i
     End If
     
-    If Not Found Then
+    If Not found Then
         colLastSeen.Add Username
         If colLastSeen.Count > 15 Then
             colLastSeen.Remove 1
@@ -978,23 +982,23 @@ Public Function GetConfigFilePath() As String
     End If
     
     If InStr(FilePath, "\") = 0 Then
-        FilePath = App.path & "\" & FilePath
+        FilePath = App.Path & "\" & FilePath
     End If
     
     GetConfigFilePath = FilePath
 End Function
 
 Public Function GetFilePath(ByVal Filename As String) As String
-    Dim S As String
+    Dim s As String
     
     If InStr(Filename, "\") = 0 Then
         GetFilePath = GetProfilePath() & "\" & Filename
         
-        S = ReadCFG("FilePaths", Filename)
+        s = ReadCFG("FilePaths", Filename)
         
-        If LenB(S) > 0 Then
-            If LenB(Dir$(S)) Then
-                GetFilePath = S
+        If LenB(s) > 0 Then
+            If LenB(Dir$(s)) Then
+                GetFilePath = s
             End If
         End If
     Else
@@ -1059,7 +1063,7 @@ End Function
 ' ProfileIndex param should only be used when changing profiles as a SET
 '   - colProfiles MUST be instantiated in order to call with a ProfileIndex > 0!
 Public Function GetProfilePath(Optional ByVal ProfileIndex As Integer) As String
-    Dim S As String
+    Dim s As String
     Static LastPath As String
 
 '    If ProfileIndex > 0 Then
@@ -1082,7 +1086,7 @@ Public Function GetProfilePath(Optional ByVal ProfileIndex As Integer) As String
         If LenB(LastPath) > 0 Then
             GetProfilePath = LastPath
         Else
-            GetProfilePath = App.path & "\"
+            GetProfilePath = App.Path & "\"
         End If
 '    End If
     
@@ -1288,18 +1292,18 @@ Public Function IsBanned(ByVal sUser As String) As Boolean
 End Function
 
 Public Function IsValidIPAddress(ByVal sIn As String) As Boolean
-    Dim S() As String
+    Dim s() As String
     Dim i As Integer
     
     IsValidIPAddress = True
     
     If InStr(sIn, ".") Then
     
-        S() = Split(sIn, ".")
+        s() = Split(sIn, ".")
         
-        If UBound(S) = 3 Then
+        If UBound(s) = 3 Then
             For i = 0 To 3
-                If Not StrictIsNumeric(S(i)) Then
+                If Not StrictIsNumeric(s(i)) Then
                     IsValidIPAddress = False
                 End If
             Next i
@@ -1314,7 +1318,7 @@ Public Function IsValidIPAddress(ByVal sIn As String) As Boolean
     End If
 End Function
 
-Public Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal IsSelf As Boolean) As Long
+Public Function GetNameColor(ByVal flags As Long, ByVal IdleTime As Long, ByVal IsSelf As Boolean) As Long
     '/* Self */
     If IsSelf Then
         'Debug.Print "Assigned color IsSelf"
@@ -1323,20 +1327,20 @@ Public Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal 
     End If
     
     '/* Blizzard */
-    If (Flags And &H1) = &H1 Then
+    If (flags And &H1) = &H1 Then
         GetNameColor = COLOR_BLUE
         Exit Function
     End If
     
     '/* Operator */
-    If (Flags And &H2) = &H2 Then
+    If (flags And &H2) = &H2 Then
         'Debug.Print "Assigned color OP"
         GetNameColor = &HDDDDDD
         Exit Function
     End If
     
     '/* Squelched */
-    If (Flags And &H20) = &H20 Then
+    If (flags And &H20) = &H20 Then
         'Debug.Print "Assigned color SQUELCH"
         GetNameColor = &H99
         Exit Function
@@ -1354,16 +1358,16 @@ Public Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal 
     GetNameColor = COLOR_TEAL
 End Function
 
-Public Function FlagDescription(ByVal Flags As Long) As String
+Public Function FlagDescription(ByVal flags As Long) As String
     Dim s0ut As String
     Dim multipleFlags As Boolean
         
-    If (Flags And &H20) = &H20 Then
+    If (flags And &H20) = &H20 Then
         s0ut = "Squelched"
         multipleFlags = True
     End If
     
-    If (Flags And &H2) = &H2 Then
+    If (flags And &H2) = &H2 Then
         If multipleFlags Then
             s0ut = s0ut & ", channel op"
         Else
@@ -1373,7 +1377,7 @@ Public Function FlagDescription(ByVal Flags As Long) As String
         multipleFlags = True
     End If
     
-    If ((Flags And USER_BLIZZREP) = USER_BLIZZREP) Or ((Flags And USER_SYSOP) = USER_SYSOP) Then
+    If ((flags And USER_BLIZZREP) = USER_BLIZZREP) Or ((flags And USER_SYSOP) = USER_SYSOP) Then
         If multipleFlags Then
             s0ut = s0ut & ", Blizzard representative"
         Else
@@ -1383,7 +1387,7 @@ Public Function FlagDescription(ByVal Flags As Long) As String
         multipleFlags = True
     End If
     
-    If (Flags And &H10) = &H10 Then
+    If (flags And &H10) = &H10 Then
         If multipleFlags Then
             s0ut = s0ut & ", UDP plug"
         Else
@@ -1394,14 +1398,14 @@ Public Function FlagDescription(ByVal Flags As Long) As String
     End If
     
     If LenB(s0ut) = 0 Then
-        If Flags = 0 Then
+        If flags = 0 Then
             s0ut = "Normal"
         Else
             s0ut = "Altered"
         End If
     End If
     
-    FlagDescription = s0ut & " [" & Flags & "]"
+    FlagDescription = s0ut & " [" & flags & "]"
 End Function
 
 'Returns TRUE if the specified argument was a command line switch,
@@ -1424,7 +1428,7 @@ End Function
 
 
 Public Function UsernameToIndex(ByVal sUsername As String) As Long
-    Dim User As clsUserInfo
+    Dim user As clsUserInfo
     Dim FirstLetter As String * 1
     Dim i As Integer
     
@@ -1433,9 +1437,9 @@ Public Function UsernameToIndex(ByVal sUsername As String) As Long
     If colUsersInChannel.Count > 0 Then
     
         For i = 1 To colUsersInChannel.Count
-            Set User = colUsersInChannel.Item(i)
+            Set user = colUsersInChannel.Item(i)
             
-            With User
+            With user
                 If StrComp(Mid$(.Username, 1, 1), FirstLetter, vbTextCompare) = 0 Then
                     If StrComp(sUsername, .Username, vbTextCompare) = 0 Then
                         UsernameToIndex = i
@@ -1483,15 +1487,15 @@ End Sub
 
 
 Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phrase As String, ByVal mType As Byte)
-    Dim i As Integer, S As String
+    Dim i As Integer, s As String
     i = FreeFile
     
     If LenB(ReadCFG("Other", "FlashOnCatchPhrases")) > 0 Then FlashWindow
     
     Select Case mType
-        Case CPTALK: S = "TALK"
-        Case CPEMOTE: S = "EMOTE"
-        Case CPWHISPER: S = "WHISPER"
+        Case CPTALK: s = "TALK"
+        Case CPEMOTE: s = "EMOTE"
+        Case CPWHISPER: s = "WHISPER"
     End Select
     
     If Dir$(GetProfilePath() & "\caughtphrases.htm") = vbNullString Then
@@ -1510,33 +1514,33 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phr
         Msg = Replace(Msg, "<", "&lt;")
         Msg = Replace(Msg, ">", "&gt;")
         
-        Print #i, "<B>" & Format(Date, "MM-dd-yyyy") & " - " & Time & " - " & S & Space(1) & Username & ": </B>" & Replace(Msg, Phrase, "<i>" & Phrase & "</i>") & "<br>"
+        Print #i, "<B>" & Format(Date, "MM-dd-yyyy") & " - " & Time & " - " & s & Space(1) & Username & ": </B>" & Replace(Msg, Phrase, "<i>" & Phrase & "</i>") & "<br>"
     Close #i
 End Sub
 
 
-Public Function DoReplacements(ByVal S As String, Optional Username As String, Optional Ping As Long) As String
+Public Function DoReplacements(ByVal s As String, Optional Username As String, Optional Ping As Long) As String
     Dim gAcc As udtGetAccessResponse
     
     gAcc = GetAccess(Username)
 
-    S = Replace(S, "%0", Username)
-    S = Replace(S, "%1", CurrentUsername)
-    S = Replace(S, "%c", gChannel.Current)
-    S = Replace(S, "%bc", BanCount)
+    s = Replace(s, "%0", Username)
+    s = Replace(s, "%1", CurrentUsername)
+    s = Replace(s, "%c", gChannel.Current)
+    s = Replace(s, "%bc", BanCount)
     
     If (Ping > -2) Then
-        S = Replace(S, "%p", Ping)
+        s = Replace(s, "%p", Ping)
     End If
     
-    S = Replace(S, "%v", CVERSION)
-    S = Replace(S, "%a", IIf(gAcc.Access >= 0, gAcc.Access, "0"))
-    S = Replace(S, "%f", gAcc.Flags)
-    S = Replace(S, "%t", Time$)
-    S = Replace(S, "%d", Date)
-    S = Replace(S, "%m", GetMailCount(Username))
+    s = Replace(s, "%v", CVERSION)
+    s = Replace(s, "%a", IIf(gAcc.Access >= 0, gAcc.Access, "0"))
+    s = Replace(s, "%f", gAcc.flags)
+    s = Replace(s, "%t", Time$)
+    s = Replace(s, "%d", Date)
+    s = Replace(s, "%m", GetMailCount(Username))
     
-    DoReplacements = S
+    DoReplacements = s
 End Function
 
 ' Updated 4/10/06 to support millisecond pauses

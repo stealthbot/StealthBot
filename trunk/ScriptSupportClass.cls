@@ -225,7 +225,7 @@ Public Sub AddChat(ParamArray saElements() As Variant)
         
         LogThis = (BotVars.Logging < 2)
         
-        If rtbChatLength > 10000 Then
+        If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
             With frmChat.rtbChat
                 .Visible = False
                 .SelStart = 0
@@ -354,7 +354,7 @@ Public Sub AddChatFont(ParamArray saElements() As Variant)
         
         LogThis = (BotVars.Logging < 2)
         
-        If rtbChatLength > 10000 Then
+        If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
             With frmChat.rtbChat
                 .Visible = False
                 .SelStart = 0
@@ -657,14 +657,14 @@ End Function
 '// Allows VBScripters to use the Like comparison operator in VB
 '// Specify TRUE to the third argument (DoPreparation) to automatically prepare both inbound strings
 '//     for compatibility with Like
-Public Function Match(ByVal sString As String, ByVal sPattern As String, ByVal DoPreparation As Boolean) As Boolean
+Public Function match(ByVal sString As String, ByVal sPattern As String, ByVal DoPreparation As Boolean) As Boolean
 
     If DoPreparation Then
         sString = PrepareCheck(sString)
         sPattern = PrepareCheck(sPattern)
     End If
     
-    Match = (sString Like sPattern)
+    match = (sString Like sPattern)
     
 End Function
 

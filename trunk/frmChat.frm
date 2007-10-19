@@ -1,16 +1,16 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   195
-   ClientTop       =   735
+   ClientLeft      =   165
+   ClientTop       =   855
    ClientWidth     =   11400
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -35,7 +35,6 @@ Begin VB.Form frmChat
       Top             =   3840
       _ExtentX        =   1005
       _ExtentY        =   1005
-      AllowUI         =   -1  'True
    End
    Begin VB.Timer tmrFriendlistUpdate 
       Interval        =   5350
@@ -150,7 +149,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -848,7 +846,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1771,7 +1768,7 @@ Sub AddChat(ParamArray saElements() As Variant)
         
         LogThis = (BotVars.Logging < 2)
         
-        If rtbChatLength > 10000 Then
+        If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
             With rtbChat
                 .Visible = False
                 .SelStart = 0
@@ -1779,12 +1776,12 @@ Sub AddChat(ParamArray saElements() As Variant)
                 
                 rtbChatLength = rtbChatLength - .SelLength
                 
-'                If BotVars.Logging < 2 And LOF(i) < BotVars.MaxLogfileSize Then
-'                    i = FreeFile
-'                    Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #i
-'                        Print #i, Left$(.SelText, Len(.SelText) - 2)
-'                    Close #i
-'                End If
+                'If BotVars.Logging < 2 And LOF(i) < BotVars.MaxLogfileSize Then
+                '    i = FreeFile
+                '    Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #i
+                '        Print #i, Left$(.SelText, Len(.SelText) - 2)
+                '    Close #i
+                'End If
                 
                 .SelText = ""
                 .Visible = True
@@ -1897,7 +1894,7 @@ Sub AddChatFont(ParamArray saElements() As Variant)
         
         LogThis = (BotVars.Logging < 2)
         
-        If rtbChatLength > 10000 Then
+        If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
             With rtbChat
                 .Visible = False
                 .SelStart = 0
@@ -2003,7 +2000,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
     Dim i As Integer
     
     If Not BotVars.LockChat Then
-        If Len(rtbWhispers.text) > 10000 Then
+        If ((BotVars.MaxBacklogSize) And (Len(rtbWhispers.text) >= BotVars.MaxBacklogSize)) Then
             If BotVars.Logging < 2 Then
                 Close #1
                 Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt") For Append As #1
@@ -4958,7 +4955,6 @@ Sub Connect()
         'NOT 'Disabled due to public version!
 
         #If BETA = 1 Then
-        
             AddChat RTBColors.InformationText, "Authorizing your private-release bot, please wait."
             
             If (Not (GetAuth(BotVars.Username))) Then
@@ -5374,7 +5370,12 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCFG(OT, "AllowMP3")
     If s = "N" Then BotVars.DisableMP3Commands = True Else BotVars.DisableMP3Commands = False
     
-    s = ReadCFG(MN, "MaxLogfileSize")
+    s = ReadCFG(MN, "MaxBacklogSize")
+    If StrictIsNumeric(s) Then
+        BotVars.MaxBacklogSize = Val(s)
+    End If
+    
+    s = ReadCFG(MN, "MaxLogFileSize")
     If StrictIsNumeric(s) Then
         BotVars.MaxLogfileSize = Val(s)
     End If
@@ -5393,7 +5394,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         DisableURLDetect
     End If
     
-    If BotVars.MaxLogfileSize = 0 Then BotVars.MaxLogfileSize = 50000000
+    If BotVars.MaxBacklogSize <= 0 Then BotVars.MaxBacklogSize = 10000
+    If BotVars.MaxLogfileSize <= 0 Then BotVars.MaxLogfileSize = 50000000
     
     '// this section must read _absolutely correctly_ or the SetTimer API call will fail
     s = ReadCFG(MN, "ReconnectDelay")

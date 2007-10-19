@@ -41,6 +41,7 @@ Private m_sProxyIP                      As String
 Private m_lProxyPort                    As Long
 Private m_eProxyStatus                  As enuProxyStatus
 Private m_bProxyIsSocks5                As Boolean
+Private m_lMaxBacklogSize               As Long
 Private m_lMaxLogfileSize               As Long
 Private m_bUseGreet                     As Boolean
 Private m_sGreetMsg                     As String
@@ -343,6 +344,18 @@ End Property
 Public Property Let ProxyIsSocks5(ByVal bProxyIsSocks5 As Boolean)
 
     m_bProxyIsSocks5 = bProxyIsSocks5
+
+End Property
+
+Public Property Get MaxBacklogSize() As Long
+
+    MaxBacklogSize = m_lMaxBacklogSize
+
+End Property
+
+Public Property Let MaxBacklogSize(ByVal lMaxBacklogSize As Long)
+
+    m_lMaxBacklogSize = lMaxBacklogSize
 
 End Property
 

@@ -327,6 +327,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
             Case "frem":                         Call OnFRem(Username, dbAccess, msgData, InBot, cmdRet())
             Case "safelist":                     Call OnSafeList(Username, dbAccess, msgData, InBot, cmdRet())
             Case "safeadd":                      Call OnSafeAdd(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "safecheck":                    Call OnSafeCheck(Username, dbAccess, msgData, InBot, cmdRet())
             Case "exile":                        Call OnExile(Username, dbAccess, msgData, InBot, cmdRet())
             Case "unexile":                      Call OnUnExile(Username, dbAccess, msgData, InBot, cmdRet())
             Case "shitlist", "sl":               Call OnShitList(Username, dbAccess, msgData, InBot, cmdRet())
@@ -343,7 +344,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
             Case "greet":                        Call OnGreet(Username, dbAccess, msgData, InBot, cmdRet())
             Case "allseen":                      Call OnAllSeen(Username, dbAccess, msgData, InBot, cmdRet())
             Case "ban":                          Call OnBan(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "unban":                        Call OnUnBan(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "unban":                        Call OnUnban(Username, dbAccess, msgData, InBot, cmdRet())
             Case "kick":                         Call OnKick(Username, dbAccess, msgData, InBot, cmdRet())
             Case "lastwhisper", "lw":            Call OnLastWhisper(Username, dbAccess, msgData, InBot, cmdRet())
             Case "say":                          Call OnSay(Username, dbAccess, msgData, InBot, cmdRet())
@@ -360,9 +361,6 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
             Case "uptime":                       Call OnUptime(Username, dbAccess, msgData, InBot, cmdRet())
             Case "away":                         Call OnAway(Username, dbAccess, msgData, InBot, cmdRet())
             Case "mp3":                          Call OnMP3(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "deldef":                       Call OnDelDef(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "define", "def":                Call OnDefine(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "newdef":                       Call OnNewDef(Username, dbAccess, msgData, InBot, cmdRet())
             Case "ping":                         Call OnPing(Username, dbAccess, msgData, InBot, cmdRet())
             Case "addquote":                     Call OnAddQuote(Username, dbAccess, msgData, InBot, cmdRet())
             Case "owner":                        Call OnOwner(Username, dbAccess, msgData, InBot, cmdRet())
@@ -405,6 +403,7 @@ End Function
 ' handle quit command
 Private Function OnQuit(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will initiate the bot's termination sequence.
     
     Call frmChat.Form_Unload(0)
 End Function ' end function OnQuit
@@ -412,6 +411,7 @@ End Function ' end function OnQuit
 ' handle locktext command
 Private Function OnLockText(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will prevent chat messages from displaying on the bot's screen.
     
     Call frmChat.mnuLock_Click
 End Function ' end function OnLockText
@@ -419,6 +419,7 @@ End Function ' end function OnLockText
 ' handle allowmp3 command
 Private Function OnAllowMp3(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will enable or disable the use of media player-related commands.
     
     Dim tmpBuf As String ' temporary output buffer
 
@@ -439,6 +440,8 @@ End Function ' end function OnAllowMp3
 ' handle loadwinamp command
 Private Function OnLoadWinamp(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will run Winamp from the default directory, or the directory
+    ' specified within the configuration file.
     
     Dim tmpBuf As String ' temporary output buffer
 
@@ -455,6 +458,9 @@ End Function ' end function OnLoadWinamp
 ' handle efp command
 Private Function OnEfp(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will enable, disable, or check the status of, the Effective Floodbot
+    ' Protection system.  EFP is a system designed to combat floodbot attacks by reducing
+    ' the number of allowable commands, and enhancing the strength of the message queue.
     
     Dim tmpBuf As String ' temporary output buffer
 
@@ -484,6 +490,7 @@ End Function ' end function OnEfp
 ' handle home command
 Private Function OnHome(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will make the bot join its home channel.
     
     AddQ "/join " & BotVars.HomeChannel, 1
 End Function ' end function OnHome
@@ -491,6 +498,8 @@ End Function ' end function OnHome
 ' handle clan command
 Private Function OnClan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will allow the use of Battle.net's /clan command without requiring
+    ' users be given the ability to use the bot's say command.
     
     Dim tmpBuf As String ' temporary output buffer
     
@@ -501,14 +510,16 @@ Private Function OnClan(ByVal Username As String, ByRef dbAccess As udtGetAccess
                 tmpBuf = "Clan channel is now public."
                 
                 ' set clan channel to public
-                AddQ "/clan public", 1
+                Call AddQ("/clan public", 1)
             Case "private", "priv"
                 tmpBuf = "Clan channel is now private."
                 
                 ' set clan channel to private
-                AddQ "/clan private", 1
+                Call AddQ("/clan private", 1)
             Case Else
-                tmpBuf = "/clan " & msgData
+            
+               ' set clan channel to specified
+               Call AddQ("/clan " & msgData)
         End Select
     Else
         tmpBuf = "The bot must have ops to change clan privacy status."
@@ -521,6 +532,10 @@ End Function ' end function OnClan
 ' handle peonban command
 Private Function OnPeonBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will enable, disable, or check the status of, WarCraft III peon
+    ' banning.  The "Peon" class is defined by Battle.net, and is currently the lowest
+    ' ranking WarCraft III user classification, in which, users have less than twenty-five
+    ' wins on record for any given race.
     
     Dim tmpBuf As String ' temporary output buffer
             
@@ -530,7 +545,7 @@ Private Function OnPeonBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
             BotVars.BanPeons = 1
             
             ' write configuration entry
-            WriteINI "Other", "PeonBans", "1"
+            Call WriteINI("Other", "PeonBans", "1")
             
             tmpBuf = "Peon banning activated."
         Case "off"
@@ -538,7 +553,7 @@ Private Function OnPeonBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
             BotVars.BanPeons = 0
             
             ' write configuration entry
-            WriteINI "Other", "PeonBans", "0"
+            Call WriteINI("Other", "PeonBans", "0")
             
             tmpBuf = "Peon banning deactivated."
         Case "status"
@@ -558,6 +573,10 @@ End Function ' end function OnPeonBan
 ' handle invite command
 Private Function OnInvite(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will send an invitation to the specified user to join the
+    ' clan that the bot is currently either a Shaman or Chieftain of.  This
+    ' command will only work if the bot is logged on using WarCraft III, and
+    ' is either a Shaman, or a Chieftain of the clan in question.
     
     Dim tmpBuf As String ' temporary output buffer
 
@@ -578,6 +597,9 @@ End Function ' end function OnInvite
 ' handle setmotd command
 Private Function OnSetMotd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will set the clan channel's Message Of The Day.  This
+    ' command will only work if the bot is logged on using WarCraft III,
+    ' and is either a Shaman or a Chieftain of the clan in question.
     
     Dim tmpBuf As String ' temporary output buffer
 
@@ -598,8 +620,17 @@ End Function ' end function OnSetMotd
 ' handle where command
 Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will state the channel that the bot is currently
+    ' residing in.  Battle.net uses this command to display basic
+    ' user data, such as game type, and channel or game name.
     
     Dim tmpBuf As String ' temporary output buffer
+    
+    ' if sent from within the bot, send "where" command
+    ' directly to Battle.net
+    If (InBot) Then
+        Call AddQ(msgData)
+    End If
 
     tmpBuf = "I am currently in channel " & gChannel.Current & " (" & _
         colUsersInChannel.Count & " users present)"
@@ -651,6 +682,8 @@ End Function ' end function OnQuietTime
 ' handle roll command
 Private Function OnRoll(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will state a random number between a range of zero to
+    ' one-hundred, or from zero to any specified number.
     
     Dim tmpBuf  As String ' temporary output buffer
     Dim iWinamp As Long
@@ -685,6 +718,9 @@ End Function ' end function OnRoll
 ' handle sweepban command
 Private Function OnSweepBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will grab the listing of users in the specified channel
+    ' using Battle.net's "who" command, and will then begin banning each
+    ' user from the current channel using Battle.net's "ban" command.
     
     Dim u As String
     Dim Y As String
@@ -699,6 +735,14 @@ End Function ' end function OnSweepBan
 ' handle sweepignore command
 Private Function OnSweepIgnore(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will grab the listing of users in the specified channel
+    ' using Battle.net's "who" command, and will then begin ignoring each
+    ' user using Battle.net's "squelch" command.  This command is often used
+    ' instead of "sweepban" to temporarily ban all users on a given ip address
+    ' without actually immediately banning them from the channel.  This is
+    ' useful if a user wishes to stay below Battle.net's limitations on bans,
+    ' and still prevent a number of users from joining the channel for a
+    ' temporary amount of time.
     
     Dim u As String
     Dim Y As String
@@ -802,6 +846,7 @@ End Function ' end function OnMath
 ' handle setkey command
 Private Function OnSetKey(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will set the bot's CD-Key to the CD-Key specified.
     
     Dim tmpBuf As String ' temporary output buffer
 
@@ -824,6 +869,8 @@ End Function ' end function OnSetKey
 ' handle setexpkey command
 Private Function OnSetExpKey(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will set the bot's expansion CD-Key to the expansion
+    ' CD-Key specified.
     
     Dim tmpBuf As String ' temporary output buffer
 
@@ -1056,6 +1103,7 @@ End Function ' end function OnJoin
 ' handle sethome command
 Private Function OnSetHome(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will set the home channel to the channel specified.
     
     Dim tmpBuf As String ' temporary output buffer
 
@@ -1072,13 +1120,17 @@ End Function ' end function OnSetHome
 ' handle resign command
 Private Function OnResign(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will make the bot resign from the role of operator
+    ' by rejoining the channel through the use of Battle.net's /resign
+    ' command.
     
-    AddQ "/resign", 1
+    Call AddQ("/resign", 1)
 End Function ' end function OnResign
 
 ' handle clearbanlist
 Private Function OnClearBanList(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will clear the bot's internal list of banned users.
     
     Dim tmpBuf As String ' temporary output buffer
 
@@ -1119,9 +1171,13 @@ End Function ' end function OnKickOnYell
 ' handle rejoin command
 Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will make the bot rejoin the current channel.
     
-    AddQ "/join " & CurrentUsername & " Rejoin", 1
-    AddQ "/join " & gChannel.Current, 1
+    ' join temporary channel
+    Call AddQ("/join " & CurrentUsername & " Rejoin", 1)
+    
+    ' rejoin previous channel
+    Call AddQ("/join " & gChannel.Current, 1)
 End Function ' end function OnRejoin
 
 ' handle plugban command
@@ -1356,6 +1412,7 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
     Next i
 
+    ' has anyone been banned?
     If (BanCount = 0) Then
         tmpBuf(tmpCount) = "No users have been banned."
     Else
@@ -1384,15 +1441,15 @@ Private Function OnIPBans(ByVal Username As String, ByRef dbAccess As udtGetAcce
             For i = 1 To colUsersInChannel.Count
                 Select Case colUsersInChannel.Item(i).Flags
                     Case 20, 30, 32, 48
-                        AddQ "/ban " & IIf(Dii, "*", "") & colUsersInChannel.Item(i).Username & _
-                            " IPBanned.", 1
+                        Call AddQ("/ban " & IIf(Dii, "*", "") & colUsersInChannel.Item(i).Username & _
+                            " IPBanned.", 1)
                 End Select
             Next i
         End If
     ElseIf (Left$(msgData, 3) = "off") Then
         BotVars.IPBans = False
         
-        WriteINI "Other", "IPBans", "N"
+        Call WriteINI("Other", "IPBans", "N")
         
         tmpBuf = "IPBanning deactivated."
         
@@ -1441,7 +1498,7 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
 
             tmpBuf = "You do not have enough access to do that."
         Else
-            AddQ "/squelch " & IIf(Dii, "*", "") & msgData, 1
+            Call AddQ("/squelch " & IIf(Dii, "*", "") & msgData, 1)
         
             tmpBuf = "User " & Chr(34) & msgData & Chr(34) & " IPBanned."
         End If
@@ -1557,7 +1614,7 @@ Private Function OnNext(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     If (Not (BotVars.DisableMP3Commands)) Then
         If (iTunesReady) Then
-            iTunesNext
+            Call iTunesNext
             
             tmpBuf = "Skipped forwards."
         Else
@@ -1586,7 +1643,7 @@ Private Function OnPrev(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     If (Not (BotVars.DisableMP3Commands)) Then
         If (iTunesReady) Then
-            iTunesBack
+            Call iTunesBack
             
             tmpBuf = "Skipped backwards."
         Else
@@ -1686,7 +1743,7 @@ Private Function OnStop(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     If (Not (BotVars.DisableMP3Commands)) Then
         If (iTunesReady) Then
-            iTunesStop
+            Call iTunesStop
             
             tmpBuf = "iTunes playback stopped."
         Else
@@ -1718,7 +1775,7 @@ Private Function OnPlay(ByVal Username As String, ByRef dbAccess As udtGetAccess
     If (Len(msgData) > 0) Then
         If (Not (BotVars.DisableMP3Commands)) Then
             If (iTunesReady) Then
-                iTunesPlayFile Mid$(msgData, 7)
+                Call iTunesPlayFile(Mid$(msgData, 7))
                 
                 tmpBuf = "Attempted to play the specified filepath."
             Else
@@ -1744,7 +1801,7 @@ Private Function OnPlay(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Else
         If (Not (BotVars.DisableMP3Commands)) Then
             If (iTunesReady) Then
-                iTunesPlay
+                Call iTunesPlay
                 
                 tmpBuf = "iTunes playback started."
             Else
@@ -1800,7 +1857,7 @@ Private Function OnUseWinamp(ByVal Username As String, ByRef dbAccess As udtGetA
     If (iTunesReady) Then
         tmpBuf = "Returning to Winamp control."
         
-        iTunesUnready
+        Call iTunesUnready
     Else
         tmpBuf = "iTunes was not ready."
     End If
@@ -1818,7 +1875,7 @@ Private Function OnPause(ByVal Username As String, ByRef dbAccess As udtGetAcces
     
     If (Not (BotVars.DisableMP3Commands)) Then
         If (iTunesReady) Then
-            iTunesPause
+            Call iTunesPause
             
             tmpBuf = "Pause toggled."
         Else
@@ -1930,7 +1987,7 @@ Private Function OnUnIgPriv(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     Dim tmpBuf As String ' temporary output buffer
 
-    AddQ "/o unigpriv", 1
+    Call AddQ("/o unigpriv", 1)
     
     tmpBuf = "Recieving text from non-friends."
         
@@ -1944,7 +2001,7 @@ Private Function OnIgPriv(ByVal Username As String, ByRef dbAccess As udtGetAcce
     
     Dim tmpBuf As String ' temporary output buffer
 
-    AddQ "/o igpriv", 1
+    Call AddQ("/o igpriv", 1)
     
     tmpBuf = "Ignoring text from non-friends."
         
@@ -2403,13 +2460,17 @@ Private Function OnCBans(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Select Case LCase$(u)
         Case "on"
             tmpBuf = "ClientBans enabled."
+            
             BotVars.ClientBans = True
-            WriteINI "Other", "ClientBansOn", "Y"
+            
+            Call WriteINI("Other", "ClientBansOn", "Y")
             
         Case "off"
             tmpBuf = "ClientBans disabled."
+            
             BotVars.ClientBans = False
-            WriteINI "Other", "ClientBansOn", "N"
+            
+            Call WriteINI("Other", "ClientBansOn", "N")
             
         Case "status"
             tmpBuf = "ClientBans are currently " & IIf(BotVars.ClientBans, "enabled.", "disabled.")
@@ -2757,6 +2818,65 @@ Private Function OnSafeAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ' return message
     cmdRet(0) = tmpBuf
 End Function ' end function OnSafeAdd
+
+' TO DO:
+' handle safecheck command
+Private Function OnSafeCheck(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim tmpBuf     As String ' temporary output buffer
+    Dim tmpCount   As Integer
+    Dim strArray() As String
+    Dim u          As String
+    Dim Y          As String
+    Dim i          As Integer
+    Dim Track      As Integer
+    
+    u = msgData
+    
+    Y = GetSafelistMatches(u)
+    
+    If (Len(Y) < 2) Then
+        tmpBuf = "That user matches no safelist entries."
+    Else
+        tmpBuf = "That user matches the following safelist entr"
+        
+        strArray() = Split(Y, " ")
+        
+        If (UBound(strArray) > 0) Then
+            tmpBuf = tmpBuf & "ies: "
+        
+            i = 0
+            Track = 0
+            
+            While i <= UBound(strArray)
+                While ((Track < 10) And (Track <= UBound(strArray)))
+                    If (Len(strArray(i)) > 0) Then
+                        tmpBuf = tmpBuf & strArray(i)
+                        
+                        If (Track < 9) Then
+                            If (i <> UBound(strArray)) Then
+                                tmpBuf = tmpBuf & ", "
+                            End If
+                        Else
+                            tmpBuf = tmpBuf & " [more]"
+                        End If
+                    End If
+                    
+                    Track = (Track + 1)
+                    i = (i + 1)
+                Wend
+                
+                Track = 0
+            Wend
+        Else
+            tmpBuf = tmpBuf & "y: " & Y
+        End If
+    End If
+
+    ' return message
+    cmdRet(0) = tmpBuf
+End Function ' end function OnSafeCheck
 
 ' handle exile command
 Private Function OnExile(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -3295,73 +3415,85 @@ End Function ' end function OnAllSeen
 Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
 
-    Dim u        As String
-    Dim tmpBuf   As String ' temporary output buffer
-    Dim banMsg   As String
-    Dim Y        As String
-    Dim i        As Integer
+    Dim u       As String
+    Dim tmpBuf  As String ' temporary output buffer
+    Dim banMsg  As String
+    Dim Y       As String
+    Dim i       As Integer
 
     If ((MyFlags <> 2) And (MyFlags <> 18)) Then
         If (InBot) Then
             tmpBuf = "You are not a channel operator."
         End If
-    End If
-
-    u = msgData
-    
-    i = InStr(1, u, " ")
-    
-    If (i > 0) Then
-        banMsg = Mid$(u, i + 1)
-        u = Left$(u, i - 1)
-    End If
-    
-    If (InStr(1, u, "*", vbTextCompare) > 0) Then
-        WildCardBan u, banMsg, 1
     Else
-        If (banMsg <> vbNullString) Then
-            Y = Ban(u & IIf(Len(banMsg) > 0, " " & banMsg, vbNullString), dbAccess.Access)
-        Else
-            Y = Ban(u & IIf(Len(banMsg) > 0, " " & banMsg, vbNullString), dbAccess.Access)
+        u = msgData
+        
+        If (Len(u) > 0) Then
+            i = InStr(1, u, " ")
+            
+            If (i > 0) Then
+                banMsg = Mid$(u, i + 1)
+                
+                u = Left$(u, i - 1)
+            End If
+            
+            If (InStr(1, u, "*", vbTextCompare) > 0) Then
+                Call WildCardBan(u, banMsg, 1)
+            Else
+                If (banMsg <> vbNullString) Then
+                    Y = Ban(u & IIf(Len(banMsg) > 0, " " & banMsg, vbNullString), dbAccess.Access)
+                Else
+                    Y = Ban(u & IIf(Len(banMsg) > 0, " " & banMsg, vbNullString), dbAccess.Access)
+                End If
+            End If
+            
+            If (Len(Y) > 2) Then
+                tmpBuf = Y
+            End If
         End If
     End If
     
-    If (Len(Y) > 2) Then
-        tmpBuf = Y
-    End If
-
     ' return message
     cmdRet(0) = tmpBuf
 End Function ' end function OnBan
 
 ' handle unban command
-Private Function OnUnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+Private Function OnUnban(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
     
-    u = msgData
-    
-    If (bFlood) Then
-        If (floodCap < 45) Then
-            floodCap = (floodCap + 15)
+    If ((MyFlags <> 2) And (MyFlags <> 18)) Then
+       If (InBot) Then
+           tmpBuf = "You are not a channel operator."
+       End If
+    Else
+        u = msgData
+        
+        If (Len(u) > 0) Then
+            If (Dii = True) Then
+                If (Not (Mid$(u, 1, 1) = "*")) Then
+                    u = "*" & u
+                End If
+            End If
             
-            Call bnetSend("/unban " & u)
+            ' what the hell is a flood cap?
+            If (bFlood) Then
+                If (floodCap < 45) Then
+                    floodCap = (floodCap + 15)
+                    
+                    Call bnetSend("/unban " & u)
+                End If
+            Else
+                If (InStr(1, msgData, "*", vbTextCompare) <> 0) Then
+                    Call WildCardBan(u, vbNullString, 2)
+                Else
+                    Call AddQ("/unban " & u)
+                End If
+            End If
         End If
     End If
-    
-    If (InStr(1, msgData, "*", vbTextCompare) <> 0) Then
-        Call WildCardBan(u, vbNullString, 2)
-    End If
-    
-    If Dii = True Then
-        If (Not (Mid$(u, 1, 1) = "*")) Then
-            u = "*" & u
-        End If
-    End If
-    
-    tmpBuf = "/unban " & u
 
     ' return message
     cmdRet(0) = tmpBuf
@@ -3378,34 +3510,36 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim Y      As String
     
     If ((MyFlags <> 2) And (MyFlags <> 18)) Then
-       If InBot Then
+       If (InBot) Then
            tmpBuf = "You are not a channel operator."
        End If
-    End If
-    
-    u = msgData
-    
-    i = InStr(1, u, " ", vbTextCompare)
-    
-    If (i > 0) Then
-        banMsg = Mid$(u, i + 1)
+    Else
+        u = msgData
         
-        u = Left$(u, i - 1)
-    End If
-    
-    If (InStr(1, u, "*", vbTextCompare) > 0) Then
-        If (dbAccess.Access > 99) Then
-            Call WildCardBan(u, banMsg, 0)
-        Else
-            Call WildCardBan(u, banMsg, 0)
+        If (Len(u) > 0) Then
+            i = InStr(1, u, " ", vbTextCompare)
+            
+            If (i > 0) Then
+                banMsg = Mid$(u, i + 1)
+                
+                u = Left$(u, i - 1)
+            End If
+            
+            If (InStr(1, u, "*", vbTextCompare) > 0) Then
+                If (dbAccess.Access > 99) Then
+                    Call WildCardBan(u, banMsg, 1)
+                Else
+                    Call WildCardBan(u, banMsg, 0)
+                End If
+            End If
+            
+            Y = Ban(u & IIf(Len(banMsg) > 0, " " & banMsg, vbNullString), _
+                dbAccess.Access, 1)
+            
+            If (Len(Y) > 1) Then
+                tmpBuf = Y
+            End If
         End If
-    End If
-    
-    Y = Ban(u & IIf(Len(banMsg) > 0, " " & banMsg, vbNullString), _
-        dbAccess.Access, 1)
-    
-    If (Len(Y) > 1) Then
-        tmpBuf = Y
     End If
     
     ' return message
@@ -3495,17 +3629,17 @@ Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim user      As String
-    Dim userIndex As Integer
+    Dim UserIndex As Integer
     Dim tmpBuf()  As String ' temporary output buffer
 
     user = msgData
     
-    userIndex = UsernameToIndex(user)
+    UserIndex = UsernameToIndex(user)
     
-    If (userIndex > 0) Then
+    If (UserIndex > 0) Then
         ReDim Preserve tmpBuf(0 To 1)
     
-        With colUsersInChannel.Item(userIndex)
+        With colUsersInChannel.Item(UserIndex)
             tmpBuf(0) = "User " & .Username & " is logged on using " & _
                 ProductCodeToFullName(.Product)
             
@@ -3792,105 +3926,6 @@ Private Function OnMP3(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     ' return message
     cmdRet(0) = tmpBuf
 End Function ' end function OnMP3
-
-' handle deldef command
-Private Function OnDelDef(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-'    On Error GoTo error_deldef
-'
-'    Dim u      As String
-'    Dim tmpBuf As String ' temporary output buffer
-'
-'    u = Mid$(msgData, 9)
-'
-'    If (Len(u) > 0) Then
-'        WriteINI "Def", u, "%deleted%", "definitions.ini"
-'
-'        tmpBuf = "That definition has been erased."
-'    Else
-'
-'error_deldef:
-'        tmpBuf = "There was an error removing that definition."
-'    End If
-'
-'    ' return message
-'    cmdRet(0) = tmpBuf
-End Function ' end function OnDelDef
-
-' handle define command
-Private Function OnDefine(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-'    On Error GoTo sendyz
-'
-'    Dim response As String
-'    Dim u        As String
-'    Dim tmpBuf   As String ' temporary output buffer
-'    Dim Track    As Long
-'
-'    If (Dir$(GetFilePath("definitions.ini")) = vbNullString) Then
-'        tmpBuf = "No definition list found. Please use " & _
-'            "'.newdef term|definition' to make one."
-'    End If
-'
-'    If Left$(msgData, 8) = "define" Then
-'        Track = 8
-'    Else
-'        Track = 5
-'    End If
-'
-'    u = LCase$(Trim(Mid$(msgData, Track)))
-'
-'    response = ReadINI("Def", u, "definitions.ini")
-'
-'    If ((response = vbNullString) Or _
-'        (StrComp(response, "%deleted%"))) = 0 Then
-'
-'        tmpBuf = "No definition on file for " & u & "."
-'    Else
-'        tmpBuf = "[" & u & "]: " & response
-'    End If
-'
-'sendyz:
-'    tmpBuf = "Define what?"
-'
-'    ' return message
-'    cmdRet(0) = tmpBuf
-End Function ' end function OnDefine
-
-' handle newdef command
-Private Function OnNewDef(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-'    On Error GoTo sendi2
-'
-'    Dim Track  As Long
-'    Dim tmpBuf As String ' temporary output buffer
-'    Dim u      As String
-'    Dim z      As String
-'
-'    u = Right(msgData, Len(msgData) - 8)
-'
-'    Track = InStr(1, u, "|", vbTextCompare)
-'
-'    z = Right(u, Len(u) - Track)
-'    u = Left$(u, Len(u) - Len(z) - 1)
-'
-'    If (z = "") Then
-'        tmpBuf = "You need to specify a definition."
-'    End If
-'
-'    WriteINI "Def", u, z, "definitions.ini"
-'
-'    tmpBuf = "Added a definition for """ & u & """."
-'
-'sendi2:
-'    tmpBuf = "Error: Please format your definitions correctly. (.newdef term|definition)"
-'
-'    ' return message
-'    cmdRet(0) = tmpBuf
-End Function ' end function OnNewDef
 
 ' handle ping command
 Private Function OnPing(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -5106,7 +5141,7 @@ Public Function GetTagbans(ByVal Username As String) As String
 End Function
 
 Private Function GetSafelistMatches(ByVal Username As String) As String
-    Dim f As Integer, strCompare As String, ret As String
+    Dim f As Integer, strCompare As String, Ret As String
     
     If Dir$(GetFilePath("safelist.txt")) <> vbNullString Then
         f = FreeFile
@@ -5125,14 +5160,14 @@ Private Function GetSafelistMatches(ByVal Username As String) As String
                 End If
                 
                 If Username Like PrepareCheck(strCompare) Then
-                    ret = ret & strCompare & " "
+                    Ret = Ret & strCompare & " "
                 End If
             Loop
         End If
         Close #f
     End If
     
-    GetSafelistMatches = ReversePrepareCheck(Trim(ret))
+    GetSafelistMatches = ReversePrepareCheck(Trim(Ret))
 End Function
 
 ' requires public
