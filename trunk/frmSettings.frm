@@ -4932,7 +4932,7 @@ Private Sub InitBasicConfig()
     End With
     
     s = ReadCFG(MN, "Trigger")
-    If Len(s) = 1 Then txtTrigger.text = s Else txtTrigger.text = "."
+    txtTrigger.text = s
     
     s = ReadCFG(MN, "Product")
     Select Case StrReverse(UCase(s))
