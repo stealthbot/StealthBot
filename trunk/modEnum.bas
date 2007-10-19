@@ -50,6 +50,7 @@ End Type
 'End Type
 
 Public Type udtGetAccessResponse
+    Username    As String
     Access      As Integer
     Flags       As String
     AddedBy     As String
