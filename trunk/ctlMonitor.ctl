@@ -145,11 +145,11 @@ Public Sub RemoveUser(sUser As String)
     SaveList
 End Sub
 
-Public Function Connect() As Boolean
+Public Function Connect(Optional alertUser As Boolean = True) As Boolean
     ClientToken = GetTickCount
     Debug.Print "[BNLS] Connecting " & strBNLS & ":9367"
     If (Len(strBNLS) = 0 Or Len(strUsername) = 0 Or Len(strPassword) = 0 Or Len(strServer) = 0) Then
-        MsgBox "You have not provided enough Information for the Monitor to connect."
+        If alertUser Then Call MsgBox("You have not provided enough Information for the Monitor to connect.")
         Connect = False
         Exit Function
     End If
@@ -265,7 +265,7 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                             .Status = 1
                             Dim Channel As String, game As String
                             If InStr(1, text, " in the ", vbTextCompare) > 0 Then
-                                Channel = Mid(text, InStr(LCase(text), " in the ", vbTextCompare) + 8)
+                                Channel = Mid(text, InStr(1, text, " in the ", vbTextCompare) + 8)
                                 Channel = Left(Channel, Len(Channel) - 1)
                             ElseIf InStr(1, text, " in a ", vbTextCompare) > 0 Then
                                 Channel = Mid(text, InStr(1, text, " in a ", vbTextCompare) + 6)
@@ -534,10 +534,22 @@ End Sub
 
 
 Private Sub SendBNET(buff As String)
+    On Error GoTo BNETError
     If wsBnet.State = sckConnected Then wsBnet.SendData buff
+    Exit Sub
+BNETError:
+    ErrorHandler "SendBNET", Err.Number, Err.Description
+    Err.Clear
+    frmChat.AddChat vbRed, DebugOutput(buff)
 End Sub
 Private Sub SendBNLS(buff As String)
+    On Error GoTo BNLSError
     If wsBnls.State = sckConnected Then wsBnls.SendData buff
+    Exit Sub
+BNLSError:
+    ErrorHandler "SendBNLS", Err.Number, Err.Description
+    Err.Clear
+    frmChat.AddChat vbRed, DebugOutput(buff)
 End Sub
 
 Private Function GetFTString(Optional LocalTime As Boolean = False) As String
@@ -567,3 +579,6 @@ Private Function GetCompUserName(Optional user As Boolean = False) As String
     GetCompUserName = Left(strBuff, Rut - 1)
 End Function
 
+Private Function ErrorHandler(strSource As String, Number As Integer, Description As String)
+  frmChat.AddChat vbRed, "[Monitor] Error: ", vbRed, strSource, vbRed, " #", vbRed, Number & ": " & Description
+End Function

@@ -406,6 +406,9 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
             Case "find", "findr":                Call OnFind(Username, dbAccess, msgData, InBot, cmdRet())
             Case "whois":                        Call OnWhoIs(Username, dbAccess, msgData, InBot, cmdRet())
             Case "findattr", "findflag":         Call OnFindAttr(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "monitor":                      Call OnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "unmonitor":                    Call OnUnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "online":                       Call OnOnline(Username, dbAccess, msgData, InBot, cmdRet())
             Case Else
                 blnNoCmd = True
         End Select
@@ -2608,7 +2611,7 @@ Private Function OnPhrases(ByVal Username As String, ByRef dbAccess As udtGetAcc
     Dim tmpCount As Integer
     Dim response As String
     Dim i        As Integer
-    Dim Found    As Integer
+    Dim found    As Integer
     
     ReDim Preserve tmpBuf(tmpCount)
 
@@ -2628,11 +2631,11 @@ Private Function OnPhrases(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 tmpCount = (tmpCount + 1)
             End If
             
-            Found = (Found + 1)
+            found = (found + 1)
         End If
     Next i
     
-    If (Found > 0) Then
+    If (found > 0) Then
         tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), ", ", " ")
     Else
         tmpBuf(0) = "There are no phrasebans."
@@ -4328,7 +4331,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim user       As String  ' ...
     Dim rank       As Integer ' ...
     Dim Flags      As String  ' ...
-    Dim Found      As Boolean ' ...
+    Dim found      As Boolean ' ...
     
     ' split message
     strArray() = Split(msgData, " ")
@@ -4554,14 +4557,14 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     
                     ' we have found the
                     ' specified user
-                    Found = True
+                    found = True
                     
                     Exit For
                 End If
             Next i
             
             ' did we find a matching entry or not?
-            If (Found = False) Then
+            If (found = False) Then
                 ' redefine array size
                 ReDim Preserve DB(UBound(DB) + 1)
                 
@@ -4861,7 +4864,7 @@ Private Function OnFindAttr(ByVal Username As String, ByRef dbAccess As udtGetAc
     Dim tmpBuf() As String ' temporary output buffer
     Dim tmpCount As Integer
     Dim i        As Integer
-    Dim Found    As Integer
+    Dim found    As Integer
     
     ReDim Preserve tmpBuf(tmpCount)
 
@@ -4877,6 +4880,76 @@ Private Function OnFindAttr(ByVal Username As String, ByRef dbAccess As udtGetAc
     ' return message
     cmdRet() = tmpBuf()
 End Function ' end function OnFindAttr
+
+
+' handle Monitor <On/Off/Username> command
+Private Function OnMonitor(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim tmpBuf As String
+    
+    If (LCase(msgData) = "on") Then
+        If (Not MonitorExists) Then
+            InitMonitor
+            If (MonitorForm.Connect(False)) Then
+                tmpBuf = "User monitor connecting."
+            Else
+                tmpBuf = "User monitor login information not filled in."
+            End If
+        Else
+            tmpBuf = "User montor already enabled."
+        End If
+    ElseIf (LCase(msgData) = "off") Then
+        If (Not MonitorExists) Then
+            tmpBuf = "User monitor is not running."
+        Else
+            MonitorForm.ShutdownMonitor
+            tmpBuf = "User monitor disabled."
+        End If
+    Else
+        If (Not MonitorExists()) Then InitMonitor
+        If (MonitorForm.AddUser(msgData)) Then
+            tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & " added to the monitor list."
+        Else
+            tmpBuf = "Failed to add user " & Chr$(&H22) & msgData & Chr$(&H22) & " to the monitor list. (Contains Spaces, or already in the list)"
+        End If
+    End If
+    
+    cmdRet(0) = tmpBuf
+End Function ' end function OnMonitor
+
+' handle UnMonitor <Username> command
+Private Function OnUnMonitor(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim tmpBuf As String
+    
+    If (MonitorExists) Then
+        If (MonitorForm.RemoveUser(msgData)) Then
+            tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & " was removed from the monitor list."
+        Else
+            tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & " was not found in the monitor list."
+        End If
+    Else
+        tmpBuf = "User monitor is not enabled."
+    End If
+    
+    cmdRet(0) = tmpBuf
+End Function ' end function OnUnMonitor
+
+' handle Online command
+Private Function OnOnline(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim tmpBuf As String
+    
+    If (MonitorExists) Then
+        tmpBuf = MonitorForm.OnlineUsers
+    Else
+        tmpBuf = "User monitor is not enabled."
+    End If
+    cmdRet = Split(tmpBuf, vbNewLine)
+End Function ' end function OnUnMonitor
 
 ' requires public
 Public Function Cache(ByVal Inpt As String, ByVal Mode As Byte, Optional ByRef Typ As String) As String
@@ -5016,7 +5089,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
     Optional upperBound As Integer = -1, Optional Flags As String = vbNullString) As Integer
     
     Dim i         As Integer
-    Dim Found     As Integer
+    Dim found     As Integer
     Dim tmpBuf()  As String
     Dim tmpCount  As Integer
     
@@ -5098,7 +5171,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                     End If
                     
                     ' increment found counter
-                    Found = (Found + 1)
+                    found = (found + 1)
                 End If
             End If
             
@@ -5106,7 +5179,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
             res = False
         Next i
 
-        If (Found = 0) Then
+        If (found = 0) Then
             tmpBuf(tmpCount) = "No such user(s) found."
         Else
             tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", " ") & "¦"
@@ -5408,7 +5481,7 @@ Public Sub LoadDatabase()
     Dim s As String, X() As String
     Dim Path As String
     Dim i As Integer, f As Integer
-    Dim gA As udtDatabase, Found As Boolean
+    Dim gA As udtDatabase, found As Boolean
     
     Path = GetFilePath("users.txt")
     
@@ -5496,12 +5569,12 @@ Public Sub LoadDatabase()
         For i = 0 To UBound(DB)
             If StrComp(DB(i).Username, BotVars.BotOwner, vbTextCompare) = 0 Then
                 DB(i).Access = 1000
-                Found = True
+                found = True
                 Exit For
             End If
         Next i
         
-        If Not Found Then
+        If Not found Then
             ReDim Preserve DB(UBound(DB) + 1)
             DB(UBound(DB)).Username = BotVars.BotOwner
             DB(UBound(DB)).Access = 1000
@@ -5597,7 +5670,7 @@ Private Function AccessNecessary(ByVal CW As String, Optional ByRef i As Integer
                 AccessNecessary = 70
             Case "mimic", "nomimic", "cmdadd", "addcmd", "cmddel", "delcmd", "cmdlist", "plist", "setpmsg", "mmail", "addtag", "cbans", "setcmdaccess"
                 AccessNecessary = 70
-            Case "padd", "addphrase", "phrases", "delphrase", "pdel", "pon", "poff", "phrasebans", "pstatus", "ipban", "banned", "notify", "denotify"
+            Case "padd", "addphrase", "phrases", "delphrase", "pdel", "pon", "poff", "phrasebans", "pstatus", "ipban", "banned", "notify", "denotify", "monitor", "unmonitor", "online"
                 AccessNecessary = 70
             Case "reconnect", "des", "designate", "rejoin", "settrigger", "igpriv", "unigpriv", "rem", "del", "sethome", "idle", "rj", "allowmp3"
                 AccessNecessary = 80

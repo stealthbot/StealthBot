@@ -5,8 +5,8 @@ Begin VB.Form frmMonitor
    BorderStyle     =   1  'Fixed Single
    Caption         =   "User Monitor"
    ClientHeight    =   5160
-   ClientLeft      =   1470
-   ClientTop       =   885
+   ClientLeft      =   1920
+   ClientTop       =   1035
    ClientWidth     =   7575
    ControlBox      =   0   'False
    LinkTopic       =   "Form1"
@@ -57,8 +57,8 @@ Begin VB.Form frmMonitor
    Begin StealthBot.ctlMonitor monConn 
       Left            =   3000
       Top             =   1800
-      _extentx        =   661
-      _extenty        =   661
+      _ExtentX        =   661
+      _ExtentY        =   661
    End
    Begin VB.CommandButton cmdShutdown 
       Caption         =   "&Shutdown"
@@ -354,12 +354,24 @@ Private StatusWatch() As Byte
 Private Sent() As Byte
 Attribute Sent.VB_VarHelpID = -1
 
+Public Sub Shutdown()
+  monConn.Disconnect
+  Call frmChat.DeconstructMonitor
+End Sub
+
 Private Sub cmdConnect_Click()
-    If (monConn.Connect) Then
+    Call Connect(True)
+End Sub
+Public Function Connect(blDisplayError As Boolean) As Boolean
+    Dim blSuccess As Boolean
+    blSuccess = monConn.Connect(blDisplayError)
+    Connect = blSuccess
+    If (blSuccess) Then
         cmdConnect.Enabled = False
         cmdDisc.Enabled = True
     End If
-End Sub
+End Function
+
 
 Private Sub cmdRefresh_Click()
     Call Form_Load
@@ -373,6 +385,10 @@ Private Sub cmdDisc_Click()
 End Sub
 
 Private Sub cmdShutdown_Click()
+    Call ShutdownMonitor
+End Sub
+
+Public Sub ShutdownMonitor()
     monConn.Disconnect
     Call frmChat.DeconstructMonitor
 End Sub
@@ -420,6 +436,19 @@ Private Sub cmdRem_CLick()
         lvMonitor.ListItems.Remove (lvMonitor.SelectedItem.Index)
     End If
 End Sub
+
+
+Public Function RemoveUser(strUser As String) As Boolean
+  RemoveUser = False
+  Dim usrItem As ListItem
+  Set usrItem = lvMonitor.FindItem(strUser)
+  If (usrItem Is Nothing) Then Exit Function
+  Call monConn.RemoveUser(usrItem.text)
+  lvMonitor.ListItems.Remove usrItem.Index
+  RemoveUser = True
+End Function
+
+
 Sub cmdAdd_Click()
     'On Error Resume Next
     If txtAdd.text <> vbNullString Then
@@ -571,9 +600,10 @@ Private Sub UpdateList(user As clsFriend)
     End If
 End Sub
 
-Sub AddUser(ByVal Username As String)
+Function AddUser(ByVal Username As String)
     On Error Resume Next
-    If (Not monConn.AddUser(Username)) Then Exit Sub
+    AddUser = False
+    If (Not monConn.AddUser(Username)) Then Exit Function
     With lvMonitor
         .ListItems.Add , Username, Username, , ICSQUELCH
         'Debug.Print .ListItems(.ListItems.Count).ListSubItems.Count
@@ -581,7 +611,8 @@ Sub AddUser(ByVal Username As String)
         .ListItems(.ListItems.Count).ListSubItems.Add 1, "last", "None"
         .ListItems(.ListItems.Count).Tag = "0"
     End With
-End Sub
+    AddUser = True
+End Function
 
 Function SetStatusWatch(ByVal Val As Byte, ByVal Username As String) As Byte
     Dim X As ListItem
@@ -632,6 +663,22 @@ Function GetUserStatus(ByVal Username As String) As Integer
     Else
         GetUserStatus = -1
     End If
+End Function
+
+Public Function OnlineUsers() As String
+    Dim X As Integer
+    Dim tmpBuf As String
+    Dim Count As Integer
+    For X = 1 To lvMonitor.ListItems.Count
+        If (lvMonitor.ListItems(X).ListSubItems(1).text = "Online") Then
+            Count = Count + 1
+            If (Count Mod 6 = 0) Then tmpBuf = tmpBuf & " [More]" & vbNewLine
+            tmpBuf = tmpBuf & lvMonitor.ListItems(X).text & ", "
+        End If
+    Next X
+    tmpBuf = "Online users " & Count & ": " & tmpBuf
+    tmpBuf = Left(tmpBuf, Len(tmpBuf) - 2)
+    OnlineUsers = tmpBuf
 End Function
 
 Function GetFullUserStatus(ByVal Username As String, ByRef Online As Boolean, ByRef LastChecked As String, ByRef LastWhois As String) As Integer

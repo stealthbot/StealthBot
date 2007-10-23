@@ -418,7 +418,7 @@ Public Function GetAccess(ByVal Username As String) As udtGetAccessResponse
         If (StrComp(DB(i).Username, Username, vbTextCompare) = 0) Then
             GetAccess.Username = DB(i).Username
             GetAccess.Access = DB(i).Access
-            GetAccess.flags = DB(i).flags
+            GetAccess.Flags = DB(i).Flags
             GetAccess.AddedBy = DB(i).AddedBy
             GetAccess.AddedOn = DB(i).AddedOn
             GetAccess.ModifiedBy = DB(i).ModifiedBy
@@ -488,19 +488,19 @@ Public Function ZeroOffsetEx(ByVal lInpt As Long, ByVal lDigits As Long) As Stri
     ZeroOffsetEx = Right$(String(lDigits, "0") & lInpt, lDigits)
 End Function
 
-Public Function GetSmallIcon(ByVal sProduct As String, ByVal flags As Long) As Long
+Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long) As Long
     Dim i As Long
     
-    If ((flags And USER_BLIZZREP) = USER_BLIZZREP) Then 'Flags = 1: blizzard rep
+    If ((Flags And USER_BLIZZREP) = USER_BLIZZREP) Then 'Flags = 1: blizzard rep
         i = ICBLIZZ
         
-    ElseIf ((flags And USER_SYSOP) = USER_SYSOP) Then 'Flags = 8: battle.net sysop
+    ElseIf ((Flags And USER_SYSOP) = USER_SYSOP) Then 'Flags = 8: battle.net sysop
         i = ICSYSOP
         
-    ElseIf (flags And USER_SQUELCHED) = USER_SQUELCHED Then 'squelched
+    ElseIf (Flags And USER_SQUELCHED) = USER_SQUELCHED Then 'squelched
         i = ICSQUELCH
         
-    ElseIf (flags And USER_CHANNELOP) = USER_CHANNELOP Then 'op
+    ElseIf (Flags And USER_CHANNELOP) = USER_CHANNELOP Then 'op
         i = ICGAVEL
         
     ElseIf g_ThisIconCode <> -1 Then
@@ -582,19 +582,19 @@ Public Function GetSmallIcon(ByVal sProduct As String, ByVal flags As Long) As L
         
     End If
     
-    If (flags = 2) Or (flags = 18) Then
+    If (Flags = 2) Or (Flags = 18) Then
         i = ICGAVEL
     End If
     
     GetSmallIcon = i
 End Function
 
-Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal flags As Long, ByVal Ping As Long, Optional Clan As String, Optional ForcePosition As Integer)
+Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flags As Long, ByVal Ping As Long, Optional Clan As String, Optional ForcePosition As Integer)
     Dim i As Integer, LagIcon As Integer, isPriority As Integer
     Dim IsSelf As Boolean
     
     If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
-        MyFlags = flags
+        MyFlags = Flags
         SharedScriptSupport.BotFlags = MyFlags
         IsSelf = True
     End If
@@ -618,11 +618,11 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal flag
             LagIcon = ICUNKNOWN
     End Select
     
-    If (flags And USER_NOUDP) = USER_NOUDP Then LagIcon = LAG_PLUG
+    If (Flags And USER_NOUDP) = USER_NOUDP Then LagIcon = LAG_PLUG
     
     isPriority = frmChat.lvChannel.ListItems.Count + 1
     
-    i = GetSmallIcon(Product, flags)
+    i = GetSmallIcon(Product, Flags)
     
     'Special Cases
     If i = ICSQUELCH Then
@@ -644,7 +644,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal flag
         .Item(isPriority).ListSubItems.Add , , , LagIcon
         
         If Not BotVars.NoColoring Then
-            .Item(isPriority).ForeColor = GetNameColor(flags, 0, IsSelf)
+            .Item(isPriority).ForeColor = GetNameColor(Flags, 0, IsSelf)
         End If
         
         g_ThisIconCode = -1
@@ -839,6 +839,7 @@ End Function
 Sub InitMonitor()
     If MonitorExists Then frmChat.DeconstructMonitor
     Set MonitorForm = New frmMonitor
+    frmMonitor.Hide
 End Sub
 
 Public Function ProductCodeToFullName(ByVal pCode As String) As String
@@ -1318,7 +1319,7 @@ Public Function IsValidIPAddress(ByVal sIn As String) As Boolean
     End If
 End Function
 
-Public Function GetNameColor(ByVal flags As Long, ByVal IdleTime As Long, ByVal IsSelf As Boolean) As Long
+Public Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal IsSelf As Boolean) As Long
     '/* Self */
     If IsSelf Then
         'Debug.Print "Assigned color IsSelf"
@@ -1327,20 +1328,20 @@ Public Function GetNameColor(ByVal flags As Long, ByVal IdleTime As Long, ByVal 
     End If
     
     '/* Blizzard */
-    If (flags And &H1) = &H1 Then
+    If (Flags And &H1) = &H1 Then
         GetNameColor = COLOR_BLUE
         Exit Function
     End If
     
     '/* Operator */
-    If (flags And &H2) = &H2 Then
+    If (Flags And &H2) = &H2 Then
         'Debug.Print "Assigned color OP"
         GetNameColor = &HDDDDDD
         Exit Function
     End If
     
     '/* Squelched */
-    If (flags And &H20) = &H20 Then
+    If (Flags And &H20) = &H20 Then
         'Debug.Print "Assigned color SQUELCH"
         GetNameColor = &H99
         Exit Function
@@ -1358,16 +1359,16 @@ Public Function GetNameColor(ByVal flags As Long, ByVal IdleTime As Long, ByVal 
     GetNameColor = COLOR_TEAL
 End Function
 
-Public Function FlagDescription(ByVal flags As Long) As String
+Public Function FlagDescription(ByVal Flags As Long) As String
     Dim s0ut As String
     Dim multipleFlags As Boolean
         
-    If (flags And &H20) = &H20 Then
+    If (Flags And &H20) = &H20 Then
         s0ut = "Squelched"
         multipleFlags = True
     End If
     
-    If (flags And &H2) = &H2 Then
+    If (Flags And &H2) = &H2 Then
         If multipleFlags Then
             s0ut = s0ut & ", channel op"
         Else
@@ -1377,7 +1378,7 @@ Public Function FlagDescription(ByVal flags As Long) As String
         multipleFlags = True
     End If
     
-    If ((flags And USER_BLIZZREP) = USER_BLIZZREP) Or ((flags And USER_SYSOP) = USER_SYSOP) Then
+    If ((Flags And USER_BLIZZREP) = USER_BLIZZREP) Or ((Flags And USER_SYSOP) = USER_SYSOP) Then
         If multipleFlags Then
             s0ut = s0ut & ", Blizzard representative"
         Else
@@ -1387,7 +1388,7 @@ Public Function FlagDescription(ByVal flags As Long) As String
         multipleFlags = True
     End If
     
-    If (flags And &H10) = &H10 Then
+    If (Flags And &H10) = &H10 Then
         If multipleFlags Then
             s0ut = s0ut & ", UDP plug"
         Else
@@ -1398,14 +1399,14 @@ Public Function FlagDescription(ByVal flags As Long) As String
     End If
     
     If LenB(s0ut) = 0 Then
-        If flags = 0 Then
+        If Flags = 0 Then
             s0ut = "Normal"
         Else
             s0ut = "Altered"
         End If
     End If
     
-    FlagDescription = s0ut & " [" & flags & "]"
+    FlagDescription = s0ut & " [" & Flags & "]"
 End Function
 
 'Returns TRUE if the specified argument was a command line switch,
@@ -1535,7 +1536,7 @@ Public Function DoReplacements(ByVal s As String, Optional Username As String, O
     
     s = Replace(s, "%v", CVERSION)
     s = Replace(s, "%a", IIf(gAcc.Access >= 0, gAcc.Access, "0"))
-    s = Replace(s, "%f", gAcc.flags)
+    s = Replace(s, "%f", gAcc.Flags)
     s = Replace(s, "%t", Time$)
     s = Replace(s, "%d", Date)
     s = Replace(s, "%m", GetMailCount(Username))
