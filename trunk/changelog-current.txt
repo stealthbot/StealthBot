@@ -91,7 +91,6 @@
 	- Fixed a bug with the .findattr command (thanks lemonhead)
 	- Adding filters with the /filter -msg- or blocking with the /block -user- commands will update
 		properly now (thanks Retain)
-	- Fixed a bug causing variables to be improperly processed in custom commands (thanks Hdx)
 	- Now properly truncating quotes spit out using the .quote command (thanks Jack)
 	- Fixed a bug requiring you to create a users.txt file before adding users (thanks various)
 	- Fixed a bug where the .levelban and .d2levelban commands were not being recorded properly
@@ -108,10 +107,12 @@
 		whisper the speaker (thanks Imhotep[Nu])
 	- The /time command used from inside the bot no longer sends a redundant /time to Battle.net
 		(thanks Jack)
+	- The find command can now check for users between a range of ranks.
+	- The add command now accepts additional paramaters using a prefix of "--":
+		- "--banmsg" will set an entry's default ban message.
 
 	
 	<b>SECURITY</b>
-	- Fixed a serious security issue involving the custom command processor (thanks various)
 	- Added code to prevent people from abusing Battle.net quirks to ban safelisted users (thanks various)
 	- Fixed a security issue involving specially-crafted input to the readfile command (thanks Fiend(KIP))
 	- Fixed a security issue related to the one mentioned above (thanks also Fiend(KIP))
@@ -120,7 +121,24 @@
 
 <i><b>*CHANGES</b></i>
 	<b>MISCELLANEOUS</b>
+	- Completely redesigned command processor, enabling the use of multiple character triggers,
+          	and several new command issuing formats including the name of the bot and a comma or colon
+          	followed by a space, and the removal of a trigger requirement entirely when issued via whisper.
+	- The database system has been updated:
+                - Database is now controlled in a central repository (Users.txt)
+                - The tagbans and shitlist are now represented using flags 'B'.
+		- The safelist is now represented using flags 'S'.
+                - Cumulative access can now be given using wildcards:
+                	- Giving * 0 B, for example, will give all users the ranking of 0 and the flags 'B'.
+			- If, assuming that * is equal to 0 B, and another user was added to the datbase
+			  	with flags 100 SD, that user would now have the ranking of 100, and the flags 'BDS'.
+			  	The flag 'B' comes as a result of the user matching the database entry "*."  However,
+			  	'S' overrides 'B,' and, because of this, the user will not be banned.
 	- New, more-informative news system
+	- The internal custom command system has now been revamped and moved to a plugin provided with the 
+		bot (thanks Snap).
+	- The internal definition system (define, newdef, deldef) has been moved to a plugin provided with the
+		bot (thanks Hdx).
 	- The bot database now tracks the following information about each person:
 		- Time/date they were added, and by whom
 		- Time/date they were last modified, and by whom
@@ -160,6 +178,7 @@
 
 
 	<b>INTERFACE</b>
+	- Added ability to control length of backlog.
 	- Added hanging indents so that long blocks of text look prettier (thanks FrOzEn)
 	- Now with the option to hide ban messages in the Window menu (thanks Hdx)
 	- Improved font consistency across various forms
@@ -200,6 +219,8 @@
 
 
 	<b>COMMANDS</b>
+	- The whois command is now distinct from the other database searching commands in that the
+	  	whois command will now state a users cumulative rank and/or flags.
 	- You can now use //command inside the bot to execute a command with console permissions,
 		yet display the response to the channel instead of to your screen. For example,
 		//mp3 will spit out Winamp's current song to the channel, while /mp3 will still
