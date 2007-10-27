@@ -1,0 +1,1167 @@
+<b>StealthBot changelog</b>
+<i>Last updated %LASTUPDATED%</i>
+
+<b>StealthBot changelog - Newest Versions First</b>
+
+
+<b>VERSION 2.7 - MILESTONE RELEASE</b>
+<i><b>*NEW README</b></i>
+	- A new, detailed StealthBot Readme is available online at
+		http://www.stealthbot.net/readme/
+	  Enjoy!
+
+
+<i><b>*SPECIAL THANKS</b></i>
+	- Retain, for his efforts regarding the Diablo II Realm situation
+	- MOD-PHOENIX (PhiX) for his endless (and bilingual!) help on our Tech Support boards
+	- Hdx, for his help with a number of things, including writing SBFix to get StealthBot
+		online during some of Blizzard's changes
+	- Quake)aS( created the bot's shiny new splash screen
+
+
+<i><b>*BUG FIXES</b></i>
+	<b>MISCELLANEOUS</b>
+	- Fixed some technical wording errors (thanks Networks and others)
+	- Fixed a code error causing the BNLS version-byte report to be ignored
+	- Fixed or clarified some messages (thanks various)
+	- Fixed an unclear error message when creating accounts with invalid characters
+	- Rewrote code that would cause random quote selection to fail (thanks Jack)
+	- Fixed Diablo II/LoD Realm connections
+	- The bot will now erase Battle.net profiles properly
+	- Fixed a bug that could improperly represent some ClientBans (thanks Michichael)
+	- Fixed the method used by the bot to extract MPQ revision numbers
+		- this counteracts a Battle.net change on 9/12/06 that changed the MPQ filenames
+	- Your script file will be loaded properly when the DisableSBNews config.ini hack 
+		is used (thanks Jack)
+	- Warcraft III Clan invitations no longer crash the bot on Windows 95/98 computers
+		(thanks various)
+	- Cleaned up parts of the packet handler to avoid odd parsing errors
+	- Fixed a queue glitch that would occasionally cause messages to come out
+		in the wrong order
+	- Messages your bot sends containing UTF8-encoded characters will now appear correctly
+		on Blizzard clients
+	- Server info and error messages, and channel names, will now be properly UTF8-decoded (thanks Jack)
+	- Now UTF8-decoding emotes (thanks various)
+
+
+	<b>INTERFACE</b>
+	- Whispers and emotes will now be UTF8 decoded (thanks Razko)
+	- The system tray menu will now close when you click off of it (thanks LeoXavior)
+	- Fixed a crash that happened when you closed the bot using Exit
+		from the menu in the system tray (thanks various)
+	- Fixed a crash occurring from pressing ALT+END while disconnected (thanks Michichael)
+	- Fixed a problem with the Chat Filters interface (thanks Jack)
+	- Fixed a runtime error 5 when using the Battle.net /help command (thanks Pr0pheT)
+	- Fixed a glitch where the system tray icon tooltip could be incorrect (thanks Jack)
+	- Fixed a minor glitch where anything starting with /w in the send box
+		was autocompleted (thanks Raylu)
+	- Fixed some statstring parsing that caused Diablo and Diabo Shareware people to
+		appear unknown
+	- Fixed a minor glitch in Settings (thanks LuC1Fr)
+	- Clicking Cancel in the QuickChannel editor no longer saves your changes (thanks Fiend)
+	- Fixed a bug that prevented you from seeing text from invisible users such as Battle.net sysops
+	- The reply features will no longer override 5-letter commands starting with 'r' (thanks Jack)
+	- Individual Whisper Windows now work properly under Diablo II (thanks Retain)
+	- Individual Whisper Windows now display messages sent through them while the main bot is
+		minimized (thanks ZergMasterI)
+	- Individual Whisper Windows will no longer steal focus from each other (thanks Retain)
+	- You can no longer create more than 8 characters to a Diablo II Realm account
+	- You can no longer get a second line in the CD-key Manager interface (thanks Snap)
+	- The CD-key Manager now works properly when adding multiple keys at a time (thanks Snap)
+	- Outbound filters are now properly applied to messages with a / at their start (thanks LuC1Fr)
+	- The prepend and append boxes are now properly applied to messages starting with / (thanks Sixen)
+	- Battle.net SysOps should now have their icons displayed correctly, and receive the
+		signature blue Blizzard text (thanks Sixen)
+	- Right-clicking on the Clan list while the bot is maximized no longer resizes it (thanks Sixen)
+	- You can no longer send messages over 225 characters by repeatedly double-clicking a name
+		in the channel (thanks FrostWraith)
+	- Improved channel list accuracy in the Void
+	- The "Lag Plug" setting is no longer available to Diablo II and Warcraft III connections
+		(those games don't allow you to reject UDP packets, thanks Imhotep[Nu])
+	- Double-clicking a name will now insert it at your cursor or overwrite any selected text in the send box
+		(provided that text was selected using any method but click-and-drag)
+	- When mimicking users it will no longer appear as though you spoke before they did (thanks Jack)
+
+
+	<b>COMMANDS</b>
+	- Channel ban and channel squelch on Diablo II now work properly (thanks Undeference, Retain)
+	- Channel ban will now properly check the safelist (thanks Hdx)
+	- Fixed a bug with wildcard database searches (thanks various)
+	- Fixed the channelban and channelsquelch commands (thanks various)
+	- Fixed a bug with the .findattr command (thanks lemonhead)
+	- Adding filters with the /filter -msg- or blocking with the /block -user- commands will update
+		properly now (thanks Retain)
+	- Fixed a bug causing variables to be improperly processed in custom commands (thanks Hdx)
+	- Now properly truncating quotes spit out using the .quote command (thanks Jack)
+	- Fixed a bug requiring you to create a users.txt file before adding users (thanks various)
+	- Fixed a bug where the .levelban and .d2levelban commands were not being recorded properly
+		(thanks Michichael and Retain)
+	- New alias for .lastwhisper:  .lw
+	- You can no longer ipban safelisted people or people with more access than you, including
+		those with just an A flag (thanks Retain)
+	- Improved documentation for some aliases and commands on the new readme page
+	- Improved response on the Winamp Jump to File command (.play songtitle)
+		- Winamp 5.2 changed something in the Jump to File dialog that I have corrected
+		- Winamp 5.3 made further changes that require a delay when sending text to that dialog
+		- thanks, various
+	- Using the .profile command with Whisper Command Responses turned on will now properly
+		whisper the speaker (thanks Imhotep[Nu])
+	- The /time command used from inside the bot no longer sends a redundant /time to Battle.net
+		(thanks Jack)
+
+	
+	<b>SECURITY</b>
+	- Fixed a serious security issue involving the custom command processor (thanks various)
+	- Added code to prevent people from abusing Battle.net quirks to ban safelisted users (thanks various)
+	- Fixed a security issue involving specially-crafted input to the readfile command (thanks Fiend(KIP))
+	- Fixed a security issue related to the one mentioned above (thanks also Fiend(KIP))
+	- You can no longer use the readfile command with any .ini file
+
+
+<i><b>*CHANGES</b></i>
+	<b>MISCELLANEOUS</b>
+	- New, more-informative news system
+	- The bot database now tracks the following information about each person:
+		- Time/date they were added, and by whom
+		- Time/date they were last modified, and by whom
+		- Use the .dbd / .detail command to get these details out of the bot
+	- Improved support for non-standards-compliant SOCKS4 proxies (thanks Raylu)
+	- Added support for custom JBLS server messages
+	- Tab characters pasted into the text box are translated into spaces
+	- Warcraft III Clan traffic from Battle.net is now ignored unless the bot is on Warcraft III
+	- Ban Evasion can now be turned off in the Moderation Settings panel
+	- The bot can now check for new version bytes using an option in the Bot menu
+		- The version bytes are maintained by StealthBot.net staff and will be up to date
+			fairly soon after Blizzard patches!
+	- The bot will now attempt to guess new version bytes, which are changed when Blizzard patches games
+	- Added support for part of Skywing's improvements to BNLS on 1/22/06
+		- Namely, invalid logons detected by BNLS are now reported to the user and the bot reconnects
+		- More info at http://www.valhallalegends.com/yoni/BNLSProtocolSpec.txt
+	- Log files are now stored in the format yyyy-MM-dd.txt, for easier sorting (thanks Draco)
+	- Changed config.ini hacks for pointing the bot at other hash file locations, see the readme for detail
+	- Now properly getting the country name data from the operating system
+		- People with non-English computers should log on into their country's default channel
+	- Touched up language referring to Diablo II/LoD Realm connections
+	- Expanded support for error and status codes related to Diablo II/LoD Realm connections
+	- The User Monitor is no more
+		- In its place, a plugin designed by HdxBmx27
+	- Added the -cpath command line argument, thanks Megatog615
+		- -cpath yourconfig.ini  will point the bot to a different config.ini file
+	- Added config.ini hacks for changing the location of any list file
+		- In config.ini, create a section labeled [FilePaths]
+		- Each line under [FilePaths] should be the name of the file and its new path
+		- For example:	   users.txt=C:\Program Files\StealthBot\users2.txt
+	- Updated the BNCSutil library, by Eric Naeseth: http://bncsutil.ionws.com  
+	- The bot now ships with logging turned off by default
+	- When logging is turned off the bot will no longer create a \Logs\ folder in its home directory
+		- (thanks ZergMasterI)
+	- Added a message received when your account has been closed by Blizzard (thanks Binaries)
+	- You can no longer write to the Sex field of your user profile due to Starcraft patch 1.15
+
+
+	<b>INTERFACE</b>
+	- Added hanging indents so that long blocks of text look prettier (thanks FrOzEn)
+	- Now with the option to hide ban messages in the Window menu (thanks Hdx)
+	- Improved font consistency across various forms
+	- Added a delay so that you can only remove one clan member every 30 seconds.
+		- This prevents your clan from being disbanded by removing too many people too quickly.
+		- Thanks raylu and Clan SBS
+	- Added a new "Tools..." option to the Settings menu:
+		- "Delete data files" removes the commands.dat and mail.dat files
+		- "Restore default version bytes" flushes config.ini's stored version bytes and restores defaults
+		- "Clean up mail database" purges delivered and invalid mail from your mail.dat file (thanks lemonhead)
+		- "Log all StealthBot packet traffic" produces a logfile in the bot's directory of all packets in and out
+			(thanks Hdx)
+	- The bot will no longer try to join a QuickChannel when its hotkey is pressed if no channel is set
+		- (thanks Jack)
+	- The Userlist Manager now requires you to put in an access value or flags before adding a user
+		- (thanks Fiend(KIP))
+	- Using /rw to rewhisper your friends' list now works properly (thanks Jack)
+	- Improved the QuickChannel system so that empty QuickChannels will not show,
+		and switched it to an ini-file system [quickchannels.ini] (thanks various)
+	- Scrolling the chat window up, then having someone talk further down it will no longer snap
+		the scrollbar back to the bottom of the chat window (thanks FrOzEn)
+	- Closing a box asking you to register your email address with Blizzard now is the same as
+		clicking "Ask Me Later" (thanks Jack)
+	- You can now delete Diablo II Realm characters by right-clicking on their portraits and choosing
+		"Delete Character"
+	- You can no longer log into Diablo II Expansion characters when signed on with Diablo II Classic
+	- A new BNLS server selector is available under the Advanced Connection Settings section of Bot Settings
+	- Incoming text is now logged immediately rather than when the chat window fills up (thanks Jack)
+	- If the bot is maximized, then minimized to the system tray, it will return to a maximized state
+		when brought out of the tray
+	- The Clan Invitation dialog will close automatically after 30 seconds' time (thanks RoNiN)
+	- The contents of all 3 chat boxes (prepend, send and append) are all sent through the
+		command processor now (thanks Sixen)
+	- Better support for World Cyber Games icons (thanks Joe)
+	- Added the option in the Miscellaneous General Settings panel to disable the prefix and/or
+		suffix boxes (thanks various)
+	- Added CD key length checks (thanks Jack)
+
+
+	<b>COMMANDS</b>
+	- You can now use //command inside the bot to execute a command with console permissions,
+		yet display the response to the channel instead of to your screen. For example,
+		//mp3 will spit out Winamp's current song to the channel, while /mp3 will still
+		display the song to your screen. This works for all commands.
+	- Shitlisting another person now requires strictly greater access than them (thanks Retain)
+	- Using a config.ini hack ("AutoModerationSafelistValue") you can now override the access required
+		to be safe from automatic moderation features [the default is 20] (thanks Draco)
+		This entry should go under [Override] in your config.ini file
+	- Commands can be disabled using a new section of access.ini
+		- To disable a command entirely, add an entry for it under [DisabledCommands] in access.ini
+		- For example, say=1
+		- Thanks, Draco
+	- You can now control individual access requirements of the .say command using access.ini:
+		- say=	  will set the default, restricted "Username says: -message-" type that cannot be abused
+		- say70=	will set the less-restricted say which will erase any leading "/" characters on -message-
+		- say90=	will set the access required to use an unrestricted say
+	- You can now use the variable %me when typing commands. %me will be translated to the username
+		of the person executing the command. (thanks Jack)
+	- Improved in-bot responses to the .pingme command (thanks Swent)
+	- .shitlist <username> is no longer an alias for .shitadd <username> (this is for greater access.ini compatibility)
+	- New alias .sl for .shitlist
+	- New commands for this version:
+		shuffle			requires access 80, toggles Winamp's Shuffle feature
+		repeat			requires access 80, toggles Winamp's Repeat feature
+		setcmdaccess -a- -b-	requires access 70, changes the required access for your custom command -a- to -b-
+		findr  -a- -b-		requires access 20, finds users with access between -a- and -b-
+		detail -user-   	requires access 60, pulls detailed information from the database about a user
+						last modified by/on, added by/on
+		deldef -def-		requires access 50, erases the definition -def- that you provide (thanks Draco)
+		checkmail		requires access 40, tells you whether or not you have new mail messages
+		getmail			requires 0 access but will not respond at all unless you have unread mail
+						if you have unread mail, reads you the first message
+		shitcheck -a-		requires access 60, tells you whether or not a given user is shitlisted or has flags of 'B'
+						alias "slcheck" (thanks Snap)
+
+ñ
+
+
+<b>VERSION 2.6R3 - NUMEROUS FIXES</b>
+<i><b>*BUG FIXES</b></i>
+
+	<b>SECURITY</b>
+	- Fixed a CRITICAL exploit requiring me to disable version 2.6 and its predecessors entirely
+	  The exploit allowed for:
+	   - Private user information disclosure (Username/Password/CDKey and other configuration values)
+	   - Complete command access
+	
+	   Technical details regarding this exploit can be attained by contacting me directly stealth@stealthbot.net
+
+	<b>Runtime Errors</b>
+	- Fixed a runtime error 35600 caused by the anti-idle system (thanks various)
+	- Fixed a runtime error 40060 caused by the user monitor system (thanks HdxBmx, MetaLMilitiA, jwensley2)
+	
+
+	<b>Under the Hood</b>
+	- Fixed a bug preventing .channelban and .channelsquelch (cb/cs) from working on Diablo II (thanks Undeference)
+	- Fixed a problem with the .unmonitor command (thanks Cnegurozka)	
+	- Fixed a bug causing Channel Passwording to ban everyone (thanks RaGnArOkY)
+	- Fixed a couple settings that weren't saving properly (thanks MetaLMilitiA)
+
+
+	<b>Built-In and Custom Commands</b>
+	- Fixed a problem with the .settrigger command (thanks Death_Gimli)
+	- Fixed a problem with the Custom Command system variables (thanks various)
+	- Fixed the .where command so it works properly (thanks imgoingtokill)
+
+
+	<b>Miscellaneous</b>
+	- Pressing F1 no longer brings up the Help dialog (thanks Sikas)
+	- "Restore Default Colors" works properly (thanks sray290)
+	- You can no longer send text to Battle.net during the connection sequence (thanks l)a-Sniper)
+	- CTRL+ENTER no longer makes a ding noise (thanks Quik)
+
+
+	<b>Interface</b>
+	- Minor interface fixes (thanks 1+3+3=7 and others)
+	- Underline (ÿcu) works properly now (thanks CrAz3D)
+
+
+<i><b>*CHANGES</b></i>
+	<b>Interface</b>
+	- Added a "Clear Whisper Window" option to the Window menu (thanks Quik)
+	- You no longer have the option to create Expansion realm characters when connected
+		with Diablo II (thanks ArchAngel)
+
+	<b>Miscellaneous</b>
+	- Now using the BNCSUtil library for local hashing -- BNCSUtil is open-source and
+		available at http://bncsutil.ionws.com
+	- Added support for Warcraft III and Frozen Throne connections via Local Hashing
+
+
+
+<b>VERSION 2.6 - MILESTONE RELEASE</b>
+<i><b>*BUG FIXES</b></i>
+	<b>Security Fixes</b>
+	- Fixed a serious security problem that could allow a malicious user to gain Admin status on the bot (thanks Impossible[gT])
+	- Fixed a security issue related to the say command (thanks impossible[CT])
+	- Fixed a security issue where a command requiring -=1 access could reconnect the bot (thanks Kirby and others)
+	- Specially-crafted profiles no longer throw the bot into an infinite loop or crash it (thanks wolf-shinobi)
+
+
+	<b>Runtime Errors</b>
+	- Fixed a runtime error 9 caused by a misclick in the Settings panel (thanks Kirby)
+	- Fixed a runtime error 451 caused by the .info command (thanks R.a.B.B.i.T)
+	- Fixed a runtime error 6 caused by abusing the .roll command
+	- Fixed a runtime error 91 in the chat filters window (thanks Blaze and deadly7)
+
+
+	<b>Interface Fixes</b>
+	- Fixed some minor glitches (thanks Draelren, ArchAngel and others)
+	- Corrected a bug with the Individual Whisper Windows (thanks God_Of_Slayers)
+	- Get Stats options in the rightclick menu now function properly under Diablo II (thanks InternationaL)
+	- Fixed a separate minor bug involving right-click stats on Diablo II (thanks Blaze)
+	- Squelching and unsquelching channel operators no longer dumps them to the bottom of the list
+	- Usernames under "watch" status now properly appear red when speaking
+	- Substantial code changes to fix the Custom Command Editor (finally)
+	- Added code to prevent the bot from coming up very small due to bad position data
+	
+	
+	<b>Built-In and Custom Command Fixes</b>
+	- The %0 argument in Custom Commands now works properly (thanks Kirby)
+	- Arguments numbered higher than 9 now work properly
+	- Fixed a minor bug involving the safelist command's output (thanks IA-Lantoka)
+	- Fixed the .away command
+	- The .reconnect command no longer sends extra text to Battle.net (thanks Kirby)
+	- The cmddel command will no longer always respond the same way (thanks IronEye)
+	- Custom commands that use Battle.net commands such as /me now work properly
+	- You can no longer make blank custom commands (thanks babs57)
+	- You can no longer make two custom commands with the same name (thanks babs57)
+	- Fixed a clan invitation response message (thanks JoeTheOdd)
+	- The .mmail command no longer sends mail incorrectly (thanks BinaryDigit)
+	- .protect on/off status is now properly written to disk when the command is used (thanks blckshdwdragon)
+	- Fixed a bug with the .add command when using it to modify access (thanks Helpfiles)
+	- Fixed a bug involving .idle kick on/off
+
+
+	<b>General Fixes</b>
+	- Whispers are now properly forwarded under Diablo II (thanks CyberMew)
+	- Fixed Ban Evasion, it now works as intended
+	- Fixed the timezone bias reported to Battle.net so that /time now displays the correct time (thanks HdxBmx27)
+	- Corrected a bug with the Color Settings panel that would screw up values (thanks Quik)
+	- Fixed a bug involving the User Monitor
+
+
+
+<i><b>*CHANGES</b></i>
+	<b>Interface</b>
+	- Added highlighting autocompletion for the second word, ie /w user[name-suggested] (thanks InternationaL)
+	- A warning message is displayed when using proxies to connect to a server that requires DNS resolution
+	- Added an option to disable username autocompletion in the General Interface settings panel
+	- Channel list tooltips now display a more detailed description of what a user's flags mean
+	- Highlighting text in the Whisper Box copies it to the clipboard (thanks JoeTheOdd)
+	- Added a delay to the Accept Clan Invitation dialog to prevent accidental action (thanks Blaze)
+	- Added a length limit to the right and left send boxes (thanks God_Of_Slayers)
+	- Usernames are now colored in the channel list, which you can turn off in the Interface Settings panel:
+		-- White: Self
+		-- Gray: Idle for - 10 minutes (or whatever other value you set)
+		-- Light gray: Channel operator
+		-- Dark red: Squelched
+		-- Blue: Blizzard representative
+		[thanks to FlaW for this suggestion]
+
+	- Added PGTour rank icons for compatibility with their private server (thanks Pat)
+	- Applied message autofiltering settings to whispered messages
+	- Made usernames in the Friends' List and Clan List doubleclickable (thanks Imhotep[Nu])
+	
+
+	<b>Under the Hood</b>
+	- Removed the limit on the length of anti-idle messages, they will still be governed by Battle.net message size limits
+	- Incoming whispers are now checked against the username and message content filters
+	- Added the %bc idle/greet message/custom command variable, for the current ban count (thanks 111787)
+	- Tweaked the Kick On Yell processing code for accuracy
+	- Switched to a higher-resolution method of retrieving system uptime
+		-- This removes both the 24- and 49-day limits with the old method
+
+
+
+<b>VERSION 2.5</b>
+<i><b>*BUG FIXES</b></i>
+	<b>Interface</b>
+	- Empty lines are no longer added to the screen when reloading script files
+	- Color setting changes are now handled properly
+	- Fixed the .online command response
+	- Fixed a minor bug with Step-By-Step Configuration
+	- Added code to prevent abuse of the rich textbox's RTF formatting
+	- Fixed a bug in the User Manager which erroneously added CrLfs to the listbox (thanks BioWaRIII)
+
+	<b>Under the Hood</b>
+	- The .giveup / .op command now handles Diablo II correctly
+	- The safelist is now handled properly - a code mistake caused it to be processed incorrectly
+	- Quotes can no longer be used to send battle.net commands (thanks Unit3000-21)
+	- The .cs and .cb commands no longer send an excess message to Battle.net
+	- Improved performance in The Void
+	- The .allseen command has been fixed
+	- Responses to SID_CHANGERANK are now handled properly
+	- Fixed an error when handling WCG statstrings
+	- Ping spoofing now functions correctly
+	- The rejoin command now adheres to flood protection
+	- A change to the way SB connects to the Diablo II Realms should fix login problems on USWest and Europe (thanks UserLoser)
+	- The ignore command now properly checks access
+	- Fixed a couple safelist-related bugs
+
+
+
+<i><b>*CHANGES</b></i>
+	<b>Interface</b>
+	- Tooltips in the channel list are much more helpful
+	- Added a new closable Whisper Window system to track whispers
+	- Added optional IM-style individual whisper windows (toggle on the Window menu)
+	- Added a new 3-pane information window system that lets you see:
+		- Your realtime clan list including online status,
+		- Your realtime friends' list,
+		- And, of course, the channel list
+	- The channel list now displays Warcraft III icons, as in the actual game
+	- The detached channel list has officially kicked the bucket. Sorry to anyone who used it
+	- Added URL highlighting, double-click to launch (thanks LordNevar)
+	- The bot will now remember its size and position
+	- The /r and /rw (reply and rewhisper) system has changed to prevent accidental /r's
+	- Added typing shortcuts:
+		- CTRL+ENTER: rewhisper
+			text in the send box is sent to the last person you sent a whisper to
+		- SHIFT+ENTER: reply
+			text in the send box is sent to the last person who whispered you
+
+	- The autocompletion system has been revamped:
+		- Part of the suggested user's name will be displayed, highlighted, as you type
+		- You can choose to continue typing or press ENTER, which will accept the currently visible name
+
+	- The Settings dialog will now display the last panel you had selected
+	- Added WCG Player and Referee icons
+	- Added Diablo II Realm character expiration date display (thanks UserLoser)
+	- Realm characters that are expired will now come up in red text
+	- New splash screen thanks to LW-KillBound
+
+
+
+	<b>Under the Hood</b>
+	- Now providing more detailed script control error messages (thanks Kirby)
+	- Changed massive dynamic array information storage system to a cleaner collection
+	- Revamped large portions of internal code
+	- Added an option to kick idle users instead of banning them, see below
+	- Added partial iTunes control support (.useitunes to activate, .usewinamp to deactivate
+	- No longer using Subclass.ocx
+	- Now correctly loading #included script files
+	- Recoded the mail system
+	- Added "%m" greet message variable - number of undelivered mail messages
+	- Now handling the 0x0F response to the Warcraft III packet 0x54 - thanks Spht and UserLoser via Yoni[vL]
+	- Catch phrases will now flash the window unless told not to via SilentCatchPhrases=Y
+	- EFP now disables the Nagle algorithm while in effect, saving time - thanks LoRd[nK]
+	- Changes to the scripting system, listed in ScriptSupportClass.txt
+	- Added an always-on ban queue efficiency check to prevent multiple bans
+	- Added a configurable autofilter system that ignores text sent within X ms of a person joining (default 300ms)
+	- Added support for 0x76 "You have been removed from the clan" packet (thanks UserLoser)
+	- More advanced system for handling Winsock errors (thanks LoRd[nK] and others)
+	- Tweaked functionality of Ban Evasion (thanks The-FooL)
+
+
+	<b>Miscellaneous</b>
+	- Creating a servers.txt file in the bot's directory will add server addresses in it to the list in Settings
+	- The /mail command, internally, has been renamed to /bmail to avoid confusion with the Battle.net command
+	- Users can now specify an alternate BNLS server by adding AlternateBNLSServer= to the Main section of config.ini
+	- Modified the CDKey Manager to clean up after itself better
+
+
+	<b>New Commands</b>
+	- .useitunes	: 80 : Causes play, stop, next, back/prev, and pause commands to talk to iTunes instead of Winamp.
+	- .usewinamp	: 80 : Reverts the aforementioned commands to Winamp control.
+	- .roll	-number-: 20 : Selects a random number between 0 and -number-.
+	- .idle kick on/off : Toggles the idle kick feature
+	- .mmail -flag(s)- -message- : 70 : mass-mail to users with the -flag(s)- the -message-
+	- .mmail -access- -message-  : 70 : mass-mail to users with the -access- the -message-
+	- .ign -username- : 50 : alias for .ignore
+
+
+
+
+<b>VERSION 2.4 REVISION 2</b>
+<i><b>*BUG FIXES</b></i>
+	<b>Interface</b>
+	- The Password field in Setup no longer has a max length of 12 (thanks LeViaThoN)
+	- The detached-channel-list label forecolor is now white instead of black
+	- Fixed a runtime error '9' caused by joining the void and right-clicking on a username (thanks Boom.dk)
+	- Idle message type changes now save correctly
+	- Step-by-step configuration now saves the selected gametype properly
+	
+	<b>Under the Hood</b>
+	- Repaired runtime errors 9 and 13 in parsing code that created an "exploit" used to crash the bot (thanks KoRe)
+	- The %cpuup variable is now processed before the %c variable so they display correctly
+	- The %a variable now displays 0 for zero-access users instead of -1
+	- The Warcraft III clan list can no longer be retrieved by users not in a clan
+	- Pressing disconnect during repeated connection attempts will now actually stop them
+	- Fixed a bug related to Disable Void View	
+	- "Get Warcraft III Web Profile" now works correctly under all circumstances
+	- CDKeys entered directly into Settings will now have "-" and " " removed	
+	- Color and font options in Settings now properly save and load
+	- Fixed a runtime error '62' when loading a broken quickchannels.txt file
+	- The Nagle Algorithm is no longer activated during the login sequence to improve speed and better imitate Blizzard's clients (thanks LoRd[nK])
+	- EFP no longer sends two bans at a time
+	- Temporary fix for runtime error '6' on Unicode-based systems (Chinese, Korean)
+	- Will now rejoin the channel when kicked if no backup is specified
+	- Attempted a fix for runtime error '91' - let me know how it works
+	- Attempted a fix for included scripts not working properly - let me know how it works
+
+
+<i><b>*CHANGES</b></i>
+	- The Starcraft/Brood War version byte has been updated to account for the 1.11 patch
+	- Now supporting stat update messages
+	- Added a few command line arguments
+
+	<b>Interface</b>
+	- Added an option to open the bot's folder under the Settings -- Edit Files submenu
+	- Blizzard representatives now speak in blue text with blue carats around their name
+
+
+
+
+
+<b>VERSION 2.4 (MAJOR RELEASE)</b>
+<i><b>*BUG FIXES</b></i>
+	<b>Functionality</b>
+	- Loading a script.txt file with invalid syntax in it no longer crashes the bot (thanks R.a.B.B.i.T)
+	- The bot will no longer greet users who are banned on join for any reason (thanks Gen.liQuid.Ace)
+	- Fixed D2 compatibility for the channel list right-click menu
+	- %rest works. Really.
+	- Logging will now stay at zero logging when so instructed
+	- Fixed runtime error '458' connected to phrasebans
+	- Erasing all filters now actually erases them, as opposed to doing nothing
+	- Fixed a runtime error when sizing a detached channel list too small
+	- Fixed caught phrase HTML output
+	- Quotes work, and their code has been streamlined
+	- Fixed some safelist issues
+	- Updated Warcraft III statstring parsing to properly handle Frozen Throne icons
+
+	<b>Commands</b>
+	- The .expand command can no longer return more than 220 characters
+	- The .add and .vote commands can no longer overflow
+	- The .away command now works properly
+	- Quotes function properly now
+	- Fixed Runtime Error '9' when activating EFP with an empty or nonexistent safelist
+	- ".levelban off" now actually deactivates levelbans (thanks Stealth_Tech)
+	- The shout command will no longer whisper back
+	- The .online command's responses will be fully whispered back (thanks Rob)
+	- The .designate command no longer works unless the bot has ops (thanks Drk)
+	- Custom commands can now use "_call script_subroutine" to talk to the Scripting system
+
+	<b>Security</b>
+	- Fixed a potential .readfile exploit (thanks Skywing[vL])
+	- Fixed a nasty access exploit resulting from Microsoft's wonderfully useless IsNumeric() function (thanks BaZ)
+	- Access can no longer be set through users.txt over 999
+	- Applied hardcoded prevention against .ver being designated as a 0-access command
+
+	<b>Interface</b>
+	- Fixed some readme.htm typos / grammatical errors (thanks Swent]DS)
+	- You can now use /clan commands from within the bot, such as /clan mail
+	- The confirmation for removing users from a Warcraft III clan now displays yes/no (thanks Alchav)
+	- Fixed the Profile window color schemes so they display consistently independent of Windows settings (thanks R.a.B.B.i.T)
+	- Fixed icon and current channel display on detached channel lists
+
+
+
+
+<i><b>*CHANGES</b></i>
+	<b>E-mail registration</b>
+	- Added support for e-mail registration in Diablo II and Warcraft III (including expansions)
+
+	<b>System Tray Icon</b>
+	- The format of the tray icon tooltip has been changed to be more useful
+	- The tray icon tooltip refreshes itself on disconnect/logon
+	- The tray icon will now redraw after an Explorer crash
+
+	<b>Diablo II Support</b>
+	- Reenabled Diablo II Realm logins
+	- Added a shiny UI for Realm character selection
+	- When using Diablo II, the bot now adds * to usernames automatically when using /w or /m
+
+	<b>Bot Interface</b>
+	- Added "Shitlist" and "Safelist" to the channel list right-click menu
+	- Reorganized the channel list right-click menu
+	- The profile description window now supports SC and D2 color codes
+	- Added an option to the Settings menu allowing UTF-8 encoding/decoding of sent/recieved text (for non-English users)
+	- Added username autocompletion
+		<i>- Typing part of someone's name followed by a comma or colon attempts to autocomplete the name from users in the channel
+		- Supports wildcards
+		- Activates only if 4+ letters are present</i>
+	- Added support for the Á@ "invisible" SC color code (displayed as blue, thanks R.a.B.B.i.T)
+	- Added a StealthBot News service that will inform you of important StealthBot-related stuff when the bot starts, and checks to see if your program is up-to-date (this can be disabled)
+	- Added an option to use millisecond timestamps
+	- The Send combobox operates more efficiently
+	- Added a new cdkey manager system for the Settings dialog
+	- Fonts throughout the bot are uniform (Tahoma)
+	- Added an option to disable "void view" (the bot's attempt to see users in the Void)
+	- Added an option to minimize to the taskbar (instead of the system tray)
+	- Added the ability to retrieve Warcraft III Web profiles through the channel list rightclick menu
+	- Added the ability to invite Warcraft III users to a Warcraft III clan through the channel list rightclick menu
+	- Revamped the Step-By-Step configuration GUI and code
+
+	<b>Under the Hood</b>
+	- Now using a new, cleaner system for recieving packets (thanks CupHead[vL])
+	- Users can no longer remove those at equal access -- more is required
+	- Whispering works with multiple command queries (.command; command) (thanks Ants)
+	- Added error checking code for the .add and .cmdadd commands (thanks SoulReaper)
+	- Improved Winamp song title retrieval to work with scrolling song titles
+	- Wrote a new class to handle incoming clan packets
+	- The L flag is no longer ignored when removing users from the bot
+	- The bot now logs in smoothly after creating an account successfully
+	- Added a config-only option to allow you to force the bot to hash your password case sensitively
+	- Added SOCKS4/SOCKS5 proxy support (thanks Kev1n, HacKe, and c0Ld for test proxies)
+	- Added CRC32-based hex protection (thanks sneakcharm)
+	- Added a much-requested user-specified delay between reconnects (default is 1000ms)
+
+	<b>User-Customizable Stuff</b>
+	- Added the %t and %d variables, Time and Date respectively (thanks R.a.B.B.i.T)
+	- The %t, %d, %a, and %f greet/idle variables are now reported correctly (thanks Alchav)
+	- Various changes to the scripting system, they are listed in ScriptSupportClass.txt
+
+	<b>Command-Related Stuff</b>
+	- Clan tags can now be tagbanned (.tagban TAG)
+	- Responses of commands that were whispered to the bot will now be whispered back
+	- Added commands:
+		90_________________________________________________
+		.clearbanlist / .cbl	Clears the list of banned users
+		.c pub / .c priv	Sets the clan privacy status (same as .clan public / .clan public)
+		.exile -username-	Shitlists and IPbans the specified username
+		.unexile -username-	Reverses the effects of .exile
+		50_________________________________________________
+		.where			Whispers back the bot's current channel (thanks bLiNk)
+
+
+
+
+<b>VERSION 2.3</b>
+<i><b>*BUG FIXES</b></i>
+	- Fixed several internal typos
+	- Repaired several bad tooltips in Settings (thanks Kaiba[nT])
+	- Users can no longer change the access of users with higher access than their own (thanks Alkiller)
+	- Fixed a subscript error when the user tried to turn notifications 
+		on for a person not on their user monitor (thanks Eddy90)
+	- Quote reading will no longer fail under a specific set of circumstances (thanks sKiLzRuLz)
+	- Kick-on-yell now works properly when the bot is on Diablo II
+	- The 'op' alias for 'giveup' works properly
+	- Fixed a queue bug that dropped a high percentage of messages when sending large amounts of info
+		(such as reading files or banning large numbers of bots)
+	- The .vote command can no longer overflow (thanks Dave(CT))
+	- User monitor removes work properly (thanks Alchav)
+	- The .readfile command cannot cause a runtime error when : is used in the filename (thanks C2Talon)
+
+<i><b>*CHANGES</b></i>
+	- Flags.ini is now access.ini and covers both custom flags and custom numeric access levels - more in the readme
+	- Ping spoofing is now allowed using BNLS connections (no more greyed-out option buttons)
+	- The /mail command, when used from inside the bot, echoes to Battle.net so Blizzard's mail system can be used
+	- EFP now pulls all possible safelisted users into a single array, eliminating duplicates, for speed purposes
+	- Slight changes to the Step-By-Step Configuration system
+	- Slight changes to the User Manager gui, and it's now called the Database Manager
+	- Added config-only support for disabling autorejoin, or moving to a backup channel, more info in the readme
+	- Added config-only support for remote userlist/safelist/shitlist sharing, more info in the readme
+	- Option to ignore Warcraft III clan invitations to guard against users flooding with them (thanks Barumonk)
+	- Tagbans now support custom messages
+	- Added greet message variables %a and %f, which resolve to the joinee's access and flags respectively
+	- Reverted the Custom Command editor to its 2.1 status
+	- The ping scale has been slightly adjusted (thanks PhoenixRevived / Retard)
+	- Removed bad shell commands that caused 'File Not Found' messages when opening the readme/changelog
+	- Unified form fonts (all Tahoma)
+	- If it's on Warcraft III, the bot will automatically detect attempts to add users with @Realm on them and remove the @Realm
+	- Starcraft color parsing now supports the teal aliases T, U and V; D2 color parsing supports ÿC: (thanks C2Talon)
+	- *** IMPORTANT *** The 'D' built-in flag now designates AND resigns! Use with caution
+	- Added commands:
+	90_________________________________________________
+	.setkey / .setexpkey		Changes the current cdkey or LOD/Expansion cdkey
+
+	50_________________________________________________
+	.eval (expression)		Evaluates a single-line VBScript expression. Can be used to perform
+					basic math: .eval (sqr(37) * 4) ^ 43
+
+-hr-
+
+2.2 HARDCODED FLAGS
+A dmin
+B anned
+D esignated
+L ocked
+S afelisted
+Z agbanned
+
+<b>VERSION 2.2 REVISION 7 (DIABLO II 1.10 PATCH UPDATE)</b>
+<i><b>*BUG FIXES</b></i>
+	- Fixed a runtime error when readfile was given a directory to read. *cough*
+	- AllowMP3 now controls the back command
+	- Fixed a bug that removed the selection from the Warcraft III Frozen Throne product option
+	- Fixed a bug that caused the bot to send blank messages and effectively deactivate the message queue
+	- Fixed a bug that allowed users with any access level to use the sweepban command
+	- The sweep-ban and -squelch commands now append a * when the bot is on Diablo II
+	- Kick-on-yell now properly kicks when the bot is on Diablo II
+	- Really fixed the UDP plug (lag plug)
+	- Repaired a bug which allowed users with -0 access to use the cmdadd command
+	- The Leave Clan button now functions as it should
+
+<i><b>*CHANGES</b></i>
+	- Added a hotkey-based channel list navigation system:	(Thanks Alkoholik)
+		ALT+PgUp and ALT+PgDn move up and down
+		ALT+Home and ALT+End move to the start and end of the list, respectively
+		ALT+Insert adds the selected person's name to the send chatbox
+		(Your cursor will remain in the send box during any of these hotkey movements.)
+	  The system has not been extensively tested. Send me your thoughts! :)
+
+	- EFP now acquires 'HIGH' RAM process priority while enabled for improved performance.
+	- Updated Diablo II statstring parsing to account for the 1.10 patch (Thanks UserLoser)
+	- Updated Diablo II version bytes to account for the 1.10 patch
+	- Added an option under the Window menu to flash the chat window on events 
+		(talk, join, leave, emote, whisper) - Thanks Alkoholik
+
+
+
+<b>VERSION 2.2 REVISION 4</b>
+	- Infinite loop bug that would crash the bot when improper color codes were used is fixed.
+	- IPbans resulting from profile writing (including ProfileAmp) have been repaired.
+	- The NSIS installer functions properly.
+	- The custom command GUI no longer erases CC contents when clicking the 'NEW' button.
+	- Runtime error '5' on login has been repaired. This happened in a rare set of circumstances. (Thanks AC0)
+	- Custom commands using /bnet commands (such as /whisper) now function properly.
+	- The 'lag plug' option now functions properly.
+
+
+
+<b>VERSION 2.2</b>
+<i><b>*BUG FIXES</b></i>
+	- Safelist deletion functions properly
+	- Phrasebans function properly
+	- Deleted filters now save
+		These three errors were tied to changes in their retrieval method.
+	- The example hash file path now displays correctly for all gametypes.
+	- Logs are now correctly saved.
+	- Channel ops are no longer redisplayed when unsquelching.
+	- The .banned command now returns properly.
+	- The .cmdlist command no longer causes IPbans.
+	- Account creation when using hashes now functions properly.
+	- Diablo I statstrings are parsed correctly.
+	- Warcraft III and Frozen Throne statstrings are now parsed correctly.
+	- Added the Frozen Throne channel list icon.
+	- The Default-color button has been reworked and functions correctly.
+	- Bots no longer respond to properly-formed multiple-command queries.
+	- The user monitor has been significantly rewritten and functions much better.
+	- Users are no longer continuously re-added to the userlist when in The Void.
+
+<i><b>*CHANGES</b></i>
+	- Reenabled support for Warcraft III and added support for The Frozen Throne logins and account creation.
+	- Warcraft III clan names are now displayed in the userlist mouseover information.
+	- Queue messages are now prioritized so important /messages are sent first.
+	- Custom Commands no longer cause minimization of games.
+	- Added the /cls in bot command, equivalent to clicking "Clear Chat Window".
+	- You can now override the automatic join/leave message deactivation during rejoin flooding.
+	- Added the .del alias for .rem.
+	- Added account info lookups on connect (Account create date/time, last logon/logoff, time logged)
+		* The in-bot command "/accountinfo" can be used at any time to look this information up.
+	- The .mail command now requires only 20 access, and .online 50.
+	- Added support for flags in access.
+	- Added support for Starcraft "ÁX" color codes, and improved D2 color code support (thanks c0ol)
+	- Added %quote and %rnd arguments to idle messages.
+	- Added a "Get Warcraft III Clan List" feature in the Bot menu that retrieves the current clan member
+		list and displays it, clan functions such as promotion/demotion can be performed from this screen.
+	- Added stats lookups for various games to the channel list right-click menu.
+	- EFP's code has been moved under the parsing layer for an extra millisecond or two in banning.
+	- Added icon support for The Frozen Throne.
+	- Added commands:
+		100_________________________________________________
+		.loadwinamp		Loads Winamp using its default path or one specified in config.ini.
+		.allowmp3 (toggle)	Enables/disables MP3 commands.
+		90 _________________________________________________
+		.cs -channelname- 	Squelches everyone in the specified channel. Alias "sweepignore".
+		.cb -channelname- 	Bans everyone in the specified channel. Alias "sweepban".
+		.setmotd -message- 	Sets the Warcraft III Clan Message of the Day.
+		.invite -username- 	Invites a user to join your Warcraft III clan.
+		.clan -private/public-  Changes the status of your Warcraft III Clan channel.
+		.peonban on/off/status	Changes/verifies the status of peon banning.
+		70 _________________________________________________
+		.notify -username- 	Displays a public message when the specified user signs on.
+		.denotify -user-   	Disables notification of a specified user's signons.
+		50 _________________________________________________
+		.expand		  	Adds spaces between each character of a phrase.
+		40 _________________________________________________
+		.getping, .pingme 	Displays the user's ping at login.
+		20 _________________________________________________
+		.flip			Flips a coin. (Requested feature)
+		-0 _________________________________________________
+		.findattr, .findflag 	Displays users with a specified flag.
+
+
+<b>VERSION 2.1</b>
+<i><b>*BUG FIXES</i></b>
+	-Unban command actually works during EFP.
+	-Fixed an overflow error when users tried to set Winamp's volume over 32767.
+	-Safelisted users can no longer be banned using the "," suffix or the "@REALM" suffix.
+	-Fixed a glitch with the %rest CC operator
+	-Fixed an access glitch that allowed a user with lower access to demote another user
+
+<i><b>*CHANGES</b></i>
+	-Hashed connections are now an option.
+	-Added support for multiple-query commands (.say More; say Than; say One; say Line!)
+	-Added support for Diablo II ÿc# colors, thanks to BNU-Camel for the inspiration =)
+	-Added support for bold and italic text, ÿci and ÿcB
+	-Three logging settings, full partial and none.
+	-Added a voting system that supports votebanning and votekicking. See below.
+	-Hovering over a person's name in the channel list displays their ping and flags.
+	-New logging settings allow full, partial or zero logging of chat text.
+	-New dynamic-array queue system.
+	-Custom command system checks the safelist for /kick and /ban custom commands.
+	-Mail system has been rewritten.
+	-Added a graphic editor for custom commands.
+	-Modified ping retrieval function to work with 0ms ping times.
+	-Three clans have requested removal from the QuickChannel list.
+	-Support for multi-line anti-idle messages using "& " as the line split.
+	-Added direct-config support for customizable levelban messages.
+	-Added a flood protection cushion for .cmdlist, .safelist, .banned, .plist and more.
+	-User monitor is functional again. (Now using the account from Setup)
+	-Added shortcuts CTRL + B, CTRL + I: add Bold and Italic font code as you type.
+	-GUI changes - menus rearranged and other details
+	-Added commands:
+		100_________________________________________________
+		.locktext		Remotely locks the chat window.
+		90 _________________________________________________
+		.giveup / .op		Passes ops to the specified user
+		.readfile		Reads the specified textfile. More info in the readme.
+		.chpw -arguments-	Channel passwording commands - see the Readme
+		.idlebans/.ib -arguments-	IdleBan commands - see the Readme
+		80 _________________________________________________
+		.koy on/off		Enables or disables kick-on-yell.
+		.plugban on/off/status	Enables or disables PlugBans.
+		.d2levelban -argument-	Enables, disables, or alters Diablo II levelbans.
+		60 _________________________________________________
+		.tagcheck -username-	Returns the tagbans that a username matches.
+		.d2levelbans		With 60 access, returns current D2 levelban settings.
+		50 _________________________________________________
+		.vote -seconds-		Starts a vote lasting the requested #seconds.
+		.voteban -username-	Starts a voteban of the specified user.
+		.votekick -username-	Starts a votekick of the specified user.
+		.tally			Displays the current vote results
+		.cancel			Forces a vote to end prematurely.
+		.info -username-	Retrieves recorded information on the specified user.
+					[Username, ping time, time in channel]
+		.scq			Silent clear-queue.
+
+
+<b>VERSION 2.02</b>
+<i><b>*BUG FIXES</b></i>
+	-Safelist is checked during channel protection.
+	-Fixed a minor typographical error on first-run. (God bless Find and Replace)
+	-Returned flood protection to 1.92 levels when the bot has ops.
+	-Fixed settings-saving issues
+	-Safelisted users are not listed on channel protect.
+	-.cmdlist would occasionally crash the program, thanks T.V.
+	-Profile lookups from a detached channel list no longer cause a runtime error, thanks SeRiaL~KiLLa
+	-Catch phrases save between instances of the program
+	-Fixed a rare overflow error
+<i><b>*CHANGES</b></i>
+	-Added Emergency Floodbot Protection [EFP] mode. Toggle it by typing "/fl" in the bot. More in the readme.
+	-Added the much-requested %rest custom command argument, which is any arguments above the highest numbered argument specified in the actions. More in the readme.
+
+
+<b>VERSION 2.0</b>
+<i><b>*BUG FIXES</b></i>
+	-Fixed a bug related to pinging
+	-Fixed a bug related to wildcard kicking/banning
+	-Fixed a bug related to using /unban in the bot
+	-Fixed usage of setname, setpass, and setserver
+	-Fixed a channel protection bug
+	-(hopefully) repaired the causes of runtime errors 372 and 7
+	-Repaired the mail system to display the sender's name
+	-Fixed the unignore command
+	-Fixed a glitch in bancounts
+	-Ping/plug of users with ops will now always be shown.
+	-You can no longer rename people in the channel list. (Thanks NeTWorKz)
+
+<i><b>*CHANGES</b></i>
+	-You can now detach the channel list so that it is independent from the rest of the bot.
+	-Outgoing messages can be filtered through the Chat Filters dialog.
+	-The .unban command now supports wildcards.
+	-New inbot command /watch allows you to highlight one user's name, useful for busy channels
+	-Major GUI updates
+	-You can now specify the message used to ban during channel protection
+	-Users who return on name#2 or a different cdkey after being banned, will be banned.
+	-All options such as Greet Messages, disabled AutoClear and others are saved
+	-Idle messages and fast rejoins are now auto-suppressed in Clan [vL]
+	-Added GreetMessage tags: %0 %1 %c %p %v
+	-Cheat prevention added to Tic Tac Toe
+	-AutoClear will now remove one line at a time from the top of the channel text. Removed lines
+		are stored in clearedtext.txt on the fly.
+	-MAJOR code structure and efficiency changes
+	-Bot now reconnects on BNLS errors
+	-Catch Phrases allows the user to record text, whispers and emotes containing certain phrases
+	-The .tagbans, .shitlist and .safelist commands will whisper back.
+	-Modified the .back command to act as .prev if no away message is set.
+	-All-new custom command structure implemented.
+	-Whisperback commands have Diablo II support.
+	-Added designate and squelch to the right-click channel list.
+	-Changed several response formats. [tagbans, mp3s]
+	-Added IPBanning, ClientBans, PhraseBans, and bans by Warcraft III level.
+	-Shitlist messages are customizable by .shitlist -username- -message-
+	-Added commands:
+		90 _________________________________________________
+		.quiettime/.qt on/off	Enables/disables QuietTime
+		.quiettime/.qt status	Displays QuietTime status
+		80 _________________________________________________
+		.levelban		Sets/disables current levelban level.
+		.des/.designate		Changes to these two
+		.clist/clientbans/cbans	Displays currently banned clients.
+		.cadd / .addclient	Adds a client to the ClientBans list
+		.cdel / .delclient	Removes a client from the ClientBans list
+		.setvol	-volume-	Sets Winamp 2.x's current volume (0-100)
+		70 _________________________________________________
+		.cmdadd/.addcmd		Adds custom commands
+		.cmddel/.delcmd		Deletes custom commands
+		.cmdlist/.listcmds	Lists custom commands
+		.phrases/.plist		Lists phrasebans
+		.addphrase/.padd	Adds phrasebans
+		.delphrase/.pdel	Deletes phrasebans
+		.pon/.poff/.pstatus	Enables/disables/shows status of phrasebans.
+		.phrasebans on/off/status	Enables/disables/shows status of phrasebans.
+		.ipbans on/off/status	Enables/disables/shows status of ipbanning.
+		.ipban -username-	Squelches and theoretically ipbans a user.
+		.unipban -username-	Unsquelches and theoretically unipbans a user.
+		.banned			Lists banned users.
+		.setpmsg		Sets the Channel Protection message.
+		60 _________________________________________________
+		.levelban		Displays current levelban level.
+		40 _________________________________________________
+		.dns			Performs a DNS lookup on the specified server.
+		20 _________________________________________________
+		.designated		Displays the user that the bot last designated.
+
+
+
+<b>VERSION 1.92</b>
+	-Fixed Runtime Error 13 which occurred when commands were used for an unknown reason.
+
+<b>VERSION 1.91</b>
+	-Fixed some minor bugs/error messages
+	-Fixed an access bug
+
+<b>VERSION 1.9</b>
+
+<i><b>*BUG FIXES</b></i>
+	-Fixed Run-Time Error '5' that was linked to ProfileAmp
+	-Fixed a the .ignore and .unignore commands. They were unbelievably screwed up, shows how much I use 'em ;)
+	-Fixed a bug in the wildcard banning subroutine that handles tagbans and wildcard bans. The bug caused the wildcards to be misread and extra people to get banned.
+	-Fixed a minor bug with ban messages.
+	-A MAJOR SECURITY HOLE WAS REPAIRED IN THE USER ACCESS CHECK CODE. This relatively unknown bug allowed a -smart-, unauthorized user to imitate another user and gain their access to the bot.
+
+<i><b>*CHANGES</b></i>
+	-You can now select text directly from the chat window and it will be placed on the Clipboard.
+	-You can now type .botname -command- so that just that bot uses the requested command.
+	-You can now paste multiple lines of text at the same time into the SEND box. They will be added in order to the queue.
+	-Channel greet messages :)
+	-You can now type .play *song title* to play the first match to that title on your Winamp playlist. ;)
+	-New idle message variables: %botup, %cpuup, %mp3
+	-USER MONITOR! Choose "User Monitor" under the Other Settings menu.
+	-The 1.05 Patch for Warcraft III has forced me to disable support for it. I hope to work around 	this in the future.
+	-Users can choose to not accept tic tac toe invitations now.
+	-Big menu organization changes.
+	-Users can be kicked and banned by rightclicking their names in the channel list.
+	-.profile command now works with multi-line descriptions without problems
+	-.find and .whois now accept wildcards, eg. ".find s*" to find anyone whose name starts with s
+	-.find and .whois now accept access numbers, eg. ".find 80" to find anyone with access 80
+	-Added commands: .allseen, .play *songtitle*, .whispercmds (toggle), .greet off, .greet -message-, .check -name-, .online, .monitor -name-, unmonitor -name-, .set -name- -access- (same as .add), .setname -username-, .setpass -password-, .setserver -server-
+	-New moderator icon (gavel)
+	-Removed the News screen which nobody used :P
+	-Minor GUI changes
+		
+
+<b>v1.8 - Update</b>
+	-StealthBot now has lag icons -;)
+	-Tagbans and Channel Protection have been reinstated.
+	-Safelist code has been modified so that it works properly.
+	-You can now play a specific track by typing .play -tracknumber-
+	-Fixed a bug where when using Diablo II Classic without realms peoples names wouldn't be deleted from the channel list.
+	-Fixed a bug that occurred when sending mail from inside the bot (/mail)
+	-Battle.net commands are no longer displayed, they are just sent.
+	-Basic, working flood protection is in place. Please let me know about how well this works.
+	-New splash screen, thanks to {DK}Disturbed
+	-New bot icon, thanks to ReV.ReCoN
+	-Inter-StealthBot Tic Tac Toe is now available ;) Read the readme for more info.
+	-Connect button will now disconnect first, preventing winsock errors some users were getting
+	-Added commands: .shout, .cq, .whoami, .whois, .protect on/off, .shitlist -user-, .shitadd -user-, .pban -user-, .safelist -user-, .safeadd -user-, .shitdel, .tagdel, .safedel, .shitlist, .safelist, .tagbans, .play -tracknumber-, .profile -user- (buggy), .mimic -user-, .nomimic
+	(.safelist, .shitlist, and .tagbans display the contents of their respective lists)
+	-"/r message" now functions like "/reply message" (laziness rules)
+	-Modified commands: .kick, .ban both accept wildcards now
+	-Code streamlining
+	-Step-by-step config button in Setup for the new bot users ;)
+	-Minor GUI changes
+
+
+<b>v1.7 - Skipped</b>
+	-Big changes happened
+	-$aInT released a trojaned "LEAKED" 1.7, which was actually a hexed 1.4
+	-1.7 had bad gas and I ran out of Pepto-Bismol
+
+
+<b>v1.6 - Update</b>
+	-Chat and channel list font and size controls! Choose Interface Settings under the 	Window menu.
+	-Added whisper forwarding =)
+	-Fixed a bug involving peoples' names not being deleted from the channel when logged on through Diablo II LOD. You will still occasionally see double of some d2 users when logged in with D2. I'm working on it. :
+	-Really fixed the quote-idle bug.
+	-Improved floodbot autodetection
+	-Added commands: .mail, !inbox
+	-Chat filters can be toggled, so CPU usage is reduced when no floodbots are around
+	-.newtrigger now modifies the trigger in the config.ini file.
+	-.uptime and the Uptime idle type now display the connection uptime as well.
+	-Bot doesn't crash when recieving D2LOD ops anymore.
+	-Added the Bot - Edit Files menu incase you want to modify the files themselves.
+	-Minor GUI changes
+	-Added connection uptime in idles and .uptime command
+	-Bot will now attempt to reconnect on 10060 timeout errors
+	-Added 4 more quickchannels by popular request
+	-Fixed an error involving tray minimization, it was minor
+
+
+
+<b>v1.5 - Update</b>
+	-The Profile Reader window has been upgraded to let you copy things out of it.
+	-Added Text Message Filters
+	-Added Username Block List (with wildcard support)
+	-StealthBot can see in The Void now.
+	-Added ProfileAmp, more information is in the readme.
+	-Fixed the idles that I totally destroyed somehow.
+	-Added commands: .block, .filter, .idle (toggle), .setidle (message), .idletype,
+		.idletime, .home
+	-Minor GUI changes
+	-Fixed a bug with the quote-type idle.
+
+
+
+<b>v1.4 - Major Release</b>
+	-StealthBot now uses CleanSlateBot2
+	-The bot now has Warcraft III support thanks to the CleanSlateBot update
+	-Added error checking
+	-Switched to a cleaner idle timer system
+	-Profile reading/writing support! Read the readme for more info
+	-Switched to a much more efficient, cleaner .ini config system
+	-Added shortcut keys:
+		CTRL + L - Lock Channel Window
+		CTRL + K - Toggle Chat Window Auto-Clear
+		CTRL + J - Toggle Join/Leave Messages
+		CTRL + P - Open Setup
+	-Added commands: .time, .sethome, .newdef, .def / .define
+	-Switched to a ComboBox for text sending, lets you see your last few messages
+	-Added code to automatically resize the objects on the form when you resize the bot
+	-Disabled some unused constants to reduce memory use
+	-Objects on the form scale in size when you resize the window
+	-GUI changes, including Pre and Post boxes -- view the readme for more info.
+	-Fixed a bug where connecting with D2, disconnecting and connecting with another product would crash the program
+	-Cleaned up global variables to reduce initial memory use
+	-Added better and additional icons
+	-Added config error checking code
+
+
+
+<b>v1.1.2 - Update</b>
+	-Quote, MP3 and Uptime idles as well as standard messages :)
+		(these may not quite work properly when the bot is minimized, still checking)
+	-Right-click menu available in the channel list, double-clicking on a name puts it in the send box
+	-Altered color code to make the bot appear the same on all Windows schemes
+		(this will let me have skins in the future as well)
+	-The bot now minimizes to the system tray
+	-The channel list now shows game icons
+	-Fixed minor bugs with .away, .des, /reply and the random quote system
+	-Added commands: .lastwhisper, .bancount
+	-You can now type "/joinhome" in the bot to send you to your home channel.
+
+
+
+<b>v1.1.0 - Major Release</b>
+	-Added Winamp support ;)
+	-Added Diablo II LOD Realm Logon support
+	-Introduced code to handle Diablo II's view of usernames. (No *'s)
+	-Added the .rem command to remove users from the userlist
+	-Added error handling code.
+	-Bot will rejoin if kicked
+	-GUI changes
+	-Users whose names match the clan channels they are in will be shown as having ops.
+	-Fixed a bug regarding the user manager.
+	-Users can be removed from the user manager.
+	-Added a join/leave message toggle, chat window lock, and toggle for the chat window auto-clear feature in the Window menu.
+	-Added commands ping and uptime
+	-Modifications to the old command structure to allow most commands to be sent from within the bot (/command) and by whisper
+	-Users will now always be removed from the channel list when they leave. Visual Basic's method of handling wildcards was responsible for this, users with brackets and other symbols in their names weren't removed properly.
+	-Typing /away (message) and /back will set your status to away and inform others in the channel. Remote commands can do this as well =)
+	-Uptimes added
+	-Added a complete list of servers in the Setup screen
+	-Added a new custom icon, thanks to Andrew "Monki3e" S.
+	-Added a new splash screen, thanks to phace.
+	-Fixed issues with some channel ops
+
+
+
+<b>v1.0.2 - Bug Fixes</b>
+	-Fixed a bug regarding old and incomplete config files and the splash screen load
+	-Fixed a bug regarding the random quote feature
+	-Added the .server command for good measure
+
+
+
+<b>v1.0.1 - Major Release</b>
+	-Basic flood protection on all commands that talk to battle.net (eg, tagbanned bots massload, the bot will delay after banning each one) This needs work, please send me feedback
+	-Added many commands, listed in readme.txt
+	-Added lockdown, tagbans, shitlist and commands to turn off the checking of said lists
+	-Rewrote parts of the code for efficiency
+	-Supports ban and kick messages, checks userlist and safelist before banning unless the banner's access is over 100
+	-Bot will reconnect if disconnected by flooding or other reasons
+	-Added the /reply in-bot command which will whisper back to the last person who sent you a whisper
+	-Added the /rejoin in-bot command which will rejoin the last channel
+	-Added splash screen, graphic thanks to {DK}Disturbed, and a way to turn it off.
+	-Added the /add in-bot command which adds users to the database "/add Username Access" in the chat window. (chew-style)
+	-Anti-idles, the timer is set up but not functioning properly.
+	-Added userlist manager (bot - User Manager) so you can see all the users present in your userlist
+	-Chat box will clear itself after 16,000 characters are present in the chat window (this prevents someone from dropping the bot by mass-messages or join flooding)
+	-GUI changes for the About and Setup dialogs
+	-Setup dialog works right when used more than once
+	-Fixed the /unsquelch and /squelch bugs
+	-Changed the channel list text color to be more visible on dim monitors.
+	-People will now be removed from the channel list when they leave the channel.
+
+
+
+<b>v1.0 BETA 3 - Final Beta Release</b>
+	-Access and commands! Information is in readme.txt.
+	-Minor bug fixes.
+	-Slight GUI changes.
+	-The Current Channel label is fixed.
+	-The ding is gone! Will only ding if nothing is entered in the send box and ENTER is pressed.
+	-Debug removed from the Bot menu. I used this command to test string returns.
+	-Will now tell you what users have secondary ops - working on having them placed at the top of 		the ListBox
+	
+<b>v1.0 BETA 2</b>
+	-Fixed a minor emote display bug
+	-Connect button will now disconnect before connecting. (Reconnects)
+	-Modified the Setup GUI
+	-Will not send messages to battle.net if they are too long
+	-Warcraft III logins disabled, on testing they didn't function right
+	-Added Current Channel label
+	-Clicking once on a person's name in the list of users will copy their username to the clipboard!
+
+
+
+<b>v1.0 BETA 1 - First publicly distributed release</b>
+	-Fixed the nasty problem that caused people's names to stay in the channel list after they left it.
+	-Timestamps are everywhere now!
+	-Added support for whispers with proper colors =p
+	-Bot now supports flags - it will display appropriate messages if a user gains or loses ops
+	-User's statstring is displayed when they join the channel, new format of join messages:
+	 " user:ping has joined the channel using product (statstring message) "
+	-Still working on profile support!
+	-Rumors of compatibility issues with the CSB ocx component
+	-Added error support for people who try to connect without a config file present
+
+
+
+<b>v0.5 ALPHA</b>
+	-Added timestamps after the login sequence
+	-ENTER key bound to Send
+	-Focus is maintained when sending text to battlenet
+	-Will not send a blank message to battlenet with the ENTER key, the Send label will still do this
+	-Working on profile retrieval!
+	-Will now display a user's name in the channel when they join it
+	-Will no longer display "BNLS: Disconnected" message if the bot is online - this was a useless 		 message, BNLS disengages the bot after it has connected
+	-Added Bot--Clear Window menu option
+
+CHANGELOG BEGINS - MID-NOVEMBER 2003
