@@ -173,7 +173,6 @@ Public Enum BanTypes
     btUnban = 2
 End Enum
 
-Public strSettingNotes '// used to store notes on your plugin settings
 
 
 
@@ -1156,10 +1155,9 @@ Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal 
     strSettingsPath = BotPath() & "plugins\settings.ini"
 
     If Len(strDescription) > 0 Then
-        If InStr(strSettingNotes, LCase(strPrefix) & "|" & strName & "|") = 0 Then
-            strSettingNotes = strSettingNotes & LCase(strPrefix) & "|" & strName & "|" & strDescription & "||"
-        End If
+        SetSetting strPrefix, strName & ".Description", strDescription, "", True
     End If
+    
     If boolOverwrite Or Len(GetConfigEntry(strPrefix, strName, strSettingsPath)) = 0 Then
         If Len(strName & varValue) > 254 Then
             WriteConfigEntry UCase(strPrefix), strName, Left(varValue, 254 - Len(strName)), strSettingsPath
@@ -1168,6 +1166,7 @@ Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal 
             SetSetting strPrefix, arrSetting(0) & "*" & i, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
         Else
             WriteConfigEntry UCase(strPrefix), strName, varValue, strSettingsPath
+            AddPSetting strPrefix, strName
         End If
     End If
 End Sub
@@ -1254,9 +1253,9 @@ Public Function GetTimeLeft(ByVal strPrefix As String, ByVal strTimerName As Str
 End Function
 
 
-'// GETTIMEWAITING
+'// GETTIMERWAITING
 '//   Written by Swent. Get's the time (in seconds) since a plugin timer sub was last executed.
-Public Function GetTimeWaiting(ByVal strPrefix As String, ByVal strTimerName As String)
+Public Function GetTimerWaiting(ByVal strPrefix As String, ByVal strTimerName As String)
 
     GetPTWaiting strPrefix, strTimerName
 End Function
