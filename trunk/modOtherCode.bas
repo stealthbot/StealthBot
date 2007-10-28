@@ -408,27 +408,143 @@ End Function
 Public Function GetAccess(ByVal Username As String) As udtGetAccessResponse
     Dim i As Integer
 
-    Username = Username
-    
-    If (Left$(Username, 1) = "*") Then
-        Username = Mid$(Username, 2)
-    End If
+    'If (Left$(Username, 1) = "*") Then
+    '    Username = Mid$(Username, 2)
+    'End If
 
     For i = LBound(DB) To UBound(DB)
         If (StrComp(DB(i).Username, Username, vbTextCompare) = 0) Then
-            GetAccess.Username = DB(i).Username
-            GetAccess.Access = DB(i).Access
-            GetAccess.Flags = DB(i).Flags
-            GetAccess.AddedBy = DB(i).AddedBy
-            GetAccess.AddedOn = DB(i).AddedOn
-            GetAccess.ModifiedBy = DB(i).ModifiedBy
-            GetAccess.ModifiedOn = DB(i).ModifiedOn
+            With GetAccess
+                .Username = DB(i).Username
+                .Access = DB(i).Access
+                .Flags = DB(i).Flags
+                .AddedBy = DB(i).AddedBy
+                .AddedOn = DB(i).AddedOn
+                .ModifiedBy = DB(i).ModifiedBy
+                .ModifiedOn = DB(i).ModifiedOn
+                .BanMessage = DB(i).BanMessage
+            End With
             
             Exit Function
         End If
     Next i
 
     GetAccess.Access = -1
+End Function
+
+Public Function GetCumulativeAccess(ByVal Username As String) As udtGetAccessResponse
+    Dim i       As Integer ' ...
+    Dim found   As Boolean ' ...
+    Dim dbIndex As Integer ' ...
+    Dim dbCount As Integer ' ...
+    
+    ' default index to negative one to
+    ' indicate that no matching users have
+    ' been found
+    dbIndex = -1
+
+    ' ...
+    If (DB(0).Username <> vbNullString) Then
+        ' ...
+        For i = LBound(DB) To UBound(DB)
+            ' ...
+            If (StrComp(Username, DB(i).Username, vbTextCompare) = 0) Then
+                With GetCumulativeAccess
+                    .Username = DB(i).Username
+                    .Access = DB(i).Access
+                    .Flags = DB(i).Flags
+                    .AddedBy = DB(i).AddedBy
+                    .AddedOn = DB(i).AddedOn
+                    .ModifiedBy = DB(i).ModifiedBy
+                    .ModifiedOn = DB(i).ModifiedOn
+                    .BanMessage = DB(i).BanMessage
+                End With
+                
+                dbIndex = i
+    
+                Exit For
+            End If
+        Next i
+    
+        ' ...
+        If ((InStr(1, Username, "*", vbBinaryCompare) = 0) And _
+            (InStr(1, Username, "?", vbBinaryCompare) = 0)) Then
+    
+            ' ...
+            GetCumulativeAccess.Username = GetCumulativeAccess.Username & _
+                IIf((dbIndex + 1), Space(1), vbNullString) & "["
+        
+            ' ...
+            For i = LBound(DB) To UBound(DB)
+                Dim bln As Boolean ' ...
+            
+                ' ...
+                If ((i <> dbIndex) And ((LCase$(PrepareCheck(Username))) Like _
+                    (LCase$(DB(i).Username)))) Then
+                    
+                    Dim j As Integer ' ...
+                
+                    ' ...
+                    If (GetCumulativeAccess.Access < DB(i).Access) Then
+                        GetCumulativeAccess.Access = DB(i).Access
+                        
+                        ' ...
+                        bln = True
+                    End If
+                    
+                    ' ...
+                    For j = 1 To Len(DB(i).Flags)
+                        ' ...
+                        If (InStr(1, GetCumulativeAccess.Flags, Mid$(DB(i).Flags, j, 1), _
+                            vbBinaryCompare) = 0) Then
+                            
+                            ' ...
+                            GetCumulativeAccess.Flags = GetCumulativeAccess.Flags & _
+                                Mid$(DB(i).Flags, j, 1)
+                            
+                            ' ...
+                            bln = True
+                        End If
+                    Next j
+                    
+                    ' ...
+                    If ((GetCumulativeAccess.BanMessage = vbNullString) Or _
+                        (GetCumulativeAccess.BanMessage = "%")) Then
+                        
+                        GetCumulativeAccess.BanMessage = DB(i).BanMessage
+                    End If
+                    
+                    If (bln) Then
+                        ' ...
+                        GetCumulativeAccess.Username = GetCumulativeAccess.Username & _
+                            DB(i).Username & ", "
+                    End If
+                    
+                    ' ...
+                    dbCount = (dbCount + 1)
+                End If
+                
+                ' ...
+                bln = False
+            Next i
+            
+            If (dbCount > 0) Then
+                ' ...
+                GetCumulativeAccess.Username = Left$(GetCumulativeAccess.Username, _
+                    Len(GetCumulativeAccess.Username) - 2) & "]"
+            Else
+                ' ...
+                If (dbIndex = -1) Then
+                    ' ...
+                    GetCumulativeAccess.Username = vbNullString
+                Else
+                    ' ...
+                    GetCumulativeAccess.Username = Left$(GetCumulativeAccess.Username, _
+                        Len(GetCumulativeAccess.Username) - 2)
+                End If
+            End If
+        End If
+    End If
 End Function
 
 Public Sub RequestSystemKeys()
@@ -453,10 +569,10 @@ End Sub
 '// parses a system time and returns in the format:
 '//     mm/dd/yy, hh:mm:ss
 '//
-Public Function SystemTimeToString(ByRef sT As SYSTEMTIME) As String
+Public Function SystemTimeToString(ByRef st As SYSTEMTIME) As String
     Dim buf As String
 
-    With sT
+    With st
     
         buf = buf & .wMonth & "/"
         buf = buf & .wDay & "/"
@@ -471,10 +587,10 @@ Public Function SystemTimeToString(ByRef sT As SYSTEMTIME) As String
 End Function
 
 Public Function GetCurrentMS() As String
-    Dim sT As SYSTEMTIME
-    GetLocalTime sT
+    Dim st As SYSTEMTIME
+    GetLocalTime st
     
-    GetCurrentMS = Right$("000" & sT.wMilliseconds, 3)
+    GetCurrentMS = Right$("000" & st.wMilliseconds, 3)
 End Function
 
 Public Function ZeroOffset(ByVal lInpt As Long, ByVal lDigits As Long) As String
