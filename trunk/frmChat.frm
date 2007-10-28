@@ -149,6 +149,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -846,6 +847,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1429,7 +1431,6 @@ Private Sub Form_Load()
     Dim f As Integer ', i As Integer
     Dim l As Long
     Dim FrmSplashInUse As Boolean
-    
     
     ' COMPILER FLAGS
     #If BETA = 1 Then
@@ -4391,10 +4392,6 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                         
                                         commandResult = ProcessCommand(CurrentUsername, cboSend.text, _
                                             True, False)
-                                            
-                                        If (commandResult = False) Then
-                                            Call AddQ(OutFilterMsg(s))
-                                        End If
                                     Else
                                         Call AddQ(OutFilterMsg(s))
                                     End If
@@ -5062,7 +5059,8 @@ End Sub
 '/* Fires every second */
 Private Sub UpTimer_Timer()
     Dim newColor As Long
-    Dim i As Integer, ThisPos As Integer
+    Dim i        As Integer
+    Dim ThisPos  As Integer
 
     uTicks = uTicks + 1000
     
