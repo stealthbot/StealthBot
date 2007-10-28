@@ -117,7 +117,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     ' check for multiple command syntax if not issued from
     ' within the console
     If ((Not (InBot)) And _
-        (InStr(1, tmpMsg, "; ", vbTextCompare) > 0)) Then
+        (InStr(1, tmpMsg, "; ", vbBinaryCompare) > 0)) Then
        
         Dim X() As String  ' ...
     
@@ -131,14 +131,18 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             ' store local copy of message
             tmpX = X(i)
         
-            ' check for presence of command identifer
-            If (Left$(tmpX, Len(BotVars.Trigger) = BotVars.Trigger)) Then
-                ' remove command identifier from message
-                tmpX = Mid$(tmpX, Len(BotVars.Trigger) + 1)
+            ' can we check for a command identifier without
+            ' causing an rte?
+            If (Len(tmpX) >= Len(BotVars.Trigger)) Then
+                ' check for presence of command identifer
+                If (Left$(tmpX, Len(BotVars.Trigger)) = BotVars.Trigger) Then
+                    ' remove command identifier from message
+                    tmpX = Mid$(tmpX, Len(BotVars.Trigger) + 1)
+                End If
             End If
         
             ' execute command
-            ProcessCommand = ExecuteCommand(Username, GetAccess(Username), X(i), _
+            ProcessCommand = ExecuteCommand(Username, GetAccess(Username), tmpX, _
                 InBot, cmdRet())
             
             If (ProcessCommand) Then
@@ -614,7 +618,7 @@ Private Function OnInvite(ByVal Username As String, ByRef dbAccess As udtGetAcce
             
             tmpBuf = msgData & ": Clan invitation sent."
         Else
-            tmpBuf = "The bot must hold Shaman or Chieftain rank to invite users."
+            tmpBuf = "Error: The bot must hold Shaman or Chieftain rank to invite users."
         End If
     End If
     
@@ -637,7 +641,7 @@ Private Function OnSetMotd(ByVal Username As String, ByRef dbAccess As udtGetAcc
             
             tmpBuf = "Clan MOTD set."
         Else
-            tmpBuf = "Shaman or Chieftain rank is required to set the MOTD."
+            tmpBuf = "Error: Shaman or Chieftain rank is required to set the MOTD."
         End If
     End If
     
@@ -705,7 +709,7 @@ Private Function OnQuietTime(ByVal Username As String, ByRef dbAccess As udtGetA
             End If
         
         Case Else
-            tmpBuf = "Invalid arguments."
+            tmpBuf = "Error: Invalid arguments."
     End Select
     
     ' return message
@@ -740,7 +744,7 @@ Private Function OnRoll(ByVal Username As String, ByRef dbAccess As udtGetAccess
                 tmpBuf = "Invalid value."
             End If
         Else
-            tmpBuf = "Invalid value."
+            tmpBuf = "Error: Invalid value."
         End If
     End If
     
@@ -976,9 +980,10 @@ Private Function OnIdleBans(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     Dim strArray() As String ' ...
     Dim tmpBuf     As String ' temporary output buffer
-    Dim subCmd     As String
+    Dim subCmd     As String ' ...
     
-    subCmd = LCase$(Mid$(msgData, 1, InStr(1, msgData, Space$(1), vbBinaryCompare)))
+    subCmd = LCase$(Mid$(msgData, 1, InStr(1, msgData, _
+        Space$(1), vbBinaryCompare)))
     
     If (Len(subCmd) > 0) Then
         Select Case (subCmd)
@@ -1012,7 +1017,7 @@ Private Function OnIdleBans(ByVal Username As String, ByRef dbAccess As udtGetAc
                 
                 tmpBuf = "IdleBans deactivated."
                 
-                WriteINI "Other", "IdleBans", "N"
+                Call WriteINI("Other", "IdleBans", "N")
             
             Case "wait", "delay"
                 strArray() = Split(msgData, " ")
@@ -1024,7 +1029,7 @@ Private Function OnIdleBans(ByVal Username As String, ByRef dbAccess As udtGetAc
                     
                     Call WriteINI("Other", "IdleBanDelay", CInt(strArray(1)))
                 Else
-                    tmpBuf = "IdleBan delays require a numeric value."
+                    tmpBuf = "Error: IdleBan delays require a numeric value."
                 End If
                 
             Case "kick"
@@ -1047,10 +1052,10 @@ Private Function OnIdleBans(ByVal Username As String, ByRef dbAccess As udtGetAc
                             BotVars.IB_Kick = False
                             
                         Case Else
-                            tmpBuf = "Unknown idle kick setting."
+                            tmpBuf = "Error: Unknown idle kick setting."
                     End Select
                 Else
-                    tmpBuf = "Not enough arguments were supplied."
+                    tmpBuf = "Error: Not enough arguments were supplied."
                 End If
                 
             Case "status"
@@ -1062,10 +1067,8 @@ Private Function OnIdleBans(ByVal Username As String, ByRef dbAccess As udtGetAc
                 End If
                 
             Case Else
-                tmpBuf = "Invalid IdleBan command."
+                tmpBuf = "Error: Invalid IdleBan command."
         End Select
-    Else
-        tmpBuf = "Invalid IdleBan command arguments."
     End If
         
     ' return message
@@ -1102,10 +1105,10 @@ Private Function OnChPw(ByVal Username As String, ByRef dbAccess As udtGetAccess
                         
                         tmpBuf = "Channel password delay set to " & strArray(1) & "."
                     Else
-                        tmpBuf = "Channel password delays cannot be more than 255 seconds."
+                        tmpBuf = "Error: Channel password delays cannot be more than 255 seconds."
                     End If
                 Else
-                    tmpBuf = "Time setting requires a numeric value."
+                    tmpBuf = "Error: Time setting requires a numeric value."
                 End If
                 
             Case "off", "kill", "clear"
@@ -1126,7 +1129,7 @@ Private Function OnChPw(ByVal Username As String, ByRef dbAccess As udtGetAccess
                 End If
                 
             Case Else
-                tmpBuf = "Unknown channel password command."
+                tmpBuf = "Error: Unknown channel password command."
         End Select
     Else
         tmpBuf = "Error setting channel password."
@@ -1356,7 +1359,7 @@ Private Function OnSetVol(ByVal Username As String, ByRef dbAccess As udtGetAcce
             
             tmpBuf = "Volume set to " & msgData & "%."
         Else
-            tmpBuf = "Invalid volume level (0-100)."
+            tmpBuf = "Error: Invalid volume level (0-100)."
         End If
     End If
     
@@ -1399,8 +1402,6 @@ Private Function OnCAdd(ByVal Username As String, ByRef dbAccess As udtGetAccess
         End If
         
         tmpBuf = "Added clientban(s): " & UCase$(msgData)
-    Else
-        tmpBuf = "You must enter a client to ban."
     End If
     
     ' return message
@@ -1422,7 +1423,7 @@ Private Function OnCDel(ByVal Username As String, ByRef dbAccess As udtGetAccess
     If (InStr(1, cBans, msgData, vbBinaryCompare) <> 0) Then
         cBans = Replace(cBans, msgData, vbNullString)
         
-        WriteINI "Other", "ClientBans", Replace(cBans, "  ", vbNullString)
+        Call WriteINI("Other", "ClientBans", Replace(cBans, "  ", vbNullString))
         
         ClientBans() = Split(ReadCFG("Other", "ClientBans"), " ")
         
@@ -1432,7 +1433,7 @@ Private Function OnCDel(ByVal Username As String, ByRef dbAccess As udtGetAccess
         
         tmpBuf = "Clientban """ & UCase$(msgData) & """ deleted."
     Else
-        tmpBuf = "Client is not banned."
+        tmpBuf = "Error: Client is not banned."
     End If
     
     ' return message
@@ -1526,7 +1527,7 @@ Private Function OnIPBans(ByVal Username As String, ByRef dbAccess As udtGetAcce
             tmpBuf = "IPBanning is currently disabled."
         End If
     Else
-        tmpBuf = "Unrecognized IPBan command. Use 'on', 'off' or 'status'."
+        tmpBuf = "Error: Unrecognized IPBan command. Use 'on', 'off' or 'status'."
     End If
         
     ' return message
@@ -1551,7 +1552,7 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
         If (dbAccess.Access < 101) Then
             If ((GetSafelist(msgData)) Or (GetSafelist(msgData))) Then
                 ' return message
-                cmdRet(0) = "That user is safelisted."
+                cmdRet(0) = "Error: That user is safelisted."
                 
                 Exit Function
             End If
@@ -1562,7 +1563,7 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
         If ((gAcc.Access >= dbAccess.Access) Or _
             ((InStr(gAcc.Flags, "A") > 0) And (dbAccess.Access < 101))) Then
 
-            tmpBuf = "You do not have enough access to do that."
+            tmpBuf = "Error: You do not have enough access to do that."
         Else
             Call AddQ("/squelch " & IIf(Dii, "*", "") & msgData, 1)
         
@@ -1570,7 +1571,7 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
         End If
     Else
         ' return message
-        tmpBuf = "You do not have enough access to do that."
+        tmpBuf = "Error: You do not have enough access to do that."
     End If
         
     ' return message
@@ -1588,8 +1589,6 @@ Private Function OnUnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
         Call AddQ("/unban " & IIf(Dii, "*", "") & msgData, 1)
         
         tmpBuf = "User " & Chr(34) & msgData & Chr(34) & " Un-IPBanned."
-    Else
-        tmpBuf = "Un-IPBan who?"
     End If
         
     ' return message
@@ -1615,10 +1614,8 @@ Private Function OnDesignate(ByVal Username As String, ByRef dbAccess As udtGetA
             
             tmpBuf = "I have designated [ " & msgData & " ]"
         Else
-            tmpBuf = "The bot does not have ops."
+            tmpBuf = "Error: The bot does not have ops."
         End If
-    Else
-        tmpBuf = "Designate who?"
     End If
     
     ' return message
@@ -2008,7 +2005,7 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             If ((InStr(1, GetAccess(Username).Flags, "A") = 0) And _
                 (GetAccess(Username).Access < 100) And (Not (InBot))) Then
             
-                tmpBuf = "That user is Locked."
+                tmpBuf = "Error: That user is Locked."
             End If
         Else
             tmpBuf = RemoveItem(u, "users")
@@ -2022,8 +2019,6 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             
             Call LoadDatabase
         End If
-    Else
-        tmpBuf = "Remove what user?"
     End If
 
     ' return message
@@ -2162,7 +2157,7 @@ Private Function OnIdle(ByVal Username As String, ByRef dbAccess As udtGetAccess
                 
                 tmpBuf = "Idle kick disabled."
             Else
-                tmpBuf = "Unknown idle kick command."
+                tmpBuf = "Error: Unknown idle kick command."
             End If
         End If
     Else
@@ -2177,68 +2172,51 @@ End Function ' end function OnIdle
 Private Function OnShitDel(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
 
-    Dim u      As String
-    Dim tmpBuf As String ' temporary output buffer
+    Dim u        As String
+    Dim tmpBuf() As String ' temporary output buffer
     
-    u = msgData
+    ' redefine array size
+    ReDim Preserve tmpBuf(0)
     
-    If ((MyFlags = 2) Or (MyFlags = 18)) Then
-        Call AddQ("/unban " & IIf(Dii, "*", "") & u, 1)
-    End If
-    
-    tmpBuf = RemoveItem(u, "autobans")
-    tmpBuf = Replace(tmpBuf, "%msgex%", "shitlist")
-    
-    If (InStr(tmpBuf, "Successfully")) Then
-        If (BotVars.LogDBActions) Then
-            Call LogDBAction(RemEntry, Username, u, msgData)
-        End If
-    End If
+    ' remove user from shitlist using "add" command
+    Call OnAdd(Username, dbAccess, msgData & " -B", InBot, tmpBuf())
         
     ' return message
-    cmdRet(0) = tmpBuf
+    cmdRet() = tmpBuf()
 End Function ' end function OnShitDel
 
 ' handle safedel command
 Private Function OnSafeDel(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim b      As Boolean
-    Dim u      As String
-    Dim tmpBuf As String ' temporary output buffer
+    Dim u        As String
+    Dim tmpBuf() As String ' temporary output buffer
 
+    ReDim Preserve tmpBuf(0)
+    
     u = msgData
         
-    b = RemoveFromSafelist(u)
-    
-    If (b) Then
-        tmpBuf = "That user has been removed from the safelist."
-    Else
-        tmpBuf = "That user is not safelisted, or there was an error removing them."
-    End If
-        
+    Call OnAdd(Username, dbAccess, u & " -S", InBot, tmpBuf())
+
     ' return message
-    cmdRet(0) = tmpBuf
+    cmdRet() = tmpBuf()
 End Function ' end function OnSafeDel
 
 ' handle tagdel command
 Private Function OnTagDel(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim u      As String
-    Dim tmpBuf As String ' temporary output buffer
+    Dim u        As String
+    Dim tmpBuf() As String ' temporary output buffer
     
-    u = msgData
+    ' redefine array size
+    ReDim Preserve tmpBuf(0)
     
-    If (Len(u) > 0) Then
-        tmpBuf = RemoveItem(u, "tagbans")
-        tmpBuf = Replace(tmpBuf, "%msgex%", "tagban")
-    Else
-        tmpBuf = "Delete what tag?"
-    End If
-    
+    ' remove user from shitlist using "add" command
+    Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " -B", InBot, tmpBuf())
+        
     ' return message
-    cmdRet(0) = tmpBuf
+    cmdRet() = tmpBuf()
 End Function ' end function OnTagDel
         
 ' handle profile command
@@ -2284,8 +2262,6 @@ Private Function OnSetIdle(ByVal Username As String, ByRef dbAccess As udtGetAcc
         Call WriteINI("Main", "IdleMsg", u)
         
         tmpBuf = "Idle message set."
-    Else
-        tmpBuf = "What do you want the idle message set to?"
     End If
     
     ' return message
@@ -2388,16 +2364,22 @@ Private Function OnSetTrigger(ByVal Username As String, ByRef dbAccess As udtGet
     
     If (Len(newTrigger) > 0) Then
         If (Left$(newTrigger, 1) <> "/") Then
-            BotVars.Trigger = newTrigger
-        
-            Call WriteINI("Main", "Trigger", newTrigger)
-        
-            tmpBuf = "The new trigger is " & Chr(34) & newTrigger & Chr(34) & "."
+            If ((Left$(newTrigger, 1) <> Space(1)) And _
+                (Right$(newTrigger, 1) <> Space(1))) Then
+                
+                ' set new trigger
+                BotVars.Trigger = newTrigger
+            
+                ' write trigger to configuration
+                Call WriteINI("Main", "Trigger", newTrigger)
+            
+                tmpBuf = "The new trigger is " & Chr(34) & newTrigger & Chr(34) & "."
+            Else
+                tmpBuf = "Error: Trigger may not begin or end with a space."
+            End If
         Else
-            tmpBuf = "Invalid trigger."
+            tmpBuf = "Error: Trigger may not begin with a forward slash."
         End If
-    Else
-        tmpBuf = "Change to what trigger?"
     End If
     
     ' return message
@@ -2562,8 +2544,6 @@ Private Function OnMimic(ByVal Username As String, ByRef dbAccess As udtGetAcces
         Mimic = LCase$(u)
         
         tmpBuf = "Mimicking [ " & u & " ]"
-    Else
-        tmpBuf = "Mimic who?"
     End If
   
     ' return message
@@ -2685,7 +2665,7 @@ Private Function OnAddPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
         
         tmpBuf = "Phraseban " & Chr(34) & u & Chr(34) & " added."
     Else
-        tmpBuf = "That phrase is already banned."
+        tmpBuf = "Error: That phrase is already banned."
     End If
     
     ' return message
@@ -2725,7 +2705,7 @@ Private Function OnDelPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     If (Len(Y) > 0) Then
         tmpBuf = "Phrase " & Chr(34) & u & Chr(34) & " deleted."
     Else
-        tmpBuf = "That phrase is not banned."
+        tmpBuf = "Error: That phrase is not banned."
     End If
     
     ' return message
@@ -2735,53 +2715,36 @@ End Function ' end function OnDelPhrase
 ' handle tagban command
 Private Function OnTagBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+
+    Dim tmpBuf() As String  ' ...
+    Dim Index    As Integer ' ...
     
-    Dim f      As Integer
-    Dim tmpBuf As String ' temporary output buffer
-    Dim u      As String
+    ' redefine array size
+    ReDim Preserve tmpBuf(0)
     
-    ' grab free file handle
-    f = FreeFile
+    ' ...
+    Index = InStr(1, msgData, Space(1), vbBinaryCompare)
     
-    u = msgData
-    
-    If (Len(u) > 0) Then
-        If (Len(GetTagbans(u)) > 1) Then
-            tmpBuf = "That tag is covered by an existing tagban."
-        Else
-            Dim saCmdRet() As String
-            
-            ' declare index zero of array
-            ReDim Preserve saCmdRet(0)
+    ' ...
+    If (Index > 0) Then
+        Dim user As String ' ...
+        Dim Msg  As String ' ...
         
-            If ((InStr(1, u, "*", vbTextCompare) = 0) And (Len(u) > 4)) Then
-                Call OnShitAdd(Username, dbAccess, msgData, InBot, saCmdRet())
-            End If
-            
-            If (Dir$(GetFilePath("tagbans.txt")) = vbNullString) Then
-                Open (GetFilePath("tagbans.txt")) For Output As #f
-                    ' ...
-                Close #f
-            End If
-            
-            Open (GetFilePath("tagbans.txt")) For Append As #f
-                Print #f, u & vbCrLf
-            Close #f
-            
-            If (InStr(u, " ") > 0) Then
-                Call WildCardBan(u, Mid$(u, InStr(u, " ")), 1)
-            Else
-                Call WildCardBan(u, "Tagban: " & u, 1)
-            End If
-            
-            tmpBuf = "Added tag " & Chr(34) & u & Chr(34) & " to the tagban list."
-        End If
+        ' ...
+        user = Mid$(msgData, 1, Index - 1)
+        
+        ' ...
+        Msg = Mid$(msgData, Index + 1)
+    
+        ' ...
+        Call OnAdd(Username, dbAccess, "*" & user & "*" & " +B --banmsg " & Msg, InBot, tmpBuf())
     Else
-        tmpBuf = "What tag would you like to add?"
+        ' ...
+        Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " +B", InBot, tmpBuf())
     End If
     
     ' return message
-    cmdRet(0) = tmpBuf
+    cmdRet() = tmpBuf()
 End Function ' end function OnTagBan
 
 ' handle fadd command
@@ -2797,8 +2760,6 @@ Private Function OnFAdd(ByVal Username As String, ByRef dbAccess As udtGetAccess
         Call AddQ("/f a " & u, 1)
         
         tmpBuf = "Added user " & Chr(34) & u & Chr(34) & " to this account's friends list."
-    Else
-        tmpBuf = "Who do you want to add?"
     End If
         
     ' return message
@@ -2818,8 +2779,6 @@ Private Function OnFRem(ByVal Username As String, ByRef dbAccess As udtGetAccess
         Call AddQ("/f r " & u, 1)
         
         tmpBuf = "Removed user " & Chr(34) & u & Chr(34) & " from this account's friends list."
-    Else
-        tmpBuf = "Who do you want to remove?"
     End If
 
     ' return message
@@ -2831,39 +2790,12 @@ Private Function OnSafeList(ByVal Username As String, ByRef dbAccess As udtGetAc
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf() As String ' temporary output buffer
-    Dim i        As Integer
-    Dim tmpCount As Integer
     
-    ReDim Preserve tmpBuf(tmpCount)
-
-    If (colSafelist.Count = 0) Then
-        tmpBuf(tmpCount) = "There are no safelisted users or tags."
-    Else
-        tmpBuf(tmpCount) = "Tags/users found: "
-
-        For i = 1 To colSafelist.Count
-            Debug.Print colSafelist.Item(i).Name
-            
-            tmpBuf(tmpCount) = tmpBuf(tmpCount) & _
-                ReversePrepareCheck(colSafelist.Item(i).Name)
-            
-            If (i < colSafelist.Count) Then
-                tmpBuf(tmpCount) = tmpBuf(tmpCount) & ", "
-            End If
-            
-            If (Len(tmpBuf(tmpCount)) > 70) Then
-                If (i < colSafelist.Count) Then
-                    ReDim Preserve tmpBuf(tmpCount + 1)
-                    
-                    tmpBuf(tmpCount + 1) = "Tags/users found: "
-                
-                    tmpBuf(tmpCount) = tmpBuf(tmpCount) & " [more]"
-                    
-                    tmpCount = (tmpCount + 1)
-                End If
-            End If
-        Next i
-    End If
+    ' redefine array size
+    ReDim Preserve tmpBuf(0)
+    
+    ' search database for shitlisted users
+    Call searchDatabase(tmpBuf(), , , , , "S")
     
     ' return message
     cmdRet() = tmpBuf()
@@ -2873,19 +2805,17 @@ End Function ' end function OnSafeList
 Private Function OnSafeAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim tmpBuf As String ' temporary output buffer
-    Dim u      As String
+    Dim tmpBuf() As String ' temporary output buffer
+    Dim u        As String
+    
+    ReDim Preserve tmpBuf(0)
     
     u = msgData
         
-    tmpBuf = AddToSafelist(u, Username)
-    
-    If (LenB(tmpBuf) = 0) Then
-        tmpBuf = "Added tag/user " & Chr(34) & u & Chr(34) & " to the safelist."
-    End If
+    Call OnAdd(Username, dbAccess, u & " +S", InBot, tmpBuf())
     
     ' return message
-    cmdRet(0) = tmpBuf
+    cmdRet() = tmpBuf()
 End Function ' end function OnSafeAdd
 
 ' TO DO:
@@ -2906,7 +2836,7 @@ Private Function OnSafeCheck(ByVal Username As String, ByRef dbAccess As udtGetA
     Y = GetSafelistMatches(u)
     
     If (Len(Y) < 2) Then
-        tmpBuf = "That user matches no safelist entries."
+        tmpBuf = "Error: That user matches no safelist entries."
     Else
         tmpBuf = "That user matches the following safelist entr"
         
@@ -2951,6 +2881,7 @@ End Function ' end function OnSafeCheck
 Private Function OnExile(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
+    Dim tmpBuf     As String ' temporary output buffer
     Dim saCmdRet() As String
     Dim ibCmdRet() As String
     Dim u          As String
@@ -2963,12 +2894,16 @@ Private Function OnExile(ByVal Username As String, ByRef dbAccess As udtGetAcces
     
     Call OnShitAdd(Username, dbAccess, u, InBot, saCmdRet())
     Call OnIPBan(Username, dbAccess, u, InBot, ibCmdRet())
+    
+    ' return message
+    cmdRet(0) = tmpBuf
 End Function ' end function OnExile
 
 ' handle unexile command
 Private Function OnUnExile(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
+    Dim tmpBuf     As String ' temporary output buffer
     Dim u          As String
     Dim sdCmdRet() As String
     Dim uiCmdRet() As String
@@ -2981,209 +2916,76 @@ Private Function OnUnExile(ByVal Username As String, ByRef dbAccess As udtGetAcc
     
     Call OnShitDel(Username, dbAccess, u, InBot, sdCmdRet())
     Call OnUnignore(Username, dbAccess, u, InBot, uiCmdRet())
+    
+    ' return message
+    cmdRet(0) = tmpBuf
 End Function ' end function OnUnExile
 
-' TO DO:
 ' handle shitlist command
 Private Function OnShitList(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim f          As Integer
-    Dim strArray() As String
-    Dim Y          As String
-    Dim tmpBuf     As String ' temporary output buffer
-    Dim i          As Integer
-    Dim response   As String
+    Dim tmpBuf() As String ' temporary output buffer
     
-    f = FreeFile
-
-    Y = GetFilePath("autobans.txt")
-        
-    If (LenB(Dir$(Y)) = 0) Then
-        tmpBuf = "No shitlist found."
-    Else
-        Open (Y) For Input As #f
-            Do While (Not (EOF(f)))
-                Line Input #f, response
-                
-                If (response <> vbNullString) Then
-                    ReDim Preserve strArray(i)
-                
-                    If (InStr(response, " ")) Then
-                        strArray(i) = Mid$(response, 1, InStr(response, " ") - 1)
-                    Else
-                        strArray(i) = response
-                    End If
-                    
-                    i = (i + 1)
-                End If
-            Loop
-        Close #f
-
-        If (i > 0) Then
-            tmpBuf = "Tags/users found: "
-            
-            For i = LBound(strArray) To UBound(strArray)
-                tmpBuf = tmpBuf & strArray(i)
-                
-                If (i <> UBound(strArray)) Then
-                    tmpBuf = tmpBuf & ", "
-                End If
-                
-                If (Len(tmpBuf) > 70) Then
-                    If (i <> UBound(strArray)) Then
-                        tmpBuf = tmpBuf & " [more]"
-                    End If
-                    
-                    'If WhisperCmds And Not InBot Then
-                    '    If Dii Then AddQ "/w *" & Username & Space(1) & tmpBuf Else AddQ "/w " & Username & Space(1) & tmpBuf
-                    'ElseIf InBot = True And Not PublicOutput Then
-                    '    frmChat.AddChat RTBColors.ConsoleText, tmpBuf
-                    'Else
-                    '    AddQ tmpBuf
-                    'End If
-                    
-                    tmpBuf = "Tags/users found: "
-                End If
-            Next i
-        Else
-            tmpBuf = "No shitlisted users found"
-        End If
-    End If
+    ' redefine array size
+    ReDim Preserve tmpBuf(0)
+    
+    ' search database for shitlisted users
+    Call searchDatabase(tmpBuf(), , , , , "B")
     
     ' return message
-    cmdRet(0) = tmpBuf
+    cmdRet() = tmpBuf()
 End Function ' end function OnShitList
 
-' TO DO:
 ' handle tagbans command
 Private Function OnTagBans(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim tmpBuf     As String  ' temporary output buffer
-    Dim tmpCount   As Integer
-    Dim strArray() As String
+    Dim tmpBuf() As String ' temporary output buffer
     
-    If (Dir$(GetFilePath("tagbans.txt")) = vbNullString) Then
-        tmpBuf = "No tagbans list found."
-    Else
-        Dim f        As Integer
-        Dim response As String
-        Dim i        As Integer
+    ' redefine array size
+    ReDim Preserve tmpBuf(0)
     
-        f = FreeFile
-    
-        Open (GetFilePath("tagbans.txt")) For Input As #f
-            Do While (Not (EOF(f)))
-                Input #f, response
-                
-                ReDim Preserve strArray(i)
-                
-                If (response <> vbNullString) Then
-                    strArray(i) = response
-                End If
-                
-                i = (i + 1)
-            Loop
-        Close #f
-        
-        If (i > 0) Then
-            tmpBuf = "Tagbans found: "
-            
-            For i = LBound(strArray) To UBound(strArray)
-                tmpBuf = tmpBuf & strArray(i) & ", "
-                
-                If (Len(tmpBuf) > 80) Then
-                    tmpBuf = Left$(tmpBuf, Len(tmpBuf) - 2)
-                    
-                    tmpBuf = tmpBuf & " [more]"
-                    
-                    'If ((WhisperCmds) And (Not (InBot))) Then
-                    '    If (Dii) Then
-                    '        AddQ "/w *" & Username & Space(1) & tmpBuf
-                    '    Else
-                    '        AddQ "/w " & Username & Space(1) & tmpBuf
-                    '    End If
-                    'ElseIf ((InBot = True) And (Not (PublicOutput))) Then
-                    '    frmChat.AddChat RTBColors.ConsoleText, tmpBuf
-                    'Else
-                    '    AddQ tmpBuf
-                    'End If
-                    
-                    tmpBuf = "Tagbans found: "
-                End If
-            Next i
-            
-            tmpBuf = Left$(tmpBuf, Len(tmpBuf) - 2)
-        Else
-            tmpBuf = "No users are tagbanned."
-        End If
-    End If
+    ' search database for shitlisted users
+    Call searchDatabase(tmpBuf(), , , , , "B")
     
     ' return message
-    cmdRet(0) = tmpBuf
+    cmdRet() = tmpBuf()
 End Function ' end function OnTagBans
 
 ' handle shitadd command
 Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim gAcc   As udtGetAccessResponse
+    Dim tmpBuf() As String  ' ...
+    Dim Index    As Integer ' ...
     
-    Dim u      As String
-    Dim tmpBuf As String
-    Dim f      As Integer
-    Dim Y      As String
+    ' redefine array size
+    ReDim Preserve tmpBuf(0)
     
-    f = FreeFile
+    ' ...
+    Index = InStr(1, msgData, Space(1), vbBinaryCompare)
     
-    u = msgData
-
-    If LenB(GetShitlist(u)) > 0 Then
-        tmpBuf = "That user is already shitlisted."
-    Else
-        gAcc = GetAccess(u)
-    
-        If (InStr(1, u, "*", vbBinaryCompare) > 0) Then
-            Dim tbBuf() As String
-            
-            ' redefine array size
-            ReDim Preserve tbBuf(0)
+    ' ...
+    If (Index > 0) Then
+        Dim user As String ' ...
+        Dim Msg  As String ' ...
         
-            Call OnTagBan(Username, gAcc, msgData, InBot, tbBuf())
-            
-            ' store result of calling "tagban"
-            ' in tmpBuf
-            tmpBuf = tbBuf(0)
-        Else
-            If (dbAccess.Access <= gAcc.Access) Then
-                tmpBuf = "You do not have access to do that."
-            ElseIf ((dbAccess.Access < 100) And (InStr(gAcc.Access, "A") > 0)) Then
-                tmpBuf = "You do not have access to do that."
-            Else
-                Y = GetFilePath("autobans.txt")
-            
-                If (Dir$(Y) = vbNullString) Then
-                    Open (Y) For Output As #f
-                        ' ...
-                    Close #f
-                End If
-            
-                Open (Y) For Append As #f
-                    Print #f, u
-                Close #f
-            
-                If ((MyFlags = 2) Or (MyFlags = 18)) Then
-                    Call AddQ("/ban " & IIf(Dii, "*", "") & u, 1)
-                End If
-                
-                tmpBuf = "Added " & u & " to the shitlist."
-            End If
-        End If
+        ' ...
+        user = Mid$(msgData, 1, Index - 1)
+        
+        ' ...
+        Msg = Mid$(msgData, Index + 1)
+    
+        ' ...
+        Call OnAdd(Username, dbAccess, user & " +B --banmsg " & Msg, InBot, tmpBuf())
+    Else
+        ' ...
+        Call OnAdd(Username, dbAccess, msgData & " +B", InBot, tmpBuf())
     End If
-   
+    
     ' return message
-    cmdRet(0) = tmpBuf
+    cmdRet() = tmpBuf()
 End Function ' end function OnShitAdd
 
 ' handle dnd command
@@ -3221,18 +3023,29 @@ End Function ' end function OnBanCount
 Private Function OnTagCheck(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
+    ' ...
+    Dim gAcc   As udtGetAccessResponse
+    
     Dim Y      As String
-    Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
-    
-    u = msgData
-    
-    Y = GetTagbans(u)
-    
-    If (Len(Y) < 2) Then
-        tmpBuf = "That user matches no tagbans."
-    Else
-        tmpBuf = "That user matches the following tagban(s): " & Y
+
+    Y = msgData
+            
+    If (Len(Y) > 0) Then
+        gAcc = GetCumulativeAccess(Y)
+        
+        If (InStr(1, gAcc.Flags, "B") <> 0) Then
+            tmpBuf = Y & " has been matched to one or more tagbans"
+        
+            If (InStr(1, gAcc.Flags, "S") <> 0) Then
+                tmpBuf = tmpBuf & "; however, " & Y & " has also been found on the bot's " & _
+                    "safelist and therefore will not be banned"
+            End If
+        Else
+            tmpBuf = "That user matches no tagbans"
+        End If
+        
+        tmpBuf = tmpBuf & "."
     End If
     
     ' return message
@@ -3243,47 +3056,36 @@ End Function ' end function OnTagCheck
 Private Function OnSLCheck(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
+    ' ...
     Dim gAcc   As udtGetAccessResponse
     
     Dim Y      As String
-    Dim Track  As Long
     Dim tmpBuf As String ' temporary output buffer
 
     Y = msgData
             
-    If (LenB(Y) > 0) Then
-        tmpBuf = "That user "
+    If (Len(Y) > 0) Then
+        gAcc = GetCumulativeAccess(Y)
         
-        gAcc = GetAccess(Y)
+        If (InStr(1, gAcc.Flags, "B") <> 0) Then
+            tmpBuf = Y & " is on the bot's shitlist"
         
-        If (InStr(gAcc.Flags, "B") > 0) Then
-            tmpBuf = tmpBuf & "has 'B' in their flags"
-            Track = 1
-        End If
-        
-        If (LenB(GetShitlist(Y))) Then
-            If (Track = 1) Then
-                tmpBuf = tmpBuf & " and "
+            If (InStr(1, gAcc.Flags, "S") <> 0) Then
+                tmpBuf = tmpBuf & "; however, " & Y & " is also on the " & _
+                    "bot's safelist and therefore will not be banned"
             End If
-            
-            tmpBuf = tmpBuf & "is on the bot's shitlist"
-            
-            Track = 2
+        Else
+            tmpBuf = "That user is not shitlisted"
         End If
         
-        If (Track > 0) Then
-            tmpBuf = tmpBuf & "."
-        Else
-            tmpBuf = "That user is not shitlisted and does not have 'B' in their flags."
-        End If
-    Else
-        tmpBuf = "Please specify a username to check."
+        tmpBuf = tmpBuf & "."
     End If
 
     ' return message
     cmdRet(0) = tmpBuf
 End Function ' end function OnSLCheck
 
+' TO DO:
 ' handle readfile command
 Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -3299,9 +3101,9 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     If (Len(u) > 0) Then
         If (InStr(1, u, "..", vbBinaryCompare) > 0) Then
-            tmpBuf(tmpCount) = "Files may only be read from program directory."
+            tmpBuf(tmpCount) = "Error: Files may only be read from program directory."
         ElseIf (InStr(1, u, ".ini", vbTextCompare) > 0) Then
-            tmpBuf(tmpCount) = "Configuration files may not be read."
+            tmpBuf(tmpCount) = "Error: Configuration files may not be read."
         Else
             Dim Y As String  ' ...
             Dim f As Integer ' ...
@@ -3327,7 +3129,7 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
             End Select
             
             If (Dir$(u) = vbNullString) Then
-                tmpBuf(tmpCount) = "File does not exist."
+                tmpBuf(tmpCount) = "Error: File does not exist."
             Else
                 ' store line in buffer
                 tmpBuf(tmpCount) = "Contents of file " & msgData & ":"
@@ -3377,54 +3179,70 @@ End Function ' end function OnReadFile
 Private Function OnGreet(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim strArray() As String
-    Dim tmpBuf     As String ' temporary output buffer
+    Dim tmpBuf       As String ' temporary output buffer
+    Dim strSplit()   As String
+    Dim greetCommand As String
     
-    strArray() = Split(msgData, " ", 3)
+    ' split string by spaces
+    strSplit() = Split(msgData, Space(1), 2)
+    
+    ' grab greet command
+    greetCommand = strSplit(0)
+    
+    ' ...
+    If (greetCommand = "on") Then
+        BotVars.UseGreet = True
         
-    If (UBound(strArray) > 0) Then
-        Select Case LCase$(strArray(1))
-            Case "on"
-                BotVars.UseGreet = True
-                tmpBuf = "Greet messages enabled."
-                WriteINI "Other", "UseGreets", "Y"
+        tmpBuf = "Greet messages enabled."
+        
+        Call WriteINI("Other", "UseGreets", "Y")
+    ElseIf (greetCommand = "off") Then
+        BotVars.UseGreet = False
+        
+        tmpBuf = "Greet messages disabled."
+        
+        Call WriteINI("Other", "UseGreets", "N")
+    ElseIf (greetCommand = "whisper") Then
+        Dim greetSubCommand As String ' ...
+        
+        ' grab greet sub command
+        greetSubCommand = strSplit(1)
+        
+        ' ...
+        If (greetSubCommand = "on") Then
+            BotVars.WhisperGreet = True
             
-            Case "off"
-                BotVars.UseGreet = False
-                tmpBuf = "Greet messages disabled."
-                WriteINI "Other", "UseGreets", "N"
-                
-            Case "whisper"
-                If UBound(strArray) > 1 Then
-                    Select Case LCase$(strArray(2))
-                        Case "on"
-                            BotVars.WhisperGreet = True
-                            tmpBuf = "Greet messages will now be whispered."
-                            WriteINI "Other", "WhisperGreet", "Y"
-                            
-                        Case "off"
-                            BotVars.WhisperGreet = False
-                            tmpBuf = "Greet messages will no longer be whispered."
-                            WriteINI "Other", "WhisperGreet", "N"
-                            
-                    End Select
-                End If
-
-            Case Else
-                If InStr(1, msgData, "/squelch", vbTextCompare) > 0 Or _
-                    InStr(1, msgData, "/ban ", vbTextCompare) > 0 Or _
-                        InStr(1, msgData, "/ignore", vbTextCompare) > 0 Or _
-                            InStr(1, msgData, "/des", vbTextCompare) > 0 Or _
-                                InStr(1, msgData, "/re", vbTextCompare) > 0 Then
-                                
-                    tmpBuf = "One or more invalid terms are present. Greet message not set."
-                Else
-                    tmpBuf = "Greet message set."
-                    BotVars.GreetMsg = Right(msgData, Len(msgData) - 7)
-                    WriteINI "Other", "GreetMsg", Right(msgData, Len(msgData) - 7)
-                End If
+            tmpBuf = "Greet messages will now be whispered."
+            
+            Call WriteINI("Other", "WhisperGreet", "Y")
+        ElseIf (greetSubCommand = "off") Then
+            BotVars.WhisperGreet = False
+            
+            tmpBuf = "Greet messages will no longer be whispered."
+            
+            Call WriteINI("Other", "WhisperGreet", "N")
+        End If
+    Else
+        Dim greetMessage As String ' ...
         
-        End Select
+        ' grab greet message
+        greetMessage = msgData
+    
+        ' ...
+        If ((InStr(1, greetMessage, "/squelch", vbTextCompare) > 0) Or _
+            (InStr(1, greetMessage, "/ban ", vbTextCompare) > 0) Or _
+            (InStr(1, greetMessage, "/ignore", vbTextCompare) > 0) Or _
+            (InStr(1, greetMessage, "/des", vbTextCompare) > 0) Or _
+            (InStr(1, greetMessage, "/re", vbTextCompare) > 0)) Then
+                        
+            tmpBuf = "One or more invalid terms are present. Greet message not set."
+        Else
+            tmpBuf = "Greet message set."
+            
+            BotVars.GreetMsg = greetMessage
+            
+            Call WriteINI("Other", "GreetMsg", greetMessage)
+        End If
     End If
 
     ' return message
@@ -3493,7 +3311,7 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
 
     Dim u       As String
     Dim tmpBuf  As String ' temporary output buffer
-    Dim banMsg  As String
+    Dim banmsg  As String
     Dim Y       As String
     Dim i       As Integer
 
@@ -3508,18 +3326,18 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             i = InStr(1, u, " ")
             
             If (i > 0) Then
-                banMsg = Mid$(u, i + 1)
+                banmsg = Mid$(u, i + 1)
                 
                 u = Left$(u, i - 1)
             End If
             
             If (InStr(1, u, "*", vbTextCompare) > 0) Then
-                Call WildCardBan(u, banMsg, 1)
+                Call WildCardBan(u, banmsg, 1)
             Else
-                If (banMsg <> vbNullString) Then
-                    Y = Ban(u & IIf(Len(banMsg) > 0, " " & banMsg, vbNullString), dbAccess.Access)
+                If (banmsg <> vbNullString) Then
+                    Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), dbAccess.Access)
                 Else
-                    Y = Ban(u & IIf(Len(banMsg) > 0, " " & banMsg, vbNullString), dbAccess.Access)
+                    Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), dbAccess.Access)
                 End If
             End If
             
@@ -3581,7 +3399,7 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     Dim u      As String
     Dim i      As Integer
-    Dim banMsg As String
+    Dim banmsg As String
     Dim tmpBuf As String ' temporary output buffer
     Dim Y      As String
     
@@ -3596,20 +3414,20 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
             i = InStr(1, u, " ", vbTextCompare)
             
             If (i > 0) Then
-                banMsg = Mid$(u, i + 1)
+                banmsg = Mid$(u, i + 1)
                 
                 u = Left$(u, i - 1)
             End If
             
             If (InStr(1, u, "*", vbTextCompare) > 0) Then
                 If (dbAccess.Access > 99) Then
-                    Call WildCardBan(u, banMsg, 1)
+                    Call WildCardBan(u, banmsg, 1)
                 Else
-                    Call WildCardBan(u, banMsg, 0)
+                    Call WildCardBan(u, banmsg, 0)
                 End If
             End If
             
-            Y = Ban(u & IIf(Len(banMsg) > 0, " " & banMsg, vbNullString), _
+            Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), _
                 dbAccess.Access, 1)
             
             If (Len(Y) > 1) Then
@@ -3705,17 +3523,17 @@ Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim user      As String
-    Dim UserIndex As Integer
+    Dim userIndex As Integer
     Dim tmpBuf()  As String ' temporary output buffer
 
     user = msgData
     
-    UserIndex = UsernameToIndex(user)
+    userIndex = UsernameToIndex(user)
     
-    If (UserIndex > 0) Then
+    If (userIndex > 0) Then
         ReDim Preserve tmpBuf(0 To 1)
     
-        With colUsersInChannel.Item(UserIndex)
+        With colUsersInChannel.Item(userIndex)
             tmpBuf(0) = "User " & .Username & " is logged on using " & _
                 ProductCodeToFullName(.Product)
             
@@ -4332,6 +4150,21 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim rank       As Integer ' ...
     Dim Flags      As String  ' ...
     Dim found      As Boolean ' ...
+    Dim addparams  As String  ' ...
+    Dim Index      As Integer ' ...
+    
+    ' check for presence of optional add command
+    ' parameters
+    Index = InStr(1, msgData, " --", vbBinaryCompare)
+    
+    ' did we find such parameters?
+    If (Index > 0) Then
+        ' grab parameters
+        addparams = Mid$(msgData, Index)
+
+        ' remove paramaters from message
+        msgData = Mid$(msgData, 1, Index)
+    End If
     
     ' split message
     strArray() = Split(msgData, " ")
@@ -4346,7 +4179,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             rank = strArray(1)
             
             ' grab flags
-            If (UBound(strArray) = 2) Then
+            If (UBound(strArray) >= 2) Then
                 Flags = strArray(2)
             End If
         Else
@@ -4372,6 +4205,47 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
         ElseIf (gAcc.Access >= dbAccess.Access) Then
             tmpBuf = "You do not have sufficient access to perform that command."
         Else
+            ' do we have any special paramaters?
+            If (Len(addparams) > 0) Then
+                ' split message by paramter
+                strArray() = Split(addparams, "--")
+                
+                ' loop through paramter list
+                For i = 1 To UBound(strArray)
+                    Dim param    As String ' ...
+                    Dim Msg      As String ' ...
+                    
+                    ' ...
+                    Index = InStr(1, strArray(i), Space(1), vbBinaryCompare)
+                    
+                    ' ...
+                    If (Index > 0) Then
+                        ' ...
+                        param = Mid$(strArray(i), 1, Index - 1)
+                        
+                        ' ...
+                        Msg = Mid$(strArray(i), Index + 1)
+                    Else
+                        ' ...
+                        param = strArray(i)
+                    End If
+                    
+                    ' ...
+                    param = LCase$(param)
+                    
+                    ' ...
+                    Select Case (param)
+                        ' ...
+                        Case "banmsg"
+                            Dim banmsg As String ' ...
+                            
+                            If (Len(Msg) > 0) Then
+                                gAcc.BanMessage = Msg
+                            End If
+                    End Select
+                Next i
+            End If
+        
             ' did we specify flags?
             If (Len(Flags) > 0) Then
                 Dim currentCharacter As String ' ...
@@ -4427,11 +4301,13 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     
                         ' check for special flags
                         If (InStr(1, Flags, "B", vbBinaryCompare) <> 0) Then
-                            Call Ban(strArray(1) & " AutoBan", (AutoModSafelistValue - 1))
-                        ElseIf (InStr(1, Flags, "S", vbBinaryCompare) <> 0) Then
-                            Call AddToSafelist(strArray(1), Username)
-                        ElseIf (InStr(1, Flags, "Z", vbBinaryCompare) <> 0) Then
-                            Call WildCardBan(strArray(1), "Tagbanned", 1)
+                            If (Len(gAcc.BanMessage) > 0) Then
+                                Call Ban(user & Space(1) & gAcc.BanMessage, _
+                                    (AutoModSafelistValue - 1))
+                            Else
+                                Call Ban(user & Space(1) & "Shitlisted", _
+                                    (AutoModSafelistValue - 1))
+                            End If
                         End If
                     
                         ' set user flags & check for duplicate entries
@@ -4465,10 +4341,6 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                         Call AddQ("/unban " & user)
                                     End If
                                 Next i
-                            ElseIf (InStr(1, Flags, "S", vbBinaryCompare) <> 0) Then
-                                Call RemoveFromSafelist(strArray(0))
-                            ElseIf (InStr(1, Flags, "Z", vbBinaryCompare) <> 0) Then
-                                ' ...
                             End If
                         
                             ' remove specified flags
@@ -4490,11 +4362,13 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     
                         ' check for special flags
                         If (InStr(1, Flags, "B", vbBinaryCompare) <> 0) Then
-                            Call Ban(strArray(1) & " AutoBan", (AutoModSafelistValue - 1))
-                        ElseIf (InStr(1, Flags, "S", vbBinaryCompare) <> 0) Then
-                            Call AddToSafelist(strArray(1), Username)
-                        ElseIf (InStr(1, Flags, "Z", vbBinaryCompare) <> 0) Then
-                            Call WildCardBan(strArray(1), "Tagbanned", 1)
+                            If (Len(gAcc.BanMessage) > 0) Then
+                                Call Ban(user & Space(1) & gAcc.BanMessage, _
+                                    (AutoModSafelistValue - 1))
+                            Else
+                                Call Ban(user & Space(1) & "Shitlisted", _
+                                    (AutoModSafelistValue - 1))
+                            End If
                         End If
                     
                         ' set user flags & check for duplicate entries
@@ -4544,6 +4418,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                             .Flags = gAcc.Flags
                             .ModifiedBy = Username
                             .ModifiedOn = Now
+                            .BanMessage = gAcc.BanMessage
                         End With
                     
                         ' commit modifications
@@ -4577,6 +4452,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     .ModifiedOn = Now
                     .AddedBy = Username
                     .AddedOn = Now
+                    .BanMessage = gAcc.BanMessage
                 End With
                 
                 ' commit modifications
@@ -4604,7 +4480,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     tmpBuf = "Set " & user & "'s flags to " & gAcc.Flags & "."
                 Else
                     ' were rank and/or flags specified but not assigned?
-                    If (Len(Flags) > 0) Then
+                    If ((Left(Flags, 1) <> "-") And (Len(Flags) > 0)) Then
                         tmpBuf = "You have specified an invalid rank and/or flags."
                     Else
                         tmpBuf = "The user " & gAcc.Username & " has been removed from the database."
@@ -4839,21 +4715,41 @@ End Function ' end function OnFind
 Private Function OnWhoIs(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim tmpBuf() As String ' temporary output buffer
-    Dim u        As String
+    ' ...
+    Dim gAcc     As udtGetAccessResponse
     
-    ReDim Preserve tmpBuf(0)
+    Dim tmpBuf   As String ' temporary output buffer
+    Dim u        As String
 
     u = msgData
             
     If (InBot) Then
         Call AddQ("/whois " & u, 1)
     End If
-    
-    Call OnFind(Username, dbAccess, u, InBot, tmpBuf())
+
+    If (Len(u) > 0) Then
+        gAcc = GetCumulativeAccess(u)
+        
+        If (gAcc.Username <> vbNullString) Then
+            If (gAcc.Access > 0) Then
+                If (gAcc.Flags <> vbNullString) Then
+                    tmpBuf = gAcc.Username & " -> " & gAcc.Access & _
+                        Space(1) & gAcc.Flags
+                Else
+                    tmpBuf = gAcc.Username & " -> " & gAcc.Access
+                End If
+            Else
+                If (gAcc.Flags <> vbNullString) Then
+                    tmpBuf = gAcc.Username & " -> " & gAcc.Flags
+                End If
+            End If
+        Else
+            tmpBuf = "There was no such user found."
+        End If
+    End If
     
     ' return message
-    cmdRet() = tmpBuf()
+    cmdRet(0) = tmpBuf
 End Function ' end function OnWhoIs
 
 ' handle findattr command
@@ -4867,29 +4763,27 @@ Private Function OnFindAttr(ByVal Username As String, ByRef dbAccess As udtGetAc
     Dim found    As Integer
     
     ReDim Preserve tmpBuf(tmpCount)
+    
+    ' ...
+    u = msgData
 
-    u = UCase$(msgData)
-            
     If (Len(u) > 0) Then
         ' execute search
         Call searchDatabase(tmpBuf(), , , , , u)
-    Else
-        tmpBuf(0) = "Please specify the flags you wish to search for."
     End If
     
     ' return message
     cmdRet() = tmpBuf()
 End Function ' end function OnFindAttr
 
-
-' handle Monitor <On/Off/Username> command
+' handle monitor command
 Private Function OnMonitor(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim tmpBuf As String
+    Dim tmpBuf As String ' temporary output buffer
     
-    If (LCase(msgData) = "on") Then
-        If (Not MonitorExists) Then
+    If (LCase$(msgData) = "on") Then
+        If (Not (MonitorExists)) Then
             InitMonitor
             If (MonitorForm.Connect(False)) Then
                 tmpBuf = "User monitor connecting."
@@ -4899,7 +4793,7 @@ Private Function OnMonitor(ByVal Username As String, ByRef dbAccess As udtGetAcc
         Else
             tmpBuf = "User montor already enabled."
         End If
-    ElseIf (LCase(msgData) = "off") Then
+    ElseIf (LCase$(msgData) = "off") Then
         If (Not MonitorExists) Then
             tmpBuf = "User monitor is not running."
         Else
@@ -4907,7 +4801,10 @@ Private Function OnMonitor(ByVal Username As String, ByRef dbAccess As udtGetAcc
             tmpBuf = "User monitor disabled."
         End If
     Else
-        If (Not MonitorExists()) Then InitMonitor
+        If (Not (MonitorExists())) Then
+            Call InitMonitor
+        End If
+        
         If (MonitorForm.AddUser(msgData)) Then
             tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & " added to the monitor list."
         Else
@@ -4915,14 +4812,15 @@ Private Function OnMonitor(ByVal Username As String, ByRef dbAccess As udtGetAcc
         End If
     End If
     
+    ' return message
     cmdRet(0) = tmpBuf
 End Function ' end function OnMonitor
 
-' handle UnMonitor <Username> command
+' handle unmonitor command
 Private Function OnUnMonitor(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim tmpBuf As String
+    Dim tmpBuf As String ' temporary output buffer
     
     If (MonitorExists) Then
         If (MonitorForm.RemoveUser(msgData)) Then
@@ -4934,28 +4832,31 @@ Private Function OnUnMonitor(ByVal Username As String, ByRef dbAccess As udtGetA
         tmpBuf = "User monitor is not enabled."
     End If
     
+    ' return message
     cmdRet(0) = tmpBuf
 End Function ' end function OnUnMonitor
 
-' handle Online command
+' handle online command
 Private Function OnOnline(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim tmpBuf As String
+    Dim tmpBuf As String ' temporary output buffer
     
     If (MonitorExists) Then
         tmpBuf = MonitorForm.OnlineUsers
     Else
         tmpBuf = "User monitor is not enabled."
     End If
+    
+    ' return message
     cmdRet = Split(tmpBuf, vbNewLine)
-End Function ' end function OnUnMonitor
+End Function ' end function OnOnline
 
 ' requires public
 Public Function Cache(ByVal Inpt As String, ByVal Mode As Byte, Optional ByRef Typ As String) As String
-    Static s() As String
+    Static s()  As String
     Static sTyp As String
-    Dim i As Integer
+    Dim i       As Integer
     
     'Debug.Print "cache input: " & Inpt
     
@@ -5122,19 +5023,32 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
             Dim res As Boolean ' store result of access check
         
             If (DB(i).Username <> vbNullString) Then
+                ' ...
                 If (match <> vbNullString) Then
                     If (PrepareCheck(DB(i).Username) Like match) Then
                         res = True
+                    Else
+                        res = False
                     End If
-                ElseIf ((lowerBound >= 0) And (upperBound >= 0)) Then
+                End If
+                
+                ' ...
+                If ((lowerBound >= 0) And (upperBound >= 0)) Then
                     If ((DB(i).Access >= lowerBound) And (DB(i).Access <= upperBound)) Then
                         res = True
+                    Else
+                        res = False
                     End If
                 ElseIf (lowerBound >= 0) Then
                     If (DB(i).Access = lowerBound) Then
                         res = True
+                    Else
+                        res = False
                     End If
-                ElseIf (Flags <> vbNullString) Then
+                End If
+                
+                ' ...
+                If (Flags <> vbNullString) Then
                     Dim j As Integer ' ...
                 
                     For j = 1 To Len(Flags)
@@ -5145,9 +5059,12 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                     
                     If (j = (Len(Flags) + 1)) Then
                         res = True
+                    Else
+                        res = False
                     End If
                 End If
                 
+                ' ...
                 If (res = True) Then
                     tmpBuf(tmpCount) = tmpBuf(tmpCount) & ", " & _
                         DB(i).Username & IIf(DB(i).Access > 0, "\" & DB(i).Access, vbNullString) & _
@@ -5255,7 +5172,7 @@ End Function
 
 ' requires public
 Public Function GetTagbans(ByVal Username As String) As String
-    Dim f As Integer, strCompare As String, banMsg As String
+    Dim f As Integer, strCompare As String, banmsg As String
     
     If Dir$(GetFilePath("tagbans.txt")) <> vbNullString Then
         f = FreeFile
@@ -5268,7 +5185,7 @@ Public Function GetTagbans(ByVal Username As String) As String
                 If InStr(1, strCompare, " ", vbBinaryCompare) > 0 Then
                 
                     'Debug.Print "strc: " & strCompare
-                    banMsg = Mid$(strCompare, InStr(strCompare, " ") + 1)
+                    banmsg = Mid$(strCompare, InStr(strCompare, " ") + 1)
                     'Debug.Print "banm: " & banMsg
                     strCompare = Split(strCompare, " ")(0)
                     'Debug.Print "strc: " & strCompare
@@ -5276,7 +5193,7 @@ Public Function GetTagbans(ByVal Username As String) As String
                 End If
                 
                 If Username Like PrepareCheck(strCompare) Then
-                    GetTagbans = strCompare & IIf(Len(banMsg) > 0, Space(1) & banMsg, vbNullString)
+                    GetTagbans = strCompare & IIf(Len(banmsg) > 0, Space(1) & banmsg, vbNullString)
                     Close #f
                     Exit Function
                 End If
@@ -5318,68 +5235,53 @@ End Function
 
 ' requires public
 Public Function GetSafelist(ByVal Username As String) As Boolean
-    Dim i As Long
+    Dim i As Long ' ...
     
-    On Error Resume Next
-    Username = PrepareCheck(Username)
-    GetSafelist = False
-    
-    If Not bFlood Then
+    ' ...
+    If (Not (bFlood)) Then
+        ' ...
+        Dim gAcc As udtGetAccessResponse
         
-        For i = 1 To colSafelist.Count
-            If Username Like colSafelist.Item(i).Name Then
-                GetSafelist = True
-                Exit Function
-            End If
-        Next i
-    
+        ' ...
+        gAcc = GetCumulativeAccess(Username)
+        
+        ' ...
+        If (InStr(1, gAcc.Flags, "S", vbBinaryCompare) <> 0) Then
+            GetSafelist = True
+        End If
     Else
-        
+        ' ...
         For i = 0 To (UBound(gFloodSafelist) - 1)
-            If Username Like gFloodSafelist(i) Then
+            If PrepareCheck(Username) Like gFloodSafelist(i) Then
                 GetSafelist = True
-                Exit Function
+                
+                ' ...
+                Exit For
             End If
         Next i
-
     End If
-    
 End Function
 
 ' requires public
 Public Function GetShitlist(ByVal Username As String) As String
-    Dim strCompare As String, toCheck As String
-    Dim Temp As String
-    Dim f As Integer
-    f = FreeFile
+    ' ...
+    Dim gAcc As udtGetAccessResponse
     
-    Username = LCase$(Username)
+    ' ...
+    gAcc = GetCumulativeAccess(Username)
     
-    On Error Resume Next
-    Temp = GetFilePath("autobans.txt")
-    
-    If Dir$(Temp) <> vbNullString Then Open Temp For Input As #f Else GoTo theEnd
-    
-    If LOF(f) < 2 Then GoTo theEnd
-    Do
-        Line Input #f, strCompare
-        toCheck = LCase$(strCompare)
-        If InStr(1, toCheck, " ", vbTextCompare) <> 0 Then
-            toCheck = Left$(strCompare, InStr(1, strCompare, " ", vbTextCompare) - 1)
-        End If
+    ' ...
+    If ((InStr(1, gAcc.Flags, "S", vbBinaryCompare) = 0) And _
+        (InStr(1, gAcc.Flags, "B", vbBinaryCompare) <> 0)) Then
         
-        If StrComp(toCheck, Username, vbTextCompare) = 0 Then
-            If InStr(1, strCompare, " ", vbTextCompare) = 0 Then
-                GetShitlist = Username & " Shitlisted"
-            Else
-                GetShitlist = Username & Space(1) & Right(strCompare, Len(strCompare) - InStr(1, strCompare, " ", vbTextCompare))
-            End If
-            Close #f
-            Exit Function
+        If ((Len(gAcc.BanMessage) > 0) And (gAcc.BanMessage <> "%")) Then
+            GetShitlist = Username & Space(1) & _
+                gAcc.BanMessage
+        Else
+            GetShitlist = Username & Space(1) & _
+                "Shitlisted"
         End If
-    Loop Until EOF(f)
-theEnd:
-    Close #f
+    End If
 End Function
 
 ' requires public
@@ -5497,10 +5399,11 @@ Public Sub LoadDatabase()
                 Line Input #f, s
                 
                 If InStr(1, s, " ", vbTextCompare) > 0 Then
-                    X() = Split(s, " ")
+                    X() = Split(s, " ", 8)
                     
                     If UBound(X) > 0 Then
                         ReDim Preserve DB(i)
+                        
                         With DB(i)
                             .Username = X(0)
                             
@@ -5510,10 +5413,10 @@ Public Sub LoadDatabase()
                                 If X(1) <> "%" Then
                                     .Flags = X(1)
                                     
-                                    If InStr(X(1), "S") > 0 Then
-                                        AddToSafelist .Username
-                                        .Flags = Replace(.Flags, "S", "")
-                                    End If
+                                    'If InStr(X(1), "S") > 0 Then
+                                    '    AddToSafelist .Username
+                                    '    .Flags = Replace(.Flags, "S", "")
+                                    'End If
                                 End If
                             End If
                             
@@ -5524,15 +5427,15 @@ Public Sub LoadDatabase()
                                     If X(2) <> "%" Then
                                         .Flags = X(2)
                                         
-                                        If InStr(X(2), "S") > 0 Then
-                                            AddToSafelist .Username
-                                            .Flags = Replace(.Flags, "S", "")
-                                        End If
+                                        'If InStr(X(2), "S") > 0 Then
+                                        '    AddToSafelist .Username
+                                        '    .Flags = Replace(.Flags, "S", "")
+                                        'End If
                                     End If
                                 End If
                                 
-                                '  0        1       2       3       4       5       6
-                                ' username access flags addedby addedon modifiedby modifiedon
+                                '  0        1       2       3      4        5          6        7
+                                ' username access flags addedby addedon modifiedby modifiedon banmsg
                                 If UBound(X) > 2 Then
                                     .AddedBy = X(3)
                                     
@@ -5544,6 +5447,10 @@ Public Sub LoadDatabase()
                                             
                                             If UBound(X) > 5 Then
                                                 .ModifiedOn = CDate(Replace(X(6), "_", " "))
+
+                                                If UBound(X) > 6 Then
+                                                    .BanMessage = X(7)
+                                                End If
                                             End If
                                         End If
                                     End If
@@ -5576,6 +5483,7 @@ Public Sub LoadDatabase()
         
         If Not found Then
             ReDim Preserve DB(UBound(DB) + 1)
+            
             DB(UBound(DB)).Username = BotVars.BotOwner
             DB(UBound(DB)).Access = 1000
         End If
@@ -5782,6 +5690,7 @@ Private Sub WriteDatabase(ByVal u As String)
             Print #f, " " & IIf(DB(i).AddedOn > 0, DateCleanup(DB(i).AddedOn), "%");
             Print #f, " " & IIf(Len(DB(i).ModifiedBy) > 0, DB(i).ModifiedBy, "%");
             Print #f, " " & IIf(DB(i).ModifiedOn > 0, DateCleanup(DB(i).ModifiedOn), "%");
+            Print #f, " " & IIf(Len(DB(i).BanMessage) > 0, DB(i).BanMessage, "%");
             Print #f, vbCr
         End If
     Next i

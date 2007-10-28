@@ -287,7 +287,7 @@ Repeat4:
         If InStr(1, KeyValue, " ", vbTextCompare) > 0 Then '// If it's a FILETIME
         
             Dim FT As FILETIME
-            Dim sT As SYSTEMTIME
+            Dim st As SYSTEMTIME
             
             FT.dwHighDateTime = CLng(Left$(KeyValue, InStr(1, KeyValue, " ", vbTextCompare)))
             
@@ -298,10 +298,10 @@ Repeat4:
             
             FT.dwLowDateTime = KeyValue 'CLng(KeyValue & "0")
             
-            FileTimeToSystemTime FT, sT
+            FileTimeToSystemTime FT, st
             
-            With sT
-                Event_ServerInfo Right$(KeyName, Len(KeyName) - 7) & ": " & SystemTimeToString(sT) & " (Battle.net time)"
+            With st
+                Event_ServerInfo Right$(KeyName, Len(KeyName) - 7) & ": " & SystemTimeToString(st) & " (Battle.net time)"
             End With
             
         Else    '// it's a SECONDS type
@@ -910,10 +910,10 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
             ' Are they banned?
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            If InStr(1, GetAccess(Username).Flags, "B") > 0 Then
-                Ban Username & " AutoBan", (AutoModSafelistValue - 1)
-                GoTo theEnd
-            End If
+            'If InStr(1, GetAccess(Username).Flags, "B") > 0 Then
+            '    Ban Username & " AutoBan", (AutoModSafelistValue - 1)
+            '    GoTo theEnd
+            'End If
             
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
             ' Are they tagbanned?

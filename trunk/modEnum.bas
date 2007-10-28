@@ -42,6 +42,7 @@ Public Type udtDatabase
     AddedOn     As Date
     ModifiedBy  As String
     ModifiedOn  As Date
+    BanMessage  As String
 End Type
 
 'Public Type udtQueue
@@ -57,6 +58,7 @@ Public Type udtGetAccessResponse
     AddedOn     As Date
     ModifiedBy  As String
     ModifiedOn  As Date
+    BanMessage  As String
 End Type
 
 Public Type FILETIME
