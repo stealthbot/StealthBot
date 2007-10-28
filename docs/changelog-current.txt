@@ -89,8 +89,6 @@
 	- Fixed a bug with wildcard database searches (thanks various)
 	- Fixed the channelban and channelsquelch commands (thanks various)
 	- Fixed a bug with the .findattr command (thanks lemonhead)
-	- The findattr command can now search for users matching all of several specified flags when specified
-		in a group.
 	- Adding filters with the /filter -msg- or blocking with the /block -user- commands will update
 		properly now (thanks Retain)
 	- Now properly truncating quotes spit out using the .quote command (thanks Jack)
@@ -221,6 +219,8 @@
 
 
 	<b>COMMANDS</b>
+	- The findattr command can now search for users matching all of several specified flags when specified
+		in a group.
 	- The whois command is now distinct from the other database searching commands in that the
 	  	whois command will now state a users cumulative rank and/or flags.
 	- You can now use //command inside the bot to execute a command with console permissions,
