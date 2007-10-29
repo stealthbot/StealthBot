@@ -1,16 +1,25 @@
 '0.979999
 '// ^^ Ignore this version line, but DO NOT remove/modify it
 
-'////////////////////////////////////////////////////////////
-'// THE PLUGIN SYSTEM - StealthBot 2.7 Development Version //
-'////////////////////////////////////////////////////////////
+
+'// The Plugin System - StealthBot 2.7 Development Version
+'//    by Swent
+'//      Last modified 8:03 PM 10/28/2007
 
 
-'//  Last modified 11:14 PM 10/17/2007 by Swent
+'// The Plugin System is an updateable, scripted extension of StealthBot's VBScripting System.
+'//   It handles plugin commands, plugin loading, execution of plugin events, and various miscallenous functions.
+'//      DO NOT change anything in this file unless you know what you're doing.
+
+'// This file will be updated periodically to continously provide new plugin features and capabilities between StealthBot versions.
+
+
+'// TODO BEFORE PUBLIC RELEASE
+'// 	* Change version check to 2.7
 
 
 '//**********************************//
-'//  CHANGE LOG                      // << This is the public changelog -- dev changes aren't listed here
+'//  CHANGE LOG                      //
 '//**********************************//
  
 '// The full change log can be found here: http://stealthbot.net/p/plugs/changelog
@@ -28,7 +37,6 @@
 '//   *When talking inside the bot, outgoing messages will be split up automatically if they exceed the SB char limit (220)
 '//      -Messages exceeding the limit that begin with "/" or your bot trigger will not be split (Thanks ZergMasterI)
 '//   *The phelp command can now be used externally (it will only display commands): .phelp <prefix>
-'//   *Minimized occurence of Runtime Error '-2147467259' by increasing the timeout to 15 seconds
 '//   *Modified /plugins and /updates outputs -- now extremely sexy thanks to the new capabilites of AddChat (Thanks Jack)
 '//   *Made the prefix validity check more thorough (now checks for repeats, invalid chars, and disallowed prefixes)
 '//   *Revamped the settings system. Plugin settings are now located in settings.ini
@@ -38,7 +46,7 @@
 '//   *Opened up the updates, getplugin and delplugin commands to external usage by Bot Owner only (Thanks RoNiN)
 '//      -In the external updates output, only prefixes are displayed. Key: New, [Updated], (Installed)
 '//   *Increased plugin load efficiency -- load time should be noticeably decreased (Thanks ZergMasterI)
-'//   *Replaced all Plugin System usaged of vbBlue with psLightBlue, which is much easier on the eyes
+'//   *Replaced all Plugin System usaged of vbBlue with vbLightBlue, which is much easier on the eyes
 '//   *Plugin and Plugin System update checks now only take place once after connection
 '//   *Improved error handling during plugin load. Loading errors will now be more descriptive (Thanks ZergMaster)
 '//      -Plugins with errors on load will be disabled automatically (to avoid the constant error messages on every event)
@@ -77,7 +85,7 @@
 '//      -Deletes the specified plugin from your plugins folder. A backup is created automatically.
 '//      -To delete a plugin forever (no backup), add a parameter of "1". Example: /delplugin crs 1
 '//    /psnews
-'//      -Displays the Plugin System news
+'//      -Displays Plugin System news
 '//    /pedit <prefix>
 '//      -Opens the specified plugin for editing. This command has a few alternate functions:
 '//         ~You can use a filename (ex: pmPeltMe.plug) in place of <prefix>, as long as it's in the plugins folder
@@ -97,50 +105,11 @@
 '//   *Fixed a plugin converter error for users with certain language settings (Thanks fagju)
 
 
-'// [ Useful Globals ]
-
-'// - psD2
-'// Holds "*" If Bot is using D2. Solves issue with whispering D2 Users.
-'//   Example usage: AddQ "/w " & psD2 & Username & " hey!"
-
-'// - vbOrange, vbBrown, vbPink, vbGrey, vbLightBlue
-'// Holds custom RBG color values (to supplement available vbColors)
-'//   Example usage: AddChat vbOrange, "This is orange!"
-
-
-'// [ Useful Objects ]
-
-'// - psFSO
-'// Holds the FileSystemObject object. Use this to work with files and folders
-'//   Example usage: psFSO.CreateTextFile("C:\Program Files\StealthBot\test.txt")
-'//   Reference: http://msdn2.microsoft.com/en-us/library/6kxy1a51.aspx
-
-'// - psWshShell
-'// Holds the Windows Script Host Shell. Use this to run commands/applications.
-'//   Example usage: psWshShell.Run "C:\Program Files\Starcraft\Brood.exe"
-'//   Reference: http://msdn2.microsoft.com/en-us/library/aew9yb99.aspx
-
-'// - psAppShell
-'// Holds the Windows Application Shell. Use this to open files/folders/programs.
-'//   Example usage: psAppShell.Open "C:\Program Files\StealthBot\safelist.txt"
-
-'// - psPlugins
-'// Holds plugin file paths
-'//   Example usage: AddQ "Your crs plugin is located at: " & psPlugins.Item("crs")
-
-'// - psVersions
-'// Holds plugin versions
-'//   Example usage: AddQ "Your crs plugin's version is: " & psVersions.Item("crs")
-
  
 '//**********************************//
 '//  THE PLUGIN SYSTEM               //
 '//**********************************//
 
-
-
- 
-'// [[[ CONSTANT AND GLOBAL DECLARATIONS, OBJECT REFERENCES ]]]
 
 Const PS_UPDATE_URL = "http://www.stealthbot.net/p/plugs/"
 Const PS_SBNET_URL = "http://www.stealthbot.net/board/index.php?"
@@ -150,7 +119,6 @@ Const PS_ALLOW_UI = True
 Const PS_SET_PATH = "plugins\settings.ini"
 Const PS_PREFIX_DISALLOW = "|ps|script|protect|phrasebans|ipbans|idle|koy|plugban|chpw|ib|efp|floodmode|"
 Const PS_COLORS = "65280,39423" '// Default: Green,Orange
-Const PS_TIMEOUT = 15
 
 Public psPrefixes       '// holds prefixes of loaded plugins
 Public psTitles         '// holds plugin titles
@@ -172,6 +140,7 @@ Set psSC = GetScriptControl()
 Set psFSO = CreateObject("Scripting.FileSystemObject")
 Set psWshShell = CreateObject("WScript.Shell")
 Set psAppShell = CreateObject("Shell.Application")
+Set psLoadError = CreateObject("Scripting.Dictionary")     '// holds plugin load status (success or errored)
 Set psPlugins = CreateObject("Scripting.Dictionary")       '// holds plugin file paths
 Set psVersions = CreateObject("Scripting.Dictionary")      '// holds plugin versions
 Set psHelp = CreateObject("Scripting.Dictionary")          '// holds plugin help output
@@ -223,7 +192,7 @@ Sub psLoadPlugins()
                   AddChat vbRed, "Did not load plugin in file ", vbWhite, psFSO.GetFileName(File), vbRed, ". Its version """ & curVersion & """ is invalid."
                Else      
 
-                  '// Everything checks out, let's load this plugin!
+                  '// Everything checks out, load this plugin!
                   psLoadPlugin curPrefix, curVersion, File, strPlugin, arrPlugin
                   If psPluginEnabled(curPrefix) Then enCount = enCount + 1
                End If
@@ -490,27 +459,32 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
  
    '* Command to list all plugins currently loaded
    ElseIf cmdName = "plugins" Then
+      arrPrefixes = psPlugins.Keys
       If DisplayID = 3 Or DisplayID = 1 Then
-         For i = 0 to UBound(psPrefixes)
-           If Not psPluginEnabled(psPrefixes(i)) Then
-              psPrefixes(i) = "(" & psPrefixes(i) & ")"
+         For i = 0 to UBound(arrPrefixes)
+           If Not psPluginEnabled(arrPrefixes(i)) Then
+              arrPrefixes(i) = "(" & arrPrefixes(i) & ")"
            End If
          Next
-         dsp DisplayID, "Loaded Plugins (" & psPlugins.Count & "): " & Join(psPrefixes, ", "), Username, vbWhite
+         dsp DisplayID, "Loaded Plugins (" & psPlugins.Count & "): " & Join(arrPrefixes, ", "), Username, vbWhite
          Exit Sub
       End If
       For i = 0 to psPlugins.Count - 1
          If i Mod 2 = 0 Then altColor = psColor1 Else altColor = psColor2 End If
-         If psPluginEnabled(psPrefixes(i)) Then
+         If psPluginEnabled(arrPrefixes(i)) Then
             status = altColor & ", "" "" & vbCrLf, "
+         ElseIf psLoadError.Item(arrPrefixes(i)) Then
+            status = "vbRed, "" (Blocked)"" & vbCrLf, "
          Else
             status = "vbRed, "" (Disabled)"" & vbCrLf, "
          End If   
-         plugVer = altColor & ", ""    Version:" & vbTab & ""& psVersions.Item(psPrefixes(i)) & """ & vbCrLf, "
-         fileLine = altColor & ", ""    Filename:" & vbTab & "" & psFSO.GetFileName(psPlugins.Item(psPrefixes(i))) & """, "
-         prefixLine = altColor & ", String(2, vbCrLf) & ""    Prefix:" & String(2, vbTab) & """, " & vbWhite & ", ""[ " & psPrefixes(i)  & " ]"", "
+         If i = 0 Then plugVer = Chr(255) & "cb"
+         plugVer = altColor & ", ""    Version:" & vbTab & ""& psVersions.Item(arrPrefixes(i)) & """ & vbCrLf, "
+         fileLine = altColor & ", ""    Filename:" & vbTab & "" & psFSO.GetFileName(psPlugins.Item(arrPrefixes(i))) & """, "
+         prefixLine = altColor & ", String(2, vbCrLf) & ""    Prefix:" & String(2, vbTab) & """, " & vbWhite & ", ""[ " & arrPrefixes(i)  & " ]"", "
          strPList = strPList & prefixLine & status & "vbCrLf & " & plugVer & fileLine
       Next
+
       AddChat vbWhite, " "
       Execute("AddChat psColor1, ""Loaded Plugins (" & psPlugins.Count & ")"", " & Left(strPList, Len(strPList) - 2))
       If Not GetSetting("ps", "enabled") Then AddChat vbRed, "Plugins have been globally disabled. To reverse this type /ps on" 
@@ -546,7 +520,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
 
       '// Did user enter a prefix?
       If UBound(cmd) = 0 Then
-         If DisplayID = 4 Then AddChat psLightBlue, "Plugin Help System"
+         If DisplayID = 4 Then AddChat vbLightBlue, "Plugin Help System"
          dsp DisplayID, "Type /phelp <prefix> to get help on one of your loaded plugins.", Username, psColor2
          dsp DisplayID, "Loaded prefixes: " & Join(psPrefixes, ", "), Username, psColor1
          If DisplayID = 4 Then AddChat psGrey, "For help with the Plugin System's commands and operation, type /phelp ps"
@@ -570,7 +544,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
 
          '// Is help available for this plugin?   
          If Join(psHelp.Item(cmd(1)), "") = vbNullString Then
-            dsp DisplayID, "Sorry, no help information is available for your " & cmd(1) & " plugin.", Username, psLightBlue
+            dsp DisplayID, "Sorry, no help information is available for your " & cmd(1) & " plugin.", Username, vbLightBlue
             Exit Sub
          End If
 
@@ -586,22 +560,14 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
          commands = Split(psHelp.Item(cmd(1))(1), ":")
          topicNum = psHelp.Item(cmd(1))(2)
          notes = Split(psHelp.Item(cmd(1))(3), ":")
-         setNotes = Filter(Split(strSettingNotes, "||"), cmd(1) & "|")
 
          '// Display the help info
-         AddChat psLightBlue, nameAndAuthor(0) & " by " & nameAndAuthor(1)
+         AddChat vbLightBlue, nameAndAuthor(0) & " by " & nameAndAuthor(1)
          AddChat vbWhite, " ": AddChat psColor2, "Commands:"
          If Join(commands, "") = vbNullString Then
             AddChat psColor2, "There are no commands for this plugin."
          Else
             For i = 0 to UBound(commands): AddChat psColor2, Space(6) & BotVars.Trigger & commands(i): Next
-         End If
-         If UBound(setNotes) > -1 Then
-            AddChat vbWhite," ": AddChat vbYellow, "Settings.ini Notes (",vbWhite,"settingName",vbYellow, ": Setting description)"
-            For i = 0 to UBound(setNotes)
-               curNote = Split(setNotes(i), "|")
-               AddChat vbWhite, Space(6) & curNote(1), vbYellow, ": " & curNote(2)
-            Next
          End If
          If Join(notes, "") <> vbNullString Then
             AddChat vbWhite, " ": AddChat vbRed, "Other Important Notes:"
@@ -633,7 +599,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
 
             '// Delete the file
             psFSO.DeleteFile(psPlugins.Item(cmd(1)))
-            dsp DisplayID, "The " & cmd(1) & " plugin has been deleted.", Username, psLightBlue
+            dsp DisplayID, "The " & cmd(1) & " plugin has been deleted.", Username, vbLightBlue
             AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
          End If
       End If
@@ -670,7 +636,7 @@ End Sub
 
 
 
-'// [[[[ PLUGIN CONVERTER ]]]]
+'// [[[ PLUGIN CONVERTER ]]]
 
 
 Sub psConvertToPlugin(Path, Lines)
@@ -708,10 +674,10 @@ Sub psConvertToPlugin(Path, Lines)
             End If
          End If
       Loop While askAgain
- 
+
       '// Convert the code to plugin form
       For i = 0 to UBound(Lines)
- 
+
          '// Convert event sub headers and event calls
          If Instr(LCase(Lines(i)), "event_") Then
 	    If Instr(Replace(LCase(Lines(i)), " ", ""), "subevent") > 0 Then
@@ -723,8 +689,8 @@ Sub psConvertToPlugin(Path, Lines)
  
          '// Convert timer code
          ElseIf Instr(Replace(LCase(Lines(i)), " ", ""), "sctimer.interval=") Then
-            interval = Mid(Lines(i), Instr(Lines(i), "=") + 1)
-            Lines(i) = "TimerInterval """ & prefix & """,""" & prefix & "Timer""," & CInt(interval) \ 1000
+            interval = Trim(Mid(Lines(i), Instr(Lines(i), "=") + 1))
+            Lines(i) = "TimerInterval """ & prefix & """,""" & prefix & "Timer""," & CLng(interval) \ 1000
          ElseIf Instr(Replace(LCase(Lines(i)), " ", ""), "sctimer.enabled=") Then
             bool = Mid(Lines(i), Instr(Lines(i), "=") + 1)
             Lines(i) = "TimerEnabled """ & prefix & """,""" & prefix & "Timer""," & bool
@@ -735,7 +701,7 @@ Sub psConvertToPlugin(Path, Lines)
             Lines(i) = "sub " & prefix & "_" & prefix & "Timer_Timer()"
          End If
       Next
- 
+
       '// Write the prefix and version line, and the converted code
       Set pluginFile = psFSO.OpenTextFile(Path, 2, 1)
       With pluginFile
@@ -760,13 +726,13 @@ End Sub
 
 
 
-'// [[[[ PLUGIN UPDATES SYSTEM ]]]]
+'// [[[ PLUGIN UPDATES ]]]
 
 
 Sub psAutoUpdate()
-  
+
    '// Check for plugin system updates
-   If PS_AUTO_UPDATE Then
+   If GetSetting("ps", "psnvn") Then
       On Error Resume Next
       curPSVersion = scINet.OpenURL(PS_UPDATE_URL & "update.php?action=sctxtver")
       If Len(curPSVersion) = 0 Or Instr(curPSVersion, " ") Then
@@ -779,11 +745,33 @@ Sub psAutoUpdate()
       '// Is there are newer Plugin System version available?
       If Len(myPSVersion) > 0 Then
          If psGetNumericVersion(curPSVersion) > psGetNumericVersion(myPSVersion) Then
-            AddChat psLightBlue, "Downloading update for the Plugin System."
-            psBackUpFile BotPath() & "PluginSystem.dat", myPSVersion
-            PrintURLToFile "PluginSystem.dat", PS_UPDATE_URL & "PluginSystem.dat"
-            AddChat psColor1, "Your Plugin System has been updated."
-            AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
+
+            updatePS = MsgBox("An new version (v" & curPSVersion & ") is available for The Plugin System. Updates of this type " & _
+                              "include new features and bug fixes for StealthBot's VBScripting System. " & String(2, vbCrLf) & _
+                              "Automatically update now (recommended)?" & String(2, vbCrLf) & "This notification can be disabled " & _
+                              "inside your settings.ini file", vbYesNoCancel + vbQuestion + vbApplicationModal, "StealthBot Updater")
+
+            If updatePS = vbYes Then
+                  AddChat vbLightBlue, "Downloading update for the Plugin System."
+                  psBackUpFile BotPath() & "PluginSystem.dat", myPSVersion
+                  PrintURLToFile "PluginSystem.dat", PS_UPDATE_URL & "PluginSystem.dat"
+                  AddChat psColor1, "Your Plugin System has been updated."
+                  AddChat psColor1, "For a list of changes in this version see: http://stealthbot.net/p/plugs/changelog"
+                  AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
+            End If
+         End If
+      End If
+   End If
+
+   '// Check for plugin creator updates.
+   If Not GetSetting("#internal", "pcvernote") Then
+      On Error Resume Next
+      curPCVersion = scINet.OpenURL("http://stealthbot.net/p/plugs/pcver.txt")
+      If curPCVersion > GetSetting("#internal", "pcver") Then
+         If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then
+            psFSO.DeleteFile BotPath() & "PluginCreator.exe"
+            AddChat vbGreen, "An update is available for your Plugin Creator. To download hit Plugins > Create New Plugin."
+            SetSetting "#internal", "pcvernote", True
          End If
       End If
    End If
@@ -804,10 +792,10 @@ Sub psAutoUpdate()
             '// If enabled, notify user of new version
             If GetSetting(curLine(1), "nvn") And GetSetting("ps", "nvn") Then
 
-               updateNow = MsgBox("A new version (v" & curLine(2) & ") is available for your " & curLine(0) & " plugin. " & _
+               updateNow = MsgBox("A new version (v" & curLine(2) & ") is available for your " & curLine(0) & " plugin. " & String(2, vbCrLf) & _
                                   "Automatically update this plugin now?" & String(2, vbCrLf) & "To stop receiving new " & _
                                   "version notifications for this plugin, type this inside your bot: /nvn " & curLine(1) & _
-                                  " off", vbYesNoCancel + vbQuestion + vbApplicationModal, "New Version Notification")
+                                  " off", vbYesNoCancel + vbQuestion + vbApplicationModal, "StealthBot Updater")
 
                If updateNow = vbYes Then psDownloadPlugin curLine(1), 4, 0
             End If
@@ -845,7 +833,7 @@ Sub psDownloadPlugin(Prefix, DisplayID, Username)
    pluginFileName = Mid(Files(0), 20) & ".plug"      
 
    '// Download the plugin
-   AddChat psLightBlue, "Downloading File: " & pluginFileName
+   AddChat vbLightBlue, "Downloading File: " & pluginFileName
    SSC.PrintURLToFile "plugins\" & pluginFileName, PS_UPDATE_URL & Files(0)
 
    If Not psPlugins.Exists(Prefix) Then
@@ -853,7 +841,7 @@ Sub psDownloadPlugin(Prefix, DisplayID, Username)
       '// Download the additonal files (if any)
       If UBound(Files) > 0 Then AddChat vbWhite, "*** NOTE: If you get a Script Control pop-up, hit Continue. Hitting End will cause errors!"
       For i = 1 to UBound(Files)
-        AddChat psLightBlue, "Downloading File: " & Files(i)
+        AddChat vbLightBlue, "Downloading File: " & Files(i)
 	If Files(i) <> "" Then SSC.PrintURLToFile "plugins\" & Files(i), PS_UPDATE_URL & Files(i)
       Next
 
@@ -870,7 +858,7 @@ End Sub
 
 
 
-'// [[[[ PLUGINS MENUS CALLBACKS ]]]]
+'// [[[ PLUGINS MENUS CALLBACKS ]]]
 
 
 '// "Display" > "Plugin Title"
@@ -926,12 +914,6 @@ Sub PluginMenus_Backup_Callback(Prefix)
      AddChat arrOnOff(2), "Backup On Updates has been " & arrOnOff(1) & " for your " & Prefix & " plugin."
    End If
    SetMenuItemCheck Prefix, "Backup On Updates", boolEnabled
-End Sub
-
-
-'// "Reload Plugins"
-Sub ps_ReloadPlugins_Callback()
-   Call ReloadScript()
 End Sub
 
 
@@ -1009,10 +991,15 @@ Sub ps_CreatePlugin_Callback()
   If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then
     psWshShell.Run "PluginCreator.exe"
   Else
-    AddChat vbRed, "File not found: " & BotPath() & "PluginCreator.exe"
+    '// Get current plugin creator version
+    On Error Resume Next
+    curPCVersion = scINet.OpenURL("http://stealthbot.net/p/plugs/pcver.txt")
+
     AddChat vbYellow, "Downloading Plugin Creator. If you receive any Script Control dialogs, hit Continue!"
     SSC.PrintURLToFile "PluginCreator.exe", "http://www.stealthbot.net/p/plugs/PluginCreator.exe"
     AddChat vbGreen, "Downloaded PluginCreator.exe to your StealthBot folder. You may now use the Create New Plugin function."
+    SetSetting "#internal", "pcver", curPCVersion
+    SetSetting "#internal", "pcvernote", False
   End If
 End Sub
 
@@ -1027,7 +1014,7 @@ End Sub
 
 
 
-'// [[[[ PLUGIN EVENT EXECUTOR ]]]]
+'// [[[ PLUGIN EVENT EXECUTOR ]]]
 
 
 Sub psExecuteEvent(EventName, Parameters)
@@ -1038,8 +1025,8 @@ Sub psExecuteEvent(EventName, Parameters)
    '// In each plugin execute this event with parameter values passed from the actual event sub below
    For i = 0 to psPlugins.Count - 1
 
-      '// Is this plugin enabled, and does this event exist in this plugin?
-      If GetSetting(psPrefixes(i), "enabled") And Instr(psEvents.Item(psPrefixes(i)), "|" & LCase(EventName) & "|") Then
+      '// Is this plugin enabled, did it load successfully, and does this event exist in this plugin?
+      If GetSetting(psPrefixes(i), "enabled") And Not psLoadError(psPrefixes(i)) And Instr(psEvents(psPrefixes(i)), "|" & LCase(EventName) & "|") Then
 
          '// Call the specified event sub in this plugin
          If Len(Parameters(0)) > 0 Then
@@ -1089,7 +1076,6 @@ Sub psTriggerLoadEvent(Prefix)
       If Not GetSetting("ps", "debugmode") Then On Error Resume Next
       Execute(Prefix & "_event_load()")
       If Err.Number <> 0 Then
-addchat vbblue, "wtfux"
             AddChat vbRed, "Scripting runtime error '" & Err.Number & "' on """ & Prefix & "_Event_Load" & _
                             """ call in file """ & psFSO.GetFileName(psPlugins.Item(Prefix)) & """"
 	    AddChat vbRed, Err.Description & "."
@@ -1193,25 +1179,24 @@ Sub psCompleteInstall()
       If psFSO.FileExists(BotPath() & "plugins\pluginsettings.ini") Then psFSO.DeleteFile(BotPath() & "plugins\pluginsettings.ini")
       psFSO.CreateTextFile(BotPath() & "plugins\settings.ini")
       AddChat 39423, "Added the settings.ini file to your plugins folder."
-      AddChat vbGreen, "Installation of the Plugin System successfully completed!"
       AddChat vbWhite, "For a quick explanation of the Plugin System and answers to common questions, visit the Plugin System FAQ:"
       AddChat vbWhite, "http://www.stealthbot.net/board/index.php?showtopic=22229"
       AddChat vbWhite, "For a Plugin System command list and extensive usage information, visit the Plugin System guide:"
       AddChat vbWhite, "http://www.stealthbot.net/board/index.php?showtopic=6052"
       AddChat vbWhite, "For answers to common scripting and plugin questions/problems, visit the scripting Tutorials and FAQs forum:"
       AddChat vbWhite, "http://www.stealthbot.net/board/index.php?showforum=53"
-      AddChat vbWhite, "These links can also be found in the Scripts menu under Help."
+      AddChat vbWhite, "These links can also be found in the Plugins menu under Help."
    End If
 End Sub
  
 
 Sub psSetPSColors()
  
-   psGrey = 9211020
-   psBrown = 1262987
+   vbGrey = 9211020
+   vbBrown = 1262987
    vbOrange = 39423
-   psPink = 13408767
-   psLightBlue = 13395456
+   vbPink = 13408767
+   vbLightBlue = 13395456
 
    '// Plugin System color scheme
    psColor1 = Split(PS_COLORS, ",")(0)
@@ -1292,12 +1277,14 @@ Sub psCreatePSSettings()
    SetSetting "ps", "allowedExtensions", "plug,txt", "Plugins will be loaded from files with these extensions", False
    SetSetting "ps", "autoConvertToPlugin", True, "Automatically converts regular scripts to plugin form on load.", False
    SetSetting "ps", "multipleCmdMsgs", True, "Allows for multiple commands in a single message.", False
-   SetSetting "ps", "newsDisabled", False, "Plugin System News. Set to True to disable.", False
    SetSetting "ps", "menusDisabled", False, "Plugin menus. Set to True to disable.", False
+   SetSetting "ps", "psnvn", True, "New Version Notification for The Plugin System. Highly recommended.", False
+   SetSetting "ps", "timeout", 15, "Script timeout. Changes to this setting only take effect after bot opening.", False
    SetSetting "ps", "prefix_cmd_access", 100, "Access required to use the .prefix on/off command", False
    SetSetting "ps", "plugins_cmd_access", 20, "Access required to use the .plugins command", False
    SetSetting "ps", "phelp_cmd_access", 20, "Access required to use the .phelp command", False
-   SetSetting "#internal", "conup", 0, "Internal setting -- do not modify", False
+   SetSetting "#internal", "pcver", "2.20", "", False
+   SetSetting "#internal", "pcvernote", False, "", False
 End Sub
 
 
@@ -1319,9 +1306,6 @@ Sub Event_Load()
    '// Create the plugin system settings
    Call psCreatePSSettings()
 
-   '// Display Plugin System news
-   'Call psDisplayNews(psFirstRun)
-
    '// Load the plugins
    Call psLoadPlugins()
 
@@ -1339,14 +1323,14 @@ End Sub
 
 Sub Event_FirstRun()
 
-   SetSCTimeout PS_TIMEOUT * 1000
+   AddChat vbWhite, "ÿcbÿcb"
+   SetSCTimeout GetSetting("ps", "timeout") * 1000
    psFirstRun = True
 End Sub
  
  
 Sub Event_ServerInfo(Message)
  
-   If Message = "Welcome to Battle.net!" Then psConUptime = 0
    psExecuteEvent "ServerInfo", Array(Message)
 End Sub
  
@@ -1409,7 +1393,6 @@ End Sub
  
 Sub Event_LoggedOn(Username, Product)
  
-   psConUptime = GetSetting("ps", "conup")
    Call psAutoUpdate()
    If Product = "VD2D" Or Product = "PX2D" Then psD2 = "*" Else psD2 = vbNullString End If   
    psExecuteEvent "LoggedOn", Array(Username,Product)
@@ -1515,7 +1498,6 @@ End Sub
 
 
 Sub Event_Close()
-   
-   SetSetting "ps", "conup", psConUptime, "", True
+
    psExecuteEvent "Close", Array(vbNullString)
 End Sub
