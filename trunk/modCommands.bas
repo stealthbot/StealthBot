@@ -2765,10 +2765,10 @@ Private Function OnTagBan(ByVal Username As String, ByRef dbAccess As udtGetAcce
         ' ...
         If (InStr(1, msgData, "*", vbBinaryCompare) <> 0) Then
             ' ...
-            Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " +B", InBot, tmpBuf())
+            Call OnAdd(Username, dbAccess, msgData & " +B", InBot, tmpBuf())
         Else
             ' ...
-            Call OnAdd(Username, dbAccess, msgData & " +B", InBot, tmpBuf())
+            Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " +B", InBot, tmpBuf())
         End If
     End If
     
