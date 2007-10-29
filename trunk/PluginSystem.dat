@@ -471,10 +471,10 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
       End If
       For i = 0 to psPlugins.Count - 1
          If i Mod 2 = 0 Then altColor = psColor1 Else altColor = psColor2 End If
-         If psPluginEnabled(arrPrefixes(i)) Then
-            status = altColor & ", "" "" & vbCrLf, "
-         ElseIf psLoadError.Item(arrPrefixes(i)) Then
+         If psLoadError.Item(arrPrefixes(i)) Then
             status = "vbRed, "" (Blocked)"" & vbCrLf, "
+         ElseIf psPluginEnabled(arrPrefixes(i)) Then
+            status = altColor & ", "" "" & vbCrLf, "
          Else
             status = "vbRed, "" (Disabled)"" & vbCrLf, "
          End If   
