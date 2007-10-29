@@ -88,7 +88,7 @@ IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""
 Title="StealthBot"
-ExeName32="StealthBot Beta v2.6993.exe"
+ExeName32="StealthBot Beta v2.6995.exe"
 Path32="..\..\..\..\Desktop"
 Command32="-debug -showdrops"
 Name="StealthBot"
@@ -97,14 +97,14 @@ Description="StealthBot"
 CompatibleMode="0"
 MajorVer=2
 MinorVer=6
-RevisionVer=993
+RevisionVer=995
 AutoIncrementVer=0
 ServerSupportFiles=0
 VersionCompanyName="Andy T (Stealth@USEast)"
 VersionFileDescription="StealthBot v2.7"
 VersionLegalCopyright="(c) 2002-2007 Andy T. (Stealth@USEast)"
 VersionProductName="StealthBot v2.7"
-CondComp="BETA = 1 : COMPILE_DEBUG = 1"
+CondComp="BETA = 1"
 CompilationType=0
 OptimizationType=0
 FavorPentiumPro(tm)=0

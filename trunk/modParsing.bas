@@ -17,7 +17,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Dim PacketID    As Byte         ' Battle.net packet ID
     Dim s           As String       ' Temporary string
     Dim l           As Long         ' Temporary long
-    Dim EventID     As Long         ' 0x0F packet Event ID
+    Dim eventID     As Long         ' 0x0F packet Event ID
     Dim UserFlags   As Long         ' 0x0F user's flags
     Dim UserPing    As Long         ' 0x0F user's ping
     Dim Username    As String       ' Misc username storage
@@ -69,7 +69,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &HF 'SID_CHATEVENT
                 ' User information
-                EventID = pD.DebuffDWORD
+                eventID = pD.DebuffDWORD
                 UserFlags = pD.DebuffDWORD
                 UserPing = pD.DebuffDWORD
                 
@@ -90,7 +90,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 End If
                 
                 ' 0x0F is a beast!
-                Select Case EventID
+                Select Case eventID
                     Case ID_JOIN
                         Call Event_UserJoins(Username, UserFlags, s2, UserPing, Product, ClanTag, s, W3Icon)
                         
@@ -132,7 +132,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         
                     Case Else
                         If MDebug("debug") Then
-                            AddChat RTBColors.ErrorMessageText, "Unhandled 0x0F Event: " & ZeroOffset(EventID, 2)
+                            AddChat RTBColors.ErrorMessageText, "Unhandled 0x0F Event: " & ZeroOffset(eventID, 2)
                             AddChat RTBColors.ErrorMessageText, "Packet data: " & vbCrLf & DebugOutput(PacketData)
                         End If
                 End Select
