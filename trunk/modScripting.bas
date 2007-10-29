@@ -8,6 +8,7 @@ Attribute VB_Name = "modScripting"
 Option Explicit
 
 Public VetoNextMessage As Boolean
+Public dictSettings As Dictionary
 Public dictTimerInterval As Dictionary
 Public dictTimerEnabled As Dictionary
 Public dictTimerCount As Dictionary
@@ -50,6 +51,9 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
         Loop
     Close #intFile
     SC.AddCode strContent
+    
+    Set dictSettings = New Dictionary
+    dictSettings.CompareMode = TextCompare
 
 LoadPluginSystem_Error:
 
@@ -57,14 +61,17 @@ LoadPluginSystem_Error:
     Debug.Print "Using variable: " & Path
 End Sub
 
+
 Public Sub SetVeto(ByVal b As Boolean)
     VetoNextMessage = b
 End Sub
+
 
 Public Function GetVeto() As Boolean
     GetVeto = VetoNextMessage
     VetoNextMessage = False
 End Function
+
 
 Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
     Dim i As Integer
@@ -98,6 +105,15 @@ Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
 ReInitScriptControl_Error:
 
     'Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ReInitScriptControl of Module modScripting"
+End Sub
+
+
+'// Written by Swent. Stores the names of plugin settings.
+Public Sub AddPSetting(ByVal strPrefix As String, ByVal strName As String)
+    Dim strCurVal As String
+    
+    If dictSettings.Exists(strPrefix) Then strCurVal = dictSettings.Item(strPrefix)
+    dictSettings.Item(strPrefix) = strCurVal & strName & "|"
 End Sub
 
 
