@@ -2225,8 +2225,13 @@ Private Function OnTagDel(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' redefine array size
     ReDim Preserve tmpBuf(0)
     
-    ' remove user from shitlist using "add" command
-    Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " -B", InBot, tmpBuf())
+    If (InStr(1, msgData, "*", vbBinaryCompare) <> 0) Then
+        ' remove user from shitlist using "add" command
+        Call OnAdd(Username, dbAccess, msgData & " -B", InBot, tmpBuf())
+    Else
+        ' remove user from shitlist using "add" command
+        Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " -B", InBot, tmpBuf())
+    End If
         
     ' return message
     cmdRet() = tmpBuf()
