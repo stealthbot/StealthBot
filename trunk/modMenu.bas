@@ -315,7 +315,7 @@ Public Sub RegisterPluginMenus()
             
     AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
     AddScriptMenuItem dictMenuIDs("ps"), "Open PluginSystem.dat", "ps_OpenPS_Callback", False, False
-    AddScriptMenuItem dictMenuIDs("ps"), "Help", "ps_Help_Callback"
+    AddScriptMenuItem dictMenuIDs("ps"), "Help", "ps_Help_Callback", False, False
     
     '// Add menu "Plugin Menu Display"
     If Not SharedScriptSupport.GetSetting("ps", "menusDisabled") Then
@@ -402,6 +402,7 @@ End Function
 
 '// Written by Swent. Registers the ID of a new plugin menu item
 Public Function RegisterPluginItem(ByVal strPrefix As String, ByVal strName As String, ByVal lngItem As Long)
+
     dictItemIDs(strPrefix & "|||" & strName) = lngItem
 End Function
 
@@ -418,7 +419,6 @@ Public Sub DeletePluginMenus()
     For i = 0 To intMenuCount
         RemoveMenu ScriptMenu_ParentID, 0, MF_BYPOSITION
     Next
-
 End Sub
 
 
@@ -468,7 +468,6 @@ Public Function RegisterScriptMenu(ByVal sMenuCaption As String) As Long
     End If
     
     If GetMenuItemCount(ScriptMenu_ParentID) = 0 Then
-        AddItemToMenu ScriptMenu_ParentID, "Reload Plugins", , , , "ps_ReloadPlugins_Callback"
         AddItemToMenu ScriptMenu_ParentID, "Open plugins folder", , , , "ps_OpenPlugins_Callback"
         AddItemToMenu ScriptMenu_ParentID, "Open settings.ini", , , , "ps_OpenSettings_Callback"
         AddItemToMenu ScriptMenu_ParentID, 0, True
