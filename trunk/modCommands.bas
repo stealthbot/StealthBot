@@ -142,8 +142,8 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             End If
         
             ' execute command
-            ProcessCommand = ExecuteCommand(Username, GetAccess(Username), tmpX, _
-                InBot, cmdRet())
+            ProcessCommand = ExecuteCommand(Username, GetCumulativeAccess(Username), _
+                tmpX, InBot, cmdRet())
             
             If (ProcessCommand) Then
                 ' display command response
@@ -177,8 +177,8 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                 InBot, cmdRet())
         Else
             ' execute command
-            ProcessCommand = ExecuteCommand(Username, GetAccess(Username), tmpMsg, _
-                InBot, cmdRet())
+            ProcessCommand = ExecuteCommand(Username, GetCumulativeAccess(Username), _
+                tmpMsg, InBot, cmdRet())
         End If
         
         If (ProcessCommand) Then
@@ -492,24 +492,27 @@ Private Function OnEfp(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     ' the number of allowable commands, and enhancing the strength of the message queue.
     
     Dim tmpBuf As String ' temporary output buffer
+    
+    ' ...
+    msgData = LCase$(msgData)
 
-    If (Left$(msgData, 2) = "on") Then
+    If (msgData = "on") Then
         ' enable efp
         Call frmChat.SetFloodbotMode(1)
         
         tmpBuf = "Emergency floodbot protection enabled."
-     ElseIf (Left$(msgData, 6) = "status") Then
+    ElseIf (msgData = "off") Then
+        ' disable efp
+        Call frmChat.SetFloodbotMode(0)
+        
+        tmpBuf = "Emergency floodbot protection disabled."
+    ElseIf (msgData = "status") Then
         If (bFlood) Then
             frmChat.AddChat RTBColors.TalkBotUsername, "Emergency floodbot protection is " & _
                 "enabled. (No messages can be sent to battle.net.)"
         Else
             tmpBuf = "Emergency floodbot protection is disabled."
         End If
-    ElseIf (Left$(msgData, 3) = "off") Then
-        ' disable efp
-        Call frmChat.SetFloodbotMode(0)
-        
-        tmpBuf = "Emergency floodbot protection disabled."
     End If
             
     ' return message
@@ -521,7 +524,7 @@ Private Function OnHome(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     ' This command will make the bot join its home channel.
     
-    AddQ "/join " & BotVars.HomeChannel, 1
+    Call AddQ("/join " & BotVars.HomeChannel, 1)
 End Function ' end function OnHome
 
 ' handle clan command
@@ -567,33 +570,35 @@ Private Function OnPeonBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ' wins on record for any given race.
     
     Dim tmpBuf As String ' temporary output buffer
-            
-    Select Case (LCase$(msgData))
-        Case "on"
-            ' enable peon banning
-            BotVars.BanPeons = 1
-            
-            ' write configuration entry
-            Call WriteINI("Other", "PeonBans", "1")
-            
-            tmpBuf = "Peon banning activated."
-        Case "off"
-            ' disable peon banning
-            BotVars.BanPeons = 0
-            
-            ' write configuration entry
-            Call WriteINI("Other", "PeonBans", "0")
-            
-            tmpBuf = "Peon banning deactivated."
-        Case "status"
-            tmpBuf = "The bot is currently "
-            
-            If (BotVars.BanPeons = 0) Then
-                tmpBuf = tmpBuf & "not banning peons."
-            Else
-                tmpBuf = tmpBuf & "banning peons."
-            End If
-    End Select
+    
+    ' ...
+    msgData = LCase$(msgData)
+    
+    If (msgData = "on") Then
+        ' enable peon banning
+        BotVars.BanPeons = 1
+        
+        ' write configuration entry
+        Call WriteINI("Other", "PeonBans", "1")
+        
+        tmpBuf = "Peon banning activated."
+    ElseIf (msgData = "off") Then
+        ' disable peon banning
+        BotVars.BanPeons = 0
+        
+        ' write configuration entry
+        Call WriteINI("Other", "PeonBans", "0")
+        
+        tmpBuf = "Peon banning deactivated."
+    ElseIf (msgData = "status") Then
+        tmpBuf = "The bot is currently "
+        
+        If (BotVars.BanPeons = 0) Then
+            tmpBuf = tmpBuf & "not banning peons."
+        Else
+            tmpBuf = tmpBuf & "banning peons."
+        End If
+    End If
     
     ' return message
     cmdRet(0) = tmpBuf
@@ -682,35 +687,34 @@ Private Function OnQuietTime(ByVal Username As String, ByRef dbAccess As udtGetA
     
     Dim tmpBuf As String ' temporary output buffer
     
-    Select Case LCase$(msgData)
-        Case "on"
-            ' enable quiettime
-            BotVars.QuietTime = True
+    ' ...
+    msgData = LCase$(msgData)
+    
+    If (msgData = "on") Then
+        ' enable quiettime
+        BotVars.QuietTime = True
+    
+        ' write configuration entry
+        Call WriteINI("Main", "QuietTime", "Y")
         
-            ' write configuration entry
-            WriteINI "Main", "QuietTime", "Y"
-            
-            tmpBuf = "Quiet-time enabled."
-            
-        Case "off"
-            ' disable quiettime
-            BotVars.QuietTime = False
-            
-            ' write configuration entry
-            WriteINI "Main", "QuietTime", "N"
-            
-            tmpBuf = "Quiet-time disabled."
-            
-        Case "status"
-            If (BotVars.QuietTime) Then
-                tmpBuf = "Quiet-time is currently enabled."
-            Else
-                tmpBuf = "Quiet-time is currently disabled."
-            End If
+        tmpBuf = "Quiet-time enabled."
+    ElseIf (msgData = "off") Then
+        ' disable quiettime
+        BotVars.QuietTime = False
         
-        Case Else
-            tmpBuf = "Error: Invalid arguments."
-    End Select
+        ' write configuration entry
+        Call WriteINI("Main", "QuietTime", "N")
+        
+        tmpBuf = "Quiet-time disabled."
+    ElseIf (msgData = "status") Then
+        If (BotVars.QuietTime) Then
+            tmpBuf = "Quiet-time is currently enabled."
+        Else
+            tmpBuf = "Quiet-time is currently disabled."
+        End If
+    Else
+        tmpBuf = "Error: Invalid arguments."
+    End If
     
     ' return message
     cmdRet(0) = tmpBuf
@@ -974,6 +978,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
     End If
 End Function ' end function OnGiveUp
 
+' TO DO:
 ' handle idlebans command
 Private Function OnIdleBans(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -1250,7 +1255,10 @@ Private Function OnPlugBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
     
     Dim tmpBuf As String ' temporary output buffer
 
-    Select Case (LCase$(msgData))
+    ' ...
+    msgData = LCase$(msgData)
+
+    Select Case (msgData)
         Case "on"
             Dim i As Integer
         
@@ -1496,11 +1504,14 @@ Private Function OnIPBans(ByVal Username As String, ByRef dbAccess As udtGetAcce
     
     Dim i      As Integer
     Dim tmpBuf As String ' temporary output buffer
+    
+    ' ...
+    msgData = LCase$(msgData)
 
     If (Left$(msgData, 2)) = "on" Then
         BotVars.IPBans = True
         
-        WriteINI "Other", "IPBans", "Y"
+        Call WriteINI("Other", "IPBans", "Y")
         
         tmpBuf = "IPBanning activated."
         
@@ -2042,7 +2053,9 @@ Private Function OnReconnect(ByVal Username As String, ByRef dbAccess As udtGetA
         
         Call frmChat.DoConnect
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "You must be online to reconnect. Try connecting first."
+        frmChat.AddChat RTBColors.SuccessText, "Connection initialized."
+        
+        Call frmChat.DoConnect
     End If
 End Function ' end function OnReconnect
 
@@ -2132,27 +2145,27 @@ Private Function OnIdle(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
         
-    u = msgData
+    u = LCase$(msgData)
     
-    If (LCase$(u) = "on") Then
+    If (u = "on") Then
         Call WriteINI("Main", "Idles", "Y")
         
         tmpBuf = "Idles activated."
-    ElseIf (LCase$(u) = "off") Then
+    ElseIf (u = "off") Then
         Call WriteINI("Main", "Idles", "N")
         
         tmpBuf = "Idles deactivated."
-    ElseIf (LCase$(u) = "kick") Then
+    ElseIf (u = "kick") Then
         If (InStr(1, msgData, Space(1), vbBinaryCompare) = 0) Then
             tmpBuf = "Error setting idles. Make sure you used '.idle on' or '.idle off'."
         Else
-            u = Mid$(msgData, InStr(1, msgData, Space(1)) + 1)
+            u = LCase$(Mid$(msgData, InStr(1, msgData, Space(1)) + 1))
             
-            If (LCase$(u) = "on") Then
+            If (u = "on") Then
                 BotVars.IB_Kick = True
                 
                 tmpBuf = "Idle kick is now enabled."
-            ElseIf (LCase$(u) = "off") Then
+            ElseIf (u = "off") Then
                 BotVars.IB_Kick = False
                 
                 tmpBuf = "Idle kick disabled."
@@ -2218,7 +2231,8 @@ Private Function OnTagDel(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' return message
     cmdRet() = tmpBuf()
 End Function ' end function OnTagDel
-        
+
+' TO DO:
 ' handle profile command
 Private Function OnProfile(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -2473,7 +2487,10 @@ Private Function OnPhraseBans(ByVal Username As String, ByRef dbAccess As udtGet
     Dim tmpBuf As String ' temporary output buffer
   
     If (Len(msgData) > 0) Then
-        If (LCase$(msgData) = "on") Then
+        ' ...
+        msgData = LCase$(msgData)
+    
+        If (msgData = "on") Then
             Call WriteINI("Other", "Phrasebans", "Y")
             
             Phrasebans = True
@@ -2737,10 +2754,22 @@ Private Function OnTagBan(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Msg = Mid$(msgData, Index + 1)
     
         ' ...
-        Call OnAdd(Username, dbAccess, "*" & user & "*" & " +B --banmsg " & Msg, InBot, tmpBuf())
+        If (InStr(1, user, "*", vbBinaryCompare) <> 0) Then
+            ' ...
+            Call OnAdd(Username, dbAccess, user & " +B --banmsg " & Msg, InBot, tmpBuf())
+        Else
+            ' ...
+            Call OnAdd(Username, dbAccess, "*" & user & "*" & " +B --banmsg " & Msg, InBot, tmpBuf())
+        End If
     Else
         ' ...
-        Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " +B", InBot, tmpBuf())
+        If (InStr(1, msgData, "*", vbBinaryCompare) <> 0) Then
+            ' ...
+            Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " +B", InBot, tmpBuf())
+        Else
+            ' ...
+            Call OnAdd(Username, dbAccess, msgData & " +B", InBot, tmpBuf())
+        End If
     End If
     
     ' return message
@@ -2931,7 +2960,7 @@ Private Function OnShitList(ByVal Username As String, ByRef dbAccess As udtGetAc
     ReDim Preserve tmpBuf(0)
     
     ' search database for shitlisted users
-    Call searchDatabase(tmpBuf(), , , , , "B")
+    Call searchDatabase(tmpBuf(), , "!*[*]*", , , "B")
     
     ' return message
     cmdRet() = tmpBuf()
@@ -2947,7 +2976,7 @@ Private Function OnTagBans(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ReDim Preserve tmpBuf(0)
     
     ' search database for shitlisted users
-    Call searchDatabase(tmpBuf(), , , , , "B")
+    Call searchDatabase(tmpBuf(), , "*[*]*", , , "B")
     
     ' return message
     cmdRet() = tmpBuf()
@@ -4104,29 +4133,22 @@ Private Function OnWhoAmI(ByVal Username As String, ByRef dbAccess As udtGetAcce
         tmpBuf = "You are the bot console."
     
         If (g_Online) Then
-            AddQ "/whoami"
+            Call AddQ("/whoami")
         End If
     ElseIf (dbAccess.Access = 1000) Then
         tmpBuf = "You are the bot owner, " & Username & "."
     Else
-        tmpBuf = "You have "
-    
         If (dbAccess.Access > 0) Then
-            tmpBuf = tmpBuf & dbAccess.Access & " access"
-    
             If (dbAccess.Flags <> vbNullString) Then
-                tmpBuf = tmpBuf & " and "
+                tmpBuf = dbAccess.Username & " has access " & dbAccess.Access & _
+                    " and flags " & dbAccess.Flags & "."
+            Else
+                tmpBuf = dbAccess.Username & " has access " & dbAccess.Access & "."
             End If
-       End If
-    
-        If (dbAccess.Flags <> vbNullString) Then
-            tmpBuf = tmpBuf & "flags " & dbAccess.Flags
-        End If
-    
-        If (StrComp(tmpBuf, "You have ") = 0) Then
-            tmpBuf = "You have no access or flags, " & Username & "."
         Else
-            tmpBuf = tmpBuf & ", " & Username & "."
+            If (dbAccess.Flags <> vbNullString) Then
+                tmpBuf = dbAccess.Username & " has flags " & dbAccess.Flags & "."
+            End If
         End If
     End If
 
@@ -4733,14 +4755,14 @@ Private Function OnWhoIs(ByVal Username As String, ByRef dbAccess As udtGetAcces
         If (gAcc.Username <> vbNullString) Then
             If (gAcc.Access > 0) Then
                 If (gAcc.Flags <> vbNullString) Then
-                    tmpBuf = gAcc.Username & " -> " & gAcc.Access & _
-                        Space(1) & gAcc.Flags
+                    tmpBuf = gAcc.Username & " has access " & gAcc.Access & _
+                        " and flags " & gAcc.Flags & "."
                 Else
-                    tmpBuf = gAcc.Username & " -> " & gAcc.Access
+                    tmpBuf = gAcc.Username & " has access " & gAcc.Access & "."
                 End If
             Else
                 If (gAcc.Flags <> vbNullString) Then
-                    tmpBuf = gAcc.Username & " -> " & gAcc.Flags
+                    tmpBuf = gAcc.Username & " has flags " & gAcc.Flags & "."
                 End If
             End If
         Else
@@ -5017,6 +5039,8 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
             tmpBuf(tmpCount) = "No such user(s) found."
         End If
     Else
+        Dim blnChecked As Boolean ' ...
+    
         tmpBuf(tmpCount) = "User(s) found: "
         
         For i = LBound(DB) To UBound(DB)
@@ -5025,26 +5049,44 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
             If (DB(i).Username <> vbNullString) Then
                 ' ...
                 If (match <> vbNullString) Then
-                    If (PrepareCheck(DB(i).Username) Like match) Then
-                        res = True
+                    If (Left$(match, 1) = "!") Then
+                        If (Not (LCase$(PrepareCheck(DB(i).Username)) Like _
+                            (LCase$(Mid$(match, 2))))) Then
+                            
+                            res = True
+                        Else
+                            res = False
+                        End If
                     Else
-                        res = False
+                        If (PrepareCheck(DB(i).Username) Like match) Then
+                            res = True
+                        Else
+                            res = False
+                        End If
                     End If
+                    
+                    blnChecked = True
                 End If
                 
                 ' ...
                 If ((lowerBound >= 0) And (upperBound >= 0)) Then
                     If ((DB(i).Access >= lowerBound) And (DB(i).Access <= upperBound)) Then
-                        res = True
+                        ' ...
+                        res = IIf(blnChecked, res, True)
                     Else
                         res = False
                     End If
+                    
+                    blnChecked = True
                 ElseIf (lowerBound >= 0) Then
                     If (DB(i).Access = lowerBound) Then
-                        res = True
+                        ' ...
+                        res = IIf(blnChecked, res, True)
                     Else
                         res = False
                     End If
+                    
+                    blnChecked = True
                 End If
                 
                 ' ...
@@ -5058,10 +5100,13 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                     Next j
                     
                     If (j = (Len(Flags) + 1)) Then
-                        res = True
+                        ' ...
+                        res = IIf(blnChecked, res, True)
                     Else
                         res = False
                     End If
+                    
+                    blnChecked = True
                 End If
                 
                 ' ...
