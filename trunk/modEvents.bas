@@ -9,7 +9,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     If LenB(Username) < 1 Then Exit Sub
     
     Dim Pos As Integer, i As Integer
-    Dim Found As ListItem
+    Dim found As ListItem
     Dim Squelching As Boolean
     Dim s As String
     
@@ -116,20 +116,20 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         End With
     End If
     
-    Set Found = frmChat.lvChannel.FindItem(Username)
+    Set found = frmChat.lvChannel.FindItem(Username)
     
-    If Not (Found Is Nothing) Then
+    If Not (found Is Nothing) Then
         If g_ThisIconCode <> -1 Then
             If Not Squelching And Not Unsquelching Then
                 If colUsersInChannel.Item(i).Product = "W3XP" Then
-                    Found.SmallIcon = g_ThisIconCode + ICON_START_W3XP + IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0)
+                    found.SmallIcon = g_ThisIconCode + ICON_START_W3XP + IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0)
                 Else
-                    Found.SmallIcon = g_ThisIconCode + ICON_START_WAR3
+                    found.SmallIcon = g_ThisIconCode + ICON_START_WAR3
                 End If
             End If
         End If
         
-        Set Found = Nothing
+        Set found = Nothing
     End If
     
     On Error Resume Next
@@ -287,7 +287,7 @@ Repeat4:
         If InStr(1, KeyValue, " ", vbTextCompare) > 0 Then '// If it's a FILETIME
         
             Dim FT As FILETIME
-            Dim st As SYSTEMTIME
+            Dim sT As SYSTEMTIME
             
             FT.dwHighDateTime = CLng(Left$(KeyValue, InStr(1, KeyValue, " ", vbTextCompare)))
             
@@ -298,10 +298,10 @@ Repeat4:
             
             FT.dwLowDateTime = KeyValue 'CLng(KeyValue & "0")
             
-            FileTimeToSystemTime FT, st
+            FileTimeToSystemTime FT, sT
             
-            With st
-                Event_ServerInfo Right$(KeyName, Len(KeyName) - 7) & ": " & SystemTimeToString(st) & " (Battle.net time)"
+            With sT
+                Event_ServerInfo Right$(KeyName, Len(KeyName) - 7) & ": " & SystemTimeToString(sT) & " (Battle.net time)"
             End With
             
         Else    '// it's a SECONDS type
@@ -1190,7 +1190,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     If bFlood Then Exit Sub
     
     Dim i As Integer, ii As Integer, Holder() As Variant, Pos As Integer
-    Dim UserIndex As Integer
+    Dim userIndex As Integer
     If InStr(1, Username, "*", vbTextCompare) <> 0 Then
         Username = Right(Username, Len(Username) - InStr(1, Username, "*", vbTextCompare))
     End If
@@ -1228,16 +1228,16 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     RemoveBanFromQueue Username
     
     On Error Resume Next
-    UserIndex = CheckChannel(Username)
+    userIndex = CheckChannel(Username)
     
     With frmChat.lvChannel
         .Enabled = False
-        .ListItems.Item(UserIndex).ListSubItems.Remove 1
-        .ListItems.Remove UserIndex
-        UserIndex = CheckChannel(Username)
-        If UserIndex > 0 Then
-            .ListItems.Item(UserIndex).ListSubItems.Remove 1
-            .ListItems.Remove UserIndex
+        .ListItems.Item(userIndex).ListSubItems.Remove 1
+        .ListItems.Remove userIndex
+        userIndex = CheckChannel(Username)
+        If userIndex > 0 Then
+            .ListItems.Item(userIndex).ListSubItems.Remove 1
+            .ListItems.Remove userIndex
         End If
         .Enabled = True
     End With
@@ -1484,7 +1484,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
     Dim s As String
     Dim lCarats As Long
     Dim WWIndex As Integer
-    
+
     If frmChat.mnuUTF8.Checked Then Message = KillNull(UTF8Decode(Message))
     
     If (GetTickCount - LastWhisperTime) > BotVars.AutofilterMS Then

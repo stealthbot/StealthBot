@@ -1,6 +1,20 @@
 Attribute VB_Name = "modCommandCode"
 ' modCommandCode.bas
-' ...
+' Copyright (C) 2002 - 2007 Stealth & Eric Evans
+
+' This module checks a message for the presence of a command identifer and, if
+' found, the message is then sent to the secondary processor, which then finally
+' sends the message to an individual command handler specific to each command.
+' The secondary processor however first ensures that the command is valid and that
+' the user has sufficient access to execute the command.  The ProcessCommand()
+' function contains a default error handler that will catch any errors thrown within
+' that function, or any of the functions that it calls, in case of an unhandled
+' exception.
+
+' *******************************************************************************
+' * This module, or any related functions outside of this module, should not be *
+' * modified without Eric's consultation prior to the modifications.            *
+' *******************************************************************************
 
 Option Explicit
 
@@ -2012,12 +2026,12 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             tmpBuf = "User not found."
         ElseIf (GetAccess(u).Access >= dbAccess.Access) Then
             tmpBuf = "That user has higher or equal access."
-        ElseIf (InStr(1, GetAccess(u).Flags, "L") > 0) Then
-            If ((InStr(1, GetAccess(Username).Flags, "A") = 0) And _
-                (GetAccess(Username).Access < 100) And (Not (InBot))) Then
+        ElseIf ((InStr(1, GetAccess(u).Flags, "L") <> 0) And _
+                (Not (InBot)) And _
+                (InStr(1, GetAccess(Username).Flags, "A") = 0) And _
+                (GetAccess(Username).Access <= 99)) Then
             
                 tmpBuf = "Error: That user is Locked."
-            End If
         Else
             tmpBuf = RemoveItem(u, "users")
             tmpBuf = Replace(tmpBuf, "%msgex%", "userlist entry")
@@ -3455,17 +3469,17 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
             
             If (InStr(1, u, "*", vbTextCompare) > 0) Then
                 If (dbAccess.Access > 99) Then
-                    Call WildCardBan(u, banmsg, 1)
+                    Call WildCardBan(u, banmsg, 0)
                 Else
                     Call WildCardBan(u, banmsg, 0)
                 End If
-            End If
-            
-            Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), _
-                dbAccess.Access, 1)
-            
-            If (Len(Y) > 1) Then
-                tmpBuf = Y
+            Else
+                Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), _
+                    dbAccess.Access, 1)
+                
+                If (Len(Y) > 1) Then
+                    tmpBuf = Y
+                End If
             End If
         End If
     End If
@@ -4161,7 +4175,6 @@ Private Function OnWhoAmI(ByVal Username As String, ByRef dbAccess As udtGetAcce
     cmdRet(0) = tmpBuf
 End Function ' end function OnWhoAmI
 
-' TO DO:
 ' handle add command
 Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -4226,11 +4239,12 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             
         ' is rank higher than user's rank?
         ElseIf (rank >= dbAccess.Access) Then
-            tmpBuf = "You do not have sufficient access to perform that command."
+            tmpBuf = "Error: You do not have sufficient access to assign a user with the " & _
+                "specified rank."
             
         ' can we modify specified user?
         ElseIf (gAcc.Access >= dbAccess.Access) Then
-            tmpBuf = "You do not have sufficient access to perform that command."
+            tmpBuf = "Error: You do not have sufficient access to modify the specified user."
         Else
             ' do we have any special paramaters?
             If (Len(addparams) > 0) Then
@@ -4263,9 +4277,19 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     ' ...
                     Select Case (param)
                         ' ...
+                        Case "type"
+                            Dim aType As String ' ...
+                            
+                            ' ...
+                            If (Len(Msg) > 0) Then
+                                ' ...
+                            End If
+                    
+                        ' ...
                         Case "banmsg"
                             Dim banmsg As String ' ...
                             
+                            ' ...
                             If (Len(Msg) > 0) Then
                                 gAcc.BanMessage = Msg
                             End If
@@ -4317,7 +4341,8 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 
                 If (i < (Len(Flags) + 1)) Then
                     ' return message
-                    cmdRet(0) = "You do not have sufficient access to perform that command."
+                    cmdRet(0) = "Error: You do not have sufficient access to add one or " & _
+                        "more flags specified."
                     
                     Exit Function
                 Else
@@ -4328,12 +4353,16 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     
                         ' check for special flags
                         If (InStr(1, Flags, "B", vbBinaryCompare) <> 0) Then
-                            If (Len(gAcc.BanMessage) > 0) Then
-                                Call Ban(user & Space(1) & gAcc.BanMessage, _
-                                    (AutoModSafelistValue - 1))
+                            If (InStr(1, user, "*", vbBinaryCompare) <> 0) Then
+                                Call WildCardBan(user, banmsg, 1)
                             Else
-                                Call Ban(user & Space(1) & "Shitlisted", _
-                                    (AutoModSafelistValue - 1))
+                                If (Len(gAcc.BanMessage) > 0) Then
+                                    Call Ban(user & Space(1) & gAcc.BanMessage, _
+                                        (AutoModSafelistValue - 1))
+                                Else
+                                    Call Ban(user & Space(1) & "Shitlisted", _
+                                        (AutoModSafelistValue - 1))
+                                End If
                             End If
                         End If
                     
@@ -4351,15 +4380,28 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                             End If
                         Next i
                         
+                        ' ...
+                        If (Len(gAcc.Flags) = 0) Then
+                            ' return message
+                            cmdRet(0) = "Error: The flags that you have specified are invalid."
+                        
+                            Exit Function
+                        End If
+                        
                     ' are we removing flags?
                     ElseIf (Left$(Flags, 1) = "-") Then
+                        Dim tmpFlags As String
+                    
                         ' remove "-" prefix
-                        Flags = Mid$(Flags, 2)
+                        tmpFlags = Mid$(Flags, 2)
                         
                         ' are we modifying an existing user? we better be!
                         If (gAcc.Username <> vbNullString) Then
+                        
                             ' check for special flags
-                            If (InStr(1, Flags, "B", vbBinaryCompare) <> 0) Then
+                            If (InStr(1, tmpFlags, "B", vbBinaryCompare) <> 0) Then
+                                Call WildCardBan(user, vbNullString, 2)
+                            Else
                                 ' unban user if found in banlist
                                 For i = LBound(gBans) To UBound(gBans)
                                     If (StrComp(gBans(i).Username, user, _
@@ -4369,10 +4411,10 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                     End If
                                 Next i
                             End If
-                        
+                            
                             ' remove specified flags
-                            For i = 1 To Len(Flags)
-                                gAcc.Flags = Replace(gAcc.Flags, Mid$(Flags, i, 1), vbNullString)
+                            For i = 1 To Len(tmpFlags)
+                                gAcc.Flags = Replace(gAcc.Flags, Mid$(tmpFlags, i, 1), vbNullString)
                             Next i
                         Else
                             ' return message
@@ -4389,12 +4431,16 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     
                         ' check for special flags
                         If (InStr(1, Flags, "B", vbBinaryCompare) <> 0) Then
-                            If (Len(gAcc.BanMessage) > 0) Then
-                                Call Ban(user & Space(1) & gAcc.BanMessage, _
-                                    (AutoModSafelistValue - 1))
+                            If (InStr(1, user, "*", vbBinaryCompare) <> 0) Then
+                                Call WildCardBan(user, banmsg, 1)
                             Else
-                                Call Ban(user & Space(1) & "Shitlisted", _
-                                    (AutoModSafelistValue - 1))
+                                If (Len(gAcc.BanMessage) > 0) Then
+                                    Call Ban(user & Space(1) & gAcc.BanMessage, _
+                                        (AutoModSafelistValue - 1))
+                                Else
+                                    Call Ban(user & Space(1) & "Shitlisted", _
+                                        (AutoModSafelistValue - 1))
+                                End If
                             End If
                         End If
                     
@@ -4411,6 +4457,14 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 End If
                             End If
                         Next i
+                        
+                        ' ...
+                        If (Len(gAcc.Flags) = 0) Then
+                            ' return message
+                            cmdRet(0) = "Error: The flags that you have specified are invalid."
+                        
+                            Exit Function
+                        End If
                     End If
                 End If
             Else
@@ -4506,12 +4560,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 If (Len(gAcc.Flags) > 0) Then
                     tmpBuf = "Set " & user & "'s flags to " & gAcc.Flags & "."
                 Else
-                    ' were rank and/or flags specified but not assigned?
-                    If ((Left(Flags, 1) <> "-") And (Len(Flags) > 0)) Then
-                        tmpBuf = "You have specified an invalid rank and/or flags."
-                    Else
-                        tmpBuf = "The user " & gAcc.Username & " has been removed from the database."
-                    End If
+                    tmpBuf = "The user " & gAcc.Username & " has been removed from the database."
                 End If
             End If
         End If
@@ -5044,12 +5093,11 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
             tmpBuf(tmpCount) = "No such user(s) found."
         End If
     Else
-        Dim blnChecked As Boolean ' ...
-    
         tmpBuf(tmpCount) = "User(s) found: "
         
         For i = LBound(DB) To UBound(DB)
-            Dim res As Boolean ' store result of access check
+            Dim res        As Boolean ' store result of access check
+            Dim blnChecked As Boolean ' ...
         
             If (DB(i).Username <> vbNullString) Then
                 ' ...
@@ -5142,8 +5190,9 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 End If
             End If
             
-            ' reset boolean
+            ' reset booleans
             res = False
+            blnChecked = False
         Next i
 
         If (found = 0) Then
