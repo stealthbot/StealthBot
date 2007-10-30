@@ -161,8 +161,6 @@
 		- People with non-English computers should log on into their country's default channel
 	- Touched up language referring to Diablo II/LoD Realm connections
 	- Expanded support for error and status codes related to Diablo II/LoD Realm connections
-	- The User Monitor is no more
-		- In its place, a plugin designed by HdxBmx27
 	- Added the -cpath command line argument, thanks Megatog615
 		- -cpath yourconfig.ini  will point the bot to a different config.ini file
 	- Added config.ini hacks for changing the location of any list file
@@ -175,6 +173,11 @@
 		- (thanks ZergMasterI)
 	- Added a message received when your account has been closed by Blizzard (thanks Binaries)
 	- You can no longer write to the Sex field of your user profile due to Starcraft patch 1.15
+	- The Plugin System known to scripting users for the past couple years has been integrated into StealthBot
+		- This change will only cause minimal changes in your experience -- this involves are mere relocation of code.
+		- The setup will be nearly identical to the ver .98 of the Plugin System that you have expected for some time now.
+			See the full list of changes here: http://stealthbot.net/p/plugs/changelog
+		- All scripting activity will now take place in your plugins folder. Your old "script.txt" file is no longer loaded.
 
 
 	<b>INTERFACE</b>
@@ -216,6 +219,8 @@
 	- Added the option in the Miscellaneous General Settings panel to disable the prefix and/or
 		suffix boxes (thanks various)
 	- Added CD key length checks (thanks Jack)
+	- Added a Plugins menu which creates a menu item for each of your plugins populated with useful commands.
+	- Added a Create New Plugin function to the Plugins menu which executes the Plugin Creator by #define
 
 
 	<b>COMMANDS</b>
@@ -258,7 +263,6 @@
 		shitcheck -a-		requires access 60, tells you whether or not a given user is shitlisted or has flags of 'B'
 						alias "slcheck" (thanks Snap)
 
-ñ
 
 
 <b>VERSION 2.6R3 - NUMEROUS FIXES</b>
