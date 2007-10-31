@@ -1,0 +1,94 @@
+'UIExample
+'1.0
+'&UIExample:Hdx
+Option Explicit
+
+Public Const objWidth = 0         'Must be an Int
+Public Const objHeight = 1        'Must be an Int
+Public Const objLeft = 2          'Must be an Int
+Public Const objTop = 3           'Must be an Int
+Public Const objVisable = 4       'Must be a boolean: 0, 1, true, false, "true", "false"
+Public Const objBackColor = 5     'Must be an Int
+Public Const objCaption = 6       'Can be anything
+Public Const objWindowState = 7   'Must be One of the following: 0: Normal, 1: Minimized, 2: Maximized
+Public Const objBorderStyle = 8   'Must be one of the following: 0: None, 1: FixedSingle, 2: Sizable, 3: FixedDialog, 4: Fixed Tool, 5: Sizable Tool
+Public Const objToolTip = 9       'Can be anything
+Public Const objText = 10         'Can be anything
+Public Const objScrollBars = 11   'Must be one of the following: 0: None, 1: Horizontal, 2: Vertical, 3: Both
+Public Const objRightToLeft = 12  'Must be a boolean: 0, 1, true, false, "true", "false"
+Public Const objPasswordChar = 13 'Must be a charecter (Is trimmed to 1 chr if string)
+Public Const objMultiLine = 14    'Must be a boolean: 0, 1, true, false, "true", "false"
+Public Const objMaxLength = 15    'Must be an Int
+Public Const objLocked = 16       'Must be a boolean: 0, 1, true, false, "true", "false"
+Public Const objForeColor = 17    'Must be an Int
+Public Const objEnabled = 18      'Must be a boolean: 0, 1, true, false, "true", "false"
+Public Const objBackStyle = 19    'Must be one of the following: 0: Transparent, 1: Opaque
+Public Const objInterval = 20     'Must be an Int
+Public Const objCommandButton = 0 'A Command Button 
+Public Const objLabel = 1         'A label
+Public Const objTextBox = 2       'A TextBox
+Public Const objTimer = 3         'A Timer
+
+Private tmrCount
+
+Sub UIExample_Event_Load()
+  AddChat vbYellow, "Form created: " & CreateForm("UIExample", "frmExample")
+  AddFormObject "UIExample", "frmExample", "txtExample", objTextBox
+  AddFormObject "UIExample", "frmExample", "lblExample", objLabel
+  AddFormObject "UIExample", "frmExample", "cmdExample", objCommandButton
+  AddFormObject "UIExample", "frmExample", "tmrExample", objTimer
+  
+  Call SetFormProperty("UIExample", "frmExample", objVisable, true)
+  Call SetObjectProperty("UIExample", "frmExample", "tmrExample", objInterval, 1000)
+  Call SetObjectProperty("UIExample", "frmExample", "tmrExample", objEnabled, true)
+  
+  
+  AddMenuItem "UIExample", "Toggle form"
+End Sub
+
+Sub UIExample_frmExample_Load()
+  AddChat vbYellow, "frmExample_Load"
+End Sub
+
+Sub UIExample_frmExample_Resize()
+  Dim width, height
+  width = GetFormProperty("UIExample", "frmExample", objWidth)
+  height = GetFormProperty("UIExample", "frmExample", objHeight)
+  AddChat vbYellow, "frmExample_Resize(", vbGreen, width, vbYellow, ", ", vbGreen, height, vbYellow, ")"
+  SetObjectProperty "UIExample", "frmExample", "txtExample", objWidth, width
+  SetObjectProperty "UIExample", "frmExample", "cmdExample", objWidth, width
+  SetObjectProperty "UIExample", "frmExample", "txtExample", objHeight, height/2
+  SetObjectProperty "UIExample", "frmExample", "cmdExample", objheight, height/2
+  SetObjectProperty "UIExample", "frmExample", "txtExample", objLeft, 0
+  SetObjectProperty "UIExample", "frmExample", "cmdExample", objLeft, 0
+  SetObjectProperty "UIExample", "frmExample", "txtExample", objTop, 0
+  SetObjectProperty "UIExample", "frmExample", "cmdExample", objTop, height/2
+End Sub
+
+Sub UIExample_frmExample_UnLoad(Cancel)
+  AddChat vbYellow, "frmExample_UnLoad(", vbGreen, Cancel, vbYellow, ")"
+  Cancel = 1
+End Sub
+
+Sub UIExample_Menu_Callback(ItemName)
+  If GetFormProperty("UIExample", "frmExample", objVisable) Then
+    Call SetFormProperty("UIExample", "frmExample", objVisable, False)
+  Else
+    Call SetFormProperty("UIExample", "frmExample", objVisable, True)
+  End If
+End Sub
+
+Sub UIExample_frmExample_cmdExample_Click()
+  If GetObjectProperty("UIExample", "frmExample", "tmrExample", objEnabled) Then
+    Call SetObjectProperty("UIExample", "frmExample", "tmrExample", objEnabled, False)
+    Call SetObjectProperty("UIExample", "frmExample", "cmdExample", objCaption, "Enable Timer")
+  Else
+    Call SetObjectProperty("UIExample", "frmExample", "tmrExample", objEnabled, True)
+    Call SetObjectProperty("UIExample", "frmExample", "cmdExample", objCaption, "Disable Timer")
+  End If
+End Sub
+
+Sub UIExample_frmExample_tmrExample_Timer()
+  tmrCount = tmrCount + 1
+  SetObjectProperty "UIExample", "frmExample", "txtExample", objText, "Timer Event #" & tmrCount
+End Sub
