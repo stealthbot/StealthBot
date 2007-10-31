@@ -93,6 +93,70 @@ Attribute VB_Exposed = False
 ' *     - Added six functions to work with the new Plugins menu - Swent
 ' *         AddMenuItem(), SetMenuItemCheck(), GetMenuItemCheck(), ToggleMenuItemCheck(),
 ' *         SetMenuItemEnabled(), and ReloadPluginMenus()
+' *     - Added new functions for creating UI forms
+' *         CreateForm(), AddFormObject(), GetFormProperty(), GetObjectProperty(),
+' *         SetFormProperty(), SetObjectProperty(), View Enum 'ObjectProps' and 'ControlTypes' for more info.
+' *     - Object Events:
+' *         For a detailed explination of each event and examplee visit:
+' *            http://www.stealthbot.net/board/index.php?showtopic=27969
+' *         Add these subs to your plugin it will be executed whenever something interacts with your objects, the format of the Subs is:
+' *         <PluginPrefix>_<FormName>_<ObjectName>_<Event>(<Parameters>)
+' *         Examples:
+' *         Example for a plugin with prefix "UITest", a form name "frmTest", and an object name "cmdOK":
+' *         Sub UIExample_frmTest_cmdOk_Click()
+' *         Sub UIExample_frmTest_Load()
+' *         Sub UIExample_frmTest_Unload(Cancel)
+' *         -Form:
+' *            Load()
+' *            Unload(Cencle)
+' *            Resize()
+' *            Activate()
+' *            Click()
+' *            DblClick()
+' *            Deactivate()
+' *            GotFocus()
+' *            Initialize
+' *            KeyDown(KeyCode, Shift)
+' *            KeyPress(KeyAscii)
+' *            KeyUp(KeyCode, Shift)
+' *            LostFocus()
+' *            MouseDown(Button, Shift, X, Y)
+' *            MouseUp(Button, Shift, X, Y)
+' *            MouseMove(Button, Shift, X, Y)
+' *            Paint()
+' *            QueryUnload(Cancel, UnloadMode)
+' *            Terminate()
+' *         -Command Buttons:
+' *            Click()
+' *            GotFocus()
+' *            LostFocus()
+' *            KeyPress(KeyAscii)
+' *            KeyUp(KeuCode, Shift)
+' *            KeyDown(KeyCode, Shift)
+' *            MouseUp(Button, Shift, X, Y)
+' *            MouseDown(Button, Shift, X, Y)
+' *            MouseMove(Button, Shift, X, Y)
+' *         -Labels:
+' *            Click()
+' *            DblClick()
+' *            Change()
+' *            MouseDown(Button, Shift, X, Y)
+' *            MouseUp(Button, Shift, X, Y)
+' *            MouseMove(Button, Shift, X, Y)
+' *         -Text Box:
+' *            Click()
+' *            Change()
+' *            GotFocus()
+' *            DblClick()
+' *            KeyPress(KeyAscii)
+' *            KeyUp(KeuCode, Shift)
+' *            KeyDown(KeyCode, Shift)
+' *            LostFocus()
+' *            MouseDown(Button, Shift, X, Y)
+' *            MouseUp(Button, Shift, X, Y)
+' *            MouseMove(Button, Shift, X, Y)
+' *         -Timer:
+' *            Timer()
 ' *
 ' *
 ' *     (version 2.6R3, scripting system build 21)

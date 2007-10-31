@@ -3,7 +3,7 @@ Begin VB.Form frmScriptUI
    BackColor       =   &H00000000&
    Caption         =   "Scripting UI"
    ClientHeight    =   3195
-   ClientLeft      =   420
+   ClientLeft      =   450
    ClientTop       =   345
    ClientWidth     =   4680
    LinkTopic       =   "Form1"
@@ -215,7 +215,6 @@ Public Function GetObjectProperty(ByVal strObject As String, ByVal btProperty As
   End If
 End Function
 
-
 '//////////////////////////////////////////////////////
 '//Events
 '//////////////////////////////////////////////////////
@@ -227,9 +226,89 @@ Private Sub Form_Load()
   frmChat.SControl.Run strPrefix & "_" & strFormName & "_Load"
 End Sub
 
+Private Sub Form_Activate()
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_Activate"
+End Sub
+
+Private Sub Form_Click()
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_Click"
+End Sub
+
+Private Sub Form_DblClick()
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_DblClick"
+End Sub
+
+Private Sub Form_Deactivate()
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_Deactivate"
+End Sub
+
+Private Sub Form_GotFocus()
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_GotFocus"
+End Sub
+
+Private Sub Form_Initialize()
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_Initialize"
+End Sub
+
+Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_KeyDown", KeyCode, Shift
+End Sub
+
+Private Sub Form_KeyPress(KeyAscii As Integer)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_KeyPress", KeyAscii
+End Sub
+
+Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_KeyUp", KeyCode, Shift
+End Sub
+
+Private Sub Form_LostFocus()
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_LostFocus"
+End Sub
+
+Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_MouseDown", Button, Shift, X, Y
+End Sub
+
+Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_MouseMove", Button, Shift, X, Y
+End Sub
+
+Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_MouseUp", Button, Shift, X, Y
+End Sub
+
+Private Sub Form_Paint()
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_Paint"
+End Sub
+
+Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_LostFocus"
+End Sub
+
 Private Sub Form_Resize()
   On Error Resume Next
   frmChat.SControl.Run strPrefix & "_" & strFormName & "_Resize"
+End Sub
+
+Private Sub Form_Terminate()
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_Terminate"
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
@@ -237,6 +316,46 @@ Private Sub Form_Unload(Cancel As Integer)
   On Error Resume Next
   frmChat.SControl.Run strPrefix & "_" & strFormName & "_UnLoad", Cancel
   Debug.Print Cancel
+End Sub
+
+Private Sub cmd_LostFocus(Index As Integer)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_LostFocus"
+End Sub
+
+Private Sub cmd_GotFocus(Index As Integer)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_GotFocus"
+End Sub
+
+Private Sub cmd_KeyPress(Index As Integer, KeyAscii As Integer)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_KeyPress", KeyAscii
+End Sub
+
+Private Sub cmd_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_KeyUp", KeyCode, Shift
+End Sub
+
+Private Sub cmd_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_MouseUp", Button, Shift, X, Y
+End Sub
+
+Private Sub cmd_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_MouseUp", Button, Shift, X, Y
+End Sub
+
+Private Sub cmd_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_MouseUp", Button, Shift, X, Y
+End Sub
+
+Private Sub cmd_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_KeyDown", KeyCode, Shift
 End Sub
 
 Private Sub cmd_Click(Index As Integer)
@@ -259,6 +378,21 @@ Private Sub lbl_DblClick(Index As Integer)
   frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & lbl(Index).Tag & "_DblClick"
 End Sub
 
+Private Sub lbl_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & lbl(Index).Tag & "_MouseDown", Button, Shift, X, Y
+End Sub
+
+Private Sub lbl_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & lbl(Index).Tag & "_MouseMove", Button, Shift, X, Y
+End Sub
+
+Private Sub lbl_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & lbl(Index).Tag & "_MouseUp", Button, Shift, X, Y
+End Sub
+
 Private Sub tmr_Timer(Index As Integer)
   On Error Resume Next
   frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & tmr(Index).Tag & "_Timer"
@@ -278,3 +412,44 @@ Private Sub txt_DblClick(Index As Integer)
   On Error Resume Next
   frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_DblClick"
 End Sub
+
+Private Sub txt_LostFocus(Index As Integer)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_LostFocus"
+End Sub
+
+Private Sub txt_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_MouseDown", Button, Shift, X, Y
+End Sub
+
+Private Sub txt_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_MouseMove", Button, Shift, X, Y
+End Sub
+
+Private Sub txt_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_MouseUp", Button, Shift, X, Y
+End Sub
+
+Private Sub txt_GotFocus(Index As Integer)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_GotFocus"
+End Sub
+
+Private Sub txt_KeyPress(Index As Integer, KeyAscii As Integer)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_KeyPress", KeyAscii
+End Sub
+
+Private Sub txt_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_KeyUp", KeyCode, Shift
+End Sub
+
+Private Sub txt_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
+  On Error Resume Next
+  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_KeyDown", KeyCode, Shift
+End Sub
+
