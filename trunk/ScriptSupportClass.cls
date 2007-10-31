@@ -173,6 +173,37 @@ Public Enum BanTypes
     btUnban = 2
 End Enum
 
+Public Enum ObjectProps
+    btWidth = 0         'Must be an Int
+    btHeight = 1        'Must be an Int
+    btLeft = 2          'Must be an Int
+    btTop = 3           'Must be an Int
+    btVisable = 4       'Must be a boolean: 0, 1, true, false, "true", "false"
+    btBackColor = 5     'Must be an Int
+    btCaption = 6       'Can be anything
+    btWindowState = 7   'Must be One of the following: 0: Normal, 1: Minimized, 2: Maximized
+    btBorderStyle = 8   'Must be one of the following: 0: None, 1: FixedSingle, 2: Sizable, 3: FixedDialog, 4: Fixed Tool, 5: Sizable Tool
+    btToolTip = 9       'Can be anything
+    btText = 10         'Can be anything
+    btScrollBars = 11   'Must be one of the following: 0: None, 1: Horizontal, 2: Vertical, 3: Both
+    btRightToLeft = 12  'Must be a boolean: 0, 1, true, false, "true", "false"
+    btPasswordChar = 13 'Must be a charecter (Is trimmed to 1 chr if string)
+    btMultiLine = 14    'Must be a boolean: 0, 1, true, false, "true", "false"
+    btMaxLength = 15    'Must be an Int
+    btLocked = 16       'Must be a boolean: 0, 1, true, false, "true", "false"
+    btForeColor = 17    'Must be an Int
+    btEnabled = 18      'Must be a boolean: 0, 1, true, false, "true", "false"
+    btBackStyle = 19    'Must be one of the following: 0: Transparent, 1: Opaque
+    btInterval = 20     'Must be an Int
+End Enum
+
+Public Enum ControlTypes
+    btCommandBox = 0
+    btLabel = 1
+    btTextBox = 2
+    btTimer = 3
+End Enum
+Private obScriptForms As Object
 
 
 
@@ -1427,3 +1458,127 @@ Public Sub SetMenuItemEnabled(ByVal strPrefix As String, ByVal strName As String
     
     SetMenuEnabled GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolEnabled
 End Sub
+
+'// CREATEFORM
+'//    Writtin by Hdx. Creates a Form object that the user can use.
+'//    Returns true if the name/prefix combo is free, and the form is created
+Public Function CreateForm(ByVal strPrefix As String, ByVal strName As String) As Boolean
+    If (obScriptForms.Exists(strPrefix & "|" & strName)) Then
+        CreateForm = False
+        Exit Function
+    Else
+        Dim frmUI As New frmScriptUI
+        frmUI.Prefix = strPrefix
+        frmUI.FormName = strName
+        Load frmUI
+        Call obScriptForms.Add(strPrefix & "|" & strName, frmUI)
+        CreateForm = True
+    End If
+End Function
+
+
+'// ADDFORMOBJECT
+'//    Writtin by Hdx - Adds an object of the selected type to a Script's form.
+'//    Returns False if the form does not exits, or the name is already taken
+Public Function AddFormObject(ByVal strPrefix As String, ByVal strFormName As String, ByVal strName As String, ByVal btType As ControlTypes) As Boolean
+    If (obScriptForms.Exists(strPrefix & "|" & strFormName)) Then
+        Dim frmUI As frmScriptUI
+        Set frmUI = obScriptForms.Item(strPrefix & "|" & strFormName)
+        Select Case btType
+            Case ControlTypes.btCommandBox: AddFormObject = frmUI.AddCommandButton(strName)
+            Case ControlTypes.btLabel:      AddFormObject = frmUI.AddLabel(strName)
+            Case ControlTypes.btTextBox:    AddFormObject = frmUI.AddTextBox(strName)
+            Case ControlTypes.btTimer:      AddFormObject = frmUI.AddTimer(strName)
+            Case Else: AddFormObject = False
+        End Select
+    Else
+        AddFormObject = False
+    End If
+End Function
+
+'// SETFORMPROPERTY
+'//    Writtin by Hdx. Sets the various atributes of your form.
+'//    See Enum 'ObjectProps' for descriptions of properties
+'//    If the object does not support that property, an error will rise.
+Public Sub SetFormProperty(ByVal strPrefix As String, ByVal strFormName As String, ByVal btProperty As ObjectProps, ByVal vValue As Variant)
+    On Error Resume Next
+    If (obScriptForms.Exists(strPrefix & "|" & strFormName)) Then
+        Dim frmUI As frmScriptUI
+        Set frmUI = obScriptForms.Item(strPrefix & "|" & strFormName)
+        Select Case btProperty
+            Case ObjectProps.btWidth:         frmUI.Width = CInt(vValue)
+            Case ObjectProps.btHeight:        frmUI.Height = CInt(vValue)
+            Case ObjectProps.btTop:           frmUI.Top = CInt(vValue)
+            Case ObjectProps.btLeft:          frmUI.Left = CInt(vValue)
+            Case ObjectProps.btVisable:       frmUI.Visible = CBool(vValue)
+            Case ObjectProps.btBackColor:     frmUI.BackColor = CLng(vValue)
+            Case ObjectProps.btCaption:       frmUI.Caption = vValue
+            Case ObjectProps.btWindowState:   frmUI.WindowState = CInt(vValue)
+            Case ObjectProps.btBorderStyle:   frmUI.BorderStyle = CInt(vValue)
+        End Select
+    End If
+End Sub
+
+'// GETFORMPROPERTY
+'//    Writtin by Hdx -Reterieves various values about a script's form
+'//    See Enum 'ObjectProps' for descriptions.
+'//    If the object does not support that property, an error will rise.
+Public Function GetFormProperty(ByVal strPrefix As String, ByVal strFormName As String, ByVal btProperty As ObjectProps) As Variant
+    If (obScriptForms.Exists(strPrefix & "|" & strFormName)) Then
+        Dim frmUI As frmScriptUI
+        Set frmUI = obScriptForms.Item(strPrefix & "|" & strFormName)
+        Select Case btProperty
+            Case ObjectProps.btWidth:         GetFormProperty = frmUI.Width
+            Case ObjectProps.btHeight:        GetFormProperty = frmUI.Height
+            Case ObjectProps.btTop:           GetFormProperty = frmUI.Top
+            Case ObjectProps.btLeft:          GetFormProperty = frmUI.Left
+            Case ObjectProps.btVisable:       GetFormProperty = frmUI.Visible
+            Case ObjectProps.btBackColor:     GetFormProperty = frmUI.BackColor
+            Case ObjectProps.btCaption:       GetFormProperty = frmUI.Caption
+            Case ObjectProps.btWindowState:   GetFormProperty = frmUI.WindowState
+            Case ObjectProps.btBorderStyle:   GetFormProperty = frmUI.BorderStyle
+        End Select
+        Set frmUI = Nothing
+    End If
+End Function
+
+'// SETOBJECTPROPERTY
+'//    Writtin by Hdx -Checks if the form exists and then passes on the command
+'//    See Enum 'ObjectProps' for descriptions.
+'//    If the object does not support that property, an error will rise.
+Public Sub SetObjectProperty(ByVal strPrefix As String, ByVal strFormName As String, ByVal strObjectName As String, ByVal btProperty As ObjectProps, ByVal vValue As Variant)
+    If (obScriptForms.Exists(strPrefix & "|" & strFormName)) Then
+        Dim frmUI As frmScriptUI
+        Set frmUI = obScriptForms.Item(strPrefix & "|" & strFormName)
+        Call frmUI.SetObjectProperty(strObjectName, btProperty, vValue)
+        Set frmUI = Nothing
+    End If
+End Sub
+
+'// GETOBJECTPROPERTY
+'//    Writtin by Hdx -Checks if the form exists and then passes on the command
+'//    See Enum 'ObjectProps' for descriptions.
+'//    If the object does not support that property, an error will rise.
+Public Function GetObjectProperty(ByVal strPrefix As String, ByVal strFormName As String, ByVal strObjectName As String, ByVal btProperty As ObjectProps)
+    If (obScriptForms.Exists(strPrefix & "|" & strFormName)) Then
+        Dim frmUI As frmScriptUI
+        Set frmUI = obScriptForms.Item(strPrefix & "|" & strFormName)
+        GetObjectProperty = frmUI.GetObjectProperty(strObjectName, btProperty)
+        Set frmUI = Nothing
+    End If
+End Function
+
+Private Sub Class_Initialize()
+    Set obScriptForms = CreateObject("Scripting.Dictionary")
+End Sub
+
+Private Sub Class_Terminate()
+    'Go through and destroy all the Forms the user has created
+    Dim X As Integer
+    For X = 0 To obScriptForms.Count
+        Unload obScriptForms.Item(0)
+        Call obScriptForms.Remove(0)
+    Next X
+    Set obScriptForms = Nothing
+End Sub
+
