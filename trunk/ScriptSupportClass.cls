@@ -84,20 +84,20 @@ Attribute VB_Exposed = False
 ' *     - Added DoStatstringParse() which allows you to parse a statstring from GetInternalData() out
 ' *         just like the bot does (thanks ZergMasterI)
 ' *     - Added a number of Windows API function mirrors (thanks FiftyToo)
-' *     - Rewrote and integrated several Plugin System functions - Swent
+' *     - Rewrote and integrated several Plugin System functions
 ' *         Dsp(), GetSetting(), SetSetting(), TimerInterval(), TimerEnabled(),
 ' *         GetTimerEnabled(), GetTimeLeft(), and GetTimeWaiting()
 ' *         Note: All integrated functions are backwards compatiable. No current calls need to be modified.
-' *     - Added two functions to work with plugins - Swent
+' *     - Added two functions to work with plugins
 ' *         PluginEnabled(), GetPluginEnabled()
-' *     - Added six functions to work with the new Plugins menu - Swent
+' *     - Added six functions to work with the new Plugins menu
 ' *         AddMenuItem(), SetMenuItemCheck(), GetMenuItemCheck(), ToggleMenuItemCheck(),
 ' *         SetMenuItemEnabled(), and ReloadPluginMenus()
 ' *     - Added new functions for creating UI forms
 ' *         CreateForm(), AddFormObject(), GetFormProperty(), GetObjectProperty(),
 ' *         SetFormProperty(), SetObjectProperty(), View Enum 'ObjectProps' and 'ControlTypes' for more info.
 ' *     - Object Events:
-' *         For a detailed explination of each event and examplee visit:
+' *         For a detailed explination of each event and examples visit:
 ' *            http://www.stealthbot.net/board/index.php?showtopic=27969
 ' *         Add these subs to your plugin it will be executed whenever something interacts with your objects, the format of the Subs is:
 ' *         <PluginPrefix>_<FormName>_<ObjectName>_<Event>(<Parameters>)
@@ -1246,21 +1246,21 @@ End Function
 Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal varValue As Variant, _
                       Optional ByVal strDescription As String, Optional ByVal boolOverwrite As Boolean = True)
                       
-    Dim strSettingsPath As String, arrSetting() As String, i As Integer
-    strSettingsPath = BotPath() & "plugins\settings.ini"
+    Dim strPath As String, arrSetting() As String, i As Integer
+    strPath = BotPath() & "plugins\settings.ini"
 
     If Len(strDescription) > 0 Then
         SetSetting strPrefix, strName & ".Description", strDescription, "", True
     End If
     
-    If boolOverwrite Or Len(GetConfigEntry(strPrefix, strName, strSettingsPath)) = 0 Then
+    If boolOverwrite Or Len(GetConfigEntry(strPrefix, strName, strPath)) = 0 Then
         If Len(strName & varValue) > 254 Then
-            WriteConfigEntry UCase(strPrefix), strName, Left(varValue, 254 - Len(strName)), strSettingsPath
+            WriteConfigEntry UCase(strPrefix), strName, Left(varValue, 254 - Len(strName)), strPath
             arrSetting = Split(strName, "*")
             If UBound(arrSetting) > 0 Then i = arrSetting(1) + 1 Else i = 1
             SetSetting strPrefix, arrSetting(0) & "*" & i, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
         Else
-            WriteConfigEntry UCase(strPrefix), strName, varValue, strSettingsPath
+            WriteConfigEntry UCase(strPrefix), strName, varValue, strPath
             AddPSetting strPrefix, strName
         End If
     End If
@@ -1270,12 +1270,15 @@ End Sub
 '// GETSETTING
 '//   Written by Swent. Retrieves plugin settings.
 Public Function GetSetting(ByVal strPrefix As String, ByVal strName As String)
-    Dim strSettingsPath As String, i As Integer, strAppend As String, tmpValue As String, varValue As Variant
-    strSettingsPath = BotPath() & "plugins\settings.ini"
+    Dim strPath As String, i As Integer, strAppend As String, tmpValue As String, varValue As Variant
+    strPath = BotPath() & "plugins\settings.ini"
+    If LenB(Dir$(strPath)) = 0 Then
+        Call ReloadScript: Exit Function
+    End If
     
     Do
         If i > 0 Then strAppend = "*" & i
-        tmpValue = GetConfigEntry(strPrefix, Left(strName, Len(strName)) & strAppend, strSettingsPath)
+        tmpValue = GetConfigEntry(strPrefix, Left(strName, Len(strName)) & strAppend, strPath)
         varValue = varValue & tmpValue
         If Len(tmpValue) = 0 Then
             GetSetting = varValue
@@ -1632,9 +1635,11 @@ Public Function GetObjectProperty(ByVal strPrefix As String, ByVal strFormName A
     End If
 End Function
 
+
 Private Sub Class_Initialize()
     Set obScriptForms = CreateObject("Scripting.Dictionary")
 End Sub
+
 
 Private Sub Class_Terminate()
     'Go through and destroy all the Forms the user has created
