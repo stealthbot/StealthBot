@@ -15,8 +15,8 @@ Begin VB.Form frmChat
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   11160
-   ScaleWidth      =   18960
+   ScaleHeight     =   7950
+   ScaleWidth      =   11400
    StartUpPosition =   3  'Windows Default
    Begin MSScriptControlCtl.ScriptControl SCRestricted 
       Left            =   6960
@@ -149,6 +149,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -846,6 +847,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1097,7 +1099,7 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuReloadScript 
          Caption         =   "Reload &Plugins"
-         Shortcut        =   ^Z
+         Shortcut        =   ^C
       End
    End
    Begin VB.Menu mnuConnect 
