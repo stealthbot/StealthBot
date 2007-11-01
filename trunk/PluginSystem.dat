@@ -4,14 +4,14 @@
 
 '// The Plugin System - StealthBot 2.7 Development Version
 '//    by Swent
-'//      Last modified 8:03 PM 10/28/2007
+'//      Last modified 12:59 AM 11/1/2007
 
 
 '// The Plugin System is an updateable, scripted extension of StealthBot's VBScripting System.
-'//   It handles plugin commands, plugin loading, execution of plugin events, and various miscallenous functions.
+'//   It handles plugin commands, plugin loading, execution of plugin events, and various miscellaneous functions.
 '//      DO NOT change anything in this file unless you know what you're doing.
 
-'// This file will be updated periodically to continously provide new plugin features and capabilities between StealthBot versions.
+'// This file will be updated periodically to provide new plugin features and capabilities between StealthBot versions.
 
 
 '// TODO BEFORE PUBLIC RELEASE
@@ -42,7 +42,6 @@
 '//   *Revamped the settings system. Plugin settings are now located in settings.ini
 '//      -Removed the /lset command as it is no longer neccessary
 '//      -Changes to settings.ini now take effect after immediately after saving the file (You do not need to type "/lset" or hit Reload Script)
-'//      -Setting descriptions relocated into the /phelp command response.
 '//   *Opened up the updates, getplugin and delplugin commands to external usage by Bot Owner only (Thanks RoNiN)
 '//      -In the external updates output, only prefixes are displayed. Key: New, [Updated], (Installed)
 '//   *Increased plugin load efficiency -- load time should be noticeably decreased (Thanks ZergMasterI)
@@ -63,8 +62,6 @@
 '//      -Set to False by default. If changed to True, that plugin will be backed up when you download updates.
 '//      -Alternatively, you can set the global "backup" PS setting to True, and it will apply to all plugins.
 '//      -When True, the global "backup" PS setting overrides the individual "backup" plugin settings
-'//   *Added Plugin System News which will displayed when you open the bot (Thanks Jack)
-'//      -Can be disabled by setting the new "newsDisabled" plugin system setting to True
 '//   *Added settings that allow you to set access requirements for external Plugin System commands:
 '//      -"prefix_cmd_access" (default 100), "plugins_cmd_access" (default 20), and "phelp_cmd_access" (default 20)
 '//   *Added double-slash Plugin System commands. Inside bot type "//command" to have the response displayed publicly.
@@ -140,7 +137,8 @@ Set psSC = GetScriptControl()
 Set psFSO = CreateObject("Scripting.FileSystemObject")
 Set psWshShell = CreateObject("WScript.Shell")
 Set psAppShell = CreateObject("Shell.Application")
-Set psLoadError = CreateObject("Scripting.Dictionary")     '// holds plugin load status (success or errored)
+Set psLoadError = CreateObject("Scripting.Dictionary")     '// holds plugin load status (errored or not)
+Set psCodeLoaded = CreateObject("Scripting.Dictionary")    '// holds status of plugin code (loaded or not)
 Set psPlugins = CreateObject("Scripting.Dictionary")       '// holds plugin file paths
 Set psVersions = CreateObject("Scripting.Dictionary")      '// holds plugin versions
 Set psHelp = CreateObject("Scripting.Dictionary")          '// holds plugin help output
@@ -241,21 +239,6 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, Lines)
       End If
    Next
 
-   '// Load this plugin's code
-   On Error Resume Next
-   If psArgsAdded Then Content = psNewContent
-   psSC.AddCode Content
-
-   '// Handle loading errors
-   If Err.Number <> 0 Then
-      psLoadError.Item(Prefix) = True
-      AddChat vbRed, "Offending file: >> " & Path
-      AddChat vbYellow, "Your " & Prefix & " plugin has been temporarily blocked due to a loading error."
-      Err.Clear
-   Else
-      psLoadError.Item(Prefix) = False
-   End If
-
    '// Register this plugin by storing it's path and version
    psPlugins.Item(Prefix) = Path
    psVersions.Item(Prefix) = Version
@@ -283,6 +266,34 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, Lines)
    SetSetting Prefix, "menu_display", True, "", False
    SetSetting Prefix, "nvn", True, "", False
    SetSetting Prefix, "backup", False, "", False
+
+   '// Load this plugin's code
+   psLoadCode Prefix, Path, Content
+End Sub
+
+
+Sub psLoadCode(Prefix, Path, Content)
+
+   '// Load the plugin's code (unless it's disabled)
+   On Error Resume Next
+   boolEnabled = GetSetting(Prefix, "enabled")
+   If (Len(boolEnabled) = 0 Or GetSetting(Prefix, "enabled")) Then
+      If psArgsAdded Then Content = psNewContent
+      psSC.AddCode Content
+      psCodeLoaded.Item(Prefix) = True
+   Else
+      psCodeLoaded.Item(Prefix) = False
+   End If
+
+   '// Handle loading errors
+   If Err.Number <> 0 Then
+      psLoadError.Item(Prefix) = True
+      AddChat vbRed, "Offending file: >> " & Path
+      AddChat vbYellow, "Your " & Prefix & " plugin has been temporarily blocked due to a loading error."
+      Err.Clear
+   Else
+      psLoadError.Item(Prefix) = False
+   End If
 End Sub
 
 
@@ -353,7 +364,6 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
       Select Case cmdName
          Case "prefix", "updates", "getplugin", "debug", "lset", "plugins", "nvn", "ext", "phelp", "delplugin", "psnews", "pedit"
             VetoThisMessage
-         Case "plist"
          Case Else: Exit Sub
       End Select
    Else
@@ -378,11 +388,13 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
             dsp DisplayID, "Plugins have been globally disabled.", Username, vbRed
          Else
             dsp DisplayID, "Plugins are no longer globally disabled.", Username, vbGreen
-            psExecuteEvent "Load", Array(vbNullString)
          End If
       Else
          dsp DisplayID, "The " & cmdPrefix & " plugin has been " & arrOnOff(1) & ".", Username, arrOnOff(2)
-         'If arrOnOff(0) Then psTriggerLoadEvent(cmdPrefix)
+         If arrOnOff(0) Then
+            psLoadCode cmdPrefix, psPlugins.Item(cmdPrefix), psGetTextStream(psPlugins.Item(cmdPrefix))
+            psTriggerLoadEvent(cmdPrefix)
+         End If
       End If
 
       '// Toggle enabled checkmark in plugin menu
@@ -433,7 +445,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
          strUpdates = Replace(strUpdates, "%4", """ & vbCrLf & """)
          strUpdates = Replace(strUpdates, """"" &", "")
  
-         AddChat vbWhite, " "
+         AddChat vbWhite, "ÿcbÿcb "
          Execute "AddChat psColor2, ""Plugins Available For Download"" & vbCrLf, vbWhite, """ & strUpdates & """"
          AddChat psColor2, "Type /getplugin PREFIX (where PREFIX is the prefix of the plugin that you want)."
       End If
@@ -455,7 +467,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
 
    '* Command to display Plugin System news
    ElseIf cmdName = "psnews" Then
-      Call psDisplayNews(True)
+      Call psDisplayNews()
  
    '* Command to list all plugins currently loaded
    ElseIf cmdName = "plugins" Then
@@ -485,7 +497,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
          strPList = strPList & prefixLine & status & "vbCrLf & " & plugVer & fileLine
       Next
 
-      AddChat vbWhite, " "
+      AddChat vbWhite, "ÿcbÿcb "
       Execute("AddChat psColor1, ""Loaded Plugins (" & psPlugins.Count & ")"", " & Left(strPList, Len(strPList) - 2))
       If Not GetSetting("ps", "enabled") Then AddChat vbRed, "Plugins have been globally disabled. To reverse this type /ps on" 
 
@@ -523,7 +535,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
          If DisplayID = 4 Then AddChat vbLightBlue, "Plugin Help System"
          dsp DisplayID, "Type /phelp <prefix> to get help on one of your loaded plugins.", Username, psColor2
          dsp DisplayID, "Loaded prefixes: " & Join(psPrefixes, ", "), Username, psColor1
-         If DisplayID = 4 Then AddChat psGrey, "For help with the Plugin System's commands and operation, type /phelp ps"
+         If DisplayID = 4 Then AddChat vbGrey, "For help with the Plugin System's commands and operation, type /phelp ps"
       Else
          '// Is this a valid prefix?   
 	 If Not psPrefixExists(cmd(1)) Then Exit Sub
@@ -562,7 +574,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
          notes = Split(psHelp.Item(cmd(1))(3), ":")
 
          '// Display the help info
-         AddChat vbLightBlue, nameAndAuthor(0) & " by " & nameAndAuthor(1)
+         AddChat vbLightBlue, "ÿcbÿcb" & nameAndAuthor(0) & " by " & nameAndAuthor(1)
          AddChat vbWhite, " ": AddChat psColor2, "Commands:"
          If Join(commands, "") = vbNullString Then
             AddChat psColor2, "There are no commands for this plugin."
@@ -1071,7 +1083,7 @@ End Function
 
 
 Sub psTriggerLoadEvent(Prefix)
-
+   
    If Instr(psEvents.Item(Prefix), "load") Then
       If Not GetSetting("ps", "debugmode") Then On Error Resume Next
       Execute(Prefix & "_event_load()")
@@ -1135,13 +1147,12 @@ End Function
 
 Function psPluginEnabled(Prefix)
 
-   If GetSetting(Prefix, "enabled") And GetSetting("ps", "enabled") Then psPluginEnabled = True
+   boolEnabled = GetSetting(Prefix, "enabled")
+   If (Len(boolEnabled) = 0 Or GetSetting(Prefix, "enabled")) And GetSetting("ps", "enabled") Then psPluginEnabled = True
 End Function
 
 
-Sub psDisplayNews(FirstRun)
-
-  If Not FirstRun Or GetSetting("ps", "newsDisabled") Then Exit Sub
+Sub psDisplayNews()
 
   news = scINet.OpenURL(PS_UPDATE_URL & "news.php")
   If Instr(news, "Plugin System") = 0 Then Exit Sub
@@ -1163,10 +1174,7 @@ Function psLatestSB()
 End Function
  
  
-Sub psCompleteInstall()
-
-   '// Installation already completed?
-   If psFSO.FolderExists(BotPath() & "plugins") And psFSO.FileExists(BotPath() & "plugins\settings.ini") Then Exit Sub
+Sub psAddPFolder()
 
    '// Create the plugins folder and settings file
    If Not psFSO.FolderExists(BotPath() & "plugins") Then
@@ -1176,16 +1184,12 @@ Sub psCompleteInstall()
       End If
    End If
    If Not psFSO.FileExists(BotPath() & "plugins\settings.ini") Then
-      If psFSO.FileExists(BotPath() & "plugins\pluginsettings.ini") Then psFSO.DeleteFile(BotPath() & "plugins\pluginsettings.ini")
-      psFSO.CreateTextFile(BotPath() & "plugins\settings.ini")
-      AddChat 39423, "Added the settings.ini file to your plugins folder."
-      AddChat vbWhite, "For a quick explanation of the Plugin System and answers to common questions, visit the Plugin System FAQ:"
-      AddChat vbWhite, "http://www.stealthbot.net/board/index.php?showtopic=22229"
-      AddChat vbWhite, "For a Plugin System command list and extensive usage information, visit the Plugin System guide:"
-      AddChat vbWhite, "http://www.stealthbot.net/board/index.php?showtopic=6052"
-      AddChat vbWhite, "For answers to common scripting and plugin questions/problems, visit the scripting Tutorials and FAQs forum:"
-      AddChat vbWhite, "http://www.stealthbot.net/board/index.php?showforum=53"
-      AddChat vbWhite, "These links can also be found in the Plugins menu under Help."
+      If psFSO.FileExists(BotPath() & "plugins\pluginsettings.ini") Then
+         psBackupFile BotPath() & "plugins\pluginsettings.ini", ""
+         psFSO.DeleteFile(BotPath() & "plugins\pluginsettings.ini")
+      End If
+      AddChat 39423, "Added settings.ini to your plugins folder."
+      AddChat vbWhite, "For information/help with scripting and The Plugin System, click Plugins > Help"
    End If
 End Sub
  
@@ -1248,7 +1252,8 @@ Sub psBackUpFile(Path, Version)
 
    fileName = psFSO.GetBaseName(Path)
    fileExt = psFSO.GetExtensionName(Path)
-   buName = fileName & "(v" & Version & ")"
+   If Len(Version) > 0 Then buVersion = "(v" & Version & ")"
+   buName = fileName & buVersion
    buPathStart = BotPath() & "ScriptBackups\" & buName
 
    fileContents = psGetTextStream(Path)
@@ -1297,8 +1302,8 @@ End Sub
 
 Sub Event_Load()
 
-   '// Finish the installation
-   Call psCompleteInstall()
+   '// Add plugins folder and settings.ini (if necessary)
+   Call psAddPFolder()
  
    '// Set color values
    Call psSetPSColors()
@@ -1323,8 +1328,10 @@ End Sub
 
 Sub Event_FirstRun()
 
-   AddChat vbWhite, "ÿcbÿcb"
-   SetSCTimeout GetSetting("ps", "timeout") * 1000
+   intTimeout = GetSetting("ps", "timeout")
+   If Len(intTimeout) = 0 Then intTimeout = 15
+   SetSCTimeout intTimeout * 1000
+
    psFirstRun = True
 End Sub
  
