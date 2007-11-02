@@ -1,24 +1,124 @@
 VERSION 5.00
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Begin VB.Form frmScriptUI 
    BackColor       =   &H00000000&
    Caption         =   "Scripting UI"
    ClientHeight    =   3195
-   ClientLeft      =   450
+   ClientLeft      =   840
    ClientTop       =   345
    ClientWidth     =   4680
    LinkTopic       =   "Form1"
    ScaleHeight     =   3195
    ScaleWidth      =   4680
    StartUpPosition =   3  'Windows Default
+   Begin RichTextLib.RichTextBox rtb 
+      Height          =   255
+      Left            =   1560
+      TabIndex        =   9
+      Top             =   1200
+      Visible         =   0   'False
+      Width           =   495
+      _ExtentX        =   873
+      _ExtentY        =   450
+      _Version        =   393217
+      Enabled         =   -1  'True
+      TextRTF         =   $"frmScruptUI.frx":0000
+   End
+   Begin InetCtlsObjects.Inet ine 
+      Index           =   0
+      Left            =   2280
+      Top             =   360
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      _Version        =   393216
+   End
+   Begin MSComctlLib.ImageList iml 
+      Index           =   0
+      Left            =   1560
+      Top             =   360
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   -2147483643
+      MaskColor       =   12632256
+      _Version        =   393216
+   End
+   Begin MSComctlLib.ListView lsv 
+      Height          =   375
+      Index           =   0
+      Left            =   600
+      TabIndex        =   8
+      Top             =   360
+      Visible         =   0   'False
+      Width           =   255
+      _ExtentX        =   450
+      _ExtentY        =   661
+      LabelWrap       =   -1  'True
+      HideSelection   =   -1  'True
+      _Version        =   393217
+      ForeColor       =   -2147483640
+      BackColor       =   -2147483643
+      BorderStyle     =   1
+      Appearance      =   1
+      NumItems        =   0
+   End
+   Begin VB.ListBox lst 
+      Height          =   255
+      Index           =   0
+      Left            =   2520
+      TabIndex        =   7
+      Top             =   0
+      Visible         =   0   'False
+      Width           =   255
+   End
+   Begin VB.ComboBox cmb 
+      Height          =   315
+      Index           =   0
+      Left            =   2040
+      TabIndex        =   6
+      Top             =   0
+      Visible         =   0   'False
+      Width           =   390
+   End
+   Begin VB.OptionButton opt 
+      Height          =   255
+      Index           =   0
+      Left            =   1680
+      TabIndex        =   5
+      Top             =   0
+      Visible         =   0   'False
+      Width           =   255
+   End
+   Begin VB.CheckBox chk 
+      Height          =   255
+      Index           =   0
+      Left            =   1320
+      TabIndex        =   4
+      Top             =   0
+      Visible         =   0   'False
+      Width           =   255
+   End
+   Begin VB.PictureBox pic 
+      Height          =   255
+      Index           =   0
+      Left            =   960
+      ScaleHeight     =   195
+      ScaleWidth      =   195
+      TabIndex        =   3
+      Top             =   0
+      Visible         =   0   'False
+      Width           =   255
+   End
    Begin VB.Timer tmr 
       Index           =   0
-      Left            =   1200
-      Top             =   0
+      Left            =   0
+      Top             =   360
    End
    Begin VB.TextBox txt 
       Height          =   285
       Index           =   0
-      Left            =   840
+      Left            =   600
       TabIndex        =   1
       Top             =   0
       Visible         =   0   'False
@@ -33,13 +133,29 @@ Begin VB.Form frmScriptUI
       Visible         =   0   'False
       Width           =   255
    End
+   Begin VB.Line lin 
+      Index           =   0
+      Visible         =   0   'False
+      X1              =   720
+      X2              =   1920
+      Y1              =   480
+      Y2              =   480
+   End
+   Begin VB.Shape shp 
+      Height          =   255
+      Index           =   0
+      Left            =   2880
+      Top             =   0
+      Visible         =   0   'False
+      Width           =   255
+   End
    Begin VB.Label lbl 
       BackColor       =   &H00000000&
       Caption         =   "lbl"
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Index           =   0
-      Left            =   600
+      Left            =   360
       TabIndex        =   2
       Top             =   0
       Visible         =   0   'False
@@ -57,161 +173,131 @@ Option Explicit
 Private strPrefix As String
 Private strFormName As String
 Private oControls As Object
+Private oNames As Object
+Private bSettingsFilled As Boolean
 
-'Public Enum ObjectProps
-'    btWidth = 0         'Must be an Int
-'    btHeight = 1        'Must be an Int
-'    btLeft = 2          'Must be an Int
-'    btTop = 3           'Must be an Int
-'    btVisable = 4       'Must be a boolean: 0, 1, true, false, "true", "false"
-'    btBackColor = 5     'Must be an Int
-'    btCaption = 6       'Can be anything
-'    btWindowState = 7   'Must be One of the following: 0: Normal, 1: Minimized, 2: Maximized
-'    btBorderStyle = 8   'Must be one of the following: 0: None, 1: FixedSingle, 2: Sizable, 3: FixedDialog, 4: Fixed Tool, 5: Sizable Tool
-'    btToolTip = 9       'Can be anything
-'    btText = 10         'Can be anything
-'    btTag = 11          'Can be anything
-'    btScrollBars = 12   'Must be one of the following: 0: None, 1: Horizontal, 2: Vertical, 3: Both
-'    btRightToLeft = 13  'Must be a boolean: 0, 1, true, false, "true", "false"
-'    btPasswordChar = 14 'Must be a charecter (Is trimmed to 1 chr if string)
-'    btMultiLine = 15    'Must be a boolean: 0, 1, true, false, "true", "false"
-'    btMaxLength = 16    'Must be an Int
-'    btLocked = 17       'Must be a boolean: 0, 1, true, false, "true", "false"
-'    btForeColor = 18    'Must be an Int
-'    btEnabled = 19      'Must be a boolean: 0, 1, true, false, "true", "false"
-'    btBackStyle = 20    'Must be one of the following: 0: Transparent, 1: Opaque
-'    btInterval = 21     'Must be an Int
-'End Enum
-
-Public Property Let Prefix(strPre As String)
-  strPrefix = strPre
-End Property
-Public Property Get Prefix() As String
-  Prefix = strPrefix
-End Property
-Public Property Let FormName(strName As String)
+Public Sub FillPrefixName(ByVal sPrefix As String, ByVal strName As String)
+  If (bSettingsFilled) Then Exit Sub
+  strPrefix = sPrefix
   strFormName = strName
-End Property
-Public Property Get FormName() As String
-  FormName = strFormName
-End Property
+  bSettingsFilled = True
+End Sub
 
-Public Function AddCommandButton(ByVal strName As String) As Boolean
+Public Function GetControl(ByVal strName As String) As Object
   If (oControls.Exists(strName)) Then
-    AddCommandButton = False
+    Set GetControl = oControls.Item(strName)
+  Else
+    Set GetControl = Nothing
+  End If
+End Function
+
+Private Function AddControl(ByVal strName As String, ByVal strCtlName As String, ByRef ctrls As Object, Optional bVisable As Boolean = True)
+  If (oControls.Exists(strName)) Then
+    AddControl = False
   Else
     Dim Index As Integer
-    Index = cmd.UBound + 1
-    Load cmd(Index)
-    cmd(Index).Visible = True
-    cmd(Index).Tag = strName
-    oControls.Add strName, cmd(Index)
+    Index = ctrls.UBound + 1
+    Load ctrls(Index)
+    If (bVisable) Then ctrls(Index).Visible = True
+    oNames.Add strCtlName & "_" & Index, strName
+    oControls.Add strName, ctrls(Index)
     Form_Resize
-    AddCommandButton = True
+    AddControl = True
   End If
+End Function
+
+Public Function AddCommandButton(ByVal strName As String) As Boolean
+  AddCommandButton = AddControl(strName, "cmd", cmd)
 End Function
 
 Public Function AddLabel(ByVal strName As String) As Boolean
-  If (oControls.Exists(strName)) Then
-    AddLabel = False
-  Else
-    Dim Index As Integer
-    Index = lbl.UBound + 1
-    Load lbl(Index)
-    lbl(Index).Visible = True
-    lbl(Index).Tag = strName
-    oControls.Add strName, cmd(Index)
-    Form_Resize
-    AddLabel = True
-  End If
+  AddLabel = AddControl(strName, "lbl", lbl)
 End Function
 
 Public Function AddTextBox(ByVal strName As String) As Boolean
-  If (oControls.Exists(strName)) Then
-    AddTextBox = False
-  Else
-    Dim Index As Integer
-    Index = txt.UBound + 1
-    Load txt(Index)
-    txt(Index).Visible = True
-    txt(Index).Tag = strName
-    oControls.Add strName, txt(Index)
-    Form_Resize
-    AddTextBox = True
-  End If
+  AddTextBox = AddControl(strName, "txt", txt)
 End Function
 
 Public Function AddTimer(ByVal strName As String) As Boolean
-  If (oControls.Exists(strName)) Then
-    AddTimer = False
-  Else
-    Dim Index As Integer
-    Index = txt.UBound + 1
-    Load tmr(Index)
-    tmr(Index).Tag = strName
-    oControls.Add strName, tmr(Index)
-    Form_Resize
-    AddTimer = True
-  End If
+  AddTimer = AddControl(strName, "tmr", tmr, False)
 End Function
 
-Public Sub SetObjectProperty(ByVal strObject As String, ByVal btProperty As ObjectProps, ByVal vValue As Variant)
-  If (oControls.Exists(strObject)) Then
-    Dim obj As Object
-    Set obj = oControls.Item(strObject)
-    Select Case btProperty
-      Case ObjectProps.btWidth:        obj.Width = CInt(vValue)
-      Case ObjectProps.btHeight:       obj.Height = CInt(vValue)
-      Case ObjectProps.btTop:          obj.Top = CInt(vValue)
-      Case ObjectProps.btLeft:         obj.Left = CInt(vValue)
-      Case ObjectProps.btVisable:      obj.visable = CBool(vValue)
-      Case ObjectProps.btBackColor:    obj.BackColor = CInt(vValue)
-      Case ObjectProps.btCaption:      obj.Caption = vValue
-      Case ObjectProps.btBorderStyle:  obj.BorderStyle = CInt(vValue)
-      Case ObjectProps.btToolTip:      obj.ToolTipText = vValue
-      Case ObjectProps.btText:         obj.text = vValue
-      Case ObjectProps.btScrollBars:   obj.ScrollBars = CInt(vValue)
-      Case ObjectProps.btRightToLeft:  obj.RightToLeft = CBool(vValue)
-      Case ObjectProps.btPasswordChar: obj.PasswordChar = Left(vValue, 1)
-      Case ObjectProps.btMultiLine:    obj.MultiLine = CBool(vValue)
-      Case ObjectProps.btMaxLength:    obj.MaxLength = CInt(vValue)
-      Case ObjectProps.btLocked:       obj.Locked = CBool(vValue)
-      Case ObjectProps.btForeColor:    obj.ForeColor = CInt(vValue)
-      Case ObjectProps.btEnabled:      obj.Enabled = CBool(vValue)
-      Case ObjectProps.btBackStyle:    obj.BackStyle = CInt(vValue)
-      Case ObjectProps.btInterval:     obj.Interval = CInt(vValue)
-    End Select
-    Set obj = Nothing
-  End If
+Public Function AddPictureBox(ByVal strName As String) As Boolean
+  AddPictureBox = AddControl(strName, "pic", pic)
+End Function
+
+Public Function AddCheckBox(ByVal strName As String) As Boolean
+  AddCheckBox = AddControl(strName, "chk", chk)
+End Function
+
+Public Function AddOptionBox(ByVal strName As String) As Boolean
+  AddOptionBox = AddControl(strName, "opt", opt)
+End Function
+
+Public Function AddComboBox(ByVal strName As String) As Boolean
+  AddComboBox = AddControl(strName, "cmb", cmb)
+End Function
+
+Public Function AddListBox(ByVal strName As String) As Boolean
+  AddListBox = AddControl(strName, "lst", lst)
+End Function
+
+Public Function AddShape(ByVal strName As String) As Boolean
+  AddShape = AddControl(strName, "shp", shp)
+End Function
+
+Public Function AddLine(ByVal strName As String) As Boolean
+  AddLine = AddControl(strName, "lin", lin)
+End Function
+
+Public Function AddListView(ByVal strName As String) As Boolean
+  AddListView = AddControl(strName, "lsv", lsv)
+End Function
+
+Public Function AddImageList(ByVal strName As String) As Boolean
+  AddImageList = AddControl(strName, "iml", iml, False)
+End Function
+
+Public Function AddINet(ByVal strName As String) As Boolean
+  AddINet = AddControl(strName, "ine", ine, False)
+End Function
+
+Public Function AddRichTextBox(ByVal strName As String) As Boolean
+  AddINet = AddControl(strName, "rtb", rtb)
+End Function
+
+Public Sub DestroyObjects()
+  On Error Resume Next
+  Dim x As Integer
+  For x = 1 To lbl.UBound: Unload lbl(x): Next x
+  For x = 1 To cmd.UBound: Unload cmd(x): Next x
+  For x = 1 To txt.UBound: Unload txt(x): Next x
+  For x = 1 To tmr.UBound: Unload tmr(x): Next x
+  For x = 1 To pic.UBound: Unload pic(x): Next x
+  For x = 1 To chk.UBound: Unload chk(x): Next x
+  For x = 1 To opt.UBound: Unload opt(x): Next x
+  For x = 1 To cmb.UBound: Unload cmb(x): Next x
+  For x = 1 To lst.UBound: Unload lst(x): Next x
+  For x = 1 To shp.UBound: Unload shp(x): Next x
+  For x = 1 To lin.UBound: Unload lin(x): Next x
+  For x = 1 To lsv.UBound: Unload lsv(x): Next x
+  For x = 1 To iml.UBound: Unload iml(x): Next x
+  For x = 1 To ine.UBound: Unload ine(x): Next x
+  For x = 1 To rtb.UBound: Unload rtb(x): Next x
+  Set oControls = Nothing
 End Sub
 
-Public Function GetObjectProperty(ByVal strObject As String, ByVal btProperty As ObjectProps)
-  If (oControls.Exists(strObject)) Then
-    Dim obj As Object
-    Set obj = oControls.Item(strObject)
-    Select Case btProperty
-      Case ObjectProps.btWidth:        GetObjectProperty = obj.Width
-      Case ObjectProps.btHeight:       GetObjectProperty = obj.Height
-      Case ObjectProps.btTop:          GetObjectProperty = obj.Top
-      Case ObjectProps.btLeft:         GetObjectProperty = obj.Left
-      Case ObjectProps.btVisable:      GetObjectProperty = obj.visable
-      Case ObjectProps.btBackColor:    GetObjectProperty = obj.BackColor
-      Case ObjectProps.btCaption:      GetObjectProperty = obj.Caption
-      Case ObjectProps.btBorderStyle:  GetObjectProperty = obj.BorderStyle
-      Case ObjectProps.btToolTip:      GetObjectProperty = obj.ToolTipText
-      Case ObjectProps.btText:         GetObjectProperty = obj.text
-      Case ObjectProps.btScrollBars:   GetObjectProperty = obj.ScrollBars
-      Case ObjectProps.btRightToLeft:  GetObjectProperty = obj.RightToLeft
-      Case ObjectProps.btPasswordChar: GetObjectProperty = obj.PasswordChar
-      Case ObjectProps.btMultiLine:    GetObjectProperty = obj.MultiLine
-      Case ObjectProps.btMaxLength:    GetObjectProperty = obj.MaxLength
-      Case ObjectProps.btLocked:       GetObjectProperty = obj.Locked
-      Case ObjectProps.btForeColor:    GetObjectProperty = obj.ForeColor
-      Case ObjectProps.btEnabled:      GetObjectProperty = obj.Enabled
-      Case ObjectProps.btBackStyle:    GetObjectProperty = obj.BackStyle
-      Case ObjectProps.btInterval:     GetObjectProperty = obj.Interval
-    End Select
-    Set obj = Nothing
+Private Function GetCallBack(ByVal strObject As String, ByVal Index As Integer, ByVal strFunction As String)
+  If (strObject = vbNullString) Then
+    GetCallBack = strPrefix & "_" & strFormName & "_" & strFunction
+    Exit Function
+  End If
+  If (oNames.Exists(strObject & "_" & Index)) Then
+    GetCallBack = strPrefix & "_" & strFormName & "_" & _
+    oNames.Item(strObject & "_" & Index) & "_" & strFunction
+  Else
+    GetCallBack = strPrefix & "_" & strFormName & "_" & _
+    strObject & "_" & Index & "_" & strFunction
   End If
 End Function
 
@@ -222,234 +308,234 @@ End Function
 Private Sub Form_Load()
   Me.Icon = frmChat.Icon
   Set oControls = CreateObject("Scripting.Dictionary")
+  Set oNames = CreateObject("Scripting.Dictionary")
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_Load"
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "Load")
 End Sub
 
 Private Sub Form_Activate()
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_Activate"
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "Activate")
 End Sub
 
 Private Sub Form_Click()
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_Click"
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "Click")
 End Sub
 
 Private Sub Form_DblClick()
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_DblClick"
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "DblClick")
 End Sub
 
 Private Sub Form_Deactivate()
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_Deactivate"
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "Deactivate")
 End Sub
 
 Private Sub Form_GotFocus()
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_GotFocus"
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "GotFocus")
 End Sub
 
 Private Sub Form_Initialize()
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_Initialize"
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "Initialize")
 End Sub
 
 Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_KeyDown", KeyCode, Shift
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "KeyDown"), KeyCode, Shift
 End Sub
 
 Private Sub Form_KeyPress(KeyAscii As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_KeyPress", KeyAscii
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "KeyPress"), KeyAscii
 End Sub
 
 Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_KeyUp", KeyCode, Shift
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "KeyUp"), KeyCode, Shift
 End Sub
 
 Private Sub Form_LostFocus()
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_LostFocus"
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "LostFocus")
 End Sub
 
-Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Form_MouseDown(Button As Integer, Shift As Integer, x As Single, Y As Single)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_MouseDown", Button, Shift, X, Y
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "MouseDown"), Button, Shift, x, Y
 End Sub
 
-Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Form_MouseMove(Button As Integer, Shift As Integer, x As Single, Y As Single)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_MouseMove", Button, Shift, X, Y
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "MoveMouse"), Button, Shift, x, Y
 End Sub
 
-Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub Form_MouseUp(Button As Integer, Shift As Integer, x As Single, Y As Single)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_MouseUp", Button, Shift, X, Y
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "MouseUp"), Button, Shift, x, Y
 End Sub
 
 Private Sub Form_Paint()
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_Paint"
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "Paint")
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_LostFocus"
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "QueryUnload"), Cancel, UnloadMode
 End Sub
 
 Private Sub Form_Resize()
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_Resize"
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "Resize")
 End Sub
 
 Private Sub Form_Terminate()
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_Terminate"
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "Terminate")
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-  Set oControls = Nothing
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_UnLoad", Cancel
-  Debug.Print Cancel
+  frmChat.SControl.Run GetCallBack(vbNullString, 0, "Unload"), Cancel
+  frmChat.SControl.ExecuteStatement "Call DestroyForm(" & Chr(&H22) & strPrefix & Chr(&H22) & ", " & Chr(&H22) & strFormName & Chr(&H22) & ")"
 End Sub
 
 Private Sub cmd_LostFocus(Index As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_LostFocus"
+  frmChat.SControl.Run GetCallBack("cmd", Index, "LostFocus")
 End Sub
 
 Private Sub cmd_GotFocus(Index As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_GotFocus"
+  frmChat.SControl.Run GetCallBack("cmd", Index, "GotFocus")
 End Sub
 
 Private Sub cmd_KeyPress(Index As Integer, KeyAscii As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_KeyPress", KeyAscii
+  frmChat.SControl.Run GetCallBack("cmd", Index, "KeyPress"), KeyAscii
 End Sub
 
 Private Sub cmd_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_KeyUp", KeyCode, Shift
+  frmChat.SControl.Run GetCallBack("cmd", Index, "KeyUp"), KeyCode, Shift
 End Sub
 
-Private Sub cmd_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub cmd_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_MouseUp", Button, Shift, X, Y
+  frmChat.SControl.Run GetCallBack("cmd", Index, "MouseDown"), Button, Shift, x, Y
 End Sub
 
-Private Sub cmd_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub cmd_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_MouseUp", Button, Shift, X, Y
+  frmChat.SControl.Run GetCallBack("cmd", Index, "MouseMove"), Button, Shift, x, Y
 End Sub
 
-Private Sub cmd_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub cmd_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_MouseUp", Button, Shift, X, Y
+  frmChat.SControl.Run GetCallBack("cmd", Index, "MouseUp"), Button, Shift, x, Y
 End Sub
 
 Private Sub cmd_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_KeyDown", KeyCode, Shift
+  frmChat.SControl.Run GetCallBack("cmd", Index, "KeyDown"), KeyCode, Shift
 End Sub
 
 Private Sub cmd_Click(Index As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & cmd(Index).Tag & "_Click"
+  frmChat.SControl.Run GetCallBack("cmd", Index, "Click")
 End Sub
 
 Private Sub lbl_Change(Index As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & lbl(Index).Tag & "_Change"
+  frmChat.SControl.Run GetCallBack("lbl", Index, "Change")
 End Sub
 
 Private Sub lbl_Click(Index As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & lbl(Index).Tag & "_Click"
+  frmChat.SControl.Run GetCallBack("lbl", Index, "Click")
 End Sub
 
 Private Sub lbl_DblClick(Index As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & lbl(Index).Tag & "_DblClick"
+  frmChat.SControl.Run GetCallBack("lbl", Index, "DblClick")
 End Sub
 
-Private Sub lbl_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lbl_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & lbl(Index).Tag & "_MouseDown", Button, Shift, X, Y
+  frmChat.SControl.Run GetCallBack("lbl", Index, "MouseDown"), Button, Shift, x, Y
 End Sub
 
-Private Sub lbl_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lbl_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & lbl(Index).Tag & "_MouseMove", Button, Shift, X, Y
+  frmChat.SControl.Run GetCallBack("lbl", Index, "MouseMove"), Button, Shift, x, Y
 End Sub
 
-Private Sub lbl_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lbl_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & lbl(Index).Tag & "_MouseUp", Button, Shift, X, Y
+  frmChat.SControl.Run GetCallBack("lbl", Index, "MouseUp"), Button, Shift, x, Y
 End Sub
 
 Private Sub tmr_Timer(Index As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & tmr(Index).Tag & "_Timer"
+  frmChat.SControl.Run GetCallBack("tmr", Index, "Timer")
 End Sub
 
 Private Sub txt_Change(Index As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_Change"
+  frmChat.SControl.Run GetCallBack("txt", Index, "Change")
 End Sub
 
 Private Sub txt_Click(Index As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_Click"
+  frmChat.SControl.Run GetCallBack("txt", Index, "Click")
 End Sub
 
 Private Sub txt_DblClick(Index As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_DblClick"
+  frmChat.SControl.Run GetCallBack("txt", Index, "DblClick")
 End Sub
 
 Private Sub txt_LostFocus(Index As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_LostFocus"
+  frmChat.SControl.Run GetCallBack("txt", Index, "LostFocus")
 End Sub
 
-Private Sub txt_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub txt_MouseDown(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_MouseDown", Button, Shift, X, Y
+  frmChat.SControl.Run GetCallBack("txt", Index, "MouseDown"), Button, Shift, x, Y
 End Sub
 
-Private Sub txt_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub txt_MouseMove(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_MouseMove", Button, Shift, X, Y
+  frmChat.SControl.Run GetCallBack("txt", Index, "MouseMove"), Button, Shift, x, Y
 End Sub
 
-Private Sub txt_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub txt_MouseUp(Index As Integer, Button As Integer, Shift As Integer, x As Single, Y As Single)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_MouseUp", Button, Shift, X, Y
+  frmChat.SControl.Run GetCallBack("txt", Index, "MouseUp"), Button, Shift, x, Y
 End Sub
 
 Private Sub txt_GotFocus(Index As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_GotFocus"
+  frmChat.SControl.Run GetCallBack("txt", Index, "GotFocus")
 End Sub
 
 Private Sub txt_KeyPress(Index As Integer, KeyAscii As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_KeyPress", KeyAscii
+  frmChat.SControl.Run GetCallBack("txt", Index, "KeyPress"), KeyAscii
 End Sub
 
 Private Sub txt_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_KeyUp", KeyCode, Shift
+  frmChat.SControl.Run GetCallBack("txt", Index, "KeyUp"), KeyCode, Shift
 End Sub
 
 Private Sub txt_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
   On Error Resume Next
-  frmChat.SControl.Run strPrefix & "_" & strFormName & "_" & txt(Index).Tag & "_KeyDown", KeyCode, Shift
+  frmChat.SControl.Run GetCallBack("txt", Index, "KeyDown"), KeyCode, Shift
 End Sub
 
