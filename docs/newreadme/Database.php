@@ -4,8 +4,10 @@
     *   Project:       hw4
     *   File:          Database.php
     *   Generic database handler class
-    */
-    
+    *   Adapted for StealthBot New Readme
+    */    
+    defined("__READMEFILE") or die("Invalid access"); 
+
     class DBHandler
     {
         var $username;
@@ -15,11 +17,11 @@
         var $db;
         var $connected;
         
-        function DBHandler($user, $pass, $dbn, $serv="localhost")
+        function DBHandler($serv = "localhost")
         {
-            $this->username = $user;
-            $this->password = $pass;
-            $this->dbname = $dbn;
+            $this->username = "steal5_rmuser";
+            $this->password = "r0mp12gz";
+            $this->dbname = "steal5_readme";
             $this->server = $serv;
             $this->connected = false;
             
