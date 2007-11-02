@@ -13,7 +13,7 @@ Attribute VB_Name = "modCommandCode"
 
 ' *******************************************************************************
 ' * This module, or any related functions outside of this module, should not be *
-' * modified without Eric's consultation prior to the modifications.            *
+' * modified without consultation prior to the modifications.                   *
 ' *******************************************************************************
 
 Option Explicit
@@ -430,9 +430,12 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
             Case Else
                 blnNoCmd = True
         End Select
-        
-        ' append entry to command log
-        Call LogCommand(Username, Message)
+    
+        ' ...
+        If (Not (blnNoCmd)) Then
+            ' append entry to command log
+            Call LogCommand(Username, Message)
+        End If
         
         ' was a command found? return.
         ExecuteCommand = (Not (blnNoCmd))
@@ -680,7 +683,7 @@ Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAcces
     ' if sent from within the bot, send "where" command
     ' directly to Battle.net
     If (InBot) Then
-        Call AddQ(msgData)
+        Call AddQ("/where " & msgData)
     End If
 
     tmpBuf = "I am currently in channel " & gChannel.Current & " (" & _
@@ -2866,58 +2869,25 @@ Private Function OnSafeAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
     cmdRet() = tmpBuf()
 End Function ' end function OnSafeAdd
 
-' TO DO:
 ' handle safecheck command
 Private Function OnSafeCheck(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim tmpBuf     As String ' temporary output buffer
-    Dim tmpCount   As Integer
-    Dim strArray() As String
-    Dim u          As String
-    Dim Y          As String
-    Dim i          As Integer
-    Dim Track      As Integer
+    ' ...
+    Dim gAcc   As udtGetAccessResponse
     
-    u = msgData
-    
-    Y = GetSafelistMatches(u)
-    
-    If (Len(Y) < 2) Then
-        tmpBuf = "Error: That user matches no safelist entries."
-    Else
-        tmpBuf = "That user matches the following safelist entr"
-        
-        strArray() = Split(Y, " ")
-        
-        If (UBound(strArray) > 0) Then
-            tmpBuf = tmpBuf & "ies: "
-        
-            i = 0
-            Track = 0
+    Dim Y      As String
+    Dim tmpBuf As String ' temporary output buffer
+
+    Y = msgData
             
-            While i <= UBound(strArray)
-                While ((Track < 10) And (Track <= UBound(strArray)))
-                    If (Len(strArray(i)) > 0) Then
-                        tmpBuf = tmpBuf & strArray(i)
-                        
-                        If (Track < 9) Then
-                            If (i <> UBound(strArray)) Then
-                                tmpBuf = tmpBuf & ", "
-                            End If
-                        Else
-                            tmpBuf = tmpBuf & " [more]"
-                        End If
-                    End If
-                    
-                    Track = (Track + 1)
-                    i = (i + 1)
-                Wend
-                
-                Track = 0
-            Wend
+    If (Len(Y) > 0) Then
+        gAcc = GetCumulativeAccess(Y)
+        
+        If (InStr(1, gAcc.Flags, "S") <> 0) Then
+            tmpBuf = Y & " is on the bot's safelist."
         Else
-            tmpBuf = tmpBuf & "y: " & Y
+            tmpBuf = "That user is not safelisted."
         End If
     End If
 
@@ -4327,11 +4297,6 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 End If
                             
                             Case "S" ' safelisted
-                                If (dbAccess.Access < 70) Then
-                                    Exit For
-                                End If
-                                
-                            Case "Z" ' tagbanned
                                 If (dbAccess.Access < 70) Then
                                     Exit For
                                 End If

@@ -294,11 +294,12 @@ Private obScriptForms As Object
 '//     AddChat vbRed, "Hello, world!"
 '// will display that phrase in red.
 Public Sub AddChat(ParamArray saElements() As Variant)
-    On Error Resume Next
     Dim s As String
     Dim l As Long, lngVerticalPos As Long
     Dim i As Integer, intRange As Integer, f As Integer
     Dim blUnlock As Boolean, LogThis As Boolean
+    
+    f = FreeFile
     
     If Not BotVars.LockChat Then
     
@@ -327,12 +328,12 @@ Public Sub AddChat(ParamArray saElements() As Variant)
                 
                 rtbChatLength = rtbChatLength - .SelLength
                 
-'                If BotVars.Logging < 2 And LOF(i) < BotVars.MaxLogfileSize Then
-'                    i = FreeFile
-'                    Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #i
-'                        Print #i, Left$(.SelText, Len(.SelText) - 2)
-'                    Close #i
-'                End If
+                'If BotVars.Logging < 2 And LOF(i) < BotVars.MaxLogfileSize Then
+                '    i = FreeFile
+                '    Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #i
+                '        Print #i, Left$(.SelText, Len(.SelText) - 2)
+                '    Close #i
+                'End If
                 
                 .SelText = ""
                 .Visible = True
@@ -353,13 +354,16 @@ Public Sub AddChat(ParamArray saElements() As Variant)
         End With
         
         If LogThis Then
-            f = FreeFile
-            
             Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #f
             
-            If (LOF(f) >= BotVars.MaxLogfileSize) Then
+            If ((BotVars.MaxLogfileSize) And _
+                (LOF(f) >= BotVars.MaxLogfileSize)) Then
+                
                 LogThis = False
+                
                 Close #f
+            Else
+                Print #f, s;
             End If
         End If
         
@@ -401,6 +405,7 @@ Public Sub AddChat(ParamArray saElements() As Variant)
     
         If LogThis Then
             Close #f
+            
             LogThis = False
         End If
 
@@ -489,6 +494,8 @@ Public Sub AddChatFont(ParamArray saElements() As Variant)
             If (LOF(f) >= BotVars.MaxLogfileSize) Then
                 LogThis = False
                 Close #f
+            Else
+                Print #f, s;
             End If
         End If
         

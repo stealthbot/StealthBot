@@ -480,7 +480,7 @@ Public Function GetCumulativeAccess(ByVal Username As String) As udtGetAccessRes
             
                 ' ...
                 If ((i <> dbIndex) And ((LCase$(PrepareCheck(Username))) Like _
-                    (LCase$(DB(i).Username)))) Then
+                    (LCase$(PrepareCheck(DB(i).Username))))) Then
                     
                     Dim j As Integer ' ...
                 
@@ -518,10 +518,10 @@ Public Function GetCumulativeAccess(ByVal Username As String) As udtGetAccessRes
                         ' ...
                         GetCumulativeAccess.Username = GetCumulativeAccess.Username & _
                             DB(i).Username & ", "
+                            
+                        ' ...
+                        dbCount = (dbCount + 1)
                     End If
-                    
-                    ' ...
-                    dbCount = (dbCount + 1)
                 End If
                 
                 ' ...
@@ -569,10 +569,10 @@ End Sub
 '// parses a system time and returns in the format:
 '//     mm/dd/yy, hh:mm:ss
 '//
-Public Function SystemTimeToString(ByRef st As SYSTEMTIME) As String
+Public Function SystemTimeToString(ByRef sT As SYSTEMTIME) As String
     Dim buf As String
 
-    With st
+    With sT
     
         buf = buf & .wMonth & "/"
         buf = buf & .wDay & "/"
@@ -587,10 +587,10 @@ Public Function SystemTimeToString(ByRef st As SYSTEMTIME) As String
 End Function
 
 Public Function GetCurrentMS() As String
-    Dim st As SYSTEMTIME
-    GetLocalTime st
+    Dim sT As SYSTEMTIME
+    GetLocalTime sT
     
-    GetCurrentMS = Right$("000" & st.wMilliseconds, 3)
+    GetCurrentMS = Right$("000" & sT.wMilliseconds, 3)
 End Function
 
 Public Function ZeroOffset(ByVal lInpt As Long, ByVal lDigits As Long) As String
