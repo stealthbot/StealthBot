@@ -149,7 +149,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -847,7 +846,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -895,9 +893,6 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuUsers 
          Caption         =   "&Userlist Manager"
-      End
-      Begin VB.Menu mnuCCEditor 
-         Caption         =   "Custom Command &Editor"
       End
       Begin VB.Menu mnuMonitor 
          Caption         =   "User &Monitor"
@@ -1044,23 +1039,11 @@ Begin VB.Form frmChat
          Begin VB.Menu mnuEditUsers 
             Caption         =   "Userlist"
          End
-         Begin VB.Menu mnuEditShitlist 
-            Caption         =   "Shitlist"
-         End
-         Begin VB.Menu mnuEditTagbans 
-            Caption         =   "Tagbans"
-         End
-         Begin VB.Menu mnuEditSafelist 
-            Caption         =   "Safelist"
-         End
          Begin VB.Menu mnuEditMonitor 
             Caption         =   "Monitor"
          End
          Begin VB.Menu mnuEditPhrasebans 
             Caption         =   "Phrasebans"
-         End
-         Begin VB.Menu mnuEditScript 
-            Caption         =   "Script File"
          End
          Begin VB.Menu mnuEditAccessFlags 
             Caption         =   "Access/Flags"
@@ -1097,10 +1080,13 @@ Begin VB.Form frmChat
       Begin VB.Menu mnuReload 
          Caption         =   "&Reload Config"
       End
+<<<<<<< .mine
+=======
       Begin VB.Menu mnuReloadScript 
          Caption         =   "Reload &Plugins"
          Shortcut        =   ^C
       End
+>>>>>>> .r135
    End
    Begin VB.Menu mnuConnect 
       Caption         =   "&Connect"
@@ -1741,11 +1727,12 @@ End Sub
 ' Updated 4/17/07 to not flash the desktop when the scrollbar is held up
 ' Updated 8/07/07 with greater precision
 Sub AddChat(ParamArray saElements() As Variant)
-    On Error Resume Next
     Dim s As String
     Dim l As Long, lngVerticalPos As Long, Diff As Long
     Dim i As Integer, intRange As Integer, f As Integer
     Dim blUnlock As Boolean, LogThis As Boolean
+    
+    f = FreeFile
     
     If Not BotVars.LockChat Then
     
@@ -1804,17 +1791,18 @@ Sub AddChat(ParamArray saElements() As Variant)
         End With
         
         If LogThis Then
-            f = FreeFile
-            
             Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #f
             
-            If (LOF(f) >= BotVars.MaxLogfileSize) Then
+            If ((BotVars.MaxLogfileSize) And _
+                (LOF(f) >= BotVars.MaxLogfileSize)) Then
+                
                 LogThis = False
+                
                 Close #f
+            Else
+                Print #f, s;
             End If
         End If
-        
-        Print #f, s;
         
         For i = LBound(saElements) To UBound(saElements) Step 2
         
@@ -1854,6 +1842,7 @@ Sub AddChat(ParamArray saElements() As Variant)
     
         If LogThis Then
             Close #f
+            
             LogThis = False
         End If
 
@@ -1873,11 +1862,12 @@ End Sub
 '   displayed in that font
 ' Created 2/19/2007 based on a suggestion from Imhotep[Nu]
 Sub AddChatFont(ParamArray saElements() As Variant)
-    On Error Resume Next
     Dim s As String
     Dim l As Long, lngVerticalPos As Long
     Dim i As Integer, intRange As Integer, f As Integer
     Dim blUnlock As Boolean, LogThis As Boolean
+    
+    f = FreeFile
     
     If Not BotVars.LockChat Then
     
@@ -1904,12 +1894,12 @@ Sub AddChatFont(ParamArray saElements() As Variant)
                 
                 rtbChatLength = rtbChatLength - .SelLength
                 
-'                If BotVars.Logging < 2 And LOF(i) < BotVars.MaxLogfileSize Then
-'                    i = FreeFile
-'                    Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #i
-'                        Print #i, Left$(.SelText, Len(.SelText) - 2)
-'                    Close #i
-'                End If
+                'If BotVars.Logging < 2 And LOF(i) < BotVars.MaxLogfileSize Then
+                '    i = FreeFile
+                '    Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #i
+                '        Print #i, Left$(.SelText, Len(.SelText) - 2)
+                '    Close #i
+                'End If
                 
                 .SelText = ""
                 .Visible = True
@@ -1934,9 +1924,14 @@ Sub AddChatFont(ParamArray saElements() As Variant)
             
             Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #f
             
-            If (LOF(f) >= BotVars.MaxLogfileSize) Then
+            If ((BotVars.MaxLogfileSize) And _
+                (LOF(f) >= BotVars.MaxLogfileSize)) Then
+                
                 LogThis = False
+                
                 Close #f
+            Else
+                Print #f, s
             End If
         End If
         
@@ -1982,6 +1977,7 @@ Sub AddChatFont(ParamArray saElements() As Variant)
     
         If LogThis Then
             Close #f
+            
             LogThis = False
         End If
 
@@ -1996,15 +1992,18 @@ End Sub
 
 
 Sub AddWhisper(ParamArray saElements() As Variant)
-    On Error Resume Next
     Dim s As String
     Dim l As Long
     Dim i As Integer
     
     If Not BotVars.LockChat Then
-        If ((BotVars.MaxBacklogSize) And (Len(rtbWhispers.text) >= BotVars.MaxBacklogSize)) Then
+        If ((BotVars.MaxBacklogSize) And _
+            ((Len(rtbWhispers.text) >= BotVars.MaxBacklogSize) Or _
+             (Len(rtbChat.text) >= BotVars.MaxBacklogSize))) Then
+            
             If BotVars.Logging < 2 Then
                 Close #1
+                
                 Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt") For Append As #1
             End If
             
@@ -2012,7 +2011,15 @@ Sub AddWhisper(ParamArray saElements() As Variant)
                 .Visible = False
                 .SelStart = 0
                 .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
-                If BotVars.Logging < 2 And LOF(1) < BotVars.MaxLogfileSize Then Print #1, Left$(.SelText, Len(.SelText) - 2)
+                
+                If (BotVars.Logging < 2) Then
+                    If ((BotVars.MaxLogfileSize = 0) Or _
+                        (LOF(1) < BotVars.MaxLogfileSize)) Then
+                       
+                        Print #1, Left$(.SelText, Len(.SelText) - 2)
+                    End If
+                End If
+                
                 .SelText = vbNullString
                 .Visible = True
             End With
