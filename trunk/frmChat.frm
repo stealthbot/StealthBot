@@ -1082,8 +1082,11 @@ Begin VB.Form frmChat
       Begin VB.Menu mnuSep6 
          Caption         =   "-"
       End
-      Begin VB.Menu mnuReload 
+      Begin VB.Menu mnureload 
          Caption         =   "&Reload Config"
+      End
+      Begin VB.Menu mnuReloadScript 
+         Caption         =   "Reload Plugins"
       End
    End
    Begin VB.Menu mnuConnect 
@@ -1439,10 +1442,10 @@ Private Sub Form_Load()
     
     ' 4/10/06:
     ' CHECK FOR CONFIG.INI PATH HACK
-    l = InStr(Command(), "-cpath ")
+    l = InStr(command(), "-cpath ")
     
-    If l > 0 And Len(Command()) > (l + 7) Then
-        ConfigOverride = Mid$(Command(), l + 7)
+    If l > 0 And Len(command()) > (l + 7) Then
+        ConfigOverride = Mid$(command(), l + 7)
         
         If InStr(ConfigOverride, " ") > 0 Then
             ConfigOverride = Split(ConfigOverride, " ")(0)
@@ -1643,7 +1646,7 @@ Private Sub Form_Load()
         AddChat RTBColors.ServerInfoText, "Please note that any usage of this program is subject to the terms of the End-User License Agreement available at http://eula.stealthbot.net."
     End If
     
-    CommandLine = Command()
+    CommandLine = command()
     
     If MDebug("debug") Then _
         AddChat RTBColors.ServerInfoText, " * Program executed in debug mode; unhandled packet information will be displayed."
@@ -3422,7 +3425,7 @@ Private Sub mnuPopSafelist_Click()
     
     toSafe = GetSelectedUser
     
-    gAcc.Access = 1000
+    gAcc.access = 1000
     
     Call ProcessCommand(CurrentUsername, "/safeadd " & toSafe, True, False)
 End Sub
@@ -3435,7 +3438,7 @@ Private Sub mnuPopShitlist_Click()
     
     toBan = GetSelectedUser
     
-    gAcc.Access = 1000
+    gAcc.access = 1000
     
     Call ProcessCommand(CurrentUsername, "/shitadd " & toBan, True, False)
 End Sub
@@ -3867,12 +3870,12 @@ Private Sub mnuUserlistWhois_Click()
     Temp = GetAccess(s)
     
     With RTBColors
-        If Temp.Access > -1 Then
-            If Temp.Access > 0 Then
+        If Temp.access > -1 Then
+            If Temp.access > 0 Then
                 If Temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & " and flags " & Temp.Flags & "."
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.access & " and flags " & Temp.Flags & "."
                 Else
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & "."
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.access & "."
                 End If
             Else
                 If Temp.Flags <> vbNullString Then
@@ -4370,7 +4373,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                             End If
                                         End If
                                         
-                                        Temp.Access = 1000
+                                        Temp.access = 1000
                                         Temp.Flags = "A"
                                         
                                         m = OutFilterMsg(s)
@@ -4559,7 +4562,7 @@ Private Sub quLower_Timer()
                 Else
                     gA = GetAccess(strArray(c))
                     
-                    If Not (GetSafelist(strArray(c)) Or gA.Access > (AutoModSafelistValue - 1) Or InStr(gA.Flags, "A") > 0) Then
+                    If Not (GetSafelist(strArray(c)) Or gA.access > (AutoModSafelistValue - 1) Or InStr(gA.Flags, "A") > 0) Then
                         AddQ "/squelch " & IIf(Dii, "*", "") & strArray(c)
                     End If
                 End If
