@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmMonitor 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -433,7 +433,7 @@ Private Sub cmdRem_CLick()
     
     If Not (lvMonitor.SelectedItem Is Nothing) Then
         Call monConn.RemoveUser(lvMonitor.SelectedItem.text)
-        lvMonitor.ListItems.Remove (lvMonitor.SelectedItem.Index)
+        lvMonitor.ListItems.Remove (lvMonitor.SelectedItem.index)
     End If
 End Sub
 
@@ -444,7 +444,7 @@ Public Function RemoveUser(strUser As String) As Boolean
   Set usrItem = lvMonitor.FindItem(strUser)
   If (usrItem Is Nothing) Then Exit Function
   Call monConn.RemoveUser(usrItem.text)
-  lvMonitor.ListItems.Remove usrItem.Index
+  lvMonitor.ListItems.Remove usrItem.index
   RemoveUser = True
 End Function
 
@@ -586,7 +586,7 @@ Private Sub UpdateList(user As clsFriend)
             StatusOnline user.Username
             X.Icon = 1
         End If
-        With lvMonitor.ListItems(X.Index)
+        With lvMonitor.ListItems(X.index)
             On Error Resume Next
             .SmallIcon = Holder
             .ListSubItems.Clear
@@ -672,7 +672,7 @@ Public Function OnlineUsers() As String
     For X = 1 To lvMonitor.ListItems.Count
         If (lvMonitor.ListItems(X).ListSubItems(1).text = "Online") Then
             Count = Count + 1
-            If (Count Mod 6 = 0) Then tmpBuf = tmpBuf & " [More]" & vbNewLine
+            If (Count Mod 6 = 0) Then tmpBuf = tmpBuf & " [more]" & vbNewLine
             tmpBuf = tmpBuf & lvMonitor.ListItems(X).text & ", "
         End If
     Next X
