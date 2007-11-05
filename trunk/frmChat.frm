@@ -2385,8 +2385,13 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     
     Set x = lvClanList.FindItem(Member)
     
+<<<<<<< .mine
+    If Not (X Is Nothing) Then
+        lvClanList.ListItems.Remove X.index
+=======
     If Not (x Is Nothing) Then
         lvClanList.ListItems.Remove x.Index
+>>>>>>> .theirs
         lvClanList.Refresh
         
         Set x = Nothing
@@ -2497,9 +2502,15 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
         AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(rank) & "."
     End If
     
+<<<<<<< .mine
+    If Not (X Is Nothing) Then
+        lvClanList.ListItems.Remove X.index
+        Set X = Nothing
+=======
     If Not (x Is Nothing) Then
         lvClanList.ListItems.Remove x.Index
         Set x = Nothing
+>>>>>>> .theirs
     End If
     
     AddClanMember Username, CInt(rank), CInt(IsOnline)
@@ -2789,8 +2800,13 @@ Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
     
     Set x = lvFriendList.FindItem(Username)
     
+<<<<<<< .mine
+    If Not (X Is Nothing) Then
+        lvFriendList.ListItems.Remove X.index
+=======
     If Not (x Is Nothing) Then
         lvFriendList.ListItems.Remove x.Index
+>>>>>>> .theirs
     End If
     
     Set x = Nothing
@@ -3195,9 +3211,9 @@ End Sub
 Private Sub mnuFLpopDemote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.Index < lvFriendList.ListItems.Count) Then
+            If (.index < lvFriendList.ListItems.Count) Then
               AddQ "/f d " & .text
-              MoveFriend .Index, .Index + 1
+              MoveFriend .index, .index + 1
             End If
         End With
     End If
@@ -3207,9 +3223,9 @@ End Sub
 Private Sub mnuFLpopPromote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.Index > 1) Then
+            If (.index > 1) Then
               AddQ "/f p " & .text
-              MoveFriend .Index, .Index - 1
+              MoveFriend .index, .index - 1
             End If
         End With
     End If
@@ -3520,9 +3536,9 @@ Private Sub mnuClearedTxt_Click()
 End Sub
 
 
-Private Sub mnuQC_Click(Index As Integer)
-    If Len(QC(Index)) > 0 Then
-        AddQ "/join " & QC(Index)
+Private Sub mnuQC_Click(index As Integer)
+    If Len(QC(index)) > 0 Then
+        AddQ "/join " & QC(index)
     End If
 End Sub
 
@@ -4028,7 +4044,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     With lvChannel
 
         If Not (.SelectedItem Is Nothing) Then
-            i = .SelectedItem.Index
+            i = .SelectedItem.index
         End If
 
         Select Case KeyCode
@@ -4240,7 +4256,6 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 Vetoed = GetVeto
                                 
                                 If Not Vetoed Then
-                                
                                     If ((Left$(s, 6) = "/tell ") And (Len(s) > 6)) Then
                                         s = "/w " & Mid$(s, 7)
                                     End If
@@ -5102,7 +5117,7 @@ Private Sub UpTimer_Timer()
             End If
             
             If Not BotVars.NoColoring Then
-                ThisPos = CheckChannel(.Username)
+                ThisPos = checkChannel(.Username)
                 
                 If ThisPos > 0 And ThisPos < lvChannel.ListItems.Count Then
                     newColor = GetNameColor(.Flags, .TimeSinceTalk(), .IsSelf)
@@ -5178,10 +5193,10 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                 Set Q = New clsQueueOBj
                 
                 With Q
-                    .Message = KillNull(Message)
+                    .Message = Message
                     .Priority = Priority
                 End With
-                
+
                 colQueue.Add Q
             End If
             
@@ -6063,7 +6078,7 @@ End Sub
 Private Function GetClanSelectedUser() As String
     With lvClanList
         If Not (.SelectedItem Is Nothing) Then
-            If .SelectedItem.Index < 1 Then
+            If .SelectedItem.index < 1 Then
                 GetClanSelectedUser = vbNullString: Exit Function
             Else
                 GetClanSelectedUser = .SelectedItem.text
@@ -6087,7 +6102,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, x As Singl
             lvClanList.ListItems(lItemIndex).Selected = True
             
             If Not (lvClanList.SelectedItem Is Nothing) Then
-                If lvClanList.SelectedItem.Index < 0 Then
+                If lvClanList.SelectedItem.index < 0 Then
                     
                     mnuPopDem.Enabled = False
                     mnuPopPro.Enabled = False
@@ -6197,7 +6212,7 @@ Private Sub mnuPopDem_Click()
         With PBuffer
             .InsertDWORD &H1
             .InsertNTString GetClanSelectedUser
-            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon - 1
+            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.index).SmallIcon - 1
             .SendPacket &H7A
         End With
         
@@ -6211,7 +6226,7 @@ Private Sub mnuPopPro_Click()
         With PBuffer
             .InsertDWORD &H3
             .InsertNTString GetClanSelectedUser
-            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon + 1
+            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.index).SmallIcon + 1
             .SendPacket &H7A
         End With
         
@@ -6228,7 +6243,7 @@ Private Sub mnuPopRem_Click()
     Else
         If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, "StealthBot") = vbYes Then
             With PBuffer
-                If lvClanList.SelectedItem.Index > 0 Then
+                If lvClanList.SelectedItem.index > 0 Then
                     .InsertDWORD 1 'lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon
                     .InsertNTString GetClanSelectedUser
                     .SendPacket &H78

@@ -450,13 +450,17 @@ Public Function GetCumulativeAccess(ByVal Username As String) As udtGetAccessRes
             ' ...
             If (StrComp(Username, DB(i).Username, vbTextCompare) = 0) Then
                 With GetCumulativeAccess
-                    .Username = DB(i).Username
+                    .Username = DB(i).Username & _
+                        IIf(((DB(i).Type <> "%") And (StrComp(DB(i).Type, "USER", vbTextCompare) <> 0)), _
+                            " (" & LCase$(DB(i).Type) & ")", vbNullString)
                     .Access = DB(i).Access
                     .Flags = DB(i).Flags
                     .AddedBy = DB(i).AddedBy
                     .AddedOn = DB(i).AddedOn
                     .ModifiedBy = DB(i).ModifiedBy
                     .ModifiedOn = DB(i).ModifiedOn
+                    .Type = IIf(((DB(i).Type <> "%") And (DB(i).Type <> vbNullString)), _
+                        DB(i).Type, "USER")
                     .BanMessage = DB(i).BanMessage
                 End With
                 
@@ -469,63 +473,110 @@ Public Function GetCumulativeAccess(ByVal Username As String) As udtGetAccessRes
         ' ...
         If ((InStr(1, Username, "*", vbBinaryCompare) = 0) And _
             (InStr(1, Username, "?", vbBinaryCompare) = 0)) Then
-    
+            
             ' ...
             GetCumulativeAccess.Username = GetCumulativeAccess.Username & _
                 IIf((dbIndex + 1), Space(1), vbNullString) & "["
         
             ' ...
             For i = LBound(DB) To UBound(DB)
-                Dim bln As Boolean ' ...
-            
-                ' ...
-                If ((i <> dbIndex) And ((LCase$(PrepareCheck(Username))) Like _
-                    (LCase$(PrepareCheck(DB(i).Username))))) Then
-                    
-                    Dim j As Integer ' ...
+                Dim bln     As Boolean ' ...
+                Dim doCheck As Boolean ' ...
+                Dim j       As Integer ' ...
                 
-                    ' ...
-                    If (GetCumulativeAccess.Access < DB(i).Access) Then
-                        GetCumulativeAccess.Access = DB(i).Access
-                        
+                If (i <> dbIndex) Then
+                    ' default type to user
+                    DB(i).Type = IIf(((DB(i).Type <> "%") And (DB(i).Type <> vbNullString)), _
+                        DB(i).Type, "USER")
+                
+                    If (StrComp(DB(i).Type, "USER", vbTextCompare) = 0) Then
                         ' ...
-                        bln = True
-                    End If
-                    
-                    ' ...
-                    For j = 1 To Len(DB(i).Flags)
-                        ' ...
-                        If (InStr(1, GetCumulativeAccess.Flags, Mid$(DB(i).Flags, j, 1), _
-                            vbBinaryCompare) = 0) Then
+                        If ((LCase$(PrepareCheck(Username))) Like _
+                            (LCase$(PrepareCheck(DB(i).Username)))) Then
                             
                             ' ...
-                            GetCumulativeAccess.Flags = GetCumulativeAccess.Flags & _
-                                Mid$(DB(i).Flags, j, 1)
+                            doCheck = True
+                        End If
+                    ElseIf (StrComp(DB(i).Type, "GAME", vbTextCompare) = 0) Then
+                        ' ...
+                        For j = 1 To colUsersInChannel.Count
+                            If (StrComp(Username, colUsersInChannel.Item(j).Username, _
+                                    vbTextCompare) = 0) Then
+                                 
+                                If (StrComp(DB(i).Username, colUsersInChannel.Item(j).Product, _
+                                    vbTextCompare) = 0) Then
+                            
+                                    ' ...
+                                    doCheck = True
+                                End If
+                                
+                                Exit For
+                            End If
+                        Next j
+                    ElseIf (StrComp(DB(i).Type, "CLAN", vbTextCompare) = 0) Then
+                        ' ...
+                        For j = 1 To colUsersInChannel.Count
+                            If (StrComp(Username, colUsersInChannel.Item(j).Username, _
+                                    vbTextCompare) = 0) Then
+                                 
+                                If (StrComp(DB(i).Username, colUsersInChannel.Item(j).Clan, _
+                                    vbTextCompare) = 0) Then
+                            
+                                    ' ...
+                                    doCheck = True
+                                End If
+                                
+                                Exit For
+                            End If
+                        Next j
+                    End If
+                    
+                    If (doCheck = True) Then
+                        ' ...
+                        If (GetCumulativeAccess.Access < DB(i).Access) Then
+                            GetCumulativeAccess.Access = DB(i).Access
                             
                             ' ...
                             bln = True
                         End If
-                    Next j
-                    
-                    ' ...
-                    If ((GetCumulativeAccess.BanMessage = vbNullString) Or _
-                        (GetCumulativeAccess.BanMessage = "%")) Then
                         
-                        GetCumulativeAccess.BanMessage = DB(i).BanMessage
-                    End If
-                    
-                    If (bln) Then
                         ' ...
-                        GetCumulativeAccess.Username = GetCumulativeAccess.Username & _
-                            DB(i).Username & ", "
+                        For j = 1 To Len(DB(i).Flags)
+                            ' ...
+                            If (InStr(1, GetCumulativeAccess.Flags, Mid$(DB(i).Flags, j, 1), _
+                                vbBinaryCompare) = 0) Then
+                                
+                                ' ...
+                                GetCumulativeAccess.Flags = GetCumulativeAccess.Flags & _
+                                    Mid$(DB(i).Flags, j, 1)
+                                
+                                ' ...
+                                bln = True
+                            End If
+                        Next j
+                        
+                        ' ...
+                        If ((GetCumulativeAccess.BanMessage = vbNullString) Or _
+                            (GetCumulativeAccess.BanMessage = "%")) Then
                             
-                        ' ...
-                        dbCount = (dbCount + 1)
+                            GetCumulativeAccess.BanMessage = DB(i).BanMessage
+                        End If
+                        
+                        If (bln) Then
+                            ' ...
+                            GetCumulativeAccess.Username = GetCumulativeAccess.Username & DB(i).Username & _
+                                IIf(((DB(i).Type <> "%") And (StrComp(DB(i).Type, "USER", vbTextCompare) <> 0)), _
+                                    " (" & LCase$(DB(i).Type) & ")", vbNullString) & ", "
+                                
+                            ' ...
+                            dbCount = (dbCount + 1)
+                        End If
                     End If
                 End If
                 
                 ' ...
                 bln = False
+                doCheck = False
             Next i
             
             If (dbCount > 0) Then
@@ -715,7 +766,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         IsSelf = True
     End If
     
-    If CheckChannel(Username) > 0 Then Exit Sub
+    If checkChannel(Username) > 0 Then Exit Sub
     
     Select Case Ping
         Case 0 To 199
@@ -1572,15 +1623,15 @@ Public Function UsernameToIndex(ByVal sUsername As String) As Long
 End Function
 
 
-Public Function CheckChannel(ByVal NameToFind As String) As Integer
+Public Function checkChannel(ByVal NameToFind As String) As Integer
     Dim itmFound As ListItem
     
     Set itmFound = frmChat.lvChannel.FindItem(NameToFind)
     
     If itmFound Is Nothing Then
-        CheckChannel = 0
+        checkChannel = 0
     Else
-        CheckChannel = itmFound.Index
+        checkChannel = itmFound.index
     End If
 End Function
 

@@ -786,7 +786,7 @@ End Function
 Public Function KillNull(ByVal text As String) As String
     Dim i As Integer
     i = InStr(1, text, Chr(0))
-    If i = 0 Then
+    If (i = 0) Then
         KillNull = text
         Exit Function
     End If
@@ -1414,14 +1414,14 @@ Public Sub StrCpy(ByRef Source As String, ByVal nText As String)
     Source = Source & nText
 End Sub
 
-Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef Flags As Long, ByRef Name As String, ByRef Txt As String)
+Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef Flags As Long, ByRef Name As String, ByRef txt As String)
     'on error resume next
     Dim A As Long ', b As Long, c As Long, D As Long, E As Long, F As Long
     Dim f As Long
     Dim recvbufpos As Long
     
     Name = vbNullString
-    Txt = vbNullString
+    txt = vbNullString
     
     'Debug.Print DebugOutput(DataBuf)
     
@@ -1448,7 +1448,7 @@ Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef Flags As
     Ping = A
     
     Call StrCpy(Name, KillNull(Mid$(DataBuf, 29)))
-    Call StrCpy(Txt, KillNull(Mid$(DataBuf, Len(Name) + 30)))
+    Call StrCpy(txt, KillNull(Mid$(DataBuf, Len(Name) + 30)))
 End Sub
 
 'Public Sub ParseBinary(strData As String)
