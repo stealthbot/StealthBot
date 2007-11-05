@@ -90,7 +90,9 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
             
             If BotVars.IPBans Then
                 If (MyFlags And USER_CHANNELOP) = USER_CHANNELOP Then
-                    frmChat.AddQ Ban(Username & " IPBanned.", (AutoModSafelistValue - 1)), 1
+                    If (Flags And USER_CHANNELOP) <> USER_CHANNELOP Then
+                        frmChat.AddQ Ban(Username & " IPBanned.", (AutoModSafelistValue - 1)), 1
+                    End If
                 End If
             End If
         End If
