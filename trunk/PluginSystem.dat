@@ -4,7 +4,7 @@
 
 '// The Plugin System - StealthBot 2.7 Development Version
 '//    by Swent
-'//      Last modified 12:59 AM 11/1/2007
+'//      Last modified 3:07 PM 11/5/2007
 
 
 '// The Plugin System is an updateable, scripted extension of StealthBot's VBScripting System.
@@ -34,8 +34,6 @@
 '//      -For compatibility reasons there is now a version check. You must have SB v2.7 or higher to use the Plugin System.
 '//   *Modified the external .plugins response with an enabled/disabled indicator
 '//      -Prefixes of disabled plugins are inside parenthesis
-'//   *When talking inside the bot, outgoing messages will be split up automatically if they exceed the SB char limit (220)
-'//      -Messages exceeding the limit that begin with "/" or your bot trigger will not be split (Thanks ZergMasterI)
 '//   *The phelp command can now be used externally (it will only display commands): .phelp <prefix>
 '//   *Modified /plugins and /updates outputs -- now extremely sexy thanks to the new capabilites of AddChat (Thanks Jack)
 '//   *Made the prefix validity check more thorough (now checks for repeats, invalid chars, and disallowed prefixes)
@@ -1215,23 +1213,6 @@ Sub psCannotConnect()
    AddChat vbRed, "- You may be having DNS resolution issues."
    AddChat vbRed, "- The server (www.stealthbot.net) may be down."
 End Sub
- 
- 
-Sub psSplitOutgoingMsg(Text)
-
-   If Left(Text, 1) = "/" Or Left(Text, 1) = BotVars.Trigger Then Exit Sub
-   VetoThisMessage
-   arrText = Split(Text)
-   If Left(Text, 2) = "/w" Then
-      Text = Mid(Text, Instr(Text, arrText(2)))         
-      dsp 3, Text, arrText(1), 0
-   ElseIf Left(Text, 3) = "/me" Or Left(Text, 6) = "/emote" Then
-      Text = Mid(Text, Instr(Text, arrText(1)))
-      dsp 2, Text, 0, 0
-   Else
-      dsp 1, Text, 0, 0
-   End If
-End Sub
 
 
 Function psOnOff(String)
@@ -1432,7 +1413,6 @@ Sub Event_PressedEnter(Text)
       Exit Sub
    End If
 
-   If Len(Text) > 220 Then psSplitOutgoingMsg Text
    psPluginSystemCmds psEcho(Text), BotVars.Username, 4
    psExecuteEvent "PressedEnter", Array(Text)
 End Sub
