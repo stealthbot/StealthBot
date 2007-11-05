@@ -84,7 +84,7 @@ Private m_bNoRTBAutomaticCopy           As Boolean
 
 
 Public Property Get Username() As String
-
+    
     Username = m_sUsername
 
 End Property
