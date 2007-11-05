@@ -24,5 +24,6 @@
                 "featureList" => "Program Features",
                 "viewCmd" => "Command Detail",
                 "viewFeat" => "Feature Detail"
-                );
+                
+                ); // I can't remember if this is still in use
 ?>

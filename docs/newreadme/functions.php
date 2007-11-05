@@ -332,4 +332,41 @@
         // Start drawing page
         require_once("header.php");    
     }
+    
+    // printTeam
+    // Displays the dev team bios page
+    function printTeam()
+    {
+        global $db;
+        $align = 0;
+        
+        startPage("Meet the StealthBot Team");
+        
+        echoln("<h2>Meet the Team</h2>");
+        echoln("<p>As of September 24th, 2007, there are five StealthBot developers. Their bios are listed below. <b>This page is under construction and far from finished :)</b></p><br />");
+        
+        $ret = $db->doQuery("SELECT * FROM dev;");
+        
+        // Field format for this database:
+        //  0       1       2       3       4
+        // devid    name    loc     imgurl  bio
+        while($row = mysql_fetch_row($ret))
+        {
+            echoln("<h3>" . $row[1] . "</h3>");
+            echoln("<p>
+                    <a href='http://www.stealthbot.net/board/index.php?showuser=" . $row[4] . "'>
+                    <img src='" . $row[3] . "' align='" . ($align == 0 ? "right" : "left") . "'>
+                    </a>");
+            echoln("\t" . stripslashes($row[5]));
+            echoln("</p>");
+            
+            if($align==0)
+                $align = 1;
+            else
+                $align = 0;
+            
+            echoln("<br />");
+        }
+    }
+    
 ?>              

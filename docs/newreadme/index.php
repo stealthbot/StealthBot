@@ -25,7 +25,7 @@
             getPage("index");
             // TODO: Insert paypal donate link
             break;
-        
+                  
         case "viewPage": // general pages
             getPage($subact);
             break;
@@ -45,6 +45,10 @@
         case "viewCmd":
             printCommandDetail($subact);
             // print command detail
+            break;
+        
+        case "team":
+            printTeam();
             break;
             
         default:
