@@ -1,16 +1,16 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   165
-   ClientTop       =   855
+   ClientLeft      =   195
+   ClientTop       =   735
    ClientWidth     =   11400
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -35,6 +35,7 @@ Begin VB.Form frmChat
       Top             =   3840
       _ExtentX        =   1005
       _ExtentY        =   1005
+      AllowUI         =   -1  'True
    End
    Begin VB.Timer tmrFriendlistUpdate 
       Interval        =   5350
@@ -149,7 +150,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -847,7 +847,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1227,12 +1226,6 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuPopSafelist 
          Caption         =   "Safelist"
-      End
-      Begin VB.Menu mnuPopSep4 
-         Caption         =   "-"
-      End
-      Begin VB.Menu mnuPopTTT 
-         Caption         =   "Request Tic-Tac-Toe"
       End
       Begin VB.Menu mnuSep0F 
          Caption         =   "-"
@@ -2710,7 +2703,6 @@ Sub Form_Unload(Cancel As Integer)
     Unload frmRealm
     Unload frmSettings
     Unload frmSplash
-    Unload frmTTT
     Unload frmUserManager
     Unload frmWriteProfile
     Call ExitProcess(0)
@@ -3916,16 +3908,6 @@ End Sub
 Private Sub mnuRestore_Click()
     Me.WindowState = vbNormal
     Me.Show
-End Sub
-
-Private Sub mnuPopTTT_click()
-    On Error Resume Next
-    frmTTT.Show
-    DisallowTTT = False
-    
-    frmTTT.txtInitiate.text = IIf(Dii, "*", "") & GetSelectedUser
-    
-    Call frmTTT.cmdInitConn_Click
 End Sub
 
 Sub mnuLock_Click()
@@ -5310,10 +5292,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     s = ReadCFG(OT, "Logging")
     If StrictIsNumeric(s) Then BotVars.Logging = Val(s) Else BotVars.Logging = 2
-    
-    s = ReadCFG(OT, "TTT")
-    If s = "N" Then DisallowTTT = True Else DisallowTTT = False
-    
+        
     mnuToggleWWUse.Checked = (ReadCFG("Main", "UseWWs") = "Y")
     
     s = ReadCFG(MN, "WhisperBack")

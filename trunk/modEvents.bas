@@ -43,7 +43,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     If InStr(1, Username, "*", vbTextCompare) <> 0 Then Username = Mid$(Username, InStr(Username, "*") + 1)
     
     i = UsernameToIndex(Username)
-    Pos = CheckChannel(Username)
+    Pos = checkChannel(Username)
     
     If gChannel.Current = "The Void" Then
         If Not frmChat.mnuDisableVoidView.Checked Then
@@ -641,7 +641,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         Username = Mid$(Username, InStr(1, Username, "*", vbTextCompare) + 1)
     End If
     
-    StatUpdate = (CheckChannel(Username) > 0)
+    StatUpdate = (checkChannel(Username) > 0)
     
     If Not StatUpdate Then
     
@@ -864,7 +864,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         ' Add to the channel list
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         If Dii Then
-            If Not (CheckChannel(Username) <> 0) Then
+            If Not (checkChannel(Username) <> 0) Then
                 AddName Username, Product, Flags, Ping, Message
             End If
         Else
@@ -1230,13 +1230,13 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     RemoveBanFromQueue Username
     
     On Error Resume Next
-    userIndex = CheckChannel(Username)
+    userIndex = checkChannel(Username)
     
     With frmChat.lvChannel
         .Enabled = False
         .ListItems.Item(userIndex).ListSubItems.Remove 1
         .ListItems.Remove userIndex
-        userIndex = CheckChannel(Username)
+        userIndex = checkChannel(Username)
         If userIndex > 0 Then
             .ListItems.Item(userIndex).ListSubItems.Remove 1
             .ListItems.Remove userIndex
@@ -1551,38 +1551,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
                 Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDNO, Username)
             End If
         End If
-        
-        If DisallowTTT = False Then
-            If Left$(Message, 5) = " ß~ßi" Then
-                frmChat.AddChat RTBColors.TalkBotUsername, Space(1) & Username & " has invited you to play Tic-Tac-Toe."
                 
-                Call frmTTT.cmdContinue_Click
-                TTTEngaged = Username
-                
-                If Mid$(Message, 6, 1) = "1" Then
-                    frmTTT.SetMyByte 0
-                Else
-                    frmTTT.SetMyByte 1
-                End If
-                
-                frmTTT.Show
-                frmTTT.uStatus "Initiating Tic-Tac-Toe game with " & TTTEngaged & "."
-                frmTTT.txtInitiate.text = TTTEngaged
-                frmTTT.SetFocus
-            End If
-            
-            If StrComp(Username, TTTEngaged, vbTextCompare) = 0 Then
-                If Left$(Message, 7) = " ß~ßend" Then
-                    frmChat.AddChat RTBColors.TalkBotUsername, " Tic-Tac-Toe game terminated by " & TTTEngaged & "."
-                    Unload frmTTT
-                End If
-            
-                If Left$(Message, 4) = " ß~ß" Then
-                    frmTTT.TTTArrival Message
-                End If
-            End If
-        End If
-        
         lCarats = RTBColors.WhisperCarats
         
         If (Flags And &H1) Then
@@ -1617,17 +1586,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
             
         '    frmchat.addchat rtbcolors.InformationText, "<From ", COLOR_BLUE, Username, vbYellow, "> ", rtbcolors.whispertext, Message
                 'COLOR_TEAL
-                
-            If ReadCFG("Other", "WForward") = "Y" Then
-                Dim FwdTo As String
-                FwdTo = ReadCFG("Other", "ForwardTo")
-                If FwdTo <> vbNullString Then
-                    s = "/w " & IIf(Dii, "*", "") & FwdTo & " Forwarded whisper from " & Username & ": " & Message
-                    If Len(s) > 200 Then s = Left$(s, 200)
-                    frmChat.AddQ s
-                End If
-            End If
-            
+                           
             If frmChat.mnuToggleWWUse.Checked And frmChat.WindowState <> vbMinimized Then
                 If Not IrrelevantWhisper(Message, Username) Then
                     WWIndex = AddWhisperWindow(Username)

@@ -125,7 +125,6 @@ Public UserCancelledConnect As Boolean
 'VARIABLES
 Public CurrentUsername As String
 Public ProfileRequest As Boolean
-Public TTTEngaged As String
 Public Protect As Boolean
 Public QC(0 To 8) As String
 
@@ -134,7 +133,6 @@ Public JoinMessagesOff As Boolean
 Public Filters As Boolean
 Public Mail As Boolean
 Public Mimic As String
-Public DisallowTTT As Boolean
 Public BotLoaded As Boolean
 Public ProtectMsg As String
 
