@@ -107,9 +107,6 @@
 		whisper the speaker (thanks Imhotep[Nu])
 	- The /time command used from inside the bot no longer sends a redundant /time to Battle.net
 		(thanks Jack)
-	- The find command can now check for users between a range of ranks.
-	- The add command now accepts additional paramaters using a prefix of "--":
-		- "--banmsg" will set an entry's default ban message.
 
 	
 	<b>SECURITY</b>
@@ -121,24 +118,7 @@
 
 <i><b>*CHANGES</b></i>
 	<b>MISCELLANEOUS</b>
-	- Completely redesigned command processor, enabling the use of multiple character triggers,
-          	and several new command issuing formats including the name of the bot and a comma or colon
-          	followed by a space, and the removal of a trigger requirement entirely when issued via whisper.
-	- The database system has been updated:
-                - Database is now controlled in a central repository (Users.txt)
-                - The tagbans and shitlist are now represented using flags 'B'.
-		- The safelist is now represented using flags 'S'.
-                - Cumulative access can now be given using wildcards:
-                	- Giving * 0 B, for example, will give all users the ranking of 0 and the flags 'B'.
-			- If, assuming that * is equal to 0 B, and another user was added to the datbase
-			  	with flags 100 SD, that user would now have the ranking of 100, and the flags 'BDS'.
-			  	The flag 'B' comes as a result of the user matching the database entry "*."  However,
-			  	'S' overrides 'B,' and, because of this, the user will not be banned.
 	- New, more-informative news system
-	- The internal custom command system has now been revamped and moved to a plugin provided with the 
-		bot (thanks Snap).
-	- The internal definition system (define, newdef, deldef) has been moved to a plugin provided with the
-		bot (thanks Hdx).
 	- The bot database now tracks the following information about each person:
 		- Time/date they were added, and by whom
 		- Time/date they were last modified, and by whom
@@ -178,10 +158,29 @@
 		- The setup will be nearly identical to the ver .98 of the Plugin System that you have expected for some time now.
 			See the full list of changes here: http://stealthbot.net/p/plugs/changelog
 		- All scripting activity will now take place in your plugins folder. Your old "script.txt" file is no longer loaded.
+	- The internal custom command system has now been revamped and moved to a plugin provided with the 
+		bot (thanks Snap).
+	- The internal definition system (define, newdef, deldef) has been moved to a plugin provided with the
+		bot (thanks Hdx).
+	- Completely redesigned command processor, enabling the use of multiple character triggers,
+          	and several new command issuing formats including the name of the bot and a comma or colon
+          	followed by a space, and the removal of a trigger requirement entirely when issued via whisper.
+	- The database system has been completely overhauled:
+                - Database is now controlled in a central repository (Users.txt)
+                - The tagbans and shitlist are now represented using flags 'B'.
+		- The safelist is now represented using flags 'S'.
+		- Clans and games can now be given access using the --type option of the add command; however, keep in mind, these are
+			dynamic groupings (users may be given access or removed from the database altogether based on actions taken by others
+			possibily not having access to the bot), and will only work while a user issuing the command is within the channel.
+                - Cumulative access can now be given using wildcards, clans and game types:
+                	- Giving * 0 B, for example, will give all users the ranking of 0 and the flags 'B'.
+			- If, assuming that * is equal to 0 B, and another user was added to the datbase
+			  	with flags 100 SD, that user would now have the ranking of 100, and the flags 'BDS'.
+			  	The flag 'B' comes as a result of the user matching the database entry "*."  However,
+			  	'S' overrides 'B,' and, because of this, the user will not be banned.
 
 
 	<b>INTERFACE</b>
-	- Added ability to control length of backlog.
 	- Added hanging indents so that long blocks of text look prettier (thanks FrOzEn)
 	- Now with the option to hide ban messages in the Window menu (thanks Hdx)
 	- Improved font consistency across various forms
@@ -221,13 +220,10 @@
 	- Added CD key length checks (thanks Jack)
 	- Added a Plugins menu which creates a menu item for each of your plugins populated with useful commands.
 	- Added a Create New Plugin function to the Plugins menu which executes the Plugin Creator by #define
+	- Added ability to control length of backlog.
 
 
 	<b>COMMANDS</b>
-	- The findattr command can now search for users matching all of several specified flags when specified
-		in a group.
-	- The whois command is now distinct from the other database searching commands in that the
-	  	whois command will now state a users cumulative rank and/or flags.
 	- You can now use //command inside the bot to execute a command with console permissions,
 		yet display the response to the channel instead of to your screen. For example,
 		//mp3 will spit out Winamp's current song to the channel, while /mp3 will still
@@ -262,6 +258,18 @@
 						if you have unread mail, reads you the first message
 		shitcheck -a-		requires access 60, tells you whether or not a given user is shitlisted or has flags of 'B'
 						alias "slcheck" (thanks Snap)
+	- The findattr command can now search for users matching all of several specified flags when specified
+		in a group.
+	- The find command can now check for users between a range of ranks.
+	- The add command now accepts additional paramaters using a prefix of "--":
+		- "--banmsg" will set an entry's default ban message.
+		- "--type" will set an entry's type (user, game, or clan).
+	- The whois command is now distinct from the other database searching commands in that the
+	  	whois command will now state a users cumulative rank and/or flags.
+	- The help command was added to allow for documentation to be displayed on any command, ranking or attribute.
+	- The ability to modify command access requirments has been moved from access.ini to commands.xml.  This change
+		will allow for more fine-grained access specifications, and give users the ability to create their own command
+		documentation displayable on webpages and within the bot's internal help command.
 
 
 
