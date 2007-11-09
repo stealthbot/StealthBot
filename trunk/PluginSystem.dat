@@ -4,7 +4,7 @@
 
 '// The Plugin System - StealthBot 2.7 Development Version
 '//    by Swent
-'//      Last modified 3:07 PM 11/5/2007
+'//      Last modified 11:12 AM 11/9/2007
 
 
 '// The Plugin System is an updateable, scripted extension of StealthBot's VBScripting System.
@@ -49,7 +49,7 @@
 '//      -Plugins with errors on load will be disabled automatically (to avoid the constant error messages on every event)
 '//   *Improved error handling while plugins are being loaded (Thanks ZergMasterI)
 '//      -Errors recieved during plugin loading now show correct offending lines and line/column numbers, and the erroring plugin will be blocked
-'//         ~A plugin being "blocked" is pretty much the same as disabled -- except it's temporary. The blocked status disappears on reload.
+'//         ~A plugin being "blocked" is essentially the same as disabled -- except it's temporary. The blocked status disappears on reload.
 '//      -Errors recieved with debug mode on will now show correct line and column numbers as well
 
 '//   [NEW FEATURES]
@@ -74,6 +74,7 @@
 '//      -5 subs/functions have been added to help you add and work with menu items for your plugin. See the SSC.
 '//      -You can disable plugin menu creation by setting the menusDisabled PS setting to True (Thanks ZergMasterI)
 '//   *Implemented #define's Plugin Creator. Can be executed from the Plugin System menu (Thanks #define)
+'//   *Implemented plugin statistics system by Snap. See http://snapnjacks.com/stats.php
 
 '//   [NEW COMMANDS]
 '//    /delplugin <prefix>
@@ -1260,8 +1261,6 @@ End Sub
 
 Sub ps_SubmitStats_Timer()
 
-   AddChat vbWhite, "stats submit!"
-
    If Not scInet.StillExecuting Then 
       For i = 0 to psPlugins.Count - 1
          Chunk = Chunk & psPrefixes(i) & "||" & psVersions(psPrefixes(i)) & "**"
@@ -1317,9 +1316,6 @@ Sub Event_Load()
 
    '// Register and populate the plugin menus
    Call ReloadPluginMenus()
-
-   '// Submit plugin stats
-   Call psSubmitStats()
 
    '// Enable the script timer
    scTimer.Interval = 1000
@@ -1403,7 +1399,8 @@ End Sub
  
  
 Sub Event_LoggedOn(Username, Product)
- 
+
+   Call psSubmitStats()
    Call psAutoUpdate()
    If Product = "VD2D" Or Product = "PX2D" Then psD2 = "*" Else psD2 = vbNullString End If   
    psExecuteEvent "LoggedOn", Array(Username,Product)
