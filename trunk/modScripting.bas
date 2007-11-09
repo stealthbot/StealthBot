@@ -3,11 +3,13 @@ Attribute VB_Name = "modScripting"
 ' * ~~~~~~~~~~~~~~~~
 ' * StealthBot VBScript support module
 ' * ~~~~~~~~~~~~~~~~
-' * Modified by Swent 10/18/2007
+' * Modified by Swent 11/06/2007
 ' */
 Option Explicit
 
 Public VetoNextMessage As Boolean
+Public boolOverride As Boolean
+
 Public dictSettings As Dictionary
 Public dictTimerInterval As Dictionary
 Public dictTimerEnabled As Dictionary
@@ -21,17 +23,34 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
 
    On Error GoTo LoadPluginSystem_Error
 
+    If ReadINI("Override", "DisablePS", GetConfigFilePath()) = "Y" Then
+        boolOverride = True
+    Else
+        boolOverride = False
+    End If
+
     '// Reset the Script Control
     SC.Reset
     
     '// Allow UI's unless they've been disabled by the user
     If ReadINI("Other", "ScriptAllowUI", GetConfigFilePath()) <> "N" Then SC.AllowUI = True
 
-    '// PluginSystem.dat exists?
-    Path = GetFilePath("PluginSystem.dat")
-    If LenB(Dir$(Path)) = 0 Then
-        AddChat vbRed, "No PluginSystem.dat file is present. It must exist in order to load plugins!"
-        Exit Sub
+    If Not boolOverride Then
+    
+        '// PluginSystem.dat exists?
+        Path = GetFilePath("PluginSystem.dat")
+        If LenB(Dir$(Path)) = 0 Then
+            AddChat vbRed, "Cannot find PluginSystem.dat. It must exist in order to load plugins!"
+            Exit Sub
+        End If
+    Else
+    
+        '// script.txt exists?
+        Path = GetFilePath("script.txt")
+        If LenB(Dir$(Path)) = 0 Then
+            AddChat vbRed, "No script.txt file is present. It must exist, if only to #include other files!"
+            Exit Sub
+        End If
     End If
     
     '// Create scripting objects
@@ -40,21 +59,77 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
     SC.AddObject "scINet", frmChat.INet
     SC.AddObject "BotVars", BotVars
     
-    '// Load PluginSystem.dat
-    intFile = FreeFile
-    Open Path For Input As #intFile
+    If Not boolOverride Then
     
-        Do While Not EOF(intFile)
-            strLine = vbNullString
-            Line Input #intFile, strLine
-            If Len(strLine) > 1 Then strContent = strContent & strLine & vbCrLf
-        Loop
-    Close #intFile
-    SC.AddCode strContent
+        '// Load PluginSystem.dat
+        intFile = FreeFile
+        Open Path For Input As #intFile
     
-    Set dictSettings = New Dictionary
-    dictSettings.CompareMode = TextCompare
+            Do While Not EOF(intFile)
+                strLine = vbNullString
+                Line Input #intFile, strLine
+                If Len(strLine) > 1 Then strContent = strContent & strLine & vbCrLf
+            Loop
+        Close #intFile
+        SC.AddCode strContent
+    
+        Set dictSettings = New Dictionary
+        dictSettings.CompareMode = TextCompare
+    Else
+        Dim strFilesToLoad() As String, i As Integer
+        ReDim strFilesToLoad(0)
+        strFilesToLoad(0) = "script.txt"
+    
+        intFile = FreeFile
+        Path = GetFilePath("script.txt")
+        
+        '// Get names of includes (if any)
+        Open Path For Input As #intFile
+            Do While Not EOF(intFile)
+                strLine = ""
+                Line Input #intFile, strLine
+                
+                If Len(strLine) > 1 Then
+                
+                    If Left$(Trim(LCase(strLine)), 8) = "#include" And Len(strLine) > 10 Then
+                        ReDim Preserve strFilesToLoad(UBound(strFilesToLoad) + 1)
+                        strFilesToLoad(UBound(strFilesToLoad)) = Mid(strLine, 10)
+                    ElseIf Left(Trim(LCase(strLine)), 3) = "sub" Then
+                        Exit Do
+                    End If
+                End If
+            Loop
+        Close #intFile
+    
+        '// Load script.txt and any includes
+        For i = 0 To UBound(strFilesToLoad)
+            strContent = ""
+            intFile = FreeFile
+            Path = GetFilePath(strFilesToLoad(i))
+            
+            Open Path For Input As #intFile
+    
+                Do While Not EOF(intFile)
+                    strLine = ""
+                    Line Input #intFile, strLine
+                    
+                    If Len(strLine) > 1 Then
+                        If i = 0 Then
+                            If Left$(Trim(LCase(strLine)), 8) = "#include" Then strLine = ""
+                        End If
+                        strContent = strContent & strLine & vbCrLf
+                    End If
+                Loop
+            Close #intFile
+            SC.AddCode strContent
+            AddChat vbGreen, "Script loaded: " & Replace(Path, "\\", "\")
+        Next
+    End If
 
+LoadScript_Exit:
+
+    Exit Sub
+   
 LoadPluginSystem_Error:
 
     Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure LoadPluginSystem of Module modScripting"
