@@ -86,7 +86,7 @@ Attribute VB_Exposed = False
 ' *     - Added a number of Windows API function mirrors (thanks FiftyToo)
 ' *     - Rewrote and integrated several Plugin System functions
 ' *         Dsp(), GetSetting(), SetSetting(), TimerInterval(), TimerEnabled(),
-' *         GetTimerEnabled(), GetTimeLeft(), and GetTimeWaiting()
+' *         GetTimerEnabled(), GetTimeLeft(), and GetTimerWaiting()
 ' *         Note: All integrated functions are backwards compatiable. No current calls need to be modified.
 ' *     - Added two functions to work with plugins
 ' *         PluginEnabled(), GetPluginEnabled()
@@ -1039,14 +1039,12 @@ End Sub
 
 
 '// SETSCTIMEOUT
-'// Sets the number of milliseconds before the script control times your script's execution out
-'//  Values range from 1 to 60000
+'//   Recommended to modify the timeout setting in your settings.ini file rather than using this sub directly.
 Public Sub SetSCTimeout(ByVal newValue As Long)
 
     If (newValue > 1 And newValue < 60001) Then
         SCReloadTimerID = SetTimer(frmChat.hWnd, newValue, 400, AddressOf ScriptReload_TimerProc)
     End If
-    
 End Sub
 
 
@@ -1054,6 +1052,7 @@ End Sub
 '// GETSCRIPTCONTROL
 '// Returns the Script Control as an object
 Public Function GetScriptControl() As Variant
+
     Set GetScriptControl = frmChat.SControl
 End Function
 
@@ -1223,7 +1222,7 @@ End Function
 
 
 '// PLUGINENABLED
-'//   Written by Swent. Enables or disables a plugin.
+'//   Enables or disables a plugin.
 Sub PluginEnabled(strPrefix As String, boolEnabled As Boolean)
     
     SetSetting strPrefix, "enabled", boolEnabled
@@ -1245,7 +1244,7 @@ End Function
 
 
 '// TIMERINTERVAL
-'//   Written by Swent. Sets a plugin timer's interval. The timer is created if it doesn't exist.
+'//   Sets a plugin timer's interval. The timer is created if it doesn't exist.
 Public Sub TimerInterval(ByVal strPrefix As String, ByVal strTimerName As String, ByVal intInterval As Integer)
 
     SetPTInterval strPrefix, strTimerName, Int(intInterval)
@@ -1253,7 +1252,7 @@ End Sub
 
 
 '// TIMERENABLED
-'//   Written by Swent. Enables or disables a plugin timer.
+'//   Enables or disables a plugin timer.
 Public Sub TimerEnabled(ByVal strPrefix As String, ByVal strTimerName As String, ByVal boolEnabled As Boolean)
 
     SetPTEnabled strPrefix, strTimerName, boolEnabled
@@ -1261,7 +1260,7 @@ End Sub
 
 
 '// TIMERCOUNT
-'//   Written by Swent. Allows you to modify the count in a running plugin timer.
+'//   Allows you to modify the count in a running plugin timer.
 Public Sub TimerCount(ByVal strPrefix As String, ByVal strTimerName As String, ByVal intCount As Integer)
 
     SetPTCount strPrefix, strTimerName, Int(intCount)
@@ -1269,7 +1268,7 @@ End Sub
 
 
 '// GETTIMERENABLED
-'//   Written by Swent. Get's the time left (in seconds) until a plugin timer sub is executed.
+'//   Get's the time left (in seconds) until a plugin timer sub is executed.
 Public Function GetTimerEnabled(ByVal strPrefix As String, ByVal strTimerName As String)
     
     GetPTEnabled strPrefix, strTimerName
@@ -1285,7 +1284,7 @@ End Function
 
 
 '// GETTIMERWAITING
-'//   Written by Swent. Get's the time (in seconds) since a plugin timer sub was last executed.
+'//   Get's the time (in seconds) since a plugin timer sub was last executed.
 Public Function GetTimerWaiting(ByVal strPrefix As String, ByVal strTimerName As String)
 
     GetPTWaiting strPrefix, strTimerName
@@ -1519,7 +1518,7 @@ Public Function AddFormObject(ByVal strPrefix As String, ByVal strFormName As St
 End Function
 
 '// GETUIOBJECT
-'//    Writtin by Hdx - Retrns the control/form the the specified name. Returns Null if not found.
+'//    Written by Hdx - Retrns the control/form the the specified name. Returns Null if not found.
 Public Function GetUIObject(ByVal strPrefix As String, ByVal strForm As String, Optional ByVal strObject As String = vbNullString) As Object
     If (obScriptForms.Exists(strPrefix & "|" & strForm)) Then
         Dim frmUI As frmScriptUI
