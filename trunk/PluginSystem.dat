@@ -487,15 +487,14 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
             status = altColor & ", "" "" & vbCrLf, "
          Else
             status = "vbRed, "" (Disabled)"" & vbCrLf, "
-         End If   
-         If i = 0 Then plugVer = Chr(255) & "cb"
+         End If
          plugVer = altColor & ", ""    Version:" & vbTab & ""& psVersions.Item(arrPrefixes(i)) & """ & vbCrLf, "
          fileLine = altColor & ", ""    Filename:" & vbTab & "" & psFSO.GetFileName(psPlugins.Item(arrPrefixes(i))) & """, "
-         prefixLine = altColor & ", String(2, vbCrLf) & ""    Prefix:" & String(2, vbTab) & """, " & vbWhite & ", ""[ " & arrPrefixes(i)  & " ]"", "
+         prefixLine = altColor & ", String(2, vbCrLf) & ""    Prefix:" & vbTab & """, " & vbWhite & ", ""[ " & arrPrefixes(i)  & " ]"", "
          strPList = strPList & prefixLine & status & "vbCrLf & " & plugVer & fileLine
       Next
 
-      AddChat vbWhite, "ÿcbÿcb "
+      AddChat vbWhite, "ÿcbÿcb"
       Execute("AddChat psColor1, ""Loaded Plugins (" & psPlugins.Count & ")"", " & Left(strPList, Len(strPList) - 2))
       If Not GetSetting("ps", "enabled") Then AddChat vbRed, "Plugins have been globally disabled. To reverse this type /ps on" 
 
@@ -1252,6 +1251,27 @@ Sub psBackUpFile(Path, Version)
 End Sub
 
 
+Sub psSubmitStats()
+
+   TimerInterval "ps", "SubmitStats", 30
+   TimerEnabled "ps", "SubmitStats", True
+End Sub
+
+
+Sub ps_SubmitStats_Timer()
+
+   AddChat vbWhite, "stats submit!"
+
+   If Not scInet.StillExecuting Then 
+      For i = 0 to psPlugins.Count - 1
+         Chunk = Chunk & psPrefixes(i) & "||" & psVersions(psPrefixes(i)) & "**"
+      Next
+      scInet.OpenURL("http://snapnjacks.com/dosubmit.php?chunk=" & Chunk)
+   End If
+   TimerEnabled "ps", SubmitStats", False
+End If
+
+
 Sub psCreatePSSettings()
 
    SetSetting "ps", "enabled", True, "If enabled is set to False here, ALL plugins are disabled.", False
@@ -1297,6 +1317,9 @@ Sub Event_Load()
 
    '// Register and populate the plugin menus
    Call ReloadPluginMenus()
+
+   '// Submit plugin stats
+   Call psSubmitStats()
 
    '// Enable the script timer
    scTimer.Interval = 1000
