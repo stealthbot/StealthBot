@@ -4,7 +4,7 @@
 
 '// The Plugin System - StealthBot 2.7 Development Version
 '//    by Swent
-'//      Last modified 11:12 AM 11/9/2007
+'//      Last modified 12:36 AM 11/15/2007
 
 
 '// The Plugin System is an updateable, scripted extension of StealthBot's VBScripting System.
@@ -491,7 +491,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
          End If
          plugVer = altColor & ", ""    Version:" & vbTab & ""& psVersions.Item(arrPrefixes(i)) & """ & vbCrLf, "
          fileLine = altColor & ", ""    Filename:" & vbTab & "" & psFSO.GetFileName(psPlugins.Item(arrPrefixes(i))) & """, "
-         prefixLine = altColor & ", String(2, vbCrLf) & ""    Prefix:" & vbTab & """, " & vbWhite & ", ""[ " & arrPrefixes(i)  & " ]"", "
+         prefixLine = altColor & ", String(2, vbCrLf) & ""    Prefix:" & String(2, vbTab) & """, " & vbWhite & ", ""[ " & arrPrefixes(i)  & " ]"", "
          strPList = strPList & prefixLine & status & "vbCrLf & " & plugVer & fileLine
       Next
 
