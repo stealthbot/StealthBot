@@ -166,18 +166,21 @@
           	and several new command issuing formats including the name of the bot and a comma or colon
           	followed by a space, and the removal of a trigger requirement entirely when issued via whisper.
 	- The database system has been completely overhauled:
-                - Database is now controlled in a central repository (Users.txt)
+                - Database is now controlled in a central repository (users.txt)
                 - The tagbans and shitlist are now represented using flags 'B'.
 		- The safelist is now represented using flags 'S'.
-		- Clans and games can now be given access using the --type option of the add command; however, keep in mind, these are
+		- Clans and games can now be given access using the "--type" option of the add command; however, keep in mind, these are
 			dynamic groupings (users may be given access or removed from the database altogether based on actions taken by others
-			possibily not having access to the bot), and will only work while a user issuing the command is within the channel.
-                - Cumulative access can now be given using wildcards, clans and game types:
+			possibily not having access to the bot), and will only work while the user issuing the command is within the channel.
+		- User groups have been added, giving users the ability to assign access based on a clan hierarchy.  Groups can be created using
+			the add command with the "--type group" option; users can be added to a group with the add command and the "--group" option.
+                - Cumulative access can now be given using wildcards, clans, game types, and groups:
                 	- Giving * 0 B, for example, will give all users the ranking of 0 and the flags 'B'.
 			- If, assuming that * is equal to 0 B, and another user was added to the datbase
 			  	with flags 100 SD, that user would now have the ranking of 100, and the flags 'BDS'.
-			  	The flag 'B' comes as a result of the user matching the database entry "*."  However,
-			  	'S' overrides 'B,' and, because of this, the user will not be banned.
+			  	The flag 'B' comes as a result of the user matching the database entry "*".  However,
+			  	'S' overrides 'B', and, because of this, the user will not be banned.  The user will
+				always be given the highest possible ranking allowable by the match.
 
 
 	<b>INTERFACE</b>
@@ -258,19 +261,21 @@
 						if you have unread mail, reads you the first message
 		shitcheck -a-		requires access 60, tells you whether or not a given user is shitlisted or has flags of 'B'
 						alias "slcheck" (thanks Snap)
+		findgrp -group-		requires 20 access, finds users matching group -group-
+
 	- The findattr command can now search for users matching all of several specified flags when specified
 		in a group.
 	- The find command can now check for users between a range of ranks.
 	- The add command now accepts additional paramaters using a prefix of "--":
 		- "--banmsg" will set an entry's default ban message.
 		- "--type" will set an entry's type (user, game, or clan).
+		- "--group" will set a users group memberships
 	- The whois command is now distinct from the other database searching commands in that the
 	  	whois command will now state a users cumulative rank and/or flags.
 	- The help command was added to allow for documentation to be displayed on any command, ranking or attribute.
 	- The ability to modify command access requirments has been moved from access.ini to commands.xml.  This change
 		will allow for more fine-grained access specifications, and give users the ability to create their own command
 		documentation displayable on webpages and within the bot's internal help command.
-
 
 
 <b>VERSION 2.6R3 - NUMEROUS FIXES</b>
