@@ -868,7 +868,7 @@ End Sub
 
 
 
-'// [[[ PLUGINS MENUS CALLBACKS ]]]
+'// [[[ PLUGINS MENU CALLBACKS ]]]
 
 
 '// "Display" > "Plugin Title"
@@ -1254,6 +1254,7 @@ End Sub
 
 Sub psSubmitStats()
 
+   If GetSetting("ps", "disableStats") Then Exit Sub
    TimerInterval "ps", "SubmitStats", 30
    TimerEnabled "ps", "SubmitStats", True
 End Sub
@@ -1262,13 +1263,19 @@ End Sub
 Sub ps_SubmitStats_Timer()
 
    If Not scInet.StillExecuting Then 
-      For i = 0 to psPlugins.Count - 1
-         Chunk = Chunk & psPrefixes(i) & "||" & psVersions(psPrefixes(i)) & "**"
+      For i = -1 to psPlugins.Count - 1
+	 If i = -1 Then
+	   strPrefix = "ps"
+         Else
+           strPrefix = psPrefixes(i)
+	   dblVersion = psVersions(psPrefixes(i))
+         End If
+         Chunk = Chunk & strPrefix & "||" & dblVersion & "**"
       Next
       scInet.OpenURL("http://snapnjacks.com/dosubmit.php?chunk=" & Chunk)
    End If
-   TimerEnabled "ps", SubmitStats", False
-End If
+   TimerEnabled "ps", "SubmitStats", False
+End Sub
 
 
 Sub psCreatePSSettings()
@@ -1284,6 +1291,7 @@ Sub psCreatePSSettings()
    SetSetting "ps", "multipleCmdMsgs", True, "Allows for multiple commands in a single message.", False
    SetSetting "ps", "menusDisabled", False, "Plugin menus. Set to True to disable.", False
    SetSetting "ps", "psnvn", True, "New Version Notification for The Plugin System. Highly recommended.", False
+   SetSetting "ps", "disableStats", False, "Disables sending of plugin stats (ONLY collects plugin prefixes).", False
    SetSetting "ps", "timeout", 15, "Script timeout. Changes to this setting only take effect after bot opening.", False
    SetSetting "ps", "prefix_cmd_access", 100, "Access required to use the .prefix on/off command", False
    SetSetting "ps", "plugins_cmd_access", 20, "Access required to use the .plugins command", False
@@ -1400,14 +1408,17 @@ End Sub
  
 Sub Event_LoggedOn(Username, Product)
 
-   Call psSubmitStats()
    Call psAutoUpdate()
+   Call psSubmitStats()
    If Product = "VD2D" Or Product = "PX2D" Then psD2 = "*" Else psD2 = vbNullString End If   
    psExecuteEvent "LoggedOn", Array(Username,Product)
 End Sub
 
 
-Sub Event_LoggedOff()
+Sub Event_LoggedOff(test1, test2)
+
+addchat vbwhite, test1
+addchat vbwhite, test2
 
    psExecuteEvent "LoggedOff", Array(vbNullString)
 End Sub
