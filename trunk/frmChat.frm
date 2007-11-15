@@ -1408,6 +1408,11 @@ Private MultiLinePaste As Boolean
 'Forms
 Public SettingsForm As frmSettings
 
+Private Const WM_SETREDRAW    As Integer = &HB
+Private Const WM_USER         As Integer = &H400
+Private Const EM_GETEVENTMASK As Integer = (WM_USER + 59)
+Private Const EM_SETEVENTMASK As Integer = (WM_USER + 69)
+
 ' LET IT BEGIN
 Private Sub Form_Load()
     Dim s As String
@@ -1723,49 +1728,44 @@ End Sub
 ' Updated 4/17/07 to not flash the desktop when the scrollbar is held up
 ' Updated 8/07/07 with greater precision
 Sub AddChat(ParamArray saElements() As Variant)
-    On Error Resume Next
-    Dim s As String
-    Dim l As Long, lngVerticalPos As Long, Diff As Long
-    Dim i As Integer, intRange As Integer, f As Integer
-    Dim blUnlock As Boolean, LogThis As Boolean
+    Dim s              As String
+    Dim l              As Long
+    Dim lngVerticalPos As Long
+    Dim Diff           As Long
+    Dim i              As Integer
+    Dim intRange       As Integer
+    Dim f              As Integer
+    Dim blUnlock       As Boolean
+    Dim LogThis        As Boolean
     
-    If Not BotVars.LockChat Then
+    If (Not (BotVars.LockChat)) Then
+        f = FreeFile
     
-        If IsWin2000Plus() Then
+        If (IsWin2000Plus()) Then
+            Call GetScrollRange(rtbChat.hWnd, SB_VERT, 0, intRange)
             
-            GetScrollRange rtbChat.hWnd, SB_VERT, 0, intRange
             lngVerticalPos = SendMessage(rtbChat.hWnd, EM_GETTHUMB, 0&, 0&)
             
-            'Debug.Print "ScrollRange: " & intRange & " ; VerticalPos: " & lngVerticalPos & " ; rtbChatHeight " & rtbChat.Height & " ; pix " & rtbChat.Height / Screen.TwipsPerPixelY
-            'Debug.Print vbTab & "lngVerticalPos + (rtbChatHeight / Screen.TwipsPerPixelY) = " & lngVerticalPos + (rtbChat.Height / Screen.TwipsPerPixelY) & " (diff: " & (lngVerticalPos + (rtbChat.Height / Screen.TwipsPerPixelY)) - intRange & ")"
-            Diff = (lngVerticalPos + (rtbChat.Height / Screen.TwipsPerPixelY)) - intRange
+            Diff = ((lngVerticalPos + (rtbChat.Height / Screen.TwipsPerPixelY)) - intRange)
             
             ' In testing it appears that if the value I calcuate as Diff is negative,
-            '  the scrollbar is not at the bottom.
-            If Diff < 0 Then
-                ' Don't move the scrollbar
-                'LockWindowUpdate rtbChat.hWnd
-                rtbChat.Visible = False
+            ' the scrollbar is not at the bottom.
+            If (Diff < 0) Then
                 blUnlock = True
             End If
         End If
         
-        LogThis = (BotVars.Logging < 2)
+        LogThis = (BotVars.Logging <= 1)
         
-        If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
+        If ((BotVars.MaxBacklogSize) And _
+            (rtbChatLength >= BotVars.MaxBacklogSize)) Then
+            
             With rtbChat
                 .Visible = False
                 .SelStart = 0
                 .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
                 
-                rtbChatLength = rtbChatLength - .SelLength
-                
-                'If BotVars.Logging < 2 And LOF(i) < BotVars.MaxLogfileSize Then
-                '    i = FreeFile
-                '    Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #i
-                '        Print #i, Left$(.SelText, Len(.SelText) - 2)
-                '    Close #i
-                'End If
+                rtbChatLength = (rtbChatLength - .SelLength)
                 
                 .SelText = ""
                 .Visible = True
@@ -1778,32 +1778,32 @@ Sub AddChat(ParamArray saElements() As Variant)
             .SelStart = Len(.text)
             .SelLength = 0
             .SelColor = RTBColors.TimeStamps
-            If .SelBold = True Then .SelBold = False
-            If .SelItalic = True Then .SelItalic = False
-            If .SelUnderline = True Then .SelUnderline = False
+            If .SelBold = True Then: .SelBold = False
+            If .SelItalic = True Then: .SelItalic = False
+            If .SelUnderline = True Then: .SelUnderline = False
             .SelText = s
             .SelStart = Len(.text)
         End With
         
-        If LogThis Then
-            f = FreeFile
-            
+        If (LogThis) Then
             Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #f
             
-            If (LOF(f) >= BotVars.MaxLogfileSize) Then
+            If ((BotVars.MaxLogfileSize) And _
+                (LOF(f) >= BotVars.MaxLogfileSize)) Then
+                
                 LogThis = False
+                
                 Close #f
+            Else
+                Print #f, s;
             End If
         End If
         
-        Print #f, s;
-        
         For i = LBound(saElements) To UBound(saElements) Step 2
-        
-            If InStr(1, saElements(i + 1), Chr(0), vbBinaryCompare) > 0 Then _
-                KillNull saElements(i + 1)
+            If (InStr(1, saElements(i + 1), Chr(0), vbBinaryCompare) > 0) Then _
+                Call KillNull(saElements(i + 1))
             
-            If Len(saElements(i + 1)) > 0 Then
+            If (Len(saElements(i + 1)) > 0) Then
                 l = InStr(1, saElements(i + 1), "{\rtf", vbTextCompare)
                 
                 While (l > 0)
@@ -1814,37 +1814,39 @@ Sub AddChat(ParamArray saElements() As Variant)
             
                 With rtbChat
                     .SelStart = Len(.text)
+                    
+                    ' store position of selection
                     l = .SelStart
+                    
                     .SelLength = 0
                     .SelColor = saElements(i)
-                    .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
+                    .SelText = saElements(i + 1) & _
+                        Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
                     
-                    rtbChatLength = rtbChatLength + Len(s) + Len(saElements(i + 1)) + Len(Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements))))
+                    rtbChatLength = (rtbChatLength + _
+                                     Len(s) + _
+                                     Len(saElements(i + 1)) + _
+                                     Len(Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))))
                     
                     .SelStart = Len(.text)
                 End With
                 
                 ' Fixed 11/21/06 to properly log timestamps
-                If LogThis Then
+                If (LogThis) Then
                     Print #f, saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)));
                 End If
             End If
-            
         Next i
         
         Call ColorModify(rtbChat, l)
-    
-        If LogThis Then
+
+        If (blUnlock) Then
+            Call SendMessage(rtbChat.hWnd, WM_VSCROLL, SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&)
+        End If
+        
+        If (LogThis) Then
             Close #f
-            LogThis = False
         End If
-
-        If blUnlock Then
-            SendMessage rtbChat.hWnd, WM_VSCROLL, SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
-            'LockWindowUpdate 0&
-            rtbChat.Visible = True
-        End If
-
     End If
 End Sub
 
