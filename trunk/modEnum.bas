@@ -36,13 +36,14 @@ End Type
 
 Public Type udtDatabase
     Username    As String
-    Type        As String
     Access      As Integer
     Flags       As String
     AddedBy     As String
     AddedOn     As Date
     ModifiedBy  As String
     ModifiedOn  As Date
+    Type        As String
+    Groups      As String
     BanMessage  As String
 End Type
 
@@ -53,13 +54,14 @@ End Type
 
 Public Type udtGetAccessResponse
     Username    As String
-    Type        As String
     Access      As Integer
     Flags       As String
     AddedBy     As String
     AddedOn     As Date
     ModifiedBy  As String
     ModifiedOn  As Date
+    Type        As String
+    Groups      As String
     BanMessage  As String
 End Type
 
