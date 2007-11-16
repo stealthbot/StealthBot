@@ -4,12 +4,11 @@
 
 '// The Plugin System - StealthBot 2.7 Development Version
 '//    by Swent
-'//      Last modified 12:36 AM 11/15/2007
-
+'//      Last modified 2:28 AM 11/16/2007
 
 '// The Plugin System is an updateable, scripted extension of StealthBot's VBScripting System.
-'//   It handles plugin commands, plugin loading, execution of plugin events, and various miscellaneous functions.
-'//      DO NOT change anything in this file unless you know what you're doing.
+'//    This portion of the scripting system remains external to allow for updates and for viewing and tweaking by advanced scriptors.
+'//        ** DO NOT change anything in this file unless you know what you're doing **
 
 '// This file will be updated periodically to provide new plugin features and capabilities between StealthBot versions.
 
@@ -75,6 +74,7 @@
 '//      -You can disable plugin menu creation by setting the menusDisabled PS setting to True (Thanks ZergMasterI)
 '//   *Implemented #define's Plugin Creator. Can be executed from the Plugin System menu (Thanks #define)
 '//   *Implemented plugin statistics system by Snap. See http://snapnjacks.com/stats.php
+'//   *Added the /exec command to the Plugin System due to its common usage. Only works from inside the bot.
 
 '//   [NEW COMMANDS]
 '//    /delplugin <prefix>
@@ -87,6 +87,8 @@
 '//         ~You can use a filename (ex: pmPeltMe.plug) in place of <prefix>, as long as it's in the plugins folder
 '//         ~You can open your settings.ini file by omitting the <prefix> parameter
 '//         ~You can open your plugins folder by using "plugins" for <prefix> (Thanks Jack)
+'//    /exec <code>
+'//      -Executes a line of VBScript code. Can only be used from inside the bot with "/" as the trigger.
 
 '//   [BUG FIXES]
 '//   *Fixed a bug in the debug command...lol (Thanks Jack)
@@ -256,7 +258,7 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, Lines)
       End If
    End If
 
-   '// Store the title for use in the plugin menu
+   '// Store the title for use in the plugins menu
    If Len(strTitle) = 0 Then strTitle = Prefix
    psTitles = psTitles & strTitle & ","
 
@@ -287,6 +289,7 @@ Sub psLoadCode(Prefix, Path, Content)
    '// Handle loading errors
    If Err.Number <> 0 Then
       psLoadError.Item(Prefix) = True
+      addchat vbwhite, err.description
       AddChat vbRed, "Offending file: >> " & Path
       AddChat vbYellow, "Your " & Prefix & " plugin has been temporarily blocked due to a loading error."
       Err.Clear
@@ -381,16 +384,22 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
    '* Command to enable/disable a specified plugin, or all plugins
    If cmdName = "prefix" Then
       arrOnOff = psOnOff(cmd(1))
+      boolLastSetting = GetSetting(cmdPrefix, "enabled")
       SetSetting cmdPrefix, "enabled", arrOnOff(0), "", True
       If cmdPrefix = "ps" Then
          If Not arrOnOff(0) Then
             dsp DisplayID, "Plugins have been globally disabled.", Username, vbRed
          Else
             dsp DisplayID, "Plugins are no longer globally disabled.", Username, vbGreen
+	    If arrOnOff(0) And Not boolLastSetting Then
+               For i = 0 to UBound(psPrefixes)
+                 If GetSetting(psPrefixes(i), "enabled") Then psTriggerLoadEvent(psPrefixes(i))
+               Next
+            End If
          End If
       Else
          dsp DisplayID, "The " & cmdPrefix & " plugin has been " & arrOnOff(1) & ".", Username, arrOnOff(2)
-         If arrOnOff(0) Then
+         If arrOnOff(0) And Not psCodeLoaded(cmdPrefix) Then
             psLoadCode cmdPrefix, psPlugins.Item(cmdPrefix), psGetTextStream(psPlugins.Item(cmdPrefix))
             psTriggerLoadEvent(cmdPrefix)
          End If
@@ -444,7 +453,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
          strUpdates = Replace(strUpdates, "%4", """ & vbCrLf & """)
          strUpdates = Replace(strUpdates, """"" &", "")
  
-         AddChat vbWhite, "ÿcbÿcb "
+         AddChat vbWhite, "ÿcbÿcb"
          Execute "AddChat psColor2, ""Plugins Available For Download"" & vbCrLf, vbWhite, """ & strUpdates & """"
          AddChat psColor2, "Type /getplugin PREFIX (where PREFIX is the prefix of the plugin that you want)."
       End If
@@ -1415,10 +1424,7 @@ Sub Event_LoggedOn(Username, Product)
 End Sub
 
 
-Sub Event_LoggedOff(test1, test2)
-
-addchat vbwhite, test1
-addchat vbwhite, test2
+Sub Event_LoggedOff()
 
    psExecuteEvent "LoggedOff", Array(vbNullString)
 End Sub
