@@ -1749,7 +1749,7 @@ Sub AddChat(ParamArray saElements() As Variant)
             ' In testing it appears that if the value I calcuate as Diff is negative,
             ' the scrollbar is not at the bottom.
             If (Diff < 0) Then
-                frmChat.Visible = False
+                rtbChat.Visible = False
             
                 blUnlock = True
             End If
@@ -1841,7 +1841,7 @@ Sub AddChat(ParamArray saElements() As Variant)
         Call ColorModify(rtbChat, l)
 
         If (blUnlock) Then
-            frmChat.Visible = True
+            rtbChat.Visible = True
             
             Call SendMessage(rtbChat.hWnd, WM_VSCROLL, SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&)
         End If
@@ -4366,7 +4366,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                         
                                         m = OutFilterMsg(s)
                                         
-                                        commandResult = ProcessCommand(CurrentUsername, cboSend.text, _
+                                        commandResult = ProcessCommand(CurrentUsername, m, _
                                             True, False)
                                     Else
                                         Call AddQ(OutFilterMsg(s))

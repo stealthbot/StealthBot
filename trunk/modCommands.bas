@@ -1381,27 +1381,27 @@ Private Function OnCAdd(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf() As String ' temporary output buffer
-    Dim index    As Integer
+    Dim Index    As Integer
 
     ' redefine array size
     ReDim Preserve tmpBuf(0)
     
     ' ...
-    index = InStr(1, msgData, Space(1), vbBinaryCompare)
+    Index = InStr(1, msgData, Space(1), vbBinaryCompare)
     
     ' ...
-    If (index > 0) Then
+    If (Index > 0) Then
         Dim user As String ' ...
         Dim Msg  As String ' ...
         
         ' ...
-        user = Mid$(msgData, 1, index - 1)
+        user = Mid$(msgData, 1, Index - 1)
         
         ' ...
-        Msg = Mid$(msgData, index + 1)
+        Msg = Mid$(msgData, Index + 1)
     
         ' ...
-        Call OnAdd(Username, dbAccess, user & " +B --type CLAN --banmsg " & Msg, InBot, tmpBuf())
+        Call OnAdd(Username, dbAccess, user & " +B --type GAME --banmsg " & Msg, InBot, tmpBuf())
     Else
         ' ...
         Call OnAdd(Username, dbAccess, msgData & " +B --type GAME", InBot, tmpBuf())
@@ -1990,22 +1990,22 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim u          As String  ' ...
     Dim tmpBuf     As String  ' temporary output buffer
     Dim dbType     As String  ' ...
-    Dim index      As Long    ' ...
+    Dim Index      As Long    ' ...
     Dim params     As String  ' ...
     Dim strArray() As String  ' ...
     Dim i          As Integer ' ...
 
     ' check for presence of optional add command
     ' parameters
-    index = InStr(1, msgData, " --", vbBinaryCompare)
+    Index = InStr(1, msgData, " --", vbBinaryCompare)
 
     ' did we find such parameters?
-    If (index > 0) Then
+    If (Index > 0) Then
         ' grab parameters
-        params = Mid$(msgData, index - 1)
+        params = Mid$(msgData, Index - 1)
 
         ' remove paramaters from message
-        msgData = Mid$(msgData, 1, index)
+        msgData = Mid$(msgData, 1, Index)
     End If
     
     ' do we have any special paramaters?
@@ -2019,15 +2019,15 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             Dim pmsg      As String ' ...
             
             ' check message for a space
-            index = InStr(1, strArray(i), Space(1), vbBinaryCompare)
+            Index = InStr(1, strArray(i), Space(1), vbBinaryCompare)
             
             ' did our search find a space?
-            If (index > 0) Then
+            If (Index > 0) Then
                 ' grab parameter
-                parameter = Mid$(strArray(i), 1, index - 1)
+                parameter = Mid$(strArray(i), 1, Index - 1)
                 
                 ' grab parameter message
-                pmsg = Mid$(strArray(i), index + 1)
+                pmsg = Mid$(strArray(i), Index + 1)
             Else
                 ' grab parameter
                 parameter = strArray(i)
@@ -2766,24 +2766,24 @@ Private Function OnTagAdd(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
 
     Dim tmpBuf() As String  ' ...
-    Dim index    As Integer ' ...
+    Dim Index    As Integer ' ...
     
     ' redefine array size
     ReDim Preserve tmpBuf(0)
     
     ' ...
-    index = InStr(1, msgData, Space(1), vbBinaryCompare)
+    Index = InStr(1, msgData, Space(1), vbBinaryCompare)
     
     ' ...
-    If (index > 0) Then
+    If (Index > 0) Then
         Dim user As String ' ...
         Dim Msg  As String ' ...
         
         ' ...
-        user = Mid$(msgData, 1, index - 1)
+        user = Mid$(msgData, 1, Index - 1)
         
         ' ...
-        Msg = Mid$(msgData, index + 1)
+        Msg = Mid$(msgData, Index + 1)
     
         ' ...
         If (InStr(1, user, "*", vbBinaryCompare) <> 0) Then
@@ -2986,24 +2986,24 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf() As String  ' ...
-    Dim index    As Integer ' ...
+    Dim Index    As Integer ' ...
     
     ' redefine array size
     ReDim Preserve tmpBuf(0)
     
     ' ...
-    index = InStr(1, msgData, Space(1), vbBinaryCompare)
+    Index = InStr(1, msgData, Space(1), vbBinaryCompare)
     
     ' ...
-    If (index > 0) Then
+    If (Index > 0) Then
         Dim user As String ' ...
         Dim Msg  As String ' ...
         
         ' ...
-        user = Mid$(msgData, 1, index - 1)
+        user = Mid$(msgData, 1, Index - 1)
         
         ' ...
-        Msg = Mid$(msgData, index + 1)
+        Msg = Mid$(msgData, Index + 1)
     
         ' ...
         Call OnAdd(Username, dbAccess, user & " +B --banmsg " & Msg, InBot, tmpBuf())
@@ -4176,19 +4176,19 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim Flags      As String  ' ...
     Dim found      As Boolean ' ...
     Dim params     As String  ' ...
-    Dim index      As Integer ' ...
+    Dim Index      As Integer ' ...
 
     ' check for presence of optional add command
     ' parameters
-    index = InStr(1, msgData, " --", vbBinaryCompare)
+    Index = InStr(1, msgData, " --", vbBinaryCompare)
     
     ' did we find such parameters?
-    If (index > 0) Then
+    If (Index > 0) Then
         ' grab parameters
-        params = Mid$(msgData, index - 1)
+        params = Mid$(msgData, Index - 1)
 
         ' remove paramaters from message
-        msgData = Mid$(msgData, 1, index)
+        msgData = Mid$(msgData, 1, Index)
     End If
     
     ' split message
@@ -4223,12 +4223,12 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             tmpBuf = "Invalid rank."
             
         ' is rank higher than user's rank?
-        ElseIf (rank >= dbAccess.access) Then
+        ElseIf ((rank) And (rank >= dbAccess.access)) Then
             tmpBuf = "Error: You do not have sufficient access to assign a user with the " & _
                 "specified rank."
             
         ' can we modify specified user?
-        ElseIf (gAcc.access >= dbAccess.access) Then
+        ElseIf ((gAcc.access) And (gAcc.access >= dbAccess.access)) Then
             tmpBuf = "Error: You do not have sufficient access to modify the specified user."
         Else
             ' do we have any special paramaters?
@@ -4242,15 +4242,15 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     Dim pmsg      As String ' ...
                     
                     ' check message for a space
-                    index = InStr(1, strArray(i), Space(1), vbBinaryCompare)
+                    Index = InStr(1, strArray(i), Space(1), vbBinaryCompare)
                     
                     ' did our search find a space?
-                    If (index > 0) Then
+                    If (Index > 0) Then
                         ' grab parameter
-                        parameter = Mid$(strArray(i), 1, index - 1)
+                        parameter = Mid$(strArray(i), 1, Index - 1)
                         
                         ' grab parameter message
-                        pmsg = Mid$(strArray(i), index + 1)
+                        pmsg = Mid$(strArray(i), Index + 1)
                     Else
                         ' grab parameter
                         parameter = strArray(i)
@@ -4301,6 +4301,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                         Case "DSHR" ' Diablo I: Shareware
                                         Case "W2BN" ' WarCraft II: Battle.net Edition
                                         Case "STAR" ' StarCraft
+                                        Case "SSHR" ' StarCraft: Shareware
                                         Case "JSTR" ' StarCraft: Japanese
                                         Case "SEXP" ' StarCraft: Brood War
                                         Case "D2DV" ' Diablo II
@@ -5130,7 +5131,7 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
 End Function
 
 Private Function searchDatabase(ByRef arrReturn() As String, Optional user As String = vbNullString, _
-    Optional ByVal match As String = vbNullString, Optional group As String = vbNullString, _
+    Optional ByVal match As String = vbNullString, Optional Group As String = vbNullString, _
     Optional dbType As String = vbNullString, Optional lowerBound As Integer = -1, _
     Optional upperBound As Integer = -1, Optional Flags As String = vbNullString) As Integer
     
@@ -5202,9 +5203,9 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 End If
                 
                 ' ...
-                If (group <> vbNullString) Then
+                If (Group <> vbNullString) Then
                     ' ...
-                    If (StrComp(DB(i).Groups, group, vbTextCompare) = 0) Then
+                    If (StrComp(DB(i).Groups, Group, vbTextCompare) = 0) Then
                         res = IIf(blnChecked, res, True)
                     Else
                         res = False
@@ -5714,17 +5715,17 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
     
     ' ...
     If (Len(CWord) > 0) Then
-        Dim commands As MSXML2.DOMDocument40
+        Dim Commands As MSXML2.DOMDocument40
         Dim command  As MSXML2.IXMLDOMNode
         
         ' ...
-        Set commands = New MSXML2.DOMDocument40
+        Set Commands = New MSXML2.DOMDocument40
 
         ' ...
-        Call commands.Load("commands.xml")
+        Call Commands.Load("commands.xml")
         
         ' ...
-        For Each command In commands.documentElement.childNodes
+        For Each command In Commands.documentElement.childNodes
             Dim accessGroup As MSXML2.IXMLDOMNode
             Dim access      As MSXML2.IXMLDOMNode
         
@@ -5814,17 +5815,17 @@ End Function
 Private Function convertAlias(ByVal cmdName As String) As String
     ' ...
     If (Len(cmdName) > 0) Then
-        Dim commands As MSXML2.DOMDocument40
+        Dim Commands As MSXML2.DOMDocument40
         Dim command  As MSXML2.IXMLDOMNode
         
         ' ...
-        Set commands = New MSXML2.DOMDocument40
+        Set Commands = New MSXML2.DOMDocument40
 
         ' ...
-        Call commands.Load("commands.xml")
+        Call Commands.Load("commands.xml")
         
         ' ...
-        For Each command In commands.documentElement.childNodes
+        For Each command In Commands.documentElement.childNodes
             Dim aliases As MSXML2.IXMLDOMNodeList
             Dim alias   As MSXML2.IXMLDOMNode
             
@@ -5861,17 +5862,17 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
     
     ' ...
     If (Len(cmdName) > 0) Then
-        Dim commands As MSXML2.DOMDocument40
+        Dim Commands As MSXML2.DOMDocument40
         Dim command  As MSXML2.IXMLDOMNode
         
         ' ...
-        Set commands = New MSXML2.DOMDocument40
+        Set Commands = New MSXML2.DOMDocument40
 
         ' ...
-        Call commands.Load("commands.xml")
+        Call Commands.Load("commands.xml")
         
         ' ...
-        For Each command In commands.documentElement.childNodes
+        For Each command In Commands.documentElement.childNodes
             Dim blnFound As Boolean ' ...
         
             ' ...
