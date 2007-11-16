@@ -426,7 +426,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
          If Not psPlugins.Exists(curPrefix) Then
             dispColor = "%1"
 	    dlList = dlList & curPrefix & ", "
-         ElseIf psVersions.Item(curPrefix) < curLine(2) Then
+         ElseIf psGetNumericVersion(psVersions.Item(curPrefix)) < psGetNumericVersion(curLine(2)) Then
             dispColor = "%2"
             dlList = dlList & "[" & curPrefix & "], "
          Else
