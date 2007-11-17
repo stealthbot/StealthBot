@@ -384,8 +384,6 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
             Case "tagcheck":     Call OnTagCheck(Username, dbAccess, msgData, InBot, cmdRet())
             Case "slcheck":      Call OnSLCheck(Username, dbAccess, msgData, InBot, cmdRet())
             Case "readfile":     Call OnReadFile(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "levelban":     Call OnLevelBan(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "d2levelban":   Call OnD2LevelBan(Username, dbAccess, msgData, InBot, cmdRet())
             Case "greet":        Call OnGreet(Username, dbAccess, msgData, InBot, cmdRet())
             Case "allseen":      Call OnAllSeen(Username, dbAccess, msgData, InBot, cmdRet())
             Case "ban":          Call OnBan(Username, dbAccess, msgData, InBot, cmdRet())
@@ -421,7 +419,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
             Case "whoami":       Call OnWhoAmI(Username, dbAccess, msgData, InBot, cmdRet())
             Case "add":          Call OnAdd(Username, dbAccess, msgData, InBot, cmdRet())
             Case "mmail":        Call OnMMail(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "mail":         Call OnMail(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "bmail":        Call OnBMail(Username, dbAccess, msgData, InBot, cmdRet())
             Case "designated":   Call OnDesignated(Username, dbAccess, msgData, InBot, cmdRet())
             Case "flip":         Call OnFlip(Username, dbAccess, msgData, InBot, cmdRet())
             Case "about":        Call OnAbout(Username, dbAccess, msgData, InBot, cmdRet())
@@ -1006,28 +1004,40 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
     End If
 End Function ' end function OnGiveUp
 
-' TO DO:
 ' handle idlebans command
 Private Function OnIdleBans(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim strArray() As String ' ...
     Dim tmpBuf     As String ' temporary output buffer
-    Dim SubCmd     As String ' ...
+    Dim subcmd     As String ' ...
+    Dim Index      As Long   ' ...
+    Dim tmpData    As String ' ...
     
-    SubCmd = LCase$(Mid$(msgData, 1, InStr(1, msgData, _
-        Space$(1), vbBinaryCompare)))
+    tmpData = msgData
     
-    If (Len(SubCmd) > 0) Then
-        Select Case (SubCmd)
+    If (Len(tmpData) > 0) Then
+        Index = InStr(1, tmpData, Space$(1), vbBinaryCompare)
+    
+        If (Index <> 0) Then
+            subcmd = Mid$(tmpData, 1, Index - 1)
+        Else
+            subcmd = tmpData
+        End If
+        
+        subcmd = LCase$(subcmd)
+        
+        If (Index) Then
+            tmpData = Mid$(msgData, Index + 1)
+        End If
+    
+        Select Case (subcmd)
             Case "on"
-                strArray() = Split(msgData, " ")
-                
                 BotVars.IB_On = BTRUE
                 
-                If (UBound(strArray) > 1) Then
-                    If (StrictIsNumeric(strArray(2))) Then
-                        BotVars.IB_Wait = strArray(2)
+                If (Len(tmpData) > 0) Then
+                    If (StrictIsNumeric(tmpData)) Then
+                        BotVars.IB_Wait = Val(tmpData)
                     End If
                 End If
                 
@@ -1051,25 +1061,10 @@ Private Function OnIdleBans(ByVal Username As String, ByRef dbAccess As udtGetAc
                 tmpBuf = "IdleBans deactivated."
                 
                 Call WriteINI("Other", "IdleBans", "N")
-            
-            Case "wait", "delay"
-                strArray() = Split(msgData, " ")
-            
-                If (StrictIsNumeric(strArray(1))) Then
-                    BotVars.IB_Wait = CInt(strArray(1))
-                    
-                    tmpBuf = "IdleBan delay set to " & BotVars.IB_Wait & "."
-                    
-                    Call WriteINI("Other", "IdleBanDelay", CInt(strArray(1)))
-                Else
-                    tmpBuf = "Error: IdleBan delays require a numeric value."
-                End If
                 
             Case "kick"
-                strArray() = Split(msgData, " ")
-            
-                If (UBound(strArray) > 1) Then
-                    Select Case (LCase$(strArray(1)))
+                If (Len(tmpData) > 0) Then
+                    Select Case (LCase$(tmpData))
                         Case "on"
                             tmpBuf = "Idle users will now be kicked instead of banned."
                             
@@ -1088,7 +1083,18 @@ Private Function OnIdleBans(ByVal Username As String, ByRef dbAccess As udtGetAc
                             tmpBuf = "Error: Unknown idle kick setting."
                     End Select
                 Else
-                    tmpBuf = "Error: Not enough arguments were supplied."
+                    tmpBuf = "Error: Too few arguments."
+                End If
+        
+            Case "wait", "delay"
+                If (StrictIsNumeric(tmpData)) Then
+                    BotVars.IB_Wait = CInt(tmpData)
+                    
+                    tmpBuf = "IdleBan delay set to " & BotVars.IB_Wait & "."
+                    
+                    Call WriteINI("Other", "IdleBanDelay", CInt(tmpData))
+                Else
+                    tmpBuf = "Error: IdleBan delays require a numeric value."
                 End If
                 
             Case "status"
@@ -1100,7 +1106,7 @@ Private Function OnIdleBans(ByVal Username As String, ByRef dbAccess As udtGetAc
                 End If
                 
             Case Else
-                tmpBuf = "Error: Invalid IdleBan command."
+                tmpBuf = "Error: Invalid command."
         End Select
     End If
         
@@ -1115,58 +1121,68 @@ Private Function OnChPw(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim strArray() As String
     Dim tmpBuf     As String ' temporary output buffer
     
-    strArray = Split(msgData, " ")
-    
-    If (UBound(strArray) > 0) Then
-        Select Case (strArray(0))
-            Case "on", "set"
-                BotVars.ChannelPassword = strArray(2)
-                
-                If (BotVars.ChannelPasswordDelay < 1) Then
-                    BotVars.ChannelPasswordDelay = 30
-                    
-                    tmpBuf = "Channel password protection enabled, delay set to " & _
-                        BotVars.ChannelPasswordDelay & "."
-                Else
-                    tmpBuf = "Channel password protection enabled."
-                End If
-                
-            Case "time", "delay", "wait"
-                If (StrictIsNumeric(strArray(1))) Then
-                    If (Val(strArray(1)) < 256) Then
-                        BotVars.ChannelPasswordDelay = CByte(strArray(1))
-                        
-                        tmpBuf = "Channel password delay set to " & strArray(1) & "."
-                    Else
-                        tmpBuf = "Error: Channel password delays cannot be more than 255 seconds."
-                    End If
-                Else
-                    tmpBuf = "Error: Time setting requires a numeric value."
-                End If
-                
-            Case "off", "kill", "clear"
-                BotVars.ChannelPassword = vbNullString
-                
-                BotVars.ChannelPasswordDelay = 0
-                
-                tmpBuf = "Channel password protection disabled."
-                
-            Case "info", "status"
-                If ((BotVars.ChannelPassword = vbNullString) Or _
-                    (BotVars.ChannelPasswordDelay = 0)) Then
-                    
-                    tmpBuf = "Channel password protection is disabled."
-                Else
-                    tmpBuf = "Channel password protection is enabled. Password [" & BotVars.ChannelPassword & "], Delay [" & _
-                        BotVars.ChannelPasswordDelay & "]."
-                End If
-                
-            Case Else
-                tmpBuf = "Error: Unknown channel password command."
-        End Select
+    ' ...
+    If (InStr(1, msgData, Space(1), vbBinaryCompare) <> 0) Then
+        strArray = Split(msgData, " ", 2)
     Else
-        tmpBuf = "Error setting channel password."
+        ' ...
+        ReDim Preserve strArray(0)
+        
+        ' ...
+        strArray(0) = msgData
     End If
+    
+    Select Case (LCase$(strArray(0)))
+        Case "on", "set"
+            If (UBound(strArray) >= 1) Then
+                BotVars.ChannelPassword = strArray(1)
+                
+                If (BotVars.ChannelPasswordDelay <= 0) Then
+                    BotVars.ChannelPasswordDelay = 30
+                End If
+                
+                tmpBuf = "Channel password protection enabled, delay set to " & _
+                    BotVars.ChannelPasswordDelay & "."
+            Else
+                tmpBuf = "Error: Invalid channel password."
+            End If
+            
+        Case "off", "kill", "clear"
+            BotVars.ChannelPassword = vbNullString
+            
+            BotVars.ChannelPasswordDelay = 0
+            
+            tmpBuf = "Channel password protection disabled."
+            
+        Case "time", "delay", "wait"
+            If (StrictIsNumeric(strArray(1))) Then
+                If ((Val(strArray(1)) <= 255) And _
+                    (Val(strArray(1)) >= 1)) Then
+                   
+                    BotVars.ChannelPasswordDelay = CByte(Val(strArray(1)))
+                    
+                    tmpBuf = "Channel password delay set to " & strArray(1) & "."
+                Else
+                    tmpBuf = "Error: Invalid channel delay."
+                End If
+            Else
+                tmpBuf = "Error: Invalid channel delay."
+            End If
+            
+        Case "info", "status"
+            If ((BotVars.ChannelPassword = vbNullString) Or _
+                (BotVars.ChannelPasswordDelay = 0)) Then
+                
+                tmpBuf = "Channel password protection is disabled."
+            Else
+                tmpBuf = "Channel password protection is enabled. Password [" & _
+                    BotVars.ChannelPassword & "], Delay [" & _
+                        BotVars.ChannelPasswordDelay & "]."
+            End If
+            
+        Case Else
+            tmpBuf = "Error: Unknown channel password command."
+    End Select
     
     ' return message
     cmdRet(0) = tmpBuf
@@ -2474,12 +2490,16 @@ Private Function OnLevelBan(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     If (Len(msgData) > 0) Then
         If (StrictIsNumeric(msgData)) Then
-            i = msgData
+            i = Val(msgData)
             
-            If (i > 0) Then
-                tmpBuf = "Banning Warcraft III users under level " & i & "."
-                
-                BotVars.BanUnderLevel = i
+            If (i >= 1) Then
+                If (i <= 255) Then
+                    tmpBuf = "Banning Warcraft III users under level " & i & "."
+                    
+                    BotVars.BanUnderLevel = CByte(i)
+                Else
+                    tmpBuf = "Error: Invalid level specified."
+                End If
             Else
                 tmpBuf = "Levelbans disabled."
                 
@@ -2514,13 +2534,15 @@ Private Function OnD2LevelBan(ByVal Username As String, ByRef dbAccess As udtGet
     If (Len(msgData) > 0) Then
         If (StrictIsNumeric(msgData)) Then
             i = Val(msgData)
-            
-            BotVars.BanD2UnderLevel = i
-            
-            If (i > 0) Then
-                tmpBuf = "Banning Diablo II characters under level " & i & "."
                 
-                BotVars.BanD2UnderLevel = i
+            If (i >= 1) Then
+                If (i <= 255) Then
+                    BotVars.BanD2UnderLevel = CByte(i)
+            
+                    tmpBuf = "Banning Diablo II characters under level " & i & "."
+                Else
+                    tmpBuf = "Error: Invalid level specified."
+                End If
             Else
                 tmpBuf = "Diablo II Levelbans disabled."
                 
@@ -2534,7 +2556,6 @@ Private Function OnD2LevelBan(ByVal Username As String, ByRef dbAccess As udtGet
         
         Call WriteINI("Other", "BanD2UnderLevel", BotVars.BanD2UnderLevel)
     Else
-    
         If (BotVars.BanD2UnderLevel = 0) Then
            tmpBuf = "Currently not banning Diablo II users by level."
         Else
@@ -4658,8 +4679,8 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
     cmdRet(0) = tmpBuf
 End Function ' end function OnMMail
 
-' handle mail command
-Private Function OnMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+' handle bmail command
+Private Function OnBMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim Temp       As udtMail
@@ -4683,7 +4704,7 @@ Private Function OnMail(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     ' return message
     cmdRet(0) = tmpBuf
-End Function ' end function OnMail
+End Function ' end function OnBMail
 
 ' handle designated command
 Private Function OnDesignated(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -5715,17 +5736,25 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
     
     ' ...
     If (Len(CWord) > 0) Then
-        Dim Commands As MSXML2.DOMDocument40
+        Dim commands As MSXML2.DOMDocument40
         Dim command  As MSXML2.IXMLDOMNode
         
         ' ...
-        Set Commands = New MSXML2.DOMDocument40
-
-        ' ...
-        Call Commands.Load("commands.xml")
+        Set commands = New MSXML2.DOMDocument40
         
         ' ...
-        For Each command In Commands.documentElement.childNodes
+        If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
+            Call AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
+                "working directory.")
+                
+            Exit Function
+        End If
+
+        ' ...
+        Call commands.Load(App.Path & "\commands.xml")
+        
+        ' ...
+        For Each command In commands.documentElement.childNodes
             Dim accessGroup As MSXML2.IXMLDOMNode
             Dim access      As MSXML2.IXMLDOMNode
         
@@ -5803,7 +5832,8 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
 
 ' ...
 ERROR_HANDLER:
-    Call AddChat(RTBColors.ConsoleText, "Error: XML Database Engine has encountered an error.")
+    Call AddChat(RTBColors.ConsoleText, "Error: XML Database Engine has encountered an error " & _
+        "during access validation.")
     
     ' ...
     ValidateAccess = False
@@ -5814,18 +5844,29 @@ End Function
 ' ...
 Private Function convertAlias(ByVal cmdName As String) As String
     ' ...
+    On Error GoTo ERROR_HANDLER
+
+    ' ...
     If (Len(cmdName) > 0) Then
-        Dim Commands As MSXML2.DOMDocument40
+        Dim commands As MSXML2.DOMDocument40
         Dim command  As MSXML2.IXMLDOMNode
         
         ' ...
-        Set Commands = New MSXML2.DOMDocument40
-
-        ' ...
-        Call Commands.Load("commands.xml")
+        Set commands = New MSXML2.DOMDocument40
         
         ' ...
-        For Each command In Commands.documentElement.childNodes
+        If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
+            Call AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
+                "working directory.")
+                
+            Exit Function
+        End If
+        
+        ' ...
+        Call commands.Load(App.Path & "\commands.xml")
+        
+        ' ...
+        For Each command In commands.documentElement.childNodes
             Dim aliases As MSXML2.IXMLDOMNodeList
             Dim alias   As MSXML2.IXMLDOMNode
             
@@ -5847,9 +5888,24 @@ Private Function convertAlias(ByVal cmdName As String) As String
     
     ' ...
     convertAlias = cmdName
+    
+    Exit Function
+    
+' ...
+ERROR_HANDLER:
+    Call AddChat(RTBColors.ConsoleText, "Error: XML Database Engine has encountered an error " & _
+        "during alias lookup.")
+    
+    ' ...
+    convertAlias = False
+
+    Exit Function
 End Function
 
 Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
+    ' ...
+    On Error GoTo ERROR_HANDLER
+    
     Dim tmpBuf() As String  ' ...
     Dim tmpCount As Integer ' ...
     Dim found    As Integer ' ...
@@ -5862,17 +5918,25 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
     
     ' ...
     If (Len(cmdName) > 0) Then
-        Dim Commands As MSXML2.DOMDocument40
+        Dim commands As MSXML2.DOMDocument40
         Dim command  As MSXML2.IXMLDOMNode
         
         ' ...
-        Set Commands = New MSXML2.DOMDocument40
-
-        ' ...
-        Call Commands.Load("commands.xml")
+        Set commands = New MSXML2.DOMDocument40
         
         ' ...
-        For Each command In Commands.documentElement.childNodes
+        If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
+            Call AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
+                "working directory.")
+                
+            Exit Sub
+        End If
+
+        ' ...
+        Call commands.Load(App.Path & "\commands.xml")
+        
+        ' ...
+        For Each command In commands.documentElement.childNodes
             Dim blnFound As Boolean ' ...
         
             ' ...
@@ -6016,6 +6080,15 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
     
     ' return result
     cmdRet() = tmpBuf()
+    
+    Exit Sub
+    
+' ...
+ERROR_HANDLER:
+    Call AddChat(RTBColors.ConsoleText, "Error: XML Database Engine has encountered an error " & _
+        "during help lookup.")
+    
+    Exit Sub
 End Sub
 
 ' ...
