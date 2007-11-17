@@ -153,11 +153,13 @@
 		- (thanks ZergMasterI)
 	- Added a message received when your account has been closed by Blizzard (thanks Binaries)
 	- You can no longer write to the Sex field of your user profile due to Starcraft patch 1.15
-	- The Plugin System known to scripting users for the past couple years has been integrated into StealthBot
-		- This change will only cause minimal changes in your experience -- this involves are mere relocation of code.
+	- Revamped StealthBot's Scripting System by integrating The Plugin System
 		- The setup will be nearly identical to the ver .98 of the Plugin System that you have expected for some time now.
 			See the full list of changes here: http://stealthbot.net/p/plugs/changelog
 		- All scripting activity will now take place in your plugins folder. Your old "script.txt" file is no longer loaded.
+		- Added a wide array of new functions/subs to work with plugins and plugin features (see ScriptSupportClass.txt).
+		- Added a Plugins menu which creates a menu item for each of your plugins populated with useful commands.
+		- Added a Create New Plugin function to the Plugins menu which executes the Plugin Creator by #define
 	- The internal custom command system has now been revamped and moved to a plugin provided with the 
 		bot (thanks Snap).
 	- The internal definition system (define, newdef, deldef) has been moved to a plugin provided with the
@@ -221,8 +223,6 @@
 	- Added the option in the Miscellaneous General Settings panel to disable the prefix and/or
 		suffix boxes (thanks various)
 	- Added CD key length checks (thanks Jack)
-	- Added a Plugins menu which creates a menu item for each of your plugins populated with useful commands.
-	- Added a Create New Plugin function to the Plugins menu which executes the Plugin Creator by #define
 	- Added ability to control length of backlog.
 
 
