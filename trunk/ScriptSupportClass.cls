@@ -1276,7 +1276,7 @@ End Function
 
 
 '// GETTIMELEFT
-'//   Written by Swent. Get's the time left (in seconds) until a plugin timer sub is executed.
+'//   Get's the time left (in seconds) until a plugin timer sub is executed.
 Public Function GetTimeLeft(ByVal strPrefix As String, ByVal strTimerName As String)
 
     GetTimeLeft = GetPTLeft(strPrefix, strTimerName)
