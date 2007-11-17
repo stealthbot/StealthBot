@@ -4410,25 +4410,33 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         ' remove "+" prefix
                         flags = Mid$(flags, 2)
                     
-                        ' set user flags & check for duplicate entries
-                        For i = 1 To Len(flags)
-                            currentCharacter = Mid$(flags, i, 1)
-                        
-                            ' is flag valid (alphabetic)?
-                            If (((Asc(currentCharacter) >= Asc("A")) And (Asc(currentCharacter) <= Asc("Z"))) Or _
-                                ((Asc(currentCharacter) >= Asc("a")) And (Asc(currentCharacter) <= Asc("z")))) Then
-                                
-                                If (InStr(1, gAcc.flags, currentCharacter, vbBinaryCompare) = 0) Then
-                                    gAcc.flags = gAcc.flags & currentCharacter
-                                End If
-                            End If
-                        Next i
-                        
                         ' ...
-                        If (Len(gAcc.flags) = 0) Then
+                        If (Len(flags) > 0) Then
+                            ' set user flags & check for duplicate entries
+                            For i = 1 To Len(flags)
+                                currentCharacter = Mid$(flags, i, 1)
+                            
+                                ' is flag valid (alphabetic)?
+                                If (((Asc(currentCharacter) >= Asc("A")) And (Asc(currentCharacter) <= Asc("Z"))) Or _
+                                    ((Asc(currentCharacter) >= Asc("a")) And (Asc(currentCharacter) <= Asc("z")))) Then
+                                    
+                                    If (InStr(1, gAcc.flags, currentCharacter, vbBinaryCompare) = 0) Then
+                                        gAcc.flags = gAcc.flags & currentCharacter
+                                    End If
+                                End If
+                            Next i
+                            
+                            ' ...
+                            If (Len(gAcc.flags) = 0) Then
+                                ' return message
+                                cmdRet(0) = "Error: The flag(s) that you have specified are invalid."
+                            
+                                Exit Function
+                            End If
+                        Else
                             ' return message
-                            cmdRet(0) = "Error: The flags that you have specified are invalid."
-                        
+                            cmdRet(0) = "Error: You must specify at least one flag for addition."
+                            
                             Exit Function
                         End If
 
@@ -4441,28 +4449,37 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         
                         ' are we modifying an existing user? we better be!
                         If (gAcc.Username <> vbNullString) Then
-                        
-                            ' check for special flags
-                            If (InStr(1, tmpFlags, "B", vbBinaryCompare) <> 0) Then
-                                Call WildCardBan(user, vbNullString, 2)
-                            Else
-                                ' unban user if found in banlist
-                                For i = LBound(gBans) To UBound(gBans)
-                                    If (StrComp(gBans(i).Username, user, _
-                                            vbTextCompare) = 0) Then
-                                        
-                                        Call AddQ("/unban " & user)
+                            ' ...
+                            If (Len(tmpFlags) > 0) Then
+                                ' check for special flags
+                                If (InStr(1, tmpFlags, "B", vbBinaryCompare) <> 0) Then
+                                    If (InStr(1, user, "*", vbBinaryCompare) <> 0) Then
+                                        Call WildCardBan(user, vbNullString, 2)
+                                    Else
+                                        ' unban user if found in banlist
+                                        For i = LBound(gBans) To UBound(gBans)
+                                            If (StrComp(gBans(i).Username, user, _
+                                                    vbTextCompare) = 0) Then
+                                                
+                                                Call AddQ("/unban " & user)
+                                            End If
+                                        Next i
                                     End If
+                                End If
+                                
+                                ' remove specified flags
+                                For i = 1 To Len(tmpFlags)
+                                    gAcc.flags = Replace(gAcc.flags, Mid$(tmpFlags, i, 1), vbNullString)
                                 Next i
-                            End If
+                            Else
+                                ' return message
+                                cmdRet(0) = "Error: You must specify at least one flag for removal."
                             
-                            ' remove specified flags
-                            For i = 1 To Len(tmpFlags)
-                                gAcc.flags = Replace(gAcc.flags, Mid$(tmpFlags, i, 1), vbNullString)
-                            Next i
+                                Exit Function
+                            End If
                         Else
                             ' return message
-                            cmdRet(0) = "User not found."
+                            cmdRet(0) = "Error: User not found."
                         
                             Exit Function
                         End If
@@ -4490,7 +4507,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         ' ...
                         If (Len(gAcc.flags) = 0) Then
                             ' return message
-                            cmdRet(0) = "Error: The flags that you have specified are invalid."
+                            cmdRet(0) = "Error: The flag(s) that you have specified are invalid."
                         
                             Exit Function
                         End If
@@ -4930,33 +4947,35 @@ Private Function OnMonitor(ByVal Username As String, ByRef dbAccess As udtGetAcc
     
     Dim tmpBuf As String ' temporary output buffer
     
-    If (LCase$(msgData) = "on") Then
-        If (Not (MonitorExists)) Then
-            InitMonitor
-            If (MonitorForm.Connect(False)) Then
-                tmpBuf = "User monitor connecting."
+    If (Len(msgData) > 0) Then
+        If (LCase$(msgData) = "on") Then
+            If (Not (MonitorExists)) Then
+                InitMonitor
+                If (MonitorForm.Connect(False)) Then
+                    tmpBuf = "User monitor connecting."
+                Else
+                    tmpBuf = "User monitor login information not filled in."
+                End If
             Else
-                tmpBuf = "User monitor login information not filled in."
+                tmpBuf = "User montor already enabled."
+            End If
+        ElseIf (LCase$(msgData) = "off") Then
+            If (Not MonitorExists) Then
+                tmpBuf = "User monitor is not running."
+            Else
+                MonitorForm.ShutdownMonitor
+                tmpBuf = "User monitor disabled."
             End If
         Else
-            tmpBuf = "User montor already enabled."
-        End If
-    ElseIf (LCase$(msgData) = "off") Then
-        If (Not MonitorExists) Then
-            tmpBuf = "User monitor is not running."
-        Else
-            MonitorForm.ShutdownMonitor
-            tmpBuf = "User monitor disabled."
-        End If
-    Else
-        If (Not (MonitorExists())) Then
-            Call InitMonitor
-        End If
-        
-        If (MonitorForm.AddUser(msgData)) Then
-            tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & " added to the monitor list."
-        Else
-            tmpBuf = "Failed to add user " & Chr$(&H22) & msgData & Chr$(&H22) & " to the monitor list. (Contains Spaces, or already in the list)"
+            If (Not (MonitorExists())) Then
+                Call InitMonitor
+            End If
+            
+            If (MonitorForm.AddUser(msgData)) Then
+                tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & " added to the monitor list."
+            Else
+                tmpBuf = "Failed to add user " & Chr$(&H22) & msgData & Chr$(&H22) & " to the monitor list. (Contains Spaces, or already in the list)"
+            End If
         End If
     End If
     
@@ -4970,14 +4989,16 @@ Private Function OnUnMonitor(ByVal Username As String, ByRef dbAccess As udtGetA
     
     Dim tmpBuf As String ' temporary output buffer
     
-    If (MonitorExists) Then
-        If (MonitorForm.RemoveUser(msgData)) Then
-            tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & " was removed from the monitor list."
+    If (Len(msgData) > 0) Then
+        If (MonitorExists) Then
+            If (MonitorForm.RemoveUser(msgData)) Then
+                tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & " was removed from the monitor list."
+            Else
+                tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & " was not found in the monitor list."
+            End If
         Else
-            tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & " was not found in the monitor list."
+            tmpBuf = "User monitor is not enabled."
         End If
-    Else
-        tmpBuf = "User monitor is not enabled."
     End If
     
     ' return message
