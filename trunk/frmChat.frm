@@ -149,6 +149,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -846,6 +847,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3080,7 +3082,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     sTemp = ParseStatstring(.Statstring, sOutBuf, sTemp)
                     
                     sTemp = "Ping at login: " & .Ping & vbCrLf
-                    sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
+                    sTemp = sTemp & "Flags: " & FlagDescription(.flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
                     sTemp = sTemp & sOutBuf
                 
@@ -3141,7 +3143,7 @@ Private Sub mnuDisconnect2_Click()
 End Sub
 
 Private Sub mnuEditAccessFlags_Click()
-    Shell "notepad " & GetFilePath("access.ini"), vbNormalFocus
+    Shell "notepad " & App.Path & "\commands.xml", vbNormalFocus
 End Sub
 
 Private Sub mnuEditCaught_Click()
@@ -3871,14 +3873,14 @@ Private Sub mnuUserlistWhois_Click()
     With RTBColors
         If Temp.access > -1 Then
             If Temp.access > 0 Then
-                If Temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.access & " and flags " & Temp.Flags & "."
+                If Temp.flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.access & " and flags " & Temp.flags & "."
                 Else
                     AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.access & "."
                 End If
             Else
-                If Temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with flags " & Temp.Flags & "."
+                If Temp.flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with flags " & Temp.flags & "."
                 Else
                     AddChat .ConsoleText, "User not found."
                 End If
@@ -4296,7 +4298,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     ElseIf ((s = "/flags") And (MDebug("debug"))) Then
                                         For n = 1 To colUsersInChannel.Count
                                             With colUsersInChannel.Item(n)
-                                                AddChat RTBColors.ConsoleText, .Username & Space(4) & .Flags
+                                                AddChat RTBColors.ConsoleText, .Username & Space(4) & .flags
                                             End With
                                         Next n
                                         
@@ -4362,7 +4364,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                         End If
                                         
                                         Temp.access = 1000
-                                        Temp.Flags = "A"
+                                        Temp.flags = "A"
                                         
                                         m = OutFilterMsg(s)
                                         
@@ -4550,7 +4552,7 @@ Private Sub quLower_Timer()
                 Else
                     gA = GetAccess(strArray(c))
                     
-                    If Not (GetSafelist(strArray(c)) Or gA.access > (AutoModSafelistValue - 1) Or InStr(gA.Flags, "A") > 0) Then
+                    If Not (GetSafelist(strArray(c)) Or gA.access > (AutoModSafelistValue - 1) Or InStr(gA.flags, "A") > 0) Then
                         AddQ "/squelch " & IIf(Dii, "*", "") & strArray(c)
                     End If
                 End If
@@ -5087,7 +5089,7 @@ Private Sub UpTimer_Timer()
                         If .TimeSinceTalk() > BotVars.IB_Wait Then
                             .InternalFlags = 0
                             
-                            If Not (.Flags And &H2 = &H2) And Not .Safelisted Then
+                            If Not (.flags And &H2 = &H2) And Not .Safelisted Then
                                 Ban .Username & " Idle for " & BotVars.IB_Wait & "+ seconds", (AutoModSafelistValue - 1), IIf(BotVars.IB_Kick, 1, 0)
                             End If
                         End If
@@ -5100,7 +5102,7 @@ Private Sub UpTimer_Timer()
                 ThisPos = checkChannel(.Username)
                 
                 If ThisPos > 0 And ThisPos < lvChannel.ListItems.Count Then
-                    newColor = GetNameColor(.Flags, .TimeSinceTalk(), .IsSelf)
+                    newColor = GetNameColor(.flags, .TimeSinceTalk(), .IsSelf)
                     
                     If lvChannel.ListItems(ThisPos).ForeColor <> newColor Then
                         lvChannel.ListItems(ThisPos).ForeColor = newColor
@@ -5668,8 +5670,8 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
             
             For i = LBound(DB) To UBound(DB)
                 With DB(i)
-                    If Len(.Flags) > 0 Then
-                        If InStr(1, .Flags, "Z") > 0 Or InStr(1, .Flags, "B") > 0 Then Add = 1
+                    If Len(.flags) > 0 Then
+                        If InStr(1, .flags, "Z") > 0 Or InStr(1, .flags, "B") > 0 Then Add = 1
                         If InStr(1, .Username, " ") > 0 Then Add = 1
                     End If
                 End With
