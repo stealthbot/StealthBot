@@ -602,7 +602,7 @@ Private Function OnPeonBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
         BotVars.BanPeons = 1
         
         ' write configuration entry
-        Call WriteINI("Other", "PeonBans", "1")
+        Call WriteINI("Other", "PeonBans", "Y")
         
         tmpBuf = "Peon banning activated."
     ElseIf (msgData = "off") Then
@@ -610,7 +610,7 @@ Private Function OnPeonBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
         BotVars.BanPeons = 0
         
         ' write configuration entry
-        Call WriteINI("Other", "PeonBans", "0")
+        Call WriteINI("Other", "PeonBans", "N")
         
         tmpBuf = "Peon banning deactivated."
     ElseIf (msgData = "status") Then
@@ -1259,14 +1259,14 @@ Private Function OnKickOnYell(ByVal Username As String, ByRef dbAccess As udtGet
             
             tmpBuf = "Kick-on-yell enabled."
             
-            Call WriteINI("Other", "KickOnYell", "1")
+            Call WriteINI("Other", "KickOnYell", "Y")
             
         Case "off"
             BotVars.KickOnYell = 0
             
             tmpBuf = "Kick-on-yell disabled."
             
-            Call WriteINI("Other", "KickOnYell", "0")
+            Call WriteINI("Other", "KickOnYell", "N")
             
         Case "status"
             tmpBuf = "Kick-on-yell is "
@@ -1324,6 +1324,8 @@ Private Function OnPlugBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
                         End If
                     End With
                 Next i
+                
+                Call WriteINI("Other", "PlugBans", "Y")
             End If
             
         Case "off"
@@ -1331,6 +1333,8 @@ Private Function OnPlugBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 BotVars.PlugBan = False
                 
                 tmpBuf = "PlugBan deactivated."
+                
+                Call WriteINI("Other", "PlugBans", "N")
             Else
                 tmpBuf = "PlugBan is already deactivated."
             End If
