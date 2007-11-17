@@ -510,15 +510,15 @@ End Sub
 '//             use it to control whether or not your command responses display publicly.
 '// CC          CC controls whether or not the command string is passed to the Custom Command processor.
 '//             For scripting purposes I will not allow the user to set CC, it is always 0.
-Public Function Command(ByVal Username As String, ByVal Message As String, ByVal InBot As Boolean) As Boolean
+Public Function command(ByVal Username As String, ByVal Message As String, ByVal InBot As Boolean) As Boolean
     Dim dbAccess As udtGetAccessResponse
     '// GetAccess() will return the access type the commands sub needs
     
     ' execute command
-    Command = ProcessCommand(Username, Message, InBot, False)
+    command = ProcessCommand(Username, Message, InBot, False)
     
     ' backwards compatible (may be removed in future!)
-    If (Command = False) Then
+    If (command = False) Then
         Dim tmpMsg As String ' ...
         
         ' store local copy of message
@@ -533,7 +533,7 @@ Public Function Command(ByVal Username As String, ByVal Message As String, ByVal
         End If
         
         ' execute command
-        Command = ProcessCommand(Username, Message, InBot, False)
+        command = ProcessCommand(Username, Message, InBot, False)
     End If
 End Function
 
@@ -559,7 +559,7 @@ Public Function CommandEx(ByVal Username As String, ByVal Message As String, ByV
     Dim dbAccess As udtGetAccessResponse
     '// GetAccess() will return the access type the commands sub needs
     
-    dbAccess.Access = uAccess
+    dbAccess.access = uAccess
     dbAccess.Flags = uFlags
 
     ' execute command
@@ -638,13 +638,13 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Sub GetDBEntry(ByVal Username As String, ByRef Access, ByRef Flags) '// yum, Variants >:\
+Public Sub GetDBEntry(ByVal Username As String, ByRef access, ByRef Flags) '// yum, Variants >:\
 
     Dim Temp As udtGetAccessResponse
     
     Temp = GetAccess(Username)
     
-    Access = Temp.Access
+    access = Temp.access
     Flags = Temp.Flags
 
 End Sub
@@ -841,7 +841,7 @@ End Function
 '// Returns 0 if the user is not present
 Public Function GetPositionByName(ByVal sUser As String) As Integer
     
-    GetPositionByName = CheckChannel(sUser)
+    GetPositionByName = checkChannel(sUser)
     
 End Function
 
@@ -849,11 +849,11 @@ End Function
 '// GETNAMEBYPOSITION
 '// Returns the name of the person at position X in the channel list.
 '// Positions are 1-based. Returns an empty string if the user isn't present
-Public Function GetNameByPosition(ByVal x As Integer) As String
+Public Function GetNameByPosition(ByVal X As Integer) As String
     
     With frmChat.lvChannel.ListItems
-        If x > 0 And x <= .Count Then
-            GetNameByPosition = .Item(x).text
+        If X > 0 And X <= .Count Then
+            GetNameByPosition = .Item(X).text
         Else
             GetNameByPosition = ""
         End If
@@ -1137,8 +1137,8 @@ Public Sub GetWinCursorPos(ByRef lCursorX As Long, ByRef lCursorY As Long)
     
     GetCursorPos PAPI
     
-    lCursorX = PAPI.x
-    lCursorY = PAPI.y
+    lCursorX = PAPI.X
+    lCursorY = PAPI.Y
 End Sub
 
 
@@ -1271,7 +1271,7 @@ End Sub
 '//   Get's the time left (in seconds) until a plugin timer sub is executed.
 Public Function GetTimerEnabled(ByVal strPrefix As String, ByVal strTimerName As String)
     
-    GetPTEnabled strPrefix, strTimerName
+    GetTimerEnabled = GetPTEnabled(strPrefix, strTimerName)
 End Function
 
 
@@ -1279,7 +1279,7 @@ End Function
 '//   Written by Swent. Get's the time left (in seconds) until a plugin timer sub is executed.
 Public Function GetTimeLeft(ByVal strPrefix As String, ByVal strTimerName As String)
 
-    GetPTLeft strPrefix, strTimerName
+    GetTimeLeft = GetPTLeft(strPrefix, strTimerName)
 End Function
 
 
@@ -1287,7 +1287,7 @@ End Function
 '//   Get's the time (in seconds) since a plugin timer sub was last executed.
 Public Function GetTimerWaiting(ByVal strPrefix As String, ByVal strTimerName As String)
 
-    GetPTWaiting strPrefix, strTimerName
+    GetTimerWaiting = GetPTWaiting(strPrefix, strTimerName)
 End Function
 
 
@@ -1540,11 +1540,11 @@ End Sub
 
 Private Sub Class_Terminate()
     'Go through and destroy all the Forms the user has created
-    Dim x As Integer
-    For x = 0 To obScriptForms.Count
+    Dim X As Integer
+    For X = 0 To obScriptForms.Count
         Unload obScriptForms.Item(0)
         Call obScriptForms.Remove(0)
-    Next x
+    Next X
     Set obScriptForms = Nothing
 End Sub
 
