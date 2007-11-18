@@ -160,6 +160,8 @@
     
     <access>
       <rank>20</rank>
+      <flag>O</flag>
+      <flag>o</flag>
     </access>
   </command>
 
@@ -254,21 +256,21 @@
       </description>
     </documentation>
 
-    <arguments>
-      <argument name="username">
+    <arguments type="required">
+      <argument name="username" type="required">
         <documentation>
           ...
         </documentation>
       </argument>
 
-      <arguments>
-        <argument name="rank">
+      <arguments type="required">
+        <argument name="rank" type="optional">
           <documentation>
             ...
           </documentation>
         </argument>
 
-        <argument name="attribute">
+        <argument name="attribute" type="optional">
           <documentation>
             ...
           </documentation>

@@ -1728,7 +1728,8 @@ End Function
 
 '// COLORMODIFY - where L is passed as the start position of the text to be checked
 Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef l As Long)
-    Dim i As Long, s As Long
+    Dim i As Long
+    Dim s As String
     Dim Temp As Long
     
     If l = 0 Then l = 1
