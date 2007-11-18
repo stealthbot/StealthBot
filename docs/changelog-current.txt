@@ -169,6 +169,8 @@
           	followed by a space, and the removal of a trigger requirement entirely when issued via whisper.
 	- The database system has been completely overhauled:
                 - Database is now controlled in a central repository (users.txt)
+		- The maximum allowable access level is now 200.  This has been changed from 1000 to discourage the assignment of unnecessarily
+			high access levels, later resulting in security issues that could have easily been averted by the user.
                 - The tagbans and shitlist are now represented using flags 'B'.
 		- The safelist is now represented using flags 'S'.
 		- Clans and games can now be given access using the "--type" option of the add command; however, keep in mind, these are
@@ -177,12 +179,13 @@
 		- User groups have been added, giving users the ability to assign access based on a clan hierarchy.  Groups can be created using
 			the add command with the "--type group" option; users can be added to a group with the add command and the "--group" option.
                 - Cumulative access can now be given using wildcards, clans, game types, and groups:
-                	- Giving * 0 B, for example, will give all users the ranking of 0 and the flags 'B'.
-			- If, assuming that * is equal to 0 B, and another user was added to the datbase
-			  	with flags 100 SD, that user would now have the ranking of 100, and the flags 'BDS'.
-			  	The flag 'B' comes as a result of the user matching the database entry "*".  However,
-			  	'S' overrides 'B', and, because of this, the user will not be banned.  The user will
-				always be given the highest possible ranking allowable by the match.
+                	- Giving * flags 'B', for example, will give all users the ranking of 0 and the flags 'B'.
+			- If, assuming that * is equal to 'B', and another user was added to the datbase with access 100 and
+				flags 'SD', that user would now have the ranking of 100, and the flags 'BDS'.  The flag 'B'
+				comes as a result of the user matching the database entry "*".  However, 'S' overrides 'B',
+				and, because of this, the user will not be banned.  The user will always be given the highest
+				possible ranking allowable by the match.  This is most effective when assigning users to groups
+				based on a clan hierarchy.
 
 
 	<b>INTERFACE</b>
@@ -251,17 +254,16 @@
 	- New commands for this version:
 		shuffle			requires access 80, toggles Winamp's Shuffle feature
 		repeat			requires access 80, toggles Winamp's Repeat feature
-		setcmdaccess -a- -b-	requires access 70, changes the required access for your custom command -a- to -b-
 		findr  -a- -b-		requires access 20, finds users with access between -a- and -b-
 		detail -user-   	requires access 60, pulls detailed information from the database about a user
 						last modified by/on, added by/on
-		deldef -def-		requires access 50, erases the definition -def- that you provide (thanks Draco)
 		checkmail		requires access 40, tells you whether or not you have new mail messages
 		getmail			requires 0 access but will not respond at all unless you have unread mail
 						if you have unread mail, reads you the first message
 		shitcheck -a-		requires access 60, tells you whether or not a given user is shitlisted or has flags of 'B'
 						alias "slcheck" (thanks Snap)
 		findgrp -group-		requires 20 access, finds users matching group -group-
+		help -topic-		requires 20 access, returns documentation for a particular command
 
 	- The findattr command can now search for users matching all of several specified flags when specified
 		in a group.
@@ -272,7 +274,6 @@
 		- "--group" will set a users group memberships
 	- The whois command is now distinct from the other database searching commands in that the
 	  	whois command will now state a users cumulative rank and/or flags.
-	- The help command was added to allow for documentation to be displayed on any command, ranking or attribute.
 	- The ability to modify command access requirments has been moved from access.ini to commands.xml.  This change
 		will allow for more fine-grained access specifications, and give users the ability to create their own command
 		documentation displayable on webpages and within the bot's internal help command.
