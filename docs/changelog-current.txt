@@ -42,8 +42,8 @@
 		on Blizzard clients
 	- Server info and error messages, and channel names, will now be properly UTF8-decoded (thanks Jack)
 	- Now UTF8-decoding emotes (thanks various)
-	- Fixed bug in color decoding function that would cause the bot to crash when a specially formatted string
-		was sent (thanks Jack) while UTF-8 was disabled.
+	- Fixed bug in color decoding routine that would cause the bot to crash when a specially formatted string
+		was sent while UTF-8 was disabled (thanks Phix & Jack)
 
 
 	<b>INTERFACE</b>
