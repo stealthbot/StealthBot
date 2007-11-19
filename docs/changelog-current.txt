@@ -229,6 +229,13 @@
 		suffix boxes (thanks various)
 	- Added CD key length checks (thanks Jack)
 	- Added ability to control length of backlog.
+	- The autocomplete system has undergone the following changes:
+		- The Tab key can now be used to scroll through a list of possible username matches
+		- You can use the Tab key to bring up user list matches anywhere in the text string
+		- When pressing enter immediately after a match appears, the selected match will no
+			longer be sent to Battle.net unless you have first unselected it.  This
+			prevents a bug that occurs when you wish to send a single word that just
+			happens to match all or part of a name within the user list.
 
 
 	<b>COMMANDS</b>
