@@ -651,6 +651,27 @@ Public Sub GetDBEntry(ByVal Username As String, ByRef access, ByRef Flags) '// y
 
 End Sub
 
+'// GETCUMULATIVEDBENTRY
+'// Bit of a modification to my existing GetCumulativeAccess() call to return the data to you
+'// effectively.
+'// The difference between GetDBEntry and GetCumulativeDBEntry is that this function will
+'// return the cumulative access of a particular user.  This includes both dynamic and static
+'// group memberships and all wildcard matches.  This function should almost always be used over
+'// GetDBEntry().
+'// The scripting control isn't the greatest.
+'// Pass it the username and it will pass you the person's access and flags.
+'// If the name is not in the database, it will return -1 / null flags.
+Public Sub GetCumulativeDBEntry(ByVal Username As String, ByRef access, ByRef Flags) '// yum, Variants >:\
+
+    Dim Temp As udtGetAccessResponse
+    
+    Temp = GetCumulativeAccess(Username)
+    
+    access = Temp.access
+    Flags = Temp.Flags
+
+End Sub
+
 
 '// PREPARELIKECHECK
 '// Prepares a string for comparison using the Visual Basic LIKE operator

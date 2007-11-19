@@ -149,7 +149,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -713,6 +712,7 @@ Begin VB.Form frmChat
       Height          =   315
       Left            =   600
       TabIndex        =   1
+      TabStop         =   0   'False
       Top             =   6600
       Width           =   7695
    End
@@ -847,7 +847,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3082,7 +3081,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     sTemp = ParseStatstring(.Statstring, sOutBuf, sTemp)
                     
                     sTemp = "Ping at login: " & .Ping & vbCrLf
-                    sTemp = sTemp & "Flags: " & FlagDescription(.flags) & vbCrLf
+                    sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
                     sTemp = sTemp & sOutBuf
                 
@@ -3873,14 +3872,14 @@ Private Sub mnuUserlistWhois_Click()
     With RTBColors
         If Temp.access > -1 Then
             If Temp.access > 0 Then
-                If Temp.flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.access & " and flags " & Temp.flags & "."
+                If Temp.Flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.access & " and flags " & Temp.Flags & "."
                 Else
                     AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.access & "."
                 End If
             Else
-                If Temp.flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with flags " & Temp.flags & "."
+                If Temp.Flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with flags " & Temp.Flags & "."
                 Else
                     AddChat .ConsoleText, "User not found."
                 End If
@@ -3977,8 +3976,28 @@ Private Sub mnuUsers_Click()
 End Sub
 
 Private Sub cboSend_GotFocus()
+    ' ...
+    On Error Resume Next
+
+    Dim i As Integer ' ...
+
     cboSend.SelLength = cboSendSelLength
     cboSend.SelStart = cboSendSelStart
+
+    For i = 0 To (Controls.Count - 1)
+        Controls(i).TabStop = False
+    Next i
+End Sub
+
+Private Sub cboSend_LostFocus()
+    ' ...
+    On Error Resume Next
+
+    Dim i As Integer ' ...
+
+    For i = 0 To (Controls.Count - 1)
+        Controls(i).TabStop = True
+    Next i
 End Sub
 
 Private Sub cboSend_Click()
@@ -4180,6 +4199,85 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             Case KEY_DELETE
                 Highlighted = False
                 
+            Case vbKeyTab
+                Dim prevStart As Long   ' ...
+                Dim tmpStr    As String ' ...
+                Dim res       As String ' ...
+            
+                With cboSend
+                    If (.SelStart > 0) Then
+                        prevStart = .SelStart
+                        
+                        ' ...
+                        tmpStr = Mid$(.text, 1, prevStart)
+                    End If
+                    
+                    If (InStr(1, tmpStr, Space(1), vbBinaryCompare) <> 0) Then
+                        Dim tmp As String ' ...
+                    
+                        ' ...
+                        tmp = Mid$(tmpStr, InStrRev(tmpStr, Space(1)) + 1)
+                        
+                        If (Highlighted = True) Then
+                            ' ...
+                            res = MatchClosest(tmp, _
+                                IIf(MatchIndex, MatchIndex + 1, 1))
+                        Else
+                            If (MatchIndex > 0) Then
+                                ' ...
+                                res = MatchClosest(tmp, MatchIndex)
+                            End If
+                        End If
+
+                        ' try again from the top
+                        If (Len(res) = 0) Then
+                            res = MatchClosest(tmp, 1)
+                        End If
+                        
+                        ' final check
+                        If (res <> vbNullString) Then
+                            If (prevStart > 0) Then
+                                res = Mid$(res, Len(tmp) + 1)
+                            End If
+                        
+                            .text = tmpStr & _
+                                res
+                                
+                            Highlighted = True
+                        End If
+                    Else
+                        If (Highlighted = True) Then
+                            ' look for match
+                            res = MatchClosest(tmpStr, _
+                                IIf(MatchIndex, MatchIndex + 1, 1))
+                        Else
+                            If (MatchIndex > 0) Then
+                                res = MatchClosest(tmpStr, MatchIndex)
+                            End If
+                        End If
+                            
+                        ' try again from the top
+                        If (Len(res) = 0) Then
+                            res = MatchClosest(tmpStr, 1)
+                        End If
+                    
+                        ' final check
+                        If (res <> vbNullString) Then
+                            If (prevStart > 0) Then
+                                res = Mid$(res, Len(tmpStr) + 1)
+                            End If
+                        
+                            .text = tmpStr & _
+                                res
+                                
+                            Highlighted = True
+                        End If
+                    End If
+            
+                    .SelStart = prevStart
+                    .SelLength = (Len(.text) - .SelStart)
+                End With
+                
             Case KEY_ENTER
                 n = UsernameToIndex(CurrentUsername)
                 
@@ -4205,183 +4303,175 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         End If
                 
                     Case Else 'normal ENTER - old rules apply
-                        If LenB(cboSend.text) > 0 Then
+                        If (Highlighted) Then
+                            cboSend.SelText = vbNullString
+                            
+                            Highlighted = False
+                        End If
+                    
+                        If (LenB(cboSend.text) > 0) Then
+                            On Error Resume Next
+                            
                             If gChannel.Current = "The Void" And Not mnuDisableVoidView.Checked Then
                                 BNCSBuffer.VoidTrimBuffer
                             End If
-                        
-                            If Highlighted Then
-                                Highlighted = False
+                            
+                            SetVeto False
+                            
+                            SControl.Run "Event_PressedEnter", cboSend.text
+                            
+                            Vetoed = GetVeto
+                            
+                            If Not Vetoed Then
+                                If ((Left$(s, 6) = "/tell ") And (Len(s) > 6)) Then
+                                    s = "/w " & Mid$(s, 7)
+                                End If
                                 
-                                With cboSend
-                                    If InStr(.text, " ") Then
-                                        .text = Split(.text, " ")(0) & Space(1) & MatchClosest(.text)
+                                s = txtPre.text & cboSend.text & txtPost.text
+                                
+                                If (LCase(s) = "/rejoin") Then
+                                    RejoinChannel gChannel.Current
+                                    
+                                ElseIf (LCase(s) = "/fl" And MDebug("debug")) Then
+                                    For n = 1 To FriendListHandler.colFriends.Count
+                                        AddChat vbMagenta, FriendListHandler.colFriends.Item(n).Username & " - " & FriendListHandler.colFriends.Item(n).Product
+                                    Next n
+                                
+                                ElseIf (LCase(s) = "/accountinfo") Then
+                                    RequestSystemKeys
+                                    
+                                    GoTo theEnd
+                                    
+                                ElseIf (LCase(s) = "/cls") Then
+                                    Call mnuClear_Click
+                                    
+                                    GoTo theEnd
+                                    
+                                ElseIf (LCase(s) = "/ds_list") Then
+                                    Call ds.List
+                                    
+                                    GoTo theEnd
+                                    
+                                ElseIf (Left$(LCase$(s), 7) = "/setcl ") Then
+                                    CommandLine = Mid$(s, 8)
+                                    frmChat.AddChat RTBColors.SuccessText, "The command line for this instance has been changed."
+                                    
+                                    GoTo theEnd
+                                    
+                                ElseIf ((s = "/force") And (MDebug("debug"))) Then
+                                    MyFlags = 2
+                                    SharedScriptSupport.BotFlags = MyFlags
+                                    AddChat RTBColors.ConsoleText, "Flags forced to 2."
+                                
+                                ElseIf ((s = "/cmf") And (MDebug("debug"))) Then
+                                    AddChat RTBColors.ConsoleText, "MyFlags is currently " & MyFlags & "."
+                                
+                                ElseIf (s = "/nadn") Then
+                                    AddName "Test1", "PX3W", 0, 0
+                                    AddName "Test2", "PX3W", 0, 0
+                                    AddName "Test3", "PX3W", 0, 0
+                                    AddName "Test4", "PX3W", 0, 0
+                                    AddName "Test5", "PX3W", 0, 0
+                                    AddName "Test6", "PX3W", 0, 0
+                                    
+                                ElseIf ((s = "/q") And (MDebug("debug"))) Then
+                                    If colQueue.Count > 0 Then
+                                        For n = 1 To colQueue.Count
+                                            AddChat RTBColors.ConsoleText, colQueue.Item(n).Priority & "|" & colQueue.Item(n).Message
+                                        Next n
                                     Else
-                                        .text = MatchClosest(.text)
+                                        AddChat RTBColors.ConsoleText, "The queue is empty."
                                     End If
                                     
-                                    .SelStart = Len(cboSend.text)
-                                End With
-                            Else
-                                On Error Resume Next
+                                    'AddChat vbBlue, IsBanned("Technique)DK(@USEast#2")
+                                    GoTo theEnd
                                 
-                                SetVeto False
+                                ElseIf ((s = "/flags") And (MDebug("debug"))) Then
+                                    For n = 1 To colUsersInChannel.Count
+                                        With colUsersInChannel.Item(n)
+                                            AddChat RTBColors.ConsoleText, .Username & Space(4) & .Flags
+                                        End With
+                                    Next n
+                                    
+                                    n = 0
+                                    
+                                    GoTo theEnd
+                                    
+                                ElseIf LCase(Left$(s, 7)) = "/watch " Then
+                                    WatchUser = LCase(Right(s, Len(s) - 7))
+                                    AddChat RTBColors.ConsoleText, "Watching " & Right(s, Len(s) - 7)
+                                    
+                                    GoTo theEnd
+                                    
+                                ElseIf LCase(s) = "/watchoff" Then
+                                    WatchUser = vbNullString
+                                    AddChat RTBColors.ConsoleText, "Watch off."
+                                    GoTo theEnd
+                                'ElseIf LCase(s) = "/li" Then
+                                '
+                                '    AddChat vbMagenta, "AWAITING_CHPW: " & IF_AWAITING_CHPW
+                                '    AddChat vbMagenta, "CHPW_AND_IDLEBANS: " & IF_CHPW_AND_IDLEBANS
+                                '    AddChat vbMagenta, "IDLEBANS: " & IF_SUBJECT_TO_IDLEBANS
+                                '
+                                '    For i = 1 To colUsersInChannel.Count
+                                '        AddChat vbMagenta, colUsersInChannel.Item(i).Username & "\" & colUsersInChannel.Item(i).InternalFlags
+                                '    Next i
+                                '    GoTo theEnd
+                                ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
+                                    m = Right(s, (Len(s) - 7))
+                                'ElseIf LCase(s) = "/li" Then
+                                '
+                                '    AddChat vbMagenta, "AWAITING_CHPW: " & IF_AWAITING_CHPW
+                                '    AddChat vbMagenta, "CHPW_AND_IDLEBANS: " & IF_CHPW_AND_IDLEBANS
+                                '    AddChat vbMagenta, "IDLEBANS: " & IF_SUBJECT_TO_IDLEBANS
+                                '
+                                '    For i = 1 To colUsersInChannel.Count
+                                '        AddChat vbMagenta, colUsersInChannel.Item(i).Username & "\" & colUsersInChannel.Item(i).InternalFlags
+                                '    Next i
+                                '    GoTo theEnd
                                 
-                                SControl.Run "Event_PressedEnter", cboSend.text
-                                
-                                Vetoed = GetVeto
-                                
-                                If Not Vetoed Then
-                                    If ((Left$(s, 6) = "/tell ") And (Len(s) > 6)) Then
-                                        s = "/w " & Mid$(s, 7)
+                                ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
+                                    m = Right(s, (Len(s) - 7))
+                                    AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m)
+                                    
+                                ElseIf (LCase(Left$(s, 9)) = "/profile ") Then
+                                    If (sckBNet.State = 7) Then
+                                        RequestProfile Right(s, Len(s) - 9)
                                     End If
                                     
-                                    s = txtPre.text & cboSend.text & txtPost.text
-                                    
-                                    If (LCase(s) = "/rejoin") Then
-                                        RejoinChannel gChannel.Current
-                                        
-                                    ElseIf (LCase(s) = "/fl" And MDebug("debug")) Then
-                                        For n = 1 To FriendListHandler.colFriends.Count
-                                            AddChat vbMagenta, FriendListHandler.colFriends.Item(n).Username & " - " & FriendListHandler.colFriends.Item(n).Product
-                                        Next n
-                                    
-                                    ElseIf (LCase(s) = "/accountinfo") Then
-                                        RequestSystemKeys
-                                        
-                                        GoTo theEnd
-                                        
-                                    ElseIf (LCase(s) = "/cls") Then
-                                        Call mnuClear_Click
-                                        
-                                        GoTo theEnd
-                                        
-                                    ElseIf (LCase(s) = "/ds_list") Then
-                                        Call ds.List
-                                        
-                                        GoTo theEnd
-                                        
-                                    ElseIf (Left$(LCase$(s), 7) = "/setcl ") Then
-                                        CommandLine = Mid$(s, 8)
-                                        frmChat.AddChat RTBColors.SuccessText, "The command line for this instance has been changed."
-                                        
-                                        GoTo theEnd
-                                        
-                                    ElseIf ((s = "/force") And (MDebug("debug"))) Then
-                                        MyFlags = 2
-                                        SharedScriptSupport.BotFlags = MyFlags
-                                        AddChat RTBColors.ConsoleText, "Flags forced to 2."
-                                    
-                                    ElseIf ((s = "/cmf") And (MDebug("debug"))) Then
-                                        AddChat RTBColors.ConsoleText, "MyFlags is currently " & MyFlags & "."
-                                    
-                                    ElseIf (s = "/nadn") Then
-                                        AddName "Test1", "PX3W", 0, 0
-                                        AddName "Test2", "PX3W", 0, 0
-                                        AddName "Test3", "PX3W", 0, 0
-                                        AddName "Test4", "PX3W", 0, 0
-                                        AddName "Test5", "PX3W", 0, 0
-                                        AddName "Test6", "PX3W", 0, 0
-                                        
-                                    ElseIf ((s = "/q") And (MDebug("debug"))) Then
-                                        If colQueue.Count > 0 Then
-                                            For n = 1 To colQueue.Count
-                                                AddChat RTBColors.ConsoleText, colQueue.Item(n).Priority & "|" & colQueue.Item(n).Message
-                                            Next n
-                                        Else
-                                            AddChat RTBColors.ConsoleText, "The queue is empty."
-                                        End If
-                                        
-                                        'AddChat vbBlue, IsBanned("Technique)DK(@USEast#2")
-                                        GoTo theEnd
-                                    
-                                    ElseIf ((s = "/flags") And (MDebug("debug"))) Then
-                                        For n = 1 To colUsersInChannel.Count
-                                            With colUsersInChannel.Item(n)
-                                                AddChat RTBColors.ConsoleText, .Username & Space(4) & .flags
-                                            End With
-                                        Next n
-                                        
-                                        n = 0
-                                        
-                                        GoTo theEnd
-                                        
-                                    ElseIf LCase(Left$(s, 7)) = "/watch " Then
-                                        WatchUser = LCase(Right(s, Len(s) - 7))
-                                        AddChat RTBColors.ConsoleText, "Watching " & Right(s, Len(s) - 7)
-                                        
-                                        GoTo theEnd
-                                        
-                                    ElseIf LCase(s) = "/watchoff" Then
-                                        WatchUser = vbNullString
-                                        AddChat RTBColors.ConsoleText, "Watch off."
-                                        GoTo theEnd
-                                    'ElseIf LCase(s) = "/li" Then
-                                    '
-                                    '    AddChat vbMagenta, "AWAITING_CHPW: " & IF_AWAITING_CHPW
-                                    '    AddChat vbMagenta, "CHPW_AND_IDLEBANS: " & IF_CHPW_AND_IDLEBANS
-                                    '    AddChat vbMagenta, "IDLEBANS: " & IF_SUBJECT_TO_IDLEBANS
-                                    '
-                                    '    For i = 1 To colUsersInChannel.Count
-                                    '        AddChat vbMagenta, colUsersInChannel.Item(i).Username & "\" & colUsersInChannel.Item(i).InternalFlags
-                                    '    Next i
-                                    '    GoTo theEnd
-                                    ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
-                                        m = Right(s, (Len(s) - 7))
-                                    'ElseIf LCase(s) = "/li" Then
-                                    '
-                                    '    AddChat vbMagenta, "AWAITING_CHPW: " & IF_AWAITING_CHPW
-                                    '    AddChat vbMagenta, "CHPW_AND_IDLEBANS: " & IF_CHPW_AND_IDLEBANS
-                                    '    AddChat vbMagenta, "IDLEBANS: " & IF_SUBJECT_TO_IDLEBANS
-                                    '
-                                    '    For i = 1 To colUsersInChannel.Count
-                                    '        AddChat vbMagenta, colUsersInChannel.Item(i).Username & "\" & colUsersInChannel.Item(i).InternalFlags
-                                    '    Next i
-                                    '    GoTo theEnd
-                                    
-                                    ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
-                                        m = Right(s, (Len(s) - 7))
-                                        AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m)
-                                        
-                                    ElseIf (LCase(Left$(s, 9)) = "/profile ") Then
-                                        If (sckBNet.State = 7) Then
-                                            RequestProfile Right(s, Len(s) - 9)
-                                        End If
-                                        
-                                        frmProfile.lblUsername.Caption = Right(s, Len(s) - 9)
-                                        frmProfile.Show
-                                    
-                                    ElseIf (LCase(Left$(s, 1)) = "/") Then
-                                        Dim commandResult As Boolean ' ..
-                                    
-                                        If ((Left$(s, 3) = "/w ") Or (Left$(s, 3) = "/m ")) Then
-                                            If (Dii) Then
-                                                If (StrComp(Mid$(s, 4, 1), "*") <> 0) Then
-                                                    s = Mid$(s, 1, 3) & "*" & _
-                                                        Mid$(s, 4)
-                                                End If
+                                    frmProfile.lblUsername.Caption = Right(s, Len(s) - 9)
+                                    frmProfile.Show
+                                
+                                ElseIf (LCase(Left$(s, 1)) = "/") Then
+                                    Dim commandResult As Boolean ' ..
+                                
+                                    If ((Left$(s, 3) = "/w ") Or (Left$(s, 3) = "/m ")) Then
+                                        If (Dii) Then
+                                            If (StrComp(Mid$(s, 4, 1), "*") <> 0) Then
+                                                s = Mid$(s, 1, 3) & "*" & _
+                                                    Mid$(s, 4)
                                             End If
                                         End If
-                                        
-                                        Temp.access = 1000
-                                        Temp.flags = "A"
-                                        
-                                        m = OutFilterMsg(s)
-                                        
-                                        commandResult = ProcessCommand(CurrentUsername, m, _
-                                            True, False)
-                                    Else
-                                        Call AddQ(OutFilterMsg(s))
                                     End If
+                                    
+                                    Temp.access = 1000
+                                    Temp.Flags = "A"
+                                    
+                                    m = OutFilterMsg(s)
+                                    
+                                    commandResult = ProcessCommand(CurrentUsername, m, _
+                                        True, False)
+                                Else
+                                    Call AddQ(OutFilterMsg(s))
                                 End If
+                            End If
 theEnd:
-                                cboSend.AddItem cboSend.text, 0
-                                
-                                cboSend.text = vbNullString
-                                
-                                If Me.WindowState <> vbMinimized Then
-                                    cboSend.SetFocus
-                                End If
+                            cboSend.AddItem cboSend.text, 0
+                            
+                            cboSend.text = vbNullString
+                            
+                            If Me.WindowState <> vbMinimized Then
+                                cboSend.SetFocus
                             End If
                         End If
                     'case...
@@ -4463,32 +4553,40 @@ Private Sub cboSend_KeyPress(KeyAscii As Integer)
     End Select
     
     With cboSend
-        If KeyAscii > 0 Then
-            If .ListCount > 15 Then
+        If (KeyAscii > 0) Then
+            If (.ListCount > 15) Then
                 .RemoveItem 15
             End If
             
-            If OKToDoAutocompletion(.text, KeyAscii) Then
-                If LenB(.text) > 0 And KeyAscii <> 8 Then
-                    If Highlighted Then
-                        .SelText = ""
-                        Highlighted = False
+            If ((OKToDoAutocompletion(.text, KeyAscii)) And _
+                (KeyAscii <> 8)) Then
+
+                If (Highlighted) Then
+                    .SelText = ""
+                    Highlighted = False
+                End If
+                
+                If (.SelStart = Len(.text)) Then
+                    If (MatchIndex > 0) Then
+                        sClosest = MatchClosest(.text & Chr(KeyAscii), _
+                            MatchIndex)
                     End If
                     
-                    If .SelStart = Len(.text) Then
-                        sClosest = MatchClosest(.text & Chr(KeyAscii))
-                        oldSelStart = Len(.text) + 1 'text is "b" = 1 = 2
+                    If (Len(sClosest) = 0) Then
+                        sClosest = MatchClosest(.text & Chr(KeyAscii), 1)
+                    End If
+                    
+                    oldSelStart = Len(.text) + 1 'text is "b" = 1 = 2
+                    
+                    If (LenB(sClosest) > 0) Then
+                        .SelStart = oldSelStart
+                        .SelLength = 0
+                        .SelText = Chr(KeyAscii) & Mid$(sClosest, (oldSelStart + 1) - InStr(.text, " "))
+                        .SelStart = oldSelStart
+                        .SelLength = Len(.text)
                         
-                        If LenB(sClosest) > 0 Then
-                            .SelStart = oldSelStart
-                            .SelLength = 0
-                            .SelText = Chr(KeyAscii) & Mid$(sClosest, (oldSelStart + 1) - InStr(.text, " "))
-                            .SelStart = oldSelStart
-                            .SelLength = Len(.text)
-                            
-                            KeyAscii = 0
-                            Highlighted = True
-                        End If
+                        KeyAscii = 0
+                        Highlighted = True
                     End If
                 End If
             Else
@@ -4552,7 +4650,7 @@ Private Sub quLower_Timer()
                 Else
                     gA = GetAccess(strArray(c))
                     
-                    If Not (GetSafelist(strArray(c)) Or gA.access > (AutoModSafelistValue - 1) Or InStr(gA.flags, "A") > 0) Then
+                    If Not (GetSafelist(strArray(c)) Or gA.access > (AutoModSafelistValue - 1) Or InStr(gA.Flags, "A") > 0) Then
                         AddQ "/squelch " & IIf(Dii, "*", "") & strArray(c)
                     End If
                 End If
@@ -5089,7 +5187,7 @@ Private Sub UpTimer_Timer()
                         If .TimeSinceTalk() > BotVars.IB_Wait Then
                             .InternalFlags = 0
                             
-                            If Not (.flags And &H2 = &H2) And Not .Safelisted Then
+                            If Not (.Flags And &H2 = &H2) And Not .Safelisted Then
                                 Ban .Username & " Idle for " & BotVars.IB_Wait & "+ seconds", (AutoModSafelistValue - 1), IIf(BotVars.IB_Kick, 1, 0)
                             End If
                         End If
@@ -5102,7 +5200,7 @@ Private Sub UpTimer_Timer()
                 ThisPos = checkChannel(.Username)
                 
                 If ThisPos > 0 And ThisPos < lvChannel.ListItems.Count Then
-                    newColor = GetNameColor(.flags, .TimeSinceTalk(), .IsSelf)
+                    newColor = GetNameColor(.Flags, .TimeSinceTalk(), .IsSelf)
                     
                     If lvChannel.ListItems(ThisPos).ForeColor <> newColor Then
                         lvChannel.ListItems(ThisPos).ForeColor = newColor
@@ -5670,8 +5768,8 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
             
             For i = LBound(DB) To UBound(DB)
                 With DB(i)
-                    If Len(.flags) > 0 Then
-                        If InStr(1, .flags, "Z") > 0 Or InStr(1, .flags, "B") > 0 Then Add = 1
+                    If Len(.Flags) > 0 Then
+                        If InStr(1, .Flags, "Z") > 0 Or InStr(1, .Flags, "B") > 0 Then Add = 1
                         If InStr(1, .Username, " ") > 0 Then Add = 1
                     End If
                 End With
@@ -5904,41 +6002,50 @@ Function GetRandomPerson() As String
     End With
 End Function
 
-Function MatchClosest(ByVal toMatch As String) As String
-    Dim i As Integer, c As Integer
+Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) As String
+    Dim i As Integer
+    Dim c As Integer
     Dim Exited As Boolean
     Dim CurrentName As String
     
-    toMatch = LCase(toMatch)
+    toMatch = LCase$(toMatch)
     
-    i = InStr(toMatch, " ")
+    i = InStr(1, toMatch, " ", vbBinaryCompare)
     
-    If i > 0 Then
+    If (i > 0) Then
         toMatch = Mid$(toMatch, i + 1)
     End If
     
     With lvChannel.ListItems
         If .Count > 0 Then
-            For i = 1 To .Count 'for each user
-                Exited = False 'reset var
-                CurrentName = LCase(.Item(i).text)
+            For i = startIndex To .Count 'for each user
+                CurrentName = LCase$(.Item(i).text)
             
                 If Len(CurrentName) >= Len(toMatch) Then
                     For c = 1 To Len(toMatch) 'for each letter in their name
-                        If Asc(Mid$(toMatch, c, 1)) <> Asc(Mid$(CurrentName, c, 1)) Then
+                        If (Asc(Mid$(toMatch, c, 1)) <> Asc(Mid$(CurrentName, c, 1))) Then
                             Exited = True
+                            
                             Exit For
                         End If
                     Next c
                     
-                    If Not Exited Then '100% match so far
+                    If (Not (Exited)) Then '100% match so far
                         MatchClosest = .Item(i).text
+                        
+                        MatchIndex = i
+
+                        Exit Function
                     End If
                 End If
+                
+                ' reset var
+                Exited = False
             Next i
         End If
     End With
     
+    MatchClosest = vbNullString
 End Function
 
 Function GetChannelString() As String

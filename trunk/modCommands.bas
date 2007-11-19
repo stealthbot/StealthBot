@@ -53,7 +53,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     
     ' create console access response structure
     With ConsoleAccessResponse
-        .access = 111
+        .access = 201
         .Flags = "A"
     End With
 
@@ -5664,7 +5664,7 @@ Public Sub LoadDatabase()
                                 
                             End If
                             
-                            If .access > 110 Then: .access = 110
+                            If .access > 200 Then: .access = 200
                         End With
 
                         i = i + 1
@@ -5677,11 +5677,11 @@ Public Sub LoadDatabase()
         Close #f
     End If
     
-    ' 9/13/06: Add the bot owner 1000
+    ' 9/13/06: Add the bot owner 200
     If LenB(BotVars.BotOwner) > 0 Then
         For i = 0 To UBound(DB)
             If StrComp(DB(i).Username, BotVars.BotOwner, vbTextCompare) = 0 Then
-                DB(i).access = 110
+                DB(i).access = 200
                 found = True
                 Exit For
             End If
@@ -5691,7 +5691,7 @@ Public Sub LoadDatabase()
             ReDim Preserve DB(UBound(DB) + 1)
             
             DB(UBound(DB)).Username = BotVars.BotOwner
-            DB(UBound(DB)).access = 1000
+            DB(UBound(DB)).access = 200
         End If
     End If
 End Sub
@@ -5705,11 +5705,11 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
     
     ' ...
     If (Len(CWord) > 0) Then
-        Dim commands As MSXML2.DOMDocument
+        Dim Commands As MSXML2.DOMDocument
         Dim command  As MSXML2.IXMLDOMNode
         
         ' ...
-        Set commands = New MSXML2.DOMDocument
+        Set Commands = New MSXML2.DOMDocument
         
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
@@ -5720,10 +5720,10 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
         End If
 
         ' ...
-        Call commands.Load(App.Path & "\commands.xml")
+        Call Commands.Load(App.Path & "\commands.xml")
         
         ' ...
-        For Each command In commands.documentElement.childNodes
+        For Each command In Commands.documentElement.childNodes
             Dim accessGroup As MSXML2.IXMLDOMNode
             Dim access      As MSXML2.IXMLDOMNode
         
@@ -5817,11 +5817,11 @@ Private Function convertAlias(ByVal cmdName As String) As String
 
     ' ...
     If (Len(cmdName) > 0) Then
-        Dim commands As MSXML2.DOMDocument
+        Dim Commands As MSXML2.DOMDocument
         Dim command  As MSXML2.IXMLDOMNode
         
         ' ...
-        Set commands = New MSXML2.DOMDocument
+        Set Commands = New MSXML2.DOMDocument
         
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
@@ -5832,10 +5832,10 @@ Private Function convertAlias(ByVal cmdName As String) As String
         End If
         
         ' ...
-        Call commands.Load(App.Path & "\commands.xml")
+        Call Commands.Load(App.Path & "\commands.xml")
         
         ' ...
-        For Each command In commands.documentElement.childNodes
+        For Each command In Commands.documentElement.childNodes
             Dim aliases As MSXML2.IXMLDOMNodeList
             Dim alias   As MSXML2.IXMLDOMNode
             
@@ -5887,11 +5887,11 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
     
     ' ...
     If (Len(cmdName) > 0) Then
-        Dim commands As MSXML2.DOMDocument
+        Dim Commands As MSXML2.DOMDocument
         Dim command  As MSXML2.IXMLDOMNode
         
         ' ...
-        Set commands = New MSXML2.DOMDocument
+        Set Commands = New MSXML2.DOMDocument
         
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
@@ -5902,10 +5902,10 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
         End If
 
         ' ...
-        Call commands.Load(App.Path & "\commands.xml")
+        Call Commands.Load(App.Path & "\commands.xml")
         
         ' ...
-        For Each command In commands.documentElement.childNodes
+        For Each command In Commands.documentElement.childNodes
             Dim blnFound As Boolean ' ...
         
             ' ...

@@ -297,6 +297,7 @@ Public Const KEY_DELETE = 46
 
 'cboSend_KeyEvents
 Public Highlighted As Boolean
+Public MatchIndex  As Long
 
 'Nagle algorithm constants
 Public Const IPPROTO_TCP& = 6   'socketlevel
