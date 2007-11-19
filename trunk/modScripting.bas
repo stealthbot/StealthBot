@@ -73,8 +73,13 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
         Close #intFile
         SC.AddCode strContent
     
-        Set dictSettings = New Dictionary
-        dictSettings.CompareMode = TextCompare
+        '// Create timer dictionaries
+        Set dictTimerInterval = New Dictionary
+        Set dictTimerEnabled = New Dictionary
+        Set dictTimerCount = New Dictionary
+        dictTimerInterval.CompareMode = TextCompare
+        dictTimerEnabled.CompareMode = TextCompare
+        dictTimerCount.CompareMode = TextCompare
     Else
         Dim strFilesToLoad() As String, i As Integer
         ReDim strFilesToLoad(0)
@@ -183,15 +188,6 @@ ReInitScriptControl_Error:
 End Sub
 
 
-'// Written by Swent. Stores the names of plugin settings.
-Public Sub AddPSetting(ByVal strPrefix As String, ByVal strName As String)
-    Dim strCurVal As String
-    
-    If dictSettings.Exists(strPrefix) Then strCurVal = dictSettings.Item(strPrefix)
-    dictSettings.Item(strPrefix) = strCurVal & strName & "|"
-End Sub
-
-
 '// Written by Swent. Sets a plugin timer's interval.
 Public Sub SetPTInterval(ByVal strPrefix As String, ByVal strTimerName As String, ByVal intInterval As Integer)
     Dim strKey As String
@@ -199,6 +195,10 @@ Public Sub SetPTInterval(ByVal strPrefix As String, ByVal strTimerName As String
 
     dictTimerInterval(strKey) = intInterval
     dictTimerCount(strKey) = intInterval
+    
+    If Not dictTimerEnabled.Exists(strKey) Then
+       dictTimerEnabled(strKey) = False
+    End If
 End Sub
 
 
@@ -217,12 +217,14 @@ End Sub
 
 
 '// Written by Swent. Gets the enabled status of a plugin timer.
-Public Function GetPTEnabled(ByVal strPrefix As String, ByVal strTimerName As String) As Integer
+Public Function GetPTEnabled(ByVal strPrefix As String, ByVal strTimerName As String)
     Dim strKey As String
     strKey = strPrefix & ":" & strTimerName
     
     If dictTimerEnabled.Exists(strKey) Then
         GetPTEnabled = dictTimerEnabled(strKey)
+    Else
+        GetPTEnabled = -1
     End If
 End Function
 
@@ -234,6 +236,8 @@ Public Function GetPTInterval(ByVal strPrefix As String, ByVal strTimerName As S
     
     If dictTimerInterval.Exists(strKey) Then
         GetPTInterval = dictTimerInterval(strKey)
+    Else
+        GetPTInterval = -1
     End If
 End Function
 
@@ -245,6 +249,8 @@ Public Function GetPTLeft(ByVal strPrefix As String, ByVal strTimerName As Strin
 
     If dictTimerCount.Exists(strKey) Then
         GetPTLeft = dictTimerCount(strKey)
+    Else
+        GetPTLeft = -1
     End If
 End Function
 
@@ -256,6 +262,8 @@ Public Function GetPTWaiting(ByVal strPrefix As String, ByVal strTimerName As St
     
     If dictTimerCount.Exists(strKey) Then
         GetPTWaiting = dictTimerInterval(strKey) - dictTimerCount(strKey) + 1
+    Else
+        GetPTWaiting = -1
     End If
 End Function
 
