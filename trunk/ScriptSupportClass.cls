@@ -88,7 +88,9 @@ Attribute VB_Exposed = False
 ' *         Dsp(), GetSetting(), SetSetting(), TimerInterval(), TimerEnabled(),
 ' *         GetTimerEnabled(), GetTimeLeft(), and GetTimerWaiting()
 ' *         Note: All integrated functions are backwards compatiable. No current calls need to be modified.
-' *     - Added two functions to work with plugins
+' *     - Added two new timer functions
+' *         GetTimerInterval, TimeLeft()
+' *     - Added two new functions to work with plugins
 ' *         PluginEnabled(), GetPluginEnabled()
 ' *     - Added six functions to work with the new Plugins menu
 ' *         AddMenuItem(), SetMenuItemCheck(), GetMenuItemCheck(), ToggleMenuItemCheck(),
@@ -1193,7 +1195,6 @@ Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal 
             SetSetting strPrefix, arrSetting(0) & "*" & i, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
         Else
             WriteConfigEntry UCase(strPrefix), strName, varValue, strPath
-            AddPSetting strPrefix, strName
         End If
     End If
 End Sub
@@ -1230,7 +1231,7 @@ End Sub
 
 
 '// GETPLUGINENABLED
-'//   Written by Swent. Gets a plugin's enabled status. Returns -1 if the plugin doesn't exist.
+'//   Gets a plugin's enabled status. Returns -1 if the plugin doesn't exist.
 Function GetPluginEnabled(strPrefix As String)
     Dim strEnabled As String
     
@@ -1251,6 +1252,14 @@ Public Sub TimerInterval(ByVal strPrefix As String, ByVal strTimerName As String
 End Sub
 
 
+'// GETTIMERINTERVAL
+'//   Gets a plugin timer's interval setting. This and all further timer functions return -1 if timer doesn't exist.
+Public Function GetTimerInterval(ByVal strPrefix As String, ByVal strTimerName As String)
+
+    GetTimerInterval = GetPTInterval(strPrefix, strTimerName)
+End Function
+
+
 '// TIMERENABLED
 '//   Enables or disables a plugin timer.
 Public Sub TimerEnabled(ByVal strPrefix As String, ByVal strTimerName As String, ByVal boolEnabled As Boolean)
@@ -1259,20 +1268,20 @@ Public Sub TimerEnabled(ByVal strPrefix As String, ByVal strTimerName As String,
 End Sub
 
 
-'// TIMERCOUNT
-'//   Allows you to modify the count in a running plugin timer.
-Public Sub TimerCount(ByVal strPrefix As String, ByVal strTimerName As String, ByVal intCount As Integer)
-
-    SetPTCount strPrefix, strTimerName, Int(intCount)
-End Sub
-
-
 '// GETTIMERENABLED
 '//   Get's the time left (in seconds) until a plugin timer sub is executed.
 Public Function GetTimerEnabled(ByVal strPrefix As String, ByVal strTimerName As String)
-    
+
     GetTimerEnabled = GetPTEnabled(strPrefix, strTimerName)
 End Function
+
+
+'// TIMELEFT
+'//   Allows you to modify the time left (in seconds) until a plugin timer sub is executed.
+Public Sub TimeLeft(ByVal strPrefix As String, ByVal strTimerName As String, ByVal intCount As Integer)
+
+    SetPTCount strPrefix, strTimerName, Int(intCount)
+End Sub
 
 
 '// GETTIMELEFT
@@ -1366,7 +1375,7 @@ End Sub
 
 
 '// RELOADPLUGINMENUS
-'//   Written by Swent. Reloads the Plugin menus. All user-added items will be cleared.
+'//   Reloads the Plugin menus. All user-added items will be cleared.
 Public Sub ReloadPluginMenus()
 
     Call DeletePluginMenus
