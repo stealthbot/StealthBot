@@ -228,7 +228,7 @@ Begin VB.Form frmSettings
          MaxLength       =   180
          TabIndex        =   85
          Text            =   "You are below the required level for entry."
-         Top             =   4080
+         Top             =   4180
          Width           =   3375
       End
       Begin VB.CheckBox chkCBan 
@@ -248,7 +248,7 @@ Begin VB.Form frmSettings
          Index           =   5
          Left            =   4560
          TabIndex        =   82
-         Top             =   2640
+         Top             =   2520
          Width           =   1695
       End
       Begin VB.CheckBox chkCBan 
@@ -268,7 +268,7 @@ Begin VB.Form frmSettings
          Index           =   3
          Left            =   4560
          TabIndex        =   81
-         Top             =   2400
+         Top             =   2280
          Width           =   1695
       End
       Begin VB.CheckBox chkPhrasebans 
@@ -328,7 +328,7 @@ Begin VB.Form frmSettings
          Index           =   0
          Left            =   3000
          TabIndex        =   76
-         Top             =   2160
+         Top             =   2040
          Width           =   975
       End
       Begin VB.CheckBox chkCBan 
@@ -348,7 +348,7 @@ Begin VB.Form frmSettings
          Index           =   1
          Left            =   4560
          TabIndex        =   80
-         Top             =   2160
+         Top             =   2040
          Width           =   1215
       End
       Begin VB.CheckBox chkCBan 
@@ -368,7 +368,7 @@ Begin VB.Form frmSettings
          Index           =   2
          Left            =   3000
          TabIndex        =   77
-         Top             =   2400
+         Top             =   2280
          Width           =   975
       End
       Begin VB.CheckBox chkCBan 
@@ -388,7 +388,7 @@ Begin VB.Form frmSettings
          Index           =   6
          Left            =   3000
          TabIndex        =   79
-         Top             =   2880
+         Top             =   2760
          Width           =   1455
       End
       Begin VB.CheckBox chkCBan 
@@ -408,7 +408,7 @@ Begin VB.Form frmSettings
          Index           =   4
          Left            =   3000
          TabIndex        =   78
-         Top             =   2640
+         Top             =   2520
          Width           =   1335
       End
       Begin VB.CheckBox chkQuiet 
@@ -448,7 +448,7 @@ Begin VB.Form frmSettings
          MaxLength       =   180
          TabIndex        =   72
          Text            =   "Lockdown Enabled"
-         Top             =   4080
+         Top             =   4180
          Width           =   2535
       End
       Begin VB.CheckBox chkProtect 
@@ -606,7 +606,7 @@ Begin VB.Form frmSettings
          Index           =   0
          Left            =   3000
          TabIndex        =   168
-         Top             =   3840
+         Top             =   3940
          Width           =   1335
       End
       Begin VB.Label lblMod 
@@ -642,11 +642,11 @@ Begin VB.Form frmSettings
             Strikethrough   =   0   'False
          EndProperty
          ForeColor       =   &H00FFFFFF&
-         Height          =   255
+         Height          =   615
          Index           =   3
          Left            =   3000
          TabIndex        =   156
-         Top             =   1920
+         Top             =   1800
          Width           =   855
       End
       Begin VB.Label lblMod 
@@ -667,7 +667,7 @@ Begin VB.Form frmSettings
          Left            =   360
          TabIndex        =   155
          ToolTipText     =   "Shorter is better"
-         Top             =   3840
+         Top             =   3940
          Width           =   1935
       End
       Begin VB.Label lblMod 
@@ -4933,15 +4933,50 @@ Private Sub InitGenMod()
     
     txtIdleBanDelay.text = ReadCFG(OT, "IdleBanDelay")
     
-    s = ReadCFG(OT, "ClientBans")
-    If InStr(1, s, "STAR", vbTextCompare) > 0 Then chkCBan(SC).Value = 1
-    If InStr(1, s, "SEXP", vbTextCompare) > 0 Then chkCBan(BW).Value = 1
-    If InStr(1, s, "D2DV", vbTextCompare) > 0 Then chkCBan(D2).Value = 1
-    If InStr(1, s, "D2XP", vbTextCompare) > 0 Then chkCBan(D2X).Value = 1
-    If InStr(1, s, "W2BN", vbTextCompare) > 0 Then chkCBan(W2).Value = 1
-    If InStr(1, s, "WAR3", vbTextCompare) > 0 Then chkCBan(W3).Value = 1
-    If InStr(1, s, "W3XP", vbTextCompare) > 0 Then chkCBan(W3X).Value = 1
+    ' grab client ban settings from database
     
+    If (InStr(1, GetCumulativeAccess("STAR", "GAME").Flags, "B", _
+        vbBinaryCompare) <> 0) Then
+    
+        chkCBan(SC).Value = 1
+    End If
+    
+    If (InStr(1, GetCumulativeAccess("SEXP", "GAME").Flags, "B", _
+        vbBinaryCompare) <> 0) Then
+    
+        chkCBan(BW).Value = 1
+    End If
+    
+    If (InStr(1, GetCumulativeAccess("D2DV", "GAME").Flags, "B", _
+        vbBinaryCompare) <> 0) Then
+    
+        chkCBan(D2).Value = 1
+    End If
+    
+    If (InStr(1, GetCumulativeAccess("D2XP", "GAME").Flags, "B", _
+        vbBinaryCompare) <> 0) Then
+    
+        chkCBan(D2X).Value = 1
+    End If
+    
+    If (InStr(1, GetCumulativeAccess("W2BN", "GAME").Flags, "B", _
+        vbBinaryCompare) <> 0) Then
+    
+        chkCBan(W2).Value = 1
+    End If
+    
+    If (InStr(1, GetCumulativeAccess("WAR3", "GAME").Flags, "B", _
+        vbBinaryCompare) <> 0) Then
+    
+        chkCBan(W3).Value = 1
+    End If
+    
+    If (InStr(1, GetCumulativeAccess("W3XP", "GAME").Flags, "B", _
+        vbBinaryCompare) <> 0) Then
+    
+        chkCBan(W3X).Value = 1
+    End If
+
     txtLevelBanMsg.text = ReadCFG(OT, "LevelbanMsg")
     If LenB(txtLevelBanMsg.text) = 0 Then txtLevelBanMsg.text = "You are below the required level for entry."
     
