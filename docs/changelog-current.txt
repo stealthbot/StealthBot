@@ -236,6 +236,9 @@
 			longer be sent to Battle.net unless you have first unselected it.  This
 			prevents a bug that occurs when you wish to send a single word that just
 			happens to match all or part of a name within the user list.
+		- When several similar matching names are in a channel, the bot will now rememeber
+			the last username that was found matching.  This allows an easy way to
+			reference a single user across multiple messages.
 
 
 	<b>COMMANDS</b>
