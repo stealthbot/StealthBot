@@ -4409,16 +4409,106 @@ Private Function SaveSettings() As Boolean
     Clients(W3) = "WAR3"
     Clients(W3X) = "W3XP"
     Clients(W2) = "W2BN"
-    
-    s = ""
-    
+
     For i = 0 To 6
-        If chkCBan(i).Value = vbChecked Then
-            s = s & Clients(i) & " "
+        If (chkCBan(i).Value = 1) Then
+            If (GetAccess(Clients(i), "GAME").Username = _
+                vbNullString) Then
+                
+                ' redefine array size
+                ReDim Preserve DB(UBound(DB) + 1)
+                
+                With DB(UBound(DB))
+                    .Username = Clients(i)
+                    .Flags = "B"
+                    .ModifiedBy = "(console)"
+                    .ModifiedOn = Now
+                    .AddedBy = "(console)"
+                    .AddedOn = Now
+                    .Type = "GAME"
+                End With
+                
+                ' commit modifications
+                Call WriteDatabase(GetFilePath("users.txt"))
+                
+                ' log actions
+                If (BotVars.LogDBActions) Then
+                    Call LogDBAction(AddEntry, "(console)", Clients(i), "")
+                End If
+            Else
+                For j = LBound(DB) To UBound(DB)
+                    If ((StrComp(DB(j).Username, Clients(i), vbTextCompare) = 0) And _
+                        (StrComp(DB(j).Type, "GAME", vbTextCompare) = 0)) Then
+                        
+                        If (InStr(1, DB(j).Flags, "B", vbBinaryCompare) = 0) Then
+                            With DB(j)
+                                .Username = Clients(i)
+                                .Flags = "B" & .Flags
+                                .ModifiedBy = "(console)"
+                                .ModifiedOn = Now
+                            End With
+                            
+                            ' log actions
+                            If (BotVars.LogDBActions) Then
+                                Call LogDBAction(ModEntry, "(console)", Clients(i), "")
+                            End If
+                            
+                            ' commit modifications
+                            Call WriteDatabase(GetFilePath("users.txt"))
+                            
+                            ' break loop
+                            Exit For
+                        End If
+                    End If
+                Next j
+            End If
+        Else
+            If (GetAccess(Clients(i), "GAME").Username <> _
+                vbNullString) Then
+
+                For j = LBound(DB) To UBound(DB)
+                    If ((StrComp(DB(j).Username, Clients(i), vbTextCompare) = 0) And _
+                        (StrComp(DB(j).Type, "GAME", vbTextCompare) = 0)) Then
+                        
+                        If ((Len(DB(j).Flags) > 1) Or _
+                            (DB(j).access > 0) Or _
+                            (Len(DB(j).Groups) > 1)) Then
+
+                            With DB(j)
+                                .Username = Clients(i)
+                                .Flags = Replace(.Flags, "B", vbNullString)
+                                .ModifiedBy = "(console)"
+                                .ModifiedOn = Now
+                            End With
+                            
+                            ' log actions
+                            If (BotVars.LogDBActions) Then
+                                Call LogDBAction(ModEntry, "(console)", Clients(i), "")
+                            End If
+                            
+                            ' commit modifications
+                            Call WriteDatabase(GetFilePath("users.txt"))
+                        Else
+                            Call RemoveItem(Clients(i), "users", _
+                                "GAME")
+                                
+                            ' log actions
+                            If (BotVars.LogDBActions) Then
+                                Call LogDBAction(RemEntry, "(console)", Clients(i), "")
+                            End If
+                            
+                            ' reload database entries
+                            Call LoadDatabase
+                        End If
+                        
+                        ' break loop
+                        Exit For
+                    End If
+                Next j
+            End If
         End If
     Next i
     
-    WINI "ClientBans", Trim$(s), secOther
     WINI "QuietTime", Cv(chkQuiet.Value), secMain
     WINI "KickOnYell", Cv(chkKOY.Value), secOther
     WINI "PlugBans", Cv(chkPlugban.Value), secOther
@@ -4935,43 +5025,43 @@ Private Sub InitGenMod()
     
     ' grab client ban settings from database
     
-    If (InStr(1, GetCumulativeAccess("STAR", "GAME").Flags, "B", _
+    If (InStr(1, GetAccess("STAR", "GAME").Flags, "B", _
         vbBinaryCompare) <> 0) Then
     
         chkCBan(SC).Value = 1
     End If
     
-    If (InStr(1, GetCumulativeAccess("SEXP", "GAME").Flags, "B", _
+    If (InStr(1, GetAccess("SEXP", "GAME").Flags, "B", _
         vbBinaryCompare) <> 0) Then
     
         chkCBan(BW).Value = 1
     End If
     
-    If (InStr(1, GetCumulativeAccess("D2DV", "GAME").Flags, "B", _
+    If (InStr(1, GetAccess("D2DV", "GAME").Flags, "B", _
         vbBinaryCompare) <> 0) Then
     
         chkCBan(D2).Value = 1
     End If
     
-    If (InStr(1, GetCumulativeAccess("D2XP", "GAME").Flags, "B", _
+    If (InStr(1, GetAccess("D2XP", "GAME").Flags, "B", _
         vbBinaryCompare) <> 0) Then
     
         chkCBan(D2X).Value = 1
     End If
     
-    If (InStr(1, GetCumulativeAccess("W2BN", "GAME").Flags, "B", _
+    If (InStr(1, GetAccess("W2BN", "GAME").Flags, "B", _
         vbBinaryCompare) <> 0) Then
     
         chkCBan(W2).Value = 1
     End If
     
-    If (InStr(1, GetCumulativeAccess("WAR3", "GAME").Flags, "B", _
+    If (InStr(1, GetAccess("WAR3", "GAME").Flags, "B", _
         vbBinaryCompare) <> 0) Then
     
         chkCBan(W3).Value = 1
     End If
     
-    If (InStr(1, GetCumulativeAccess("W3XP", "GAME").Flags, "B", _
+    If (InStr(1, GetAccess("W3XP", "GAME").Flags, "B", _
         vbBinaryCompare) <> 0) Then
     
         chkCBan(W3X).Value = 1

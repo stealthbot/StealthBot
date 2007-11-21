@@ -4454,7 +4454,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                         End If
                                     End If
                                     
-                                    Temp.access = 1000
+                                    Temp.access = 201
                                     Temp.Flags = "A"
                                     
                                     m = OutFilterMsg(s)

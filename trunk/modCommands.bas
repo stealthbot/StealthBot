@@ -376,7 +376,6 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
             Case "exile":        Call OnExile(Username, dbAccess, msgData, InBot, cmdRet())
             Case "unexile":      Call OnUnExile(Username, dbAccess, msgData, InBot, cmdRet())
             Case "shitlist":     Call OnShitList(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "safelist":     Call OnSafeList(Username, dbAccess, msgData, InBot, cmdRet())
             Case "tagbans":      Call OnTagBans(Username, dbAccess, msgData, InBot, cmdRet())
             Case "shitadd":      Call OnShitAdd(Username, dbAccess, msgData, InBot, cmdRet())
             Case "dnd":          Call OnDND(Username, dbAccess, msgData, InBot, cmdRet())
@@ -2988,7 +2987,7 @@ Private Function OnShitList(ByVal Username As String, ByRef dbAccess As udtGetAc
     ReDim Preserve tmpBuf(0)
     
     ' search database for shitlisted users
-    Call searchDatabase(tmpBuf(), , , "!*[*]*", , , , "B")
+    Call searchDatabase(tmpBuf(), , "!*[*]*", , , , , "B")
     
     ' return message
     cmdRet() = tmpBuf()
@@ -3004,7 +3003,7 @@ Private Function OnTagBans(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ReDim Preserve tmpBuf(0)
     
     ' search database for shitlisted users
-    Call searchDatabase(tmpBuf(), , , "*[*]*", , , , "B")
+    Call searchDatabase(tmpBuf(), , "*[*]*", , , , , "B")
     
     ' return message
     cmdRet() = tmpBuf()
@@ -3286,13 +3285,8 @@ Private Function OnGreet(ByVal Username As String, ByRef dbAccess As udtGetAcces
         greetMessage = msgData
     
         ' ...
-        If ((InStr(1, greetMessage, "/squelch", vbTextCompare) > 0) Or _
-            (InStr(1, greetMessage, "/ban ", vbTextCompare) > 0) Or _
-            (InStr(1, greetMessage, "/ignore", vbTextCompare) > 0) Or _
-            (InStr(1, greetMessage, "/des", vbTextCompare) > 0) Or _
-            (InStr(1, greetMessage, "/re", vbTextCompare) > 0)) Then
-                        
-            tmpBuf = "One or more invalid terms are present. Greet message not set."
+        If (Left$(greetMessage, 1) = "/") Then
+            tmpBuf = "Error: Invalid greet message specified."
         Else
             tmpBuf = "Greet message set."
             
@@ -4641,7 +4635,6 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     cmdRet(0) = tmpBuf
 End Function ' end function OnAdd
 
-' TO DO:
 ' handle mmail command
 Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -4657,6 +4650,8 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
     strArray = Split(msgData, " ", 2)
             
     If (UBound(strArray) > 0) Then
+        Dim gAcc As udtGetAccessResponse ' ...
+    
         tmpBuf = "Mass mailing "
 
         With Temp
@@ -4668,26 +4663,33 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
                 Track = Val(strArray(0))
                 
                 For c = 0 To UBound(DB)
-                    If (DB(c).access = Track) Then
-                        .To = DB(c).Username
-                        
-                        Call AddMail(Temp)
+                    gAcc = GetCumulativeAccess(DB(c).Username)
+                    
+                    If (StrComp(gAcc.Type, "USER", vbTextCompare) = 0) Then
+                        If (gAcc.access = Track) Then
+                            .To = DB(c).Username
+                            
+                            Call AddMail(Temp)
+                        End If
                     End If
                 Next c
                 
                 tmpBuf = tmpBuf & "to users with access " & Track
             Else
-                'word games
-                strArray(0) = UCase$(strArray(0))
-                
                 For c = 0 To UBound(DB)
-                    For f = 1 To Len(strArray(1))
-                        If (InStr(DB(c).Flags, Mid$(strArray(0), f, 1)) > 0) Then
-                            .To = DB(c).Username
-                            
-                            Call AddMail(Temp)
-                            
-                            Exit For
+                    gAcc = GetCumulativeAccess(DB(c).Username)
+                
+                    For f = 1 To Len(strArray(0))
+                        If (StrComp(gAcc.Type, "USER", vbTextCompare) = 0) Then
+                            If (InStr(1, gAcc.Flags, Mid$(strArray(0), f, 1), _
+                                vbBinaryCompare) > 0) Then
+                                
+                                .To = DB(c).Username
+                                
+                                Call AddMail(Temp)
+                                
+                                Exit For
+                            End If
                         End If
                     Next f
                 Next c
@@ -4845,10 +4847,10 @@ Private Function OnFind(ByVal Username As String, ByRef dbAccess As udtGetAccess
                 (InStr(1, u, "?", vbBinaryCompare) <> 0)) Then
             
             ' execute search
-            Call searchDatabase(tmpBuf(), , u)
+            Call searchDatabase(tmpBuf(), , PrepareCheck(u))
         Else
             ' execute search
-            Call searchDatabase(tmpBuf(), , u)
+            Call searchDatabase(tmpBuf(), , PrepareCheck(u))
         End If
     End If
     
@@ -5184,10 +5186,10 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
     Optional dbType As String = vbNullString, Optional lowerBound As Integer = -1, _
     Optional upperBound As Integer = -1, Optional Flags As String = vbNullString) As Integer
     
-    Dim i         As Integer
-    Dim found     As Integer
-    Dim tmpBuf()  As String
-    Dim tmpCount  As Integer
+    Dim i        As Integer
+    Dim found    As Integer
+    Dim tmpBuf() As String
+    Dim tmpCount As Integer
     
     ' redefine array size
     ReDim Preserve tmpBuf(tmpCount)
@@ -5232,15 +5234,15 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 If (match <> vbNullString) Then
                     If (Left$(match, 1) = "!") Then
                         If (Not (LCase$(PrepareCheck(DB(i).Username)) Like _
-                                (LCase$(PrepareCheck(Mid$(match, 2)))))) Then
-                            
+                                (LCase$(Mid$(match, 2))))) Then
+
                             res = True
                         Else
                             res = False
                         End If
                     Else
                         If (LCase$(PrepareCheck(DB(i).Username)) Like _
-                           (LCase$(PrepareCheck(match)))) Then
+                           (LCase$(match))) Then
                            
                             res = True
                         Else
@@ -5371,7 +5373,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
     arrReturn() = tmpBuf()
 End Function
 
-Private Function RemoveItem(ByVal rItem As String, File As String, Optional ByVal dbType As String = _
+Public Function RemoveItem(ByVal rItem As String, File As String, Optional ByVal dbType As String = _
     vbNullString) As String
     
     Dim s()        As String
@@ -6179,7 +6181,7 @@ End Function
 
 ' Writes database to disk
 ' Updated 9/13/06 for new features
-Private Sub WriteDatabase(ByVal u As String)
+Public Sub WriteDatabase(ByVal u As String)
     Dim f As Integer, i As Integer
     
    On Error GoTo WriteDatabase_Exit
