@@ -86,7 +86,8 @@ Begin VB.Form frmChat
    Begin MSComctlLib.ListView lvFriendList 
       Height          =   6375
       Left            =   8880
-      TabIndex        =   8
+      TabIndex        =   3
+      TabStop         =   0   'False
       Top             =   240
       Width           =   2775
       _ExtentX        =   4895
@@ -134,14 +135,15 @@ Begin VB.Form frmChat
       EndProperty
       Height          =   1695
       Left            =   11160
-      TabIndex        =   4
+      TabIndex        =   5
+      TabStop         =   0   'False
       Top             =   6600
       Width           =   245
    End
    Begin RichTextLib.RichTextBox rtbWhispers 
       Height          =   1695
       Left            =   0
-      TabIndex        =   7
+      TabIndex        =   8
       TabStop         =   0   'False
       Top             =   6960
       Width           =   11175
@@ -712,14 +714,14 @@ Begin VB.Form frmChat
       Height          =   315
       Left            =   600
       TabIndex        =   1
-      TabStop         =   0   'False
       Top             =   6600
       Width           =   7695
    End
    Begin TabDlg.SSTab ListviewTabs 
       Height          =   375
       Left            =   8880
-      TabIndex        =   3
+      TabIndex        =   4
+      TabStop         =   0   'False
       Top             =   6600
       Width           =   2805
       _ExtentX        =   4948
@@ -727,7 +729,6 @@ Begin VB.Form frmChat
       _Version        =   393216
       TabOrientation  =   1
       Style           =   1
-      Tab             =   1
       TabHeight       =   520
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -740,11 +741,11 @@ Begin VB.Form frmChat
       EndProperty
       TabCaption(0)   =   "Channel  "
       TabPicture(0)   =   "frmChat.frx":6AC38
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "Friends  "
       TabPicture(1)   =   "frmChat.frx":6AC54
-      Tab(1).ControlEnabled=   -1  'True
+      Tab(1).ControlEnabled=   0   'False
       Tab(1).ControlCount=   0
       TabCaption(2)   =   "Clan  "
       TabPicture(2)   =   "frmChat.frx":6AC70
@@ -754,7 +755,7 @@ Begin VB.Form frmChat
    Begin MSComctlLib.ListView lvChannel 
       Height          =   6375
       Left            =   8880
-      TabIndex        =   6
+      TabIndex        =   7
       TabStop         =   0   'False
       Top             =   240
       Width           =   2775
@@ -876,7 +877,7 @@ Begin VB.Form frmChat
       ForeColor       =   &H8000000E&
       Height          =   255
       Left            =   8880
-      TabIndex        =   5
+      TabIndex        =   6
       ToolTipText     =   "Currently in channel..."
       Top             =   0
       Width           =   2775
@@ -3981,12 +3982,22 @@ Private Sub cboSend_GotFocus()
 
     Dim i As Integer ' ...
 
+    ' ...
     cboSend.SelLength = cboSendSelLength
     cboSend.SelStart = cboSendSelStart
 
-    For i = 0 To (Controls.Count - 1)
-        Controls(i).TabStop = False
-    Next i
+    If (BotVars.NoAutocompletion = False) Then
+        ' ..
+        For i = 0 To (Controls.Count - 1)
+            ' ...
+            If (Controls(i).TabStop = False) Then
+                Controls(i).Tag = "False"
+            End If
+        
+            ' ...
+            Controls(i).TabStop = False
+        Next i
+    End If
 End Sub
 
 Private Sub cboSend_LostFocus()
@@ -3995,9 +4006,16 @@ Private Sub cboSend_LostFocus()
 
     Dim i As Integer ' ...
 
-    For i = 0 To (Controls.Count - 1)
-        Controls(i).TabStop = True
-    Next i
+    If (BotVars.NoAutocompletion = False) Then
+        ' ...
+        For i = 0 To (Controls.Count - 1)
+            ' ...
+            If (Controls(i).Tag <> "False") Then
+                ' ...
+                Controls(i).TabStop = True
+            End If
+        Next i
+    End If
 End Sub
 
 Private Sub cboSend_Click()
