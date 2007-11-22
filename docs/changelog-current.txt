@@ -250,18 +250,10 @@
 	- Using a config.ini hack ("AutoModerationSafelistValue") you can now override the access required
 		to be safe from automatic moderation features [the default is 20] (thanks Draco)
 		This entry should go under [Override] in your config.ini file
-	- Commands can be disabled using a new section of access.ini
-		- To disable a command entirely, add an entry for it under [DisabledCommands] in access.ini
-		- For example, say=1
-		- Thanks, Draco
-	- You can now control individual access requirements of the .say command using access.ini:
-		- say=	  will set the default, restricted "Username says: -message-" type that cannot be abused
-		- say70=	will set the less-restricted say which will erase any leading "/" characters on -message-
-		- say90=	will set the access required to use an unrestricted say
 	- You can now use the variable %me when typing commands. %me will be translated to the username
 		of the person executing the command. (thanks Jack)
 	- Improved in-bot responses to the .pingme command (thanks Swent)
-	- .shitlist <username> is no longer an alias for .shitadd <username> (this is for greater access.ini compatibility)
+	- .shitlist <username> is no longer an alias for .shitadd <username>
 	- New alias .sl for .shitlist
 	- New commands for this version:
 		shuffle			requires access 80, toggles Winamp's Shuffle feature
