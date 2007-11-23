@@ -2821,14 +2821,17 @@ Private Function OnTagAdd(ByVal Username As String, ByRef dbAccess As udtGetAcce
             ' ...
             Call OnAdd(Username, dbAccess, "*" & user & "*" & " +B --banmsg " & Msg, InBot, tmpBuf())
         End If
-    Else
-        ' ...
+    Else            ' ...
         If (InStr(1, msgData, "*", vbBinaryCompare) <> 0) Then
             ' ...
             Call OnAdd(Username, dbAccess, msgData & " +B", InBot, tmpBuf())
         Else
-            ' ...
-            Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " +B", InBot, tmpBuf())
+            If (Len(msgData) > 0) Then
+                ' ...
+                Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " +B", InBot, tmpBuf())
+            Else
+                tmpBuf(0) = "Error: Invalid username."
+            End If
         End If
     End If
     
@@ -4158,6 +4161,8 @@ Private Function OnWhoAmI(ByVal Username As String, ByRef dbAccess As udtGetAcce
 
     If (InBot) Then
         tmpBuf = "You are the bot console."
+        
+        tmpBuf = checkUser("bo111][b[")
     
         If (g_Online) Then
             Call AddQ("/whoami")
@@ -4718,23 +4723,32 @@ End Function ' end function OnMMail
 Private Function OnBMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim Temp       As udtMail
+    Dim Temp       As udtMail ' ...
 
-    Dim strArray() As String
+    Dim strArray() As String ' ...
     Dim tmpBuf     As String ' temporary output buffer
     
+    ' ...
     strArray = Split(msgData, " ", 2)
     
     If (UBound(strArray) > 0) Then
-        Temp.From = Username
-        Temp.To = strArray(0)
-        Temp.Message = strArray(1)
+        ' ...
+        With Temp
+            .To = strArray(0)
+            .From = Username
+            .Message = strArray(1)
+        End With
         
-        Call AddMail(Temp)
-        
-        tmpBuf = "Added mail for " & strArray(0) & "."
+        If (Len(Temp.To) = 0) Then
+            tmpBuf = "Error: Invalid user."
+        Else
+            ' ...
+            Call AddMail(Temp)
+            
+            tmpBuf = "Added mail for " & strArray(0) & "."
+        End If
     Else
-        tmpBuf = "Error processing mail."
+        tmpBuf = "Error: Too few arguments."
     End If
     
     ' return message
@@ -6290,5 +6304,125 @@ Private Function GetAccessINIValue(ByVal sKey As String, Optional ByVal Default 
         Else
             GetAccessINIValue = 100
         End If
+    End If
+End Function
+
+Private Function checkUser(ByVal user As String, Optional ByVal _
+    allow_illegal As Boolean = False) As Boolean
+    
+    Dim i       As Integer ' ...
+    Dim bln     As Boolean ' ...
+    Dim illegal As Boolean ' ...
+    Dim invalid As Boolean ' ...
+    
+    ' ...
+    If (Left$(user, 1) = "*") Then
+        user = Mid$(user, 2)
+    End If
+    
+    ' ...
+    user = Replace(user, "@USWest", vbNullString, 1)
+    user = Replace(user, "@USEast", vbNullString, 1)
+    user = Replace(user, "@Asia", vbNullString, 1)
+    user = Replace(user, "@Europe", vbNullString, 1)
+    
+    ' ...
+    user = Replace(user, "@Lordaeron", vbNullString, 1)
+    user = Replace(user, "@Azeroth", vbNullString, 1)
+    user = Replace(user, "@Kalimdor", vbNullString, 1)
+    user = Replace(user, "@Northrend", vbNullString, 1)
+    
+    If (Len(user) = 0) Then
+        invalid = True
+    ElseIf (Len(user) > 15) Then
+        invalid = True
+    Else
+        ' 95 (a)
+        ' 65 (A)
+        ' 48 (0)
+        ' 57 (9)
+    
+        ' ...
+        For i = 1 To Len(user)
+            ' ...
+            Dim currentCharacter As String
+            
+            ' ...
+            currentCharacter = Mid$(user, i, 1)
+        
+            ' is the character between A-Z or a-z?
+            If (Asc(currentCharacter) < Asc("A")) Or (Asc(currentCharacter) > Asc("z")) Then
+                MsgBox Asc(currentCharacter)
+            
+                ' is the character between 0 - 9?
+                If ((Asc(currentCharacter) < Asc("0")) Or (Asc(currentCharacter) > Asc("9"))) Then
+                    'MsgBox Asc(currentCharacter)
+                
+                    ' !@$(){}[]=+`~^-’.:;_|
+                
+                    ' is the character a valid special
+                    ' character?
+                    
+                    If ((Asc(currentCharacter) = Asc("[")) Or _
+                        (Asc(currentCharacter) = Asc("]")) Or _
+                        (Asc(currentCharacter) = Asc("(")) Or _
+                        (Asc(currentCharacter) = Asc(")")) Or _
+                        (Asc(currentCharacter) = Asc(".")) Or _
+                        (Asc(currentCharacter) = Asc("-")) Or _
+                        (Asc(currentCharacter) = Asc("_"))) Then
+                    
+                        ' ...
+                        If (bln) Then
+                            illegal = True
+                        Else
+                            bln = True
+                        End If
+                    Else
+                        ' check for illegal characters, and for
+                        ' characters that have always been invalid
+                        Select Case (Asc(currentCharacter))
+                            Case Asc("{"): illegal = True
+                            Case Asc("}"): illegal = True
+                            Case Asc("="): illegal = True
+                            Case Asc("+"): illegal = True
+                            Case Asc("`"): illegal = True
+                            Case Asc("~"): illegal = True
+                            Case Asc("^"): illegal = True
+                            Case Asc(":"): illegal = True
+                            Case Asc(";"): illegal = True
+                            Case Asc("|"): illegal = True
+                            Case Asc("@"): illegal = True
+                            Case Asc("$"): illegal = True
+                            Case Asc("!"): illegal = True
+                            Case Asc("#"): illegal = True
+                            Case Else:
+                                invalid = True
+                                
+                                ' break loop
+                                Exit For
+                        End Select
+                    End If
+                End If
+            End If
+        Next i
+    End If
+    
+    ' is our user valid?
+    If (Not (invalid)) Then
+        ' does our user contain illegal
+        ' characters?
+        If (illegal) Then
+            ' do we allow illegal
+            ' characters?
+            If (allow_illegal) Then
+                checkUser = True
+            Else
+                checkUser = False
+            End If
+        Else
+            checkUser = True
+        End If
+    Else
+        checkUser = False
     End If
 End Function
