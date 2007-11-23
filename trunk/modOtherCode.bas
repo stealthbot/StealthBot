@@ -862,20 +862,20 @@ End Sub
 '//     mm/dd/yy, hh:mm:ss
 '//
 Public Function SystemTimeToString(ByRef sT As SYSTEMTIME) As String
-    Dim buf As String
+    Dim Buf As String
 
     With sT
     
-        buf = buf & .wMonth & "/"
-        buf = buf & .wDay & "/"
-        buf = buf & .wYear & ", "
-        buf = buf & IIf(.wHour > 9, .wHour, "0" & .wHour) & ":"
-        buf = buf & IIf(.wMinute > 9, .wMinute, "0" & .wMinute) & ":"
-        buf = buf & IIf(.wSecond > 9, .wSecond, "0" & .wSecond)
+        Buf = Buf & .wMonth & "/"
+        Buf = Buf & .wDay & "/"
+        Buf = Buf & .wYear & ", "
+        Buf = Buf & IIf(.wHour > 9, .wHour, "0" & .wHour) & ":"
+        Buf = Buf & IIf(.wMinute > 9, .wMinute, "0" & .wMinute) & ":"
+        Buf = Buf & IIf(.wSecond > 9, .wSecond, "0" & .wSecond)
     
     End With
     
-    SystemTimeToString = buf
+    SystemTimeToString = Buf
 End Function
 
 Public Function GetCurrentMS() As String
@@ -908,7 +908,7 @@ Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long) As L
     ElseIf (Flags And USER_SQUELCHED) = USER_SQUELCHED Then 'squelched
         i = ICSQUELCH
         
-    ElseIf (Flags And USER_CHANNELOP) = USER_CHANNELOP Then 'op
+    ElseIf (Flags And USER_CHANNELOP&) = USER_CHANNELOP& Then 'op
         i = ICGAVEL
         
     ElseIf g_ThisIconCode <> -1 Then
@@ -1865,14 +1865,14 @@ End Function
 
 
 Public Function checkChannel(ByVal NameToFind As String) As Integer
-    Dim item As ListItem
+    Dim lvItem As ListItem
 
-    item = frmChat.lvChannel.FindItem(NameToFind)
+    Set lvItem = frmChat.lvChannel.FindItem(NameToFind)
 
-    If (item Is Nothing) Then
+    If (lvItem Is Nothing) Then
         checkChannel = 0
     Else
-        checkChannel = item.Index
+        checkChannel = lvItem.Index
     End If
 End Function
 

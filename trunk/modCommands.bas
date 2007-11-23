@@ -173,8 +173,8 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                             ' send message to battle.net
                             If (WhisperedIn) Then
                                 ' whisper message
-                                Call AddQ("/w " & IIf((Dii), "*", vbNullString) & _
-                                    Username & Space(1) & cmdRet(j), 1)
+                                Call AddQ("/w " & reverseUsername(Username) & _
+                                    Space(1) & cmdRet(j), 1)
                             Else
                                 Call AddQ(cmdRet(j), 1)
                             End If
@@ -209,8 +209,8 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                            ((BotVars.WhisperCmds) And (Not (InBot)))) Then
                            
                             ' whisper message
-                            Call AddQ("/w " & IIf((Dii), "*", vbNullString) & _
-                                Username & Space(1) & cmdRet(i), 1)
+                            Call AddQ("/w " & reverseUsername(Username) & _
+                                Space(1) & cmdRet(j), 1)
                         Else
                             Call AddQ(cmdRet(i), 1)
                         End If
@@ -5699,22 +5699,29 @@ Public Sub LoadDatabase()
         
         Close #f
     End If
-    
+
     ' 9/13/06: Add the bot owner 200
     If LenB(BotVars.BotOwner) > 0 Then
         For i = 0 To UBound(DB)
-            If StrComp(DB(i).Username, BotVars.BotOwner, vbTextCompare) = 0 Then
-                DB(i).access = 200
+            If (StrComp(DB(i).Username, BotVars.BotOwner, vbTextCompare) = 0) Then
+                With DB(i)
+                    .access = 200
+                End With
+                
                 found = True
+                
                 Exit For
             End If
         Next i
         
-        If Not found Then
+        If (Not (found)) Then
             ReDim Preserve DB(UBound(DB) + 1)
             
-            DB(UBound(DB)).Username = BotVars.BotOwner
-            DB(UBound(DB)).access = 200
+            With DB(UBound(DB))
+                .Username = BotVars.BotOwner
+                .Type = "USER"
+                .access = 200
+            End With
         End If
     End If
 End Sub
@@ -6084,10 +6091,10 @@ ERROR_HANDLER:
 End Sub
 
 ' ...
-Private Sub checkUsers()
+Public Sub checkUsers()
     Dim i As Integer ' ...
     
-    If ((MyFlags = 2) Or (MyFlags = 18)) Then
+    If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
         For i = 1 To colUsersInChannel.Count
             Dim tmp As String ' ...
             
@@ -6117,8 +6124,8 @@ Private Sub checkUsers()
                 
                 ' ...
                 If (BotVars.IPBans) Then
-                    If ((colUsersInChannel.Item(i).Flags = 20) Or (colUsersInChannel.Item(i).Flags = 30) Or _
-                        (colUsersInChannel.Item(i).Flags = 32) Or (colUsersInChannel.Item(i).Flags = 48)) Then
+                    If ((colUsersInChannel.Item(i).Flags And _
+                         USER_SQUELCHED) = USER_SQUELCHED) Then
                         
                         Call Ban(colUsersInChannel.Item(i).Username & _
                             " IPBanned.", (AutoModSafelistValue - 1))
@@ -6428,3 +6435,71 @@ Private Function checkUser(ByVal user As String, Optional ByVal _
         checkUser = False
     End If
 End Function
+
+Public Function convertUsername(ByVal Username As String) As String
+    Dim Index As Long ' ...
+    
+    If (LenB(Username) < 1) Then
+        convertUsername = Username
+    
+        Exit Function
+    End If
+    
+    If (Dii) Then
+        Index = InStr(1, Username, "*", vbBinaryCompare)
+    
+        If (Index <> 0) Then
+            convertUsername = Mid$(Username, Index + 1)
+        End If
+    ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
+            (StrReverse$(BotVars.Product) = "W3XP")) Then
+            
+        If (w3Realm <> vbNullString) Then
+            Select Case (w3Realm)
+                Case "Lordaeron": Index = InStr(1, Username, "@USWest", vbBinaryCompare)
+                Case "Azeroth":   Index = InStr(1, Username, "@USEast", vbBinaryCompare)
+                Case "Kalimdor":  Index = InStr(1, Username, "@Asia", vbBinaryCompare)
+                Case "Northrend": Index = InStr(1, Username, "@Europe", vbBinaryCompare)
+            End Select
+            
+            If (Index <> 0) Then
+                convertUsername = Left$(Username, Index - 1)
+            Else
+                convertUsername = Username & "@" & _
+                    w3Realm
+            End If
+        Else
+            convertUsername = Username
+        End If
+    End If
+End Function
+
+Public Function reverseUsername(ByVal Username As String) As String
+    Dim Index As Long ' ...
+    
+    If (LenB(Username) < 1) Then
+        Exit Function
+    End If
+    
+    If (Dii) Then
+        reverseUsername = ("*" & Username)
+    ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
+            (StrReverse$(BotVars.Product) = "W3XP")) Then
+            
+        If (w3Realm <> vbNullString) Then
+            Index = InStr(1, Username, ("@" & w3Realm), vbBinaryCompare)
+            
+            If (Index <> 0) Then
+                reverseUsername = Left$(Username, Index - 1)
+            Else
+                Select Case (w3Realm)
+                    Case "Lordaeron": reverseUsername = Username & "@USWest"
+                    Case "Azeroth":   reverseUsername = Username & "@USEast"
+                    Case "Kalimdor":  reverseUsername = Username & "@Asia"
+                    Case "Northrend": reverseUsername = Username & "@Europe"
+                End Select
+            End If
+        End If
+    End If
+End Function
+
