@@ -1,0 +1,75 @@
+'UIExample
+'1.0
+'&UIExample:Hdx
+Option Explicit
+
+Public Const objCommandButton = 0 'A Command Button 
+Public Const objLabel = 1         'A label
+Public Const objTextBox = 2       'A TextBox
+Public Const objTimer = 3         'A Timer
+
+Private tmrCount
+Private uieFrm, uieTxt, uieLbl, uieCmd, uieTmr
+Sub UIExample_Event_Load()
+  AddChat vbYellow, "Form created: " & CreateForm("UIExample", "frmExample")
+  AddFormObject "UIExample", "frmExample", "txtExample", objTextBox
+  AddFormObject "UIExample", "frmExample", "lblExample", objLabel
+  AddFormObject "UIExample", "frmExample", "cmdExample", objCommandButton
+  AddFormObject "UIExample", "frmExample", "tmrExample", objTimer
+  
+  Set uieFrm = GetUIObject("UIExample", "frmExample")
+  Set uieTxt = GetUIObject("UIExample", "frmExample", "txtExample")
+  Set uieLbl = GetUIObject("UIExample", "frmExample", "lblExample")
+  Set uieCmd = GetUIObject("UIExample", "frmExample", "cmdExample")
+  Set uieTmr = GetUIObject("UIExample", "frmExample", "tmrExample")
+  uieFrm.Show
+  uieTmr.Interval = 1000
+  uieTmr.Enabled = true
+  
+  AddMenuItem "UIExample", "Toggle form"
+End Sub
+
+Sub UIExample_frmExample_Load()
+  AddChat vbYellow, "frmExample_Load"
+End Sub
+
+Sub UIExample_frmExample_Resize()
+  If(uieTmr is Nothing) Then Exit Sub
+  AddChat vbYellow, "frmExample_Resize(", vbGreen, uieFrm.Width, vbYellow, ", ", vbGreen, uieFrm.Height, vbYellow, ")"
+  
+  With uieTxt
+    .Width  = uieFrm.width
+    .Height = uieFrm.Height/2
+    .Top    = 0
+    .Left   = 0
+  End With
+  With uieCmd
+    .Width  = uieFrm.width
+    .Height = uieFrm.Height/2
+    .Top    = uieFrm.Height/2
+    .Left   = 0
+  End With
+End Sub
+
+Sub UIExample_frmExample_UnLoad(Cancel)
+  AddChat vbYellow, "frmExample_UnLoad(", vbGreen, Cancel, vbYellow, ")"
+  Cancel = 1
+End Sub
+
+Sub UIExample_Menu_Callback(ItemName)
+  uieFrm.Visible = Not uieFrm.Visible
+End Sub
+
+Sub UIExample_frmExample_cmdExample_Click()
+  uieTmr.Enabled = Not uieTmr.Enabled
+  If uieTmr.Enabled Then
+    uieCmd.Caption = "Disable Timer"
+  Else
+    uieCmd.Caption = "Enable Timer"
+  End If
+End Sub
+
+Sub UIExample_frmExample_tmrExample_Timer()
+  tmrCount = tmrCount + 1
+  uieTxt.Text = "Timer Event #" & tmrCount
+End Sub
