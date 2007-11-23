@@ -18,6 +18,135 @@ Begin VB.Form frmChat
    ScaleHeight     =   7950
    ScaleWidth      =   11400
    StartUpPosition =   3  'Windows Default
+   Begin TabDlg.SSTab ListviewTabs 
+      Height          =   375
+      Left            =   8880
+      TabIndex        =   4
+      Top             =   6600
+      Width           =   2805
+      _ExtentX        =   4948
+      _ExtentY        =   661
+      _Version        =   393216
+      TabOrientation  =   1
+      Style           =   1
+      TabHeight       =   520
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      TabCaption(0)   =   "Channel  "
+      TabPicture(0)   =   "frmChat.frx":1CCA
+      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlCount=   0
+      TabCaption(1)   =   "Friends  "
+      TabPicture(1)   =   "frmChat.frx":1CE6
+      Tab(1).ControlEnabled=   0   'False
+      Tab(1).ControlCount=   0
+      TabCaption(2)   =   "Clan  "
+      TabPicture(2)   =   "frmChat.frx":1D02
+      Tab(2).ControlEnabled=   0   'False
+      Tab(2).ControlCount=   0
+   End
+   Begin VB.TextBox txtPost 
+      BackColor       =   &H00000000&
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   285
+      Left            =   8280
+      MaxLength       =   50
+      TabIndex        =   2
+      Top             =   6600
+      Width           =   615
+   End
+   Begin MSComctlLib.ListView lvChannel 
+      Height          =   6375
+      Left            =   8880
+      TabIndex        =   7
+      TabStop         =   0   'False
+      Top             =   240
+      Width           =   2775
+      _ExtentX        =   4895
+      _ExtentY        =   11245
+      View            =   3
+      LabelEdit       =   1
+      LabelWrap       =   -1  'True
+      HideSelection   =   -1  'True
+      HideColumnHeaders=   -1  'True
+      HoverSelection  =   -1  'True
+      _Version        =   393217
+      SmallIcons      =   "imlIcons"
+      ForeColor       =   10079232
+      BackColor       =   0
+      BorderStyle     =   1
+      Appearance      =   1
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      NumItems        =   2
+      BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         Object.Width           =   4057
+      EndProperty
+      BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         SubItemIndex    =   1
+         Object.Width           =   88
+      EndProperty
+   End
+   Begin VB.ComboBox cboSend 
+      BackColor       =   &H00000000&
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   315
+      Left            =   600
+      TabIndex        =   1
+      Top             =   6600
+      Width           =   7695
+   End
+   Begin VB.TextBox txtPre 
+      BackColor       =   &H00000000&
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   285
+      Left            =   0
+      MaxLength       =   50
+      TabIndex        =   0
+      Top             =   6600
+      Width           =   615
+   End
    Begin MSScriptControlCtl.ScriptControl SCRestricted 
       Left            =   6960
       Top             =   3840
@@ -54,72 +183,33 @@ Begin VB.Form frmChat
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   7
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1CCA
+            Picture         =   "frmChat.frx":1D1E
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1F59
+            Picture         =   "frmChat.frx":1FAD
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":21E0
+            Picture         =   "frmChat.frx":2234
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":249A
+            Picture         =   "frmChat.frx":24EE
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":2744
+            Picture         =   "frmChat.frx":2798
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":2C22
+            Picture         =   "frmChat.frx":2C76
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4DF5
+            Picture         =   "frmChat.frx":4E49
             Key             =   ""
          EndProperty
-      EndProperty
-   End
-   Begin MSComctlLib.ListView lvFriendList 
-      Height          =   6375
-      Left            =   8880
-      TabIndex        =   3
-      TabStop         =   0   'False
-      Top             =   240
-      Width           =   2775
-      _ExtentX        =   4895
-      _ExtentY        =   11245
-      View            =   3
-      LabelEdit       =   1
-      LabelWrap       =   -1  'True
-      HideSelection   =   -1  'True
-      HideColumnHeaders=   -1  'True
-      _Version        =   393217
-      Icons           =   "imlIcons"
-      SmallIcons      =   "imlIcons"
-      ForeColor       =   10079232
-      BackColor       =   0
-      BorderStyle     =   1
-      Appearance      =   1
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      NumItems        =   2
-      BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         Object.Width           =   4057
-      EndProperty
-      BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         SubItemIndex    =   1
-         Object.Width           =   88
       EndProperty
    End
    Begin VB.CommandButton cmdShowHide 
@@ -154,7 +244,7 @@ Begin VB.Form frmChat
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
-      TextRTF         =   $"frmChat.frx":6F6F
+      TextRTF         =   $"frmChat.frx":6FC3
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -211,439 +301,439 @@ Begin VB.Form frmChat
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   109
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6FEA
+            Picture         =   "frmChat.frx":703E
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":A030
+            Picture         =   "frmChat.frx":A084
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":D199
+            Picture         =   "frmChat.frx":D1ED
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":103C5
+            Picture         =   "frmChat.frx":10419
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":129CD
+            Picture         =   "frmChat.frx":12A21
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":15E98
+            Picture         =   "frmChat.frx":15EEC
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1867B
+            Picture         =   "frmChat.frx":186CF
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1B560
+            Picture         =   "frmChat.frx":1B5B4
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1B8D0
+            Picture         =   "frmChat.frx":1B924
             Key             =   ""
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1E9B3
+            Picture         =   "frmChat.frx":1EA07
             Key             =   ""
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":21B5E
+            Picture         =   "frmChat.frx":21BB2
             Key             =   ""
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":24BA7
+            Picture         =   "frmChat.frx":24BFB
             Key             =   ""
          EndProperty
          BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":27C43
+            Picture         =   "frmChat.frx":27C97
             Key             =   ""
          EndProperty
          BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":2AC1A
+            Picture         =   "frmChat.frx":2AC6E
             Key             =   ""
          EndProperty
          BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":2E15D
+            Picture         =   "frmChat.frx":2E1B1
             Key             =   ""
          EndProperty
          BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":30AEE
+            Picture         =   "frmChat.frx":30B42
             Key             =   ""
          EndProperty
          BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":30EB5
+            Picture         =   "frmChat.frx":30F09
             Key             =   ""
          EndProperty
          BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3122B
+            Picture         =   "frmChat.frx":3127F
             Key             =   ""
          EndProperty
          BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":315B3
+            Picture         =   "frmChat.frx":31607
             Key             =   ""
          EndProperty
          BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3194C
+            Picture         =   "frmChat.frx":319A0
             Key             =   ""
          EndProperty
          BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":31CF1
+            Picture         =   "frmChat.frx":31D45
             Key             =   ""
          EndProperty
          BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":320A3
+            Picture         =   "frmChat.frx":320F7
             Key             =   ""
          EndProperty
          BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":32468
+            Picture         =   "frmChat.frx":324BC
             Key             =   ""
          EndProperty
          BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":325BC
+            Picture         =   "frmChat.frx":32610
             Key             =   ""
          EndProperty
          BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":34675
+            Picture         =   "frmChat.frx":346C9
             Key             =   ""
          EndProperty
          BeginProperty ListImage26 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3772F
+            Picture         =   "frmChat.frx":37783
             Key             =   ""
          EndProperty
          BeginProperty ListImage27 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":37999
+            Picture         =   "frmChat.frx":379ED
             Key             =   ""
          EndProperty
          BeginProperty ListImage28 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":37BAA
+            Picture         =   "frmChat.frx":37BFE
             Key             =   ""
          EndProperty
          BeginProperty ListImage29 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":37DE4
+            Picture         =   "frmChat.frx":37E38
             Key             =   ""
          EndProperty
          BeginProperty ListImage30 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38048
+            Picture         =   "frmChat.frx":3809C
             Key             =   ""
          EndProperty
          BeginProperty ListImage31 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":382A3
+            Picture         =   "frmChat.frx":382F7
             Key             =   ""
          EndProperty
          BeginProperty ListImage32 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":384EE
+            Picture         =   "frmChat.frx":38542
             Key             =   ""
          EndProperty
          BeginProperty ListImage33 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38758
+            Picture         =   "frmChat.frx":387AC
             Key             =   ""
          EndProperty
          BeginProperty ListImage34 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3897B
+            Picture         =   "frmChat.frx":389CF
             Key             =   ""
          EndProperty
          BeginProperty ListImage35 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38BA8
+            Picture         =   "frmChat.frx":38BFC
             Key             =   ""
          EndProperty
          BeginProperty ListImage36 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38DC4
+            Picture         =   "frmChat.frx":38E18
             Key             =   ""
          EndProperty
          BeginProperty ListImage37 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38FFB
+            Picture         =   "frmChat.frx":3904F
             Key             =   ""
          EndProperty
          BeginProperty ListImage38 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39246
+            Picture         =   "frmChat.frx":3929A
             Key             =   ""
          EndProperty
          BeginProperty ListImage39 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":394B0
+            Picture         =   "frmChat.frx":39504
             Key             =   ""
          EndProperty
          BeginProperty ListImage40 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":396B3
+            Picture         =   "frmChat.frx":39707
             Key             =   ""
          EndProperty
          BeginProperty ListImage41 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":398EC
+            Picture         =   "frmChat.frx":39940
             Key             =   ""
          EndProperty
          BeginProperty ListImage42 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39B1B
+            Picture         =   "frmChat.frx":39B6F
             Key             =   ""
          EndProperty
          BeginProperty ListImage43 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39D77
+            Picture         =   "frmChat.frx":39DCB
             Key             =   ""
          EndProperty
          BeginProperty ListImage44 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39FC1
+            Picture         =   "frmChat.frx":3A015
             Key             =   ""
          EndProperty
          BeginProperty ListImage45 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A22B
+            Picture         =   "frmChat.frx":3A27F
             Key             =   ""
          EndProperty
          BeginProperty ListImage46 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A46E
+            Picture         =   "frmChat.frx":3A4C2
             Key             =   ""
          EndProperty
          BeginProperty ListImage47 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A6C2
+            Picture         =   "frmChat.frx":3A716
             Key             =   ""
          EndProperty
          BeginProperty ListImage48 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A904
+            Picture         =   "frmChat.frx":3A958
             Key             =   ""
          EndProperty
          BeginProperty ListImage49 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3AB6C
+            Picture         =   "frmChat.frx":3ABC0
             Key             =   ""
          EndProperty
          BeginProperty ListImage50 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3ADCB
+            Picture         =   "frmChat.frx":3AE1F
             Key             =   ""
          EndProperty
          BeginProperty ListImage51 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B035
+            Picture         =   "frmChat.frx":3B089
             Key             =   ""
          EndProperty
          BeginProperty ListImage52 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B283
+            Picture         =   "frmChat.frx":3B2D7
             Key             =   ""
          EndProperty
          BeginProperty ListImage53 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B502
+            Picture         =   "frmChat.frx":3B556
             Key             =   ""
          EndProperty
          BeginProperty ListImage54 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B737
+            Picture         =   "frmChat.frx":3B78B
             Key             =   ""
          EndProperty
          BeginProperty ListImage55 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B9A4
+            Picture         =   "frmChat.frx":3B9F8
             Key             =   ""
          EndProperty
          BeginProperty ListImage56 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3BBBB
+            Picture         =   "frmChat.frx":3BC0F
             Key             =   ""
          EndProperty
          BeginProperty ListImage57 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3BE25
+            Picture         =   "frmChat.frx":3BE79
             Key             =   ""
          EndProperty
          BeginProperty ListImage58 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C05F
+            Picture         =   "frmChat.frx":3C0B3
             Key             =   ""
          EndProperty
          BeginProperty ListImage59 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C288
+            Picture         =   "frmChat.frx":3C2DC
             Key             =   ""
          EndProperty
          BeginProperty ListImage60 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C4DB
+            Picture         =   "frmChat.frx":3C52F
             Key             =   ""
          EndProperty
          BeginProperty ListImage61 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C714
+            Picture         =   "frmChat.frx":3C768
             Key             =   ""
          EndProperty
          BeginProperty ListImage62 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C96A
+            Picture         =   "frmChat.frx":3C9BE
             Key             =   ""
          EndProperty
          BeginProperty ListImage63 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3CBDB
+            Picture         =   "frmChat.frx":3CC2F
             Key             =   ""
          EndProperty
          BeginProperty ListImage64 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3CE45
+            Picture         =   "frmChat.frx":3CE99
             Key             =   ""
          EndProperty
          BeginProperty ListImage65 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D09D
+            Picture         =   "frmChat.frx":3D0F1
             Key             =   ""
          EndProperty
          BeginProperty ListImage66 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D2C2
+            Picture         =   "frmChat.frx":3D316
             Key             =   ""
          EndProperty
          BeginProperty ListImage67 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D515
+            Picture         =   "frmChat.frx":3D569
             Key             =   ""
          EndProperty
          BeginProperty ListImage68 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D738
+            Picture         =   "frmChat.frx":3D78C
             Key             =   ""
          EndProperty
          BeginProperty ListImage69 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D9A2
+            Picture         =   "frmChat.frx":3D9F6
             Key             =   ""
          EndProperty
          BeginProperty ListImage70 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3DBE2
+            Picture         =   "frmChat.frx":3DC36
             Key             =   ""
          EndProperty
          BeginProperty ListImage71 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3DE27
+            Picture         =   "frmChat.frx":3DE7B
             Key             =   ""
          EndProperty
          BeginProperty ListImage72 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E075
+            Picture         =   "frmChat.frx":3E0C9
             Key             =   ""
          EndProperty
          BeginProperty ListImage73 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E2BC
+            Picture         =   "frmChat.frx":3E310
             Key             =   ""
          EndProperty
          BeginProperty ListImage74 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E526
+            Picture         =   "frmChat.frx":3E57A
             Key             =   ""
          EndProperty
          BeginProperty ListImage75 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E759
+            Picture         =   "frmChat.frx":3E7AD
             Key             =   ""
          EndProperty
          BeginProperty ListImage76 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E99E
+            Picture         =   "frmChat.frx":3E9F2
             Key             =   ""
          EndProperty
          BeginProperty ListImage77 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3EBDA
+            Picture         =   "frmChat.frx":3EC2E
             Key             =   ""
          EndProperty
          BeginProperty ListImage78 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3EE46
+            Picture         =   "frmChat.frx":3EE9A
             Key             =   ""
          EndProperty
          BeginProperty ListImage79 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F0B0
+            Picture         =   "frmChat.frx":3F104
             Key             =   ""
          EndProperty
          BeginProperty ListImage80 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F2F7
+            Picture         =   "frmChat.frx":3F34B
             Key             =   ""
          EndProperty
          BeginProperty ListImage81 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F53F
+            Picture         =   "frmChat.frx":3F593
             Key             =   ""
          EndProperty
          BeginProperty ListImage82 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F76B
+            Picture         =   "frmChat.frx":3F7BF
             Key             =   ""
          EndProperty
          BeginProperty ListImage83 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F992
+            Picture         =   "frmChat.frx":3F9E6
             Key             =   ""
          EndProperty
          BeginProperty ListImage84 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3FBFC
+            Picture         =   "frmChat.frx":3FC50
             Key             =   ""
          EndProperty
          BeginProperty ListImage85 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3FE01
+            Picture         =   "frmChat.frx":3FE55
             Key             =   ""
          EndProperty
          BeginProperty ListImage86 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3FFFC
+            Picture         =   "frmChat.frx":40050
             Key             =   ""
          EndProperty
          BeginProperty ListImage87 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4023D
+            Picture         =   "frmChat.frx":40291
             Key             =   ""
          EndProperty
          BeginProperty ListImage88 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4044D
+            Picture         =   "frmChat.frx":404A1
             Key             =   ""
          EndProperty
          BeginProperty ListImage89 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":406BE
+            Picture         =   "frmChat.frx":40712
             Key             =   ""
          EndProperty
          BeginProperty ListImage90 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":409CF
+            Picture         =   "frmChat.frx":40A23
             Key             =   ""
          EndProperty
          BeginProperty ListImage91 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":40D15
+            Picture         =   "frmChat.frx":40D69
             Key             =   ""
          EndProperty
          BeginProperty ListImage92 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":412E6
+            Picture         =   "frmChat.frx":4133A
             Key             =   ""
          EndProperty
          BeginProperty ListImage93 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":418B6
+            Picture         =   "frmChat.frx":4190A
             Key             =   ""
          EndProperty
          BeginProperty ListImage94 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":41E61
+            Picture         =   "frmChat.frx":41EB5
             Key             =   ""
          EndProperty
          BeginProperty ListImage95 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":424F6
+            Picture         =   "frmChat.frx":4254A
             Key             =   ""
          EndProperty
          BeginProperty ListImage96 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":42B87
+            Picture         =   "frmChat.frx":42BDB
             Key             =   ""
          EndProperty
          BeginProperty ListImage97 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4321A
+            Picture         =   "frmChat.frx":4326E
             Key             =   ""
          EndProperty
          BeginProperty ListImage98 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":43781
+            Picture         =   "frmChat.frx":437D5
             Key             =   ""
          EndProperty
          BeginProperty ListImage99 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":43CEE
+            Picture         =   "frmChat.frx":43D42
             Key             =   ""
          EndProperty
          BeginProperty ListImage100 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":44260
+            Picture         =   "frmChat.frx":442B4
             Key             =   ""
          EndProperty
          BeginProperty ListImage101 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":44807
+            Picture         =   "frmChat.frx":4485B
             Key             =   ""
          EndProperty
          BeginProperty ListImage102 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":44DAC
+            Picture         =   "frmChat.frx":44E00
             Key             =   ""
          EndProperty
          BeginProperty ListImage103 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":45359
+            Picture         =   "frmChat.frx":453AD
             Key             =   ""
          EndProperty
          BeginProperty ListImage104 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4833C
+            Picture         =   "frmChat.frx":48390
             Key             =   ""
          EndProperty
          BeginProperty ListImage105 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4E079
+            Picture         =   "frmChat.frx":4E0CD
             Key             =   ""
          EndProperty
          BeginProperty ListImage106 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":53D3E
+            Picture         =   "frmChat.frx":53D92
             Key             =   ""
          EndProperty
          BeginProperty ListImage107 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":59956
+            Picture         =   "frmChat.frx":599AA
             Key             =   ""
          EndProperty
          BeginProperty ListImage108 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":5F3E9
+            Picture         =   "frmChat.frx":5F43D
             Key             =   ""
          EndProperty
          BeginProperty ListImage109 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6501A
+            Picture         =   "frmChat.frx":6506E
             Key             =   ""
          EndProperty
       EndProperty
@@ -661,140 +751,11 @@ Begin VB.Form frmChat
       Left            =   7200
       Top             =   4680
    End
-   Begin VB.TextBox txtPost 
-      BackColor       =   &H00000000&
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   285
-      Left            =   8280
-      MaxLength       =   50
-      TabIndex        =   2
-      Top             =   6600
-      Width           =   615
-   End
-   Begin VB.TextBox txtPre 
-      BackColor       =   &H00000000&
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   285
-      Left            =   0
-      MaxLength       =   50
-      TabIndex        =   0
-      Top             =   6600
-      Width           =   615
-   End
-   Begin VB.ComboBox cboSend 
-      BackColor       =   &H00000000&
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   315
-      Left            =   600
-      TabIndex        =   1
-      Top             =   6600
-      Width           =   7695
-   End
-   Begin TabDlg.SSTab ListviewTabs 
-      Height          =   375
-      Left            =   8880
-      TabIndex        =   4
-      TabStop         =   0   'False
-      Top             =   6600
-      Width           =   2805
-      _ExtentX        =   4948
-      _ExtentY        =   661
-      _Version        =   393216
-      TabOrientation  =   1
-      Style           =   1
-      TabHeight       =   520
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      TabCaption(0)   =   "Channel  "
-      TabPicture(0)   =   "frmChat.frx":6AC38
-      Tab(0).ControlEnabled=   -1  'True
-      Tab(0).ControlCount=   0
-      TabCaption(1)   =   "Friends  "
-      TabPicture(1)   =   "frmChat.frx":6AC54
-      Tab(1).ControlEnabled=   0   'False
-      Tab(1).ControlCount=   0
-      TabCaption(2)   =   "Clan  "
-      TabPicture(2)   =   "frmChat.frx":6AC70
-      Tab(2).ControlEnabled=   0   'False
-      Tab(2).ControlCount=   0
-   End
-   Begin MSComctlLib.ListView lvChannel 
-      Height          =   6375
-      Left            =   8880
-      TabIndex        =   7
-      TabStop         =   0   'False
-      Top             =   240
-      Width           =   2775
-      _ExtentX        =   4895
-      _ExtentY        =   11245
-      View            =   3
-      LabelEdit       =   1
-      LabelWrap       =   -1  'True
-      HideSelection   =   -1  'True
-      HideColumnHeaders=   -1  'True
-      HoverSelection  =   -1  'True
-      _Version        =   393217
-      SmallIcons      =   "imlIcons"
-      ForeColor       =   10079232
-      BackColor       =   0
-      BorderStyle     =   1
-      Appearance      =   1
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      NumItems        =   2
-      BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         Object.Width           =   4057
-      EndProperty
-      BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         SubItemIndex    =   1
-         Object.Width           =   88
-      EndProperty
-   End
    Begin MSComctlLib.ListView lvClanList 
       Height          =   6375
       Left            =   8880
       TabIndex        =   9
+      TabStop         =   0   'False
       Top             =   240
       Width           =   2775
       _ExtentX        =   4895
@@ -834,6 +795,45 @@ Begin VB.Form frmChat
       EndProperty
       BeginProperty ColumnHeader(4) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
          SubItemIndex    =   3
+         Object.Width           =   88
+      EndProperty
+   End
+   Begin MSComctlLib.ListView lvFriendList 
+      Height          =   6375
+      Left            =   8880
+      TabIndex        =   3
+      TabStop         =   0   'False
+      Top             =   240
+      Width           =   2775
+      _ExtentX        =   4895
+      _ExtentY        =   11245
+      View            =   3
+      LabelEdit       =   1
+      LabelWrap       =   -1  'True
+      HideSelection   =   -1  'True
+      HideColumnHeaders=   -1  'True
+      _Version        =   393217
+      Icons           =   "imlIcons"
+      SmallIcons      =   "imlIcons"
+      ForeColor       =   10079232
+      BackColor       =   0
+      BorderStyle     =   1
+      Appearance      =   1
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      NumItems        =   2
+      BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         Object.Width           =   4057
+      EndProperty
+      BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         SubItemIndex    =   1
          Object.Width           =   88
       EndProperty
    End
@@ -1404,6 +1404,7 @@ Attribute FriendListHandler.VB_VarHelpID = -1
 'Variables
 Private m_lCurItemIndex As Long
 Private MultiLinePaste As Boolean
+Private doAuth As Boolean
 
 'Forms
 Public SettingsForm As frmSettings
@@ -1626,12 +1627,12 @@ Private Sub Form_Load()
     If BotVars.Logging < 2 Then
         MakeLoggingDirectory
     
-        If Dir$(GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") = vbNullString Then
+        If (Dir$(GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") = vbNullString) Then
             Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt" For Output As #1
             Close #1
         End If
         
-        If Dir$(GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt") = vbNullString Then
+        If (Dir$(GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt") = vbNullString) Then
             Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt" For Output As #1
             Close #1
         End If
@@ -1639,20 +1640,27 @@ Private Sub Form_Load()
     
     VoteDuration = -1
     
-    If LenB(Dir$(GetConfigFilePath())) = 0 Then
-        AddChat RTBColors.ServerInfoText, "If you're new to bots, start by choosing 'Bot Settings' under the 'Settings' menu above."
-        AddChat RTBColors.ServerInfoText, "For more help, click the 'Step-By-Step Configuration' button inside Settings."
-        AddChat RTBColors.ServerInfoText, "For more information and a list of commands, see the Readme by clicking 'Readme' under the 'Help' menu."
-        AddChat RTBColors.ServerInfoText, "Please note that any usage of this program is subject to the terms of the End-User License Agreement available at http://eula.stealthbot.net."
+    If (LenB(Dir$(GetConfigFilePath())) = 0) Then
+        AddChat RTBColors.ServerInfoText, "If you're new to bots, start by choosing 'Bot Settings' " & _
+            "under the 'Settings' menu above."
+        AddChat RTBColors.ServerInfoText, "For more help, click the 'Step-By-Step Configuration' " & _
+            "button inside Settings."
+        AddChat RTBColors.ServerInfoText, "For more information and a list of commands, see the " & _
+            "Readme by clicking 'Readme' under the 'Help' menu."
+        AddChat RTBColors.ServerInfoText, "Please note that any usage of this program is subject to " & _
+            "the terms of the End-User License Agreement available at http://eula.stealthbot.net."
     End If
     
     CommandLine = command()
     
     If MDebug("debug") Then _
-        AddChat RTBColors.ServerInfoText, " * Program executed in debug mode; unhandled packet information will be displayed."
+        AddChat RTBColors.ServerInfoText, " * Program executed in debug mode; unhandled packet " & _
+            "information will be displayed."
     
     Randomize
-    ID_TASKBARICON = Rnd * 100
+    
+    ID_TASKBARICON = (Rnd * 100)
+    
     TASKBARCREATED_MSGID = RegisterWindowMessage("TaskbarCreated")
     
     'BNCSUtil Version Check
@@ -1671,8 +1679,8 @@ Private Sub Form_Load()
     
     s = ReadCFG("Override", "DisableSBNews")
     
-    If LenB(s) = 0 Then
-        INet.Execute GetNewsURL(), "GET"
+    If (LenB(s) = 0) Then
+        Call INet.Execute(GetNewsURL(), "GET")
     Else
         If Not BotLoaded Then
             SControl.Run "Event_FirstRun"
@@ -1699,8 +1707,6 @@ Private Sub Form_Load()
             Call Form_Resize
         End If
     #End If
-    
-    
     
 '    BotVars.UseProxy = True
 '    BotVars.ProxyIP = "213.210.194.139"
@@ -2848,25 +2854,42 @@ Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLInd
 End Sub
 
 Private Sub INet_StateChanged(ByVal State As Integer)
-    On Error Resume Next
+    On Error GoTo ERROR_HANDLER
 
     If (State = icResponseCompleted) Then
-        Call HandleNews(INet.GetChunk(1024, icString))
+        If (doAuth) Then
+            If (INet.GetChunk(1, icString) = "1") Then
+                doAuth = False
+            End If
+        Else
+            Call HandleNews(INet.GetChunk(1024, icString))
         
-        If Not BotLoaded Then
-            SControl.Run "Event_FirstRun"
-            SControl.Run "Event_Load"
-            BotLoaded = True
-        End If
-    Else
-        If (State = icError) Then
             If Not BotLoaded Then
                 SControl.Run "Event_FirstRun"
                 SControl.Run "Event_Load"
                 BotLoaded = True
             End If
         End If
+    Else
+        If (State = icError) Then
+            If (doAuth) Then
+                doAuth = True
+            Else
+                If Not BotLoaded Then
+                    SControl.Run "Event_FirstRun"
+                    SControl.Run "Event_Load"
+                    BotLoaded = True
+                End If
+            End If
+        End If
     End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    doAuth = False
+    
+    Exit Sub
 End Sub
 
 Private Sub ListviewTabs_Click(PreviousTab As Integer)
@@ -5037,13 +5060,26 @@ Sub Connect()
     
         Const f As String = "Main" ', p As String = "config.ini"
         'Vars
-        If BotVars.Username = vbNullString Or BotVars.Password = vbNullString Or BotVars.CDKey = vbNullString Or BotVars.Server = vbNullString Or BotVars.HomeChannel = vbNullString _
-            Or BotVars.Product = vbNullString Then
-                MsgBox "You haven't provided enough information to connect! Please edit your connection settings by choosing Bot Settings under the Settings menu." & vbNewLine & "Required information to connect: Username, Password, CDKey, Home channel, Server, your choice of Client and Trigger."
+        If BotVars.Username = vbNullString Or _
+            BotVars.Password = vbNullString Or _
+                BotVars.CDKey = vbNullString Or _
+                    BotVars.Server = vbNullString Or _
+                        BotVars.HomeChannel = vbNullString _
+                            Or BotVars.Product = vbNullString Then
+                            
+                MsgBox "You haven't provided enough information to connect! " & _
+                    "Please edit your connection settings by choosing Bot Settings under the Settings menu." & _
+                    vbNewLine & "Required information to connect: Username, Password, CDKey, Home channel, " & _
+                    "Server, your choice of Client and Trigger."
+                
                 Call DoDisconnect(1)
+                
                 Exit Sub
         End If
-        If StrComp(BotVars.Product, "PX2D", vbTextCompare) = 0 Or StrComp(BotVars.Product, "VD2D", vbTextCompare) = 0 Then
+        
+        If ((StrComp(BotVars.Product, "PX2D", vbTextCompare) = 0) Or _
+            (StrComp(BotVars.Product, "VD2D", vbTextCompare) = 0)) Then
+            
             Dii = True
         Else
             Dii = False
@@ -5052,16 +5088,32 @@ Sub Connect()
         'NOT 'Disabled due to public version!
 
         #If BETA = 1 Then
+            doAuth = True
+        
             AddChat RTBColors.InformationText, "Authorizing your private-release bot, please wait."
             
-            If (Not (GetAuth(BotVars.Username))) Then
-                AddChat RTBColors.ErrorMessageText, "- - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -"
+            Call INet.Execute("http://www.stealthbot.net/board/sbauth.php?username=" & _
+                BotVars.Username, "GET")
+                
+            Do Until (Not (INet.StillExecuting))
+                DoEvents
+            Loop
+            
+            ' ...
+            If (doAuth) Then
+                ' ...
+                AddChat RTBColors.ErrorMessageText, _
+                    "- - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -"
+                
+                ' ...
                 Call DoDisconnect
+                
+                ' ...
                 Exit Sub
             Else
-                AddChat RTBColors.SuccessText, "Private usage authorized, connecting to Battle.Net."
+                AddChat RTBColors.SuccessText, _
+                    "Private usage authorized, connecting to Battle.Net."
             End If
-            
         #End If
         
         
@@ -5107,9 +5159,12 @@ Sub Connect()
     End If
     
     Exit Sub
+    
 Error:
     MsgBox "Configuration file error. Please re-write your configuration file using the Setup dialog.", vbCritical + vbOKOnly, "Error"
+    
     SetTitle "Disconnected"
+    
     Exit Sub
 End Sub
 
@@ -5230,30 +5285,46 @@ Private Sub UpTimer_Timer()
 End Sub
 
 'StealthLock (c) 2003 Stealth, Please do not remove this header
-Private Function GetAuth(ByVal Username As String) As Boolean
+Private Function GetAuth(ByVal res As String) As Boolean
     On Error GoTo ERROR_HANDLER
 
-    Dim res As String ' string variable for storing beta authorization result
-                      ' 0 == unauthorized
-                      ' 1 == authorized
-                      
-    res = INet.OpenURL("http://www.stealthbot.net/board/sbauth.php?username=" & Username)
-
-    Do While INet.StillExecuting
-        DoEvents
-    Loop
-    
     If (res = "1") Then
         GetAuth = True
     Else
         GetAuth = False
     End If
-    
+
     Exit Function
-    
+
 ERROR_HANDLER:
     GetAuth = False
 End Function
+
+'StealthLock (c) 2003 Stealth, Please do not remove this header
+'Private Function GetAuth(ByVal Username As String) As Boolean
+'    On Error GoTo ERROR_HANDLER
+'
+'    Dim res As String ' string variable for storing beta authorization result
+'                      ' 0 == unauthorized
+'                      ' 1 == authorized
+'
+'    res = INet.OpenURL("http://www.stealthbot.net/board/sbauth.php?username=" & Username)
+'
+'    Do While INet.StillExecuting
+'        DoEvents
+'    Loop
+'
+'    If (res = "1") Then
+'        GetAuth = True
+'    Else
+'        GetAuth = False
+'    End If
+'
+'    Exit Function
+'
+'ERROR_HANDLER:
+'    GetAuth = False
+'End Function
 
 Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
     Dim Q As clsQueueOBj
