@@ -627,26 +627,31 @@ End Sub
 'Ping, Product, sClan, InitStatstring, W3Icon
 Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
     ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, Optional ByVal W3Icon As String)
-    
-    If Len(Username) < 1 Then Exit Sub
-    If Ping > 200000000 Then Exit Sub ' Error correction code added April 2005
-                                      ' to fix a mysterious ghosting bug
-    
-    'Debug.Print Username & "\" & OriginalStatstring & "\"
-    
-    Dim i As Integer, strCompare As String, Level As Byte
+                                      
+    Dim i          As Integer
+    Dim strCompare As String
+    Dim Level      As Byte
     Dim StatUpdate As Boolean
     
-    If InStr(1, Username, "*", vbTextCompare) > 0 Then
+    If (Len(Username) < 1) Then
+        Exit Sub
+    End If
+    
+    ' Error correction code added April 2005
+    ' to fix a mysterious ghosting bug
+    If (Ping > 200000000) Then
+        Exit Sub
+    End If
+    
+    If (InStr(1, Username, "*", vbTextCompare) > 0) Then
         Username = Mid$(Username, InStr(1, Username, "*", vbTextCompare) + 1)
     End If
     
     StatUpdate = (checkChannel(Username) > 0)
     
-    If Not StatUpdate Then
-    
-        If (Flags = 2 Or Flags = 18) Then
-            If StrComp(Username, CurrentUsername, vbTextCompare) <> 0 Then
+    If (Not (StatUpdate)) Then
+        If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+            If (StrComp(Username, CurrentUsername, vbTextCompare) <> 0) Then
                 gChannel.Designated = Username
             End If
         End If
@@ -666,39 +671,48 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             .Clan = sClan
             .IsSelf = (StrComp(LCase(Username), LCase(CurrentUsername)) = 0)
         
-            If Not .Safelisted Then
-                If GetAccess(Username).access < 20 Then
-                
-                    If Len(BotVars.ChannelPassword) > 0 And BotVars.ChannelPasswordDelay > 0 Then
-                        .InternalFlags = .InternalFlags + IF_AWAITING_CHPW
-                    End If
+            If (Not (.Safelisted)) Then
+                If ((Len(BotVars.ChannelPassword) > 0) And _
+                    (BotVars.ChannelPasswordDelay > 0)) Then
                     
-                    If Flags <> 2 And Flags <> 18 And StrComp(Username, CurrentUsername, vbTextCompare) <> 0 Then
+                    .InternalFlags = .InternalFlags + IF_AWAITING_CHPW
+                End If
+                
+                If (((Flags And USER_CHANNELOP&) <> USER_CHANNELOP&) And _
+                     (StrComp(Username, CurrentUsername, vbTextCompare) <> 0)) Then
+                    
+                    If (BotVars.IB_On = 1) Then
                         .InternalFlags = .InternalFlags + IF_SUBJECT_TO_IDLEBANS
                     End If
-                    
                 End If
             End If
-        
         End With
         
         colUsersInChannel.Add UserToAdd
     End If
     
     'using Warcraft III: Reign of Chaos (Level: 8, icon tier: Orcs
-    If (MyFlags = 2 Or MyFlags = 18) And BotVars.BanUnderLevel > 0 Then
-        If Product = "WAR3" Or Product = "W3XP" Then
+    If (((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
+         (BotVars.BanUnderLevel > 0)) Then
+         
+        If ((Product = "WAR3") Or (Product = "W3XP")) Then
             i = InStr(1, Message, "Level: ", vbTextCompare)
             
-            If i > 0 Then
-                i = i + 7
-                strCompare = Mid(Message, i, 2)
-                If Right(strCompare, 1) = "," Then strCompare = Left$(strCompare, 1)
+            If (i > 0) Then
+                i = (i + 7)
+                
+                strCompare = Mid$(Message, i, 2)
+                
+                If (Right$(strCompare, 1) = ",") Then
+                    strCompare = Left$(strCompare, 1)
+                End If
+                
                 Level = CByte(strCompare)
                 
-                If Level < BotVars.BanUnderLevel Then
-                    If Not GetSafelist(Username) And GetAccess(Username).access < 20 Then
-                        frmChat.AddQ "/ban " & Username & Space(1) & ReadCFG("Other", "LevelbanMsg"), 1 '" You are under the required level for entry."
+                If (Level < BotVars.BanUnderLevel) Then
+                    If (Not (GetSafelist(Username))) Then
+                        frmChat.AddQ "/ban " & Username & Space(1) & _
+                            ReadCFG("Other", "LevelbanMsg"), 1
                     End If
                 End If
             End If
@@ -706,13 +720,14 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     End If
 
         
-    If Not StatUpdate Then
+    If (Not (StatUpdate)) Then
         If InStr(1, Message, "in clan ", vbTextCompare) > 0 Then
             strCompare = Mid$(Message, InStr(1, Message, "in clan ", vbTextCompare) + 8)
             strCompare = Left$(strCompare, Len(Message) - 1)
-            AddName Username, Product, Flags, Ping, strCompare
+            
+            Call AddName(Username, Product, Flags, Ping, strCompare)
         Else
-            AddName Username, Product, Flags, Ping
+            Call AddName(Username, Product, Flags, Ping)
         End If
         
         Call DoLastSeen(Username)
@@ -721,16 +736,17 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             
         colUsersInChannel.Item(i).Statstring = OriginalStatstring
         
-        If JoinMessagesOff = False Then
+        If (JoinMessagesOff = False) Then
             frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", _
                     RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
                     RTBColors.JoinText, " is using " & Message
         End If
     End If
     
-    frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
+    frmChat.lblCurrentChannel.Caption = _
+        frmChat.GetChannelString()
     
-    If MDebug("statstrings") Then
+    If (MDebug("statstrings")) Then
         frmChat.AddChat vbMagenta, "Username: " & Username & ", Statstring: " & OriginalStatstring
     End If
     
@@ -816,7 +832,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                     If ((Len(BotVars.ChannelPassword) > 0) And _
                         (BotVars.ChannelPasswordDelay > 0)) Then
                         
-                        If ((MyFlags And &H2) = &H2) Then
+                        If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
                             If ((Len(BotVars.ChannelPassword) > 0) And _
                                 (BotVars.ChannelPasswordDelay > 0)) Then
                                 

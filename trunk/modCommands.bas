@@ -557,7 +557,7 @@ Private Function OnClan(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim tmpBuf As String ' temporary output buffer
     
     ' is bot a channel operator?
-    If ((MyFlags) And (&H2)) Then
+    If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
         Select Case (LCase$(msgData))
             Case "public", "pub"
                 tmpBuf = "Clan channel is now public."
@@ -1623,7 +1623,7 @@ Private Function OnDesignate(ByVal Username As String, ByRef dbAccess As udtGetA
     Dim tmpBuf As String ' temporary output buffer
     
     If (Len(msgData) > 0) Then
-        If (((MyFlags) And (&H2)) = &H2) Then
+        If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
             'diablo 2 handling
             If (Dii = True) Then
                 If (Not (Mid$(msgData, 1, 1) = "*")) Then
@@ -3596,7 +3596,7 @@ Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccess
             tmpBuf(0) = "User " & .Username & " is logged on using " & _
                 ProductCodeToFullName(.Product)
             
-            If ((.Flags) And (&H2) = &H2) Then
+            If ((.Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
                 tmpBuf(0) = tmpBuf(0) & " with ops, and a ping time of " & .Ping & "ms."
             Else
                 tmpBuf(0) = tmpBuf(0) & " with a ping time of " & .Ping & "ms."
@@ -6349,10 +6349,12 @@ Private Function checkUser(ByVal user As String, Optional ByVal _
             
             ' ...
             currentCharacter = Mid$(user, i, 1)
+            
+            MsgBox currentCharacter
         
             ' is the character between A-Z or a-z?
             If (Asc(currentCharacter) < Asc("A")) Or (Asc(currentCharacter) > Asc("z")) Then
-                MsgBox Asc(currentCharacter)
+                MsgBox currentCharacter
             
                 ' is the character between 0 - 9?
                 If ((Asc(currentCharacter) < Asc("0")) Or (Asc(currentCharacter) > Asc("9"))) Then
