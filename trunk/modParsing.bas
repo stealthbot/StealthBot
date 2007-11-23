@@ -27,6 +27,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Dim Product     As String       ' User product
     Dim W3Icon      As String       ' Warcraft III icon code
     Dim b           As Boolean      ' Temporary bool
+    Dim sArr()      As String       ' Temp String array
     
     Static ServerToken As Long      ' Server token used in various packets
     
@@ -57,8 +58,24 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         
         Select Case PacketID
             '###########################################################################
-            Case &HB        ' These two events added so that debug-mode does not
-            Case &H4C       ' spit data to the user!
+            Case &HB 'SID_GETCHANNELLIST
+                l = InStr(5, PacketData, String(2, Chr$(0)))
+                If l < 6 Then l = LenB(PacketData) - 5
+                sArr = Split(Mid$(PacketData, 5, l - 5), Chr$(0))
+                Call Event_ChannelList(sArr)
+                
+            '##########################################################################
+            Case &H2D 'SID_ICONDATA
+                If MDebug("debug") Then
+                    pD.DebuffFILETIME
+                    frmChat.AddChat RTBColors.InformationText, "Received Icons file name: ", RTBColors.InformationText, pD.DebuffNTString
+                End If
+                
+            '##########################################################################
+            Case &H4C 'SID_EXTRAWORK
+                If MDebug("debug") Then
+                    frmChat.AddChat RTBColors.InformationText, "Received Extra Work file name: ", RTBColors.InformationText, pD.DebuffNTString
+                End If
             
             '###########################################################################
             Case &HA 'SID_ENTERCHAT

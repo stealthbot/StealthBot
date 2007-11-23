@@ -1723,3 +1723,16 @@ Public Function Event_RealmStatusError(ByVal Status As Long)
     
     RealmError = True
 End Function
+
+'11/22/07 - Hdx - Pass the channel listing (0x0B) directly off to scriptors for there needs. (What other use is there?)
+Public Sub Event_ChannelList(sChannels() As String)
+    If MDebug("all") Then
+        Dim X As Integer
+        frmChat.AddChat RTBColors.InformationText, "Received Channel List: "
+        For X = 0 To UBound(sChannels)
+            frmChat.AddChat RTBColors.InformationText, vbTab & sChannels(X)
+        Next X
+    End If
+    On Error Resume Next
+    frmChat.SControl.Run "Event_ChannelList", sChannels
+End Sub
