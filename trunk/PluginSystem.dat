@@ -4,7 +4,7 @@
 
 '// The Plugin System - StealthBot 2.7 Development Version
 '//    by Swent
-'//      Last modified 2:28 AM 11/16/2007
+'//      Last modified 1:52 AM 11/23/2007
 
 '// The Plugin System is an updateable, scripted extension of StealthBot's VBScripting System.
 '//    This portion of the scripting system remains external to allow for updates and for viewing and tweaking by advanced scriptors.
@@ -158,8 +158,8 @@ Sub psLoadPlugins()
    On Error Resume Next
 
    '// Create an array of all existing StealthBot events
-   psEventNames = Split("load|firstrun|serverinfo|servererror|usertalk|useremote|whisperfromuser|userjoins|" & _
-                        "userleaves|flagupdate|loggedon|loggedoff|userinchannel|channeljoin|pressedenter|keyreturn|" & _
+   psEventNames = Split("load|firstrun|serverinfo|servererror|usertalk|useremote|whisperfromuser|userjoins|userleaves|" & _
+                        "flagupdate|loggedon|loggedoff|userinchannel|channeljoin|channellist|pressedenter|keyreturn|" & _
                         "messagesent|claninfo|clanmemberlist|clanmemberupdate|clanmotd|clanmemberleaves|" & _
                         "botremovedfromclan|botclanrankchanged|botjoinedclan|botclaninfo|close|shutdown", "|")
 
@@ -1439,6 +1439,12 @@ End Sub
 Sub Event_ChannelJoin(ChannelName, Flags)
  
    psExecuteEvent "ChannelJoin", Array(ChannelName,Flags)
+End Sub
+
+
+Sub Event_ChannelList(Channels)
+
+   psExecuteEvent "ChannelList", Array(Channels)
 End Sub
  
  
