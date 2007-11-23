@@ -6497,9 +6497,14 @@ Public Function reverseUsername(ByVal Username As String) As String
                     Case "Azeroth":   reverseUsername = Username & "@USEast"
                     Case "Kalimdor":  reverseUsername = Username & "@Asia"
                     Case "Northrend": reverseUsername = Username & "@Europe"
+                    Case Else:        reverseUsername = Username
                 End Select
             End If
+        Else
+            reverseUsername = Username
         End If
     End If
+    
+    MsgBox reverseUsername
 End Function
 

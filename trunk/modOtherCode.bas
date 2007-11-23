@@ -158,9 +158,11 @@ Public Function CheckPath(ByVal sPath As String) As Long
 End Function
 
 Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kick As Integer) As String
-    Dim Username As String, CleanedUsername As String
-    Static LastBan As String
-    Dim i As Integer
+    Static LastBan      As String
+    
+    Dim Username        As String
+    Dim CleanedUsername As String
+    Dim i               As Integer
     
     If LenB(Inpt) > 0 Then
         If Kick > 2 Then
@@ -170,7 +172,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
         
         If colQueue.Count > 0 Then
             For i = 1 To colQueue.Count
-                With colQueue.item(i)
+                With colQueue.Item(i)
                     If Left$(.Message, 5) = "/ban " Then
                         If StrComp(LastBan & " ", LCase$(Mid$(.Message, 6, Len(LastBan) + 1)), vbTextCompare) = 0 Then
                             Exit Function
@@ -591,10 +593,10 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                     ElseIf (StrComp(DB(i).Type, "GAME", vbTextCompare) = 0) Then
                         ' ...
                         For j = 1 To colUsersInChannel.Count
-                            If (StrComp(Username, colUsersInChannel.item(j).Username, _
+                            If (StrComp(Username, colUsersInChannel.Item(j).Username, _
                                     vbTextCompare) = 0) Then
                                  
-                                If (StrComp(DB(i).Username, colUsersInChannel.item(j).Product, _
+                                If (StrComp(DB(i).Username, colUsersInChannel.Item(j).Product, _
                                     vbTextCompare) = 0) Then
                             
                                     ' ...
@@ -607,10 +609,10 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                     ElseIf (StrComp(DB(i).Type, "CLAN", vbTextCompare) = 0) Then
                         ' ...
                         For j = 1 To colUsersInChannel.Count
-                            If (StrComp(Username, colUsersInChannel.item(j).Username, _
+                            If (StrComp(Username, colUsersInChannel.Item(j).Username, _
                                     vbTextCompare) = 0) Then
                                  
-                                If (StrComp(DB(i).Username, colUsersInChannel.item(j).Clan, _
+                                If (StrComp(DB(i).Username, colUsersInChannel.Item(j).Clan, _
                                     vbTextCompare) = 0) Then
                             
                                     ' ...
@@ -1049,10 +1051,10 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         
     With frmChat.lvChannel.ListItems
         .Add isPriority, , Username, , i
-        .item(isPriority).ListSubItems.Add , , , LagIcon
+        .Item(isPriority).ListSubItems.Add , , , LagIcon
         
         If Not BotVars.NoColoring Then
-            .item(isPriority).ForeColor = GetNameColor(Flags, 0, IsSelf)
+            .Item(isPriority).ForeColor = GetNameColor(Flags, 0, IsSelf)
         End If
         
         g_ThisIconCode = -1
@@ -1335,7 +1337,7 @@ Public Sub DoLastSeen(ByVal Username As String)
     
     If colLastSeen.Count > 0 Then
         For i = 1 To colLastSeen.Count
-            If StrComp(colLastSeen.item(i), Username, vbTextCompare) = 0 Then
+            If StrComp(colLastSeen.Item(i), Username, vbTextCompare) = 0 Then
                 found = True
                 Exit For
             End If
@@ -1524,7 +1526,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
     i = 1
     
     While QueueUBound > 0 And i < (QueueUBound - NumRemoved)
-        With colQueue.item(i)
+        With colQueue.Item(i)
             If Len(.Message) >= CompareLen Then
             
                 If StrComp(Left$(LCase(.Message), CompareLen), sUser, vbBinaryCompare) = 0 Then
@@ -1578,7 +1580,7 @@ Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boo
     'For each condition where the user is NOT allowed to talk, set to false
     
     If i > 0 Then
-        With colUsersInChannel.item(i)
+        With colUsersInChannel.Item(i)
             If CurrentGTC - .JoinTime < BotVars.AutofilterMS Then
                 AllowedToTalk = False
             End If
@@ -1619,7 +1621,7 @@ Public Sub UpdateSafelistedStatus(ByVal sUser As String, ByVal bStatus As Boolea
     i = UsernameToIndex(sUser)
     
     If i > 0 Then
-        colUsersInChannel.item(i).Safelisted = bStatus
+        colUsersInChannel.Item(i).Safelisted = bStatus
     End If
 End Sub
 
@@ -1846,7 +1848,7 @@ Public Function UsernameToIndex(ByVal sUsername As String) As Long
     If colUsersInChannel.Count > 0 Then
     
         For i = 1 To colUsersInChannel.Count
-            Set user = colUsersInChannel.item(i)
+            Set user = colUsersInChannel.Item(i)
             
             With user
                 If StrComp(Mid$(.Username, 1, 1), FirstLetter, vbTextCompare) = 0 Then
