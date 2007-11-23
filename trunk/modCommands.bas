@@ -4222,6 +4222,13 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
         ' grab username
         user = strArray(0)
         
+        ' ...
+        If (user = vbNullString) Then
+            cmdRet(0) = "Error: Invalid username."
+            
+            Exit Function
+        End If
+        
         ' grab rank & flags
         If (StrictIsNumeric(strArray(1))) Then
             ' grab rank
