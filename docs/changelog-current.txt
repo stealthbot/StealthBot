@@ -239,6 +239,8 @@
 		- When several similar matching names are in a channel, the bot will now rememeber
 			the last username that was found matching.  This allows an easy way to
 			reference a single user across multiple messages.
+		- When changing listviews (Channel, Friends, Clan), the auto-complete system will
+			now use the names from the respective listview.
 
 
 	<b>COMMANDS</b>
