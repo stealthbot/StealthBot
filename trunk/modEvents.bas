@@ -614,47 +614,59 @@ Public Sub Event_SomethingUnknown(ByVal UnknownString As String)
 End Sub
 
 Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal Message As String)
-    Dim i As Integer
+    Dim i As Integer ' ...
 
     Username = convertUsername(Username)
     
-    If frmChat.mnuUTF8.Checked Then Message = KillNull(UTF8Decode(Message))
+    If (frmChat.mnuUTF8.Checked) Then
+        Message = KillNull(UTF8Decode(Message))
+    End If
     
     i = UsernameToIndex(Username)
     
-    If i > 0 Then colUsersInChannel.Item(i).Acts
+    If (i > 0) Then
+        colUsersInChannel.Item(i).Acts
+    End If
     
-    If Catch(0) <> vbNullString Then Call CheckPhrase(Username, Message, CPEMOTE)
+    If (Catch(0) <> vbNullString) Then
+        Call CheckPhrase(Username, Message, CPEMOTE)
+    End If
     
-    If (MyFlags = 2 Or MyFlags = 18) And (Phrasebans Or BotVars.QuietTime) And Flags <> 2 And Flags <> 18 Then
-        If MyFlags = 2 Or MyFlags = 18 Then
-            If BotVars.QuietTime Then
-                If Not GetSafelist(Username) Then
-                    If GetAccess(Username).access < 20 Then
-                        frmChat.AddQ "/ban " & Username & " Quiet-time is enabled.", 1
-                    End If
+    If ((Phrasebans) Or (BotVars.QuietTime)) Then
+        If (((MyFlags = USER_CHANNELOP&) = USER_CHANNELOP&) And _
+            ((Flags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
+            
+            If (BotVars.QuietTime) Then
+                If (Not (GetSafelist(Username))) Then
+                    frmChat.AddQ "/ban " & Username & _
+                        " Quiet-time is enabled.", 1
                 End If
             End If
             
-            If Phrasebans Then
+            If (Phrasebans) Then
                 For i = LBound(Phrases) To UBound(Phrases)
-                    If LCase(Phrases(i)) = vbNullString Or LCase(Phrases(i)) = " " Then GoTo NextPhrase
-                
-                    If InStr(1, LCase(Message), LCase(Phrases(i)), vbTextCompare) <> 0 Then
-                        If GetSafelist(Username) Or (GetAccess(Username).access >= (AutoModSafelistValue)) Then GoTo theEnd
-                        
-                        frmChat.AddQ "/ban " & Username & " Banned phrase: " & Phrases(i), 1
-                        GoTo theEnd
+                    If ((LCase$(Phrases(i)) <> vbNullString) And _
+                        (LCase$(Phrases(i)) <> Space(1))) Then
+                    
+                        If (InStr(1, Message, Phrases(i), vbTextCompare) <> 0) Then
+                            If (Not (GetSafelist(Username))) Then
+                                frmChat.AddQ "/ban " & Username & _
+                                    " Banned phrase: " & Phrases(i), 1
+                            End If
+                            
+                            GoTo theEnd
+                        End If
                     End If
-NextPhrase:
                 Next i
             End If
         End If
     End If
     
-    If Len(Message) > 135 Then
-        BotVars.JoinWatch = BotVars.JoinWatch + 5
+    If (Len(Message) > 135) Then
+        BotVars.JoinWatch = (BotVars.JoinWatch + 5)
+        
         'i = GetAryPos(Username)
+        
         'gChannel.Spam(i) = gChannel.Spam(i) + 1
         'If gChannel.Spam(i) > 3 And (MyFlags = 2 Or MyFlags = 18) Then
         '    If Not GetSafelist(Username) Then frmchat.addq "/ban " & Username & " Spamming"
@@ -662,14 +674,18 @@ NextPhrase:
     End If
 
 theEnd:
-    If AllowedToTalk(Username, Message) Then
-        If frmChat.mnuFlash.Checked Then FlashWindow
+    If (AllowedToTalk(Username, Message)) Then
+        If (frmChat.mnuFlash.Checked) Then
+            FlashWindow
+        End If
         
         With RTBColors
-            frmChat.AddChat .EmoteText, "<", .EmoteUsernames, Username & " ", .EmoteText, Message & ">"
+            frmChat.AddChat .EmoteText, "<", .EmoteUsernames, Username & _
+                " ", .EmoteText, Message & ">"
         End With
         
         On Error Resume Next
+        
         frmChat.SControl.Run "Event_UserEmote", Username, Flags, Message
     End If
 End Sub
