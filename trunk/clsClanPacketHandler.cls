@@ -177,6 +177,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
     End Select
     inBuf.Clear
     Set inBuf = Nothing
+    Exit Sub
 clanErr:
   Debug.Print "ParseClanPacket Error: " & Err.Number & ": " & Err.Description
   Debug.Print DebugOutput(Data)
