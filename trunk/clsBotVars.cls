@@ -81,6 +81,7 @@ Private m_bLockChat                     As Boolean
 Private m_iJoinWatch                    As Integer
 Private m_sBNLSServer                   As String
 Private m_bNoRTBAutomaticCopy           As Boolean
+Private m_bUseGameConventions           As Boolean
 
 
 Public Property Get Username() As String
@@ -825,5 +826,17 @@ End Property
 Public Property Let NoRTBAutomaticCopy(ByVal bNoRTBAutomaticCopy As Boolean)
 
     m_bNoRTBAutomaticCopy = bNoRTBAutomaticCopy
+
+End Property
+
+Public Property Get UseGameConventions() As Boolean
+
+    UseGameConventions = m_bUseGameConventions
+
+End Property
+
+Public Property Let UseGameConventions(ByVal bUseGameConventions As Boolean)
+
+    m_bUseGameConventions = bUseGameConventions
 
 End Property

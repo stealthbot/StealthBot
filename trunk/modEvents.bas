@@ -21,7 +21,9 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     
     Username = convertUsername(Username)
     
-    If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
+    If (StrComp(Username, convertUsername(CurrentUsername), _
+        vbBinaryCompare) = 0) Then
+        
         MyFlags = Flags
         
         SharedScriptSupport.BotFlags = MyFlags
@@ -381,7 +383,7 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     If (StrComp(Left$(CurrentUsername, 2), "w#", vbTextCompare) = 0) Then
         CurrentUsername = Mid(CurrentUsername, 3)
     End If
-    
+
     SharedScriptSupport.myUsername = CurrentUsername
     
     With frmChat
@@ -698,7 +700,9 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
     If (Not (StatUpdate)) Then
         If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
-            If (StrComp(Username, CurrentUsername, vbTextCompare) <> 0) Then
+            If (StrComp(Username, convertUsername(CurrentUsername), _
+                vbTextCompare) <> 0) Then
+                
                 gChannel.Designated = Username
             End If
         End If

@@ -6093,14 +6093,14 @@ End Sub
 ' ...
 Public Sub checkUsers()
     Dim i As Integer ' ...
-    
+
     If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
         For i = 1 To colUsersInChannel.Count
             Dim tmp As String ' ...
             
             ' ...
             tmp = GetShitlist(colUsersInChannel.Item(i).Username)
-            
+           
             ' ...
             If (Len(tmp) > 0) Then
                 ' ...
@@ -6444,33 +6444,37 @@ Public Function convertUsername(ByVal Username As String) As String
     
         Exit Function
     End If
-    
-    If (Dii) Then
-        Index = InStr(1, Username, "*", vbBinaryCompare)
-    
-        If (Index <> 0) Then
-            convertUsername = Mid$(Username, Index + 1)
-        End If
-    ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
-            (StrReverse$(BotVars.Product) = "W3XP")) Then
-            
-        If (w3Realm <> vbNullString) Then
-            Select Case (w3Realm)
-                Case "Lordaeron": Index = InStr(1, Username, "@USWest", vbBinaryCompare)
-                Case "Azeroth":   Index = InStr(1, Username, "@USEast", vbBinaryCompare)
-                Case "Kalimdor":  Index = InStr(1, Username, "@Asia", vbBinaryCompare)
-                Case "Northrend": Index = InStr(1, Username, "@Europe", vbBinaryCompare)
-            End Select
-            
+
+    If (Not (BotVars.UseGameConventions)) Then
+        If (Dii) Then
+            Index = InStr(1, Username, "*", vbBinaryCompare)
+        
             If (Index <> 0) Then
-                convertUsername = Left$(Username, Index - 1)
-            Else
-                convertUsername = Username & "@" & _
-                    w3Realm
+                convertUsername = Mid$(Username, Index + 1)
             End If
-        Else
-            convertUsername = Username
+        ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
+                (StrReverse$(BotVars.Product) = "W3XP")) Then
+                
+            If (w3Realm <> vbNullString) Then
+                Select Case (w3Realm)
+                    Case "Lordaeron": Index = InStr(1, Username, "@USWest", vbBinaryCompare)
+                    Case "Azeroth":   Index = InStr(1, Username, "@USEast", vbBinaryCompare)
+                    Case "Kalimdor":  Index = InStr(1, Username, "@Asia", vbBinaryCompare)
+                    Case "Northrend": Index = InStr(1, Username, "@Europe", vbBinaryCompare)
+                End Select
+                
+                If (Index <> 0) Then
+                    convertUsername = Left$(Username, Index - 1)
+                Else
+                    convertUsername = Username & "@" & _
+                        w3Realm
+                End If
+            End If
         End If
+    End If
+    
+    If (Len(convertUsername) = 0) Then
+        convertUsername = Username
     End If
 End Function
 
@@ -6500,11 +6504,11 @@ Public Function reverseUsername(ByVal Username As String) As String
                     Case Else:        reverseUsername = Username
                 End Select
             End If
-        Else
-            reverseUsername = Username
         End If
     End If
     
-    MsgBox reverseUsername
+    If (Len(reverseUsername) = 0) Then
+        reverseUsername = Username
+    End If
 End Function
 

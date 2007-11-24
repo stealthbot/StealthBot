@@ -164,8 +164,8 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
     Dim CleanedUsername As String
     Dim i               As Integer
     
-    If LenB(Inpt) > 0 Then
-        If Kick > 2 Then
+    If (LenB(Inpt) > 0) Then
+        If (Kick > 2) Then
             LastBan = vbNullString
             Exit Function
         End If

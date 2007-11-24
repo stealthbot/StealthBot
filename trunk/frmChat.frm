@@ -1582,6 +1582,11 @@ Private Sub Form_Load()
         Me.Top = (Screen.Height - Me.Height) / 2
     End If
     
+    Set ClanHandler = New clsClanPacketHandler
+    Set colUsersInChannel = New Collection
+    Set FriendListHandler = New clsFriendlistHandler
+    Set ListToolTip = New CTooltip
+    
     Call ReloadConfig
     
     Call Form_Resize
@@ -1591,11 +1596,6 @@ Private Sub Form_Load()
     Call DisableListviewTabs
     
     ListviewTabs.Tab = 0
-    
-    Set ClanHandler = New clsClanPacketHandler
-    Set colUsersInChannel = New Collection
-    Set FriendListHandler = New clsFriendlistHandler
-    Set ListToolTip = New CTooltip
     
     With ListToolTip
         .Style = TTStandard
@@ -4777,7 +4777,9 @@ Private Sub QueueTimer_Timer()
             colQueue.Remove Override
             
             If Sent = 1 And InStr(1, "/", Left(Message, 1), vbTextCompare) = 0 Then
-                AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, CurrentUsername, RTBColors.Carats, "> ", RTBColors.TalkNormalText, Message
+                AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
+                    convertUsername(CurrentUsername), RTBColors.Carats, "> ", _
+                        RTBColors.TalkNormalText, Message
             End If
             
         End If
@@ -5357,7 +5359,8 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                 bnetSend KillNull(Message)
                 
                 If InStr(1, Message, "/") <> 1 Then
-                    AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, CurrentUsername, RTBColors.Carats, "> ", vbWhite, Message
+                    AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
+                        convertUsername(CurrentUsername), RTBColors.Carats, "> ", vbWhite, Message
                 End If
                 
                 QueueLoad = QueueLoad + 1
@@ -5401,7 +5404,6 @@ Sub ClearChannel()
 End Sub
 
 Sub ReloadConfig(Optional Mode As Byte = 0)
-    On Error Resume Next
     Dim s As String, i As Integer, f As Integer
     Const MN As String = "Main", OT As String = "Other"
     
@@ -5477,6 +5479,34 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         
     s = ReadCFG(MN, "ShowOfflineFriends")
     If s = "Y" Then BotVars.ShowOfflineFriends = True Else BotVars.ShowOfflineFriends = False
+    
+    s = ReadCFG(OT, "UseGameConventions")
+    
+    If (s = "Y") Then
+        If (colUsersInChannel.Count > 0) Then
+            For i = 1 To colUsersInChannel.Count
+                colUsersInChannel(i).Username = _
+                    reverseUsername(colUsersInChannel(i).Username)
+                    
+                lvChannel.ListItems.Item(i).text = _
+                    colUsersInChannel(i).Username
+            Next i
+        End If
+        
+        BotVars.UseGameConventions = True
+    Else
+        BotVars.UseGameConventions = False
+        
+        If (colUsersInChannel.Count > 0) Then
+            For i = 1 To colUsersInChannel.Count
+                colUsersInChannel(i).Username = _
+                    convertUsername(colUsersInChannel(i).Username)
+                    
+                lvChannel.ListItems.Item(i).text = _
+                    colUsersInChannel(i).Username
+            Next i
+        End If
+    End If
     
     s = ReadCFG(OT, "JoinLeaves")
     If s = "Y" Then JoinMessagesOff = False Else JoinMessagesOff = True

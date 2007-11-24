@@ -151,7 +151,7 @@ Begin VB.Form frmSettings
       TabIndex        =   122
       Top             =   0
       Width           =   6615
-      Begin VB.CheckBox Check1 
+      Begin VB.CheckBox chkGameConventions 
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
          Caption         =   "Use Game Username Conventions"
@@ -4092,7 +4092,7 @@ Function KeyToIndex(ByVal sKey As String) As Byte
     
 End Function
 
-Sub ShowPanel(ByVal index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
+Sub ShowPanel(ByVal Index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
 
     Static ActivePanel As Integer
     
@@ -4102,8 +4102,8 @@ Sub ShowPanel(ByVal index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
             ActivePanel = KeyToIndex("splash")
         Else
             'fraPanel(ActivePanel).ZOrder vbSendToBack
-            fraPanel(index).ZOrder vbBringToFront
-            ActivePanel = index
+            fraPanel(Index).ZOrder vbBringToFront
+            ActivePanel = Index
             WriteINI "Position", "LastSettingsPanel", ActivePanel
             
             'Debug.Print "Writing: " & ActivePanel
@@ -4363,6 +4363,7 @@ Private Function SaveSettings() As Boolean
     WINI "DoNotUseDirectFList", Cv(chkDoNotUsePacketFList.Value), secMain
     WINI "URLDetect", Cv(chkURLDetect.Value), secMain
     WINI "ShowOfflineFriends", Cv(chkShowOffline.Value), secMain
+    WINI "UseGameConventions", Cv(chkGameConventions.Value), secOther
     WINI "LogDBActions", Cv(chkLogDBActions.Value), secMain
     WINI "LogCommands", Cv(chkLogAllCommands.Value), secMain
     
@@ -4841,6 +4842,7 @@ Private Sub InitGenMisc()
     chkConnectOnStartup.Value = YesToTrue(ReadCFG(MN, "ConnectOnStartup"), 0)
     chkMinimizeOnStartup.Value = YesToTrue(ReadCFG(MN, "MinimizeOnStartup"), 0)
     chkShowOffline.Value = YesToTrue(ReadCFG(MN, "ShowOfflineFriends"), 0)
+    chkGameConventions.Value = YesToTrue(ReadCFG(OT, "UseGameConventions"), 0)
     
     chkURLDetect.Value = YesToTrue(ReadCFG(MN, "URLDetect"), 1)
     chkDoNotUsePacketFList.Value = YesToTrue(ReadCFG(MN, "DoNotUseDirectFList"), 0)
