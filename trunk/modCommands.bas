@@ -3883,18 +3883,18 @@ Private Function OnPing(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf  As String ' temporary output buffer
-    Dim latency As Long
+    Dim Latency As Long
     Dim user    As String
     
     user = msgData
     
     If (Len(user) > 0) Then
-        latency = GetPing(user)
+        Latency = GetPing(user)
         
-        If (latency < -1) Then
+        If (Latency < -1) Then
             tmpBuf = "I can't see " & user & " in the channel."
         Else
-            tmpBuf = user & "'s ping at login was " & latency & "ms."
+            tmpBuf = user & "'s ping at login was " & Latency & "ms."
         End If
     Else
         tmpBuf = "Ping who?"
@@ -4075,22 +4075,22 @@ Private Function OnGetPing(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf  As String ' temporary output buffer
-    Dim latency As Long
+    Dim Latency As Long
 
     If (InBot) Then
         If (g_Online) Then
             ' grab current latency
-            latency = GetPing(CurrentUsername)
+            Latency = GetPing(CurrentUsername)
         
-            tmpBuf = "Your ping at login was " & latency & "ms."
+            tmpBuf = "Your ping at login was " & Latency & "ms."
         Else
             tmpBuf = "You are not connected."
         End If
     Else
-        latency = GetPing(Username)
+        Latency = GetPing(Username)
     
-        If (latency > -2) Then
-            tmpBuf = "Your ping at login was " & latency & "ms."
+        If (Latency > -2) Then
+            tmpBuf = "Your ping at login was " & Latency & "ms."
         End If
     End If
 
@@ -6122,8 +6122,8 @@ Public Sub checkUsers()
                 
                 ' ...
                 If (BotVars.IPBans) Then
-                    If ((colUsersInChannel.Item(i).Flags And _
-                         USER_SQUELCHED) = USER_SQUELCHED) Then
+                    If ((colUsersInChannel.Item(i).Flags And USER_SQUELCHED) = _
+                         USER_SQUELCHED) Then
                         
                         Call Ban(colUsersInChannel.Item(i).Username & _
                             " IPBanned.", (AutoModSafelistValue - 1))

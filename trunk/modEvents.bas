@@ -684,10 +684,29 @@ theEnd:
             FlashWindow
         End If
         
-        With RTBColors
-            frmChat.AddChat .EmoteText, "<", .EmoteUsernames, Username & _
-                " ", .EmoteText, Message & ">"
-        End With
+        
+        For i = 1 To colChatQueue.Count
+            ' ...
+            Dim clsChatQueue As clsChatQueue
+        
+            ' ...
+            Set clsChatQueue = colChatQueue(i)
+            
+            If (StrComp(Username, clsChatQueue.Username, _
+                vbBinaryCompare) = 0) Then
+            
+                Exit For
+            End If
+        Next i
+        
+        If (i >= (colChatQueue.Count + 1)) Then
+            frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, _
+                Username & Space(1), RTBColors.EmoteText, Message & ">"
+        Else
+            Set clsChatQueue = colChatQueue(i)
+            
+            Call clsChatQueue.StoreEmote(Flags, 0, Message)
+        End If
         
         On Error Resume Next
         
@@ -738,7 +757,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             .Ping = Ping
             .Product = Product
             .Safelisted = GetSafelist(Username)
-            .StatString = OriginalStatstring
+            .Statstring = OriginalStatstring
             .JoinTime = GetTickCount
             .Clan = sClan
             .IsSelf = (StrComp(Username, CurrentUsername, vbTextCompare) = 0)
@@ -806,7 +825,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Else
         i = UsernameToIndex(Username)
             
-        colUsersInChannel.Item(i).StatString = OriginalStatstring
+        colUsersInChannel.Item(i).Statstring = OriginalStatstring
         
         If (JoinMessagesOff = False) Then
             frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", _
@@ -837,45 +856,51 @@ End Sub
 Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal w3icon As String)
     Dim clsChatQueue As clsChatQueue
     
-    Dim f As Integer
-    
     Set clsChatQueue = New clsChatQueue
     
     Username = convertUsername(Username)
     
     If (Not (bFlood)) Then
-        If (Len(Username) < 1) Then: Exit Sub
-            'If InStr(1, GetAccess(Username).Flags, "X", vbTextCompare) > 0 And floodCap < 45 Then
-            '    If StrComp(Flood, Username, vbTextCompare) <> 0 Then
-            '        Send "/ban " & Username
-            '        floodCap = floodCap + 15
-            '        Flood = Username
-            '    End If
-            'End If
-            
-            'If StrComp(Username, LCase(Username), vbTextCompare) = 0 And floodCap < 45 Then
-            '    If Len(Username) > 9 And StrComp(Flood, Username, vbTextCompare) <> 0 Then
-            '        Send "/ban " & Username
-            '        floodCap = floodCap + 15
-            '        Flood = Username
-            '    End If
-            'End If
+        Dim toCheck    As String
+        Dim strCompare As String
+        Dim i          As Long
+        Dim Temp       As Byte
+        Dim Level      As Byte
+        Dim l          As Long
+        Dim Banned     As Boolean
+        Dim f          As Integer
+    
+        If (Len(Username) < 1) Then
+            Exit Sub
+        End If
+        
+        'If InStr(1, GetAccess(Username).Flags, "X", vbTextCompare) > 0 And floodCap < 45 Then
+        '    If StrComp(Flood, Username, vbTextCompare) <> 0 Then
+        '        Send "/ban " & Username
+        '        floodCap = floodCap + 15
+        '        Flood = Username
+        '    End If
         'End If
         
-'        If Flags = 10 Or Flags = 12 Then Flags = Flags + 6
-'        If Flags = 14 Then Flags = 18
+        'If StrComp(Username, LCase(Username), vbTextCompare) = 0 And floodCap < 45 Then
+        '    If Len(Username) > 9 And StrComp(Flood, Username, vbTextCompare) <> 0 Then
+        '        Send "/ban " & Username
+        '        floodCap = floodCap + 15
+        '        Flood = Username
+        '    End If
+        'End If
         
-        Dim toCheck As String
-        Dim strCompare As String
-        Dim i As Long
-        Dim Temp As Byte
-        Dim Level As Byte
-        Dim l As Long
-        Dim Banned As Boolean
+        'If Flags = 10 Or Flags = 12 Then Flags = Flags + 6
+        'If Flags = 14 Then Flags = 18
         
         Banned = True
+        
         f = FreeFile
-        If InStr(1, Username, "*", vbTextCompare) <> 0 Then Username = Right$(Username, Len(Username) - InStr(1, Username, "*", vbTextCompare))
+        
+        'If (InStr(1, Username, "*", vbBinaryCompare) <> 0) Then
+        '    Username = Right$(Username, Len(Username) - _
+        '        InStr(1, Username, "*", vbTextCompare))
+        'End If
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' Add user to collection
@@ -891,32 +916,33 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             .Ping = Ping
             .Product = Product
             .Safelisted = GetSafelist(Username)
-            .StatString = OriginalStatstring
+            .Statstring = OriginalStatstring
             .JoinTime = GetTickCount
             .Clan = sClan
-            .IsSelf = (StrComp(LCase(Username), LCase(CurrentUsername)) = 0)
+            .IsSelf = (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0)
             .InternalFlags = 0
             
             If (Not (.Safelisted)) Then
-                If (GetCumulativeAccess(Username).access < 20) Then
-                    If ((Flags <> 2 And Flags <> 18) And _
-                        (StrComp(Username, CurrentUsername, vbTextCompare) <> 0)) Then
-                        
-                        If (BotVars.IB_On = 1) Then
-                            .InternalFlags = .InternalFlags + IF_SUBJECT_TO_IDLEBANS
-                        End If
-                    End If
+                If (((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
+                     (StrComp(Username, CurrentUsername, vbTextCompare) <> 0)) Then
                     
-                    If ((Len(BotVars.ChannelPassword) > 0) And _
-                        (BotVars.ChannelPasswordDelay > 0)) Then
-                        
-                        If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
-                            If ((Len(BotVars.ChannelPassword) > 0) And _
-                                (BotVars.ChannelPasswordDelay > 0)) Then
-                                
-                                .InternalFlags = .InternalFlags + IF_AWAITING_CHPW
-                            End If
-                                                    
+                    If (BotVars.IB_On = 1) Then
+                        .InternalFlags = .InternalFlags + _
+                            IF_SUBJECT_TO_IDLEBANS
+                    End If
+                End If
+                
+                If ((Len(BotVars.ChannelPassword) > 0) And _
+                    (BotVars.ChannelPasswordDelay > 0)) Then
+                    
+                    If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+                        If ((Len(BotVars.ChannelPassword) > 0) And _
+                            (BotVars.ChannelPasswordDelay > 0)) Then
+                            
+                            .InternalFlags = (.InternalFlags + _
+                                IF_AWAITING_CHPW)
+                            
+                            ' prompt user for channel password
                             If (Dii) Then
                                 frmChat.AddQ "/w *" & Username & " You have " & _
                                     BotVars.ChannelPasswordDelay & " seconds to whisper a valid " & _
@@ -941,6 +967,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         If ((Product = "WAR3") Or _
             (Product = "W3XP")) Then
+            
             i = InStr(1, Message, "Level: ", vbTextCompare)
         ElseIf Product = "D2DV" Or Product = "D2XP" Then
             i = InStr(1, Message, " level ", vbTextCompare)
@@ -1010,14 +1037,18 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         ' AUTOMATIC MODERATION FEATURES
         '  These are all dependent on OPS (determined here)
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        If (MyFlags = 2 Or MyFlags = 18) Then
-        
-            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            ' Designate them?
-            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            If InStr(1, GetCumulativeAccess(Username).Flags, "D", vbBinaryCompare) > 0 Then
-                If ((gChannel.Designated = vbNullString) And (MyFlags = 2 Or MyFlags = 18)) Then
-                    If ((Flags <> 2) And (Flags <> 18)) Then
+        If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+            ' There's no sense trying to perform moderatory actions on
+            ' a moderator
+            If ((Flags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
+            
+                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                ' Designate them?
+                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                If (InStr(1, GetCumulativeAccess(Username).Flags, "D", _
+                    vbBinaryCompare) > 0) Then
+                    
+                    If (gChannel.Designated = vbNullString) Then
                         If Mid$(LCase$(gChannel.Current), 1, 3) = "op " Then
                             If (StrComp(Mid$(gChannel.Current, 4), StripRealm(Username), _
                                 vbTextCompare)) <> 0 Then
@@ -1028,7 +1059,6 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                                     frmChat.AddQ "/designate " & Username
                                 End If
                                 
-                                'frmchat.addq "/resign"
                                 gChannel.staticDesignee = Username
                             End If
                         Else
@@ -1038,203 +1068,150 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                                 frmChat.AddQ "/designate " & Username
                             End If
                             
-                            'frmchat.addq "/resign"
                             gChannel.staticDesignee = Username
                         End If
                     End If
                 End If
-            End If
-            
-            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            ' Are they banned?
-            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            'If InStr(1, GetAccess(Username).Flags, "B") > 0 Then
-            '    Ban Username & " AutoBan", (AutoModSafelistValue - 1)
-            '    GoTo theEnd
-            'End If
-            
-            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            ' Are they tagbanned?
-            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            'strCompare = PrepareCheck(Username)
-            'For i = 0 To UBound(DB)
-            '    With DB(i)
-            '        If InStr(1, .Flags, "Z") > 0 Then
-            '            If strCompare Like PrepareCheck(.Username) Then
-            '                Ban Username & " Tagbanned", (AutoModSafelistValue - 1)
-            '                GoTo theEnd
-            '            End If
-            '        End If
-            '    End With
-            'Next i
-    
-            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            ' AUTOMATIC MODERATION FEATURES
-            '  These are all dependent on OPS (above if control) and the user's
-            '  SAFELISTED STATUS (determined here)
-            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            If Not UserToAdd.Safelisted Then
-    
+        
                 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Warcraft III players: various checks
+                ' AUTOMATIC MODERATION FEATURES
+                '  These are all dependent on OPS (above if control) and the user's
+                '  SAFELISTED STATUS (determined here)
                 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                If Product = "WAR3" Or Product = "W3XP" Then
-                    
+                If (Not (UserToAdd.Safelisted)) Then
+        
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    ' Should they be banned for being low?
+                    ' Warcraft III players: various checks
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    If BotVars.BanUnderLevel > 0 Then
-                        If Level < BotVars.BanUnderLevel Then
-                            strCompare = ReadCFG("Other", "LevelbanMsg")
-                            
-                            If strCompare <> vbNullString Then
-                                Ban Username & Space(1) & strCompare, (AutoModSafelistValue - 1) '" You are under the required level for entry."
-                            Else
-                                Ban Username & Space(1) & "You are under the required level for entry.", (AutoModSafelistValue - 1)
-                            End If
-                            
-                            GoTo theEnd
-                        End If
-                    End If
-                    
-                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    ' Are they clan-tagbanned?
-                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    If InStr(1, Message, "in Clan ", vbTextCompare) > 0 Then
-                        toCheck = Mid(Message, InStr(1, Message, "in Clan ", vbTextCompare) + 8)
-                        toCheck = Mid(toCheck, 1, Len(toCheck) - 1)
+                    If ((Product = "WAR3") Or (Product = "W3XP")) Then
                         
-                    '    If Len(GetTagbans(toCheck)) > 0 Then
-                    '        If InStr(toCheck, " ") > 0 Then
-                    '            Ban Username & Space(1) & Mid$(toCheck, InStr(toCheck, " ") + 1), (AutoModSafelistValue - 1)
-                    '        Else
-                    '            Ban Username & " Tagbanned", (AutoModSafelistValue - 1)
-                    '        End If
-                    '
-                    '        GoTo theEnd
-                    '    End If
-                    End If
+                        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                        ' Should they be banned for being low?
+                        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                        If (BotVars.BanUnderLevel > 0) Then
+                            If (Level < BotVars.BanUnderLevel) Then
+                                strCompare = ReadCFG("Other", "LevelbanMsg")
+                                
+                                If (strCompare <> vbNullString) Then
+                                    Ban Username & Space(1) & strCompare, _
+                                        (AutoModSafelistValue - 1)
+                                Else
+                                    Ban Username & Space(1) & _
+                                        "You are under the required level for entry.", _
+                                            (AutoModSafelistValue - 1)
+                                End If
+                                
+                                GoTo theEnd
+                            End If
+                        End If
+                        
+                        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                        ' How about peon-banned?
+                        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                        If (BotVars.BanPeons = 1) Then
+                            If (InStr(1, Message, "peon icon", vbTextCompare) > 0) Then
+                                If (Len(ReadCFG("Main", "PeonBanMsg")) > 0) Then
+                                    Ban Username & Space(1) & ReadCFG("Main", "PeonBanMsg"), _
+                                        (AutoModSafelistValue - 1)
+                                Else
+                                    Ban Username & " PeonBan", (AutoModSafelistValue - 1)
+                                End If
+                                
+                                GoTo theEnd
+                            End If
+                        End If
+                    End If ' (end Warcraft III checks)
                     
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    ' How about peon-banned?
+                    ' Diablo II players: are they levelbanned?
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    If BotVars.BanPeons = 1 Then
-                        If InStr(1, Message, "peon icon", vbTextCompare) > 0 Then
-                            If Len(ReadCFG("Main", "PeonBanMsg")) > 0 Then
-                                Ban Username & Space(1) & ReadCFG("Main", "PeonBanMsg"), (AutoModSafelistValue - 1)
-                            Else
-                                Ban Username & " PeonBan", (AutoModSafelistValue - 1)
+                    If ((Product = "D2DV") Or (Product = "D2XP")) Then
+                        If (BotVars.BanD2UnderLevel > 0) Then
+                            If (Level < BotVars.BanD2UnderLevel) Then
+                                strCompare = ReadCFG("Other", "LevelbanMsg")
+                                
+                                If (strCompare <> vbNullString) Then
+                                    Ban Username & Space(1) & strCompare, _
+                                        (AutoModSafelistValue - 1)
+                                Else
+                                    Ban Username & Space(1) & _
+                                        "You are under the required level for entry.", _
+                                            (AutoModSafelistValue - 1)
+                                End If
+                                GoTo theEnd
                             End If
+                        End If
+                    End If
+NoLevel:
+                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    ' Are they plugbanned?
+                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    If (BotVars.PlugBan) Then
+                        If ((Flags And USER_NOUDP) = USER_NOUDP) Then
+                            
+                            Ban Username & " PlugBan", (AutoModSafelistValue - 1)
                             
                             GoTo theEnd
                         End If
                     End If
-                End If ' (end Warcraft III checks)
-                
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Diablo II players: are they levelbanned?
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                If Product = "D2DV" Or Product = "D2XP" Then
-                    If BotVars.BanD2UnderLevel > 0 Then
-                        If Level < BotVars.BanD2UnderLevel Then
-                            strCompare = ReadCFG("Other", "LevelbanMsg")
-                            If strCompare <> vbNullString Then
-                                Ban Username & Space(1) & strCompare, (AutoModSafelistValue - 1) '" You are under the required level for entry."
-                            Else
-                                Ban Username & Space(1) & "You are under the required level for entry.", (AutoModSafelistValue - 1)
-                            End If
-                            GoTo theEnd
-                        End If
+                    
+                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    ' Are they evading a ban?
+                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    If (InStr(1, Username, "#", vbBinaryCompare) <> 0) Then
+                        toCheck = LCase(Left$(Username, InStr(1, _
+                            Username, "#", vbTextCompare) - 1))
+                    Else
+                        toCheck = LCase(Username)
                     End If
-                End If
-NoLevel:
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Are they plugbanned?
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                If (Flags And USER_NOUDP) = USER_NOUDP Then
-                    If BotVars.PlugBan Then
-                        Ban Username & " PlugBan", (AutoModSafelistValue - 1)
+                    
+                    toCheck = StripRealm(toCheck)
+                    
+                    If (BotVars.BanEvasion) Then
+                        For i = 0 To UBound(gBans)
+                            If (StrComp(toCheck, gBans(i).Username, vbTextCompare) = 0) Then
+                                Ban Username & " Ban Evasion", _
+                                    (AutoModSafelistValue - 1)
+                                
+                                GoTo theEnd
+                            End If
+                        Next i
+                    End If
+                    
+                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    ' Are they shitlisted?
+                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    toCheck = GetShitlist(Username)
+                    If (Len(toCheck) > 1) Then
+                        Ban toCheck, 1000
+                        
                         GoTo theEnd
                     End If
-                End If
-                
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Are they evading a ban?
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                If InStr(1, Username, "#", vbTextCompare) <> 0 Then
-                    toCheck = LCase(Left$(Username, InStr(1, Username, "#", vbTextCompare) - 1))
-                Else
-                    toCheck = LCase(Username)
-                End If
-                
-                toCheck = StripRealm(toCheck)
-                
-                If BotVars.BanEvasion Then
-                    For i = 0 To UBound(gBans)
-                        If StrComp(toCheck, LCase(gBans(i).Username), vbTextCompare) = 0 Then
-                            Ban Username & " Ban Evasion", (AutoModSafelistValue - 1)
-                            GoTo theEnd
-                        End If
-                    Next i
-                End If
-                
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Are they shitlisted?
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                toCheck = GetShitlist(Username)
-                If Len(toCheck) > 1 Then
-                    Ban toCheck, 1000
-                    GoTo theEnd
-                End If
 SLSkip:
-                Close #f
-                
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Are they tagbanned?
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                'toCheck = GetTagbans(Username)
-                'If Len(toCheck) > 1 Then
-                '    If InStr(toCheck, " ") > 0 Then
-                '        Ban Username & Space(1) & Mid$(toCheck, InStr(toCheck, " ") + 1), (AutoModSafelistValue - 1)
-                '    Else
-                '        Ban Username & " Tagban: " & toCheck, (AutoModSafelistValue - 1)
-                '    End If
-                '
-                '    GoTo theEnd
-                'End If
-                
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Is the channel in lockdown?
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                If Protect Then
-                    Ban Username & Space(1) & ProtectMsg, (AutoModSafelistValue - 1)
-                    GoTo theEnd
-                End If
-checkIPBan:
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Are they IP-banned?
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                If BotVars.IPBans Then
-                    If Flags = 20 Or Flags = 30 Or Flags = 32 Or Flags = 48 Then
-                            Ban Username & " IPBanned.", (AutoModSafelistValue - 1)
-                            GoTo theEnd
+                    Close #f
+                    
+                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    ' Is the channel in lockdown?
+                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    If (Protect) Then
+                        Ban Username & Space(1) & ProtectMsg, (AutoModSafelistValue - 1)
+                        
+                        GoTo theEnd
                     End If
-                End If
-                
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Are they client-banned?
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                If BotVars.ClientBans Then
-                    For i = LBound(ClientBans) To UBound(ClientBans)
-                        If StrComp(UCase(ClientBans(i)), Product, vbTextCompare) = 0 Then
-                            Ban Username & " ClientBan: " & Product, (AutoModSafelistValue - 1)
+checkIPBan:
+                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    ' Are they IP-banned?
+                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                    If (BotVars.IPBans) Then
+                        If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
+                            Ban Username & " IPBanned.", (AutoModSafelistValue - 1)
+                            
                             GoTo theEnd
                         End If
-                    Next i
-                End If
-                
-            End If ' (user not safelisted)
-        End If ' (bot has ops)
+                    End If
+                End If ' (user not safelisted)
+            End If ' (bot has ops)
+        End If
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' If we've gotten this far, and haven't been banned yet, they're
@@ -1242,14 +1219,15 @@ checkIPBan:
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         Banned = False
         
-        If BotVars.UseGreet Then
-            If LenB(BotVars.GreetMsg) > 0 Then
-                If StrComp(gChannel.Current, "clan sbs", vbTextCompare) <> 0 Then
+        If (BotVars.UseGreet) Then
+            If (LenB(BotVars.GreetMsg) > 0) Then
+                If (StrComp(gChannel.Current, "Clan SBs", vbTextCompare) <> 0) Then
                     
                     If QueueLoad = 0 Then QueueLoad = QueueLoad + 1
                     
                     If BotVars.WhisperGreet Then
-                        frmChat.AddQ "/w " & IIf(Dii, "*" & Username, Username) & Space(1) & DoReplacements(BotVars.GreetMsg, Username, Ping)
+                        frmChat.AddQ "/w " & IIf(Dii, "*" & Username, Username) & _
+                            Space(1) & DoReplacements(BotVars.GreetMsg, Username, Ping)
                     Else
                         frmChat.AddQ DoReplacements(BotVars.GreetMsg, Username, Ping)
                     End If
@@ -1262,21 +1240,25 @@ theEnd:
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' Is channel flooding or mass-joining happening?
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        BotVars.JoinWatch = BotVars.JoinWatch + 1
+        BotVars.JoinWatch = (BotVars.JoinWatch + 1)
         
-        If BotVars.JoinWatch > 20 Then
+        If (BotVars.JoinWatch > 20) Then
             BotVars.JoinWatch = 0
             
-            If Not JoinMessagesOff Then
-                If ForcedJoinsOn = 0 Then
-                    frmChat.AddChat RTBColors.TalkBotUsername, "Rejoin flooding and/or massloading detected!"
-                    frmChat.AddChat RTBColors.TalkBotUsername, "Join/Leave Messages have been disabled due to rejoin flooding. Reactivate them by pressing CTRL + J."
+            If (Not (JoinMessagesOff)) Then
+                If (ForcedJoinsOn = 0) Then
+                    frmChat.AddChat RTBColors.TalkBotUsername, _
+                        "Rejoin flooding and/or massloading detected!"
+                    frmChat.AddChat RTBColors.TalkBotUsername, _
+                        "Join/Leave Messages have been disabled due to rejoin flooding. Reactivate them by pressing CTRL + J."
+                    
                     'JoinMessagesOff = True
                     ForcedJoinsOn = 2
                 End If
             End If
             
-            If Not Filters Then frmChat.AddChat RTBColors.TalkBotUsername, "Chat filters have been activated due to rejoin flooding. Deactivate them by pressing CTRL + F."
+            If Not Filters Then frmChat.AddChat RTBColors.TalkBotUsername, _
+                "Chat filters have been activated due to rejoin flooding. Deactivate them by pressing CTRL + F."
             Filters = True
         End If
         
@@ -1287,7 +1269,8 @@ theEnd:
             l = GetMailCount(Username)
             
             If l > 0 Then
-                frmChat.AddQ "/w " & IIf(Dii, "*", "") & Username & " You have " & l & " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
+                frmChat.AddQ "/w " & IIf(Dii, "*", "") & Username & " You have " & l & _
+                    " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
             End If
         End If
         
@@ -1311,6 +1294,8 @@ theEnd:
         frmChat.SControl.Run "Event_UserJoins", Username, Flags, Message, Ping, Product, Level, OriginalStatstring, Banned
 
         Close #f
+        
+        ' What the hell is this for?
         
         'INetQueue inqAdd, "http://bot.egamesx.com/onlineget.php?" & _
             "nick=" & Username & _
@@ -1415,89 +1400,102 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         "&channel=" & Replace(gChannel.Current, " ", "%20")
 End Sub
 
-Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long)
+Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
+    ByVal Ping As Long)
     
-    If frmChat.mnuUTF8.Checked Then Message = KillNull(UTF8Decode(Message))
+    Dim strSend    As String
+    Dim s          As String
+    Dim u          As String
+    Dim strCompare As String
+    Dim i          As Integer
+    Dim ColIndex   As Integer
+    Dim b          As Boolean
     
-    If Len(Message) < 1 Then Exit Sub
+    If (Len(Message) < 1) Then
+        Exit Sub
+    End If
     
-    Dim strSend As String, s As String, u As String, strCompare As String
-    Dim i As Integer, ColIndex As Integer
-    Dim b As Boolean
-    Dim TextColor As Long, UsernameColor As Long, CaratColor As Long
+    If (frmChat.mnuUTF8.Checked) Then
+        Message = KillNull(UTF8Decode(Message))
+    End If
     
     Username = convertUsername(Username)
     
-    ' Removed 7/21/05 in Cd. Juarez
-'    If StrComp(Username, "Stealth", vbTextCompare) = 0 Or StrComp(Username, "Stealth@USEast", vbTextCompare) = 0 Or StrComp(Username, "Stealth@USWest", vbTextCompare) = 0 Then
-'        If StrComp(Message, "Hi there.", vbTextCompare) = 0 Then
-'            frmChat.AddQ "/w " & Username & " id!"
-'            Exit Sub
-'        End If
-'        If StrComp(Message, ",eww..") = 0 Then
-'            frmChat.AddQ "/dnd"
-'            Exit Sub
-'        End If
-'        If StrComp(Message, "bye!") = 0 Then
-'            Call frmChat.Form_Unload(0)
-'        End If
-'    End If
-    
-    If InStr(1, Username, "*", vbTextCompare) <> 0 Then Username = Right(Username, Len(Username) - InStr(1, Username, "*", vbTextCompare))
+    If (InStr(1, Username, "*", vbTextCompare) <> 0) Then
+        Username = Right$(Username, Len(Username) - _
+            InStr(1, Username, "*", vbBinaryCompare))
+    End If
     
     i = UsernameToIndex(Username)
     
-    If i > 0 Then colUsersInChannel.Item(i).Acts
+    If (i > 0) Then
+        colUsersInChannel.Item(i).Acts
+    End If
         
-    If AllowedToTalk(Username, Message) Then
-        If Catch(0) <> vbNullString Then Call CheckPhrase(Username, Message, CPTALK)
+    If (AllowedToTalk(Username, Message)) Then
+        If (Catch(0) <> vbNullString) Then
+            Call CheckPhrase(Username, Message, CPTALK)
+        End If
         
-        If VoteDuration > 0 Then
-            If InStr(1, LCase(Message), "yes", vbTextCompare) > 0 Then
+        If (VoteDuration > 0) Then
+            If (InStr(1, LCase(Message), "yes", vbTextCompare) > 0) Then
                 Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDYES, Username)
-            ElseIf InStr(1, LCase(Message), "no", vbTextCompare) > 0 Then
+            ElseIf (InStr(1, LCase(Message), "no", vbTextCompare) > 0) Then
                 Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDNO, Username)
             End If
         End If
                 
-        If Len(Message) > 100 Then
-            BotVars.JoinWatch = BotVars.JoinWatch + 5
-         '   gChannel.Spam(i) = gChannel.Spam(i) + 1
-         '   If gChannel.Spam(i) > 3 And (MyFlags = 2 Or MyFlags = 18) Then
-         '       If Not GetSafelist(Username) Then frmchat.addq "/ban " & Username & " Spamming"
-         '   End If
+        If (Len(Message) > 100) Then
+            BotVars.JoinWatch = (BotVars.JoinWatch + 5)
+            
+            'gChannel.Spam(i) = gChannel.Spam(i) + 1
+            
+            'If gChannel.Spam(i) > 3 And (MyFlags = 2 Or MyFlags = 18) Then
+            '    If Not GetSafelist(Username) Then frmChat.AddQ "/ban " & Username & " Spamming"
+            'End If
         End If
         
-        If BotVars.JoinWatch > 30 And Not Filters Then
-            frmChat.AddChat RTBColors.TalkBotUsername, "Spamming detected; chat filters have been turned on."
+        If ((BotVars.JoinWatch > 30) And (Not (Filters))) Then
+            frmChat.AddChat RTBColors.TalkBotUsername, "Spamming detected; " & _
+                "chat filters have been turned on."
+                
             BotVars.JoinWatch = 0
             Filters = True
         End If
         
         b = False
         
-        If frmChat.mnuFlash.Checked Then FlashWindow
-        
-        UsernameColor = RTBColors.TalkUsernameNormal
-        TextColor = RTBColors.TalkNormalText
-        CaratColor = RTBColors.Carats
-        
-        If (Flags = 12 Or Flags = 18 Or Flags = 2) Then
-            UsernameColor = RTBColors.TalkUsernameOp
+        If (frmChat.mnuFlash.Checked) Then
+            FlashWindow
         End If
         
-        If ((Flags And &H1) = &H1) Or ((Flags And &H8) = &H8) Then     'blizzard rep/sysop
-            TextColor = RGB(97, 105, 255)
-            CaratColor = RGB(97, 105, 255)
+        For i = 1 To colChatQueue.Count
+            ' ...
+            Dim clsChatQueue As clsChatQueue
+        
+            ' ...
+            Set clsChatQueue = colChatQueue(i)
+            
+            If (StrComp(Username, clsChatQueue.Username, _
+                vbBinaryCompare) = 0) Then
+            
+                Exit For
+            End If
+        Next i
+        
+        If (i >= (colChatQueue.Count + 1)) Then
+            'frmChat.AddChat CaratColor, "<", UsernameColor, Username, _
+            '    CaratColor, "> ", TextColor, Message
+            
+            Call Event_QueuedTalk(Username, Flags, Ping, Message)
+        Else
+            Set clsChatQueue = colChatQueue(i)
+            
+            Call clsChatQueue.StoreTalk(Flags, Ping, Message)
         End If
         
-        If StrComp(WatchUser, LCase(Username), vbTextCompare) = 0 Then UsernameColor = RTBColors.ErrorMessageText
-        
-        With RTBColors
-            frmChat.AddChat CaratColor, "<", _
-                UsernameColor, Username, _
-                CaratColor, "> ", TextColor, Message
-        End With
+        'With RTBColors
+        'End With
         
         ' This code moved to behind the addchat (topic 22332, thanks Jack)
         If LenB(Mimic) > 0 And LCase(Username) = Mimic Then
