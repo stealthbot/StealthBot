@@ -7,7 +7,8 @@ Option Explicit
 Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVal Ping As Long, _
     ByVal Product As String)
     
-    Dim found      As ListItem ' ...
+    Dim found        As ListItem ' ...
+    Dim clsChatQueue As clsChatQueue
     
     Dim Pos        As Integer  ' ...
     Dim i          As Integer  ' ...
@@ -18,6 +19,8 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     If (LenB(Username) < 1) Then
         Exit Sub
     End If
+    
+    Set clsChatQueue = New clsChatQueue
     
     Username = convertUsername(Username)
     
@@ -694,7 +697,7 @@ End Sub
 
 'Ping, Product, sClan, InitStatstring, W3Icon
 Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
-    ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, Optional ByVal W3Icon As String)
+    ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, Optional ByVal w3icon As String)
                                       
     Dim i          As Integer ' ...
     Dim strCompare As String  ' ...
@@ -735,7 +738,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             .Ping = Ping
             .Product = Product
             .Safelisted = GetSafelist(Username)
-            .Statstring = OriginalStatstring
+            .StatString = OriginalStatstring
             .JoinTime = GetTickCount
             .Clan = sClan
             .IsSelf = (StrComp(Username, CurrentUsername, vbTextCompare) = 0)
@@ -803,7 +806,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Else
         i = UsernameToIndex(Username)
             
-        colUsersInChannel.Item(i).Statstring = OriginalStatstring
+        colUsersInChannel.Item(i).StatString = OriginalStatstring
         
         If (JoinMessagesOff = False) Then
             frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", _
@@ -831,8 +834,12 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         "&channel=" & Replace(gChannel.Current, " ", "%20")
 End Sub
 
-Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal W3Icon As String)
+Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal w3icon As String)
+    Dim clsChatQueue As clsChatQueue
+    
     Dim f As Integer
+    
+    Set clsChatQueue = New clsChatQueue
     
     Username = convertUsername(Username)
     
@@ -884,7 +891,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             .Ping = Ping
             .Product = Product
             .Safelisted = GetSafelist(Username)
-            .Statstring = OriginalStatstring
+            .StatString = OriginalStatstring
             .JoinTime = GetTickCount
             .Clan = sClan
             .IsSelf = (StrComp(LCase(Username), LCase(CurrentUsername)) = 0)
@@ -952,15 +959,6 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         End If
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        ' Join Message
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        If JoinMessagesOff = False Then
-            frmChat.AddChat RTBColors.JoinText, "-- ", _
-                    RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
-                    RTBColors.JoinText, " has joined the channel using " & Message
-        End If
-        
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' Flash window
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         If frmChat.mnuFlash.Checked Then FlashWindow
@@ -981,6 +979,26 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             Else
                 AddName Username, Product, Flags, Ping
             End If
+        End If
+        
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' Join Message
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        If JoinMessagesOff = False Then
+        
+            With clsChatQueue
+                .Username = Username
+                .Time = GetTickCount()
+            End With
+            
+            Call clsChatQueue.StoreJoin(Flags, Ping, Product, sClan, _
+                OriginalStatstring, w3icon)
+            
+            Call colChatQueue.Add(clsChatQueue)
+            
+            'frmChat.AddChat RTBColors.JoinText, "-- ", _
+            '        RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
+            '        RTBColors.JoinText, " has joined the channel using " & Message
         End If
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
