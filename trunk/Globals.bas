@@ -302,7 +302,7 @@ Public MatchIndex  As Long
 'Nagle algorithm constants
 Public Const IPPROTO_TCP& = 6   'socketlevel
 Public Const TCP_NODELAY& = &H1 'optname
-Public Const NAGLE_OPTLEN& = 43 'optlen
+Public Const NAGLE_OPTLEN& = 4  'optlen
 Public Const NAGLE_ON& = 1      'optval
 Public Const NAGLE_OFF& = 0     'optval
 

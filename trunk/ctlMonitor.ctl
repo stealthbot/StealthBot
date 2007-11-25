@@ -48,7 +48,7 @@ Private strPassword       As String
 Private strServer         As String
 Private strBNLS           As String
 Attribute strBNLS.VB_VarHelpID = -1
-Private currentIndex      As Integer
+Private CurrentIndex      As Integer
 Private ServerToken       As Long
 Private ClientToken       As Long
 Private VersionByte       As Long
@@ -164,20 +164,21 @@ Public Sub Disconnect()
     wsBnls.Close
     wsBnet.Close
     tmr.Enabled = False
-    currentIndex = 1
+    CurrentIndex = 1
 End Sub
 
 Private Sub tmr_Timer()
-    If (currentIndex > colUserInfo.Count Or currentIndex < 1) Then currentIndex = 1
+    If (CurrentIndex > colUserInfo.Count Or CurrentIndex < 1) Then CurrentIndex = 1
     If (colUserInfo.Count > 0) Then
-        Debug.Print "Timer: " & colUserInfo.Item(currentIndex).Username
-        Call Send0x0E("/whereis " & colUserInfo.Item(currentIndex).Username)
+        Debug.Print "Timer: " & colUserInfo.Item(CurrentIndex).Username
+        Call Send0x0E("/whereis " & colUserInfo.Item(CurrentIndex).Username)
     End If
 End Sub
 
 Private Sub UserControl_Initialize()
     Call SetNagelStatus(wsBnet.SocketHandle, False)
     Call SetNagelStatus(wsBnls.SocketHandle, False)
+    
     VersionByte = &H2A
     Set colUserInfo = New Collection
 End Sub
@@ -186,7 +187,7 @@ Private Sub wsBnet_Close()
     Debug.Print "[BNET] Closed."
     RaiseEvent BNLSClose
     tmr.Enabled = False
-    currentIndex = 1
+    CurrentIndex = 1
     wsBnet.Close
 End Sub
 
@@ -259,8 +260,8 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                 PBuffer.Advance 20
                 Username = PBuffer.DebuffNTString
                 text = PBuffer.DebuffNTString
-                If (currentIndex <= colUserInfo.Count) Then
-                    With colUserInfo.Item(currentIndex)
+                If (CurrentIndex <= colUserInfo.Count) Then
+                    With colUserInfo.Item(CurrentIndex)
                         If eventID = 18 Then
                             .Status = 1
                             Dim Channel As String, game As String
@@ -282,16 +283,16 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                             
                             If (InStr(1, text, " is refusing messages ", vbTextCompare) = 0) Then
                                 If (InStr(1, text, " is away ", vbTextCompare) = 0) Then
-                                    RaiseEvent UserInfo(colUserInfo.Item(currentIndex))
-                                    currentIndex = currentIndex + 1
+                                    RaiseEvent UserInfo(colUserInfo.Item(CurrentIndex))
+                                    CurrentIndex = CurrentIndex + 1
                                 End If
                             End If
                         ElseIf eventID = 19 Then
                             .Status = 0
                             .Product = vbNullString
                             .Channel = "Offline"
-                            RaiseEvent UserInfo(colUserInfo.Item(currentIndex))
-                            currentIndex = currentIndex + 1
+                            RaiseEvent UserInfo(colUserInfo.Item(CurrentIndex))
+                            CurrentIndex = CurrentIndex + 1
                         End If
                     End With
                 End If
@@ -565,9 +566,9 @@ Private Function GetFTString(Optional LocalTime As Boolean = False) As String
 End Function
 
 Private Function LocaleInfo(ByVal locale As Long, ByVal lc_type As Long) As String
-    Dim length As Long, buf As String * 1024
-    length = GetLocaleInfo(locale, lc_type, buf, Len(buf))
-    LocaleInfo = Left$(buf, length - 1)
+    Dim length As Long, Buf As String * 1024
+    length = GetLocaleInfo(locale, lc_type, Buf, Len(Buf))
+    LocaleInfo = Left$(Buf, length - 1)
 End Function
 
 Private Function GetCompUserName(Optional user As Boolean = False) As String

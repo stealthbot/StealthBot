@@ -1196,8 +1196,6 @@ Private Function OnJoin(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     If (LenB(msgData) > 0) Then
         AddQ "/join " & msgData
-    Else
-        tmpBuf = "Join what channel?"
     End If
 End Function ' end function OnJoin
 

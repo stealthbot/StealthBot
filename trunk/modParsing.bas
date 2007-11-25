@@ -17,7 +17,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Dim PacketID    As Byte         ' Battle.net packet ID
     Dim s           As String       ' Temporary string
     Dim l           As Long         ' Temporary long
-    Dim eventID     As Long         ' 0x0F packet Event ID
+    Dim EventID     As Long         ' 0x0F packet Event ID
     Dim UserFlags   As Long         ' 0x0F user's flags
     Dim UserPing    As Long         ' 0x0F user's ping
     Dim Username    As String       ' Misc username storage
@@ -25,7 +25,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Dim s3          As String       ' Temporary string
     Dim ClanTag     As String       ' User clan tag
     Dim Product     As String       ' User product
-    Dim W3Icon      As String       ' Warcraft III icon code
+    Dim w3icon      As String       ' Warcraft III icon code
     Dim b           As Boolean      ' Temporary bool
     Dim sArr()      As String       ' Temp String array
     
@@ -86,7 +86,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &HF 'SID_CHATEVENT
                 ' User information
-                eventID = pD.DebuffDWORD
+                EventID = pD.DebuffDWORD
                 UserFlags = pD.DebuffDWORD
                 UserPing = pD.DebuffDWORD
                 
@@ -103,26 +103,30 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 End If
                 
                 If Product = "WAR3" Or Product = "W3XP" Then
-                    If Len(s2) > 4 Then W3Icon = StrReverse(Mid$(s2, 6, 4))
+                    If Len(s2) > 4 Then w3icon = StrReverse(Mid$(s2, 6, 4))
                 End If
                 
                 ' 0x0F is a beast!
-                Select Case eventID
+                Select Case EventID
+                    Dim j As Integer ' ...
+                    
                     Case ID_JOIN
-                        Call Event_UserJoins(Username, UserFlags, s2, UserPing, Product, ClanTag, s, W3Icon)
+                        Call Event_UserJoins(Username, UserFlags, s2, UserPing, Product, ClanTag, s, w3icon)
                         
                     Case ID_LEAVE
                         Call Event_UserLeaves(Username, UserFlags)
                         
                     Case ID_USER
-                        Call Event_UserInChannel(Username, UserFlags, s2, UserPing, Product, ClanTag, s, W3Icon)
+                        Call Event_UserInChannel(Username, UserFlags, s2, UserPing, Product, ClanTag, s, w3icon)
                         
                     Case ID_WHISPER
-                        If Not bFlood Then Call Event_WhisperFromUser(Username, UserFlags, s)
+                        If (Not (bFlood)) Then
+                            Call Event_WhisperFromUser(Username, UserFlags, s)
+                        End If
                         
                     Case ID_TALK
                         Call Event_UserTalk(Username, UserFlags, s, UserPing)
-                        
+
                     Case ID_BROADCAST
                         Call Event_ServerInfo("BROADCAST from " & Username & ": " & s)
                     
@@ -131,7 +135,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         
                     Case ID_USERFLAGS
                         Call Event_FlagsUpdate(Username, UserFlags, UserPing, Product)
-                        
+
                     Case ID_WHISPERSENT
                         Call Event_WhisperToUser(Username, UserFlags, s, UserPing)
                     
@@ -149,7 +153,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         
                     Case Else
                         If MDebug("debug") Then
-                            AddChat RTBColors.ErrorMessageText, "Unhandled 0x0F Event: " & ZeroOffset(eventID, 2)
+                            AddChat RTBColors.ErrorMessageText, "Unhandled 0x0F Event: " & ZeroOffset(EventID, 2)
                             AddChat RTBColors.ErrorMessageText, "Packet data: " & vbCrLf & DebugOutput(PacketData)
                         End If
                 End Select
@@ -1093,7 +1097,7 @@ theEnd:
     Source = Source & nText
 End Sub
 
-Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As String, ByRef sClan As String) As String
+Public Function ParseStatstring(ByVal StatString As String, ByRef outBuf As String, ByRef sClan As String) As String
     Dim Values() As String
     Dim Temp() As String
     Dim cType As String
@@ -1106,22 +1110,22 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As Stri
     ' LPCW = Player
     
     'Debug.Print "Received statstring: " & Statstring
-    If LenB(Statstring) > 0 Then
+    If LenB(StatString) > 0 Then
         
         g_ThisIconCode = -1
     
-        Select Case Left$(Statstring, 4)
+        Select Case Left$(StatString, 4)
             Case "3RAW", "PX3W"
-                If Len(Statstring) > 4 Then
-                    Temp() = Split(Statstring, " ")
+                If Len(StatString) > 4 Then
+                    Temp() = Split(StatString, " ")
                     
                     ReDim Values(3)
                     
                     If StrComp(Right$(Temp(1), 2), "CW") = 0 Then
                         WCG = True
                     Else
-                        Values(1) = Mid$(Statstring, 6, 1)
-                        Values(2) = Mid$(Statstring, 7, 1)
+                        Values(1) = Mid$(StatString, 6, 1)
+                        Values(2) = Mid$(StatString, 7, 1)
                     End If
                     
                     Values(0) = Temp(2)
@@ -1130,17 +1134,17 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As Stri
                         Values(3) = StrReverse(Temp(3))
                     End If
                     
-                    g_ThisIconCode = GetRaceAndIcon(Values(1), Values(2), Left$(Statstring, 4), IIf(WCG, Temp(1), ""))
+                    g_ThisIconCode = GetRaceAndIcon(Values(1), Values(2), Left$(StatString, 4), IIf(WCG, Temp(1), ""))
                     
                     sClan = IIf(UBound(Values) > 2, Values(3), "")
                     
-                    If Left$(Statstring, 4) = "3RAW" Then
+                    If Left$(StatString, 4) = "3RAW" Then
                         Call sPrintF(outBuf, "Warcraft III: Reign of Chaos (Level: %s, icon tier %s, %s icon" & IIf(UBound(Temp) > 2, ", in Clan " & sClan, vbNullString) & ")", Values(0), Values(2), Values(1))
                     Else
                         Call sPrintF(outBuf, "Warcraft III: The Frozen Throne (Level: %s, icon tier %s, %s icon" & IIf(UBound(Temp) > 2, ", in Clan " & sClan, vbNullString) & ")", Values(0), Values(2), Values(1))
                     End If
                 Else
-                    If Left$(Statstring, 4) = "3RAW" Then
+                    If Left$(StatString, 4) = "3RAW" Then
                         Call StrCpy(outBuf, "Warcraft III: Reign of Chaos.")
                         g_ThisIconCode = -56
                     Else
@@ -1153,7 +1157,7 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As Stri
                 Call StrCpy(outBuf, "Starcraft Shareware.")
                 
             Case "RATS"
-                Values() = Split(Mid$(Statstring, 6), " ")
+                Values() = Split(Mid$(StatString, 6), " ")
                 If UBound(Values) <> 8 Then
                     Call sPrintF(outBuf, "a Starcraft %sbot", IIf((Values(3) = 1), " (spawn) ", vbNullString))
                 Else
@@ -1165,7 +1169,7 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As Stri
                 End If
                 
             Case "PXES"
-                Values() = Split(Mid(Statstring, 6), " ")
+                Values() = Split(Mid(StatString, 6), " ")
                 If UBound(Values) <> 8 Then
                     Call sPrintF(outBuf, "a Starcraft Brood War bot.", vbNullString)
                     
@@ -1181,7 +1185,7 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As Stri
                 End If
                 
             Case "RTSJ"
-                Values() = Split(Mid(Statstring, 6), " ")
+                Values() = Split(Mid(StatString, 6), " ")
                 If UBound(Values) <> 8 Then
                     Call sPrintF(outBuf, "a Starcraft Japanese %sbot.", IIf((Values(3) = 1), " (spawn) ", vbNullString))
                 Else
@@ -1193,7 +1197,7 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As Stri
                 End If
                 
             Case "NB2W"
-                Values() = Split(Mid$(Statstring, 6), " ")
+                Values() = Split(Mid$(StatString, 6), " ")
                 
                 If UBound(Values) <> 8 Then
                     Call sPrintF(outBuf, "a Warcraft II %sbot.", IIf((Values(3) = 1), " (spawn) ", vbNullString))
@@ -1206,7 +1210,7 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As Stri
                 End If
                 
             Case "RHSD"
-                Values() = Split(Mid$(Statstring, 6), " ")
+                Values() = Split(Mid$(StatString, 6), " ")
                 If UBound(Values) <> 8 Then
                     Call StrCpy(outBuf, "A Diablo shareware bot.")
                 Else
@@ -1219,7 +1223,7 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As Stri
                 End If
                 
             Case "LTRD"
-                Values() = Split(Mid$(Statstring, 6), " ")
+                Values() = Split(Mid$(StatString, 6), " ")
                 
                 If UBound(Values) <> 8 Then
                     Call StrCpy(outBuf, "A Diablo bot.")
@@ -1233,10 +1237,10 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As Stri
                 End If
                 
             Case "PX2D"
-                Call StrCpy(outBuf, ParseD2Stats(Statstring))
+                Call StrCpy(outBuf, ParseD2Stats(StatString))
                 
             Case "VD2D"
-                Call StrCpy(outBuf, ParseD2Stats(Statstring))
+                Call StrCpy(outBuf, ParseD2Stats(StatString))
                 
             Case "TAHC"
                 Call StrCpy(outBuf, "a Chat bot.")
@@ -1246,7 +1250,7 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As Stri
                 
         End Select
         
-        ParseStatstring = StrReverse(Left$(Statstring, 4))
+        ParseStatstring = StrReverse(Left$(StatString, 4))
         
     End If
 
@@ -1256,7 +1260,7 @@ ParseStatString_Exit:
 ParseStatString_Error:
 
     Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParseStatString of Module modParsing"
-    outBuf = "- Error parsing statstring. [" & Replace(Statstring, Chr(0), "") & "]"
+    outBuf = "- Error parsing statstring. [" & Replace(StatString, Chr(0), "") & "]"
     
     Resume ParseStatString_Exit
 End Function
@@ -1407,15 +1411,15 @@ Public Function ParseD2Stats(ByVal Stats As String)
     ParseD2Stats = StatBuf
 End Function
 
-Public Function GetServer(ByVal Statstring As String, ByRef Server As String) As Byte
+Public Function GetServer(ByVal StatString As String, ByRef Server As String) As Byte
     'returns the begining of the character name
-    Server = Mid$(Statstring, 5, InStr(5, Statstring, ",") - 5)
-    GetServer = InStr(5, Statstring, ",") + 1
+    Server = Mid$(StatString, 5, InStr(5, StatString, ",") - 5)
+    GetServer = InStr(5, StatString, ",") + 1
 End Function
 
-Public Function GetCharacterName(ByVal Statstring As String, ByVal start As Byte, ByRef cName As String) As Byte
-    cName = Mid$(Statstring, start, InStr(start, Statstring, ",") - start)
-    GetCharacterName = InStr(start, Statstring, ",") + 1
+Public Function GetCharacterName(ByVal StatString As String, ByVal start As Byte, ByRef cName As String) As Byte
+    cName = Mid$(StatString, start, InStr(start, StatString, ",") - start)
+    GetCharacterName = InStr(start, StatString, ",") + 1
 End Function
 
 Function MakeLong(X As String) As Long

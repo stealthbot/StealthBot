@@ -359,19 +359,21 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     Username = convertUsername(Username)
 
     LastWhisper = vbNullString
-    If InStr(1, Username, "*", vbBinaryCompare) <> 0 Then
-        Username = Right(Username, Len(Username) - InStr(1, Username, "*", vbBinaryCompare))
-    End If
     
-    While colQueue.Count > 0
-        colQueue.Remove 1
+    'If InStr(1, Username, "*", vbBinaryCompare) <> 0 Then
+    '    Username = Right(Username, Len(Username) - InStr(1, Username, "*", vbBinaryCompare))
+    'End If
+    
+    While (colQueue.Count > 0)
+        Call colQueue.Remove(1)
     Wend
     
     g_Online = True
     DestroyNLSObject
     AttemptedFirstReconnect = False
     
-    SetNagelStatus frmChat.sckBNet.SocketHandle, False
+    Call SetNagelStatus(frmChat.sckBNet.SocketHandle, True)
+    
     EnableSO_KEEPALIVE frmChat.sckBNet.SocketHandle
     
     If BotVars.UsingDirectFList Then
@@ -1251,7 +1253,7 @@ theEnd:
                 If ForcedJoinsOn = 0 Then
                     frmChat.AddChat RTBColors.TalkBotUsername, "Rejoin flooding and/or massloading detected!"
                     frmChat.AddChat RTBColors.TalkBotUsername, "Join/Leave Messages have been disabled due to rejoin flooding. Reactivate them by pressing CTRL + J."
-                    JoinMessagesOff = True
+                    'JoinMessagesOff = True
                     ForcedJoinsOn = 2
                 End If
             End If

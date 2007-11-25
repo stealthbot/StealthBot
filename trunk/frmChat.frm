@@ -21,7 +21,7 @@ Begin VB.Form frmChat
    Begin TabDlg.SSTab ListviewTabs 
       Height          =   375
       Left            =   8880
-      TabIndex        =   4
+      TabIndex        =   2
       Top             =   6600
       Width           =   2805
       _ExtentX        =   4948
@@ -67,14 +67,14 @@ Begin VB.Form frmChat
       Height          =   285
       Left            =   8280
       MaxLength       =   50
-      TabIndex        =   2
+      TabIndex        =   1
       Top             =   6600
       Width           =   615
    End
    Begin MSComctlLib.ListView lvChannel 
       Height          =   6375
       Left            =   8880
-      TabIndex        =   7
+      TabIndex        =   4
       TabStop         =   0   'False
       Top             =   240
       Width           =   2775
@@ -124,7 +124,7 @@ Begin VB.Form frmChat
       ForeColor       =   &H00FFFFFF&
       Height          =   315
       Left            =   600
-      TabIndex        =   1
+      TabIndex        =   0
       Top             =   6600
       Width           =   7695
    End
@@ -143,7 +143,7 @@ Begin VB.Form frmChat
       Height          =   285
       Left            =   0
       MaxLength       =   50
-      TabIndex        =   0
+      TabIndex        =   3
       Top             =   6600
       Width           =   615
    End
@@ -225,7 +225,7 @@ Begin VB.Form frmChat
       EndProperty
       Height          =   1695
       Left            =   11160
-      TabIndex        =   5
+      TabIndex        =   6
       TabStop         =   0   'False
       Top             =   6600
       Width           =   245
@@ -776,7 +776,7 @@ Begin VB.Form frmChat
    Begin MSComctlLib.ListView lvFriendList 
       Height          =   6375
       Left            =   8880
-      TabIndex        =   3
+      TabIndex        =   5
       TabStop         =   0   'False
       Top             =   240
       Width           =   2775
@@ -877,7 +877,7 @@ Begin VB.Form frmChat
       ForeColor       =   &H8000000E&
       Height          =   255
       Left            =   8880
-      TabIndex        =   6
+      TabIndex        =   7
       ToolTipText     =   "Currently in channel..."
       Top             =   0
       Width           =   2775
@@ -1595,6 +1595,8 @@ Private Sub Form_Load()
     Call InitListviewTabs
     Call DisableListviewTabs
     
+    Call ChatQueue_Initialize
+    
     ListviewTabs.Tab = 0
     
     With ListToolTip
@@ -2053,13 +2055,13 @@ End Sub
 
 'BNLS EVENTS
 Sub Event_BNetConnected()
-    If BotVars.UseProxy Then
+    If (BotVars.UseProxy) Then
         AddChat RTBColors.SuccessText, "[PROXY] Connected!"
     Else
         AddChat RTBColors.SuccessText, "[BNET] Connected!"
     End If
     
-    SetNagelStatus sckBNet.SocketHandle, True
+    Call SetNagelStatus(sckBNet.SocketHandle, False)
 End Sub
 
 Sub Event_BNetConnecting()
@@ -2146,6 +2148,8 @@ End Sub
 
 Sub Event_BNLSConnected()
     AddChat RTBColors.SuccessText, "[BNLS] Connected!"
+    
+    Call SetNagelStatus(sckBNLS.SocketHandle, False)
 End Sub
 
 Sub Event_BNLSConnecting()
@@ -3101,7 +3105,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
             If colUsersInChannel.Count > 0 Then
             
                 With colUsersInChannel.Item(lItemIndex)
-                    sTemp = ParseStatstring(.Statstring, sOutBuf, sTemp)
+                    sTemp = ParseStatstring(.StatString, sOutBuf, sTemp)
                     
                     sTemp = "Ping at login: " & .Ping & vbCrLf
                     sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
@@ -4808,13 +4812,14 @@ End Sub
 
 Private Sub sckBNet_Connect()
     On Error Resume Next
+    
     Call Event_BNetConnected
     
     If MDebug("all") Then
         AddChat COLOR_BLUE, "BNET CONNECT"
     End If
         
-    If Not BotVars.UseProxy Then
+    If (Not (BotVars.UseProxy)) Then
         InitBNetConnection
     Else
         LogonToProxy sckBNet, BotVars.Server, 6112, BotVars.ProxyIsSocks5
@@ -5847,7 +5852,7 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
     Select Case Mode
         Case 0      'OFF
             bFlood = False
-            SetNagelStatus frmChat.sckBNet.SocketHandle, False
+            SetNagelStatus frmChat.sckBNet.SocketHandle, True
                         
             While colQueue.Count > 0
                 colQueue.Remove 1
@@ -5859,7 +5864,7 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
             
         Case 1      'ON
             bFlood = True
-            SetNagelStatus frmChat.sckBNet.SocketHandle, True
+            SetNagelStatus frmChat.sckBNet.SocketHandle, False
             
             While colQueue.Count > 0
                 colQueue.Remove 1

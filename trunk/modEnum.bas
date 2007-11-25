@@ -36,7 +36,7 @@ End Type
 
 Public Type udtDatabase
     Username    As String
-    Access      As Integer
+    access      As Integer
     Flags       As String
     AddedBy     As String
     AddedOn     As Date
@@ -54,7 +54,7 @@ End Type
 
 Public Type udtGetAccessResponse
     Username    As String
-    Access      As Integer
+    access      As Integer
     Flags       As String
     AddedBy     As String
     AddedOn     As Date

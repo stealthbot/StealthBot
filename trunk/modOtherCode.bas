@@ -1231,9 +1231,9 @@ End Function
 Public Sub SetNagelStatus(ByVal lSocketHandle As Long, ByVal bEnabled As Boolean)
     If lSocketHandle > 0 Then
         If bEnabled Then
-            Call SetSockOpt(lSocketHandle, IPPROTO_TCP, TCP_NODELAY, NAGLE_ON, NAGLE_OPTLEN)
-        Else
             Call SetSockOpt(lSocketHandle, IPPROTO_TCP, TCP_NODELAY, NAGLE_OFF, NAGLE_OPTLEN)
+        Else
+            Call SetSockOpt(lSocketHandle, IPPROTO_TCP, TCP_NODELAY, NAGLE_ON, NAGLE_OPTLEN)
         End If
     End If
 End Sub
@@ -1277,15 +1277,17 @@ Public Function PercentActualUppercase(ByVal sIn As String) As Double
     
     sIn = Replace(sIn, " ", "")
     
-    For i = 1 To Len(sIn)
-        If IsAlpha(Asc(Mid$(sIn, i, 1))) Then
-            If IsUppercase(Asc(Mid$(sIn, i, 1))) Then
-                UppercaseChars = UppercaseChars + 1
+    If (Len(sIn) > 0) Then
+        For i = 1 To Len(sIn)
+            If IsAlpha(Asc(Mid$(sIn, i, 1))) Then
+                If IsUppercase(Asc(Mid$(sIn, i, 1))) Then
+                    UppercaseChars = UppercaseChars + 1
+                End If
             End If
-        End If
-    Next i
+        Next i
     
-    PercentActualUppercase = CDbl(100 * (UppercaseChars / Len(sIn)))
+        PercentActualUppercase = CDbl(100 * (UppercaseChars / Len(sIn)))
+    End If
 End Function
 
 Public Function MyUCase(ByVal sIn As String) As String
