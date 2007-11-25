@@ -1138,7 +1138,7 @@ NoLevel:
                         toCheck = LCase(Left$(Username, InStr(1, _
                             Username, "#", vbTextCompare) - 1))
                     Else
-                        toCheck = LCase(Username)
+                        toCheck = LCase$(Username)
                     End If
                     
                     toCheck = StripRealm(toCheck)
@@ -1158,6 +1158,7 @@ NoLevel:
                     ' Are they shitlisted?
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                     toCheck = GetShitlist(Username)
+                    
                     If (Len(toCheck) > 1) Then
                         Ban toCheck, 1000
                         
@@ -1199,9 +1200,11 @@ checkIPBan:
             If (LenB(BotVars.GreetMsg) > 0) Then
                 If (StrComp(gChannel.Current, "Clan SBs", vbTextCompare) <> 0) Then
                     
-                    If QueueLoad = 0 Then QueueLoad = QueueLoad + 1
+                    If (QueueLoad = 0) Then
+                        QueueLoad = (QueueLoad + 1)
+                    End If
                     
-                    If BotVars.WhisperGreet Then
+                    If (BotVars.WhisperGreet) Then
                         frmChat.AddQ "/w " & IIf(Dii, "*" & Username, Username) & _
                             Space(1) & DoReplacements(BotVars.GreetMsg, Username, Ping)
                     Else
@@ -1233,18 +1236,22 @@ theEnd:
                 End If
             End If
             
-            If Not Filters Then frmChat.AddChat RTBColors.TalkBotUsername, _
-                "Chat filters have been activated due to rejoin flooding. Deactivate them by pressing CTRL + F."
-            Filters = True
+            If (Not (Filters)) Then
+                frmChat.AddChat RTBColors.TalkBotUsername, _
+                    "Chat filters have been activated due to rejoin flooding. " & _
+                        "Deactivate them by pressing CTRL + F."
+                        
+                Filters = True
+            End If
         End If
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' Do they have mail?
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        If Mail Then
+        If (Mail) Then
             l = GetMailCount(Username)
             
-            If l > 0 Then
+            If (l > 0) Then
                 frmChat.AddQ "/w " & IIf(Dii, "*", "") & Username & " You have " & l & _
                     " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
             End If
@@ -1253,7 +1260,7 @@ theEnd:
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' Print their statstring, if desired
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        If MDebug("statstrings") Then
+        If (MDebug("statstrings")) Then
             frmChat.AddChat RTBColors.ErrorMessageText, OriginalStatstring
         End If
         
@@ -1266,6 +1273,7 @@ theEnd:
         ' Tell the script bums!
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         On Error Resume Next
+        
         'Debug.Print OriginalStatstring
         frmChat.SControl.Run "Event_UserJoins", Username, Flags, Message, Ping, Product, Level, OriginalStatstring, Banned
 
@@ -1285,38 +1293,53 @@ theEnd:
 End Sub
 
 Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
+    Dim i As Integer
+    Dim ii As Integer
+    Dim Holder() As Variant
+    Dim Pos As Integer
+    Dim userIndex As Integer
+    
+    If (bFlood) Then
+        Exit Sub
+    End If
     
     Username = convertUsername(Username)
     
-    If bFlood Then Exit Sub
-    
-    Dim i As Integer, ii As Integer, Holder() As Variant, Pos As Integer
-    Dim userIndex As Integer
-    If InStr(1, Username, "*", vbTextCompare) <> 0 Then
-        Username = Right(Username, Len(Username) - InStr(1, Username, "*", vbTextCompare))
-    End If
+    'If InStr(1, Username, "*", vbTextCompare) <> 0 Then
+    '    Username = Right(Username, Len(Username) - InStr(1, Username, "*", vbTextCompare))
+    'End If
     
     i = UsernameToIndex(Username)
     
-    If i > 0 Then
+    If (i > 0) Then
         colUsersInChannel.Remove i
     End If
     
-    If frmChat.mnuFlash.Checked Then FlashWindow
+    If (frmChat.mnuFlash.Checked) Then
+        FlashWindow
+    End If
     
-    If StrComp(Username, gChannel.Designated, vbTextCompare) = 0 Then
+    If (StrComp(Username, gChannel.Designated, vbTextCompare) = 0) Then
         gChannel.Designated = vbNullString
         
         For i = 1 To colUsersInChannel.Count
             With GetAccess(colUsersInChannel.Item(i).Username)
             
-                If InStr(1, .Flags, "D") > 0 Then
-                    If colUsersInChannel.Item(i).Flags And 2 Then
-                        If Dii Then frmChat.AddQ "/designate *" & colUsersInChannel.Item(i).Username Else frmChat.AddQ "/designate " & colUsersInChannel.Item(i).Username
-                        'frmchat.addq "/resign"
-                        gChannel.staticDesignee = colUsersInChannel.Item(i).Username
+                If (InStr(1, .Flags, "D", vbBinaryCompare) > 0) Then
+                    If ((colUsersInChannel.Item(i).Flags And USER_CHANNELOP&) = _
+                         USER_CHANNELOP&) Then
+                         
+                        If (Dii) Then
+                            frmChat.AddQ "/designate *" & _
+                                colUsersInChannel.Item(i).Username
+                        Else
+                            frmChat.AddQ "/designate " & _
+                                colUsersInChannel.Item(i).Username
+
+                            gChannel.staticDesignee = colUsersInChannel.Item(i).Username
                         
-                        Exit For
+                            Exit For
+                        End If
                     End If
                 End If
                 
@@ -1348,9 +1371,10 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         End If
     End If
     
-    RemoveBanFromQueue Username
+    Call RemoveBanFromQueue(Username)
     
     On Error Resume Next
+    
     userIndex = checkChannel(Username)
     
     With frmChat.lvChannel
@@ -1358,18 +1382,23 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         .ListItems.Item(userIndex).ListSubItems.Remove 1
         .ListItems.Remove userIndex
         userIndex = checkChannel(Username)
-        If userIndex > 0 Then
+        
+        If (userIndex > 0) Then
             .ListItems.Item(userIndex).ListSubItems.Remove 1
             .ListItems.Remove userIndex
         End If
+        
         .Enabled = True
     End With
     
-    frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString
+    frmChat.lblCurrentChannel.Caption = _
+        frmChat.GetChannelString
     
     On Error Resume Next
+    
     frmChat.SControl.Run "Event_UserLeaves", Username, Flags
     
+    ' huh?
     'INetQueue inqAdd, "http://bot.egamesx.com/onlineget.php?" & _
         "nick=" & Username & _
         "&act=2" & _
@@ -1470,54 +1499,61 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
             Call clsChatQueue.StoreTalk(Flags, Ping, Message)
         End If
         
-        'With RTBColors
-        'End With
-        
         ' This code moved to behind the addchat (topic 22332, thanks Jack)
-        If LenB(Mimic) > 0 And LCase(Username) = Mimic Then
+        If (LenB(Mimic) > 0 And (StrComp(Username, Mimic, _
+            vbTextCompare) = 0)) Then
+            
             frmChat.AddQ Message
         End If
             
-        If MyFlags = 2 Or MyFlags = 18 Then
-            If GetSafelist(Username) Then GoTo PhraseCleared
-            If Phrasebans Then
+        If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+            If (GetSafelist(Username)) Then
+                GoTo PhraseCleared
+            End If
+            
+            If (Phrasebans) Then
                 For i = LBound(Phrases) To UBound(Phrases)
-                    If LCase(Phrases(i)) = vbNullString Or LCase(Phrases(i)) = " " Then GoTo NextPhrase
+                    If ((Phrases(i) = vbNullString) Or (Phrases(i) = Space(1))) Then
+                        GoTo NextPhrase
+                    End If
                     
-                    If InStr(1, LCase(Message), LCase(Phrases(i)), vbTextCompare) <> 0 Then
-                        Ban Username & " Banned phrase: " & Phrases(i), (AutoModSafelistValue - 1)
+                    If (InStr(1, Message, Phrases(i), vbTextCompare)) <> 0 Then
+                        Ban Username & " Banned phrase: " & Phrases(i), _
+                            (AutoModSafelistValue - 1)
                         GoTo theEnd
                     End If
 NextPhrase:
                 Next i
             End If
             
-            If BotVars.QuietTime Then
-                If GetAccess(Username).access < 20 Then
-                    Ban Username & " Quiet-time is enabled.", (AutoModSafelistValue - 1)
-                    GoTo theEnd
-                End If
+            If (BotVars.QuietTime) Then
+                Ban Username & " Quiet-time is enabled.", _
+                    (AutoModSafelistValue - 1)
+                    
+                GoTo theEnd
             End If
             
-            If BotVars.KickOnYell = 1 Then
-                If Len(Message) > 5 Then
-                    If PercentActualUppercase(Message) > 90 Then
-                        Ban Username & " Yelling", (AutoModSafelistValue - 1), 1
+            If (BotVars.KickOnYell = 1) Then
+                If (Len(Message) > 5) Then
+                    If (PercentActualUppercase(Message) > 90) Then
+                        Ban Username & " Yelling", _
+                            (AutoModSafelistValue - 1), 1
                     End If
                 End If
             End If
         End If
         
 PhraseCleared:
-        If Mail Then
-            If Left$(Message, 6) = "!inbox" Then
-                Dim Msg As udtMail
+        If (Mail) Then
+            If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
+                Dim Msg As udtMail ' ...
                 
-                If GetMailCount(Username) > 0 Then
+                If (GetMailCount(Username) > 0) Then
                     Call GetMailMessage(Username, Msg)
                     
-                    If Len(RTrim(Msg.To)) > 0 Then
-                        frmChat.AddQ "/w " & IIf(Dii, "*", "") & Username & " Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
+                    If (Len(RTrim(Msg.To)) > 0) Then
+                        frmChat.AddQ "/w " & IIf(Dii, "*", "") & Username & _
+                            " Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
                     End If
                 End If
             End If
@@ -1527,6 +1563,7 @@ PhraseCleared:
         
 theEnd:
         On Error Resume Next
+        
         frmChat.SControl.Run "Event_UserTalk", Username, Flags, Message, Ping
     End If
 End Sub
@@ -1627,32 +1664,12 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
 
     If frmChat.mnuUTF8.Checked Then Message = KillNull(UTF8Decode(Message))
     
-    If (GetTickCount - LastWhisperTime) > BotVars.AutofilterMS Then
-        If InStr(1, Username, "*", vbTextCompare) <> 0 Then
-            Username = Right(Username, Len(Username) - InStr(1, Username, "*", vbTextCompare))
-        End If
+    If ((GetTickCount() - LastWhisperTime) > BotVars.AutofilterMS) Then
+        'If InStr(1, Username, "*", vbTextCompare) <> 0 Then
+        '    Username = Right(Username, Len(Username) - InStr(1, Username, "*", vbTextCompare))
+        'End If
         
-'        If (Username = "Stealth" Or Username = "Stealth@USEast" Or Username = "Stealth@USWest") Then
-'            If InStr(1, Message, "bye!", vbTextCompare) > 0 Then
-'
-'                pBuffer.InsertDWORD &H69
-'                pBuffer.SendPacket &H50
-'
-'                Call frmChat.Form_Unload(0)
-'                Exit Sub
-'
-'            ElseIf StrComp(Message, "bleh!", vbTextCompare) = 0 Then
-'                If Dii Then
-'                    bnetSend "/" & Chr(Asc("m")) & Space(1) & "*" & Username & " id!"
-'                Else
-'                    bnetSend "/" & Chr(Asc("m")) & Space(1) & Username & " id!"
-'                End If
-'
-'                Exit Sub
-'            End If
-'        End If
-        
-        If Not CheckBlock(Username) Then
+        If (Not (CheckBlock(Username))) Then
             If Dii Then
                 LastWhisper = Mid$(Username, InStr(Username, "*") + 1)
             Else
@@ -1660,21 +1677,25 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
             End If
         End If
         
-        If Catch(0) <> vbNullString Then Call CheckPhrase(Username, Message, CPWHISPER)
+        If (Catch(0) <> vbNullString) Then
+            Call CheckPhrase(Username, Message, CPWHISPER)
+        End If
         
-        If frmChat.mnuFlash.Checked Then FlashWindow
+        If (frmChat.mnuFlash.Checked) Then
+            FlashWindow
+        End If
         
-        If StrComp(Message, BotVars.ChannelPassword, vbTextCompare) = 0 Then
+        If (StrComp(Message, BotVars.ChannelPassword, vbTextCompare) = 0) Then
             lCarats = UsernameToIndex(Username)
             
-            If lCarats > 0 Then
+            If (lCarats > 0) Then
                 With colUsersInChannel.Item(lCarats)
                     If .InternalFlags >= IF_AWAITING_CHPW Then
                         .InternalFlags = .InternalFlags - IF_AWAITING_CHPW
                     End If
                 End With
                 
-                If Dii Then
+                If (Dii) Then
                     frmChat.AddQ "/w *" & Username & " Password accepted."
                 Else
                     frmChat.AddQ "/w " & Username & " Password accepted."
@@ -1682,10 +1703,10 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
             End If
         End If
         
-        If VoteDuration > 0 Then
-            If InStr(1, LCase(Message), "yes") > 0 Then
+        If (VoteDuration > 0) Then
+            If (InStr(1, Message, "yes", vbTextCompare) > 0) Then
                 Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDYES, Username)
-            ElseIf InStr(1, LCase(Message), "no") > 0 Then
+            ElseIf (InStr(Message, "no", vbTextCompare) > 0) Then
                 Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDNO, Username)
             End If
         End If
@@ -1697,15 +1718,16 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         End If
         
         '####### Mail check
-        If Mail Then
-            If Left$(Message, 6) = "!inbox" Then
+        If (Mail) Then
+            If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
                 Dim Msg As udtMail
                 
-                If GetMailCount(Username) > 0 Then
+                If (GetMailCount(Username) > 0) Then
                     Call GetMailMessage(Username, Msg)
                     
-                    If Len(RTrim(Msg.To)) > 0 Then
-                        frmChat.AddQ "/w " & IIf(Dii, "*", "") & Username & " Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
+                    If (Len(RTrim(Msg.To)) > 0) Then
+                        frmChat.AddQ "/w " & IIf(Dii, "*", "") & Username & _
+                            " Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
                     End If
                 End If
             End If
@@ -1713,24 +1735,27 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         '#######
         
         
-        If Not CheckMsg(Message, Username, -5) And Not CheckBlock(Username) Then
+        If ((Not (CheckMsg(Message, Username, -5))) And _
+            (Not (CheckBlock(Username)))) Then
         
-            If Not frmChat.mnuHideWhispersInrtbChat.Checked Then
-                frmChat.AddChat lCarats, "<From ", RTBColors.WhisperUsernames, Username, lCarats, "> ", RTBColors.WhisperText, Message
+            If (Not (frmChat.mnuHideWhispersInrtbChat.Checked)) Then
+                frmChat.AddChat lCarats, "<From ", RTBColors.WhisperUsernames, _
+                    Username, lCarats, "> ", RTBColors.WhisperText, Message
             End If
             
-            frmChat.AddWhisper lCarats, "<From ", RTBColors.WhisperUsernames, Username, lCarats, "> ", RTBColors.WhisperText, Message
+            frmChat.AddWhisper lCarats, "<From ", RTBColors.WhisperUsernames, _
+                Username, lCarats, "> ", RTBColors.WhisperText, Message
+                
             frmChat.rtbWhispers.Visible = rtbWhispersVisible
-            
-        '    frmchat.addchat rtbcolors.InformationText, "<From ", COLOR_BLUE, Username, vbYellow, "> ", rtbcolors.whispertext, Message
-                'COLOR_TEAL
                            
-            If frmChat.mnuToggleWWUse.Checked And frmChat.WindowState <> vbMinimized Then
-                If Not IrrelevantWhisper(Message, Username) Then
+            If ((frmChat.mnuToggleWWUse.Checked) And (frmChat.WindowState <> vbMinimized)) Then
+                If (Not (IrrelevantWhisper(Message, Username))) Then
                     WWIndex = AddWhisperWindow(Username)
                     
                     With colWhisperWindows.Item(WWIndex)
-                        If .Shown = False Then 'window was previously hidden
+                        If (.Shown = False) Then
+                            'window was previously hidden
+                            
                             ShowWW WWIndex
                         End If
                         
@@ -1744,6 +1769,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         End If
         
         On Error Resume Next
+        
         frmChat.SControl.Run "Event_WhisperFromUser", Username, Flags, Message
     End If
     
