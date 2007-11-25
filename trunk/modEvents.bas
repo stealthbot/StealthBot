@@ -874,34 +874,10 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             Exit Sub
         End If
         
-        'If InStr(1, GetAccess(Username).Flags, "X", vbTextCompare) > 0 And floodCap < 45 Then
-        '    If StrComp(Flood, Username, vbTextCompare) <> 0 Then
-        '        Send "/ban " & Username
-        '        floodCap = floodCap + 15
-        '        Flood = Username
-        '    End If
-        'End If
-        
-        'If StrComp(Username, LCase(Username), vbTextCompare) = 0 And floodCap < 45 Then
-        '    If Len(Username) > 9 And StrComp(Flood, Username, vbTextCompare) <> 0 Then
-        '        Send "/ban " & Username
-        '        floodCap = floodCap + 15
-        '        Flood = Username
-        '    End If
-        'End If
-        
-        'If Flags = 10 Or Flags = 12 Then Flags = Flags + 6
-        'If Flags = 14 Then Flags = 18
-        
         Banned = True
         
         f = FreeFile
-        
-        'If (InStr(1, Username, "*", vbBinaryCompare) <> 0) Then
-        '    Username = Right$(Username, Len(Username) - _
-        '        InStr(1, Username, "*", vbTextCompare))
-        'End If
-        
+
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' Add user to collection
         ' *necessary*
