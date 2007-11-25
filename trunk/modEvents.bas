@@ -1363,7 +1363,29 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         Next i
     End If
     
-    If JoinMessagesOff = False And Not bFlood Then frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, Username, RTBColors.JoinText, " has left the channel."
+    ' ...
+    If ((JoinMessagesOff = False) And (Not (bFlood))) Then
+        For i = 1 To colChatQueue.Count
+            ' ...
+            Dim clsChatQueue As clsChatQueue
+        
+            ' ...
+            Set clsChatQueue = colChatQueue(i)
+            
+            If (StrComp(Username, clsChatQueue.Username, _
+                vbBinaryCompare) = 0) Then
+            
+                Exit For
+            End If
+        Next i
+        
+        If (i >= (colChatQueue.Count + 1)) Then
+            frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, Username, _
+                RTBColors.JoinText, " has left the channel."
+        Else
+            Call colChatQueue.Remove(i)
+        End If
+    End If
     
     RemoveBanFromQueue Username
     
