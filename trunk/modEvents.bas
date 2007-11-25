@@ -508,8 +508,7 @@ Public Sub Event_ServerInfo(ByVal Message As String)
     End If
     
     If (InStr(1, Message, Space(1), vbBinaryCompare)) Then
-    
-        If InStr(1, Message, "are still marked", vbTextCompare) <> 0 Then
+        If (InStr(1, Message, "are still marked", vbTextCompare) <> 0) Then
             Exit Sub
         End If
         
@@ -529,7 +528,9 @@ Public Sub Event_ServerInfo(ByVal Message As String)
         'Ban Evasion and banned-user tracking
         Temp = Split(Message, " ")(1)
         
-        If (Len(Temp) > 0) Then ' added 1/21/06 thanks to http://www.stealthbot.net/forum/index.php?showtopic=24582
+        ' added 1/21/06 thanks to
+        ' http://www.stealthbot.net/forum/index.php?showtopic=24582
+        If (Len(Temp) > 0) Then
             If (InStr(Len(Temp), Message, " was banned by ", _
                 vbTextCompare) > 0) Then
             
@@ -543,7 +544,9 @@ Public Sub Event_ServerInfo(ByVal Message As String)
                 RemoveBanFromQueue Temp
                 
                 bHide = frmChat.mnuHideBans.Checked
-            ElseIf (InStr(Len(Temp), Message, " was unbanned by ", vbTextCompare) > 0) Then
+            ElseIf (InStr(Len(Temp), Message, " was unbanned by ", _
+                    vbTextCompare) > 0) Then
+                    
                 BanCount = BanCount - 1
                 
                 Temp = (Replace(Left$(Message, InStr(1, Message, " ", vbTextCompare) - 1), _
@@ -568,7 +571,9 @@ Public Sub Event_ServerInfo(ByVal Message As String)
                 End If
             End If
             
-            If (InStr(Len(Temp), Message, " has been unsquelched", vbTextCompare) > 0) Then
+            If (InStr(Len(Temp), Message, " has been unsquelched", _
+                vbTextCompare) > 0) Then
+                
                 Unsquelching = True
             End If
         End If
@@ -579,7 +584,9 @@ Public Sub Event_ServerInfo(ByVal Message As String)
         
         ' trick to find the current Warcraft III realm name, thanks LoRd :)
         If (IsW3) Then
-            If (InStr(1, Message, "You are " & CurrentUsername & ", using Warcraft III ") > 0) Then
+            If (InStr(1, Message, "You are " & CurrentUsername & ", " & _
+                "using Warcraft III ") > 0) Then
+                
                 If (InStr(1, Message, "channel", vbTextCompare) = 0) Then
                     i = InStrRev(Message, " ")
                     
@@ -760,7 +767,8 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             .Statstring = OriginalStatstring
             .JoinTime = GetTickCount
             .Clan = sClan
-            .IsSelf = (StrComp(Username, CurrentUsername, vbTextCompare) = 0)
+            .IsSelf = (StrComp(Username, CurrentUsername, _
+                vbTextCompare) = 0)
         
             If (Not (.Safelisted)) Then
                 If ((Len(BotVars.ChannelPassword) > 0) And _
@@ -829,7 +837,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         
         If (JoinMessagesOff = False) Then
             frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", _
-                    RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
+                RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
                     RTBColors.JoinText, " is using " & Message
         End If
     End If
@@ -842,6 +850,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     End If
     
     On Error Resume Next
+    
     frmChat.SControl.Run "Event_UserInChannel", Username, Flags, Message, Ping, Product, StatUpdate
     
     'INetQueue inqAdd, "http://bot.egamesx.com/onlineget.php?" & _
@@ -895,7 +904,8 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             .Statstring = OriginalStatstring
             .JoinTime = GetTickCount
             .Clan = sClan
-            .IsSelf = (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0)
+            .IsSelf = (StrComp(Username, CurrentUsername, _
+                vbBinaryCompare) = 0)
             .InternalFlags = 0
             
             If (Not (.Safelisted)) Then
@@ -932,7 +942,6 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                     End If
                 End If
             End If
-        
         End With
         
         colUsersInChannel.Add UserToAdd
@@ -1231,7 +1240,7 @@ theEnd:
                     frmChat.AddChat RTBColors.TalkBotUsername, _
                         "Join/Leave Messages have been disabled due to rejoin flooding. Reactivate them by pressing CTRL + J."
                     
-                    'JoinMessagesOff = True
+                    JoinMessagesOff = True
                     ForcedJoinsOn = 2
                 End If
             End If
