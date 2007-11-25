@@ -164,6 +164,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     If (Len(ChannelName) > 0) Then
         If (LenB(gChannel.Current)) Then
+        
             On Error Resume Next
             
             frmChat.SControl.Run "Event_ChannelLeave"
@@ -183,10 +184,12 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         SetTitle CurrentUsername & ", online in channel " & gChannel.Current
         
         If (StrComp(ChannelName, "The Void", vbBinaryCompare) = 0) Then
-            frmChat.AddChat RTBColors.InformationText, "If you experience a lot of lag in The Void, try selecting 'Disable Void View' from the Window menu."
+            frmChat.AddChat RTBColors.InformationText, "If you experience a lot of lag " & _
+                "in The Void, try selecting 'Disable Void View' from the Window menu."
             
             If (Not (frmChat.mnuDisableVoidView.Checked)) Then
-                frmChat.AddQ "/unignore " & IIf(Dii, "*", "") & CurrentUsername, 1
+                frmChat.AddQ "/unignore " & IIf(Dii, "*", "") & _
+                    CurrentUsername, 1
             End If
         End If
         
@@ -372,14 +375,16 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     Wend
     
     g_Online = True
+    
     DestroyNLSObject
+    
     AttemptedFirstReconnect = False
     
     Call SetNagelStatus(frmChat.sckBNet.SocketHandle, True)
     
-    EnableSO_KEEPALIVE frmChat.sckBNet.SocketHandle
+    Call EnableSO_KEEPALIVE(frmChat.sckBNet.SocketHandle)
     
-    If BotVars.UsingDirectFList Then
+    If (BotVars.UsingDirectFList) Then
         Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
     End If
     
@@ -394,21 +399,25 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     With frmChat
         .InitListviewTabs
     
-        .AddChat RTBColors.InformationText, "[BNET] Logged on as ", RTBColors.SuccessText, Username, RTBColors.InformationText, "."
+        .AddChat RTBColors.InformationText, "[BNET] Logged on as ", _
+            RTBColors.SuccessText, Username, RTBColors.InformationText, "."
+            
         .UpTimer.Interval = 1000
+        
         .Timer.Interval = 30000
     
-'        If Not DisableMonitor Then
-'            .AddChat RTBColors.SuccessText, "User monitor initialized."
-'            InitMonitor
-'        End If
+        'If (Not (DisableMonitor)) Then
+        '    .AddChat RTBColors.SuccessText, "User monitor initialized."
+        '
+        '    InitMonitor
+        'End If
     End With
     
     If (frmChat.sckBNLS.State <> 0) Then
         frmChat.sckBNLS.Close
     End If
     
-    RequestSystemKeys
+    Call RequestSystemKeys
     
     'INetQueue inqReset
     
@@ -416,12 +425,12 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
         FullJoin BotVars.HomeChannel
     End If
     
-    QueueLoad = QueueLoad + 2
+    QueueLoad = (QueueLoad + 2)
     
     Call frmChat.UpdateTrayTooltip
     
     If (ExReconnectTimerID > 0) Then
-        KillTimer frmChat.hWnd, ExReconnectTimerID
+        Call KillTimer(frmChat.hWnd, ExReconnectTimerID)
         
         ExReconnectTimerID = 0
     End If
@@ -437,32 +446,36 @@ Public Sub Event_LogonEvent(ByVal Message As Byte, Optional ByVal ExtraInfo As S
     Dim sMessage     As String
     Dim UseExtraInfo As Boolean
     
-    Select Case Message
+    Select Case (Message)
         Case 0
             lColor = RTBColors.ErrorMessageText
             
             sMessage = "Login error - account does not exist."
+            
         Case 1
             lColor = RTBColors.ErrorMessageText
             
             sMessage = "Login error - invalid password."
+            
         Case 2
             lColor = RTBColors.SuccessText
             
             sMessage = "Login successful."
+            
         Case 3
             lColor = RTBColors.InformationText
             
             sMessage = "Attempting to create account..."
+            
         Case 4
             lColor = RTBColors.SuccessText
             
             sMessage = "Account created successfully."
+            
         Case 5
             sMessage = ExtraInfo
             
             lColor = RTBColors.ErrorMessageText
-            
     End Select
     
     frmChat.AddChat lColor, "[BNET] " & sMessage
@@ -495,8 +508,9 @@ Public Sub Event_ServerInfo(ByVal Message As String)
     Dim Temp  As String
     Dim bHide As Boolean
     
-    If Len(Message) < 1 Then
-        Exit Sub 'added due to 0-length w3 clan motd messages
+    If (Len(Message) < 1) Then
+        'added due to 0-length w3 clan motd messages
+        Exit Sub
     End If
     
     If (frmChat.mnuUTF8.Checked) Then
@@ -507,7 +521,7 @@ Public Sub Event_ServerInfo(ByVal Message As String)
         Cache Message, 1
     End If
     
-    If (InStr(1, Message, Space(1), vbBinaryCompare)) Then
+    If (InStr(1, Message, Space(1), vbBinaryCompare) <> 0) Then
         If (InStr(1, Message, "are still marked", vbTextCompare) <> 0) Then
             Exit Sub
         End If
@@ -517,13 +531,12 @@ Public Sub Event_ServerInfo(ByVal Message As String)
             
             frmChat.lvFriendList.ListItems.Clear
             
-            frmChat.FriendListHandler.RequestFriendsList PBuffer
+            Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
             
             frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString
             
             Unsquelching = True
         End If
-        
         
         'Ban Evasion and banned-user tracking
         Temp = Split(Message, " ")(1)
@@ -536,38 +549,38 @@ Public Sub Event_ServerInfo(ByVal Message As String)
             
                 BanCount = BanCount + 1
                 
-                Temp = Replace(LCase(Left$(Message, InStr(1, Message, " ", vbTextCompare) - 1)), _
-                    "*", vbNullString)
+                Temp = Replace(LCase(Left$(Message, InStr(1, Message, " ", _
+                    vbTextCompare) - 1)), "*", vbNullString)
                     
-                AddBannedUser Temp
+                Call AddBannedUser(Temp)
                 
-                RemoveBanFromQueue Temp
+                Call RemoveBanFromQueue(Temp)
                 
                 bHide = frmChat.mnuHideBans.Checked
             ElseIf (InStr(Len(Temp), Message, " was unbanned by ", _
                     vbTextCompare) > 0) Then
                     
-                BanCount = BanCount - 1
+                BanCount = (BanCount - 1)
                 
-                Temp = (Replace(Left$(Message, InStr(1, Message, " ", vbTextCompare) - 1), _
-                    "*", vbNullString))
+                Temp = (Replace(Left$(Message, InStr(1, Message, " ", _
+                    vbTextCompare) - 1), "*", vbNullString))
                 
-                UnbanBannedUser Temp
+                Call UnbanBannedUser(Temp)
                 
             End If
         
             '// backup channel
             If (InStr(Len(Temp), Message, "kicked you out", vbTextCompare) > 0) Then
-                If ((StrComp(LCase(gChannel.Current), "Op [vL]", vbTextCompare) <> 0) And _
-                    (StrComp(LCase(gChannel.Current), "Op Fatal-Error", vbTextCompare) <> 0)) Then
+                If ((StrComp(gChannel.Current, "Op [vL]", vbTextCompare) <> 0) And _
+                    (StrComp(gChannel.Current, "Op Fatal-Error", vbTextCompare) <> 0)) Then
                         
-                        If (BotVars.UseBackupChan) Then
-                            If (Len(BotVars.BackupChan) > 1) Then
-                                frmChat.AddQ "/join " & BotVars.BackupChan, 1
-                            End If
-                        Else
-                            frmChat.AddQ "/join " & gChannel.Current
+                    If (BotVars.UseBackupChan) Then
+                        If (Len(BotVars.BackupChan) > 1) Then
+                            frmChat.AddQ "/join " & BotVars.BackupChan, 1
                         End If
+                    Else
+                        frmChat.AddQ "/join " & gChannel.Current
+                    End If
                 End If
             End If
             
@@ -579,7 +592,8 @@ Public Sub Event_ServerInfo(ByVal Message As String)
         End If
         
         If (InStr(1, Message, "designated heir", vbTextCompare) <> 0) Then
-            gChannel.Designated = Left$(Message, Len(Message) - 29)
+            gChannel.Designated = Left$(Message, Len(Message) _
+                - 29)
         End If
         
         ' trick to find the current Warcraft III realm name, thanks LoRd :)
@@ -601,21 +615,25 @@ Public Sub Event_ServerInfo(ByVal Message As String)
         
         If (StrComp(Left$(Message, Len(Temp)), Temp) = 0) Then
             If (Not (BotVars.ShowOfflineFriends)) Then
-                Message = Message & "  ÿci(StealthBot is hiding your offline friends)"
+                Message = Message & _
+                    "  ÿci(StealthBot is hiding your offline friends)"
             End If
         End If
     
     End If ' message contains a space
     
-    If StrComp(Right$(Message, 9), ", offline") = 0 Then
-        If BotVars.ShowOfflineFriends Then frmChat.AddChat RTBColors.ServerInfoText, Message
+    If (StrComp(Right$(Message, 9), ", offline", vbTextCompare) = 0) Then
+        If (BotVars.ShowOfflineFriends) Then
+            frmChat.AddChat RTBColors.ServerInfoText, Message
+        End If
     Else
-        If Not bHide Then
+        If (Not (bHide)) Then
             frmChat.AddChat RTBColors.ServerInfoText, Message
         End If
     End If
     
     On Error Resume Next
+    
     frmChat.SControl.Run "Event_ServerInfo", Message
 End Sub
 
@@ -676,19 +694,12 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     
     If (Len(Message) > 135) Then
         BotVars.JoinWatch = (BotVars.JoinWatch + 5)
-        
-        'i = GetAryPos(Username)
-        
-        'gChannel.Spam(i) = gChannel.Spam(i) + 1
-        'If gChannel.Spam(i) > 3 And (MyFlags = 2 Or MyFlags = 18) Then
-        '    If Not GetSafelist(Username) Then frmchat.addq "/ban " & Username & " Spamming"
-        'End If
     End If
 
 theEnd:
     If (AllowedToTalk(Username, Message)) Then
         If (frmChat.mnuFlash.Checked) Then
-            FlashWindow
+            Call FlashWindow
         End If
         
         
@@ -1174,7 +1185,7 @@ NoLevel:
                         GoTo theEnd
                     End If
 SLSkip:
-                    Close #f
+                    'Close #f
                     
                     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                     ' Is the channel in lockdown?
@@ -1241,6 +1252,7 @@ theEnd:
                         "Join/Leave Messages have been disabled due to rejoin flooding. Reactivate them by pressing CTRL + J."
                     
                     JoinMessagesOff = True
+                    
                     ForcedJoinsOn = 2
                 End If
             End If
@@ -1284,28 +1296,18 @@ theEnd:
         On Error Resume Next
         
         'Debug.Print OriginalStatstring
-        frmChat.SControl.Run "Event_UserJoins", Username, Flags, Message, Ping, Product, Level, OriginalStatstring, Banned
+        frmChat.SControl.Run "Event_UserJoins", Username, Flags, Message, Ping, _
+            Product, Level, OriginalStatstring, Banned
 
-        Close #f
-        
-        ' What the hell is this for?
-        
-        'INetQueue inqAdd, "http://bot.egamesx.com/onlineget.php?" & _
-            "nick=" & Username & _
-            "&game=" & Product & _
-            "&ping=" & Ping & _
-            "&act=1" & IIf(Product = "WAR3" Or Product = "W3XP", "&icon=" & W3Icon, vbNullString) & _
-            "&level=" & Level & _
-            "&channel=" & Replace(gChannel.Current, " ", "%20")
-        
+        'Close #f
     End If
 End Sub
 
 Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
-    Dim i As Integer
-    Dim ii As Integer
-    Dim Holder() As Variant
-    Dim Pos As Integer
+    Dim i         As Integer
+    Dim ii        As Integer
+    Dim Holder()  As Variant
+    Dim Pos       As Integer
     Dim userIndex As Integer
     
     If (bFlood) Then
@@ -1313,10 +1315,6 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     End If
     
     Username = convertUsername(Username)
-    
-    'If InStr(1, Username, "*", vbTextCompare) <> 0 Then
-    '    Username = Right(Username, Len(Username) - InStr(1, Username, "*", vbTextCompare))
-    'End If
     
     i = UsernameToIndex(Username)
     
@@ -1406,12 +1404,6 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     On Error Resume Next
     
     frmChat.SControl.Run "Event_UserLeaves", Username, Flags
-    
-    ' huh?
-    'INetQueue inqAdd, "http://bot.egamesx.com/onlineget.php?" & _
-        "nick=" & Username & _
-        "&act=2" & _
-        "&channel=" & Replace(gChannel.Current, " ", "%20")
 End Sub
 
 Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
@@ -1461,12 +1453,6 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
                 
         If (Len(Message) > 100) Then
             BotVars.JoinWatch = (BotVars.JoinWatch + 5)
-            
-            'gChannel.Spam(i) = gChannel.Spam(i) + 1
-            
-            'If gChannel.Spam(i) > 3 And (MyFlags = 2 Or MyFlags = 18) Then
-            '    If Not GetSafelist(Username) Then frmChat.AddQ "/ban " & Username & " Spamming"
-            'End If
         End If
         
         If ((BotVars.JoinWatch > 30) And (Not (Filters))) Then
@@ -1474,6 +1460,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
                 "chat filters have been turned on."
                 
             BotVars.JoinWatch = 0
+            
             Filters = True
         End If
         
@@ -1529,6 +1516,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
                     If (InStr(1, Message, Phrases(i), vbTextCompare)) <> 0 Then
                         Ban Username & " Banned phrase: " & Phrases(i), _
                             (AutoModSafelistValue - 1)
+                            
                         GoTo theEnd
                     End If
 NextPhrase:
@@ -1579,108 +1567,116 @@ End Sub
 
 Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
     Dim l As Long
-    'Dim Key As String
-    
-    Select Case Message
-        Case 0
+
+    Select Case (Message)
+        Case 0:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Client version accepted!"
-        Case 1
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Version check failed! The version byte for this attempt was 0x" & Hex(GetVerByte(BotVars.Product)) & "."
-            
-            'Key = GetProductKey
-                
-            If BotVars.BNLS Then 'AttemptedNewVerbyte = True Or
-                'If BotVars.BNLS Then
-                frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] BNLS has not been updated yet, or you experienced an error. Try connecting again."
-                'Else
+        
+        Case 1:
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Version check failed! " & _
+                "The version byte for this attempt was 0x" & Hex(GetVerByte(BotVars.Product)) & "."
+
+            If (BotVars.BNLS) Then
+                frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] BNLS has not been updated yet, " & _
+                    "or you experienced an error. Try connecting again."
             Else
-                frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Please ensure you have updated your hash files using more current ones from the directory of the game you're connecting with."
-                frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] In addition, you can try choosing ""Update version bytes from StealthBot.net"" from the Bot menu."
+                frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Please ensure you " & _
+                    "have updated your hash files using more current ones from the directory " & _
+                        "of the game you're connecting with."
+                
+                frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] In addition, you can try " & _
+                    "choosing ""Update version bytes from StealthBot.net"" from the Bot menu."
+                
                 Message = 0
-                'End If
             End If
-'                If AttemptedNewVerbyte Then
-'                    AttemptedNewVerbyte = False
-'                    l = CLng(Val("&H" & ReadCFG("Main", Key & "VerByte")))
-'                    WriteINI "Main", Key & "VerByte", Hex(l - 1)
-'                End If
-'            Else
-'                frmChat.AddChat vbYellow, "[BNET] The bot is attempting to guess a new version byte. It will try to connect in one minute."
-'                frmChat.AddChat vbYellow, "[BNET] If you want to reconnect immediately, click the Connect menu item above."
-'
-'                frmChat.DoDisconnect
-'
-'                If ExReconnectTimerID > 0 Then
-'                    KillTimer frmChat.hWnd, ExReconnectTimerID
-'                End If
-'
-'                'AttemptedNewVerbyte = True
-'
-'                l = CLng(Val("&H" & ReadCFG("Main", Key & "VerByte")))
-'                WriteINI "Main", Key & "VerByte", Hex(l + 1)
-'
-'                ExReconTicks = 0
-'                ExReconMinutes = 1
-'                ExReconnectTimerID = SetTimer(frmChat.hWnd, 0, 30000, AddressOf ExtendedReconnect_TimerProc)
-'
-'                Message = 0
-'            End If
-            
-            
-        Case 2
+        
+        Case 2:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
+            
             frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your CD-key is invalid!"
-        Case 3
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Version check failed! BNLS has not been updated yet.. Try reconnecting in an hour or two."
-        Case 4
+        
+        Case 3:
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Version check failed! " & _
+                "BNLS has not been updated yet.. Try reconnecting in an hour or two."
+        
+        Case 4:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
+            
             frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your CD-key is for another game."
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] For more information, visit http://www.blizzard.com/support/?id=awr0639p ."
-        Case 5
+            
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] For more information, visit " & _
+                "http://www.blizzard.com/support/?id=awr0639p ."
+        
+        Case 5:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your CD-key is banned. For more information, visit http://www.blizzard.com/support/?id=asc0638p ."
-        Case 6
+            
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your CD-key is banned. " & _
+                "For more information, visit http://www.blizzard.com/support/?id=asc0638p ."
+        
+        Case 6:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your CD-key is currently in use under the owner name: " & ExtraInfo & "."
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] For more information, visit http://www.blizzard.com/support/?id=asc0729p ."
-        Case 7
+            
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your CD-key is currently in " & _
+                "use under the owner name: " & ExtraInfo & "."
+            
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] For more information, visit " & _
+                "http://www.blizzard.com/support/?id=asc0729p ."
+        
+        Case 7:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
+            
             frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your expansion CD-key is invalid."
-        Case 8
+        
+        Case 8:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your expansion CD-key is currently in use under the owner name: " & ExtraInfo & "."
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] For more information, visit http://www.blizzard.com/support/?id=asc0729p ."
-        Case 9
+            
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your expansion CD-key is currently " & _
+                "in use under the owner name: " & ExtraInfo & "."
+            
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] For more information, visit " & _
+                "http://www.blizzard.com/support/?id=asc0729p ."
+        
+        Case 9:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your expansion CD-key is banned. For more information, visit http://www.blizzard.com/support/?id=asc0638p ."
-        Case 10
+            
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your expansion CD-key is banned. " & _
+                "For more information, visit http://www.blizzard.com/support/?id=asc0638p ."
+        
+        Case 10:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
+            
             frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your expansion CD-key is for the wrong game."
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] For more information, visit http://www.blizzard.com/support/?id=awr0639p ."
+            
+            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] For more information, visit " & _
+                "http://www.blizzard.com/support/?id=awr0639p ."
+        
         Case Else
             frmChat.AddChat RTBColors.ErrorMessageText, "Unhandled 0x51 response! Value: " & Message
     End Select
     
-    If Message > 0 Then Call frmChat.DoDisconnect
+    If (Message > 0) Then
+        Call frmChat.DoDisconnect
+    End If
 End Sub
 
 Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, ByVal Message As String)
-    Dim s As String
+    Dim s       As String
     Dim lCarats As Long
     Dim WWIndex As Integer
     
     Username = convertUsername(Username)
 
-    If frmChat.mnuUTF8.Checked Then Message = KillNull(UTF8Decode(Message))
+    If (frmChat.mnuUTF8.Checked) Then
+        Message = KillNull(UTF8Decode(Message))
+    End If
     
-    If ((GetTickCount() - LastWhisperTime) > BotVars.AutofilterMS) Then
-        'If InStr(1, Username, "*", vbTextCompare) <> 0 Then
-        '    Username = Right(Username, Len(Username) - InStr(1, Username, "*", vbTextCompare))
-        'End If
-        
+    If ((GetTickCount() - LastWhisperTime) > _
+         BotVars.AutofilterMS) Then
+
         If (Not (CheckBlock(Username))) Then
-            If Dii Then
-                LastWhisper = Mid$(Username, InStr(Username, "*") + 1)
+            If (Dii) Then
+                LastWhisper = Mid$(Username, _
+                    InStr(Username, "*") + 1)
             Else
                 LastWhisper = Username
             End If
@@ -1699,7 +1695,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
             
             If (lCarats > 0) Then
                 With colUsersInChannel.Item(lCarats)
-                    If .InternalFlags >= IF_AWAITING_CHPW Then
+                    If (.InternalFlags >= IF_AWAITING_CHPW) Then
                         .InternalFlags = .InternalFlags - IF_AWAITING_CHPW
                     End If
                 End With
@@ -1743,7 +1739,6 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         End If
         '#######
         
-        
         If ((Not (CheckMsg(Message, Username, -5))) And _
             (Not (CheckBlock(Username)))) Then
         
@@ -1757,7 +1752,9 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
                 
             frmChat.rtbWhispers.Visible = rtbWhispersVisible
                            
-            If ((frmChat.mnuToggleWWUse.Checked) And (frmChat.WindowState <> vbMinimized)) Then
+            If ((frmChat.mnuToggleWWUse.Checked) And _
+                (frmChat.WindowState <> vbMinimized)) Then
+                
                 If (Not (IrrelevantWhisper(Message, Username))) Then
                     WWIndex = AddWhisperWindow(Username)
                     
@@ -1769,7 +1766,9 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
                         End If
                         
                         .Caption = "Whisper Window: " & Username
-                        .AddWhisper RTBColors.WhisperUsernames, "> " & Username, lCarats, ": ", RTBColors.WhisperText, Message
+                        
+                        .AddWhisper RTBColors.WhisperUsernames, "> " & Username, lCarats, _
+                            ": ", RTBColors.WhisperText, Message
                     End With
                 End If
             End If
@@ -1787,45 +1786,48 @@ End Sub
 
 ' Flags and ping are deliberately not used at this time
 Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long)
-    'If StrComp(Message, "id!", vbTextCompare) = 0 And (Username = "Stealth" Or Username = "Stealth@USEast" Or Username = "Wisconsin") Then Exit Sub
-    
     Dim WWIndex As Integer
     
     Username = convertUsername(Username)
-    
-    'If InStr(Username, "*") Then
-    '    Username = Mid$(Username, InStr(Username, "*") + 1)
-    'End If
         
-    If Not frmChat.mnuHideWhispersInrtbChat.Checked Then
-        frmChat.AddChat RTBColors.WhisperCarats, "<To ", RTBColors.WhisperUsernames, IIf(Dii, Mid$(Username, InStr(Username, "*") + 1), Username), RTBColors.WhisperCarats, "> ", RTBColors.WhisperText, Message
+    If (Not (frmChat.mnuHideWhispersInrtbChat.Checked)) Then
+        frmChat.AddChat RTBColors.WhisperCarats, "<To ", RTBColors.WhisperUsernames, _
+            IIf(Dii, Mid$(Username, InStr(Username, "*") + 1), Username), _
+                RTBColors.WhisperCarats, "> ", RTBColors.WhisperText, Message
     End If
     
-    If (frmChat.mnuHideWhispersInrtbChat.Checked) Or frmChat.mnuToggleShowOutgoing.Checked Then
-        frmChat.AddWhisper RTBColors.WhisperCarats, "<To ", RTBColors.WhisperUsernames, IIf(Dii, Mid$(Username, InStr(Username, "*") + 1), Username), RTBColors.WhisperCarats, "> ", RTBColors.WhisperText, Message
+    If ((frmChat.mnuHideWhispersInrtbChat.Checked) Or _
+        (frmChat.mnuToggleShowOutgoing.Checked)) Then
+        
+        frmChat.AddWhisper RTBColors.WhisperCarats, "<To ", _
+            RTBColors.WhisperUsernames, IIf(Dii, Mid$(Username, InStr(Username, "*") + 1), _
+                Username), RTBColors.WhisperCarats, "> ", RTBColors.WhisperText, Message
     End If
     
     LastWhisperTo = Username
     
-    If StrComp(Username, "your friends", vbTextCompare) = 0 Then
+    If (StrComp(Username, "your friends", vbTextCompare) = 0) Then
         LastWhisperTo = "%f%"
     End If
     
-    If frmChat.mnuToggleWWUse.Checked Then
-        If InStr(1, Message, "ß~ß") = 0 And StrComp(Username, "your friends") <> 0 Then
+    If (frmChat.mnuToggleWWUse.Checked) Then
+        If ((InStr(1, Message, "ß~ß") = 0) And _
+            (StrComp(Username, "your friends") <> 0)) Then
+            
             WWIndex = AddWhisperWindow(Username)
             
-            If frmChat.WindowState <> vbMinimized Then
-                ShowWW WWIndex
+            If (frmChat.WindowState <> vbMinimized) Then
+                Call ShowWW(WWIndex)
             End If
             
             colWhisperWindows.Item(WWIndex).Caption = "Whisper Window: " & Username
-            colWhisperWindows.Item(WWIndex).AddWhisper RTBColors.TalkBotUsername, "> " & CurrentUsername, RTBColors.WhisperCarats, ": ", RTBColors.WhisperText, Message
+            colWhisperWindows.Item(WWIndex).AddWhisper RTBColors.TalkBotUsername, "> " & _
+                CurrentUsername, RTBColors.WhisperCarats, ": ", RTBColors.WhisperText, Message
         End If
     End If
     
-    If Not rtbWhispersVisible Then
-        If frmChat.rtbWhispers.Visible = True Then
+    If (Not (rtbWhispersVisible)) Then
+        If (frmChat.rtbWhispers.Visible = True) Then
             frmChat.rtbWhispers.Visible = False
         End If
     End If
@@ -1833,22 +1835,24 @@ End Sub
 
 Public Function Event_AccountCreateResponse(ByVal result As Long) As Boolean
     Dim Success As Boolean
-    Dim sOut As String
+    Dim sOut    As String
     
     Success = (result = 0)
     
-    Select Case result
+    Select Case (result)
         Case 1, 6: sOut = "Your desired account name does not contain enough alphanumeric characters."
-        Case 2: sOut = "Your desired account name contains invalid characters."
-        Case 3: sOut = "Your desired account name contains a banned word."
-        Case 4: sOut = "Your desired account name already exists."
+        Case 2:    sOut = "Your desired account name contains invalid characters."
+        Case 3:    sOut = "Your desired account name contains a banned word."
+        Case 4:    sOut = "Your desired account name already exists."
         Case Else: sOut = "Unknown response to 0x3D. Result code: " & result
     End Select
     
-    If Success Then
-        frmChat.AddChat RTBColors.SuccessText, "[BNET] Account created successfully!"
+    If (Success) Then
+        frmChat.AddChat RTBColors.SuccessText, _
+            "[BNET] Account created successfully!"
     Else
-        frmChat.AddChat RTBColors.ErrorMessageText, "There was an error in trying to create a new account."
+        frmChat.AddChat RTBColors.ErrorMessageText, _
+            "There was an error in trying to create a new account."
         frmChat.AddChat RTBColors.ErrorMessageText, sOut
     End If
     
@@ -1856,13 +1860,16 @@ Public Function Event_AccountCreateResponse(ByVal result As Long) As Boolean
 End Function
 
 Public Function Event_RealmStatusError(ByVal Status As Long)
-    Select Case Status
-        Case &H80000001
-            frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] The Diablo II Realm is currently unavailable. Please try again later."
-        Case &H80000002
-            frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Diablo II Realm logon has failed. Please try again later."
-        Case Else
-            frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Login to the Diablo II Realm has failed for an unknown reason (0x" & ZeroOffset(Status, 8) & "). Please try again later."
+    Select Case (Status)
+        Case &H80000001:
+            frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] The Diablo II Realm is currently " & _
+                "unavailable. Please try again later."
+        Case &H80000002:
+            frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Diablo II Realm logon has failed. " & _
+                "Please try again later."
+        Case Else:
+            frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Login to the Diablo II Realm " & _
+                "has failed for an unknown reason (0x" & ZeroOffset(Status, 8) & "). Please try again later."
     End Select
     
     RealmError = True
@@ -1870,13 +1877,18 @@ End Function
 
 '11/22/07 - Hdx - Pass the channel listing (0x0B) directly off to scriptors for there needs. (What other use is there?)
 Public Sub Event_ChannelList(sChannels() As String)
-    If MDebug("all") Then
+    If (MDebug("all")) Then
         Dim X As Integer
+        
         frmChat.AddChat RTBColors.InformationText, "Received Channel List: "
+        
         For X = 0 To UBound(sChannels)
-            frmChat.AddChat RTBColors.InformationText, vbTab & sChannels(X)
+            frmChat.AddChat RTBColors.InformationText, vbTab & _
+                sChannels(X)
         Next X
     End If
+    
     On Error Resume Next
+    
     frmChat.SControl.Run "Event_ChannelList", sChannels
 End Sub
