@@ -1390,6 +1390,7 @@ Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVa
         Next
     Else
         If Len(strDelimiter) > 0 Then strOption = strDelimiter
+        If Len(strOption) = 0 Or Not IsNumeric(strOption) Then strOption = 0
         AddChat strOption, strMessage
     End If
 End Sub
