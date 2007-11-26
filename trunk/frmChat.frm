@@ -823,6 +823,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -848,6 +849,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3105,7 +3107,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
             If colUsersInChannel.Count > 0 Then
             
                 With colUsersInChannel.Item(lItemIndex)
-                    sTemp = ParseStatstring(.StatString, sOutBuf, sTemp)
+                    sTemp = ParseStatstring(.Statstring, sOutBuf, sTemp)
                     
                     sTemp = "Ping at login: " & .Ping & vbCrLf
                     sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
@@ -5409,10 +5411,15 @@ Sub ClearChannel()
 End Sub
 
 Sub ReloadConfig(Optional Mode As Byte = 0)
-    Dim s As String, i As Integer, f As Integer
-    Const MN As String = "Main", OT As String = "Other"
+    Const MN As String = "Main"
+    Const OT As String = "Other"
+    
+    Dim s    As String
+    Dim i    As Integer
+    Dim f    As Integer
     
     s = BotVars.Username
+    
     BotVars.Username = ReadCFG(MN, "Username")
     
     If LenB(s) > 0 Then
