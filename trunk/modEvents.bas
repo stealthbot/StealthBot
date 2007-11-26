@@ -26,7 +26,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     
     If (StrComp(Username, convertUsername(CurrentUsername), _
         vbBinaryCompare) = 0) Then
-        
+
         MyFlags = Flags
         
         SharedScriptSupport.BotFlags = MyFlags
@@ -750,6 +750,15 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     End If
     
     Username = convertUsername(Username)
+    
+    ' are we receiving my user information?
+    If (StrComp(Username, convertUsername(CurrentUsername), _
+        vbBinaryCompare) = 0) Then
+
+        ' we don't want to have an out-of-date
+        ' flag value for ourselves
+        MyFlags = Flags
+    End If
 
     StatUpdate = (checkChannel(Username) > 0)
     
@@ -775,7 +784,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             .Statstring = OriginalStatstring
             .JoinTime = GetTickCount
             .Clan = sClan
-            .IsSelf = (StrComp(Username, CurrentUsername, _
+            .IsSelf = (StrComp(Username, convertUsername(CurrentUsername), _
                 vbTextCompare) = 0)
         
             If (Not (.Safelisted)) Then
@@ -786,45 +795,49 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 End If
                 
                 If (((Flags And USER_CHANNELOP&) <> USER_CHANNELOP&) And _
-                     (StrComp(Username, CurrentUsername, vbTextCompare) <> 0)) Then
+                     (StrComp(Username, convertUsername(CurrentUsername), vbBinaryCompare) <> 0)) Then
                     
                     If (BotVars.IB_On = 1) Then
-                        .InternalFlags = .InternalFlags + IF_SUBJECT_TO_IDLEBANS
+                        .InternalFlags = (.InternalFlags + _
+                            IF_SUBJECT_TO_IDLEBANS)
                     End If
                 End If
             End If
         End With
         
-        colUsersInChannel.Add UserToAdd
+        Call colUsersInChannel.Add(UserToAdd)
     End If
     
+    ' we won't even know if we're ops until we receive the status update,
+    ' and even then, we just call a checkUsers()...
+    
     'using Warcraft III: Reign of Chaos (Level: 8, icon tier: Orcs
-    If (((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
-         (BotVars.BanUnderLevel > 0)) Then
-         
-        If ((Product = "WAR3") Or (Product = "W3XP")) Then
-            i = InStr(1, Message, "Level: ", vbTextCompare)
-            
-            If (i > 0) Then
-                i = (i + 7)
-                
-                strCompare = Mid$(Message, i, 2)
-                
-                If (Right$(strCompare, 1) = ",") Then
-                    strCompare = Left$(strCompare, 1)
-                End If
-                
-                Level = CByte(strCompare)
-                
-                If (Level < BotVars.BanUnderLevel) Then
-                    If (Not (GetSafelist(Username))) Then
-                        frmChat.AddQ "/ban " & Username & Space(1) & _
-                            ReadCFG("Other", "LevelbanMsg"), 1
-                    End If
-                End If
-            End If
-        End If
-    End If
+    'If (((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
+    '     (BotVars.BanUnderLevel > 0)) Then
+    '
+    '    If ((Product = "WAR3") Or (Product = "W3XP")) Then
+    '        i = InStr(1, Message, "Level: ", vbTextCompare)
+    '
+    '        If (i > 0) Then
+    '            i = (i + 7)
+    '
+    '            strCompare = Mid$(Message, i, 2)
+    '
+    '            If (Right$(strCompare, 1) = ",") Then
+    '                strCompare = Left$(strCompare, 1)
+    '            End If
+    '
+    '            Level = CByte(strCompare)
+    '
+    '            If (Level < BotVars.BanUnderLevel) Then
+    '                If (Not (GetSafelist(Username))) Then
+    '                    frmChat.AddQ "/ban " & Username & Space(1) & _
+    '                        ReadCFG("Other", "LevelbanMsg"), 1
+    '                End If
+    '            End If
+    '        End If
+    '    End If
+    'End If
 
         
     If (Not (StatUpdate)) Then
@@ -841,7 +854,8 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Else
         i = UsernameToIndex(Username)
             
-        colUsersInChannel.Item(i).Statstring = OriginalStatstring
+        colUsersInChannel.Item(i).Statstring = _
+            OriginalStatstring
         
         If (JoinMessagesOff = False) Then
             frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", _
@@ -1502,17 +1516,16 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
             
             If (Phrasebans) Then
                 For i = LBound(Phrases) To UBound(Phrases)
-                    If ((Phrases(i) = vbNullString) Or (Phrases(i) = Space(1))) Then
-                        GoTo NextPhrase
+                    If ((Phrases(i) <> vbNullString) And _
+                        (Phrases(i) <> Space(1))) Then
+                        
+                        If ((InStr(1, Message, Phrases(i), vbTextCompare)) <> 0) Then
+                            Ban Username & " Banned phrase: " & Phrases(i), _
+                                (AutoModSafelistValue - 1)
+                                
+                            GoTo theEnd
+                        End If
                     End If
-                    
-                    If (InStr(1, Message, Phrases(i), vbTextCompare)) <> 0 Then
-                        Ban Username & " Banned phrase: " & Phrases(i), _
-                            (AutoModSafelistValue - 1)
-                            
-                        GoTo theEnd
-                    End If
-NextPhrase:
                 Next i
             End If
             
