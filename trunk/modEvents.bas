@@ -10,11 +10,11 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     Dim found        As ListItem ' ...
     Dim clsChatQueue As clsChatQueue
     
-    Dim Pos        As Integer  ' ...
-    Dim i          As Integer  ' ...
-    Dim Squelching As Boolean  ' ...
-    Dim s          As String   ' ...
-    Dim Index      As Long     ' ...
+    Dim Pos          As Integer  ' ...
+    Dim i            As Integer  ' ...
+    Dim Squelching   As Boolean  ' ...
+    Dim s            As String   ' ...
+    Dim Index        As Long     ' ...
     
     If (LenB(Username) < 1) Then
         Exit Sub
@@ -36,7 +36,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                 For i = 1 To colUsersInChannel.Count
                 
                     With GetCumulativeAccess(colUsersInChannel.Item(i).Username)
-                        If (InStr(1, .Flags, "D") > 0) Then
+                        If (InStr(1, .Flags, "D", vbBinaryCompare) > 0) Then
                             If ((colUsersInChannel.Item(i).Flags And USER_CHANNELOP&) <> _
                                  USER_CHANNELOP&) Then
                                 
@@ -55,12 +55,9 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
             Call checkUsers
         End If
     End If
-    
-    'If (InStr(1, Username, "*", vbTextCompare) <> 0) Then
-    '    Username = Mid$(Username, InStr(Username, "*") + 1)
-    'End If
-    
+
     i = UsernameToIndex(Username)
+    
     Pos = checkChannel(Username)
     
     If (StrComp(gChannel.Current, "The Void", vbBinaryCompare) = 0) Then
@@ -857,20 +854,14 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         frmChat.GetChannelString()
     
     If (MDebug("statstrings")) Then
-        frmChat.AddChat vbMagenta, "Username: " & Username & ", Statstring: " & OriginalStatstring
+        frmChat.AddChat vbMagenta, "Username: " & Username & ", Statstring: " & _
+            OriginalStatstring
     End If
     
     On Error Resume Next
     
-    frmChat.SControl.Run "Event_UserInChannel", Username, Flags, Message, Ping, Product, StatUpdate
-    
-    'INetQueue inqAdd, "http://bot.egamesx.com/onlineget.php?" & _
-        "nick=" & Username & _
-        "&game=" & IIf(StrComp(Username, CurrentUsername, vbBinaryCompare) = 0, "SEGX", Product) & _
-        "&ping=" & Ping & _
-        "&act=1&icon=" & W3Icon & _
-        "&level=" & Level & _
-        "&channel=" & Replace(gChannel.Current, " ", "%20")
+    frmChat.SControl.Run "Event_UserInChannel", Username, Flags, Message, Ping, _
+        Product, StatUpdate
 End Sub
 
 Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal w3icon As String)
@@ -1248,8 +1239,10 @@ theEnd:
                 If (ForcedJoinsOn = 0) Then
                     frmChat.AddChat RTBColors.TalkBotUsername, _
                         "Rejoin flooding and/or massloading detected!"
+                        
                     frmChat.AddChat RTBColors.TalkBotUsername, _
-                        "Join/Leave Messages have been disabled due to rejoin flooding. Reactivate them by pressing CTRL + J."
+                        "Join/Leave Messages have been disabled due to rejoin flooding. " & _
+                            "Reactivate them by pressing CTRL + J."
                     
                     JoinMessagesOff = True
                     
