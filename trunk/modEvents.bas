@@ -758,6 +758,8 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         ' we don't want to have an out-of-date
         ' flag value for ourselves
         MyFlags = Flags
+        
+        SharedScriptSupport.BotFlags = MyFlags
     End If
 
     StatUpdate = (checkChannel(Username) > 0)
@@ -929,8 +931,8 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                      (StrComp(Username, CurrentUsername, vbTextCompare) <> 0)) Then
                     
                     If (BotVars.IB_On = 1) Then
-                        .InternalFlags = .InternalFlags + _
-                            IF_SUBJECT_TO_IDLEBANS
+                        .InternalFlags = (.InternalFlags + _
+                            IF_SUBJECT_TO_IDLEBANS)
                     End If
                 End If
                 
