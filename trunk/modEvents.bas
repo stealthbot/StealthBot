@@ -359,8 +359,6 @@ Repeat4:
 End Sub
 
 Public Sub Event_LoggedOnAs(Username As String, Product As String)
-    Username = convertUsername(Username)
-
     LastWhisper = vbNullString
     
     'If InStr(1, Username, "*", vbBinaryCompare) <> 0 Then
