@@ -14,7 +14,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     Dim i            As Integer  ' ...
     Dim Squelching   As Boolean  ' ...
     Dim s            As String   ' ...
-    Dim index        As Long     ' ...
+    Dim Index        As Long     ' ...
     
     If (LenB(Username) < 1) Then
         Exit Sub
@@ -54,22 +54,6 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
             Call checkUsers
         End If
     End If
-
-    i = UsernameToIndex(Username)
-    
-    Pos = checkChannel(Username)
-    
-    If (StrComp(gChannel.Current, "The Void", vbBinaryCompare) = 0) Then
-        If (Not (frmChat.mnuDisableVoidView.Checked)) Then
-            If (frmChat.lvChannel.ListItems.Count < 200) Then
-                If (Pos = 0) Then
-                    Call AddName(Username, Product, Flags, Ping)
-                End If
-            End If
-        End If
-        
-        Exit Sub
-    End If
     
     For i = 1 To colChatQueue.Count
         ' ...
@@ -96,6 +80,22 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         Call clsChatQueue.StoreStatusUpdate(Flags, Ping, Product, _
             vbNullString, vbNullString, vbNullString)
     End If
+    
+    i = UsernameToIndex(Username)
+    
+    Pos = checkChannel(Username)
+    
+    If (StrComp(gChannel.Current, "The Void", vbBinaryCompare) = 0) Then
+        If (Not (frmChat.mnuDisableVoidView.Checked)) Then
+            If (frmChat.lvChannel.ListItems.Count < 200) Then
+                If (Pos = 0) Then
+                    Call AddName(Username, Product, Flags, Ping)
+                End If
+            End If
+        End If
+        
+        Exit Sub
+    End If
 
     If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
         (Not (Unsquelching)) Then
@@ -106,14 +106,14 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     End If
 
     ' User is being squelched?
-    If ((Flags And USER_SQUELCHED) = USER_SQUELCHED) Then
+    If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
         Squelching = True
         
         If (Pos > 0) Then
             With colUsersInChannel.Item(i)
                 frmChat.lvChannel.Enabled = False
                 
-                frmChat.lvChannel.ListItems.Remove Pos
+                Call frmChat.lvChannel.ListItems.Remove(Pos)
                 
                 Call AddName(.Username, .Product, Flags, .Ping, .Clan, Pos)
                 
@@ -133,7 +133,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         ' User is being unsquelched?
         If (i > 0) Then
             With colUsersInChannel.Item(i)
-                If (.Flags And USER_SQUELCHED) = USER_SQUELCHED Then
+                If ((.Flags And USER_SQUELCHED) = USER_SQUELCHED) Then
                     frmChat.lvChannel.Enabled = False
                     
                     frmChat.lvChannel.ListItems.Remove Pos
@@ -761,7 +761,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim strCompare As String  ' ...
     Dim Level      As Byte    ' ...
     Dim StatUpdate As Boolean ' ...
-    Dim index      As Long    ' ...
+    Dim Index      As Long    ' ...
     
     If (Len(Username) < 1) Then
         Exit Sub
@@ -831,39 +831,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         
         Call colUsersInChannel.Add(UserToAdd)
     End If
-    
-    ' we won't even know if we're ops until we receive the status update,
-    ' and even then, we just call a checkUsers()...
-    
-    'using Warcraft III: Reign of Chaos (Level: 8, icon tier: Orcs
-    'If (((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
-    '     (BotVars.BanUnderLevel > 0)) Then
-    '
-    '    If ((Product = "WAR3") Or (Product = "W3XP")) Then
-    '        i = InStr(1, Message, "Level: ", vbTextCompare)
-    '
-    '        If (i > 0) Then
-    '            i = (i + 7)
-    '
-    '            strCompare = Mid$(Message, i, 2)
-    '
-    '            If (Right$(strCompare, 1) = ",") Then
-    '                strCompare = Left$(strCompare, 1)
-    '            End If
-    '
-    '            Level = CByte(strCompare)
-    '
-    '            If (Level < BotVars.BanUnderLevel) Then
-    '                If (Not (GetSafelist(Username))) Then
-    '                    frmChat.AddQ "/ban " & Username & Space(1) & _
-    '                        ReadCFG("Other", "LevelbanMsg"), 1
-    '                End If
-    '            End If
-    '        End If
-    '    End If
-    'End If
 
-        
     If (Not (StatUpdate)) Then
         If InStr(1, Message, "in clan ", vbTextCompare) > 0 Then
             strCompare = Mid$(Message, InStr(1, Message, "in clan ", vbTextCompare) + 8)

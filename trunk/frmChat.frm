@@ -823,6 +823,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -848,6 +849,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2397,7 +2399,7 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     Set X = lvClanList.FindItem(Member)
     
     If Not (X Is Nothing) Then
-        lvClanList.ListItems.Remove X.index
+        lvClanList.ListItems.Remove X.Index
         
         lvClanList.Refresh
         
@@ -2510,7 +2512,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
     End If
     
     If Not (X Is Nothing) Then
-        lvClanList.ListItems.Remove X.index
+        lvClanList.ListItems.Remove X.Index
         Set X = Nothing
     End If
     
@@ -2801,7 +2803,7 @@ Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
     Set X = lvFriendList.FindItem(Username)
     
     If Not (X Is Nothing) Then
-        lvFriendList.ListItems.Remove X.index
+        lvFriendList.ListItems.Remove X.Index
     End If
     
     Set X = Nothing
@@ -3023,8 +3025,7 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
             
             Dim sTemp As String
             
-            If FriendListHandler.colFriends.Count > 0 Then
-            
+            If ((lItemIndex) And (FriendListHandler.colFriends.Count)) Then
                 lItemIndex = FriendListHandler.UsernameToFLIndex(lvFriendList.ListItems(m_lCurItemIndex).text)
             
                 With FriendListHandler.colFriends.Item(lItemIndex)
@@ -3076,7 +3077,6 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
                 End With
                 
                 Call ListToolTip.Create(lvFriendList.hWnd, CLng(X), CLng(Y))
-                
             End If
         End If
     End If
@@ -3102,8 +3102,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
             
             lItemIndex = UsernameToIndex(lvChannel.ListItems(m_lCurItemIndex).text)
             
-            If colUsersInChannel.Count > 0 Then
-            
+            If ((lItemIndex) And (colUsersInChannel.Count)) Then
                 With colUsersInChannel.Item(lItemIndex)
                     sTemp = ParseStatstring(.Statstring, sOutBuf, sTemp)
                     
@@ -3117,7 +3116,6 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                 End With
                 
                 Call ListToolTip.Create(lvChannel.hWnd, CLng(X), CLng(Y))
-                
             End If
         End If
     End If
@@ -3223,9 +3221,9 @@ End Sub
 Private Sub mnuFLpopDemote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.index < lvFriendList.ListItems.Count) Then
+            If (.Index < lvFriendList.ListItems.Count) Then
               AddQ "/f d " & .text
-              MoveFriend .index, .index + 1
+              MoveFriend .Index, .Index + 1
             End If
         End With
     End If
@@ -3235,9 +3233,9 @@ End Sub
 Private Sub mnuFLpopPromote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.index > 1) Then
+            If (.Index > 1) Then
               AddQ "/f p " & .text
-              MoveFriend .index, .index - 1
+              MoveFriend .Index, .Index - 1
             End If
         End With
     End If
@@ -3548,9 +3546,9 @@ Private Sub mnuClearedTxt_Click()
 End Sub
 
 
-Private Sub mnuQC_Click(index As Integer)
-    If Len(QC(index)) > 0 Then
-        AddQ "/join " & QC(index)
+Private Sub mnuQC_Click(Index As Integer)
+    If Len(QC(Index)) > 0 Then
+        AddQ "/join " & QC(Index)
     End If
 End Sub
 
@@ -4087,7 +4085,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     With lvChannel
 
         If Not (.SelectedItem Is Nothing) Then
-            i = .SelectedItem.index
+            i = .SelectedItem.Index
         End If
 
         Select Case KeyCode
@@ -5415,7 +5413,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Dim s     As String
     Dim i     As Integer
     Dim f     As Integer
-    Dim index As Integer
+    Dim Index As Integer
     
     s = BotVars.Username
     
@@ -5499,11 +5497,11 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                 colUsersInChannel(i).Username = _
                     reverseUsername(colUsersInChannel(i).Username)
                     
-                index = _
+                Index = _
                     checkChannel(colUsersInChannel(i).Username)
 
-                If (index) Then
-                    lvChannel.ListItems.Item(index).text = _
+                If (Index) Then
+                    lvChannel.ListItems.Item(Index).text = _
                         colUsersInChannel(i).Username
                 End If
             Next i
@@ -5526,11 +5524,11 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                 colUsersInChannel(i).Username = _
                     convertUsername(colUsersInChannel(i).Username)
                 
-                index = _
+                Index = _
                     checkChannel(colUsersInChannel(i).Username)
 
-                If (index) Then
-                    lvChannel.ListItems.Item(index).text = _
+                If (Index) Then
+                    lvChannel.ListItems.Item(Index).text = _
                         colUsersInChannel(i).Username
                 End If
             Next i
@@ -6334,7 +6332,7 @@ End Sub
 Private Function GetClanSelectedUser() As String
     With lvClanList
         If Not (.SelectedItem Is Nothing) Then
-            If .SelectedItem.index < 1 Then
+            If .SelectedItem.Index < 1 Then
                 GetClanSelectedUser = vbNullString: Exit Function
             Else
                 GetClanSelectedUser = .SelectedItem.text
@@ -6358,7 +6356,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
             lvClanList.ListItems(lItemIndex).Selected = True
             
             If Not (lvClanList.SelectedItem Is Nothing) Then
-                If lvClanList.SelectedItem.index < 0 Then
+                If lvClanList.SelectedItem.Index < 0 Then
                     
                     mnuPopDem.Enabled = False
                     mnuPopPro.Enabled = False
@@ -6468,7 +6466,7 @@ Private Sub mnuPopDem_Click()
         With PBuffer
             .InsertDWORD &H1
             .InsertNTString GetClanSelectedUser
-            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.index).SmallIcon - 1
+            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon - 1
             .SendPacket &H7A
         End With
         
@@ -6482,7 +6480,7 @@ Private Sub mnuPopPro_Click()
         With PBuffer
             .InsertDWORD &H3
             .InsertNTString GetClanSelectedUser
-            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.index).SmallIcon + 1
+            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon + 1
             .SendPacket &H7A
         End With
         
@@ -6499,7 +6497,7 @@ Private Sub mnuPopRem_Click()
     Else
         If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, "StealthBot") = vbYes Then
             With PBuffer
-                If lvClanList.SelectedItem.index > 0 Then
+                If lvClanList.SelectedItem.Index > 0 Then
                     .InsertDWORD 1 'lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon
                     .InsertNTString GetClanSelectedUser
                     .SendPacket &H78
