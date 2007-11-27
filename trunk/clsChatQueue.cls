@@ -132,7 +132,9 @@ Public Sub Show()
                                 .w3icon)
                                 
                 Case ID_USERFLAGS:
-                    Call modChatQueue.Event_QueuedStatusUpdate
+                    Call modChatQueue.Event_QueuedStatusUpdate(m_Username, _
+                            .Flags, .Ping, .Product, .Clan, .Statstring, _
+                                .w3icon)
                     
                 Case ID_TALK:
                     Call modChatQueue.Event_QueuedTalk(m_Username, _

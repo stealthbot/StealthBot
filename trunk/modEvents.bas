@@ -14,7 +14,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     Dim i            As Integer  ' ...
     Dim Squelching   As Boolean  ' ...
     Dim s            As String   ' ...
-    Dim Index        As Long     ' ...
+    Dim index        As Long     ' ...
     
     If (LenB(Username) < 1) Then
         Exit Sub
@@ -71,11 +71,34 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         Exit Sub
     End If
     
+    For i = 1 To colChatQueue.Count
+        ' ...
+        Set clsChatQueue = colChatQueue(i)
+        
+        If (StrComp(Username, clsChatQueue.Username, _
+            vbBinaryCompare) = 0) Then
+        
+            Exit For
+        End If
+    Next i
+    
+    If (i >= (colChatQueue.Count + 1)) Then
+        If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
+            (Not (Unsquelching)) Then
+    
+            frmChat.AddChat RTBColors.JoinedChannelText, "-- ", _
+                RTBColors.JoinedChannelName, Username, RTBColors.JoinedChannelText, _
+                    " has acquired ops."
+        End If
+    Else
+        Set clsChatQueue = colChatQueue(i)
+        
+        Call clsChatQueue.StoreStatusUpdate(Flags, Ping, Product, _
+            vbNullString, vbNullString, vbNullString)
+    End If
+
     If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
         (Not (Unsquelching)) Then
-
-        frmChat.AddChat RTBColors.JoinedChannelText, "-- ", _
-            RTBColors.JoinedChannelName, Username, RTBColors.JoinedChannelText, " has acquired ops."
                 
         Call frmChat.lvChannel.ListItems.Remove(Pos)
         
@@ -738,7 +761,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim strCompare As String  ' ...
     Dim Level      As Byte    ' ...
     Dim StatUpdate As Boolean ' ...
-    Dim Index      As Long    ' ...
+    Dim index      As Long    ' ...
     
     If (Len(Username) < 1) Then
         Exit Sub

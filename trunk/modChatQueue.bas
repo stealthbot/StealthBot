@@ -69,8 +69,17 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
 End Sub
 
 ' ...
-Public Sub Event_QueuedStatusUpdate()
-    Call frmChat.AddChat(vbRed, "Event_QueuedJoin() has been fired.")
+Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Long, ByVal Ping As Long, _
+    ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
+    ByVal w3icon As String)
+    
+    If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
+        (Not (Unsquelching)) Then
+
+        frmChat.AddChat RTBColors.JoinedChannelText, "-- ", _
+            RTBColors.JoinedChannelName, Username, RTBColors.JoinedChannelText, _
+                " has acquired ops."
+    End If
 End Sub
 
 ' ...
