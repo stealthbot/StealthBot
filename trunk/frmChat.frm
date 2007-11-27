@@ -823,7 +823,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -849,7 +848,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3101,6 +3099,10 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
             ListToolTip.Title = "Information for " & lvChannel.ListItems(m_lCurItemIndex).text
             
             lItemIndex = UsernameToIndex(lvChannel.ListItems(m_lCurItemIndex).text)
+            
+            If (lItemIndex = 0) Then
+                AddChat vbRed, lvChannel.ListItems(m_lCurItemIndex).text
+            End If
             
             If ((lItemIndex) And (colUsersInChannel.Count)) Then
                 With colUsersInChannel.Item(lItemIndex)
@@ -5492,7 +5494,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCFG(OT, "UseGameConventions")
     
     If (s = "Y") Then
-        If (colUsersInChannel.Count > 0) Then
+        If (colUsersInChannel.Count) Then
             For i = 1 To colUsersInChannel.Count
                 colUsersInChannel(i).Username = _
                     reverseUsername(colUsersInChannel(i).Username)
@@ -5519,7 +5521,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Else
         BotVars.UseGameConventions = False
         
-        If (colUsersInChannel.Count > 0) Then
+        If (colUsersInChannel.Count) Then
             For i = 1 To colUsersInChannel.Count
                 colUsersInChannel(i).Username = _
                     convertUsername(colUsersInChannel(i).Username)

@@ -1854,8 +1854,11 @@ Public Function UsernameToIndex(ByVal sUsername As String) As Long
             
             With user
                 If StrComp(Mid$(.Username, 1, 1), FirstLetter, vbTextCompare) = 0 Then
+                    AddChat vbBlue, sUsername & ":" & .Username
+                
                     If StrComp(sUsername, .Username, vbTextCompare) = 0 Then
                         UsernameToIndex = i
+                        
                         Exit Function
                     End If
                 End If
