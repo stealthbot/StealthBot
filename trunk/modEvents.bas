@@ -24,9 +24,8 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     
     Username = convertUsername(Username)
     
-    If (StrComp(Username, convertUsername(CurrentUsername), _
-        vbBinaryCompare) = 0) Then
-
+    If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
+    
         MyFlags = Flags
         
         SharedScriptSupport.BotFlags = MyFlags
@@ -600,6 +599,10 @@ Public Sub Event_ServerInfo(ByVal Message As String)
                     i = InStrRev(Message, " ")
                     
                     w3Realm = Mid$(Message, i + 1)
+                    
+                    ' we want our username to accurately reflect
+                    ' our new discovery of the realm name
+                    CurrentUsername = convertUsername(CurrentUsername)
 
                     Exit Sub
                 End If
@@ -750,8 +753,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Username = convertUsername(Username)
     
     ' are we receiving my user information?
-    If (StrComp(Username, convertUsername(CurrentUsername), _
-        vbBinaryCompare) = 0) Then
+    If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
 
         ' we don't want to have an out-of-date
         ' flag value for ourselves
@@ -764,8 +766,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
     If (Not (StatUpdate)) Then
         If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
-            If (StrComp(Username, convertUsername(CurrentUsername), _
-                vbTextCompare) <> 0) Then
+            If (StrComp(Username, CurrentUsername, vbTextCompare) <> 0) Then
                 
                 gChannel.Designated = Username
             End If
@@ -784,7 +785,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             .Statstring = OriginalStatstring
             .JoinTime = GetTickCount
             .Clan = sClan
-            .IsSelf = (StrComp(Username, convertUsername(CurrentUsername), _
+            .IsSelf = (StrComp(Username, CurrentUsername, _
                 vbTextCompare) = 0)
         
             If (Not (.Safelisted)) Then
@@ -795,7 +796,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 End If
                 
                 If (((Flags And USER_CHANNELOP&) <> USER_CHANNELOP&) And _
-                     (StrComp(Username, convertUsername(CurrentUsername), vbBinaryCompare) <> 0)) Then
+                     (StrComp(Username, CurrentUsername, vbBinaryCompare) <> 0)) Then
                     
                     If (BotVars.IB_On = 1) Then
                         .InternalFlags = (.InternalFlags + _
