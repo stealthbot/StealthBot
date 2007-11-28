@@ -1337,8 +1337,14 @@ End Function
 Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVal strOption As String, Optional ByVal strDelimiter As String)
 
     If intID < 4 Then
-        Dim arrQueue() As String, arrMessage() As String, tmpMsgPart As String, i As Integer
-        Dim strUsername As String, strDelim As String, strProduct As String
+        Dim arrQueue() As String
+        Dim arrMessage() As String
+        Dim tmpMsgPart As String
+        Dim i As Integer
+        Dim strUsername As String
+        Dim strDelim As String
+        Dim strProduct As String
+        
         ReDim arrQueue(0)
         
         '// Get username and delimiter if applicable

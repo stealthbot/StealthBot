@@ -2129,5 +2129,5 @@ Function GetProductKey(Optional ByVal Product As String) As String
 End Function
 
 Public Function InsertDummyQueueEntry()
-    frmChat.AddQ "%%%%%blankqueuemessage%%%%%"
+    frmChat.AddQ Chr$(0)
 End Function
