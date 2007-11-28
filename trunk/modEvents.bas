@@ -937,7 +937,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' Update the channel list user count
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
+        'frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
     
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' AUTOMATIC MODERATION FEATURES
@@ -1219,7 +1219,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim pos       As Integer
+    Dim Pos       As Integer
     Dim userIndex As Integer
     
     If (bFlood) Then

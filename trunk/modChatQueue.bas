@@ -69,15 +69,18 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
             
     If (Dii) Then
         If (Not (checkChannel(Username) <> 0)) Then
-            AddName Username, Product, Flags, Ping, Clan
+            Call AddName(Username, Product, Flags, Ping, Clan)
         End If
     Else
         If (Len(Clan)) Then
-            AddName Username, Product, Flags, Ping, Clan
+            Call AddName(Username, Product, Flags, Ping, Clan)
         Else
-            AddName Username, Product, Flags, Ping
+            Call AddName(Username, Product, Flags, Ping)
         End If
     End If
+    
+    frmChat.lblCurrentChannel.Caption = _
+        frmChat.GetChannelString()
 End Sub
 
 ' ...
