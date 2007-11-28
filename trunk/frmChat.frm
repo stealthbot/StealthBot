@@ -3101,10 +3101,6 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
             ListToolTip.Title = "Information for " & lvChannel.ListItems(m_lCurItemIndex).text
             
             lItemIndex = UsernameToIndex(lvChannel.ListItems(m_lCurItemIndex).text)
-            
-            If (lItemIndex = 0) Then
-                AddChat vbRed, lvChannel.ListItems(m_lCurItemIndex).text
-            End If
 
             If ((lItemIndex) And (colUsersInChannel.Count)) Then
                 With colUsersInChannel.Item(lItemIndex)

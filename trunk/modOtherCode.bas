@@ -1853,9 +1853,7 @@ Public Function UsernameToIndex(ByVal sUsername As String) As Long
             Set user = colUsersInChannel.Item(i)
             
             With user
-                If StrComp(Mid$(.Username, 1, 1), FirstLetter, vbTextCompare) = 0 Then
-                    AddChat vbBlue, sUsername & ":" & .Username
-                
+                If (StrComp(Mid$(.Username, 1, 1), FirstLetter, vbTextCompare) = 0) Then
                     If (StrComp(sUsername, .Username, vbTextCompare) = 0) Then
                         UsernameToIndex = i
                         
@@ -1879,7 +1877,7 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
     If (lvItem Is Nothing) Then
         checkChannel = 0
     Else
-        checkChannel = lvItem.Index
+        checkChannel = lvItem.index
     End If
 End Function
 
