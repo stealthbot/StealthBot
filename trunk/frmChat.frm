@@ -5100,7 +5100,7 @@ Sub Connect()
         
             AddChat RTBColors.InformationText, "Authorizing your private-release bot, please wait."
             
-            Call INet.Execute("http://www.stealthbot.net/board/sbauth.php?username=" & _
+            Call INet.Execute("http://www.stealthbot.net/beta/sbauth.php?username=" & _
                 BotVars.Username, "GET")
                 
             Do Until (Not (INet.StillExecuting))

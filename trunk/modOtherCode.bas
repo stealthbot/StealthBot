@@ -1136,7 +1136,7 @@ Public Sub ReadyINet()
 End Sub
 
 Public Function GetNewsURL() As String
-    GetNewsURL = Chr(Asc("h")) & Chr(Asc("t")) & Chr(Asc("t")) & Chr(Asc("p")) & Chr(Asc(":")) & Chr(Asc("/")) & Chr(Asc("/")) & Chr(Asc("w")) & Chr(Asc("w")) & Chr(Asc("w")) & Chr(Asc(".")) & Chr(Asc("s")) & Chr(Asc("t")) & Chr(Asc("e")) & Chr(Asc("a")) & Chr(Asc("l")) & Chr(Asc("t")) & Chr(Asc("h")) & Chr(Asc("b")) & Chr(Asc("o")) & Chr(Asc("t")) & Chr(Asc(".")) & Chr(Asc("n")) & Chr(Asc("e")) & Chr(Asc("t")) & Chr(Asc("/")) & Chr(Asc("g")) & Chr(Asc("e")) & Chr(Asc("t")) & Chr(Asc("v")) & Chr(Asc("e")) & Chr(Asc("r")) & Chr(Asc("3")) & Chr(Asc(".")) & Chr(Asc("p")) & Chr(Asc("h")) & Chr(Asc("p")) & Chr(Asc("?")) & Chr(Asc("v")) & Chr(Asc("c")) & Chr(Asc("=")) & VERCODE
+    GetNewsURL = "http://www.stealthbot.net/getver3.php?vc=" & VERCODE
 End Function
 
 Public Function HTMLToRGBColor(ByVal s As String) As Long
