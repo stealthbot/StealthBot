@@ -7,14 +7,10 @@ Option Explicit
 Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVal Ping As Long, _
     ByVal Product As String)
     
-    Dim found        As ListItem ' ...
     Dim clsChatQueue As clsChatQueue
     
-    Dim Pos          As Integer  ' ...
     Dim i            As Integer  ' ...
-    Dim Squelching   As Boolean  ' ...
-    Dim s            As String   ' ...
-    Dim Index        As Long     ' ...
+    Dim prevflags    As Long     ' ...
     
     If (LenB(Username) < 1) Then
         Exit Sub
@@ -24,8 +20,19 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     
     Username = convertUsername(Username)
     
-    If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
+    i = UsernameToIndex(Username)
     
+    If (i > 0) Then
+        With colUsersInChannel.Item(i)
+            ' create a copy of previous flags for determining
+            ' if a user's flags have just been changed
+            prevflags = .Flags
+            
+            .Flags = Flags
+        End With
+    End If
+    
+    If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
         MyFlags = Flags
         
         SharedScriptSupport.BotFlags = MyFlags
@@ -33,16 +40,15 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
             If (gChannel.Designated = vbNullString) Then
                 For i = 1 To colUsersInChannel.Count
-                
                     With GetCumulativeAccess(colUsersInChannel.Item(i).Username)
                         If (InStr(1, .Flags, "D", vbBinaryCompare) > 0) Then
-                            If ((colUsersInChannel.Item(i).Flags And USER_CHANNELOP&) <> _
+                            If ((colUsersInChannel(i).Flags And USER_CHANNELOP&) <> _
                                  USER_CHANNELOP&) Then
                                 
                                 frmChat.AddQ "/designate " & _
-                                    IIf(Dii, "*", "") & colUsersInChannel.Item(i).Username
+                                    reverseUsername(colUsersInChannel(i).Username)
     
-                                gChannel.staticDesignee = colUsersInChannel.Item(i).Username
+                                gChannel.staticDesignee = colUsersInChannel(i).Username
                                 
                                 Exit For
                             End If
@@ -67,106 +73,13 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     Next i
     
     If (i >= (colChatQueue.Count + 1)) Then
-        If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
-            (Not (Unsquelching)) Then
-    
-            frmChat.AddChat RTBColors.JoinedChannelText, "-- ", _
-                RTBColors.JoinedChannelName, Username, RTBColors.JoinedChannelText, _
-                    " has acquired ops."
-        End If
+        Call Event_QueuedStatusUpdate(Username, Flags, prevflags, Ping, Product, _
+            vbNullString, vbNullString, vbNullString)
     Else
         Set clsChatQueue = colChatQueue(i)
         
-        Call clsChatQueue.StoreStatusUpdate(Flags, Ping, Product, _
+        Call clsChatQueue.StoreStatusUpdate(Flags, prevflags, Ping, Product, _
             vbNullString, vbNullString, vbNullString)
-    End If
-    
-    i = UsernameToIndex(Username)
-    
-    Pos = checkChannel(Username)
-    
-    If (StrComp(gChannel.Current, "The Void", vbBinaryCompare) = 0) Then
-        If (Not (frmChat.mnuDisableVoidView.Checked)) Then
-            If (frmChat.lvChannel.ListItems.Count < 200) Then
-                If (Pos = 0) Then
-                    Call AddName(Username, Product, Flags, Ping)
-                End If
-            End If
-        End If
-        
-        Exit Sub
-    End If
-
-    If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
-        (Not (Unsquelching)) Then
-                
-        Call frmChat.lvChannel.ListItems.Remove(Pos)
-        
-        Call AddName(Username, colUsersInChannel.Item(i).Product, Flags, Ping)
-    End If
-
-    ' User is being squelched?
-    If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
-        Squelching = True
-        
-        If (Pos > 0) Then
-            With colUsersInChannel.Item(i)
-                frmChat.lvChannel.Enabled = False
-                
-                Call frmChat.lvChannel.ListItems.Remove(Pos)
-                
-                Call AddName(.Username, .Product, Flags, .Ping, .Clan, Pos)
-                
-                frmChat.lvChannel.Enabled = True
-            End With
-            
-            If (BotVars.IPBans) Then
-                If (MyFlags And USER_CHANNELOP&) = USER_CHANNELOP& Then
-                    If (Flags And USER_CHANNELOP&) <> USER_CHANNELOP& Then
-                        frmChat.AddQ Ban(Username & " IPBanned.", _
-                            (AutoModSafelistValue - 1)), 1
-                    End If
-                End If
-            End If
-        End If
-    Else
-        ' User is being unsquelched?
-        If (i > 0) Then
-            With colUsersInChannel.Item(i)
-                If ((.Flags And USER_SQUELCHED) = USER_SQUELCHED) Then
-                    frmChat.lvChannel.Enabled = False
-                    
-                    frmChat.lvChannel.ListItems.Remove Pos
-                    
-                    Call AddName(.Username, .Product, Flags, .Ping, .Clan, Pos)
-                    
-                    frmChat.lvChannel.Enabled = True
-                End If
-            End With
-        End If
-    End If
-    
-    If (i > 0) Then
-        With colUsersInChannel.Item(i)
-            .Flags = Flags
-        End With
-    End If
-    
-    Set found = frmChat.lvChannel.FindItem(Username)
-    
-    If (Not (found Is Nothing)) Then
-        If (g_ThisIconCode <> -1) Then
-            If ((Not (Squelching)) And (Not (Unsquelching))) Then
-                If (colUsersInChannel.Item(i).Product = "W3XP") Then
-                    found.SmallIcon = (g_ThisIconCode + ICON_START_W3XP + _
-                        IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0))
-                Else
-                    found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
-                End If
-            End If
-        End If
-        
-        Set found = Nothing
     End If
     
     On Error Resume Next
@@ -986,20 +899,20 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' Add to the channel list
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        If (Dii) Then
-            If (Not (checkChannel(Username) <> 0)) Then
-                AddName Username, Product, Flags, Ping, Message
-            End If
-        Else
-            If (InStr(1, Message, "in clan ") > 0) Then
-                strCompare = Mid$(Message, InStr(1, Message, "in clan ") + 8)
-                strCompare = Left$(strCompare, Len(strCompare) - 1)
-                
-                AddName Username, Product, Flags, Ping, strCompare
-            Else
-                AddName Username, Product, Flags, Ping
-            End If
-        End If
+        'If (Dii) Then
+        '    If (Not (checkChannel(Username) <> 0)) Then
+        '        AddName Username, Product, Flags, Ping, Message
+        '    End If
+        'Else
+        '    If (InStr(1, Message, "in clan ") > 0) Then
+        '        strCompare = Mid$(Message, InStr(1, Message, "in clan ") + 8)
+        '        strCompare = Left$(strCompare, Len(strCompare) - 1)
+        '
+        '        AddName Username, Product, Flags, Ping, strCompare
+        '    Else
+        '        AddName Username, Product, Flags, Ping
+        '    End If
+        'End If
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' Join Message
@@ -1306,7 +1219,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim Pos       As Integer
+    Dim pos       As Integer
     Dim userIndex As Integer
     
     If (bFlood) Then
@@ -1385,12 +1298,15 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     
     With frmChat.lvChannel
         .Enabled = False
+        
         .ListItems.Item(userIndex).ListSubItems.Remove 1
         .ListItems.Remove userIndex
+        
         userIndex = checkChannel(Username)
         
-        If (userIndex > 0) Then
+        If (userIndex) Then
             .ListItems.Item(userIndex).ListSubItems.Remove 1
+            
             .ListItems.Remove userIndex
         End If
         
