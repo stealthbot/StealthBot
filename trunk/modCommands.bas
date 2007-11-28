@@ -6490,7 +6490,7 @@ Public Function reverseUsername(ByVal Username As String) As String
             
         If (w3Realm <> vbNullString) Then
             Index = InStr(1, Username, ("@" & w3Realm), vbBinaryCompare)
-            
+
             If (Index <> 0) Then
                 reverseUsername = Left$(Username, Index - 1)
             Else
