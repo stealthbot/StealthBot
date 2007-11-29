@@ -63,10 +63,12 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
     
     Game = ParseStatstring(OriginalStatstring, pStats, Clan)
 
-    frmChat.AddChat RTBColors.JoinText, "-- ", _
-        RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
-            RTBColors.JoinText, " has joined the channel using " & pStats
-            
+    If (Not (JoinMessagesOff)) Then
+        frmChat.AddChat RTBColors.JoinText, "-- ", _
+            RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
+                RTBColors.JoinText, " has joined the channel using " & pStats
+    End If
+    
     If (Dii) Then
         If (Not (checkChannel(Username) <> 0)) Then
             Call AddName(Username, Product, Flags, Ping, Clan)
