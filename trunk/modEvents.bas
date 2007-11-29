@@ -61,18 +61,22 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         End If
     End If
     
-    For i = 1 To colChatQueue.Count
-        ' ...
-        Set clsChatQueue = colChatQueue(i)
-        
-        If (StrComp(Username, clsChatQueue.Username, _
-            vbBinaryCompare) = 0) Then
-        
-            Exit For
-        End If
-    Next i
+    If (Filters) Then
+        For i = 1 To colChatQueue.Count
+            ' ...
+            Set clsChatQueue = colChatQueue(i)
+            
+            If (StrComp(Username, clsChatQueue.Username, _
+                vbBinaryCompare) = 0) Then
+            
+                Exit For
+            End If
+        Next i
+    End If
     
-    If (i >= (colChatQueue.Count + 1)) Then
+    If ((Not (Filters)) Or _
+        (i >= (colChatQueue.Count + 1))) Then
+        
         Call Event_QueuedStatusUpdate(Username, Flags, prevflags, Ping, Product, _
             vbNullString, vbNullString, vbNullString)
     Else
@@ -636,22 +640,25 @@ theEnd:
             Call FlashWindow
         End If
         
-        
-        For i = 1 To colChatQueue.Count
-            ' ...
-            Dim clsChatQueue As clsChatQueue
-        
-            ' ...
-            Set clsChatQueue = colChatQueue(i)
+        If (Filters) Then
+            For i = 1 To colChatQueue.Count
+                ' ...
+                Dim clsChatQueue As clsChatQueue
             
-            If (StrComp(Username, clsChatQueue.Username, _
-                vbBinaryCompare) = 0) Then
-            
-                Exit For
-            End If
-        Next i
+                ' ...
+                Set clsChatQueue = colChatQueue(i)
+                
+                If (StrComp(Username, clsChatQueue.Username, _
+                    vbBinaryCompare) = 0) Then
+                
+                    Exit For
+                End If
+            Next i
+        End If
         
-        If (i >= (colChatQueue.Count + 1)) Then
+        If ((Not (Filters)) Or _
+            (i >= (colChatQueue.Count + 1))) Then
+            
             frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, _
                 Username & Space(1), RTBColors.EmoteText, Message & ">"
         Else
@@ -919,6 +926,10 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         If JoinMessagesOff = False Then
         
+
+        End If
+        
+        If (Filters) Then
             With clsChatQueue
                 .Username = Username
                 .Time = GetTickCount()
@@ -928,10 +939,9 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 OriginalStatstring, w3icon)
             
             Call colChatQueue.Add(clsChatQueue)
-            
-            'frmChat.AddChat RTBColors.JoinText, "-- ", _
-            '        RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
-            '        RTBColors.JoinText, " has joined the channel using " & Message
+        Else
+            Call Event_QueuedJoin(Username, Flags, Ping, Product, sClan, _
+                OriginalStatstring, w3icon)
         End If
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1268,21 +1278,25 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     
     ' ...
     If ((JoinMessagesOff = False) And (Not (bFlood))) Then
-        For i = 1 To colChatQueue.Count
-            ' ...
-            Dim clsChatQueue As clsChatQueue
-        
-            ' ...
-            Set clsChatQueue = colChatQueue(i)
+        If (Filters) Then
+            For i = 1 To colChatQueue.Count
+                ' ...
+                Dim clsChatQueue As clsChatQueue
             
-            If (StrComp(Username, clsChatQueue.Username, _
-                vbBinaryCompare) = 0) Then
-            
-                Exit For
-            End If
-        Next i
+                ' ...
+                Set clsChatQueue = colChatQueue(i)
+                
+                If (StrComp(Username, clsChatQueue.Username, _
+                    vbBinaryCompare) = 0) Then
+                
+                    Exit For
+                End If
+            Next i
+        End If
         
-        If (i >= (colChatQueue.Count + 1)) Then
+        If ((Not (Filters)) Or _
+            (i >= (colChatQueue.Count + 1))) Then
+            
             frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, Username, _
                 RTBColors.JoinText, " has left the channel."
         Else
@@ -1385,24 +1399,25 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
             FlashWindow
         End If
         
-        For i = 1 To colChatQueue.Count
-            ' ...
-            Dim clsChatQueue As clsChatQueue
+        If (Filters) Then
+            For i = 1 To colChatQueue.Count
+                ' ...
+                Dim clsChatQueue As clsChatQueue
+            
+                ' ...
+                Set clsChatQueue = colChatQueue(i)
+                
+                If (StrComp(Username, clsChatQueue.Username, _
+                    vbBinaryCompare) = 0) Then
+                
+                    Exit For
+                End If
+            Next i
+        End If
         
-            ' ...
-            Set clsChatQueue = colChatQueue(i)
-            
-            If (StrComp(Username, clsChatQueue.Username, _
-                vbBinaryCompare) = 0) Then
-            
-                Exit For
-            End If
-        Next i
-        
-        If (i >= (colChatQueue.Count + 1)) Then
-            'frmChat.AddChat CaratColor, "<", UsernameColor, Username, _
-            '    CaratColor, "> ", TextColor, Message
-            
+        If ((Not (Filters)) Or _
+            (i >= (colChatQueue.Count + 1))) Then
+           
             Call Event_QueuedTalk(Username, Flags, Ping, Message)
         Else
             Set clsChatQueue = colChatQueue(i)
