@@ -94,6 +94,10 @@ End Sub
 Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     ChannelName = KillNull(ChannelName)
     
+    ' we want to reset our filter
+    ' values when we join a new channel
+    BotVars.JoinWatch = 0
+    
     If (frmChat.mnuUTF8.Checked) Then
         ChannelName = KillNull(UTF8Decode(ChannelName))
     End If
@@ -643,9 +647,15 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
             Call WriteINI("Other", "Filters", "Y")
                     
             Filters = True
+            
+            AutoChatFilter = GetTickCount()
         End If
             
         BotVars.JoinWatch = 0
+        
+        If (AutoChatFilter) Then
+            AutoChatFilter = GetTickCount()
+        End If
     End If
 
 theEnd:
@@ -1199,9 +1209,15 @@ theEnd:
                 Call WriteINI("Other", "Filters", "Y")
                         
                 Filters = True
+                
+                AutoChatFilter = GetTickCount()
             End If
             
             BotVars.JoinWatch = 0
+            
+            If (AutoChatFilter) Then
+                AutoChatFilter = GetTickCount()
+            End If
         End If
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1407,11 +1423,17 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
                         "deactivate them by pressing CTRL + F."
         
                 Call WriteINI("Other", "Filters", "Y")
-                        
+
                 Filters = True
+                
+                AutoChatFilter = GetTickCount()
             End If
                 
             BotVars.JoinWatch = 0
+            
+            If (AutoChatFilter) Then
+                AutoChatFilter = GetTickCount()
+            End If
         End If
         
         b = False

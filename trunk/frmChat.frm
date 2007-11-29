@@ -4945,7 +4945,23 @@ Private Sub Timer_Timer()
     End If
     
     If ReadCFG("Other", "ProfileAmp") = "Y" And sckBNet.State = 7 Then Call UpdateProfile
+    
+    
     BotVars.JoinWatch = 0
+    
+    If (AutoChatFilter) Then
+        If ((GetTickCount() - AutoChatFilter) >= 60000) Then
+            frmChat.AddChat RTBColors.TalkBotUsername, _
+                "Chat filters have been deactivated; " & _
+                    "activate them by pressing CTRL + F."
+        
+            Call WriteINI("Other", "Filters", "N")
+        
+            Filters = False
+            
+            AutoChatFilter = 0
+        End If
+    End If
     
     If Not mnuDisableVoidView.Checked Then
         If gChannel.Current = "The Void" Then

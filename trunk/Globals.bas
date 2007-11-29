@@ -73,6 +73,7 @@ Public ReconnectTimerID As Long
 Public ExReconnectTimerID As Long
 Public SCReloadTimerID As Long
 Public ClanAcceptTimerID As Long
+Public AutoChatFilter As Long
 
 Public rtbWhispersVisible As Boolean
 Public cboSendHadFocus As Boolean
