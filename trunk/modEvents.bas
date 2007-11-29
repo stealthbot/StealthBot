@@ -635,7 +635,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     End If
     
     If (Len(Message) >= 75) Then
-        BotVars.JoinWatch = (BotVars.JoinWatch + 5)
+        BotVars.JoinWatch = (BotVars.JoinWatch + 3)
     End If
     
     If (BotVars.JoinWatch >= 20) Then
@@ -1413,7 +1413,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         End If
                 
         If (Len(Message) >= 75) Then
-            BotVars.JoinWatch = (BotVars.JoinWatch + 5)
+            BotVars.JoinWatch = (BotVars.JoinWatch + 3)
         End If
         
         If (BotVars.JoinWatch >= 20) Then
