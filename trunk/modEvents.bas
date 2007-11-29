@@ -630,8 +630,22 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
         End If
     End If
     
-    If (Len(Message) > 135) Then
+    If (Len(Message) >= 75) Then
         BotVars.JoinWatch = (BotVars.JoinWatch + 5)
+    End If
+    
+    If (BotVars.JoinWatch >= 20) Then
+        If (Not (Filters)) Then
+            frmChat.AddChat RTBColors.TalkBotUsername, _
+                "Chat filters have been activated due to rejoin flooding; " & _
+                    "deactivate them by pressing CTRL + F."
+    
+            Call WriteINI("Other", "Filters", "Y")
+                    
+            Filters = True
+        End If
+            
+        BotVars.JoinWatch = 0
     End If
 
 theEnd:
@@ -1161,9 +1175,7 @@ theEnd:
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         BotVars.JoinWatch = (BotVars.JoinWatch + 1)
         
-        If (BotVars.JoinWatch > 20) Then
-            BotVars.JoinWatch = 0
-            
+        If (BotVars.JoinWatch >= 20) Then
             'If (Not (JoinMessagesOff)) Then
             '    If (ForcedJoinsOn = 0) Then
             '        frmChat.AddChat RTBColors.TalkBotUsername, _
@@ -1188,6 +1200,8 @@ theEnd:
                         
                 Filters = True
             End If
+            
+            BotVars.JoinWatch = 0
         End If
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1382,17 +1396,22 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
             End If
         End If
                 
-        If (Len(Message) > 100) Then
+        If (Len(Message) >= 75) Then
             BotVars.JoinWatch = (BotVars.JoinWatch + 5)
         End If
         
-        If ((BotVars.JoinWatch > 30) And (Not (Filters))) Then
-            frmChat.AddChat RTBColors.TalkBotUsername, "Spamming detected; " & _
-                "chat filters have been turned on."
+        If (BotVars.JoinWatch >= 20) Then
+            If (Not (Filters)) Then
+                frmChat.AddChat RTBColors.TalkBotUsername, _
+                    "Chat filters have been activated due to rejoin flooding; " & _
+                        "deactivate them by pressing CTRL + F."
+        
+                Call WriteINI("Other", "Filters", "Y")
+                        
+                Filters = True
+            End If
                 
             BotVars.JoinWatch = 0
-            
-            Filters = True
         End If
         
         b = False
