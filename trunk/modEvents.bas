@@ -1164,25 +1164,25 @@ theEnd:
         If (BotVars.JoinWatch > 20) Then
             BotVars.JoinWatch = 0
             
-            If (Not (JoinMessagesOff)) Then
-                If (ForcedJoinsOn = 0) Then
-                    frmChat.AddChat RTBColors.TalkBotUsername, _
-                        "Rejoin flooding and/or massloading detected!"
-                        
-                    frmChat.AddChat RTBColors.TalkBotUsername, _
-                        "Join/Leave Messages have been disabled due to rejoin flooding. " & _
-                            "Reactivate them by pressing CTRL + J."
-                    
-                    JoinMessagesOff = True
-                    
-                    ForcedJoinsOn = 2
-                End If
-            End If
+            'If (Not (JoinMessagesOff)) Then
+            '    If (ForcedJoinsOn = 0) Then
+            '        frmChat.AddChat RTBColors.TalkBotUsername, _
+            '            "Rejoin flooding and/or massloading detected!"
+            '
+            '        frmChat.AddChat RTBColors.TalkBotUsername, _
+            '            "Join/Leave Messages have been disabled due to rejoin flooding. " & _
+            '                "Reactivate them by pressing CTRL + J."
+            '
+            '        JoinMessagesOff = True
+            '
+            '        ForcedJoinsOn = 2
+            '    End If
+            'End If
             
             If (Not (Filters)) Then
                 frmChat.AddChat RTBColors.TalkBotUsername, _
-                    "Chat filters have been activated due to rejoin flooding. " & _
-                        "Deactivate them by pressing CTRL + F."
+                    "Chat filters have been activated due to rejoin flooding; " & _
+                        "deactivate them by pressing CTRL + F."
                         
                 Filters = True
             End If
