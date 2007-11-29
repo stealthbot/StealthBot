@@ -1183,6 +1183,8 @@ theEnd:
                 frmChat.AddChat RTBColors.TalkBotUsername, _
                     "Chat filters have been activated due to rejoin flooding; " & _
                         "deactivate them by pressing CTRL + F."
+        
+                Call WriteINI("Other", "Filters", "Y")
                         
                 Filters = True
             End If

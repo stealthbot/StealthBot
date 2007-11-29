@@ -5473,7 +5473,12 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     End If
     
     s = ReadCFG(OT, "Filters")
-    If s = "Y" Then Filters = True Else Filters = False
+    
+    If s = "Y" Then
+        Filters = True
+    Else
+        Filters = False
+    End If
     
     BotVars.AutofilterMS = 300 'default
     s = ReadCFG(MN, "AutofilterMS")
@@ -5504,54 +5509,58 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCFG(OT, "UseGameConventions")
     
     If (s = "Y") Then
-        BotVars.UseGameConventions = True
-
-        If (colUsersInChannel.Count) Then
-            For i = 1 To colUsersInChannel.Count
-                Index = _
-                    checkChannel(colUsersInChannel(i).Username)
-            
-                colUsersInChannel(i).Username = _
-                    reverseUsername(colUsersInChannel(i).Username)
-
-                If (Index) Then
-                    lvChannel.ListItems(Index).text = _
-                        colUsersInChannel(i).Username
-                End If
-            Next i
-        End If
+        If (BotVars.UseGameConventions = False) Then
+            BotVars.UseGameConventions = True
         
-        If (g_Online) Then
-            CurrentUsername = _
-                reverseUsername(CurrentUsername)
+            If (colUsersInChannel.Count) Then
+                For i = 1 To colUsersInChannel.Count
+                    Index = _
+                        checkChannel(colUsersInChannel(i).Username)
                 
-            SetTitle CurrentUsername & ", online in channel " & _
-                gChannel.Current
+                    colUsersInChannel(i).Username = _
+                        reverseUsername(colUsersInChannel(i).Username)
+    
+                    If (Index) Then
+                        lvChannel.ListItems(Index).text = _
+                            colUsersInChannel(i).Username
+                    End If
+                Next i
+            End If
+        
+            If (g_Online) Then
+                CurrentUsername = _
+                    reverseUsername(CurrentUsername)
+                    
+                SetTitle CurrentUsername & ", online in channel " & _
+                    gChannel.Current
+            End If
         End If
     Else
-        BotVars.UseGameConventions = False
+        If (BotVars.UseGameConventions) Then
+            BotVars.UseGameConventions = False
         
-        If (colUsersInChannel.Count) Then
-            For i = 1 To colUsersInChannel.Count
-                Index = _
-                    checkChannel(colUsersInChannel(i).Username)
-            
-                colUsersInChannel(i).Username = _
-                    convertUsername(colUsersInChannel(i).Username)
-
-                If (Index) Then
-                    lvChannel.ListItems(Index).text = _
-                        colUsersInChannel(i).Username
-                End If
-            Next i
-        End If
-        
-        If (g_Online) Then
-            CurrentUsername = _
-                convertUsername(CurrentUsername)
+            If (colUsersInChannel.Count) Then
+                For i = 1 To colUsersInChannel.Count
+                    Index = _
+                        checkChannel(colUsersInChannel(i).Username)
                 
-            SetTitle CurrentUsername & ", online in channel " & _
-                gChannel.Current
+                    colUsersInChannel(i).Username = _
+                        convertUsername(colUsersInChannel(i).Username)
+    
+                    If (Index) Then
+                        lvChannel.ListItems(Index).text = _
+                            colUsersInChannel(i).Username
+                    End If
+                Next i
+            End If
+            
+            If (g_Online) Then
+                CurrentUsername = _
+                    convertUsername(CurrentUsername)
+                    
+                SetTitle CurrentUsername & ", online in channel " & _
+                    gChannel.Current
+            End If
         End If
     End If
     
