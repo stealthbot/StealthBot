@@ -823,7 +823,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -849,7 +848,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4060,10 +4058,15 @@ Private Sub cboSend_KeyUp(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
-    Dim i As Long, l As Long
-    Dim n As Integer, c As Integer ',oldSelStart As Integer
-    Dim X() As String, m As String, s As String ', sClosest As String
     Dim Temp As udtGetAccessResponse
+    
+    Dim i As Long
+    Dim l As Long
+    Dim n As Integer
+    Dim c As Integer ',oldSelStart As Integer
+    Dim X() As String
+    Dim m As String
+    Dim s As String ',sClosest As String
     Dim Vetoed As Boolean
     
     Const S_SHIFT = 1
@@ -4084,13 +4087,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
 
     With lvChannel
 
-        If Not (.SelectedItem Is Nothing) Then
+        If (Not (.SelectedItem Is Nothing)) Then
             i = .SelectedItem.Index
         End If
 
-        Select Case KeyCode
-
-            Case KEY_PGDN 'ALT+PAGEDOWN
+        Select Case (KeyCode)
+            Case KEY_PGDN 'ALT + PAGEDOWN
                 If Shift = S_ALT Then
                     If i < .ListItems.Count Then
                         .ListItems.Item(i + 1).Selected = True
@@ -4103,7 +4105,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Exit Sub
                 End If
 
-            Case KEY_PGUP 'ALT+PAGEUP
+            Case KEY_PGUP 'ALT + PAGEUP
                 If Shift = S_ALT Then
                     If i > 1 Then
                         .ListItems.Item(i - 1).Selected = True
@@ -4116,13 +4118,13 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Exit Sub
                 End If
 
-            Case KEY_ALTN, KEY_INSERT 'ALT+N or ALT+INSERT
-                If Shift = S_ALT Then
+            Case KEY_ALTN, KEY_INSERT 'ALT + N or ALT + INSERT
+                If (Shift = S_ALT) Then
                     's = NameWithoutRealm(GetSelectedUser)
                     'c = .SelectedItem.Index
                     'Unfinished business - suggestion from Engel
                                             
-                    If Not (.SelectedItem Is Nothing) Then
+                    If (Not (.SelectedItem Is Nothing)) Then
                         cboSend.SelText = .SelectedItem.text
                         cboSend.SelStart = cboSend.SelStart + Len(.SelectedItem.text)
                     End If
@@ -4130,11 +4132,13 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
 
             Case KEY_HOME 'ALT+HOME
                 If Shift = S_ALT Then
-                    If i > 0 Then
+                    If (i > 0) Then
                         .ListItems.Item(1).Selected = True
+                        
                         For c = 1 To .ListItems.Count
                             .ListItems.Item(c).Ghosted = False
                         Next c
+                        
                         .ListItems.Item(1).Ghosted = True
     
                         cboSend.SetFocus
@@ -4162,26 +4166,29 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 End If
                 
             Case KEY_V 'PASTE
-                If Shift = S_CTRL Then
+                If (Shift = S_CTRL) Then
                     On Error Resume Next
                     
-                    If InStr(1, Clipboard.GetText, Chr(13), vbTextCompare) <> 0 Then
-                    
+                    If (InStr(1, Clipboard.GetText, Chr(13), vbTextCompare) <> 0) Then
                         X() = Split(Clipboard.GetText, Chr(10))
+                        
                         If UBound(X) > 0 Then
                             For n = LBound(X) To UBound(X)
                                 X(n) = Replace(X(n), Chr(13), vbNullString)
                                 
-                                If X(n) <> vbNullString Then
-                                    If n <> LBound(X) Then
+                                If (X(n) <> vbNullString) Then
+                                    If (n <> LBound(X)) Then
                                         AddQ txtPre.text & X(n) & txtPost.text
+                                        
                                         cboSend.AddItem txtPre.text & X(n) & txtPost.text, 0
                                     Else
                                         AddQ txtPre.text & cboSend.text & X(n) & txtPost.text
+                                        
                                         cboSend.AddItem txtPre.text & cboSend.text & X(n) & txtPost.text, 0
                                     End If
                                 End If
                             Next n
+                            
                             cboSend.text = vbNullString
                             
                             MultiLinePaste = True
@@ -4190,28 +4197,30 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 End If
                 
             Case KEY_A
-                If Shift = S_CTRL Then
+                If (Shift = S_CTRL) Then
                     c = ListviewTabs.TabIndex
                     ListviewTabs.TabIndex = 0
                     Call ListviewTabs_Click(c)
                 End If
                 
             Case KEY_S
-                If Shift = S_CTRL Then
+                If (Shift = S_CTRL) Then
                     c = ListviewTabs.TabIndex
                     ListviewTabs.TabIndex = 1
                     Call ListviewTabs_Click(c)
                 End If
                 
             Case KEY_D
-                If Shift = S_CTRL Then
+                If (Shift = S_CTRL) Then
                     c = ListviewTabs.TabIndex
+                    
                     ListviewTabs.TabIndex = 2
+                    
                     Call ListviewTabs_Click(c)
                 End If
                 
             Case KEY_B
-                If Shift = S_CTRL Then
+                If (Shift = S_CTRL) Then
                     With cboSend
                         .SelText = "ÿcb"
                         .SelLength = 0
@@ -4220,12 +4229,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 End If
                 
             Case KEY_J
-                If Shift = S_CTRL Then
+                If (Shift = S_CTRL) Then
                     Call mnuToggle_Click
                 End If
                 
             Case KEY_U
-                If Shift = S_CTRL Then
+                If (Shift = S_CTRL) Then
                     With cboSend
                         .SelText = "ÿcu"
                         .SelLength = 0
@@ -4234,7 +4243,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 End If
                 
             Case KEY_I
-                If Shift = S_CTRL Then
+                If (Shift = S_CTRL) Then
                     With cboSend
                         .SelText = "ÿci"
                         .SelLength = 0
@@ -4250,92 +4259,96 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 Dim tmpStr    As String ' ...
                 Dim res       As String ' ...
             
-                With cboSend
-                    If (.SelStart > 0) Then
-                        prevStart = .SelStart
-                        
-                        ' ...
-                        tmpStr = Mid$(.text, 1, prevStart)
-                    End If
-                    
-                    If (InStr(1, tmpStr, Space(1), vbBinaryCompare) <> 0) Then
-                        Dim tmp As String ' ...
-                    
-                        ' ...
-                        tmp = Mid$(tmpStr, InStrRev(tmpStr, Space(1)) + 1)
-                        
-                        If (Highlighted = True) Then
-                            ' ...
-                            res = MatchClosest(tmp, _
-                                IIf(MatchIndex, MatchIndex + 1, 1))
-                        Else
-                            If (MatchIndex > 0) Then
-                                ' ...
-                                res = MatchClosest(tmp, MatchIndex)
-                            End If
-                        End If
-
-                        ' try again from the top
-                        If (Len(res) = 0) Then
-                            res = MatchClosest(tmp, 1)
-                        End If
-                        
-                        ' final check
-                        If (res <> vbNullString) Then
-                            If (prevStart > 0) Then
-                                res = Mid$(res, Len(tmp) + 1)
-                            End If
-                        
-                            .text = tmpStr & _
-                                res
-                                
-                            Highlighted = True
-                        End If
-                    Else
-                        If (Highlighted = True) Then
-                            ' look for match
-                            res = MatchClosest(tmpStr, _
-                                IIf(MatchIndex, MatchIndex + 1, 1))
-                        Else
-                            If (MatchIndex > 0) Then
-                                res = MatchClosest(tmpStr, MatchIndex)
-                            End If
-                        End If
+                If (Shift) Then
+                    Call cboSend_LostFocus
+                Else
+                    With cboSend
+                        If (.SelStart > 0) Then
+                            prevStart = .SelStart
                             
-                        ' try again from the top
-                        If (Len(res) = 0) Then
-                            res = MatchClosest(tmpStr, 1)
+                            ' ...
+                            tmpStr = Mid$(.text, 1, prevStart)
                         End If
-                    
-                        ' final check
-                        If (res <> vbNullString) Then
-                            If (prevStart > 0) Then
-                                res = Mid$(res, Len(tmpStr) + 1)
+                        
+                        If (InStr(1, tmpStr, Space(1), vbBinaryCompare) <> 0) Then
+                            Dim tmp As String ' ...
+                        
+                            ' ...
+                            tmp = Mid$(tmpStr, InStrRev(tmpStr, Space(1)) + 1)
+                            
+                            If (Highlighted = True) Then
+                                ' ...
+                                res = MatchClosest(tmp, _
+                                    IIf(MatchIndex, MatchIndex + 1, 1))
+                            Else
+                                If (MatchIndex > 0) Then
+                                    ' ...
+                                    res = MatchClosest(tmp, MatchIndex)
+                                End If
+                            End If
+    
+                            ' try again from the top
+                            If (Len(res) = 0) Then
+                                res = MatchClosest(tmp, 1)
+                            End If
+                            
+                            ' final check
+                            If (res <> vbNullString) Then
+                                If (prevStart > 0) Then
+                                    res = Mid$(res, Len(tmp) + 1)
+                                End If
+                            
+                                .text = tmpStr & _
+                                    res
+                                    
+                                Highlighted = True
+                            End If
+                        Else
+                            If (Highlighted = True) Then
+                                ' look for match
+                                res = MatchClosest(tmpStr, _
+                                    IIf(MatchIndex, MatchIndex + 1, 1))
+                            Else
+                                If (MatchIndex > 0) Then
+                                    res = MatchClosest(tmpStr, MatchIndex)
+                                End If
+                            End If
+                                
+                            ' try again from the top
+                            If (Len(res) = 0) Then
+                                res = MatchClosest(tmpStr, 1)
                             End If
                         
-                            .text = tmpStr & _
-                                res
-                                
-                            Highlighted = True
+                            ' final check
+                            If (res <> vbNullString) Then
+                                If (prevStart > 0) Then
+                                    res = Mid$(res, Len(tmpStr) + 1)
+                                End If
+                            
+                                .text = tmpStr & _
+                                    res
+                                    
+                                Highlighted = True
+                            End If
                         End If
-                    End If
-            
-                    .SelStart = prevStart
-                    .SelLength = (Len(.text) - .SelStart)
-                End With
+                
+                        .SelStart = prevStart
+                        .SelLength = (Len(.text) - .SelStart)
+                    End With
+                End If
                 
             Case KEY_ENTER
                 n = UsernameToIndex(CurrentUsername)
                 
                 'Debug.Print n
                 
-                If n > 0 Then
+                If (n > 0) Then
                     With colUsersInChannel
                         .Item(n).Acts
                     End With
                 End If
             
-                Select Case Shift
+                Select Case (Shift)
                     Case S_CTRL 'CTRL+ENTER - rewhisper
                         If LenB(cboSend.text) > 0 Then
                             AddQ "/w " & IIf(Dii, "*", "") & LastWhisperTo & Space(1) & cboSend.text
@@ -4368,32 +4381,34 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                             
                             Vetoed = GetVeto
                             
-                            If Not Vetoed Then
-                                If ((Left$(s, 6) = "/tell ") And (Len(s) > 6)) Then
+                            If (Not (Vetoed)) Then
+                                If ((Left$(s, 6) = "/tell ") And _
+                                    (Len(s) > 6)) Then
+                                    
                                     s = "/w " & Mid$(s, 7)
                                 End If
                                 
                                 s = txtPre.text & cboSend.text & txtPost.text
                                 
-                                If (LCase(s) = "/rejoin") Then
+                                If (LCase$(s) = "/rejoin") Then
                                     RejoinChannel gChannel.Current
                                     
-                                ElseIf (LCase(s) = "/fl" And MDebug("debug")) Then
+                                ElseIf (LCase$(s) = "/fl" And MDebug("debug")) Then
                                     For n = 1 To FriendListHandler.colFriends.Count
                                         AddChat vbMagenta, FriendListHandler.colFriends.Item(n).Username & " - " & FriendListHandler.colFriends.Item(n).Product
                                     Next n
                                 
-                                ElseIf (LCase(s) = "/accountinfo") Then
+                                ElseIf (LCase$(s) = "/accountinfo") Then
                                     RequestSystemKeys
                                     
                                     GoTo theEnd
                                     
-                                ElseIf (LCase(s) = "/cls") Then
+                                ElseIf (LCase$(s) = "/cls") Then
                                     Call mnuClear_Click
                                     
                                     GoTo theEnd
                                     
-                                ElseIf (LCase(s) = "/ds_list") Then
+                                ElseIf (LCase$(s) = "/ds_list") Then
                                     Call ds.List
                                     
                                     GoTo theEnd
@@ -4449,11 +4464,11 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     
                                     GoTo theEnd
                                     
-                                ElseIf LCase(s) = "/watchoff" Then
+                                ElseIf LCase$(s) = "/watchoff" Then
                                     WatchUser = vbNullString
                                     AddChat RTBColors.ConsoleText, "Watch off."
                                     GoTo theEnd
-                                'ElseIf LCase(s) = "/li" Then
+                                'ElseIf LCase$(s) = "/li" Then
                                 '
                                 '    AddChat vbMagenta, "AWAITING_CHPW: " & IF_AWAITING_CHPW
                                 '    AddChat vbMagenta, "CHPW_AND_IDLEBANS: " & IF_CHPW_AND_IDLEBANS
@@ -4465,7 +4480,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 '    GoTo theEnd
                                 ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
                                     m = Right(s, (Len(s) - 7))
-                                'ElseIf LCase(s) = "/li" Then
+                                'ElseIf LCase$(s) = "/li" Then
                                 '
                                 '    AddChat vbMagenta, "AWAITING_CHPW: " & IF_AWAITING_CHPW
                                 '    AddChat vbMagenta, "CHPW_AND_IDLEBANS: " & IF_CHPW_AND_IDLEBANS
@@ -5420,7 +5435,7 @@ Sub ClearChannel()
     lblCurrentChannel.Caption = vbNullString
     lvChannel.Enabled = True
     
-    If Len(gChannel.staticDesignee) > 0 Then
+    If (Len(gChannel.staticDesignee) > 0) Then
         gChannel.Designated = gChannel.staticDesignee
         gChannel.staticDesignee = vbNullString
     End If
@@ -5838,19 +5853,18 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
 End Sub
 
 'returns OK to Proceed
-Function DisplayError(ByVal ErrorNumber As Integer, bytType As Byte, ByVal Source As enuErrorSources) As Boolean
+Function DisplayError(ByVal ErrorNumber As Integer, bytType As Byte, _
+    ByVal Source As enuErrorSources) As Boolean
+    
     Dim s As String
     
     s = GErrorHandler.GetErrorString(ErrorNumber, Source)
     
-    If LenB(s) > 0 Then
-        Select Case bytType
-            Case 0 'BNLS
-                s = "[BNLS] " & s
-            Case 1
-                s = "[BNET] " & s
-            Case 2
-                s = "[PROXY] " & s
+    If (LenB(s) > 0) Then
+        Select Case (bytType)
+            Case 0: s = "[BNLS] " & s
+            Case 1: s = "[BNET] " & s
+            Case 2: s = "[PROXY] " & s
         End Select
         
         AddChat RTBColors.ErrorMessageText, s
@@ -5860,40 +5874,56 @@ Function DisplayError(ByVal ErrorNumber As Integer, bytType As Byte, ByVal Sourc
 End Function
 
 Sub LoadOutFilters()
-    Dim s As String, i As Integer
     Const o As String = "Outgoing"
     Const f As String = "filters.ini"
     
+    Dim s   As String
+    Dim i   As Integer
+    
     ReDim gOutFilters(1 To 1)
     ReDim Catch(0)
+    
     Catch(0) = vbNullString
     
     s = ReadINI(o, "Total", f)
-    If Not StrictIsNumeric(s) Then Exit Sub
+    
+    If (Not (StrictIsNumeric(s))) Then
+        Exit Sub
+    End If
     
     For i = 1 To Val(s)
         gOutFilters(i).ofFind = Replace(LCase(ReadINI(o, "Find" & i, f)), "¦", " ")
         gOutFilters(i).ofReplace = Replace(ReadINI(o, "Replace" & i, f), "¦", " ")
-        If i <> Val(s) Then ReDim Preserve gOutFilters(1 To i + 1)
+        
+        If (i <> Val(s)) Then
+            ReDim Preserve gOutFilters(1 To i + 1)
+        End If
     Next i
     
-    If Dir$(GetFilePath("catchphrases.txt")) <> vbNullString Then
+    If (Dir$(GetFilePath("catchphrases.txt")) <> vbNullString) Then
         i = FreeFile
-        Open GetFilePath("catchphrases.txt") For Input As #i
-        If LOF(i) < 2 Then
-            Close #i
-            Exit Sub
-        End If
         
-        Do While Not EOF(i)
-            Line Input #i, s
-            If s <> vbNullString And s <> " " Then
-                Catch(UBound(Catch)) = LCase(s)
-                ReDim Preserve Catch(0 To UBound(Catch) + 1)
+        Open GetFilePath("catchphrases.txt") For Input As #i
+        
+            If (LOF(i) < 2) Then
+                Close #i
+                
+                Exit Sub
             End If
-        Loop
-        'Note: Why did this happen?
-        'If Catch(0) = vbNullString Then Catch(0) = "¯"
+            
+            Do While Not EOF(i)
+                Line Input #i, s
+                
+                If ((s <> vbNullString) And (s <> " ")) Then
+                    Catch(UBound(Catch)) = LCase$(s)
+                    
+                    ReDim Preserve Catch(0 To UBound(Catch) + 1)
+                End If
+            Loop
+            
+            'Note: Why did this happen?
+            'If Catch(0) = vbNullString Then Catch(0) = "¯"
+            
         Close #i
     End If
 End Sub
@@ -5901,10 +5931,10 @@ End Sub
 Function OutFilterMsg(ByVal strOut As String) As String
     Dim i As Integer
     
-    If UBound(gOutFilters) > 0 Then
-    
+    If (UBound(gOutFilters) > 0) Then
         For i = LBound(gOutFilters) To UBound(gOutFilters)
-            strOut = Replace(strOut, gOutFilters(i).ofFind, gOutFilters(i).ofReplace)
+            strOut = Replace(strOut, gOutFilters(i).ofFind, _
+                gOutFilters(i).ofReplace)
         Next i
     End If
     
