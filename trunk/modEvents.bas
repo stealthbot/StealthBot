@@ -12,6 +12,8 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     Dim i            As Integer  ' ...
     Dim prevflags    As Long     ' ...
     
+    ' if our username is for some reason null, we don't
+    ' want to continue, possibly causing further errors
     If (LenB(Username) < 1) Then
         Exit Sub
     End If
@@ -37,6 +39,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         End With
     End If
     
+    ' are we receiving a flag update for ourselves?
     If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
         ' assign my current flags to the
         ' relevant internal variable
@@ -117,11 +120,11 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     ' destroy instance of chat queue
     Set clsChatQueue = Nothing
     
-    On Error Resume Next
-    
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' call event script function
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    
+    On Error Resume Next
     
     frmChat.SControl.Run "Event_FlagUpdate", Username, Flags, Ping
 End Sub
@@ -131,49 +134,66 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     ' values when we join a new channel
     BotVars.JoinWatch = 0
     
-    If (frmChat.mnuUTF8.Checked) Then
-        ChannelName = KillNull(UTF8Decode(ChannelName))
+    ' if our channel is for some reason null, we don't
+    ' want to continue, possibly causing further errors
+    If (Len(ChannelName) < 1) Then
+        Exit Sub
     End If
-    
-    If (Len(ChannelName) > 0) Then
-        If (LenB(gChannel.Current)) Then
-        
-            On Error Resume Next
-            
-            frmChat.SControl.Run "Event_ChannelLeave"
-        End If
-    
-        BanCount = 0
-        
-        Call frmChat.ClearChannel
-        
-        frmChat.AddChat RTBColors.JoinedChannelText, "-- Joined channel: ", _
-            RTBColors.JoinedChannelName, ChannelName, RTBColors.JoinedChannelText, " --"
-        
-        gChannel.Current = ChannelName
-        
-        SharedScriptSupport.myChannel = ChannelName
-        
-        SetTitle CurrentUsername & ", online in channel " & gChannel.Current
-        
-        If (StrComp(ChannelName, "The Void", vbBinaryCompare) = 0) Then
-            frmChat.AddChat RTBColors.InformationText, "If you experience a lot of lag " & _
-                "in The Void, try selecting 'Disable Void View' from the Window menu."
-            
-            If (Not (frmChat.mnuDisableVoidView.Checked)) Then
-                frmChat.AddQ "/unignore " & IIf(Dii, "*", "") & _
-                    CurrentUsername, 1
-            End If
-        End If
-        
-        frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
 
-        Call WriteINI("Other", "LastChannel", ChannelName)
-        
+    ' if we've just left another channel, call event script
+    ' function indicating that we've done so.
+    If (LenB(gChannel.Current)) Then
         On Error Resume Next
         
-        frmChat.SControl.Run "Event_ChannelJoin", ChannelName, Flags
+        frmChat.SControl.Run "Event_ChannelLeave"
     End If
+
+    BanCount = 0
+    
+    Call frmChat.ClearChannel
+    
+    frmChat.AddChat RTBColors.JoinedChannelText, "-- Joined channel: ", _
+        RTBColors.JoinedChannelName, ChannelName, RTBColors.JoinedChannelText, " --"
+    
+    gChannel.Current = ChannelName
+    
+    SharedScriptSupport.myChannel = ChannelName
+    
+    SetTitle CurrentUsername & ", online in channel " & _
+        gChannel.Current
+    
+    ' have we just joined the void?
+    If (StrComp(ChannelName, "The Void", vbBinaryCompare) = 0) Then
+        ' lets inform user of potential lag issues while in this channel
+        frmChat.AddChat RTBColors.InformationText, "If you experience a lot of lag " & _
+            "in The Void, try selecting 'Disable Void View' from the Window menu."
+        
+        ' if we've joined the void, lets try to grab the list of
+        ' users within the channel by attempting to force a user
+        ' update message using Battle.net's unignore command.
+        If (Not (frmChat.mnuDisableVoidView.Checked)) Then
+            frmChat.AddQ "/unignore " & _
+                reverseUsername(CurrentUsername), 1
+        End If
+    End If
+    
+    ' lets update frmChat's caption with the current
+    ' channel name
+    frmChat.lblCurrentChannel.Caption = _
+        frmChat.GetChannelString()
+
+    ' lets update our configuration file with the
+    ' current channel name so that we join the channel
+    ' again automatically if we disconnect or close the bot.
+    Call WriteINI("Other", "LastChannel", ChannelName)
+    
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    
+    On Error Resume Next
+    
+    frmChat.SControl.Run "Event_ChannelJoin", ChannelName, Flags
 End Sub
 
 Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
@@ -405,6 +425,10 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
         
         ExReconnectTimerID = 0
     End If
+    
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
     On Error Resume Next
     
@@ -418,32 +442,32 @@ Public Sub Event_LogonEvent(ByVal Message As Byte, Optional ByVal ExtraInfo As S
     Dim UseExtraInfo As Boolean
     
     Select Case (Message)
-        Case 0
+        Case 0:
             lColor = RTBColors.ErrorMessageText
             
             sMessage = "Login error - account does not exist."
             
-        Case 1
+        Case 1:
             lColor = RTBColors.ErrorMessageText
             
             sMessage = "Login error - invalid password."
             
-        Case 2
+        Case 2:
             lColor = RTBColors.SuccessText
             
             sMessage = "Login successful."
             
-        Case 3
+        Case 3:
             lColor = RTBColors.InformationText
             
             sMessage = "Attempting to create account..."
             
-        Case 4
+        Case 4:
             lColor = RTBColors.SuccessText
             
             sMessage = "Account created successfully."
             
-        Case 5
+        Case 5:
             sMessage = ExtraInfo
             
             lColor = RTBColors.ErrorMessageText
@@ -468,6 +492,10 @@ End Sub
 
 Public Sub Event_ServerError(ByVal Message As String)
     frmChat.AddChat RTBColors.ErrorMessageText, Message
+    
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
     On Error Resume Next
     
@@ -607,15 +635,21 @@ Public Sub Event_ServerInfo(ByVal Message As String)
         End If
     End If
     
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    
     On Error Resume Next
     
     frmChat.SControl.Run "Event_ServerInfo", Message
 End Sub
 
 Public Sub Event_SomethingUnknown(ByVal UnknownString As String)
-    frmChat.AddChat RTBColors.ErrorMessageText, "Something unknown has happened... Did Battle.Net change something? The Unknown Event is as follows:"
+    frmChat.AddChat RTBColors.ErrorMessageText, "Something unknown has happened... " & _
+        "Did Battle.Net change something? The Unknown Event is as follows:"
     frmChat.AddChat RTBColors.ErrorMessageText, "[" & UnknownString & "]"
-    frmChat.AddChat RTBColors.ErrorMessageText, "Please report this event to Stealth as soon as possible, copy/paste this entire message."
+    frmChat.AddChat RTBColors.ErrorMessageText, "Please report this event to Stealth as soon " & _
+        "as possible, copy/paste this entire message."
 End Sub
 
 Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal Message As String)
@@ -723,6 +757,10 @@ theEnd:
             
             Call clsChatQueue.StoreEmote(Flags, 0, Message)
         End If
+        
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' call event script function
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         
         On Error Resume Next
         
@@ -840,6 +878,10 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         frmChat.AddChat vbMagenta, "Username: " & Username & ", Statstring: " & _
             OriginalStatstring
     End If
+    
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
     On Error Resume Next
     
@@ -1279,15 +1321,13 @@ theEnd:
         Call DoLastSeen(Username)
 
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        ' Tell the script bums!
+        ' call event script function
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        
         On Error Resume Next
         
-        'Debug.Print OriginalStatstring
         frmChat.SControl.Run "Event_UserJoins", Username, Flags, Message, Ping, _
             Product, Level, OriginalStatstring, Banned
-
-        'Close #f
     End If
 End Sub
 
@@ -1395,6 +1435,10 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     
     frmChat.lblCurrentChannel.Caption = _
         frmChat.GetChannelString
+        
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
     On Error Resume Next
     
@@ -1563,6 +1607,10 @@ PhraseCleared:
         End If
         
         Call ProcessCommand(Username, Message, False, False)
+        
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' call event script function
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         
 theEnd:
         On Error Resume Next
@@ -1782,6 +1830,10 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
             Call ProcessCommand(Username, Message, False, True)
         End If
         
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' call event script function
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        
         On Error Resume Next
         
         frmChat.SControl.Run "Event_WhisperFromUser", Username, Flags, Message
@@ -1893,6 +1945,10 @@ Public Sub Event_ChannelList(sChannels() As String)
                 sChannels(X)
         Next X
     End If
+    
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
     On Error Resume Next
     
