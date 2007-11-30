@@ -16,40 +16,59 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         Exit Sub
     End If
     
-    Set clsChatQueue = New clsChatQueue
-    
+    ' convert username to appropriate
+    ' display format
     Username = convertUsername(Username)
     
+    ' check for user in channel
     i = UsernameToIndex(Username)
     
-    If (i > 0) Then
+    ' the user is already in the
+    ' internal channel listings,
+    ' right?
+    If (i) Then
         With colUsersInChannel.Item(i)
             ' create a copy of previous flags for determining
             ' if a user's flags have just been changed
             prevflags = .Flags
             
+            ' update user flags
             .Flags = Flags
         End With
     End If
     
     If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
+        ' assign my current flags to the
+        ' relevant internal variable
         MyFlags = Flags
         
+        ' assign my current flags to the
+        ' relevant scripting variable
         SharedScriptSupport.BotFlags = MyFlags
         
+        ' if we're on ops, check for the presence of a user that we
+        ' should designate as an heir
         If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
             If (gChannel.Designated = vbNullString) Then
+                ' loop through list of users
                 For i = 1 To colUsersInChannel.Count
                     With GetCumulativeAccess(colUsersInChannel.Item(i).Username)
+                        ' check for auto-designation flag
                         If (InStr(1, .Flags, "D", vbBinaryCompare) > 0) Then
+                            ' is the user already an op?
                             If ((colUsersInChannel(i).Flags And USER_CHANNELOP&) <> _
                                  USER_CHANNELOP&) Then
                                 
+                                ' designate user
                                 frmChat.AddQ "/designate " & _
                                     reverseUsername(colUsersInChannel(i).Username)
     
-                                gChannel.staticDesignee = colUsersInChannel(i).Username
+                                ' store designee name for future reference
+                                gChannel.staticDesignee = _
+                                    colUsersInChannel(i).Username
                                 
+                                ' we can only designate a
+                                ' single person
                                 Exit For
                             End If
                         End If
@@ -57,9 +76,18 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                 Next i
             End If
             
+            ' We don't want anyone here that isn't
+            ' supposed to be here.
             Call checkUsers
         End If
     End If
+    
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' handle the display of user event
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    
+    ' create new instance of chat queue
+    Set clsChatQueue = New clsChatQueue
     
     If (Filters) Then
         For i = 1 To colChatQueue.Count
@@ -86,14 +114,19 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
             vbNullString, vbNullString, vbNullString)
     End If
     
+    ' destroy instance of chat queue
+    Set clsChatQueue = Nothing
+    
     On Error Resume Next
+    
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
     frmChat.SControl.Run "Event_FlagUpdate", Username, Flags, Ping
 End Sub
 
 Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
-    ChannelName = KillNull(ChannelName)
-    
     ' we want to reset our filter
     ' values when we join a new channel
     BotVars.JoinWatch = 0
@@ -1089,7 +1122,8 @@ NoLevel:
                     If (BotVars.PlugBan) Then
                         If ((Flags And USER_NOUDP) = USER_NOUDP) Then
                             
-                            Ban Username & " PlugBan", (AutoModSafelistValue - 1)
+                            Ban Username & " PlugBan", _
+                                (AutoModSafelistValue - 1)
                             
                             GoTo theEnd
                         End If
