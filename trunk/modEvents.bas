@@ -803,9 +803,9 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         SharedScriptSupport.BotFlags = MyFlags
     End If
 
-    StatUpdate = (checkChannel(Username) > 0)
+    StatUpdate = (checkChannel(Username))
 
-    If (StatUpdate) Then
+    If (StatUpdate = False) Then
         If (Filters) Then
             For i = 1 To colChatQueue.Count
                 ' ...
@@ -820,11 +820,15 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                     Exit For
                 End If
             Next i
-        End If
-        
-        If ((Not (Filters)) Or _
-            (i >= (colChatQueue.Count + 1))) Then
             
+            If (i < (colChatQueue.Count + 1)) Then
+                StatUpdate = True
+            End If
+        End If
+    End If
+    
+    If (StatUpdate) Then
+        If ((Not (Filters)) Or (i >= (colChatQueue.Count + 1))) Then
             Call Event_QueuedUserInChannel(Username, Flags, Ping, Product, sClan, _
                 OriginalStatstring, w3icon)
         Else
@@ -943,7 +947,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         Dim l          As Long
         Dim Banned     As Boolean
         Dim f          As Integer
-    
+        
         If (Len(Username) < 1) Then
             Exit Sub
         End If
