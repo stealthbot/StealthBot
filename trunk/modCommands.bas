@@ -4281,6 +4281,12 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
         ' grab access for entry
         gAcc = GetAccess(user)
         
+        ' if we've found a matching user, lets correct
+        ' the casing of the name that we've entered
+        If (Len(gAcc.Username)) Then
+            user = gAcc.Username
+        End If
+        
         ' do we have any special paramaters?
         If (Len(params)) Then
             ' split message by paramter
@@ -4582,7 +4588,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                             ' pointless, so lets remove it
                             Call RemoveItem(user, "users")
                             
-                            cmdRet(0) = "The database entry "" & user & "" has been removed " & _
+                            cmdRet(0) = Chr(34) & user & Chr(34) & " has been removed " & _
                                 "from the database."
                                 
                             Exit Function
@@ -4651,7 +4657,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     Else
                         ' modify database entry
                         With DB(i)
-                            .Username = gAcc.Username
+                            .Username = user
                             .access = gAcc.access
                             .Flags = gAcc.Flags
                             .ModifiedBy = Username
@@ -4714,7 +4720,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 
                 ' was the user given the specified flags, too?
                 If (Len(gAcc.Flags)) Then
-                    tmpBuf = tmpBuf & " and flags " & gAcc.Flags & "."
+                    tmpBuf = tmpBuf & " and flags " & gAcc.Flags
                 End If
             Else
                 ' was the user given the specified flags?
