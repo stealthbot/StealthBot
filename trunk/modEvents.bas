@@ -784,7 +784,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
     ' Error correction code added April 2005
     ' to fix a mysterious ghosting bug
-    If (Ping > 200000000) Then
+    If (Ping >= 200000000) Then
         Exit Sub
     End If
     
@@ -797,12 +797,49 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         ' flag value for ourselves
         MyFlags = Flags
         
+        ' we don't want to have an out-of-date
+        ' flag value for ourselves in scripts,
+        ' either
         SharedScriptSupport.BotFlags = MyFlags
     End If
 
-    StatUpdate = (checkChannel(Username) > 0)
+    StatUpdate = (checkChannel(Username))
+
+    If (StatUpdate) Then
+        If (Filters) Then
+            For i = 1 To colChatQueue.Count
+                ' ...
+                Dim clsChatQueue As clsChatQueue
+            
+                ' ...
+                Set clsChatQueue = colChatQueue(i)
+                
+                If (StrComp(Username, clsChatQueue.Username, _
+                    vbBinaryCompare) = 0) Then
+                
+                    Exit For
+                End If
+            Next i
+        End If
+        
+        If ((Not (Filters)) Or _
+            (i >= (colChatQueue.Count + 1))) Then
+            
+            Call Event_QueuedUserInChannel(Username, Flags, Ping, Product, sClan, _
+                OriginalStatstring, w3icon)
+        Else
+            Set clsChatQueue = colChatQueue(i)
+            
+            Call clsChatQueue.StoreUserInChannel(Flags, Ping, Product, sClan, _
+                OriginalStatstring, w3icon)
+        End If
+    Else
+        Dim UserToAdd As clsUserInfo ' ...
+        
+        ' create new instance of class
+        Set UserToAdd = New clsUserInfo
     
-    If (Not (StatUpdate)) Then
+        ' dunno what this does...
         If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
             If (StrComp(Username, CurrentUsername, vbTextCompare) <> 0) Then
                 
@@ -810,9 +847,10 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             End If
         End If
         
-        Dim UserToAdd As clsUserInfo
-        
-        Set UserToAdd = New clsUserInfo
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' Add user to collection
+        ' *necessary*
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         
         With UserToAdd
             .Flags = Flags
@@ -826,16 +864,21 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             .IsSelf = (StrComp(Username, CurrentUsername, _
                 vbTextCompare) = 0)
         
+            ' if the user isn't safelisted, lets make sure he's abides by the
+            ' channel rules and, if required, inputs the correct channel password.
             If (Not (.Safelisted)) Then
-                If ((Len(BotVars.ChannelPassword) > 0) And _
-                    (BotVars.ChannelPasswordDelay > 0)) Then
-                    
-                    .InternalFlags = .InternalFlags + IF_AWAITING_CHPW
-                End If
-                
+                ' is the user an operator?  ... or his "he" actually "me"?
                 If (((Flags And USER_CHANNELOP&) <> USER_CHANNELOP&) And _
                      (StrComp(Username, CurrentUsername, vbBinaryCompare) <> 0)) Then
                     
+                    ' do we have a channel password set?
+                    If ((Len(BotVars.ChannelPassword) > 0) And _
+                        (BotVars.ChannelPasswordDelay > 0)) Then
+                        
+                        .InternalFlags = (.InternalFlags + IF_AWAITING_CHPW)
+                    End If
+                    
+                    ' do we have idle bans on?
                     If (BotVars.IB_On = 1) Then
                         .InternalFlags = (.InternalFlags + _
                             IF_SUBJECT_TO_IDLEBANS)
@@ -844,11 +887,14 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             End If
         End With
         
+        ' lets add our new friend to the collection
         Call colUsersInChannel.Add(UserToAdd)
-    End If
-
-    If (Not (StatUpdate)) Then
-        If InStr(1, Message, "in clan ", vbTextCompare) > 0 Then
+        
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' Add to the channel list
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    
+        If (InStr(1, Message, "in clan ", vbTextCompare) > 0) Then
             strCompare = Mid$(Message, InStr(1, Message, "in clan ", vbTextCompare) + 8)
             strCompare = Left$(strCompare, Len(Message) - 1)
             
@@ -858,17 +904,9 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         End If
         
         Call DoLastSeen(Username)
-    Else
-        i = UsernameToIndex(Username)
-            
-        colUsersInChannel.Item(i).Statstring = _
-            OriginalStatstring
         
-        If (JoinMessagesOff = False) Then
-            frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", _
-                RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
-                    RTBColors.JoinText, " is using " & Message
-        End If
+        ' destroy class
+        Set UserToAdd = Nothing
     End If
     
     frmChat.lblCurrentChannel.Caption = _

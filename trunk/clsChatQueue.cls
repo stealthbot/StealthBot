@@ -70,6 +70,24 @@ Public Sub StoreJoin(ByVal bnflags As Long, ByVal Latency As Long, ByVal Game As
     ReDim Preserve m_arrChatPackets(m_Count)
 End Sub
 
+Public Sub StoreUserInChannel(ByVal bnflags As Long, ByVal Latency As Long, ByVal Game As String, _
+    ByVal Clan As String, ByVal Statstring As String, ByVal w3icon As String)
+
+    With m_arrChatPackets(m_Count)
+        .EventID = ID_JOIN
+        .Flags = bnflags
+        .Ping = Latency
+        .Product = Game
+        .Clan = Clan
+        .Statstring = Statstring
+        .w3icon = w3icon
+    End With
+
+    m_Count = (m_Count + 1)
+    
+    ReDim Preserve m_arrChatPackets(m_Count)
+End Sub
+
 Public Sub StoreStatusUpdate(ByVal bnflags As Long, ByVal prevflags As Long, ByVal Latency As Long, _
     ByVal Game As String, ByVal Clan As String, ByVal Statstring As String, ByVal w3icon As String)
 
@@ -130,6 +148,11 @@ Public Sub Show()
             Select Case (.EventID)
                 Case ID_JOIN:
                     Call modChatQueue.Event_QueuedJoin(m_Username, _
+                            .Flags, .Ping, .Product, .Clan, .Statstring, _
+                                .w3icon)
+                                
+                Case ID_USER:
+                    Call modChatQueue.Event_QueuedUserInChannel(m_Username, _
                             .Flags, .Ping, .Product, .Clan, .Statstring, _
                                 .w3icon)
                                 

@@ -86,6 +86,30 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
 End Sub
 
 ' ...
+Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Long, _
+    ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
+    ByVal w3icon As String)
+    
+    Dim i      As Integer ' ...
+    Dim Game   As String  ' ...
+    Dim pStats As String  ' ...
+    Dim Clan   As String  ' ...
+
+    i = UsernameToIndex(Username)
+    
+    colUsersInChannel.Item(i).Statstring = _
+        OriginalStatstring
+        
+    Game = ParseStatstring(OriginalStatstring, pStats, Clan)
+    
+    If (JoinMessagesOff = False) Then
+        frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", _
+            RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
+                RTBColors.JoinText, " is using " & pStats
+    End If
+End Sub
+
+' ...
 Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Long, _
     ByVal prevflags As Long, ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, _
     ByVal OriginalStatstring As String, ByVal w3icon As String)
