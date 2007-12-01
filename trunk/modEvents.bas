@@ -803,7 +803,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         SharedScriptSupport.BotFlags = MyFlags
     End If
 
-    StatUpdate = (checkChannel(Username))
+    StatUpdate = (checkChannel(Username) > 0)
 
     If (StatUpdate) Then
         If (Filters) Then

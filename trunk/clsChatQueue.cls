@@ -74,7 +74,7 @@ Public Sub StoreUserInChannel(ByVal bnflags As Long, ByVal Latency As Long, ByVa
     ByVal Clan As String, ByVal Statstring As String, ByVal w3icon As String)
 
     With m_arrChatPackets(m_Count)
-        .EventID = ID_JOIN
+        .EventID = ID_USER
         .Flags = bnflags
         .Ping = Latency
         .Product = Game
