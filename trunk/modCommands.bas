@@ -4236,6 +4236,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim found      As Boolean ' ...
     Dim params     As String  ' ...
     Dim Index      As Integer ' ...
+    Dim sGrp       As String  ' ...
 
     ' check for presence of optional add command
     ' parameters
@@ -4428,6 +4429,8 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 Exit Function
                             Else
                                 gAcc.Groups = pmsg
+                                
+                                sGrp = gAcc.Groups
                             End If
                         End If
                 End Select
@@ -4720,7 +4723,13 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 
                 ' was the user given the specified flags, too?
                 If (Len(gAcc.Flags)) Then
-                    tmpBuf = tmpBuf & " and flags " & gAcc.Flags
+                    ' lets make sure we don't use
+                    ' improper grammar because of groups!
+                    If (Len(sGrp)) Then
+                        tmpBuf = tmpBuf & ", flags " & gAcc.Flags
+                    Else
+                        tmpBuf = tmpBuf & " and flags " & gAcc.Flags
+                    End If
                 End If
             Else
                 ' was the user given the specified flags?
@@ -4731,9 +4740,9 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             End If
             
             ' was the user assigned to a group?
-            If (Len(gAcc.Groups) And (gAcc.Groups <> "%")) Then
+            If (Len(sGrp)) Then
                 If (Len(tmpBuf)) Then
-                    tmpBuf = tmpBuf & "; and has been made a member of " & _
+                    tmpBuf = tmpBuf & ", and has been made a member of " & _
                         "the group(s): " & gAcc.Groups
                 Else
                     tmpBuf = Chr(34) & user & Chr(34) & " has been made a member of " & _
