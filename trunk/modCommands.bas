@@ -2109,16 +2109,22 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             
                 tmpBuf = "Error: That user is Locked."
         Else
-            tmpBuf = RemoveItem(u, "users", dbType)
-            tmpBuf = Replace(tmpBuf, "%msgex%", "database entry")
+            Dim res As Boolean ' ...
+        
+            res = DB_remove(u, dbType)
             
-            If (InStr(tmpBuf, "Successfully")) Then
+            If (res) Then
                 If (BotVars.LogDBActions) Then
                     Call LogDBAction(RemEntry, Username, u, msgData)
                 End If
+                
+                tmpBuf = "Successfully removed database entry " & Chr$(34) & _
+                    u & "." & Chr$(34)
+            Else
+                tmpBuf = "Error: There was a problem removing that entry from the database."
             End If
             
-            Call LoadDatabase
+            'Call LoadDatabase
         End If
     End If
 
@@ -4585,14 +4591,21 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         
                         ' does this entry have any remaining access?
                         If ((gAcc.access = 0) And (gAcc.Flags = vbNullString) And _
-                            (gAcc.Groups = vbNullString)) Then
+                            ((gAcc.Groups = vbNullString) Or (gAcc.Groups = "%"))) Then
+                            
+                            Dim res As Boolean ' ...
                            
                             ' with no access a database entry is
                             ' pointless, so lets remove it
-                            Call RemoveItem(user, "users")
+                            res = DB_remove(user, gAcc.Type)
                             
-                            cmdRet(0) = Chr(34) & user & Chr(34) & " has been removed " & _
-                                "from the database."
+                            If (res) Then
+                                cmdRet(0) = Chr(34) & user & Chr(34) & " has been removed " & _
+                                    "from the database."
+                            Else
+                                cmdRet(0) = "Error: There was a problem removing that entry " & _
+                                    "from the database."
+                            End If
                                 
                             Exit Function
                         End If
@@ -4643,21 +4656,21 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     (StrComp(DB(i).Type, gAcc.Type, vbTextCompare) = 0)) Then
                     
                     ' ...
-                    If ((gAcc.access <= 0) And _
-                        (gAcc.Flags = vbNullString) And _
-                        (gAcc.Groups = vbNullString)) Then
-                        
-                        ' remove user
-                        Call RemoveItem(user, "users")
-                        
-                        ' log actions
-                        If (BotVars.LogDBActions) Then
-                            Call LogDBAction(RemEntry, Username, gAcc.Username, msgData)
-                        End If
-                        
-                        ' reload database
-                        Call LoadDatabase
-                    Else
+                    'If ((gAcc.access <= 0) And _
+                    '    (gAcc.Flags = vbNullString) And _
+                    '    (gAcc.Groups = vbNullString)) Then
+                    '
+                    '    ' remove user
+                    '    Call RemoveItem(user, "users")
+                    '
+                    '    ' log actions
+                    '    If (BotVars.LogDBActions) Then
+                    '        Call LogDBAction(RemEntry, Username, gAcc.Username, msgData)
+                    '    End If
+                    '
+                    '    ' reload database
+                    '    Call LoadDatabase
+                    'Else
                         ' modify database entry
                         With DB(i)
                             .Username = user
@@ -4677,7 +4690,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         If (BotVars.LogDBActions) Then
                             Call LogDBAction(ModEntry, Username, gAcc.Username, msgData)
                         End If
-                    End If
+                    'End If
                     
                     ' we have found the
                     ' specified user
@@ -5569,6 +5582,57 @@ Successful:
         Next Counter
 theEnd:
     Close #f
+End Function
+
+Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String = _
+    vbNullString) As Boolean
+
+    Dim i     As Integer ' ...
+    Dim found As Boolean ' ...
+    
+    For i = LBound(DB) To UBound(DB)
+        If (StrComp(DB(i).Username, entry, vbTextCompare) = 0) Then
+            Dim bln As Boolean ' ...
+        
+            If (Len(dbType)) Then
+                If (StrComp(DB(i).Type, dbType, vbTextCompare) = 0) Then
+                    bln = True
+                End If
+            Else
+                bln = True
+            End If
+            
+            If (bln) Then
+                found = True
+                
+                Exit For
+            End If
+        End If
+    Next i
+    
+    If (found) Then
+        ' we aren't removing the last array
+        ' element, are we?
+        If (i < UBound(DB)) Then
+            Dim j As Integer ' ...
+        
+            For j = (i + 1) To UBound(DB)
+                DB(j - 1) = DB(j)
+            Next j
+        End If
+        
+        ' redefine array size
+        ReDim Preserve DB(UBound(DB) - 1)
+        
+        ' commit modifications
+        Call WriteDatabase(GetFilePath("users.txt"))
+        
+        DB_remove = True
+        
+        Exit Function
+    End If
+    
+    DB_remove = False
 End Function
 
 ' requires public

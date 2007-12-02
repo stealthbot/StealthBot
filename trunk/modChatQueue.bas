@@ -39,7 +39,7 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, _
     
         With clsChatQueue
             ' ...
-            If (GetTickCount() - .Time() >= 3000) Then
+            If (GetTickCount() - .Time() >= 3500) Then
                 ' ...
                 Call .Show
                 
