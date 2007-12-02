@@ -1301,7 +1301,7 @@ theEnd:
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' Is channel flooding or mass-joining happening?
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        BotVars.JoinWatch = (BotVars.JoinWatch + 1)
+        BotVars.JoinWatch = (BotVars.JoinWatch + 2)
         
         If (BotVars.JoinWatch >= 20) Then
             'If (Not (JoinMessagesOff)) Then
