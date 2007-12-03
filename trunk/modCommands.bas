@@ -881,28 +881,31 @@ Private Function OnMath(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     Dim tmpBuf As String ' temporary output buffer
 
-    If (Len(msgData) > 0) Then
+    If (Len(msgData)) Then
         If (InStr(1, msgData, "CreateObject", vbTextCompare) > 0) Then
             ' use of CreateObject is a no no
             tmpBuf = "Evaluation error."
         Else
             Dim res As String ' stores result of Eval()
         
-            ' disable access to user interface
-            frmChat.SCRestricted.AllowUI = False
+            ' disable dangerous exploits
+            With frmChat.SCRestricted
+                .AllowUI = False
+                .UseSafeSubset = True
+            End With
             
             ' evaluate expression
             res = frmChat.SCRestricted.Eval(msgData)
             
             ' check for scripting object errors
             If (res <> vbNullString) Then
-                tmpBuf = res
+                tmpBuf = "The statement " & Chr$(34) & _
+                    msgData & Chr$(34) & " evaluates to: " & _
+                        res & "."
             Else
                 tmpBuf = "Evaluation error."
             End If
         End If
-    Else
-        tmpBuf = "Evaluation error."
     End If
     
     ' return message
@@ -4418,7 +4421,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                         
                                     Exit Function
                                 Else
-                                    Dim tmp As udtGetAccessResponse
+                                    Dim tmp As udtGetAccessResponse ' ...
                                 
                                     tmp = GetAccess(Splt(j), "GROUP")
                                     
@@ -5586,6 +5589,8 @@ End Function
 
 Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String = _
     vbNullString) As Boolean
+    
+    On Error GoTo ERROR_HANDLER
 
     Dim i     As Integer ' ...
     Dim found As Boolean ' ...
@@ -5595,7 +5600,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
             Dim bln As Boolean ' ...
         
             If (Len(dbType)) Then
-                If (StrComp(DB(i).Type, dbType, vbTextCompare) = 0) Then
+                If (StrComp(DB(i).Type, dbType, vbBinaryCompare) = 0) Then
                     bln = True
                 End If
             Else
@@ -5611,11 +5616,16 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
     Next i
     
     If (found) Then
+        Dim bak As udtDatabase ' ...
+        
+        Dim j   As Integer ' ...
+        
+        ' ...
+        bak = DB(i)
+
         ' we aren't removing the last array
         ' element, are we?
         If (i < UBound(DB)) Then
-            Dim j As Integer ' ...
-        
             For j = (i + 1) To UBound(DB)
                 DB(j - 1) = DB(j)
             Next j
@@ -5623,6 +5633,62 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
         
         ' redefine array size
         ReDim Preserve DB(UBound(DB) - 1)
+        
+        ' if we're removing a group, we need to also fix our
+        ' group memberships, in case anything is broken now
+        If (StrComp(bak.Type, "GROUP", vbBinaryCompare) = 0) Then
+            Dim res As Boolean ' ...
+       
+            ' if we remove a user from the database during the
+            ' execution of the inner loop, we have to reset our
+            ' inner loop variables, otherwise we create errors
+            ' due to incorrect database indexes.  Because of this,
+            ' we have to dual-loop until our inner loop runs out
+            ' of matching users.
+            Do
+                ' reset loop variable
+                res = False
+            
+                ' loop through database checking for users that
+                ' were members of the group that we just removed
+                For i = LBound(DB) To UBound(DB)
+                    If (Len(DB(i).Groups) And DB(i).Groups <> "%") Then
+                        If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
+                            Dim Splt()     As String ' ...
+                            Dim innerfound As Boolean ' ...
+                            
+                            Splt() = Split(DB(i).Groups, ",")
+                            
+                            For j = LBound(Splt) To UBound(Splt)
+                                If (StrComp(bak.Username, Splt(j), vbTextCompare) = 0) Then
+                                    innerfound = True
+                                
+                                    Exit For
+                                End If
+                            Next j
+                        
+                            If (innerfound) Then
+                                Dim K As Integer ' ...
+                                
+                                For K = (j + 1) To UBound(Splt)
+                                    Splt(K - 1) = Splt(K)
+                                Next K
+                                
+                                ReDim Preserve Splt(UBound(Splt) - 1)
+                                
+                                DB(i).Groups = Join(Splt(), vbNullString)
+                            End If
+                        Else
+                            If (StrComp(bak.Username, DB(i).Groups, vbTextCompare) = 0) Then
+                                res = DB_remove(DB(i).Username, DB(i).Type)
+                                
+                                Exit For
+                            End If
+                        End If
+                    End If
+                Next i
+            Loop While (res)
+        End If
         
         ' commit modifications
         Call WriteDatabase(GetFilePath("users.txt"))
@@ -5633,6 +5699,16 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
     End If
     
     DB_remove = False
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: DB_remove() has encountered an error while " & _
+        "removing a database entry.")
+        
+    DB_remove = False
+    
+    Exit Function
 End Function
 
 ' requires public
@@ -6536,9 +6612,7 @@ Private Function checkUser(ByVal user As String, Optional ByVal _
             
             ' ...
             currentCharacter = Mid$(user, i, 1)
-            
-            MsgBox currentCharacter
-        
+
             ' is the character between A-Z or a-z?
             If (Asc(currentCharacter) < Asc("A")) Or (Asc(currentCharacter) > Asc("z")) Then
                 MsgBox currentCharacter

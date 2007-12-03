@@ -418,6 +418,12 @@ Public Function GetAccess(ByVal Username As String, Optional dbType As String = 
 
     For i = LBound(DB) To UBound(DB)
         If (StrComp(DB(i).Username, Username, vbTextCompare) = 0) Then
+            If (Len(dbType)) Then
+                If (StrComp(DB(i).Type, dbType, vbBinaryCompare) <> 0) Then
+                    Exit For
+                End If
+            End If
+                
             With GetAccess
                 .Username = DB(i).Username
                 .access = DB(i).access
@@ -1877,7 +1883,7 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
     If (lvItem Is Nothing) Then
         checkChannel = 0
     Else
-        checkChannel = lvItem.index
+        checkChannel = lvItem.Index
     End If
 End Function
 
