@@ -410,7 +410,8 @@ End Function
 Public Function GetAccess(ByVal Username As String, Optional dbType As String = _
     vbNullString) As udtGetAccessResponse
     
-    Dim i As Integer
+    Dim i   As Integer ' ...
+    Dim bln As Boolean ' ...
 
     'If (Left$(Username, 1) = "*") Then
     '    Username = Mid$(Username, 2)
@@ -419,26 +420,32 @@ Public Function GetAccess(ByVal Username As String, Optional dbType As String = 
     For i = LBound(DB) To UBound(DB)
         If (StrComp(DB(i).Username, Username, vbTextCompare) = 0) Then
             If (Len(dbType)) Then
-                If (StrComp(DB(i).Type, dbType, vbBinaryCompare) <> 0) Then
-                    Exit For
+                If (StrComp(DB(i).Type, dbType, vbBinaryCompare) = 0) Then
+                    bln = True
                 End If
+            Else
+                bln = True
             End If
                 
-            With GetAccess
-                .Username = DB(i).Username
-                .access = DB(i).access
-                .Flags = DB(i).Flags
-                .AddedBy = DB(i).AddedBy
-                .AddedOn = DB(i).AddedOn
-                .ModifiedBy = DB(i).ModifiedBy
-                .ModifiedOn = DB(i).ModifiedOn
-                .Type = DB(i).Type
-                .Groups = DB(i).Groups
-                .BanMessage = DB(i).BanMessage
-            End With
-            
-            Exit Function
+            If (bln = True) Then
+                With GetAccess
+                    .Username = DB(i).Username
+                    .access = DB(i).access
+                    .Flags = DB(i).Flags
+                    .AddedBy = DB(i).AddedBy
+                    .AddedOn = DB(i).AddedOn
+                    .ModifiedBy = DB(i).ModifiedBy
+                    .ModifiedOn = DB(i).ModifiedOn
+                    .Type = DB(i).Type
+                    .Groups = DB(i).Groups
+                    .BanMessage = DB(i).BanMessage
+                End With
+                
+                Exit Function
+            End If
         End If
+        
+        bln = False
     Next i
 
     GetAccess.access = -1
@@ -765,7 +772,7 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
     Dim Splt() As String               ' ...
     
     ' ...
-    gAcc = GetAccess(Group)
+    gAcc = GetAccess(Group, "GROUP")
     
     ' ...
     If ((Len(gAcc.Groups) > 0) And (gAcc.Groups <> "%")) Then

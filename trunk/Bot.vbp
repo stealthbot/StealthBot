@@ -87,6 +87,7 @@ UserControl=ctlMonitor.ctl
 Form=frmScruptUI.frm
 Class=clsChatQueue; clsChatQueue.cls
 Module=modChatQueue; modChatQueue.bas
+Form=frmDBManager.frm
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""

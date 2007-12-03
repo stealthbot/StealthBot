@@ -2842,7 +2842,7 @@ Private Function OnTagAdd(ByVal Username As String, ByRef dbAccess As udtGetAcce
         
         ' ...
         bmsg = Mid$(msgData, Index + 1)
-    
+        
         ' ...
         If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
             tmpBuf(0) = "Error: The specified username is invalid."
@@ -2850,19 +2850,25 @@ Private Function OnTagAdd(ByVal Username As String, ByRef dbAccess As udtGetAcce
             ' ...
             Call OnAdd(Username, dbAccess, user & " +B --banmsg " & bmsg, True, tmpBuf())
         Else
-            ' ...
-            Call OnAdd(Username, dbAccess, "*" & user & "*" & " +B --banmsg " & bmsg, True, tmpBuf())
+            If (Len(user) = 0) Then
+                tmpBuf(0) = "Error: The specified username is invalid."
+            Else
+                ' ...
+                Call OnAdd(Username, dbAccess, "*" & user & "*" & " +B --banmsg " & bmsg, _
+                    True, tmpBuf())
+            End If
         End If
-    Else            ' ...
+    Else
         If (InStr(1, msgData, "*", vbBinaryCompare) <> 0) Then
             ' ...
             Call OnAdd(Username, dbAccess, msgData & " +B", True, tmpBuf())
         Else
-            If (Len(msgData)) Then
-                ' ...
-                Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " +B", True, tmpBuf())
+            If (Len(msgData) = 0) Then
+               tmpBuf(0) = "Error: The specified username is invalid."
             Else
-                tmpBuf(0) = "Error: The specified username is invalid."
+                ' ...
+                Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " +B", True, _
+                    tmpBuf())
             End If
         End If
     End If
@@ -4434,29 +4440,29 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                         ' two groups to be members of each other, potentially
                                         ' causing a stack overflow when doing recursion in
                                         ' GetCumulativeAccess().
-                                        'If ((Len(tmp.Groups)) And (tmp.Groups <> "%")) Then
-                                        '    Dim splt2() As String  ' ...
-                                        '    Dim k       As Integer ' ...
-                                        '
-                                        '    If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
-                                        '        splt2() = Split(tmp.Groups, ",")
-                                        '    Else
-                                        '        ReDim Preserve splt2(0)
-                                        '
-                                        '        splt2(0) = tmp.Groups
-                                        '    End If
-                                        '
-                                        '    For k = LBound(splt2) To UBound(splt2)
-                                        '        If (StrComp(user, splt2(k), vbBinaryCompare) = 0) Then
-                                        '
-                                        '            cmdRet(0) = "Error: " & Chr$(34) & tmp.Username & _
-                                        '                Chr$(34) & " is already a member of group " & _
-                                        '                    Chr$(34) & user & "." & Chr$(34)
-                                        '
-                                        '            Exit Function
-                                        '        End If
-                                        '    Next k
-                                        'End If
+                                        If ((Len(tmp.Groups)) And (tmp.Groups <> "%")) Then
+                                            Dim splt2() As String  ' ...
+                                            Dim k       As Integer ' ...
+                                        
+                                            If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
+                                                splt2() = Split(tmp.Groups, ",")
+                                            Else
+                                                ReDim Preserve splt2(0)
+                                        
+                                                splt2(0) = tmp.Groups
+                                            End If
+                                        
+                                            For k = LBound(splt2) To UBound(splt2)
+                                                If (StrComp(user, splt2(k), vbBinaryCompare) = 0) Then
+                                        
+                                                    cmdRet(0) = "Error: " & Chr$(34) & tmp.Username & _
+                                                        Chr$(34) & " is already a member of group " & _
+                                                            Chr$(34) & user & "." & Chr$(34)
+                                        
+                                                    Exit Function
+                                                End If
+                                            Next k
+                                        End If
                                     End If
                                 End If
                             Next j
@@ -4645,7 +4651,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     Else
                         ' if we're adding with no flag indicator ('+' or '-'),
                         ' then we need to remove the previous entry from the database.
-                        Call DB_remove(gAcc.Username, gAcc.Type)
+                        Call DB_remove(user, dbType)
                     
                         ' clear user flags
                         gAcc.Flags = vbNullString
@@ -4677,6 +4683,10 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     End If
                 End If
             Else
+                ' if we're adding with no flag indicator ('+' or '-'),
+                ' then we need to remove the previous entry from the database.
+                Call DB_remove(user, dbType)
+
                 ' clear flags
                 gAcc.Flags = vbNullString
             
@@ -5647,6 +5657,8 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                 Exit For
             End If
         End If
+        
+        bln = False
     Next i
     
     If (found) Then
@@ -5667,7 +5679,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
         
         ' redefine array size
         ReDim Preserve DB(UBound(DB) - 1)
-        
+
         ' if we're removing a group, we need to also fix our
         ' group memberships, in case anything is broken now
         If (StrComp(bak.Type, "GROUP", vbBinaryCompare) = 0) Then
