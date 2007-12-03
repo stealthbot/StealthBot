@@ -874,7 +874,8 @@ Private Function OnMath(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ' of any code through direct user-interaction can become quite error-prone
     ' and, as such, this command requires its own error handler.  The input
     ' of this command must also be properly sanitized to ensure that no
-    ' exploitable statements are inadvertently allowed to launch.
+    ' harmful statements are inadvertently allowed to launch on the user's
+    ' machine.
     
     ' default error handler for math command
     On Error GoTo ERROR_HANDLER
@@ -882,8 +883,10 @@ Private Function OnMath(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim tmpBuf As String ' temporary output buffer
 
     If (Len(msgData)) Then
-        If (InStr(1, msgData, "CreateObject", vbTextCompare) > 0) Then
-            ' use of CreateObject is a no no
+        If (InStr(1, msgData, "CreateObject", vbTextCompare)) Then
+            ' CreateObject() is a no no, because of
+            ' its use in exploits.
+            
             tmpBuf = "Evaluation error."
         Else
             Dim res As String ' stores result of Eval()
