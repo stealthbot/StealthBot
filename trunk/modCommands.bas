@@ -2078,7 +2078,7 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     ' do we have a valid parameter length?
                     If (Len(pmsg) > 0) Then
                         Dim recType As String ' ...
-                        
+                    
                         ' grab database entry type
                         recType = UCase$(pmsg)
                         
@@ -4249,6 +4249,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim params     As String  ' ...
     Dim Index      As Integer ' ...
     Dim sGrp       As String  ' ...
+    Dim dbType     As String  ' ...
 
     ' check for presence of optional add command
     ' parameters
@@ -4333,16 +4334,14 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     Case "type" ' ...
                         ' do we have a valid parameter length?
                         If (Len(pmsg)) Then
-                            Dim recType As String ' ...
-                            
                             ' grab database entry type
-                            recType = UCase$(pmsg)
+                            dbType = UCase$(pmsg)
                             
                             ' ...
-                            If (recType = "USER") Then
+                            If (dbType = "USER") Then
                                 ' set record type
                                 gAcc.Type = "USER"
-                            ElseIf (recType = "GROUP") Then
+                            ElseIf (dbType = "GROUP") Then
                                 ' set record type
                                 gAcc.Type = "GROUP"
                                 
@@ -4353,7 +4352,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                                                 
                                     Exit Function
                                 End If
-                            ElseIf (recType = "CLAN") Then
+                            ElseIf (dbType = "CLAN") Then
                                 ' set record type
                                 gAcc.Type = "CLAN"
                                 
@@ -4365,7 +4364,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                         
                                     Exit Function
                                 End If
-                            ElseIf (recType = "GAME") Then
+                            ElseIf (dbType = "GAME") Then
                                 ' set record type
                                 gAcc.Type = "GAME"
                                 
@@ -4430,6 +4429,34 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                     
                                     If (tmp.Username = vbNullString) Then
                                         Exit For
+                                    Else
+                                        ' we need to check to make sure that we aren't allowing
+                                        ' two groups to be members of each other, potentially
+                                        ' causing a stack overflow when doing recursion in
+                                        ' GetCumulativeAccess().
+                                        'If ((Len(tmp.Groups)) And (tmp.Groups <> "%")) Then
+                                        '    Dim splt2() As String  ' ...
+                                        '    Dim k       As Integer ' ...
+                                        '
+                                        '    If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
+                                        '        splt2() = Split(tmp.Groups, ",")
+                                        '    Else
+                                        '        ReDim Preserve splt2(0)
+                                        '
+                                        '        splt2(0) = tmp.Groups
+                                        '    End If
+                                        '
+                                        '    For k = LBound(splt2) To UBound(splt2)
+                                        '        If (StrComp(user, splt2(k), vbBinaryCompare) = 0) Then
+                                        '
+                                        '            cmdRet(0) = "Error: " & Chr$(34) & tmp.Username & _
+                                        '                Chr$(34) & " is already a member of group " & _
+                                        '                    Chr$(34) & user & "." & Chr$(34)
+                                        '
+                                        '            Exit Function
+                                        '        End If
+                                        '    Next k
+                                        'End If
                                     End If
                                 End If
                             Next j
@@ -4451,8 +4478,8 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
         
         ' we want to ensure that we have a default
         ' entry type if none is specified explicitly
-        If (gAcc.Type = vbNullString) Then
-            gAcc.Type = "USER"
+        If (dbType = vbNullString) Then
+            dbType = "USER"
         End If
 
         ' is rank valid?
@@ -4616,6 +4643,10 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                             Exit Function
                         End If
                     Else
+                        ' if we're adding with no flag indicator ('+' or '-'),
+                        ' then we need to remove the previous entry from the database.
+                        Call DB_remove(gAcc.Username, gAcc.Type)
+                    
                         ' clear user flags
                         gAcc.Flags = vbNullString
                         
@@ -4684,7 +4715,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                             .Flags = gAcc.Flags
                             .ModifiedBy = Username
                             .ModifiedOn = Now
-                            .Type = gAcc.Type
+                            .Type = dbType
                             .Groups = gAcc.Groups
                             .BanMessage = gAcc.BanMessage
                         End With
@@ -4720,8 +4751,8 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     .ModifiedOn = Now
                     .AddedBy = Username
                     .AddedOn = Now
-                    .Type = IIf(((gAcc.Type <> "%") And (gAcc.Type <> vbNullString)), _
-                        gAcc.Type, "USER")
+                    .Type = IIf(((dbType <> vbNullString) And (dbType <> "%")), _
+                        dbType, "USER")
                     .Groups = gAcc.Groups
                     .BanMessage = gAcc.BanMessage
                 End With
@@ -5671,11 +5702,11 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                             Next j
                         
                             If (innerfound) Then
-                                Dim K As Integer ' ...
+                                Dim k As Integer ' ...
                                 
-                                For K = (j + 1) To UBound(Splt)
-                                    Splt(K - 1) = Splt(K)
-                                Next K
+                                For k = (j + 1) To UBound(Splt)
+                                    Splt(k - 1) = Splt(k)
+                                Next k
                                 
                                 ReDim Preserve Splt(UBound(Splt) - 1)
                                 

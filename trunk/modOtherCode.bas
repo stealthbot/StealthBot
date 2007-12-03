@@ -452,7 +452,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Dim gAcc    As udtGetAccessResponse ' ...
     
     Dim i       As Integer ' ...
-    Dim K       As Integer ' ...
+    Dim k       As Integer ' ...
     Dim j       As Integer ' ...
     Dim found   As Boolean ' ...
     Dim dbIndex As Integer ' ...
@@ -515,19 +515,19 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                         End If
                         
                         ' ...
-                        For K = 1 To Len(gAcc.Flags)
+                        For k = 1 To Len(gAcc.Flags)
                             ' ...
-                            If (InStr(1, GetCumulativeAccess.Flags, Mid$(gAcc.Flags, K, 1), _
+                            If (InStr(1, GetCumulativeAccess.Flags, Mid$(gAcc.Flags, k, 1), _
                                 vbBinaryCompare) = 0) Then
                                 
                                 ' ...
                                 GetCumulativeAccess.Flags = GetCumulativeAccess.Flags & _
-                                    Mid$(gAcc.Flags, K, 1)
+                                    Mid$(gAcc.Flags, k, 1)
                                     
                                 ' ...
                                 bln = True
                             End If
-                        Next K
+                        Next k
                         
                         ' ...
                         If ((GetCumulativeAccess.BanMessage = vbNullString) Or _
@@ -662,16 +662,16 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                                 End If
                                 
                                 ' ...
-                                For K = 1 To Len(gAcc.Flags)
+                                For k = 1 To Len(gAcc.Flags)
                                     ' ...
-                                    If (InStr(1, tmp.Flags, Mid$(gAcc.Flags, K, 1), _
+                                    If (InStr(1, tmp.Flags, Mid$(gAcc.Flags, k, 1), _
                                         vbBinaryCompare) = 0) Then
                                         
                                         ' ...
                                         tmp.Flags = tmp.Flags & _
-                                            Mid$(gAcc.Flags, K, 1)
+                                            Mid$(gAcc.Flags, k, 1)
                                     End If
-                                Next K
+                                Next k
                                 
                                 ' ...
                                 If ((tmp.BanMessage = vbNullString) Or _
@@ -756,8 +756,6 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Exit Function
     
 ERROR_HANDLER:
-    MsgBox Err.Number
-    
     Exit Function
 End Function
 
