@@ -130,6 +130,8 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
 End Sub
 
 Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
+    Dim mailCount As Integer ' ...
+    
     ' we want to reset our filter
     ' values when we join a new channel
     BotVars.JoinWatch = 0
@@ -186,6 +188,18 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     ' current channel name so that we join the channel
     ' again automatically if we disconnect or close the bot.
     Call WriteINI("Other", "LastChannel", ChannelName)
+    
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' check for mail
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    
+    mailCount = GetMailCount(CurrentUsername)
+        
+    If (mailCount) Then
+        frmChat.AddChat RTBColors.ConsoleText, "You have " & _
+            mailCount & " new message" & IIf(mailCount = 1, "", "s") & _
+                ". Type /getmail to retrieve."
+    End If
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' call event script function

@@ -823,7 +823,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -849,7 +848,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3997,7 +3995,8 @@ Private Sub mnuToggle_Click()
 End Sub
 
 Private Sub mnuUsers_Click()
-    frmUserManager.Show
+    'frmUserManager.Show
+    frmDBManager.Show
 End Sub
 
 Private Sub cboSend_GotFocus()

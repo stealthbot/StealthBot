@@ -4038,13 +4038,15 @@ Private Function OnQuote(ByVal Username As String, ByRef dbAccess As udtGetAcces
     
     Dim tmpBuf As String ' temporary output buffer
 
-    tmpBuf = GetRandomQuote
+    tmpBuf = "Quote: " & _
+        GetRandomQuote
     
     If (Len(tmpBuf) = 0) Then
         tmpBuf = "Error reading quotes, or no quote file exists."
     ElseIf (Len(tmpBuf) > 220) Then
         ' try one more time
-        tmpBuf = GetRandomQuote
+        tmpBuf = "Quote: " & _
+            GetRandomQuote
         
         If (Len(tmpBuf) > 220) Then
             'too long? too bad. truncate
@@ -4193,7 +4195,7 @@ Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAcc
         Call GetMailMessage(Username, Msg)
         
         If (Len(RTrim(Msg.To)) > 0) Then
-            tmpBuf = "msgData from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
+            tmpBuf = "Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
         End If
     End If
     
@@ -4409,19 +4411,19 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     Case "group" ' ...
                         ' do we have a valid parameter length?
                         If (Len(pmsg)) Then
-                            Dim Splt() As String
+                            Dim splt() As String
                             Dim j      As Integer
                         
                             If (InStr(1, pmsg, ",", vbBinaryCompare) <> 0) Then
-                                Splt() = Split(pmsg, ",")
+                                splt() = Split(pmsg, ",")
                             Else
-                                ReDim Preserve Splt(0)
+                                ReDim Preserve splt(0)
                                 
-                                Splt(0) = pmsg
+                                splt(0) = pmsg
                             End If
                             
-                            For j = 0 To UBound(Splt)
-                                If ((StrComp(Splt(j), user, vbTextCompare) = 0) And _
+                            For j = 0 To UBound(splt)
+                                If ((StrComp(splt(j), user, vbTextCompare) = 0) And _
                                     (gAcc.Type = "GROUP")) Then
                                     
                                     cmdRet(0) = "Error: You cannot make a group a member of " & _
@@ -4431,7 +4433,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 Else
                                     Dim tmp As udtGetAccessResponse ' ...
                                 
-                                    tmp = GetAccess(Splt(j), "GROUP")
+                                    tmp = GetAccess(splt(j), "GROUP")
                                     
                                     If (tmp.Username = vbNullString) Then
                                         Exit For
@@ -4467,7 +4469,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 End If
                             Next j
                             
-                            If (j < (UBound(Splt) + 1)) Then
+                            If (j < (UBound(splt) + 1)) Then
                                 cmdRet(0) = "Error: The specified group(s) could " & _
                                     "not be found."
                                     
@@ -4777,7 +4779,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             End If
             
             ' check for errors & create message
-            If (gAcc.access) Then
+            If (gAcc.access > 0) Then
                 tmpBuf = Chr(34) & user & Chr(34) & " has been given access " & _
                     gAcc.access
                 
@@ -5700,13 +5702,13 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                 For i = LBound(DB) To UBound(DB)
                     If (Len(DB(i).Groups) And DB(i).Groups <> "%") Then
                         If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
-                            Dim Splt()     As String ' ...
+                            Dim splt()     As String ' ...
                             Dim innerfound As Boolean ' ...
                             
-                            Splt() = Split(DB(i).Groups, ",")
+                            splt() = Split(DB(i).Groups, ",")
                             
-                            For j = LBound(Splt) To UBound(Splt)
-                                If (StrComp(bak.Username, Splt(j), vbTextCompare) = 0) Then
+                            For j = LBound(splt) To UBound(splt)
+                                If (StrComp(bak.Username, splt(j), vbTextCompare) = 0) Then
                                     innerfound = True
                                 
                                     Exit For
@@ -5716,13 +5718,13 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                             If (innerfound) Then
                                 Dim k As Integer ' ...
                                 
-                                For k = (j + 1) To UBound(Splt)
-                                    Splt(k - 1) = Splt(k)
+                                For k = (j + 1) To UBound(splt)
+                                    splt(k - 1) = splt(k)
                                 Next k
                                 
-                                ReDim Preserve Splt(UBound(Splt) - 1)
+                                ReDim Preserve splt(UBound(splt) - 1)
                                 
-                                DB(i).Groups = Join(Splt(), vbNullString)
+                                DB(i).Groups = Join(splt(), vbNullString)
                             End If
                         Else
                             If (StrComp(bak.Username, DB(i).Groups, vbTextCompare) = 0) Then
