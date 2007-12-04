@@ -296,7 +296,7 @@ Private Sub Form_Load()
         End If
     Next i
     
-    trvUsers.Nodes(1).Selected = True
+    trvUsers.Nodes(1).Expanded = True
 End Sub
 
 Private Sub trvUsers_MouseDown(Button As Integer, Shift As Integer, x As Single, _
