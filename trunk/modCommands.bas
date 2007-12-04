@@ -2307,7 +2307,8 @@ Private Function OnShitDel(ByVal Username As String, ByRef dbAccess As udtGetAcc
         tmpBuf(0) = "Error: The specified username is invalid."
     Else
         ' remove user from shitlist using "add" command
-        Call OnAdd(Username, dbAccess, msgData & " -B", True, tmpBuf())
+        Call OnAdd(Username, dbAccess, msgData & " -B --type USER", _
+            True, tmpBuf())
     End If
     
     ' return message
@@ -2349,10 +2350,11 @@ Private Function OnTagDel(ByVal Username As String, ByRef dbAccess As udtGetAcce
         tmpBuf(0) = "Error: The specified username is invalid."
     ElseIf (InStr(1, msgData, "*", vbBinaryCompare) <> 0) Then
         ' remove user from shitlist using "add" command
-        Call OnAdd(Username, dbAccess, msgData & " -B", True, tmpBuf())
+        Call OnAdd(Username, dbAccess, msgData & " -B --type USER", True, tmpBuf())
     Else
         ' remove user from shitlist using "add" command
-        Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " -B", True, tmpBuf())
+        Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " -B --type USER", _
+            True, tmpBuf())
     End If
         
     ' return message
@@ -2857,26 +2859,27 @@ Private Function OnTagAdd(ByVal Username As String, ByRef dbAccess As udtGetAcce
             tmpBuf(0) = "Error: The specified username is invalid."
         ElseIf (InStr(1, user, "*", vbBinaryCompare) <> 0) Then
             ' ...
-            Call OnAdd(Username, dbAccess, user & " +B --banmsg " & bmsg, True, tmpBuf())
+            Call OnAdd(Username, dbAccess, user & " +B --type USER --banmsg " & _
+                bmsg, True, tmpBuf())
         Else
             If (Len(user) = 0) Then
                 tmpBuf(0) = "Error: The specified username is invalid."
             Else
                 ' ...
-                Call OnAdd(Username, dbAccess, "*" & user & "*" & " +B --banmsg " & bmsg, _
-                    True, tmpBuf())
+                Call OnAdd(Username, dbAccess, "*" & user & "*" & " +B --type USER --banmsg " _
+                    & bmsg, True, tmpBuf())
             End If
         End If
     Else
         If (InStr(1, msgData, "*", vbBinaryCompare) <> 0) Then
             ' ...
-            Call OnAdd(Username, dbAccess, msgData & " +B", True, tmpBuf())
+            Call OnAdd(Username, dbAccess, msgData & " +B --type USER", True, tmpBuf())
         Else
             If (Len(msgData) = 0) Then
                tmpBuf(0) = "Error: The specified username is invalid."
             Else
                 ' ...
-                Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " +B", True, _
+                Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " +B --type USER", True, _
                     tmpBuf())
             End If
         End If
@@ -3090,11 +3093,12 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
             Msg = Mid$(msgData, Index + 1)
         
             ' ...
-            Call OnAdd(Username, dbAccess, user & " +B --banmsg " & Msg, True, tmpBuf())
+            Call OnAdd(Username, dbAccess, user & " +B --type USER --banmsg " & _
+                Msg, True, tmpBuf())
         End If
     Else
         ' ...
-        Call OnAdd(Username, dbAccess, msgData & " +B", True, tmpBuf())
+        Call OnAdd(Username, dbAccess, msgData & " +B --type USER", True, tmpBuf())
     End If
     
     ' return message
@@ -4267,6 +4271,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim Index      As Integer ' ...
     Dim sGrp       As String  ' ...
     Dim dbType     As String  ' ...
+    Dim banmsg     As String  ' ...
 
     ' check for presence of optional add command
     ' parameters
@@ -4308,9 +4313,6 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             ' grab flags
             Flags = strArray(1)
         End If
-        
-        ' grab access for entry
-        gAcc = GetAccess(user)
         
         ' if we've found a matching user, lets correct
         ' the casing of the name that we've entered
@@ -4356,12 +4358,8 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                             
                             ' ...
                             If (dbType = "USER") Then
-                                ' set record type
-                                gAcc.Type = "USER"
+                                ' ...
                             ElseIf (dbType = "GROUP") Then
-                                ' set record type
-                                gAcc.Type = "GROUP"
-                                
                                 ' check for presence of space in name
                                 If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
                                     cmdRet(0) = "Error: The specified group name contains one or more " & _
@@ -4370,9 +4368,6 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                     Exit Function
                                 End If
                             ElseIf (dbType = "CLAN") Then
-                                ' set record type
-                                gAcc.Type = "CLAN"
-                                
                                 ' check for invalid clan entry
                                 If ((Len(user) < 2) Or (Len(user) > 4)) Then
                                     ' return message
@@ -4382,9 +4377,6 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                     Exit Function
                                 End If
                             ElseIf (dbType = "GAME") Then
-                                ' set record type
-                                gAcc.Type = "GAME"
-                                
                                 ' convert entry to uppercase
                                 user = UCase$(user)
                                 
@@ -4414,7 +4406,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     Case "banmsg" ' ...
                         ' do we have a valid parameter length?
                         If (Len(pmsg)) Then
-                            gAcc.BanMessage = pmsg
+                            banmsg = pmsg
                         End If
                         
                     Case "group" ' ...
@@ -4492,24 +4484,29 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                     
                                 Exit Function
                             Else
-                                gAcc.Groups = pmsg
-                                
-                                sGrp = gAcc.Groups
+                                sGrp = pmsg
                             End If
                         End If
                 End Select
             Next i
         End If
         
+        ' grab access for entry
+        gAcc = GetAccess(user, dbType)
+        
         ' we want to ensure that we have a default
         ' entry type if none is specified explicitly
         If (dbType = vbNullString) Then
-            dbType = "USER"
+            dbType = gAcc.Type
+            
+            If (dbType = vbNullString) Then
+                dbType = "USER"
+            End If
         End If
 
         ' is rank valid?
         If ((rank <= 0) And (Flags = vbNullString) And _
-            (gAcc.Groups = vbNullString)) Then
+            (sGrp = vbNullString)) Then
             
             tmpBuf = "Error: You have specified an invalid rank."
             
@@ -4649,7 +4646,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         
                         ' does this entry have any remaining access?
                         If ((gAcc.access = 0) And (gAcc.Flags = vbNullString) And _
-                            ((gAcc.Groups = vbNullString) Or (gAcc.Groups = "%"))) Then
+                            ((sGrp = vbNullString) Or (sGrp = "%"))) Then
                             
                             Dim res As Boolean ' ...
                            
@@ -4724,7 +4721,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     ' ...
                     'If ((gAcc.access <= 0) And _
                     '    (gAcc.Flags = vbNullString) And _
-                    '    (gAcc.Groups = vbNullString)) Then
+                    '    (sGrp = vbNullString)) Then
                     '
                     '    ' remove user
                     '    Call RemoveItem(user, "users")
@@ -4745,7 +4742,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                             .ModifiedBy = Username
                             .ModifiedOn = Now
                             .Type = dbType
-                            .Groups = gAcc.Groups
+                            .Groups = sGrp
                             .BanMessage = gAcc.BanMessage
                         End With
                     
@@ -4782,7 +4779,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     .AddedOn = Now
                     .Type = IIf(((dbType <> vbNullString) And (dbType <> "%")), _
                         dbType, "USER")
-                    .Groups = gAcc.Groups
+                    .Groups = sGrp
                     .BanMessage = gAcc.BanMessage
                 End With
                 
@@ -4822,10 +4819,10 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             If (Len(sGrp)) Then
                 If (Len(tmpBuf)) Then
                     tmpBuf = tmpBuf & ", and has been made a member of " & _
-                        "the group(s): " & gAcc.Groups
+                        "the group(s): " & sGrp
                 Else
                     tmpBuf = Chr(34) & user & Chr(34) & " has been made a member of " & _
-                        "the group(s): " & gAcc.Groups
+                        "the group(s): " & sGrp
                 End If
             End If
             

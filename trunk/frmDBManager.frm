@@ -299,11 +299,11 @@ Private Sub Form_Load()
     trvUsers.Nodes(1).Expanded = True
 End Sub
 
-Private Sub trvUsers_MouseDown(Button As Integer, Shift As Integer, x As Single, _
-    y As Single)
-    
-    Set m_selnode = trvUsers.SelectedItem
-End Sub
+'Private Sub trvUsers_MouseDown(Button As Integer, Shift As Integer, x As Single, _
+'    y As Single)
+'
+'    Set m_selnode = trvUsers.SelectedItem
+'End Sub
 
 Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
     Set m_selnode = Node
@@ -334,36 +334,54 @@ Private Sub trvUsers_DragDrop(ByRef Source As Control, ByRef x As Single, _
     
     If (m_dragging) Then
         If (Source.Name = "trvUsers") Then
-            Dim selnow  As udtGetAccessResponse ' ...
-            Dim selprev As udtGetAccessResponse ' ...
-            
             If (Not (trvUsers.DropHighlight Is Nothing)) Then
-                selnow = GetAccess(trvUsers.DropHighlight.text)
-                selprev = GetAccess(trvUsers.SelectedItem.text)
+                Dim selnow  As udtGetAccessResponse ' ...
+                Dim selprev As udtGetAccessResponse ' ...
                 
-                If (StrComp(selnow.Type, "GROUP", vbBinaryCompare) = 0) Then
-                    Dim res As Integer ' ...
+                Dim res     As Integer ' ...
+                Dim i       As Integer ' ...
                 
-                    'res = MsgBox("Are you sure you wish to move " & Chr$(34) & _
-                    '    selprev.Username & Chr$(34) & " into the group " & Chr$(34) & _
-                    '        selnow.Username & "?" & Chr$(34), vbYesNo + vbInformation, _
-                    '            "Move User")
-                    '
-                    'If (res = vbYes) Then
-                        Dim i As Integer ' ...
+                If (trvUsers.DropHighlight.Index = 1) Then
+                    selprev = GetAccess(trvUsers.SelectedItem.text)
+                    
+                    If (Len(selprev.Groups) And (selprev.Groups <> "%")) Then
+                        res = MsgBox("Are you sure you wish to move " & Chr$(34) & _
+                            selprev.Username & Chr$(34) & " out of the group(s) " & Chr$(34) & _
+                                selprev.Groups & "?" & Chr$(34), vbYesNo + vbInformation, _
+                                    "Move User")
+                                        
+                        If (res = vbYes) Then
+                            For i = LBound(DB) To UBound(DB)
+                                If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
+                                    DB(i).Groups = vbNullString
+                                End If
+                            Next i
+                            
+                            Call WriteDatabase(GetFilePath("users.txt"))
+                        End If
+                    End If
+                Else
+                    If (trvUsers.SelectedItem.Index <> 1) Then
+                        selnow = GetAccess(trvUsers.DropHighlight.text)
+                        selprev = GetAccess(trvUsers.SelectedItem.text)
                         
-                        For i = LBound(DB) To UBound(DB)
-                            If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
-                                DB(i).Groups = trvUsers.DropHighlight.text
+                        If (StrComp(selnow.Type, "GROUP", vbBinaryCompare) = 0) Then
+                            res = MsgBox("Are you sure you wish to move " & Chr$(34) & _
+                                selprev.Username & Chr$(34) & " into the group " & Chr$(34) & _
+                                    selnow.Username & "?" & Chr$(34), vbYesNo + vbInformation, _
+                                        "Move User")
+                            
+                            If (res = vbYes) Then
+                                For i = LBound(DB) To UBound(DB)
+                                    If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
+                                        DB(i).Groups = trvUsers.DropHighlight.text
+                                    End If
+                                Next i
+                                
+                                Call WriteDatabase(GetFilePath("users.txt"))
                             End If
-                        Next i
-                        
-                        Call WriteDatabase(GetFilePath("users.txt"))
-                        
-                        ReDim DB(0)
-                        
-                        Call Form_Load
-                    'End If
+                        End If
+                    End If
                 End If
             End If
             

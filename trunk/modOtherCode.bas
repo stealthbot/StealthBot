@@ -554,7 +554,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                                 GetCumulativeAccess.Username = GetCumulativeAccess.Username & _
                                     IIf((i + 1), Space(1), vbNullString) & "["
                             End If
-                        
+                                    
                             ' ...
                             GetCumulativeAccess.Username = GetCumulativeAccess.Username & gAcc.Username & _
                                 IIf(((gAcc.Type <> "%") And (StrComp(gAcc.Type, "USER", vbTextCompare) <> 0)), _
@@ -577,15 +577,11 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     
         ' ...
         If ((InStr(1, Username, "*", vbBinaryCompare) = 0) And _
-            (InStr(1, Username, "?", vbBinaryCompare) = 0)) Then
+            (InStr(1, Username, "?", vbBinaryCompare) = 0) And _
+            (GetCumulativeAccess.Type <> "GAME") And _
+            (GetCumulativeAccess.Type <> "CLAN") And _
+            (GetCumulativeAccess.Type <> "GROUP")) Then
             
-            ' ...
-            If (dbCount = 0) Then
-                ' ...
-                GetCumulativeAccess.Username = GetCumulativeAccess.Username & _
-                    IIf((dbIndex + 1), Space(1), vbNullString) & "["
-            End If
-        
             ' ...
             For i = LBound(DB) To UBound(DB)
                 Dim doCheck As Boolean ' ...
@@ -727,6 +723,13 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
    
                         If (bln) Then
                             ' ...
+                            If (dbCount = 0) Then
+                                ' ...
+                                GetCumulativeAccess.Username = GetCumulativeAccess.Username & _
+                                    IIf((dbIndex + 1), Space(1), vbNullString) & "["
+                            End If
+                        
+                            ' ...
                             GetCumulativeAccess.Username = GetCumulativeAccess.Username & tmp.Username & _
                                 IIf(((tmp.Type <> "%") And (StrComp(tmp.Type, "USER", vbTextCompare) <> 0)), _
                                     " (" & LCase$(tmp.Type) & ")", vbNullString) & ", "
@@ -741,22 +744,20 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                 bln = False
                 doCheck = False
             Next i
-            
-            If (dbCount > 0) Then
-                ' ...
-                GetCumulativeAccess.Username = Left$(GetCumulativeAccess.Username, _
-                    Len(GetCumulativeAccess.Username) - 2) & "]"
-            Else
-                ' ...
-                If (dbIndex = -1) Then
-                    ' ...
-                    GetCumulativeAccess.Username = vbNullString
-                Else
-                    ' ...
-                    GetCumulativeAccess.Username = Left$(GetCumulativeAccess.Username, _
-                        Len(GetCumulativeAccess.Username) - 2)
-                End If
+        End If
+        
+        If (dbCount = 0) Then
+            If (dbIndex = -1) Then
+                With GetCumulativeAccess
+                    .Username = vbNullString
+                    .access = -1
+                    .Flags = vbNullString
+                End With
             End If
+        Else
+            ' ...
+            GetCumulativeAccess.Username = Left$(GetCumulativeAccess.Username, _
+                Len(GetCumulativeAccess.Username) - 2) & "]"
         End If
     End If
     
