@@ -872,11 +872,11 @@ End Function
 '// GETNAMEBYPOSITION
 '// Returns the name of the person at position X in the channel list.
 '// Positions are 1-based. Returns an empty string if the user isn't present
-Public Function GetNameByPosition(ByVal X As Integer) As String
+Public Function GetNameByPosition(ByVal x As Integer) As String
     
     With frmChat.lvChannel.ListItems
-        If X > 0 And X <= .Count Then
-            GetNameByPosition = .Item(X).text
+        If x > 0 And x <= .Count Then
+            GetNameByPosition = .Item(x).text
         Else
             GetNameByPosition = ""
         End If
@@ -1160,8 +1160,8 @@ Public Sub GetWinCursorPos(ByRef lCursorX As Long, ByRef lCursorY As Long)
     
     GetCursorPos PAPI
     
-    lCursorX = PAPI.X
-    lCursorY = PAPI.Y
+    lCursorX = PAPI.x
+    lCursorY = PAPI.y
 End Sub
 
 
@@ -1356,7 +1356,7 @@ Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVa
             End If
         Else
             strUsername = strOption
-            strProduct = GetInternalDataByUsername(strOption, 3)
+            strProduct = GetInternalDataByUsername(BotVars.Username, 3)
             If strProduct = "D2DV" Or strProduct = "D2PX" Then strUsername = "*" & strUsername
             If Len(strDelimiter) > 0 Then
                 strDelim = strDelimiter
@@ -1577,11 +1577,11 @@ End Sub
 
 Private Sub Class_Terminate()
     'Go through and destroy all the Forms the user has created
-    Dim X As Integer
-    For X = 0 To obScriptForms.Count
+    Dim x As Integer
+    For x = 0 To obScriptForms.Count
         Unload obScriptForms.Item(0)
         Call obScriptForms.Remove(0)
-    Next X
+    Next x
     Set obScriptForms = Nothing
 End Sub
 
