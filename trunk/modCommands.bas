@@ -4452,27 +4452,35 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                         ' causing a stack overflow when doing recursion in
                                         ' GetCumulativeAccess().
                                         If ((Len(tmp.Groups)) And (tmp.Groups <> "%")) Then
-                                            Dim splt2() As String  ' ...
-                                            Dim k       As Integer ' ...
-                                        
-                                            If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
-                                                splt2() = Split(tmp.Groups, ",")
-                                            Else
-                                                ReDim Preserve splt2(0)
-                                        
-                                                splt2(0) = tmp.Groups
-                                            End If
-                                        
-                                            For k = LBound(splt2) To UBound(splt2)
-                                                If (StrComp(user, splt2(k), vbBinaryCompare) = 0) Then
-                                        
-                                                    cmdRet(0) = "Error: " & Chr$(34) & tmp.Username & _
-                                                        Chr$(34) & " is already a member of group " & _
-                                                            Chr$(34) & user & "." & Chr$(34)
+                                            If (CheckGroup(tmp.Username, user)) Then
+                                                cmdRet(0) = "Error: " & Chr$(34) & tmp.Username & _
+                                                    Chr$(34) & " is already a member of group " & _
+                                                        Chr$(34) & user & "." & Chr$(34)
                                         
                                                     Exit Function
-                                                End If
-                                            Next k
+                                            End If
+                                            
+                                            'Dim splt2() As String  ' ...
+                                            'Dim k       As Integer ' ...
+                                            '
+                                            'If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
+                                            '    splt2() = Split(tmp.Groups, ",")
+                                            'Else
+                                            '    ReDim Preserve splt2(0)
+                                            '
+                                            '    splt2(0) = tmp.Groups
+                                            'End If
+                                            '
+                                            'For k = LBound(splt2) To UBound(splt2)
+                                            '    If (StrComp(user, splt2(k), vbBinaryCompare) = 0) Then
+                                            '
+                                            '        cmdRet(0) = "Error: " & Chr$(34) & tmp.Username & _
+                                            '            Chr$(34) & " is already a member of group " & _
+                                            '                Chr$(34) & user & "." & Chr$(34)
+                                            '
+                                            '        Exit Function
+                                            '    End If
+                                            'Next k
                                         End If
                                     End If
                                 End If

@@ -34,9 +34,9 @@ Begin VB.Form frmDBManager
       LineStyle       =   1
       Sorted          =   -1  'True
       Style           =   6
-      SingleSel       =   -1  'True
       Appearance      =   1
       OLEDragMode     =   1
+      OLEDropMode     =   1
    End
    Begin VB.TextBox txtFlags 
       BackColor       =   &H00993300&
@@ -217,11 +217,16 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
+Private m_dragging As Boolean ' ...
+Private m_selnode  As Node    ' ...
+
 Private Sub Form_Load()
     Dim i      As Integer ' ...
     Dim splt() As String  ' ...
     Dim j      As Integer ' ...
     Dim pos    As Integer ' ...
+    
+    Call trvUsers.Nodes.Clear
 
     If (DB(0).Username = vbNullString) Then
         Call LoadDatabase
@@ -294,14 +299,32 @@ Private Sub Form_Load()
     trvUsers.Nodes(1).Selected = True
 End Sub
 
+Private Sub trvUsers_MouseDown(Button As Integer, Shift As Integer, x As Single, _
+    y As Single)
+    
+    Set m_selnode = trvUsers.SelectedItem
+End Sub
+
+Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
+    Set m_selnode = Node
+End Sub
+
+Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, x As Single, _
+    y As Single)
+
+    If (Button = vbLeftButton) Then
+        m_dragging = True
+        
+        Call trvUsers.Drag(vbBeginDrag)
+    End If
+End Sub
+
 Private Sub trvUsers_DragOver(ByRef Source As Control, ByRef x As Single, _
     ByRef y As Single, ByRef State As Integer)
     
-    If (State = vbEnter) Then
+    If (m_dragging) Then
         If (Source.Name = "trvUsers") Then
-            'Source.DragIcon = picOkDrop.Picture
-        Else
-            'Source.DragIcon = picNoDrop.Picture
+            Set trvUsers.DropHighlight = trvUsers.HitTest(x, y)
         End If
     End If
 End Sub
@@ -309,11 +332,48 @@ End Sub
 Private Sub trvUsers_DragDrop(ByRef Source As Control, ByRef x As Single, _
     ByRef y As Single)
     
-    If (Source.Name = "trvUsers") Then
-        
+    If (m_dragging) Then
+        If (Source.Name = "trvUsers") Then
+            Dim selnow  As udtGetAccessResponse ' ...
+            Dim selprev As udtGetAccessResponse ' ...
+            
+            If (Not (trvUsers.DropHighlight Is Nothing)) Then
+                selnow = GetAccess(trvUsers.DropHighlight.text)
+                selprev = GetAccess(trvUsers.SelectedItem.text)
+                
+                If (StrComp(selnow.Type, "GROUP", vbBinaryCompare) = 0) Then
+                    Dim res As Integer ' ...
+                
+                    'res = MsgBox("Are you sure you wish to move " & Chr$(34) & _
+                    '    selprev.Username & Chr$(34) & " into the group " & Chr$(34) & _
+                    '        selnow.Username & "?" & Chr$(34), vbYesNo + vbInformation, _
+                    '            "Move User")
+                    '
+                    'If (res = vbYes) Then
+                        Dim i As Integer ' ...
+                        
+                        For i = LBound(DB) To UBound(DB)
+                            If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
+                                DB(i).Groups = trvUsers.DropHighlight.text
+                            End If
+                        Next i
+                        
+                        Call WriteDatabase(GetFilePath("users.txt"))
+                        
+                        ReDim DB(0)
+                        
+                        Call Form_Load
+                    'End If
+                End If
+            End If
+            
+            Set m_selnode = Nothing
+            
+            Set trvUsers.DropHighlight = Nothing
+            
+            m_dragging = False
+        End If
     End If
-    
-    MsgBox Source.Name
 End Sub
 
 Private Function Exists(ByVal nodeName As String) As Integer

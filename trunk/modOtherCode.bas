@@ -464,7 +464,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Dim found   As Boolean ' ...
     Dim dbIndex As Integer ' ...
     Dim dbCount As Integer ' ...
-    Dim Splt()  As String  ' ...
+    Dim splt()  As String  ' ...
     Dim bln     As Boolean ' ...
     
     ' default index to negative one to
@@ -498,19 +498,19 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                     ' ...
                     If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
                         ' ...
-                        Splt() = Split(DB(i).Groups, ",")
+                        splt() = Split(DB(i).Groups, ",")
                     Else
                         ' ...
-                        ReDim Preserve Splt(0)
+                        ReDim Preserve splt(0)
                         
                         ' ...
-                        Splt(0) = DB(i).Groups
+                        splt(0) = DB(i).Groups
                     End If
                     
                     ' ...
-                    For j = 0 To UBound(Splt)
+                    For j = 0 To UBound(splt)
                         ' ...
-                        gAcc = GetCumulativeGroupAccess(Splt(j))
+                        gAcc = GetCumulativeGroupAccess(splt(j))
                     
                         ' ...
                         If (GetCumulativeAccess.access < gAcc.access) Then
@@ -649,19 +649,19 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             ' ...
                             If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
                                 ' ...
-                                Splt() = Split(tmp.Groups, ",")
+                                splt() = Split(tmp.Groups, ",")
                             Else
                                 ' ...
-                                ReDim Preserve Splt(0)
+                                ReDim Preserve splt(0)
                                 
                                 ' ...
-                                Splt(0) = tmp.Groups
+                                splt(0) = tmp.Groups
                             End If
                             
                             ' ...
-                            For j = 0 To UBound(Splt)
+                            For j = 0 To UBound(splt)
                                 ' ...
-                                gAcc = GetCumulativeGroupAccess(Splt(j))
+                                gAcc = GetCumulativeGroupAccess(splt(j))
                             
                                 ' ...
                                 If (tmp.access < gAcc.access) Then
@@ -769,7 +769,7 @@ End Function
 ' ...
 Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccessResponse
     Dim gAcc   As udtGetAccessResponse ' ...
-    Dim Splt() As String               ' ...
+    Dim splt() As String               ' ...
     
     ' ...
     gAcc = GetAccess(Group, "GROUP")
@@ -784,12 +784,12 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
             Dim j As Integer ' ...
         
             ' ...
-            Splt() = Split(gAcc.Groups, ",")
+            splt() = Split(gAcc.Groups, ",")
             
             ' ...
-            For i = 0 To UBound(Splt)
+            For i = 0 To UBound(splt)
                 ' ...
-                recAcc = GetCumulativeGroupAccess(Splt(i))
+                recAcc = GetCumulativeGroupAccess(splt(i))
                     
                 ' ...
                 If (gAcc.access < recAcc.access) Then
@@ -849,6 +849,65 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
     
     ' ...
     GetCumulativeGroupAccess = gAcc
+End Function
+
+' ...
+Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Boolean
+    Dim gAcc   As udtGetAccessResponse ' ...
+    Dim splt() As String               ' ...
+    
+    ' ...
+    gAcc = GetAccess(Group, "GROUP")
+    
+    ' ...
+    If ((Len(gAcc.Groups) > 0) And (gAcc.Groups <> "%")) Then
+        Dim recAcc As Boolean ' ...
+    
+        ' ...
+        If (InStr(1, gAcc.Groups, ",", vbBinaryCompare) <> 0) Then
+            Dim i As Integer ' ...
+            Dim j As Integer ' ...
+        
+            ' ...
+            splt() = Split(gAcc.Groups, ",")
+            
+            ' ...
+            For i = 0 To UBound(splt)
+                If (StrComp(splt(i), Check, vbTextCompare) = 0) Then
+                    CheckGroup = True
+                    
+                    Exit Function
+                Else
+                    ' ...
+                    recAcc = CheckGroup(splt(i), Check)
+                
+                    If (recAcc) Then
+                        CheckGroup = True
+                    
+                        Exit Function
+                    End If
+                End If
+            Next i
+        Else
+            If (StrComp(gAcc.Groups, Check, vbTextCompare) = 0) Then
+                CheckGroup = True
+                
+                Exit Function
+            Else
+                ' ...
+                recAcc = CheckGroup(gAcc.Groups, Check)
+            
+                If (recAcc) Then
+                    CheckGroup = True
+                
+                    Exit Function
+                End If
+            End If
+        End If
+    End If
+    
+    ' ...
+    CheckGroup = False
 End Function
 
 
@@ -2073,22 +2132,22 @@ End Sub
 ' Returns a single chunk of a string as if that string were Split() and that chunk
 ' extracted
 ' 1-based
-Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
+Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
     'one two three
     '   1   2
     Dim c As Integer, i As Integer, TargetSpace As Integer
     c = 0
     i = 1
-    Pos = Pos
+    pos = pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While (c < Pos) And (i > 0)
+    While (c < pos) And (i > 0)
         TargetSpace = i
         i = InStr(i + 1, str, " ")
         c = c + 1
     Wend
     
-    If c >= Pos Then
+    If c >= pos Then
         c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
         If c > 0 Then
