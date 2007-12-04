@@ -5,7 +5,7 @@ Begin VB.Form frmDBManager
    ClientHeight    =   5640
    ClientLeft      =   60
    ClientTop       =   450
-   ClientWidth     =   6855
+   ClientWidth     =   6750
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -16,13 +16,14 @@ Begin VB.Form frmDBManager
       Strikethrough   =   0   'False
    EndProperty
    LinkTopic       =   "frmDBManager"
+   MaxButton       =   0   'False
    ScaleHeight     =   5640
-   ScaleWidth      =   6855
+   ScaleWidth      =   6750
    StartUpPosition =   1  'CenterOwner
    Begin MSComctlLib.TreeView trvUsers 
       Height          =   5055
       Left            =   120
-      TabIndex        =   17
+      TabIndex        =   16
       Top             =   105
       Width           =   3375
       _ExtentX        =   5953
@@ -35,42 +36,30 @@ Begin VB.Form frmDBManager
       SingleSel       =   -1  'True
       Appearance      =   1
    End
-   Begin VB.OptionButton Option1 
-      Caption         =   "Clan"
-      Height          =   255
-      Index           =   1
-      Left            =   4800
-      TabIndex        =   11
-      Top             =   620
-      Width           =   735
-   End
-   Begin VB.TextBox txtBackupChan 
+   Begin VB.TextBox txtFlags 
       BackColor       =   &H00993300&
       ForeColor       =   &H00FFFFFF&
       Height          =   285
-      Index           =   2
       Left            =   5160
       MaxLength       =   25
       TabIndex        =   7
       Top             =   2280
       Width           =   1215
    End
-   Begin VB.TextBox txtBackupChan 
+   Begin VB.TextBox txtRank 
       BackColor       =   &H00993300&
       ForeColor       =   &H00FFFFFF&
       Height          =   285
-      Index           =   1
       Left            =   3840
       MaxLength       =   25
       TabIndex        =   5
       Top             =   2280
       Width           =   1215
    End
-   Begin VB.TextBox txtBackupChan 
+   Begin VB.TextBox txtName 
       BackColor       =   &H00993300&
       ForeColor       =   &H00FFFFFF&
       Height          =   285
-      Index           =   0
       Left            =   3840
       MaxLength       =   25
       TabIndex        =   3
@@ -81,7 +70,7 @@ Begin VB.Form frmDBManager
       Caption         =   "&Cancel"
       Height          =   255
       Index           =   0
-      Left            =   4560
+      Left            =   4440
       TabIndex        =   2
       Top             =   5280
       Width           =   855
@@ -90,7 +79,7 @@ Begin VB.Form frmDBManager
       Caption         =   "Apply and Cl&ose"
       Height          =   255
       Index           =   0
-      Left            =   5400
+      Left            =   5280
       TabIndex        =   1
       Top             =   5280
       Width           =   1335
@@ -101,11 +90,21 @@ Begin VB.Form frmDBManager
       Left            =   3600
       TabIndex        =   0
       Top             =   10
-      Width           =   3135
-      Begin VB.ListBox List1 
+      Width           =   3025
+      Begin VB.OptionButton recType 
+         Caption         =   "Clan"
+         Height          =   255
+         Index           =   1
+         Left            =   1200
+         TabIndex        =   18
+         Top             =   620
+         Width           =   735
+      End
+      Begin VB.ListBox lstGroups 
          Height          =   1620
          Left            =   240
-         TabIndex        =   18
+         MultiSelect     =   1  'Simple
+         TabIndex        =   17
          Top             =   3000
          Width           =   2535
       End
@@ -115,7 +114,7 @@ Begin VB.Form frmDBManager
          Height          =   255
          Index           =   1
          Left            =   1080
-         TabIndex        =   16
+         TabIndex        =   15
          Top             =   4750
          Width           =   855
       End
@@ -124,29 +123,29 @@ Begin VB.Form frmDBManager
          Height          =   255
          Index           =   1
          Left            =   1930
-         TabIndex        =   15
+         TabIndex        =   14
          Top             =   4750
          Width           =   855
       End
-      Begin VB.OptionButton Option1 
+      Begin VB.OptionButton recType 
          Caption         =   "Group"
          Height          =   255
          Index           =   3
          Left            =   1200
-         TabIndex        =   13
-         Top             =   870
-         Width           =   735
-      End
-      Begin VB.OptionButton Option1 
-         Caption         =   "Game"
-         Height          =   255
-         Index           =   2
-         Left            =   360
          TabIndex        =   12
          Top             =   870
          Width           =   735
       End
-      Begin VB.OptionButton Option1 
+      Begin VB.OptionButton recType 
+         Caption         =   "Game"
+         Height          =   255
+         Index           =   2
+         Left            =   360
+         TabIndex        =   11
+         Top             =   870
+         Width           =   735
+      End
+      Begin VB.OptionButton recType 
          Caption         =   "User"
          Height          =   255
          Index           =   0
@@ -161,7 +160,7 @@ Begin VB.Form frmDBManager
          Height          =   255
          Index           =   4
          Left            =   240
-         TabIndex        =   14
+         TabIndex        =   13
          Top             =   360
          Width           =   1815
       End
@@ -250,6 +249,10 @@ Private Sub Form_Load()
         End If
     Next i
     
+    For i = 1 To trvUsers.Nodes.Count
+        Call lstGroups.AddItem(trvUsers.Nodes(i).text)
+    Next i
+    
     For i = LBound(DB) To UBound(DB)
         If ((StrComp(DB(i).Type, "USER", vbBinaryCompare) = 0) Or _
             (StrComp(DB(i).Type, "CLAN", vbBinaryCompare) = 0) Or _
@@ -294,3 +297,61 @@ Private Function Exists(ByVal nodeName As String) As Integer
     
     Exists = False
 End Function
+
+Private Sub trvUsers_Click()
+    Dim tmp As udtGetAccessResponse ' ...
+    
+    Dim i   As Integer ' ...
+    
+    ' deselect groups
+    For i = 0 To (lstGroups.ListCount - 1)
+        lstGroups.Selected(i) = False
+    Next i
+    
+    ' disable changing of record type
+    For i = 0 To 3
+        recType(i).Enabled = False
+    Next i
+    
+    ' disable changing of record name
+    txtName.Enabled = False
+    
+    ' grab entry from database
+    tmp = GetAccess(trvUsers.SelectedItem.text)
+    
+    Select Case (UCase$(tmp.Type))
+        Case "USER":  recType(0).Value = True
+        Case "CLAN":  recType(1).Value = True
+        Case "GAME":  recType(2).Value = True
+        Case "GROUP": recType(3).Value = True
+    End Select
+    
+    txtName.text = tmp.Username
+    
+    If (tmp.access) Then
+        txtRank.text = tmp.access
+    End If
+    
+    txtFlags.text = tmp.Flags
+    
+    If (Len(tmp.Groups) And (tmp.Groups <> "%")) Then
+        Dim splt() As String  ' ...
+        Dim j      As Integer ' ...
+    
+        If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
+            splt() = Split(DB(i).Groups, ",")
+        Else
+            ReDim Preserve splt(0)
+            
+            splt(0) = tmp.Groups
+        End If
+        
+        For i = LBound(splt) To UBound(splt)
+            For j = 0 To (lstGroups.ListCount - 1)
+                If (StrComp(splt(i), lstGroups.List(j), vbTextCompare) = 0) Then
+                    lstGroups.Selected(j) = True
+                End If
+            Next j
+        Next i
+    End If
+End Sub
