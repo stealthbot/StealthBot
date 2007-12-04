@@ -1,7 +1,7 @@
 'defs
 '1.0
 '&Definitions:Hdx
-'&define:newdef:deldef
+'&define:newdef <phrase>|<definition>:deldef
 '&
 '&Replacement for the internal Define/NewDef/DelDef commands.
 
