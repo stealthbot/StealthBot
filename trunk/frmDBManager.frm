@@ -4,7 +4,7 @@ Begin VB.Form frmDBManager
    Caption         =   "Database Manager"
    ClientHeight    =   5640
    ClientLeft      =   60
-   ClientTop       =   450
+   ClientTop       =   750
    ClientWidth     =   6750
    BeginProperty Font 
       Name            =   "Tahoma"
@@ -37,7 +37,6 @@ Begin VB.Form frmDBManager
       SingleSel       =   -1  'True
       Appearance      =   1
       OLEDragMode     =   1
-      OLEDropMode     =   1
    End
    Begin VB.TextBox txtFlags 
       BackColor       =   &H00993300&
@@ -204,6 +203,12 @@ Begin VB.Form frmDBManager
          Width           =   2535
       End
    End
+   Begin VB.Menu mnuFile 
+      Caption         =   "File"
+      Begin VB.Menu mnuOpenDB 
+         Caption         =   "Open Database"
+      End
+   End
 End
 Attribute VB_Name = "frmDBManager"
 Attribute VB_GlobalNameSpace = False
@@ -289,6 +294,28 @@ Private Sub Form_Load()
     trvUsers.Nodes(1).Selected = True
 End Sub
 
+Private Sub trvUsers_DragOver(ByRef Source As Control, ByRef x As Single, _
+    ByRef y As Single, ByRef State As Integer)
+    
+    If (State = vbEnter) Then
+        If (Source.Name = "trvUsers") Then
+            'Source.DragIcon = picOkDrop.Picture
+        Else
+            'Source.DragIcon = picNoDrop.Picture
+        End If
+    End If
+End Sub
+
+Private Sub trvUsers_DragDrop(ByRef Source As Control, ByRef x As Single, _
+    ByRef y As Single)
+    
+    If (Source.Name = "trvUsers") Then
+        
+    End If
+    
+    MsgBox Source.Name
+End Sub
+
 Private Function Exists(ByVal nodeName As String) As Integer
     Dim i As Integer ' ...
     
@@ -333,7 +360,7 @@ Private Sub trvUsers_Click()
     
     txtName.text = tmp.Username
     
-    If (tmp.access) Then
+    If (tmp.access > 0) Then
         txtRank.text = tmp.access
     End If
     

@@ -279,17 +279,17 @@ Repeat2:
             
         ElseIf KeyName = "Profile\Description" Then
         
-            Dim X() As String
+            Dim x() As String
             
-            X() = Split(KeyValue, Chr(13))
+            x() = Split(KeyValue, Chr(13))
             ReDim s(0)
             
-            For i = LBound(X) To UBound(X)
-                s(0) = X(i)
+            For i = LBound(x) To UBound(x)
+                s(0) = x(i)
                 
                 If Len(s(0)) > 200 Then s(0) = Left$(s(0), 200)
                 
-                If i = LBound(X) Then
+                If i = LBound(x) Then
                     frmChat.AddQ u & "[Descr] " & s(0)
                 Else
                     frmChat.AddQ u & "[Descr] " & Right(s(0), Len(s(0)) - 1)
@@ -1391,7 +1391,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim Pos       As Integer
+    Dim pos       As Integer
     Dim userIndex As Integer
     
     If (bFlood) Then
@@ -1606,7 +1606,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         If (LenB(Mimic) > 0 And (StrComp(Username, Mimic, _
             vbTextCompare) = 0)) Then
             
-            frmChat.AddQ Message
+            frmChat.AddQ Username & " says: " & Message
         End If
             
         If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
@@ -1992,14 +1992,14 @@ End Function
 '11/22/07 - Hdx - Pass the channel listing (0x0B) directly off to scriptors for there needs. (What other use is there?)
 Public Sub Event_ChannelList(sChannels() As String)
     If (MDebug("all")) Then
-        Dim X As Integer
+        Dim x As Integer
         
         frmChat.AddChat RTBColors.InformationText, "Received Channel List: "
         
-        For X = 0 To UBound(sChannels)
+        For x = 0 To UBound(sChannels)
             frmChat.AddChat RTBColors.InformationText, vbTab & _
-                sChannels(X)
-        Next X
+                sChannels(x)
+        Next x
     End If
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
