@@ -1324,58 +1324,42 @@ End Function
 '// DSP
 '// Written by Swent. Displays messages via the specified output type and allows for unlimited message lengths.
 '// This function is backwards compatiable -- you do not need to modify your current Dsp calls
-'//     intID (required) must be one of the following integer values:
+'//     Syntax: Dsp Output, Message, [Username], [Color], [Delimiter]
+'//     Output must be one of the following integer values:
 '//         1 = AddQ
-'//             Usage: Dsp 1, Message, [Delimiter]
+'//             Example: Dsp 1, "Example message"
 '//         2 = Emote
-'//             Usage: Dsp 2, Message, [Delimiter]
+'//             Example: Dsp 2, "Example message"
 '//         3 = Whisper
-'//             Usage: Dsp 3, Message, Username, [Delimiter]
+'//             Example: Dsp 3, "Example message, "JoeUser"
 '//         4 = AddChat
-'//             Usage: Dsp 4, Message, Color
-'//     Color must be a vbColor or any RGB value
-Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVal strOption As String, Optional ByVal strDelimiter As String)
+'//             Example: Dsp 4, "Example message", , vbCyan
+'//     Delimiter is " " by default, and only applies for messages > 220 characters.
+Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVal strUsername As String, Optional ByVal lngColor As Long, Optional ByVal strDelimiter As String)
 
     If intID < 4 Then
-        Dim arrQueue() As String
-        Dim arrMessage() As String
-        Dim tmpMsgPart As String
+        Dim arrQueue() As String, arrMessage() As String
+        Dim tmpMsgPart As String, strDelim As String, strProduct As String
         Dim i As Integer
-        Dim strUsername As String
-        Dim strDelim As String
-        Dim strProduct As String
-        
         ReDim arrQueue(0)
         
-        '// Get username and delimiter if applicable
-        If intID < 3 Then
-            If Len(strOption) > 0 Then
-              strDelim = strOption
-            Else
-              strDelim = " "
-            End If
-        Else
-            strUsername = strOption
+        If intID = 3 Then
             strProduct = GetInternalDataByUsername(BotVars.Username, 3)
             If strProduct = "D2DV" Or strProduct = "D2PX" Then strUsername = "*" & strUsername
-            If Len(strDelimiter) > 0 Then
-                strDelim = strDelimiter
-            Else
-                strDelim = " "
-            End If
         End If
+        If Len(strDelimiter) = 0 Then strDelimiter = " "
         
         '// If message is too long to display in a single AddQ, split into multiple messages
-        If Len(strMessage) > 220 And InStr(strMessage, strDelim) Then
+        If Len(strMessage) > 220 And InStr(strMessage, strDelimiter) Then
             arrMessage = Split(strMessage)
             
             For i = 0 To UBound(arrMessage)
-                If Len(tmpMsgPart & arrMessage(i) & strDelim) < 205 Then
-                    tmpMsgPart = tmpMsgPart & arrMessage(i) & strDelim
+                If Len(tmpMsgPart & arrMessage(i) & strDelimiter) < 205 Then
+                    tmpMsgPart = tmpMsgPart & arrMessage(i) & strDelimiter
                 Else
                     arrQueue(UBound(arrQueue)) = tmpMsgPart & "[more]"
                     ReDim Preserve arrQueue(UBound(arrQueue) + 1)
-                    tmpMsgPart = arrMessage(i) & strDelim
+                    tmpMsgPart = arrMessage(i) & strDelimiter
                 End If
             Next
             arrQueue(UBound(arrQueue)) = Left(tmpMsgPart, Len(tmpMsgPart) - 1)
@@ -1395,9 +1379,7 @@ Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVa
             End If
         Next
     Else
-        If Len(strDelimiter) > 0 Then strOption = strDelimiter
-        If Len(strOption) = 0 Or Not IsNumeric(strOption) Then strOption = 0
-        AddChat strOption, strMessage
+        AddChat lngColor, strMessage
     End If
 End Sub
 
