@@ -66,6 +66,12 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     ' check for command identifier when command
     ' is not issued from within console
     If (Not (InBot)) Then
+        ' we're going to mute our own access for now to prevent users from
+        ' using the "say" command to gain full control over the bot.
+        If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
+            Exit Function
+        End If
+    
         ' check for commands using universal command identifier (?)
         If (StrComp(Left$(tmpMsg, Len("?trigger")), "?trigger", vbTextCompare) = 0) Then
             ' remove universal command identifier from message
