@@ -29,6 +29,7 @@ Begin VB.Form frmDBManager
       _ExtentX        =   5953
       _ExtentY        =   8916
       _Version        =   393217
+      HideSelection   =   0   'False
       Indentation     =   575
       LabelEdit       =   1
       LineStyle       =   1
@@ -36,7 +37,6 @@ Begin VB.Form frmDBManager
       Style           =   6
       Appearance      =   1
       OLEDragMode     =   1
-      OLEDropMode     =   1
    End
    Begin VB.TextBox txtFlags 
       BackColor       =   &H00993300&
@@ -222,9 +222,9 @@ Private m_selnode  As Node    ' ...
 
 Private Sub Form_Load()
     Dim i      As Integer ' ...
-    Dim splt() As String  ' ...
+    Dim Splt() As String  ' ...
     Dim j      As Integer ' ...
-    Dim pos    As Integer ' ...
+    Dim Pos    As Integer ' ...
     
     Call trvUsers.Nodes.Clear
 
@@ -238,18 +238,18 @@ Private Sub Form_Load()
         If (StrComp(DB(i).Type, "GROUP", vbBinaryCompare) = 0) Then
             If (Len(DB(i).Groups) And (DB(i).Groups <> "%")) Then
                 If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
-                    splt() = Split(DB(i).Groups, ",")
+                    Splt() = Split(DB(i).Groups, ",")
                 Else
-                    ReDim Preserve splt(0)
+                    ReDim Preserve Splt(0)
                     
-                    splt(0) = DB(i).Groups
+                    Splt(0) = DB(i).Groups
                 End If
                 
-                For j = LBound(splt) To UBound(splt)
-                    pos = Exists(splt(j))
+                For j = LBound(Splt) To UBound(Splt)
+                    Pos = Exists(Splt(j))
                     
-                    If (pos) Then
-                        Call trvUsers.Nodes.Add(trvUsers.Nodes(pos).Key, _
+                    If (Pos) Then
+                        Call trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
                             tvwChild, DB(i).Username, DB(i).Username)
                     End If
                 Next j
@@ -275,18 +275,18 @@ Private Sub Form_Load()
 
             If (Len(DB(i).Groups) And (DB(i).Groups <> "%")) Then
                 If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
-                    splt() = Split(DB(i).Groups, ",")
+                    Splt() = Split(DB(i).Groups, ",")
                 Else
-                    ReDim Preserve splt(0)
+                    ReDim Preserve Splt(0)
                     
-                    splt(0) = DB(i).Groups
+                    Splt(0) = DB(i).Groups
                 End If
                 
-                For j = LBound(splt) To UBound(splt)
-                    pos = Exists(splt(j))
+                For j = LBound(Splt) To UBound(Splt)
+                    Pos = Exists(Splt(j))
                     
-                    If (pos) Then
-                        Call trvUsers.Nodes.Add(trvUsers.Nodes(pos).Key, _
+                    If (Pos) Then
+                        Call trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
                             tvwChild, DB(i).Username, DB(i).Username)
                     End If
                 Next j
@@ -299,119 +299,12 @@ Private Sub Form_Load()
     trvUsers.Nodes(1).Expanded = True
 End Sub
 
-'Private Sub trvUsers_MouseDown(Button As Integer, Shift As Integer, x As Single, _
-'    y As Single)
-'
-'    Set m_selnode = trvUsers.SelectedItem
-'End Sub
-
 Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
-    Set m_selnode = Node
-End Sub
-
-Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, x As Single, _
-    y As Single)
-
-    If (Button = vbLeftButton) Then
-        m_dragging = True
-        
-        Call trvUsers.Drag(vbBeginDrag)
-    End If
-End Sub
-
-Private Sub trvUsers_DragOver(ByRef Source As Control, ByRef x As Single, _
-    ByRef y As Single, ByRef State As Integer)
-    
-    If (m_dragging) Then
-        If (Source.Name = "trvUsers") Then
-            Set trvUsers.DropHighlight = trvUsers.HitTest(x, y)
-        End If
-    End If
-End Sub
-
-Private Sub trvUsers_DragDrop(ByRef Source As Control, ByRef x As Single, _
-    ByRef y As Single)
-    
-    If (m_dragging) Then
-        If (Source.Name = "trvUsers") Then
-            If (Not (trvUsers.DropHighlight Is Nothing)) Then
-                Dim selnow  As udtGetAccessResponse ' ...
-                Dim selprev As udtGetAccessResponse ' ...
-                
-                Dim res     As Integer ' ...
-                Dim i       As Integer ' ...
-                
-                If (trvUsers.DropHighlight.Index = 1) Then
-                    selprev = GetAccess(trvUsers.SelectedItem.text)
-                    
-                    If (Len(selprev.Groups) And (selprev.Groups <> "%")) Then
-                        res = MsgBox("Are you sure you wish to move " & Chr$(34) & _
-                            selprev.Username & Chr$(34) & " out of the group(s) " & Chr$(34) & _
-                                selprev.Groups & "?" & Chr$(34), vbYesNo + vbInformation, _
-                                    "Move User")
-                                        
-                        If (res = vbYes) Then
-                            For i = LBound(DB) To UBound(DB)
-                                If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
-                                    DB(i).Groups = vbNullString
-                                End If
-                            Next i
-                            
-                            Call WriteDatabase(GetFilePath("users.txt"))
-                        End If
-                    End If
-                Else
-                    If (trvUsers.SelectedItem.Index <> 1) Then
-                        selnow = GetAccess(trvUsers.DropHighlight.text)
-                        selprev = GetAccess(trvUsers.SelectedItem.text)
-                        
-                        If (StrComp(selnow.Type, "GROUP", vbBinaryCompare) = 0) Then
-                            res = MsgBox("Are you sure you wish to move " & Chr$(34) & _
-                                selprev.Username & Chr$(34) & " into the group " & Chr$(34) & _
-                                    selnow.Username & "?" & Chr$(34), vbYesNo + vbInformation, _
-                                        "Move User")
-                            
-                            If (res = vbYes) Then
-                                For i = LBound(DB) To UBound(DB)
-                                    If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
-                                        DB(i).Groups = trvUsers.DropHighlight.text
-                                    End If
-                                Next i
-                                
-                                Call WriteDatabase(GetFilePath("users.txt"))
-                            End If
-                        End If
-                    End If
-                End If
-            End If
-            
-            Set m_selnode = Nothing
-            
-            Set trvUsers.DropHighlight = Nothing
-            
-            m_dragging = False
-        End If
-    End If
-End Sub
-
-Private Function Exists(ByVal nodeName As String) As Integer
-    Dim i As Integer ' ...
-    
-    For i = 1 To trvUsers.Nodes.Count
-        If (StrComp(trvUsers.Nodes(i).text, nodeName, vbTextCompare) = 0) Then
-            Exists = i
-        
-            Exit Function
-        End If
-    Next i
-    
-    Exists = False
-End Function
-
-Private Sub trvUsers_Click()
     Dim tmp As udtGetAccessResponse ' ...
     
     Dim i   As Integer ' ...
+    
+    Set m_selnode = Node
     
     ' deselect groups
     For i = 0 To (lstGroups.ListCount - 1)
@@ -440,28 +333,165 @@ Private Sub trvUsers_Click()
     
     If (tmp.access > 0) Then
         txtRank.text = tmp.access
+    Else
+        txtRank.text = vbNullString
     End If
     
     txtFlags.text = tmp.Flags
     
     If (Len(tmp.Groups) And (tmp.Groups <> "%")) Then
-        Dim splt() As String  ' ...
+        Dim Splt() As String  ' ...
         Dim j      As Integer ' ...
     
         If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
-            splt() = Split(DB(i).Groups, ",")
+            Splt() = Split(DB(i).Groups, ",")
         Else
-            ReDim Preserve splt(0)
+            ReDim Preserve Splt(0)
             
-            splt(0) = tmp.Groups
+            Splt(0) = tmp.Groups
         End If
         
-        For i = LBound(splt) To UBound(splt)
+        For i = LBound(Splt) To UBound(Splt)
             For j = 0 To (lstGroups.ListCount - 1)
-                If (StrComp(splt(i), lstGroups.List(j), vbTextCompare) = 0) Then
+                If (StrComp(Splt(i), lstGroups.List(j), vbTextCompare) = 0) Then
                     lstGroups.Selected(j) = True
                 End If
             Next j
         Next i
     End If
 End Sub
+
+Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, X As Single, _
+    Y As Single)
+
+    If (Button = vbLeftButton) Then
+        m_dragging = True
+        
+        Call trvUsers.Drag(vbBeginDrag)
+    End If
+End Sub
+
+Private Sub trvUsers_DragOver(ByRef Source As Control, ByRef X As Single, _
+    ByRef Y As Single, ByRef State As Integer)
+    
+    If (m_dragging) Then
+        If (Source.Name = "trvUsers") Then
+            Set trvUsers.DropHighlight = trvUsers.HitTest(X, Y)
+        End If
+    End If
+End Sub
+
+Private Sub trvUsers_DragDrop(ByRef Source As Control, ByRef X As Single, _
+    ByRef Y As Single)
+    
+    If (m_dragging) Then
+        If (Source.Name = "trvUsers") Then
+            If (Not (trvUsers.DropHighlight Is Nothing)) Then
+                Dim selnow  As udtGetAccessResponse ' ...
+                Dim selprev As udtGetAccessResponse ' ...
+                Dim gAcc    As udtGetAccessResponse ' ...
+                
+                Dim res     As Integer ' ...
+                Dim i       As Integer ' ...
+                Dim found   As Integer ' ...
+                
+                If (trvUsers.DropHighlight.Index = 1) Then
+                    selprev = GetAccess(trvUsers.SelectedItem.text)
+                    
+                    If (Len(selprev.Groups) And (selprev.Groups <> "%")) Then
+                        'res = MsgBox("Are you sure you wish to move " & Chr$(34) & _
+                        '    selprev.Username & Chr$(34) & " out of the group(s) " & Chr$(34) & _
+                        '        selprev.Groups & "?" & Chr$(34), vbYesNo + vbInformation, _
+                        '            "Move User")
+                                        
+                        'If (res = vbYes) Then
+                            For i = LBound(DB) To UBound(DB)
+                                If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
+                                    DB(i).Groups = vbNullString
+                                End If
+                            Next i
+                            
+                            ' ...
+                            gAcc = GetCumulativeAccess(selprev.Username)
+                            
+                            Call trvUsers.Nodes.Add(trvUsers.DropHighlight.text, tvwChild, , _
+                                selprev.Username)
+                                
+                            Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+                            
+                            If (gAcc.access = 0) Then
+                                found = Exists(selprev.Username)
+                                
+                                If (found > 0) Then
+                                    With trvUsers.Nodes(found)
+                                        .ForeColor = vbRed
+                                        .Tag = "This entry is currently marked for deletetion."
+                                    End With
+                                End If
+                            End If
+                        'End If
+                    End If
+                Else
+                    If (trvUsers.SelectedItem.Index <> 1) Then
+                        selnow = GetAccess(trvUsers.DropHighlight.text)
+                        selprev = GetAccess(trvUsers.SelectedItem.text)
+                        
+                        If (StrComp(selnow.Type, "GROUP", vbBinaryCompare) = 0) Then
+                            'res = MsgBox("Are you sure you wish to move " & Chr$(34) & _
+                            '    selprev.Username & Chr$(34) & " into the group " & Chr$(34) & _
+                            '        selnow.Username & "?" & Chr$(34), vbYesNo + vbInformation, _
+                            '            "Move User")
+                            
+                            'If (res = vbYes) Then
+                                For i = LBound(DB) To UBound(DB)
+                                    If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
+                                        DB(i).Groups = trvUsers.DropHighlight.text
+                                    End If
+                                Next i
+                                
+                                ' ...
+                                gAcc = GetCumulativeAccess(selprev.Username)
+                                
+                                Call trvUsers.Nodes.Add(trvUsers.DropHighlight.text, tvwChild, , _
+                                    selprev.Username)
+
+                                Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+                                
+                                If (gAcc.access = 0) Then
+                                    found = Exists(selprev.Username)
+                                    
+                                    If (found > 0) Then
+                                        With trvUsers.Nodes(found)
+                                            .ForeColor = vbRed
+                                            .Tag = "This entry is currently marked for deletetion."
+                                        End With
+                                    End If
+                                End If
+                            'End If
+                        End If
+                    End If
+                End If
+            End If
+            
+            Set m_selnode = Nothing
+            
+            Set trvUsers.DropHighlight = Nothing
+            
+            m_dragging = False
+        End If
+    End If
+End Sub
+
+Private Function Exists(ByVal nodeName As String) As Integer
+    Dim i As Integer ' ...
+    
+    For i = 1 To trvUsers.Nodes.Count
+        If (StrComp(trvUsers.Nodes(i).text, nodeName, vbTextCompare) = 0) Then
+            Exists = i
+        
+            Exit Function
+        End If
+    Next i
+    
+    Exists = False
+End Function
