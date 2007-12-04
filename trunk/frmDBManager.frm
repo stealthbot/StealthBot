@@ -30,11 +30,14 @@ Begin VB.Form frmDBManager
       _ExtentY        =   8916
       _Version        =   393217
       Indentation     =   575
+      LabelEdit       =   1
       LineStyle       =   1
       Sorted          =   -1  'True
       Style           =   6
       SingleSel       =   -1  'True
       Appearance      =   1
+      OLEDragMode     =   1
+      OLEDropMode     =   1
    End
    Begin VB.TextBox txtFlags 
       BackColor       =   &H00993300&
@@ -249,9 +252,11 @@ Private Sub Form_Load()
         End If
     Next i
     
-    For i = 1 To trvUsers.Nodes.Count
-        Call lstGroups.AddItem(trvUsers.Nodes(i).text)
-    Next i
+    If (trvUsers.Nodes.Count > 1) Then
+        For i = 2 To trvUsers.Nodes.Count
+            Call lstGroups.AddItem(trvUsers.Nodes(i).text)
+        Next i
+    End If
     
     For i = LBound(DB) To UBound(DB)
         If ((StrComp(DB(i).Type, "USER", vbBinaryCompare) = 0) Or _
