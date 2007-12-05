@@ -131,7 +131,7 @@ Begin VB.Form frmDBManager
       Begin VB.ListBox lstGroups 
          Height          =   3180
          Left            =   240
-         MultiSelect     =   1  'Simple
+         MultiSelect     =   2  'Extended
          TabIndex        =   11
          Top             =   1275
          Width           =   2535
@@ -186,6 +186,17 @@ Begin VB.Form frmDBManager
       Caption         =   "File"
       Begin VB.Menu mnuOpenDB 
          Caption         =   "Open Database"
+      End
+   End
+   Begin VB.Menu mnuContext 
+      Caption         =   "mnuContext"
+      Visible         =   0   'False
+      Begin VB.Menu mnuRename 
+         Caption         =   "Rename"
+         Enabled         =   0   'False
+      End
+      Begin VB.Menu mnuDelete 
+         Caption         =   "Delete"
       End
    End
 End
@@ -295,6 +306,14 @@ Private Sub Form_Load()
         .Expanded = True
         .Image = 1
     End With
+End Sub
+
+Private Sub mnuDelete_Click()
+    Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+End Sub
+
+Private Sub mnuRename_Click()
+    ' ...
 End Sub
 
 Private Sub trvUsers_Collapse(ByVal Node As Node)
@@ -407,11 +426,17 @@ Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, X As Single,
     End If
 End Sub
 
+Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    If (Button = vbRightButton) Then
+        Call Me.PopupMenu(mnuContext)
+    End If
+End Sub
+
 Private Sub trvUsers_DragOver(ByRef Source As Control, ByRef X As Single, _
     ByRef Y As Single, ByRef State As Integer)
     
     If (m_dragging) Then
-        If (Source.name = "trvUsers") Then
+        If (Source.Name = "trvUsers") Then
             Set trvUsers.DropHighlight = trvUsers.HitTest(X, Y)
         End If
     End If
@@ -421,7 +446,7 @@ Private Sub trvUsers_DragDrop(ByRef Source As Control, ByRef X As Single, _
     ByRef Y As Single)
     
     If (m_dragging) Then
-        If (Source.name = "trvUsers") Then
+        If (Source.Name = "trvUsers") Then
             If (Not (trvUsers.DropHighlight Is Nothing)) Then
                 Dim current As Node ' ...
                 Dim child   As Node ' ...
@@ -544,6 +569,6 @@ Private Function Exists(ByVal nodeName As String) As Integer
     Exists = False
 End Function
 
-Private Function GetIconIndex(ByVal name As String) As Integer
+Private Function GetIconIndex(ByVal Name As String) As Integer
     ' ...
 End Function

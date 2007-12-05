@@ -225,6 +225,7 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
             Passed0x0F = 1
             Call frmChat.Event_BNLSAuthEvent(True)
             Call frmChat.Event_BNetConnecting
+
             frmChat.sckBNet.Connect 'BNLS is authorized, proceed to initiate BNet connection.
             
         Case &H10 'BNLS_REQUESTVERSIONBYTE

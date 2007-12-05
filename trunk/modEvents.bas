@@ -144,7 +144,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
 
     ' if we've just left another channel, call event script
     ' function indicating that we've done so.
-    If (LenB(gChannel.Current)) Then
+    If (LenB(gChannel.current)) Then
         On Error Resume Next
         
         frmChat.SControl.Run "Event_ChannelLeave"
@@ -157,12 +157,12 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     frmChat.AddChat RTBColors.JoinedChannelText, "-- Joined channel: ", _
         RTBColors.JoinedChannelName, ChannelName, RTBColors.JoinedChannelText, " --"
     
-    gChannel.Current = ChannelName
+    gChannel.current = ChannelName
     
     SharedScriptSupport.myChannel = ChannelName
     
     SetTitle CurrentUsername & ", online in channel " & _
-        gChannel.Current
+        gChannel.current
     
     ' have we just joined the void?
     If (StrComp(ChannelName, "The Void", vbBinaryCompare) = 0) Then
@@ -279,17 +279,17 @@ Repeat2:
             
         ElseIf KeyName = "Profile\Description" Then
         
-            Dim x() As String
+            Dim X() As String
             
-            x() = Split(KeyValue, Chr(13))
+            X() = Split(KeyValue, Chr(13))
             ReDim s(0)
             
-            For i = LBound(x) To UBound(x)
-                s(0) = x(i)
+            For i = LBound(X) To UBound(X)
+                s(0) = X(i)
                 
                 If Len(s(0)) > 200 Then s(0) = Left$(s(0), 200)
                 
-                If i = LBound(x) Then
+                If i = LBound(X) Then
                     frmChat.AddQ u & "[Descr] " & s(0)
                 Else
                     frmChat.AddQ u & "[Descr] " & Right(s(0), Len(s(0)) - 1)
@@ -584,15 +584,15 @@ Public Sub Event_ServerInfo(ByVal Message As String)
         
             '// backup channel
             If (InStr(Len(Temp), Message, "kicked you out", vbTextCompare) > 0) Then
-                If ((StrComp(gChannel.Current, "Op [vL]", vbTextCompare) <> 0) And _
-                    (StrComp(gChannel.Current, "Op Fatal-Error", vbTextCompare) <> 0)) Then
+                If ((StrComp(gChannel.current, "Op [vL]", vbTextCompare) <> 0) And _
+                    (StrComp(gChannel.current, "Op Fatal-Error", vbTextCompare) <> 0)) Then
                         
                     If (BotVars.UseBackupChan) Then
                         If (Len(BotVars.BackupChan) > 1) Then
                             frmChat.AddQ "/join " & BotVars.BackupChan, 1
                         End If
                     Else
-                        frmChat.AddQ "/join " & gChannel.Current
+                        frmChat.AddQ "/join " & gChannel.current
                     End If
                 End If
             End If
@@ -833,6 +833,8 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 
                     Exit For
                 End If
+                
+                Set clsChatQueue = Nothing
             Next i
             
             If (i < (colChatQueue.Count + 1)) Then
@@ -1120,8 +1122,8 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                     vbBinaryCompare) > 0) Then
                     
                     If (gChannel.Designated = vbNullString) Then
-                        If Mid$(LCase$(gChannel.Current), 1, 3) = "op " Then
-                            If (StrComp(Mid$(gChannel.Current, 4), StripRealm(Username), _
+                        If Mid$(LCase$(gChannel.current), 1, 3) = "op " Then
+                            If (StrComp(Mid$(gChannel.current, 4), StripRealm(Username), _
                                 vbTextCompare)) <> 0 Then
                                 
                                 If (Dii) Then
@@ -1294,7 +1296,7 @@ checkIPBan:
         
         If (BotVars.UseGreet) Then
             If (LenB(BotVars.GreetMsg) > 0) Then
-                If (StrComp(gChannel.Current, "Clan SBs", vbTextCompare) <> 0) Then
+                If (StrComp(gChannel.current, "Clan SBs", vbTextCompare) <> 0) Then
                     
                     If (QueueLoad = 0) Then
                         QueueLoad = (QueueLoad + 1)
@@ -1391,7 +1393,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim pos       As Integer
+    Dim Pos       As Integer
     Dim userIndex As Integer
     
     If (bFlood) Then
@@ -1992,14 +1994,14 @@ End Function
 '11/22/07 - Hdx - Pass the channel listing (0x0B) directly off to scriptors for there needs. (What other use is there?)
 Public Sub Event_ChannelList(sChannels() As String)
     If (MDebug("all")) Then
-        Dim x As Integer
+        Dim X As Integer
         
         frmChat.AddChat RTBColors.InformationText, "Received Channel List: "
         
-        For x = 0 To UBound(sChannels)
+        For X = 0 To UBound(sChannels)
             frmChat.AddChat RTBColors.InformationText, vbTab & _
-                sChannels(x)
-        Next x
+                sChannels(X)
+        Next X
     End If
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
