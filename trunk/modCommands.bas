@@ -42,7 +42,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Dim ConsoleAccessResponse As udtGetAccessResponse
 
     Dim i            As Integer ' loop counter
-    Dim tmpMsg       As String  ' stores local copy of message
+    Dim tmpmsg       As String  ' stores local copy of message
     Dim cmdRet()     As String  ' stores output of commands
     Dim PublicOutput As Boolean ' stores result of public command
                                 ' output check (used for displaying command
@@ -58,10 +58,10 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     End With
 
     ' store local copy of message
-    tmpMsg = Message
+    tmpmsg = Message
     
     ' replace message variables
-    tmpMsg = Replace(tmpMsg, "%me", IIf((InBot), CurrentUsername, Username), 1)
+    tmpmsg = Replace(tmpmsg, "%me", IIf((InBot), CurrentUsername, Username), 1)
     
     ' check for command identifier when command
     ' is not issued from within console
@@ -73,39 +73,39 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         End If
     
         ' check for commands using universal command identifier (?)
-        If (StrComp(Left$(tmpMsg, Len("?trigger")), "?trigger", vbTextCompare) = 0) Then
+        If (StrComp(Left$(tmpmsg, Len("?trigger")), "?trigger", vbTextCompare) = 0) Then
             ' remove universal command identifier from message
-            tmpMsg = Mid$(tmpMsg, 2)
+            tmpmsg = Mid$(tmpmsg, 2)
         
         ' check for commands using command identifier
-        ElseIf ((Len(tmpMsg) >= Len(BotVars.Trigger)) And _
-                (Left$(tmpMsg, Len(BotVars.Trigger)) = BotVars.Trigger)) Then
+        ElseIf ((Len(tmpmsg) >= Len(BotVars.Trigger)) And _
+                (Left$(tmpmsg, Len(BotVars.Trigger)) = BotVars.Trigger)) Then
             
             ' remove command identifier from message
-            tmpMsg = Mid$(tmpMsg, Len(BotVars.Trigger) + 1)
+            tmpmsg = Mid$(tmpmsg, Len(BotVars.Trigger) + 1)
         
             ' check for command identifier and name combination
             ' (e.g., .Eric[nK] say hello)
-            If (Len(tmpMsg) >= (Len(CurrentUsername) + 1)) Then
-                If (StrComp(Left$(tmpMsg, Len(CurrentUsername) + 1), _
+            If (Len(tmpmsg) >= (Len(CurrentUsername) + 1)) Then
+                If (StrComp(Left$(tmpmsg, Len(CurrentUsername) + 1), _
                     CurrentUsername & Space(1), vbTextCompare) = 0) Then
                         
                     ' remove username (and space) from message
-                    tmpMsg = Mid$(tmpMsg, Len(CurrentUsername) + 2)
+                    tmpmsg = Mid$(tmpmsg, Len(CurrentUsername) + 2)
                 End If
             End If
         
         ' check for commands using either name and colon (and space),
         ' or name and comma (and space)
         ' (e.g., Eric[nK]: say hello; and, Eric[nK], say hello)
-        ElseIf ((Len(tmpMsg) >= (Len(CurrentUsername) + 2)) And _
-                ((StrComp(Left$(tmpMsg, Len(CurrentUsername) + 2), CurrentUsername & ": ", _
+        ElseIf ((Len(tmpmsg) >= (Len(CurrentUsername) + 2)) And _
+                ((StrComp(Left$(tmpmsg, Len(CurrentUsername) + 2), CurrentUsername & ": ", _
                   vbTextCompare) = 0) Or _
-                 (StrComp(Left$(tmpMsg, Len(CurrentUsername) + 2), CurrentUsername & ", ", _
+                 (StrComp(Left$(tmpmsg, Len(CurrentUsername) + 2), CurrentUsername & ", ", _
                   vbTextCompare) = 0))) Then
             
             ' remove username (and colon/comma) from message
-            tmpMsg = Mid$(tmpMsg, Len(CurrentUsername) + 3)
+            tmpmsg = Mid$(tmpmsg, Len(CurrentUsername) + 3)
         Else
             ' allow commands without any command identifier if
             ' commands are sent via whisper
@@ -120,29 +120,29 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         End If
     Else
         ' remove slash (/) from in-console message
-        tmpMsg = Mid$(tmpMsg, 2)
+        tmpmsg = Mid$(tmpmsg, 2)
         
         ' check for second slash indicating
         ' public output
-        If (Left$(tmpMsg, 1) = "/") Then
+        If (Left$(tmpmsg, 1) = "/") Then
             ' enable public display of command
             PublicOutput = True
         
             ' remove second slash (/) from in-console
             ' message
-            tmpMsg = Mid$(tmpMsg, 2)
+            tmpmsg = Mid$(tmpmsg, 2)
         End If
     End If
 
     ' check for multiple command syntax if not issued from
     ' within the console
     If ((Not (InBot)) And _
-        (InStr(1, tmpMsg, "; ", vbBinaryCompare) > 0)) Then
+        (InStr(1, tmpmsg, "; ", vbBinaryCompare) > 0)) Then
        
         Dim X() As String  ' ...
     
         ' split message
-        X = Split(tmpMsg, "; ")
+        X = Split(tmpmsg, "; ")
         
         ' loop through commands
         For i = 0 To UBound(X)
@@ -193,12 +193,12 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         ' send command to main processor
         If (InBot = True) Then
             ' execute command
-            ProcessCommand = ExecuteCommand(Username, ConsoleAccessResponse, tmpMsg, _
+            ProcessCommand = ExecuteCommand(Username, ConsoleAccessResponse, tmpmsg, _
                 InBot, cmdRet())
         Else
             ' execute command
             ProcessCommand = ExecuteCommand(Username, GetCumulativeAccess(Username, _
-                "USER"), tmpMsg, InBot, cmdRet())
+                "USER"), tmpmsg, InBot, cmdRet())
         End If
         
         If (ProcessCommand) Then
@@ -228,6 +228,50 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             ' command is found to be invalid and issued
             ' internally
             If (InBot) Then
+                If (Len(Message)) Then
+                    If (Left$(Message, 1) = "/") Then
+                        Dim Index As Long   ' ...
+
+                        Index = InStr(1, Message, Space(1), _
+                            vbBinaryCompare)
+                    
+                        If (Index) Then
+                            Dim Splt() As String ' ...
+                        
+                            tmpmsg = LCase$(Mid$(Message, 2, (Index - 2)))
+                            
+                            If ((tmpmsg = "w") Or _
+                                (tmpmsg = "whisper") Or _
+                                (tmpmsg = "m") Or _
+                                (tmpmsg = "msg") Or _
+                                (tmpmsg = "message") Or _
+                                (tmpmsg = "whois") Or _
+                                (tmpmsg = "where") Or _
+                                (tmpmsg = "whereis")) Then
+                                
+                                Splt() = Split(Message, Space(1), 3)
+                                
+                                If (UBound(Splt) = 2) Then
+                                    Message = Splt(0) & Space(1) & _
+                                        reverseUsername(Splt(1)) & _
+                                            Space(1) & Splt(2)
+                                End If
+                            ElseIf ((tmpmsg = "f") Or _
+                                    (tmpmsg = "friends")) Then
+                                    
+                                Splt() = Split(Message, Space(1), 3)
+                                
+                                If (UBound(Splt) = 2) Then
+                                    Message = Splt(0) & Space(1) & _
+                                        Splt(1) & Space(1) & _
+                                            reverseUsername(Splt(2))
+                                End If
+                            End If
+                               
+                        End If
+                    End If
+                End If
+            
                 Call AddQ(Message)
             End If
         End If
@@ -252,7 +296,7 @@ End Function ' end function ProcessCommand
 Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal Message As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
 
-    Dim tmpMsg   As String  ' stores copy of message
+    Dim tmpmsg   As String  ' stores copy of message
     Dim cmdName  As String  ' stores command name
     Dim msgData  As String  ' stores unparsed command parameters
     Dim blnNoCmd As Boolean ' stores result of command switch (true = no command found)
@@ -263,22 +307,22 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
     ReDim Preserve cmdRet(0)
     
     ' store local copy of message
-    tmpMsg = Message
+    tmpmsg = Message
 
     ' grab command name & message data
-    If (InStr(1, tmpMsg, Space(1), vbBinaryCompare) <> 0) Then
+    If (InStr(1, tmpmsg, Space(1), vbBinaryCompare) <> 0) Then
         ' grab command name
-        cmdName = Left$(tmpMsg, (InStr(1, tmpMsg, Space(1), _
+        cmdName = Left$(tmpmsg, (InStr(1, tmpmsg, Space(1), _
             vbBinaryCompare) - 1))
         
         ' remove command name (and space) from message
-        tmpMsg = Mid$(tmpMsg, Len(cmdName) + 2)
+        tmpmsg = Mid$(tmpmsg, Len(cmdName) + 2)
         
         ' grab message data
-        msgData = tmpMsg
+        msgData = tmpmsg
     Else
         ' grab command name
-        cmdName = tmpMsg
+        cmdName = tmpmsg
     End If
     
     ' convert command name to lcase
@@ -697,7 +741,7 @@ Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAcces
         Call AddQ("/where " & msgData)
     End If
 
-    tmpBuf = "I am currently in channel " & gChannel.Current & " (" & _
+    tmpBuf = "I am currently in channel " & gChannel.current & " (" & _
         colUsersInChannel.Count & " users present)"
     
     ' return message
@@ -1298,7 +1342,7 @@ Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Call AddQ("/join " & CurrentUsername & " Rejoin", 1)
     
     ' rejoin previous channel
-    Call AddQ("/join " & gChannel.Current, 1)
+    Call AddQ("/join " & gChannel.current, 1)
 End Function ' end function OnRejoin
 
 ' handle plugban command
@@ -2152,7 +2196,7 @@ Private Function OnReconnect(ByVal Username As String, ByRef dbAccess As udtGetA
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     If (g_Online) Then
-        BotVars.HomeChannel = gChannel.Current
+        BotVars.HomeChannel = gChannel.current
         
         Call frmChat.DoDisconnect
         
