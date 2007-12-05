@@ -20,14 +20,22 @@ Begin VB.Form frmDBManager
    ScaleHeight     =   5640
    ScaleWidth      =   6750
    StartUpPosition =   1  'CenterOwner
+   Begin VB.CommandButton btnCreateGroup 
+      Caption         =   "Create Group"
+      Height          =   375
+      Left            =   1800
+      TabIndex        =   19
+      Top             =   4800
+      Width           =   1695
+   End
    Begin MSComctlLib.TreeView trvUsers 
-      Height          =   5055
+      Height          =   4575
       Left            =   120
       TabIndex        =   16
       Top             =   105
       Width           =   3375
       _ExtentX        =   5953
-      _ExtentY        =   8916
+      _ExtentY        =   8070
       _Version        =   393217
       HideSelection   =   0   'False
       Indentation     =   575
@@ -203,6 +211,15 @@ Begin VB.Form frmDBManager
          Width           =   2535
       End
    End
+   Begin VB.CommandButton cmdCancel 
+      Caption         =   "Create User"
+      Height          =   375
+      Index           =   3
+      Left            =   120
+      TabIndex        =   20
+      Top             =   4800
+      Width           =   1695
+   End
    Begin VB.Menu mnuFile 
       Caption         =   "File"
       Begin VB.Menu mnuOpenDB 
@@ -219,6 +236,10 @@ Option Explicit
 
 Private m_dragging As Boolean ' ...
 Private m_selnode  As Node    ' ...
+
+Private Sub btnCreateGroup_Click()
+    Call frmGroupSelection.Show(vbModal, Me)
+End Sub
 
 Private Sub Form_Load()
     Dim i      As Integer ' ...

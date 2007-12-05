@@ -139,17 +139,17 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     If ((Not (InBot)) And _
         (InStr(1, tmpMsg, "; ", vbBinaryCompare) > 0)) Then
        
-        Dim x() As String  ' ...
+        Dim X() As String  ' ...
     
         ' split message
-        x = Split(tmpMsg, "; ")
+        X = Split(tmpMsg, "; ")
         
         ' loop through commands
-        For i = 0 To UBound(x)
+        For i = 0 To UBound(X)
             Dim tmpX As String ' ...
             
             ' store local copy of message
-            tmpX = x(i)
+            tmpX = X(i)
         
             ' can we check for a command identifier without
             ' causing an rte?
@@ -792,7 +792,7 @@ Private Function OnSweepBan(ByVal Username As String, ByRef dbAccess As udtGetAc
     ' user from the current channel using Battle.net's "ban" command.
     
     Dim u As String
-    Dim y As String
+    Dim Y As String
 
     Caching = True
     
@@ -814,7 +814,7 @@ Private Function OnSweepIgnore(ByVal Username As String, ByRef dbAccess As udtGe
     ' temporary amount of time.
     
     Dim u As String
-    Dim y As String
+    Dim Y As String
     
     Caching = True
     
@@ -2796,7 +2796,7 @@ Private Function OnDelPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     
     Dim f      As Integer
     Dim u      As String
-    Dim y      As String
+    Dim Y      As String
     Dim tmpBuf As String ' temporary output buffer
     Dim c      As Integer
     
@@ -2805,13 +2805,13 @@ Private Function OnDelPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     f = FreeFile
     
     Open GetFilePath("phrasebans.txt") For Output As #f
-        y = vbNullString
+        Y = vbNullString
     
         For c = LBound(Phrases) To UBound(Phrases)
             If (StrComp(Phrases(c), LCase$(u), vbTextCompare) <> 0) Then
                 Print #f, Phrases(c)
             Else
-                y = "x"
+                Y = "x"
             End If
         Next c
     Close #f
@@ -2820,7 +2820,7 @@ Private Function OnDelPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     
     Call frmChat.LoadArray(LOAD_PHRASES, Phrases())
     
-    If (Len(y) > 0) Then
+    If (Len(Y) > 0) Then
         tmpBuf = "Phrase " & Chr(34) & u & Chr(34) & " deleted."
     Else
         tmpBuf = "Error: That phrase is not banned."
@@ -2971,14 +2971,14 @@ Private Function OnSafeCheck(ByVal Username As String, ByRef dbAccess As udtGetA
     ' ...
     Dim gAcc   As udtGetAccessResponse
     
-    Dim y      As String
+    Dim Y      As String
     Dim tmpBuf As String ' temporary output buffer
 
-    y = msgData
+    Y = msgData
             
-    If (Len(y)) Then
-        If (GetSafelist(y)) Then
-            tmpBuf = y & " is on the bot's safelist."
+    If (Len(Y)) Then
+        If (GetSafelist(Y)) Then
+            tmpBuf = Y & " is on the bot's safelist."
         Else
             tmpBuf = "That user is not safelisted."
         End If
@@ -2996,7 +2996,7 @@ Private Function OnExile(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Dim saCmdRet() As String
     Dim ibCmdRet() As String
     Dim u          As String
-    Dim y          As String
+    Dim Y          As String
     
     ReDim Preserve saCmdRet(0)
     ReDim Preserve ibCmdRet(0)
@@ -3143,19 +3143,19 @@ Private Function OnTagCheck(ByVal Username As String, ByRef dbAccess As udtGetAc
     ' ...
     Dim gAcc   As udtGetAccessResponse
     
-    Dim y      As String
+    Dim Y      As String
     Dim tmpBuf As String ' temporary output buffer
 
-    y = msgData
+    Y = msgData
             
-    If (Len(y) > 0) Then
-        gAcc = GetCumulativeAccess(y)
+    If (Len(Y) > 0) Then
+        gAcc = GetCumulativeAccess(Y)
         
         If (InStr(1, gAcc.Flags, "B") <> 0) Then
-            tmpBuf = y & " has been matched to one or more tagbans"
+            tmpBuf = Y & " has been matched to one or more tagbans"
         
             If (InStr(1, gAcc.Flags, "S") <> 0) Then
-                tmpBuf = tmpBuf & "; however, " & y & " has also been found on the bot's " & _
+                tmpBuf = tmpBuf & "; however, " & Y & " has also been found on the bot's " & _
                     "safelist and therefore will not be banned"
             End If
         Else
@@ -3176,19 +3176,19 @@ Private Function OnSLCheck(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ' ...
     Dim gAcc   As udtGetAccessResponse
     
-    Dim y      As String
+    Dim Y      As String
     Dim tmpBuf As String ' temporary output buffer
 
-    y = msgData
+    Y = msgData
             
-    If (Len(y) > 0) Then
-        gAcc = GetCumulativeAccess(y)
+    If (Len(Y) > 0) Then
+        gAcc = GetCumulativeAccess(Y)
         
         If (InStr(1, gAcc.Flags, "B") <> 0) Then
-            tmpBuf = y & " is on the bot's shitlist"
+            tmpBuf = Y & " is on the bot's shitlist"
         
             If (InStr(1, gAcc.Flags, "S") <> 0) Then
-                tmpBuf = tmpBuf & "; however, " & y & " is also on the " & _
+                tmpBuf = tmpBuf & "; however, " & Y & " is also on the " & _
                     "bot's safelist and therefore will not be banned"
             End If
         Else
@@ -3222,22 +3222,22 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
         ElseIf (InStr(1, u, ".ini", vbTextCompare) > 0) Then
             tmpBuf(tmpCount) = "Error: Configuration files may not be read."
         Else
-            Dim y As String  ' ...
+            Dim Y As String  ' ...
             Dim f As Integer ' ...
         
             ' grab a file number
             f = FreeFile
         
             If (InStr(u, ".") > 0) Then
-                y = Left$(u, InStr(u, ".") - 1)
+                Y = Left$(u, InStr(u, ".") - 1)
             Else
-                y = u
+                Y = u
             End If
             
             ' get absolute file path
             u = App.Path & "\" & u
                     
-            Select Case UCase$(y)
+            Select Case UCase$(Y)
                 Case "CON", "PRN", "AUX", "CLOCK$", "NUL", "COM1", "COM2", "COM3", _
                     "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", _
                     "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
@@ -3424,7 +3424,7 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim u       As String
     Dim tmpBuf  As String ' temporary output buffer
     Dim banmsg  As String
-    Dim y       As String
+    Dim Y       As String
     Dim i       As Integer
 
     If ((MyFlags <> 2) And (MyFlags <> 18)) Then
@@ -3447,14 +3447,14 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 Call WildCardBan(u, banmsg, 1)
             Else
                 If (banmsg <> vbNullString) Then
-                    y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), dbAccess.access)
+                    Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), dbAccess.access)
                 Else
-                    y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), dbAccess.access)
+                    Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), dbAccess.access)
                 End If
             End If
             
-            If (Len(y) > 2) Then
-                tmpBuf = y
+            If (Len(Y) > 2) Then
+                tmpBuf = Y
             End If
         End If
     End If
@@ -3518,7 +3518,7 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim i      As Integer
     Dim banmsg As String
     Dim tmpBuf As String ' temporary output buffer
-    Dim y      As String
+    Dim Y      As String
     
     If ((MyFlags <> 2) And (MyFlags <> 18)) Then
        If (InBot) Then
@@ -3543,11 +3543,11 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
                     Call WildCardBan(u, banmsg, 0)
                 End If
             Else
-                y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), _
+                Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), _
                     dbAccess.access, 1)
                 
-                If (Len(y) > 1) Then
-                    tmpBuf = y
+                If (Len(Y) > 1) Then
+                    tmpBuf = Y
                 End If
             End If
         End If
@@ -3972,7 +3972,7 @@ Private Function OnAddQuote(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     Dim f      As Integer
     Dim u      As String
-    Dim y      As String
+    Dim Y      As String
     Dim tmpBuf As String ' temporary output buffer
     
     f = FreeFile
@@ -3980,14 +3980,14 @@ Private Function OnAddQuote(ByVal Username As String, ByRef dbAccess As udtGetAc
     u = msgData
     
     If (Len(u) > 0) Then
-        y = Dir$(GetFilePath("quotes.txt"))
+        Y = Dir$(GetFilePath("quotes.txt"))
         
-        If (Len(y) = 0) Then
+        If (Len(Y) = 0) Then
             Open GetFilePath("quotes.txt") For Output As #f
                 Print #f, u
             Close #f
         Else
-            Open y For Append As #f
+            Open Y For Append As #f
                 Print #f, u
             Close #f
         End If
@@ -4314,12 +4314,6 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             Flags = strArray(1)
         End If
         
-        ' if we've found a matching user, lets correct
-        ' the casing of the name that we've entered
-        If (Len(gAcc.Username)) Then
-            user = gAcc.Username
-        End If
-        
         ' do we have any special paramaters?
         If (Len(params)) Then
             ' split message by paramter
@@ -4412,19 +4406,19 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     Case "group" ' ...
                         ' do we have a valid parameter length?
                         If (Len(pmsg)) Then
-                            Dim splt() As String
+                            Dim Splt() As String
                             Dim j      As Integer
                         
                             If (InStr(1, pmsg, ",", vbBinaryCompare) <> 0) Then
-                                splt() = Split(pmsg, ",")
+                                Splt() = Split(pmsg, ",")
                             Else
-                                ReDim Preserve splt(0)
+                                ReDim Preserve Splt(0)
                                 
-                                splt(0) = pmsg
+                                Splt(0) = pmsg
                             End If
                             
-                            For j = 0 To UBound(splt)
-                                If ((StrComp(splt(j), user, vbTextCompare) = 0) And _
+                            For j = 0 To UBound(Splt)
+                                If ((StrComp(Splt(j), user, vbTextCompare) = 0) And _
                                     (gAcc.Type = "GROUP")) Then
                                     
                                     cmdRet(0) = "Error: You cannot make a group a member of " & _
@@ -4434,7 +4428,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 Else
                                     Dim tmp As udtGetAccessResponse ' ...
                                 
-                                    tmp = GetAccess(splt(j), "GROUP")
+                                    tmp = GetAccess(Splt(j), "GROUP")
                                     
                                     If (tmp.Username = vbNullString) Then
                                         Exit For
@@ -4478,7 +4472,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 End If
                             Next j
                             
-                            If (j < (UBound(splt) + 1)) Then
+                            If (j < (UBound(Splt) + 1)) Then
                                 cmdRet(0) = "Error: The specified group(s) could " & _
                                     "not be found."
                                     
@@ -4491,17 +4485,19 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             Next i
         End If
         
-        ' grab access for entry
-        gAcc = GetAccess(user, dbType)
-        
         ' we want to ensure that we have a default
         ' entry type if none is specified explicitly
         If (dbType = vbNullString) Then
-            dbType = gAcc.Type
-            
-            If (dbType = vbNullString) Then
-                dbType = "USER"
-            End If
+            dbType = "USER"
+        End If
+        
+        ' grab access for entry
+        gAcc = GetAccess(user, dbType)
+        
+        ' if we've found a matching user, lets correct
+        ' the casing of the name that we've entered
+        If (Len(gAcc.Username)) Then
+            user = gAcc.Username
         End If
 
         ' is rank valid?
@@ -4667,7 +4663,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     Else
                         ' if we're adding with no flag indicator ('+' or '-'),
                         ' then we need to remove the previous entry from the database.
-                        Call DB_remove(user, dbType)
+                        'Call DB_remove(user, dbType)
                     
                         ' clear user flags
                         gAcc.Flags = vbNullString
@@ -4701,7 +4697,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             Else
                 ' if we're adding with no flag indicator ('+' or '-'),
                 ' then we need to remove the previous entry from the database.
-                Call DB_remove(user, dbType)
+                'Call DB_remove(user, dbType)
 
                 ' clear flags
                 gAcc.Flags = vbNullString
@@ -5716,13 +5712,13 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                 For i = LBound(DB) To UBound(DB)
                     If (Len(DB(i).Groups) And DB(i).Groups <> "%") Then
                         If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
-                            Dim splt()     As String ' ...
+                            Dim Splt()     As String ' ...
                             Dim innerfound As Boolean ' ...
                             
-                            splt() = Split(DB(i).Groups, ",")
+                            Splt() = Split(DB(i).Groups, ",")
                             
-                            For j = LBound(splt) To UBound(splt)
-                                If (StrComp(bak.Username, splt(j), vbTextCompare) = 0) Then
+                            For j = LBound(Splt) To UBound(Splt)
+                                If (StrComp(bak.Username, Splt(j), vbTextCompare) = 0) Then
                                     innerfound = True
                                 
                                     Exit For
@@ -5732,13 +5728,13 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                             If (innerfound) Then
                                 Dim k As Integer ' ...
                                 
-                                For k = (j + 1) To UBound(splt)
-                                    splt(k - 1) = splt(k)
+                                For k = (j + 1) To UBound(Splt)
+                                    Splt(k - 1) = Splt(k)
                                 Next k
                                 
-                                ReDim Preserve splt(UBound(splt) - 1)
+                                ReDim Preserve Splt(UBound(Splt) - 1)
                                 
-                                DB(i).Groups = Join(splt(), vbNullString)
+                                DB(i).Groups = Join(Splt(), vbNullString)
                             End If
                         Else
                             If (StrComp(bak.Username, DB(i).Groups, vbTextCompare) = 0) Then
@@ -5923,7 +5919,7 @@ Public Sub LoadDatabase()
     Dim gA    As udtDatabase
     
     Dim s     As String
-    Dim x()   As String
+    Dim X()   As String
     Dim Path  As String
     Dim i     As Integer
     Dim f     As Integer
@@ -5943,19 +5939,19 @@ Public Sub LoadDatabase()
                 Line Input #f, s
                 
                 If InStr(1, s, " ", vbTextCompare) > 0 Then
-                    x() = Split(s, " ", 10)
+                    X() = Split(s, " ", 10)
                     
-                    If UBound(x) > 0 Then
+                    If UBound(X) > 0 Then
                         ReDim Preserve DB(i)
                         
                         With DB(i)
-                            .Username = x(0)
+                            .Username = X(0)
                             
-                            If StrictIsNumeric(x(1)) Then
-                                .access = Val(x(1))
+                            If StrictIsNumeric(X(1)) Then
+                                .access = Val(X(1))
                             Else
-                                If x(1) <> "%" Then
-                                    .Flags = x(1)
+                                If X(1) <> "%" Then
+                                    .Flags = X(1)
                                     
                                     'If InStr(X(1), "S") > 0 Then
                                     '    AddToSafelist .Username
@@ -5964,37 +5960,37 @@ Public Sub LoadDatabase()
                                 End If
                             End If
                             
-                            If UBound(x) > 1 Then
-                                If StrictIsNumeric(x(2)) Then
-                                    .access = Int(x(2))
+                            If UBound(X) > 1 Then
+                                If StrictIsNumeric(X(2)) Then
+                                    .access = Int(X(2))
                                 Else
-                                    If x(2) <> "%" Then
-                                        .Flags = x(2)
+                                    If X(2) <> "%" Then
+                                        .Flags = X(2)
                                     End If
                                 End If
                                 
                                 '  0        1       2       3      4        5          6       7     8
                                 ' username access flags addedby addedon modifiedby modifiedon type banmsg
-                                If UBound(x) > 2 Then
-                                    .AddedBy = x(3)
+                                If UBound(X) > 2 Then
+                                    .AddedBy = X(3)
                                     
-                                    If UBound(x) > 3 Then
-                                        .AddedOn = CDate(Replace(x(4), "_", " "))
+                                    If UBound(X) > 3 Then
+                                        .AddedOn = CDate(Replace(X(4), "_", " "))
                                         
-                                        If UBound(x) > 4 Then
-                                            .ModifiedBy = x(5)
+                                        If UBound(X) > 4 Then
+                                            .ModifiedBy = X(5)
                                             
-                                            If UBound(x) > 5 Then
-                                                .ModifiedOn = CDate(Replace(x(6), "_", " "))
+                                            If UBound(X) > 5 Then
+                                                .ModifiedOn = CDate(Replace(X(6), "_", " "))
 
-                                                If UBound(x) > 6 Then
-                                                    .Type = x(7)
+                                                If UBound(X) > 6 Then
+                                                    .Type = X(7)
                                                     
-                                                    If UBound(x) > 7 Then
-                                                        .Groups = x(8)
+                                                    If UBound(X) > 7 Then
+                                                        .Groups = X(8)
                                                         
-                                                        If UBound(x) > 8 Then
-                                                            .BanMessage = x(9)
+                                                        If UBound(X) > 8 Then
+                                                            .BanMessage = X(9)
                                                         End If
                                                     End If
                                                 End If
