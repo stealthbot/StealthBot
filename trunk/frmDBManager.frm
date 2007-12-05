@@ -5,7 +5,7 @@ Begin VB.Form frmDBManager
    ClientHeight    =   5415
    ClientLeft      =   60
    ClientTop       =   750
-   ClientWidth     =   6735
+   ClientWidth     =   7215
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -18,31 +18,54 @@ Begin VB.Form frmDBManager
    LinkTopic       =   "frmDBManager"
    MaxButton       =   0   'False
    ScaleHeight     =   5415
-   ScaleWidth      =   6735
+   ScaleWidth      =   7215
    StartUpPosition =   1  'CenterOwner
+   Begin MSComctlLib.ImageList icons 
+      Left            =   360
+      Top             =   3720
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+      BackColor       =   -2147483643
+      ImageWidth      =   16
+      ImageHeight     =   16
+      MaskColor       =   12632256
+      _Version        =   393216
+      BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
+         NumListImages   =   2
+         BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmDBManager.frx":0000
+            Key             =   ""
+         EndProperty
+         BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+            Picture         =   "frmDBManager.frx":015A
+            Key             =   ""
+         EndProperty
+      EndProperty
+   End
    Begin VB.CommandButton btnCreateGroup 
       Caption         =   "Create Group"
       Height          =   375
-      Left            =   1800
+      Left            =   2047
       TabIndex        =   12
-      Top             =   4560
-      Width           =   1695
+      Top             =   4550
+      Width           =   1943
    End
    Begin MSComctlLib.TreeView trvUsers 
-      Height          =   4335
+      Height          =   4350
       Left            =   120
       TabIndex        =   10
       Top             =   105
-      Width           =   3375
-      _ExtentX        =   5953
-      _ExtentY        =   7646
+      Width           =   3850
+      _ExtentX        =   6800
+      _ExtentY        =   7673
       _Version        =   393217
       HideSelection   =   0   'False
       Indentation     =   575
       LabelEdit       =   1
       LineStyle       =   1
       Sorted          =   -1  'True
-      Style           =   6
+      Style           =   7
+      ImageList       =   "icons"
       Appearance      =   1
       OLEDragMode     =   1
    End
@@ -51,7 +74,7 @@ Begin VB.Form frmDBManager
       Enabled         =   0   'False
       ForeColor       =   &H00FFFFFF&
       Height          =   285
-      Left            =   5160
+      Left            =   5640
       MaxLength       =   25
       TabIndex        =   5
       Top             =   580
@@ -62,7 +85,7 @@ Begin VB.Form frmDBManager
       Enabled         =   0   'False
       ForeColor       =   &H00FFFFFF&
       Height          =   285
-      Left            =   3840
+      Left            =   4320
       MaxLength       =   25
       TabIndex        =   3
       Top             =   580
@@ -72,7 +95,7 @@ Begin VB.Form frmDBManager
       Caption         =   "&Cancel"
       Height          =   255
       Index           =   0
-      Left            =   4440
+      Left            =   4920
       TabIndex        =   2
       Top             =   5040
       Width           =   855
@@ -81,17 +104,26 @@ Begin VB.Form frmDBManager
       Caption         =   "Apply and Cl&ose"
       Height          =   255
       Index           =   0
-      Left            =   5280
+      Left            =   5760
       TabIndex        =   1
       Top             =   5040
       Width           =   1335
    End
+   Begin VB.CommandButton cmdCancel 
+      Caption         =   "Create User"
+      Height          =   375
+      Index           =   3
+      Left            =   110
+      TabIndex        =   13
+      Top             =   4550
+      Width           =   1943
+   End
    Begin VB.Frame frmDatabase 
       Caption         =   "Database"
       Height          =   4920
-      Left            =   3600
+      Left            =   4080
       TabIndex        =   0
-      Top             =   10
+      Top             =   8
       Width           =   3025
       Begin VB.ListBox lstGroups 
          Enabled         =   0   'False
@@ -99,7 +131,7 @@ Begin VB.Form frmDBManager
          Left            =   240
          MultiSelect     =   1  'Simple
          TabIndex        =   11
-         Top             =   1245
+         Top             =   1275
          Width           =   2535
       End
       Begin VB.CommandButton cmdCancel 
@@ -127,7 +159,7 @@ Begin VB.Form frmDBManager
          Index           =   3
          Left            =   240
          TabIndex        =   7
-         Top             =   1000
+         Top             =   1030
          Width           =   1215
       End
       Begin VB.Label Label1 
@@ -148,15 +180,6 @@ Begin VB.Form frmDBManager
          Top             =   320
          Width           =   1215
       End
-   End
-   Begin VB.CommandButton cmdCancel 
-      Caption         =   "Create User"
-      Height          =   375
-      Index           =   3
-      Left            =   120
-      TabIndex        =   13
-      Top             =   4560
-      Width           =   1695
    End
    Begin VB.Menu mnuFile 
       Caption         =   "File"
@@ -209,13 +232,13 @@ Private Sub Form_Load()
                     
                     If (Pos) Then
                         Call trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
-                            tvwChild, DB(i).Username, DB(i).Username)
+                            tvwChild, DB(i).Username, DB(i).Username, 2)
                     End If
                 Next j
             Else
                 If (Not (Exists(DB(i).Username))) Then
                     Call trvUsers.Nodes.Add("Database", tvwChild, DB(i).Username, _
-                        DB(i).Username)
+                        DB(i).Username, 2)
                 End If
             End If
         End If
@@ -252,10 +275,23 @@ Private Sub Form_Load()
             Else
                 Call trvUsers.Nodes.Add("Database", tvwChild, , DB(i).Username)
             End If
+            
+            If (StrComp(DB(i).Type, "GAME", vbBinaryCompare) = 0) Then
+                trvUsers.Nodes(i + 1).Image = 1
+            Else
+                
+            End If
         End If
     Next i
     
-    trvUsers.Nodes(1).Expanded = True
+    With trvUsers.Nodes(1)
+        .Expanded = True
+        .Image = 2
+    End With
+End Sub
+
+Private Sub Label3_Click()
+
 End Sub
 
 Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
@@ -360,7 +396,7 @@ Private Sub trvUsers_DragOver(ByRef Source As Control, ByRef X As Single, _
     ByRef Y As Single, ByRef State As Integer)
     
     If (m_dragging) Then
-        If (Source.Name = "trvUsers") Then
+        If (Source.name = "trvUsers") Then
             Set trvUsers.DropHighlight = trvUsers.HitTest(X, Y)
         End If
     End If
@@ -370,7 +406,7 @@ Private Sub trvUsers_DragDrop(ByRef Source As Control, ByRef X As Single, _
     ByRef Y As Single)
     
     If (m_dragging) Then
-        If (Source.Name = "trvUsers") Then
+        If (Source.name = "trvUsers") Then
             If (Not (trvUsers.DropHighlight Is Nothing)) Then
                 Dim selnow  As udtGetAccessResponse ' ...
                 Dim selprev As udtGetAccessResponse ' ...
@@ -384,50 +420,38 @@ Private Sub trvUsers_DragDrop(ByRef Source As Control, ByRef X As Single, _
                     selprev = GetAccess(trvUsers.SelectedItem.text)
                     
                     If (Len(selprev.Groups) And (selprev.Groups <> "%")) Then
-                        'res = MsgBox("Are you sure you wish to move " & Chr$(34) & _
-                        '    selprev.Username & Chr$(34) & " out of the group(s) " & Chr$(34) & _
-                        '        selprev.Groups & "?" & Chr$(34), vbYesNo + vbInformation, _
-                        '            "Move User")
-                                        
-                        'If (res = vbYes) Then
-                            For i = LBound(DB) To UBound(DB)
-                                If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
-                                    DB(i).Groups = vbNullString
-                                End If
-                            Next i
-                            
-                            ' ...
-                            gAcc = GetCumulativeAccess(selprev.Username)
-                            
-                            Call trvUsers.Nodes.Add(trvUsers.DropHighlight.text, tvwChild, , _
-                                selprev.Username)
-                                
-                            Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
-                            
-                            If (gAcc.access = 0) Then
-                                found = Exists(selprev.Username)
-                                
-                                If (found > 0) Then
-                                    With trvUsers.Nodes(found)
-                                        .ForeColor = vbRed
-                                        .Tag = "This entry is currently marked for deletetion."
-                                    End With
-                                End If
+                        For i = LBound(DB) To UBound(DB)
+                            If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
+                                DB(i).Groups = vbNullString
                             End If
-                        'End If
+                        Next i
+                        
+                        ' ...
+                        gAcc = GetCumulativeAccess(selprev.Username)
+                        
+                        Call trvUsers.Nodes.Add(trvUsers.DropHighlight.text, tvwChild, , _
+                            selprev.Username)
+                            
+                        Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+                        
+                        If (gAcc.access = 0) Then
+                            found = Exists(selprev.Username)
+                            
+                            If (found > 0) Then
+                                With trvUsers.Nodes(found)
+                                    .ForeColor = vbRed
+                                    .Tag = "This entry is currently marked for deletetion."
+                                End With
+                            End If
+                        End If
                     End If
                 Else
                     If (trvUsers.SelectedItem.Index <> 1) Then
                         selnow = GetAccess(trvUsers.DropHighlight.text)
                         selprev = GetAccess(trvUsers.SelectedItem.text)
                         
-                        If (StrComp(selnow.Type, "GROUP", vbBinaryCompare) = 0) Then
-                            'res = MsgBox("Are you sure you wish to move " & Chr$(34) & _
-                            '    selprev.Username & Chr$(34) & " into the group " & Chr$(34) & _
-                            '        selnow.Username & "?" & Chr$(34), vbYesNo + vbInformation, _
-                            '            "Move User")
-                            
-                            'If (res = vbYes) Then
+                        If (selnow.Username <> selprev.Username) Then
+                            If (StrComp(selnow.Type, "GROUP", vbBinaryCompare) = 0) Then
                                 For i = LBound(DB) To UBound(DB)
                                     If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
                                         DB(i).Groups = trvUsers.DropHighlight.text
@@ -439,7 +463,7 @@ Private Sub trvUsers_DragDrop(ByRef Source As Control, ByRef X As Single, _
                                 
                                 Call trvUsers.Nodes.Add(trvUsers.DropHighlight.text, tvwChild, , _
                                     selprev.Username)
-
+    
                                 Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
                                 
                                 If (gAcc.access = 0) Then
@@ -452,7 +476,7 @@ Private Sub trvUsers_DragDrop(ByRef Source As Control, ByRef X As Single, _
                                         End With
                                     End If
                                 End If
-                            'End If
+                            End If
                         End If
                     End If
                 End If
@@ -479,4 +503,8 @@ Private Function Exists(ByVal nodeName As String) As Integer
     Next i
     
     Exists = False
+End Function
+
+Private Function GetIconIndex(ByVal name As String) As Integer
+    ' ...
 End Function
