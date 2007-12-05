@@ -2,10 +2,10 @@ VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmDBManager 
    Caption         =   "Database Manager"
-   ClientHeight    =   5640
+   ClientHeight    =   5415
    ClientLeft      =   60
    ClientTop       =   750
-   ClientWidth     =   6750
+   ClientWidth     =   6735
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -17,25 +17,25 @@ Begin VB.Form frmDBManager
    EndProperty
    LinkTopic       =   "frmDBManager"
    MaxButton       =   0   'False
-   ScaleHeight     =   5640
-   ScaleWidth      =   6750
+   ScaleHeight     =   5415
+   ScaleWidth      =   6735
    StartUpPosition =   1  'CenterOwner
    Begin VB.CommandButton btnCreateGroup 
       Caption         =   "Create Group"
       Height          =   375
       Left            =   1800
-      TabIndex        =   19
-      Top             =   4800
+      TabIndex        =   12
+      Top             =   4560
       Width           =   1695
    End
    Begin MSComctlLib.TreeView trvUsers 
-      Height          =   4575
+      Height          =   4335
       Left            =   120
-      TabIndex        =   16
+      TabIndex        =   10
       Top             =   105
       Width           =   3375
       _ExtentX        =   5953
-      _ExtentY        =   8070
+      _ExtentY        =   7646
       _Version        =   393217
       HideSelection   =   0   'False
       Indentation     =   575
@@ -48,33 +48,25 @@ Begin VB.Form frmDBManager
    End
    Begin VB.TextBox txtFlags 
       BackColor       =   &H00993300&
+      Enabled         =   0   'False
       ForeColor       =   &H00FFFFFF&
       Height          =   285
       Left            =   5160
       MaxLength       =   25
-      TabIndex        =   7
-      Top             =   2280
+      TabIndex        =   5
+      Top             =   580
       Width           =   1215
    End
    Begin VB.TextBox txtRank 
       BackColor       =   &H00993300&
-      ForeColor       =   &H00FFFFFF&
-      Height          =   285
-      Left            =   3840
-      MaxLength       =   25
-      TabIndex        =   5
-      Top             =   2280
-      Width           =   1215
-   End
-   Begin VB.TextBox txtName 
-      BackColor       =   &H00993300&
+      Enabled         =   0   'False
       ForeColor       =   &H00FFFFFF&
       Height          =   285
       Left            =   3840
       MaxLength       =   25
       TabIndex        =   3
-      Top             =   1560
-      Width           =   2535
+      Top             =   580
+      Width           =   1215
    End
    Begin VB.CommandButton cmdCancel 
       Caption         =   "&Cancel"
@@ -82,7 +74,7 @@ Begin VB.Form frmDBManager
       Index           =   0
       Left            =   4440
       TabIndex        =   2
-      Top             =   5280
+      Top             =   5040
       Width           =   855
    End
    Begin VB.CommandButton cmdSave 
@@ -91,31 +83,23 @@ Begin VB.Form frmDBManager
       Index           =   0
       Left            =   5280
       TabIndex        =   1
-      Top             =   5280
+      Top             =   5040
       Width           =   1335
    End
-   Begin VB.Frame Frame1 
-      Caption         =   "Database Record"
-      Height          =   5160
+   Begin VB.Frame frmDatabase 
+      Caption         =   "Database"
+      Height          =   4920
       Left            =   3600
       TabIndex        =   0
       Top             =   10
       Width           =   3025
-      Begin VB.OptionButton recType 
-         Caption         =   "Clan"
-         Height          =   255
-         Index           =   1
-         Left            =   1200
-         TabIndex        =   18
-         Top             =   620
-         Width           =   735
-      End
       Begin VB.ListBox lstGroups 
-         Height          =   1620
+         Enabled         =   0   'False
+         Height          =   3180
          Left            =   240
          MultiSelect     =   1  'Simple
-         TabIndex        =   17
-         Top             =   3000
+         TabIndex        =   11
+         Top             =   1245
          Width           =   2535
       End
       Begin VB.CommandButton cmdCancel 
@@ -124,8 +108,8 @@ Begin VB.Form frmDBManager
          Height          =   255
          Index           =   1
          Left            =   1080
-         TabIndex        =   15
-         Top             =   4750
+         TabIndex        =   9
+         Top             =   4530
          Width           =   855
       End
       Begin VB.CommandButton cmdSave 
@@ -133,54 +117,17 @@ Begin VB.Form frmDBManager
          Height          =   255
          Index           =   1
          Left            =   1930
-         TabIndex        =   14
-         Top             =   4750
+         TabIndex        =   8
+         Top             =   4530
          Width           =   855
-      End
-      Begin VB.OptionButton recType 
-         Caption         =   "Group"
-         Height          =   255
-         Index           =   3
-         Left            =   1200
-         TabIndex        =   12
-         Top             =   870
-         Width           =   735
-      End
-      Begin VB.OptionButton recType 
-         Caption         =   "Game"
-         Height          =   255
-         Index           =   2
-         Left            =   360
-         TabIndex        =   11
-         Top             =   870
-         Width           =   735
-      End
-      Begin VB.OptionButton recType 
-         Caption         =   "User"
-         Height          =   255
-         Index           =   0
-         Left            =   360
-         TabIndex        =   10
-         Top             =   620
-         Value           =   -1  'True
-         Width           =   735
-      End
-      Begin VB.Label Label1 
-         Caption         =   "Record Type:"
-         Height          =   255
-         Index           =   4
-         Left            =   240
-         TabIndex        =   13
-         Top             =   360
-         Width           =   1815
       End
       Begin VB.Label Label1 
          Caption         =   "Group(s):"
          Height          =   255
          Index           =   3
          Left            =   240
-         TabIndex        =   9
-         Top             =   2760
+         TabIndex        =   7
+         Top             =   1000
          Width           =   1215
       End
       Begin VB.Label Label1 
@@ -188,8 +135,8 @@ Begin VB.Form frmDBManager
          Height          =   255
          Index           =   2
          Left            =   1560
-         TabIndex        =   8
-         Top             =   2040
+         TabIndex        =   6
+         Top             =   320
          Width           =   1215
       End
       Begin VB.Label Label1 
@@ -197,18 +144,9 @@ Begin VB.Form frmDBManager
          Height          =   255
          Index           =   1
          Left            =   240
-         TabIndex        =   6
-         Top             =   2040
-         Width           =   1215
-      End
-      Begin VB.Label Label1 
-         Caption         =   "Username / Clan / Game / Group:"
-         Height          =   255
-         Index           =   0
-         Left            =   240
          TabIndex        =   4
-         Top             =   1320
-         Width           =   2535
+         Top             =   320
+         Width           =   1215
       End
    End
    Begin VB.CommandButton cmdCancel 
@@ -216,8 +154,8 @@ Begin VB.Form frmDBManager
       Height          =   375
       Index           =   3
       Left            =   120
-      TabIndex        =   20
-      Top             =   4800
+      TabIndex        =   13
+      Top             =   4560
       Width           =   1695
    End
    Begin VB.Menu mnuFile 
@@ -333,24 +271,50 @@ Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
     Next i
     
     ' disable changing of record type
-    For i = 0 To 3
-        recType(i).Enabled = False
-    Next i
+    'For i = 0 To 3
+    '    recType(i).Enabled = False
+    'Next i
     
     ' disable changing of record name
-    txtName.Enabled = False
+    'txtName.Enabled = False
     
     ' grab entry from database
     tmp = GetAccess(trvUsers.SelectedItem.text)
     
-    Select Case (UCase$(tmp.Type))
-        Case "USER":  recType(0).Value = True
-        Case "CLAN":  recType(1).Value = True
-        Case "GAME":  recType(2).Value = True
-        Case "GROUP": recType(3).Value = True
-    End Select
+    'Select Case (UCase$(tmp.Type))
+    '    Case "USER":  recType(0).Value = True
+    '    Case "CLAN":  recType(1).Value = True
+    '    Case "GAME":  recType(2).Value = True
+    '    Case "GROUP": recType(3).Value = True
+    'End Select
     
-    txtName.text = tmp.Username
+    If (Node.Index = 1) Then
+        frmDatabase.Caption = "Database"
+        
+        txtRank.Enabled = False
+        txtFlags.Enabled = False
+        lstGroups.Enabled = False
+    Else
+        If (tmp.Type = "USER") Then
+            frmDatabase.Caption = "User: " & _
+                tmp.Username
+        ElseIf (tmp.Type = "CLAN") Then
+            frmDatabase.Caption = "Clan: " & _
+                tmp.Username
+        ElseIf (tmp.Type = "GAME") Then
+            frmDatabase.Caption = "Game: " & _
+                tmp.Username
+        ElseIf (tmp.Type = "GROUP") Then
+            frmDatabase.Caption = "Group: " & _
+                tmp.Username
+        Else
+            frmDatabase.Caption = tmp.Username
+        End If
+        
+        txtRank.Enabled = True
+        txtFlags.Enabled = True
+        lstGroups.Enabled = True
+    End If
     
     If (tmp.access > 0) Then
         txtRank.text = tmp.access
