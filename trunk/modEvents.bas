@@ -785,12 +785,14 @@ End Sub
 'Ping, Product, sClan, InitStatstring, W3Icon
 Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
     ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, Optional ByVal w3icon As String)
-                                      
-    Dim i          As Integer ' ...
-    Dim strCompare As String  ' ...
-    Dim Level      As Byte    ' ...
-    Dim StatUpdate As Boolean ' ...
-    Dim Index      As Long    ' ...
+
+    Dim clsChatQueue As New clsChatQueue ' ...
+    
+    Dim i            As Integer ' ...
+    Dim strCompare   As String  ' ...
+    Dim Level        As Byte    ' ...
+    Dim StatUpdate   As Boolean ' ...
+    Dim Index        As Long    ' ...
     
     If (Len(Username) < 1) Then
         Exit Sub
@@ -821,10 +823,10 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
 
     If (StatUpdate = False) Then
         If (Filters) Then
-            For i = 1 To colChatQueue.Count
-                ' ...
-                Dim clsChatQueue As clsChatQueue
+            ' create new instance of chat queue
+            Set clsChatQueue = New clsChatQueue
             
+            For i = 1 To colChatQueue.Count
                 ' ...
                 Set clsChatQueue = colChatQueue(i)
                 
@@ -833,23 +835,23 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 
                     Exit For
                 End If
-                
-                Set clsChatQueue = Nothing
             Next i
             
             If (i < (colChatQueue.Count + 1)) Then
                 StatUpdate = True
             End If
+            
+            Set clsChatQueue = Nothing
         End If
     End If
     
     If (StatUpdate) Then
-        If ((Not (Filters)) Or (i >= (colChatQueue.Count + 1))) Then
+        If ((Not (Filters)) Or _
+            (i >= (colChatQueue.Count + 1))) Then
+            
             Call Event_QueuedUserInChannel(Username, Flags, Ping, Product, sClan, _
                 OriginalStatstring, w3icon)
         Else
-            Set clsChatQueue = colChatQueue(i)
-            
             Call clsChatQueue.StoreUserInChannel(Flags, Ping, Product, sClan, _
                 OriginalStatstring, w3icon)
         End If
