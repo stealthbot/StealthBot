@@ -137,10 +137,9 @@ Begin VB.Form frmDBManager
       Top             =   5016
       Width           =   1695
    End
-   Begin VB.CommandButton cmdCancel 
+   Begin VB.CommandButton btnCreateUser 
       Caption         =   "Create User"
       Height          =   375
-      Index           =   3
       Left            =   120
       TabIndex        =   3
       Top             =   5016
@@ -214,10 +213,10 @@ Begin VB.Form frmDBManager
    End
    Begin VB.Menu mnuFile 
       Caption         =   "File"
+      Visible         =   0   'False
    End
    Begin VB.Menu mnuContext 
       Caption         =   "mnuContext"
-      Visible         =   0   'False
       Begin VB.Menu mnuRename 
          Caption         =   "Rename"
          Enabled         =   0   'False
@@ -237,6 +236,56 @@ Option Explicit
 Private m_dragging As Boolean ' ...
 Private m_selnode  As Node    ' ...
 
+Private Sub btnCreateUser_Click()
+    Static userCount As Integer ' ...
+    
+    Dim newNode      As Node    ' ...
+    
+    Dim Username     As String  ' ...
+    
+    Username = "New User #" & _
+        (userCount + 1)
+
+    If (Not (trvUsers.SelectedItem Is Nothing)) Then
+        Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
+            tvwChild, Username, Username, 3)
+    Else
+        Set newNode = trvUsers.Nodes.Add("Database", tvwChild, Username, _
+            Username, 3)
+    End If
+        
+    trvUsers.Nodes(newNode.Index).Selected = True
+    
+    Call trvUsers.StartLabelEdit
+    
+    userCount = (userCount + 1)
+End Sub
+
+Private Sub btnCreateGroup_Click()
+    Static groupCount As Integer ' ...
+    
+    Dim newNode       As Node    ' ...
+    
+    Dim groupname     As String  ' ...
+    
+    groupname = "New Group #" & _
+        (groupCount + 1)
+
+    If (Not (trvUsers.SelectedItem Is Nothing)) Then
+        Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
+            tvwChild, groupname, groupname, 1)
+    Else
+        Set newNode = trvUsers.Nodes.Add("Database", tvwChild, groupname, _
+            groupname, 1)
+    End If
+        
+    trvUsers.Nodes(newNode.Index).Selected = True
+    
+    Call trvUsers.StartLabelEdit
+    
+    groupCount = (groupCount + 1)
+End Sub
+
 Private Sub Form_Load()
     Call tbsTabs_Click
 End Sub
@@ -246,18 +295,16 @@ Private Sub mnuDelete_Click()
 End Sub
 
 Private Sub mnuRename_Click()
-    ' ...
-End Sub
-
-Private Sub TabStrip1_Click()
-
+    Call trvUsers.StartLabelEdit
 End Sub
 
 Private Sub tbsTabs_Click()
-    Dim i      As Integer ' ...
-    Dim Splt() As String  ' ...
-    Dim j      As Integer ' ...
-    Dim Pos    As Integer ' ...
+    Dim newNode As Node ' ...
+
+    Dim i       As Integer ' ...
+    Dim Splt()  As String  ' ...
+    Dim j       As Integer ' ...
+    Dim Pos     As Integer ' ...
     
     If (DB(0).Username = vbNullString) Then
         Call LoadDatabase
@@ -284,14 +331,14 @@ Private Sub tbsTabs_Click()
                             Pos = Exists(Splt(j))
                             
                             If (Pos) Then
-                                Call trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
+                                Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
                                     tvwChild, DB(i).Username, DB(i).Username, 1)
                             End If
                         Next j
                     Else
                         If (Not (Exists(DB(i).Username))) Then
-                            Call trvUsers.Nodes.Add("Database", tvwChild, DB(i).Username, _
-                                DB(i).Username, 1)
+                            Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
+                                DB(i).Username, DB(i).Username, 1)
                         End If
                     End If
                 End If
@@ -320,13 +367,13 @@ Private Sub tbsTabs_Click()
                             Pos = Exists(Splt(j))
                             
                             If (Pos) Then
-                                Call trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
+                                Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
                                     tvwChild, DB(i).Username, DB(i).Username, 3)
                             End If
                         Next j
                     Else
-                        Call trvUsers.Nodes.Add("Database", tvwChild, DB(i).Username, _
-                                DB(i).Username, 3)
+                        Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
+                            DB(i).Username, DB(i).Username, 3)
                     End If
                 End If
             Next i
@@ -334,7 +381,7 @@ Private Sub tbsTabs_Click()
         Case 2: ' Clans
             For i = LBound(DB) To UBound(DB)
                 If (StrComp(DB(i).Type, "CLAN", vbBinaryCompare) = 0) Then
-                    Call trvUsers.Nodes.Add("Database", tvwChild, DB(i).Username, _
+                    Set newNode = trvUsers.Nodes.Add("Database", tvwChild, DB(i).Username, _
                             DB(i).Username, 2)
                 End If
             Next i
@@ -342,29 +389,8 @@ Private Sub tbsTabs_Click()
         Case 3: ' Games
             For i = LBound(DB) To UBound(DB)
                 If (StrComp(DB(i).Type, "GAME", vbBinaryCompare) = 0) Then
-                    Dim gameName As String ' ...
-                
-                    ' check for invalid game entry
-                    'Select Case (DB(i).Username)
-                    '    Case "CHAT": gameName = "Chat"
-                    '    Case "DRTL": gameName = "Diablo I: Retail"
-                    '    Case "DSHR": gameName = "Diablo I: Shareware"
-                    '    Case "W2BN": gameName = "WarCraft II: Battle.net Edition"
-                    '    Case "STAR": gameName = "StarCraft"
-                    '    Case "SSHR": gameName = "StarCraft: Shareware"
-                    '    Case "JSTR": gameName = "StarCraft: Japanese"
-                    '    Case "SEXP": gameName = "StarCraft: Brood War"
-                    '    Case "D2DV": gameName = "Diablo II"
-                    '    Case "D2XP": gameName = "Diablo II: Lord of Destruction"
-                    '    Case "WAR3": gameName = "WarCraft III: Reign of Chaos"
-                    '    Case "W3XP": gameName = "WarCraft III: The Frozen Throne"
-                    '    Case Else:   gameName = DB(i).Username
-                    'End Select
-                    
-                    gameName = DB(i).Username
-                
-                    Call trvUsers.Nodes.Add("Database", tvwChild, gameName, _
-                            gameName, 2)
+                    Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
+                        DB(i).Username, DB(i).Username, 2)
                 End If
             Next i
     End Select
@@ -374,6 +400,8 @@ Private Sub tbsTabs_Click()
             .Expanded = True
             .Image = 1
         End With
+        
+        Call trvUsers.Refresh
     End If
 End Sub
 
@@ -471,6 +499,19 @@ End Sub
 
 Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If (Button = vbRightButton) Then
+        Dim gAcc As udtGetAccessResponse ' ...
+
+        ' ...
+        gAcc = GetAccess(trvUsers.SelectedItem.text)
+
+        ' ...
+        If (gAcc.Type = "GROUP") Then
+            mnuRename.Enabled = True
+        Else
+            mnuRename.Enabled = False
+        End If
+        
+        ' ...
         Call Me.PopupMenu(mnuContext)
     End If
 End Sub
@@ -496,55 +537,23 @@ Private Sub trvUsers_DragDrop(ByRef Source As Control, ByRef X As Single, _
             
                 Dim selnow  As udtGetAccessResponse ' ...
                 Dim selprev As udtGetAccessResponse ' ...
-                Dim gAcc    As udtGetAccessResponse ' ...
-                
+
                 Dim res     As Integer ' ...
                 Dim i       As Integer ' ...
                 Dim found   As Integer ' ...
                 
                 If (trvUsers.DropHighlight.Index = 1) Then
                     selprev = GetAccess(trvUsers.SelectedItem.text)
-                    
-                    If (Len(selprev.Groups) And (selprev.Groups <> "%")) Then
-                        For i = LBound(DB) To UBound(DB)
-                            If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
-                                DB(i).Groups = vbNullString
-                            End If
-                        Next i
-                        
-                        ' ...
-                        gAcc = GetCumulativeAccess(selprev.Username)
-                        
-                        Call trvUsers.Nodes.Add(trvUsers.DropHighlight.text, tvwChild, , _
-                            selprev.Username, 1)
-                            
-                        If (trvUsers.Nodes(trvUsers.SelectedItem.Index).children) Then
-                            'Set child = trvUsers.SelectedItem.Next
 
-                            'Do While (Not (child Is Nothing))
-                            '    Call trvUsers.Nodes.Add(trvUsers.DropHighlight.text, _
-                            '        tvwChild, , selprev.Username)
-                            '
-                            '    Set child = trvUsers.SelectedItem.Next
-                            'Loop
+                    For i = LBound(DB) To UBound(DB)
+                        If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
+                            DB(i).Groups = vbNullString
                         End If
-                            
-                        Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
-                        
-                        If ((gAcc.access = 0) And _
-                            (gAcc.Flags = vbNullString) And _
-                            ((gAcc.Groups = vbNullString) Or _
-                             (gAcc.Groups = "%"))) Then
-                           
-                            found = Exists(selprev.Username)
-                            
-                            If (found > 0) Then
-                                With trvUsers.Nodes(found)
-                                    .ForeColor = vbRed
-                                End With
-                            End If
-                        End If
-                    End If
+                    Next i
+                    
+                    ' ...
+                    Set trvUsers.SelectedItem.Parent = _
+                        trvUsers.DropHighlight
                 Else
                     If (trvUsers.SelectedItem.Index <> 1) Then
                         selnow = GetAccess(trvUsers.DropHighlight.text)
@@ -559,26 +568,8 @@ Private Sub trvUsers_DragDrop(ByRef Source As Control, ByRef X As Single, _
                                 Next i
                                 
                                 ' ...
-                                gAcc = GetCumulativeAccess(selprev.Username)
-                                
-                                Call trvUsers.Nodes.Add(trvUsers.DropHighlight.text, tvwChild, , _
-                                    selprev.Username, 2)
-    
-                                Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
-                                
-                                If ((gAcc.access = 0) And _
-                                    (gAcc.Flags = vbNullString) And _
-                                    ((gAcc.Groups = vbNullString) Or _
-                                     (gAcc.Groups = "%"))) Then
-                                   
-                                    found = Exists(selprev.Username)
-                                    
-                                    If (found > 0) Then
-                                        With trvUsers.Nodes(found)
-                                            .ForeColor = vbRed
-                                        End With
-                                    End If
-                                End If
+                                Set trvUsers.SelectedItem.Parent = _
+                                    trvUsers.DropHighlight
                             End If
                         End If
                     End If
@@ -592,10 +583,6 @@ Private Sub trvUsers_DragDrop(ByRef Source As Control, ByRef X As Single, _
             m_dragging = False
         End If
     End If
-End Sub
-
-Private Sub btnCreateGroup_Click()
-    Call frmGroupSelection.Show(vbModal, Me)
 End Sub
 
 Private Function Exists(ByVal nodeName As String) As Integer
