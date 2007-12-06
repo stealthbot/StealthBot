@@ -342,8 +342,29 @@ Private Sub tbsTabs_Click()
         Case 3: ' Games
             For i = LBound(DB) To UBound(DB)
                 If (StrComp(DB(i).Type, "GAME", vbBinaryCompare) = 0) Then
-                    Call trvUsers.Nodes.Add("Database", tvwChild, DB(i).Username, _
-                            DB(i).Username, 2)
+                    Dim gameName As String ' ...
+                
+                    ' check for invalid game entry
+                    'Select Case (DB(i).Username)
+                    '    Case "CHAT": gameName = "Chat"
+                    '    Case "DRTL": gameName = "Diablo I: Retail"
+                    '    Case "DSHR": gameName = "Diablo I: Shareware"
+                    '    Case "W2BN": gameName = "WarCraft II: Battle.net Edition"
+                    '    Case "STAR": gameName = "StarCraft"
+                    '    Case "SSHR": gameName = "StarCraft: Shareware"
+                    '    Case "JSTR": gameName = "StarCraft: Japanese"
+                    '    Case "SEXP": gameName = "StarCraft: Brood War"
+                    '    Case "D2DV": gameName = "Diablo II"
+                    '    Case "D2XP": gameName = "Diablo II: Lord of Destruction"
+                    '    Case "WAR3": gameName = "WarCraft III: Reign of Chaos"
+                    '    Case "W3XP": gameName = "WarCraft III: The Frozen Throne"
+                    '    Case Else:   gameName = DB(i).Username
+                    'End Select
+                    
+                    gameName = DB(i).Username
+                
+                    Call trvUsers.Nodes.Add("Database", tvwChild, gameName, _
+                            gameName, 2)
                 End If
             Next i
     End Select
@@ -377,35 +398,18 @@ Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
     
     Dim i   As Integer ' ...
     
-    Set m_selnode = Node
-    
     ' deselect groups
     For i = 0 To (lstGroups.ListCount - 1)
         lstGroups.Selected(i) = False
     Next i
-    
-    ' disable changing of record type
-    'For i = 0 To 3
-    '    recType(i).Enabled = False
-    'Next i
-    
-    ' disable changing of record name
-    'txtName.Enabled = False
-    
+
+    Set m_selnode = Node
+
     ' grab entry from database
     tmp = GetAccess(trvUsers.SelectedItem.text)
     
-    'Select Case (UCase$(tmp.Type))
-    '    Case "USER":  recType(0).Value = True
-    '    Case "CLAN":  recType(1).Value = True
-    '    Case "GAME":  recType(2).Value = True
-    '    Case "GROUP": recType(3).Value = True
-    'End Select
-    
     If (Node.Index = 1) Then
         frmDatabase.Caption = "Database"
-        
-        frmDatabase.Enabled = False
     Else
         If (tmp.Type = "USER") Then
             frmDatabase.Caption = "User: " & _
@@ -420,10 +424,9 @@ Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
             frmDatabase.Caption = "Group: " & _
                 tmp.Username
         Else
-            frmDatabase.Caption = tmp.Username
+            frmDatabase.Caption = _
+                tmp.Username
         End If
-        
-        frmDatabase.Enabled = True
     End If
     
     If (tmp.access > 0) Then
