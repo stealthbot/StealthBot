@@ -738,7 +738,7 @@ Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAcces
     ' if sent from within the bot, send "where" command
     ' directly to Battle.net
     If (InBot) Then
-        Call AddQ("/where " & msgData)
+        Call AddQ("/where " & reverseUsername(msgData))
     End If
 
     tmpBuf = "I am currently in channel " & gChannel.current & " (" & _
@@ -1055,7 +1055,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
     
     If (checkChannel(msgData) > 0) Then
         ' designate user
-        Call AddQ("/designate " & IIf(Dii, "*", vbNullString) & msgData)
+        Call AddQ("/designate " & reverseUsername(msgData))
         
         ' rejoin channel
         Call AddQ("/resign")
@@ -1376,7 +1376,7 @@ Private Function OnPlugBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 For i = 1 To colUsersInChannel.Count
                     With colUsersInChannel.Item(i)
                         If ((.Flags = 16) And (Not .Safelisted)) Then
-                            AddQ "/ban " & IIf(Dii, "*", "") & .Username & " PlugBan", 1
+                            AddQ "/ban " & reverseUsername(.Username) & " PlugBan", 1
                         End If
                     End With
                 Next i
@@ -1588,7 +1588,7 @@ Private Function OnIPBans(ByVal Username As String, ByRef dbAccess As udtGetAcce
             For i = 1 To colUsersInChannel.Count
                 Select Case colUsersInChannel.Item(i).Flags
                     Case 20, 30, 32, 48
-                        Call AddQ("/ban " & IIf(Dii, "*", "") & colUsersInChannel.Item(i).Username & _
+                        Call AddQ("/ban " & reverseUsername(colUsersInChannel.Item(i).Username) & _
                             " IPBanned.", 1)
                 End Select
             Next i
@@ -1652,7 +1652,7 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
 
             tmpBuf = "Error: You do not have enough access to do that."
         Else
-            Call AddQ("/squelch " & IIf(Dii, "*", "") & msgData, 1)
+            Call AddQ("/squelch " & reverseUsername(msgData), 1)
         
             tmpBuf = "User " & Chr(34) & msgData & Chr(34) & " IPBanned."
         End If
@@ -1672,8 +1672,8 @@ Private Function OnUnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
     Dim tmpBuf As String ' temporary output buffer
 
     If (Len(msgData) > 0) Then
-        Call AddQ("/unsquelch " & IIf(Dii, "*", "") & msgData, 1)
-        Call AddQ("/unban " & IIf(Dii, "*", "") & msgData, 1)
+        Call AddQ("/unsquelch " & reverseUsername(msgData), 1)
+        Call AddQ("/unban " & reverseUsername(msgData), 1)
         
         tmpBuf = "User " & Chr(34) & msgData & Chr(34) & " Un-IPBanned."
     End If
@@ -1697,7 +1697,7 @@ Private Function OnDesignate(ByVal Username As String, ByRef dbAccess As udtGetA
                 End If
             End If
             
-            Call AddQ("/designate " & msgData, 1)
+            Call AddQ("/designate " & reverseUsername(msgData), 1)
             
             tmpBuf = "I have designated [ " & msgData & " ]"
         Else
@@ -2943,7 +2943,7 @@ Private Function OnFAdd(ByVal Username As String, ByRef dbAccess As udtGetAccess
     u = msgData
     
     If (Len(u) > 0) Then
-        Call AddQ("/f a " & u, 1)
+        Call AddQ("/f a " & reverseUsername(u), 1)
         
         tmpBuf = "Added user " & Chr(34) & u & Chr(34) & " to this account's friends list."
     End If
@@ -2962,7 +2962,7 @@ Private Function OnFRem(ByVal Username As String, ByRef dbAccess As udtGetAccess
     u = msgData
     
     If (Len(u) > 0) Then
-        Call AddQ("/f r " & u, 1)
+        Call AddQ("/f r " & reverseUsername(u), 1)
         
         tmpBuf = "Removed user " & Chr(34) & u & Chr(34) & " from this account's friends list."
     End If
@@ -3544,7 +3544,7 @@ Private Function OnUnban(ByVal Username As String, ByRef dbAccess As udtGetAcces
                     '    Call AddQ("/unsquelch " & u, 1)
                     'End If
                 
-                    Call AddQ("/unban " & u)
+                    Call AddQ("/unban " & reverseUsername(u))
                 End If
             End If
         End If
@@ -4077,7 +4077,7 @@ Private Function OnIgnore(ByVal Username As String, ByRef dbAccess As udtGetAcce
             
             tmpBuf = "That user has equal or higher access."
         Else
-            AddQ "/ignore " & IIf(Dii, "*", "") & u, 1
+            AddQ "/ignore " & reverseUsername(u)
             
             tmpBuf = "Ignoring messages from " & Chr(34) & u & Chr(34) & "."
         End If
@@ -4125,7 +4125,7 @@ Private Function OnUnignore(ByVal Username As String, ByRef dbAccess As udtGetAc
     u = msgData
     
     If (Len(msgData) > 0) Then
-        AddQ "/unignore " & IIf(Dii, "*", "") & u, 1
+        AddQ "/unignore " & reverseUsername(u)
         
         tmpBuf = "Receiving messages from """ & u & """."
     Else
@@ -5124,7 +5124,7 @@ Private Function OnWhoIs(ByVal Username As String, ByRef dbAccess As udtGetAcces
     u = msgData
             
     If (InBot) Then
-        Call AddQ("/whois " & u, 1)
+        Call AddQ("/whois " & reverseUsername(u), 1)
     End If
 
     If (Len(u) > 0) Then
@@ -5391,7 +5391,7 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
                         If (z Like sMatch) Then
                             If (GetSafelist(.Username) = False) Then
                                 If (LenB(.Username) > 0 And ((.Flags <> 2) And (.Flags <> 18))) Then
-                                    Call AddQ("/" & Typ & .Username & Space(1) & smsgData, 1)
+                                    Call AddQ("/" & Typ & reverseUsername(.Username) & Space(1) & smsgData, 1)
                                 End If
                             Else
                                 iSafe = (iSafe + 1)
@@ -5416,7 +5416,7 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
                     '    Call AddQ("/unsquelch " & gBans(i).UsernameActual, 1)
                     'End If
                 
-                    Call AddQ("/" & Typ & gBans(i).UsernameActual, 1)
+                    Call AddQ("/" & Typ & reverseUsername(gBans(i).UsernameActual), 1)
                 Else
                     ' unipban user
                     'If (BotVars.IPBans = True) Then
@@ -5426,7 +5426,7 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
                     z = PrepareCheck(gBans(i).UsernameActual)
                     
                     If (z Like sMatch) Then
-                        Call AddQ("/" & Typ & gBans(i).UsernameActual, 1)
+                        Call AddQ("/" & Typ & reverseUsername(gBans(i).UsernameActual), 1)
                     End If
                 End If
             Next i
@@ -6462,7 +6462,7 @@ Public Sub checkUsers()
             ' ...
             If (Len(tmp) > 0) Then
                 ' ...
-                Call AddQ("/ban " & tmp)
+                Call AddQ("/ban " & reverseUsername(tmp))
             Else
                 Dim j As Integer ' ...
     

@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmDBManager 
    Caption         =   "Database Manager"
-   ClientHeight    =   5415
+   ClientHeight    =   5895
    ClientLeft      =   60
    ClientTop       =   750
    ClientWidth     =   6735
@@ -17,90 +17,190 @@ Begin VB.Form frmDBManager
    EndProperty
    LinkTopic       =   "frmDBManager"
    MaxButton       =   0   'False
-   ScaleHeight     =   5415
+   ScaleHeight     =   5895
    ScaleWidth      =   6735
    StartUpPosition =   1  'CenterOwner
-   Begin MSComctlLib.ImageList icons 
-      Left            =   360
-      Top             =   3720
-      _ExtentX        =   1005
-      _ExtentY        =   1005
-      BackColor       =   -2147483643
-      ImageWidth      =   16
-      ImageHeight     =   16
-      MaskColor       =   12632256
+   Begin MSComctlLib.TabStrip TabStrip1 
+      Height          =   375
+      Left            =   120
+      TabIndex        =   2
+      Top             =   135
+      Width           =   6495
+      _ExtentX        =   11456
+      _ExtentY        =   661
+      MultiRow        =   -1  'True
+      Style           =   1
+      Separators      =   -1  'True
+      TabMinWidth     =   176
       _Version        =   393216
-      BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
-         NumListImages   =   3
-         BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0000
-            Key             =   ""
+      BeginProperty Tabs {1EFB6598-857C-11D1-B16A-00C0F0283628} 
+         NumTabs         =   3
+         BeginProperty Tab1 {1EFB659A-857C-11D1-B16A-00C0F0283628} 
+            Caption         =   "Users and Groups"
+            ImageVarType    =   2
          EndProperty
-         BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0552
-            Key             =   ""
+         BeginProperty Tab2 {1EFB659A-857C-11D1-B16A-00C0F0283628} 
+            Caption         =   "Clans"
+            ImageVarType    =   2
          EndProperty
-         BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0AA4
-            Key             =   ""
+         BeginProperty Tab3 {1EFB659A-857C-11D1-B16A-00C0F0283628} 
+            Caption         =   "Games"
+            ImageVarType    =   2
          EndProperty
       EndProperty
    End
-   Begin VB.CommandButton btnCreateGroup 
-      Caption         =   "Create Group"
-      Height          =   375
-      Left            =   1795
-      TabIndex        =   12
-      Top             =   4537
-      Width           =   1695
-   End
-   Begin MSComctlLib.TreeView trvUsers 
-      Height          =   4350
+   Begin VB.Frame Frame1 
+      BorderStyle     =   0  'None
+      Caption         =   "Frame1"
+      Height          =   5055
       Left            =   120
-      TabIndex        =   10
-      Top             =   105
-      Width           =   3375
-      _ExtentX        =   5953
-      _ExtentY        =   7673
-      _Version        =   393217
-      HideSelection   =   0   'False
-      Indentation     =   575
-      LabelEdit       =   1
-      LineStyle       =   1
-      Sorted          =   -1  'True
-      Style           =   7
-      ImageList       =   "icons"
-      Appearance      =   1
-      OLEDragMode     =   1
-   End
-   Begin VB.TextBox txtFlags 
-      BackColor       =   &H00993300&
-      ForeColor       =   &H00FFFFFF&
-      Height          =   285
-      Left            =   5160
-      MaxLength       =   25
-      TabIndex        =   5
-      Top             =   580
-      Width           =   1215
-   End
-   Begin VB.TextBox txtRank 
-      BackColor       =   &H00993300&
-      ForeColor       =   &H00FFFFFF&
-      Height          =   285
-      Left            =   3840
-      MaxLength       =   25
       TabIndex        =   3
-      Top             =   580
-      Width           =   1215
-   End
-   Begin VB.CommandButton cmdCancel 
-      Caption         =   "&Cancel"
-      Height          =   255
-      Index           =   0
-      Left            =   4440
-      TabIndex        =   2
-      Top             =   5040
-      Width           =   855
+      Top             =   480
+      Width           =   6615
+      Begin VB.Frame frmDatabase 
+         Caption         =   "Database"
+         Enabled         =   0   'False
+         Height          =   4920
+         Left            =   3480
+         TabIndex        =   6
+         Top             =   20
+         Width           =   3025
+         Begin VB.TextBox txtFlags 
+            BackColor       =   &H00993300&
+            ForeColor       =   &H00FFFFFF&
+            Height          =   285
+            Left            =   1560
+            MaxLength       =   25
+            TabIndex        =   11
+            Top             =   600
+            Width           =   1215
+         End
+         Begin VB.TextBox txtRank 
+            BackColor       =   &H00993300&
+            ForeColor       =   &H00FFFFFF&
+            Height          =   285
+            Left            =   240
+            MaxLength       =   25
+            TabIndex        =   10
+            Top             =   600
+            Width           =   1215
+         End
+         Begin VB.ListBox lstGroups 
+            Height          =   3180
+            Left            =   240
+            MultiSelect     =   2  'Extended
+            TabIndex        =   9
+            Top             =   1200
+            Width           =   2535
+         End
+         Begin VB.CommandButton cmdCancel 
+            Caption         =   "Delete"
+            Height          =   255
+            Index           =   1
+            Left            =   1080
+            TabIndex        =   8
+            Top             =   4500
+            Width           =   855
+         End
+         Begin VB.CommandButton cmdSave 
+            Caption         =   "Save"
+            Height          =   255
+            Index           =   1
+            Left            =   1930
+            TabIndex        =   7
+            Top             =   4500
+            Width           =   855
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Group:"
+            Height          =   255
+            Index           =   3
+            Left            =   240
+            TabIndex        =   14
+            Top             =   960
+            Width           =   1215
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Flags:"
+            Height          =   255
+            Index           =   2
+            Left            =   1560
+            TabIndex        =   13
+            Top             =   360
+            Width           =   1215
+         End
+         Begin VB.Label Label1 
+            Caption         =   "Rank (1 - 200):"
+            Height          =   255
+            Index           =   1
+            Left            =   240
+            TabIndex        =   12
+            Top             =   360
+            Width           =   1215
+         End
+      End
+      Begin VB.CommandButton btnCreateGroup 
+         Caption         =   "Create Group"
+         Height          =   375
+         Left            =   1680
+         TabIndex        =   5
+         Top             =   4552
+         Width           =   1695
+      End
+      Begin VB.CommandButton cmdCancel 
+         Caption         =   "Create User"
+         Height          =   375
+         Index           =   3
+         Left            =   0
+         TabIndex        =   4
+         Top             =   4552
+         Width           =   1695
+      End
+      Begin MSComctlLib.ImageList icons 
+         Left            =   4080
+         Top             =   3960
+         _ExtentX        =   1005
+         _ExtentY        =   1005
+         BackColor       =   -2147483643
+         ImageWidth      =   16
+         ImageHeight     =   16
+         MaskColor       =   12632256
+         _Version        =   393216
+         BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
+            NumListImages   =   3
+            BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+               Picture         =   "frmDBManager.frx":0000
+               Key             =   ""
+            EndProperty
+            BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+               Picture         =   "frmDBManager.frx":0552
+               Key             =   ""
+            EndProperty
+            BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
+               Picture         =   "frmDBManager.frx":0AA4
+               Key             =   ""
+            EndProperty
+         EndProperty
+      End
+      Begin MSComctlLib.TreeView trvUsers 
+         Height          =   4350
+         Left            =   0
+         TabIndex        =   15
+         Top             =   120
+         Width           =   3375
+         _ExtentX        =   5953
+         _ExtentY        =   7673
+         _Version        =   393217
+         HideSelection   =   0   'False
+         Indentation     =   575
+         LabelEdit       =   1
+         LineStyle       =   1
+         Sorted          =   -1  'True
+         Style           =   7
+         ImageList       =   "icons"
+         Appearance      =   1
+         OLEDragMode     =   1
+      End
    End
    Begin VB.CommandButton cmdSave 
       Caption         =   "Apply and Cl&ose"
@@ -108,85 +208,20 @@ Begin VB.Form frmDBManager
       Index           =   0
       Left            =   5280
       TabIndex        =   1
-      Top             =   5040
+      Top             =   5520
       Width           =   1335
    End
    Begin VB.CommandButton cmdCancel 
-      Caption         =   "Create User"
-      Height          =   375
-      Index           =   3
-      Left            =   120
-      TabIndex        =   13
-      Top             =   4537
-      Width           =   1695
-   End
-   Begin VB.Frame frmDatabase 
-      Caption         =   "Database"
-      Enabled         =   0   'False
-      Height          =   4920
-      Left            =   3600
+      Caption         =   "&Cancel"
+      Height          =   255
+      Index           =   0
+      Left            =   4560
       TabIndex        =   0
-      Top             =   0
-      Width           =   3025
-      Begin VB.ListBox lstGroups 
-         Height          =   3180
-         Left            =   240
-         MultiSelect     =   2  'Extended
-         TabIndex        =   11
-         Top             =   1275
-         Width           =   2535
-      End
-      Begin VB.CommandButton cmdCancel 
-         Caption         =   "Delete"
-         Height          =   255
-         Index           =   1
-         Left            =   1080
-         TabIndex        =   9
-         Top             =   4535
-         Width           =   855
-      End
-      Begin VB.CommandButton cmdSave 
-         Caption         =   "Save"
-         Height          =   255
-         Index           =   1
-         Left            =   1930
-         TabIndex        =   8
-         Top             =   4535
-         Width           =   855
-      End
-      Begin VB.Label Label1 
-         Caption         =   "Group(s):"
-         Height          =   255
-         Index           =   3
-         Left            =   240
-         TabIndex        =   7
-         Top             =   1030
-         Width           =   1215
-      End
-      Begin VB.Label Label1 
-         Caption         =   "Flags:"
-         Height          =   255
-         Index           =   2
-         Left            =   1560
-         TabIndex        =   6
-         Top             =   320
-         Width           =   1215
-      End
-      Begin VB.Label Label1 
-         Caption         =   "Rank (1 - 200):"
-         Height          =   255
-         Index           =   1
-         Left            =   240
-         TabIndex        =   4
-         Top             =   320
-         Width           =   1215
-      End
+      Top             =   5520
+      Width           =   735
    End
    Begin VB.Menu mnuFile 
       Caption         =   "File"
-      Begin VB.Menu mnuOpenDB 
-         Caption         =   "Open Database"
-      End
    End
    Begin VB.Menu mnuContext 
       Caption         =   "mnuContext"
