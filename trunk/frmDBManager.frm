@@ -53,7 +53,7 @@ Begin VB.Form frmDBManager
       Caption         =   "Database"
       Height          =   4920
       Left            =   3600
-      TabIndex        =   5
+      TabIndex        =   14
       Top             =   487
       Width           =   3025
       Begin VB.CommandButton cmdSave 
@@ -91,7 +91,7 @@ Begin VB.Form frmDBManager
          Height          =   285
          Left            =   240
          MaxLength       =   25
-         TabIndex        =   7
+         TabIndex        =   6
          Top             =   600
          Width           =   1215
       End
@@ -102,7 +102,7 @@ Begin VB.Form frmDBManager
          Height          =   285
          Left            =   1560
          MaxLength       =   25
-         TabIndex        =   6
+         TabIndex        =   7
          Top             =   600
          Width           =   1215
       End
@@ -111,7 +111,7 @@ Begin VB.Form frmDBManager
          Enabled         =   0   'False
          Height          =   255
          Left            =   240
-         TabIndex        =   13
+         TabIndex        =   11
          Top             =   360
          Width           =   1215
       End
@@ -129,7 +129,7 @@ Begin VB.Form frmDBManager
          Enabled         =   0   'False
          Height          =   255
          Left            =   240
-         TabIndex        =   11
+         TabIndex        =   13
          Top             =   1050
          Width           =   1215
       End
@@ -138,7 +138,7 @@ Begin VB.Form frmDBManager
       Caption         =   "Create Group"
       Height          =   375
       Left            =   1800
-      TabIndex        =   4
+      TabIndex        =   2
       Top             =   5016
       Width           =   1695
    End
@@ -146,14 +146,14 @@ Begin VB.Form frmDBManager
       Caption         =   "Create User"
       Height          =   375
       Left            =   120
-      TabIndex        =   3
+      TabIndex        =   1
       Top             =   5016
       Width           =   1695
    End
    Begin MSComctlLib.TabStrip tbsTabs 
       Height          =   375
       Left            =   120
-      TabIndex        =   2
+      TabIndex        =   5
       Top             =   135
       Width           =   6495
       _ExtentX        =   11456
@@ -184,7 +184,7 @@ Begin VB.Form frmDBManager
       Height          =   255
       Index           =   0
       Left            =   5280
-      TabIndex        =   1
+      TabIndex        =   4
       Top             =   5520
       Width           =   1335
    End
@@ -193,14 +193,14 @@ Begin VB.Form frmDBManager
       Height          =   255
       Index           =   0
       Left            =   4560
-      TabIndex        =   0
+      TabIndex        =   3
       Top             =   5520
       Width           =   735
    End
    Begin MSComctlLib.TreeView trvUsers 
       Height          =   4350
       Left            =   120
-      TabIndex        =   14
+      TabIndex        =   0
       Top             =   578
       Width           =   3375
       _ExtentX        =   5953
@@ -290,24 +290,49 @@ Private Sub btnCreateGroup_Click()
             Set newNode = trvUsers.Nodes.Add("Database", tvwChild, groupname, _
                 groupname, 1)
         End If
-            
-        trvUsers.Nodes(newNode.Index).Selected = True
         
+        ' ...
+        Set trvUsers.SelectedItem = newNode
+        
+        ' ...
         Call trvUsers.StartLabelEdit
         
+        ' ...
         groupCount = (groupCount + 1)
     ElseIf (tbsTabs.SelectedItem.Index = 2) Then
     
     ElseIf (tbsTabs.SelectedItem.Index = 3) Then
+        ' ...
         Call frmGameSelection.Show(vbModal, frmDBManager)
         
+        ' ...
         If (Len(m_game)) Then
+            ReDim Preserve m_DB(UBound(m_DB) + 1)
+            
+            With m_DB(UBound(m_DB))
+                .Username = m_game
+                .Type = "GAME"
+                .AddedBy = "(console)"
+                .AddedOn = Now
+            End With
+        
             Set newNode = trvUsers.Nodes.Add("Database", tvwChild, m_game, _
                 m_game, 2)
-                
-            trvUsers.Nodes(newNode.Index).Selected = True
+            
+            ' ...
+            Set trvUsers.SelectedItem = newNode
+            
+            ' ...
+            Call trvUsers_NodeClick(trvUsers.SelectedItem)
+            
+            ' ...
+            Call trvUsers.SetFocus
         End If
     End If
+End Sub
+
+Private Sub cmdCancel_Click(Index As Integer)
+    Call Unload(frmDBManager)
 End Sub
 
 Private Sub cmdSave_Click(Index As Integer)
@@ -462,21 +487,31 @@ Private Sub tbsTabs_Click()
         
         Call trvUsers.Refresh
     End If
+    
+    frmDatabase.Caption = "Database"
+    
+    lblRank.Enabled = False
+    txtRank.Enabled = False
+    
+    txtRank.text = vbNullString
+    
+    lblFlags.Enabled = False
+    txtFlags.Enabled = False
+    
+    txtFlags.text = vbNullString
+    
+    lblGroup.Enabled = False
+    lstGroups.Enabled = False
+    
+    cmdSave(1).Enabled = False
+    cmdCancel(1).Enabled = False
 End Sub
 
 Private Sub trvUsers_Collapse(ByVal Node As Node)
-    If (Node.Index = 1) Then
-        'trvUsers.Nodes(1).Image = 1
-    End If
-    
     Call trvUsers.Refresh
 End Sub
 
 Private Sub trvUsers_Expand(ByVal Node As Node)
-    If (Node.Index = 1) Then
-        'trvUsers.Nodes(1).Image = 2
-    End If
-    
     Call trvUsers.Refresh
 End Sub
 
@@ -493,7 +528,7 @@ Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
     If (Not (trvUsers.SelectedItem Is Nothing)) Then
         ' grab entry from database
         tmp = GetAccess(trvUsers.SelectedItem.text)
-        
+
         If (Node.Index = 1) Then
             frmDatabase.Caption = "Database"
             
@@ -655,7 +690,9 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
             selprev = GetAccess(nodeprev.text)
 
             For i = LBound(DB) To UBound(DB)
-                If (StrComp(selprev.Username, m_DB(i).Username, vbBinaryCompare) = 0) Then
+                If (StrComp(selprev.Username, m_DB(i).Username, _
+                    vbBinaryCompare) = 0) Then
+                    
                     m_DB(i).Groups = vbNullString
                 End If
             Next i
@@ -771,9 +808,6 @@ Private Function Exists(ByVal nodeName As String) As Integer
     Exists = False
 End Function
 
-Private Function GetIconIndex(ByVal Name As String) As Integer
-    ' ...
-End Function
 
 Private Sub txtFlags_Change()
     cmdSave(1).Enabled = True
@@ -782,3 +816,43 @@ End Sub
 Private Sub txtRank_Change()
     cmdSave(1).Enabled = True
 End Sub
+
+Private Function GetAccess(ByVal Username As String, Optional dbType As String = _
+    vbNullString) As udtGetAccessResponse
+    
+    Dim i   As Integer ' ...
+    Dim bln As Boolean ' ...
+
+    For i = LBound(m_DB) To UBound(m_DB)
+        If (StrComp(m_DB(i).Username, Username, vbTextCompare) = 0) Then
+            If (Len(dbType)) Then
+                If (StrComp(m_DB(i).Type, dbType, vbBinaryCompare) = 0) Then
+                    bln = True
+                End If
+            Else
+                bln = True
+            End If
+                
+            If (bln = True) Then
+                With GetAccess
+                    .Username = m_DB(i).Username
+                    .access = m_DB(i).access
+                    .Flags = m_DB(i).Flags
+                    .AddedBy = m_DB(i).AddedBy
+                    .AddedOn = m_DB(i).AddedOn
+                    .ModifiedBy = m_DB(i).ModifiedBy
+                    .ModifiedOn = m_DB(i).ModifiedOn
+                    .Type = m_DB(i).Type
+                    .Groups = m_DB(i).Groups
+                    .BanMessage = m_DB(i).BanMessage
+                End With
+                
+                Exit Function
+            End If
+        End If
+        
+        bln = False
+    Next i
+
+    GetAccess.access = -1
+End Function

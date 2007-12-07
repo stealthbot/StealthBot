@@ -89,6 +89,7 @@ Class=clsChatQueue; clsChatQueue.cls
 Module=modChatQueue; modChatQueue.bas
 Form=frmDBManager.frm
 Form=frmGameSelection.frm
+Form=frmCommands.frm
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""
