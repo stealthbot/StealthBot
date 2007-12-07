@@ -219,6 +219,9 @@ Begin VB.Form frmDBManager
    Begin VB.Menu mnuFile 
       Caption         =   "File"
    End
+   Begin VB.Menu mnuHelp 
+      Caption         =   "Help"
+   End
    Begin VB.Menu mnuContext 
       Caption         =   "mnuContext"
       Visible         =   0   'False
@@ -237,6 +240,8 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
+
+Public m_game      As String
 
 Private m_DB()     As udtDatabase
 
@@ -274,22 +279,35 @@ Private Sub btnCreateGroup_Click()
     
     Dim groupname     As String  ' ...
     
-    groupname = "New Group #" & _
-        (groupCount + 1)
-
-    If (Not (trvUsers.SelectedItem Is Nothing)) Then
-        Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
-            tvwChild, groupname, groupname, 1)
-    Else
-        Set newNode = trvUsers.Nodes.Add("Database", tvwChild, groupname, _
-            groupname, 1)
-    End If
+    If (tbsTabs.SelectedItem.Index = 1) Then
+        groupname = "New Group #" & _
+            (groupCount + 1)
+    
+        If (Not (trvUsers.SelectedItem Is Nothing)) Then
+            Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
+                tvwChild, groupname, groupname, 1)
+        Else
+            Set newNode = trvUsers.Nodes.Add("Database", tvwChild, groupname, _
+                groupname, 1)
+        End If
+            
+        trvUsers.Nodes(newNode.Index).Selected = True
         
-    trvUsers.Nodes(newNode.Index).Selected = True
+        Call trvUsers.StartLabelEdit
+        
+        groupCount = (groupCount + 1)
+    ElseIf (tbsTabs.SelectedItem.Index = 2) Then
     
-    Call trvUsers.StartLabelEdit
-    
-    groupCount = (groupCount + 1)
+    ElseIf (tbsTabs.SelectedItem.Index = 3) Then
+        Call frmGameSelection.Show(vbModal, frmDBManager)
+        
+        If (Len(m_game)) Then
+            Set newNode = trvUsers.Nodes.Add("Database", tvwChild, m_game, _
+                m_game, 2)
+                
+            trvUsers.Nodes(newNode.Index).Selected = True
+        End If
+    End If
 End Sub
 
 Private Sub cmdSave_Click(Index As Integer)
@@ -693,6 +711,50 @@ ERROR_HANDLER:
         Nothing
     
     Exit Sub
+End Sub
+
+Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
+    Dim i As Integer ' ...
+    
+    If (Not (trvUsers.SelectedItem Is Nothing)) Then
+        For i = LBound(m_DB) To UBound(m_DB)
+            If (StrComp(trvUsers.SelectedItem.text, m_DB(i).Username, _
+                    vbTextCompare) = 0) Then
+                
+                If (StrComp(m_DB(i).Type, "GROUP", vbBinaryCompare) = 0) Then
+                    
+                    m_DB(i).Username = NewString
+                
+                    Exit For
+                End If
+            End If
+        Next i
+        
+        For i = LBound(m_DB) To UBound(m_DB)
+            If ((Len(m_DB(i).Groups)) And (m_DB(i).Groups <> "%")) Then
+                Dim Splt() As String  ' ...
+                Dim j      As Integer ' ...
+            
+                If (InStr(1, m_DB(i).Groups, ",", vbTextCompare) <> 0) Then
+                    Splt() = Split(m_DB(i).Groups, ",")
+                Else
+                    ReDim Preserve Splt(0)
+                    
+                    Splt(0) = m_DB(i).Groups
+                End If
+                
+                For j = LBound(Splt) To UBound(Splt)
+                    If (StrComp(Splt(j), trvUsers.SelectedItem.text, _
+                        vbTextCompare) = 0) Then
+                    
+                        Splt(j) = NewString
+                    End If
+                Next j
+                
+                m_DB(i).Groups = Join(Splt(), ",")
+            End If
+        Next i
+    End If
 End Sub
 
 Private Function Exists(ByVal nodeName As String) As Integer
