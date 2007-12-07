@@ -1,6 +1,7 @@
 VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmDBManager 
+   AutoRedraw      =   -1  'True
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Database Manager"
    ClientHeight    =   5895
@@ -608,7 +609,9 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
     ' ...
     On Error GoTo ERROR_HANDLER
       
-    If (Not (trvUsers.DropHighlight Is Nothing)) Then
+    If ((Not (trvUsers.DropHighlight Is Nothing)) And _
+        (Not (trvUsers.SelectedItem Is Nothing))) Then
+        
         Dim nodeprev As Node ' ...
         Dim nodenow  As Node ' ...
     
@@ -661,15 +664,29 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
             End If
         End If
         
+        ' ...
         Set trvUsers.DropHighlight = _
             Nothing
+    ElseIf (Not (trvUsers.DropHighlight Is Nothing)) Then
+        If (Data.Files.Count) Then
+            MsgBox Data.Files(1)
+        End If
+        
+        ' ...
+        Set trvUsers.DropHighlight = _
+            Nothing
+    Else
+        If (Data.Files.Count) Then
+            MsgBox Data.Files(1)
+        End If
     End If
     
     Exit Sub
     
 ERROR_HANDLER:
     If (Err.Number = 35614) Then
-        MsgBox Err.Description
+        MsgBox Err.Description, vbCritical, _
+            "Error"
     End If
     
     Set trvUsers.DropHighlight = _

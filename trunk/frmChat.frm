@@ -828,6 +828,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -853,6 +854,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4377,7 +4379,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         If (LenB(cboSend.text) > 0) Then
                             On Error Resume Next
                             
-                            If gChannel.current = "The Void" And Not mnuDisableVoidView.Checked Then
+                            If gChannel.Current = "The Void" And Not mnuDisableVoidView.Checked Then
                                 BNCSBuffer.VoidTrimBuffer
                             End If
                             
@@ -4397,7 +4399,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 s = txtPre.text & cboSend.text & txtPost.text
                                 
                                 If (LCase$(s) = "/rejoin") Then
-                                    RejoinChannel gChannel.current
+                                    RejoinChannel gChannel.Current
                                     
                                 ElseIf (LCase$(s) = "/fl" And MDebug("debug")) Then
                                     For n = 1 To FriendListHandler.colFriends.Count
@@ -4971,7 +4973,7 @@ Private Sub Timer_Timer()
     BotVars.JoinWatch = 0
     
     If (AutoChatFilter) Then
-        If ((GetTickCount() - AutoChatFilter) >= 60000) Then
+        If ((GetTickCount() - AutoChatFilter) >= 180000) Then
             frmChat.AddChat RTBColors.TalkBotUsername, _
                 "Chat filters have been deactivated; " & _
                     "activate them by pressing CTRL + F."
@@ -4985,12 +4987,9 @@ Private Sub Timer_Timer()
     End If
     
     If Not mnuDisableVoidView.Checked Then
-        If gChannel.current = "The Void" Then
-            If Dii Then
-                AddQ "/unsquelch *" & CurrentUsername
-            Else
-                AddQ "/unsquelch " & CurrentUsername, 1
-            End If
+        If gChannel.Current = "The Void" Then
+            AddQ "/unsquelch " & _
+                reverseUsername(CurrentUsername), 1
         End If
     End If
     
@@ -5014,7 +5013,7 @@ Private Sub Timer_Timer()
 
     If IdleWait < 1 Then Exit Sub
     
-    If iCounter >= IdleWait And StrComp(LCase(gChannel.current), "op [vl]", vbTextCompare) <> 0 Then
+    If iCounter >= IdleWait And StrComp(LCase(gChannel.Current), "op [vl]", vbTextCompare) <> 0 Then
         iCounter = 0
         'on error resume next
         If IdleType = "msg" Or IdleType = vbNullString Then
@@ -5022,8 +5021,8 @@ Private Sub Timer_Timer()
                 Exit Sub
             End If
             IdleMsg = Replace(IdleMsg, "%cpuup", ConvertTime(GetUptimeMS))
-            IdleMsg = Replace(IdleMsg, "%chan", gChannel.current)
-            IdleMsg = Replace(IdleMsg, "%c", gChannel.current)
+            IdleMsg = Replace(IdleMsg, "%chan", gChannel.Current)
+            IdleMsg = Replace(IdleMsg, "%c", gChannel.Current)
             IdleMsg = Replace(IdleMsg, "%me", CurrentUsername)
             IdleMsg = Replace(IdleMsg, "%v", CVERSION)
             IdleMsg = Replace(IdleMsg, "%ver", CVERSION)
@@ -5396,7 +5395,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
             
             If QueueLoad = 0 And g_Online And GTC - LastMessage > 10000 Then
                 ' This IF statement addresses oddities reported in topic 20021
-                If StrComp(gChannel.current, "the void", vbTextCompare) = 0 Then
+                If StrComp(gChannel.Current, "the void", vbTextCompare) = 0 Then
                     BNCSBuffer.ClearBuffer
                 End If
             
@@ -5571,7 +5570,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                     reverseUsername(CurrentUsername)
                     
                 SetTitle CurrentUsername & ", online in channel " & _
-                    gChannel.current
+                    gChannel.Current
             End If
         End If
     Else
@@ -5598,7 +5597,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                     convertUsername(CurrentUsername)
                     
                 SetTitle CurrentUsername & ", online in channel " & _
-                    gChannel.current
+                    gChannel.Current
             End If
         End If
     End If
@@ -6296,7 +6295,7 @@ Function GetChannelString() As String
         GetChannelString = vbNullString
     Else
         Select Case ListviewTabs.Tab
-            Case 0: GetChannelString = gChannel.current & " (" & lvChannel.ListItems.Count & ")"
+            Case 0: GetChannelString = gChannel.Current & " (" & lvChannel.ListItems.Count & ")"
             Case 1: GetChannelString = lvFriendList.ListItems.Count & " friends listed"
             Case 2: GetChannelString = "Clan " & StrReverse(Replace(Clan.DWName, Chr(0), "")) & ": " & lvClanList.ListItems.Count & " members."
         End Select
