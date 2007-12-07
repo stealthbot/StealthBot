@@ -144,7 +144,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
 
     ' if we've just left another channel, call event script
     ' function indicating that we've done so.
-    If (LenB(gChannel.current)) Then
+    If (LenB(gChannel.Current)) Then
         On Error Resume Next
         
         frmChat.SControl.Run "Event_ChannelLeave"
@@ -157,12 +157,12 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     frmChat.AddChat RTBColors.JoinedChannelText, "-- Joined channel: ", _
         RTBColors.JoinedChannelName, ChannelName, RTBColors.JoinedChannelText, " --"
     
-    gChannel.current = ChannelName
+    gChannel.Current = ChannelName
     
     SharedScriptSupport.myChannel = ChannelName
     
     SetTitle CurrentUsername & ", online in channel " & _
-        gChannel.current
+        gChannel.Current
     
     ' have we just joined the void?
     If (StrComp(ChannelName, "The Void", vbBinaryCompare) = 0) Then
@@ -584,15 +584,15 @@ Public Sub Event_ServerInfo(ByVal Message As String)
         
             '// backup channel
             If (InStr(Len(Temp), Message, "kicked you out", vbTextCompare) > 0) Then
-                If ((StrComp(gChannel.current, "Op [vL]", vbTextCompare) <> 0) And _
-                    (StrComp(gChannel.current, "Op Fatal-Error", vbTextCompare) <> 0)) Then
+                If ((StrComp(gChannel.Current, "Op [vL]", vbTextCompare) <> 0) And _
+                    (StrComp(gChannel.Current, "Op Fatal-Error", vbTextCompare) <> 0)) Then
                         
                     If (BotVars.UseBackupChan) Then
                         If (Len(BotVars.BackupChan) > 1) Then
                             frmChat.AddQ "/join " & BotVars.BackupChan, 1
                         End If
                     Else
-                        frmChat.AddQ "/join " & gChannel.current
+                        frmChat.AddQ "/join " & gChannel.Current
                     End If
                 End If
             End If
@@ -715,15 +715,15 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
         End If
     End If
     
-    If (Len(Message) >= 75) Then
+    If (Len(Message) >= 100) Then
         BotVars.JoinWatch = (BotVars.JoinWatch + 5)
     End If
     
     If (BotVars.JoinWatch >= 20) Then
         If (Not (Filters)) Then
             frmChat.AddChat RTBColors.TalkBotUsername, _
-                "Chat filters have been activated due to rejoin flooding; " & _
-                    "deactivate them by pressing CTRL + F."
+                "Chat filters have been activated due to excessive rejoins and/or " & _
+                    "spam; deactivate them by pressing CTRL + F."
     
             Call WriteINI("Other", "Filters", "Y")
                     
@@ -1124,8 +1124,8 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                     vbBinaryCompare) > 0) Then
                     
                     If (gChannel.Designated = vbNullString) Then
-                        If Mid$(LCase$(gChannel.current), 1, 3) = "op " Then
-                            If (StrComp(Mid$(gChannel.current, 4), StripRealm(Username), _
+                        If Mid$(LCase$(gChannel.Current), 1, 3) = "op " Then
+                            If (StrComp(Mid$(gChannel.Current, 4), StripRealm(Username), _
                                 vbTextCompare)) <> 0 Then
                                 
                                 If (Dii) Then
@@ -1298,7 +1298,7 @@ checkIPBan:
         
         If (BotVars.UseGreet) Then
             If (LenB(BotVars.GreetMsg) > 0) Then
-                If (StrComp(gChannel.current, "Clan SBs", vbTextCompare) <> 0) Then
+                If (StrComp(gChannel.Current, "Clan SBs", vbTextCompare) <> 0) Then
                     
                     If (QueueLoad = 0) Then
                         QueueLoad = (QueueLoad + 1)
@@ -1339,8 +1339,8 @@ theEnd:
             
             If (Not (Filters)) Then
                 frmChat.AddChat RTBColors.TalkBotUsername, _
-                    "Chat filters have been activated due to rejoin flooding; " & _
-                        "deactivate them by pressing CTRL + F."
+                    "Chat filters have been activated due to excessive rejoins and/or " & _
+                        "spam; deactivate them by pressing CTRL + F."
         
                 Call WriteINI("Other", "Filters", "Y")
                         
@@ -1550,15 +1550,15 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
             End If
         End If
                 
-        If (Len(Message) >= 75) Then
+        If (Len(Message) >= 100) Then
             BotVars.JoinWatch = (BotVars.JoinWatch + 5)
         End If
         
         If (BotVars.JoinWatch >= 20) Then
             If (Not (Filters)) Then
                 frmChat.AddChat RTBColors.TalkBotUsername, _
-                    "Chat filters have been activated due to rejoin flooding; " & _
-                        "deactivate them by pressing CTRL + F."
+                    "Chat filters have been activated due to excessive rejoins and/or " & _
+                        "spam; deactivate them by pressing CTRL + F."
         
                 Call WriteINI("Other", "Filters", "Y")
 

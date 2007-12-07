@@ -3635,7 +3635,7 @@ Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim tmpBuf  As String ' temporary output buffer
     Dim tmpSend As String ' ...
     
-    If (Len(msgData) > 0) Then
+    If (Len(msgData)) Then
         If (dbAccess.access >= GetAccessINIValue("say70", 70)) Then
             If (dbAccess.access >= GetAccessINIValue("say90", 90)) Then
                 tmpSend = msgData
@@ -3643,12 +3643,11 @@ Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 tmpSend = Replace(msgData, "/", "")
             End If
         Else
-            tmpSend = Username & " says: " & msgData
+            tmpSend = Username & " says: " & _
+                msgData
         End If
         
         Call AddQ(tmpSend)
-    Else
-        tmpBuf = "Say what?"
     End If
 
     ' return message
@@ -3662,16 +3661,25 @@ Private Function OnExpand(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Dim tmpBuf  As String ' temporary output buffer
     Dim tmpSend As String
 
-    If (Len(msgData) > 0) Then
-        tmpSend = Expand(msgData)
+    If (Len(msgData)) Then
+        If (dbAccess.access >= GetAccessINIValue("say70", 70)) Then
+            If (dbAccess.access >= GetAccessINIValue("say90", 90)) Then
+                tmpSend = msgData
+            Else
+                tmpSend = Replace(msgData, "/", "")
+            End If
+            
+            tmpBuf = Expand(msgData)
+        Else
+            tmpSend = Username & " says: " & _
+                Expand(msgData)
+        End If
         
         If (Len(tmpSend) > 220) Then
             tmpSend = Mid$(tmpSend, 1, 220)
         End If
         
         Call AddQ(tmpSend, 1)
-    Else
-        tmpBuf = "Expand what?"
     End If
     
     ' return message
@@ -3733,20 +3741,21 @@ Private Function OnShout(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Dim tmpBuf  As String ' temporary output buffer
     Dim tmpSend As String
 
-    If (Len(msgData) > 0) Then
+    If (Len(msgData)) Then
         If (dbAccess.access > 69) Then
             If (dbAccess.access > 89) Then
                 tmpSend = msgData
             Else
                 tmpSend = Replace(msgData, "/", vbNullString, 1)
             End If
+            
+            tmpSend = UCase$(tmpSend)
         Else
-            tmpSend = Username & " shouts: " & msgData
+            tmpSend = Username & " shouts: " & _
+                UCase$(msgData)
         End If
         
-        Call AddQ(UCase$(tmpSend))
-    Else
-        tmpBuf = "Shout what?"
+        Call AddQ(tmpSend)
     End If
     
     ' return message
