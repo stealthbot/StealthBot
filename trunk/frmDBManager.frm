@@ -201,7 +201,6 @@ Begin VB.Form frmDBManager
       _ExtentX        =   5953
       _ExtentY        =   7673
       _Version        =   393217
-      HideSelection   =   0   'False
       Indentation     =   575
       LabelEdit       =   1
       LineStyle       =   1
@@ -210,13 +209,14 @@ Begin VB.Form frmDBManager
       ImageList       =   "icons"
       Appearance      =   1
       OLEDragMode     =   1
+      OLEDropMode     =   1
    End
    Begin VB.Menu mnuFile 
       Caption         =   "File"
-      Visible         =   0   'False
    End
    Begin VB.Menu mnuContext 
       Caption         =   "mnuContext"
+      Visible         =   0   'False
       Begin VB.Menu mnuRename 
          Caption         =   "Rename"
          Enabled         =   0   'False
@@ -233,8 +233,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private m_dragging As Boolean ' ...
-Private m_selnode  As Node    ' ...
+Private m_DB() As udtDatabase
 
 Private Sub btnCreateUser_Click()
     Static userCount As Integer ' ...
@@ -287,6 +286,12 @@ Private Sub btnCreateGroup_Click()
 End Sub
 
 Private Sub Form_Load()
+    If (m_DB(0).Username = vbNullString) Then
+        Call LoadDatabase
+    End If
+    
+    m_DB() = DB()
+    
     Call tbsTabs_Click
 End Sub
 
@@ -305,10 +310,6 @@ Private Sub tbsTabs_Click()
     Dim Splt()  As String  ' ...
     Dim j       As Integer ' ...
     Dim Pos     As Integer ' ...
-    
-    If (DB(0).Username = vbNullString) Then
-        Call LoadDatabase
-    End If
 
     Call trvUsers.Nodes.Clear
     
@@ -317,14 +318,14 @@ Private Sub tbsTabs_Click()
     Select Case (tbsTabs.SelectedItem.Index)
         Case 1: ' Users and Groups
             For i = LBound(DB) To UBound(DB)
-                If (StrComp(DB(i).Type, "GROUP", vbBinaryCompare) = 0) Then
-                    If (Len(DB(i).Groups) And (DB(i).Groups <> "%")) Then
-                        If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
-                            Splt() = Split(DB(i).Groups, ",")
+                If (StrComp(m_DB(i).Type, "GROUP", vbBinaryCompare) = 0) Then
+                    If (Len(m_DB(i).Groups) And (m_DB(i).Groups <> "%")) Then
+                        If (InStr(1, m_DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
+                            Splt() = Split(m_DB(i).Groups, ",")
                         Else
                             ReDim Preserve Splt(0)
                             
-                            Splt(0) = DB(i).Groups
+                            Splt(0) = m_DB(i).Groups
                         End If
                         
                         For j = LBound(Splt) To UBound(Splt)
@@ -332,13 +333,13 @@ Private Sub tbsTabs_Click()
                             
                             If (Pos) Then
                                 Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
-                                    tvwChild, DB(i).Username, DB(i).Username, 1)
+                                    tvwChild, m_DB(i).Username, m_DB(i).Username, 1)
                             End If
                         Next j
                     Else
-                        If (Not (Exists(DB(i).Username))) Then
+                        If (Not (Exists(m_DB(i).Username))) Then
                             Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
-                                DB(i).Username, DB(i).Username, 1)
+                                m_DB(i).Username, m_DB(i).Username, 1)
                         End If
                     End If
                 End If
@@ -353,14 +354,14 @@ Private Sub tbsTabs_Click()
             End If
             
             For i = LBound(DB) To UBound(DB)
-                If (StrComp(DB(i).Type, "USER", vbBinaryCompare) = 0) Then
-                    If (Len(DB(i).Groups) And (DB(i).Groups <> "%")) Then
-                        If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
-                            Splt() = Split(DB(i).Groups, ",")
+                If (StrComp(m_DB(i).Type, "USER", vbBinaryCompare) = 0) Then
+                    If (Len(m_DB(i).Groups) And (m_DB(i).Groups <> "%")) Then
+                        If (InStr(1, m_DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
+                            Splt() = Split(m_DB(i).Groups, ",")
                         Else
                             ReDim Preserve Splt(0)
                             
-                            Splt(0) = DB(i).Groups
+                            Splt(0) = m_DB(i).Groups
                         End If
                         
                         For j = LBound(Splt) To UBound(Splt)
@@ -368,29 +369,29 @@ Private Sub tbsTabs_Click()
                             
                             If (Pos) Then
                                 Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
-                                    tvwChild, DB(i).Username, DB(i).Username, 3)
+                                    tvwChild, m_DB(i).Username, m_DB(i).Username, 3)
                             End If
                         Next j
                     Else
                         Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
-                            DB(i).Username, DB(i).Username, 3)
+                            m_DB(i).Username, m_DB(i).Username, 3)
                     End If
                 End If
             Next i
             
         Case 2: ' Clans
             For i = LBound(DB) To UBound(DB)
-                If (StrComp(DB(i).Type, "CLAN", vbBinaryCompare) = 0) Then
-                    Set newNode = trvUsers.Nodes.Add("Database", tvwChild, DB(i).Username, _
-                            DB(i).Username, 2)
+                If (StrComp(m_DB(i).Type, "CLAN", vbBinaryCompare) = 0) Then
+                    Set newNode = trvUsers.Nodes.Add("Database", tvwChild, m_DB(i).Username, _
+                            m_DB(i).Username, 2)
                 End If
             Next i
             
         Case 3: ' Games
             For i = LBound(DB) To UBound(DB)
-                If (StrComp(DB(i).Type, "GAME", vbBinaryCompare) = 0) Then
+                If (StrComp(m_DB(i).Type, "GAME", vbBinaryCompare) = 0) Then
                     Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
-                        DB(i).Username, DB(i).Username, 2)
+                        m_DB(i).Username, m_DB(i).Username, 2)
                 End If
             Next i
     End Select
@@ -431,8 +432,6 @@ Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
         lstGroups.Selected(i) = False
     Next i
 
-    Set m_selnode = Node
-
     ' grab entry from database
     tmp = GetAccess(trvUsers.SelectedItem.text)
     
@@ -470,7 +469,7 @@ Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
         Dim j      As Integer ' ...
     
         If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
-            Splt() = Split(DB(i).Groups, ",")
+            Splt() = Split(m_DB(i).Groups, ",")
         Else
             ReDim Preserve Splt(0)
             
@@ -491,9 +490,21 @@ Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, X As Single,
     Y As Single)
 
     If (Button = vbLeftButton) Then
-        m_dragging = True
-        
-        Call trvUsers.Drag(vbBeginDrag)
+        Set trvUsers.SelectedItem = _
+            trvUsers.HitTest(X, Y)
+            
+        Call trvUsers_NodeClick(trvUsers.SelectedItem)
+    End If
+End Sub
+
+Private Sub trvUsers_OLEStartDrag(Data As MSComctlLib.DataObject, _
+    AllowedEffects As Long)
+    
+    If (Not (trvUsers.SelectedItem Is Nothing)) Then
+        Data.Clear
+    
+        Data.SetData trvUsers.SelectedItem.Key, _
+            vbCFText
     End If
 End Sub
 
@@ -516,72 +527,71 @@ Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y
     End If
 End Sub
 
-Private Sub trvUsers_DragOver(ByRef Source As Control, ByRef X As Single, _
-    ByRef Y As Single, ByRef State As Integer)
+Private Sub trvUsers_OLEDragOver(Data As MSComctlLib.DataObject, Effect As Long, _
+    Button As Integer, Shift As Integer, X As Single, Y As Single, _
+    State As Integer)
     
-    If (m_dragging) Then
-        If (Source.Name = "trvUsers") Then
-            Set trvUsers.DropHighlight = trvUsers.HitTest(X, Y)
-        End If
-    End If
+    Set trvUsers.DropHighlight = _
+        trvUsers.HitTest(X, Y)
 End Sub
 
-Private Sub trvUsers_DragDrop(ByRef Source As Control, ByRef X As Single, _
-    ByRef Y As Single)
+Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long, _
+    Button As Integer, Shift As Integer, X As Single, Y As Single)
+      
+    If (Not (trvUsers.DropHighlight Is Nothing)) Then
+        Dim nodeprev As Node ' ...
+        Dim nodenow  As Node ' ...
     
-    If (m_dragging) Then
-        If (Source.Name = "trvUsers") Then
-            If (Not (trvUsers.DropHighlight Is Nothing)) Then
-                Dim current As Node ' ...
-                Dim child   As Node ' ...
+        Dim selnow   As udtGetAccessResponse ' ...
+        Dim selprev  As udtGetAccessResponse ' ...
+        
+        Dim strKey   As String  ' ...
+        Dim res      As Integer ' ...
+        Dim i        As Integer ' ...
+        Dim found    As Integer ' ...
+        
+        If (Data.GetFormat(vbCFText)) Then
+            strKey = Data.GetData(vbCFText)
             
-                Dim selnow  As udtGetAccessResponse ' ...
-                Dim selprev As udtGetAccessResponse ' ...
+            If (Len(strKey)) Then
+                Set nodeprev = trvUsers.Nodes(strKey)
+            End If
+        End If
+        
+        Set nodenow = trvUsers.DropHighlight
+        
+        If (trvUsers.DropHighlight.Index = 1) Then
+            selprev = GetAccess(nodeprev.text)
 
-                Dim res     As Integer ' ...
-                Dim i       As Integer ' ...
-                Dim found   As Integer ' ...
+            For i = LBound(DB) To UBound(DB)
+                If (StrComp(selprev.Username, m_DB(i).Username, vbBinaryCompare) = 0) Then
+                    m_DB(i).Groups = vbNullString
+                End If
+            Next i
+            
+            ' ...
+            Set nodeprev.Parent = nodenow
+        Else
+            If (trvUsers.SelectedItem.Index <> 1) Then
+                selnow = GetAccess(trvUsers.DropHighlight.text)
+                selprev = GetAccess(trvUsers.SelectedItem.text)
                 
-                If (trvUsers.DropHighlight.Index = 1) Then
-                    selprev = GetAccess(trvUsers.SelectedItem.text)
-
-                    For i = LBound(DB) To UBound(DB)
-                        If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
-                            DB(i).Groups = vbNullString
-                        End If
-                    Next i
-                    
-                    ' ...
-                    Set trvUsers.SelectedItem.Parent = _
-                        trvUsers.DropHighlight
-                Else
-                    If (trvUsers.SelectedItem.Index <> 1) Then
-                        selnow = GetAccess(trvUsers.DropHighlight.text)
-                        selprev = GetAccess(trvUsers.SelectedItem.text)
-                        
-                        If (selnow.Username <> selprev.Username) Then
-                            If (StrComp(selnow.Type, "GROUP", vbBinaryCompare) = 0) Then
-                                For i = LBound(DB) To UBound(DB)
-                                    If (StrComp(selprev.Username, DB(i).Username, vbBinaryCompare) = 0) Then
-                                        DB(i).Groups = trvUsers.DropHighlight.text
-                                    End If
-                                Next i
-                                
-                                ' ...
-                                Set trvUsers.SelectedItem.Parent = _
-                                    trvUsers.DropHighlight
+                If (selnow.Username <> selprev.Username) Then
+                    If (StrComp(selnow.Type, "GROUP", vbBinaryCompare) = 0) Then
+                        For i = LBound(DB) To UBound(DB)
+                            If (StrComp(selprev.Username, m_DB(i).Username, vbBinaryCompare) = 0) Then
+                                m_DB(i).Groups = nodenow.text
                             End If
-                        End If
+                        Next i
+                        
+                        ' ...
+                        Set nodeprev.Parent = nodenow
                     End If
                 End If
             End If
-            
-            Set m_selnode = Nothing
-            
-            Set trvUsers.DropHighlight = Nothing
-            
-            m_dragging = False
         End If
+        
+        Set trvUsers.DropHighlight = Nothing
     End If
 End Sub
 

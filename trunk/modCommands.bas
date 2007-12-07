@@ -247,7 +247,11 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                                 (tmpmsg = "message") Or _
                                 (tmpmsg = "whois") Or _
                                 (tmpmsg = "where") Or _
-                                (tmpmsg = "whereis")) Then
+                                (tmpmsg = "whereis") Or _
+                                (tmpmsg = "squelch") Or _
+                                (tmpmsg = "unsquelch") Or _
+                                (tmpmsg = "ignore") Or _
+                                (tmpmsg = "unignore")) Then
                                 
                                 Splt() = Split(Message, Space(1), 3)
                                 
@@ -741,7 +745,7 @@ Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAcces
         Call AddQ("/where " & reverseUsername(msgData))
     End If
 
-    tmpBuf = "I am currently in channel " & gChannel.current & " (" & _
+    tmpBuf = "I am currently in channel " & gChannel.Current & " (" & _
         colUsersInChannel.Count & " users present)"
     
     ' return message
@@ -1342,7 +1346,7 @@ Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Call AddQ("/join " & CurrentUsername & " Rejoin", 1)
     
     ' rejoin previous channel
-    Call AddQ("/join " & gChannel.current, 1)
+    Call AddQ("/join " & gChannel.Current, 1)
 End Function ' end function OnRejoin
 
 ' handle plugban command
@@ -2196,7 +2200,7 @@ Private Function OnReconnect(ByVal Username As String, ByRef dbAccess As udtGetA
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     If (g_Online) Then
-        BotVars.HomeChannel = gChannel.current
+        BotVars.HomeChannel = gChannel.Current
         
         Call frmChat.DoDisconnect
         
