@@ -109,14 +109,21 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         Else
             ' allow commands without any command identifier if
             ' commands are sent via whisper
-            If (Not (WhisperedIn)) Then
-                ' return negative result indicating that message does not contain
-                ' a valid command identifier
-                ProcessCommand = False
-                
-                ' exit function
-                Exit Function
-            End If
+            'If (Not (WhisperedIn)) Then
+            '    ' return negative result indicating that message does not contain
+            '    ' a valid command identifier
+            '    ProcessCommand = False
+            '
+            '    ' exit function
+            '    Exit Function
+            'End If
+            
+            ' return negative result indicating that message does not contain
+            ' a valid command identifier
+            ProcessCommand = False
+        
+            ' exit function
+            Exit Function
         End If
     Else
         ' remove slash (/) from in-console message
@@ -1481,7 +1488,7 @@ Private Function OnCAdd(ByVal Username As String, ByRef dbAccess As udtGetAccess
         user = Mid$(msgData, 1, Index - 1)
         
         If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
-            tmpBuf(0) = "Error: The specified username is invalid."
+            tmpBuf(0) = "Error: The specified game name is invalid."
         Else
             Dim bmsg As String ' ...
             
@@ -1511,10 +1518,10 @@ Private Function OnCDel(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ReDim Preserve tmpBuf(0)
     
     If (InStr(1, msgData, Space(1), vbBinaryCompare) <> 0) Then
-        tmpBuf(0) = "Error: The specified username is invalid."
+        tmpBuf(0) = "Error: The specified game name is invalid."
     Else
         ' remove user from shitlist using "add" command
-        Call OnAdd(Username, dbAccess, msgData & " -B", True, tmpBuf())
+        Call OnAdd(Username, dbAccess, msgData & " -B --type GAME", True, tmpBuf())
     End If
     
     ' return message
@@ -2395,7 +2402,7 @@ Private Function OnTagDel(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ReDim Preserve tmpBuf(0)
     
     If (InStr(1, msgData, Space(1), vbBinaryCompare) <> 0) Then
-        tmpBuf(0) = "Error: The specified username is invalid."
+        tmpBuf(0) = "Error: The specified tag is invalid."
     ElseIf (InStr(1, msgData, "*", vbBinaryCompare) <> 0) Then
         ' remove user from shitlist using "add" command
         Call OnAdd(Username, dbAccess, msgData & " -B --type USER", True, tmpBuf())
@@ -2911,7 +2918,7 @@ Private Function OnTagAdd(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 bmsg, True, tmpBuf())
         Else
             If (Len(user) = 0) Then
-                tmpBuf(0) = "Error: The specified username is invalid."
+                tmpBuf(0) = "Error: The specified tag is invalid."
             Else
                 ' ...
                 Call OnAdd(Username, dbAccess, "*" & user & "*" & " +B --type USER --banmsg " _
@@ -2924,7 +2931,7 @@ Private Function OnTagAdd(ByVal Username As String, ByRef dbAccess As udtGetAcce
             Call OnAdd(Username, dbAccess, msgData & " +B --type USER", True, tmpBuf())
         Else
             If (Len(msgData) = 0) Then
-               tmpBuf(0) = "Error: The specified username is invalid."
+               tmpBuf(0) = "Error: The specified tag is invalid."
             Else
                 ' ...
                 Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " +B --type USER", True, _

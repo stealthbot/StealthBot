@@ -50,7 +50,6 @@ Begin VB.Form frmDBManager
    End
    Begin VB.Frame frmDatabase 
       Caption         =   "Database"
-      Enabled         =   0   'False
       Height          =   4920
       Left            =   3600
       TabIndex        =   5
@@ -58,6 +57,7 @@ Begin VB.Form frmDBManager
       Width           =   3025
       Begin VB.CommandButton cmdSave 
          Caption         =   "Save"
+         Enabled         =   0   'False
          Height          =   255
          Index           =   1
          Left            =   1930
@@ -67,6 +67,7 @@ Begin VB.Form frmDBManager
       End
       Begin VB.CommandButton cmdCancel 
          Caption         =   "Delete"
+         Enabled         =   0   'False
          Height          =   255
          Index           =   1
          Left            =   1080
@@ -75,6 +76,7 @@ Begin VB.Form frmDBManager
          Width           =   855
       End
       Begin VB.ListBox lstGroups 
+         Enabled         =   0   'False
          Height          =   3180
          Left            =   240
          TabIndex        =   8
@@ -83,6 +85,7 @@ Begin VB.Form frmDBManager
       End
       Begin VB.TextBox txtRank 
          BackColor       =   &H00993300&
+         Enabled         =   0   'False
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   240
@@ -93,6 +96,7 @@ Begin VB.Form frmDBManager
       End
       Begin VB.TextBox txtFlags 
          BackColor       =   &H00993300&
+         Enabled         =   0   'False
          ForeColor       =   &H00FFFFFF&
          Height          =   285
          Left            =   1560
@@ -101,28 +105,28 @@ Begin VB.Form frmDBManager
          Top             =   600
          Width           =   1215
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblRank 
          Caption         =   "Rank (1 - 200):"
+         Enabled         =   0   'False
          Height          =   255
-         Index           =   1
          Left            =   240
          TabIndex        =   13
          Top             =   360
          Width           =   1215
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblFlags 
          Caption         =   "Flags:"
+         Enabled         =   0   'False
          Height          =   255
-         Index           =   2
          Left            =   1560
          TabIndex        =   12
          Top             =   360
          Width           =   1215
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblGroup 
          Caption         =   "Group:"
+         Enabled         =   0   'False
          Height          =   255
-         Index           =   3
          Left            =   240
          TabIndex        =   11
          Top             =   1050
@@ -233,7 +237,9 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private m_DB() As udtDatabase
+Private m_DB()     As udtDatabase
+
+Private m_modified As Boolean
 
 Private Sub btnCreateUser_Click()
     Static userCount As Integer ' ...
@@ -285,14 +291,47 @@ Private Sub btnCreateGroup_Click()
     groupCount = (groupCount + 1)
 End Sub
 
+Private Sub cmdSave_Click(Index As Integer)
+    Dim i As Integer ' ...
+
+    If (Index = 1) Then
+        For i = LBound(m_DB()) To UBound(m_DB())
+            If (StrComp(trvUsers.SelectedItem.text, m_DB(i).Username, _
+                vbTextCompare) = 0) Then
+                
+                With m_DB(i)
+                    .access = Val(txtRank.text)
+                    .Flags = txtFlags.text
+                    .ModifiedBy = "(console)"
+                    .ModifiedOn = Now
+                End With
+                
+                Exit For
+            End If
+        Next i
+        
+        cmdSave(1).Enabled = False
+    Else
+        DB() = m_DB()
+    
+        Call WriteDatabase(GetFilePath("users.txt"))
+        
+        Call Unload(frmDBManager)
+    End If
+End Sub
+
 Private Sub Form_Load()
-    If (m_DB(0).Username = vbNullString) Then
+    If (DB(0).Username = vbNullString) Then
         Call LoadDatabase
     End If
     
     m_DB() = DB()
     
     Call tbsTabs_Click
+End Sub
+
+Private Sub lstGroups_Click()
+    cmdSave(1).Enabled = True
 End Sub
 
 Private Sub mnuDelete_Click()
@@ -432,57 +471,85 @@ Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
         lstGroups.Selected(i) = False
     Next i
 
-    ' grab entry from database
-    tmp = GetAccess(trvUsers.SelectedItem.text)
-    
-    If (Node.Index = 1) Then
-        frmDatabase.Caption = "Database"
-    Else
-        If (tmp.Type = "USER") Then
-            frmDatabase.Caption = "User: " & _
-                tmp.Username
-        ElseIf (tmp.Type = "CLAN") Then
-            frmDatabase.Caption = "Clan: " & _
-                tmp.Username
-        ElseIf (tmp.Type = "GAME") Then
-            frmDatabase.Caption = "Game: " & _
-                tmp.Username
-        ElseIf (tmp.Type = "GROUP") Then
-            frmDatabase.Caption = "Group: " & _
-                tmp.Username
-        Else
-            frmDatabase.Caption = _
-                tmp.Username
-        End If
-    End If
-    
-    If (tmp.access > 0) Then
-        txtRank.text = tmp.access
-    Else
-        txtRank.text = vbNullString
-    End If
-    
-    txtFlags.text = tmp.Flags
-    
-    If (Len(tmp.Groups) And (tmp.Groups <> "%")) Then
-        Dim Splt() As String  ' ...
-        Dim j      As Integer ' ...
-    
-        If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
-            Splt() = Split(m_DB(i).Groups, ",")
-        Else
-            ReDim Preserve Splt(0)
+    If (Not (trvUsers.SelectedItem Is Nothing)) Then
+        ' grab entry from database
+        tmp = GetAccess(trvUsers.SelectedItem.text)
+        
+        If (Node.Index = 1) Then
+            frmDatabase.Caption = "Database"
             
-            Splt(0) = tmp.Groups
+            lblRank.Enabled = False
+            txtRank.Enabled = False
+            
+            lblFlags.Enabled = False
+            txtFlags.Enabled = False
+            
+            lblGroup.Enabled = False
+            lstGroups.Enabled = False
+            
+            cmdCancel(1).Enabled = False
+        Else
+            If (tmp.Type = "USER") Then
+                frmDatabase.Caption = "User: " & _
+                    tmp.Username
+            ElseIf (tmp.Type = "CLAN") Then
+                frmDatabase.Caption = "Clan: " & _
+                    tmp.Username
+            ElseIf (tmp.Type = "GAME") Then
+                frmDatabase.Caption = "Game: " & _
+                    tmp.Username
+            ElseIf (tmp.Type = "GROUP") Then
+                frmDatabase.Caption = "Group: " & _
+                    tmp.Username
+            Else
+                frmDatabase.Caption = _
+                    tmp.Username
+            End If
+            
+            lblRank.Enabled = True
+            txtRank.Enabled = True
+            
+            lblFlags.Enabled = True
+            txtFlags.Enabled = True
+            
+            lblGroup.Enabled = True
+            lstGroups.Enabled = True
+            
+            cmdCancel(1).Enabled = True
         End If
         
-        For i = LBound(Splt) To UBound(Splt)
-            For j = 0 To (lstGroups.ListCount - 1)
-                If (StrComp(Splt(i), lstGroups.List(j), vbTextCompare) = 0) Then
-                    lstGroups.Selected(j) = True
-                End If
-            Next j
-        Next i
+        If (tmp.access > 0) Then
+            txtRank.text = tmp.access
+        Else
+            txtRank.text = vbNullString
+        End If
+        
+        txtFlags.text = tmp.Flags
+        
+        If (Len(tmp.Groups) And (tmp.Groups <> "%")) Then
+            Dim Splt() As String  ' ...
+            Dim j      As Integer ' ...
+        
+            If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
+                Splt() = Split(m_DB(i).Groups, ",")
+            Else
+                ReDim Preserve Splt(0)
+                
+                Splt(0) = tmp.Groups
+            End If
+            
+            For i = LBound(Splt) To UBound(Splt)
+                For j = 0 To (lstGroups.ListCount - 1)
+                    If (StrComp(Splt(i), lstGroups.List(j), vbTextCompare) = 0) Then
+                        lstGroups.Selected(j) = True
+                    End If
+                Next j
+            Next i
+        End If
+        
+        cmdSave(1).Enabled = False
+        
+        Call trvUsers.Refresh
     End If
 End Sub
 
@@ -537,6 +604,9 @@ End Sub
 
 Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long, _
     Button As Integer, Shift As Integer, X As Single, Y As Single)
+    
+    ' ...
+    On Error GoTo ERROR_HANDLER
       
     If (Not (trvUsers.DropHighlight Is Nothing)) Then
         Dim nodeprev As Node ' ...
@@ -591,8 +661,21 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
             End If
         End If
         
-        Set trvUsers.DropHighlight = Nothing
+        Set trvUsers.DropHighlight = _
+            Nothing
     End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    If (Err.Number = 35614) Then
+        MsgBox Err.Description
+    End If
+    
+    Set trvUsers.DropHighlight = _
+        Nothing
+    
+    Exit Sub
 End Sub
 
 Private Function Exists(ByVal nodeName As String) As Integer
@@ -612,3 +695,11 @@ End Function
 Private Function GetIconIndex(ByVal Name As String) As Integer
     ' ...
 End Function
+
+Private Sub txtFlags_Change()
+    cmdSave(1).Enabled = True
+End Sub
+
+Private Sub txtRank_Change()
+    cmdSave(1).Enabled = True
+End Sub

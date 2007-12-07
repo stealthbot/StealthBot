@@ -966,7 +966,7 @@ Public Sub SetProfile(ByVal Location As String, ByVal Description As String)
     With PBuffer
         .InsertDWORD &H1                    '// #accounts
         .InsertDWORD 2                      '// #keys
-        .InsertNTString CurrentUsername     '// account to update
+        .InsertNTString reverseUsername(CurrentUsername)     '// account to update
                                             '// keys
         .InsertNTString "Profile\Location"
         .InsertNTString "Profile\Description"
@@ -1097,7 +1097,7 @@ theEnd:
     Source = Source & nText
 End Sub
 
-Public Function ParseStatstring(ByVal StatString As String, ByRef outBuf As String, ByRef sClan As String) As String
+Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As String, ByRef sClan As String) As String
     Dim Values() As String
     Dim Temp() As String
     Dim cType As String
@@ -1110,22 +1110,22 @@ Public Function ParseStatstring(ByVal StatString As String, ByRef outBuf As Stri
     ' LPCW = Player
     
     'Debug.Print "Received statstring: " & Statstring
-    If LenB(StatString) > 0 Then
+    If LenB(Statstring) > 0 Then
         
         g_ThisIconCode = -1
     
-        Select Case Left$(StatString, 4)
+        Select Case Left$(Statstring, 4)
             Case "3RAW", "PX3W"
-                If Len(StatString) > 4 Then
-                    Temp() = Split(StatString, " ")
+                If Len(Statstring) > 4 Then
+                    Temp() = Split(Statstring, " ")
                     
                     ReDim Values(3)
                     
                     If StrComp(Right$(Temp(1), 2), "CW") = 0 Then
                         WCG = True
                     Else
-                        Values(1) = Mid$(StatString, 6, 1)
-                        Values(2) = Mid$(StatString, 7, 1)
+                        Values(1) = Mid$(Statstring, 6, 1)
+                        Values(2) = Mid$(Statstring, 7, 1)
                     End If
                     
                     Values(0) = Temp(2)
@@ -1134,17 +1134,17 @@ Public Function ParseStatstring(ByVal StatString As String, ByRef outBuf As Stri
                         Values(3) = StrReverse(Temp(3))
                     End If
                     
-                    g_ThisIconCode = GetRaceAndIcon(Values(1), Values(2), Left$(StatString, 4), IIf(WCG, Temp(1), ""))
+                    g_ThisIconCode = GetRaceAndIcon(Values(1), Values(2), Left$(Statstring, 4), IIf(WCG, Temp(1), ""))
                     
                     sClan = IIf(UBound(Values) > 2, Values(3), "")
                     
-                    If Left$(StatString, 4) = "3RAW" Then
+                    If Left$(Statstring, 4) = "3RAW" Then
                         Call sPrintF(outBuf, "Warcraft III: Reign of Chaos (Level: %s, icon tier %s, %s icon" & IIf(UBound(Temp) > 2, ", in Clan " & sClan, vbNullString) & ")", Values(0), Values(2), Values(1))
                     Else
                         Call sPrintF(outBuf, "Warcraft III: The Frozen Throne (Level: %s, icon tier %s, %s icon" & IIf(UBound(Temp) > 2, ", in Clan " & sClan, vbNullString) & ")", Values(0), Values(2), Values(1))
                     End If
                 Else
-                    If Left$(StatString, 4) = "3RAW" Then
+                    If Left$(Statstring, 4) = "3RAW" Then
                         Call StrCpy(outBuf, "Warcraft III: Reign of Chaos.")
                         g_ThisIconCode = -56
                     Else
@@ -1157,7 +1157,7 @@ Public Function ParseStatstring(ByVal StatString As String, ByRef outBuf As Stri
                 Call StrCpy(outBuf, "Starcraft Shareware.")
                 
             Case "RATS"
-                Values() = Split(Mid$(StatString, 6), " ")
+                Values() = Split(Mid$(Statstring, 6), " ")
                 If UBound(Values) <> 8 Then
                     Call sPrintF(outBuf, "a Starcraft %sbot", IIf((Values(3) = 1), " (spawn) ", vbNullString))
                 Else
@@ -1169,7 +1169,7 @@ Public Function ParseStatstring(ByVal StatString As String, ByRef outBuf As Stri
                 End If
                 
             Case "PXES"
-                Values() = Split(Mid(StatString, 6), " ")
+                Values() = Split(Mid(Statstring, 6), " ")
                 If UBound(Values) <> 8 Then
                     Call sPrintF(outBuf, "a Starcraft Brood War bot.", vbNullString)
                     
@@ -1185,7 +1185,7 @@ Public Function ParseStatstring(ByVal StatString As String, ByRef outBuf As Stri
                 End If
                 
             Case "RTSJ"
-                Values() = Split(Mid(StatString, 6), " ")
+                Values() = Split(Mid(Statstring, 6), " ")
                 If UBound(Values) <> 8 Then
                     Call sPrintF(outBuf, "a Starcraft Japanese %sbot.", IIf((Values(3) = 1), " (spawn) ", vbNullString))
                 Else
@@ -1197,7 +1197,7 @@ Public Function ParseStatstring(ByVal StatString As String, ByRef outBuf As Stri
                 End If
                 
             Case "NB2W"
-                Values() = Split(Mid$(StatString, 6), " ")
+                Values() = Split(Mid$(Statstring, 6), " ")
                 
                 If UBound(Values) <> 8 Then
                     Call sPrintF(outBuf, "a Warcraft II %sbot.", IIf((Values(3) = 1), " (spawn) ", vbNullString))
@@ -1210,7 +1210,7 @@ Public Function ParseStatstring(ByVal StatString As String, ByRef outBuf As Stri
                 End If
                 
             Case "RHSD"
-                Values() = Split(Mid$(StatString, 6), " ")
+                Values() = Split(Mid$(Statstring, 6), " ")
                 If UBound(Values) <> 8 Then
                     Call StrCpy(outBuf, "A Diablo shareware bot.")
                 Else
@@ -1223,7 +1223,7 @@ Public Function ParseStatstring(ByVal StatString As String, ByRef outBuf As Stri
                 End If
                 
             Case "LTRD"
-                Values() = Split(Mid$(StatString, 6), " ")
+                Values() = Split(Mid$(Statstring, 6), " ")
                 
                 If UBound(Values) <> 8 Then
                     Call StrCpy(outBuf, "A Diablo bot.")
@@ -1237,10 +1237,10 @@ Public Function ParseStatstring(ByVal StatString As String, ByRef outBuf As Stri
                 End If
                 
             Case "PX2D"
-                Call StrCpy(outBuf, ParseD2Stats(StatString))
+                Call StrCpy(outBuf, ParseD2Stats(Statstring))
                 
             Case "VD2D"
-                Call StrCpy(outBuf, ParseD2Stats(StatString))
+                Call StrCpy(outBuf, ParseD2Stats(Statstring))
                 
             Case "TAHC"
                 Call StrCpy(outBuf, "a Chat bot.")
@@ -1250,7 +1250,7 @@ Public Function ParseStatstring(ByVal StatString As String, ByRef outBuf As Stri
                 
         End Select
         
-        ParseStatstring = StrReverse(Left$(StatString, 4))
+        ParseStatstring = StrReverse(Left$(Statstring, 4))
         
     End If
 
@@ -1260,7 +1260,7 @@ ParseStatString_Exit:
 ParseStatString_Error:
 
     Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParseStatString of Module modParsing"
-    outBuf = "- Error parsing statstring. [" & Replace(StatString, Chr(0), "") & "]"
+    outBuf = "- Error parsing statstring. [" & Replace(Statstring, Chr(0), "") & "]"
     
     Resume ParseStatString_Exit
 End Function
@@ -1411,15 +1411,15 @@ Public Function ParseD2Stats(ByVal Stats As String)
     ParseD2Stats = StatBuf
 End Function
 
-Public Function GetServer(ByVal StatString As String, ByRef Server As String) As Byte
+Public Function GetServer(ByVal Statstring As String, ByRef Server As String) As Byte
     'returns the begining of the character name
-    Server = Mid$(StatString, 5, InStr(5, StatString, ",") - 5)
-    GetServer = InStr(5, StatString, ",") + 1
+    Server = Mid$(Statstring, 5, InStr(5, Statstring, ",") - 5)
+    GetServer = InStr(5, Statstring, ",") + 1
 End Function
 
-Public Function GetCharacterName(ByVal StatString As String, ByVal start As Byte, ByRef cName As String) As Byte
-    cName = Mid$(StatString, start, InStr(start, StatString, ",") - start)
-    GetCharacterName = InStr(start, StatString, ",") + 1
+Public Function GetCharacterName(ByVal Statstring As String, ByVal start As Byte, ByRef cName As String) As Byte
+    cName = Mid$(Statstring, start, InStr(start, Statstring, ",") - start)
+    GetCharacterName = InStr(start, Statstring, ",") + 1
 End Function
 
 Function MakeLong(X As String) As Long
