@@ -332,7 +332,13 @@ Private Sub btnCreateGroup_Click()
 End Sub
 
 Private Sub cmdCancel_Click(Index As Integer)
-    Call Unload(frmDBManager)
+    If (Index = 0) Then
+        Call Unload(frmDBManager)
+    Else
+        Call DB_remove(trvUsers.SelectedItem.text)
+
+        Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+    End If
 End Sub
 
 Private Sub cmdSave_Click(Index As Integer)
@@ -357,6 +363,8 @@ Private Sub cmdSave_Click(Index As Integer)
         cmdSave(1).Enabled = False
     Else
         DB() = m_DB()
+        
+        Call checkUsers
     
         Call WriteDatabase(GetFilePath("users.txt"))
         
@@ -379,6 +387,8 @@ Private Sub lstGroups_Click()
 End Sub
 
 Private Sub mnuDelete_Click()
+    Call DB_remove(trvUsers.SelectedItem.text)
+
     Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
 End Sub
 
@@ -400,7 +410,7 @@ Private Sub tbsTabs_Click()
     
     Select Case (tbsTabs.SelectedItem.Index)
         Case 1: ' Users and Groups
-            For i = LBound(DB) To UBound(DB)
+            For i = LBound(m_DB) To UBound(m_DB)
                 If (StrComp(m_DB(i).Type, "GROUP", vbBinaryCompare) = 0) Then
                     If (Len(m_DB(i).Groups) And (m_DB(i).Groups <> "%")) Then
                         If (InStr(1, m_DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
@@ -436,7 +446,7 @@ Private Sub tbsTabs_Click()
                 Next i
             End If
             
-            For i = LBound(DB) To UBound(DB)
+            For i = LBound(m_DB) To UBound(m_DB)
                 If (StrComp(m_DB(i).Type, "USER", vbBinaryCompare) = 0) Then
                     If (Len(m_DB(i).Groups) And (m_DB(i).Groups <> "%")) Then
                         If (InStr(1, m_DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
@@ -463,7 +473,7 @@ Private Sub tbsTabs_Click()
             Next i
             
         Case 2: ' Clans
-            For i = LBound(DB) To UBound(DB)
+            For i = LBound(m_DB) To UBound(m_DB)
                 If (StrComp(m_DB(i).Type, "CLAN", vbBinaryCompare) = 0) Then
                     Set newNode = trvUsers.Nodes.Add("Database", tvwChild, m_DB(i).Username, _
                             m_DB(i).Username, 2)
@@ -471,7 +481,7 @@ Private Sub tbsTabs_Click()
             Next i
             
         Case 3: ' Games
-            For i = LBound(DB) To UBound(DB)
+            For i = LBound(m_DB) To UBound(m_DB)
                 If (StrComp(m_DB(i).Type, "GAME", vbBinaryCompare) = 0) Then
                     Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
                         m_DB(i).Username, m_DB(i).Username, 2)
@@ -689,7 +699,7 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
         If (trvUsers.DropHighlight.Index = 1) Then
             selprev = GetAccess(nodeprev.text)
 
-            For i = LBound(DB) To UBound(DB)
+            For i = LBound(m_DB) To UBound(m_DB)
                 If (StrComp(selprev.Username, m_DB(i).Username, _
                     vbBinaryCompare) = 0) Then
                     
@@ -706,7 +716,7 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
                 
                 If (selnow.Username <> selprev.Username) Then
                     If (StrComp(selnow.Type, "GROUP", vbBinaryCompare) = 0) Then
-                        For i = LBound(DB) To UBound(DB)
+                        For i = LBound(m_DB) To UBound(m_DB)
                             If (StrComp(selprev.Username, m_DB(i).Username, vbBinaryCompare) = 0) Then
                                 m_DB(i).Groups = nodenow.text
                             End If
@@ -855,4 +865,130 @@ Private Function GetAccess(ByVal Username As String, Optional dbType As String =
     Next i
 
     GetAccess.access = -1
+End Function
+
+Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String = _
+    vbNullString) As Boolean
+    
+    On Error GoTo ERROR_HANDLER
+
+    Dim i     As Integer ' ...
+    Dim found As Boolean ' ...
+    
+    For i = LBound(m_DB) To UBound(m_DB)
+        If (StrComp(m_DB(i).Username, entry, vbTextCompare) = 0) Then
+            Dim bln As Boolean ' ...
+        
+            If (Len(dbType)) Then
+                If (StrComp(m_DB(i).Type, dbType, vbBinaryCompare) = 0) Then
+                    bln = True
+                End If
+            Else
+                bln = True
+            End If
+            
+            If (bln) Then
+                found = True
+                
+                Exit For
+            End If
+        End If
+        
+        bln = False
+    Next i
+    
+    If (found) Then
+        Dim bak As udtDatabase ' ...
+        
+        Dim j   As Integer ' ...
+        
+        ' ...
+        bak = m_DB(i)
+
+        ' we aren't removing the last array
+        ' element, are we?
+        If (i < UBound(m_DB)) Then
+            For j = (i + 1) To UBound(m_DB)
+                m_DB(j - 1) = m_DB(j)
+            Next j
+        End If
+        
+        ' redefine array size
+        ReDim Preserve m_DB(UBound(m_DB) - 1)
+
+        ' if we're removing a group, we need to also fix our
+        ' group memberships, in case anything is broken now
+        If (StrComp(bak.Type, "GROUP", vbBinaryCompare) = 0) Then
+            Dim res As Boolean ' ...
+       
+            ' if we remove a user from the database during the
+            ' execution of the inner loop, we have to reset our
+            ' inner loop variables, otherwise we create errors
+            ' due to incorrect database indexes.  Because of this,
+            ' we have to dual-loop until our inner loop runs out
+            ' of matching users.
+            Do
+                ' reset loop variable
+                res = False
+            
+                ' loop through database checking for users that
+                ' were members of the group that we just removed
+                For i = LBound(m_DB) To UBound(m_DB)
+                    If (Len(m_DB(i).Groups) And m_DB(i).Groups <> "%") Then
+                        If (InStr(1, m_DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
+                            Dim Splt()     As String ' ...
+                            Dim innerfound As Boolean ' ...
+                            
+                            Splt() = Split(m_DB(i).Groups, ",")
+                            
+                            For j = LBound(Splt) To UBound(Splt)
+                                If (StrComp(bak.Username, Splt(j), vbTextCompare) = 0) Then
+                                    innerfound = True
+                                
+                                    Exit For
+                                End If
+                            Next j
+                        
+                            If (innerfound) Then
+                                Dim k As Integer ' ...
+                                
+                                For k = (j + 1) To UBound(Splt)
+                                    Splt(k - 1) = Splt(k)
+                                Next k
+                                
+                                ReDim Preserve Splt(UBound(Splt) - 1)
+                                
+                                m_DB(i).Groups = Join(Splt(), vbNullString)
+                            End If
+                        Else
+                            If (StrComp(bak.Username, m_DB(i).Groups, vbTextCompare) = 0) Then
+                                res = DB_remove(m_DB(i).Username, m_DB(i).Type)
+                                
+                                Exit For
+                            End If
+                        End If
+                    End If
+                Next i
+            Loop While (res)
+        End If
+        
+        ' commit modifications
+        Call WriteDatabase(GetFilePath("users.txt"))
+        
+        DB_remove = True
+        
+        Exit Function
+    End If
+    
+    DB_remove = False
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: DB_remove() has encountered an error while " & _
+        "removing a database entry.")
+        
+    DB_remove = False
+    
+    Exit Function
 End Function
