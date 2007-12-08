@@ -258,8 +258,15 @@ Private Sub btnCreateUser_Click()
         (userCount + 1)
 
     If (Not (trvUsers.SelectedItem Is Nothing)) Then
-        Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
-            tvwChild, "U:" & Username, Username, 3)
+        If ((trvUsers.SelectedItem.Index = 1) Or _
+            (GetAccess(trvUsers.SelectedItem.text).Type = "GROUP")) Then
+            
+            Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
+                tvwChild, "U:" & Username, Username, 3)
+        Else
+            Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Parent.Key, _
+                tvwChild, "U:" & Username, Username, 3)
+        End If
     Else
         Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
             "U:" & Username, Username, 3)
@@ -284,8 +291,15 @@ Private Sub btnCreateGroup_Click()
             (groupCount + 1)
     
         If (Not (trvUsers.SelectedItem Is Nothing)) Then
-            Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
-                tvwChild, "G:" & groupname, groupname, 1)
+            If ((trvUsers.SelectedItem.Index = 1) Or _
+                (GetAccess(trvUsers.SelectedItem.text).Type = "GROUP")) Then
+                
+                Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
+                    tvwChild, "G:" & groupname, groupname, 1)
+            Else
+                Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Parent.Key, _
+                    tvwChild, "G:" & groupname, groupname, 1)
+            End If
         Else
             Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
                 "G:" & groupname, groupname, 1)
@@ -472,6 +486,10 @@ Private Sub tbsTabs_Click()
                 End If
             Next i
             
+            btnCreateGroup.Caption = "Create Group"
+            
+            btnCreateUser.Enabled = True
+            
         Case 2: ' Clans
             For i = LBound(m_DB) To UBound(m_DB)
                 If (StrComp(m_DB(i).Type, "CLAN", vbBinaryCompare) = 0) Then
@@ -480,6 +498,10 @@ Private Sub tbsTabs_Click()
                 End If
             Next i
             
+            btnCreateGroup.Caption = "Create Clan"
+            
+            btnCreateUser.Enabled = False
+            
         Case 3: ' Games
             For i = LBound(m_DB) To UBound(m_DB)
                 If (StrComp(m_DB(i).Type, "GAME", vbBinaryCompare) = 0) Then
@@ -487,6 +509,10 @@ Private Sub tbsTabs_Click()
                         "G:" & m_DB(i).Username, m_DB(i).Username, 2)
                 End If
             Next i
+            
+            btnCreateGroup.Caption = "Create Game"
+            
+            btnCreateUser.Enabled = False
     End Select
     
     If (trvUsers.Nodes.Count) Then
