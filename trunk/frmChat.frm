@@ -828,7 +828,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -854,7 +853,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1107,6 +1105,7 @@ Begin VB.Form frmChat
       Caption         =   "&Window"
       Begin VB.Menu mnuToggle 
          Caption         =   "&Toggle Join/Leave Messages"
+         Shortcut        =   ^J
       End
       Begin VB.Menu mnuHideBans 
          Caption         =   "Hide& Ban Messages"
@@ -4973,17 +4972,17 @@ Private Sub Timer_Timer()
     BotVars.JoinWatch = 0
     
     If (AutoChatFilter) Then
-        If ((GetTickCount() - AutoChatFilter) >= 180000) Then
-            frmChat.AddChat RTBColors.TalkBotUsername, _
-                "Chat filters have been deactivated; " & _
-                    "activate them by pressing CTRL + F."
-        
-            Call WriteINI("Other", "Filters", "N")
-        
-            Filters = False
-            
-            AutoChatFilter = 0
-        End If
+        'If ((GetTickCount() - AutoChatFilter) >= 180000) Then
+        '    frmChat.AddChat RTBColors.TalkBotUsername, _
+        '        "Chat filters have been deactivated; " & _
+        '            "activate them by pressing CTRL + F."
+        '
+        '    Call WriteINI("Other", "Filters", "N")
+        '
+        '    Filters = False
+        '
+        '    AutoChatFilter = 0
+        'End If
     End If
     
     If Not mnuDisableVoidView.Checked Then

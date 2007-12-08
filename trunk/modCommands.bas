@@ -1203,9 +1203,7 @@ Private Function OnChPw(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     Select Case (LCase$(strArray(0)))
         Case "on", "set"
-            If (UBound(strArray) >= 1) Then
-                BotVars.ChannelPassword = strArray(1)
-                
+            If ((UBound(strArray) >= 1) And Len(strArray(1))) Then
                 If (BotVars.ChannelPasswordDelay <= 0) Then
                     BotVars.ChannelPasswordDelay = 30
                 End If
@@ -3262,6 +3260,8 @@ End Function ' end function OnSLCheck
 Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
+    On Error GoTo ERROR_HANDLER
+    
     Dim u        As String
     Dim tmpBuf() As String ' temporary output buffer
     Dim tmpCount As Integer
@@ -3271,11 +3271,12 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     u = msgData
     
-    If (Len(u) > 0) Then
-        If (InStr(1, u, "..", vbBinaryCompare) > 0) Then
-            tmpBuf(tmpCount) = "Error: Files may only be read from program directory."
-        ElseIf (InStr(1, u, ".ini", vbTextCompare) > 0) Then
-            tmpBuf(tmpCount) = "Error: Configuration files may not be read."
+    If (Len(u)) Then
+        If (InStr(1, u, "..", vbBinaryCompare) <> 0) Then
+            tmpBuf(tmpCount) = "Error: You may only specify a file within the program " & _
+                "directory or subdirectories."
+        ElseIf (InStr(1, u, ".ini", vbTextCompare) <> 0) Then
+            tmpBuf(tmpCount) = "Error: You may not read configuration files."
         Else
             Dim Y As String  ' ...
             Dim f As Integer ' ...
@@ -3283,28 +3284,36 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
             ' grab a file number
             f = FreeFile
         
-            If (InStr(u, ".") > 0) Then
-                Y = Left$(u, InStr(u, ".") - 1)
+            If (InStr(1, u, ".") > 0) Then
+                Y = Left$(u, InStr(1, u, ".", _
+                    vbBinaryCompare) - 1)
             Else
                 Y = u
             End If
             
-            ' get absolute file path
-            u = App.Path & "\" & u
-                    
-            Select Case UCase$(Y)
-                Case "CON", "PRN", "AUX", "CLOCK$", "NUL", "COM1", "COM2", "COM3", _
-                    "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "LPT1", "LPT2", _
-                    "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
-                    
-                    tmpBuf(tmpCount) = "You cannot read that file."
+            Select Case (UCase$(Y))
+                Case "CON", "PRN", "AUX", "CLOCK$", "NUL", "COM1", _
+                     "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", _
+                     "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", _
+                     "LPT5", "LPT6", "LPT7", "LPT8", "LPT9"
+            
+                    cmdRet(0) = "Error: You cannot read the specified file."
+            
+                    Exit Function
             End Select
             
-            If (Dir$(u) = vbNullString) Then
-                tmpBuf(tmpCount) = "Error: File does not exist."
+            u = (Dir$(u, vbNormal))
+            
+            If (u = vbNullString) Then
+                tmpBuf(tmpCount) = "Error: The specified file could not " & _
+                    "be found."
             Else
+                ' get absolute file paths
+                u = (App.Path & "\" & u)
+                
                 ' store line in buffer
-                tmpBuf(tmpCount) = "Contents of file " & msgData & ":"
+                tmpBuf(tmpCount) = "Contents of file " & _
+                    msgData & ":"
                 
                 ' increment counter
                 tmpCount = (tmpCount + 1)
@@ -3338,12 +3347,17 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
                 tmpBuf(tmpCount) = "End of File."
             End If
         End If
-    Else
-        tmpBuf(tmpCount) = "Error reading file."
     End If
     
     ' return message
     cmdRet() = tmpBuf()
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    cmdRet(0) = "There was an error reading the specified file."
+
+    Exit Function
 End Function ' end function OnReadFile
 
 ' TO DO:
@@ -3544,7 +3558,7 @@ Private Function OnUnban(ByVal Username As String, ByRef dbAccess As udtGetAcces
                 If (floodCap < 45) Then
                     floodCap = (floodCap + 15)
                     
-                    Call bnetSend("/unban " & u)
+                    Call bnetSend("/unban " & reverseUsername(u))
                 End If
             Else
                 If (InStr(1, msgData, "*", vbTextCompare) <> 0) Then
@@ -4341,8 +4355,9 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     ' parameters
     Index = InStr(1, msgData, " --", vbBinaryCompare)
     
-    ' did we find such parameters?
-    If (Index) Then
+    ' did we find such parameters, and if so,
+    ' do they begin after an entry name?
+    If (Index > 1) Then
         ' grab parameters
         params = Mid$(msgData, Index - 1)
 
@@ -4350,8 +4365,14 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
         msgData = Mid$(msgData, 1, Index)
     End If
     
-    ' split message
-    strArray() = Split(msgData, " ")
+    ' does our message contain an entry name? rank? flags?
+    ' anything? we don't want to error out if not.
+    If (InStr(1, msgData, Space(1), vbBinaryCompare) <> 0) Then
+        ' split message
+        strArray() = Split(msgData, Space(1))
+    Else
+        Exit Function
+    End If
     
     If (UBound(strArray) > 0) Then
         ' grab username
@@ -5578,7 +5599,9 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                     Dim j As Integer ' ...
                 
                     For j = 1 To Len(Flags)
-                        If (InStr(1, DB(i).Flags, Mid$(Flags, j, 1), vbTextCompare) = 0) Then
+                        If (InStr(1, DB(i).Flags, Mid$(Flags, j, 1), _
+                            vbBinaryCompare) = 0) Then
+                            
                             Exit For
                         End If
                     Next j
@@ -5825,7 +5848,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: DB_remove() has encountered an error while " & _
+    Call AddChat(vbRed, "Error: DB_remove() has encountered an error while " & _
         "removing a database entry.")
         
     DB_remove = False
@@ -5873,14 +5896,15 @@ Public Function GetShitlist(ByVal Username As String) As String
     gAcc = GetCumulativeAccess(Username)
     
     ' ...
-    If ((InStr(1, gAcc.Flags, "S", vbBinaryCompare) = 0) And _
-        (InStr(1, gAcc.Flags, "B", vbBinaryCompare) <> 0)) Then
+    If ((InStr(1, gAcc.Flags, "B", vbBinaryCompare) <> 0) And _
+        (InStr(1, gAcc.Flags, "S", vbBinaryCompare) = 0) And _
+        (gAcc.access < 20)) Then
         
         If ((Len(gAcc.BanMessage) > 0) And (gAcc.BanMessage <> "%")) Then
-            GetShitlist = Username & Space(1) & _
+            GetShitlist = reverseUsername(Username) & Space(1) & _
                 gAcc.BanMessage
         Else
-            GetShitlist = Username & Space(1) & _
+            GetShitlist = reverseUsername(Username) & Space(1) & _
                 "Shitlisted"
         End If
     End If
@@ -6482,7 +6506,7 @@ Public Sub checkUsers()
             ' ...
             If (Len(tmp) > 0) Then
                 ' ...
-                Call AddQ("/ban " & reverseUsername(tmp))
+                Call AddQ("/ban " & tmp)
             Else
                 Dim j As Integer ' ...
     

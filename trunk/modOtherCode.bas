@@ -174,7 +174,9 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
             For i = 1 To colQueue.Count
                 With colQueue.Item(i)
                     If Left$(.Message, 5) = "/ban " Then
-                        If StrComp(LastBan & " ", LCase$(Mid$(.Message, 6, Len(LastBan) + 1)), vbTextCompare) = 0 Then
+                        If StrComp(LastBan & " ", LCase$(Mid$(.Message, 6, Len(LastBan) + 1)), _
+                            vbTextCompare) = 0 Then
+                            
                             Exit Function
                         End If
                     End If
@@ -192,7 +194,8 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
             
             If LenB(Username) > 0 Then
                 LastBan = LCase(Username)
-                CleanedUsername = StripInvalidNameChars(Username)
+                'CleanedUsername = StripInvalidNameChars(Username)
+                CleanedUsername = Username
                 
                 'If InStr(1, CleanedUsername, "@") > 0 Then CleanedUsername = StripRealm(CleanedUsername)
                 
@@ -208,18 +211,10 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
                     Exit Function
                 End If
                 
-                If Dii Then
-                    If Kick = 0 Then
-                        frmChat.AddQ "/ban *" & Inpt, 1
-                    Else
-                        frmChat.AddQ "/kick *" & Inpt, 1
-                    End If
+                If (Kick = 0) Then
+                    frmChat.AddQ "/ban " & reverseUsername(Inpt), 1
                 Else
-                    If Kick = 0 Then
-                        frmChat.AddQ "/ban " & Inpt, 1
-                    Else
-                        frmChat.AddQ "/kick " & Inpt, 1
-                    End If
+                    frmChat.AddQ "/kick " & reverseUsername(Inpt), 1
                 End If
             End If
         Else
@@ -464,7 +459,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Dim found   As Boolean ' ...
     Dim dbIndex As Integer ' ...
     Dim dbCount As Integer ' ...
-    Dim splt()  As String  ' ...
+    Dim Splt()  As String  ' ...
     Dim bln     As Boolean ' ...
     
     ' default index to negative one to
@@ -498,19 +493,19 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                     ' ...
                     If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
                         ' ...
-                        splt() = Split(DB(i).Groups, ",")
+                        Splt() = Split(DB(i).Groups, ",")
                     Else
                         ' ...
-                        ReDim Preserve splt(0)
+                        ReDim Preserve Splt(0)
                         
                         ' ...
-                        splt(0) = DB(i).Groups
+                        Splt(0) = DB(i).Groups
                     End If
                     
                     ' ...
-                    For j = 0 To UBound(splt)
+                    For j = 0 To UBound(Splt)
                         ' ...
-                        gAcc = GetCumulativeGroupAccess(splt(j))
+                        gAcc = GetCumulativeGroupAccess(Splt(j))
                     
                         ' ...
                         If (GetCumulativeAccess.access < gAcc.access) Then
@@ -645,19 +640,19 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             ' ...
                             If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
                                 ' ...
-                                splt() = Split(tmp.Groups, ",")
+                                Splt() = Split(tmp.Groups, ",")
                             Else
                                 ' ...
-                                ReDim Preserve splt(0)
+                                ReDim Preserve Splt(0)
                                 
                                 ' ...
-                                splt(0) = tmp.Groups
+                                Splt(0) = tmp.Groups
                             End If
                             
                             ' ...
-                            For j = 0 To UBound(splt)
+                            For j = 0 To UBound(Splt)
                                 ' ...
-                                gAcc = GetCumulativeGroupAccess(splt(j))
+                                gAcc = GetCumulativeGroupAccess(Splt(j))
                             
                                 ' ...
                                 If (tmp.access < gAcc.access) Then
@@ -770,7 +765,7 @@ End Function
 ' ...
 Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccessResponse
     Dim gAcc   As udtGetAccessResponse ' ...
-    Dim splt() As String               ' ...
+    Dim Splt() As String               ' ...
     
     ' ...
     gAcc = GetAccess(Group, "GROUP")
@@ -785,12 +780,12 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
             Dim j As Integer ' ...
         
             ' ...
-            splt() = Split(gAcc.Groups, ",")
+            Splt() = Split(gAcc.Groups, ",")
             
             ' ...
-            For i = 0 To UBound(splt)
+            For i = 0 To UBound(Splt)
                 ' ...
-                recAcc = GetCumulativeGroupAccess(splt(i))
+                recAcc = GetCumulativeGroupAccess(Splt(i))
                     
                 ' ...
                 If (gAcc.access < recAcc.access) Then
@@ -855,7 +850,7 @@ End Function
 ' ...
 Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Boolean
     Dim gAcc   As udtGetAccessResponse ' ...
-    Dim splt() As String               ' ...
+    Dim Splt() As String               ' ...
     
     ' ...
     gAcc = GetAccess(Group, "GROUP")
@@ -870,17 +865,17 @@ Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Bool
             Dim j As Integer ' ...
         
             ' ...
-            splt() = Split(gAcc.Groups, ",")
+            Splt() = Split(gAcc.Groups, ",")
             
             ' ...
-            For i = 0 To UBound(splt)
-                If (StrComp(splt(i), Check, vbTextCompare) = 0) Then
+            For i = 0 To UBound(Splt)
+                If (StrComp(Splt(i), Check, vbTextCompare) = 0) Then
                     CheckGroup = True
                     
                     Exit Function
                 Else
                     ' ...
-                    recAcc = CheckGroup(splt(i), Check)
+                    recAcc = CheckGroup(Splt(i), Check)
                 
                     If (recAcc) Then
                         CheckGroup = True
@@ -2133,22 +2128,22 @@ End Sub
 ' Returns a single chunk of a string as if that string were Split() and that chunk
 ' extracted
 ' 1-based
-Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
+Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
     'one two three
     '   1   2
     Dim c As Integer, i As Integer, TargetSpace As Integer
     c = 0
     i = 1
-    pos = pos
+    Pos = Pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While (c < pos) And (i > 0)
+    While (c < Pos) And (i > 0)
         TargetSpace = i
         i = InStr(i + 1, str, " ")
         c = c + 1
     Wend
     
-    If c >= pos Then
+    If c >= Pos Then
         c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
         If c > 0 Then
