@@ -259,10 +259,10 @@ Private Sub btnCreateUser_Click()
 
     If (Not (trvUsers.SelectedItem Is Nothing)) Then
         Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
-            tvwChild, Username, Username, 3)
+            tvwChild, "U:" & Username, Username, 3)
     Else
-        Set newNode = trvUsers.Nodes.Add("Database", tvwChild, Username, _
-            Username, 3)
+        Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
+            "U:" & Username, Username, 3)
     End If
         
     trvUsers.Nodes(newNode.Index).Selected = True
@@ -285,10 +285,10 @@ Private Sub btnCreateGroup_Click()
     
         If (Not (trvUsers.SelectedItem Is Nothing)) Then
             Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
-                tvwChild, groupname, groupname, 1)
+                tvwChild, "G:" & groupname, groupname, 1)
         Else
-            Set newNode = trvUsers.Nodes.Add("Database", tvwChild, groupname, _
-                groupname, 1)
+            Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
+                "G:" & groupname, groupname, 1)
         End If
         
         ' ...
@@ -316,8 +316,8 @@ Private Sub btnCreateGroup_Click()
                 .AddedOn = Now
             End With
         
-            Set newNode = trvUsers.Nodes.Add("Database", tvwChild, m_game, _
-                m_game, 2)
+            Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
+                "G:" & m_game, m_game, 2)
             
             ' ...
             Set trvUsers.SelectedItem = newNode
@@ -426,13 +426,13 @@ Private Sub tbsTabs_Click()
                             
                             If (Pos) Then
                                 Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
-                                    tvwChild, m_DB(i).Username, m_DB(i).Username, 1)
+                                    tvwChild, "G:" & m_DB(i).Username, m_DB(i).Username, 1)
                             End If
                         Next j
                     Else
                         If (Not (Exists(m_DB(i).Username))) Then
                             Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
-                                m_DB(i).Username, m_DB(i).Username, 1)
+                                "G:" & m_DB(i).Username, m_DB(i).Username, 1)
                         End If
                     End If
                 End If
@@ -462,12 +462,12 @@ Private Sub tbsTabs_Click()
                             
                             If (Pos) Then
                                 Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
-                                    tvwChild, m_DB(i).Username, m_DB(i).Username, 3)
+                                    tvwChild, "U:" & m_DB(i).Username, m_DB(i).Username, 3)
                             End If
                         Next j
                     Else
                         Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
-                            m_DB(i).Username, m_DB(i).Username, 3)
+                            "U:" & m_DB(i).Username, m_DB(i).Username, 3)
                     End If
                 End If
             Next i
@@ -475,8 +475,8 @@ Private Sub tbsTabs_Click()
         Case 2: ' Clans
             For i = LBound(m_DB) To UBound(m_DB)
                 If (StrComp(m_DB(i).Type, "CLAN", vbBinaryCompare) = 0) Then
-                    Set newNode = trvUsers.Nodes.Add("Database", tvwChild, m_DB(i).Username, _
-                            m_DB(i).Username, 2)
+                    Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
+                        "G:" & m_DB(i).Username, m_DB(i).Username, 2)
                 End If
             Next i
             
@@ -484,7 +484,7 @@ Private Sub tbsTabs_Click()
             For i = LBound(m_DB) To UBound(m_DB)
                 If (StrComp(m_DB(i).Type, "GAME", vbBinaryCompare) = 0) Then
                     Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
-                        m_DB(i).Username, m_DB(i).Username, 2)
+                        "G:" & m_DB(i).Username, m_DB(i).Username, 2)
                 End If
             Next i
     End Select
