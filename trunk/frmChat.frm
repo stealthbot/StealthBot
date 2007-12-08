@@ -828,6 +828,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -853,6 +854,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1429,7 +1431,7 @@ Private Sub Form_Load()
     
     ' COMPILER FLAGS
     #If BETA = 1 Then
-        CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & ZeroOffsetEx(App.REVISION, 3)
+        CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & ZeroOffsetEx(App.REVISION, 3) & " Pre-Release"
     #Else
         CVERSION = "StealthBot v" & App.Major & "." & App.Minor & " build " & ZeroOffsetEx(App.REVISION, 3) & IIf(Len(REVISION) > 0, " Revision " & REVISION, "")
     #End If
@@ -1514,9 +1516,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
