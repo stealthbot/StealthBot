@@ -57,11 +57,11 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
     ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
     ByVal w3icon As String)
     
-    Dim Game   As String ' ...
+    Dim game   As String ' ...
     Dim pStats As String ' ...
     Dim Clan   As String ' ...
     
-    Game = ParseStatstring(OriginalStatstring, pStats, Clan)
+    game = ParseStatstring(OriginalStatstring, pStats, Clan)
 
     If (Not (JoinMessagesOff)) Then
         frmChat.AddChat RTBColors.JoinText, "-- ", _
@@ -91,7 +91,7 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
     ByVal w3icon As String)
     
     Dim i      As Integer ' ...
-    Dim Game   As String  ' ...
+    Dim game   As String  ' ...
     Dim pStats As String  ' ...
     Dim Clan   As String  ' ...
 
@@ -100,7 +100,7 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
     colUsersInChannel.Item(i).Statstring = _
         OriginalStatstring
         
-    Game = ParseStatstring(OriginalStatstring, pStats, Clan)
+    game = ParseStatstring(OriginalStatstring, pStats, Clan)
     
     If (JoinMessagesOff = False) Then
         frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", _
@@ -237,4 +237,14 @@ Public Sub Event_QueuedEmote(ByVal Username As String, ByVal Flags As Long, ByVa
     ByVal Message As String)
     
     Call frmChat.AddChat(vbRed, "Event_QueuedEmote() has been fired.")
+End Sub
+
+' ...
+Public Sub ClearChatQueue()
+    Dim i As Integer ' ...
+
+    ' clear chat queue
+    For i = 1 To colChatQueue.Count
+        Call colChatQueue(i).Remove
+    Next i
 End Sub

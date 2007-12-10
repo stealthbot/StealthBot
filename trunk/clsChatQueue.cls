@@ -49,17 +49,19 @@ Private m_Count            As Long
 Private m_GTC              As Long
 
 Private Sub Class_Initialize()
+    m_Count = 0
+
     ReDim m_arrChatPackets(0)
 End Sub
 
-Public Sub StoreJoin(ByVal bnflags As Long, ByVal Latency As Long, ByVal Game As String, _
+Public Sub StoreJoin(ByVal bnflags As Long, ByVal Latency As Long, ByVal game As String, _
     ByVal Clan As String, ByVal Statstring As String, ByVal w3icon As String)
 
     With m_arrChatPackets(m_Count)
         .EventID = ID_JOIN
         .Flags = bnflags
         .Ping = Latency
-        .Product = Game
+        .Product = game
         .Clan = Clan
         .Statstring = Statstring
         .w3icon = w3icon
@@ -70,14 +72,14 @@ Public Sub StoreJoin(ByVal bnflags As Long, ByVal Latency As Long, ByVal Game As
     ReDim Preserve m_arrChatPackets(m_Count)
 End Sub
 
-Public Sub StoreUserInChannel(ByVal bnflags As Long, ByVal Latency As Long, ByVal Game As String, _
+Public Sub StoreUserInChannel(ByVal bnflags As Long, ByVal Latency As Long, ByVal game As String, _
     ByVal Clan As String, ByVal Statstring As String, ByVal w3icon As String)
 
     With m_arrChatPackets(m_Count)
         .EventID = ID_USER
         .Flags = bnflags
         .Ping = Latency
-        .Product = Game
+        .Product = game
         .Clan = Clan
         .Statstring = Statstring
         .w3icon = w3icon
@@ -89,14 +91,14 @@ Public Sub StoreUserInChannel(ByVal bnflags As Long, ByVal Latency As Long, ByVa
 End Sub
 
 Public Sub StoreStatusUpdate(ByVal bnflags As Long, ByVal prevflags As Long, ByVal Latency As Long, _
-    ByVal Game As String, ByVal Clan As String, ByVal Statstring As String, ByVal w3icon As String)
+    ByVal game As String, ByVal Clan As String, ByVal Statstring As String, ByVal w3icon As String)
 
     With m_arrChatPackets(m_Count)
         .EventID = ID_USERFLAGS
         .Flags = bnflags
         .prevflags = prevflags
         .Ping = Latency
-        .Product = Game
+        .Product = game
         .Clan = Clan
         .Statstring = Statstring
         .w3icon = w3icon
@@ -176,6 +178,8 @@ Public Sub Show()
 End Sub
 
 Private Sub Clear()
+    m_Count = 0
+
     ReDim m_arrChatPackets(0)
 End Sub
 
