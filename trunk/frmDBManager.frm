@@ -251,28 +251,51 @@ Private Sub btnCreateUser_Click()
     Static userCount As Integer ' ...
     
     Dim newNode      As Node    ' ...
+    Dim gAcc         As udtGetAccessResponse
     
     Dim Username     As String  ' ...
     
     Username = "New User #" & _
         (userCount + 1)
+        
+    ReDim Preserve m_DB(UBound(m_DB) + 1)
+    
+    With m_DB(UBound(m_DB))
+        .Username = Username
+        .Type = "USER"
+        .AddedBy = "(console)"
+        .AddedOn = Now
+    End With
 
     If (Not (trvUsers.SelectedItem Is Nothing)) Then
-        If ((trvUsers.SelectedItem.Index = 1) Or _
-            (GetAccess(trvUsers.SelectedItem.text).Type = "GROUP")) Then
-            
+        If (trvUsers.SelectedItem.Index = 1) Then
             Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
                 tvwChild, "U:" & Username, Username, 3)
+        ElseIf (GetAccess(trvUsers.SelectedItem.text).Type = "GROUP") Then
+            Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
+                tvwChild, "U:" & Username, Username, 3)
+
+            With m_DB(UBound(m_DB))
+                .Groups = trvUsers.SelectedItem.text
+            End With
         Else
             Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Parent.Key, _
                 tvwChild, "U:" & Username, Username, 3)
+                
+            If (GetAccess(trvUsers.SelectedItem.Parent.text).Type = "GROUP") Then
+                With m_DB(UBound(m_DB))
+                    .Groups = trvUsers.SelectedItem.text
+                End With
+            End If
         End If
     Else
         Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
             "U:" & Username, Username, 3)
     End If
         
-    trvUsers.Nodes(newNode.Index).Selected = True
+    With trvUsers.Nodes(newNode.Index)
+        .Selected = True
+    End With
     
     Call trvUsers.StartLabelEdit
     
@@ -289,16 +312,36 @@ Private Sub btnCreateGroup_Click()
     If (tbsTabs.SelectedItem.Index = 1) Then
         groupname = "New Group #" & _
             (groupCount + 1)
+            
+        ReDim Preserve m_DB(UBound(m_DB) + 1)
+        
+        With m_DB(UBound(m_DB))
+            .Username = groupname
+            .Type = "GROUP"
+            .AddedBy = "(console)"
+            .AddedOn = Now
+        End With
     
         If (Not (trvUsers.SelectedItem Is Nothing)) Then
-            If ((trvUsers.SelectedItem.Index = 1) Or _
-                (GetAccess(trvUsers.SelectedItem.text).Type = "GROUP")) Then
-                
+            If (trvUsers.SelectedItem.Index = 1) Then
                 Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
                     tvwChild, "G:" & groupname, groupname, 1)
+            ElseIf (GetAccess(trvUsers.SelectedItem.text).Type = "GROUP") Then
+                Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
+                    tvwChild, "G:" & groupname, groupname, 1)
+
+                With m_DB(UBound(m_DB))
+                    .Groups = trvUsers.SelectedItem.text
+                End With
             Else
                 Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Parent.Key, _
                     tvwChild, "G:" & groupname, groupname, 1)
+                    
+                If (GetAccess(trvUsers.SelectedItem.Parent.text).Type = "GROUP") Then
+                    With m_DB(UBound(m_DB))
+                        .Groups = trvUsers.SelectedItem.Parent.text
+                    End With
+                End If
             End If
         Else
             Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
@@ -793,40 +836,39 @@ Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
         For i = LBound(m_DB) To UBound(m_DB)
             If (StrComp(trvUsers.SelectedItem.text, m_DB(i).Username, _
                     vbTextCompare) = 0) Then
-                
-                If (StrComp(m_DB(i).Type, "GROUP", vbBinaryCompare) = 0) Then
                     
-                    m_DB(i).Username = NewString
-                
-                    Exit For
-                End If
+                m_DB(i).Username = NewString
+            
+                Exit For
             End If
         Next i
         
-        For i = LBound(m_DB) To UBound(m_DB)
-            If ((Len(m_DB(i).Groups)) And (m_DB(i).Groups <> "%")) Then
-                Dim Splt() As String  ' ...
-                Dim j      As Integer ' ...
-            
-                If (InStr(1, m_DB(i).Groups, ",", vbTextCompare) <> 0) Then
-                    Splt() = Split(m_DB(i).Groups, ",")
-                Else
-                    ReDim Preserve Splt(0)
-                    
-                    Splt(0) = m_DB(i).Groups
-                End If
+        If (StrComp(m_DB(i).Type, "GROUP", vbBinaryCompare) = 0) Then
+            For i = LBound(m_DB) To UBound(m_DB)
+                If ((Len(m_DB(i).Groups)) And (m_DB(i).Groups <> "%")) Then
+                    Dim Splt() As String  ' ...
+                    Dim j      As Integer ' ...
                 
-                For j = LBound(Splt) To UBound(Splt)
-                    If (StrComp(Splt(j), trvUsers.SelectedItem.text, _
-                        vbTextCompare) = 0) Then
-                    
-                        Splt(j) = NewString
+                    If (InStr(1, m_DB(i).Groups, ",", vbTextCompare) <> 0) Then
+                        Splt() = Split(m_DB(i).Groups, ",")
+                    Else
+                        ReDim Preserve Splt(0)
+                        
+                        Splt(0) = m_DB(i).Groups
                     End If
-                Next j
-                
-                m_DB(i).Groups = Join(Splt(), ",")
-            End If
-        Next i
+                    
+                    For j = LBound(Splt) To UBound(Splt)
+                        If (StrComp(Splt(j), trvUsers.SelectedItem.text, _
+                            vbTextCompare) = 0) Then
+                        
+                            Splt(j) = NewString
+                        End If
+                    Next j
+                    
+                    m_DB(i).Groups = Join(Splt(), ",")
+                End If
+            Next i
+        End If
     End If
 End Sub
 
@@ -843,7 +885,6 @@ Private Function Exists(ByVal nodeName As String) As Integer
     
     Exists = False
 End Function
-
 
 Private Sub txtFlags_Change()
     cmdSave(1).Enabled = True

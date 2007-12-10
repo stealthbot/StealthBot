@@ -262,10 +262,14 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                                 
                                 Splt() = Split(Message, Space(1), 3)
                                 
-                                If (UBound(Splt) = 2) Then
+                                If (UBound(Splt) > 0) Then
                                     Message = Splt(0) & Space(1) & _
-                                        reverseUsername(Splt(1)) & _
+                                        reverseUsername(Splt(1))
+                                        
+                                    If (UBound(Splt) > 1) Then
+                                        Message = Message & _
                                             Space(1) & Splt(2)
+                                    End If
                                 End If
                             ElseIf ((tmpmsg = "f") Or _
                                     (tmpmsg = "friends")) Then
@@ -278,11 +282,10 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                                             reverseUsername(Splt(2))
                                 End If
                             End If
-                               
                         End If
                     End If
                 End If
-            
+ 
                 Call AddQ(Message)
             End If
         End If
@@ -3302,15 +3305,16 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
                     Exit Function
             End Select
             
-            u = (Dir$(u, vbNormal))
+            ' get absolute file path
+            u = (App.Path & "\" & u)
+            
+            ' check for existence of file
+            u = (Dir$(u))
             
             If (u = vbNullString) Then
                 tmpBuf(tmpCount) = "Error: The specified file could not " & _
                     "be found."
             Else
-                ' get absolute file paths
-                u = (App.Path & "\" & u)
-                
                 ' store line in buffer
                 tmpBuf(tmpCount) = "Contents of file " & _
                     msgData & ":"
@@ -4111,7 +4115,7 @@ Private Function OnIgnore(ByVal Username As String, ByRef dbAccess As udtGetAcce
             
             tmpBuf = "That user has equal or higher access."
         Else
-            AddQ "/ignore " & reverseUsername(u)
+            Call AddQ("/ignore " & reverseUsername(u))
             
             tmpBuf = "Ignoring messages from " & Chr(34) & u & Chr(34) & "."
         End If
@@ -4504,7 +4508,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                             
                             For j = 0 To UBound(Splt)
                                 If ((StrComp(Splt(j), user, vbTextCompare) = 0) And _
-                                    (gAcc.Type = "GROUP")) Then
+                                    (dbType = "GROUP")) Then
                                     
                                     cmdRet(0) = "Error: You cannot make a group a member of " & _
                                         "itself."
@@ -5168,7 +5172,7 @@ Private Function OnWhoIs(ByVal Username As String, ByRef dbAccess As udtGetAcces
         Call AddQ("/whois " & reverseUsername(u), 1)
     End If
 
-    If (Len(u) > 0) Then
+    If (Len(u)) Then
         gAcc = GetCumulativeAccess(u)
         
         If (gAcc.Username <> vbNullString) Then
@@ -6871,11 +6875,11 @@ Public Function convertUsername(ByVal Username As String) As String
                 End If
             End If
         End If
+        
+        Exit Function
     End If
     
-    If (Len(convertUsername) = 0) Then
-        convertUsername = Username
-    End If
+    convertUsername = Username
 End Function
 
 Public Function reverseUsername(ByVal Username As String) As String
@@ -6885,30 +6889,32 @@ Public Function reverseUsername(ByVal Username As String) As String
         Exit Function
     End If
     
-    If (Dii) Then
-        reverseUsername = ("*" & Username)
-    ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
-            (StrReverse$(BotVars.Product) = "W3XP")) Then
-            
-        If (w3Realm <> vbNullString) Then
-            Index = InStr(1, Username, ("@" & w3Realm), vbBinaryCompare)
-
-            If (Index <> 0) Then
-                reverseUsername = Left$(Username, Index - 1)
-            Else
-                Select Case (w3Realm)
-                    Case "Lordaeron": reverseUsername = Username & "@USWest"
-                    Case "Azeroth":   reverseUsername = Username & "@USEast"
-                    Case "Kalimdor":  reverseUsername = Username & "@Asia"
-                    Case "Northrend": reverseUsername = Username & "@Europe"
-                    Case Else:        reverseUsername = Username
-                End Select
+    If (Not (BotVars.UseGameConventions)) Then
+        If (Dii) Then
+            reverseUsername = ("*" & Username)
+        ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
+                (StrReverse$(BotVars.Product) = "W3XP")) Then
+                
+            If (w3Realm <> vbNullString) Then
+                Index = InStr(1, Username, ("@" & w3Realm), vbBinaryCompare)
+    
+                If (Index <> 0) Then
+                    reverseUsername = Left$(Username, Index - 1)
+                Else
+                    Select Case (w3Realm)
+                        Case "Lordaeron": reverseUsername = Username & "@USWest"
+                        Case "Azeroth":   reverseUsername = Username & "@USEast"
+                        Case "Kalimdor":  reverseUsername = Username & "@Asia"
+                        Case "Northrend": reverseUsername = Username & "@Europe"
+                        Case Else:        reverseUsername = Username
+                    End Select
+                End If
             End If
         End If
+        
+        Exit Function
     End If
     
-    If (Len(reverseUsername) = 0) Then
-        reverseUsername = Username
-    End If
+    reverseUsername = Username
 End Function
 

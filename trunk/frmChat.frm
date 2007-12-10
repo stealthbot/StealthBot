@@ -828,6 +828,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -853,6 +854,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -5547,8 +5549,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     If (s = "Y") Then
         If (BotVars.UseGameConventions = False) Then
-            BotVars.UseGameConventions = True
-        
             If (colUsersInChannel.Count) Then
                 For i = 1 To colUsersInChannel.Count
                     Index = _
@@ -5571,6 +5571,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                 SetTitle CurrentUsername & ", online in channel " & _
                     gChannel.Current
             End If
+            
+            BotVars.UseGameConventions = True
         End If
     Else
         If (BotVars.UseGameConventions) Then
