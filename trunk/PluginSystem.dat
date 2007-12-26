@@ -230,12 +230,20 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, Lines)
                psEvents.Item(Prefix) = psEvents.Item(Prefix) & psEventNames(j) & "|"
             End If
          Next
+
+         '// Check for a split line
+         If Right(curLine, 1) = "_" And i < UBound(Lines) Then
+           curLine = curLine & Trim(LCase(Lines(i + 1)))
+           intLine = i + 1
+         Else
+           intLine = i
+         End If
  
          '// If it's a UserJoins or UserInChannel event, make sure the new arguments exist
          If Instr(curLine, "userjoins") > 0 And Instr(curLine, "banned") = 0 Then
-            psAddArg Prefix, i, "UserJoins", "OriginalStatString", "Banned", Lines, Path
+            psAddArg Prefix, intLine, "UserJoins", "OriginalStatString", "Banned", Lines, Path
          ElseIf Instr(curLine, "userinchannel") > 0 And Instr(curLine, "statupdate") = 0 Then
-            psAddArg Prefix, i, "UserInChannel", "Product", "StatUpdate", Lines, Path
+            psAddArg Prefix, intLine, "UserInChannel", "Product", "StatUpdate", Lines, Path
          End If
       End If
    Next
