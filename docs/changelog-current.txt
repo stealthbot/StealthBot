@@ -17,6 +17,8 @@
 	- Hdx, for his help with a number of things, including writing SBFix to get StealthBot
 		online during some of Blizzard's changes
 	- Quake)aS( created the bot's shiny new splash screen
+	- NNG-Vector, for the significant amount of time dedicated to searching for (and finding ;p)
+		miscellaneous database and command processor bugs
 
 
 <i><b>*BUG FIXES</b></i>
@@ -43,7 +45,9 @@
 	- Server info and error messages, and channel names, will now be properly UTF8-decoded (thanks Jack)
 	- Now UTF8-decoding emotes (thanks various)
 	- Fixed bug in color decoding routine that would cause the bot to crash when a specially formatted string
-		was sent while UTF-8 was disabled (thanks Phix & Jack)
+		was sent while UTF-8 was disabled (thanks PhiX & Jack)
+	- The use of certain messages within the clan motd can now no longer be used to trigger event handlers
+		unrelated to the motd (thanks PyroManiac and PhiX)
 
 
 	<b>INTERFACE</b>
@@ -82,7 +86,6 @@
 		(those games don't allow you to reject UDP packets, thanks Imhotep[Nu])
 	- Double-clicking a name will now insert it at your cursor or overwrite any selected text in the send box
 		(provided that text was selected using any method but click-and-drag)
-	- When mimicking users it will no longer appear as though you spoke before they did (thanks Jack)
 
 
 	<b>COMMANDS</b>
@@ -109,6 +112,7 @@
 		whisper the speaker (thanks Imhotep[Nu])
 	- The /time command used from inside the bot no longer sends a redundant /time to Battle.net
 		(thanks Jack)
+	- The math command will no longer allow the execution of potentially harmful code (thanks various).
 
 	
 	<b>SECURITY</b>
@@ -116,6 +120,9 @@
 	- Fixed a security issue involving specially-crafted input to the readfile command (thanks Fiend(KIP))
 	- Fixed a security issue related to the one mentioned above (thanks also Fiend(KIP))
 	- You can no longer use the readfile command with any .ini file
+	- If the username that the bot is logged on as has access, that access will no longer work when whispering
+		yourself.  This prevents users from using the say command to issue commands otherwise beyond their
+		capabilities.
 
 
 <i><b>*CHANGES</b></i>
@@ -162,13 +169,6 @@
 		- Added a wide array of new functions/subs to work with plugins and plugin features (see ScriptSupportClass.txt).
 		- Added a Plugins menu which creates a menu item for each of your plugins populated with useful commands.
 		- Added a Create New Plugin function to the Plugins menu which executes the Plugin Creator by #define
-	- The internal custom command system has now been revamped and moved to a plugin provided with the 
-		bot (thanks Snap).
-	- The internal definition system (define, newdef, deldef) has been moved to a plugin provided with the
-		bot (thanks Hdx).
-	- Completely redesigned command processor, enabling the use of multiple character triggers,
-          	and several new command issuing formats including the name of the bot and a comma or colon
-          	followed by a space, and the removal of a trigger requirement entirely when issued via whisper.
 	- The database system has been completely overhauled:
                 - Database is now controlled in a central repository (users.txt)
 		- The maximum allowable access level is now 200.  This has been changed from 1000 to discourage the assignment of unnecessarily
@@ -232,15 +232,17 @@
 	- The autocomplete system has undergone the following changes:
 		- The Tab key can now be used to scroll through a list of possible username matches
 		- You can use the Tab key to bring up user list matches anywhere in the text string
-		- When pressing enter immediately after a match appears, the selected match will no
-			longer be sent to Battle.net unless you have first unselected it.  This
-			prevents a bug that occurs when you wish to send a single word that just
-			happens to match all or part of a name within the user list.
 		- When several similar matching names are in a channel, the bot will now rememeber
-			the last username that was found matching.  This allows an easy way to
+			the last username that was found matching.  This allows for an easy way to
 			reference a single user across multiple messages.
-		- When changing listviews (Channel, Friends, Clan), the auto-complete system will
-			now use the names from the respective listview.
+	- The userlist/database manager has been completely redesigned to support the new database
+		capabilities.
+	- You can now use legacy naming while on WarCraft III.
+		- The use of legacy naming allows WarCraft III users to see non-WarCraft III users
+			without tag postfixes (@USWest, @USEast, etc.)
+		- The use of legacy naming also allows for a consistent database when changing the
+			selected game from WarCraft III to a legacy game.
+	- You can now toggle the use of legacy naming while on Diablo II.
 
 
 	<b>COMMANDS</b>
@@ -283,7 +285,13 @@
 	- The ability to modify command access requirments has been moved from access.ini to commands.xml.  This change
 		will allow for more fine-grained access specifications, and give users the ability to create their own command
 		documentation displayable on webpages and within the bot's internal help command.
-
+	- The internal custom command system has now been revamped and moved to a plugin provided with the 
+		bot (thanks Snap).
+	- The internal definition system (define, newdef, deldef) has been moved to a plugin provided with the
+		bot (thanks Hdx).
+	- Completely redesigned command processor, enabling the use of multiple character triggers and a new command
+          	issuing format: The name of the bot, and a comma or colon followed by a space (ex: Stealth: say hello).
+	- The mimic command has been removed from the bot to allow for a higher standard of security.
 
 <b>VERSION 2.6R3 - NUMEROUS FIXES</b>
 <i><b>*BUG FIXES</b></i>
