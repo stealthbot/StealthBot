@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmCCEditor 
    BackColor       =   &H00000000&
    BorderStyle     =   3  'Fixed Dialog
@@ -324,7 +324,7 @@ Private Sub cmdDelete_Click()
                 Iterations = Iterations + 1
                 
                 If Iterations > 7000 Then
-                    frmChat.AddChat vbRed, "Warning: Loop size limit exceeded in cmdDelete_Click()!"
+                    frmChat.AddChat RTBColors.ErrorMessageText, "Warning: Loop size limit exceeded in cmdDelete_Click()!"
                     Exit Sub
                 End If
             Wend

@@ -272,8 +272,18 @@ Public Function StripInvalidNameChars(ByVal Username As String) As String
 End Function
 
 Public Function StripRealm(ByVal Username As String) As String
-    If InStr(1, Username, "@") > 0 Then
-        Username = Left$(Username, InStr(Username, "@") - 1)
+    If (InStr(1, Username, "@", vbBinaryCompare) > 0) Then
+        ' ...
+        Username = Replace(Username, "@USWest", vbNullString)
+        Username = Replace(Username, "@USEast", vbNullString)
+        Username = Replace(Username, "@Asia", vbNullString)
+        Username = Replace(Username, "@Euruope", vbNullString)
+        
+        ' ...
+        Username = Replace(Username, "@Lordaeron", vbNullString, 1)
+        Username = Replace(Username, "@Azeroth", vbNullString, 1)
+        Username = Replace(Username, "@Kalimdor", vbNullString, 1)
+        Username = Replace(Username, "@Northrend", vbNullString, 1)
     End If
     
     StripRealm = Username
@@ -1623,7 +1633,7 @@ ArrayIsLocked:
             
             If Iterations > 10000 Then
                 If MDebug("debug") Then
-                    frmChat.AddChat vbRed, "Warning: Loop size limit exceeded in RemoveBanFromQueue()!"
+                    frmChat.AddChat RTBColors.ErrorMessageText, "Warning: Loop size limit exceeded in RemoveBanFromQueue()!"
                 End If
                 
                 Exit Sub
@@ -1695,23 +1705,25 @@ End Sub
 
 Public Sub AddBannedUser(ByVal sUser As String)
     Dim i As Integer
-    
-    sUser = LCase(sUser)
-    
+
     If UBound(gBans) > 10000 Then
         ReDim gBans(0)
     End If
 
     For i = 0 To UBound(gBans)
-        If StrComp(gBans(i).UsernameActual, sUser) = 0 Then
+        If (StrComp(gBans(i).Username, StripRealm(sUser), _
+            vbTextCompare) = 0) Then
+            
             Exit Sub
         End If
     Next i
     
-    ReDim Preserve gBans(0 To UBound(gBans) + 1)
+    With gBans(UBound(gBans))
+        .Username = StripRealm(sUser)
+        .UsernameActual = sUser
+    End With
     
-    gBans(UBound(gBans)).UsernameActual = sUser
-    gBans(UBound(gBans)).Username = StripRealm(sUser)
+    ReDim Preserve gBans(0 To UBound(gBans) + 1)
 End Sub
 
 Public Sub UnbanBannedUser(ByVal sUser As String)
@@ -1719,11 +1731,11 @@ Public Sub UnbanBannedUser(ByVal sUser As String)
     Dim i As Integer, c As Integer, NumRemoved As Integer, Iterations As Long
     Dim uBnd As Integer
     
-    sUser = LCase(StripRealm(sUser))
+    sUser = StripRealm(sUser)
     uBnd = UBound(gBans)
     
     While i <= (uBnd - NumRemoved)
-        If StrComp(sUser, gBans(i).Username) = 0 Then
+        If StrComp(sUser, gBans(i).Username, vbTextCompare) = 0 Then
             If i <> UBound(gBans) Then
                 For c = i To UBound(gBans)
                     gBans(i) = gBans(i + 1)
@@ -1741,8 +1753,8 @@ Public Sub UnbanBannedUser(ByVal sUser As String)
         
         If Iterations > 9000 Then
             If MDebug("debug") Then
-                frmChat.AddChat vbRed, "Warning: Loop size limit exceeded in UnbanBannedUser()!"
-                frmChat.AddChat vbRed, "The banned-user list has been reset.. hope it works!"
+                frmChat.AddChat RTBColors.ErrorMessageText, "Warning: Loop size limit exceeded in UnbanBannedUser()!"
+                frmChat.AddChat RTBColors.ErrorMessageText, "The banned-user list has been reset.. hope it works!"
             End If
             
             ReDim gBans(0)
@@ -2195,5 +2207,6 @@ Function GetProductKey(Optional ByVal Product As String) As String
 End Function
 
 Public Function InsertDummyQueueEntry()
-    frmChat.AddQ Chr$(0)
+    ' %%%%%blankqueuemessage%%%%%
+    frmChat.AddQ "%%%%%blankqueuemessage%%%%%"
 End Function

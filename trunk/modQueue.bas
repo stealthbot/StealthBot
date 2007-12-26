@@ -100,7 +100,7 @@ Attribute VB_Name = "modQueueCode"
 '        ConsecSends = ConsecSends + 1
 '        TotalConsecSends = TotalConsecSends + 1
 '
-'        If MDebug("queue") Then frmChat.AddChat vbRed, "-> " & Delay & " ms delay returned"
+'        If MDebug("queue") Then frmChat.AddChat RTBColors.ErrorMessageText,  "-> " & Delay & " ms delay returned"
 '
 '        RequiredDelay = Delay
 '    End If

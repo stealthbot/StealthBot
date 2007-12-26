@@ -34,6 +34,7 @@ Const SID_MEMBERLEFT& = &H7E
 Const SID_CHANGERANK& = &H7A
 Const SID_NEWRANKRECEIVED& = &H81
 Const SID_CLANUSERINFO& = &H82 '// arbitrary name
+Const SID_CLANMOTD& = &H7C
 
 
 Public Event CandidateList(ByVal Status As Byte, ByRef users() As String)
@@ -50,12 +51,18 @@ Public Event RemoveUserReply(ByVal result As Byte)
 Public Event MyRankChange(ByVal NewRank As Byte)
 Public Event MemberLeaves(ByVal Member As String)
 Public Event RemovedFromClan(ByVal Status As Byte)
-
+Public Event ClanMOTD(ByVal cookie As Long, ByVal Message As String)
 
 Public Sub RequestClanList()
     AwaitingClanList = 1
+    
     PBuffer.InsertDWORD &H1
     PBuffer.SendPacket &H7D
+End Sub
+
+Public Sub RequestClanMotd(Optional ByVal cookie As Long)
+    PBuffer.InsertDWORD cookie
+    PBuffer.SendPacket &H7C
 End Sub
 
 '10-18-07 - Hdx - Changed to use clsPacketDebuffer
@@ -168,6 +175,16 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             RaiseEvent MyRankChange(inBuf.GetBYTE)
             
         Case SID_CLANUSERINFO
+        
+        Case SID_CLANMOTD
+            Dim cookie  As Long
+            Dim Message As String
+            
+            cookie = inBuf.DebuffDWORD
+            inBuf.RemoveDWORD
+            Message = inBuf.GetNTString
+        
+            RaiseEvent ClanMOTD(cookie, Message)
             
         
         Case Else

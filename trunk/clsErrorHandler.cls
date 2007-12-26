@@ -103,7 +103,6 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
         Case Else
             miNoProceed = 0
             
-            
     End Select
     
     If miNoProceed = 2 Then

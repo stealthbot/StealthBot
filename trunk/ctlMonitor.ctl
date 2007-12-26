@@ -255,14 +255,14 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                 tmr.Enabled = True
      
             Case &HF
-                Dim eventID As Long, Username As String, text As String
-                eventID = PBuffer.DebuffDWORD
+                Dim EventID As Long, Username As String, text As String
+                EventID = PBuffer.DebuffDWORD
                 PBuffer.Advance 20
                 Username = PBuffer.DebuffNTString
                 text = PBuffer.DebuffNTString
                 If (CurrentIndex <= colUserInfo.Count) Then
                     With colUserInfo.Item(CurrentIndex)
-                        If eventID = 18 Then
+                        If EventID = 18 Then
                             .Status = 1
                             Dim Channel As String, game As String
                             If InStr(1, text, " in the ", vbTextCompare) > 0 Then
@@ -287,7 +287,7 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                                     CurrentIndex = CurrentIndex + 1
                                 End If
                             End If
-                        ElseIf eventID = 19 Then
+                        ElseIf EventID = 19 Then
                             .Status = 0
                             .Product = vbNullString
                             .Channel = "Offline"
@@ -541,7 +541,7 @@ Private Sub SendBNET(buff As String)
 BNETError:
     ErrorHandler "SendBNET", Err.Number, Err.Description
     Err.Clear
-    frmChat.AddChat vbRed, DebugOutput(buff)
+    frmChat.AddChat RTBColors.ErrorMessageText, DebugOutput(buff)
 End Sub
 Private Sub SendBNLS(buff As String)
     On Error GoTo BNLSError
@@ -550,7 +550,7 @@ Private Sub SendBNLS(buff As String)
 BNLSError:
     ErrorHandler "SendBNLS", Err.Number, Err.Description
     Err.Clear
-    frmChat.AddChat vbRed, DebugOutput(buff)
+    frmChat.AddChat RTBColors.ErrorMessageText, DebugOutput(buff)
 End Sub
 
 Private Function GetFTString(Optional LocalTime As Boolean = False) As String
@@ -581,5 +581,5 @@ Private Function GetCompUserName(Optional user As Boolean = False) As String
 End Function
 
 Private Function ErrorHandler(strSource As String, Number As Integer, Description As String)
-  frmChat.AddChat vbRed, "[Monitor] Error: ", vbRed, strSource, vbRed, " #", vbRed, Number & ": " & Description
+  frmChat.AddChat RTBColors.ErrorMessageText, "[Monitor] Error: ", RTBColors.ErrorMessageText, strSource, RTBColors.ErrorMessageText, " #", RTBColors.ErrorMessageText, Number & ": " & Description
 End Function

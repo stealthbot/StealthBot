@@ -82,6 +82,8 @@ Private m_iJoinWatch                    As Integer
 Private m_sBNLSServer                   As String
 Private m_bNoRTBAutomaticCopy           As Boolean
 Private m_bUseGameConventions           As Boolean
+Private m_bUseD2GameConventions         As Boolean
+Private m_bUseW3GameConventions         As Boolean
 
 
 Public Property Get Username() As String
@@ -840,3 +842,28 @@ Public Property Let UseGameConventions(ByVal bUseGameConventions As Boolean)
     m_bUseGameConventions = bUseGameConventions
 
 End Property
+
+Public Property Get UseD2GameConventions() As Boolean
+
+    UseD2GameConventions = m_bUseD2GameConventions
+
+End Property
+
+Public Property Let UseD2GameConventions(ByVal bUseD2GameConventions As Boolean)
+
+    m_bUseD2GameConventions = bUseD2GameConventions
+
+End Property
+
+Public Property Get UseW3GameConventions() As Boolean
+
+    UseW3GameConventions = m_bUseW3GameConventions
+
+End Property
+
+Public Property Let UseW3GameConventions(ByVal bUseW3GameConventions As Boolean)
+
+    m_bUseW3GameConventions = bUseW3GameConventions
+
+End Property
+

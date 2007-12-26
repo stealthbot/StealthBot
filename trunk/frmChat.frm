@@ -901,7 +901,7 @@ Begin VB.Form frmChat
          Caption         =   "-"
       End
       Begin VB.Menu mnuUsers 
-         Caption         =   "&Userlist Manager"
+         Caption         =   "&Database Manager"
       End
       Begin VB.Menu mnuMonitor 
          Caption         =   "User &Monitor"
@@ -1430,13 +1430,15 @@ Private Sub Form_Load()
     Dim FrmSplashInUse As Boolean
     
     ' COMPILER FLAGS
-    #If BETA = 1 Then
-        CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & ZeroOffsetEx(App.REVISION, 3)
+    #If (BETA = 1) Then
+        CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
+            ZeroOffsetEx(App.REVISION, 3)
     #Else
-        CVERSION = "StealthBot v" & App.Major & "." & App.Minor & " build " & ZeroOffsetEx(App.REVISION, 3) & IIf(Len(REVISION) > 0, " Revision " & REVISION, "")
+        CVERSION = "StealthBot v" & App.Major & "." & App.Minor & " build " & _
+            ZeroOffsetEx(App.REVISION, 3) & IIf(Len(REVISION) > 0, " Revision " & REVISION, "")
     #End If
     
-    #If COMPILE_RELEASE = 1 Then
+    #If (COMPILE_RELEASE = 1) Then
         If (Not ValidateExecutable) Then
             MsgBox GetHexProtectionMessage, vbOKOnly + vbCritical
             Call Form_Unload(0)
@@ -1444,7 +1446,7 @@ Private Sub Form_Load()
         End If
     #End If
     
-    #If COMPILE_DEBUG = 0 Then
+    #If (COMPILE_DEBUG = 0) Then
         HookWindowProc frmChat.hWnd
         HookSendBoxWindowProc frmChat.cboSend.hWnd
     #End If
@@ -2118,9 +2120,18 @@ Sub Event_BNetError(ErrorNumber As Integer, Description As String)
     AddChat RTBColors.ErrorMessageText, s & ErrorNumber & " -- " & Description
     AddChat RTBColors.ErrorMessageText, s & "Disconnected."
     
-    If sckBNet.State <> 0 Then sckBNet.Close
-    If sckBNLS.State <> 0 Then sckBNLS.Close
-    If sckMCP.State <> 0 Then sckMCP.Close
+    If (sckBNet.State <> 0) Then
+        Call sckBNet.Close
+    End If
+    
+    If (sckBNLS.State <> 0) Then
+        Call sckBNLS.Close
+    End If
+    
+    If (sckMCP.State <> 0) Then
+        Call sckMCP.Close
+    End If
+    
     g_Connected = False
     
     DoDisconnect (1)
@@ -2141,7 +2152,7 @@ Sub Event_BNetError(ErrorNumber As Integer, Description As String)
         
         UserCancelledConnect = False 'this should fix the beta reconnect problems
         
-        ReconnectTimerID = SetTimer(Me.hWnd, 0, BotVars.ReconnectDelay, AddressOf Reconnect_TimerProc)
+        ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, AddressOf Reconnect_TimerProc)
     End If
 End Sub
 
@@ -2442,9 +2453,12 @@ Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
 End Sub
 
 Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal rank As Byte)
-    Clan.DWName = RawClanTag
-    Clan.MyRank = rank
-    Clan.isUsed = True
+    With Clan
+        .Name = ClanTag
+        .DWName = RawClanTag
+        .MyRank = rank
+        .isUsed = True
+    End With
     
     Call InitListviewTabs
     
@@ -2528,10 +2542,17 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
     SControl.Run "Event_ClanMemberUpdate", Username, rank, IsOnline
 End Sub
 
-Private Sub ClanHandler_ClanMOTD(ByVal Message As String)
-    Call Event_ServerInfo("[CLAN] MOTD: " & Message)
+Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
+    If (cookie = 1) Then
+        PassedClanMotdCheck = True
+    End If
+    
+    'If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+    '    frmChat.AddChat RTBColors.ServerInfoText, Message
+    'End If
     
     On Error Resume Next
+    
     SControl.Run "Event_ClanMOTD", Message
 End Sub
 
@@ -2677,14 +2698,21 @@ Sub Form_Unload(Cancel As Integer)
         Kill GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt"
     End If
     
-    If ReconnectTimerID > 0 Then KillTimer Me.hWnd, ReconnectTimerID
-    If ExReconnectTimerID > 0 Then KillTimer Me.hWnd, ExReconnectTimerID
+    If ReconnectTimerID > 0 Then
+        KillTimer 0, ReconnectTimerID
+    End If
+    
+    If ExReconnectTimerID > 0 Then
+        KillTimer 0, ExReconnectTimerID
+    End If
     
 '    If AttemptedNewVerbyte Then
 '        AttemptedNewVerbyte = False
 '        l = CLng(Val("&H" & ReadCFG("Main", Key & "VerByte")))
 '        WriteINI "Main", Key & "VerByte", Hex(l - 1)
 '    End If
+
+    Call ChatQueue_Terminate
 
     DisableURLDetect
     UnhookWindowProc
@@ -2868,38 +2896,31 @@ Private Sub INet_StateChanged(ByVal State As Integer)
     On Error GoTo ERROR_HANDLER
 
     If (State = icResponseCompleted) Then
-        If (doAuth) Then
-            If (INet.GetChunk(1, icString) = "1") Then
-                doAuth = False
-            End If
-        Else
-            Call HandleNews(INet.GetChunk(1024, icString))
-        
-            If Not BotLoaded Then
-                SControl.Run "Event_FirstRun"
-                SControl.Run "Event_Load"
-                BotLoaded = True
-            End If
+        Call HandleNews(INet.GetChunk(1024, icString))
+    
+        If (Not (BotLoaded)) Then
+            Call SControl.Run("Event_FirstRun")
+            Call SControl.Run("Event_Load")
+            
+            BotLoaded = True
         End If
     Else
         If (State = icError) Then
-            If (doAuth) Then
-                doAuth = True
-            Else
-                If Not BotLoaded Then
-                    SControl.Run "Event_FirstRun"
-                    SControl.Run "Event_Load"
-                    BotLoaded = True
-                End If
+            If (Not (BotLoaded)) Then
+                Call SControl.Run("Event_FirstRun")
+                Call SControl.Run("Event_Load")
+                
+                BotLoaded = True
             End If
+            
+            'Call AddChat(RTBColors.ErrorMessageText, "Error: There was an error " & _
+            '    "loading the news.")
         End If
     End If
     
     Exit Sub
     
 ERROR_HANDLER:
-    doAuth = False
-    
     Exit Sub
 End Sub
 
@@ -2935,7 +2956,7 @@ Private Sub lvChannel_dblClick()
     
     s = GetSelectedUser
     oldSelStart = cboSendSelStart
-    
+
     If (Len(s) > 0) Then
         With cboSend
             .SelStart = cboSendSelStart 'IIf(cboSendSelStart > 0, cboSendSelStart, 0)
@@ -4067,6 +4088,9 @@ Private Sub cboSend_KeyUp(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
+    Static strBuf        As String ' ...
+    Static spaceIndex(2) As Long   ' ...
+
     Dim Temp As udtGetAccessResponse
     
     Dim i As Long
@@ -4261,7 +4285,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 End If
                 
             Case KEY_DELETE
-                Highlighted = False
+                'Highlighted = False
                 
             Case vbKeyTab
                 Dim prevStart As Long   ' ...
@@ -4270,79 +4294,85 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             
                 If (Shift) Then
                     Call cboSend_LostFocus
+                    
+                    If (txtPre.Visible = True) Then
+                        Call txtPre.SetFocus
+                    Else
+                        Call ListviewTabs.SetFocus
+                    End If
                 Else
                     With cboSend
-                        If (.SelStart > 0) Then
-                            prevStart = .SelStart
+                        If (strBuf = vbNullString) Then
+                            ' grab space before cursor
+                            spaceIndex(0) = InStrRev(.text, Space(1), IIf(.SelStart, _
+                                .SelStart, 1), vbBinaryCompare)
                             
-                            ' ...
-                            tmpStr = Mid$(.text, 1, prevStart)
-                        End If
-                        
-                        If (InStr(1, tmpStr, Space(1), vbBinaryCompare) <> 0) Then
-                            Dim tmp As String ' ...
-                        
-                            ' ...
-                            tmp = Mid$(tmpStr, InStrRev(tmpStr, Space(1)) + 1)
+                            ' grab space after cursor
+                            spaceIndex(1) = InStr((spaceIndex(0) + 1), .text, Space(1), _
+                                vbBinaryCompare)
                             
-                            If (Highlighted = True) Then
-                                ' ...
-                                res = MatchClosest(tmp, _
-                                    IIf(MatchIndex, MatchIndex + 1, 1))
+                            If (spaceIndex(1) <= 1) Then
+                                ' if no space was found, lets just
+                                ' set the cursor to the end of the
+                                ' line.
+                                .SelStart = Len(.text)
                             Else
-                                If (MatchIndex > 0) Then
-                                    ' ...
-                                    res = MatchClosest(tmp, MatchIndex)
+                                ' are we in between spaces? if so, we
+                                ' shouldn't be.
+                                If (spaceIndex(1) - spaceIndex(0) > 0) Then
+                                    .SelStart = (spaceIndex(1) - 1)
                                 End If
                             End If
-    
+                            
+                            strBuf = Mid$(.text, spaceIndex(0) + 1, _
+                                (.SelStart - spaceIndex(0)))
+                        End If
+                        
+                        If (Len(strBuf)) Then
+                            res = MatchClosest(strBuf, _
+                                IIf(MatchIndex, MatchIndex + 1, 1))
+                            
                             ' try again from the top
-                            If (Len(res) = 0) Then
-                                res = MatchClosest(tmp, 1)
+                            If (res = vbNullString) Then
+                                res = MatchClosest(strBuf, 1)
                             End If
                             
                             ' final check
                             If (res <> vbNullString) Then
-                                If (prevStart > 0) Then
-                                    res = Mid$(res, Len(tmp) + 1)
-                                End If
-                            
-                                .text = tmpStr & _
-                                    res
-                                    
-                                Highlighted = True
-                            End If
-                        Else
-                            If (Highlighted = True) Then
-                                ' look for match
-                                res = MatchClosest(tmpStr, _
-                                    IIf(MatchIndex, MatchIndex + 1, 1))
-                            Else
-                                If (MatchIndex > 0) Then
-                                    res = MatchClosest(tmpStr, MatchIndex)
-                                End If
-                            End If
+                                Dim SelStart As Long   ' ...
+                                Dim tmp      As String ' ...
                                 
-                            ' try again from the top
-                            If (Len(res) = 0) Then
-                                res = MatchClosest(tmpStr, 1)
-                            End If
-                        
-                            ' final check
-                            If (res <> vbNullString) Then
-                                If (prevStart > 0) Then
-                                    res = Mid$(res, Len(tmpStr) + 1)
+                                ' ...
+                                tmp = .text
+                                
+                                ' ...
+                                .text = vbNullString
+                            
+                                ' ...
+                                If (spaceIndex(0)) Then
+                                    .text = Left$(tmp, _
+                                        spaceIndex(0))
+                                End If
+                                
+                                ' ...
+                                .text = .text & _
+                                    res
+                                
+                                ' ...
+                                SelStart = Len(.text)
+                                
+                                ' ...
+                                If ((spaceIndex(1)) And _
+                                    (spaceIndex(1) < Len(tmp))) Then
+                                    
+                                    .text = Mid$(tmp, _
+                                        spaceIndex(1))
                                 End If
                             
-                                .text = tmpStr & _
-                                    res
-                                    
-                                Highlighted = True
+                                ' ...
+                                .SelStart = SelStart
                             End If
                         End If
-                
-                        .SelStart = prevStart
-                        .SelLength = (Len(.text) - .SelStart)
                     End With
                 End If
                 
@@ -4371,11 +4401,11 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         End If
                 
                     Case Else 'normal ENTER - old rules apply
-                        If (Highlighted) Then
-                            cboSend.SelText = vbNullString
-                            
-                            Highlighted = False
-                        End If
+                        'If (Highlighted) Then
+                        '    cboSend.SelText = vbNullString
+                        '
+                        '    Highlighted = False
+                        'End If
                     
                         If (LenB(cboSend.text) > 0) Then
                             On Error Resume Next
@@ -4590,18 +4620,19 @@ theEnd:
                         
                     End Select
                 End With
-            
-
         End Select
     End With
+    
+    If (KeyCode <> vbKeyTab) Then
+        strBuf = vbNullString
+    End If
 
-   On Error GoTo 0
-   Exit Sub
+    Exit Sub
 
 cboSend_KeyDown_Error:
-
-    If MDebug("debug") Then
-        AddChat vbRed, "Error " & Err.Number & " (" & Err.Description & ") in procedure cboSend_KeyDown"
+    If (MDebug("debug")) Then
+        Call AddChat(RTBColors.ErrorMessageText, "Error " & Err.Number & _
+            " (" & Err.Description & ") in procedure cboSend_KeyDown")
     End If
 End Sub
 
@@ -4628,40 +4659,40 @@ Private Sub cboSend_KeyPress(KeyAscii As Integer)
                 .RemoveItem 15
             End If
             
-            If ((OKToDoAutocompletion(.text, KeyAscii)) And _
-                (KeyAscii <> 8)) Then
-
-                If (Highlighted) Then
-                    .SelText = ""
-                    Highlighted = False
-                End If
-                
-                If (.SelStart = Len(.text)) Then
-                    If (MatchIndex > 0) Then
-                        sClosest = MatchClosest(.text & Chr(KeyAscii), _
-                            MatchIndex)
-                    End If
-                    
-                    If (Len(sClosest) = 0) Then
-                        sClosest = MatchClosest(.text & Chr(KeyAscii), 1)
-                    End If
-                    
-                    oldSelStart = Len(.text) + 1 'text is "b" = 1 = 2
-                    
-                    If (LenB(sClosest) > 0) Then
-                        .SelStart = oldSelStart
-                        .SelLength = 0
-                        .SelText = Chr(KeyAscii) & Mid$(sClosest, (oldSelStart + 1) - InStr(.text, " "))
-                        .SelStart = oldSelStart
-                        .SelLength = Len(.text)
-                        
-                        KeyAscii = 0
-                        Highlighted = True
-                    End If
-                End If
-            Else
-                Highlighted = False
-            End If
+            'If ((OKToDoAutocompletion(.text, KeyAscii)) And _
+            '    (KeyAscii <> 8)) Then
+            '
+            '    If (Highlighted) Then
+            '        .SelText = ""
+            '        Highlighted = False
+            '    End If
+            '
+            '    If (.SelStart = Len(.text)) Then
+            '        If (MatchIndex > 0) Then
+            '            sClosest = MatchClosest(.text & Chr(KeyAscii), _
+            '                MatchIndex)
+            '        End If
+            '
+            '        If (Len(sClosest) = 0) Then
+            '            sClosest = MatchClosest(.text & Chr(KeyAscii), 1)
+            '        End If
+            '
+            '        oldSelStart = Len(.text) + 1 'text is "b" = 1 = 2
+            '
+            '        If (LenB(sClosest) > 0) Then
+            '            .SelStart = oldSelStart
+            '            .SelLength = 0
+            '            .SelText = Chr(KeyAscii) & Mid$(sClosest, (oldSelStart + 1) - InStr(.text, " "))
+            '            .SelStart = oldSelStart
+            '            .SelLength = Len(.text)
+            '
+            '            KeyAscii = 0
+            '            Highlighted = True
+            '        End If
+            '    End If
+            'Else
+            '    Highlighted = False
+            'End If
         End If
     End With
     
@@ -4728,7 +4759,7 @@ Private Sub quLower_Timer()
         Next c
     End If
     
-    If Unsquelching Then Unsquelching = False
+    If unsquelching Then unsquelching = False
 End Sub
 
 
@@ -4757,7 +4788,8 @@ Private Sub QueueTimer_Timer()
             Next i
         End With
         
-        If (StrComp(Message, Chr$(0), vbBinaryCompare) = 0) Then
+        If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
+
             '// This is a dummy queue message - pretend like we sent a 70-character message
             QueueLoad = QueueLoad + 1
             QueueMaster = QueueMaster + 3
@@ -4770,7 +4802,7 @@ Private Sub QueueTimer_Timer()
             If ((StrComp(LCase(Left(Message, 11)), "/unsquelch ", vbTextCompare) = 0) Or _
                 (StrComp(LCase(Left(Message, 11)), "/unignore ", vbTextCompare) = 0)) Then
                 
-                    Unsquelching = True
+                    unsquelching = True
             End If
             
             If Len(Message) > 220 Then
@@ -4806,7 +4838,7 @@ Private Sub QueueTimer_Timer()
         
             colQueue.Remove Override
             
-            If Sent = 1 And InStr(1, "/", Left(Message, 1), vbTextCompare) = 0 Then
+            If Sent = 1 And InStr(1, "/", Left(Message, 1), vbBinaryCompare) = 0 Then
                 AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
                     CurrentUsername, RTBColors.Carats, "> ", _
                         RTBColors.TalkNormalText, Message
@@ -5136,32 +5168,27 @@ Sub Connect()
         'StealthLock Check
         'NOT 'Disabled due to public version!
 
-        #If BETA = 1 Then
-            doAuth = True
-        
-            AddChat RTBColors.InformationText, "Authorizing your private-release bot, please wait."
-            
-            Call INet.Execute("http://www.stealthbot.net/beta/sbauth.php?username=" & _
-                BotVars.Username, "GET")
-                
-            Do Until (Not (INet.StillExecuting))
-                DoEvents
-            Loop
+        #If (BETA = 1) Then
+            Call AddChat(RTBColors.InformationText, "Authorizing your private-release " & _
+                "bot, please wait.")
             
             ' ...
-            If (doAuth) Then
+            If (GetAuth(BotVars.Username) = False) Then
                 ' ...
-                AddChat RTBColors.ErrorMessageText, _
-                    "- - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -"
+                Call AddChat(RTBColors.ErrorMessageText, _
+                    "- - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -")
                 
                 ' ...
                 Call DoDisconnect
                 
                 ' ...
+                UserCancelledConnect = False
+                
+                ' ...
                 Exit Sub
             Else
-                AddChat RTBColors.SuccessText, _
-                    "Private usage authorized, connecting to Battle.Net."
+                Call AddChat(RTBColors.SuccessText, _
+                    "Private usage authorized, connecting to Battle.Net.")
             End If
         #End If
         
@@ -5210,9 +5237,10 @@ Sub Connect()
     Exit Sub
     
 Error:
-    MsgBox "Configuration file error. Please re-write your configuration file using the Setup dialog.", vbCritical + vbOKOnly, "Error"
+    MsgBox "Configuration file error. Please re-write your configuration file " & _
+        "using the Setup dialog.", vbCritical + vbOKOnly, "Error"
     
-    SetTitle "Disconnected"
+    Call SetTitle("Disconnected")
     
     Exit Sub
 End Sub
@@ -5334,8 +5362,18 @@ Private Sub UpTimer_Timer()
 End Sub
 
 'StealthLock (c) 2003 Stealth, Please do not remove this header
-Private Function GetAuth(ByVal res As String) As Boolean
+Private Function GetAuth(ByVal Username As String) As Boolean
     On Error GoTo ERROR_HANDLER
+
+    Dim res As String ' string variable for storing beta authorization result
+                      ' 0 == unauthorized
+                      ' 1 == authorized
+
+    res = INet.OpenURL("http://www.stealthbot.net/board/sbauth.php?username=" & Username)
+
+    Do While INet.StillExecuting
+        DoEvents
+    Loop
 
     If (res = "1") Then
         GetAuth = True
@@ -5349,65 +5387,101 @@ ERROR_HANDLER:
     GetAuth = False
 End Function
 
-'StealthLock (c) 2003 Stealth, Please do not remove this header
-'Private Function GetAuth(ByVal Username As String) As Boolean
-'    On Error GoTo ERROR_HANDLER
-'
-'    Dim res As String ' string variable for storing beta authorization result
-'                      ' 0 == unauthorized
-'                      ' 1 == authorized
-'
-'    res = INet.OpenURL("http://www.stealthbot.net/board/sbauth.php?username=" & Username)
-'
-'    Do While INet.StillExecuting
-'        DoEvents
-'    Loop
-'
-'    If (res = "1") Then
-'        GetAuth = True
-'    Else
-'        GetAuth = False
-'    End If
-'
-'    Exit Function
-'
-'ERROR_HANDLER:
-'    GetAuth = False
-'End Function
-
 Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
-    Dim Q As clsQueueOBj
     Static LastMessage As Long
-    Dim GTC As Long
     
-    If Len(Message) > 0 Then
-        If Not bFlood Then
+    Dim Q              As clsQueueOBj
+    Dim GTC            As Long
+    
+    If (Len(Message) > 0) Then
+        If (Not (bFlood)) Then
             GTC = GetTickCount
             
             ' tab check added 9/23/05
-            If InStr(Message, Chr(9)) > 0 Then
-                Message = Replace(Message, Chr(9), Space(4))
+            If (InStr(1, Message, Chr$(9), vbBinaryCompare) > 0) Then
+                Message = Replace$(Message, Chr$(9), Space(4))
             End If
             
             ' truncate to 220 characters
-            If Len(Message) > 220 Then
+            If (Len(Message) > 220) Then
                 Message = Left$(Message, 220)
             End If
             
-            If QueueLoad = 0 And g_Online And GTC - LastMessage > 10000 Then
+            If ((QueueLoad = 0) And _
+                (GTC - LastMessage > 10000)) Then
+                
                 ' This IF statement addresses oddities reported in topic 20021
-                If StrComp(gChannel.Current, "the void", vbTextCompare) = 0 Then
-                    BNCSBuffer.ClearBuffer
+                If (StrComp(gChannel.Current, "The Void", vbBinaryCompare) = 0) Then
+                    Call BNCSBuffer.ClearBuffer
                 End If
-            
-                bnetSend KillNull(Message)
-                
-                If InStr(1, Message, "/") <> 1 Then
-                    AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
-                        CurrentUsername, RTBColors.Carats, "> ", vbWhite, Message
+
+                If (bFlood = False) Then
+                    Dim banDelay As Integer ' ...
+                    
+                    Set Q = New clsQueueOBj
+                    
+                    ' set default message delay when
+                    ' queue is empty (ms)
+                    banDelay = 100
+                    
+                    With Q
+                        .Message = Message
+                        .Priority = Priority
+                    End With
+    
+                    Call colQueue.Add(Q)
+                    
+                    ' ...
+                    If ((StrComp(Left$(Message, 5), "/ban ", vbTextCompare) = 0) Or _
+                        (StrComp(Left$(Message, 6), "/kick ", vbTextCompare) = 0)) Then
+                        
+                        Dim i As Integer ' ...
+
+                        ' ...
+                        For i = 1 To colUsersInChannel.Count
+                            ' we aren't looking at my user data are we?
+                            If (StrComp(colUsersInChannel(i).Username, CurrentUsername, _
+                                vbBinaryCompare) <> 0) Then
+                        
+                                ' do we have an op?
+                                If ((colUsersInChannel(i).Flags And USER_CHANNELOP&) = _
+                                     USER_CHANNELOP&) Then
+                        
+                                    ' seed rnd() function
+                                    Randomize
+                        
+                                    ' calculate delay value between 100
+                                    ' and 600 ms and add to default delay value
+                                    banDelay = (banDelay + _
+                                        ((1 + Rnd() * 6) * 100))
+
+                                    ' break from loop
+                                    Exit For
+                                End If
+                            End If
+                        Next i
+                    End If
+                    
+                    ' set the delay before our next queue cycle
+                    frmChat.QueueTimer.Interval = banDelay
+                Else
+                    If (g_Online) Then
+                        If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", _
+                            vbBinaryCompare) = 0) Then
+                        
+                            QueueMaster = (QueueMaster + 3)
+                        Else
+                            Call bnetSend(KillNull(Message))
+                        
+                            If (InStr(1, Message, "/", vbBinaryCompare) <> 1) Then
+                                AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
+                                    CurrentUsername, RTBColors.Carats, "> ", vbWhite, Message
+                            End If
+                        End If
+                        
+                        QueueLoad = (QueueLoad + 1)
+                    End If
                 End If
-                
-                QueueLoad = QueueLoad + 1
             Else
                 Set Q = New clsQueueOBj
                 
@@ -5416,7 +5490,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                     .Priority = Priority
                 End With
 
-                colQueue.Add Q
+                Call colQueue.Add(Q)
             End If
             
             LastMessage = GTC
@@ -5448,13 +5522,18 @@ Sub ClearChannel()
 End Sub
 
 Sub ReloadConfig(Optional Mode As Byte = 0)
-    Const MN As String = "Main"
-    Const OT As String = "Other"
+    Const MN              As String = "Main"
+    Const OT              As String = "Other"
 
-    Dim s     As String
-    Dim i     As Integer
-    Dim f     As Integer
-    Dim Index As Integer
+    Dim s                 As String
+    Dim i                 As Integer
+    Dim f                 As Integer
+    Dim Index             As Integer
+    Dim D2GameConventions As String
+    Dim W3GameConventions As String
+    Dim gameConventions   As String
+    Dim bln               As Boolean
+    Dim doConvert         As Boolean
     
     s = BotVars.Username
     
@@ -5543,12 +5622,39 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.BNLSServer = s
         
     s = ReadCFG(MN, "ShowOfflineFriends")
-    If s = "Y" Then BotVars.ShowOfflineFriends = True Else BotVars.ShowOfflineFriends = False
     
-    s = ReadCFG(OT, "UseGameConventions")
+    If s = "Y" Then
+        BotVars.ShowOfflineFriends = True
+    Else
+        BotVars.ShowOfflineFriends = False
+    End If
     
-    If (s = "Y") Then
-        If (BotVars.UseGameConventions = False) Then
+    gameConventions = ReadCFG(OT, "UseGameConventions")
+    D2GameConventions = ReadCFG(OT, "UseD2GameConventions")
+    W3GameConventions = ReadCFG(OT, "UseW3GameConventions")
+
+    If (gameConventions = "Y") Then
+        If (D2GameConventions = "N") Then
+            If ((StrReverse$(BotVars.Product) = "D2DV") Or _
+                (StrReverse$(BotVars.Product) = "D2XP")) Then
+                
+                doConvert = True
+            End If
+        End If
+
+        If (W3GameConventions = "N") Then
+            If ((StrReverse$(BotVars.Product) = "WAR3") Or _
+                (StrReverse$(BotVars.Product) = "W3XP")) Then
+            
+                doConvert = True
+            End If
+        End If
+    Else
+        doConvert = True
+    End If
+
+    If (BotVars.UseGameConventions) Then
+        If (doConvert = False) Then
             If (colUsersInChannel.Count) Then
                 For i = 1 To colUsersInChannel.Count
                     Index = _
@@ -5563,20 +5669,36 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                     End If
                 Next i
             End If
-        
+            
             If (g_Online) Then
                 CurrentUsername = _
                     reverseUsername(CurrentUsername)
-                    
+    
                 SetTitle CurrentUsername & ", online in channel " & _
                     gChannel.Current
             End If
+    
+            With BotVars
+                .UseGameConventions = IIf((gameConventions = "Y"), _
+                    True, False)
             
-            BotVars.UseGameConventions = True
-        End If
-    Else
-        If (BotVars.UseGameConventions) Then
-            BotVars.UseGameConventions = False
+                .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
+                    True, False)
+            
+                .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
+                    True, False)
+            End With
+        Else
+            With BotVars
+                .UseGameConventions = IIf((gameConventions = "Y"), _
+                        True, False)
+            
+                .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
+                    True, False)
+            
+                .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
+                    True, False)
+            End With
         
             If (colUsersInChannel.Count) Then
                 For i = 1 To colUsersInChannel.Count
@@ -5585,7 +5707,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                 
                     colUsersInChannel(i).Username = _
                         convertUsername(colUsersInChannel(i).Username)
-    
+        
                     If (Index) Then
                         lvChannel.ListItems(Index).text = _
                             colUsersInChannel(i).Username
@@ -5601,7 +5723,161 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                     gChannel.Current
             End If
         End If
+    Else
+        With BotVars
+            .UseGameConventions = IIf((gameConventions = "Y"), _
+                    True, False)
+        
+            .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
+                True, False)
+        
+            .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
+                True, False)
+        End With
+    
+        If (doConvert) Then
+            If (colUsersInChannel.Count) Then
+                For i = 1 To colUsersInChannel.Count
+                    Index = _
+                        checkChannel(colUsersInChannel(i).Username)
+                
+                    colUsersInChannel(i).Username = _
+                        convertUsername(colUsersInChannel(i).Username)
+        
+                    If (Index) Then
+                        lvChannel.ListItems(Index).text = _
+                            colUsersInChannel(i).Username
+                    End If
+                Next i
+            End If
+            
+            If (g_Online) Then
+                CurrentUsername = _
+                    convertUsername(CurrentUsername)
+                    
+                SetTitle CurrentUsername & ", online in channel " & _
+                    gChannel.Current
+            End If
+        Else
+            
+        End If
     End If
+    
+    'If (gameConventions = "Y") Then
+    '    If (BotVars.UseGameConventions = False) Then
+    '        bln = True
+    '    End If
+    '
+    '    If ((StrReverse$(BotVars.Product) = "WAR3") Or _
+    '        (StrReverse$(BotVars.Product) = "W3XP")) Then
+    '
+    '        If (W3GameConventions = "Y") Then
+    '            If (BotVars.UseW3GameConventions = False) Then
+    '                bln = True
+    '            End If
+    '        End If
+    '    End If
+    '
+    '    If ((StrReverse$(BotVars.Product) = "D2DV") Or _
+    '        (StrReverse$(BotVars.Product) = "D2XP")) Then
+    '
+    '        If (D2GameConventions = "Y") Then
+    '            If (BotVars.UseD2GameConventions = False) Then
+    '                bln = True
+    '            End If
+    '        End If
+    '    End If
+    '
+    '     If (bln) Then
+    '        BotVars.UseD2GameConventions = IIf((D2GameConventions = "Y"), _
+    '            True, False)
+    '
+    '        BotVars.UseW3GameConventions = IIf((W3GameConventions = "Y"), _
+    '            True, False)
+    '
+    '        If (colUsersInChannel.Count) Then
+    '            For i = 1 To colUsersInChannel.Count
+    '                Index = _
+    '                    checkChannel(colUsersInChannel(i).Username)
+    '
+    '                colUsersInChannel(i).Username = _
+    '                    reverseUsername(colUsersInChannel(i).Username)
+    '
+    '                If (Index) Then
+    '                    lvChannel.ListItems(Index).text = _
+    '                        colUsersInChannel(i).Username
+    '                End If
+    '            Next i
+    '        End If
+    '
+    '        If (g_Online) Then
+    '            CurrentUsername = _
+    '                reverseUsername(CurrentUsername)
+    '
+    '            SetTitle CurrentUsername & ", online in channel " & _
+    '                gChannel.Current
+    '        End If
+    '
+    '        BotVars.UseGameConventions = True
+    '    End If
+    'Else
+    '    If (BotVars.UseGameConventions) Then
+    '        If ((StrReverse$(BotVars.Product) = "WAR3") Or _
+    '            (StrReverse$(BotVars.Product) = "W3XP")) Then
+    '
+    '            If (W3GameConventions <> "Y") Then
+    '                If (BotVars.UseW3GameConventions = True) Then
+    '                    bln = True
+    '                End If
+    '            End If
+    '        End If
+    '
+    '        If ((StrReverse$(BotVars.Product) = "D2DV") Or _
+    '            (StrReverse$(BotVars.Product) = "D2XP")) Then
+    '
+    '            If (D2GameConventions <> "Y") Then
+    '                If (BotVars.UseD2GameConventions = True) Then
+    '                    bln = True
+    '                End If
+    '            End If
+    '        End If
+    '
+    '        If (bln) Then
+    '            With BotVars
+    '                .UseGameConventions = False
+    '
+    '                .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
+    '                    True, False)
+    '
+    '                .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
+    '                    True, False)
+    '            End With
+    '
+    '            If (colUsersInChannel.Count) Then
+    '                For i = 1 To colUsersInChannel.Count
+    '                    Index = _
+    '                        checkChannel(colUsersInChannel(i).Username)
+    '
+    '                    colUsersInChannel(i).Username = _
+    '                        convertUsername(colUsersInChannel(i).Username)
+    '
+    '                    If (Index) Then
+    '                        lvChannel.ListItems(Index).text = _
+    '                            colUsersInChannel(i).Username
+    '                    End If
+    '                Next i
+    '            End If
+    '
+    '            If (g_Online) Then
+    '                CurrentUsername = _
+    '                    convertUsername(CurrentUsername)
+    '
+    '                SetTitle CurrentUsername & ", online in channel " & _
+    '                    gChannel.Current
+    '            End If
+    '        End If
+    '    End If
+    'End If
     
     s = ReadCFG(OT, "JoinLeaves")
     If s = "Y" Then JoinMessagesOff = False Else JoinMessagesOff = True
@@ -6621,17 +6897,17 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         End If
         
         If ReconnectTimerID > 0 Then
-            KillTimer Me.hWnd, ReconnectTimerID
+            KillTimer 0, ReconnectTimerID
             ReconnectTimerID = 0
         End If
         
         If ExReconnectTimerID > 0 Then
-            KillTimer Me.hWnd, ExReconnectTimerID
+            KillTimer 0, ExReconnectTimerID
             ExReconnectTimerID = 0
         End If
         
         If SCReloadTimerID > 0 Then
-            KillTimer Me.hWnd, SCReloadTimerID
+            KillTimer 0, SCReloadTimerID
             SCReloadTimerID = 0
         End If
         

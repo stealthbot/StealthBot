@@ -128,7 +128,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         Call Event_UserTalk(Username, UserFlags, s, UserPing)
 
                     Case ID_BROADCAST
-                        Call Event_ServerInfo("BROADCAST from " & Username & ": " & s)
+                        Call Event_ServerInfo(Username, "BROADCAST from " & Username & ": " & s)
                     
                     Case ID_CHANNEL
                         Call Event_JoinedChannel(s, UserFlags)
@@ -143,7 +143,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         'Call Event_ServerError(S)
                         
                     Case ID_INFO
-                        Call Event_ServerInfo(s)
+                        'MsgBox Username & ":" & UserFlags & ":" & UserPing
+                    
+                        Call Event_ServerInfo(Username, s)
                         
                     Case ID_ERROR
                         Call Event_ServerError(s)
@@ -232,7 +234,8 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         ' WTF?
                         frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Invalid response to 0x3A!"
                         frmChat.AddChat RTBColors.ErrorMessageText, "Status code: " & l
-                        frmChat.AddChat RTBColors.ErrorMessageText, "Packet dump: " & vbCrLf & DebugOutput(PacketData)
+                        frmChat.AddChat RTBColors.ErrorMessageText, "Packet dump: " & vbCrLf & _
+                            DebugOutput(PacketData)
                         Call frmChat.DoDisconnect
                         
                 End Select

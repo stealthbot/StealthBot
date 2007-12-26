@@ -521,17 +521,17 @@ Public Function command(ByVal Username As String, ByVal Message As String, ByVal
     
     ' backwards compatible (may be removed in future!)
     If (command = False) Then
-        Dim tmpMsg As String ' ...
+        Dim tmpmsg As String ' ...
         
         ' store local copy of message
-        tmpMsg = Message
+        tmpmsg = Message
     
         ' manipulate message for deprecated
         ' calling format
         If (InBot) Then
-            tmpMsg = "/" & tmpMsg
+            tmpmsg = "/" & tmpmsg
         Else
-            tmpMsg = BotVars.Trigger & tmpMsg
+            tmpmsg = BotVars.Trigger & tmpmsg
         End If
         
         ' execute command
@@ -872,11 +872,11 @@ End Function
 '// GETNAMEBYPOSITION
 '// Returns the name of the person at position X in the channel list.
 '// Positions are 1-based. Returns an empty string if the user isn't present
-Public Function GetNameByPosition(ByVal x As Integer) As String
+Public Function GetNameByPosition(ByVal X As Integer) As String
     
     With frmChat.lvChannel.ListItems
-        If x > 0 And x <= .Count Then
-            GetNameByPosition = .Item(x).text
+        If X > 0 And X <= .Count Then
+            GetNameByPosition = .Item(X).text
         Else
             GetNameByPosition = ""
         End If
@@ -1160,8 +1160,8 @@ Public Sub GetWinCursorPos(ByRef lCursorX As Long, ByRef lCursorY As Long)
     
     GetCursorPos PAPI
     
-    lCursorX = PAPI.x
-    lCursorY = PAPI.y
+    lCursorX = PAPI.X
+    lCursorY = PAPI.Y
 End Sub
 
 
@@ -1487,7 +1487,7 @@ Public Function CreateForm(ByVal strPrefix As String, ByVal strName As String) A
     Else
         Dim frmUI As New frmScriptUI
         frmUI.FillPrefixName strPrefix, strName
-        Load frmUI
+        load frmUI
         Call obScriptForms.Add(strPrefix & "|" & strName, frmUI)
         CreateForm = True
     End If
@@ -1559,11 +1559,11 @@ End Sub
 
 Private Sub Class_Terminate()
     'Go through and destroy all the Forms the user has created
-    Dim x As Integer
-    For x = 0 To obScriptForms.Count
+    Dim X As Integer
+    For X = 0 To obScriptForms.Count
         Unload obScriptForms.Item(0)
         Call obScriptForms.Remove(0)
-    Next x
+    Next X
     Set obScriptForms = Nothing
 End Sub
 

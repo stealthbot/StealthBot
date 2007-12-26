@@ -4,7 +4,7 @@ Begin VB.Form frmDBManager
    AutoRedraw      =   -1  'True
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Database Manager"
-   ClientHeight    =   5895
+   ClientHeight    =   5925
    ClientLeft      =   45
    ClientTop       =   735
    ClientWidth     =   6735
@@ -20,9 +20,11 @@ Begin VB.Form frmDBManager
    LinkTopic       =   "frmDBManager"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   5895
+   ScaleHeight     =   5925
    ScaleWidth      =   6735
    StartUpPosition =   1  'CenterOwner
+   WhatsThisButton =   -1  'True
+   WhatsThisHelp   =   -1  'True
    Begin MSComctlLib.ImageList icons 
       Left            =   4080
       Top             =   4080
@@ -51,31 +53,12 @@ Begin VB.Form frmDBManager
    End
    Begin VB.Frame frmDatabase 
       Caption         =   "Database"
-      Height          =   4920
+      Enabled         =   0   'False
+      Height          =   4950
       Left            =   3600
       TabIndex        =   14
       Top             =   487
       Width           =   3025
-      Begin VB.CommandButton cmdSave 
-         Caption         =   "Save"
-         Enabled         =   0   'False
-         Height          =   255
-         Index           =   1
-         Left            =   1930
-         TabIndex        =   10
-         Top             =   4530
-         Width           =   855
-      End
-      Begin VB.CommandButton cmdCancel 
-         Caption         =   "Delete"
-         Enabled         =   0   'False
-         Height          =   255
-         Index           =   1
-         Left            =   1080
-         TabIndex        =   9
-         Top             =   4530
-         Width           =   855
-      End
       Begin VB.ListBox lstGroups 
          Enabled         =   0   'False
          Height          =   3180
@@ -105,6 +88,26 @@ Begin VB.Form frmDBManager
          TabIndex        =   7
          Top             =   600
          Width           =   1215
+      End
+      Begin VB.CommandButton cmdSave 
+         Caption         =   "Save"
+         Enabled         =   0   'False
+         Height          =   280
+         Index           =   1
+         Left            =   1930
+         TabIndex        =   10
+         Top             =   4545
+         Width           =   855
+      End
+      Begin VB.CommandButton cmdCancel 
+         Caption         =   "Delete"
+         Enabled         =   0   'False
+         Height          =   280
+         Index           =   1
+         Left            =   1080
+         TabIndex        =   9
+         Top             =   4545
+         Width           =   855
       End
       Begin VB.Label lblRank 
          Caption         =   "Rank (1 - 200):"
@@ -139,7 +142,7 @@ Begin VB.Form frmDBManager
       Height          =   375
       Left            =   1800
       TabIndex        =   2
-      Top             =   5016
+      Top             =   5046
       Width           =   1695
    End
    Begin VB.CommandButton btnCreateUser 
@@ -147,7 +150,7 @@ Begin VB.Form frmDBManager
       Height          =   375
       Left            =   120
       TabIndex        =   1
-      Top             =   5016
+      Top             =   5046
       Width           =   1695
    End
    Begin MSComctlLib.TabStrip tbsTabs 
@@ -181,27 +184,27 @@ Begin VB.Form frmDBManager
    End
    Begin VB.CommandButton cmdSave 
       Caption         =   "Apply and Cl&ose"
-      Height          =   255
+      Height          =   300
       Index           =   0
       Left            =   5280
       TabIndex        =   4
-      Top             =   5520
+      Top             =   5540
       Width           =   1335
    End
    Begin VB.CommandButton cmdCancel 
       Caption         =   "&Cancel"
-      Height          =   255
+      Height          =   300
       Index           =   0
       Left            =   4560
       TabIndex        =   3
-      Top             =   5520
+      Top             =   5540
       Width           =   735
    End
    Begin MSComctlLib.TreeView trvUsers 
       Height          =   4350
       Left            =   120
       TabIndex        =   0
-      Top             =   578
+      Top             =   608
       Width           =   3375
       _ExtentX        =   5953
       _ExtentY        =   7673
@@ -567,7 +570,10 @@ Private Sub tbsTabs_Click()
         Call trvUsers.Refresh
     End If
     
-    frmDatabase.Caption = "Database"
+    With frmDatabase
+        .Caption = "Database"
+        .Enabled = False
+    End With
     
     lblRank.Enabled = False
     txtRank.Enabled = False
@@ -609,7 +615,10 @@ Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
         tmp = GetAccess(trvUsers.SelectedItem.text)
 
         If (Node.Index = 1) Then
-            frmDatabase.Caption = "Database"
+            With frmDatabase
+                .Caption = "Database"
+                .Enabled = False
+            End With
             
             lblRank.Enabled = False
             txtRank.Enabled = False
@@ -622,6 +631,8 @@ Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
             
             cmdCancel(1).Enabled = False
         Else
+            frmDatabase.Enabled = True
+        
             If (tmp.Type = "USER") Then
                 frmDatabase.Caption = "User: " & _
                     tmp.Username
@@ -827,6 +838,14 @@ ERROR_HANDLER:
         Nothing
     
     Exit Sub
+End Sub
+
+Private Sub trvUsers_KeyUp(KeyCode As Integer, Shift As Integer)
+    If (KeyCode = vbKeyDelete) Then
+        Call DB_remove(trvUsers.SelectedItem.text)
+
+        Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+    End If
 End Sub
 
 Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
@@ -1052,7 +1071,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: DB_remove() has encountered an error while " & _
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Error: DB_remove() has encountered an error while " & _
         "removing a database entry.")
         
     DB_remove = False

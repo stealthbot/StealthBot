@@ -40,7 +40,7 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
         '// PluginSystem.dat exists?
         Path = GetFilePath("PluginSystem.dat")
         If LenB(Dir$(Path)) = 0 Then
-            AddChat vbRed, "Cannot find PluginSystem.dat. It must exist in order to load plugins!"
+            AddChat RTBColors.ErrorMessageText, "Cannot find PluginSystem.dat. It must exist in order to load plugins!"
             Exit Sub
         End If
     Else
@@ -48,7 +48,7 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
         '// script.txt exists?
         Path = GetFilePath("script.txt")
         If LenB(Dir$(Path)) = 0 Then
-            AddChat vbRed, "No script.txt file is present. It must exist, if only to #include other files!"
+            AddChat RTBColors.ErrorMessageText, "No script.txt file is present. It must exist, if only to #include other files!"
             Exit Sub
         End If
     End If

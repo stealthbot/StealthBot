@@ -146,8 +146,9 @@ Public Dii As Boolean
 Public PPL As Boolean
 Public PPLRespondTo As String
 Public MyFlags As Long
-Public Unsquelching As Boolean
+Public unsquelching As Boolean
 Public BanCount As Integer
+Public PassedClanMotdCheck As Boolean
 
 Public LastAdd As Byte
 Public WatchUser As String

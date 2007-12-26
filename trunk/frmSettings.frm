@@ -15,6 +15,7 @@ Begin VB.Form frmSettings
    ScaleHeight     =   5310
    ScaleWidth      =   9735
    StartUpPosition =   1  'CenterOwner
+   WhatsThisHelp   =   -1  'True
    Begin VB.ComboBox cboProfile 
       Appearance      =   0  'Flat
       BackColor       =   &H00993300&
@@ -152,9 +153,48 @@ Begin VB.Form frmSettings
       Top             =   0
       Width           =   6615
       Begin VB.CheckBox chkGameConventions 
-         Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
-         Caption         =   "Use Game Username Conventions"
+         Caption         =   "WarCraft III"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   2
+         Left            =   3840
+         TabIndex        =   192
+         Top             =   4270
+         Width           =   2175
+      End
+      Begin VB.CheckBox chkGameConventions 
+         BackColor       =   &H00000000&
+         Caption         =   "Diablo II"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Index           =   1
+         Left            =   3840
+         TabIndex        =   191
+         Top             =   4015
+         Width           =   2175
+      End
+      Begin VB.CheckBox chkGameConventions 
+         BackColor       =   &H00000000&
+         Caption         =   "Use Game-Specific Username Conventions"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -166,10 +206,11 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Left            =   360
+         Index           =   0
+         Left            =   3480
          TabIndex        =   190
          ToolTipText     =   "Disable the use of legacy naming conventions for chat interface and command usage"
-         Top             =   3840
+         Top             =   3560
          Width           =   2535
       End
       Begin VB.CheckBox chkDisableSuffix 
@@ -333,7 +374,7 @@ Begin VB.Form frmSettings
          Left            =   3480
          MaxLength       =   25
          TabIndex        =   87
-         Top             =   3120
+         Top             =   3140
          Width           =   2535
       End
       Begin VB.CheckBox chkMinimizeOnStartup 
@@ -496,7 +537,7 @@ Begin VB.Form frmSettings
          Index           =   10
          Left            =   3480
          TabIndex        =   171
-         Top             =   2880
+         Top             =   2910
          Width           =   2415
       End
       Begin VB.Line Line1 
@@ -505,7 +546,7 @@ Begin VB.Form frmSettings
          X1              =   3120
          X2              =   3120
          Y1              =   840
-         Y2              =   4200
+         Y2              =   4560
       End
       Begin VB.Line Line1 
          BorderColor     =   &H00FFFFFF&
@@ -3857,6 +3898,18 @@ Private Enum enuConfigSection
     secOther = 1
 End Enum
 
+Private Sub chkGameConventions_Click(Index As Integer)
+    If (Index = 0) Then
+        If (chkGameConventions(Index).Value = 0) Then
+            chkGameConventions(1).Enabled = False
+            chkGameConventions(2).Enabled = False
+        Else
+            chkGameConventions(1).Enabled = True
+            chkGameConventions(2).Enabled = True
+        End If
+    End If
+End Sub
+
 Private Sub Form_Load()
     Me.Icon = frmChat.Icon
     
@@ -4363,7 +4416,9 @@ Private Function SaveSettings() As Boolean
     WINI "DoNotUseDirectFList", Cv(chkDoNotUsePacketFList.Value), secMain
     WINI "URLDetect", Cv(chkURLDetect.Value), secMain
     WINI "ShowOfflineFriends", Cv(chkShowOffline.Value), secMain
-    WINI "UseGameConventions", Cv(chkGameConventions.Value), secOther
+    WINI "UseGameConventions", Cv(chkGameConventions(0).Value), secOther
+    WINI "UseD2GameConventions", Cv(chkGameConventions(1).Value), secOther
+    WINI "UseW3GameConventions", Cv(chkGameConventions(2).Value), secOther
     WINI "LogDBActions", Cv(chkLogDBActions.Value), secMain
     WINI "LogCommands", Cv(chkLogAllCommands.Value), secMain
     
@@ -4842,7 +4897,12 @@ Private Sub InitGenMisc()
     chkConnectOnStartup.Value = YesToTrue(ReadCFG(MN, "ConnectOnStartup"), 0)
     chkMinimizeOnStartup.Value = YesToTrue(ReadCFG(MN, "MinimizeOnStartup"), 0)
     chkShowOffline.Value = YesToTrue(ReadCFG(MN, "ShowOfflineFriends"), 0)
-    chkGameConventions.Value = YesToTrue(ReadCFG(OT, "UseGameConventions"), 0)
+    
+    chkGameConventions(0).Value = YesToTrue(ReadCFG(OT, "UseGameConventions"), 1)
+    Call chkGameConventions_Click(0)
+    
+    chkGameConventions(1).Value = YesToTrue(ReadCFG(OT, "UseD2GameConventions"), 0)
+    chkGameConventions(2).Value = YesToTrue(ReadCFG(OT, "UseW3GameConventions"), 1)
     
     chkURLDetect.Value = YesToTrue(ReadCFG(MN, "URLDetect"), 1)
     chkDoNotUsePacketFList.Value = YesToTrue(ReadCFG(MN, "DoNotUseDirectFList"), 0)

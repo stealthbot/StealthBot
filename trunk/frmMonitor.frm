@@ -408,7 +408,7 @@ Private Sub Form_Load()
     Dim users As Collection, X As Integer
     With lvMonitor
         .SmallIcons = frmChat.imlIcons
-        .Icons = frmChat.imlIcons
+        .icons = frmChat.imlIcons
         .View = lvwReport
         .ListItems.Clear
         Set users = monConn.getList
@@ -433,7 +433,7 @@ Private Sub cmdRem_CLick()
     
     If Not (lvMonitor.SelectedItem Is Nothing) Then
         Call monConn.RemoveUser(lvMonitor.SelectedItem.text)
-        lvMonitor.ListItems.Remove (lvMonitor.SelectedItem.index)
+        lvMonitor.ListItems.Remove (lvMonitor.SelectedItem.Index)
     End If
 End Sub
 
@@ -444,7 +444,7 @@ Public Function RemoveUser(strUser As String) As Boolean
   Set usrItem = lvMonitor.FindItem(strUser)
   If (usrItem Is Nothing) Then Exit Function
   Call monConn.RemoveUser(usrItem.text)
-  lvMonitor.ListItems.Remove usrItem.index
+  lvMonitor.ListItems.Remove usrItem.Index
   RemoveUser = True
 End Function
 
@@ -586,7 +586,7 @@ Private Sub UpdateList(user As clsFriend)
             StatusOnline user.Username
             X.Icon = 1
         End If
-        With lvMonitor.ListItems(X.index)
+        With lvMonitor.ListItems(X.Index)
             On Error Resume Next
             .SmallIcon = Holder
             .ListSubItems.Clear
