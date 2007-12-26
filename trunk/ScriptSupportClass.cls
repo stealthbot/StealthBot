@@ -95,6 +95,8 @@ Attribute VB_Exposed = False
 ' *     - Added six functions to work with the new Plugins menu
 ' *         AddMenuItem(), SetMenuItemCheck(), GetMenuItemCheck(), ToggleMenuItemCheck(),
 ' *         SetMenuItemEnabled(), and ReloadPluginMenus()
+' *         For a more detailed explanation, see the function comments below, or visit:
+' *            http://www.stealthbot.net/board/index.php?showtopic=29141
 ' *     - Added new functions for creating UI forms
 ' *         CreateForm(), DestroyForm(), AddFormObject(), GetUIObject()
 ' *         For a detailed explination of each event and examples visit:
