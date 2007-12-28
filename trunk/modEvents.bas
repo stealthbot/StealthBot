@@ -545,6 +545,14 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     
     If (Caching) Then ' for .cs and .cb commands
         Cache Message, 1
+        
+        With frmChat.quLower
+            .Enabled = False
+            
+            .Interval = .Interval
+            
+            .Enabled = True
+        End With
     End If
     
     If (InStr(1, Message, Space(1), vbBinaryCompare) <> 0) Then

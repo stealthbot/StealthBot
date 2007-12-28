@@ -92,6 +92,7 @@ Form=frmGameSelection.frm
 Form=frmCommands.frm
 Class=clsDatabase; clsDatabase.cls
 Module=modDatabase; modDatabase.bas
+Form=frmScriptSubmission.frm
 Startup="frmChat"
 HelpFile=""
 Title="StealthBot"
