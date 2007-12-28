@@ -6484,51 +6484,59 @@ Public Sub checkUsers()
             If ((colUsersInChannel(i).Flags And USER_CHANNELOP&) <> _
                  USER_CHANNELOP&) Then
                  
-                ' ...
-                tmp = GetShitlist(colUsersInChannel.Item(i).Username)
-               
-                ' ...
-                If (Len(tmp)) Then
-                    ' ...
-                    Call AddQ("/ban " & tmp)
-                Else
-                    Dim j As Integer ' ...
-        
-                    ' ...
-                    If ((doCheck) And (BotVars.BanEvasion)) Then
-                        For j = 0 To UBound(gBans)
-                            If (StrComp(colUsersInChannel.Item(i).Username, _
-                                    gBans(j).Username, vbTextCompare) = 0) Then
-                                
-                                Call Ban(colUsersInChannel.Item(i).Username & _
-                                    " Ban Evasion", (AutoModSafelistValue - 1))
-                                
-                                ' ...
-                                doCheck = False
+                If (GetSafelist(colUsersInChannel.Item(i).Username) = False) Then
+                    If (Protect) Then
+                        ' ...
+                        Call Ban(colUsersInChannel.Item(i).Username & _
+                            Space(1) & ProtectMsg, (AutoModSafelistValue - 1))
+                    Else
+                        ' ...
+                        tmp = GetShitlist(colUsersInChannel.Item(i).Username)
+                       
+                        ' ...
+                        If (tmp <> vbNullString) Then
+                            ' ...
+                            Call AddQ("/ban " & reverseUsername(tmp))
+                        Else
+                            Dim j As Integer ' ...
+                
+                            ' ...
+                            If ((doCheck) And (BotVars.BanEvasion)) Then
+                                For j = 0 To UBound(gBans)
+                                    If (StrComp(colUsersInChannel.Item(i).Username, _
+                                            gBans(j).Username, vbTextCompare) = 0) Then
+                                        
+                                        Call Ban(colUsersInChannel.Item(i).Username & _
+                                            " Ban Evasion", (AutoModSafelistValue - 1))
+                                        
+                                        ' ...
+                                        doCheck = False
+                                    End If
+                                Next j
                             End If
-                        Next j
-                    End If
-                    
-                    ' ...
-                    If ((doCheck) And (BotVars.IPBans)) Then
-                        If ((colUsersInChannel.Item(i).Flags And USER_SQUELCHED) = _
-                             USER_SQUELCHED) Then
-                            
-                            Call Ban(colUsersInChannel.Item(i).Username & _
-                                " IPBanned.", (AutoModSafelistValue - 1))
                             
                             ' ...
-                            doCheck = False
+                            If ((doCheck) And (BotVars.IPBans)) Then
+                                If ((colUsersInChannel.Item(i).Flags And USER_SQUELCHED) = _
+                                     USER_SQUELCHED) Then
+                                    
+                                    Call Ban(colUsersInChannel.Item(i).Username & _
+                                        " IPBanned.", (AutoModSafelistValue - 1))
+                                    
+                                    ' ...
+                                    doCheck = False
+                                End If
+                            End If
                         End If
                     End If
                 End If
-                
-                ' ...
-                tmp = vbNullString
-                
-                ' ...
-                doCheck = True
             End If
+            
+            ' ...
+            tmp = vbNullString
+            
+            ' ...
+            doCheck = True
         Next i
     End If
 End Sub

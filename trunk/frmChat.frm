@@ -6134,6 +6134,10 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             Close #1
         End If
     End If
+    
+    If (g_Online) Then
+        Call checkUsers
+    End If
 End Sub
 
 'returns OK to Proceed
@@ -6322,12 +6326,12 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
                 If Asc(Mid$(strTemp, 2, 1)) = &HF Then
                     If Conv(Mid$(strTemp, 5, 4)) = ID_JOIN Then
                         fTemp = KillNull(Mid$(strTemp, 29))
-                        If StrComp(Flood, fTemp, vbBinaryCompare) <> 0 Then
+                        If StrComp(flood, fTemp, vbBinaryCompare) <> 0 Then
                             If Not GetSafelist(fTemp) Then
                                 If floodCap < 45 Then
                                     APISend "/ban " & fTemp
                                     floodCap = floodCap + 30
-                                    Flood = fTemp
+                                    flood = fTemp
                                     Exit Sub
                                 End If
                             End If
