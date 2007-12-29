@@ -84,6 +84,8 @@ Private m_bNoRTBAutomaticCopy           As Boolean
 Private m_bUseGameConventions           As Boolean
 Private m_bUseD2GameConventions         As Boolean
 Private m_bUseW3GameConventions         As Boolean
+Private m_sClan                         As String
+Private m_sGateway                      As String
 
 
 Public Property Get Username() As String
@@ -864,6 +866,30 @@ End Property
 Public Property Let UseW3GameConventions(ByVal bUseW3GameConventions As Boolean)
 
     m_bUseW3GameConventions = bUseW3GameConventions
+
+End Property
+
+Public Property Get Clan() As Boolean
+
+    Clan = m_sClan
+
+End Property
+
+Public Property Let Clan(ByVal sClan As String)
+
+    m_sClan = sClan
+
+End Property
+
+Public Property Get Gateway() As Boolean
+
+    Gateway = m_sGateway
+
+End Property
+
+Public Property Let Gateway(ByVal sGateway As String)
+
+    m_sGateway = sGateway
 
 End Property
 
