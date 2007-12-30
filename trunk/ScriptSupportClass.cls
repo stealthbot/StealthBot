@@ -1237,6 +1237,7 @@ Public Function GetSetting(ByVal strPrefix As String, ByVal strName As String)
         tmpValue = GetConfigEntry(strPrefix, Left(strName, Len(strName)) & strAppend, strPath)
         varValue = varValue & tmpValue
         If Len(tmpValue) = 0 Then
+            If Len(varValue) = 0 Then varValue = Empty
             GetSetting = varValue
             Exit Do
         End If
