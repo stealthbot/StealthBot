@@ -86,6 +86,7 @@ Begin VB.Form frmChat
       LabelWrap       =   -1  'True
       HideSelection   =   -1  'True
       HideColumnHeaders=   -1  'True
+      OLEDragMode     =   1
       HoverSelection  =   -1  'True
       _Version        =   393217
       SmallIcons      =   "imlIcons"
@@ -102,6 +103,7 @@ Begin VB.Form frmChat
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
+      OLEDragMode     =   1
       NumItems        =   2
       BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
          Object.Width           =   4057
@@ -828,9 +830,11 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
+      OLEDropMode     =   0
       TextRTF         =   $"frmChat.frx":6AC11
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -853,6 +857,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4022,8 +4027,7 @@ Private Sub mnuToggle_Click()
 End Sub
 
 Private Sub mnuUsers_Click()
-    'frmUserManager.Show
-    Call frmDBManager.Show(vbModal, Me)
+    frmDBManager.Show
 End Sub
 
 Private Sub cboSend_GotFocus()
@@ -4283,7 +4287,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 End If
                 
             Case KEY_DELETE
-                'Highlighted = False
+                strBuf = vbNullString
                 
             Case vbKeyTab
                 Dim prevStart As Long   ' ...
@@ -4324,16 +4328,17 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                             
                             strBuf = Mid$(.text, spaceIndex(0) + 1, _
                                 (.SelStart - spaceIndex(0)))
+                                
+                            ' ...
+                            MatchIndex = 1
+                        Else
+                            ' ...
+                            MatchIndex = (MatchIndex + 1)
                         End If
                         
-                        If (Len(strBuf)) Then
+                        If (strBuf <> vbNullString) Then
                             res = MatchClosest(strBuf, _
-                                IIf(MatchIndex, MatchIndex + 1, 1))
-                            
-                            ' try again from the top
-                            If (res = vbNullString) Then
-                                res = MatchClosest(strBuf, 1)
-                            End If
+                                IIf(MatchIndex, MatchIndex, 1))
                             
                             ' final check
                             If (res <> vbNullString) Then
@@ -6414,11 +6419,10 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     Dim lstView     As ListView
 
     Dim i           As Integer ' ...
-    Dim c           As Integer ' ...
-    Dim Exited      As Boolean ' ...
     Dim CurrentName As String  ' ...
     Dim atChar      As Integer ' ...
     Dim index       As Integer ' ...
+    Dim loops       As Integer ' ...
 
     i = InStr(1, toMatch, " ", vbBinaryCompare)
     
@@ -6426,7 +6430,61 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         toMatch = Mid$(toMatch, i + 1)
     End If
     
-    atChar = InStr(1, toMatch, "@")
+    Select Case (ListviewTabs.Tab)
+        Case 0:
+            Set lstView = lvChannel
+        Case 1:
+            Set lstView = lvFriendList
+        Case 2:
+            Set lstView = lvClanList
+    End Select
+    
+    With lstView.ListItems
+        If (.Count > 0) Then
+            Dim c As Integer ' ...
+            
+            If (startIndex > .Count) Then
+                index = 1
+            Else
+                index = startIndex
+            End If
+        
+            While (loops < 2)
+                For i = index To .Count 'for each user
+                    CurrentName = .Item(i).text
+                
+                    If (Len(CurrentName) >= Len(toMatch)) Then
+                        For c = 1 To Len(toMatch) 'for each letter in their name
+                            If (StrComp(Mid$(toMatch, c, 1), Mid$(CurrentName, c, 1), _
+                                vbTextCompare) <> 0) Then
+                                
+                                Exit For
+                            End If
+                        Next c
+                        
+                        If (c >= (Len(toMatch) + 1)) Then
+                            MatchClosest = .Item(i).text
+                            
+                            MatchIndex = i
+                            
+                            Exit Function
+                        End If
+                    End If
+                Next i
+                
+                ' ...
+                index = 1
+                
+                ' ...
+                loops = (loops + 1)
+            Wend
+            
+            ' ...
+            loops = 0
+        End If
+    End With
+    
+    atChar = InStr(1, toMatch, "@", vbBinaryCompare)
     
     If (atChar <> 0) Then
         Dim tmp      As String  ' ...
@@ -6455,83 +6513,51 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         If (Len(toMatch) >= (atChar + 1)) Then
             tmp = Mid$(toMatch, atChar + 1)
 
-            ' ...
-            For i = index To UBound(realms)
+            While (loops < 2)
                 ' ...
-                If (tmp = vbNullString) Then
-                    MatchClosest = Left$(toMatch, atChar) & _
-                        realms(i)
-                                
-                    MatchIndex = (i + 1)
-                    
-                    Exit Function
-                Else
+                For i = index To UBound(realms)
                     ' ...
                     If (Len(realms(i)) >= Len(tmp)) Then
                         ' ...
                         If (StrComp(Left$(realms(i), Len(tmp)), tmp, _
                             vbTextCompare) = 0) Then
+                            
+                            Dim j As Integer ' ...
                         
                             MatchClosest = Left$(toMatch, atChar) & _
                                 realms(i)
-                                
+                            
                             MatchIndex = (i + 1)
-                        
+                            
                             Exit Function
                         End If
                     End If
-                End If
-            Next i
+                Next i
+                
+                ' ...
+                index = 0
+                
+                ' ...
+                loops = (loops + 1)
+            Wend
+        Else
+            If (tmp = vbNullString) Then
+                ' ...
+                MatchClosest = Left$(toMatch, atChar) & _
+                    realms(index)
+                    
+                MatchIndex = (index + 1)
+                    
+                Exit Function
+            End If
         End If
     End If
     
-    Select Case (ListviewTabs.Tab)
-        Case 0:
-            Set lstView = lvChannel
-        Case 1:
-            Set lstView = lvFriendList
-        Case 2:
-            Set lstView = lvClanList
-    End Select
-    
-    With lstView.ListItems
-        If (.Count > 0) Then
-            toMatch = LCase$(toMatch)
-        
-            If (startIndex > .Count) Then
-                index = 0
-            Else
-                index = startIndex
-            End If
-        
-            For i = index To .Count 'for each user
-                CurrentName = LCase$(.Item(i).text)
-            
-                If (Len(CurrentName) >= Len(toMatch)) Then
-                    For c = 1 To Len(toMatch) 'for each letter in their name
-                        If (Asc(Mid$(toMatch, c, 1)) <> Asc(Mid$(CurrentName, c, 1))) Then
-                            Exited = True
-                            
-                            Exit For
-                        End If
-                    Next c
-                    
-                    If (Not (Exited)) Then '100% match so far
-                        MatchClosest = .Item(i).text
-                        
-                        MatchIndex = i
-
-                        Exit Function
-                    End If
-                End If
-                
-                ' reset var
-                Exited = False
-            Next i
-        End If
-    End With
-    
+    ' ...
     MatchClosest = vbNullString
+    
+    ' ...
+    MatchIndex = 1
 End Function
 
 Function GetChannelString() As String

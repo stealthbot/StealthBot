@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmDBManager 
    AutoRedraw      =   -1  'True
@@ -25,6 +26,14 @@ Begin VB.Form frmDBManager
    StartUpPosition =   1  'CenterOwner
    WhatsThisButton =   -1  'True
    WhatsThisHelp   =   -1  'True
+   Begin MSComDlg.CommonDialog CommonDialog 
+      Left            =   2880
+      Top             =   4320
+      _ExtentX        =   847
+      _ExtentY        =   847
+      _Version        =   393216
+      Filter          =   "*.txt"
+   End
    Begin VB.Frame frmDatabase 
       Caption         =   "Eric[nK]"
       Height          =   4950
@@ -246,7 +255,9 @@ Begin VB.Form frmDBManager
       Caption         =   "Create Group"
       Height          =   375
       Left            =   1800
+      Picture         =   "frmDBManager.frx":0FF6
       TabIndex        =   2
+      ToolTipText     =   "Create Group"
       Top             =   5047
       Width           =   1695
    End
@@ -254,7 +265,10 @@ Begin VB.Form frmDBManager
       Caption         =   "Create User"
       Height          =   375
       Left            =   120
+      MaskColor       =   &H00000000&
+      Picture         =   "frmDBManager.frx":145E
       TabIndex        =   1
+      ToolTipText     =   "Create User"
       Top             =   5047
       Width           =   1695
    End
@@ -610,6 +624,10 @@ Private Sub mnuDelete_Click()
     End If
 End Sub
 
+Private Sub mnuOpenDatabase_Click()
+    Call CommonDialog.ShowOpen
+End Sub
+
 Private Sub mnuRename_Click()
     Call trvUsers.StartLabelEdit
 End Sub
@@ -733,7 +751,7 @@ Private Sub tbsTabs_Click()
                 End If
             Next i
             
-            btnCreateGroup.Caption = "Create Group"
+            'btnCreateGroup.Caption = "Create Group"
             
             btnCreateUser.Enabled = True
             
@@ -745,7 +763,7 @@ Private Sub tbsTabs_Click()
                 End If
             Next i
             
-            btnCreateGroup.Caption = "Create Clan"
+            'btnCreateGroup.Caption = "Create Clan"
             
             btnCreateUser.Enabled = False
             
@@ -757,7 +775,7 @@ Private Sub tbsTabs_Click()
                 End If
             Next i
             
-            btnCreateGroup.Caption = "Create Game"
+            'btnCreateGroup.Caption = "Create Game"
             
             btnCreateUser.Enabled = False
     End Select
@@ -954,6 +972,8 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
         Dim i        As Integer ' ...
         Dim found    As Integer ' ...
         
+        MsgBox "!"
+        
         If (Data.GetFormat(vbCFText)) Then
             strKey = Data.GetData(vbCFText)
             
@@ -1001,6 +1021,8 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
         Set trvUsers.DropHighlight = _
             Nothing
     ElseIf (Not (trvUsers.DropHighlight Is Nothing)) Then
+        MsgBox "!!"
+    
         If (Data.Files.Count) Then
             MsgBox Data.Files(1)
         End If
@@ -1009,9 +1031,15 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
         Set trvUsers.DropHighlight = _
             Nothing
     Else
-        If (Data.Files.Count) Then
-            MsgBox Data.Files(1)
+        Call Data.GetFormat(vbCFText)
+    
+        If (Not (Data.Files Is Nothing)) Then
+            If (Data.Files.Count) Then
+                MsgBox Data.Files(1)
+            End If
         End If
+        
+        MsgBox "!"
     End If
     
     Exit Sub

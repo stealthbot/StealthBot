@@ -58,9 +58,19 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     
     ' create console access response structure
     With ConsoleAccessResponse
-        .access = 201
+        .Access = 201
         .Flags = "A"
     End With
+    
+    m_Username = Username
+    m_Console = InBot
+    m_Whisper = WhisperedIn
+
+    If (m_Console) Then
+        m_dbAccess = ConsoleAccessResponse
+    Else
+        m_dbAccess = GetCumulativeAccess(Username, "USER")
+    End If
 
     ' store local copy of message
     tmpmsg = Message
@@ -1654,7 +1664,7 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
         End If
         
         ' ...
-        If (dbAccess.access <= 100) Then
+        If (dbAccess.Access <= 100) Then
             If ((GetSafelist(tmpAcc)) Or (GetSafelist(msgData))) Then
                 ' return message
                 cmdRet(0) = "Error: That user is safelisted."
@@ -1667,8 +1677,8 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
         gAcc = GetAccess(msgData)
         
         ' ...
-        If ((gAcc.access >= dbAccess.access) Or _
-            ((InStr(gAcc.Flags, "A") > 0) And (dbAccess.access <= 100))) Then
+        If ((gAcc.Access >= dbAccess.Access) Or _
+            ((InStr(gAcc.Flags, "A") > 0) And (dbAccess.Access <= 100))) Then
 
             tmpBuf = "Error: You do not have enough access to do that."
         Else
@@ -2175,16 +2185,16 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     u = msgData
     
     If (Len(u) > 0) Then
-        If ((GetAccess(u, dbType).access = -1) And _
+        If ((GetAccess(u, dbType).Access = -1) And _
             (GetAccess(u, dbType).Flags = vbNullString)) Then
             
             tmpBuf = "User not found."
-        ElseIf (GetAccess(u, dbType).access >= dbAccess.access) Then
+        ElseIf (GetAccess(u, dbType).Access >= dbAccess.Access) Then
             tmpBuf = "That user has higher or equal access."
         ElseIf ((InStr(1, GetAccess(u, dbType).Flags, "L") <> 0) And _
                 (Not (InBot)) And _
                 (InStr(1, GetAccess(Username, dbType).Flags, "A") = 0) And _
-                (GetAccess(Username, dbType).access <= 99)) Then
+                (GetAccess(Username, dbType).Access <= 99)) Then
             
                 tmpBuf = "Error: That user is Locked."
         Else
@@ -3151,14 +3161,14 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
         If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
             tmpBuf(0) = "Error: The specified username is invalid."
         Else
-            Dim msg As String ' ...
+            Dim Msg As String ' ...
             
             ' ...
-            msg = Mid$(msgData, Index + 1)
+            Msg = Mid$(msgData, Index + 1)
         
             ' ...
             Call OnAdd(Username, dbAccess, user & " +B --type USER --banmsg " & _
-                msg, True, tmpBuf())
+                Msg, True, tmpBuf())
         End If
     Else
         ' ...
@@ -3528,9 +3538,9 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 Call WildCardBan(u, banmsg, 1)
             Else
                 If (banmsg <> vbNullString) Then
-                    Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), dbAccess.access)
+                    Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), dbAccess.Access)
                 Else
-                    Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), dbAccess.access)
+                    Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), dbAccess.Access)
                 End If
             End If
             
@@ -3618,14 +3628,14 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
             End If
             
             If (InStr(1, u, "*", vbTextCompare) > 0) Then
-                If (dbAccess.access > 99) Then
+                If (dbAccess.Access > 99) Then
                     Call WildCardBan(u, banmsg, 0)
                 Else
                     Call WildCardBan(u, banmsg, 0)
                 End If
             Else
                 Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), _
-                    dbAccess.access, 1)
+                    dbAccess.Access, 1)
                 
                 If (Len(Y) > 1) Then
                     tmpBuf = Y
@@ -3662,8 +3672,8 @@ Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim tmpSend As String ' ...
     
     If (Len(msgData)) Then
-        If (dbAccess.access >= GetAccessINIValue("say70", 70)) Then
-            If (dbAccess.access >= GetAccessINIValue("say90", 90)) Then
+        If (dbAccess.Access >= GetAccessINIValue("say70", 70)) Then
+            If (dbAccess.Access >= GetAccessINIValue("say90", 90)) Then
                 tmpSend = msgData
             Else
                 tmpSend = Replace(msgData, "/", "")
@@ -3688,8 +3698,8 @@ Private Function OnExpand(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Dim tmpSend As String
 
     If (Len(msgData)) Then
-        If (dbAccess.access >= GetAccessINIValue("say70", 70)) Then
-            If (dbAccess.access >= GetAccessINIValue("say90", 90)) Then
+        If (dbAccess.Access >= GetAccessINIValue("say70", 70)) Then
+            If (dbAccess.Access >= GetAccessINIValue("say90", 90)) Then
                 tmpSend = msgData
             Else
                 tmpSend = Replace(msgData, "/", "")
@@ -3768,8 +3778,8 @@ Private Function OnShout(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Dim tmpSend As String
 
     If (Len(msgData)) Then
-        If (dbAccess.access > 69) Then
-            If (dbAccess.access > 89) Then
+        If (dbAccess.Access > 69) Then
+            If (dbAccess.Access > 89) Then
                 tmpSend = msgData
             Else
                 tmpSend = Replace(msgData, "/", vbNullString, 1)
@@ -4114,7 +4124,7 @@ Private Function OnIgnore(ByVal Username As String, ByRef dbAccess As udtGetAcce
     u = msgData
     
     If (Len(u)) Then
-        If ((GetAccess(u).access >= dbAccess.access) Or _
+        If ((GetAccess(u).Access >= dbAccess.Access) Or _
             (InStr(GetAccess(u).Flags, "A"))) Then
             
             tmpBuf = "That user has equal or higher access."
@@ -4278,7 +4288,7 @@ End Function ' end function OnCheckMail
 Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim msg    As udtMail
+    Dim Msg    As udtMail
     
     Dim tmpBuf As String ' temporary output buffer
             
@@ -4287,10 +4297,10 @@ Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAcc
     End If
     
     If (GetMailCount(Username) > 0) Then
-        Call GetMailMessage(Username, msg)
+        Call GetMailMessage(Username, Msg)
         
-        If (Len(RTrim(msg.To)) > 0) Then
-            tmpBuf = "Message from " & RTrim(msg.From) & ": " & RTrim(msg.Message)
+        If (Len(RTrim(Msg.To)) > 0) Then
+            tmpBuf = "Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
         End If
     Else
         tmpBuf = "You do not currently have any messages " & _
@@ -4313,15 +4323,15 @@ Private Function OnWhoAmI(ByVal Username As String, ByRef dbAccess As udtGetAcce
         If (g_Online) Then
             Call AddQ("/whoami")
         End If
-    ElseIf (dbAccess.access = 1000) Then
+    ElseIf (dbAccess.Access = 1000) Then
         tmpBuf = "You are the bot owner, " & Username & "."
     Else
-        If (dbAccess.access > 0) Then
+        If (dbAccess.Access > 0) Then
             If (dbAccess.Flags <> vbNullString) Then
-                tmpBuf = dbAccess.Username & " has access " & dbAccess.access & _
+                tmpBuf = dbAccess.Username & " has access " & dbAccess.Access & _
                     " and flags " & dbAccess.Flags & "."
             Else
-                tmpBuf = dbAccess.Username & " has access " & dbAccess.access & "."
+                tmpBuf = dbAccess.Username & " has access " & dbAccess.Access & "."
             End If
         Else
             If (dbAccess.Flags <> vbNullString) Then
@@ -4521,7 +4531,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 ' ...
                                 tmp = GetAccess(Splt(j), "GROUP")
                             
-                                If (dbAccess.access < tmp.access) Then
+                                If (dbAccess.Access < tmp.Access) Then
                                     cmdRet(0) = "Error: You do not have sufficient access to " & _
                                         "add a member to the specified group."
                                         
@@ -4591,12 +4601,12 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             tmpBuf = "Error: You have specified an invalid rank."
             
         ' is rank higher than user's rank?
-        ElseIf ((rank) And (rank >= dbAccess.access)) Then
+        ElseIf ((rank) And (rank >= dbAccess.Access)) Then
             tmpBuf = "Error: You do not have sufficient access to assign an entry with the " & _
                 "specified rank."
             
         ' can we modify specified user?
-        ElseIf ((gAcc.access) And (gAcc.access >= dbAccess.access)) Then
+        ElseIf ((gAcc.Access) And (gAcc.Access >= dbAccess.Access)) Then
             tmpBuf = "Error: You do not have sufficient access to modify the specified entry."
         Else
             ' did we specify flags?
@@ -4609,27 +4619,27 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     If ((currentCharacter <> "+") And (currentCharacter <> "-")) Then
                         Select Case (currentCharacter)
                             Case "A" ' administrator
-                                If (dbAccess.access <= 100) Then
+                                If (dbAccess.Access <= 100) Then
                                     Exit For
                                 End If
                                 
                             Case "B" ' banned
-                                If (dbAccess.access < 70) Then
+                                If (dbAccess.Access < 70) Then
                                     Exit For
                                 End If
                                 
                             Case "D" ' designated
-                                If (dbAccess.access < 100) Then
+                                If (dbAccess.Access < 100) Then
                                     Exit For
                                 End If
                             
                             Case "L" ' locked
-                                If (dbAccess.access < 70) Then
+                                If (dbAccess.Access < 70) Then
                                     Exit For
                                 End If
                             
                             Case "S" ' safelisted
-                                If (dbAccess.access < 70) Then
+                                If (dbAccess.Access < 70) Then
                                     Exit For
                                 End If
                         End Select
@@ -4725,7 +4735,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         End If
                         
                         ' does this entry have any remaining access?
-                        If ((gAcc.access = 0) And (gAcc.Flags = vbNullString) And _
+                        If ((gAcc.Access = 0) And (gAcc.Flags = vbNullString) And _
                             ((sGrp = vbNullString) Or (sGrp = "%"))) Then
                             
                             Dim res As Boolean ' ...
@@ -4753,7 +4763,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         gAcc.Flags = vbNullString
                         
                         ' set rank to specified
-                        gAcc.access = rank
+                        gAcc.Access = rank
                     
                         ' set user flags & check for duplicate entries
                         For i = 1 To Len(Flags)
@@ -4787,7 +4797,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 gAcc.Flags = vbNullString
             
                 ' set rank to specified
-                gAcc.access = rank
+                gAcc.Access = rank
             End If
 
             ' grab path to database
@@ -4801,7 +4811,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     ' modify database entry
                     With DB(i)
                         .Username = user
-                        .access = gAcc.access
+                        .Access = gAcc.Access
                         .Flags = gAcc.Flags
                         .ModifiedBy = Username
                         .ModifiedOn = Now
@@ -4833,8 +4843,8 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 
                 With DB(UBound(DB))
                     .Username = user
-                    .access = IIf((gAcc.access >= 0), _
-                        gAcc.access, 0)
+                    .Access = IIf((gAcc.Access >= 0), _
+                        gAcc.Access, 0)
                     .Flags = gAcc.Flags
                     .ModifiedBy = Username
                     .ModifiedOn = Now
@@ -4856,9 +4866,9 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             End If
             
             ' check for errors & create message
-            If (gAcc.access > 0) Then
+            If (gAcc.Access > 0) Then
                 tmpBuf = Chr(34) & user & Chr(34) & " has been given access " & _
-                    gAcc.access
+                    gAcc.Access
                 
                 ' was the user given the specified flags, too?
                 If (Len(gAcc.Flags)) Then
@@ -4933,7 +4943,7 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
                     gAcc = GetCumulativeAccess(DB(c).Username)
                     
                     If (StrComp(gAcc.Type, "USER", vbTextCompare) = 0) Then
-                        If (gAcc.access = Track) Then
+                        If (gAcc.Access = Track) Then
                             .To = DB(c).Username
                             
                             Call AddMail(Temp)
@@ -5154,12 +5164,12 @@ Private Function OnWhoIs(ByVal Username As String, ByRef dbAccess As udtGetAcces
         gAcc = GetCumulativeAccess(u)
         
         If (gAcc.Username <> vbNullString) Then
-            If (gAcc.access > 0) Then
+            If (gAcc.Access > 0) Then
                 If (gAcc.Flags <> vbNullString) Then
-                    tmpBuf = gAcc.Username & " has access " & gAcc.access & _
+                    tmpBuf = gAcc.Username & " has access " & gAcc.Access & _
                         " and flags " & gAcc.Flags & "."
                 Else
-                    tmpBuf = gAcc.Username & " has access " & gAcc.access & "."
+                    tmpBuf = gAcc.Username & " has access " & gAcc.Access & "."
                 End If
             Else
                 If (gAcc.Flags <> vbNullString) Then
@@ -5488,12 +5498,12 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 " (" & LCase$(gAcc.Type) & ")"
         End If
         
-        If (gAcc.access > 0) Then
+        If (gAcc.Access > 0) Then
             If (gAcc.Flags <> vbNullString) Then
-                tmpBuf(tmpCount) = "Found user " & gAcc.Username & ", with access " & gAcc.access & _
+                tmpBuf(tmpCount) = "Found user " & gAcc.Username & ", with access " & gAcc.Access & _
                     " and flags " & gAcc.Flags & "."
             Else
-                tmpBuf(tmpCount) = "Found user " & gAcc.Username & ", with access " & gAcc.access & "."
+                tmpBuf(tmpCount) = "Found user " & gAcc.Username & ", with access " & gAcc.Access & "."
             End If
         ElseIf (gAcc.Flags <> vbNullString) Then
             tmpBuf(tmpCount) = "Found user " & gAcc.Username & ", with flags " & gAcc.Flags & "."
@@ -5557,8 +5567,8 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 
                 ' ...
                 If ((lowerBound >= 0) And (upperBound >= 0)) Then
-                    If ((DB(i).access >= lowerBound) And _
-                        (DB(i).access <= upperBound)) Then
+                    If ((DB(i).Access >= lowerBound) And _
+                        (DB(i).Access <= upperBound)) Then
                         
                         ' ...
                         res = IIf(blnChecked, res, True)
@@ -5568,7 +5578,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                     
                     blnChecked = True
                 ElseIf (lowerBound >= 0) Then
-                    If (DB(i).access = lowerBound) Then
+                    If (DB(i).Access = lowerBound) Then
                         ' ...
                         res = IIf(blnChecked, res, True)
                     Else
@@ -5605,7 +5615,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                     tmpBuf(tmpCount) = tmpBuf(tmpCount) & ", " & DB(i).Username & _
                         IIf(((DB(i).Type <> "%") And (StrComp(DB(i).Type, "USER", vbTextCompare) <> 0)), _
                             " (" & LCase$(DB(i).Type) & ")", vbNullString) & _
-                        IIf(DB(i).access > 0, "\" & DB(i).access, vbNullString) & _
+                        IIf(DB(i).Access > 0, "\" & DB(i).Access, vbNullString) & _
                         IIf(DB(i).Flags <> vbNullString, "\" & DB(i).Flags, vbNullString)
                 
                     If ((Len(tmpBuf(tmpCount)) > 80) And (i <> UBound(DB))) Then
@@ -5855,7 +5865,7 @@ Public Function GetSafelist(ByVal Username As String) As Boolean
         ' ...
         If (InStr(1, gAcc.Flags, "S", vbBinaryCompare) <> 0) Then
             GetSafelist = True
-        ElseIf (gAcc.access >= 20) Then
+        ElseIf (gAcc.Access >= 20) Then
             GetSafelist = True
         End If
     Else
@@ -5882,7 +5892,7 @@ Public Function GetShitlist(ByVal Username As String) As String
     ' ...
     If ((InStr(1, gAcc.Flags, "B", vbBinaryCompare) <> 0) And _
         (InStr(1, gAcc.Flags, "S", vbBinaryCompare) = 0) And _
-        (gAcc.access < 20)) Then
+        (gAcc.Access < 20)) Then
         
         If ((Len(gAcc.BanMessage) > 0) And (gAcc.BanMessage <> "%")) Then
             GetShitlist = reverseUsername(Username) & Space(1) & _
@@ -5979,7 +5989,7 @@ Private Sub DBRemove(ByVal s As String)
     
     Open Temp For Output As #n
         For i = LBound(DB) To UBound(DB)
-            Print #n, DB(i).Username & Space(1) & DB(i).access & Space(1) & DB(i).Flags
+            Print #n, DB(i).Username & Space(1) & DB(i).Access & Space(1) & DB(i).Flags
         Next i
     Close #n
 End Sub
@@ -6020,7 +6030,7 @@ Public Sub LoadDatabase()
                             .Username = X(0)
                             
                             If StrictIsNumeric(X(1)) Then
-                                .access = Val(X(1))
+                                .Access = Val(X(1))
                             Else
                                 If X(1) <> "%" Then
                                     .Flags = X(1)
@@ -6034,7 +6044,7 @@ Public Sub LoadDatabase()
                             
                             If UBound(X) > 1 Then
                                 If StrictIsNumeric(X(2)) Then
-                                    .access = Int(X(2))
+                                    .Access = Int(X(2))
                                 Else
                                     If X(2) <> "%" Then
                                         .Flags = X(2)
@@ -6073,7 +6083,7 @@ Public Sub LoadDatabase()
                                 
                             End If
                             
-                            If .access > 200 Then: .access = 200
+                            If .Access > 200 Then: .Access = 200
                         End With
 
                         i = i + 1
@@ -6091,7 +6101,7 @@ Public Sub LoadDatabase()
         For i = 0 To UBound(DB)
             If (StrComp(DB(i).Username, BotVars.BotOwner, vbTextCompare) = 0) Then
                 With DB(i)
-                    .access = 200
+                    .Access = 200
                 End With
                 
                 found = True
@@ -6106,7 +6116,7 @@ Public Sub LoadDatabase()
             With DB(UBound(DB))
                 .Username = BotVars.BotOwner
                 .Type = "USER"
-                .access = 200
+                .Access = 200
             End With
         End If
     End If
@@ -6141,7 +6151,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
         ' ...
         For Each command In Commands.documentElement.childNodes
             Dim accessGroup As MSXML2.IXMLDOMNode
-            Dim access      As MSXML2.IXMLDOMNode
+            Dim Access      As MSXML2.IXMLDOMNode
         
             ' ...
             If (StrComp(command.Attributes.getNamedItem("name").text, _
@@ -6151,15 +6161,15 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                 Set accessGroup = command.selectSingleNode("access")
                 
                 ' ...
-                For Each access In accessGroup.childNodes
-                    If (LCase$(access.nodeName) = "rank") Then
-                        If ((gAcc.access) >= (Val(access.text))) Then
+                For Each Access In accessGroup.childNodes
+                    If (LCase$(Access.nodeName) = "rank") Then
+                        If ((gAcc.Access) >= (Val(Access.text))) Then
                             ValidateAccess = True
                         
                             Exit For
                         End If
-                    ElseIf (LCase$(access.nodeName = "flag")) Then
-                        If (InStr(1, gAcc.Flags, access.text, vbBinaryCompare) <> 0) Then
+                    ElseIf (LCase$(Access.nodeName = "flag")) Then
+                        If (InStr(1, gAcc.Flags, Access.text, vbBinaryCompare) <> 0) Then
                             ValidateAccess = True
                         
                             Exit For
@@ -6189,15 +6199,15 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                             Set accessGroup = restriction.selectSingleNode("access")
                             
                             ' ...
-                            For Each access In accessGroup.childNodes
-                                If (LCase$(access.nodeName) = "rank") Then
-                                    If ((gAcc.access) >= (Val(access.text))) Then
+                            For Each Access In accessGroup.childNodes
+                                If (LCase$(Access.nodeName) = "rank") Then
+                                    If ((gAcc.Access) >= (Val(Access.text))) Then
                                         ValidateAccess = True
                                     
                                         Exit For
                                     End If
-                                ElseIf (LCase$(access.nodeName = "flag")) Then
-                                    If (InStr(1, gAcc.Flags, access.text, vbBinaryCompare) <> 0) Then
+                                ElseIf (LCase$(Access.nodeName = "flag")) Then
+                                    If (InStr(1, gAcc.Flags, Access.text, vbBinaryCompare) <> 0) Then
                                         ValidateAccess = True
                                     
                                         Exit For
@@ -6341,7 +6351,7 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
             If (blnFound = True) Then
                 ' ...
                 Dim docs    As MSXML2.IXMLDOMNode
-                Dim access  As MSXML2.IXMLDOMNode
+                Dim Access  As MSXML2.IXMLDOMNode
                 Dim args    As MSXML2.IXMLDOMNode
                 Dim arg     As MSXML2.IXMLDOMNode
                 
@@ -6349,7 +6359,7 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
                 
                 ' ...
                 Set docs = command.selectSingleNode("documentation")
-                Set access = command.selectSingleNode("access")
+                Set Access = command.selectSingleNode("access")
                 Set args = command.selectSingleNode("arguments")
         
                 ' ...
@@ -6385,18 +6395,18 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
                 End If
                 
                 ' ...
-                If (Not (access.selectSingleNode("rank") Is Nothing)) Then
-                    tmp = access.selectSingleNode("rank").text & _
+                If (Not (Access.selectSingleNode("rank") Is Nothing)) Then
+                    tmp = Access.selectSingleNode("rank").text & _
                         " access"
                 End If
                 
                 ' ...
-                If (Not (access.selectSingleNode("flag") Is Nothing)) Then
+                If (Not (Access.selectSingleNode("flag") Is Nothing)) Then
                     Dim Flags As MSXML2.IXMLDOMNodeList
                     Dim flag  As MSXML2.IXMLDOMNode
                 
                     ' ...
-                    Set Flags = access.selectNodes("flag")
+                    Set Flags = Access.selectNodes("flag")
                     
                     ' ...
                     tmp = "either " & _
@@ -6626,13 +6636,13 @@ Public Sub WriteDatabase(ByVal u As String)
     Open u For Output As #f
         For i = LBound(DB) To UBound(DB)
             ' ...
-            If ((DB(i).access > 0) Or _
+            If ((DB(i).Access > 0) Or _
                 (Len(DB(i).Flags) > 0) Or _
                 (Len(DB(i).Groups) > 0)) Then
                 
                 ' ...
                 Print #f, DB(i).Username;
-                Print #f, " " & DB(i).access;
+                Print #f, " " & DB(i).Access;
                 Print #f, " " & IIf(Len(DB(i).Flags) > 0, DB(i).Flags, "%");
                 Print #f, " " & IIf(Len(DB(i).AddedBy) > 0, DB(i).AddedBy, "%");
                 Print #f, " " & IIf(DB(i).AddedOn > 0, DateCleanup(DB(i).AddedOn), "%");
@@ -6861,6 +6871,15 @@ Public Function convertUsername(ByVal Username As String) As String
         
             If (Index <> 0) Then
                 convertUsername = Mid$(Username, Index + 1)
+            End If
+        Else
+            Index = InStr(1, Username, "*", vbBinaryCompare)
+        
+            If (Index > 1) Then
+                convertUsername = Left$(Username, Index - 1) & _
+                    " (" & Mid$(Username, Index) & ")"
+            Else
+                convertUsername = Username
             End If
         End If
     ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
