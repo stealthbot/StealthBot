@@ -828,7 +828,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -854,7 +853,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2416,7 +2414,7 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     Set X = lvClanList.FindItem(Member)
     
     If Not (X Is Nothing) Then
-        lvClanList.ListItems.Remove X.Index
+        lvClanList.ListItems.Remove X.index
         
         lvClanList.Refresh
         
@@ -2532,7 +2530,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
     End If
     
     If Not (X Is Nothing) Then
-        lvClanList.ListItems.Remove X.Index
+        lvClanList.ListItems.Remove X.index
         Set X = Nothing
     End If
     
@@ -2837,7 +2835,7 @@ Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
     Set X = lvFriendList.FindItem(Username)
     
     If Not (X Is Nothing) Then
-        lvFriendList.ListItems.Remove X.Index
+        lvFriendList.ListItems.Remove X.index
     End If
     
     Set X = Nothing
@@ -3248,9 +3246,9 @@ End Sub
 Private Sub mnuFLpopDemote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.Index < lvFriendList.ListItems.Count) Then
+            If (.index < lvFriendList.ListItems.Count) Then
               AddQ "/f d " & .text
-              MoveFriend .Index, .Index + 1
+              MoveFriend .index, .index + 1
             End If
         End With
     End If
@@ -3260,9 +3258,9 @@ End Sub
 Private Sub mnuFLpopPromote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.Index > 1) Then
+            If (.index > 1) Then
               AddQ "/f p " & .text
-              MoveFriend .Index, .Index - 1
+              MoveFriend .index, .index - 1
             End If
         End With
     End If
@@ -3477,7 +3475,7 @@ Private Sub mnuPopSafelist_Click()
     
     toSafe = GetSelectedUser
     
-    gAcc.access = 1000
+    gAcc.Access = 1000
     
     Call ProcessCommand(CurrentUsername, "/safeadd " & toSafe, True, False)
 End Sub
@@ -3490,7 +3488,7 @@ Private Sub mnuPopShitlist_Click()
     
     toBan = GetSelectedUser
     
-    gAcc.access = 1000
+    gAcc.Access = 1000
     
     Call ProcessCommand(CurrentUsername, "/shitadd " & toBan, True, False)
 End Sub
@@ -3573,9 +3571,9 @@ Private Sub mnuClearedTxt_Click()
 End Sub
 
 
-Private Sub mnuQC_Click(Index As Integer)
-    If Len(QC(Index)) > 0 Then
-        AddQ "/join " & QC(Index)
+Private Sub mnuQC_Click(index As Integer)
+    If Len(QC(index)) > 0 Then
+        AddQ "/join " & QC(index)
     End If
 End Sub
 
@@ -3922,12 +3920,12 @@ Private Sub mnuUserlistWhois_Click()
     Temp = GetAccess(s)
     
     With RTBColors
-        If Temp.access > -1 Then
-            If Temp.access > 0 Then
+        If Temp.Access > -1 Then
+            If Temp.Access > 0 Then
                 If Temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.access & " and flags " & Temp.Flags & "."
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & " and flags " & Temp.Flags & "."
                 Else
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.access & "."
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & "."
                 End If
             Else
                 If Temp.Flags <> vbNullString Then
@@ -4121,7 +4119,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     With lvChannel
 
         If (Not (.SelectedItem Is Nothing)) Then
-            i = .SelectedItem.Index
+            i = .SelectedItem.index
         End If
 
         Select Case (KeyCode)
@@ -4554,7 +4552,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                         End If
                                     End If
                                     
-                                    Temp.access = 201
+                                    Temp.Access = 201
                                     Temp.Flags = "A"
                                     
                                     m = OutFilterMsg(s)
@@ -4751,7 +4749,7 @@ Private Sub quLower_Timer()
                 Else
                     gA = GetAccess(strArray(c))
                     
-                    If Not (GetSafelist(strArray(c)) Or gA.access > (AutoModSafelistValue - 1) Or InStr(gA.Flags, "A") > 0) Then
+                    If Not (GetSafelist(strArray(c)) Or gA.Access > (AutoModSafelistValue - 1) Or InStr(gA.Flags, "A") > 0) Then
                         AddQ "/squelch " & IIf(Dii, "*", "") & strArray(c)
                     End If
                 End If
@@ -5528,7 +5526,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Dim s                 As String
     Dim i                 As Integer
     Dim f                 As Integer
-    Dim Index             As Integer
+    Dim index             As Integer
     Dim D2GameConventions As String
     Dim W3GameConventions As String
     Dim gameConventions   As String
@@ -5685,14 +5683,14 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
         If (colUsersInChannel.Count) Then
             For i = 1 To colUsersInChannel.Count
-                Index = _
+                index = _
                     checkChannel(colUsersInChannel(i).Username)
             
                 colUsersInChannel(i).Username = _
                     convertUsername(colUsersInChannel(i).Username)
     
-                If (Index) Then
-                    lvChannel.ListItems(Index).text = _
+                If (index) Then
+                    lvChannel.ListItems(index).text = _
                         colUsersInChannel(i).Username
                 End If
             Next i
@@ -5743,14 +5741,14 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         If (doConvert) Then
             If (colUsersInChannel.Count) Then
                 For i = 1 To colUsersInChannel.Count
-                    Index = _
+                    index = _
                         checkChannel(colUsersInChannel(i).Username)
                 
                     colUsersInChannel(i).Username = _
                         reverseUsername(colUsersInChannel(i).Username)
     
-                    If (Index) Then
-                        lvChannel.ListItems(Index).text = _
+                    If (index) Then
+                        lvChannel.ListItems(index).text = _
                             colUsersInChannel(i).Username
                     End If
                 Next i
@@ -6415,17 +6413,76 @@ End Function
 Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) As String
     Dim lstView     As ListView
 
-    Dim i           As Integer
-    Dim c           As Integer
-    Dim Exited      As Boolean
-    Dim CurrentName As String
-    
-    toMatch = LCase$(toMatch)
-    
+    Dim i           As Integer ' ...
+    Dim c           As Integer ' ...
+    Dim Exited      As Boolean ' ...
+    Dim CurrentName As String  ' ...
+    Dim atChar      As Integer ' ...
+    Dim index       As Integer ' ...
+
     i = InStr(1, toMatch, " ", vbBinaryCompare)
     
     If (i > 0) Then
         toMatch = Mid$(toMatch, i + 1)
+    End If
+    
+    atChar = InStr(1, toMatch, "@")
+    
+    If (atChar <> 0) Then
+        Dim tmp      As String  ' ...
+        Dim realms() As String  ' ...
+        
+        ' ...
+        ReDim realms(0 To 8)
+        
+        ' ...
+        realms(0) = "USWest"
+        realms(1) = "USEast"
+        realms(2) = "Asia"
+        realms(3) = "Europe"
+        realms(4) = "Lordaeron"
+        realms(5) = "Azeroth"
+        realms(6) = "Kalimdor"
+        realms(7) = "Northrend"
+        
+        If (startIndex > UBound(realms)) Then
+            index = 0
+        Else
+            index = (startIndex - 1)
+        End If
+        
+        ' ...
+        If (Len(toMatch) >= (atChar + 1)) Then
+            tmp = Mid$(toMatch, atChar + 1)
+
+            ' ...
+            For i = index To UBound(realms)
+                ' ...
+                If (tmp = vbNullString) Then
+                    MatchClosest = Left$(toMatch, atChar) & _
+                        realms(i)
+                                
+                    MatchIndex = (i + 1)
+                    
+                    Exit Function
+                Else
+                    ' ...
+                    If (Len(realms(i)) >= Len(tmp)) Then
+                        ' ...
+                        If (StrComp(Left$(realms(i), Len(tmp)), tmp, _
+                            vbTextCompare) = 0) Then
+                        
+                            MatchClosest = Left$(toMatch, atChar) & _
+                                realms(i)
+                                
+                            MatchIndex = (i + 1)
+                        
+                            Exit Function
+                        End If
+                    End If
+                End If
+            Next i
+        End If
     End If
     
     Select Case (ListviewTabs.Tab)
@@ -6438,11 +6495,19 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     End Select
     
     With lstView.ListItems
-        If .Count > 0 Then
-            For i = startIndex To .Count 'for each user
+        If (.Count > 0) Then
+            toMatch = LCase$(toMatch)
+        
+            If (startIndex > .Count) Then
+                index = 0
+            Else
+                index = startIndex
+            End If
+        
+            For i = index To .Count 'for each user
                 CurrentName = LCase$(.Item(i).text)
             
-                If Len(CurrentName) >= Len(toMatch) Then
+                If (Len(CurrentName) >= Len(toMatch)) Then
                     For c = 1 To Len(toMatch) 'for each letter in their name
                         If (Asc(Mid$(toMatch, c, 1)) <> Asc(Mid$(CurrentName, c, 1))) Then
                             Exited = True
@@ -6585,7 +6650,7 @@ End Sub
 Private Function GetClanSelectedUser() As String
     With lvClanList
         If Not (.SelectedItem Is Nothing) Then
-            If .SelectedItem.Index < 1 Then
+            If .SelectedItem.index < 1 Then
                 GetClanSelectedUser = vbNullString: Exit Function
             Else
                 GetClanSelectedUser = .SelectedItem.text
@@ -6609,7 +6674,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
             lvClanList.ListItems(lItemIndex).Selected = True
             
             If Not (lvClanList.SelectedItem Is Nothing) Then
-                If lvClanList.SelectedItem.Index < 0 Then
+                If lvClanList.SelectedItem.index < 0 Then
                     
                     mnuPopDem.Enabled = False
                     mnuPopPro.Enabled = False
@@ -6719,7 +6784,7 @@ Private Sub mnuPopDem_Click()
         With PBuffer
             .InsertDWORD &H1
             .InsertNTString GetClanSelectedUser
-            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon - 1
+            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.index).SmallIcon - 1
             .SendPacket &H7A
         End With
         
@@ -6733,7 +6798,7 @@ Private Sub mnuPopPro_Click()
         With PBuffer
             .InsertDWORD &H3
             .InsertNTString GetClanSelectedUser
-            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon + 1
+            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.index).SmallIcon + 1
             .SendPacket &H7A
         End With
         
@@ -6750,7 +6815,7 @@ Private Sub mnuPopRem_Click()
     Else
         If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, "StealthBot") = vbYes Then
             With PBuffer
-                If lvClanList.SelectedItem.Index > 0 Then
+                If lvClanList.SelectedItem.index > 0 Then
                     .InsertDWORD 1 'lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon
                     .InsertNTString GetClanSelectedUser
                     .SendPacket &H78

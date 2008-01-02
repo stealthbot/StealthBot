@@ -27,32 +27,11 @@ Begin VB.Form frmDBManager
    WhatsThisHelp   =   -1  'True
    Begin VB.Frame frmDatabase 
       Caption         =   "Eric[nK]"
-      Enabled         =   0   'False
       Height          =   4950
       Left            =   3600
       TabIndex        =   6
       Top             =   487
       Width           =   3025
-      Begin VB.CommandButton cmdCancel 
-         Caption         =   "Delete"
-         Enabled         =   0   'False
-         Height          =   300
-         Index           =   1
-         Left            =   1080
-         TabIndex        =   11
-         Top             =   4535
-         Width           =   855
-      End
-      Begin VB.CommandButton cmdSave 
-         Caption         =   "Save"
-         Enabled         =   0   'False
-         Height          =   300
-         Index           =   1
-         Left            =   1930
-         TabIndex        =   10
-         Top             =   4535
-         Width           =   855
-      End
       Begin VB.TextBox txtFlags 
          BackColor       =   &H00993300&
          Enabled         =   0   'False
@@ -84,6 +63,26 @@ Begin VB.Form frmDBManager
          Top             =   2450
          Width           =   2535
       End
+      Begin VB.CommandButton cmdSave 
+         Caption         =   "Save"
+         Enabled         =   0   'False
+         Height          =   300
+         Index           =   1
+         Left            =   1930
+         TabIndex        =   10
+         Top             =   4535
+         Width           =   855
+      End
+      Begin VB.CommandButton cmdCancel 
+         Caption         =   "Delete"
+         Enabled         =   0   'False
+         Height          =   300
+         Index           =   1
+         Left            =   1088
+         TabIndex        =   11
+         Top             =   4535
+         Width           =   855
+      End
       Begin VB.Label Label2 
          Caption         =   "by Eric[nK]"
          BeginProperty Font 
@@ -99,7 +98,7 @@ Begin VB.Form frmDBManager
          Index           =   5
          Left            =   480
          TabIndex        =   20
-         Top             =   1985
+         Top             =   1965
          Width           =   2415
       End
       Begin VB.Label Label2 
@@ -117,7 +116,7 @@ Begin VB.Form frmDBManager
          Index           =   4
          Left            =   480
          TabIndex        =   19
-         Top             =   1370
+         Top             =   1350
          Width           =   2415
       End
       Begin VB.Label Label2 
@@ -135,7 +134,7 @@ Begin VB.Form frmDBManager
          Index           =   2
          Left            =   360
          TabIndex        =   15
-         Top             =   1200
+         Top             =   1180
          Width           =   2415
       End
       Begin VB.Label Label2 
@@ -153,7 +152,7 @@ Begin VB.Form frmDBManager
          Index           =   3
          Left            =   360
          TabIndex        =   18
-         Top             =   1820
+         Top             =   1800
          Width           =   2415
       End
       Begin VB.Label Label2 
@@ -171,7 +170,7 @@ Begin VB.Form frmDBManager
          Index           =   0
          Left            =   240
          TabIndex        =   17
-         Top             =   990
+         Top             =   970
          Width           =   2535
       End
       Begin VB.Label Label2 
@@ -189,12 +188,11 @@ Begin VB.Form frmDBManager
          Index           =   1
          Left            =   240
          TabIndex        =   16
-         Top             =   1610
+         Top             =   1590
          Width           =   2535
       End
       Begin VB.Label lblGroup 
          Caption         =   "Member of Group(s):"
-         Enabled         =   0   'False
          Height          =   255
          Left            =   240
          TabIndex        =   14
@@ -203,7 +201,6 @@ Begin VB.Form frmDBManager
       End
       Begin VB.Label lblFlags 
          Caption         =   "Flags:"
-         Enabled         =   0   'False
          Height          =   255
          Left            =   1560
          TabIndex        =   13
@@ -212,7 +209,6 @@ Begin VB.Form frmDBManager
       End
       Begin VB.Label lblRank 
          Caption         =   "Rank (1 - 200):"
-         Enabled         =   0   'False
          Height          =   255
          Left            =   240
          TabIndex        =   12
@@ -279,10 +275,12 @@ Begin VB.Form frmDBManager
          NumTabs         =   3
          BeginProperty Tab1 {1EFB659A-857C-11D1-B16A-00C0F0283628} 
             Caption         =   "Users and Groups"
+            Object.ToolTipText     =   "User entries identify individual users which can be grouped for easier control"
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab2 {1EFB659A-857C-11D1-B16A-00C0F0283628} 
             Caption         =   "Clans"
+            Object.ToolTipText     =   "Clan entries allow access to be given based on WarCraft III clan membership"
             ImageVarType    =   2
          EndProperty
          BeginProperty Tab3 {1EFB659A-857C-11D1-B16A-00C0F0283628} 
@@ -511,9 +509,30 @@ Private Sub cmdCancel_Click(Index As Integer)
     If (Index = 0) Then
         Call Unload(frmDBManager)
     Else
-        Call DB_remove(trvUsers.SelectedItem.text)
+        Dim response As Integer ' ...
+        Dim isGroup  As Boolean ' ...
+        
+        isGroup = (trvUsers.Nodes(trvUsers.SelectedItem.Index).Image = 1)
+    
+        If (isGroup) Then
+            response = MsgBox("Are you sure you wish to delete " & _
+                "this group and " & "all of its members?", vbYesNo + _
+                    vbInformation, "Information")
+            
+            If (response = vbYes) Then
+                Call DB_remove(trvUsers.SelectedItem.text)
 
-        Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+                Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+                
+                Call trvUsers_NodeClick(trvUsers.SelectedItem)
+            End If
+        Else
+            Call DB_remove(trvUsers.SelectedItem.text)
+
+            Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+            
+            Call trvUsers_NodeClick(trvUsers.SelectedItem)
+        End If
     End If
 End Sub
 
@@ -526,7 +545,7 @@ Private Sub cmdSave_Click(Index As Integer)
                 vbTextCompare) = 0) Then
                 
                 With m_DB(i)
-                    .access = Val(txtRank.text)
+                    .Access = Val(txtRank.text)
                     .Flags = txtFlags.text
                     .ModifiedBy = "(console)"
                     .ModifiedOn = Now
@@ -564,9 +583,30 @@ End Sub
 
 Private Sub mnuDelete_Click()
     If (trvUsers.SelectedItem.Index > 1) Then
-        Call DB_remove(trvUsers.SelectedItem.text)
+        Dim response As Integer ' ...
+        Dim isGroup  As Boolean ' ...
+        
+        isGroup = (trvUsers.Nodes(trvUsers.SelectedItem.Index).Image = 1)
     
-        Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+        If (isGroup) Then
+            response = MsgBox("Are you sure you wish to delete " & _
+                "this group and " & "all of its members?", vbYesNo + _
+                    vbInformation, "Information")
+            
+            If (response = vbYes) Then
+                Call DB_remove(trvUsers.SelectedItem.text)
+
+                Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+                
+                Call trvUsers_NodeClick(trvUsers.SelectedItem)
+            End If
+        Else
+            Call DB_remove(trvUsers.SelectedItem.text)
+
+            Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+            
+            Call trvUsers_NodeClick(trvUsers.SelectedItem)
+        End If
     End If
 End Sub
 
@@ -733,20 +773,14 @@ Private Sub tbsTabs_Click()
     
     With frmDatabase
         .Caption = "Database"
-        .Enabled = False
     End With
     
-    lblRank.Enabled = False
     txtRank.Enabled = False
-    
     txtRank.text = vbNullString
     
-    lblFlags.Enabled = False
     txtFlags.Enabled = False
-    
     txtFlags.text = vbNullString
     
-    lblGroup.Enabled = False
     lstGroups.Enabled = False
     
     cmdSave(1).Enabled = False
@@ -778,22 +812,16 @@ Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
         If (Node.Index = 1) Then
             With frmDatabase
                 .Caption = "Database"
-                .Enabled = False
             End With
             
-            lblRank.Enabled = False
             txtRank.Enabled = False
             
-            lblFlags.Enabled = False
             txtFlags.Enabled = False
             
-            lblGroup.Enabled = False
             lstGroups.Enabled = False
             
             cmdCancel(1).Enabled = False
         Else
-            frmDatabase.Enabled = True
-        
             If (tmp.Type = "USER") Then
                 frmDatabase.Caption = tmp.Username
             ElseIf (tmp.Type = "CLAN") Then
@@ -806,20 +834,17 @@ Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
                 frmDatabase.Caption = tmp.Username
             End If
             
-            lblRank.Enabled = True
             txtRank.Enabled = True
             
-            lblFlags.Enabled = True
             txtFlags.Enabled = True
             
-            lblGroup.Enabled = True
             lstGroups.Enabled = True
             
             cmdCancel(1).Enabled = True
         End If
         
-        If (tmp.access > 0) Then
-            txtRank.text = tmp.access
+        If (tmp.Access > 0) Then
+            txtRank.text = tmp.Access
         Else
             txtRank.text = vbNullString
         End If
@@ -1006,9 +1031,30 @@ End Sub
 Private Sub trvUsers_KeyDown(KeyCode As Integer, Shift As Integer)
     If (KeyCode = vbKeyDelete) Then
         If (trvUsers.SelectedItem.Index > 1) Then
-            Call DB_remove(trvUsers.SelectedItem.text)
+            Dim response As Integer ' ...
+            Dim isGroup  As Boolean ' ...
+            
+            isGroup = (trvUsers.Nodes(trvUsers.SelectedItem.Index).Image = 1)
+        
+            If (isGroup) Then
+                response = MsgBox("Are you sure you wish to delete " & _
+                    "this group and " & "all of its members?", vbYesNo + _
+                        vbInformation, "Information")
+                
+                If (response = vbYes) Then
+                    Call DB_remove(trvUsers.SelectedItem.text)
     
-            Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+                    Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+                    
+                    Call trvUsers_NodeClick(trvUsers.SelectedItem)
+                End If
+            Else
+                Call DB_remove(trvUsers.SelectedItem.text)
+    
+                Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.Index)
+                
+                Call trvUsers_NodeClick(trvUsers.SelectedItem)
+            End If
         End If
     End If
 End Sub
@@ -1111,7 +1157,7 @@ Private Function GetAccess(ByVal Username As String, Optional dbType As String =
             If (bln = True) Then
                 With GetAccess
                     .Username = m_DB(i).Username
-                    .access = m_DB(i).access
+                    .Access = m_DB(i).Access
                     .Flags = m_DB(i).Flags
                     .AddedBy = m_DB(i).AddedBy
                     .AddedOn = m_DB(i).AddedOn
@@ -1129,7 +1175,7 @@ Private Function GetAccess(ByVal Username As String, Optional dbType As String =
         bln = False
     Next i
 
-    GetAccess.access = -1
+    GetAccess.Access = -1
 End Function
 
 Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String = _
