@@ -156,6 +156,7 @@ Begin VB.Form frmSettings
          Alignment       =   1  'Right Justify
          BackColor       =   &H00000000&
          Caption         =   "Show user game stats icons"
+         Enabled         =   0   'False
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -167,10 +168,10 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Index           =   1
          Left            =   360
          TabIndex        =   193
          Top             =   3680
+         Value           =   1  'Checked
          Width           =   2535
       End
       Begin VB.CheckBox chkGameConventions 
@@ -373,7 +374,6 @@ Begin VB.Form frmSettings
          EndProperty
          ForeColor       =   &H00FFFFFF&
          Height          =   375
-         Index           =   0
          Left            =   360
          TabIndex        =   42
          ToolTipText     =   "Disable the internal friends' list (alternative channel list)"

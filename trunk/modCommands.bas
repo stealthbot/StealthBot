@@ -282,9 +282,14 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                                 Splt() = Split(Message, Space(1), 3)
                                 
                                 If (UBound(Splt) = 2) Then
-                                    Message = Splt(0) & Space(1) & _
-                                        Splt(1) & Space(1) & _
-                                            reverseUsername(Splt(2))
+                                    Select Case (LCase$(Splt(1)))
+                                        Case "m"
+                                        Case "msg"
+                                        Case Else
+                                            Message = Splt(0) & Space(1) & _
+                                                Splt(1) & Space(1) & _
+                                                    reverseUsername(Splt(2))
+                                    End Select
                                 End If
                             End If
                         End If
@@ -3146,14 +3151,14 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
         If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
             tmpBuf(0) = "Error: The specified username is invalid."
         Else
-            Dim Msg As String ' ...
+            Dim msg As String ' ...
             
             ' ...
-            Msg = Mid$(msgData, Index + 1)
+            msg = Mid$(msgData, Index + 1)
         
             ' ...
             Call OnAdd(Username, dbAccess, user & " +B --type USER --banmsg " & _
-                Msg, True, tmpBuf())
+                msg, True, tmpBuf())
         End If
     Else
         ' ...
@@ -4273,7 +4278,7 @@ End Function ' end function OnCheckMail
 Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim Msg As udtMail
+    Dim msg    As udtMail
     
     Dim tmpBuf As String ' temporary output buffer
             
@@ -4282,11 +4287,14 @@ Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAcc
     End If
     
     If (GetMailCount(Username) > 0) Then
-        Call GetMailMessage(Username, Msg)
+        Call GetMailMessage(Username, msg)
         
-        If (Len(RTrim(Msg.To)) > 0) Then
-            tmpBuf = "Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
+        If (Len(RTrim(msg.To)) > 0) Then
+            tmpBuf = "Message from " & RTrim(msg.From) & ": " & RTrim(msg.Message)
         End If
+    Else
+        tmpBuf = "You do not currently have any messages " & _
+            "in your inbox."
     End If
     
     ' return message
@@ -4302,8 +4310,6 @@ Private Function OnWhoAmI(ByVal Username As String, ByRef dbAccess As udtGetAcce
     If (InBot) Then
         tmpBuf = "You are the bot console."
         
-        tmpBuf = checkUser("bo111][b[")
-    
         If (g_Online) Then
             Call AddQ("/whoami")
         End If
@@ -6496,7 +6502,7 @@ Public Sub checkUsers()
                         ' ...
                         If (tmp <> vbNullString) Then
                             ' ...
-                            Call AddQ("/ban " & reverseUsername(tmp))
+                            Call AddQ("/ban " & tmp)
                         Else
                             Dim j As Integer ' ...
                 

@@ -286,8 +286,8 @@ Public Sub AddChat(ParamArray saElements() As Variant)
         If LogThis Then
             Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #f
             
-            If ((BotVars.MaxLogfileSize) And _
-                (LOF(f) >= BotVars.MaxLogfileSize)) Then
+            If ((BotVars.MaxLogFileSize) And _
+                (LOF(f) >= BotVars.MaxLogFileSize)) Then
                 
                 LogThis = False
                 
@@ -421,7 +421,7 @@ Public Sub AddChatFont(ParamArray saElements() As Variant)
             
             Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #f
             
-            If (LOF(f) >= BotVars.MaxLogfileSize) Then
+            If (LOF(f) >= BotVars.MaxLogFileSize) Then
                 LogThis = False
                 Close #f
             Else
@@ -563,7 +563,7 @@ Public Function CommandEx(ByVal Username As String, ByVal Message As String, ByV
     Dim dbAccess As udtGetAccessResponse
     '// GetAccess() will return the access type the commands sub needs
     
-    dbAccess.access = uAccess
+    dbAccess.Access = uAccess
     dbAccess.Flags = uFlags
 
     ' execute command
@@ -642,18 +642,18 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Sub GetDBEntry(ByVal Username As String, ByRef access, ByRef Flags) '// yum, Variants >:\
+Public Sub GetDBEntry(ByVal Username As String, ByRef Access, ByRef Flags) '// yum, Variants >:\
 
     Dim Temp As udtGetAccessResponse
     
-    Temp = GetAccess(Username)
+    Temp = GetCumulativeAccess(Username)
     
-    access = Temp.access
+    Access = Temp.Access
     Flags = Temp.Flags
 
 End Sub
 
-'// GETCUMULATIVEDBENTRY
+'// GETNONCUMULATIVEDBENTRY
 '// Bit of a modification to my existing GetCumulativeAccess() call to return the data to you
 '// effectively.
 '// The difference between GetDBEntry and GetCumulativeDBEntry is that this function will
@@ -663,13 +663,13 @@ End Sub
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Sub GetCumulativeDBEntry(ByVal Username As String, ByRef access, ByRef Flags) '// yum, Variants >:\
+Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags) '// yum, Variants >:\
 
     Dim Temp As udtGetAccessResponse
     
-    Temp = GetCumulativeAccess(Username)
+    Temp = GetAccess(Username)
     
-    access = Temp.access
+    Access = Temp.Access
     Flags = Temp.Flags
 
 End Sub

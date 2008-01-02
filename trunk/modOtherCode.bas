@@ -1593,56 +1593,29 @@ End Function
 
 'Checks the queue for duplicate bans
 Public Sub RemoveBanFromQueue(ByVal sUser As String)
-    Dim i As Integer, CompareLen As Integer, QueueUBound As Integer, NumRemoved As Integer
+    Dim i          As Integer
+    Dim iUserLen   As Integer
     
-    Dim Iterations As Integer
-
-    sUser = "/ban " & LCase(sUser) & " "
-    CompareLen = Len(sUser)
-    QueueUBound = colQueue.Count
+    sUser = "/ban " & StripRealm(sUser)
+    iUserLen = Len(sUser)
     
-    i = 1
-    
-    While QueueUBound > 0 And i < (QueueUBound - NumRemoved)
+    For i = 1 To colQueue.Count
         With colQueue.Item(i)
-            If Len(.Message) >= CompareLen Then
-            
-                If StrComp(Left$(LCase(.Message), CompareLen), sUser, vbBinaryCompare) = 0 Then
-                    On Error GoTo ArrayIsLocked
+            If (Len(.Message) >= iUserLen) Then
+                If (StrComp(Left$(.Message, iUserLen), sUser, _
+                    vbBinaryCompare) = 0) Then
                 
-                    If i < colQueue.Count Then
-'                        For c = i + 1 To UBound(Queue)
-'                            Queue(c - 1) = Queue(c)
-'                        Next c
-                        colQueue.Remove i
-                    End If
+                    Call colQueue.Remove(i)
                     
-                    'ReDim Preserve Queue(UBound(Queue) - 1)
-                    
-                    NumRemoved = NumRemoved + 1
-                    
-ArrayIsLocked:
-                    Debug.Print "Error " & Err.Number & ": " & Err.Description
-                    Debug.Print "Array was locked in RemoveBanFromQueue() with user " & sUser & "!"
-                    Resume Next
+                    i = 0
                 End If
-                
             End If
-            
-            Iterations = Iterations + 1
-            
-            If Iterations > 10000 Then
-                If MDebug("debug") Then
-                    frmChat.AddChat RTBColors.ErrorMessageText, "Warning: Loop size limit exceeded in RemoveBanFromQueue()!"
-                End If
-                
-                Exit Sub
-            End If
-            
         End With
         
-        i = i + 1
-    Wend
+        If (colQueue.Count = 0) Then
+            Exit For
+        End If
+    Next i
 End Sub
 
 
@@ -2069,7 +2042,7 @@ Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String,
     Else
         Open sPath For Append As #f
         
-        If LOF(f) > BotVars.MaxLogfileSize And BotVars.MaxLogfileSize > 0 Then
+        If LOF(f) > BotVars.MaxLogFileSize And BotVars.MaxLogFileSize > 0 Then
             Close #f
             Kill sPath
             Open sPath For Output As #f
@@ -2114,7 +2087,7 @@ Public Sub LogCommand(ByVal Caller As String, ByVal CString As String)
         Else
             Open sPath For Append As #f
             
-            If LOF(f) > BotVars.MaxLogfileSize And BotVars.MaxLogfileSize > 0 Then
+            If LOF(f) > BotVars.MaxLogFileSize And BotVars.MaxLogFileSize > 0 Then
                 Close #f
                 Kill sPath
                 Open sPath For Output As #f

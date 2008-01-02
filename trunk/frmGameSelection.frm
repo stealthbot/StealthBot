@@ -144,6 +144,9 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Sub cmdCancel_Click()
+    frmDBManager.m_game = _
+        vbNullString
+
     Call Unload(frmGameSelection)
 End Sub
 
@@ -165,7 +168,8 @@ Private Sub cmdOK_Click()
         Case 12: game = "W3XP"
     End Select
 
-    frmDBManager.m_game = game
+    frmDBManager.m_game = _
+        game
     
     Call Unload(frmGameSelection)
 End Sub

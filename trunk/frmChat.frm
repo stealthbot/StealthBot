@@ -1807,8 +1807,8 @@ Sub AddChat(ParamArray saElements() As Variant)
         If (LogThis) Then
             Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #f
             
-            If ((BotVars.MaxLogfileSize) And _
-                (LOF(f) >= BotVars.MaxLogfileSize)) Then
+            If ((BotVars.MaxLogFileSize) And _
+                (LOF(f) >= BotVars.MaxLogFileSize)) Then
                 
                 LogThis = False
                 
@@ -1939,7 +1939,7 @@ Sub AddChatFont(ParamArray saElements() As Variant)
             
             Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #f
             
-            If (LOF(f) >= BotVars.MaxLogfileSize) Then
+            If (LOF(f) >= BotVars.MaxLogFileSize) Then
                 LogThis = False
                 Close #f
             End If
@@ -2017,7 +2017,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
                 .Visible = False
                 .SelStart = 0
                 .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
-                If BotVars.Logging < 2 And LOF(1) < BotVars.MaxLogfileSize Then Print #1, Left$(.SelText, Len(.SelText) - 2)
+                If BotVars.Logging < 2 And LOF(1) < BotVars.MaxLogFileSize Then Print #1, Left$(.SelText, Len(.SelText) - 2)
                 .SelText = vbNullString
                 .Visible = True
             End With
@@ -2681,14 +2681,14 @@ Sub Form_Unload(Cancel As Integer)
     
     If BotVars.Logging = 1 Then
         Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt" For Append As #1
-            If LOF(1) < BotVars.MaxLogfileSize Then
+            If LOF(1) < BotVars.MaxLogFileSize Then
                 Print #1, "Bot application closed, dumping chat screen."
                 Print #1, rtbChat.text
             End If
         Close #1
         
         Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt" For Append As #1
-            If LOF(1) < BotVars.MaxLogfileSize Then
+            If LOF(1) < BotVars.MaxLogFileSize Then
                 Print #1, "Bot application closed, dumping whisper screen."
                 Print #1, rtbWhispers.text
             End If
@@ -5638,7 +5638,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             If ((StrReverse$(BotVars.Product) = "D2DV") Or _
                 (StrReverse$(BotVars.Product) = "D2XP")) Then
                 
-                doConvert = True
+                If (BotVars.UseD2GameConventions) Then
+                    doConvert = True
+                End If
             End If
         End If
 
@@ -5646,15 +5648,99 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             If ((StrReverse$(BotVars.Product) = "WAR3") Or _
                 (StrReverse$(BotVars.Product) = "W3XP")) Then
             
-                doConvert = True
+                If (BotVars.UseW3GameConventions) Then
+                    doConvert = True
+                End If
             End If
         End If
     Else
-        doConvert = True
+        If (BotVars.UseGameConventions) Then
+            If ((StrReverse$(BotVars.Product) = "D2DV") Or _
+                (StrReverse$(BotVars.Product) = "D2XP")) Then
+                    
+                If (BotVars.UseD2GameConventions) Then
+                    doConvert = True
+                End If
+            ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
+                    (StrReverse$(BotVars.Product) = "W3XP")) Then
+                
+                If (BotVars.UseW3GameConventions) Then
+                    doConvert = True
+                End If
+            End If
+        End If
     End If
-
-    If (BotVars.UseGameConventions) Then
-        If (doConvert = False) Then
+    
+    If (doConvert) Then
+        With BotVars
+            .UseGameConventions = IIf((gameConventions = "Y"), _
+                    True, False)
+        
+            .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
+                True, False)
+        
+            .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
+                True, False)
+        End With
+    
+        If (colUsersInChannel.Count) Then
+            For i = 1 To colUsersInChannel.Count
+                Index = _
+                    checkChannel(colUsersInChannel(i).Username)
+            
+                colUsersInChannel(i).Username = _
+                    convertUsername(colUsersInChannel(i).Username)
+    
+                If (Index) Then
+                    lvChannel.ListItems(Index).text = _
+                        colUsersInChannel(i).Username
+                End If
+            Next i
+        End If
+        
+        If (g_Online) Then
+            CurrentUsername = _
+                convertUsername(CurrentUsername)
+                
+            SetTitle CurrentUsername & ", online in channel " & _
+                gChannel.Current
+        End If
+    Else
+        If (BotVars.UseGameConventions) Then
+            If ((StrReverse$(BotVars.Product) = "D2DV") Or _
+                (StrReverse$(BotVars.Product) = "D2XP")) Then
+        
+                If (D2GameConventions = "Y") Then
+                    If (BotVars.UseD2GameConventions = False) Then
+                        doConvert = True
+                    End If
+                End If
+            ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
+                    (StrReverse$(BotVars.Product) = "W3XP")) Then
+        
+                If (W3GameConventions = "Y") Then
+                    If (BotVars.UseW3GameConventions = False) Then
+                        doConvert = True
+                    End If
+                End If
+            End If
+        Else
+            If ((StrReverse$(BotVars.Product) = "D2DV") Or _
+                (StrReverse$(BotVars.Product) = "D2XP")) Then
+        
+                If (D2GameConventions = "Y") Then
+                    doConvert = True
+                End If
+            ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
+                    (StrReverse$(BotVars.Product) = "W3XP")) Then
+        
+                If (W3GameConventions = "Y") Then
+                    doConvert = True
+                End If
+            End If
+        End If
+    
+        If (doConvert) Then
             If (colUsersInChannel.Count) Then
                 For i = 1 To colUsersInChannel.Count
                     Index = _
@@ -5677,56 +5763,11 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                 SetTitle CurrentUsername & ", online in channel " & _
                     gChannel.Current
             End If
-    
-            With BotVars
-                .UseGameConventions = IIf((gameConventions = "Y"), _
-                    True, False)
-            
-                .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
-                    True, False)
-            
-                .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
-                    True, False)
-            End With
-        Else
-            With BotVars
-                .UseGameConventions = IIf((gameConventions = "Y"), _
-                        True, False)
-            
-                .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
-                    True, False)
-            
-                .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
-                    True, False)
-            End With
-        
-            If (colUsersInChannel.Count) Then
-                For i = 1 To colUsersInChannel.Count
-                    Index = _
-                        checkChannel(colUsersInChannel(i).Username)
-                
-                    colUsersInChannel(i).Username = _
-                        convertUsername(colUsersInChannel(i).Username)
-        
-                    If (Index) Then
-                        lvChannel.ListItems(Index).text = _
-                            colUsersInChannel(i).Username
-                    End If
-                Next i
-            End If
-            
-            If (g_Online) Then
-                CurrentUsername = _
-                    convertUsername(CurrentUsername)
-                    
-                SetTitle CurrentUsername & ", online in channel " & _
-                    gChannel.Current
-            End If
         End If
-    Else
+        
         With BotVars
             .UseGameConventions = IIf((gameConventions = "Y"), _
-                    True, False)
+                True, False)
         
             .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
                 True, False)
@@ -5734,150 +5775,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
                 True, False)
         End With
-    
-        If (doConvert) Then
-            If (colUsersInChannel.Count) Then
-                For i = 1 To colUsersInChannel.Count
-                    Index = _
-                        checkChannel(colUsersInChannel(i).Username)
-                
-                    colUsersInChannel(i).Username = _
-                        convertUsername(colUsersInChannel(i).Username)
-        
-                    If (Index) Then
-                        lvChannel.ListItems(Index).text = _
-                            colUsersInChannel(i).Username
-                    End If
-                Next i
-            End If
-            
-            If (g_Online) Then
-                CurrentUsername = _
-                    convertUsername(CurrentUsername)
-                    
-                SetTitle CurrentUsername & ", online in channel " & _
-                    gChannel.Current
-            End If
-        Else
-            
-        End If
     End If
-    
-    'If (gameConventions = "Y") Then
-    '    If (BotVars.UseGameConventions = False) Then
-    '        bln = True
-    '    End If
-    '
-    '    If ((StrReverse$(BotVars.Product) = "WAR3") Or _
-    '        (StrReverse$(BotVars.Product) = "W3XP")) Then
-    '
-    '        If (W3GameConventions = "Y") Then
-    '            If (BotVars.UseW3GameConventions = False) Then
-    '                bln = True
-    '            End If
-    '        End If
-    '    End If
-    '
-    '    If ((StrReverse$(BotVars.Product) = "D2DV") Or _
-    '        (StrReverse$(BotVars.Product) = "D2XP")) Then
-    '
-    '        If (D2GameConventions = "Y") Then
-    '            If (BotVars.UseD2GameConventions = False) Then
-    '                bln = True
-    '            End If
-    '        End If
-    '    End If
-    '
-    '     If (bln) Then
-    '        BotVars.UseD2GameConventions = IIf((D2GameConventions = "Y"), _
-    '            True, False)
-    '
-    '        BotVars.UseW3GameConventions = IIf((W3GameConventions = "Y"), _
-    '            True, False)
-    '
-    '        If (colUsersInChannel.Count) Then
-    '            For i = 1 To colUsersInChannel.Count
-    '                Index = _
-    '                    checkChannel(colUsersInChannel(i).Username)
-    '
-    '                colUsersInChannel(i).Username = _
-    '                    reverseUsername(colUsersInChannel(i).Username)
-    '
-    '                If (Index) Then
-    '                    lvChannel.ListItems(Index).text = _
-    '                        colUsersInChannel(i).Username
-    '                End If
-    '            Next i
-    '        End If
-    '
-    '        If (g_Online) Then
-    '            CurrentUsername = _
-    '                reverseUsername(CurrentUsername)
-    '
-    '            SetTitle CurrentUsername & ", online in channel " & _
-    '                gChannel.Current
-    '        End If
-    '
-    '        BotVars.UseGameConventions = True
-    '    End If
-    'Else
-    '    If (BotVars.UseGameConventions) Then
-    '        If ((StrReverse$(BotVars.Product) = "WAR3") Or _
-    '            (StrReverse$(BotVars.Product) = "W3XP")) Then
-    '
-    '            If (W3GameConventions <> "Y") Then
-    '                If (BotVars.UseW3GameConventions = True) Then
-    '                    bln = True
-    '                End If
-    '            End If
-    '        End If
-    '
-    '        If ((StrReverse$(BotVars.Product) = "D2DV") Or _
-    '            (StrReverse$(BotVars.Product) = "D2XP")) Then
-    '
-    '            If (D2GameConventions <> "Y") Then
-    '                If (BotVars.UseD2GameConventions = True) Then
-    '                    bln = True
-    '                End If
-    '            End If
-    '        End If
-    '
-    '        If (bln) Then
-    '            With BotVars
-    '                .UseGameConventions = False
-    '
-    '                .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
-    '                    True, False)
-    '
-    '                .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
-    '                    True, False)
-    '            End With
-    '
-    '            If (colUsersInChannel.Count) Then
-    '                For i = 1 To colUsersInChannel.Count
-    '                    Index = _
-    '                        checkChannel(colUsersInChannel(i).Username)
-    '
-    '                    colUsersInChannel(i).Username = _
-    '                        convertUsername(colUsersInChannel(i).Username)
-    '
-    '                    If (Index) Then
-    '                        lvChannel.ListItems(Index).text = _
-    '                            colUsersInChannel(i).Username
-    '                    End If
-    '                Next i
-    '            End If
-    '
-    '            If (g_Online) Then
-    '                CurrentUsername = _
-    '                    convertUsername(CurrentUsername)
-    '
-    '                SetTitle CurrentUsername & ", online in channel " & _
-    '                    gChannel.Current
-    '            End If
-    '        End If
-    '    End If
-    'End If
     
     s = ReadCFG(OT, "JoinLeaves")
     If s = "Y" Then JoinMessagesOff = False Else JoinMessagesOff = True
@@ -5947,7 +5845,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     s = ReadCFG(MN, "MaxLogFileSize")
     If StrictIsNumeric(s) Then
-        BotVars.MaxLogfileSize = Val(s)
+        BotVars.MaxLogFileSize = Val(s)
     End If
     
     s = ReadCFG(MN, "DoNotUseDirectFList")
@@ -5965,7 +5863,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     End If
     
     If BotVars.MaxBacklogSize < 0 Then BotVars.MaxBacklogSize = 10000
-    If BotVars.MaxLogfileSize < 0 Then BotVars.MaxLogfileSize = 50000000
+    If BotVars.MaxLogFileSize < 0 Then BotVars.MaxLogFileSize = 50000000
     
     '// this section must read _absolutely correctly_ or the SetTimer API call will fail
     s = ReadCFG(MN, "ReconnectDelay")

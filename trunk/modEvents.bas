@@ -533,9 +533,11 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     
     If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
         If (PassedClanMotdCheck = False) Then
-            Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
-        
-            Exit Sub
+            If (Len(Message) > 0) Then
+                Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
+            
+                Exit Sub
+            End If
         End If
     End If
     
@@ -1256,7 +1258,7 @@ NoLevel:
                     toCheck = GetShitlist(Username)
                     
                     If (Len(toCheck) > 1) Then
-                        Ban toCheck, 1000
+                        Call frmChat.AddQ("/ban " & toCheck)
                         
                         GoTo theEnd
                     End If

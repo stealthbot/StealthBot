@@ -364,13 +364,13 @@ Public Property Let MaxBacklogSize(ByVal lMaxBacklogSize As Long)
 
 End Property
 
-Public Property Get MaxLogfileSize() As Long
+Public Property Get MaxLogFileSize() As Long
 
-    MaxLogfileSize = m_lMaxLogfileSize
+    MaxLogFileSize = m_lMaxLogfileSize
 
 End Property
 
-Public Property Let MaxLogfileSize(ByVal lMaxLogfileSize As Long)
+Public Property Let MaxLogFileSize(ByVal lMaxLogfileSize As Long)
 
     m_lMaxLogfileSize = lMaxLogfileSize
 
@@ -869,7 +869,7 @@ Public Property Let UseW3GameConventions(ByVal bUseW3GameConventions As Boolean)
 
 End Property
 
-Public Property Get Clan() As Boolean
+Public Property Get Clan() As String
 
     Clan = m_sClan
 
@@ -881,7 +881,7 @@ Public Property Let Clan(ByVal sClan As String)
 
 End Property
 
-Public Property Get Gateway() As Boolean
+Public Property Get Gateway() As String
 
     Gateway = m_sGateway
 
