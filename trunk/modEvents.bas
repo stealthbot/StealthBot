@@ -445,7 +445,7 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     Call frmChat.UpdateTrayTooltip
     
     If (ExReconnectTimerID > 0) Then
-        Call KillTimer(frmChat.hWnd, ExReconnectTimerID)
+        Call KillTimer(0, ExReconnectTimerID)
         
         ExReconnectTimerID = 0
     End If

@@ -87,6 +87,7 @@ Begin VB.Form frmChat
       HideSelection   =   -1  'True
       HideColumnHeaders=   -1  'True
       OLEDragMode     =   1
+      AllowReorder    =   -1  'True
       HoverSelection  =   -1  'True
       _Version        =   393217
       SmallIcons      =   "imlIcons"
@@ -830,7 +831,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -857,7 +857,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2155,7 +2154,10 @@ Sub Event_BNetError(ErrorNumber As Integer, Description As String)
         
         UserCancelledConnect = False 'this should fix the beta reconnect problems
         
-        ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, AddressOf Reconnect_TimerProc)
+        'ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, AddressOf Reconnect_TimerProc)
+        
+        ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, _
+            BotVars.ReconnectDelay, AddressOf ExtendedReconnect_TimerProc)
     End If
 End Sub
 
@@ -2419,7 +2421,7 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     Set X = lvClanList.FindItem(Member)
     
     If Not (X Is Nothing) Then
-        lvClanList.ListItems.Remove X.index
+        lvClanList.ListItems.Remove X.Index
         
         lvClanList.Refresh
         
@@ -2535,7 +2537,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
     End If
     
     If Not (X Is Nothing) Then
-        lvClanList.ListItems.Remove X.index
+        lvClanList.ListItems.Remove X.Index
         Set X = Nothing
     End If
     
@@ -2701,9 +2703,9 @@ Sub Form_Unload(Cancel As Integer)
         Kill GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt"
     End If
     
-    If ReconnectTimerID > 0 Then
-        KillTimer 0, ReconnectTimerID
-    End If
+    'If ReconnectTimerID > 0 Then
+    '    KillTimer 0, ReconnectTimerID
+    'End If
     
     If ExReconnectTimerID > 0 Then
         KillTimer 0, ExReconnectTimerID
@@ -2840,7 +2842,7 @@ Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
     Set X = lvFriendList.FindItem(Username)
     
     If Not (X Is Nothing) Then
-        lvFriendList.ListItems.Remove X.index
+        lvFriendList.ListItems.Remove X.Index
     End If
     
     Set X = Nothing
@@ -3251,9 +3253,9 @@ End Sub
 Private Sub mnuFLpopDemote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.index < lvFriendList.ListItems.Count) Then
+            If (.Index < lvFriendList.ListItems.Count) Then
               AddQ "/f d " & .text
-              MoveFriend .index, .index + 1
+              MoveFriend .Index, .Index + 1
             End If
         End With
     End If
@@ -3263,9 +3265,9 @@ End Sub
 Private Sub mnuFLpopPromote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.index > 1) Then
+            If (.Index > 1) Then
               AddQ "/f p " & .text
-              MoveFriend .index, .index - 1
+              MoveFriend .Index, .Index - 1
             End If
         End With
     End If
@@ -3576,9 +3578,9 @@ Private Sub mnuClearedTxt_Click()
 End Sub
 
 
-Private Sub mnuQC_Click(index As Integer)
-    If Len(QC(index)) > 0 Then
-        AddQ "/join " & QC(index)
+Private Sub mnuQC_Click(Index As Integer)
+    If Len(QC(Index)) > 0 Then
+        AddQ "/join " & QC(Index)
     End If
 End Sub
 
@@ -4123,7 +4125,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     With lvChannel
 
         If (Not (.SelectedItem Is Nothing)) Then
-            i = .SelectedItem.index
+            i = .SelectedItem.Index
         End If
 
         Select Case (KeyCode)
@@ -4767,91 +4769,96 @@ End Sub
 
 
 Private Sub QueueTimer_Timer()
-    Dim Message As String
-    Dim Sent As Byte
-    Dim i As Integer
+    Dim Message  As String
+    Dim Sent     As Byte
+    Dim i        As Integer
     Dim Override As Integer
     
     Sent = 0
     
-    If colQueue.Count > 0 And g_Online Then
-        
+    If ((colQueue.Count) And (g_Online)) Then
         Override = 1
         
         With colQueue
             Message = .Item(1).Message
             
             For i = 1 To .Count
-                If .Item(i).Priority = 1 And Len(.Item(i).Message) > 1 Then '// a priority-1 message
+                If ((.Item(i).Priority = 1) And (Len(.Item(i).Message) > 1)) Then '// a priority-1 message
                                                                             '// cannot be <=1 character
                     Message = .Item(i).Message
+                    
                     Override = i
+                    
                     Exit For
                 End If
             Next i
         End With
         
         If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
-
             '// This is a dummy queue message - pretend like we sent a 70-character message
-            QueueLoad = QueueLoad + 1
-            QueueMaster = QueueMaster + 3
+            QueueLoad = (QueueLoad + 1)
+            QueueMaster = (QueueMaster + 3)
+            
             Sent = 2
-        
-        ElseIf LenB(Message) > 0 Then
-        
-            'Debug.Print Message
-        
+        ElseIf (LenB(Message)) Then
             If ((StrComp(LCase(Left(Message, 11)), "/unsquelch ", vbTextCompare) = 0) Or _
                 (StrComp(LCase(Left(Message, 11)), "/unignore ", vbTextCompare) = 0)) Then
                 
-                    unsquelching = True
+                ' ...
+                unsquelching = True
             End If
             
-            If Len(Message) > 220 Then
+            If (Len(Message) > 220) Then
                 Message = Left$(Message, 220)
             End If
             
-            If QueueLoad < 3 And QueueMaster < 16 Then
-                If Len(Message) <= 70 Then
-                    QueueLoad = QueueLoad + 1
-                    QueueMaster = QueueMaster + 3
-                    bnetSend Message
-                ElseIf Len(Message) <= 130 Then
-                    QueueLoad = QueueLoad + 2
-                    QueueMaster = QueueMaster + 5
-                    bnetSend Message
-                ElseIf Len(Message) <= 170 Then
-                    QueueLoad = QueueLoad + 3
-                    QueueMaster = QueueMaster + 7
-                    bnetSend Message
+            If ((QueueLoad < 3) And (QueueMaster < 16)) Then
+                If (Len(Message) <= 70) Then
+                    QueueLoad = (QueueLoad + 1)
+                    QueueMaster = (QueueMaster + 3)
+                    
+                    Call bnetSend(Message)
+                ElseIf (Len(Message) <= 130) Then
+                    QueueLoad = (QueueLoad + 2)
+                    QueueMaster = (QueueMaster + 5)
+                    
+                    Call bnetSend(Message)
+                ElseIf (Len(Message) <= 170) Then
+                    QueueLoad = (QueueLoad + 3)
+                    QueueMaster = (QueueMaster + 7)
+                    
+                    Call bnetSend(Message)
                 Else
-                    QueueLoad = QueueLoad + 4
-                    QueueMaster = QueueMaster + 9
-                    bnetSend Message
+                    QueueLoad = (QueueLoad + 4)
+                    QueueMaster = (QueueMaster + 9)
+                    
+                    Call bnetSend(Message)
                 End If
+                
                 Sent = 1
             End If
-            
         Else
             Sent = 1
         End If
         
-        If Sent > 0 Then
-        
-            colQueue.Remove Override
+        If (Sent) Then
+            Call colQueue.Remove(Override)
             
-            If Sent = 1 And InStr(1, "/", Left(Message, 1), vbBinaryCompare) = 0 Then
+            If ((Sent = 1) And (InStr(1, "/", Left(Message, 1), vbBinaryCompare) = 0)) Then
                 AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
                     CurrentUsername, RTBColors.Carats, "> ", _
                         RTBColors.TalkNormalText, Message
             End If
-            
         End If
         
-        If QueueMaster >= 15 And QueueTimer.Interval <> 2400 Then
+        If ((QueueMaster >= 15) And (QueueTimer.Interval <> 2400)) Then
+            ' ...
             QueueTimer.Interval = 2400
-        ElseIf QueueMaster < 15 And QueueTimer.Interval = 2400 Then
+        ElseIf ((QueueMaster < 15) And (QueueTimer.Interval = 2400)) Then
+            ' ...
+            QueueTimer.Interval = 1175
+        Else
+            ' ...
             QueueTimer.Interval = 1175
         End If
     End If
@@ -5393,12 +5400,14 @@ End Function
 Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
     Static LastMessage As Long
     
-    Dim Q              As clsQueueOBj
-    Dim GTC            As Long
+    Dim Q   As clsQueueOBj
+    Dim GTC As Long
     
-    If (Len(Message) > 0) Then
+    ' ...
+    If (Message <> vbNullString) Then
+        ' ...
         If (Not (bFlood)) Then
-            GTC = GetTickCount
+            GTC = GetTickCount()
             
             ' tab check added 9/23/05
             If (InStr(1, Message, Chr$(9), vbBinaryCompare) > 0) Then
@@ -5410,6 +5419,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                 Message = Left$(Message, 220)
             End If
             
+            ' ...
             If ((QueueLoad = 0) And _
                 (GTC - LastMessage > 10000)) Then
                 
@@ -5418,9 +5428,11 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                     Call BNCSBuffer.ClearBuffer
                 End If
 
+                ' ...
                 If (bFlood = False) Then
                     Dim banDelay As Integer ' ...
                     
+                    ' ...
                     Set Q = New clsQueueOBj
                     
                     ' set default message delay when
@@ -5432,6 +5444,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                         .Priority = Priority
                     End With
     
+                    ' ...
                     Call colQueue.Add(Q)
                     
                     ' ...
@@ -5467,25 +5480,38 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                     
                     ' set the delay before our next queue cycle
                     frmChat.QueueTimer.Interval = banDelay
+                    
+                    ' ...
+                    LastMessage = GTC
                 Else
+                    ' ...
                     If (g_Online) Then
+                        ' ...
                         If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", _
                             vbBinaryCompare) = 0) Then
                         
+                            ' ...
                             QueueMaster = (QueueMaster + 3)
                         Else
+                            ' ...
                             Call bnetSend(KillNull(Message))
-                        
+                            
+                            ' ...
                             If (InStr(1, Message, "/", vbBinaryCompare) <> 1) Then
                                 AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
                                     CurrentUsername, RTBColors.Carats, "> ", vbWhite, Message
                             End If
                         End If
                         
+                        ' ...
                         QueueLoad = (QueueLoad + 1)
+                        
+                        ' ...
+                        LastMessage = GTC
                     End If
                 End If
             Else
+                ' ...
                 Set Q = New clsQueueOBj
                 
                 With Q
@@ -5493,10 +5519,12 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                     .Priority = Priority
                 End With
 
+                ' ...
                 Call colQueue.Add(Q)
+                
+                ' ...
+                LastMessage = GTC
             End If
-            
-            LastMessage = GTC
         End If
     End If
 End Sub
@@ -5531,7 +5559,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Dim s                 As String
     Dim i                 As Integer
     Dim f                 As Integer
-    Dim index             As Integer
+    Dim Index             As Integer
     Dim D2GameConventions As String
     Dim W3GameConventions As String
     Dim gameConventions   As String
@@ -5688,14 +5716,14 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
         If (colUsersInChannel.Count) Then
             For i = 1 To colUsersInChannel.Count
-                index = _
+                Index = _
                     checkChannel(colUsersInChannel(i).Username)
             
                 colUsersInChannel(i).Username = _
                     convertUsername(colUsersInChannel(i).Username)
     
-                If (index) Then
-                    lvChannel.ListItems(index).text = _
+                If (Index) Then
+                    lvChannel.ListItems(Index).text = _
                         colUsersInChannel(i).Username
                 End If
             Next i
@@ -5746,14 +5774,14 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         If (doConvert) Then
             If (colUsersInChannel.Count) Then
                 For i = 1 To colUsersInChannel.Count
-                    index = _
+                    Index = _
                         checkChannel(colUsersInChannel(i).Username)
                 
                     colUsersInChannel(i).Username = _
                         reverseUsername(colUsersInChannel(i).Username)
     
-                    If (index) Then
-                        lvChannel.ListItems(index).text = _
+                    If (Index) Then
+                        lvChannel.ListItems(Index).text = _
                             colUsersInChannel(i).Username
                     End If
                 Next i
@@ -6421,7 +6449,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     Dim i           As Integer ' ...
     Dim CurrentName As String  ' ...
     Dim atChar      As Integer ' ...
-    Dim index       As Integer ' ...
+    Dim Index       As Integer ' ...
     Dim loops       As Integer ' ...
 
     i = InStr(1, toMatch, " ", vbBinaryCompare)
@@ -6444,13 +6472,13 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
             Dim c As Integer ' ...
             
             If (startIndex > .Count) Then
-                index = 1
+                Index = 1
             Else
-                index = startIndex
+                Index = startIndex
             End If
         
             While (loops < 2)
-                For i = index To .Count 'for each user
+                For i = Index To .Count 'for each user
                     CurrentName = .Item(i).text
                 
                     If (Len(CurrentName) >= Len(toMatch)) Then
@@ -6473,7 +6501,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                 Next i
                 
                 ' ...
-                index = 1
+                Index = 1
                 
                 ' ...
                 loops = (loops + 1)
@@ -6504,9 +6532,9 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         realms(7) = "Northrend"
         
         If (startIndex > UBound(realms)) Then
-            index = 0
+            Index = 0
         Else
-            index = (startIndex - 1)
+            Index = (startIndex - 1)
         End If
         
         ' ...
@@ -6515,7 +6543,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
 
             While (loops < 2)
                 ' ...
-                For i = index To UBound(realms)
+                For i = Index To UBound(realms)
                     ' ...
                     If (Len(realms(i)) >= Len(tmp)) Then
                         ' ...
@@ -6535,7 +6563,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                 Next i
                 
                 ' ...
-                index = 0
+                Index = 0
                 
                 ' ...
                 loops = (loops + 1)
@@ -6544,9 +6572,9 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
             If (tmp = vbNullString) Then
                 ' ...
                 MatchClosest = Left$(toMatch, atChar) & _
-                    realms(index)
+                    realms(Index)
                     
-                MatchIndex = (index + 1)
+                MatchIndex = (Index + 1)
                     
                 Exit Function
             End If
@@ -6676,7 +6704,7 @@ End Sub
 Private Function GetClanSelectedUser() As String
     With lvClanList
         If Not (.SelectedItem Is Nothing) Then
-            If .SelectedItem.index < 1 Then
+            If .SelectedItem.Index < 1 Then
                 GetClanSelectedUser = vbNullString: Exit Function
             Else
                 GetClanSelectedUser = .SelectedItem.text
@@ -6700,7 +6728,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
             lvClanList.ListItems(lItemIndex).Selected = True
             
             If Not (lvClanList.SelectedItem Is Nothing) Then
-                If lvClanList.SelectedItem.index < 0 Then
+                If lvClanList.SelectedItem.Index < 0 Then
                     
                     mnuPopDem.Enabled = False
                     mnuPopPro.Enabled = False
@@ -6810,7 +6838,7 @@ Private Sub mnuPopDem_Click()
         With PBuffer
             .InsertDWORD &H1
             .InsertNTString GetClanSelectedUser
-            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.index).SmallIcon - 1
+            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon - 1
             .SendPacket &H7A
         End With
         
@@ -6824,7 +6852,7 @@ Private Sub mnuPopPro_Click()
         With PBuffer
             .InsertDWORD &H3
             .InsertNTString GetClanSelectedUser
-            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.index).SmallIcon + 1
+            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon + 1
             .SendPacket &H7A
         End With
         
@@ -6841,7 +6869,7 @@ Private Sub mnuPopRem_Click()
     Else
         If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, "StealthBot") = vbYes Then
             With PBuffer
-                If lvClanList.SelectedItem.index > 0 Then
+                If lvClanList.SelectedItem.Index > 0 Then
                     .InsertDWORD 1 'lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon
                     .InsertNTString GetClanSelectedUser
                     .SendPacket &H78

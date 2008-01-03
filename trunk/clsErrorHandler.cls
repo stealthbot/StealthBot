@@ -52,12 +52,15 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
                 GetErrorString = "You appear to be IPBanned. The bot will attempt to reconnect again in 20 minutes."
                 
                 If ExReconnectTimerID > 0 Then
-                    KillTimer frmChat.hWnd, ExReconnectTimerID
+                    MsgBox "!"
+                
+                    KillTimer 0, ExReconnectTimerID
                 End If
                 
                 ExReconTicks = 0
                 ExReconMinutes = 20
-                ExReconnectTimerID = SetTimer(frmChat.hWnd, 0, 30000, AddressOf ExtendedReconnect_TimerProc)
+                'ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, _
+                '    ((ExReconMinutes * 60) * 1000), AddressOf ExtendedReconnect_TimerProc)
                 
                 miNoProceed = 1
             End If
@@ -105,7 +108,7 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
             
     End Select
     
-    If miNoProceed = 2 Then
+    If (miNoProceed) Then
         UserCancelledConnect = True
         'Debug.Print "Set here.."
     End If

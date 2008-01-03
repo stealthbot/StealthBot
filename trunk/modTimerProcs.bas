@@ -20,7 +20,7 @@ Public Sub ExtendedReconnect_TimerProc(ByVal hWnd As Long, ByVal uMsg As Long, B
     End If
     
     If ExReconTicks >= (ExReconMinutes * 2) Or UserCancelledConnect Then
-        KillTimer frmChat.hWnd, ExReconnectTimerID
+        KillTimer 0, ExReconnectTimerID
         UserCancelledConnect = False
         ExReconnectTimerID = 0
         ExReconTicks = 0
