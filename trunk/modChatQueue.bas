@@ -277,14 +277,5 @@ End Sub
 
 ' ...
 Public Sub ClearChatQueue()
-    Dim i As Integer ' ...
-    
-    ' clear chat queue
-    'For i = 1 To colChatQueue.Count
-    '    Call colChatQueue(1).Remove
-    'Next i
-    
-    If (colChatQueue.Count) Then
-        Call colChatQueue(1).Remove
-    End If
+    Set colChatQueue = New Collection
 End Sub
