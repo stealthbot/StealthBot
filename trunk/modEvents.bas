@@ -589,7 +589,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                     
                     Temp = Replace(Left$(Message, InStr(1, Message, " ", _
                         vbBinaryCompare) - 1), "*", vbNullString)
-                        
+
                     Call AddBannedUser(Temp)
                     
                     Call RemoveBanFromQueue(Temp)

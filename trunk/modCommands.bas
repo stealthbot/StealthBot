@@ -251,6 +251,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             ' internally
             If (InBot) Then
                 If (Len(Message)) Then
+                    ' lets handle legacy naming
                     If (Left$(Message, 1) = "/") Then
                         Dim Index As Long   ' ...
 
@@ -296,9 +297,16 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                                         Case "m"
                                         Case "msg"
                                         Case Else
-                                            Message = Splt(0) & Space(1) & _
-                                                Splt(1) & Space(1) & _
-                                                    reverseUsername(Splt(2))
+                                            If ((StrReverse$(BotVars.Product) = "WAR3") Or _
+                                                (StrReverse$(BotVars.Product) = "W3XP")) Then
+                                                
+                                                Message = Splt(0) & Space(1) & _
+                                                    Splt(1) & Space(1) & _
+                                                        reverseUsername(Splt(2))
+                                            Else
+                                                Message = Splt(0) & Space(1) & _
+                                                    Splt(1) & Space(1) & Splt(2)
+                                            End If
                                     End Select
                                 End If
                             End If
@@ -4817,7 +4825,10 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         .ModifiedOn = Now
                         .Type = dbType
                         .Groups = sGrp
-                        .BanMessage = gAcc.BanMessage
+                        
+                        If (banmsg <> vbNullString) Then
+                            .BanMessage = banmsg
+                        End If
                     End With
                 
                     ' commit modifications
@@ -4853,7 +4864,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     .Type = IIf(((dbType <> vbNullString) And (dbType <> "%")), _
                         dbType, "USER")
                     .Groups = sGrp
-                    .BanMessage = gAcc.BanMessage
+                    .BanMessage = banmsg
                 End With
                 
                 ' commit modifications

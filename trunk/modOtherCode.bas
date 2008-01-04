@@ -206,7 +206,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
                     End If
                 End If
                 
-                If GetAccess(Username).access >= SpeakerAccess Then
+                If GetAccess(Username).Access >= SpeakerAccess Then
                     Ban = "You do not have enough access to do that."
                     Exit Function
                 End If
@@ -374,14 +374,14 @@ Public Function Voting(ByVal Mode1 As Byte, Optional Mode2 As Byte, Optional Use
                         
                     Case BVT_VOTE_BAN
                         If VotesYes > VotesNo Then
-                            Voting = Ban(Target & " Banned by vote", VoteInitiator.access)
+                            Voting = Ban(Target & " Banned by vote", VoteInitiator.Access)
                         Else
                             Voting = "Ban vote failed."
                         End If
                         
                     Case BVT_VOTE_KICK
                         If VotesYes > VotesNo Then
-                            Voting = Ban(Target & " Kicked by vote", VoteInitiator.access, 1)
+                            Voting = Ban(Target & " Kicked by vote", VoteInitiator.Access, 1)
                         Else
                             Voting = "Kick vote failed."
                         End If
@@ -435,7 +435,7 @@ Public Function GetAccess(ByVal Username As String, Optional dbType As String = 
             If (bln = True) Then
                 With GetAccess
                     .Username = DB(i).Username
-                    .access = DB(i).access
+                    .Access = DB(i).Access
                     .Flags = DB(i).Flags
                     .AddedBy = DB(i).AddedBy
                     .AddedOn = DB(i).AddedOn
@@ -453,7 +453,7 @@ Public Function GetAccess(ByVal Username As String, Optional dbType As String = 
         bln = False
     Next i
 
-    GetAccess.access = -1
+    GetAccess.Access = -1
 End Function
 
 Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As String = _
@@ -487,7 +487,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                     .Username = DB(i).Username & _
                         IIf(((DB(i).Type <> "%") And (StrComp(DB(i).Type, "USER", vbTextCompare) <> 0)), _
                             " (" & LCase$(DB(i).Type) & ")", vbNullString)
-                    .access = DB(i).access
+                    .Access = DB(i).Access
                     .Flags = DB(i).Flags
                     .AddedBy = DB(i).AddedBy
                     .AddedOn = DB(i).AddedOn
@@ -518,9 +518,9 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                         gAcc = GetCumulativeGroupAccess(Splt(j))
                     
                         ' ...
-                        If (GetCumulativeAccess.access < gAcc.access) Then
+                        If (GetCumulativeAccess.Access < gAcc.Access) Then
                             ' ...
-                            GetCumulativeAccess.access = gAcc.access
+                            GetCumulativeAccess.Access = gAcc.Access
                             
                             ' ...
                             bln = True
@@ -665,8 +665,8 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                                 gAcc = GetCumulativeGroupAccess(Splt(j))
                             
                                 ' ...
-                                If (tmp.access < gAcc.access) Then
-                                    tmp.access = gAcc.access
+                                If (tmp.Access < gAcc.Access) Then
+                                    tmp.Access = gAcc.Access
                                 End If
                                 
                                 ' ...
@@ -692,9 +692,9 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                         End If
 
                         ' ...
-                        If (GetCumulativeAccess.access < tmp.access) Then
+                        If (GetCumulativeAccess.Access < tmp.Access) Then
                             ' ...
-                            GetCumulativeAccess.access = tmp.access
+                            GetCumulativeAccess.Access = tmp.Access
                             
                             ' ...
                             bln = True
@@ -755,7 +755,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
             If (dbIndex = -1) Then
                 With GetCumulativeAccess
                     .Username = vbNullString
-                    .access = -1
+                    .Access = -1
                     .Flags = vbNullString
                 End With
             End If
@@ -798,8 +798,8 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
                 recAcc = GetCumulativeGroupAccess(Splt(i))
                     
                 ' ...
-                If (gAcc.access < recAcc.access) Then
-                    gAcc.access = recAcc.access
+                If (gAcc.Access < recAcc.Access) Then
+                    gAcc.Access = recAcc.Access
                 End If
                 
                 ' ...
@@ -827,8 +827,8 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
             recAcc = GetCumulativeGroupAccess(gAcc.Groups)
         
             ' ...
-            If (gAcc.access < recAcc.access) Then
-                gAcc.access = recAcc.access
+            If (gAcc.Access < recAcc.Access) Then
+                gAcc.Access = recAcc.Access
             End If
             
             ' ...
@@ -1596,7 +1596,9 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
     Dim i          As Integer
     Dim iUserLen   As Integer
     
-    sUser = "/ban " & StripRealm(sUser)
+    sUser = "/ban " & IIf(Dii, "*", vbNullString) & _
+        StripRealm(sUser)
+        
     iUserLen = Len(sUser)
     
     For i = 1 To colQueue.Count
@@ -1999,7 +2001,7 @@ Public Function DoReplacements(ByVal s As String, Optional Username As String, O
     End If
     
     s = Replace(s, "%v", CVERSION)
-    s = Replace(s, "%a", IIf(gAcc.access >= 0, gAcc.access, "0"))
+    s = Replace(s, "%a", IIf(gAcc.Access >= 0, gAcc.Access, "0"))
     s = Replace(s, "%f", gAcc.Flags)
     s = Replace(s, "%t", Time$)
     s = Replace(s, "%d", Date)

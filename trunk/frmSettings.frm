@@ -4570,7 +4570,7 @@ Private Function SaveSettings() As Boolean
                         (StrComp(DB(j).Type, "GAME", vbTextCompare) = 0)) Then
                         
                         If ((Len(DB(j).Flags) > 1) Or _
-                            (DB(j).access > 0) Or _
+                            (DB(j).Access > 0) Or _
                             (Len(DB(j).Groups) > 1)) Then
 
                             With DB(j)
@@ -5205,7 +5205,14 @@ Private Sub InitGenInterface()
         cboTimestamp.ListIndex = Val(s)
     End If
     
-    txtMaxBackLogSize.text = Val(ReadCFG(MN, "MaxBacklogSize"))
+    s = ReadCFG(MN, "MaxBacklogSize")
+    
+    If (s <> vbNullString) Then
+        txtMaxBackLogSize.text = Val(ReadCFG(MN, "MaxBacklogSize"))
+    Else
+        txtMaxBackLogSize.text = 10000
+    End If
+    
     txtMaxLogSize.text = Val(ReadCFG(MN, "MaxLogFileSize"))
     
 End Sub

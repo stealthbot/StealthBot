@@ -831,7 +831,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -858,7 +857,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4551,14 +4549,14 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 ElseIf (LCase(Left$(s, 1)) = "/") Then
                                     Dim commandResult As Boolean ' ..
                                 
-                                    If ((Left$(s, 3) = "/w ") Or (Left$(s, 3) = "/m ")) Then
-                                        If (Dii) Then
-                                            If (StrComp(Mid$(s, 4, 1), "*") <> 0) Then
-                                                s = Mid$(s, 1, 3) & "*" & _
-                                                    Mid$(s, 4)
-                                            End If
-                                        End If
-                                    End If
+                                    'If ((Left$(s, 3) = "/w ") Or (Left$(s, 3) = "/m ")) Then
+                                    '    If (Dii) Then
+                                    '        If (StrComp(Mid$(s, 4, 1), "*") <> 0) Then
+                                    '            s = Mid$(s, 1, 3) & "*" & _
+                                    '                Mid$(s, 4)
+                                    '        End If
+                                    '    End If
+                                    'End If
                                     
                                     Temp.Access = 201
                                     Temp.Flags = "A"
@@ -4603,7 +4601,7 @@ theEnd:
                                 If StrComp(Left$(.text, 6), "/reply", vbTextCompare) = 0 Then
                                     .SelStart = 0
                                     .SelLength = Len(.text)
-                                    .SelText = "/w " & IIf(Dii, "*", "") & LastWhisper
+                                    .SelText = "/w " & LastWhisper
                                     .SelStart = Len(.text)
                                 End If
                             End If
@@ -4617,7 +4615,7 @@ theEnd:
                                     If StrComp(LastWhisperTo, "%f%") = 0 Then
                                         .SelText = "/f m"
                                     Else
-                                        .SelText = "/w " & IIf(Dii, "*", "") & LastWhisperTo
+                                        .SelText = "/w " & LastWhisperTo
                                     End If
                                     
                                     .SelStart = Len(.text)
