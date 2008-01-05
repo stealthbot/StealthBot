@@ -849,9 +849,6 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
 
     If (StatUpdate = False) Then
         If (Filters) Then
-            ' create new instance of chat queue
-            'Set clsChatQueue = New clsChatQueue
-            
             For i = 1 To colChatQueue.Count
                 ' ...
                 Set clsChatQueue = colChatQueue(i)
@@ -953,12 +950,12 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         
         Call DoLastSeen(Username)
         
+        frmChat.lblCurrentChannel.Caption = _
+            frmChat.GetChannelString()
+        
         ' destroy class
         Set UserToAdd = Nothing
     End If
-    
-    frmChat.lblCurrentChannel.Caption = _
-        frmChat.GetChannelString()
     
     If (MDebug("statstrings")) Then
         frmChat.AddChat vbMagenta, "Username: " & Username & ", Statstring: " & _

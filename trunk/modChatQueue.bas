@@ -124,22 +124,47 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
     ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
     ByVal w3icon As String)
     
-    Dim i      As Integer ' ...
-    Dim game   As String  ' ...
-    Dim pStats As String  ' ...
-    Dim Clan   As String  ' ...
+    Dim found  As ListItem ' ...
+    
+    Dim i      As Integer  ' ...
+    Dim game   As String   ' ...
+    Dim pStats As String   ' ...
+    Dim Clan   As String   ' ...
+    Dim Pos    As Integer  ' ...
 
     i = UsernameToIndex(Username)
     
-    colUsersInChannel.Item(i).Statstring = _
-        OriginalStatstring
-        
+    Pos = checkChannel(Username)
+
     game = ParseStatstring(OriginalStatstring, pStats, Clan)
+    
+    'If (i) Then
+    '    With colUsersInChannel(i)
+    '        .Username = Username
+    '        .Clan = Clan
+    '        .Statstring = OriginalStatstring
+    '    End With
+    'End If
     
     If (JoinMessagesOff = False) Then
         Call frmChat.AddChat(RTBColors.JoinText, "-- Stats updated: ", _
             RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
                 RTBColors.JoinText, " is using " & pStats)
+    End If
+    
+    If (Pos) Then
+        Set found = frmChat.lvChannel.ListItems(Pos)
+        
+        If (g_ThisIconCode <> -1) Then
+            If (colUsersInChannel.Item(i).Product = "W3XP") Then
+                found.SmallIcon = (g_ThisIconCode + ICON_START_W3XP + _
+                    IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0))
+            Else
+                found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
+            End If
+        End If
+    
+        Set found = Nothing
     End If
 End Sub
 
@@ -216,25 +241,6 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
                 End With
             End If
         End If
-    End If
-
-    If (Pos) Then
-        Set found = frmChat.lvChannel.ListItems(Pos)
-        
-        If (g_ThisIconCode <> -1) Then
-            If ((Not (squelching)) And _
-                (Not (unsquelching))) Then
-                
-                If (colUsersInChannel.Item(i).Product = "W3XP") Then
-                    found.SmallIcon = (g_ThisIconCode + ICON_START_W3XP + _
-                        IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0))
-                Else
-                    found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
-                End If
-            End If
-        End If
-    
-        Set found = Nothing
     End If
 End Sub
 
