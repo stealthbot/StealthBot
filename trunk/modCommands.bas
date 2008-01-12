@@ -6899,8 +6899,8 @@ Public Function convertUsername(ByVal Username As String) As String
         If ((Not (BotVars.UseGameConventions)) Or _
             (Not (BotVars.UseW3GameConventions))) Then
 
-            If (w3Realm <> vbNullString) Then
-                Select Case (w3Realm)
+            If (BotVars.Realm <> vbNullString) Then
+                Select Case (BotVars.Realm)
                     Case "Lordaeron": Index = InStr(1, Username, "@USWest", vbBinaryCompare)
                     Case "Azeroth":   Index = InStr(1, Username, "@USEast", vbBinaryCompare)
                     Case "Kalimdor":  Index = InStr(1, Username, "@Asia", vbBinaryCompare)
@@ -6911,7 +6911,7 @@ Public Function convertUsername(ByVal Username As String) As String
                     convertUsername = Left$(Username, Index - 1)
                 Else
                     convertUsername = Username & "@" & _
-                        w3Realm
+                        BotVars.Realm
                 End If
             End If
         End If
@@ -6943,13 +6943,13 @@ Public Function reverseUsername(ByVal Username As String) As String
         If ((Not (BotVars.UseGameConventions)) Or _
             (Not (BotVars.UseW3GameConventions))) Then
             
-            If (w3Realm <> vbNullString) Then
-                Index = InStr(1, Username, ("@" & w3Realm), vbBinaryCompare)
+            If (BotVars.Realm <> vbNullString) Then
+                Index = InStr(1, Username, ("@" & BotVars.Realm), vbBinaryCompare)
     
                 If (Index <> 0) Then
                     reverseUsername = Left$(Username, Index - 1)
                 Else
-                    Select Case (w3Realm)
+                    Select Case (BotVars.Realm)
                         Case "Lordaeron": reverseUsername = Username & "@USWest"
                         Case "Azeroth":   reverseUsername = Username & "@USEast"
                         Case "Kalimdor":  reverseUsername = Username & "@Asia"

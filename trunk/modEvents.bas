@@ -643,7 +643,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 If (InStr(1, Message, "channel", vbTextCompare) = 0) Then
                     i = InStrRev(Message, " ")
                     
-                    w3Realm = Mid$(Message, i + 1)
+                    BotVars.Realm = Mid$(Message, i + 1)
                     
                     ' we want our username to accurately reflect
                     ' our new discovery of the realm name

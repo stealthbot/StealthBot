@@ -6,7 +6,6 @@ Option Explicit
 Public AwaitingClanList As Byte
 Public AwaitingClanMembership As Byte
 Public AwaitingClanInfo As Byte
-Public w3Realm As String
 Public LastRemoval As Long
 
 Public Type udtClan

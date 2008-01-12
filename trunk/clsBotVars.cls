@@ -16,6 +16,7 @@ Attribute VB_Exposed = False
 ' DateTime  : 1/22/2005 16:09
 ' Author    : Andy (andy@stealthbot.net)
 ' Purpose   : stores bot variables at runtime and is exposed to the scripting subsystem
+'  - Added Realm string in response to topic 29227 -andy
 '---------------------------------------------------------------------------------------
 Option Explicit
 
@@ -86,6 +87,7 @@ Private m_bUseD2GameConventions         As Boolean
 Private m_bUseW3GameConventions         As Boolean
 Private m_sClan                         As String
 Private m_sGateway                      As String
+Private m_sRealm                        As String
 
 
 Public Property Get Username() As String
@@ -893,3 +895,15 @@ Public Property Let Gateway(ByVal sGateway As String)
 
 End Property
 
+
+Public Property Get Realm() As String
+
+    Realm = m_sRealm
+
+End Property
+
+Public Property Let Realm(ByVal sRealm As String)
+
+    m_sRealm = sRealm
+
+End Property

@@ -3432,12 +3432,14 @@ End Sub
 
 Private Sub mnuPopAddLeft_Click()
     On Error Resume Next
-    If Dii Then txtPre.text = "/w *" Else txtPre.text = "/w "
-    
-    txtPre.text = txtPre.text & GetSelectedUser & " "
-    
-    cboSend.SetFocus
-    cboSend.SelStart = Len(cboSend.text)
+    If txtPre.Enabled Then 'fix for topic 25290 -a
+        If Dii Then txtPre.text = "/w *" Else txtPre.text = "/w "
+        
+        txtPre.text = txtPre.text & GetSelectedUser & " "
+        
+        cboSend.SetFocus
+        cboSend.SelStart = Len(cboSend.text)
+    End If
 End Sub
 
 Private Sub mnuPopAddToFList_Click()

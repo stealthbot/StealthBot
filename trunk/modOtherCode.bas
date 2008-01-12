@@ -1405,7 +1405,7 @@ End Function
 
 Public Sub GetW3LadderProfile(ByVal sPlayer As String, ByVal eType As enuWebProfileTypes)
     If LenB(sPlayer) > 0 Then
-        ShellExecute frmChat.hWnd, "Open", "http://www.battle.net/war3/ladder/" & IIf(eType = W3XP, "w3xp", "war3") & "-player-profile.aspx?Gateway=" & GetW3Realm(sPlayer) & "&PlayerName=" & NameWithoutRealm(sPlayer), 0&, 0&, 0&
+        ShellExecute frmChat.hWnd, "Open", "http://www.battle.net/war3/ladder/" & IIf(eType = W3XP, "w3xp", "war3") & "-player-profile.aspx?Gateway=" & GetBotVars.Realm(sPlayer) & "&PlayerName=" & NameWithoutRealm(sPlayer), 0&, 0&, 0&
     End If
 End Sub
 
@@ -1446,14 +1446,14 @@ Public Function NameWithoutRealm(ByVal Username As String, Optional ByVal Strict
     End If
 End Function
 
-Public Function GetW3Realm(Optional ByVal Username As String) As String
+Public Function GetBotVars.Realm(Optional ByVal Username As String) As String
     If LenB(Username) = 0 Then
-        GetW3Realm = w3Realm
+        GetBotVars.Realm = BotVars.Realm
     Else
         If InStr(1, Username, "@") > 0 Then
-            GetW3Realm = Mid$(Username, InStr(1, Username, "@") + 1)
+            GetBotVars.Realm = Mid$(Username, InStr(1, Username, "@") + 1)
         Else
-            GetW3Realm = w3Realm
+            GetBotVars.Realm = BotVars.Realm
         End If
     End If
 End Function
