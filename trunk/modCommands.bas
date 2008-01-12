@@ -1054,10 +1054,10 @@ Private Function OnSetExpKey(ByVal Username As String, ByRef dbAccess As udtGetA
     msgData = Replace(msgData, " ", vbNullString)
     
     ' write configuration entry
-    Call WriteINI("Main", "LODKey", msgData)
+    Call WriteINI("Main", "ExpKey", msgData)
     
     ' set expansion CD-Key
-    BotVars.LODKey = msgData
+    BotVars.ExpKey = msgData
     
     tmpBuf = "New expansion CD-key set."
     

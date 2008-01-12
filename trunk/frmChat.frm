@@ -5579,7 +5579,11 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     BotVars.Password = ReadCFG(MN, "Password")
     BotVars.CDKey = UCase$(ReadCFG(MN, "CDKey"))
-    BotVars.LODKey = UCase$(ReadCFG(MN, "LODKey"))
+    BotVars.ExpKey = UCase$(ReadCFG(MN, "LODKey"))
+    If BotVars.ExpKey = "" Then
+        BotVars.ExpKey = UCase$(ReadCFG(MN, "ExpKey"))
+    End If
+    
     BotVars.Product = ReadCFG(MN, "Product")
     BotVars.Server = ReadCFG(MN, "Server")
     BotVars.BanUnderLevel = Val(ReadCFG(OT, "BanUnderLevel"))

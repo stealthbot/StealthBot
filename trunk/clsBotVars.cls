@@ -23,7 +23,7 @@ Option Explicit
 Private m_sUsername                     As String
 Private m_sPassword                     As String
 Private m_sCDKey                        As String
-Private m_sLODKey                       As String
+Private m_sExpKey                       As String
 Private m_sProduct                      As String
 Private m_sServer                       As String
 Private m_byBanUnderLevel               As Byte
@@ -126,15 +126,15 @@ Public Property Let CDKey(ByVal sCDKey As String)
 
 End Property
 
-Public Property Get LODKey() As String
+Public Property Get ExpKey() As String
 
-    LODKey = m_sLODKey
+    ExpKey = m_sExpKey
 
 End Property
 
-Public Property Let LODKey(ByVal sLODKey As String)
+Public Property Let ExpKey(ByVal sExpKey As String)
 
-    m_sLODKey = sLODKey
+    m_sExpKey = sExpKey
 
 End Property
 

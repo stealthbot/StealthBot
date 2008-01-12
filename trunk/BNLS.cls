@@ -161,12 +161,12 @@ Public Sub Send_0x14(ByVal sIndex As Long, ByVal sAccount As String, ByVal sData
     Packet.vLSendPacket &H14
 End Sub
 
-Public Sub Send_0x1A(ByVal ProductID As Long, ByVal Flags As Long, ByVal Cookie As Long, _
+Public Sub Send_0x1A(ByVal ProductID As Long, ByVal Flags As Long, ByVal cookie As Long, _
     ByVal Timestamp As String, ByVal MPQName As String, ByVal ChecksumFormula As String)    'BNLS_VERSIONCHECKEX2
 
     Packet.InsertDWORD ProductID
     Packet.InsertDWORD Flags
-    Packet.InsertDWORD Cookie
+    Packet.InsertDWORD cookie
     Packet.InsertNonNTString Timestamp
     Packet.InsertNTString MPQName
     Packet.InsertNTString ChecksumFormula
@@ -285,7 +285,7 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
                 ds.SetKeyHash Mid$(Data, 12, 36), 1
                 
                 If BotVars.Product = "PX3W" Or BotVars.Product = "PX2D" Then
-                    Call Send_0x0C(BotVars.LODKey)
+                    Call Send_0x0C(BotVars.ExpKey)
                 Else
                     Call Send_BNLS0x51
                 End If

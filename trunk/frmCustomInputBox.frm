@@ -278,7 +278,7 @@ Private Sub cmdNext_Click()
             
             .cboCDKey.text = InputValues(3)
             .lblAddCurrentKey_Click
-            .txtLODKey.text = InputValues(4)
+            .txtExpKey.text = InputValues(4)
             .txtHomeChan.text = InputValues(5)
             
 '            .AddItem "(Choose One)"

@@ -148,9 +148,9 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                 .InsertNonNTString KeyHash
                 
                 If BotVars.Product = "PX2D" Or BotVars.Product = "PX3W" Then
-                    Call DecodeCDKey(BotVars.LODKey, ServerToken, ClientToken, KeyHash, Value1, ProductID, MPQRevision)
+                    Call DecodeCDKey(BotVars.ExpKey, ServerToken, ClientToken, KeyHash, Value1, ProductID, MPQRevision)
                     
-                    .InsertDWORD Len(BotVars.LODKey)
+                    .InsertDWORD Len(BotVars.ExpKey)
                     .InsertDWORD ProductID
                     .InsertDWORD Value1
                     .InsertDWORD &H0
@@ -179,15 +179,15 @@ End Sub
 Public Sub DecodeCDKey(ByVal sCDKey As String, ByVal ServerToken As Long, ByVal ClientToken As Long, ByRef KeyHash As String, ByRef Value1 As Long, ByRef ProductID As Long, ByVal MPQRevision As Long)
     Dim KDh As Long                     ' Key Decoder handler
     Dim HashSize As Long                ' CDKey hash size in bytes
-    Dim Result As Long                  ' kd_init() result
+    Dim result As Long                  ' kd_init() result
     
     sCDKey = Replace(sCDKey, "-", vbNullString)
     sCDKey = Replace(sCDKey, " ", vbNullString)
     sCDKey = KillNull(sCDKey)
     
-    Result = kd_init()
+    result = kd_init()
     
-    If Result = 0 Then
+    If result = 0 Then
         frmChat.AddChat RTBColors.ErrorMessageText, "BNCSUtil: kd_init() failed! Please use BNLS to connect."
         frmChat.DoDisconnect
         
@@ -330,11 +330,11 @@ End Sub
 
 
 Public Sub Send0x52()
-    Dim Result As Long
+    Dim result As Long
     Dim sBuffer As String
     
     sBuffer = String$(NLS_ACCOUNTCREATE_ + Len(BotVars.Username), vbNullChar)
-    Result = nls_account_create(ds.NLSHandle, sBuffer, NLS_ACCOUNTCREATE_ + Len(BotVars.Username))
+    result = nls_account_create(ds.NLSHandle, sBuffer, NLS_ACCOUNTCREATE_ + Len(BotVars.Username))
     
     With PBuffer
         .InsertNonNTString sBuffer

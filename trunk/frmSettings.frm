@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.0#0"; "vbalTreeView6.ocx"
 Begin VB.Form frmSettings 
    BackColor       =   &H00000000&
@@ -2476,7 +2476,7 @@ Begin VB.Form frmSettings
          Top             =   1080
          Width           =   2415
       End
-      Begin VB.TextBox txtLODKey 
+      Begin VB.TextBox txtExpKey 
          BackColor       =   &H00993300&
          Enabled         =   0   'False
          BeginProperty Font 
@@ -4356,10 +4356,10 @@ Private Function SaveSettings() As Boolean
         End If
     End If
     
-    If txtLODKey.Enabled And Not DoCDKeyLengthCheck(txtLODKey.text, s) Then
+    If txtExpKey.Enabled And Not DoCDKeyLengthCheck(txtExpKey.text, s) Then
         If MsgBox("Your expansion CD key is of an invalid length for the product you have chosen. Do you want to anyway?", vbInformation + vbYesNo, "StealthBot Settings") = vbNo Then
             ShowPanel spConnectionConfig
-            txtLODKey.SetFocus
+            txtExpKey.SetFocus
             SaveSettings = False
             Exit Function
         End If
@@ -4371,7 +4371,7 @@ Private Function SaveSettings() As Boolean
     WINI "Username", txtUsername.text, secMain
     WINI "Password", txtPassword.text, secMain
     WINI "CDKey", CDKeyReplacements(cboCDKey.text), secMain
-    WINI "LODKey", CDKeyReplacements(txtLODKey.text), secMain
+    WINI "ExpKey", CDKeyReplacements(txtExpKey.text), secMain
     WINI "HomeChan", txtHomeChan.text, secMain
     WINI "Server", cboServer.text, secMain
     WINI "BNLSServer", cboBNLSServer.text, secMain
@@ -4652,7 +4652,7 @@ Public Function InvalidConfigValues() As Boolean
     Dim s As String
     
     If optW3XP.Value Or optD2XP.Value Then
-        If LenB(txtLODKey.text) = 0 Then
+        If LenB(txtExpKey.text) = 0 Then
             If optW3XP.Value Then
                 s = "Warcraft III and a Frozen Throne"
             Else
@@ -4661,7 +4661,7 @@ Public Function InvalidConfigValues() As Boolean
             
             MsgBox "You must enter both a " & s & " CD-key to connect with an Expansion game.", vbOKOnly + vbInformation
             ShowPanel spConnectionConfig
-            txtLODKey.SetFocus
+            txtExpKey.SetFocus
             InvalidConfigValues = True
         End If
     End If
@@ -4843,49 +4843,49 @@ Private Sub optQuote_Click()
 End Sub
 
 Sub optSTAR_Click()
-    txtLODKey.Enabled = False
+    txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     lblHashPath.Caption = GetGamePath("RATS")
     chkUDP.Enabled = True
 End Sub
 
 Sub optWAR3_Click()
-    txtLODKey.Enabled = False
+    txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     lblHashPath.Caption = GetGamePath("3RAW")
     chkUDP.Enabled = False
 End Sub
 
 Sub optD2DV_Click()
-    txtLODKey.Enabled = False
+    txtExpKey.Enabled = False
     chkUseRealm.Enabled = True
     lblHashPath.Caption = GetGamePath("VD2D")
     chkUDP.Enabled = False
 End Sub
 
 Sub optW2BN_Click()
-    txtLODKey.Enabled = False
+    txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     lblHashPath.Caption = GetGamePath("NB2W")
     chkUDP.Enabled = True
 End Sub
 
 Sub optSEXP_Click()
-    txtLODKey.Enabled = False
+    txtExpKey.Enabled = False
     chkUseRealm.Enabled = False
     lblHashPath.Caption = GetGamePath("RATS")
     chkUDP.Enabled = True
 End Sub
 
 Sub optD2XP_Click()
-    txtLODKey.Enabled = True
+    txtExpKey.Enabled = True
     chkUseRealm.Enabled = True
     lblHashPath.Caption = GetGamePath("VD2D")
     chkUDP.Enabled = False
 End Sub
 
 Sub optW3XP_Click()
-    txtLODKey.Enabled = True
+    txtExpKey.Enabled = True
     chkUseRealm.Enabled = False
     lblHashPath.Caption = GetGamePath("PX3W")
     chkUDP.Enabled = False
@@ -4989,22 +4989,13 @@ Private Sub InitBasicConfig()
     txtPassword.text = ReadCFG(MN, "Password")
     cboCDKey.text = ReadCFG(MN, "CDKey")
     
-'    f = FreeFile
-'    If Dir$(App.Path & "\KeyList.txt") <> vbNullString Then
-'        Open App.Path & "\keylist.txt" For Input As #f
-'
-'        If LOF(f) > 0 Then
-'            Do While Not EOF(f)
-'                Line Input #f, s
-'                cboCDKey.AddItem s
-'            Loop
-'        End If
-'
-'        Close #f
-'    End If
+    ' Backwards compatibility for old LODKey config entry -a
+    txtExpKey.text = ReadCFG(MN, "LODKey")
     
-    'todo: same as above, for expkey
-    txtLODKey.text = ReadCFG(MN, "LODKey")
+    If txtExpKey.text <> "" Then
+        txtExpKey.text = ReadCFG(MN, "ExpKey")
+    End If
+    
     txtHomeChan.text = ReadCFG(MN, "HomeChan")
     txtOwner.text = ReadCFG(MN, "Owner")
     

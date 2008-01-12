@@ -153,7 +153,7 @@ Public PassedClanMotdCheck As Boolean
 Public LastAdd As Byte
 Public WatchUser As String
 Public bFlood As Boolean
-Public BotVars As clscBotVars
+Public BotVars As clsBotVars
 
 Public colUsersInChannel As Collection
 Public colLastSeen As Collection
