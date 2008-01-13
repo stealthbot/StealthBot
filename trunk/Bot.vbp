@@ -21,7 +21,6 @@ Class=clsCRC32; clsCRC32.cls
 Class=clsMCPHandler; clsMCPHandler.cls
 Class=DataStorage; DataStorage.cls
 Form=frmCatch.frm
-Form=frmCCEditor.frm
 Form=frmChat.frm
 Form=frmClanInvite.frm
 Form=frmCustomInputBox.frm

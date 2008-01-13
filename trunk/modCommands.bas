@@ -5427,14 +5427,14 @@ End Function ' end function OnHelp
 Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    
+    ' ...
 End Function
 
 ' handle demote command
-Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+Private Function OnDemote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    
+    ' ...
 End Function
 
 ' requires public

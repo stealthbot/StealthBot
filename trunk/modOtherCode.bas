@@ -983,18 +983,18 @@ End Sub
 '//     mm/dd/yy, hh:mm:ss
 '//
 Public Function SystemTimeToString(ByRef sT As SYSTEMTIME) As String
-    Dim buf As String
+    Dim Buf As String
 
     With sT
-        buf = buf & .wMonth & "/"
-        buf = buf & .wDay & "/"
-        buf = buf & .wYear & ", "
-        buf = buf & IIf(.wHour > 9, .wHour, "0" & .wHour) & ":"
-        buf = buf & IIf(.wMinute > 9, .wMinute, "0" & .wMinute) & ":"
-        buf = buf & IIf(.wSecond > 9, .wSecond, "0" & .wSecond)
+        Buf = Buf & .wMonth & "/"
+        Buf = Buf & .wDay & "/"
+        Buf = Buf & .wYear & ", "
+        Buf = Buf & IIf(.wHour > 9, .wHour, "0" & .wHour) & ":"
+        Buf = Buf & IIf(.wMinute > 9, .wMinute, "0" & .wMinute) & ":"
+        Buf = Buf & IIf(.wSecond > 9, .wSecond, "0" & .wSecond)
     End With
     
-    SystemTimeToString = buf
+    SystemTimeToString = Buf
 End Function
 
 Public Function GetCurrentMS() As String
@@ -1502,15 +1502,15 @@ Public Function NameWithoutRealm(ByVal Username As String, Optional ByVal Strict
     End If
 End Function
 
-Public Function GetBotVars.Realm(Optional ByVal Username As String) As String
+Public Function GetW3Realm(Optional ByVal Username As String) As String
     If (LenB(Username) = 0) Then
-        GetBotVars.Realm = BotVars.Realm
+        GetW3Realm = BotVars.Realm
     Else
         If (InStr(1, Username, "@", vbBinaryCompare) > 0) Then
             GetW3Realm = Mid$(Username, InStr(1, Username, "@", _
                 vbBinaryCompare) + 1)
         Else
-            GetBotVars.Realm = BotVars.Realm
+            GetW3Realm = BotVars.Realm
         End If
     End If
 End Function
