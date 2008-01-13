@@ -1074,6 +1074,14 @@ Private Function OnSetServer(ByVal Username As String, ByRef dbAccess As udtGetA
     ' specified.
     
     Dim tmpBuf As String ' temporary output buffer
+    
+    ' ...
+    If (InStr(1, msgData, Space(1), vbBinaryCompare) <> 0) Then
+        cmdRet(0) = "Error: The specified server contains " & _
+            "invalid character(s)."
+    
+        Exit Function
+    End If
 
     ' write configuration information
     Call WriteINI("Main", "Server", msgData)
@@ -2498,7 +2506,7 @@ Private Function OnSafeDel(ByVal Username As String, ByRef dbAccess As udtGetAcc
     If (InStr(1, u, Space(1), vbBinaryCompare) <> 0) Then
         tmpBuf(0) = "Error: The specified username is invalid."
     Else
-        Call OnAdd(Username, dbAccess, u & " -S", True, tmpBuf())
+        Call OnAdd(Username, dbAccess, u & " -S --type USER", True, tmpBuf())
     End If
     
     ' return message
@@ -4830,7 +4838,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         
                         ' does this entry have any remaining access?
                         If ((gAcc.Access = 0) And (gAcc.Flags = vbNullString) And _
-                            ((sGrp = vbNullString) Or (sGrp = "%"))) Then
+                            ((gAcc.Groups = vbNullString) Or (gAcc.Groups = "%"))) Then
                             
                             Dim res As Boolean ' ...
                            
@@ -5172,9 +5180,25 @@ End Function ' end function OnAbout
 Private Function OnServer(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim tmpBuf As String ' temporary output buffer
+    Dim tmpBuf       As String ' temporary output buffer
+    Dim RemoteHost   As String ' ...
+    Dim RemoteHostIP As String ' ...
     
-    tmpBuf = "I am currently connected to " & BotVars.Server & "."
+    ' ...
+    RemoteHost = frmChat.sckBNet.RemoteHost
+    
+    ' ...
+    RemoteHostIP = frmChat.sckBNet.RemoteHostIP
+    
+    ' ...
+    If (StrComp(RemoteHost, RemoteHostIP, vbBinaryCompare) = 0) Then
+        tmpBuf = "I am currently connected to " & _
+            frmChat.sckBNet.RemoteHostIP & "."
+    Else
+        tmpBuf = "I am currently connected to " & _
+            frmChat.sckBNet.RemoteHost & " (" & _
+                frmChat.sckBNet.RemoteHostIP & ")."
+    End If
             
     ' return message
     cmdRet(0) = tmpBuf
