@@ -200,3 +200,21 @@ End Property
 Public Property Let Username(ByVal Username As String)
     m_Username = Username
 End Property
+
+Public Property Get MessageCount() As Long
+    Dim ChatPacket As udtChatPacket
+    Dim i          As Integer ' ...
+    
+    For i = 0 To (m_Count - 1)
+        ChatPacket = m_arrChatPackets(i)
+        
+        With ChatPacket
+            If ((.EventID = ID_TALK) Or _
+                (.EventID = ID_EMOTE)) Then
+
+                MessageCount = _
+                    (MessageCount + 1)
+            End If
+        End With
+    Next i
+End Property

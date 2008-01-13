@@ -8,7 +8,6 @@ Attribute VB_Name = "modLogging"
 ' Created to enhance and clean up event and text logging
 Private iActiveDay As Integer
 
-
 ' START ENHANCED LOGGING
 ' Call before using any methods in this module
 Public Sub StartEnhancedLogging()
@@ -16,7 +15,6 @@ Public Sub StartEnhancedLogging()
         Call CreateLogfileCSS
     End If
 End Sub
-
 
 ' GET LOG FILENAME
 ' Returns the appropriate filename for the CURRENT, ACTIVE StealthBot log
@@ -30,20 +28,18 @@ Public Function GetLogFilename() As String
     GetLogFilename = sPath
 End Function
 
-
 ' GET ACTIVE DAY
 ' Returns the current DAY as an int
 Public Function GetActiveDay() As Integer
     GetActiveDay = CInt(Format(Date, "dd"))
 End Function
 
-
 ' OPEN LOGFILE
 ' Determines whether or not the logfile for today exists
 ' If it does not exist, creats and opens it and returns the filenumber
 ' If it exists, opens it for binary access write and returns the filenumber
 Public Function OpenLogfile() As Integer
-    Dim f As Integer
+    Dim f            As Integer
     Dim sLogFilename As String
     
     sLogFilename = GetLogFilename
@@ -125,29 +121,30 @@ End Function
 Public Sub LogPacketRaw(ByVal Server As enuPL_ServerTypes, ByVal Direction As enuPL_DirectionTypes, ByVal PacketID As Long, ByVal PacketLen As Long, ByRef PacketData As String)
     Dim l As Long
     
-    If LogPacketTraffic Then
+    If (LogPacketTraffic) Then
         'Log this packet!
         l = FreeFile
         
         Open PacketLogFilePath For Append As #l
             Print #l, GetTimestamp() & " "
         
-            Select Case Server
+            Select Case (Server)
                 Case stBNCS
                     Print #l, "BNCS";
                 Case stBNLS
                     Print #l, "BNLS";
             End Select
             
-            Select Case Direction
+            Select Case (Direction)
                 Case CtoS
                     Print #l, " C->S";
                 Case StoC
                     Print #l, " S->C";
             End Select
             
-            Print #l, " -- Packet ID " & Right$("00" & Hex(PacketID), 2) & "h (" & PacketID & "d) length " & PacketLen
-            Print #l, ""
+            Print #l, " -- Packet ID " & Right$("00" & Hex(PacketID), 2) & _
+                "h (" & PacketID & "d) length " & PacketLen
+            Print #l, vbNullString
             Print #l, DebugOutput(PacketData)
             Print #l, vbCrLf
         Close #l

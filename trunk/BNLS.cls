@@ -146,7 +146,9 @@ Public Sub Send_0x12(Optional ByVal sSlots As Long = 1) 'BNLS_RESERVESERVERSLOTS
     Packet.vLSendPacket &H12
 End Sub
 
-Public Sub Send_0x13(ByVal sIndex As Long, ByVal sNLS As Long, ByVal s0x53Data As String, ByVal sAcctDBData As String) 'BNLS_SERVERLOGONCHALLENGE
+Public Sub Send_0x13(ByVal sIndex As Long, ByVal sNLS As Long, ByVal s0x53Data As String, _
+    ByVal sAcctDBData As String) 'BNLS_SERVERLOGONCHALLENGE
+    
     Packet.InsertDWORD sIndex
     Packet.InsertDWORD sNLS
     Packet.InsertNonNTString sAcctDBData '(DWORD[16])  Data from account database.
@@ -181,26 +183,24 @@ Public Sub SendGenPacket(ByVal s As String, ByVal PacketID As Byte) 'Send back p
 End Sub
 
 Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
-    Dim sTemp As String
-    Dim lTemp As Long
-    'Static SessKey As String
-    'Static ClientSessKey As String
-    'Static KeyData As String
-    'Static KeyData2 As String
-    Dim lCheckSum As Long
-    Dim Splt() As String
-    Dim PacketID As Long
-    'Dim CheckString As String
-    'Dim Version As Long
+    Dim pD        As clsPacketDebuffer
     
-    Dim pD As clsPacketDebuffer
+    Dim sTemp     As String
+    Dim lTemp     As Long
+    Dim lCheckSum As Long
+    Dim Splt()    As String
+    Dim PacketID  As Long
     
     Set pD = New clsPacketDebuffer
+    
     pD.DebuffPacket Mid$(Data, 4)
     
     PacketID = Asc(Mid(Data, 3, 1))
     
-    If MDebug("all") Then frmChat.AddChat COLOR_BLUE, "BNLS RECV 0x" & Right$("00" & Hex(PacketID), 2)
+    If (MDebug("all")) Then
+        frmChat.AddChat COLOR_BLUE, "BNLS RECV 0x" & _
+            Right$("00" & Hex(PacketID), 2)
+    End If
     
     ' Added 2007-06-08 for a packet logging menu feature to aid tech support
     LogPacketRaw BNLS, StoC, PacketID, Len(Data), Data
@@ -208,7 +208,7 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     'Debug.Print "_-------------------------------------_"
     'Debug.Print DebugOutput(Data)
     
-    Select Case PacketID
+    Select Case (PacketID)
         Case &HD 'BNLS_CHOOSENLSREVISION
             'Debug.Print Conv(Mid$(Data, 4, 4))
             '(BOOL) success
@@ -305,21 +305,31 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
             sTemp = pD.DebuffRaw(20)
             lTemp = Conv(Mid$(sTemp, 1, 4))
             
-            If lTemp = 0 Then
+            If (lTemp = 0) Then
                 ' New condition added 1/22/06
                 '  All zeroes means that the logon WILL fail and the connection
                 '  should be aborted and retried. This is a Battle.net bug.
                 With frmChat
-                    If AttemptedFirstReconnect = False Then
+                    If (AttemptedFirstReconnect = False) Then
                         AttemptedFirstReconnect = True
-                        .AddChat RTBColors.ErrorMessageText, "[BNLS] The BNLS server has reported that this logon will fail because of a Battle.net bug."
-                        .AddChat RTBColors.ErrorMessageText, "[BNLS] This is nothing to worry about. The bot will try connecting again and should succeed."
+                        .AddChat RTBColors.ErrorMessageText, "[BNLS] The BNLS server has reported that " & _
+                            "this logon will fail because of a Battle.net bug."
+                        
+                        .AddChat RTBColors.ErrorMessageText, "[BNLS] This is nothing to worry about. " & _
+                            "The bot will try connecting again and should succeed."
+                            
                         .DoDisconnect
-                        Pause 1
+                        
+                        Call Pause(1)
+                        
                         .DoConnect
                     Else
-                        .AddChat RTBColors.ErrorMessageText, "[BNLS] The BNLS server has reported that this logon will fail because of a Battle.net bug."
-                        .AddChat RTBColors.ErrorMessageText, "[BNLS] Please try your connection at a later time."
+                        .AddChat RTBColors.ErrorMessageText, "[BNLS] The BNLS server has reported that " & _
+                            "this logon will fail because of a Battle.net bug."
+                            
+                        .AddChat RTBColors.ErrorMessageText, "[BNLS] Please try your connection at a " & _
+                            "later time."
+                            
                         .DoDisconnect
                     End If
                 End With
@@ -381,9 +391,10 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
             'BYTE   #Successful 9
             'DWORD  Successcode 10111213
             'DWORD  Clientkey   14151617
-            If Len(Data) < 40 Then
+            If (Len(Data) < 40) Then
                 frmChat.Event_BNLSDataError 2
-                CloseConnection
+                
+                Call CloseConnection
             Else
                 ds.SetKeyHash Mid(Data, 18, 36), 2 '9 DWORD KeyData
                 Call Send_BNLS0x51
@@ -394,12 +405,13 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
 End Sub
 
 Sub CloseConnection(Optional ByVal DoNotShow As Byte = 0)
-    If frmChat.sckBNLS.State <> 0 Then frmChat.sckBNLS.Close
-    If frmChat.sckBNet.State <> 0 Then frmChat.sckBNet.Close
-    If frmChat.sckMCP.State <> 0 Then frmChat.sckMCP.Close
+    If (frmChat.sckBNLS.State <> 0) Then: frmChat.sckBNLS.Close
+    If (frmChat.sckBNet.State <> 0) Then: frmChat.sckBNet.Close
+    If (frmChat.sckMCP.State <> 0) Then: frmChat.sckMCP.Close
     
-    If DoNotShow = 0 Then
-        frmChat.AddChat RTBColors.ErrorMessageText, "All connections closed."
+    If (DoNotShow = 0) Then
+        frmChat.AddChat RTBColors.ErrorMessageText, _
+            "All connections closed."
     End If
     
     Passed0x0F = 0
@@ -407,6 +419,7 @@ Sub CloseConnection(Optional ByVal DoNotShow As Byte = 0)
     SetTitle "Disconnected"
     
     On Error Resume Next
+    
     frmChat.SControl.Run "Event_ServerError", "All connections closed."
 End Sub
 
@@ -416,7 +429,9 @@ Private Sub Send_BNLS0x51()
         .InsertDWORD ds.GetVersion
         .InsertDWORD ds.GetChecksum
         
-        If BotVars.Product = "PX2D" Or BotVars.Product = "PX3W" Then
+        If ((BotVars.Product = "PX2D") Or _
+            (BotVars.Product = "PX3W")) Then
+           
             .InsertDWORD &H2
         Else
             .InsertDWORD &H1
@@ -425,7 +440,9 @@ Private Sub Send_BNLS0x51()
         .InsertDWORD &H0
         .InsertNonNTString ds.GetKeyHash(1)
         
-        If BotVars.Product = "PX2D" Or BotVars.Product = "PX3W" Then
+        If ((BotVars.Product = "PX2D") Or _
+            (BotVars.Product = "PX3W")) Then
+            
             .InsertNonNTString ds.GetKeyHash(2)
         End If
         

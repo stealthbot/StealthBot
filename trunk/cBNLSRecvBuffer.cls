@@ -23,10 +23,15 @@ End Sub
 
 Public Function FullPacket() As Boolean
     Dim lngPacketLen As Long
+    
     FullPacket = False
-    If Len(strData) > 0 Then
+    
+    If (Len(strData) > 0) Then
         lngPacketLen = GetWORD(Mid(strData, 1, 2))
-        If Len(strData) >= lngPacketLen Then FullPacket = True
+        
+        If (Len(strData) >= lngPacketLen) Then
+            FullPacket = True
+        End If
     End If
 End Function
 
@@ -44,16 +49,22 @@ End Sub
 
 Private Function GetWORD(Data As String) As Long
     Dim tmp As String
+    Dim A As String
+    Dim b As String
+    
     tmp = ToHex(Data)
-    Dim A As String, b As String
-    A = Mid(tmp, 3, 2)
-    b = Mid(tmp, 1, 2)
+    
+    A = Mid$(tmp, 3, 2)
+    b = Mid$(tmp, 1, 2)
+    
     tmp = A & b
+    
     GetWORD = Val("&H" & tmp)
 End Function
 
 Private Function ToHex(Data As String) As String
     Dim i As Integer
+    
     For i = 1 To Len(Data)
         ToHex = ToHex & Right("00" & Hex(Asc(Mid(Data, i, 1))), 2)
     Next i

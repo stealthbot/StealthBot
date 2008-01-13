@@ -521,6 +521,8 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
             Case "unmonitor":    Call OnUnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
             Case "online":       Call OnOnline(Username, dbAccess, msgData, InBot, cmdRet())
             Case "help":         Call OnHelp(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "promote":      Call OnPromote(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "demote":       Call OnDemote(Username, dbAccess, msgData, InBot, cmdRet())
             Case Else
                 blnNoCmd = True
         End Select
@@ -1093,12 +1095,97 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' its status as a channel moderator.  This command is useful if you are
     ' lazy and you just wish to designate someone as quickly as possible.
     
-    If (checkChannel(msgData) > 0) Then
+    ' ...
+    If (checkChannel(msgData)) Then
+        Dim i          As Integer ' ...
+        Dim arrUsers() As String  ' ...
+        Dim userCount  As Integer ' ...
+    
+        ' ...
+        If ((MyFlags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
+            ' ...
+            cmdRet(0) = "Error: This command requires channel " & _
+                "operator status."
+        
+            Exit Function
+        End If
+    
+        ' ...
+        If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+            ' ...
+            ReDim Preserve arrUsers(0)
+            
+            ' ...
+            If (Clan.MyRank >= 4) Then
+                ' ...
+                For i = 1 To frmChat.lvClanList.ListItems.Count
+                    ' ...
+                    If (StrComp(frmChat.lvClanList.ListItems(i).text, _
+                        reverseUsername(CurrentUsername), vbTextCompare) <> 0) Then
+                        
+                        ' ...
+                        If (frmChat.lvClanList.ListItems(i).SmallIcon = 3) Then
+                            ' ...
+                            arrUsers(userCount) = _
+                                frmChat.lvClanList.ListItems(i).text
+        
+                            ' ...
+                            userCount = (userCount + 1)
+        
+                            ' ...
+                            ReDim Preserve arrUsers(0 To userCount)
+                        End If
+                    End If
+                Next i
+            End If
+            
+            ' ...
+            If (userCount) Then
+                ' demote shamans
+                For i = 0 To (userCount - 1)
+                    ' ...
+                    AddChat vbRed, "DEMOTE: " & arrUsers(i)
+                
+                    ' ...
+                    With PBuffer
+                        .InsertDWORD &H1
+                        .InsertNTString arrUsers(i)
+                        .InsertBYTE &H2 ' General member (Grunt)
+                        .SendPacket &H7A
+                    End With
+                Next i
+            End If
+        End If
+        
         ' designate user
         Call AddQ("/designate " & reverseUsername(msgData))
         
         ' rejoin channel
         Call AddQ("/resign")
+        
+        ' ...
+        If (userCount) Then
+            ' promote shamans again
+            For i = 0 To (userCount - 1)
+                ' ...
+                AddChat vbRed, "PROMOTE: " & arrUsers(i)
+            
+                ' ...
+                With PBuffer
+                    .InsertDWORD &H3
+                    .InsertNTString arrUsers(i)
+                    .InsertBYTE &H3 ' Officer (Shaman)
+                    .SendPacket &H7A
+                End With
+            Next i
+        End If
+        
+        ' ...
+        ReDim arrUsers(0)
+    Else
+        ' ...
+        cmdRet(0) = "Error: The specified user is not present " & _
+            "within the channel."
     End If
 End Function ' end function OnGiveUp
 
@@ -3313,9 +3400,8 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
             ' grab a file number
             f = FreeFile
         
-            If (InStr(1, u, ".") > 0) Then
-                Y = Left$(u, InStr(1, u, ".", _
-                    vbBinaryCompare) - 1)
+            If (InStr(1, u, ".", vbBinaryCompare) > 0) Then
+                Y = Left$(u, InStr(1, u, ".", vbBinaryCompare) - 1)
             Else
                 Y = u
             End If
@@ -3332,10 +3418,7 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
             End Select
             
             ' get absolute file path
-            u = (App.Path & "\" & u)
-            
-            ' check for existence of file
-            u = (Dir$(u))
+            u = Dir$(App.Path & "\" & u)
             
             If (u = vbNullString) Then
                 tmpBuf(tmpCount) = "Error: The specified file could not " & _
@@ -3362,7 +3445,8 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
                             ReDim Preserve tmpBuf(tmpCount)
                         
                             ' store line in buffer
-                            tmpBuf(tmpCount) = tmp
+                            tmpBuf(tmpCount) = "Line " & tmpCount & ": " & _
+                                tmp
                             
                             ' increment counter
                             tmpCount = (tmpCount + 1)
@@ -3546,9 +3630,11 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 Call WildCardBan(u, banmsg, 1)
             Else
                 If (banmsg <> vbNullString) Then
-                    Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), dbAccess.Access)
+                    Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, _
+                        vbNullString), dbAccess.Access)
                 Else
-                    Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), dbAccess.Access)
+                    Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, _
+                        vbNullString), dbAccess.Access)
                 End If
             End If
             
@@ -5337,6 +5423,20 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
     cmdRet() = tmpBuf()
 End Function ' end function OnHelp
 
+' handle promote command
+Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    
+End Function
+
+' handle demote command
+Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    
+End Function
+
 ' requires public
 Public Function Cache(ByVal Inpt As String, ByVal Mode As Byte, Optional ByRef Typ As String) As String
     Static s()  As String
@@ -5427,14 +5527,15 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
             ' Kicking or Banning
         
             For i = 1 To colUsersInChannel.Count
-                
                 With colUsersInChannel.Item(i)
                     If (Not (.IsSelf())) Then
                         z = PrepareCheck(.Username)
                         
                         If (z Like sMatch) Then
                             If (GetSafelist(.Username) = False) Then
-                                If (LenB(.Username) > 0 And ((.Flags <> 2) And (.Flags <> 18))) Then
+                                If ((LenB(.Username) > 0) And _
+                                   ((.Flags <> 2) And (.Flags <> 18))) Then
+                                   
                                     Call AddQ("/" & Typ & reverseUsername(.Username) & Space(1) & smsgData, 1)
                                 End If
                             Else
@@ -5445,7 +5546,7 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
                 End With
             Next i
             
-            If (iSafe > 0) Then
+            If (iSafe) Then
                 If (StrComp(smsgData, ProtectMsg, vbTextCompare) <> 0) Then
                     Call AddQ("Encountered " & iSafe & " safelisted user(s).")
                 End If
@@ -6685,22 +6786,25 @@ Private Function GetDBDetail(ByVal Username As String) As String
     
     For i = 0 To UBound(DB)
         With DB(i)
-            If StrComp(Username, .Username, vbTextCompare) = 0 Then
+            If (StrComp(Username, .Username, vbTextCompare) = 0) Then
                 If .AddedBy <> "%" And LenB(.AddedBy) > 0 Then
-                    sRetAdd = " was added by " & .AddedBy & " on " & .AddedOn & "."
+                    sRetAdd = " was added by " & .AddedBy & " on " & _
+                        .AddedOn & "."
                 End If
                 
-                If .ModifiedBy <> "%" And LenB(.ModifiedBy) > 0 Then
-                    If (.AddedOn <> .ModifiedOn) Or (.AddedBy <> .ModifiedBy) Then
-                        sRetMod = " was last modified by " & .ModifiedBy & " on " & .ModifiedOn & "."
+                If ((.ModifiedBy <> "%") And (LenB(.ModifiedBy) > 0)) Then
+                    If ((.AddedOn <> .ModifiedOn) Or (.AddedBy <> .ModifiedBy)) Then
+                        sRetMod = " was last modified by " & .ModifiedBy & _
+                            " on " & .ModifiedOn & "."
                     Else
                         sRetMod = " have not been modified since they were added."
                     End If
                 End If
                 
-                If LenB(sRetAdd) > 0 Or LenB(sRetMod) > 0 Then
-                    If LenB(sRetAdd) > 0 Then
-                        GetDBDetail = DB(i).Username & sRetAdd & " They" & sRetMod
+                If ((LenB(sRetAdd) > 0) Or (LenB(sRetMod) > 0)) Then
+                    If (LenB(sRetAdd) > 0) Then
+                        GetDBDetail = DB(i).Username & sRetAdd & " They" & _
+                            sRetMod
                     Else
                         'no add, but we could have a modify
                         GetDBDetail = DB(i).Username & sRetMod

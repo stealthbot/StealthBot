@@ -9,6 +9,7 @@ Public colChatQueue  As Collection
 ' ...
 Private m_TimerID    As Long
 Private m_QueueCount As Long
+Private m_QueueGTC   As Long
 
 ' ...
 Public Sub ChatQueue_Initialize()
@@ -28,10 +29,11 @@ End Sub
 Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, _
     ByVal idEvent As Long, ByVal dwTimer As Long)
     
-    Dim i      As Integer ' ...
-    Dim doLoop As Boolean ' ...
-    Dim found  As Boolean ' ...
-        
+    Dim i       As Integer ' ...
+    Dim doLoop  As Boolean ' ...
+    Dim found   As Boolean ' ...
+    Dim blnShow As Boolean ' ...
+    
     ' ...
     m_QueueCount = colChatQueue.Count
     
@@ -47,23 +49,25 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, _
             
             ' ...
             Set clsChatQueue = colChatQueue(i)
-        
+
             With clsChatQueue
                 ' ...
-                If (GetTickCount() - .Time() >= 3000) Then
+                If (GetTickCount() - .Time() >= 1000) Then
+                    blnShow = True
+                End If
+
+                ' ...
+                If (blnShow) Then
                     ' ...
                     Call .Show
                     
                     ' ...
                     Call colChatQueue.Remove(i)
-                    
-                    ' ...
-                    found = True
-                    
-                    ' ...
-                    Exit For
                 End If
             End With
+            
+            ' ...
+            blnShow = False
         Next
         
         ' ...
@@ -91,28 +95,16 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
     
     game = ParseStatstring(OriginalStatstring, pStats, Clan)
 
-    If (Not (JoinMessagesOff)) Then
-        If (m_QueueCount <= 3) Then
-            Call frmChat.AddChat(RTBColors.JoinText, "-- ", _
-                RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
-                    RTBColors.JoinText, " has joined the channel using " & pStats)
-        Else
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, "-- ", _
-                RTBColors.ErrorMessageText, Username & " [" & Ping & "ms]", _
-                    RTBColors.ErrorMessageText, " has joined the channel using " & pStats)
-        End If
+    If (JoinMessagesOff = False) Then
+        Call frmChat.AddChat(RTBColors.JoinText, "-- ", _
+            RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
+                RTBColors.JoinText, " has joined the channel using " & pStats)
     End If
     
-    If (Dii) Then
-        If (Not (checkChannel(Username) <> 0)) Then
-            Call AddName(Username, Product, Flags, Ping, Clan)
-        End If
+    If (Clan <> vbNullString) Then
+        Call AddName(Username, Product, Flags, Ping, Clan)
     Else
-        If (Len(Clan)) Then
-            Call AddName(Username, Product, Flags, Ping, Clan)
-        Else
-            Call AddName(Username, Product, Flags, Ping)
-        End If
+        Call AddName(Username, Product, Flags, Ping)
     End If
     
     frmChat.lblCurrentChannel.Caption = _
@@ -138,33 +130,27 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
 
     game = ParseStatstring(OriginalStatstring, pStats, Clan)
     
-    'If (i) Then
-    '    With colUsersInChannel(i)
-    '        .Username = Username
-    '        .Clan = Clan
-    '        .Statstring = OriginalStatstring
-    '    End With
-    'End If
-    
     If (JoinMessagesOff = False) Then
         Call frmChat.AddChat(RTBColors.JoinText, "-- Stats updated: ", _
             RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
                 RTBColors.JoinText, " is using " & pStats)
     End If
     
-    If (Pos) Then
-        Set found = frmChat.lvChannel.ListItems(Pos)
-        
-        If (g_ThisIconCode <> -1) Then
-            If (colUsersInChannel.Item(i).Product = "W3XP") Then
-                found.SmallIcon = (g_ThisIconCode + ICON_START_W3XP + _
-                    IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0))
-            Else
-                found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
+    If (Flags = 0) Then
+        If (Pos) Then
+            Set found = frmChat.lvChannel.ListItems(Pos)
+            
+            If (g_ThisIconCode <> -1) Then
+                If (colUsersInChannel.Item(i).Product = "W3XP") Then
+                    found.SmallIcon = (g_ThisIconCode + ICON_START_W3XP + _
+                        IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0))
+                Else
+                    found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
+                End If
             End If
+        
+            Set found = Nothing
         End If
-    
-        Set found = Nothing
     End If
 End Sub
 
@@ -278,7 +264,12 @@ End Sub
 Public Sub Event_QueuedEmote(ByVal Username As String, ByVal Flags As Long, ByVal Ping As Long, _
     ByVal Message As String)
     
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Event_QueuedEmote() has been fired.")
+    frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, _
+        Username & Space(1), RTBColors.EmoteText, Message & ">"
+        
+    If (frmChat.mnuFlash.Checked) Then
+        Call FlashWindow
+    End If
 End Sub
 
 ' ...

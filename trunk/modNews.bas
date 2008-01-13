@@ -2,12 +2,12 @@ Attribute VB_Name = "modNews"
 Option Explicit
 
 Public Sub HandleNews(ByVal s As String)
-
     On Error Resume Next
     
-    Dim Splt() As String, SubSplt() As String
-    Dim i As Integer
-    Dim OldValue As Boolean
+    Dim Splt()    As String
+    Dim SubSplt() As String
+    Dim i         As Integer
+    Dim OldValue  As Boolean
     
     OldValue = frmChat.mnuUTF8.Checked ' old value of UTF8 encoding setting
     
@@ -60,11 +60,8 @@ Public Sub HandleNews(ByVal s As String)
                 frmChat.AddChat RTBColors.ServerInfoText, "The current StealthBot Beta version is " & Splt(4) & "."
             #End If
             '##############
-            
-            
         End If
     
         frmChat.mnuUTF8.Checked = OldValue
     End If
-    
 End Sub
