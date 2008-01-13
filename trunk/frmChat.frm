@@ -831,6 +831,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -857,6 +858,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -904,6 +906,12 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuUsers 
          Caption         =   "&Database Manager"
+      End
+      Begin VB.Menu mnuCommandManager 
+         Caption         =   "Command Manager"
+      End
+      Begin VB.Menu mnuSepTabcd 
+         Caption         =   "-"
       End
       Begin VB.Menu mnuMonitor 
          Caption         =   "User &Monitor"
@@ -2153,10 +2161,11 @@ Sub Event_BNetError(ErrorNumber As Integer, Description As String)
         
         UserCancelledConnect = False 'this should fix the beta reconnect problems
         
-        'ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, AddressOf Reconnect_TimerProc)
+        ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
+            AddressOf Reconnect_TimerProc)
         
-        ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, _
-            BotVars.ReconnectDelay, AddressOf ExtendedReconnect_TimerProc)
+        'ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, _
+        '    BotVars.ReconnectDelay, AddressOf ExtendedReconnect_TimerProc)
     End If
 End Sub
 
@@ -2747,7 +2756,7 @@ Sub Form_Unload(Cancel As Integer)
     
     Unload frmAbout
     Unload frmCatch
-    Unload frmCCEditor
+    'Unload frmCCEditor
     'Unload frmChat: we are doing this now
     Unload frmClanInvite
     Unload frmEMailReg
@@ -2759,7 +2768,7 @@ Sub Form_Unload(Cancel As Integer)
     Unload frmRealm
     Unload frmSettings
     Unload frmSplash
-    Unload frmUserManager
+    'Unload frmUserManager
     Unload frmWriteProfile
     Call ExitProcess(0)
 End Sub
@@ -3164,13 +3173,17 @@ Private Sub mnuCatchPhrases_Click()
     frmCatch.Show
 End Sub
 
-Private Sub mnuCCEditor_Click()
-    frmCCEditor.Show
-End Sub
+'Private Sub mnuCCEditor_Click()
+'    frmCCEditor.Show
+'End Sub
 
 Sub mnuClearWW_Click()
     rtbWhispers.text = ""
     AddWhisper RTBColors.ConsoleText, ">> Whisper window cleared."
+End Sub
+
+Private Sub mnuCommandManager_Click()
+    frmCommands.Show
 End Sub
 
 Private Sub mnuConnect2_Click()
@@ -5938,7 +5951,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     mnuHideWhispersInrtbChat.Checked = (ReadCFG("Main", "HideWhispersInMain") = "Y")
     mnuIgnoreInvites.Checked = (ReadCFG("Main", "IgnoreClanInvitations") = "Y")
     
-    LoadSafelist
+    'LoadSafelist
     LoadArray LOAD_PHRASES, Phrases()
     LoadArray LOAD_FILTERS, gFilters()
     
@@ -5991,12 +6004,12 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCFG(OT, "IPBans")
     If s = "Y" Then BotVars.IPBans = True Else BotVars.IPBans = False
     
-    s = ReadCFG(OT, "ClientBansOn")
-    If s = "Y" Then BotVars.ClientBans = True Else BotVars.ClientBans = False
+    's = ReadCFG(OT, "ClientBansOn")
+    'If s = "Y" Then BotVars.ClientBans = True Else BotVars.ClientBans = False
     
-    s = ReadCFG(OT, "ClientBans")
-    ClientBans() = Split(s, " ")
-    If UBound(ClientBans) = -1 Then ReDim ClientBans(0)
+    's = ReadCFG(OT, "ClientBans")
+    'ClientBans() = Split(s, " ")
+    'If UBound(ClientBans) = -1 Then ReDim ClientBans(0)
     
     s = ReadCFG(MN, "QuietTime")
     If s = "Y" Then BotVars.QuietTime = True Else BotVars.QuietTime = False
@@ -6169,13 +6182,13 @@ Function OutFilterMsg(ByVal strOut As String) As String
 End Function
 
 Sub SetFloodbotMode(ByVal Mode As Byte)
-
-    Dim i As Integer
+    Dim i   As Integer
     Dim Add As Byte
 
-    Select Case Mode
+    Select Case (Mode)
         Case 0      'OFF
             bFlood = False
+            
             SetNagelStatus frmChat.sckBNet.SocketHandle, True
                         
             While colQueue.Count > 0
@@ -6183,23 +6196,29 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
             Wend
             
             SetProcessPriority 0, frmChat.hWnd, ppNormal
-            AddChat RTBColors.TalkBotUsername, "The channel list is most likely not accurate. Rejoin the bot to correct this."
+            
+            AddChat RTBColors.TalkBotUsername, "The channel list is most likely not accurate. Please " & _
+                "rejoin the bot to correct this."
+            
             ReDim gFloodSafelist(0)
             
         Case 1      'ON
             bFlood = True
+            
             SetNagelStatus frmChat.sckBNet.SocketHandle, False
             
-            While colQueue.Count > 0
+            While (colQueue.Count > 0)
                 colQueue.Remove 1
             Wend
             
             AddChat RTBColors.TalkBotUsername, "You have enabled Emergency Floodbot Protection:"
             AddChat RTBColors.InformationText, "- All message-queue actions have been suspended."
             AddChat RTBColors.InformationText, "- No greet messages or command responses will be displayed."
-            AddChat RTBColors.InformationText, "- You can still use any commands from the channel or in-bot. You may not see their results."
+            AddChat RTBColors.InformationText, "- You can still use any commands from the channel or " & _
+                "in-bot. You may not see their results."
             AddChat RTBColors.InformationText, "- Any user that joins and IS NOT SAFELISTED will be banned."
-            AddChat RTBColors.InformationText, "- You can add users to the safelist using the safelist command in-bot or in-channel."
+            AddChat RTBColors.InformationText, "- You can add users to the safelist using the safelist " & _
+                "command in-bot or in-channel."
             AddChat RTBColors.TalkBotUsername, "Type '/efp off' to return to normal."
             
             SetProcessPriority 0, frmChat.hWnd, ppHigh
@@ -6207,36 +6226,34 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
             ReDim gFloodSafelist(0)
             
             For i = 1 To colSafelist.Count
-                
-                If Not GetSafelist(colSafelist.Item(i).Name) Then '// recursion -- bFlood is active
+                If (Not (GetSafelist(colSafelist.Item(i).Name))) Then
+                    gFloodSafelist(UBound(gFloodSafelist)) = _
+                        Replace(PrepareCheck(colSafelist.Item(i).Name), Space(1), _
+                            vbNullString)
                     
-                    gFloodSafelist(UBound(gFloodSafelist)) = Replace(PrepareCheck(colSafelist.Item(i).Name), " ", vbNullString)
                     ReDim Preserve gFloodSafelist(UBound(gFloodSafelist) + 1)
-                    
                 End If
-                
             Next i
             
             For i = LBound(DB) To UBound(DB)
                 With DB(i)
-                    If Len(.Flags) > 0 Then
-                        If InStr(1, .Flags, "Z") > 0 Or InStr(1, .Flags, "B") > 0 Then Add = 1
-                        If InStr(1, .Username, " ") > 0 Then Add = 1
+                    If (GetShitlist(DB(i).Username)) Then
+                        Add = 1
                     End If
                 End With
                 
-                If GetSafelist(DB(i).Username) Then Add = 1
+                If (GetSafelist(DB(i).Username)) Then
+                    Add = 1
+                End If
                 
-                If Add = 0 Then
+                If (Add = 0) Then
+                    gFloodSafelist(UBound(gFloodSafelist)) = _
+                        DB(i).Username
                     
-                    gFloodSafelist(UBound(gFloodSafelist)) = DB(i).Username
                     ReDim Preserve gFloodSafelist(UBound(gFloodSafelist) + 1)
-                    
                 End If
             Next i
-            
     End Select
-    
 End Sub
 
 Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
@@ -6261,16 +6278,20 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
             'BNCSBuffer.WriteLog strTemp
             
             ' EFP System now running under the parsing layer for extra-crispy efficiency
-            If bFlood Then
-                If Asc(Mid$(strTemp, 2, 1)) = &HF Then
-                    If Conv(Mid$(strTemp, 5, 4)) = ID_JOIN Then
+            If (bFlood) Then
+                If (Asc(Mid$(strTemp, 2, 1)) = &HF) Then
+                    If (Conv(Mid$(strTemp, 5, 4)) = ID_JOIN) Then
                         fTemp = KillNull(Mid$(strTemp, 29))
-                        If StrComp(flood, fTemp, vbBinaryCompare) <> 0 Then
-                            If Not GetSafelist(fTemp) Then
-                                If floodCap < 45 Then
-                                    APISend "/ban " & fTemp
-                                    floodCap = floodCap + 30
+                        
+                        If (StrComp(flood, fTemp, vbBinaryCompare) <> 0) Then
+                            If (Not (GetSafelist(fTemp))) Then
+                                If (floodCap < 45) Then
+                                    Call APISend("/ban " & fTemp)
+                                    
+                                    floodCap = (floodCap + 30)
+                                    
                                     flood = fTemp
+                                    
                                     Exit Sub
                                 End If
                             End If
@@ -6279,9 +6300,9 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
                 End If
             End If
             
-            BNCSParsePacket strTemp
+            Call BNCSParsePacket(strTemp)
             
-            BufferLimit = BufferLimit + 1 'DebugOutput Left$(strBuffer, lngLen)
+            BufferLimit = (BufferLimit + 1) 'DebugOutput Left$(strBuffer, lngLen)
         Wend
     Else
         'proxy is ON and NOT CONNECTED
@@ -6910,7 +6931,7 @@ Sub DoConnect()
 End Sub
 
 Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAlone As Boolean = False)
-    If Not UserCancelledConnect Then
+    If (Not (UserCancelledConnect)) Then
         SetTitle "Disconnected"
         
         Call NLogin.CloseConnection(DoNotShow)
@@ -6966,9 +6987,15 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         Passed0x0F = 0
         uTicks = 0
         
-        If Me.WindowState = vbNormal And DoNotShow = 0 Then cboSend.SetFocus
+        If ((Me.WindowState = vbNormal) And _
+            (DoNotShow = 0)) Then
+            
+            Call cboSend.SetFocus
+        End If
         
         DestroyNLSObject
+        
+        Call ClearChatQueue
         
         On Error Resume Next
         SControl.Run "Event_LoggedOff"
