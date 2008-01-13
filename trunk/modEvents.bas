@@ -128,7 +128,7 @@ End Sub
 
 Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     Dim mailCount As Integer ' ...
-        
+    
     ' clear chat queue when
     ' joining new channel
     Call ClearChatQueue
