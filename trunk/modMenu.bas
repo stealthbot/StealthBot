@@ -293,7 +293,8 @@ End Function
 '// Written by Swent. Registers and populates menus for each plugin in the Plugins menu.
 '//   Also registers the Plugin System, Scripting Help, and Display menus
 Public Sub RegisterPluginMenus()
-    Dim lngHelpMenu As Long, strPrefixes() As String, strTitles() As String
+    Dim lngHelpMenu As Long, strPrefixes() As String, strTitles() As String, tmpTitle As String
+    Dim boolAddPrefix As Boolean
     Dim i As Integer
     
     Set dictMenuIDs = New Dictionary
@@ -325,13 +326,18 @@ Public Sub RegisterPluginMenus()
     
     '// Get plugin prefixes and titles
     strPrefixes = Split(frmChat.SControl.Eval("Join(psPrefixes)"))
-    strTitles = Split(frmChat.SControl.Eval("psTitles"), ",")
+    strTitles = Split(frmChat.SControl.Eval("psTitles"), "|||")
 
     '// Register and populate a menu for each plugin
     For i = 0 To UBound(strPrefixes)
     
         '// Are plugin menus enabled?
         If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit For
+
+        '// Format title
+        If strTitles(i) <> strPrefixes(i) Then boolAddPrefix = True Else boolAddPrefix = False
+        If Len(strTitles(i)) > 30 Then strTitles(i) = Left(strTitles(i), 27) & "..."
+        If boolAddPrefix Then strTitles(i) = strTitles(i) & " (" & strPrefixes(i) & ")"
 
         '// Add an item in Plugin Menu Display for this plugin
         dictItemIDs("#Display|||" & strPrefixes(i)) = AddScriptMenuItem(dictMenuIDs("#Display"), strTitles(i), _
