@@ -2,11 +2,11 @@
 '// ^^ Ignore this version line, but DO NOT remove/modify it
 
 
-'// The Plugin System - StealthBot 2.7 Development Version
+'// The StealthBot Plugin System - StealthBot 2.7 Development Version
 '//    by Swent
-'//      Last modified 1:52 AM 11/23/2007
+'//      Last modified 2:01 AM 1/15/2008
 
-'// The Plugin System is an updateable, scripted extension of StealthBot's VBScripting System.
+'// The StealthBot Plugin System is an updateable, scripted extension of StealthBot's VBScripting System.
 '//    This portion of the scripting system remains external to allow for updates and for viewing and tweaking by advanced scriptors.
 '//        ** DO NOT change anything in this file unless you know what you're doing **
 
@@ -138,7 +138,7 @@ Set psSC = GetScriptControl()
 Set psFSO = CreateObject("Scripting.FileSystemObject")
 Set psWshShell = CreateObject("WScript.Shell")
 Set psAppShell = CreateObject("Shell.Application")
-Set psLoadError = CreateObject("Scripting.Dictionary")     '// holds plugin load status (errored or not)
+Set psLoadError = CreateObject("Scripting.Dictionary")     '// holds load error status (errored or not)
 Set psCodeLoaded = CreateObject("Scripting.Dictionary")    '// holds status of plugin code (loaded or not)
 Set psPlugins = CreateObject("Scripting.Dictionary")       '// holds plugin file paths
 Set psVersions = CreateObject("Scripting.Dictionary")      '// holds plugin versions
@@ -268,7 +268,7 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, Lines)
 
    '// Store the title for use in the plugins menu
    If Len(strTitle) = 0 Then strTitle = Prefix
-   psTitles = psTitles & strTitle & ","
+   psTitles = psTitles & strTitle & "|||"
 
    '// Create the default settings for this plugin
    SetSetting Prefix, "enabled", True, "", False
@@ -488,6 +488,8 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
    '* Command to list all plugins currently loaded
    ElseIf cmdName = "plugins" Then
       arrPrefixes = psPlugins.Keys
+      arrTitles = Split(psTitles, "|||")
+
       If DisplayID = 3 Or DisplayID = 1 Then
          For i = 0 to UBound(arrPrefixes)
            If Not psPluginEnabled(arrPrefixes(i)) Then
@@ -497,6 +499,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
          dsp DisplayID, "Loaded Plugins (" & psPlugins.Count & "): " & Join(arrPrefixes, ", "), Username, vbWhite
          Exit Sub
       End If
+
       For i = 0 to psPlugins.Count - 1
          If i Mod 2 = 0 Then altColor = psColor1 Else altColor = psColor2 End If
          If psLoadError.Item(arrPrefixes(i)) Then
@@ -506,10 +509,18 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
          Else
             status = "vbRed, "" (Disabled)"" & vbCrLf, "
          End If
+
+         arrTitles = Split(psTitles, "|||")
+         If Len(arrTitles(i)) > 0 Then 
+	    titleLine = altColor & ", ""    Title:" & String(2, vbTab) & ""& arrTitles(i) & """ & vbCrLf, "
+         Else
+            titleLine = ""
+         End If
+
          plugVer = altColor & ", ""    Version:" & vbTab & ""& psVersions.Item(arrPrefixes(i)) & """ & vbCrLf, "
          fileLine = altColor & ", ""    Filename:" & vbTab & "" & psFSO.GetFileName(psPlugins.Item(arrPrefixes(i))) & """, "
          prefixLine = altColor & ", String(2, vbCrLf) & ""    Prefix:" & String(2, vbTab) & """, " & vbWhite & ", ""[ " & arrPrefixes(i)  & " ]"", "
-         strPList = strPList & prefixLine & status & "vbCrLf & " & plugVer & fileLine
+         strPList = strPList & prefixLine & status & "vbCrLf & " & titleLine & plugVer & fileLine
       Next
 
       AddChat vbWhite, "ÿcbÿcb"
