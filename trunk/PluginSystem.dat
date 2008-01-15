@@ -297,7 +297,6 @@ Sub psLoadCode(Prefix, Path, Content)
    '// Handle loading errors
    If Err.Number <> 0 Then
       psLoadError.Item(Prefix) = True
-      addchat vbwhite, err.description
       AddChat vbRed, "Offending file: >> " & Path
       AddChat vbYellow, "Your " & Prefix & " plugin has been temporarily blocked due to a loading error."
       Err.Clear
