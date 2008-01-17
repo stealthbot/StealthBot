@@ -5575,35 +5575,39 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
         If (Splt(0) <> vbNullString) Then
             ' ...
             For i = 0 To UBound(Splt)
-                ' ...
+                ' store current tick
                 GTC = GetTickCount()
                 
-                ' ...
+                ' store working copy
                 send = Splt(i)
                 
-                ' ...
+                ' is efp enabled?
                 If (bFlood) Then
-                    ' ...
+                    ' are we on-line?
                     If (g_Online) Then
-                        ' ...
+                        ' we don't want to display (or even send!) our
+                        ' scripted queue delays.
                         If (StrComp(send, "%%%%%blankqueuemessage%%%%%", _
                             vbBinaryCompare) = 0) Then
                 
-                            ' ...
+                            ' delay queue
                             QueueMaster = (QueueMaster + 3)
                         Else
-                            ' ...
+                            ' send our message on its way
                             Call bnetSend(KillNull(send))
                 
-                            ' ...
+                            ' if we're not issuing a command, lets show the user
+                            ' what he's saying.
                             If (InStr(1, send, "/", vbBinaryCompare) <> 1) Then
                                 AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
                                     CurrentUsername, RTBColors.Carats, "> ", vbWhite, send
                             End If
+                            
+                            ' lets alert our queue of the direct
+                            ' transmission of the message through
+                            ' this delay.
+                            QueueLoad = (QueueLoad + 1)
                         End If
-                
-                        ' ...
-                        QueueLoad = (QueueLoad + 1)
                     End If
                 Else
                     Dim Q        As clsQueueOBj ' ...
@@ -5652,7 +5656,8 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                     Call colQueue.Add(Q)
                 End If
                 
-                ' ...
+                ' store our tick
+                ' for future reference
                 LastGTC = GTC
             Next i
         End If
