@@ -1530,9 +1530,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5114,7 +5114,7 @@ Private Sub Timer_Timer()
             
             If WindowTitle = vbNullString Then
                 IdleMsg = "/me .: " & CVERSION & " :: anti-idle :."
-                GoTo Send
+                GoTo send
             End If
             IdleMsg = "/me -: Now Playing: " & WindowTitle & " :: " & CVERSION & " :-"
             
@@ -5124,10 +5124,10 @@ Private Sub Timer_Timer()
             IdleMsg = "/me : " & u
             
         End If
-        GoTo Send
+        GoTo send
 Error:
         IdleMsg = "/me -- " & CVERSION
-Send:
+send:
         If sckBNet.State = 7 Then
             If InStr(1, IdleMsg, "& ", vbTextCompare) And IdleType = "msg" Then
                 s = Split(IdleMsg, "& ")
@@ -5445,7 +5445,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
         Dim Splt()   As String  ' ...
         Dim i        As Integer ' ...
         Dim currChar As Integer ' ...
-        Dim Send     As String  ' ...
+        Dim send     As String  ' ...
         Dim command  As String  ' ...
         Dim GTC      As Long    ' ...
     
@@ -5579,26 +5579,26 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                 GTC = GetTickCount()
                 
                 ' ...
-                Send = Splt(i)
+                send = Splt(i)
                 
                 ' ...
                 If (bFlood) Then
                     ' ...
                     If (g_Online) Then
                         ' ...
-                        If (StrComp(Send, "%%%%%blankqueuemessage%%%%%", _
+                        If (StrComp(send, "%%%%%blankqueuemessage%%%%%", _
                             vbBinaryCompare) = 0) Then
                 
                             ' ...
                             QueueMaster = (QueueMaster + 3)
                         Else
                             ' ...
-                            Call bnetSend(KillNull(Send))
+                            Call bnetSend(KillNull(send))
                 
                             ' ...
-                            If (InStr(1, Send, "/", vbBinaryCompare) <> 1) Then
+                            If (InStr(1, send, "/", vbBinaryCompare) <> 1) Then
                                 AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
-                                    CurrentUsername, RTBColors.Carats, "> ", vbWhite, Send
+                                    CurrentUsername, RTBColors.Carats, "> ", vbWhite, send
                             End If
                         End If
                 
@@ -5606,44 +5606,34 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                         QueueLoad = (QueueLoad + 1)
                     End If
                 Else
-                    Dim Q As clsQueueOBj ' ...
-                    Dim j As Integer     ' ...
+                    Dim Q        As clsQueueOBj ' ...
+                    Dim j        As Integer     ' ...
+                    Dim banDelay As Integer     ' ...
                 
-                    ' ...
+                    ' should we subject this message to the typical delay,
+                    ' or can we get it out of here a bit faster?  If we
+                    ' want it out of here quick, we need an empty queue
+                    ' and have had at least 10 seconds elapse since the
+                    ' previous message.
                     If ((QueueLoad = 0) And (GTC - LastGTC > 10000)) Then
-                        Dim banDelay As Integer ' ...
-                        
-                        ' set default message delay when
-                        ' queue is empty (ms)
+                        ' set default message delay when queue
+                        ' is empty (in ms)
                         banDelay = 100
                         
-                        ' ...
-                        If ((StrComp(Left$(Send, 4), "/ban", vbTextCompare) = 0) Or _
-                            (StrComp(Left$(Send, 5), "/kick", vbTextCompare) = 0)) Then
+                        ' are we issuing a channel moderation command?
+                        If ((StrComp(Left$(send, 4), "/ban", vbTextCompare) = 0) Or _
+                            (StrComp(Left$(send, 5), "/kick", vbTextCompare) = 0)) Then
                             
-                            ' ...
-                            For j = 1 To colUsersInChannel.Count
-                                ' we aren't looking at my user data are we?
-                                If (StrComp(colUsersInChannel(j).Username, CurrentUsername, _
-                                    vbBinaryCompare) <> 0) Then
-                            
-                                    ' do we have an op?
-                                    If ((colUsersInChannel(j).Flags And USER_CHANNELOP&) = _
-                                         USER_CHANNELOP&) Then
-                            
-                                        ' seed rnd() function
-                                        Randomize
-                            
-                                        ' calculate delay value between 100
-                                        ' and 600 ms and add to default delay value
-                                        banDelay = (banDelay + _
-                                            ((1 + Rnd() * 6) * 100))
-    
-                                        ' break from loop
-                                        Exit For
-                                    End If
-                                End If
-                            Next j
+                            ' do we have ops?
+                            If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+                                ' seed rnd() function
+                                Randomize
+                    
+                                ' calculate delay value between 100
+                                ' and 600 ms and add to default delay value
+                                banDelay = (banDelay + _
+                                    ((1 + Rnd() * 6) * 100))
+                            End If
                         End If
                         
                         ' set the delay before our next queue cycle
@@ -5654,7 +5644,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                     Set Q = New clsQueueOBj
                     
                     With Q
-                        .Message = Send
+                        .Message = send
                         .Priority = Priority
                     End With
     
