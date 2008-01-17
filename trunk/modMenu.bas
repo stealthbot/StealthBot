@@ -482,7 +482,7 @@ Public Function RegisterScriptMenu(ByVal sMenuCaption As String) As Long
     ThisScript_MenuID = AddParentMenu(ScriptMenu_ParentID, sMenuCaption)
     
     RegisterScriptMenu = ThisScript_MenuID
-        DrawMenuBar frmChat.hWnd
+    DrawMenuBar frmChat.hWnd
     colDynamicMenus.Add ThisScript_MenuID
     
 End Function
@@ -635,6 +635,7 @@ Public Sub DeleteMenuItem(ByVal hMenuBar As Long, hDeleteMenu As Long, _
 End Sub
 
 ' Written by Andy, 2007-06-11
+'   Modified by Swent 1/16/08
 Public Sub DeleteMenuItemByID(ByVal lId As Long)
     Dim hMenuBar As Long
     Dim l As Long
@@ -646,11 +647,10 @@ Public Sub DeleteMenuItemByID(ByVal lId As Long)
     l = GetMenuItemCount(lId)
     
     For l = 0 To l
-        RemoveMenu lId, 0, MF_BYPOSITION
+        DeleteMenuItem ScriptMenu_ParentID, lId, lngParentPosition
     Next l
-    
-    DeleteMenuItem ScriptMenu_ParentID, lId, lngParentPosition
 End Sub
+
 
 
 'GetParentMenu: Begins search at hMenuBar.
