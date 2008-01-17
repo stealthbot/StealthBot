@@ -908,7 +908,8 @@ Sub PluginMenus_Display_Callback(Prefix)
    '// Toggle backup checkmark in plugin menu
    SetMenuItemCheck "#display", Prefix, boolEnabled
 
-   AddChat vbOrange, "Reloading plugins...": Call ReloadScript()
+   '// If it was disabled, remove the menu
+   If Not boolEnabled Then RemoveMenuItem Prefix
 End Sub
 
 
