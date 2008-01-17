@@ -908,8 +908,12 @@ Sub PluginMenus_Display_Callback(Prefix)
    '// Toggle backup checkmark in plugin menu
    SetMenuItemCheck "#display", Prefix, boolEnabled
 
-   '// If it was disabled, remove the menu
-   If Not boolEnabled Then RemoveMenuItem Prefix
+   '// If it was disabled, remove the menu, otherwise reload
+   If Not boolEnabled Then
+	RemoveMenuItem Prefix
+   Else
+	Call ReloadScript()
+   End If
 End Sub
 
 
