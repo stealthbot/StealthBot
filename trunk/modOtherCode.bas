@@ -63,20 +63,30 @@ Public Function ReadINI$(ByVal riSection$, ByVal riKey$, ByVal riFile$)
     End If
 End Function
 
-Public Function GetTimestamp() As String
+Public Function GetTimeStamp() As String
     Select Case (BotVars.TSSetting)
-        Case 0: GetTimestamp = " [" & Time & "] "
-        Case 1: GetTimestamp = " [" & Format(Time, "HH:MM:SS") & "] "
-        Case 2: GetTimestamp = " [" & Format(Time, "HH:MM:SS") & "." & _
-            GetCurrentMS & "] "
-        Case 3: GetTimestamp = ""
+        Case 0
+            GetTimeStamp = _
+                " [" & Format(Time, "HH:MM:SS AM/PM") & "] "
+            
+        Case 1
+            GetTimeStamp = _
+                " [" & Format(Time, "HH:MM:SS") & "] "
+        
+        Case 2
+            GetTimeStamp = _
+                " [" & Format(Time, "HH:MM:SS") & "." & _
+                    Right$("000" & GetCurrentMS, 3) & "] "
+        
+        Case Else
+            GetTimeStamp = vbNullString
     End Select
 End Function
 
 '// Converts a millisecond or second time value to humanspeak.. modified to support BNet's Time
 '// Logged report.
 '// Updated 2/11/05 to support timeGetSystemTime() unsigned longs, which in VB are doubles after conversion
-Public Function ConvertTime(ByVal dblMS As Double, Optional Seconds As Byte) As String
+Public Function ConvertTime(ByVal dblMS As Double, Optional seconds As Byte) As String
     Dim dblSeconds As Double
     Dim dblDays    As Double
     Dim dblHours   As Double
@@ -84,7 +94,7 @@ Public Function ConvertTime(ByVal dblMS As Double, Optional Seconds As Byte) As 
     Dim strSeconds As String
     Dim strDays    As String
     
-    If (Seconds = 0) Then
+    If (seconds = 0) Then
         dblSeconds = (dblMS / 1000)
     Else
         dblSeconds = dblMS
@@ -238,11 +248,9 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
                 End If
                 
                 If (Kick = 0) Then
-                    frmChat.AddQ "/ban " & _
-                        reverseUsername(Inpt), 1
+                    frmChat.AddQ "/ban " & Inpt, 1
                 Else
-                    frmChat.AddQ "/kick " & _
-                        reverseUsername(Inpt), 1
+                    frmChat.AddQ "/kick " & Inpt, 1
                 End If
             End If
         Else
@@ -2096,18 +2104,18 @@ End Function
 
 ' Updated 4/10/06 to support millisecond pauses
 '  If using milliseconds pause for at least 100ms
-Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean = True, Optional ByVal Milliseconds As Boolean = False)
+Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean = True, Optional ByVal milliseconds As Boolean = False)
     Dim i As Integer
     
     If (AllowEvents) Then
-        For i = 0 To (fSeconds * (IIf(Milliseconds, 1, 1000))) \ 100
+        For i = 0 To (fSeconds * (IIf(milliseconds, 1, 1000))) \ 100
             'Debug.Print "sleeping 100ms"
             Call Sleep(100)
             
             DoEvents
         Next i
     Else
-        Call Sleep(fSeconds * (IIf(Milliseconds, 1, 1000)))
+        Call Sleep(fSeconds * (IIf(milliseconds, 1, 1000)))
     End If
 End Sub
 
@@ -2206,7 +2214,7 @@ End Sub
 ' Returns a single chunk of a string as if that string were Split() and that chunk
 ' extracted
 ' 1-based
-Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
+Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
     Dim c           As Integer
     Dim i           As Integer
     Dim TargetSpace As Integer
@@ -2216,10 +2224,10 @@ Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
     
     c = 0
     i = 1
-    Pos = Pos
+    pos = pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While ((c < Pos) And (i > 0))
+    While ((c < pos) And (i > 0))
         TargetSpace = i
         
         i = (InStr(i + 1, str, Space(1), vbBinaryCompare))
@@ -2227,7 +2235,7 @@ Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
         c = (c + 1)
     Wend
     
-    If (c >= Pos) Then
+    If (c >= pos) Then
         c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
         If (c > 0) Then
@@ -2280,4 +2288,88 @@ End Function
 Public Function InsertDummyQueueEntry()
     ' %%%%%blankqueuemessage%%%%%
     frmChat.AddQ "%%%%%blankqueuemessage%%%%%"
+End Function
+
+' This procedure splits a message by a specified length, with optional line postfixes
+' and split delimiters.
+Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef StringRet() As String, _
+    Optional LinePostfix As String = " [more]", Optional OversizeDelimiter As String = " ")
+    
+    Dim lineCount As Long    ' stores line number
+    Dim pos       As Long    ' stores position of delimiter
+    Dim strtmp    As String  ' stores working copy of StringSplit
+    Dim length    As Long    ' stores length after postfix
+    Dim bln       As Boolean ' stores result of delimiter split
+    
+    ' initialize our array
+    ReDim StringRet(0)
+    
+    ' do loop until our string is empty
+    Do While (StringSplit <> vbNullString)
+        ' resize array so that it can store
+        ' the next line
+        ReDim Preserve StringRet(lineCount)
+        
+        ' store working copy of string
+        strtmp = StringSplit
+        
+        ' does our string already equal to or fall
+        ' below the specified length?
+        If (Len(strtmp) <= SplitLength) Then
+            ' assign our string to the current line
+            StringRet(lineCount) = strtmp
+        Else
+            ' Our string is over the size limit, so we're
+            ' going to postfix it.  Because of this, we're
+            ' going to have to calculate the length after
+            ' the post fix has been accounted for.
+            length = (SplitLength - Len(LinePostfix))
+        
+            ' if we're going to be splitting the oversized
+            ' message at a specified character, we need to
+            ' determine the position of the character in the
+            ' string
+            If (OversizeDelimiter <> vbNullString) Then
+                ' grab position of delimiter character that is
+                ' the closest to our specified length
+                pos = InStrRev(StringSplit, OversizeDelimiter, _
+                    length, vbBinaryCompare)
+            End If
+            
+            ' if the delimiter we were looking for was found,
+            ' and the position was greater than or equal to
+            ' half of the message (this check prevents breaks
+            ' in unecessary locations), split the message
+            ' accordingly.
+            If ((pos) And (pos >= Round(length / 2))) Then
+                ' truncate message
+                strtmp = Mid$(strtmp, 1, pos - 1)
+                
+                ' indicate that an additional
+                ' character will require removal
+                ' from official copy
+                bln = True
+            Else
+                ' truncate message
+                strtmp = Mid$(strtmp, 1, length)
+            End If
+            
+            ' store truncated message in line
+            StringRet(lineCount) = strtmp & _
+                LinePostfix
+        End If
+        
+        ' remove line from official string
+        StringSplit = Mid$(StringSplit, _
+            (Len(strtmp) + 1))
+        
+        ' if we need to remove an additional
+        ' character, lets do so now.
+        If (bln) Then
+            StringSplit = Mid$(StringSplit, 2)
+        End If
+            
+        ' increment line counter
+        lineCount = (lineCount + 1)
+    Loop
 End Function

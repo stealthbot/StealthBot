@@ -116,6 +116,7 @@ Begin VB.Form frmChat
    End
    Begin VB.ComboBox cboSend 
       BackColor       =   &H00000000&
+      CausesValidation=   0   'False
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -831,7 +832,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -858,7 +858,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1412,6 +1411,8 @@ Attribute VB_Exposed = False
 'Source Code Version: 2.6R3+
 Option Explicit
 
+Private Declare Function GetFocus Lib "user" () As Integer
+
 'Classes
 Public WithEvents ClanHandler As clsClanPacketHandler
 Attribute ClanHandler.VB_VarHelpID = -1
@@ -1430,6 +1431,8 @@ Private Const WM_SETREDRAW    As Integer = &HB
 Private Const WM_USER         As Integer = &H400
 Private Const EM_GETEVENTMASK As Integer = (WM_USER + 59)
 Private Const EM_SETEVENTMASK As Integer = (WM_USER + 69)
+Private Const EM_LIMITTEXT    As Integer = (WM_USER + 21)
+Private Const EM_SETLIMITTEXT = &HC5
 
 ' LET IT BEGIN
 Private Sub Form_Load()
@@ -1734,11 +1737,15 @@ Private Sub Form_Load()
 '    BotVars.ProxyPort = 1080
     'BotVars.ProxyIsSocks5 = True
     
+    frmChat.Show
+    cboSend.SetFocus
+    
+    SendMessage GetFocus, EM_SETLIMITTEXT, 2, 0
 End Sub
 
 Private Sub Form_GotFocus()
     If (cboSendHadFocus) Then
-        'cboSend.SetFocus
+        cboSend.SetFocus
     End If
 End Sub
 
@@ -1772,7 +1779,8 @@ Sub AddChat(ParamArray saElements() As Variant)
             
             lngVerticalPos = SendMessage(rtbChat.hWnd, EM_GETTHUMB, 0&, 0&)
             
-            Diff = ((lngVerticalPos + (rtbChat.Height / Screen.TwipsPerPixelY)) - intRange)
+            Diff = ((lngVerticalPos + _
+                (rtbChat.Height / Screen.TwipsPerPixelY)) - intRange)
             
             ' In testing it appears that if the value I calcuate as Diff is negative,
             ' the scrollbar is not at the bottom.
@@ -1800,7 +1808,7 @@ Sub AddChat(ParamArray saElements() As Variant)
             End With
         End If
         
-        s = GetTimestamp
+        s = GetTimeStamp()
         
         With rtbChat
             .SelStart = Len(.text)
@@ -1828,8 +1836,9 @@ Sub AddChat(ParamArray saElements() As Variant)
         End If
         
         For i = LBound(saElements) To UBound(saElements) Step 2
-            If (InStr(1, saElements(i + 1), Chr(0), vbBinaryCompare) > 0) Then _
+            If (InStr(1, saElements(i + 1), Chr(0), vbBinaryCompare) > 0) Then
                 Call KillNull(saElements(i + 1))
+            End If
             
             If (Len(saElements(i + 1)) > 0) Then
                 l = InStr(1, saElements(i + 1), "{\rtf", vbTextCompare)
@@ -1861,7 +1870,8 @@ Sub AddChat(ParamArray saElements() As Variant)
                 
                 ' Fixed 11/21/06 to properly log timestamps
                 If (LogThis) Then
-                    Print #f, saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)));
+                    Print #f, saElements(i + 1) & _
+                        Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)));
                 End If
             End If
         Next i
@@ -1871,7 +1881,8 @@ Sub AddChat(ParamArray saElements() As Variant)
         If (blUnlock) Then
             rtbChat.Visible = True
             
-            Call SendMessage(rtbChat.hWnd, WM_VSCROLL, SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&)
+            Call SendMessage(rtbChat.hWnd, WM_VSCROLL, _
+                SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&)
         End If
         
         If (LogThis) Then
@@ -1930,7 +1941,7 @@ Sub AddChatFont(ParamArray saElements() As Variant)
             End With
         End If
         
-        s = GetTimestamp
+        s = GetTimeStamp
         
         With rtbChat
             .SelStart = Len(.text)
@@ -2964,7 +2975,8 @@ End Sub
 ' These two properties are zeroed out as the control loses focus and inaccessible
 '  (zeroed) at both access time in this method AND in the _LostFocus sub
 Private Sub lvChannel_dblClick()
-    Dim s As String, t As String
+    Dim s           As String
+    Dim t           As String
     Dim oldSelStart As Long
     
     s = GetSelectedUser
@@ -2979,6 +2991,7 @@ Private Sub lvChannel_dblClick()
             ' This is correct - sets the cursor properly
             cboSendSelStart = oldSelStart + Len(s)
             cboSendSelLength = 0
+            
             .SetFocus
         End With
     End If
@@ -2986,13 +2999,13 @@ End Sub
 
 Private Sub lvChannel_Keyup(KeyCode As Integer, Shift As Integer)
     Const S_ALT = 4
-    
+   
     If Shift = S_ALT And KeyCode = KEY_ALTN Then
         With lvChannel
             If Not (.SelectedItem Is Nothing) Then
                 cboSend.SelText = .SelectedItem.text
                 cboSend.SelStart = cboSend.SelStart + Len(.SelectedItem.text)
-                
+    
                 KeyCode = 0
                 Shift = 0
             End If
@@ -4052,9 +4065,8 @@ Private Sub cboSend_GotFocus()
 
     Dim i As Integer ' ...
 
-    ' ...
-    cboSend.SelLength = cboSendSelLength
     cboSend.SelStart = cboSendSelStart
+    cboSend.SelLength = cboSendSelLength
 
     If (BotVars.NoAutocompletion = False) Then
         ' ..
@@ -4065,7 +4077,9 @@ Private Sub cboSend_GotFocus()
             End If
         
             ' ...
-            Controls(i).TabStop = False
+            If (Controls(i).Name <> "cboSend") Then
+                Controls(i).TabStop = False
+            End If
         Next i
     End If
     
@@ -4077,13 +4091,14 @@ Private Sub cboSend_LostFocus()
     On Error Resume Next
 
     Dim i As Integer ' ...
-
+    
     If (BotVars.NoAutocompletion = False) Then
         ' ...
         For i = 0 To (Controls.Count - 1)
             ' ...
-            If (Controls(i).Tag <> "False") Then
-                ' ...
+            If ((Controls(i).Name <> "cboSend") And _
+                (Controls(i).Tag <> "False")) Then
+                
                 Controls(i).TabStop = True
             End If
         Next i
@@ -4822,9 +4837,9 @@ Private Sub QueueTimer_Timer()
                 unsquelching = True
             End If
             
-            If (Len(Message) > 220) Then
-                Message = Left$(Message, 220)
-            End If
+            'If (Len(Message) > 220) Then
+            '    Message = Left$(Message, 220)
+            'End If
             
             If ((QueueLoad < 3) And (QueueMaster < 16)) Then
                 If (Len(Message) <= 70) Then
@@ -5046,7 +5061,7 @@ Private Sub Timer_Timer()
     If Not mnuDisableVoidView.Checked Then
         If gChannel.Current = "The Void" Then
             AddQ "/unsquelch " & _
-                reverseUsername(CurrentUsername), 1
+                CurrentUsername, 1
         End If
     End If
     
@@ -5411,134 +5426,245 @@ ERROR_HANDLER:
     GetAuth = False
 End Function
 
+' ...
 Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
-    Static LastMessage As Long
-    
-    Dim Q   As clsQueueOBj
-    Dim GTC As Long
+    ' maximum size of Battle.net messages
+    Const MAX_MESSAGE_LENGTH = 220
+
+    ' ...
+    Static LastGTC As Long
     
     ' ...
-    If (Message <> vbNullString) Then
+    Dim strTmp As String
+    
+    ' ...
+    strTmp = Message
+    
+    ' ...
+    If (strTmp <> vbNullString) Then
+        Dim Splt()   As String  ' ...
+        Dim i        As Integer ' ...
+        Dim currChar As Integer ' ...
+        Dim Send     As String  ' ...
+        Dim command  As String  ' ...
+        Dim GTC      As Long    ' ...
+    
+        ' check for tabs and replace with spaces (2005-09-23)
+        If (InStr(1, strTmp, Chr$(9), vbBinaryCompare) <> 0) Then
+            strTmp = Replace$(strTmp, Chr$(9), Space(4))
+        End If
+        
         ' ...
-        If (Not (bFlood)) Then
-            GTC = GetTickCount()
-            
-            ' tab check added 9/23/05
-            If (InStr(1, Message, Chr$(9), vbBinaryCompare) > 0) Then
-                Message = Replace$(Message, Chr$(9), Space(4))
+        For i = 1 To Len(strTmp)
+            ' ...
+            currChar = Asc(Mid$(strTmp, i, 1))
+        
+            ' ...
+            If (currChar < 32) Then
+                Exit Sub
             End If
-            
-            ' truncate to 220 characters
-            If (Len(Message) > 220) Then
-                Message = Left$(Message, 220)
-            End If
+        Next i
+    
+        ' ...
+        If (StrComp(Left$(strTmp, 1), "/", vbBinaryCompare) = 0) Then
+            Dim Index As Long ' ...
             
             ' ...
-            If ((QueueLoad = 0) And _
-                (GTC - LastMessage > 10000)) Then
-                
-                ' This IF statement addresses oddities reported in topic 20021
-                If (StrComp(gChannel.Current, "The Void", vbBinaryCompare) = 0) Then
-                    Call BNCSBuffer.ClearBuffer
+            For i = 2 To Len(strTmp)
+                ' ...
+                currChar = Asc(Mid$(strTmp, i, 1))
+            
+                ' ...
+                If (currChar <> Asc(Space(1))) Then
+                    Exit For
                 End If
+            Next i
+            
+            ' ...
+            If (i > 2) Then
+                strTmp = "/" & Mid$(strTmp, i)
+            End If
+
+            ' ...
+            Index = InStr(1, strTmp, Space(1), vbBinaryCompare)
+            
+            ' ...
+            If (Index > 2) Then
+                ' ...
+                command = Mid$(strTmp, 2, (Index - 2))
 
                 ' ...
-                If (bFlood = False) Then
-                    Dim banDelay As Integer ' ...
+                If ((command = "w") Or _
+                    (command = "whisper") Or _
+                    (command = "m") Or _
+                    (command = "msg") Or _
+                    (command = "message") Or _
+                    (command = "whois") Or _
+                    (command = "where") Or _
+                    (command = "whereis") Or _
+                    (command = "squelch") Or _
+                    (command = "unsquelch") Or _
+                    (command = "ignore") Or _
+                    (command = "unignore") Or _
+                    (command = "ban") Or _
+                    (command = "unban") Or _
+                    (command = "designate")) Then
+        
+                    ' ...
+                    Splt() = Split(strTmp, Space(1), 3)
+                    
+                    ' ...
+                    If (UBound(Splt) > 0) Then
+                        ' ...
+                        command = Splt(0) & Space(1) & _
+                            reverseUsername(Splt(1)) & _
+                                Space(1)
+                            
+                        If (UBound(Splt) > 1) Then
+                            strTmp = command & _
+                                Splt(2)
+                        Else
+                            strTmp = command
+                        End If
+                    End If
+                ElseIf ((command = "f") Or _
+                        (command = "friends")) Then
+                    
+                    ' ...
+                    Splt() = Split(strTmp, Space(1), 3)
+                    
+                    ' ...
+                    If (UBound(Splt) = 2) Then
+                        ' ...
+                        command = Splt(0) & _
+                            Space(1) & Splt(1) & _
+                                Space(1)
+                    
+                        Select Case (LCase$(Splt(1)))
+                            Case "m"
+                            Case "msg"
+                            Case Else
+                                If ((StrReverse$(BotVars.Product) = "WAR3") Or _
+                                    (StrReverse$(BotVars.Product) = "W3XP")) Then
+                                    
+                                    ' ...
+                                    strTmp = command & _
+                                        reverseUsername(Splt(2))
+                                Else
+                                    ' ...
+                                    strTmp = command & _
+                                        Splt(2)
+                                End If
+                        End Select
+                    End If
+                Else
+                    command = "/" & command & _
+                        Space(1)
+                End If
+            End If
+        End If
+        
+        ' ...
+        Call SplitByLen(strTmp, (MAX_MESSAGE_LENGTH - Len(command)), _
+            Splt())
+            
+        ' ...
+        ReDim Preserve Splt(0 To UBound(Splt))
+        
+        ' ...
+        If (Splt(0) <> vbNullString) Then
+            ' ...
+            For i = 0 To UBound(Splt)
+                ' ...
+                GTC = GetTickCount()
+                
+                ' ...
+                Send = Splt(i)
+                
+                ' ...
+                If (bFlood) Then
+                    ' ...
+                    If (g_Online) Then
+                        ' ...
+                        If (StrComp(Send, "%%%%%blankqueuemessage%%%%%", _
+                            vbBinaryCompare) = 0) Then
+                
+                            ' ...
+                            QueueMaster = (QueueMaster + 3)
+                        Else
+                            ' ...
+                            Call bnetSend(KillNull(Send))
+                
+                            ' ...
+                            If (InStr(1, Send, "/", vbBinaryCompare) <> 1) Then
+                                AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
+                                    CurrentUsername, RTBColors.Carats, "> ", vbWhite, Send
+                            End If
+                        End If
+                
+                        ' ...
+                        QueueLoad = (QueueLoad + 1)
+                    End If
+                Else
+                    Dim Q As clsQueueOBj ' ...
+                    Dim j As Integer     ' ...
+                
+                    ' ...
+                    If ((QueueLoad = 0) And (GTC - LastGTC > 10000)) Then
+                        Dim banDelay As Integer ' ...
+                        
+                        ' set default message delay when
+                        ' queue is empty (ms)
+                        banDelay = 100
+                        
+                        ' ...
+                        If ((StrComp(Left$(Send, 4), "/ban", vbTextCompare) = 0) Or _
+                            (StrComp(Left$(Send, 5), "/kick", vbTextCompare) = 0)) Then
+                            
+                            ' ...
+                            For j = 1 To colUsersInChannel.Count
+                                ' we aren't looking at my user data are we?
+                                If (StrComp(colUsersInChannel(j).Username, CurrentUsername, _
+                                    vbBinaryCompare) <> 0) Then
+                            
+                                    ' do we have an op?
+                                    If ((colUsersInChannel(j).Flags And USER_CHANNELOP&) = _
+                                         USER_CHANNELOP&) Then
+                            
+                                        ' seed rnd() function
+                                        Randomize
+                            
+                                        ' calculate delay value between 100
+                                        ' and 600 ms and add to default delay value
+                                        banDelay = (banDelay + _
+                                            ((1 + Rnd() * 6) * 100))
+    
+                                        ' break from loop
+                                        Exit For
+                                    End If
+                                End If
+                            Next j
+                        End If
+                        
+                        ' set the delay before our next queue cycle
+                        frmChat.QueueTimer.Interval = banDelay
+                    End If
                     
                     ' ...
                     Set Q = New clsQueueOBj
                     
-                    ' set default message delay when
-                    ' queue is empty (ms)
-                    banDelay = 100
-                    
                     With Q
-                        .Message = Message
+                        .Message = Send
                         .Priority = Priority
                     End With
     
                     ' ...
                     Call colQueue.Add(Q)
-                    
-                    ' ...
-                    If ((StrComp(Left$(Message, 5), "/ban ", vbTextCompare) = 0) Or _
-                        (StrComp(Left$(Message, 6), "/kick ", vbTextCompare) = 0)) Then
-                        
-                        Dim i As Integer ' ...
-
-                        ' ...
-                        For i = 1 To colUsersInChannel.Count
-                            ' we aren't looking at my user data are we?
-                            If (StrComp(colUsersInChannel(i).Username, CurrentUsername, _
-                                vbBinaryCompare) <> 0) Then
-                        
-                                ' do we have an op?
-                                If ((colUsersInChannel(i).Flags And USER_CHANNELOP&) = _
-                                     USER_CHANNELOP&) Then
-                        
-                                    ' seed rnd() function
-                                    Randomize
-                        
-                                    ' calculate delay value between 100
-                                    ' and 600 ms and add to default delay value
-                                    banDelay = (banDelay + _
-                                        ((1 + Rnd() * 6) * 100))
-
-                                    ' break from loop
-                                    Exit For
-                                End If
-                            End If
-                        Next i
-                    End If
-                    
-                    ' set the delay before our next queue cycle
-                    frmChat.QueueTimer.Interval = banDelay
-                    
-                    ' ...
-                    LastMessage = GTC
-                Else
-                    ' ...
-                    If (g_Online) Then
-                        ' ...
-                        If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", _
-                            vbBinaryCompare) = 0) Then
-                        
-                            ' ...
-                            QueueMaster = (QueueMaster + 3)
-                        Else
-                            ' ...
-                            Call bnetSend(KillNull(Message))
-                            
-                            ' ...
-                            If (InStr(1, Message, "/", vbBinaryCompare) <> 1) Then
-                                AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
-                                    CurrentUsername, RTBColors.Carats, "> ", vbWhite, Message
-                            End If
-                        End If
-                        
-                        ' ...
-                        QueueLoad = (QueueLoad + 1)
-                        
-                        ' ...
-                        LastMessage = GTC
-                    End If
                 End If
-            Else
-                ' ...
-                Set Q = New clsQueueOBj
-                
-                With Q
-                    .Message = Message
-                    .Priority = Priority
-                End With
-
-                ' ...
-                Call colQueue.Add(Q)
                 
                 ' ...
-                LastMessage = GTC
-            End If
+                LastGTC = GTC
+            Next i
         End If
     End If
 End Sub
@@ -5796,7 +5922,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                         checkChannel(colUsersInChannel(i).Username)
                 
                     colUsersInChannel(i).Username = _
-                        reverseUsername(colUsersInChannel(i).Username)
+                        colUsersInChannel(i).Username
     
                     If (Index) Then
                         lvChannel.ListItems(Index).text = _

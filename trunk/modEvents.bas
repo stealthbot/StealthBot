@@ -64,7 +64,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
                                 
                                 ' designate user
                                 frmChat.AddQ "/designate " & _
-                                    reverseUsername(colUsersInChannel(i).Username)
+                                    colUsersInChannel(i).Username
     
                                 ' store designee name for future reference
                                 gChannel.staticDesignee = _
@@ -184,7 +184,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         ' update message using Battle.net's unignore command.
         If (Not (frmChat.mnuDisableVoidView.Checked)) Then
             frmChat.AddQ "/unignore " & _
-                reverseUsername(CurrentUsername), 1
+                CurrentUsername, 1
         End If
     End If
     
@@ -818,7 +818,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim strCompare   As String  ' ...
     Dim Level        As Byte    ' ...
     Dim StatUpdate   As Boolean ' ...
-    Dim Index        As Long    ' ...
+    Dim index        As Long    ' ...
     
     If (Len(Username) < 1) Then
         Exit Sub
@@ -1420,7 +1420,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim Pos       As Integer
+    Dim pos       As Integer
     Dim userIndex As Integer
     
     ' ...
@@ -1450,7 +1450,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
                         
                         ' ...
                         frmChat.AddQ "/designate " & _
-                            reverseUsername(colUsersInChannel.Item(i).Username)
+                            colUsersInChannel.Item(i).Username
 
                         ' ...
                         gChannel.staticDesignee = colUsersInChannel.Item(i).Username

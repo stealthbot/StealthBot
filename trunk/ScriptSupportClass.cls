@@ -270,7 +270,7 @@ Public Sub AddChat(ParamArray saElements() As Variant)
             End With
         End If
         
-        s = GetTimestamp
+        s = GetTimeStamp
         
         With frmChat.rtbChat
             .SelStart = Len(.text)
@@ -403,7 +403,7 @@ Public Sub AddChatFont(ParamArray saElements() As Variant)
             End With
         End If
         
-        s = GetTimestamp
+        s = GetTimeStamp
         
         With frmChat.rtbChat
             .SelStart = Len(.text)
