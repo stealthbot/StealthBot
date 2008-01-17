@@ -1338,7 +1338,7 @@ End Function
 '//         2 = Emote
 '//             Example: Dsp 2, "Example message"
 '//         3 = Whisper
-'//             Example: Dsp 3, "Example message, "JoeUser"
+'//             Example: Dsp 3, "Example message", "JoeUser"
 '//         4 = AddChat
 '//             Example: Dsp 4, "Example message", , vbCyan
 '//     Delimiter is " " by default, and only applies for messages > 220 characters.
@@ -1352,7 +1352,8 @@ Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVa
         
         If intID = 3 Then
             strProduct = GetInternalDataByUsername(BotVars.Username, 3)
-            If strProduct = "D2DV" Or strProduct = "D2PX" Then strUsername = "*" & strUsername
+            AddChat vbWhite, strProduct
+            If strProduct = "D2DV" Or strProduct = "D2XP" Then strUsername = "*" & strUsername
         End If
         If Len(strDelimiter) = 0 Then strDelimiter = " "
         
@@ -1392,11 +1393,21 @@ End Sub
 
 
 '// RELOADPLUGINMENUS
-'//   Reloads the Plugin menus. All user-added items will be cleared.
+'//   Written by Swent. Reloads the all plugin menus. All user-added items will be cleared.
 Public Sub ReloadPluginMenus()
 
     Call DeletePluginMenus
     Call RegisterPluginMenus
+End Sub
+
+
+'// REMOVEPLUGINMENU
+'//   Written by Swent. Removes an entire plugin menu.
+Public Sub RemoveMenuItem(ByVal strPrefix As String, Optional ByVal strName As String)
+
+    If GetSetting("ps", "menusDisabled") Then Exit Sub
+    
+    DeleteMenuItemByID GetPluginMenu(strPrefix)
 End Sub
 
 
@@ -1413,7 +1424,7 @@ Public Sub AddMenuItem(ByVal strPrefix As String, ByVal strName As String, Optio
 
     If GetSetting("ps", "menusDisabled") Then Exit Sub
 
-    Dim varCheckmark As Variant, strCallback As String
+    Dim strCallback As String
     Dim lngMenu As Long, lngItem As Long, intItemCount As Integer
     
     lngMenu = GetPluginMenu(strPrefix)
@@ -1483,6 +1494,7 @@ Public Sub SetMenuItemEnabled(ByVal strPrefix As String, ByVal strName As String
     
     SetMenuEnabled GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolEnabled
 End Sub
+
 
 '// CREATEFORM
 '//    Writtin by Hdx. Creates a Form object that the user can use.
