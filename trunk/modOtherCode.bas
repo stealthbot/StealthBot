@@ -359,7 +359,7 @@ Public Sub APISend(ByRef s As String) '// faster API-based sending for EFP
     
     i = Len(s) + 5
     
-    Call Send(frmChat.sckBNet.SocketHandle, "ÿ" & "" & Chr(i) & _
+    Call send(frmChat.sckBNet.SocketHandle, "ÿ" & "" & Chr(i) & _
         Chr(0) & s & Chr(0), i, 0)
 End Sub
 
@@ -2214,7 +2214,7 @@ End Sub
 ' Returns a single chunk of a string as if that string were Split() and that chunk
 ' extracted
 ' 1-based
-Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
+Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
     Dim c           As Integer
     Dim i           As Integer
     Dim TargetSpace As Integer
@@ -2224,10 +2224,10 @@ Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
     
     c = 0
     i = 1
-    pos = pos
+    Pos = Pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While ((c < pos) And (i > 0))
+    While ((c < Pos) And (i > 0))
         TargetSpace = i
         
         i = (InStr(i + 1, str, Space(1), vbBinaryCompare))
@@ -2235,7 +2235,7 @@ Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
         c = (c + 1)
     Wend
     
-    If (c >= pos) Then
+    If (c >= Pos) Then
         c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
         If (c > 0) Then
@@ -2296,13 +2296,16 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     Optional LinePostfix As String = " [more]", Optional OversizeDelimiter As String = " ")
     
     Dim lineCount As Long    ' stores line number
-    Dim pos       As Long    ' stores position of delimiter
-    Dim strtmp    As String  ' stores working copy of StringSplit
+    Dim Pos       As Long    ' stores position of delimiter
+    Dim strTmp    As String  ' stores working copy of StringSplit
     Dim length    As Long    ' stores length after postfix
     Dim bln       As Boolean ' stores result of delimiter split
     
     ' initialize our array
     ReDim StringRet(0)
+    
+    ' default our first index
+    StringRet(0) = vbNullString
     
     ' do loop until our string is empty
     Do While (StringSplit <> vbNullString)
@@ -2311,13 +2314,13 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
         ReDim Preserve StringRet(lineCount)
         
         ' store working copy of string
-        strtmp = StringSplit
+        strTmp = StringSplit
         
         ' does our string already equal to or fall
         ' below the specified length?
-        If (Len(strtmp) <= SplitLength) Then
+        If (Len(strTmp) <= SplitLength) Then
             ' assign our string to the current line
-            StringRet(lineCount) = strtmp
+            StringRet(lineCount) = strTmp
         Else
             ' Our string is over the size limit, so we're
             ' going to postfix it.  Because of this, we're
@@ -2332,7 +2335,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             If (OversizeDelimiter <> vbNullString) Then
                 ' grab position of delimiter character that is
                 ' the closest to our specified length
-                pos = InStrRev(StringSplit, OversizeDelimiter, _
+                Pos = InStrRev(StringSplit, OversizeDelimiter, _
                     length, vbBinaryCompare)
             End If
             
@@ -2341,9 +2344,9 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((pos) And (pos >= Round(length / 2))) Then
+            If ((Pos) And (Pos >= Round(length / 2))) Then
                 ' truncate message
-                strtmp = Mid$(strtmp, 1, pos - 1)
+                strTmp = Mid$(strTmp, 1, Pos - 1)
                 
                 ' indicate that an additional
                 ' character will require removal
@@ -2351,17 +2354,17 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
                 bln = True
             Else
                 ' truncate message
-                strtmp = Mid$(strtmp, 1, length)
+                strTmp = Mid$(strTmp, 1, length)
             End If
             
             ' store truncated message in line
-            StringRet(lineCount) = strtmp & _
+            StringRet(lineCount) = strTmp & _
                 LinePostfix
         End If
         
         ' remove line from official string
         StringSplit = Mid$(StringSplit, _
-            (Len(strtmp) + 1))
+            (Len(strTmp) + 1))
         
         ' if we need to remove an additional
         ' character, lets do so now.
