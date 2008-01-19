@@ -296,30 +296,30 @@ Public Sub RegisterPluginMenus()
     Dim lngHelpMenu As Long, strPrefixes() As String, strTitles() As String, tmpTitle As String
     Dim boolAddPrefix As Boolean
     Dim i As Integer
-    
+    AddChat vbWhite, "test1"
     Set dictMenuIDs = New Dictionary
     Set dictItemIDs = New Dictionary
     dictMenuIDs.CompareMode = TextCompare
     dictItemIDs.CompareMode = TextCompare
-    
+    AddChat vbWhite, "test21"
     '// Add menu "The Plugin System" and populate with several commands
     dictMenuIDs("ps") = RegisterScriptMenu("The Plugin System")
-    
+    AddChat vbWhite, "test22"
     dictItemIDs("ps|||Enabled") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Disable Plugins", _
-            "ps_GEnabled_Callback", 0, 0, Not SharedScriptSupport.GetSetting("ps", "enabled"))
-            
+            "ps_GEnabled_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "enabled")))
+    AddChat vbWhite, "test23"
     dictItemIDs("ps|||New Version Notification") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Disable NVN", _
-            "ps_GNVN_Callback", 0, 0, Not SharedScriptSupport.GetSetting("ps", "enabled"))
-            
+            "ps_GNVN_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "enabled")))
+    AddChat vbWhite, "test24"
     dictItemIDs("ps|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Enable Plugin Backups", _
-            "ps_GBackups_Callback", 0, 0, SharedScriptSupport.GetSetting("ps", "enabled"))
-            
+            "ps_GBackups_Callback", 0, 0, CBool(SharedScriptSupport.GetSetting("ps", "enabled")))
+    AddChat vbWhite, "test25"
     AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
     AddScriptMenuItem dictMenuIDs("ps"), "Open PluginSystem.dat", "ps_OpenPS_Callback", False, False
     AddScriptMenuItem dictMenuIDs("ps"), "Help", "ps_Help_Callback", False, False
-    
+    AddChat vbWhite, "test3"
     '// Add menu "Plugin Menu Display"
-    If Not SharedScriptSupport.GetSetting("ps", "menusDisabled") Then
+    If Not CBool(SharedScriptSupport.GetSetting("ps", "menusDisabled")) Then
         dictMenuIDs("#Display") = RegisterScriptMenu("Plugin Menu Display")
         AddItemToMenu ScriptMenu_ParentID, 0, True
     End If
@@ -327,12 +327,12 @@ Public Sub RegisterPluginMenus()
     '// Get plugin prefixes and titles
     strPrefixes = Split(frmChat.SControl.Eval("Join(psPrefixes)"))
     strTitles = Split(frmChat.SControl.Eval("psTitles"), "|||")
-
+    AddChat vbWhite, "test4"
     '// Register and populate a menu for each plugin
     For i = 0 To UBound(strPrefixes)
     
         '// Are plugin menus enabled?
-        If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit For
+        If CBool(SharedScriptSupport.GetSetting("ps", "menusDisabled")) Then Exit For
 
         '// Format title
         If strTitles(i) <> strPrefixes(i) Then boolAddPrefix = True Else boolAddPrefix = False
@@ -341,23 +341,23 @@ Public Sub RegisterPluginMenus()
 
         '// Add an item in Plugin Menu Display for this plugin
         dictItemIDs("#Display|||" & strPrefixes(i)) = AddScriptMenuItem(dictMenuIDs("#Display"), strTitles(i), _
-                    "ps_display_callback_" & strPrefixes(i), , , SharedScriptSupport.GetSetting(strPrefixes(i), "menu_display"))
+                    "ps_display_callback_" & strPrefixes(i), , , CBool(SharedScriptSupport.GetSetting(strPrefixes(i), "menu_display")))
         frmChat.SControl.AddCode "Sub ps_display_callback_" & strPrefixes(i) & ":PluginMenus_Display_Callback """ & strPrefixes(i) & """: End " & "Sub"
         
         '// Should this plugin's menu be displayed?
-        If SharedScriptSupport.GetSetting(strPrefixes(i), "menu_display") Then
+        If CBool(SharedScriptSupport.GetSetting(strPrefixes(i), "menu_display")) Then
             
             '// Register a menu for this plugin and populate with several default items
             dictMenuIDs(strPrefixes(i)) = RegisterScriptMenu(strTitles(i))
             
             dictItemIDs(strPrefixes(i) & "|||Enabled") = AddScriptMenuItem(dictMenuIDs(strPrefixes(i)), "Enabled", _
-                    "ps_enabled_callback_" & strPrefixes(i), , , SharedScriptSupport.GetSetting(strPrefixes(i), "enabled"))
+                    "ps_enabled_callback_" & strPrefixes(i), , , CBool(SharedScriptSupport.GetSetting(strPrefixes(i), "enabled")))
             
             dictItemIDs(strPrefixes(i) & "|||New Version Notification") = AddScriptMenuItem(dictMenuIDs(strPrefixes(i)), _
-                    "New Version Notification", "ps_nvn_callback_" & strPrefixes(i), , , SharedScriptSupport.GetSetting(strPrefixes(i), "nvn"))
+                    "New Version Notification", "ps_nvn_callback_" & strPrefixes(i), , , CBool(SharedScriptSupport.GetSetting(strPrefixes(i), "nvn")))
             
             dictItemIDs(strPrefixes(i) & "|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs(strPrefixes(i)), "Backup On Updates", _
-                    "ps_backup_callback_" & strPrefixes(i), , , SharedScriptSupport.GetSetting(strPrefixes(i), "backup"))
+                    "ps_backup_callback_" & strPrefixes(i), , , CBool(SharedScriptSupport.GetSetting(strPrefixes(i), "backup")))
             
             AddScriptMenuItem dictMenuIDs(strPrefixes(i)), 0, 0, True
             AddScriptMenuItem dictMenuIDs(strPrefixes(i)), "Open File", "ps_openfile_callback_" & strPrefixes(i)
@@ -373,10 +373,10 @@ Public Sub RegisterPluginMenus()
         
         If i = UBound(strPrefixes) Then AddItemToMenu ScriptMenu_ParentID, 0, True
     Next
-    
+    AddChat vbWhite, "test5"
     '// Add 1st level command "Create New Plugin"
     AddItemToMenu ScriptMenu_ParentID, "Create New Plugin", , , , "ps_CreatePlugin_Callback"
-    
+    AddChat vbWhite, "test6"
     '// Add help menu populated with links to some helpful forums/topics
     lngHelpMenu = RegisterScriptMenu("Help")
     AddScriptMenuItem lngHelpMenu, "Scripting Tutorials and FAQs", "ps_mainhelp1_callback"
@@ -416,7 +416,7 @@ End Function
 '// Written by Swent. Deletes all items in the Plugins menu.
 Public Sub DeletePluginMenus()
     Dim intMenuCount As Integer, i As Integer
-    
+
     intMenuCount = GetMenuItemCount(ScriptMenu_ParentID)
 
     '// Is the Plugins menu already empty?
