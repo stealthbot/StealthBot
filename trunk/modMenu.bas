@@ -296,28 +296,28 @@ Public Sub RegisterPluginMenus()
     Dim lngHelpMenu As Long, strPrefixes() As String, strTitles() As String, tmpTitle As String
     Dim boolAddPrefix As Boolean
     Dim i As Integer
-    AddChat vbWhite, "test1"
+
     Set dictMenuIDs = New Dictionary
     Set dictItemIDs = New Dictionary
     dictMenuIDs.CompareMode = TextCompare
     dictItemIDs.CompareMode = TextCompare
-    AddChat vbWhite, "test21"
+
     '// Add menu "The Plugin System" and populate with several commands
     dictMenuIDs("ps") = RegisterScriptMenu("The Plugin System")
-    AddChat vbWhite, "test22"
+
     dictItemIDs("ps|||Enabled") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Disable Plugins", _
             "ps_GEnabled_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "enabled")))
-    AddChat vbWhite, "test23"
+
     dictItemIDs("ps|||New Version Notification") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Disable NVN", _
             "ps_GNVN_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "enabled")))
-    AddChat vbWhite, "test24"
+
     dictItemIDs("ps|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Enable Plugin Backups", _
             "ps_GBackups_Callback", 0, 0, CBool(SharedScriptSupport.GetSetting("ps", "enabled")))
-    AddChat vbWhite, "test25"
+
     AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
     AddScriptMenuItem dictMenuIDs("ps"), "Open PluginSystem.dat", "ps_OpenPS_Callback", False, False
     AddScriptMenuItem dictMenuIDs("ps"), "Help", "ps_Help_Callback", False, False
-    AddChat vbWhite, "test3"
+
     '// Add menu "Plugin Menu Display"
     If Not CBool(SharedScriptSupport.GetSetting("ps", "menusDisabled")) Then
         dictMenuIDs("#Display") = RegisterScriptMenu("Plugin Menu Display")
@@ -327,7 +327,7 @@ Public Sub RegisterPluginMenus()
     '// Get plugin prefixes and titles
     strPrefixes = Split(frmChat.SControl.Eval("Join(psPrefixes)"))
     strTitles = Split(frmChat.SControl.Eval("psTitles"), "|||")
-    AddChat vbWhite, "test4"
+
     '// Register and populate a menu for each plugin
     For i = 0 To UBound(strPrefixes)
     
@@ -373,10 +373,10 @@ Public Sub RegisterPluginMenus()
         
         If i = UBound(strPrefixes) Then AddItemToMenu ScriptMenu_ParentID, 0, True
     Next
-    AddChat vbWhite, "test5"
+
     '// Add 1st level command "Create New Plugin"
     AddItemToMenu ScriptMenu_ParentID, "Create New Plugin", , , , "ps_CreatePlugin_Callback"
-    AddChat vbWhite, "test6"
+
     '// Add help menu populated with links to some helpful forums/topics
     lngHelpMenu = RegisterScriptMenu("Help")
     AddScriptMenuItem lngHelpMenu, "Scripting Tutorials and FAQs", "ps_mainhelp1_callback"
