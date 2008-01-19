@@ -1344,10 +1344,10 @@ Sub Event_Load()
 
    '// Add plugins folder and settings.ini (if necessary)
    Call psAddPFolder()
- 
+
    '// Set color values
    Call psSetPSColors()
- 
+
    '// Create the plugin system settings
    Call psCreatePSSettings()
 
@@ -1363,6 +1363,7 @@ Sub Event_Load()
 
    psExecuteEvent "FirstRun", Array(vbNullString)
    psExecuteEvent "Load", Array(vbNullString)
+addchat vbwhite, "test"
 End Sub
 
 
