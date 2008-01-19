@@ -1316,7 +1316,6 @@ Sub psCreatePSSettings()
    SetSetting "ps", "nvn", True, "New Version Notification. If set to False here, you won't " & _
                                  "get pop-up notification of new versions for ANY plugins.", False
    SetSetting "ps", "backup", False, "If True, plugin files will be backed up when updates are downloaded.", False
-   SetSetting "ps", "menu_display", True, "If True, Plugin System options will be displayed in Scripts menu", False
    SetSetting "ps", "debugmode", False, "Stores the debug mode status", False
    SetSetting "ps", "allowedExtensions", "plug,txt", "Plugins will be loaded from files with these extensions", False
    SetSetting "ps", "autoConvertToPlugin", True, "Automatically converts regular scripts to plugin form on load.", False
