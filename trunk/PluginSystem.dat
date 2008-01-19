@@ -1363,7 +1363,6 @@ Sub Event_Load()
 
    psExecuteEvent "FirstRun", Array(vbNullString)
    psExecuteEvent "Load", Array(vbNullString)
-addchat vbwhite, "test"
 End Sub
 
 
