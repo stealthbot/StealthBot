@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   165
-   ClientTop       =   855
+   ClientLeft      =   225
+   ClientTop       =   825
    ClientWidth     =   11580
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -832,7 +832,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -859,7 +858,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1532,9 +1530,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -4985,7 +4983,7 @@ Private Sub scTimer_Timer()
         Exit Sub
     End If
 
-    If Not SharedScriptSupport.GetSetting("ps", "enabled") Then Exit Sub
+    If Not CBool(SharedScriptSupport.GetSetting("ps", "enabled")) Then Exit Sub
     
     Dim strKeys() As String, strKey() As String, i As Integer
     
@@ -5001,7 +4999,7 @@ Private Sub scTimer_Timer()
         If modScripting.GetPTEnabled(strKey(0), strKey(1)) Then
             
             '// Is the plugin that this timer belongs to enabled?
-            If SharedScriptSupport.GetSetting(strKey(0), "enabled") Then
+            If CBool(SharedScriptSupport.GetSetting(strKey(0), "enabled")) Then
                 
                 '// Has this timer reached the end of its interval countdown?
                 If modScripting.GetPTLeft(strKey(0), strKey(1)) = 1 Then
@@ -5116,7 +5114,7 @@ Private Sub Timer_Timer()
             
             If WindowTitle = vbNullString Then
                 IdleMsg = "/me .: " & CVERSION & " :: anti-idle :."
-                GoTo send
+                GoTo Send
             End If
             IdleMsg = "/me -: Now Playing: " & WindowTitle & " :: " & CVERSION & " :-"
             
@@ -5126,10 +5124,10 @@ Private Sub Timer_Timer()
             IdleMsg = "/me : " & u
             
         End If
-        GoTo send
+        GoTo Send
 Error:
         IdleMsg = "/me -- " & CVERSION
-send:
+Send:
         If sckBNet.State = 7 Then
             If InStr(1, IdleMsg, "& ", vbTextCompare) And IdleType = "msg" Then
                 s = Split(IdleMsg, "& ")
@@ -5447,7 +5445,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
         Dim Splt()   As String  ' ...
         Dim i        As Integer ' ...
         Dim currChar As Integer ' ...
-        Dim send     As String  ' ...
+        Dim Send     As String  ' ...
         Dim command  As String  ' ...
         Dim GTC      As Long    ' ...
     
@@ -5581,7 +5579,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                 GTC = GetTickCount()
                 
                 ' store working copy
-                send = Splt(i)
+                Send = Splt(i)
                 
                 ' is efp enabled?
                 If (bFlood) Then
@@ -5589,20 +5587,20 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                     If (g_Online) Then
                         ' we don't want to display (or even send!) our
                         ' scripted queue delays.
-                        If (StrComp(send, "%%%%%blankqueuemessage%%%%%", _
+                        If (StrComp(Send, "%%%%%blankqueuemessage%%%%%", _
                             vbBinaryCompare) = 0) Then
                 
                             ' delay queue
                             QueueMaster = (QueueMaster + 3)
                         Else
                             ' send our message on its way
-                            Call bnetSend(KillNull(send))
+                            Call bnetSend(KillNull(Send))
                 
                             ' if we're not issuing a command, lets show the user
                             ' what he's saying.
-                            If (InStr(1, send, "/", vbBinaryCompare) <> 1) Then
+                            If (InStr(1, Send, "/", vbBinaryCompare) <> 1) Then
                                 AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
-                                    CurrentUsername, RTBColors.Carats, "> ", vbWhite, send
+                                    CurrentUsername, RTBColors.Carats, "> ", vbWhite, Send
                             End If
                             
                             ' lets alert our queue of the direct
@@ -5627,8 +5625,8 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                         banDelay = 100
                         
                         ' are we issuing a channel moderation command?
-                        If ((StrComp(Left$(send, 4), "/ban", vbTextCompare) = 0) Or _
-                            (StrComp(Left$(send, 5), "/kick", vbTextCompare) = 0)) Then
+                        If ((StrComp(Left$(Send, 4), "/ban", vbTextCompare) = 0) Or _
+                            (StrComp(Left$(Send, 5), "/kick", vbTextCompare) = 0)) Then
                             
                             ' do we have ops?
                             If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
@@ -5650,7 +5648,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                     Set Q = New clsQueueOBj
                     
                     With Q
-                        .Message = send
+                        .Message = Send
                         .Priority = Priority
                     End With
     
