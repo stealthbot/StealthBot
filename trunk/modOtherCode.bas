@@ -1477,7 +1477,9 @@ Public Sub DoLastSeen(ByVal Username As String)
     
     If (colLastSeen.Count > 0) Then
         For i = 1 To colLastSeen.Count
-            If (StrComp(colLastSeen.Item(i), Username, vbTextCompare) = 0) Then
+            If (StrComp(colLastSeen.Item(i), Username, _
+                vbTextCompare) = 0) Then
+                
                 found = True
                 
                 Exit For
@@ -1618,8 +1620,9 @@ End Function
 ' ProfileIndex param should only be used when changing profiles as a SET
 '   - colProfiles MUST be instantiated in order to call with a ProfileIndex > 0!
 Public Function GetProfilePath(Optional ByVal ProfileIndex As Integer) As String
-    Dim s As String
     Static LastPath As String
+    
+    Dim s As String
 
 '    If ProfileIndex > 0 Then
 '        If ProfileIndex <= colProfiles.Count Then
@@ -1659,8 +1662,8 @@ End Function
 
 'Checks the queue for duplicate bans
 Public Sub RemoveBanFromQueue(ByVal sUser As String)
-    Dim i          As Integer
-    Dim iUserLen   As Integer
+    Dim i        As Integer
+    Dim iUserLen As Integer
     
     sUser = "/ban " & IIf(Dii, "*", vbNullString) & _
         StripRealm(sUser)
@@ -1689,25 +1692,30 @@ End Sub
 
 Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boolean
     Dim i As Integer
-    Dim CurrentGTC As Long
     
-    AllowedToTalk = True    ' Default to true
-
-    i = UsernameToIndex(sUser)
-    CurrentGTC = GetTickCount()
+    ' default to true
+    AllowedToTalk = True
     
     'For each condition where the user is NOT allowed to talk, set to false
     
-    If i > 0 Then
-        With colUsersInChannel.Item(i)
-            If CurrentGTC - .JoinTime < BotVars.AutofilterMS Then
-                AllowedToTalk = False
-            End If
-        End With
-    End If
+    'i = UsernameToIndex(sUser)
+    '
+    'If i > 0 Then
+    '    Dim CurrentGTC As Long
+    '
+    '    CurrentGTC = GetTickCount()
+    '
+    '    With colUsersInChannel.Item(i)
+    '        If ((CurrentGTC - .JoinTime) < BotVars.AutofilterMS) Then
+    '            AllowedToTalk = False
+    '        End If
+    '    End With
+    'End If
     
-    If Filters Then
-        If CheckBlock(sUser) Or CheckMsg(Msg, sUser, -5) Then
+    ' ...
+    If (Filters) Then
+        ' ...
+        If ((CheckBlock(sUser)) Or (CheckMsg(Msg, sUser, -5))) Then
             AllowedToTalk = False
         End If
     End If
@@ -1820,9 +1828,7 @@ End Sub
 
 Public Function IsBanned(ByVal sUser As String) As Boolean
     Dim i As Integer
-    
-    sUser = LCase$(sUser)
-    
+
     If (InStr(1, sUser, "#", vbBinaryCompare)) Then
         sUser = Left$(sUser, InStr(1, sUser, _
             "#", vbBinaryCompare) - 1)
@@ -1831,7 +1837,9 @@ Public Function IsBanned(ByVal sUser As String) As Boolean
     End If
     
     For i = 0 To UBound(gBans)
-        If (StrComp(sUser, gBans(i).UsernameActual, vbBinaryCompare) = 0) Then
+        If (StrComp(sUser, gBans(i).UsernameActual, _
+            vbTextCompare) = 0) Then
+            
             IsBanned = True
             
             Exit Function
@@ -1872,21 +1880,23 @@ Public Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal 
     End If
     
     '/* Blizzard */
-    If ((Flags And &H1) = &H1) Then
+    If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or _
+        ((Flags And USER_SYSOP&) = USER_SYSOP&)) Then
+       
         GetNameColor = COLOR_BLUE
         
         Exit Function
     End If
     
     '/* Operator */
-    If ((Flags And &H2) = &H2) Then
+    If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
         'Debug.Print "Assigned color OP"
         GetNameColor = &HDDDDDD
         Exit Function
     End If
     
     '/* Squelched */
-    If ((Flags And &H20) = &H20) Then
+    If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
         'Debug.Print "Assigned color SQUELCH"
         GetNameColor = &H99
         
@@ -1909,7 +1919,7 @@ Public Function FlagDescription(ByVal Flags As Long) As String
     Dim s0ut          As String
     Dim multipleFlags As Boolean
         
-    If (Flags And &H20) = &H20 Then
+    If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
         s0ut = "Squelched"
         
         multipleFlags = True
@@ -1938,7 +1948,7 @@ Public Function FlagDescription(ByVal Flags As Long) As String
         multipleFlags = True
     End If
     
-    If ((Flags And &H10) = &H10) Then
+    If ((Flags And USER_NOUDP&) = USER_NOUDP&) Then
         If (multipleFlags) Then
             s0ut = s0ut & ", UDP plug"
         Else
@@ -1967,7 +1977,7 @@ End Function
 
 'Returns system uptime in milliseconds
 Public Function GetUptimeMS() As Double
-    Dim mmt As MMTIME
+    Dim mmt   As MMTIME
     Dim lSize As Long
     
     lSize = LenB(mmt)
@@ -2039,7 +2049,9 @@ End Sub
 
 
 Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phrase As String, ByVal mType As Byte)
-    Dim i As Integer, s As String
+    Dim i As Integer
+    Dim s As String
+    
     i = FreeFile
     
     If (LenB(ReadCFG("Other", "FlashOnCatchPhrases")) > 0) Then
@@ -2078,7 +2090,9 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phr
 End Sub
 
 
-Public Function DoReplacements(ByVal s As String, Optional Username As String, Optional Ping As Long) As String
+Public Function DoReplacements(ByVal s As String, Optional Username As String, _
+    Optional Ping As Long) As String
+
     Dim gAcc As udtGetAccessResponse
     
     gAcc = GetCumulativeAccess(Username)

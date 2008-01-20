@@ -98,6 +98,8 @@ Public CommandLine As String
 
 Public rtbChatLength As Long
 
+Public g_NoSupportMultiCharTrigger As Boolean
+
 Public Const BTRUE& = 1
 Public Const BFALSE& = 0
 

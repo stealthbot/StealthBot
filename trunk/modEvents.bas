@@ -630,8 +630,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
         
         If (InStr(1, Message, "designated heir", vbTextCompare) <> 0) Then
-            gChannel.Designated = Left$(Message, Len(Message) _
-                - 29)
+            gChannel.Designated = Left$(Message, Len(Message) - 29)
         End If
         
         ' trick to find the current Warcraft III realm name, thanks LoRd :)
@@ -640,7 +639,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 "using Warcraft III ") > 0) Then
                 
                 If (InStr(1, Message, "channel", vbTextCompare) = 0) Then
-                    i = InStrRev(Message, " ")
+                    i = InStrRev(Message, Space(1))
                     
                     BotVars.Realm = Mid$(Message, i + 1)
                     
@@ -804,6 +803,15 @@ theEnd:
         
         On Error Resume Next
         
+        If ((g_NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
+            If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
+                vbBinaryCompare) = 0) Then
+                
+                Message = BotVars.Trigger & _
+                    Mid$(Message, Len(BotVars.TriggerLong) + 1)
+            End If
+        End If
+        
         frmChat.SControl.Run "Event_UserEmote", Username, Flags, Message
     End If
 End Sub
@@ -818,7 +826,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim strCompare   As String  ' ...
     Dim Level        As Byte    ' ...
     Dim StatUpdate   As Boolean ' ...
-    Dim index        As Long    ' ...
+    Dim Index        As Long    ' ...
     
     If (Len(Username) < 1) Then
         Exit Sub
@@ -1420,7 +1428,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim pos       As Integer
+    Dim Pos       As Integer
     Dim userIndex As Integer
     
     ' ...
@@ -1699,6 +1707,15 @@ PhraseCleared:
 theEnd:
         On Error Resume Next
         
+        If ((g_NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
+            If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
+                vbBinaryCompare) = 0) Then
+                
+                Message = BotVars.Trigger & _
+                    Mid$(Message, Len(BotVars.TriggerLong) + 1)
+            End If
+        End If
+
         frmChat.SControl.Run "Event_UserTalk", Username, Flags, Message, Ping
     End If
 End Sub

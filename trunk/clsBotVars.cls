@@ -535,8 +535,18 @@ Public Property Let SecondsToIdle(ByVal lSecondsToIdle As Long)
 End Property
 
 Public Property Get Trigger() As String
+    
+    If (g_NoSupportMultiCharTrigger) Then
+        Trigger = Left$(m_sTrigger, 1)
+    Else
+        Trigger = m_sTrigger
+    End If
+    
+End Property
 
-    Trigger = m_sTrigger
+Public Property Get TriggerLong() As String
+
+    TriggerLong = m_sTrigger
 
 End Property
 

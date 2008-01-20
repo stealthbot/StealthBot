@@ -533,7 +533,8 @@ Public Function command(ByVal Username As String, ByVal Message As String, ByVal
         If (InBot) Then
             tmpmsg = "/" & tmpmsg
         Else
-            tmpmsg = BotVars.Trigger & tmpmsg
+            tmpmsg = BotVars.TriggerLong & _
+                tmpmsg
         End If
         
         ' execute command
@@ -1571,6 +1572,14 @@ Public Function GetUIObject(ByVal strPrefix As String, ByVal strForm As String, 
         Set GetUIObject = Nothing
     End If
 End Function
+
+Public Sub NoSupportMultiCharTrigger()
+    g_NoSupportMultiCharTrigger = True
+    
+    AddChat vbRed, "Warning: One or more scripts found do not currently support the use of " & _
+        "multiple-character triggers." & " Because of this, a backwards-compatibility mode has been " & _
+            "enabled to allow the use of such scripts while using a multiple-character trigger."
+End Sub
 
 Private Sub Class_Initialize()
     Set obScriptForms = CreateObject("Scripting.Dictionary")

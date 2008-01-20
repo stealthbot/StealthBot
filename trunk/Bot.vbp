@@ -66,7 +66,6 @@ Module=modColors; modColors.bas
 Module=modCommandCode; modCommands.bas
 Module=modOtherCode; modOtherCode.bas
 Module=modParsing; modParsing.bas
-Module=modQueueCode; modQueue.bas
 Module=modScripting; modScripting.bas
 Module=modSystray; modSystray.bas
 Module=UnsignedConversions; modUnsignedConversions.bas

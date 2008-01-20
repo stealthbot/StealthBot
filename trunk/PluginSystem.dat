@@ -176,6 +176,15 @@ Sub psLoadPlugins()
          If Instr(extensions, psFSO.GetExtensionName(File) & ",") Then
 
             strPlugin = psGetTextStream(File)
+
+	    '// does plugin contain references to BotVars.Trigger with a static length of one?
+            If (InStr(1, strPlugin, ", 1) = BotVars.Trigger", vbTextCompare) <> 0) Then
+                strPlugin = Replace(strPlugin, ", 1) = BotVars.Trigger", _
+		    ", Len(BotVars.Trigger)) = BotVars.Trigger", 1, 1, vbTextCompare)
+
+		Call NoSupportMultiCharTrigger
+            End If
+
             arrPlugin = Split(strPlugin, vbCrLf)
             curPrefix = Mid(Trim(LCase(arrPlugin(0))), 2)
             curVersion = Mid(Trim(arrPlugin(1)), 2)

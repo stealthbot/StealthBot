@@ -15,7 +15,7 @@ Private m_QueueGTC   As Long
 Public Sub ChatQueue_Initialize()
     Set colChatQueue = New Collection
 
-    m_TimerID = SetTimer(0, m_TimerID, 1000, AddressOf ChatQueueTimerProc)
+    m_TimerID = SetTimer(0, m_TimerID, 500, AddressOf ChatQueueTimerProc)
 End Sub
 
 ' ...
@@ -52,7 +52,7 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, _
 
             With clsChatQueue
                 ' ...
-                If (GetTickCount() - .Time() >= 1000) Then
+                If (GetTickCount() - .Time() >= 500) Then
                     blnShow = True
                 End If
 
@@ -108,7 +108,15 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
     End If
     
     frmChat.lblCurrentChannel.Caption = _
-        frmChat.GetChannelString()
+        frmChat.GetChannelString
+        
+    On Error Resume Next
+    
+    'frmChat.SControl.Run "Event_UserJoins", Username, Flags, Message, Ping, _
+    '        Product, Level, OriginalStatstring, Banned
+        
+    frmChat.SControl.Run "Event_QueuedUserJoins", Username, Flags, OriginalStatstring, Ping, _
+            Product, 0, OriginalStatstring, False
 End Sub
 
 ' ...
@@ -152,6 +160,12 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
             Set found = Nothing
         End If
     End If
+    
+    'frmChat.SControl.Run "Event_UserInChannel", Username, Flags, Message, Ping, _
+    '    Product, StatsUpdate
+    
+    'frmChat.SControl.Run "Event_QueuedUserInChannel", Username, Flags, OriginalStatstring, Ping, _
+    '    Product, True
 End Sub
 
 ' ...
@@ -228,6 +242,8 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
             End If
         End If
     End If
+    
+    'frmChat.SControl.Run "Event_QueuedFlagUpdate", Username, Flags, Ping
 End Sub
 
 ' ...
@@ -258,6 +274,18 @@ Public Sub Event_QueuedTalk(ByVal Username As String, ByVal Flags As Long, ByVal
     
     Call frmChat.AddChat(CaratColor, "<", UsernameColor, Username, _
         CaratColor, "> ", TextColor, Message)
+        
+    ' scripts
+    If ((g_NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
+        If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
+            vbBinaryCompare) = 0) Then
+            
+            Message = BotVars.TriggerLong & _
+                Mid$(Message, Len(BotVars.TriggerLong) + 1)
+        End If
+    End If
+    
+    'frmChat.SControl.Run "Event_QueuedUserTalk", Username, Flags, Message, Ping
 End Sub
 
 ' ...
@@ -270,6 +298,18 @@ Public Sub Event_QueuedEmote(ByVal Username As String, ByVal Flags As Long, ByVa
     If (frmChat.mnuFlash.Checked) Then
         Call FlashWindow
     End If
+    
+    ' scripts
+    If ((g_NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
+        If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
+            vbBinaryCompare) = 0) Then
+            
+            Message = BotVars.TriggerLong & _
+                Mid$(Message, Len(BotVars.TriggerLong) + 1)
+        End If
+    End If
+
+    'frmChat.SControl.Run "Event_QueuedUserEmote", Username, Flags, Message
 End Sub
 
 ' ...
