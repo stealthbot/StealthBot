@@ -5519,13 +5519,6 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                         command = Splt(0) & Space(1) & _
                             reverseUsername(Splt(1)) & _
                                 Space(1)
-                            
-                        If (UBound(Splt) > 1) Then
-                            strTmp = command & _
-                                Splt(2)
-                        Else
-                            strTmp = command
-                        End If
                     End If
                 ElseIf ((command = "f") Or _
                         (command = "friends")) Then
@@ -5548,12 +5541,8 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                                     (StrReverse$(BotVars.Product) = "W3XP")) Then
                                     
                                     ' ...
-                                    strTmp = command & _
+                                    command = command & _
                                         reverseUsername(Splt(2))
-                                Else
-                                    ' ...
-                                    strTmp = command & _
-                                        Splt(2)
                                 End If
                         End Select
                     End If
@@ -5565,8 +5554,8 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
         End If
         
         ' ...
-        Call SplitByLen(strTmp, (MAX_MESSAGE_LENGTH - Len(command)), _
-            Splt())
+        Call SplitByLen(Mid$(strTmp, Len(command) + 1), (MAX_MESSAGE_LENGTH - _
+            Len(command)), Splt())
             
         ' ...
         ReDim Preserve Splt(0 To UBound(Splt))
@@ -5579,7 +5568,8 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                 GTC = GetTickCount()
                 
                 ' store working copy
-                Send = Splt(i)
+                Send = command & _
+                    Splt(i)
                 
                 ' is efp enabled?
                 If (bFlood) Then
@@ -5625,8 +5615,8 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                         banDelay = 100
                         
                         ' are we issuing a channel moderation command?
-                        If ((StrComp(Left$(Send, 4), "/ban", vbTextCompare) = 0) Or _
-                            (StrComp(Left$(Send, 5), "/kick", vbTextCompare) = 0)) Then
+                        If ((StrComp(Left$(Send, 5), "/ban ", vbTextCompare) = 0) Or _
+                            (StrComp(Left$(Send, 6), "/kick ", vbTextCompare) = 0)) Then
                             
                             ' do we have ops?
                             If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
@@ -5726,7 +5716,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.BotOwner = ReadCFG(MN, "Owner")
     BotVars.Trigger = ReadCFG(MN, "Trigger")
     
-    If (BotVars.Trigger = vbNullString) Then
+    If (BotVars.TriggerLong = vbNullString) Then
         BotVars.Trigger = "."
     End If
     
