@@ -1573,10 +1573,6 @@ Public Function GetUIObject(ByVal strPrefix As String, ByVal strForm As String, 
     End If
 End Function
 
-Public Sub NoSupportMultiCharTrigger()
-    g_NoSupportMultiCharTrigger = True
-End Sub
-
 Private Sub Class_Initialize()
     Set obScriptForms = CreateObject("Scripting.Dictionary")
 End Sub

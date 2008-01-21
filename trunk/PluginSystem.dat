@@ -209,13 +209,20 @@ Sub psLoadPlugins()
                      "ins", psColor1, " to view them. Type ", psColor2, "/phelp", psColor1, " for help using them."
    AddChat psColor1, "Type ", psColor2, "/updates", psColor1, " in the bot to view updates and new plugins that are available for download."
 
+   '// alert our users if backwards-compatibility mode has been
+   '// enabled for the use of multiple-character triggers
+   If (BotVars.NoSupportMultiCharTrigger) Then
+      AddChat vbRed, "Warning: One or more plugins have been loaded that do not currently support " & _
+         "the use of multiple-character triggers and as such a backwards-compatibility mode has been " & _
+         "enabled to allow for the usage of these triggers without modification to plugin code."
+   End If
+
    psPrefixes = psPlugins.Keys
    psLoaded = True
 End Sub
 
  
 Sub psLoadPlugin(Prefix, Version, Path, Content, Lines)
-
    '// Get the names of all events that exist in this plugin
    psArgsAdded = False
    psEvents.Item(Prefix) = "|"
@@ -245,14 +252,6 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, Lines)
          ElseIf Instr(curLine, "userinchannel") > 0 And Instr(curLine, "statupdate") = 0 Then
             psAddArg Prefix, intLine, "UserInChannel", "Product", "StatUpdate", Lines, Path
          End If
-      ElseIf ((InStr(1, curLine, ", 1) = BotVars.Trigger", vbTextCompare) <> 0) Or _
-              (InStr(1, curLine, ", 1) <> BotVars.Trigger", vbTextCompare) <> 0)) Then
-
-          Call NoSupportMultiCharTrigger
-
-	  AddChat vbRed, "Warning: The " & Chr(34) & Prefix & Chr(34) & " plugin does not currently " & _
-	      "support the use of multiple-character triggers and because of this a backwards-compatibility " & _
-                  "mode has been enabled to allow for proper functionality when using such triggers."
       End If
    Next
 
@@ -295,8 +294,24 @@ Sub psLoadCode(Prefix, Path, Content)
    On Error Resume Next
    boolEnabled = GetSetting(Prefix, "enabled")
    If (Len(boolEnabled) = 0 Or GetSetting(Prefix, "enabled")) Then
-      If psArgsAdded Then Content = psNewContent
+      If psArgsAdded Then
+          Content = psNewContent
+      End If
+      
+      ' // check if plugin supports multiple-character triggers if backwards-compatibility
+      ' // mode has not yet been enabled globally
+      If (BotVars.NoSupportMultiCharTrigger = False) Then
+         If ((InStr(1, Content, ", 1) = BotVars.Trigger", vbTextCompare) <> 0) Or _
+             (InStr(1, Content, ", 1) <> BotVars.Trigger", vbTextCompare) <> 0)) Then
+  
+            '// ugh, no multiple-character trigger support; enable
+            '// backwards-compatibility for such features.
+            BotVars.NoSupportMultiCharTrigger = True
+         End If
+      End If
+
       psSC.AddCode Content
+
       psCodeLoaded.Item(Prefix) = True
    Else
       psCodeLoaded.Item(Prefix) = False

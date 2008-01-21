@@ -803,7 +803,7 @@ theEnd:
         
         On Error Resume Next
         
-        If ((g_NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
+        If ((BotVars.NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
             If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
                 vbBinaryCompare) = 0) Then
                 
@@ -1707,7 +1707,7 @@ PhraseCleared:
 theEnd:
         On Error Resume Next
         
-        If ((g_NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
+        If ((BotVars.NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
             If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
                 vbBinaryCompare) = 0) Then
                 

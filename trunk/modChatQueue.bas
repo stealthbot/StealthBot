@@ -276,7 +276,7 @@ Public Sub Event_QueuedTalk(ByVal Username As String, ByVal Flags As Long, ByVal
         CaratColor, "> ", TextColor, Message)
         
     ' scripts
-    If ((g_NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
+    If ((BotVars.NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
         If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
             vbBinaryCompare) = 0) Then
             
@@ -300,7 +300,7 @@ Public Sub Event_QueuedEmote(ByVal Username As String, ByVal Flags As Long, ByVa
     End If
     
     ' scripts
-    If ((g_NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
+    If ((BotVars.NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
         If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
             vbBinaryCompare) = 0) Then
             

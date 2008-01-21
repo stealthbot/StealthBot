@@ -88,7 +88,7 @@ Private m_bUseW3GameConventions         As Boolean
 Private m_sClan                         As String
 Private m_sGateway                      As String
 Private m_sRealm                        As String
-
+Private m_NoSupportMultiCharTrigger     As Boolean
 
 Public Property Get Username() As String
     
@@ -536,7 +536,7 @@ End Property
 
 Public Property Get Trigger() As String
     
-    If (g_NoSupportMultiCharTrigger) Then
+    If (m_NoSupportMultiCharTrigger) Then
         Trigger = Left$(m_sTrigger, 1)
     Else
         Trigger = m_sTrigger
@@ -917,3 +917,16 @@ Public Property Let Realm(ByVal sRealm As String)
     m_sRealm = sRealm
 
 End Property
+
+Public Property Get NoSupportMultiCharTrigger() As Boolean
+    
+    NoSupportMultiCharTrigger = m_NoSupportMultiCharTrigger
+
+End Property
+
+Public Property Let NoSupportMultiCharTrigger(ByVal NoMultiCharTrigger As Boolean)
+    
+    m_NoSupportMultiCharTrigger = NoMultiCharTrigger
+
+End Property
+
