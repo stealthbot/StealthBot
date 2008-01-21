@@ -1406,7 +1406,7 @@ End Sub
 '//   Written by Swent. Removes an entire plugin menu.
 Public Sub RemoveMenuItem(ByVal strPrefix As String, Optional ByVal strName As String)
 
-    If CBool(GetSetting("ps", "menusDisabled")) Then Exit Sub
+    If GetSetting("ps", "menusDisabled") Then Exit Sub
     
     DeleteMenuItemByID GetPluginMenu(strPrefix)
 End Sub
@@ -1423,7 +1423,7 @@ End Sub
 Public Sub AddMenuItem(ByVal strPrefix As String, ByVal strName As String, Optional ByVal boolSeparator As Boolean, _
                 Optional ByVal boolDisabled As Boolean, Optional ByVal boolCheckmark As Boolean)
 
-    If CBool(GetSetting("ps", "menusDisabled")) Then Exit Sub
+    If GetSetting("ps", "menusDisabled") Then Exit Sub
 
     Dim strCallback As String
     Dim lngMenu As Long, lngItem As Long, intItemCount As Integer
@@ -1451,7 +1451,7 @@ End Sub
 '// SETMENUITEMCHECK
 '//   Written by Swent. Changes checked status of an item in a plugin menu.
 Public Sub SetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String, ByVal boolChecked As Boolean)
-    If CBool(GetSetting("ps", "menusDisabled")) Then Exit Sub
+    If GetSetting("ps", "menusDisabled") Then Exit Sub
     
     SetMenuCheck GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolChecked
 End Sub
@@ -1461,7 +1461,7 @@ End Sub
 '//   Written by Swent. Get's the checked status of an item in a plugin menu.
 '//   Returns True (checked), False (unchecked), or -1 if it's not a checkmark item
 Public Function GetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
-    If CBool(GetSetting("ps", "menusDisabled")) Then Exit Function
+    If GetSetting("ps", "menusDisabled") Then Exit Function
     
     Dim intChange As Integer
     intChange = SetMenuCheck(GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), True)
@@ -1481,7 +1481,7 @@ End Function
 '//   Written by Swent. Reverses the checked status of a plugin menu item.
 Public Sub ToggleMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
 
-    If CBool(GetSetting("ps", "menusDisabled")) Then Exit Sub
+    If GetSetting("ps", "menusDisabled") Then Exit Sub
     
     SetMenuItemCheck strPrefix, strName, Not GetMenuItemCheck(strPrefix, strName)
 End Sub
@@ -1491,7 +1491,7 @@ End Sub
 '//   Written by Swent. Enables or disables a plugin menu item. Disabled items are greyed out and not clickable.
 Public Sub SetMenuItemEnabled(ByVal strPrefix As String, ByVal strName As String, ByVal boolEnabled As Boolean)
 
-    If CBool(GetSetting("ps", "menusDisabled")) Then Exit Sub
+    If GetSetting("ps", "menusDisabled") Then Exit Sub
     
     SetMenuEnabled GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolEnabled
 End Sub
@@ -1575,10 +1575,6 @@ End Function
 
 Public Sub NoSupportMultiCharTrigger()
     g_NoSupportMultiCharTrigger = True
-    
-    AddChat vbRed, "Warning: One or more scripts found do not currently support the use of " & _
-        "multiple-character triggers." & " Because of this, a backwards-compatibility mode has been " & _
-            "enabled to allow the use of such scripts while using a multiple-character trigger."
 End Sub
 
 Private Sub Class_Initialize()

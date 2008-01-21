@@ -176,15 +176,6 @@ Sub psLoadPlugins()
          If Instr(extensions, psFSO.GetExtensionName(File) & ",") Then
 
             strPlugin = psGetTextStream(File)
-
-	    '// does plugin contain references to BotVars.Trigger with a static length of one?
-            If (InStr(1, strPlugin, ", 1) = BotVars.Trigger", vbTextCompare) <> 0) Then
-                strPlugin = Replace(strPlugin, ", 1) = BotVars.Trigger", _
-		    ", Len(BotVars.Trigger)) = BotVars.Trigger", 1, 1, vbTextCompare)
-
-		Call NoSupportMultiCharTrigger
-            End If
-
             arrPlugin = Split(strPlugin, vbCrLf)
             curPrefix = Mid(Trim(LCase(arrPlugin(0))), 2)
             curVersion = Mid(Trim(arrPlugin(1)), 2)
@@ -254,6 +245,14 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, Lines)
          ElseIf Instr(curLine, "userinchannel") > 0 And Instr(curLine, "statupdate") = 0 Then
             psAddArg Prefix, intLine, "UserInChannel", "Product", "StatUpdate", Lines, Path
          End If
+      ElseIf ((InStr(1, curLine, ", 1) = BotVars.Trigger", vbTextCompare) <> 0) Or _
+              (InStr(1, curLine, ", 1) <> BotVars.Trigger", vbTextCompare) <> 0)) Then
+
+          Call NoSupportMultiCharTrigger
+
+	  AddChat vbRed, "Warning: The " & Chr(34) & Prefix & Chr(34) & " plugin does not currently " & _
+	      "support the use of multiple-character triggers and because of this a backwards-compatibility " & _
+                  "mode has been enabled to allow for proper functionality when using such triggers."
       End If
    Next
 
