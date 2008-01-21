@@ -13,5 +13,30 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public Message As String
-Public Priority As Integer
+Public m_message  As String
+Public m_priority As Integer
+Public m_tag      As String
+
+Public Property Let Message(ByVal msg As String)
+    m_message = msg
+End Property
+
+Public Property Get Message() As String
+    Message = m_message
+End Property
+
+Public Property Let Priority(ByVal pri As Integer)
+    m_priority = pri
+End Property
+
+Public Property Get Priority() As Integer
+    Priority = m_priority
+End Property
+
+Public Property Let Tag(ByVal Tag As String)
+    m_tag = Tag
+End Property
+
+Public Property Get Tag() As String
+    Tag = m_tag
+End Property

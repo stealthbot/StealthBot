@@ -330,7 +330,7 @@ Public Function StripRealm(ByVal Username As String) As String
     StripRealm = Username
 End Function
 
-Public Sub bnetSend(ByVal Message As String)
+Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNullString)
     If frmChat.sckBNet.State = 7 Then
         With PBuffer
             ' We shouldn't be sending in UTF-8: Blizzard's
@@ -349,7 +349,7 @@ Public Sub bnetSend(ByVal Message As String)
     If (Not (bFlood)) Then
         On Error Resume Next
         
-        frmChat.SControl.Run "Event_MessageSent", Message
+        frmChat.SControl.Run "Event_MessageSent", Message, Tag
     End If
 End Sub
 
@@ -359,7 +359,7 @@ Public Sub APISend(ByRef s As String) '// faster API-based sending for EFP
     
     i = Len(s) + 5
     
-    Call send(frmChat.sckBNet.SocketHandle, "ÿ" & "" & Chr(i) & _
+    Call Send(frmChat.sckBNet.SocketHandle, "ÿ" & "" & Chr(i) & _
         Chr(0) & s & Chr(0), i, 0)
 End Sub
 
@@ -1192,17 +1192,17 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
     End If
 End Function
 
-Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String, _
+Public Function CheckMsg(ByVal msg As String, Optional ByVal Username As String, _
     Optional ByVal Ping As Long) As Boolean
     
     Dim i As Integer ' ...
     
-    Msg = LCase$(Msg)
+    msg = LCase$(msg)
     
     For i = 0 To UBound(gFilters)
         If (Len(gFilters(i)) > 1) Then
             If (InStr(1, gFilters(i), "%", vbBinaryCompare) > 0) Then
-                If (InStr(1, Msg, LCase$(DoReplacements(gFilters(i), _
+                If (InStr(1, msg, LCase$(DoReplacements(gFilters(i), _
                     Username, Ping))) > 0) Then
                     
                     CheckMsg = True
@@ -1210,7 +1210,7 @@ Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String,
                     Exit Function
                 End If
             Else
-                If (InStr(1, Msg, LCase$(gFilters(i)), vbBinaryCompare) > 0) Then
+                If (InStr(1, msg, LCase$(gFilters(i)), vbBinaryCompare) > 0) Then
                     CheckMsg = True
                     
                     Exit Function
@@ -1690,7 +1690,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
 End Sub
 
 
-Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boolean
+Public Function AllowedToTalk(ByVal sUser As String, ByVal msg As String) As Boolean
     Dim i As Integer
     
     ' default to true
@@ -1715,7 +1715,7 @@ Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boo
     ' ...
     If (Filters) Then
         ' ...
-        If ((CheckBlock(sUser)) Or (CheckMsg(Msg, sUser, -5))) Then
+        If ((CheckBlock(sUser)) Or (CheckMsg(msg, sUser, -5))) Then
             AllowedToTalk = False
         End If
     End If
@@ -2029,7 +2029,7 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
 End Function
 
 
-Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mType As Byte)
+Public Sub CheckPhrase(ByRef Username As String, ByRef msg As String, ByVal mType As Byte)
     Dim i As Integer
     
     If UBound(Catch) = 0 Then
@@ -2038,8 +2038,8 @@ Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mTyp
     
     For i = LBound(Catch) To UBound(Catch)
         If (Catch(i) <> vbNullString) Then
-            If (InStr(1, LCase(Msg), Catch(i), vbTextCompare) <> 0) Then
-                Call CaughtPhrase(Username, Msg, Catch(i), mType)
+            If (InStr(1, LCase(msg), Catch(i), vbTextCompare) <> 0) Then
+                Call CaughtPhrase(Username, msg, Catch(i), mType)
                 
                 Exit Sub
             End If
@@ -2048,7 +2048,7 @@ Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mTyp
 End Sub
 
 
-Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phrase As String, ByVal mType As Byte)
+Public Sub CaughtPhrase(ByVal Username As String, ByVal msg As String, ByVal Phrase As String, ByVal mType As Byte)
     Dim i As Integer
     Dim s As String
     
@@ -2079,12 +2079,12 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phr
             Open GetProfilePath() & "\caughtphrases.htm" For Output As #i
         End If
         
-        Msg = Replace(Msg, "<", "&lt;", 1)
-        Msg = Replace(Msg, ">", "&gt;", 1)
+        msg = Replace(msg, "<", "&lt;", 1)
+        msg = Replace(msg, ">", "&gt;", 1)
         
         Print #i, "<B>" & Format(Date, "MM-dd-yyyy") & " - " & Time & _
             " - " & s & Space(1) & Username & ": </B>" & _
-                Replace(Msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
+                Replace(msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
                     "<br>"
     Close #i
 End Sub

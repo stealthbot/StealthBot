@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   225
-   ClientTop       =   825
+   ClientLeft      =   165
+   ClientTop       =   855
    ClientWidth     =   11580
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -832,6 +832,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -858,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4799,6 +4801,7 @@ End Sub
 
 Private Sub QueueTimer_Timer()
     Dim Message  As String
+    Dim Tag      As String
     Dim Sent     As Byte
     Dim i        As Integer
     Dim Override As Integer
@@ -4810,6 +4813,7 @@ Private Sub QueueTimer_Timer()
         
         With colQueue
             Message = .Item(1).Message
+            Tag = .Item(1).Tag
             
             For i = 1 To .Count
                 If ((.Item(i).Priority = 1) And (Len(.Item(i).Message) > 1)) Then '// a priority-1 message
@@ -4845,24 +4849,18 @@ Private Sub QueueTimer_Timer()
                 If (Len(Message) <= 70) Then
                     QueueLoad = (QueueLoad + 1)
                     QueueMaster = (QueueMaster + 3)
-                    
-                    Call bnetSend(Message)
                 ElseIf (Len(Message) <= 130) Then
                     QueueLoad = (QueueLoad + 2)
                     QueueMaster = (QueueMaster + 5)
-                    
-                    Call bnetSend(Message)
                 ElseIf (Len(Message) <= 170) Then
                     QueueLoad = (QueueLoad + 3)
                     QueueMaster = (QueueMaster + 7)
-                    
-                    Call bnetSend(Message)
                 Else
                     QueueLoad = (QueueLoad + 4)
                     QueueMaster = (QueueMaster + 9)
-                    
-                    Call bnetSend(Message)
                 End If
+                
+                Call bnetSend(Message, Tag)
                 
                 Sent = 1
             End If
@@ -5427,7 +5425,9 @@ ERROR_HANDLER:
 End Function
 
 ' ...
-Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
+Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
+    ByVal Tag As String = vbNullString)
+    
     ' maximum size of Battle.net messages
     Const MAX_MESSAGE_LENGTH = 220
 
@@ -5584,7 +5584,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                             QueueMaster = (QueueMaster + 3)
                         Else
                             ' send our message on its way
-                            Call bnetSend(KillNull(Send))
+                            Call bnetSend(KillNull(Send), Tag)
                 
                             ' if we're not issuing a command, lets show the user
                             ' what he's saying.
@@ -5640,6 +5640,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0)
                     With Q
                         .Message = Send
                         .Priority = Priority
+                        .Tag = Tag
                     End With
     
                     ' ...

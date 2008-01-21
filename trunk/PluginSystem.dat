@@ -1512,9 +1512,9 @@ Sub Event_KeyReturn(KeyName, KeyValue)
 End Sub
  
  
-Sub Event_MessageSent(Message)
+Sub Event_MessageSent(Message, Tag)
  
-   psExecuteEvent "MessageSent", Array(Message)
+   psExecuteEvent "MessageSent", Array(Message, Tag)
 End Sub
 
 
