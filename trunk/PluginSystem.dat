@@ -360,9 +360,9 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
    '// Is it a multiple command message?
    If (Instr(Message, "; ")) Then
      If (Left(Message, 1) = "/") Then
-        msg_prefix = Mid(Message, 1, 1)
+        msg_prefix = Left(Message, 1)
      ElseIf (Left(Message, Len(BotVars.Trigger)) = Len(BotVars.Trigger)) Then
-        msg_prefix = Mid(Message, 1, Len(BotVars.Trigger) + 1)
+        msg_prefix = Left(Message, Len(BotVars.Trigger) + 1)
      End If
 
      If (Len(msg_prefix) > 0) Then
