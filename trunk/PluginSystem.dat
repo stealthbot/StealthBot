@@ -355,7 +355,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
    If Not psLoaded Then Exit Sub
 
    '// Is it a command?
-   If Not (Left(Message, 1) = "/" Or (Left(Message, Len(BotVars.Trigger)) = BotVars.Trigger And Username <> BotVars.Username)) Then Exit Sub
+   If Not (Left(Message, 1) = "/" Or (Left(Message, 1) = BotVars.Trigger And Username <> BotVars.Username)) Then Exit Sub
 
    '// Are they using a double slash?
    If Left(Message, 2) = "//" Then
@@ -364,7 +364,7 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
    End If
 
    '// Is it a multiple command message?
-   If (Left(Message, Len(BotVars.Trigger)) = BotVars.Trigger Or Left(Message, 1) = "/") And Instr(Message, "; ") Then
+   If (Left(Message, 1) = BotVars.Trigger Or Left(Message, 1) = "/") And Instr(Message, "; ") Then
      arrMessage = Split(Mid(Message, 2), "; ")
      ReDim arrCmd(UBound(arrMessage))
      For i = 0 to UBound(arrCmd)
@@ -1415,7 +1415,7 @@ Sub Event_UserTalk(Username, Flags, Message, Ping)
    psPluginSystemCmds Message, Username, 3
  
    '// Is it a multiple command message?
-   If Left(Message, Len(BotVars.Trigger)) = BotVars.Trigger And Instr(Message, "; ") Then
+   If Left(Message, 1) = BotVars.Trigger And Instr(Message, "; ") Then
      arrMessage = Split(Mid(Message, 2), "; ")
      ReDim arrCmd(UBound(arrMessage))
      For i = 0 to UBound(arrCmd)
