@@ -355,27 +355,41 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
    If Not psLoaded Then Exit Sub
 
    '// Is it a command?
-   If Not (Left(Message, 1) = "/" Or (Left(Message, 1) = BotVars.Trigger And Username <> BotVars.Username)) Then Exit Sub
-
-   '// Are they using a double slash?
-   If Left(Message, 2) = "//" Then
-      DisplayID = 1
-      Message = Mid(Message, 2)
-   End If
+   If (Not (Left(Message, 1) = "/" Or (Left(Message, Len(BotVars.Trigger)) = BotVars.Trigger And Username <> BotVars.Username))) Then Exit Sub
 
    '// Is it a multiple command message?
-   If (Left(Message, 1) = BotVars.Trigger Or Left(Message, 1) = "/") And Instr(Message, "; ") Then
-     arrMessage = Split(Mid(Message, 2), "; ")
-     ReDim arrCmd(UBound(arrMessage))
-     For i = 0 to UBound(arrCmd)
-        psPluginSystemCmds Left(Message, 1) & arrMessage(i), Username, DisplayID
-     Next
-     Exit Sub
+   If (Instr(Message, "; ")) Then
+     If (Left(Message, 1) = "/") Then
+        msg_prefix = Mid(Message, 1, 1)
+     ElseIf (Left(Message, Len(BotVars.Trigger)) = Len(BotVars.Trigger)) Then
+        msg_prefix = Mid(Message, 1, Len(BotVars.Trigger) + 1)
+     End If
+
+     If (Len(msg_prefix) > 0) Then
+        arrMessage = Split(Mid(Message, Len(msg_prefix) + 1), "; ")
+
+        ReDim arrCmd(UBound(arrMessage))
+
+        For i = 0 to UBound(arrCmd)
+           psPluginSystemCmds BotVars.Trigger & arrMessage(i), Username, DisplayID
+        Next
+
+        Exit Sub
+     End If
+   End If
+
+   If (Left(Message, 2) = "//") Then
+      DisplayID = 1
+      Message = Mid(Message, 3)
+   ElseIf (Left(Message, 1) = "/") Then
+      Message = Mid(Message, 2)
+   ElseIf (Left(Message, Len(BotVars.Trigger)) = BotVars.Trigger) Then
+      Message = Mid(Message, Len(BotVars.Trigger) + 1)
    End If
 
    '// Get the command name and arguements
    If Trim(Message) = vbNullString Or Len(Message) < 2 Then Exit Sub
-   cmd = Split(Trim(LCase(Message & " "))): cmdName = Mid(cmd(0), 2)
+   cmd = Split(Trim(LCase(Message & " "))): cmdName = cmd(0)
  
    '// Is it a .[prefix] on/off command?
    If UBound(cmd) = 1 Then
