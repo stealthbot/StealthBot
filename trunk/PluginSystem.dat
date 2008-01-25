@@ -209,12 +209,8 @@ Sub psLoadPlugins()
                      "ins", psColor1, " to view them. Type ", psColor2, "/phelp", psColor1, " for help using them."
    AddChat psColor1, "Type ", psColor2, "/updates", psColor1, " in the bot to view updates and new plugins that are available for download."
 
-   '// alert our users if backwards-compatibility mode has been
-   '// enabled for the use of multiple-character triggers
    If (BotVars.NoSupportMultiCharTrigger) Then
-      AddChat vbRed, "Warning: One or more plugins have been loaded that do not currently support " & _
-         "the use of multiple-character triggers and as such a backwards-compatibility mode has been " & _
-         "enabled to allow for the usage of these triggers without modification to plugin code."
+      AddChat vbYellow, "Plugins have been loaded that do not support multi-character triggers. Backwards compatibility mode has been enabled."
    End If
 
    psPrefixes = psPlugins.Keys
