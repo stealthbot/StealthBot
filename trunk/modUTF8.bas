@@ -39,12 +39,14 @@ Public Function UTF8Decode(str As String) As String
     UnicodeChars = MultiByteToWideChar(CP_UTF8, 0, str, InputBytes, vbNullString, 0)
     UnicodeBuffer = Space(UnicodeChars * 2)
     MultiByteToWideChar CP_UTF8, 0, str, InputBytes, UnicodeBuffer, UnicodeChars
-    
+   
     'Now that we've got everything translated to Unicode, we can convert it to 8-bit characters.
-    Dim SingleByteChars As Long, SingleByteBuffer As String
-    SingleByteChars = WideCharToMultiByte(CP_ACP, 0, UnicodeBuffer, UnicodeChars, vbNullString, 0, vbNullString, 0)
-    SingleByteBuffer = Space(SingleByteChars)
-    WideCharToMultiByte CP_ACP, 0, UnicodeBuffer, UnicodeChars, SingleByteBuffer, SingleByteChars, vbNullString, 0
+    'Dim SingleByteChars As Long, SingleByteBuffer As String
+    'SingleByteChars = WideCharToMultiByte(CP_ACP, 0, UnicodeBuffer, UnicodeChars, vbNullString, 0, vbNullString, 0)
+    'SingleByteBuffer = Space(SingleByteChars)
+    'WideCharToMultiByte CP_ACP, 0, UnicodeBuffer, UnicodeChars, SingleByteBuffer, SingleByteChars, vbNullString, 0
     
-    UTF8Decode = SingleByteBuffer
+    'UTF8Decode = SingleByteBuffer
+    
+    UTF8Decode = Replace(UnicodeBuffer, Chr$(0), vbNullString)
 End Function

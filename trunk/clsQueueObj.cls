@@ -13,12 +13,12 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Public m_message  As String
-Public m_priority As Integer
-Public m_tag      As String
+Private m_message  As String
+Private m_priority As Integer
+Private m_tag      As String
 
-Public Property Let Message(ByVal msg As String)
-    m_message = msg
+Public Property Let Message(ByVal Msg As String)
+    m_message = Msg
 End Property
 
 Public Property Get Message() As String

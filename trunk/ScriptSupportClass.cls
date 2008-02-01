@@ -318,7 +318,8 @@ Public Sub AddChat(ParamArray saElements() As Variant)
                     .SelColor = saElements(i)
                     .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
                     
-                    rtbChatLength = rtbChatLength + Len(s) + Len(saElements(i + 1)) + Len(Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements))))
+                    rtbChatLength = rtbChatLength + Len(s) + Len(saElements(i + 1)) + _
+                        Len(Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements))))
                     
                     .SelStart = Len(.text)
                 End With
@@ -566,7 +567,7 @@ Public Function CommandEx(ByVal Username As String, ByVal Message As String, ByV
     '// GetAccess() will return the access type the commands sub needs
     
     dbAccess.Access = uAccess
-    dbAccess.Flags = uFlags
+    dbAccess.flags = uFlags
 
     ' execute command
     CommandEx = ExecuteCommand(Username, dbAccess, Message, InBot, cmdRet())
@@ -644,7 +645,7 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Sub GetDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
+Public Sub GetDBEntry(ByVal Username As String, ByRef Access, ByRef flags, _
     Optional ByRef entryType As String = "USER") '// yum, Variants >:\
 
     Dim Temp As udtGetAccessResponse
@@ -653,7 +654,7 @@ Public Sub GetDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
     
     With Temp
         Access = .Access
-        Flags = .Flags
+        flags = .flags
     End With
 End Sub
 
@@ -667,7 +668,7 @@ End Sub
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
+Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef flags, _
     Optional ByRef entryType As String = "USER") '// yum, Variants >:\
 
     Dim Temp As udtGetAccessResponse
@@ -676,7 +677,7 @@ Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
     
     With Temp
         Access = .Access
-        Flags = .Flags
+        flags = .flags
     End With
 End Sub
 
@@ -827,7 +828,7 @@ Public Function GetInternalData(ByVal iIndex As Integer, ByVal lDataType As Long
                 GetInternalData = colUsersInChannel.Item(iIndex).Clan
                 
             Case GID_FLAGS
-                GetInternalData = colUsersInChannel.Item(iIndex).Flags
+                GetInternalData = colUsersInChannel.Item(iIndex).flags
             
             Case GID_PING
                 GetInternalData = colUsersInChannel.Item(iIndex).Ping

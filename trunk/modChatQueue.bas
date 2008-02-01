@@ -26,8 +26,8 @@ Public Sub ChatQueue_Terminate()
 End Sub
 
 ' ...
-Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, _
-    ByVal idEvent As Long, ByVal dwTimer As Long)
+Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal idEvent As Long, _
+    ByVal dwTimer As Long)
     
     Dim i       As Integer ' ...
     Dim doLoop  As Boolean ' ...
@@ -85,9 +85,8 @@ End Function
 ' CHATQUEUE EVENTS
 
 ' ...
-Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal Ping As Long, _
-    ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
-    ByVal w3icon As String)
+Public Sub Event_QueuedJoin(ByVal Username As String, ByVal flags As Long, ByVal Ping As Long, _
+    ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal w3icon As String)
     
     Dim game   As String ' ...
     Dim pStats As String ' ...
@@ -102,27 +101,30 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
     End If
     
     If (Clan <> vbNullString) Then
-        Call AddName(Username, Product, Flags, Ping, Clan)
+        Call AddName(Username, Product, flags, Ping, Clan)
     Else
-        Call AddName(Username, Product, Flags, Ping)
+        Call AddName(Username, Product, flags, Ping)
     End If
     
     frmChat.lblCurrentChannel.Caption = _
         frmChat.GetChannelString
         
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    
     On Error Resume Next
     
-    'frmChat.SControl.Run "Event_UserJoins", Username, Flags, Message, Ping, _
-    '        Product, Level, OriginalStatstring, Banned
-        
-    frmChat.SControl.Run "Event_QueuedUserJoins", Username, Flags, OriginalStatstring, Ping, _
-            Product, 0, OriginalStatstring, False
+    'frmChat.SControl.Run "Event_UserJoins", Username, flags, Message, Ping, _
+    '    Level, OriginalStatstring, Banned
+    
+    frmChat.SControl.Run "Event_UserJoins", Username, flags, OriginalStatstring, Ping, _
+        Product, 0, OriginalStatstring, False
 End Sub
 
 ' ...
-Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Long, _
-    ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
-    ByVal w3icon As String)
+Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal flags As Long, ByVal Ping As Long, _
+    ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal w3icon As String)
     
     Dim found  As ListItem ' ...
     
@@ -144,7 +146,7 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
                 RTBColors.JoinText, " is using " & pStats)
     End If
     
-    If (Flags = 0) Then
+    If (flags = 0) Then
         If (Pos) Then
             Set found = frmChat.lvChannel.ListItems(Pos)
             
@@ -160,18 +162,12 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
             Set found = Nothing
         End If
     End If
-    
-    'frmChat.SControl.Run "Event_UserInChannel", Username, Flags, Message, Ping, _
-    '    Product, StatsUpdate
-    
-    'frmChat.SControl.Run "Event_QueuedUserInChannel", Username, Flags, OriginalStatstring, Ping, _
-    '    Product, True
 End Sub
 
 ' ...
-Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Long, _
-    ByVal prevflags As Long, ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, _
-    ByVal OriginalStatstring As String, ByVal w3icon As String)
+Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal flags As Long, ByVal prevflags As Long, _
+    ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
+        ByVal w3icon As String)
     
     Dim found      As ListItem ' ...
     
@@ -183,7 +179,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     
     Pos = checkChannel(Username)
     
-    If (((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
+    If (((flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
         ((prevflags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
 
         Call frmChat.AddChat(RTBColors.JoinedChannelText, "-- ", _
@@ -192,7 +188,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
                 
         Call frmChat.lvChannel.ListItems.Remove(Pos)
     
-        Call AddName(Username, colUsersInChannel.Item(i).Product, Flags, Ping)
+        Call AddName(Username, colUsersInChannel.Item(i).Product, flags, Ping)
     End If
     
     If (StrComp(gChannel.Current, "The Void", vbBinaryCompare) = 0) Then
@@ -201,7 +197,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
                 If (Not (Pos)) Then
                     frmChat.lvChannel.Enabled = False
                 
-                    Call AddName(Username, Product, Flags, Ping)
+                    Call AddName(Username, Product, flags, Ping)
                     
                     frmChat.lvChannel.Enabled = True
                 End If
@@ -212,7 +208,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     End If
 
     ' is user being squelched?
-    If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
+    If ((flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
         squelching = True
     
         If (Pos) Then
@@ -221,7 +217,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     
                 Call frmChat.lvChannel.ListItems.Remove(Pos)
     
-                Call AddName(.Username, .Product, Flags, Ping, .Clan, Pos)
+                Call AddName(.Username, .Product, flags, Ping, .Clan, Pos)
     
                 frmChat.lvChannel.Enabled = True
             End With
@@ -235,7 +231,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     
                     Call frmChat.lvChannel.ListItems.Remove(Pos)
     
-                    Call AddName(.Username, .Product, Flags, Ping, .Clan, Pos)
+                    Call AddName(.Username, .Product, flags, Ping, .Clan, Pos)
                     
                     frmChat.lvChannel.Enabled = True
                 End With
@@ -243,11 +239,17 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
         End If
     End If
     
-    'frmChat.SControl.Run "Event_QueuedFlagUpdate", Username, Flags, Ping
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    
+    On Error Resume Next
+    
+    frmChat.SControl.Run "Event_FlagUpdate", Username, flags, Ping
 End Sub
 
 ' ...
-Public Sub Event_QueuedTalk(ByVal Username As String, ByVal Flags As Long, ByVal Ping As Long, _
+Public Sub Event_QueuedTalk(ByVal Username As String, ByVal flags As Long, ByVal Ping As Long, _
     ByVal Message As String)
     
     Dim UsernameColor As Long ' ...
@@ -256,14 +258,14 @@ Public Sub Event_QueuedTalk(ByVal Username As String, ByVal Flags As Long, ByVal
     
     If (StrComp(WatchUser, Username, vbTextCompare) = 0) Then
         UsernameColor = RTBColors.ErrorMessageText
-    ElseIf ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+    ElseIf ((flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
         UsernameColor = RTBColors.TalkUsernameOp
     Else
         UsernameColor = RTBColors.TalkUsernameNormal
     End If
     
-    If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or _
-        ((Flags And USER_SYSOP&) = USER_SYSOP&)) Then
+    If (((flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or _
+        ((flags And USER_SYSOP&) = USER_SYSOP&)) Then
        
         TextColor = RGB(97, 105, 255)
         CaratColor = RGB(97, 105, 255)
@@ -285,11 +287,26 @@ Public Sub Event_QueuedTalk(ByVal Username As String, ByVal Flags As Long, ByVal
         End If
     End If
     
-    'frmChat.SControl.Run "Event_QueuedUserTalk", Username, Flags, Message, Ping
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    
+    On Error Resume Next
+    
+    If ((BotVars.NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
+        If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
+            vbBinaryCompare) = 0) Then
+            
+            Message = BotVars.Trigger & _
+                Mid$(Message, Len(BotVars.TriggerLong) + 1)
+        End If
+    End If
+
+    frmChat.SControl.Run "Event_UserTalk", Username, flags, Message, Ping
 End Sub
 
 ' ...
-Public Sub Event_QueuedEmote(ByVal Username As String, ByVal Flags As Long, ByVal Ping As Long, _
+Public Sub Event_QueuedEmote(ByVal Username As String, ByVal flags As Long, ByVal Ping As Long, _
     ByVal Message As String)
     
     frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, _
@@ -309,7 +326,53 @@ Public Sub Event_QueuedEmote(ByVal Username As String, ByVal Flags As Long, ByVa
         End If
     End If
 
-    'frmChat.SControl.Run "Event_QueuedUserEmote", Username, Flags, Message
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    
+    On Error Resume Next
+    
+    If ((BotVars.NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
+        If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
+            vbBinaryCompare) = 0) Then
+            
+            Message = BotVars.Trigger & _
+                Mid$(Message, Len(BotVars.TriggerLong) + 1)
+        End If
+    End If
+    
+    frmChat.SControl.Run "Event_UserEmote", Username, flags, Message
+End Sub
+
+' ...
+Public Sub Event_DroppedJoin(ByVal Username As String, ByVal flags As Long, ByVal Ping As Long, _
+    ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal w3icon As String)
+    
+End Sub
+
+' ...
+Public Sub Event_DroppedUserInChannel(ByVal Username As String, ByVal flags As Long, ByVal Ping As Long, _
+    ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal w3icon As String)
+    
+End Sub
+
+' ...
+Public Sub Event_DroppedStatusUpdate(ByVal Username As String, ByVal flags As Long, ByVal prevflags As Long, _
+    ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
+        ByVal w3icon As String)
+    
+End Sub
+
+' ...
+Public Sub Event_DroppedTalk(ByVal Username As String, ByVal flags As Long, ByVal Ping As Long, _
+    ByVal Message As String)
+    
+End Sub
+
+' ...
+Public Sub Event_DroppedEmote(ByVal Username As String, ByVal flags As Long, ByVal Ping As Long, _
+    ByVal Message As String)
+    
 End Sub
 
 ' ...

@@ -18,10 +18,64 @@ Begin VB.Form frmChat
    ScaleHeight     =   7950
    ScaleWidth      =   11580
    StartUpPosition =   3  'Windows Default
+   Begin VB.ComboBox cboSend 
+      BackColor       =   &H00000000&
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   315
+      Left            =   600
+      TabIndex        =   10
+      Top             =   6600
+      Width           =   7695
+   End
+   Begin VB.TextBox txtPost 
+      BackColor       =   &H00000000&
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   285
+      Left            =   8280
+      TabIndex        =   9
+      Top             =   6600
+      Width           =   615
+   End
+   Begin VB.TextBox txtPre 
+      BackColor       =   &H00000000&
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
+      Height          =   285
+      Left            =   0
+      TabIndex        =   8
+      Top             =   6600
+      Width           =   615
+   End
    Begin TabDlg.SSTab ListviewTabs 
       Height          =   375
       Left            =   8880
-      TabIndex        =   2
+      TabIndex        =   0
       Top             =   6600
       Width           =   2805
       _ExtentX        =   4948
@@ -52,29 +106,10 @@ Begin VB.Form frmChat
       Tab(2).ControlEnabled=   0   'False
       Tab(2).ControlCount=   0
    End
-   Begin VB.TextBox txtPost 
-      BackColor       =   &H00000000&
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   285
-      Left            =   8280
-      MaxLength       =   50
-      TabIndex        =   1
-      Top             =   6600
-      Width           =   615
-   End
    Begin MSComctlLib.ListView lvChannel 
       Height          =   6375
       Left            =   8880
-      TabIndex        =   4
+      TabIndex        =   1
       TabStop         =   0   'False
       Top             =   240
       Width           =   2775
@@ -113,44 +148,6 @@ Begin VB.Form frmChat
          SubItemIndex    =   1
          Object.Width           =   88
       EndProperty
-   End
-   Begin VB.ComboBox cboSend 
-      BackColor       =   &H00000000&
-      CausesValidation=   0   'False
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   315
-      Left            =   600
-      TabIndex        =   0
-      Top             =   6600
-      Width           =   7695
-   End
-   Begin VB.TextBox txtPre 
-      BackColor       =   &H00000000&
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H00FFFFFF&
-      Height          =   285
-      Left            =   0
-      MaxLength       =   50
-      TabIndex        =   3
-      Top             =   6600
-      Width           =   615
    End
    Begin MSScriptControlCtl.ScriptControl SCRestricted 
       Left            =   6960
@@ -230,7 +227,7 @@ Begin VB.Form frmChat
       EndProperty
       Height          =   1695
       Left            =   11160
-      TabIndex        =   6
+      TabIndex        =   3
       TabStop         =   0   'False
       Top             =   6600
       Width           =   245
@@ -736,7 +733,7 @@ Begin VB.Form frmChat
    Begin MSComctlLib.ListView lvClanList 
       Height          =   6375
       Left            =   8880
-      TabIndex        =   9
+      TabIndex        =   6
       TabStop         =   0   'False
       Top             =   240
       Width           =   2775
@@ -784,7 +781,7 @@ Begin VB.Form frmChat
    Begin MSComctlLib.ListView lvFriendList 
       Height          =   6375
       Left            =   8880
-      TabIndex        =   5
+      TabIndex        =   2
       TabStop         =   0   'False
       Top             =   240
       Width           =   2775
@@ -821,37 +818,10 @@ Begin VB.Form frmChat
          Object.Width           =   88
       EndProperty
    End
-   Begin RichTextLib.RichTextBox rtbChat 
-      Height          =   6615
-      Left            =   0
-      TabIndex        =   10
-      TabStop         =   0   'False
-      Top             =   0
-      Width           =   8895
-      _ExtentX        =   15690
-      _ExtentY        =   11668
-      _Version        =   393217
-      BackColor       =   0
-      Enabled         =   -1  'True
-      ReadOnly        =   -1  'True
-      ScrollBars      =   2
-      AutoVerbMenu    =   -1  'True
-      OLEDropMode     =   0
-      TextRTF         =   $"frmChat.frx":6AC11
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Tahoma"
-         Size            =   9
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-   End
    Begin RichTextLib.RichTextBox rtbWhispers 
       Height          =   1695
       Left            =   0
-      TabIndex        =   8
+      TabIndex        =   5
       TabStop         =   0   'False
       Top             =   6960
       Width           =   11175
@@ -859,14 +829,39 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
-      TextRTF         =   $"frmChat.frx":6AC8C
+      TextRTF         =   $"frmChat.frx":6AC11
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
+   Begin RichTextLib.RichTextBox rtbChat 
+      Height          =   6615
+      Left            =   0
+      TabIndex        =   7
+      TabStop         =   0   'False
+      Top             =   0
+      Width           =   8895
+      _ExtentX        =   15690
+      _ExtentY        =   11668
+      _Version        =   393217
+      BackColor       =   0
+      ReadOnly        =   -1  'True
+      ScrollBars      =   2
+      AutoVerbMenu    =   -1  'True
+      OLEDropMode     =   0
+      TextRTF         =   $"frmChat.frx":6AC8C
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   9
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -889,7 +884,7 @@ Begin VB.Form frmChat
       ForeColor       =   &H8000000E&
       Height          =   255
       Left            =   8880
-      TabIndex        =   7
+      TabIndex        =   4
       ToolTipText     =   "Currently in channel..."
       Top             =   0
       Width           =   2775
@@ -1004,6 +999,7 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuUTF8 
          Caption         =   "Use &UTF-8 Decoding"
+         Enabled         =   0   'False
       End
       Begin VB.Menu mnuSep4 
          Caption         =   "-"
@@ -1442,7 +1438,7 @@ Private Sub Form_Load()
     Dim f As Integer ', i As Integer
     Dim l As Long
     Dim FrmSplashInUse As Boolean
-    
+
     ' COMPILER FLAGS
     #If (BETA = 1) Then
         CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
@@ -1462,7 +1458,7 @@ Private Sub Form_Load()
     
     #If (COMPILE_DEBUG = 0) Then
         HookWindowProc frmChat.hWnd
-        HookSendBoxWindowProc frmChat.cboSend.hWnd
+        'HookSendBoxWindowProc frmChat.cboSend.hWnd
     #End If
     
     ' 4/10/06:
@@ -1734,6 +1730,8 @@ Private Sub Form_Load()
         End If
     #End If
     
+    Call GetCommand("say")
+    
 '    BotVars.UseProxy = True
 '    BotVars.ProxyIP = "213.210.194.139"
 '    BotVars.ProxyPort = 1080
@@ -1743,6 +1741,8 @@ Private Sub Form_Load()
     cboSend.SetFocus
     
     SendMessage GetFocus, EM_SETLIMITTEXT, 2, 0
+    
+    AddChat vbRed, UTF8Decode(UTF8Encode("îabcî"))
 End Sub
 
 Private Sub Form_GotFocus()
@@ -1869,6 +1869,25 @@ Sub AddChat(ParamArray saElements() As Variant)
                     
                     .SelStart = Len(.text)
                 End With
+                
+                'With TextBox1
+                '    .SelStart = Len(.text)
+                '
+                '    ' store position of selection
+                '    l = .SelStart
+                '
+                '    .SelLength = 0
+                '    '.SelColor = saElements(i)
+                '    .SelText = saElements(i + 1) & _
+                '        Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
+                '
+                '    rtbChatLength = (rtbChatLength + _
+                '                     Len(s) + _
+                '                     Len(saElements(i + 1)) + _
+                '                     Len(Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))))
+                '
+                '    .SelStart = Len(.text)
+                'End With
                 
                 ' Fixed 11/21/06 to properly log timestamps
                 If (LogThis) Then
@@ -2130,7 +2149,7 @@ Sub Event_BNetDisconnected()
     Call UpdateTrayTooltip
 End Sub
 
-Sub Event_BNetError(ErrorNumber As Integer, Description As String)
+Sub Event_BNetError(ErrorNumber As Integer, description As String)
     Dim s As String
     
     If BotVars.UseProxy And BotVars.ProxyStatus <> psOnline Then
@@ -2139,7 +2158,7 @@ Sub Event_BNetError(ErrorNumber As Integer, Description As String)
         s = "[BNET] "
     End If
     
-    AddChat RTBColors.ErrorMessageText, s & ErrorNumber & " -- " & Description
+    AddChat RTBColors.ErrorMessageText, s & ErrorNumber & " -- " & description
     AddChat RTBColors.ErrorMessageText, s & "Disconnected."
     
     If (sckBNet.State <> 0) Then
@@ -2214,9 +2233,9 @@ Sub Event_BNLSDataError(Message As Byte)
     End If
 End Sub
 
-Sub Event_BNLSError(ErrorNumber As Integer, Description As String)
+Sub Event_BNLSError(ErrorNumber As Integer, description As String)
     If sckBNet.State <> 7 Then
-        AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & Description
+        AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & description
         
         If DisplayError(ErrorNumber, 0, BNLS) Then
             'This area is in question
@@ -3162,7 +3181,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     sTemp = ParseStatstring(.Statstring, sOutBuf, sTemp)
                     
                     sTemp = "Ping at login: " & .Ping & vbCrLf
-                    sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
+                    sTemp = sTemp & "Flags: " & FlagDescription(.flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
                     sTemp = sTemp & sOutBuf
                 
@@ -3811,7 +3830,7 @@ mnuReloadScript_Click_Error: ' No code is present
         Resume MRS_Continue
     Else
         Debug.Print "Unhandled error in mnuReloadScript_Click()"
-        Debug.Print Err.Number & ": " & Err.Description
+        Debug.Print Err.Number & ": " & Err.description
         Resume MRS_Exit
     End If
 End Sub
@@ -3958,14 +3977,14 @@ Private Sub mnuUserlistWhois_Click()
     With RTBColors
         If Temp.Access > -1 Then
             If Temp.Access > 0 Then
-                If Temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & " and flags " & Temp.Flags & "."
+                If Temp.flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & " and flags " & Temp.flags & "."
                 Else
                     AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & "."
                 End If
             Else
-                If Temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with flags " & Temp.Flags & "."
+                If Temp.flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with flags " & Temp.flags & "."
                 Else
                     AddChat .ConsoleText, "User not found."
                 End If
@@ -4525,7 +4544,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 ElseIf ((s = "/flags") And (MDebug("debug"))) Then
                                     For n = 1 To colUsersInChannel.Count
                                         With colUsersInChannel.Item(n)
-                                            AddChat RTBColors.ConsoleText, .Username & Space(4) & .Flags
+                                            AddChat RTBColors.ConsoleText, .Username & Space(4) & .flags
                                         End With
                                     Next n
                                     
@@ -4591,7 +4610,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     'End If
                                     
                                     Temp.Access = 201
-                                    Temp.Flags = "A"
+                                    Temp.flags = "A"
                                     
                                     m = OutFilterMsg(s)
                                     
@@ -4668,7 +4687,7 @@ theEnd:
 cboSend_KeyDown_Error:
     If (MDebug("debug")) Then
         Call AddChat(RTBColors.ErrorMessageText, "Error " & Err.Number & _
-            " (" & Err.Description & ") in procedure cboSend_KeyDown")
+            " (" & Err.description & ") in procedure cboSend_KeyDown")
     End If
 End Sub
 
@@ -4787,7 +4806,7 @@ Private Sub quLower_Timer()
                 Else
                     gA = GetAccess(strArray(c))
                     
-                    If Not (GetSafelist(strArray(c)) Or gA.Access > (AutoModSafelistValue - 1) Or InStr(gA.Flags, "A") > 0) Then
+                    If Not (GetSafelist(strArray(c)) Or gA.Access > (AutoModSafelistValue - 1) Or InStr(gA.flags, "A") > 0) Then
                         AddQ "/squelch " & IIf(Dii, "*", "") & strArray(c)
                     End If
                 End If
@@ -4894,7 +4913,7 @@ End Sub
 
 Private Sub SControl_Error()
     AddChat RTBColors.ErrorMessageText, "Scripting runtime error " & Chr(39) & SControl.Error.Number & Chr(39) & ": (line " & SControl.Error.Line & "; column " & SControl.Error.Column & ")"
-    AddChat RTBColors.ErrorMessageText, SControl.Error.Description & "."
+    AddChat RTBColors.ErrorMessageText, SControl.Error.description & "."
     AddChat RTBColors.ErrorMessageText, "Offending line: >> " & SControl.Error.text
 End Sub
 
@@ -4933,8 +4952,8 @@ Sub InitBNetConnection()
     End If
 End Sub
 
-Private Sub sckBNet_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    Call Event_BNetError(Number, Description)
+Private Sub sckBNet_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+    Call Event_BNetError(Number, description)
 End Sub
 
 Private Sub sckMCP_Close()
@@ -4962,10 +4981,10 @@ Private Sub sckMCP_DataArrival(ByVal bytesTotal As Long)
     frmRealm.MCPHandler.ParseMCPPacket Data
 End Sub
 
-Private Sub sckMCP_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckMCP_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     If Not g_Online Then
         ' This message is ignored if we've been online for awhile.
-        AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & Description
+        AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & description
         RealmError = True
         Unload frmRealm
     End If
@@ -5160,14 +5179,14 @@ Private Sub tmrFriendlistUpdate_Timer()
 End Sub
 
 Private Sub txtPre_KeyPress(KeyAscii As Integer)
-    If KeyAscii = 13 Then
-        Call cboSend_KeyPress(13)
+    If (KeyAscii = 13) Then
+        Call cboSend_KeyPress(KeyAscii)
     End If
 End Sub
 
 Private Sub txtPost_KeyPress(KeyAscii As Integer)
-    If KeyAscii = 13 Then
-        Call cboSend_KeyPress(13)
+    If (KeyAscii = 13) Then
+        Call cboSend_KeyPress(KeyAscii)
     End If
 End Sub
 
@@ -5374,7 +5393,7 @@ Private Sub UpTimer_Timer()
                         If .TimeSinceTalk() > BotVars.IB_Wait Then
                             .InternalFlags = 0
                             
-                            If Not ((.Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And Not .Safelisted Then
+                            If Not ((.flags And USER_CHANNELOP&) = USER_CHANNELOP&) And Not .Safelisted Then
                                 Ban .Username & " Idle for " & BotVars.IB_Wait & "+ seconds", (AutoModSafelistValue - 1), IIf(BotVars.IB_Kick, 1, 0)
                             End If
                         End If
@@ -5387,7 +5406,7 @@ Private Sub UpTimer_Timer()
                 ThisPos = checkChannel(.Username)
                 
                 If ThisPos > 0 And ThisPos < lvChannel.ListItems.Count Then
-                    newColor = GetNameColor(.Flags, .TimeSinceTalk(), .IsSelf)
+                    newColor = GetNameColor(.flags, .TimeSinceTalk(), .IsSelf)
                     
                     If lvChannel.ListItems(ThisPos).ForeColor <> newColor Then
                         lvChannel.ListItems(ThisPos).ForeColor = newColor
@@ -5448,6 +5467,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
         Dim Send     As String  ' ...
         Dim command  As String  ' ...
         Dim GTC      As Long    ' ...
+        Dim strUser  As String  ' ...
     
         ' check for tabs and replace with spaces (2005-09-23)
         If (InStr(1, strTmp, Chr$(9), vbBinaryCompare) <> 0) Then
@@ -5530,8 +5550,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
                     If (UBound(Splt) = 2) Then
                         ' ...
                         command = Splt(0) & _
-                            Space(1) & Splt(1) & _
-                                Space(1)
+                            Space(1)
                     
                         Select Case (LCase$(Splt(1)))
                             Case "m"
@@ -5543,6 +5562,10 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
                                     ' ...
                                     command = command & _
                                         reverseUsername(Splt(2))
+                                Else
+                                    ' ...
+                                    command = command & _
+                                        Splt(1) & Space(1)
                                 End If
                         End Select
                     End If
@@ -5624,9 +5647,9 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
                                 Randomize
                     
                                 ' calculate delay value between 100
-                                ' and 600 ms and add to default delay value
+                                ' and 500 ms and add to default delay value
                                 banDelay = (banDelay + _
-                                    ((1 + Rnd() * 6) * 100))
+                                    ((1 + Rnd() * 5) * 100))
                             End If
                         End If
                         
@@ -6563,8 +6586,8 @@ Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
     End If
 End Sub
 
-Private Sub sckBNLS_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    Call Event_BNLSError(Number, Description)
+Private Sub sckBNLS_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+    Call Event_BNLSError(Number, description)
 End Sub
 
 Function GetSelectedUser() As String
@@ -6955,7 +6978,7 @@ End Sub
 Private Sub mnuPopLeaveClan_Click()
     If MsgBox("Are you sure you want to leave the clan?", vbYesNo, "StealthBot") = vbYes Then
         With PBuffer
-            .InsertDWORD &H1    '//cookie
+            .InsertDWord &H1    '//cookie
             .InsertNTString CurrentUsername
             .SendPacket &H78
         End With
@@ -6981,9 +7004,9 @@ Private Sub mnuPopDem_Click()
     If MsgBox("Are you sure you want to demote " & GetClanSelectedUser & "?", vbYesNo, "StealthBot") = vbYes Then
         
         With PBuffer
-            .InsertDWORD &H1
+            .InsertDWord &H1
             .InsertNTString GetClanSelectedUser
-            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon - 1
+            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon - 1
             .SendPacket &H7A
         End With
         
@@ -6995,9 +7018,9 @@ End Sub
 Private Sub mnuPopPro_Click()
     If MsgBox("Are you sure you want to promote " & GetClanSelectedUser & "?", vbYesNo, "StealthBot") = vbYes Then
         With PBuffer
-            .InsertDWORD &H3
+            .InsertDWord &H3
             .InsertNTString GetClanSelectedUser
-            .InsertBYTE lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon + 1
+            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon + 1
             .SendPacket &H7A
         End With
         
@@ -7015,7 +7038,7 @@ Private Sub mnuPopRem_Click()
         If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, "StealthBot") = vbYes Then
             With PBuffer
                 If lvClanList.SelectedItem.Index > 0 Then
-                    .InsertDWORD 1 'lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon
+                    .InsertDWord 1 'lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon
                     .InsertNTString GetClanSelectedUser
                     .SendPacket &H78
                 End If

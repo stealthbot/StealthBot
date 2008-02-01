@@ -52,6 +52,12 @@ Public Declare Function Send Lib "ws2_32.dll" Alias "send" _
     ByVal datalen As Long, _
     ByVal Flags As Long) As Long
     
+Public Declare Function SendBytes Lib "ws2_32.dll" Alias "send" _
+   (ByVal s As Long, _
+    ByRef Buf() As Byte, _
+    ByVal datalen As Long, _
+    ByVal Flags As Long) As Long
+    
 Public Declare Function DeleteURLCacheEntry Lib "Wininet.dll" _
    Alias "DeleteUrlCacheEntryA" _
   (ByVal lpszUrlName As String) As Long
@@ -94,7 +100,7 @@ Public Declare Function Shell_NotifyIcon Lib "shell32.dll" Alias "Shell_NotifyIc
 Public Declare Function FindWindowEx Lib "user32" Alias "FindWindowExA" (ByVal hWnd1 As Long, ByVal hWnd2 As Long, ByVal lpsz1 As String, ByVal lpsz2 As String) As Long
 
 Public Declare Function GetCursorPos Lib "user32" (lpPoint As POINTAPI) As Long
-Public Declare Function SetCursorPos Lib "user32" (ByVal x As Long, ByVal Y As Long) As Long
+Public Declare Function SetCursorPos Lib "user32" (ByVal X As Long, ByVal Y As Long) As Long
 
 Public Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" ( _
     ByVal hWnd As Long, _

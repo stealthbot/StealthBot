@@ -24,15 +24,15 @@ For i = LBound(Data) To UBound(Data) Step 1
 Next i
 End Function
 
-Public Function InsertDWORD(ByVal Data As Long)
+Public Function InsertDWord(ByVal Data As Long)
 Buffer = Buffer & MakeDWORD(Data)
 End Function
 
-Public Function InsertWORD(ByVal Data As Integer)
+Public Function InsertWord(ByVal Data As Integer)
 Buffer = Buffer & MakeWORD(Data)
 End Function
 
-Public Function InsertBYTE(ByVal Data As Integer)
+Public Function InsertByte(ByVal Data As Integer)
 Buffer = Buffer & Chr(Data)
 End Function
 
@@ -68,7 +68,7 @@ Public Function MakeWORD(Data As Integer) As String
     MakeWORD = MakeWORD & Chr(Val("&H" & A))
 End Function
 
-Public Function GetDWORD(ByVal Data As String) As Long
+Public Function GetDWord(ByVal Data As String) As Long
     Dim tmp As String
     tmp = StrToHex(Data)
     Dim A As String, b As String, c As String, D As String
@@ -77,17 +77,17 @@ Public Function GetDWORD(ByVal Data As String) As Long
     c = Mid(tmp, 5, 2)
     D = Mid(tmp, 7, 2)
     tmp = D & c & b & A
-    GetDWORD = Val("&H" & tmp)
+    GetDWord = Val("&H" & tmp)
 End Function
 
-Public Function GetWORD(ByVal Data As String) As Long
+Public Function GetWord(ByVal Data As String) As Long
     Dim tmp As String
     tmp = ToHex(Data)
     Dim A As String, b As String
     A = Mid(tmp, 1, 2)
     b = Mid(tmp, 3, 2)
     tmp = b & A
-    GetWORD = Val("&H" & tmp)
+    GetWord = Val("&H" & tmp)
 End Function
 
 Public Function Clear()
@@ -108,7 +108,10 @@ End Function
 
 Public Function SendPacket(Optional PacketID As Byte)
     On Error Resume Next
-    Dim l As Long
+    
+    Dim l     As Long
+    Dim Buf() As Byte
+    Dim i     As Integer
     
     If MDebug("all") Then
         frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & Right$("00" & Hex(PacketID), 2)
@@ -118,7 +121,17 @@ Public Function SendPacket(Optional PacketID As Byte)
     
     If frmChat.sckBNet.State <> 0 Then
         Buffer = Chr(&HFF) & Chr(PacketID) & MakeWORD(l + 4) & Buffer
+        
+        For i = 0 To LenB(Buffer)
+            ReDim Preserve Buf(i)
+        
+            Buf(i) = Asc(Mid$(Buffer, i + 1, 1))
+        Next i
+        
+        'Call SendBytes(frmChat.sckBNet.SocketHandle, byt(), Len(Buffer), 0)
+        
         frmChat.sckBNet.SendData Buffer
+        
         'Debug.Print DebugOutput(Chr(&HFF) & Chr(PacketID) & MakeWORD(Len(Buffer) + 4) & Buffer)
     End If
     
