@@ -1530,9 +1530,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5542,8 +5542,8 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
                     ' ...
                     If (UBound(Splt) = 2) Then
                         ' ...
-                        command = Splt(0) & _
-                            Space(1)
+                        command = Splt(0) & Space(1) & _
+                            Splt(1) & Space(1)
                     
                         Select Case (LCase$(Splt(1)))
                             Case "m"
@@ -5555,23 +5555,30 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
                                     ' ...
                                     command = command & _
                                         reverseUsername(Splt(2))
-                                Else
-                                    ' ...
-                                    command = command & _
-                                        Splt(1) & Space(1)
                                 End If
                         End Select
                     End If
                 Else
+                    ' ...
                     command = "/" & command & _
                         Space(1)
+                End If
+                
+                ' ...
+                ReDim Preserve Splt(0 To UBound(Splt) - 1)
+                
+                ' ...
+                If (Splt(0) <> vbNullString) Then
+                    ' ...
+                    strTmp = Mid$(strTmp, _
+                        (Len(Join(Splt(), Space$(1))) + Len(Space(1))) + 1)
                 End If
             End If
         End If
         
         ' ...
-        Call SplitByLen(Mid$(strTmp, Len(command) + 1), (MAX_MESSAGE_LENGTH - _
-            Len(command)), Splt())
+        Call SplitByLen(strTmp, _
+            (MAX_MESSAGE_LENGTH - Len(command)), Splt())
             
         ' ...
         ReDim Preserve Splt(0 To UBound(Splt))
@@ -5586,7 +5593,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
                 ' store working copy
                 Send = command & _
                     Splt(i)
-                
+
                 ' is efp enabled?
                 If (bFlood) Then
                     ' are we on-line?
