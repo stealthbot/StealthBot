@@ -829,6 +829,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -854,6 +855,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1528,9 +1530,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -1730,19 +1732,10 @@ Private Sub Form_Load()
         End If
     #End If
     
-    Call GetCommand("say")
-    
 '    BotVars.UseProxy = True
 '    BotVars.ProxyIP = "213.210.194.139"
 '    BotVars.ProxyPort = 1080
     'BotVars.ProxyIsSocks5 = True
-    
-    frmChat.Show
-    cboSend.SetFocus
-    
-    SendMessage GetFocus, EM_SETLIMITTEXT, 2, 0
-    
-    AddChat vbRed, UTF8Decode(UTF8Encode("îabcî"))
 End Sub
 
 Private Sub Form_GotFocus()
@@ -6079,8 +6072,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     BotVars.BackupChan = ReadCFG(MN, "BackupChan")
     
-    s = ReadCFG("Main", "UTF8")
-    If s = "Y" Then mnuUTF8.Checked = True Else mnuUTF8.Checked = False
+    ' UTF-8 defunt. atm.
+    's = ReadCFG("Main", "UTF8")
+    'If s = "Y" Then mnuUTF8.Checked = True Else mnuUTF8.Checked = False
     
     mnuToggleShowOutgoing.Checked = (ReadCFG("Main", "ShowOutgoingWhispers") = "Y")
     mnuHideWhispersInrtbChat.Checked = (ReadCFG("Main", "HideWhispersInMain") = "Y")
