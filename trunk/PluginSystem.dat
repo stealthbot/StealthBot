@@ -26,6 +26,7 @@
 '// ver .98 (BETA)
 
 '//   [MODIFICATIONS]
+'//   *Integrated 
 '//   *Modified the Plugin System to make it compatiable with StealthBot v2.7
 '//      -You can now use the FirstRun, MessageSent, Shutdown, LoggedOff, and the 9 new clan-related events in your plugins (see SSC)
 '//      -Added the new Event arguements: Banned (UserJoins) and StatUpdate (UserInChannel) - see the SSC
@@ -46,10 +47,10 @@
 '//   *Plugin and Plugin System update checks now only take place once after connection
 '//   *Improved error handling during plugin load. Loading errors will now be more descriptive (Thanks ZergMaster)
 '//      -Plugins with errors on load will be disabled automatically (to avoid the constant error messages on every event)
-'//   *Improved error handling while plugins are being loaded (Thanks ZergMasterI)
+'//   *Improved plugin error handling while plugins are being loaded (Thanks ZergMasterI)
 '//      -Errors recieved during plugin loading now show correct offending lines and line/column numbers, and the erroring plugin will be blocked
-'//         ~A plugin being "blocked" is essentially the same as disabled -- except it's temporary. The blocked status disappears on reload.
-'//      -Errors recieved with debug mode on will now show correct line and column numbers as well
+'//         ~"Blocked" is essentially the same as disabled -- except it's temporary. The blocked status disappears on reload (if error is fixed)
+'//      -All other errors recieved will show correct line and column numbers as well if debug mode is on
 
 '//   [NEW FEATURES]
 '//   *Added multiple command messages. As in StealthBot, you can now type: ".crs off; ss on; pelt me" etc.
@@ -105,7 +106,7 @@
 
  
 '//**********************************//
-'//  THE PLUGIN SYSTEM               //
+'//  THE STEALTHBOT PLUGIN SYSTEM    //
 '//**********************************//
 
 
@@ -143,7 +144,7 @@ Set psCodeLoaded = CreateObject("Scripting.Dictionary")    '// holds status of p
 Set psPlugins = CreateObject("Scripting.Dictionary")       '// holds plugin file paths
 Set psVersions = CreateObject("Scripting.Dictionary")      '// holds plugin versions
 Set psHelp = CreateObject("Scripting.Dictionary")          '// holds plugin help output
-Set psEvents = CreateObject("Scripting.Dictionary")        '// holds existing event names
+Set psEvents = CreateObject("Scripting.Dictionary")        '// holds event names found in each plugin
 
 
 
@@ -824,7 +825,7 @@ Sub psAutoUpdate()
             If updatePS = vbYes Then
                   AddChat vbLightBlue, "Downloading update for the Plugin System."
                   psBackUpFile BotPath() & "PluginSystem.dat", myPSVersion
-                  PrintURLToFile "PluginSystem.dat", PS_UPDATE_URL & "PluginSystem.dat"
+                  PrintURLToFile "PluginSystem.dat", PS_UPDATE_URL & "getplug.php?plugin=pluginsystem"
                   AddChat psColor1, "Your Plugin System has been updated."
                   AddChat psColor1, "For a list of changes in this version see: http://stealthbot.net/p/plugs/changelog"
                   AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
