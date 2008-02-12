@@ -4,7 +4,7 @@
 
 '// The StealthBot Plugin System - StealthBot 2.7 Development Version
 '//    by Swent
-'//      Last modified 2:01 AM 1/15/2008
+'//      Last modified 3:23 PM 2/12/2008
 
 '// The StealthBot Plugin System is an updateable, scripted extension of StealthBot's VBScripting System.
 '//    This portion of the scripting system remains external to allow for updates and for viewing and tweaking by advanced scriptors.
@@ -809,9 +809,9 @@ Sub psAutoUpdate()
       If Len(curPSVersion) = 0 Or Instr(curPSVersion, " ") Then
          Call psCannotConnect(): Exit Sub
       End If
-      Set myPluginScript = psFSO.OpenTextFile(BotPath() & "PluginSystem.dat", 1)
-      myPSVersion = Mid(myPluginScript.ReadLine(), 2)
-      myPluginScript.Close
+      Set myPSFile = psFSO.OpenTextFile(BotPath() & "PluginSystem.dat", 1)
+      myPSVersion = Mid(myPSFile.ReadLine(), 2)
+      myPSFile.Close
  
       '// Is there are newer Plugin System version available?
       If Len(myPSVersion) > 0 Then
@@ -929,7 +929,23 @@ End Sub
 
 
 
-'// [[[ PLUGINS MENU CALLBACKS ]]]
+'// [[[ PLUGINS MENU ]]]
+
+
+'// Called when an item is clicked in the Plugins menu
+Sub psProcessMenu(strCallback, Prefix)
+
+   On Error Resume Next
+   Execute(strCallback)
+
+   '// Handle errors
+   If Err.Number <> 0 Then
+      AddChat vbRed, "Scripting runtime error '" & Err.Number & "' on """ & Prefix & "_Menu_Callback"" " & _
+                     "call in file """ & psFSO.GetFileName(psPlugins.Item(Prefix)) & """"
+      AddChat vbRed, Err.Description & "."
+      Err.Clear
+   End If
+End Sub
 
 
 '// "Display" > "Plugin Title"
