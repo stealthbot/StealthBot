@@ -356,23 +356,14 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
 
    '// Is it a multiple command message?
    If (Instr(Message, "; ")) Then
-     If (Left(Message, 1) = "/") Then
-        msg_prefix = Left(Message, 1)
-     ElseIf (Left(Message, Len(BotVars.Trigger)) = Len(BotVars.Trigger)) Then
-        msg_prefix = Left(Message, Len(BotVars.Trigger) + 1)
-     End If
+     If Left(Message, 1) = "/" Then intStart = 2 Else intStart = Len(BotVars.Trigger) + 1 End If
 
-     If (Len(msg_prefix) > 0) Then
-        arrMessage = Split(Mid(Message, Len(msg_prefix) + 1), "; ")
+     arrCmd = Split(Mid(Message, intStart), "; ")
 
-        ReDim arrCmd(UBound(arrMessage))
-
-        For i = 0 to UBound(arrCmd)
-           psPluginSystemCmds BotVars.Trigger & arrMessage(i), Username, DisplayID
-        Next
-
-        Exit Sub
-     End If
+     For i = 0 to UBound(arrCmd)
+        psPluginSystemCmds BotVars.Trigger & arrCmd(i), Username, DisplayID
+     Next
+     Exit Sub
    End If
 
    If (Left(Message, 2) = "//") Then
@@ -1440,24 +1431,17 @@ End Sub
 Sub Event_UserTalk(Username, Flags, Message, Ping)
 
    psPluginSystemCmds Message, Username, 3
- 
+
    '// Is it a multiple command message?
-   If Instr(Message, "; ") Then
-     If (Left(Message, Len(BotVars.Trigger)) = Len(BotVars.Trigger)) Then
-        msg_prefix = Left(Message, Len(BotVars.Trigger) + 1)
-     End If
+   If (Instr(Message, "; ")) Then
+     If Left(Message, 1) = "/" Then intStart = 2 Else intStart = Len(BotVars.Trigger) + 1 End If
 
-     If (Len(msg_prefix) > 0) Then
-        arrMessage = Split(Mid(Message, Len(msg_prefix) + 1), "; ")
+     arrCmd = Split(Mid(Message, intStart), "; ")
 
-        ReDim arrCmd(UBound(arrMessage))
-
-        For i = 0 to UBound(arrCmd)
-           psExecuteEvent "UserTalk", Array(Username, Flags, BotVars.Trigger & arrMessage(i), Ping)
-        Next
-
-        Exit Sub
-     End If
+     For i = 0 to UBound(arrCmd)
+        psExecuteEvent "UserTalk", Array(Username, Flags, BotVars.Trigger & arrCmd(i), Ping)
+     Next
+     Exit Sub
    End If
 
    psExecuteEvent "UserTalk", Array(Username, Flags, Message, Ping)
