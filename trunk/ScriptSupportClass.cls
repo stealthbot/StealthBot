@@ -567,7 +567,7 @@ Public Function CommandEx(ByVal Username As String, ByVal Message As String, ByV
     '// GetAccess() will return the access type the commands sub needs
     
     dbAccess.Access = uAccess
-    dbAccess.flags = uFlags
+    dbAccess.Flags = uFlags
 
     ' execute command
     CommandEx = ExecuteCommand(Username, dbAccess, Message, InBot, cmdRet())
@@ -645,7 +645,7 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Sub GetDBEntry(ByVal Username As String, ByRef Access, ByRef flags, _
+Public Sub GetDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
     Optional ByRef entryType As String = "USER") '// yum, Variants >:\
 
     Dim Temp As udtGetAccessResponse
@@ -654,7 +654,7 @@ Public Sub GetDBEntry(ByVal Username As String, ByRef Access, ByRef flags, _
     
     With Temp
         Access = .Access
-        flags = .flags
+        Flags = .Flags
     End With
 End Sub
 
@@ -668,7 +668,7 @@ End Sub
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef flags, _
+Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
     Optional ByRef entryType As String = "USER") '// yum, Variants >:\
 
     Dim Temp As udtGetAccessResponse
@@ -677,7 +677,7 @@ Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef flags, _
     
     With Temp
         Access = .Access
-        flags = .flags
+        Flags = .Flags
     End With
 End Sub
 
@@ -828,7 +828,7 @@ Public Function GetInternalData(ByVal iIndex As Integer, ByVal lDataType As Long
                 GetInternalData = colUsersInChannel.Item(iIndex).Clan
                 
             Case GID_FLAGS
-                GetInternalData = colUsersInChannel.Item(iIndex).flags
+                GetInternalData = colUsersInChannel.Item(iIndex).Flags
             
             Case GID_PING
                 GetInternalData = colUsersInChannel.Item(iIndex).Ping
@@ -1355,7 +1355,6 @@ Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVa
         
         If intID = 3 Then
             strProduct = GetInternalDataByUsername(BotVars.Username, 3)
-            AddChat vbWhite, strProduct
             If strProduct = "D2DV" Or strProduct = "D2XP" Then strUsername = "*" & strUsername
         End If
         If Len(strDelimiter) = 0 Then strDelimiter = " "
