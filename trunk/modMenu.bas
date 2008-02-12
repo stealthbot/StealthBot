@@ -107,9 +107,10 @@ Public Declare Function RemoveMenu Lib "user32" _
 
 
 'ProcessMenu: Called when the user has clicked a menu item.
+'  Modified by Swent 2/12/08
 Public Sub ProcessMenu(hWnd As Long, lngMenuCommand As Long)
+    On Error Resume Next
     Dim s As String
-  
   
     ' Call the callback function installed with this menu item
     If dctCallbacks.Exists(CStr(lngMenuCommand)) Then
@@ -117,7 +118,7 @@ Public Sub ProcessMenu(hWnd As Long, lngMenuCommand As Long)
     End If
     
     If LenB(s) > 0 Then
-        frmChat.SControl.Run s
+        frmChat.SControl.Run "psProcessMenu", s, GetPrefixByID(lngMenuCommand)
     End If
 End Sub
 
@@ -386,14 +387,14 @@ Public Sub RegisterPluginMenus()
 End Sub
 
 
-'// Written by Swent. Get's the ID of a plugin menu menu
+'// Written by Swent. Gets the ID of a plugin menu
 Public Function GetPluginMenu(ByVal strPrefix As String) As Long
 
     GetPluginMenu = dictMenuIDs(strPrefix)
 End Function
 
 
-'// Written by Swent. Get's the ID of a plugin menu item
+'// Written by Swent. Gets the ID of a plugin menu item
 Public Function GetPluginItem(ByVal strPrefix As String, ByVal strName As String) As Long
     Dim strKey As String
     strKey = strPrefix & "|||" & strName
@@ -404,6 +405,22 @@ Public Function GetPluginItem(ByVal strPrefix As String, ByVal strName As String
         GetPluginItem = -1
     End If
 End Function
+
+
+'// Written by Swent. Gets the prefix associated with a plugin menu item
+Public Function GetPrefixByID(ByVal lngItemID As Long)
+    Dim varKeys() As Variant, varItems() As Variant, i As Integer
+
+    varKeys = dictItemIDs.Keys
+    varItems = dictItemIDs.Items
+    
+    For i = 0 To UBound(varItems)
+        If varItems(i) = lngItemID Then
+            GetPrefixByID = Split(varKeys(i), "|||")(0)
+        End If
+    Next
+End Function
+
 
 
 '// Written by Swent. Registers the ID of a new plugin menu item
