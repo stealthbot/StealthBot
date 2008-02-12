@@ -1442,13 +1442,22 @@ Sub Event_UserTalk(Username, Flags, Message, Ping)
    psPluginSystemCmds Message, Username, 3
  
    '// Is it a multiple command message?
-   If Left(Message, 1) = BotVars.Trigger And Instr(Message, "; ") Then
-     arrMessage = Split(Mid(Message, 2), "; ")
-     ReDim arrCmd(UBound(arrMessage))
-     For i = 0 to UBound(arrCmd)
-       psExecuteEvent "UserTalk", Array(Username, Flags, Left(Message, 1) & arrMessage(i), Ping)
-     Next
-     Exit Sub
+   If Instr(Message, "; ") Then
+     If (Left(Message, Len(BotVars.Trigger)) = Len(BotVars.Trigger)) Then
+        msg_prefix = Left(Message, Len(BotVars.Trigger) + 1)
+     End If
+
+     If (Len(msg_prefix) > 0) Then
+        arrMessage = Split(Mid(Message, Len(msg_prefix) + 1), "; ")
+
+        ReDim arrCmd(UBound(arrMessage))
+
+        For i = 0 to UBound(arrCmd)
+           psExecuteEvent "UserTalk", Array(Username, Flags, BotVars.Trigger & arrMessage(i), Ping)
+        Next
+
+        Exit Sub
+     End If
    End If
 
    psExecuteEvent "UserTalk", Array(Username, Flags, Message, Ping)
