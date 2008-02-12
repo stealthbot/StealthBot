@@ -1432,7 +1432,8 @@ Private Const WM_USER         As Integer = &H400
 Private Const EM_GETEVENTMASK As Integer = (WM_USER + 59)
 Private Const EM_SETEVENTMASK As Integer = (WM_USER + 69)
 Private Const EM_LIMITTEXT    As Integer = (WM_USER + 21)
-Private Const EM_SETLIMITTEXT = &HC5
+Private Const EM_SETLIMITTEXT As Integer = &HC5
+Private Const WM_SETTEXT      As Integer = &HC
 
 ' LET IT BEGIN
 Private Sub Form_Load()
@@ -1903,6 +1904,24 @@ Sub AddChat(ParamArray saElements() As Variant)
             Close #f
         End If
     End If
+    
+    'Dim hm As String
+    
+    
+    'Dim blah As Object
+    
+    'set blah = CreateObject(
+    
+    'hm = &HC0C9
+    
+    'With rtbChat
+    '    .SelStart = Len(.text)
+    '    .SelFontName = "Arial Unicode MS"
+    'End With
+
+    'SendMessage frmChat.rtbChat.hWnd, WM_SETTEXT, 0, ByVal StrPtr(hm)
+    
+    'rtbChat.Refresh
 End Sub
 
 
@@ -5440,6 +5459,9 @@ End Function
 Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
     ByVal Tag As String = vbNullString)
     
+    ' ...
+    On Error GoTo ERROR_HANDLER
+    
     ' maximum size of Battle.net messages
     Const MAX_MESSAGE_LENGTH = 220
 
@@ -5461,6 +5483,9 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
         Dim command  As String  ' ...
         Dim GTC      As Long    ' ...
         Dim strUser  As String  ' ...
+        
+        ' ...
+        ReDim Splt(0)
     
         ' check for tabs and replace with spaces (2005-09-23)
         If (InStr(1, strTmp, Chr$(9), vbBinaryCompare) <> 0) Then
@@ -5563,15 +5588,22 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
                     command = "/" & command & _
                         Space(1)
                 End If
-                
-                ' ...
-                ReDim Preserve Splt(0 To UBound(Splt) - 1)
-                
+
                 ' ...
                 If (Splt(0) <> vbNullString) Then
                     ' ...
+                    If (UBound(Splt)) Then
+                        ReDim Preserve Splt(0 To UBound(Splt) - 1)
+                    Else
+                        ReDim Preserve Splt(0)
+                    End If
+                    
+                    ' ...
                     strTmp = Mid$(strTmp, _
                         (Len(Join(Splt(), Space$(1))) + Len(Space(1))) + 1)
+                Else
+                    ' ...
+                    strTmp = Mid$(strTmp, Len(command) + 1)
                 End If
             End If
         End If
@@ -5579,7 +5611,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
         ' ...
         Call SplitByLen(strTmp, _
             (MAX_MESSAGE_LENGTH - Len(command)), Splt())
-            
+ 
         ' ...
         ReDim Preserve Splt(0 To UBound(Splt))
         
@@ -5676,6 +5708,14 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
             Next i
         End If
     End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    AddChat vbRed, "Error: " & _
+        Err.description & " in AddQ()."
+
+    Exit Sub
 End Sub
 
 Sub ClearChannel()
