@@ -113,7 +113,6 @@
 Const PS_UPDATE_URL = "http://www.stealthbot.net/p/plugs/"
 Const PS_SBNET_URL = "http://www.stealthbot.net/board/index.php?"
 
-Const PS_AUTO_UPDATE = True
 Const PS_ALLOW_UI = True
 Const PS_SET_PATH = "plugins\settings.ini"
 Const PS_PREFIX_DISALLOW = "|ps|script|protect|phrasebans|ipbans|idle|koy|plugban|chpw|ib|efp|floodmode|"
@@ -220,6 +219,7 @@ End Sub
 
  
 Sub psLoadPlugin(Prefix, Version, Path, Content, Lines)
+
    '// Get the names of all events that exist in this plugin
    psArgsAdded = False
    psEvents.Item(Prefix) = "|"
@@ -252,7 +252,7 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, Lines)
       End If
    Next
 
-   '// Register this plugin by storing it's path and version
+   '// Store the plugin's path and version
    psPlugins.Item(Prefix) = Path
    psVersions.Item(Prefix) = Version
 
@@ -295,14 +295,12 @@ Sub psLoadCode(Prefix, Path, Content)
           Content = psNewContent
       End If
       
-      ' // check if plugin supports multiple-character triggers if backwards-compatibility
-      ' // mode has not yet been enabled globally
+      '// Check if plugin supports multiple-character triggers
       If (BotVars.NoSupportMultiCharTrigger = False) Then
          If ((InStr(1, Content, ", 1) = BotVars.Trigger", vbTextCompare) <> 0) Or _
              (InStr(1, Content, ", 1) <> BotVars.Trigger", vbTextCompare) <> 0)) Then
   
-            '// ugh, no multiple-character trigger support; enable
-            '// backwards-compatibility for such features.
+            '// Not supported -- enable backwards compatibility mode
             BotVars.NoSupportMultiCharTrigger = True
          End If
       End If
@@ -1430,8 +1428,6 @@ End Sub
  
 Sub Event_UserTalk(Username, Flags, Message, Ping)
 
-   psPluginSystemCmds Message, Username, 3
-
    '// Is it a multiple command message?
    If (Instr(Message, "; ")) Then
      If Left(Message, 1) = "/" Then intStart = 2 Else intStart = Len(BotVars.Trigger) + 1 End If
@@ -1439,11 +1435,13 @@ Sub Event_UserTalk(Username, Flags, Message, Ping)
      arrCmd = Split(Mid(Message, intStart), "; ")
 
      For i = 0 to UBound(arrCmd)
+        psPluginSystemCmds BotVars.Trigger & arrCmd(i), Username, 3
         psExecuteEvent "UserTalk", Array(Username, Flags, BotVars.Trigger & arrCmd(i), Ping)
      Next
      Exit Sub
    End If
 
+   psPluginSystemCmds Message, Username, 3
    psExecuteEvent "UserTalk", Array(Username, Flags, Message, Ping)
 End Sub
  
