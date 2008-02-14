@@ -5,48 +5,55 @@ Attribute VB_Name = "modUTF8"
 'http://forum.valhallalegends.com/phpbbs/index.php?board=18;action=display;threadid=1027&start=0
 Option Explicit
 
-Private Declare Function MultiByteToWideChar Lib "kernel32" (ByVal CodePage As Long, ByVal dwFlags As Long, ByVal lpMultiByteStr As String, ByVal cchMultiByte As Long, ByVal lpWideCharStr As String, ByVal cchWideChar As Long) As Long
-Private Declare Function WideCharToMultiByte Lib "kernel32" (ByVal CodePage As Long, ByVal dwFlags As Long, ByVal lpWideCharStr As String, ByVal cchWideChar As Long, ByVal lpMultiByteStr As String, ByVal cchMultiByte As Long, ByVal lpDefaultChar As String, ByVal lpUsedDefaultChar As Long) As Long
+Private Declare Function GetLastError Lib "Kernel32" () As Long
 
-Private Const CP_ACP = 0
-Private Const CP_UTF8 = 65001
+Public Declare Function MultiByteToWideChar Lib "Kernel32" (ByVal CodePage As Long, ByVal dwFlags As Long, ByVal lpMultiByteStr As String, ByVal cchMultiByte As Long, ByVal lpWideCharStr As String, ByVal cchWideChar As Long) As Long
+Public Declare Function WideCharToMultiByte Lib "Kernel32" (ByVal CodePage As Long, ByVal dwFlags As Long, ByVal lpWideCharStr As String, ByVal cchWideChar As Long, ByVal lpMultiByteStr As String, ByVal cchMultiByte As Long, ByVal lpDefaultChar As String, ByVal lpUsedDefaultChar As Long) As Long
 
-Public Function UTF8Encode(str As String) As String
-    Dim InputChars As Long
-    InputChars = Len(str)
+Private Const MB_ERR_INVALID_CHARS As Long = &H8
+
+Private Const CP_ACP               As Long = 0
+Private Const CP_UTF8              As Long = 65001
+
+' ...
+Public Function UTF8Encode(ByRef str As String) As String
+    Dim UnicodeBuffer As String ' ...
+    Dim UTF8Buffer    As String ' ...
+    Dim UTF8Chars     As Long   ' ...
+
+    ' translate string to unicode
+    UnicodeBuffer = StrConv(str, vbUnicode)
+
+    ' grab length of string after conversion
+    UTF8Chars = WideCharToMultiByte(CP_UTF8, 0, UnicodeBuffer, Len(str), _
+        0, 0, vbNullString, 0)
     
-    'We need to first convert the ASCII input to Unicode before we can convert it to UTF-8...
-    Dim UnicodeChars As Long, UnicodeBuffer As String
-    UnicodeChars = MultiByteToWideChar(CP_ACP, 0, str, InputChars, vbNullString, 0)
-    UnicodeBuffer = Space(UnicodeChars * 2)
-    MultiByteToWideChar CP_ACP, 0, str, InputChars, UnicodeBuffer, UnicodeChars
+    ' initialize buffer
+    UTF8Buffer = String$(UTF8Chars, vbNullChar)
     
-    'Now that we've got everything translated to Unicode, we can (finally) convert it to UTF-8.
-    Dim UTF8Chars As Long, UTF8Buffer As String
-    UTF8Chars = WideCharToMultiByte(CP_UTF8, 0, UnicodeBuffer, UnicodeChars, 0, 0, vbNullString, 0)
-    UTF8Buffer = Space(UTF8Chars)
-    WideCharToMultiByte CP_UTF8, 0, UnicodeBuffer, UnicodeChars, UTF8Buffer, UTF8Chars, vbNullString, 0
+    ' translate from unicode to utf-8
+    WideCharToMultiByte CP_UTF8, 0, UnicodeBuffer, Len(str), UTF8Buffer, _
+        UTF8Chars, vbNullString, 0
     
+    ' return unicode buffer
     UTF8Encode = UTF8Buffer
 End Function
 
-Public Function UTF8Decode(str As String) As String
-    Dim InputBytes As Long
-    InputBytes = Len(str)
+' ...
+Public Function UTF8Decode(ByRef str As String) As String
+    Dim UnicodeBuffer As String ' ...
+    Dim UnicodeChars  As Long   ' ...
     
-    'Again, we need to convert the UTF-8 string to Unicode before we can convert it to 8-bit.
-    Dim UnicodeChars As Long, UnicodeBuffer As String
-    UnicodeChars = MultiByteToWideChar(CP_UTF8, 0, str, InputBytes, vbNullString, 0)
-    UnicodeBuffer = Space(UnicodeChars * 2)
-    MultiByteToWideChar CP_UTF8, 0, str, InputBytes, UnicodeBuffer, UnicodeChars
+    ' grab length of string after conversion
+    UnicodeChars = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, str, _
+        Len(str), vbNullString, 0)
+    
+    ' initialize buffer
+    UnicodeBuffer = String$(UnicodeChars * 2, vbNullChar)
+    
+    ' translate utf-8 string to unicode
+    MultiByteToWideChar CP_UTF8, 0, str, Len(str), UnicodeBuffer, UnicodeChars
    
-    'Now that we've got everything translated to Unicode, we can convert it to 8-bit characters.
-    'Dim SingleByteChars As Long, SingleByteBuffer As String
-    'SingleByteChars = WideCharToMultiByte(CP_ACP, 0, UnicodeBuffer, UnicodeChars, vbNullString, 0, vbNullString, 0)
-    'SingleByteBuffer = Space(SingleByteChars)
-    'WideCharToMultiByte CP_ACP, 0, UnicodeBuffer, UnicodeChars, SingleByteBuffer, SingleByteChars, vbNullString, 0
-    
-    'UTF8Decode = SingleByteBuffer
-    
-    UTF8Decode = Replace(UnicodeBuffer, Chr$(0), vbNullString)
+    ' translate from unicode to ansi
+    UTF8Decode = StrConv(UnicodeBuffer, vbFromUnicode)
 End Function

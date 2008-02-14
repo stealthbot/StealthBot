@@ -74,8 +74,8 @@ End Sub
 
 Public Sub CreateMCPCharacter(ByVal CharType As Long, ByVal CharFlags As Long, ByVal CharName As String)
     With PBuffer
-        .InsertDWORD CharType
-        .InsertWORD CharFlags
+        .InsertDWord CharType
+        .InsertWord CharFlags
         .InsertNTString CharName
         .SendPacketMCP MCP_CHARCREATE
     End With
@@ -88,9 +88,9 @@ Public Sub LogonToCharacter(ByVal CharName As String)
     End With
 End Sub
 
-Public Sub DeleteCharacter(ByVal CharName As String, Optional ByVal Flags As Integer = &H1)
+Public Sub DeleteCharacter(ByVal CharName As String, Optional ByVal flags As Integer = &H1)
     With PBuffer
-        .InsertWORD Flags
+        .InsertWord flags
         .InsertNTString CharName
         
         'Debug.Print "Sending: "
@@ -106,7 +106,7 @@ End Sub
 
 Public Sub RequestCharacterList(Optional ByVal NumCharacters = 8)
     With PBuffer
-        .InsertDWORD NumCharacters
+        .InsertDWord NumCharacters
         .SendPacketMCP MCP_CHARLIST
     End With
 End Sub
@@ -119,7 +119,7 @@ Public Sub UpgradeCharacter(ByVal CharName As String)
 End Sub
 
 '// note: this sub does not use the MCP socket and requires calchashbuf()
-Public Sub LogonToRealm(ByVal Cookie As Long, ByVal ServerToken As Long, ByVal RealmName As String) ', Optional ByVal RealmPass As String = "password")
+Public Sub LogonToRealm(ByVal cookie As Long, ByVal ServerToken As Long, ByVal RealmName As String) ', Optional ByVal RealmPass As String = "password")
     '(DWORD)      Cookie
     '(DWORD[5])   Hashed realm password
     '(STRING)     Realm title
@@ -128,10 +128,10 @@ Public Sub LogonToRealm(ByVal Cookie As Long, ByVal ServerToken As Long, ByVal R
     
     Buffer = String$(20, vbNullChar)
     Call calcHashBuf("password", 8, Buffer)
-    Call calcHashBuf(MKL(Cookie) & MKL(ServerToken) & Buffer, 28, Buffer)
+    Call calcHashBuf(MKL(cookie) & MKL(ServerToken) & Buffer, 28, Buffer)
     
     With PBuffer
-        .InsertDWORD Cookie
+        .InsertDWord cookie
         .InsertNonNTString Buffer
         .InsertNTString RealmName
         .SendPacket &H3E
@@ -146,7 +146,7 @@ Public Sub ParseMCPPacket(ByVal Data As String)
     Static sBuffer As String
     
     Dim CharName As String, StringRaw As String, Statstring As String
-    Dim Position As Long, n As Long, PacketLen As Long, Seconds As Long
+    Dim Position As Long, n As Long, PacketLen As Long, seconds As Long
     Dim NullPos As Integer
     Dim Expiry As Date
     Dim IncompletePacketInBuffer As Boolean
@@ -154,7 +154,7 @@ Public Sub ParseMCPPacket(ByVal Data As String)
     sBuffer = sBuffer & Data
     
     While Len(sBuffer) > 0 And Not IncompletePacketInBuffer
-        PacketLen = PBuffer.GetWORD(Mid$(sBuffer, 1, 2))
+        PacketLen = StringToWord(Mid$(sBuffer, 1, 2))
         
         'Debug.Print "PacketLen: " & PacketLen
         
@@ -240,8 +240,8 @@ Public Sub ParseMCPPacket(ByVal Data As String)
                     'For each character:
                     '  (DWORD) Expiration in seconds since 1970
                         StringRaw = Mid$(Data, Position, 4)
-                        Seconds = Conv(StringRaw)
-                        Expiry = DateAdd("s", Seconds, "1/1/1970")
+                        seconds = Conv(StringRaw)
+                        Expiry = DateAdd("s", seconds, "1/1/1970")
                         Position = Position + 4
                         
                     '  (STRING)       Name

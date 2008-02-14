@@ -65,7 +65,7 @@ Public Function FullPacket() As Boolean
         l = InStr(strData, Chr(&HFF))
         
         If l = 1 Then
-            lngPacketLen = GetWORD(Mid$(strData, 3, 2))
+            lngPacketLen = StringToWord(Mid$(strData, 3, 2))
             
             'WriteLog "Buffer data from which packetlen was read:", True
             'WriteLog strData
@@ -102,7 +102,7 @@ End Function
 Public Function GetPacket() As String
     Dim lngPacketLen As Long
 
-    lngPacketLen = GetWORD(Mid$(strData, 3, 2))
+    lngPacketLen = StringToWord(Mid$(strData, 3, 2))
     
     'WriteLog "Pulling a packet. Length: " & lngPacketLen, True
     
@@ -131,7 +131,7 @@ Public Sub VoidTrimBuffer()
     End If
 End Sub
 
-Private Function GetWORD(Data As String) As Long
+Private Function StringToWord(Data As String) As Long
     Dim tmp As String
     Dim A As String, b As String
     
@@ -139,7 +139,7 @@ Private Function GetWORD(Data As String) As Long
     A = Mid(tmp, 3, 2)
     b = Mid(tmp, 1, 2)
     tmp = A & b
-    GetWORD = Val("&H" & tmp)
+    StringToWord = Val("&H" & tmp)
 End Function
 
 Private Function ToHex(Data As String) As String

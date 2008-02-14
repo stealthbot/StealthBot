@@ -59,8 +59,8 @@ Public Event BNLSClose()
 Public Event BNETClose()
 Public Event BNLSConnect()
 Public Event BNETConnect()
-Public Event BNLSError(ByVal Number As Integer, ByVal Description As String)
-Public Event BNETError(ByVal Number As Integer, ByVal Description As String)
+Public Event BNLSError(ByVal Number As Integer, ByVal description As String)
+Public Event BNETError(ByVal Number As Integer, ByVal description As String)
 Public Event OnVersionCheck(ByVal result As Long, PatchFile As String)
 Public Event OnLogin(ByVal Success As Boolean)
 Public Event OnChatJoin(ByVal UniqueName As String)
@@ -305,7 +305,7 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
       
             Case &H25
                 Dim pBuff As New PacketBuffer
-                pBuff.InsertDWORD PBuffer.DebuffDWORD
+                pBuff.InsertDWord PBuffer.DebuffDWORD
                 SendBNET pBuff.GetPacket(&H25)
                 Debug.Print "[BNET] Send 0x25"
       
@@ -338,12 +338,12 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
     Loop
 End Sub
 
-Private Sub wsBnet_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    RaiseEvent BNETError(Number, Description)
+Private Sub wsBnet_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+    RaiseEvent BNETError(Number, description)
     'Debug.Print "[BNET] Error: " & Number & ": " & Description
 End Sub
-Private Sub wsBnls_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    RaiseEvent BNLSError(Number, Description)
+Private Sub wsBnls_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+    RaiseEvent BNLSError(Number, description)
     'Debug.Print "[BNLS] Error: " & Number & ": " & Description
 End Sub
 
@@ -405,10 +405,10 @@ End Sub
 Private Sub Send0x06()
     Dim PBuffer As New PacketBuffer
     With PBuffer
-        .InsertDWORD PLATID
-        .InsertDWORD PRODID
-        .InsertDWORD VersionByte
-        .InsertDWORD &H0
+        .InsertDWord PLATID
+        .InsertDWord PRODID
+        .InsertDWord VersionByte
+        .InsertDWord &H0
         SendBNET .GetPacket(&H6)
     End With
     Set PBuffer = Nothing
@@ -418,11 +418,11 @@ End Sub
 Private Sub Send0x07(ver As Long, Check As Long, info As String, vb As Long)
     Dim PBuffer As New PacketBuffer
     With PBuffer
-        .InsertDWORD PLATID
-        .InsertDWORD PRODID
-        .InsertDWORD VersionByte
-        .InsertDWORD ver
-        .InsertDWORD Check
+        .InsertDWord PLATID
+        .InsertDWord PRODID
+        .InsertDWord VersionByte
+        .InsertDWord ver
+        .InsertDWord Check
         .InsertNTString info
         SendBNET .GetPacket(7)
     End With
@@ -459,10 +459,10 @@ Private Sub Send0x12()
     With PBuffer
         .InsertNonNTString GetFTString(False)
         .InsertNonNTString GetFTString(True)
-        .InsertDWORD &H0
-        .InsertDWORD GetSystemDefaultLCID
-        .InsertDWORD LCID
-        .InsertDWORD GetUserDefaultLangID
+        .InsertDWord &H0
+        .InsertDWord GetSystemDefaultLCID
+        .InsertDWord LCID
+        .InsertDWord GetUserDefaultLangID
         .InsertNTString LocaleInfo(LCID, LOCALE_SABBREVLANGNAME)
         .InsertNTString LocaleInfo(LCID, LOCALE_SNATIVECTRYNAME)
         .InsertNTString LocaleInfo(LCID, LOCALE_SABBREVCTRYNAME)
@@ -477,11 +477,11 @@ End Sub
 Private Sub Send0x1E()
     Dim PBuffer As New PacketBuffer
     With PBuffer
-        .InsertDWORD 0
-        .InsertDWORD 0
-        .InsertDWORD 0
-        .InsertDWORD 0
-        .InsertDWORD 0
+        .InsertDWord 0
+        .InsertDWord 0
+        .InsertDWord 0
+        .InsertDWord 0
+        .InsertDWord 0
         .InsertNTString GetCompUserName(False)
         .InsertNTString GetCompUserName(True)
         SendBNET .GetPacket(&H1E)
@@ -494,8 +494,8 @@ Private Sub Send0x29()
     If (strPassword = vbNullString) Then Exit Sub
     Dim PBuffer As New PacketBuffer
     With PBuffer
-        .InsertDWORD ClientToken
-        .InsertDWORD ServerToken
+        .InsertDWord ClientToken
+        .InsertDWord ServerToken
         .InsertNonNTString doubleHashPassword(LCase(strPassword), ClientToken, ServerToken)
         .InsertNTString strUsername
         SendBNET .GetPacket(&H29)
@@ -519,11 +519,11 @@ End Sub
 Private Sub Send0x1ABNLS(MPQ As String, Value As String)
     Dim PBuffer As New PacketBuffer
     With PBuffer
-        .InsertDWORD &H9
-        .InsertDWORD 0
-        .InsertDWORD 0
-        .InsertDWORD 0
-        .InsertDWORD 0
+        .InsertDWord &H9
+        .InsertDWord 0
+        .InsertDWord 0
+        .InsertDWord 0
+        .InsertDWord 0
         .InsertNTString MPQ
         .InsertNTString Value
         SendBNLS .GetBNLSPacket(&H1A)
@@ -539,7 +539,7 @@ Private Sub SendBNET(buff As String)
     If wsBnet.State = sckConnected Then wsBnet.SendData buff
     Exit Sub
 BNETError:
-    ErrorHandler "SendBNET", Err.Number, Err.Description
+    ErrorHandler "SendBNET", Err.Number, Err.description
     Err.Clear
     frmChat.AddChat RTBColors.ErrorMessageText, DebugOutput(buff)
 End Sub
@@ -548,7 +548,7 @@ Private Sub SendBNLS(buff As String)
     If wsBnls.State = sckConnected Then wsBnls.SendData buff
     Exit Sub
 BNLSError:
-    ErrorHandler "SendBNLS", Err.Number, Err.Description
+    ErrorHandler "SendBNLS", Err.Number, Err.description
     Err.Clear
     frmChat.AddChat RTBColors.ErrorMessageText, DebugOutput(buff)
 End Sub
@@ -562,24 +562,30 @@ Private Function GetFTString(Optional LocalTime As Boolean = False) As String
     End If
     Call SystemTimeToFileTime(SyT, FT)
     Dim buff As New PacketBuffer
-    GetFTString = buff.MakeDWORD(FT.dwLowDateTime) & buff.MakeDWORD(FT.dwHighDateTime)
+    GetFTString = DWordToString(FT.dwLowDateTime) & DWordToString(FT.dwHighDateTime)
 End Function
 
 Private Function LocaleInfo(ByVal locale As Long, ByVal lc_type As Long) As String
-    Dim length As Long, Buf As String * 1024
-    length = GetLocaleInfo(locale, lc_type, Buf, Len(Buf))
-    LocaleInfo = Left$(Buf, length - 1)
+    Dim length As Long, buf As String * 1024
+    length = GetLocaleInfo(locale, lc_type, buf, Len(buf))
+    LocaleInfo = Left$(buf, length - 1)
 End Function
 
 Private Function GetCompUserName(Optional user As Boolean = False) As String
-    Dim strBuff As String, Rut As Long
+    Dim strBuff As String
+    Dim Rut     As Long
+    
     strBuff = String(255, Chr(&H0))
-    Rut = IIf(user, GetUserName(strBuff, Len(strBuff)), GetComputerName(strBuff, Len(strBuff)))
+    
+    Rut = IIf(user, GetUserName(strBuff, Len(strBuff)), _
+        GetComputerName(strBuff, Len(strBuff)))
 
     Rut = InStr(strBuff, Chr$(&H0))
     GetCompUserName = Left(strBuff, Rut - 1)
 End Function
 
-Private Function ErrorHandler(strSource As String, Number As Integer, Description As String)
-  frmChat.AddChat RTBColors.ErrorMessageText, "[Monitor] Error: ", RTBColors.ErrorMessageText, strSource, RTBColors.ErrorMessageText, " #", RTBColors.ErrorMessageText, Number & ": " & Description
+Private Function ErrorHandler(strSource As String, Number As Integer, description As String)
+  frmChat.AddChat RTBColors.ErrorMessageText, "[Monitor] Error: ", _
+    RTBColors.ErrorMessageText, strSource, RTBColors.ErrorMessageText, _
+        " #", RTBColors.ErrorMessageText, Number & ": " & description
 End Function

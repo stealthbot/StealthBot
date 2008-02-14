@@ -1522,11 +1522,9 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal flags As Long, ByVal M
     Dim ColIndex   As Integer
     Dim b          As Boolean
     
-    If (frmChat.mnuUTF8.Checked) Then
-        Message = UTF8Decode(Message)
-        
-        If (Message = vbNullString) Then
-            Exit Sub
+    If (frmChat.mnuUTF8.Checked = False) Then
+        If (Len(UTF8Decode(Message)) > 0) Then
+            Message = UTF8Decode(Message)
         End If
     End If
     

@@ -27,7 +27,7 @@ Public Function FullPacket() As Boolean
     FullPacket = False
     
     If (Len(strData) > 0) Then
-        lngPacketLen = GetWORD(Mid(strData, 1, 2))
+        lngPacketLen = StringToWord(Mid(strData, 1, 2))
         
         If (Len(strData) >= lngPacketLen) Then
             FullPacket = True
@@ -38,7 +38,7 @@ End Function
 Public Function GetPacket() As String
     Dim lngPacketLen As Long
 
-    lngPacketLen = GetWORD(Mid(strData, 1, 2))
+    lngPacketLen = StringToWord(Mid(strData, 1, 2))
     GetPacket = Mid(strData, 1, lngPacketLen)
     strData = Mid(strData, lngPacketLen + 1)
 End Function
@@ -47,7 +47,7 @@ Public Sub ClearBuffer()
     strData = vbNullString
 End Sub
 
-Private Function GetWORD(Data As String) As Long
+Private Function StringToWord(Data As String) As Long
     Dim tmp As String
     Dim A As String
     Dim b As String
@@ -59,7 +59,7 @@ Private Function GetWORD(Data As String) As Long
     
     tmp = A & b
     
-    GetWORD = Val("&H" & tmp)
+    StringToWord = Val("&H" & tmp)
 End Function
 
 Private Function ToHex(Data As String) As String

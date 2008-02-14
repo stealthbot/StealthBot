@@ -2,7 +2,7 @@ Attribute VB_Name = "modOtherCode"
 Option Explicit
 
 Public Type COMMAND_DATA
-    name         As String
+    Name         As String
     params       As String
     local        As Boolean
     publicOutput As Boolean
@@ -340,8 +340,8 @@ End Function
 Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNullString)
     If (frmChat.sckBNet.State = 7) Then
         With PBuffer
-            If (frmChat.mnuUTF8.Checked) Then
-                .InsertNTString Message
+            If (frmChat.mnuUTF8.Checked = False) Then
+                .InsertNTString Message, UTF8
             Else
                 .InsertNTString Message
             End If
@@ -995,18 +995,18 @@ End Sub
 '//     mm/dd/yy, hh:mm:ss
 '//
 Public Function SystemTimeToString(ByRef sT As SYSTEMTIME) As String
-    Dim Buf As String
+    Dim buf As String
 
     With sT
-        Buf = Buf & .wMonth & "/"
-        Buf = Buf & .wDay & "/"
-        Buf = Buf & .wYear & ", "
-        Buf = Buf & IIf(.wHour > 9, .wHour, "0" & .wHour) & ":"
-        Buf = Buf & IIf(.wMinute > 9, .wMinute, "0" & .wMinute) & ":"
-        Buf = Buf & IIf(.wSecond > 9, .wSecond, "0" & .wSecond)
+        buf = buf & .wMonth & "/"
+        buf = buf & .wDay & "/"
+        buf = buf & .wYear & ", "
+        buf = buf & IIf(.wHour > 9, .wHour, "0" & .wHour) & ":"
+        buf = buf & IIf(.wMinute > 9, .wMinute, "0" & .wMinute) & ":"
+        buf = buf & IIf(.wSecond > 9, .wSecond, "0" & .wSecond)
     End With
     
-    SystemTimeToString = Buf
+    SystemTimeToString = buf
 End Function
 
 Public Function GetCurrentMS() As String
@@ -2028,7 +2028,7 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
     If (lvItem Is Nothing) Then
         checkChannel = 0
     Else
-        checkChannel = lvItem.index
+        checkChannel = lvItem.Index
     End If
 End Function
 
@@ -2337,6 +2337,15 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
         ' does our string already equal to or fall
         ' below the specified length?
         If (Len(strTmp) <= SplitLength) Then
+            ' ...
+            'If (Right$(strTmp, _
+            '    Len(OversizeDelimiter)) = OversizeDelimiter) Then
+            '
+            '    ' ...
+            '    strTmp = Left$(strTmp, Len(strTmp) - _
+            '        Len(OversizeDelimiter))
+            'End If
+        
             ' assign our string to the current line
             StringRet(lineCount) = strTmp
         Else
@@ -2405,7 +2414,7 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
     Static Message   As String  ' ...
     Static CropLen   As Integer ' ...
 
-    Dim index        As Integer ' ...
+    Dim Index        As Integer ' ...
     Dim bln          As Boolean ' ...
     Dim tmp          As String  ' ...
     Dim console      As Boolean ' ...
@@ -2418,7 +2427,7 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
         ' ...
         If (Len(Message) <= CropLen) Then
             With IsCommand
-                .name = vbNullString
+                .Name = vbNullString
                 .params = vbNullString
             End With
         
@@ -2452,12 +2461,12 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
     ' that way is to entirely disable internal support!
     If (console = False) Then
         ' check our message for a command delimiter
-        index = InStr(Len(BotVars.TriggerLong) + 1, Message, _
+        Index = InStr(Len(BotVars.TriggerLong) + 1, Message, _
             CMD_DELIMITER, vbBinaryCompare)
     
         ' ...
-        If (index) Then
-            tmp = Mid$(tmp, 1, index - 1)
+        If (Index) Then
+            tmp = Mid$(tmp, 1, Index - 1)
         End If
     End If
     
@@ -2508,16 +2517,16 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
     ' ...
     If ((console) Or (bln)) Then
         ' ...
-        index = InStr(1, tmp, Space(1), vbBinaryCompare)
+        Index = InStr(1, tmp, Space(1), vbBinaryCompare)
         
         ' ...
-        If (index) Then
+        If (Index) Then
             With IsCommand
-                .name = Mid$(tmp, 1, index - 1)
-                .params = Mid$(tmp, index + 1)
+                .Name = Mid$(tmp, 1, Index - 1)
+                .params = Mid$(tmp, Index + 1)
             End With
         Else
-            IsCommand.name = tmp
+            IsCommand.Name = tmp
         End If
         
         With IsCommand
@@ -2526,7 +2535,7 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
         End With
         
         ' ...
-        If (IsCommand.name <> vbNullString) Then
+        If (IsCommand.Name <> vbNullString) Then
             ' grab command data
         End If
         
@@ -2535,7 +2544,7 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
     End If
     
     With IsCommand
-        .name = vbNullString
+        .Name = vbNullString
         .params = vbNullString
     End With
 End Function

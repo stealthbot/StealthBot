@@ -213,7 +213,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         Next i
     Else
         ' send command to main processor
-        If (InBot = True) Then
+        If (InBot) Then
             ' execute command
             ProcessCommand = ExecuteCommand(Username, ConsoleAccessResponse, tmpmsg, _
                 InBot, cmdRet())
@@ -250,70 +250,6 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             ' command is found to be invalid and issued
             ' internally
             If (InBot) Then
-                If (Len(Message)) Then
-                    ' lets handle legacy naming
-                    If (Left$(Message, 1) = "/") Then
-                        Dim Index As Long   ' ...
-
-                        Index = InStr(1, Message, Space(1), _
-                            vbBinaryCompare)
-                    
-                        If (Index) Then
-                            Dim Splt() As String ' ...
-                        
-                            tmpmsg = LCase$(Mid$(Message, 2, (Index - 2)))
-                            
-                            If ((tmpmsg = "w") Or _
-                                (tmpmsg = "whisper") Or _
-                                (tmpmsg = "m") Or _
-                                (tmpmsg = "msg") Or _
-                                (tmpmsg = "message") Or _
-                                (tmpmsg = "whois") Or _
-                                (tmpmsg = "where") Or _
-                                (tmpmsg = "whereis") Or _
-                                (tmpmsg = "squelch") Or _
-                                (tmpmsg = "unsquelch") Or _
-                                (tmpmsg = "ignore") Or _
-                                (tmpmsg = "unignore")) Then
-                                
-                                Splt() = Split(Message, Space(1), 3)
-                                
-                                If (UBound(Splt) > 0) Then
-                                    Message = Splt(0) & Space(1) & _
-                                        Splt(1)
-                                        
-                                    If (UBound(Splt) > 1) Then
-                                        Message = Message & _
-                                            Space(1) & Splt(2)
-                                    End If
-                                End If
-                            ElseIf ((tmpmsg = "f") Or _
-                                    (tmpmsg = "friends")) Then
-                                    
-                                Splt() = Split(Message, Space(1), 3)
-                                
-                                If (UBound(Splt) = 2) Then
-                                    Select Case (LCase$(Splt(1)))
-                                        Case "m"
-                                        Case "msg"
-                                        Case Else
-                                            If ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                                                (StrReverse$(BotVars.Product) = "W3XP")) Then
-                                                
-                                                Message = Splt(0) & Space(1) & _
-                                                    Splt(1) & Space(1) & _
-                                                        Splt(2)
-                                            Else
-                                                Message = Splt(0) & Space(1) & _
-                                                    Splt(1) & Space(1) & Splt(2)
-                                            End If
-                                    End Select
-                                End If
-                            End If
-                        End If
-                    End If
-                End If
- 
                 Call AddQ(Message)
             End If
         End If
@@ -5649,13 +5585,12 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
     Optional dbType As String = vbNullString, Optional lowerBound As Integer = -1, _
     Optional upperBound As Integer = -1, Optional flags As String = vbNullString) As Integer
     
+    ' ...
+    On Error GoTo ERROR_HANDLER
+    
     Dim i        As Integer
     Dim found    As Integer
-    Dim tmpBuf() As String
-    Dim tmpCount As Integer
-    
-    ' redefine array size
-    ReDim Preserve tmpBuf(tmpCount)
+    Dim tmpBuf   As String
     
     If (user <> vbNullString) Then
         ' store GetAccess() response
@@ -5675,19 +5610,17 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
         
         If (gAcc.Access > 0) Then
             If (gAcc.flags <> vbNullString) Then
-                tmpBuf(tmpCount) = "Found user " & gAcc.Username & ", with access " & gAcc.Access & _
+                tmpBuf = "Found user " & gAcc.Username & ", with access " & gAcc.Access & _
                     " and flags " & gAcc.flags & "."
             Else
-                tmpBuf(tmpCount) = "Found user " & gAcc.Username & ", with access " & gAcc.Access & "."
+                tmpBuf = "Found user " & gAcc.Username & ", with access " & gAcc.Access & "."
             End If
         ElseIf (gAcc.flags <> vbNullString) Then
-            tmpBuf(tmpCount) = "Found user " & gAcc.Username & ", with flags " & gAcc.flags & "."
+            tmpBuf = "Found user " & gAcc.Username & ", with flags " & gAcc.flags & "."
         Else
-            tmpBuf(tmpCount) = "No such user(s) found."
+            tmpBuf = "No such user(s) found."
         End If
     Else
-        tmpBuf(tmpCount) = "User(s) found: "
-        
         For i = LBound(DB) To UBound(DB)
             Dim res        As Boolean ' store result of access check
             Dim blnChecked As Boolean ' ...
@@ -5787,28 +5720,13 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 
                 ' ...
                 If (res = True) Then
-                    tmpBuf(tmpCount) = tmpBuf(tmpCount) & ", " & DB(i).Username & _
-                        IIf(((DB(i).type <> "%") And (StrComp(DB(i).type, "USER", vbTextCompare) <> 0)), _
+                    ' ...
+                    tmpBuf = tmpBuf & DB(i).Username & _
+                        IIf(((DB(i).type <> "%") And _
+                                (StrComp(DB(i).type, "USER", vbTextCompare) <> 0)), _
                             " (" & LCase$(DB(i).type) & ")", vbNullString) & _
                         IIf(DB(i).Access > 0, "\" & DB(i).Access, vbNullString) & _
-                        IIf(DB(i).flags <> vbNullString, "\" & DB(i).flags, vbNullString)
-                
-                    If ((Len(tmpBuf(tmpCount)) > 80) And (i <> UBound(DB))) Then
-                        ' resize array
-                        ReDim Preserve tmpBuf(tmpCount + 1)
-                        
-                        ' prefix next message
-                        tmpBuf(tmpCount + 1) = "User(s) found: "
-                    
-                        tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", " ")
-                        tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), ": , ", ": ")
-                        
-                        ' postfix message
-                        tmpBuf(tmpCount) = tmpBuf(tmpCount) & " [more]"
-                        
-                        ' increment array index
-                        tmpCount = (tmpCount + 1)
-                    End If
+                        IIf(DB(i).flags <> vbNullString, "\" & DB(i).flags, vbNullString) & ", "
                     
                     ' increment found counter
                     found = (found + 1)
@@ -5821,21 +5739,37 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
         Next i
 
         If (found = 0) Then
-            tmpBuf(tmpCount) = "No such user(s) found."
+            ' return message
+            arrReturn(0) = _
+                "No such user(s) found."
         Else
-            tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", " ") & "¦"
-            tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", " ")
-            tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), ": , ", ": ")
-            tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), ", ¦", vbNullString)
+            Dim prefix As String ' ...
+            Dim arr()  As String ' ...
+            
+            ' ...
+            prefix = "User(s) found: "
         
-            If (InStr(1, tmpBuf(tmpCount), "¦", vbTextCompare) > 0) Then
-                tmpBuf(tmpCount) = Left$(tmpBuf(tmpCount), Len(tmpBuf(tmpCount)) - 1)
-            End If
+            ' ...
+            Call SplitByLen(tmpBuf, 80 - _
+                Len(prefix), arr(), " [more]", ", ")
+            
+            ' ...
+            For i = 0 To UBound(arr)
+                ' ...
+                arr(i) = prefix & arr(i)
+            Next i
+            
+            ' return message
+            arrReturn() = arr()
         End If
     End If
     
-    ' return message
-    arrReturn() = tmpBuf()
+    Exit Function
+    
+ERROR_HANDLER:
+    MsgBox Err.description
+    
+    Exit Function
 End Function
 
 Public Function RemoveItem(ByVal rItem As String, File As String, Optional ByVal dbType As String = _
@@ -6292,6 +6226,10 @@ Public Sub LoadDatabase()
                 .Username = BotVars.BotOwner
                 .type = "USER"
                 .Access = 200
+                .AddedBy = "(console)"
+                .AddedOn = Now
+                .ModifiedBy = "(console)"
+                .ModifiedOn = Now
             End With
         End If
     End If

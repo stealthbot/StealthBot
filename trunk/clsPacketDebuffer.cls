@@ -67,7 +67,7 @@ End Function
 'Debuffers a BYTE from the Debuffer
 Public Function DebuffBYTE() As Byte
     If HasBytes(1) Then
-        DebuffBYTE = GetBYTE
+        DebuffBYTE = GetByte
         RemoveBYTE
     End If
 End Function
@@ -156,32 +156,32 @@ End Sub
 '=======================================================
 
 'Gets a BYTE from the Debuffer
-Function GetBYTE() As Byte
+Function GetByte() As Byte
     Dim PBYTE As Byte
     PBYTE = Asc(Mid$(Debuffer, 1, 1))
-    GetBYTE = PBYTE
+    GetByte = PBYTE
 End Function
 
 'Gets a WORD from the Debuffer
 Function GetWORD() As Integer
-    Dim WORD As Integer
+    Dim word As Integer
     Dim sTemp As String * 2
     
     sTemp = Mid$(Debuffer, 1, 2)
-    CopyMemory WORD, ByVal sTemp, 2
+    CopyMemory word, ByVal sTemp, 2
     
-    GetWORD = WORD
+    GetWORD = word
 End Function
 
 'Gets a DWORD from the Debuffer
 Function GetDWORD() As Long
-    Dim DWORD As Long
+    Dim dword As Long
     Dim sTemp As String * 4
     
     sTemp = Mid$(Debuffer, 1, 4)
-    CopyMemory DWORD, ByVal sTemp, 4
+    CopyMemory dword, ByVal sTemp, 4
     
-    GetDWORD = DWORD
+    GetDWORD = dword
 End Function
 
 'Gets a FILETIME from the Debuffer

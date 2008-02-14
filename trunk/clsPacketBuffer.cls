@@ -122,11 +122,11 @@ Public Function SendPacket(Optional PacketID As Byte)
     If frmChat.sckBNet.State <> 0 Then
         Buffer = Chr(&HFF) & Chr(PacketID) & MakeWORD(l + 4) & Buffer
         
-        For i = 0 To LenB(Buffer)
-            ReDim Preserve Buf(i)
-        
-            Buf(i) = Asc(Mid$(Buffer, i + 1, 1))
-        Next i
+        'For i = 0 To LenB(Buffer)
+        '    ReDim Preserve Buf(i)
+       '
+       '     Buf(i) = Asc(Mid$(Buffer, i + 1, 1))
+       ' Next i
         
         'Call SendBytes(frmChat.sckBNet.SocketHandle, byt(), Len(Buffer), 0)
         

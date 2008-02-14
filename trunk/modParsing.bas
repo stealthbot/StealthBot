@@ -170,7 +170,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &H25 'SID_PING
                 If BotVars.Spoof = 0 Or g_Online Then
-                    PBuffer.InsertDWORD pD.DebuffDWORD
+                    PBuffer.InsertDWord pD.DebuffDWORD
                     PBuffer.SendPacket &H25
                 End If
             
@@ -695,7 +695,7 @@ Cont:
     
 ErrorTrapped:
     AddChat RTBColors.ErrorMessageText, "D2/W2 CDKey decoding error occurred!"
-    AddChat RTBColors.ErrorMessageText, Err.Number & ": " & Err.Description
+    AddChat RTBColors.ErrorMessageText, Err.Number & ": " & Err.description
 End Function
 
 Public Function DecodeStarcraftKey(ByVal sKey As String) As String
@@ -888,9 +888,9 @@ End Sub
 
 Public Sub FullJoin(Channel As String, Optional ByVal i As Byte)
     If i > 0 Then
-        PBuffer.InsertDWORD CLng(i)
+        PBuffer.InsertDWord CLng(i)
     Else
-        PBuffer.InsertDWORD &H2
+        PBuffer.InsertDWord &H2
     End If
     PBuffer.InsertNTString Channel
     PBuffer.SendPacket &HC
@@ -909,7 +909,7 @@ End Function
 Public Sub RejoinChannel(Channel As String)
     'on error resume next
     PBuffer.SendPacket &H10
-    PBuffer.InsertDWORD &H2
+    PBuffer.InsertDWord &H2
     PBuffer.InsertNTString Channel
     PBuffer.SendPacket &HC
 End Sub
@@ -917,9 +917,9 @@ End Sub
 Public Sub RequestProfile(strUser As String)
     'on error resume next
     With PBuffer
-        .InsertDWORD 1
-        .InsertDWORD 4
-        .InsertDWORD GetTickCount()
+        .InsertDWord 1
+        .InsertDWord 4
+        .InsertDWord GetTickCount()
         .InsertNTString strUser
         .InsertNTString "Profile\Age"
         .InsertNTString "Profile\Sex"
@@ -931,26 +931,26 @@ End Sub
 
 Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
     With PBuffer
-        .InsertDWORD 1
-        .InsertDWORD 1
-        .InsertDWORD GetTickCount()
+        .InsertDWord 1
+        .InsertDWord 1
+        .InsertDWord GetTickCount()
         .InsertNTString sUsername
         .InsertNTString sKey
         .SendPacket &H26
     End With
 End Sub
 
-Public Sub SetProfile(ByVal Location As String, ByVal Description As String)
+Public Sub SetProfile(ByVal Location As String, ByVal description As String)
     'Dim i As Byte
     Const MAX_DESCR As Long = 510
     Const MAX_SEX As Long = 200
     Const MAX_LOC As Long = 200
     
     '// Sanity checks
-    If LenB(Description) = 0 Then
-        Description = Space(1)
-    ElseIf Len(Description) > MAX_DESCR Then
-        Description = Left$(Description, MAX_DESCR)
+    If LenB(description) = 0 Then
+        description = Space(1)
+    ElseIf Len(description) > MAX_DESCR Then
+        description = Left$(description, MAX_DESCR)
     End If
     
 '    If LenB(Sex) = 0 Then
@@ -967,15 +967,15 @@ Public Sub SetProfile(ByVal Location As String, ByVal Description As String)
     
     
     With PBuffer
-        .InsertDWORD &H1                    '// #accounts
-        .InsertDWORD 2                      '// #keys
+        .InsertDWord &H1                    '// #accounts
+        .InsertDWord 2                      '// #keys
         .InsertNTString reverseUsername(CurrentUsername)     '// account to update
                                             '// keys
         .InsertNTString "Profile\Location"
         .InsertNTString "Profile\Description"
                                             '// values
         .InsertNTString Location
-        .InsertNTString Description
+        .InsertNTString description
         
         .SendPacket &H27
     End With
@@ -985,7 +985,7 @@ End Sub
 '//  Will not ERASE if a field is left blank
 '// 2007-06-07: SEX value is ignored because Blizzard removed that
 '//     field from profiles
-Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
+Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
     'Dim i As Byte
     Const MAX_DESCR As Long = 510
     Const MAX_SEX As Long = 200
@@ -995,9 +995,9 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
     Dim pKeys(1 To 3) As String
     
     '// Sanity checks
-    If LenB(Description) > 0 Then
-        If Len(Description) > MAX_DESCR Then
-            Description = Left$(Description, MAX_DESCR)
+    If LenB(description) > 0 Then
+        If Len(description) > MAX_DESCR Then
+            description = Left$(description, MAX_DESCR)
         End If
         
         nKeys = nKeys + 1
@@ -1024,8 +1024,8 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
     
     If nKeys > 0 Then
         With PBuffer
-            .InsertDWORD &H1                    '// #accounts
-            .InsertDWORD nKeys                  '// #keys
+            .InsertDWord &H1                    '// #accounts
+            .InsertDWord nKeys                  '// #keys
             .InsertNTString CurrentUsername     '// account to update
                                                 '// keys
             For nKeys = 1 To nKeys
@@ -1033,14 +1033,14 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
             Next nKeys
                                                 '// values
             .InsertNTString Location
-            .InsertNTString Description
+            .InsertNTString description
             
             .SendPacket &H27
         End With
     End If
 End Sub
 
-Public Function GetDWORD(Data As String) As Long
+Public Function StringToDWord(Data As String) As Long
     Dim tmp As String
     tmp = StrToHex(Data)
     Dim A As String, b As String, c As String, D As String
@@ -1049,7 +1049,7 @@ Public Function GetDWORD(Data As String) As Long
     c = Mid(tmp, 5, 2)
     D = Mid(tmp, 7, 2)
     tmp = D & c & b & A
-    GetDWORD = Val("&H" & tmp)
+    StringToDWord = Val("&H" & tmp)
 End Function
 
 Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
@@ -1262,7 +1262,7 @@ ParseStatString_Exit:
 
 ParseStatString_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParseStatString of Module modParsing"
+    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure ParseStatString of Module modParsing"
     outBuf = "- Error parsing statstring. [" & Replace(Statstring, Chr(0), "") & "]"
     
     Resume ParseStatString_Exit
@@ -1438,7 +1438,7 @@ Public Sub StrCpy(ByRef Source As String, ByVal nText As String)
     Source = Source & nText
 End Sub
 
-Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef Flags As Long, ByRef Name As String, ByRef txt As String)
+Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef flags As Long, ByRef Name As String, ByRef txt As String)
     'on error resume next
     Dim A As Long ', b As Long, c As Long, D As Long, E As Long, F As Long
     Dim f As Long
@@ -1468,7 +1468,7 @@ Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef Flags As
 '    E = MakeLong(Mid$(DataBuf, recvbufpos, 4))
     
 '    recvbufpos = recvbufpos + 4
-    Flags = f
+    flags = f
     Ping = A
     
     Call StrCpy(Name, KillNull(Mid$(DataBuf, 29)))

@@ -78,7 +78,6 @@ frmCommands = 44, 58, 861, 546, , 66, 87, 883, 575, C
 clsDatabase = 154, 203, 971, 691, 
 modDatabase = 0, 0, 817, 488, 
 frmScriptUI = 88, 116, 905, 604, , 154, 203, 1009, 691, C
-clsDynBuf = 88, 116, 900, 604, 
 clsCommand = 44, 58, 856, 546, 
 modCommand = 22, 29, 834, 517, 
 clsCommandArg = 22, 29, 746, 517, 
