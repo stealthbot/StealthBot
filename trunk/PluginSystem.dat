@@ -26,7 +26,7 @@
 '// ver .98 (BETA)
 
 '//   [MODIFICATIONS]
-'//   *Integrated 
+'//   *Integrated portions of the Plugin System into the StealthBot internals to improve functionality.
 '//   *Modified the Plugin System to make it compatiable with StealthBot v2.7
 '//      -You can now use the FirstRun, MessageSent, Shutdown, LoggedOff, and the 9 new clan-related events in your plugins (see SSC)
 '//      -Added the new Event arguements: Banned (UserJoins) and StatUpdate (UserInChannel) - see the SSC
@@ -51,6 +51,7 @@
 '//      -Errors recieved during plugin loading now show correct offending lines and line/column numbers, and the erroring plugin will be blocked
 '//         ~"Blocked" is essentially the same as disabled -- except it's temporary. The blocked status disappears on reload (if error is fixed)
 '//      -All other errors recieved will show correct line and column numbers as well if debug mode is on
+'//   *Added the option to include a plugin description in the help lines. Include it on the first line (name:author:description)
 
 '//   [NEW FEATURES]
 '//   *Added multiple command messages. As in StealthBot, you can now type: ".crs off; ss on; pelt me" etc.
@@ -524,10 +525,12 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
 
       For i = 0 to psPlugins.Count - 1
          If i Mod 2 = 0 Then altColor = psColor1 Else altColor = psColor2 End If
-         If psLoadError.Item(arrPrefixes(i)) Then
-            status = "vbRed, "" (Blocked)"" & vbCrLf, "
-         ElseIf psPluginEnabled(arrPrefixes(i)) Then
-            status = altColor & ", "" "" & vbCrLf, "
+         If psPluginEnabled(arrPrefixes(i)) Then
+            If psLoadError.Item(arrPrefixes(i)) Then
+               status = "vbRed, "" (Blocked)"" & vbCrLf, "
+            Else
+               status = altColor & ", "" "" & vbCrLf, "
+            End If
          Else
             status = "vbRed, "" (Disabled)"" & vbCrLf, "
          End If
@@ -614,24 +617,29 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
             dsp DisplayID, "Commands: " & BotVars.Trigger & Join(commands, ", " & BotVars.Trigger), Username, 0
             Exit Sub
          End If
- 
-         '// Get the name and author, commands, important notes, thread url, and setting notes
-         nameAndAuthor = Split(psHelp.Item(cmd(1))(0), ":")
-         commands = Split(psHelp.Item(cmd(1))(1), ":")
-         topicNum = psHelp.Item(cmd(1))(2)
-         notes = Split(psHelp.Item(cmd(1))(3), ":")
 
-         '// Display the help info
-         AddChat vbLightBlue, "ÿcbÿcb" & nameAndAuthor(0) & " by " & nameAndAuthor(1)
+         arrLine1 = Split(psHelp.Item(cmd(1))(0), ":")
+         arrCmds = Split(psHelp.Item(cmd(1))(1), ":")
+         topicNum = psHelp.Item(cmd(1))(2)
+         arrNotes = Split(psHelp.Item(cmd(1))(3), ":")
+
+         '// Display title, author, and description
+         If UBound(arrLine1) = 0 Then strAuthor = "Unknown" Else strAuthor = arrLine1(1) End If
+         AddChat vbLightBlue, "ÿcbÿcb" & arrLine1(0) & " by " & strAuthor
+	 If UBound(arrLine1) > 1 Then AddChat vbLightBlue, Space(6) & arrLine1(2)
+
+         '// Display commands
          AddChat vbWhite, " ": AddChat psColor2, "Commands:"
-         If Join(commands, "") = vbNullString Then
+         If Join(arrCmds, "") = vbNullString Then
             AddChat psColor2, "There are no commands for this plugin."
          Else
-            For i = 0 to UBound(commands): AddChat psColor2, Space(6) & BotVars.Trigger & commands(i): Next
+            For i = 0 to UBound(arrCmds): AddChat psColor2, Space(6) & BotVars.Trigger & arrCmds(i): Next
          End If
-         If Join(notes, "") <> vbNullString Then
+
+         '// Display important notes and forum link
+         If Join(arrNotes, "") <> vbNullString Then
             AddChat vbWhite, " ": AddChat vbRed, "Other Important Notes:"
-            For i = 0 to UBound(notes): AddChat vbRed, Space(6) & "-" & Replace(notes(i), "\c", ":"): Next
+            For i = 0 to UBound(arrNotes): AddChat vbRed, Space(6) & "-" & Replace(arrNotes(i), "\c", ":"): Next
          End If
          If topicNum <> vbNullString Then
             url = "http://www.stealthbot.net/forumn/index.php?showtopic=" & topicNum
