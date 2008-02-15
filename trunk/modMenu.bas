@@ -110,15 +110,15 @@ Public Declare Function RemoveMenu Lib "user32" _
 '  Modified by Swent 2/12/08
 Public Sub ProcessMenu(hWnd As Long, lngMenuCommand As Long)
     On Error Resume Next
-    Dim s As String
+    Dim strCallback As String
   
     ' Call the callback function installed with this menu item
     If dctCallbacks.Exists(CStr(lngMenuCommand)) Then
-        s = dctCallbacks.Item(CStr(lngMenuCommand))
+        strCallback = dctCallbacks.Item(CStr(lngMenuCommand))
     End If
     
-    If LenB(s) > 0 Then
-        frmChat.SControl.Run "psProcessMenu", s, GetPrefixByID(lngMenuCommand)
+    If LenB(strCallback) > 0 Then
+        frmChat.SControl.Run "psProcessMenu", strCallback, GetPrefixByID(lngMenuCommand)
     End If
 End Sub
 
@@ -310,10 +310,10 @@ Public Sub RegisterPluginMenus()
             "ps_GEnabled_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "enabled")))
 
     dictItemIDs("ps|||New Version Notification") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Disable NVN", _
-            "ps_GNVN_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "enabled")))
+            "ps_GNVN_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "nvn")))
 
     dictItemIDs("ps|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Enable Plugin Backups", _
-            "ps_GBackups_Callback", 0, 0, CBool(SharedScriptSupport.GetSetting("ps", "enabled")))
+            "ps_GBackups_Callback", 0, 0, CBool(SharedScriptSupport.GetSetting("ps", "backup")))
 
     AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
     AddScriptMenuItem dictMenuIDs("ps"), "Open PluginSystem.dat", "ps_OpenPS_Callback", False, False
