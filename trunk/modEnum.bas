@@ -8,6 +8,7 @@ Option Explicit
 'UDTS
 Public Type udtChanList
     Current         As String
+    Flags           As Long
     Designated      As String
     staticDesignee  As String
 End Type
@@ -20,7 +21,7 @@ End Type
 Public Type udtBanList
     Username        As String
     UsernameActual  As String
-'    BannedBy As String
+    cOperator       As String
 End Type
 
 Public Type udtAutoRespond
@@ -36,7 +37,7 @@ End Type
 
 Public Type udtDatabase
     Username    As String
-    access      As Integer
+    Access      As Integer
     Flags       As String
     AddedBy     As String
     AddedOn     As Date
@@ -54,7 +55,7 @@ End Type
 
 Public Type udtGetAccessResponse
     Username    As String
-    access      As Integer
+    Access      As Integer
     Flags       As String
     AddedBy     As String
     AddedOn     As Date
@@ -143,7 +144,7 @@ End Enum
 Public Enum enuErrorSources
     BNET = 0
     BNLS = 1
-    mcp = 2
+    MCP = 2
 End Enum
 
 Public Enum enuProxyStatus

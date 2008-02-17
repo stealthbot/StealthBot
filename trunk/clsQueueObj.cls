@@ -15,6 +15,7 @@ Option Explicit
 
 Private m_message  As String
 Private m_priority As Integer
+Private m_response As String
 Private m_tag      As String
 
 Public Property Let Message(ByVal Msg As String)
@@ -40,3 +41,13 @@ End Property
 Public Property Get Tag() As String
     Tag = m_tag
 End Property
+
+Public Property Let ResponseTo(ByVal sUser As String)
+    m_response = sUser
+End Property
+
+Public Property Get ResponseTo() As String
+    ResponseTo = m_response
+End Property
+
+

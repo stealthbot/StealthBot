@@ -89,6 +89,7 @@ Private m_sClan                         As String
 Private m_sGateway                      As String
 Private m_sRealm                        As String
 Private m_NoSupportMultiCharTrigger     As Boolean
+Private m_MediaPlayer                   As String
 
 Public Property Get Username() As String
     
@@ -929,4 +930,18 @@ Public Property Let NoSupportMultiCharTrigger(ByVal NoMultiCharTrigger As Boolea
     m_NoSupportMultiCharTrigger = NoMultiCharTrigger
 
 End Property
+
+Public Property Get MediaPlayer() As String
+    
+    MediaPlayer = m_MediaPlayer
+
+End Property
+
+Public Property Let MediaPlayer(ByVal mPlayer As String)
+    
+    m_MediaPlayer = mPlayer
+
+End Property
+
+
 

@@ -11,6 +11,8 @@ Public hWndSet As Long
 Public SendBox_OldWindowProc As Long
 Public SendBox_hWndSet As Long
 
+Private Const WM_COMMAND = &H111                     'Used in SendMessage call
+Private Const WM_USER = &H400
 Public Const WM_NCDESTROY = &H82
 Public ID_TASKBARICON As Integer
 Public Const WM_ICONNOTIFY = WM_USER + 100

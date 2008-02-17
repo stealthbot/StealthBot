@@ -1542,10 +1542,6 @@ Private Sub Form_Load()
     ReDim gOutFilters(0)
     ReDim gFilters(0)
     
-    While colQueue.Count > 0
-        colQueue.Remove 1
-    Wend
-    
     s = ReadCFG("Main", "ShowWhisperWindow")
     If s = "Y" Then
         If Not rtbWhispersVisible Then Call cmdShowHide_Click
@@ -3193,7 +3189,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     sTemp = ParseStatstring(.Statstring, sOutBuf, sTemp)
                     
                     sTemp = "Ping at login: " & .Ping & vbCrLf
-                    sTemp = sTemp & "Flags: " & FlagDescription(.flags) & vbCrLf
+                    sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
                     sTemp = sTemp & sOutBuf
                 
@@ -3989,14 +3985,14 @@ Private Sub mnuUserlistWhois_Click()
     With RTBColors
         If Temp.Access > -1 Then
             If Temp.Access > 0 Then
-                If Temp.flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & " and flags " & Temp.flags & "."
+                If Temp.Flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & " and flags " & Temp.Flags & "."
                 Else
                     AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & "."
                 End If
             Else
-                If Temp.flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with flags " & Temp.flags & "."
+                If Temp.Flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with flags " & Temp.Flags & "."
                 Else
                     AddChat .ConsoleText, "User not found."
                 End If
@@ -4556,7 +4552,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 ElseIf ((s = "/flags") And (MDebug("debug"))) Then
                                     For n = 1 To colUsersInChannel.Count
                                         With colUsersInChannel.Item(n)
-                                            AddChat RTBColors.ConsoleText, .Username & Space(4) & .flags
+                                            AddChat RTBColors.ConsoleText, .Username & Space(4) & .Flags
                                         End With
                                     Next n
                                     
@@ -4622,7 +4618,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     'End If
                                     
                                     Temp.Access = 201
-                                    Temp.flags = "A"
+                                    Temp.Flags = "A"
                                     
                                     m = OutFilterMsg(s)
                                     
@@ -4818,7 +4814,7 @@ Private Sub quLower_Timer()
                 Else
                     gA = GetAccess(strArray(c))
                     
-                    If Not (GetSafelist(strArray(c)) Or gA.Access > (AutoModSafelistValue - 1) Or InStr(gA.flags, "A") > 0) Then
+                    If Not (GetSafelist(strArray(c)) Or gA.Access > (AutoModSafelistValue - 1) Or InStr(gA.Flags, "A") > 0) Then
                         AddQ "/squelch " & IIf(Dii, "*", "") & strArray(c)
                     End If
                 End If
@@ -5129,7 +5125,7 @@ Private Sub Timer_Timer()
             IdleMsg = Replace(IdleMsg, "%ver", CVERSION)
             IdleMsg = Replace(IdleMsg, "%bc", BanCount)
             IdleMsg = Replace(IdleMsg, "%botup", ConvertTime(uTicks))
-            IdleMsg = Replace(IdleMsg, "%mp3", Replace(GetCurrentSongTitle(True), "&", "+"))
+            IdleMsg = Replace(IdleMsg, "%mp3", Replace(MediaPlayer.TrackName, "&", "+"))
             IdleMsg = Replace(IdleMsg, "%quote", GetRandomQuote)
             IdleMsg = Replace(IdleMsg, "%rnd", GetRandomPerson)
             IdleMsg = Replace(IdleMsg, "%t", Time$)
@@ -5139,7 +5135,8 @@ Private Sub Timer_Timer()
             
         ElseIf IdleType = "mp3" Then
             Dim WindowTitle As String
-            WindowTitle = GetCurrentSongTitle(True)
+            
+            WindowTitle = MediaPlayer.TrackName
             
             If WindowTitle = vbNullString Then
                 IdleMsg = "/me .: " & CVERSION & " :: anti-idle :."
@@ -5405,7 +5402,7 @@ Private Sub UpTimer_Timer()
                         If .TimeSinceTalk() > BotVars.IB_Wait Then
                             .InternalFlags = 0
                             
-                            If Not ((.flags And USER_CHANNELOP&) = USER_CHANNELOP&) And Not .Safelisted Then
+                            If Not ((.Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And Not .Safelisted Then
                                 Ban .Username & " Idle for " & BotVars.IB_Wait & "+ seconds", (AutoModSafelistValue - 1), IIf(BotVars.IB_Kick, 1, 0)
                             End If
                         End If
@@ -5418,7 +5415,7 @@ Private Sub UpTimer_Timer()
                 ThisPos = checkChannel(.Username)
                 
                 If ThisPos > 0 And ThisPos < lvChannel.ListItems.Count Then
-                    newColor = GetNameColor(.flags, .TimeSinceTalk(), .IsSelf)
+                    newColor = GetNameColor(.Flags, .TimeSinceTalk(), .IsSelf)
                     
                     If lvChannel.ListItems(ThisPos).ForeColor <> newColor Then
                         lvChannel.ListItems(ThisPos).ForeColor = newColor
@@ -6224,6 +6221,13 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     s = ReadCFG(OT, "DisableVoidView")
     If s = "Y" Then mnuDisableVoidView.Checked = True Else mnuDisableVoidView.Checked = False
+    
+    s = ReadCFG(OT, "MediaPlayer")
+    If s <> vbNullString Then
+        BotVars.MediaPlayer = s
+    Else
+        BotVars.MediaPlayer = "Winamp"
+    End If
     
     s = ReadCFG(MN, "UseRealm")
     If s = "Y" Then BotVars.UseRealm = True Else BotVars.UseRealm = False
