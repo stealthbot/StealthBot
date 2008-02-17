@@ -34,12 +34,14 @@ End Function ' end function Push
 
 ' ...
 Public Function Pop() As clsQueueOBj
-
+    ' ...
+    Set Pop = m_QueueObjs(GetNextQueueObj)
 End Function ' end function Pop
 
 ' ...
 Public Function Peek() As clsQueueOBj
-
+    ' ...
+    Set Peek = m_QueueObjs(GetNextQueueObj)
 End Function ' end function Peek
 
 ' ...
