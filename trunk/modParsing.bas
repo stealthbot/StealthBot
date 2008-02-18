@@ -7,29 +7,25 @@ Public Sub SendHeader()
     frmChat.sckBNet.SendData ChrW(1)
 End Sub
 
-Sub AddChat(ByVal sColor As String, ByVal sMsg As String)
-    frmChat.AddChat sColor, sMsg
-End Sub
-
 Public Sub BNCSParsePacket(ByVal PacketData As String)
-    Dim pD As clsPacketDebuffer     ' Packet debuffer object
-    Dim PacketLen   As Long         ' Length of the packet minus the header
-    Dim PacketID    As Byte         ' Battle.net packet ID
-    Dim s           As String       ' Temporary string
-    Dim l           As Long         ' Temporary long
-    Dim EventID     As Long         ' 0x0F packet Event ID
-    Dim UserFlags   As Long         ' 0x0F user's flags
-    Dim UserPing    As Long         ' 0x0F user's ping
-    Dim Username    As String       ' Misc username storage
-    Dim s2          As String       ' Temporary string
-    Dim s3          As String       ' Temporary string
-    Dim ClanTag     As String       ' User clan tag
-    Dim Product     As String       ' User product
-    Dim w3icon      As String       ' Warcraft III icon code
-    Dim b           As Boolean      ' Temporary bool
-    Dim sArr()      As String       ' Temp String array
+    Dim pD          As clsPacketDebuffer ' Packet debuffer object
+    Dim PacketLen   As Long              ' Length of the packet minus the header
+    Dim PacketID    As Byte              ' Battle.net packet ID
+    Dim s           As String            ' Temporary string
+    Dim l           As Long              ' Temporary long
+    Dim EventID     As Long              ' 0x0F packet Event ID
+    Dim UserFlags   As Long              ' 0x0F user's flags
+    Dim UserPing    As Long              ' 0x0F user's ping
+    Dim Username    As String            ' Misc username storage
+    Dim s2          As String            ' Temporary string
+    Dim s3          As String            ' Temporary string
+    Dim ClanTag     As String            ' User clan tag
+    Dim Product     As String            ' User product
+    Dim w3icon      As String            ' Warcraft III icon code
+    Dim b           As Boolean           ' Temporary bool
+    Dim sArr()      As String            ' Temp String array
     
-    Static ServerToken As Long      ' Server token used in various packets
+    Static ServerToken As Long           ' Server token used in various packets
     
     '--------------
     '| Initialize |
@@ -155,8 +151,8 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         
                     Case Else
                         If MDebug("debug") Then
-                            AddChat RTBColors.ErrorMessageText, "Unhandled 0x0F Event: " & ZeroOffset(EventID, 2)
-                            AddChat RTBColors.ErrorMessageText, "Packet data: " & vbCrLf & DebugOutput(PacketData)
+                            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unhandled 0x0F Event: " & ZeroOffset(EventID, 2))
+                            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Packet data: " & vbCrLf & DebugOutput(PacketData))
                         End If
                 End Select
                     
@@ -206,7 +202,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         
                         If AwaitingEmailReg = 0 Then
                             If Dii And BotVars.UseRealm Then
-                                AddChat RTBColors.InformationText, "[BNET] Asking Battle.net for a list of Realm servers..."
+                                Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Asking Battle.net for a list of Realm servers...")
                                 frmRealm.Show
                                 PBuffer.SendPacket &H40
                             Else
@@ -290,8 +286,8 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 pD.Advance 12
                 
                 s = pD.DebuffNTString
-                AddChat RTBColors.SuccessText, "[BNET] Battle.net has responded!"
-                AddChat RTBColors.InformationText, "[REALM] Opening a connection to the Diablo II Realm..."
+                Call frmChat.AddChat(RTBColors.SuccessText, "[BNET] Battle.net has responded!")
+                Call frmChat.AddChat(RTBColors.InformationText, "[REALM] Opening a connection to the Diablo II Realm...")
                 
                 frmRealm.MCPHandler.LogonToRealm &H1, ServerToken, s
                 
@@ -326,7 +322,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 ' Updated 11/7/06 due to another change to Blizzard's checkrevision
                 ' Now passing the entire filename to BNLS
                 
-                AddChat RTBColors.InformationText, "[BNET] Checking version..."
+                Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Checking version...")
                 
                 If MDebug("-all") Then
                     frmChat.AddChat COLOR_BLUE, "-- MPQ name: " & s2
@@ -392,11 +388,11 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                             b = False
                         End If
                         
-                        AddChat RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(l, 4)
+                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(l, 4))
                 End Select
                 
                 If frmChat.sckBNet.State = 7 And AwaitingEmailReg = 0 And Not b Then
-                    AddChat RTBColors.InformationText, "[BNET] Sending login information..."
+                    Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Sending login information...")
             
                     If ds.LogonType = 2 Then ' NLS! Proceed to 0x52+
                         If BotVars.BNLS Then
@@ -420,7 +416,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         Call Event_LogonEvent(4)
                         
                         If frmChat.sckBNet.State = 7 Then
-                            AddChat RTBColors.InformationText, "[BNET] Sending login information..."
+                            Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Sending login information...")
                             
                             If BotVars.BNLS Then
                                 NLogin.Send_0x02 BotVars.Username, BotVars.Password
@@ -430,7 +426,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         End If
                         
                     Case Else
-                        AddChat RTBColors.ErrorMessageText, "Account creation failed."
+                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "Account creation failed.")
                         Call frmChat.DoDisconnect
                         
                 End Select
@@ -464,13 +460,13 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         If BotVars.BNLS Then
                             NLogin.Send_0x07 BotVars.Username, BotVars.Password
                         Else
-                            AddChat RTBColors.ErrorMessageText, "[BNET] Battle.net reports that your account requires an NLS upgrade."
-                            AddChat RTBColors.ErrorMessageText, "[BNET] Please connect using BNLS at least once so that this upgrade can occur."
+                            Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Battle.net reports that your account requires an NLS upgrade.")
+                            Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Please connect using BNLS at least once so that this upgrade can occur.")
                             frmChat.DoDisconnect
                         End If
                         
                     Case Else
-                        AddChat RTBColors.ErrorMessageText, "[BNET] Unknown response to 0x53: 0x" & ZeroOffset(l, 4)
+                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Unknown response to 0x53: 0x" & ZeroOffset(l, 4))
                         frmChat.DoDisconnect
                         
                 End Select
@@ -500,9 +496,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         Call frmChat.DoDisconnect
                         
                     Case Else
-                        AddChat RTBColors.ErrorMessageText, "[BNET] Unknown response to 0x54: 0x" & Right$("00" & Hex(Conv(Mid$(PacketData, 5, 4))), 2)
-                        AddChat RTBColors.ErrorMessageText, "[BNET] Hex dump of the packet: "
-                        AddChat RTBColors.ErrorMessageText, "[BNET]" & vbCrLf & DebugOutput(PacketData)
+                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Unknown response to 0x54: 0x" & Right$("00" & Hex(Conv(Mid$(PacketData, 5, 4))), 2))
+                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Hex dump of the packet: ")
+                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET]" & vbCrLf & DebugOutput(PacketData))
                         Call frmChat.DoDisconnect
                         
                 End Select
@@ -528,8 +524,8 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case Else
                 If MDebug("debug") Then
-                    AddChat RTBColors.ErrorMessageText, "Unhandled packet 0x" & ZeroOffset(PacketID, 2)
-                    AddChat RTBColors.ErrorMessageText, "Packet data: " & vbCrLf & DebugOutput(PacketData)
+                    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unhandled packet 0x" & ZeroOffset(PacketID, 2))
+                    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Packet data: " & vbCrLf & DebugOutput(PacketData))
                 End If
             
         End Select
@@ -694,8 +690,8 @@ Cont:
     Exit Function
     
 ErrorTrapped:
-    AddChat RTBColors.ErrorMessageText, "D2/W2 CDKey decoding error occurred!"
-    AddChat RTBColors.ErrorMessageText, Err.Number & ": " & Err.description
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, "D2/W2 CDKey decoding error occurred!")
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, Err.Number & ": " & Err.description)
 End Function
 
 Public Function DecodeStarcraftKey(ByVal sKey As String) As String
@@ -1438,7 +1434,7 @@ Public Sub StrCpy(ByRef Source As String, ByVal nText As String)
     Source = Source & nText
 End Sub
 
-Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef flags As Long, ByRef Name As String, ByRef txt As String)
+Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef Flags As Long, ByRef Name As String, ByRef txt As String)
     'on error resume next
     Dim A As Long ', b As Long, c As Long, D As Long, E As Long, F As Long
     Dim f As Long
@@ -1468,7 +1464,7 @@ Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef flags As
 '    E = MakeLong(Mid$(DataBuf, recvbufpos, 4))
     
 '    recvbufpos = recvbufpos + 4
-    flags = f
+    Flags = f
     Ping = A
     
     Call StrCpy(Name, KillNull(Mid$(DataBuf, 29)))

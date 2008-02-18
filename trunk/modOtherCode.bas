@@ -213,19 +213,19 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
             Exit Function
         End If
         
-        If (colQueue.Count) Then
-            For i = 1 To colQueue.Count
-                With colQueue.Item(i)
-                    If (Left$(.Message, 5) = "/ban ") Then
-                        If (StrComp(LastBan & Space(1), LCase$(Mid$(.Message, 6, Len(LastBan) + 1)), _
-                            vbTextCompare) = 0) Then
-                            
-                            Exit Function
-                        End If
-                    End If
-                End With
-            Next i
-        End If
+        'If (g_Queue.Count) Then
+        '    For i = 1 To g_Queue.Count
+        '        With g_Queue.Peek
+        '            If (Left$(.Message, 5) = "/ban ") Then
+        '                If (StrComp(LastBan & Space(1), LCase$(Mid$(.Message, 6, Len(LastBan) + 1)), _
+        '                    vbTextCompare) = 0) Then
+        '
+        '                    Exit Function
+        '                End If
+        '            End If
+        '        End With
+        '    Next i
+        'End If
         
         If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
             If (InStr(1, Inpt, Space(1), vbBinaryCompare) <> 0) Then
@@ -826,7 +826,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Exit Function
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error: GetCumulativeAccess() error."
+    Call frmChat.AddChat(vbRed, "Error: GetCumulativeAccess() error.")
 
     Exit Function
 End Function
@@ -1668,31 +1668,31 @@ End Function
 
 'Checks the queue for duplicate bans
 Public Sub RemoveBanFromQueue(ByVal sUser As String)
-    Dim i        As Integer
-    Dim iUserLen As Integer
-    
-    sUser = "/ban " & IIf(Dii, "*", vbNullString) & _
-        StripRealm(sUser)
-        
-    iUserLen = Len(sUser)
-    
-    For i = 1 To colQueue.Count
-        With colQueue.Item(i)
-            If (Len(.Message) >= iUserLen) Then
-                If (StrComp(Left$(.Message, iUserLen), sUser, _
-                    vbBinaryCompare) = 0) Then
-                
-                    Call colQueue.Remove(i)
-                    
-                    i = 0
-                End If
-            End If
-        End With
-        
-        If (colQueue.Count = 0) Then
-            Exit For
-        End If
-    Next i
+    'Dim i        As Integer
+    'Dim iUserLen As Integer
+    '
+    'sUser = "/ban " & IIf(Dii, "*", vbNullString) & _
+    '    StripRealm(sUser)
+    '
+    'iUserLen = Len(sUser)
+   
+    'For i = 1 To g_Queue.Count
+    '    With colQueue.Item(i)
+    '        If (Len(.Message) >= iUserLen) Then
+    '            If (StrComp(Left$(.Message, iUserLen), sUser, _
+    '                vbBinaryCompare) = 0) Then
+    '
+    '                Call colQueue.Remove(i)
+    '
+    '                i = 0
+    '            End If
+    '        End If
+    '    End With
+    '
+    '    If (colQueue.Count = 0) Then
+    '        Exit For
+    '    End If
+    'Next i
 End Sub
 
 
@@ -2570,3 +2570,173 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
         .params = vbNullString
     End With
 End Function
+
+Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Variant)
+    On Error Resume Next
+    
+    Dim s              As String
+    Dim l              As Long
+    Dim lngVerticalPos As Long
+    Dim Diff           As Long
+    Dim i              As Integer
+    Dim intRange       As Integer
+    Dim f              As Integer
+    Dim blUnlock       As Boolean
+    Dim LogThis        As Boolean
+    
+    If (BotVars.LockChat = False) Then
+        f = FreeFile
+    
+        If (IsWin2000Plus()) Then
+            Call GetScrollRange(rtb.hWnd, SB_VERT, 0, intRange)
+            
+            lngVerticalPos = SendMessage(rtb.hWnd, EM_GETTHUMB, 0&, 0&)
+            
+            Diff = ((lngVerticalPos + _
+                (rtb.Height / Screen.TwipsPerPixelY)) - intRange)
+            
+            ' In testing it appears that if the value I calcuate as Diff is negative,
+            ' the scrollbar is not at the bottom.
+            If (Diff < 0) Then
+                rtb.Visible = False
+            
+                blUnlock = True
+            End If
+        End If
+        
+        LogThis = (BotVars.Logging <= 1)
+        
+        If ((BotVars.MaxBacklogSize) And _
+            (rtbChatLength >= BotVars.MaxBacklogSize)) Then
+            
+            With rtb
+                .Visible = False
+                .SelStart = 0
+                .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
+                
+                rtbChatLength = (rtbChatLength - .SelLength)
+                
+                .SelText = ""
+                .Visible = True
+            End With
+        End If
+        
+        s = GetTimeStamp()
+        
+        With rtb
+            .SelStart = Len(.text)
+            .SelLength = 0
+            .SelColor = RTBColors.TimeStamps
+            If .SelBold = True Then: .SelBold = False
+            If .SelItalic = True Then: .SelItalic = False
+            If .SelUnderline = True Then: .SelUnderline = False
+            .SelText = s
+            .SelStart = Len(.text)
+        End With
+        
+        If (LogThis) Then
+            Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #f
+            
+            If ((BotVars.MaxLogFileSize) And _
+                (LOF(f) >= BotVars.MaxLogFileSize)) Then
+                
+                LogThis = False
+                
+                Close #f
+            Else
+                Print #f, s;
+            End If
+        End If
+
+        For i = LBound(saElements) To UBound(saElements) Step 2
+            If (InStr(1, saElements(i + 1), Chr(0), vbBinaryCompare) > 0) Then
+                Call KillNull(saElements(i + 1))
+            End If
+            
+            If (Len(saElements(i + 1)) > 0) Then
+                l = InStr(1, saElements(i + 1), "{\rtf", vbTextCompare)
+                
+                While (l > 0)
+                    Mid$(saElements(i + 1), l + 1, 1) = "/"
+                    
+                    l = InStr(1, saElements(i + 1), "{\rtf", vbTextCompare)
+                Wend
+            
+                With rtb
+                    .SelStart = Len(.text)
+                    
+                    ' store position of selection
+                    l = .SelStart
+                    
+                    .SelLength = 0
+                    .SelColor = saElements(i)
+                    .SelText = saElements(i + 1) & _
+                        Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
+                    
+                    rtbChatLength = (rtbChatLength + _
+                                     Len(s) + _
+                                     Len(saElements(i + 1)) + _
+                                     Len(Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))))
+                    
+                    .SelStart = Len(.text)
+                End With
+                
+                'With TextBox1
+                '    .SelStart = Len(.text)
+                '
+                '    ' store position of selection
+                '    l = .SelStart
+                '
+                '    .SelLength = 0
+                '    '.SelColor = saElements(i)
+                '    .SelText = saElements(i + 1) & _
+                '        Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
+                '
+                '    rtbChatLength = (rtbChatLength + _
+                '                     Len(s) + _
+                '                     Len(saElements(i + 1)) + _
+                '                     Len(Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))))
+                '
+                '    .SelStart = Len(.text)
+                'End With
+                
+                ' Fixed 11/21/06 to properly log timestamps
+                If (LogThis) Then
+                    Print #f, saElements(i + 1) & _
+                        Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)));
+                End If
+            End If
+        Next i
+        
+        Call ColorModify(rtb, l)
+
+        If (blUnlock) Then
+            rtb.Visible = True
+            
+            Call SendMessage(rtb.hWnd, WM_VSCROLL, _
+                SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&)
+        End If
+        
+        If (LogThis) Then
+            Close #f
+        End If
+    End If
+    
+    'Dim hm As String
+    
+    
+    'Dim blah As Object
+    
+    'set blah = CreateObject(
+    
+    'hm = &HC0C9
+    
+    'With rtbChat
+    '    .SelStart = Len(.text)
+    '    .SelFontName = "Arial Unicode MS"
+    'End With
+
+    'SendMessage frmChat.rtbChat.hWnd, WM_SETTEXT, 0, ByVal StrPtr(hm)
+    
+    'rtbChat.Refresh
+End Sub

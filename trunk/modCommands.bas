@@ -196,15 +196,15 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                     For j = 0 To UBound(cmdRet)
                         If ((InBot) And (Not (publicOutput))) Then
                             ' display message on screen
-                            Call AddChat(RTBColors.ConsoleText, cmdRet(j))
+                            Call frmChat.AddChat(RTBColors.ConsoleText, cmdRet(j))
                         Else
                             ' send message to battle.net
                             If (WhisperedIn) Then
                                 ' whisper message
                                 Call AddQ("/w " & Username & _
-                                    Space(1) & cmdRet(j), 1)
+                                    Space(1) & cmdRet(j), 2, Username)
                             Else
-                                Call AddQ(cmdRet(j), 1)
+                                Call AddQ(cmdRet(j), 2, Username)
                             End If
                         End If
                     Next j
@@ -230,7 +230,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                 For i = 0 To UBound(cmdRet)
                     If ((InBot) And (Not (publicOutput))) Then
                         ' display message on screen
-                        Call AddChat(RTBColors.ConsoleText, cmdRet(i))
+                        Call frmChat.AddChat(RTBColors.ConsoleText, cmdRet(i))
                     Else
                         ' display message
                         If ((WhisperedIn) Or _
@@ -238,9 +238,9 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                            
                             ' whisper message
                             Call AddQ("/w " & Username & _
-                                Space(1) & cmdRet(j), 1)
+                                Space(1) & cmdRet(i), 2, Username)
                         Else
-                            Call AddQ(cmdRet(i), 1)
+                            Call AddQ(cmdRet(i), 2, Username)
                         End If
                     End If
                 Next i
@@ -250,7 +250,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             ' command is found to be invalid and issued
             ' internally
             If (InBot) Then
-                Call AddQ(Message)
+                Call AddQ(Message, 0, "(console)")
             End If
         End If
     End If
@@ -262,10 +262,8 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
 ' default (if all else fails) error handler to keep erroneous
 ' commands and/or input formats from killing me
 ERROR_HANDLER:
-    Call AddChat(RTBColors.ConsoleText, "Error: Command processor has encountered an error.")
-    
-    MsgBox Err.description
-    
+    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: Command processor has encountered an error.")
+
     ' return command failure result
     ProcessCommand = False
     
@@ -576,7 +574,7 @@ Private Function OnHome(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     ' This command will make the bot join its home channel.
     
-    Call AddQ("/join " & BotVars.HomeChannel, 1)
+    Call AddQ("/join " & BotVars.HomeChannel, 1, Username)
 End Function ' end function OnHome
 
 ' handle clan command
@@ -594,17 +592,17 @@ Private Function OnClan(ByVal Username As String, ByRef dbAccess As udtGetAccess
                 tmpBuf = "Clan channel is now public."
                 
                 ' set clan channel to public
-                Call AddQ("/clan public", 1)
+                Call AddQ("/clan public", 1, Username)
                 
             Case "private", "priv"
                 tmpBuf = "Clan channel is now private."
                 
                 ' set clan channel to private
-                Call AddQ("/clan private", 1)
+                Call AddQ("/clan private", 1, Username)
                 
             Case Else
                ' set clan channel to specified
-               Call AddQ("/clan " & msgData)
+               Call AddQ("/clan " & msgData, , Username)
         End Select
     Else
         tmpBuf = "The bot must have ops to change clan privacy status."
@@ -719,7 +717,7 @@ Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAcces
     ' if sent from within the bot, send "where" command
     ' directly to Battle.net
     If (InBot) Then
-        Call AddQ("/where " & msgData)
+        Call AddQ("/where " & msgData, , "(console)")
     End If
 
     tmpBuf = "I am currently in channel " & gChannel.Current & " (" & _
@@ -823,7 +821,7 @@ Private Function OnSweepBan(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     Call Cache(vbNullString, 255, "ban ")
     
-    Call AddQ("/who " & msgData, 1)
+    Call AddQ("/who " & msgData, 1, Username)
 End Function ' end function OnSweepBan
 
 ' handle sweepignore command
@@ -845,7 +843,7 @@ Private Function OnSweepIgnore(ByVal Username As String, ByRef dbAccess As udtGe
     
     Call Cache(vbNullString, 255, "squelch ")
     
-    Call AddQ("/who " & msgData, 1)
+    Call AddQ("/who " & msgData, 1, Username)
 End Function ' end function OnSweepIgnore
 
 ' handle setname command
@@ -1091,7 +1089,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 ' demote shamans
                 For i = 0 To (userCount - 1)
                     ' ...
-                    AddChat vbRed, "DEMOTE: " & arrUsers(i)
+                    Call frmChat.AddChat(vbRed, "DEMOTE: " & arrUsers(i))
                 
                     ' ...
                     With PBuffer
@@ -1105,17 +1103,17 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
         
         ' designate user
-        Call AddQ("/designate " & msgData)
+        Call AddQ("/designate " & msgData, 0, Username)
         
         ' rejoin channel
-        Call AddQ("/resign")
+        Call AddQ("/resign", 0, Username)
         
         ' ...
         If (userCount) Then
             ' promote shamans again
             For i = 0 To (userCount - 1)
                 ' ...
-                AddChat vbRed, "PROMOTE: " & arrUsers(i)
+                Call frmChat.AddChat(vbRed, "PROMOTE: " & arrUsers(i))
             
                 ' ...
                 With PBuffer
@@ -1326,7 +1324,7 @@ Private Function OnJoin(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim tmpBuf As String ' temporary output buffer
 
     If (LenB(msgData) > 0) Then
-        AddQ "/join " & msgData
+        AddQ "/join " & msgData, 1, Username
     End If
 End Function ' end function OnJoin
 
@@ -1356,7 +1354,7 @@ Private Function OnResign(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' by rejoining the channel through the use of Battle.net's /resign
     ' command.
     
-    Call AddQ("/resign", 1)
+    Call AddQ("/resign", 1, Username)
 End Function ' end function OnResign
 
 ' handle clearbanlist
@@ -1411,10 +1409,10 @@ Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' This command will make the bot rejoin the current channel.
     
     ' join temporary channel
-    Call AddQ("/join " & CurrentUsername & " Rejoin", 1)
+    Call AddQ("/join " & CurrentUsername & " Rejoin", 1, Username)
     
     ' rejoin previous channel
-    Call AddQ("/join " & gChannel.Current, 1)
+    Call AddQ("/join " & gChannel.Current, 1, Username)
 End Function ' end function OnRejoin
 
 ' handle plugban command
@@ -1502,22 +1500,18 @@ Private Function OnSetVol(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' specified by the user.
     
     Dim tmpBuf As String ' temporary output buffer
-    Dim hWndWA As Long
+    Dim lngVol As Long   ' ...
 
-    If (Not (BotVars.DisableMP3Commands)) Then
+    If (BotVars.DisableMP3Commands = False) Then
         If (StrictIsNumeric(msgData)) Then
-            'hWndWA = GetWinamphWnd()
-            
-            If (hWndWA = 0) Then
-                tmpBuf = "Winamp is not loaded."
+            lngVol = CLng(msgData)
+        
+            If (lngVol > 100) Then
+                lngVol = 100
             End If
             
-            If (CInt(msgData) > 100) Then
-                msgData = 100
-            End If
-            
-            'Call SendMessage(hWndWA, WM_WA_IPC, 2.55 * CInt(msgData), 122)
-            
+            MediaPlayer.Volume = lngVol
+
             tmpBuf = "Volume set to " & msgData & "%."
         Else
             tmpBuf = "Error: Invalid volume level (0-100)."
@@ -1724,7 +1718,7 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
 
             tmpBuf = "Error: You do not have enough access to do that."
         Else
-            Call AddQ("/squelch " & msgData, 1)
+            Call AddQ("/squelch " & msgData, 1, Username)
         
             tmpBuf = "User " & Chr(34) & msgData & Chr(34) & " IPBanned."
         End If
@@ -1744,8 +1738,8 @@ Private Function OnUnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
     Dim tmpBuf As String ' temporary output buffer
 
     If (Len(msgData) > 0) Then
-        Call AddQ("/unsquelch " & msgData, 1)
-        Call AddQ("/unban " & msgData, 1)
+        Call AddQ("/unsquelch " & msgData, 1, Username)
+        Call AddQ("/unban " & msgData, 1, Username)
         
         tmpBuf = "User " & Chr(34) & msgData & Chr(34) & " Un-IPBanned."
     End If
@@ -1769,7 +1763,7 @@ Private Function OnDesignate(ByVal Username As String, ByRef dbAccess As udtGetA
                 End If
             End If
             
-            Call AddQ("/designate " & msgData, 1)
+            Call AddQ("/designate " & msgData, 1, Username)
             
             tmpBuf = "I have designated [ " & msgData & " ]"
         Else
@@ -2224,7 +2218,7 @@ Private Function OnUnIgPriv(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     Dim tmpBuf As String ' temporary output buffer
 
-    Call AddQ("/o unigpriv", 1)
+    Call AddQ("/o unigpriv", 1, Username)
     
     tmpBuf = "Recieving text from non-friends."
         
@@ -2238,7 +2232,7 @@ Private Function OnIgPriv(ByVal Username As String, ByRef dbAccess As udtGetAcce
     
     Dim tmpBuf As String ' temporary output buffer
 
-    Call AddQ("/o igpriv", 1)
+    Call AddQ("/o igpriv", 1, Username)
     
     tmpBuf = "Ignoring text from non-friends."
         
@@ -2946,7 +2940,7 @@ Private Function OnFAdd(ByVal Username As String, ByRef dbAccess As udtGetAccess
     u = msgData
     
     If (Len(u) > 0) Then
-        Call AddQ("/f a " & u, 1)
+        Call AddQ("/f a " & u, 1, Username)
         
         tmpBuf = "Added user " & Chr(34) & u & Chr(34) & " to this account's friends list."
     End If
@@ -2965,7 +2959,7 @@ Private Function OnFRem(ByVal Username As String, ByRef dbAccess As udtGetAccess
     u = msgData
     
     If (Len(u) > 0) Then
-        Call AddQ("/f r " & u, 1)
+        Call AddQ("/f r " & u, 1, Username)
         
         tmpBuf = "Removed user " & Chr(34) & u & Chr(34) & " from this account's friends list."
     End If
@@ -3163,7 +3157,7 @@ Private Function OnDND(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Else
         DNDMsg = msgData
     
-        AddQ "/dnd " & DNDMsg, 1
+        AddQ "/dnd " & DNDMsg, 1, Username
     End If
 End Function ' end function OnDND
 
@@ -3597,7 +3591,7 @@ Private Function OnUnban(ByVal Username As String, ByRef dbAccess As udtGetAcces
                     '    Call AddQ("/unsquelch " & u, 1)
                     'End If
                 
-                    Call AddQ("/unban " & u)
+                    Call AddQ("/unban " & u, 1, Username)
                 End If
             End If
         End If
@@ -3661,7 +3655,10 @@ Private Function OnLastWhisper(ByVal Username As String, ByRef dbAccess As udtGe
     Dim tmpBuf As String ' temporary output buffer
     
     If (LastWhisper <> vbNullString) Then
-        tmpBuf = "The last whisper to this bot was from: " & LastWhisper
+        tmpBuf = "The last whisper to this bot was from " & LastWhisper & " at " & _
+            FormatDateTime(LastWhisperFromTime, vbLongTime) & " on " & _
+                FormatDateTime(LastWhisperFromTime, vbLongDate) & "."
+        
     Else
         tmpBuf = "The bot has not been whispered since it logged on."
     End If
@@ -3689,7 +3686,7 @@ Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 msgData
         End If
         
-        Call AddQ(tmpSend)
+        Call AddQ(tmpSend, , Username)
     End If
 
     ' return message
@@ -3711,7 +3708,7 @@ Private Function OnExpand(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 tmpSend = Replace(msgData, "/", "")
             End If
             
-            tmpBuf = Expand(msgData)
+            tmpSend = Expand(msgData)
         Else
             tmpSend = Username & " says: " & _
                 Expand(msgData)
@@ -3721,7 +3718,7 @@ Private Function OnExpand(ByVal Username As String, ByRef dbAccess As udtGetAcce
             tmpSend = Mid$(tmpSend, 1, 220)
         End If
         
-        Call AddQ(tmpSend, 1)
+        tmpBuf = tmpSend
     End If
     
     ' return message
@@ -3797,7 +3794,7 @@ Private Function OnShout(ByVal Username As String, ByRef dbAccess As udtGetAcces
                 UCase$(msgData)
         End If
         
-        Call AddQ(tmpSend)
+        tmpBuf = tmpSend
     End If
     
     ' return message
@@ -3934,7 +3931,7 @@ Private Function OnBack(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim hWndWA As Long
     
     If (AwayMsg <> vbNullString) Then
-        Call AddQ("/away", 1)
+        Call AddQ("/away", 1, Username)
         
         If (Not (InBot)) Then
             ' alert users of status change
@@ -4136,7 +4133,7 @@ Private Function OnIgnore(ByVal Username As String, ByRef dbAccess As udtGetAcce
             
             tmpBuf = "That user has equal or higher access."
         Else
-            Call AddQ("/ignore " & u)
+            Call AddQ("/ignore " & u, 1)
             
             tmpBuf = "Ignoring messages from " & Chr(34) & u & Chr(34) & "."
         End If
@@ -4182,7 +4179,7 @@ Private Function OnUnignore(ByVal Username As String, ByRef dbAccess As udtGetAc
     u = msgData
     
     If (Len(msgData)) Then
-        AddQ "/unignore " & u
+        AddQ "/unignore " & u, 1
         
         tmpBuf = "Receiving messages from """ & u & """."
     End If
@@ -4197,9 +4194,7 @@ Private Function OnCQ(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
     
     Dim tmpBuf As String ' temporary output buffer
 
-    While (colQueue.Count > 0)
-        Call colQueue.Remove(1)
-    Wend
+    Call g_Queue.Clear
     
     tmpBuf = "Queue cleared."
 
@@ -4213,9 +4208,7 @@ Private Function OnSCQ(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     
     Dim tmpBuf As String ' temporary output buffer
 
-    While (colQueue.Count > 0)
-        Call colQueue.Remove(1)
-    Wend
+    Call g_Queue.Clear
 
     ' return message
     cmdRet(0) = tmpBuf
@@ -5448,10 +5441,10 @@ Private Function Expand(ByVal s As String) As String
     End If
 End Function
 
-Private Sub AddQ(ByVal s As String, Optional DND As Byte, Optional ByVal Tag As String = _
-    vbNullString)
+Private Sub AddQ(ByVal s As String, Optional Priority As Byte, Optional ByVal user As String = _
+    vbNullString, Optional ByVal Tag As String = vbNullString)
     
-    Call frmChat.AddQ(s, DND, Tag)
+    Call frmChat.AddQ(s, Priority, user, Tag)
 End Sub
 
 Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, ByVal Banning As Byte) ', Optional ExtraMode As Byte)
@@ -5920,7 +5913,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
     Exit Function
     
 ERROR_HANDLER:
-    Call AddChat(RTBColors.ErrorMessageText, "Error: DB_remove() has encountered an error while " & _
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Error: DB_remove() has encountered an error while " & _
         "removing a database entry.")
         
     DB_remove = False
@@ -6221,7 +6214,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
         
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
-            Call AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
+            Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
                 "working directory.")
                 
             Exit Function
@@ -6309,7 +6302,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
 
 ' ...
 ERROR_HANDLER::
-    Call AddChat(RTBColors.ConsoleText, "Error: XML Database Processor has encountered an error " & _
+    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: XML Database Processor has encountered an error " & _
         "during access validation.")
     
     ' ...
@@ -6333,7 +6326,7 @@ Private Function convertAlias(ByVal cmdName As String) As String
         
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
-            Call AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
+            Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
                 "working directory.")
                 
             Exit Function
@@ -6370,7 +6363,7 @@ Private Function convertAlias(ByVal cmdName As String) As String
     
 ' ...
 ERROR_HANDLER:
-    Call AddChat(RTBColors.ConsoleText, "Error: XML Database Processor has encountered an error " & _
+    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: XML Database Processor has encountered an error " & _
         "during alias lookup.")
         
     ' ...
@@ -6403,7 +6396,7 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
         
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
-            Call AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
+            Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
                 "working directory.")
                 
             Exit Sub
@@ -6562,7 +6555,7 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
     
 ' ...
 ERROR_HANDLER:
-    Call AddChat(RTBColors.ConsoleText, "Error: XML Database Processor has encountered an error " & _
+    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: XML Database Processor has encountered an error " & _
         "during documentation lookup.")
     
     Exit Sub

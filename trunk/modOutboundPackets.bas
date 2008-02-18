@@ -11,7 +11,7 @@ Public Sub Send0x50(Optional lVerByte As Long)
     Dim s As String
 
     With PBuffer
-        .InsertDWORD &H0 'Protocol ID (Zero)
+        .InsertDWord &H0 'Protocol ID (Zero)
         
         s = StrReverse(UCase(ReadCFG("Override", GetProductKey() & "PlatID")))
         
@@ -24,21 +24,21 @@ Public Sub Send0x50(Optional lVerByte As Long)
         End If
         
         If (lVerByte > 0) Then
-            .InsertDWORD lVerByte
+            .InsertDWord lVerByte
         Else
-            .InsertDWORD GetVerByte(BotVars.Product) 'Version byte
+            .InsertDWord GetVerByte(BotVars.Product) 'Version byte
         End If
         
-        .InsertDWORD &H0 ' Product Language
-        .InsertDWORD &H0 ' Local IP (defunct)
-        .InsertDWORD GetTimeZoneBias ' Timezone bias
+        .InsertDWord &H0 ' Product Language
+        .InsertDWord &H0 ' Local IP (defunct)
+        .InsertDWord GetTimeZoneBias ' Timezone bias
         
         If LenB(ReadCFG("Override", "ForceDefaultLocaleID")) > 0 Then
-            .InsertDWORD 1033 ' US English
-            .InsertDWORD 1033
+            .InsertDWord 1033 ' US English
+            .InsertDWord 1033
         Else
-            .InsertDWORD CLng(GetUserDefaultLCID)
-            .InsertDWORD CLng(GetUserDefaultLangID)
+            .InsertDWord CLng(GetUserDefaultLCID)
+            .InsertDWord CLng(GetUserDefaultLangID)
         End If
         
         Call GetCountryData(CAbbr, cName)
@@ -58,7 +58,7 @@ Public Sub Send0x50(Optional lVerByte As Long)
         .SendPacket &H50
         
         If BotVars.Spoof = 1 Then
-            .InsertDWORD &H0
+            .InsertDWord &H0
             .SendPacket &H25
         End If
     End With
@@ -126,34 +126,34 @@ Public Sub Send0x51(ByVal ServerToken As Long)
             Version = getExeInfo(HashPaths(0), EXEInfo)
             
             With PBuffer
-                .InsertDWORD ClientToken    ' Client token
-                .InsertDWORD Version        ' CheckRevision version
-                .InsertDWORD Checksum       ' CheckRevision checksum
+                .InsertDWord ClientToken    ' Client token
+                .InsertDWord Version        ' CheckRevision version
+                .InsertDWord Checksum       ' CheckRevision checksum
                 
                 ' Number of CDKeys
                 If BotVars.Product = "PX2D" Or BotVars.Product = "PX3W" Then
-                    .InsertDWORD &H2
+                    .InsertDWord &H2
                 Else
-                    .InsertDWORD &H1
+                    .InsertDWord &H1
                 End If
                 
                 ' For each cdkey...
                 Call DecodeCDKey(BotVars.CDKey, ServerToken, ClientToken, KeyHash, Value1, ProductID, MPQRevision)
                 
-                .InsertDWORD &H0
-                .InsertDWORD Len(BotVars.CDKey)
-                .InsertDWORD ProductID
-                .InsertDWORD Value1
-                .InsertDWORD &H0
+                .InsertDWord &H0
+                .InsertDWord Len(BotVars.CDKey)
+                .InsertDWord ProductID
+                .InsertDWord Value1
+                .InsertDWord &H0
                 .InsertNonNTString KeyHash
                 
                 If BotVars.Product = "PX2D" Or BotVars.Product = "PX3W" Then
                     Call DecodeCDKey(BotVars.ExpKey, ServerToken, ClientToken, KeyHash, Value1, ProductID, MPQRevision)
                     
-                    .InsertDWORD Len(BotVars.ExpKey)
-                    .InsertDWORD ProductID
-                    .InsertDWORD Value1
-                    .InsertDWORD &H0
+                    .InsertDWord Len(BotVars.ExpKey)
+                    .InsertDWord ProductID
+                    .InsertDWord Value1
+                    .InsertDWord &H0
                     .InsertNonNTString KeyHash
                 End If
                 
@@ -168,7 +168,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                 .SendPacket &H51
             End With
         Else
-            AddChat RTBColors.ErrorMessageText, "CheckRevision failed!"
+            frmChat.AddChat RTBColors.ErrorMessageText, "CheckRevision failed!"
             frmChat.DoDisconnect
         End If
     End If
@@ -234,8 +234,8 @@ Public Sub Send0x3A(ByVal ServerToken As Long)
     End If
     
     With PBuffer
-        .InsertDWORD ds.GetGTC
-        .InsertDWORD ds.GetServerToken
+        .InsertDWord ds.GetGTC
+        .InsertDWord ds.GetServerToken
         .InsertNonNTString PasswordHash
         .InsertNTString BotVars.Username
         .SendPacket &H3A
@@ -262,19 +262,19 @@ Public Sub Send0x0A()
     
     With PBuffer
         .InsertNTString BotVars.Username
-        .InsertBYTE 0
+        .InsertByte 0
         .SendPacket &HA
         .InsertNonNTString BotVars.Product
         .SendPacket &HB
         
         If IsW3 Then
-            .InsertDWORD &H0
+            .InsertDWord &H0
             .InsertNTString "wrd" & CLng(Rnd * 10000 + 1)
             .SendPacket &HC
             bnetSend "/whoami"
-            .InsertDWORD &H1
+            .InsertDWord &H1
         Else
-            .InsertDWORD &H2
+            .InsertDWord &H2
         End If
         
         .InsertNTString BotVars.HomeChannel
@@ -298,8 +298,8 @@ End Sub
 Public Sub Send0x09(ByVal ServerToken As Long, ByVal UDPValue As Long)
     If BotVars.UseUDP Then
         With PBuffer
-            .InsertDWORD ServerToken
-            .InsertDWORD UDPValue
+            .InsertDWord ServerToken
+            .InsertDWord UDPValue
             .SendPacket &H9
         End With
     End If

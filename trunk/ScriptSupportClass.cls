@@ -489,9 +489,9 @@ End Sub
 '// Adds a string to the message send queue.
 '// Nonzero priority messages will be sent with precedence over 0-priority messages.
 Public Sub AddQ(ByVal sText As String, Optional ByVal Priority As Byte = 0, Optional _
-    ByVal Tag As String = vbNullString)
+    ByVal User As String = vbNullString, Optional ByVal Tag As String = vbNullString)
 
-    frmChat.AddQ sText, Priority, Tag
+    frmChat.AddQ sText, Priority, User, Tag
     
 End Sub
 
@@ -1042,7 +1042,7 @@ End Sub
 '// Returns the number of items currently in the outgoing message queue
 Public Function GetQueueSize() As Integer
     
-    GetQueueSize = colQueue.Count
+    GetQueueSize = g_Queue.Count
 
 End Function
 

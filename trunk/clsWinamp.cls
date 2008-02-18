@@ -228,6 +228,16 @@ Public Sub PlayTrack(Optional Track As Integer)
 End Sub
 
 ' ...
+Public Property Let Volume(lngVol As Long)
+    Call SendMessage(m_hWnd, WM_WA_IPC, (lngVol * 2.55), WA_SETVOLUME)
+End Property
+
+' ...
+Public Property Get Volume() As Long
+    Volume = SendMessage(m_hWnd, WM_WA_IPC, -666, WA_SETVOLUME)
+End Property
+
+' ...
 Public Sub PausePlayback()
     Call SendMessage(m_hWnd, WM_COMMAND, WA_PAUSE, 0)
 End Sub

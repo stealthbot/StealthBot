@@ -91,6 +91,8 @@ Public CfgVersion As Long
 
 Public VoteInitiator As udtGetAccessResponse
 
+Public g_Queue As New clsQueue
+
 Public AttemptedFirstReconnect As Boolean
 
 Public ConfigOverride As String
@@ -138,6 +140,7 @@ Public BotLoaded As Boolean
 Public ProtectMsg As String
 
 Public LastWhisper As String
+Public LastWhisperFromTime As Date
 Public LastWhisperTo As String
 Public Caching As Boolean
 Public UserTracker(14) As String

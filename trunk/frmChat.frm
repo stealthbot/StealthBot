@@ -1753,171 +1753,14 @@ End Sub
 ' Updated 4/17/07 to not flash the desktop when the scrollbar is held up
 ' Updated 8/07/07 with greater precision
 Sub AddChat(ParamArray saElements() As Variant)
-    Dim s              As String
-    Dim l              As Long
-    Dim lngVerticalPos As Long
-    Dim Diff           As Long
-    Dim i              As Integer
-    Dim intRange       As Integer
-    Dim f              As Integer
-    Dim blUnlock       As Boolean
-    Dim LogThis        As Boolean
+    Dim arr() As Variant ' ...
+    Dim i     As Integer ' ...
     
-    If (Not (BotVars.LockChat)) Then
-        f = FreeFile
+    ' ...
+    arr() = saElements
     
-        If (IsWin2000Plus()) Then
-            Call GetScrollRange(rtbChat.hWnd, SB_VERT, 0, intRange)
-            
-            lngVerticalPos = SendMessage(rtbChat.hWnd, EM_GETTHUMB, 0&, 0&)
-            
-            Diff = ((lngVerticalPos + _
-                (rtbChat.Height / Screen.TwipsPerPixelY)) - intRange)
-            
-            ' In testing it appears that if the value I calcuate as Diff is negative,
-            ' the scrollbar is not at the bottom.
-            If (Diff < 0) Then
-                rtbChat.Visible = False
-            
-                blUnlock = True
-            End If
-        End If
-        
-        LogThis = (BotVars.Logging <= 1)
-        
-        If ((BotVars.MaxBacklogSize) And _
-            (rtbChatLength >= BotVars.MaxBacklogSize)) Then
-            
-            With rtbChat
-                .Visible = False
-                .SelStart = 0
-                .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
-                
-                rtbChatLength = (rtbChatLength - .SelLength)
-                
-                .SelText = ""
-                .Visible = True
-            End With
-        End If
-        
-        s = GetTimeStamp()
-        
-        With rtbChat
-            .SelStart = Len(.text)
-            .SelLength = 0
-            .SelColor = RTBColors.TimeStamps
-            If .SelBold = True Then: .SelBold = False
-            If .SelItalic = True Then: .SelItalic = False
-            If .SelUnderline = True Then: .SelUnderline = False
-            .SelText = s
-            .SelStart = Len(.text)
-        End With
-        
-        If (LogThis) Then
-            Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #f
-            
-            If ((BotVars.MaxLogFileSize) And _
-                (LOF(f) >= BotVars.MaxLogFileSize)) Then
-                
-                LogThis = False
-                
-                Close #f
-            Else
-                Print #f, s;
-            End If
-        End If
-        
-        For i = LBound(saElements) To UBound(saElements) Step 2
-            If (InStr(1, saElements(i + 1), Chr(0), vbBinaryCompare) > 0) Then
-                Call KillNull(saElements(i + 1))
-            End If
-            
-            If (Len(saElements(i + 1)) > 0) Then
-                l = InStr(1, saElements(i + 1), "{\rtf", vbTextCompare)
-                
-                While (l > 0)
-                    Mid$(saElements(i + 1), l + 1, 1) = "/"
-                    
-                    l = InStr(1, saElements(i + 1), "{\rtf", vbTextCompare)
-                Wend
-            
-                With rtbChat
-                    .SelStart = Len(.text)
-                    
-                    ' store position of selection
-                    l = .SelStart
-                    
-                    .SelLength = 0
-                    .SelColor = saElements(i)
-                    .SelText = saElements(i + 1) & _
-                        Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
-                    
-                    rtbChatLength = (rtbChatLength + _
-                                     Len(s) + _
-                                     Len(saElements(i + 1)) + _
-                                     Len(Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))))
-                    
-                    .SelStart = Len(.text)
-                End With
-                
-                'With TextBox1
-                '    .SelStart = Len(.text)
-                '
-                '    ' store position of selection
-                '    l = .SelStart
-                '
-                '    .SelLength = 0
-                '    '.SelColor = saElements(i)
-                '    .SelText = saElements(i + 1) & _
-                '        Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
-                '
-                '    rtbChatLength = (rtbChatLength + _
-                '                     Len(s) + _
-                '                     Len(saElements(i + 1)) + _
-                '                     Len(Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))))
-                '
-                '    .SelStart = Len(.text)
-                'End With
-                
-                ' Fixed 11/21/06 to properly log timestamps
-                If (LogThis) Then
-                    Print #f, saElements(i + 1) & _
-                        Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)));
-                End If
-            End If
-        Next i
-        
-        Call ColorModify(rtbChat, l)
-
-        If (blUnlock) Then
-            rtbChat.Visible = True
-            
-            Call SendMessage(rtbChat.hWnd, WM_VSCROLL, _
-                SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&)
-        End If
-        
-        If (LogThis) Then
-            Close #f
-        End If
-    End If
-    
-    'Dim hm As String
-    
-    
-    'Dim blah As Object
-    
-    'set blah = CreateObject(
-    
-    'hm = &HC0C9
-    
-    'With rtbChat
-    '    .SelStart = Len(.text)
-    '    .SelFontName = "Arial Unicode MS"
-    'End With
-
-    'SendMessage frmChat.rtbChat.hWnd, WM_SETTEXT, 0, ByVal StrPtr(hm)
-    
-    'rtbChat.Refresh
+    ' ...
+    Call DisplayRichText(frmChat.rtbChat, arr)
 End Sub
 
 
@@ -4538,14 +4381,14 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     AddName "Test6", "PX3W", 0, 0
                                     
                                 ElseIf ((s = "/q") And (MDebug("debug"))) Then
-                                    If colQueue.Count > 0 Then
-                                        For n = 1 To colQueue.Count
-                                            AddChat RTBColors.ConsoleText, colQueue.Item(n).Priority & "|" & colQueue.Item(n).Message
-                                        Next n
-                                    Else
-                                        AddChat RTBColors.ConsoleText, "The queue is empty."
-                                    End If
-                                    
+                                    'If g_Queue.Count > 0 Then
+                                    '    For n = 1 To g_Queue.Count
+                                    '        AddChat RTBColors.ConsoleText, colQueue.Item(n).Priority & "|" & colQueue.Item(n).Message
+                                    '    Next n
+                                    'Else
+                                    '    AddChat RTBColors.ConsoleText, "The queue is empty."
+                                    'End If
+                                   
                                     'AddChat vbBlue, IsBanned("Technique)DK(@USEast#2")
                                     GoTo theEnd
                                 
@@ -4835,23 +4678,21 @@ Private Sub QueueTimer_Timer()
     
     Sent = 0
     
-    If ((colQueue.Count) And (g_Online)) Then
+    If ((g_Queue.Count) And (g_Online)) Then
         Override = 1
         
-        With colQueue
-            Message = .Item(1).Message
-            Tag = .Item(1).Tag
+        With g_Queue.Peek
+            Message = .Message
+            Tag = .Tag
             
-            For i = 1 To .Count
-                If ((.Item(i).Priority = 1) And (Len(.Item(i).Message) > 1)) Then '// a priority-1 message
-                                                                            '// cannot be <=1 character
-                    Message = .Item(i).Message
-                    
-                    Override = i
-                    
-                    Exit For
-                End If
-            Next i
+            'For i = 1 To g_Queue.Count
+            '    If ((.Priority = 1) And (Len(Message) > 1)) Then '// a priority-1 message
+            '                                                     '// cannot be <=1 character
+            '        Override = i
+            '
+            '        Exit For
+            '    End If
+            'Next i
         End With
         
         If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
@@ -4895,16 +4736,16 @@ Private Sub QueueTimer_Timer()
             Sent = 1
         End If
         
-        If (Sent) Then
-            Call colQueue.Remove(Override)
-            
-            If ((Sent = 1) And (InStr(1, "/", Left(Message, 1), vbBinaryCompare) = 0)) Then
+        If (Sent = 1) Then
+            If (Left$(Message, 1) <> "/") Then
                 AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
                     CurrentUsername, RTBColors.Carats, "> ", _
                         RTBColors.TalkNormalText, Message
             End If
+            
+            Call g_Queue.Pop
         End If
-        
+    
         If ((QueueMaster >= 15) And (QueueTimer.Interval <> 2400)) Then
             ' ...
             QueueTimer.Interval = 2400
@@ -5374,7 +5215,7 @@ Private Sub UpTimer_Timer()
         End If
     End If
     
-    If colQueue.Count > 0 Then
+    If g_Queue.Count > 0 Then
         Ban vbNullString, 0, 3
     End If
     
@@ -5454,7 +5295,7 @@ End Function
 
 ' ...
 Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
-    ByVal Tag As String = vbNullString)
+    ByVal user As String = vbNullString, Optional ByVal Tag As String = vbNullString)
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -5562,10 +5403,14 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
                     Splt() = Split(strTmp, Space(1), 3)
                     
                     ' ...
+                    command = Splt(0) & _
+                        Space$(1)
+                    
+                    ' ...
                     If (UBound(Splt) = 2) Then
                         ' ...
-                        command = Splt(0) & Space(1) & _
-                            Splt(1) & Space(1)
+                        command = command & Splt(1) & _
+                            Space$(1)
                     
                         Select Case (LCase$(Splt(1)))
                             Case "m"
@@ -5576,7 +5421,12 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
                                     
                                     ' ...
                                     command = command & _
-                                        reverseUsername(Splt(2))
+                                        reverseUsername(Splt(2)) & _
+                                            Space$(1)
+                                Else
+                                    ' ...
+                                    command = command & Splt(2) & _
+                                        Space$(1)
                                 End If
                         End Select
                     End If
@@ -5692,11 +5542,12 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
                     With Q
                         .Message = Send
                         .Priority = Priority
+                        .ResponseTo = user
                         .Tag = Tag
                     End With
     
                     ' ...
-                    Call colQueue.Add(Q)
+                    Call g_Queue.Push(Q)
                 End If
                 
                 ' store our tick
@@ -6019,7 +5870,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     mnuToggleWWUse.Checked = (ReadCFG("Main", "UseWWs") = "Y")
     
     s = ReadCFG(MN, "WhisperBack")
-    If s = "Y" Then BotVars.WhisperCmds = True Else BotVars.WhisperCmds = False
+    If s = "N" Then BotVars.WhisperCmds = False Else BotVars.WhisperCmds = True
     
     s = ReadCFG(OT, "Phrasebans")
     If s = "Y" Then Phrasebans = True Else Phrasebans = False
@@ -6371,9 +6222,7 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
             
             SetNagelStatus frmChat.sckBNet.SocketHandle, True
                         
-            While colQueue.Count > 0
-                colQueue.Remove 1
-            Wend
+            Call g_Queue.Clear
             
             SetProcessPriority 0, frmChat.hWnd, ppNormal
             
@@ -6387,9 +6236,7 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
             
             SetNagelStatus frmChat.sckBNet.SocketHandle, False
             
-            While (colQueue.Count > 0)
-                colQueue.Remove 1
-            Wend
+            Call g_Queue.Clear
             
             AddChat RTBColors.TalkBotUsername, "You have enabled Emergency Floodbot Protection:"
             AddChat RTBColors.InformationText, "- All message-queue actions have been suspended."
@@ -7122,9 +6969,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         
         ListviewTabs.Tab = 0
         
-        While colQueue.Count > 0
-            colQueue.Remove 1
-        Wend
+        Call g_Queue.Clear
         
         If Not LeaveUCCAlone Then
             UserCancelledConnect = True
@@ -7162,9 +7007,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         lvClanList.ListItems.Clear
         lvFriendList.ListItems.Clear
         
-        While colQueue.Count > 0
-            colQueue.Remove 1
-        Wend
+        Call g_Queue.Clear
     
         Passed0x0F = 0
         uTicks = 0

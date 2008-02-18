@@ -379,9 +379,7 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     '    Username = Right(Username, Len(Username) - InStr(1, Username, "*", vbBinaryCompare))
     'End If
     
-    While (colQueue.Count > 0)
-        Call colQueue.Remove(1)
-    Wend
+    Call g_Queue.Clear
     
     g_Online = True
     
@@ -1834,6 +1832,8 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
             Else
                 LastWhisper = Username
             End If
+            
+            LastWhisperFromTime = Now
         End If
         
         If (Catch(0) <> vbNullString) Then

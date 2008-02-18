@@ -19,7 +19,7 @@ Public dictTimerCount As Dictionary
 '// Loads the Plugin System
 '//   Called from Form_Load() and mnuReloadScript_Click() in frmChat
 Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
-    Dim path As String, intFile As Integer, strLine As String, strContent As String
+    Dim Path As String, intFile As Integer, strLine As String, strContent As String
 
    On Error GoTo LoadPluginSystem_Error
 
@@ -38,17 +38,17 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
     If Not boolOverride Then
     
         '// PluginSystem.dat exists?
-        path = GetFilePath("PluginSystem.dat")
-        If LenB(Dir$(path)) = 0 Then
-            AddChat RTBColors.ErrorMessageText, "Cannot find PluginSystem.dat. It must exist in order to load plugins!"
+        Path = GetFilePath("PluginSystem.dat")
+        If LenB(Dir$(Path)) = 0 Then
+            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Cannot find PluginSystem.dat. It must exist in order to load plugins!")
             Exit Sub
         End If
     Else
     
         '// script.txt exists?
-        path = GetFilePath("script.txt")
-        If LenB(Dir$(path)) = 0 Then
-            AddChat RTBColors.ErrorMessageText, "No script.txt file is present. It must exist, if only to #include other files!"
+        Path = GetFilePath("script.txt")
+        If LenB(Dir$(Path)) = 0 Then
+            Call frmChat.AddChat(RTBColors.ErrorMessageText, "No script.txt file is present. It must exist, if only to #include other files!")
             Exit Sub
         End If
     End If
@@ -63,7 +63,7 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
     
         '// Load PluginSystem.dat
         intFile = FreeFile
-        Open path For Input As #intFile
+        Open Path For Input As #intFile
     
             Do While Not EOF(intFile)
                 strLine = vbNullString
@@ -86,10 +86,10 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
         strFilesToLoad(0) = "script.txt"
     
         intFile = FreeFile
-        path = GetFilePath("script.txt")
+        Path = GetFilePath("script.txt")
         
         '// Get names of includes (if any)
-        Open path For Input As #intFile
+        Open Path For Input As #intFile
             Do While Not EOF(intFile)
                 strLine = ""
                 Line Input #intFile, strLine
@@ -110,9 +110,9 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
         For i = 0 To UBound(strFilesToLoad)
             strContent = ""
             intFile = FreeFile
-            path = GetFilePath(strFilesToLoad(i))
+            Path = GetFilePath(strFilesToLoad(i))
             
-            Open path For Input As #intFile
+            Open Path For Input As #intFile
     
                 Do While Not EOF(intFile)
                     strLine = ""
@@ -127,7 +127,7 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
                 Loop
             Close #intFile
             SC.AddCode strContent
-            AddChat vbGreen, "Script loaded: " & Replace(path, "\\", "\")
+            Call frmChat.AddChat(vbGreen, "Script loaded: " & Replace(Path, "\\", "\"))
         Next
     End If
 
@@ -138,7 +138,7 @@ LoadScript_Exit:
 LoadPluginSystem_Error:
 
     Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure LoadPluginSystem of Module modScripting"
-    Debug.Print "Using variable: " & path
+    Debug.Print "Using variable: " & Path
 End Sub
 
 
@@ -170,7 +170,7 @@ Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
             For i = 1 To colUsersInChannel.Count
                 Message = ""
 
-                With colUsersInChannel.item(i)
+                With colUsersInChannel.Item(i)
                      ParseStatstring .Statstring, Message, .Clan
 
                      SC.Run "Event_UserInChannel", .Username, .Flags, Message, .Ping, .Product, False
