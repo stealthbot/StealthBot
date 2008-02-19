@@ -40,7 +40,9 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
         '// PluginSystem.dat exists?
         Path = GetFilePath("PluginSystem.dat")
         If LenB(Dir$(Path)) = 0 Then
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Cannot find PluginSystem.dat. It must exist in order to load plugins!")
+            Call frmChat.AddChat(vbRed, "Cannot find PluginSystem.dat. It must exist in order to load plugins!")
+            Call frmChat.AddChat(vbYellow, "You may download PluginSystem.dat to your StealthBot folder using the link below.")
+            Call frmChat.AddChat(vbWhite, "http://www.stealthbot.net/p/Users/Swent/index.php?file=PluginSystem.dat")
             Exit Sub
         End If
     Else
@@ -137,7 +139,7 @@ LoadScript_Exit:
    
 LoadPluginSystem_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure LoadPluginSystem of Module modScripting"
+    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure LoadPluginSystem of Module modScripting"
     Debug.Print "Using variable: " & Path
 End Sub
 
