@@ -4,7 +4,7 @@
 
 '// The StealthBot Plugin System - StealthBot 2.7 Development Version
 '//    by Swent
-'//      Last modified 3:23 PM 2/12/2008
+'//      Last modified 1:16 AM 2/19/2008
 
 '// The StealthBot Plugin System is an updateable, scripted extension of StealthBot's VBScripting System.
 '//    This portion of the scripting system remains external to allow for updates and for viewing and tweaking by advanced scriptors.
@@ -344,26 +344,14 @@ End Sub
 
 '/// [[[ PLUGIN SYSTEM COMMANDS ]]]
  
- 
-Sub psPluginSystemCmds(Message, Username, DisplayID)
+
+Sub psProcessCmd(Message, Username, DisplayID)
 
    '// Has the Plugin System loaded completely?
    If Not psLoaded Then Exit Sub
 
    '// Is it a command?
    If (Not (Left(Message, 1) = "/" Or (Left(Message, Len(BotVars.Trigger)) = BotVars.Trigger And Username <> BotVars.Username))) Then Exit Sub
-
-   '// Is it a multiple command message?
-   If (Instr(Message, "; ")) Then
-     If Left(Message, 1) = "/" Then intStart = 2 Else intStart = Len(BotVars.Trigger) + 1 End If
-
-     arrCmd = Split(Mid(Message, intStart), "; ")
-
-     For i = 0 to UBound(arrCmd)
-        psPluginSystemCmds BotVars.Trigger & arrCmd(i), Username, DisplayID
-     Next
-     Exit Sub
-   End If
 
    If (Left(Message, 2) = "//") Then
       DisplayID = 1
@@ -376,25 +364,25 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
 
    '// Get the command name and arguements
    If Trim(Message) = vbNullString Or Len(Message) < 2 Then Exit Sub
-   cmd = Split(Trim(LCase(Message & " "))): cmdName = cmd(0)
+   cmd = Split(Trim(LCase(Message & " "))): strCmdName = cmd(0)
  
    '// Is it a .[prefix] on/off command?
    If UBound(cmd) = 1 Then
-      If (cmd(1) = "on" Or cmd(1) = "off" Or cmd(1) = "status") And cmdName <> "debug" Then
-         cmdPrefix = cmdName: cmdName = "prefix"
+      If (cmd(1) = "on" Or cmd(1) = "off" Or cmd(1) = "status") And strCmdName <> "debug" Then
+         cmdPrefix = strCmdName: strCmdName = "prefix"
  
          '// Make sure it's a valid prefix
          If Not (psPlugins.Exists(cmdPrefix) Or cmdPrefix = "ps") Then Exit Sub
       End If
    Else
-      If cmdName = "prefix" Then Exit Sub
+      If strCmdName = "prefix" Then Exit Sub
    End If
 
    '// Have they entered a plugin system command?
    If Username = BotVars.Username Then
  
       '// Is this a valid internal plugin system command?
-      Select Case cmdName
+      Select Case strCmdName
          Case "prefix", "updates", "getplugin", "debug", "lset", "plugins", "nvn", "ext", "phelp", "delplugin", "psnews", "pedit"
             VetoThisMessage
          Case Else: Exit Sub
@@ -403,157 +391,235 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
       GetDBEntry Username, myAccess, myFlags
  
       '// Is this a valid external plugin system command and is there sufficient access?
-      Select Case cmdName
+      Select Case strCmdName
          Case "prefix", "plugins", "phelp"
-            If myAccess < CInt(GetSetting("ps", cmdName & "_cmd_access")) Then Exit Sub
+            If myAccess < CInt(GetSetting("ps", strCmdName & "_cmd_access")) Then Exit Sub
          Case "updates", "getplugin", "delplugin"
             If myAccess < 1000 Then Exit Sub '// Bot Owner only
          Case Else: Exit Sub
       End Select
    End If
+
+   '// Call the appropriate command sub
+   Select Case strCmdName
+      Case "prefix":    ps_prefix_cmd cmd, cmdPrefix, Username, DisplayID
+      Case "updates":   ps_updates_cmd cmd, Username, DisplayID
+      Case "getplugin": ps_getplugin_cmd cmd, Username, DisplayID
+      Case "debug":     ps_debug_cmd cmd, Username, DisplayID
+      Case "plugins":   ps_plugins_cmd cmd, Username, DisplayID
+      Case "nvn":       ps_nvn_cmd cmd, Username, DisplayID
+      Case "phelp":     ps_phelp_cmd cmd, Username, DisplayID
+      Case "delplugin": ps_delplugin_cmd cmd, Username, DisplayID
+      Case "pedit":     ps_pedit_cmd cmd, Username, DisplayID
+      Case "psnews":    ps_psnews_cmd
+      Case "lset"
+         AddChat psColor2, "Command removed -- changes to settings.ini take effect after saving the file (using /lset or Reload Script not necessary)."
+      Case "ext"
+         AddChat psColor2, "The ext command has been removed. Please change the extensions manually in your settings.ini file."
+   End Select
+End Sub
+       
+
+'// Enable/disables the specified plugin, or all plugins
+Sub ps_prefix_cmd(cmd, Prefix, Username, DisplayID)
  
-   '* Command to enable/disable a specified plugin, or all plugins
-   If cmdName = "prefix" Then
-      arrOnOff = psOnOff(cmd(1))
-      boolLastSetting = GetSetting(cmdPrefix, "enabled")
-      SetSetting cmdPrefix, "enabled", arrOnOff(0), "", True
-      If cmdPrefix = "ps" Then
-         If Not arrOnOff(0) Then
-            dsp DisplayID, "Plugins have been globally disabled.", Username, vbRed
-         Else
-            dsp DisplayID, "Plugins are no longer globally disabled.", Username, vbGreen
-	    If arrOnOff(0) And Not boolLastSetting Then
-               For i = 0 to UBound(psPrefixes)
-                 If GetSetting(psPrefixes(i), "enabled") Then psTriggerLoadEvent(psPrefixes(i))
-               Next
-            End If
-         End If
+   arrOnOff = psOnOff(cmd(1))
+   boolLastSetting = GetSetting(Prefix, "enabled")
+   SetSetting Prefix, "enabled", arrOnOff(0), "", True
+   If Prefix = "ps" Then
+      If Not arrOnOff(0) Then
+         dsp DisplayID, "Plugins have been globally disabled.", Username, vbRed
       Else
-         dsp DisplayID, "The " & cmdPrefix & " plugin has been " & arrOnOff(1) & ".", Username, arrOnOff(2)
-         If arrOnOff(0) And Not psCodeLoaded(cmdPrefix) Then
-            psLoadCode cmdPrefix, psPlugins.Item(cmdPrefix), psGetTextStream(psPlugins.Item(cmdPrefix))
-            psTriggerLoadEvent(cmdPrefix)
+         dsp DisplayID, "Plugins are no longer globally disabled.", Username, vbGreen
+	 If arrOnOff(0) And Not boolLastSetting Then
+            For i = 0 to UBound(psPrefixes)
+               If GetSetting(psPrefixes(i), "enabled") Then psTriggerLoadEvent(psPrefixes(i))
+            Next
          End If
       End If
-
-      '// Toggle enabled checkmark in plugin menu
-      If cmdPrefix = "ps" Then boolEnabled = Not arrOnOff(0) Else boolEnabled = arrOnOff(0) End If
-      SetMenuItemCheck cmdPrefix, "Enabled", boolEnabled
- 
-   '* Command to view all new plugins and updates available for download - Thanks SoCxFiftyToo!
-   ElseIf cmdName = "updates" Then
-      Content = scInet.OpenURL(PS_UPDATE_URL & "update.php?action=getlist")
-      If Instr(Content, "|||") = 0 Then
-         Call psCannotConnect(): Exit Sub
+   Else
+      dsp DisplayID, "The " & Prefix & " plugin has been " & arrOnOff(1) & ".", Username, arrOnOff(2)
+      If arrOnOff(0) And Not psCodeLoaded(Prefix) Then
+         psLoadCode Prefix, psPlugins.Item(Prefix), psGetTextStream(psPlugins.Item(Prefix))
+         psTriggerLoadEvent(Prefix)
       End If
-      Lines = Split(Content, vbCrLf)
-      strUpdates = "%4 Color Key: %1 New, %2Updated, %3Installed%4"
- 
-      For i = 0 to UBound(Lines)
-         curLine = Split(Lines(i), "|||")
-         curPrefix = LCase(curLine(1))
- 
-         '// Is this plugin not installed or is there a newer version available?
-         If Not psPlugins.Exists(curPrefix) Then
-            dispColor = "%1"
-	    dlList = dlList & curPrefix & ", "
-         ElseIf psGetNumericVersion(psVersions.Item(curPrefix)) < psGetNumericVersion(curLine(2)) Then
-            dispColor = "%2"
-            dlList = dlList & "[" & curPrefix & "], "
-         Else
-            dispColor = "%3"
-	    dlList = dlList & "(" & curPrefix & "), "
-         End If
- 
-         If Lines(i) <> vbNullString Then
-            strUpdates = strUpdates & dispColor & "%4 [ " & curLine(0) & " ]%4 Plugin Version: " & curLine(2) & _
-                         "%4 " & "Description: " & curLine(3) & "%4 " & "Prefix: " & curPrefix & "%4"
-         End If
-      Next
-      If DisplayID < 4 Then
-         dsp DisplayID, "Plugin Downloads: " & Left(dlList, Len(dlList) - 2), Username, 0
-      Else
+   End If
 
-         If Not GetSetting("ps", "nvn") Then
-            strUpdates = strUpdates & "%4" & """, 255, """ & "You aren't recieving notification of new versions for " & _
+   '// Toggle enabled checkmark in plugin menu
+   If Prefix = "ps" Then boolEnabled = Not arrOnOff(0) Else boolEnabled = arrOnOff(0) End If
+   SetMenuItemCheck Prefix, "Enabled", boolEnabled
+End Sub
+
+
+'// Displays new plugins and updates available for download - Thanks FiftyToo!
+Sub ps_updates_cmd(cmd, Username, DisplayID)
+ 
+   Content = scInet.OpenURL(PS_UPDATE_URL & "update.php?action=getlist")
+   If Instr(Content, "|||") = 0 Then
+      Call psCannotConnect(): Exit Sub
+   End If
+   Lines = Split(Content, vbCrLf)
+   strUpdates = "%4 Color Key: %1 New, %2Updated, %3Installed%4"
+ 
+   For i = 0 to UBound(Lines)
+      curLine = Split(Lines(i), "|||")
+      curPrefix = LCase(curLine(1))
+ 
+      '// Is this plugin not installed or is there a newer version available?
+      If Not psPlugins.Exists(curPrefix) Then
+         dispColor = "%1"
+	 dlList = dlList & curPrefix & ", "
+      ElseIf psGetNumericVersion(psVersions.Item(curPrefix)) < psGetNumericVersion(curLine(2)) Then
+         dispColor = "%2"
+         dlList = dlList & "[" & curPrefix & "], "
+      Else
+         dispColor = "%3"
+	 dlList = dlList & "(" & curPrefix & "), "
+      End If
+ 
+      If Lines(i) <> vbNullString Then
+         strUpdates = strUpdates & dispColor & "%4 [ " & curLine(0) & " ]%4 Plugin Version: " & curLine(2) & _
+                      "%4 " & "Description: " & curLine(3) & "%4 " & "Prefix: " & curPrefix & "%4"
+      End If
+   Next
+   If DisplayID < 4 Then
+      dsp DisplayID, "Plugin Downloads: " & Left(dlList, Len(dlList) - 2), Username, 0
+   Else
+
+      If Not GetSetting("ps", "nvn") Then
+         strUpdates = strUpdates & "%4" & """, 255, """ & "You aren't recieving notification of new versions for " & _
                                                              "any plugins. To reverse this type /nvn " & "ps" & " on"
-         End If
-         strUpdates = Replace(strUpdates, "%1", """, psColor1, """)
-         strUpdates = Replace(strUpdates, "%2", """, vbCyan, """)
-         strUpdates = Replace(strUpdates, "%3", """, psColor2, """)
-         strUpdates = Replace(strUpdates, "%4", """ & vbCrLf & """)
-         strUpdates = Replace(strUpdates, """"" &", "")
- 
-         AddChat vbWhite, "ÿcbÿcb"
-         Execute "AddChat psColor2, ""Plugins Available For Download"" & vbCrLf, vbWhite, """ & strUpdates & """"
-         AddChat psColor2, "Type /getplugin PREFIX (where PREFIX is the prefix of the plugin that you want)."
       End If
+      strUpdates = Replace(strUpdates, "%1", """, psColor1, """)
+      strUpdates = Replace(strUpdates, "%2", """, vbCyan, """)
+      strUpdates = Replace(strUpdates, "%3", """, psColor2, """)
+      strUpdates = Replace(strUpdates, "%4", """ & vbCrLf & """)
+      strUpdates = Replace(strUpdates, """"" &", "")
  
-   '* Command to download a plugin from the plugin server - Thanks SoCxFiftyToo!
-   ElseIf cmdName = "getplugin" And UBound(cmd) = 1 Then
-      psDownloadPlugin cmd(1), DisplayID, Username
+      AddChat vbWhite, "ÿcbÿcb"
+      Execute "AddChat psColor2, ""Plugins Available For Download"" & vbCrLf, vbWhite, """ & strUpdates & """"
+      AddChat psColor2, "Type /getplugin PREFIX (where PREFIX is the prefix of the plugin that you want)."
+   End If
+End Sub
+
+
+'// Downloads a plugin from the plugins server.
+Sub ps_getplugin_cmd(cmd, Username, DisplayID)
+
+   If UBound(cmd) = 1 Then Prefix = cmd(1) Else Exit Sub End If
+
+   Content = scInet.OpenURL(PS_UPDATE_URL & "update.php?action=getscript&script=" & Prefix)
+   If Content = "invalid" Then
+     AddChat vbRed, "Invalid command: None of the plugins available for download have prefix """ & Prefix & """."
+     AddChat vbRed, "Type /updates to view the prefixes of available plugins."
+     Exit Sub
+   ElseIf Instr(Content, "|") = 0 Then
+     Call psCannotConnect()
+     Exit Sub
+   End If
+
+   '// Do we need to back up an existing version before we download?
+   If psPlugins.Exists(Prefix) Then
+      If GetSetting(Prefix, "backup") Or GetSetting("ps", "backup") Then
+        psBackUpFile psPlugins.Item(Prefix), psVersions.Item(Prefix)
+      End If
+   End If
+
+   '// Get names of needed files
+   cvars = Split(Content, "|")
+   If Right(cvars(0),1) = "," Then
+     cvars(0) = Left(cvars(0), Len(cvars(0)) - 1)
+   End If
+   Files = Split(cvars(0), ",")
+   pluginFileName = Mid(Files(0), 20) & ".plug"      
+
+   '// Download the plugin
+   AddChat vbLightBlue, "Downloading File: " & pluginFileName
+   SSC.PrintURLToFile "plugins\" & pluginFileName, PS_UPDATE_URL & Files(0)
+
+   If Not psPlugins.Exists(Prefix) Then
+
+      '// Download the additonal files (if any)
+      If UBound(Files) > 0 Then AddChat vbWhite, "*** NOTE: If you get a Script Control pop-up, hit Continue. Hitting End will cause errors!"
+      For i = 1 to UBound(Files)
+        AddChat vbLightBlue, "Downloading File: " & Files(i)
+	If Files(i) <> "" Then SSC.PrintURLToFile "plugins\" & Files(i), PS_UPDATE_URL & Files(i)
+      Next
+
+      If DisplayID = 4 Then trig = "/" Else trig = BotVars.Trigger End If
+      dsp DisplayID, "The " & cvars(1) & " plugin installed successfully. For help, " & _
+		     "type """ & trig & "phelp " & Prefix & """ inside your bot.", Username, psColor1
+   Else
+      dsp DisplayID, "The " & cvars(1) & " plugin was updated successfully.", Username, psColor1
+   End If
+   AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
+End Sub
  
-   '* Command to enable/disable debug mode
-   ElseIf cmdName = "debug" And UBound(cmd) = 1 Then
+ 
+'// Enables/disables debug mode
+Sub ps_debug_cmd(cmd, Username, DisplayID)
+
+   If UBound(cmd) = 1 Then
       If cmd(1) = "on" Or cmd(1) = "off" Then
          arrOnOff = psOnOff(cmd(1))
          dsp DisplayID, "Debug Mode has been " & arrOnOff(1) & ".", 0, arrOnOff(2)
          SetSetting "ps", "debugmode", arrOnOff(0), "", True
       End If
+   End If
+End Sub
 
-   ElseIf cmdName = "lset" Then
-      AddChat psColor2, "Command removed -- changes to settings.ini take effect after saving the file (using /lset or Reload Script not necessary)."
 
-   '* Command to display Plugin System news
-   ElseIf cmdName = "psnews" Then
-      Call psDisplayNews()
+'// Displays list of all plugins currently loaded
+Sub ps_plugins_cmd(cmd, Username, DisplayID)
  
-   '* Command to list all plugins currently loaded
-   ElseIf cmdName = "plugins" Then
-      arrPrefixes = psPlugins.Keys
-      arrTitles = Split(psTitles, "|||")
+   arrPrefixes = psPlugins.Keys
+   arrTitles = Split(psTitles, "|||")
 
-      If DisplayID = 3 Or DisplayID = 1 Then
-         For i = 0 to UBound(arrPrefixes)
-           If Not psPluginEnabled(arrPrefixes(i)) Then
-              arrPrefixes(i) = "(" & arrPrefixes(i) & ")"
-           End If
-         Next
-         dsp DisplayID, "Loaded Plugins (" & psPlugins.Count & "): " & Join(arrPrefixes, ", "), Username, vbWhite
-         Exit Sub
+   If DisplayID = 3 Or DisplayID = 1 Then
+      For i = 0 to UBound(arrPrefixes)
+         If Not psPluginEnabled(arrPrefixes(i)) Then
+            arrPrefixes(i) = "(" & arrPrefixes(i) & ")"
+         End If
+      Next
+      dsp DisplayID, "Loaded Plugins (" & psPlugins.Count & "): " & Join(arrPrefixes, ", "), Username, vbWhite
+      Exit Sub
+   End If
+
+   For i = 0 to psPlugins.Count - 1
+      If i Mod 2 = 0 Then altColor = psColor1 Else altColor = psColor2 End If
+      If psPluginEnabled(arrPrefixes(i)) Then
+         If psLoadError.Item(arrPrefixes(i)) Then
+            status = "vbRed, "" (Blocked)"" & vbCrLf, "
+         Else
+            status = altColor & ", "" "" & vbCrLf, "
+         End If
+      Else
+         status = "vbRed, "" (Disabled)"" & vbCrLf, "
       End If
 
-      For i = 0 to psPlugins.Count - 1
-         If i Mod 2 = 0 Then altColor = psColor1 Else altColor = psColor2 End If
-         If psPluginEnabled(arrPrefixes(i)) Then
-            If psLoadError.Item(arrPrefixes(i)) Then
-               status = "vbRed, "" (Blocked)"" & vbCrLf, "
-            Else
-               status = altColor & ", "" "" & vbCrLf, "
-            End If
-         Else
-            status = "vbRed, "" (Disabled)"" & vbCrLf, "
-         End If
+      arrTitles = Split(psTitles, "|||")
+      If Len(arrTitles(i)) > 0 Then 
+	 titleLine = altColor & ", ""    Title:" & String(2, vbTab) & ""& arrTitles(i) & """ & vbCrLf, "
+      Else
+         titleLine = ""
+      End If
 
-         arrTitles = Split(psTitles, "|||")
-         If Len(arrTitles(i)) > 0 Then 
-	    titleLine = altColor & ", ""    Title:" & String(2, vbTab) & ""& arrTitles(i) & """ & vbCrLf, "
-         Else
-            titleLine = ""
-         End If
+      plugVer = altColor & ", ""    Version:" & vbTab & ""& psVersions.Item(arrPrefixes(i)) & """ & vbCrLf, "
+      fileLine = altColor & ", ""    Filename:" & vbTab & "" & psFSO.GetFileName(psPlugins.Item(arrPrefixes(i))) & """, "
+      prefixLine = altColor & ", String(2, vbCrLf) & ""    Prefix:" & String(2, vbTab) & """, " & vbWhite & ", ""[ " & arrPrefixes(i)  & " ]"", "
+      strPList = strPList & prefixLine & status & "vbCrLf & " & titleLine & plugVer & fileLine
+   Next
 
-         plugVer = altColor & ", ""    Version:" & vbTab & ""& psVersions.Item(arrPrefixes(i)) & """ & vbCrLf, "
-         fileLine = altColor & ", ""    Filename:" & vbTab & "" & psFSO.GetFileName(psPlugins.Item(arrPrefixes(i))) & """, "
-         prefixLine = altColor & ", String(2, vbCrLf) & ""    Prefix:" & String(2, vbTab) & """, " & vbWhite & ", ""[ " & arrPrefixes(i)  & " ]"", "
-         strPList = strPList & prefixLine & status & "vbCrLf & " & titleLine & plugVer & fileLine
-      Next
+   AddChat vbWhite, "ÿcbÿcb"
+   Execute("AddChat psColor1, ""Loaded Plugins (" & psPlugins.Count & ")"", " & Left(strPList, Len(strPList) - 2))
+   If Not GetSetting("ps", "enabled") Then AddChat vbRed, "Plugins have been globally disabled. To reverse this type /ps on"
+End Sub
 
-      AddChat vbWhite, "ÿcbÿcb"
-      Execute("AddChat psColor1, ""Loaded Plugins (" & psPlugins.Count & ")"", " & Left(strPList, Len(strPList) - 2))
-      If Not GetSetting("ps", "enabled") Then AddChat vbRed, "Plugins have been globally disabled. To reverse this type /ps on" 
 
-   '* Command to enable/disable new version notification for a specified plugin, or all plugins
-   ElseIf cmdName = "nvn" And UBound(cmd) = 2 Then
+'// Enables/disables new version notification for a specified plugin, or all plugins
+Sub ps_nvn_cmd(cmd, Username, DisplayID)
+
+   If UBound(cmd) = 2 Then
       If psPrefixExists(cmd(1)) Then
          If cmd(2) = "on" Or cmd(2) = "off" Then
             arrOnOff = psOnOff(cmd(2))
@@ -574,81 +640,87 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
             SetMenuItemCheck cmd(1), "New Version Notification", boolEnabled
          End If
       End If
- 
-   ElseIf cmdName = "ext" And UBound(cmd) = 2 Then
-      AddChat psColor2, "The ext command has been removed. Please change the extensions manually in your settings.ini file."
- 
-   '* Command to get help on a particular plugin (provides title, author, commands, important notes, and link to a thread)
-   ElseIf cmdName = "phelp" Then
+   End If
+End Sub
 
-      '// Did user enter a prefix?
-      If UBound(cmd) = 0 Then
-         If DisplayID = 4 Then AddChat vbLightBlue, "Plugin Help System"
-         dsp DisplayID, "Type /phelp <prefix> to get help on one of your loaded plugins.", Username, psColor2
-         dsp DisplayID, "Loaded prefixes: " & Join(psPrefixes, ", "), Username, psColor1
-         If DisplayID = 4 Then AddChat vbGrey, "For help with the Plugin System's commands and operation, type /phelp ps"
-      Else
-         '// Is this a valid prefix?   
-	 If Not psPrefixExists(cmd(1)) Then Exit Sub
+ 
+'// Displays help on a specified plugin
+Sub ps_phelp_cmd(cmd, Username, DisplayID)
 
-         '// Did they enter ps as prefix?
-         If cmd(1) = "ps" Then
-           If DisplayID = 4 Then
+   '// Did user enter a prefix?
+   If UBound(cmd) = 0 Then
+      If DisplayID = 4 Then AddChat vbLightBlue, "Plugin Help System"
+      dsp DisplayID, "Type /phelp <prefix> to get help on one of your loaded plugins.", Username, psColor2
+      dsp DisplayID, "Loaded prefixes: " & Join(psPrefixes, ", "), Username, psColor1
+      If DisplayID = 4 Then AddChat vbGrey, "For help with the Plugin System's commands and operation, type /phelp ps"
+   Else
+      '// Is this a valid prefix?   
+      If Not psPrefixExists(cmd(1)) Then Exit Sub
+
+      '// Did they enter ps as prefix?
+      If cmd(1) = "ps" Then
+        If DisplayID = 4 Then
+           If Not scINet.StillExecuting Then
               AddChat psColor2, scINet.OpenURL(PS_UPDATE_URL & "pscmds.txt") & vbCrLf
-              AddChat psColor1, "For additional information please visit the Plugin System thread:"
-              AddChat vbWhite, "http://www.stealthbot.net/board/index.php?showtopic=6052"
-           Else
-              strCmds = "[prefix] on/off, " & BotVars.Trigger & "plugins, " & BotVars.Trigger & "phelp [prefix]"
-              dsp DisplayID, "External Plugin System Commands: " & BotVars.Trigger & strCmds, Username, 0
-              dsp DisplayID, "Additional info: http://www.stealthbot.net/board/index.php?showtopic=6052", Username, 0
            End If
-           Exit Sub
-         End If
-
-         '// Is help available for this plugin?   
-         If Join(psHelp.Item(cmd(1)), "") = vbNullString Then
-            dsp DisplayID, "Sorry, no help information is available for your " & cmd(1) & " plugin.", Username, vbLightBlue
-            Exit Sub
-         End If
-
-         '// If an external command, display only the commands
-         If DisplayID <> 4 Then
-            commands = Split(psHelp.Item(cmd(1))(1), ":")
-            dsp DisplayID, "Commands: " & BotVars.Trigger & Join(commands, ", " & BotVars.Trigger), Username, 0
-            Exit Sub
-         End If
-
-         arrLine1 = Split(psHelp.Item(cmd(1))(0), ":")
-         arrCmds = Split(psHelp.Item(cmd(1))(1), ":")
-         topicNum = psHelp.Item(cmd(1))(2)
-         arrNotes = Split(psHelp.Item(cmd(1))(3), ":")
-
-         '// Display title, author, and description
-         If UBound(arrLine1) = 0 Then strAuthor = "Unknown" Else strAuthor = arrLine1(1) End If
-         AddChat vbLightBlue, "ÿcbÿcb" & arrLine1(0) & " by " & strAuthor
-	 If UBound(arrLine1) > 1 Then AddChat vbLightBlue, Space(6) & arrLine1(2)
-
-         '// Display commands
-         AddChat vbWhite, " ": AddChat psColor2, "Commands:"
-         If Join(arrCmds, "") = vbNullString Then
-            AddChat psColor2, "There are no commands for this plugin."
-         Else
-            For i = 0 to UBound(arrCmds): AddChat psColor2, Space(6) & BotVars.Trigger & arrCmds(i): Next
-         End If
-
-         '// Display important notes and forum link
-         If Join(arrNotes, "") <> vbNullString Then
-            AddChat vbWhite, " ": AddChat vbRed, "Other Important Notes:"
-            For i = 0 to UBound(arrNotes): AddChat vbRed, Space(6) & "-" & Replace(arrNotes(i), "\c", ":"): Next
-         End If
-         If topicNum <> vbNullString Then
-            url = "http://www.stealthbot.net/forumn/index.php?showtopic=" & topicNum
-            AddChat vbWhite, " ": AddChat psColor1, "Visit " & url & " for additional information on this plugin."
-         End If
+           AddChat psColor1, "For additional information please visit the Plugin System thread:"
+           AddChat vbWhite, "http://www.stealthbot.net/board/index.php?showtopic=6052"
+        Else
+           strCmds = "[prefix] on/off, " & BotVars.Trigger & "plugins, " & BotVars.Trigger & "phelp [prefix]"
+           dsp DisplayID, "External Plugin System Commands: " & BotVars.Trigger & strCmds, Username, 0
+           dsp DisplayID, "Additional info: http://www.stealthbot.net/board/index.php?showtopic=6052", Username, 0
+        End If
+        Exit Sub
       End If
 
-   '* Command to delete a plugin
-   ElseIf cmdName = "delplugin" And UBound(cmd) > 0 Then
+      '// Is help available for this plugin?
+      If Join(psHelp.Item(cmd(1)), "") = vbNullString Then
+         dsp DisplayID, "Sorry, no help information is available for your " & cmd(1) & " plugin.", Username, vbLightBlue
+         Exit Sub
+      End If
+
+      '// If an external command, display only the commands
+      If DisplayID <> 4 Then
+         commands = Split(psHelp.Item(cmd(1))(1), ":")
+         dsp DisplayID, "Commands: " & BotVars.Trigger & Join(commands, ", " & BotVars.Trigger), Username, 0
+         Exit Sub
+      End If
+
+      arrLine1 = Split(psHelp.Item(cmd(1))(0), ":")
+      arrCmds = Split(psHelp.Item(cmd(1))(1), ":")
+      topicNum = psHelp.Item(cmd(1))(2)
+      arrNotes = Split(psHelp.Item(cmd(1))(3), ":")
+
+      '// Display title, author, and description
+      If UBound(arrLine1) = 0 Then strAuthor = "Unknown" Else strAuthor = arrLine1(1) End If
+      AddChat vbLightBlue, "ÿcbÿcb" & arrLine1(0) & " by " & strAuthor
+      If UBound(arrLine1) > 1 Then AddChat vbLightBlue, Space(6) & arrLine1(2)
+
+      '// Display commands
+      AddChat vbWhite, " ": AddChat psColor2, "Commands:"
+      If Join(arrCmds, "") = vbNullString Then
+         AddChat psColor2, "There are no commands for this plugin."
+      Else
+         For i = 0 to UBound(arrCmds): AddChat psColor2, Space(6) & BotVars.Trigger & arrCmds(i): Next
+      End If
+
+      '// Display important notes and forum link
+      If Join(arrNotes, "") <> vbNullString Then
+         AddChat vbWhite, " ": AddChat vbRed, "Other Important Notes:"
+         For i = 0 to UBound(arrNotes): AddChat vbRed, Space(6) & "-" & Replace(arrNotes(i), "\c", ":"): Next
+      End If
+      If topicNum <> vbNullString Then
+         url = "http://www.stealthbot.net/forumn/index.php?showtopic=" & topicNum
+         AddChat vbWhite, " ": AddChat psColor1, "Visit " & url & " for additional information on this plugin."
+      End If
+   End If
+End Sub
+
+
+'// Deletes the specified plugin file
+Sub ps_delplugin_cmd(cmd, Username, DisplayID)
+
+   If UBound(cmd) > 0 Then
       If Not psPlugins.Exists(cmd(1)) Then
          AddChat vbRed, "Invalid command: None of your loaded plugins have prefix """ & cmd(1) & """."
          Exit Sub
@@ -671,33 +743,48 @@ Sub psPluginSystemCmds(Message, Username, DisplayID)
             AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
          End If
       End If
+   End If
+End Sub
    
-   '* Command to open files for editing
-   ElseIf cmdName = "pedit" Then
-      If UBound(cmd) = 0 Then
-         path = BotPath() & PS_SET_PATH
-      ElseIf cmd(1) = "plugins" Then
-         path = BotPath() & cmd(1)
-      Else
-         If Instr(cmd(1), ".") Then
-	    If psFSO.FileExists(BotPath() & "plugins\" & cmd(1)) Then
-               path = BotPath() & "plugins\" & cmd(1)
-            Else
-               AddChat vbRed, "Invalid command: The file """ & cmd(1) & """ doesn't exist in your plugins folder."
-               Exit Sub
-            End If
-         Else
-            If Not psPrefixExists(cmd(1)) Then Exit Sub
 
-	    If cmd(1) = "ps" Then
-               path = BotPath() & "PluginSystem.dat"
-            Else
-               path = psPlugins.Item(cmd(1))
-            End If
+'// Opens the specified plugin file for editing.
+Sub ps_pedit_cmd(cmd, Username, DisplayID)
+
+   If UBound(cmd) = 0 Then
+      path = BotPath() & PS_SET_PATH
+   ElseIf cmd(1) = "plugins" Then
+      path = BotPath() & cmd(1)
+   Else
+      If Instr(cmd(1), ".") Then
+         If psFSO.FileExists(BotPath() & "plugins\" & cmd(1)) Then
+            path = BotPath() & "plugins\" & cmd(1)
+         Else
+            AddChat vbRed, "Invalid command: The file """ & cmd(1) & """ doesn't exist in your plugins folder."
+            Exit Sub
+         End If
+      Else
+         If Not psPrefixExists(cmd(1)) Then Exit Sub
+
+	 If cmd(1) = "ps" Then
+            path = BotPath() & "PluginSystem.dat"
+         Else
+            path = psPlugins.Item(cmd(1))
          End If
       End If
-      psAppShell.Open path
    End If
+   psAppShell.Open path
+End Sub
+
+
+'// Displays Plugin System news
+Sub ps_psnews_cmd()
+
+  news = scINet.OpenURL(PS_UPDATE_URL & "news.php")
+  If Instr(news, "Plugin System") = 0 Then Exit Sub
+  arrNews = Split(news, vbCrLf)
+  For i = 0 to UBound(arrNews)
+     AddChat 13408512, arrNews(i)
+  Next
 End Sub
 
 
@@ -865,61 +952,11 @@ Sub psAutoUpdate()
                                   "version notifications for this plugin, type this inside your bot: /nvn " & curLine(1) & _
                                   " off", vbYesNoCancel + vbQuestion + vbApplicationModal, "StealthBot Updater")
 
-               If updateNow = vbYes Then psDownloadPlugin curLine(1), 4, 0
+               If updateNow = vbYes Then ps_getplugin_cmd curLine, 0, 4
             End If
          End If
       End If
    Next
-End Sub
-
-
-Sub psDownloadPlugin(Prefix, DisplayID, Username)
-
-   Content = scInet.OpenURL(PS_UPDATE_URL & "update.php?action=getscript&script=" & Prefix)
-   If Content = "invalid" Then
-     AddChat vbRed, "Invalid command: None of the plugins available for download have prefix """ & Prefix & """."
-     AddChat vbRed, "Type /updates to view the prefixes of available plugins."
-     Exit Sub
-   ElseIf Instr(Content, "|") = 0 Then
-     Call psCannotConnect()
-     Exit Sub
-   End If
-
-   '// Do we need to back up an existing version before we download?
-   If psPlugins.Exists(Prefix) Then
-      If GetSetting(Prefix, "backup") Or GetSetting("ps", "backup") Then
-        psBackUpFile psPlugins.Item(Prefix), psVersions.Item(Prefix)
-      End If
-   End If
-
-   '// Get names of needed files
-   cvars = Split(Content, "|")
-   If Right(cvars(0),1) = "," Then
-     cvars(0) = Left(cvars(0), Len(cvars(0)) - 1)
-   End If
-   Files = Split(cvars(0), ",")
-   pluginFileName = Mid(Files(0), 20) & ".plug"      
-
-   '// Download the plugin
-   AddChat vbLightBlue, "Downloading File: " & pluginFileName
-   SSC.PrintURLToFile "plugins\" & pluginFileName, PS_UPDATE_URL & Files(0)
-
-   If Not psPlugins.Exists(Prefix) Then
-
-      '// Download the additonal files (if any)
-      If UBound(Files) > 0 Then AddChat vbWhite, "*** NOTE: If you get a Script Control pop-up, hit Continue. Hitting End will cause errors!"
-      For i = 1 to UBound(Files)
-        AddChat vbLightBlue, "Downloading File: " & Files(i)
-	If Files(i) <> "" Then SSC.PrintURLToFile "plugins\" & Files(i), PS_UPDATE_URL & Files(i)
-      Next
-
-      If DisplayID = 4 Then trig = "/" Else trig = BotVars.Trigger End If
-      dsp DisplayID, "The " & cvars(1) & " plugin installed successfully. For help, " & _
-		     "type """ & trig & "phelp " & Prefix & """ inside your bot.", Username, psColor1
-   Else
-      dsp DisplayID, "The " & cvars(1) & " plugin was updated successfully.", Username, psColor1
-   End If
-   AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
 End Sub
 
 
@@ -968,9 +1005,9 @@ End Sub
 Sub PluginMenus_Enabled_Callback(Prefix)
 
    If GetSetting(Prefix, "enabled") Then
-      psPluginSystemCmds "/" & Prefix & " off", BotVars.Username, 4
+      psProcessCmd "/" & Prefix & " off", BotVars.Username, 4
    Else
-      psPluginSystemCmds "/" & Prefix & " on", BotVars.Username, 4
+      psProcessCmd "/" & Prefix & " on", BotVars.Username, 4
    End If
 End Sub
 
@@ -979,9 +1016,9 @@ End Sub
 Sub PluginMenus_NVN_Callback(Prefix)
 
    If GetSetting(Prefix, "nvn") Then
-      psPluginSystemCmds "/nvn " & Prefix & " off", BotVars.Username, 4
+      psProcessCmd "/nvn " & Prefix & " off", BotVars.Username, 4
    Else
-      psPluginSystemCmds "/nvn " & Prefix & " on", BotVars.Username, 4
+      psProcessCmd "/nvn " & Prefix & " on", BotVars.Username, 4
    End If
 End Sub
 
@@ -1008,13 +1045,13 @@ End Sub
 
 '// "Open plugins folder"
 Sub ps_OpenPlugins_Callback()
-   psPluginSystemCmds "/pedit plugins", BotVars.Username, 4
+   psProcessCmd "/pedit plugins", BotVars.Username, 4
 End Sub
 
 
 '// "Open settings.ini"
 Sub ps_OpenSettings_Callback()
-   psPluginSystemCmds "/pedit", BotVars.Username, 4
+   psProcessCmd "/pedit", BotVars.Username, 4
 End Sub
 
 
@@ -1070,7 +1107,7 @@ End Sub
 '// "The Plugin System" > "Open PluginSystem.dat"
 Sub ps_OpenPS_Callback()
 
-   psPluginSystemCmds "/pedit ps", BotVars.Username, 4
+   psProcessCmd "/pedit ps", BotVars.Username, 4
 End Sub
 
 
@@ -1096,7 +1133,7 @@ End Sub
 '// "The Plugin System" > "Help"
 Sub ps_Help_Callback()
 
-   psPluginSystemCmds "/phelp ps", BotVars.Username, 4
+   psProcessCmd "/phelp ps", BotVars.Username, 4
 End Sub
 
 
@@ -1227,17 +1264,6 @@ Function psPluginEnabled(Prefix)
    boolEnabled = GetSetting(Prefix, "enabled")
    If (Len(boolEnabled) = 0 Or GetSetting(Prefix, "enabled")) And GetSetting("ps", "enabled") Then psPluginEnabled = True
 End Function
-
-
-Sub psDisplayNews()
-
-  news = scINet.OpenURL(PS_UPDATE_URL & "news.php")
-  If Instr(news, "Plugin System") = 0 Then Exit Sub
-  arrNews = Split(news, vbCrLf)
-  For i = 0 to UBound(arrNews)
-     AddChat 13408512, arrNews(i)
-  Next
-End Sub
 
 
 Function psLatestSB()
@@ -1379,6 +1405,30 @@ Sub psCreatePSSettings()
 End Sub
 
 
+Function psMultiCmd(Message, EventName, Args)
+
+   '// Check for multi-command message
+   If Left(Message, Len(BotVars.Trigger)) = BotVars.Trigger Then
+      If Instr(Message, "; ") Then
+
+         arrCmd = Split(Mid(Message, Len(BotVars.Trigger) + 1), "; ")
+
+         For i = 0 to UBound(arrCmd)
+
+            psProcessCmd BotVars.Trigger & arrCmd(i), Args(0), 3
+
+            If UBound(Args) = 2 Then
+               psExecuteEvent EventName, Array(Args(0), Args(1), BotVars.Trigger & arrCmd(i))
+            Else
+               psExecuteEvent EventName, Array(Args(0), Args(1), BotVars.Trigger & arrCmd(i), Args(3))
+            End If
+         Next
+         psMultiCmd = True
+      End If
+   End If
+End Function
+
+
 
 
  
@@ -1432,38 +1482,34 @@ Sub Event_ServerError(Message)
 
    psExecuteEvent "ServerError", Array(Message)
 End Sub
- 
+
  
 Sub Event_UserTalk(Username, Flags, Message, Ping)
 
-   '// Is it a multiple command message?
-   If (Instr(Message, "; ")) Then
-     If Left(Message, 1) = "/" Then intStart = 2 Else intStart = Len(BotVars.Trigger) + 1 End If
+   arrArgs = Array(Username, Flags, Message, Ping)
+   If psMultiCmd(Message, "UserTalk", arrArgs) Then Exit Sub
 
-     arrCmd = Split(Mid(Message, intStart), "; ")
-
-     For i = 0 to UBound(arrCmd)
-        psPluginSystemCmds BotVars.Trigger & arrCmd(i), Username, 3
-        psExecuteEvent "UserTalk", Array(Username, Flags, BotVars.Trigger & arrCmd(i), Ping)
-     Next
-     Exit Sub
-   End If
-
-   psPluginSystemCmds Message, Username, 3
-   psExecuteEvent "UserTalk", Array(Username, Flags, Message, Ping)
+   psProcessCmd psEcho(Message), Username, 3
+   psExecuteEvent "UserTalk", arrArgs
 End Sub
  
  
 Sub Event_UserEmote(Username, Flags, Message)
- 
-   psPluginSystemCmds Message, Username, 3
-   psExecuteEvent "UserEmote", Array(Username, Flags, Message)
+
+   arrArgs = Array(Username, Flags, Message)
+   If psMultiCmd(Message, "UserEmote", arrArgs) Then Exit Sub
+
+   psProcessCmd psEcho(Message), Username, 3
+   psExecuteEvent "UserEmote", arrArgs
 End Sub
  
  
 Sub Event_WhisperFromUser(Username, Flags, Message)
 
-   psPluginSystemCmds Message, Username, 3
+   arrArgs = Array(Username, Flags, Message)
+   If psMultiCmd(Message, "WhisperFromUser", arrArgs) Then Exit Sub
+
+   psProcessCmd psEcho(Message), Username, 3
    psExecuteEvent "WhisperFromUser", Array(Username, Flags, Message)
 End Sub
  
@@ -1527,7 +1573,7 @@ Sub Event_PressedEnter(Text)
       Exit Sub
    End If
 
-   psPluginSystemCmds psEcho(Text), BotVars.Username, 4
+   psProcessCmd psEcho(Text), BotVars.Username, 4
    psExecuteEvent "PressedEnter", Array(Text)
 End Sub
  
