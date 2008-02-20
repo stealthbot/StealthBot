@@ -151,12 +151,15 @@ Public PPLRespondTo As String
 Public MyFlags As Long
 Public unsquelching As Boolean
 Public BanCount As Integer
+Public g_lastQueueUser As String
 Public PassedClanMotdCheck As Boolean
 
 Public LastAdd As Byte
 Public WatchUser As String
 Public bFlood As Boolean
 Public BotVars As clsBotVars
+Public clsWinamp As New clsWinamp
+Public clsiTunes As New clsiTunes
 
 Public colUsersInChannel As Collection
 Public colLastSeen As Collection

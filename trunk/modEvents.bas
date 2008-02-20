@@ -18,6 +18,9 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         Exit Sub
     End If
     
+    ' ...
+    g_lastQueueUser = "(console)"
+    
     ' convert username to appropriate
     ' display format
     Username = convertUsername(Username)
@@ -89,7 +92,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     ' handle the display of user event
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
-    If (Filters) Then
+    If (BotVars.ChatDelay) Then
         For i = 1 To colChatQueue.Count
             ' ...
             Set clsChatQueue = colChatQueue(i)
@@ -102,7 +105,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         Next i
     End If
     
-    If ((Filters = False) Or _
+    If ((BotVars.ChatDelay = 0) Or _
         ((colChatQueue.Count = 0) Or (i >= (colChatQueue.Count + 1)))) Then
         
         Call Event_QueuedStatusUpdate(Username, Flags, prevflags, Ping, Product, _
@@ -120,6 +123,9 @@ End Sub
 
 Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     Dim mailCount As Integer ' ...
+    
+    ' ...
+    g_lastQueueUser = "(console)"
     
     ' clear chat queue when
     ' joining new channel
@@ -220,6 +226,9 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
     Dim s() As String
     Dim u   As String
     Dim i   As Integer
+    
+    ' ...
+    g_lastQueueUser = "(console)"
     
     ' Some of the oldest code in this project lives right here
     If SuppressProfileOutput Then
@@ -375,6 +384,9 @@ End Sub
 Public Sub Event_LoggedOnAs(Username As String, Product As String)
     LastWhisper = vbNullString
     
+    ' ...
+    g_lastQueueUser = "(console)"
+    
     'If InStr(1, Username, "*", vbBinaryCompare) <> 0 Then
     '    Username = Right(Username, Len(Username) - InStr(1, Username, "*", vbBinaryCompare))
     'End If
@@ -456,7 +468,7 @@ Public Sub Event_LogonEvent(ByVal Message As Byte, Optional ByVal ExtraInfo As S
     Dim lColor       As Long
     Dim sMessage     As String
     Dim UseExtraInfo As Boolean
-    
+
     Select Case (Message)
         Case 0:
             lColor = RTBColors.ErrorMessageText
@@ -525,6 +537,9 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Dim i     As Integer
     Dim Temp  As String
     Dim bHide As Boolean
+    
+    ' ...
+    g_lastQueueUser = "(console)"
     
     'If (frmChat.mnuUTF8.Checked) Then
     '    Message = UTF8Decode(Message)
@@ -731,6 +746,9 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
         End If
     End If
     
+    ' ...
+    g_lastQueueUser = Username
+    
     i = UsernameToIndex(Username)
     
     If (i > 0) Then
@@ -776,7 +794,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     End If
     
     If (BotVars.JoinWatch >= 20) Then
-        If (Not (Filters)) Then
+        If (Filters = False) Then
             frmChat.AddChat RTBColors.TalkBotUsername, _
                 "Chat filters have been activated due to excessive rejoins and/or " & _
                     "spam; deactivate them by pressing CTRL + F."
@@ -798,7 +816,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
 theEnd:
     If (AllowedToTalk(Username, Message)) Then
         ' ...
-        If (Filters) Then
+        If (BotVars.ChatDelay) Then
             For i = 1 To colChatQueue.Count
                 ' ...
                 Dim clsChatQueue As clsChatQueue
@@ -816,7 +834,7 @@ theEnd:
         End If
         
         ' ...
-        If ((Filters = False) Or _
+        If ((BotVars.ChatDelay = 0) Or _
             ((colChatQueue.Count = 0) Or (i >= (colChatQueue.Count + 1)))) Then
             
             ' ...
@@ -855,6 +873,9 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
     Username = convertUsername(Username)
     
+    ' ...
+    g_lastQueueUser = "(console)"
+    
     ' are we receiving my user information?
     If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
 
@@ -874,7 +895,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     ' ...
     If (StatUpdate = False) Then
         ' ...
-        If (Filters) Then
+        If (BotVars.ChatDelay) Then
             ' ...
             For i = 1 To colChatQueue.Count
                 ' ...
@@ -917,7 +938,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         End If
     
         ' ...
-        If ((Filters = False) Or _
+        If ((BotVars.ChatDelay = 0) Or _
             ((colChatQueue.Count = 0) Or (i >= (colChatQueue.Count + 1)))) Then
 
             Call Event_QueuedUserInChannel(Username, Flags, Ping, Product, sClan, _
@@ -1026,6 +1047,9 @@ End Sub
 
 Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal w3icon As String)
     Username = convertUsername(Username)
+    
+    ' ...
+    g_lastQueueUser = "(console)"
     
     If (Not (bFlood)) Then
         Dim UserToAdd  As clsUserInfo
@@ -1137,7 +1161,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             Call FlashWindow
         End If
         
-        If (Filters) Then
+        If (BotVars.ChatDelay) Then
             Dim clsChatQueue As clsChatQueue
     
             Set clsChatQueue = New clsChatQueue
@@ -1385,7 +1409,7 @@ theEnd:
             '    End If
             'End If
             
-            If (Not (Filters)) Then
+            If (Filters = False) Then
                 frmChat.AddChat RTBColors.TalkBotUsername, _
                     "Chat filters have been activated due to excessive rejoins and/or " & _
                         "spam; deactivate them by pressing CTRL + F."
@@ -1441,6 +1465,9 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Username = convertUsername(Username)
     
     ' ...
+    g_lastQueueUser = "(console)"
+    
+    ' ...
     i = UsernameToIndex(Username)
     
     ' ...
@@ -1481,8 +1508,8 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Call RemoveBanFromQueue(reverseUsername(Username))
     
     ' ...
-    If ((JoinMessagesOff = False) And (Not (bFlood))) Then
-        If (Filters) Then
+    If ((JoinMessagesOff = False) And (bFlood = False)) Then
+        If (BotVars.ChatDelay) Then
             ' ...
             Dim clsChatQueue As clsChatQueue
         
@@ -1500,7 +1527,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
             Next i
         End If
         
-        If ((Filters = False) Or _
+        If ((BotVars.ChatDelay = 0) Or _
             ((colChatQueue.Count = 0) Or (i >= (colChatQueue.Count + 1)))) Then
             
             frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, Username, _
@@ -1567,6 +1594,9 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
             InStr(1, Username, "*", vbBinaryCompare))
     End If
     
+    ' ...
+    g_lastQueueUser = Username
+    
     i = UsernameToIndex(Username)
     
     If (i > 0) Then
@@ -1591,7 +1621,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         End If
         
         If (BotVars.JoinWatch >= 20) Then
-            If (Not (Filters)) Then
+            If (Filters = False) Then
                 frmChat.AddChat RTBColors.TalkBotUsername, _
                     "Chat filters have been activated due to excessive rejoins and/or " & _
                         "spam; deactivate them by pressing CTRL + F."
@@ -1616,7 +1646,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
             Call FlashWindow
         End If
         
-        If (Filters) Then
+        If (BotVars.ChatDelay) Then
             For i = 1 To colChatQueue.Count
                 ' ...
                 Dim clsChatQueue As clsChatQueue
@@ -1632,7 +1662,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
             Next i
         End If
         
-        If ((Filters = False) Or _
+        If ((BotVars.ChatDelay = 0) Or _
             ((colChatQueue.Count = 0) Or (i >= (colChatQueue.Count + 1)))) Then
            
             Call Event_QueuedTalk(Username, Flags, Ping, Message)
@@ -1812,6 +1842,9 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
     Dim WWIndex As Integer
     
     Username = convertUsername(Username)
+    
+    ' ...
+    g_lastQueueUser = Username
 
     If (frmChat.mnuUTF8.Checked) Then
         Message = UTF8Decode(Message)
@@ -1946,7 +1979,14 @@ End Sub
 Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long)
     Dim WWIndex As Integer
     
-    Username = convertUsername(Username)
+    ' ...
+    g_lastQueueUser = "(console)"
+    
+    If (StrComp(Username, "your friends", vbTextCompare) <> 0) Then
+        Username = convertUsername(Username)
+        
+        LastWhisperTo = "%f%"
+    End If
     
     If (frmChat.mnuUTF8.Checked) Then
         Message = UTF8Decode(Message)
@@ -1971,10 +2011,6 @@ Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, By
     End If
     
     LastWhisperTo = Username
-    
-    If (StrComp(Username, "your friends", vbTextCompare) = 0) Then
-        LastWhisperTo = "%f%"
-    End If
     
     If (frmChat.mnuToggleWWUse.Checked) Then
         If ((InStr(1, Message, "ß~ß") = 0) And _

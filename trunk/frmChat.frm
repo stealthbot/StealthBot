@@ -1411,7 +1411,7 @@ Attribute VB_Exposed = False
 'Source Code Version: 2.6R3+
 Option Explicit
 
-Private Declare Function GetFocus Lib "user" () As Integer
+Private Declare Function GetFocus Lib "User" () As Integer
 
 'Classes
 Public WithEvents ClanHandler As clsClanPacketHandler
@@ -1444,8 +1444,13 @@ Private Sub Form_Load()
 
     ' COMPILER FLAGS
     #If (BETA = 1) Then
-        CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
-            ZeroOffsetEx(App.REVISION, 3)
+        #If (DEV_RELEASE = 1) Then
+            CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
+                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "1"
+        #Else
+            CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
+                ZeroOffsetEx(App.REVISION, 3) & " Stable"
+        #End If
     #Else
         CVERSION = "StealthBot v" & App.Major & "." & App.Minor & " build " & _
             ZeroOffsetEx(App.REVISION, 3) & IIf(Len(REVISION) > 0, " Revision " & REVISION, "")
@@ -1613,8 +1618,6 @@ Private Sub Form_Load()
     Call GetColorLists
     Call InitListviewTabs
     Call DisableListviewTabs
-    
-    Call ChatQueue_Initialize
     
     ListviewTabs.Tab = 0
     
@@ -5294,8 +5297,8 @@ ERROR_HANDLER:
 End Function
 
 ' ...
-Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
-    ByVal user As String = vbNullString, Optional ByVal Tag As String = vbNullString)
+Sub AddQ(ByVal Message As String, Optional Priority As Byte = 100, Optional _
+    ByVal User As String = vbNullString, Optional ByVal Tag As String = vbNullString)
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -5542,7 +5545,14 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 0, Optional _
                     With Q
                         .Message = Send
                         .Priority = Priority
-                        .ResponseTo = user
+                        
+                        ' ...
+                        If (User = vbNullString) Then
+                            .ResponseTo = User
+                        Else
+                            .ResponseTo = g_lastQueueUser
+                        End If
+                        
                         .Tag = Tag
                     End With
     
@@ -6104,6 +6114,15 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     BotVars.ProxyIP = ReadCFG(MN, "ProxyIP")
     
+    s = ReadCFG(OT, "ChatDelay")
+    If (s = vbNullString) Then
+        BotVars.ChatDelay = 500
+    Else
+        BotVars.ChatDelay = CLng(Val(s))
+    End If
+
+    Call ChatQueue_Initialize
+
     If BotVars.Logging < 2 Then
         MakeLoggingDirectory
     

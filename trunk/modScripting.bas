@@ -60,6 +60,8 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
     SC.AddObject "scTimer", frmChat.scTimer
     SC.AddObject "scINet", frmChat.INet
     SC.AddObject "BotVars", BotVars
+    SC.AddObject "clsWinamp", clsWinamp
+    SC.AddObject "clsiTunes", clsiTunes
     
     If Not boolOverride Then
     

@@ -13,19 +13,17 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-'clsUserInfo - project StealthBot
-
-Private msUsername As String
-Private mlFlags As Long
-Private mlPing As Long
-Private msStatstring As String
-Private msProduct As String
+Private msUsername       As String
+Private mlFlags          As Long
+Private mlPing           As Long
+Private msStatstring     As String
+Private msProduct        As String
 Private mbyInternalFlags As Byte
-Private mlLastAction As Long
-Private mbSafelisted As Boolean
-Private msClan As String
-Private mlJoinTime As Long
-Private mbIsSelf As Boolean
+Private mlLastAction     As Long
+Private mbSafelisted     As Boolean
+Private msClan           As String
+Private mlJoinTime       As Long
+Private mbIsSelf         As Boolean
 
 Private Sub Class_Initialize()
     mlLastAction = GetTickCount()

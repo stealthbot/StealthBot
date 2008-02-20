@@ -19,7 +19,7 @@ Option Explicit
 Private m_iTunesObj As Object
 
 Private Sub Class_Initialize()
-    Call CreateiTunesObj
+    ' ...
 End Sub
 
 Private Sub Class_Terminate()
@@ -68,15 +68,30 @@ Public Sub PlayTrack(Optional Track As Integer)
 End Sub
 
 Public Sub PausePlayback()
+    ' ...
+    If (Not (m_iTunesObj Is Nothing)) Then
+        Call CreateiTunesObj
+    End If
+
     Call m_iTunesObj.PlayPause
 End Sub
 
 Public Sub QuitPlayback()
+    ' ...
+    If (Not (m_iTunesObj Is Nothing)) Then
+        Call CreateiTunesObj
+    End If
+
     Call m_iTunesObj.Stop
 End Sub
 
 ' ...
 Public Property Get TrackName() As String
+    ' ...
+    If (Not (m_iTunesObj Is Nothing)) Then
+        Call CreateiTunesObj
+    End If
+
     ' ...
     TrackName = m_iTunesObj.CurrentTrack.Name
 End Property
@@ -84,6 +99,11 @@ End Property
 ' ...
 Public Property Get PlaylistCount() As Integer
     Dim TrackCollection As Object ' ...
+    
+    ' ...
+    If (Not (m_iTunesObj Is Nothing)) Then
+        Call CreateiTunesObj
+    End If
 
     ' ...
     Set TrackCollection = _
@@ -94,14 +114,29 @@ Public Property Get PlaylistCount() As Integer
 End Property
 
 Public Property Get PlaylistPosition() As Long
+    ' ...
+    If (Not (m_iTunesObj Is Nothing)) Then
+        Call CreateiTunesObj
+    End If
+
     PlaylistPosition = m_iTunesObj.CurrentTrack.PlayOrderIndex
 End Property
 
 Public Property Get TrackTime() As Long
+    ' ...
+    If (Not (m_iTunesObj Is Nothing)) Then
+        Call CreateiTunesObj
+    End If
+
     TrackTime = m_iTunesObj.PlayerPosition
 End Property
 
 Public Property Get TrackLength() As Long
+    ' ...
+    If (Not (m_iTunesObj Is Nothing)) Then
+        Call CreateiTunesObj
+    End If
+
     TrackLength = m_iTunesObj.CurrentTrack.Finish
 End Property
 

@@ -90,6 +90,7 @@ Private m_sGateway                      As String
 Private m_sRealm                        As String
 Private m_NoSupportMultiCharTrigger     As Boolean
 Private m_MediaPlayer                   As String
+Private m_ChatDelay                     As Long
 
 Public Property Get Username() As String
     
@@ -943,5 +944,15 @@ Public Property Let MediaPlayer(ByVal mPlayer As String)
 
 End Property
 
+Public Property Get ChatDelay() As Long
 
+    m_ChatDelay = m_ChatDelay
+
+End Property
+
+Public Property Let ChatDelay(lDelay As Long)
+    
+    m_ChatDelay = lDelay
+
+End Property
 

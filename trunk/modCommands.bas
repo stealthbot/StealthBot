@@ -1537,12 +1537,12 @@ Private Function OnCAdd(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     ' ...
     If (Index) Then
-        Dim user As String ' ...
+        Dim User As String ' ...
         
         ' ...
-        user = Mid$(msgData, 1, Index - 1)
+        User = Mid$(msgData, 1, Index - 1)
         
-        If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
+        If (InStr(1, User, Space(1), vbBinaryCompare) <> 0) Then
             tmpBuf(0) = "Error: The specified game name is invalid."
         Else
             Dim bmsg As String ' ...
@@ -1551,7 +1551,7 @@ Private Function OnCAdd(ByVal Username As String, ByRef dbAccess As udtGetAccess
             bmsg = Mid$(msgData, Index + 1)
         
             ' ...
-            Call OnAdd(Username, dbAccess, user & " +B --type GAME --banmsg " & bmsg, True, tmpBuf())
+            Call OnAdd(Username, dbAccess, User & " +B --type GAME --banmsg " & bmsg, True, tmpBuf())
         End If
     Else
         ' ...
@@ -2886,28 +2886,28 @@ Private Function OnTagAdd(ByVal Username As String, ByRef dbAccess As udtGetAcce
     
     ' ...
     If (Index) Then
-        Dim user As String ' ...
+        Dim User As String ' ...
         Dim bmsg As String ' ...
         
         ' ...
-        user = Mid$(msgData, 1, Index - 1)
+        User = Mid$(msgData, 1, Index - 1)
         
         ' ...
         bmsg = Mid$(msgData, Index + 1)
         
         ' ...
-        If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
+        If (InStr(1, User, Space(1), vbBinaryCompare) <> 0) Then
             tmpBuf(0) = "Error: The specified username is invalid."
-        ElseIf (InStr(1, user, "*", vbBinaryCompare) <> 0) Then
+        ElseIf (InStr(1, User, "*", vbBinaryCompare) <> 0) Then
             ' ...
-            Call OnAdd(Username, dbAccess, user & " +B --type USER --banmsg " & _
+            Call OnAdd(Username, dbAccess, User & " +B --type USER --banmsg " & _
                 bmsg, True, tmpBuf())
         Else
-            If (Len(user) = 0) Then
+            If (Len(User) = 0) Then
                 tmpBuf(0) = "Error: The specified tag is invalid."
             Else
                 ' ...
-                Call OnAdd(Username, dbAccess, "*" & user & "*" & " +B --type USER --banmsg " _
+                Call OnAdd(Username, dbAccess, "*" & User & "*" & " +B --type USER --banmsg " _
                     & bmsg, True, tmpBuf())
             End If
         End If
@@ -3120,12 +3120,12 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
     
     ' ...
     If (Index) Then
-        Dim user As String ' ...
+        Dim User As String ' ...
         
         ' ...
-        user = Mid$(msgData, 1, Index - 1)
+        User = Mid$(msgData, 1, Index - 1)
         
-        If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
+        If (InStr(1, User, Space(1), vbBinaryCompare) <> 0) Then
             tmpBuf(0) = "Error: The specified username is invalid."
         Else
             Dim Msg As String ' ...
@@ -3134,7 +3134,7 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
             Msg = Mid$(msgData, Index + 1)
         
             ' ...
-            Call OnAdd(Username, dbAccess, user & " +B --type USER --banmsg " & _
+            Call OnAdd(Username, dbAccess, User & " +B --type USER --banmsg " & _
                 Msg, True, tmpBuf())
         End If
     Else
@@ -3741,13 +3741,13 @@ End Function ' end function OnDetail
 Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim user      As String
+    Dim User      As String
     Dim userIndex As Integer
     Dim tmpBuf()  As String ' temporary output buffer
 
-    user = msgData
+    User = msgData
     
-    userIndex = UsernameToIndex(user)
+    userIndex = UsernameToIndex(User)
     
     If (userIndex > 0) Then
         ReDim Preserve tmpBuf(0 To 1)
@@ -3806,16 +3806,16 @@ Private Function OnVoteBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf As String ' temporary output buffer
-    Dim user   As String
+    Dim User   As String
     
-    user = msgData
+    User = msgData
     
     If (VoteDuration = -1) Then
-        Call Voting(BVT_VOTE_START, BVT_VOTE_BAN, user)
+        Call Voting(BVT_VOTE_START, BVT_VOTE_BAN, User)
         
         VoteDuration = 30
         
-        tmpBuf = "30-second VoteBan vote started. Type YES to ban " & user & ", NO to acquit him/her."
+        tmpBuf = "30-second VoteBan vote started. Type YES to ban " & User & ", NO to acquit him/her."
     Else
         tmpBuf = "A vote is currently in progress."
     End If
@@ -3829,18 +3829,18 @@ Private Function OnVoteKick(ByVal Username As String, ByRef dbAccess As udtGetAc
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
 
     Dim tmpBuf   As String ' temporary output buffer
-    Dim user     As String
+    Dim User     As String
     
-    user = msgData
+    User = msgData
     
     If (VoteDuration = -1) Then
-        Call Voting(BVT_VOTE_START, BVT_VOTE_KICK, user)
+        Call Voting(BVT_VOTE_START, BVT_VOTE_KICK, User)
         
         VoteDuration = 30
         
         VoteInitiator = dbAccess
         
-        tmpBuf = "30-second VoteKick vote started. Type YES to kick " & user & _
+        tmpBuf = "30-second VoteKick vote started. Type YES to kick " & User & _
             ", NO to acquit him/her."
     Else
         tmpBuf = "A vote is currently in progress."
@@ -4050,17 +4050,17 @@ Private Function OnPing(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     Dim tmpBuf  As String ' temporary output buffer
     Dim Latency As Long
-    Dim user    As String
+    Dim User    As String
     
-    user = msgData
+    User = msgData
     
-    If (Len(user)) Then
-        Latency = GetPing(user)
+    If (Len(User)) Then
+        Latency = GetPing(User)
         
         If (Latency < -1) Then
-            tmpBuf = "I can't see " & user & " in the channel."
+            tmpBuf = "I can't see " & User & " in the channel."
         Else
-            tmpBuf = user & "'s ping at login was " & Latency & "ms."
+            tmpBuf = User & "'s ping at login was " & Latency & "ms."
         End If
     End If
     
@@ -4356,7 +4356,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim i          As Integer ' ...
     Dim tmpBuf     As String  ' temporary output buffer
     Dim dbPath     As String  ' ...
-    Dim user       As String  ' ...
+    Dim User       As String  ' ...
     Dim rank       As Integer ' ...
     Dim Flags      As String  ' ...
     Dim found      As Boolean ' ...
@@ -4391,10 +4391,10 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     
     If (UBound(strArray) > 0) Then
         ' grab username
-        user = strArray(0)
+        User = strArray(0)
         
         ' ...
-        If (user = vbNullString) Then
+        If (User = vbNullString) Then
             cmdRet(0) = "Error: You have specified an invalid entry name."
             
             Exit Function
@@ -4455,7 +4455,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 ' ...
                             ElseIf (dbType = "GROUP") Then
                                 ' check for presence of space in name
-                                If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
+                                If (InStr(1, User, Space(1), vbBinaryCompare) <> 0) Then
                                     cmdRet(0) = "Error: The specified group name contains one or more " & _
                                         "invalid characters."
                                                                 
@@ -4463,7 +4463,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 End If
                             ElseIf (dbType = "CLAN") Then
                                 ' check for invalid clan entry
-                                If ((Len(user) < 2) Or (Len(user) > 4)) Then
+                                If ((Len(User) < 2) Or (Len(User) > 4)) Then
                                     ' return message
                                     cmdRet(0) = "Error: The clan name specified is of an " & _
                                         "incorrect length."
@@ -4472,10 +4472,10 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 End If
                             ElseIf (dbType = "GAME") Then
                                 ' convert entry to uppercase
-                                user = UCase$(user)
+                                User = UCase$(User)
                                 
                                 ' check for invalid game entry
-                                Select Case (user)
+                                Select Case (User)
                                     Case "CHAT" ' Chat Client
                                     Case "DRTL" ' Diablo I: Retail
                                     Case "DSHR" ' Diablo I: Shareware
@@ -4538,7 +4538,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                     Exit Function
                                 End If
                                 
-                                If ((StrComp(Splt(j), user, vbTextCompare) = 0) And _
+                                If ((StrComp(Splt(j), User, vbTextCompare) = 0) And _
                                     (dbType = "GROUP")) Then
                                     
                                     cmdRet(0) = "Error: You cannot make a group a member of " & _
@@ -4554,10 +4554,10 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                         ' causing a stack overflow when doing recursion in
                                         ' GetCumulativeAccess().
                                         If ((Len(tmp.Groups)) And (tmp.Groups <> "%")) Then
-                                            If (CheckGroup(tmp.Username, user)) Then
+                                            If (CheckGroup(tmp.Username, User)) Then
                                                 cmdRet(0) = "Error: " & Chr$(34) & tmp.Username & _
                                                     Chr$(34) & " is already a member of group " & _
-                                                        Chr$(34) & user & "." & Chr$(34)
+                                                        Chr$(34) & User & "." & Chr$(34)
                                         
                                                     Exit Function
                                             End If
@@ -4586,12 +4586,12 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
         End If
         
         ' grab access for entry
-        gAcc = GetAccess(user, dbType)
+        gAcc = GetAccess(User, dbType)
         
         ' if we've found a matching user, lets correct
         ' the casing of the name that we've entered
         If (Len(gAcc.Username)) Then
-            user = gAcc.Username
+            User = gAcc.Username
         End If
 
         ' is rank valid?
@@ -4701,15 +4701,15 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                             If (Len(tmpFlags) > 0) Then
                                 ' check for special flags
                                 If (InStr(1, tmpFlags, "B", vbBinaryCompare) <> 0) Then
-                                    If (InStr(1, user, "*", vbBinaryCompare) <> 0) Then
-                                        Call WildCardBan(user, vbNullString, 2)
+                                    If (InStr(1, User, "*", vbBinaryCompare) <> 0) Then
+                                        Call WildCardBan(User, vbNullString, 2)
                                     Else
                                         ' unban user if found in banlist
                                         For i = LBound(gBans) To UBound(gBans)
-                                            If (StrComp(gBans(i).Username, user, _
+                                            If (StrComp(gBans(i).Username, User, _
                                                     vbTextCompare) = 0) Then
                                                 
-                                                Call AddQ("/unban " & user)
+                                                Call AddQ("/unban " & User)
                                             End If
                                         Next i
                                     End If
@@ -4742,10 +4742,10 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                            
                             ' with no access a database entry is
                             ' pointless, so lets remove it
-                            res = DB_remove(user, gAcc.Type)
+                            res = DB_remove(User, gAcc.Type)
                             
                             If (res) Then
-                                cmdRet(0) = Chr(34) & user & Chr(34) & " has been removed " & _
+                                cmdRet(0) = Chr(34) & User & Chr(34) & " has been removed " & _
                                     "from the database."
                             Else
                                 cmdRet(0) = "Error: There was a problem removing that entry " & _
@@ -4805,12 +4805,12 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
 
             ' does user already exist in database?
             For i = LBound(DB) To UBound(DB)
-                If ((StrComp(DB(i).Username, user, vbTextCompare) = 0) And _
+                If ((StrComp(DB(i).Username, User, vbTextCompare) = 0) And _
                     (StrComp(DB(i).Type, gAcc.Type, vbTextCompare) = 0)) Then
                     
                     ' modify database entry
                     With DB(i)
-                        .Username = user
+                        .Username = User
                         .Access = gAcc.Access
                         .Flags = gAcc.Flags
                         .ModifiedBy = Username
@@ -4845,7 +4845,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 ReDim Preserve DB(UBound(DB) + 1)
                 
                 With DB(UBound(DB))
-                    .Username = user
+                    .Username = User
                     .Access = IIf((gAcc.Access >= 0), _
                         gAcc.Access, 0)
                     .Flags = gAcc.Flags
@@ -4870,7 +4870,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             
             ' check for errors & create message
             If (gAcc.Access > 0) Then
-                tmpBuf = Chr(34) & user & Chr(34) & " has been given access " & _
+                tmpBuf = Chr(34) & User & Chr(34) & " has been given access " & _
                     gAcc.Access
                 
                 ' was the user given the specified flags, too?
@@ -4886,7 +4886,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             Else
                 ' was the user given the specified flags?
                 If (Len(gAcc.Flags)) Then
-                    tmpBuf = Chr(34) & user & Chr(34) & " has been given flags " & _
+                    tmpBuf = Chr(34) & User & Chr(34) & " has been given flags " & _
                         gAcc.Flags
                 End If
             End If
@@ -4897,7 +4897,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     tmpBuf = tmpBuf & ", and has been made a member of " & _
                         "the group(s): " & sGrp
                 Else
-                    tmpBuf = Chr(34) & user & Chr(34) & " has been made a member of " & _
+                    tmpBuf = Chr(34) & User & Chr(34) & " has been made a member of " & _
                         "the group(s): " & sGrp
                 End If
             End If
@@ -5441,10 +5441,10 @@ Private Function Expand(ByVal s As String) As String
     End If
 End Function
 
-Private Sub AddQ(ByVal s As String, Optional Priority As Byte, Optional ByVal user As String = _
+Private Sub AddQ(ByVal s As String, Optional Priority As Byte = 100, Optional ByVal User As String = _
     vbNullString, Optional ByVal Tag As String = vbNullString)
     
-    Call frmChat.AddQ(s, Priority, user, Tag)
+    Call frmChat.AddQ(s, Priority, User, Tag)
 End Sub
 
 Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, ByVal Banning As Byte) ', Optional ExtraMode As Byte)
@@ -5542,7 +5542,7 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
     End If
 End Function
 
-Private Function searchDatabase(ByRef arrReturn() As String, Optional user As String = vbNullString, _
+Private Function searchDatabase(ByRef arrReturn() As String, Optional User As String = vbNullString, _
     Optional ByVal match As String = vbNullString, Optional Group As String = vbNullString, _
     Optional dbType As String = vbNullString, Optional lowerBound As Integer = -1, _
     Optional upperBound As Integer = -1, Optional Flags As String = vbNullString) As Integer
@@ -5554,12 +5554,12 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
     Dim found    As Integer
     Dim tmpBuf   As String
     
-    If (user <> vbNullString) Then
+    If (User <> vbNullString) Then
         ' store GetAccess() response
         Dim gAcc As udtGetAccessResponse
     
         ' grab user access
-        gAcc = GetAccess(user, dbType)
+        gAcc = GetAccess(User, dbType)
         
         ' ...
         If ((gAcc.Type <> "%") And _
@@ -6810,7 +6810,7 @@ Private Function GetAccessINIValue(ByVal sKey As String, Optional ByVal Default 
     End If
 End Function
 
-Private Function checkUser(ByVal user As String, Optional ByVal _
+Private Function checkUser(ByVal User As String, Optional ByVal _
     allow_illegal As Boolean = False) As Boolean
     
     Dim i       As Integer ' ...
@@ -6819,25 +6819,25 @@ Private Function checkUser(ByVal user As String, Optional ByVal _
     Dim invalid As Boolean ' ...
     
     ' ...
-    If (Left$(user, 1) = "*") Then
-        user = Mid$(user, 2)
+    If (Left$(User, 1) = "*") Then
+        User = Mid$(User, 2)
     End If
     
     ' ...
-    user = Replace(user, "@USWest", vbNullString, 1)
-    user = Replace(user, "@USEast", vbNullString, 1)
-    user = Replace(user, "@Asia", vbNullString, 1)
-    user = Replace(user, "@Europe", vbNullString, 1)
+    User = Replace(User, "@USWest", vbNullString, 1)
+    User = Replace(User, "@USEast", vbNullString, 1)
+    User = Replace(User, "@Asia", vbNullString, 1)
+    User = Replace(User, "@Europe", vbNullString, 1)
     
     ' ...
-    user = Replace(user, "@Lordaeron", vbNullString, 1)
-    user = Replace(user, "@Azeroth", vbNullString, 1)
-    user = Replace(user, "@Kalimdor", vbNullString, 1)
-    user = Replace(user, "@Northrend", vbNullString, 1)
+    User = Replace(User, "@Lordaeron", vbNullString, 1)
+    User = Replace(User, "@Azeroth", vbNullString, 1)
+    User = Replace(User, "@Kalimdor", vbNullString, 1)
+    User = Replace(User, "@Northrend", vbNullString, 1)
     
-    If (Len(user) = 0) Then
+    If (Len(User) = 0) Then
         invalid = True
-    ElseIf (Len(user) > 15) Then
+    ElseIf (Len(User) > 15) Then
         invalid = True
     Else
         ' 95 (a)
@@ -6846,12 +6846,12 @@ Private Function checkUser(ByVal user As String, Optional ByVal _
         ' 57 (9)
     
         ' ...
-        For i = 1 To Len(user)
+        For i = 1 To Len(User)
             ' ...
             Dim currentCharacter As String
             
             ' ...
-            currentCharacter = Mid$(user, i, 1)
+            currentCharacter = Mid$(User, i, 1)
 
             ' is the character between A-Z or a-z?
             If (Asc(currentCharacter) < Asc("A")) Or (Asc(currentCharacter) > Asc("z")) Then
