@@ -13,173 +13,286 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Attribute VB_Ext_KEY = "SavedWithClassBuilder6" ,"Yes"
 Attribute VB_Ext_KEY = "Top_Level" ,"Yes"
+' PacketBuffer.cls
+' Copyright (C) 2008 Eric Evans
+
 Option Explicit
 
-Private Buffer As String
+Private m_buf()  As Byte
+Private m_bufpos As Integer
 
-Public Function InsertDWORDArray(Data() As Long)
-Dim i As Integer
-For i = LBound(Data) To UBound(Data) Step 1
-    Buffer = Buffer & MakeDWORD(Data(i))
-Next i
-End Function
+' ...
+Private Sub Class_Initialize()
+    ' clear buffer contents
+    Call Clear
+End Sub ' end function Class_Initialize
 
-Public Function InsertDWord(ByVal Data As Long)
-Buffer = Buffer & MakeDWORD(Data)
-End Function
+' ...
+Private Sub Class_Terminate()
+    ' clear buffer contents
+    Call Clear
+End Sub ' end function Class_Terminate
 
+' ...
+Public Function InsertByte(ByVal Data As Byte)
+    ' resize buffer
+    ReDim Preserve m_buf(0 To (m_bufpos + 1))
+
+    ' copy data to buffer
+    m_buf(m_bufpos) = Data
+    
+    ' store buffer length
+    m_bufpos = (m_bufpos + 1)
+End Function ' end function InsertByte
+
+' ...
+Public Function InsertByteArr(ByRef Data() As Byte)
+    ' resize buffer
+    ReDim Preserve m_buf(0 To (m_bufpos + (UBound(Data) + 1)))
+
+    ' copy data to buffer
+    Call CopyMemory(m_buf(m_bufpos), Data(0), (UBound(Data) + 1))
+
+    ' store buffer length
+    m_bufpos = (m_bufpos + (UBound(Data) + 1))
+End Function ' end function InsertByte
+
+' ...
+Public Function GetByte() As Byte
+
+End Function ' end function GetByte
+
+' ...
 Public Function InsertWord(ByVal Data As Integer)
-Buffer = Buffer & MakeWORD(Data)
-End Function
+    ' resize buffer
+    ReDim Preserve m_buf(0 To (m_bufpos + 2))
 
-Public Function InsertByte(ByVal Data As Integer)
-Buffer = Buffer & Chr(Data)
-End Function
+    ' copy data to buffer
+    Call CopyMemory(m_buf(m_bufpos), Data, 2)
+    
+    ' store buffer length
+    m_bufpos = (m_bufpos + 2)
+End Function ' end function InsertWord
 
-Public Function InsertNTString(ByVal Data As String)
-Buffer = Buffer & Data & Chr(0)
-End Function
+' ...
+Public Function GetWord() As Integer
 
+End Function ' end function GetWord
+
+' ...
+Public Function InsertDWord(ByVal Data As Long)
+    ' resize data buffer
+    ReDim Preserve m_buf(0 To (m_bufpos + 4))
+
+    ' copy data to buffer
+    Call CopyMemory(m_buf(m_bufpos), Data, 4)
+    
+    ' store buffer length
+    m_bufpos = (m_bufpos + 4)
+End Function ' end function InsertDWord
+
+' ...
+Public Function GetDWord() As Long
+
+End Function ' end function GetDWord
+
+' ...
 Public Function InsertNonNTString(ByVal Data As String)
-Buffer = Buffer & Data
+    ' resize buffer
+    ReDim Preserve m_buf(0 To (m_bufpos + Len(Data)))
+    
+    ' copy data to buffer
+    Call CopyMemory(m_buf(m_bufpos), ByVal Data, Len(Data))
+    
+    ' store buffer length
+    m_bufpos = (m_bufpos + Len(Data))
+End Function ' end function InsertNonNTString
+
+' ...
+Public Function InsertNTString(ByRef Data As String, _
+    Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI)
+    
+    Dim arrStr() As Byte ' ...
+    
+    ' ...
+    Select Case (Encoding)
+        Case STRINGENCODING.ANSI
+            arrStr() = StrConv(Data, vbFromUnicode)
+            
+        Case STRINGENCODING.UTF8
+            arrStr() = modUTF8.UTF8Encode(Data)
+            
+        Case STRINGENCODING.UTF16
+            arrStr() = StrConv(Data, vbFromUnicode)
+    End Select
+    
+    ' resize buffer
+    ReDim Preserve m_buf(0 To (m_bufpos + (UBound(arrStr) + 2)))
+    
+    ' copy data to buffer
+    Call CopyMemory(m_buf(m_bufpos), arrStr(0), (UBound(arrStr) + 1))
+
+    ' store buffer length
+    m_bufpos = (m_bufpos + (UBound(arrStr) + 2))
+End Function ' end function InsertNTString
+
+' ...
+Public Function GetString() As String
+
+End Function ' end function GetString
+
+' ...
+Public Function Length() As Long
+    Length = m_bufpos
 End Function
 
-Public Function MakeDWORD(Data As Long) As String
-    Dim tmp As String
-    tmp = Right("00000000" & Hex(Data), 8)
-    Dim A As String, b As String, c As String, D As String
-    A = Mid(tmp, 1, 2)
-    b = Mid(tmp, 3, 2)
-    c = Mid(tmp, 5, 2)
-    D = Mid(tmp, 7, 2)
-    MakeDWORD = Chr(Val("&H" & D))
-    MakeDWORD = MakeDWORD & Chr(Val("&H" & c))
-    MakeDWORD = MakeDWORD & Chr(Val("&H" & b))
-    MakeDWORD = MakeDWORD & Chr(Val("&H" & A))
-End Function
-
-Public Function MakeWORD(Data As Integer) As String
-    Dim tmp As String
-    tmp = Right("0000" & Hex(Data), 4)
-    Dim A As String, b As String
-    A = Mid(tmp, 1, 2)
-    b = Mid(tmp, 3, 2)
-    MakeWORD = Chr(Val("&H" & b))
-    MakeWORD = MakeWORD & Chr(Val("&H" & A))
-End Function
-
-Public Function GetDWord(ByVal Data As String) As Long
-    Dim tmp As String
-    tmp = StrToHex(Data)
-    Dim A As String, b As String, c As String, D As String
-    A = Mid(tmp, 1, 2)
-    b = Mid(tmp, 3, 2)
-    c = Mid(tmp, 5, 2)
-    D = Mid(tmp, 7, 2)
-    tmp = D & c & b & A
-    GetDWord = Val("&H" & tmp)
-End Function
-
-Public Function GetWord(ByVal Data As String) As Long
-    Dim tmp As String
-    tmp = ToHex(Data)
-    Dim A As String, b As String
-    A = Mid(tmp, 1, 2)
-    b = Mid(tmp, 3, 2)
-    tmp = b & A
-    GetWord = Val("&H" & tmp)
-End Function
-
+' ...
 Public Function Clear()
-    Buffer = vbNullString
-End Function
+    ' resize buffer
+    ReDim m_buf(0)
+    
+    ' clear first index
+    m_buf(0) = 0
+    
+    ' reset buffer length
+    m_bufpos = 0
+End Function ' end function Clear
 
+' ...
 Public Function SendPacketMCP(Optional PacketID As Byte)
-    On Error Resume Next
-    If MDebug("all") > 0 Then
-        frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & Right$("00" & Hex(PacketID), 2)
+    Dim buf() As Byte ' ...
+
+    ' ...
+    If (MDebug("all")) Then
+        frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & _
+            Right$("00" & Hex(PacketID), 2)
     End If
     
-    If frmChat.sckMCP.State <> 0 Then
-        frmChat.sckMCP.SendData MakeWORD(Len(Buffer) + 3) & Chr(PacketID) & Buffer
+    ' ...
+    If (frmChat.sckMCP.State <> 0) Then
+        'frmChat.sckMCP.SendData WordToString(Len(buffer) + 3) & _
+        '    Chr$(PacketID) & buffer
     End If
-    Clear
-End Function
+    
+    ' clear buffer contents
+    Call Clear
+End Function ' end function SendPacketMCP
 
+' ...
 Public Function SendPacket(Optional PacketID As Byte)
-    On Error Resume Next
+    Dim l     As Long    ' ...
+    Dim buf() As Byte    ' ...
+    Dim i     As Integer ' ...
     
-    Dim l     As Long
-    Dim Buf() As Byte
-    Dim i     As Integer
+    ' resize temporary data buffer
+    ReDim buf(m_bufpos + 3)
     
-    If MDebug("all") Then
-        frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & Right$("00" & Hex(PacketID), 2)
+    ' ...
+    If (MDebug("all")) Then
+        frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & Right$("00" & _
+            Hex(PacketID), 2)
     End If
     
-    l = Len(Buffer)
+    l = m_bufpos
     
-    If frmChat.sckBNet.State <> 0 Then
-        Buffer = Chr(&HFF) & Chr(PacketID) & MakeWORD(l + 4) & Buffer
+    ' ...
+    If (frmChat.sckBNet.State <> 0) Then
+        buf(0) = &HFF     ' header
+        buf(1) = PacketID ' packet identification number
         
-        'For i = 0 To LenB(Buffer)
-        '    ReDim Preserve Buf(i)
-       '
-       '     Buf(i) = Asc(Mid$(Buffer, i + 1, 1))
-       ' Next i
+        ' copy packet data length to temporary buffer
+        Call CopyMemory(buf(2), l + 4, 2)
         
-        'Call SendBytes(frmChat.sckBNet.SocketHandle, byt(), Len(Buffer), 0)
+        ' ...
+        If (m_bufpos) Then
+            ' copy data from buffer to temporary buffer
+            Call CopyMemory(buf(4), m_buf(0), m_bufpos)
+        End If
         
-        frmChat.sckBNet.SendData Buffer
-        
-        'Debug.Print DebugOutput(Chr(&HFF) & Chr(PacketID) & MakeWORD(Len(Buffer) + 4) & Buffer)
+        ' ...
+        Call frmChat.sckBNet.SendData(buf)
     End If
     
-    LogPacketRaw stBNCS, CtoS, PacketID, l + 4, Buffer
+    ' ...
+    'Call LogPacketRaw(stBNCS, CtoS, PacketID, l + 4, buffer)
     
-    Clear
-End Function
+    ' clear buffer contents
+    Call Clear
+End Function ' end function SendPacket
 
+' ...
 Public Function vLSendPacket(Optional PacketID As Byte)
-    On Error Resume Next
-    Dim l As Long
+    Dim buf() As Byte ' ...
+    Dim l     As Long ' ...
     
-    l = Len(Buffer)
+    l = m_bufpos
     
-    If MDebug("all") Then frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & Right$("00" & Hex(PacketID), 2)
+    ' resize temporary data buffer
+    ReDim buf(m_bufpos + 2)
     
-    If frmChat.sckBNLS.State <> 0 Then
-        Buffer = MakeWORD(l + 3) & Chr(PacketID) & Buffer
-        frmChat.sckBNLS.SendData Buffer
+    ' ...
+    If (MDebug("all")) Then
+        frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & _
+            Right$("00" & Hex(PacketID), 2)
     End If
     
-    LogPacketRaw stBNLS, CtoS, PacketID, l + 3, Buffer
+    ' ...
+    If (frmChat.sckBNLS.State <> 0) Then
+        ' copy packet data length to temporary buffer
+        Call CopyMemory(buf(0), m_bufpos + 3, 2)
+
+        buf(2) = PacketID ' packet identification number
+        
+        ' ...
+        If (m_bufpos) Then
+            ' copy data from buffer to temporary buffer
+            Call CopyMemory(buf(3), m_buf(0), m_bufpos)
+        End If
+        
+        ' ...
+        Call frmChat.sckBNLS.SendData(buf)
+    End If
     
-    Clear
-End Function
+    ' ...
+    'Call LogPacketRaw(stBNLS, CtoS, PacketID, l + 3, buffer)
+    
+    ' clear buffer contents
+    Call Clear
+End Function ' end function vLSendPacket
 
-Public Function DumpHex() As String
-    Dim i As Integer
-    DumpHex = StrToHex(MakeWORD(Len(Buffer) + 3)) & Space(1) & Hex(&H1)
-    For i = 1 To Len(Buffer)
-        DumpHex = DumpHex & Space(1) & Right("00" & Hex(Asc(Mid(Buffer, i, 1))), 2)
-    Next i
-End Function
-
-Public Function ToHex(Data As String) As String
-    Dim i As Integer
-    For i = 1 To Len(Data)
-        ToHex = ToHex & Right("00" & Hex(Asc(Mid(Data, i, 1))), 2)
-    Next i
-End Function
-
+' ...
 Public Function GetPacket(PacketID As Byte) As String
-    GetPacket = Chr(&HFF) & Chr(PacketID) & MakeWORD(Len(Buffer) + 4) & Buffer
+    Dim buf As String ' ...
+    
+    ' ...
+    buf = String$(m_bufpos + 1, vbNull)
+    
+    ' ...
+    Call CopyMemory(ByVal buf, m_buf(0), m_bufpos + 1)
+
+    ' ...
+    GetPacket = Chr$(&HFF) & Chr$(PacketID) & WordToString((m_bufpos + 1) + 4) & _
+        buf
+    
+    ' clear buffer contents
     Call Clear
-End Function
-'09-24-07 - Added by Hdx. Pretty self evidant.
+End Function ' end function GetPacket
+
+' ...
 Public Function GetBNLSPacket(PacketID As Byte) As String
-    GetBNLSPacket = MakeWORD(Len(Buffer) + 3) & Chr(PacketID) & Buffer
+    Dim buf As String ' ...
+    
+    ' ...
+    buf = String$(m_bufpos + 1, vbNull)
+    
+    ' ...
+    Call CopyMemory(ByVal buf, m_buf(0), m_bufpos + 1)
+
+    ' ...
+    GetBNLSPacket = WordToString((m_bufpos + 1) + 3) & Chr$(PacketID) & _
+        buf
+    
+    ' clear buffer contents
     Call Clear
-End Function
+End Function ' end function GetBNLSPacket
 

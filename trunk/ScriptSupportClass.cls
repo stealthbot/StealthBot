@@ -197,6 +197,7 @@ Public Enum ControlTypes
     btINet = 13
     btRichTextBox = 14
 End Enum
+
 Private obScriptForms As Object
 
 
@@ -224,129 +225,13 @@ Private obScriptForms As Object
 '//     AddChat vbRed, "Hello, world!"
 '// will display that phrase in red.
 Public Sub AddChat(ParamArray saElements() As Variant)
-    Dim s As String
-    Dim l As Long, lngVerticalPos As Long
-    Dim i As Integer, intRange As Integer, f As Integer
-    Dim blUnlock As Boolean, LogThis As Boolean
+    Dim arr() As Variant ' ...
     
-    f = FreeFile
+    ' ...
+    arr() = saElements
     
-    If Not BotVars.LockChat Then
-    
-        If IsWin2000Plus() Then
-            intRange = 40
-            
-            GetScrollRange frmChat.rtbChat.hWnd, SB_VERT, 0, intRange
-            lngVerticalPos = SendMessage(frmChat.rtbChat.hWnd, EM_GETTHUMB, 0&, 0&)
-            
-            'Debug.Print "ScrollRange: " & intRange & " ; VerticalPos: " & lngVerticalPos & " ; frmchat.rtbchatHeight " & frmchat.rtbchat.Height & " ; pix " & frmchat.rtbchat.Height / Screen.TwipsPerPixelY
-            
-            If (lngVerticalPos + (frmChat.rtbChat.Height / Screen.TwipsPerPixelY)) <= intRange Then
-                'LockWindowUpdate frmchat.rtbchat.hWnd
-                frmChat.rtbChat.Visible = False
-                blUnlock = True
-            End If
-        End If
-        
-        LogThis = (BotVars.Logging < 2)
-        
-        If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
-            With frmChat.rtbChat
-                .Visible = False
-                .SelStart = 0
-                .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
-                
-                rtbChatLength = rtbChatLength - .SelLength
-                
-                'If BotVars.Logging < 2 And LOF(i) < BotVars.MaxLogfileSize Then
-                '    i = FreeFile
-                '    Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #i
-                '        Print #i, Left$(.SelText, Len(.SelText) - 2)
-                '    Close #i
-                'End If
-                
-                .SelText = ""
-                .Visible = True
-            End With
-        End If
-        
-        s = GetTimeStamp
-        
-        With frmChat.rtbChat
-            .SelStart = Len(.text)
-            .SelLength = 0
-            .SelColor = RTBColors.TimeStamps
-            If .SelBold = True Then .SelBold = False
-            If .SelItalic = True Then .SelItalic = False
-            If .SelUnderline = True Then .SelUnderline = False
-            .SelText = s
-            .SelStart = Len(.text)
-        End With
-        
-        If LogThis Then
-            Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #f
-            
-            If ((BotVars.MaxLogFileSize) And _
-                (LOF(f) >= BotVars.MaxLogFileSize)) Then
-                
-                LogThis = False
-                
-                Close #f
-            Else
-                Print #f, s;
-            End If
-        End If
-        
-        For i = LBound(saElements) To UBound(saElements) Step 2
-        
-            If InStr(1, saElements(i + 1), Chr(0), vbBinaryCompare) > 0 Then _
-                KillNull saElements(i + 1)
-            
-            If Len(saElements(i + 1)) > 0 Then
-                l = InStr(1, saElements(i + 1), "{\rtf", vbTextCompare)
-                
-                While (l > 0)
-                    Mid$(saElements(i + 1), l + 1, 1) = "/"
-                    
-                    l = InStr(1, saElements(i + 1), "{\rtf", vbTextCompare)
-                Wend
-            
-                With frmChat.rtbChat
-                    .SelStart = Len(.text)
-                    l = .SelStart
-                    .SelLength = 0
-                    .SelColor = saElements(i)
-                    .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
-                    
-                    rtbChatLength = rtbChatLength + Len(s) + Len(saElements(i + 1)) + _
-                        Len(Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements))))
-                    
-                    .SelStart = Len(.text)
-                End With
-                
-                ' Fixed 11/21/06 to properly log timestamps
-                If LogThis Then
-                    Print #f, s & saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)));
-                End If
-            End If
-            
-        Next i
-        
-        Call ColorModify(frmChat.rtbChat, l)
-    
-        If LogThis Then
-            Close #f
-            
-            LogThis = False
-        End If
-
-        If blUnlock Then
-            SendMessage frmChat.rtbChat.hWnd, WM_VSCROLL, SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
-            'LockWindowUpdate 0&
-            frmChat.rtbChat.Visible = True
-        End If
-
-    End If
+    ' ...
+    Call DisplayRichText(frmChat.rtbChat, arr)
 End Sub
 
 
@@ -361,138 +246,17 @@ End Sub
 '//     AddChatFont "Courier New", vbRed, "Hello, world!"
 '// will display that phrase in the Courier New font and red color.
 Public Sub AddChatFont(ParamArray saElements() As Variant)
-    On Error Resume Next
-    Dim s As String
-    Dim l As Long, lngVerticalPos As Long
-    Dim i As Integer, intRange As Integer, f As Integer
-    Dim blUnlock As Boolean, LogThis As Boolean
-    
-    If Not BotVars.LockChat Then
-    
-        If IsWin2000Plus() Then
-            GetScrollRange frmChat.rtbChat.hWnd, SB_VERT, 0, intRange
-            lngVerticalPos = SendMessage(frmChat.rtbChat.hWnd, EM_GETTHUMB, 0&, 0&)
-            
-            'Debug.Print "ScrollRange: " & intRange & " ; VerticalPos: " & lngVerticalPos & " ; frmchat.rtbchatHeight " & frmchat.rtbchat.Height & " ; pix " & frmchat.rtbchat.Height / Screen.TwipsPerPixelY
-            
-            If (lngVerticalPos + (frmChat.rtbChat.Height / Screen.TwipsPerPixelY)) <= intRange Then
-                'LockWindowUpdate frmchat.rtbchat.hWnd
-                frmChat.rtbChat.Visible = False
-                blUnlock = True
-            End If
-        End If
-        
-        LogThis = (BotVars.Logging < 2)
-        
-        If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
-            With frmChat.rtbChat
-                .Visible = False
-                .SelStart = 0
-                .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
-                
-                rtbChatLength = rtbChatLength - .SelLength
-                
-'                If BotVars.Logging < 2 And LOF(i) < BotVars.MaxLogfileSize Then
-'                    i = FreeFile
-'                    Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #i
-'                        Print #i, Left$(.SelText, Len(.SelText) - 2)
-'                    Close #i
-'                End If
-                
-                .SelText = ""
-                .Visible = True
-            End With
-        End If
-        
-        s = GetTimeStamp
-        
-        With frmChat.rtbChat
-            .SelStart = Len(.text)
-            .SelLength = 0
-            .SelColor = RTBColors.TimeStamps
-            If .SelBold = True Then .SelBold = False
-            If .SelItalic = True Then .SelItalic = False
-            If .SelUnderline = True Then .SelUnderline = False
-            .SelText = s
-            .SelStart = Len(.text)
-        End With
-        
-        If LogThis Then
-            f = FreeFile
-            
-            Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #f
-            
-            If (LOF(f) >= BotVars.MaxLogFileSize) Then
-                LogThis = False
-                Close #f
-            Else
-                Print #f, s;
-            End If
-        End If
-        
-        For i = LBound(saElements) To UBound(saElements) Step 3
-        
-            If InStr(1, saElements(i + 1), Chr(0), vbBinaryCompare) > 0 Then _
-                KillNull saElements(i + 1)
-            
-            If InStr(1, saElements(i + 2), Chr(0), vbBinaryCompare) > 0 Then _
-                KillNull saElements(i + 2)
-            
-            If Len(saElements(i + 2)) > 0 Then
-                l = InStr(1, saElements(i + 1), "{\rtf", vbTextCompare)
-                
-                While (l > 0)
-                    Mid$(saElements(i + 2), l + 2, 1) = "/"
-                    
-                    l = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
-                Wend
-            
-                With frmChat.rtbChat
-                    .SelStart = Len(.text)
-                    l = .SelStart
-                    .SelLength = 0
-                    .SelFontName = saElements(i)
-                    .SelColor = saElements(i + 1)
-                    .SelText = saElements(i + 2) & Left$(vbCrLf, -2 * CLng((i + 2) = UBound(saElements)))
-                    
-                    rtbChatLength = rtbChatLength + Len(s) + Len(saElements(i + 2)) + Len(Left$(vbCrLf, -2 * CLng((i + 2) = UBound(saElements))))
-                    
-                    .SelStart = Len(.text)
-                End With
-                
-                ' Fixed 11/21/06 to properly log timestamps
-                If LogThis Then
-                    Print #f, s & saElements(i + 2) & Left$(vbCrLf, -2 * CLng((i + 2) = UBound(saElements)));
-                End If
-            End If
-            
-        Next i
-        
-        Call ColorModify(frmChat.rtbChat, l)
-    
-        If LogThis Then
-            Close #f
-            LogThis = False
-        End If
-
-        If blUnlock Then
-            SendMessage frmChat.rtbChat.hWnd, WM_VSCROLL, SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
-            'LockWindowUpdate 0&
-            frmChat.rtbChat.Visible = True
-        End If
-
-    End If
+    'Call frmChat.AddChatFont(saElements())
 End Sub
 
 
 '// ADDQ (ADD QUEUE)
 '// Adds a string to the message send queue.
 '// Nonzero priority messages will be sent with precedence over 0-priority messages.
-Public Sub AddQ(ByVal sText As String, Optional ByVal Priority As Byte = 0, Optional _
-    ByVal User As String = vbNullString, Optional ByVal Tag As String = vbNullString)
+Public Sub AddQ(ByVal sText As String, Optional ByVal Priority As Byte = 100, Optional _
+    ByVal user As String = vbNullString, Optional ByVal Tag As String = vbNullString)
 
-    frmChat.AddQ sText, Priority, User, Tag
-    
+    Call frmChat.AddQ(sText, Priority, user, Tag)
 End Sub
 
 
@@ -532,12 +296,12 @@ Public Function command(ByVal Username As String, ByVal Message As String, ByVal
     
         ' manipulate message for deprecated
         ' calling format
-        If (InBot) Then
-            tmpmsg = "/" & tmpmsg
-        Else
-            tmpmsg = BotVars.TriggerLong & _
-                tmpmsg
-        End If
+        'If (InBot) Then
+        '    tmpmsg = "/" & tmpmsg
+        'Else
+        '    tmpmsg = BotVars.TriggerLong & _
+        '        tmpmsg
+        'End If
         
         ' execute command
         command = ProcessCommand(Username, Message, InBot, False)
@@ -898,12 +662,7 @@ End Function
 '// Returns the current StealthBot app version as a string.
 Public Function GetBotVersion() As String
     
-    GetBotVersion = "StealthBot v" & App.Major & "." & App.Minor
-    
-    '// Compiler flag - BETA = 0 in public releases
-    #If BETA = 1 Then
-        GetBotVersion = GetBotVersion & App.REVISION & " Development Edition"
-    #End If
+    GetBotVersion = CVERSION
     
 End Function
 
@@ -1508,7 +1267,7 @@ Public Function CreateForm(ByVal strPrefix As String, ByVal strName As String) A
     Else
         Dim frmUI As New frmScriptUI
         frmUI.FillPrefixName strPrefix, strName
-        load frmUI
+        Load frmUI
         Call obScriptForms.Add(strPrefix & "|" & strName, frmUI)
         CreateForm = True
     End If
@@ -1572,6 +1331,11 @@ Public Function GetUIObject(ByVal strPrefix As String, ByVal strForm As String, 
     Else
         Set GetUIObject = Nothing
     End If
+End Function
+
+' // ...
+Public Function MediaPlayer() As Object
+    Set MediaPlayer = modMediaPlayer.MediaPlayer()
 End Function
 
 Private Sub Class_Initialize()

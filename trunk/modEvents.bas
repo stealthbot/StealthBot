@@ -17,10 +17,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
     If (LenB(Username) < 1) Then
         Exit Sub
     End If
-    
-    ' ...
-    g_lastQueueUser = "(console)"
-    
+
     ' convert username to appropriate
     ' display format
     Username = convertUsername(Username)
@@ -123,10 +120,7 @@ End Sub
 
 Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     Dim mailCount As Integer ' ...
-    
-    ' ...
-    g_lastQueueUser = "(console)"
-    
+
     ' clear chat queue when
     ' joining new channel
     Call ClearChatQueue
@@ -226,10 +220,7 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
     Dim s() As String
     Dim u   As String
     Dim i   As Integer
-    
-    ' ...
-    g_lastQueueUser = "(console)"
-    
+
     ' Some of the oldest code in this project lives right here
     If SuppressProfileOutput Then
         
@@ -383,10 +374,7 @@ End Sub
 
 Public Sub Event_LoggedOnAs(Username As String, Product As String)
     LastWhisper = vbNullString
-    
-    ' ...
-    g_lastQueueUser = "(console)"
-    
+
     'If InStr(1, Username, "*", vbBinaryCompare) <> 0 Then
     '    Username = Right(Username, Len(Username) - InStr(1, Username, "*", vbBinaryCompare))
     'End If
@@ -534,20 +522,18 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Const BANNED_MESSAGE   As String = " was banned by "
     Const UNBANNED_MESSAGE As String = " was unbanned by "
 
-    Dim i     As Integer
-    Dim Temp  As String
-    Dim bHide As Boolean
+    Dim i      As Integer
+    Dim Temp   As String
+    Dim bHide  As Boolean
+    Dim ToANSI As String
     
     ' ...
-    g_lastQueueUser = "(console)"
+    ToANSI = UTF8Decode(Message)
     
-    'If (frmChat.mnuUTF8.Checked) Then
-    '    Message = UTF8Decode(Message)
-    '
-    '    If (Message = vbNullString) Then
-    '        Exit Sub
-    '    End If
-    'End If
+    ' ...
+    If (Len(ToANSI) > 0) Then
+        Message = ToANSI
+    End If
     
     If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
         If (PassedClanMotdCheck = False) Then
@@ -684,7 +670,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 If (InStr(1, Message, "channel", vbTextCompare) = 0) Then
                     i = InStrRev(Message, Space(1))
                     
-                    BotVars.Realm = Mid$(Message, i + 1)
+                    BotVars.Gateway = Mid$(Message, i + 1)
                     
                     ' we want our username to accurately reflect
                     ' our new discovery of the realm name
@@ -734,20 +720,19 @@ Public Sub Event_SomethingUnknown(ByVal UnknownString As String)
 End Sub
 
 Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal Message As String)
-    Dim i As Integer ' ...
+    Dim i      As Integer ' ...
+    Dim ToANSI As String ' ...
 
+    ' ...
     Username = convertUsername(Username)
     
-    If (frmChat.mnuUTF8.Checked) Then
-        Message = UTF8Decode(Message)
-    
-        If (Message = vbNullString) Then
-            Exit Sub
-        End If
-    End If
+    ' ...
+    ToANSI = UTF8Decode(Message)
     
     ' ...
-    g_lastQueueUser = Username
+    If (Len(ToANSI) > 0) Then
+        Message = ToANSI
+    End If
     
     i = UsernameToIndex(Username)
     
@@ -872,9 +857,6 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     End If
     
     Username = convertUsername(Username)
-    
-    ' ...
-    g_lastQueueUser = "(console)"
     
     ' are we receiving my user information?
     If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
@@ -1047,10 +1029,7 @@ End Sub
 
 Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal w3icon As String)
     Username = convertUsername(Username)
-    
-    ' ...
-    g_lastQueueUser = "(console)"
-    
+
     If (Not (bFlood)) Then
         Dim UserToAdd  As clsUserInfo
         
@@ -1465,9 +1444,6 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Username = convertUsername(Username)
     
     ' ...
-    g_lastQueueUser = "(console)"
-    
-    ' ...
     i = UsernameToIndex(Username)
     
     ' ...
@@ -1580,23 +1556,19 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     Dim i          As Integer
     Dim ColIndex   As Integer
     Dim b          As Boolean
-    
-    If (frmChat.mnuUTF8.Checked = False) Then
-        If (Len(UTF8Decode(Message)) > 0) Then
-            Message = UTF8Decode(Message)
-        End If
-    End If
-    
-    Username = convertUsername(Username)
-    
-    If (InStr(1, Username, "*", vbTextCompare) <> 0) Then
-        Username = Right$(Username, Len(Username) - _
-            InStr(1, Username, "*", vbBinaryCompare))
-    End If
+    Dim ToANSI     As String
     
     ' ...
-    g_lastQueueUser = Username
+    Username = convertUsername(Username)
     
+    ' ...
+    ToANSI = UTF8Decode(Message)
+    
+    ' ...
+    If (Len(ToANSI) > 0) Then
+        Message = ToANSI
+    End If
+
     i = UsernameToIndex(Username)
     
     If (i > 0) Then
@@ -1840,14 +1812,20 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
     Dim s       As String
     Dim lCarats As Long
     Dim WWIndex As Integer
+    Dim ToANSI  As String
     
     Username = convertUsername(Username)
     
     ' ...
-    g_lastQueueUser = Username
+    ToANSI = UTF8Decode(Message)
+    
+    ' ...
+    If (Len(ToANSI) > 0) Then
+        Message = ToANSI
+    End If
 
     If (frmChat.mnuUTF8.Checked) Then
-        Message = UTF8Decode(Message)
+        Message = ToANSI
         
         If (Message = vbNullString) Then
             Exit Sub
@@ -1978,24 +1956,23 @@ End Sub
 ' Flags and ping are deliberately not used at this time
 Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long)
     Dim WWIndex As Integer
+    Dim ToANSI  As String
     
     ' ...
-    g_lastQueueUser = "(console)"
+    ToANSI = UTF8Decode(Message)
     
+    ' ...
+    If (Len(ToANSI) > 0) Then
+        Message = ToANSI
+    End If
+    
+    ' ...
     If (StrComp(Username, "your friends", vbTextCompare) <> 0) Then
         Username = convertUsername(Username)
-        
+    Else
         LastWhisperTo = "%f%"
     End If
-    
-    If (frmChat.mnuUTF8.Checked) Then
-        Message = UTF8Decode(Message)
-        
-        If (Message = vbNullString) Then
-            Exit Sub
-        End If
-    End If
-        
+
     If (Not (frmChat.mnuHideWhispersInrtbChat.Checked)) Then
         frmChat.AddChat RTBColors.WhisperCarats, "<To ", RTBColors.WhisperUsernames, _
             IIf(Dii, Mid$(Username, InStr(Username, "*") + 1), Username), _

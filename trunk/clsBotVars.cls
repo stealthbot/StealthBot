@@ -892,7 +892,9 @@ End Property
 
 Public Property Let Clan(ByVal sClan As String)
 
-    m_sClan = sClan
+    If (m_ScriptLock = False) Then
+        m_sClan = sClan
+    End If
 
 End Property
 
@@ -904,7 +906,9 @@ End Property
 
 Public Property Let Gateway(ByVal sGateway As String)
 
-    m_sGateway = sGateway
+    If (m_ScriptLock = False) Then
+        m_sGateway = sGateway
+    End If
 
 End Property
 
@@ -957,15 +961,17 @@ Public Property Let ChatDelay(lDelay As Long)
 
 End Property
 
-'Public Property Get ScriptLock() As Boolean
-'
-'    ScriptLock = m_ScriptLock
-'
-'End Property
+Public Property Get ScriptLock() As Boolean
 
-'Public Property Let ScriptLock(bln As Boolean)
-'
-'    m_ScriptLock = bln
-'
-'End Property
+    ScriptLock = m_ScriptLock
+
+End Property
+
+Public Property Let ScriptLock(bln As Boolean)
+
+    If (m_ScriptLock = False) Then
+        m_ScriptLock = bln
+    End If
+    
+End Property
 

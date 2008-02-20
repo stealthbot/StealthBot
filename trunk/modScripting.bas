@@ -141,7 +141,7 @@ LoadScript_Exit:
    
 LoadPluginSystem_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure LoadPluginSystem of Module modScripting"
+    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure LoadPluginSystem of Module modScripting"
     Debug.Print "Using variable: " & Path
 End Sub
 

@@ -1520,13 +1520,13 @@ End Function
 
 Public Function GetW3Realm(Optional ByVal Username As String) As String
     If (LenB(Username) = 0) Then
-        GetW3Realm = BotVars.Realm
+        GetW3Realm = BotVars.Gateway
     Else
         If (InStr(1, Username, "@", vbBinaryCompare) > 0) Then
             GetW3Realm = Mid$(Username, InStr(1, Username, "@", _
                 vbBinaryCompare) + 1)
         Else
-            GetW3Realm = BotVars.Realm
+            GetW3Realm = BotVars.Gateway
         End If
     End If
 End Function

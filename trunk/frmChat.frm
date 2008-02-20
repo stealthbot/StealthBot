@@ -1001,7 +1001,6 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuUTF8 
          Caption         =   "Use &UTF-8 Decoding"
-         Enabled         =   0   'False
       End
       Begin VB.Menu mnuSep4 
          Caption         =   "-"
@@ -1411,7 +1410,7 @@ Attribute VB_Exposed = False
 'Source Code Version: 2.6R3+
 Option Explicit
 
-Private Declare Function GetFocus Lib "User" () As Integer
+Private Declare Function GetFocus Lib "user" () As Integer
 
 'Classes
 Public WithEvents ClanHandler As clsClanPacketHandler
@@ -1643,6 +1642,8 @@ Private Sub Form_Load()
     Me.Show
     Me.Refresh
     Me.AutoRedraw = True
+
+    Call UTF8Encode("/whoami")
 
     AddChat RTBColors.ConsoleText, "-> Welcome to " & CVERSION & ", by Stealth."
     AddChat RTBColors.ConsoleText, "-> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net"
@@ -5298,7 +5299,7 @@ End Function
 
 ' ...
 Sub AddQ(ByVal Message As String, Optional Priority As Byte = 100, Optional _
-    ByVal User As String = vbNullString, Optional ByVal Tag As String = vbNullString)
+    ByVal user As String = vbNullString, Optional ByVal Tag As String = vbNullString)
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -5547,10 +5548,10 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 100, Optional _
                         .Priority = Priority
                         
                         ' ...
-                        If (User = vbNullString) Then
-                            .ResponseTo = User
+                        If (user = vbNullString) Then
+                            .ResponseTo = user
                         Else
-                            .ResponseTo = g_lastQueueUser
+                            .ResponseTo = vbNullString
                         End If
                         
                         .Tag = Tag

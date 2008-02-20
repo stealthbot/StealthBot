@@ -63,7 +63,7 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
 
             With clsChatQueue
                 ' ...
-                If (GetTickCount() - .Time() >= 500) Then
+                If (GetTickCount() - .Time() >= 300) Then
                     blnShow = True
                 End If
 
@@ -125,9 +125,6 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
     On Error Resume Next
-    
-    ' ...
-    g_lastQueueUser = "(console)"
     
     'frmChat.SControl.Run "Event_UserJoins", Username, flags, Message, Ping, _
     '    Level, OriginalStatstring, Banned
@@ -258,10 +255,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
     On Error Resume Next
-    
-    ' ...
-    g_lastQueueUser = "(console)"
-    
+
     frmChat.SControl.Run "Event_FlagUpdate", Username, Flags, Ping
 End Sub
 
@@ -318,9 +312,6 @@ Public Sub Event_QueuedTalk(ByVal Username As String, ByVal Flags As Long, ByVal
                 Mid$(Message, Len(BotVars.TriggerLong) + 1)
         End If
     End If
-    
-    ' ...
-    g_lastQueueUser = Username
 
     frmChat.SControl.Run "Event_UserTalk", Username, Flags, Message, Ping
 End Sub
@@ -360,9 +351,6 @@ Public Sub Event_QueuedEmote(ByVal Username As String, ByVal Flags As Long, ByVa
                 Mid$(Message, Len(BotVars.TriggerLong) + 1)
         End If
     End If
-    
-    ' ...
-    g_lastQueueUser = Username
     
     frmChat.SControl.Run "Event_UserEmote", Username, Flags, Message
 End Sub
