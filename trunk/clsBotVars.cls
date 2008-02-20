@@ -91,6 +91,7 @@ Private m_sRealm                        As String
 Private m_NoSupportMultiCharTrigger     As Boolean
 Private m_MediaPlayer                   As String
 Private m_ChatDelay                     As Long
+Private m_ScriptLock                    As Boolean
 
 Public Property Get Username() As String
     
@@ -955,4 +956,16 @@ Public Property Let ChatDelay(lDelay As Long)
     m_ChatDelay = lDelay
 
 End Property
+
+'Public Property Get ScriptLock() As Boolean
+'
+'    ScriptLock = m_ScriptLock
+'
+'End Property
+
+'Public Property Let ScriptLock(bln As Boolean)
+'
+'    m_ScriptLock = bln
+'
+'End Property
 
