@@ -1268,7 +1268,7 @@ End Function
 
 Function psLatestSB()
 
-   If Replace(Split(GetBotVersion())(1), "v", "") < 2.6 Then
+   If (GetBotVersionNumber() < 2.6) Then
       AddChat vbRed, "Error: You must have StealthBot v2.7 to use the Plugin System."
       AddChat vbRed, "Please download the latest version of StealthBot: http://www.stealthbot.net/board/getsb.php"
    Else
@@ -1281,7 +1281,7 @@ Sub psAddPFolder()
 
    '// Create the plugins folder and settings file
    If Not psFSO.FolderExists(BotPath() & "plugins") Then
-      If Replace(Split(GetBotVersion())(1), "v", "") >= 2.6 Then
+      If (GetBotVersionNumber() >= 2.6) Then
          psFSO.CreateFolder(BotPath() & "plugins")
          AddChat 39423, "Added the plugins folder to your StealthBot folder."
       End If
@@ -1648,3 +1648,19 @@ Sub Event_Close()
 
    psExecuteEvent "Close", Array(vbNullString)
 End Sub
+
+Function GetBotVersionNumber()
+   strVersion = GetBotVersion()
+
+   arrVersion = Split(strVersion, Space(1))
+
+   If (UBound(arrVersion)) Then
+      If (arrVersion(1) = "Beta") Then
+         If (UBound(arrVersion) > 1) Then
+            GetBotVersionNumber = Mid(arrVersion(2), 2)
+         End If
+      Else
+         GetBotVersionNumber = Mid(arrVersion(1), 2)
+      End If
+   End If
+End Function
