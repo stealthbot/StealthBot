@@ -88,6 +88,7 @@ Module=modMediaPlayer; modMediaPlayer.bas
 Class=clsQueue; clsQueue.cls
 Class=PacketBuffer; clsPacketBuffer.cls
 Class=ScriptSupportClass; ScriptSupportClass.cls
+Class=clsBNI; clsBNI.cls
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""

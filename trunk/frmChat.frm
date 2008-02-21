@@ -829,7 +829,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -855,7 +854,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1000,7 +998,7 @@ Begin VB.Form frmChat
          Shortcut        =   ^P
       End
       Begin VB.Menu mnuUTF8 
-         Caption         =   "Use &UTF-8 Decoding"
+         Caption         =   "Use &UTF-8 in Chat"
       End
       Begin VB.Menu mnuSep4 
          Caption         =   "-"
@@ -3765,7 +3763,6 @@ Private Sub mnuUTF8_Click()
         mnuUTF8.Checked = False
         WriteINI "Main", "UTF8", "N"
         AddChat RTBColors.ConsoleText, "Messages will no longer be UTF-8-decoded."
-        
     Else
         mnuUTF8.Checked = True
         WriteINI "Main", "UTF8", "Y"
@@ -5927,12 +5924,16 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     If s = "N" Then BotVars.DisableMP3Commands = True Else BotVars.DisableMP3Commands = False
     
     s = ReadCFG(MN, "MaxBacklogSize")
-    If StrictIsNumeric(s) Then
+    If ((s = vbNullString) Or (StrictIsNumeric(s) = False)) Then
+        BotVars.MaxBacklogSize = 10000
+    Else
         BotVars.MaxBacklogSize = Val(s)
     End If
     
     s = ReadCFG(MN, "MaxLogFileSize")
-    If StrictIsNumeric(s) Then
+    If ((s = vbNullString) Or (StrictIsNumeric(s) = False)) Then
+        BotVars.MaxLogFileSize = 50000000
+    Else
         BotVars.MaxLogFileSize = Val(s)
     End If
     
@@ -5978,9 +5979,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     BotVars.BackupChan = ReadCFG(MN, "BackupChan")
     
-    ' UTF-8 defunt. atm.
-    's = ReadCFG("Main", "UTF8")
-    'If s = "Y" Then mnuUTF8.Checked = True Else mnuUTF8.Checked = False
+    s = ReadCFG("Main", "UTF8")
+    If s = "N" Then mnuUTF8.Checked = True Else mnuUTF8.Checked = False
     
     mnuToggleShowOutgoing.Checked = (ReadCFG("Main", "ShowOutgoingWhispers") = "Y")
     mnuHideWhispersInrtbChat.Checked = (ReadCFG("Main", "HideWhispersInMain") = "Y")
