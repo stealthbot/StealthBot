@@ -198,13 +198,6 @@ Public Enum ControlTypes
     btRichTextBox = 14
 End Enum
 
-Public Type COMMAND_DATA
-    Name         As String
-    params       As String
-    local        As Boolean
-    publicOutput As Boolean
-End Type
-
 Private obScriptForms As Object
 
 
@@ -1342,9 +1335,9 @@ End Function
 
 ' // ...
 Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Boolean = _
-    False) As COMMAND_DATA
+    False) As Object
     
-    IsCommand = modOtherCode.IsCommand(str, DontCheckTrigger)
+    Set IsCommand = modOtherCode.IsCommand(str, DontCheckTrigger)
 End Function
 
 ' // ...

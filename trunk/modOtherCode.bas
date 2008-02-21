@@ -3,9 +3,9 @@ Option Explicit
 
 Public Type COMMAND_DATA
     Name         As String
-    params       As String
+    Params       As String
     local        As Boolean
-    publicOutput As Boolean
+    PublicOutput As Boolean
 End Type
 
 'Read/WriteIni code thanks to ickis
@@ -2433,7 +2433,7 @@ End Function
 
 ' Thanks strtok()!
 Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Boolean = _
-    False) As COMMAND_DATA
+    False) As clsCommand
     
     ' ...
     Const CMD_DELIMITER As String = "; "
@@ -2445,7 +2445,7 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
     Dim bln          As Boolean ' ...
     Dim tmp          As String  ' ...
     Dim console      As Boolean ' ...
-    Dim publicOutput As Boolean ' ...
+    Dim PublicOutput As Boolean ' ...
     
     ' ...
     If (str <> vbNullString) Then
@@ -2455,7 +2455,7 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
         If (Len(Message) <= CropLen) Then
             With IsCommand
                 .Name = vbNullString
-                .params = vbNullString
+                .Params = vbNullString
             End With
         
             Exit Function
@@ -2471,13 +2471,13 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
         
         ' ...
         If (Left$(Message, 2) = "//") Then
-            publicOutput = True
+            PublicOutput = True
         Else
-            publicOutput = False
+            PublicOutput = False
         End If
         
         ' ...
-        tmp = Mid$(tmp, IIf(publicOutput, Len("//") + 1, _
+        tmp = Mid$(tmp, IIf(PublicOutput, Len("//") + 1, _
             Len("/") + 1))
     Else
         console = False
@@ -2550,15 +2550,15 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
         If (Index) Then
             With IsCommand
                 .Name = Mid$(tmp, 1, Index - 1)
-                .params = Mid$(tmp, Index + 1)
+                .Params = Mid$(tmp, Index + 1)
             End With
         Else
             IsCommand.Name = tmp
         End If
         
         With IsCommand
-            .local = console
-            .publicOutput = publicOutput
+            .IsLocal = console
+            .PublicOutput = PublicOutput
         End With
         
         ' ...
@@ -2572,7 +2572,7 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
     
     With IsCommand
         .Name = vbNullString
-        .params = vbNullString
+        .Params = vbNullString
     End With
 End Function
 
