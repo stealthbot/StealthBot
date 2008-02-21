@@ -126,7 +126,7 @@ Public Function InsertNTString(ByRef Data As String, _
             arrStr() = StrConv(Data, vbFromUnicode)
     End Select
     
-    ' resize buffer
+    ' resize buffer and include terminating null character
     ReDim Preserve m_buf(0 To (m_bufpos + (UBound(arrStr) + 2)))
     
     ' copy data to buffer

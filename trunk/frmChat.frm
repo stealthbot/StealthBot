@@ -2365,6 +2365,8 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
     
     ClanTag = KillNull(ClanTag)
     
+    BotVars.Clan = ClanTag
+    
     If AwaitingClanMembership = 1 Then
         AddChat RTBColors.SuccessText, "[CLAN] You are now a member of ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "!"
         AwaitingClanMembership = 0

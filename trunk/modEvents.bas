@@ -606,7 +606,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 
                 Call AddBannedUser(bUser, cOperator)
                 
-                Call RemoveBanFromQueue(Temp)
+                Call RemoveBanFromQueue(bUser)
                 
                 bHide = frmChat.mnuHideBans.Checked
                 
@@ -844,7 +844,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim strCompare   As String  ' ...
     Dim Level        As Byte    ' ...
     Dim StatUpdate   As Boolean ' ...
-    Dim Index        As Long    ' ...
+    Dim index        As Long    ' ...
     
     If (Len(Username) < 1) Then
         Exit Sub
@@ -1481,7 +1481,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     End If
     
     ' ...
-    Call RemoveBanFromQueue(reverseUsername(Username))
+    Call RemoveBanFromQueue(Username)
     
     ' ...
     If ((JoinMessagesOff = False) And (bFlood = False)) Then

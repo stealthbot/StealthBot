@@ -1668,14 +1668,19 @@ End Function
 
 'Checks the queue for duplicate bans
 Public Sub RemoveBanFromQueue(ByVal sUser As String)
+    Dim tmp As String ' ...
+
+    ' ...
+    tmp = "/ban " & reverseUsername(sUser)
+        
+    ' ...
+    Call g_Queue.RemoveLines(tmp)
+    
     'Dim i        As Integer
     'Dim iUserLen As Integer
     '
-    'sUser = "/ban " & IIf(Dii, "*", vbNullString) & _
-    '    StripRealm(sUser)
-    '
     'iUserLen = Len(sUser)
-   
+    '
     'For i = 1 To g_Queue.Count
     '    With colQueue.Item(i)
     '        If (Len(.Message) >= iUserLen) Then
@@ -2338,7 +2343,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     Dim lineCount As Long    ' stores line number
     Dim Pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
-    Dim length    As Long    ' stores length after postfix
+    Dim Length    As Long    ' stores length after postfix
     Dim bln       As Boolean ' stores result of delimiter split
     
     ' initialize our array
@@ -2375,7 +2380,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' going to postfix it.  Because of this, we're
             ' going to have to calculate the length after
             ' the post fix has been accounted for.
-            length = (SplitLength - Len(LinePostfix))
+            Length = (SplitLength - Len(LinePostfix))
         
             ' if we're going to be splitting the oversized
             ' message at a specified character, we need to
@@ -2385,7 +2390,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
                 ' grab position of delimiter character that is
                 ' the closest to our specified length
                 Pos = InStrRev(StringSplit, OversizeDelimiter, _
-                    length, vbBinaryCompare)
+                    Length, vbBinaryCompare)
             End If
             
             ' if the delimiter we were looking for was found,
@@ -2393,7 +2398,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((Pos) And (Pos >= Round(length / 2))) Then
+            If ((Pos) And (Pos >= Round(Length / 2))) Then
                 ' truncate message
                 strTmp = Mid$(strTmp, 1, Pos - 1)
                 
@@ -2403,7 +2408,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
                 bln = True
             Else
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, length)
+                strTmp = Mid$(strTmp, 1, Length)
             End If
             
             ' store truncated message in line
