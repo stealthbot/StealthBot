@@ -190,18 +190,20 @@ End Function
 
 ' ...
 Public Function OpenPlayer(Optional FilePath As String) As Boolean
-    If (FilePath <> vbNullString) Then
-        If (Dir$(FilePath) <> vbNullString) Then
-            Call Shell(FilePath, vbNormalFocus)
-            
-            OpenPlayer = True
-        End If
+    ' ...
+    If (Dir$(FilePath) <> vbNullString) Then
+        ' ...
+        OpenPlayer = True
     Else
         If (Dir$(WA_DEFAULT_PATH) <> vbNullString) Then
-            Call Shell(WA_DEFAULT_PATH, vbNormalFocus)
-            
+            ' ...
             OpenPlayer = True
         End If
+    End If
+    
+    ' ...
+    If (OpenPlayer) Then
+        Call Shell(WA_DEFAULT_PATH, vbNormalFocus)
     End If
 End Function
 

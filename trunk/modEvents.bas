@@ -428,10 +428,8 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     
     'INetQueue inqReset
     
-    If (IsW3) Then
-        FullJoin BotVars.HomeChannel
-    End If
-    
+    FullJoin BotVars.HomeChannel
+
     QueueLoad = (QueueLoad + 2)
     
     Call frmChat.UpdateTrayTooltip
@@ -663,21 +661,19 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
         
         ' trick to find the current Warcraft III realm name, thanks LoRd :)
-        If (IsW3) Then
-            If (InStr(1, Message, "You are " & CurrentUsername & ", " & _
-                "using Warcraft III ") > 0) Then
+        If (InStr(1, Message, "You are " & reverseUsername(CurrentUsername) & _
+            ", using ") > 0) Then
+            
+            If (InStr(1, Message, "channel", vbTextCompare) = 0) Then
+                i = InStrRev(Message, Space(1))
                 
-                If (InStr(1, Message, "channel", vbTextCompare) = 0) Then
-                    i = InStrRev(Message, Space(1))
-                    
-                    BotVars.Gateway = Mid$(Message, i + 1)
-                    
-                    ' we want our username to accurately reflect
-                    ' our new discovery of the realm name
-                    CurrentUsername = convertUsername(CurrentUsername)
+                BotVars.Gateway = Mid$(Message, i + 1)
 
-                    Exit Sub
-                End If
+                ' we want our username to accurately reflect
+                ' our new discovery of the realm name
+                CurrentUsername = convertUsername(CurrentUsername)
+
+                Exit Sub
             End If
         End If
         
@@ -967,7 +963,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             ' if the user isn't safelisted, lets make sure he's abides by the
             ' channel rules and, if required, inputs the correct channel password.
             If (Not (.Safelisted)) Then
-                ' is the user an operator?  ... or his "he" actually "me"?
+                'BotVars.Gateway  the user an operator?  ... or his "he" actually "me"?
                 If (((Flags And USER_CHANNELOP&) <> USER_CHANNELOP&) And _
                      (StrComp(Username, CurrentUsername, vbBinaryCompare) <> 0)) Then
                     

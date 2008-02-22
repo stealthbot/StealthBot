@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.0#0"; "vbalTreeView6.ocx"
 Begin VB.Form frmSettings 
    BackColor       =   &H00000000&
@@ -3920,9 +3920,9 @@ Private Enum enuConfigSection
     secOther = 1
 End Enum
 
-Private Sub chkGameConventions_Click(Index As Integer)
-    If (Index = 0) Then
-        If (chkGameConventions(Index).Value = 0) Then
+Private Sub chkGameConventions_Click(index As Integer)
+    If (index = 0) Then
+        If (chkGameConventions(index).Value = 0) Then
             chkGameConventions(1).Enabled = False
             chkGameConventions(2).Enabled = False
         Else
@@ -4098,7 +4098,7 @@ Private Sub Form_Load()
         "%v = Bot version" & vbNewLine & _
         "%botup = Bot uptime" & vbNewLine & _
         "%cpuup = System uptime" & vbNewLine & _
-        "%mp3 = Current Winamp MP3" & vbNewLine & _
+        "%mp3 = Current MP3" & vbNewLine & _
         "%quote = Random quote" & vbNewLine & _
         "%rnd = Random person in the channel" & vbNewLine
     
@@ -4167,7 +4167,7 @@ Function KeyToIndex(ByVal sKey As String) As Byte
     
 End Function
 
-Sub ShowPanel(ByVal Index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
+Sub ShowPanel(ByVal index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
 
     Static ActivePanel As Integer
     
@@ -4177,8 +4177,8 @@ Sub ShowPanel(ByVal Index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
             ActivePanel = KeyToIndex("splash")
         Else
             'fraPanel(ActivePanel).ZOrder vbSendToBack
-            fraPanel(Index).ZOrder vbBringToFront
-            ActivePanel = Index
+            fraPanel(index).ZOrder vbBringToFront
+            ActivePanel = index
             WriteINI "Position", "LastSettingsPanel", ActivePanel
             
             'Debug.Print "Writing: " & ActivePanel
@@ -4685,10 +4685,10 @@ End Sub
 
 Private Sub cmdExport_Click()
     With cDLG
-        .Filename = vbNullString
+        .filename = vbNullString
         .ShowSave
-        If .Filename <> vbNullString Then
-            SaveColors .Filename
+        If .filename <> vbNullString Then
+            SaveColors .filename
             MsgBox "ColorList exported.", vbOKOnly
         End If
     End With
@@ -4696,10 +4696,10 @@ End Sub
 
 Private Sub cmdImport_Click()
     With cDLG
-        .Filename = vbNullString
+        .filename = vbNullString
         .ShowOpen
-        If .Filename <> vbNullString Then
-            GetColorLists (.Filename)
+        If .filename <> vbNullString Then
+            GetColorLists (.filename)
             cboColorList.Clear
             Call Form_Load
         End If
@@ -4770,7 +4770,7 @@ ShowCurrentColor_Exit:
 
 ShowCurrentColor_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ShowCurrentColor of Form frmSettings"
+    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure ShowCurrentColor of Form frmSettings"
     Resume ShowCurrentColor_Exit
 End Sub
 

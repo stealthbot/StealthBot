@@ -469,7 +469,7 @@ Public Function Voting(ByVal Mode1 As Byte, Optional Mode2 As Byte, Optional Use
     End Select
 End Function
 
-Public Function GetAccess(ByVal Username As String, Optional dbType As String = _
+Public Function GetAccess(ByVal Username As String, Optional DBType As String = _
     vbNullString) As udtGetAccessResponse
     
     Dim i   As Integer ' ...
@@ -481,8 +481,8 @@ Public Function GetAccess(ByVal Username As String, Optional dbType As String = 
 
     For i = LBound(DB) To UBound(DB)
         If (StrComp(DB(i).Username, Username, vbTextCompare) = 0) Then
-            If (Len(dbType)) Then
-                If (StrComp(DB(i).Type, dbType, vbBinaryCompare) = 0) Then
+            If (Len(DBType)) Then
+                If (StrComp(DB(i).Type, DBType, vbBinaryCompare) = 0) Then
                     bln = True
                 End If
             Else
@@ -513,7 +513,7 @@ Public Function GetAccess(ByVal Username As String, Optional dbType As String = 
     GetAccess.Access = -1
 End Function
 
-Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As String = _
+Public Function GetCumulativeAccess(ByVal Username As String, Optional DBType As String = _
     vbNullString) As udtGetAccessResponse
     
     On Error GoTo ERROR_HANDLER
@@ -2055,7 +2055,7 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
     If (lvItem Is Nothing) Then
         checkChannel = 0
     Else
-        checkChannel = lvItem.Index
+        checkChannel = lvItem.index
     End If
 End Function
 
@@ -2441,7 +2441,7 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
     Static Message   As String  ' ...
     Static CropLen   As Integer ' ...
 
-    Dim Index        As Integer ' ...
+    Dim index        As Integer ' ...
     Dim bln          As Boolean ' ...
     Dim tmp          As String  ' ...
     Dim console      As Boolean ' ...
@@ -2491,12 +2491,12 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
     ' that way is to entirely disable internal support!
     If (console = False) Then
         ' check our message for a command delimiter
-        Index = InStr(Len(BotVars.TriggerLong) + 1, Message, _
+        index = InStr(Len(BotVars.TriggerLong) + 1, Message, _
             CMD_DELIMITER, vbBinaryCompare)
     
         ' ...
-        If (Index) Then
-            tmp = Mid$(tmp, 1, Index - 1)
+        If (index) Then
+            tmp = Mid$(tmp, 1, index - 1)
         End If
     End If
     
@@ -2547,13 +2547,13 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
     ' ...
     If ((console) Or (bln)) Then
         ' ...
-        Index = InStr(1, tmp, Space(1), vbBinaryCompare)
+        index = InStr(1, tmp, Space(1), vbBinaryCompare)
         
         ' ...
-        If (Index) Then
+        If (index) Then
             With IsCommand
-                .Name = Mid$(tmp, 1, Index - 1)
-                .Params = Mid$(tmp, Index + 1)
+                .Name = Mid$(tmp, 1, index - 1)
+                .Params = Mid$(tmp, index + 1)
             End With
         Else
             IsCommand.Name = tmp

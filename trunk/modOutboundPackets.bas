@@ -267,15 +267,15 @@ Public Sub Send0x0A()
         .InsertNonNTString BotVars.Product
         .SendPacket &HB
         
-        If IsW3 Then
+        'If IsW3 Then
             .InsertDWord &H0
             .InsertNTString "wrd" & CLng(Rnd * 10000 + 1)
             .SendPacket &HC
             bnetSend "/whoami"
             .InsertDWord &H1
-        Else
-            .InsertDWord &H2
-        End If
+        'Else
+        '    .InsertDWord &H2
+        'End If
         
         .InsertNTString BotVars.HomeChannel
         .SendPacket &HC

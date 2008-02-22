@@ -153,7 +153,7 @@ End Sub
 Private Sub cmdOK_Click()
     Dim game As String ' ...
     
-    Select Case (lvGames.SelectedItem.Index)
+    Select Case (lvGames.SelectedItem.index)
         Case 1:  game = "CHAT"
         Case 2:  game = "STAR"
         Case 3:  game = "SSHR"
@@ -177,9 +177,9 @@ End Sub
 Private Sub Form_Load()
     Call lvGames.ListItems.Add(, , "Chat", , 7)
     Call lvGames.ListItems.Add(, , "StarCraft", , 1)
-    Call lvGames.ListItems.Add(, , "StarCraft: Shareware", , 2)
+    Call lvGames.ListItems.Add(, , "StarCraft: Shareware", , 12)
     Call lvGames.ListItems.Add(, , "StarCraft: Japanese", , 10)
-    Call lvGames.ListItems.Add(, , "StarCraft: Brood War", , 12)
+    Call lvGames.ListItems.Add(, , "StarCraft: Brood War", , 2)
     Call lvGames.ListItems.Add(, , "Diablo I: Retail", , 8)
     Call lvGames.ListItems.Add(, , "Diablo I: Shareware", , 9)
     Call lvGames.ListItems.Add(, , "Diablo II", , 3)

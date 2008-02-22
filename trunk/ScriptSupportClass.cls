@@ -410,18 +410,18 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Sub GetDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
-    Optional ByRef entryType As String = "USER") '// yum, Variants >:\
+Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Optional ByRef Flags, _
+    Optional ByRef EntryType As String = "USER") As Object
 
     Dim Temp As udtGetAccessResponse
     
-    Temp = GetCumulativeAccess(Username, entryType)
+    Temp = GetCumulativeAccess(Username, EntryType)
     
     With Temp
         Access = .Access
         Flags = .Flags
     End With
-End Sub
+End Function
 
 '// GETSTDDBENTRY
 '// Bit of a modification to my existing GetCumulativeAccess() call to return the data to you
@@ -434,11 +434,11 @@ End Sub
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
 Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
-    Optional ByRef entryType As String = "USER") '// yum, Variants >:\
+    Optional ByRef EntryType As String = "USER") '// yum, Variants >:\
 
     Dim Temp As udtGetAccessResponse
     
-    Temp = GetAccess(Username, entryType)
+    Temp = GetAccess(Username, EntryType)
     
     With Temp
         Access = .Access
