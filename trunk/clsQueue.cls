@@ -93,6 +93,21 @@ Public Function Peek() As clsQueueOBj
 End Function ' end function Peek
 
 ' ...
+Public Function Item(lItem As Long) As Object
+    ' ...
+    If (((lItem - 1) < 0) Or (lItem > m_objCount)) Then
+        ' ...
+        Set Item = New clsQueueOBj
+    
+        ' ...
+        Exit Function
+    End If
+
+    ' ...
+    Set Item = m_QueueObjs(lItem - 1)
+End Function ' end function Item
+
+' ...
 Public Property Get Count() As Long
     Count = m_objCount
 End Property
@@ -241,7 +256,7 @@ Private Function GetNextQueueObj() As Integer
 End Function ' end function GetNextQueueObj
 
 ' ...
-Private Sub RemoveItem(ByVal Index As Integer)
+Private Sub RemoveItem(ByVal index As Integer)
 
 End Sub ' end function RemoveItem
 

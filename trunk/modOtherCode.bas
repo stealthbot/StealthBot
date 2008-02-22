@@ -2448,6 +2448,9 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
     Dim PublicOutput As Boolean ' ...
     
     ' ...
+    Set IsCommand = New clsCommand
+    
+    ' ...
     If (str <> vbNullString) Then
         Message = str
     Else

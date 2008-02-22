@@ -24,6 +24,8 @@ Begin VB.Form frmScriptUI
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
+      Enabled         =   -1  'True
+      ScrollBars      =   2
       TextRTF         =   $"frmScriptUI.frx":0000
    End
    Begin InetCtlsObjects.Inet ine 
@@ -200,7 +202,7 @@ Private Function AddControl(ByVal strName As String, ByVal strCtlName As String,
   Else
     Dim Index As Integer
     Index = ctrls.UBound + 1
-    load ctrls(Index)
+    Load ctrls(Index)
     If (bVisable) Then ctrls(Index).Visible = True
     oNames.Add strCtlName & "_" & Index, strName
     oControls.Add strName, ctrls(Index)

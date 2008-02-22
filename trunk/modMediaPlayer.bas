@@ -8,11 +8,11 @@ Option Explicit
 ' fake polymorphism by returning dynamic object to client
 Public Function MediaPlayer() As Object
     ' determine selected media player type
-    If (StrComp(BotVars.MediaPlayer, "Winamp", vbTextCompare) = 0) Then
-        ' return winamp object
-        Set MediaPlayer = clsWinamp
-    ElseIf (StrComp(BotVars.MediaPlayer, "iTunes", vbTextCompare) = 0) Then
+    If (StrComp(BotVars.MediaPlayer, "iTunes", vbTextCompare) = 0) Then
         ' return itunes object
-        Set MediaPlayer = clsiTunes
+        Set MediaPlayer = New clsiTunes
+    Else
+        ' return winamp object
+        Set MediaPlayer = New clsWinamp
     End If
 End Function

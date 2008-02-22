@@ -49,7 +49,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Dim i            As Integer ' loop counter
     Dim tmpmsg       As String  ' stores local copy of message
     Dim cmdRet()     As String  ' stores output of commands
-    Dim publicOutput As Boolean ' stores result of public command
+    Dim PublicOutput As Boolean ' stores result of public command
                                 ' output check (used for displaying command
                                 ' output when issuing via console)
     
@@ -148,7 +148,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         ' public output
         If (Left$(tmpmsg, 1) = "/") Then
             ' enable public display of command
-            publicOutput = True
+            PublicOutput = True
         
             ' remove second slash (/) from in-console
             ' message
@@ -194,7 +194,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                 
                     ' loop through command response
                     For j = 0 To UBound(cmdRet)
-                        If ((InBot) And (Not (publicOutput))) Then
+                        If ((InBot) And (Not (PublicOutput))) Then
                             ' display message on screen
                             Call frmChat.AddChat(RTBColors.ConsoleText, cmdRet(j))
                         Else
@@ -228,7 +228,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             If (cmdRet(0) <> vbNullString) Then
                 ' loop through command response
                 For i = 0 To UBound(cmdRet)
-                    If ((InBot) And (Not (publicOutput))) Then
+                    If ((InBot) And (Not (PublicOutput))) Then
                         ' display message on screen
                         Call frmChat.AddChat(RTBColors.ConsoleText, cmdRet(i))
                     Else
@@ -2077,7 +2077,7 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim tmpBuf     As String  ' temporary output buffer
     Dim dbType     As String  ' ...
     Dim Index      As Long    ' ...
-    Dim params     As String  ' ...
+    Dim Params     As String  ' ...
     Dim strArray() As String  ' ...
     Dim i          As Integer ' ...
 
@@ -2088,16 +2088,16 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     ' did we find such parameters?
     If (Index > 0) Then
         ' grab parameters
-        params = Mid$(msgData, Index - 1)
+        Params = Mid$(msgData, Index - 1)
 
         ' remove paramaters from message
         msgData = Mid$(msgData, 1, Index)
     End If
     
     ' do we have any special paramaters?
-    If (Len(params) > 0) Then
+    If (Len(Params) > 0) Then
         ' split message by paramter
-        strArray() = Split(params, " --")
+        strArray() = Split(Params, " --")
         
         ' loop through paramter list
         For i = 1 To UBound(strArray)
@@ -4360,7 +4360,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim rank       As Integer ' ...
     Dim Flags      As String  ' ...
     Dim found      As Boolean ' ...
-    Dim params     As String  ' ...
+    Dim Params     As String  ' ...
     Dim Index      As Integer ' ...
     Dim sGrp       As String  ' ...
     Dim dbType     As String  ' ...
@@ -4374,7 +4374,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     ' do they begin after an entry name?
     If (Index > 1) Then
         ' grab parameters
-        params = Mid$(msgData, Index - 1)
+        Params = Mid$(msgData, Index - 1)
 
         ' remove paramaters from message
         msgData = Mid$(msgData, 1, Index)
@@ -4415,9 +4415,9 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
         End If
         
         ' do we have any special paramaters?
-        If (Len(params)) Then
+        If (Len(Params)) Then
             ' split message by paramter
-            strArray() = Split(params, " --")
+            strArray() = Split(Params, " --")
             
             ' loop through paramter list
             For i = 1 To UBound(strArray)
@@ -5363,7 +5363,7 @@ Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAcc
         If (Not (liUser Is Nothing)) Then
             With PBuffer
                 .InsertDWord &HB
-                .InsertNonNTString liUser.text
+                .InsertNTString liUser.text
                 .InsertWord (liUser.SmallIcon + 1)
                 .SendPacket &H7A
             End With
