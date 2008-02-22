@@ -157,16 +157,20 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
                 RTBColors.JoinText, " is using " & pStats)
     End If
     
-    If (Flags = 0) Then
+    If (Flags = &H0) Then
         If (Pos) Then
             Set found = frmChat.lvChannel.ListItems(Pos)
             
             If (g_ThisIconCode <> -1) Then
-                If (colUsersInChannel.Item(i).Product = "W3XP") Then
-                    found.SmallIcon = (g_ThisIconCode + ICON_START_W3XP + _
-                        IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0))
-                Else
-                    found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
+                If (colUsersInChannel.Item(i).Product = "WAR3") Then
+                    If (g_ThisIconCode = ICON_START_WAR3) Then
+                        found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
+                    End If
+                ElseIf (colUsersInChannel.Item(i).Product = "W3XP") Then
+                    If (g_ThisIconCode = ICON_START_W3XP) Then
+                        found.SmallIcon = (g_ThisIconCode + ICON_START_W3XP + _
+                            IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0))
+                    End If
                 End If
             End If
         

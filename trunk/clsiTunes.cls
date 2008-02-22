@@ -142,7 +142,7 @@ Public Property Get TrackTime() As Long
 End Property
 
 Public Property Get IsPlaying() As Boolean
-    IsPlaying = True
+    IsPlaying = (m_iTunesObj.PlayerState > 0)
 End Property
 
 Public Property Get TrackLength() As Long

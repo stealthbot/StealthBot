@@ -304,5 +304,5 @@ End Property
 
 ' ...
 Public Property Get IsPlaying() As Boolean
-    IsPlaying = True
+    IsPlaying = (SendMessage(m_hWnd, WM_WA_IPC, 0, WA_GETSTATUS) = 1)
 End Property
