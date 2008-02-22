@@ -4,7 +4,7 @@
 
 '// The StealthBot Plugin System - StealthBot 2.7 Development Version
 '//    by Swent
-'//      Last modified 1:16 AM 2/19/2008
+'//      Last modified 11:21 PM 2/21/2008
 
 '// The StealthBot Plugin System is an updateable, scripted extension of StealthBot's VBScripting System.
 '//    This portion of the scripting system remains external to allow for updates and for viewing and tweaking by advanced scriptors.
@@ -974,9 +974,11 @@ Sub psProcessMenu(strCallback, Prefix)
 
    '// Handle errors
    If Err.Number <> 0 Then
-      AddChat vbRed, "Scripting runtime error '" & Err.Number & "' on """ & Prefix & "_Menu_Callback"" " & _
-                     "call in file """ & psFSO.GetFileName(psPlugins.Item(Prefix)) & """"
-      AddChat vbRed, Err.Description & "."
+      If Len(Prefix) > 0 Then
+         AddChat vbRed, "Scripting runtime error '" & Err.Number & "' on """ & Prefix & "_Menu_Callback"" " & _
+                        "call in file """ & psFSO.GetFileName(psPlugins.Item(Prefix)) & """"
+         AddChat vbRed, Err.Description & "."
+      End If
       Err.Clear
    End If
 End Sub
@@ -1043,14 +1045,30 @@ Sub PluginMenus_Backup_Callback(Prefix)
 End Sub
 
 
+'// "Plugin Title" > "Open File"
+Sub PluginMenus_OpenFile_Callback(Prefix)
+
+   psProcessCmd "/pedit " & Prefix, BotVars.Username, 4
+End Sub
+
+
+'// "Plugin Title" > "Help"
+Sub PluginMenus_Help_Callback(Prefix)
+
+   psProcessCmd "/phelp " & Prefix, BotVars.Username, 4
+End Sub
+
+
 '// "Open plugins folder"
 Sub ps_OpenPlugins_Callback()
+
    psProcessCmd "/pedit plugins", BotVars.Username, 4
 End Sub
 
 
 '// "Open settings.ini"
 Sub ps_OpenSettings_Callback()
+
    psProcessCmd "/pedit", BotVars.Username, 4
 End Sub
 
