@@ -368,8 +368,8 @@ Public Sub RegisterPluginMenus()
             frmChat.SControl.AddCode "Sub ps_enabled_callback_" & strPrefixes(i) & ":PluginMenus_Enabled_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
                                      "Sub ps_nvn_callback_" & strPrefixes(i) & ":PluginMenus_NVN_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
                                      "Sub ps_backup_callback_" & strPrefixes(i) & ":PluginMenus_Backup_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
-                                     "Sub ps_openfile_callback_" & strPrefixes(i) & ":psPluginSystemCmds ""/pedit " & strPrefixes(i) & """, """ & BotVars.Username & """, 4:End " & "Sub" & vbCrLf & _
-                                     "Sub ps_help_callback_" & strPrefixes(i) & ":psPluginSystemCmds ""/phelp " & strPrefixes(i) & """, """ & BotVars.Username & """, 4:End " & "Sub"
+                                     "Sub ps_openfile_callback_" & strPrefixes(i) & ":PluginMenus_OpenFile_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
+                                     "Sub ps_help_callback_" & strPrefixes(i) & ":PluginMenus_Help_Callback """ & strPrefixes(i) & """:End " & "Sub"
         End If
         
         If i = UBound(strPrefixes) Then AddItemToMenu ScriptMenu_ParentID, 0, True
