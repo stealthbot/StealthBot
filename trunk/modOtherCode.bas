@@ -469,7 +469,7 @@ Public Function Voting(ByVal Mode1 As Byte, Optional Mode2 As Byte, Optional Use
     End Select
 End Function
 
-Public Function GetAccess(ByVal Username As String, Optional DBType As String = _
+Public Function GetAccess(ByVal Username As String, Optional dbType As String = _
     vbNullString) As udtGetAccessResponse
     
     Dim i   As Integer ' ...
@@ -481,8 +481,8 @@ Public Function GetAccess(ByVal Username As String, Optional DBType As String = 
 
     For i = LBound(DB) To UBound(DB)
         If (StrComp(DB(i).Username, Username, vbTextCompare) = 0) Then
-            If (Len(DBType)) Then
-                If (StrComp(DB(i).Type, DBType, vbBinaryCompare) = 0) Then
+            If (Len(dbType)) Then
+                If (StrComp(DB(i).Type, dbType, vbBinaryCompare) = 0) Then
                     bln = True
                 End If
             Else
@@ -513,7 +513,7 @@ Public Function GetAccess(ByVal Username As String, Optional DBType As String = 
     GetAccess.Access = -1
 End Function
 
-Public Function GetCumulativeAccess(ByVal Username As String, Optional DBType As String = _
+Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As String = _
     vbNullString) As udtGetAccessResponse
     
     On Error GoTo ERROR_HANDLER
@@ -1910,6 +1910,14 @@ Public Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal 
         Exit Function
     End If
     
+    '/* Squelched */
+    If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
+        'Debug.Print "Assigned color SQUELCH"
+        GetNameColor = &H99
+        
+        Exit Function
+    End If
+    
     '/* Blizzard */
     If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or _
         ((Flags And USER_SYSOP&) = USER_SYSOP&)) Then
@@ -1923,14 +1931,6 @@ Public Function GetNameColor(ByVal Flags As Long, ByVal IdleTime As Long, ByVal 
     If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
         'Debug.Print "Assigned color OP"
         GetNameColor = &HDDDDDD
-        Exit Function
-    End If
-    
-    '/* Squelched */
-    If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
-        'Debug.Print "Assigned color SQUELCH"
-        GetNameColor = &H99
-        
         Exit Function
     End If
     

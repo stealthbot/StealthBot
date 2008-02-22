@@ -19,8 +19,8 @@ Public Sub ChatQueue_Initialize()
         Set colChatQueue = New Collection
     
         ' ...
-        m_TimerID = SetTimer(0, m_TimerID, BotVars.ChatDelay, _
-            AddressOf ChatQueueTimerProc)
+        m_TimerID = SetTimer(0, m_TimerID, _
+            IIf(BotVars.ChatDelay <= 1000, BotVars.ChatDelay, 1000), AddressOf ChatQueueTimerProc)
     End If
 End Sub
 
@@ -63,7 +63,7 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
 
             With clsChatQueue
                 ' ...
-                If (GetTickCount() - .Time() >= 300) Then
+                If (GetTickCount() - .Time() >= BotVars.ChatDelay) Then
                     blnShow = True
                 End If
 
