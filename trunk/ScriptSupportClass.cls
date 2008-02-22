@@ -101,6 +101,7 @@ Attribute VB_Exposed = False
 ' *         CreateForm(), DestroyForm(), AddFormObject(), GetUIObject()
 ' *         For a detailed explination of each event and examples visit:
 ' *            http://www.stealthbot.net/board/index.php?showtopic=27969
+' *     - Added GetBotVersionNumber() function which returns only the numerical value of the bot version
 ' *
 ' *     (version 2.6R3, scripting system build 21)
 ' *     - GetNameByPosition() boundary checks fixed (thanks Scio)
@@ -664,6 +665,25 @@ Public Function GetBotVersion() As String
     
     GetBotVersion = CVERSION
     
+End Function
+
+
+'// GETBOTVERSIONNUMBER
+'// Returns numerical value of the current StealthBot version.
+Function GetBotVersionNumber()
+   Dim strVersion() As String
+   
+   strVersion = Split(GetBotVersion(), Space(1))
+
+   If (UBound(strVersion)) Then
+      If (strVersion(1) = "Beta") Then
+         If (UBound(strVersion) > 1) Then
+            GetBotVersionNumber = Mid$(strVersion(2), 2)
+         End If
+      Else
+         GetBotVersionNumber = Mid$(strVersion(1), 2)
+      End If
+   End If
 End Function
 
 
