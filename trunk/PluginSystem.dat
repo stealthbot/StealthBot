@@ -1666,19 +1666,3 @@ Sub Event_Close()
 
    psExecuteEvent "Close", Array(vbNullString)
 End Sub
-
-Function GetBotVersionNumber()
-   strVersion = GetBotVersion()
-
-   arrVersion = Split(strVersion, Space(1))
-
-   If (UBound(arrVersion)) Then
-      If (arrVersion(1) = "Beta") Then
-         If (UBound(arrVersion) > 1) Then
-            GetBotVersionNumber = Mid(arrVersion(2), 2)
-         End If
-      Else
-         GetBotVersionNumber = Mid(arrVersion(1), 2)
-      End If
-   End If
-End Function
