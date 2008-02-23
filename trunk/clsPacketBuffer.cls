@@ -123,14 +123,17 @@ Public Function InsertNTString(ByRef Data As String, _
             arrStr() = modUTF8.UTF8Encode(Data)
             
         Case STRINGENCODING.UTF16
-            arrStr() = StrConv(Data, vbFromUnicode)
+            arrStr() = StrConv(Data, vbUnicode)
     End Select
     
     ' resize buffer and include terminating null character
     ReDim Preserve m_buf(0 To (m_bufpos + (UBound(arrStr) + 2)))
     
-    ' copy data to buffer
-    Call CopyMemory(m_buf(m_bufpos), arrStr(0), (UBound(arrStr) + 1))
+    ' ...
+    If (UBound(arrStr)) Then
+        ' copy data to buffer
+        Call CopyMemory(m_buf(m_bufpos), arrStr(0), (UBound(arrStr) + 1))
+    End If
 
     ' store buffer length
     m_bufpos = (m_bufpos + (UBound(arrStr) + 2))
@@ -161,17 +164,31 @@ End Function ' end function Clear
 ' ...
 Public Function SendPacketMCP(Optional PacketID As Byte)
     Dim buf() As Byte ' ...
-
-    ' ...
-    If (MDebug("all")) Then
-        frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & _
-            Right$("00" & Hex(PacketID), 2)
-    End If
     
     ' ...
     If (frmChat.sckMCP.State <> 0) Then
-        'frmChat.sckMCP.SendData WordToString(Len(buffer) + 3) & _
-        '    Chr$(PacketID) & buffer
+        ' resize temporary data buffer
+        ReDim buf(m_bufpos + 2)
+
+         ' copy packet data length to temporary buffer
+        Call CopyMemory(buf(0), m_bufpos + 3, 2)
+        
+        buf(2) = PacketID ' packet identification number
+    
+        ' ...
+        If (m_bufpos) Then
+            ' copy data from buffer to temporary buffer
+            Call CopyMemory(buf(3), m_buf(0), m_bufpos)
+        End If
+        
+        ' ...
+        If (MDebug("all")) Then
+            frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & _
+                Right$("00" & Hex(PacketID), 2)
+        End If
+        
+        ' ...
+        Call frmChat.sckMCP.SendData(buf)
     End If
     
     ' clear buffer contents
@@ -193,15 +210,13 @@ Public Function SendPacket(Optional PacketID As Byte)
             Hex(PacketID), 2)
     End If
     
-    l = m_bufpos
-    
     ' ...
     If (frmChat.sckBNet.State <> 0) Then
         buf(0) = &HFF     ' header
         buf(1) = PacketID ' packet identification number
         
         ' copy packet data length to temporary buffer
-        Call CopyMemory(buf(2), l + 4, 2)
+        Call CopyMemory(buf(2), m_bufpos + 4, 2)
         
         ' ...
         If (m_bufpos) Then
@@ -225,11 +240,6 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     Dim buf() As Byte ' ...
     Dim l     As Long ' ...
     
-    l = m_bufpos
-    
-    ' resize temporary data buffer
-    ReDim buf(m_bufpos + 2)
-    
     ' ...
     If (MDebug("all")) Then
         frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & _
@@ -238,6 +248,9 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     
     ' ...
     If (frmChat.sckBNLS.State <> 0) Then
+        ' resize temporary data buffer
+        ReDim buf(m_bufpos + 2)
+    
         ' copy packet data length to temporary buffer
         Call CopyMemory(buf(0), m_bufpos + 3, 2)
 
