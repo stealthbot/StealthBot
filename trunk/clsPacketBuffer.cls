@@ -130,7 +130,7 @@ Public Function InsertNTString(ByRef Data As String, _
     ReDim Preserve m_buf(0 To (m_bufpos + (UBound(arrStr) + 2)))
     
     ' ...
-    If (UBound(arrStr)) Then
+    If (Data <> vbNullString) Then
         ' copy data to buffer
         Call CopyMemory(m_buf(m_bufpos), arrStr(0), (UBound(arrStr) + 1))
     End If

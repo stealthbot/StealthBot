@@ -3505,15 +3505,15 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim Y       As String
     Dim i       As Integer
 
-    If ((MyFlags <> 2) And (MyFlags <> 18)) Then
+    If (MyFlags <> USER_CHANNELOP&) Then
         If (InBot) Then
             tmpBuf = "You are not a channel operator."
         End If
     Else
         u = msgData
         
-        If (Len(u) > 0) Then
-            i = InStr(1, u, " ")
+        If (u <> vbNullString) Then
+            i = InStr(1, u, Space(1), vbBinaryCompare)
             
             If (i > 0) Then
                 banmsg = Mid$(u, i + 1)
@@ -3521,16 +3521,11 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 u = Left$(u, i - 1)
             End If
             
-            If (InStr(1, u, "*", vbTextCompare) > 0) Then
+            If (InStr(1, u, "*", vbBinaryCompare) <> 0) Then
                 Call WildCardBan(u, banmsg, 1)
             Else
-                If (banmsg <> vbNullString) Then
-                    Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, _
-                        vbNullString), dbAccess.Access)
-                Else
-                    Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, _
-                        vbNullString), dbAccess.Access)
-                End If
+                Y = Ban(u & IIf(banmsg <> vbNullString, Space$(1) & banmsg, _
+                    vbNullString), dbAccess.Access)
             End If
             
             If (Len(Y) > 2) Then
@@ -3550,14 +3545,14 @@ Private Function OnUnban(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
     
-    If ((MyFlags <> 2) And (MyFlags <> 18)) Then
+    If (MyFlags <> USER_CHANNELOP&) Then
        If (InBot) Then
            tmpBuf = "You are not a channel operator."
        End If
     Else
         u = msgData
         
-        If (Len(u) > 0) Then
+        If (u <> vbNullString) Then
             If (Dii = True) Then
                 If (Not (Mid$(u, 1, 1) = "*")) Then
                     u = "*" & u
@@ -3569,17 +3564,13 @@ Private Function OnUnban(ByVal Username As String, ByRef dbAccess As udtGetAcces
                 If (floodCap < 45) Then
                     floodCap = (floodCap + 15)
                     
-                    Call bnetSend("/unban " & u)
+                    ' bnetSend?
+                    Call AddQ("/unban " & u)
                 End If
             Else
-                If (InStr(1, msgData, "*", vbTextCompare) <> 0) Then
+                If (InStr(1, msgData, "*", vbBinaryCompare) <> 0) Then
                     Call WildCardBan(u, vbNullString, 2)
                 Else
-                    ' unipban user
-                    'If (BotVars.IPBans = True) Then
-                    '    Call AddQ("/unsquelch " & u, 1)
-                    'End If
-                
                     Call AddQ("/unban " & u, 1, Username)
                 End If
             End If
@@ -3600,7 +3591,7 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim tmpBuf As String ' temporary output buffer
     Dim Y      As String
     
-    If ((MyFlags <> 2) And (MyFlags <> 18)) Then
+    If (MyFlags <> USER_CHANNELOP&) Then
        If (InBot) Then
            tmpBuf = "You are not a channel operator."
        End If
@@ -3617,13 +3608,13 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
             End If
             
             If (InStr(1, u, "*", vbTextCompare) > 0) Then
-                If (dbAccess.Access > 99) Then
+                If (dbAccess.Access >= 100) Then
                     Call WildCardBan(u, banmsg, 0)
                 Else
                     Call WildCardBan(u, banmsg, 0)
                 End If
             Else
-                Y = Ban(u & IIf(Len(banmsg) > 0, " " & banmsg, vbNullString), _
+                Y = Ban(u & IIf(Len(banmsg) > 0, Space$(1) & banmsg, vbNullString), _
                     dbAccess.Access, 1)
                 
                 If (Len(Y) > 1) Then

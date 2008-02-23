@@ -5392,20 +5392,20 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 100, Optional _
                     (command = "designate")) Then
         
                     ' ...
-                    Splt() = Split(strTmp, Space(1), 3)
+                    Splt() = Split(strTmp, Space$(1), 3)
                     
                     ' ...
                     If (UBound(Splt) > 0) Then
                         ' ...
-                        command = Splt(0) & Space(1) & _
+                        command = Splt(0) & Space$(1) & _
                             reverseUsername(Splt(1)) & _
-                                Space(1)
+                                Space$(1)
                     End If
                 ElseIf ((command = "f") Or _
                         (command = "friends")) Then
                     
                     ' ...
-                    Splt() = Split(strTmp, Space(1), 3)
+                    Splt() = Split(strTmp, Space$(1), 3)
                     
                     ' ...
                     command = Splt(0) & _

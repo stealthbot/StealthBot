@@ -228,7 +228,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
         'End If
         
         If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
-            If (InStr(1, Inpt, Space(1), vbBinaryCompare) <> 0) Then
+            If (InStr(1, Inpt, Space$(1), vbBinaryCompare) <> 0) Then
                 Username = LCase$(Left$(Inpt, InStr(1, Inpt, Space(1), _
                     vbBinaryCompare) - 1))
             Else
@@ -2259,7 +2259,7 @@ End Sub
 ' Returns a single chunk of a string as if that string were Split() and that chunk
 ' extracted
 ' 1-based
-Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
+Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
     Dim c           As Integer
     Dim i           As Integer
     Dim TargetSpace As Integer
@@ -2269,10 +2269,10 @@ Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
     
     c = 0
     i = 1
-    Pos = Pos
+    pos = pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While ((c < Pos) And (i > 0))
+    While ((c < pos) And (i > 0))
         TargetSpace = i
         
         i = (InStr(i + 1, str, Space(1), vbBinaryCompare))
@@ -2280,7 +2280,7 @@ Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
         c = (c + 1)
     Wend
     
-    If (c >= Pos) Then
+    If (c >= pos) Then
         c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
         If (c > 0) Then
@@ -2341,7 +2341,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     Optional LinePostfix As String = " [more]", Optional OversizeDelimiter As String = " ")
     
     Dim lineCount As Long    ' stores line number
-    Dim Pos       As Long    ' stores position of delimiter
+    Dim pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
     Dim Length    As Long    ' stores length after postfix
     Dim bln       As Boolean ' stores result of delimiter split
@@ -2389,7 +2389,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             If (OversizeDelimiter <> vbNullString) Then
                 ' grab position of delimiter character that is
                 ' the closest to our specified length
-                Pos = InStrRev(StringSplit, OversizeDelimiter, _
+                pos = InStrRev(StringSplit, OversizeDelimiter, _
                     Length, vbBinaryCompare)
             End If
             
@@ -2398,9 +2398,9 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((Pos) And (Pos >= Round(Length / 2))) Then
+            If ((pos) And (pos >= Round(Length / 2))) Then
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, Pos - 1)
+                strTmp = Mid$(strTmp, 1, pos - 1)
                 
                 ' indicate that an additional
                 ' character will require removal
