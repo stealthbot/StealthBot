@@ -426,6 +426,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
             Case "tally":        Call OnTally(Username, dbAccess, msgData, InBot, cmdRet())
             Case "cancel":       Call OnCancel(Username, dbAccess, msgData, InBot, cmdRet())
             Case "back":         Call OnBack(Username, dbAccess, msgData, InBot, cmdRet())
+            Case "prev":         Call OnPrev(Username, dbAccess, msgData, InBot, cmdRet())
             Case "uptime":       Call OnUptime(Username, dbAccess, msgData, InBot, cmdRet())
             Case "away":         Call OnAway(Username, dbAccess, msgData, InBot, cmdRet())
             Case "mp3":          Call OnMP3(Username, dbAccess, msgData, InBot, cmdRet())
@@ -521,11 +522,15 @@ Private Function OnLoadWinamp(ByVal Username As String, ByRef dbAccess As udtGet
     ' This command will run Winamp from the default directory, or the directory
     ' specified within the configuration file.
     
-    Dim tmpBuf As String  ' temporary output buffer
-    Dim bln    As Boolean ' ...
+    Dim clsWinamp As clsWinamp
+    Dim tmpBuf    As String  ' temporary output buffer
+    Dim bln       As Boolean ' ...
+    
+    ' ...
+    Set clsWinamp = New clsWinamp
 
     ' ...
-    bln = MediaPlayer.OpenPlayer(ReadCFG("Other", "WinampPath"))
+    bln = clsWinamp.OpenPlayer(ReadCFG("Other", "WinampPath"))
        
     ' ...
     If (bln) Then
@@ -533,6 +538,9 @@ Private Function OnLoadWinamp(ByVal Username As String, ByRef dbAccess As udtGet
     Else
         tmpBuf = "There was an error loading Winamp."
     End If
+    
+    ' ...
+    Set clsWinamp = Nothing
     
     ' return message
     cmdRet(0) = tmpBuf
@@ -2056,7 +2064,7 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     
     Dim u          As String  ' ...
     Dim tmpBuf     As String  ' temporary output buffer
-    Dim DBType     As String  ' ...
+    Dim dbType     As String  ' ...
     Dim index      As Long    ' ...
     Dim Params     As String  ' ...
     Dim strArray() As String  ' ...
@@ -2115,15 +2123,15 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         
                         ' ...
                         If (recType = "USER") Then
-                            DBType = "USER"
+                            dbType = "USER"
                         ElseIf (recType = "GROUP") Then
-                            DBType = "GROUP"
+                            dbType = "GROUP"
                         ElseIf (recType = "CLAN") Then
-                            DBType = "CLAN"
+                            dbType = "CLAN"
                         ElseIf (recType = "GAME") Then
-                            DBType = "GAME"
+                            dbType = "GAME"
                         Else
-                            DBType = "USER"
+                            dbType = "USER"
                         End If
                     End If
             End Select
@@ -2133,22 +2141,22 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     u = msgData
     
     If (Len(u) > 0) Then
-        If ((GetAccess(u, DBType).Access = -1) And _
-            (GetAccess(u, DBType).Flags = vbNullString)) Then
+        If ((GetAccess(u, dbType).Access = -1) And _
+            (GetAccess(u, dbType).Flags = vbNullString)) Then
             
             tmpBuf = "User not found."
-        ElseIf (GetAccess(u, DBType).Access >= dbAccess.Access) Then
+        ElseIf (GetAccess(u, dbType).Access >= dbAccess.Access) Then
             tmpBuf = "That user has higher or equal access."
-        ElseIf ((InStr(1, GetAccess(u, DBType).Flags, "L") <> 0) And _
+        ElseIf ((InStr(1, GetAccess(u, dbType).Flags, "L") <> 0) And _
                 (Not (InBot)) And _
-                (InStr(1, GetAccess(Username, DBType).Flags, "A") = 0) And _
-                (GetAccess(Username, DBType).Access <= 99)) Then
+                (InStr(1, GetAccess(Username, dbType).Flags, "A") = 0) And _
+                (GetAccess(Username, dbType).Access <= 99)) Then
             
                 tmpBuf = "Error: That user is Locked."
         Else
             Dim res As Boolean ' ...
         
-            res = DB_remove(u, DBType)
+            res = DB_remove(u, dbType)
             
             If (res) Then
                 If (BotVars.LogDBActions) Then
@@ -3922,23 +3930,39 @@ Private Function OnBack(ByVal Username As String, ByRef dbAccess As udtGetAccess
             AwayMsg = vbNullString
         End If
     Else
-        If (BotVars.DisableMP3Commands = False) Then
-            Dim pos As Integer ' ...
-            
-            ' ...
-            pos = MediaPlayer.PlaylistPosition
-        
-            ' ...
-            Call MediaPlayer.PlayTrack(pos - 1)
-            
-            ' ...
-            tmpBuf = "Skipped backwards."
-        End If
+        ' ...
+        Call OnPrev(Username, dbAccess, msgData, InBot, _
+            cmdRet())
     End If
     
     ' return message
     cmdRet(0) = tmpBuf
 End Function ' end function OnBack
+
+' handle prev command
+Private Function OnPrev(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim tmpBuf As String ' temporary output buffer
+    Dim hWndWA As Long   ' ...
+    
+    ' ...
+    If (BotVars.DisableMP3Commands = False) Then
+        Dim pos As Integer ' ...
+        
+        ' ...
+        pos = MediaPlayer.PlaylistPosition
+    
+        ' ...
+        Call MediaPlayer.PlayTrack(pos - 1)
+        
+        ' ...
+        tmpBuf = "Skipped backwards."
+    End If
+    
+    ' return message
+    cmdRet(0) = tmpBuf
+End Function ' end function OnPrev
 
 ' handle uptime command
 Private Function OnUptime(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -4180,9 +4204,21 @@ Private Function OnCQ(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
     
     Dim tmpBuf As String ' temporary output buffer
 
-    Call g_Queue.Clear
+    ' ...
+    If (msgData = vbNullString) Then
+        ' ...
+        Call g_Queue.Clear
     
-    tmpBuf = "Queue cleared."
+        ' ...
+        tmpBuf = "Queue cleared."
+    Else
+        ' ...
+        Call g_Queue.RemoveLines(vbNullString, msgData)
+        
+        ' ...
+        tmpBuf = "Queue entries for the user " & Chr$(34) & _
+            msgData & Chr$(34) & " have been removed."
+    End If
 
     ' return message
     cmdRet(0) = tmpBuf
@@ -4194,7 +4230,14 @@ Private Function OnSCQ(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     
     Dim tmpBuf As String ' temporary output buffer
 
-    Call g_Queue.Clear
+    ' ...
+    If (msgData = vbNullString) Then
+        ' ...
+        Call g_Queue.Clear
+    Else
+        ' ...
+        Call g_Queue.RemoveLines(vbNullString, msgData)
+    End If
 
     ' return message
     cmdRet(0) = tmpBuf
@@ -4349,7 +4392,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim Params     As String  ' ...
     Dim index      As Integer ' ...
     Dim sGrp       As String  ' ...
-    Dim DBType     As String  ' ...
+    Dim dbType     As String  ' ...
     Dim banmsg     As String  ' ...
 
     ' check for presence of optional add command
@@ -4434,12 +4477,12 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         ' do we have a valid parameter length?
                         If (Len(pmsg)) Then
                             ' grab database entry type
-                            DBType = UCase$(pmsg)
+                            dbType = UCase$(pmsg)
                             
                             ' ...
-                            If (DBType = "USER") Then
+                            If (dbType = "USER") Then
                                 ' ...
-                            ElseIf (DBType = "GROUP") Then
+                            ElseIf (dbType = "GROUP") Then
                                 ' check for presence of space in name
                                 If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
                                     cmdRet(0) = "Error: The specified group name contains one or more " & _
@@ -4447,7 +4490,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                                                 
                                     Exit Function
                                 End If
-                            ElseIf (DBType = "CLAN") Then
+                            ElseIf (dbType = "CLAN") Then
                                 ' check for invalid clan entry
                                 If ((Len(user) < 2) Or (Len(user) > 4)) Then
                                     ' return message
@@ -4456,7 +4499,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                         
                                     Exit Function
                                 End If
-                            ElseIf (DBType = "GAME") Then
+                            ElseIf (dbType = "GAME") Then
                                 ' convert entry to uppercase
                                 user = UCase$(user)
                                 
@@ -4525,7 +4568,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 End If
                                 
                                 If ((StrComp(Splt(j), user, vbTextCompare) = 0) And _
-                                    (DBType = "GROUP")) Then
+                                    (dbType = "GROUP")) Then
                                     
                                     cmdRet(0) = "Error: You cannot make a group a member of " & _
                                         "itself."
@@ -4567,12 +4610,12 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
         
         ' we want to ensure that we have a default
         ' entry type if none is specified explicitly
-        If (DBType = vbNullString) Then
-            DBType = "USER"
+        If (dbType = vbNullString) Then
+            dbType = "USER"
         End If
         
         ' grab access for entry
-        gAcc = GetAccess(user, DBType)
+        gAcc = GetAccess(user, dbType)
         
         ' if we've found a matching user, lets correct
         ' the casing of the name that we've entered
@@ -4801,7 +4844,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         .Flags = gAcc.Flags
                         .ModifiedBy = Username
                         .ModifiedOn = Now
-                        .Type = DBType
+                        .Type = dbType
                         .Groups = sGrp
                         
                         If (banmsg <> vbNullString) Then
@@ -4839,8 +4882,8 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     .ModifiedOn = Now
                     .AddedBy = Username
                     .AddedOn = Now
-                    .Type = IIf(((DBType <> vbNullString) And (DBType <> "%")), _
-                        DBType, "USER")
+                    .Type = IIf(((dbType <> vbNullString) And (dbType <> "%")), _
+                        dbType, "USER")
                     .Groups = sGrp
                     .BanMessage = banmsg
                 End With
@@ -5530,7 +5573,7 @@ End Function
 
 Private Function searchDatabase(ByRef arrReturn() As String, Optional user As String = vbNullString, _
     Optional ByVal match As String = vbNullString, Optional Group As String = vbNullString, _
-    Optional DBType As String = vbNullString, Optional lowerBound As Integer = -1, _
+    Optional dbType As String = vbNullString, Optional lowerBound As Integer = -1, _
     Optional upperBound As Integer = -1, Optional Flags As String = vbNullString) As Integer
     
     ' ...
@@ -5545,7 +5588,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
         Dim gAcc As udtGetAccessResponse
     
         ' grab user access
-        gAcc = GetAccess(user, DBType)
+        gAcc = GetAccess(user, dbType)
         
         ' ...
         If ((gAcc.Type <> "%") And _
@@ -5610,9 +5653,9 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 End If
 
                 ' ...
-                If (DBType <> vbNullString) Then
+                If (dbType <> vbNullString) Then
                     ' ...
-                    If (StrComp(DB(i).Type, DBType, vbTextCompare) = 0) Then
+                    If (StrComp(DB(i).Type, dbType, vbTextCompare) = 0) Then
                         res = IIf(blnChecked, res, True)
                     Else
                         res = False
@@ -5720,7 +5763,7 @@ ERROR_HANDLER:
     Exit Function
 End Function
 
-Public Function RemoveItem(ByVal rItem As String, File As String, Optional ByVal DBType As String = _
+Public Function RemoveItem(ByVal rItem As String, File As String, Optional ByVal dbType As String = _
     vbNullString) As String
     
     Dim s()        As String
@@ -5781,7 +5824,7 @@ theEnd:
     Close #f
 End Function
 
-Public Function DB_remove(ByVal entry As String, Optional ByVal DBType As String = _
+Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String = _
     vbNullString) As Boolean
     
     On Error GoTo ERROR_HANDLER
@@ -5793,8 +5836,8 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal DBType As String
         If (StrComp(DB(i).Username, entry, vbTextCompare) = 0) Then
             Dim bln As Boolean ' ...
         
-            If (Len(DBType)) Then
-                If (StrComp(DB(i).Type, DBType, vbBinaryCompare) = 0) Then
+            If (Len(dbType)) Then
+                If (StrComp(DB(i).Type, dbType, vbBinaryCompare) = 0) Then
                     bln = True
                 End If
             Else

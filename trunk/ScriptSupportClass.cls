@@ -421,6 +421,20 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
         Access = .Access
         Flags = .Flags
     End With
+    
+    ' ...
+    Set GetDBEntry = New clsDBEntryObj
+    
+    ' ...
+    With GetDBEntry
+        .Name = Temp.Username
+        .Rank = Temp.Access
+        .Flags = Temp.Flags
+        .CreatedOn = Temp.AddedOn
+        .CreatedBy = Temp.AddedBy
+        .ModifiedOn = Temp.ModifiedOn
+        .ModifiedBy = Temp.ModifiedBy
+    End With
 End Function
 
 '// GETSTDDBENTRY

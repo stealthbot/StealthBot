@@ -88,9 +88,9 @@ Public Sub LogonToCharacter(ByVal CharName As String)
     End With
 End Sub
 
-Public Sub DeleteCharacter(ByVal CharName As String, Optional ByVal flags As Integer = &H1)
+Public Sub DeleteCharacter(ByVal CharName As String, Optional ByVal Flags As Integer = &H1)
     With PBuffer
-        .InsertWord flags
+        .InsertWord Flags
         .InsertNTString CharName
         
         'Debug.Print "Sending: "

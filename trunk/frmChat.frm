@@ -1445,7 +1445,7 @@ Private Sub Form_Load()
     #If (BETA = 1) Then
         #If (DEV_RELEASE = 1) Then
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
-                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "1"
+                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "2"
         #Else
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
                 ZeroOffsetEx(App.REVISION, 3) & " Stable"

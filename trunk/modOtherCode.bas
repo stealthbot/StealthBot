@@ -1997,7 +1997,7 @@ Public Function FlagDescription(ByVal Flags As Long) As String
         End If
     End If
     
-    FlagDescription = s0ut & " [" & Flags & "]"
+    FlagDescription = s0ut & " [0x" & Right$("00000000" & Hex(Flags), 8) & "]"
 End Function
 
 'Returns TRUE if the specified argument was a command line switch,
