@@ -884,10 +884,12 @@ End Sub
 '// [[[ PLUGIN UPDATES ]]]
 
 
-Sub psAutoUpdate()
+Sub psAutoUpdate(boolMenuClick)
+
+   boolFoundUpdate = False
 
    '// Check for plugin system updates
-   If GetSetting("ps", "psnvn") Then
+   If GetSetting("ps", "psnvn") or boolMenuClick Then
       On Error Resume Next
       curPSVersion = scINet.OpenURL(PS_UPDATE_URL & "update.php?action=sctxtver")
       If Len(curPSVersion) = 0 Or Instr(curPSVersion, " ") Then
@@ -900,6 +902,7 @@ Sub psAutoUpdate()
       '// Is there are newer Plugin System version available?
       If Len(myPSVersion) > 0 Then
          If psGetNumericVersion(curPSVersion) > psGetNumericVersion(myPSVersion) Then
+            boolFoundUpdate = True
 
             updatePS = MsgBox("An new version (v" & curPSVersion & ") is available for The Plugin System. Updates of this type " & _
                               "include new features and bug fixes for StealthBot's VBScripting System. " & String(2, vbCrLf) & _
@@ -923,6 +926,7 @@ Sub psAutoUpdate()
       On Error Resume Next
       curPCVersion = scINet.OpenURL("http://stealthbot.net/p/plugs/pcver.txt")
       If curPCVersion > GetSetting("#internal", "pcver") Then
+         boolFoundUpdate = True
          If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then
             psFSO.DeleteFile BotPath() & "PluginCreator.exe"
             AddChat vbGreen, "An update is available for your Plugin Creator. To download hit Plugins > Create New Plugin."
@@ -932,31 +936,36 @@ Sub psAutoUpdate()
    End If
 
    '// Check for plugin updates
-   On Error Resume Next
-   Content = scInet.OpenURL(PS_UPDATE_URL & "update.php?action=getlist")
-   Lines = Split(Content, vbCrLf)
-   For i = 0 to UBound(Lines)
-      curLine = Split(Lines(i), "|||")
+   If GetSetting("ps", "nvn") Or boolMenuClick Then
+      On Error Resume Next
+      Content = scInet.OpenURL(PS_UPDATE_URL & "update.php?action=getlist")
+      Lines = Split(Content, vbCrLf)
+      For i = 0 to UBound(Lines)
+         curLine = Split(Lines(i), "|||")
 
-      '// Is this plugin installed?
-      If psPlugins.Exists(curLine(1)) Then
+         '// Is this plugin installed?
+         If psPlugins.Exists(curLine(1)) Then
 
-         '// Is the available version greater than the local version?
-         If psGetNumericVersion(curLine(2)) > psGetNumericVersion(psVersions.Item(curLine(1))) Then
+            '// Is the available version greater than the local version?
+            If psGetNumericVersion(curLine(2)) > psGetNumericVersion(psVersions.Item(curLine(1))) Then
 
-            '// If enabled, notify user of new version
-            If GetSetting(curLine(1), "nvn") And GetSetting("ps", "nvn") Then
+               '// If enabled, notify user of new version
+               If GetSetting(curLine(1), "nvn") or boolMenuClick Then
+                  boolFoundUpdate = True
 
-               updateNow = MsgBox("A new version (v" & curLine(2) & ") is available for your " & curLine(0) & " plugin. " & String(2, vbCrLf) & _
-                                  "Automatically update this plugin now?" & String(2, vbCrLf) & "To stop receiving new " & _
-                                  "version notifications for this plugin, type this inside your bot: /nvn " & curLine(1) & _
-                                  " off", vbYesNoCancel + vbQuestion + vbApplicationModal, "StealthBot Updater")
+                  updateNow = MsgBox("A new version (v" & curLine(2) & ") is available for your " & curLine(0) & " plugin. " & String(2, vbCrLf) & _
+                                     "Automatically update this plugin now?" & String(2, vbCrLf) & "To stop receiving new " & _
+                                     "version notifications for this plugin, type this inside your bot: /nvn " & curLine(1) & _
+                                     " off", vbYesNoCancel + vbQuestion + vbApplicationModal, "StealthBot Updater")
 
-               If updateNow = vbYes Then ps_getplugin_cmd curLine, 0, 4
+                  If updateNow = vbYes Then ps_getplugin_cmd curLine, 0, 4
+               End If
             End If
          End If
-      End If
-   Next
+      Next
+   End If
+
+   If boolMenuClick and Not boolFoundUpdate Then AddChat vbCyan, "There are no updates available at this time."
 End Sub
 
 
@@ -1122,6 +1131,13 @@ Sub ps_GBackups_Callback()
 End Sub
 
 
+'// "The Plugin System" > "Check for Updates"
+Sub ps_UpdateCheck_Callback()
+
+   Call psAutoUpdate(True)
+End Sub
+
+
 '// "The Plugin System" > "Open PluginSystem.dat"
 Sub ps_OpenPS_Callback()
 
@@ -1129,7 +1145,14 @@ Sub ps_OpenPS_Callback()
 End Sub
 
 
-'// "The Plugin System" > "Create New Plugin"
+'// "Get Plugins"
+Sub ps_GetPlugins_Callback()
+
+   psAppShell.Open "http://stealthbot.net/p"
+End Sub
+
+
+'// "Create New Plugin"
 Sub ps_CreatePlugin_Callback()
 
   If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then
@@ -1552,7 +1575,7 @@ End Sub
  
 Sub Event_LoggedOn(Username, Product)
 
-   Call psAutoUpdate()
+   Call psAutoUpdate(False)
    Call psSubmitStats()
    If Product = "VD2D" Or Product = "PX2D" Then psD2 = "*" Else psD2 = vbNullString End If   
    psExecuteEvent "LoggedOn", Array(Username,Product)
