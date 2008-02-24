@@ -292,7 +292,6 @@ End Function
 
 
 '// Written by Swent. Registers and populates menus for each plugin in the Plugins menu.
-'//   Also registers the Plugin System, Scripting Help, and Display menus
 Public Sub RegisterPluginMenus()
     Dim lngHelpMenu As Long, strPrefixes() As String, strTitles() As String, tmpTitle As String
     Dim boolAddPrefix As Boolean
@@ -315,6 +314,10 @@ Public Sub RegisterPluginMenus()
     dictItemIDs("ps|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Enable Plugin Backups", _
             "ps_GBackups_Callback", 0, 0, CBool(SharedScriptSupport.GetSetting("ps", "backup")))
 
+    AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
+    AddScriptMenuItem dictMenuIDs("ps"), "Get plugins", "ps_GetPlugins_Callback", False, False
+    AddScriptMenuItem dictMenuIDs("ps"), "Check for updates", "ps_UpdateCheck_Callback", False, False
+    AddScriptMenuItem dictMenuIDs("ps"), "Create new plugin", "ps_CreatePlugin_Callback", False, False
     AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
     AddScriptMenuItem dictMenuIDs("ps"), "Open PluginSystem.dat", "ps_OpenPS_Callback", False, False
     AddScriptMenuItem dictMenuIDs("ps"), "Help", "ps_Help_Callback", False, False
@@ -374,9 +377,6 @@ Public Sub RegisterPluginMenus()
         
         If i = UBound(strPrefixes) Then AddItemToMenu ScriptMenu_ParentID, 0, True
     Next
-
-    '// Add 1st level command "Create New Plugin"
-    AddItemToMenu ScriptMenu_ParentID, "Create New Plugin", , , , "ps_CreatePlugin_Callback"
 
     '// Add help menu populated with links to some helpful forums/topics
     lngHelpMenu = RegisterScriptMenu("Help")
