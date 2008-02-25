@@ -829,6 +829,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -854,6 +855,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1533,9 +1535,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -3859,7 +3861,7 @@ Private Sub mnuPopKick_Click()
 End Sub
 
 Private Sub mnuPopBan_Click()
-    If MyFlags = 2 Or MyFlags = 18 Then AddQ "/ban " & IIf(Dii, "*", "") & GetSelectedUser, 1
+    If MyFlags = 2 Or MyFlags = 18 Then AddQ "/ban " & IIf(Dii, "*", "") & GetSelectedUser
 End Sub
 
 Private Sub mnuTrayExit_click()
@@ -3948,7 +3950,7 @@ Private Sub cboSend_GotFocus()
         For i = 0 To (Controls.Count - 1)
             ' ...
             If (Controls(i).TabStop = False) Then
-                Controls(i).Tag = "False"
+                Controls(i).tag = "False"
             End If
         
             ' ...
@@ -3972,7 +3974,7 @@ Private Sub cboSend_LostFocus()
         For i = 0 To (Controls.Count - 1)
             ' ...
             If ((Controls(i).Name <> "cboSend") And _
-                (Controls(i).Tag <> "False")) Then
+                (Controls(i).tag <> "False")) Then
                 
                 Controls(i).TabStop = True
             End If
@@ -4674,7 +4676,7 @@ End Sub
 
 Private Sub QueueTimer_Timer()
     Dim Message  As String
-    Dim Tag      As String
+    Dim tag      As String
     Dim Sent     As Byte
     Dim i        As Integer
     Dim Override As Integer
@@ -4686,7 +4688,7 @@ Private Sub QueueTimer_Timer()
         
         With g_Queue.Peek
             Message = .Message
-            Tag = .Tag
+            tag = .tag
             
             'For i = 1 To g_Queue.Count
             '    If ((.Priority = 1) And (Len(Message) > 1)) Then '// a priority-1 message
@@ -4731,7 +4733,7 @@ Private Sub QueueTimer_Timer()
                     QueueMaster = (QueueMaster + 9)
                 End If
                 
-                Call bnetSend(Message, Tag)
+                Call bnetSend(Message, tag)
                 
                 Sent = 1
             End If
@@ -4929,8 +4931,7 @@ Private Sub Timer_Timer()
     
     If Not mnuDisableVoidView.Checked Then
         If gChannel.Current = "The Void" Then
-            AddQ "/unsquelch " & _
-                CurrentUsername, 1
+            AddQ "/unsquelch " & CurrentUsername
         End If
     End If
     
@@ -5013,7 +5014,7 @@ Send:
                     IdleMsg = Left$(IdleMsg, 215)
                 End If
                 
-                frmChat.AddQ IdleMsg, 1
+                frmChat.AddQ IdleMsg
             End If
         End If
         
@@ -5298,7 +5299,7 @@ End Function
 
 ' ...
 Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optional _
-    ByVal user As String = vbNullString, Optional ByVal Tag As String = vbNullString)
+    ByVal user As String = vbNullString, Optional ByVal tag As String = vbNullString)
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -5521,7 +5522,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                             QueueMaster = (QueueMaster + 3)
                         Else
                             ' send our message on its way
-                            Call bnetSend(KillNull(Send), Tag)
+                            Call bnetSend(KillNull(Send), tag)
                 
                             ' if we're not issuing a command, lets show the user
                             ' what he's saying.
@@ -5585,7 +5586,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                             .ResponseTo = vbNullString
                         End If
                         
-                        .Tag = Tag
+                        .tag = tag
                     End With
     
                     ' ...

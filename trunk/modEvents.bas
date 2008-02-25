@@ -178,8 +178,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         ' users within the channel by attempting to force a user
         ' update message using Battle.net's unignore command.
         If (Not (frmChat.mnuDisableVoidView.Checked)) Then
-            frmChat.AddQ "/unignore " & _
-                CurrentUsername, 1
+            frmChat.AddQ "/unignore " & CurrentUsername
         End If
     End If
     
@@ -641,7 +640,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                         
                     If (BotVars.UseBackupChan) Then
                         If (Len(BotVars.BackupChan) > 1) Then
-                            frmChat.AddQ "/join " & BotVars.BackupChan, 1
+                            frmChat.AddQ "/join " & BotVars.BackupChan
                         End If
                     Else
                         frmChat.AddQ "/join " & gChannel.Current
@@ -746,20 +745,19 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
             
             If (BotVars.QuietTime) Then
                 If (Not (GetSafelist(Username))) Then
-                    frmChat.AddQ "/ban " & Username & _
-                        " Quiet-time is enabled.", 1
+                    frmChat.AddQ "/ban " & Username & " Quiet-time is enabled."
                 End If
             End If
             
             If (Phrasebans) Then
                 For i = LBound(Phrases) To UBound(Phrases)
                     If ((LCase$(Phrases(i)) <> vbNullString) And _
-                        (LCase$(Phrases(i)) <> Space(1))) Then
+                        (LCase$(Phrases(i)) <> Space$(1))) Then
                     
                         If (InStr(1, Message, Phrases(i), vbTextCompare) <> 0) Then
                             If (Not (GetSafelist(Username))) Then
-                                frmChat.AddQ "/ban " & Username & _
-                                    " Banned phrase: " & Phrases(i), 1
+                                frmChat.AddQ "/ban " & Username & " Banned phrase: " & _
+                                    Phrases(i), 1
                             End If
                             
                             GoTo theEnd
@@ -1175,21 +1173,13 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                             If (StrComp(Mid$(gChannel.Current, 4), StripRealm(Username), _
                                 vbTextCompare)) <> 0 Then
                                 
-                                If (Dii) Then
-                                    frmChat.AddQ "/designate *" & Username
-                                Else
-                                    frmChat.AddQ "/designate " & Username
-                                End If
-                                
+                                frmChat.AddQ "/designate " & Username
+   
                                 gChannel.staticDesignee = Username
                             End If
                         Else
-                            If (Dii) Then
-                                frmChat.AddQ "/designate *" & Username
-                            Else
-                                frmChat.AddQ "/designate " & Username
-                            End If
-                            
+                            frmChat.AddQ "/designate " & Username
+
                             gChannel.staticDesignee = Username
                         End If
                     End If
@@ -1352,8 +1342,8 @@ checkIPBan:
                     End If
                     
                     If (BotVars.WhisperGreet) Then
-                        frmChat.AddQ "/w " & IIf(Dii, "*" & Username, Username) & _
-                            Space(1) & DoReplacements(BotVars.GreetMsg, Username, Ping)
+                        frmChat.AddQ "/w " & Space$(1) & _
+                            DoReplacements(BotVars.GreetMsg, Username, Ping)
                     Else
                         frmChat.AddQ DoReplacements(BotVars.GreetMsg, Username, Ping)
                     End If
@@ -1410,7 +1400,7 @@ theEnd:
             l = GetMailCount(Username)
             
             If (l > 0) Then
-                frmChat.AddQ "/w " & IIf(Dii, "*", "") & Username & " You have " & l & _
+                frmChat.AddQ "/w " & Username & " You have " & l & _
                     " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
             End If
         End If
@@ -1433,7 +1423,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim Pos       As Integer
+    Dim pos       As Integer
     Dim userIndex As Integer
     
     ' ...
@@ -1693,8 +1683,8 @@ PhraseCleared:
                     Call GetMailMessage(Username, Msg)
                     
                     If (Len(RTrim(Msg.To)) > 0) Then
-                        frmChat.AddQ "/w " & IIf(Dii, "*", "") & Username & _
-                            " Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
+                        frmChat.AddQ "/w " & Username & " Message from " & _
+                            RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
                     End If
                 End If
             End If
@@ -1861,11 +1851,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
                     End If
                 End With
                 
-                If (Dii) Then
-                    frmChat.AddQ "/w *" & Username & " Password accepted."
-                Else
-                    frmChat.AddQ "/w " & Username & " Password accepted."
-                End If
+                frmChat.AddQ "/w " & Username & " Password accepted."
             End If
         End If
         
@@ -1892,8 +1878,8 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
                     Call GetMailMessage(Username, Msg)
                     
                     If (Len(RTrim(Msg.To)) > 0) Then
-                        frmChat.AddQ "/w " & IIf(Dii, "*", "") & Username & _
-                            " Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
+                        frmChat.AddQ "/w " & Username & " Message from " & _
+                            RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
                     End If
                 End If
             End If

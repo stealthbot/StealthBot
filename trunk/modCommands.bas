@@ -204,6 +204,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                                 Call AddQ("/w " & Username & Space$(1) & cmdRet(j), _
                                     Priority.COMMAND_RESPONSE_MESSAGE, Username)
                             Else
+                                ' send standard message
                                 Call AddQ(cmdRet(j), Priority.COMMAND_RESPONSE_MESSAGE, _
                                     Username)
                             End If
@@ -242,6 +243,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                                 Space(1) & cmdRet(i), Priority.COMMAND_RESPONSE_MESSAGE, _
                                     Username)
                         Else
+                            ' send standard message
                             Call AddQ(cmdRet(i), Priority.COMMAND_RESPONSE_MESSAGE, _
                                 Username)
                         End If
@@ -589,7 +591,9 @@ Private Function OnHome(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     ' This command will make the bot join its home channel.
     
-    Call AddQ("/join " & BotVars.HomeChannel, Priority.COMMAND_RESPONSE_MESSAGE, Username)
+    ' ...
+    Call AddQ("/join " & BotVars.HomeChannel, Priority.COMMAND_RESPONSE_MESSAGE, _
+        Username)
 End Function ' end function OnHome
 
 ' handle clan command
@@ -620,8 +624,9 @@ Private Function OnClan(ByVal Username As String, ByRef dbAccess As udtGetAccess
                     Username)
                 
             Case Else
-               ' set clan channel to specified
-               Call AddQ("/clan " & msgData, , Username)
+                ' set clan channel to specified
+                Call AddQ("/clan " & msgData, Priority.COMMAND_RESPONSE_MESSAGE, _
+                    Username)
         End Select
     Else
         tmpBuf = "The bot must have ops to change clan privacy status."
@@ -845,7 +850,8 @@ Private Function OnSweepBan(ByVal Username As String, ByRef dbAccess As udtGetAc
     Call Cache(vbNullString, 255, "ban ")
     
     ' ...
-    Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, Username)
+    Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, _
+        Username)
 End Function ' end function OnSweepBan
 
 ' handle sweepignore command
@@ -870,7 +876,8 @@ Private Function OnSweepIgnore(ByVal Username As String, ByRef dbAccess As udtGe
     Call Cache(vbNullString, 255, "squelch ")
     
     ' ...
-    Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, Username)
+    Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, _
+        Username)
 End Function ' end function OnSweepIgnore
 
 ' handle setname command
@@ -1130,10 +1137,12 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
         
         ' designate user
-        Call AddQ("/designate " & msgData, 0, Username)
+        Call AddQ("/designate " & msgData, Priority.SPECIAL_MESSAGE, _
+            Username)
         
         ' rejoin channel
-        Call AddQ("/resign", 0, Username)
+        Call AddQ("/resign", Priority.SPECIAL_MESSAGE, _
+            Username)
         
         ' ...
         If (userCount) Then
@@ -1350,8 +1359,11 @@ Private Function OnJoin(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     Dim tmpBuf As String ' temporary output buffer
 
+    ' ...
     If (LenB(msgData) > 0) Then
-        Call AddQ("/join " & msgData, 2, Username)
+        ' ...
+        Call AddQ("/join " & msgData, Priority.COMMAND_RESPONSE_MESSAGE, _
+            Username)
     End If
 End Function ' end function OnJoin
 
@@ -1381,7 +1393,7 @@ Private Function OnResign(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' by rejoining the channel through the use of Battle.net's /resign
     ' command.
     
-    Call AddQ("/resign", 2, Username)
+    Call AddQ("/resign", Priority.SPECIAL_MESSAGE, Username)
 End Function ' end function OnResign
 
 ' handle clearbanlist
@@ -1436,10 +1448,11 @@ Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' This command will make the bot rejoin the current channel.
     
     ' join temporary channel
-    Call AddQ("/join " & CurrentUsername & " Rejoin", 2, Username)
+    Call AddQ("/join " & CurrentUsername & " Rejoin", Priority.COMMAND_RESPONSE_MESSAGE, _
+        Username)
     
     ' rejoin previous channel
-    Call AddQ("/join " & gChannel.Current, 2, Username)
+    Call AddQ("/join " & gChannel.Current, Priority.COMMAND_RESPONSE_MESSAGE, Username)
 End Function ' end function OnRejoin
 
 ' handle plugban command
@@ -1473,7 +1486,7 @@ Private Function OnPlugBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 For i = 1 To colUsersInChannel.Count
                     With colUsersInChannel.Item(i)
                         If ((.Flags = 16) And (Not .Safelisted)) Then
-                            Call AddQ("/ban " & .Username & " PlugBan", 1)
+                            Call AddQ("/ban " & .Username & " PlugBan")
                         End If
                     End With
                 Next i
@@ -1682,7 +1695,7 @@ Private Function OnIPBans(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 Select Case colUsersInChannel.Item(i).Flags
                     Case 20, 30, 32, 48
                         Call AddQ("/ban " & colUsersInChannel.Item(i).Username & _
-                            " IPBanned.", 1)
+                            " IPBanned.")
                 End Select
             Next i
         End If
@@ -1745,7 +1758,7 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
 
             tmpBuf = "Error: You do not have enough access to do that."
         Else
-            Call AddQ("/squelch " & msgData, 1, Username)
+            Call AddQ("/squelch " & msgData, , Username)
         
             tmpBuf = "User " & Chr(34) & msgData & Chr(34) & " IPBanned."
         End If
@@ -1764,11 +1777,17 @@ Private Function OnUnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
     
     Dim tmpBuf As String ' temporary output buffer
 
-    If (Len(msgData) > 0) Then
-        Call AddQ("/unsquelch " & msgData, 1, Username)
-        Call AddQ("/unban " & msgData, 1, Username)
+    ' ...
+    If (LenB(msgData) > 0) Then
+        ' ...
+        Call AddQ("/unsquelch " & msgData, , Username)
         
-        tmpBuf = "User " & Chr(34) & msgData & Chr(34) & " Un-IPBanned."
+        ' ...
+        Call AddQ("/unban " & msgData, , Username)
+        
+        ' ...
+        tmpBuf = "User " & Chr$(34) & msgData & Chr$(34) & _
+            " Un-IPBanned."
     End If
         
     ' return message
@@ -1781,19 +1800,17 @@ Private Function OnDesignate(ByVal Username As String, ByRef dbAccess As udtGetA
     
     Dim tmpBuf As String ' temporary output buffer
     
-    If (Len(msgData) > 0) Then
+    ' ...
+    If (LenB(msgData) > 0) Then
+        ' ...
         If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
-            'diablo 2 handling
-            'If (Dii = True) Then
-            '    If (Not (Mid$(msgData, 1, 1) = "*")) Then
-            '        msgData = "*" & msgData
-            '    End If
-            'End If
+            ' ...
+            Call AddQ("/designate " & msgData, , Username)
             
-            Call AddQ("/designate " & msgData, 1, Username)
-            
+            ' ...
             tmpBuf = "I have designated [ " & msgData & " ]"
         Else
+            ' ...
             tmpBuf = "Error: The bot does not have ops."
         End If
     End If
@@ -1871,8 +1888,8 @@ Private Function OnNext(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf As String ' temporary output buffer
-    Dim hWndWA As Long
 
+    ' ...
     If (BotVars.DisableMP3Commands = False) Then
         Dim pos As Integer ' ...
         
@@ -2213,8 +2230,11 @@ Private Function OnUnIgPriv(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     Dim tmpBuf As String ' temporary output buffer
 
-    Call AddQ("/o unigpriv", 1, Username)
+    ' ...
+    Call AddQ("/o unigpriv", Priority.COMMAND_RESPONSE_MESSAGE, _
+        Username)
     
+    ' ...
     tmpBuf = "Recieving text from non-friends."
         
     ' return message
@@ -2227,8 +2247,11 @@ Private Function OnIgPriv(ByVal Username As String, ByRef dbAccess As udtGetAcce
     
     Dim tmpBuf As String ' temporary output buffer
 
-    Call AddQ("/o igpriv", 1, Username)
+    ' ...
+    Call AddQ("/o igpriv", Priority.COMMAND_RESPONSE_MESSAGE, _
+        Username)
     
+    ' ...
     tmpBuf = "Ignoring text from non-friends."
         
     ' return message
@@ -2428,18 +2451,23 @@ End Function ' end function OnProfile
 Private Function OnSetIdle(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim u      As String
+    Dim u      As String ' ...
     Dim tmpBuf As String ' temporary output buffer
     
+    ' ...
     u = msgData
     
-    If (Len(u) > 0) Then
+    ' ...
+    If (LenB(u) > 0) Then
+        ' ...
         If (Left$(u, 1) = "/") Then
-            u = " " & u
+            u = Mid$(u, 2)
         End If
         
+        ' ...
         Call WriteINI("Main", "IdleMsg", u)
         
+        ' ...
         tmpBuf = "Idle message set."
     End If
     
@@ -2520,12 +2548,17 @@ Private Function OnTrigger(ByVal Username As String, ByRef dbAccess As udtGetAcc
     
     Dim tmpBuf As String ' temporary output buffer
 
-    If (Len(BotVars.TriggerLong) = 1) Then
-        tmpBuf = "The bot's current trigger is " & Chr(34) & Space(1) & _
-            BotVars.TriggerLong & Space(1) & Chr(34) & " (Alt + 0" & Asc(BotVars.TriggerLong) & ")"
+    ' ...
+    If (LenB(BotVars.TriggerLong) = 1) Then
+        ' ...
+        tmpBuf = "The bot's current trigger is " & _
+            Chr$(34) & Space$(1) & BotVars.TriggerLong & Space$(1) & Chr$(34) & _
+                " (Alt + 0" & Asc(BotVars.TriggerLong) & ")"
     Else
-        tmpBuf = "The bot's current trigger is " & Chr(34) & Space(1) & _
-            BotVars.TriggerLong & Space(1) & Chr(34) & " (Length: " & Len(BotVars.TriggerLong) & ")"
+        ' ...
+        tmpBuf = "The bot's current trigger is " & _
+            Chr$(34) & Space$(1) & BotVars.TriggerLong & Space$(1) & Chr$(34) & _
+                " (Length: " & Len(BotVars.TriggerLong) & ")"
     End If
 
     ' return message
@@ -2537,28 +2570,44 @@ Private Function OnSetTrigger(ByVal Username As String, ByRef dbAccess As udtGet
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf     As String ' temporary output buffer
-    Dim newTrigger As String
+    Dim newTrigger As String ' ...
     
+    ' ...
     newTrigger = msgData
     
-    If (Len(newTrigger) > 0) Then
-        If (Left$(newTrigger, 1) <> "/") Then
-            If ((Left$(newTrigger, 1) <> Space(1)) And _
-                (Right$(newTrigger, 1) <> Space(1))) Then
-                
-                ' set new trigger
-                BotVars.Trigger = newTrigger
+    ' ...
+    If (LenB(newTrigger) > 0) Then
+        ' ...
+        If (Left$(newTrigger, 1) = "/") Then
+            ' ...
+            cmdRet(0) = tmpBuf = "Error: Trigger may not begin with a " & _
+                "forward slash."
             
-                ' write trigger to configuration
-                Call WriteINI("Main", "Trigger", newTrigger)
-            
-                tmpBuf = "The new trigger is " & Chr(34) & newTrigger & Chr(34) & "."
-            Else
-                tmpBuf = "Error: Trigger may not begin or end with a space."
-            End If
-        Else
-            tmpBuf = "Error: Trigger may not begin with a forward slash."
+            ' ...
+            Exit Function
         End If
+        
+        ' ...
+        If ((Left$(newTrigger, 1) <> Space$(1)) And (Right$(newTrigger, 1) <> _
+            Space$(1))) Then
+            
+            ' ...
+            cmdRet(0) = "Error: Trigger may not begin or end with a " & _
+                "space."
+            
+            ' ...
+            Exit Function
+        End If
+        
+        ' set new trigger
+        BotVars.Trigger = newTrigger
+    
+        ' write trigger to configuration
+        Call WriteINI("Main", "Trigger", newTrigger)
+    
+        ' ...
+        tmpBuf = "The new trigger is " & Chr$(34) & newTrigger & _
+            Chr$(34) & "."
     End If
     
     ' return message
@@ -2600,7 +2649,8 @@ Private Function OnLevelBan(ByVal Username As String, ByRef dbAccess As udtGetAc
         If (BotVars.BanUnderLevel = 0) Then
            tmpBuf = "Currently not banning Warcraft III users by level."
         Else
-           tmpBuf = "Currently banning Warcraft III users under level " & BotVars.BanUnderLevel & "."
+            tmpBuf = "Currently banning Warcraft III users under level " & _
+                BotVars.BanUnderLevel & "."
         End If
     End If
     
@@ -2932,11 +2982,15 @@ Private Function OnFAdd(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
     
+    ' ...
     u = msgData
     
-    If (Len(u) > 0) Then
-        Call AddQ("/f a " & u, 1, Username)
+    If (LenB(u) > 0) Then
+        ' ...
+        Call AddQ("/f a " & u, Priority.COMMAND_RESPONSE_MESSAGE, _
+            Username)
         
+        ' ...
         tmpBuf = "Added user " & Chr(34) & u & Chr(34) & " to this account's friends list."
     End If
         
@@ -2951,11 +3005,15 @@ Private Function OnFRem(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
     
+    ' ...
     u = msgData
     
     If (Len(u) > 0) Then
-        Call AddQ("/f r " & u, 1, Username)
+        ' ...
+        Call AddQ("/f r " & u, Priority.COMMAND_RESPONSE_MESSAGE, _
+            Username)
         
+        ' ...
         tmpBuf = "Removed user " & Chr(34) & u & Chr(34) & " from this account's friends list."
     End If
 
@@ -3145,14 +3203,19 @@ End Function ' end function OnShitAdd
 Private Function OnDND(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim DNDMsg As String
+    Dim DNDMsg As String ' ...
     
-    If (Len(msgData) = 0) Then
-        AddQ "/dnd", 1
+    ' ...
+    If (LenB(msgData) = 0) Then
+        ' ...
+        Call AddQ("/dnd", Priority.COMMAND_RESPONSE_MESSAGE)
     Else
+        ' ...
         DNDMsg = msgData
     
-        AddQ "/dnd " & DNDMsg, 1, Username
+        ' ...
+        Call AddQ("/dnd " & DNDMsg, Priority.COMMAND_RESPONSE_MESSAGE, _
+            Username)
     End If
 End Function ' end function OnDND
 
@@ -3672,7 +3735,8 @@ Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 msgData
         End If
         
-        Call AddQ(tmpSend, , Username)
+        Call AddQ(tmpSend, Priority.COMMAND_RESPONSE_MESSAGE, _
+            Username)
     End If
 
     ' return message
@@ -3914,14 +3978,19 @@ Private Function OnBack(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf As String ' temporary output buffer
-    Dim hWndWA As Long
+    Dim hWndWA As Long   ' ...
     
+    ' ...
     If (AwayMsg <> vbNullString) Then
-        Call AddQ("/away", 1, Username)
+        ' ...
+        Call AddQ("/away", Priority.COMMAND_RESPONSE_MESSAGE, _
+            Username)
         
-        If (Not (InBot)) Then
+        ' ...
+        If (InBot = False) Then
             ' alert users of status change
-            Call AddQ("/me is back from " & AwayMsg & ".")
+            Call AddQ("/me is back from " & AwayMsg & ".", _
+                Priority.COMMAND_RESPONSE_MESSAGE)
             
             ' set away message
             AwayMsg = vbNullString
@@ -3980,27 +4049,30 @@ Private Function OnAway(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     Dim tmpBuf As String ' temporary output buffer
     
-    If (Len(AwayMsg) > 0) Then
+    ' ...
+    If (LenB(AwayMsg) > 0) Then
         ' send away command to battle.net
-        Call AddQ("/away")
+        Call AddQ("/away", Priority.COMMAND_RESPONSE_MESSAGE)
         
         ' alert users of status change
-        If (Not (InBot)) Then
-            Call AddQ("/me is back from (" & AwayMsg & ")")
+        If (InBot = False) Then
+            Call AddQ("/me is back from (" & AwayMsg & ")", _
+                Priority.COMMAND_RESPONSE_MESSAGE)
         End If
         
         ' set away message
         AwayMsg = vbNullString
     Else
-        If (Len(msgData) > 0) Then
+        If (LenB(msgData) > 0) Then
             ' set away message
             AwayMsg = msgData
             
             ' send away command to battle.net
-            Call AddQ("/away " & AwayMsg)
+            Call AddQ("/away " & AwayMsg, Priority.COMMAND_RESPONSE_MESSAGE)
             
             ' alert users of status change
-            If (Not (InBot)) Then
+            If (InBot = False) Then
+                ' ...
                 Call AddQ("/me is away (" & AwayMsg & ")")
             End If
         Else
@@ -4008,10 +4080,10 @@ Private Function OnAway(ByVal Username As String, ByRef dbAccess As udtGetAccess
             AwayMsg = " - "
         
             ' send away command to battle.net
-            Call AddQ("/away")
+            Call AddQ("/away", Priority.COMMAND_RESPONSE_MESSAGE)
             
             ' alert users of status change
-            If (Not (InBot)) Then
+            If (InBot = False) Then
                 Call AddQ("/me is away.")
             End If
         End If
@@ -4140,7 +4212,7 @@ Private Function OnIgnore(ByVal Username As String, ByRef dbAccess As udtGetAcce
             
             tmpBuf = "That user has equal or higher access."
         Else
-            Call AddQ("/ignore " & u, 1)
+            Call AddQ("/ignore " & u)
             
             tmpBuf = "Ignoring messages from " & Chr(34) & u & Chr(34) & "."
         End If
@@ -4186,7 +4258,7 @@ Private Function OnUnignore(ByVal Username As String, ByRef dbAccess As udtGetAc
     u = msgData
     
     If (Len(msgData)) Then
-        AddQ "/unignore " & u, 1
+        Call AddQ("/unignore " & u)
         
         tmpBuf = "Receiving messages from """ & u & """."
     End If
@@ -4347,7 +4419,7 @@ Private Function OnWhoAmI(ByVal Username As String, ByRef dbAccess As udtGetAcce
         tmpBuf = "You are the bot console."
         
         If (g_Online) Then
-            Call AddQ("/whoami")
+            Call AddQ("/whoami", Priority.CONSOLE_MESSAGE)
         End If
     ElseIf (dbAccess.Access = 1000) Then
         tmpBuf = "You are the bot owner, " & Username & "."
@@ -5202,7 +5274,7 @@ Private Function OnWhoIs(ByVal Username As String, ByRef dbAccess As udtGetAcces
     u = msgData
             
     If (InBot) Then
-        Call AddQ("/whois " & u, 1)
+        Call AddQ("/whois " & u, Priority.CONSOLE_MESSAGE)
     End If
 
     If (Len(u)) Then
@@ -5523,7 +5595,7 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
                                    ((.Flags <> 2) And (.Flags <> 18))) Then
                                    
                                     Call AddQ("/" & Typ & .Username & Space(1) & _
-                                        smsgData, 1)
+                                        smsgData)
                                 End If
                             Else
                                 iSafe = (iSafe + 1)
@@ -5549,7 +5621,7 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
                         '    Call AddQ("/unsquelch " & gBans(i).UsernameActual, 1)
                         'End If
                     
-                        Call AddQ("/" & Typ & gBans(i).UsernameActual, 1)
+                        Call AddQ("/" & Typ & gBans(i).UsernameActual)
                     Else
                         ' unipban user
                         'If (BotVars.IPBans = True) Then
@@ -5559,7 +5631,7 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
                         z = PrepareCheck(gBans(i).UsernameActual)
                         
                         If (z Like sMatch) Then
-                            Call AddQ("/" & Typ & gBans(i).UsernameActual, 1)
+                            Call AddQ("/" & Typ & gBans(i).UsernameActual)
                         End If
                     End If
                 End If

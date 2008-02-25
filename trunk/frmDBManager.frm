@@ -398,98 +398,141 @@ Private Sub btnCreateUser_Click()
     
     Dim Username     As String  ' ...
     
-    Username = "New User #" & _
-        (userCount + 1)
+    ' ...
+    Do
+        ' ...
+        Username = "New User #" & (userCount + 1)
+    Loop While (GetAccess(Username, "User").Username <> vbNullString)
         
+    ' redefine array to support new entry
     ReDim Preserve m_DB(UBound(m_DB) + 1)
     
+    ' create new database entry
     With m_DB(UBound(m_DB))
-        .Username = vbNullString
+        .Username = Username
         .Type = "USER"
         .AddedBy = "(console)"
         .AddedOn = Now
     End With
 
+    ' do we have an item (hopefully a group) selected?
     If (Not (trvUsers.SelectedItem Is Nothing)) Then
+        ' is the item really just the root item?
         If (trvUsers.SelectedItem.index = 1) Then
             Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
                 tvwChild, "User: " & Username, Username, 3)
-        ElseIf (trvUsers.SelectedItem.Image = 1) Then
-            Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
-                tvwChild, "User: " & Username, Username, 3)
-
-            With m_DB(UBound(m_DB))
-                .Groups = trvUsers.SelectedItem.text
-            End With
-        Else
-            Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Parent.Key, _
-                tvwChild, "User: " & Username, Username, 3)
                 
-            If (trvUsers.SelectedItem.Parent.Image = 1) Then
+        Else
+            ' is the item a group?
+            If (StrComp(trvUsers.SelectedItem.tag, "Group", vbTextCompare) = 0) Then
+                ' create new node under group node
+                Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, tvwChild, _
+                    "User: " & Username, Username, 3)
+    
+                ' ...
                 With m_DB(UBound(m_DB))
                     .Groups = trvUsers.SelectedItem.text
                 End With
+            Else
+                ' is our parent a group?
+                If (StrComp(trvUsers.SelectedItem.Parent.tag, "Group", vbTextCompare) = 0) Then
+                    ' create new node under group node
+                    Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Parent.Key, tvwChild, _
+                        "User: " & Username, Username, 3)
+                
+                    ' set group settings on new database entry
+                    With m_DB(UBound(m_DB))
+                        .Groups = trvUsers.SelectedItem.Parent.text
+                    End With
+                Else
+                    ' create new node under root
+                    Set newNode = trvUsers.Nodes.Add("Database", tvwChild, "User: " & _
+                        Username, Username, 3)
+                End If
             End If
         End If
     Else
+        ' lets just create the node under the root node
         Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
             "User: " & Username, Username, 3)
     End If
-        
-    With trvUsers.Nodes(newNode.index)
+    
+    ' change misc. settings
+    With newNode
+        .tag = "User"
         .Selected = True
     End With
     
+    ' open entry name for editing
     Call trvUsers.StartLabelEdit
     
+    ' increment user count
     userCount = (userCount + 1)
 End Sub
 
 ' ...
 Private Sub btnCreateGroup_Click()
     Static groupCount As Integer ' ...
+    Static clanCount  As Integer ' ...
     
     Dim newNode       As Node    ' ...
     
-    Dim groupname     As String  ' ...
+    ' ...
+    If (tbsTabs.SelectedItem.index = 1) Then ' Users and Groups Tab
+        Dim GroupName As String ' ...
     
-    If (tbsTabs.SelectedItem.index = 1) Then
-        groupname = "New Group #" & _
-            (groupCount + 1)
-            
+        ' ...
+        Do
+            ' ...
+            GroupName = "New Group #" & (groupCount + 1)
+        Loop While (GetAccess(GroupName, "Group").Username <> vbNullString)
+        
+        ' ...
         ReDim Preserve m_DB(UBound(m_DB) + 1)
         
+        ' ...
         With m_DB(UBound(m_DB))
-            .Username = vbNullString
+            .Username = GroupName
             .Type = "GROUP"
             .AddedBy = "(console)"
             .AddedOn = Now
         End With
     
+        ' do we have an item (hopefully a group) selected?
         If (Not (trvUsers.SelectedItem Is Nothing)) Then
+            ' is the item reall just the root node?
             If (trvUsers.SelectedItem.index = 1) Then
+                ' ...
                 Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
-                    tvwChild, "Group: " & groupname, groupname, 1)
-            ElseIf (trvUsers.SelectedItem.Image = 1) Then
-                Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
-                    tvwChild, "Group: " & groupname, groupname, 1)
-
-                With m_DB(UBound(m_DB))
-                    .Groups = trvUsers.SelectedItem.text
-                End With
+                    tvwChild, "Group: " & GroupName, GroupName, 1)
             Else
-                Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Parent.Key, _
-                    tvwChild, "Group: " & groupname, groupname, 1)
-                    
-                If (trvUsers.SelectedItem.Parent.Image = 1) Then
+                ' ...
+                If (StrComp(trvUsers.SelectedItem.tag, "Group", vbTextCompare) = 0) Then
+                    ' ...
+                    Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
+                        tvwChild, "Group: " & GroupName, GroupName, 1)
+    
+                    ' ...
                     With m_DB(UBound(m_DB))
-                        .Groups = trvUsers.SelectedItem.Parent.text
+                        .Groups = trvUsers.SelectedItem.text
                     End With
+                Else
+                    ' ...
+                    Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Parent.Key, _
+                        tvwChild, "Group: " & GroupName, GroupName, 1)
+                        
+                    ' ...
+                    If (trvUsers.SelectedItem.Parent.Image = 1) Then
+                        With m_DB(UBound(m_DB))
+                            .Groups = trvUsers.SelectedItem.Parent.text
+                        End With
+                    End If
                 End If
             End If
         Else
+            ' ...
             Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
-                "Group: " & groupname, groupname, 1)
+                "Group: " & GroupName, GroupName, 1)
         End If
         
         ' ...
@@ -500,19 +543,41 @@ Private Sub btnCreateGroup_Click()
         
         ' ...
         groupCount = (groupCount + 1)
-    ElseIf (tbsTabs.SelectedItem.index = 2) Then
+        
+    ElseIf (tbsTabs.SelectedItem.index = 2) Then ' Clan Tab
+        Dim ClanName As String ' ...
     
-    ElseIf (tbsTabs.SelectedItem.index = 3) Then
+        ' ...
+        Do
+            ' ...
+            ClanName = "New Clan #" & (clanCount + 1)
+        Loop While (GetAccess(GroupName, "Group").Username <> vbNullString)
+        
+        ' ...
+        ReDim Preserve m_DB(UBound(m_DB) + 1)
+        
+        ' ...
+        With m_DB(UBound(m_DB))
+            .Username = m_game
+            .Type = "CLAN"
+            .AddedBy = "(console)"
+            .AddedOn = Now
+        End With
+        
+        ' ...
+        clanCount = (clanCount + 1)
+        
+    ElseIf (tbsTabs.SelectedItem.index = 3) Then ' Game Tab
         ' ...
         Call frmGameSelection.Show(vbModal, frmDBManager)
         
         ' ...
-        If (Len(m_game)) Then
-            If (GetAccess(m_game, "GAME").Username = _
-                vbNullString) Then
-                
+        If (m_game <> vbNullString) Then
+            If (GetAccess(m_game, "GAME").Username = vbNullString) Then
+                ' ...
                 ReDim Preserve m_DB(UBound(m_DB) + 1)
                 
+                ' ...
                 With m_DB(UBound(m_DB))
                     .Username = m_game
                     .Type = "GAME"
@@ -520,6 +585,7 @@ Private Sub btnCreateGroup_Click()
                     .AddedOn = Now
                 End With
             
+                ' ...
                 Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
                     "Group: " & m_game, m_game, 2)
                 
@@ -532,7 +598,9 @@ Private Sub btnCreateGroup_Click()
                 ' ...
                 Call trvUsers.SetFocus
             Else
-                MsgBox "There is already an entry of this type matching the specified name."
+                ' alert user that game entry already exists
+                MsgBox "There is already an entry of this type matching " & _
+                    "the specified name."
             End If
         End If
     End If
@@ -761,7 +829,7 @@ Private Sub tbsTabs_Click()
                     
                     ' change misc. settings
                     With newNode
-                        .Tag = "Group"
+                        .tag = "Group"
                         .Sorted = True
                     End With
                 End If
@@ -811,7 +879,7 @@ Private Sub tbsTabs_Click()
                     
                     ' change misc. settings
                     With newNode
-                        .Tag = "User"
+                        .tag = "User"
                     End With
                 End If
             Next i
@@ -830,7 +898,7 @@ Private Sub tbsTabs_Click()
                         
                     ' change misc. settings
                     With newNode
-                        .Tag = "Clan"
+                        .tag = "Clan"
                     End With
                 End If
             Next i
@@ -849,7 +917,7 @@ Private Sub tbsTabs_Click()
                         
                     ' change misc. settings
                     With newNode
-                        .Tag = "Game"
+                        .tag = "Game"
                     End With
                 End If
             Next i
@@ -1272,7 +1340,7 @@ Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
 End Sub
 
 ' ...
-Private Function Exists(ByVal nodeName As String, Optional Tag As String = vbNullString) As Integer
+Private Function Exists(ByVal nodeName As String, Optional tag As String = vbNullString) As Integer
     Dim i As Integer ' ...
     
     ' ...
@@ -1280,9 +1348,9 @@ Private Function Exists(ByVal nodeName As String, Optional Tag As String = vbNul
         ' ...
         If (StrComp(trvUsers.Nodes(i).text, nodeName, vbTextCompare) = 0) Then
             ' ...
-            If (Tag <> vbNullString) Then
+            If (tag <> vbNullString) Then
                 ' ...
-                If (StrComp(trvUsers.Nodes(i).Tag, Tag, vbTextCompare) = 0) Then
+                If (StrComp(trvUsers.Nodes(i).tag, tag, vbTextCompare) = 0) Then
                     ' ...
                     Exists = i
                     

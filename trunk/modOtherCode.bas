@@ -255,9 +255,9 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
                 End If
                 
                 If (Kick = 0) Then
-                    Call frmChat.AddQ("/ban " & Inpt, 1)
+                    Call frmChat.AddQ("/ban " & Inpt)
                 Else
-                    Call frmChat.AddQ("/kick " & Inpt, 1)
+                    Call frmChat.AddQ("/kick " & Inpt)
                 End If
             End If
         Else
@@ -337,7 +337,7 @@ Public Function StripRealm(ByVal Username As String) As String
     StripRealm = Username
 End Function
 
-Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNullString)
+Public Sub bnetSend(ByVal Message As String, Optional ByVal tag As String = vbNullString)
     If (frmChat.sckBNet.State = 7) Then
         With PBuffer
             If (frmChat.mnuUTF8.Checked = False) Then
@@ -353,7 +353,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
     If (Not (bFlood)) Then
         On Error Resume Next
         
-        frmChat.SControl.Run "Event_MessageSent", Message, Tag
+        frmChat.SControl.Run "Event_MessageSent", Message, tag
     End If
 End Sub
 
@@ -826,7 +826,8 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: GetCumulativeAccess() error.")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in " & _
+        "GetCumulativeAccess().")
 
     Exit Function
 End Function

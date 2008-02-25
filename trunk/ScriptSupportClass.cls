@@ -256,6 +256,11 @@ End Sub
 '// Nonzero priority messages will be sent with precedence over 0-priority messages.
 Public Sub AddQ(ByVal sText As String, Optional ByVal msg_priority As Integer = -1, Optional _
     ByVal user As String = vbNullString, Optional ByVal tag As String = vbNullString)
+    
+    '// priority zero reserved for internal usage only
+    If (msg_priority < 1) Then
+        Exit Sub
+    End If
 
     Call frmChat.AddQ(sText, msg_priority, user, tag)
 End Sub
