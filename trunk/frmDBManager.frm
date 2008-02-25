@@ -94,7 +94,6 @@ Begin VB.Form frmDBManager
          Width           =   855
       End
       Begin VB.Label lblModifiedBy 
-         Caption         =   "by Eric[nK]"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   6
@@ -111,7 +110,6 @@ Begin VB.Form frmDBManager
          Width           =   2415
       End
       Begin VB.Label lblCreatedBy 
-         Caption         =   "by Eric[nK]"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   6
@@ -128,7 +126,7 @@ Begin VB.Form frmDBManager
          Width           =   2415
       End
       Begin VB.Label lblCreatedOn 
-         Caption         =   "12/27/2007 at 11:32 P.M. Local Time"
+         Caption         =   "(not applicable)"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   6
@@ -145,7 +143,7 @@ Begin VB.Form frmDBManager
          Width           =   2415
       End
       Begin VB.Label lblModifiedOn 
-         Caption         =   "12/27/2007 at 11:32 P.M. Local Time"
+         Caption         =   "(not applicable)"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   6
@@ -327,12 +325,10 @@ Begin VB.Form frmDBManager
       _ExtentX        =   5953
       _ExtentY        =   7699
       _Version        =   393217
+      HideSelection   =   0   'False
       Indentation     =   575
-      LabelEdit       =   1
       LineStyle       =   1
-      Sorted          =   -1  'True
       Style           =   7
-      FullRowSelect   =   -1  'True
       ImageList       =   "icons"
       Appearance      =   1
       OLEDragMode     =   1
@@ -368,11 +364,12 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Public m_game      As String
+Public m_game       As String
 
-Private m_DB()     As udtDatabase
-Private m_Modified As Boolean
-Private m_DBDate   As Long
+Private m_DB()      As udtDatabase
+Private m_modified  As Boolean
+Private m_new_entry As Boolean
+Private m_DBDate    As Long
 
 ' ...
 Private Sub Form_Load()
@@ -395,7 +392,6 @@ Private Sub btnCreateUser_Click()
     
     Dim newNode      As Node    ' ...
     Dim gAcc         As udtGetAccessResponse
-    
     Dim Username     As String  ' ...
     
     ' ...
@@ -463,6 +459,9 @@ Private Sub btnCreateUser_Click()
         .Selected = True
     End With
     
+    ' ...
+    m_new_entry = True
+    
     ' open entry name for editing
     Call trvUsers.StartLabelEdit
     
@@ -522,7 +521,8 @@ Private Sub btnCreateGroup_Click()
                         tvwChild, "Group: " & GroupName, GroupName, 1)
                         
                     ' ...
-                    If (trvUsers.SelectedItem.Parent.Image = 1) Then
+                    If (StrComp(trvUsers.SelectedItem.Parent.tag, "Group", vbTextCompare) = 0) Then
+                        ' ...
                         With m_DB(UBound(m_DB))
                             .Groups = trvUsers.SelectedItem.Parent.text
                         End With
@@ -535,13 +535,12 @@ Private Sub btnCreateGroup_Click()
                 "Group: " & GroupName, GroupName, 1)
         End If
         
-        ' ...
-        Set trvUsers.SelectedItem = newNode
+        ' change misc. settings
+        With newNode
+            .tag = "Group"
+        End With
         
-        ' ...
-        Call trvUsers.StartLabelEdit
-        
-        ' ...
+        ' increment group counter
         groupCount = (groupCount + 1)
         
     ElseIf (tbsTabs.SelectedItem.index = 2) Then ' Clan Tab
@@ -558,13 +557,22 @@ Private Sub btnCreateGroup_Click()
         
         ' ...
         With m_DB(UBound(m_DB))
-            .Username = m_game
+            .Username = ClanName
             .Type = "CLAN"
             .AddedBy = "(console)"
             .AddedOn = Now
         End With
         
         ' ...
+        Set newNode = trvUsers.Nodes.Add("Database", tvwChild, "Clan: " & _
+            ClanName, ClanName, 2)
+            
+        ' change misc. settings
+        With newNode
+            .tag = "Clan"
+        End With
+            
+        ' increment clan counter
         clanCount = (clanCount + 1)
         
     ElseIf (tbsTabs.SelectedItem.index = 3) Then ' Game Tab
@@ -584,24 +592,37 @@ Private Sub btnCreateGroup_Click()
                     .AddedBy = "(console)"
                     .AddedOn = Now
                 End With
-            
-                ' ...
-                Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
-                    "Group: " & m_game, m_game, 2)
                 
                 ' ...
-                Set trvUsers.SelectedItem = newNode
-                
-                ' ...
-                Call trvUsers_NodeClick(trvUsers.SelectedItem)
-                
-                ' ...
-                Call trvUsers.SetFocus
+                Set newNode = trvUsers.Nodes.Add("Database", tvwChild, "Game: " & _
+                    m_game, m_game, 2)
+                    
+                ' change misc. settings
+                With newNode
+                    .tag = "Game"
+                End With
             Else
                 ' alert user that game entry already exists
                 MsgBox "There is already an entry of this type matching " & _
                     "the specified name."
             End If
+        End If
+    End If
+    
+    ' ...
+    If (Not (newNode Is Nothing)) Then
+        ' change misc. settings
+        With newNode
+            .Selected = True
+        End With
+
+        ' ...
+        If ((tbsTabs.SelectedItem.index = 1) Or (tbsTabs.SelectedItem.index = 2)) Then
+            ' ...
+            m_new_entry = True
+        
+            ' ...
+            Call trvUsers.StartLabelEdit
         End If
     End If
 End Sub
@@ -743,10 +764,7 @@ Private Sub tbsTabs_Click()
     
     ' create root node
     Call trvUsers.Nodes.Add(, , "Database", "Database")
-    
-    ' sort nodes
-    trvUsers.Nodes(1).Sorted = True
-    
+
     ' which tab index are we on?
     Select Case (tbsTabs.SelectedItem.index)
         Case 1: ' Users and Groups
@@ -830,7 +848,6 @@ Private Sub tbsTabs_Click()
                     ' change misc. settings
                     With newNode
                         .tag = "Group"
-                        .Sorted = True
                     End With
                 End If
             Next i
@@ -997,11 +1014,11 @@ Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
             
             cmdCancel(1).Enabled = False
             
-            lblCreatedOn = "n/a"
+            lblCreatedOn = "(not applicable)"
                 
             lblCreatedBy = vbNullString
             
-            lblModifiedOn = "n/a"
+            lblModifiedOn = "(not applicable)"
                 
             lblModifiedBy = vbNullString
         Else
@@ -1112,28 +1129,36 @@ End Sub
 
 ' ...
 Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    ' ...
     If (Button = vbRightButton) Then
         Dim gAcc As udtGetAccessResponse ' ...
 
-        If (trvUsers.SelectedItem.index > 1) Then
+        ' ...
+        If (Not (trvUsers.SelectedItem Is Nothing)) Then
             ' ...
-            gAcc = GetAccess(trvUsers.SelectedItem.text)
-    
-            ' ...
-            If (gAcc.Type = "GROUP") Then
-                mnuRename.Enabled = True
+            If (trvUsers.SelectedItem.index > 1) Then
+                ' ...
+                If (StrComp(trvUsers.SelectedItem.tag, "Group", vbTextCompare) = 0) Then
+                    ' ...
+                    mnuRename.Enabled = True
+                Else
+                    ' ...
+                    mnuRename.Enabled = False
+                End If
+                
+                ' ...
+                mnuDelete.Enabled = True
             Else
+                ' ...
                 mnuRename.Enabled = False
+                
+                ' ...
+                mnuDelete.Enabled = False
             End If
             
-            mnuDelete.Enabled = True
-        Else
-            mnuRename.Enabled = False
-            mnuDelete.Enabled = False
+            ' ...
+            Call Me.PopupMenu(mnuContext)
         End If
-        
-        ' ...
-        Call Me.PopupMenu(mnuContext)
     End If
 End Sub
 
@@ -1280,6 +1305,21 @@ Private Sub trvUsers_KeyDown(KeyCode As Integer, Shift As Integer)
                 Call trvUsers_NodeClick(trvUsers.SelectedItem)
             End If
         End If
+    End If
+End Sub
+
+' ...
+Private Sub trvUsers_BeforeLabelEdit(Cancel As Integer)
+    ' is this a new entry that requires a name?
+    If (m_new_entry) Then
+        ' break from function
+        Exit Sub
+    End If
+
+    ' is entry a group? if not, disallow edit.
+    If (StrComp(trvUsers.SelectedItem.tag, "Group", vbTextCompare) <> 0) Then
+        ' disallow editing of entry label
+        Cancel = 1
     End If
 End Sub
 

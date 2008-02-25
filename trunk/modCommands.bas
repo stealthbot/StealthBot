@@ -2618,8 +2618,8 @@ End Function ' end function OnSetTrigger
 Private Function OnLevelBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim i      As Integer
-    Dim tmpBuf As String ' temporary output buffer
+    Dim i      As Integer ' ...
+    Dim tmpBuf As String  ' temporary output buffer
     
     If (Len(msgData) > 0) Then
         If (StrictIsNumeric(msgData)) Then
@@ -2734,39 +2734,6 @@ Private Function OnPhraseBans(ByVal Username As String, ByRef dbAccess As udtGet
     ' return message
     cmdRet(0) = tmpBuf
 End Function ' end function OnPhraseBans
-
-' handle mimic command
-'Private Function OnMimic(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-'    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-'
-'    Dim u      As String
-'    Dim tmpBuf As String ' temporary output buffer
-'
-'    u = msgData
-'
-'    If (Len(u) > 0) Then
-'        Mimic = LCase$(u)
-'
-'        tmpBuf = "Mimicking [ " & u & " ]"
-'    End If
-'
-'    ' return message
-'    cmdRet(0) = tmpBuf
-'End Function ' end function OnMimic
-
-' handle nomimic command
-'Private Function OnNoMimic(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-'    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-'
-'    Dim tmpBuf As String ' temporary output buffer
-'
-'    Mimic = vbNullString
-'
-'    tmpBuf = "Mimic off."
-'
-'    ' return message
-'    cmdRet(0) = tmpBuf
-'End Function ' end function OnNoMimic
 
 ' handle setpmsg command
 Private Function OnSetPMsg(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -3065,12 +3032,15 @@ Private Function OnSafeCheck(ByVal Username As String, ByRef dbAccess As udtGetA
     ' ...
     Dim gAcc   As udtGetAccessResponse
     
-    Dim Y      As String
+    Dim Y      As String ' ...
     Dim tmpBuf As String ' temporary output buffer
 
+    ' ...
     Y = msgData
             
-    If (Len(Y)) Then
+    ' ...
+    If (LenB(Y) > 0) Then
+        ' ...
         If (GetSafelist(Y)) Then
             tmpBuf = Y & " is on the bot's safelist."
         Else
@@ -3087,17 +3057,22 @@ Private Function OnExile(ByVal Username As String, ByRef dbAccess As udtGetAcces
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf     As String ' temporary output buffer
-    Dim saCmdRet() As String
-    Dim ibCmdRet() As String
-    Dim u          As String
-    Dim Y          As String
+    Dim saCmdRet() As String ' ...
+    Dim ibCmdRet() As String ' ...
+    Dim u          As String ' ...
+    Dim Y          As String ' ...
     
+    ' ...
     ReDim Preserve saCmdRet(0)
     ReDim Preserve ibCmdRet(0)
 
+    ' ...
     u = msgData
     
+    ' ...
     Call OnShitAdd(Username, dbAccess, u, InBot, saCmdRet())
+    
+    ' ...
     Call OnIPBan(Username, dbAccess, u, InBot, ibCmdRet())
     
     ' return message
@@ -3109,18 +3084,22 @@ Private Function OnUnExile(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf     As String ' temporary output buffer
-    Dim u          As String
-    Dim sdCmdRet() As String
-    Dim uiCmdRet() As String
+    Dim u          As String ' ...
+    Dim sdCmdRet() As String ' ...
+    Dim uiCmdRet() As String ' ...
     
     ' declare index zero of array
     ReDim Preserve sdCmdRet(0)
     ReDim Preserve uiCmdRet(0)
 
+    ' ...
     u = msgData
     
+    ' ...
     Call OnShitDel(Username, dbAccess, u, InBot, sdCmdRet())
-    Call OnUnignore(Username, dbAccess, u, InBot, uiCmdRet())
+    
+    ' ...
+    Call OnUnIPBan(Username, dbAccess, u, InBot, uiCmdRet())
     
     ' return message
     cmdRet(0) = tmpBuf
@@ -3181,14 +3160,14 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
         If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
             tmpBuf(0) = "Error: The specified username is invalid."
         Else
-            Dim Msg As String ' ...
+            Dim msg As String ' ...
             
             ' ...
-            Msg = Mid$(msgData, index + 1)
+            msg = Mid$(msgData, index + 1)
         
             ' ...
             Call OnAdd(Username, dbAccess, user & " +B --type USER --banmsg " & _
-                Msg, True, tmpBuf())
+                msg, True, tmpBuf())
         End If
     Else
         ' ...
@@ -4386,7 +4365,7 @@ End Function ' end function OnCheckMail
 Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim Msg    As udtMail
+    Dim msg    As udtMail
     
     Dim tmpBuf As String ' temporary output buffer
             
@@ -4395,10 +4374,10 @@ Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAcc
     End If
     
     If (GetMailCount(Username) > 0) Then
-        Call GetMailMessage(Username, Msg)
+        Call GetMailMessage(Username, msg)
         
-        If (Len(RTrim(Msg.To)) > 0) Then
-            tmpBuf = "Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
+        If (Len(RTrim(msg.To)) > 0) Then
+            tmpBuf = "Message from " & RTrim(msg.From) & ": " & RTrim(msg.Message)
         End If
     Else
         tmpBuf = "You do not currently have any messages " & _
