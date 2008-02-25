@@ -829,7 +829,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -855,7 +854,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1535,9 +1533,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5299,7 +5297,7 @@ ERROR_HANDLER:
 End Function
 
 ' ...
-Sub AddQ(ByVal Message As String, Optional Priority As Byte = 100, Optional _
+Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optional _
     ByVal user As String = vbNullString, Optional ByVal Tag As String = vbNullString)
     
     ' ...
@@ -5461,6 +5459,38 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 100, Optional _
         End If
         
         ' ...
+        If (msg_priority = -1) Then
+            Dim cmdName    As String ' ...
+            Dim spaceIndex As Long   ' ...
+            
+            ' ...
+            spaceIndex = InStr(1, Message, Space$(1), vbBinaryCompare)
+            
+            ' ...
+            If (spaceIndex) Then
+                ' ...
+                cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 1))
+            Else
+                ' ...
+                cmdName = LCase$(Mid$(Message, 2))
+            End If
+        
+            ' ...
+            Select Case (cmdName)
+                Case "designate": msg_priority = Priority.SPECIAL_MESSAGE
+                Case "resign":    msg_priority = Priority.SPECIAL_MESSAGE
+                Case "ban":       msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case "unban":     msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case "kick":      msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case "squelch":   msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case "ignore":    msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case "unsquelch": msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case "unignore":  msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case Else:        msg_priority = Priority.MESSAGE_DEFAULT
+            End Select
+        End If
+        
+        ' ...
         Call SplitByLen(strTmp, _
             (MAX_MESSAGE_LENGTH - Len(command)), Splt())
  
@@ -5546,7 +5576,7 @@ Sub AddQ(ByVal Message As String, Optional Priority As Byte = 100, Optional _
                     
                     With Q
                         .Message = Send
-                        .Priority = Priority
+                        .Priority = msg_priority
                         
                         ' ...
                         If (user = vbNullString) Then

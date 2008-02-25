@@ -34,6 +34,8 @@ Private Const WA_DEFAULT_PATH As String = "C:\Program Files\Winamp\winamp.exe"
 Private Const WM_COMMAND = &H111                     'Used in SendMessage call
 Private Const WM_USER = &H400                        'Used in SendMessage call
 Private Const PROCESS_VM_READ = (&H10)
+Private Const WM_LBUTTONDBLCLK = &H203
+Private Const WM_COPYDATA = &H4A
 
 '--------------------------------------'
 '         User Message Constants       '
@@ -50,7 +52,6 @@ Private Const WA_GETEQDATA = 127
 Private Const WA_SETEQDATA = 128
 Private Const WA_SENDCUSTOMDATA = 273
 
-
 '--------------------------------------'
 '      Command Message Constants       '
 '--------------------------------------'
@@ -60,6 +61,10 @@ Private Const IPC_SETVOLUME = 122
 Private Const IPC_GETLISTLENGTH = 124
 Private Const IPC_GETLISTPOS& = 125
 Private Const IPC_GETPLAYLISTTITLE& = 212
+Private Const IPC_GET_SHUFFLE = 250
+Private Const IPC_GET_REPEAT = 251
+Private Const IPC_SET_SHUFFLE = 252
+Private Const IPC_SET_REPEAT = 253
 Private Const IPC_GET_EXTENDED_FILE_INFO = 290
 Private Const WA_STOPAFTERTRACK = 40157
 Private Const WA_FASTFORWARD = 40148 '5 secs
@@ -108,6 +113,17 @@ Private Type extendedFileInfoStruct
     metadata As String
     retlen   As Integer
     ret      As String
+End Type
+
+Private Type COPYDATASTRUCT
+    dwData As Long
+    cbData As Long
+    lpData As String
+End Type
+
+Private Type FILEINFO
+    file  As String
+    index As Long
 End Type
 
 Private m_hWnd As Long
@@ -208,7 +224,7 @@ Public Function OpenPlayer(Optional FilePath As String) As Boolean
 End Function
 
 ' ...
-Public Sub PlayTrack(Optional Track As Integer)
+Public Sub PlayTrack(Optional Track As Variant = vbNullString)
     ' ...
     If (m_hWnd = 0) Then
         ' ...
@@ -220,12 +236,51 @@ Public Sub PlayTrack(Optional Track As Integer)
         End If
     End If
     
-    If (Track) Then
+    ' ...
+    If (Track <> vbNullString) Then
+        ' ...
         Call QuitPlayback
         
-        Call SendMessage(m_hWnd, WM_USER, Track - 1, IPC_SETPLAYLISTPOS)
+        ' ...
+        If (StrictIsNumeric(Track)) Then
+            ' ...
+            Call SendMessage(m_hWnd, WM_USER, Track - 1, IPC_SETPLAYLISTPOS)
+        Else
+            Dim lngJumpto  As Long    ' ...
+            Dim lngEdit    As Long    ' ...
+            Dim lngListBox As Long    ' ...
+            Dim iterations As Integer ' ...
+   
+            ' ...
+            Call PostMessage(m_hWnd, WA_SENDCUSTOMDATA, WA_DIALOGJUMPTOFILE, 0)
+            
+            ' ...
+            Do
+                ' ...
+                lngJumpto = FindWindow("#32770", "Jump to file")
+                
+                ' ...
+                lngEdit = FindWindowEx(lngJumpto, 0, "Edit", vbNullString)
+                
+                ' ...
+                lngListBox = FindWindowEx(lngJumpto, 0, "ListBox", vbNullString)
+                
+                ' ...
+                iterations = (iterations + 1)
+                
+                ' ...
+                DoEvents
+            Loop Until lngListBox <> 0 And lngJumpto <> 0 And lngEdit <> 0 Or iterations > 3000
+            
+            ' ...
+            Call SendMessageByString(lngEdit, &HC, 0, Track)
+            
+            ' ...
+            Call PostMessage(lngListBox, WM_LBUTTONDBLCLK, 0, 0)
+        End If
     End If
 
+    ' ...
     Call SendMessage(m_hWnd, WM_COMMAND, WA_PLAY, 0)
 End Sub
 
@@ -290,6 +345,26 @@ Public Property Get TrackName() As String
     Else
         TrackName = vbNullString
     End If
+End Property
+
+' ...
+Public Property Let Shuffle(blnShuffle As Boolean)
+    Call SendMessage(m_hWnd, WM_WA_IPC, blnShuffle, IPC_SET_REPEAT)
+End Property
+
+' ...
+Public Property Get Shuffle() As Boolean
+    Shuffle = SendMessage(m_hWnd, WM_WA_IPC, 0&, IPC_GET_SHUFFLE)
+End Property
+
+' ...
+Public Property Let Repeat(blnRepeat As Boolean)
+    Call SendMessage(m_hWnd, WM_WA_IPC, blnRepeat, IPC_SET_REPEAT)
+End Property
+
+' ...
+Public Property Get Repeat() As Boolean
+    Repeat = SendMessage(m_hWnd, WM_WA_IPC, 0&, IPC_GET_REPEAT)
 End Property
 
 Public Property Get TrackTime() As Long

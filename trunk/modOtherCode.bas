@@ -255,9 +255,9 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
                 End If
                 
                 If (Kick = 0) Then
-                    frmChat.AddQ "/ban " & Inpt, 1
+                    Call frmChat.AddQ("/ban " & Inpt, 1)
                 Else
-                    frmChat.AddQ "/kick " & Inpt, 1
+                    Call frmChat.AddQ("/kick " & Inpt, 1)
                 End If
             End If
         Else
@@ -1811,7 +1811,7 @@ Public Sub UnbanBannedUser(ByVal sUser As String, ByVal cOperator As String)
     Dim i          As Integer
     Dim c          As Integer
     Dim NumRemoved As Integer
-    Dim Iterations As Long
+    Dim iterations As Long
     Dim uBnd       As Integer
     
     sUser = StripRealm(sUser)
@@ -1840,9 +1840,9 @@ Public Sub UnbanBannedUser(ByVal sUser As String, ByVal cOperator As String)
             i = (i + 1)
         End If
         
-        Iterations = (Iterations + 1)
+        iterations = (iterations + 1)
         
-        If (Iterations > 9000) Then
+        If (iterations > 9000) Then
             If (MDebug("debug")) Then
                 frmChat.AddChat RTBColors.ErrorMessageText, "Warning: Loop size limit exceeded " & _
                     "in UnbanBannedUser()!"

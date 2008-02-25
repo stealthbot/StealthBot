@@ -201,10 +201,11 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                             ' send message to battle.net
                             If (WhisperedIn) Then
                                 ' whisper message
-                                Call AddQ("/w " & Username & _
-                                    Space(1) & cmdRet(j), 2, Username)
+                                Call AddQ("/w " & Username & Space$(1) & cmdRet(j), _
+                                    Priority.COMMAND_RESPONSE_MESSAGE, Username)
                             Else
-                                Call AddQ(cmdRet(j), 2, Username)
+                                Call AddQ(cmdRet(j), Priority.COMMAND_RESPONSE_MESSAGE, _
+                                    Username)
                             End If
                         End If
                     Next j
@@ -238,9 +239,11 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                            
                             ' whisper message
                             Call AddQ("/w " & Username & _
-                                Space(1) & cmdRet(i), 2, Username)
+                                Space(1) & cmdRet(i), Priority.COMMAND_RESPONSE_MESSAGE, _
+                                    Username)
                         Else
-                            Call AddQ(cmdRet(i), 2, Username)
+                            Call AddQ(cmdRet(i), Priority.COMMAND_RESPONSE_MESSAGE, _
+                                Username)
                         End If
                     End If
                 Next i
@@ -250,7 +253,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             ' command is found to be invalid and issued
             ' internally
             If (InBot) Then
-                Call AddQ(Message, 0, "(console)")
+                Call AddQ(Message, Priority.CONSOLE_MESSAGE, "{console}")
             End If
         End If
     End If
@@ -586,7 +589,7 @@ Private Function OnHome(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     ' This command will make the bot join its home channel.
     
-    Call AddQ("/join " & BotVars.HomeChannel, 1, Username)
+    Call AddQ("/join " & BotVars.HomeChannel, Priority.COMMAND_RESPONSE_MESSAGE, Username)
 End Function ' end function OnHome
 
 ' handle clan command
@@ -601,16 +604,20 @@ Private Function OnClan(ByVal Username As String, ByRef dbAccess As udtGetAccess
     If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
         Select Case (LCase$(msgData))
             Case "public", "pub"
+                ' ...
                 tmpBuf = "Clan channel is now public."
                 
                 ' set clan channel to public
-                Call AddQ("/clan public", 1, Username)
+                Call AddQ("/clan public", Priority.CHANNEL_MODERATION_MESSAGE, _
+                    Username)
                 
             Case "private", "priv"
+                ' ...
                 tmpBuf = "Clan channel is now private."
                 
                 ' set clan channel to private
-                Call AddQ("/clan private", 1, Username)
+                Call AddQ("/clan private", Priority.CHANNEL_MODERATION_MESSAGE, _
+                    Username)
                 
             Case Else
                ' set clan channel to specified
@@ -729,9 +736,11 @@ Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAcces
     ' if sent from within the bot, send "where" command
     ' directly to Battle.net
     If (InBot) Then
-        Call AddQ("/where " & msgData, , "(console)")
+        Call AddQ("/where " & msgData, Priority.COMMAND_RESPONSE_MESSAGE, _
+            "{console}")
     End If
 
+    ' ...
     tmpBuf = "I am currently in channel " & gChannel.Current & " (" & _
         colUsersInChannel.Count & " users present)"
     
@@ -826,14 +835,17 @@ Private Function OnSweepBan(ByVal Username As String, ByRef dbAccess As udtGetAc
     ' using Battle.net's "who" command, and will then begin banning each
     ' user from the current channel using Battle.net's "ban" command.
     
-    Dim u As String
-    Dim Y As String
+    Dim u As String ' ...
+    Dim Y As String ' ...
 
+    ' ...
     Caching = True
     
+    ' ...
     Call Cache(vbNullString, 255, "ban ")
     
-    Call AddQ("/who " & msgData, 1, Username)
+    ' ...
+    Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, Username)
 End Function ' end function OnSweepBan
 
 ' handle sweepignore command
@@ -848,14 +860,17 @@ Private Function OnSweepIgnore(ByVal Username As String, ByRef dbAccess As udtGe
     ' and still prevent a number of users from joining the channel for a
     ' temporary amount of time.
     
-    Dim u As String
-    Dim Y As String
+    Dim u As String ' ...
+    Dim Y As String ' ...
     
+    ' ...
     Caching = True
     
+    ' ...
     Call Cache(vbNullString, 255, "squelch ")
     
-    Call AddQ("/who " & msgData, 1, Username)
+    ' ...
+    Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, Username)
 End Function ' end function OnSweepIgnore
 
 ' handle setname command
@@ -1336,7 +1351,7 @@ Private Function OnJoin(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim tmpBuf As String ' temporary output buffer
 
     If (LenB(msgData) > 0) Then
-        AddQ "/join " & msgData, 1, Username
+        Call AddQ("/join " & msgData, 2, Username)
     End If
 End Function ' end function OnJoin
 
@@ -1366,7 +1381,7 @@ Private Function OnResign(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' by rejoining the channel through the use of Battle.net's /resign
     ' command.
     
-    Call AddQ("/resign", 1, Username)
+    Call AddQ("/resign", 2, Username)
 End Function ' end function OnResign
 
 ' handle clearbanlist
@@ -1421,10 +1436,10 @@ Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' This command will make the bot rejoin the current channel.
     
     ' join temporary channel
-    Call AddQ("/join " & CurrentUsername & " Rejoin", 1, Username)
+    Call AddQ("/join " & CurrentUsername & " Rejoin", 2, Username)
     
     ' rejoin previous channel
-    Call AddQ("/join " & gChannel.Current, 1, Username)
+    Call AddQ("/join " & gChannel.Current, 2, Username)
 End Function ' end function OnRejoin
 
 ' handle plugban command
@@ -1458,7 +1473,7 @@ Private Function OnPlugBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 For i = 1 To colUsersInChannel.Count
                     With colUsersInChannel.Item(i)
                         If ((.Flags = 16) And (Not .Safelisted)) Then
-                            AddQ "/ban " & .Username & " PlugBan", 1
+                            Call AddQ("/ban " & .Username & " PlugBan", 1)
                         End If
                     End With
                 Next i
@@ -1769,11 +1784,11 @@ Private Function OnDesignate(ByVal Username As String, ByRef dbAccess As udtGetA
     If (Len(msgData) > 0) Then
         If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
             'diablo 2 handling
-            If (Dii = True) Then
-                If (Not (Mid$(msgData, 1, 1) = "*")) Then
-                    msgData = "*" & msgData
-                End If
-            End If
+            'If (Dii = True) Then
+            '    If (Not (Mid$(msgData, 1, 1) = "*")) Then
+            '        msgData = "*" & msgData
+            '    End If
+            'End If
             
             Call AddQ("/designate " & msgData, 1, Username)
             
@@ -1794,17 +1809,24 @@ Private Function OnShuffle(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ' shuffling feature.
     
     Dim tmpBuf As String ' temporary output buffer
-    Dim hWndWA As Long
     
-    If (Not (BotVars.DisableMP3Commands)) Then
-        tmpBuf = "Winamp's Shuffle feature has been toggled."
-        
-        'hWndWA = GetWinamphWnd()
-        
-        If (hWndWA = 0) Then
-            tmpBuf = "Winamp is not loaded."
+    ' ...
+    If (BotVars.DisableMP3Commands = False) Then
+        ' ...
+        If (MediaPlayer.Shuffle) Then
+            ' ...
+            MediaPlayer.Shuffle = False
+            
+            ' ...
+            tmpBuf = "The shuffle option has been disabled for the selected " & _
+                "media player."
         Else
-            'Call SendMessage(hWndWA, WM_COMMAND, WA_TOGGLESHUFFLE, 0)
+            ' ...
+            MediaPlayer.Shuffle = True
+            
+            ' ...
+            tmpBuf = "The shuffle option has been enabled for the selected " & _
+                "media player."
         End If
     End If
         
@@ -1818,18 +1840,25 @@ Private Function OnRepeat(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' This command will toggle the usage of the selected media player's
     ' repeat feature.
     
-    Dim hWndWA As Long
     Dim tmpBuf As String ' temporary output buffer
     
-    If (Not (BotVars.DisableMP3Commands)) Then
-        tmpBuf = "Winamp's Repeat feature has been toggled."
-        
-        'hWndWA = GetWinamphWnd()
-        
-        If (hWndWA = 0) Then
-            tmpBuf = "Winamp is not loaded."
+    ' ...
+    If (BotVars.DisableMP3Commands = False) Then
+        ' ...
+        If (MediaPlayer.Repeat) Then
+            ' ...
+            MediaPlayer.Repeat = False
+            
+            ' ...
+            tmpBuf = "The repeat option has been disabled for the selected " & _
+                "media player."
         Else
-            'Call SendMessage(hWndWA, WM_COMMAND, WA_TOGGLEREPEAT, 0)
+            ' ...
+            MediaPlayer.Repeat = True
+            
+            ' ...
+            tmpBuf = "The repeat option has been enabled for the selected " & _
+                "media player."
         End If
     End If
         
@@ -1940,9 +1969,11 @@ Private Function OnStop(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
+        ' ...
         Call MediaPlayer.QuitPlayback
     
-        tmpBuf = "Stopped play."
+        ' ...
+        tmpBuf = "Stopped playback."
     End If
         
     ' return message
@@ -1957,26 +1988,11 @@ Private Function OnPlay(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim Track  As Long
     
     If (BotVars.DisableMP3Commands = False) Then
-        If (Len(msgData) > 0) Then
-            If (StrictIsNumeric(msgData)) Then
-                ' ...
-                Track = CLng(msgData)
-                
-                ' ...
-                Call MediaPlayer.PlayTrack(Track)
-                
-                ' ...
-                tmpBuf = "Skipped to track " & Track & "."
-            Else
-                'Call WinampJumpToFile(msgData)
-            End If
-        Else
-            ' ...
-            Call MediaPlayer.PlayTrack
-            
-            ' ...
-            tmpBuf = "Play started."
-        End If
+        ' ...
+        Call MediaPlayer.PlayTrack(msgData)
+        
+        ' ...
+        tmpBuf = "Playback started."
     End If
 
     ' return message
@@ -1990,15 +2006,10 @@ Private Function OnUseiTunes(ByVal Username As String, ByRef dbAccess As udtGetA
     Dim tmpBuf As String ' temporary output buffer
     
     ' ...
-    If (StrComp(BotVars.MediaPlayer, "iTunes", vbTextCompare) = 0) Then
-        ' ...
-    End If
+    BotVars.MediaPlayer = "iTunes"
     
     ' ...
     tmpBuf = "iTunes is ready."
-    
-    ' ...
-    BotVars.MediaPlayer = "iTunes"
         
     ' return message
     cmdRet(0) = tmpBuf
@@ -2011,15 +2022,10 @@ Private Function OnUseWinamp(ByVal Username As String, ByRef dbAccess As udtGetA
     Dim tmpBuf As String ' temporary output buffer
     
     ' ...
-    If (StrComp(BotVars.MediaPlayer, "Winamp", vbTextCompare) = 0) Then
-        ' ...
-    End If
+    BotVars.MediaPlayer = "Winamp"
     
     ' ...
     tmpBuf = "Winamp is ready."
-    
-    ' ...
-    BotVars.MediaPlayer = "Winamp"
 
     ' return message
     cmdRet(0) = tmpBuf
@@ -5461,10 +5467,10 @@ Private Function Expand(ByVal s As String) As String
     End If
 End Function
 
-Private Sub AddQ(ByVal s As String, Optional Priority As Byte = 100, Optional ByVal user As String = _
-    vbNullString, Optional ByVal Tag As String = vbNullString)
+Private Sub AddQ(ByVal s As String, Optional msg_priority As Integer = -1, Optional ByVal user As String = _
+    vbNullString, Optional ByVal tag As String = vbNullString)
     
-    Call frmChat.AddQ(s, Priority, user, Tag)
+    Call frmChat.AddQ(s, msg_priority, user, tag)
 End Sub
 
 Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, ByVal Banning As Byte) ', Optional ExtraMode As Byte)
@@ -5754,7 +5760,7 @@ ERROR_HANDLER:
     Exit Function
 End Function
 
-Public Function RemoveItem(ByVal rItem As String, File As String, Optional ByVal dbType As String = _
+Public Function RemoveItem(ByVal rItem As String, file As String, Optional ByVal dbType As String = _
     vbNullString) As String
     
     Dim s()        As String
@@ -5765,12 +5771,12 @@ Public Function RemoveItem(ByVal rItem As String, File As String, Optional ByVal
     
     f = FreeFile
     
-    If Dir$(GetFilePath(File & ".txt")) = vbNullString Then
+    If Dir$(GetFilePath(file & ".txt")) = vbNullString Then
         RemoveItem = "No %msgex% file found. Create one using .add, .addtag, or .shitlist."
         Exit Function
     End If
     
-    Open (GetFilePath(File & ".txt")) For Input As #f
+    Open (GetFilePath(file & ".txt")) For Input As #f
     If LOF(f) < 2 Then
         RemoveItem = "The %msgex% file is empty."
         Close #f
@@ -5807,7 +5813,7 @@ Successful:
     
     RemoveItem = "Successfully removed %msgex% " & Chr(34) & rItem & Chr(34) & "."
     
-    Open (GetFilePath(File & ".txt")) For Output As #f
+    Open (GetFilePath(file & ".txt")) For Output As #f
         For Counter = LBound(s) To UBound(s)
             If s(Counter) <> vbNullString And s(Counter) <> " " Then Print #f, s(Counter)
         Next Counter

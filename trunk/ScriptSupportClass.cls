@@ -254,10 +254,10 @@ End Sub
 '// ADDQ (ADD QUEUE)
 '// Adds a string to the message send queue.
 '// Nonzero priority messages will be sent with precedence over 0-priority messages.
-Public Sub AddQ(ByVal sText As String, Optional ByVal Priority As Byte = 100, Optional _
-    ByVal user As String = vbNullString, Optional ByVal Tag As String = vbNullString)
+Public Sub AddQ(ByVal sText As String, Optional ByVal msg_priority As Integer = -1, Optional _
+    ByVal user As String = vbNullString, Optional ByVal tag As String = vbNullString)
 
-    Call frmChat.AddQ(sText, Priority, user, Tag)
+    Call frmChat.AddQ(sText, msg_priority, user, tag)
 End Sub
 
 

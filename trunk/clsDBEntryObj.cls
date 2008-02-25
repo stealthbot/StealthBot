@@ -25,7 +25,7 @@ Private m_created_on  As Date
 Private m_created_by  As String
 Private m_modified_on As Date
 Private m_modified_by As String
-Private m_groups()    As String
+Private m_groups()    As clsDBEntryObj
 Private m_lastseen    As Date
 
 ' ...
@@ -107,3 +107,8 @@ End Property
 Public Property Let LastSeen(ByRef dLastSeen As Date)
 
 End Property
+
+' ...
+Public Function Group(ByVal grp As Variant) As Object
+    
+End Function
