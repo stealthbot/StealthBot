@@ -337,7 +337,7 @@ Public Function StripRealm(ByVal Username As String) As String
     StripRealm = Username
 End Function
 
-Public Sub bnetSend(ByVal Message As String, Optional ByVal tag As String = vbNullString)
+Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNullString)
     If (frmChat.sckBNet.State = 7) Then
         With PBuffer
             If (frmChat.mnuUTF8.Checked = False) Then
@@ -353,7 +353,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal tag As String = vbNu
     If (Not (bFlood)) Then
         On Error Resume Next
         
-        frmChat.SControl.Run "Event_MessageSent", Message, tag
+        frmChat.SControl.Run "Event_MessageSent", Message, Tag
     End If
 End Sub
 
@@ -2341,6 +2341,9 @@ End Function
 Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef StringRet() As String, _
     Optional LinePostfix As String = " [more]", Optional OversizeDelimiter As String = " ")
     
+    ' ...
+    On Error GoTo ERROR_HANDLER
+    
     Dim lineCount As Long    ' stores line number
     Dim pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
@@ -2430,6 +2433,13 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
         ' increment line counter
         lineCount = (lineCount + 1)
     Loop
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, Err.description & " in SplitByLen().")
+    
+    Exit Function
 End Function
 
 ' Thanks strtok()!

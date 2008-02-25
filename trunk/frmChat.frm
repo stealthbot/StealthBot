@@ -829,6 +829,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -854,6 +855,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -5494,20 +5496,19 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         ' ...
         Call SplitByLen(strTmp, _
             (MAX_MESSAGE_LENGTH - Len(command)), Splt())
- 
+
         ' ...
         ReDim Preserve Splt(0 To UBound(Splt))
-        
+
         ' ...
-        If (Splt(0) <> vbNullString) Then
+        If (Splt(LBound(Splt)) <> vbNullString) Then
             ' ...
-            For i = 0 To UBound(Splt)
+            For i = LBound(Splt) To UBound(Splt)
                 ' store current tick
                 GTC = GetTickCount()
                 
                 ' store working copy
-                Send = command & _
-                    Splt(i)
+                Send = command & Splt(i)
 
                 ' is efp enabled?
                 If (bFlood) Then
@@ -5603,8 +5604,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error: " & _
-        Err.description & " in AddQ()."
+    Call AddChat(vbRed, "Error: " & Err.description & " in AddQ().")
 
     Exit Sub
 End Sub
