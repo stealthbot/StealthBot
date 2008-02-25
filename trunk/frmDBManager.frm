@@ -774,9 +774,9 @@ Private Sub tbsTabs_Click()
                     ' is this group a member of other groups?
                     If (Len(m_DB(i).Groups) And (m_DB(i).Groups <> "%")) Then
                         ' is entry member of multiple groups?
-                        If (InStr(1, m_DB(i).Groups, ", ", vbBinaryCompare) <> 0) Then
+                        If (InStr(1, m_DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
                             ' split up multiple groupings
-                            grp = Split(m_DB(i).Groups, ", ", 2)(0)
+                            grp = Split(m_DB(i).Groups, ",", 2)(0)
                         Else
                             ' no need for special handling...
                             grp = m_DB(i).Groups
@@ -810,9 +810,9 @@ Private Sub tbsTabs_Click()
                                 ' other groups
                                 If (Len(m_DB(j).Groups) And (m_DB(j).Groups <> "%")) Then
                                     ' is entry member of multiple groups?
-                                    If (InStr(1, m_DB(j).Groups, ", ", vbBinaryCompare) <> 0) Then
+                                    If (InStr(1, m_DB(j).Groups, ",", vbBinaryCompare) <> 0) Then
                                         ' split up multiple groupings
-                                        grp = Split(m_DB(j).Groups, ", ", 2)(0)
+                                        grp = Split(m_DB(j).Groups, ",", 2)(0)
                                     Else
                                         ' no need for special handling...
                                         grp = m_DB(j).Groups
@@ -871,9 +871,9 @@ Private Sub tbsTabs_Click()
                     ' is the user a member of any groups?
                     If (Len(m_DB(i).Groups) And (m_DB(i).Groups <> "%")) Then
                         ' is entry member of multiple groups?
-                        If (InStr(1, m_DB(i).Groups, ", ", vbBinaryCompare) <> 0) Then
+                        If (InStr(1, m_DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
                             ' split up multiple groupings
-                            grp = Split(m_DB(i).Groups, ", ", 2)(0)
+                            grp = Split(m_DB(i).Groups, ",", 2)(0)
                         Else
                             ' no need for special handling...
                             grp = m_DB(i).Groups
@@ -978,11 +978,13 @@ End Sub
 
 ' handle node collapse
 Private Sub trvUsers_Collapse(ByVal Node As Node)
+    ' refresh tree view
     Call trvUsers.Refresh
 End Sub
 
 ' handle node expand
 Private Sub trvUsers_Expand(ByVal Node As Node)
+    ' refresh tree view
     Call trvUsers.Refresh
 End Sub
 
@@ -1034,53 +1036,73 @@ Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
                 frmDatabase.Caption = tmp.Username
             End If
             
+            ' ...
             txtRank.Enabled = True
             
+            ' ...
             txtFlags.Enabled = True
             
+            ' ...
             lstGroups.Enabled = True
             
+            ' ...
             cmdCancel(1).Enabled = True
             
             If (tmp.AddedBy = "%") Then
+                ' ...
                 lblCreatedOn = "unknown"
                 
+                ' ...
                 lblCreatedBy = "by unknown"
             Else
-                lblCreatedOn = tmp.AddedOn & _
-                    " Local Time"
+                ' ...
+                lblCreatedOn = tmp.AddedOn & " Local Time"
                     
-                lblCreatedBy = "by " & _
-                    tmp.AddedBy
+                ' ...
+                lblCreatedBy = "by " & tmp.AddedBy
             End If
             
+            ' ...
             If (tmp.ModifiedBy = "%") Then
+                ' ...
                 lblModifiedOn = "unknown"
                 
+                ' ...
                 lblModifiedBy = "by unknown"
             Else
-                lblModifiedOn = tmp.ModifiedOn & _
-                    " Local Time"
+                ' ...
+                lblModifiedOn = tmp.ModifiedOn & " Local Time"
                     
-                lblModifiedBy = "by " & _
-                    tmp.ModifiedBy
+                ' ...
+                lblModifiedBy = "by " & tmp.ModifiedBy
             End If
             
+            ' is entry a member of a group?
             If (Len(tmp.Groups) And (tmp.Groups <> "%")) Then
                 Dim Splt() As String  ' ...
                 Dim j      As Integer ' ...
             
+                ' is entry a member of multiple groups?
                 If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
+                    ' store working copy of group memberships, splitting up
+                    ' multiple groupings by the ',' delimiter.
                     Splt() = Split(m_DB(i).Groups, ",")
                 Else
+                    ' redefine array size to store group name
                     ReDim Preserve Splt(0)
                     
+                    ' store working copy of group membership
                     Splt(0) = tmp.Groups
                 End If
                 
+                ' loop through entry's group memberships
                 For i = LBound(Splt) To UBound(Splt)
+                    ' loop through our group listing, checking to see if we have any
+                    ' matches (since the entry is a member of a group, we better!)
                     For j = 0 To (lstGroups.ListCount - 1)
+                        ' is entry a member of group?
                         If (StrComp(Splt(i), lstGroups.List(j), vbTextCompare) = 0) Then
+                            ' select group if entry is a member
                             lstGroups.Selected(j) = True
                         End If
                     Next j
@@ -1089,16 +1111,22 @@ Private Sub trvUsers_NodeClick(ByVal Node As MSComctlLib.Node)
             
         End If
         
-        If (tmp.Access > 0) Then
+        ' does entry have a rank?
+        If (tmp.Access) Then
+            ' write rank to text box
             txtRank.text = tmp.Access
         Else
+            ' clear rank from text box
             txtRank.text = vbNullString
         End If
         
+        ' clear flags from text box
         txtFlags.text = tmp.Flags
     
+        ' disable entry save button
         cmdSave(1).Enabled = False
         
+        ' refresh tree view
         Call trvUsers.Refresh
     End If
 End Sub
@@ -1107,23 +1135,25 @@ End Sub
 Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, X As Single, _
     Y As Single)
 
+    ' ...
     If (Button = vbLeftButton) Then
-        Set trvUsers.SelectedItem = _
-            trvUsers.HitTest(X, Y)
-            
+        ' ...
+        Set trvUsers.SelectedItem = trvUsers.HitTest(X, Y)
+        
+        ' ...
         Call trvUsers_NodeClick(trvUsers.SelectedItem)
     End If
 End Sub
 
 ' ...
-Private Sub trvUsers_OLEStartDrag(Data As MSComctlLib.DataObject, _
-    AllowedEffects As Long)
-    
+Private Sub trvUsers_OLEStartDrag(Data As MSComctlLib.DataObject, AllowedEffects As Long)
+    ' ...
     If (Not (trvUsers.SelectedItem Is Nothing)) Then
-        Data.Clear
+        ' ...
+        Call Data.Clear
     
-        Data.SetData trvUsers.SelectedItem.Key, _
-            vbCFText
+        ' ...
+        Call Data.SetData(trvUsers.SelectedItem.Key, vbCFText)
     End If
 End Sub
 
@@ -1163,17 +1193,16 @@ Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y
 End Sub
 
 ' ...
-Private Sub trvUsers_OLEDragOver(Data As MSComctlLib.DataObject, Effect As Long, _
-    Button As Integer, Shift As Integer, X As Single, Y As Single, _
-    State As Integer)
+Private Sub trvUsers_OLEDragOver(Data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
+    Shift As Integer, X As Single, Y As Single, State As Integer)
     
-    Set trvUsers.DropHighlight = _
-        trvUsers.HitTest(X, Y)
+    ' ...
+    Set trvUsers.DropHighlight = trvUsers.HitTest(X, Y)
 End Sub
 
 ' ...
-Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long, _
-    Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
+    Shift As Integer, X As Single, Y As Single)
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -1278,31 +1307,37 @@ End Sub
 
 ' ...
 Private Sub trvUsers_KeyDown(KeyCode As Integer, Shift As Integer)
+    ' ...
     If (KeyCode = vbKeyDelete) Then
-        If (trvUsers.SelectedItem.index > 1) Then
-            Dim response As Integer ' ...
-            Dim isGroup  As Boolean ' ...
-            
-            isGroup = (trvUsers.Nodes(trvUsers.SelectedItem.index).Image = 1)
-        
-            If (isGroup) Then
-                response = MsgBox("Are you sure you wish to delete " & _
-                    "this group and " & "all of its members?", vbYesNo + _
-                        vbInformation, "Information")
+        ' ...
+        If (Not (trvUsers.SelectedItem Is Nothing)) Then
+            ' ...
+            If (trvUsers.SelectedItem.index > 1) Then
+                Dim response As Integer ' ...
+                Dim isGroup  As Boolean ' ...
                 
-                If (response = vbYes) Then
-                    Call DB_remove(trvUsers.SelectedItem.text)
-    
+                ' ...
+                isGroup = (StrComp(trvUsers.Nodes(trvUsers.SelectedItem.index).tag, _
+                    "Group", vbTextCompare) = 0)
+            
+                ' ...
+                If (isGroup) Then
+                    ' ...
+                    response = MsgBox("Are you sure you wish to delete this group and " & _
+                        "all of its members?", vbYesNo + vbInformation, "Information")
+                End If
+                
+                ' ...
+                If (isGroup = False) Or ((isGroup) And (response = vbYes)) Then
+                    ' ...
+                    Call DB_remove(trvUsers.SelectedItem.text, trvUsers.tag)
+        
+                    ' ...
                     Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.index)
                     
+                    ' ...
                     Call trvUsers_NodeClick(trvUsers.SelectedItem)
                 End If
-            Else
-                Call DB_remove(trvUsers.SelectedItem.text)
-    
-                Call trvUsers.Nodes.Remove(trvUsers.SelectedItem.index)
-                
-                Call trvUsers_NodeClick(trvUsers.SelectedItem)
             End If
         End If
     End If
@@ -1327,12 +1362,15 @@ End Sub
 Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
     Dim i As Integer ' ...
     
+    ' ...
     If (Not (trvUsers.SelectedItem Is Nothing)) Then
+        ' ...
         If (m_DB(UBound(m_DB)).Username = vbNullString) Then
             If (GetAccess(NewString, m_DB(UBound(m_DB)).Type).Username <> _
                 vbNullString) Then
                 
-                MsgBox "There is already an entry of this type matching the specified name."
+                MsgBox "There is already an entry of this type matching " & _
+                    "the specified name."
                 
                 Call trvUsers.StartLabelEdit
                 
@@ -1340,11 +1378,11 @@ Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
             End If
         Else
             For i = LBound(m_DB) To UBound(m_DB)
-                If (StrComp(trvUsers.SelectedItem.text, m_DB(i).Username, _
-                        vbTextCompare) = 0) Then
-            
+                If (StrComp(trvUsers.SelectedItem.text, m_DB(i).Username, vbTextCompare) = 0) Then
+                    ' ...
                     m_DB(i).Username = NewString
             
+                    ' ...
                     Exit For
                 End If
             Next i

@@ -2263,6 +2263,8 @@ Sub Form_Resize()
             Me.WindowState = vbMaximized
         End If
     End If
+    
+    Call rtbChat.Refresh
 End Sub
 
 Function GenerateTooltip() As String

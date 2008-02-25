@@ -258,7 +258,7 @@ Public Sub AddQ(ByVal sText As String, Optional ByVal msg_priority As Integer = 
     ByVal user As String = vbNullString, Optional ByVal tag As String = vbNullString)
     
     '// priority zero reserved for internal usage only
-    If (msg_priority < 1) Then
+    If (msg_priority = 0) Then
         Exit Sub
     End If
 
