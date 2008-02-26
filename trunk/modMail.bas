@@ -42,7 +42,7 @@ End Function
 
 Public Sub GetMailMessage(ByVal sUser As String, ByRef theMessage As udtMail)
     Dim msgTemp As udtMail
-    Dim i       As Integer
+    Dim i       As Long
     
     Call OpenMailFile
     
@@ -76,9 +76,11 @@ Public Sub GetMailMessage(ByVal sUser As String, ByRef theMessage As udtMail)
 End Sub
 
 Public Sub OpenMailFile()
+    On Error GoTo ERROR_HANDLER
+
     Dim Temp As udtMail
     Dim f    As Integer
-    Dim i    As Integer
+    Dim i    As Long
     
     f = FreeFile
     
@@ -101,6 +103,14 @@ Public Sub OpenMailFile()
     
     CurrentRecord = i
     CurrentOpenFile = f
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in " & _
+        "OpenMailFile().")
+    
+    Exit Sub
 End Sub
 
 Public Sub CloseMailFile()

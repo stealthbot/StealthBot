@@ -286,15 +286,15 @@ End Sub
 '//             use it to control whether or not your command responses display publicly.
 '// CC          CC controls whether or not the command string is passed to the Custom Command processor.
 '//             For scripting purposes I will not allow the user to set CC, it is always 0.
-Public Function command(ByVal Username As String, ByVal Message As String, ByVal InBot As Boolean) As Boolean
+Public Function Command(ByVal Username As String, ByVal Message As String, ByVal InBot As Boolean) As Boolean
     Dim dbAccess As udtGetAccessResponse
     '// GetAccess() will return the access type the commands sub needs
     
     ' execute command
-    command = ProcessCommand(Username, Message, InBot, False)
+    Command = ProcessCommand(Username, Message, InBot, False)
     
     ' backwards compatible (may be removed in future!)
-    If (command = False) Then
+    If (Command = False) Then
         Dim tmpmsg As String ' ...
         
         ' store local copy of message
@@ -310,7 +310,7 @@ Public Function command(ByVal Username As String, ByVal Message As String, ByVal
         'End If
         
         ' execute command
-        command = ProcessCommand(Username, Message, InBot, False)
+        Command = ProcessCommand(Username, Message, InBot, False)
     End If
 End Function
 
