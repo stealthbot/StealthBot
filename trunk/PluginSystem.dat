@@ -111,9 +111,9 @@
 '//**********************************//
 
 
+Const PS_TITLE = "The StealthBot Plugin System"
 Const PS_UPDATE_URL = "http://www.stealthbot.net/p/plugs/"
 Const PS_SBNET_URL = "http://www.stealthbot.net/board/index.php?"
-
 Const PS_ALLOW_UI = True
 Const PS_SET_PATH = "plugins\settings.ini"
 Const PS_PREFIX_DISALLOW = "|ps|script|protect|phrasebans|ipbans|idle|koy|plugban|chpw|ib|efp|floodmode|"
@@ -799,32 +799,33 @@ Sub psConvertToPlugin(Path, Lines)
    '// Is the plugin converter disabled?
    If Not GetSetting("ps", "autoConvertToPlugin") Then Exit Sub
 
+   strDlgTitle = PS_TITLE & " - Plugin Converter"
    fileName = Mid(Path, InstrRev(Path, "\") + 1)
-   convertNow = MsgBox("A file in your plugins folder contains a script that isn't in plugin format: " & _
-                        fileName & String(2, vbCrLf) & "Would you like to convert this script to plugin " & _
-                       "format now?", vbYesNoCancel + vbQuestion + vbApplicationModal, "Plugin Converter")
+   convertNow = MsgBox("A file in your plugins folder contains a script that isn't in plugin format: " & String(2, vbCrLf) & _
+                        fileName & String(2, vbCrLf) & "Would you like to convert this script to plugin format " & _
+                       "now?", vbYesNoCancel + vbQuestion + vbApplicationModal, strDlgTitle)
 
    If convertNow = vbYes Then
  
       '// Get the desired prefix for the converted plugin
       Do
-         prefix = LCase(InputBox("Enter a prefix for this plugin.", "Plugin Converter"))
+         prefix = LCase(InputBox("Enter a prefix for this plugin.", strDlgTitle))
          askAgain = False
  
          '// Make sure they've entered something
          If Trim(prefix) = vbNullString Then
-            MsgBox "You must enter a prefix.", vbExclamation + vbApplicationModal, "Plugin Converter"
+            MsgBox "You must enter a prefix.", vbExclamation + vbApplicationModal, strDlgTitle
             askAgain = True
          Else
             '// Make sure they've entered a valid prefix
             If psPlugins.Exists(prefix) Then
-               MsgBox "The prefix """ & prefix & """ already exists.", vbExclamation + vbApplicationModal, "Plugin Converter"
+               MsgBox "The prefix """ & prefix & """ already exists.", vbExclamation + vbApplicationModal, strDlgTitle
                askAgain = True
             ElseIf Instr(prefix, " ") Then
-               MsgBox "You can't have spaces in your prefix.", vbExclamation + vbApplicationModal, "Plugin Converter"
+               MsgBox "You can't have spaces in your prefix.", vbExclamation + vbApplicationModal, strDlgTitle
                askAgain = True
             ElseIf Len(psPrefixCheck(prefix)) > 0 Then
-               MsgBox "Invalid prefix.", vbExclamation + vbApplicationModal, "Plugin Converter"
+               MsgBox "Invalid prefix.", vbExclamation + vbApplicationModal, strDlgTitle
                askAgain = True
             End If
          End If
@@ -904,16 +905,15 @@ Sub psAutoUpdate(boolMenuClick)
          If psGetNumericVersion(curPSVersion) > psGetNumericVersion(myPSVersion) Then
             boolFoundUpdate = True
 
-            updatePS = MsgBox("An new version (v" & curPSVersion & ") is available for The Plugin System. Updates of this type " & _
-                              "include new features and bug fixes for StealthBot's VBScripting System. " & String(2, vbCrLf) & _
-                              "Automatically update now (recommended)?" & String(2, vbCrLf) & "This notification can be disabled " & _
-                              "inside your settings.ini file", vbYesNoCancel + vbQuestion + vbApplicationModal, "StealthBot Updater")
+            updatePS = MsgBox("An new version (v" & curPSVersion & ") is available for " & PS_TITLE & ". Automatically " & _
+                              "update now (recommended)?" & String(2, vbCrLf) & "This notification can be disabled inside " & _
+                              "your settings.ini file", vbYesNoCancel + vbQuestion + vbApplicationModal, PS_TITLE & " - Updater")
 
             If updatePS = vbYes Then
-                  AddChat vbLightBlue, "Downloading update for the Plugin System."
+                  AddChat vbLightBlue, "Downloading an update for the " & PS_TITLE
                   psBackUpFile BotPath() & "PluginSystem.dat", myPSVersion
                   PrintURLToFile "PluginSystem.dat", PS_UPDATE_URL & "getplug.php?plugin=pluginsystem"
-                  AddChat psColor1, "Your Plugin System has been updated."
+                  AddChat psColor1, "The Plugin System has been updated."
                   AddChat psColor1, "For a list of changes in this version see: http://stealthbot.net/p/plugs/changelog"
                   AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
             End If
@@ -956,7 +956,7 @@ Sub psAutoUpdate(boolMenuClick)
                   updateNow = MsgBox("A new version (v" & curLine(2) & ") is available for your " & curLine(0) & " plugin. " & String(2, vbCrLf) & _
                                      "Automatically update this plugin now?" & String(2, vbCrLf) & "To stop receiving new " & _
                                      "version notifications for this plugin, type this inside your bot: /nvn " & curLine(1) & _
-                                     " off", vbYesNoCancel + vbQuestion + vbApplicationModal, "StealthBot Updater")
+                                     " off", vbYesNoCancel + vbQuestion + vbApplicationModal, PS_TITLE & " - Plugin Updater")
 
                   If updateNow = vbYes Then ps_getplugin_cmd curLine, 0, 4
                End If
@@ -1007,7 +1007,7 @@ Sub PluginMenus_Display_Callback(Prefix)
    If Not boolEnabled Then
 	RemoveMenuItem Prefix
    Else
-	Call ReloadScript()
+        AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
    End If
 End Sub
 
@@ -1152,15 +1152,15 @@ Sub ps_GetPlugins_Callback()
 End Sub
 
 
-'// "The Plugin System" > "Open New Plugin File"
-Sub ps_NewPluginFile_Callback()
+'// "The Plugin System" > "Add Code Manually"
+Sub ps_AddCode_Callback()
    On Error Resume Next
 
    '// Get plugin file name
    Do
       boolAskAgain = False
 
-      strFilename = Split(InputBox("Enter a name for the plugin file.", "Add Plugin Code"), ".")(0)
+      strFilename = Split(InputBox("Enter a name for the plugin file.", PS_TITLE & " - Add Code"), ".")(0)
       If strFilename <> vbNullString Then
          strPath = BotPath() & "plugins\" & strFilename & ".plug"
       Else
@@ -1170,7 +1170,7 @@ Sub ps_NewPluginFile_Callback()
       Set objNewPlugin = psFSO.CreateTextFile(strPath, 0)
 
       If Err.Number = 52 Or Err.Number = 58 Then
-         MsgBox Err.Description, vbExclamation + vbApplicationModal, "Add Plugin Code"
+         MsgBox Err.Description, vbExclamation + vbApplicationModal, PS_TITLE & " - Add Code"
          boolAskAgain = True
          Err.Clear
       End If
@@ -1456,10 +1456,9 @@ End Sub
 
 Sub psCreatePSSettings()
 
-   SetSetting "ps", "enabled", True, "If enabled is set to False here, ALL plugins are disabled.", False
-   SetSetting "ps", "nvn", True, "New Version Notification. If set to False here, you won't " & _
-                                 "get pop-up notification of new versions for ANY plugins.", False
-   SetSetting "ps", "backup", False, "If True, plugin files will be backed up when updates are downloaded.", False
+   SetSetting "ps", "enabled", True, "Set to False to globally disable plugins."
+   SetSetting "ps", "nvn", True, "Set to False to globally disable New Version Notification."
+   SetSetting "ps", "backup", False, "Set to True to globally enable plugin backups.", False
    SetSetting "ps", "debugmode", False, "Stores the debug mode status", False
    SetSetting "ps", "allowedExtensions", "plug,txt", "Plugins will be loaded from files with these extensions", False
    SetSetting "ps", "autoConvertToPlugin", True, "Automatically converts regular scripts to plugin form on load.", False
