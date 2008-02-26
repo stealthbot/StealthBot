@@ -1352,10 +1352,8 @@ Sub psAddPFolder()
 
    '// Create the plugins folder and settings file
    If Not psFSO.FolderExists(BotPath() & "plugins") Then
-      If (GetBotVersionNumber() >= 2.6) Then
-         psFSO.CreateFolder(BotPath() & "plugins")
-         AddChat 39423, "Added the plugins folder to your StealthBot folder."
-      End If
+      psFSO.CreateFolder(BotPath() & "plugins")
+      AddChat 39423, "Added the plugins folder to your StealthBot folder."
    End If
    If Not psFSO.FileExists(BotPath() & "plugins\settings.ini") Then
       If psFSO.FileExists(BotPath() & "plugins\pluginsettings.ini") Then
@@ -1363,7 +1361,7 @@ Sub psAddPFolder()
          psFSO.DeleteFile(BotPath() & "plugins\pluginsettings.ini")
       End If
       AddChat 39423, "Added settings.ini to your plugins folder."
-      AddChat vbWhite, "For information/help with scripting and The Plugin System, click Plugins > Help"
+      AddChat 39423, "For help with scripting and The StealthBot Plugin System, click Plugins > Help"
    End If
 End Sub
  
