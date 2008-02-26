@@ -506,7 +506,7 @@ End Sub
 '// Downloads a plugin from the plugins server.
 Sub ps_getplugin_cmd(cmd, Username, DisplayID)
 
-   If UBound(cmd) = 1 Then Prefix = cmd(1) Else Exit Sub End If
+   If UBound(cmd) > 0 Then Prefix = cmd(1) Else Exit Sub End If
 
    Content = scInet.OpenURL(PS_UPDATE_URL & "update.php?action=getscript&script=" & Prefix)
    If Content = "invalid" Then
@@ -922,15 +922,20 @@ Sub psAutoUpdate(boolMenuClick)
    End If
 
    '// Check for plugin creator updates.
-   If Not GetSetting("#internal", "pcvernote") Then
+   strPCVer = GetSetting("#internal", "pcvernote")
+   If Len(strPCVer) > 0 And Not strPCVer Then
       On Error Resume Next
       curPCVersion = scINet.OpenURL("http://stealthbot.net/p/plugs/pcver.txt")
-      If curPCVersion > GetSetting("#internal", "pcver") Then
-         boolFoundUpdate = True
-         If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then
-            psFSO.DeleteFile BotPath() & "PluginCreator.exe"
-            AddChat vbGreen, "An update is available for your Plugin Creator. To download hit Plugins > Create New Plugin."
-            SetSetting "#internal", "pcvernote", True
+      dblPCVer = GetSetting("#internal", "pcver")
+ 
+      If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then    
+         If Len(dblPCVer) > 0 Then
+            If curPCVersion > dblPCVer Then
+               boolFoundUpdate = True
+               psFSO.DeleteFile BotPath() & "PluginCreator.exe"
+               AddChat vbGreen, "An update is available for your Plugin Creator. To download hit Plugins > The Plugin System > Plugin Creator"
+               SetSetting "#internal", "pcvernote", True
+            End If       
          End If
       End If
    End If
@@ -1467,7 +1472,7 @@ Sub psCreatePSSettings()
    SetSetting "ps", "prefix_cmd_access", 100, "Access required to use the .prefix on/off command", False
    SetSetting "ps", "plugins_cmd_access", 20, "Access required to use the .plugins command", False
    SetSetting "ps", "phelp_cmd_access", 20, "Access required to use the .phelp command", False
-   SetSetting "#internal", "pcver", "2.20", "", False
+   SetSetting "#internal", "pcver", "2.32", "", False
    SetSetting "#internal", "pcvernote", False, "", False
 End Sub
 
