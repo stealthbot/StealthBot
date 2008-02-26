@@ -316,7 +316,7 @@ Public Sub RegisterPluginMenus()
 
     AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
     AddScriptMenuItem dictMenuIDs("ps"), "Download Plugins", "ps_GetPlugins_Callback", 0, 0
-    AddScriptMenuItem dictMenuIDs("ps"), "Open New Plugin File", "ps_NewPluginFile_Callback", 0, 0
+    AddScriptMenuItem dictMenuIDs("ps"), "Add Code Manually", "ps_AddCode_Callback", 0, 0
     AddScriptMenuItem dictMenuIDs("ps"), "Plugin Creator", "ps_PluginCreator_Callback", 0, 0
     AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
     AddScriptMenuItem dictMenuIDs("ps"), "Check for Updates", "ps_UpdateCheck_Callback", 0, 0
