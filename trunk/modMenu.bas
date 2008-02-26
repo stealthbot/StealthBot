@@ -315,12 +315,14 @@ Public Sub RegisterPluginMenus()
             "ps_GBackups_Callback", 0, 0, CBool(SharedScriptSupport.GetSetting("ps", "backup")))
 
     AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
-    AddScriptMenuItem dictMenuIDs("ps"), "Get plugins", "ps_GetPlugins_Callback", False, False
-    AddScriptMenuItem dictMenuIDs("ps"), "Check for updates", "ps_UpdateCheck_Callback", False, False
-    AddScriptMenuItem dictMenuIDs("ps"), "Create new plugin", "ps_CreatePlugin_Callback", False, False
+    AddScriptMenuItem dictMenuIDs("ps"), "Download Plugins", "ps_GetPlugins_Callback", 0, 0
+    AddScriptMenuItem dictMenuIDs("ps"), "Open New Plugin File", "ps_NewPluginFile_Callback", 0, 0
+    AddScriptMenuItem dictMenuIDs("ps"), "Plugin Creator", "ps_PluginCreator_Callback", 0, 0
     AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
-    AddScriptMenuItem dictMenuIDs("ps"), "Open PluginSystem.dat", "ps_OpenPS_Callback", False, False
-    AddScriptMenuItem dictMenuIDs("ps"), "Help", "ps_Help_Callback", False, False
+    AddScriptMenuItem dictMenuIDs("ps"), "Check for Updates", "ps_UpdateCheck_Callback", 0, 0
+    AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
+    AddScriptMenuItem dictMenuIDs("ps"), "Open PluginSystem.dat", "ps_OpenPS_Callback", 0, 0
+    AddScriptMenuItem dictMenuIDs("ps"), "Help", "ps_Help_Callback", 0, 0
 
     '// Add menu "Plugin Menu Display"
     If Not CBool(SharedScriptSupport.GetSetting("ps", "menusDisabled")) Then
