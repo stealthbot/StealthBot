@@ -907,13 +907,13 @@ Sub psAutoUpdate(boolMenuClick)
 
             updatePS = MsgBox("An new version (v" & curPSVersion & ") is available for " & PS_TITLE & ". Automatically " & _
                               "update now (recommended)?" & String(2, vbCrLf) & "This notification can be disabled inside " & _
-                              "your settings.ini file", vbYesNoCancel + vbQuestion + vbApplicationModal, PS_TITLE & " - Updater")
+                              "your settings.ini file.", vbYesNoCancel + vbQuestion + vbApplicationModal, PS_TITLE & " - Updater")
 
             If updatePS = vbYes Then
-                  AddChat vbLightBlue, "Downloading an update for the " & PS_TITLE
+                  AddChat vbLightBlue, "Downloading an update for " & PS_TITLE
                   psBackUpFile BotPath() & "PluginSystem.dat", myPSVersion
                   PrintURLToFile "PluginSystem.dat", PS_UPDATE_URL & "getplug.php?plugin=pluginsystem"
-                  AddChat psColor1, "The Plugin System has been updated."
+                  AddChat psColor1, "Your Plugin System has been updated."
                   AddChat psColor1, "For a list of changes in this version see: http://stealthbot.net/p/plugs/changelog"
                   AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
             End If
@@ -954,9 +954,8 @@ Sub psAutoUpdate(boolMenuClick)
                   boolFoundUpdate = True
 
                   updateNow = MsgBox("A new version (v" & curLine(2) & ") is available for your " & curLine(0) & " plugin. " & String(2, vbCrLf) & _
-                                     "Automatically update this plugin now?" & String(2, vbCrLf) & "To stop receiving new " & _
-                                     "version notifications for this plugin, type this inside your bot: /nvn " & curLine(1) & _
-                                     " off", vbYesNoCancel + vbQuestion + vbApplicationModal, PS_TITLE & " - Plugin Updater")
+                                     "Automatically update this plugin now?" & String(2, vbCrLf) & "New version notification can be disabled " & _
+                                     "inside the Plugins menu.", vbYesNoCancel + vbQuestion + vbApplicationModal, PS_TITLE & " - Plugin Updater")
 
                   If updateNow = vbYes Then ps_getplugin_cmd curLine, 0, 4
                End If
