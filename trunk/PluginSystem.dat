@@ -1145,15 +1145,44 @@ Sub ps_OpenPS_Callback()
 End Sub
 
 
-'// "Get Plugins"
+'// "The Plugin System" > "Download Plugins"
 Sub ps_GetPlugins_Callback()
 
    psAppShell.Open "http://stealthbot.net/p"
 End Sub
 
 
-'// "Create New Plugin"
-Sub ps_CreatePlugin_Callback()
+'// "The Plugin System" > "Open New Plugin File"
+Sub ps_NewPluginFile_Callback()
+   On Error Resume Next
+
+   '// Get plugin file name
+   Do
+      boolAskAgain = False
+
+      strFilename = Split(InputBox("Enter a name for the plugin file.", "Add Plugin Code"), ".")(0)
+      If strFilename <> vbNullString Then
+         strPath = BotPath() & "plugins\" & strFilename & ".plug"
+      Else
+         Exit Sub
+      End If
+      
+      Set objNewPlugin = psFSO.CreateTextFile(strPath, 0)
+
+      If Err.Number = 52 Or Err.Number = 58 Then
+         MsgBox Err.Description, vbExclamation + vbApplicationModal, "Add Plugin Code"
+         boolAskAgain = True
+         Err.Clear
+      End If
+   Loop While boolAskAgain
+      
+   '// Open plugin file
+   psAppShell.Open strPath
+End Sub
+
+
+'// "The Plugin System" > "Plugin Creator"
+Sub ps_PluginCreator_Callback()
 
   If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then
     psWshShell.Run "PluginCreator.exe"
@@ -1164,7 +1193,8 @@ Sub ps_CreatePlugin_Callback()
 
     AddChat vbYellow, "Downloading Plugin Creator. If you receive any Script Control dialogs, hit Continue!"
     SSC.PrintURLToFile "PluginCreator.exe", "http://www.stealthbot.net/p/plugs/PluginCreator.exe"
-    AddChat vbGreen, "Downloaded PluginCreator.exe to your StealthBot folder. You may now use the Create New Plugin function."
+    AddChat vbGreen, "Downloaded PluginCreator.exe to your StealthBot folder."
+    If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then psAppShell.Open BotPath() & "PluginCreator.exe"
     SetSetting "#internal", "pcver", curPCVersion
     SetSetting "#internal", "pcvernote", False
   End If
