@@ -493,6 +493,8 @@ Private Sub btnCreateGroup_Click()
             .Type = "GROUP"
             .AddedBy = "(console)"
             .AddedOn = Now
+            .ModifiedBy = "(console)"
+            .ModifiedOn = Now
         End With
     
         ' do we have an item (hopefully a group) selected?
@@ -559,6 +561,8 @@ Private Sub btnCreateGroup_Click()
             .Type = "CLAN"
             .AddedBy = "(console)"
             .AddedOn = Now
+            .ModifiedBy = "(console)"
+            .ModifiedOn = Now
         End With
         
         ' ...
@@ -589,6 +593,8 @@ Private Sub btnCreateGroup_Click()
                     .Type = "GAME"
                     .AddedBy = "(console)"
                     .AddedOn = Now
+                    .ModifiedBy = "(console)"
+                    .ModifiedOn = Now
                 End With
                 
                 ' ...
@@ -908,11 +914,18 @@ Private Sub tbsTabs_Click()
     ' ...
     Call UpdateGroupListBox
     
+    ' ...
+    Call LockGUI
+End Sub
+
+Private Sub LockGUI()
+    Dim i As Integer ' ...
+    
     ' set our default frame caption
     With frmDatabase
         .Caption = "Database"
     End With
-    
+
     ' disable & clear rank
     txtRank.Enabled = False
     txtRank.text = vbNullString
@@ -921,8 +934,58 @@ Private Sub tbsTabs_Click()
     txtFlags.Enabled = False
     txtFlags.text = vbNullString
     
+    ' loop through listbox and clear selected items
+    For i = 0 To (lstGroups.ListCount - 1)
+        lstGroups.Selected(i) = False
+    Next i
+    
     ' disable group list
     lstGroups.Enabled = False
+    
+    ' reset created on & modified on labels
+    lblCreatedOn.Caption = "(not applicable)"
+    lblModifiedOn.Caption = "(not applicable)"
+    
+    ' reset created by & modified by labels
+    lblCreatedBy.Caption = vbNullString
+    lblModifiedBy.Caption = vbNullString
+    
+    ' disable entry buttons
+    btnSave(1).Enabled = False
+    btnDelete.Enabled = False
+End Sub
+
+Private Sub UnlockGUI()
+    Dim i As Integer ' ...
+
+    ' set our default frame caption
+    With frmDatabase
+        .Caption = "Database"
+    End With
+
+    ' enable & clear rank
+    txtRank.Enabled = True
+    txtRank.text = vbNullString
+    
+    ' enable & clear flags
+    txtFlags.Enabled = True
+    txtFlags.text = vbNullString
+
+    ' loop through listbox and clear selected items
+    For i = 0 To (lstGroups.ListCount - 1)
+        lstGroups.Selected(i) = False
+    Next i
+    
+    ' enable group list
+    lstGroups.Enabled = True
+    
+    ' reset created on & modified on labels
+    lblCreatedOn.Caption = "(not applicable)"
+    lblModifiedOn.Caption = "(not applicable)"
+    
+    ' reset created by & modified by labels
+    lblCreatedBy.Caption = vbNullString
+    lblModifiedBy.Caption = vbNullString
     
     ' disable entry buttons
     btnSave(1).Enabled = False
@@ -943,116 +1006,19 @@ End Sub
 
 ' ...
 Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
-    Dim i As Integer ' ...
+    Dim tmp As udtGetAccessResponse ' ...
+    Dim i   As Integer ' ...
     
-    ' deselect groups
-    For i = 0 To (lstGroups.ListCount - 1)
-        lstGroups.Selected(i) = False
-    Next i
+    ' ...
+    tmp = GetAccess(node.text, node.tag)
 
-    If (Not (trvUsers.SelectedItem Is Nothing)) Then
-        Dim tmp As udtGetAccessResponse ' ...
-        
+    ' ...
+    If (node.index > 1) Then
         ' ...
-        tmp = GetAccess(trvUsers.SelectedItem.text, trvUsers.SelectedItem.tag)
-
-        If (node.index = 1) Then
-            With frmDatabase
-                .Caption = "Database"
-            End With
-            
-            txtRank.Enabled = False
-            
-            txtFlags.Enabled = False
-            
-            lstGroups.Enabled = False
-            
-            btnDelete.Enabled = False
-            
-            lblCreatedOn = "(not applicable)"
-                
-            lblCreatedBy = vbNullString
-            
-            lblModifiedOn = "(not applicable)"
-                
-            lblModifiedBy = vbNullString
-        Else
-            ' ...
-            frmDatabase.Caption = trvUsers.SelectedItem.text
-            
-            ' ...
-            txtRank.Enabled = True
-            
-            ' ...
-            txtFlags.Enabled = True
-            
-            ' ...
-            lstGroups.Enabled = True
-            
-            ' ...
-            btnDelete.Enabled = True
-            
-            If (tmp.AddedBy = "%") Then
-                ' ...
-                lblCreatedOn = "unknown"
-                
-                ' ...
-                lblCreatedBy = "by unknown"
-            Else
-                ' ...
-                lblCreatedOn = tmp.AddedOn & " Local Time"
-                    
-                ' ...
-                lblCreatedBy = "by " & tmp.AddedBy
-            End If
-            
-            ' ...
-            If (tmp.ModifiedBy = "%") Then
-                ' ...
-                lblModifiedOn = "unknown"
-                
-                ' ...
-                lblModifiedBy = "by unknown"
-            Else
-                ' ...
-                lblModifiedOn = tmp.ModifiedOn & " Local Time"
-                    
-                ' ...
-                lblModifiedBy = "by " & tmp.ModifiedBy
-            End If
-            
-            ' is entry a member of a group?
-            If (Len(tmp.Groups) And (tmp.Groups <> "%")) Then
-                Dim splt() As String  ' ...
-                Dim j      As Integer ' ...
-            
-                ' is entry a member of multiple groups?
-                If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
-                    ' store working copy of group memberships, splitting up
-                    ' multiple groupings by the ',' delimiter.
-                    splt() = Split(m_DB(i).Groups, ",")
-                Else
-                    ' redefine array size to store group name
-                    ReDim Preserve splt(0)
-                    
-                    ' store working copy of group membership
-                    splt(0) = tmp.Groups
-                End If
-                
-                ' loop through entry's group memberships
-                For i = LBound(splt) To UBound(splt)
-                    ' loop through our group listing, checking to see if we have any
-                    ' matches (since the entry is a member of a group, we better!)
-                    For j = 0 To (lstGroups.ListCount - 1)
-                        ' is entry a member of group?
-                        If (StrComp(splt(i), lstGroups.List(j), vbTextCompare) = 0) Then
-                            ' select group if entry is a member
-                            lstGroups.Selected(j) = True
-                        End If
-                    Next j
-                Next i
-            End If
-        End If
+        Call UnlockGUI
+    
+        ' ...
+        frmDatabase.Caption = node.text
         
         ' does entry have a rank?
         If (tmp.Access > 0) Then
@@ -1065,13 +1031,66 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
         
         ' clear flags from text box
         txtFlags.text = tmp.Flags
-    
-        ' disable entry save button
-        btnSave(1).Enabled = False
         
-        ' refresh tree view
-        Call trvUsers.Refresh
+        ' ...
+        If ((tmp.AddedBy = vbNullString) Or (tmp.AddedBy = "%")) Then
+            lblCreatedOn = "unknown"
+            lblCreatedBy = "by unknown"
+        Else
+            lblCreatedOn = tmp.AddedOn & " Local Time"
+            lblCreatedBy = "by " & tmp.AddedBy
+        End If
+        
+        ' ...
+        If ((tmp.ModifiedBy = vbNullString) Or (tmp.ModifiedBy = "%")) Then
+            lblModifiedOn = "unknown"
+            lblModifiedBy = "by unknown"
+        Else
+            lblModifiedOn = tmp.ModifiedOn & " Local Time"
+            lblModifiedBy = "by " & tmp.ModifiedBy
+        End If
+        
+        ' is entry a member of a group?
+        If (Len(tmp.Groups) And (tmp.Groups <> "%")) Then
+            Dim splt() As String  ' ...
+            Dim j      As Integer ' ...
+        
+            ' is entry a member of multiple groups?
+            If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
+                ' store working copy of group memberships, splitting up
+                ' multiple groupings by the ',' delimiter.
+                splt() = Split(m_DB(i).Groups, ",")
+            Else
+                ' redefine array size to store group name
+                ReDim Preserve splt(0)
+                
+                ' store working copy of group membership
+                splt(0) = tmp.Groups
+            End If
+            
+            ' loop through entry's group memberships
+            For i = LBound(splt) To UBound(splt)
+                ' loop through our group listing, checking to see if we have any
+                ' matches (since the entry is a member of a group, we better!)
+                For j = 0 To (lstGroups.ListCount - 1)
+                    ' is entry a member of group?
+                    If (StrComp(splt(i), lstGroups.List(j), vbTextCompare) = 0) Then
+                        ' select group if entry is a member
+                        lstGroups.Selected(j) = True
+                    End If
+                Next j
+            Next i
+        End If
+    Else
+        ' ...
+        Call LockGUI
     End If
+    
+    ' ...
+    Set trvUsers.SelectedItem = node
+
+    ' refresh tree view
+    Call trvUsers.Refresh
 End Sub
 
 ' ...
@@ -1085,18 +1104,6 @@ Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, X As Single,
         Call trvUsers_NodeClick(trvUsers.SelectedItem)
     End If
 End Sub
-
-' ...
-'Private Sub trvUsers_OLEStartDrag(Data As MSComctlLib.DataObject, AllowedEffects As Long)
-'    ' ...
-'    If (Not (trvUsers.SelectedItem Is Nothing)) Then
-'        ' ...
-'        Call Data.Clear
-'
-'        ' ...
-'        Call Data.SetData(trvUsers.SelectedItem.Key, vbCFText)
-'    End If
-'End Sub
 
 ' ...
 Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
