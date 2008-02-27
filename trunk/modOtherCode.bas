@@ -337,7 +337,7 @@ Public Function StripRealm(ByVal Username As String) As String
     StripRealm = Username
 End Function
 
-Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNullString)
+Public Sub bnetSend(ByVal Message As String, Optional ByVal tag As String = vbNullString)
     If (frmChat.sckBNet.State = 7) Then
         With PBuffer
             If (frmChat.mnuUTF8.Checked = False) Then
@@ -353,7 +353,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
     If (Not (bFlood)) Then
         On Error Resume Next
         
-        frmChat.SControl.Run "Event_MessageSent", Message, Tag
+        frmChat.SControl.Run "Event_MessageSent", Message, tag
     End If
 End Sub
 
@@ -526,7 +526,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Dim found   As Boolean ' ...
     Dim dbIndex As Integer ' ...
     Dim dbCount As Integer ' ...
-    Dim Splt()  As String  ' ...
+    Dim splt()  As String  ' ...
     Dim bln     As Boolean ' ...
     
     ' default index to negative one to
@@ -560,19 +560,19 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                     ' ...
                     If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
                         ' ...
-                        Splt() = Split(DB(i).Groups, ",")
+                        splt() = Split(DB(i).Groups, ",")
                     Else
                         ' ...
-                        ReDim Preserve Splt(0)
+                        ReDim Preserve splt(0)
                         
                         ' ...
-                        Splt(0) = DB(i).Groups
+                        splt(0) = DB(i).Groups
                     End If
                     
                     ' ...
-                    For j = 0 To UBound(Splt)
+                    For j = 0 To UBound(splt)
                         ' ...
-                        gAcc = GetCumulativeGroupAccess(Splt(j))
+                        gAcc = GetCumulativeGroupAccess(splt(j))
                     
                         ' ...
                         If (GetCumulativeAccess.Access < gAcc.Access) Then
@@ -707,19 +707,19 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             ' ...
                             If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
                                 ' ...
-                                Splt() = Split(tmp.Groups, ",")
+                                splt() = Split(tmp.Groups, ",")
                             Else
                                 ' ...
-                                ReDim Preserve Splt(0)
+                                ReDim Preserve splt(0)
                                 
                                 ' ...
-                                Splt(0) = tmp.Groups
+                                splt(0) = tmp.Groups
                             End If
                             
                             ' ...
-                            For j = 0 To UBound(Splt)
+                            For j = 0 To UBound(splt)
                                 ' ...
-                                gAcc = GetCumulativeGroupAccess(Splt(j))
+                                gAcc = GetCumulativeGroupAccess(splt(j))
                             
                                 ' ...
                                 If (tmp.Access < gAcc.Access) Then
@@ -835,7 +835,7 @@ End Function
 ' ...
 Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccessResponse
     Dim gAcc   As udtGetAccessResponse ' ...
-    Dim Splt() As String               ' ...
+    Dim splt() As String               ' ...
     
     ' ...
     gAcc = GetAccess(Group, "GROUP")
@@ -850,12 +850,12 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
             Dim j As Integer ' ...
         
             ' ...
-            Splt() = Split(gAcc.Groups, ",")
+            splt() = Split(gAcc.Groups, ",")
             
             ' ...
-            For i = 0 To UBound(Splt)
+            For i = 0 To UBound(splt)
                 ' ...
-                recAcc = GetCumulativeGroupAccess(Splt(i))
+                recAcc = GetCumulativeGroupAccess(splt(i))
                     
                 ' ...
                 If (gAcc.Access < recAcc.Access) Then
@@ -920,7 +920,7 @@ End Function
 ' ...
 Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Boolean
     Dim gAcc   As udtGetAccessResponse ' ...
-    Dim Splt() As String               ' ...
+    Dim splt() As String               ' ...
     
     ' ...
     gAcc = GetAccess(Group, "GROUP")
@@ -935,17 +935,17 @@ Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Bool
             Dim j As Integer ' ...
         
             ' ...
-            Splt() = Split(gAcc.Groups, ",")
+            splt() = Split(gAcc.Groups, ",")
             
             ' ...
-            For i = 0 To UBound(Splt)
-                If (StrComp(Splt(i), Check, vbTextCompare) = 0) Then
+            For i = 0 To UBound(splt)
+                If (StrComp(splt(i), Check, vbTextCompare) = 0) Then
                     CheckGroup = True
                     
                     Exit Function
                 Else
                     ' ...
-                    recAcc = CheckGroup(Splt(i), Check)
+                    recAcc = CheckGroup(splt(i), Check)
                 
                     If (recAcc) Then
                         CheckGroup = True
@@ -1672,35 +1672,29 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
     Dim tmp As String ' ...
 
     ' ...
-    tmp = "/ban " & reverseUsername(sUser)
+    tmp = "/ban " & sUser
         
     ' ...
     Call g_Queue.RemoveLines(tmp)
     
-    'Dim i        As Integer
-    'Dim iUserLen As Integer
-    '
-    'iUserLen = Len(sUser)
-    '
-    'For i = 1 To g_Queue.Count
-    '    With colQueue.Item(i)
-    '        If (Len(.Message) >= iUserLen) Then
-    '            If (StrComp(Left$(.Message, iUserLen), sUser, _
-    '                vbBinaryCompare) = 0) Then
-    '
-    '                Call colQueue.Remove(i)
-    '
-    '                i = 0
-    '            End If
-    '        End If
-    '    End With
-    '
-    '    If (colQueue.Count = 0) Then
-    '        Exit For
-    '    End If
-    'Next i
+    ' ...
+    If ((StrReverse$(BotVars.Product) = "WAR") Or _
+        (StrReverse$(BotVars.Product) = "W3XP")) Then
+        
+        Dim strGateway As String ' ...
+        
+        ' ...
+        Select Case (BotVars.Gateway)
+            Case "Lordaeron": strGateway = "@USWest"
+            Case "Azeroth":   strGateway = "@USEast"
+            Case "Kalimdor":  strGateway = "@Asia"
+            Case "Northrend": strGateway = "@Europe"
+        End Select
+        
+        ' ...
+        Call g_Queue.RemoveLines(tmp & strGateway)
+    End If
 End Sub
-
 
 Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boolean
     Dim i As Integer

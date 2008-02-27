@@ -3,7 +3,7 @@ Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmCommands 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Command Manager"
-   ClientHeight    =   4845
+   ClientHeight    =   4860
    ClientLeft      =   45
    ClientTop       =   435
    ClientWidth     =   5550
@@ -19,7 +19,7 @@ Begin VB.Form frmCommands
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   4845
+   ScaleHeight     =   4860
    ScaleWidth      =   5550
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
@@ -27,7 +27,7 @@ Begin VB.Form frmCommands
       Height          =   4215
       Left            =   120
       TabIndex        =   16
-      Top             =   120
+      Top             =   150
       Width           =   2175
       _ExtentX        =   3836
       _ExtentY        =   7435
@@ -55,7 +55,7 @@ Begin VB.Form frmCommands
       Index           =   0
       Left            =   4080
       TabIndex        =   7
-      Top             =   4440
+      Top             =   4470
       Width           =   1335
    End
    Begin VB.Frame Frame1 
@@ -63,7 +63,7 @@ Begin VB.Form frmCommands
       Height          =   4335
       Left            =   2400
       TabIndex        =   1
-      Top             =   23
+      Top             =   60
       Width           =   3015
       Begin VB.CommandButton cmdCancel 
          Caption         =   "Delete"
@@ -213,7 +213,7 @@ Begin VB.Form frmCommands
       Index           =   0
       Left            =   3360
       TabIndex        =   0
-      Top             =   4440
+      Top             =   4470
       Width           =   735
    End
 End
@@ -236,7 +236,7 @@ Private Sub Form_Load()
     End If
     
     ' ...
-    Call m_CommandsDoc.load(App.Path & "\commands.xml")
+    Call m_CommandsDoc.Load(App.Path & "\commands.xml")
     
     ' ...
     Call PopulateTreeView
@@ -253,9 +253,9 @@ Private Sub PopulateTreeView()
     Dim xmlArgs           As MSXML2.IXMLDOMNodeList
     Dim xmlArgRestricions As MSXML2.IXMLDOMNodeList
 
-    Dim nCommand          As Node ' ...
-    Dim nArg              As Node ' ...
-    Dim nArgRestriction   As Node ' ...
+    Dim nCommand          As node ' ...
+    Dim nArg              As node ' ...
+    Dim nArgRestriction   As node ' ...
     
     Dim i As Integer ' ...
 
@@ -275,7 +275,7 @@ Private Sub PopulateTreeView()
             Dim j As Integer ' ...
         
             ' ...
-            For i = 0 To (xmlArgs.length - 1)
+            For i = 0 To (xmlArgs.Length - 1)
                 ' ...
                 Set nArg = _
                     trvCommands.Nodes.Add(nCommand, tvwChild, , _
@@ -286,7 +286,7 @@ Private Sub PopulateTreeView()
                     xmlArgs(i).selectNodes("restriction")
                     
                 ' ...
-                For j = 0 To (xmlArgRestricions.length - 1)
+                For j = 0 To (xmlArgRestricions.Length - 1)
                     ' ...
                     Set nArgRestriction = _
                         trvCommands.Nodes.Add(nArg, tvwChild, , _
@@ -296,3 +296,4 @@ Private Sub PopulateTreeView()
         End If
     Next
 End Sub
+

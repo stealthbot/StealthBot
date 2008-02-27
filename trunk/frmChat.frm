@@ -829,7 +829,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -855,7 +854,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1470,10 +1468,10 @@ Private Sub Form_Load()
     
     ' 4/10/06:
     ' CHECK FOR CONFIG.INI PATH HACK
-    l = InStr(command(), "-cpath ")
+    l = InStr(Command(), "-cpath ")
     
-    If l > 0 And Len(command()) > (l + 7) Then
-        ConfigOverride = Mid$(command(), l + 7)
+    If l > 0 And Len(Command()) > (l + 7) Then
+        ConfigOverride = Mid$(Command(), l + 7)
         
         If InStr(ConfigOverride, " ") > 0 Then
             ConfigOverride = Split(ConfigOverride, " ")(0)
@@ -1676,7 +1674,7 @@ Private Sub Form_Load()
             "the terms of the End-User License Agreement available at http://eula.stealthbot.net."
     End If
     
-    CommandLine = command()
+    CommandLine = Command()
     
     If MDebug("debug") Then _
         AddChat RTBColors.ServerInfoText, " * Program executed in debug mode; unhandled packet " & _
@@ -4127,7 +4125,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                         
                                         cboSend.AddItem txtPre.text & X(n) & txtPost.text, 0
                                     Else
-                                        AddQ txtPre.text & cboSend.text & X(n) & txtPost.text
+                                        AddQ txtPre.text & cboSend.text & X(n) & txtPost.text, _
+                                            PRIORITY.CONSOLE_MESSAGE
                                         
                                         cboSend.AddItem txtPre.text & cboSend.text & X(n) & txtPost.text, 0
                                     End If
@@ -4303,13 +4302,16 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 Select Case (Shift)
                     Case S_CTRL 'CTRL+ENTER - rewhisper
                         If LenB(cboSend.text) > 0 Then
-                            AddQ "/w " & IIf(Dii, "*", "") & LastWhisperTo & Space(1) & cboSend.text
+                            AddQ "/w " & IIf(Dii, "*", "") & LastWhisperTo & Space(1) & cboSend.text, _
+                                PRIORITY.CONSOLE_MESSAGE
+                                
                             cboSend.text = vbNullString
                         End If
                         
                     Case S_CTRLSHIFT 'CTRL+SHIFT+ENTER - reply
                         If LenB(cboSend.text) > 0 Then
-                            AddQ "/w " & IIf(Dii, "*", "") & LastWhisper & Space(1) & cboSend.text
+                            AddQ "/w " & IIf(Dii, "*", "") & LastWhisper & Space(1) & cboSend.text, _
+                                PRIORITY.CONSOLE_MESSAGE
                             cboSend.text = vbNullString
                         End If
                 
@@ -4445,7 +4447,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 
                                 ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
                                     m = Right(s, (Len(s) - 7))
-                                    AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m)
+                                    AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m), _
+                                        PRIORITY.CONSOLE_MESSAGE
                                     
                                 ElseIf (LCase(Left$(s, 9)) = "/profile ") Then
                                     If (sckBNet.State = 7) Then
@@ -4475,7 +4478,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     commandResult = ProcessCommand(CurrentUsername, m, _
                                         True, False)
                                 Else
-                                    Call AddQ(OutFilterMsg(s))
+                                    Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
                                 End If
                             End If
 theEnd:
@@ -5070,6 +5073,9 @@ Sub Connect()
                 Exit Sub
         End If
         
+        ' ...
+        g_username = BotVars.Username
+        
         If ((StrComp(BotVars.Product, "PX2D", vbTextCompare) = 0) Or _
             (StrComp(BotVars.Product, "VD2D", vbTextCompare) = 0)) Then
             
@@ -5320,16 +5326,16 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     
     ' ...
     If (strTmp <> vbNullString) Then
-        Dim Splt()   As String  ' ...
+        Dim splt()   As String  ' ...
         Dim i        As Integer ' ...
         Dim currChar As Integer ' ...
         Dim Send     As String  ' ...
-        Dim command  As String  ' ...
+        Dim Command  As String  ' ...
         Dim GTC      As Long    ' ...
         Dim strUser  As String  ' ...
         
         ' ...
-        ReDim Splt(0)
+        ReDim splt(0)
     
         ' check for tabs and replace with spaces (2005-09-23)
         If (InStr(1, strTmp, Chr$(9), vbBinaryCompare) <> 0) Then
@@ -5373,52 +5379,52 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             ' ...
             If (index > 2) Then
                 ' ...
-                command = Mid$(strTmp, 2, (index - 2))
+                Command = Mid$(strTmp, 2, (index - 2))
 
                 ' ...
-                If ((command = "w") Or _
-                    (command = "whisper") Or _
-                    (command = "m") Or _
-                    (command = "msg") Or _
-                    (command = "message") Or _
-                    (command = "whois") Or _
-                    (command = "where") Or _
-                    (command = "whereis") Or _
-                    (command = "squelch") Or _
-                    (command = "unsquelch") Or _
-                    (command = "ignore") Or _
-                    (command = "unignore") Or _
-                    (command = "ban") Or _
-                    (command = "unban") Or _
-                    (command = "designate")) Then
+                If ((Command = "w") Or _
+                    (Command = "whisper") Or _
+                    (Command = "m") Or _
+                    (Command = "msg") Or _
+                    (Command = "message") Or _
+                    (Command = "whois") Or _
+                    (Command = "where") Or _
+                    (Command = "whereis") Or _
+                    (Command = "squelch") Or _
+                    (Command = "unsquelch") Or _
+                    (Command = "ignore") Or _
+                    (Command = "unignore") Or _
+                    (Command = "ban") Or _
+                    (Command = "unban") Or _
+                    (Command = "designate")) Then
         
                     ' ...
-                    Splt() = Split(strTmp, Space$(1), 3)
+                    splt() = Split(strTmp, Space$(1), 3)
                     
                     ' ...
-                    If (UBound(Splt) > 0) Then
+                    If (UBound(splt) > 0) Then
                         ' ...
-                        command = Splt(0) & Space$(1) & _
-                            reverseUsername(Splt(1)) & _
+                        Command = splt(0) & Space$(1) & _
+                            reverseUsername(splt(1)) & _
                                 Space$(1)
                     End If
-                ElseIf ((command = "f") Or _
-                        (command = "friends")) Then
+                ElseIf ((Command = "f") Or _
+                        (Command = "friends")) Then
                     
                     ' ...
-                    Splt() = Split(strTmp, Space$(1), 3)
+                    splt() = Split(strTmp, Space$(1), 3)
                     
                     ' ...
-                    command = Splt(0) & _
+                    Command = splt(0) & _
                         Space$(1)
                     
                     ' ...
-                    If (UBound(Splt) = 2) Then
+                    If (UBound(splt) = 2) Then
                         ' ...
-                        command = command & Splt(1) & _
+                        Command = Command & splt(1) & _
                             Space$(1)
                     
-                        Select Case (LCase$(Splt(1)))
+                        Select Case (LCase$(splt(1)))
                             Case "m"
                             Case "msg"
                             Case Else
@@ -5426,37 +5432,37 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                                     (StrReverse$(BotVars.Product) = "W3XP")) Then
                                     
                                     ' ...
-                                    command = command & _
-                                        reverseUsername(Splt(2)) & _
+                                    Command = Command & _
+                                        reverseUsername(splt(2)) & _
                                             Space$(1)
                                 Else
                                     ' ...
-                                    command = command & Splt(2) & _
+                                    Command = Command & splt(2) & _
                                         Space$(1)
                                 End If
                         End Select
                     End If
                 Else
                     ' ...
-                    command = "/" & command & _
+                    Command = "/" & Command & _
                         Space(1)
                 End If
 
                 ' ...
-                If (Splt(0) <> vbNullString) Then
+                If (splt(0) <> vbNullString) Then
                     ' ...
-                    If (UBound(Splt)) Then
-                        ReDim Preserve Splt(0 To UBound(Splt) - 1)
+                    If (UBound(splt)) Then
+                        ReDim Preserve splt(0 To UBound(splt) - 1)
                     Else
-                        ReDim Preserve Splt(0)
+                        ReDim Preserve splt(0)
                     End If
                     
                     ' ...
                     strTmp = Mid$(strTmp, _
-                        (Len(Join(Splt(), Space$(1))) + Len(Space(1))) + 1)
+                        (Len(Join(splt(), Space$(1))) + Len(Space(1))) + 1)
                 Else
                     ' ...
-                    strTmp = Mid$(strTmp, Len(command) + 1)
+                    strTmp = Mid$(strTmp, Len(Command) + 1)
                 End If
             End If
         End If
@@ -5480,35 +5486,35 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         
             ' ...
             Select Case (cmdName)
-                Case "designate": msg_priority = Priority.SPECIAL_MESSAGE
-                Case "resign":    msg_priority = Priority.SPECIAL_MESSAGE
-                Case "ban":       msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                Case "unban":     msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                Case "kick":      msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                Case "squelch":   msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                Case "ignore":    msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                Case "unsquelch": msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                Case "unignore":  msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                Case Else:        msg_priority = Priority.MESSAGE_DEFAULT
+                Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
+                Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
+                Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                Case "unban":     msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                Case "squelch":   msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                Case "ignore":    msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                Case "unsquelch": msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                Case "unignore":  msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
             End Select
         End If
         
         ' ...
         Call SplitByLen(strTmp, _
-            (MAX_MESSAGE_LENGTH - Len(command)), Splt())
+            (MAX_MESSAGE_LENGTH - Len(Command)), splt())
 
         ' ...
-        ReDim Preserve Splt(0 To UBound(Splt))
+        ReDim Preserve splt(0 To UBound(splt))
 
         ' ...
-        If (Splt(LBound(Splt)) <> vbNullString) Then
+        If (splt(LBound(splt)) <> vbNullString) Then
             ' ...
-            For i = LBound(Splt) To UBound(Splt)
+            For i = LBound(splt) To UBound(splt)
                 ' store current tick
                 GTC = GetTickCount()
                 
                 ' store working copy
-                Send = command & Splt(i)
+                Send = Command & splt(i)
 
                 ' is efp enabled?
                 If (bFlood) Then
@@ -5548,10 +5554,10 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     ' want it out of here quick, we need an empty queue
                     ' and have had at least 10 seconds elapse since the
                     ' previous message.
-                    If ((QueueLoad = 0) And (GTC - LastGTC > 10000)) Then
+                    If ((QueueLoad = 0) And (GTC - LastGTC >= 10000)) Then
                         ' set default message delay when queue
                         ' is empty (in ms)
-                        banDelay = 100
+                        banDelay = 10
                         
                         ' are we issuing a channel moderation command?
                         If ((StrComp(Left$(Send, 5), "/ban ", vbTextCompare) = 0) Or _
@@ -5564,8 +5570,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     
                                 ' calculate delay value between 100
                                 ' and 500 ms and add to default delay value
-                                banDelay = (banDelay + _
-                                    ((1 + Rnd() * 5) * 100))
+                                banDelay = (banDelay + ((1 + Rnd() * 5) * 100))
                             End If
                         End If
                         
@@ -5576,17 +5581,11 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     ' ...
                     Set Q = New clsQueueOBj
                     
+                    ' ...
                     With Q
                         .Message = Send
-                        .Priority = msg_priority
-                        
-                        ' ...
-                        If (user = vbNullString) Then
-                            .ResponseTo = user
-                        Else
-                            .ResponseTo = vbNullString
-                        End If
-                        
+                        .PRIORITY = msg_priority
+                        .ResponseTo = vbNullString
                         .tag = tag
                     End With
     

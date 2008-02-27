@@ -255,7 +255,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             ' command is found to be invalid and issued
             ' internally
             If (InBot) Then
-                Call AddQ(Message, Priority.CONSOLE_MESSAGE, "{console}")
+                Call AddQ(Message, Priority.CONSOLE_MESSAGE, "(console)")
             End If
         End If
     End If
@@ -742,7 +742,7 @@ Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAcces
     ' directly to Battle.net
     If (InBot) Then
         Call AddQ("/where " & msgData, Priority.COMMAND_RESPONSE_MESSAGE, _
-            "{console}")
+            "(console)")
     End If
 
     ' ...
@@ -840,18 +840,28 @@ Private Function OnSweepBan(ByVal Username As String, ByRef dbAccess As udtGetAc
     ' using Battle.net's "who" command, and will then begin banning each
     ' user from the current channel using Battle.net's "ban" command.
     
-    Dim u As String ' ...
-    Dim Y As String ' ...
+    Dim u      As String ' ...
+    Dim Y      As String ' ...
+    Dim tmpBuf As String ' ...
 
     ' ...
-    Caching = True
+    If ((MyFlags And &H2) = &H2) Then
+        ' ...
+        Caching = True
+        
+        ' ...
+        Call Cache(vbNullString, 255, "ban ")
+        
+        ' ...
+        Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, _
+            Username)
+    Else
+        ' ...
+        tmpBuf = "Error: The bot is not currently a channel operator."
+    End If
     
-    ' ...
-    Call Cache(vbNullString, 255, "ban ")
-    
-    ' ...
-    Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, _
-        Username)
+    ' return message
+    cmdRet(0) = tmpBuf
 End Function ' end function OnSweepBan
 
 ' handle sweepignore command
@@ -866,18 +876,28 @@ Private Function OnSweepIgnore(ByVal Username As String, ByRef dbAccess As udtGe
     ' and still prevent a number of users from joining the channel for a
     ' temporary amount of time.
     
-    Dim u As String ' ...
-    Dim Y As String ' ...
+    Dim u      As String ' ...
+    Dim Y      As String ' ...
+    Dim tmpBuf As String ' ...
     
     ' ...
-    Caching = True
+    If ((MyFlags And &H2) = &H2) Then
+        ' ...
+        Caching = True
+        
+        ' ...
+        Call Cache(vbNullString, 255, "squelch ")
+        
+        ' ...
+        Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, _
+            Username)
+    Else
+        ' ...
+        tmpBuf = "Error: The bot is not currently a channel operator."
+    End If
     
-    ' ...
-    Call Cache(vbNullString, 255, "squelch ")
-    
-    ' ...
-    Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, _
-        Username)
+    ' return message
+    cmdRet(0) = tmpBuf
 End Function ' end function OnSweepIgnore
 
 ' handle setname command
@@ -3160,14 +3180,14 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
         If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
             tmpBuf(0) = "Error: The specified username is invalid."
         Else
-            Dim msg As String ' ...
+            Dim Msg As String ' ...
             
             ' ...
-            msg = Mid$(msgData, index + 1)
+            Msg = Mid$(msgData, index + 1)
         
             ' ...
             Call OnAdd(Username, dbAccess, user & " +B --type USER --banmsg " & _
-                msg, True, tmpBuf())
+                Msg, True, tmpBuf())
         End If
     Else
         ' ...
@@ -4365,7 +4385,7 @@ End Function ' end function OnCheckMail
 Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim msg    As udtMail
+    Dim Msg    As udtMail
     
     Dim tmpBuf As String ' temporary output buffer
             
@@ -4374,10 +4394,10 @@ Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAcc
     End If
     
     If (GetMailCount(Username) > 0) Then
-        Call GetMailMessage(Username, msg)
+        Call GetMailMessage(Username, Msg)
         
-        If (Len(RTrim(msg.To)) > 0) Then
-            tmpBuf = "Message from " & RTrim(msg.From) & ": " & RTrim(msg.Message)
+        If (Len(RTrim(Msg.To)) > 0) Then
+            tmpBuf = "Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
         End If
     Else
         tmpBuf = "You do not currently have any messages " & _
@@ -4583,7 +4603,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     Case "group" ' ...
                         ' do we have a valid parameter length?
                         If (Len(pmsg)) Then
-                            Dim Splt() As String
+                            Dim splt() As String
                             Dim j      As Integer
                         
                             If (InStr(1, pmsg, ",", vbBinaryCompare) <> 0) Then
@@ -4597,16 +4617,16 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                         
                                 Exit Function
                             Else
-                                ReDim Preserve Splt(0)
+                                ReDim Preserve splt(0)
                                 
-                                Splt(0) = pmsg
+                                splt(0) = pmsg
                             End If
                             
-                            For j = 0 To UBound(Splt)
+                            For j = 0 To UBound(splt)
                                 Dim tmp As udtGetAccessResponse ' ...
                                 
                                 ' ...
-                                tmp = GetAccess(Splt(j), "GROUP")
+                                tmp = GetAccess(splt(j), "GROUP")
                             
                                 If (dbAccess.Access < tmp.Access) Then
                                     cmdRet(0) = "Error: You do not have sufficient access to " & _
@@ -4615,7 +4635,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                     Exit Function
                                 End If
                                 
-                                If ((StrComp(Splt(j), user, vbTextCompare) = 0) And _
+                                If ((StrComp(splt(j), user, vbTextCompare) = 0) And _
                                     (dbType = "GROUP")) Then
                                     
                                     cmdRet(0) = "Error: You cannot make a group a member of " & _
@@ -4643,7 +4663,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 End If
                             Next j
                             
-                            If (j < (UBound(Splt) + 1)) Then
+                            If (j < (UBound(splt) + 1)) Then
                                 cmdRet(0) = "Error: The specified group(s) could " & _
                                     "not be found."
                                     
@@ -5941,13 +5961,13 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                 For i = LBound(DB) To UBound(DB)
                     If (Len(DB(i).Groups) And DB(i).Groups <> "%") Then
                         If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
-                            Dim Splt()     As String ' ...
+                            Dim splt()     As String ' ...
                             Dim innerfound As Boolean ' ...
                             
-                            Splt() = Split(DB(i).Groups, ",")
+                            splt() = Split(DB(i).Groups, ",")
                             
-                            For j = LBound(Splt) To UBound(Splt)
-                                If (StrComp(bak.Username, Splt(j), vbTextCompare) = 0) Then
+                            For j = LBound(splt) To UBound(splt)
+                                If (StrComp(bak.Username, splt(j), vbTextCompare) = 0) Then
                                     innerfound = True
                                 
                                     Exit For
@@ -5957,13 +5977,13 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                             If (innerfound) Then
                                 Dim k As Integer ' ...
                                 
-                                For k = (j + 1) To UBound(Splt)
-                                    Splt(k - 1) = Splt(k)
+                                For k = (j + 1) To UBound(splt)
+                                    splt(k - 1) = splt(k)
                                 Next k
                                 
-                                ReDim Preserve Splt(UBound(Splt) - 1)
+                                ReDim Preserve splt(UBound(splt) - 1)
                                 
-                                DB(i).Groups = Join(Splt(), vbNullString)
+                                DB(i).Groups = Join(splt(), vbNullString)
                             End If
                         Else
                             If (StrComp(bak.Username, DB(i).Groups, vbTextCompare) = 0) Then
@@ -6284,7 +6304,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
     ' ...
     If (Len(CWord) > 0) Then
         Dim Commands As MSXML2.DOMDocument
-        Dim command  As MSXML2.IXMLDOMNode
+        Dim Command  As MSXML2.IXMLDOMNode
         
         ' ...
         Set Commands = New MSXML2.DOMDocument
@@ -6301,16 +6321,16 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
         Call Commands.Load(App.Path & "\commands.xml")
         
         ' ...
-        For Each command In Commands.documentElement.childNodes
+        For Each Command In Commands.documentElement.childNodes
             Dim accessGroup As MSXML2.IXMLDOMNode
             Dim Access      As MSXML2.IXMLDOMNode
         
             ' ...
-            If (StrComp(command.Attributes.getNamedItem("name").text, _
+            If (StrComp(Command.Attributes.getNamedItem("name").text, _
                 CWord, vbTextCompare) = 0) Then
                 
                 ' ...
-                Set accessGroup = command.selectSingleNode("access")
+                Set accessGroup = Command.selectSingleNode("access")
                 
                 ' ...
                 For Each Access In accessGroup.childNodes
@@ -6340,7 +6360,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                     Dim RESTRICTION  As MSXML2.IXMLDOMNode
                     
                     ' ...
-                    Set restrictions = command.selectNodes("restriction")
+                    Set restrictions = Command.selectNodes("restriction")
                     
                     ' ...
                     For Each RESTRICTION In restrictions
@@ -6396,7 +6416,7 @@ Private Function convertAlias(ByVal cmdName As String) As String
     ' ...
     If (Len(cmdName) > 0) Then
         Dim Commands As MSXML2.DOMDocument
-        Dim command  As MSXML2.IXMLDOMNode
+        Dim Command  As MSXML2.IXMLDOMNode
         
         ' ...
         Set Commands = New MSXML2.DOMDocument
@@ -6413,19 +6433,19 @@ Private Function convertAlias(ByVal cmdName As String) As String
         Call Commands.Load(App.Path & "\commands.xml")
         
         ' ...
-        For Each command In Commands.documentElement.childNodes
+        For Each Command In Commands.documentElement.childNodes
             Dim aliases As MSXML2.IXMLDOMNodeList
             Dim alias   As MSXML2.IXMLDOMNode
             
             ' ...
-            Set aliases = command.selectNodes("alias")
+            Set aliases = Command.selectNodes("alias")
 
             ' ...
             For Each alias In aliases
                 ' ...
                 If (StrComp(alias.text, cmdName, vbTextCompare) = 0) Then
                     ' ...
-                    convertAlias = command.Attributes.getNamedItem("name").text
+                    convertAlias = Command.Attributes.getNamedItem("name").text
                     
                     Exit Function
                 End If
@@ -6466,7 +6486,7 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
     ' ...
     If (Len(cmdName) > 0) Then
         Dim Commands As MSXML2.DOMDocument
-        Dim command  As MSXML2.IXMLDOMNode
+        Dim Command  As MSXML2.IXMLDOMNode
         
         ' ...
         Set Commands = New MSXML2.DOMDocument
@@ -6483,16 +6503,16 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
         Call Commands.Load(App.Path & "\commands.xml")
         
         ' ...
-        For Each command In Commands.documentElement.childNodes
+        For Each Command In Commands.documentElement.childNodes
             Dim blnFound As Boolean ' ...
         
             ' ...
-            If (StrComp(command.Attributes.getNamedItem("name").text, _
+            If (StrComp(Command.Attributes.getNamedItem("name").text, _
                 cmdName, vbTextCompare) = 0) Then
                 
                 ' ...
                 blnFound = True
-            ElseIf ((PrepareCheck(command.Attributes.getNamedItem("name").text)) Like _
+            ElseIf ((PrepareCheck(Command.Attributes.getNamedItem("name").text)) Like _
                 (PrepareCheck(cmdName))) Then
                 
                 ' ...
@@ -6510,9 +6530,9 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
                 Dim tmp     As String ' ...
                 
                 ' ...
-                Set docs = command.selectSingleNode("documentation")
-                Set Access = command.selectSingleNode("access")
-                Set args = command.selectSingleNode("arguments")
+                Set docs = Command.selectSingleNode("documentation")
+                Set Access = Command.selectSingleNode("access")
+                Set args = Command.selectSingleNode("arguments")
         
                 ' ...
                 If (found >= 1) Then
@@ -6594,7 +6614,7 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
                 ' ...
                 tmpBuf(tmpCount) = tmpBuf(tmpCount) & _
                     " [Syntax: <trigger>" & _
-                    command.Attributes.getNamedItem("name").text & _
+                    Command.Attributes.getNamedItem("name").text & _
                         Space(1)
                 
                 ' ...

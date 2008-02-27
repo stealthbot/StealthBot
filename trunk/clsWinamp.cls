@@ -339,11 +339,9 @@ End Property
 
 ' ...
 Public Property Get TrackName() As String
+    ' ...
     If (IsPlaying) Then
-        ' ...
         TrackName = GetWinampSongTitle()
-    Else
-        TrackName = vbNullString
     End If
 End Property
 
@@ -369,8 +367,6 @@ End Property
 
 Public Property Get TrackTime() As Long
     If (IsPlaying) Then
-        TrackTime = 0
-    Else
         TrackTime = (SendMessage(m_hWnd, WM_WA_IPC, 0&, WA_GETTRACKPOSITION) / 1000)
     End If
 End Property

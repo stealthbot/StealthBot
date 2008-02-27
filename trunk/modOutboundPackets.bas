@@ -5,6 +5,7 @@ Attribute VB_Name = "modOutboundPackets"
 ' Andy T andy@stealthbot.net
 Option Explicit
 
+Public g_username As String
 
 Public Sub Send0x50(Optional lVerByte As Long)
     Dim CAbbr As String, cName As String
@@ -237,7 +238,7 @@ Public Sub Send0x3A(ByVal ServerToken As Long)
         .InsertDWord ds.GetGTC
         .InsertDWord ds.GetServerToken
         .InsertNonNTString PasswordHash
-        .InsertNTString BotVars.Username
+        .InsertNTString g_username
         .SendPacket &H3A
     End With
 End Sub
@@ -267,19 +268,19 @@ Public Sub Send0x0A()
         .InsertNonNTString BotVars.Product
         .SendPacket &HB
         
-        'If IsW3 Then
-            .InsertDWord &H0
-            .InsertNTString "wrd" & CLng(Rnd * 10000 + 1)
-            .SendPacket &HC
-            bnetSend "/whoami"
-            .InsertDWord &H1
-        'Else
-        '    .InsertDWord &H2
-        'End If
-        
+        .InsertDWord &H0
+        .InsertNTString "wrd" & CLng(Rnd * 10000 + 1)
+        .SendPacket &HC
+            
+        .InsertNTString "/whoami"
+        .SendPacket &HE
+            
+        .InsertDWord &H1
         .InsertNTString BotVars.HomeChannel
         .SendPacket &HC
     End With
+    
+    Call InsertDummyQueueEntry
 End Sub
 
 Public Sub AttemptAccountCreation()

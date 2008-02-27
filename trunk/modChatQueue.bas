@@ -125,10 +125,11 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
     On Error Resume Next
-    
+
     'frmChat.SControl.Run "Event_UserJoins", Username, flags, Message, Ping, _
     '    Level, OriginalStatstring, Banned
     
+    ' ...
     frmChat.SControl.Run "Event_UserJoins", Username, Flags, pStats, Ping, _
         Product, 0, OriginalStatstring, False
 End Sub
@@ -259,7 +260,8 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
     On Error Resume Next
-
+    
+    ' ...
     frmChat.SControl.Run "Event_FlagUpdate", Username, Flags, Ping
 End Sub
 
@@ -317,6 +319,10 @@ Public Sub Event_QueuedTalk(ByVal Username As String, ByVal Flags As Long, ByVal
         End If
     End If
 
+    ' ...
+    g_lastQueueUser = Username
+
+    ' ...
     frmChat.SControl.Run "Event_UserTalk", Username, Flags, Message, Ping
 End Sub
 
@@ -356,6 +362,10 @@ Public Sub Event_QueuedEmote(ByVal Username As String, ByVal Flags As Long, ByVa
         End If
     End If
     
+    ' ...
+    g_lastQueueUser = Username
+    
+    ' ...
     frmChat.SControl.Run "Event_UserEmote", Username, Flags, Message
 End Sub
 

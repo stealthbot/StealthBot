@@ -1612,9 +1612,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
                 ' ...
                 Set clsChatQueue = colChatQueue(i)
                 
-                If (StrComp(Username, clsChatQueue.Username, _
-                    vbBinaryCompare) = 0) Then
-                
+                If (StrComp(Username, clsChatQueue.Username, vbBinaryCompare) = 0) Then
                     Exit For
                 End If
             Next i
@@ -1929,6 +1927,10 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         
         On Error Resume Next
         
+        ' ...
+        g_lastQueueUser = Username
+        
+        ' ...
         frmChat.SControl.Run "Event_WhisperFromUser", Username, Flags, Message
     End If
     
