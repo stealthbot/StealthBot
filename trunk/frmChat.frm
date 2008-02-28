@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   165
-   ClientTop       =   855
+   ClientLeft      =   225
+   ClientTop       =   825
    ClientWidth     =   11580
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -829,6 +829,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -854,6 +855,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4126,7 +4128,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                         cboSend.AddItem txtPre.text & X(n) & txtPost.text, 0
                                     Else
                                         AddQ txtPre.text & cboSend.text & X(n) & txtPost.text, _
-                                            PRIORITY.CONSOLE_MESSAGE
+                                            Priority.CONSOLE_MESSAGE
                                         
                                         cboSend.AddItem txtPre.text & cboSend.text & X(n) & txtPost.text, 0
                                     End If
@@ -4303,7 +4305,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Case S_CTRL 'CTRL+ENTER - rewhisper
                         If LenB(cboSend.text) > 0 Then
                             AddQ "/w " & IIf(Dii, "*", "") & LastWhisperTo & Space(1) & cboSend.text, _
-                                PRIORITY.CONSOLE_MESSAGE
+                                Priority.CONSOLE_MESSAGE
                                 
                             cboSend.text = vbNullString
                         End If
@@ -4311,7 +4313,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Case S_CTRLSHIFT 'CTRL+SHIFT+ENTER - reply
                         If LenB(cboSend.text) > 0 Then
                             AddQ "/w " & IIf(Dii, "*", "") & LastWhisper & Space(1) & cboSend.text, _
-                                PRIORITY.CONSOLE_MESSAGE
+                                Priority.CONSOLE_MESSAGE
                             cboSend.text = vbNullString
                         End If
                 
@@ -4448,7 +4450,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
                                     m = Right(s, (Len(s) - 7))
                                     AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m), _
-                                        PRIORITY.CONSOLE_MESSAGE
+                                        Priority.CONSOLE_MESSAGE
                                     
                                 ElseIf (LCase(Left$(s, 9)) = "/profile ") Then
                                     If (sckBNet.State = 7) Then
@@ -4478,7 +4480,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     commandResult = ProcessCommand(CurrentUsername, m, _
                                         True, False)
                                 Else
-                                    Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
+                                    Call AddQ(OutFilterMsg(s), Priority.CONSOLE_MESSAGE)
                                 End If
                             End If
 theEnd:
@@ -4859,6 +4861,7 @@ Private Sub scTimer_Timer()
         Exit Sub
     End If
 
+    '// Are plugins enabled?
     If Not CBool(SharedScriptSupport.GetSetting("ps", "enabled")) Then Exit Sub
     
     Dim strKeys() As String, strKey() As String, i As Integer
@@ -5486,16 +5489,16 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         
             ' ...
             Select Case (cmdName)
-                Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
-                Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
-                Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "unban":     msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "squelch":   msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "ignore":    msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "unsquelch": msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "unignore":  msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
+                Case "designate": msg_priority = Priority.SPECIAL_MESSAGE
+                Case "resign":    msg_priority = Priority.SPECIAL_MESSAGE
+                Case "ban":       msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case "unban":     msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case "kick":      msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case "squelch":   msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case "ignore":    msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case "unsquelch": msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case "unignore":  msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case Else:        msg_priority = Priority.MESSAGE_DEFAULT
             End Select
         End If
         
@@ -5584,7 +5587,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     ' ...
                     With Q
                         .Message = Send
-                        .PRIORITY = msg_priority
+                        .Priority = msg_priority
                         .ResponseTo = vbNullString
                         .tag = tag
                     End With
