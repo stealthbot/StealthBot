@@ -1351,24 +1351,6 @@ Function psLatestSB()
    End If
 End Function
  
- 
-Sub psAddPFolder()
-
-   '// Create the plugins folder and settings file
-   If Not psFSO.FolderExists(BotPath() & "plugins") Then
-      psFSO.CreateFolder(BotPath() & "plugins")
-      AddChat 39423, "Added the plugins folder to your StealthBot folder."
-   End If
-   If Not psFSO.FileExists(BotPath() & "plugins\settings.ini") Then
-      If psFSO.FileExists(BotPath() & "plugins\pluginsettings.ini") Then
-         psBackupFile BotPath() & "plugins\pluginsettings.ini", ""
-         psFSO.DeleteFile(BotPath() & "plugins\pluginsettings.ini")
-      End If
-      AddChat 39423, "Added settings.ini to your plugins folder."
-      AddChat 39423, "For help with scripting and The StealthBot Plugin System, click Plugins > Help"
-   End If
-End Sub
- 
 
 Sub psSetPSColors()
  
@@ -1381,6 +1363,16 @@ Sub psSetPSColors()
    '// Plugin System color scheme
    psColor1 = Split(PS_COLORS, ",")(0)
    psColor2 = Split(PS_COLORS, ",")(1)
+End Sub
+
+ 
+Sub psAddPFolder()
+
+   '// Create the plugins folder if it doesn't exist
+   If Not psFSO.FolderExists(BotPath() & "plugins") Then
+      psFSO.CreateFolder(BotPath() & "plugins")
+      AddChat vbOrange, "Added the plugins folder to your StealthBot folder."
+   End If
 End Sub
  
 
@@ -1510,11 +1502,11 @@ End Function
 
 Sub Event_Load()
 
-   '// Add plugins folder and settings.ini (if necessary)
-   Call psAddPFolder()
-
    '// Set color values
    Call psSetPSColors()
+
+   '// Add plugins folder (if necessary)
+   Call psAddPFolder()
 
    '// Create the plugin system settings
    Call psCreatePSSettings()
