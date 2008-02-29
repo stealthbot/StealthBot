@@ -74,7 +74,7 @@ End Type
 Public Type udtMail
     To      As String * 30
     From    As String * 30
-    Message As String * 225
+    message As String * 225
 End Type
 
 Public Type SYSTEMTIME
@@ -192,6 +192,7 @@ End Enum
 Public Enum enuPL_ServerTypes
     stBNLS = 1
     stBNCS = 2
+    stMCP = 3
 End Enum
 
 Public Enum enuPL_DirectionTypes

@@ -41,6 +41,13 @@ Begin VB.Form frmDBManager
       TabIndex        =   6
       Top             =   487
       Width           =   3025
+      Begin VB.ListBox lstGroups 
+         Height          =   2010
+         Left            =   240
+         TabIndex        =   20
+         Top             =   2450
+         Width           =   2535
+      End
       Begin VB.TextBox txtFlags 
          BackColor       =   &H00993300&
          Enabled         =   0   'False
@@ -48,7 +55,7 @@ Begin VB.Form frmDBManager
          Height          =   285
          Left            =   1560
          MaxLength       =   25
-         TabIndex        =   9
+         TabIndex        =   8
          Top             =   580
          Width           =   1215
       End
@@ -59,19 +66,9 @@ Begin VB.Form frmDBManager
          Height          =   285
          Left            =   240
          MaxLength       =   25
-         TabIndex        =   8
+         TabIndex        =   7
          Top             =   580
          Width           =   1215
-      End
-      Begin VB.ListBox lstGroups 
-         Enabled         =   0   'False
-         Height          =   2010
-         Left            =   240
-         MultiSelect     =   2  'Extended
-         Sorted          =   -1  'True
-         TabIndex        =   7
-         Top             =   2450
-         Width           =   2535
       End
       Begin VB.CommandButton btnSave 
          Caption         =   "Save"
@@ -79,7 +76,7 @@ Begin VB.Form frmDBManager
          Height          =   300
          Index           =   1
          Left            =   1930
-         TabIndex        =   10
+         TabIndex        =   9
          Top             =   4535
          Width           =   855
       End
@@ -88,7 +85,7 @@ Begin VB.Form frmDBManager
          Enabled         =   0   'False
          Height          =   300
          Left            =   1088
-         TabIndex        =   11
+         TabIndex        =   10
          Top             =   4535
          Width           =   855
       End
@@ -104,7 +101,7 @@ Begin VB.Form frmDBManager
          EndProperty
          Height          =   135
          Left            =   480
-         TabIndex        =   20
+         TabIndex        =   19
          Top             =   1965
          Width           =   2415
       End
@@ -120,7 +117,7 @@ Begin VB.Form frmDBManager
          EndProperty
          Height          =   135
          Left            =   480
-         TabIndex        =   19
+         TabIndex        =   18
          Top             =   1350
          Width           =   2415
       End
@@ -137,7 +134,7 @@ Begin VB.Form frmDBManager
          EndProperty
          Height          =   130
          Left            =   360
-         TabIndex        =   15
+         TabIndex        =   14
          Top             =   1180
          Width           =   2415
       End
@@ -154,7 +151,7 @@ Begin VB.Form frmDBManager
          EndProperty
          Height          =   135
          Left            =   360
-         TabIndex        =   18
+         TabIndex        =   17
          Top             =   1800
          Width           =   2415
       End
@@ -172,7 +169,7 @@ Begin VB.Form frmDBManager
          Height          =   135
          Index           =   0
          Left            =   240
-         TabIndex        =   17
+         TabIndex        =   16
          Top             =   970
          Width           =   2535
       End
@@ -190,15 +187,15 @@ Begin VB.Form frmDBManager
          Height          =   135
          Index           =   1
          Left            =   240
-         TabIndex        =   16
+         TabIndex        =   15
          Top             =   1590
          Width           =   2535
       End
       Begin VB.Label lblGroup 
          Caption         =   "Member of Group(s):"
          Height          =   255
-         Left            =   240
-         TabIndex        =   14
+         Left            =   245
+         TabIndex        =   13
          Top             =   2240
          Width           =   2535
       End
@@ -206,7 +203,7 @@ Begin VB.Form frmDBManager
          Caption         =   "Flags:"
          Height          =   255
          Left            =   1560
-         TabIndex        =   13
+         TabIndex        =   12
          Top             =   340
          Width           =   1215
       End
@@ -214,7 +211,7 @@ Begin VB.Form frmDBManager
          Caption         =   "Rank (1 - 200):"
          Height          =   255
          Left            =   240
-         TabIndex        =   12
+         TabIndex        =   11
          Top             =   340
          Width           =   1215
       End
@@ -362,12 +359,14 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Public m_game       As String
+Public m_game          As String
 
-Private m_DB()      As udtDatabase
-Private m_modified  As Boolean
-Private m_new_entry As Boolean
-Private m_DBDate    As Long
+Private m_DB()         As udtDatabase
+Private m_modified     As Boolean
+Private m_new_entry    As Boolean
+Private m_DBDate       As Long
+Private m_group_index  As Integer
+Private m_group_change As Boolean
 
 ' ...
 Private Sub Form_Load()
@@ -640,11 +639,12 @@ End Sub
 ' ...
 Private Sub btnSave_Click(index As Integer)
     Dim i As Integer ' ...
+    Dim j As Integer ' ...
 
     ' are we looking at a single entry or are we saving it all?
     If (index = 1) Then
         ' if we have no selected user... escape quick!
-        If (Not (trvUsers.SelectedItem Is Nothing)) Then
+        If (trvUsers.SelectedItem Is Nothing) Then
             ' break from function
             Exit Sub
         End If
@@ -660,6 +660,46 @@ Private Sub btnSave_Click(index As Integer)
                     .ModifiedBy = "(console)"
                     .ModifiedOn = Now
                 End With
+                
+                ' ...
+                If (m_group_change) Then
+                    ' ...
+                    If (m_group_index > -1) Then
+                        m_DB(i).Groups = lstGroups.List(m_group_index)
+                        
+                        ' ...
+                        If (tbsTabs.SelectedItem.index = 1) Then
+                            Set trvUsers.SelectedItem.Parent = _
+                                    trvUsers.Nodes(Exists(m_DB(i).Groups, "Group"))
+                        End If
+                    Else
+                        m_DB(i).Groups = vbNullString
+                        
+                        ' ...
+                        If (tbsTabs.SelectedItem.index = 1) Then
+                            Set trvUsers.SelectedItem.Parent = trvUsers.Nodes(1)
+                        End If
+                    End If
+                    
+                    ' ...
+                    If (lstGroups.SelCount > 1) Then
+                        ' ...
+                        For j = 0 To (lstGroups.ListCount - 1)
+                            ' ...
+                            If (j <> m_group_index) Then
+                                ' ...
+                                If (lstGroups.Selected(j) = True) Then
+                                    ' ...
+                                    m_DB(i).Groups = m_DB(i).Groups & "," & _
+                                        lstGroups.List(j)
+                                End If
+                            End If
+                        Next j
+                    End If
+                    
+                    ' ...
+                    m_group_change = False
+                End If
                 
                 ' break loop
                 Exit For
@@ -685,6 +725,19 @@ End Sub
 
 ' ...
 Private Sub lstGroups_Click()
+    ' ...
+    m_group_change = True '
+
+    ' ...
+    If (lstGroups.SelCount = 0) Then
+        m_group_index = -1
+    ElseIf (lstGroups.SelCount = 1) Then
+        m_group_index = lstGroups.ListIndex
+    Else
+        MsgBox lstGroups.ListIndex
+    End If '
+
+    ' ...
     btnSave(1).Enabled = True
 End Sub
 
@@ -1010,7 +1063,12 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
     Dim i   As Integer ' ...
     
     ' ...
-    tmp = GetAccess(node.text, node.tag)
+    If (node Is Nothing) Then
+        Exit Sub
+    End If
+    
+    ' ...
+    m_group_index = -1
 
     ' ...
     If (node.index > 1) Then
@@ -1019,6 +1077,9 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
     
         ' ...
         frmDatabase.Caption = node.text
+        
+        ' ...
+        tmp = GetAccess(node.text, node.tag)
         
         ' does entry have a rank?
         If (tmp.Access > 0) Then
@@ -1059,7 +1120,7 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
             If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
                 ' store working copy of group memberships, splitting up
                 ' multiple groupings by the ',' delimiter.
-                splt() = Split(m_DB(i).Groups, ",")
+                splt() = Split(tmp.Groups, ",")
             Else
                 ' redefine array size to store group name
                 ReDim Preserve splt(0)
@@ -1075,6 +1136,11 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
                 For j = 0 To (lstGroups.ListCount - 1)
                     ' is entry a member of group?
                     If (StrComp(splt(i), lstGroups.List(j), vbTextCompare) = 0) Then
+                        ' ...
+                        If (m_group_index = -1) Then
+                            m_group_index = j
+                        End If
+                    
                         ' select group if entry is a member
                         lstGroups.Selected(j) = True
                     End If

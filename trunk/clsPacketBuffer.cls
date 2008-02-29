@@ -15,6 +15,7 @@ Attribute VB_Ext_KEY = "SavedWithClassBuilder6" ,"Yes"
 Attribute VB_Ext_KEY = "Top_Level" ,"Yes"
 ' PacketBuffer.cls
 ' Copyright (C) 2008 Eric Evans
+' ...
 
 Option Explicit
 
@@ -200,6 +201,7 @@ Public Function SendPacket(Optional PacketID As Byte)
     Dim l     As Long    ' ...
     Dim buf() As Byte    ' ...
     Dim i     As Integer ' ...
+    Dim log   As String  ' ...
     
     ' resize temporary data buffer
     ReDim buf(m_bufpos + 3)
@@ -229,7 +231,13 @@ Public Function SendPacket(Optional PacketID As Byte)
     End If
     
     ' ...
-    'Call LogPacketRaw(stBNCS, CtoS, PacketID, l + 4, buffer)
+    log = String$(m_bufpos + 4, vbNullChar)
+    
+    ' ...
+    Call CopyMemory(ByVal log, buf(0), m_bufpos + 4)
+    
+    ' ...
+    Call LogPacketRaw(stBNCS, CtoS, PacketID, m_bufpos + 4, log)
     
     ' clear buffer contents
     Call Clear
@@ -237,8 +245,8 @@ End Function ' end function SendPacket
 
 ' ...
 Public Function vLSendPacket(Optional PacketID As Byte)
-    Dim buf() As Byte ' ...
-    Dim l     As Long ' ...
+    Dim buf() As Byte   ' ...
+    Dim log   As String ' ...
     
     ' ...
     If (MDebug("all")) Then
@@ -267,7 +275,13 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     End If
     
     ' ...
-    'Call LogPacketRaw(stBNLS, CtoS, PacketID, l + 3, buffer)
+    log = String$(m_bufpos + 3, vbNullChar)
+    
+    ' ...
+    Call CopyMemory(ByVal log, buf(0), m_bufpos + 3)
+    
+    ' ...
+    Call LogPacketRaw(stBNLS, CtoS, PacketID, m_bufpos + 3, log)
     
     ' clear buffer contents
     Call Clear
