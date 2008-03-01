@@ -275,10 +275,3 @@ Public Function GetPTKeys() As String
 
     GetPTKeys = Join(dictTimerEnabled.Keys)
 End Function
-
-
-'// Written by Swent. Gets the number of plugin timers.
-Public Function GetNumPT() As Integer
-
-    GetNumPT = dictTimerEnabled.Count
-End Function
