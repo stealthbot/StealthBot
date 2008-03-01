@@ -3728,8 +3728,7 @@ Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 msgData
         End If
         
-        Call AddQ(tmpSend, Priority.COMMAND_RESPONSE_MESSAGE, _
-            Username)
+        Call AddQ(tmpSend, Priority.COMMAND_RESPONSE_MESSAGE, Username)
     End If
 
     ' return message

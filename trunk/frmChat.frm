@@ -5454,10 +5454,8 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             
             ' ...
             If (spaceIndex) Then
-                ' ...
-                cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 1))
+                cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 2))
             Else
-                ' ...
                 cmdName = LCase$(Mid$(Message, 2))
             End If
         
@@ -5477,8 +5475,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         End If
         
         ' ...
-        Call SplitByLen(strTmp, _
-            (MAX_MESSAGE_LENGTH - Len(Command)), splt())
+        Call SplitByLen(strTmp, (MAX_MESSAGE_LENGTH - Len(Command)), splt())
 
         ' ...
         ReDim Preserve splt(0 To UBound(splt))

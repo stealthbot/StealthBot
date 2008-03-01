@@ -157,6 +157,10 @@ Public Function GetGamePath(ByVal Client As String) As String
     
     If (LenB(ReadCFG("Override", Key & "Hashes")) > 0) Then
         GetGamePath = ReadCFG("Override", Key & "Hashes")
+        
+        If (Right$(GetGamePath, 1) <> "\") Then
+            GetGamePath = GetGamePath & "\"
+        End If
     Else
         Select Case (StrReverse$(UCase$(Client)))
             Case "W2BN": GetGamePath = App.Path & "\W2BN\"

@@ -160,7 +160,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                 
                 .InsertNTString EXEInfo
                 
-                If LenB(ReadCFG("Override", "OwnerName")) > 0 Then
+                If (LenB(ReadCFG("Override", "OwnerName")) > 0) Then
                     .InsertNTString ReadCFG("Override", "OwnerName")
                 Else
                     .InsertNTString BotVars.Username

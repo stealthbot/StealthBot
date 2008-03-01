@@ -31,7 +31,7 @@ Public Sub ServToken(ByRef s As String, ByVal Setting As Byte)
 End Sub
 
 Public Sub Send_0x01(ByVal sCDKey As String) 'BNLS_CDKEY
-    Packet.InsertDWORD ds.GetServerToken
+    Packet.InsertDWord ds.GetServerToken
     Packet.InsertNTString sCDKey
     Packet.vLSendPacket &H1
 End Sub
@@ -82,8 +82,8 @@ Public Sub Send_0x09(ByVal IX86Num As Long, ByVal sCheckSumFormula As String) 'B
 '        Send_0x0D &H2
 '    End If
     
-    Packet.InsertDWORD GetBNLSProductID(BotVars.Product)
-    Packet.InsertDWORD IX86Num
+    Packet.InsertDWord GetBNLSProductID(BotVars.Product)
+    Packet.InsertDWord IX86Num
     
     'Debug.Print "Sending BNLS IX86Num of " & IX86Num
     
@@ -97,8 +97,8 @@ Public Sub Send_0x0A(ByVal sData As String) 'BNLS_CONFIRMLOGON
 End Sub
 
 Public Sub Send_0x0B(sData As String, Optional sFlags As Long = &H1)  'BNLS_HASHDATA
-    Packet.InsertDWORD Len(sData)
-    Packet.InsertDWORD sFlags
+    Packet.InsertDWord Len(sData)
+    Packet.InsertDWord sFlags
     Packet.InsertNTString sData
     'If sFlags = &H2 Then
     '    Packet.InsertDWORD ClientKey   '(DWORD)      Client Key (Double Hash only)
@@ -108,28 +108,28 @@ Public Sub Send_0x0B(sData As String, Optional sFlags As Long = &H1)  'BNLS_HASH
 End Sub
 
 Public Sub Send_0x0C(sCDKey As String) 'BNLS_CDKEY_EX
-    Packet.InsertDWORD &H0                  'Cookie
-    Packet.InsertBYTE &H1                   'Number of CDKeys
-    Packet.InsertDWORD &H2                  'Flags
-    Packet.InsertDWORD ds.GetServerToken    'Server Key
-    Packet.InsertDWORD ds.GetGTC            'Client Key
+    Packet.InsertDWord &H0                  'Cookie
+    Packet.InsertByte &H1                   'Number of CDKeys
+    Packet.InsertDWord &H2                  'Flags
+    Packet.InsertDWord ds.GetServerToken    'Server Key
+    Packet.InsertDWord ds.GetGTC            'Client Key
     Packet.InsertNTString sCDKey            'CDKey
     Packet.vLSendPacket &HC
 End Sub
 
 Public Sub Send_0x0D(ByVal sNLS As Long) 'BNLS_CHOOSENLSREVISION
     'Debug.Print "--> Sending NLS revision " & sNLS
-    Packet.InsertDWORD sNLS
+    Packet.InsertDWord sNLS
     Packet.vLSendPacket &HD
 End Sub
 
 Public Sub Send_0x0F(ByVal sCheckSum As Long) 'BNLS_AUTHORIZEPROOF
-    Packet.InsertDWORD sCheckSum
+    Packet.InsertDWord sCheckSum
     Packet.vLSendPacket &HF
 End Sub
 
 Public Sub Send_0x10(ByVal sProdID As String) 'BNLS_REQUESTVERSIONBYTE
-    Packet.InsertDWORD GetBNLSProductID(sProdID)
+    Packet.InsertDWord GetBNLSProductID(sProdID)
     Packet.vLSendPacket &H10
 End Sub
 
@@ -142,22 +142,22 @@ End Sub
 'End Sub
 
 Public Sub Send_0x12(Optional ByVal sSlots As Long = 1) 'BNLS_RESERVESERVERSLOTS
-    Packet.InsertDWORD sSlots
+    Packet.InsertDWord sSlots
     Packet.vLSendPacket &H12
 End Sub
 
 Public Sub Send_0x13(ByVal sIndex As Long, ByVal sNLS As Long, ByVal s0x53Data As String, _
     ByVal sAcctDBData As String) 'BNLS_SERVERLOGONCHALLENGE
     
-    Packet.InsertDWORD sIndex
-    Packet.InsertDWORD sNLS
+    Packet.InsertDWord sIndex
+    Packet.InsertDWord sNLS
     Packet.InsertNonNTString sAcctDBData '(DWORD[16])  Data from account database.
     Packet.InsertNonNTString s0x53Data   '(DWORD[8])   Data client's SID_AUTH_ACCOUNTLOGON (0x53) request
     Packet.vLSendPacket &H13
 End Sub
 
 Public Sub Send_0x14(ByVal sIndex As Long, ByVal sAccount As String, ByVal sData As String) 'BNLS_SERVERLOGONPROOF
-    Packet.InsertDWORD sIndex
+    Packet.InsertDWord sIndex
     Packet.InsertNonNTString sData '(DWORD[5])   Data from client's SID_AUTH_ACCOUNTLOGONPROOF (0x54).
     Packet.InsertNTString sAccount
     Packet.vLSendPacket &H14
@@ -166,9 +166,9 @@ End Sub
 Public Sub Send_0x1A(ByVal ProductID As Long, ByVal Flags As Long, ByVal cookie As Long, _
     ByVal Timestamp As String, ByVal MPQName As String, ByVal ChecksumFormula As String)    'BNLS_VERSIONCHECKEX2
 
-    Packet.InsertDWORD ProductID
-    Packet.InsertDWORD Flags
-    Packet.InsertDWORD cookie
+    Packet.InsertDWord ProductID
+    Packet.InsertDWord Flags
+    Packet.InsertDWord cookie
     Packet.InsertNonNTString Timestamp
     Packet.InsertNTString MPQName
     Packet.InsertNTString ChecksumFormula
@@ -188,7 +188,7 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     Dim sTemp     As String
     Dim lTemp     As Long
     Dim lCheckSum As Long
-    Dim Splt()    As String
+    Dim splt()    As String
     Dim PacketID  As Long
     
     Set pD = New clsPacketDebuffer
@@ -425,19 +425,19 @@ End Sub
 
 Private Sub Send_BNLS0x51()
     With PBuffer
-        .InsertDWORD ds.GetGTC
-        .InsertDWORD ds.GetVersion
-        .InsertDWORD ds.GetChecksum
+        .InsertDWord ds.GetGTC
+        .InsertDWord ds.GetVersion
+        .InsertDWord ds.GetChecksum
         
         If ((BotVars.Product = "PX2D") Or _
             (BotVars.Product = "PX3W")) Then
            
-            .InsertDWORD &H2
+            .InsertDWord &H2
         Else
-            .InsertDWORD &H1
+            .InsertDWord &H1
         End If
         
-        .InsertDWORD &H0
+        .InsertDWord &H0
         .InsertNonNTString ds.GetKeyHash(1)
         
         If ((BotVars.Product = "PX2D") Or _
@@ -448,7 +448,12 @@ Private Sub Send_BNLS0x51()
         
         'Debug.Print ds.getExeInfo
         .InsertNTString ds.getExeInfo
-        .InsertNTString BotVars.Username
+        
+        If (LenB(ReadCFG("Override", "OwnerName")) > 0) Then
+            .InsertNTString ReadCFG("Override", "OwnerName")
+        Else
+            .InsertNTString BotVars.Username
+        End If
         
         'ds.List
         
