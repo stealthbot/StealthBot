@@ -158,25 +158,26 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
                 RTBColors.JoinText, " is using " & pStats)
     End If
     
-    If (Flags = &H0) Then
-        If (pos) Then
-            Set found = frmChat.lvChannel.ListItems(pos)
-            
-            If (g_ThisIconCode <> -1) Then
-                If (colUsersInChannel.Item(i).Product = "WAR3") Then
-                    If (g_ThisIconCode = ICON_START_WAR3) Then
-                        found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
-                    End If
-                ElseIf (colUsersInChannel.Item(i).Product = "W3XP") Then
-                    If (g_ThisIconCode = ICON_START_W3XP) Then
-                        found.SmallIcon = (g_ThisIconCode + ICON_START_W3XP + _
-                            IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0))
-                    End If
+    If (pos) Then
+        Set found = frmChat.lvChannel.ListItems(pos)
+        
+        If (g_ThisIconCode <> -1) Then
+            If (colUsersInChannel.Item(i).Product = "WAR3") Then
+                If (found.SmallIcon = ICON_START_WAR3) Then
+                    found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
+                End If
+            ElseIf (colUsersInChannel.Item(i).Product = "W3XP") Then
+                If (found.SmallIcon = ICON_START_W3XP) Then
+                    found.SmallIcon = (g_ThisIconCode + ICON_START_W3XP)
                 End If
             End If
-        
-            Set found = Nothing
         End If
+    
+        Set found = Nothing
+        
+        ' blah...
+        'found.SmallIcon = (g_ThisIconCode + ICON_START_W3XP + _
+        '    IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0))
     End If
 End Sub
 

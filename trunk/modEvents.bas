@@ -525,12 +525,12 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Dim ToANSI As String
     
     ' ...
-    ToANSI = UTF8Decode(Message)
+    'ToANSI = UTF8Decode(Message)
     
     ' ...
-    If (Len(ToANSI) > 0) Then
-        Message = ToANSI
-    End If
+    'If (Len(ToANSI) > 0) Then
+    '    Message = ToANSI
+    'End If
     
     If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
         If (PassedClanMotdCheck = False) Then

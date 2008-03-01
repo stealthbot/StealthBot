@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   225
-   ClientTop       =   825
+   ClientLeft      =   165
+   ClientTop       =   855
    ClientWidth     =   11580
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -829,6 +829,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -854,6 +855,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1533,9 +1535,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2956,7 +2958,7 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
             
             Dim sTemp As String
             
-            If ((lItemIndex) And (FriendListHandler.colFriends.Count)) Then
+            If ((lItemIndex > 0) And (FriendListHandler.colFriends.Count > 0)) Then
                 lItemIndex = FriendListHandler.UsernameToFLIndex(lvFriendList.ListItems(m_lCurItemIndex).text)
             
                 With FriendListHandler.colFriends.Item(lItemIndex)
@@ -3032,8 +3034,8 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
             ListToolTip.Title = "Information for " & lvChannel.ListItems(m_lCurItemIndex).text
             
             lItemIndex = UsernameToIndex(lvChannel.ListItems(m_lCurItemIndex).text)
-
-            If ((lItemIndex) And (colUsersInChannel.Count)) Then
+            
+            If ((lItemIndex > 0) And (colUsersInChannel.Count > 0)) Then
                 With colUsersInChannel.Item(lItemIndex)
                     sTemp = ParseStatstring(.Statstring, sOutBuf, sTemp)
                     
@@ -4845,7 +4847,7 @@ Private Sub scTimer_Timer()
     strKeys = Split(modScripting.GetPTKeys)
 
     '// Execute all existing plugin timer subs at the appropriate intervals
-    For i = 0 To modScripting.dictTimerEnabled.Count - 1
+    For i = 0 To modScripting.GetNumPT - 1
         strKey = Split(strKeys(i), ":")
         
         '// Is this timer enabled?
