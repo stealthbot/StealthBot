@@ -1008,9 +1008,7 @@ End Function
 
 '// SETSETTING
 '//   Written by Swent. Creates/modifies plugin settings.
-'//     Usage - New setting: SetSetting "prefix", "settingname", Value, "optional description", False
-'//     Usage - Existing setting:   SetSetting "prefix", "settingname", Value
-'//     Setting values of any length can be set and retrieved properly (no longer a 255 char max)
+'//   Setting values of any length can be set and retrieved properly (no longer a 255 char max)
 Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal varValue As Variant, _
                       Optional ByVal strDescription As String, Optional ByVal boolOverwrite As Boolean = True)
                       
@@ -1039,9 +1037,7 @@ End Sub
 Public Function GetSetting(ByVal strPrefix As String, ByVal strName As String)
     Dim strPath As String, i As Integer, strAppend As String, tmpValue As String, varValue As Variant
     strPath = BotPath() & "plugins\settings.ini"
-    If LenB(Dir$(strPath)) = 0 Then
-        Call ReloadScript: Exit Function
-    End If
+    If LenB(Dir$(strPath)) = 0 Then Exit Function
     
     Do
         If i > 0 Then strAppend = "*" & i
@@ -1137,7 +1133,6 @@ End Function
 
 '// DSP
 '// Written by Swent. Displays messages via the specified output type and allows for unlimited message lengths.
-'// This function is backwards compatiable -- you do not need to modify your current Dsp calls
 '//     Syntax: Dsp Output, Message, [Username], [Color], [Delimiter]
 '//     Output must be one of the following integer values:
 '//         1 = AddQ
@@ -1199,7 +1194,7 @@ End Sub
 
 
 '// RELOADPLUGINMENUS
-'//   Written by Swent. Reloads the all plugin menus. All user-added items will be cleared.
+'//   Reloads the all plugin menus. All user-added items will be cleared.
 Public Sub ReloadPluginMenus()
 
     Call DeletePluginMenus
@@ -1208,7 +1203,7 @@ End Sub
 
 
 '// REMOVEPLUGINMENU
-'//   Written by Swent. Removes an entire plugin menu.
+'//   Removes an entire plugin menu.
 Public Sub RemoveMenuItem(ByVal strPrefix As String, Optional ByVal strName As String)
 
     If GetSetting("ps", "menusDisabled") Then Exit Sub
@@ -1254,8 +1249,9 @@ End Sub
 
 
 '// SETMENUITEMCHECK
-'//   Written by Swent. Changes checked status of an item in a plugin menu.
+'//   Changes checked status of an item in a plugin menu.
 Public Sub SetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String, ByVal boolChecked As Boolean)
+
     If GetSetting("ps", "menusDisabled") Then Exit Sub
     
     SetMenuCheck GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolChecked
@@ -1263,7 +1259,7 @@ End Sub
 
 
 '// GETMENUITEMCHECK
-'//   Written by Swent. Get's the checked status of an item in a plugin menu.
+'//   Get's the checked status of an item in a plugin menu.
 '//   Returns True (checked), False (unchecked), or -1 if it's not a checkmark item
 Public Function GetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
     If GetSetting("ps", "menusDisabled") Then Exit Function
@@ -1283,7 +1279,7 @@ End Function
 
 
 '// TOGGLEMENUITEMCHECK
-'//   Written by Swent. Reverses the checked status of a plugin menu item.
+'//   Reverses the checked status of a plugin menu item.
 Public Sub ToggleMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
 
     If GetSetting("ps", "menusDisabled") Then Exit Sub
@@ -1293,7 +1289,7 @@ End Sub
 
 
 '// SETMENUITEMENABLED
-'//   Written by Swent. Enables or disables a plugin menu item. Disabled items are greyed out and not clickable.
+'//   Enables or disables a plugin menu item. Disabled items are greyed out and not clickable.
 Public Sub SetMenuItemEnabled(ByVal strPrefix As String, ByVal strName As String, ByVal boolEnabled As Boolean)
 
     If GetSetting("ps", "menusDisabled") Then Exit Sub
@@ -1303,7 +1299,7 @@ End Sub
 
 
 '// CREATEFORM
-'//    Writtin by Hdx. Creates a Form object that the user can use.
+'//    Written by Hdx. Creates a Form object that the user can use.
 '//    Returns true if the name/prefix combo is free, and the form is created
 Public Function CreateForm(ByVal strPrefix As String, ByVal strName As String) As Boolean
     If (obScriptForms.Exists(strPrefix & "|" & strName)) Then
