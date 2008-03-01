@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   225
-   ClientTop       =   825
+   ClientLeft      =   165
+   ClientTop       =   855
    ClientWidth     =   11580
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -1445,7 +1445,7 @@ Private Sub Form_Load()
     #If (BETA = 1) Then
         #If (DEV_RELEASE = 1) Then
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
-                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "2"
+                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "3"
         #Else
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
                 ZeroOffsetEx(App.REVISION, 3) & " Stable"
@@ -2075,15 +2075,15 @@ Sub Event_BNLSConnecting()
     AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
 End Sub
 
-Sub Event_BNLSDataError(message As Byte)
-    If message = 0 Then
+Sub Event_BNLSDataError(Message As Byte)
+    If Message = 0 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Your CD-Key was rejected. It may be invalid. Try connecting again."
-    ElseIf message = 1 Then
+    ElseIf Message = 1 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Error! Your CD-Key is bad."
-    ElseIf message = 2 Then
+    ElseIf Message = 2 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Error! BNLS has failed CheckRevision. Please check your bot's settings and try again."
         AddChat RTBColors.ErrorMessageText, "[BNLS] Product: " & StrReverse(BotVars.Product) & "."
-    ElseIf message = 3 Then
+    ElseIf Message = 3 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Error! Bad NLS revision."
     End If
 End Sub
@@ -2446,7 +2446,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     SControl.Run "Event_ClanMemberUpdate", Username, Rank, IsOnline
 End Sub
 
-Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal message As String)
+Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
     If (cookie = 1) Then
         PassedClanMotdCheck = True
     End If
@@ -2457,7 +2457,7 @@ Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal message As String)
     
     On Error Resume Next
     
-    SControl.Run "Event_ClanMOTD", message
+    SControl.Run "Event_ClanMOTD", Message
 End Sub
 
 Private Sub ClanHandler_DemoteUserReply(ByVal Success As Boolean)
@@ -4682,38 +4682,38 @@ End Sub
 
 
 Private Sub QueueTimer_Timer()
-    Dim message  As String
+    Dim Message  As String
     Dim tag      As String
-    Dim sent     As Byte
+    Dim Sent     As Byte
     Dim i        As Integer
     Dim override As Integer
 
     If ((g_Queue.Count) And (g_Online)) Then
         With g_Queue.Peek
-            message = .message
+            Message = .Message
             tag = .tag
         End With
         
-        If (StrComp(message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
+        If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
             '// This is a dummy queue message faking a 70-character queue entry
             QueueLoad = (QueueLoad + 1)
             QueueMaster = (QueueMaster + 3)
         Else
-            If ((StrComp(Left$(message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
-                (StrComp(Left$(message, 10), "/unignore ", vbTextCompare) = 0)) Then
+            If ((StrComp(Left$(Message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
+                (StrComp(Left$(Message, 10), "/unignore ", vbTextCompare) = 0)) Then
                 
                 ' ...
                 unsquelching = True
             End If
             
             If ((QueueLoad < 3) And (QueueMaster < 16)) Then
-                If (Len(message) <= 70) Then
+                If (Len(Message) <= 70) Then
                     QueueLoad = (QueueLoad + 1)
                     QueueMaster = (QueueMaster + 3)
-                ElseIf (Len(message) <= 130) Then
+                ElseIf (Len(Message) <= 130) Then
                     QueueLoad = (QueueLoad + 2)
                     QueueMaster = (QueueMaster + 5)
-                ElseIf (Len(message) <= 170) Then
+                ElseIf (Len(Message) <= 170) Then
                     QueueLoad = (QueueLoad + 3)
                     QueueMaster = (QueueMaster + 7)
                 Else
@@ -4721,17 +4721,17 @@ Private Sub QueueTimer_Timer()
                     QueueMaster = (QueueMaster + 9)
                 End If
                 
-                sent = 1
+                Sent = 1
                 
-                Call bnetSend(message, tag)
+                Call bnetSend(Message, tag)
             End If
         End If
         
-        If (sent = 1) Then
-            If (Left$(message, 1) <> "/") Then
+        If (Sent = 1) Then
+            If (Left$(Message, 1) <> "/") Then
                 AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
                     CurrentUsername, RTBColors.Carats, "> ", _
-                        RTBColors.TalkNormalText, message
+                        RTBColors.TalkNormalText, Message
             End If
             
             Call g_Queue.Pop
@@ -5285,7 +5285,7 @@ ERROR_HANDLER:
 End Function
 
 ' ...
-Sub AddQ(ByVal message As String, Optional msg_priority As Integer = -1, Optional _
+Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optional _
     ByVal user As String = vbNullString, Optional ByVal tag As String = vbNullString)
     
     ' ...
@@ -5301,7 +5301,7 @@ Sub AddQ(ByVal message As String, Optional msg_priority As Integer = -1, Optiona
     Dim strTmp As String
     
     ' ...
-    strTmp = message
+    strTmp = Message
     
     ' ...
     If (strTmp <> vbNullString) Then
@@ -5452,15 +5452,15 @@ Sub AddQ(ByVal message As String, Optional msg_priority As Integer = -1, Optiona
             Dim spaceIndex As Long   ' ...
             
             ' ...
-            spaceIndex = InStr(1, message, Space$(1), vbBinaryCompare)
+            spaceIndex = InStr(1, Message, Space$(1), vbBinaryCompare)
             
             ' ...
             If (spaceIndex) Then
                 ' ...
-                cmdName = LCase$(Left$(Mid$(message, 2), spaceIndex - 1))
+                cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 1))
             Else
                 ' ...
-                cmdName = LCase$(Mid$(message, 2))
+                cmdName = LCase$(Mid$(Message, 2))
             End If
         
             ' ...
@@ -5561,7 +5561,7 @@ Sub AddQ(ByVal message As String, Optional msg_priority As Integer = -1, Optiona
                     
                     ' ...
                     With Q
-                        .message = Send
+                        .Message = Send
                         .Priority = msg_priority
                         .ResponseTo = vbNullString
                         .tag = tag

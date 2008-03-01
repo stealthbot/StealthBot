@@ -881,20 +881,14 @@ Private Function OnSweepIgnore(ByVal Username As String, ByRef dbAccess As udtGe
     Dim tmpBuf As String ' ...
     
     ' ...
-    If ((MyFlags And &H2) = &H2) Then
-        ' ...
-        Caching = True
-        
-        ' ...
-        Call Cache(vbNullString, 255, "squelch ")
-        
-        ' ...
-        Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, _
-            Username)
-    Else
-        ' ...
-        tmpBuf = "Error: The bot is not currently a channel operator."
-    End If
+    Caching = True
+    
+    ' ...
+    Call Cache(vbNullString, 255, "squelch ")
+    
+    ' ...
+    Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, _
+        Username)
     
     ' return message
     cmdRet(0) = tmpBuf
@@ -5461,7 +5455,7 @@ Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAcc
             With PBuffer
                 .InsertDWord &HB
                 .InsertNTString liUser.text
-                .InsertWord (liUser.SmallIcon + 1)
+                .InsertByte (liUser.SmallIcon + 1)
                 .SendPacket &H7A
             End With
         End If

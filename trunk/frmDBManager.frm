@@ -1353,58 +1353,79 @@ Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
     Dim i As Integer ' ...
     
     ' ...
-    If (Not (trvUsers.SelectedItem Is Nothing)) Then
+    If (trvUsers.SelectedItem Is Nothing) Then
         ' ...
-        If (m_DB(UBound(m_DB)).Username = vbNullString) Then
-            If (GetAccess(NewString, m_DB(UBound(m_DB)).Type).Username <> _
-                vbNullString) Then
-                
-                MsgBox "There is already an entry of this type matching " & _
-                    "the specified name."
-                
-                Call trvUsers.StartLabelEdit
-                
-                Cancel = 1
-            End If
-        Else
-            For i = LBound(m_DB) To UBound(m_DB)
-                If (StrComp(trvUsers.SelectedItem.text, m_DB(i).Username, vbTextCompare) = 0) Then
+        Exit Sub
+    End If
+    
+    ' ...
+    If (m_new_entry) Then
+        ' ...
+        If (GetAccess(NewString, trvUsers.SelectedItem.tag).Username <> vbNullString) Then
+            ' ...
+            MsgBox "There is already an entry of this type matching the specified name."
+            
+            ' ...
+            Call trvUsers.StartLabelEdit
+            
+            ' ...
+            Cancel = 1
+        End If
+    Else
+        ' ...
+        For i = LBound(m_DB) To UBound(m_DB)
+            ' ...
+            If (StrComp(trvUsers.SelectedItem.text, m_DB(i).Username, vbTextCompare) = 0) Then
+                ' ...
+                If (StrComp(trvUsers.SelectedItem.tag, m_DB(i).Type, vbTextCompare) = 0) Then
                     ' ...
                     m_DB(i).Username = NewString
             
                     ' ...
                     Exit For
                 End If
-            Next i
-            
-            If (StrComp(m_DB(i).Type, "GROUP", vbBinaryCompare) = 0) Then
-                For i = LBound(m_DB) To UBound(m_DB)
-                    If ((Len(m_DB(i).Groups)) And (m_DB(i).Groups <> "%")) Then
-                        Dim splt() As String  ' ...
-                        Dim j      As Integer ' ...
-                    
-                        If (InStr(1, m_DB(i).Groups, ",", vbTextCompare) <> 0) Then
-                            splt() = Split(m_DB(i).Groups, ",")
-                        Else
-                            ReDim Preserve splt(0)
-                            
-                            splt(0) = m_DB(i).Groups
-                        End If
-                        
-                        For j = LBound(splt) To UBound(splt)
-                            If (StrComp(splt(j), trvUsers.SelectedItem.text, _
-                                vbTextCompare) = 0) Then
-                            
-                                splt(j) = NewString
-                            End If
-                        Next j
-                        
-                        m_DB(i).Groups = Join(splt(), ",")
-                    End If
-                Next i
             End If
+        Next i
+        
+        ' ...
+        If (StrComp(m_DB(i).Type, "Group", vbTextCompare) = 0) Then
+            ' ...
+            For i = LBound(m_DB) To UBound(m_DB)
+                ' ...
+                If ((Len(m_DB(i).Groups) > 0) And (m_DB(i).Groups <> "%")) Then
+                    Dim splt() As String  ' ...
+                    Dim j      As Integer ' ...
+                
+                    ' ...
+                    If (InStr(1, m_DB(i).Groups, ",", vbTextCompare) <> 0) Then
+                        ' ...
+                        splt() = Split(m_DB(i).Groups, ",")
+                    Else
+                        ' ...
+                        ReDim Preserve splt(0)
+                        
+                        ' ...
+                        splt(0) = m_DB(i).Groups
+                    End If
+                    
+                    ' ...
+                    For j = LBound(splt) To UBound(splt)
+                        ' ...
+                        If (StrComp(splt(j), trvUsers.SelectedItem.text, vbTextCompare) = 0) Then
+                            ' ...
+                            splt(j) = NewString
+                        End If
+                    Next j
+                    
+                    ' ...
+                    m_DB(i).Groups = Join(splt(), ",")
+                End If
+            Next i
         End If
     End If
+    
+    ' ...
+    m_new_entry = False
 End Sub
 
 Private Function IsInGroup(ByVal Username As String, ByVal GroupName As String) As Boolean
