@@ -1230,7 +1230,7 @@ End Function
 Public Sub UpdateProfile()
     Dim s As String
     
-    's = GetCurrentSongTitle(True)
+    s = MediaPlayer.TrackName
     
     If (s = vbNullString) Then
         Exit Sub

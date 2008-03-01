@@ -1084,16 +1084,9 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                             .InternalFlags = (.InternalFlags + _
                                 IF_AWAITING_CHPW)
                             
-                            ' prompt user for channel password
-                            If (Dii) Then
-                                frmChat.AddQ "/w *" & Username & " You have " & _
-                                    BotVars.ChannelPasswordDelay & " seconds to whisper a valid " & _
-                                        "password or you will be banned."
-                            Else
-                                frmChat.AddQ "/w " & Username & " You have " & _
-                                    BotVars.ChannelPasswordDelay & " seconds to whisper a valid " & _
-                                        "password or you will be banned."
-                            End If
+                            frmChat.AddQ "/w " & Username & " You have " & _
+                                BotVars.ChannelPasswordDelay & " seconds to whisper a valid " & _
+                                    "password or you will be banned."
                         End If
                     End If
                 End If
@@ -1342,7 +1335,7 @@ checkIPBan:
                     End If
                     
                     If (BotVars.WhisperGreet) Then
-                        frmChat.AddQ "/w " & Space$(1) & _
+                        frmChat.AddQ "/w " & Username & Space$(1) & _
                             DoReplacements(BotVars.GreetMsg, Username, Ping)
                     Else
                         frmChat.AddQ DoReplacements(BotVars.GreetMsg, Username, Ping)
