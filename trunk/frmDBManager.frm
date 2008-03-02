@@ -1370,6 +1370,11 @@ Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
             End With
             
             ' ...
+            If (StrComp(m_DB(UBound(m_DB)).Type, "Group", vbTextCompare) = 0) Then
+                Call UpdateGroupListBox
+            End If
+            
+            ' ...
             m_new_entry = False
         Else
             ' ...
