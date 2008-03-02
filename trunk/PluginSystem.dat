@@ -1163,6 +1163,7 @@ Sub ps_AddCode_Callback()
    '// Get plugin file name
    Do
       boolAskAgain = False
+      strFilename = vbNullString
 
       strFilename = Split(InputBox("Enter a name for the plugin file.", PS_TITLE & " - Add Code"), ".")(0)
       If strFilename <> vbNullString Then
@@ -1173,8 +1174,8 @@ Sub ps_AddCode_Callback()
       
       Set objNewPlugin = psFSO.CreateTextFile(strPath, 0)
 
-      If Err.Number = 52 Or Err.Number = 58 Then
-         MsgBox Err.Description, vbExclamation + vbApplicationModal, PS_TITLE & " - Add Code"
+      If Err.Number <> 0 Then
+         MsgBox "Add Code Error: " & Err.Description & ".", vbExclamation + vbApplicationModal, PS_TITLE & " - Add Code"
          boolAskAgain = True
          Err.Clear
       End If
