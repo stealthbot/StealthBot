@@ -5732,165 +5732,193 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     gameConventions = ReadCFG(OT, "UseGameConventions")
     
-    If (gameConventions = vbNullString) Then
-        gameConventions = "Y"
+    If (gameConventions = "N") Then
+        BotVars.UseGameConventions = False
+    Else
+        BotVars.UseGameConventions = True
     End If
     
     D2GameConventions = ReadCFG(OT, "UseD2GameConventions")
     
-    If (D2GameConventions = vbNullString) Then
-        D2GameConventions = "N"
+    If (D2GameConventions = "Y") Then
+        BotVars.UseD2GameConventions = True
+    Else
+        BotVars.UseD2GameConventions = False
     End If
     
     W3GameConventions = ReadCFG(OT, "UseW3GameConventions")
     
-    If (W3GameConventions = vbNullString) Then
-        W3GameConventions = "Y"
-    End If
-    
-    If (gameConventions = "Y") Then
-        If (D2GameConventions = "N") Then
-            If ((StrReverse$(BotVars.Product) = "D2DV") Or _
-                (StrReverse$(BotVars.Product) = "D2XP")) Then
-                
-                If (BotVars.UseD2GameConventions) Then
-                    doConvert = True
-                End If
-            End If
-        End If
-
-        If (W3GameConventions = "N") Then
-            If ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                (StrReverse$(BotVars.Product) = "W3XP")) Then
-            
-                If (BotVars.UseW3GameConventions) Then
-                    doConvert = True
-                End If
-            End If
-        End If
+    If (W3GameConventions = "N") Then
+        BotVars.UseW3GameConventions = False
     Else
-        If (BotVars.UseGameConventions) Then
-            If ((StrReverse$(BotVars.Product) = "D2DV") Or _
-                (StrReverse$(BotVars.Product) = "D2XP")) Then
-                    
-                If (BotVars.UseD2GameConventions) Then
-                    doConvert = True
-                End If
-            ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                    (StrReverse$(BotVars.Product) = "W3XP")) Then
-                
-                If (BotVars.UseW3GameConventions) Then
-                    doConvert = True
-                End If
-            End If
-        End If
+        BotVars.UseW3GameConventions = True
     End If
     
-    If (doConvert) Then
-        With BotVars
-            .UseGameConventions = IIf((gameConventions = "Y"), _
-                    True, False)
-        
-            .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
-                True, False)
-        
-            .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
-                True, False)
-        End With
+    Dim UserIndex As Integer
+    Dim j As Integer
     
-        If (colUsersInChannel.Count) Then
-            For i = 1 To colUsersInChannel.Count
-                index = _
-                    checkChannel(colUsersInChannel(i).Username)
+    For i = 1 To lvChannel.ListItems.Count
+        For j = 1 To colUsersInChannel.Count
+            If (StrComp(colUsersInChannel(j).DisplayName, lvChannel.ListItems(i).text, _
+                vbTextCompare) = 0) Then
             
-                colUsersInChannel(i).Username = _
-                    convertUsername(colUsersInChannel(i).Username)
-    
-                If (index) Then
-                    lvChannel.ListItems(index).text = _
-                        colUsersInChannel(i).Username
-                End If
-            Next i
-        End If
-        
-        If (g_Online) Then
-            CurrentUsername = _
-                convertUsername(CurrentUsername)
-                
-            SetTitle CurrentUsername & ", online in channel " & _
-                gChannel.Current
-        End If
-    Else
-        If (BotVars.UseGameConventions) Then
-            If ((StrReverse$(BotVars.Product) = "D2DV") Or _
-                (StrReverse$(BotVars.Product) = "D2XP")) Then
-        
-                If (D2GameConventions = "Y") Then
-                    If (BotVars.UseD2GameConventions = False) Then
-                        doConvert = True
-                    End If
-                End If
-            ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                    (StrReverse$(BotVars.Product) = "W3XP")) Then
-        
-                If (W3GameConventions = "Y") Then
-                    If (BotVars.UseW3GameConventions = False) Then
-                        doConvert = True
-                    End If
-                End If
+                lvChannel.ListItems(i).text = _
+                    colUsersInChannel(UserIndex).DisplayName
             End If
-        Else
-            If ((StrReverse$(BotVars.Product) = "D2DV") Or _
-                (StrReverse$(BotVars.Product) = "D2XP")) Then
+        Next j
+    
+        UserIndex = UsernameToIndex(lvChannel.ListItems(i).text)
         
-                If (D2GameConventions = "Y") Then
-                    doConvert = True
-                End If
-            ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                    (StrReverse$(BotVars.Product) = "W3XP")) Then
-        
-                If (W3GameConventions = "Y") Then
-                    doConvert = True
-                End If
-            End If
+        If (UserIndex > 0) Then
+            lvChannel.ListItems(i).text = _
+                colUsersInChannel(UserIndex).DisplayName
         End If
+    Next i
     
-        If (doConvert) Then
-            If (colUsersInChannel.Count) Then
-                For i = 1 To colUsersInChannel.Count
-                    index = _
-                        checkChannel(colUsersInChannel(i).Username)
-                
-                    colUsersInChannel(i).Username = _
-                        colUsersInChannel(i).Username
     
-                    If (index) Then
-                        lvChannel.ListItems(index).text = _
-                            colUsersInChannel(i).Username
-                    End If
-                Next i
-            End If
-            
-            If (g_Online) Then
-                CurrentUsername = _
-                    reverseUsername(CurrentUsername)
-    
-                SetTitle CurrentUsername & ", online in channel " & _
-                    gChannel.Current
-            End If
-        End If
-        
-        With BotVars
-            .UseGameConventions = IIf((gameConventions = "Y"), _
-                True, False)
-        
-            .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
-                True, False)
-        
-            .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
-                True, False)
-        End With
-    End If
+    'If (gameConventions = "Y") Then
+    '    If (D2GameConventions = "N") Then
+    '        If ((StrReverse$(BotVars.Product) = "D2DV") Or _
+    '            (StrReverse$(BotVars.Product) = "D2XP")) Then
+    '
+    '            If (BotVars.UseD2GameConventions) Then
+    '                doConvert = True
+    '            End If
+    '        End If
+    '    End If
+    '
+    '    If (W3GameConventions = "N") Then
+    '        If ((StrReverse$(BotVars.Product) = "WAR3") Or _
+    '            (StrReverse$(BotVars.Product) = "W3XP")) Then
+    '
+    '            If (BotVars.UseW3GameConventions) Then
+    '                doConvert = True
+    '            End If
+    '        End If
+    '    End If
+    'Else
+    '    If (BotVars.UseGameConventions) Then
+    '        If ((StrReverse$(BotVars.Product) = "D2DV") Or _
+    '            (StrReverse$(BotVars.Product) = "D2XP")) Then
+    '
+    '            If (BotVars.UseD2GameConventions) Then
+    '                doConvert = True
+    '            End If
+    '        ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
+    '                (StrReverse$(BotVars.Product) = "W3XP")) Then
+    '
+    '            If (BotVars.UseW3GameConventions) Then
+    '                doConvert = True
+    '            End If
+    '        End If
+    '    End If
+    'End If
+    '
+    'If (doConvert) Then
+    '    With BotVars
+    '        .UseGameConventions = IIf((gameConventions = "Y"), _
+    '                True, False)
+    '
+    '        .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
+    '            True, False)
+    '
+    '        .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
+    '            True, False)
+    '    End With
+    '
+    '    If (colUsersInChannel.Count) Then
+    '        For i = 1 To colUsersInChannel.Count
+    '            index = _
+    '                checkChannel(colUsersInChannel(i).Username)
+    '
+    '            colUsersInChannel(i).Username = _
+    '                convertUsername(colUsersInChannel(i).Username)
+    '
+    '            If (index) Then
+    '                lvChannel.ListItems(index).text = _
+    '                    colUsersInChannel(i).Username
+    '            End If
+    '        Next i
+    '    End If
+    '
+    '    If (g_Online) Then
+    '        CurrentUsername = _
+    '            convertUsername(CurrentUsername)
+    '
+    '        SetTitle CurrentUsername & ", online in channel " & _
+    '            gChannel.Current
+    '    End If
+    'Else
+    '    If (BotVars.UseGameConventions) Then
+    '        If ((StrReverse$(BotVars.Product) = "D2DV") Or _
+    '            (StrReverse$(BotVars.Product) = "D2XP")) Then
+    '
+    '            If (D2GameConventions = "Y") Then
+    '                If (BotVars.UseD2GameConventions = False) Then
+    '                    doConvert = True
+    '                End If
+    '            End If
+    '        ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
+    '                (StrReverse$(BotVars.Product) = "W3XP")) Then
+    '
+    '            If (W3GameConventions = "Y") Then
+    '                If (BotVars.UseW3GameConventions = False) Then
+    '                    doConvert = True
+    '                End If
+    '            End If
+    '        End If
+    '    Else
+    '        If ((StrReverse$(BotVars.Product) = "D2DV") Or _
+    '            (StrReverse$(BotVars.Product) = "D2XP")) Then
+    '
+    '            If (D2GameConventions = "Y") Then
+    '                doConvert = True
+    '            End If
+    '        ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
+    '                (StrReverse$(BotVars.Product) = "W3XP")) Then
+    '
+    '            If (W3GameConventions = "Y") Then
+    '                doConvert = True
+    '            End If
+    '        End If
+    '    End If
+    '
+    '    If (doConvert) Then
+    '        If (colUsersInChannel.Count) Then
+    '            For i = 1 To colUsersInChannel.Count
+    '                index = _
+    '                    checkChannel(colUsersInChannel(i).Username)
+    '
+    '                colUsersInChannel(i).Username = _
+    '                    colUsersInChannel(i).Username
+    '
+    '                If (index) Then
+    '                    lvChannel.ListItems(index).text = _
+    '                        colUsersInChannel(i).Username
+    '                End If
+    '            Next i
+    '        End If
+    '
+    '        If (g_Online) Then
+    '            CurrentUsername = _
+    '                reverseUsername(CurrentUsername)
+    '
+    '            SetTitle CurrentUsername & ", online in channel " & _
+    '                gChannel.Current
+    '        End If
+    '    End If
+    '
+    '    With BotVars
+    '        .UseGameConventions = IIf((gameConventions = "Y"), _
+    '            True, False)
+    '
+    '        .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
+    '            True, False)
+    '
+    '        .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
+    '            True, False)
+    '    End With
+    'End If
     
     s = ReadCFG(OT, "JoinLeaves")
     If s = "Y" Then JoinMessagesOff = False Else JoinMessagesOff = True

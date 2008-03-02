@@ -42,6 +42,38 @@ Public Property Let Username(ByVal sUsername As String)
 
 End Property
 
+Public Property Get DisplayName() As String
+
+    'If (BotVars.UseGameConventions = False) Then
+    '    DisplayName = convertUsername(msUsername)
+    '
+    '    Exit Property
+    'Else
+    '    If ((StrReverse$(BotVars.Product) = "D2DV") Or _
+    '        (StrReverse$(BotVars.Product) = "D2XP")) Then
+    '
+    '        If (BotVars.UseD2GameConventions = False) Then
+    '            DisplayName = convertUsername(msUsername)
+    '
+    '            Exit Property
+    '        End If
+    '    Else
+    '        If ((StrReverse$(BotVars.Product) = "WAR3") Or _
+    '            (StrReverse$(BotVars.Product) = "W3XP")) Then
+    '
+    '            If (BotVars.UseW3GameConventions = False) Then
+    '                DisplayName = convertUsername(msUsername)
+    '
+    '                Exit Property
+    '            End If
+    '        End If
+    '    End If
+    'End If
+
+    DisplayName = convertUsername(msUsername)
+End Property
+
+
 Public Property Get Flags() As Long
 
     Flags = mlFlags
