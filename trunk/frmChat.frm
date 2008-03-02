@@ -5731,9 +5731,23 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     End If
     
     gameConventions = ReadCFG(OT, "UseGameConventions")
+    
+    If (gameConventions = vbNullString) Then
+        gameConventions = "Y"
+    End If
+    
     D2GameConventions = ReadCFG(OT, "UseD2GameConventions")
+    
+    If (D2GameConventions = vbNullString) Then
+        D2GameConventions = "N"
+    End If
+    
     W3GameConventions = ReadCFG(OT, "UseW3GameConventions")
-
+    
+    If (W3GameConventions = vbNullString) Then
+        W3GameConventions = "Y"
+    End If
+    
     If (gameConventions = "Y") Then
         If (D2GameConventions = "N") Then
             If ((StrReverse$(BotVars.Product) = "D2DV") Or _
