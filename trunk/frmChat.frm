@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   165
-   ClientTop       =   855
+   ClientLeft      =   225
+   ClientTop       =   825
    ClientWidth     =   11580
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -829,7 +829,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -855,7 +854,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1534,9 +1532,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -4865,37 +4863,37 @@ Private Sub scTimer_Timer()
     strKeys = Split(modScripting.GetPTKeys)
 
     '// Execute all existing plugin timer subs at the appropriate intervals
-    'For i = 0 To modScripting.GetNumPT - 1
-    '    strKey = Split(strKeys(i), ":")
-    '
-    '    '// Is this timer enabled?
-    '    If modScripting.GetPTEnabled(strKey(0), strKey(1)) Then
-    '
-    '        '// Is the plugin that this timer belongs to enabled?
-    '        If CBool(SharedScriptSupport.GetSetting(strKey(0), "enabled")) Then
-    '
-    '            '// Has this timer reached the end of its interval countdown?
-    '            If modScripting.GetPTLeft(strKey(0), strKey(1)) = 1 Then
-    '
-    '                '// Execute this timer sub
-    '                frmChat.SControl.Run strKey(0) & "_" & strKey(1) & "_Timer"
-    '
-    '                '// Handle errors
-    '                If SControl.Error.Number <> 0 Then
-    '                    AddChat vbYellow, "The """ & strKey(1) & """ timer in your """ & strKey(0) & """ plugin has been disabled due to an error."
-    '                    modScripting.SetPTEnabled strKey(0), strKey(1), False
-    '                    SControl.Error.Clear
-    '                End If
-    '
-    '                '// Reset this timer's countdown
-    '                modScripting.SetPTCount strKey(0), strKey(1), modScripting.GetPTInterval(strKey(0), strKey(1))
-    '            Else
-    '                '// Subtract one second from this timer's countdown
-    '                modScripting.SetPTCount strKey(0), strKey(1), modScripting.GetPTLeft(strKey(0), strKey(1)) - 1
-    '            End If
-    '        End If
-    '    End If
-    'Next
+    For i = 0 To modScripting.dictTimerEnabled.Count - 1
+        strKey = Split(strKeys(i), ":")
+    
+        '// Is this timer enabled?
+        If modScripting.GetPTEnabled(strKey(0), strKey(1)) Then
+    
+            '// Is the plugin that this timer belongs to enabled?
+            If CBool(SharedScriptSupport.GetSetting(strKey(0), "enabled")) Then
+    
+                '// Has this timer reached the end of its interval countdown?
+                If modScripting.GetPTLeft(strKey(0), strKey(1)) = 1 Then
+    
+                    '// Execute this timer sub
+                    frmChat.SControl.Run strKey(0) & "_" & strKey(1) & "_Timer"
+    
+                    '// Handle errors
+                    If SControl.Error.Number <> 0 Then
+                        AddChat vbYellow, "The """ & strKey(1) & """ timer in your """ & strKey(0) & """ plugin has been disabled due to an error."
+                        modScripting.SetPTEnabled strKey(0), strKey(1), False
+                        SControl.Error.Clear
+                    End If
+    
+                    '// Reset this timer's countdown
+                    modScripting.SetPTCount strKey(0), strKey(1), modScripting.GetPTInterval(strKey(0), strKey(1))
+                Else
+                    '// Subtract one second from this timer's countdown
+                    modScripting.SetPTCount strKey(0), strKey(1), modScripting.GetPTLeft(strKey(0), strKey(1)) - 1
+                End If
+            End If
+        End If
+    Next
 End Sub
 
 Private Sub Timer_Timer()
