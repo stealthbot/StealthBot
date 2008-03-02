@@ -406,6 +406,8 @@ Private Sub btnCreateUser_Click()
         .Type = "USER"
         .AddedBy = "(console)"
         .AddedOn = Now
+        .ModifiedBy = "(console)"
+        .ModifiedOn = Now
     End With
 
     ' do we have an item (hopefully a group) selected?
@@ -1361,7 +1363,15 @@ Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
     ' ...
     If (m_new_entry) Then
         ' ...
-        If (GetAccess(NewString, trvUsers.SelectedItem.tag).Username <> vbNullString) Then
+        If (GetAccess(NewString, trvUsers.SelectedItem.tag).Username = vbNullString) Then
+            ' ...
+            With m_DB(UBound(m_DB))
+                .Username = NewString
+            End With
+            
+            ' ...
+            m_new_entry = False
+        Else
             ' ...
             MsgBox "There is already an entry of this type matching the specified name."
             
@@ -1423,9 +1433,6 @@ Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
             Next i
         End If
     End If
-    
-    ' ...
-    m_new_entry = False
 End Sub
 
 Private Function IsInGroup(ByVal Username As String, ByVal GroupName As String) As Boolean
@@ -1596,8 +1603,8 @@ Private Function GetAccess(ByVal Username As String, Optional dbType As String =
 
     For i = LBound(m_DB) To UBound(m_DB)
         If (StrComp(m_DB(i).Username, Username, vbTextCompare) = 0) Then
-            If (Len(dbType)) Then
-                If (StrComp(m_DB(i).Type, dbType, vbBinaryCompare) = 0) Then
+            If (Len(dbType) > 0) Then
+                If (StrComp(m_DB(i).Type, dbType, vbTextCompare) = 0) Then
                     bln = True
                 End If
             Else
