@@ -39,7 +39,7 @@ End Property
 
 ' ...
 Public Property Let Params(strParams As String)
-    m_params = Params
+    m_params = strParams
 End Property
 
 ' ...
