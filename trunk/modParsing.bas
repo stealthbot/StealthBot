@@ -396,7 +396,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
                     If ds.LogonType = 2 Then ' NLS! Proceed to 0x52+
                         If BotVars.BNLS Then
-                            NLogin.Send_0x02 BotVars.Username, BotVars.Password
+                            NLogin.Send_0x02 g_username, BotVars.Password
                         Else
                             Call CreateNLSObject
                             Call Send0x53
@@ -419,7 +419,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                             Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Sending login information...")
                             
                             If BotVars.BNLS Then
-                                NLogin.Send_0x02 BotVars.Username, BotVars.Password
+                                NLogin.Send_0x02 g_username, BotVars.Password
                             Else
                                 Call Send0x53
                             End If
@@ -451,14 +451,14 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         Call Event_LogonEvent(3)
                         
                         If BotVars.BNLS Then
-                            NLogin.Send_0x04 BotVars.Username, BotVars.Password
+                            NLogin.Send_0x04 g_username, BotVars.Password
                         Else
                             Send0x52
                         End If
                         
                     Case &H5    'Requires upgrade
                         If BotVars.BNLS Then
-                            NLogin.Send_0x07 BotVars.Username, BotVars.Password
+                            NLogin.Send_0x07 g_username, BotVars.Password
                         Else
                             Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Battle.net reports that your account requires an NLS upgrade.")
                             Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Please connect using BNLS at least once so that this upgrade can occur.")

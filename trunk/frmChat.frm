@@ -4865,37 +4865,37 @@ Private Sub scTimer_Timer()
     strKeys = Split(modScripting.GetPTKeys)
 
     '// Execute all existing plugin timer subs at the appropriate intervals
-    For i = 0 To modScripting.GetNumPT - 1
-        strKey = Split(strKeys(i), ":")
-        
-        '// Is this timer enabled?
-        If modScripting.GetPTEnabled(strKey(0), strKey(1)) Then
-            
-            '// Is the plugin that this timer belongs to enabled?
-            If CBool(SharedScriptSupport.GetSetting(strKey(0), "enabled")) Then
-                
-                '// Has this timer reached the end of its interval countdown?
-                If modScripting.GetPTLeft(strKey(0), strKey(1)) = 1 Then
-                        
-                    '// Execute this timer sub
-                    frmChat.SControl.Run strKey(0) & "_" & strKey(1) & "_Timer"
-                    
-                    '// Handle errors
-                    If SControl.Error.Number <> 0 Then
-                        AddChat vbYellow, "The """ & strKey(1) & """ timer in your """ & strKey(0) & """ plugin has been disabled due to an error."
-                        modScripting.SetPTEnabled strKey(0), strKey(1), False
-                        SControl.Error.Clear
-                    End If
-                    
-                    '// Reset this timer's countdown
-                    modScripting.SetPTCount strKey(0), strKey(1), modScripting.GetPTInterval(strKey(0), strKey(1))
-                Else
-                    '// Subtract one second from this timer's countdown
-                    modScripting.SetPTCount strKey(0), strKey(1), modScripting.GetPTLeft(strKey(0), strKey(1)) - 1
-                End If
-            End If
-        End If
-    Next
+    'For i = 0 To modScripting.GetNumPT - 1
+    '    strKey = Split(strKeys(i), ":")
+    '
+    '    '// Is this timer enabled?
+    '    If modScripting.GetPTEnabled(strKey(0), strKey(1)) Then
+    '
+    '        '// Is the plugin that this timer belongs to enabled?
+    '        If CBool(SharedScriptSupport.GetSetting(strKey(0), "enabled")) Then
+    '
+    '            '// Has this timer reached the end of its interval countdown?
+    '            If modScripting.GetPTLeft(strKey(0), strKey(1)) = 1 Then
+    '
+    '                '// Execute this timer sub
+    '                frmChat.SControl.Run strKey(0) & "_" & strKey(1) & "_Timer"
+    '
+    '                '// Handle errors
+    '                If SControl.Error.Number <> 0 Then
+    '                    AddChat vbYellow, "The """ & strKey(1) & """ timer in your """ & strKey(0) & """ plugin has been disabled due to an error."
+    '                    modScripting.SetPTEnabled strKey(0), strKey(1), False
+    '                    SControl.Error.Clear
+    '                End If
+    '
+    '                '// Reset this timer's countdown
+    '                modScripting.SetPTCount strKey(0), strKey(1), modScripting.GetPTInterval(strKey(0), strKey(1))
+    '            Else
+    '                '// Subtract one second from this timer's countdown
+    '                modScripting.SetPTCount strKey(0), strKey(1), modScripting.GetPTLeft(strKey(0), strKey(1)) - 1
+    '            End If
+    '        End If
+    '    End If
+    'Next
 End Sub
 
 Private Sub Timer_Timer()
@@ -5049,6 +5049,9 @@ End Sub
 Sub Connect()
     Dim BNLS As Byte
     
+    ' ...
+    g_username = BotVars.Username
+    
     If sckBNet.State = 0 And sckBNLS.State = 0 Then
     
         Const f As String = "Main" ', p As String = "config.ini"
@@ -5069,9 +5072,6 @@ Sub Connect()
                 
                 Exit Sub
         End If
-        
-        ' ...
-        g_username = BotVars.Username
         
         If ((StrComp(BotVars.Product, "PX2D", vbTextCompare) = 0) Or _
             (StrComp(BotVars.Product, "VD2D", vbTextCompare) = 0)) Then
@@ -5754,7 +5754,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         BotVars.UseW3GameConventions = True
     End If
     
-    Dim UserIndex As Integer
+    Dim userIndex As Integer
     Dim j As Integer
     
     For i = 1 To lvChannel.ListItems.Count
@@ -5763,15 +5763,15 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                 vbTextCompare) = 0) Then
             
                 lvChannel.ListItems(i).text = _
-                    colUsersInChannel(UserIndex).DisplayName
+                    colUsersInChannel(userIndex).DisplayName
             End If
         Next j
     
-        UserIndex = UsernameToIndex(lvChannel.ListItems(i).text)
+        userIndex = UsernameToIndex(lvChannel.ListItems(i).text)
         
-        If (UserIndex > 0) Then
+        If (userIndex > 0) Then
             lvChannel.ListItems(i).text = _
-                colUsersInChannel(UserIndex).DisplayName
+                colUsersInChannel(userIndex).DisplayName
         End If
     Next i
     
