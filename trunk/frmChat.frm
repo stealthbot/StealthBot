@@ -887,7 +887,6 @@ Begin VB.Form frmChat
       Height          =   255
       Left            =   8880
       TabIndex        =   4
-      ToolTipText     =   "Currently in channel..."
       Top             =   0
       Width           =   2775
    End
@@ -5383,9 +5382,8 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     ' ...
                     If (UBound(splt) > 0) Then
                         ' ...
-                        Command = splt(0) & Space$(1) & _
-                            reverseUsername(splt(1)) & _
-                                Space$(1)
+                        Command = splt(0) & Space$(1) & reverseUsername(splt(1)) & _
+                            Space$(1)
                     End If
                 ElseIf ((Command = "f") Or _
                         (Command = "friends")) Then
@@ -5394,54 +5392,51 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     splt() = Split(strTmp, Space$(1), 3)
                     
                     ' ...
-                    Command = splt(0) & _
-                        Space$(1)
+                    Command = splt(0) & Space$(1)
                     
                     ' ...
-                    If (UBound(splt) = 2) Then
+                    If (UBound(splt) >= 1) Then
                         ' ...
-                        Command = Command & splt(1) & _
-                            Space$(1)
+                        Command = Command & splt(1) & Space$(1)
                     
-                        Select Case (LCase$(splt(1)))
-                            Case "m"
-                            Case "msg"
-                            Case Else
-                                If ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                                    (StrReverse$(BotVars.Product) = "W3XP")) Then
-                                    
-                                    ' ...
-                                    Command = Command & _
-                                        reverseUsername(splt(2)) & _
+                        ' ...
+                        If (UBound(splt) >= 2) Then
+                            ' ...
+                            Select Case (LCase$(splt(1)))
+                                Case "m"
+                                Case "msg"
+                                Case Else
+                                    If ((StrReverse$(BotVars.Product) = "WAR3") Or _
+                                        (StrReverse$(BotVars.Product) = "W3XP")) Then
+                                        
+                                        ' ...
+                                        Command = Command & reverseUsername(splt(2)) & _
                                             Space$(1)
-                                Else
-                                    ' ...
-                                    Command = Command & splt(2) & _
-                                        Space$(1)
-                                End If
-                        End Select
+                                    Else
+                                        ' ...
+                                        Command = Command & splt(2) & Space$(1)
+                                    End If
+                            End Select
+                        End If
                     End If
                 Else
                     ' ...
-                    Command = "/" & Command & _
-                        Space(1)
+                    Command = "/" & Command & Space$(1)
+                    
+                    ' ...
+                    strTmp = Mid$(strTmp, Len(Command) + 1)
                 End If
 
                 ' ...
-                If (splt(0) <> vbNullString) Then
+                If (UBound(splt) > 0) Then
                     ' ...
-                    If (UBound(splt)) Then
+                    If (UBound(splt) > 1) Then
                         ReDim Preserve splt(0 To UBound(splt) - 1)
-                    Else
-                        ReDim Preserve splt(0)
                     End If
                     
                     ' ...
                     strTmp = Mid$(strTmp, _
-                        (Len(Join(splt(), Space$(1))) + Len(Space(1))) + 1)
-                Else
-                    ' ...
-                    strTmp = Mid$(strTmp, Len(Command) + 1)
+                        (Len(Join(splt(), Space$(1))) + (Len(Space$(1))) + 1))
                 End If
             End If
         End If
@@ -5483,98 +5478,96 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         ReDim Preserve splt(0 To UBound(splt))
 
         ' ...
-        If (splt(LBound(splt)) <> vbNullString) Then
-            ' ...
-            For i = LBound(splt) To UBound(splt)
-                ' store current tick
-                GTC = GetTickCount()
-                
-                ' store working copy
-                Send = Command & splt(i)
+        For i = LBound(splt) To UBound(splt)
+            ' store current tick
+            GTC = GetTickCount()
+            
+            ' store working copy
+            Send = Command & splt(i)
 
-                ' is efp enabled?
-                If (bFlood) Then
-                    ' are we on-line?
-                    If (g_Online) Then
-                        ' we don't want to display (or even send!) our
-                        ' scripted queue delays.
-                        If (StrComp(Send, "%%%%%blankqueuemessage%%%%%", _
-                            vbBinaryCompare) = 0) Then
-                
-                            ' delay queue
-                            QueueMaster = (QueueMaster + 3)
-                        Else
-                            ' send our message on its way
-                            Call bnetSend(KillNull(Send), tag)
-                
-                            ' if we're not issuing a command, lets show the user
-                            ' what he's saying.
-                            If (InStr(1, Send, "/", vbBinaryCompare) <> 1) Then
-                                AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
-                                    CurrentUsername, RTBColors.Carats, "> ", vbWhite, Send
-                            End If
-                            
-                            ' lets alert our queue of the direct
-                            ' transmission of the message through
-                            ' this delay.
-                            QueueLoad = (QueueLoad + 1)
-                        End If
-                    End If
-                Else
-                    Dim Q        As clsQueueOBj ' ...
-                    Dim j        As Integer     ' ...
-                    Dim banDelay As Integer     ' ...
-                    
-                    ' should we subject this message to the typical delay,
-                    ' or can we get it out of here a bit faster?  If we
-                    ' want it out of here quick, we need an empty queue
-                    ' and have had at least 10 seconds elapse since the
-                    ' previous message.
-                    If ((QueueLoad = 0) And (GTC - LastGTC >= 10000)) Then
-                        ' set default message delay when queue is empty (in ms)
-                        banDelay = 1
+            ' is efp enabled?
+            If (bFlood) Then
+                ' are we on-line?
+                If (g_Online) Then
+                    ' we don't want to display (or even send!) our
+                    ' scripted queue delays.
+                    If (StrComp(Send, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
+                        ' delay queue
+                        QueueMaster = (QueueMaster + 3)
                         
-                        ' are we issuing a channel moderation command?
-                        If ((StrComp(Left$(Send, 5), "/ban ", vbTextCompare) = 0) Or _
-                            (StrComp(Left$(Send, 6), "/kick ", vbTextCompare) = 0)) Then
-                            
-                            ' do we have ops?
-                            If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
-                                ' seed rnd() function
-                                Randomize
-                    
-                                ' calculate delay value between 100 and 600 ms
-                                ' and add to default delay value
-                                banDelay = (banDelay + ((1 + Rnd() * 6) * 100))
-                            End If
+                        ' ...
+                        QueueLoad = (QueueLoad + 1)
+                    Else
+                        ' send our message on its way
+                        Call bnetSend(KillNull(Send), tag)
+            
+                        ' if we're not issuing a command, lets show the user
+                        ' what he's saying.
+                        If (InStr(1, Send, "/", vbBinaryCompare) <> 1) Then
+                            AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, CurrentUsername, _
+                                RTBColors.Carats, "> ", vbWhite, Send
                         End If
                         
-                        ' set the delay before our next queue cycle
-                        frmChat.QueueTimer.Interval = banDelay
+                        ' lets alert our queue of the direct
+                        ' transmission of the message through
+                        ' this delay.
+                        QueueLoad = (QueueLoad + 1)
+                    End If
+                End If
+            Else
+                Dim Q        As clsQueueOBj ' ...
+                Dim j        As Integer     ' ...
+                Dim banDelay As Integer     ' ...
+                
+                ' should we subject this message to the typical delay,
+                ' or can we get it out of here a bit faster?  If we
+                ' want it out of here quick, we need an empty queue
+                ' and have had at least 10 seconds elapse since the
+                ' previous message.
+                If ((QueueLoad = 0) And (GTC - LastGTC >= 10000)) Then
+                    ' set default message delay when queue is empty (in ms)
+                    banDelay = 1
+                    
+                    ' are we issuing a channel moderation command?
+                    If ((StrComp(Left$(Send, 5), "/ban ", vbTextCompare) = 0) Or _
+                        (StrComp(Left$(Send, 6), "/kick ", vbTextCompare) = 0)) Then
+                        
+                        ' do we have ops?
+                        If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+                            ' seed rnd() function
+                            Randomize
+                
+                            ' calculate delay value between 100 and 600 ms
+                            ' and add to default delay value
+                            banDelay = (banDelay + ((1 + Rnd() * 6) * 100))
+                        End If
                     End If
                     
-                    ' ...
-                    Set Q = New clsQueueOBj
-                    
-                    ' ...
-                    With Q
-                        .Message = Send
-                        .Priority = msg_priority
-                        .ResponseTo = vbNullString
-                        .tag = tag
-                    End With
-    
-                    ' ...
-                    Call g_Queue.Push(Q)
+                    ' set the delay before our next queue cycle
+                    frmChat.QueueTimer.Interval = banDelay
                 End If
                 
-                ' store our tick
-                ' for future reference
-                LastGTC = GTC
-            Next i
-        End If
+                ' ...
+                Set Q = New clsQueueOBj
+                
+                ' ...
+                With Q
+                    .Message = Send
+                    .Priority = msg_priority
+                    .ResponseTo = vbNullString
+                    .tag = tag
+                End With
+
+                ' ...
+                Call g_Queue.Push(Q)
+            End If
+            
+            ' store our tick
+            ' for future reference
+            LastGTC = GTC
+        Next i
     End If
-    
+        
     Exit Sub
     
 ERROR_HANDLER:
