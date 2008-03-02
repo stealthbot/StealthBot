@@ -153,6 +153,7 @@ Public unsquelching As Boolean
 Public BanCount As Integer
 Public g_lastQueueUser As String
 Public PassedClanMotdCheck As Boolean
+Public g_request_receipt As Boolean
 
 Public LastAdd As Byte
 Public WatchUser As String

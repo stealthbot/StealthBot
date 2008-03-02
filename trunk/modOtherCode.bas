@@ -352,9 +352,19 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal tag As String = vbNu
 
             .SendPacket &HE
         End With
+        
+        If (tag = "request_receipt") Then
+            ' ...
+            g_request_receipt = True
+        
+            With PBuffer
+                .SendPacket &H65
+            End With
+        End If
     End If
-    
-    If (Not (bFlood)) Then
+
+    ' ...
+    If (bFlood = False) Then
         On Error Resume Next
         
         frmChat.SControl.Run "Event_MessageSent", Message, tag
@@ -1682,7 +1692,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
     Call g_Queue.RemoveLines(tmp)
     
     ' ...
-    If ((StrReverse$(BotVars.Product) = "WAR") Or _
+    If ((StrReverse$(BotVars.Product) = "WAR3") Or _
         (StrReverse$(BotVars.Product) = "W3XP")) Then
         
         Dim strGateway As String ' ...

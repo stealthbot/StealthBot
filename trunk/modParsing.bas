@@ -518,6 +518,12 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         frmChat.ParseClanPacket PacketID, IIf(Len(PacketData) > 4, Mid$(PacketData, 5), vbNullString)
                     End If
                 Else
+                    If (g_request_receipt) Then
+                        g_request_receipt = False
+                        
+                        Exit Sub
+                    End If
+                
                     frmChat.ParseFriendsPacket PacketID, Mid$(PacketData, 5)
                 End If
             

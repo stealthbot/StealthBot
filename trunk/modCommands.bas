@@ -847,14 +847,11 @@ Private Function OnSweepBan(ByVal Username As String, ByRef dbAccess As udtGetAc
     ' ...
     If ((MyFlags And &H2) = &H2) Then
         ' ...
-        Caching = True
-        
-        ' ...
         Call Cache(vbNullString, 255, "ban ")
         
         ' ...
         Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, _
-            Username)
+            Username, "request_receipt")
     Else
         ' ...
         tmpBuf = "Error: The bot is not currently a channel operator."
@@ -879,16 +876,13 @@ Private Function OnSweepIgnore(ByVal Username As String, ByRef dbAccess As udtGe
     Dim u      As String ' ...
     Dim Y      As String ' ...
     Dim tmpBuf As String ' ...
-    
-    ' ...
-    Caching = True
-    
+
     ' ...
     Call Cache(vbNullString, 255, "squelch ")
     
     ' ...
     Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, _
-        Username)
+        Username, "request_receipt")
     
     ' return message
     cmdRet(0) = tmpBuf
@@ -1137,7 +1131,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 ' demote shamans
                 For i = 0 To (userCount - 1)
                     ' ...
-                    Call frmChat.AddChat(vbRed, "DEMOTE: " & arrUsers(i))
+                    Call frmChat.AddChat(vbRed, "Demote: " & arrUsers(i))
                 
                     ' ...
                     With PBuffer
@@ -1146,24 +1140,34 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                         .InsertByte &H2 ' General member (Grunt)
                         .SendPacket &H7A
                     End With
+                    
+                    ' ...
+                    Call Pause(500, True, True)
                 Next i
             End If
         End If
         
+        ' ...
+        Call Pause(3, True, False)
+        
         ' designate user
-        Call AddQ("/designate " & msgData, Priority.SPECIAL_MESSAGE, _
-            Username)
+        Call bnetSend("/designate " & reverseUsername(msgData))
+        
+        ' ...
+        Call Pause(3, True, False)
         
         ' rejoin channel
-        Call AddQ("/resign", Priority.SPECIAL_MESSAGE, _
-            Username)
+        Call bnetSend("/resign")
+        
+        ' ...
+        Call Pause(3, True, False)
         
         ' ...
         If (userCount) Then
             ' promote shamans again
             For i = 0 To (userCount - 1)
                 ' ...
-                Call frmChat.AddChat(vbRed, "PROMOTE: " & arrUsers(i))
+                Call frmChat.AddChat(vbRed, "Promote: " & arrUsers(i))
             
                 ' ...
                 With PBuffer
@@ -1172,6 +1176,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                     .InsertByte &H3 ' Officer (Shaman)
                     .SendPacket &H7A
                 End With
+                
+                ' ...
+                Call Pause(500, True, True)
             Next i
         End If
         
@@ -1179,8 +1186,8 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         ReDim arrUsers(0)
     Else
         ' ...
-        cmdRet(0) = "Error: The specified user is not present " & _
-            "within the channel."
+        cmdRet(0) = "Error: The specified user is not present within the " & _
+            "channel."
     End If
 End Function ' end function OnGiveUp
 
@@ -2602,8 +2609,7 @@ Private Function OnSetTrigger(ByVal Username As String, ByRef dbAccess As udtGet
         End If
         
         ' ...
-        If ((Left$(newTrigger, 1) <> Space$(1)) And (Right$(newTrigger, 1) <> _
-            Space$(1))) Then
+        If ((Left$(newTrigger, 1) = Space$(1)) Or (Right$(newTrigger, 1) = Space$(1))) Then
             
             ' ...
             cmdRet(0) = "Error: Trigger may not begin or end with a " & _

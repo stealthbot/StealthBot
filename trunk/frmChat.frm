@@ -4627,13 +4627,32 @@ Private Sub quLower_Timer()
     Dim gA As udtGetAccessResponse
     
     ' this code updated 7/23/05 in Chihuahua, Chihuahua, MX
-    If Caching Then ' time to retrieve stored information and squelch or ban a channel
+    If (Caching) Then ' time to retrieve stored information and squelch or ban a channel
         Dim strArray() As String
+        Dim ret As String
+        Dim lpos As Long
         Dim Y As String
         Dim c As Integer, n As Integer
         
         Caching = False
-        strArray() = Split(Cache(vbNullString, 0, Y), " ")
+        
+        ' ...
+        ret = Cache(vbNullString, 0, Y)
+        
+        ' ...
+        lpos = InStr(1, ret, Space$(1), vbBinaryCompare)
+        
+        ' ...
+        If (lpos) Then
+            ' ...
+            strArray() = Split(ret, " ")
+        Else
+            ' ...
+            ReDim Preserve strArray(0)
+            
+            ' ...
+            strArray(0) = ret
+        End If
         
         For c = 0 To UBound(strArray)
             ' [CHANNELOP]  -  [*CHANNELOP]  -  [CHARACTER@USEast (*CHANNELOP)]
@@ -4660,16 +4679,16 @@ Private Sub quLower_Timer()
                 End If
             End If
             
+            strArray(c) = convertUsername(strArray(c))
+            
             If Len(strArray(c)) > 1 Then
                 If InStr(Y, "ban") Then
-                    If MyFlags = 2 Or MyFlags = 18 Then
+                    If ((MyFlags And &H2) = &H2) Then
                         Ban strArray(c), (AutoModSafelistValue - 1), 0
                     End If
                 Else
-                    gA = GetAccess(strArray(c))
-                    
-                    If Not (GetSafelist(strArray(c)) Or gA.Access > (AutoModSafelistValue - 1) Or InStr(gA.Flags, "A") > 0) Then
-                        AddQ "/squelch " & IIf(Dii, "*", "") & strArray(c)
+                    If (GetSafelist(strArray(c)) = False) Then
+                        AddQ "/squelch " & strArray(c)
                     End If
                 End If
             End If

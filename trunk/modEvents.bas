@@ -542,14 +542,17 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
     End If
     
-    If (Caching) Then ' for .cs and .cb commands
+    ' ...
+    If (g_request_receipt) Then ' for .cs and .cb commands
+        ' ...
+        Caching = True
+    
+        ' ...
         Cache Message, 1
         
+        ' ...
         With frmChat.quLower
             .Enabled = False
-            
-            .Interval = .Interval
-            
             .Enabled = True
         End With
     End If
