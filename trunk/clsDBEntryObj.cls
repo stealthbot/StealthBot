@@ -29,6 +29,16 @@ Private m_groups()    As clsDBEntryObj
 Private m_lastseen    As Date
 
 ' ...
+Public Property Get entryType() As String
+    entryType = m_type
+End Property
+
+' ...
+Public Property Let entryType(ByVal strType As String)
+    m_type = strType
+End Property
+
+' ...
 Public Property Get Name() As String
     Name = m_name
 End Property

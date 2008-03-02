@@ -422,11 +422,11 @@ End Function
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
 Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Optional ByRef Flags, _
-    Optional ByRef EntryType As String = "USER") As Object
+    Optional ByRef entryType As String = "USER") As Object
 
     Dim Temp As udtGetAccessResponse
     
-    Temp = GetCumulativeAccess(Username, EntryType)
+    Temp = GetCumulativeAccess(Username, entryType)
     
     With Temp
         Access = .Access
@@ -438,6 +438,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     
     ' ...
     With GetDBEntry
+        .entryType = Temp.Type
         .Name = Temp.Username
         .Rank = Temp.Access
         .Flags = Temp.Flags
@@ -459,11 +460,11 @@ End Function
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
 Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
-    Optional ByRef EntryType As String = "USER") '// yum, Variants >:\
+    Optional ByRef entryType As String = "USER") '// yum, Variants >:\
 
     Dim Temp As udtGetAccessResponse
     
-    Temp = GetAccess(Username, EntryType)
+    Temp = GetAccess(Username, entryType)
     
     With Temp
         Access = .Access

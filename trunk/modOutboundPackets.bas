@@ -163,7 +163,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                 If (LenB(ReadCFG("Override", "OwnerName")) > 0) Then
                     .InsertNTString ReadCFG("Override", "OwnerName")
                 Else
-                    .InsertNTString BotVars.Username
+                    .InsertNTString g_username
                 End If
                 
                 .SendPacket &H51
@@ -262,7 +262,7 @@ Public Sub Send0x0A()
     End If
     
     With PBuffer
-        .InsertNTString BotVars.Username
+        .InsertNTString g_username
         .InsertByte 0
         .SendPacket &HA
         .InsertNonNTString BotVars.Product
@@ -290,7 +290,7 @@ Public Sub AttemptAccountCreation()
     
     With PBuffer
         .InsertNonNTString PasswordHash
-        .InsertNTString BotVars.Username
+        .InsertNTString g_username
         .SendPacket &H3D
     End With
 End Sub
@@ -311,7 +311,7 @@ Public Sub CreateNLSObject()
     Dim Handle As Long
     
     Call DestroyNLSObject
-    Handle = nls_init(BotVars.Username, BotVars.Password)
+    Handle = nls_init(g_username, BotVars.Password)
     
     If Handle = 0 Then
         frmChat.AddChat "Warning: nls_init() failed! Please update BNCSutil.dll."
@@ -334,8 +334,8 @@ Public Sub Send0x52()
     Dim result As Long
     Dim sBuffer As String
     
-    sBuffer = String$(NLS_ACCOUNTCREATE_ + Len(BotVars.Username), vbNullChar)
-    result = nls_account_create(ds.NLSHandle, sBuffer, NLS_ACCOUNTCREATE_ + Len(BotVars.Username))
+    sBuffer = String$(NLS_ACCOUNTCREATE_ + Len(g_username), vbNullChar)
+    result = nls_account_create(ds.NLSHandle, sBuffer, NLS_ACCOUNTCREATE_ + Len(g_username))
     
     With PBuffer
         .InsertNonNTString sBuffer
@@ -351,7 +351,7 @@ Public Sub Send0x53()
     
     With PBuffer
         .InsertNonNTString sBuffer
-        .InsertNTString BotVars.Username
+        .InsertNTString g_username
         .SendPacket &H53
     End With
 End Sub
