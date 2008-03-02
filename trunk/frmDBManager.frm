@@ -394,7 +394,7 @@ Private Sub btnCreateUser_Click()
     ' ...
     Do
         ' ...
-        Username = "New User #" & (userCount + 1)
+        Username = "New_User_#" & (userCount + 1)
     Loop While (GetAccess(Username, "User").Username <> vbNullString)
         
     ' redefine array to support new entry
@@ -482,7 +482,7 @@ Private Sub btnCreateGroup_Click()
         ' ...
         Do
             ' ...
-            GroupName = "New Group #" & (groupCount + 1)
+            GroupName = "New_Group_#" & (groupCount + 1)
         Loop While (GetAccess(GroupName, "Group").Username <> vbNullString)
         
         ' ...
@@ -1356,6 +1356,38 @@ Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
     
     ' ...
     If (trvUsers.SelectedItem Is Nothing) Then
+        ' ...
+        Exit Sub
+    End If
+    
+    ' ...
+    If ((NewString = vbNullString) Or (Len(NewString) > 30)) Then
+        ' ...
+        MsgBox "The specified name is of an invalid length."
+
+        ' ...
+        Call trvUsers.StartLabelEdit
+        
+        ' ...
+        Cancel = 1
+    
+        ' ...
+        Exit Sub
+    End If
+    
+    ' ...
+    If (InStr(1, NewString, Space$(1), vbBinaryCompare <> 0)) Or _
+       (InStr(1, NewString, "%", vbBinaryCompare <> 0)) Then
+    
+        ' ...
+        MsgBox "The specified name contains one or more invalid characters."
+        
+        ' ...
+        Call trvUsers.StartLabelEdit
+        
+        ' ...
+        Cancel = 1
+    
         ' ...
         Exit Sub
     End If
