@@ -2451,7 +2451,7 @@ ERROR_HANDLER:
 End Function
 
 ' Thanks strtok()!
-Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Boolean = _
+Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional DontCheckTrigger As Boolean = _
     False) As clsCommand
     
     ' ...
@@ -2477,7 +2477,7 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
         If (Len(Message) <= CropLen) Then
             With IsCommand
                 .Name = vbNullString
-                .Params = vbNullString
+                .Args = vbNullString
             End With
         
             Exit Function
@@ -2572,10 +2572,10 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
         If (index) Then
             With IsCommand
                 .Name = Mid$(tmp, 1, index - 1)
-                .Params = Mid$(tmp, index + 1)
+                .Args = Mid$(tmp, index + 1)
             End With
         Else
-            IsCommand.Name = tmp
+            IsCommand.Args = tmp
         End If
         
         With IsCommand
@@ -2594,7 +2594,7 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
     
     With IsCommand
         .Name = vbNullString
-        .Params = vbNullString
+        .Args = vbNullString
     End With
 End Function
 

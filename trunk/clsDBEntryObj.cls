@@ -17,7 +17,7 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_type        As Integer
+Private m_type        As String
 Private m_name        As String
 Private m_rank        As Long
 Private m_flags       As String
@@ -30,95 +30,182 @@ Private m_lastseen    As Date
 
 ' ...
 Public Property Get entryType() As String
+
     entryType = m_type
+
 End Property
 
 ' ...
 Public Property Let entryType(ByVal strType As String)
+    
     m_type = strType
+
 End Property
 
 ' ...
 Public Property Get Name() As String
+    
     Name = m_name
+
 End Property
 
 ' ...
 Public Property Let Name(ByVal strName As String)
+    
     m_name = strName
+
 End Property
 
 ' ...
 Public Property Get Rank() As Long
+    
     Rank = m_rank
+
 End Property
 
 ' ...
 Public Property Let Rank(ByVal lngRank As Long)
+    
     m_rank = lngRank
+
 End Property
 
 ' ...
 Public Property Get Flags() As String
+    
     Flags = m_flags
+
 End Property
 
 ' ...
 Public Property Let Flags(ByVal strFlags As String)
+    
     m_flags = strFlags
+
 End Property
 
 ' ...
+Public Function HasFlag(ByVal strFlag As String, Optional ByVal CaseSensitive As Boolean = True) As Boolean
+    
+    If (CaseSensitive) Then
+        HasFlag = (InStr(1, m_flags, strFlag, vbBinaryCompare) <> 0)
+    Else
+        HasFlag = (InStr(1, m_flags, strFlag, vbTextCompare) <> 0)
+    End If
+
+End Function ' end function HasFlag
+
+' ...
+Public Function HasAnyFlag(ByVal strFlags As String, Optional ByVal CaseSensitive As Boolean = True) As Boolean
+    
+    Dim i As Integer ' ...
+    
+    For i = 1 To Len(strFlags)
+        If (CaseSensitive) Then
+            HasAnyFlag = (InStr(1, m_flags, Mid$(strFlags, i, 1), vbBinaryCompare) <> 0)
+        Else
+            HasAnyFlag = (InStr(1, m_flags, Mid$(strFlags, i, 1), vbTextCompare) <> 0)
+        End If
+        
+        If (HasAnyFlag) Then
+            Exit Function
+        End If
+    Next i
+    
+End Function ' end function HasAnyFlag
+
+' ...
+Public Function HasFlags(ByVal strFlags As String, Optional ByVal CaseSensitive As Boolean = True) As Boolean
+    
+    Dim i As Integer ' ...
+    
+    For i = 1 To Len(strFlags)
+        If (CaseSensitive) Then
+            HasFlags = (InStr(1, m_flags, Mid$(strFlags, i, 1), vbBinaryCompare) <> 0)
+        Else
+            HasFlags = (InStr(1, m_flags, Mid$(strFlags, i, 1), vbTextCompare) <> 0)
+        End If
+        
+        If (HasFlags = False) Then
+            Exit Function
+        End If
+    Next i
+    
+End Function ' end function HasFlags
+
+' ...
 Public Property Get CreatedOn() As Date
+    
     CreatedOn = m_created_on
+
 End Property
 
 ' ...
 Public Property Let CreatedOn(ByRef dCreatedOn As Date)
+    
     m_created_on = dCreatedOn
+
 End Property
 
 ' ...
 Public Property Get CreatedBy() As String
+    
     CreatedBy = m_created_by
+
 End Property
 
 ' ...
 Public Property Let CreatedBy(ByVal sCreatedBy As String)
+    
     m_created_by = sCreatedBy
+
 End Property
 
 ' ...
 Public Property Get ModifiedOn() As Date
+    
     ModifiedOn = m_modified_on
+
 End Property
 
 ' ...
 Public Property Let ModifiedOn(ByRef dModifiedOn As Date)
+    
     m_modified_on = dModifiedOn
+
 End Property
 
 ' ...
 Public Property Get ModifiedBy() As String
+    
     ModifiedBy = m_modified_by
+
 End Property
 
 ' ...
 Public Property Let ModifiedBy(ByVal sModifiedBy As String)
+    
     m_modified_by = sModifiedBy
+
 End Property
 
 ' ...
 Public Property Get LastSeen() As Date
 
+    ' ...
+    
 End Property
 
 ' ...
 Public Property Let LastSeen(ByRef dLastSeen As Date)
 
+    ' ...
+
 End Property
 
 ' ...
 Public Function Group(ByVal grp As Variant) As Object
+    
+    ' ...
     
 End Function

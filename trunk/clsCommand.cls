@@ -18,7 +18,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private m_name         As String
-Private m_params       As String
+Private m_args         As String
 Private m_local        As Boolean
 Private m_publicOutput As Boolean
 
@@ -33,13 +33,13 @@ Public Property Let Name(strName As String)
 End Property
 
 ' ...
-Public Property Get Params() As String
-    Params = m_params
+Public Property Get Args() As String
+    Args = m_args
 End Property
 
 ' ...
-Public Property Let Params(strParams As String)
-    m_params = strParams
+Public Property Let Args(strargs As String)
+    m_args = strargs
 End Property
 
 ' ...

@@ -4913,10 +4913,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         .ModifiedOn = Now
                         .Type = dbType
                         .Groups = sGrp
-                        
-                        If (banmsg <> vbNullString) Then
-                            .BanMessage = banmsg
-                        End If
+                        .BanMessage = banmsg
                     End With
                 
                     ' commit modifications
