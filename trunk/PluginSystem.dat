@@ -8,7 +8,7 @@
 
 '// The StealthBot Plugin System is an updateable, scripted extension of StealthBot's VBScripting System.
 '//    This portion of the scripting system remains external to allow for updates and for viewing and tweaking by advanced scriptors.
-'//        ** DO NOT change anything in this file unless you know what you're doing **
+'//        ** DO NOT change anything in this file unless you know what you're doing -- improper changes can crash the bot **
 
 '// This file will be updated periodically to provide new plugin features and capabilities between StealthBot versions.
 
