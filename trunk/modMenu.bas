@@ -291,48 +291,75 @@ Public Function FindMenuByID(ByVal hMenu As Long, ByVal lngFindMenuID As Long, _
 End Function
 
 
-'// Written by Swent. Registers and populates menus for each plugin in the Plugins menu.
+'Written by Andy. Creates a first-level menu item under the Plugins menu item
+'   Modified by Swent 10/11/07
+Public Function RegisterScriptMenu(ByVal sMenuCaption As String) As Long
+    
+    Dim lMenu As Long
+    Dim ThisScript_MenuID As Long
+    
+    lMenu = GetMenu(frmChat.hWnd)
+    
+    If ScriptMenu_ParentID = 0 Then
+        ScriptMenu_ParentID = AddParentMenu(lMenu, "Plugins", , 5)
+    End If
+    
+    If GetMenuItemCount(ScriptMenu_ParentID) = 0 Then
+        AddItemToMenu ScriptMenu_ParentID, "Settings Manager", , , , "ps_SettingsManager_Callback"
+    End If
+    
+    ThisScript_MenuID = AddParentMenu(ScriptMenu_ParentID, sMenuCaption)
+    
+    RegisterScriptMenu = ThisScript_MenuID
+    DrawMenuBar frmChat.hWnd
+    colDynamicMenus.Add ThisScript_MenuID
+    
+End Function
+
+
+'// Written by Swent. Registers all default menus and items in the Plugins menu.
 Public Sub RegisterPluginMenus()
-    Dim lngHelpMenu As Long, strPrefixes() As String, strTitles() As String, tmpTitle As String
+    Dim strPrefixes() As String, strTitles() As String, tmpTitle As String
+    Dim lngHelpMenu As Long, lngAdvMenu As Long
     Dim boolAddPrefix As Boolean
-    Dim i As Integer
+    Dim i As Integer, intLoaded As Integer
 
     Set dictMenuIDs = New Dictionary
     Set dictItemIDs = New Dictionary
     dictMenuIDs.CompareMode = TextCompare
     dictItemIDs.CompareMode = TextCompare
 
-    '// Add menu "The Plugin System" and populate with several commands
-    dictMenuIDs("ps") = RegisterScriptMenu("The Plugin System")
+    '// Add "Options" menu
+    dictMenuIDs("ps") = RegisterScriptMenu("Options...")
 
-    dictItemIDs("ps|||Enabled") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Disable Plugins", _
-            "ps_GEnabled_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "enabled")))
-
-    dictItemIDs("ps|||New Version Notification") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Disable NVN", _
-            "ps_GNVN_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "nvn")))
-
-    dictItemIDs("ps|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Enable Plugin Backups", _
-            "ps_GBackups_Callback", 0, 0, CBool(SharedScriptSupport.GetSetting("ps", "backup")))
-
+    AddScriptMenuItem dictMenuIDs("ps"), "Open plugins folder", "ps_OpenPlugins_Callback", 0, 0
+    AddScriptMenuItem dictMenuIDs("ps"), "Open settings.ini", "ps_OpenSettings_Callback", 0, 0
     AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
     AddScriptMenuItem dictMenuIDs("ps"), "Download Plugins", "ps_GetPlugins_Callback", 0, 0
     AddScriptMenuItem dictMenuIDs("ps"), "Add Code Manually", "ps_AddCode_Callback", 0, 0
-    AddScriptMenuItem dictMenuIDs("ps"), "Plugin Creator", "ps_PluginCreator_Callback", 0, 0
+    AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
+
+    dictItemIDs("ps|||Enabled") = AddScriptMenuItem(dictMenuIDs("ps"), "Disable Plugins", _
+            "ps_GEnabled_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "enabled")))
+
+    dictItemIDs("ps|||New Version Notification") = AddScriptMenuItem(dictMenuIDs("ps"), "Disable New Version Notification", _
+            "ps_GNVN_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "nvn")))
+
+    'dictItemIDs("ps|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Enable Plugin Backups", _
+            '"ps_GBackups_Callback", 0, 0, CBool(SharedScriptSupport.GetSetting("ps", "backup")))
+
     AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
     AddScriptMenuItem dictMenuIDs("ps"), "Check for Updates", "ps_UpdateCheck_Callback", 0, 0
-    AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
-    AddScriptMenuItem dictMenuIDs("ps"), "Open PluginSystem.dat", "ps_OpenPS_Callback", 0, 0
-    AddScriptMenuItem dictMenuIDs("ps"), "Help", "ps_Help_Callback", 0, 0
-
-    '// Add menu "Plugin Menu Display"
-    If Not CBool(SharedScriptSupport.GetSetting("ps", "menusDisabled")) Then
-        dictMenuIDs("#Display") = RegisterScriptMenu("Plugin Menu Display")
-        AddItemToMenu ScriptMenu_ParentID, 0, True
-    End If
     
     '// Get plugin prefixes and titles
     strPrefixes = Split(frmChat.SControl.Eval("Join(psPrefixes)"))
     strTitles = Split(frmChat.SControl.Eval("psTitles"), "|||")
+    
+    '// Add "Plugin Menus" menu
+    If Not CBool(SharedScriptSupport.GetSetting("ps", "menusDisabled")) Then
+        AddItemToMenu ScriptMenu_ParentID, 0, True
+        dictMenuIDs("#display") = RegisterScriptMenu("Plugin Menus")
+    End If
 
     '// Register and populate a menu for each plugin
     For i = 0 To UBound(strPrefixes)
@@ -346,7 +373,7 @@ Public Sub RegisterPluginMenus()
         If boolAddPrefix Then strTitles(i) = strTitles(i) & " (" & strPrefixes(i) & ")"
 
         '// Add an item in Plugin Menu Display for this plugin
-        dictItemIDs("#Display|||" & strPrefixes(i)) = AddScriptMenuItem(dictMenuIDs("#Display"), strTitles(i), _
+        dictItemIDs("#display|||" & strPrefixes(i)) = AddScriptMenuItem(dictMenuIDs("#display"), strTitles(i), _
                     "ps_display_callback_" & strPrefixes(i), , , CBool(SharedScriptSupport.GetSetting(strPrefixes(i), "menu_display")))
         frmChat.SControl.AddCode "Sub ps_display_callback_" & strPrefixes(i) & ":PluginMenus_Display_Callback """ & strPrefixes(i) & """: End " & "Sub"
         
@@ -380,12 +407,21 @@ Public Sub RegisterPluginMenus()
         If i = UBound(strPrefixes) Then AddItemToMenu ScriptMenu_ParentID, 0, True
     Next
 
-    '// Add help menu populated with links to some helpful forums/topics
+    '// Add "Advanced" menu
+    dictMenuIDs("#advanced") = RegisterScriptMenu("Advanced")
+    AddScriptMenuItem dictMenuIDs("#advanced"), "Plugin Creator", "ps_PluginCreator_Callback"
+    AddScriptMenuItem dictMenuIDs("#advanced"), "Open PluginSystem.dat", "ps_OpenPS_Callback"
+    AddScriptMenuItem dictMenuIDs("#advanced"), 0, 0, True
+    
+    dictItemIDs("#advanced|||ps") = AddScriptMenuItem(dictMenuIDs("#advanced"), "Debug Mode", _
+                "ps_Debug_Callback", , , CBool(SharedScriptSupport.GetSetting("ps", "debugmode")))
+
+    '// Add "Help" menu
     lngHelpMenu = RegisterScriptMenu("Help")
-    AddScriptMenuItem lngHelpMenu, "Scripting Tutorials and FAQs", "ps_mainhelp1_callback"
-    AddScriptMenuItem lngHelpMenu, "Scripting and Plugins Support", "ps_mainhelp2_callback"
-    AddScriptMenuItem lngHelpMenu, "The Plugin System Guide", "ps_mainhelp3_callback"
-    AddScriptMenuItem lngHelpMenu, "The Plugin System FAQ", "ps_mainhelp4_callback"
+    AddScriptMenuItem lngHelpMenu, "Plugin System Commands", "ps_Help1_Callback"
+    AddScriptMenuItem lngHelpMenu, "The Plugin System Guide", "ps_Help2_Callback"
+    AddScriptMenuItem lngHelpMenu, "Scripting and Plugins Support", "ps_Help3_Callback"
+    AddScriptMenuItem lngHelpMenu, "About...", "ps_About_Callback"
 End Sub
 
 
@@ -476,34 +512,6 @@ Public Function AddParentMenu(ByVal hMenu As Long, strItemCaption As String, _
   ' Looks as if lngMenuID is internal to the program, whereas hPopupMenu is the Win32 handle to the menu
   
   AddParentMenu = hPopupMenu
-End Function
-
-
-'Written by Andy. Creates a first-level menu item under the Plugins menu item
-'   Modified by Swent 10/11/07
-Public Function RegisterScriptMenu(ByVal sMenuCaption As String) As Long
-    
-    Dim lMenu As Long
-    Dim ThisScript_MenuID As Long
-    
-    lMenu = GetMenu(frmChat.hWnd)
-    
-    If ScriptMenu_ParentID = 0 Then
-        ScriptMenu_ParentID = AddParentMenu(lMenu, "Plugins", , 5)
-    End If
-    
-    If GetMenuItemCount(ScriptMenu_ParentID) = 0 Then
-        AddItemToMenu ScriptMenu_ParentID, "Open plugins folder", , , , "ps_OpenPlugins_Callback"
-        AddItemToMenu ScriptMenu_ParentID, "Open settings.ini", , , , "ps_OpenSettings_Callback"
-        AddItemToMenu ScriptMenu_ParentID, 0, True
-    End If
-    
-    ThisScript_MenuID = AddParentMenu(ScriptMenu_ParentID, sMenuCaption)
-    
-    RegisterScriptMenu = ThisScript_MenuID
-    DrawMenuBar frmChat.hWnd
-    colDynamicMenus.Add ThisScript_MenuID
-    
 End Function
 
 
