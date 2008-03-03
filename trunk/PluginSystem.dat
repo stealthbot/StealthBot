@@ -506,7 +506,11 @@ End Sub
 '// Downloads a plugin from the plugins server.
 Sub ps_getplugin_cmd(cmd, Username, DisplayID)
 
-   If UBound(cmd) > 0 Then Prefix = cmd(1) Else Exit Sub End If
+   If UBound(cmd) > 0 Then
+      Prefix = cmd(1)
+   Else
+      psProcessCmd "/updates", BotVars.Username, 4: Exit Sub
+   End If
 
    Content = scInet.OpenURL(PS_UPDATE_URL & "update.php?action=getscript&script=" & Prefix)
    If Content = "invalid" Then
