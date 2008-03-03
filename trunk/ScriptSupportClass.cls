@@ -292,33 +292,12 @@ End Sub
 '//             use it to control whether or not your command responses display publicly.
 '// CC          CC controls whether or not the command string is passed to the Custom Command processor.
 '//             For scripting purposes I will not allow the user to set CC, it is always 0.
-Public Function Command(ByVal Username As String, ByVal Message As String, ByVal InBot As Boolean) As Boolean
-    Dim dbAccess As udtGetAccessResponse
-    '// GetAccess() will return the access type the commands sub needs
+Public Sub Command(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
+    False, Optional ByVal Whispered As Boolean = False)
     
     ' execute command
-    Command = ProcessCommand(Username, Message, InBot, False)
-    
-    ' backwards compatible (may be removed in future!)
-    If (Command = False) Then
-        Dim tmpmsg As String ' ...
-        
-        ' store local copy of message
-        tmpmsg = Message
-    
-        ' manipulate message for deprecated
-        ' calling format
-        'If (InBot) Then
-        '    tmpmsg = "/" & tmpmsg
-        'Else
-        '    tmpmsg = BotVars.TriggerLong & _
-        '        tmpmsg
-        'End If
-        
-        ' execute command
-        Command = ProcessCommand(Username, Message, InBot, False)
-    End If
-End Function
+    Call ProcessCommand(Username, Message, IsLocal, Whispered)
+End Sub
 
 
 '// COMMANDEX
@@ -338,15 +317,33 @@ End Function
 '//         ALL uppercase and with no repeating letters, or the bot will become
 '//         somewhat confused.
 
-Public Function CommandEx(ByVal Username As String, ByVal Message As String, ByVal InBot As Boolean, ByVal uAccess As Integer, ByVal uFlags As String, ByRef cmdRet() As String) As Boolean
-    Dim dbAccess As udtGetAccessResponse
-    '// GetAccess() will return the access type the commands sub needs
+Public Function CommandEx(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
+    False) As String
     
-    dbAccess.Access = uAccess
-    dbAccess.Flags = uFlags
+    Dim dbAccess           As udtGetAccessResponse
+    Dim command_response() As String
+    Dim bln                As Boolean
+
+    ' ...
+    If (IsLocal) Then
+        ' ...
+        Username = "(console)"
+    
+        ' ...
+        With dbAccess
+            .Access = 200
+            .Flags = "A"
+        End With
+    Else
+        ' ...
+        dbAccess = GetCumulativeAccess(Username)
+    End If
 
     ' execute command
-    CommandEx = ExecuteCommand(Username, dbAccess, Message, InBot, cmdRet())
+    bln = ExecuteCommand(Username, dbAccess, Message, IsLocal, command_response)
+    
+    ' ...
+    CommandEx = Join(command_response, Chr$(0))
 End Function
 
 
