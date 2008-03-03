@@ -6,8 +6,8 @@
 '//    by Swent
 '//      Last modified 11:21 PM 2/21/2008
 
-'// The StealthBot Plugin System is an updateable, scripted extension of StealthBot's VBScripting System.
-'//    This portion of the scripting system remains external to allow for updates and for viewing and tweaking by advanced scriptors.
+'// The StealthBot Plugin System is a scripted platform that allows StealthBot to load, run, and update plugins.
+'//    This platform remains external to allow for automatic updates, and for viewing/tweaking by advanced scriptors.
 '//        ** DO NOT change anything in this file unless you know what you're doing -- improper changes can crash the bot **
 
 '// This file will be updated periodically to provide new plugin features and capabilities between StealthBot versions.
@@ -116,7 +116,7 @@ Const PS_UPDATE_URL = "http://www.stealthbot.net/p/plugs/"
 Const PS_SBNET_URL = "http://www.stealthbot.net/board/index.php?"
 Const PS_ALLOW_UI = True
 Const PS_SET_PATH = "plugins\settings.ini"
-Const PS_PREFIX_DISALLOW = "|ps|script|protect|phrasebans|ipbans|idle|koy|plugban|chpw|ib|efp|floodmode|"
+Const PS_PREFIX_DISALLOW = "|ps|script|protect|phrasebans|ipbans|idle|koy|plugban|chpw|ib|efp|floodmode|debug"
 Const PS_COLORS = "65280,39423" '// Default: Green,Orange
 
 Public psPrefixes       '// holds prefixes of loaded plugins
@@ -562,7 +562,7 @@ Sub ps_debug_cmd(cmd, Username, DisplayID)
    If UBound(cmd) = 1 Then
       If cmd(1) = "on" Or cmd(1) = "off" Then
          arrOnOff = psOnOff(cmd(1))
-         dsp DisplayID, "Debug Mode has been " & arrOnOff(1) & ".", 0, arrOnOff(2)
+         dsp DisplayID, "Plugin debug mode has been " & arrOnOff(1) & ".", 0, arrOnOff(2)
          SetSetting "ps", "debugmode", arrOnOff(0), "", True
       End If
    End If
@@ -987,7 +987,7 @@ Sub psProcessMenu(strCallback, Prefix)
 
    '// Handle errors
    If Err.Number <> 0 Then
-      If Len(Prefix) > 0 Then
+      If Len(Prefix) > 0 and psPlugins.Exists(Prefix) Then
          AddChat vbRed, "Scripting runtime error '" & Err.Number & "' on """ & Prefix & "_Menu_Callback"" " & _
                         "call in file """ & psFSO.GetFileName(psPlugins.Item(Prefix)) & """"
          AddChat vbRed, Err.Description & "."
@@ -997,7 +997,28 @@ Sub psProcessMenu(strCallback, Prefix)
 End Sub
 
 
-'// "Display" > "Plugin Title"
+'// "Open plugins folder"
+Sub ps_OpenPlugins_Callback()
+
+   psProcessCmd "/pedit plugins", BotVars.Username, 4
+End Sub
+
+
+'// "Open settings.ini"
+Sub ps_OpenSettings_Callback()
+
+   psProcessCmd "/pedit", BotVars.Username, 4
+End Sub
+
+
+'// "Plugin Settings Manager"
+Sub ps_SettingsManager_Callback()
+
+   AddChat vbYellow, "Plugin Settings Manager coming soon."
+End Sub
+
+
+'// "Display Menus" > "Plugin Title"
 Sub PluginMenus_Display_Callback(Prefix)
 
    If GetSetting(Prefix, "menu_display") Then boolEnabled = False Else boolEnabled = True End If
@@ -1013,6 +1034,71 @@ Sub PluginMenus_Display_Callback(Prefix)
    Else
         AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
    End If
+End Sub
+
+
+'// "Options" > "Globally Disable Plugins"
+Sub ps_GEnabled_Callback()
+
+   PluginMenus_Enabled_Callback "ps"
+End Sub
+
+
+'// "Options" > "Globally Disable NVN"
+Sub ps_GNVN_Callback()
+
+   PluginMenus_NVN_Callback "ps"
+End Sub
+
+
+'// "Options" > "Global Enabled Plugin Backups"
+Sub ps_GBackups_Callback()
+
+   PluginMenus_Backup_Callback "ps"
+End Sub
+
+
+'// "Options" > "Check for Updates"
+Sub ps_UpdateCheck_Callback()
+
+   Call psAutoUpdate(True)
+End Sub
+
+
+'// "Options" > "Download Plugins"
+Sub ps_GetPlugins_Callback()
+
+   psAppShell.Open "http://stealthbot.net/p"
+End Sub
+
+
+'// "Options" > "Add Code Manually"
+Sub ps_AddCode_Callback()
+   On Error Resume Next
+
+   '// Get plugin file name
+   Do
+      boolAskAgain = False
+      strFilename = vbNullString
+
+      strFilename = Split(InputBox("Enter a name for the plugin file.", PS_TITLE & " - Add Code"), ".")(0)
+      If strFilename <> vbNullString Then
+         strPath = BotPath() & "plugins\" & strFilename & ".plug"
+      Else
+         Exit Sub
+      End If
+      
+      Set objNewPlugin = psFSO.CreateTextFile(strPath, 0)
+
+      If Err.Number <> 0 Then
+         MsgBox "Add Code Error: " & Err.Description & ".", vbExclamation + vbApplicationModal, PS_TITLE & " - Add Code"
+         boolAskAgain = True
+         Err.Clear
+      End If
+   Loop While boolAskAgain
+      
+   '// Open plugin file
+   psAppShell.Open strPath
 End Sub
 
 
@@ -1072,121 +1158,14 @@ Sub PluginMenus_Help_Callback(Prefix)
 End Sub
 
 
-'// "Open plugins folder"
-Sub ps_OpenPlugins_Callback()
-
-   psProcessCmd "/pedit plugins", BotVars.Username, 4
-End Sub
-
-
-'// "Open settings.ini"
-Sub ps_OpenSettings_Callback()
-
-   psProcessCmd "/pedit", BotVars.Username, 4
-End Sub
-
-
-'// "Scripting Help" > "Scripting Tutorials and FAQS"
-Sub ps_MainHelp1_Callback
-
-   psAppShell.Open PS_SBNET_URL & "showforum=53"
-End Sub
-
-
-'// "Scripting Help" > "Scripting and Plugins Help"
-Sub ps_MainHelp2_Callback
-
-   psAppShell.Open PS_SBNET_URL & "showforum=11"
-End Sub
-
-
-'// "Scripting Help" > "The Plugin System Guide"
-Sub ps_MainHelp3_Callback
-
-   psAppShell.Open PS_SBNET_URL & "showtopic=6052"
-End Sub
-
-
-'// "Scripting Help" > "The Plugin System FAQ"
-Sub ps_MainHelp4_Callback
-
-   psAppShell.Open PS_SBNET_URL & "showtopic=22229"
-End Sub
-
-
-'// "The Plugin System" > "Globally Disable Plugins"
-Sub ps_GEnabled_Callback()
-
-   PluginMenus_Enabled_Callback "ps"
-End Sub
-
-
-'// "The Plugin System" > "Globally Disable NVN"
-Sub ps_GNVN_Callback()
-
-   PluginMenus_NVN_Callback "ps"
-End Sub
-
-
-'// "The Plugin System" > "Global Enabled Plugin Backups"
-Sub ps_GBackups_Callback()
-
-   PluginMenus_Backup_Callback "ps"
-End Sub
-
-
-'// "The Plugin System" > "Check for Updates"
-Sub ps_UpdateCheck_Callback()
-
-   Call psAutoUpdate(True)
-End Sub
-
-
-'// "The Plugin System" > "Open PluginSystem.dat"
+'// "Advanced" > "Open PluginSystem.dat"
 Sub ps_OpenPS_Callback()
 
    psProcessCmd "/pedit ps", BotVars.Username, 4
 End Sub
 
 
-'// "The Plugin System" > "Download Plugins"
-Sub ps_GetPlugins_Callback()
-
-   psAppShell.Open "http://stealthbot.net/p"
-End Sub
-
-
-'// "The Plugin System" > "Add Code Manually"
-Sub ps_AddCode_Callback()
-   On Error Resume Next
-
-   '// Get plugin file name
-   Do
-      boolAskAgain = False
-      strFilename = vbNullString
-
-      strFilename = Split(InputBox("Enter a name for the plugin file.", PS_TITLE & " - Add Code"), ".")(0)
-      If strFilename <> vbNullString Then
-         strPath = BotPath() & "plugins\" & strFilename & ".plug"
-      Else
-         Exit Sub
-      End If
-      
-      Set objNewPlugin = psFSO.CreateTextFile(strPath, 0)
-
-      If Err.Number <> 0 Then
-         MsgBox "Add Code Error: " & Err.Description & ".", vbExclamation + vbApplicationModal, PS_TITLE & " - Add Code"
-         boolAskAgain = True
-         Err.Clear
-      End If
-   Loop While boolAskAgain
-      
-   '// Open plugin file
-   psAppShell.Open strPath
-End Sub
-
-
-'// "The Plugin System" > "Plugin Creator"
+'// "Advanced" > "Plugin Creator"
 Sub ps_PluginCreator_Callback()
 
   If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then
@@ -1206,12 +1185,49 @@ Sub ps_PluginCreator_Callback()
 End Sub
 
 
-'// "The Plugin System" > "Help"
-Sub ps_Help_Callback()
+'// "Advanced" > "Debug Mode"
+Sub ps_Debug_Callback()
+
+   If GetSetting("ps", "debugmode") Then boolDebugMode = False Else boolDebugMode = True End If
+
+   If boolDebugMode Then
+      psProcessCmd "/debug on", BotVars.Username, 4
+   Else
+      psProcessCmd "/debug off", BotVars.Username, 4
+   End If
+
+   SetMenuItemCheck "#advanced", "ps", boolDebugMode
+End Sub
+
+
+'// "Help" > "Plugin System Commands"
+Sub ps_Help1_Callback()
 
    psProcessCmd "/phelp ps", BotVars.Username, 4
 End Sub
 
+
+'// "Help" > "The Plugin System Guide"
+Sub ps_Help2_Callback
+
+   psAppShell.Open PS_SBNET_URL & "showtopic=6052"
+End Sub
+
+
+'// "Help" > "Scripting and Plugins Help"
+Sub ps_Help3_Callback
+
+   psAppShell.Open PS_SBNET_URL & "showforum=11"
+End Sub
+
+
+'// "Help" > "About..."
+Sub ps_About_Callback
+
+   If Not scINet.StillExecuting Then
+      AddChat psColor2, scINet.OpenURL(PS_UPDATE_URL & "psabout.txt") & vbCrLf
+   End If
+End Sub
 
 
 
