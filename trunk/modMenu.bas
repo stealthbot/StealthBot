@@ -357,8 +357,8 @@ Public Sub RegisterPluginMenus()
     
     '// Add "Plugin Menus" menu
     If Not CBool(SharedScriptSupport.GetSetting("ps", "menusDisabled")) Then
-        AddItemToMenu ScriptMenu_ParentID, 0, True
         dictMenuIDs("#display") = RegisterScriptMenu("Plugin Menus")
+        AddItemToMenu ScriptMenu_ParentID, 0, True
     End If
 
     '// Register and populate a menu for each plugin
