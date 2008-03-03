@@ -1468,7 +1468,7 @@ End Sub
 Sub psCreatePSSettings()
 
    SetSetting "ps", "enabled", True, "Set to False to globally disable plugins.", False
-   SetSetting "ps", "nvn", True, "Set to False to globally disable New Version Notification."
+   SetSetting "ps", "nvn", True, "Set to False to globally disable New Version Notification.", False
    SetSetting "ps", "backup", False, "Set to True to globally enable plugin backups.", False
    SetSetting "ps", "debugmode", False, "Stores the debug mode status", False
    SetSetting "ps", "allowedExtensions", "plug,txt", "Plugins will be loaded from files with these extensions", False
