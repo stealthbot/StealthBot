@@ -118,10 +118,9 @@ Begin VB.Form frmChat
       View            =   3
       LabelEdit       =   1
       LabelWrap       =   0   'False
-      HideSelection   =   0   'False
+      HideSelection   =   -1  'True
       HideColumnHeaders=   -1  'True
       OLEDragMode     =   1
-      FullRowSelect   =   -1  'True
       _Version        =   393217
       SmallIcons      =   "imlIcons"
       ForeColor       =   10079232
@@ -740,10 +739,9 @@ Begin VB.Form frmChat
       View            =   3
       LabelEdit       =   1
       LabelWrap       =   0   'False
-      HideSelection   =   0   'False
+      HideSelection   =   -1  'True
       HideColumnHeaders=   -1  'True
       OLEDragMode     =   1
-      FullRowSelect   =   -1  'True
       _Version        =   393217
       SmallIcons      =   "imlIcons"
       ForeColor       =   10079232
@@ -789,10 +787,9 @@ Begin VB.Form frmChat
       View            =   3
       LabelEdit       =   1
       LabelWrap       =   0   'False
-      HideSelection   =   0   'False
+      HideSelection   =   -1  'True
       HideColumnHeaders=   -1  'True
       OLEDragMode     =   1
-      FullRowSelect   =   -1  'True
       _Version        =   393217
       Icons           =   "imlIcons"
       SmallIcons      =   "imlIcons"

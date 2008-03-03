@@ -58,10 +58,9 @@ Begin VB.Form frmScriptUI
       View            =   3
       LabelEdit       =   1
       LabelWrap       =   0   'False
-      HideSelection   =   0   'False
+      HideSelection   =   -1  'True
       HideColumnHeaders=   -1  'True
       OLEDragMode     =   1
-      FullRowSelect   =   -1  'True
       _Version        =   393217
       ForeColor       =   -2147483640
       BackColor       =   -2147483643
