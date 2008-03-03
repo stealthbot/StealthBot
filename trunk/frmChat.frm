@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   225
-   ClientTop       =   825
+   ClientLeft      =   165
+   ClientTop       =   855
    ClientWidth     =   11580
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -117,13 +117,11 @@ Begin VB.Form frmChat
       _ExtentY        =   11245
       View            =   3
       LabelEdit       =   1
-      MultiSelect     =   -1  'True
-      LabelWrap       =   -1  'True
-      HideSelection   =   -1  'True
+      LabelWrap       =   0   'False
+      HideSelection   =   0   'False
       HideColumnHeaders=   -1  'True
       OLEDragMode     =   1
-      AllowReorder    =   -1  'True
-      HoverSelection  =   -1  'True
+      FullRowSelect   =   -1  'True
       _Version        =   393217
       SmallIcons      =   "imlIcons"
       ForeColor       =   10079232
@@ -741,10 +739,10 @@ Begin VB.Form frmChat
       _ExtentY        =   11245
       View            =   3
       LabelEdit       =   1
-      MultiSelect     =   -1  'True
-      LabelWrap       =   -1  'True
-      HideSelection   =   -1  'True
+      LabelWrap       =   0   'False
+      HideSelection   =   0   'False
       HideColumnHeaders=   -1  'True
+      OLEDragMode     =   1
       FullRowSelect   =   -1  'True
       _Version        =   393217
       SmallIcons      =   "imlIcons"
@@ -761,6 +759,7 @@ Begin VB.Form frmChat
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
+      OLEDragMode     =   1
       NumItems        =   4
       BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
          Object.Width           =   4057
@@ -789,10 +788,11 @@ Begin VB.Form frmChat
       _ExtentY        =   11245
       View            =   3
       LabelEdit       =   1
-      MultiSelect     =   -1  'True
-      LabelWrap       =   -1  'True
-      HideSelection   =   -1  'True
+      LabelWrap       =   0   'False
+      HideSelection   =   0   'False
       HideColumnHeaders=   -1  'True
+      OLEDragMode     =   1
+      FullRowSelect   =   -1  'True
       _Version        =   393217
       Icons           =   "imlIcons"
       SmallIcons      =   "imlIcons"
@@ -809,6 +809,7 @@ Begin VB.Form frmChat
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
+      OLEDragMode     =   1
       NumItems        =   2
       BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
          Object.Width           =   4057
@@ -829,6 +830,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -854,6 +856,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1532,9 +1535,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
