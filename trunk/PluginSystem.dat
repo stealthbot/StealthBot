@@ -1201,7 +1201,7 @@ Sub ps_PluginCreator_Callback()
       '// Download the EXE
       AddChat vbWhite, "If you receive any Script Control dialogs, hit Continue!"
       AddChat vbLightBlue, "Downloading file: PluginCreator.exe"
-      SSC.PrintURLToFile "plugins\PluginCreator.exe", PS_UPDATE_URL & "PluginCreator.exe"
+      SSC.PrintURLToFile "PluginCreator.exe", PS_UPDATE_URL & "PluginCreator.exe"
 
       '// Download successful?
       If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then
