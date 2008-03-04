@@ -52,6 +52,7 @@
 '//         ~"Blocked" is essentially the same as disabled -- except it's temporary. The blocked status disappears on reload (if error is fixed)
 '//      -All other errors recieved will show correct line and column numbers as well if debug mode is on
 '//   *Added the option to include a plugin description in the help lines. Include it on the first line (name:author:description)
+'//   *The "/<prefix> off" command now triggers a call to the plugin's Close event (Thanks Ribose)
 
 '//   [NEW FEATURES]
 '//   *Added multiple command messages. As in StealthBot, you can now type: ".crs off; ss on; pelt me" etc.
@@ -426,22 +427,31 @@ Sub ps_prefix_cmd(cmd, Prefix, Username, DisplayID)
    arrOnOff = psOnOff(cmd(1))
    boolLastSetting = GetSetting(Prefix, "enabled")
    SetSetting Prefix, "enabled", arrOnOff(0), "", True
+
    If Prefix = "ps" Then
       If Not arrOnOff(0) Then
          dsp DisplayID, "Plugins have been globally disabled.", Username, vbRed
       Else
          dsp DisplayID, "Plugins are no longer globally disabled.", Username, vbGreen
+
+         '// Reversing global disablement?
 	 If arrOnOff(0) And Not boolLastSetting Then
             For i = 0 to UBound(psPrefixes)
-               If GetSetting(psPrefixes(i), "enabled") Then psTriggerLoadEvent(psPrefixes(i))
+               If GetSetting(psPrefixes(i), "enabled") Then psLoadOrClose psPrefixes(i), "Load"
             Next
          End If
       End If
    Else
       dsp DisplayID, "The " & Prefix & " plugin has been " & arrOnOff(1) & ".", Username, arrOnOff(2)
+
+      '// Enabling an unloaded plugin?
       If arrOnOff(0) And Not psCodeLoaded(Prefix) Then
          psLoadCode Prefix, psPlugins.Item(Prefix), psGetTextStream(psPlugins.Item(Prefix))
-         psTriggerLoadEvent(Prefix)
+         psLoadOrClose Prefix, "Load"
+
+      '// Disabling a plugin?
+      ElseIf Not arrOnOff(0) Then
+         psLoadOrClose Prefix, "Close"
       End If
    End If
 
@@ -1321,13 +1331,27 @@ Function psGetTextStream(Path)
 End Function
 
 
-Sub psTriggerLoadEvent(Prefix)
+Sub psLoadOrClose(Prefix, LoadOrClose)
    
-   If Instr(psEvents.Item(Prefix), "load") Then
+   If Instr(psEvents.Item(Prefix), LCase(LoadOrClose)) Then
       If Not GetSetting("ps", "debugmode") Then On Error Resume Next
-      Execute(Prefix & "_event_load()")
+      Execute(Prefix & "_event_" & LoadOrClose & "()")
       If Err.Number <> 0 Then
-            AddChat vbRed, "Scripting runtime error '" & Err.Number & "' on """ & Prefix & "_Event_Load" & _
+            AddChat vbRed, "Scripting runtime error '" & Err.Number & "' on """ & Prefix & "_Event_" & LoadOrClose & _
+                            """ call in file """ & psFSO.GetFileName(psPlugins.Item(Prefix)) & """"
+	    AddChat vbRed, Err.Description & "."
+      End If
+   End If
+End Sub
+
+
+Sub psTriggerCloseEvent(Prefix)
+   
+   If Instr(psEvents.Item(Prefix), "close") Then
+      If Not GetSetting("ps", "debugmode") Then On Error Resume Next
+      Execute(Prefix & "_event_close()")
+      If Err.Number <> 0 Then
+            AddChat vbRed, "Scripting runtime error '" & Err.Number & "' on """ & Prefix & "_Event_Close" & _
                             """ call in file """ & psFSO.GetFileName(psPlugins.Item(Prefix)) & """"
 	    AddChat vbRed, Err.Description & "."
       End If
