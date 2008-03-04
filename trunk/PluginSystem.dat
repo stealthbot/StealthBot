@@ -453,7 +453,11 @@ End Sub
 
 '// Displays new plugins and updates available for download - Thanks FiftyToo!
 Sub ps_updates_cmd(cmd, Username, DisplayID)
- 
+
+   If scINet.StillExecuting Then
+      AddChat vbRed, "Connection to plugins server is busy. Try again in a couple minutes.": Exit Sub
+   End If
+
    Content = scInet.OpenURL(PS_UPDATE_URL & "update.php?action=getlist")
    If Instr(Content, "|||") = 0 Then
       Call psCannotConnect(): Exit Sub
@@ -512,6 +516,10 @@ Sub ps_getplugin_cmd(cmd, Username, DisplayID)
       psProcessCmd "/updates", BotVars.Username, 4: Exit Sub
    End If
 
+   If scINet.StillExecuting Then
+      AddChat vbRed, "Connection to plugins server is busy. Try again in a couple minutes.": Exit Sub
+   End If
+  
    Content = scInet.OpenURL(PS_UPDATE_URL & "update.php?action=getscript&script=" & Prefix)
    If Content = "invalid" Then
      AddChat vbRed, "Invalid command: None of the plugins available for download have prefix """ & Prefix & """."
@@ -783,12 +791,16 @@ End Sub
 '// Displays Plugin System news
 Sub ps_psnews_cmd()
 
-  news = scINet.OpenURL(PS_UPDATE_URL & "news.php")
-  If Instr(news, "Plugin System") = 0 Then Exit Sub
-  arrNews = Split(news, vbCrLf)
-  For i = 0 to UBound(arrNews)
-     AddChat 13408512, arrNews(i)
-  Next
+   If scINet.StillExecuting Then
+      AddChat vbRed, "Connection to plugins server is busy. Try again in a couple minutes.": Exit Sub
+   End If
+
+   news = scINet.OpenURL(PS_UPDATE_URL & "news.php")
+   If Instr(news, "Plugin System") = 0 Then Exit Sub
+   arrNews = Split(news, vbCrLf)
+   For i = 0 to UBound(arrNews)
+      AddChat 13408512, arrNews(i)
+   Next
 End Sub
 
 
@@ -895,7 +907,8 @@ Sub psAutoUpdate(boolMenuClick)
 
    '// Check for plugin system updates
    If GetSetting("ps", "psnvn") or boolMenuClick Then
-      On Error Resume Next
+      If scINet.StillExecuting Then Exit Sub
+
       curPSVersion = scINet.OpenURL(PS_UPDATE_URL & "update.php?action=sctxtver")
       If Len(curPSVersion) = 0 Or Instr(curPSVersion, " ") Then
          Call psCannotConnect(): Exit Sub
@@ -928,7 +941,8 @@ Sub psAutoUpdate(boolMenuClick)
    '// Check for plugin creator updates.
    strPCVer = GetSetting("#internal", "pcvernote")
    If Len(strPCVer) > 0 And Not strPCVer Then
-      On Error Resume Next
+      If scINet.StillExecuting Then Exit Sub
+
       curPCVersion = scINet.OpenURL("http://stealthbot.net/p/plugs/pcver.txt")
       dblPCVer = GetSetting("#internal", "pcver")
  
@@ -937,7 +951,7 @@ Sub psAutoUpdate(boolMenuClick)
             If curPCVersion > dblPCVer Then
                boolFoundUpdate = True
                psFSO.DeleteFile BotPath() & "PluginCreator.exe"
-               AddChat vbGreen, "An update is available for your Plugin Creator. To download hit Plugins > The Plugin System > Plugin Creator"
+               AddChat vbGreen, "An update is available for your Plugin Creator. To download hit Plugins > Advanced > Plugin Creator"
                SetSetting "#internal", "pcvernote", True
             End If       
          End If
@@ -946,7 +960,8 @@ Sub psAutoUpdate(boolMenuClick)
 
    '// Check for plugin updates
    If GetSetting("ps", "nvn") Or boolMenuClick Then
-      On Error Resume Next
+      If scINet.StillExecuting Then Exit Sub
+
       Content = scInet.OpenURL(PS_UPDATE_URL & "update.php?action=getlist")
       Lines = Split(Content, vbCrLf)
       For i = 0 to UBound(Lines)
@@ -1172,20 +1187,34 @@ End Sub
 '// "Advanced" > "Plugin Creator"
 Sub ps_PluginCreator_Callback()
 
-  If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then
-    psWshShell.Run "PluginCreator.exe"
-  Else
-    '// Get current plugin creator version
-    On Error Resume Next
-    curPCVersion = scINet.OpenURL("http://stealthbot.net/p/plugs/pcver.txt")
+   If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then
+      psWshShell.Run "PluginCreator.exe"
+   Else
 
-    AddChat vbYellow, "Downloading Plugin Creator. If you receive any Script Control dialogs, hit Continue!"
-    SSC.PrintURLToFile "PluginCreator.exe", "http://www.stealthbot.net/p/plugs/PluginCreator.exe"
-    AddChat vbGreen, "Downloaded PluginCreator.exe to your StealthBot folder."
-    If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then psAppShell.Open BotPath() & "PluginCreator.exe"
-    SetSetting "#internal", "pcver", curPCVersion
-    SetSetting "#internal", "pcvernote", False
-  End If
+      '// Get current plugin creator version
+      If Not scINet.StillExecuting Then
+         curPCVersion = scINet.OpenURL(PS_UPDATE_URL & "pcver.txt")
+      Else
+         AddChat vbRed, "Connection to plugins server is busy. Try again in a couple minutes.": Exit Sub
+      End If
+
+      '// Download the EXE
+      AddChat vbWhite, "If you receive any Script Control dialogs, hit Continue!"
+      AddChat vbLightBlue, "Downloading file: PluginCreator.exe"
+      SSC.PrintURLToFile "plugins\PluginCreator.exe", PS_UPDATE_URL & "PluginCreator.exe"
+
+      '// Download successful?
+      If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then
+         AddChat vbGreen, "Your Plugin Creator was updated successfully."
+         psAppShell.Open BotPath() & "PluginCreator.exe"
+      Else
+         AddChat vbRed, "Plugin Creator download failed. Please manually download PluginCreator.exe to your StealthBot folder:"
+         AddChat vbWhite, "http://stealthbot.net/p/plugs/PluginCreator.exe"
+      End If
+
+      SetSetting "#internal", "pcver", curPCVersion
+      SetSetting "#internal", "pcvernote", False
+   End If
 End Sub
 
 
@@ -1485,7 +1514,7 @@ Sub psCreatePSSettings()
    SetSetting "ps", "prefix_cmd_access", 100, "Access required to use the .prefix on/off command", False
    SetSetting "ps", "plugins_cmd_access", 20, "Access required to use the .plugins command", False
    SetSetting "ps", "phelp_cmd_access", 20, "Access required to use the .phelp command", False
-   SetSetting "#internal", "pcver", "2.32", "", False
+   SetSetting "#internal", "pcver", 2.32, "", False
    SetSetting "#internal", "pcvernote", False, "", False
 End Sub
 
