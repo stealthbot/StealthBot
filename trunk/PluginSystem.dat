@@ -1538,7 +1538,7 @@ Sub psCreatePSSettings()
    SetSetting "ps", "prefix_cmd_access", 100, "Access required to use the .prefix on/off command", False
    SetSetting "ps", "plugins_cmd_access", 20, "Access required to use the .plugins command", False
    SetSetting "ps", "phelp_cmd_access", 20, "Access required to use the .phelp command", False
-   SetSetting "#internal", "pcver", 2.32, "", False
+   SetSetting "#internal", "pcver", 2.4, "", False
    SetSetting "#internal", "pcvernote", False, "", False
 End Sub
 
