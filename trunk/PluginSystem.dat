@@ -1197,7 +1197,7 @@ End Sub
 '// "Advanced" > "Plugin Creator"
 Sub ps_PluginCreator_Callback()
 
-   If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then
+   If psFSO.FileExists("PluginCreator.exe") Then
       psWshShell.Run "PluginCreator.exe"
    Else
 
