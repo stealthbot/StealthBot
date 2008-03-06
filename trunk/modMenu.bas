@@ -322,7 +322,7 @@ Public Sub RegisterPluginMenus()
     Dim strPrefixes() As String, strTitles() As String, tmpTitle As String
     Dim lngHelpMenu As Long, lngAdvMenu As Long
     Dim boolAddPrefix As Boolean
-    Dim i As Integer, intLoaded As Integer
+    Dim i As Integer, intLoaded As Integer, intMenuLimit As Integer
 
     Set dictMenuIDs = New Dictionary
     Set dictItemIDs = New Dictionary
@@ -359,13 +359,18 @@ Public Sub RegisterPluginMenus()
     If Not CBool(SharedScriptSupport.GetSetting("ps", "menusDisabled")) Then
         dictMenuIDs("#display") = RegisterScriptMenu("Plugin Menus")
         AddItemToMenu ScriptMenu_ParentID, 0, True
+        intMenuLimit = SharedScriptSupport.GetSetting("ps", "menuLimit")
+        If Len(intMenuLimit) > 0 Then intMenuLimit = CDbl(intMenuLimit)
     End If
 
     '// Register and populate a menu for each plugin
     For i = 0 To UBound(strPrefixes)
-    
+        
         '// Are plugin menus enabled?
         If CBool(SharedScriptSupport.GetSetting("ps", "menusDisabled")) Then Exit For
+
+        '// Reach plugin menu limit?
+        If i >= intMenuLimit And intMenuLimit > -1 Then Exit For
 
         '// Format title
         If strTitles(i) <> strPrefixes(i) Then boolAddPrefix = True Else boolAddPrefix = False
@@ -403,11 +408,10 @@ Public Sub RegisterPluginMenus()
                                      "Sub ps_openfile_callback_" & strPrefixes(i) & ":PluginMenus_OpenFile_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
                                      "Sub ps_help_callback_" & strPrefixes(i) & ":PluginMenus_Help_Callback """ & strPrefixes(i) & """:End " & "Sub"
         End If
-        
-        If i = UBound(strPrefixes) Then AddItemToMenu ScriptMenu_ParentID, 0, True
     Next
 
     '// Add "Advanced" menu
+    AddItemToMenu ScriptMenu_ParentID, 0, True
     dictMenuIDs("#advanced") = RegisterScriptMenu("Advanced")
     AddScriptMenuItem dictMenuIDs("#advanced"), "Plugin Creator", "ps_PluginCreator_Callback"
     AddScriptMenuItem dictMenuIDs("#advanced"), "Open PluginSystem.dat", "ps_OpenPS_Callback"
