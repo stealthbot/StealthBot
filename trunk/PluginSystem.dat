@@ -956,14 +956,34 @@ Sub psAutoUpdate(boolMenuClick)
       curPCVersion = scINet.OpenURL("http://stealthbot.net/p/plugs/pcver.txt")
       dblPCVer = GetSetting("#internal", "pcver")
  
-      If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then    
+      If psFSO.FileExists("PluginCreator.exe") Then    
          If Len(dblPCVer) > 0 Then
-            If curPCVersion > dblPCVer Then
+            If psGetNumericVersion(curPCVersion) > psGetNumericVersion(dblPCVer) Then
                boolFoundUpdate = True
                psFSO.DeleteFile BotPath() & "PluginCreator.exe"
                AddChat vbGreen, "An update is available for your Plugin Creator. To download hit Plugins > Advanced > Plugin Creator"
                SetSetting "#internal", "pcvernote", True
             End If       
+         End If
+      End If
+   End If
+
+   '// Check for settings manager updates.
+   strSMVer = GetSetting("#internal", "smvernote")
+   If Len(strSMVer) > 0 And Not strSMVer Then
+      If scINet.StillExecuting Then Exit Sub
+
+      curSMVersion = scINet.OpenURL("http://stealthbot.net/p/plugs/smver.txt")
+      dblSMVer = GetSetting("#internal", "smver")
+
+      If psFSO.FileExists("PluginSettings.exe") Then
+         If Len(dblSMVer) > 0 Then
+            If psGetNumericVersion(curSMVersion) > psGetNumericVersion(dblSMVer) Then
+               boolFoundUpdate = True
+               psFSO.DeleteFile "PluginSettings.exe"
+               AddChat vbGreen, "An update is available for your Plugin Settings Manager. To download hit Plugins > Settings Manager"
+               SetSetting "#internal", "smvernote", True
+            End If
          End If
       End If
    End If
@@ -1040,10 +1060,37 @@ Sub ps_OpenSettings_Callback()
 End Sub
 
 
-'// "Plugin Settings Manager"
+'// "Settings Manager"
 Sub ps_SettingsManager_Callback()
 
-   AddChat vbYellow, "Plugin Settings Manager coming soon."
+   If psFSO.FileExists("PluginSettings.exe") Then
+      psWshShell.Run "PluginSettings.exe"
+   Else
+
+      '// Get current settings manager version
+      If Not scINet.StillExecuting Then
+         curSMVersion = scINet.OpenURL(PS_UPDATE_URL & "smver.txt")
+      Else
+         AddChat vbRed, "Connection to plugins server is busy. Try again in a couple minutes.": Exit Sub
+      End If
+
+      '// Download the EXE
+      AddChat vbWhite, "If you receive any Script Control dialogs, hit Continue!"
+      AddChat vbLightBlue, "Downloading file: PluginSettings.exe"
+      SSC.PrintURLToFile "PluginSettings.exe", PS_UPDATE_URL & "PluginSettings.exe"
+
+      '// Download successful?
+      If psFSO.FileExists("PluginSettings.exe") Then
+         AddChat vbGreen, "Your Plugin Settings Manager was updated successfully."
+         psAppShell.Open "PluginSettings.exe"
+      Else
+         AddChat vbRed, "Plugin Settings Manager download failed. Please manually download PluginSettings.exe to your StealthBot folder:"
+         AddChat vbWhite, "http://stealthbot.net/p/plugs/PluginSettings.exe"
+      End If
+
+      SetSetting "#internal", "smver", curSMVersion
+      SetSetting "#internal", "smvernote", False
+   End If
 End Sub
 
 
@@ -1540,6 +1587,8 @@ Sub psCreatePSSettings()
    SetSetting "ps", "phelp_cmd_access", 20, "Access required to use the .phelp command", False
    SetSetting "#internal", "pcver", 2.4, "", False
    SetSetting "#internal", "pcvernote", False, "", False
+   SetSetting "#internal", "smver", 1.00, "", False
+   SetSetting "#internal", "smvernote", False
 End Sub
 
 
