@@ -1579,6 +1579,7 @@ Sub psCreatePSSettings()
    SetSetting "ps", "autoConvertToPlugin", True, "Automatically converts regular scripts to plugin form on load.", False
    SetSetting "ps", "multipleCmdMsgs", True, "Allows for multiple commands in a single message.", False
    SetSetting "ps", "menusDisabled", False, "Plugin menus. Set to True to disable.", False
+   SetSetting "ps", "menuLimit", -1, "Maximum number of plugin menus allowed. Set to -1 for unlimited.", False
    SetSetting "ps", "psnvn", True, "New Version Notification for The Plugin System. Highly recommended.", False
    SetSetting "ps", "disableStats", False, "Disables sending of plugin stats (ONLY collects plugin prefixes).", False
    SetSetting "ps", "timeout", 15, "Script timeout. Changes to this setting only take effect after bot opening.", False
