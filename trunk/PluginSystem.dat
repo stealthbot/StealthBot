@@ -914,15 +914,15 @@ End Sub
 Sub psAutoUpdate(boolMenuClick)
 
    boolFoundUpdate = False
+   On Error Resume Next
 
    '// Check for plugin system updates
    If GetSetting("ps", "psnvn") or boolMenuClick Then
       If scINet.StillExecuting Then Exit Sub
 
       curPSVersion = scINet.OpenURL(PS_UPDATE_URL & "update.php?action=sctxtver")
-      If Len(curPSVersion) = 0 Or Instr(curPSVersion, " ") Then
-         Call psCannotConnect(): Exit Sub
-      End If
+      If Len(curPSVersion) = 0 Or Instr(curPSVersion, " ") Then Exit Sub
+
       Set myPSFile = psFSO.OpenTextFile(BotPath() & "PluginSystem.dat", 1)
       myPSVersion = Mid(myPSFile.ReadLine(), 2)
       myPSFile.Close
