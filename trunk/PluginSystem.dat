@@ -151,7 +151,7 @@ Set psEvents = CreateObject("Scripting.Dictionary")        '// holds event names
 
 
 
-'// [[[ PLUGIN LOADING SYSTEM ]]]
+'// [[[ PLUGIN LOADING ]]]
 
 
 Sub psLoadPlugins()
@@ -298,7 +298,7 @@ Sub psLoadCode(Prefix, Path, Content)
       End If
       
       '// Check if plugin supports multiple-character triggers
-      If (BotVars.NoSupportMultiCharTrigger = False) Then
+      If Not BotVars.NoSupportMultiCharTrigger Then
          If ((InStr(1, Content, ", 1) = BotVars.Trigger", vbTextCompare) <> 0) Or _
              (InStr(1, Content, ", 1) <> BotVars.Trigger", vbTextCompare) <> 0)) Then
   
@@ -1390,20 +1390,6 @@ Sub psLoadOrClose(Prefix, LoadOrClose)
       Execute(Prefix & "_event_" & LoadOrClose & "()")
       If Err.Number <> 0 Then
             AddChat vbRed, "Scripting runtime error '" & Err.Number & "' on """ & Prefix & "_Event_" & LoadOrClose & _
-                            """ call in file """ & psFSO.GetFileName(psPlugins.Item(Prefix)) & """"
-	    AddChat vbRed, Err.Description & "."
-      End If
-   End If
-End Sub
-
-
-Sub psTriggerCloseEvent(Prefix)
-   
-   If Instr(psEvents.Item(Prefix), "close") Then
-      If Not GetSetting("ps", "debugmode") Then On Error Resume Next
-      Execute(Prefix & "_event_close()")
-      If Err.Number <> 0 Then
-            AddChat vbRed, "Scripting runtime error '" & Err.Number & "' on """ & Prefix & "_Event_Close" & _
                             """ call in file """ & psFSO.GetFileName(psPlugins.Item(Prefix)) & """"
 	    AddChat vbRed, Err.Description & "."
       End If
