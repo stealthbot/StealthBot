@@ -920,9 +920,14 @@ Sub psAutoUpdate(boolMenuClick)
    If GetSetting("ps", "psnvn") or boolMenuClick Then
       If scINet.StillExecuting Then Exit Sub
 
+      '// Successful connection with the plugins server? If not, stop update checks
       curPSVersion = scINet.OpenURL(PS_UPDATE_URL & "update.php?action=sctxtver")
-      If Len(curPSVersion) = 0 Or Instr(curPSVersion, " ") Then Exit Sub
+      If Len(curPSVersion) = 0 Or Instr(curPSVersion, " ") > 0 Then
+         If boolMenuClick Then Call psCannotConnect()
+         Exit Sub
+      End If
 
+      '// Get local Plugin System version
       Set myPSFile = psFSO.OpenTextFile(BotPath() & "PluginSystem.dat", 1)
       myPSVersion = Mid(myPSFile.ReadLine(), 2)
       myPSFile.Close
@@ -1074,7 +1079,7 @@ Sub ps_SettingsManager_Callback()
          AddChat vbRed, "Connection to plugins server is busy. Try again in a couple minutes.": Exit Sub
       End If
 
-      '// Download the EXE
+      '// Download the exe
       AddChat vbWhite, "If you receive any Script Control dialogs, hit Continue!"
       AddChat vbLightBlue, "Downloading file: PluginSettings.exe"
       SSC.PrintURLToFile "PluginSettings.exe", PS_UPDATE_URL & "PluginSettings.exe"
@@ -1499,7 +1504,7 @@ End Sub
 
 Sub psCannotConnect()
  
-   AddChat vbRed, "Error: Can't establish a connection with the Plugins Server. Possible reasons for this error:"
+   AddChat vbRed, "Error: Can't establish a connection with the plugins server. Possible reasons for this error:"
    AddChat vbRed, "- You may not be connected to the internet."
    AddChat vbRed, "- You may be having DNS resolution issues."
    AddChat vbRed, "- The server (www.stealthbot.net) may be down."
