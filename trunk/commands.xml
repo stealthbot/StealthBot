@@ -1198,6 +1198,20 @@
     </access>
   </command>
 
+  <command name="banlistcount">
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+    
+    <access>
+      <rank>60</rank>
+      <flag>O</flag>
+      <flag>o</flag>
+    </access>
+  </command>
+
   <command name="allseen">
     <documentation>
       <description>
@@ -2641,6 +2655,7 @@
 
   <command name="giveup" token="operator">
     <alias>op</alias>
+    <alias>ddp</alias>
 
     <documentation>
       <description>
