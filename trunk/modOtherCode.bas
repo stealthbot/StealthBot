@@ -2613,14 +2613,15 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         If (IsCommand.Name <> vbNullString) Then
             ' ...
             If (IsCommand.docs.Name = vbNullString) Then
-                ' ...
                 IsCommand.Name = convertAlias(IsCommand.Name)
-                
+            End If
+            
+            ' ...
+            If ((IsCommand.docs.Name = vbNullString) Or _
+                    (IsCommand.docs.IsEnabled = False)) Then
+                    
                 ' ...
-                If (IsCommand.docs.Name = vbNullString) Then
-                    ' ...
-                    Set IsCommand = IsCommand(vbNullString)
-                End If
+                Set IsCommand = IsCommand(vbNullString)
                 
                 ' ...
                 Exit Function

@@ -2533,6 +2533,26 @@
     </access>
   </command>
 
+  <command name="promote">
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>    
+
+    <access />
+  </command>
+
+  <command name="demote">
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>    
+
+    <access />
+  </command>
+
   <command name="resign" token="operator">
     <documentation>
       <description>

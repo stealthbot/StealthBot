@@ -25,6 +25,7 @@ Private m_required_flags As String
 Private m_description    As String
 Private m_special_notes  As String
 Private m_params         As Collection
+Private m_enabled        As Boolean
 
 Private Sub Class_Initialize()
 
@@ -46,6 +47,7 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal DatabaseP
     Dim command_access_node   As IXMLDOMNode
     Dim command_documentation As IXMLDOMNode
     Dim command_parameters    As IXMLDOMNodeList
+    Dim attrs                 As IXMLDOMAttribute
     
     ' ...
     If (DatabasePath = vbNullString) Then
@@ -77,6 +79,19 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal DatabaseP
         
     ' ...
     m_name = m_command_node.Attributes.getNamedItem("name").text
+    
+    ' ...
+    Set attrs = m_command_node.Attributes.getNamedItem("enabled")
+    
+    If (Not (attrs Is Nothing)) Then
+        If (attrs.text = "true") Then
+            m_enabled = True
+        Else
+            m_enabled = False
+        End If
+    Else
+        m_enabled = True
+    End If
         
     ' ...
     Set command_access_node = m_command_node.selectSingleNode("access")
@@ -145,7 +160,6 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal DatabaseP
         Dim data           As IXMLDOMNode
         Dim restrictions   As IXMLDOMNodeList
         Dim restriction    As IXMLDOMNode
-        Dim attrs          As IXMLDOMAttribute
         
         For Each parameter In command_parameters
             ' ...
@@ -195,6 +209,18 @@ End Function
 Public Property Get Name() As String
 
     Name = m_name
+    
+End Property
+
+Public Property Get IsEnabled() As Boolean
+
+    IsEnabled = m_enabled
+    
+End Property
+
+Public Property Let IsEnabled(bln As Boolean)
+
+    m_enabled = bln
     
 End Property
 
