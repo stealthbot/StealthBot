@@ -17,6 +17,7 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+Private m_command_docs As clsCommandDocObj
 Private m_name         As String
 Private m_args         As String
 Private m_local        As Boolean
@@ -58,9 +59,9 @@ Public Property Get IsLocal() As Boolean
 End Property
 
 ' ...
-Public Property Let IsLocal(blnLocal As Boolean)
+Public Property Let IsLocal(bln As Boolean)
 
-    m_local = IsLocal
+    m_local = bln
     
 End Property
 
@@ -72,8 +73,15 @@ Public Property Get PublicOutput() As Boolean
 End Property
 
 ' ...
-Public Property Let PublicOutput(blnOutput As Boolean)
+Public Property Let PublicOutput(bln As Boolean)
 
-    m_publicOutput = PublicOutput
+    m_publicOutput = bln
     
+End Property
+
+' ...
+Public Property Get docs() As Object
+
+    Set docs = OpenCommand(m_name)
+
 End Property

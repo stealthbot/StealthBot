@@ -41,11 +41,22 @@ Begin VB.Form frmDBManager
       TabIndex        =   6
       Top             =   487
       Width           =   3025
-      Begin VB.ListBox lstGroups 
-         Height          =   2010
+      Begin VB.ComboBox cbxPrimaryGroup 
+         Height          =   315
+         ItemData        =   "frmDBManager.frx":0000
          Left            =   240
+         List            =   "frmDBManager.frx":0007
+         Style           =   2  'Dropdown List
+         TabIndex        =   21
+         Top             =   2520
+         Width           =   2535
+      End
+      Begin VB.ListBox lstGroups 
+         Height          =   960
+         Left            =   240
+         Style           =   1  'Checkbox
          TabIndex        =   20
-         Top             =   2450
+         Top             =   3240
          Width           =   2535
       End
       Begin VB.TextBox txtFlags 
@@ -88,6 +99,14 @@ Begin VB.Form frmDBManager
          TabIndex        =   10
          Top             =   4535
          Width           =   855
+      End
+      Begin VB.Label Label1 
+         Caption         =   "Primary Group:"
+         Height          =   255
+         Left            =   240
+         TabIndex        =   22
+         Top             =   2280
+         Width           =   2535
       End
       Begin VB.Label lblModifiedBy 
          BeginProperty Font 
@@ -192,11 +211,11 @@ Begin VB.Form frmDBManager
          Width           =   2535
       End
       Begin VB.Label lblGroup 
-         Caption         =   "Member of Group(s):"
+         Caption         =   "Secondary Group(s):"
          Height          =   255
-         Left            =   245
+         Left            =   240
          TabIndex        =   13
-         Top             =   2240
+         Top             =   3000
          Width           =   2535
       End
       Begin VB.Label lblFlags 
@@ -229,15 +248,15 @@ Begin VB.Form frmDBManager
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   3
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0000
+            Picture         =   "frmDBManager.frx":001F
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0552
+            Picture         =   "frmDBManager.frx":0571
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0AA4
+            Picture         =   "frmDBManager.frx":0AC3
             Key             =   ""
          EndProperty
       EndProperty
@@ -246,7 +265,7 @@ Begin VB.Form frmDBManager
       Caption         =   "Create Group"
       Height          =   375
       Left            =   1800
-      Picture         =   "frmDBManager.frx":0FF6
+      Picture         =   "frmDBManager.frx":1015
       TabIndex        =   2
       ToolTipText     =   "Create Group"
       Top             =   5047
@@ -257,7 +276,7 @@ Begin VB.Form frmDBManager
       Height          =   375
       Left            =   120
       MaskColor       =   &H00000000&
-      Picture         =   "frmDBManager.frx":145E
+      Picture         =   "frmDBManager.frx":147D
       TabIndex        =   1
       ToolTipText     =   "Create User"
       Top             =   5047
@@ -652,7 +671,7 @@ Private Sub btnSave_Click(index As Integer)
         End If
     
         ' look for selected user in database
-        For i = LBound(m_DB()) To UBound(m_DB())
+        For i = LBound(m_DB) To UBound(m_DB)
             ' is this the user we were looking for?
             If (StrComp(trvUsers.SelectedItem.text, m_DB(i).Username, vbTextCompare) = 0) Then
                 ' modifiy user data
@@ -1511,24 +1530,24 @@ Private Function IsInGroup(ByVal Username As String, ByVal GroupName As String) 
 End Function
 
 Private Sub HandleDeleteEvent(ByRef NodeToDelete As node)
-    Dim Temp As node ' ...
+    Dim temp As node ' ...
     
     ' ...
-    Set Temp = NodeToDelete
+    Set temp = NodeToDelete
 
     ' ...
-    If (Temp Is Nothing) Then
+    If (temp Is Nothing) Then
         ' ...
         Exit Sub
     End If
 
     ' ...
-    If (Temp.index > 1) Then
+    If (temp.index > 1) Then
         Dim response As Integer ' ...
         Dim isGroup  As Boolean ' ...
         
         ' ...
-        isGroup = (StrComp(Temp.tag, "Group", vbTextCompare) = 0)
+        isGroup = (StrComp(temp.tag, "Group", vbTextCompare) = 0)
     
         ' ...
         If (isGroup) Then
@@ -1540,25 +1559,25 @@ Private Sub HandleDeleteEvent(ByRef NodeToDelete As node)
         ' ...
         If ((isGroup = False) Or ((isGroup) And (response = vbYes))) Then
             ' ...
-            Call DB_remove(Temp.text, Temp.tag)
+            Call DB_remove(temp.text, temp.tag)
             
             ' ...
-            If (Temp.Next Is Nothing) Then
+            If (temp.Next Is Nothing) Then
                 ' ...
-                If (Temp.Previous Is Nothing) Then
+                If (temp.Previous Is Nothing) Then
                     ' ...
-                    trvUsers.Nodes(Temp.Parent.index).Selected = True
+                    trvUsers.Nodes(temp.Parent.index).Checked = True
                 Else
                     ' ...
-                    trvUsers.Nodes(Temp.Previous.index).Selected = True
+                    trvUsers.Nodes(temp.Previous.index).Checked = True
                 End If
             Else
                 ' ...
-                trvUsers.Nodes(Temp.Next.index).Selected = True
+                trvUsers.Nodes(temp.Next.index).Checked = True
             End If
             
             ' ...
-            Call trvUsers.Nodes.Remove(Temp.index)
+            Call trvUsers.Nodes.Remove(temp.index)
             
             ' ...
             Call trvUsers_NodeClick(trvUsers.SelectedItem)
@@ -1581,6 +1600,9 @@ Private Sub UpdateGroupListBox()
         If (StrComp(m_DB(i).Type, "Group", vbTextCompare) = 0) Then
             ' add group to group selection listbox
             Call lstGroups.AddItem(m_DB(i).Username)
+            
+            ' ...
+            Call cbxPrimaryGroup.AddItem(m_DB(i).Username)
         End If
     Next i
 End Sub

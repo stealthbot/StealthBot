@@ -122,6 +122,8 @@ Public g_Online As Boolean
 Public AwaitingSystemKeys As Byte
 Public AwaitingSelfRemoval As Byte
 'Public AttemptedNewVerbyte As Boolean
+Public g_Quotes As Collection
+
 
 Public UserCancelledConnect As Boolean
 

@@ -93,7 +93,7 @@
         </documentation>
       </argument>
 
-      <argument name="message">
+      <argument name="message" type="string">
         <documentation>
           <description>
             The message to be sent.
@@ -256,122 +256,245 @@
       </description>
     </documentation>
 
-    <arguments type="required">
-      <argument name="username" type="required">
+    <arguments>
+      <argument name="username">
         <documentation>
-          ...
+          <description>
+            ...
+          </description>
         </documentation>
       </argument>
 
-      <arguments type="required">
-        <argument name="rank" type="optional">
-          <documentation>
+      <argument name="rank" optional="true">
+        <data type="number" min="1" max="100" />
+
+        <documentation>
+          <description>
             ...
-          </documentation>
-        </argument>
+          </description>
+        </documentation>
+       </argument>
 
-        <argument name="attribute" type="optional">
-          <documentation>
-            ...
-          </documentation>
+       <argument name="attributes" optional="true">
+         <data type="string" maxLength="52" pattern="[A-Za-z]+" />
 
-          <restriction value="A">
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>            
-          </restriction>
+         <documentation>
+           <description>
+             ...
+           </description>
+         </documentation>
 
-          <restriction value="a">
-            <access>
-               <rank>100</rank>
-               <flag>A</flag>
-            </access>           
-          </restriction>
+         <restriction name="FLAG_A_HIGH">
+           <documentation>
+             <description>
+               ...
+             </description>
+           </documentation>
 
-          <restriction value="B">
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-              <flag>a</flag>
-            </access>            
-          </restriction>
+           <match message="A+" />
 
-          <restriction value="c">
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>            
-          </restriction>
+           <access>
+             <rank>100</rank>
+             <flag>A</flag>
+           </access>
+         </restriction>
 
-          <restriction value="C">
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>            
-          </restriction>
+         <restriction name="FLAG_A_LOW">
+           <documentation>
+             <description>
+               ...
+             </description>
+           </documentation>
 
-          <restriction value="D">
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>
-          </restriction>
+           <match message="a+" />
 
-          <restriction value="J">
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>
-          </restriction>
+           <access>
+             <rank>100</rank>
+             <flag>A</flag>
+           </access>
+         </restriction>
 
-          <restriction value="O">
+         <restriction name="FLAG_B">
+           <documentation>
+             <description>
+               ...
+             </description>
+            </documentation>
+
+            <match message="B+" />
+
             <access>
               <rank>100</rank>
               <flag>A</flag>
             </access>
           </restriction>
 
-          <restriction value="o">
+          <restriction name="FLAG_C_HIGH">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
+
+            <match message="c+" />
+
             <access>
               <rank>100</rank>
               <flag>A</flag>
-              <flag>a</flag>
             </access>
           </restriction>
 
-          <restriction value="P">
+          <restriction name="FLAG_C_LOW">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
+
+            <match message="c+" />
+
             <access>
               <rank>100</rank>
               <flag>A</flag>
             </access>
           </restriction>
 
-          <restriction value="S">
+          <restriction name="FLAG_D">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
+
+            <match message="D+" />
+
             <access>
               <rank>100</rank>
               <flag>A</flag>
-              <flag>a</flag>
             </access>
           </restriction>
 
-          <restriction value="s">
+          <restriction name="FLAG_I">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
+
+            <match message="I+" />
+
             <access>
               <rank>100</rank>
               <flag>A</flag>
-              <flag>a</flag>
             </access>
           </restriction>
 
-          <restriction value="T">
+          <restriction name="FLAG_J">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
+
+            <match message="J+" />
+
             <access>
               <rank>100</rank>
               <flag>A</flag>
             </access>
           </restriction>
-        </argument>
+
+          <restriction name="FLAG_O_HIGH">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
+
+            <match message="O+" />
+  
+            <access>
+              <rank>100</rank>
+              <flag>A</flag>
+            </access>
+          </restriction>
+
+          <restriction name="FLAG_O_LOW">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
+
+            <match message="o+" />
+
+            <access>
+              <rank>100</rank>
+              <flag>A</flag>
+            </access>
+          </restriction>
+
+          <restriction name="FLAG_P">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
+
+            <match message="P+" />
+
+            <access>
+              <rank>100</rank>
+              <flag>A</flag>
+            </access>
+          </restriction>
+
+          <restriction name="FLAG_S_HIGH">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
+
+            <match message="S+" />
+  
+            <access>
+              <rank>100</rank>
+              <flag>A</flag>
+            </access>
+          </restriction>
+
+          <restriction name="FLAG_S_LOW">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
+
+            <match message="s+" />
+
+            <access>
+              <rank>100</rank>
+              <flag>A</flag>
+            </access>
+          </restriction>
+
+          <restriction name="FLAG_T">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
+
+            <match message="T+" />
+
+            <access>
+              <rank>100</rank>
+              <flag>A</flag>
+            </access>
+          </restriction>
+       </argument>
       </arguments>
-    </arguments>
 
     <access>
       <rank>20</rank>
@@ -635,33 +758,11 @@
 
     <arguments>
       <argument name="message">
-        <restriction name="username_prefix">
-          <documentation>
-            <description>
-              The "username_prefix" restriction will automatically prefix "Username says:"
-              to outgoing messages when using the this command.
-            </description>
-          </documentation>
-          
-          <access>
-            <rank>70</rank>
-            <flag>T</flag>
-          </access>
-        </restriction>
-
-        <restriction name="remove_slashes">
-          <documentation>
-            <description>
-              The "remove_slashes" restriction will automatically remove all forward slashes ("/")
-              from outgoing messages when using the this command.
-            </description>
-          </documentation>
-          
-          <access>
-            <rank>90</rank>
-            <flag>T</flag>
-          </access>
-        </restriction>
+        <documentation>
+          <description>
+            ...
+          </description>
+        </documentation>
       </argument>
     </arguments>
 
@@ -831,33 +932,7 @@
 
     <arguments>
       <argument name="message">
-        <restriction name="username_prefix">
-          <documentation>
-            <description>
-              The "username_prefix" restriction will automatically prefix "Username says:"
-              to outgoing messages when using the this command.
-            </description>
-          </documentation>
 
-          <access>
-            <rank>70</rank>
-            <flag>T</flag>
-          </access>
-        </restriction>
-
-        <restriction name="remove_slashes">
-          <documentation>
-            <description>
-              The "remove_slashes" restriction will automatically remove all forward slashes ("/")
-              from outgoing messages when using the this command.
-            </description>
-          </documentation>
-          
-          <access>
-            <rank>90</rank>
-            <flag>T</flag>
-          </access>
-        </restriction>
       </argument>
     </arguments>
 

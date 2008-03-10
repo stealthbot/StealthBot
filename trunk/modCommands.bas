@@ -39,6 +39,82 @@ Public floodCap As Byte   ' ...?
 Public Function ProcessCommand(ByVal Username As String, ByVal Message As String, _
     Optional ByVal InBot As Boolean = False, Optional ByVal WhisperedIn As Boolean = False) As Boolean
     
+    On Error GoTo ERROR_HANDLER
+    
+    Dim Command          As clsCommandObj
+    Dim dbAccess         As udtGetAccessResponse
+    Dim command_return() As String
+    Dim i                As Integer
+    Dim Count            As Integer
+    Dim bln              As Boolean
+    
+    Set Command = IsCommand(Message)
+
+    Do While (Command.Name <> vbNullString)
+        If ((Command.IsLocal) Or _
+                (HasAccess(Username, Command.Name, Command.Args))) Then
+        
+            If (Command.IsLocal) Then
+                With dbAccess
+                    .access = 201
+                End With
+            Else
+                dbAccess = GetCumulativeAccess(Username)
+            End If
+            
+            Call ExecuteCommand(Username, dbAccess, Command.Name & Space$(1) & Command.Args, _
+                    InBot, command_return)
+            
+            If (command_return(0) <> vbNullString) Then
+                For i = LBound(command_return) To UBound(command_return)
+                    If (Command.IsLocal) Then
+                        If (Command.PublicOutput) Then
+                            AddQ command_return(i), PRIORITY.CONSOLE_MESSAGE
+                        Else
+                            frmChat.AddChat RTBColors.ConsoleText, command_return(i)
+                        End If
+                    Else
+                        If (WhisperedIn) Then
+                            AddQ "/w " & Username & Space$(1) & command_return(i), _
+                                    PRIORITY.COMMAND_RESPONSE_MESSAGE
+                        Else
+                            AddQ command_return(i), PRIORITY.COMMAND_RESPONSE_MESSAGE
+                        End If
+                    End If
+                Next i
+            End If
+        End If
+        
+        Count = (Count + 1)
+        
+        Set Command = IsCommand(vbNullString)
+    Loop
+    
+    If (InBot) Then
+        If ((bln = False) And (Count = 0)) Then
+            AddQ Message
+        End If
+    End If
+    
+    Exit Function
+    
+' default (if all else fails) error handler to keep erroneous
+' commands and/or input formats from killing me
+ERROR_HANDLER:
+    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: " & Err.Description & _
+        " in ProcessCommand().")
+
+    ' return command failure result
+    ProcessCommand = False
+    
+    Exit Function
+End Function
+
+' prepares commands for processing, and calls helper functions associated with
+' processing
+Public Function ProcessCommand3(ByVal Username As String, ByVal Message As String, _
+    Optional ByVal InBot As Boolean = False, Optional ByVal WhisperedIn As Boolean = False) As Boolean
+    
     ' default error response for commands
     On Error GoTo ERROR_HANDLER
     
@@ -58,8 +134,8 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     
     ' create console access response structure
     With ConsoleAccessResponse
-        .Access = 201
-        .Flags = "A"
+        .access = 201
+        .flags = "A"
     End With
     
     m_Username = Username
@@ -135,7 +211,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             
             ' return negative result indicating that message does not contain
             ' a valid command identifier
-            ProcessCommand = False
+            ProcessCommand3 = False
         
             ' exit function
             Exit Function
@@ -184,10 +260,10 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             End If
         
             ' execute command
-            ProcessCommand = ExecuteCommand(Username, GetCumulativeAccess(Username, _
+            ProcessCommand3 = ExecuteCommand(Username, GetCumulativeAccess(Username, _
                 "USER"), tmpX, InBot, cmdRet())
             
-            If (ProcessCommand) Then
+            If (ProcessCommand3) Then
                 ' display command response
                 If (cmdRet(0) <> vbNullString) Then
                     Dim j As Integer ' ...
@@ -202,10 +278,10 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                             If (WhisperedIn) Then
                                 ' whisper message
                                 Call AddQ("/w " & Username & Space$(1) & cmdRet(j), _
-                                    Priority.COMMAND_RESPONSE_MESSAGE, Username)
+                                    PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
                             Else
                                 ' send standard message
-                                Call AddQ(cmdRet(j), Priority.COMMAND_RESPONSE_MESSAGE, _
+                                Call AddQ(cmdRet(j), PRIORITY.COMMAND_RESPONSE_MESSAGE, _
                                     Username)
                             End If
                         End If
@@ -217,15 +293,15 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         ' send command to main processor
         If (InBot) Then
             ' execute command
-            ProcessCommand = ExecuteCommand(Username, ConsoleAccessResponse, tmpmsg, _
+            ProcessCommand3 = ExecuteCommand(Username, ConsoleAccessResponse, tmpmsg, _
                 InBot, cmdRet())
         Else
             ' execute command
-            ProcessCommand = ExecuteCommand(Username, GetCumulativeAccess(Username, _
+            ProcessCommand3 = ExecuteCommand(Username, GetCumulativeAccess(Username, _
                 "USER"), tmpmsg, InBot, cmdRet())
         End If
         
-        If (ProcessCommand) Then
+        If (ProcessCommand3) Then
             ' display command response
             If (cmdRet(0) <> vbNullString) Then
                 ' loop through command response
@@ -240,11 +316,11 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                            
                             ' whisper message
                             Call AddQ("/w " & Username & _
-                                Space(1) & cmdRet(i), Priority.COMMAND_RESPONSE_MESSAGE, _
+                                Space(1) & cmdRet(i), PRIORITY.COMMAND_RESPONSE_MESSAGE, _
                                     Username)
                         Else
                             ' send standard message
-                            Call AddQ(cmdRet(i), Priority.COMMAND_RESPONSE_MESSAGE, _
+                            Call AddQ(cmdRet(i), PRIORITY.COMMAND_RESPONSE_MESSAGE, _
                                 Username)
                         End If
                     End If
@@ -255,7 +331,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             ' command is found to be invalid and issued
             ' internally
             If (InBot) Then
-                Call AddQ(Message, Priority.CONSOLE_MESSAGE, "(console)")
+                Call AddQ(Message, PRIORITY.CONSOLE_MESSAGE, "(console)")
             End If
         End If
     End If
@@ -267,10 +343,11 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
 ' default (if all else fails) error handler to keep erroneous
 ' commands and/or input formats from killing me
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: Command processor has encountered an error.")
+    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: " & Err.Description & _
+        " in ProcessCommand().")
 
     ' return command failure result
-    ProcessCommand = False
+    ProcessCommand3 = False
     
     Exit Function
 End Function ' end function ProcessCommand
@@ -307,181 +384,173 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
         ' grab command name
         cmdName = tmpmsg
     End If
-    
-    ' convert command name to lcase
-    cmdName = LCase$(cmdName)
-    
-    ' check for & convert aliases to officially
-    ' supported command names
-    cmdName = convertAlias(cmdName)
 
     ' initial access check
-    If ((ValidateAccess(dbAccess, cmdName) = True) Or _
-        (InBot = True)) Then
-        
-        ' command switch
-        Select Case (cmdName)
-            Case "quit":         Call OnQuit(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "locktext":     Call OnLockText(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "allowmp3":     Call OnAllowMp3(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "loadwinamp":   Call OnLoadWinamp(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "efp":          Call OnEfp(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "home":         Call OnHome(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "clan":         Call OnClan(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "peonban":      Call OnPeonBan(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "invite":       Call OnInvite(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "setmotd":      Call OnSetMotd(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "where":        Call OnWhere(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "quiettime":    Call OnQuietTime(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "roll":         Call OnRoll(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "sweepban":     Call OnSweepBan(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "sweepignore":  Call OnSweepIgnore(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "setname":      Call OnSetName(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "setpass":      Call OnSetPass(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "setkey":       Call OnSetKey(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "setexpkey":    Call OnSetExpKey(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "setserver":    Call OnSetServer(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "giveup":       Call OnGiveUp(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "math":         Call OnMath(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "idlebans":     Call OnIdleBans(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "chpw":         Call OnChPw(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "join":         Call OnJoin(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "sethome":      Call OnSetHome(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "resign":       Call OnResign(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "clearbanlist": Call OnClearBanList(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "kickonyell":   Call OnKickOnYell(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "rejoin":       Call OnRejoin(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "plugban":      Call OnPlugBan(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "clientbans":   Call OnClientBans(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "setvol":       Call OnSetVol(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "cadd":         Call OnCAdd(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "cdel":         Call OnCDel(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "banned":       Call OnBanned(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "ipbans":       Call OnIPBans(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "ipban":        Call OnIPBan(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "unipban":      Call OnUnIPBan(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "designate":    Call OnDesignate(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "shuffle":      Call OnShuffle(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "repeat":       Call OnRepeat(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "next":         Call OnNext(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "protect":      Call OnProtect(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "whispercmds":  Call OnWhisperCmds(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "stop":         Call OnStop(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "play":         Call OnPlay(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "useitunes":    Call OnUseiTunes(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "usewinamp":    Call OnUseWinamp(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "pause":        Call OnPause(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "fos":          Call OnFos(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "rem":          Call OnRem(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "reconnect":    Call OnReconnect(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "unigpriv":     Call OnUnIgPriv(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "igpriv":       Call OnIgPriv(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "block":        Call OnBlock(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "idletime":     Call OnIdleTime(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "idle":         Call OnIdle(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "shitdel":      Call OnShitDel(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "safedel":      Call OnSafeDel(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "tagdel":       Call OnTagDel(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "setidle":      Call OnSetIdle(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "idletype":     Call OnIdleType(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "filter":       Call OnFilter(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "trigger":      Call OnTrigger(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "settrigger":   Call OnSetTrigger(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "levelban":     Call OnLevelBan(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "d2levelban":   Call OnD2LevelBan(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "phrasebans":   Call OnPhraseBans(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "pon":          Call OnPhraseBans(Username, dbAccess, "on", InBot, cmdRet())
-            Case "poff":         Call OnPhraseBans(Username, dbAccess, "off", InBot, cmdRet())
-            Case "pstatus":      Call OnPhraseBans(Username, dbAccess, vbNullString, InBot, cmdRet())
-            Case "setpmsg":      Call OnSetPMsg(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "phrases":      Call OnPhrases(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "addphrase":    Call OnAddPhrase(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "delphrase":    Call OnDelPhrase(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "tagadd":       Call OnTagAdd(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "fadd":         Call OnFAdd(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "frem":         Call OnFRem(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "safelist":     Call OnSafeList(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "safeadd":      Call OnSafeAdd(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "safecheck":    Call OnSafeCheck(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "exile":        Call OnExile(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "unexile":      Call OnUnExile(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "shitlist":     Call OnShitList(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "tagbans":      Call OnTagBans(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "shitadd":      Call OnShitAdd(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "dnd":          Call OnDND(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "bancount":     Call OnBanCount(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "banlistcount": Call OnBanListCount(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "tagcheck":     Call OnTagCheck(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "slcheck":      Call OnSLCheck(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "readfile":     Call OnReadFile(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "greet":        Call OnGreet(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "allseen":      Call OnAllSeen(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "ban":          Call OnBan(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "unban":        Call OnUnban(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "kick":         Call OnKick(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "lastwhisper":  Call OnLastWhisper(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "say":          Call OnSay(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "expand":       Call OnExpand(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "detail":       Call OnDetail(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "info":         Call OnInfo(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "shout":        Call OnShout(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "voteban":      Call OnVoteBan(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "votekick":     Call OnVoteKick(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "vote":         Call OnVote(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "tally":        Call OnTally(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "cancel":       Call OnCancel(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "back":         Call OnBack(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "prev":         Call OnPrev(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "uptime":       Call OnUptime(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "away":         Call OnAway(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "mp3":          Call OnMP3(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "ping":         Call OnPing(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "addquote":     Call OnAddQuote(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "owner":        Call OnOwner(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "ignore":       Call OnIgnore(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "quote":        Call OnQuote(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "unignore":     Call OnUnignore(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "cq":           Call OnCQ(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "scq":          Call OnSCQ(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "time":         Call OnTime(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "getping":      Call OnGetPing(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "checkmail":    Call OnCheckMail(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "getmail":      Call OnGetMail(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "whoami":       Call OnWhoAmI(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "add":          Call OnAdd(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "mmail":        Call OnMMail(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "bmail":        Call OnBMail(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "designated":   Call OnDesignated(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "flip":         Call OnFlip(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "about":        Call OnAbout(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "server":       Call OnServer(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "find":         Call OnFind(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "whois":        Call OnWhoIs(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "findattr":     Call OnFindAttr(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "findgrp":      Call OnFindGrp(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "monitor":      Call OnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "unmonitor":    Call OnUnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "online":       Call OnOnline(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "help":         Call OnHelp(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "promote":      Call OnPromote(Username, dbAccess, msgData, InBot, cmdRet())
-            Case "demote":       Call OnDemote(Username, dbAccess, msgData, InBot, cmdRet())
-            Case Else
-                blnNoCmd = True
-        End Select
+    If (IsCorrectSyntax(cmdName, msgData) = False) Then
+        AddQ "Error: The syntax for the specified command is invalid. [" & BotVars.TriggerLong & _
+            "help " & cmdName & " for further information]"
     
-        ' ...
-        If (Not (blnNoCmd)) Then
-            ' append entry to command log
-            Call LogCommand(Username, Message)
-        End If
-        
-        ' was a command found? return.
-        ExecuteCommand = (Not (blnNoCmd))
-    Else
-        ' return false result, as user does not have sufficient
-        ' access to issue the requested command
-        ExecuteCommand = False
+        Exit Function
     End If
+    
+    ' command switch
+    Select Case (cmdName)
+        Case "quit":         Call OnQuit(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "locktext":     Call OnLockText(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "allowmp3":     Call OnAllowMp3(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "loadwinamp":   Call OnLoadWinamp(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "efp":          Call OnEfp(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "home":         Call OnHome(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "clan":         Call OnClan(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "peonban":      Call OnPeonBan(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "invite":       Call OnInvite(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "setmotd":      Call OnSetMotd(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "where":        Call OnWhere(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "quiettime":    Call OnQuietTime(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "roll":         Call OnRoll(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "sweepban":     Call OnSweepBan(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "sweepignore":  Call OnSweepIgnore(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "setname":      Call OnSetName(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "setpass":      Call OnSetPass(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "setkey":       Call OnSetKey(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "setexpkey":    Call OnSetExpKey(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "setserver":    Call OnSetServer(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "giveup":       Call OnGiveUp(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "math":         Call OnMath(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "idlebans":     Call OnIdleBans(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "chpw":         Call OnChPw(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "join":         Call OnJoin(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "sethome":      Call OnSetHome(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "resign":       Call OnResign(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "clearbanlist": Call OnClearBanList(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "kickonyell":   Call OnKickOnYell(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "rejoin":       Call OnRejoin(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "plugban":      Call OnPlugBan(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "clientbans":   Call OnClientBans(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "setvol":       Call OnSetVol(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "cadd":         Call OnCAdd(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "cdel":         Call OnCDel(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "banned":       Call OnBanned(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "ipbans":       Call OnIPBans(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "ipban":        Call OnIPBan(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "unipban":      Call OnUnIPBan(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "designate":    Call OnDesignate(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "shuffle":      Call OnShuffle(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "repeat":       Call OnRepeat(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "next":         Call OnNext(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "protect":      Call OnProtect(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "whispercmds":  Call OnWhisperCmds(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "stop":         Call OnStop(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "play":         Call OnPlay(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "useitunes":    Call OnUseiTunes(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "usewinamp":    Call OnUseWinamp(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "pause":        Call OnPause(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "fos":          Call OnFos(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "rem":          Call OnRem(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "reconnect":    Call OnReconnect(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "unigpriv":     Call OnUnIgPriv(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "igpriv":       Call OnIgPriv(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "block":        Call OnBlock(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "idletime":     Call OnIdleTime(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "idle":         Call OnIdle(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "shitdel":      Call OnShitDel(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "safedel":      Call OnSafeDel(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "tagdel":       Call OnTagDel(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "setidle":      Call OnSetIdle(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "idletype":     Call OnIdleType(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "filter":       Call OnFilter(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "trigger":      Call OnTrigger(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "settrigger":   Call OnSetTrigger(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "levelban":     Call OnLevelBan(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "d2levelban":   Call OnD2LevelBan(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "phrasebans":   Call OnPhraseBans(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "pon":          Call OnPhraseBans(Username, dbAccess, "on", InBot, cmdRet())
+        Case "poff":         Call OnPhraseBans(Username, dbAccess, "off", InBot, cmdRet())
+        Case "pstatus":      Call OnPhraseBans(Username, dbAccess, vbNullString, InBot, cmdRet())
+        Case "setpmsg":      Call OnSetPMsg(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "phrases":      Call OnPhrases(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "addphrase":    Call OnAddPhrase(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "delphrase":    Call OnDelPhrase(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "tagadd":       Call OnTagAdd(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "fadd":         Call OnFAdd(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "frem":         Call OnFRem(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "safelist":     Call OnSafeList(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "safeadd":      Call OnSafeAdd(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "safecheck":    Call OnSafeCheck(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "exile":        Call OnExile(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "unexile":      Call OnUnExile(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "shitlist":     Call OnShitList(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "tagbans":      Call OnTagBans(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "shitadd":      Call OnShitAdd(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "dnd":          Call OnDND(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "bancount":     Call OnBanCount(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "banlistcount": Call OnBanListCount(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "tagcheck":     Call OnTagCheck(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "slcheck":      Call OnSLCheck(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "readfile":     Call OnReadFile(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "greet":        Call OnGreet(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "allseen":      Call OnAllSeen(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "ban":          Call OnBan(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "unban":        Call OnUnban(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "kick":         Call OnKick(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "lastwhisper":  Call OnLastWhisper(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "say":          Call OnSay(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "expand":       Call OnExpand(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "detail":       Call OnDetail(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "info":         Call OnInfo(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "shout":        Call OnShout(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "voteban":      Call OnVoteBan(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "votekick":     Call OnVoteKick(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "vote":         Call OnVote(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "tally":        Call OnTally(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "cancel":       Call OnCancel(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "back":         Call OnBack(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "prev":         Call OnPrev(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "uptime":       Call OnUptime(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "away":         Call OnAway(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "mp3":          Call OnMP3(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "ping":         Call OnPing(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "addquote":     Call OnAddQuote(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "owner":        Call OnOwner(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "ignore":       Call OnIgnore(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "quote":        Call OnQuote(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "unignore":     Call OnUnignore(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "cq":           Call OnCQ(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "scq":          Call OnSCQ(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "time":         Call OnTime(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "getping":      Call OnGetPing(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "checkmail":    Call OnCheckMail(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "getmail":      Call OnGetMail(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "whoami":       Call OnWhoAmI(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "add":          Call OnAdd(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "mmail":        Call OnMMail(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "bmail":        Call OnBMail(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "designated":   Call OnDesignated(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "flip":         Call OnFlip(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "about":        Call OnAbout(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "server":       Call OnServer(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "find":         Call OnFind(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "whois":        Call OnWhoIs(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "findattr":     Call OnFindAttr(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "findgrp":      Call OnFindGrp(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "monitor":      Call OnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "unmonitor":    Call OnUnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "online":       Call OnOnline(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "help":         Call OnHelp(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "promote":      Call OnPromote(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "demote":       Call OnDemote(Username, dbAccess, msgData, InBot, cmdRet())
+        Case Else
+            blnNoCmd = True
+    End Select
+
+    ' ...
+    If (Not (blnNoCmd)) Then
+        ' append entry to command log
+        Call LogCommand(Username, Message)
+    End If
+    
+    ' was a command found? return.
+    ExecuteCommand = (Not (blnNoCmd))
 End Function
 
 ' handle quit command
@@ -592,7 +661,7 @@ Private Function OnHome(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ' This command will make the bot join its home channel.
     
     ' ...
-    Call AddQ("/join " & BotVars.HomeChannel, Priority.COMMAND_RESPONSE_MESSAGE, _
+    Call AddQ("/join " & BotVars.HomeChannel, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
         Username)
 End Function ' end function OnHome
 
@@ -612,7 +681,7 @@ Private Function OnClan(ByVal Username As String, ByRef dbAccess As udtGetAccess
                 tmpBuf = "Clan channel is now public."
                 
                 ' set clan channel to public
-                Call AddQ("/clan public", Priority.CHANNEL_MODERATION_MESSAGE, _
+                Call AddQ("/clan public", PRIORITY.CHANNEL_MODERATION_MESSAGE, _
                     Username)
                 
             Case "private", "priv"
@@ -620,12 +689,12 @@ Private Function OnClan(ByVal Username As String, ByRef dbAccess As udtGetAccess
                 tmpBuf = "Clan channel is now private."
                 
                 ' set clan channel to private
-                Call AddQ("/clan private", Priority.CHANNEL_MODERATION_MESSAGE, _
+                Call AddQ("/clan private", PRIORITY.CHANNEL_MODERATION_MESSAGE, _
                     Username)
                 
             Case Else
                 ' set clan channel to specified
-                Call AddQ("/clan " & msgData, Priority.COMMAND_RESPONSE_MESSAGE, _
+                Call AddQ("/clan " & msgData, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
                     Username)
         End Select
     Else
@@ -741,7 +810,7 @@ Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAcces
     ' if sent from within the bot, send "where" command
     ' directly to Battle.net
     If (InBot) Then
-        Call AddQ("/where " & msgData, Priority.COMMAND_RESPONSE_MESSAGE, _
+        Call AddQ("/where " & msgData, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
             "(console)")
     End If
 
@@ -817,7 +886,7 @@ Private Function OnRoll(ByVal Username As String, ByRef dbAccess As udtGetAccess
         Randomize
         
         If (StrictIsNumeric(msgData)) Then
-            If (Val(msgData) < 100000000) Then
+            If (val(msgData) < 100000000) Then
                 Track = CLng(Rnd * CLng(msgData))
                 
                 tmpBuf = "Random number (0-" & msgData & "): " & Track
@@ -850,7 +919,7 @@ Private Function OnSweepBan(ByVal Username As String, ByRef dbAccess As udtGetAc
         Call Cache(vbNullString, 255, "ban ")
         
         ' ...
-        Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, _
+        Call AddQ("/who " & msgData, PRIORITY.CHANNEL_MODERATION_MESSAGE, _
             Username, "request_receipt")
     Else
         ' ...
@@ -881,7 +950,7 @@ Private Function OnSweepIgnore(ByVal Username As String, ByRef dbAccess As udtGe
     Call Cache(vbNullString, 255, "squelch ")
     
     ' ...
-    Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, _
+    Call AddQ("/who " & msgData, PRIORITY.CHANNEL_MODERATION_MESSAGE, _
         Username, "request_receipt")
     
     ' return message
@@ -1224,7 +1293,7 @@ Private Function OnIdleBans(ByVal Username As String, ByRef dbAccess As udtGetAc
                 
                 If (Len(tmpData) > 0) Then
                     If (StrictIsNumeric(tmpData)) Then
-                        BotVars.IB_Wait = Val(tmpData)
+                        BotVars.IB_Wait = val(tmpData)
                     End If
                 End If
                 
@@ -1341,10 +1410,10 @@ Private Function OnChPw(ByVal Username As String, ByRef dbAccess As udtGetAccess
             
         Case "time", "delay", "wait"
             If (StrictIsNumeric(strArray(1))) Then
-                If ((Val(strArray(1)) <= 255) And _
-                    (Val(strArray(1)) >= 1)) Then
+                If ((val(strArray(1)) <= 255) And _
+                    (val(strArray(1)) >= 1)) Then
                    
-                    BotVars.ChannelPasswordDelay = CByte(Val(strArray(1)))
+                    BotVars.ChannelPasswordDelay = CByte(val(strArray(1)))
                     
                     tmpBuf = "Channel password delay set to " & strArray(1) & "."
                 Else
@@ -1383,7 +1452,7 @@ Private Function OnJoin(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ' ...
     If (LenB(msgData) > 0) Then
         ' ...
-        Call AddQ("/join " & msgData, Priority.COMMAND_RESPONSE_MESSAGE, _
+        Call AddQ("/join " & msgData, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
             Username)
     End If
 End Function ' end function OnJoin
@@ -1414,7 +1483,7 @@ Private Function OnResign(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' by rejoining the channel through the use of Battle.net's /resign
     ' command.
     
-    Call AddQ("/resign", Priority.SPECIAL_MESSAGE, Username)
+    Call AddQ("/resign", PRIORITY.SPECIAL_MESSAGE, Username)
 End Function ' end function OnResign
 
 ' handle clearbanlist
@@ -1469,11 +1538,11 @@ Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' This command will make the bot rejoin the current channel.
     
     ' join temporary channel
-    Call AddQ("/join " & CurrentUsername & " Rejoin", Priority.COMMAND_RESPONSE_MESSAGE, _
+    Call AddQ("/join " & CurrentUsername & " Rejoin", PRIORITY.COMMAND_RESPONSE_MESSAGE, _
         Username)
     
     ' rejoin previous channel
-    Call AddQ("/join " & gChannel.Current, Priority.COMMAND_RESPONSE_MESSAGE, Username)
+    Call AddQ("/join " & gChannel.Current, PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
 End Function ' end function OnRejoin
 
 ' handle plugban command
@@ -1506,7 +1575,7 @@ Private Function OnPlugBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 
                 For i = 1 To colUsersInChannel.Count
                     With colUsersInChannel.Item(i)
-                        If ((.Flags = 16) And (Not .Safelisted)) Then
+                        If ((.flags = 16) And (Not .Safelisted)) Then
                             Call AddQ("/ban " & .Username & " PlugBan")
                         End If
                     End With
@@ -1713,7 +1782,7 @@ Private Function OnIPBans(ByVal Username As String, ByRef dbAccess As udtGetAcce
         
         If ((MyFlags = 2) Or (MyFlags = 18)) Then
             For i = 1 To colUsersInChannel.Count
-                Select Case colUsersInChannel.Item(i).Flags
+                Select Case colUsersInChannel.Item(i).flags
                     Case 20, 30, 32, 48
                         Call AddQ("/ban " & colUsersInChannel.Item(i).Username & _
                             " IPBanned.")
@@ -1761,7 +1830,7 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
         End If
         
         ' ...
-        If (dbAccess.Access <= 100) Then
+        If (dbAccess.access <= 100) Then
             If ((GetSafelist(tmpAcc)) Or (GetSafelist(msgData))) Then
                 ' return message
                 cmdRet(0) = "Error: That user is safelisted."
@@ -1774,8 +1843,8 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
         gAcc = GetAccess(msgData)
         
         ' ...
-        If ((gAcc.Access >= dbAccess.Access) Or _
-            ((InStr(gAcc.Flags, "A") > 0) And (dbAccess.Access <= 100))) Then
+        If ((gAcc.access >= dbAccess.access) Or _
+            ((InStr(gAcc.flags, "A") > 0) And (dbAccess.access <= 100))) Then
 
             tmpBuf = "Error: You do not have enough access to do that."
         Else
@@ -2185,16 +2254,16 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     u = msgData
     
     If (Len(u) > 0) Then
-        If ((GetAccess(u, dbType).Access = -1) And _
-            (GetAccess(u, dbType).Flags = vbNullString)) Then
+        If ((GetAccess(u, dbType).access = -1) And _
+            (GetAccess(u, dbType).flags = vbNullString)) Then
             
             tmpBuf = "User not found."
-        ElseIf (GetAccess(u, dbType).Access >= dbAccess.Access) Then
+        ElseIf (GetAccess(u, dbType).access >= dbAccess.access) Then
             tmpBuf = "That user has higher or equal access."
-        ElseIf ((InStr(1, GetAccess(u, dbType).Flags, "L") <> 0) And _
+        ElseIf ((InStr(1, GetAccess(u, dbType).flags, "L") <> 0) And _
                 (Not (InBot)) And _
-                (InStr(1, GetAccess(Username, dbType).Flags, "A") = 0) And _
-                (GetAccess(Username, dbType).Access <= 99)) Then
+                (InStr(1, GetAccess(Username, dbType).flags, "A") = 0) And _
+                (GetAccess(Username, dbType).access <= 99)) Then
             
                 tmpBuf = "Error: That user is Locked."
         Else
@@ -2252,7 +2321,7 @@ Private Function OnUnIgPriv(ByVal Username As String, ByRef dbAccess As udtGetAc
     Dim tmpBuf As String ' temporary output buffer
 
     ' ...
-    Call AddQ("/o unigpriv", Priority.COMMAND_RESPONSE_MESSAGE, _
+    Call AddQ("/o unigpriv", PRIORITY.COMMAND_RESPONSE_MESSAGE, _
         Username)
     
     ' ...
@@ -2269,7 +2338,7 @@ Private Function OnIgPriv(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Dim tmpBuf As String ' temporary output buffer
 
     ' ...
-    Call AddQ("/o igpriv", Priority.COMMAND_RESPONSE_MESSAGE, _
+    Call AddQ("/o igpriv", PRIORITY.COMMAND_RESPONSE_MESSAGE, _
         Username)
     
     ' ...
@@ -2318,7 +2387,7 @@ Private Function OnIdleTime(ByVal Username As String, ByRef dbAccess As udtGetAc
 
     u = msgData
         
-    If ((Not (StrictIsNumeric(u))) Or (Val(u) > 50000)) Then
+    If ((Not (StrictIsNumeric(u))) Or (val(u) > 50000)) Then
         tmpBuf = "Error setting idle wait time."
     Else
         Call WriteINI("Main", "IdleWait", 2 * Int(u))
@@ -2643,7 +2712,7 @@ Private Function OnLevelBan(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     If (Len(msgData) > 0) Then
         If (StrictIsNumeric(msgData)) Then
-            i = Val(msgData)
+            i = val(msgData)
             
             If (i >= 1) Then
                 If (i <= 255) Then
@@ -2687,7 +2756,7 @@ Private Function OnD2LevelBan(ByVal Username As String, ByRef dbAccess As udtGet
     
     If (Len(msgData) > 0) Then
         If (StrictIsNumeric(msgData)) Then
-            i = Val(msgData)
+            i = val(msgData)
                 
             If (i >= 1) Then
                 If (i <= 255) Then
@@ -2974,7 +3043,7 @@ Private Function OnFAdd(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     If (LenB(u) > 0) Then
         ' ...
-        Call AddQ("/f a " & u, Priority.COMMAND_RESPONSE_MESSAGE, _
+        Call AddQ("/f a " & u, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
             Username)
         
         ' ...
@@ -2997,7 +3066,7 @@ Private Function OnFRem(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     If (Len(u) > 0) Then
         ' ...
-        Call AddQ("/f r " & u, Priority.COMMAND_RESPONSE_MESSAGE, _
+        Call AddQ("/f r " & u, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
             Username)
         
         ' ...
@@ -3207,13 +3276,13 @@ Private Function OnDND(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     ' ...
     If (LenB(msgData) = 0) Then
         ' ...
-        Call AddQ("/dnd", Priority.COMMAND_RESPONSE_MESSAGE)
+        Call AddQ("/dnd", PRIORITY.COMMAND_RESPONSE_MESSAGE)
     Else
         ' ...
         DNDMsg = msgData
     
         ' ...
-        Call AddQ("/dnd " & DNDMsg, Priority.COMMAND_RESPONSE_MESSAGE, _
+        Call AddQ("/dnd " & DNDMsg, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
             Username)
     End If
 End Function ' end function OnDND
@@ -3283,10 +3352,10 @@ Private Function OnTagCheck(ByVal Username As String, ByRef dbAccess As udtGetAc
     If (Len(Y) > 0) Then
         gAcc = GetCumulativeAccess(Y)
         
-        If (InStr(1, gAcc.Flags, "B") <> 0) Then
+        If (InStr(1, gAcc.flags, "B") <> 0) Then
             tmpBuf = Y & " has been matched to one or more tagbans"
         
-            If (InStr(1, gAcc.Flags, "S") <> 0) Then
+            If (InStr(1, gAcc.flags, "S") <> 0) Then
                 tmpBuf = tmpBuf & "; however, " & Y & " has also been found on the bot's " & _
                     "safelist and therefore will not be banned"
             End If
@@ -3316,10 +3385,10 @@ Private Function OnSLCheck(ByVal Username As String, ByRef dbAccess As udtGetAcc
     If (Len(Y) > 0) Then
         gAcc = GetCumulativeAccess(Y)
         
-        If (InStr(1, gAcc.Flags, "B") <> 0) Then
+        If (InStr(1, gAcc.flags, "B") <> 0) Then
             tmpBuf = Y & " is on the bot's shitlist"
         
-            If (InStr(1, gAcc.Flags, "S") <> 0) Then
+            If (InStr(1, gAcc.flags, "S") <> 0) Then
                 tmpBuf = tmpBuf & "; however, " & Y & " is also on the " & _
                     "bot's safelist and therefore will not be banned"
             End If
@@ -3593,7 +3662,7 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 Call WildCardBan(u, banmsg, 1)
             Else
                 Y = Ban(u & IIf(banmsg <> vbNullString, Space$(1) & banmsg, _
-                    vbNullString), dbAccess.Access)
+                    vbNullString), dbAccess.access)
             End If
             
             If (Len(Y) > 2) Then
@@ -3676,14 +3745,14 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
             End If
             
             If (InStr(1, u, "*", vbTextCompare) > 0) Then
-                If (dbAccess.Access >= 100) Then
+                If (dbAccess.access >= 100) Then
                     Call WildCardBan(u, banmsg, 0)
                 Else
                     Call WildCardBan(u, banmsg, 0)
                 End If
             Else
                 Y = Ban(u & IIf(Len(banmsg) > 0, Space$(1) & banmsg, vbNullString), _
-                    dbAccess.Access, 1)
+                    dbAccess.access, 1)
                 
                 If (Len(Y) > 1) Then
                     tmpBuf = Y
@@ -3723,8 +3792,8 @@ Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim tmpSend As String ' ...
     
     If (Len(msgData)) Then
-        If (dbAccess.Access >= GetAccessINIValue("say70", 70)) Then
-            If (dbAccess.Access >= GetAccessINIValue("say90", 90)) Then
+        If (dbAccess.access >= GetAccessINIValue("say70", 70)) Then
+            If (dbAccess.access >= GetAccessINIValue("say90", 90)) Then
                 tmpSend = msgData
             Else
                 tmpSend = Replace(msgData, "/", "")
@@ -3734,7 +3803,7 @@ Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 msgData
         End If
         
-        Call AddQ(tmpSend, Priority.COMMAND_RESPONSE_MESSAGE, Username)
+        Call AddQ(tmpSend, PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
     End If
 
     ' return message
@@ -3749,8 +3818,8 @@ Private Function OnExpand(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Dim tmpSend As String
 
     If (Len(msgData)) Then
-        If (dbAccess.Access >= GetAccessINIValue("say70", 70)) Then
-            If (dbAccess.Access >= GetAccessINIValue("say90", 90)) Then
+        If (dbAccess.access >= GetAccessINIValue("say70", 70)) Then
+            If (dbAccess.access >= GetAccessINIValue("say90", 90)) Then
                 tmpSend = msgData
             Else
                 tmpSend = Replace(msgData, "/", "")
@@ -3804,7 +3873,7 @@ Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccess
             tmpBuf(0) = "User " & .Username & " is logged on using " & _
                 ProductCodeToFullName(.Product)
             
-            If ((.Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+            If ((.flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
                 tmpBuf(0) = tmpBuf(0) & " with ops, and a ping time of " & .Ping & "ms."
             Else
                 tmpBuf(0) = tmpBuf(0) & " with a ping time of " & .Ping & "ms."
@@ -3829,8 +3898,8 @@ Private Function OnShout(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Dim tmpSend As String
 
     If (Len(msgData)) Then
-        If (dbAccess.Access > 69) Then
-            If (dbAccess.Access > 89) Then
+        If (dbAccess.access > 69) Then
+            If (dbAccess.access > 89) Then
                 tmpSend = msgData
             Else
                 tmpSend = Replace(msgData, "/", vbNullString, 1)
@@ -3908,7 +3977,7 @@ Private Function OnVote(ByVal Username As String, ByRef dbAccess As udtGetAccess
     If (Len(msgData) > 0) Then
         If (VoteDuration = -1) Then
             ' ensure that tmpDuration is an integer
-            tmpDuration = Val(msgData)
+            tmpDuration = val(msgData)
         
             ' check for proper duration time and call for vote
             If ((tmpDuration > 0) And (tmpDuration <= 32000)) Then
@@ -3981,14 +4050,14 @@ Private Function OnBack(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ' ...
     If (AwayMsg <> vbNullString) Then
         ' ...
-        Call AddQ("/away", Priority.COMMAND_RESPONSE_MESSAGE, _
+        Call AddQ("/away", PRIORITY.COMMAND_RESPONSE_MESSAGE, _
             Username)
         
         ' ...
         If (InBot = False) Then
             ' alert users of status change
             Call AddQ("/me is back from " & AwayMsg & ".", _
-                Priority.COMMAND_RESPONSE_MESSAGE)
+                PRIORITY.COMMAND_RESPONSE_MESSAGE)
             
             ' set away message
             AwayMsg = vbNullString
@@ -4050,12 +4119,12 @@ Private Function OnAway(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ' ...
     If (LenB(AwayMsg) > 0) Then
         ' send away command to battle.net
-        Call AddQ("/away", Priority.COMMAND_RESPONSE_MESSAGE)
+        Call AddQ("/away", PRIORITY.COMMAND_RESPONSE_MESSAGE)
         
         ' alert users of status change
         If (InBot = False) Then
             Call AddQ("/me is back from (" & AwayMsg & ")", _
-                Priority.COMMAND_RESPONSE_MESSAGE)
+                PRIORITY.COMMAND_RESPONSE_MESSAGE)
         End If
         
         ' set away message
@@ -4066,7 +4135,7 @@ Private Function OnAway(ByVal Username As String, ByRef dbAccess As udtGetAccess
             AwayMsg = msgData
             
             ' send away command to battle.net
-            Call AddQ("/away " & AwayMsg, Priority.COMMAND_RESPONSE_MESSAGE)
+            Call AddQ("/away " & AwayMsg, PRIORITY.COMMAND_RESPONSE_MESSAGE)
             
             ' alert users of status change
             If (InBot = False) Then
@@ -4078,7 +4147,7 @@ Private Function OnAway(ByVal Username As String, ByRef dbAccess As udtGetAccess
             AwayMsg = " - "
         
             ' send away command to battle.net
-            Call AddQ("/away", Priority.COMMAND_RESPONSE_MESSAGE)
+            Call AddQ("/away", PRIORITY.COMMAND_RESPONSE_MESSAGE)
             
             ' alert users of status change
             If (InBot = False) Then
@@ -4205,8 +4274,8 @@ Private Function OnIgnore(ByVal Username As String, ByRef dbAccess As udtGetAcce
     u = msgData
     
     If (Len(u)) Then
-        If ((GetAccess(u).Access >= dbAccess.Access) Or _
-            (InStr(GetAccess(u).Flags, "A"))) Then
+        If ((GetAccess(u).access >= dbAccess.access) Or _
+            (InStr(GetAccess(u).flags, "A"))) Then
             
             tmpBuf = "That user has equal or higher access."
         Else
@@ -4417,21 +4486,21 @@ Private Function OnWhoAmI(ByVal Username As String, ByRef dbAccess As udtGetAcce
         tmpBuf = "You are the bot console."
         
         If (g_Online) Then
-            Call AddQ("/whoami", Priority.CONSOLE_MESSAGE)
+            Call AddQ("/whoami", PRIORITY.CONSOLE_MESSAGE)
         End If
-    ElseIf (dbAccess.Access = 1000) Then
+    ElseIf (dbAccess.access = 1000) Then
         tmpBuf = "You are the bot owner, " & Username & "."
     Else
-        If (dbAccess.Access > 0) Then
-            If (dbAccess.Flags <> vbNullString) Then
-                tmpBuf = dbAccess.Username & " has access " & dbAccess.Access & _
-                    " and flags " & dbAccess.Flags & "."
+        If (dbAccess.access > 0) Then
+            If (dbAccess.flags <> vbNullString) Then
+                tmpBuf = dbAccess.Username & " has access " & dbAccess.access & _
+                    " and flags " & dbAccess.flags & "."
             Else
-                tmpBuf = dbAccess.Username & " has access " & dbAccess.Access & "."
+                tmpBuf = dbAccess.Username & " has access " & dbAccess.access & "."
             End If
         Else
-            If (dbAccess.Flags <> vbNullString) Then
-                tmpBuf = dbAccess.Username & " has flags " & dbAccess.Flags & "."
+            If (dbAccess.flags <> vbNullString) Then
+                tmpBuf = dbAccess.Username & " has flags " & dbAccess.flags & "."
             End If
         End If
     End If
@@ -4453,8 +4522,8 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim tmpBuf     As String  ' temporary output buffer
     Dim dbPath     As String  ' ...
     Dim user       As String  ' ...
-    Dim Rank       As Integer ' ...
-    Dim Flags      As String  ' ...
+    Dim rank       As Integer ' ...
+    Dim flags      As String  ' ...
     Dim found      As Boolean ' ...
     Dim Params     As String  ' ...
     Dim index      As Integer ' ...
@@ -4499,15 +4568,15 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
         ' grab rank & flags
         If (StrictIsNumeric(strArray(1))) Then
             ' grab rank
-            Rank = strArray(1)
+            rank = strArray(1)
             
             ' grab flags
             If (UBound(strArray) >= 2) Then
-                Flags = strArray(2)
+                flags = strArray(2)
             End If
         Else
             ' grab flags
-            Flags = strArray(1)
+            flags = strArray(1)
         End If
         
         ' do we have any special paramaters?
@@ -4627,7 +4696,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 ' ...
                                 tmp = GetAccess(splt(j), "GROUP")
                             
-                                If (dbAccess.Access < tmp.Access) Then
+                                If (dbAccess.access < tmp.access) Then
                                     cmdRet(0) = "Error: You do not have sufficient access to " & _
                                         "add a member to the specified group."
                                         
@@ -4691,58 +4760,58 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
         End If
 
         ' is rank valid?
-        If ((Rank <= 0) And (Flags = vbNullString) And _
+        If ((rank <= 0) And (flags = vbNullString) And _
             (sGrp = vbNullString)) Then
             
             tmpBuf = "Error: You have specified an invalid rank."
             
         ' is rank higher than user's rank?
-        ElseIf ((Rank) And (Rank >= dbAccess.Access)) Then
+        ElseIf ((rank) And (rank >= dbAccess.access)) Then
             tmpBuf = "Error: You do not have sufficient access to assign an entry with the " & _
                 "specified rank."
             
         ' can we modify specified user?
-        ElseIf ((gAcc.Access) And (gAcc.Access >= dbAccess.Access)) Then
+        ElseIf ((gAcc.access) And (gAcc.access >= dbAccess.access)) Then
             tmpBuf = "Error: You do not have sufficient access to modify the specified entry."
         Else
             ' did we specify flags?
-            If (Len(Flags)) Then
+            If (Len(flags)) Then
                 Dim currentCharacter As String ' ...
             
-                For i = 1 To Len(Flags)
-                    currentCharacter = Mid$(Flags, i, 1)
+                For i = 1 To Len(flags)
+                    currentCharacter = Mid$(flags, i, 1)
                 
                     If ((currentCharacter <> "+") And (currentCharacter <> "-")) Then
                         Select Case (currentCharacter)
                             Case "A" ' administrator
-                                If (dbAccess.Access <= 100) Then
+                                If (dbAccess.access <= 100) Then
                                     Exit For
                                 End If
                                 
                             Case "B" ' banned
-                                If (dbAccess.Access < 70) Then
+                                If (dbAccess.access < 70) Then
                                     Exit For
                                 End If
                                 
                             Case "D" ' designated
-                                If (dbAccess.Access < 100) Then
+                                If (dbAccess.access < 100) Then
                                     Exit For
                                 End If
                             
                             Case "L" ' locked
-                                If (dbAccess.Access < 70) Then
+                                If (dbAccess.access < 70) Then
                                     Exit For
                                 End If
                             
                             Case "S" ' safelisted
-                                If (dbAccess.Access < 70) Then
+                                If (dbAccess.access < 70) Then
                                     Exit For
                                 End If
                         End Select
                     End If
                 Next i
                 
-                If (i < (Len(Flags) + 1)) Then
+                If (i < (Len(flags) + 1)) Then
                     ' return message
                     cmdRet(0) = "Error: You do not have sufficient access to add one or " & _
                         "more flags specified."
@@ -4750,28 +4819,28 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     Exit Function
                 Else
                     ' are we adding flags?
-                    If (Left$(Flags, 1) = "+") Then
+                    If (Left$(flags, 1) = "+") Then
                         ' remove "+" prefix
-                        Flags = Mid$(Flags, 2)
+                        flags = Mid$(flags, 2)
                     
                         ' ...
-                        If (Len(Flags) > 0) Then
+                        If (Len(flags) > 0) Then
                             ' set user flags & check for duplicate entries
-                            For i = 1 To Len(Flags)
-                                currentCharacter = Mid$(Flags, i, 1)
+                            For i = 1 To Len(flags)
+                                currentCharacter = Mid$(flags, i, 1)
                             
                                 ' is flag valid (alphabetic)?
                                 If (((Asc(currentCharacter) >= Asc("A")) And (Asc(currentCharacter) <= Asc("Z"))) Or _
                                     ((Asc(currentCharacter) >= Asc("a")) And (Asc(currentCharacter) <= Asc("z")))) Then
                                     
-                                    If (InStr(1, gAcc.Flags, currentCharacter, vbBinaryCompare) = 0) Then
-                                        gAcc.Flags = gAcc.Flags & currentCharacter
+                                    If (InStr(1, gAcc.flags, currentCharacter, vbBinaryCompare) = 0) Then
+                                        gAcc.flags = gAcc.flags & currentCharacter
                                     End If
                                 End If
                             Next i
                             
                             ' ...
-                            If (Len(gAcc.Flags) = 0) Then
+                            If (Len(gAcc.flags) = 0) Then
                                 ' return message
                                 cmdRet(0) = "Error: The flag(s) that you have specified are invalid."
                             
@@ -4785,11 +4854,11 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         End If
 
                     ' are we removing flags?
-                    ElseIf (Left$(Flags, 1) = "-") Then
+                    ElseIf (Left$(flags, 1) = "-") Then
                         Dim tmpFlags As String
                     
                         ' remove "-" prefix
-                        tmpFlags = Mid$(Flags, 2)
+                        tmpFlags = Mid$(flags, 2)
                         
                         ' are we modifying an existing user? we better be!
                         If (gAcc.Username <> vbNullString) Then
@@ -4813,7 +4882,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                                 
                                 ' remove specified flags
                                 For i = 1 To Len(tmpFlags)
-                                    gAcc.Flags = Replace(gAcc.Flags, Mid$(tmpFlags, i, 1), _
+                                    gAcc.flags = Replace(gAcc.flags, Mid$(tmpFlags, i, 1), _
                                         vbNullString)
                                 Next i
                             Else
@@ -4831,7 +4900,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         End If
                         
                         ' does this entry have any remaining access?
-                        If ((gAcc.Access = 0) And (gAcc.Flags = vbNullString) And _
+                        If ((gAcc.access = 0) And (gAcc.flags = vbNullString) And _
                             ((gAcc.Groups = vbNullString) Or (gAcc.Groups = "%"))) Then
                             
                             Dim res As Boolean ' ...
@@ -4856,27 +4925,27 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         'Call DB_remove(user, dbType)
                     
                         ' clear user flags
-                        gAcc.Flags = vbNullString
+                        gAcc.flags = vbNullString
                         
                         ' set rank to specified
-                        gAcc.Access = Rank
+                        gAcc.access = rank
                     
                         ' set user flags & check for duplicate entries
-                        For i = 1 To Len(Flags)
-                            currentCharacter = Mid$(Flags, i, 1)
+                        For i = 1 To Len(flags)
+                            currentCharacter = Mid$(flags, i, 1)
                         
                             ' is flag valid (alphabetic)?
                             If (((Asc(currentCharacter) >= Asc("A")) And (Asc(currentCharacter) <= Asc("Z"))) Or _
                                 ((Asc(currentCharacter) >= Asc("a")) And (Asc(currentCharacter) <= Asc("z")))) Then
                                 
-                                If (InStr(1, gAcc.Flags, currentCharacter, vbBinaryCompare) = 0) Then
-                                    gAcc.Flags = gAcc.Flags & currentCharacter
+                                If (InStr(1, gAcc.flags, currentCharacter, vbBinaryCompare) = 0) Then
+                                    gAcc.flags = gAcc.flags & currentCharacter
                                 End If
                             End If
                         Next i
                         
                         ' ...
-                        If (Len(gAcc.Flags) = 0) Then
+                        If (Len(gAcc.flags) = 0) Then
                             ' return message
                             cmdRet(0) = "Error: The flag(s) that you have specified are invalid."
                         
@@ -4890,10 +4959,10 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 'Call DB_remove(user, dbType)
 
                 ' clear flags
-                gAcc.Flags = vbNullString
+                gAcc.flags = vbNullString
             
                 ' set rank to specified
-                gAcc.Access = Rank
+                gAcc.access = rank
             End If
 
             ' grab path to database
@@ -4907,8 +4976,8 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     ' modify database entry
                     With DB(i)
                         .Username = user
-                        .Access = gAcc.Access
-                        .Flags = gAcc.Flags
+                        .access = gAcc.access
+                        .flags = gAcc.flags
                         .ModifiedBy = Username
                         .ModifiedOn = Now
                         .Type = dbType
@@ -4939,9 +5008,9 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 
                 With DB(UBound(DB))
                     .Username = user
-                    .Access = IIf((gAcc.Access >= 0), _
-                        gAcc.Access, 0)
-                    .Flags = gAcc.Flags
+                    .access = IIf((gAcc.access >= 0), _
+                        gAcc.access, 0)
+                    .flags = gAcc.flags
                     .ModifiedBy = Username
                     .ModifiedOn = Now
                     .AddedBy = Username
@@ -4962,25 +5031,25 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             End If
             
             ' check for errors & create message
-            If (gAcc.Access > 0) Then
+            If (gAcc.access > 0) Then
                 tmpBuf = Chr(34) & user & Chr(34) & " has been given access " & _
-                    gAcc.Access
+                    gAcc.access
                 
                 ' was the user given the specified flags, too?
-                If (Len(gAcc.Flags)) Then
+                If (Len(gAcc.flags)) Then
                     ' lets make sure we don't use
                     ' improper grammar because of groups!
                     If (Len(sGrp)) Then
-                        tmpBuf = tmpBuf & ", flags " & gAcc.Flags
+                        tmpBuf = tmpBuf & ", flags " & gAcc.flags
                     Else
-                        tmpBuf = tmpBuf & " and flags " & gAcc.Flags
+                        tmpBuf = tmpBuf & " and flags " & gAcc.flags
                     End If
                 End If
             Else
                 ' was the user given the specified flags?
-                If (Len(gAcc.Flags)) Then
+                If (Len(gAcc.flags)) Then
                     tmpBuf = Chr(34) & user & Chr(34) & " has been given flags " & _
-                        gAcc.Flags
+                        gAcc.flags
                 End If
             End If
             
@@ -5012,7 +5081,7 @@ End Function ' end function OnAdd
 Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim Temp       As udtMail
+    Dim temp       As udtMail
     
     Dim strArray() As String
     Dim tmpBuf     As String ' temporary output buffer
@@ -5027,22 +5096,22 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
     
         tmpBuf = "Mass mailing "
 
-        With Temp
+        With temp
             .From = Username
             .Message = strArray(1)
             
             If (StrictIsNumeric(strArray(0))) Then
                 'number games
-                Track = Val(strArray(0))
+                Track = val(strArray(0))
                 
                 For c = 0 To UBound(DB)
                     gAcc = GetCumulativeAccess(DB(c).Username)
                     
                     If (StrComp(gAcc.Type, "USER", vbTextCompare) = 0) Then
-                        If (gAcc.Access = Track) Then
+                        If (gAcc.access = Track) Then
                             .To = DB(c).Username
                             
-                            Call AddMail(Temp)
+                            Call AddMail(temp)
                         End If
                     End If
                 Next c
@@ -5054,12 +5123,12 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
                 
                     For f = 1 To Len(strArray(0))
                         If (StrComp(gAcc.Type, "USER", vbTextCompare) = 0) Then
-                            If (InStr(1, gAcc.Flags, Mid$(strArray(0), f, 1), _
+                            If (InStr(1, gAcc.flags, Mid$(strArray(0), f, 1), _
                                 vbBinaryCompare) > 0) Then
                                 
                                 .To = DB(c).Username
                                 
-                                Call AddMail(Temp)
+                                Call AddMail(temp)
                                 
                                 Exit For
                             End If
@@ -5084,7 +5153,7 @@ End Function ' end function OnMMail
 Private Function OnBMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim Temp       As udtMail ' ...
+    Dim temp       As udtMail ' ...
 
     Dim strArray() As String ' ...
     Dim tmpBuf     As String ' temporary output buffer
@@ -5094,17 +5163,17 @@ Private Function OnBMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
     
     If (UBound(strArray) > 0) Then
         ' ...
-        With Temp
+        With temp
             .To = strArray(0)
             .From = Username
             .Message = strArray(1)
         End With
         
-        If (Len(Temp.To) = 0) Then
+        If (Len(temp.To) = 0) Then
             tmpBuf = "Error: Invalid user."
         Else
             ' ...
-            Call AddMail(Temp)
+            Call AddMail(temp)
             
             tmpBuf = "Added mail for " & strArray(0) & "."
         End If
@@ -5219,7 +5288,7 @@ Private Function OnFind(ByVal Username As String, ByRef dbAccess As udtGetAccess
     If (Len(u) > 0) Then
         If (StrictIsNumeric(u)) Then
             ' execute search
-            Call searchDatabase(tmpBuf(), , , , , Val(u))
+            Call searchDatabase(tmpBuf(), , , , , val(u))
         ElseIf (InStr(1, u, Space(1), vbBinaryCompare) <> 0) Then
             Dim lowerBound As String ' ...
             Dim upperBound As String ' ...
@@ -5237,7 +5306,7 @@ Private Function OnFind(ByVal Username As String, ByRef dbAccess As udtGetAccess
                 (StrictIsNumeric(upperBound))) Then
             
                 ' execute search
-                Call searchDatabase(tmpBuf(), , , , , CInt(Val(lowerBound)), CInt(Val(upperBound)))
+                Call searchDatabase(tmpBuf(), , , , , CInt(val(lowerBound)), CInt(val(upperBound)))
             Else
                 tmpBuf(0) = "Error: You have specified an invalid range."
             End If
@@ -5269,23 +5338,23 @@ Private Function OnWhoIs(ByVal Username As String, ByRef dbAccess As udtGetAcces
     u = msgData
             
     If (InBot) Then
-        Call AddQ("/whois " & u, Priority.CONSOLE_MESSAGE)
+        Call AddQ("/whois " & u, PRIORITY.CONSOLE_MESSAGE)
     End If
 
     If (Len(u)) Then
         gAcc = GetCumulativeAccess(u)
         
         If (gAcc.Username <> vbNullString) Then
-            If (gAcc.Access > 0) Then
-                If (gAcc.Flags <> vbNullString) Then
-                    tmpBuf = gAcc.Username & " has access " & gAcc.Access & _
-                        " and flags " & gAcc.Flags & "."
+            If (gAcc.access > 0) Then
+                If (gAcc.flags <> vbNullString) Then
+                    tmpBuf = gAcc.Username & " has access " & gAcc.access & _
+                        " and flags " & gAcc.flags & "."
                 Else
-                    tmpBuf = gAcc.Username & " has access " & gAcc.Access & "."
+                    tmpBuf = gAcc.Username & " has access " & gAcc.access & "."
                 End If
             Else
-                If (gAcc.Flags <> vbNullString) Then
-                    tmpBuf = gAcc.Username & " has flags " & gAcc.Flags & "."
+                If (gAcc.flags <> vbNullString) Then
+                    tmpBuf = gAcc.Username & " has flags " & gAcc.flags & "."
                 End If
             End If
         Else
@@ -5522,13 +5591,13 @@ End Function
 
 Private Function Expand(ByVal s As String) As String
     Dim i As Integer
-    Dim Temp As String
+    Dim temp As String
     
     If Len(s) > 1 Then
         For i = 1 To Len(s)
-            Temp = Temp & Mid(s, i, 1) & Space(1)
+            temp = temp & Mid(s, i, 1) & Space(1)
         Next i
-        Expand = Trim(Temp)
+        Expand = Trim(temp)
     Else
         Expand = s
     End If
@@ -5587,7 +5656,7 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
                         If (z Like sMatch) Then
                             If (GetSafelist(.Username) = False) Then
                                 If ((LenB(.Username) > 0) And _
-                                   ((.Flags <> 2) And (.Flags <> 18))) Then
+                                   ((.flags <> 2) And (.flags <> 18))) Then
                                    
                                     Call AddQ("/" & Typ & .Username & Space(1) & _
                                         smsgData)
@@ -5638,7 +5707,7 @@ End Function
 Private Function searchDatabase(ByRef arrReturn() As String, Optional user As String = vbNullString, _
     Optional ByVal match As String = vbNullString, Optional Group As String = vbNullString, _
     Optional dbType As String = vbNullString, Optional lowerBound As Integer = -1, _
-    Optional upperBound As Integer = -1, Optional Flags As String = vbNullString) As Integer
+    Optional upperBound As Integer = -1, Optional flags As String = vbNullString) As Integer
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -5663,15 +5732,15 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 " (" & LCase$(gAcc.Type) & ")"
         End If
         
-        If (gAcc.Access > 0) Then
-            If (gAcc.Flags <> vbNullString) Then
-                tmpBuf = "Found user " & gAcc.Username & ", with access " & gAcc.Access & _
-                    " and flags " & gAcc.Flags & "."
+        If (gAcc.access > 0) Then
+            If (gAcc.flags <> vbNullString) Then
+                tmpBuf = "Found user " & gAcc.Username & ", with access " & gAcc.access & _
+                    " and flags " & gAcc.flags & "."
             Else
-                tmpBuf = "Found user " & gAcc.Username & ", with access " & gAcc.Access & "."
+                tmpBuf = "Found user " & gAcc.Username & ", with access " & gAcc.access & "."
             End If
-        ElseIf (gAcc.Flags <> vbNullString) Then
-            tmpBuf = "Found user " & gAcc.Username & ", with flags " & gAcc.Flags & "."
+        ElseIf (gAcc.flags <> vbNullString) Then
+            tmpBuf = "Found user " & gAcc.Username & ", with flags " & gAcc.flags & "."
         Else
             tmpBuf = "No such user(s) found."
         End If
@@ -5730,8 +5799,8 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 
                 ' ...
                 If ((lowerBound >= 0) And (upperBound >= 0)) Then
-                    If ((DB(i).Access >= lowerBound) And _
-                        (DB(i).Access <= upperBound)) Then
+                    If ((DB(i).access >= lowerBound) And _
+                        (DB(i).access <= upperBound)) Then
                         
                         ' ...
                         res = IIf(blnChecked, res, True)
@@ -5741,7 +5810,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                     
                     blnChecked = True
                 ElseIf (lowerBound >= 0) Then
-                    If (DB(i).Access = lowerBound) Then
+                    If (DB(i).access = lowerBound) Then
                         ' ...
                         res = IIf(blnChecked, res, True)
                     Else
@@ -5752,18 +5821,18 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 End If
                 
                 ' ...
-                If (Flags <> vbNullString) Then
+                If (flags <> vbNullString) Then
                     Dim j As Integer ' ...
                 
-                    For j = 1 To Len(Flags)
-                        If (InStr(1, DB(i).Flags, Mid$(Flags, j, 1), _
+                    For j = 1 To Len(flags)
+                        If (InStr(1, DB(i).flags, Mid$(flags, j, 1), _
                             vbBinaryCompare) = 0) Then
                             
                             Exit For
                         End If
                     Next j
                     
-                    If (j = (Len(Flags) + 1)) Then
+                    If (j = (Len(flags) + 1)) Then
                         ' ...
                         res = IIf(blnChecked, res, True)
                     Else
@@ -5780,8 +5849,8 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                         IIf(((DB(i).Type <> "%") And _
                                 (StrComp(DB(i).Type, "USER", vbTextCompare) <> 0)), _
                             " (" & LCase$(DB(i).Type) & ")", vbNullString) & _
-                        IIf(DB(i).Access > 0, "\" & DB(i).Access, vbNullString) & _
-                        IIf(DB(i).Flags <> vbNullString, "\" & DB(i).Flags, vbNullString) & ", "
+                        IIf(DB(i).access > 0, "\" & DB(i).access, vbNullString) & _
+                        IIf(DB(i).flags <> vbNullString, "\" & DB(i).flags, vbNullString) & ", "
                     
                     ' increment found counter
                     found = (found + 1)
@@ -5822,7 +5891,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
     Exit Function
     
 ERROR_HANDLER:
-    MsgBox Err.description
+    MsgBox Err.Description
     
     Exit Function
 End Function
@@ -6027,9 +6096,9 @@ Public Function GetSafelist(ByVal Username As String) As Boolean
         gAcc = GetCumulativeAccess(Username, "USER")
         
         ' ...
-        If (InStr(1, gAcc.Flags, "S", vbBinaryCompare) <> 0) Then
+        If (InStr(1, gAcc.flags, "S", vbBinaryCompare) <> 0) Then
             GetSafelist = True
-        ElseIf (gAcc.Access >= 20) Then
+        ElseIf (gAcc.access >= 20) Then
             GetSafelist = True
         End If
     Else
@@ -6054,9 +6123,9 @@ Public Function GetShitlist(ByVal Username As String) As String
     gAcc = GetCumulativeAccess(Username, "USER")
     
     ' ...
-    If ((InStr(1, gAcc.Flags, "B", vbBinaryCompare) <> 0) And _
-        (InStr(1, gAcc.Flags, "S", vbBinaryCompare) = 0) And _
-        (gAcc.Access < 20)) Then
+    If ((InStr(1, gAcc.flags, "B", vbBinaryCompare) <> 0) And _
+        (InStr(1, gAcc.flags, "S", vbBinaryCompare) = 0) And _
+        (gAcc.access < 20)) Then
         
         If ((Len(gAcc.BanMessage) > 0) And (gAcc.BanMessage <> "%")) Then
             GetShitlist = Username & Space(1) & _
@@ -6125,7 +6194,7 @@ Private Sub DBRemove(ByVal s As String)
     Dim i    As Integer
     Dim c    As Integer
     Dim n    As Integer
-    Dim Temp As String
+    Dim temp As String
     
     s = LCase$(s)
     
@@ -6149,11 +6218,11 @@ Private Sub DBRemove(ByVal s As String)
     
     n = FreeFile
     
-    Temp = GetFilePath("users.txt")
+    temp = GetFilePath("users.txt")
     
-    Open Temp For Output As #n
+    Open temp For Output As #n
         For i = LBound(DB) To UBound(DB)
-            Print #n, DB(i).Username & Space(1) & DB(i).Access & Space(1) & DB(i).Flags
+            Print #n, DB(i).Username & Space(1) & DB(i).access & Space(1) & DB(i).flags
         Next i
     Close #n
 End Sub
@@ -6194,10 +6263,10 @@ Public Sub LoadDatabase()
                             .Username = X(0)
                             
                             If StrictIsNumeric(X(1)) Then
-                                .Access = Val(X(1))
+                                .access = val(X(1))
                             Else
                                 If X(1) <> "%" Then
-                                    .Flags = X(1)
+                                    .flags = X(1)
                                     
                                     'If InStr(X(1), "S") > 0 Then
                                     '    AddToSafelist .Username
@@ -6208,10 +6277,10 @@ Public Sub LoadDatabase()
                             
                             If UBound(X) > 1 Then
                                 If StrictIsNumeric(X(2)) Then
-                                    .Access = Int(X(2))
+                                    .access = Int(X(2))
                                 Else
                                     If X(2) <> "%" Then
-                                        .Flags = X(2)
+                                        .flags = X(2)
                                     End If
                                 End If
                                 
@@ -6247,7 +6316,7 @@ Public Sub LoadDatabase()
                                 
                             End If
                             
-                            If .Access > 200 Then: .Access = 200
+                            If .access > 200 Then: .access = 200
                         End With
 
                         i = i + 1
@@ -6278,7 +6347,7 @@ Public Sub LoadDatabase()
             With DB(UBound(DB))
                 .Username = BotVars.BotOwner
                 .Type = "USER"
-                .Access = 200
+                .access = 200
                 .AddedBy = "(console)"
                 .AddedOn = Now
                 .ModifiedBy = "(console)"
@@ -6289,6 +6358,229 @@ Public Sub LoadDatabase()
         End If
     End If
 End Sub
+
+Private Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String) As Boolean
+    On Error GoTo ERROR_HANDLER
+    
+    Dim Command As clsCommandDocObj
+    Dim regex   As RegExp
+    Dim matches As MatchCollection
+    
+    ' ...
+    Set Command = OpenCommand(CommandName)
+
+    ' ...
+    If (Command.Name = vbNullString) Then
+        Exit Function
+    End If
+    
+    If (Command.Params.Count) Then
+        Dim parameter   As clsCommandParamsObj
+        Dim restriction As clsCommandRestrictionObj
+        Dim splt()      As String
+        Dim loopCount   As Integer
+        Dim bln         As Boolean
+        Dim i           As Integer
+        
+        If (InStr(1, CommandArgs, Space$(1), vbBinaryCompare) <> 0) Then
+            splt() = Split(CommandArgs, Space$(1))
+        Else
+            ReDim Preserve splt(0)
+            
+            splt(0) = CommandArgs
+        End If
+        
+        For i = 1 To Command.Params.Count
+            Set parameter = Command.Params(i)
+
+            If (parameter.IsOptional) Then
+                If ((Command.Params.Count > i) And (Command.Params.Item(i).IsOptional)) Then
+                    If (parameter.dataType = "number") Then
+                        If (StrictIsNumeric(splt(loopCount)) = False) Then
+                            bln = True
+                        End If
+                    End If
+                End If
+            End If
+        
+            If (bln = False) Then
+                ' ...
+                If (parameter.dataType = "number") Then
+                    Dim lVal As Long
+                
+                    If (StrictIsNumeric(splt(loopCount)) = False) Then
+                        IsCorrectSyntax = False
+                        
+                        Exit Function
+                    End If
+                    
+                    'lVal = val(splt(loopCount))
+                    
+                    'If ((lVal < parameter.min) Or (lVal > parameter.max)) Then
+                    '    IsCorrectSyntax = False
+                    '
+                    '    Exit Function
+                    'End If
+                    
+                ElseIf (parameter.dataType = "string") Then
+                    Set regex = New RegExp
+                
+                    With regex
+                        .pattern = parameter.pattern
+                        .Global = True
+                    End With
+                    
+                    Set matches = regex.Execute(splt(loopCount))
+                    
+                    If (matches.Count = 0) Then
+                        IsCorrectSyntax = False
+                        
+                        Exit Function
+                    Else
+                        If (matches.Item(0).Value <> splt(loopCount)) Then
+                            IsCorrectSyntax = False
+                            
+                            Exit Function
+                        End If
+                    End If
+                    
+                    Set regex = Nothing
+                End If
+                
+                ' ...
+                If (parameter.IsOptional) Then
+                    Exit For
+                End If
+            
+                ' ...
+                loopCount = (loopCount + 1)
+            End If
+            
+            ' ...
+            bln = False
+        Next i
+    End If
+    
+    IsCorrectSyntax = True
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in IsCorrectSyntax().")
+    
+    Exit Function
+End Function
+
+Private Function HasAccess(ByVal Username As String, ByVal CommandName As String, Optional ByVal CommandArgs As _
+    String = vbNullString) As Boolean
+    
+    On Error GoTo ERROR_HANDLER
+    
+    Dim Command As clsCommandDocObj
+    Dim user    As clsDBEntryObj
+    Dim regex   As RegExp
+    Dim matches As MatchCollection
+    
+    ' ...
+    Set Command = OpenCommand(CommandName)
+
+    ' ...
+    If (Command.Name = vbNullString) Then
+        Exit Function
+    End If
+    
+    Set user = SharedScriptSupport.GetDBEntry(Username, , , "USER")
+    
+    If ((user.rank >= Command.RequiredRank) = False) Then
+        If (user.HasAnyFlag(Command.RequiredFlags) = False) Then
+            HasAccess = False
+            
+            Exit Function
+        End If
+    End If
+    
+    If (Command.Params.Count) Then
+        Dim parameter   As clsCommandParamsObj
+        Dim restriction As clsCommandRestrictionObj
+        Dim splt()      As String
+        Dim loopCount   As Integer
+        Dim bln         As Boolean
+        Dim i           As Integer
+        
+        If (InStr(1, CommandArgs, Space$(1), vbBinaryCompare) <> 0) Then
+            splt() = Split(CommandArgs, Space$(1))
+        Else
+            ReDim Preserve splt(0)
+            
+            splt(0) = CommandArgs
+        End If
+        
+        For i = 1 To Command.Params.Count
+            Set parameter = Command.Params(i)
+
+            If (parameter.IsOptional) Then
+                If ((Command.Params.Count > i) And (Command.Params.Item(i).IsOptional)) Then
+                    'If (parameter.dataType = "number") Then
+                        If (StrictIsNumeric(splt(loopCount)) = False) Then
+                            bln = True
+                        End If
+                    'End If
+                End If
+            End If
+        
+            If (bln = False) Then
+                If (parameter.restrictions.Count) Then
+                    Set regex = New RegExp
+                
+                    For Each restriction In parameter.restrictions
+                        With regex
+                            .pattern = restriction.MatchMessage
+                            .Global = True
+                        End With
+
+                        Set matches = regex.Execute(splt(loopCount))
+
+                        If (matches.Count > 0) Then
+                            If ((user.rank >= restriction.RequiredRank) = False) Then
+                                If (user.HasAnyFlag(restriction.RequiredFlags) = False) Then
+                                    AddQ "Error: You do not have sufficient access to perform the specified " & _
+                                        "action. [" & BotVars.TriggerLong & "help " & Command.Name & _
+                                            " --restriction " & restriction.Name & " for further information]"
+                                    
+                                    HasAccess = False
+                                    
+                                    Exit Function
+                                End If
+                            End If
+                        End If
+                    Next
+                    
+                    Set regex = Nothing
+                End If
+                
+                ' ...
+                If (parameter.IsOptional) Then
+                    Exit For
+                End If
+                
+                ' ...
+                loopCount = (loopCount + 1)
+            End If
+            
+            ' ...
+            bln = False
+        Next i
+    End If
+    
+    HasAccess = True
+    
+    Exit Function
+
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in HasAccess().")
+    
+    Exit Function
+End Function
 
 Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord As String, _
     Optional ByVal ARGUMENT As String = vbNullString, Optional ByVal restrictionName As String = _
@@ -6319,7 +6611,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
         ' ...
         For Each Command In Commands.documentElement.childNodes
             Dim accessGroup As MSXML2.IXMLDOMNode
-            Dim Access      As MSXML2.IXMLDOMNode
+            Dim access      As MSXML2.IXMLDOMNode
         
             ' ...
             If (StrComp(Command.Attributes.getNamedItem("name").text, _
@@ -6329,15 +6621,15 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                 Set accessGroup = Command.selectSingleNode("access")
                 
                 ' ...
-                For Each Access In accessGroup.childNodes
-                    If (LCase$(Access.nodeName) = "rank") Then
-                        If ((gAcc.Access) >= (Val(Access.text))) Then
+                For Each access In accessGroup.childNodes
+                    If (LCase$(access.nodeName) = "rank") Then
+                        If ((gAcc.access) >= (val(access.text))) Then
                             ValidateAccess = True
                         
                             Exit For
                         End If
-                    ElseIf (LCase$(Access.nodeName = "flag")) Then
-                        If (InStr(1, gAcc.Flags, Access.text, vbBinaryCompare) <> 0) Then
+                    ElseIf (LCase$(access.nodeName = "flag")) Then
+                        If (InStr(1, gAcc.flags, access.text, vbBinaryCompare) <> 0) Then
                             ValidateAccess = True
                         
                             Exit For
@@ -6353,29 +6645,29 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                 ' ...
                 If (restrictionName <> vbNullString) Then
                     Dim restrictions As MSXML2.IXMLDOMNodeList
-                    Dim RESTRICTION  As MSXML2.IXMLDOMNode
+                    Dim restriction  As MSXML2.IXMLDOMNode
                     
                     ' ...
                     Set restrictions = Command.selectNodes("restriction")
                     
                     ' ...
-                    For Each RESTRICTION In restrictions
-                        If (StrComp(RESTRICTION.Attributes.getNamedItem("name").text, _
+                    For Each restriction In restrictions
+                        If (StrComp(restriction.Attributes.getNamedItem("name").text, _
                             restrictionName, vbTextCompare) = 0) Then
                             
                             ' ...
-                            Set accessGroup = RESTRICTION.selectSingleNode("access")
+                            Set accessGroup = restriction.selectSingleNode("access")
                             
                             ' ...
-                            For Each Access In accessGroup.childNodes
-                                If (LCase$(Access.nodeName) = "rank") Then
-                                    If ((gAcc.Access) >= (Val(Access.text))) Then
+                            For Each access In accessGroup.childNodes
+                                If (LCase$(access.nodeName) = "rank") Then
+                                    If ((gAcc.access) >= (val(access.text))) Then
                                         ValidateAccess = True
                                     
                                         Exit For
                                     End If
-                                ElseIf (LCase$(Access.nodeName = "flag")) Then
-                                    If (InStr(1, gAcc.Flags, Access.text, vbBinaryCompare) <> 0) Then
+                                ElseIf (LCase$(access.nodeName = "flag")) Then
+                                    If (InStr(1, gAcc.flags, access.text, vbBinaryCompare) <> 0) Then
                                         ValidateAccess = True
                                     
                                         Exit For
@@ -6400,67 +6692,6 @@ ERROR_HANDLER::
     
     ' ...
     ValidateAccess = False
-
-    Exit Function
-End Function
-
-' ...
-Private Function convertAlias(ByVal cmdName As String) As String
-    ' ...
-    On Error GoTo ERROR_HANDLER
-
-    ' ...
-    If (Len(cmdName) > 0) Then
-        Dim Commands As MSXML2.DOMDocument
-        Dim Command  As MSXML2.IXMLDOMNode
-        
-        ' ...
-        Set Commands = New MSXML2.DOMDocument
-        
-        ' ...
-        If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
-            Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
-                "working directory.")
-                
-            Exit Function
-        End If
-        
-        ' ...
-        Call Commands.Load(App.Path & "\commands.xml")
-        
-        ' ...
-        For Each Command In Commands.documentElement.childNodes
-            Dim aliases As MSXML2.IXMLDOMNodeList
-            Dim alias   As MSXML2.IXMLDOMNode
-            
-            ' ...
-            Set aliases = Command.selectNodes("alias")
-
-            ' ...
-            For Each alias In aliases
-                ' ...
-                If (StrComp(alias.text, cmdName, vbTextCompare) = 0) Then
-                    ' ...
-                    convertAlias = Command.Attributes.getNamedItem("name").text
-                    
-                    Exit Function
-                End If
-            Next
-        Next
-    End If
-    
-    ' ...
-    convertAlias = cmdName
-    
-    Exit Function
-    
-' ...
-ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: XML Database Processor has encountered an error " & _
-        "during alias lookup.")
-        
-    ' ...
-    convertAlias = False
 
     Exit Function
 End Function
@@ -6519,16 +6750,16 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
             If (blnFound = True) Then
                 ' ...
                 Dim docs    As MSXML2.IXMLDOMNode
-                Dim Access  As MSXML2.IXMLDOMNode
-                Dim args    As MSXML2.IXMLDOMNode
+                Dim access  As MSXML2.IXMLDOMNode
+                Dim Args    As MSXML2.IXMLDOMNode
                 Dim arg     As MSXML2.IXMLDOMNode
                 
                 Dim tmp     As String ' ...
                 
                 ' ...
                 Set docs = Command.selectSingleNode("documentation")
-                Set Access = Command.selectSingleNode("access")
-                Set args = Command.selectSingleNode("arguments")
+                Set access = Command.selectSingleNode("access")
+                Set Args = Command.selectSingleNode("arguments")
         
                 ' ...
                 If (found >= 1) Then
@@ -6563,25 +6794,25 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
                 End If
                 
                 ' ...
-                If (Not (Access.selectSingleNode("rank") Is Nothing)) Then
-                    tmp = Access.selectSingleNode("rank").text & _
+                If (Not (access.selectSingleNode("rank") Is Nothing)) Then
+                    tmp = access.selectSingleNode("rank").text & _
                         " access"
                 End If
                 
                 ' ...
-                If (Not (Access.selectSingleNode("flag") Is Nothing)) Then
-                    Dim Flags As MSXML2.IXMLDOMNodeList
+                If (Not (access.selectSingleNode("flag") Is Nothing)) Then
+                    Dim flags As MSXML2.IXMLDOMNodeList
                     Dim flag  As MSXML2.IXMLDOMNode
                 
                     ' ...
-                    Set Flags = Access.selectNodes("flag")
+                    Set flags = access.selectNodes("flag")
                     
                     ' ...
                     tmp = "either " & _
                         tmp & " or flag "
                 
                     ' ...
-                    For Each flag In Flags
+                    For Each flag In flags
                         Dim flagCount As Integer ' ...
                     
                         ' ...
@@ -6615,7 +6846,7 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
                 
                 ' ...
                 If (Not (arg Is Nothing)) Then
-                    For Each arg In args.childNodes
+                    For Each arg In Args.childNodes
                         tmpBuf(tmpCount) = tmpBuf(tmpCount) & _
                             arg.Attributes.getNamedItem("name").text & Space(1)
                     Next
@@ -6665,7 +6896,7 @@ Public Sub checkUsers()
         doCheck = True
     
         For i = 1 To colUsersInChannel.Count
-            If ((colUsersInChannel(i).Flags And USER_CHANNELOP&) <> _
+            If ((colUsersInChannel(i).flags And USER_CHANNELOP&) <> _
                  USER_CHANNELOP&) Then
                  
                 If (GetSafelist(colUsersInChannel.Item(i).Username) = False) Then
@@ -6701,7 +6932,7 @@ Public Sub checkUsers()
                             
                             ' ...
                             If ((doCheck) And (BotVars.IPBans)) Then
-                                If ((colUsersInChannel.Item(i).Flags And USER_SQUELCHED) = _
+                                If ((colUsersInChannel.Item(i).flags And USER_SQUELCHED) = _
                                      USER_SQUELCHED) Then
                                     
                                     Call Ban(colUsersInChannel.Item(i).Username & _
@@ -6724,6 +6955,35 @@ Public Sub checkUsers()
         Next i
     End If
 End Sub
+
+Public Function LoadQuotes(Optional strPath As String = vbNullString)
+    Dim f As Integer
+    Dim s As String
+
+    Set g_Quotes = New Collection
+    
+    If (strPath = vbNullString) Then
+        strPath = App.Path & "\quotes.txt"
+    End If
+    
+    If (LenB(Dir$(strPath)) > 0) Then
+        f = FreeFile
+        
+        Open (GetFilePath("quotes.txt")) For Input As #f
+            If (LOF(f) > 1) Then
+                Do
+                    Line Input #f, s
+                    
+                    s = Trim(s)
+                    
+                    If (LenB(s) > 0) Then
+                        g_Quotes.Add s
+                    End If
+                Loop Until EOF(f)
+            End If
+        Close #f
+    End If
+End Function
 
 ' requires public
 Public Function GetRandomQuote() As String
@@ -6787,7 +7047,7 @@ GetRandomQuote_Exit:
 
 GetRandomQuote_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure GetRandomQuote of Module modCommandCode"
+    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure GetRandomQuote of Module modCommandCode"
     Resume GetRandomQuote_Exit
 End Function
 
@@ -6804,14 +7064,14 @@ Public Sub WriteDatabase(ByVal u As String)
     Open u For Output As #f
         For i = LBound(DB) To UBound(DB)
             ' ...
-            If ((DB(i).Access > 0) Or _
-                (Len(DB(i).Flags) > 0) Or _
+            If ((DB(i).access > 0) Or _
+                (Len(DB(i).flags) > 0) Or _
                 (Len(DB(i).Groups) > 0)) Then
                 
                 ' ...
                 Print #f, DB(i).Username;
-                Print #f, " " & DB(i).Access;
-                Print #f, " " & IIf(Len(DB(i).Flags) > 0, DB(i).Flags, "%");
+                Print #f, " " & DB(i).access;
+                Print #f, " " & IIf(Len(DB(i).flags) > 0, DB(i).flags, "%");
                 Print #f, " " & IIf(Len(DB(i).AddedBy) > 0, DB(i).AddedBy, "%");
                 Print #f, " " & IIf(DB(i).AddedOn > 0, DateCleanup(DB(i).AddedOn), "%");
                 Print #f, " " & IIf(Len(DB(i).ModifiedBy) > 0, DB(i).ModifiedBy, "%");
@@ -6830,7 +7090,7 @@ WriteDatabase_Exit:
 
 WriteDatabase_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure " & _
+    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure " & _
         "WriteDatabase of Module modCommandCode"
     
     Resume WriteDatabase_Exit
@@ -6890,7 +7150,7 @@ Private Function GetAccessINIValue(ByVal sKey As String, Optional ByVal Default 
     Dim s As String, l As Long
     
     s = ReadINI("Numeric", sKey, "access.ini")
-    l = Val(s)
+    l = val(s)
     
     If l > 0 Then
         GetAccessINIValue = l
@@ -7135,34 +7395,34 @@ Public Function reverseUsername(ByVal Username As String) As String
 End Function
 
 Public Function SecondsToString(ByVal seconds As Long) As String
-    Dim Temp  As Long ' ...
+    Dim temp  As Long ' ...
     Dim secs  As Long ' ...
     Dim mins  As Long ' ...
     Dim hours As Long ' ...
     
     ' ...
-    Temp = seconds
+    temp = seconds
     
     ' ...
-    Do While (Temp > 0)
-        If (Temp - 3600 >= 0) Then
+    Do While (temp > 0)
+        If (temp - 3600 >= 0) Then
             ' ...
-            Temp = (Temp - 3600)
+            temp = (temp - 3600)
             
             ' ...
             hours = (hours + 1)
-        ElseIf (Temp - 60 >= 0) Then
+        ElseIf (temp - 60 >= 0) Then
             ' ...
-            Temp = (Temp - 60)
+            temp = (temp - 60)
             
             ' ...
             mins = (mins + 1)
         Else
             ' ...
-            secs = Temp
+            secs = temp
                    
             ' ...
-            Temp = 0
+            temp = 0
         End If
     Loop
     

@@ -146,10 +146,6 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
     Dim Clan   As String   ' ...
     Dim pos    As Integer  ' ...
 
-    i = UsernameToIndex(Username)
-    
-    pos = checkChannel(Username)
-
     game = ParseStatstring(OriginalStatstring, pStats, Clan)
     
     If (JoinMessagesOff = False) Then
@@ -158,17 +154,23 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
                 RTBColors.JoinText, " is using " & pStats)
     End If
     
+    pos = checkChannel(Username)
+    
     If (pos) Then
         Set found = frmChat.lvChannel.ListItems(pos)
         
+        i = UsernameToIndex(Username)
+        
         If (g_ThisIconCode <> -1) Then
+            ' TO DO: FIX ICON CODE NUMBERS (ICON_START_WAR3/ICON_START_W3XP)
             If (colUsersInChannel.Item(i).Product = "WAR3") Then
                 If (found.SmallIcon = ICON_START_WAR3) Then
-                    found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
+                    found.SmallIcon = (ICON_START_WAR3 + g_ThisIconCode)
                 End If
             ElseIf (colUsersInChannel.Item(i).Product = "W3XP") Then
                 If (found.SmallIcon = ICON_START_W3XP) Then
-                    found.SmallIcon = (g_ThisIconCode + ICON_START_W3XP)
+                    found.SmallIcon = ICON_START_W3XP + g_ThisIconCode + _
+                        IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0)
                 End If
             End If
         End If

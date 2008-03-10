@@ -331,8 +331,8 @@ Public Function CommandEx(ByVal Username As String, ByVal Message As String, Opt
     
         ' ...
         With dbAccess
-            .Access = 200
-            .Flags = "A"
+            .access = 200
+            .flags = "A"
         End With
     Else
         ' ...
@@ -418,16 +418,18 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Optional ByRef Flags, _
+Public Function GetDBEntry(ByVal Username As String, Optional ByRef access, Optional ByRef flags, _
     Optional ByRef entryType As String = "USER") As Object
 
-    Dim Temp As udtGetAccessResponse
+    Dim temp   As udtGetAccessResponse
+    Dim i      As Integer
+    Dim splt() As String
     
-    Temp = GetCumulativeAccess(Username, entryType)
+    temp = GetCumulativeAccess(Username, entryType)
     
-    With Temp
-        Access = .Access
-        Flags = .Flags
+    With temp
+        access = .access
+        flags = .flags
     End With
     
     ' ...
@@ -435,15 +437,29 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     
     ' ...
     With GetDBEntry
-        .entryType = Temp.Type
-        .Name = Temp.Username
-        .Rank = Temp.Access
-        .Flags = Temp.Flags
-        .CreatedOn = Temp.AddedOn
-        .CreatedBy = Temp.AddedBy
-        .ModifiedOn = Temp.ModifiedOn
-        .ModifiedBy = Temp.ModifiedBy
+        .entryType = temp.Type
+        .Name = temp.Username
+        .rank = temp.access
+        .flags = temp.flags
+        .CreatedOn = temp.AddedOn
+        .CreatedBy = temp.AddedBy
+        .ModifiedOn = temp.ModifiedOn
+        .ModifiedBy = temp.ModifiedBy
     End With
+
+    If ((temp.Groups <> vbNullString) And (temp.Groups <> "%")) Then
+        If (InStr(1, temp.Groups, ",", vbBinaryCompare) <> 0) Then
+            splt() = Split(temp.Groups, ",")
+        Else
+            ReDim Preserve splt(0)
+        
+            splt(0) = temp.Groups
+        End If
+    
+        For i = LBound(splt) To UBound(splt)
+            GetDBEntry.Groups.Add GetDBEntry(splt(i), , , "GROUP")
+        Next i
+    End If
 End Function
 
 '// GETSTDDBENTRY
@@ -456,16 +472,16 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
+Public Sub GetStdDBEntry(ByVal Username As String, ByRef access, ByRef flags, _
     Optional ByRef entryType As String = "USER") '// yum, Variants >:\
 
-    Dim Temp As udtGetAccessResponse
+    Dim temp As udtGetAccessResponse
     
-    Temp = GetAccess(Username, entryType)
+    temp = GetAccess(Username, entryType)
     
-    With Temp
-        Access = .Access
-        Flags = .Flags
+    With temp
+        access = .access
+        flags = .flags
     End With
 End Sub
 
@@ -616,7 +632,7 @@ Public Function GetInternalData(ByVal iIndex As Integer, ByVal lDataType As Long
                 GetInternalData = colUsersInChannel.Item(iIndex).Clan
                 
             Case GID_FLAGS
-                GetInternalData = colUsersInChannel.Item(iIndex).Flags
+                GetInternalData = colUsersInChannel.Item(iIndex).flags
             
             Case GID_PING
                 GetInternalData = colUsersInChannel.Item(iIndex).Ping
@@ -1378,6 +1394,23 @@ Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Bool
     
     Set IsCommand = modOtherCode.IsCommand(str, DontCheckTrigger)
 End Function
+
+Public Function OpenCommand(ByVal strCommand As String) As Object
+    '// ...
+    Set OpenCommand = modCommandDocsObj.OpenCommand(strCommand)
+End Function
+
+Public Function Quotes() As Collection
+    Set Quotes = g_Quotes
+End Function
+
+'Public Function GetQuote(Optional quoteNumber As Integer) As String'
+'
+'    Dim strQuote As String
+'
+'''
+'
+'End Function
 
 ' // ...
 Public Function MediaPlayer() As Object

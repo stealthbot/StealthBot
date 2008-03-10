@@ -827,7 +827,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -853,7 +852,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1550,7 +1548,7 @@ Private Sub Form_Load()
         If rtbWhispersVisible Then Call cmdShowHide_Click
     End If
     
-    CfgVersion = Val(ReadCFG("Main", "ConfigVersion"))
+    CfgVersion = val(ReadCFG("Main", "ConfigVersion"))
 '
 '    If CfgVersion < 3 Then
 '
@@ -1695,6 +1693,7 @@ Private Sub Form_Load()
     LoadQuickChannels
     
     LoadPluginSystem SControl
+    LoadQuotes
     
     On Error Resume Next
     'News call and scripting events
@@ -2001,7 +2000,7 @@ Sub Event_BNetDisconnected()
     Call UpdateTrayTooltip
 End Sub
 
-Sub Event_BNetError(ErrorNumber As Integer, description As String)
+Sub Event_BNetError(ErrorNumber As Integer, Description As String)
     Dim s As String
     
     If BotVars.UseProxy And BotVars.ProxyStatus <> psOnline Then
@@ -2010,7 +2009,7 @@ Sub Event_BNetError(ErrorNumber As Integer, description As String)
         s = "[BNET] "
     End If
     
-    AddChat RTBColors.ErrorMessageText, s & ErrorNumber & " -- " & description
+    AddChat RTBColors.ErrorMessageText, s & ErrorNumber & " -- " & Description
     AddChat RTBColors.ErrorMessageText, s & "Disconnected."
     
     If (sckBNet.State <> 0) Then
@@ -2085,9 +2084,9 @@ Sub Event_BNLSDataError(Message As Byte)
     End If
 End Sub
 
-Sub Event_BNLSError(ErrorNumber As Integer, description As String)
+Sub Event_BNLSError(ErrorNumber As Integer, Description As String)
     If sckBNet.State <> 7 Then
-        AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & description
+        AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & Description
         
         If DisplayError(ErrorNumber, 0, BNLS) Then
             'This area is in question
@@ -2351,11 +2350,11 @@ Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
     SControl.Run "Event_BotClanRankChanged", NewRank
 End Sub
 
-Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal Rank As Byte)
+Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal rank As Byte)
     With Clan
         .Name = ClanTag
         .DWName = RawClanTag
-        .MyRank = Rank
+        .MyRank = rank
         .isUsed = True
     End With
     
@@ -2374,9 +2373,9 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
             
         SControl.Run "Event_BotJoinedClan", ClanTag
     Else
-        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(Rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
+        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
         
-        SControl.Run "Event_BotClanInfo", ClanTag, Rank
+        SControl.Run "Event_BotClanInfo", ClanTag, rank
     End If
     
     ClanHandler.RequestClanList
@@ -2417,19 +2416,19 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
     lblCurrentChannel.Caption = GetChannelString
 End Sub
 
-Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
+Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
     Dim X As ListItem
     
     Set X = lvClanList.FindItem(Username)
 
     If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
-        Clan.MyRank = IIf(Rank = 0, Rank + 1, Rank)
+        Clan.MyRank = IIf(rank = 0, rank + 1, rank)
         AwaitingClanInfo = 1
     End If
     
     If AwaitingClanInfo = 1 Then
         AwaitingClanInfo = 0
-        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(Rank) & "."
+        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(rank) & "."
     End If
     
     If Not (X Is Nothing) Then
@@ -2437,10 +2436,10 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
         Set X = Nothing
     End If
     
-    AddClanMember Username, CInt(Rank), CInt(IsOnline)
+    AddClanMember Username, CInt(rank), CInt(IsOnline)
     
     On Error Resume Next
-    SControl.Run "Event_ClanMemberUpdate", Username, Rank, IsOnline
+    SControl.Run "Event_ClanMemberUpdate", Username, rank, IsOnline
 End Sub
 
 Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
@@ -2544,10 +2543,10 @@ Private Sub ClanHandler_RemoveUserReply(ByVal result As Byte)
     lblCurrentChannel.Caption = GetChannelString
 End Sub
 
-Private Sub ClanHandler_UnknownClanEvent(ByVal PacketID As Byte, ByVal Data As String)
+Private Sub ClanHandler_UnknownClanEvent(ByVal PacketID As Byte, ByVal data As String)
     If MDebug("debug") Then
         frmChat.AddChat RTBColors.ErrorMessageText, "[CLAN] Unknown clan event [0x" & Hex(PacketID) & "]. Data is as follows:"
-        frmChat.AddChat RTBColors.ErrorMessageText, Data
+        frmChat.AddChat RTBColors.ErrorMessageText, data
     End If
 End Sub
 
@@ -3037,7 +3036,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     sTemp = ParseStatstring(.Statstring, sOutBuf, sTemp)
                     
                     sTemp = "Ping at login: " & .Ping & vbCrLf
-                    sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
+                    sTemp = sTemp & "Flags: " & FlagDescription(.flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
                     sTemp = sTemp & sOutBuf
                 
@@ -3386,7 +3385,7 @@ Private Sub mnuPopSafelist_Click()
     
     toSafe = GetSelectedUser
     
-    gAcc.Access = 1000
+    gAcc.access = 1000
     
     Call ProcessCommand(CurrentUsername, "/safeadd " & toSafe, True, False)
 End Sub
@@ -3399,7 +3398,7 @@ Private Sub mnuPopShitlist_Click()
     
     toBan = GetSelectedUser
     
-    gAcc.Access = 1000
+    gAcc.access = 1000
     
     Call ProcessCommand(CurrentUsername, "/shitadd " & toBan, True, False)
 End Sub
@@ -3686,7 +3685,7 @@ mnuReloadScript_Click_Error: ' No code is present
         Resume MRS_Continue
     Else
         Debug.Print "Unhandled error in mnuReloadScript_Click()"
-        Debug.Print Err.Number & ": " & Err.description
+        Debug.Print Err.Number & ": " & Err.Description
         Resume MRS_Exit
     End If
 End Sub
@@ -3822,24 +3821,24 @@ End Sub
 
 Private Sub mnuUserlistWhois_Click()
     On Error Resume Next
-    Dim Temp As udtGetAccessResponse
+    Dim temp As udtGetAccessResponse
     Dim s As String
     
     s = GetSelectedUser
     
-    Temp = GetAccess(s)
+    temp = GetAccess(s)
     
     With RTBColors
-        If Temp.Access > -1 Then
-            If Temp.Access > 0 Then
-                If Temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & " and flags " & Temp.Flags & "."
+        If temp.access > -1 Then
+            If temp.access > 0 Then
+                If temp.flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & temp.access & " and flags " & temp.flags & "."
                 Else
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & "."
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & temp.access & "."
                 End If
             Else
-                If Temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with flags " & Temp.Flags & "."
+                If temp.flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with flags " & temp.flags & "."
                 Else
                     AddChat .ConsoleText, "User not found."
                 End If
@@ -4000,7 +3999,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Static strBuf        As String ' ...
     Static spaceIndex(2) As Long   ' ...
 
-    Dim Temp As udtGetAccessResponse
+    Dim temp As udtGetAccessResponse
     
     Dim i As Long
     Dim l As Long
@@ -4403,7 +4402,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 ElseIf ((s = "/flags") And (MDebug("debug"))) Then
                                     For n = 1 To colUsersInChannel.Count
                                         With colUsersInChannel.Item(n)
-                                            AddChat RTBColors.ConsoleText, .Username & Space(4) & .Flags
+                                            AddChat RTBColors.ConsoleText, .Username & Space(4) & .flags
                                         End With
                                     Next n
                                     
@@ -4469,8 +4468,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     '    End If
                                     'End If
                                     
-                                    Temp.Access = 201
-                                    Temp.Flags = "A"
+                                    temp.access = 201
+                                    temp.flags = "A"
                                     
                                     m = OutFilterMsg(s)
                                     
@@ -4547,7 +4546,7 @@ theEnd:
 cboSend_KeyDown_Error:
     If (MDebug("debug")) Then
         Call AddChat(RTBColors.ErrorMessageText, "Error " & Err.Number & _
-            " (" & Err.description & ") in procedure cboSend_KeyDown")
+            " (" & Err.Description & ") in procedure cboSend_KeyDown")
     End If
 End Sub
 
@@ -4766,7 +4765,7 @@ End Sub
 
 Private Sub SControl_Error()
     AddChat RTBColors.ErrorMessageText, "Scripting runtime error " & Chr(39) & SControl.Error.Number & Chr(39) & ": (line " & SControl.Error.Line & "; column " & SControl.Error.Column & ")"
-    AddChat RTBColors.ErrorMessageText, SControl.Error.description & "."
+    AddChat RTBColors.ErrorMessageText, SControl.Error.Description & "."
     AddChat RTBColors.ErrorMessageText, "Offending line: >> " & SControl.Error.text
 End Sub
 
@@ -4805,8 +4804,8 @@ Sub InitBNetConnection()
     End If
 End Sub
 
-Private Sub sckBNet_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    Call Event_BNetError(Number, description)
+Private Sub sckBNet_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+    Call Event_BNetError(Number, Description)
 End Sub
 
 Private Sub sckMCP_Close()
@@ -4828,16 +4827,16 @@ Private Sub sckMCP_Connect()
 End Sub
 
 Private Sub sckMCP_DataArrival(ByVal bytesTotal As Long)
-    Dim Data As String
+    Dim data As String
     
-    sckMCP.GetData Data, vbString
-    frmRealm.MCPHandler.ParseMCPPacket Data
+    sckMCP.GetData data, vbString
+    frmRealm.MCPHandler.ParseMCPPacket data
 End Sub
 
-Private Sub sckMCP_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckMCP_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     If Not g_Online Then
         ' This message is ignored if we've been online for awhile.
-        AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & description
+        AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & Description
         RealmError = True
         Unload frmRealm
     End If
@@ -5250,7 +5249,7 @@ Private Sub UpTimer_Timer()
                         If .TimeSinceTalk() > BotVars.IB_Wait Then
                             .InternalFlags = 0
                             
-                            If Not ((.Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And Not .Safelisted Then
+                            If Not ((.flags And USER_CHANNELOP&) = USER_CHANNELOP&) And Not .Safelisted Then
                                 Ban .Username & " Idle for " & BotVars.IB_Wait & "+ seconds", (AutoModSafelistValue - 1), IIf(BotVars.IB_Kick, 1, 0)
                             End If
                         End If
@@ -5263,7 +5262,7 @@ Private Sub UpTimer_Timer()
                 ThisPos = checkChannel(.Username)
                 
                 If ThisPos > 0 And ThisPos < lvChannel.ListItems.Count Then
-                    newColor = GetNameColor(.Flags, .TimeSinceTalk(), .IsSelf)
+                    newColor = GetNameColor(.flags, .TimeSinceTalk(), .IsSelf)
                     
                     If lvChannel.ListItems(ThisPos).ForeColor <> newColor Then
                         lvChannel.ListItems(ThisPos).ForeColor = newColor
@@ -5588,7 +5587,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     Exit Sub
     
 ERROR_HANDLER:
-    Call AddChat(vbRed, "Error: " & Err.description & " in AddQ().")
+    Call AddChat(vbRed, "Error: " & Err.Description & " in AddQ().")
 
     Exit Sub
 End Sub
@@ -5649,8 +5648,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     BotVars.Product = ReadCFG(MN, "Product")
     BotVars.Server = ReadCFG(MN, "Server")
-    BotVars.BanUnderLevel = Val(ReadCFG(OT, "BanUnderLevel"))
-    BotVars.BanD2UnderLevel = Val(ReadCFG(OT, "BanD2UnderLevel"))
+    BotVars.BanUnderLevel = val(ReadCFG(OT, "BanUnderLevel"))
+    BotVars.BanD2UnderLevel = val(ReadCFG(OT, "BanD2UnderLevel"))
     BotVars.HomeChannel = ReadCFG(MN, "HomeChan")
     BotVars.BotOwner = ReadCFG(MN, "Owner")
     BotVars.Trigger = ReadCFG(MN, "Trigger")
@@ -5702,13 +5701,13 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     If LenB(s) > 0 Then
         If StrictIsNumeric(s) Then
-            BotVars.AutofilterMS = Val(s)
+            BotVars.AutofilterMS = val(s)
         End If
     End If
     
     s = ReadCFG("Override", "AutoModerationSafelistValue")
-    If Val(s) > 0 And Val(s) < 1001 Then
-        AutoModSafelistValue = Val(s)
+    If val(s) > 0 And val(s) < 1001 Then
+        AutoModSafelistValue = val(s)
     Else
         AutoModSafelistValue = 20
     End If
@@ -5931,10 +5930,10 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     If s = "N" Then BotVars.BanEvasion = False Else BotVars.BanEvasion = True
     
     s = ReadCFG(OT, "Timestamp")
-    If StrictIsNumeric(s) And Val(s) < 4 Then BotVars.TSSetting = CInt(s) Else BotVars.TSSetting = 0
+    If StrictIsNumeric(s) And val(s) < 4 Then BotVars.TSSetting = CInt(s) Else BotVars.TSSetting = 0
     
     s = ReadCFG(OT, "Logging")
-    If StrictIsNumeric(s) Then BotVars.Logging = Val(s) Else BotVars.Logging = 2
+    If StrictIsNumeric(s) Then BotVars.Logging = val(s) Else BotVars.Logging = 2
         
     mnuToggleWWUse.Checked = (ReadCFG("Main", "UseWWs") = "Y")
     
@@ -5959,8 +5958,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCFG("Override", "SecondsToIdle")
     If LenB(s) > 0 Then
         If StrictIsNumeric(s) Then
-            If Val(s) < 1000000 Then
-                BotVars.SecondsToIdle = Val(s)
+            If val(s) < 1000000 Then
+                BotVars.SecondsToIdle = val(s)
             End If
         End If
     End If
@@ -5974,7 +5973,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     ' Capped at 32767, topic=29986 -Andy
     s = ReadCFG(OT, "IdleBanDelay")
     If StrictIsNumeric(s) Then
-        If Val(s) < 32767 Then
+        If val(s) < 32767 Then
             BotVars.IB_Wait = CInt(s)
         Else
             BotVars.IB_Wait = 32767
@@ -5988,14 +5987,14 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     If ((s = vbNullString) Or (StrictIsNumeric(s) = False)) Then
         BotVars.MaxBacklogSize = 10000
     Else
-        BotVars.MaxBacklogSize = Val(s)
+        BotVars.MaxBacklogSize = val(s)
     End If
     
     s = ReadCFG(MN, "MaxLogFileSize")
     If ((s = vbNullString) Or (StrictIsNumeric(s) = False)) Then
         BotVars.MaxLogFileSize = 50000000
     Else
-        BotVars.MaxLogFileSize = Val(s)
+        BotVars.MaxLogFileSize = val(s)
     End If
     
     s = ReadCFG(MN, "DoNotUseDirectFList")
@@ -6019,9 +6018,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCFG(MN, "ReconnectDelay")
     If LenB(s) > 0 Then
         If StrictIsNumeric(s) Then
-            If Val(s) < 60000 Then
-                If Val(s) > 0 Then
-                    BotVars.ReconnectDelay = Val(s)
+            If val(s) < 60000 Then
+                If val(s) > 0 Then
+                    BotVars.ReconnectDelay = val(s)
                 Else
                     BotVars.ReconnectDelay = 1000
                 End If
@@ -6123,7 +6122,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     s = ReadCFG(MN, "ProxyPort")
     If StrictIsNumeric(s) Then
-        If Val(s) < 65536 Then BotVars.ProxyPort = CLng(s) Else BotVars.ProxyPort = 0
+        If val(s) < 65536 Then BotVars.ProxyPort = CLng(s) Else BotVars.ProxyPort = 0
     Else
         BotVars.ProxyPort = 0
     End If
@@ -6180,7 +6179,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     If (s = vbNullString) Then
         BotVars.ChatDelay = 500
     Else
-        BotVars.ChatDelay = CLng(Val(s))
+        BotVars.ChatDelay = CLng(val(s))
     End If
 
     Call ChatQueue_Initialize
@@ -6243,11 +6242,11 @@ Sub LoadOutFilters()
         Exit Sub
     End If
     
-    For i = 1 To Val(s)
+    For i = 1 To val(s)
         gOutFilters(i).ofFind = Replace(LCase(ReadINI(o, "Find" & i, f)), "¦", " ")
         gOutFilters(i).ofReplace = Replace(ReadINI(o, "Replace" & i, f), "¦", " ")
         
-        If (i <> Val(s)) Then
+        If (i <> val(s)) Then
             ReDim Preserve gOutFilters(1 To i + 1)
         End If
     Next i
@@ -6425,7 +6424,7 @@ End Sub
 Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
     Dim f As Integer
     Dim Path As String
-    Dim Temp As String
+    Dim temp As String
     Dim i As Integer
     Dim c As Integer
     
@@ -6449,22 +6448,22 @@ Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
             ReDim tArray(0)
             If Mode <> LOAD_FILTERS Then
                 Do
-                    Line Input #f, Temp
-                    If Len(Temp) > 0 Then
+                    Line Input #f, temp
+                    If Len(temp) > 0 Then
                         ' removed for 2.5 - why am I PCing it ?
                         'If Mode = LOAD_SAFELIST Then temp = PrepareCheck(temp)
-                        tArray(UBound(tArray)) = LCase(Temp)
+                        tArray(UBound(tArray)) = LCase(temp)
                         ReDim Preserve tArray(UBound(tArray) + 1)
                     End If
                 Loop While Not EOF(f)
             Else
-                Temp = ReadINI(FI, "Total", "filters.ini")
-                If Temp <> vbNullString And CInt(Temp) > -1 Then
-                    c = Int(Temp)
+                temp = ReadINI(FI, "Total", "filters.ini")
+                If temp <> vbNullString And CInt(temp) > -1 Then
+                    c = Int(temp)
                     For i = 1 To c
-                        Temp = ReadINI(FI, "Filter" & i, "filters.ini")
-                        If Temp <> vbNullString Then
-                            tArray(UBound(tArray)) = LCase(Temp)
+                        temp = ReadINI(FI, "Filter" & i, "filters.ini")
+                        If temp <> vbNullString Then
+                            tArray(UBound(tArray)) = LCase(temp)
                             If i <> c Then ReDim Preserve tArray(UBound(tArray) + 1)
                         End If
                     Next i
@@ -6559,8 +6558,8 @@ Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
     End If
 End Sub
 
-Private Sub sckBNLS_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    Call Event_BNLSError(Number, description)
+Private Sub sckBNLS_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+    Call Event_BNLSError(Number, Description)
 End Sub
 
 Function GetSelectedUser() As String
@@ -6820,26 +6819,26 @@ Sub DisableListviewTabs()
     ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
 End Sub
 
-Sub AddClanMember(ByVal Name As String, Rank As Integer, Online As Integer)
+Sub AddClanMember(ByVal Name As String, rank As Integer, Online As Integer)
     
-    If Rank = 0 Then Rank = 1
-    If Rank > 4 Then Rank = 5 '// handle bad ranks
+    If rank = 0 Then rank = 1
+    If rank > 4 Then rank = 5 '// handle bad ranks
     
     '// add user
     
     Name = KillNull(Name)
     
     With lvClanList
-        .ListItems.Add .ListItems.Count + 1, , Name, , Rank
+        .ListItems.Add .ListItems.Count + 1, , Name, , rank
         .ListItems(.ListItems.Count).ListSubItems.Add , , , Online + 6
-        .ListItems(.ListItems.Count).ListSubItems.Add , , Rank
+        .ListItems(.ListItems.Count).ListSubItems.Add , , rank
         .SortKey = 2
         .SortOrder = lvwDescending
         .Sorted = True
     End With
     
     On Error Resume Next
-    SControl.Run "Event_ClanInfo", Name, Rank, Online
+    SControl.Run "Event_ClanInfo", Name, rank, Online
 End Sub
 
 Private Function GetClanSelectedUser() As String

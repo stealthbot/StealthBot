@@ -25,8 +25,15 @@ Private m_created_on  As Date
 Private m_created_by  As String
 Private m_modified_on As Date
 Private m_modified_by As String
-Private m_groups()    As clsDBEntryObj
+Private m_groups      As Collection
 Private m_lastseen    As Date
+
+' ...
+Private Sub Class_Initialize()
+
+    Set m_groups = New Collection
+
+End Sub
 
 ' ...
 Public Property Get entryType() As String
@@ -204,8 +211,21 @@ Public Property Let LastSeen(ByRef dLastSeen As Date)
 End Property
 
 ' ...
-Public Function Group(ByVal grp As Variant) As Object
+Public Property Get Groups() As Collection
+    
+    Set Groups = m_groups
+    
+End Property
+
+' ...
+Public Property Get MembersOf() As Collection
+    ' ...
+    Set MembersOf = New Collection
     
     ' ...
-    
-End Function
+    If (StrComp(m_type, "Group", vbTextCompare) = 0) Then
+
+        ' ...
+        
+    End If
+End Property

@@ -520,17 +520,17 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Const UNBANNED_MESSAGE As String = " was unbanned by "
 
     Dim i      As Integer
-    Dim Temp   As String
+    Dim temp   As String
     Dim bHide  As Boolean
     Dim ToANSI As String
     
     ' ...
-    'ToANSI = UTF8Decode(Message)
+    ToANSI = UTF8Decode(Message)
     
     ' ...
-    'If (Len(ToANSI) > 0) Then
-    '    Message = ToANSI
-    'End If
+    If (Len(ToANSI) > 0) Then
+        Message = ToANSI
+    End If
     
     If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
         If (PassedClanMotdCheck = False) Then
@@ -575,12 +575,12 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
         
         'Ban Evasion and banned-user tracking
-        Temp = Split(Message, " ")(1)
+        temp = Split(Message, " ")(1)
         
         ' added 1/21/06 thanks to
         ' http://www.stealthbot.net/forum/index.php?showtopic=24582
         
-        If (Len(Temp) > 0) Then
+        If (Len(temp) > 0) Then
             Dim bUser     As String  ' ...
             Dim cOperator As String  ' ...
             Dim msgPos    As Integer ' ...
@@ -592,8 +592,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 bUser = Left$(Message, (msgPos - 1))
                 
                 cOperator = _
-                    Mid$(Message, _
-                            (msgPos + Len(BANNED_MESSAGE)))
+                    Mid$(Message, (msgPos + Len(BANNED_MESSAGE)))
                                 
                 If (InStr(1, cOperator, Space$(1), vbBinaryCompare) <> 0) Then
                     cOperator = Left$(cOperator, _
@@ -612,15 +611,14 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 
                 BanCount = (BanCount + 1)
                 
-            ElseIf (InStr(Len(Temp), Message, UNBANNED_MESSAGE, vbTextCompare) > 0) Then
+            ElseIf (InStr(Len(temp), Message, UNBANNED_MESSAGE, vbTextCompare) > 0) Then
             
                 msgPos = InStr(1, Message, UNBANNED_MESSAGE, vbBinaryCompare)
                 
                 bUser = Left$(Message, (msgPos - 1))
                 
                 cOperator = _
-                    Mid$(Message, _
-                            (msgPos + Len(UNBANNED_MESSAGE)))
+                    Mid$(Message, (msgPos + Len(UNBANNED_MESSAGE)))
                                 
                 If (InStr(1, cOperator, Space$(1), vbBinaryCompare) <> 0) Then
                     cOperator = Left$(cOperator, _
@@ -637,7 +635,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
     
             '// backup channel
-            If (InStr(Len(Temp), Message, "kicked you out", vbTextCompare) > 0) Then
+            If (InStr(Len(temp), Message, "kicked you out", vbTextCompare) > 0) Then
                 If ((StrComp(gChannel.Current, "Op [vL]", vbTextCompare) <> 0) And _
                     (StrComp(gChannel.Current, "Op Fatal-Error", vbTextCompare) <> 0)) Then
                         
@@ -651,23 +649,22 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 End If
             End If
             
-            If (InStr(Len(Temp), Message, " has been unsquelched", _
-                vbTextCompare) > 0) Then
-                
+            ' ...
+            If (InStr(Len(temp), Message, " has been unsquelched", vbTextCompare) > 0) Then
                 unsquelching = True
             End If
         End If
         
+        ' ...
         If (InStr(1, Message, "designated heir", vbTextCompare) <> 0) Then
             gChannel.Designated = Left$(Message, Len(Message) - 29)
         End If
         
         ' trick to find the current Warcraft III realm name, thanks LoRd :)
-        If (InStr(1, Message, "You are " & reverseUsername(CurrentUsername) & _
-            ", using ") > 0) Then
-            
+        If (InStr(1, Message, "You are " & reverseUsername(CurrentUsername) & ", using ") > 0) Then
+            ' ...
             If (InStr(1, Message, "channel", vbTextCompare) = 0) Then
-                i = InStrRev(Message, Space(1))
+                i = InStrRev(Message, Space$(1))
                 
                 BotVars.Gateway = Mid$(Message, i + 1)
 
@@ -679,9 +676,9 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
         End If
         
-        Temp = "Your friends are:"
+        temp = "Your friends are:"
         
-        If (StrComp(Left$(Message, Len(Temp)), Temp) = 0) Then
+        If (StrComp(Left$(Message, Len(temp)), temp) = 0) Then
             If (Not (BotVars.ShowOfflineFriends)) Then
                 Message = Message & _
                     "  ÿci(StealthBot is hiding your offline friends)"
@@ -1033,7 +1030,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         Dim toCheck    As String
         Dim strCompare As String
         Dim i          As Long
-        Dim Temp       As Byte
+        Dim temp       As Byte
         Dim Level      As Byte
         Dim l          As Long
         Dim Banned     As Boolean
