@@ -93,7 +93,7 @@ Begin VB.Form frmDBManager
          Index           =   1
          Left            =   1930
          TabIndex        =   9
-         Top             =   4535
+         Top             =   4538
          Width           =   855
       End
       Begin VB.CommandButton btnDelete 
@@ -102,7 +102,7 @@ Begin VB.Form frmDBManager
          Height          =   300
          Left            =   1088
          TabIndex        =   10
-         Top             =   4535
+         Top             =   4538
          Width           =   855
       End
       Begin VB.Label Label1 
@@ -673,7 +673,7 @@ Private Sub btnSave_Click(index As Integer)
             If (StrComp(trvUsers.SelectedItem.text, m_DB(i).Username, vbTextCompare) = 0) Then
                 ' modifiy user data
                 With m_DB(i)
-                    .access = val(txtRank.text)
+                    .access = Val(txtRank.text)
                     .flags = txtFlags.text
                     .ModifiedBy = "(console)"
                     .ModifiedOn = Now
@@ -1225,7 +1225,7 @@ Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y
 End Sub
 
 ' ...
-Private Sub trvUsers_OLEDragOver(data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
+Private Sub trvUsers_OLEDragOver(Data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
     Shift As Integer, X As Single, Y As Single, State As Integer)
     
     ' ...
@@ -1233,7 +1233,7 @@ Private Sub trvUsers_OLEDragOver(data As MSComctlLib.DataObject, Effect As Long,
 End Sub
 
 ' ...
-Private Sub trvUsers_OLEDragDrop(data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
+Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
     Shift As Integer, X As Single, Y As Single)
     
     ' ...
@@ -1289,7 +1289,7 @@ Private Sub trvUsers_OLEDragDrop(data As MSComctlLib.DataObject, Effect As Long,
                     Set trvUsers.DropHighlight = nodeNow
                 
                     ' ...
-                    Call trvUsers_OLEDragDrop(data, Effect, Button, Shift, _
+                    Call trvUsers_OLEDragDrop(Data, Effect, Button, Shift, _
                         X, Y)
                 
                     ' ...
@@ -1329,7 +1329,7 @@ Private Sub trvUsers_OLEDragDrop(data As MSComctlLib.DataObject, Effect As Long,
 ERROR_HANDLER:
     ' potential cycle introduction error
     If (Err.Number = 35614) Then
-        MsgBox Err.Description, vbCritical, "Error"
+        MsgBox Err.description, vbCritical, "Error"
     End If
     
     ' ...
