@@ -6359,7 +6359,7 @@ Public Sub LoadDatabase()
     End If
 End Sub
 
-Private Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String) As Boolean
+Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String) As Boolean
     On Error GoTo ERROR_HANDLER
     
     Dim Command As clsCommandDocObj
@@ -6487,7 +6487,7 @@ ERROR_HANDLER:
     Exit Function
 End Function
 
-Private Function HasAccess(ByVal Username As String, ByVal CommandName As String, Optional ByVal CommandArgs As _
+Public Function HasAccess(ByVal Username As String, ByVal CommandName As String, Optional ByVal CommandArgs As _
     String = vbNullString) As Boolean
     
     On Error GoTo ERROR_HANDLER

@@ -292,11 +292,11 @@ End Sub
 '//             use it to control whether or not your command responses display publicly.
 '// CC          CC controls whether or not the command string is passed to the Custom Command processor.
 '//             For scripting purposes I will not allow the user to set CC, it is always 0.
-Public Sub Command(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
+Public Sub Command(ByVal Username As String, ByVal message As String, Optional ByVal IsLocal As Boolean = _
     False, Optional ByVal Whispered As Boolean = False)
     
     ' execute command
-    Call ProcessCommand(Username, Message, IsLocal, Whispered)
+    Call ProcessCommand(Username, message, IsLocal, Whispered)
 End Sub
 
 
@@ -317,7 +317,7 @@ End Sub
 '//         ALL uppercase and with no repeating letters, or the bot will become
 '//         somewhat confused.
 
-Public Function CommandEx(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
+Public Function CommandEx(ByVal Username As String, ByVal message As String, Optional ByVal IsLocal As Boolean = _
     False) As String
     
     Dim dbAccess           As udtGetAccessResponse
@@ -340,7 +340,7 @@ Public Function CommandEx(ByVal Username As String, ByVal Message As String, Opt
     End If
 
     ' execute command
-    bln = ExecuteCommand(Username, dbAccess, Message, IsLocal, command_response)
+    bln = ExecuteCommand(Username, dbAccess, message, IsLocal, command_response)
     
     ' ...
     CommandEx = Join(command_response, Chr$(0))
@@ -1400,17 +1400,19 @@ Public Function OpenCommand(ByVal strCommand As String) As Object
     Set OpenCommand = modCommandDocsObj.OpenCommand(strCommand)
 End Function
 
+Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String) As Boolean
+    IsCorrectSyntax = modCommandCode.IsCorrectSyntax(CommandName, CommandArgs)
+End Function
+
+Public Function HasAccess(ByVal Username As String, ByVal CommandName As String, Optional ByVal CommandArgs As _
+    String = vbNullString) As Boolean
+    
+    HasAccess = modCommandCode.HasAccess(Username, CommandName, CommandArgs)
+End Function
+
 Public Function Quotes() As Collection
     Set Quotes = g_Quotes
 End Function
-
-'Public Function GetQuote(Optional quoteNumber As Integer) As String'
-'
-'    Dim strQuote As String
-'
-'''
-'
-'End Function
 
 ' // ...
 Public Function MediaPlayer() As Object
