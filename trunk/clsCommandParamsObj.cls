@@ -18,6 +18,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private m_name           As String
+Private m_optional       As Boolean
 Private m_required_rank  As Integer
 Private m_required_flags As String
 Private m_description    As String
@@ -132,12 +133,14 @@ End Property
 Public Property Get IsOptional() As Boolean
 
     ' ...
+    IsOptional = m_optional
 
 End Property
 
 Public Property Let IsOptional(bln As Boolean)
 
     ' ...
+    m_optional = bln
 
 End Property
 

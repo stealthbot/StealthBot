@@ -41,23 +41,28 @@ Begin VB.Form frmDBManager
       TabIndex        =   6
       Top             =   487
       Width           =   3025
-      Begin VB.ComboBox cbxPrimaryGroup 
-         Height          =   315
-         ItemData        =   "frmDBManager.frx":0000
-         Left            =   240
-         List            =   "frmDBManager.frx":0007
-         Style           =   2  'Dropdown List
-         TabIndex        =   21
-         Top             =   2520
-         Width           =   2535
-      End
-      Begin VB.ListBox lstGroups 
-         Height          =   960
-         Left            =   240
-         Style           =   1  'Checkbox
-         TabIndex        =   20
-         Top             =   3240
-         Width           =   2535
+      Begin MSComctlLib.ListView lvGroups 
+         Height          =   1935
+         Left            =   225
+         TabIndex        =   19
+         Top             =   2530
+         Width           =   2560
+         _ExtentX        =   4524
+         _ExtentY        =   3413
+         View            =   3
+         LabelEdit       =   1
+         LabelWrap       =   -1  'True
+         HideSelection   =   -1  'True
+         HideColumnHeaders=   -1  'True
+         Checkboxes      =   -1  'True
+         _Version        =   393217
+         ForeColor       =   -2147483640
+         BackColor       =   -2147483643
+         Appearance      =   1
+         NumItems        =   1
+         BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+            Object.Width           =   3969
+         EndProperty
       End
       Begin VB.TextBox txtFlags 
          BackColor       =   &H00993300&
@@ -101,11 +106,11 @@ Begin VB.Form frmDBManager
          Width           =   855
       End
       Begin VB.Label Label1 
-         Caption         =   "Primary Group:"
+         Caption         =   "Group(s):"
          Height          =   255
          Left            =   240
-         TabIndex        =   22
-         Top             =   2280
+         TabIndex        =   20
+         Top             =   2300
          Width           =   2535
       End
       Begin VB.Label lblModifiedBy 
@@ -120,7 +125,7 @@ Begin VB.Form frmDBManager
          EndProperty
          Height          =   135
          Left            =   480
-         TabIndex        =   19
+         TabIndex        =   18
          Top             =   1965
          Width           =   2415
       End
@@ -136,7 +141,7 @@ Begin VB.Form frmDBManager
          EndProperty
          Height          =   135
          Left            =   480
-         TabIndex        =   18
+         TabIndex        =   17
          Top             =   1350
          Width           =   2415
       End
@@ -153,7 +158,7 @@ Begin VB.Form frmDBManager
          EndProperty
          Height          =   130
          Left            =   360
-         TabIndex        =   14
+         TabIndex        =   13
          Top             =   1180
          Width           =   2415
       End
@@ -170,7 +175,7 @@ Begin VB.Form frmDBManager
          EndProperty
          Height          =   135
          Left            =   360
-         TabIndex        =   17
+         TabIndex        =   16
          Top             =   1800
          Width           =   2415
       End
@@ -188,7 +193,7 @@ Begin VB.Form frmDBManager
          Height          =   135
          Index           =   0
          Left            =   240
-         TabIndex        =   16
+         TabIndex        =   15
          Top             =   970
          Width           =   2535
       End
@@ -206,16 +211,8 @@ Begin VB.Form frmDBManager
          Height          =   135
          Index           =   1
          Left            =   240
-         TabIndex        =   15
+         TabIndex        =   14
          Top             =   1590
-         Width           =   2535
-      End
-      Begin VB.Label lblGroup 
-         Caption         =   "Secondary Group(s):"
-         Height          =   255
-         Left            =   240
-         TabIndex        =   13
-         Top             =   3000
          Width           =   2535
       End
       Begin VB.Label lblFlags 
@@ -248,15 +245,15 @@ Begin VB.Form frmDBManager
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   3
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":001F
+            Picture         =   "frmDBManager.frx":0000
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0571
+            Picture         =   "frmDBManager.frx":0552
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0AC3
+            Picture         =   "frmDBManager.frx":0AA4
             Key             =   ""
          EndProperty
       EndProperty
@@ -265,7 +262,7 @@ Begin VB.Form frmDBManager
       Caption         =   "Create Group"
       Height          =   375
       Left            =   1800
-      Picture         =   "frmDBManager.frx":1015
+      Picture         =   "frmDBManager.frx":0FF6
       TabIndex        =   2
       ToolTipText     =   "Create Group"
       Top             =   5047
@@ -276,7 +273,7 @@ Begin VB.Form frmDBManager
       Height          =   375
       Left            =   120
       MaskColor       =   &H00000000&
-      Picture         =   "frmDBManager.frx":147D
+      Picture         =   "frmDBManager.frx":145E
       TabIndex        =   1
       ToolTipText     =   "Create User"
       Top             =   5047
@@ -676,51 +673,51 @@ Private Sub btnSave_Click(index As Integer)
             If (StrComp(trvUsers.SelectedItem.text, m_DB(i).Username, vbTextCompare) = 0) Then
                 ' modifiy user data
                 With m_DB(i)
-                    .Access = Val(txtRank.text)
-                    .Flags = txtFlags.text
+                    .access = val(txtRank.text)
+                    .flags = txtFlags.text
                     .ModifiedBy = "(console)"
                     .ModifiedOn = Now
                 End With
                 
                 ' ...
-                If (m_group_change) Then
-                    ' ...
-                    If (m_group_index > -1) Then
-                        m_DB(i).Groups = lstGroups.List(m_group_index)
-                        
-                        ' ...
-                        If (tbsTabs.SelectedItem.index = 1) Then
-                            Set trvUsers.SelectedItem.Parent = _
-                                    trvUsers.Nodes(Exists(m_DB(i).Groups, "Group"))
-                        End If
-                    Else
-                        m_DB(i).Groups = vbNullString
-                        
-                        ' ...
-                        If (tbsTabs.SelectedItem.index = 1) Then
-                            Set trvUsers.SelectedItem.Parent = trvUsers.Nodes(1)
-                        End If
-                    End If
-                    
-                    ' ...
-                    If (lstGroups.SelCount > 1) Then
-                        ' ...
-                        For j = 0 To (lstGroups.ListCount - 1)
-                            ' ...
-                            If (j <> m_group_index) Then
-                                ' ...
-                                If (lstGroups.Selected(j) = True) Then
-                                    ' ...
-                                    m_DB(i).Groups = m_DB(i).Groups & "," & _
-                                        lstGroups.List(j)
-                                End If
-                            End If
-                        Next j
-                    End If
-                    
-                    ' ...
-                    m_group_change = False
-                End If
+                'If (m_group_change) Then
+                '    ' ...
+                '    If (m_group_index > -1) Then
+                '        m_DB(i).Groups = lstGroups.List(m_group_index)
+                '
+                '        ' ...
+                '        If (tbsTabs.SelectedItem.index = 1) Then
+                '            Set trvUsers.SelectedItem.Parent = _
+                '                    trvUsers.Nodes(Exists(m_DB(i).Groups, "Group"))
+                '        End If
+                '    Else
+                '        m_DB(i).Groups = vbNullString
+                '
+                '        ' ...
+                '        If (tbsTabs.SelectedItem.index = 1) Then
+                '            Set trvUsers.SelectedItem.Parent = trvUsers.Nodes(1)
+                '        End If
+                '    End If
+                '
+                '    ' ...
+                '    If (lstGroups.SelCount > 1) Then
+                '        ' ...
+                '        For j = 0 To (lstGroups.ListCount - 1)
+                '            ' ...
+                '            If (j <> m_group_index) Then
+                '                ' ...
+                '                If (lstGroups.Selected(j) = True) Then
+                '                    ' ...
+                '                    m_DB(i).Groups = m_DB(i).Groups & "," & _
+                '                        lstGroups.List(j)
+                '                End If
+                '            End If
+                '        Next j
+                '    End If
+                '
+                '    ' ...
+                '    m_group_change = False
+                'End If
                 
                 ' break loop
                 Exit For
@@ -745,22 +742,22 @@ Private Sub btnSave_Click(index As Integer)
 End Sub
 
 ' ...
-Private Sub lstGroups_Click()
-    ' ...
-    m_group_change = True '
-
-    ' ...
-    If (lstGroups.SelCount = 0) Then
-        m_group_index = -1
-    ElseIf (lstGroups.SelCount = 1) Then
-        m_group_index = lstGroups.ListIndex
-    Else
-        MsgBox lstGroups.ListIndex
-    End If '
-
-    ' ...
-    btnSave(1).Enabled = True
-End Sub
+'Private Sub lstGroups_Click()
+'    ' ...
+'    m_group_change = True
+'
+'    ' ...
+'    If (lstGroups.SelCount = 0) Then
+'        m_group_index = -1
+'    ElseIf (lstGroups.SelCount = 1) Then
+'        m_group_index = lstGroups.ListIndex
+'    Else
+'        MsgBox lstGroups.ListIndex
+'    End If
+'
+'    ' ...
+'    btnSave(1).Enabled = True
+'End Sub
 
 ' ...
 Private Sub mnuDelete_Click()
@@ -1009,12 +1006,12 @@ Private Sub LockGUI()
     txtFlags.text = vbNullString
     
     ' loop through listbox and clear selected items
-    For i = 0 To (lstGroups.ListCount - 1)
-        lstGroups.Selected(i) = False
+    For i = 1 To lvGroups.ListItems.Count
+        lvGroups.ListItems(i).Checked = False
     Next i
     
     ' disable group list
-    lstGroups.Enabled = False
+    'lstGroups.Enabled = False
     
     ' reset created on & modified on labels
     lblCreatedOn.Caption = "(not applicable)"
@@ -1046,12 +1043,12 @@ Private Sub UnlockGUI()
     txtFlags.text = vbNullString
 
     ' loop through listbox and clear selected items
-    For i = 0 To (lstGroups.ListCount - 1)
-        lstGroups.Selected(i) = False
+    For i = 1 To lvGroups.ListItems.Count
+        lvGroups.ListItems(i).Checked = False
     Next i
     
     ' enable group list
-    lstGroups.Enabled = True
+    'lstGroups.Enabled = True
     
     ' reset created on & modified on labels
     lblCreatedOn.Caption = "(not applicable)"
@@ -1103,16 +1100,16 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
         tmp = GetAccess(node.text, node.tag)
         
         ' does entry have a rank?
-        If (tmp.Access > 0) Then
+        If (tmp.access > 0) Then
             ' write rank to text box
-            txtRank.text = tmp.Access
+            txtRank.text = tmp.access
         Else
             ' clear rank from text box
             txtRank.text = vbNullString
         End If
         
         ' clear flags from text box
-        txtFlags.text = tmp.Flags
+        txtFlags.text = tmp.flags
         
         ' ...
         If ((tmp.AddedBy = vbNullString) Or (tmp.AddedBy = "%")) Then
@@ -1154,16 +1151,16 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
             For i = LBound(splt) To UBound(splt)
                 ' loop through our group listing, checking to see if we have any
                 ' matches (since the entry is a member of a group, we better!)
-                For j = 0 To (lstGroups.ListCount - 1)
+                For j = 1 To lvGroups.ListItems.Count
                     ' is entry a member of group?
-                    If (StrComp(splt(i), lstGroups.List(j), vbTextCompare) = 0) Then
+                    If (StrComp(splt(i), lvGroups.ListItems(j), vbTextCompare) = 0) Then
                         ' ...
                         If (m_group_index = -1) Then
                             m_group_index = j
                         End If
                     
                         ' select group if entry is a member
-                        lstGroups.Selected(j) = True
+                        lvGroups.ListItems(j).Checked = True
                     End If
                 Next j
             Next i
@@ -1228,7 +1225,7 @@ Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y
 End Sub
 
 ' ...
-Private Sub trvUsers_OLEDragOver(Data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
+Private Sub trvUsers_OLEDragOver(data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
     Shift As Integer, X As Single, Y As Single, State As Integer)
     
     ' ...
@@ -1236,7 +1233,7 @@ Private Sub trvUsers_OLEDragOver(Data As MSComctlLib.DataObject, Effect As Long,
 End Sub
 
 ' ...
-Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
+Private Sub trvUsers_OLEDragDrop(data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
     Shift As Integer, X As Single, Y As Single)
     
     ' ...
@@ -1292,7 +1289,7 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
                     Set trvUsers.DropHighlight = nodeNow
                 
                     ' ...
-                    Call trvUsers_OLEDragDrop(Data, Effect, Button, Shift, _
+                    Call trvUsers_OLEDragDrop(data, Effect, Button, Shift, _
                         X, Y)
                 
                     ' ...
@@ -1332,7 +1329,7 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
 ERROR_HANDLER:
     ' potential cycle introduction error
     If (Err.Number = 35614) Then
-        MsgBox Err.description, vbCritical, "Error"
+        MsgBox Err.Description, vbCritical, "Error"
     End If
     
     ' ...
@@ -1592,17 +1589,14 @@ Private Sub UpdateGroupListBox()
     Dim i As Integer ' ...
 
     ' clear group selection listing
-    Call lstGroups.Clear
+    Call lvGroups.ListItems.Clear
 
     ' go through group listing
     For i = LBound(m_DB) To UBound(m_DB)
         ' ...
         If (StrComp(m_DB(i).Type, "Group", vbTextCompare) = 0) Then
             ' add group to group selection listbox
-            Call lstGroups.AddItem(m_DB(i).Username)
-            
-            ' ...
-            Call cbxPrimaryGroup.AddItem(m_DB(i).Username)
+            Call lvGroups.ListItems.Add(, , m_DB(i).Username)
         End If
     Next i
 End Sub
@@ -1673,8 +1667,8 @@ Private Function GetAccess(ByVal Username As String, Optional dbType As String =
             If (bln = True) Then
                 With GetAccess
                     .Username = m_DB(i).Username
-                    .Access = m_DB(i).Access
-                    .Flags = m_DB(i).Flags
+                    .access = m_DB(i).access
+                    .flags = m_DB(i).flags
                     .AddedBy = m_DB(i).AddedBy
                     .AddedOn = m_DB(i).AddedOn
                     .ModifiedBy = m_DB(i).ModifiedBy
@@ -1691,7 +1685,7 @@ Private Function GetAccess(ByVal Username As String, Optional dbType As String =
         bln = False
     Next i
 
-    GetAccess.Access = -1
+    GetAccess.access = -1
 End Function
 
 ' ...

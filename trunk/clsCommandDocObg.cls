@@ -165,8 +165,15 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal DatabaseP
             ' ...
             Set paramObj = New clsCommandParamsObj
             
+            Set attrs = parameter.Attributes.getNamedItem("optional")
             Set data = parameter.selectSingleNode("./data")
             Set restrictions = parameter.selectNodes("./restriction")
+            
+            If (Not (attrs Is Nothing)) Then
+                If (attrs.text = "true") Then
+                    paramObj.IsOptional = True
+                End If
+            End If
             
             If (Not (data Is Nothing)) Then
                 paramObj.dataType = data.Attributes.getNamedItem("type").text

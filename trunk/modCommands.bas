@@ -6390,14 +6390,26 @@ Private Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs 
             splt(0) = CommandArgs
         End If
         
+        If (UBound(splt) + 1 > Command.Params.Count) Then
+            IsCorrectSyntax = False
+        
+            Exit Function
+        End If
+        
         For i = 1 To Command.Params.Count
             Set parameter = Command.Params(i)
 
             If (parameter.IsOptional) Then
-                If ((Command.Params.Count > i) And (Command.Params.Item(i).IsOptional)) Then
-                    If (parameter.dataType = "number") Then
-                        If (StrictIsNumeric(splt(loopCount)) = False) Then
-                            bln = True
+                If (Command.Params.Count > i) Then
+                    If (Command.Params.Item(i + 1).IsOptional) Then
+                        If (parameter.dataType = "number") Then
+                            If (StrictIsNumeric(splt(loopCount)) = False) Then
+                                bln = True
+                            End If
+                        Else
+                            IsCorrectSyntax = False
+                            
+                            Exit Function
                         End If
                     End If
                 End If
@@ -6407,13 +6419,13 @@ Private Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs 
                 ' ...
                 If (parameter.dataType = "number") Then
                     Dim lVal As Long
-                
+
                     If (StrictIsNumeric(splt(loopCount)) = False) Then
                         IsCorrectSyntax = False
                         
                         Exit Function
                     End If
-                    
+
                     'lVal = val(splt(loopCount))
                     
                     'If ((lVal < parameter.min) Or (lVal > parameter.max)) Then
