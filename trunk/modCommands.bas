@@ -36,7 +36,7 @@ Public floodCap As Byte   ' ...?
 
 ' prepares commands for processing, and calls helper functions associated with
 ' processing
-Public Function ProcessCommand(ByVal Username As String, ByVal Message As String, _
+Public Function ProcessCommand(ByVal Username As String, ByVal message As String, _
     Optional ByVal InBot As Boolean = False, Optional ByVal WhisperedIn As Boolean = False) As Boolean
     
     On Error GoTo ERROR_HANDLER
@@ -48,7 +48,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Dim Count            As Integer
     Dim bln              As Boolean
     
-    Set Command = IsCommand(Message)
+    Set Command = IsCommand(message)
 
     Do While (Command.Name <> vbNullString)
         If ((Command.IsLocal) Or _
@@ -92,7 +92,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     
     If (InBot) Then
         If ((bln = False) And (Count = 0)) Then
-            AddQ Message
+            AddQ message
         End If
     End If
     
@@ -101,7 +101,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
 ' default (if all else fails) error handler to keep erroneous
 ' commands and/or input formats from killing me
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: " & Err.Description & _
+    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: " & Err.description & _
         " in ProcessCommand().")
 
     ' return command failure result
@@ -112,7 +112,7 @@ End Function
 
 ' prepares commands for processing, and calls helper functions associated with
 ' processing
-Public Function ProcessCommand3(ByVal Username As String, ByVal Message As String, _
+Public Function ProcessCommand3(ByVal Username As String, ByVal message As String, _
     Optional ByVal InBot As Boolean = False, Optional ByVal WhisperedIn As Boolean = False) As Boolean
     
     ' default error response for commands
@@ -149,7 +149,7 @@ Public Function ProcessCommand3(ByVal Username As String, ByVal Message As Strin
     End If
 
     ' store local copy of message
-    tmpmsg = Message
+    tmpmsg = message
     
     ' replace message variables
     tmpmsg = Replace(tmpmsg, "%me", IIf((InBot), CurrentUsername, Username), 1)
@@ -331,7 +331,7 @@ Public Function ProcessCommand3(ByVal Username As String, ByVal Message As Strin
             ' command is found to be invalid and issued
             ' internally
             If (InBot) Then
-                Call AddQ(Message, PRIORITY.CONSOLE_MESSAGE, "(console)")
+                Call AddQ(message, PRIORITY.CONSOLE_MESSAGE, "(console)")
             End If
         End If
     End If
@@ -343,7 +343,7 @@ Public Function ProcessCommand3(ByVal Username As String, ByVal Message As Strin
 ' default (if all else fails) error handler to keep erroneous
 ' commands and/or input formats from killing me
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: " & Err.Description & _
+    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: " & Err.description & _
         " in ProcessCommand().")
 
     ' return command failure result
@@ -354,7 +354,7 @@ End Function ' end function ProcessCommand
 
 ' command processing helper function
 Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal Message As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ByVal message As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
 
     Dim tmpmsg   As String  ' stores copy of message
     Dim cmdName  As String  ' stores command name
@@ -367,7 +367,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
     ReDim Preserve cmdRet(0)
     
     ' store local copy of message
-    tmpmsg = Message
+    tmpmsg = message
 
     ' grab command name & message data
     If (InStr(1, tmpmsg, Space(1), vbBinaryCompare) <> 0) Then
@@ -546,7 +546,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
     ' ...
     If (Not (blnNoCmd)) Then
         ' append entry to command log
-        Call LogCommand(Username, Message)
+        Call LogCommand(Username, message)
     End If
     
     ' was a command found? return.
@@ -886,7 +886,7 @@ Private Function OnRoll(ByVal Username As String, ByRef dbAccess As udtGetAccess
         Randomize
         
         If (StrictIsNumeric(msgData)) Then
-            If (val(msgData) < 100000000) Then
+            If (Val(msgData) < 100000000) Then
                 Track = CLng(Rnd * CLng(msgData))
                 
                 tmpBuf = "Random number (0-" & msgData & "): " & Track
@@ -1293,7 +1293,7 @@ Private Function OnIdleBans(ByVal Username As String, ByRef dbAccess As udtGetAc
                 
                 If (Len(tmpData) > 0) Then
                     If (StrictIsNumeric(tmpData)) Then
-                        BotVars.IB_Wait = val(tmpData)
+                        BotVars.IB_Wait = Val(tmpData)
                     End If
                 End If
                 
@@ -1410,10 +1410,10 @@ Private Function OnChPw(ByVal Username As String, ByRef dbAccess As udtGetAccess
             
         Case "time", "delay", "wait"
             If (StrictIsNumeric(strArray(1))) Then
-                If ((val(strArray(1)) <= 255) And _
-                    (val(strArray(1)) >= 1)) Then
+                If ((Val(strArray(1)) <= 255) And _
+                    (Val(strArray(1)) >= 1)) Then
                    
-                    BotVars.ChannelPasswordDelay = CByte(val(strArray(1)))
+                    BotVars.ChannelPasswordDelay = CByte(Val(strArray(1)))
                     
                     tmpBuf = "Channel password delay set to " & strArray(1) & "."
                 Else
@@ -2387,7 +2387,7 @@ Private Function OnIdleTime(ByVal Username As String, ByRef dbAccess As udtGetAc
 
     u = msgData
         
-    If ((Not (StrictIsNumeric(u))) Or (val(u) > 50000)) Then
+    If ((Not (StrictIsNumeric(u))) Or (Val(u) > 50000)) Then
         tmpBuf = "Error setting idle wait time."
     Else
         Call WriteINI("Main", "IdleWait", 2 * Int(u))
@@ -2712,7 +2712,7 @@ Private Function OnLevelBan(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     If (Len(msgData) > 0) Then
         If (StrictIsNumeric(msgData)) Then
-            i = val(msgData)
+            i = Val(msgData)
             
             If (i >= 1) Then
                 If (i <= 255) Then
@@ -2756,7 +2756,7 @@ Private Function OnD2LevelBan(ByVal Username As String, ByRef dbAccess As udtGet
     
     If (Len(msgData) > 0) Then
         If (StrictIsNumeric(msgData)) Then
-            i = val(msgData)
+            i = Val(msgData)
                 
             If (i >= 1) Then
                 If (i <= 255) Then
@@ -3642,7 +3642,7 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim Y       As String
     Dim i       As Integer
 
-    If (MyFlags <> USER_CHANNELOP&) Then
+    If ((MyFlags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
         If (InBot) Then
             tmpBuf = "You are not a channel operator."
         End If
@@ -3977,7 +3977,7 @@ Private Function OnVote(ByVal Username As String, ByRef dbAccess As udtGetAccess
     If (Len(msgData) > 0) Then
         If (VoteDuration = -1) Then
             ' ensure that tmpDuration is an integer
-            tmpDuration = val(msgData)
+            tmpDuration = Val(msgData)
         
             ' check for proper duration time and call for vote
             If ((tmpDuration > 0) And (tmpDuration <= 32000)) Then
@@ -4465,7 +4465,7 @@ Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAcc
         Call GetMailMessage(Username, Msg)
         
         If (Len(RTrim(Msg.To)) > 0) Then
-            tmpBuf = "Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
+            tmpBuf = "Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.message)
         End If
     Else
         tmpBuf = "You do not currently have any messages " & _
@@ -5098,11 +5098,11 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
 
         With temp
             .From = Username
-            .Message = strArray(1)
+            .message = strArray(1)
             
             If (StrictIsNumeric(strArray(0))) Then
                 'number games
-                Track = val(strArray(0))
+                Track = Val(strArray(0))
                 
                 For c = 0 To UBound(DB)
                     gAcc = GetCumulativeAccess(DB(c).Username)
@@ -5166,7 +5166,7 @@ Private Function OnBMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
         With temp
             .To = strArray(0)
             .From = Username
-            .Message = strArray(1)
+            .message = strArray(1)
         End With
         
         If (Len(temp.To) = 0) Then
@@ -5288,7 +5288,7 @@ Private Function OnFind(ByVal Username As String, ByRef dbAccess As udtGetAccess
     If (Len(u) > 0) Then
         If (StrictIsNumeric(u)) Then
             ' execute search
-            Call searchDatabase(tmpBuf(), , , , , val(u))
+            Call searchDatabase(tmpBuf(), , , , , Val(u))
         ElseIf (InStr(1, u, Space(1), vbBinaryCompare) <> 0) Then
             Dim lowerBound As String ' ...
             Dim upperBound As String ' ...
@@ -5306,7 +5306,7 @@ Private Function OnFind(ByVal Username As String, ByRef dbAccess As udtGetAccess
                 (StrictIsNumeric(upperBound))) Then
             
                 ' execute search
-                Call searchDatabase(tmpBuf(), , , , , CInt(val(lowerBound)), CInt(val(upperBound)))
+                Call searchDatabase(tmpBuf(), , , , , CInt(Val(lowerBound)), CInt(Val(upperBound)))
             Else
                 tmpBuf(0) = "Error: You have specified an invalid range."
             End If
@@ -5891,7 +5891,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
     Exit Function
     
 ERROR_HANDLER:
-    MsgBox Err.Description
+    MsgBox Err.description
     
     Exit Function
 End Function
@@ -6263,7 +6263,7 @@ Public Sub LoadDatabase()
                             .Username = X(0)
                             
                             If StrictIsNumeric(X(1)) Then
-                                .access = val(X(1))
+                                .access = Val(X(1))
                             Else
                                 If X(1) <> "%" Then
                                     .flags = X(1)
@@ -6381,19 +6381,23 @@ Private Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs 
         Dim loopCount   As Integer
         Dim bln         As Boolean
         Dim i           As Integer
+        Dim spaceIndex  As Integer
         
-        If (InStr(1, CommandArgs, Space$(1), vbBinaryCompare) <> 0) Then
-            splt() = Split(CommandArgs, Space$(1))
+        ' ...
+        spaceIndex = InStr(1, CommandArgs, Space$(1), vbBinaryCompare)
+        
+        If ((spaceIndex <> 0) And (Command.Params.Count > 1)) Then
+            splt() = Split(CommandArgs, Space$(1), Command.Params.Count)
         Else
+            If (CommandArgs = vbNullString) Then
+                IsCorrectSyntax = False
+                
+                Exit Function
+            End If
+        
             ReDim Preserve splt(0)
-            
+        
             splt(0) = CommandArgs
-        End If
-        
-        If (UBound(splt) + 1 > Command.Params.Count) Then
-            IsCorrectSyntax = False
-        
-            Exit Function
         End If
         
         For i = 1 To Command.Params.Count
@@ -6478,7 +6482,7 @@ Private Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs 
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in IsCorrectSyntax().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in IsCorrectSyntax().")
     
     Exit Function
 End Function
@@ -6589,7 +6593,7 @@ Private Function HasAccess(ByVal Username As String, ByVal CommandName As String
     Exit Function
 
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in HasAccess().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in HasAccess().")
     
     Exit Function
 End Function
@@ -6635,7 +6639,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                 ' ...
                 For Each access In accessGroup.childNodes
                     If (LCase$(access.nodeName) = "rank") Then
-                        If ((gAcc.access) >= (val(access.text))) Then
+                        If ((gAcc.access) >= (Val(access.text))) Then
                             ValidateAccess = True
                         
                             Exit For
@@ -6673,7 +6677,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                             ' ...
                             For Each access In accessGroup.childNodes
                                 If (LCase$(access.nodeName) = "rank") Then
-                                    If ((gAcc.access) >= (val(access.text))) Then
+                                    If ((gAcc.access) >= (Val(access.text))) Then
                                         ValidateAccess = True
                                     
                                         Exit For
@@ -7059,7 +7063,7 @@ GetRandomQuote_Exit:
 
 GetRandomQuote_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure GetRandomQuote of Module modCommandCode"
+    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure GetRandomQuote of Module modCommandCode"
     Resume GetRandomQuote_Exit
 End Function
 
@@ -7102,7 +7106,7 @@ WriteDatabase_Exit:
 
 WriteDatabase_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure " & _
+    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure " & _
         "WriteDatabase of Module modCommandCode"
     
     Resume WriteDatabase_Exit
@@ -7162,7 +7166,7 @@ Private Function GetAccessINIValue(ByVal sKey As String, Optional ByVal Default 
     Dim s As String, l As Long
     
     s = ReadINI("Numeric", sKey, "access.ini")
-    l = val(s)
+    l = Val(s)
     
     If l > 0 Then
         GetAccessINIValue = l

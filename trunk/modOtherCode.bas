@@ -145,7 +145,7 @@ Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Inte
         End Select
     Else
         GetVerByte = _
-            CLng(val("&H" & ReadCFG("Override", Key & "VerByte")))
+            CLng(Val("&H" & ReadCFG("Override", Key & "VerByte")))
     End If
     
 End Function
@@ -341,13 +341,13 @@ Public Function StripRealm(ByVal Username As String) As String
     StripRealm = Username
 End Function
 
-Public Sub bnetSend(ByVal Message As String, Optional ByVal tag As String = vbNullString)
+Public Sub bnetSend(ByVal message As String, Optional ByVal tag As String = vbNullString)
     If (frmChat.sckBNet.State = 7) Then
         With PBuffer
             If (frmChat.mnuUTF8.Checked = False) Then
-                .InsertNTString Message, UTF8
+                .InsertNTString message, UTF8
             Else
-                .InsertNTString Message
+                .InsertNTString message
             End If
 
             .SendPacket &HE
@@ -367,7 +367,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal tag As String = vbNu
     If (bFlood = False) Then
         On Error Resume Next
         
-        frmChat.SControl.Run "Event_MessageSent", Message, tag
+        frmChat.SControl.Run "Event_MessageSent", message, tag
     End If
 End Sub
 
@@ -843,7 +843,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in " & _
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in " & _
         "GetCumulativeAccess().")
 
     Exit Function
@@ -1283,8 +1283,8 @@ Public Function GetNewsURL() As String
 End Function
 
 Public Function HTMLToRGBColor(ByVal s As String) As Long
-    HTMLToRGBColor = RGB(val("&H" & Mid$(s, 1, 2)), val("&H" & Mid$(s, 3, 2)), _
-        val("&H" & Mid$(s, 5, 2)))
+    HTMLToRGBColor = RGB(Val("&H" & Mid$(s, 1, 2)), Val("&H" & Mid$(s, 3, 2)), _
+        Val("&H" & Mid$(s, 5, 2)))
 End Function
 
 Public Function StrictIsNumeric(ByVal sCheck As String) As Boolean
@@ -1316,7 +1316,7 @@ Public Sub LoadCDKeys(ByRef cboCDKey As ComboBox)
     Dim Count As Integer
     Dim sKey  As String
     
-    Count = val(ReadCFG("StoredKeys", "Count"))
+    Count = Val(ReadCFG("StoredKeys", "Count"))
     
     If (Count) Then
         For Count = 1 To Count
@@ -2261,7 +2261,7 @@ Public Sub LogCommand(ByVal Caller As String, ByVal CString As String)
     Exit Sub
 
 LogCommand_Error:
-    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in " & _
+    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in " & _
         "Procedure; LogCommand; of; Module; modOtherCode; "
     
     Exit Sub
@@ -2448,7 +2448,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, Err.Description & " in SplitByLen().")
+    Call frmChat.AddChat(vbRed, Err.description & " in SplitByLen().")
     
     Exit Function
 End Function
@@ -2460,8 +2460,9 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     ' ...
     Const CMD_DELIMITER As String = "; "
 
-    Static Message   As String  ' ...
-    Static CropLen   As Integer ' ...
+    Static message    As String  ' ...
+    Static CropLen    As Integer ' ...
+    Static HasTrigger As Boolean ' ...
 
     Dim index        As Integer ' ...
     Dim bln          As Boolean ' ...
@@ -2475,13 +2476,14 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     ' ...
     If (str <> vbNullString) Then
         ' ...
-        Message = str
+        message = str
         
-        ' ...
+        ' reset our statics
         CropLen = 0
+        HasTrigger = False
     Else
         ' ...
-        If (Len(Message) <= CropLen) Then
+        If (Len(message) <= CropLen) Then
             With IsCommand
                 .Name = vbNullString
                 .Args = vbNullString
@@ -2492,12 +2494,12 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     End If
 
     ' ...
-    If (Left$(Message, 1) = "/") Then
+    If (Left$(message, 1) = "/") Then
         ' ...
         console = True
         
         ' ...
-        If (Left$(Message, 2) = "//") Then
+        If (Left$(message, 2) = "//") Then
             PublicOutput = True
             
             If (CropLen = 0) Then
@@ -2520,77 +2522,99 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     
     ' ...
     If (CropLen) Then
-        tmp = Mid$(Message, CropLen + 1)
+        tmp = Mid$(message, CropLen + 1)
     Else
-        tmp = Message
+        tmp = message
     End If
     
     ' ...
     If ((console = False) And (DontCheckTrigger = False)) Then
         ' ...
-        If (Left$(Message, Len(BotVars.TriggerLong)) = BotVars.TriggerLong) Then
+        If (Left$(tmp, Len(BotVars.TriggerLong)) = BotVars.TriggerLong) Then
             ' ...
             CropLen = (CropLen + Len(BotVars.TriggerLong))
         
             ' ...
-            If (StrComp(Left$(Message, Len(CurrentUsername) + 1), CurrentUsername & Space(1), _
-                vbTextCompare) = 0) Then
+            If (StrComp(Left$(tmp, Len(CurrentUsername) + 1), CurrentUsername & Space(1), _
+                    vbTextCompare) = 0) Then
                 
+                ' ...
                 CropLen = (CropLen + Len(CurrentUsername))
             End If
             
+            ' ...
             bln = True
         Else
-            If (Left$(tmp, 1) = "?") Then
-                If (StrComp(tmp, "trigger", vbTextCompare) = 0) Then
-                    CropLen = (CropLen + Len("?"))
-                
-                    bln = True
-                End If
-            Else
+            ' ...
+            If (HasTrigger = False) Then
                 ' ...
-                If (StrComp(Left$(tmp, Len(CurrentUsername)), CurrentUsername, _
-                        vbTextCompare) = 0) Then
-    
-                    If (Mid$(tmp, Len(CurrentUsername) + 1, 2) = ": ") Then
-                        CropLen = (CropLen + (Len(CurrentUsername) + Len(": ")))
-                            
+                If (Left$(tmp, 1) = "?") Then
+                    ' ...
+                    If (StrComp(tmp, "trigger", vbTextCompare) = 0) Then
+                        ' ...
+                        CropLen = (CropLen + Len("?"))
+                    
+                        ' ...
                         bln = True
-                    ElseIf (Mid$(tmp, Len(CurrentUsername) + 1, 2) = ", ") Then
-                        CropLen = (CropLen + (Len(CurrentUsername) + Len(", ")))
-    
-                        bln = True
+                    End If
+                Else
+                    ' ...
+                    If (StrComp(Left$(tmp, Len(CurrentUsername)), CurrentUsername, vbTextCompare) = 0) Then
+                        ' ...
+                        If (Mid$(tmp, Len(CurrentUsername) + 1, 2) = ": ") Then
+                            ' ...
+                            CropLen = (CropLen + (Len(CurrentUsername) + Len(": ")))
+                                
+                            ' ...
+                            bln = True
+                        ElseIf (Mid$(tmp, Len(CurrentUsername) + 1, 2) = ", ") Then
+                            ' ...
+                            CropLen = (CropLen + (Len(CurrentUsername) + Len(", ")))
+        
+                            ' ...
+                            bln = True
+                        End If
                     End If
                 End If
             End If
         End If
         
         ' ...
-        If (bln = True) Then
-            tmp = Mid$(tmp, CropLen + 1)
+        If (bln) Then
+            ' ...
+            tmp = Mid$(message, CropLen + 1)
+            
+            ' ...
+            HasTrigger = True
         End If
     End If
     
-    ' check our message for a command delimiter
-    index = InStr(Len(BotVars.TriggerLong) + 1, tmp, CMD_DELIMITER, _
-        vbBinaryCompare)
-    
-    ' using a delimiter can be undesirable at times, so
-    ' we require a way of bypassing such a feature, and
-    ' that way is to entirely disable internal support!
-    If ((index) And (console = False)) Then
-        ' ...
-        tmp = Mid$(tmp, 1, index - 1)
+    ' ...
+    If (HasTrigger) Then
+        ' check our message for a command delimiter
+        index = InStr(Len(BotVars.TriggerLong) + 1, tmp, CMD_DELIMITER, _
+            vbBinaryCompare)
         
-        ' ...
-        CropLen = (CropLen + (Len(tmp) + Len(CMD_DELIMITER)))
+        ' using a delimiter can be undesirable at times, so
+        ' we require a way of bypassing such a feature, and
+        ' that way is to entirely disable internal support!
+        If (index) Then
+            ' ...
+            tmp = Mid$(tmp, 1, index - 1)
+            
+            ' ...
+            CropLen = (CropLen + (Len(tmp) + Len(CMD_DELIMITER)))
+        Else
+            ' ...
+            CropLen = Len(message)
+        End If
     Else
         ' ...
-        CropLen = Len(Message)
+        CropLen = Len(message)
     End If
     
     ' ...
-    If ((console) Or (bln)) Then
+    If ((console) Or (HasTrigger)) Then
         ' ...
         index = InStr(1, tmp, Space$(1), vbBinaryCompare)
         
