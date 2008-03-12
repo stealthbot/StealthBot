@@ -1024,7 +1024,8 @@ End Function
 '//   Written by Swent. Creates/modifies plugin settings.
 '//   Usage - new setting: SetSetting "prefix", "settingName", value, "setting description", False
 '//   Usage - existing setting: SetSetting "prefix", "settingName", value
-'//   Setting values of any length can be set and retrieved properly (no longer a 255 char max)
+'//   Setting values of any length are now set and retrieved properly (no longer a 255 char max)
+'//   You can now have spaces in your setting names.
 Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal varValue As Variant, _
                       Optional ByVal strDescription As String, Optional ByVal boolOverwrite As Boolean = True)
                       
@@ -1032,7 +1033,7 @@ Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal 
     strPath = BotPath() & "plugins\settings.ini"
 
     If Len(strDescription) > 0 Then
-        SetSetting strPrefix, strName & ".Description", strDescription, "", True
+        SetSetting strPrefix, strName & " (info)", strDescription, "", True
     End If
     
     If boolOverwrite Or Len(GetConfigEntry(strPrefix, strName, strPath)) = 0 Then
