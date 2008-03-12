@@ -252,7 +252,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
                     End If
                 End If
                 
-                If (GetAccess(Username).access >= SpeakerAccess) Then
+                If (GetAccess(Username).Access >= SpeakerAccess) Then
                     Ban = "You do not have enough access to do that."
                     
                     Exit Function
@@ -341,19 +341,19 @@ Public Function StripRealm(ByVal Username As String) As String
     StripRealm = Username
 End Function
 
-Public Sub bnetSend(ByVal message As String, Optional ByVal tag As String = vbNullString)
+Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNullString)
     If (frmChat.sckBNet.State = 7) Then
         With PBuffer
             If (frmChat.mnuUTF8.Checked = False) Then
-                .InsertNTString message, UTF8
+                .InsertNTString Message, UTF8
             Else
-                .InsertNTString message
+                .InsertNTString Message
             End If
 
             .SendPacket &HE
         End With
         
-        If (tag = "request_receipt") Then
+        If (Tag = "request_receipt") Then
             ' ...
             g_request_receipt = True
         
@@ -367,7 +367,7 @@ Public Sub bnetSend(ByVal message As String, Optional ByVal tag As String = vbNu
     If (bFlood = False) Then
         On Error Resume Next
         
-        frmChat.SControl.Run "Event_MessageSent", message, tag
+        frmChat.SControl.Run "Event_MessageSent", Message, Tag
     End If
 End Sub
 
@@ -444,14 +444,14 @@ Public Function Voting(ByVal Mode1 As Byte, Optional Mode2 As Byte, Optional Use
                         
                     Case BVT_VOTE_BAN
                         If (VotesYes > VotesNo) Then
-                            Voting = Ban(Target & " Banned by vote", VoteInitiator.access)
+                            Voting = Ban(Target & " Banned by vote", VoteInitiator.Access)
                         Else
                             Voting = "Ban vote failed."
                         End If
                         
                     Case BVT_VOTE_KICK
                         If (VotesYes > VotesNo) Then
-                            Voting = Ban(Target & " Kicked by vote", VoteInitiator.access, 1)
+                            Voting = Ban(Target & " Kicked by vote", VoteInitiator.Access, 1)
                         Else
                             Voting = "Kick vote failed."
                         End If
@@ -506,7 +506,7 @@ Public Function GetAccess(ByVal Username As String, Optional dbType As String = 
             If (bln = True) Then
                 With GetAccess
                     .Username = DB(i).Username
-                    .access = DB(i).access
+                    .Access = DB(i).Access
                     .flags = DB(i).flags
                     .AddedBy = DB(i).AddedBy
                     .AddedOn = DB(i).AddedOn
@@ -524,7 +524,7 @@ Public Function GetAccess(ByVal Username As String, Optional dbType As String = 
         bln = False
     Next i
 
-    GetAccess.access = -1
+    GetAccess.Access = -1
 End Function
 
 Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As String = _
@@ -540,7 +540,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Dim found   As Boolean ' ...
     Dim dbIndex As Integer ' ...
     Dim dbCount As Integer ' ...
-    Dim splt()  As String  ' ...
+    Dim Splt()  As String  ' ...
     Dim bln     As Boolean ' ...
     
     ' default index to negative one to
@@ -558,7 +558,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                     .Username = DB(i).Username & _
                         IIf(((DB(i).Type <> "%") And (StrComp(DB(i).Type, "USER", vbTextCompare) <> 0)), _
                             " (" & LCase$(DB(i).Type) & ")", vbNullString)
-                    .access = DB(i).access
+                    .Access = DB(i).Access
                     .flags = DB(i).flags
                     .AddedBy = DB(i).AddedBy
                     .AddedOn = DB(i).AddedOn
@@ -574,24 +574,24 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                     ' ...
                     If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
                         ' ...
-                        splt() = Split(DB(i).Groups, ",")
+                        Splt() = Split(DB(i).Groups, ",")
                     Else
                         ' ...
-                        ReDim Preserve splt(0)
+                        ReDim Preserve Splt(0)
                         
                         ' ...
-                        splt(0) = DB(i).Groups
+                        Splt(0) = DB(i).Groups
                     End If
                     
                     ' ...
-                    For j = 0 To UBound(splt)
+                    For j = 0 To UBound(Splt)
                         ' ...
-                        gAcc = GetCumulativeGroupAccess(splt(j))
+                        gAcc = GetCumulativeGroupAccess(Splt(j))
                     
                         ' ...
-                        If (GetCumulativeAccess.access < gAcc.access) Then
+                        If (GetCumulativeAccess.Access < gAcc.Access) Then
                             ' ...
-                            GetCumulativeAccess.access = gAcc.access
+                            GetCumulativeAccess.Access = gAcc.Access
                             
                             ' ...
                             bln = True
@@ -723,23 +723,23 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                                 ' ...
                                 If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
                                     ' ...
-                                    splt() = Split(tmp.Groups, ",")
+                                    Splt() = Split(tmp.Groups, ",")
                                 Else
                                     ' ...
-                                    ReDim Preserve splt(0)
+                                    ReDim Preserve Splt(0)
                                     
                                     ' ...
-                                    splt(0) = tmp.Groups
+                                    Splt(0) = tmp.Groups
                                 End If
                                 
                                 ' ...
-                                For j = 0 To UBound(splt)
+                                For j = 0 To UBound(Splt)
                                     ' ...
-                                    gAcc = GetCumulativeGroupAccess(splt(j))
+                                    gAcc = GetCumulativeGroupAccess(Splt(j))
                                 
                                     ' ...
-                                    If (tmp.access < gAcc.access) Then
-                                        tmp.access = gAcc.access
+                                    If (tmp.Access < gAcc.Access) Then
+                                        tmp.Access = gAcc.Access
                                     End If
                                     
                                     ' ...
@@ -765,9 +765,9 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             End If
     
                             ' ...
-                            If (GetCumulativeAccess.access < tmp.access) Then
+                            If (GetCumulativeAccess.Access < tmp.Access) Then
                                 ' ...
-                                GetCumulativeAccess.access = tmp.access
+                                GetCumulativeAccess.Access = tmp.Access
                                 
                                 ' ...
                                 bln = True
@@ -829,7 +829,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
             If (dbIndex = -1) Then
                 With GetCumulativeAccess
                     .Username = vbNullString
-                    .access = -1
+                    .Access = -1
                     .flags = vbNullString
                 End With
             End If
@@ -852,7 +852,7 @@ End Function
 ' ...
 Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccessResponse
     Dim gAcc   As udtGetAccessResponse ' ...
-    Dim splt() As String               ' ...
+    Dim Splt() As String               ' ...
     
     ' ...
     gAcc = GetAccess(Group, "GROUP")
@@ -867,16 +867,16 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
             Dim j As Integer ' ...
         
             ' ...
-            splt() = Split(gAcc.Groups, ",")
+            Splt() = Split(gAcc.Groups, ",")
             
             ' ...
-            For i = 0 To UBound(splt)
+            For i = 0 To UBound(Splt)
                 ' ...
-                recAcc = GetCumulativeGroupAccess(splt(i))
+                recAcc = GetCumulativeGroupAccess(Splt(i))
                     
                 ' ...
-                If (gAcc.access < recAcc.access) Then
-                    gAcc.access = recAcc.access
+                If (gAcc.Access < recAcc.Access) Then
+                    gAcc.Access = recAcc.Access
                 End If
                 
                 ' ...
@@ -904,8 +904,8 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
             recAcc = GetCumulativeGroupAccess(gAcc.Groups)
         
             ' ...
-            If (gAcc.access < recAcc.access) Then
-                gAcc.access = recAcc.access
+            If (gAcc.Access < recAcc.Access) Then
+                gAcc.Access = recAcc.Access
             End If
             
             ' ...
@@ -937,7 +937,7 @@ End Function
 ' ...
 Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Boolean
     Dim gAcc   As udtGetAccessResponse ' ...
-    Dim splt() As String               ' ...
+    Dim Splt() As String               ' ...
     
     ' ...
     gAcc = GetAccess(Group, "GROUP")
@@ -952,17 +952,17 @@ Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Bool
             Dim j As Integer ' ...
         
             ' ...
-            splt() = Split(gAcc.Groups, ",")
+            Splt() = Split(gAcc.Groups, ",")
             
             ' ...
-            For i = 0 To UBound(splt)
-                If (StrComp(splt(i), Check, vbTextCompare) = 0) Then
+            For i = 0 To UBound(Splt)
+                If (StrComp(Splt(i), Check, vbTextCompare) = 0) Then
                     CheckGroup = True
                     
                     Exit Function
                 Else
                     ' ...
-                    recAcc = CheckGroup(splt(i), Check)
+                    recAcc = CheckGroup(Splt(i), Check)
                 
                     If (recAcc) Then
                         CheckGroup = True
@@ -2150,7 +2150,7 @@ Public Function DoReplacements(ByVal s As String, Optional Username As String, _
     End If
     
     s = Replace(s, "%v", CVERSION, 1)
-    s = Replace(s, "%a", IIf(gAcc.access >= 0, gAcc.access, "0"), 1)
+    s = Replace(s, "%a", IIf(gAcc.Access >= 0, gAcc.Access, "0"), 1)
     s = Replace(s, "%f", gAcc.flags, 1)
     s = Replace(s, "%t", Time$, 1)
     s = Replace(s, "%d", Date, 1)
@@ -2358,7 +2358,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     Dim lineCount As Long    ' stores line number
     Dim pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
-    Dim Length    As Long    ' stores length after postfix
+    Dim length    As Long    ' stores length after postfix
     Dim bln       As Boolean ' stores result of delimiter split
     
     ' initialize our array
@@ -2395,7 +2395,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' going to postfix it.  Because of this, we're
             ' going to have to calculate the length after
             ' the post fix has been accounted for.
-            Length = (SplitLength - Len(LinePostfix))
+            length = (SplitLength - Len(LinePostfix))
         
             ' if we're going to be splitting the oversized
             ' message at a specified character, we need to
@@ -2405,7 +2405,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
                 ' grab position of delimiter character that is
                 ' the closest to our specified length
                 pos = InStrRev(StringSplit, OversizeDelimiter, _
-                    Length, vbBinaryCompare)
+                    length, vbBinaryCompare)
             End If
             
             ' if the delimiter we were looking for was found,
@@ -2413,7 +2413,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((pos) And (pos >= Round(Length / 2))) Then
+            If ((pos) And (pos >= Round(length / 2))) Then
                 ' truncate message
                 strTmp = Mid$(strTmp, 1, pos - 1)
                 
@@ -2423,7 +2423,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
                 bln = True
             Else
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, Length)
+                strTmp = Mid$(strTmp, 1, length)
             End If
             
             ' store truncated message in line
@@ -2460,7 +2460,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     ' ...
     Const CMD_DELIMITER As String = "; "
 
-    Static message    As String  ' ...
+    Static Message    As String  ' ...
     Static CropLen    As Integer ' ...
     Static HasTrigger As Boolean ' ...
 
@@ -2476,14 +2476,14 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     ' ...
     If (str <> vbNullString) Then
         ' ...
-        message = str
+        Message = str
         
         ' reset our statics
         CropLen = 0
         HasTrigger = False
     Else
         ' ...
-        If (Len(message) <= CropLen) Then
+        If (Len(Message) <= CropLen) Then
             With IsCommand
                 .Name = vbNullString
                 .Args = vbNullString
@@ -2494,12 +2494,12 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     End If
 
     ' ...
-    If (Left$(message, 1) = "/") Then
+    If (Left$(Message, 1) = "/") Then
         ' ...
         console = True
         
         ' ...
-        If (Left$(message, 2) = "//") Then
+        If (Left$(Message, 2) = "//") Then
             PublicOutput = True
             
             If (CropLen = 0) Then
@@ -2522,9 +2522,9 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     
     ' ...
     If (CropLen) Then
-        tmp = Mid$(message, CropLen + 1)
+        tmp = Mid$(Message, CropLen + 1)
     Else
-        tmp = message
+        tmp = Message
     End If
     
     ' ...
@@ -2550,7 +2550,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                 ' ...
                 If (Left$(tmp, 1) = "?") Then
                     ' ...
-                    If (StrComp(tmp, "trigger", vbTextCompare) = 0) Then
+                    If (StrComp(Mid$(tmp, 2), "trigger", vbTextCompare) = 0) Then
                         ' ...
                         CropLen = (CropLen + Len("?"))
                     
@@ -2582,7 +2582,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         ' ...
         If (bln) Then
             ' ...
-            tmp = Mid$(message, CropLen + 1)
+            tmp = Mid$(Message, CropLen + 1)
             
             ' ...
             HasTrigger = True
@@ -2606,11 +2606,11 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
             CropLen = (CropLen + (Len(tmp) + Len(CMD_DELIMITER)))
         Else
             ' ...
-            CropLen = Len(message)
+            CropLen = Len(Message)
         End If
     Else
         ' ...
-        CropLen = Len(message)
+        CropLen = Len(Message)
     End If
     
     ' ...
