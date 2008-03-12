@@ -255,7 +255,7 @@ End Sub
 '// Adds a string to the message send queue.
 '// Nonzero priority messages will be sent with precedence over 0-priority messages.
 Public Sub AddQ(ByVal sText As String, Optional ByVal msg_priority As Integer = -1, Optional ByVal _
-    tag As String = vbNullString)
+    Tag As String = vbNullString)
     
     '// priority zero reserved for internal usage only
     If (msg_priority = 0) Then
@@ -263,7 +263,7 @@ Public Sub AddQ(ByVal sText As String, Optional ByVal msg_priority As Integer = 
     End If
 
     '// ...
-    Call frmChat.AddQ(sText, msg_priority, g_lastQueueUser, tag)
+    Call frmChat.AddQ(sText, msg_priority, g_lastQueueUser, Tag)
     
     '// ...
     If (g_lastQueueUser <> vbNullString) Then
@@ -292,11 +292,11 @@ End Sub
 '//             use it to control whether or not your command responses display publicly.
 '// CC          CC controls whether or not the command string is passed to the Custom Command processor.
 '//             For scripting purposes I will not allow the user to set CC, it is always 0.
-Public Sub Command(ByVal Username As String, ByVal message As String, Optional ByVal IsLocal As Boolean = _
+Public Sub Command(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
     False, Optional ByVal Whispered As Boolean = False)
     
     ' execute command
-    Call ProcessCommand(Username, message, IsLocal, Whispered)
+    Call ProcessCommand(Username, Message, IsLocal, Whispered)
 End Sub
 
 
@@ -317,7 +317,7 @@ End Sub
 '//         ALL uppercase and with no repeating letters, or the bot will become
 '//         somewhat confused.
 
-Public Function CommandEx(ByVal Username As String, ByVal message As String, Optional ByVal IsLocal As Boolean = _
+Public Function CommandEx(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
     False) As String
     
     Dim dbAccess           As udtGetAccessResponse
@@ -331,7 +331,7 @@ Public Function CommandEx(ByVal Username As String, ByVal message As String, Opt
     
         ' ...
         With dbAccess
-            .access = 200
+            .Access = 200
             .flags = "A"
         End With
     Else
@@ -340,7 +340,7 @@ Public Function CommandEx(ByVal Username As String, ByVal message As String, Opt
     End If
 
     ' execute command
-    bln = ExecuteCommand(Username, dbAccess, message, IsLocal, command_response)
+    bln = ExecuteCommand(Username, dbAccess, Message, IsLocal, command_response)
     
     ' ...
     CommandEx = Join(command_response, Chr$(0))
@@ -418,17 +418,17 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Function GetDBEntry(ByVal Username As String, Optional ByRef access, Optional ByRef flags, _
+Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Optional ByRef flags, _
     Optional ByRef entryType As String = "USER") As Object
 
-    Dim temp   As udtGetAccessResponse
+    Dim Temp   As udtGetAccessResponse
     Dim i      As Integer
-    Dim splt() As String
+    Dim Splt() As String
     
-    temp = GetCumulativeAccess(Username, entryType)
+    Temp = GetCumulativeAccess(Username, entryType)
     
-    With temp
-        access = .access
+    With Temp
+        Access = .Access
         flags = .flags
     End With
     
@@ -437,27 +437,27 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef access, Opti
     
     ' ...
     With GetDBEntry
-        .entryType = temp.Type
-        .Name = temp.Username
-        .rank = temp.access
-        .flags = temp.flags
-        .CreatedOn = temp.AddedOn
-        .CreatedBy = temp.AddedBy
-        .ModifiedOn = temp.ModifiedOn
-        .ModifiedBy = temp.ModifiedBy
+        .entryType = Temp.Type
+        .Name = Temp.Username
+        .rank = Temp.Access
+        .flags = Temp.flags
+        .CreatedOn = Temp.AddedOn
+        .CreatedBy = Temp.AddedBy
+        .ModifiedOn = Temp.ModifiedOn
+        .ModifiedBy = Temp.ModifiedBy
     End With
 
-    If ((temp.Groups <> vbNullString) And (temp.Groups <> "%")) Then
-        If (InStr(1, temp.Groups, ",", vbBinaryCompare) <> 0) Then
-            splt() = Split(temp.Groups, ",")
+    If ((Temp.Groups <> vbNullString) And (Temp.Groups <> "%")) Then
+        If (InStr(1, Temp.Groups, ",", vbBinaryCompare) <> 0) Then
+            Splt() = Split(Temp.Groups, ",")
         Else
-            ReDim Preserve splt(0)
+            ReDim Preserve Splt(0)
         
-            splt(0) = temp.Groups
+            Splt(0) = Temp.Groups
         End If
     
-        For i = LBound(splt) To UBound(splt)
-            GetDBEntry.Groups.Add GetDBEntry(splt(i), , , "GROUP")
+        For i = LBound(Splt) To UBound(Splt)
+            GetDBEntry.Groups.Add GetDBEntry(Splt(i), , , "GROUP")
         Next i
     End If
 End Function
@@ -472,15 +472,15 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Sub GetStdDBEntry(ByVal Username As String, ByRef access, ByRef flags, _
+Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef flags, _
     Optional ByRef entryType As String = "USER") '// yum, Variants >:\
 
-    Dim temp As udtGetAccessResponse
+    Dim Temp As udtGetAccessResponse
     
-    temp = GetAccess(Username, entryType)
+    Temp = GetAccess(Username, entryType)
     
-    With temp
-        access = .access
+    With Temp
+        Access = .Access
         flags = .flags
     End With
 End Sub
@@ -1022,6 +1022,8 @@ End Function
 
 '// SETSETTING
 '//   Written by Swent. Creates/modifies plugin settings.
+'//   Usage - new setting: SetSetting "prefix", "settingName", value, "setting description", False
+'//   Usage - existing setting: SetSetting "prefix", "settingName", value
 '//   Setting values of any length can be set and retrieved properly (no longer a 255 char max)
 Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal varValue As Variant, _
                       Optional ByVal strDescription As String, Optional ByVal boolOverwrite As Boolean = True)
