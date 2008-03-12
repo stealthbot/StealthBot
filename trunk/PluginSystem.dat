@@ -514,7 +514,7 @@ Sub ps_updates_cmd(cmd, Username, DisplayID)
  
       AddChat psColor2, "ÿcbÿcuOfficial StealthBot Plugins and Updatesÿcuÿcbÿciÿci"
       Execute "AddChat vbWhite, """ & strUpdates & """"
-      AddChat psColor2, "Type /getplugin PREFIX (where PREFIX is the prefix of the plugin that you want)."
+      AddChat psColor1, "ÿcbTo download one of the plugins above, type /getplugin <prefix>"
    End If
 End Sub
 
