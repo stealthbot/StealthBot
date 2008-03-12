@@ -6,8 +6,8 @@
 '//    by Swent
 '//      Last modified 11:21 PM 2/21/2008
 
-'// The StealthBot Plugin System is a scripted platform that allows StealthBot to load, run, and update plugins.
-'//    This platform remains external to allow for automatic updates, and for viewing/tweaking by advanced scriptors.
+'// The StealthBot Plugin System allows StealthBot to load, run, and update plugins written in VBScript
+'//    This code remains external to allow for automatic updates, and for viewing/tweaking by advanced scriptors.
 '//        ** DO NOT change anything in this file unless you know what you're doing -- improper changes can crash the bot **
 
 '// This file will be updated periodically to provide new plugin features and capabilities between StealthBot versions.
@@ -510,8 +510,8 @@ Sub ps_updates_cmd(cmd, Username, DisplayID)
       strUpdates = Replace(strUpdates, "%4", """ & vbCrLf & """)
       strUpdates = Replace(strUpdates, """"" &", "")
  
-      AddChat vbWhite, "ÿcbÿcb"
-      Execute "AddChat psColor2, ""Plugins Available For Download"" & vbCrLf, vbWhite, """ & strUpdates & """"
+      AddChat psColor2, "ÿcbÿcuOfficial StealthBot Plugins and Updatesÿcuÿcbÿciÿci"
+      Execute "AddChat vbWhite, """ & strUpdates & """"
       AddChat psColor2, "Type /getplugin PREFIX (where PREFIX is the prefix of the plugin that you want)."
    End If
 End Sub
@@ -626,14 +626,15 @@ Sub ps_plugins_cmd(cmd, Username, DisplayID)
          titleLine = ""
       End If
 
+      'If i = 0 Then strFont = Array("ÿcb ÿcb", "ÿcu ÿcu", "ÿci ÿci") Else strFont = Array("","","") End If
       plugVer = altColor & ", ""    Version:" & vbTab & ""& psVersions.Item(arrPrefixes(i)) & """ & vbCrLf, "
       fileLine = altColor & ", ""    Filename:" & vbTab & "" & psFSO.GetFileName(psPlugins.Item(arrPrefixes(i))) & """, "
       prefixLine = altColor & ", String(2, vbCrLf) & ""    Prefix:" & String(2, vbTab) & """, " & vbWhite & ", ""[ " & arrPrefixes(i)  & " ]"", "
       strPList = strPList & prefixLine & status & "vbCrLf & " & titleLine & plugVer & fileLine
    Next
 
-   AddChat vbWhite, "ÿcbÿcb"
-   Execute("AddChat psColor1, ""Loaded Plugins (" & psPlugins.Count & ")"", " & Left(strPList, Len(strPList) - 2))
+   AddChat psColor1, "ÿcbÿcuLoaded Plugins(" & psPlugins.Count & ")ÿcuÿcbÿciÿci"
+   Execute("AddChat " & Left(strPList, Len(strPList) - 2))
    If Not GetSetting("ps", "enabled") Then AddChat vbRed, "Plugins have been globally disabled. To reverse this type /ps on"
 End Sub
 
