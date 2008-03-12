@@ -4,7 +4,7 @@
 
 '// The StealthBot Plugin System - StealthBot 2.7 Development Version
 '//    by Swent
-'//      Last modified 11:21 PM 2/21/2008
+'//      Last modified 11:54 PM 3/11/2008
 
 '// The StealthBot Plugin System allows StealthBot to load, run, and update plugins written in VBScript
 '//    This code remains external to allow for automatic updates, and for viewing/tweaking by advanced scriptors.
@@ -118,7 +118,9 @@ Const PS_SBNET_URL = "http://www.stealthbot.net/board/index.php?"
 Const PS_ALLOW_UI = True
 Const PS_SET_PATH = "plugins\settings.ini"
 Const PS_PREFIX_DISALLOW = "|ps|script|protect|phrasebans|ipbans|idle|koy|plugban|chpw|ib|efp|floodmode|debug"
-Const PS_COLORS = "65280,39423" '// Default: Green,Orange
+Const PS_COLORS = "65280,39423"
+Const PS_PC_VER = 2.4
+Const PS_SM_VER = 1.1
 
 Public psPrefixes       '// holds prefixes of loaded plugins
 Public psTitles         '// holds plugin titles
@@ -1150,7 +1152,7 @@ End Sub
 '// "Options" > "Download Plugins"
 Sub ps_GetPlugins_Callback()
 
-   psAppShell.Open "http://stealthbot.net/p"
+   psProcessCmd "/updates", BotVars.Username, 4
 End Sub
 
 
@@ -1578,9 +1580,9 @@ Sub psCreatePSSettings()
    SetSetting "ps", "prefix_cmd_access", 100, "Access required to use the .prefix on/off command", False
    SetSetting "ps", "plugins_cmd_access", 20, "Access required to use the .plugins command", False
    SetSetting "ps", "phelp_cmd_access", 20, "Access required to use the .phelp command", False
-   SetSetting "#internal", "pcver", 2.4, "", False
+   SetSetting "#internal", "pcver", PS_PC_VER, "", False
    SetSetting "#internal", "pcvernote", False, "", False
-   SetSetting "#internal", "smver", 1.00, "", False
+   SetSetting "#internal", "smver", PS_SM_VER, "", False
    SetSetting "#internal", "smvernote", False
 End Sub
 
