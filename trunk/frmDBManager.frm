@@ -42,13 +42,13 @@ Begin VB.Form frmDBManager
       Top             =   487
       Width           =   3025
       Begin MSComctlLib.ListView lvGroups 
-         Height          =   1935
-         Left            =   225
+         Height          =   1815
+         Left            =   240
          TabIndex        =   19
-         Top             =   2530
-         Width           =   2560
+         Top             =   2640
+         Width           =   2565
          _ExtentX        =   4524
-         _ExtentY        =   3413
+         _ExtentY        =   3201
          View            =   3
          LabelEdit       =   1
          LabelWrap       =   -1  'True
@@ -110,7 +110,7 @@ Begin VB.Form frmDBManager
          Height          =   255
          Left            =   240
          TabIndex        =   20
-         Top             =   2300
+         Top             =   2400
          Width           =   2535
       End
       Begin VB.Label lblModifiedBy 
@@ -435,7 +435,7 @@ Private Sub btnCreateUser_Click()
                 
         Else
             ' is the item a group?
-            If (StrComp(trvUsers.SelectedItem.tag, "Group", vbTextCompare) = 0) Then
+            If (StrComp(trvUsers.SelectedItem.Tag, "Group", vbTextCompare) = 0) Then
                 ' create new node under group node
                 Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, tvwChild, _
                     "User: " & Username, Username, 3)
@@ -446,7 +446,7 @@ Private Sub btnCreateUser_Click()
                 End With
             Else
                 ' is our parent a group?
-                If (StrComp(trvUsers.SelectedItem.Parent.tag, "Group", vbTextCompare) = 0) Then
+                If (StrComp(trvUsers.SelectedItem.Parent.Tag, "Group", vbTextCompare) = 0) Then
                     ' create new node under group node
                     Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Parent.Key, tvwChild, _
                         "User: " & Username, Username, 3)
@@ -470,7 +470,7 @@ Private Sub btnCreateUser_Click()
     
     ' change misc. settings
     With newNode
-        .tag = "User"
+        .Tag = "User"
         .Selected = True
     End With
     
@@ -523,7 +523,7 @@ Private Sub btnCreateGroup_Click()
                     tvwChild, "Group: " & GroupName, GroupName, 1)
             Else
                 ' ...
-                If (StrComp(trvUsers.SelectedItem.tag, "Group", vbTextCompare) = 0) Then
+                If (StrComp(trvUsers.SelectedItem.Tag, "Group", vbTextCompare) = 0) Then
                     ' ...
                     Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
                         tvwChild, "Group: " & GroupName, GroupName, 1)
@@ -538,7 +538,7 @@ Private Sub btnCreateGroup_Click()
                         tvwChild, "Group: " & GroupName, GroupName, 1)
                         
                     ' ...
-                    If (StrComp(trvUsers.SelectedItem.Parent.tag, "Group", vbTextCompare) = 0) Then
+                    If (StrComp(trvUsers.SelectedItem.Parent.Tag, "Group", vbTextCompare) = 0) Then
                         ' ...
                         With m_DB(UBound(m_DB))
                             .Groups = trvUsers.SelectedItem.Parent.text
@@ -554,7 +554,7 @@ Private Sub btnCreateGroup_Click()
         
         ' change misc. settings
         With newNode
-            .tag = "Group"
+            .Tag = "Group"
         End With
         
         ' increment group counter
@@ -588,7 +588,7 @@ Private Sub btnCreateGroup_Click()
             
         ' change misc. settings
         With newNode
-            .tag = "Clan"
+            .Tag = "Clan"
         End With
             
         ' increment clan counter
@@ -620,7 +620,7 @@ Private Sub btnCreateGroup_Click()
                     
                 ' change misc. settings
                 With newNode
-                    .tag = "Game"
+                    .Tag = "Game"
                 End With
             Else
                 ' alert user that game entry already exists
@@ -673,7 +673,7 @@ Private Sub btnSave_Click(index As Integer)
             If (StrComp(trvUsers.SelectedItem.text, m_DB(i).Username, vbTextCompare) = 0) Then
                 ' modifiy user data
                 With m_DB(i)
-                    .access = Val(txtRank.text)
+                    .Access = Val(txtRank.text)
                     .flags = txtFlags.text
                     .ModifiedBy = "(console)"
                     .ModifiedOn = Now
@@ -886,7 +886,7 @@ Private Sub tbsTabs_Click()
                     
                     ' change misc. settings
                     With newNode
-                        .tag = "Group"
+                        .Tag = "Group"
                     End With
                 End If
             Next i
@@ -923,7 +923,7 @@ Private Sub tbsTabs_Click()
                     
                     ' change misc. settings
                     With newNode
-                        .tag = "User"
+                        .Tag = "User"
                     End With
                 End If
             Next i
@@ -942,7 +942,7 @@ Private Sub tbsTabs_Click()
                         
                     ' change misc. settings
                     With newNode
-                        .tag = "Clan"
+                        .Tag = "Clan"
                     End With
                 End If
             Next i
@@ -961,7 +961,7 @@ Private Sub tbsTabs_Click()
                         
                     ' change misc. settings
                     With newNode
-                        .tag = "Game"
+                        .Tag = "Game"
                     End With
                 End If
             Next i
@@ -1097,12 +1097,12 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
         frmDatabase.Caption = node.text
         
         ' ...
-        tmp = GetAccess(node.text, node.tag)
+        tmp = GetAccess(node.text, node.Tag)
         
         ' does entry have a rank?
-        If (tmp.access > 0) Then
+        If (tmp.Access > 0) Then
             ' write rank to text box
-            txtRank.text = tmp.access
+            txtRank.text = tmp.Access
         Else
             ' clear rank from text box
             txtRank.text = vbNullString
@@ -1131,29 +1131,29 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
         
         ' is entry a member of a group?
         If (Len(tmp.Groups) And (tmp.Groups <> "%")) Then
-            Dim splt() As String  ' ...
+            Dim Splt() As String  ' ...
             Dim j      As Integer ' ...
         
             ' is entry a member of multiple groups?
             If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
                 ' store working copy of group memberships, splitting up
                 ' multiple groupings by the ',' delimiter.
-                splt() = Split(tmp.Groups, ",")
+                Splt() = Split(tmp.Groups, ",")
             Else
                 ' redefine array size to store group name
-                ReDim Preserve splt(0)
+                ReDim Preserve Splt(0)
                 
                 ' store working copy of group membership
-                splt(0) = tmp.Groups
+                Splt(0) = tmp.Groups
             End If
             
             ' loop through entry's group memberships
-            For i = LBound(splt) To UBound(splt)
+            For i = LBound(Splt) To UBound(Splt)
                 ' loop through our group listing, checking to see if we have any
                 ' matches (since the entry is a member of a group, we better!)
                 For j = 1 To lvGroups.ListItems.Count
                     ' is entry a member of group?
-                    If (StrComp(splt(i), lvGroups.ListItems(j), vbTextCompare) = 0) Then
+                    If (StrComp(Splt(i), lvGroups.ListItems(j), vbTextCompare) = 0) Then
                         ' ...
                         If (m_group_index = -1) Then
                             m_group_index = j
@@ -1200,7 +1200,7 @@ Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y
             ' ...
             If (trvUsers.SelectedItem.index > 1) Then
                 ' ...
-                If (StrComp(trvUsers.SelectedItem.tag, "Group", vbTextCompare) = 0) Then
+                If (StrComp(trvUsers.SelectedItem.Tag, "Group", vbTextCompare) = 0) Then
                     ' ...
                     mnuRename.Enabled = True
                 Else
@@ -1260,7 +1260,7 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
             ' ...
             If (StrComp(m_DB(i).Username, nodePrev.text, vbTextCompare) = 0) Then
                 ' ...
-                If (StrComp(m_DB(i).Type, nodePrev.tag, vbTextCompare) = 0) Then
+                If (StrComp(m_DB(i).Type, nodePrev.Tag, vbTextCompare) = 0) Then
                     ' ...
                     If ((Len(m_DB(i).Groups) > 0) And (m_DB(i).Groups <> "%")) Then
                         ' ...
@@ -1279,7 +1279,7 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
         ' ...
         If (nodePrev.index <> 1) Then
             ' ...
-            If (StrComp(nodeNow.tag, "Group", vbTextCompare) <> 0) Then
+            If (StrComp(nodeNow.Tag, "Group", vbTextCompare) <> 0) Then
                 ' ...
                 Set nodeNow = nodeNow.Parent
                 
@@ -1304,7 +1304,7 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
                     ' ...
                     If (StrComp(m_DB(i).Username, nodePrev.text, vbTextCompare) = 0) Then
                         ' ...
-                        If (StrComp(m_DB(i).Type, nodePrev.tag, vbTextCompare) = 0) Then
+                        If (StrComp(m_DB(i).Type, nodePrev.Tag, vbTextCompare) = 0) Then
                             ' ...
                             m_DB(i).Groups = nodeNow.text
                             
@@ -1360,7 +1360,7 @@ Private Sub trvUsers_BeforeLabelEdit(Cancel As Integer)
     End If
 
     ' is entry a group? if not, disallow edit.
-    If (StrComp(trvUsers.SelectedItem.tag, "Group", vbTextCompare) <> 0) Then
+    If (StrComp(trvUsers.SelectedItem.Tag, "Group", vbTextCompare) <> 0) Then
         ' disallow editing of entry label
         Cancel = 1
     End If
@@ -1411,7 +1411,7 @@ Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
     ' ...
     If (m_new_entry) Then
         ' ...
-        If (GetAccess(NewString, trvUsers.SelectedItem.tag).Username = vbNullString) Then
+        If (GetAccess(NewString, trvUsers.SelectedItem.Tag).Username = vbNullString) Then
             ' ...
             With m_DB(UBound(m_DB))
                 .Username = NewString
@@ -1440,7 +1440,7 @@ Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
             ' ...
             If (StrComp(trvUsers.SelectedItem.text, m_DB(i).Username, vbTextCompare) = 0) Then
                 ' ...
-                If (StrComp(trvUsers.SelectedItem.tag, m_DB(i).Type, vbTextCompare) = 0) Then
+                If (StrComp(trvUsers.SelectedItem.Tag, m_DB(i).Type, vbTextCompare) = 0) Then
                     ' ...
                     m_DB(i).Username = NewString
             
@@ -1456,32 +1456,32 @@ Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
             For i = LBound(m_DB) To UBound(m_DB)
                 ' ...
                 If ((Len(m_DB(i).Groups) > 0) And (m_DB(i).Groups <> "%")) Then
-                    Dim splt() As String  ' ...
+                    Dim Splt() As String  ' ...
                     Dim j      As Integer ' ...
                 
                     ' ...
                     If (InStr(1, m_DB(i).Groups, ",", vbTextCompare) <> 0) Then
                         ' ...
-                        splt() = Split(m_DB(i).Groups, ",")
+                        Splt() = Split(m_DB(i).Groups, ",")
                     Else
                         ' ...
-                        ReDim Preserve splt(0)
+                        ReDim Preserve Splt(0)
                         
                         ' ...
-                        splt(0) = m_DB(i).Groups
+                        Splt(0) = m_DB(i).Groups
                     End If
                     
                     ' ...
-                    For j = LBound(splt) To UBound(splt)
+                    For j = LBound(Splt) To UBound(Splt)
                         ' ...
-                        If (StrComp(splt(j), trvUsers.SelectedItem.text, vbTextCompare) = 0) Then
+                        If (StrComp(Splt(j), trvUsers.SelectedItem.text, vbTextCompare) = 0) Then
                             ' ...
-                            splt(j) = NewString
+                            Splt(j) = NewString
                         End If
                     Next j
                     
                     ' ...
-                    m_DB(i).Groups = Join(splt(), ",")
+                    m_DB(i).Groups = Join(Splt(), ",")
                 End If
             Next i
         End If
@@ -1491,7 +1491,7 @@ End Sub
 Private Function IsInGroup(ByVal Username As String, ByVal GroupName As String) As Boolean
     Dim i      As Integer ' ...
     Dim j      As Integer ' ...
-    Dim splt() As String  ' ...
+    Dim Splt() As String  ' ...
     
     ' ...
     For i = LBound(m_DB) To UBound(m_DB)
@@ -1502,18 +1502,18 @@ Private Function IsInGroup(ByVal Username As String, ByVal GroupName As String) 
                 ' ...
                 If (InStr(1, m_DB(i).Groups, "%", vbBinaryCompare) <> 0) Then
                     ' ...
-                    splt() = Split(m_DB(i).Groups, "%")
+                    Splt() = Split(m_DB(i).Groups, "%")
                 Else
                     ' ...
-                    ReDim splt(0)
+                    ReDim Splt(0)
                     
                     ' ...
-                    splt(0) = m_DB(i).Groups
+                    Splt(0) = m_DB(i).Groups
                 End If
                 
                 ' ...
-                For j = LBound(splt) To UBound(splt)
-                    If (StrComp(GroupName, splt(j), vbTextCompare) = 0) Then
+                For j = LBound(Splt) To UBound(Splt)
+                    If (StrComp(GroupName, Splt(j), vbTextCompare) = 0) Then
                         ' ...
                         IsInGroup = True
                         
@@ -1527,24 +1527,24 @@ Private Function IsInGroup(ByVal Username As String, ByVal GroupName As String) 
 End Function
 
 Private Sub HandleDeleteEvent(ByRef NodeToDelete As node)
-    Dim temp As node ' ...
+    Dim Temp As node ' ...
     
     ' ...
-    Set temp = NodeToDelete
+    Set Temp = NodeToDelete
 
     ' ...
-    If (temp Is Nothing) Then
+    If (Temp Is Nothing) Then
         ' ...
         Exit Sub
     End If
 
     ' ...
-    If (temp.index > 1) Then
+    If (Temp.index > 1) Then
         Dim response As Integer ' ...
         Dim isGroup  As Boolean ' ...
         
         ' ...
-        isGroup = (StrComp(temp.tag, "Group", vbTextCompare) = 0)
+        isGroup = (StrComp(Temp.Tag, "Group", vbTextCompare) = 0)
     
         ' ...
         If (isGroup) Then
@@ -1556,25 +1556,25 @@ Private Sub HandleDeleteEvent(ByRef NodeToDelete As node)
         ' ...
         If ((isGroup = False) Or ((isGroup) And (response = vbYes))) Then
             ' ...
-            Call DB_remove(temp.text, temp.tag)
+            Call DB_remove(Temp.text, Temp.Tag)
             
             ' ...
-            If (temp.Next Is Nothing) Then
+            If (Temp.Next Is Nothing) Then
                 ' ...
-                If (temp.Previous Is Nothing) Then
+                If (Temp.Previous Is Nothing) Then
                     ' ...
-                    trvUsers.Nodes(temp.Parent.index).Checked = True
+                    trvUsers.Nodes(Temp.Parent.index).Checked = True
                 Else
                     ' ...
-                    trvUsers.Nodes(temp.Previous.index).Checked = True
+                    trvUsers.Nodes(Temp.Previous.index).Checked = True
                 End If
             Else
                 ' ...
-                trvUsers.Nodes(temp.Next.index).Checked = True
+                trvUsers.Nodes(Temp.Next.index).Checked = True
             End If
             
             ' ...
-            Call trvUsers.Nodes.Remove(temp.index)
+            Call trvUsers.Nodes.Remove(Temp.index)
             
             ' ...
             Call trvUsers_NodeClick(trvUsers.SelectedItem)
@@ -1602,7 +1602,7 @@ Private Sub UpdateGroupListBox()
 End Sub
 
 ' ...
-Private Function Exists(ByVal nodeName As String, Optional tag As String = vbNullString) As Integer
+Private Function Exists(ByVal nodeName As String, Optional Tag As String = vbNullString) As Integer
     Dim i As Integer ' ...
     
     ' ...
@@ -1610,9 +1610,9 @@ Private Function Exists(ByVal nodeName As String, Optional tag As String = vbNul
         ' ...
         If (StrComp(trvUsers.Nodes(i).text, nodeName, vbTextCompare) = 0) Then
             ' ...
-            If (tag <> vbNullString) Then
+            If (Tag <> vbNullString) Then
                 ' ...
-                If (StrComp(trvUsers.Nodes(i).tag, tag, vbTextCompare) = 0) Then
+                If (StrComp(trvUsers.Nodes(i).Tag, Tag, vbTextCompare) = 0) Then
                     ' ...
                     Exists = i
                     
@@ -1667,7 +1667,7 @@ Private Function GetAccess(ByVal Username As String, Optional dbType As String =
             If (bln = True) Then
                 With GetAccess
                     .Username = m_DB(i).Username
-                    .access = m_DB(i).access
+                    .Access = m_DB(i).Access
                     .flags = m_DB(i).flags
                     .AddedBy = m_DB(i).AddedBy
                     .AddedOn = m_DB(i).AddedOn
@@ -1685,7 +1685,7 @@ Private Function GetAccess(ByVal Username As String, Optional dbType As String =
         bln = False
     Next i
 
-    GetAccess.access = -1
+    GetAccess.Access = -1
 End Function
 
 ' ...
@@ -1762,13 +1762,13 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                 For i = LBound(m_DB) To UBound(m_DB)
                     If (Len(m_DB(i).Groups) And m_DB(i).Groups <> "%") Then
                         If (InStr(1, m_DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
-                            Dim splt()     As String ' ...
+                            Dim Splt()     As String ' ...
                             Dim innerfound As Boolean ' ...
                             
-                            splt() = Split(m_DB(i).Groups, ",")
+                            Splt() = Split(m_DB(i).Groups, ",")
                             
-                            For j = LBound(splt) To UBound(splt)
-                                If (StrComp(bak.Username, splt(j), vbTextCompare) = 0) Then
+                            For j = LBound(Splt) To UBound(Splt)
+                                If (StrComp(bak.Username, Splt(j), vbTextCompare) = 0) Then
                                     innerfound = True
                                 
                                     Exit For
@@ -1778,13 +1778,13 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                             If (innerfound) Then
                                 Dim k As Integer ' ...
                                 
-                                For k = (j + 1) To UBound(splt)
-                                    splt(k - 1) = splt(k)
+                                For k = (j + 1) To UBound(Splt)
+                                    Splt(k - 1) = Splt(k)
                                 Next k
                                 
-                                ReDim Preserve splt(UBound(splt) - 1)
+                                ReDim Preserve Splt(UBound(Splt) - 1)
                                 
-                                m_DB(i).Groups = Join(splt(), vbNullString)
+                                m_DB(i).Groups = Join(Splt(), vbNullString)
                             End If
                         Else
                             If (StrComp(bak.Username, m_DB(i).Groups, vbTextCompare) = 0) Then

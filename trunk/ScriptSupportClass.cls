@@ -1393,24 +1393,26 @@ End Function
 
 ' // ...
 Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Boolean = _
-    False) As Object
+    False, Optional ByVal datasrc As String = "external") As Object
     
-    Set IsCommand = modOtherCode.IsCommand(str, DontCheckTrigger)
+    Set IsCommand = modOtherCode.IsCommand(str, DontCheckTrigger, datasrc)
 End Function
 
-Public Function OpenCommand(ByVal strCommand As String) As Object
+Public Function OpenCommand(ByVal strCommand As String, Optional ByVal datasrc As String = "external") As Object
     '// ...
-    Set OpenCommand = modCommandDocsObj.OpenCommand(strCommand)
+    Set OpenCommand = modCommandDocsObj.OpenCommand(strCommand, datasrc)
 End Function
 
-Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String) As Boolean
-    IsCorrectSyntax = modCommandCode.IsCorrectSyntax(CommandName, CommandArgs)
+Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String, Optional ByVal _
+    datasrc As String = "external") As Boolean
+    
+    IsCorrectSyntax = modCommandCode.IsCorrectSyntax(CommandName, CommandArgs, datasrc)
 End Function
 
 Public Function HasAccess(ByVal Username As String, ByVal CommandName As String, Optional ByVal CommandArgs As _
-    String = vbNullString) As Boolean
+    String = vbNullString, Optional ByVal datasrc As String = "external") As Boolean
     
-    HasAccess = modCommandCode.HasAccess(Username, CommandName, CommandArgs)
+    HasAccess = modCommandCode.HasAccess(Username, CommandName, CommandArgs, datasrc)
 End Function
 
 Public Function Quotes() As Collection

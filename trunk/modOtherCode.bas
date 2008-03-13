@@ -2455,7 +2455,7 @@ End Function
 
 ' Thanks strtok()!
 Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional DontCheckTrigger As Boolean = _
-    False) As clsCommandObj
+    False, Optional ByVal datasrc As String = "internal") As clsCommandObj
     
     ' ...
     Const CMD_DELIMITER As String = "; "
@@ -2561,18 +2561,28 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                     ' ...
                     If (StrComp(Left$(tmp, Len(CurrentUsername)), CurrentUsername, vbTextCompare) = 0) Then
                         ' ...
-                        If (Mid$(tmp, Len(CurrentUsername) + 1, 2) = ": ") Then
+                        If ((Mid$(tmp, Len(CurrentUsername) + 1, 2) = ": ") Or _
+                                (Mid$(tmp, Len(CurrentUsername) + 1, 2) = ", ")) Then
+                                
                             ' ...
-                            CropLen = (CropLen + (Len(CurrentUsername) + Len(": ")))
+                            CropLen = (CropLen + (Len(CurrentUsername) + 2))
                                 
                             ' ...
                             bln = True
-                        ElseIf (Mid$(tmp, Len(CurrentUsername) + 1, 2) = ", ") Then
+                        End If
+                    Else
+                        ' ...
+                        If ((StrComp(Left$(Message, Len("ops: ")), "ops: ", vbTextCompare) = 0) Or _
+                                (StrComp(Left$(Message, Len("ops, ")), "ops, ", vbTextCompare) = 0)) Then
+                                
                             ' ...
-                            CropLen = (CropLen + (Len(CurrentUsername) + Len(", ")))
-        
-                            ' ...
-                            bln = True
+                            If ((MyFlags And &H2) = &H2) Then
+                                ' ...
+                                CropLen = (CropLen + 5)
+            
+                                ' ...
+                                bln = True
+                            End If
                         End If
                     End If
                 End If
@@ -2627,6 +2637,8 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         Else
             IsCommand.Name = tmp
         End If
+        
+        IsCommand.Name = LCase$(IsCommand.Name)
 
         With IsCommand
             .IsLocal = console
@@ -2645,7 +2657,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                     (IsCommand.docs.IsEnabled = False)) Then
                     
                 ' ...
-                Set IsCommand = IsCommand(vbNullString)
+                Set IsCommand = IsCommand(vbNullString, False, "internal")
                 
                 ' ...
                 Exit Function
@@ -2688,14 +2700,14 @@ Public Function convertAlias(ByVal cmdName As String) As String
         
         ' ...
         For Each Command In Commands.documentElement.childNodes
-            Dim aliases As MSXML2.IXMLDOMNodeList
+            Dim Aliases As MSXML2.IXMLDOMNodeList
             Dim alias   As MSXML2.IXMLDOMNode
             
             ' ...
-            Set aliases = Command.selectNodes("alias")
+            Set Aliases = Command.selectNodes("alias")
 
             ' ...
-            For Each alias In aliases
+            For Each alias In Aliases
                 ' ...
                 If (StrComp(alias.text, cmdName, vbTextCompare) = 0) Then
                     ' ...

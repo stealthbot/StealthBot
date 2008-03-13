@@ -57,6 +57,20 @@ Public Property Get dataType() As String
 
 End Property
 
+Public Property Let Name(str As String)
+
+    ' ...
+    m_name = str
+
+End Property
+
+Public Property Get Name() As String
+
+    ' ...
+    Name = m_name
+
+End Property
+
 Public Property Let dataType(strType As String)
 
     ' ...
@@ -85,10 +99,10 @@ Public Property Get min() As Long
 
 End Property
 
-Public Property Let min(val As Long)
+Public Property Let min(Val As Long)
 
     ' ...
-    m_data_min = val
+    m_data_min = Val
 
 End Property
 
@@ -99,10 +113,10 @@ Public Property Get max() As Long
 
 End Property
 
-Public Property Let max(val As Long)
+Public Property Let max(Val As Long)
 
     ' ...
-    m_data_max = val
+    m_data_max = Val
 
 End Property
 
@@ -112,7 +126,7 @@ Public Property Get minLength() As Long
 
 End Property
 
-Public Property Let minLength(val As Long)
+Public Property Let minLength(Val As Long)
 
     ' ...
 
@@ -124,7 +138,7 @@ Public Property Get maxLength() As Long
 
 End Property
 
-Public Property Let maxLength(val As Long)
+Public Property Let maxLength(Val As Long)
 
     ' ...
 

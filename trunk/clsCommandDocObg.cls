@@ -20,17 +20,20 @@ Option Explicit
 Private m_database       As MSXML2.DOMDocument
 Private m_command_node   As MSXML2.IXMLDOMNode
 Private m_name           As String
+Private m_aliases        As Collection
 Private m_required_rank  As Integer
 Private m_required_flags As String
 Private m_description    As String
 Private m_special_notes  As String
 Private m_params         As Collection
 Private m_enabled        As Boolean
+Private m_datasrc        As String
 
 Private Sub Class_Initialize()
 
     Set m_database = New MSXML2.DOMDocument
     Set m_params = New Collection
+    Set m_aliases = New Collection
     
 End Sub
 
@@ -38,15 +41,18 @@ Private Sub Class_Terminate()
 
     Set m_database = Nothing
     Set m_params = Nothing
+    Set m_aliases = Nothing
     
 End Sub
 
-Public Function OpenCommand(ByVal strCommand As String, Optional ByVal DatabasePath As String = _
-    vbNullString) As Boolean
+Public Function OpenCommand(ByVal strCommand As String, ByVal datasrc As String, Optional ByVal DatabasePath _
+    As String = vbNullString) As Boolean
     
     Dim command_access_node   As IXMLDOMNode
     Dim command_documentation As IXMLDOMNode
     Dim command_parameters    As IXMLDOMNodeList
+    Dim command_aliases       As IXMLDOMNodeList
+    Dim alias                 As IXMLDOMNode
     Dim attrs                 As IXMLDOMAttribute
     
     ' ...
@@ -67,10 +73,16 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal DatabaseP
         Exit Function
     End If
     
-    ' ...
-    Set m_command_node = _
-        m_command_node.selectSingleNode("./command[@name='" & strCommand & "']")
-        
+    If (datasrc = "internal") Then
+        ' ...
+        Set m_command_node = _
+            m_command_node.selectSingleNode("./command[@name='" & strCommand & "']")
+    Else
+        ' ...
+        Set m_command_node = _
+            m_command_node.selectSingleNode("./command[@name='" & strCommand & "' and " & _
+                "@datasrc='" & datasrc & "']")
+    End If
     ' ...
     If (m_command_node Is Nothing) Then
         ' ...
@@ -92,6 +104,12 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal DatabaseP
     Else
         m_enabled = True
     End If
+    
+    Set command_aliases = m_command_node.selectNodes("./alias")
+    
+    For Each alias In command_aliases
+        m_aliases.Add alias.text
+    Next
         
     ' ...
     Set command_access_node = m_command_node.selectSingleNode("access")
@@ -157,7 +175,7 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal DatabaseP
         Dim restrictionObj As clsCommandRestrictionObj
     
         Dim parameter      As IXMLDOMNode
-        Dim data           As IXMLDOMNode
+        Dim Data           As IXMLDOMNode
         Dim restrictions   As IXMLDOMNodeList
         Dim restriction    As IXMLDOMNode
         
@@ -165,8 +183,14 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal DatabaseP
             ' ...
             Set paramObj = New clsCommandParamsObj
             
+            Set attrs = parameter.Attributes.getNamedItem("name")
+            
+            If (Not (attrs Is Nothing)) Then
+                paramObj.Name = attrs.text
+            End If
+            
             Set attrs = parameter.Attributes.getNamedItem("optional")
-            Set data = parameter.selectSingleNode("./data")
+            Set Data = parameter.selectSingleNode("./data")
             Set restrictions = parameter.selectNodes("./restriction")
             
             If (Not (attrs Is Nothing)) Then
@@ -175,11 +199,11 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal DatabaseP
                 End If
             End If
             
-            If (Not (data Is Nothing)) Then
-                paramObj.dataType = data.Attributes.getNamedItem("type").text
+            If (Not (Data Is Nothing)) Then
+                paramObj.dataType = Data.Attributes.getNamedItem("type").text
                 
                 If (paramObj.dataType = "string") Then
-                    paramObj.pattern = data.Attributes.getNamedItem("pattern").text
+                    paramObj.pattern = Data.Attributes.getNamedItem("pattern").text
                 ElseIf (paramObj.dataType = "number") Then
                 
                 End If
@@ -219,6 +243,13 @@ Public Property Get Name() As String
     
 End Property
 
+Public Property Get Aliases() As Collection
+
+    ' ...
+    Set Aliases = m_aliases
+
+End Property
+
 Public Property Get IsEnabled() As Boolean
 
     IsEnabled = m_enabled
@@ -249,13 +280,13 @@ Public Property Get RequiredFlags() As String
     
 End Property
 
-Public Property Get Description() As String
+Public Property Get description() As String
 
-    Description = m_description
+    description = m_description
     
 End Property
 
-Public Property Let Description(strDescription As String)
+Public Property Let description(strDescription As String)
 
     m_description = strDescription
     

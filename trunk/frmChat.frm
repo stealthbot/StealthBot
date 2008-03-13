@@ -827,7 +827,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -853,7 +852,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4121,7 +4119,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 
                                 If (X(n) <> vbNullString) Then
                                     If (n <> LBound(X)) Then
-                                        AddQ txtPre.text & X(n) & txtPost.text
+                                        AddQ txtPre.text & X(n) & txtPost.text, PRIORITY.CONSOLE_MESSAGE
                                         
                                         cboSend.AddItem txtPre.text & X(n) & txtPost.text, 0
                                     Else
@@ -4343,13 +4341,11 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 End If
                                 
                                 s = txtPre.text & cboSend.text & txtPost.text
-                                
-                                If (LCase$(s) = "/rejoin") Then
-                                    RejoinChannel gChannel.Current
                                     
-                                ElseIf (LCase$(s) = "/fl" And MDebug("debug")) Then
+                                If (LCase$(s) = "/fl" And MDebug("debug")) Then
                                     For n = 1 To FriendListHandler.colFriends.Count
-                                        AddChat vbMagenta, FriendListHandler.colFriends.Item(n).Username & " - " & FriendListHandler.colFriends.Item(n).Product
+                                        AddChat vbMagenta, FriendListHandler.colFriends.Item(n).Username & _
+                                            " - " & FriendListHandler.colFriends.Item(n).Product
                                     Next n
                                 
                                 ElseIf (LCase$(s) = "/accountinfo") Then
@@ -4369,7 +4365,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     
                                 ElseIf (Left$(LCase$(s), 7) = "/setcl ") Then
                                     CommandLine = Mid$(s, 8)
-                                    frmChat.AddChat RTBColors.SuccessText, "The command line for this instance has been changed."
+                                    frmChat.AddChat RTBColors.SuccessText, _
+                                            "The command line for this instance has been changed."
                                     
                                     GoTo theEnd
                                     
@@ -4377,29 +4374,6 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     MyFlags = 2
                                     SharedScriptSupport.BotFlags = MyFlags
                                     AddChat RTBColors.ConsoleText, "Flags forced to 2."
-                                
-                                ElseIf ((s = "/cmf") And (MDebug("debug"))) Then
-                                    AddChat RTBColors.ConsoleText, "MyFlags is currently " & MyFlags & "."
-                                
-                                ElseIf (s = "/nadn") Then
-                                    AddName "Test1", "PX3W", 0, 0
-                                    AddName "Test2", "PX3W", 0, 0
-                                    AddName "Test3", "PX3W", 0, 0
-                                    AddName "Test4", "PX3W", 0, 0
-                                    AddName "Test5", "PX3W", 0, 0
-                                    AddName "Test6", "PX3W", 0, 0
-                                    
-                                ElseIf ((s = "/q") And (MDebug("debug"))) Then
-                                    'If g_Queue.Count > 0 Then
-                                    '    For n = 1 To g_Queue.Count
-                                    '        AddChat RTBColors.ConsoleText, colQueue.Item(n).Priority & "|" & colQueue.Item(n).Message
-                                    '    Next n
-                                    'Else
-                                    '    AddChat RTBColors.ConsoleText, "The queue is empty."
-                                    'End If
-                                   
-                                    'AddChat vbBlue, IsBanned("Technique)DK(@USEast#2")
-                                    GoTo theEnd
                                 
                                 ElseIf ((s = "/flags") And (MDebug("debug"))) Then
                                     For n = 1 To colUsersInChannel.Count
@@ -4422,31 +4396,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     WatchUser = vbNullString
                                     AddChat RTBColors.ConsoleText, "Watch off."
                                     GoTo theEnd
-                                'ElseIf LCase$(s) = "/li" Then
+                                'ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
                                 '
-                                '    AddChat vbMagenta, "AWAITING_CHPW: " & IF_AWAITING_CHPW
-                                '    AddChat vbMagenta, "CHPW_AND_IDLEBANS: " & IF_CHPW_AND_IDLEBANS
-                                '    AddChat vbMagenta, "IDLEBANS: " & IF_SUBJECT_TO_IDLEBANS
-                                '
-                                '    For i = 1 To colUsersInChannel.Count
-                                '        AddChat vbMagenta, colUsersInChannel.Item(i).Username & "\" & colUsersInChannel.Item(i).InternalFlags
-                                '    Next i
-                                '    GoTo theEnd
+                                '   m = Right(s, (Len(s) - 7))
                                 ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
                                     m = Right(s, (Len(s) - 7))
-                                'ElseIf LCase$(s) = "/li" Then
-                                '
-                                '    AddChat vbMagenta, "AWAITING_CHPW: " & IF_AWAITING_CHPW
-                                '    AddChat vbMagenta, "CHPW_AND_IDLEBANS: " & IF_CHPW_AND_IDLEBANS
-                                '    AddChat vbMagenta, "IDLEBANS: " & IF_SUBJECT_TO_IDLEBANS
-                                '
-                                '    For i = 1 To colUsersInChannel.Count
-                                '        AddChat vbMagenta, colUsersInChannel.Item(i).Username & "\" & colUsersInChannel.Item(i).InternalFlags
-                                '    Next i
-                                '    GoTo theEnd
-                                
-                                ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
-                                    m = Right(s, (Len(s) - 7))
+                                    
                                     AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m), _
                                         PRIORITY.CONSOLE_MESSAGE
                                     
@@ -5348,7 +5303,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 Exit Sub
             End If
         Next i
-    
+
         ' ...
         If (StrComp(Left$(strTmp, 1), "/", vbBinaryCompare) = 0) Then
             Dim index As Long ' ...
@@ -5457,38 +5412,38 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         (Len(Join(Splt(), Space$(1))) + (Len(Space$(1))) + 1))
                 End If
             End If
-        End If
-        
-        ' ...
-        If (msg_priority = -1) Then
-            Dim cmdName    As String ' ...
-            Dim spaceIndex As Long   ' ...
             
             ' ...
-            spaceIndex = InStr(1, Message, Space$(1), vbBinaryCompare)
+            If (msg_priority = -1) Then
+                Dim cmdName    As String ' ...
+                Dim spaceIndex As Long   ' ...
+                
+                ' ...
+                spaceIndex = InStr(1, Message, Space$(1), vbBinaryCompare)
+                
+                ' ...
+                If (spaceIndex) Then
+                    cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 2))
+                Else
+                    cmdName = LCase$(Mid$(Message, 2))
+                End If
             
-            ' ...
-            If (spaceIndex) Then
-                cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 2))
-            Else
-                cmdName = LCase$(Mid$(Message, 2))
+                ' ...
+                Select Case (cmdName)
+                    Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
+                    Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
+                    Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                    Case "unban":     msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                    Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                    Case "squelch":   msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                    Case "ignore":    msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                    Case "unsquelch": msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                    Case "unignore":  msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                    Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
+                End Select
             End If
-        
-            ' ...
-            Select Case (cmdName)
-                Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
-                Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
-                Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "unban":     msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "squelch":   msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "ignore":    msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "unsquelch": msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "unignore":  msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
-            End Select
         End If
-        
+
         ' ...
         Call SplitByLen(strTmp, (MAX_MESSAGE_LENGTH - Len(Command)), Splt())
 

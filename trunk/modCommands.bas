@@ -48,11 +48,11 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Dim Count            As Integer
     Dim bln              As Boolean
     
-    Set Command = IsCommand(Message)
+    Set Command = IsCommand(Message, False, "internal")
 
     Do While (Command.Name <> vbNullString)
         If ((Command.IsLocal) Or _
-                (HasAccess(Username, Command.Name, Command.Args))) Then
+                (HasAccess(Username, Command.Name, Command.Args, "internal"))) Then
         
             If (Command.IsLocal) Then
                 With dbAccess
@@ -386,7 +386,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
     End If
 
     ' initial access check
-    If (IsCorrectSyntax(cmdName, msgData) = False) Then
+    If (IsCorrectSyntax(cmdName, msgData, "internal") = False) Then
         AddQ "Error: The syntax for the specified command is invalid. [" & BotVars.TriggerLong & _
             "help " & cmdName & " for further information]"
     
@@ -3835,7 +3835,7 @@ Private Function OnExpand(ByVal Username As String, ByRef dbAccess As udtGetAcce
             tmpSend = Mid$(tmpSend, 1, 220)
         End If
         
-        tmpBuf = tmpSend
+        Call AddQ(tmpSend, PRIORITY.COMMAND_RESPONSE_MESSAGE)
     End If
     
     ' return message
@@ -3911,7 +3911,7 @@ Private Function OnShout(ByVal Username As String, ByRef dbAccess As udtGetAcces
                 UCase$(msgData)
         End If
         
-        tmpBuf = tmpSend
+        Call AddQ(tmpSend, PRIORITY.COMMAND_RESPONSE_MESSAGE)
     End If
     
     ' return message
@@ -5500,11 +5500,96 @@ End Function ' end function OnOnline
 Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim tmpBuf() As String ' temporary output buffer
+    Dim tmpBuf()    As String ' temporary output buffer
+    Dim CommandDocs As clsCommandDocObj
+    Dim FindCommand As String
+    Dim spaceIndex  As Integer
+    Dim i           As Integer
     
     ' ...
-    Call grabCommandData(msgData, tmpBuf())
+    ReDim Preserve tmpBuf(0)
     
+    ' ...
+    spaceIndex = InStr(1, msgData, Space$(1), vbBinaryCompare)
+    
+    ' ...
+    If (spaceIndex <> 0) Then
+        ' ...
+        FindCommand = Mid$(msgData, 1, spaceIndex - 1)
+    Else
+        ' ...
+        FindCommand = msgData
+    End If
+    
+    ' ...
+    Set CommandDocs = OpenCommand(FindCommand)
+    
+    If (CommandDocs.Name = vbNullString) Then
+        cmdRet(0) = "Sorry, but no related documentation could be found."
+    
+        Exit Function
+    End If
+    
+    tmpBuf(0) = "[" & CommandDocs.Name
+    
+    If (CommandDocs.Aliases.Count) Then
+        tmpBuf(0) = tmpBuf(0) & " (aliases: "
+    Else
+        tmpBuf(0) = tmpBuf(0) & " (aliases: none"
+    End If
+    
+    If (CommandDocs.Aliases.Count) Then
+        For i = 1 To CommandDocs.Aliases.Count
+            tmpBuf(0) = tmpBuf(0) & CommandDocs.Aliases(i) & ", "
+        Next i
+        
+        tmpBuf(0) = Mid$(tmpBuf(0), 1, Len(tmpBuf(0)) - Len(", "))
+    End If
+
+    ' ...
+    tmpBuf(0) = tmpBuf(0) & ")]: " & CommandDocs.description
+    
+    ' ...
+    tmpBuf(0) = tmpBuf(0) & Space$(1) & "(Syntax: " & "<trigger>" & CommandDocs.Name
+            
+    If (CommandDocs.Params.Count) Then
+        For i = 1 To CommandDocs.Params.Count
+            If (CommandDocs.Params(i).IsOptional) Then
+                tmpBuf(0) = tmpBuf(0) & " [" & CommandDocs.Params(i).Name & "]"
+            Else
+                tmpBuf(0) = tmpBuf(0) & " <" & CommandDocs.Params(i).Name & ">"
+            End If
+        Next i
+    End If
+    
+    tmpBuf(0) = tmpBuf(0) & "). "
+    
+    If ((CommandDocs.RequiredRank = 0) And _
+            (CommandDocs.RequiredFlags = vbNullString)) Then
+    
+        tmpBuf(0) = tmpBuf(0) & " Command is only available to the console"
+    Else
+        tmpBuf(0) = tmpBuf(0) & " Requires " & CommandDocs.RequiredRank & _
+                " access"
+                
+        If (CommandDocs.RequiredFlags <> vbNullString) Then
+            tmpBuf(0) = tmpBuf(0) & " or flags "
+            
+            For i = 1 To Len(CommandDocs.RequiredFlags)
+                tmpBuf(0) = tmpBuf(0) & _
+                        Mid$(CommandDocs.RequiredFlags, i, 1) & ", "
+                        
+                If (i + 1 = Len(CommandDocs.RequiredFlags)) Then
+                    tmpBuf(0) = tmpBuf(0) & "or "
+                End If
+            Next i
+            
+            tmpBuf(0) = Mid$(tmpBuf(0), 1, Len(tmpBuf(0)) - Len(", "))
+        End If
+    End If
+    
+    tmpBuf(0) = tmpBuf(0) & "."
+
     ' return message
     cmdRet() = tmpBuf()
 End Function ' end function OnHelp
@@ -6359,7 +6444,9 @@ Public Sub LoadDatabase()
     End If
 End Sub
 
-Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String) As Boolean
+Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String, Optional _
+    ByVal datasrc As String = "internal") As Boolean
+    
     On Error GoTo ERROR_HANDLER
     
     Dim Command As clsCommandDocObj
@@ -6367,7 +6454,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
     Dim matches As MatchCollection
     
     ' ...
-    Set Command = OpenCommand(CommandName)
+    Set Command = OpenCommand(CommandName, "internal")
 
     ' ...
     If (Command.Name = vbNullString) Then
@@ -6488,7 +6575,7 @@ ERROR_HANDLER:
 End Function
 
 Public Function HasAccess(ByVal Username As String, ByVal CommandName As String, Optional ByVal CommandArgs As _
-    String = vbNullString) As Boolean
+    String = vbNullString, Optional ByVal datasrc As String = "internal") As Boolean
     
     On Error GoTo ERROR_HANDLER
     
@@ -6498,7 +6585,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     Dim matches As MatchCollection
     
     ' ...
-    Set Command = OpenCommand(CommandName)
+    Set Command = OpenCommand(CommandName, "internal")
 
     ' ...
     If (Command.Name = vbNullString) Then

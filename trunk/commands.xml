@@ -8,7 +8,7 @@
 
     <documentation>
       <description>
-        The "find" command will state a specified user's rank and/or flags.
+        This command will state a specified user's rank and/or flags.
       </description>
     </documentation>
 
@@ -27,6 +27,18 @@
       <flag>A</flag>
       <flag>a</flag>
     </access>
+  </command>
+
+  <command name="getmail">
+    <documentation>
+      <description>
+         ... 
+      </description>
+    </documentation>
+
+    <arguments/>
+
+    <access/>
   </command>
 
   <command name="whois">
@@ -56,7 +68,7 @@
   <command name="roll">
     <documentation>
       <description>
-        The "roll" command will state a random value between 0 and 100.
+        This command will state a random value between 0 and 100.
       </description>
     </documentation>
 
@@ -80,7 +92,7 @@
 
     <documentation>
       <description>
-        The "bmail" command will store a message for a specified user.
+        This command will store a message for a specified user.
       </description>
     </documentation>
 
@@ -120,7 +132,7 @@
   <command name="flip">
     <documentation>
       <description>
-        The "flip" command will state the result of a coin toss.
+        This command will state the result of a coin toss.
       </description>
     </documentation>
     
@@ -144,7 +156,7 @@
 
     <documentation>
       <description>
-        The "findattr" command will state all users with the specified flag(s).
+        This command will state all users with the specified flag(s).
       </description>
     </documentation>
 
@@ -170,7 +182,7 @@
 
     <documentation>
       <description>
-        The "designated" command will state the currently designated user.
+        This command will state the currently designated user.
       </description>
     </documentation>
     
@@ -184,7 +196,7 @@
   <command name="scq">
     <documentation>
       <description>
-        The "scq" command will silently clear the message queue.
+        This command will silently clear the message queue.
       </description>
     </documentation>
 
@@ -206,7 +218,7 @@
   <command name="cq">
     <documentation>
       <description>
-        The "cq" command will clear the message queue.
+        This command will clear the message queue.
       </description>
     </documentation>
 
@@ -228,7 +240,7 @@
   <command name="whoami">
     <documentation>
       <description>
-        The "whomai" command will state the requesting user's rank and/or flags.
+        This command will state the requesting user's rank and/or flags.
       </description>
     </documentation>
     
@@ -252,7 +264,7 @@
 
     <documentation>
       <description>
-        The "add" command will add or modify a user database entry.
+        This command will create or modify a specified database entry.
       </description>
     </documentation>
 
@@ -276,7 +288,7 @@
        </argument>
 
        <argument name="attributes" optional="true">
-         <data type="string" maxLength="52" pattern="[A-Za-z]+" />
+         <data type="string" maxLength="52" pattern="\+[A-Za-z]+|-[A-Za-z]+|[A-Za-z]+" />
 
          <documentation>
            <description>
@@ -496,6 +508,9 @@
        </argument>
       </arguments>
 
+      <options>
+      </options>
+
     <access>
       <rank>20</rank>
       <flag>A</flag>
@@ -506,7 +521,7 @@
   <command name="server">
     <documentation>
       <description>
-        The "server" command will state the server address that the bot is currently 
+        This command will state the server address that the bot is currently 
         connected to.
       </description>
     </documentation>
@@ -523,7 +538,7 @@
 
     <documentation>
       <description>
-        The "about" command will state the application's version information.
+        This command will state the application's version information.
       </description>
     </documentation>
 
@@ -547,7 +562,7 @@
 
     <documentation>
       <description>
-        The "getping" command will state the requesting user's connection latency with
+        This command will state the requesting user's connection latency with
         the Battle.net server.
       </description>
     </documentation>
@@ -570,7 +585,7 @@
   <command name="trigger">
     <documentation>
       <description>
-        The "trigger" command will state the current command identifier.
+        This command will state the current command identifier.
       </description>
     </documentation>
 
@@ -592,7 +607,7 @@
   <command name="time">
     <documentation>
       <description>
-        The "time" command will state the current system time.
+        This command will state the current system time.
       </description>
     </documentation>
 
@@ -614,7 +629,7 @@
   <command name="vote">
     <documentation>
       <description>
-        The "vote" command will initiate a tally of "yes" and "no" responses.
+        This command will initiate a tally of "yes" and "no" responses.
       </description>
     </documentation>
 
@@ -646,8 +661,7 @@
   <command name="voteban" token="operator">
     <documentation>
       <description>
-        The "voteban" command will initiate a tally of "yes" and "no" responses,
-        potentially resulting in the banning of a specified user from the channel.
+        This command will initiate a tally of "yes" and "no" responses, potentially resulting in the banning of a specified user from the channel.
       </description>
     </documentation>
 
@@ -671,8 +685,7 @@
   <command name="votekick" token="operator">
     <documentation>
       <description>
-        The "votekick" command will initiate a tally of "yes" and "no" responses,
-        potentially resulting in the kicking of a specified user from the channel.
+        This command will initiate a tally of "yes" and "no" responses, potentially resulting in the kicking of a specified user from the channel.
       </description>
     </documentation>
 
@@ -696,7 +709,7 @@
   <command name="tally">
     <documentation>
       <description>
-        The "tally" command will state the current statistics for the most recent vote.
+        This command will state the current statistics for the most recent vote.
       </description>
     </documentation>
     
@@ -718,8 +731,7 @@
   <command name="info">
     <documentation>
       <description>
-        The "info" command will state basic information about a specified user currently in
-        the channel.
+        This command will state basic information about a specified user currently in the channel.
       </description>
     </documentation>
 
@@ -751,8 +763,7 @@
   <command name="expand" token="speech">
     <documentation>
       <description>
-        The "expand" command will echo a specified phrase, placing a space after each
-        character.
+        This command will echo a specified phrase, placing a space after each character.
       </description>
     </documentation>
 
@@ -777,7 +788,7 @@
 
     <documentation>
       <description>
-        The "math" command will state the result of specified mathematical expression.
+        This command will state the result of specified mathematical expression.
       </description>
     </documentation>
 
@@ -809,7 +820,7 @@
   <command name="where">
     <documentation>
       <description>
-        The "where" command states the bot's current channel.
+        This command will state the bot's current channel.
       </description>
     </documentation>
 
@@ -831,7 +842,7 @@
   <command name="safecheck">
     <documentation>
       <description>
-        The "safecheck" command states the safelist status of a specified user or tag.
+        This command states the safelist status of a specified user or tag.
       </description>
     </documentation>
 
@@ -865,7 +876,7 @@
   <command name="cancel">
     <documentation>
       <description>
-        The "cancel" command stops all votes that are currently in progress.
+        This command stops all votes that are currently in progress.
       </description>
     </documentation>
     
@@ -889,7 +900,7 @@
   <command name="owner">
     <documentation>
       <description>
-        The "owner" command states the bot's owner.
+        This command states the bot's owner.
       </description>
     </documentation>
     
@@ -912,7 +923,7 @@
   <command name="mp3">
     <documentation>
       <description>
-        The "mp3" command states the currently playing track from either Winamp or iTunes
+        This command states the currently playing track from either Winamp or iTunes
         on the local computer.
       </description>
     </documentation>
@@ -926,7 +937,7 @@
   <command name="say">
     <documentation>
       <description>
-        The "say" command will echo a specified phrase.
+        This command will echo a specified phrase.
       </description>
     </documentation>
 
@@ -945,39 +956,13 @@
   <command name="shout">
     <documentation>
       <description>
-        The "shout" command will echo a specified phrase using all capital letters.
+        This command will echo a specified phrase using all capital letters.
       </description>
     </documentation>
 
     <arguments>
       <argument name="message">
-        <restriction name="username_prefix">
-          <documentation>
-            <description>
-              The "username_prefix" restriction will automatically prefix "Username says:"
-              to outgoing messages when using the this command.
-            </description>
-          </documentation>
 
-          <access>
-            <rank>70</rank>
-            <flag>T</flag>
-          </access>          
-        </restriction>
-
-        <restriction name="remove_slashes">
-          <documentation>
-            <description>
-              The "remove_slashes" restriction will automatically remove all forward slashes ("/")
-              from outgoing messages when using the this command.
-            </description>
-          </documentation>
-
-          <access>
-            <rank>90</rank>
-            <flag>T</flag>
-          </access>
-        </restriction>
       </argument>
     </arguments>
 
@@ -989,11 +974,11 @@
 
   <command name="ignore">
     <alias>ign</alias>
+    <alias>squelch</alias>
 
     <documentation>
       <description>
-        The "ignore" command will instruct the bot to ignore all messages from a specified user,
-        and all other users connecting with the same ip address.
+        instructs the bot to squelch a specified user.
       </description>
     </documentation>
 
@@ -1014,11 +999,13 @@
     </access>
   </command>
 
-  <command name="unignore">
+  <command name="unignore" datasrc="external">
+    <alias>unign</alias>
+    <alias>unsquelch</alias>
+
     <documentation>
       <description>
-        The "unignore" command will instruct the bot to unignore a specified user, and all other
-        users connecting with the same ip address.
+        instructs the bot to unsquelch a specified user.
       </description>
     </documentation>
 
@@ -1042,7 +1029,7 @@
   <command name="addquote">
     <documentation>
       <description>
-        The "addquote" command will add a quote to the quote database.
+        adds a quote to the quote database.
       </description>
     </documentation>
 
@@ -1066,7 +1053,7 @@
   <command name="quote">
     <documentation>
       <description>
-        The "quote" command will state a random quote from the quote database.
+        This command will state a random quote from the quote database.
       </description>
     </documentation>
 
@@ -1080,7 +1067,7 @@
   <command name="away">
     <documentation>
       <description>
-        The "away" command will instruct the bot to set an away message using the specified phrase.
+        This command will instruct the bot to set an away message using the specified phrase.
       </description>
     </documentation>
 
@@ -1103,7 +1090,7 @@
   <command name="back">
     <documentation>
       <description>
-        The "back" command will instruct the bot to clear any currently set away message.
+        This command will instruct the bot to clear any currently set away message.
       </description>
     </documentation>
 
@@ -1117,8 +1104,7 @@
   <command name="ping">
     <documentation>
       <description>
-        The "ping" command will state a specified user's latency with the Battle.net server, if the specified
-        user is currently present within the channel.
+        This command will state a specified user's latency with the Battle.net server, if the specified user is currently present within the channel.
       </description>
     </documentation>
 
@@ -1150,7 +1136,7 @@
   <command name="uptime">
     <documentation>
       <description>
-        The "uptime" command states the current system and application elapased operational times.
+        This command states the current system and application elapased operational times.
       </description>
     </documentation>
     
@@ -1172,8 +1158,7 @@
   <command name="frem">
     <documentation>
       <description>
-        The "frem" command will instruct the bot to remove a specified user from the bot's friends
-        list.
+        This command will instruct the bot to remove a specified user from the bot's friends list.
       </description>
     </documentation>
     
@@ -1186,8 +1171,7 @@
   <command name="bancount">
     <documentation>
       <description>
-        The "bancount" command will state the current number of users that have been banned from
-        the channel.
+        This command will state the current number of users that have been banned from the channel.
       </description>
     </documentation>
     
@@ -1215,7 +1199,7 @@
   <command name="allseen">
     <documentation>
       <description>
-        The "allseen" command will state the last 15 users the bot has seen.
+        This command will state the last 15 users the bot has seen.
       </description>
     </documentation>
 
@@ -1234,11 +1218,12 @@
     </access>
   </command>
 
-  <command name="levelbans">
+  <command name="levelban">
+    <alias>levelbans</alias>
+
     <documentation>
       <description>
-        The "levelbans" command will state the minimum level permissible for WarCraft III users
-        joining the channel.
+        This command will state the minimum level permissible for WarCraft III users joining the channel.
       </description>
     </documentation>
     
@@ -1248,11 +1233,12 @@
     </access>
   </command>
 
-  <command name="d2levelbans">
+  <command name="d2levelban">
+    <alias>d2levelbans</alias>
+
     <documentation>
       <description>
-        The "d2levelbans" command will state the minimum level permissible for Diablo II users
-        joining the channel.
+        This command will state the minimum level permissible for Diablo II users joining the channel.
       </description>
     </documentation>
     
@@ -1317,7 +1303,7 @@
   <command name="tagcheck">
     <documentation>
       <description>
-        The "tagcheck" command will state if a specified user matches a tagban.
+        This command will state if a specified user matches a tagban.
       </description>
     </documentation>
     
@@ -1331,7 +1317,7 @@
   <command name="fadd">
     <documentation>
       <description>
-        The "fadd" command will instruct the bot to add a specified user to the bot's friends list.
+        This command will instruct the bot to add a specified user to the bot's friends list.
       </description>
     </documentation>
 
@@ -1344,7 +1330,7 @@
   <command name="kick" token="operator">
     <documentation>
       <description>
-        The "kick" command will temporarily remove a user from the channel.
+        This command will temporarily remove a user from the channel.
       </description>
     </documentation>
 
@@ -1362,6 +1348,38 @@
         role as channel moderator.
       </description>
     </documentation>
+
+    <arguments>
+      <argument name="username">
+         <restriction name="BAN_SAFELISTED_RANK">
+           <match user_rank="20" />
+ 
+           <access>
+             <rank>90</rank>
+             <flag>O</flag>
+           </access>
+         </restriction>
+
+         <restriction name="BAN_SAFELISTED_WILDCARD_RANK">
+           <match user_rank="20" />
+           <match message="[/*]+" />
+ 
+           <access>
+             <rank>90</rank>
+             <flag>O</flag>
+           </access>
+         </restriction>
+
+         <restriction name="BAN_SAFELIST_FLAGS">
+           <match user_flags="S" /> 
+
+           <access>
+             <rank>90</rank>
+             <flag>O</flag>
+           </access>
+         </restriction>
+      </argument>
+    </arguments>
 
     <access>
       <rank>60</rank>
@@ -1389,8 +1407,7 @@
 
     <documentation>
       <description>
-        The "lastwhisper" command will state the name of the user whom last privately
-        messaged the bot.
+        The "lastwhisper" command will state the name of the user whom last privately messaged the bot.
       </description>
     </documentation>
 
@@ -1429,8 +1446,7 @@
 
     <documentation>
       <description>
-        The "addphrase" command will add the specified word or phrase to the phrasebans
-        list.
+        The "addphrase" command will add the specified word or phrase to the phrasebans list.
       </description>
     </documentation>
 
@@ -1443,8 +1459,7 @@
   <command name="mmail">
     <documentation>
       <description>
-        The "mmail" command will store a message for all users matching the specified rank or
-        flag.
+        The "mmail" command will store a message for all users matching the specified rank or flag.
       </description>
     </documentation>
 
@@ -1536,8 +1551,7 @@
   <command name="ipban" token="operator">
     <documentation>
       <description>
-        The "ipban" command will instruct the bot to squelch and ban a specified user, and then
-        ban all other users also matching the squelch.
+        The "ipban" command will instruct the bot to squelch and ban a specified user, and then ban all other users also matching the squelch.
       </description>
     </documentation>
 
@@ -1551,8 +1565,7 @@
   <command name="banned">
     <documentation>
       <description>
-        The "banned" command will state all users that the bot has banned during the duration of
-        its role as channel moderator.
+        The "banned" command will state all users that the bot has banned during the duration of its role as channel moderator.
       </description>
     </documentation>
     
@@ -1566,8 +1579,7 @@
   <command name="notify">
     <documentation>
       <description>
-        The "notify" command will send the requesting user a private message when a specified user
-        is discovered to be on-line.
+        The "notify" command will send the requesting user a private message when a specified user is discovered to be on-line.
       </description>
     </documentation>    
 
@@ -1579,8 +1591,7 @@
   <command name="denotify">
     <documentation>
       <description>
-        The "denotify" command will remove the requesting user's on-line notification for the
-        specified user.
+        The "denotify" command will remove the requesting user's on-line notification for the specified user.
       </description>
     </documentation>    
 
@@ -1663,8 +1674,7 @@
   <command name="safedel">
     <documentation>
       <description>
-        The "safedel" command will remove a safelist entry for a specifed user or group
-        of users.
+        The "safedel" command will remove a safelist entry for a specifed user or group of users.
       </description>
     </documentation>    
 
@@ -1738,8 +1748,7 @@
   <command name="online">
     <documentation>
       <description>
-        The "online" command will state the user's that the bot's user monitor detects
-        as on-line.
+        The "online" command will state the user's that the bot's user monitor detects as on-line.
       </description>
     </documentation>
     
@@ -1757,51 +1766,6 @@
     
     <access>
       <rank>70</rank>
-    </access>
-  </command>
-
-  <command name="nomimic">
-    <documentation>
-      <description>
-        The "nomimic" command will disable mimicing.
-      </description>
-    </documentation>    
-
-    <access>
-      <rank>70</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
-    </access>
-  </command>
-
-  <command name="mimic">
-    <documentation>
-      <description>
-        The "mimic" command will cause the bot to echo everything that a specified
-        user says.
-      </description>
-    </documentation>    
-    
-    <access>
-      <rank>70</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
     </access>
   </command>
 
@@ -1824,8 +1788,7 @@
   <command name="protect">
     <documentation>
       <description>
-        The "protect" command will allow the requesting user to enable, disable, or check the
-        status of, channel protection.
+        The "protect" command will allow the requesting user to enable, disable, or check the status of, channel protection.
       </description>
     </documentation>
 
@@ -1835,43 +1798,10 @@
     </access>
   </command>
 
-  <command name="d2levelban">
-    <alias>d2levelbans</alias>
-
-    <documentation>
-      <description>
-        The "d2levelban" command will set a level under which you bot will ban Diablo II
-        users.
-      </description>
-    </documentation>    
-
-    <access>
-      <rank>80</rank>
-      <flag>O</flag>
-    </access>
-  </command>
-
-  <command name="levelban">
-    <alias>levelbans</alias>
-
-    <documentation>
-      <description>
-        The "levelban" command will set a level under which your bot will ban WarCraft III
-        users.
-      </description>
-    </documentation>    
-
-    <access>
-      <rank>80</rank>
-      <flag>O</flag>
-    </access>
-  </command>
-
   <command name="greet">
     <documentation>
       <description>
-        The "greet" command will enable, disable, set, or change the settings of, a welcome
-        message.
+        The "greet" command will enable, disable, set, or change the settings of, a welcome message.
       </description>
     </documentation>    
     
@@ -1908,8 +1838,7 @@
 
     <documentation>
       <description>
-        The "whispercmds" command will enable the use of command responses via private
-        messaging.
+        The "whispercmds" command will enable the use of command responses via private messaging.
       </description>
     </documentation>
     
@@ -2043,8 +1972,7 @@
   <command name="plugban">
     <documentation>
       <description>
-        The "plugban" command will enable, disable, or state the status of, UDP plug
-        banning.
+        The "plugban" command will enable, disable, or state the status of, UDP plug banning.
       </description>
     </documentation>
 
@@ -2057,8 +1985,7 @@
   <command name="useitunes">
     <documentation>
       <description>
-        The "useitunes" command will enable or disable the use of iTunes as the target
-        media player for use with mp3 commands.
+        The "useitunes" command will enable or disable the use of iTunes as the target media player for use with mp3 commands.
       </description>
     </documentation>    
 
@@ -2071,8 +1998,7 @@
   <command name="usewinamp">
     <documentation>
       <description>
-        The "usewinamp" command will enable or disable the use of Winamp as the target
-        media player for use with mp3 commands.
+        The "usewinamp" command will enable or disable the use of Winamp as the target media player for use with mp3 commands.
       </description>
     </documentation>    
 
@@ -2113,8 +2039,7 @@
 
     <documentation>
       <description>
-        The "idletime" command will set the bot's idle to the specified delay
-        interval.
+        sets the bot's idle delay to the specified.
       </description>
     </documentation>    
 
@@ -2127,8 +2052,7 @@
   <command name="repeat">
     <documentation>
       <description>
-        The "repeat" command will enable or disable the selected media player's
-        repeat setting.
+        toggles the selected media player's repeat setting.
       </description>
     </documentation>
     
@@ -2141,8 +2065,7 @@
   <command name="reconnect">
     <documentation>
       <description>
-        The "reconnect" command will make the bot reconnect to the Battle.net
-        server.
+        forces the bot to reconnect to the selected Battle.net server.
       </description>
     </documentation>    
 
@@ -2157,8 +2080,7 @@
 
     <documentation>
       <description>
-        The "designate" command will designate the specified user as heir to the
-        channel moderator position.
+        designates the specified user as heir to the channel moderator position.
       </description>
     </documentation>    
     
@@ -2168,26 +2090,10 @@
     </access>
   </command>
 
-  <command name="rejoin">
-    <alias>rj</alias>
-
-    <documentation>
-      <description>
-        The "rejoin" command will make the bot rejoin the current channel.
-      </description>
-    </documentation>    
-
-    <access>
-      <rank>80</rank>
-      <flag>J</flag>
-    </access>
-  </command>
-
   <command name="settrigger">
     <documentation>
       <description>
-        The "settrigger" command will set the bot's command identifier to the specified
-        character.
+        sets the bot's command identifier to the specified.
       </description>
     </documentation>    
 
@@ -2200,8 +2106,7 @@
   <command name="igpriv">
     <documentation>
       <description>
-        The "igpriv" command will make the bot ignore all messages within private chat
-        channels from users not on the bot's friends list.
+        makes the bot ignore all messages within private chat channels from users not on the bot's friends list.
       </description>
     </documentation>    
 
@@ -2214,8 +2119,7 @@
   <command name="unigpriv">
     <documentation>
       <description>
-        The "unigpriv" command will make the bot unignore all messages within private
-        chat channels from users not on the bot's friends list.
+        makes the bot unignore all messages within private chat channels from users not on the bot's friends list.
       </description>
     </documentation>    
     
@@ -2230,7 +2134,7 @@
 
     <documentation>
       <description>
-        The "rem" command will remove a specified user from the bot's database.
+        removes a specified user from the bot's database.
       </description>
     </documentation>    
     
@@ -2244,7 +2148,7 @@
   <command name="sethome">
     <documentation>
       <description>
-        The "sethome" command will set the home channel to the channel specified.
+        sets the bot's home channel to the channel specified.
       </description>
     </documentation>    
 
@@ -2257,7 +2161,7 @@
   <command name="idle">
     <documentation>
       <description>
-        The "idle" command enables or disables the use of idle messages.
+        enables or disables the use of idle messages.
       </description>
     </documentation>    
 
@@ -2270,7 +2174,7 @@
   <command name="shuffle">
     <documentation>
       <description>
-        The "shuffle" command enables the use of shuffle mode on the selected media player.
+        toggles the use of shuffle mode for the selected media player.
       </description>
     </documentation>
 
@@ -2283,7 +2187,7 @@
   <command name="pause">
     <documentation>
       <description>
-        The "pause" command pauses the playback of the selected media player.
+        pauses playback in the selected media player.
       </description>
     </documentation>  
     
@@ -2296,8 +2200,7 @@
   <command name="fos">
     <documentation>
       <description>
-        The "fos" command will cause a fade-out stop of the media currently playing in the
-        the selected media player.
+        toggles fade-out stop for the the selected media player.
       </description>
     </documentation>
     
@@ -2310,8 +2213,7 @@
   <command name="setvol">
     <documentation>
       <description>
-        The "setvol" command will allow to change the selected media player's volume to the
-        specified level.
+        changes the selected media player's volume to the specified level.
       </description>
     </documentation>    
 
@@ -2324,7 +2226,7 @@
   <command name="stop">
     <documentation>
       <description>
-        The "stop" command will stop playback in the specified media player.
+        terminates playback in the currently selected media player.
       </description>
     </documentation>    
 
@@ -2337,7 +2239,7 @@
   <command name="play">
     <documentation>
       <description>
-        The "play" command will enable playback in the specified media player.
+        begins playback in the currently selected media player.
       </description>
     </documentation>    
 
@@ -2350,8 +2252,7 @@
   <command name="next">
     <documentation>
       <description>
-        The "next" command will skip to the next playlist entry in the selected media
-        player.
+        skips to the next playlist entry in the selected media player's playlist.
       </description>
     </documentation>    
 
@@ -2382,7 +2283,7 @@
 
     <documentation>
       <description>
-        The "sweepignore" command will attempt to ignore all users within the specified channel.
+        attempts to ignore all users within the specified channel.
       </description>
     </documentation>
     
@@ -2398,8 +2299,7 @@
 
     <documentation>
       <description>
-        The "idlebans" command can allow the requesting user to check or change the status of
-        idle banning.
+        allows the requesting user to check or change the status of idle banning.
       </description>
     </documentation>    
     
@@ -2412,8 +2312,7 @@
   <command name="setkey">
     <documentation>
       <description>
-        The "setkey" command will change the bot's CD-Key configuration entry to the one 
-        specified.
+        changes the bot's CD-Key configuration entry to the one specified.
       </description>
     </documentation>
 
@@ -2426,8 +2325,7 @@
   <command name="setexpkey">
     <documentation>
       <description>
-        The "setexpkey" command will change the bot's expansion CD-Key configuration entry to the one 
-        specified.
+        changes the bot's expansion CD-Key configuration entry to the one specified.
       </description>
     </documentation>    
 
@@ -2440,8 +2338,7 @@
   <command name="exile" token="operator">
     <documentation>
       <description>
-        The "exile" command will add a specified user to the bot's shitlist, and will then attempt to
-        ban and ignore the user.
+        adds a specified user to the bot's shitlist and will then attempt to ban and ignore the user.
       </description>
     </documentation>    
     
@@ -2453,8 +2350,7 @@
   <command name="unexile" token="operator">
     <documentation>
       <description>
-        The "unexile" command will remove a specified user from the bot's shitlist, and will then attempt
-        to unban and unignore the user.
+        removes a specified user from the bot's shitlist, and will then attempt to unban and unignore the user.
       </description>
     </documentation>    
     
@@ -2468,7 +2364,7 @@
 
     <documentation>
       <description>
-        The "clearbanlist" command will clear the bot's internal banlist.
+        clears the bot's internal banlist.
       </description>
     </documentation>    
 
@@ -2483,7 +2379,7 @@
 
     <documentation>
       <description>
-        The "clan" command enables or disables clan channel privacy status.
+        enables or disables clan channel privacy status.
       </description>
     </documentation>    
 
@@ -2496,7 +2392,7 @@
   <command name="chpw">
     <documentation>
       <description>
-        The "chpw" command enables or disables channel password protection.
+        enables or disables channel password protection.
       </description>
     </documentation>
 
@@ -2509,8 +2405,7 @@
   <command name="readfile">
     <documentation>
       <description>
-        The "readfile" command will state the contents of a specified file within the
-        bot's directory.
+        states the contents of a specified file within the bot's directory.
       </description>
     </documentation>    
     
@@ -2522,7 +2417,7 @@
   <command name="join">
     <documentation>
       <description>
-        The "join" command will make the bot join the specified channel.
+        makes the bot join the specified channel.
       </description>
     </documentation>    
 
@@ -2537,7 +2432,7 @@
 
     <documentation>
       <description>
-        The "home" command will make the bot join its home channel.
+        makes the bot join its home channel.
       </description>
     </documentation>    
 
@@ -2550,7 +2445,7 @@
   <command name="promote">
     <documentation>
       <description>
-        ...
+        promotes the specified user in the current WarCraft III clan.
       </description>
     </documentation>    
 
@@ -2560,7 +2455,7 @@
   <command name="demote">
     <documentation>
       <description>
-        ...
+        demotes the specified user in the current WarCraft III clan.
       </description>
     </documentation>    
 
@@ -2570,8 +2465,7 @@
   <command name="resign" token="operator">
     <documentation>
       <description>
-        The "resign" command will make the bot resign from its status as a channel
-        moderator.
+        forces the bot to resign from its status as a channel moderator.
       </description>
     </documentation>    
 
@@ -2584,8 +2478,7 @@
   <command name="setname">
     <documentation>
       <description>
-        The "setname" command will change the configuration entry for the username to the
-        name specified.
+        changes the configuration entry for the username to the username specified.
       </description>
     </documentation>    
 
@@ -2598,8 +2491,7 @@
   <command name="setpass">
     <documentation>
       <description>
-        The "setpass" command will change the configuration entry for the password to the
-        password specified.
+        changes the configuration entry for the password to the password specified.
       </description>
     </documentation>    
     
@@ -2612,8 +2504,7 @@
   <command name="setserver">
     <documentation>
       <description>
-        The "setserver" command will change the configuration entry for the server to the
-        server specified.
+        changes the configuration entry for the server to the server specified.
       </description>
     </documentation>    
 
@@ -2628,12 +2519,12 @@
 
     <documentation>
       <description>
-        ...
+        makes the bot rejoin the current channel.
       </description>
     </documentation>    
 
     <access>
-      <rank>90</rank>
+      <rank>80</rank>
       <flag>J</flag>
     </access>
   </command>
@@ -2643,7 +2534,7 @@
 
     <documentation>
       <description>
-        The "quiettime" command will enable or disable the use of quiettime.
+        enables or disables the use of quiettime.
       </description>
     </documentation>    
 
@@ -2659,8 +2550,7 @@
 
     <documentation>
       <description>
-        The "giveup" command will designate the specified user, and then make the bot
-        resign from its role as a channel moderator.
+        designates the specified user and resigns from channel moderator position.
       </description>
     </documentation>
 
@@ -2673,8 +2563,7 @@
   <command name="invite">
     <documentation>
       <description>
-        The "invite" command will invite a specified user into the clan in which the bot
-        is a member.
+        invites a specified user into the clan in which the bot is a member.
       </description>
     </documentation>    
 
@@ -2687,7 +2576,7 @@
   <command name="setmotd" token="operator">
     <documentation>
       <description>
-        The "setmotd" command will set the clan's message of the day.
+        sets the clan's message of the day.
       </description>
     </documentation>    
     
@@ -2700,7 +2589,7 @@
   <command name="loadwinamp">
     <documentation>
       <description>
-        The "loadwinamp" command will run Winamp.
+        opens winamp.
       </description>
     </documentation>    
     
@@ -2715,8 +2604,7 @@
 
     <documentation>
       <description>
-        The "efp" command will enable or disable the use of Emergency Floodbot
-        Protection.
+        enables or disables the use of emergency floodbot protection.
       </description>
     </documentation>   
 
@@ -2727,9 +2615,11 @@
   </command>
 
   <command name="locktext">
+    <alias>lockchat</alias>
+
     <documentation>
       <description>
-        The "locktext" command will disable the display of incoming chat messages.
+        disables the display of incoming chat messages.
       </description>
     </documentation>    
 
@@ -2742,7 +2632,7 @@
   <command name="quit">
     <documentation>
       <description>
-        The "quit" command will terminate execution of the bot.
+        terminates application execution.
       </description>
     </documentation>    
 
@@ -2754,7 +2644,7 @@
   <command name="peonban">
     <documentation>
       <description>
-        The "peonban" command will enable or disable WarCraft III peon banning.
+        enables or disables WarCraft III peon banning.
       </description>
     </documentation>
 

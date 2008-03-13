@@ -6,13 +6,17 @@ Attribute VB_Name = "modCommandDocsObj"
 Option Explicit
 
 ' ...
-Public Function OpenCommand(ByVal strCommand As String) As clsCommandDocObj
+Public Function OpenCommand(ByVal strCommand As String, Optional ByVal datasrc = "internal") As clsCommandDocObj
     
     ' ...
     Set OpenCommand = New clsCommandDocObj
     
     ' ...
-    OpenCommand.OpenCommand strCommand
+    OpenCommand.OpenCommand strCommand, datasrc
+    
+    If (OpenCommand.Name = vbNullString) Then
+        OpenCommand.OpenCommand convertAlias(strCommand), datasrc
+    End If
     
 End Function
 
