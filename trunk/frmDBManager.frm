@@ -5,7 +5,7 @@ Begin VB.Form frmDBManager
    AutoRedraw      =   -1  'True
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Database Manager"
-   ClientHeight    =   5925
+   ClientHeight    =   6255
    ClientLeft      =   45
    ClientTop       =   735
    ClientWidth     =   6735
@@ -21,7 +21,7 @@ Begin VB.Form frmDBManager
    LinkTopic       =   "frmDBManager"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   5925
+   ScaleHeight     =   6255
    ScaleWidth      =   6735
    StartUpPosition =   1  'CenterOwner
    WhatsThisButton =   -1  'True
@@ -36,19 +36,46 @@ Begin VB.Form frmDBManager
    End
    Begin VB.Frame frmDatabase 
       Caption         =   "Eric[nK]"
-      Height          =   4950
+      Height          =   5295
       Left            =   3600
       TabIndex        =   6
-      Top             =   487
+      Top             =   480
       Width           =   3025
+      Begin VB.CommandButton btnSave 
+         Caption         =   "Save"
+         Enabled         =   0   'False
+         Height          =   300
+         Index           =   1
+         Left            =   1920
+         TabIndex        =   9
+         Top             =   4845
+         Width           =   855
+      End
+      Begin VB.CommandButton btnDelete 
+         Caption         =   "Delete"
+         Enabled         =   0   'False
+         Height          =   300
+         Left            =   1080
+         TabIndex        =   10
+         Top             =   4845
+         Width           =   855
+      End
+      Begin VB.TextBox txtBanMessage 
+         BackColor       =   &H00FFFFFF&
+         Height          =   285
+         Left            =   240
+         TabIndex        =   21
+         Top             =   4440
+         Width           =   2535
+      End
       Begin MSComctlLib.ListView lvGroups 
-         Height          =   1815
+         Height          =   1555
          Left            =   240
          TabIndex        =   19
-         Top             =   2640
+         Top             =   2520
          Width           =   2565
          _ExtentX        =   4524
-         _ExtentY        =   3201
+         _ExtentY        =   2752
          View            =   3
          LabelEdit       =   1
          LabelWrap       =   -1  'True
@@ -86,81 +113,13 @@ Begin VB.Form frmDBManager
          Top             =   580
          Width           =   1215
       End
-      Begin VB.CommandButton btnSave 
-         Caption         =   "Save"
-         Enabled         =   0   'False
-         Height          =   300
-         Index           =   1
-         Left            =   1930
-         TabIndex        =   9
-         Top             =   4538
-         Width           =   855
-      End
-      Begin VB.CommandButton btnDelete 
-         Caption         =   "Delete"
-         Enabled         =   0   'False
-         Height          =   300
-         Left            =   1088
-         TabIndex        =   10
-         Top             =   4538
-         Width           =   855
-      End
-      Begin VB.Label Label1 
-         Caption         =   "Group(s):"
+      Begin VB.Label Label3 
+         Caption         =   "Ban message:"
          Height          =   255
          Left            =   240
-         TabIndex        =   20
-         Top             =   2400
+         TabIndex        =   22
+         Top             =   4200
          Width           =   2535
-      End
-      Begin VB.Label lblModifiedBy 
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   6
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   -1  'True
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   135
-         Left            =   480
-         TabIndex        =   18
-         Top             =   1965
-         Width           =   2415
-      End
-      Begin VB.Label lblCreatedBy 
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   6
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   -1  'True
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   135
-         Left            =   480
-         TabIndex        =   17
-         Top             =   1350
-         Width           =   2415
-      End
-      Begin VB.Label lblCreatedOn 
-         Caption         =   "(not applicable)"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   6
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   130
-         Left            =   360
-         TabIndex        =   13
-         Top             =   1180
-         Width           =   2415
       End
       Begin VB.Label lblModifiedOn 
          Caption         =   "(not applicable)"
@@ -176,7 +135,80 @@ Begin VB.Form frmDBManager
          Height          =   135
          Left            =   360
          TabIndex        =   16
-         Top             =   1800
+         Top             =   1845
+         Width           =   2415
+      End
+      Begin VB.Label Label1 
+         Caption         =   "Group(s):"
+         Height          =   255
+         Left            =   240
+         TabIndex        =   20
+         Top             =   2280
+         Width           =   2535
+      End
+      Begin VB.Label lblModifiedBy 
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   6
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   -1  'True
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   135
+         Left            =   480
+         TabIndex        =   18
+         Top             =   2005
+         Width           =   2415
+      End
+      Begin VB.Label lblCreatedBy 
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   6
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   -1  'True
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   135
+         Left            =   480
+         TabIndex        =   17
+         Top             =   1375
+         Width           =   2415
+      End
+      Begin VB.Label lblFlags 
+         Caption         =   "Flags:"
+         Height          =   255
+         Left            =   1560
+         TabIndex        =   12
+         Top             =   340
+         Width           =   1215
+      End
+      Begin VB.Label lblRank 
+         Caption         =   "Rank (1 - 200):"
+         Height          =   255
+         Left            =   240
+         TabIndex        =   11
+         Top             =   340
+         Width           =   1215
+      End
+      Begin VB.Label lblCreatedOn 
+         Caption         =   "(not applicable)"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   6
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   135
+         Left            =   360
+         TabIndex        =   13
+         Top             =   1215
          Width           =   2415
       End
       Begin VB.Label Label2 
@@ -194,7 +226,7 @@ Begin VB.Form frmDBManager
          Index           =   0
          Left            =   240
          TabIndex        =   15
-         Top             =   970
+         Top             =   1005
          Width           =   2535
       End
       Begin VB.Label Label2 
@@ -212,24 +244,8 @@ Begin VB.Form frmDBManager
          Index           =   1
          Left            =   240
          TabIndex        =   14
-         Top             =   1590
+         Top             =   1630
          Width           =   2535
-      End
-      Begin VB.Label lblFlags 
-         Caption         =   "Flags:"
-         Height          =   255
-         Left            =   1560
-         TabIndex        =   12
-         Top             =   340
-         Width           =   1215
-      End
-      Begin VB.Label lblRank 
-         Caption         =   "Rank (1 - 200):"
-         Height          =   255
-         Left            =   240
-         TabIndex        =   11
-         Top             =   340
-         Width           =   1215
       End
    End
    Begin MSComctlLib.ImageList icons 
@@ -265,7 +281,7 @@ Begin VB.Form frmDBManager
       Picture         =   "frmDBManager.frx":0FF6
       TabIndex        =   2
       ToolTipText     =   "Create Group"
-      Top             =   5047
+      Top             =   5378
       Width           =   1695
    End
    Begin VB.CommandButton btnCreateUser 
@@ -276,7 +292,7 @@ Begin VB.Form frmDBManager
       Picture         =   "frmDBManager.frx":145E
       TabIndex        =   1
       ToolTipText     =   "Create User"
-      Top             =   5047
+      Top             =   5378
       Width           =   1695
    End
    Begin MSComctlLib.TabStrip tbsTabs 
@@ -316,7 +332,7 @@ Begin VB.Form frmDBManager
       Index           =   0
       Left            =   5280
       TabIndex        =   4
-      Top             =   5540
+      Top             =   5880
       Width           =   1335
    End
    Begin VB.CommandButton btnCancel 
@@ -324,17 +340,17 @@ Begin VB.Form frmDBManager
       Height          =   300
       Left            =   4560
       TabIndex        =   3
-      Top             =   5540
+      Top             =   5880
       Width           =   735
    End
    Begin MSComctlLib.TreeView trvUsers 
-      Height          =   4370
+      Height          =   4725
       Left            =   120
       TabIndex        =   0
-      Top             =   577
+      Top             =   570
       Width           =   3375
       _ExtentX        =   5953
-      _ExtentY        =   7699
+      _ExtentY        =   8334
       _Version        =   393217
       HideSelection   =   0   'False
       Indentation     =   575
@@ -429,7 +445,7 @@ Private Sub btnCreateUser_Click()
     ' do we have an item (hopefully a group) selected?
     If (Not (trvUsers.SelectedItem Is Nothing)) Then
         ' is the item really just the root item?
-        If (trvUsers.SelectedItem.index = 1) Then
+        If (trvUsers.SelectedItem.Index = 1) Then
             Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
                 tvwChild, "User: " & Username, Username, 3)
                 
@@ -492,7 +508,7 @@ Private Sub btnCreateGroup_Click()
     Dim newNode       As node    ' ...
     
     ' ...
-    If (tbsTabs.SelectedItem.index = 1) Then ' Users and Groups Tab
+    If (tbsTabs.SelectedItem.Index = 1) Then ' Users and Groups Tab
         Dim GroupName As String ' ...
     
         ' ...
@@ -517,7 +533,7 @@ Private Sub btnCreateGroup_Click()
         ' do we have an item (hopefully a group) selected?
         If (Not (trvUsers.SelectedItem Is Nothing)) Then
             ' is the item reall just the root node?
-            If (trvUsers.SelectedItem.index = 1) Then
+            If (trvUsers.SelectedItem.Index = 1) Then
                 ' ...
                 Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
                     tvwChild, "Group: " & GroupName, GroupName, 1)
@@ -560,7 +576,7 @@ Private Sub btnCreateGroup_Click()
         ' increment group counter
         groupCount = (groupCount + 1)
         
-    ElseIf (tbsTabs.SelectedItem.index = 2) Then ' Clan Tab
+    ElseIf (tbsTabs.SelectedItem.Index = 2) Then ' Clan Tab
         Dim ClanName As String ' ...
     
         ' ...
@@ -594,7 +610,7 @@ Private Sub btnCreateGroup_Click()
         ' increment clan counter
         clanCount = (clanCount + 1)
         
-    ElseIf (tbsTabs.SelectedItem.index = 3) Then ' Game Tab
+    ElseIf (tbsTabs.SelectedItem.Index = 3) Then ' Game Tab
         ' ...
         Call frmGameSelection.Show(vbModal, frmDBManager)
         
@@ -638,7 +654,7 @@ Private Sub btnCreateGroup_Click()
         End With
 
         ' ...
-        If ((tbsTabs.SelectedItem.index = 1) Or (tbsTabs.SelectedItem.index = 2)) Then
+        If ((tbsTabs.SelectedItem.Index = 1) Or (tbsTabs.SelectedItem.Index = 2)) Then
             ' ...
             m_new_entry = True
         
@@ -655,12 +671,12 @@ Private Sub btnCancel_Click()
 End Sub
 
 ' ...
-Private Sub btnSave_Click(index As Integer)
+Private Sub btnSave_Click(Index As Integer)
     Dim i As Integer ' ...
     Dim j As Integer ' ...
 
     ' are we looking at a single entry or are we saving it all?
-    If (index = 1) Then
+    If (Index = 1) Then
         ' if we have no selected user... escape quick!
         If (trvUsers.SelectedItem Is Nothing) Then
             ' break from function
@@ -674,9 +690,10 @@ Private Sub btnSave_Click(index As Integer)
                 ' modifiy user data
                 With m_DB(i)
                     .Access = Val(txtRank.text)
-                    .flags = txtFlags.text
+                    .Flags = txtFlags.text
                     .ModifiedBy = "(console)"
                     .ModifiedOn = Now
+                    .BanMessage = txtBanMessage.text
                 End With
                 
                 ' ...
@@ -741,6 +758,16 @@ Private Sub btnSave_Click(index As Integer)
     End If
 End Sub
 
+Private Sub lvGroups_Click()
+    Dim i As Integer
+    
+    For i = 1 To lvGroups.ListItems.Count
+        lvGroups.ListItems(i).Selected = False
+    Next i
+    
+    Set lvGroups.SelectedItem = Nothing
+End Sub
+
 ' ...
 'Private Sub lstGroups_Click()
 '    ' ...
@@ -796,7 +823,7 @@ Private Sub tbsTabs_Click()
     Dim i       As Integer ' ...
     Dim grp     As String ' ...
     Dim j       As Integer ' ...
-    Dim pos     As Integer ' ...
+    Dim Pos     As Integer ' ...
 
     ' clear treeview
     Call trvUsers.Nodes.Clear
@@ -805,7 +832,7 @@ Private Sub tbsTabs_Click()
     Call trvUsers.Nodes.Add(, , "Database", "Database")
 
     ' which tab index are we on?
-    Select Case (tbsTabs.SelectedItem.index)
+    Select Case (tbsTabs.SelectedItem.Index)
         Case 1: ' Users and Groups
             For i = LBound(m_DB) To UBound(m_DB)
                 ' we're handling groups first; is this entry a group?
@@ -823,12 +850,12 @@ Private Sub tbsTabs_Click()
                     
                         ' has the group already been added or is database in an
                         ' incorrect order?
-                        pos = Exists(grp, "Group")
+                        Pos = Exists(grp, "Group")
                         
                         ' ... well, does it exist?
-                        If (pos) Then
+                        If (Pos) Then
                             ' make node a child of existing group
-                            Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(pos).Key, _
+                            Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
                                 tvwChild, "Group: " & m_DB(i).Username, m_DB(i).Username, 1)
                         Else
                             ' lets make this guy a parent node for now until we can find
@@ -907,12 +934,12 @@ Private Sub tbsTabs_Click()
                         End If
                     
                         ' search for our group
-                        pos = Exists(grp, "Group")
+                        Pos = Exists(grp, "Group")
                             
                         ' does our group exist?
-                        If (pos) Then
+                        If (Pos) Then
                             ' create user node and move into group
-                            Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(pos).Key, _
+                            Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
                                 tvwChild, "User: " & m_DB(i).Username, m_DB(i).Username, 3)
                         End If
                     Else
@@ -1013,6 +1040,10 @@ Private Sub LockGUI()
     ' disable group list
     'lstGroups.Enabled = False
     
+    ' disable & clear ban message
+    txtBanMessage.Enabled = False
+    txtBanMessage.text = vbNullString
+    
     ' reset created on & modified on labels
     lblCreatedOn.Caption = "(not applicable)"
     lblModifiedOn.Caption = "(not applicable)"
@@ -1049,6 +1080,10 @@ Private Sub UnlockGUI()
     
     ' enable group list
     'lstGroups.Enabled = True
+    
+    ' enable & clear ban message
+    txtBanMessage.Enabled = True
+    txtBanMessage.text = vbNullString
     
     ' reset created on & modified on labels
     lblCreatedOn.Caption = "(not applicable)"
@@ -1089,7 +1124,7 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
     m_group_index = -1
 
     ' ...
-    If (node.index > 1) Then
+    If (node.Index > 1) Then
         ' ...
         Call UnlockGUI
     
@@ -1109,7 +1144,7 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
         End If
         
         ' clear flags from text box
-        txtFlags.text = tmp.flags
+        txtFlags.text = tmp.Flags
         
         ' ...
         If ((tmp.AddedBy = vbNullString) Or (tmp.AddedBy = "%")) Then
@@ -1171,6 +1206,9 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
     End If
     
     ' ...
+    txtBanMessage.text = tmp.BanMessage
+    
+    ' ...
     Set trvUsers.SelectedItem = node
 
     ' refresh tree view
@@ -1198,7 +1236,7 @@ Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y
         ' ...
         If (Not (trvUsers.SelectedItem Is Nothing)) Then
             ' ...
-            If (trvUsers.SelectedItem.index > 1) Then
+            If (trvUsers.SelectedItem.Index > 1) Then
                 ' ...
                 If (StrComp(trvUsers.SelectedItem.Tag, "Group", vbTextCompare) = 0) Then
                     ' ...
@@ -1254,7 +1292,7 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
     Set nodePrev = trvUsers.SelectedItem
         
     ' ...
-    If (nodeNow.index = 1) Then
+    If (nodeNow.Index = 1) Then
         ' ...
         For i = LBound(m_DB) To UBound(m_DB)
             ' ...
@@ -1277,14 +1315,14 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
         Next i
     Else
         ' ...
-        If (nodePrev.index <> 1) Then
+        If (nodePrev.Index <> 1) Then
             ' ...
             If (StrComp(nodeNow.Tag, "Group", vbTextCompare) <> 0) Then
                 ' ...
                 Set nodeNow = nodeNow.Parent
                 
                 ' ...
-                If (nodeNow.index = 1) Then
+                If (nodeNow.Index = 1) Then
                     ' ...
                     Set trvUsers.DropHighlight = nodeNow
                 
@@ -1539,7 +1577,7 @@ Private Sub HandleDeleteEvent(ByRef NodeToDelete As node)
     End If
 
     ' ...
-    If (Temp.index > 1) Then
+    If (Temp.Index > 1) Then
         Dim response As Integer ' ...
         Dim isGroup  As Boolean ' ...
         
@@ -1563,18 +1601,18 @@ Private Sub HandleDeleteEvent(ByRef NodeToDelete As node)
                 ' ...
                 If (Temp.Previous Is Nothing) Then
                     ' ...
-                    trvUsers.Nodes(Temp.Parent.index).Checked = True
+                    trvUsers.Nodes(Temp.Parent.Index).Checked = True
                 Else
                     ' ...
-                    trvUsers.Nodes(Temp.Previous.index).Checked = True
+                    trvUsers.Nodes(Temp.Previous.Index).Checked = True
                 End If
             Else
                 ' ...
-                trvUsers.Nodes(Temp.Next.index).Checked = True
+                trvUsers.Nodes(Temp.Next.Index).Checked = True
             End If
             
             ' ...
-            Call trvUsers.Nodes.Remove(Temp.index)
+            Call trvUsers.Nodes.Remove(Temp.Index)
             
             ' ...
             Call trvUsers_NodeClick(trvUsers.SelectedItem)
@@ -1668,7 +1706,7 @@ Private Function GetAccess(ByVal Username As String, Optional dbType As String =
                 With GetAccess
                     .Username = m_DB(i).Username
                     .Access = m_DB(i).Access
-                    .flags = m_DB(i).flags
+                    .Flags = m_DB(i).Flags
                     .AddedBy = m_DB(i).AddedBy
                     .AddedOn = m_DB(i).AddedOn
                     .ModifiedBy = m_DB(i).ModifiedBy
