@@ -779,7 +779,7 @@ Private Function OnInvite(ByVal Username As String, ByRef dbAccess As udtGetAcce
     If (IsW3) Then
         ' is my ranking sufficient to issue
         ' an invitation?
-        If (Clan.MyRank >= 3) Then
+        If (clan.MyRank >= 3) Then
             Call InviteToClan(msgData)
             
             tmpBuf = msgData & ": Clan invitation sent."
@@ -802,7 +802,7 @@ Private Function OnSetMotd(ByVal Username As String, ByRef dbAccess As udtGetAcc
     Dim tmpBuf As String ' temporary output buffer
 
     If (IsW3) Then
-        If (Clan.MyRank >= 3) Then
+        If (clan.MyRank >= 3) Then
             Call SetClanMOTD(msgData)
             
             tmpBuf = "Clan MOTD set."
@@ -1197,12 +1197,12 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Next i
     
         ' ...
-        If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+        If (StrComp(gChannel.Current, "Clan " & clan.Name, vbTextCompare) = 0) Then
             ' ...
             ReDim Preserve arrUsers(0)
             
             ' ...
-            If (Clan.MyRank >= 4) Then
+            If (clan.MyRank >= 4) Then
                 ' ...
                 For i = 1 To frmChat.lvClanList.ListItems.Count
                     ' ...
@@ -3722,7 +3722,7 @@ Private Function OnUnban(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Dim u      As String
     Dim tmpBuf As String ' temporary output buffer
     
-    If (MyFlags <> USER_CHANNELOP&) Then
+    If ((MyFlags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
        If (InBot) Then
            tmpBuf = "You are not a channel operator."
        End If
@@ -3768,7 +3768,7 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim tmpBuf As String ' temporary output buffer
     Dim Y      As String
     
-    If (MyFlags <> USER_CHANNELOP&) Then
+    If ((MyFlags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
        If (InBot) Then
            tmpBuf = "You are not a channel operator."
        End If
