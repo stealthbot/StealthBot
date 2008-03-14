@@ -265,6 +265,7 @@ Public Sub Send0x0A()
         .InsertNTString g_username
         .InsertByte 0
         .SendPacket &HA
+        
         .InsertNonNTString BotVars.Product
         .SendPacket &HB
         

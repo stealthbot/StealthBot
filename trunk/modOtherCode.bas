@@ -3,7 +3,7 @@ Option Explicit
 
 Public Type COMMAND_DATA
     Name         As String
-    Params       As String
+    params       As String
     local        As Boolean
     PublicOutput As Boolean
 End Type
@@ -1250,12 +1250,14 @@ Public Sub UpdateProfile()
     s = MediaPlayer.TrackName
     
     If (s = vbNullString) Then
-        Exit Sub
+        SetProfile "", ":[ ProfileAmp ]:" & vbCrLf & "WinAmp is not currently playing " & _
+                vbCrLf & "Last updated " & Time & ", " & Format(Date, "d-MM-yyyy") & vbCrLf & _
+                    CVERSION & " - http://www.stealthbot.net"
+    Else
+        SetProfile "", ":[ ProfileAmp ]:" & vbCrLf & "WinAmp is currently playing: " & _
+                vbCrLf & s & vbCrLf & "Last updated " & Time & ", " & Format(Date, "d-MM-yyyy") & _
+                    vbCrLf & CVERSION & " - http://www.stealthbot.net"
     End If
-    
-    SetProfile "", ":[ ProfileAmp ]:" & vbCrLf & "WinAmp is currently playing: " & _
-        vbCrLf & s & vbCrLf & "Last updated " & Time & ", " & Format(Date, "d-MM-yyyy") & _
-            vbCrLf & CVERSION & " - http://www.stealthbot.net"
 End Sub
 
 Public Function FlashWindow() As Boolean
