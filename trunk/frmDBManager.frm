@@ -1206,7 +1206,12 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
     End If
     
     ' ...
-    txtBanMessage.text = tmp.BanMessage
+    If ((tmp.BanMessage <> vbNullString) And (tmp.BanMessage <> _
+            "%")) Then
+            
+        ' ...
+        txtBanMessage.text = tmp.BanMessage
+    End If
     
     ' ...
     Set trvUsers.SelectedItem = node
@@ -1670,6 +1675,11 @@ Private Function Exists(ByVal nodeName As String, Optional Tag As String = vbNul
     ' ...
     Exists = False
 End Function
+
+Private Sub txtBanMessage_Change()
+    ' enable entry save button
+    btnSave(1).Enabled = True
+End Sub
 
 ' ...
 Private Sub txtFlags_Change()
