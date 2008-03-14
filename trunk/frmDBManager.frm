@@ -322,6 +322,7 @@ Begin VB.Form frmDBManager
          EndProperty
          BeginProperty Tab3 {1EFB659A-857C-11D1-B16A-00C0F0283628} 
             Caption         =   "Games"
+            Object.ToolTipText     =   "Game entries allow access to be given based on game type"
             ImageVarType    =   2
          EndProperty
       EndProperty
