@@ -1093,9 +1093,11 @@ Private Sub UnlockGUI()
     lblCreatedBy.Caption = vbNullString
     lblModifiedBy.Caption = vbNullString
     
-    ' disable entry buttons
+    ' disable entry save button
     btnSave(1).Enabled = False
-    btnDelete.Enabled = False
+    
+    ' enable entry delete button
+    btnDelete.Enabled = True
 End Sub
 
 ' handle node collapse
@@ -1125,9 +1127,6 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
 
     ' ...
     If (node.Index > 1) Then
-        ' ...
-        Call UnlockGUI
-    
         ' ...
         frmDatabase.Caption = node.text
         
@@ -1200,17 +1199,20 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
                 Next j
             Next i
         End If
+        
+        ' ...
+        If ((tmp.BanMessage <> vbNullString) And (tmp.BanMessage <> _
+                "%")) Then
+                
+            ' ...
+            txtBanMessage.text = tmp.BanMessage
+        End If
+        
+        ' ...
+        Call UnlockGUI
     Else
         ' ...
         Call LockGUI
-    End If
-    
-    ' ...
-    If ((tmp.BanMessage <> vbNullString) And (tmp.BanMessage <> _
-            "%")) Then
-            
-        ' ...
-        txtBanMessage.text = tmp.BanMessage
     End If
     
     ' ...
