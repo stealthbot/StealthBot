@@ -2459,6 +2459,8 @@ End Function
 Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional DontCheckTrigger As Boolean = _
     False, Optional ByVal datasrc As String = "internal") As clsCommandObj
     
+    On Error GoTo ERROR_HANDLER
+    
     ' ...
     Const CMD_DELIMITER As String = "; "
 
@@ -2658,10 +2660,10 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
             ' ...
             If ((IsCommand.docs.Name = vbNullString) Or _
                     (IsCommand.docs.IsEnabled = False)) Then
-                    
+            
                 ' ...
-                Set IsCommand = IsCommand(vbNullString, False, "internal")
-                
+                Set IsCommand = IsCommand(vbNullString)
+            
                 ' ...
                 Exit Function
             End If
@@ -2675,6 +2677,13 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         .Name = vbNullString
         .Args = vbNullString
     End With
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in IsCommand().")
+    
+    Exit Function
 End Function
 
 ' ...

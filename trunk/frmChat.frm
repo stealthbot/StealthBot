@@ -83,6 +83,7 @@ Begin VB.Form frmChat
       _Version        =   393216
       TabOrientation  =   1
       Style           =   1
+      Tab             =   1
       TabHeight       =   520
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
@@ -95,11 +96,11 @@ Begin VB.Form frmChat
       EndProperty
       TabCaption(0)   =   "Channel  "
       TabPicture(0)   =   "frmChat.frx":1CCA
-      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlEnabled=   0   'False
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "Friends  "
       TabPicture(1)   =   "frmChat.frx":1CE6
-      Tab(1).ControlEnabled=   0   'False
+      Tab(1).ControlEnabled=   -1  'True
       Tab(1).ControlCount=   0
       TabCaption(2)   =   "Clan  "
       TabPicture(2)   =   "frmChat.frx":1D02
@@ -827,6 +828,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -852,6 +854,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True

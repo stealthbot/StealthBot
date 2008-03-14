@@ -48,7 +48,7 @@ End Property
 ' ...
 Public Property Let datasrc(str As String)
 
-    datasrc = str
+    m_datasrc = str
     
 End Property
 

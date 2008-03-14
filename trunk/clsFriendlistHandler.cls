@@ -78,7 +78,6 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                     '(STRING)         Account
                     s = KillNull(Mid$(Data, Position))
                     .Username = s
-                    .Username = convertUsername(.Username)
                     'debug.print "Username: " & s
                     Position = Position + Len(.Username) + 1 'account for chr(0) at end
                     'debug.print "Position incremented " & Len(.Username) + 1 & " to " & Position
@@ -116,6 +115,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                     Position = Position + Len(s) + 1
                     .Channel = s
                     
+                    .Username = convertUsername(.Username)
                 End With
                 
                 ''debug.print "Successfully added: " & flTemp.Username
@@ -167,7 +167,6 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 s = KillNull(Mid$(Data, Position))
                 Position = Position + Len(s) + 1
                 .Username = s
-                .Username = convertUsername(.Username)
                             
                 '(BYTE)       Friend Status
                 bytTemp = Asc(Mid$(Data, Position, 1))
@@ -187,6 +186,8 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 '(STRING)         Channel
                 s = KillNull(Mid$(Data, Position))
                 .Channel = s
+                
+                .Username = convertUsername(.Username)
                 
                 RaiseEvent FriendAdded(.Username, .Product, .Location, .Status, .Channel)
             End With
