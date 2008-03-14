@@ -39,6 +39,29 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
             ' update user flags
             .Flags = Flags
         End With
+    Else
+        Dim UserToAdd As clsUserInfo
+        
+        ' ...
+        Set UserToAdd = New clsUserInfo
+    
+        ' ...
+        With UserToAdd
+            .Flags = Flags
+            .Username = Username
+            .Ping = Ping
+            .Product = Product
+            .Safelisted = GetSafelist(Username)
+            .Statstring = ""
+            .JoinTime = GetTickCount
+            .Clan = ""
+            .IsSelf = (StrComp(Username, CurrentUsername, _
+                vbBinaryCompare) = 0)
+            .InternalFlags = 0
+        End With
+        
+        ' ...
+        Call colUsersInChannel.Add(UserToAdd)
     End If
     
     ' are we receiving a flag update for ourselves?

@@ -4889,6 +4889,8 @@ Private Sub Timer_Timer()
     
     If Not mnuDisableVoidView.Checked Then
         If gChannel.Current = "The Void" Then
+            lvChannel.ListItems.Clear
+            
             AddQ "/unsquelch " & CurrentUsername
         End If
     End If

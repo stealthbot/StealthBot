@@ -212,7 +212,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     
     If (StrComp(gChannel.Current, "The Void", vbBinaryCompare) = 0) Then
         If (Not (frmChat.mnuDisableVoidView.Checked)) Then
-            If (frmChat.lvChannel.ListItems.Count < 200) Then
+            'If (frmChat.lvChannel.ListItems.Count < 200) Then
                 If (Not (Pos)) Then
                     frmChat.lvChannel.Enabled = False
                 
@@ -220,7 +220,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
                     
                     frmChat.lvChannel.Enabled = True
                 End If
-            End If
+            'End If
         End If
     
         Exit Sub
