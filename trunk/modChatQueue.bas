@@ -99,11 +99,13 @@ End Function
 Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal Ping As Long, _
     ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal w3icon As String)
     
+    On Error GoTo ERROR_HANDLER
+    
     Dim game   As String ' ...
     Dim pStats As String ' ...
-    Dim Clan   As String ' ...
+    Dim clan   As String ' ...
     
-    game = ParseStatstring(OriginalStatstring, pStats, Clan)
+    game = ParseStatstring(OriginalStatstring, pStats, clan)
 
     If (JoinMessagesOff = False) Then
         Call frmChat.AddChat(RTBColors.JoinText, "-- ", _
@@ -111,8 +113,8 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
                 RTBColors.JoinText, " has joined the channel using " & pStats)
     End If
     
-    If (Clan <> vbNullString) Then
-        Call AddName(Username, Product, Flags, Ping, Clan)
+    If (clan <> vbNullString) Then
+        Call AddName(Username, Product, Flags, Ping, clan)
     Else
         Call AddName(Username, Product, Flags, Ping)
     End If
@@ -132,6 +134,13 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
     ' ...
     frmChat.SControl.Run "Event_UserJoins", Username, Flags, pStats, Ping, _
         Product, 0, OriginalStatstring, False
+        
+    Exit Sub
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in Event_QueuedUserJoin().")
+    
+    Exit Sub
 End Sub
 
 ' ...
@@ -143,10 +152,10 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
     Dim i      As Integer  ' ...
     Dim game   As String   ' ...
     Dim pStats As String   ' ...
-    Dim Clan   As String   ' ...
+    Dim clan   As String   ' ...
     Dim Pos    As Integer  ' ...
 
-    game = ParseStatstring(OriginalStatstring, pStats, Clan)
+    game = ParseStatstring(OriginalStatstring, pStats, clan)
     
     If (JoinMessagesOff = False) Then
         Call frmChat.AddChat(RTBColors.JoinText, "-- Stats updated: ", _
@@ -181,12 +190,21 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
         'found.SmallIcon = (g_ThisIconCode + ICON_START_W3XP + _
         '    IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0))
     End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in Event_QueuedUserInChannel().")
+    
+    Exit Sub
 End Sub
 
 ' ...
 Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Long, ByVal prevflags As Long, _
     ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
         ByVal w3icon As String)
+    
+    On Error GoTo ERROR_HANDLER
     
     Dim found      As ListItem ' ...
     
@@ -236,7 +254,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     
                 Call frmChat.lvChannel.ListItems.Remove(Pos)
     
-                Call AddName(.Username, .Product, Flags, Ping, .Clan, Pos)
+                Call AddName(.Username, .Product, Flags, Ping, .clan, Pos)
     
                 frmChat.lvChannel.Enabled = True
             End With
@@ -250,7 +268,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     
                     Call frmChat.lvChannel.ListItems.Remove(Pos)
     
-                    Call AddName(.Username, .Product, Flags, Ping, .Clan, Pos)
+                    Call AddName(.Username, .Product, Flags, Ping, .clan, Pos)
                     
                     frmChat.lvChannel.Enabled = True
                 End With
@@ -266,6 +284,13 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     
     ' ...
     frmChat.SControl.Run "Event_FlagUpdate", Username, Flags, Ping
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in Event_QueuedStatusUpdate().")
+    
+    Exit Sub
 End Sub
 
 ' ...

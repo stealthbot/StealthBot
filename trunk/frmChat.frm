@@ -827,6 +827,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -852,6 +853,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2342,11 +2344,21 @@ Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
 End Sub
 
 Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
+    If (clan.MyRank < NewRank) Then
+        AddChat RTBColors.SuccessText, "[CLAN] You have been promoted. Your new rank is ", _
+                RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
+    ElseIf (clan.MyRank > NewRank) Then
+        AddChat RTBColors.SuccessText, "[CLAN] You have been demoted. Your new rank is ", _
+                RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
+    Else
+        AddChat RTBColors.SuccessText, "[CLAN] Your new rank is ", RTBColors.InformationText, _
+                GetRank(NewRank), RTBColors.SuccessText, "."
+    End If
+
     clan.MyRank = NewRank
     
-    AddChat RTBColors.SuccessText, "[CLAN] You have been promoted. Your new rank is ", RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
-    
     On Error Resume Next
+    
     SControl.Run "Event_BotClanRankChanged", NewRank
 End Sub
 
