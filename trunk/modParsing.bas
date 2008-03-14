@@ -130,7 +130,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         Call Event_JoinedChannel(s, UserFlags)
                         
                     Case ID_USERFLAGS
-                        Call Event_FlagsUpdate(Username, UserFlags, UserPing, Product)
+                        Call Event_FlagsUpdate(Username, s, UserFlags, UserPing, Product)
 
                     Case ID_WHISPERSENT
                         Call Event_WhisperToUser(Username, UserFlags, s, UserPing)

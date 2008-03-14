@@ -4,8 +4,8 @@ Attribute VB_Name = "modEvents"
 
 Option Explicit
 
-Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVal Ping As Long, _
-    ByVal Product As String)
+Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, ByVal Flags As Long, _
+    ByVal Ping As Long, ByVal Product As String)
     
     On Error GoTo ERROR_HANDLER
     
@@ -41,9 +41,13 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
         End With
     Else
         Dim UserToAdd As clsUserInfo
+        Dim clan      As String
+        Dim parsed    As String
         
         ' ...
         Set UserToAdd = New clsUserInfo
+        
+        Call ParseStatstring(Message, parsed, clan)
     
         ' ...
         With UserToAdd
@@ -52,9 +56,9 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Flags As Long, ByVa
             .Ping = Ping
             .Product = Product
             .Safelisted = GetSafelist(Username)
-            .Statstring = ""
+            .Statstring = Message
             .JoinTime = GetTickCount
-            .Clan = ""
+            .clan = clan
             .IsSelf = (StrComp(Username, CurrentUsername, _
                 vbBinaryCompare) = 0)
             .InternalFlags = 0
@@ -174,7 +178,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     SharedScriptSupport.myChannel = ChannelName
     
-    If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+    If (StrComp(gChannel.Current, "Clan " & clan.Name, vbTextCompare) = 0) Then
         
         PassedClanMotdCheck = False
         
@@ -563,7 +567,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         Message = ToANSI
     End If
     
-    If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+    If (StrComp(gChannel.Current, "Clan " & clan.Name, vbTextCompare) = 0) Then
         If (PassedClanMotdCheck = False) Then
             If (Message <> vbNullString) Then
                 Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
@@ -941,7 +945,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 .Username = Username
                 .Flags = Flags
                 .Ping = Ping
-                .Clan = sClan
+                .clan = sClan
                 .Statstring = OriginalStatstring
             End With
         End If
@@ -987,7 +991,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             .Safelisted = GetSafelist(Username)
             .Statstring = OriginalStatstring
             .JoinTime = GetTickCount
-            .Clan = sClan
+            .clan = sClan
             .IsSelf = (StrComp(Username, CurrentUsername, _
                 vbBinaryCompare) = 0)
         
@@ -1101,7 +1105,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             .Safelisted = GetSafelist(Username)
             .Statstring = OriginalStatstring
             .JoinTime = GetTickCount
-            .Clan = sClan
+            .clan = sClan
             .IsSelf = (StrComp(Username, CurrentUsername, _
                 vbBinaryCompare) = 0)
             .InternalFlags = 0
