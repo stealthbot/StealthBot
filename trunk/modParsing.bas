@@ -996,9 +996,18 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
     Dim nKeys As Integer
     Dim pKeys(1 To 3) As String
     
+    If (LenB(Location) > 0) Then
+        If (Len(Location) > MAX_LOC) Then
+            Location = Left$(Location, MAX_LOC)
+        End If
+        
+        nKeys = nKeys + 1
+        pKeys(nKeys) = "Profile\Location"
+    End If
+    
     '// Sanity checks
-    If LenB(description) > 0 Then
-        If Len(description) > MAX_DESCR Then
+    If (LenB(description) > 0) Then
+        If (Len(description) > MAX_DESCR) Then
             description = Left$(description, MAX_DESCR)
         End If
         
@@ -1015,27 +1024,20 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
 '        pKeys(nKeys) = "Profile\Sex"
 '    End If
     
-    If LenB(Location) = 0 Then
-        If Len(Location) > MAX_LOC Then
-            Location = Left$(Location, MAX_LOC)
-        End If
-        
-        nKeys = nKeys + 1
-        pKeys(nKeys) = "Profile\Location"
-    End If
-    
     If nKeys > 0 Then
+        Dim i As Integer
+    
         With PBuffer
             .InsertDWord &H1                    '// #accounts
             .InsertDWord nKeys                  '// #keys
-            .InsertNTString CurrentUsername     '// account to update
+            .InsertNTString reverseUsername(CurrentUsername) '// account to update
                                                 '// keys
-            For nKeys = 1 To nKeys
-                .InsertNTString pKeys(nKeys)
-            Next nKeys
-                                                '// values
+            For i = 1 To nKeys
+                .InsertNTString pKeys(i)
+            Next i
+           
             .InsertNTString Location
-            .InsertNTString description
+            .InsertNTString description '// values
             
             .SendPacket &H27
         End With

@@ -78,6 +78,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                     '(STRING)         Account
                     s = KillNull(Mid$(Data, Position))
                     .Username = s
+                    .Username = convertUsername(.Username)
                     'debug.print "Username: " & s
                     Position = Position + Len(.Username) + 1 'account for chr(0) at end
                     'debug.print "Position incremented " & Len(.Username) + 1 & " to " & Position
@@ -166,6 +167,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 s = KillNull(Mid$(Data, Position))
                 Position = Position + Len(s) + 1
                 .Username = s
+                .Username = convertUsername(.Username)
                             
                 '(BYTE)       Friend Status
                 bytTemp = Asc(Mid$(Data, Position, 1))
