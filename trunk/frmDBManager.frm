@@ -1033,9 +1033,7 @@ Private Sub LockGUI()
     txtFlags.text = vbNullString
     
     ' loop through listbox and clear selected items
-    For i = 1 To lvGroups.ListItems.Count
-        lvGroups.ListItems(i).Checked = False
-    Next i
+    Call ClearGroupList
     
     ' disable group list
     'lstGroups.Enabled = False
@@ -1057,6 +1055,15 @@ Private Sub LockGUI()
     btnDelete.Enabled = False
 End Sub
 
+Private Sub ClearGroupList()
+    Dim i As Integer ' ...
+
+    ' loop through listbox and clear selected items
+    For i = 1 To lvGroups.ListItems.Count
+        lvGroups.ListItems(i).Checked = False
+    Next i
+End Sub
+
 Private Sub UnlockGUI()
     Dim i As Integer ' ...
 
@@ -1065,33 +1072,14 @@ Private Sub UnlockGUI()
         .Caption = "Database"
     End With
 
-    ' enable & clear rank
+    ' enable rank field
     txtRank.Enabled = True
-    txtRank.text = vbNullString
-    
-    ' enable & clear flags
-    txtFlags.Enabled = True
-    txtFlags.text = vbNullString
 
-    ' loop through listbox and clear selected items
-    For i = 1 To lvGroups.ListItems.Count
-        lvGroups.ListItems(i).Checked = False
-    Next i
+    ' enable flags field
+    txtFlags.Enabled = True
     
-    ' enable group list
-    'lstGroups.Enabled = True
-    
-    ' enable & clear ban message
+    ' enable ban message field
     txtBanMessage.Enabled = True
-    txtBanMessage.text = vbNullString
-    
-    ' reset created on & modified on labels
-    lblCreatedOn.Caption = "(not applicable)"
-    lblModifiedOn.Caption = "(not applicable)"
-    
-    ' reset created by & modified by labels
-    lblCreatedBy.Caption = vbNullString
-    lblModifiedBy.Caption = vbNullString
     
     ' disable entry save button
     btnSave(1).Enabled = False
@@ -1127,6 +1115,9 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
 
     ' ...
     If (node.Index > 1) Then
+        ' ...
+        Call ClearGroupList
+    
         ' ...
         frmDatabase.Caption = node.text
         
