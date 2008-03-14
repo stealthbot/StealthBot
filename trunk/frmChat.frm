@@ -827,6 +827,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -852,6 +853,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3036,7 +3038,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     sTemp = ParseStatstring(.Statstring, sOutBuf, sTemp)
                     
                     sTemp = "Ping at login: " & .Ping & vbCrLf
-                    sTemp = sTemp & "Flags: " & FlagDescription(.flags) & vbCrLf
+                    sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
                     sTemp = sTemp & sOutBuf
                 
@@ -3831,14 +3833,14 @@ Private Sub mnuUserlistWhois_Click()
     With RTBColors
         If Temp.Access > -1 Then
             If Temp.Access > 0 Then
-                If Temp.flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & " and flags " & Temp.flags & "."
+                If Temp.Flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & " and flags " & Temp.Flags & "."
                 Else
                     AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & "."
                 End If
             Else
-                If Temp.flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with flags " & Temp.flags & "."
+                If Temp.Flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with flags " & Temp.Flags & "."
                 Else
                     AddChat .ConsoleText, "User not found."
                 End If
@@ -4378,7 +4380,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 ElseIf ((s = "/flags") And (MDebug("debug"))) Then
                                     For n = 1 To colUsersInChannel.Count
                                         With colUsersInChannel.Item(n)
-                                            AddChat RTBColors.ConsoleText, .Username & Space(4) & .flags
+                                            AddChat RTBColors.ConsoleText, .Username & Space(4) & .Flags
                                         End With
                                     Next n
                                     
@@ -4426,7 +4428,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     'End If
                                     
                                     Temp.Access = 201
-                                    Temp.flags = "A"
+                                    Temp.Flags = "A"
                                     
                                     m = OutFilterMsg(s)
                                     
@@ -5206,7 +5208,7 @@ Private Sub UpTimer_Timer()
                         If .TimeSinceTalk() > BotVars.IB_Wait Then
                             .InternalFlags = 0
                             
-                            If Not ((.flags And USER_CHANNELOP&) = USER_CHANNELOP&) And Not .Safelisted Then
+                            If Not ((.Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And Not .Safelisted Then
                                 Ban .Username & " Idle for " & BotVars.IB_Wait & "+ seconds", (AutoModSafelistValue - 1), IIf(BotVars.IB_Kick, 1, 0)
                             End If
                         End If
@@ -5219,7 +5221,7 @@ Private Sub UpTimer_Timer()
                 ThisPos = checkChannel(.Username)
                 
                 If ThisPos > 0 And ThisPos < lvChannel.ListItems.Count Then
-                    newColor = GetNameColor(.flags, .TimeSinceTalk(), .IsSelf)
+                    newColor = GetNameColor(.Flags, .TimeSinceTalk(), .IsSelf)
                     
                     If lvChannel.ListItems(ThisPos).ForeColor <> newColor Then
                         lvChannel.ListItems(ThisPos).ForeColor = newColor

@@ -243,6 +243,18 @@ Public Property Get Name() As String
     
 End Property
 
+Public Property Get datasrc() As String
+
+    datasrc = m_datasrc
+    
+End Property
+
+Public Property Let datasrc(str As String)
+
+    m_datasrc = str
+    
+End Property
+
 Public Property Get Aliases() As Collection
 
     ' ...
@@ -304,15 +316,37 @@ Public Property Let Notes(strNotes As String)
     
 End Property
 
-Public Property Get Params() As Collection
+Public Property Get params() As Collection
 
-    Set Params = m_params
+    Set params = m_params
 
 End Property
 
 Public Function Save() As Boolean
+    Dim node     As IXMLDOMNode
+    Dim params   As IXMLDOMNode
+    Dim tmp_attr As IXMLDOMAttribute
+    Dim tmp_node As IXMLDOMNode
+    Dim i        As Integer
+    
+    tmp_attr.text = m_name
+
+    node.Attributes.setNamedItem tmp_attr
+    
+    'tmp_node.nodeName = "arguments"
+    
+    'node.appendChild "arguments"
+    
+    For i = 1 To params
+        
+        
+    Next i
 
     ' ...
+    Call Delete
+    
+    
+    m_command_node.parentNode.appendChild node
     
 End Function
 
@@ -320,8 +354,5 @@ Public Function Delete() As Boolean
 
     ' ...
     m_command_node.parentNode.removeChild m_command_node
-    
-    ' ...
-    Set m_command_node = Nothing
 
 End Function

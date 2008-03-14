@@ -144,7 +144,7 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
     Dim game   As String   ' ...
     Dim pStats As String   ' ...
     Dim Clan   As String   ' ...
-    Dim pos    As Integer  ' ...
+    Dim Pos    As Integer  ' ...
 
     game = ParseStatstring(OriginalStatstring, pStats, Clan)
     
@@ -154,10 +154,10 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
                 RTBColors.JoinText, " is using " & pStats)
     End If
     
-    pos = checkChannel(Username)
+    Pos = checkChannel(Username)
     
-    If (pos) Then
-        Set found = frmChat.lvChannel.ListItems(pos)
+    If (Pos) Then
+        Set found = frmChat.lvChannel.ListItems(Pos)
         
         i = UsernameToIndex(Username)
         
@@ -191,12 +191,12 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     Dim found      As ListItem ' ...
     
     Dim i          As Integer  ' ...
-    Dim pos        As Integer  ' ...
+    Dim Pos        As Integer  ' ...
     Dim squelching As Boolean  ' ...
     
     i = UsernameToIndex(Username)
     
-    pos = checkChannel(Username)
+    Pos = checkChannel(Username)
     
     If (((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
         ((prevflags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
@@ -205,7 +205,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
             RTBColors.JoinedChannelName, Username, RTBColors.JoinedChannelText, _
                 " has acquired ops.")
                 
-        Call frmChat.lvChannel.ListItems.Remove(pos)
+        Call frmChat.lvChannel.ListItems.Remove(Pos)
     
         Call AddName(Username, colUsersInChannel.Item(i).Product, Flags, Ping)
     End If
@@ -213,7 +213,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     If (StrComp(gChannel.Current, "The Void", vbBinaryCompare) = 0) Then
         If (Not (frmChat.mnuDisableVoidView.Checked)) Then
             If (frmChat.lvChannel.ListItems.Count < 200) Then
-                If (Not (pos)) Then
+                If (Not (Pos)) Then
                     frmChat.lvChannel.Enabled = False
                 
                     Call AddName(Username, Product, Flags, Ping)
@@ -230,27 +230,27 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
         squelching = True
     
-        If (pos) Then
+        If (Pos) Then
             With colUsersInChannel(i)
                 frmChat.lvChannel.Enabled = False
     
-                Call frmChat.lvChannel.ListItems.Remove(pos)
+                Call frmChat.lvChannel.ListItems.Remove(Pos)
     
-                Call AddName(.Username, .Product, Flags, Ping, .Clan, pos)
+                Call AddName(.Username, .Product, Flags, Ping, .Clan, Pos)
     
                 frmChat.lvChannel.Enabled = True
             End With
         End If
     Else
         ' is user being unsquelched?
-        If (pos) Then
+        If (Pos) Then
             If ((prevflags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
                 With colUsersInChannel(i)
                     frmChat.lvChannel.Enabled = False
     
-                    Call frmChat.lvChannel.ListItems.Remove(pos)
+                    Call frmChat.lvChannel.ListItems.Remove(Pos)
     
-                    Call AddName(.Username, .Product, Flags, Ping, .Clan, pos)
+                    Call AddName(.Username, .Product, Flags, Ping, .Clan, Pos)
                     
                     frmChat.lvChannel.Enabled = True
                 End With
@@ -285,7 +285,7 @@ Public Sub Event_QueuedTalk(ByVal Username As String, ByVal Flags As Long, ByVal
     End If
     
     If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or _
-        ((Flags And USER_SYSOP&) = USER_SYSOP&)) Then
+            ((Flags And USER_SYSOP&) = USER_SYSOP&)) Then
        
         TextColor = RGB(97, 105, 255)
         CaratColor = RGB(97, 105, 255)

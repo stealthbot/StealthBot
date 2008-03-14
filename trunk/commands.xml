@@ -237,7 +237,7 @@
     </access>
   </command>
 
-  <command name="whoami">
+  <command name="whoami" datasrc="external">
     <documentation>
       <description>
         This command will state the requesting user's rank and/or flags.
@@ -2095,7 +2095,15 @@
       <description>
         sets the bot's command identifier to the specified.
       </description>
-    </documentation>    
+    </documentation>
+ 
+    <arguments>
+      <argument name="trigger">
+        <restriction name="DISABLE_FORWARD_SLASH">
+          <match message="//+" />
+        </restriction>
+      </argument>
+    </arguments>
 
     <access>
       <rank>80</rank>
