@@ -1067,11 +1067,6 @@ End Sub
 Private Sub UnlockGUI()
     Dim i As Integer ' ...
 
-    ' set our default frame caption
-    With frmDatabase
-        .Caption = "Database"
-    End With
-
     ' enable rank field
     txtRank.Enabled = True
 
