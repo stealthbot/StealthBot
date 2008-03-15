@@ -14,9 +14,9 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal datasrc =
     ' ...
     OpenCommand.OpenCommand strCommand, datasrc
     
-    If (OpenCommand.Name = vbNullString) Then
-        OpenCommand.OpenCommand convertAlias(strCommand), datasrc
-    End If
+    'If (OpenCommand.Name = vbNullString) Then
+    '    OpenCommand.OpenCommand convertAlias(strCommand), datasrc
+    'End If
     
 End Function
 

@@ -1216,25 +1216,22 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
     End If
 End Function
 
-Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String, _
-    Optional ByVal Ping As Long) As Boolean
+Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
+        Long) As Boolean
     
     Dim i As Integer ' ...
     
-    Msg = LCase$(Msg)
-    
     For i = 0 To UBound(gFilters)
-        If (Len(gFilters(i)) > 1) Then
+        If (Len(gFilters(i)) > 0) Then
             If (InStr(1, gFilters(i), "%", vbBinaryCompare) > 0) Then
-                If (InStr(1, Msg, LCase$(DoReplacements(gFilters(i), _
-                    Username, Ping))) > 0) Then
+                If (InStr(1, Msg, DoReplacements(gFilters(i), Username, Ping), vbTextCompare) > 0) Then
                     
                     CheckMsg = True
                     
                     Exit Function
                 End If
             Else
-                If (InStr(1, Msg, LCase$(gFilters(i)), vbBinaryCompare) > 0) Then
+                If (InStr(1, Msg, gFilters(i), vbTextCompare) <> 0) Then
                     CheckMsg = True
                     
                     Exit Function
@@ -2653,9 +2650,9 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         ' ...
         If (IsCommand.Name <> vbNullString) Then
             ' ...
-            'If (IsCommand.docs.Name = vbNullString) Then
-            '    IsCommand.Name = convertAlias(IsCommand.Name)
-            'End If
+            If (IsCommand.docs.Name = vbNullString) Then
+                IsCommand.Name = convertAlias(IsCommand.Name)
+            End If
             
             ' ...
             If ((IsCommand.docs.Name = vbNullString) Or _

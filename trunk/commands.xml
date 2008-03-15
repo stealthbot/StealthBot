@@ -29,6 +29,32 @@
     </access>
   </command>
 
+  <command name="findgrp">
+    <alias>findgroup</alias>
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+
+    <arguments>
+      <argument name="group">
+        <documentation>
+          <description>
+            ...
+          </description>
+        </documentation>
+      </argument>
+    </arguments>
+
+    <access>
+      <rank>20</rank>
+      <flag>A</flag>
+      <flag>a</flag>
+    </access>
+  </command>
+
   <command name="getmail">
     <documentation>
       <description>

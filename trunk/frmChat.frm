@@ -5373,6 +5373,10 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         ' ...
                         Command = Splt(0) & Space$(1) & reverseUsername(Splt(1)) & _
                             Space$(1)
+                            
+                        If (UBound(Splt) > 1) Then
+                            ReDim Preserve Splt(0 To UBound(Splt) - 1)
+                        End If
                     End If
                 ElseIf ((Command = "f") Or _
                         (Command = "friends")) Then
@@ -5406,6 +5410,10 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                                         Command = Command & Splt(2) & Space$(1)
                                     End If
                             End Select
+                            
+                            If (UBound(Splt) > 2) Then
+                                ReDim Preserve Splt(0 To UBound(Splt) - 1)
+                            End If
                         End If
                     End If
                 Else
@@ -5419,9 +5427,9 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 ' ...
                 If (UBound(Splt) > 0) Then
                     ' ...
-                    If (UBound(Splt) > 1) Then
-                        ReDim Preserve Splt(0 To UBound(Splt) - 1)
-                    End If
+                    'If (UBound(Splt) > 1) Then
+                    '    ReDim Preserve Splt(0 To UBound(Splt) - 1)
+                    'End If
                     
                     ' ...
                     strTmp = Mid$(strTmp, _
