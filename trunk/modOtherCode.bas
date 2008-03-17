@@ -2453,7 +2453,7 @@ ERROR_HANDLER:
 End Function
 
 ' Thanks strtok()!
-Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional DontCheckTrigger As Boolean = _
+Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional IsLocal As Boolean = _
     False, Optional ByVal datasrc As String = "internal") As clsCommandObj
     
     On Error GoTo ERROR_HANDLER
@@ -2495,30 +2495,30 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     End If
 
     ' ...
-    If (Left$(Message, 1) = "/") Then
+    If (IsLocal) Then
         ' ...
-        console = True
-        
-        ' ...
-        If (Left$(Message, 2) = "//") Then
-            PublicOutput = True
-            
-            If (CropLen = 0) Then
-                CropLen = Len("//")
+        If (Left$(Message, 1) = "/") Then
+            ' ...
+            If (Left$(Message, 2) = "//") Then
+                ' ...
+                PublicOutput = True
+                
+                ' ...
+                If (CropLen = 0) Then
+                    CropLen = Len("//")
+                End If
+            Else
+                ' ...
+                If (CropLen = 0) Then
+                    CropLen = Len("/")
+                End If
             End If
         Else
-            PublicOutput = False
-            
-            If (CropLen = 0) Then
-                CropLen = Len("/")
-            End If
+            ' ...
+            CropLen = Len(Message)
+
+            Exit Function
         End If
-    Else
-        ' ...
-        console = False
-        
-        ' ...
-        PublicOutput = False
     End If
     
     ' ...
@@ -2529,7 +2529,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     End If
     
     ' ...
-    If ((console = False) And (DontCheckTrigger = False)) Then
+    If (IsLocal = False) Then
         ' ...
         If (Left$(tmp, Len(BotVars.TriggerLong)) = BotVars.TriggerLong) Then
             ' ...
@@ -2551,7 +2551,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                 ' ...
                 If (Left$(tmp, 1) = "?") Then
                     ' ...
-                    If (StrComp("?trigger", vbTextCompare) = 0) Then
+                    If (StrComp(tmp, "?trigger", vbTextCompare) = 0) Then
                         ' ...
                         CropLen = (CropLen + Len("?"))
                     
@@ -2625,7 +2625,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     End If
     
     ' ...
-    If ((console) Or (HasTrigger)) Then
+    If ((IsLocal) Or (HasTrigger)) Then
         ' ...
         index = InStr(1, tmp, Space$(1), vbBinaryCompare)
         
@@ -2642,7 +2642,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         IsCommand.Name = LCase$(IsCommand.Name)
 
         With IsCommand
-            .IsLocal = console
+            .IsLocal = IsLocal
             .PublicOutput = PublicOutput
             .datasrc = datasrc
         End With
@@ -2690,11 +2690,11 @@ Public Function convertAlias(ByVal cmdName As String) As String
 
     ' ...
     If (Len(cmdName) > 0) Then
-        Dim Commands As MSXML2.DOMDocument
-        Dim Command  As MSXML2.IXMLDOMNode
+        Dim commands As MSXML2.DOMDocument
+        Dim alias    As MSXML2.IXMLDOMNode
         
         ' ...
-        Set Commands = New MSXML2.DOMDocument
+        Set commands = New MSXML2.DOMDocument
         
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
@@ -2705,19 +2705,17 @@ Public Function convertAlias(ByVal cmdName As String) As String
         End If
         
         ' ...
-        Call Commands.Load(App.Path & "\commands.xml")
+        Call commands.Load(App.Path & "\commands.xml")
         
         ' ...
-        Set Command = Commands.documentElement.selectSingleNode("./command[alias='" & _
-                cmdName & "']")
+        Set alias = _
+                commands.documentElement.selectSingleNode("./command/alias[text()='" & cmdName & "']")
         
         ' ...
-        If (Not (Command Is Nothing)) Then
+        If (Not (alias Is Nothing)) Then
             ' ...
-            convertAlias = Command.Attributes.getNamedItem("name").text
-            
-            frmChat.AddChat vbRed, convertAlias
-            
+            convertAlias = alias.parentNode.Attributes.getNamedItem("name").text
+    
             ' ...
             Exit Function
         End If
@@ -2725,7 +2723,8 @@ Public Function convertAlias(ByVal cmdName As String) As String
     
     ' ...
     convertAlias = cmdName
-    
+
+    ' ...
     Exit Function
     
 ' ...
@@ -2734,7 +2733,7 @@ ERROR_HANDLER:
         "during alias lookup.")
         
     ' ...
-    convertAlias = False
+    convertAlias = cmdName
 
     Exit Function
 End Function

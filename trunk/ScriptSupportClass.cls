@@ -332,7 +332,7 @@ Public Function CommandEx(ByVal Username As String, ByVal Message As String, Opt
         ' ...
         With dbAccess
             .Access = 200
-            .flags = "A"
+            .Flags = "A"
         End With
     Else
         ' ...
@@ -418,7 +418,7 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Optional ByRef flags, _
+Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Optional ByRef Flags, _
     Optional ByRef entryType As String = "USER") As Object
 
     Dim Temp   As udtGetAccessResponse
@@ -429,7 +429,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     
     With Temp
         Access = .Access
-        flags = .flags
+        Flags = .Flags
     End With
     
     ' ...
@@ -440,7 +440,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
         .entryType = Temp.Type
         .Name = Temp.Username
         .rank = Temp.Access
-        .flags = Temp.flags
+        .Flags = Temp.Flags
         .CreatedOn = Temp.AddedOn
         .CreatedBy = Temp.AddedBy
         .ModifiedOn = Temp.ModifiedOn
@@ -472,7 +472,7 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef flags, _
+Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
     Optional ByRef entryType As String = "USER") '// yum, Variants >:\
 
     Dim Temp As udtGetAccessResponse
@@ -481,7 +481,7 @@ Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef flags, _
     
     With Temp
         Access = .Access
-        flags = .flags
+        Flags = .Flags
     End With
 End Sub
 
@@ -632,7 +632,7 @@ Public Function GetInternalData(ByVal iIndex As Integer, ByVal lDataType As Long
                 GetInternalData = colUsersInChannel.Item(iIndex).Clan
                 
             Case GID_FLAGS
-                GetInternalData = colUsersInChannel.Item(iIndex).flags
+                GetInternalData = colUsersInChannel.Item(iIndex).Flags
             
             Case GID_PING
                 GetInternalData = colUsersInChannel.Item(iIndex).Ping

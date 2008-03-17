@@ -1377,33 +1377,11 @@
 
     <arguments>
       <argument name="username">
-         <restriction name="BAN_SAFELISTED_RANK">
-           <match user_rank="20" />
- 
-           <access>
-             <rank>90</rank>
-             <flag>O</flag>
-           </access>
-         </restriction>
-
-         <restriction name="BAN_SAFELISTED_WILDCARD_RANK">
-           <match user_rank="20" />
-           <match message="[/*]+" />
- 
-           <access>
-             <rank>90</rank>
-             <flag>O</flag>
-           </access>
-         </restriction>
-
-         <restriction name="BAN_SAFELIST_FLAGS">
-           <match user_flags="S" /> 
-
-           <access>
-             <rank>90</rank>
-             <flag>O</flag>
-           </access>
-         </restriction>
+        <documentation>
+          <description>
+            ...
+          </description>
+        </documentation>
       </argument>
     </arguments>
 
@@ -1578,6 +1556,22 @@
     <documentation>
       <description>
         The "ipban" command will instruct the bot to squelch and ban a specified user, and then ban all other users also matching the squelch.
+      </description>
+    </documentation>
+
+    <access>
+      <rank>70</rank>
+      <flag>O</flag>
+      <flag>o</flag>
+    </access>
+  </command>
+
+  <command name="ipbans" token="operator">
+    <alias>ipbanning</alias>
+
+    <documentation>
+      <description>
+        ...
       </description>
     </documentation>
 
@@ -2127,6 +2121,8 @@
       <argument name="trigger">
         <restriction name="DISABLE_FORWARD_SLASH">
           <match message="//+" />
+
+          <access />
         </restriction>
       </argument>
     </arguments>
@@ -2549,8 +2545,16 @@
   </command>
 
   <command name="rejoin">
-    <alias>rj</alias>
+    <documentation>
+      <description>
+        makes the bot rejoin the current channel.
+      </description>
+    </documentation>    
 
+    <access />
+  </command>
+
+  <command name="rj">
     <documentation>
       <description>
         makes the bot rejoin the current channel.

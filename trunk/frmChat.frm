@@ -1443,7 +1443,7 @@ Private Sub Form_Load()
     #If (BETA = 1) Then
         #If (DEV_RELEASE = 1) Then
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
-                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "4"
+                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "5"
         #Else
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
                 ZeroOffsetEx(App.REVISION, 3) & " Stable"
@@ -5382,7 +5382,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         (Command = "friends")) Then
                     
                     ' ...
-                    Splt() = Split(strTmp, Space$(1), 3)
+                    Splt() = Split(strTmp, Space$(1), 4)
                     
                     ' ...
                     Command = Splt(0) & Space$(1)
@@ -5396,9 +5396,12 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         If (UBound(Splt) >= 2) Then
                             ' ...
                             Select Case (LCase$(Splt(1)))
-                                Case "m"
-                                Case "msg"
+                                Case "m", "msg"
+                                    ' ...
+                                    ReDim Preserve Splt(0 To UBound(Splt) - 1)
+
                                 Case Else
+                                    ' ...
                                     If ((StrReverse$(BotVars.Product) = "WAR3") Or _
                                         (StrReverse$(BotVars.Product) = "W3XP")) Then
                                         
@@ -5410,10 +5413,6 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                                         Command = Command & Splt(2) & Space$(1)
                                     End If
                             End Select
-                            
-                            If (UBound(Splt) > 2) Then
-                                ReDim Preserve Splt(0 To UBound(Splt) - 1)
-                            End If
                         End If
                     End If
                 Else

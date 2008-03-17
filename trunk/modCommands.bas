@@ -37,7 +37,7 @@ Public floodCap As Byte   ' ...?
 ' prepares commands for processing, and calls helper functions associated with
 ' processing
 Public Function ProcessCommand(ByVal Username As String, ByVal Message As String, _
-    Optional ByVal InBot As Boolean = False, Optional ByVal WhisperedIn As Boolean = False) As Boolean
+    Optional ByVal IsLocal As Boolean = False, Optional ByVal Whispered As Boolean = False) As Boolean
     
     On Error GoTo ERROR_HANDLER
     
@@ -49,10 +49,10 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Dim bln              As Boolean
     
     ' replace message variables
-    Message = Replace(Message, "%me", IIf(InBot, CurrentUsername, Username), 1)
+    Message = Replace(Message, "%me", IIf(IsLocal, CurrentUsername, Username), 1)
 
     ' ...
-    Set Command = IsCommand(Message)
+    Set Command = IsCommand(Message, IsLocal)
 
     ' ...
     Do While (Command.Name <> vbNullString)
@@ -61,7 +61,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                 (HasAccess(Username, Command.Name, Command.Args))) Then
         
             ' ...
-            If (Command.IsLocal) Then
+            If (IsLocal) Then
                 With dbAccess
                     .Access = 201
                 End With
@@ -71,14 +71,14 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             
             ' ...
             Call ExecuteCommand(Username, dbAccess, Command.Name & Space$(1) & Command.Args, _
-                    InBot, command_return)
+                    IsLocal, command_return)
             
             ' ...
             If (command_return(0) <> vbNullString) Then
                 ' ...
                 For i = LBound(command_return) To UBound(command_return)
                     ' ...
-                    If (Command.IsLocal) Then
+                    If (IsLocal) Then
                         ' ...
                         If (Command.PublicOutput) Then
                             AddQ command_return(i), PRIORITY.CONSOLE_MESSAGE
@@ -87,7 +87,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                         End If
                     Else
                         ' ...
-                        If (WhisperedIn) Then
+                        If (Whispered) Then
                             AddQ "/w " & Username & Space$(1) & command_return(i), _
                                     PRIORITY.COMMAND_RESPONSE_MESSAGE
                         Else
@@ -102,11 +102,11 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         Count = (Count + 1)
         
         ' ...
-        Set Command = IsCommand(vbNullString)
+        Set Command = IsCommand(vbNullString, IsLocal)
     Loop
     
     ' ...
-    If (InBot) Then
+    If (IsLocal) Then
         ' ...
         If ((bln = False) And (Count = 0)) Then
             AddQ Message
@@ -403,7 +403,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
     End If
 
     ' initial access check
-    If (IsCorrectSyntax(cmdName, msgData, "internal") = False) Then
+    If (IsCorrectSyntax(cmdName, msgData) = False) Then
         cmdRet(0) = "Error: The syntax for the specified command is invalid. [" & _
                 BotVars.TriggerLong & "help " & cmdName & " for further information]"
     
@@ -442,6 +442,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "clearbanlist": Call OnClearBanList(Username, dbAccess, msgData, InBot, cmdRet())
         Case "kickonyell":   Call OnKickOnYell(Username, dbAccess, msgData, InBot, cmdRet())
         Case "rejoin":       Call OnRejoin(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "rj":           Call OnRj(Username, dbAccess, msgData, InBot, cmdRet())
         Case "plugban":      Call OnPlugBan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "clientbans":   Call OnClientBans(Username, dbAccess, msgData, InBot, cmdRet())
         Case "setvol":       Call OnSetVol(Username, dbAccess, msgData, InBot, cmdRet())
@@ -1179,7 +1180,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         If ((MyFlags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
             ' ...
             cmdRet(0) = "Error: This command requires channel " & _
-                "operator status."
+                    "operator status."
         
             Exit Function
         End If
@@ -1187,9 +1188,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         ' ...
         For i = 1 To colUsersInChannel.Count
             ' ...
-            If (colUsersInChannel(i).Username <> CurrentUsername) Then
+            If (StrComp(colUsersInChannel(i).Username, CurrentUsername, vbTextCompare) <> 0) Then
                 ' ...
-                If ((colUsersInChannel(i).Flags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
+                If ((colUsersInChannel(i).Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
                     ' ...
                     opsCount = (opsCount + 1)
                 End If
@@ -1206,13 +1207,13 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 ' ...
                 For i = 1 To frmChat.lvClanList.ListItems.Count
                     ' ...
-                    If (StrComp(frmChat.lvClanList.ListItems(i).text, CurrentUsername, _
-                            vbTextCompare) <> 0) Then
-                        
+                    If (StrComp(frmChat.lvClanList.ListItems(i).text, reverseUsername(CurrentUsername), _
+                                vbTextCompare) <> 0) Then
+
                         ' ...
                         If (frmChat.lvClanList.ListItems(i).SmallIcon = 3) Then
                             ' ...
-                            If (UsernameToIndex(frmChat.lvClanList.ListItems(i).text) > 0) Then
+                            If (UsernameToIndex(convertUsername(frmChat.lvClanList.ListItems(i).text)) > 0) Then
                                 ' ...
                                 arrUsers(userCount) = _
                                     frmChat.lvClanList.ListItems(i).text
@@ -1226,33 +1227,63 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                         End If
                     End If
                 Next i
+                
+                ' ...
+                If (opsCount > userCount) Then
+                    ' ...
+                    cmdRet(0) = "Error: There is currently a channel moderator present that cannot be " & _
+                            "removed from his or her position."
+                        
+                    Exit Function
+                End If
+                
+                ' ...
+                If (userCount) Then
+                    ' demote shamans
+                    For i = 0 To (userCount - 1)
+                        ' ...
+                        Call frmChat.AddChat(vbRed, "Demote: " & arrUsers(i))
+                    
+                        ' ...
+                        With PBuffer
+                            .InsertDWord &H1
+                            .InsertNTString arrUsers(i)
+                            .InsertByte &H2 ' General member (Grunt)
+                            .SendPacket &H7A
+                        End With
+                        
+                        ' ...
+                        Call Pause(200, True, True)
+                    Next i
+                End If
             End If
-            
+        End If
+        
+        ' ...
+        If (StrComp(Left$(gChannel.Current, 3), "Op ", vbTextCompare) = 0) Then
             ' ...
-            If (opsCount > userCount) Then
+            If (opsCount >= 2) Then
                 ' ...
                 cmdRet(0) = "Error: There is currently a channel moderator present that cannot be " & _
-                    "removed from his or her position."
-            End If
-            
-            ' ...
-            If (userCount) Then
-                ' demote shamans
-                For i = 0 To (userCount - 1)
-                    ' ...
-                    Call frmChat.AddChat(vbRed, "Demote: " & arrUsers(i))
+                                "removed from his or her position."
                 
+                ' ...
+                Exit Function
+            End If
+        ElseIf (StrComp(Left$(gChannel.Current, 5), "Clan ", vbTextCompare) = 0) Then
+            ' ...
+            If ((StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) <> 0) Or _
+                    (Clan.MyRank <= 2)) Then
+                
+                ' ...
+                If (opsCount >= 2) Then
                     ' ...
-                    With PBuffer
-                        .InsertDWord &H1
-                        .InsertNTString arrUsers(i)
-                        .InsertByte &H2 ' General member (Grunt)
-                        .SendPacket &H7A
-                    End With
+                    cmdRet(0) = "Error: There is currently a channel moderator present that " & _
+                            "cannot be removed from his or her position."
                     
                     ' ...
-                    Call Pause(200, True, True)
-                Next i
+                    Exit Function
+                End If
             End If
         End If
         
@@ -1577,6 +1608,15 @@ Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     ' This command will make the bot rejoin the current channel.
     
+    ' ...
+    Call RejoinChannel(gChannel.Current)
+End Function ' end function OnRejoin
+
+' handle rejoin command
+Private Function OnRj(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will make the bot rejoin the current channel.
+    
     ' join temporary channel
     Call AddQ("/join " & CurrentUsername & " Rejoin", PRIORITY.COMMAND_RESPONSE_MESSAGE, _
         Username)
@@ -1820,15 +1860,17 @@ Private Function OnIPBans(ByVal Username As String, ByRef dbAccess As udtGetAcce
         
         tmpBuf = "IPBanning activated."
         
-        If ((MyFlags = 2) Or (MyFlags = 18)) Then
-            For i = 1 To colUsersInChannel.Count
-                Select Case colUsersInChannel.Item(i).Flags
-                    Case 20, 30, 32, 48
-                        Call AddQ("/ban " & colUsersInChannel.Item(i).Username & _
-                            " IPBanned.")
-                End Select
-            Next i
-        End If
+        Call checkUsers
+        
+        'If ((MyFlags = 2) Or (MyFlags = 18)) Then
+        '    For i = 1 To colUsersInChannel.Count
+        '        Select Case colUsersInChannel.Item(i).Flags
+        '            Case 20, 30, 32, 48
+        '                Call AddQ("/ban " & colUsersInChannel.Item(i).Username & _
+        '                    " IPBanned.")
+        '        End Select
+        '    Next i
+        'End If
     ElseIf (Left$(msgData, 3) = "off") Then
         BotVars.IPBans = False
         
@@ -3842,7 +3884,7 @@ Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             tmpSend = Username & " says: " & _
                 msgData
         End If
-        
+
         Call AddQ(tmpSend, PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
     End If
 
@@ -6778,11 +6820,11 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
     
     ' ...
     If (Len(CWord) > 0) Then
-        Dim Commands As MSXML2.DOMDocument
+        Dim commands As MSXML2.DOMDocument
         Dim Command  As MSXML2.IXMLDOMNode
         
         ' ...
-        Set Commands = New MSXML2.DOMDocument
+        Set commands = New MSXML2.DOMDocument
         
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
@@ -6793,10 +6835,10 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
         End If
 
         ' ...
-        Call Commands.Load(App.Path & "\commands.xml")
+        Call commands.Load(App.Path & "\commands.xml")
         
         ' ...
-        For Each Command In Commands.documentElement.childNodes
+        For Each Command In commands.documentElement.childNodes
             Dim accessGroup As MSXML2.IXMLDOMNode
             Dim Access      As MSXML2.IXMLDOMNode
         
@@ -6899,11 +6941,11 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
     
     ' ...
     If (Len(cmdName) > 0) Then
-        Dim Commands As MSXML2.DOMDocument
+        Dim commands As MSXML2.DOMDocument
         Dim Command  As MSXML2.IXMLDOMNode
         
         ' ...
-        Set Commands = New MSXML2.DOMDocument
+        Set commands = New MSXML2.DOMDocument
         
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
@@ -6914,10 +6956,10 @@ Public Sub grabCommandData(ByVal cmdName As String, cmdRet() As String)
         End If
 
         ' ...
-        Call Commands.Load(App.Path & "\commands.xml")
+        Call commands.Load(App.Path & "\commands.xml")
         
         ' ...
-        For Each Command In Commands.documentElement.childNodes
+        For Each Command In commands.documentElement.childNodes
             Dim blnFound As Boolean ' ...
         
             ' ...

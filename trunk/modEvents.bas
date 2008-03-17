@@ -41,13 +41,13 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         End With
     Else
         Dim UserToAdd As clsUserInfo
-        Dim clan      As String
+        Dim Clan      As String
         Dim parsed    As String
         
         ' ...
         Set UserToAdd = New clsUserInfo
         
-        Call ParseStatstring(Message, parsed, clan)
+        Call ParseStatstring(Message, parsed, Clan)
     
         ' ...
         With UserToAdd
@@ -58,7 +58,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
             .Safelisted = GetSafelist(Username)
             .Statstring = Message
             .JoinTime = GetTickCount
-            .clan = clan
+            .Clan = Clan
             .IsSelf = (StrComp(Username, CurrentUsername, _
                 vbBinaryCompare) = 0)
             .InternalFlags = 0
@@ -107,10 +107,6 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                     End With
                 Next i
             End If
-            
-            ' We don't want anyone here that isn't
-            ' supposed to be here.
-            Call checkUsers
         End If
     End If
     
@@ -141,6 +137,13 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         
         Call clsChatQueue.StoreStatusUpdate(Flags, prevflags, Ping, Product, _
             vbNullString, vbNullString, vbNullString)
+    End If
+    
+    ' ...
+    If ((MyFlags And &H2) = &H2) Then
+        ' we don't want anyone here that isn't
+        ' supposed to be here.
+        Call checkUsers
     End If
     
     ' destroy instance of chat queue
@@ -178,7 +181,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     SharedScriptSupport.myChannel = ChannelName
     
-    If (StrComp(gChannel.Current, "Clan " & clan.Name, vbTextCompare) = 0) Then
+    If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
         
         PassedClanMotdCheck = False
         
@@ -551,8 +554,9 @@ Public Sub Event_ServerError(ByVal Message As String)
 End Sub
 
 Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
-    Const BANNED_MESSAGE   As String = " was banned by "
-    Const UNBANNED_MESSAGE As String = " was unbanned by "
+    Const BANNED_MESSAGE    As String = " was banned by "
+    Const UNBANNED_MESSAGE  As String = " was unbanned by "
+    Const SQUELCHED_MESSAGE As String = " has been squelched."
 
     Dim i      As Integer
     Dim Temp   As String
@@ -567,7 +571,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         Message = ToANSI
     End If
     
-    If (StrComp(gChannel.Current, "Clan " & clan.Name, vbTextCompare) = 0) Then
+    If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
         If (PassedClanMotdCheck = False) Then
             If (Message <> vbNullString) Then
                 Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
@@ -945,7 +949,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 .Username = Username
                 .Flags = Flags
                 .Ping = Ping
-                .clan = sClan
+                .Clan = sClan
                 .Statstring = OriginalStatstring
             End With
         End If
@@ -991,7 +995,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             .Safelisted = GetSafelist(Username)
             .Statstring = OriginalStatstring
             .JoinTime = GetTickCount
-            .clan = sClan
+            .Clan = sClan
             .IsSelf = (StrComp(Username, CurrentUsername, _
                 vbBinaryCompare) = 0)
         
@@ -1105,7 +1109,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             .Safelisted = GetSafelist(Username)
             .Statstring = OriginalStatstring
             .JoinTime = GetTickCount
-            .clan = sClan
+            .Clan = sClan
             .IsSelf = (StrComp(Username, CurrentUsername, _
                 vbBinaryCompare) = 0)
             .InternalFlags = 0

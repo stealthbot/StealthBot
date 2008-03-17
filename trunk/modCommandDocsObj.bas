@@ -12,11 +12,10 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal datasrc =
     Set OpenCommand = New clsCommandDocObj
     
     ' ...
-    OpenCommand.OpenCommand strCommand, datasrc
+    strCommand = Replace(strCommand, "'", "/'")
     
-    'If (OpenCommand.Name = vbNullString) Then
-    '    OpenCommand.OpenCommand convertAlias(strCommand), datasrc
-    'End If
+    ' ...
+    OpenCommand.OpenCommand strCommand, datasrc
     
 End Function
 
