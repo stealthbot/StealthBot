@@ -7012,11 +7012,14 @@ End Sub
 Private Sub mnuPopRem_Click()
     Dim l As Long
     l = TimeSinceLastRemoval
-    
+
     If l < 30 Then
-        AddChat RTBColors.ErrorMessageText, "You must wait " & l & " more seconds before you can remove another user from your clan."
+        AddChat RTBColors.ErrorMessageText, "You must wait " & 30 - l & " more seconds before you " & _
+                "can remove another user from your clan."
     Else
-        If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, "StealthBot") = vbYes Then
+        If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, _
+                "StealthBot") = vbYes Then
+                
             With PBuffer
                 If lvClanList.SelectedItem.index > 0 Then
                     .InsertDWord 1 'lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon

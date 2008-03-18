@@ -28,7 +28,7 @@ End Function
 
 Public Sub InviteToClan(Username As String) '//Works
     With PBuffer
-        .InsertDWORD &H1
+        .InsertDWord &H1
         .InsertNTString Username
         .SendPacket &H77
     End With
@@ -36,7 +36,7 @@ End Sub
 
 Public Sub SetClanMOTD(Message As String) '//Works
     With PBuffer
-        .InsertDWORD &H0
+        .InsertDWord &H0
         .InsertNTString Message
         .SendPacket &H7B
     End With
@@ -44,18 +44,18 @@ End Sub
 
 Public Sub PromoteMember(Username As String)
     With PBuffer
-        .InsertDWORD &HB
+        .InsertDWord &HB
         .InsertNonNTString Username
-        .InsertWORD &H3
+        .InsertWord &H3
         .SendPacket &H7A
     End With
 End Sub
 
 Public Sub DemoteMember(Username As String)
     With PBuffer
-        .InsertDWORD &H1
+        .InsertDWord &H1
         .InsertNTString Username
-        .InsertBYTE &H1
+        .InsertByte &H1
         .SendPacket &H7A
     End With
 End Sub
@@ -121,8 +121,9 @@ Public Function TimeSinceLastRemoval() As Long
     
     If LastRemoval > 0 Then
         l = GetTickCount
-        TimeSinceLastRemoval = (l - LastRemoval) / 1000
+        
+        TimeSinceLastRemoval = ((l - LastRemoval) / 1000)
     Else
-        TimeSinceLastRemoval = 31
+        TimeSinceLastRemoval = 30
     End If
 End Function
