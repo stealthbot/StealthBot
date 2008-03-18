@@ -3419,20 +3419,20 @@ End Sub
 Private Sub mnuPopSquelch_Click()
     On Error Resume Next
     
-    AddQ "/squelch " & IIf(Dii, "*", "") & GetSelectedUser
+    AddQ "/squelch " & GetSelectedUser
 End Sub
 
 
 Private Sub mnuPopUnsquelch_Click()
     On Error Resume Next
     
-    AddQ "/unsquelch " & IIf(Dii, "*", "") & GetSelectedUser
+    AddQ "/unsquelch " & GetSelectedUser
 End Sub
 
 Private Sub mnuPopWhisper_Click()
     On Error Resume Next
     If cboSend.text <> vbNullString Then
-        AddQ "/w " & IIf(Dii, "*", "") & GetSelectedUser & Space(1) & cboSend.text
+        AddQ "/w " & GetSelectedUser & Space(1) & cboSend.text
         
         cboSend.AddItem cboSend.text, 0
         cboSend.text = vbNullString
@@ -3451,11 +3451,7 @@ End Sub
 Private Sub mnuPopWhois_Click()
     On Error Resume Next
     
-    If Dii Then
-        AddQ "/whois *" & GetSelectedUser
-    Else
-        AddQ "/whois " & GetSelectedUser
-    End If
+    AddQ "/whois " & GetSelectedUser
 End Sub
 
 Private Sub mnuPopInvite_Click()
@@ -4690,7 +4686,7 @@ Private Sub QueueTimer_Timer()
                 ' ...
                 unsquelching = True
             End If
-            
+
             If ((QueueLoad < 3) And (QueueMaster < 16)) Then
                 If (Len(Message) <= 70) Then
                     QueueLoad = (QueueLoad + 1)
@@ -5382,7 +5378,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         (Command = "friends")) Then
                     
                     ' ...
-                    Splt() = Split(strTmp, Space$(1), 4)
+                    Splt() = Split(strTmp, Space$(1), 3)
                     
                     ' ...
                     Command = Splt(0) & Space$(1)
@@ -5402,6 +5398,9 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
 
                                 Case Else
                                     ' ...
+                                    Splt() = Split(strTmp, Space$(1), 4)
+                                
+                                    ' ...
                                     If ((StrReverse$(BotVars.Product) = "WAR3") Or _
                                         (StrReverse$(BotVars.Product) = "W3XP")) Then
                                         
@@ -5411,6 +5410,11 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                                     Else
                                         ' ...
                                         Command = Command & Splt(2) & Space$(1)
+                                    End If
+                                    
+                                    ' ...
+                                    If (UBound(Splt) >= 3) Then
+                                        Command = Command & Splt(3)
                                     End If
                             End Select
                         End If
@@ -5422,14 +5426,14 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     ' ...
                     strTmp = Mid$(strTmp, Len(Command) + 1)
                 End If
+                
+                ' ...
+                If (Len(Command) >= MAX_MESSAGE_LENGTH) Then
+                    Exit Sub
+                End If
 
                 ' ...
                 If (UBound(Splt) > 0) Then
-                    ' ...
-                    'If (UBound(Splt) > 1) Then
-                    '    ReDim Preserve Splt(0 To UBound(Splt) - 1)
-                    'End If
-                    
                     ' ...
                     strTmp = Mid$(strTmp, _
                         (Len(Join(Splt(), Space$(1))) + (Len(Space$(1))) + 1))
@@ -5522,7 +5526,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 ' previous message.
                 If ((QueueLoad = 0) And (GTC - LastGTC >= 10000)) Then
                     ' set default message delay when queue is empty (in ms)
-                    banDelay = 1
+                    banDelay = 10
                     
                     ' are we issuing a channel moderation command?
                     If ((StrComp(Left$(Send, 5), "/ban ", vbTextCompare) = 0) Or _
@@ -5540,7 +5544,16 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     End If
                     
                     ' set the delay before our next queue cycle
-                    frmChat.QueueTimer.Interval = banDelay
+                    With frmChat.QueueTimer
+                        ' disable timer with
+                        .Enabled = False
+                        
+                        ' set new delay
+                        .Interval = banDelay
+                        
+                        ' enable timer with new delay
+                        .Enabled = True
+                    End With
                 End If
                 
                 ' ...
@@ -6542,10 +6555,26 @@ Private Sub sckBNLS_Error(ByVal Number As Integer, description As String, ByVal 
     Call Event_BNLSError(Number, description)
 End Sub
 
+Function GetSelectedUsers() As Collection
+    Dim i As Integer ' ...
+
+    Set GetSelectedUsers = New Collection
+    
+    For i = 1 To lvChannel.ListItems.Count
+        If (lvChannel.ListItems(i).Selected) Then
+            Call GetSelectedUsers.Add(lvChannel.ListItems(i).text)
+        End If
+    Next i
+End Function
+
 Function GetSelectedUser() As String
-    If Not (lvChannel.SelectedItem Is Nothing) Then
-        GetSelectedUser = lvChannel.SelectedItem.text
+    If (lvChannel.SelectedItem Is Nothing) Then
+        GetSelectedUser = vbNullString
+    
+        Exit Function
     End If
+
+    GetSelectedUser = lvChannel.SelectedItem.text
 End Function
 
 Function GetRandomPerson() As String

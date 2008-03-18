@@ -1564,7 +1564,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         ' ...
         With frmChat.lvChannel
             .Enabled = False
-            
+
             .ListItems.Remove userIndex
             
             .Enabled = True

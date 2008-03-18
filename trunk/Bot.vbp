@@ -99,6 +99,7 @@ Module=modCommandDocsObj; modCommandDocsObj.bas
 Class=clsCommandParamsObj; clsCommandParamsObj.cls
 Module=modCommandParamObj; modCommandParamObj.bas
 Class=clsCommandRestrictionObj; clsCommandRestrictionObj.cls
+Class=clsMyClanObj; clsMyClanObj.cls
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""

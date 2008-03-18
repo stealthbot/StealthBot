@@ -403,12 +403,12 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
     End If
 
     ' initial access check
-    If (IsCorrectSyntax(cmdName, msgData) = False) Then
-        cmdRet(0) = "Error: The syntax for the specified command is invalid. [" & _
-                BotVars.TriggerLong & "help " & cmdName & " for further information]"
-    
-        Exit Function
-    End If
+    'If (IsCorrectSyntax(cmdName, msgData) = False) Then
+    '    cmdRet(0) = "Error: The syntax for the specified command is invalid. [" & _
+    '            BotVars.TriggerLong & "help " & cmdName & " for further information]"
+    '
+    '    Exit Function
+    'End If
     
     ' command switch
     Select Case (cmdName)
@@ -1253,7 +1253,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                         End With
                         
                         ' ...
-                        Call Pause(200, True, True)
+                        Call Pause(200, False, True)
                     Next i
                 End If
             End If
@@ -1288,13 +1288,13 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
         
         ' ...
-        Call Pause(2, True, False)
+        Call Pause(2, False, False)
         
         ' designate user
         Call bnetSend("/designate " & reverseUsername(msgData))
         
         ' ...
-        Call Pause(2, True, False)
+        Call Pause(2, False, False)
         
         ' rejoin channel
         Call bnetSend("/resign")
@@ -5606,10 +5606,19 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ' ...
     Set CommandDocs = OpenCommand(FindCommand)
     
+    ' ...
     If (CommandDocs.Name = vbNullString) Then
-        cmdRet(0) = "Sorry, but no related documentation could be found."
+        ' ...
+        Set CommandDocs = OpenCommand(convertAlias(FindCommand))
     
-        Exit Function
+        ' ...
+        If (CommandDocs.Name = vbNullString) Then
+            ' ...
+            cmdRet(0) = "Sorry, but no related documentation could be found."
+        
+            ' ...
+            Exit Function
+        End If
     End If
     
     tmpBuf(0) = "[" & CommandDocs.Name
