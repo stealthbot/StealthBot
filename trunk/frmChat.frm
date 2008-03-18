@@ -5537,9 +5537,9 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                             ' seed rnd() function
                             Randomize
                 
-                            ' calculate delay value between 100 and 600 ms
+                            ' calculate delay value between 100 and 500 ms
                             ' and add to default delay value
-                            banDelay = (banDelay + ((1 + Rnd() * 6) * 100))
+                            banDelay = (banDelay + ((1 + Rnd() * 5) * 100))
                         End If
                     End If
                     
