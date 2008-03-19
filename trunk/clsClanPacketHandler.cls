@@ -56,12 +56,12 @@ Public Event ClanMOTD(ByVal cookie As Long, ByVal Message As String)
 Public Sub RequestClanList()
     AwaitingClanList = 1
     
-    PBuffer.InsertDWORD &H1
+    PBuffer.InsertDWord &H1
     PBuffer.SendPacket &H7D
 End Sub
 
 Public Sub RequestClanMotd(Optional ByVal cookie As Long)
-    PBuffer.InsertDWORD cookie
+    PBuffer.InsertDWord cookie
     PBuffer.SendPacket &H7C
 End Sub
 
@@ -117,6 +117,8 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             iTemp = inBuf.DebuffDWORD
             bStatus = inBuf.DebuffBYTE
             
+            frmChat.AddChat vbRed, iTemp
+            
             Select Case bStatus
                 Case 0  'success
                     Select Case iTemp
@@ -144,13 +146,13 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             RaiseEvent ClanMemberList(ary())
             
             
-        Case SID_REMOVEMEMBER:    RaiseEvent RemoveUserReply(inBuf.GetBYTE)
+        Case SID_REMOVEMEMBER:    RaiseEvent RemoveUserReply(inBuf.GetByte)
         Case SID_MEMBERLEFT:      RaiseEvent MemberLeaves(inBuf.GetNTString)
         Case SID_REMOVEDFROMCLAN: RaiseEvent RemovedFromClan(inBuf.DebuffBYTE)
             
         Case SID_DISBANDCLAN
             inBuf.RemoveDWORD 'cookie
-            RaiseEvent DisbandClanReply((inBuf.GetBYTE = 0))
+            RaiseEvent DisbandClanReply((inBuf.GetByte = 0))
             
             
         Case SID_CLANINVITE, SID_CLANINVITE2
@@ -165,16 +167,17 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             
         Case SID_CLANREQUEST
             inBuf.RemoveDWORD
-            RaiseEvent InviteUserReply(inBuf.GetBYTE)
+            RaiseEvent InviteUserReply(inBuf.GetByte)
             
         Case SID_NEWRANKRECEIVED
 '            (BYTE) - Old rank
 '            (BYTE) - New rank
 '            (STRING) - User who changed your rank
             inBuf.RemoveBYTE
-            RaiseEvent MyRankChange(inBuf.GetBYTE)
+            RaiseEvent MyRankChange(inBuf.GetByte)
             
         Case SID_CLANUSERINFO
+            frmChat.AddChat vbRed, "!"
         
         Case SID_CLANMOTD
             Dim cookie  As Long
@@ -196,7 +199,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
     Set inBuf = Nothing
     Exit Sub
 clanErr:
-  Debug.Print "ParseClanPacket Error: " & Err.Number & ": " & Err.Description
+  Debug.Print "ParseClanPacket Error: " & Err.Number & ": " & Err.description
   Debug.Print DebugOutput(Data)
   Err.Clear
 End Sub

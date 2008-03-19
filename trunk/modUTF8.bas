@@ -19,25 +19,29 @@ Private Const CP_UTF8              As Long = 65001
 Public Function UTF8Encode(ByRef str As String) As Byte()
     Dim UTF8Buffer() As Byte   ' ...
     Dim UTF8Chars    As Long   ' ...
+    Dim lstr         As String ' ...
     
     ' ...
-    If (str = vbNullString) Then
-        Exit Function
-    End If
+    lstr = str
     
     ' grab length of string after conversion
-    UTF8Chars = WideCharToMultiByte(CP_UTF8, 0, ByVal StrPtr(str), -1, _
+    UTF8Chars = WideCharToMultiByte(CP_UTF8, 0, ByVal StrPtr(lstr), Len(lstr), _
             0, 0, vbNullString, 0)
-            
+    
+    ' ...
     If (UTF8Chars = 0) Then
-        frmChat.AddChat vbRed, "GRRR!"
+        ' ...
+        frmChat.AddChat vbRed, "DEBUG: GRRR @ UTF8Encode()!"
+        
+        ' ...
+        Exit Function
     End If
 
     ' initialize buffer
     ReDim UTF8Buffer(0 To UTF8Chars - 1)
     
     ' translate from unicode to utf-8
-    Call WideCharToMultiByte(CP_UTF8, 0, ByVal StrPtr(str), Len(str), _
+    Call WideCharToMultiByte(CP_UTF8, 0, ByVal StrPtr(lstr), Len(lstr), _
             ByVal VarPtr(UTF8Buffer(0)), UTF8Chars, vbNullString, 0)
     
     ' return unicode buffer
@@ -50,16 +54,19 @@ Public Function UTF8Decode(ByRef str As String, Optional LocaleID As Long = 1252
     Dim UnicodeChars  As Long   ' ...
     Dim lstr          As String ' ...
     
-    lstr = str & "Æ"
-    'lstr = str
+    ' ...
+    lstr = str
     
     ' grab length of string after conversion
     UnicodeChars = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, lstr, _
-             -1, vbNullString, 0)
+             Len(lstr), vbNullString, 0)
             
+    ' ...
     If (UnicodeChars = 0) Then
-        frmChat.AddChat vbRed, UnicodeChars
-        
+        ' ...
+        frmChat.AddChat vbRed, "DEBUG: GRRR @ UTF8Decode()!"
+    
+        ' ...
         Exit Function
     End If
     
@@ -67,12 +74,9 @@ Public Function UTF8Decode(ByRef str As String, Optional LocaleID As Long = 1252
     UnicodeBuffer = String$(UnicodeChars * 2, vbNullChar)
     
     ' translate utf-8 string to unicode
-    Call MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, lstr, -1, UnicodeBuffer, _
+    Call MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, lstr, Len(lstr), UnicodeBuffer, _
             UnicodeChars)
    
     ' translate from unicode to ansi
     UTF8Decode = StrConv(UnicodeBuffer, vbFromUnicode)
-    
-    ' ...
-    UTF8Decode = Left$(UTF8Decode, Len(UTF8Decode) - 1)
 End Function

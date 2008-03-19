@@ -446,7 +446,7 @@ Private Sub btnCreateUser_Click()
     ' do we have an item (hopefully a group) selected?
     If (Not (trvUsers.SelectedItem Is Nothing)) Then
         ' is the item really just the root item?
-        If (trvUsers.SelectedItem.Index = 1) Then
+        If (trvUsers.SelectedItem.index = 1) Then
             Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
                 tvwChild, "User: " & Username, Username, 3)
                 
@@ -509,7 +509,7 @@ Private Sub btnCreateGroup_Click()
     Dim newNode       As node    ' ...
     
     ' ...
-    If (tbsTabs.SelectedItem.Index = 1) Then ' Users and Groups Tab
+    If (tbsTabs.SelectedItem.index = 1) Then ' Users and Groups Tab
         Dim GroupName As String ' ...
     
         ' ...
@@ -534,7 +534,7 @@ Private Sub btnCreateGroup_Click()
         ' do we have an item (hopefully a group) selected?
         If (Not (trvUsers.SelectedItem Is Nothing)) Then
             ' is the item reall just the root node?
-            If (trvUsers.SelectedItem.Index = 1) Then
+            If (trvUsers.SelectedItem.index = 1) Then
                 ' ...
                 Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
                     tvwChild, "Group: " & GroupName, GroupName, 1)
@@ -577,7 +577,7 @@ Private Sub btnCreateGroup_Click()
         ' increment group counter
         groupCount = (groupCount + 1)
         
-    ElseIf (tbsTabs.SelectedItem.Index = 2) Then ' Clan Tab
+    ElseIf (tbsTabs.SelectedItem.index = 2) Then ' Clan Tab
         Dim ClanName As String ' ...
     
         ' ...
@@ -611,7 +611,7 @@ Private Sub btnCreateGroup_Click()
         ' increment clan counter
         clanCount = (clanCount + 1)
         
-    ElseIf (tbsTabs.SelectedItem.Index = 3) Then ' Game Tab
+    ElseIf (tbsTabs.SelectedItem.index = 3) Then ' Game Tab
         ' ...
         Call frmGameSelection.Show(vbModal, frmDBManager)
         
@@ -655,7 +655,7 @@ Private Sub btnCreateGroup_Click()
         End With
 
         ' ...
-        If ((tbsTabs.SelectedItem.Index = 1) Or (tbsTabs.SelectedItem.Index = 2)) Then
+        If ((tbsTabs.SelectedItem.index = 1) Or (tbsTabs.SelectedItem.index = 2)) Then
             ' ...
             m_new_entry = True
         
@@ -672,12 +672,12 @@ Private Sub btnCancel_Click()
 End Sub
 
 ' ...
-Private Sub btnSave_Click(Index As Integer)
+Private Sub btnSave_Click(index As Integer)
     Dim i As Integer ' ...
     Dim j As Integer ' ...
 
     ' are we looking at a single entry or are we saving it all?
-    If (Index = 1) Then
+    If (index = 1) Then
         ' if we have no selected user... escape quick!
         If (trvUsers.SelectedItem Is Nothing) Then
             ' break from function
@@ -759,13 +759,18 @@ Private Sub btnSave_Click(Index As Integer)
     End If
 End Sub
 
-Private Sub lvGroups_Click()
+Private Sub lvGroups_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
     Dim i As Integer
     
     For i = 1 To lvGroups.ListItems.Count
-        lvGroups.ListItems(i).Selected = False
+        With lvGroups.ListItems(i)
+            .Selected = False
+            .Checked = False
+        End With
     Next i
     
+    ' ...
+    Set trvUsers.DropHighlight = Nothing
     Set lvGroups.SelectedItem = Nothing
 End Sub
 
@@ -833,7 +838,7 @@ Private Sub tbsTabs_Click()
     Call trvUsers.Nodes.Add(, , "Database", "Database")
 
     ' which tab index are we on?
-    Select Case (tbsTabs.SelectedItem.Index)
+    Select Case (tbsTabs.SelectedItem.index)
         Case 1: ' Users and Groups
             For i = LBound(m_DB) To UBound(m_DB)
                 ' we're handling groups first; is this entry a group?
@@ -1110,7 +1115,7 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
     m_group_index = -1
 
     ' ...
-    If (node.Index > 1) Then
+    If (node.index > 1) Then
         ' ...
         Call ClearGroupList
     
@@ -1210,11 +1215,11 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
 End Sub
 
 ' ...
-Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
     ' ...
     If (Button = vbLeftButton) Then
         ' ...
-        Set trvUsers.SelectedItem = trvUsers.HitTest(X, Y)
+        Set trvUsers.SelectedItem = trvUsers.HitTest(x, y)
         
         ' ...
         Call trvUsers_NodeClick(trvUsers.SelectedItem)
@@ -1222,7 +1227,7 @@ Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, X As Single,
 End Sub
 
 ' ...
-Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
     ' ...
     If (Button = vbRightButton) Then
         Dim gAcc As udtGetAccessResponse ' ...
@@ -1230,7 +1235,7 @@ Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y
         ' ...
         If (Not (trvUsers.SelectedItem Is Nothing)) Then
             ' ...
-            If (trvUsers.SelectedItem.Index > 1) Then
+            If (trvUsers.SelectedItem.index > 1) Then
                 ' ...
                 If (StrComp(trvUsers.SelectedItem.Tag, "Group", vbTextCompare) = 0) Then
                     ' ...
@@ -1258,15 +1263,15 @@ End Sub
 
 ' ...
 Private Sub trvUsers_OLEDragOver(Data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
-    Shift As Integer, X As Single, Y As Single, State As Integer)
+    Shift As Integer, x As Single, y As Single, State As Integer)
     
     ' ...
-    Set trvUsers.DropHighlight = trvUsers.HitTest(X, Y)
+    Set trvUsers.DropHighlight = trvUsers.HitTest(x, y)
 End Sub
 
 ' ...
 Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
-    Shift As Integer, X As Single, Y As Single)
+    Shift As Integer, x As Single, y As Single)
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -1286,7 +1291,7 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
     Set nodePrev = trvUsers.SelectedItem
         
     ' ...
-    If (nodeNow.Index = 1) Then
+    If (nodeNow.index = 1) Then
         ' ...
         For i = LBound(m_DB) To UBound(m_DB)
             ' ...
@@ -1309,20 +1314,20 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
         Next i
     Else
         ' ...
-        If (nodePrev.Index <> 1) Then
+        If (nodePrev.index <> 1) Then
             ' ...
             If (StrComp(nodeNow.Tag, "Group", vbTextCompare) <> 0) Then
                 ' ...
                 Set nodeNow = nodeNow.Parent
                 
                 ' ...
-                If (nodeNow.Index = 1) Then
+                If (nodeNow.index = 1) Then
                     ' ...
                     Set trvUsers.DropHighlight = nodeNow
                 
                     ' ...
                     Call trvUsers_OLEDragDrop(Data, Effect, Button, Shift, _
-                        X, Y)
+                        x, y)
                 
                     ' ...
                     Exit Sub
@@ -1571,7 +1576,7 @@ Private Sub HandleDeleteEvent(ByRef NodeToDelete As node)
     End If
 
     ' ...
-    If (Temp.Index > 1) Then
+    If (Temp.index > 1) Then
         Dim response As Integer ' ...
         Dim isGroup  As Boolean ' ...
         
@@ -1595,18 +1600,18 @@ Private Sub HandleDeleteEvent(ByRef NodeToDelete As node)
                 ' ...
                 If (Temp.Previous Is Nothing) Then
                     ' ...
-                    trvUsers.Nodes(Temp.Parent.Index).Checked = True
+                    trvUsers.Nodes(Temp.Parent.index).Checked = True
                 Else
                     ' ...
-                    trvUsers.Nodes(Temp.Previous.Index).Checked = True
+                    trvUsers.Nodes(Temp.Previous.index).Checked = True
                 End If
             Else
                 ' ...
-                trvUsers.Nodes(Temp.Next.Index).Checked = True
+                trvUsers.Nodes(Temp.Next.index).Checked = True
             End If
             
             ' ...
-            Call trvUsers.Nodes.Remove(Temp.Index)
+            Call trvUsers.Nodes.Remove(Temp.index)
             
             ' ...
             Call trvUsers_NodeClick(trvUsers.SelectedItem)

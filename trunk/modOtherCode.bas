@@ -344,7 +344,7 @@ End Function
 Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNullString)
     If (frmChat.sckBNet.State = 7) Then
         With PBuffer
-            If (frmChat.mnuUTF8.Checked = False) Then
+            If (frmChat.mnuUTF8.Checked) Then
                 .InsertNTString Message, UTF8
             Else
                 .InsertNTString Message
