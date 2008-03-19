@@ -1242,9 +1242,6 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                     ' demote shamans
                     For i = 0 To (userCount - 1)
                         ' ...
-                        Call frmChat.AddChat(vbRed, "Demote: " & arrUsers(i))
-                    
-                        ' ...
                         With PBuffer
                             .InsertDWord &H1
                             .InsertNTString arrUsers(i)
@@ -1304,14 +1301,11 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
             ' promote shamans again
             For i = 0 To (userCount - 1)
                 ' ...
-                Call frmChat.AddChat(vbRed, "Promote: " & arrUsers(i))
-            
-                ' ...
                 With PBuffer
                     .InsertDWord &H3
                     .InsertNTString arrUsers(i)
                     .InsertByte &H3 ' Officer (Shaman)
-                    .SendPacket SID_CHANGERANK
+                    .SendPacket &H7A
                 End With
                 
                 ' ...
@@ -5722,7 +5716,7 @@ Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAcc
             .InsertDWord &H3
             .InsertNTString liUser.text
             .InsertByte (liUser.SmallIcon + 1)
-            .SendPacket SID_CHANGERANK
+            .SendPacket &H7A
         End With
         
         ' ...
@@ -5771,7 +5765,7 @@ Private Function OnDemote(ByVal Username As String, ByRef dbAccess As udtGetAcce
             .InsertDWord &H1
             .InsertNTString liUser.text
             .InsertByte (liUser.SmallIcon - 1)
-            .SendPacket SID_CHANGERANK
+            .SendPacket &H7A
         End With
         
         ' ...

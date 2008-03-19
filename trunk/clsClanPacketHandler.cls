@@ -116,9 +116,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             
             iTemp = inBuf.DebuffDWORD
             bStatus = inBuf.DebuffBYTE
-            
-            frmChat.AddChat vbRed, iTemp
-            
+
             Select Case bStatus
                 Case 0  'success
                     Select Case iTemp

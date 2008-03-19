@@ -2112,6 +2112,7 @@ End Sub
 ' Updated 8/8/07 to support new prefix/suffix box feature
 Sub Form_Resize()
     On Error Resume Next
+    
     Static WasMaximized As Boolean
     Static DoMaximize As Boolean
     

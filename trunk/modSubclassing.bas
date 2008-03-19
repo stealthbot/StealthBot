@@ -47,6 +47,8 @@ Public Sub UnhookSendBoxWindowProc()
 End Sub
 
 Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+    On Error GoTo ERROR_HANDLER
+    
     Dim Rezult As Long
     Dim uHead As NMHDR
     Dim eLink As ENLINK
@@ -96,6 +98,13 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wPara
     End If
     
     NewWindowProc = CallWindowProc(OldWindowProc, hWndSet, Msg, wParam, lParam)
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in NewWindowProc().")
+    
+    Exit Function
 End Function
 
 Public Function NewSendBoxWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
