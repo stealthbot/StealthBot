@@ -564,11 +564,14 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Dim ToANSI As String
     
     ' ...
-    ToANSI = UTF8Decode(Message)
-    
-    ' ...
-    If (Len(ToANSI) > 0) Then
-        Message = ToANSI
+    If (frmChat.mnuUTF8.Checked) Then
+        ' ...
+        ToANSI = UTF8Decode(Message)
+        
+        ' ...
+        If (Len(ToANSI) > 0) Then
+            Message = ToANSI
+        End If
     End If
     
     If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
@@ -761,11 +764,14 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     Username = convertUsername(Username)
     
     ' ...
-    ToANSI = UTF8Decode(Message)
-    
-    ' ...
-    If (Len(ToANSI) > 0) Then
-        Message = ToANSI
+    If (frmChat.mnuUTF8.Checked) Then
+        ' ...
+        ToANSI = UTF8Decode(Message)
+        
+        ' ...
+        If (Len(ToANSI) > 0) Then
+            Message = ToANSI
+        End If
     End If
     
     i = UsernameToIndex(Username)
@@ -1623,11 +1629,14 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     Username = convertUsername(Username)
     
     ' ...
-    ToANSI = UTF8Decode(Message)
-    
-    ' ...
-    If (Len(ToANSI) > 0) Then
-        Message = ToANSI
+    If (frmChat.mnuUTF8.Checked) Then
+        ' ...
+        ToANSI = UTF8Decode(Message)
+        
+        ' ...
+        If (Len(ToANSI) > 0) Then
+            Message = ToANSI
+        End If
     End If
 
     i = UsernameToIndex(Username)

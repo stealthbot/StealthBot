@@ -1240,7 +1240,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 ' ...
                 If (userCount) Then
                     ' demote shamans
-                    For i = 0 To (userCount - 1)
+                    For i = 0 To userCount
                         ' ...
                         With PBuffer
                             .InsertDWord &H1
@@ -1250,7 +1250,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                         End With
                         
                         ' ...
-                        Call Pause(200, True, True)
+                        Call Pause(200, False, True)
                     Next i
                 End If
             End If
@@ -1285,13 +1285,15 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
         
         ' ...
-        Call Pause(2, True, False)
+        If (QueueLoad > 0) Then
+            Call Pause(2, False, False)
+        End If
         
         ' designate user
         Call bnetSend("/designate " & reverseUsername(msgData))
         
         ' ...
-        Call Pause(2, True, False)
+        Call Pause(2, False, False)
         
         ' rejoin channel
         Call bnetSend("/resign")
@@ -1309,12 +1311,12 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 End With
                 
                 ' ...
-                Call Pause(200, True, True)
+                Call Pause(200, False, True)
             Next i
         End If
         
         ' ...
-        Call Pause(3, True, False)
+        Call Pause(3, False, False)
         
         ' ...
         ReDim arrUsers(0)

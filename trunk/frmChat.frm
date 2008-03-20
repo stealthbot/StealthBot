@@ -3425,6 +3425,8 @@ End Sub
 Private Sub mnuPopUnsquelch_Click()
     On Error Resume Next
     
+    AddChat vbRed, GetSelectedUser
+    
     AddQ "/unsquelch " & GetSelectedUser
 End Sub
 
@@ -5358,6 +5360,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     (Command = "unignore") Or _
                     (Command = "ban") Or _
                     (Command = "unban") Or _
+                    (Command = "kick") Or _
                     (Command = "designate")) Then
         
                     ' ...
