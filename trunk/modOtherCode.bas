@@ -2708,6 +2708,10 @@ Public Function convertAlias(ByVal cmdName As String) As String
         Call commands.Load(App.Path & "\commands.xml")
         
         ' ...
+        cmdName = Replace(cmdName, "'", "\'")
+        cmdName = Replace(cmdName, "\", "\\")
+        
+        ' ...
         Set alias = _
                 commands.documentElement.selectSingleNode("./command/alias[text()='" & cmdName & "']")
         

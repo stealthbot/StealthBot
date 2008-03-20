@@ -4372,6 +4372,7 @@ Private Function SaveSettings() As Boolean
     WINI "Password", txtPassword.text, secMain
     WINI "CDKey", CDKeyReplacements(cboCDKey.text), secMain
     WINI "ExpKey", CDKeyReplacements(txtExpKey.text), secMain
+    WINI "LODKey", vbNullString, secMain
     WINI "HomeChan", txtHomeChan.text, secMain
     WINI "Server", cboServer.text, secMain
     WINI "BNLSServer", cboBNLSServer.text, secMain

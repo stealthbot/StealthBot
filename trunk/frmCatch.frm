@@ -164,7 +164,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub cmdDone_Click()
     Dim i As Integer, f As Integer
-    ReDim Catch(0)
+    ReDim Preserve Catch(0)
     If lbCatch.ListCount < 0 Then
         Unload Me
         Exit Sub

@@ -320,17 +320,17 @@ Repeat2:
             
         ElseIf KeyName = "Profile\Description" Then
         
-            Dim X() As String
+            Dim x() As String
             
-            X() = Split(KeyValue, Chr(13))
+            x() = Split(KeyValue, Chr(13))
             ReDim s(0)
             
-            For i = LBound(X) To UBound(X)
-                s(0) = X(i)
+            For i = LBound(x) To UBound(x)
+                s(0) = x(i)
                 
                 If Len(s(0)) > 200 Then s(0) = Left$(s(0), 200)
                 
-                If i = LBound(X) Then
+                If i = LBound(x) Then
                     frmChat.AddQ u & "[Descr] " & s(0)
                 Else
                     frmChat.AddQ u & "[Descr] " & Right(s(0), Len(s(0)) - 1)
@@ -1477,12 +1477,28 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim Holder()  As Variant
     Dim Pos       As Integer
     Dim userIndex As Integer
+    Dim bln       As Boolean
     
     ' ...
     Username = convertUsername(Username)
     
     ' ...
     i = UsernameToIndex(Username)
+    
+    Do Until (bln = True)
+        ' ...
+        For i = 0 To UBound(gBans)
+            If (StrComp(gBans(i).cOperator, reverseUsername(Username), vbTextCompare) = 0) Then
+                Call UnbanBannedUser(gBans(i).UsernameActual, reverseUsername(Username))
+                
+                Exit For
+            End If
+        Next i
+        
+        If (i >= UBound(gBans) + 1) Then
+            bln = True
+        End If
+    Loop
     
     ' ...
     If (i) Then
@@ -2095,14 +2111,14 @@ End Function
 '11/22/07 - Hdx - Pass the channel listing (0x0B) directly off to scriptors for there needs. (What other use is there?)
 Public Sub Event_ChannelList(sChannels() As String)
     If (MDebug("all")) Then
-        Dim X As Integer
+        Dim x As Integer
         
         frmChat.AddChat RTBColors.InformationText, "Received Channel List: "
         
-        For X = 0 To UBound(sChannels)
+        For x = 0 To UBound(sChannels)
             frmChat.AddChat RTBColors.InformationText, vbTab & _
-                sChannels(X)
-        Next X
+                sChannels(x)
+        Next x
     End If
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''

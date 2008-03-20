@@ -1250,7 +1250,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                         End With
                         
                         ' ...
-                        Call Pause(200, False, True)
+                        Call Pause(200, True, True)
                     Next i
                 End If
             End If
@@ -1285,13 +1285,13 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
         
         ' ...
-        Call Pause(2, False, False)
+        Call Pause(2, True, False)
         
         ' designate user
         Call bnetSend("/designate " & reverseUsername(msgData))
         
         ' ...
-        Call Pause(2, False, False)
+        Call Pause(2, True, False)
         
         ' rejoin channel
         Call bnetSend("/resign")
@@ -1547,6 +1547,10 @@ Private Function OnResign(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' This command will make the bot resign from the role of operator
     ' by rejoining the channel through the use of Battle.net's /resign
     ' command.
+    
+    If ((MyFlags And &H2) <> &H2) Then
+        Exit Function
+    End If
     
     Call AddQ("/resign", PRIORITY.SPECIAL_MESSAGE, Username)
 End Function ' end function OnResign
