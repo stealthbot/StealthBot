@@ -7114,6 +7114,8 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         
         Call ClearChatQueue
         
+        PassedClanMotdCheck = False
+        
         On Error Resume Next
         SControl.Run "Event_LoggedOff"
     End If

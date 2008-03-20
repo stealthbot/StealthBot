@@ -76,7 +76,6 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &HA 'SID_ENTERCHAT
                 s = pD.DebuffNTString
-                CurrentUsername = s
                 Call Event_LoggedOnAs(s, BotVars.Product)
             
             '###########################################################################
@@ -826,12 +825,12 @@ Public Function ParsePing(strData As String) As Long
     CopyMemory ParsePing, ByVal strPing$, 4
 End Function
 
-Public Function CVL(X As String) As Long
+Public Function CVL(x As String) As Long
     'on error resume next
-    If Len(X) < 4 Then
+    If Len(x) < 4 Then
         Exit Function
     End If
-    CopyMemory CVL, ByVal X, 4
+    CopyMemory CVL, ByVal x, 4
 End Function
 
 
@@ -1429,12 +1428,12 @@ Public Function GetCharacterName(ByVal Statstring As String, ByVal start As Byte
     GetCharacterName = InStr(start, Statstring, ",") + 1
 End Function
 
-Function MakeLong(X As String) As Long
+Function MakeLong(x As String) As Long
  'on error resume next
-    If Len(X) < 4 Then
+    If Len(x) < 4 Then
         Exit Function
     End If
-    CopyMemory MakeLong, ByVal X, 4
+    CopyMemory MakeLong, ByVal x, 4
 End Function
 
 Public Sub StrCpy(ByRef Source As String, ByVal nText As String)
@@ -1906,7 +1905,7 @@ End Function
 'Originally from DPChat by Zorm - cleaned up and adapted to my needs
 Public Sub ProfileParse(Data As String)
     On Error Resume Next
-    Dim X As Integer
+    Dim x As Integer
     Dim ProfileEnd As String
     Dim SplitProfile() As String
     

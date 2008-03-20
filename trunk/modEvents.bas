@@ -703,11 +703,12 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
         
         ' trick to find the current Warcraft III realm name, thanks LoRd :)
-        If (InStr(1, Message, "You are " & reverseUsername(CurrentUsername) & ", using ") > 0) Then
+        If (InStr(1, Message, "You are ") > 0) And (InStr(1, Message, " using ") > 0) Then
             ' ...
             If (InStr(1, Message, "channel", vbTextCompare) = 0) Then
                 i = InStrRev(Message, Space$(1))
                 
+                ' ...
                 BotVars.Gateway = Mid$(Message, i + 1)
 
                 ' we want our username to accurately reflect
