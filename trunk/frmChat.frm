@@ -5531,9 +5531,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     banDelay = 10
                     
                     ' are we issuing a channel moderation command?
-                    If ((StrComp(Left$(Send, 5), "/ban ", vbTextCompare) = 0) Or _
-                        (StrComp(Left$(Send, 6), "/kick ", vbTextCompare) = 0)) Then
-                        
+                    If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
                         ' do we have ops?
                         If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
                             ' seed rnd() function
