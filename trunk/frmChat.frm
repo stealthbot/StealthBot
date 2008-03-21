@@ -828,6 +828,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -853,6 +854,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2311,16 +2313,16 @@ End Sub
 Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     AddChat vbYellow, "[CLAN] " & Member & " has left the clan."
     
-    Dim x As ListItem
+    Dim X As ListItem
     
-    Set x = lvClanList.FindItem(Member)
+    Set X = lvClanList.FindItem(Member)
     
-    If Not (x Is Nothing) Then
-        lvClanList.ListItems.Remove x.index
+    If Not (X Is Nothing) Then
+        lvClanList.ListItems.Remove X.index
         
         lvClanList.Refresh
         
-        Set x = Nothing
+        Set X = Nothing
     End If
     
     On Error Resume Next
@@ -2362,11 +2364,11 @@ Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
     SControl.Run "Event_BotClanRankChanged", NewRank
 End Sub
 
-Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal rank As Byte)
+Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal Rank As Byte)
     With Clan
         .Name = ClanTag
         .DWName = RawClanTag
-        .MyRank = rank
+        .MyRank = Rank
         .isUsed = True
     End With
     
@@ -2385,9 +2387,9 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
             
         SControl.Run "Event_BotJoinedClan", ClanTag
     Else
-        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
+        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(Rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
         
-        SControl.Run "Event_BotClanInfo", ClanTag, rank
+        SControl.Run "Event_BotClanInfo", ClanTag, Rank
     End If
     
     ClanHandler.RequestClanList
@@ -2428,30 +2430,30 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
     lblCurrentChannel.Caption = GetChannelString
 End Sub
 
-Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
-    Dim x As ListItem
+Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
+    Dim X As ListItem
     
-    Set x = lvClanList.FindItem(Username)
+    Set X = lvClanList.FindItem(Username)
 
     If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
-        Clan.MyRank = IIf(rank = 0, rank + 1, rank)
+        Clan.MyRank = IIf(Rank = 0, Rank + 1, Rank)
         AwaitingClanInfo = 1
     End If
     
     If AwaitingClanInfo = 1 Then
         AwaitingClanInfo = 0
-        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(rank) & "."
+        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(Rank) & "."
     End If
     
-    If Not (x Is Nothing) Then
-        lvClanList.ListItems.Remove x.index
-        Set x = Nothing
+    If Not (X Is Nothing) Then
+        lvClanList.ListItems.Remove X.index
+        Set X = Nothing
     End If
     
-    AddClanMember Username, CInt(rank), CInt(IsOnline)
+    AddClanMember Username, CInt(Rank), CInt(IsOnline)
     
     On Error Resume Next
-    SControl.Run "Event_ClanMemberUpdate", Username, rank, IsOnline
+    SControl.Run "Event_ClanMemberUpdate", Username, Rank, IsOnline
 End Sub
 
 Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
@@ -2744,40 +2746,40 @@ Private Sub FriendListHandler_FriendMoved()
 End Sub
 
 Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
-    Dim x As ListItem
+    Dim X As ListItem
     
-    Set x = lvFriendList.FindItem(Username)
+    Set X = lvFriendList.FindItem(Username)
     
-    If Not (x Is Nothing) Then
-        lvFriendList.ListItems.Remove x.index
+    If Not (X Is Nothing) Then
+        lvFriendList.ListItems.Remove X.index
     End If
     
-    Set x = Nothing
+    Set X = Nothing
     
     lblCurrentChannel.Caption = GetChannelString
 End Sub
 
 Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLIndex As Byte)
-    Dim x As ListItem
+    Dim X As ListItem
     Dim i As Integer
     Const ICONLINE = 23
     Const ICOFFLINE = 24
     
-    Set x = lvFriendList.FindItem(Username)
+    Set X = lvFriendList.FindItem(Username)
     
-    If Not (x Is Nothing) Then
+    If Not (X Is Nothing) Then
         With FriendListHandler.colFriends.Item(FLIndex)
             Select Case .Location
                 Case FRL_OFFLINE
-                    x.ListSubItems.Item(1).ReportIcon = ICOFFLINE
-                    x.SmallIcon = ICUNKNOWN
+                    X.ListSubItems.Item(1).ReportIcon = ICOFFLINE
+                    X.SmallIcon = ICUNKNOWN
                     
                 Case Else
-                    If x.ListSubItems.Item(1).ReportIcon = ICOFFLINE Then
+                    If X.ListSubItems.Item(1).ReportIcon = ICOFFLINE Then
                         'Friend is now online - notify user?
                     End If
                     
-                    x.ListSubItems.Item(1).ReportIcon = ICONLINE
+                    X.ListSubItems.Item(1).ReportIcon = ICONLINE
                     
                     Select Case .Product
                         Case Is = "STAR": i = ICSTAR
@@ -2795,13 +2797,13 @@ Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLInd
                         Case Else: i = ICUNKNOWN
                     End Select
                     
-                    x.SmallIcon = i
+                    X.SmallIcon = i
             End Select
         End With
         
     End If
     
-    Set x = Nothing
+    Set X = Nothing
 End Sub
 
 Private Sub INet_StateChanged(ByVal State As Integer)
@@ -2917,7 +2919,7 @@ Private Sub lvClanList_dblClick()
     End If
 End Sub
 
-Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Dim aInx As Integer
     Dim sProd As String * 4
 
@@ -2942,18 +2944,18 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, 
     End If
 End Sub
 
-Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = vbRightButton Then
         PopupMenu mnuFLpop
     End If
 End Sub
 
-Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Dim lvhti As LVHITTESTINFO
     Dim lItemIndex As Long
    
-    lvhti.pt.x = x / Screen.TwipsPerPixelX
-    lvhti.pt.y = y / Screen.TwipsPerPixelY
+    lvhti.pt.X = X / Screen.TwipsPerPixelX
+    lvhti.pt.Y = Y / Screen.TwipsPerPixelY
     lItemIndex = SendMessageAny(lvFriendList.hWnd, LVM_HITTEST, 0, lvhti) + 1
    
     If m_lCurItemIndex <> lItemIndex Then
@@ -3017,20 +3019,20 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, x As Sin
                     ListToolTip.TipText = sTemp
                 End With
                 
-                Call ListToolTip.Create(lvFriendList.hWnd, CLng(x), CLng(y))
+                Call ListToolTip.Create(lvFriendList.hWnd, CLng(X), CLng(Y))
             End If
         End If
     End If
 End Sub
 
-Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Dim lvhti As LVHITTESTINFO
     Dim lItemIndex As Long
     Dim sOutBuf As String
     Dim sTemp As String
    
-    lvhti.pt.x = x / Screen.TwipsPerPixelX
-    lvhti.pt.y = y / Screen.TwipsPerPixelY
+    lvhti.pt.X = X / Screen.TwipsPerPixelX
+    lvhti.pt.Y = Y / Screen.TwipsPerPixelY
     lItemIndex = SendMessageAny(lvChannel.hWnd, LVM_HITTEST, 0, lvhti) + 1
    
     If m_lCurItemIndex <> lItemIndex Then
@@ -3056,7 +3058,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single
                     
                 End With
                 
-                Call ListToolTip.Create(lvChannel.hWnd, CLng(x), CLng(y))
+                Call ListToolTip.Create(lvChannel.hWnd, CLng(X), CLng(Y))
             End If
         End If
     End If
@@ -3797,7 +3799,7 @@ Private Sub mnuWindow_Click()
     End Select
 End Sub
 
-Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
     If Button = 1 And Len(rtbChat.SelText) > 0 Then
@@ -3808,7 +3810,7 @@ Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, x As Single, y 
     End If
 End Sub
 
-Private Sub rtbWhispers_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub rtbWhispers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
     If Button = 1 And Len(rtbWhispers.SelText) > 0 Then
@@ -4015,7 +4017,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Dim l As Long
     Dim n As Integer
     Dim c As Integer ',oldSelStart As Integer
-    Dim x() As String
+    Dim X() As String
     Dim m As String
     Dim s As String ',sClosest As String
     Dim Vetoed As Boolean
@@ -4121,22 +4123,22 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     On Error Resume Next
                     
                     If (InStr(1, Clipboard.GetText, Chr(13), vbTextCompare) <> 0) Then
-                        x() = Split(Clipboard.GetText, Chr(10))
+                        X() = Split(Clipboard.GetText, Chr(10))
                         
-                        If UBound(x) > 0 Then
-                            For n = LBound(x) To UBound(x)
-                                x(n) = Replace(x(n), Chr(13), vbNullString)
+                        If UBound(X) > 0 Then
+                            For n = LBound(X) To UBound(X)
+                                X(n) = Replace(X(n), Chr(13), vbNullString)
                                 
-                                If (x(n) <> vbNullString) Then
-                                    If (n <> LBound(x)) Then
-                                        AddQ txtPre.text & x(n) & txtPost.text, PRIORITY.CONSOLE_MESSAGE
+                                If (X(n) <> vbNullString) Then
+                                    If (n <> LBound(X)) Then
+                                        AddQ txtPre.text & X(n) & txtPost.text, PRIORITY.CONSOLE_MESSAGE
                                         
-                                        cboSend.AddItem txtPre.text & x(n) & txtPost.text, 0
+                                        cboSend.AddItem txtPre.text & X(n) & txtPost.text, 0
                                     Else
-                                        AddQ txtPre.text & cboSend.text & x(n) & txtPost.text, _
+                                        AddQ txtPre.text & cboSend.text & X(n) & txtPost.text, _
                                             PRIORITY.CONSOLE_MESSAGE
                                         
-                                        cboSend.AddItem txtPre.text & cboSend.text & x(n) & txtPost.text, 0
+                                        cboSend.AddItem txtPre.text & cboSend.text & X(n) & txtPost.text, 0
                                     End If
                                 End If
                             Next n
@@ -4595,13 +4597,13 @@ Private Sub quLower_Timer()
         Dim strArray() As String
         Dim ret As String
         Dim lpos As Long
-        Dim y As String
+        Dim Y As String
         Dim c As Integer, n As Integer
         
         Caching = False
         
         ' ...
-        ret = Cache(vbNullString, 0, y)
+        ret = Cache(vbNullString, 0, Y)
         
         ' ...
         lpos = InStr(1, ret, Space$(1), vbBinaryCompare)
@@ -4646,7 +4648,7 @@ Private Sub quLower_Timer()
             strArray(c) = convertUsername(strArray(c))
             
             If Len(strArray(c)) > 1 Then
-                If InStr(y, "ban") Then
+                If InStr(Y, "ban") Then
                     If ((MyFlags And &H2) = &H2) Then
                         Ban strArray(c), (AutoModSafelistValue - 1), 0
                     End If
@@ -5992,6 +5994,23 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
+    s = ReadCFG(OT, "DefaultTagbansGroup")
+    BotVars.DefaultTagbansGroup = s
+    
+        ' ...
+    If (BotVars.DefaultTagbansGroup <> vbNullString) Then
+        ' ...
+        default_group_access = _
+                GetAccess(BotVars.DefaultTagbansGroup, "GROUP")
+        
+        ' ...
+        If (default_group_access.Username = vbNullString) Then
+            ' ...
+            Call ProcessCommand(CurrentUsername, "/add " & BotVars.DefaultTagbansGroup & _
+                    " B --type group --banmsg Tagbanned", True, False, False)
+        End If
+    End If
+    
     s = ReadCFG(OT, "DefaultSafelistGroup")
     BotVars.DefaultSafelistGroup = s
     
@@ -6864,26 +6883,26 @@ Sub DisableListviewTabs()
     ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
 End Sub
 
-Sub AddClanMember(ByVal Name As String, rank As Integer, Online As Integer)
+Sub AddClanMember(ByVal Name As String, Rank As Integer, Online As Integer)
     
-    If rank = 0 Then rank = 1
-    If rank > 4 Then rank = 5 '// handle bad ranks
+    If Rank = 0 Then Rank = 1
+    If Rank > 4 Then Rank = 5 '// handle bad ranks
     
     '// add user
     
     Name = KillNull(Name)
     
     With lvClanList
-        .ListItems.Add .ListItems.Count + 1, , Name, , rank
+        .ListItems.Add .ListItems.Count + 1, , Name, , Rank
         .ListItems(.ListItems.Count).ListSubItems.Add , , , Online + 6
-        .ListItems(.ListItems.Count).ListSubItems.Add , , rank
+        .ListItems(.ListItems.Count).ListSubItems.Add , , Rank
         .SortKey = 2
         .SortOrder = lvwDescending
         .Sorted = True
     End With
     
     On Error Resume Next
-    SControl.Run "Event_ClanInfo", Name, rank, Online
+    SControl.Run "Event_ClanInfo", Name, Rank, Online
 End Sub
 
 Private Function GetClanSelectedUser() As String
@@ -6898,15 +6917,15 @@ Private Function GetClanSelectedUser() As String
     End With
 End Function
 
-Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = vbRightButton Then
         lvClanList.SetFocus
         
         Dim lvhti As LVHITTESTINFO
         Dim lItemIndex As Long, m_lCurItemIndex As Long
         
-        lvhti.pt.x = x / Screen.TwipsPerPixelX
-        lvhti.pt.y = y / Screen.TwipsPerPixelY
+        lvhti.pt.X = X / Screen.TwipsPerPixelX
+        lvhti.pt.Y = Y / Screen.TwipsPerPixelY
         lItemIndex = SendMessageAny(lvClanList.hWnd, LVM_HITTEST, 0, lvhti) + 1
         
         If lItemIndex > 0 Then

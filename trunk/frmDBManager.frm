@@ -759,7 +759,7 @@ Private Sub btnSave_Click(index As Integer)
     End If
 End Sub
 
-Private Sub lvGroups_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub lvGroups_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Dim i As Integer
     
     For i = 1 To lvGroups.ListItems.Count
@@ -1112,6 +1112,9 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
     End If
     
     ' ...
+    Call LockGUI
+    
+    ' ...
     m_group_index = -1
 
     ' ...
@@ -1202,9 +1205,6 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
         
         ' ...
         Call UnlockGUI
-    Else
-        ' ...
-        Call LockGUI
     End If
     
     ' ...
@@ -1215,11 +1215,11 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
 End Sub
 
 ' ...
-Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
     ' ...
     If (Button = vbLeftButton) Then
         ' ...
-        Set trvUsers.SelectedItem = trvUsers.HitTest(x, y)
+        Set trvUsers.SelectedItem = trvUsers.HitTest(X, Y)
         
         ' ...
         Call trvUsers_NodeClick(trvUsers.SelectedItem)
@@ -1227,7 +1227,7 @@ Private Sub trvUsers_MouseMove(Button As Integer, Shift As Integer, x As Single,
 End Sub
 
 ' ...
-Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     ' ...
     If (Button = vbRightButton) Then
         Dim gAcc As udtGetAccessResponse ' ...
@@ -1263,15 +1263,15 @@ End Sub
 
 ' ...
 Private Sub trvUsers_OLEDragOver(Data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
-    Shift As Integer, x As Single, y As Single, State As Integer)
+    Shift As Integer, X As Single, Y As Single, State As Integer)
     
     ' ...
-    Set trvUsers.DropHighlight = trvUsers.HitTest(x, y)
+    Set trvUsers.DropHighlight = trvUsers.HitTest(X, Y)
 End Sub
 
 ' ...
 Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long, Button As Integer, _
-    Shift As Integer, x As Single, y As Single)
+    Shift As Integer, X As Single, Y As Single)
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -1327,7 +1327,7 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
                 
                     ' ...
                     Call trvUsers_OLEDragDrop(Data, Effect, Button, Shift, _
-                        x, y)
+                        X, Y)
                 
                     ' ...
                     Exit Sub

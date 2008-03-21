@@ -94,6 +94,7 @@ Private m_ChatDelay                     As Long
 Private m_ScriptLock                    As Boolean
 Private m_shitlist_group                As String
 Private m_safelist_group                As String
+Private m_tagbans_group                 As String
 
 Public Property Get Username() As String
     
@@ -1002,6 +1003,20 @@ Public Property Let DefaultSafelistGroup(str As String)
 
     ' ...
     m_safelist_group = str
+    
+End Property
+
+Public Property Get DefaultTagbansGroup() As String
+
+    ' ...
+    DefaultSafelistGroup = m_tagbans_group
+
+End Property
+
+Public Property Let DefaultTagbansGroup(str As String)
+
+    ' ...
+    m_tagbans_group = str
     
 End Property
 
