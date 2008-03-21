@@ -7646,10 +7646,10 @@ Public Function convertUsername(ByVal Username As String) As String
 
             If (BotVars.Gateway <> vbNullString) Then
                 Select Case (BotVars.Gateway)
-                    Case "Lordaeron": index = InStr(1, Username, "@USWest", vbBinaryCompare)
-                    Case "Azeroth":   index = InStr(1, Username, "@USEast", vbBinaryCompare)
-                    Case "Kalimdor":  index = InStr(1, Username, "@Asia", vbBinaryCompare)
-                    Case "Northrend": index = InStr(1, Username, "@Europe", vbBinaryCompare)
+                    Case "Lordaeron": index = InStr(1, Username, "@USWest", vbTextCompare)
+                    Case "Azeroth":   index = InStr(1, Username, "@USEast", vbTextCompare)
+                    Case "Kalimdor":  index = InStr(1, Username, "@Asia", vbTextCompare)
+                    Case "Northrend": index = InStr(1, Username, "@Europe", vbTextCompare)
                 End Select
                 
                 If (index <> 0) Then
@@ -7697,7 +7697,7 @@ Public Function reverseUsername(ByVal Username As String) As String
             (Not (BotVars.UseW3GameConventions))) Then
             
             If (BotVars.Gateway <> vbNullString) Then
-                index = InStr(1, Username, ("@" & BotVars.Gateway), vbBinaryCompare)
+                index = InStr(1, Username, ("@" & BotVars.Gateway), vbTextCompare)
     
                 If (index <> 0) Then
                     reverseUsername = Left$(Username, index - 1)

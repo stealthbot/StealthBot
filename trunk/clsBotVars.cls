@@ -1009,7 +1009,7 @@ End Property
 Public Property Get DefaultTagbansGroup() As String
 
     ' ...
-    DefaultSafelistGroup = m_tagbans_group
+    DefaultTagbansGroup = m_tagbans_group
 
 End Property
 
