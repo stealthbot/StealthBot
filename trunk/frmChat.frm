@@ -5988,7 +5988,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         If (default_group_access.Username = vbNullString) Then
             ' ...
             Call ProcessCommand(CurrentUsername, "/add " & BotVars.DefaultShitlistGroup & _
-                    " B --type group --banmsg Shitlist", True, False, False)
+                    " B --type group --banmsg Shitlisted", True, False, False)
         End If
     End If
     
