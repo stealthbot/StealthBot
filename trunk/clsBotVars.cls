@@ -954,7 +954,7 @@ End Property
 
 Public Property Get ChatDelay() As Long
 
-    m_ChatDelay = m_ChatDelay
+    ChatDelay = m_ChatDelay
 
 End Property
 

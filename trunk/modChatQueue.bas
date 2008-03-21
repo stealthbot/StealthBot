@@ -14,20 +14,20 @@ Private m_QueueGTC   As Long
 ' ...
 Public Sub ChatQueue_Initialize()
     ' ...
-    If (BotVars.ChatDelay) Then
+    If (BotVars.ChatDelay > 0) Then
         ' ...
         Set colChatQueue = New Collection
     
         ' ...
         m_TimerID = SetTimer(0, m_TimerID, _
-            IIf(BotVars.ChatDelay <= 1000, BotVars.ChatDelay, 1000), AddressOf ChatQueueTimerProc)
+            IIf(BotVars.ChatDelay <= 500, BotVars.ChatDelay, 500), AddressOf ChatQueueTimerProc)
     End If
 End Sub
 
 ' ...
 Public Sub ChatQueue_Terminate()
     ' ...
-    If (m_TimerID) Then
+    If (m_TimerID > 0) Then
         ' ...
         m_TimerID = KillTimer(0, m_TimerID)
         
@@ -103,9 +103,9 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
     
     Dim game   As String ' ...
     Dim pStats As String ' ...
-    Dim clan   As String ' ...
+    Dim Clan   As String ' ...
     
-    game = ParseStatstring(OriginalStatstring, pStats, clan)
+    game = ParseStatstring(OriginalStatstring, pStats, Clan)
 
     If (JoinMessagesOff = False) Then
         Call frmChat.AddChat(RTBColors.JoinText, "-- ", _
@@ -113,8 +113,8 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
                 RTBColors.JoinText, " has joined the channel using " & pStats)
     End If
     
-    If (clan <> vbNullString) Then
-        Call AddName(Username, Product, Flags, Ping, clan)
+    If (Clan <> vbNullString) Then
+        Call AddName(Username, Product, Flags, Ping, Clan)
     Else
         Call AddName(Username, Product, Flags, Ping)
     End If
@@ -152,10 +152,10 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
     Dim i      As Integer  ' ...
     Dim game   As String   ' ...
     Dim pStats As String   ' ...
-    Dim clan   As String   ' ...
+    Dim Clan   As String   ' ...
     Dim Pos    As Integer  ' ...
 
-    game = ParseStatstring(OriginalStatstring, pStats, clan)
+    game = ParseStatstring(OriginalStatstring, pStats, Clan)
     
     If (JoinMessagesOff = False) Then
         Call frmChat.AddChat(RTBColors.JoinText, "-- Stats updated: ", _
@@ -254,7 +254,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     
                 Call frmChat.lvChannel.ListItems.Remove(Pos)
     
-                Call AddName(.Username, .Product, Flags, Ping, .clan, Pos)
+                Call AddName(.Username, .Product, Flags, Ping, .Clan, Pos)
     
                 frmChat.lvChannel.Enabled = True
             End With
@@ -268,7 +268,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     
                     Call frmChat.lvChannel.ListItems.Remove(Pos)
     
-                    Call AddName(.Username, .Product, Flags, Ping, .clan, Pos)
+                    Call AddName(.Username, .Product, Flags, Ping, .Clan, Pos)
                     
                     frmChat.lvChannel.Enabled = True
                 End With
