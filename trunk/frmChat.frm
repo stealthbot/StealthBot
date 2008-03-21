@@ -5609,18 +5609,20 @@ Sub ClearChannel()
 End Sub
 
 Sub ReloadConfig(Optional Mode As Byte = 0)
-    Const MN              As String = "Main"
-    Const OT              As String = "Other"
+    Const MN                 As String = "Main"
+    Const OT                 As String = "Other"
 
-    Dim s                 As String
-    Dim i                 As Integer
-    Dim f                 As Integer
-    Dim index             As Integer
-    Dim D2GameConventions As String
-    Dim W3GameConventions As String
-    Dim gameConventions   As String
-    Dim bln               As Boolean
-    Dim doConvert         As Boolean
+    Dim default_group_access As udtGetAccessResponse
+    Dim s                    As String
+    Dim i                    As Integer
+    Dim f                    As Integer
+    Dim index                As Integer
+    Dim D2GameConventions    As String
+    Dim W3GameConventions    As String
+    Dim gameConventions      As String
+    Dim bln                  As Boolean
+    Dim doConvert            As Boolean
+    Dim command_output()     As String
     
     s = BotVars.Username
     
@@ -5970,6 +5972,40 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             BotVars.IB_Wait = CInt(s)
         Else
             BotVars.IB_Wait = 32767
+        End If
+    End If
+    
+    s = ReadCFG(OT, "DefaultShitlistGroup")
+    BotVars.DefaultShitlistGroup = s
+    
+    ' ...
+    If (BotVars.DefaultShitlistGroup <> vbNullString) Then
+        ' ...
+        default_group_access = _
+                GetAccess(BotVars.DefaultShitlistGroup, "GROUP")
+        
+        ' ...
+        If (default_group_access.Username = vbNullString) Then
+            ' ...
+            Call ProcessCommand(CurrentUsername, "/add " & BotVars.DefaultShitlistGroup & _
+                    " B --type group --banmsg Shitlist", True, False, False)
+        End If
+    End If
+    
+    s = ReadCFG(OT, "DefaultSafelistGroup")
+    BotVars.DefaultSafelistGroup = s
+    
+    ' ...
+    If (BotVars.DefaultSafelistGroup <> vbNullString) Then
+        ' ...
+        default_group_access = _
+                GetAccess(BotVars.DefaultSafelistGroup, "GROUP")
+        
+        ' ...
+        If (default_group_access.Username = vbNullString) Then
+            ' ...
+            Call ProcessCommand(CurrentUsername, "/add " & BotVars.DefaultSafelistGroup & _
+                    " S --type group", True, False, False)
         End If
     End If
     

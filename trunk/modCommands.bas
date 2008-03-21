@@ -37,7 +37,8 @@ Public floodCap As Byte   ' ...?
 ' prepares commands for processing, and calls helper functions associated with
 ' processing
 Public Function ProcessCommand(ByVal Username As String, ByVal Message As String, _
-    Optional ByVal IsLocal As Boolean = False, Optional ByVal Whispered As Boolean = False) As Boolean
+        Optional ByVal IsLocal As Boolean = False, Optional ByVal Whispered As Boolean = False, Optional _
+                DisplayOutput As Boolean = True) As Boolean
     
     On Error GoTo ERROR_HANDLER
     
@@ -74,27 +75,30 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                     IsLocal, command_return)
             
             ' ...
-            If (command_return(0) <> vbNullString) Then
+            If (DisplayOutput) Then
                 ' ...
-                For i = LBound(command_return) To UBound(command_return)
+                If (command_return(0) <> vbNullString) Then
                     ' ...
-                    If (IsLocal) Then
+                    For i = LBound(command_return) To UBound(command_return)
                         ' ...
-                        If (Command.PublicOutput) Then
-                            AddQ command_return(i), PRIORITY.CONSOLE_MESSAGE
+                        If (IsLocal) Then
+                            ' ...
+                            If (Command.PublicOutput) Then
+                                AddQ command_return(i), PRIORITY.CONSOLE_MESSAGE
+                            Else
+                                frmChat.AddChat RTBColors.ConsoleText, command_return(i)
+                            End If
                         Else
-                            frmChat.AddChat RTBColors.ConsoleText, command_return(i)
+                            ' ...
+                            If (Whispered) Then
+                                AddQ "/w " & Username & Space$(1) & command_return(i), _
+                                        PRIORITY.COMMAND_RESPONSE_MESSAGE
+                            Else
+                                AddQ command_return(i), PRIORITY.COMMAND_RESPONSE_MESSAGE
+                            End If
                         End If
-                    Else
-                        ' ...
-                        If (Whispered) Then
-                            AddQ "/w " & Username & Space$(1) & command_return(i), _
-                                    PRIORITY.COMMAND_RESPONSE_MESSAGE
-                        Else
-                            AddQ command_return(i), PRIORITY.COMMAND_RESPONSE_MESSAGE
-                        End If
-                    End If
-                Next i
+                    Next i
+                End If
             End If
         End If
         
@@ -3180,16 +3184,33 @@ Private Function OnSafeAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf() As String ' temporary output buffer
-    Dim u        As String
+    Dim safe_msg As String ' ...
     
     ReDim Preserve tmpBuf(0)
     
-    u = msgData
-        
-    If (InStr(1, u, Space(1), vbBinaryCompare) <> 0) Then
+    If (InStr(1, msgData, Space(1), vbBinaryCompare) <> 0) Then
         tmpBuf(0) = "Error: The specified username is invalid."
     Else
-        Call OnAdd(Username, dbAccess, u & " +S", True, tmpBuf())
+        ' ...
+        If (BotVars.DefaultSafelistGroup <> vbNullString) Then
+            Dim default_group_access As udtGetAccessResponse
+            
+            ' ...
+            default_group_access = _
+                    GetAccess(BotVars.DefaultSafelistGroup, "GROUP")
+            
+            ' ...
+            If (default_group_access.Username <> vbNullString) Then
+                safe_msg = " --group " & BotVars.DefaultSafelistGroup
+            End If
+        End If
+        
+        ' ...
+        If (safe_msg = vbNullString) Then
+            safe_msg = " +S"
+        End If
+    
+        Call OnAdd(Username, dbAccess, msgData & safe_msg, True, tmpBuf())
     End If
     
     ' return message
@@ -3314,9 +3335,29 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
     
     Dim tmpBuf() As String  ' ...
     Dim index    As Integer ' ...
+    Dim shit_msg As String  ' ...
     
     ' redefine array size
     ReDim Preserve tmpBuf(0)
+    
+    ' ...
+    If (BotVars.DefaultShitlistGroup <> vbNullString) Then
+        Dim default_group_access As udtGetAccessResponse
+        
+        ' ...
+        default_group_access = _
+                GetAccess(BotVars.DefaultShitlistGroup, "GROUP")
+        
+        ' ...
+        If (default_group_access.Username <> vbNullString) Then
+            shit_msg = " --group " & BotVars.DefaultShitlistGroup
+        End If
+    End If
+    
+    ' ...
+    If (shit_msg = vbNullString) Then
+        shit_msg = " +B"
+    End If
     
     ' ...
     index = InStr(1, msgData, Space(1), vbBinaryCompare)
@@ -3331,19 +3372,21 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
         If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
             tmpBuf(0) = "Error: The specified username is invalid."
         Else
-            Dim Msg As String ' ...
+            Dim msg As String ' ...
             
             ' ...
-            Msg = Mid$(msgData, index + 1)
+            msg = Mid$(msgData, index + 1)
         
             ' ...
-            Call OnAdd(Username, dbAccess, user & " +B --type USER --banmsg " & _
-                Msg, True, tmpBuf())
+            shit_msg = user & shit_msg & " --type USER --banmsg " & msg
         End If
     Else
         ' ...
-        Call OnAdd(Username, dbAccess, msgData & " +B --type USER", True, tmpBuf())
+        shit_msg = msgData & shit_msg & " --type USER"
     End If
+    
+    ' ...
+    Call OnAdd(Username, dbAccess, shit_msg, True, tmpBuf())
     
     ' return message
     cmdRet() = tmpBuf()
@@ -4535,7 +4578,7 @@ End Function ' end function OnCheckMail
 Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim Msg    As udtMail
+    Dim msg    As udtMail
     
     Dim tmpBuf As String ' temporary output buffer
             
@@ -4544,10 +4587,10 @@ Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAcc
     End If
     
     If (GetMailCount(Username) > 0) Then
-        Call GetMailMessage(Username, Msg)
+        Call GetMailMessage(Username, msg)
         
-        If (Len(RTrim(Msg.To)) > 0) Then
-            tmpBuf = "Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
+        If (Len(RTrim(msg.To)) > 0) Then
+            tmpBuf = "Message from " & RTrim(msg.From) & ": " & RTrim(msg.Message)
         End If
     Else
         tmpBuf = "You do not currently have any messages " & _
@@ -4593,7 +4636,7 @@ End Function ' end function OnWhoAmI
 
 ' TO DO:
 ' handle add command
-Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
 
     ' ...
@@ -4843,7 +4886,7 @@ Private Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessR
 
         ' is rank valid?
         If ((rank <= 0) And (Flags = vbNullString) And _
-            (sGrp = vbNullString)) Then
+                (sGrp = vbNullString) And (dbType = vbNullString)) Then
             
             tmpBuf = "Error: You have specified an invalid rank."
             

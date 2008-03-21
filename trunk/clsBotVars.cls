@@ -92,6 +92,8 @@ Private m_NoSupportMultiCharTrigger     As Boolean
 Private m_MediaPlayer                   As String
 Private m_ChatDelay                     As Long
 Private m_ScriptLock                    As Boolean
+Private m_shitlist_group                As String
+Private m_safelist_group                As String
 
 Public Property Get Username() As String
     
@@ -972,6 +974,34 @@ Public Property Let ScriptLock(bln As Boolean)
     If (m_ScriptLock = False) Then
         m_ScriptLock = bln
     End If
+    
+End Property
+
+Public Property Get DefaultShitlistGroup() As String
+
+    ' ...
+    DefaultShitlistGroup = m_shitlist_group
+
+End Property
+
+Public Property Let DefaultShitlistGroup(str As String)
+
+    ' ...
+    m_shitlist_group = str
+    
+End Property
+
+Public Property Get DefaultSafelistGroup() As String
+
+    ' ...
+    DefaultSafelistGroup = m_safelist_group
+
+End Property
+
+Public Property Let DefaultSafelistGroup(str As String)
+
+    ' ...
+    m_safelist_group = str
     
 End Property
 
