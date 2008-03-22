@@ -166,7 +166,7 @@ Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
 
     If g_Online Then
         SC.Run "Event_LoggedOn", CurrentUsername, BotVars.Product
-        SC.Run "Event_ChannelJoin", gChannel.Current, gChannel.Flags
+        SC.Run "Event_ChannelJoin", g_Channel.Name, gChannel.Flags
 
         If colUsersInChannel.Count > 0 Then
             For i = 1 To colUsersInChannel.Count

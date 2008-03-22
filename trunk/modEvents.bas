@@ -10,6 +10,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     On Error GoTo ERROR_HANDLER
     
     Dim clsChatQueue As clsChatQueue
+    Dim UserObj      As clsChannelUserObj
     
     Dim i            As Integer  ' ...
     Dim prevflags    As Long     ' ...
@@ -19,10 +20,40 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     If (LenB(Username) < 1) Then
         Exit Sub
     End If
+    
+    ' ...
+    Set UserObj = g_Channel.GetUserByName(Username)
+    
+    ' ...
+    If (UserObj.Name = vbNullString) Then
+        ' ...
+        Set UserObj = New clsChannelUserObj
+        
+        ' ...
+        If (g_Channel.IsSilent = False) Then
+            frmChat.AddChat vbRed, "Error: (1) There was a flags update received for a user that we do " & _
+                    "not have a record for."
+                    
+            Exit Sub
+        End If
+    End If
+    
+    ' ...
+    With UserObj
+        .Name = Username
+        .DisplayName = convertUsername(Username)
+        .Flags = Flags
+        .Ping = Ping
+    End With
+    
+    ' ...
+    If (g_Channel.IsSilent) Then
+        g_Channel.Users.Add UserObj
+    End If
 
     ' convert username to appropriate
     ' display format
-    Username = convertUsername(Username)
+    Username = UserObj.DisplayName
     
     ' check for user in channel
     i = UsernameToIndex(Username)
@@ -30,7 +61,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     ' the user is already in the
     ' internal channel listings,
     ' right?
-    If (i) Then
+    If (i > 0) Then
         With colUsersInChannel.Item(i)
             ' create a copy of previous flags for determining
             ' if a user's flags have just been changed
@@ -40,32 +71,39 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
             .Flags = Flags
         End With
     Else
-        Dim UserToAdd As clsUserInfo
-        Dim Clan      As String
-        Dim parsed    As String
+        If (g_Channel.IsSilent) Then
+            Dim UserToAdd As clsUserInfo
+            Dim Clan      As String
+            Dim parsed    As String
+            
+            ' ...
+            Set UserToAdd = New clsUserInfo
+            
+            Call ParseStatstring(Message, parsed, Clan)
         
-        ' ...
-        Set UserToAdd = New clsUserInfo
-        
-        Call ParseStatstring(Message, parsed, Clan)
-    
-        ' ...
-        With UserToAdd
-            .Flags = Flags
-            .Username = Username
-            .Ping = Ping
-            .Product = Product
-            .Safelisted = GetSafelist(Username)
-            .Statstring = Message
-            .JoinTime = GetTickCount
-            .Clan = Clan
-            .IsSelf = (StrComp(Username, CurrentUsername, _
-                vbBinaryCompare) = 0)
-            .InternalFlags = 0
-        End With
-        
-        ' ...
-        Call colUsersInChannel.Add(UserToAdd)
+            ' ...
+            With UserToAdd
+                .Flags = Flags
+                .Username = Username
+                .Ping = Ping
+                .Product = Product
+                .Safelisted = GetSafelist(Username)
+                .Statstring = Message
+                .JoinTime = GetTickCount
+                .Clan = Clan
+                .IsSelf = (StrComp(Username, CurrentUsername, _
+                    vbBinaryCompare) = 0)
+                .InternalFlags = 0
+            End With
+            
+            ' ...
+            Call colUsersInChannel.Add(UserToAdd)
+        Else
+            frmChat.AddChat vbRed, "Error: (2) There was a flags update received for a user that we do " & _
+                    "not have a record for."
+                    
+            Exit Sub
+        End If
     End If
     
     ' are we receiving a flag update for ourselves?
@@ -159,6 +197,15 @@ End Sub
 
 Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     Dim mailCount As Integer ' ...
+    
+    ' ...
+    Set g_Channel = New clsChannelObj
+    
+    ' ...
+    With g_Channel
+        .Name = ChannelName
+        .Flags = Flags
+    End With
 
     ' clear chat queue when
     ' joining new channel
@@ -179,9 +226,9 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         .Flags = Flags
     End With
     
-    SharedScriptSupport.myChannel = ChannelName
+    SharedScriptSupport.MyChannel = ChannelName
     
-    If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+    If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
         
         PassedClanMotdCheck = False
         
@@ -190,7 +237,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
 
     ' if we've just left another channel, call event script
     ' function indicating that we've done so.
-    If (LenB(gChannel.Current)) Then
+    If (LenB(g_Channel.Name)) Then
         On Error Resume Next
         
         frmChat.SControl.Run "Event_ChannelLeave"
@@ -204,10 +251,10 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         RTBColors.JoinedChannelName, ChannelName, RTBColors.JoinedChannelText, " --"
     
     SetTitle CurrentUsername & ", online in channel " & _
-        gChannel.Current
+        g_Channel.Name
     
     ' have we just joined the void?
-    If (StrComp(ChannelName, "The Void", vbBinaryCompare) = 0) Then
+    If (g_Channel.IsSilent) Then
         ' lets inform user of potential lag issues while in this channel
         frmChat.AddChat RTBColors.InformationText, "If you experience a lot of lag " & _
             "in The Void, try selecting 'Disable Void View' from the Window menu."
@@ -320,17 +367,17 @@ Repeat2:
             
         ElseIf KeyName = "Profile\Description" Then
         
-            Dim x() As String
+            Dim X() As String
             
-            x() = Split(KeyValue, Chr(13))
+            X() = Split(KeyValue, Chr(13))
             ReDim s(0)
             
-            For i = LBound(x) To UBound(x)
-                s(0) = x(i)
+            For i = LBound(X) To UBound(X)
+                s(0) = X(i)
                 
                 If Len(s(0)) > 200 Then s(0) = Left$(s(0), 200)
                 
-                If i = LBound(x) Then
+                If i = LBound(X) Then
                     frmChat.AddQ u & "[Descr] " & s(0)
                 Else
                     frmChat.AddQ u & "[Descr] " & Right(s(0), Len(s(0)) - 1)
@@ -574,7 +621,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
     End If
     
-    If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+    If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
         If (PassedClanMotdCheck = False) Then
             If (Message <> vbNullString) Then
                 Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
@@ -678,15 +725,15 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     
             '// backup channel
             If (InStr(Len(Temp), Message, "kicked you out", vbTextCompare) > 0) Then
-                If ((StrComp(gChannel.Current, "Op [vL]", vbTextCompare) <> 0) And _
-                    (StrComp(gChannel.Current, "Op Fatal-Error", vbTextCompare) <> 0)) Then
+                If ((StrComp(g_Channel.Name, "Op [vL]", vbTextCompare) <> 0) And _
+                    (StrComp(g_Channel.Name, "Op Fatal-Error", vbTextCompare) <> 0)) Then
                         
                     If (BotVars.UseBackupChan) Then
                         If (Len(BotVars.BackupChan) > 1) Then
                             frmChat.AddQ "/join " & BotVars.BackupChan
                         End If
                     Else
-                        frmChat.AddQ "/join " & gChannel.Current
+                        frmChat.AddQ "/join " & g_Channel.Name
                     End If
                 End If
             End If
@@ -881,6 +928,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     On Error GoTo ERROR_HANDLER
 
     Dim clsChatQueue As clsChatQueue ' ...
+    Dim UserObj      As clsChannelUserObj
     
     Dim i            As Integer ' ...
     Dim strCompare   As String  ' ...
@@ -898,7 +946,33 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         Exit Sub
     End If
     
-    Username = convertUsername(Username)
+    ' ...
+    Set UserObj = g_Channel.GetUserByName(Username)
+    
+    ' ...
+    If (UserObj.Name = vbNullString) Then
+        ' ...
+        Set UserObj = New clsChannelUserObj
+    Else
+        ' ...
+        StatUpdate = True
+    End If
+    
+    ' ...
+    With UserObj
+        .Name = Username
+        .DisplayName = convertUsername(Username)
+        .Flags = Flags
+        .Ping = Ping
+    End With
+    
+    ' ...
+    If (StatUpdate = False) Then
+        g_Channel.Users.Add UserObj
+    End If
+    
+    ' ...
+    Username = UserObj.DisplayName
     
     ' are we receiving my user information?
     If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
@@ -1048,7 +1122,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         Call DoLastSeen(Username)
         
         frmChat.lblCurrentChannel.Caption = _
-            frmChat.GetChannelString()
+                frmChat.GetChannelString()
         
         ' destroy class
         Set UserToAdd = Nothing
@@ -1079,7 +1153,24 @@ End Sub
 Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal w3icon As String)
     On Error GoTo ERROR_HANDLER
     
-    Username = convertUsername(Username)
+    Dim UserObj As clsChannelUserObj
+    
+    ' ...
+    Set UserObj = New clsChannelUserObj
+    
+    ' ...
+    With UserObj
+        .Name = Username
+        .DisplayName = convertUsername(Username)
+        .Flags = Flags
+        .Ping = Ping
+    End With
+    
+    ' ...
+    g_Channel.Users.Add UserObj
+    
+    ' ...
+    Username = UserObj.DisplayName
 
     If (Not (bFlood)) Then
         Dim UserToAdd  As clsUserInfo
@@ -1219,8 +1310,8 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                     vbBinaryCompare) > 0) Then
                     
                     If (gChannel.Designated = vbNullString) Then
-                        If Mid$(LCase$(gChannel.Current), 1, 3) = "op " Then
-                            If (StrComp(Mid$(gChannel.Current, 4), StripRealm(Username), _
+                        If Mid$(LCase$(g_Channel.Name), 1, 3) = "op " Then
+                            If (StrComp(Mid$(g_Channel.Name, 4), StripRealm(Username), _
                                 vbTextCompare)) <> 0 Then
                                 
                                 frmChat.AddQ "/designate " & Username
@@ -1385,7 +1476,7 @@ checkIPBan:
         
         If (BotVars.UseGreet) Then
             If (LenB(BotVars.GreetMsg) > 0) Then
-                If (StrComp(gChannel.Current, "Clan SBs", vbTextCompare) <> 0) Then
+                If (StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) <> 0) Then
                     
                     If (QueueLoad = 0) Then
                         QueueLoad = (QueueLoad + 1)
@@ -1479,18 +1570,32 @@ End Sub
 Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     On Error GoTo ERROR_HANDLER
 
+    Dim UserObj   As clsChannelUserObj
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim Pos       As Integer
+    Dim pos       As Integer
     Dim userIndex As Integer
     Dim bln       As Boolean
+    
+    ' ...
+    Set UserObj = g_Channel.GetUserByName(Username)
+    
+    ' ...
+    If (UserObj.Name <> vbNullString) Then
+        Set UserObj = Nothing
+    End If
     
     ' ...
     Username = convertUsername(Username)
     
     ' ...
     i = UsernameToIndex(Username)
+    
+    ' ...
+    If (i) Then
+        Call colUsersInChannel.Remove(i)
+    End If
     
     Do Until (bln = True)
         ' ...
@@ -1506,11 +1611,6 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
             bln = True
         End If
     Loop
-    
-    ' ...
-    If (i) Then
-        Call colUsersInChannel.Remove(i)
-    End If
     
     ' ...
     If (StrComp(Username, gChannel.Designated, vbTextCompare) = 0) Then
@@ -2121,14 +2221,14 @@ End Function
 '11/22/07 - Hdx - Pass the channel listing (0x0B) directly off to scriptors for there needs. (What other use is there?)
 Public Sub Event_ChannelList(sChannels() As String)
     If (MDebug("all")) Then
-        Dim x As Integer
+        Dim X As Integer
         
         frmChat.AddChat RTBColors.InformationText, "Received Channel List: "
         
-        For x = 0 To UBound(sChannels)
+        For X = 0 To UBound(sChannels)
             frmChat.AddChat RTBColors.InformationText, vbTab & _
-                sChannels(x)
-        Next x
+                sChannels(X)
+        Next X
     End If
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''

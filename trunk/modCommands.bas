@@ -90,7 +90,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                             End If
                         Else
                             ' ...
-                            If (Whispered) Then
+                            If ((BotVars.WhisperCmds) Or (Whispered)) Then
                                 AddQ "/w " & Username & Space$(1) & command_return(i), _
                                         PRIORITY.COMMAND_RESPONSE_MESSAGE
                             Else
@@ -842,7 +842,7 @@ Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAcces
     End If
 
     ' ...
-    tmpBuf = "I am currently in channel " & gChannel.Current & " (" & _
+    tmpBuf = "I am currently in channel " & g_Channel.Name & " (" & _
         colUsersInChannel.Count & " users present)"
     
     ' return message
@@ -1182,7 +1182,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
     If (checkChannel(msgData)) Then
         Dim i          As Integer ' ...
         Dim arrUsers() As String  ' ...
-        Dim userCount  As Integer ' ...
+        Dim UserCount  As Integer ' ...
         Dim opsCount   As Integer ' ...
     
         ' ...
@@ -1207,7 +1207,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Next i
     
         ' ...
-        If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+        If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
             ' ...
             ReDim Preserve arrUsers(0)
             
@@ -1224,21 +1224,21 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                             ' ...
                             If (UsernameToIndex(convertUsername(frmChat.lvClanList.ListItems(i).text)) > 0) Then
                                 ' ...
-                                arrUsers(userCount) = _
+                                arrUsers(UserCount) = _
                                     frmChat.lvClanList.ListItems(i).text
             
                                 ' ...
-                                userCount = (userCount + 1)
+                                UserCount = (UserCount + 1)
             
                                 ' ...
-                                ReDim Preserve arrUsers(0 To userCount)
+                                ReDim Preserve arrUsers(0 To UserCount)
                             End If
                         End If
                     End If
                 Next i
                 
                 ' ...
-                If (opsCount > userCount) Then
+                If (opsCount > UserCount) Then
                     ' ...
                     cmdRet(0) = "Error: There is currently a channel moderator present that cannot be " & _
                             "removed from his or her position."
@@ -1247,9 +1247,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 End If
                 
                 ' ...
-                If (userCount) Then
+                If (UserCount) Then
                     ' demote shamans
-                    For i = 0 To userCount
+                    For i = 0 To UserCount
                         ' ...
                         With PBuffer
                             .InsertDWord &H1
@@ -1266,7 +1266,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
         
         ' ...
-        If (StrComp(Left$(gChannel.Current, 3), "Op ", vbTextCompare) = 0) Then
+        If (StrComp(Left$(g_Channel.Name, 3), "Op ", vbTextCompare) = 0) Then
             ' ...
             If (opsCount >= 2) Then
                 ' ...
@@ -1276,9 +1276,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 ' ...
                 Exit Function
             End If
-        ElseIf (StrComp(Left$(gChannel.Current, 5), "Clan ", vbTextCompare) = 0) Then
+        ElseIf (StrComp(Left$(g_Channel.Name, 5), "Clan ", vbTextCompare) = 0) Then
             ' ...
-            If ((StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) <> 0) Or _
+            If ((StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) <> 0) Or _
                     (Clan.MyRank <= 2)) Then
                 
                 ' ...
@@ -1308,9 +1308,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Call bnetSend("/resign")
         
         ' ...
-        If (userCount) Then
+        If (UserCount) Then
             ' promote shamans again
-            For i = 0 To (userCount - 1)
+            For i = 0 To (UserCount - 1)
                 ' ...
                 With PBuffer
                     .InsertDWord &H3
@@ -1618,7 +1618,7 @@ Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' This command will make the bot rejoin the current channel.
     
     ' ...
-    Call RejoinChannel(gChannel.Current)
+    Call RejoinChannel(g_Channel.Name)
 End Function ' end function OnRejoin
 
 ' handle rejoin command
@@ -1631,7 +1631,7 @@ Private Function OnRj(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
         Username)
     
     ' rejoin previous channel
-    Call AddQ("/join " & gChannel.Current, PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
+    Call AddQ("/join " & g_Channel.Name, PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
 End Function ' end function OnRejoin
 
 ' handle plugban command
@@ -2072,13 +2072,13 @@ Private Function OnNext(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim Pos As Integer ' ...
+        Dim pos As Integer ' ...
         
         ' ...
-        Pos = MediaPlayer.PlaylistPosition
+        pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(Pos + 1)
+        Call MediaPlayer.PlayTrack(pos + 1)
         
         ' ...
         tmpBuf = "Skipped forwards."
@@ -2386,7 +2386,7 @@ Private Function OnReconnect(ByVal Username As String, ByRef dbAccess As udtGetA
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     If (g_Online) Then
-        BotVars.HomeChannel = gChannel.Current
+        BotVars.HomeChannel = g_Channel.Name
         
         Call frmChat.DoDisconnect
         
@@ -3070,6 +3070,8 @@ Private Function OnTagAdd(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Dim tmpBuf() As String  ' ...
     Dim index    As Integer ' ...
     Dim tag_msg  As String  ' ...
+    Dim user     As String  ' ...
+    Dim bmsg     As String  ' ...
     
     ' redefine array size
     ReDim Preserve tmpBuf(0)
@@ -3095,17 +3097,9 @@ Private Function OnTagAdd(ByVal Username As String, ByRef dbAccess As udtGetAcce
     
     ' ...
     index = InStr(1, msgData, Space(1), vbBinaryCompare)
-
-    ' STOP!
-    
-    ' ...
-    index = InStr(1, msgData, Space(1), vbBinaryCompare)
     
     ' ...
     If (index) Then
-        Dim user As String ' ...
-        Dim bmsg As String ' ...
-        
         ' ...
         user = Mid$(msgData, 1, index - 1)
         
@@ -3114,34 +3108,31 @@ Private Function OnTagAdd(ByVal Username As String, ByRef dbAccess As udtGetAcce
         
         ' ...
         If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
-            tmpBuf(0) = "Error: The specified username is invalid."
-        ElseIf (InStr(1, user, "*", vbBinaryCompare) <> 0) Then
             ' ...
-            Call OnAdd(Username, dbAccess, user & " +B --type USER --banmsg " & _
-                bmsg, True, tmpBuf())
-        Else
-            If (Len(user) = 0) Then
-                tmpBuf(0) = "Error: The specified tag is invalid."
-            Else
-                ' ...
-                Call OnAdd(Username, dbAccess, "*" & user & "*" & " +B --type USER --banmsg " _
-                    & bmsg, True, tmpBuf())
-            End If
+            tmpBuf(0) = "Error: The specified username is invalid."
         End If
     Else
-        If (InStr(1, msgData, "*", vbBinaryCompare) <> 0) Then
+        ' ...
+        user = msgData
+    End If
+    
+    ' ..
+    If (InStr(1, user, "*", vbBinaryCompare) = 0) Then
+        ' ...
+        If (Len(user) = 0) Then
             ' ...
-            Call OnAdd(Username, dbAccess, msgData & " +B --type USER", True, tmpBuf())
+            tmpBuf(0) = "Error: The specified tag is invalid."
         Else
-            If (Len(msgData) = 0) Then
-               tmpBuf(0) = "Error: The specified tag is invalid."
-            Else
-                ' ...
-                Call OnAdd(Username, dbAccess, "*" & msgData & "*" & " +B --type USER", True, _
-                    tmpBuf())
-            End If
+            ' ...
+            user = "*" & user & "*"
         End If
     End If
+    
+    ' ...
+    tag_msg = tag_msg & " --type USER"
+    
+    ' ...
+    Call OnAdd(Username, dbAccess, user & tag_msg, True, tmpBuf())
     
     ' return message
     cmdRet() = tmpBuf()
@@ -4236,13 +4227,13 @@ Private Function OnPrev(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim Pos As Integer ' ...
+        Dim pos As Integer ' ...
         
         ' ...
-        Pos = MediaPlayer.PlaylistPosition
+        pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(Pos - 1)
+        Call MediaPlayer.PlayTrack(pos - 1)
         
         ' ...
         tmpBuf = "Skipped backwards."

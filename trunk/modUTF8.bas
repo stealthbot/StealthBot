@@ -30,8 +30,8 @@ Public Function UTF8Encode(ByRef str As String) As Byte()
     
     ' ...
     If (UTF8Chars = 0) Then
-        ' ...
-        frmChat.AddChat vbRed, "DEBUG: GRRR @ UTF8Encode()!"
+        ' debug code
+        'frmChat.AddChat vbRed, "DEBUG: GRRR @ UTF8Encode()!"
         
         ' ...
         Exit Function
@@ -63,8 +63,8 @@ Public Function UTF8Decode(ByRef str As String, Optional LocaleID As Long = 1252
             
     ' ...
     If (UnicodeChars = 0) Then
-        ' ...
-        frmChat.AddChat vbRed, "DEBUG: GRRR @ UTF8Decode()!"
+        ' debug code
+        'frmChat.AddChat vbRed, "DEBUG: GRRR @ UTF8Decode()!"
     
         ' ...
         Exit Function

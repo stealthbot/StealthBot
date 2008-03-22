@@ -167,7 +167,7 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Public myChannel As String  '// will contain the bot's current channel at runtime.
+Public MyChannel As String  '// will contain the bot's current channel at runtime.
 Public BotFlags As Long     '// will contain the bot's current battle.net flags at runtime.
 Public myUsername As String '// will contain the bot's current username at runtime.
                             '// NOTE: This may be different than the bot's config.ini username
@@ -439,7 +439,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     With GetDBEntry
         .entryType = Temp.Type
         .Name = Temp.Username
-        .rank = Temp.Access
+        .Rank = Temp.Access
         .Flags = Temp.Flags
         .CreatedOn = Temp.AddedOn
         .CreatedBy = Temp.AddedBy
@@ -1422,6 +1422,10 @@ End Function
 ' // ...
 Public Function MediaPlayer() As Object
     Set MediaPlayer = modMediaPlayer.MediaPlayer()
+End Function
+
+Public Function Channel() As Object
+    Set Channel = g_Channel
 End Function
 
 Private Sub Class_Initialize()

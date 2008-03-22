@@ -2289,7 +2289,7 @@ Sub UpdateTrayTooltip()
     End If
 End Sub
 
-Private Sub ClanHandler_CandidateList(ByVal Status As Byte, users() As String)
+Private Sub ClanHandler_CandidateList(ByVal Status As Byte, Users() As String)
     Dim i As Long
     
     'Valid Status codes:
@@ -2300,11 +2300,11 @@ Private Sub ClanHandler_CandidateList(ByVal Status As Byte, users() As String)
     
     If MDebug("debug") Then
         AddChat RTBColors.ErrorMessageText, "CandidateList received. Status code [0x" & Hex(Status) & "]."
-        If UBound(users) > -1 Then
+        If UBound(Users) > -1 Then
             AddChat RTBColors.InformationText, "Potential clan members:"
             
-            For i = 0 To UBound(users)
-                AddChat RTBColors.InformationText, users(i)
+            For i = 0 To UBound(Users)
+                AddChat RTBColors.InformationText, Users(i)
             Next i
         End If
     End If
@@ -2461,7 +2461,7 @@ Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
         PassedClanMotdCheck = True
     End If
     
-    'If (StrComp(gChannel.Current, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+    'If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
     '    frmChat.AddChat RTBColors.ServerInfoText, Message
     'End If
     
@@ -3426,9 +3426,7 @@ End Sub
 
 Private Sub mnuPopUnsquelch_Click()
     On Error Resume Next
-    
-    AddChat vbRed, GetSelectedUser
-    
+
     AddQ "/unsquelch " & GetSelectedUser
 End Sub
 
@@ -4335,7 +4333,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         If (LenB(cboSend.text) > 0) Then
                             On Error Resume Next
                             
-                            If gChannel.Current = "The Void" And Not mnuDisableVoidView.Checked Then
+                            If (g_Channel.IsSilent) And Not mnuDisableVoidView.Checked Then
                                 BNCSBuffer.VoidTrimBuffer
                             End If
                             
@@ -4682,6 +4680,9 @@ Private Sub QueueTimer_Timer()
             '// This is a dummy queue message faking a 70-character queue entry
             QueueLoad = (QueueLoad + 1)
             QueueMaster = (QueueMaster + 3)
+            
+            ' ...
+            Call g_Queue.Pop
         Else
             If ((StrComp(Left$(Message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
                 (StrComp(Left$(Message, 10), "/unignore ", vbTextCompare) = 0)) Then
@@ -4898,8 +4899,11 @@ Private Sub Timer_Timer()
     End If
     
     If Not mnuDisableVoidView.Checked Then
-        If gChannel.Current = "The Void" Then
+        If (g_Channel.IsSilent) Then
             Set colUsersInChannel = New Collection
+            
+            g_Channel.ClearUsers
+            
             lvChannel.ListItems.Clear
             
             AddQ "/unsquelch " & CurrentUsername
@@ -4926,7 +4930,7 @@ Private Sub Timer_Timer()
 
     If IdleWait < 1 Then Exit Sub
     
-    If iCounter >= IdleWait And StrComp(LCase(gChannel.Current), "op [vl]", vbTextCompare) <> 0 Then
+    If iCounter >= IdleWait And StrComp(LCase(g_Channel.Name), "op [vl]", vbTextCompare) <> 0 Then
         iCounter = 0
         'on error resume next
         If IdleType = "msg" Or IdleType = vbNullString Then
@@ -4934,8 +4938,8 @@ Private Sub Timer_Timer()
                 Exit Sub
             End If
             IdleMsg = Replace(IdleMsg, "%cpuup", ConvertTime(GetUptimeMS))
-            IdleMsg = Replace(IdleMsg, "%chan", gChannel.Current)
-            IdleMsg = Replace(IdleMsg, "%c", gChannel.Current)
+            IdleMsg = Replace(IdleMsg, "%chan", g_Channel.Name)
+            IdleMsg = Replace(IdleMsg, "%c", g_Channel.Name)
             IdleMsg = Replace(IdleMsg, "%me", CurrentUsername)
             IdleMsg = Replace(IdleMsg, "%v", CVERSION)
             IdleMsg = Replace(IdleMsg, "%ver", CVERSION)
@@ -5292,13 +5296,14 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     
     ' ...
     If (strTmp <> vbNullString) Then
-        Dim Splt()   As String  ' ...
-        Dim i        As Integer ' ...
-        Dim currChar As Integer ' ...
-        Dim Send     As String  ' ...
-        Dim Command  As String  ' ...
-        Dim GTC      As Long    ' ...
-        Dim strUser  As String  ' ...
+        Dim Splt()         As String  ' ...
+        Dim i              As Integer ' ...
+        Dim currChar       As Integer ' ...
+        Dim Send           As String  ' ...
+        Dim Command        As String  ' ...
+        Dim GTC            As Long    ' ...
+        Dim strUser        As String  ' ...
+        Dim nameConversion As Boolean ' ...
         
         ' ...
         ReDim Splt(0)
@@ -5320,127 +5325,152 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         Next i
 
         ' ...
-        If (StrComp(Left$(strTmp, 1), "/", vbBinaryCompare) = 0) Then
-            Dim index As Long ' ...
-            
+        If (BotVars.UseGameConventions = False) Then
+            nameConversion = True
+        Else
             ' ...
-            For i = 2 To Len(strTmp)
-                ' ...
-                currChar = Asc(Mid$(strTmp, i, 1))
-            
-                ' ...
-                If (currChar <> Asc(Space(1))) Then
-                    Exit For
-                End If
-            Next i
-            
-            ' ...
-            If (i > 2) Then
-                strTmp = "/" & Mid$(strTmp, i)
-            End If
-
-            ' ...
-            index = InStr(1, strTmp, Space(1), vbBinaryCompare)
-            
-            ' ...
-            If (index > 2) Then
-                ' ...
-                Command = Mid$(strTmp, 2, (index - 2))
-
-                ' ...
-                If ((Command = "w") Or _
-                    (Command = "whisper") Or _
-                    (Command = "m") Or _
-                    (Command = "msg") Or _
-                    (Command = "message") Or _
-                    (Command = "whois") Or _
-                    (Command = "where") Or _
-                    (Command = "whereis") Or _
-                    (Command = "squelch") Or _
-                    (Command = "unsquelch") Or _
-                    (Command = "ignore") Or _
-                    (Command = "unignore") Or _
-                    (Command = "ban") Or _
-                    (Command = "unban") Or _
-                    (Command = "kick") Or _
-                    (Command = "designate")) Then
-        
-                    ' ...
-                    Splt() = Split(strTmp, Space$(1), 3)
+            If ((StrReverse$(BotVars.Product) = "D2DV") Or _
+                    (StrReverse$(BotVars.Product) = "D2XP")) Then
                     
+                ' ...
+                If (BotVars.UseD2GameConventions = False) Then
+                    nameConversion = True
+                End If
+            ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
+                    (StrReverse$(BotVars.Product) = "W3XP")) Then
+                
+                ' ...
+                If (BotVars.UseW3GameConventions = False) Then
+                    nameConversion = True
+                End If
+            End If
+        End If
+        
+        ' ...
+        If (nameConversion) Then
+            ' ...
+            If (StrComp(Left$(strTmp, 1), "/", vbBinaryCompare) = 0) Then
+                Dim index As Long ' ...
+                
+                ' ...
+                For i = 2 To Len(strTmp)
+                    ' ...
+                    currChar = Asc(Mid$(strTmp, i, 1))
+                
+                    ' ...
+                    If (currChar <> Asc(Space(1))) Then
+                        Exit For
+                    End If
+                Next i
+                
+                ' ...
+                If (i > 2) Then
+                    strTmp = "/" & Mid$(strTmp, i)
+                End If
+    
+                ' ...
+                index = InStr(1, strTmp, Space(1), vbBinaryCompare)
+                
+                ' ...
+                If (index > 2) Then
+                    ' ...
+                    Command = Mid$(strTmp, 2, (index - 2))
+    
+                    ' ...
+                    If ((Command = "w") Or _
+                        (Command = "whisper") Or _
+                        (Command = "m") Or _
+                        (Command = "msg") Or _
+                        (Command = "message") Or _
+                        (Command = "whois") Or _
+                        (Command = "where") Or _
+                        (Command = "whereis") Or _
+                        (Command = "squelch") Or _
+                        (Command = "unsquelch") Or _
+                        (Command = "ignore") Or _
+                        (Command = "unignore") Or _
+                        (Command = "ban") Or _
+                        (Command = "unban") Or _
+                        (Command = "kick") Or _
+                        (Command = "designate")) Then
+            
+                        ' ...
+                        Splt() = Split(strTmp, Space$(1), 3)
+                        
+                        ' ...
+                        If (UBound(Splt) > 0) Then
+                            ' ...
+                            Command = Splt(0) & Space$(1) & reverseUsername(Splt(1)) & _
+                                Space$(1)
+                                
+                            If (UBound(Splt) > 1) Then
+                                ReDim Preserve Splt(0 To UBound(Splt) - 1)
+                            End If
+                        End If
+                    ElseIf ((Command = "f") Or _
+                            (Command = "friends")) Then
+                        
+                        ' ...
+                        Splt() = Split(strTmp, Space$(1), 3)
+                        
+                        ' ...
+                        Command = Splt(0) & Space$(1)
+                        
+                        ' ...
+                        If (UBound(Splt) >= 1) Then
+                            ' ...
+                            Command = Command & Splt(1) & Space$(1)
+                        
+                            ' ...
+                            If (UBound(Splt) >= 2) Then
+                                ' ...
+                                Select Case (LCase$(Splt(1)))
+                                    Case "m", "msg"
+                                        ' ...
+                                        ReDim Preserve Splt(0 To UBound(Splt) - 1)
+    
+                                    Case Else
+                                        ' ...
+                                        Splt() = Split(strTmp, Space$(1), 4)
+                                    
+                                        ' ...
+                                        If ((StrReverse$(BotVars.Product) = "WAR3") Or _
+                                            (StrReverse$(BotVars.Product) = "W3XP")) Then
+                                            
+                                            ' ...
+                                            Command = Command & reverseUsername(Splt(2)) & _
+                                                Space$(1)
+                                        Else
+                                            ' ...
+                                            Command = Command & Splt(2) & Space$(1)
+                                        End If
+                                        
+                                        ' ...
+                                        If (UBound(Splt) >= 3) Then
+                                            Command = Command & Splt(3)
+                                        End If
+                                End Select
+                            End If
+                        End If
+                    Else
+                        ' ...
+                        Command = "/" & Command & Space$(1)
+                        
+                        ' ...
+                        strTmp = Mid$(strTmp, Len(Command) + 1)
+                    End If
+                    
+                    ' ...
+                    If (Len(Command) >= MAX_MESSAGE_LENGTH) Then
+                        Exit Sub
+                    End If
+    
                     ' ...
                     If (UBound(Splt) > 0) Then
                         ' ...
-                        Command = Splt(0) & Space$(1) & reverseUsername(Splt(1)) & _
-                            Space$(1)
-                            
-                        If (UBound(Splt) > 1) Then
-                            ReDim Preserve Splt(0 To UBound(Splt) - 1)
-                        End If
+                        strTmp = Mid$(strTmp, _
+                            (Len(Join(Splt(), Space$(1))) + (Len(Space$(1))) + 1))
                     End If
-                ElseIf ((Command = "f") Or _
-                        (Command = "friends")) Then
-                    
-                    ' ...
-                    Splt() = Split(strTmp, Space$(1), 3)
-                    
-                    ' ...
-                    Command = Splt(0) & Space$(1)
-                    
-                    ' ...
-                    If (UBound(Splt) >= 1) Then
-                        ' ...
-                        Command = Command & Splt(1) & Space$(1)
-                    
-                        ' ...
-                        If (UBound(Splt) >= 2) Then
-                            ' ...
-                            Select Case (LCase$(Splt(1)))
-                                Case "m", "msg"
-                                    ' ...
-                                    ReDim Preserve Splt(0 To UBound(Splt) - 1)
-
-                                Case Else
-                                    ' ...
-                                    Splt() = Split(strTmp, Space$(1), 4)
-                                
-                                    ' ...
-                                    If ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                                        (StrReverse$(BotVars.Product) = "W3XP")) Then
-                                        
-                                        ' ...
-                                        Command = Command & reverseUsername(Splt(2)) & _
-                                            Space$(1)
-                                    Else
-                                        ' ...
-                                        Command = Command & Splt(2) & Space$(1)
-                                    End If
-                                    
-                                    ' ...
-                                    If (UBound(Splt) >= 3) Then
-                                        Command = Command & Splt(3)
-                                    End If
-                            End Select
-                        End If
-                    End If
-                Else
-                    ' ...
-                    Command = "/" & Command & Space$(1)
-                    
-                    ' ...
-                    strTmp = Mid$(strTmp, Len(Command) + 1)
-                End If
-                
-                ' ...
-                If (Len(Command) >= MAX_MESSAGE_LENGTH) Then
-                    Exit Sub
-                End If
-
-                ' ...
-                If (UBound(Splt) > 0) Then
-                    ' ...
-                    strTmp = Mid$(strTmp, _
-                        (Len(Join(Splt(), Space$(1))) + (Len(Space$(1))) + 1))
                 End If
             End If
             
@@ -5450,28 +5480,31 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 Dim spaceIndex As Long   ' ...
                 
                 ' ...
-                spaceIndex = InStr(1, Message, Space$(1), vbBinaryCompare)
+                If (Len(Message) > 1) Then
+                    ' ...
+                    spaceIndex = InStr(1, Message, Space$(1), vbBinaryCompare)
+                    
+                    ' ...
+                    If (spaceIndex) Then
+                        cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 2))
+                    Else
+                        cmdName = LCase$(Mid$(Message, 2))
+                    End If
                 
-                ' ...
-                If (spaceIndex) Then
-                    cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 2))
-                Else
-                    cmdName = LCase$(Mid$(Message, 2))
+                    ' ...
+                    Select Case (cmdName)
+                        Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
+                        Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
+                        Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        Case "unban":     msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        Case "squelch":   msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        Case "ignore":    msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        Case "unsquelch": msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        Case "unignore":  msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
+                    End Select
                 End If
-            
-                ' ...
-                Select Case (cmdName)
-                    Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
-                    Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
-                    Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                    Case "unban":     msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                    Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                    Case "squelch":   msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                    Case "ignore":    msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                    Case "unsquelch": msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                    Case "unignore":  msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                    Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
-                End Select
             End If
         End If
 
@@ -5840,7 +5873,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                 convertUsername(CurrentUsername)
     
             SetTitle CurrentUsername & ", online in channel " & _
-                gChannel.Current
+                g_Channel.Name
         End If
     Else
         If (BotVars.UseGameConventions) Then
@@ -5898,7 +5931,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
                     reverseUsername(CurrentUsername)
     
                 SetTitle CurrentUsername & ", online in channel " & _
-                    gChannel.Current
+                    g_Channel.Name
             End If
         End If
     
@@ -6797,7 +6830,7 @@ Function GetChannelString() As String
         GetChannelString = vbNullString
     Else
         Select Case ListviewTabs.Tab
-            Case 0: GetChannelString = gChannel.Current & " (" & lvChannel.ListItems.Count & ")"
+            Case 0: GetChannelString = g_Channel.Name & " (" & lvChannel.ListItems.Count & ")"
             Case 1: GetChannelString = lvFriendList.ListItems.Count & " friends listed"
             Case 2: GetChannelString = "Clan " & StrReverse(Replace(Clan.DWName, Chr(0), "")) & ": " & lvClanList.ListItems.Count & " members."
         End Select

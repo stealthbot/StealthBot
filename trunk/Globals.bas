@@ -123,7 +123,7 @@ Public AwaitingSystemKeys As Byte
 Public AwaitingSelfRemoval As Byte
 'Public AttemptedNewVerbyte As Boolean
 Public g_Quotes As Collection
-
+Public g_Channel As New clsChannelObj
 
 Public UserCancelledConnect As Boolean
 

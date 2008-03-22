@@ -37,12 +37,12 @@ Const SID_CLANUSERINFO& = &H82 '// arbitrary name
 Const SID_CLANMOTD& = &H7C
 
 
-Public Event CandidateList(ByVal Status As Byte, ByRef users() As String)
+Public Event CandidateList(ByVal Status As Byte, ByRef Users() As String)
 Public Event DisbandClanReply(ByVal Success As Boolean)
-Public Event ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal rank As Byte)
+Public Event ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal Rank As Byte)
 Public Event InviteUserReply(ByVal Status As Byte)
 Public Event ClanInvitation(ByVal Token As String, ByVal ClanTag As String, ByVal RawClanTag As String, ByVal ClanName As String, ByVal InvitedBy As String, ByVal NewClan As Boolean)
-Public Event ClanMemberUpdate(ByVal Username As String, ByVal rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
+Public Event ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
 Public Event ClanMemberList(ByRef Members() As String)
 Public Event UnknownClanEvent(ByVal PacketID As Byte, ByVal Data As String)
 Public Event DemoteUserReply(ByVal Success As Boolean)
@@ -175,7 +175,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             RaiseEvent MyRankChange(inBuf.GetByte)
             
         Case SID_CLANUSERINFO
-            frmChat.AddChat vbRed, "!"
+            'frmChat.AddChat vbRed, "!"
         
         Case SID_CLANMOTD
             Dim cookie  As Long

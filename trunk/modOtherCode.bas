@@ -1157,7 +1157,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
     '    If ForcePosition > 0 Then isPriority = ForcePosition
     '
     If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or _
-        ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&)) Then
+            ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&)) Then
         
         If (ForcePosition = 0) Then
             isPriority = 1
@@ -1174,18 +1174,27 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         i = frmChat.imlIcons.ListImages.Count
     End If
         
-    With frmChat.lvChannel.ListItems
-        .Add isPriority, , Username, , i
+    With frmChat.lvChannel
+        ' ...
+        .Enabled = False
         
-        .Item(isPriority).ListSubItems.Add , , , LagIcon
+        ' ...
+        .ListItems.Add isPriority, , Username, , i
         
-        If (Not (BotVars.NoColoring)) Then
-            .Item(isPriority).ForeColor = _
-                GetNameColor(Flags, 0, IsSelf)
+        ' ...
+        .ListItems.Item(isPriority).ListSubItems.Add , , , LagIcon
+        
+        ' ...
+        If (BotVars.NoColoring = False) Then
+            .ListItems.Item(isPriority).ForeColor = _
+                        GetNameColor(Flags, 0, IsSelf)
         End If
         
-        g_ThisIconCode = -1
+        ' ...
+        .Enabled = True
     End With
+    
+    g_ThisIconCode = -1
 End Sub
 
 
@@ -2141,7 +2150,7 @@ Public Function DoReplacements(ByVal s As String, Optional Username As String, _
 
     s = Replace(s, "%0", Username, 1)
     s = Replace(s, "%1", CurrentUsername, 1)
-    s = Replace(s, "%c", gChannel.Current, 1)
+    s = Replace(s, "%c", g_Channel.Name, 1)
     s = Replace(s, "%bc", BanCount, 1)
     
     If (Ping > -2) Then
@@ -2567,6 +2576,20 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                                 
                             ' ...
                             CropLen = (CropLen + (Len(CurrentUsername) + 2))
+                                
+                            ' ...
+                            bln = True
+                        End If
+                        
+                    ElseIf (StrComp(Left$(tmp, Len(reverseUsername(CurrentUsername))), _
+                                reverseUsername(CurrentUsername), vbTextCompare) = 0) Then
+                            
+                        ' ...
+                        If ((Mid$(tmp, Len(reverseUsername(CurrentUsername)) + 1, 2) = ": ") Or _
+                                (Mid$(tmp, Len(reverseUsername(CurrentUsername)) + 1, 2) = ", ")) Then
+                                
+                            ' ...
+                            CropLen = (CropLen + (Len(reverseUsername(CurrentUsername)) + 2))
                                 
                             ' ...
                             bln = True
