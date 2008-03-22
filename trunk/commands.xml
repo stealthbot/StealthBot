@@ -1511,8 +1511,6 @@
   </command>
 
   <command name="pon">
-    <alias>phrasebans on</alias>
-
     <documentation>
       <description>
         The "pon" command will enable phrasebanning.
