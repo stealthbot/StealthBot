@@ -277,7 +277,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         ' if we've joined the void, lets try to grab the list of
         ' users within the channel by attempting to force a user
         ' update message using Battle.net's unignore command.
-        If (Not (frmChat.mnuDisableVoidView.Checked)) Then
+        If (frmChat.mnuDisableVoidView.Checked = False) Then
             frmChat.AddQ "/unignore " & CurrentUsername
         End If
     End If

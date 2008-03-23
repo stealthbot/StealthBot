@@ -18,6 +18,12 @@ Begin VB.Form frmChat
    ScaleHeight     =   7950
    ScaleWidth      =   11580
    StartUpPosition =   3  'Windows Default
+   Begin VB.Timer tmrSilentChannel 
+      Enabled         =   0   'False
+      Interval        =   100
+      Left            =   6240
+      Top             =   4680
+   End
    Begin VB.ComboBox cboSend 
       BackColor       =   &H00000000&
       BeginProperty Font 
@@ -4330,9 +4336,9 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         If (LenB(cboSend.text) > 0) Then
                             On Error Resume Next
                             
-                            If (g_Channel.IsSilent) And Not mnuDisableVoidView.Checked Then
-                                BNCSBuffer.VoidTrimBuffer
-                            End If
+                            'If (g_Channel.IsSilent) And Not mnuDisableVoidView.Checked Then
+                            '    BNCSBuffer.VoidTrimBuffer
+                            'End If
                             
                             SetVeto False
                             
@@ -4901,7 +4907,15 @@ Private Sub Timer_Timer()
             
             g_Channel.ClearUsers
             
-            lvChannel.ListItems.Clear
+            With lvChannel
+                .Enabled = False
+                .ListItems.Clear
+            End With
+            
+            With tmrSilentChannel
+                .Enabled = False
+                .Enabled = True
+            End With
             
             AddQ "/unsquelch " & CurrentUsername
         End If
@@ -5002,6 +5016,14 @@ Private Sub tmrFriendlistUpdate_Timer()
             End If
         End If
     End If
+End Sub
+
+Private Sub tmrSilentChannel_Timer()
+    ' ...
+    lvChannel.Enabled = True
+    
+    ' ...
+    tmrSilentChannel.Enabled = False
 End Sub
 
 Private Sub txtPre_KeyPress(KeyAscii As Integer)
