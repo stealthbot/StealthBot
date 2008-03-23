@@ -12,6 +12,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Dim clsChatQueue As clsChatQueue
     Dim UserObj      As clsChannelUserObj
     
+    Dim UserIndex    As Integer  ' ...
     Dim i            As Integer  ' ...
     Dim prevflags    As Long     ' ...
     
@@ -22,19 +23,25 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     End If
     
     ' ...
-    Set UserObj = g_Channel.GetUserByName(Username)
+    UserIndex = g_Channel.GetUserIndexByName(Username)
     
     ' ...
-    If (UserObj.Name = vbNullString) Then
+    If (UserIndex > 0) Then
         ' ...
-        Set UserObj = New clsChannelUserObj
-        
+        Set UserObj = g_Channel.Users(UserIndex)
+    Else
         ' ...
-        If (g_Channel.IsSilent = False) Then
-            frmChat.AddChat vbRed, "Error: (1) There was a flags update received for a user that we do " & _
-                    "not have a record for."
-                    
-            Exit Sub
+        If (UserObj.Name = vbNullString) Then
+            ' ...
+            Set UserObj = New clsChannelUserObj
+            
+            ' ...
+            If (g_Channel.IsSilent = False) Then
+                frmChat.AddChat vbRed, "Error: (1) There was a flags update received for a user that we do " & _
+                        "not have a record for."
+                        
+                Exit Sub
+            End If
         End If
     End If
     
@@ -930,6 +937,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim clsChatQueue As clsChatQueue ' ...
     Dim UserObj      As clsChannelUserObj
     
+    Dim UserIndex    As Integer ' ...
     Dim i            As Integer ' ...
     Dim strCompare   As String  ' ...
     Dim Level        As Byte    ' ...
@@ -947,15 +955,15 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     End If
     
     ' ...
-    Set UserObj = g_Channel.GetUserByName(Username)
+    UserIndex = g_Channel.GetUserIndexByName(Username)
     
     ' ...
-    If (UserObj.Name = vbNullString) Then
+    If (UserIndex > 0) Then
         ' ...
-        Set UserObj = New clsChannelUserObj
+        Set UserObj = g_Channel.Users(UserIndex)
     Else
         ' ...
-        StatUpdate = True
+        Set UserObj = New clsChannelUserObj
     End If
     
     ' ...
@@ -967,7 +975,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     End With
     
     ' ...
-    If (StatUpdate = False) Then
+    If (UserIndex = 0) Then
         g_Channel.Users.Add UserObj
     End If
     
@@ -1019,14 +1027,12 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
     ' ...
     If (StatUpdate) Then
-        Dim userIndex As Integer ' ...
+        ' ...
+        UserIndex = UsernameToIndex(Username)
     
         ' ...
-        userIndex = UsernameToIndex(Username)
-    
-        ' ...
-        If (userIndex) Then
-            With colUsersInChannel(userIndex)
+        If (UserIndex) Then
+            With colUsersInChannel(UserIndex)
                 .Username = Username
                 .Flags = Flags
                 .Ping = Ping
@@ -1153,21 +1159,34 @@ End Sub
 Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal w3icon As String)
     On Error GoTo ERROR_HANDLER
     
-    Dim UserObj As clsChannelUserObj
+    Dim UserObj   As clsChannelUserObj
+    
+    Dim UserIndex As Integer ' ...
     
     ' ...
-    Set UserObj = New clsChannelUserObj
+    UserIndex = g_Channel.GetUserIndexByName(Username)
     
     ' ...
-    With UserObj
-        .Name = Username
-        .DisplayName = convertUsername(Username)
-        .Flags = Flags
-        .Ping = Ping
-    End With
-    
-    ' ...
-    g_Channel.Users.Add UserObj
+    If (UserIndex = 0) Then
+        ' ...
+        Set UserObj = New clsChannelUserObj
+        
+        ' ...
+        With UserObj
+            .Name = Username
+            .DisplayName = convertUsername(Username)
+            .Flags = Flags
+            .Ping = Ping
+        End With
+        
+        ' ...
+        g_Channel.Users.Add UserObj
+    Else
+        frmChat.AddChat vbRed, "Error: We have received a join event for a user that we had thought was " & _
+                "already present within the channel."
+        
+        Exit Sub
+    End If
     
     ' ...
     Username = UserObj.DisplayName
@@ -1571,19 +1590,26 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     On Error GoTo ERROR_HANDLER
 
     Dim UserObj   As clsChannelUserObj
+    
+    Dim UserIndex As Integer
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
     Dim pos       As Integer
-    Dim userIndex As Integer
     Dim bln       As Boolean
     
     ' ...
-    Set UserObj = g_Channel.GetUserByName(Username)
+    UserIndex = g_Channel.GetUserIndexByName(Username)
     
     ' ...
-    If (UserObj.Name <> vbNullString) Then
-        Set UserObj = Nothing
+    If (UserIndex > 0) Then
+        ' ...
+        g_Channel.Users.Remove UserIndex
+    Else
+        frmChat.AddChat vbRed, "Error: We have received a leave event for a user that we didn't know " & _
+                "was in the channel."
+    
+        Exit Sub
     End If
     
     ' ...
@@ -1675,10 +1701,10 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     End If
     
     ' ...
-    userIndex = checkChannel(Username)
+    UserIndex = checkChannel(Username)
     
     ' ...
-    If (userIndex) Then
+    If (UserIndex) Then
         ' ...
         If (frmChat.mnuFlash.Checked) Then
             Call FlashWindow
@@ -1688,7 +1714,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         With frmChat.lvChannel
             .Enabled = False
 
-            .ListItems.Remove userIndex
+            .ListItems.Remove UserIndex
             
             .Enabled = True
         End With

@@ -144,19 +144,16 @@ Public Property Get Self() As clsChannelUserObj
 
 End Property
 
-Public Function GetUserByName(ByVal Username As String) As clsChannelUserObj
+Public Function GetUserIndexByName(ByVal Username As String) As Integer
 
     Dim i As Integer ' ...
 
-    ' ...
-    Set GetUserByName = New clsChannelUserObj
-    
     ' ...
     For i = 1 To m_users.Count
         ' ...
         If (StrComp(m_users(i).Name, Username, vbBinaryCompare) = 0) Then
             ' ...
-            Set GetUserByName = m_users(i)
+            GetUserIndexByName = i
             
             ' ...
             Exit Function
@@ -165,19 +162,16 @@ Public Function GetUserByName(ByVal Username As String) As clsChannelUserObj
 
 End Function
 
-Public Function GetUserByDisplayName(ByVal Username As String) As clsChannelUserObj
+Public Function GetUserIndexByDisplayName(ByVal Username As String) As Integer
 
     Dim i As Integer ' ...
 
-    ' ...
-    Set GetUserByDisplayName = New clsChannelUserObj
-    
     ' ...
     For i = 1 To m_users.Count
         ' ...
         If (StrComp(m_users(i).DisplayName, Username, vbBinaryCompare) = 0) Then
             ' ...
-            Set GetUserByDisplayName = m_users(i)
+            GetUserIndexByDisplayName = i
             
             ' ...
             Exit Function
