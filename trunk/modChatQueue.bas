@@ -292,35 +292,32 @@ Public Sub Event_QueuedTalk(ByVal Username As String, ByVal Flags As Long, ByVal
     Dim TextColor     As Long ' ...
     Dim CaratColor    As Long ' ...
     
-    If (StrComp(WatchUser, Username, vbTextCompare) = 0) Then
-        UsernameColor = RTBColors.ErrorMessageText
-    ElseIf ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
-        UsernameColor = RTBColors.TalkUsernameOp
-    Else
-        UsernameColor = RTBColors.TalkUsernameNormal
-    End If
-    
-    If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or _
-            ((Flags And USER_SYSOP&) = USER_SYSOP&)) Then
-       
-        TextColor = RGB(97, 105, 255)
-        CaratColor = RGB(97, 105, 255)
-    Else
-        TextColor = RTBColors.TalkNormalText
-        CaratColor = RTBColors.Carats
-    End If
-    
-    Call frmChat.AddChat(CaratColor, "<", UsernameColor, Username, _
-        CaratColor, "> ", TextColor, Message)
-        
-    ' scripts
-    If ((BotVars.NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
-        If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
-            vbBinaryCompare) = 0) Then
-            
-            Message = BotVars.TriggerLong & _
-                Mid$(Message, Len(BotVars.TriggerLong) + 1)
+    ' ...
+    If (AllowedToTalk(Username, Message)) Then
+        If (Catch(0) <> vbNullString) Then
+            Call CheckPhrase(Username, Message, CPTALK)
         End If
+    
+        If (StrComp(WatchUser, Username, vbTextCompare) = 0) Then
+            UsernameColor = RTBColors.ErrorMessageText
+        ElseIf ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+            UsernameColor = RTBColors.TalkUsernameOp
+        Else
+            UsernameColor = RTBColors.TalkUsernameNormal
+        End If
+        
+        If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or _
+                ((Flags And USER_SYSOP&) = USER_SYSOP&)) Then
+           
+            TextColor = RGB(97, 105, 255)
+            CaratColor = RGB(97, 105, 255)
+        Else
+            TextColor = RTBColors.TalkNormalText
+            CaratColor = RTBColors.Carats
+        End If
+        
+        Call frmChat.AddChat(CaratColor, "<", UsernameColor, Username, _
+            CaratColor, "> ", TextColor, Message)
     End If
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -329,17 +326,16 @@ Public Sub Event_QueuedTalk(ByVal Username As String, ByVal Flags As Long, ByVal
     
     On Error Resume Next
     
+    ' ...
     If ((BotVars.NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
+        ' ...
         If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
-            vbBinaryCompare) = 0) Then
+                vbBinaryCompare) = 0) Then
             
-            Message = BotVars.Trigger & _
-                Mid$(Message, Len(BotVars.TriggerLong) + 1)
+            ' ...
+            Message = BotVars.Trigger & Mid$(Message, Len(BotVars.TriggerLong) + 1)
         End If
     End If
-
-    ' ...
-    g_lastQueueUser = Username
 
     ' ...
     frmChat.SControl.Run "Event_UserTalk", Username, Flags, Message, Ping
@@ -349,20 +345,15 @@ End Sub
 Public Sub Event_QueuedEmote(ByVal Username As String, ByVal Flags As Long, ByVal Ping As Long, _
     ByVal Message As String)
     
-    frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, _
-        Username & Space(1), RTBColors.EmoteText, Message & ">"
+    ' ...
+    If (AllowedToTalk(Username, Message)) Then
+        ' ...
+        frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, _
+            Username & Space(1), RTBColors.EmoteText, Message & ">"
         
-    If (frmChat.mnuFlash.Checked) Then
-        Call FlashWindow
-    End If
-    
-    ' scripts
-    If ((BotVars.NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
-        If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
-            vbBinaryCompare) = 0) Then
-            
-            Message = BotVars.TriggerLong & _
-                Mid$(Message, Len(BotVars.TriggerLong) + 1)
+        ' ...
+        If (frmChat.mnuFlash.Checked) Then
+            Call FlashWindow
         End If
     End If
 
@@ -372,12 +363,12 @@ Public Sub Event_QueuedEmote(ByVal Username As String, ByVal Flags As Long, ByVa
     
     On Error Resume Next
     
+    ' ...
     If ((BotVars.NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
         If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
             vbBinaryCompare) = 0) Then
             
-            Message = BotVars.Trigger & _
-                Mid$(Message, Len(BotVars.TriggerLong) + 1)
+            Message = BotVars.Trigger & Mid$(Message, Len(BotVars.TriggerLong) + 1)
         End If
     End If
     

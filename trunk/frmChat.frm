@@ -32,7 +32,7 @@ Begin VB.Form frmChat
       ForeColor       =   &H00FFFFFF&
       Height          =   315
       Left            =   600
-      TabIndex        =   10
+      TabIndex        =   9
       Top             =   6600
       Width           =   7695
    End
@@ -50,7 +50,7 @@ Begin VB.Form frmChat
       ForeColor       =   &H00FFFFFF&
       Height          =   285
       Left            =   8280
-      TabIndex        =   9
+      TabIndex        =   8
       Top             =   6600
       Width           =   615
    End
@@ -68,7 +68,7 @@ Begin VB.Form frmChat
       ForeColor       =   &H00FFFFFF&
       Height          =   285
       Left            =   0
-      TabIndex        =   8
+      TabIndex        =   7
       Top             =   6600
       Width           =   615
    End
@@ -731,7 +731,7 @@ Begin VB.Form frmChat
    Begin MSComctlLib.ListView lvClanList 
       Height          =   6375
       Left            =   8880
-      TabIndex        =   6
+      TabIndex        =   5
       TabStop         =   0   'False
       Top             =   240
       Width           =   2775
@@ -820,7 +820,7 @@ Begin VB.Form frmChat
    Begin RichTextLib.RichTextBox rtbWhispers 
       Height          =   1695
       Left            =   0
-      TabIndex        =   5
+      TabIndex        =   4
       TabStop         =   0   'False
       Top             =   6960
       Width           =   11175
@@ -828,7 +828,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -846,7 +845,7 @@ Begin VB.Form frmChat
    Begin RichTextLib.RichTextBox rtbChat 
       Height          =   6615
       Left            =   0
-      TabIndex        =   7
+      TabIndex        =   6
       TabStop         =   0   'False
       Top             =   0
       Width           =   8895
@@ -854,7 +853,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -882,10 +880,9 @@ Begin VB.Form frmChat
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      ForeColor       =   &H8000000E&
       Height          =   255
       Left            =   8880
-      TabIndex        =   4
+      TabIndex        =   10
       Top             =   0
       Width           =   2775
    End
@@ -1443,7 +1440,7 @@ Private Sub Form_Load()
     #If (BETA = 1) Then
         #If (DEV_RELEASE = 1) Then
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
-                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "6"
+                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "7"
         #Else
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
                 ZeroOffsetEx(App.REVISION, 3) & " Stable"

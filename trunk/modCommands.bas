@@ -2386,7 +2386,7 @@ Private Function OnReconnect(ByVal Username As String, ByRef dbAccess As udtGetA
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     If (g_Online) Then
-        BotVars.HomeChannel = g_Channel.Name
+        'BotVars.HomeChannel = g_Channel.Name
         
         Call frmChat.DoDisconnect
         
@@ -4005,17 +4005,17 @@ Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim user      As String
-    Dim userIndex As Integer
+    Dim UserIndex As Integer
     Dim tmpBuf()  As String ' temporary output buffer
 
     user = msgData
     
-    userIndex = UsernameToIndex(user)
+    UserIndex = UsernameToIndex(user)
     
-    If (userIndex > 0) Then
+    If (UserIndex > 0) Then
         ReDim Preserve tmpBuf(0 To 1)
     
-        With colUsersInChannel.Item(userIndex)
+        With colUsersInChannel.Item(UserIndex)
             tmpBuf(0) = "User " & .Username & " is logged on using " & _
                 ProductCodeToFullName(.Product)
             
