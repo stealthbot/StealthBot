@@ -213,7 +213,7 @@ Sub psLoadPlugins()
                      "ins", psColor1, " to view them. Type ", psColor2, "/phelp", psColor1, " for help using them."
    AddChat psColor1, "Type ", psColor2, "/updates", psColor1, " in the bot to view updates and new plugins that are available for download."
 
-   If (BotVars.NoSupportMultiCharTrigger) Then
+   If BotVars.NoSupportMultiCharTrigger Then
       AddChat vbYellow, "Plugins have been loaded that do not support multi-character triggers. Backwards compatibility mode has been enabled."
    End If
 
@@ -318,7 +318,8 @@ Sub psLoadCode(Prefix, Path, Content)
 
    '// Handle loading errors
    If Err.Number <> 0 Then
-      psLoadError.Item(Prefix) = True
+      'LoadError.Item(Prefix) = True
+      AddChat vbRed, "Plugin loading error '" & Err.Number & "': " & Err.Description
       AddChat vbRed, "Offending file: >> " & Path
       AddChat vbYellow, "Your " & Prefix & " plugin has been temporarily blocked due to a loading error."
       Err.Clear
@@ -1345,7 +1346,7 @@ Sub psExecuteEvent(EventName, Parameters)
       If GetSetting(psPrefixes(i), "enabled") And Not psLoadError(psPrefixes(i)) And Instr(psEvents(psPrefixes(i)), "|" & LCase(EventName) & "|") Then
 
          '// Call the specified event sub in this plugin
-         If Len(Parameters(0)) > 0 Then
+         If IsArray(Parameters) Then
             For j = 0 to UBound(Parameters)
                paramString = paramString & "psEcho(Parameters(" & j & "))" & ","
             Next
@@ -1639,8 +1640,8 @@ Sub Event_Load()
    scTimer.Interval = 1000
    scTimer.Enabled = True
 
-   psExecuteEvent "FirstRun", Array(vbNullString)
-   psExecuteEvent "Load", Array(vbNullString)
+   psExecuteEvent "FirstRun", 0
+   psExecuteEvent "Load", 0
 End Sub
 
 
@@ -1725,7 +1726,7 @@ End Sub
 
 Sub Event_LoggedOff()
 
-   psExecuteEvent "LoggedOff", Array(vbNullString)
+   psExecuteEvent "LoggedOff", 0
 End Sub
  
  
@@ -1804,7 +1805,7 @@ End Sub
 
 Sub Event_BotRemovedFromClan()
 
-   psExecuteEvent "BotRemovedFromClan", Array(vbNullString)
+   psExecuteEvent "BotRemovedFromClan", 0
 End Sub
 
 
@@ -1828,5 +1829,5 @@ End Sub
 
 Sub Event_Close()
 
-   psExecuteEvent "Close", Array(vbNullString)
+   psExecuteEvent "Close", 0
 End Sub
