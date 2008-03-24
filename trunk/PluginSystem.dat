@@ -318,8 +318,8 @@ Sub psLoadCode(Prefix, Path, Content)
 
    '// Handle loading errors
    If Err.Number <> 0 Then
-      'LoadError.Item(Prefix) = True
-      AddChat vbRed, "Plugin loading error '" & Err.Number & "': " & Err.Description
+      LoadError.Item(Prefix) = True
+      'AddChat vbRed, "Plugin loading error '" & Err.Number & "': " & Err.Description
       AddChat vbRed, "Offending file: >> " & Path
       AddChat vbYellow, "Your " & Prefix & " plugin has been temporarily blocked due to a loading error."
       Err.Clear
@@ -629,7 +629,6 @@ Sub ps_plugins_cmd(cmd, Username, DisplayID)
          titleLine = ""
       End If
 
-      'If i = 0 Then strFont = Array("ÿcb ÿcb", "ÿcu ÿcu", "ÿci ÿci") Else strFont = Array("","","") End If
       plugVer = altColor & ", ""    Version:" & vbTab & ""& psVersions.Item(arrPrefixes(i)) & """ & vbCrLf, "
       fileLine = altColor & ", ""    Filename:" & vbTab & "" & psFSO.GetFileName(psPlugins.Item(arrPrefixes(i))) & """, "
       prefixLine = altColor & ", String(2, vbCrLf) & ""    Prefix:" & String(2, vbTab) & """, " & vbWhite & ", ""[ " & arrPrefixes(i)  & " ]"", "
