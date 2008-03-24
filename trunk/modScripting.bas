@@ -11,15 +11,13 @@ Public VetoNextMessage As Boolean
 Public boolOverride As Boolean
 
 Public dictSettings As Dictionary
-Public dctTimerInterval As Dictionary
-Public dctTimerEnabled As Dictionary
-Public dctTimerCount As Dictionary
-Public objFSO As Object
-Public objTextStream As Object
+Public dictTimerInterval As Dictionary
+Public dictTimerEnabled As Dictionary
+Public dictTimerCount As Dictionary
 
 
 
-'// Written by Swent. Loads the Plugin System
+'// Loads the Plugin System
 '//   Called from Form_Load() and mnuReloadScript_Click() in frmChat
 Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
     Dim Path As String, intFile As Integer, strLine As String, strContent As String
@@ -66,29 +64,17 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
     
     If Not boolOverride Then
     
-        Set objTextStream = objFSO.OpenTextFile(Path, 1)
-        SC.AddCode objTextStream.ReadAll()
-        objTextStream.Close
-    
         '// Load PluginSystem.dat
-        'intFile = FreeFile
-        'Open Path For Input As #intFile
+        intFile = FreeFile
+        Open Path For Input As #intFile
     
-            'Do While Not EOF(intFile)
-                'strLine = vbNullString
-                'Line Input #intFile, strLine
-                'If Len(strLine) > 1 Then strContent = strContent & strLine & vbCrLf
-            'Loop
-        'Close #intFile
-        'SC.AddCode strContent
-    
-        '// Create timer dictionaries
-        'Set dctTimerInterval = New Dictionary
-        'Set dctTimerEnabled = New Dictionary
-        'Set dctTimerCount = New Dictionary
-        'dctTimerInterval.CompareMode = TextCompare
-        'dctTimerEnabled.CompareMode = TextCompare
-        'dctTimerCount.CompareMode = TextCompare
+            Do While Not EOF(intFile)
+                strLine = vbNullString
+                Line Input #intFile, strLine
+                If Len(strLine) > 1 Then strContent = strContent & strLine & vbCrLf
+            Loop
+        Close #intFile
+        SC.AddCode strContent
     Else
         Dim strFilesToLoad() As String, i As Integer
         ReDim strFilesToLoad(0)
@@ -202,11 +188,11 @@ Public Sub SetPTInterval(ByVal strPrefix As String, ByVal strTimerName As String
     Dim strKey As String
     strKey = strPrefix & ":" & strTimerName
 
-    dctTimerInterval(strKey) = intInterval
-    dctTimerCount(strKey) = intInterval
+    dictTimerInterval(strKey) = intInterval
+    dictTimerCount(strKey) = intInterval
     
-    If Not dctTimerEnabled.Exists(strKey) Then
-       dctTimerEnabled(strKey) = False
+    If Not dictTimerEnabled.Exists(strKey) Then
+       dictTimerEnabled(strKey) = False
     End If
 End Sub
 
@@ -214,14 +200,14 @@ End Sub
 '// Written by Swent. Enables or disables a plugin timer.
 Public Sub SetPTEnabled(ByVal strPrefix As String, ByVal strTimerName As String, ByVal boolEnabled As Boolean)
     
-    dctTimerEnabled(strPrefix & ":" & strTimerName) = boolEnabled
+    dictTimerEnabled(strPrefix & ":" & strTimerName) = boolEnabled
 End Sub
 
 
 '// Written by Swent. Modifies the count in a running plugin timer.
 Public Sub SetPTCount(ByVal strPrefix As String, ByVal strTimerName As String, ByVal intCount As Integer)
     
-    dctTimerCount(strPrefix & ":" & strTimerName) = intCount
+    dictTimerCount(strPrefix & ":" & strTimerName) = intCount
 End Sub
 
 
@@ -230,8 +216,8 @@ Public Function GetPTEnabled(ByVal strPrefix As String, ByVal strTimerName As St
     Dim strKey As String
     strKey = strPrefix & ":" & strTimerName
     
-    If dctTimerEnabled.Exists(strKey) Then
-        GetPTEnabled = dctTimerEnabled(strKey)
+    If dictTimerEnabled.Exists(strKey) Then
+        GetPTEnabled = dictTimerEnabled(strKey)
     Else
         GetPTEnabled = -1
     End If
@@ -243,8 +229,8 @@ Public Function GetPTInterval(ByVal strPrefix As String, ByVal strTimerName As S
     Dim strKey As String
     strKey = strPrefix & ":" & strTimerName
     
-    If dctTimerInterval.Exists(strKey) Then
-        GetPTInterval = dctTimerInterval(strKey)
+    If dictTimerInterval.Exists(strKey) Then
+        GetPTInterval = dictTimerInterval(strKey)
     Else
         GetPTInterval = -1
     End If
@@ -256,8 +242,8 @@ Public Function GetPTLeft(ByVal strPrefix As String, ByVal strTimerName As Strin
     Dim strKey As String
     strKey = strPrefix & ":" & strTimerName
 
-    If dctTimerCount.Exists(strKey) Then
-        GetPTLeft = dctTimerCount(strKey)
+    If dictTimerCount.Exists(strKey) Then
+        GetPTLeft = dictTimerCount(strKey)
     Else
         GetPTLeft = -1
     End If
@@ -269,8 +255,8 @@ Public Function GetPTWaiting(ByVal strPrefix As String, ByVal strTimerName As St
     Dim strKey As String
     strKey = strPrefix & ":" & strTimerName
     
-    If dctTimerCount.Exists(strKey) Then
-        GetPTWaiting = dctTimerInterval(strKey) - dctTimerCount(strKey) + 1
+    If dictTimerCount.Exists(strKey) Then
+        GetPTWaiting = dictTimerInterval(strKey) - dictTimerCount(strKey) + 1
     Else
         GetPTWaiting = -1
     End If
@@ -280,5 +266,5 @@ End Function
 '// Written by Swent. Gets keys for the timer dictionaries.
 Public Function GetPTKeys() As String
 
-    GetPTKeys = Join(dctTimerEnabled.Keys)
+    GetPTKeys = Join(dictTimerEnabled.Keys)
 End Function
