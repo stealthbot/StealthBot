@@ -1062,7 +1062,7 @@ Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long) As L
         If (sProduct = "W3XP") Then
             i = g_ThisIconCode + ICON_START_W3XP + _
                 IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0)
-        Else
+        ElseIf (sProduct = "WAR3") Then
             i = g_ThisIconCode + ICON_START_WAR3
         End If
     Else
@@ -2035,7 +2035,7 @@ End Function
 
 
 Public Function UsernameToIndex(ByVal sUsername As String) As Long
-    Dim User        As clsUserInfo
+    Dim user        As clsUserInfo
     Dim FirstLetter As String * 1
     Dim i           As Integer
     
@@ -2043,9 +2043,9 @@ Public Function UsernameToIndex(ByVal sUsername As String) As Long
     
     If (colUsersInChannel.Count > 0) Then
         For i = 1 To colUsersInChannel.Count
-            Set User = colUsersInChannel.Item(i)
+            Set user = colUsersInChannel.Item(i)
             
-            With User
+            With user
                 If (StrComp(Mid$(.Username, 1, 1), FirstLetter, vbTextCompare) = 0) Then
                     If (StrComp(sUsername, .Username, vbTextCompare) = 0) Then
                         UsernameToIndex = i
@@ -2070,7 +2070,7 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
     If (lvItem Is Nothing) Then
         checkChannel = 0
     Else
-        checkChannel = lvItem.Index
+        checkChannel = lvItem.index
     End If
 End Function
 
@@ -2274,7 +2274,7 @@ End Sub
 ' Returns a single chunk of a string as if that string were Split() and that chunk
 ' extracted
 ' 1-based
-Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
+Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
     Dim c           As Integer
     Dim i           As Integer
     Dim TargetSpace As Integer
@@ -2284,10 +2284,10 @@ Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
     
     c = 0
     i = 1
-    pos = pos
+    Pos = Pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While ((c < pos) And (i > 0))
+    While ((c < Pos) And (i > 0))
         TargetSpace = i
         
         i = (InStr(i + 1, str, Space(1), vbBinaryCompare))
@@ -2295,7 +2295,7 @@ Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
         c = (c + 1)
     Wend
     
-    If (c >= pos) Then
+    If (c >= Pos) Then
         c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
         If (c > 0) Then
@@ -2359,7 +2359,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     On Error GoTo ERROR_HANDLER
     
     Dim lineCount As Long    ' stores line number
-    Dim pos       As Long    ' stores position of delimiter
+    Dim Pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
     Dim length    As Long    ' stores length after postfix
     Dim bln       As Boolean ' stores result of delimiter split
@@ -2407,7 +2407,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             If (OversizeDelimiter <> vbNullString) Then
                 ' grab position of delimiter character that is
                 ' the closest to our specified length
-                pos = InStrRev(StringSplit, OversizeDelimiter, _
+                Pos = InStrRev(StringSplit, OversizeDelimiter, _
                     length, vbBinaryCompare)
             End If
             
@@ -2416,9 +2416,9 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((pos) And (pos >= Round(length / 2))) Then
+            If ((Pos) And (Pos >= Round(length / 2))) Then
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, pos - 1)
+                strTmp = Mid$(strTmp, 1, Pos - 1)
                 
                 ' indicate that an additional
                 ' character will require removal
@@ -2469,7 +2469,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     Static CropLen    As Integer ' ...
     Static HasTrigger As Boolean ' ...
 
-    Dim Index        As Integer ' ...
+    Dim index        As Integer ' ...
     Dim bln          As Boolean ' ...
     Dim tmp          As String  ' ...
     Dim console      As Boolean ' ...
@@ -2621,15 +2621,15 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     ' ...
     If (HasTrigger) Then
         ' check our message for a command delimiter
-        Index = InStr(Len(BotVars.TriggerLong) + 1, tmp, CMD_DELIMITER, _
+        index = InStr(Len(BotVars.TriggerLong) + 1, tmp, CMD_DELIMITER, _
             vbBinaryCompare)
         
         ' using a delimiter can be undesirable at times, so
         ' we require a way of bypassing such a feature, and
         ' that way is to entirely disable internal support!
-        If (Index) Then
+        If (index) Then
             ' ...
-            tmp = Mid$(tmp, 1, Index - 1)
+            tmp = Mid$(tmp, 1, index - 1)
             
             ' ...
             CropLen = (CropLen + (Len(tmp) + Len(CMD_DELIMITER)))
@@ -2645,13 +2645,13 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     ' ...
     If ((IsLocal) Or (HasTrigger)) Then
         ' ...
-        Index = InStr(1, tmp, Space$(1), vbBinaryCompare)
+        index = InStr(1, tmp, Space$(1), vbBinaryCompare)
         
         ' ...
-        If (Index) Then
+        If (index) Then
             With IsCommand
-                .Name = Mid$(tmp, 1, Index - 1)
-                .Args = Mid$(tmp, Index + 1)
+                .Name = Mid$(tmp, 1, index - 1)
+                .Args = Mid$(tmp, index + 1)
             End With
         Else
             IsCommand.Name = tmp

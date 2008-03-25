@@ -101,11 +101,11 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
     
     On Error GoTo ERROR_HANDLER
     
-    Dim Game   As String ' ...
+    Dim game   As String ' ...
     Dim pStats As String ' ...
-    Dim Clan   As String ' ...
+    Dim clan   As String ' ...
     
-    Game = ParseStatstring(OriginalStatstring, pStats, Clan)
+    game = ParseStatstring(OriginalStatstring, pStats, clan)
 
     If (JoinMessagesOff = False) Then
         Call frmChat.AddChat(RTBColors.JoinText, "-- ", _
@@ -113,8 +113,8 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
                 RTBColors.JoinText, " has joined the channel using " & pStats)
     End If
     
-    If (Clan <> vbNullString) Then
-        Call AddName(Username, Product, Flags, Ping, Clan)
+    If (clan <> vbNullString) Then
+        Call AddName(Username, Product, Flags, Ping, clan)
     Else
         Call AddName(Username, Product, Flags, Ping)
     End If
@@ -150,45 +150,53 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
     Dim found  As ListItem ' ...
     
     Dim i      As Integer  ' ...
-    Dim Game   As String   ' ...
-    Dim pStats As String   ' ...
-    Dim Clan   As String   ' ...
+    Dim stats  As String   ' ...
+    Dim clan   As String   ' ...
     Dim pos    As Integer  ' ...
 
-    Game = ParseStatstring(OriginalStatstring, pStats, Clan)
+    ' ...
+    ParseStatstring OriginalStatstring, stats, clan
     
+    ' ...
     If (JoinMessagesOff = False) Then
+        ' ...
         Call frmChat.AddChat(RTBColors.JoinText, "-- Stats updated: ", _
-            RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
-                RTBColors.JoinText, " is using " & pStats)
+                RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
+                        RTBColors.JoinText, " is using " & stats)
     End If
     
+    ' ...
     pos = checkChannel(Username)
     
+    ' ...
     If (pos) Then
+        ' ...
         Set found = frmChat.lvChannel.ListItems(pos)
         
+        ' ...
         i = UsernameToIndex(Username)
         
+        ' ...
         If (g_ThisIconCode <> -1) Then
-            ' TO DO: FIX ICON CODE NUMBERS (ICON_START_WAR3/ICON_START_W3XP)
+            ' ...
             If (colUsersInChannel.Item(i).Product = "WAR3") Then
+                ' ...
                 If (found.SmallIcon = ICON_START_WAR3) Then
-                    found.SmallIcon = (ICON_START_WAR3 + g_ThisIconCode)
+                    ' ...
+                    found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
                 End If
             ElseIf (colUsersInChannel.Item(i).Product = "W3XP") Then
+                ' ...
                 If (found.SmallIcon = ICON_START_W3XP) Then
-                    found.SmallIcon = ICON_START_W3XP + g_ThisIconCode + _
-                        IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0)
+                    ' ...
+                    found.SmallIcon = ((g_ThisIconCode + ICON_START_W3XP) + IIf(g_ThisIconCode + _
+                            ICON_START_W3XP = ICSCSW, 1, 0))
                 End If
             End If
         End If
-    
-        Set found = Nothing
         
-        ' blah...
-        'found.SmallIcon = (g_ThisIconCode + ICON_START_W3XP + _
-        '    IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0))
+        ' ...
+        Set found = Nothing
     End If
     
     Exit Sub

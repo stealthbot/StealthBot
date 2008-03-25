@@ -15,7 +15,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Dim UserIndex    As Integer  ' ...
     Dim i            As Integer  ' ...
     Dim prevflags    As Long     ' ...
-    Dim Clan         As String
+    Dim clan         As String
     Dim Parsed       As String
     
     ' if our username is for some reason null, we don't
@@ -25,7 +25,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     End If
     
     ' ...
-    Call ParseStatstring(Message, Parsed, Clan)
+    Call ParseStatstring(Message, Parsed, clan)
     
     ' ...
     UserIndex = g_Channel.GetUserIndexByName(Username)
@@ -57,8 +57,8 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         .DisplayName = convertUsername(Username)
         .Flags = Flags
         .Ping = Ping
-        .Game = Product
-        .Clan = Clan
+        .game = Product
+        .clan = clan
     End With
     
     ' ...
@@ -101,7 +101,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                 .Safelisted = GetSafelist(Username)
                 .Statstring = Message
                 .JoinTime = GetTickCount
-                .Clan = Clan
+                .clan = clan
                 .IsSelf = (StrComp(Username, CurrentUsername, _
                     vbBinaryCompare) = 0)
                 .InternalFlags = 0
@@ -252,7 +252,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     SharedScriptSupport.MyChannel = ChannelName
     
-    If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+    If (StrComp(g_Channel.Name, "Clan " & clan.Name, vbTextCompare) = 0) Then
         
         PassedClanMotdCheck = False
         
@@ -647,7 +647,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
     End If
     
-    If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+    If (StrComp(g_Channel.Name, "Clan " & clan.Name, vbTextCompare) = 0) Then
         If (PassedClanMotdCheck = False) Then
             If (Message <> vbNullString) Then
                 Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
@@ -775,10 +775,12 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             gChannel.Designated = Left$(Message, Len(Message) - 29)
         End If
         
-        ' trick to find the current Warcraft III realm name, thanks LoRd :)
-        If (InStr(1, Message, "You are ") > 0) And (InStr(1, Message, " using ") > 0) Then
+        ' trick to find the current realm name, thanks LoRd :)
+        If (InStr(1, Message, "You are ", vbTextCompare) > 0) And (InStr(1, Message, " using ", _
+                vbTextCompare) > 0) Then
+                
             ' ...
-            If (InStr(1, Message, "channel", vbTextCompare) = 0) Then
+            If (InStr(1, Message, " channel ", vbTextCompare) = 0) Then
                 i = InStrRev(Message, Space$(1))
                 
                 ' ...
@@ -960,7 +962,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim strCompare   As String  ' ...
     Dim Level        As Byte    ' ...
     Dim StatUpdate   As Boolean ' ...
-    Dim Index        As Long    ' ...
+    Dim index        As Long    ' ...
     
     If (Len(Username) < 1) Then
         Exit Sub
@@ -1055,7 +1057,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 .Username = Username
                 .Flags = Flags
                 .Ping = Ping
-                .Clan = sClan
+                .clan = sClan
                 .Statstring = OriginalStatstring
             End With
         End If
@@ -1101,7 +1103,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             .Safelisted = GetSafelist(Username)
             .Statstring = OriginalStatstring
             .JoinTime = GetTickCount
-            .Clan = sClan
+            .clan = sClan
             .IsSelf = (StrComp(Username, CurrentUsername, _
                 vbBinaryCompare) = 0)
         
@@ -1210,7 +1212,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             .DisplayName = convertUsername(Username)
             .Flags = Flags
             .Ping = Ping
-            .Game = Product
+            .game = Product
             .JoinDate = Now
         End With
         
@@ -1245,7 +1247,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         .Safelisted = GetSafelist(Username)
         .Statstring = OriginalStatstring
         .JoinTime = GetTickCount
-        .Clan = sClan
+        .clan = sClan
         .IsSelf = (StrComp(Username, CurrentUsername, _
             vbBinaryCompare) = 0)
         .InternalFlags = 0
@@ -1613,7 +1615,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim pos       As Integer
+    Dim Pos       As Integer
     Dim bln       As Boolean
     
     ' ...
