@@ -5664,7 +5664,7 @@ Sub AddQ(ByVal message As String, Optional msg_priority As Integer = -1, Optiona
                 ' previous message.
                 If ((QueueLoad = 0) And (GTC - LastGTC >= 10000)) Then
                     ' set default message delay when queue is empty (in ms)
-                    banDelay = 10
+                    banDelay = 25
                     
                     ' are we issuing a channel moderation command?
                     If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
