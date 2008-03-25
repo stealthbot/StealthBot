@@ -5049,13 +5049,16 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
             
                 ' ...
                 If (lvChannel.FindItem(User.DisplayName) Is Nothing) Then
-                    AddName User.DisplayName, colUsersInChannel(i).Product, User.Flags, User.Ping
+                    AddName User.DisplayName, User.Game, User.Flags, User.Ping, User.Clan
                 End If
                 
                 ' ...
                 DoEvents
             Next i
         End If
+        
+        ' ...
+        lvChannel.Refresh
         
         ' update channel label with current channel name and user count
         lblCurrentChannel.Caption = GetChannelString()

@@ -28,10 +28,10 @@ Private Const CHAN_GLOBAL     As Long = &H1000
 Private m_name            As String
 Private m_flags           As Long
 Private m_designated_heir As Integer
-Private m_num_users       As Integer
 Private m_num_joins       As Long
 Private m_num_bans        As Long
 Private m_num_kicks       As Long
+Private m_join_date       As Date
 Private m_users           As Collection
 Private m_chat_queue      As Collection
 
@@ -70,24 +70,24 @@ Public Property Let Flags(lng As Long)
 
 End Property
 
+Public Property Let JoinDate(jdate As Date)
+
+    ' ...
+    m_join_date = jdate
+
+End Property
+
+Public Property Get JoinDate() As Date
+
+    ' ...
+    JoinDate = m_join_date
+
+End Property
+
 Public Property Get IsSilent() As Boolean
 
     ' ...
     IsSilent = ((m_flags And CHAN_SILENT) = CHAN_SILENT)
-
-End Property
-
-Public Property Get UserCount() As Integer
-
-    ' ...
-    UserCount = m_num_users
-
-End Property
-
-Public Property Let UserCount(i As Integer)
-
-    ' ...
-    m_num_users = i
 
 End Property
 

@@ -58,6 +58,34 @@ Public Property Let Name(str As String)
 
 End Property
 
+Public Property Get Game() As String
+
+    ' ...
+    Game = m_game
+
+End Property
+
+Public Property Let Game(str As String)
+
+    ' ...
+    m_game = str
+
+End Property
+
+Public Property Get Clan() As String
+
+    ' ...
+    Clan = m_clan
+
+End Property
+
+Public Property Let Clan(str As String)
+
+    ' ...
+    m_clan = str
+
+End Property
+
 Public Property Get DisplayName() As String
 
     ' ...
@@ -104,6 +132,20 @@ Public Property Get Ping() As Long
 
     ' ...
     Ping = m_ping
+
+End Property
+
+Public Property Let JoinDate(jdate As Date)
+
+    ' ...
+    m_join_date = jdate
+
+End Property
+
+Public Property Get JoinDate() As Date
+
+    ' ...
+    JoinDate = m_join_date
 
 End Property
 

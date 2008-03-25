@@ -15,12 +15,17 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Dim UserIndex    As Integer  ' ...
     Dim i            As Integer  ' ...
     Dim prevflags    As Long     ' ...
+    Dim Clan         As String
+    Dim Parsed       As String
     
     ' if our username is for some reason null, we don't
     ' want to continue, possibly causing further errors
     If (LenB(Username) < 1) Then
         Exit Sub
     End If
+    
+    ' ...
+    Call ParseStatstring(Message, Parsed, Clan)
     
     ' ...
     UserIndex = g_Channel.GetUserIndexByName(Username)
@@ -52,6 +57,8 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         .DisplayName = convertUsername(Username)
         .Flags = Flags
         .Ping = Ping
+        .Game = Product
+        .Clan = Clan
     End With
     
     ' ...
@@ -81,13 +88,9 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Else
         If (g_Channel.IsSilent) Then
             Dim UserToAdd As clsUserInfo
-            Dim Clan      As String
-            Dim parsed    As String
             
             ' ...
             Set UserToAdd = New clsUserInfo
-            
-            Call ParseStatstring(Message, parsed, Clan)
         
             ' ...
             With UserToAdd
@@ -183,8 +186,6 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         
         Call clsChatQueue.StoreStatusUpdate(Flags, prevflags, Ping, Product, _
             vbNullString, vbNullString, vbNullString)
-            
-        frmChat.AddChat vbRed, "!"
     End If
     
     ' ...
@@ -227,6 +228,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     With g_Channel
         .Name = ChannelName
         .Flags = Flags
+        .JoinDate = Now
     End With
 
     ' clear chat queue when
@@ -988,6 +990,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         .DisplayName = convertUsername(Username)
         .Flags = Flags
         .Ping = Ping
+        .JoinDate = g_Channel.JoinDate
     End With
     
     ' ...
@@ -1207,6 +1210,8 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             .DisplayName = convertUsername(Username)
             .Flags = Flags
             .Ping = Ping
+            .Game = Product
+            .JoinDate = Now
         End With
         
         ' ...
