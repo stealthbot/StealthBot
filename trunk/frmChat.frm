@@ -840,6 +840,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -865,6 +866,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1417,7 +1419,7 @@ Attribute VB_Exposed = False
 'Source Code Version: 2.6R3+
 Option Explicit
 
-Private Declare Function GetFocus Lib "User" () As Integer
+Private Declare Function GetFocus Lib "user" () As Integer
 
 'Classes
 Public WithEvents ClanHandler As clsClanPacketHandler
@@ -2327,7 +2329,7 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     Set X = lvClanList.FindItem(Member)
     
     If Not (X Is Nothing) Then
-        lvClanList.ListItems.Remove X.Index
+        lvClanList.ListItems.Remove X.index
         
         lvClanList.Refresh
         
@@ -2455,7 +2457,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     End If
     
     If Not (X Is Nothing) Then
-        lvClanList.ListItems.Remove X.Index
+        lvClanList.ListItems.Remove X.index
         Set X = Nothing
     End If
     
@@ -2760,7 +2762,7 @@ Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
     Set X = lvFriendList.FindItem(Username)
     
     If Not (X Is Nothing) Then
-        lvFriendList.ListItems.Remove X.Index
+        lvFriendList.ListItems.Remove X.index
     End If
     
     Set X = Nothing
@@ -3177,9 +3179,9 @@ End Sub
 Private Sub mnuFLpopDemote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.Index < lvFriendList.ListItems.Count) Then
+            If (.index < lvFriendList.ListItems.Count) Then
               AddQ "/f d " & .text
-              MoveFriend .Index, .Index + 1
+              MoveFriend .index, .index + 1
             End If
         End With
     End If
@@ -3189,9 +3191,9 @@ End Sub
 Private Sub mnuFLpopPromote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.Index > 1) Then
+            If (.index > 1) Then
               AddQ "/f p " & .text
-              MoveFriend .Index, .Index - 1
+              MoveFriend .index, .index - 1
             End If
         End With
     End If
@@ -3500,9 +3502,9 @@ Private Sub mnuClearedTxt_Click()
 End Sub
 
 
-Private Sub mnuQC_Click(Index As Integer)
-    If Len(QC(Index)) > 0 Then
-        AddQ "/join " & QC(Index)
+Private Sub mnuQC_Click(index As Integer)
+    If Len(QC(index)) > 0 Then
+        AddQ "/join " & QC(index)
     End If
 End Sub
 
@@ -4048,7 +4050,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     With lvChannel
 
         If (Not (.SelectedItem Is Nothing)) Then
-            i = .SelectedItem.Index
+            i = .SelectedItem.index
         End If
 
         Select Case (KeyCode)
@@ -4656,7 +4658,7 @@ Private Sub quLower_Timer()
             
             If Len(strArray(c)) > 1 Then
                 If InStr(Y, "ban") Then
-                    If ((MyFlags And &H2) = &H2) Then
+                    If (g_Channel.Self.IsOperator) Then
                         Ban strArray(c), (AutoModSafelistValue - 1), 0
                     End If
                 Else
@@ -5004,17 +5006,27 @@ Private Sub tmrFriendlistUpdate_Timer()
     End If
 End Sub
 
-Private Sub tmrSilentChannel_Timer(Index As Integer)
-    Dim User  As clsChannelUserObj
-    Dim Item  As ListItem
-    Dim i     As Integer ' ...
-    Dim j     As Integer ' ...
-    Dim found As Boolean ' ...
+Private Sub tmrSilentChannel_Timer(index As Integer)
+    Dim user    As clsChannelUserObj
+    Dim Item    As ListItem
+    Dim i       As Integer ' ...
+    Dim j       As Integer ' ...
+    Dim found   As Boolean ' ...
+    Dim WasZero As Boolean ' ...
 
     ' ...
-    If (Index = 0) Then
+    If (index = 0) Then
         ' ...
         If (frmChat.mnuDisableVoidView.Checked = False) Then
+            ' ...
+            If (lvChannel.ListItems.Count = 0) Then
+                ' ...
+                lvChannel.Enabled = False
+            
+                ' ...
+                WasZero = True
+            End If
+        
             ' ...
             Do
                 ' ...
@@ -5045,16 +5057,21 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
             ' ...
             For i = 1 To g_Channel.Users.Count
                 ' ...
-                Set User = g_Channel.Users(i)
+                Set user = g_Channel.Users(i)
             
                 ' ...
-                If (lvChannel.FindItem(User.DisplayName) Is Nothing) Then
-                    AddName User.DisplayName, User.Game, User.Flags, User.Ping, User.Clan
+                If (lvChannel.FindItem(user.DisplayName) Is Nothing) Then
+                    AddName user.DisplayName, user.game, user.Flags, user.Ping, user.Clan
                 End If
                 
                 ' ...
                 DoEvents
             Next i
+        End If
+        
+        ' ...
+        If (WasZero) Then
+            lvChannel.Enabled = True
         End If
         
         ' ...
@@ -5065,7 +5082,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
     
         ' ...
         tmrSilentChannel(0).Enabled = False
-    ElseIf (Index = 1) Then
+    ElseIf (index = 1) Then
         ' ...
         If (mnuDisableVoidView.Checked = False) Then
             ' ...
@@ -5355,7 +5372,7 @@ End Function
 
 ' ...
 Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optional _
-    ByVal User As String = vbNullString, Optional ByVal Tag As String = vbNullString)
+    ByVal user As String = vbNullString, Optional ByVal Tag As String = vbNullString)
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -5426,7 +5443,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         
         ' ...
         If (StrComp(Left$(strTmp, 1), "/", vbBinaryCompare) = 0) Then
-            Dim Index As Long ' ...
+            Dim index As Long ' ...
             
             ' ...
             For i = 2 To Len(strTmp)
@@ -5445,12 +5462,12 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             End If
 
             ' ...
-            Index = InStr(1, strTmp, Space(1), vbBinaryCompare)
+            index = InStr(1, strTmp, Space(1), vbBinaryCompare)
             
             ' ...
-            If (Index > 2) Then
+            If (index > 2) Then
                 ' ...
-                Command = Mid$(strTmp, 2, (Index - 2))
+                Command = Mid$(strTmp, 2, (index - 2))
 
                 ' ...
                 If ((Command = "w") Or _
@@ -5643,7 +5660,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     ' are we issuing a channel moderation command?
                     If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
                         ' do we have ops?
-                        If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+                        If (g_Channel.Self.IsOperator) Then
                             ' seed rnd() function
                             Randomize
                 
@@ -5726,7 +5743,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Dim s                    As String
     Dim i                    As Integer
     Dim f                    As Integer
-    Dim Index                As Integer
+    Dim index                As Integer
     Dim D2GameConventions    As String
     Dim W3GameConventions    As String
     Dim gameConventions      As String
@@ -5930,14 +5947,14 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
         If (colUsersInChannel.Count) Then
             For i = 1 To colUsersInChannel.Count
-                Index = _
+                index = _
                     checkChannel(colUsersInChannel(i).Username)
     
                 colUsersInChannel(i).Username = _
                     convertUsername(colUsersInChannel(i).Username)
     
-                If (Index) Then
-                    lvChannel.ListItems(Index).text = _
+                If (index) Then
+                    lvChannel.ListItems(index).text = _
                         colUsersInChannel(i).Username
                 End If
             Next i
@@ -5988,14 +6005,14 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         If (doConvert) Then
             If (colUsersInChannel.Count) Then
                 For i = 1 To colUsersInChannel.Count
-                    Index = _
+                    index = _
                         checkChannel(colUsersInChannel(i).Username)
     
                     colUsersInChannel(i).Username = _
                         colUsersInChannel(i).Username
     
-                    If (Index) Then
-                        lvChannel.ListItems(Index).text = _
+                    If (index) Then
+                        lvChannel.ListItems(index).text = _
                             colUsersInChannel(i).Username
                     End If
                 Next i
@@ -6771,7 +6788,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     Dim i           As Integer ' ...
     Dim CurrentName As String  ' ...
     Dim atChar      As Integer ' ...
-    Dim Index       As Integer ' ...
+    Dim index       As Integer ' ...
     Dim loops       As Integer ' ...
 
     i = InStr(1, toMatch, " ", vbBinaryCompare)
@@ -6794,13 +6811,13 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
             Dim c As Integer ' ...
             
             If (startIndex > .Count) Then
-                Index = 1
+                index = 1
             Else
-                Index = startIndex
+                index = startIndex
             End If
         
             While (loops < 2)
-                For i = Index To .Count 'for each user
+                For i = index To .Count 'for each user
                     CurrentName = .Item(i).text
                 
                     If (Len(CurrentName) >= Len(toMatch)) Then
@@ -6823,7 +6840,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                 Next i
                 
                 ' ...
-                Index = 1
+                index = 1
                 
                 ' ...
                 loops = (loops + 1)
@@ -6854,9 +6871,9 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         realms(7) = "Northrend"
         
         If (startIndex > UBound(realms)) Then
-            Index = 0
+            index = 0
         Else
-            Index = (startIndex - 1)
+            index = (startIndex - 1)
         End If
         
         ' ...
@@ -6865,7 +6882,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
 
             While (loops < 2)
                 ' ...
-                For i = Index To UBound(realms)
+                For i = index To UBound(realms)
                     ' ...
                     If (Len(realms(i)) >= Len(tmp)) Then
                         ' ...
@@ -6885,7 +6902,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                 Next i
                 
                 ' ...
-                Index = 0
+                index = 0
                 
                 ' ...
                 loops = (loops + 1)
@@ -6894,9 +6911,9 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
             If (tmp = vbNullString) Then
                 ' ...
                 MatchClosest = Left$(toMatch, atChar) & _
-                    realms(Index)
+                    realms(index)
                     
-                MatchIndex = (Index + 1)
+                MatchIndex = (index + 1)
                     
                 Exit Function
             End If
@@ -7026,7 +7043,7 @@ End Sub
 Private Function GetClanSelectedUser() As String
     With lvClanList
         If Not (.SelectedItem Is Nothing) Then
-            If .SelectedItem.Index < 1 Then
+            If .SelectedItem.index < 1 Then
                 GetClanSelectedUser = vbNullString: Exit Function
             Else
                 GetClanSelectedUser = .SelectedItem.text
@@ -7050,7 +7067,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
             lvClanList.ListItems(lItemIndex).Selected = True
             
             If Not (lvClanList.SelectedItem Is Nothing) Then
-                If lvClanList.SelectedItem.Index < 0 Then
+                If lvClanList.SelectedItem.index < 0 Then
                     
                     mnuPopDem.Enabled = False
                     mnuPopPro.Enabled = False
@@ -7160,7 +7177,7 @@ Private Sub mnuPopDem_Click()
         With PBuffer
             .InsertDWord &H1
             .InsertNTString GetClanSelectedUser
-            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon - 1
+            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.index).SmallIcon - 1
             .SendPacket &H7A
         End With
         
@@ -7174,7 +7191,7 @@ Private Sub mnuPopPro_Click()
         With PBuffer
             .InsertDWord &H3
             .InsertNTString GetClanSelectedUser
-            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon + 1
+            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.index).SmallIcon + 1
             .SendPacket &H7A
         End With
         
@@ -7194,7 +7211,7 @@ Private Sub mnuPopRem_Click()
                 "StealthBot") = vbYes Then
                 
             With PBuffer
-                If lvClanList.SelectedItem.Index > 0 Then
+                If lvClanList.SelectedItem.index > 0 Then
                     .InsertDWord 1 'lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon
                     .InsertNTString GetClanSelectedUser
                     .SendPacket &H78

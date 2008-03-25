@@ -129,7 +129,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         
         ' if we're on ops, check for the presence of a user that we
         ' should designate as an heir
-        If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+        If (g_Channel.Self.IsOperator) Then
             If (gChannel.Designated = vbNullString) Then
                 ' loop through list of users
                 For i = 1 To colUsersInChannel.Count
@@ -189,7 +189,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     End If
     
     ' ...
-    If ((MyFlags And &H2) = &H2) Then
+    If (g_Channel.Self.IsOperator) Then
         ' we don't want anyone here that isn't
         ' supposed to be here.
         Call checkUsers
@@ -859,7 +859,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     End If
     
     If ((Phrasebans) Or (BotVars.QuietTime)) Then
-        If (((MyFlags = USER_CHANNELOP&) = USER_CHANNELOP&) And _
+        If ((g_Channel.Self.IsOperator) And _
             ((Flags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
             
             If (BotVars.QuietTime) Then
@@ -1263,7 +1263,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             If ((Len(BotVars.ChannelPassword) > 0) And _
                 (BotVars.ChannelPasswordDelay > 0)) Then
                 
-                If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+                If (g_Channel.Self.IsOperator) Then
                     If ((Len(BotVars.ChannelPassword) > 0) And _
                         (BotVars.ChannelPasswordDelay > 0)) Then
                         
@@ -1336,7 +1336,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     ' AUTOMATIC MODERATION FEATURES
     '  These are all dependent on OPS (determined here)
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+    If (g_Channel.Self.IsOperator) Then
         ' There's no sense trying to perform moderatory actions on
         ' a moderator
         If ((Flags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
@@ -1853,7 +1853,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         Call clsChatQueue.StoreTalk(Flags, Ping, Message)
     End If
         
-    If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+    If (g_Channel.Self.IsOperator) Then
         If (GetSafelist(Username) = False) Then
             If (Phrasebans) Then
                 For i = LBound(Phrases) To UBound(Phrases)

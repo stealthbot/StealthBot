@@ -231,7 +231,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
         '    Next i
         'End If
         
-        If ((MyFlags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+        If (g_Channel.Self.IsOperator) Then
             If (InStr(1, Inpt, Space$(1), vbBinaryCompare) <> 0) Then
                 Username = LCase$(Left$(Inpt, InStr(1, Inpt, Space(1), _
                     vbBinaryCompare) - 1))
@@ -2595,7 +2595,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                                 (StrComp(Left$(Message, Len("ops, ")), "ops, ", vbTextCompare) = 0)) Then
                                 
                             ' ...
-                            If ((MyFlags And &H2) = &H2) Then
+                            If (g_Channel.Self.IsOperator) Then
                                 ' ...
                                 CropLen = (CropLen + 5)
             
