@@ -1077,6 +1077,8 @@ Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long) As L
             Case Is = "DSHR": i = ICDIABLOSW
             Case Is = "JSTR": i = ICJSTR
             Case Is = "SSHR": i = ICSCSW
+            Case Is = "WAR3": i = ICWAR3
+            Case Is = "W3XP": i = ICWAR3X
                 
             '*** Special icons for WCG added 6/24/07 ***
             Case Is = "WCRF": i = IC_WCRF
@@ -1122,9 +1124,9 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         IsSelf = True
     End If
     
-    If (checkChannel(Username) > 0) Then
-        Exit Sub
-    End If
+    'If (checkChannel(Username) > 0) Then
+    '    Exit Sub
+    'End If
     
     Select Case (Ping)
         Case 0 To 199
@@ -1183,8 +1185,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         
         ' ...
         If (BotVars.NoColoring = False) Then
-            .ListItems.Item(isPriority).ForeColor = _
-                        GetNameColor(Flags, 0, IsSelf)
+            .ListItems.Item(isPriority).ForeColor = GetNameColor(Flags, 0, IsSelf)
         End If
     End With
     
@@ -2034,7 +2035,7 @@ End Function
 
 
 Public Function UsernameToIndex(ByVal sUsername As String) As Long
-    Dim user        As clsUserInfo
+    Dim User        As clsUserInfo
     Dim FirstLetter As String * 1
     Dim i           As Integer
     
@@ -2042,9 +2043,9 @@ Public Function UsernameToIndex(ByVal sUsername As String) As Long
     
     If (colUsersInChannel.Count > 0) Then
         For i = 1 To colUsersInChannel.Count
-            Set user = colUsersInChannel.Item(i)
+            Set User = colUsersInChannel.Item(i)
             
-            With user
+            With User
                 If (StrComp(Mid$(.Username, 1, 1), FirstLetter, vbTextCompare) = 0) Then
                     If (StrComp(sUsername, .Username, vbTextCompare) = 0) Then
                         UsernameToIndex = i
@@ -2069,7 +2070,7 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
     If (lvItem Is Nothing) Then
         checkChannel = 0
     Else
-        checkChannel = lvItem.index
+        checkChannel = lvItem.Index
     End If
 End Function
 
@@ -2468,7 +2469,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     Static CropLen    As Integer ' ...
     Static HasTrigger As Boolean ' ...
 
-    Dim index        As Integer ' ...
+    Dim Index        As Integer ' ...
     Dim bln          As Boolean ' ...
     Dim tmp          As String  ' ...
     Dim console      As Boolean ' ...
@@ -2620,15 +2621,15 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     ' ...
     If (HasTrigger) Then
         ' check our message for a command delimiter
-        index = InStr(Len(BotVars.TriggerLong) + 1, tmp, CMD_DELIMITER, _
+        Index = InStr(Len(BotVars.TriggerLong) + 1, tmp, CMD_DELIMITER, _
             vbBinaryCompare)
         
         ' using a delimiter can be undesirable at times, so
         ' we require a way of bypassing such a feature, and
         ' that way is to entirely disable internal support!
-        If (index) Then
+        If (Index) Then
             ' ...
-            tmp = Mid$(tmp, 1, index - 1)
+            tmp = Mid$(tmp, 1, Index - 1)
             
             ' ...
             CropLen = (CropLen + (Len(tmp) + Len(CMD_DELIMITER)))
@@ -2644,13 +2645,13 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     ' ...
     If ((IsLocal) Or (HasTrigger)) Then
         ' ...
-        index = InStr(1, tmp, Space$(1), vbBinaryCompare)
+        Index = InStr(1, tmp, Space$(1), vbBinaryCompare)
         
         ' ...
-        If (index) Then
+        If (Index) Then
             With IsCommand
-                .Name = Mid$(tmp, 1, index - 1)
-                .Args = Mid$(tmp, index + 1)
+                .Name = Mid$(tmp, 1, Index - 1)
+                .Args = Mid$(tmp, Index + 1)
             End With
         Else
             IsCommand.Name = tmp

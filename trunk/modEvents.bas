@@ -39,7 +39,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                     
             Exit Sub
         Else
-            With frmChat.tmrSilentChannel
+            With frmChat.tmrSilentChannel(0)
                 .Enabled = False
                 .Enabled = True
             End With
@@ -285,14 +285,16 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         ' users within the channel by attempting to force a user
         ' update message using Battle.net's unignore command.
         If (frmChat.mnuDisableVoidView.Checked = False) Then
+            ' ...
+            frmChat.tmrSilentChannel(1).Enabled = True
+        
+            ' ...
             frmChat.AddQ "/unignore " & CurrentUsername
         End If
+    Else
+        ' ...
+        frmChat.tmrSilentChannel(1).Enabled = False
     End If
-    
-    ' lets update frmChat's caption with the current
-    ' channel name
-    frmChat.lblCurrentChannel.Caption = _
-        frmChat.GetChannelString()
 
     ' lets update our configuration file with the
     ' current channel name so that we join the channel
@@ -956,7 +958,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim strCompare   As String  ' ...
     Dim Level        As Byte    ' ...
     Dim StatUpdate   As Boolean ' ...
-    Dim index        As Long    ' ...
+    Dim Index        As Long    ' ...
     
     If (Len(Username) < 1) Then
         Exit Sub
