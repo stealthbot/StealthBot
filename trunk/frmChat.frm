@@ -5021,9 +5021,6 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
             ' ...
             If (lvChannel.ListItems.Count = 0) Then
                 ' ...
-                lvChannel.Enabled = False
-            
-                ' ...
                 WasZero = True
             End If
         
@@ -5067,18 +5064,13 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
                 ' ...
                 DoEvents
             Next i
+            
+            ' ...
+            lvChannel.Refresh
+            
+            ' update channel label with current channel name and user count
+            lblCurrentChannel.Caption = GetChannelString()
         End If
-        
-        ' ...
-        If (WasZero) Then
-            lvChannel.Enabled = True
-        End If
-        
-        ' ...
-        lvChannel.Refresh
-        
-        ' update channel label with current channel name and user count
-        lblCurrentChannel.Caption = GetChannelString()
     
         ' ...
         tmrSilentChannel(0).Enabled = False
