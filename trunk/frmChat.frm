@@ -2083,15 +2083,15 @@ Sub Event_BNLSConnecting()
     AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
 End Sub
 
-Sub Event_BNLSDataError(Message As Byte)
-    If Message = 0 Then
+Sub Event_BNLSDataError(message As Byte)
+    If message = 0 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Your CD-Key was rejected. It may be invalid. Try connecting again."
-    ElseIf Message = 1 Then
+    ElseIf message = 1 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Error! Your CD-Key is bad."
-    ElseIf Message = 2 Then
+    ElseIf message = 2 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Error! BNLS has failed CheckRevision. Please check your bot's settings and try again."
         AddChat RTBColors.ErrorMessageText, "[BNLS] Product: " & StrReverse(BotVars.Product) & "."
-    ElseIf Message = 3 Then
+    ElseIf message = 3 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Error! Bad NLS revision."
     End If
 End Sub
@@ -2465,7 +2465,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     SControl.Run "Event_ClanMemberUpdate", Username, Rank, IsOnline
 End Sub
 
-Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
+Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal message As String)
     If (cookie = 1) Then
         PassedClanMotdCheck = True
     End If
@@ -2476,7 +2476,7 @@ Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
     
     On Error Resume Next
     
-    SControl.Run "Event_ClanMOTD", Message
+    SControl.Run "Event_ClanMOTD", message
 End Sub
 
 Private Sub ClanHandler_DemoteUserReply(ByVal Success As Boolean)
@@ -3967,7 +3967,7 @@ Private Sub cboSend_GotFocus()
         For i = 0 To (Controls.Count - 1)
             ' ...
             If (Controls(i).TabStop = False) Then
-                Controls(i).Tag = "False"
+                Controls(i).tag = "False"
             End If
         
             ' ...
@@ -3991,7 +3991,7 @@ Private Sub cboSend_LostFocus()
         For i = 0 To (Controls.Count - 1)
             ' ...
             If ((Controls(i).Name <> "cboSend") And _
-                (Controls(i).Tag <> "False")) Then
+                (Controls(i).tag <> "False")) Then
                 
                 Controls(i).TabStop = True
             End If
@@ -4673,19 +4673,22 @@ End Sub
 
 
 Private Sub QueueTimer_Timer()
-    Dim Message  As String
-    Dim Tag      As String
-    Dim Sent     As Byte
+    Dim message  As String
+    Dim tag      As String
+    Dim sent     As Byte
     Dim i        As Integer
     Dim override As Integer
+    Dim pri      As Integer
+    Dim delay    As Integer
 
     If ((g_Queue.Count) And (g_Online)) Then
         With g_Queue.Peek
-            Message = .Message
-            Tag = .Tag
+            message = .message
+            tag = .tag
+            pri = .PRIORITY
         End With
         
-        If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
+        If (StrComp(message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
             '// This is a dummy queue message faking a 70-character queue entry
             QueueLoad = (QueueLoad + 1)
             QueueMaster = (QueueMaster + 3)
@@ -4693,21 +4696,21 @@ Private Sub QueueTimer_Timer()
             ' ...
             Call g_Queue.Pop
         Else
-            If ((StrComp(Left$(Message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
-                (StrComp(Left$(Message, 10), "/unignore ", vbTextCompare) = 0)) Then
+            If ((StrComp(Left$(message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
+                (StrComp(Left$(message, 10), "/unignore ", vbTextCompare) = 0)) Then
                 
                 ' ...
                 unsquelching = True
             End If
 
             If ((QueueLoad < 3) And (QueueMaster < 16)) Then
-                If (Len(Message) <= 70) Then
+                If (Len(message) <= 70) Then
                     QueueLoad = (QueueLoad + 1)
                     QueueMaster = (QueueMaster + 3)
-                ElseIf (Len(Message) <= 130) Then
+                ElseIf (Len(message) <= 130) Then
                     QueueLoad = (QueueLoad + 2)
                     QueueMaster = (QueueMaster + 5)
-                ElseIf (Len(Message) <= 170) Then
+                ElseIf (Len(message) <= 170) Then
                     QueueLoad = (QueueLoad + 3)
                     QueueMaster = (QueueMaster + 7)
                 Else
@@ -4715,28 +4718,37 @@ Private Sub QueueTimer_Timer()
                     QueueMaster = (QueueMaster + 9)
                 End If
                 
-                Sent = 1
+                sent = 1
                 
-                Call bnetSend(Message, Tag)
+                Call bnetSend(message, tag)
             End If
         End If
         
-        If (Sent = 1) Then
-            If (Left$(Message, 1) <> "/") Then
+        If (sent = 1) Then
+            If (Left$(message, 1) <> "/") Then
                 AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
                     CurrentUsername, RTBColors.Carats, "> ", _
-                        RTBColors.TalkNormalText, Message
+                        RTBColors.TalkNormalText, message
             End If
             
             Call g_Queue.Pop
         End If
+        
+        ' ...
+        If (pri = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
+            ' ...
+            Randomize
+            
+            ' ...
+            delay = ((1 + Rnd() * 3) * 100)
+        End If
     
         If ((QueueMaster >= 15) And (QueueTimer.Interval <> 2400)) Then
-            QueueTimer.Interval = 2400
+            QueueTimer.Interval = (2400 + delay)
         ElseIf ((QueueMaster < 15) And (QueueTimer.Interval = 2400)) Then
-            QueueTimer.Interval = 1175
+            QueueTimer.Interval = (1175 + delay)
         Else
-            QueueTimer.Interval = 1175
+            QueueTimer.Interval = (1175 + delay)
         End If
     End If
 End Sub
@@ -5368,8 +5380,8 @@ ERROR_HANDLER:
 End Function
 
 ' ...
-Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optional _
-    ByVal user As String = vbNullString, Optional ByVal Tag As String = vbNullString)
+Sub AddQ(ByVal message As String, Optional msg_priority As Integer = -1, Optional _
+    ByVal user As String = vbNullString, Optional ByVal tag As String = vbNullString)
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -5384,7 +5396,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     Dim strTmp As String
     
     ' ...
-    strTmp = Message
+    strTmp = message
     
     ' ...
     If (strTmp <> vbNullString) Then
@@ -5569,15 +5581,15 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 Dim spaceIndex As Long   ' ...
                 
                 ' ...
-                If (Len(Message) > 1) Then
+                If (Len(message) > 1) Then
                     ' ...
-                    spaceIndex = InStr(1, Message, Space$(1), vbBinaryCompare)
+                    spaceIndex = InStr(1, message, Space$(1), vbBinaryCompare)
                     
                     ' ...
                     If (spaceIndex) Then
-                        cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 2))
+                        cmdName = LCase$(Left$(Mid$(message, 2), spaceIndex - 2))
                     Else
-                        cmdName = LCase$(Mid$(Message, 2))
+                        cmdName = LCase$(Mid$(message, 2))
                     End If
                 
                     ' ...
@@ -5625,7 +5637,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         QueueLoad = (QueueLoad + 1)
                     Else
                         ' send our message on its way
-                        Call bnetSend(KillNull(Send), Tag)
+                        Call bnetSend(KillNull(Send), tag)
             
                         ' if we're not issuing a command, lets show the user
                         ' what he's saying.
@@ -5685,10 +5697,10 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 
                 ' ...
                 With Q
-                    .Message = Send
+                    .message = Send
                     .PRIORITY = msg_priority
                     .ResponseTo = vbNullString
-                    .Tag = Tag
+                    .tag = tag
                 End With
 
                 ' ...
