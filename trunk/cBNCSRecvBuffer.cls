@@ -67,26 +67,32 @@ Public Function FullPacket() As Boolean
         If l = 1 Then
             lngPacketLen = StringToWord(Mid$(strData, 3, 2))
             
-            'WriteLog "Buffer data from which packetlen was read:", True
-            'WriteLog strData
-            
-            If Len(strData) >= lngPacketLen Then
+            If (lngPacketLen = 0) Then
+                Exit Function
+            End If
+
+            If (Len(strData) >= lngPacketLen) Then
                 If lngPacketLen < 10000 Then
                     FullPacket = True
                 Else
-                    frmChat.AddChat RTBColors.ErrorMessageText, "-> Warning: Invalid [high] packet length detected! Packet dropped. Buffer content at this time: " & vbCrLf & DebugOutput(strData)
-                    ClearBuffer
+                    frmChat.AddChat vbRed, "Error: Packet length of unusually high length detected! Packet " & _
+                            "dropped. Buffer content at this time: " & vbCrLf & DebugOutput(strData)
+                            
+                    Call ClearBuffer
                 End If
             End If
         Else
+            frmChat.AddChat vbRed, "Error: The front of the buffer is not a valid packet!"
+        
             If MDebug("showdrops") Then
-                frmChat.AddChat RTBColors.ErrorMessageText, "The front of the buffer is not a valid packet!"
+                frmChat.AddChat RTBColors.ErrorMessageText, "Error: The front of the buffer is not " & _
+                        "a valid packet!"
                 frmChat.AddChat RTBColors.ErrorMessageText, "The following data is being purged:"
                 
                 If l > 0 Then
-                    frmChat.AddChat DebugOutput(Mid$(strData, 1, l - 1))
+                    frmChat.AddChat Space$(1) & DebugOutput(Mid$(strData, 1, l - 1))
                 Else
-                    frmChat.AddChat DebugOutput(strData)
+                    frmChat.AddChat Space$(1) & DebugOutput(strData)
                 End If
             End If
             
@@ -131,16 +137,16 @@ Public Sub VoidTrimBuffer()
     End If
 End Sub
 
-Private Function StringToWord(Data As String) As Long
-    Dim tmp As String
-    Dim A As String, b As String
-    
-    tmp = ToHex(Data)
-    A = Mid(tmp, 3, 2)
-    b = Mid(tmp, 1, 2)
-    tmp = A & b
-    StringToWord = Val("&H" & tmp)
-End Function
+'Private Function StringToWord(Data As String) As Long
+'    Dim tmp As String
+'    Dim A As String, b As String
+'
+'    tmp = ToHex(Data)
+'    A = Mid(tmp, 3, 2)
+'    b = Mid(tmp, 1, 2)
+'    tmp = A & b
+'    StringToWord = Val("&H" & tmp)
+'End Function
 
 Private Function ToHex(Data As String) As String
     Dim i As Integer

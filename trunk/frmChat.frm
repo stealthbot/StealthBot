@@ -20,7 +20,7 @@ Begin VB.Form frmChat
    StartUpPosition =   3  'Windows Default
    Begin VB.Timer tmrSilentChannel 
       Enabled         =   0   'False
-      Interval        =   100
+      Interval        =   1000
       Left            =   6240
       Top             =   4680
    End
@@ -1174,7 +1174,7 @@ Begin VB.Form frmChat
          Caption         =   "&Flash Window on Events"
       End
       Begin VB.Menu mnuDisableVoidView 
-         Caption         =   "Disable &Void View"
+         Caption         =   "Disable Silent Channel View"
       End
       Begin VB.Menu mnuRecordWindowPos 
          Caption         =   "&Record Current Position"
@@ -4902,20 +4902,13 @@ Private Sub Timer_Timer()
     End If
     
     If Not mnuDisableVoidView.Checked Then
+        ' ...
         If (g_Channel.IsSilent) Then
+            ' ...
             Set colUsersInChannel = New Collection
             
+            ' ...
             g_Channel.ClearUsers
-            
-            With lvChannel
-                .Enabled = False
-                .ListItems.Clear
-            End With
-            
-            With tmrSilentChannel
-                .Enabled = False
-                .Enabled = True
-            End With
             
             AddQ "/unsquelch " & CurrentUsername
         End If
@@ -5020,8 +5013,8 @@ End Sub
 
 Private Sub tmrSilentChannel_Timer()
     ' ...
-    lvChannel.Enabled = True
-    
+    lvChannel.Enabled = False
+
     ' ...
     tmrSilentChannel.Enabled = False
 End Sub
@@ -5344,152 +5337,149 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         Next i
 
         ' ...
-        If (BotVars.UseGameConventions = False) Then
-            nameConversion = True
-        Else
-            ' ...
-            If ((StrReverse$(BotVars.Product) = "D2DV") Or _
-                    (StrReverse$(BotVars.Product) = "D2XP")) Then
-                    
-                ' ...
-                If (BotVars.UseD2GameConventions = False) Then
-                    nameConversion = True
-                End If
-            ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                    (StrReverse$(BotVars.Product) = "W3XP")) Then
-                
-                ' ...
-                If (BotVars.UseW3GameConventions = False) Then
-                    nameConversion = True
-                End If
-            End If
-        End If
+        'If (BotVars.UseGameConventions = False) Then
+        '    nameConversion = True
+        'Else
+        '    ' ...
+        '    If ((StrReverse$(BotVars.Product) = "D2DV") Or _
+        '            (StrReverse$(BotVars.Product) = "D2XP")) Then
+        '
+        '        ' ...
+        '        If (BotVars.UseD2GameConventions = False) Then
+        '            nameConversion = True
+        '        End If
+        '    ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
+        '            (StrReverse$(BotVars.Product) = "W3XP")) Then
+        '
+        '        ' ...
+        '        If (BotVars.UseW3GameConventions = False) Then
+        '            nameConversion = True
+        '        End If
+        '    End If
+        'End If
         
         ' ...
-        If (nameConversion) Then
-            ' ...
-            If (StrComp(Left$(strTmp, 1), "/", vbBinaryCompare) = 0) Then
-                Dim index As Long ' ...
-                
-                ' ...
-                For i = 2 To Len(strTmp)
-                    ' ...
-                    currChar = Asc(Mid$(strTmp, i, 1))
-                
-                    ' ...
-                    If (currChar <> Asc(Space(1))) Then
-                        Exit For
-                    End If
-                Next i
-                
-                ' ...
-                If (i > 2) Then
-                    strTmp = "/" & Mid$(strTmp, i)
-                End If
-    
-                ' ...
-                index = InStr(1, strTmp, Space(1), vbBinaryCompare)
-                
-                ' ...
-                If (index > 2) Then
-                    ' ...
-                    Command = Mid$(strTmp, 2, (index - 2))
-    
-                    ' ...
-                    If ((Command = "w") Or _
-                        (Command = "whisper") Or _
-                        (Command = "m") Or _
-                        (Command = "msg") Or _
-                        (Command = "message") Or _
-                        (Command = "whois") Or _
-                        (Command = "where") Or _
-                        (Command = "whereis") Or _
-                        (Command = "squelch") Or _
-                        (Command = "unsquelch") Or _
-                        (Command = "ignore") Or _
-                        (Command = "unignore") Or _
-                        (Command = "ban") Or _
-                        (Command = "unban") Or _
-                        (Command = "kick") Or _
-                        (Command = "designate")) Then
+        If (StrComp(Left$(strTmp, 1), "/", vbBinaryCompare) = 0) Then
+            Dim index As Long ' ...
             
-                        ' ...
-                        Splt() = Split(strTmp, Space$(1), 3)
-                        
-                        ' ...
-                        If (UBound(Splt) > 0) Then
-                            ' ...
-                            Command = Splt(0) & Space$(1) & reverseUsername(Splt(1)) & _
-                                Space$(1)
-                                
-                            If (UBound(Splt) > 1) Then
-                                ReDim Preserve Splt(0 To UBound(Splt) - 1)
-                            End If
-                        End If
-                    ElseIf ((Command = "f") Or _
-                            (Command = "friends")) Then
-                        
-                        ' ...
-                        Splt() = Split(strTmp, Space$(1), 3)
-                        
-                        ' ...
-                        Command = Splt(0) & Space$(1)
-                        
-                        ' ...
-                        If (UBound(Splt) >= 1) Then
-                            ' ...
-                            Command = Command & Splt(1) & Space$(1)
-                        
-                            ' ...
-                            If (UBound(Splt) >= 2) Then
-                                ' ...
-                                Select Case (LCase$(Splt(1)))
-                                    Case "m", "msg"
-                                        ' ...
-                                        ReDim Preserve Splt(0 To UBound(Splt) - 1)
-    
-                                    Case Else
-                                        ' ...
-                                        Splt() = Split(strTmp, Space$(1), 4)
-                                    
-                                        ' ...
-                                        If ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                                            (StrReverse$(BotVars.Product) = "W3XP")) Then
-                                            
-                                            ' ...
-                                            Command = Command & reverseUsername(Splt(2)) & _
-                                                Space$(1)
-                                        Else
-                                            ' ...
-                                            Command = Command & Splt(2) & Space$(1)
-                                        End If
-                                        
-                                        ' ...
-                                        If (UBound(Splt) >= 3) Then
-                                            Command = Command & Splt(3)
-                                        End If
-                                End Select
-                            End If
-                        End If
-                    Else
-                        ' ...
-                        Command = "/" & Command & Space$(1)
-                        
-                        ' ...
-                        strTmp = Mid$(strTmp, Len(Command) + 1)
-                    End If
-                    
+            ' ...
+            For i = 2 To Len(strTmp)
+                ' ...
+                currChar = Asc(Mid$(strTmp, i, 1))
+            
+                ' ...
+                If (currChar <> Asc(Space(1))) Then
+                    Exit For
+                End If
+            Next i
+            
+            ' ...
+            If (i > 2) Then
+                strTmp = "/" & Mid$(strTmp, i)
+            End If
+
+            ' ...
+            index = InStr(1, strTmp, Space(1), vbBinaryCompare)
+            
+            ' ...
+            If (index > 2) Then
+                ' ...
+                Command = Mid$(strTmp, 2, (index - 2))
+
+                ' ...
+                If ((Command = "w") Or _
+                    (Command = "whisper") Or _
+                    (Command = "m") Or _
+                    (Command = "msg") Or _
+                    (Command = "message") Or _
+                    (Command = "whois") Or _
+                    (Command = "where") Or _
+                    (Command = "whereis") Or _
+                    (Command = "squelch") Or _
+                    (Command = "unsquelch") Or _
+                    (Command = "ignore") Or _
+                    (Command = "unignore") Or _
+                    (Command = "ban") Or _
+                    (Command = "unban") Or _
+                    (Command = "kick") Or _
+                    (Command = "designate")) Then
+        
                     ' ...
-                    If (Len(Command) >= MAX_MESSAGE_LENGTH) Then
-                        Exit Sub
-                    End If
-    
+                    Splt() = Split(strTmp, Space$(1), 3)
+                    
                     ' ...
                     If (UBound(Splt) > 0) Then
                         ' ...
-                        strTmp = Mid$(strTmp, _
-                            (Len(Join(Splt(), Space$(1))) + (Len(Space$(1))) + 1))
+                        Command = Splt(0) & Space$(1) & reverseUsername(Splt(1)) & _
+                            Space$(1)
+                            
+                        If (UBound(Splt) > 1) Then
+                            ReDim Preserve Splt(0 To UBound(Splt) - 1)
+                        End If
                     End If
+                ElseIf ((Command = "f") Or _
+                        (Command = "friends")) Then
+                    
+                    ' ...
+                    Splt() = Split(strTmp, Space$(1), 3)
+                    
+                    ' ...
+                    Command = Splt(0) & Space$(1)
+                    
+                    ' ...
+                    If (UBound(Splt) >= 1) Then
+                        ' ...
+                        Command = Command & Splt(1) & Space$(1)
+                    
+                        ' ...
+                        If (UBound(Splt) >= 2) Then
+                            ' ...
+                            Select Case (LCase$(Splt(1)))
+                                Case "m", "msg"
+                                    ' ...
+                                    ReDim Preserve Splt(0 To UBound(Splt) - 1)
+
+                                Case Else
+                                    ' ...
+                                    Splt() = Split(strTmp, Space$(1), 4)
+                                
+                                    ' ...
+                                    If ((StrReverse$(BotVars.Product) = "WAR3") Or _
+                                        (StrReverse$(BotVars.Product) = "W3XP")) Then
+                                        
+                                        ' ...
+                                        Command = Command & reverseUsername(Splt(2)) & _
+                                            Space$(1)
+                                    Else
+                                        ' ...
+                                        Command = Command & Splt(2) & Space$(1)
+                                    End If
+                                    
+                                    ' ...
+                                    If (UBound(Splt) >= 3) Then
+                                        Command = Command & Splt(3)
+                                    End If
+                            End Select
+                        End If
+                    End If
+                Else
+                    ' ...
+                    Command = "/" & Command & Space$(1)
+                    
+                    ' ...
+                    strTmp = Mid$(strTmp, Len(Command) + 1)
+                End If
+                
+                ' ...
+                If (Len(Command) >= MAX_MESSAGE_LENGTH) Then
+                    Exit Sub
+                End If
+
+                ' ...
+                If (UBound(Splt) > 0) Then
+                    ' ...
+                    strTmp = Mid$(strTmp, _
+                        (Len(Join(Splt(), Space$(1))) + (Len(Space$(1))) + 1))
                 End If
             End If
             
@@ -6325,7 +6315,7 @@ Function DisplayError(ByVal ErrorNumber As Integer, bytType As Byte, _
 End Function
 
 Sub LoadOutFilters()
-    Const o As String = "Outgoing"
+    Const O As String = "Outgoing"
     Const f As String = "filters.ini"
     
     Dim s   As String
@@ -6336,15 +6326,15 @@ Sub LoadOutFilters()
     
     Catch(0) = vbNullString
     
-    s = ReadINI(o, "Total", f)
+    s = ReadINI(O, "Total", f)
     
     If (Not (StrictIsNumeric(s))) Then
         Exit Sub
     End If
     
     For i = 1 To Val(s)
-        gOutFilters(i).ofFind = Replace(LCase(ReadINI(o, "Find" & i, f)), "¦", " ")
-        gOutFilters(i).ofReplace = Replace(ReadINI(o, "Replace" & i, f), "¦", " ")
+        gOutFilters(i).ofFind = Replace(LCase(ReadINI(O, "Find" & i, f)), "¦", " ")
+        gOutFilters(i).ofReplace = Replace(ReadINI(O, "Replace" & i, f), "¦", " ")
         
         If (i <> Val(s)) Then
             ReDim Preserve gOutFilters(1 To i + 1)
@@ -6467,6 +6457,7 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
     Dim strTemp     As String
     Dim fTemp       As String
     Dim BufferLimit As Long
+    Dim interations As Integer
     
     sckBNet.GetData strTemp, vbString
     
@@ -6485,29 +6476,38 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
             'BNCSBuffer.WriteLog strTemp
             
             ' EFP System now running under the parsing layer for extra-crispy efficiency
-            If (bFlood) Then
-                If (Asc(Mid$(strTemp, 2, 1)) = &HF) Then
-                    If (Conv(Mid$(strTemp, 5, 4)) = ID_JOIN) Then
-                        fTemp = KillNull(Mid$(strTemp, 29))
-                        
-                        If (StrComp(flood, fTemp, vbBinaryCompare) <> 0) Then
-                            If (Not (GetSafelist(fTemp))) Then
-                                If (floodCap < 45) Then
-                                    Call APISend("/ban " & fTemp)
-                                    
-                                    floodCap = (floodCap + 30)
-                                    
-                                    flood = fTemp
-                                    
-                                    Exit Sub
-                                End If
-                            End If
-                        End If
-                    End If
-                End If
-            End If
+            'If (bFlood) Then
+            '    If (Asc(Mid$(strTemp, 2, 1)) = &HF) Then
+            '        If (Conv(Mid$(strTemp, 5, 4)) = ID_JOIN) Then
+            '            fTemp = KillNull(Mid$(strTemp, 29))
+            '
+            '            If (StrComp(flood, fTemp, vbBinaryCompare) <> 0) Then
+            '                If (Not (GetSafelist(fTemp))) Then
+            '                    If (floodCap < 45) Then
+            '                        Call APISend("/ban " & fTemp)
+            '
+            '                        floodCap = (floodCap + 30)
+            '
+            '                        flood = fTemp
+            '
+            '                        Exit Sub
+            '                    End If
+            '                End If
+            '            End If
+            '        End If
+            '    End If
+            'End If
             
             Call BNCSParsePacket(strTemp)
+            
+            ' ...
+            interations = (interations + 1)
+            
+            If (interations >= 2000) Then
+                MsgBox "ahhhh!"
+            
+                Exit Sub
+            End If
             
             ' Why do we need this?  Anyway, it's causing topic id #26093
             ' (The Void issue).

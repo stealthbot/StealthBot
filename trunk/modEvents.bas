@@ -38,6 +38,11 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                     "not have a record for."
                     
             Exit Sub
+        Else
+            With frmChat.tmrSilentChannel
+                .Enabled = False
+                .Enabled = True
+            End With
         End If
     End If
     
@@ -178,6 +183,8 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         
         Call clsChatQueue.StoreStatusUpdate(Flags, prevflags, Ping, Product, _
             vbNullString, vbNullString, vbNullString)
+            
+        frmChat.AddChat vbRed, "!"
     End If
     
     ' ...
@@ -193,7 +200,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Exit Sub
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in Event_FlagsUpdate()")
+    MsgBox "Error: " & Err.description & " in Event_FlagsUpdate()"
 
     Exit Sub
 End Sub
@@ -271,8 +278,8 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     ' have we just joined the void?
     If (g_Channel.IsSilent) Then
         ' lets inform user of potential lag issues while in this channel
-        frmChat.AddChat RTBColors.InformationText, "If you experience a lot of lag " & _
-            "in The Void, try selecting 'Disable Void View' from the Window menu."
+        frmChat.AddChat RTBColors.InformationText, "If you experience a lot of lag while within " & _
+                "this channel, try selecting 'Disable Silent Channel View' from the Window menu."
         
         ' if we've joined the void, lets try to grab the list of
         ' users within the channel by attempting to force a user

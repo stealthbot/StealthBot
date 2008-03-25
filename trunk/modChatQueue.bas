@@ -213,7 +213,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     If (g_Channel.IsSilent) Then
         ' ...
         If (frmChat.mnuDisableVoidView.Checked = False) Then
-            Call AddName(Username, Product, Flags, Ping)
+            'Call AddName(Username, Product, Flags, Ping)
         End If
     
         Exit Sub
@@ -279,7 +279,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     Exit Sub
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in Event_QueuedStatusUpdate().")
+    MsgBox "Error: " & Err.description & " in Event_QueuedStatusUpdate()."
     
     Exit Sub
 End Sub

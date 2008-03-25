@@ -47,20 +47,20 @@ Public Sub ClearBuffer()
     strData = vbNullString
 End Sub
 
-Private Function StringToWord(Data As String) As Long
-    Dim tmp As String
-    Dim A As String
-    Dim b As String
-    
-    tmp = ToHex(Data)
-    
-    A = Mid$(tmp, 3, 2)
-    b = Mid$(tmp, 1, 2)
-    
-    tmp = A & b
-    
-    StringToWord = Val("&H" & tmp)
-End Function
+'Private Function StringToWord(Data As String) As Long
+'    Dim tmp As String
+'    Dim A As String
+'    Dim b As String
+'
+'    tmp = ToHex(Data)
+'
+'    A = Mid$(tmp, 3, 2)
+'    b = Mid$(tmp, 1, 2)
+'
+'    tmp = A & b
+'
+'    StringToWord = Val("&H" & tmp)
+'End Function
 
 Private Function ToHex(Data As String) As String
     Dim i As Integer
