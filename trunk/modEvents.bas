@@ -15,8 +15,8 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Dim UserIndex    As Integer  ' ...
     Dim i            As Integer  ' ...
     Dim prevflags    As Long     ' ...
-    Dim clan         As String
-    Dim Parsed       As String
+    Dim Clan         As String
+    Dim parsed       As String
     
     ' if our username is for some reason null, we don't
     ' want to continue, possibly causing further errors
@@ -25,10 +25,11 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     End If
     
     ' ...
-    Call ParseStatstring(Message, Parsed, clan)
+    Call ParseStatstring(Message, parsed, Clan)
     
     ' ...
-    UserIndex = g_Channel.GetUserIndexByName(Username)
+    UserIndex = _
+        g_Channel.GetUserIndexByName(CleanDiablo2Username(Username))
     
     ' ...
     If (UserIndex > 0) Then
@@ -58,7 +59,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         .Flags = Flags
         .Ping = Ping
         .game = Product
-        .clan = clan
+        .Clan = Clan
     End With
     
     ' ...
@@ -101,7 +102,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                 .Safelisted = GetSafelist(Username)
                 .Statstring = Message
                 .JoinTime = GetTickCount
-                .clan = clan
+                .Clan = Clan
                 .IsSelf = (StrComp(Username, CurrentUsername, _
                     vbBinaryCompare) = 0)
                 .InternalFlags = 0
@@ -252,7 +253,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     SharedScriptSupport.MyChannel = ChannelName
     
-    If (StrComp(g_Channel.Name, "Clan " & clan.Name, vbTextCompare) = 0) Then
+    If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
         
         PassedClanMotdCheck = False
         
@@ -647,7 +648,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
     End If
     
-    If (StrComp(g_Channel.Name, "Clan " & clan.Name, vbTextCompare) = 0) Then
+    If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
         If (PassedClanMotdCheck = False) Then
             If (Message <> vbNullString) Then
                 Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
@@ -696,9 +697,11 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         ' http://www.stealthbot.net/forum/index.php?showtopic=24582
         
         If (Len(Temp) > 0) Then
-            Dim bUser     As String  ' ...
-            Dim cOperator As String  ' ...
-            Dim msgPos    As Integer ' ...
+            Dim BannedUser As clsBannedUserObj
+            Dim bUser      As String  ' ...
+            Dim cOperator  As String  ' ...
+            Dim msgPos     As Integer ' ...
+            Dim pos        As Integer ' ...
             
             If (InStr(1, Message, BANNED_MESSAGE, vbTextCompare) > 0) Then
                 
@@ -747,6 +750,33 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 Call UnbanBannedUser(bUser, cOperator)
                 
                 BanCount = (BanCount - 1)
+            End If
+            
+            ' ...
+            pos = g_Channel.GetUserIndexByName(cOperator)
+            
+            ' ...
+            If (pos = 0) Then
+                frmChat.AddChat vbRed, "Error: " & cOperator
+            
+                'If (StrReverse$(BotVars.Product) = "WAR3") Or _
+                '        (StrReverse$(BotVars.Product = "W3XP")) Then
+                '
+                '
+                'End If
+            Else
+                frmChat.AddChat vbRed, cOperator
+            
+                ' ...
+                Set BannedUser = New clsBannedUserObj
+                
+                ' ...
+                With BannedUser
+                    .Name = bUser
+                    .DateOfBan = Now
+                End With
+                
+                g_Channel.Users(pos).Banlist.Add BannedUser
             End If
     
             '// backup channel
@@ -988,7 +1018,8 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
     ' ...
     With UserObj
-        .Name = Username
+        ' ...
+        .Name = CleanDiablo2Username(Username)
         .DisplayName = convertUsername(Username)
         .Flags = Flags
         .Ping = Ping
@@ -1057,7 +1088,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 .Username = Username
                 .Flags = Flags
                 .Ping = Ping
-                .clan = sClan
+                .Clan = sClan
                 .Statstring = OriginalStatstring
             End With
         End If
@@ -1103,7 +1134,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             .Safelisted = GetSafelist(Username)
             .Statstring = OriginalStatstring
             .JoinTime = GetTickCount
-            .clan = sClan
+            .Clan = sClan
             .IsSelf = (StrComp(Username, CurrentUsername, _
                 vbBinaryCompare) = 0)
         
@@ -1208,7 +1239,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         
         ' ...
         With UserObj
-            .Name = Username
+            .Name = CleanDiablo2Username(Username)
             .DisplayName = convertUsername(Username)
             .Flags = Flags
             .Ping = Ping
@@ -1247,7 +1278,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         .Safelisted = GetSafelist(Username)
         .Statstring = OriginalStatstring
         .JoinTime = GetTickCount
-        .clan = sClan
+        .Clan = sClan
         .IsSelf = (StrComp(Username, CurrentUsername, _
             vbBinaryCompare) = 0)
         .InternalFlags = 0
@@ -1615,11 +1646,12 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim Pos       As Integer
+    Dim pos       As Integer
     Dim bln       As Boolean
     
     ' ...
-    UserIndex = g_Channel.GetUserIndexByName(Username)
+    UserIndex = _
+        g_Channel.GetUserIndexByName(CleanDiablo2Username(Username))
     
     ' ...
     If (UserIndex > 0) Then
@@ -2262,3 +2294,47 @@ Public Sub Event_ChannelList(sChannels() As String)
     
     frmChat.SControl.Run "Event_ChannelList", sChannels
 End Sub
+
+Private Function CleanDiablo2Username(ByVal Username As String) As String
+    
+    Dim tmp As String  ' ...
+    Dim pos As Integer ' ...
+    
+    ' ...
+    tmp = Username
+    
+    ' ...
+    pos = InStr(1, tmp, "*", vbBinaryCompare)
+
+    ' ...
+    If (pos > 0) Then
+        tmp = Mid$(Username, pos + 1)
+        
+        ' ...
+        If (Right$(tmp, 1) = ")") Then
+            tmp = Left$(tmp, Len(tmp) - 1)
+        End If
+    End If
+    
+    ' ...
+    CleanDiablo2Username = tmp
+    
+End Function
+
+Private Function GetDiablo2CharacterName(ByVal Username As String) As String
+
+    Dim tmp As String  ' ...
+    Dim pos As Integer ' ...
+    
+    ' ...
+    pos = InStr(1, Username, "*", vbBinaryCompare)
+
+    ' ...
+    If (pos > 0) Then
+        tmp = Mid$(Username, 1, pos - 1)
+    End If
+    
+    ' ...
+    GetDiablo2CharacterName = tmp
+
+End Function

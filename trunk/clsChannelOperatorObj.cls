@@ -17,4 +17,3 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_banned_users As Collection
