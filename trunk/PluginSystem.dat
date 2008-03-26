@@ -48,8 +48,8 @@
 '//   *Improved error handling during plugin load. Loading errors will now be more descriptive (Thanks ZergMaster)
 '//      -Plugins with errors on load will be disabled automatically (to avoid the constant error messages on every event)
 '//   *Improved plugin error handling while plugins are being loaded (Thanks ZergMasterI)
-'//      -Errors recieved during plugin loading now show correct offending lines and line/column numbers, and the erroring plugin will be blocked
-'//         ~"Blocked" is essentially the same as disabled -- except it's temporary. The blocked status disappears on reload (if error is fixed)
+'//      -If errors are recieved during plugin loading the erroring plugin will be blocked (temporarily disabled) to stop errors on every event
+'//         ~In the /plugins response, blocked plugins' status will be "Error"
 '//      -All other errors recieved will show correct line and column numbers as well if debug mode is on
 '//   *Added the option to include a plugin description in the help lines. Include it on the first line (name:author:description)
 '//   *The "/<prefix> off" command now triggers a call to the plugin's Close event (Thanks Ribose)
@@ -190,9 +190,9 @@ Sub psLoadPlugins()
                '// Check prefix and version validity
                pcErr = psPrefixCheck(curPrefix)
                If Len(pcErr) > 0 Then
-                  AddChat vbRed, "Did not load plugin in file ", vbWhite, psFSO.GetFileName(File), vbRed, ". " & pcErr & "."
+                  AddChat vbRed, "Did not load plugin in file """ & psFSO.GetFileName(File) & """. " & pcErr & "."
                ElseIf psGetNumericVersion(curVersion) < 0 Then
-                  AddChat vbRed, "Did not load plugin in file ", vbWhite, psFSO.GetFileName(File), vbRed, ". Its version """ & curVersion & """ is invalid."
+                  AddChat vbRed, "Did not load plugin in file """ & psFSO.GetFileName(File) & ". Its version """ & curVersion & """ is invalid."
                Else      
 
                   '// Everything checks out, load this plugin!
@@ -318,10 +318,8 @@ Sub psLoadCode(Prefix, Path, Content)
 
    '// Handle loading errors
    If Err.Number <> 0 Then
-      LoadError.Item(Prefix) = True
-      'AddChat vbRed, "Plugin loading error '" & Err.Number & "': " & Err.Description
-      AddChat vbRed, "Offending file: >> " & Path
-      AddChat vbYellow, "Your " & Prefix & " plugin has been temporarily blocked due to a loading error."
+      psLoadError.Item(Prefix) = True
+      AddChat vbRed, "Error loading plugin """ & Prefix & """ in file """ & psFSO.GetFileName(Path) & """ (" & Err.Number & ": " & Err.Description & ")"
       Err.Clear
    Else
       psLoadError.Item(Prefix) = False
@@ -340,6 +338,45 @@ Sub psAddArg(Prefix, Index, EventName, LastArg, NewArg, Lines, Path)
    pFile.WriteLine psNewContent
    pFile.Close
    psArgsAdded = True
+End Sub
+
+
+
+
+
+'// [[[ PLUGIN EVENT EXECUTOR ]]]
+
+
+Sub psExecuteEvent(EventName, Parameters)
+
+   If Not (GetSetting("ps", "enabled") And psLoaded) Or (EventName = "FirstRun" And Not psFirstRun) Then Exit Sub
+   Err.Clear: If Not GetSetting("ps", "debugmode") Then On Error Resume Next
+
+   '// In each plugin execute this event with parameter values passed from the actual event sub below
+   For i = 0 to psPlugins.Count - 1
+
+      '// Is this plugin enabled, did it load successfully, and does this event exist in this plugin?
+      If GetSetting(psPrefixes(i), "enabled") And Not psLoadError(psPrefixes(i)) And Instr(psEvents(psPrefixes(i)), "|" & LCase(EventName) & "|") Then
+
+         '// Call the specified event sub in this plugin
+         If IsArray(Parameters) Then
+            For j = 0 to UBound(Parameters)
+               paramString = paramString & "psEcho(Parameters(" & j & "))" & ","
+            Next
+            paramString = Left(paramString, Len(paramString) - 1)
+         End If
+         Execute("Call " & psPrefixes(i) & "_Event_" & EventName & "(" & paramString & ")")
+ 
+         '// Handle errors
+         If Err.Number <> 0 Then
+            AddChat vbRed, "Scripting runtime error '" & Err.Number & "' on """ & psPrefixes(i) & "_Event_" & _
+                            EventName & """ call in file """ & psFSO.GetFileName(psPlugins.Items()(i)) & """"
+	    AddChat vbRed, Err.Description & "."
+            Err.Clear
+         End If
+      End If
+      paramString = vbNullString
+   Next
 End Sub
 
 
@@ -614,7 +651,7 @@ Sub ps_plugins_cmd(cmd, Username, DisplayID)
       If i Mod 2 = 0 Then altColor = psColor1 Else altColor = psColor2 End If
       If psPluginEnabled(arrPrefixes(i)) Then
          If psLoadError.Item(arrPrefixes(i)) Then
-            status = "vbRed, "" (Blocked)"" & vbCrLf, "
+            status = "vbRed, "" (Error)"" & vbCrLf, "
          Else
             status = altColor & ", "" "" & vbCrLf, "
          End If
@@ -1330,43 +1367,6 @@ End Sub
 
 
 
-'// [[[ PLUGIN EVENT EXECUTOR ]]]
-
-
-Sub psExecuteEvent(EventName, Parameters)
-
-   If Not (GetSetting("ps", "enabled") And psLoaded) Or (EventName = "FirstRun" And Not psFirstRun) Then Exit Sub
-   Err.Clear: If Not GetSetting("ps", "debugmode") Then On Error Resume Next
-
-   '// In each plugin execute this event with parameter values passed from the actual event sub below
-   For i = 0 to psPlugins.Count - 1
-
-      '// Is this plugin enabled, did it load successfully, and does this event exist in this plugin?
-      If GetSetting(psPrefixes(i), "enabled") And Not psLoadError(psPrefixes(i)) And Instr(psEvents(psPrefixes(i)), "|" & LCase(EventName) & "|") Then
-
-         '// Call the specified event sub in this plugin
-         If IsArray(Parameters) Then
-            For j = 0 to UBound(Parameters)
-               paramString = paramString & "psEcho(Parameters(" & j & "))" & ","
-            Next
-            paramString = Left(paramString, Len(paramString) - 1)
-         End If
-         Execute("Call " & psPrefixes(i) & "_Event_" & EventName & "(" & paramString & ")")
- 
-         '// Handle errors
-         If Err.Number <> 0 Then
-            AddChat vbRed, "Scripting runtime error '" & Err.Number & "' on """ & psPrefixes(i) & "_Event_" & _
-                            EventName & """ call in file """ & psFSO.GetFileName(psPlugins.Items()(i)) & """"
-	    AddChat vbRed, Err.Description & "."
-            Err.Clear
-         End If
-      End If
-      paramString = vbNullString
-   Next
-End Sub
-
-
-
 
 
 '// [[[ OTHER SUBS/FUNCTIONS ]]]
@@ -1403,7 +1403,7 @@ End Sub
 Function psPrefixCheck(Prefix)
 
    If psPlugins.Exists(Prefix) Then
-      strErr = "already exists"
+      strErr = "already exists in file """ & psFSO.GetFileName(psPlugins.Item(Prefix)) & """"
    Else
       For i = 1 to Len(Prefix)
          val = asc(Mid(prefix, i, 1))
@@ -1514,13 +1514,13 @@ End Function
 Sub psBackUpFile(Path, Version)
 
    If Not psFSO.FileExists(Path) Then Exit Sub
-   If Not psFSO.FolderExists(BotPath() & "ScriptBackups\") Then psFSO.CreateFolder(BotPath() & "ScriptBackups\")
+   If Not psFSO.FolderExists(BotPath() & "plugins\backups\") Then psFSO.CreateFolder(BotPath() & "plugins\backups\")
 
    fileName = psFSO.GetBaseName(Path)
    fileExt = psFSO.GetExtensionName(Path)
    If Len(Version) > 0 Then buVersion = "(v" & Version & ")"
    buName = fileName & buVersion
-   buPathStart = BotPath() & "ScriptBackups\" & buName
+   buPathStart = BotPath() & "plugins\backups\" & buName
 
    fileContents = psGetTextStream(Path)
    Do
@@ -1530,7 +1530,7 @@ Sub psBackUpFile(Path, Version)
          Set File = psFSO.OpenTextFile(buPath, 2, True)
          File.WriteLine(fileContents)
          File.Close
-         AddChat vbCyan, fileName & "." & fileExt & " backed up in file> " & "ScriptBackups\" & buName & buNum & "." & fileExt
+         AddChat vbCyan, fileName & "." & fileExt & " backed up in file> " & "plugins\backups\" & buName & buNum & "." & fileExt
          Exit Do
       End If
    Loop
