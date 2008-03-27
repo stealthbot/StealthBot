@@ -709,6 +709,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             Dim cOperator  As String  ' ...
             Dim msgPos     As Integer ' ...
             Dim pos        As Integer ' ...
+            Dim tmp        As String
             
             If (InStr(1, Message, BANNED_MESSAGE, vbTextCompare) > 0) Then
                 
@@ -760,20 +761,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
             
             ' ...
-            pos = g_Channel.GetUserIndexByName(cOperator)
+            pos = g_Channel.GetUserIndexByName(CleanDiablo2Username(Username))
             
             ' ...
-            If (pos = 0) Then
-                frmChat.AddChat vbRed, "Error: " & cOperator
-            
-                'If (StrReverse$(BotVars.Product) = "WAR3") Or _
-                '        (StrReverse$(BotVars.Product = "W3XP")) Then
-                '
-                '
-                'End If
-            Else
-                frmChat.AddChat vbRed, cOperator
-            
+            If (pos > 0) Then
                 ' ...
                 Set BannedUser = New clsBannedUserObj
                 
