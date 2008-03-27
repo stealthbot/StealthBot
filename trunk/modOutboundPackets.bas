@@ -244,6 +244,8 @@ Public Sub Send0x3A(ByVal ServerToken As Long)
 End Sub
 
 Public Sub Send0x0A()
+    Dim num As Integer
+
     If BotVars.Product <> "VD2D" And BotVars.Product <> "PX2D" And _
         BotVars.Product <> "PX3W" And BotVars.Product <> "3RAW" Then
         
@@ -261,23 +263,23 @@ Public Sub Send0x0A()
         End If
     End If
     
+    ' ...
+    Randomize
+    
+    ' ...
+    num = (1 + Rnd() * 1000)
+    
+    ' ...
     With PBuffer
         .InsertNTString g_username
-        .InsertByte 0
+        .InsertNTString vbNullString
         .SendPacket &HA
         
         .InsertNonNTString BotVars.Product
         .SendPacket &HB
         
         .InsertDWord &H0
-        .InsertNTString "wrd" & CLng(Rnd * 10000 + 1)
-        .SendPacket &HC
-            
-        .InsertNTString "/whoami"
-        .SendPacket &HE
-            
-        .InsertDWord &H1
-        .InsertNTString BotVars.HomeChannel
+        .InsertNTString g_username & " #" & num
         .SendPacket &HC
     End With
     

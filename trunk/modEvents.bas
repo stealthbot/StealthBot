@@ -539,7 +539,7 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     
     'INetQueue inqReset
     
-    FullJoin BotVars.HomeChannel
+    'FullJoin BotVars.HomeChannel
 
     QueueLoad = (QueueLoad + 2)
     
@@ -550,6 +550,13 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
         
         ExReconnectTimerID = 0
     End If
+    
+    With PBuffer
+        .InsertNTString "/whoami"
+        .SendPacket &HE
+    End With
+    
+    Call FullJoin(BotVars.HomeChannel)
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' call event script function
