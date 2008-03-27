@@ -19,26 +19,26 @@ Attribute VB_Name = "modCommandCode"
 Option Explicit
 
 ' Winamp Constants
-Private Const WA_PREVTRACK   As Long = 40044 ' ...
-Private Const WA_NEXTTRACK   As Long = 40048 ' ...
-Private Const WA_PLAY        As Long = 40045 ' ...
-Private Const WA_PAUSE       As Long = 40046 ' ...
-Private Const WA_STOP        As Long = 40047 ' ...
-Private Const WA_FADEOUTSTOP As Long = 40147 ' ...
+'Private Const WA_PREVTRACK   As Long = 40044 ' ...
+'Private Const WA_NEXTTRACK   As Long = 40048 ' ...
+'Private Const WA_PLAY        As Long = 40045 ' ...
+'Private Const WA_PAUSE       As Long = 40046 ' ...
+'Private Const WA_STOP        As Long = 40047 ' ...
+'Private Const WA_FADEOUTSTOP As Long = 40147 ' ...
 
-Private m_dbAccess As udtGetAccessResponse
-Private m_Username As String  ' ...
-Private m_Console  As Boolean ' ...
-Private m_Whisper  As Boolean ' ...
+Private m_dbAccess     As udtGetAccessResponse
+Private m_Username     As String  ' ...
+Private m_IsLocal      As Boolean ' ...
+Private m_WasWhispered As Boolean ' ...
 
 Public flood    As String ' ...?
 Public floodCap As Byte   ' ...?
 
 ' prepares commands for processing, and calls helper functions associated with
 ' processing
-Public Function ProcessCommand(ByVal Username As String, ByVal Message As String, _
-        Optional ByVal IsLocal As Boolean = False, Optional ByVal Whispered As Boolean = False, Optional _
-                DisplayOutput As Boolean = True) As Boolean
+Public Function ProcessCommand(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As _
+        Boolean = False, Optional ByVal WasWhispered As Boolean = False, Optional DisplayOutput As Boolean = _
+                True) As Boolean
     
     On Error GoTo ERROR_HANDLER
     
@@ -90,7 +90,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                             End If
                         Else
                             ' ...
-                            If ((BotVars.WhisperCmds) Or (Whispered)) Then
+                            If ((BotVars.WhisperCmds) Or (WasWhispered)) Then
                                 AddQ "/w " & Username & Space$(1) & command_return(i), _
                                         PRIORITY.COMMAND_RESPONSE_MESSAGE
                             Else
@@ -133,245 +133,245 @@ End Function
 
 ' prepares commands for processing, and calls helper functions associated with
 ' processing
-Public Function ProcessCommand3(ByVal Username As String, ByVal Message As String, _
-    Optional ByVal InBot As Boolean = False, Optional ByVal WhisperedIn As Boolean = False) As Boolean
-    
-    ' default error response for commands
-    On Error GoTo ERROR_HANDLER
-    
-    ' stores the access response for use when commands are
-    ' issued via console
-    Dim ConsoleAccessResponse As udtGetAccessResponse
-
-    Dim i            As Integer ' loop counter
-    Dim tmpmsg       As String  ' stores local copy of message
-    Dim cmdRet()     As String  ' stores output of commands
-    Dim PublicOutput As Boolean ' stores result of public command
-                                ' output check (used for displaying command
-                                ' output when issuing via console)
-    
-    ' create single command data array element for safe bounds checking
-    ReDim Preserve cmdRet(0)
-    
-    ' create console access response structure
-    With ConsoleAccessResponse
-        .Access = 201
-        .Flags = "A"
-    End With
-    
-    m_Username = Username
-    m_Console = InBot
-    m_Whisper = WhisperedIn
-
-    If (m_Console) Then
-        m_dbAccess = ConsoleAccessResponse
-    Else
-        m_dbAccess = GetCumulativeAccess(Username, "USER")
-    End If
-
-    ' store local copy of message
-    tmpmsg = Message
-    
-    ' replace message variables
-    tmpmsg = Replace(tmpmsg, "%me", IIf((InBot), CurrentUsername, Username), 1)
-    
-    ' check for command identifier when command
-    ' is not issued from within console
-    If (Not (InBot)) Then
-        ' we're going to mute our own access for now to prevent users from
-        ' using the "say" command to gain full control over the bot.
-        If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
-            Exit Function
-        End If
-    
-        ' check for commands using universal command identifier (?)
-        If (StrComp(Left$(tmpmsg, Len("?trigger")), "?trigger", vbTextCompare) = 0) Then
-            ' remove universal command identifier from message
-            tmpmsg = Mid$(tmpmsg, 2)
-        
-        ' check for commands using command identifier
-        ElseIf ((Len(tmpmsg) >= Len(BotVars.TriggerLong)) And _
-                (Left$(tmpmsg, Len(BotVars.TriggerLong)) = BotVars.TriggerLong)) Then
-            
-            ' remove command identifier from message
-            tmpmsg = Mid$(tmpmsg, Len(BotVars.TriggerLong) + 1)
-        
-            ' check for command identifier and name combination
-            ' (e.g., .Eric[nK] say hello)
-            If (Len(tmpmsg) >= (Len(CurrentUsername) + 1)) Then
-                If (StrComp(Left$(tmpmsg, Len(CurrentUsername) + 1), _
-                    CurrentUsername & Space(1), vbTextCompare) = 0) Then
-                        
-                    ' remove username (and space) from message
-                    tmpmsg = Mid$(tmpmsg, Len(CurrentUsername) + 2)
-                End If
-            End If
-        
-        ' check for commands using either name and colon (and space),
-        ' or name and comma (and space)
-        ' (e.g., Eric[nK]: say hello; and, Eric[nK], say hello)
-        ElseIf ((Len(tmpmsg) >= (Len(CurrentUsername) + 2)) And _
-                ((StrComp(Left$(tmpmsg, Len(CurrentUsername) + 2), CurrentUsername & ": ", _
-                  vbTextCompare) = 0) Or _
-                 (StrComp(Left$(tmpmsg, Len(CurrentUsername) + 2), CurrentUsername & ", ", _
-                  vbTextCompare) = 0))) Then
-            
-            ' remove username (and colon/comma) from message
-            tmpmsg = Mid$(tmpmsg, Len(CurrentUsername) + 3)
-        Else
-            ' allow commands without any command identifier if
-            ' commands are sent via whisper
-            'If (Not (WhisperedIn)) Then
-            '    ' return negative result indicating that message does not contain
-            '    ' a valid command identifier
-            '    ProcessCommand = False
-            '
-            '    ' exit function
-            '    Exit Function
-            'End If
-            
-            ' return negative result indicating that message does not contain
-            ' a valid command identifier
-            ProcessCommand3 = False
-        
-            ' exit function
-            Exit Function
-        End If
-    Else
-        ' remove slash (/) from in-console message
-        tmpmsg = Mid$(tmpmsg, 2)
-        
-        ' check for second slash indicating
-        ' public output
-        If (Left$(tmpmsg, 1) = "/") Then
-            ' enable public display of command
-            PublicOutput = True
-        
-            ' remove second slash (/) from in-console
-            ' message
-            tmpmsg = Mid$(tmpmsg, 2)
-        End If
-    End If
-
-    ' check for multiple command syntax if not issued from
-    ' within the console
-    If ((Not (InBot)) And _
-        (InStr(1, tmpmsg, "; ", vbBinaryCompare) > 0)) Then
-       
-        Dim X() As String  ' ...
-    
-        ' split message
-        X = Split(tmpmsg, "; ")
-        
-        ' loop through commands
-        For i = 0 To UBound(X)
-            Dim tmpX As String ' ...
-            
-            ' store local copy of message
-            tmpX = X(i)
-        
-            ' can we check for a command identifier without
-            ' causing an rte?
-            If (Len(tmpX) >= Len(BotVars.TriggerLong)) Then
-                ' check for presence of command identifer
-                If (Left$(tmpX, Len(BotVars.TriggerLong)) = BotVars.TriggerLong) Then
-                    ' remove command identifier from message
-                    tmpX = Mid$(tmpX, Len(BotVars.TriggerLong) + 1)
-                End If
-            End If
-        
-            ' execute command
-            ProcessCommand3 = ExecuteCommand(Username, GetCumulativeAccess(Username, _
-                "USER"), tmpX, InBot, cmdRet())
-            
-            If (ProcessCommand3) Then
-                ' display command response
-                If (cmdRet(0) <> vbNullString) Then
-                    Dim j As Integer ' ...
-                
-                    ' loop through command response
-                    For j = 0 To UBound(cmdRet)
-                        If ((InBot) And (Not (PublicOutput))) Then
-                            ' display message on screen
-                            Call frmChat.AddChat(RTBColors.ConsoleText, cmdRet(j))
-                        Else
-                            ' send message to battle.net
-                            If (WhisperedIn) Then
-                                ' whisper message
-                                Call AddQ("/w " & Username & Space$(1) & cmdRet(j), _
-                                    PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
-                            Else
-                                ' send standard message
-                                Call AddQ(cmdRet(j), PRIORITY.COMMAND_RESPONSE_MESSAGE, _
-                                    Username)
-                            End If
-                        End If
-                    Next j
-                End If
-            End If
-        Next i
-    Else
-        ' send command to main processor
-        If (InBot) Then
-            ' execute command
-            ProcessCommand3 = ExecuteCommand(Username, ConsoleAccessResponse, tmpmsg, _
-                InBot, cmdRet())
-        Else
-            ' execute command
-            ProcessCommand3 = ExecuteCommand(Username, GetCumulativeAccess(Username, _
-                "USER"), tmpmsg, InBot, cmdRet())
-        End If
-        
-        If (ProcessCommand3) Then
-            ' display command response
-            If (cmdRet(0) <> vbNullString) Then
-                ' loop through command response
-                For i = 0 To UBound(cmdRet)
-                    If ((InBot) And (Not (PublicOutput))) Then
-                        ' display message on screen
-                        Call frmChat.AddChat(RTBColors.ConsoleText, cmdRet(i))
-                    Else
-                        ' display message
-                        If ((WhisperedIn) Or _
-                           ((BotVars.WhisperCmds) And (Not (InBot)))) Then
-                           
-                            ' whisper message
-                            Call AddQ("/w " & Username & _
-                                Space(1) & cmdRet(i), PRIORITY.COMMAND_RESPONSE_MESSAGE, _
-                                    Username)
-                        Else
-                            ' send standard message
-                            Call AddQ(cmdRet(i), PRIORITY.COMMAND_RESPONSE_MESSAGE, _
-                                Username)
-                        End If
-                    End If
-                Next i
-            End If
-        Else
-            ' send command directly to Battle.net if
-            ' command is found to be invalid and issued
-            ' internally
-            If (InBot) Then
-                Call AddQ(Message, PRIORITY.CONSOLE_MESSAGE, "(console)")
-            End If
-        End If
-    End If
-    
-    ' break out of function before reaching error
-    ' handler
-    Exit Function
-    
-' default (if all else fails) error handler to keep erroneous
-' commands and/or input formats from killing me
-ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: " & Err.description & _
-        " in ProcessCommand().")
-
-    ' return command failure result
-    ProcessCommand3 = False
-    
-    Exit Function
-End Function ' end function ProcessCommand
+'Public Function ProcessCommand3(ByVal Username As String, ByVal Message As String, _
+'    Optional ByVal InBot As Boolean = False, Optional ByVal WhisperedIn As Boolean = False) As Boolean
+'
+'    ' default error response for commands
+'    On Error GoTo ERROR_HANDLER
+'
+'    ' stores the access response for use when commands are
+'    ' issued via console
+'    Dim ConsoleAccessResponse As udtGetAccessResponse
+'
+'    Dim i            As Integer ' loop counter
+'    Dim tmpmsg       As String  ' stores local copy of message
+'    Dim cmdRet()     As String  ' stores output of commands
+'    Dim PublicOutput As Boolean ' stores result of public command
+'                                ' output check (used for displaying command
+'                                ' output when issuing via console)
+'
+'    ' create single command data array element for safe bounds checking
+'    ReDim Preserve cmdRet(0)
+'
+'    ' create console access response structure
+'    With ConsoleAccessResponse
+'        .Access = 201
+'        .Flags = "A"
+'    End With
+'
+'    m_Username = Username
+'    m_IsLocal = InBot
+'    m_WasWhispered = WhisperedIn
+'
+'    If (m_console) Then
+'        m_dbAccess = ConsoleAccessResponse
+'    Else
+'        m_dbAccess = GetCumulativeAccess(Username, "USER")
+'    End If
+'
+'    ' store local copy of message
+'    tmpmsg = Message
+'
+'    ' replace message variables
+'    tmpmsg = Replace(tmpmsg, "%me", IIf((InBot), CurrentUsername, Username), 1)
+'
+'    ' check for command identifier when command
+'    ' is not issued from within console
+'    If (Not (InBot)) Then
+'        ' we're going to mute our own access for now to prevent users from
+'        ' using the "say" command to gain full control over the bot.
+'        If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
+'            Exit Function
+'        End If
+'
+'        ' check for commands using universal command identifier (?)
+'        If (StrComp(Left$(tmpmsg, Len("?trigger")), "?trigger", vbTextCompare) = 0) Then
+'            ' remove universal command identifier from message
+'            tmpmsg = Mid$(tmpmsg, 2)
+'
+'        ' check for commands using command identifier
+'        ElseIf ((Len(tmpmsg) >= Len(BotVars.TriggerLong)) And _
+'                (Left$(tmpmsg, Len(BotVars.TriggerLong)) = BotVars.TriggerLong)) Then
+'
+'            ' remove command identifier from message
+'            tmpmsg = Mid$(tmpmsg, Len(BotVars.TriggerLong) + 1)
+'
+'            ' check for command identifier and name combination
+'            ' (e.g., .Eric[nK] say hello)
+'            If (Len(tmpmsg) >= (Len(CurrentUsername) + 1)) Then
+'                If (StrComp(Left$(tmpmsg, Len(CurrentUsername) + 1), _
+'                    CurrentUsername & Space(1), vbTextCompare) = 0) Then
+'
+'                    ' remove username (and space) from message
+'                    tmpmsg = Mid$(tmpmsg, Len(CurrentUsername) + 2)
+'                End If
+'            End If
+'
+'        ' check for commands using either name and colon (and space),
+'        ' or name and comma (and space)
+'        ' (e.g., Eric[nK]: say hello; and, Eric[nK], say hello)
+'        ElseIf ((Len(tmpmsg) >= (Len(CurrentUsername) + 2)) And _
+'                ((StrComp(Left$(tmpmsg, Len(CurrentUsername) + 2), CurrentUsername & ": ", _
+'                  vbTextCompare) = 0) Or _
+'                 (StrComp(Left$(tmpmsg, Len(CurrentUsername) + 2), CurrentUsername & ", ", _
+'                  vbTextCompare) = 0))) Then
+'
+'            ' remove username (and colon/comma) from message
+'            tmpmsg = Mid$(tmpmsg, Len(CurrentUsername) + 3)
+'        Else
+'            ' allow commands without any command identifier if
+'            ' commands are sent via whisper
+'            'If (Not (WhisperedIn)) Then
+'            '    ' return negative result indicating that message does not contain
+'            '    ' a valid command identifier
+'            '    ProcessCommand = False
+'            '
+'            '    ' exit function
+'            '    Exit Function
+'            'End If
+'
+'            ' return negative result indicating that message does not contain
+'            ' a valid command identifier
+'            ProcessCommand3 = False
+'
+'            ' exit function
+'            Exit Function
+'        End If
+'    Else
+'        ' remove slash (/) from in-console message
+'        tmpmsg = Mid$(tmpmsg, 2)
+'
+'        ' check for second slash indicating
+'        ' public output
+'        If (Left$(tmpmsg, 1) = "/") Then
+'            ' enable public display of command
+'            PublicOutput = True
+'
+'            ' remove second slash (/) from in-console
+'            ' message
+'            tmpmsg = Mid$(tmpmsg, 2)
+'        End If
+'    End If
+'
+'    ' check for multiple command syntax if not issued from
+'    ' within the console
+'    If ((Not (InBot)) And _
+'        (InStr(1, tmpmsg, "; ", vbBinaryCompare) > 0)) Then
+'
+'        Dim X() As String  ' ...
+'
+'        ' split message
+'        X = Split(tmpmsg, "; ")
+'
+'        ' loop through commands
+'        For i = 0 To UBound(X)
+'            Dim tmpX As String ' ...
+'
+'            ' store local copy of message
+'            tmpX = X(i)
+'
+'            ' can we check for a command identifier without
+'            ' causing an rte?
+'            If (Len(tmpX) >= Len(BotVars.TriggerLong)) Then
+'                ' check for presence of command identifer
+'                If (Left$(tmpX, Len(BotVars.TriggerLong)) = BotVars.TriggerLong) Then
+'                    ' remove command identifier from message
+'                    tmpX = Mid$(tmpX, Len(BotVars.TriggerLong) + 1)
+'                End If
+'            End If
+'
+'            ' execute command
+'            ProcessCommand3 = ExecuteCommand(Username, GetCumulativeAccess(Username, _
+'                "USER"), tmpX, InBot, cmdRet())
+'
+'            If (ProcessCommand3) Then
+'                ' display command response
+'                If (cmdRet(0) <> vbNullString) Then
+'                    Dim j As Integer ' ...
+'
+'                    ' loop through command response
+'                    For j = 0 To UBound(cmdRet)
+'                        If ((InBot) And (Not (PublicOutput))) Then
+'                            ' display message on screen
+'                            Call frmChat.AddChat(RTBColors.ConsoleText, cmdRet(j))
+'                        Else
+'                            ' send message to battle.net
+'                            If (WhisperedIn) Then
+'                                ' whisper message
+'                                Call AddQ("/w " & Username & Space$(1) & cmdRet(j), _
+'                                    PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
+'                            Else
+'                                ' send standard message
+'                                Call AddQ(cmdRet(j), PRIORITY.COMMAND_RESPONSE_MESSAGE, _
+'                                    Username)
+'                            End If
+'                        End If
+'                    Next j
+'                End If
+'            End If
+'        Next i
+'    Else
+'        ' send command to main processor
+'        If (InBot) Then
+'            ' execute command
+'            ProcessCommand3 = ExecuteCommand(Username, ConsoleAccessResponse, tmpmsg, _
+'                InBot, cmdRet())
+'        Else
+'            ' execute command
+'            ProcessCommand3 = ExecuteCommand(Username, GetCumulativeAccess(Username, _
+'                "USER"), tmpmsg, InBot, cmdRet())
+'        End If
+'
+'        If (ProcessCommand3) Then
+'            ' display command response
+'            If (cmdRet(0) <> vbNullString) Then
+'                ' loop through command response
+'                For i = 0 To UBound(cmdRet)
+'                    If ((InBot) And (Not (PublicOutput))) Then
+'                        ' display message on screen
+'                        Call frmChat.AddChat(RTBColors.ConsoleText, cmdRet(i))
+'                    Else
+'                        ' display message
+'                        If ((WhisperedIn) Or _
+'                           ((BotVars.WhisperCmds) And (Not (InBot)))) Then
+'
+'                            ' whisper message
+'                            Call AddQ("/w " & Username & _
+'                                Space(1) & cmdRet(i), PRIORITY.COMMAND_RESPONSE_MESSAGE, _
+'                                    Username)
+'                        Else
+'                            ' send standard message
+'                            Call AddQ(cmdRet(i), PRIORITY.COMMAND_RESPONSE_MESSAGE, _
+'                                Username)
+'                        End If
+'                    End If
+'                Next i
+'            End If
+'        Else
+'            ' send command directly to Battle.net if
+'            ' command is found to be invalid and issued
+'            ' internally
+'            If (InBot) Then
+'                Call AddQ(Message, PRIORITY.CONSOLE_MESSAGE, "(console)")
+'            End If
+'        End If
+'    End If
+'
+'    ' break out of function before reaching error
+'    ' handler
+'    Exit Function
+'
+'' default (if all else fails) error handler to keep erroneous
+'' commands and/or input formats from killing me
+'ERROR_HANDLER:
+'    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: " & Err.description & _
+'        " in ProcessCommand().")
+'
+'    ' return command failure result
+'    ProcessCommand3 = False
+'
+'    Exit Function
+'End Function ' end function ProcessCommand
 
 ' command processing helper function
 Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -4332,19 +4332,23 @@ Private Function OnMP3(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim TrackTime    As Integer ' ...
     Dim TrackLength  As Integer ' ...
     
-    TrackName = MediaPlayer.TrackName
-    ListPosition = MediaPlayer.PlaylistPosition
-    ListCount = MediaPlayer.PlaylistCount
-    TrackTime = MediaPlayer.TrackTime
-    TrackLength = MediaPlayer.TrackLength
-    
-    If (TrackName = vbNullString) Then
-        tmpBuf = "Winamp is not loaded."
-    Else
-        tmpBuf = "Current MP3 " & _
-            "[" & ListPosition & "/" & ListCount & "]: " & _
-                TrackName & " (" & SecondsToString(TrackTime) & _
-                    "/" & SecondsToString(TrackLength) & ")"
+    ' ...
+    If (BotVars.DisableMP3Commands = False) Then
+        ' ...
+        TrackName = MediaPlayer.TrackName
+        ListPosition = MediaPlayer.PlaylistPosition
+        ListCount = MediaPlayer.PlaylistCount
+        TrackTime = MediaPlayer.TrackTime
+        TrackLength = MediaPlayer.TrackLength
+        
+        If (TrackName = vbNullString) Then
+            tmpBuf = "Winamp is not loaded."
+        Else
+            tmpBuf = "Current MP3 " & _
+                "[" & ListPosition & "/" & ListCount & "]: " & _
+                    TrackName & " (" & SecondsToString(TrackTime) & _
+                        "/" & SecondsToString(TrackLength) & ")"
+        End If
     End If
     
     ' return message

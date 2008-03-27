@@ -840,6 +840,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -865,6 +866,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2083,15 +2085,15 @@ Sub Event_BNLSConnecting()
     AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
 End Sub
 
-Sub Event_BNLSDataError(message As Byte)
-    If message = 0 Then
+Sub Event_BNLSDataError(Message As Byte)
+    If Message = 0 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Your CD-Key was rejected. It may be invalid. Try connecting again."
-    ElseIf message = 1 Then
+    ElseIf Message = 1 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Error! Your CD-Key is bad."
-    ElseIf message = 2 Then
+    ElseIf Message = 2 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Error! BNLS has failed CheckRevision. Please check your bot's settings and try again."
         AddChat RTBColors.ErrorMessageText, "[BNLS] Product: " & StrReverse(BotVars.Product) & "."
-    ElseIf message = 3 Then
+    ElseIf Message = 3 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Error! Bad NLS revision."
     End If
 End Sub
@@ -2340,7 +2342,7 @@ End Sub
 
 Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
     If Status = 1 Then
-        clan.isUsed = False
+        Clan.isUsed = False
         
         ListviewTabs.TabEnabled(2) = False
         lvClanList.ListItems.Clear
@@ -2355,10 +2357,10 @@ Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
 End Sub
 
 Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
-    If (clan.MyRank < NewRank) Then
+    If (Clan.MyRank < NewRank) Then
         AddChat RTBColors.SuccessText, "[CLAN] You have been promoted. Your new rank is ", _
                 RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
-    ElseIf (clan.MyRank > NewRank) Then
+    ElseIf (Clan.MyRank > NewRank) Then
         AddChat RTBColors.SuccessText, "[CLAN] You have been demoted. Your new rank is ", _
                 RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
     Else
@@ -2366,7 +2368,7 @@ Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
                 GetRank(NewRank), RTBColors.SuccessText, "."
     End If
 
-    clan.MyRank = NewRank
+    Clan.MyRank = NewRank
     
     On Error Resume Next
     
@@ -2374,7 +2376,7 @@ Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
 End Sub
 
 Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal Rank As Byte)
-    With clan
+    With Clan
         .Name = ClanTag
         .DWName = RawClanTag
         .MyRank = Rank
@@ -2388,7 +2390,7 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
     
     ClanTag = KillNull(ClanTag)
     
-    BotVars.clan = ClanTag
+    BotVars.Clan = ClanTag
     
     If AwaitingClanMembership = 1 Then
         AddChat RTBColors.SuccessText, "[CLAN] You are now a member of ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "!"
@@ -2406,11 +2408,11 @@ End Sub
 
 Private Sub ClanHandler_ClanInvitation(ByVal Token As String, ByVal ClanTag As String, ByVal RawClanTag As String, ByVal ClanName As String, ByVal InvitedBy As String, ByVal NewClan As Boolean)
     If Not mnuIgnoreInvites.Checked And IsW3 Then
-        clan.Token = Token
-        clan.DWName = RawClanTag
-        clan.Creator = InvitedBy
-        clan.Name = ClanName
-        If NewClan Then clan.isNew = 1
+        Clan.Token = Token
+        Clan.DWName = RawClanTag
+        Clan.Creator = InvitedBy
+        Clan.Name = ClanName
+        If NewClan Then Clan.isNew = 1
         
         With RTBColors
             AddChat .SuccessText, "[CLAN] ", .InformationText, InvitedBy, .SuccessText, " has invited you to join ", .InformationText, "Clan " & ClanName, .SuccessText, "!"
@@ -2445,7 +2447,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     Set X = lvClanList.FindItem(Username)
 
     If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
-        clan.MyRank = IIf(Rank = 0, Rank + 1, Rank)
+        Clan.MyRank = IIf(Rank = 0, Rank + 1, Rank)
         AwaitingClanInfo = 1
     End If
     
@@ -2465,7 +2467,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     SControl.Run "Event_ClanMemberUpdate", Username, Rank, IsOnline
 End Sub
 
-Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal message As String)
+Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
     If (cookie = 1) Then
         PassedClanMotdCheck = True
     End If
@@ -2476,7 +2478,7 @@ Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal message As String)
     
     On Error Resume Next
     
-    SControl.Run "Event_ClanMOTD", message
+    SControl.Run "Event_ClanMOTD", Message
 End Sub
 
 Private Sub ClanHandler_DemoteUserReply(ByVal Success As Boolean)
@@ -2534,7 +2536,7 @@ Private Sub ClanHandler_RemoveUserReply(ByVal result As Byte)
         Case 0, 2, 1
             If AwaitingSelfRemoval = 1 Then
                 AwaitingSelfRemoval = 0
-                clan.isUsed = False
+                Clan.isUsed = False
                 
                 ListviewTabs.TabEnabled(2) = False
                 lvClanList.ListItems.Clear
@@ -2940,7 +2942,7 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, 
                 sProd = colUsersInChannel.Item(aInx).Product
             
                 mnuPopWebProfile.Enabled = (sProd = "W3XP" Or sProd = "WAR3")
-                mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And clan.MyRank >= 3)
+                mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And Clan.MyRank >= 3)
                 mnuPopKick.Enabled = (MyFlags = 2 Or MyFlags = 18)
                 mnuPopDes.Enabled = (MyFlags = 2 Or MyFlags = 18)
                 mnuPopBan.Enabled = (MyFlags = 2 Or MyFlags = 18)
@@ -3472,7 +3474,7 @@ Private Sub mnuPopInvite_Click()
     End If
     
     If LenB(sPlayer) > 0 Then
-        If clan.MyRank >= 3 Then
+        If Clan.MyRank >= 3 Then
             InviteToClan (sPlayer)
             AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & GetSelectedUser & ", awaiting reply."
         End If
@@ -3967,7 +3969,7 @@ Private Sub cboSend_GotFocus()
         For i = 0 To (Controls.Count - 1)
             ' ...
             If (Controls(i).TabStop = False) Then
-                Controls(i).tag = "False"
+                Controls(i).Tag = "False"
             End If
         
             ' ...
@@ -3991,7 +3993,7 @@ Private Sub cboSend_LostFocus()
         For i = 0 To (Controls.Count - 1)
             ' ...
             If ((Controls(i).Name <> "cboSend") And _
-                (Controls(i).tag <> "False")) Then
+                (Controls(i).Tag <> "False")) Then
                 
                 Controls(i).TabStop = True
             End If
@@ -4673,9 +4675,9 @@ End Sub
 
 
 Private Sub QueueTimer_Timer()
-    Dim message  As String
-    Dim tag      As String
-    Dim sent     As Byte
+    Dim Message  As String
+    Dim Tag      As String
+    Dim Sent     As Byte
     Dim i        As Integer
     Dim override As Integer
     Dim pri      As Integer
@@ -4683,12 +4685,12 @@ Private Sub QueueTimer_Timer()
 
     If ((g_Queue.Count) And (g_Online)) Then
         With g_Queue.Peek
-            message = .message
-            tag = .tag
+            Message = .Message
+            Tag = .Tag
             pri = .PRIORITY
         End With
         
-        If (StrComp(message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
+        If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
             '// This is a dummy queue message faking a 70-character queue entry
             QueueLoad = (QueueLoad + 1)
             QueueMaster = (QueueMaster + 3)
@@ -4696,21 +4698,21 @@ Private Sub QueueTimer_Timer()
             ' ...
             Call g_Queue.Pop
         Else
-            If ((StrComp(Left$(message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
-                (StrComp(Left$(message, 10), "/unignore ", vbTextCompare) = 0)) Then
+            If ((StrComp(Left$(Message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
+                (StrComp(Left$(Message, 10), "/unignore ", vbTextCompare) = 0)) Then
                 
                 ' ...
                 unsquelching = True
             End If
 
             If ((QueueLoad < 3) And (QueueMaster < 16)) Then
-                If (Len(message) <= 70) Then
+                If (Len(Message) <= 70) Then
                     QueueLoad = (QueueLoad + 1)
                     QueueMaster = (QueueMaster + 3)
-                ElseIf (Len(message) <= 130) Then
+                ElseIf (Len(Message) <= 130) Then
                     QueueLoad = (QueueLoad + 2)
                     QueueMaster = (QueueMaster + 5)
-                ElseIf (Len(message) <= 170) Then
+                ElseIf (Len(Message) <= 170) Then
                     QueueLoad = (QueueLoad + 3)
                     QueueMaster = (QueueMaster + 7)
                 Else
@@ -4718,17 +4720,17 @@ Private Sub QueueTimer_Timer()
                     QueueMaster = (QueueMaster + 9)
                 End If
                 
-                sent = 1
+                Sent = 1
                 
-                Call bnetSend(message, tag)
+                Call bnetSend(Message, Tag)
             End If
         End If
         
-        If (sent = 1) Then
-            If (Left$(message, 1) <> "/") Then
+        If (Sent = 1) Then
+            If (Left$(Message, 1) <> "/") Then
                 AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
                     CurrentUsername, RTBColors.Carats, "> ", _
-                        RTBColors.TalkNormalText, message
+                        RTBColors.TalkNormalText, Message
             End If
             
             Call g_Queue.Pop
@@ -5068,14 +5070,14 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
             
                 ' ...
                 If (lvChannel.FindItem(user.DisplayName) Is Nothing) Then
-                    Dim stats As String ' ...
-                    Dim clan  As String ' ...
+                    Dim Stats As String ' ...
+                    Dim Clan  As String ' ...
                 
                     ' ...
-                    ParseStatstring colUsersInChannel(i).Statstring, stats, clan
+                    ParseStatstring colUsersInChannel(i).Statstring, Stats, Clan
                 
                     ' ...
-                    AddName user.DisplayName, user.game, user.Flags, user.Ping, clan
+                    AddName user.DisplayName, user.game, user.Flags, user.Ping, Clan
                 End If
                 
                 ' ...
@@ -5380,8 +5382,8 @@ ERROR_HANDLER:
 End Function
 
 ' ...
-Sub AddQ(ByVal message As String, Optional msg_priority As Integer = -1, Optional _
-    ByVal user As String = vbNullString, Optional ByVal tag As String = vbNullString)
+Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optional _
+    ByVal user As String = vbNullString, Optional ByVal Tag As String = vbNullString)
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -5396,7 +5398,7 @@ Sub AddQ(ByVal message As String, Optional msg_priority As Integer = -1, Optiona
     Dim strTmp As String
     
     ' ...
-    strTmp = message
+    strTmp = Message
     
     ' ...
     If (strTmp <> vbNullString) Then
@@ -5581,15 +5583,15 @@ Sub AddQ(ByVal message As String, Optional msg_priority As Integer = -1, Optiona
                 Dim spaceIndex As Long   ' ...
                 
                 ' ...
-                If (Len(message) > 1) Then
+                If (Len(Message) > 1) Then
                     ' ...
-                    spaceIndex = InStr(1, message, Space$(1), vbBinaryCompare)
+                    spaceIndex = InStr(1, Message, Space$(1), vbBinaryCompare)
                     
                     ' ...
                     If (spaceIndex) Then
-                        cmdName = LCase$(Left$(Mid$(message, 2), spaceIndex - 2))
+                        cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 2))
                     Else
-                        cmdName = LCase$(Mid$(message, 2))
+                        cmdName = LCase$(Mid$(Message, 2))
                     End If
                 
                     ' ...
@@ -5637,7 +5639,7 @@ Sub AddQ(ByVal message As String, Optional msg_priority As Integer = -1, Optiona
                         QueueLoad = (QueueLoad + 1)
                     Else
                         ' send our message on its way
-                        Call bnetSend(KillNull(Send), tag)
+                        Call bnetSend(KillNull(Send), Tag)
             
                         ' if we're not issuing a command, lets show the user
                         ' what he's saying.
@@ -5697,10 +5699,10 @@ Sub AddQ(ByVal message As String, Optional msg_priority As Integer = -1, Optiona
                 
                 ' ...
                 With Q
-                    .message = Send
+                    .Message = Send
                     .PRIORITY = msg_priority
                     .ResponseTo = vbNullString
-                    .tag = tag
+                    .Tag = Tag
                 End With
 
                 ' ...
@@ -6943,7 +6945,7 @@ Function GetChannelString() As String
         Select Case ListviewTabs.Tab
             Case 0: GetChannelString = g_Channel.Name & " (" & lvChannel.ListItems.Count & ")"
             Case 1: GetChannelString = lvFriendList.ListItems.Count & " friends listed"
-            Case 2: GetChannelString = "Clan " & StrReverse(Replace(clan.DWName, Chr(0), "")) & ": " & lvClanList.ListItems.Count & " members."
+            Case 2: GetChannelString = "Clan " & StrReverse(Replace(Clan.DWName, Chr(0), "")) & ": " & lvClanList.ListItems.Count & " members."
         End Select
     End If
 End Function
@@ -7001,7 +7003,7 @@ Sub InitListviewTabs()
     Dim toSet As Boolean
 
     If IsW3() Then
-        If clan.isUsed Then
+        If Clan.isUsed Then
             toSet = True
         Else
             toSet = False
@@ -7089,7 +7091,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
                     mnuPopDem.Enabled = False
                     mnuPopPro.Enabled = False
                     
-                    If clan.MyRank > 2 Then
+                    If Clan.MyRank > 2 Then
                             
                         mnuPopBNProfile.Enabled = True
                         
@@ -7104,7 +7106,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
                                 
                                 mnuPopPro.Enabled = False
                                 
-                                If clan.MyRank = 4 Then
+                                If Clan.MyRank = 4 Then
                                     
                                     mnuPopDem.Enabled = True
                                     mnuPopRem.Enabled = True
@@ -7135,7 +7137,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
             End If
             
             If StrComp(GetClanSelectedUser(), CurrentUsername, vbTextCompare) = 0 Then
-                If clan.MyRank > 0 Then
+                If Clan.MyRank > 0 Then
                     mnuSP2.Visible = True
                     mnuPopLeaveClan.Visible = True
                 Else
@@ -7285,7 +7287,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         
         BotVars.ProxyStatus = psNotConnected
         
-        clan.isUsed = False
+        Clan.isUsed = False
         lvClanList.ListItems.Clear
         
         BNLSBuffer.ClearBuffer
