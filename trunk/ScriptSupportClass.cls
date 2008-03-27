@@ -1180,7 +1180,7 @@ Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVa
             arrMessage = Split(strMessage)
             
             For i = 0 To UBound(arrMessage)
-                If Len(tmpMsgPart & arrMessage(i) & strDelimiter) < 205 Then
+                If Len(tmpMsgPart & arrMessage(i) & strDelimiter) < 206 Then
                     tmpMsgPart = tmpMsgPart & arrMessage(i) & strDelimiter
                 Else
                     arrQueue(UBound(arrQueue)) = tmpMsgPart & "[more]"
