@@ -446,7 +446,8 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "clearbanlist": Call OnClearBanList(Username, dbAccess, msgData, InBot, cmdRet())
         Case "kickonyell":   Call OnKickOnYell(Username, dbAccess, msgData, InBot, cmdRet())
         Case "rejoin":       Call OnRejoin(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "rj":           Call OnRj(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "forcejoin":    Call OnForceJoin(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "quickrejoin":  Call OnQuickRejoin(Username, dbAccess, msgData, InBot, cmdRet())
         Case "plugban":      Call OnPlugBan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "clientbans":   Call OnClientBans(Username, dbAccess, msgData, InBot, cmdRet())
         Case "setvol":       Call OnSetVol(Username, dbAccess, msgData, InBot, cmdRet())
@@ -789,7 +790,7 @@ Private Function OnInvite(ByVal Username As String, ByRef dbAccess As udtGetAcce
     If (IsW3) Then
         ' is my ranking sufficient to issue
         ' an invitation?
-        If (clan.MyRank >= 3) Then
+        If (Clan.MyRank >= 3) Then
             Call InviteToClan(msgData)
             
             tmpBuf = msgData & ": Clan invitation sent."
@@ -812,7 +813,7 @@ Private Function OnSetMotd(ByVal Username As String, ByRef dbAccess As udtGetAcc
     Dim tmpBuf As String ' temporary output buffer
 
     If (IsW3) Then
-        If (clan.MyRank >= 3) Then
+        If (Clan.MyRank >= 3) Then
             Call SetClanMOTD(msgData)
             
             tmpBuf = "Clan MOTD set."
@@ -1207,12 +1208,12 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Next i
     
         ' ...
-        If (StrComp(g_Channel.Name, "Clan " & clan.Name, vbTextCompare) = 0) Then
+        If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
             ' ...
             ReDim Preserve arrUsers(0)
             
             ' ...
-            If (clan.MyRank >= 4) Then
+            If (Clan.MyRank >= 4) Then
                 ' ...
                 For i = 1 To frmChat.lvClanList.ListItems.Count
                     ' ...
@@ -1278,8 +1279,8 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
             End If
         ElseIf (StrComp(Left$(g_Channel.Name, 5), "Clan ", vbTextCompare) = 0) Then
             ' ...
-            If ((StrComp(g_Channel.Name, "Clan " & clan.Name, vbTextCompare) <> 0) Or _
-                    (clan.MyRank <= 2)) Then
+            If ((StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) <> 0) Or _
+                    (Clan.MyRank <= 2)) Then
                 
                 ' ...
                 If (opsCount >= 2) Then
@@ -1617,21 +1618,35 @@ Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     ' This command will make the bot rejoin the current channel.
     
-    ' ...
-    Call RejoinChannel(g_Channel.Name)
-End Function ' end function OnRejoin
-
-' handle rejoin command
-Private Function OnRj(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    ' This command will make the bot rejoin the current channel.
-    
     ' join temporary channel
     Call AddQ("/join " & CurrentUsername & " Rejoin", PRIORITY.COMMAND_RESPONSE_MESSAGE, _
         Username)
     
     ' rejoin previous channel
     Call AddQ("/join " & g_Channel.Name, PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
+End Function ' end function OnRejoin
+
+' handle quickrejoin command
+Private Function OnQuickRejoin(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will make the bot rejoin the current channel.
+    
+    ' ...
+    Call RejoinChannel(g_Channel.Name)
+End Function ' end function OnRejoin
+
+' handle forcejoin command
+Private Function OnForceJoin(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ' This command will make the bot rejoin the current channel.
+    
+    ' ...
+    If (Len(msgData) = 0) Then
+        Exit Function
+    End If
+    
+    ' ...
+    Call FullJoin(msgData)
 End Function ' end function OnRejoin
 
 ' handle plugban command
@@ -2072,13 +2087,13 @@ Private Function OnNext(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim Pos As Integer ' ...
+        Dim pos As Integer ' ...
         
         ' ...
-        Pos = MediaPlayer.PlaylistPosition
+        pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(Pos + 1)
+        Call MediaPlayer.PlayTrack(pos + 1)
         
         ' ...
         tmpBuf = "Skipped forwards."
@@ -4227,13 +4242,13 @@ Private Function OnPrev(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim Pos As Integer ' ...
+        Dim pos As Integer ' ...
         
         ' ...
-        Pos = MediaPlayer.PlaylistPosition
+        pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(Pos - 1)
+        Call MediaPlayer.PlayTrack(pos - 1)
         
         ' ...
         tmpBuf = "Skipped backwards."

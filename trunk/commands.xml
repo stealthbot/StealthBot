@@ -2543,16 +2543,8 @@
   </command>
 
   <command name="rejoin">
-    <documentation>
-      <description>
-        makes the bot rejoin the current channel.
-      </description>
-    </documentation>    
+    <alias>rj</alias>
 
-    <access />
-  </command>
-
-  <command name="rj">
     <documentation>
       <description>
         makes the bot rejoin the current channel.
@@ -2563,6 +2555,32 @@
       <rank>80</rank>
       <flag>J</flag>
     </access>
+  </command>
+
+  <command name="quickrejoin">
+    <alias>qrejoin</alias>
+    <alias>qrj</alias>
+
+    <documentation>
+      <description>
+        makes the bot rejoin the current channel.
+      </description>
+    </documentation>    
+
+    <access />
+  </command>
+
+  <command name="forcejoin">
+    <alias>fjoin</alias>
+    <alias>fj</alias>
+
+    <documentation>
+      <description>
+        makes the bot rejoin the current channel.
+      </description>
+    </documentation>    
+
+    <access />
   </command>
 
   <command name="quiettime">
