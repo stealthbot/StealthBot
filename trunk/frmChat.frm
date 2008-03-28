@@ -27,7 +27,7 @@ Begin VB.Form frmChat
    Begin VB.Timer tmrSilentChannel 
       Enabled         =   0   'False
       Index           =   0
-      Interval        =   1000
+      Interval        =   750
       Left            =   6240
       Top             =   4680
    End
@@ -840,7 +840,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -866,7 +865,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True

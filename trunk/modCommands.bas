@@ -46,7 +46,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Dim dbAccess         As udtGetAccessResponse
     Dim command_return() As String
     Dim i                As Integer
-    Dim Count            As Integer
+    Dim count            As Integer
     Dim bln              As Boolean
     
     ' replace message variables
@@ -103,7 +103,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         End If
         
         ' ...
-        Count = (Count + 1)
+        count = (count + 1)
         
         ' ...
         Set Command = IsCommand(vbNullString, IsLocal)
@@ -112,7 +112,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     ' ...
     If (IsLocal) Then
         ' ...
-        If ((bln = False) And (Count = 0)) Then
+        If ((bln = False) And (count = 0)) Then
             AddQ Message
         End If
     End If
@@ -425,6 +425,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "clan":         Call OnClan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "peonban":      Call OnPeonBan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "invite":       Call OnInvite(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "createclan":   Call OnCreateClan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "setmotd":      Call OnSetMotd(Username, dbAccess, msgData, InBot, cmdRet())
         Case "where":        Call OnWhere(Username, dbAccess, msgData, InBot, cmdRet())
         Case "quiettime":    Call OnQuietTime(Username, dbAccess, msgData, InBot, cmdRet())
@@ -803,6 +804,38 @@ Private Function OnInvite(ByVal Username As String, ByRef dbAccess As udtGetAcce
     cmdRet(0) = tmpBuf
 End Function ' end function OnInvite
 
+' handle createclan command
+Private Function OnCreateClan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim tmpBuf As String ' temporary output buffer
+
+    ' are we using warcraft iii?
+    'If (IsW3) Then
+    '    ' is my ranking sufficient to issue
+    '    ' an invitation?
+    '    If (Clan.MyRank >= 3) Then
+    '        Call InviteToClan(msgData)
+    '
+    '        tmpBuf = msgData & ": Clan invitation sent."
+    '    Else
+    '        tmpBuf = "Error: The bot must hold Shaman or Chieftain rank to invite users."
+    '    End If
+    'End If
+    
+    With PBuffer
+        .InsertDWord &H0
+        .InsertNTString "hmmm"
+        .InsertNonNTString "SB"
+        .InsertByte &H1
+        .InsertNTString "Alendar"
+        .SendPacket &H71
+    End With
+    
+    ' return message
+    cmdRet(0) = tmpBuf
+End Function ' end function OnInvite
+
 ' handle setmotd command
 Private Function OnSetMotd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -844,7 +877,7 @@ Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAcces
 
     ' ...
     tmpBuf = "I am currently in channel " & g_Channel.Name & " (" & _
-        colUsersInChannel.Count & " users present)"
+        colUsersInChannel.count & " users present)"
     
     ' return message
     cmdRet(0) = tmpBuf
@@ -1196,7 +1229,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
         
         ' ...
-        For i = 1 To colUsersInChannel.Count
+        For i = 1 To colUsersInChannel.count
             ' ...
             If (StrComp(colUsersInChannel(i).Username, CurrentUsername, vbTextCompare) <> 0) Then
                 ' ...
@@ -1215,7 +1248,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
             ' ...
             If (Clan.MyRank >= 4) Then
                 ' ...
-                For i = 1 To frmChat.lvClanList.ListItems.Count
+                For i = 1 To frmChat.lvClanList.ListItems.count
                     ' ...
                     If (StrComp(frmChat.lvClanList.ListItems(i).text, reverseUsername(CurrentUsername), _
                                 vbTextCompare) <> 0) Then
@@ -1677,7 +1710,7 @@ Private Function OnPlugBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 
                 tmpBuf = "PlugBan activated."
                 
-                For i = 1 To colUsersInChannel.Count
+                For i = 1 To colUsersInChannel.count
                     With colUsersInChannel.Item(i)
                         If ((.Flags = 16) And (Not .Safelisted)) Then
                             Call AddQ("/ban " & .Username & " PlugBan")
@@ -1827,41 +1860,84 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Dim tmpCount As Integer
     Dim BanCount As Integer
     Dim i        As Integer
+    Dim j        As Integer ' ...
     
     ' redefine array size
     ReDim Preserve tmpBuf(0)
-
-    tmpBuf(tmpCount) = "Banned users: "
     
-    For i = LBound(gBans) To UBound(gBans)
-        If (gBans(i).Username <> vbNullString) Then
-            tmpBuf(tmpCount) = tmpBuf(tmpCount) & ", " & gBans(i).Username
-            
-            If ((Len(tmpBuf(tmpCount)) > 90) And (i <> UBound(gBans))) Then
-                ' increase array size
-                ReDim Preserve tmpBuf(tmpCount + 1)
-            
-                ' apply postfix to previous line
-                tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", Space(1)) & " [more]"
-                
-                ' apply prefix to new line
-                tmpBuf(tmpCount + 1) = "Banned users: "
-                
-                ' incrememnt counter
-                tmpCount = (tmpCount + 1)
-            End If
-            
-            ' incrememnt counter
-            BanCount = (BanCount + 1)
-        End If
-    Next i
-
-    ' has anyone been banned?
-    If (BanCount = 0) Then
-        tmpBuf(tmpCount) = "No users have been banned."
-    Else
-        tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", Space(1))
+    ' ...
+    If (g_Channel.BanCount = 0) Then
+        ' ...
+        cmdRet(0) = "There have been no users banned since I have joined " & _
+            "the channel."
+    
+        ' ...
+        Exit Function
     End If
+
+    ' ...
+    tmpBuf(tmpCount) = "User(s) banned: "
+    
+    ' ...
+    For i = 1 To g_Channel.Users.count
+        ' ...
+        If (g_Channel.Users(i).IsOperator) Then
+            ' ...
+            For j = 1 To g_Channel.Users(i).Banlist.count
+                ' ...
+                tmpBuf(tmpCount) = _
+                        tmpBuf(tmpCount) & ", " & g_Channel.Users(i).Banlist(j).Name
+                        
+                ' ...
+                If ((Len(tmpBuf(tmpCount)) > 90) And (i <> g_Channel.BanCount)) Then
+                    ' increase array size
+                    ReDim Preserve tmpBuf(tmpCount + 1)
+                
+                    ' apply postfix to previous line
+                    tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", Space$(1)) & _
+                        " [more]"
+                    
+                    ' apply prefix to new line
+                    tmpBuf(tmpCount + 1) = "User(s) banned: "
+                    
+                    ' incrememnt counter
+                    tmpCount = (tmpCount + 1)
+                End If
+            Next j
+        End If
+        
+        tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", Space$(1))
+    Next i
+    
+    'For i = LBound(gBans) To UBound(gBans)
+    '    If (gBans(i).Username <> vbNullString) Then
+    '        tmpBuf(tmpCount) = tmpBuf(tmpCount) & ", " & gBans(i).Username
+    '
+    '        If ((Len(tmpBuf(tmpCount)) > 90) And (i <> UBound(gBans))) Then
+    '            ' increase array size
+    '            ReDim Preserve tmpBuf(tmpCount + 1)
+    '
+    '            ' apply postfix to previous line
+    '            tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", Space(1)) & " [more]"
+    '
+    '            ' apply prefix to new line
+    '            tmpBuf(tmpCount + 1) = "Banned users: "
+    '
+    '            ' incrememnt counter
+    '            tmpCount = (tmpCount + 1)
+    '        End If
+    '
+    '        ' incrememnt counter
+    '        BanCount = (BanCount + 1)
+    '    End If
+    'Next i
+    '
+    ' has anyone been banned?
+    'If (BanCount = 0) Then
+    '    tmpBuf(tmpCount) = "No users have been banned."
+    'Else
+    '    tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", Space(1))
+    'End If
     
     ' return message
     cmdRet() = tmpBuf()
@@ -3454,11 +3530,12 @@ Private Function OnBanCount(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     Dim tmpBuf As String ' temporary output buffer
 
-    If (BanCount = 0) Then
+    ' ...
+    If (g_Channel.TotalBanCount = 0) Then
         tmpBuf = "No users have been banned since I joined this channel."
     Else
-        tmpBuf = "Since I joined this channel, " & BanCount & " user(s) " & _
-            "have been banned."
+        tmpBuf = "Since I joined this channel, " & g_Channel.TotalBanCount & " user(s) have " & _
+                    "been banned."
     End If
     
     ' return message
@@ -3471,24 +3548,21 @@ Private Function OnBanListCount(ByVal Username As String, ByRef dbAccess As udtG
     
     Dim tmpBuf As String ' temporary output buffer
 
-    If (BanCount = 0) Then
+    ' ...
+    If (g_Channel.TotalBanCount = 0) Then
+        ' ...
         tmpBuf = "There are currently no users on the internal ban list."
     Else
         Dim bCount As Integer ' ...
         Dim i      As Integer ' ...
     
-        tmpBuf = "There are currently " & UBound(gBans) & _
-            " user(s) on the internal ban list"
-        
-        For i = 0 To UBound(gBans)
-            If (StrComp(gBans(i).cOperator, CurrentUsername, vbTextCompare) = 0) Then
-                bCount = (bCount + 1)
-            End If
-        Next i
-        
+        ' ...
+        tmpBuf = "There are currently " & g_Channel.BanCount & " user(s) on the internal ban list"
+                        
+        ' ...
         If (g_Channel.Self.IsOperator) Then
-            tmpBuf = tmpBuf & ", " & _
-                bCount & " of which users were banned by me."
+            tmpBuf = tmpBuf & ", " & g_Channel.Self.Banlist.count & " of which users were " & _
+                        "banned by me."
         Else
             tmpBuf = tmpBuf & "."
         End If
@@ -3752,16 +3826,16 @@ Private Function OnAllSeen(ByVal Username As String, ByRef dbAccess As udtGetAcc
     tmpBuf(tmpCount) = "Last 15 users seen: "
     
     ' were there any users seen?
-    If (colLastSeen.Count = 0) Then
+    If (colLastSeen.count = 0) Then
         tmpBuf(tmpCount) = tmpBuf(tmpCount) & "(list is empty)"
     Else
-        For i = 1 To colLastSeen.Count
+        For i = 1 To colLastSeen.count
             ' append user to list
             tmpBuf(tmpCount) = tmpBuf(tmpCount) & _
                 colLastSeen.Item(i) & ", "
             
             If (Len(tmpBuf(tmpCount)) > 90) Then
-                If (i < colLastSeen.Count) Then
+                If (i < colLastSeen.count) Then
                     ' redefine array size
                     ReDim Preserve tmpBuf(tmpCount + 1)
                     
@@ -5706,14 +5780,14 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     tmpBuf(0) = "[" & CommandDocs.Name
     
-    If (CommandDocs.Aliases.Count) Then
+    If (CommandDocs.Aliases.count) Then
         tmpBuf(0) = tmpBuf(0) & " (aliases: "
     Else
         tmpBuf(0) = tmpBuf(0) & " (aliases: none"
     End If
     
-    If (CommandDocs.Aliases.Count) Then
-        For i = 1 To CommandDocs.Aliases.Count
+    If (CommandDocs.Aliases.count) Then
+        For i = 1 To CommandDocs.Aliases.count
             tmpBuf(0) = tmpBuf(0) & CommandDocs.Aliases(i) & ", "
         Next i
         
@@ -5726,8 +5800,8 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ' ...
     tmpBuf(0) = tmpBuf(0) & Space$(1) & "(Syntax: " & "<trigger>" & CommandDocs.Name
             
-    If (CommandDocs.params.Count) Then
-        For i = 1 To CommandDocs.params.Count
+    If (CommandDocs.params.count) Then
+        For i = 1 To CommandDocs.params.count
             If (CommandDocs.params(i).IsOptional) Then
                 tmpBuf(0) = tmpBuf(0) & " [" & CommandDocs.params(i).Name & "]"
             Else
@@ -5950,14 +6024,14 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
             Typ = Typ & "*"
         End If
         
-        If (colUsersInChannel.Count < 1) Then
+        If (colUsersInChannel.count < 1) Then
             Exit Function
         End If
         
         If (Banning <> 2) Then
             ' Kicking or Banning
         
-            For i = 1 To colUsersInChannel.Count
+            For i = 1 To colUsersInChannel.count
                 With colUsersInChannel.Item(i)
                     If (Not (.IsSelf())) Then
                         z = PrepareCheck(.Username)
@@ -6685,7 +6759,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
         Exit Function
     End If
     
-    If (Command.params.Count) Then
+    If (Command.params.count) Then
         Dim parameter   As clsCommandParamsObj
         Dim restriction As clsCommandRestrictionObj
         Dim Splt()      As String
@@ -6697,8 +6771,8 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
         ' ...
         spaceIndex = InStr(1, CommandArgs, Space$(1), vbBinaryCompare)
         
-        If ((spaceIndex <> 0) And (Command.params.Count > 1)) Then
-            Splt() = Split(CommandArgs, Space$(1), Command.params.Count)
+        If ((spaceIndex <> 0) And (Command.params.count > 1)) Then
+            Splt() = Split(CommandArgs, Space$(1), Command.params.count)
         Else
             If (CommandArgs = vbNullString) Then
                 IsCorrectSyntax = False
@@ -6711,11 +6785,11 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
             Splt(0) = CommandArgs
         End If
         
-        For i = 1 To Command.params.Count
+        For i = 1 To Command.params.count
             Set parameter = Command.params(i)
 
             If (parameter.IsOptional) Then
-                If (Command.params.Count > i) Then
+                If (Command.params.count > i) Then
                     If (Command.params.Item(i + 1).IsOptional) Then
                         If (parameter.dataType = "number") Then
                             If (StrictIsNumeric(Splt(loopCount)) = False) Then
@@ -6759,7 +6833,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
                     
                     Set matches = regex.Execute(Splt(loopCount))
                     
-                    If (matches.Count = 0) Then
+                    If (matches.count = 0) Then
                         IsCorrectSyntax = False
                         
                         Exit Function
@@ -6834,7 +6908,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
         End If
     End If
     
-    If (Command.params.Count) Then
+    If (Command.params.count) Then
         Dim parameter   As clsCommandParamsObj
         Dim restriction As clsCommandRestrictionObj
         Dim Splt()      As String
@@ -6850,11 +6924,11 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
             Splt(0) = CommandArgs
         End If
         
-        For i = 1 To Command.params.Count
+        For i = 1 To Command.params.count
             Set parameter = Command.params(i)
 
             If (parameter.IsOptional) Then
-                If ((Command.params.Count > i) And (Command.params.Item(i).IsOptional)) Then
+                If ((Command.params.count > i) And (Command.params.Item(i).IsOptional)) Then
                     'If (parameter.dataType = "number") Then
                         If (StrictIsNumeric(Splt(loopCount)) = False) Then
                             bln = True
@@ -6864,7 +6938,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
             End If
         
             If (bln = False) Then
-                If (parameter.restrictions.Count) Then
+                If (parameter.restrictions.count) Then
                     Set regex = New RegExp
                 
                     For Each restriction In parameter.restrictions
@@ -6875,7 +6949,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
 
                         Set matches = regex.Execute(Splt(loopCount))
 
-                        If (matches.Count > 0) Then
+                        If (matches.count > 0) Then
                             If ((user.Rank >= restriction.RequiredRank) = False) Then
                                 If (user.HasAnyFlag(restriction.RequiredFlags) = False) Then
                                     AddQ "Error: You do not have sufficient access to perform the specified " & _
@@ -7230,7 +7304,7 @@ Public Sub checkUsers()
         ' ...
         doCheck = True
     
-        For i = 1 To colUsersInChannel.Count
+        For i = 1 To colUsersInChannel.count
             If ((colUsersInChannel(i).Flags And USER_CHANNELOP&) <> _
                  USER_CHANNELOP&) Then
                  
@@ -7350,7 +7424,7 @@ Public Function GetRandomQuote() As String
             Loop Until EOF(f)
             
             Randomize
-            Rand = Rnd * colQuotes.Count
+            Rand = Rnd * colQuotes.count
             
             If Rand <= 0 Then
                 Rand = 1
@@ -7358,7 +7432,7 @@ Public Function GetRandomQuote() As String
             
             If Len(colQuotes.Item(Rand)) < 1 Then
                 Randomize
-                Rand = Rnd * colQuotes.Count
+                Rand = Rnd * colQuotes.count
                 
                 If Rand <= 0 Then
                     Rand = 1
@@ -7630,8 +7704,8 @@ Public Function convertUsername(ByVal Username As String) As String
     If ((StrReverse$(BotVars.Product) = "D2DV") Or _
         (StrReverse$(BotVars.Product) = "D2XP")) Then
         
-        If ((Not (BotVars.UseGameConventions)) Or _
-            (Not (BotVars.UseD2GameConventions))) Then
+        If ((BotVars.UseGameConventions = False) Or _
+                ((BotVars.UseD2GameConventions = False))) Then
            
             index = InStr(1, Username, "*", vbBinaryCompare)
         
@@ -7651,8 +7725,8 @@ Public Function convertUsername(ByVal Username As String) As String
     ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
             (StrReverse$(BotVars.Product) = "W3XP")) Then
             
-        If ((Not (BotVars.UseGameConventions)) Or _
-            (Not (BotVars.UseW3GameConventions))) Then
+        If ((BotVars.UseGameConventions = False)) Or _
+                ((BotVars.UseW3GameConventions = False)) Then
 
             If (BotVars.Gateway <> vbNullString) Then
                 Select Case (BotVars.Gateway)
@@ -7665,8 +7739,7 @@ Public Function convertUsername(ByVal Username As String) As String
                 If (index <> 0) Then
                     convertUsername = Left$(Username, index - 1)
                 Else
-                    convertUsername = Username & "@" & _
-                        BotVars.Gateway
+                    convertUsername = Username & "@" & BotVars.Gateway
                 End If
             End If
         End If
@@ -7687,8 +7760,8 @@ Public Function reverseUsername(ByVal Username As String) As String
     If ((StrReverse$(BotVars.Product) = "D2DV") Or _
         (StrReverse$(BotVars.Product) = "D2XP")) Then
         
-        If ((Not (BotVars.UseGameConventions)) Or _
-            (Not (BotVars.UseD2GameConventions))) Then
+        If ((BotVars.UseGameConventions = False)) Or _
+                ((BotVars.UseD2GameConventions = False)) Then
             
             ' With reverseUsername() now being called from AddQ(), usernames
             ' in procedures called prior to AddQ() will no longer require
@@ -7703,13 +7776,13 @@ Public Function reverseUsername(ByVal Username As String) As String
     ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
             (StrReverse$(BotVars.Product) = "W3XP")) Then
             
-        If ((Not (BotVars.UseGameConventions)) Or _
-            (Not (BotVars.UseW3GameConventions))) Then
+        If ((BotVars.UseGameConventions = False)) Or _
+                ((BotVars.UseW3GameConventions = False)) Then
             
             If (BotVars.Gateway <> vbNullString) Then
                 index = InStr(1, Username, ("@" & BotVars.Gateway), vbTextCompare)
     
-                If (index <> 0) Then
+                If (index > 0) Then
                     reverseUsername = Left$(Username, index - 1)
                 Else
                     Select Case (BotVars.Gateway)

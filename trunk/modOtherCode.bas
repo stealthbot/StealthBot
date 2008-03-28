@@ -679,7 +679,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             End If
                         ElseIf (StrComp(DB(i).Type, "GAME", vbTextCompare) = 0) Then
                             ' ...
-                            For j = 1 To colUsersInChannel.Count
+                            For j = 1 To colUsersInChannel.count
                                 If (StrComp(Username, colUsersInChannel.Item(j).Username, _
                                         vbTextCompare) = 0) Then
                                      
@@ -695,7 +695,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             Next j
                         ElseIf (StrComp(DB(i).Type, "CLAN", vbTextCompare) = 0) Then
                             ' ...
-                            For j = 1 To colUsersInChannel.Count
+                            For j = 1 To colUsersInChannel.count
                                 If (StrComp(Username, colUsersInChannel.Item(j).Username, _
                                         vbTextCompare) = 0) Then
                                      
@@ -1149,7 +1149,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         LagIcon = LAG_PLUG
     End If
     
-    isPriority = (frmChat.lvChannel.ListItems.Count + 1)
+    isPriority = (frmChat.lvChannel.ListItems.count + 1)
     
     i = GetSmallIcon(Product, Flags)
     
@@ -1172,8 +1172,8 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         End If
     End If
     
-    If (i > frmChat.imlIcons.ListImages.Count) Then
-        i = frmChat.imlIcons.ListImages.Count
+    If (i > frmChat.imlIcons.ListImages.count) Then
+        i = frmChat.imlIcons.ListImages.count
     End If
         
     With frmChat.lvChannel
@@ -1316,19 +1316,19 @@ End Function
 '---------------------------------------------------------------------------------------
 '
 Public Sub LoadCDKeys(ByRef cboCDKey As ComboBox)
-    Dim Count As Integer
+    Dim count As Integer
     Dim sKey  As String
     
-    Count = Val(ReadCFG("StoredKeys", "Count"))
+    count = Val(ReadCFG("StoredKeys", "Count"))
     
-    If (Count) Then
-        For Count = 1 To Count
-            sKey = ReadCFG("StoredKeys", "Key" & Count)
+    If (count) Then
+        For count = 1 To count
+            sKey = ReadCFG("StoredKeys", "Key" & count)
             
             If (Len(sKey) > 0) Then
                 cboCDKey.AddItem sKey
             End If
-        Next Count
+        Next count
     End If
 End Sub
 
@@ -1502,8 +1502,8 @@ Public Sub DoLastSeen(ByVal Username As String)
     Dim i     As Integer
     Dim found As Boolean
     
-    If (colLastSeen.Count > 0) Then
-        For i = 1 To colLastSeen.Count
+    If (colLastSeen.count > 0) Then
+        For i = 1 To colLastSeen.count
             If (StrComp(colLastSeen.Item(i), Username, _
                 vbTextCompare) = 0) Then
                 
@@ -1517,7 +1517,7 @@ Public Sub DoLastSeen(ByVal Username As String)
     If (Not (found)) Then
         colLastSeen.Add Username
         
-        If (colLastSeen.Count > 15) Then
+        If (colLastSeen.count > 15) Then
             Call colLastSeen.Remove(1)
         End If
     End If
@@ -2041,8 +2041,8 @@ Public Function UsernameToIndex(ByVal sUsername As String) As Long
     
     FirstLetter = Mid$(sUsername, 1, 1)
     
-    If (colUsersInChannel.Count > 0) Then
-        For i = 1 To colUsersInChannel.Count
+    If (colUsersInChannel.count > 0) Then
+        For i = 1 To colUsersInChannel.count
             Set user = colUsersInChannel.Item(i)
             
             With user
@@ -2274,7 +2274,7 @@ End Sub
 ' Returns a single chunk of a string as if that string were Split() and that chunk
 ' extracted
 ' 1-based
-Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
+Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
     Dim c           As Integer
     Dim i           As Integer
     Dim TargetSpace As Integer
@@ -2284,10 +2284,10 @@ Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
     
     c = 0
     i = 1
-    Pos = Pos
+    pos = pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While ((c < Pos) And (i > 0))
+    While ((c < pos) And (i > 0))
         TargetSpace = i
         
         i = (InStr(i + 1, str, Space(1), vbBinaryCompare))
@@ -2295,7 +2295,7 @@ Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
         c = (c + 1)
     Wend
     
-    If (c >= Pos) Then
+    If (c >= pos) Then
         c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
         If (c > 0) Then
@@ -2359,7 +2359,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     On Error GoTo ERROR_HANDLER
     
     Dim lineCount As Long    ' stores line number
-    Dim Pos       As Long    ' stores position of delimiter
+    Dim pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
     Dim length    As Long    ' stores length after postfix
     Dim bln       As Boolean ' stores result of delimiter split
@@ -2407,7 +2407,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             If (OversizeDelimiter <> vbNullString) Then
                 ' grab position of delimiter character that is
                 ' the closest to our specified length
-                Pos = InStrRev(StringSplit, OversizeDelimiter, _
+                pos = InStrRev(StringSplit, OversizeDelimiter, _
                     length, vbBinaryCompare)
             End If
             
@@ -2416,9 +2416,9 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((Pos) And (Pos >= Round(length / 2))) Then
+            If ((pos) And (pos >= Round(length / 2))) Then
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, Pos - 1)
+                strTmp = Mid$(strTmp, 1, pos - 1)
                 
                 ' indicate that an additional
                 ' character will require removal
@@ -2715,6 +2715,9 @@ Public Function convertAlias(ByVal cmdName As String) As String
         Set commands = New MSXML2.DOMDocument
         
         ' ...
+        Call commands.setProperty("SelectionLanguage", "XPath")
+        
+        ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
             Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
                 "working directory.")
@@ -2726,7 +2729,7 @@ Public Function convertAlias(ByVal cmdName As String) As String
         Call commands.Load(App.Path & "\commands.xml")
         
         ' ...
-        cmdName = Replace(cmdName, "'", "\'")
+        cmdName = Replace(cmdName, "'", "''")
         cmdName = Replace(cmdName, "\", "\\")
         
         ' ...

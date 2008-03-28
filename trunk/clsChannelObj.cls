@@ -100,7 +100,15 @@ End Property
 Public Property Get TotalBanCount() As Long
 
     ' ...
+    TotalBanCount = m_num_bans
 
+End Property
+
+Public Property Let TotalBanCount(lng As Long)
+
+    ' ...
+    m_num_bans = lng
+    
 End Property
 
 Public Property Get TotalKickCount() As Long
@@ -131,7 +139,7 @@ Public Property Get Self() As clsChannelUserObj
     Set Self = New clsChannelUserObj
     
     ' ...
-    For i = 1 To m_users.Count
+    For i = 1 To m_users.count
         ' ...
         If (StrComp(m_users(i).DisplayName, CurrentUsername, vbBinaryCompare) = 0) Then
             ' ...
@@ -149,7 +157,7 @@ Public Function GetUserIndexByName(ByVal Username As String) As Integer
     Dim i As Integer ' ...
 
     ' ...
-    For i = 1 To m_users.Count
+    For i = 1 To m_users.count
         ' ...
         If (StrComp(m_users(i).Name, Username, vbBinaryCompare) = 0) Then
             ' ...
@@ -167,7 +175,7 @@ Public Function GetUserIndexByDisplayName(ByVal Username As String) As Integer
     Dim i As Integer ' ...
 
     ' ...
-    For i = 1 To m_users.Count
+    For i = 1 To m_users.count
         ' ...
         If (StrComp(m_users(i).DisplayName, Username, vbBinaryCompare) = 0) Then
             ' ...
@@ -179,3 +187,22 @@ Public Function GetUserIndexByDisplayName(ByVal Username As String) As Integer
     Next i
 
 End Function
+
+Public Property Get BanCount() As Integer
+
+    Dim i     As Integer ' ...
+    Dim count As Integer ' ...
+    
+    ' ...
+    For i = 1 To m_users.count
+        ' ...
+        If (m_users(i).IsOperator) Then
+            ' ...
+            count = (count + m_users(i).Banlist.count)
+        End If
+    Next i
+    
+    ' ...
+    BanCount = count
+
+End Property

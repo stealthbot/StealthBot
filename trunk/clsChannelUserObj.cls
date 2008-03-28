@@ -173,3 +173,19 @@ Public Property Let Ping(lng As Long)
     m_ping = lng
 
 End Property
+
+Public Function IsOnBanList(ByVal Username As String) As Integer
+
+    ' ...
+    Dim i As Integer ' ...
+    
+    For i = 1 To m_banned_users.count
+        If (StrComp(m_banned_users(i).Name, Username, vbTextCompare) = 0) Then
+            IsOnBanList = i
+            
+            Exit Function
+        End If
+    Next i
+
+    IsOnBanList = 0
+End Function

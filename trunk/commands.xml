@@ -2627,6 +2627,16 @@
     </access>
   </command>
 
+  <command name="createclan">
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>    
+
+    <access />
+  </command>
+
   <command name="setmotd" token="operator">
     <documentation>
       <description>

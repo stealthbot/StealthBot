@@ -12,7 +12,7 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal datasrc =
     Set OpenCommand = New clsCommandDocObj
     
     ' ...
-    strCommand = Replace(strCommand, "'", "\'")
+    strCommand = Replace(strCommand, "'", "''")
     strCommand = Replace(strCommand, "\", "\\")
     
     ' ...

@@ -62,7 +62,10 @@ Public Function OpenCommand(ByVal strCommand As String, ByVal datasrc As String,
     End If
     
     ' ...
-    m_database.Load DatabasePath
+    Call m_database.Load(DatabasePath)
+    
+    ' ...
+    Call m_database.setProperty("SelectionLanguage", "XPath")
     
     ' ...
     Set m_command_node = m_database.documentElement
@@ -76,12 +79,12 @@ Public Function OpenCommand(ByVal strCommand As String, ByVal datasrc As String,
     If (datasrc = "internal") Then
         ' ...
         Set m_command_node = _
-            m_command_node.selectSingleNode("./command[@name='" & strCommand & "']")
+                m_command_node.selectSingleNode("./command[@name='" & strCommand & "']")
     Else
         ' ...
         Set m_command_node = _
-            m_command_node.selectSingleNode("./command[@name='" & strCommand & "' and " & _
-                "@datasrc='" & datasrc & "']")
+                m_command_node.selectSingleNode("./command[@name='" & strCommand & "' and @datasrc='" & _
+                        datasrc & "']")
     End If
     ' ...
     If (m_command_node Is Nothing) Then
