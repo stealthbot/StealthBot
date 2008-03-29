@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
 Begin VB.Form frmWhisperWindow 
    BackColor       =   &H00000000&
    Caption         =   "< account name >"
@@ -38,7 +38,6 @@ Begin VB.Form frmWhisperWindow
       _ExtentY        =   4683
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmWhisperWindow.frx":0000
@@ -185,15 +184,15 @@ Private Sub mnuSave_Click()
         .Filter = ".htm|HTML Documents"
         .ShowSave
     
-        If LenB(.Filename) > 0 Then
+        If LenB(.filename) > 0 Then
             ToSave() = Split(rtbWhispers.text, vbCrLf)
             f = FreeFile
             
-            If InStr(1, .Filename, ".") = 0 Then
-                .Filename = .Filename & ".htm"
+            If InStr(1, .filename, ".") = 0 Then
+                .filename = .filename & ".htm"
             End If
             
-            Open .Filename For Output As #f
+            Open .filename For Output As #f
                 Print #f, "<html><head>"
                 Print #f, "<title>StealthBot Conversation Log: " & CurrentUsername & " and " & m_sWhisperTo & "</title></head>"
                 Print #f, "<body bgcolor='#000000'>"
@@ -238,6 +237,14 @@ Private Sub mnuSave_Click()
             AddWhisper vbGreen, "» Conversation saved."
         End If
     End With
+End Sub
+
+Private Sub rtbWhispers_KeyPress(KeyAscii As Integer)
+    ' ...
+    txtSend.SetFocus
+    
+    ' ...
+    txtSend.SelText = Chr$(KeyAscii)
 End Sub
 
 Private Sub txtSend_KeyPress(KeyAscii As Integer)

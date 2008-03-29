@@ -840,6 +840,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -865,6 +866,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3804,6 +3806,22 @@ Private Sub mnuWindow_Click()
         Case 2: mnuLog2.Checked = True
         'Case 3: mnuLog3.Checked = True
     End Select
+End Sub
+
+Private Sub rtbChat_KeyPress(KeyAscii As Integer)
+    ' ...
+    cboSend.SetFocus
+    
+    ' ...
+    cboSend.SelText = Chr$(KeyAscii)
+End Sub
+
+Private Sub rtbWhispers_KeyPress(KeyAscii As Integer)
+    ' ...
+    cboSend.SetFocus
+    
+    ' ...
+    cboSend.SelText = Chr$(KeyAscii)
 End Sub
 
 Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)

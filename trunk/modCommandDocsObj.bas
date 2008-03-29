@@ -12,7 +12,10 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal datasrc =
     Set OpenCommand = New clsCommandDocObj
     
     ' ...
-    strCommand = Replace(strCommand, "'", "''")
+    If (InStr(1, strCommand, "'", vbBinaryCompare) > 0) Then
+        Exit Function
+    End If
+    
     strCommand = Replace(strCommand, "\", "\\")
     
     ' ...
