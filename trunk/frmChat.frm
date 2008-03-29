@@ -6092,6 +6092,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCFG(OT, "Phrasebans")
     If s = "Y" Then Phrasebans = True Else Phrasebans = False
     
+    s = ReadCFG(OT, "AutoCompletePostfix")
+    BotVars.AutoCompletePostfix = s
+    
     s = ReadCFG(MN, "UseBNLS")
     If s = "N" Then BotVars.BNLS = False Else BotVars.BNLS = True
     
@@ -6857,7 +6860,8 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                         Next c
                         
                         If (c >= (Len(toMatch) + 1)) Then
-                            MatchClosest = .Item(i).text
+                            MatchClosest = _
+                                    .Item(i).text & BotVars.AutoCompletePostfix
                             
                             MatchIndex = i
                             
@@ -6918,8 +6922,8 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                             
                             Dim j As Integer ' ...
                         
-                            MatchClosest = Left$(toMatch, atChar) & _
-                                realms(i)
+                            MatchClosest = Left$(toMatch, atChar) & realms(i) & _
+                                    BotVars.AutoCompletePostfix
                             
                             MatchIndex = (i + 1)
                             
@@ -6937,8 +6941,8 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         Else
             If (tmp = vbNullString) Then
                 ' ...
-                MatchClosest = Left$(toMatch, atChar) & _
-                    realms(index)
+                MatchClosest = Left$(toMatch, atChar) & realms(index) & _
+                        BotVars.AutoCompletePostfix
                     
                 MatchIndex = (index + 1)
                     

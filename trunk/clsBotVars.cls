@@ -95,6 +95,7 @@ Private m_ScriptLock                    As Boolean
 Private m_shitlist_group                As String
 Private m_safelist_group                As String
 Private m_tagbans_group                 As String
+Private m_autocomplete_postfix          As String
 
 Public Property Get Username() As String
     
@@ -1020,3 +1021,16 @@ Public Property Let DefaultTagbansGroup(str As String)
     
 End Property
 
+Public Property Let AutoCompletePostfix(str As String)
+
+    ' ...
+    m_autocomplete_postfix = str
+
+End Property
+
+Public Property Get AutoCompletePostfix() As String
+
+    ' ...
+    AutoCompletePostfix = m_autocomplete_postfix
+
+End Property
