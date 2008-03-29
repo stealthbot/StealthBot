@@ -3810,6 +3810,11 @@ End Sub
 
 Private Sub rtbChat_KeyPress(KeyAscii As Integer)
     ' ...
+    If (KeyAscii < 32) Then
+        Exit Sub
+    End If
+
+    ' ...
     cboSend.SetFocus
     
     ' ...
@@ -3817,6 +3822,11 @@ Private Sub rtbChat_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub rtbWhispers_KeyPress(KeyAscii As Integer)
+    ' ...
+    If (KeyAscii < 32) Then
+        Exit Sub
+    End If
+
     ' ...
     cboSend.SetFocus
     
