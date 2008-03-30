@@ -46,13 +46,12 @@ Public Sub RequestFriendsList(ByRef pBuff As PacketBuffer)
 End Sub
 
 Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
+    On Error GoTo ERROR_HANDLER
     
     Dim n As Long, bytTemp As Byte
     Dim s As String
     Dim Position As Long
     Dim flTemp As clsFriend
-    
-    On Error GoTo ParsePacket_Error
 
     Position = 1
     
@@ -217,10 +216,12 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
     
     Set flTemp = Nothing
 
-    On Error GoTo 0
     Exit Sub
 
-ParsePacket_Error:
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in ParsePacket()."
+
+    Exit Sub
 
     'debug.print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParsePacket of Class Module clsFriendlistHandler"
     

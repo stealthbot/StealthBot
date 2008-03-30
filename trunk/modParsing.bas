@@ -8,6 +8,8 @@ Public Sub SendHeader()
 End Sub
 
 Public Sub BNCSParsePacket(ByVal PacketData As String)
+    On Error GoTo ERROR_HANDLER
+
     Dim pD          As clsPacketDebuffer ' Packet debuffer object
     Dim PacketLen   As Long              ' Length of the packet minus the header
     Dim PacketID    As Byte              ' Battle.net packet ID
@@ -537,6 +539,13 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     End If
     
     Set pD = Nothing
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in BNCSParsePacket()."
+    
+    Exit Sub
 End Sub
 
 Public Function StrToHex(ByVal String1 As String, Optional ByVal NoSpaces As Boolean = False) As String
@@ -825,12 +834,12 @@ Public Function ParsePing(strData As String) As Long
     CopyMemory ParsePing, ByVal strPing$, 4
 End Function
 
-Public Function CVL(x As String) As Long
+Public Function CVL(X As String) As Long
     'on error resume next
-    If Len(x) < 4 Then
+    If Len(X) < 4 Then
         Exit Function
     End If
-    CopyMemory CVL, ByVal x, 4
+    CopyMemory CVL, ByVal X, 4
 End Function
 
 
@@ -1428,12 +1437,12 @@ Public Function GetCharacterName(ByVal Statstring As String, ByVal start As Byte
     GetCharacterName = InStr(start, Statstring, ",") + 1
 End Function
 
-Function MakeLong(x As String) As Long
+Function MakeLong(X As String) As Long
  'on error resume next
-    If Len(x) < 4 Then
+    If Len(X) < 4 Then
         Exit Function
     End If
-    CopyMemory MakeLong, ByVal x, 4
+    CopyMemory MakeLong, ByVal X, 4
 End Function
 
 Public Sub StrCpy(ByRef Source As String, ByVal nText As String)
@@ -1905,7 +1914,7 @@ End Function
 'Originally from DPChat by Zorm - cleaned up and adapted to my needs
 Public Sub ProfileParse(Data As String)
     On Error Resume Next
-    Dim x As Integer
+    Dim X As Integer
     Dim ProfileEnd As String
     Dim SplitProfile() As String
     

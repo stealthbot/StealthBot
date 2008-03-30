@@ -67,7 +67,8 @@ End Sub
 
 '10-18-07 - Hdx - Changed to use clsPacketDebuffer
 Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
-    On Error GoTo clanErr
+    On Error GoTo ERROR_HANDLER
+    
     Dim ary() As String
     'Dim dwTemp As Long
     Dim ClanTag As String * 4
@@ -196,8 +197,13 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
     inBuf.Clear
     Set inBuf = Nothing
     Exit Sub
-clanErr:
-  Debug.Print "ParseClanPacket Error: " & Err.Number & ": " & Err.description
-  Debug.Print DebugOutput(Data)
-  Err.Clear
+    
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in ParseClanPacket()."
+    
+    Exit Sub
+
+  'Debug.Print "ParseClanPacket Error: " & Err.Number & ": " & Err.description
+  'Debug.Print DebugOutput(Data)
+  'Err.Clear
 End Sub

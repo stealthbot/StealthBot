@@ -6298,7 +6298,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
     Exit Function
     
 ERROR_HANDLER:
-    MsgBox Err.description
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in searchDatabase()."
     
     Exit Function
 End Function
