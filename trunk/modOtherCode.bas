@@ -1189,6 +1189,8 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         If (BotVars.NoColoring = False) Then
             .ListItems.Item(isPriority).ForeColor = GetNameColor(Flags, 0, IsSelf)
         End If
+        
+        .Refresh
     End With
     
     g_ThisIconCode = -1

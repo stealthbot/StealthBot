@@ -41,18 +41,13 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
     ByVal dwTimer As Long)
     
     Dim i       As Integer ' ...
-    Dim doLoop  As Boolean ' ...
-    Dim found   As Boolean ' ...
     Dim blnShow As Boolean ' ...
-    
+
     ' ...
-    m_QueueCount = colChatQueue.Count
+    Do
+        ' ...
+        blnShow = False
     
-    ' ...
-    doLoop = True
-    
-    ' ...
-    Do While (doLoop)
         ' ...
         For i = 1 To colChatQueue.Count
             ' ...
@@ -61,36 +56,24 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
             ' ...
             Set clsChatQueue = colChatQueue(i)
 
-            With clsChatQueue
-                ' ...
-                If (GetTickCount() - .Time() >= BotVars.ChatDelay) Then
-                    blnShow = True
-                End If
-
-                ' ...
-                If (blnShow) Then
-                    ' ...
-                    Call .Show
-                    
-                    ' ...
-                    Call colChatQueue.Remove(i)
-                End If
-            End With
-            
             ' ...
-            blnShow = False
-        Next
-        
-        ' ...
-        If (found) Then
-            doLoop = True
-        Else
-            doLoop = False
-        End If
-        
-        ' ...
-        found = False
-    Loop
+            If (GetTickCount() - clsChatQueue.Time() >= BotVars.ChatDelay) Then
+                blnShow = True
+            End If
+
+            ' ...
+            If (blnShow) Then
+                ' ...
+                clsChatQueue.Show
+                
+                ' ...
+                colChatQueue.Remove i
+                
+                ' ...
+                Exit For
+            End If
+        Next i
+    Loop While (blnShow)
 End Function
 
 ' CHATQUEUE EVENTS
@@ -103,9 +86,9 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
     
     Dim game   As String ' ...
     Dim pStats As String ' ...
-    Dim clan   As String ' ...
+    Dim Clan   As String ' ...
     
-    game = ParseStatstring(OriginalStatstring, pStats, clan)
+    game = ParseStatstring(OriginalStatstring, pStats, Clan)
 
     If (JoinMessagesOff = False) Then
         Call frmChat.AddChat(RTBColors.JoinText, "-- ", _
@@ -113,8 +96,8 @@ Public Sub Event_QueuedJoin(ByVal Username As String, ByVal Flags As Long, ByVal
                 RTBColors.JoinText, " has joined the channel using " & pStats)
     End If
     
-    If (clan <> vbNullString) Then
-        Call AddName(Username, Product, Flags, Ping, clan)
+    If (Clan <> vbNullString) Then
+        Call AddName(Username, Product, Flags, Ping, Clan)
     Else
         Call AddName(Username, Product, Flags, Ping)
     End If
@@ -150,28 +133,28 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
     Dim found  As ListItem ' ...
     
     Dim i      As Integer  ' ...
-    Dim stats  As String   ' ...
-    Dim clan   As String   ' ...
-    Dim pos    As Integer  ' ...
+    Dim Stats  As String   ' ...
+    Dim Clan   As String   ' ...
+    Dim Pos    As Integer  ' ...
 
     ' ...
-    ParseStatstring OriginalStatstring, stats, clan
+    ParseStatstring OriginalStatstring, Stats, Clan
     
     ' ...
     If (JoinMessagesOff = False) Then
         ' ...
         Call frmChat.AddChat(RTBColors.JoinText, "-- Stats updated: ", _
                 RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
-                        RTBColors.JoinText, " is using " & stats)
+                        RTBColors.JoinText, " is using " & Stats)
     End If
     
     ' ...
-    pos = checkChannel(Username)
+    Pos = checkChannel(Username)
     
     ' ...
-    If (pos) Then
+    If (Pos) Then
         ' ...
-        Set found = frmChat.lvChannel.ListItems(pos)
+        Set found = frmChat.lvChannel.ListItems(Pos)
         
         ' ...
         i = UsernameToIndex(Username)
@@ -214,7 +197,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     
     On Error GoTo ERROR_HANDLER
     
-    Dim pos      As Integer  ' ...
+    Dim Pos      As Integer  ' ...
     Dim doUpdate As Boolean  ' ...
     
     ' are we in the void?
@@ -227,14 +210,14 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
         Exit Sub
     Else
         ' ...
-        pos = checkChannel(Username)
+        Pos = checkChannel(Username)
     
         ' is user being designated?
         If (((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
                 ((prevflags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
     
             ' ...
-            frmChat.lvChannel.ListItems.Remove pos
+            frmChat.lvChannel.ListItems.Remove Pos
             
             ' ...
             Call AddName(Username, Product, Flags, Ping)
@@ -265,12 +248,12 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
         ' ...
         If (doUpdate = True) Then
             ' ...
-            If (pos) Then
+            If (Pos) Then
                 ' ...
-                frmChat.lvChannel.ListItems.Remove pos
+                frmChat.lvChannel.ListItems.Remove Pos
                 
                 ' ...
-                Call AddName(Username, Product, Flags, Ping, sClan, pos)
+                Call AddName(Username, Product, Flags, Ping, sClan, Pos)
             End If
         End If
     End If

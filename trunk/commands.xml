@@ -2081,6 +2081,8 @@
   </command>
 
   <command name="reconnect">
+    <alias>rc</alias>
+
     <documentation>
       <description>
         forces the bot to reconnect to the selected Battle.net server.
@@ -2621,10 +2623,29 @@
       </description>
     </documentation>    
 
-    <access>
-      <rank>100</rank>
-      <flag>c</flag>
-    </access>
+    <access />
+  </command>
+
+  <command name="makechieftain">
+    <alias>makechief</alias>
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>    
+
+    <access />
+  </command>
+
+  <command name="disbandclan">
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>    
+
+    <access />
   </command>
 
   <command name="createclan">

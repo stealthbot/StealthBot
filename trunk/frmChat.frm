@@ -1454,7 +1454,7 @@ Private Sub Form_Load()
     #If (BETA = 1) Then
         #If (DEV_RELEASE = 1) Then
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
-                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "7"
+                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "8"
         #Else
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
                 ZeroOffsetEx(App.REVISION, 3) & " Stable"
@@ -7166,7 +7166,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
                 End If
             End If
             
-            If StrComp(GetClanSelectedUser(), CurrentUsername, vbTextCompare) = 0 Then
+            If StrComp(GetClanSelectedUser(), reverseUsername(CurrentUsername), vbTextCompare) = 0 Then
                 If Clan.MyRank > 0 Then
                     mnuSP2.Visible = True
                     mnuPopLeaveClan.Visible = True
@@ -7191,7 +7191,7 @@ Private Sub mnuPopLeaveClan_Click()
     If MsgBox("Are you sure you want to leave the clan?", vbYesNo, "StealthBot") = vbYes Then
         With PBuffer
             .InsertDWord &H1    '//cookie
-            .InsertNTString CurrentUsername
+            .InsertNTString reverseUsername(CurrentUsername)
             .SendPacket &H78
         End With
 
