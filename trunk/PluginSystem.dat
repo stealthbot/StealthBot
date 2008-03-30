@@ -157,9 +157,10 @@ Set psEvents = CreateObject("Scripting.Dictionary")        '// holds event names
 
 
 Sub psLoadPlugins()
+   On Error Resume Next
 
    If Not psLatestSB() Then Exit Sub
-   On Error Resume Next
+   BotVars.NoSupportMultiCharTrigger = False
 
    '// Create an array of all existing StealthBot events
    psEventNames = Split("load|firstrun|serverinfo|servererror|usertalk|useremote|whisperfromuser|userjoins|userleaves|" & _
@@ -289,7 +290,7 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, Lines)
 End Sub
 
 
-Sub psLoadCode(Prefix, Path, Content)
+Sub psLoadCode(Prefix, Path, ByVal Content)
 
    '// Load the plugin's code (unless it's disabled)
    On Error Resume Next
@@ -386,7 +387,7 @@ End Sub
 '/// [[[ PLUGIN SYSTEM COMMANDS ]]]
  
 
-Sub psProcessCmd(Message, Username, DisplayID)
+Sub psProcessCmd(ByVal Message, Username, DisplayID)
 
    '// Has the Plugin System loaded completely?
    If Not psLoaded Then Exit Sub
@@ -1671,7 +1672,7 @@ Sub Event_UserTalk(Username, Flags, Message, Ping)
    arrArgs = Array(Username, Flags, Message, Ping)
    If psMultiCmd(Message, "UserTalk", arrArgs) Then Exit Sub
 
-   psProcessCmd psEcho(Message), Username, 3
+   psProcessCmd Message, Username, 3
    psExecuteEvent "UserTalk", arrArgs
 End Sub
  
@@ -1681,7 +1682,7 @@ Sub Event_UserEmote(Username, Flags, Message)
    arrArgs = Array(Username, Flags, Message)
    If psMultiCmd(Message, "UserEmote", arrArgs) Then Exit Sub
 
-   psProcessCmd psEcho(Message), Username, 3
+   psProcessCmd Message, Username, 3
    psExecuteEvent "UserEmote", arrArgs
 End Sub
  
@@ -1691,7 +1692,7 @@ Sub Event_WhisperFromUser(Username, Flags, Message)
    arrArgs = Array(Username, Flags, Message)
    If psMultiCmd(Message, "WhisperFromUser", arrArgs) Then Exit Sub
 
-   psProcessCmd psEcho(Message), Username, 3
+   psProcessCmd Message, Username, 3
    psExecuteEvent "WhisperFromUser", Array(Username, Flags, Message)
 End Sub
  
@@ -1755,7 +1756,7 @@ Sub Event_PressedEnter(Text)
       Exit Sub
    End If
 
-   psProcessCmd psEcho(Text), BotVars.Username, 4
+   psProcessCmd Text, BotVars.Username, 4
    psExecuteEvent "PressedEnter", Array(Text)
 End Sub
  
