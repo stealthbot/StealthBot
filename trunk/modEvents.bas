@@ -254,7 +254,6 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     SharedScriptSupport.MyChannel = ChannelName
     
     If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
-        
         PassedClanMotdCheck = False
         
         Call frmChat.ClanHandler.RequestClanMotd(1)
