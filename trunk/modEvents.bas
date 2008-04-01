@@ -23,7 +23,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     If (LenB(Username) < 1) Then
         Exit Sub
     End If
-    
+ 
     ' ...
     Call ParseStatstring(Message, parsed, Clan)
     
@@ -85,6 +85,9 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
             
             ' update user flags
             .Flags = Flags
+            
+            ' ...
+            Clan = .Clan
         End With
     Else
         If (g_Channel.IsSilent) Then
