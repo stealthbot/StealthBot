@@ -220,7 +220,7 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
             frmChat.lvChannel.ListItems.Remove Pos
             
             ' ...
-            Call AddName(Username, Product, Flags, Ping)
+            Call AddName(Username, Product, Flags, Ping, sClan)
         
             ' ...
             Call frmChat.AddChat(RTBColors.JoinedChannelText, "-- ", _

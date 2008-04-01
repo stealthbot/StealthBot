@@ -181,12 +181,12 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         ((colChatQueue.Count = 0) Or (i >= (colChatQueue.Count + 1)))) Then
         
         Call Event_QueuedStatusUpdate(Username, Flags, prevflags, Ping, Product, _
-            vbNullString, vbNullString, vbNullString)
+            Clan, Message, vbNullString)
     Else
         Set clsChatQueue = colChatQueue(i)
         
         Call clsChatQueue.StoreStatusUpdate(Flags, prevflags, Ping, Product, _
-            vbNullString, vbNullString, vbNullString)
+            Clan, Message, vbNullString)
     End If
     
     ' ...
@@ -255,8 +255,6 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
         PassedClanMotdCheck = False
-        
-        Call frmChat.ClanHandler.RequestClanMotd(1)
     End If
 
     ' if we've just left another channel, call event script
@@ -451,13 +449,14 @@ Repeat4:
             FileTimeToSystemTime FT, sT
             
             With sT
-                Event_ServerInfo CurrentUsername, Right$(KeyName, Len(KeyName) - 7) & ": " & SystemTimeToString(sT) & " (Battle.net time)"
+                frmChat.AddChat RTBColors.ServerInfoText, Right$(KeyName, Len(KeyName) - 7) & ": " & _
+                        SystemTimeToString(sT) & " (Battle.net time)"
             End With
             
         Else    '// it's a SECONDS type
             If StrictIsNumeric(KeyValue) Then
                 'On Error Resume Next
-                Event_ServerInfo CurrentUsername, "Time Logged: " & ConvertTime(KeyValue, 1)
+                frmChat.AddChat RTBColors.ServerInfoText, "Time Logged: " & ConvertTime(KeyValue, 1)
             End If
         End If
         
@@ -517,7 +516,7 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
         .InitListviewTabs
     
         .AddChat RTBColors.InformationText, "[BNET] Logged on as ", _
-            RTBColors.SuccessText, Username, RTBColors.InformationText, "."
+                RTBColors.SuccessText, Username, RTBColors.InformationText, "."
             
         .UpTimer.Interval = 1000
         
@@ -534,8 +533,6 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
         frmChat.sckBNLS.Close
     End If
     
-    Call RequestSystemKeys
-    
     'INetQueue inqReset
     
     'FullJoin BotVars.HomeChannel
@@ -549,6 +546,8 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
         
         ExReconnectTimerID = 0
     End If
+    
+    RequestSystemKeys
     
     With PBuffer
         .InsertNTString "/whoami"
@@ -665,6 +664,9 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             If (Message <> vbNullString) Then
                 Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
             End If
+
+            ' ...
+            PassedClanMotdCheck = True
             
             ' ...
             Exit Sub
@@ -686,6 +688,31 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End With
     End If
     
+    ' what is our current gateway name?
+    If (BotVars.Gateway = vbNullString) Then
+        ' ...
+        If (InStr(1, Message, "You are ", vbTextCompare) > 0) And (InStr(1, Message, ", using ", _
+                vbTextCompare) > 0) Then
+                
+            ' ...
+            If ((InStr(1, Message, "channel", vbTextCompare) = 0) And _
+                    (InStr(1, Message, "game", vbTextCompare) = 0)) Then
+                    
+                ' ...
+                i = InStrRev(Message, Space$(1))
+                
+                ' ...
+                BotVars.Gateway = Mid$(Message, i + 1)
+    
+                ' we want our username to accurately reflect
+                ' our new discovery of the realm name
+                CurrentUsername = convertUsername(CurrentUsername)
+    
+                Exit Sub
+            End If
+        End If
+    End If
+
     If (InStr(1, Message, Space$(1), vbBinaryCompare) <> 0) Then
         If (InStr(1, Message, "are still marked", vbTextCompare) <> 0) Then
             Exit Sub
@@ -806,24 +833,6 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             gChannel.Designated = Left$(Message, Len(Message) - 29)
         End If
         
-        ' trick to find the current realm name, thanks LoRd :)
-        If (InStr(1, Message, "You are ", vbTextCompare) > 0) And (InStr(1, Message, " using ", _
-                vbTextCompare) > 0) Then
-                
-            ' ...
-            If (InStr(1, Message, " channel ", vbTextCompare) = 0) Then
-                i = InStrRev(Message, Space$(1))
-                
-                ' ...
-                BotVars.Gateway = Mid$(Message, i + 1)
-
-                ' we want our username to accurately reflect
-                ' our new discovery of the realm name
-                CurrentUsername = convertUsername(CurrentUsername)
-
-                Exit Sub
-            End If
-        End If
         
         Temp = "Your friends are:"
         
@@ -841,9 +850,9 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             frmChat.AddChat RTBColors.ServerInfoText, Message
         End If
     Else
-        If (Not (bHide)) Then
+        'If (Not (bHide)) Then
             frmChat.AddChat RTBColors.ServerInfoText, Message
-        End If
+        'End If
     End If
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1171,7 +1180,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
         If (InStr(1, Message, "in clan ", vbTextCompare) > 0) Then
             strCompare = Mid$(Message, InStr(1, Message, "in clan ", vbTextCompare) + 8)
-            strCompare = Left$(strCompare, Len(Message) - 1)
+            strCompare = Left$(strCompare, Len(strCompare) - 1)
         
             Call AddName(Username, Product, Flags, Ping, strCompare)
         Else

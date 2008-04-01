@@ -2502,7 +2502,11 @@ End Function ' end function OnRem
 Private Function OnReconnect(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
+    Dim tmp As String ' ...
+    
     If (g_Online) Then
+        tmp = BotVars.HomeChannel
+    
         BotVars.HomeChannel = g_Channel.Name
         
         Call frmChat.DoDisconnect
@@ -2515,6 +2519,10 @@ Private Function OnReconnect(ByVal Username As String, ByRef dbAccess As udtGetA
         frmChat.AddChat RTBColors.SuccessText, "Connection initialized."
         
         Call frmChat.DoConnect
+        
+        'Pause 3, True
+        
+        BotVars.HomeChannel = tmp
     Else
         frmChat.AddChat RTBColors.SuccessText, "Connection initialized."
         

@@ -11,12 +11,12 @@ Begin VB.Form frmChat
    ClientHeight    =   7950
    ClientLeft      =   165
    ClientTop       =   855
-   ClientWidth     =   11580
+   ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   7950
-   ScaleWidth      =   11580
+   ScaleWidth      =   12585
    StartUpPosition =   3  'Windows Default
    Begin VB.Timer tmrSilentChannel 
       Index           =   1
@@ -61,7 +61,7 @@ Begin VB.Form frmChat
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   285
+      Height          =   315
       Left            =   8280
       TabIndex        =   8
       Top             =   6600
@@ -79,7 +79,7 @@ Begin VB.Form frmChat
          Strikethrough   =   0   'False
       EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   285
+      Height          =   315
       Left            =   0
       TabIndex        =   7
       Top             =   6600
@@ -90,8 +90,8 @@ Begin VB.Form frmChat
       Left            =   8880
       TabIndex        =   0
       Top             =   6600
-      Width           =   2805
-      _ExtentX        =   4948
+      Width           =   3705
+      _ExtentX        =   6535
       _ExtentY        =   661
       _Version        =   393216
       TabOrientation  =   1
@@ -125,12 +125,12 @@ Begin VB.Form frmChat
       TabIndex        =   1
       TabStop         =   0   'False
       Top             =   240
-      Width           =   2775
-      _ExtentX        =   4895
+      Width           =   3698
+      _ExtentX        =   6535
       _ExtentY        =   11245
       View            =   3
       LabelEdit       =   1
-      LabelWrap       =   0   'False
+      LabelWrap       =   -1  'True
       HideSelection   =   -1  'True
       HideColumnHeaders=   -1  'True
       OLEDragMode     =   1
@@ -150,13 +150,19 @@ Begin VB.Form frmChat
          Strikethrough   =   0   'False
       EndProperty
       OLEDragMode     =   1
-      NumItems        =   2
+      NumItems        =   3
       BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         Object.Width           =   4057
+         Object.Width           =   4154
       EndProperty
       BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         Alignment       =   2
          SubItemIndex    =   1
-         Object.Width           =   88
+         Object.Width           =   1191
+      EndProperty
+      BeginProperty ColumnHeader(3) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         Alignment       =   1
+         SubItemIndex    =   2
+         Object.Width           =   617
       EndProperty
    End
    Begin MSScriptControlCtl.ScriptControl SCRestricted 
@@ -236,7 +242,7 @@ Begin VB.Form frmChat
          Strikethrough   =   0   'False
       EndProperty
       Height          =   1695
-      Left            =   11160
+      Left            =   12360
       TabIndex        =   3
       TabStop         =   0   'False
       Top             =   6600
@@ -835,12 +841,11 @@ Begin VB.Form frmChat
       TabIndex        =   4
       TabStop         =   0   'False
       Top             =   6960
-      Width           =   11175
-      _ExtentX        =   19711
+      Width           =   12375
+      _ExtentX        =   21828
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -866,7 +871,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -898,7 +902,7 @@ Begin VB.Form frmChat
       Left            =   8880
       TabIndex        =   10
       Top             =   0
-      Width           =   2775
+      Width           =   3698
    End
    Begin VB.Menu mnuBot 
       Caption         =   "&Bot"
@@ -2163,16 +2167,18 @@ Sub Form_Resize()
         'sizing + positioning
         
         With lvChannel
-            .Width = (Me.Width / 4) - 120 'magic number?
-            If .Width > (.ColumnHeaders.Item(1).Width + 700) Then
-                .Width = .ColumnHeaders.Item(1).Width + 700
-                
-                rtbChat.Width = Me.Width - .Width - 120
-            Else
-                rtbChat.Width = ((Me.Width / 4) * 3)
-            End If
-            
-            .ColumnHeaders.Item(1).Width = (.Width / 3) * 2.5
+            rtbChat.Width = Me.Width - .Width - 120
+        
+        '    .Width = (Me.Width / 4) - 120 'magic number?
+        '    If .Width > (.ColumnHeaders.Item(1).Width + 700) Then
+        '        .Width = .ColumnHeaders.Item(1).Width + 700
+        '
+        '        rtbChat.Width = Me.Width - .Width - 120
+        '    Else
+        '        rtbChat.Width = ((Me.Width / 4) * 3)
+        '    End If
+        '
+        '    .ColumnHeaders.Item(1).Width = (.Width / 3) * 2.5
         End With
         
         lblCurrentChannel.Width = lvChannel.Width
@@ -2404,6 +2410,8 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
     End If
     
     ClanHandler.RequestClanList
+    
+    'frmChat.ClanHandler.RequestClanMotd 1
 End Sub
 
 Private Sub ClanHandler_ClanInvitation(ByVal Token As String, ByVal ClanTag As String, ByVal RawClanTag As String, ByVal ClanName As String, ByVal InvitedBy As String, ByVal NewClan As Boolean)
@@ -3044,8 +3052,8 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
    
     lvhti.pt.X = X / Screen.TwipsPerPixelX
     lvhti.pt.Y = Y / Screen.TwipsPerPixelY
-    lItemIndex = SendMessageAny(lvChannel.hWnd, LVM_HITTEST, 0, lvhti) + 1
-   
+    lItemIndex = SendMessageAny(lvChannel.hWnd, LVM_HITTEST, -1, lvhti) + 1
+ 
     If m_lCurItemIndex <> lItemIndex Then
         m_lCurItemIndex = lItemIndex
         
@@ -4399,6 +4407,18 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     RequestSystemKeys
                                     
                                     GoTo theEnd
+                                    
+                                ElseIf (LCase$(s) = "/lvchandims") Then
+                                    Dim j As Integer ' ...
+                                
+                                    AddChat vbRed, "lvChannel:"
+                                    AddChat vbRed, " Height: " & lvChannel.Height
+                                    AddChat vbRed, " Width: " & lvChannel.Width
+                                    
+                                    For j = 1 To lvChannel.ColumnHeaders.Count
+                                        AddChat vbRed, " Column " & j & ":"
+                                        AddChat vbRed, "  Width:" & lvChannel.ColumnHeaders(j).Width
+                                    Next j
                                     
                                 ElseIf (LCase$(s) = "/cls") Then
                                     Call mnuClear_Click
@@ -5886,6 +5906,22 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         BotVars.ShowOfflineFriends = False
     End If
     
+    s = ReadCFG(OT, "HideClanDisplay")
+    If (s = "Y") Then
+        With lvChannel
+            .Width = (.Width - .ColumnHeaders(2).Width)
+            .ColumnHeaders(2).Width = 0
+        End With
+    End If
+    
+    s = ReadCFG(OT, "HidePingDisplay")
+    If (s = "Y") Then
+        With lvChannel
+            .Width = (.Width - .ColumnHeaders(3).Width)
+            .ColumnHeaders(3).Width = 0
+        End With
+    End If
+    
     gameConventions = ReadCFG(OT, "UseGameConventions")
     
     'If (gameConventions = "N") Then
@@ -7287,6 +7323,10 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         SetTitle "Disconnected"
         
         Call NLogin.CloseConnection(DoNotShow)
+        
+        Set g_Channel = Nothing
+        
+        BotVars.Gateway = vbNullString
         
         CurrentUsername = vbNullString
         

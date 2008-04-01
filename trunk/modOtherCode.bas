@@ -1183,7 +1183,14 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         .ListItems.Add isPriority, , Username, , i
         
         ' ...
-        .ListItems.Item(isPriority).ListSubItems.Add , , , LagIcon
+        If (.ColumnHeaders(2).Width > 0) Then
+            .ListItems.Item(isPriority).ListSubItems.Add , , Clan
+        End If
+        
+        ' ...
+        If (.ColumnHeaders(3).Width > 0) Then
+            .ListItems.Item(isPriority).ListSubItems.Add , , , LagIcon
+        End If
         
         ' ...
         If (BotVars.NoColoring = False) Then
@@ -2792,7 +2799,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             lngVerticalPos = SendMessage(rtb.hWnd, EM_GETTHUMB, 0&, 0&)
             
             Diff = ((lngVerticalPos + _
-                (rtb.Height / Screen.TwipsPerPixelY)) - intRange)
+                            (rtb.Height / Screen.TwipsPerPixelY)) - intRange)
             
             ' In testing it appears that if the value I calcuate as Diff is negative,
             ' the scrollbar is not at the bottom.
@@ -2902,7 +2909,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 ' Fixed 11/21/06 to properly log timestamps
                 If (LogThis) Then
                     Print #f, saElements(i + 1) & _
-                        Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)));
+                                    Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)));
                 End If
             End If
         Next i
