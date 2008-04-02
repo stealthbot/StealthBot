@@ -1,4 +1,4 @@
-frmAbout = 154, 203, 966, 691, Z, 154, 203, 878, 691, C
+frmAbout = 154, 203, 966, 691, , 154, 203, 878, 691, C
 cBNLS = 0, 0, 0, 0, C
 cBNCSRecvBuffer = 22, 29, 834, 517, 
 cBNLSRecvBuffer = 22, 29, 834, 517, 
@@ -44,7 +44,7 @@ frmProfileManager = 0, 0, 0, 0, C, 66, 87, 790, 575, C
 clsErrorHandler = 0, 0, 0, 0, C
 clsPacketDebuffer = 0, 0, 0, 0, C
 BNCSutil = 44, 58, 856, 546, 
-modEvents = 66, 87, 790, 575, 
+modEvents = 66, 87, 790, 575, Z
 modOutboundPackets = 154, 203, 966, 691, 
 modLogging = 0, 0, 0, 0, C
 modColors = 132, 174, 944, 662, 

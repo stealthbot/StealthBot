@@ -362,6 +362,17 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
             End With
         End If
     End If
+    
+    ' ...
+    If (Left$(Message, 1) <> "/") Then
+        If (g_Channel.IsSilent) Then
+            frmChat.AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, CurrentUsername, _
+                RTBColors.Carats, "> ", RTBColors.WhisperText, Message
+        Else
+            frmChat.AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, CurrentUsername, _
+                RTBColors.Carats, "> ", RTBColors.TalkNormalText, Message
+        End If
+    End If
 
     ' ...
     If (bFlood = False) Then
@@ -1058,10 +1069,11 @@ Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long) As L
         i = ICGAVEL
     ElseIf (Flags And USER_SQUELCHED) = USER_SQUELCHED Then 'squelched
         i = ICSQUELCH
-    ElseIf (g_ThisIconCode <> -1) Then
+    ElseIf ((BotVars.ShowStatsIcons) And (g_ThisIconCode <> -1)) Then
+        ' ...
         If (sProduct = "W3XP") Then
             i = g_ThisIconCode + ICON_START_W3XP + _
-                IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0)
+                    IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0)
         ElseIf (sProduct = "WAR3") Then
             i = g_ThisIconCode + ICON_START_WAR3
         End If

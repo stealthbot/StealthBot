@@ -96,6 +96,7 @@ Private m_shitlist_group                As String
 Private m_safelist_group                As String
 Private m_tagbans_group                 As String
 Private m_autocomplete_postfix          As String
+Private m_show_stats_icons              As Boolean
 
 Public Property Get Username() As String
     
@@ -1034,3 +1035,19 @@ Public Property Get AutoCompletePostfix() As String
     AutoCompletePostfix = m_autocomplete_postfix
 
 End Property
+
+
+Public Property Let ShowStatsIcons(bln As Boolean)
+
+    ' ...
+    m_show_stats_icons = bln
+
+End Property
+
+Public Property Get ShowStatsIcons() As Boolean
+
+    ' ...
+    ShowStatsIcons = m_show_stats_icons
+
+End Property
+

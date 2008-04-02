@@ -503,10 +503,6 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     
     Call EnableSO_KEEPALIVE(frmChat.sckBNet.SocketHandle)
     
-    If (BotVars.UsingDirectFList) Then
-        Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
-    End If
-    
     CurrentUsername = KillNull(Username)
     
     If (StrComp(Left$(CurrentUsername, 2), "w#", vbTextCompare) = 0) Then
@@ -556,6 +552,10 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
         .InsertNTString "/whoami"
         .SendPacket &HE
     End With
+    
+    If (BotVars.UsingDirectFList) Then
+        Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
+    End If
     
     Call FullJoin(BotVars.HomeChannel)
     

@@ -149,37 +149,40 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
     End If
     
     ' ...
-    Pos = checkChannel(Username)
-    
-    ' ...
-    If (Pos) Then
+    If (BotVars.ShowStatsIcons) Then
         ' ...
-        Set found = frmChat.lvChannel.ListItems(Pos)
+        Pos = checkChannel(Username)
         
         ' ...
-        i = UsernameToIndex(Username)
-        
-        ' ...
-        If (g_ThisIconCode <> -1) Then
+        If (Pos) Then
             ' ...
-            If (colUsersInChannel.Item(i).Product = "WAR3") Then
+            Set found = frmChat.lvChannel.ListItems(Pos)
+            
+            ' ...
+            i = UsernameToIndex(Username)
+            
+            ' ...
+            If (g_ThisIconCode <> -1) Then
                 ' ...
-                If (found.SmallIcon = ICWAR3) Then
+                If (colUsersInChannel.Item(i).Product = "WAR3") Then
                     ' ...
-                    found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
-                End If
-            ElseIf (colUsersInChannel.Item(i).Product = "W3XP") Then
-                ' ...
-                If (found.SmallIcon = ICWAR3X) Then
+                    If (found.SmallIcon = ICWAR3) Then
+                        ' ...
+                        found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
+                    End If
+                ElseIf (colUsersInChannel.Item(i).Product = "W3XP") Then
                     ' ...
-                    found.SmallIcon = ((g_ThisIconCode + ICON_START_W3XP) + IIf(g_ThisIconCode + _
-                            ICON_START_W3XP = ICSCSW, 1, 0))
+                    If (found.SmallIcon = ICWAR3X) Then
+                        ' ...
+                        found.SmallIcon = ((g_ThisIconCode + ICON_START_W3XP) + IIf(g_ThisIconCode + _
+                                ICON_START_W3XP = ICSCSW, 1, 0))
+                    End If
                 End If
             End If
+            
+            ' ...
+            Set found = Nothing
         End If
-        
-        ' ...
-        Set found = Nothing
     End If
     
     Exit Sub

@@ -18,6 +18,51 @@ Begin VB.Form frmChat
    ScaleHeight     =   7950
    ScaleWidth      =   12585
    StartUpPosition =   3  'Windows Default
+   Begin MSComctlLib.ListView lvChannel 
+      Height          =   6375
+      Left            =   8880
+      TabIndex        =   1
+      TabStop         =   0   'False
+      Top             =   240
+      Width           =   3705
+      _ExtentX        =   6535
+      _ExtentY        =   11245
+      View            =   3
+      LabelEdit       =   1
+      LabelWrap       =   -1  'True
+      HideSelection   =   -1  'True
+      HideColumnHeaders=   -1  'True
+      OLEDragMode     =   1
+      _Version        =   393217
+      SmallIcons      =   "imlIcons"
+      ForeColor       =   10079232
+      BackColor       =   0
+      BorderStyle     =   1
+      Appearance      =   1
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      OLEDragMode     =   1
+      NumItems        =   3
+      BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         Object.Width           =   4154
+      EndProperty
+      BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         SubItemIndex    =   1
+         Object.Width           =   1191
+      EndProperty
+      BeginProperty ColumnHeader(3) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         Alignment       =   1
+         SubItemIndex    =   2
+         Object.Width           =   617
+      EndProperty
+   End
    Begin VB.Timer tmrSilentChannel 
       Index           =   1
       Interval        =   30000
@@ -118,52 +163,6 @@ Begin VB.Form frmChat
       TabPicture(2)   =   "frmChat.frx":1D02
       Tab(2).ControlEnabled=   0   'False
       Tab(2).ControlCount=   0
-   End
-   Begin MSComctlLib.ListView lvChannel 
-      Height          =   6375
-      Left            =   8880
-      TabIndex        =   1
-      TabStop         =   0   'False
-      Top             =   240
-      Width           =   3698
-      _ExtentX        =   6535
-      _ExtentY        =   11245
-      View            =   3
-      LabelEdit       =   1
-      LabelWrap       =   -1  'True
-      HideSelection   =   -1  'True
-      HideColumnHeaders=   -1  'True
-      OLEDragMode     =   1
-      _Version        =   393217
-      SmallIcons      =   "imlIcons"
-      ForeColor       =   10079232
-      BackColor       =   0
-      BorderStyle     =   1
-      Appearance      =   1
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      OLEDragMode     =   1
-      NumItems        =   3
-      BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         Object.Width           =   4154
-      EndProperty
-      BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         Alignment       =   2
-         SubItemIndex    =   1
-         Object.Width           =   1191
-      EndProperty
-      BeginProperty ColumnHeader(3) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         Alignment       =   1
-         SubItemIndex    =   2
-         Object.Width           =   617
-      EndProperty
    End
    Begin MSScriptControlCtl.ScriptControl SCRestricted 
       Left            =   6960
@@ -752,8 +751,8 @@ Begin VB.Form frmChat
       TabIndex        =   5
       TabStop         =   0   'False
       Top             =   240
-      Width           =   2775
-      _ExtentX        =   4895
+      Width           =   3705
+      _ExtentX        =   6535
       _ExtentY        =   11245
       View            =   3
       LabelEdit       =   1
@@ -786,6 +785,7 @@ Begin VB.Form frmChat
          Object.Width           =   2540
       EndProperty
       BeginProperty ColumnHeader(3) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         Alignment       =   1
          SubItemIndex    =   2
          Object.Width           =   2540
       EndProperty
@@ -800,8 +800,8 @@ Begin VB.Form frmChat
       TabIndex        =   2
       TabStop         =   0   'False
       Top             =   240
-      Width           =   2775
-      _ExtentX        =   4895
+      Width           =   3705
+      _ExtentX        =   6535
       _ExtentY        =   11245
       View            =   3
       LabelEdit       =   1
@@ -831,6 +831,7 @@ Begin VB.Form frmChat
          Object.Width           =   4057
       EndProperty
       BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         Alignment       =   1
          SubItemIndex    =   1
          Object.Width           =   88
       EndProperty
@@ -4773,11 +4774,10 @@ Private Sub QueueTimer_Timer()
         End If
         
         If (Sent = 1) Then
-            If (Left$(Message, 1) <> "/") Then
-                AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, _
-                    CurrentUsername, RTBColors.Carats, "> ", _
-                        RTBColors.TalkNormalText, Message
-            End If
+            'If (Left$(Message, 1) <> "/") Then
+            '    AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, CurrentUsername, _
+            '        RTBColors.Carats, "> ", RTBColors.TalkNormalText, Message
+            'End If
             
             Call g_Queue.Pop
         End If
@@ -5689,10 +5689,10 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             
                         ' if we're not issuing a command, lets show the user
                         ' what he's saying.
-                        If (InStr(1, Send, "/", vbBinaryCompare) <> 1) Then
-                            AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, CurrentUsername, _
-                                RTBColors.Carats, "> ", vbWhite, Send
-                        End If
+                        'If (InStr(1, Send, "/", vbBinaryCompare) <> 1) Then
+                        '    AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, CurrentUsername, _
+                        '        RTBColors.Carats, "> ", vbWhite, Send
+                        'End If
                         
                         ' lets alert our queue of the direct
                         ' transmission of the message through
@@ -6114,6 +6114,14 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     s = ReadCFG(OT, "JoinLeaves")
     If s = "Y" Then JoinMessagesOff = False Else JoinMessagesOff = True
+    
+    s = ReadCFG(OT, "ShowStatsIcons")
+    
+    If s = "N" Then
+        BotVars.ShowStatsIcons = False
+    Else
+        BotVars.ShowStatsIcons = True
+    End If
     
     s = ReadCFG(OT, "Mail")
     If s = "Y" Then Mail = True Else Mail = False
