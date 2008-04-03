@@ -1228,6 +1228,16 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         Set UserToAdd = Nothing
     End If
     
+    ' ...
+    'If (sClan <> vbNullString) Then
+    '    With PBuffer
+    '        .InsertDWord g_Channel.Users.Count
+    '        .InsertNonNTString StrReverse$(sClan)
+    '        .InsertNTString g_Channel.Users(g_Channel.Users.Count).Name
+    '        .SendPacket &H82
+    '    End With
+    'End If
+    
     If (MDebug("statstrings")) Then
         frmChat.AddChat vbMagenta, "Username: " & Username & ", Statstring: " & _
             OriginalStatstring

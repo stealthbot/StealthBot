@@ -33,12 +33,12 @@ Private Const USER_GUEST       As Long = &H40
 Private Const USER_PGLOFFICIAL As Long = &H400
 Private Const USER_KBKPLAYER   As Long = &H800
 
-Private m_banned_users     As Collection
 Private m_flags            As Long
 Private m_ping             As Long
 Private m_actual_name      As String
 Private m_display_name     As String
 Private m_clan             As String
+Private m_clan_rank        As Integer
 Private m_join_date        As Date
 Private m_last_speak_date  As Date
 Private m_stats_string     As String
@@ -46,21 +46,6 @@ Private m_game             As String
 Private m_total_bans       As Long
 Private m_total_kicks      As Long
 Private m_operator_date    As Date
-
-Private Sub Class_Initialize()
-
-    ' ...
-    Set m_banned_users = New Collection
-
-End Sub
-
-Public Property Get Banlist() As Collection
-    
-    ' ...
-    Set Banlist = m_banned_users
-    
-End Property
-
 
 Public Property Get Name() As String
 
@@ -173,19 +158,3 @@ Public Property Let Ping(lng As Long)
     m_ping = lng
 
 End Property
-
-Public Function IsOnBanList(ByVal Username As String) As Integer
-
-    ' ...
-    Dim i As Integer ' ...
-    
-    For i = 1 To m_banned_users.Count
-        If (StrComp(m_banned_users(i).Name, Username, vbTextCompare) = 0) Then
-            IsOnBanList = i
-            
-            Exit Function
-        End If
-    Next i
-
-    IsOnBanList = 0
-End Function

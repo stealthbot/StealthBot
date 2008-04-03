@@ -103,7 +103,6 @@ Class=clsMyClanObj; clsMyClanObj.cls
 Class=clsClanMemberObj; clsClanMemberObj.cls
 Class=clsChannelObj; clsChannelObj.cls
 Class=clsChannelUserObj; clsChannelUserObj.cls
-Class=clsChannelOperatorObj; clsChannelOperatorObj.cls
 Class=clsBannedUserObj; clsBannedUserObj.cls
 Class=clsUserStats; clsUserStats.cls
 IconForm="frmChat"
