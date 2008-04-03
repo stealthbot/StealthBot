@@ -58,10 +58,7 @@
 '//   *Added multiple command messages. As in StealthBot, you can now type: ".crs off; ss on; pelt me" etc.
 '//      -This will work for Plugin System commands as well as all of your plugins' commands (No StealthBot commands)
 '//      -This option can be disabled by setting the new "multipleCmdMsgs" plugin system setting to False
-'//   *Added the option to back up plugins during updates by adding the "backup" setting for all plugins
-'//      -Set to False by default. If changed to True, that plugin will be backed up when you download updates.
-'//      -Alternatively, you can set the global "backup" PS setting to True, and it will apply to all plugins.
-'//      -When True, the global "backup" PS setting overrides the individual "backup" plugin settings
+'//   *Added default backup of plugins upon updates. This can be disabled (either globally or individually) through the Plugins menu
 '//   *Added settings that allow you to set access requirements for external Plugin System commands:
 '//      -"prefix_cmd_access" (default 100), "plugins_cmd_access" (default 20), and "phelp_cmd_access" (default 20)
 '//   *Added double-slash Plugin System commands. Inside bot type "//command" to have the response displayed publicly.
@@ -282,7 +279,7 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, ByVal Lines)
    SetSetting Prefix, "enabled", True, "", False
    SetSetting Prefix, "menu_display", True, "", False
    SetSetting Prefix, "nvn", True, "", False
-   SetSetting Prefix, "backup", False, "", False
+   SetSetting Prefix, "backup", True, "", False
 
    '// Load this plugin's code
    psLoadCode Prefix, Path, Content
@@ -582,7 +579,7 @@ Sub ps_getplugin_cmd(cmd, Username, DisplayID)
 
    '// Do we need to back up an existing version before we download?
    If psPlugins.Exists(Prefix) Then
-      If GetSetting(Prefix, "backup") Or GetSetting("ps", "backup") Then
+      If GetSetting(Prefix, "backup") And GetSetting("ps", "backupUpdates") Then
         psBackUpFile psPlugins.Item(Prefix), psVersions.Item(Prefix)
       End If
    End If
@@ -795,7 +792,7 @@ Sub ps_delplugin_cmd(cmd, Username, DisplayID)
             If UBound(cmd) > 1 Then
                If cmd(2) <> 1 Then bkup = True
             Else
-               bkup = True
+               If Not GetSetting("ps", "deleteForever") Then bkup = True
             End If 
             If bkup Then psBackUpFile psPlugins.Item(cmd(1)), psVersions.Item(cmd(1))
 
@@ -977,18 +974,12 @@ Sub psAutoUpdate(boolMenuClick)
          If psGetNumericVersion(curPSVersion) > psGetNumericVersion(myPSVersion) Then
             boolFoundUpdate = True
 
-            updatePS = MsgBox("An new version (v" & curPSVersion & ") is available for " & PS_TITLE & ". Automatically " & _
-                              "update now (recommended)?" & String(2, vbCrLf) & "This notification can be disabled inside " & _
-                              "your settings.ini file.", vbYesNoCancel + vbQuestion + vbApplicationModal, PS_TITLE & " - Updater")
-
-            If updatePS = vbYes Then
-                  AddChat vbLightBlue, "Downloading an update for " & PS_TITLE
-                  psBackUpFile BotPath() & "PluginSystem.dat", myPSVersion
-                  PrintURLToFile "PluginSystem.dat", PS_UPDATE_URL & "getplug.php?plugin=pluginsystem"
-                  AddChat psColor1, "Your Plugin System has been updated."
-                  AddChat psColor1, "For a list of changes in this version see: http://stealthbot.net/p/plugs/changelog"
-                  AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
-            End If
+            AddChat vbLightBlue, "Downloading an update for " & PS_TITLE
+            psBackUpFile BotPath() & "PluginSystem.dat", myPSVersion
+            PrintURLToFile "PluginSystem.dat", PS_UPDATE_URL & "getplug.php?plugin=pluginsystem"
+            AddChat psColor1, "The StealthBot Plugin System has been updated."
+            AddChat psColor1, "For a list of changes in this version see: http://stealthbot.net/p/plugs/changelog"
+            AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
          End If
       End If
    End If
@@ -1248,20 +1239,26 @@ End Sub
 '// "Plugin Title" > "Backup"
 Sub PluginMenus_Backup_Callback(Prefix)
 
-   If GetSetting(Prefix, "backup") Then boolEnabled = False Else boolEnabled = True End If
-   SetSetting Prefix, "backup", boolEnabled, "", True
-
    If Prefix = "ps" Then
+
+     If GetSetting("ps", "backupUpdates") Then boolEnabled = True Else boolEnabled = False End If
+     SetSetting "ps", "backupUpdates", Not boolEnabled, "", True
+
      If boolEnabled Then
-     	AddChat vbGreen, "Backups have been globally enabled."
+     	AddChat vbRed, "Backup On Updates has been globally disabled."
      Else
-        Addchat vbRed, "Backups are no longer globally enabled."
+        Addchat vbGreen, "Backup On Updates is no longer globally disabed."
      End If
    Else
+
+     If GetSetting(Prefix, "backup") Then boolEnabled = False Else boolEnabled = True End If
+     SetSetting Prefix, "backup", boolEnabled, "", True
+
      If boolEnabled Then arrOnOff = psOnOff("on") Else arrOnOff = psOnOff("off") End If
-     AddChat arrOnOff(2), "Backups (upon updates and deletions) " & arrOnOff(1) & " for your " & Prefix & " plugin."
+     AddChat arrOnOff(2), "Backup On Updates " & arrOnOff(1) & " for your " & Prefix & " plugin."
    End If
-   SetMenuItemCheck Prefix, "Backup", boolEnabled
+
+   SetMenuItemCheck Prefix, "Backup On Updates", boolEnabled
 End Sub
 
 
@@ -1567,7 +1564,7 @@ Sub psCreatePSSettings()
 
    SetSetting "ps", "enabled", True, "Set to False to globally disable plugins.", False
    SetSetting "ps", "nvn", True, "Set to False to globally disable New Version Notification.", False
-   SetSetting "ps", "backup", False, "Set to True to globally enable plugin backups.", False
+   SetSetting "ps", "backupUpdates", True, "Set to False to globally disable Backup On Updates.", False
    SetSetting "ps", "debugmode", False, "Stores the debug mode status", False
    SetSetting "ps", "allowedExtensions", "plug,txt", "Plugins will be loaded from files with these extensions", False
    SetSetting "ps", "autoConvertToPlugin", True, "Automatically converts regular scripts to plugin form on load.", False
@@ -1577,6 +1574,7 @@ Sub psCreatePSSettings()
    SetSetting "ps", "psnvn", True, "New Version Notification for The Plugin System. Highly recommended.", False
    SetSetting "ps", "disableStats", False, "Disables sending of plugin stats (ONLY collects plugin prefixes).", False
    SetSetting "ps", "timeout", 15, "Script timeout. Changes to this setting only take effect after bot opening.", False
+   SetSetting "ps", "deleteForever", False, "If True, the /delplugin command will delete plugins forever (no backup created)", False
    SetSetting "ps", "prefix_cmd_access", 100, "Access required to use the .prefix on/off command", False
    SetSetting "ps", "plugins_cmd_access", 20, "Access required to use the .plugins command", False
    SetSetting "ps", "phelp_cmd_access", 20, "Access required to use the .phelp command", False
