@@ -179,7 +179,7 @@ Public Function IsOnBanList(ByVal Username As String) As Integer
     ' ...
     Dim i As Integer ' ...
     
-    For i = 1 To m_banned_users.count
+    For i = 1 To m_banned_users.Count
         If (StrComp(m_banned_users(i).Name, Username, vbTextCompare) = 0) Then
             IsOnBanList = i
             

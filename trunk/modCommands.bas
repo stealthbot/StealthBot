@@ -1242,7 +1242,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
     If (checkChannel(msgData)) Then
         Dim i          As Integer ' ...
         Dim arrUsers() As String  ' ...
-        Dim userCount  As Integer ' ...
+        Dim UserCount  As Integer ' ...
         Dim opsCount   As Integer ' ...
     
         ' ...
@@ -1284,21 +1284,21 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                             ' ...
                             If (UsernameToIndex(convertUsername(frmChat.lvClanList.ListItems(i).text)) > 0) Then
                                 ' ...
-                                arrUsers(userCount) = _
+                                arrUsers(UserCount) = _
                                     frmChat.lvClanList.ListItems(i).text
             
                                 ' ...
-                                userCount = (userCount + 1)
+                                UserCount = (UserCount + 1)
             
                                 ' ...
-                                ReDim Preserve arrUsers(0 To userCount)
+                                ReDim Preserve arrUsers(0 To UserCount)
                             End If
                         End If
                     End If
                 Next i
                 
                 ' ...
-                If (opsCount > userCount) Then
+                If (opsCount > UserCount) Then
                     ' ...
                     cmdRet(0) = "Error: There is currently a channel moderator present that cannot be " & _
                             "removed from his or her position."
@@ -1307,9 +1307,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 End If
                 
                 ' ...
-                If (userCount) Then
+                If (UserCount) Then
                     ' demote shamans
-                    For i = 0 To userCount
+                    For i = 0 To UserCount
                         ' ...
                         With PBuffer
                             .InsertDWord &H1
@@ -1368,9 +1368,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Call bnetSend("/resign")
         
         ' ...
-        If (userCount) Then
+        If (UserCount) Then
             ' promote shamans again
-            For i = 0 To (userCount - 1)
+            For i = 0 To (UserCount - 1)
                 ' ...
                 With PBuffer
                     .InsertDWord &H3
@@ -1882,17 +1882,18 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' This command will display a listing of all of the users that have been
     ' banned from the channel since the time of having joined the channel.
     
-    Dim tmpBuf() As String ' temporary output buffer
-    Dim tmpCount As Integer
-    Dim BanCount As Integer
-    Dim i        As Integer
-    Dim j        As Integer ' ...
+    Dim tmpBuf()  As String ' temporary output buffer
+    Dim tmpCount  As Integer
+    Dim BanCount  As Integer
+    Dim i         As Integer
+    Dim j         As Integer ' ...
+    Dim UserCount As Integer ' ...
     
     ' redefine array size
     ReDim Preserve tmpBuf(0)
     
     ' ...
-    If (g_Channel.BanCount = 0) Then
+    If (g_Channel.Banlist.Count = 0) Then
         ' ...
         cmdRet(0) = "There have been no users banned since I have joined " & _
             "the channel."
@@ -1905,34 +1906,50 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
     tmpBuf(tmpCount) = "User(s) banned: "
     
     ' ...
-    For i = 1 To g_Channel.Users.Count
+    For i = 1 To g_Channel.Banlist.Count
         ' ...
-        If (g_Channel.Users(i).IsOperator) Then
+        If (g_Channel.Banlist(i).IsDuplicateBan = False) Then
             ' ...
-            For j = 1 To g_Channel.Users(i).Banlist.Count
+            For j = 1 To g_Channel.Banlist.Count
                 ' ...
-                tmpBuf(tmpCount) = _
-                        tmpBuf(tmpCount) & ", " & g_Channel.Users(i).Banlist(j).Name
-                        
-                ' ...
-                If ((Len(tmpBuf(tmpCount)) > 90) And (i <> g_Channel.BanCount)) Then
-                    ' increase array size
-                    ReDim Preserve tmpBuf(tmpCount + 1)
+                If (StrComp(g_Channel.Banlist(j).Name, g_Channel.Banlist(i).Name, _
+                        vbTextCompare) = 0) Then
                 
-                    ' apply postfix to previous line
-                    tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", Space$(1)) & _
-                        " [more]"
-                    
-                    ' apply prefix to new line
-                    tmpBuf(tmpCount + 1) = "User(s) banned: "
-                    
-                    ' incrememnt counter
-                    tmpCount = (tmpCount + 1)
+                    ' ...
+                    UserCount = (UserCount + 1)
                 End If
             Next j
+            
+            ' ...
+            tmpBuf(tmpCount) = _
+                    tmpBuf(tmpCount) & ", " & g_Channel.Banlist(i).Name
+                    
+            ' ...
+            If (UserCount > 1) Then
+                tmpBuf(tmpCount) = _
+                        tmpBuf(tmpCount) & " (" & UserCount & ") "
+            End If
+                    
+            ' ...
+            If ((Len(tmpBuf(tmpCount)) > 90) And (i <> g_Channel.Banlist.Count)) Then
+                ' increase array size
+                ReDim Preserve tmpBuf(tmpCount + 1)
+            
+                ' apply postfix to previous line
+                tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", Space$(1)) & " [more]"
+                
+                ' apply prefix to new line
+                tmpBuf(tmpCount + 1) = "User(s) banned: "
+                
+                ' incrememnt counter
+                tmpCount = (tmpCount + 1)
+            End If
+    
+            tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", Space$(1))
         End If
         
-        tmpBuf(tmpCount) = Replace(tmpBuf(tmpCount), " , ", Space$(1))
+        ' ...
+        UserCount = 0
     Next i
     
     'For i = LBound(gBans) To UBound(gBans)
@@ -2189,13 +2206,13 @@ Private Function OnNext(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim Pos As Integer ' ...
+        Dim pos As Integer ' ...
         
         ' ...
-        Pos = MediaPlayer.PlaylistPosition
+        pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(Pos + 1)
+        Call MediaPlayer.PlayTrack(pos + 1)
         
         ' ...
         tmpBuf = "Skipped forwards."
@@ -3591,12 +3608,12 @@ Private Function OnBanListCount(ByVal Username As String, ByRef dbAccess As udtG
         Dim i      As Integer ' ...
     
         ' ...
-        tmpBuf = "There are currently " & g_Channel.BanCount & " user(s) on the internal ban list"
+        tmpBuf = "There are currently " & g_Channel.Banlist.Count & " user(s) on the internal ban list"
                         
         ' ...
         If (g_Channel.Self.IsOperator) Then
-            tmpBuf = tmpBuf & ", " & g_Channel.Self.Banlist.Count & " of which users were " & _
-                        "banned by me."
+            'tmpBuf = tmpBuf & ", " & g_Channel.Self.Banlist.Count & " of which users were " & _
+            '            "banned by me."
         Else
             tmpBuf = tmpBuf & "."
         End If
@@ -4348,13 +4365,13 @@ Private Function OnPrev(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim Pos As Integer ' ...
+        Dim pos As Integer ' ...
         
         ' ...
-        Pos = MediaPlayer.PlaylistPosition
+        pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(Pos - 1)
+        Call MediaPlayer.PlayTrack(pos - 1)
         
         ' ...
         tmpBuf = "Skipped backwards."
@@ -5899,7 +5916,7 @@ Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAcc
         ' ...
         If (liUser.SmallIcon >= 3) Then
             ' ...
-            cmdRet(0) = "Error: The specified user is already at the highest possible " & _
+            cmdRet(0) = "Error: The specified user is already at the highest promotable " & _
                     "ranking."
         
             ' ...
@@ -5915,11 +5932,11 @@ Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAcc
         End With
         
         ' ...
-        If (InBot = False) Then
-            ' ...
-            cmdRet(0) = Chr$(34) & liUser.text & Chr$(34) & " has been promoted to " & _
-                    GetRank(liUser.SmallIcon + 1) & "."
-        End If
+        'If (InBot = False) Then
+        '    ' ...
+        '    cmdRet(0) = Chr$(34) & liUser.text & Chr$(34) & " has been promoted to " & _
+        '            GetRank(liUser.SmallIcon + 1) & "."
+        'End If
     End If
 End Function
 
@@ -5948,7 +5965,7 @@ Private Function OnDemote(ByVal Username As String, ByRef dbAccess As udtGetAcce
         ' ...
         If (liUser.SmallIcon <= 1) Then
             ' ...
-            cmdRet(0) = "Error: The specified user is already at the lowest possible " & _
+            cmdRet(0) = "Error: The specified user is already at the lowest demoteable " & _
                     "ranking."
         
             ' ...
@@ -5964,11 +5981,11 @@ Private Function OnDemote(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End With
         
         ' ...
-        If (InBot = False) Then
-            ' ...
-            cmdRet(0) = Chr$(34) & liUser.text & Chr$(34) & " has been demoted to " & _
-                    GetRank(liUser.SmallIcon - 1) & "."
-        End If
+        'If (InBot = False) Then
+        '    ' ...
+        '    cmdRet(0) = Chr$(34) & liUser.text & Chr$(34) & " has been demoted to " & _
+        '            GetRank(liUser.SmallIcon - 1) & "."
+        'End If
     End If
 End Function
 

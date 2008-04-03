@@ -8,7 +8,7 @@
 
     <documentation>
       <description>
-        This command will state a specified user's rank and/or flags.
+        states a specified user's rank and flags.
       </description>
     </documentation>
 
@@ -94,7 +94,7 @@
   <command name="roll">
     <documentation>
       <description>
-        This command will state a random value between 0 and 100.
+        states a random value between 0 and 100.
       </description>
     </documentation>
 
@@ -118,7 +118,7 @@
 
     <documentation>
       <description>
-        This command will store a message for a specified user.
+        stores a message for the specified user.
       </description>
     </documentation>
 
@@ -158,7 +158,7 @@
   <command name="flip">
     <documentation>
       <description>
-        This command will state the result of a coin toss.
+        initiates a coin toss and states the results.
       </description>
     </documentation>
     
@@ -182,7 +182,7 @@
 
     <documentation>
       <description>
-        This command will state all users with the specified flag(s).
+        states all users with the specified flag(s).
       </description>
     </documentation>
 
@@ -208,7 +208,7 @@
 
     <documentation>
       <description>
-        This command will state the currently designated user.
+        states the currently designated user.
       </description>
     </documentation>
     
@@ -222,7 +222,7 @@
   <command name="scq">
     <documentation>
       <description>
-        This command will silently clear the message queue.
+        silently clears the outgoing message queue.
       </description>
     </documentation>
 
@@ -244,7 +244,7 @@
   <command name="cq">
     <documentation>
       <description>
-        This command will clear the message queue.
+        clears the outgoing chat message queue.
       </description>
     </documentation>
 
@@ -266,7 +266,7 @@
   <command name="whoami" datasrc="external">
     <documentation>
       <description>
-        This command will state the requesting user's rank and/or flags.
+        states the requesting user's rank and flags.
       </description>
     </documentation>
     
@@ -290,7 +290,7 @@
 
     <documentation>
       <description>
-        This command will create or modify a specified database entry.
+        creates or modifies a specified database entry.
       </description>
     </documentation>
 
@@ -329,7 +329,7 @@
              </description>
            </documentation>
 
-           <match message="A+" />
+           <match message="[A]+" />
 
            <access>
              <rank>100</rank>
@@ -344,7 +344,7 @@
              </description>
            </documentation>
 
-           <match message="a+" />
+           <match message="[a]+" />
 
            <access>
              <rank>100</rank>
@@ -359,7 +359,7 @@
              </description>
             </documentation>
 
-            <match message="B+" />
+            <match message="[B]+" />
 
             <access>
               <rank>100</rank>
@@ -374,7 +374,7 @@
               </description>
             </documentation>
 
-            <match message="c+" />
+            <match message="[c]+" />
 
             <access>
               <rank>100</rank>
@@ -389,7 +389,7 @@
               </description>
             </documentation>
 
-            <match message="c+" />
+            <match message="[c]+" />
 
             <access>
               <rank>100</rank>
@@ -404,7 +404,7 @@
               </description>
             </documentation>
 
-            <match message="D+" />
+            <match message="[D]+" />
 
             <access>
               <rank>100</rank>
@@ -419,7 +419,7 @@
               </description>
             </documentation>
 
-            <match message="I+" />
+            <match message="[I]+" />
 
             <access>
               <rank>100</rank>
@@ -434,7 +434,7 @@
               </description>
             </documentation>
 
-            <match message="J+" />
+            <match message="[J]+" />
 
             <access>
               <rank>100</rank>
@@ -449,7 +449,7 @@
               </description>
             </documentation>
 
-            <match message="O+" />
+            <match message="[O]+" />
   
             <access>
               <rank>100</rank>
@@ -464,7 +464,7 @@
               </description>
             </documentation>
 
-            <match message="o+" />
+            <match message="[o]+" />
 
             <access>
               <rank>100</rank>
@@ -479,7 +479,7 @@
               </description>
             </documentation>
 
-            <match message="P+" />
+            <match message="[P]+" />
 
             <access>
               <rank>100</rank>
@@ -494,7 +494,7 @@
               </description>
             </documentation>
 
-            <match message="S+" />
+            <match message="[S]+" />
   
             <access>
               <rank>100</rank>
@@ -509,7 +509,7 @@
               </description>
             </documentation>
 
-            <match message="s+" />
+            <match message="[s]+" />
 
             <access>
               <rank>100</rank>
@@ -524,7 +524,7 @@
               </description>
             </documentation>
 
-            <match message="T+" />
+            <match message="[T]+" />
 
             <access>
               <rank>100</rank>
@@ -547,8 +547,7 @@
   <command name="server">
     <documentation>
       <description>
-        This command will state the server address that the bot is currently 
-        connected to.
+        states the address of the server that the bot is currently connected to.
       </description>
     </documentation>
     
@@ -564,7 +563,7 @@
 
     <documentation>
       <description>
-        This command will state the application's version information.
+        states the application's version information.
       </description>
     </documentation>
 
@@ -588,8 +587,7 @@
 
     <documentation>
       <description>
-        This command will state the requesting user's connection latency with
-        the Battle.net server.
+        states the requesting user's connection latency with the Battle.net server.
       </description>
     </documentation>
     
@@ -611,7 +609,7 @@
   <command name="trigger">
     <documentation>
       <description>
-        This command will state the current command identifier.
+        states the current string used for command identification.
       </description>
     </documentation>
 
@@ -633,7 +631,7 @@
   <command name="time">
     <documentation>
       <description>
-        This command will state the current system time.
+        states the current system time.
       </description>
     </documentation>
 
@@ -655,7 +653,7 @@
   <command name="vote">
     <documentation>
       <description>
-        This command will initiate a tally of "yes" and "no" responses.
+        initiates a tally of "yes" and "no" responses.
       </description>
     </documentation>
 
@@ -687,7 +685,7 @@
   <command name="voteban" token="operator">
     <documentation>
       <description>
-        This command will initiate a tally of "yes" and "no" responses, potentially resulting in the banning of a specified user from the channel.
+        initiates a tally of "yes" and "no" responses, potentially resulting in the banning of a specified user from the channel.
       </description>
     </documentation>
 
@@ -711,7 +709,7 @@
   <command name="votekick" token="operator">
     <documentation>
       <description>
-        This command will initiate a tally of "yes" and "no" responses, potentially resulting in the kicking of a specified user from the channel.
+        initiates a tally of "yes" and "no" responses, potentially resulting in the kicking of a specified user from the channel.
       </description>
     </documentation>
 
@@ -735,7 +733,7 @@
   <command name="tally">
     <documentation>
       <description>
-        This command will state the current statistics for the most recent vote.
+        states the results for the most recent or currently active vote.
       </description>
     </documentation>
     
@@ -757,7 +755,7 @@
   <command name="info">
     <documentation>
       <description>
-        This command will state basic information about a specified user currently in the channel.
+        states basic information about a specified user residing within the channel.
       </description>
     </documentation>
 
@@ -789,17 +787,20 @@
   <command name="expand" token="speech">
     <documentation>
       <description>
-        This command will echo a specified phrase, placing a space after each character.
+        echos a specified phrase, placing a space after each character.
       </description>
     </documentation>
 
     <arguments>
       <argument name="message">
-        <documentation>
-          <description>
-            ...
-          </description>
-        </documentation>
+        <restriction name="DISALLOW_COMMAND_USAGE">
+          <match message="^[/]" />
+
+          <access>
+             <rank>100</rank>
+             <flag>T</flag>
+          </access>
+        </restriction>
       </argument>
     </arguments>
 
@@ -814,7 +815,7 @@
 
     <documentation>
       <description>
-        This command will state the result of specified mathematical expression.
+        states the result of specified mathematical expression.
       </description>
     </documentation>
 
@@ -846,7 +847,7 @@
   <command name="where">
     <documentation>
       <description>
-        This command will state the bot's current channel.
+        states the channel that the bot is currently residing within.
       </description>
     </documentation>
 
@@ -868,7 +869,7 @@
   <command name="safecheck">
     <documentation>
       <description>
-        This command states the safelist status of a specified user or tag.
+        states the safelist status of a specified user or tag.
       </description>
     </documentation>
 
@@ -902,7 +903,7 @@
   <command name="cancel">
     <documentation>
       <description>
-        This command stops all votes that are currently in progress.
+        stops all votes that are currently in progress.
       </description>
     </documentation>
     
@@ -926,7 +927,7 @@
   <command name="owner">
     <documentation>
       <description>
-        This command states the bot's owner.
+        states the owner of the bot.
       </description>
     </documentation>
     
@@ -949,8 +950,7 @@
   <command name="mp3">
     <documentation>
       <description>
-        This command states the currently playing track from either Winamp or iTunes
-        on the local computer.
+        states the currently playing track from a compatibile media player running on the local computer.
       </description>
     </documentation>
 
@@ -963,13 +963,20 @@
   <command name="say">
     <documentation>
       <description>
-        This command will echo a specified phrase.
+        echos a specified phrase.
       </description>
     </documentation>
 
     <arguments>
       <argument name="message">
+        <restriction name="DISALLOW_COMMAND_USAGE">
+          <match message="^[/]" />
 
+          <access>
+             <rank>100</rank>
+             <flag>T</flag>
+          </access>
+        </restriction>
       </argument>
     </arguments>
 
@@ -982,13 +989,20 @@
   <command name="shout">
     <documentation>
       <description>
-        This command will echo a specified phrase using all capital letters.
+        echos a specified phrase using all capital letters.
       </description>
     </documentation>
 
     <arguments>
       <argument name="message">
+        <restriction name="DISALLOW_COMMAND_USAGE">
+          <match message="^[/]" />
 
+          <access>
+             <rank>100</rank>
+             <flag>T</flag>
+          </access>
+        </restriction>
       </argument>
     </arguments>
 
@@ -1079,7 +1093,7 @@
   <command name="quote">
     <documentation>
       <description>
-        This command will state a random quote from the quote database.
+        echos a random quote from the quote database.
       </description>
     </documentation>
 
@@ -1093,7 +1107,7 @@
   <command name="away">
     <documentation>
       <description>
-        This command will instruct the bot to set an away message using the specified phrase.
+        instructs the bot to set an away message using the specified phrase.
       </description>
     </documentation>
 
@@ -1116,7 +1130,7 @@
   <command name="back">
     <documentation>
       <description>
-        This command will instruct the bot to clear any currently set away message.
+        instructs the bot to clear any currently set away message.
       </description>
     </documentation>
 
@@ -1130,7 +1144,7 @@
   <command name="ping">
     <documentation>
       <description>
-        This command will state a specified user's latency with the Battle.net server, if the specified user is currently present within the channel.
+        states a specified user's latency with the Battle.net server if the user is present within the current channel.
       </description>
     </documentation>
 
@@ -1162,7 +1176,7 @@
   <command name="uptime">
     <documentation>
       <description>
-        This command states the current system and application elapased operational times.
+        states the current system and application operational times.
       </description>
     </documentation>
     
@@ -1184,7 +1198,7 @@
   <command name="frem">
     <documentation>
       <description>
-        This command will instruct the bot to remove a specified user from the bot's friends list.
+        instructs the bot to remove a specified user from the bot's friends list.
       </description>
     </documentation>
     
@@ -1197,7 +1211,7 @@
   <command name="bancount">
     <documentation>
       <description>
-        This command will state the current number of users that have been banned from the channel.
+        states the current number of users that have been banned from the channel.
       </description>
     </documentation>
     
@@ -1225,7 +1239,7 @@
   <command name="allseen">
     <documentation>
       <description>
-        This command will state the last 15 users the bot has seen.
+        states the last fifteen users that the bot has seen.
       </description>
     </documentation>
 
@@ -1249,7 +1263,7 @@
 
     <documentation>
       <description>
-        This command will state the minimum level permissible for WarCraft III users joining the channel.
+        states the minimum level permissible for WarCraft III users joining the channel.
       </description>
     </documentation>
     
@@ -1264,7 +1278,7 @@
 
     <documentation>
       <description>
-        This command will state the minimum level permissible for Diablo II users joining the channel.
+        states the minimum level permissible for Diablo II users joining the channel.
       </description>
     </documentation>
     
@@ -1329,7 +1343,7 @@
   <command name="tagcheck">
     <documentation>
       <description>
-        This command will state if a specified user matches a tagban.
+        states if a specified user matches a tagban.
       </description>
     </documentation>
     
@@ -1343,7 +1357,7 @@
   <command name="fadd">
     <documentation>
       <description>
-        This command will instruct the bot to add a specified user to the bot's friends list.
+        instructs the bot to add a specified user to the bot's friends list.
       </description>
     </documentation>
 
@@ -1356,7 +1370,7 @@
   <command name="kick" token="operator">
     <documentation>
       <description>
-        This command will temporarily remove a user from the channel.
+        temporarily removes a user from the channel.
       </description>
     </documentation>
 
@@ -1370,8 +1384,7 @@
   <command name="ban" token="operator">
     <documentation>
       <description>
-        The "ban" command will remove a user from the channel for the duration of the bot's
-        role as channel moderator.
+        removes a user from the channel for the duration of the bot's role as a channel moderator.
       </description>
     </documentation>
 
@@ -1395,7 +1408,7 @@
   <command name="unban" token="operator">
     <documentation>
       <description>
-        The "unban" command will unban a user from the channel.
+        unbans a user from the channel.
       </description>
     </documentation>
 
@@ -1411,7 +1424,7 @@
 
     <documentation>
       <description>
-        The "lastwhisper" command will state the name of the user whom last privately messaged the bot.
+        states the name of the user whom last privately messaged the bot.
       </description>
     </documentation>
 
@@ -1435,7 +1448,7 @@
 
     <documentation>
       <description>
-        The "phrases" command will state the currently active phrasebans.
+        states the currently active phrasebans.
       </description>
     </documentation>
     
@@ -1450,7 +1463,7 @@
 
     <documentation>
       <description>
-        The "addphrase" command will add the specified word or phrase to the phrasebans list.
+        adds the specified phrase to the phrasebans list.
       </description>
     </documentation>
 
@@ -1463,7 +1476,7 @@
   <command name="mmail">
     <documentation>
       <description>
-        The "mmail" command will store a message for all users matching the specified rank or flag.
+        stores a message for all users matching the specified rank or flag.
       </description>
     </documentation>
 
@@ -1485,7 +1498,7 @@
   <command name="setpmsg">
     <documentation>
       <description>
-        The "setpmsg" command will define a message for use during channel protection.
+        defines a message for use during channel protection.
       </description>
     </documentation>
 
@@ -1500,7 +1513,7 @@
 
     <documentation>
       <description>
-        The "delphrase" command will remove a word or phrase from the phrasebans list.
+        removes a phrase from the phrasebans list.
       </description>
     </documentation>
     
@@ -1513,7 +1526,7 @@
   <command name="pon">
     <documentation>
       <description>
-        The "pon" command will enable phrasebanning.
+        enables the use of phrasebanning.
       </description>
     </documentation>
 
@@ -1526,7 +1539,7 @@
   <command name="poff">
     <documentation>
       <description>
-        The "poff" command will disable phrasebanning.
+        disables the use of phrasebanning.
       </description>
     </documentation>
 
@@ -1539,7 +1552,7 @@
   <command name="pstatus">
     <documentation>
       <description>
-        The "pstatus" command will state the current status of phrasebanning.
+        states the current status of phrasebanning.
       </description>
     </documentation>
     
@@ -1553,7 +1566,7 @@
   <command name="ipban" token="operator">
     <documentation>
       <description>
-        The "ipban" command will instruct the bot to squelch and ban a specified user, and then ban all other users also matching the squelch.
+        instructs the bot to squelch and ban a specified user.
       </description>
     </documentation>
 
@@ -1583,7 +1596,7 @@
   <command name="banned">
     <documentation>
       <description>
-        The "banned" command will state all users that the bot has banned during the duration of its role as channel moderator.
+        states all users that the bot has banned during the duration of its role as channel moderator.
       </description>
     </documentation>
     
@@ -1597,7 +1610,7 @@
   <command name="notify">
     <documentation>
       <description>
-        The "notify" command will send the requesting user a private message when a specified user is discovered to be on-line.
+        sends the requesting user a private message when a specified user is discovered to be on-line.
       </description>
     </documentation>    
 
@@ -1609,7 +1622,7 @@
   <command name="denotify">
     <documentation>
       <description>
-        The "denotify" command will remove the requesting user's on-line notification for the specified user.
+        removes the requesting user's on-line notification for the specified user.
       </description>
     </documentation>    
 
@@ -1621,7 +1634,7 @@
   <command name="unmonitor">
     <documentation>
       <description>
-        The "unmonitor" command will remove a specified user from the bot's user monitor.
+        removes a specified user from the bot's user monitor.
       </description>
     </documentation>
 
@@ -1633,7 +1646,7 @@
   <command name="monitor">
     <documentation>
       <description>
-        The "monitor" command will add a specified user to the bot's user monitor.
+        adds a specified user to the bot's user monitor.
       </description>
     </documentation>    
     
@@ -1647,22 +1660,19 @@
 
     <documentation>
       <description>
-        The "shitlist" command will add a specified user, if given, to the shitlist.
-        If, however, there is no user specified, the entire shitlist is displayed.
+        states the users currently on the shitlist.
       </description>
     </documentation>    
     
     <access>
       <rank>70</rank>
-      <flag>A</flag>
-      <flag>a</flag>
     </access>
   </command>
 
   <command name="shitdel">
     <documentation>
       <description>
-        The "shitdel" command will remove a specified user from the shitlist.
+        removes a specified user from the shitlist.
       </description>
     </documentation>    
 
@@ -1678,7 +1688,7 @@
     
     <documentation>
       <description>
-        The "safeadd" command will safelist a specified user or group of users.
+        safelists a specified user or group of users.
       </description>
     </documentation>  
 
@@ -1692,7 +1702,7 @@
   <command name="safedel">
     <documentation>
       <description>
-        The "safedel" command will remove a safelist entry for a specifed user or group of users.
+        removes a safelist entry for a specifed user or group of users.
       </description>
     </documentation>    
 
@@ -1706,8 +1716,7 @@
   <command name="safelist">
     <documentation>
       <description>
-        The "safelist" command will add a specified user, if given, to the safelist.
-        If, however, there is no user specified, the entire safelist is displayed.
+        states the users currently on the safelist.
       </description>
     </documentation>    
     
@@ -1721,7 +1730,7 @@
   <command name="tagbans">
     <documentation>
       <description>
-        The "tagbans" command will state the current tagbans.
+        states the tags currently on the tagban list.
       </description>
     </documentation>    
 
@@ -1738,7 +1747,7 @@
 
     <documentation>
       <description>
-        The "tagadd" command will add a specified tag to the tagban list.
+        adds a specified tag to the tagban list.
       </description>
     </documentation>    
 
@@ -1752,7 +1761,7 @@
   <command name="tagdel">
     <documentation>
       <description>
-        The "tagdel" command will remove a specifed tag from the tagban list.
+        removes a specifed tag from the tagban list.
       </description>
     </documentation>    
 
@@ -1766,7 +1775,7 @@
   <command name="online">
     <documentation>
       <description>
-        The "online" command will state the user's that the bot's user monitor detects as on-line.
+        states the users that the user monitor currently detects on-line.
       </description>
     </documentation>
     
@@ -1778,7 +1787,7 @@
   <command name="check">
     <documentation>
       <description>
-        The "check" command will state if a specified user is on-line.
+        states if a specified user is on-line based off of the results from the user monitor.
       </description>
     </documentation>    
     
@@ -1792,7 +1801,7 @@
 
     <documentation>
       <description>
-        The "shitadd" command will add a specified user to the bot's shitlist.
+        adds a specified user to the shitlist.
       </description>
     </documentation>    
     
@@ -1806,7 +1815,7 @@
   <command name="protect">
     <documentation>
       <description>
-        The "protect" command will allow the requesting user to enable, disable, or check the status of, channel protection.
+        allows the requesting user to enable, disable, or check the status of, channel protection.
       </description>
     </documentation>
 
@@ -1819,7 +1828,7 @@
   <command name="greet">
     <documentation>
       <description>
-        The "greet" command will enable, disable, set, or change the settings of, a welcome message.
+        enables, disables, or changes the settings of, a welcome message.
       </description>
     </documentation>    
     
@@ -1832,7 +1841,7 @@
   <command name="profile">
     <documentation>
       <description>
-        The "profile" command will state the specified user's Battle.net user profile.
+        states the specified user's Battle.net user profile.
       </description>
     </documentation>    
     
@@ -1856,7 +1865,7 @@
 
     <documentation>
       <description>
-        The "whispercmds" command will enable the use of command responses via private messaging.
+        toggles the use of private messaging as a means for delivering command responses.
       </description>
     </documentation>
     
@@ -1869,8 +1878,7 @@
   <command name="filter">
     <documentation>
       <description>
-        The "filter" command will filter any incoming messages containing the specified
-        phrase.
+        The "filter" command will filter any incoming messages containing the specified phrase.
       </description>
     </documentation>
     

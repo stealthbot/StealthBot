@@ -33,12 +33,14 @@ Private m_num_bans        As Long
 Private m_num_kicks       As Long
 Private m_join_date       As Date
 Private m_users           As Collection
+Private m_banlist         As Collection
 Private m_chat_queue      As Collection
 
 Private Sub Class_Initialize()
     
     ' ...
     Set m_users = New Collection
+    Set m_banlist = New Collection
     
 End Sub
 
@@ -139,7 +141,7 @@ Public Property Get Self() As clsChannelUserObj
     Set Self = New clsChannelUserObj
     
     ' ...
-    For i = 1 To m_users.count
+    For i = 1 To m_users.Count
         ' ...
         If (StrComp(m_users(i).DisplayName, CurrentUsername, vbBinaryCompare) = 0) Then
             ' ...
@@ -157,7 +159,7 @@ Public Function GetUserIndexByName(ByVal Username As String) As Integer
     Dim i As Integer ' ...
 
     ' ...
-    For i = 1 To m_users.count
+    For i = 1 To m_users.Count
         ' ...
         If (StrComp(m_users(i).Name, Username, vbBinaryCompare) = 0) Then
             ' ...
@@ -175,7 +177,7 @@ Public Function GetUserIndexByDisplayName(ByVal Username As String) As Integer
     Dim i As Integer ' ...
 
     ' ...
-    For i = 1 To m_users.count
+    For i = 1 To m_users.Count
         ' ...
         If (StrComp(m_users(i).DisplayName, Username, vbBinaryCompare) = 0) Then
             ' ...
@@ -188,21 +190,69 @@ Public Function GetUserIndexByDisplayName(ByVal Username As String) As Integer
 
 End Function
 
-Public Property Get BanCount() As Integer
-
-    Dim i     As Integer ' ...
-    Dim count As Integer ' ...
+Public Property Get Banlist() As Collection
     
     ' ...
-    For i = 1 To m_users.count
-        ' ...
-        If (m_users(i).IsOperator) Then
-            ' ...
-            count = (count + m_users(i).Banlist.count)
-        End If
-    Next i
-    
-    ' ...
-    BanCount = count
+    Set Banlist = m_banlist
 
 End Property
+
+Public Function IsOnBanList(ByVal Username As String, Optional Operator As String = vbNullString) As Integer
+
+    ' ...
+    Dim i   As Integer ' ...
+    Dim bln As Boolean ' ...
+    
+    ' ...
+    For i = 1 To m_banlist.Count
+        ' ...
+        If (StrComp(m_banlist(i).Name, Username, vbTextCompare) = 0) Then
+            ' ...
+            If (Operator <> vbNullString) Then
+                ' ...
+                If (StrComp(m_banlist(i).Operator, Operator, vbTextCompare) = 0) Then
+                    bln = True
+                End If
+            Else
+                bln = True
+            End If
+        
+            ' ...
+            If (bln) Then
+                IsOnBanList = i
+                
+                Exit Function
+            End If
+        End If
+    Next i
+
+    IsOnBanList = 0
+End Function
+
+Public Sub RemoveBansFromOperator(ByVal Username As String)
+
+    Dim i   As Integer ' ...
+    Dim bln As Boolean ' ...
+
+    ' ...
+    Do
+        ' ...
+        bln = False
+    
+        ' ...
+        For i = 1 To m_banlist.Count
+            ' ...
+            If (StrComp(m_banlist(i).Operator, Username, vbTextCompare) = 0) Then
+                ' ...
+                m_banlist.Remove i
+                
+                ' ...
+                bln = True
+                
+                ' ...
+                Exit For
+            End If
+        Next i
+    Loop While (bln = True)
+
+End Sub

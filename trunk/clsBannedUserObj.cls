@@ -17,9 +17,11 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_name             As String
-Private m_banned_date      As Date
-Private m_ban_reason       As String
+Private m_name          As String
+Private m_banned_date   As Date
+Private m_ban_reason    As String
+Private m_operator      As String
+Private m_duplicate_ban As Boolean
 
 Public Property Get Name() As String
 
@@ -32,6 +34,20 @@ Public Property Let Name(str As String)
 
     ' ...
     m_name = str
+
+End Property
+
+Public Property Get Operator() As String
+
+    ' ...
+    Operator = m_operator
+
+End Property
+
+Public Property Let Operator(str As String)
+
+    ' ...
+    m_operator = str
 
 End Property
 
@@ -62,4 +78,19 @@ Public Property Let Reason(str As String)
     m_ban_reason = str
 
 End Property
+
+Public Property Let IsDuplicateBan(bln As Boolean)
+
+    ' ...
+    m_duplicate_ban = bln
+
+End Property
+
+Public Property Get IsDuplicateBan() As Boolean
+
+    ' ...
+    IsDuplicateBan = m_duplicate_ban
+
+End Property
+
 

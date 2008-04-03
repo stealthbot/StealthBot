@@ -243,6 +243,9 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     ' values when we join a new channel
     BotVars.JoinWatch = 0
     
+    ' ...
+    frmChat.tmrSilentChannel(0).Enabled = False
+    
     ' if our channel is for some reason null, we don't
     ' want to continue, possibly causing further errors
     If (Len(ChannelName) < 1) Then
@@ -745,7 +748,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             Dim user       As String  ' ...
             Dim cOperator  As String  ' ...
             Dim msgPos     As Integer ' ...
-            Dim Pos        As Integer ' ...
+            Dim pos        As Integer ' ...
             Dim tmp        As String
             Dim banpos     As Integer ' ...
             Dim j          As Integer
@@ -758,30 +761,37 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 ' ...
                 If (Len(user) > 0) Then
                     ' ...
-                    g_Channel.TotalBanCount = _
-                                (g_Channel.TotalBanCount + 1)
+                    g_Channel.TotalBanCount = (g_Channel.TotalBanCount + 1)
                 
                     ' ...
-                    Pos = g_Channel.GetUserIndexByName(CleanDiablo2Username(Username))
+                    pos = g_Channel.GetUserIndexByName(CleanDiablo2Username(Username))
                     
                     ' ...
-                    If (Pos > 0) Then
+                    If (pos > 0) Then
+                        ' ...
                         Dim BanlistObj As clsBannedUserObj
                         
                         ' ...
-                        If (g_Channel.Users(Pos).IsOnBanList(user) = False) Then
-                            ' ...
-                            Set BanlistObj = New clsBannedUserObj
-                            
-                            ' ...
-                            With BanlistObj
-                                .Name = user
-                                .DateOfBan = Now
-                            End With
-                            
-                            ' ...
-                            Call g_Channel.Users(Pos).Banlist.Add(BanlistObj)
+                        Set BanlistObj = New clsBannedUserObj
+                        
+                        ' ...
+                        banpos = g_Channel.IsOnBanList(user, CleanDiablo2Username(Username))
+                        
+                        ' ...
+                        If (banpos > 0) Then
+                            g_Channel.Banlist.Remove banpos
                         End If
+                        
+                        ' ...
+                        With BanlistObj
+                            .Name = user
+                            .Operator = CleanDiablo2Username(Username)
+                            .DateOfBan = Now
+                            .IsDuplicateBan = (g_Channel.IsOnBanList(user) > 0)
+                        End With
+                        
+                        ' ...
+                        g_Channel.Banlist.Add BanlistObj
                     End If
                 End If
                 
@@ -795,18 +805,29 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 ' ...
                 If (Len(user) > 0) Then
                     ' ...
-                    For i = 1 To g_Channel.Users.Count
+                    Do
                         ' ...
-                        If (g_Channel.Users(i).IsOperator) Then
-                            ' ...
-                            banpos = g_Channel.Users(i).IsOnBanList(user)
-                            
-                            ' ...
-                            If (banpos > 0) Then
-                                Call g_Channel.Users(i).Banlist.Remove(banpos)
-                            End If
+                        banpos = g_Channel.IsOnBanList(user)
+                    
+                        ' ...
+                        If (banpos > 0) Then
+                            g_Channel.Banlist.Remove banpos
                         End If
-                    Next i
+                    Loop While (banpos <> 0)
+                
+                    ' ...
+                    'For i = 1 To g_Channel.Users.Count
+                    '    ' ...
+                    '    If (g_Channel.Users(i).IsOperator) Then
+                    '        ' ...
+                    '        banpos = g_Channel.Users(i).IsOnBanList(user)
+                    '
+                    '        ' ...
+                    '        If (banpos > 0) Then
+                    '            Call g_Channel.Users(i).Banlist.Remove(banpos)
+                    '        End If
+                    '    End If
+                    'Next i
                 End If
             End If
     
@@ -1659,7 +1680,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim Pos       As Integer
+    Dim pos       As Integer
     Dim bln       As Boolean
     
     ' ...
@@ -1668,6 +1689,12 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     
     ' ...
     If (UserIndex > 0) Then
+        ' ...
+        If (g_Channel.Users(UserIndex).IsOperator) Then
+            ' ...
+            g_Channel.RemoveBansFromOperator Username
+        End If
+        
         ' ...
         g_Channel.Users.Remove UserIndex
     Else
@@ -2309,17 +2336,17 @@ End Sub
 Private Function CleanDiablo2Username(ByVal Username As String) As String
     
     Dim tmp As String  ' ...
-    Dim Pos As Integer ' ...
+    Dim pos As Integer ' ...
     
     ' ...
     tmp = Username
     
     ' ...
-    Pos = InStr(1, tmp, "*", vbBinaryCompare)
+    pos = InStr(1, tmp, "*", vbBinaryCompare)
 
     ' ...
-    If (Pos > 0) Then
-        tmp = Mid$(Username, Pos + 1)
+    If (pos > 0) Then
+        tmp = Mid$(Username, pos + 1)
         
         ' ...
         If (Right$(tmp, 1) = ")") Then
@@ -2335,14 +2362,14 @@ End Function
 Private Function GetDiablo2CharacterName(ByVal Username As String) As String
 
     Dim tmp As String  ' ...
-    Dim Pos As Integer ' ...
+    Dim pos As Integer ' ...
     
     ' ...
-    Pos = InStr(1, Username, "*", vbBinaryCompare)
+    pos = InStr(1, Username, "*", vbBinaryCompare)
 
     ' ...
-    If (Pos > 0) Then
-        tmp = Mid$(Username, 1, Pos - 1)
+    If (pos > 0) Then
+        tmp = Mid$(Username, 1, pos - 1)
     End If
     
     ' ...

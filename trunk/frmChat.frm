@@ -51,16 +51,16 @@ Begin VB.Form frmChat
       OLEDragMode     =   1
       NumItems        =   3
       BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         Object.Width           =   4154
+         Object.Width           =   4180
       EndProperty
       BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
          SubItemIndex    =   1
-         Object.Width           =   1191
+         Object.Width           =   1217
       EndProperty
       BeginProperty ColumnHeader(3) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
          Alignment       =   1
          SubItemIndex    =   2
-         Object.Width           =   617
+         Object.Width           =   582
       EndProperty
    End
    Begin VB.Timer tmrSilentChannel 
@@ -5071,43 +5071,57 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
     Dim j       As Integer ' ...
     Dim found   As Boolean ' ...
     Dim WasZero As Boolean ' ...
+    
+    ' ...
+    If (g_Channel.IsSilent = False) Then
+        Exit Sub
+    End If
 
     ' ...
     If (index = 0) Then
         ' ...
         If (frmChat.mnuDisableVoidView.Checked = False) Then
             ' ...
-            If (lvChannel.ListItems.Count = 0) Then
+            If (g_Channel.Users.Count = 0) Then
                 ' ...
-                WasZero = True
+                If (lvChannel.ListItems.Count > 0) Then
+                    lvChannel.ListItems.Clear
+                End If
+            
+                Exit Sub
             End If
         
             ' ...
-            Do
+            If (lvChannel.ListItems.Count > 0) Then
                 ' ...
-                found = False
-            
-                ' ...
-                For i = 1 To lvChannel.ListItems.Count
+                Do
                     ' ...
-                    Set Item = lvChannel.ListItems(i)
+                    found = False
                 
                     ' ...
-                    If (g_Channel.GetUserIndexByDisplayName(Item.text) = 0) Then
+                    For i = 1 To lvChannel.ListItems.Count
                         ' ...
-                        lvChannel.ListItems.Remove i
+                        Set Item = lvChannel.ListItems(i)
                     
                         ' ...
-                        found = True
+                        If (g_Channel.GetUserIndexByDisplayName(Item.text) = 0) Then
+                            ' ...
+                            lvChannel.ListItems.Remove i
                         
-                        ' ...
-                        Exit For
-                    End If
-                Next i
-                
-                ' ...
-                DoEvents
-            Loop While (found = True)
+                            ' ...
+                            found = True
+                            
+                            ' ...
+                            Exit For
+                        End If
+                    Next i
+                    
+                    ' ...
+                    DoEvents
+                Loop While (found = True)
+            Else
+                WasZero = True
+            End If
             
             ' ...
             For i = 1 To g_Channel.Users.Count
@@ -5133,7 +5147,7 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
             ' ...
             lvChannel.Refresh
             
-            ' update channel label with current channel name and user count
+            ' ...
             lblCurrentChannel.Caption = GetChannelString()
         End If
     
@@ -5143,16 +5157,13 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
         ' ...
         If (mnuDisableVoidView.Checked = False) Then
             ' ...
-            If (g_Channel.IsSilent) Then
-                ' ...
-                Set colUsersInChannel = New Collection
-                
-                ' ...
-                Call g_Channel.ClearUsers
-                
-                ' ...
-                Call AddQ("/unsquelch " & CurrentUsername)
-            End If
+            Set colUsersInChannel = New Collection
+            
+            ' ...
+            Call g_Channel.ClearUsers
+            
+            ' ...
+            Call AddQ("/unsquelch " & CurrentUsername)
         End If
     End If
 End Sub
@@ -7377,6 +7388,9 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         Call ClearChannel
         lvClanList.ListItems.Clear
         lvFriendList.ListItems.Clear
+        
+        ' ...
+        tmrSilentChannel(0).Enabled = False
         
         Call g_Queue.Clear
     
