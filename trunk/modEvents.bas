@@ -748,7 +748,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             Dim user       As String  ' ...
             Dim cOperator  As String  ' ...
             Dim msgPos     As Integer ' ...
-            Dim pos        As Integer ' ...
+            Dim Pos        As Integer ' ...
             Dim tmp        As String
             Dim banpos     As Integer ' ...
             Dim j          As Integer
@@ -764,10 +764,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                     g_Channel.TotalBanCount = (g_Channel.TotalBanCount + 1)
                 
                     ' ...
-                    pos = g_Channel.GetUserIndexByName(CleanDiablo2Username(Username))
+                    Pos = g_Channel.GetUserIndexByName(CleanDiablo2Username(Username))
                     
                     ' ...
-                    If (pos > 0) Then
+                    If (Pos > 0) Then
                         ' ...
                         Dim BanlistObj As clsBannedUserObj
                         
@@ -789,6 +789,14 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                             .DateOfBan = Now
                             .IsDuplicateBan = (g_Channel.IsOnBanList(user) > 0)
                         End With
+                        
+                        ' ...
+                        If (BanlistObj.IsDuplicateBan) Then
+                            ' ...
+                            With g_Channel.Banlist(g_Channel.IsOnBanList(user))
+                                .IsDuplicateBan = False
+                            End With
+                        End If
                         
                         ' ...
                         g_Channel.Banlist.Add BanlistObj
@@ -1680,7 +1688,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim pos       As Integer
+    Dim Pos       As Integer
     Dim bln       As Boolean
     
     ' ...
@@ -2336,17 +2344,17 @@ End Sub
 Private Function CleanDiablo2Username(ByVal Username As String) As String
     
     Dim tmp As String  ' ...
-    Dim pos As Integer ' ...
+    Dim Pos As Integer ' ...
     
     ' ...
     tmp = Username
     
     ' ...
-    pos = InStr(1, tmp, "*", vbBinaryCompare)
+    Pos = InStr(1, tmp, "*", vbBinaryCompare)
 
     ' ...
-    If (pos > 0) Then
-        tmp = Mid$(Username, pos + 1)
+    If (Pos > 0) Then
+        tmp = Mid$(Username, Pos + 1)
         
         ' ...
         If (Right$(tmp, 1) = ")") Then
@@ -2362,14 +2370,14 @@ End Function
 Private Function GetDiablo2CharacterName(ByVal Username As String) As String
 
     Dim tmp As String  ' ...
-    Dim pos As Integer ' ...
+    Dim Pos As Integer ' ...
     
     ' ...
-    pos = InStr(1, Username, "*", vbBinaryCompare)
+    Pos = InStr(1, Username, "*", vbBinaryCompare)
 
     ' ...
-    If (pos > 0) Then
-        tmp = Mid$(Username, 1, pos - 1)
+    If (Pos > 0) Then
+        tmp = Mid$(Username, 1, Pos - 1)
     End If
     
     ' ...
