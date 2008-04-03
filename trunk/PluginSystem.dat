@@ -157,7 +157,6 @@ Set psEvents = CreateObject("Scripting.Dictionary")        '// holds event names
 
 
 Sub psLoadPlugins()
-   On Error Resume Next
 
    If Not psLatestSB() Then Exit Sub
    BotVars.NoSupportMultiCharTrigger = False
@@ -189,16 +188,16 @@ Sub psLoadPlugins()
             If Left(arrPlugin(0), 1) = "'" And Instr(curPrefix, " ") = 0 And UBound(arrPlugin) > 1 Then
 
                '// Check prefix and version validity
-               pcErr = psPrefixCheck(curPrefix)
-               If Len(pcErr) > 0 Then
-                  AddChat vbRed, "Did not load plugin in file """ & psFSO.GetFileName(File) & """. " & pcErr & "."
+               strPCErr = psPrefixCheck(curPrefix)
+               If Len(strPCErr) > 0 Then
+                  AddChat vbRed, "Did not load plugin in file """ & psFSO.GetFileName(File) & """. " & strPCErr & "."
                ElseIf psGetNumericVersion(curVersion) < 0 Then
                   AddChat vbRed, "Did not load plugin in file """ & psFSO.GetFileName(File) & ". Its version """ & curVersion & """ is invalid."
                Else      
 
                   '// Everything checks out, load this plugin!
                   psLoadPlugin curPrefix, curVersion, File, strPlugin, arrPlugin
-                  If psPluginEnabled(curPrefix) Then enCount = enCount + 1
+                  If psPluginEnabled(curPrefix) Then intEnabled = intEnabled + 1
                End If
                
             Else
@@ -210,7 +209,7 @@ Sub psLoadPlugins()
       End If
    Next
  
-   AddChat psColor1, "Loaded " & psPlugins.Count & " plugins (" & CInt(enCount) & " enabled). Type ", psColor2, "/plug" & _
+   AddChat psColor1, "Loaded " & psPlugins.Count & " plugins (" & CInt(intEnabled) & " enabled). Type ", psColor2, "/plug" & _
                      "ins", psColor1, " to view them. Type ", psColor2, "/phelp", psColor1, " for help using them."
    AddChat psColor1, "Type ", psColor2, "/updates", psColor1, " in the bot to view updates and new plugins that are available for download."
 
@@ -223,7 +222,7 @@ Sub psLoadPlugins()
 End Sub
 
  
-Sub psLoadPlugin(Prefix, Version, Path, Content, Lines)
+Sub psLoadPlugin(Prefix, Version, Path, Content, ByVal Lines)
 
    '// Get the names of all events that exist in this plugin
    psArgsAdded = False
@@ -533,8 +532,8 @@ Sub ps_updates_cmd(cmd, Username, DisplayID)
       End If
  
       If Lines(i) <> vbNullString Then
-         strUpdates = strUpdates & dispColor & "%4 [ " & curLine(0) & " ]%4 Plugin Version: " & curLine(2) & _
-                      "%4 " & "Description: " & curLine(3) & "%4 " & "Prefix: " & curPrefix & "%4"
+         strUpdates = strUpdates & dispColor & "%4 [ " & curLine(0) & " ]%4 Author: " & curLine(4) & vbTab & " Version: " & _
+                      curLine(2) & "%4 " & "Description: " & curLine(3) & "%4 " & "Prefix: " & curPrefix & "%4"
       End If
    Next
    If DisplayID < 4 Then
@@ -1246,7 +1245,7 @@ Sub PluginMenus_NVN_Callback(Prefix)
 End Sub
 
 
-'// "Plugin Title" > "Backup On Updates"
+'// "Plugin Title" > "Backup"
 Sub PluginMenus_Backup_Callback(Prefix)
 
    If GetSetting(Prefix, "backup") Then boolEnabled = False Else boolEnabled = True End If
@@ -1254,15 +1253,15 @@ Sub PluginMenus_Backup_Callback(Prefix)
 
    If Prefix = "ps" Then
      If boolEnabled Then
-     	AddChat vbGreen, "Backup On Updates has been globally enabled."
+     	AddChat vbGreen, "Backups have been globally enabled."
      Else
-        Addchat vbRed, "Backup On Updates is no longer globally enabled."
+        Addchat vbRed, "Backups are no longer globally enabled."
      End If
    Else
      If boolEnabled Then arrOnOff = psOnOff("on") Else arrOnOff = psOnOff("off") End If
-     AddChat arrOnOff(2), "Backup On Updates has been " & arrOnOff(1) & " for your " & Prefix & " plugin."
+     AddChat arrOnOff(2), "Backups (upon updates and deletions) " & arrOnOff(1) & " for your " & Prefix & " plugin."
    End If
-   SetMenuItemCheck Prefix, "Backup On Updates", boolEnabled
+   SetMenuItemCheck Prefix, "Backup", boolEnabled
 End Sub
 
 
