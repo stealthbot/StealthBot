@@ -345,8 +345,8 @@ Public Sub RegisterPluginMenus()
     dictItemIDs("ps|||New Version Notification") = AddScriptMenuItem(dictMenuIDs("ps"), "Disable New Version Notification", _
             "ps_GNVN_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "nvn")))
 
-    'dictItemIDs("ps|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs("ps"), "Globally Enable Plugin Backups", _
-            '"ps_GBackups_Callback", 0, 0, CBool(SharedScriptSupport.GetSetting("ps", "backup")))
+    dictItemIDs("ps|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs("ps"), "Disable Backup On Updates", _
+            "ps_GBackups_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "backupUpdates")))
 
     AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
     AddScriptMenuItem dictMenuIDs("ps"), "Check for Updates", "ps_UpdateCheck_Callback", 0, 0
