@@ -56,10 +56,10 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Set Command = IsCommand(Message, IsLocal)
 
     ' ...
-    Do While (Command.Name <> vbNullString)
+    Do While (Command.name <> vbNullString)
         ' ...
         If ((Command.IsLocal) Or _
-                (HasAccess(Username, Command.Name, Command.Args))) Then
+                (HasAccess(Username, Command.name, Command.Args))) Then
         
             ' ...
             If (IsLocal) Then
@@ -71,7 +71,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             End If
             
             ' ...
-            Call ExecuteCommand(Username, dbAccess, Command.Name & Space$(1) & Command.Args, _
+            Call ExecuteCommand(Username, dbAccess, Command.name & Space$(1) & Command.Args, _
                     IsLocal, command_return)
             
             ' ...
@@ -902,7 +902,7 @@ Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAcces
     End If
 
     ' ...
-    tmpBuf = "I am currently in channel " & g_Channel.Name & " (" & _
+    tmpBuf = "I am currently in channel " & g_Channel.name & " (" & _
         colUsersInChannel.Count & " users present)"
     
     ' return message
@@ -1242,7 +1242,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
     If (checkChannel(msgData)) Then
         Dim i          As Integer ' ...
         Dim arrUsers() As String  ' ...
-        Dim UserCount  As Integer ' ...
+        Dim userCount  As Integer ' ...
         Dim opsCount   As Integer ' ...
     
         ' ...
@@ -1267,7 +1267,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Next i
     
         ' ...
-        If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+        If (StrComp(g_Channel.name, "Clan " & Clan.name, vbTextCompare) = 0) Then
             ' ...
             ReDim Preserve arrUsers(0)
             
@@ -1284,21 +1284,21 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                             ' ...
                             If (UsernameToIndex(convertUsername(frmChat.lvClanList.ListItems(i).text)) > 0) Then
                                 ' ...
-                                arrUsers(UserCount) = _
+                                arrUsers(userCount) = _
                                     frmChat.lvClanList.ListItems(i).text
             
                                 ' ...
-                                UserCount = (UserCount + 1)
+                                userCount = (userCount + 1)
             
                                 ' ...
-                                ReDim Preserve arrUsers(0 To UserCount)
+                                ReDim Preserve arrUsers(0 To userCount)
                             End If
                         End If
                     End If
                 Next i
                 
                 ' ...
-                If (opsCount > UserCount) Then
+                If (opsCount > userCount) Then
                     ' ...
                     cmdRet(0) = "Error: There is currently a channel moderator present that cannot be " & _
                             "removed from his or her position."
@@ -1307,9 +1307,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 End If
                 
                 ' ...
-                If (UserCount) Then
+                If (userCount) Then
                     ' demote shamans
-                    For i = 0 To UserCount
+                    For i = 0 To userCount
                         ' ...
                         With PBuffer
                             .InsertDWord &H1
@@ -1326,7 +1326,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
         
         ' ...
-        If (StrComp(Left$(g_Channel.Name, 3), "Op ", vbTextCompare) = 0) Then
+        If (StrComp(Left$(g_Channel.name, 3), "Op ", vbTextCompare) = 0) Then
             ' ...
             If (opsCount >= 2) Then
                 ' ...
@@ -1336,9 +1336,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 ' ...
                 Exit Function
             End If
-        ElseIf (StrComp(Left$(g_Channel.Name, 5), "Clan ", vbTextCompare) = 0) Then
+        ElseIf (StrComp(Left$(g_Channel.name, 5), "Clan ", vbTextCompare) = 0) Then
             ' ...
-            If ((StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) <> 0) Or _
+            If ((StrComp(g_Channel.name, "Clan " & Clan.name, vbTextCompare) <> 0) Or _
                     (Clan.MyRank <= 2)) Then
                 
                 ' ...
@@ -1368,9 +1368,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Call bnetSend("/resign")
         
         ' ...
-        If (UserCount) Then
+        If (userCount) Then
             ' promote shamans again
-            For i = 0 To (UserCount - 1)
+            For i = 0 To (userCount - 1)
                 ' ...
                 With PBuffer
                     .InsertDWord &H3
@@ -1633,8 +1633,8 @@ Private Function OnClearBanList(ByVal Username As String, ByRef dbAccess As udtG
     
     Dim tmpBuf As String ' temporary output buffer
 
-    ' redefine array size
-    ReDim gBans(0)
+    ' ...
+    g_Channel.clearbanlist
     
     tmpBuf = "Banned user list cleared."
     
@@ -1682,7 +1682,7 @@ Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Username)
     
     ' rejoin previous channel
-    Call AddQ("/join " & g_Channel.Name, PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
+    Call AddQ("/join " & g_Channel.name, PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
 End Function ' end function OnRejoin
 
 ' handle quickrejoin command
@@ -1691,7 +1691,7 @@ Private Function OnQuickRejoin(ByVal Username As String, ByRef dbAccess As udtGe
     ' This command will make the bot rejoin the current channel.
     
     ' ...
-    Call RejoinChannel(g_Channel.Name)
+    Call RejoinChannel(g_Channel.name)
 End Function ' end function OnRejoin
 
 ' handle forcejoin command
@@ -1887,7 +1887,7 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Dim BanCount  As Integer
     Dim i         As Integer
     Dim j         As Integer ' ...
-    Dim UserCount As Integer ' ...
+    Dim userCount As Integer ' ...
     
     ' redefine array size
     ReDim Preserve tmpBuf(0)
@@ -1912,22 +1912,22 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
             ' ...
             For j = 1 To g_Channel.Banlist.Count
                 ' ...
-                If (StrComp(g_Channel.Banlist(j).Name, g_Channel.Banlist(i).Name, _
+                If (StrComp(g_Channel.Banlist(j).name, g_Channel.Banlist(i).name, _
                         vbTextCompare) = 0) Then
                 
                     ' ...
-                    UserCount = (UserCount + 1)
+                    userCount = (userCount + 1)
                 End If
             Next j
             
             ' ...
             tmpBuf(tmpCount) = _
-                    tmpBuf(tmpCount) & ", " & g_Channel.Banlist(i).Name
+                    tmpBuf(tmpCount) & ", " & g_Channel.Banlist(i).name
                     
             ' ...
-            If (UserCount > 1) Then
+            If (userCount > 1) Then
                 tmpBuf(tmpCount) = _
-                        tmpBuf(tmpCount) & " (" & UserCount & ") "
+                        tmpBuf(tmpCount) & " (" & userCount & ") "
             End If
                     
             ' ...
@@ -1949,7 +1949,7 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
         
         ' ...
-        UserCount = 0
+        userCount = 0
     Next i
     
     'For i = LBound(gBans) To UBound(gBans)
@@ -2524,7 +2524,7 @@ Private Function OnReconnect(ByVal Username As String, ByRef dbAccess As udtGetA
     If (g_Online) Then
         tmp = BotVars.HomeChannel
     
-        BotVars.HomeChannel = g_Channel.Name
+        BotVars.HomeChannel = g_Channel.name
         
         Call frmChat.DoDisconnect
         
@@ -5813,12 +5813,12 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Set CommandDocs = OpenCommand(FindCommand)
     
     ' ...
-    If (CommandDocs.Name = vbNullString) Then
+    If (CommandDocs.name = vbNullString) Then
         ' ...
         Set CommandDocs = OpenCommand(convertAlias(FindCommand))
     
         ' ...
-        If (CommandDocs.Name = vbNullString) Then
+        If (CommandDocs.name = vbNullString) Then
             ' ...
             cmdRet(0) = "Sorry, but no related documentation could be found."
         
@@ -5827,7 +5827,7 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
         End If
     End If
     
-    tmpBuf(0) = "[" & CommandDocs.Name
+    tmpBuf(0) = "[" & CommandDocs.name
     
     If (CommandDocs.Aliases.Count) Then
         tmpBuf(0) = tmpBuf(0) & " (aliases: "
@@ -5847,14 +5847,14 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
     tmpBuf(0) = tmpBuf(0) & ")]: " & CommandDocs.description
     
     ' ...
-    tmpBuf(0) = tmpBuf(0) & Space$(1) & "(Syntax: " & "<trigger>" & CommandDocs.Name
+    tmpBuf(0) = tmpBuf(0) & Space$(1) & "(Syntax: " & "<trigger>" & CommandDocs.name
             
     If (CommandDocs.params.Count) Then
         For i = 1 To CommandDocs.params.Count
             If (CommandDocs.params(i).IsOptional) Then
-                tmpBuf(0) = tmpBuf(0) & " [" & CommandDocs.params(i).Name & "]"
+                tmpBuf(0) = tmpBuf(0) & " [" & CommandDocs.params(i).name & "]"
             Else
-                tmpBuf(0) = tmpBuf(0) & " <" & CommandDocs.params(i).Name & ">"
+                tmpBuf(0) = tmpBuf(0) & " <" & CommandDocs.params(i).name & ">"
             End If
         Next i
     End If
@@ -6804,7 +6804,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
     Set Command = OpenCommand(CommandName, "internal")
 
     ' ...
-    If (Command.Name = vbNullString) Then
+    If (Command.name = vbNullString) Then
         Exit Function
     End If
     
@@ -6935,7 +6935,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     Set Command = OpenCommand(CommandName, "internal")
 
     ' ...
-    If (Command.Name = vbNullString) Then
+    If (Command.name = vbNullString) Then
         Exit Function
     End If
     
@@ -7002,8 +7002,8 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
                             If ((user.Rank >= restriction.RequiredRank) = False) Then
                                 If (user.HasAnyFlag(restriction.RequiredFlags) = False) Then
                                     AddQ "Error: You do not have sufficient access to perform the specified " & _
-                                        "action. [" & BotVars.TriggerLong & "help " & Command.Name & _
-                                            " --restriction " & restriction.Name & " for further information]"
+                                        "action. [" & BotVars.TriggerLong & "help " & Command.name & _
+                                            " --restriction " & restriction.name & " for further information]"
                                     
                                     HasAccess = False
                                     

@@ -54,7 +54,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     
     ' ...
     With UserObj
-        .Name = Username
+        .name = Username
         .DisplayName = convertUsername(Username)
         .Flags = Flags
         .Ping = Ping
@@ -230,7 +230,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     ' ...
     With g_Channel
-        .Name = ChannelName
+        .name = ChannelName
         .Flags = Flags
         .JoinDate = Now
     End With
@@ -259,13 +259,13 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     SharedScriptSupport.MyChannel = ChannelName
     
-    If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+    If (StrComp(g_Channel.name, "Clan " & Clan.name, vbTextCompare) = 0) Then
         PassedClanMotdCheck = False
     End If
 
     ' if we've just left another channel, call event script
     ' function indicating that we've done so.
-    If (LenB(g_Channel.Name)) Then
+    If (LenB(g_Channel.name)) Then
         On Error Resume Next
         
         frmChat.SControl.Run "Event_ChannelLeave"
@@ -279,7 +279,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         RTBColors.JoinedChannelName, ChannelName, RTBColors.JoinedChannelText, " --"
     
     SetTitle CurrentUsername & ", online in channel " & _
-        g_Channel.Name
+        g_Channel.name
     
     ' have we just joined the void?
     If (g_Channel.IsSilent) Then
@@ -663,7 +663,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     End If
     
     ' ...
-    If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+    If (StrComp(g_Channel.name, "Clan " & Clan.name, vbTextCompare) = 0) Then
         ' ...
         If (PassedClanMotdCheck = False) Then
             ' ...
@@ -748,7 +748,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             Dim user       As String  ' ...
             Dim cOperator  As String  ' ...
             Dim msgPos     As Integer ' ...
-            Dim Pos        As Integer ' ...
+            Dim pos        As Integer ' ...
             Dim tmp        As String
             Dim banpos     As Integer ' ...
             Dim j          As Integer
@@ -764,10 +764,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                     g_Channel.TotalBanCount = (g_Channel.TotalBanCount + 1)
                 
                     ' ...
-                    Pos = g_Channel.GetUserIndexByName(CleanDiablo2Username(Username))
+                    pos = g_Channel.GetUserIndexByName(CleanDiablo2Username(Username))
                     
                     ' ...
-                    If (Pos > 0) Then
+                    If (pos > 0) Then
                         ' ...
                         Dim BanlistObj As clsBannedUserObj
                         
@@ -784,7 +784,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                         
                         ' ...
                         With BanlistObj
-                            .Name = user
+                            .name = user
                             .Operator = CleanDiablo2Username(Username)
                             .DateOfBan = Now
                             .IsDuplicateBan = (g_Channel.IsOnBanList(user) > 0)
@@ -841,15 +841,15 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     
             '// backup channel
             If (InStr(Len(Temp), Message, "kicked you out", vbTextCompare) > 0) Then
-                If ((StrComp(g_Channel.Name, "Op [vL]", vbTextCompare) <> 0) And _
-                    (StrComp(g_Channel.Name, "Op Fatal-Error", vbTextCompare) <> 0)) Then
+                If ((StrComp(g_Channel.name, "Op [vL]", vbTextCompare) <> 0) And _
+                    (StrComp(g_Channel.name, "Op Fatal-Error", vbTextCompare) <> 0)) Then
                         
                     If (BotVars.UseBackupChan) Then
                         If (Len(BotVars.BackupChan) > 1) Then
                             frmChat.AddQ "/join " & BotVars.BackupChan
                         End If
                     Else
-                        frmChat.AddQ "/join " & g_Channel.Name
+                        frmChat.AddQ "/join " & g_Channel.name
                     End If
                 End If
             End If
@@ -1061,7 +1061,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     ' ...
     With UserObj
         ' ...
-        .Name = CleanDiablo2Username(Username)
+        .name = CleanDiablo2Username(Username)
         .DisplayName = convertUsername(Username)
         .Flags = Flags
         .Ping = Ping
@@ -1291,7 +1291,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         
         ' ...
         With UserObj
-            .Name = CleanDiablo2Username(Username)
+            .name = CleanDiablo2Username(Username)
             .DisplayName = convertUsername(Username)
             .Flags = Flags
             .Ping = Ping
@@ -1433,8 +1433,8 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 vbBinaryCompare) > 0) Then
                 
                 If (gChannel.Designated = vbNullString) Then
-                    If Mid$(LCase$(g_Channel.Name), 1, 3) = "op " Then
-                        If (StrComp(Mid$(g_Channel.Name, 4), StripRealm(Username), _
+                    If Mid$(LCase$(g_Channel.name), 1, 3) = "op " Then
+                        If (StrComp(Mid$(g_Channel.name, 4), StripRealm(Username), _
                             vbTextCompare)) <> 0 Then
                             
                             frmChat.AddQ "/designate " & Username
@@ -1535,24 +1535,19 @@ NoLevel:
                 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
                 ' Are they evading a ban?
                 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                If (InStr(1, Username, "#", vbBinaryCompare) <> 0) Then
-                    toCheck = LCase(Left$(Username, InStr(1, _
-                        Username, "#", vbTextCompare) - 1))
-                Else
-                    toCheck = LCase$(Username)
-                End If
-                
-                toCheck = StripRealm(toCheck)
+                'If (InStr(1, Username, "#", vbBinaryCompare) <> 0) Then
+                '    toCheck = LCase(Left$(Username, InStr(1, _
+                '        Username, "#", vbTextCompare) - 1))
+                'Else
+                '    toCheck = LCase$(Username)
+                'End If
+            
+                'toCheck = StripRealm(toCheck)
                 
                 If (BotVars.BanEvasion) Then
-                    For i = 0 To UBound(gBans)
-                        If (StrComp(toCheck, gBans(i).Username, vbTextCompare) = 0) Then
-                            Ban Username & " Ban Evasion", _
-                                (AutoModSafelistValue - 1)
-                            
-                            GoTo theEnd
-                        End If
-                    Next i
+                    If (g_Channel.IsOnBanList(reverseUsername(Username))) Then
+                        Ban Username & " Ban Evasion", (AutoModSafelistValue - 1)
+                    End If
                 End If
                 
                 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1599,7 +1594,7 @@ checkIPBan:
     
     If (BotVars.UseGreet) Then
         If (LenB(BotVars.GreetMsg) > 0) Then
-            If (StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) <> 0) Then
+            If (StrComp(g_Channel.name, "Clan SBs", vbTextCompare) <> 0) Then
                 
                 If (QueueLoad = 0) Then
                     QueueLoad = (QueueLoad + 1)
@@ -1698,7 +1693,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim Pos       As Integer
+    Dim pos       As Integer
     Dim bln       As Boolean
     
     ' ...
@@ -2354,17 +2349,17 @@ End Sub
 Private Function CleanDiablo2Username(ByVal Username As String) As String
     
     Dim tmp As String  ' ...
-    Dim Pos As Integer ' ...
+    Dim pos As Integer ' ...
     
     ' ...
     tmp = Username
     
     ' ...
-    Pos = InStr(1, tmp, "*", vbBinaryCompare)
+    pos = InStr(1, tmp, "*", vbBinaryCompare)
 
     ' ...
-    If (Pos > 0) Then
-        tmp = Mid$(Username, Pos + 1)
+    If (pos > 0) Then
+        tmp = Mid$(Username, pos + 1)
         
         ' ...
         If (Right$(tmp, 1) = ")") Then
@@ -2380,14 +2375,14 @@ End Function
 Private Function GetDiablo2CharacterName(ByVal Username As String) As String
 
     Dim tmp As String  ' ...
-    Dim Pos As Integer ' ...
+    Dim pos As Integer ' ...
     
     ' ...
-    Pos = InStr(1, Username, "*", vbBinaryCompare)
+    pos = InStr(1, Username, "*", vbBinaryCompare)
 
     ' ...
-    If (Pos > 0) Then
-        tmp = Mid$(Username, 1, Pos - 1)
+    If (pos > 0) Then
+        tmp = Mid$(Username, 1, pos - 1)
     End If
     
     ' ...

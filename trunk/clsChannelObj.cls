@@ -44,14 +44,14 @@ Private Sub Class_Initialize()
     
 End Sub
 
-Public Property Get Name() As String
+Public Property Get name() As String
 
     ' ...
-    Name = m_name
+    name = m_name
 
 End Property
 
-Public Property Let Name(str As String)
+Public Property Let name(str As String)
 
     ' ...
     m_name = str
@@ -133,6 +133,13 @@ Public Sub ClearUsers()
 
 End Sub
 
+Public Sub ClearBanlist()
+
+    ' ...
+    Set m_banlist = New Collection
+
+End Sub
+
 Public Property Get Self() As clsChannelUserObj
 
     Dim i As Integer ' ...
@@ -161,7 +168,7 @@ Public Function GetUserIndexByName(ByVal Username As String) As Integer
     ' ...
     For i = 1 To m_users.Count
         ' ...
-        If (StrComp(m_users(i).Name, Username, vbBinaryCompare) = 0) Then
+        If (StrComp(m_users(i).name, Username, vbBinaryCompare) = 0) Then
             ' ...
             GetUserIndexByName = i
             
@@ -206,7 +213,7 @@ Public Function IsOnBanList(ByVal Username As String, Optional Operator As Strin
     ' ...
     For i = 1 To m_banlist.Count
         ' ...
-        If (StrComp(m_banlist(i).Name, Username, vbTextCompare) = 0) Then
+        If (StrComp(m_banlist(i).name, Username, vbTextCompare) = 0) Then
             ' ...
             If (Operator <> vbNullString) Then
                 ' ...
@@ -231,9 +238,10 @@ End Function
 
 Public Sub RemoveBansFromOperator(ByVal Username As String)
 
-    Dim i   As Integer ' ...
-    Dim bln As Boolean ' ...
-    Dim pos As Integer ' ...
+    Dim i    As Integer ' ...
+    Dim bln  As Boolean ' ...
+    Dim pos  As Integer ' ...
+    Dim name As String  ' ...
 
     ' ...
     Do
@@ -245,14 +253,17 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
             ' ...
             If (StrComp(m_banlist(i).Operator, Username, vbTextCompare) = 0) Then
                 ' ...
+                name = m_banlist(i).name
+            
+                ' ...
                 m_banlist.Remove i
                 
                 ' ...
-                pos = IsOnBanList(Username)
+                pos = IsOnBanList(name)
                 
                 ' ...
                 If (pos > 0) Then
-                    Banlist(pos).IsDuplicateBan = False
+                    m_banlist(pos).IsDuplicateBan = False
                 End If
                 
                 ' ...
