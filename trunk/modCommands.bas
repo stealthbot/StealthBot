@@ -56,10 +56,10 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Set Command = IsCommand(Message, IsLocal)
 
     ' ...
-    Do While (Command.name <> vbNullString)
+    Do While (Command.Name <> vbNullString)
         ' ...
         If ((Command.IsLocal) Or _
-                (HasAccess(Username, Command.name, Command.Args))) Then
+                (HasAccess(Username, Command.Name, Command.Args))) Then
         
             ' ...
             If (IsLocal) Then
@@ -71,7 +71,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             End If
             
             ' ...
-            Call ExecuteCommand(Username, dbAccess, Command.name & Space$(1) & Command.Args, _
+            Call ExecuteCommand(Username, dbAccess, Command.Name & Space$(1) & Command.Args, _
                     IsLocal, command_return)
             
             ' ...
@@ -902,7 +902,7 @@ Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAcces
     End If
 
     ' ...
-    tmpBuf = "I am currently in channel " & g_Channel.name & " (" & _
+    tmpBuf = "I am currently in channel " & g_Channel.Name & " (" & _
         colUsersInChannel.Count & " users present)"
     
     ' return message
@@ -1267,7 +1267,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Next i
     
         ' ...
-        If (StrComp(g_Channel.name, "Clan " & Clan.name, vbTextCompare) = 0) Then
+        If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
             ' ...
             ReDim Preserve arrUsers(0)
             
@@ -1326,7 +1326,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
         
         ' ...
-        If (StrComp(Left$(g_Channel.name, 3), "Op ", vbTextCompare) = 0) Then
+        If (StrComp(Left$(g_Channel.Name, 3), "Op ", vbTextCompare) = 0) Then
             ' ...
             If (opsCount >= 2) Then
                 ' ...
@@ -1336,9 +1336,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 ' ...
                 Exit Function
             End If
-        ElseIf (StrComp(Left$(g_Channel.name, 5), "Clan ", vbTextCompare) = 0) Then
+        ElseIf (StrComp(Left$(g_Channel.Name, 5), "Clan ", vbTextCompare) = 0) Then
             ' ...
-            If ((StrComp(g_Channel.name, "Clan " & Clan.name, vbTextCompare) <> 0) Or _
+            If ((StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) <> 0) Or _
                     (Clan.MyRank <= 2)) Then
                 
                 ' ...
@@ -1634,7 +1634,7 @@ Private Function OnClearBanList(ByVal Username As String, ByRef dbAccess As udtG
     Dim tmpBuf As String ' temporary output buffer
 
     ' ...
-    g_Channel.clearbanlist
+    g_Channel.ClearBanlist
     
     tmpBuf = "Banned user list cleared."
     
@@ -1682,7 +1682,7 @@ Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Username)
     
     ' rejoin previous channel
-    Call AddQ("/join " & g_Channel.name, PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
+    Call AddQ("/join " & g_Channel.Name, PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
 End Function ' end function OnRejoin
 
 ' handle quickrejoin command
@@ -1691,7 +1691,7 @@ Private Function OnQuickRejoin(ByVal Username As String, ByRef dbAccess As udtGe
     ' This command will make the bot rejoin the current channel.
     
     ' ...
-    Call RejoinChannel(g_Channel.name)
+    Call RejoinChannel(g_Channel.Name)
 End Function ' end function OnRejoin
 
 ' handle forcejoin command
@@ -1912,7 +1912,7 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
             ' ...
             For j = 1 To g_Channel.Banlist.Count
                 ' ...
-                If (StrComp(g_Channel.Banlist(j).name, g_Channel.Banlist(i).name, _
+                If (StrComp(g_Channel.Banlist(j).Name, g_Channel.Banlist(i).Name, _
                         vbTextCompare) = 0) Then
                 
                     ' ...
@@ -1922,7 +1922,7 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
             
             ' ...
             tmpBuf(tmpCount) = _
-                    tmpBuf(tmpCount) & ", " & g_Channel.Banlist(i).name
+                    tmpBuf(tmpCount) & ", " & g_Channel.Banlist(i).Name
                     
             ' ...
             If (userCount > 1) Then
@@ -2524,7 +2524,7 @@ Private Function OnReconnect(ByVal Username As String, ByRef dbAccess As udtGetA
     If (g_Online) Then
         tmp = BotVars.HomeChannel
     
-        BotVars.HomeChannel = g_Channel.name
+        BotVars.HomeChannel = g_Channel.Name
         
         Call frmChat.DoDisconnect
         
@@ -4483,18 +4483,18 @@ Private Function OnPing(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf  As String ' temporary output buffer
-    Dim Latency As Long
+    Dim latency As Long
     Dim user    As String
     
     user = msgData
     
-    If (Len(user)) Then
-        Latency = GetPing(user)
+    If (user <> vbNullString) Then
+        latency = GetPing(user)
         
-        If (Latency < -1) Then
-            tmpBuf = "I can't see " & user & " in the channel."
+        If (latency >= -1) Then
+            tmpBuf = user & "'s ping at login was " & latency & "ms."
         Else
-            tmpBuf = user & "'s ping at login was " & Latency & "ms."
+            tmpBuf = "I can't see " & user & " in the channel."
         End If
     End If
     
@@ -4685,22 +4685,26 @@ Private Function OnGetPing(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf  As String ' temporary output buffer
-    Dim Latency As Long
+    Dim latency As Long
 
     If (InBot) Then
         If (g_Online) Then
             ' grab current latency
-            Latency = GetPing(CurrentUsername)
+            latency = GetPing(CurrentUsername)
         
-            tmpBuf = "Your ping at login was " & Latency & "ms."
+            ' ...
+            tmpBuf = "Your ping at login was " & latency & "ms."
         Else
+            ' ...
             tmpBuf = "You are not connected."
         End If
     Else
-        Latency = GetPing(Username)
+        ' ...
+        latency = GetPing(Username)
     
-        If (Latency > -2) Then
-            tmpBuf = "Your ping at login was " & Latency & "ms."
+        ' ...
+        If (latency >= -1) Then
+            tmpBuf = "Your ping at login was " & latency & "ms."
         End If
     End If
 
@@ -5813,12 +5817,12 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Set CommandDocs = OpenCommand(FindCommand)
     
     ' ...
-    If (CommandDocs.name = vbNullString) Then
+    If (CommandDocs.Name = vbNullString) Then
         ' ...
         Set CommandDocs = OpenCommand(convertAlias(FindCommand))
     
         ' ...
-        If (CommandDocs.name = vbNullString) Then
+        If (CommandDocs.Name = vbNullString) Then
             ' ...
             cmdRet(0) = "Sorry, but no related documentation could be found."
         
@@ -5827,7 +5831,7 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
         End If
     End If
     
-    tmpBuf(0) = "[" & CommandDocs.name
+    tmpBuf(0) = "[" & CommandDocs.Name
     
     If (CommandDocs.Aliases.Count) Then
         tmpBuf(0) = tmpBuf(0) & " (aliases: "
@@ -5847,14 +5851,14 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
     tmpBuf(0) = tmpBuf(0) & ")]: " & CommandDocs.description
     
     ' ...
-    tmpBuf(0) = tmpBuf(0) & Space$(1) & "(Syntax: " & "<trigger>" & CommandDocs.name
+    tmpBuf(0) = tmpBuf(0) & Space$(1) & "(Syntax: " & "<trigger>" & CommandDocs.Name
             
     If (CommandDocs.params.Count) Then
         For i = 1 To CommandDocs.params.Count
             If (CommandDocs.params(i).IsOptional) Then
-                tmpBuf(0) = tmpBuf(0) & " [" & CommandDocs.params(i).name & "]"
+                tmpBuf(0) = tmpBuf(0) & " [" & CommandDocs.params(i).Name & "]"
             Else
-                tmpBuf(0) = tmpBuf(0) & " <" & CommandDocs.params(i).name & ">"
+                tmpBuf(0) = tmpBuf(0) & " <" & CommandDocs.params(i).Name & ">"
             End If
         Next i
     End If
@@ -6573,10 +6577,10 @@ End Function
 Public Function GetPing(ByVal Username As String) As Long
     Dim i As Integer
     
-    i = UsernameToIndex(Username)
+    i = g_Channel.GetUserIndexByDisplayName(Username)
     
     If i > 0 Then
-        GetPing = colUsersInChannel.Item(i).Ping
+        GetPing = g_Channel.Users(i).Ping
     Else
         GetPing = -3
     End If
@@ -6804,7 +6808,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
     Set Command = OpenCommand(CommandName, "internal")
 
     ' ...
-    If (Command.name = vbNullString) Then
+    If (Command.Name = vbNullString) Then
         Exit Function
     End If
     
@@ -6935,7 +6939,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     Set Command = OpenCommand(CommandName, "internal")
 
     ' ...
-    If (Command.name = vbNullString) Then
+    If (Command.Name = vbNullString) Then
         Exit Function
     End If
     
@@ -7002,8 +7006,8 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
                             If ((user.Rank >= restriction.RequiredRank) = False) Then
                                 If (user.HasAnyFlag(restriction.RequiredFlags) = False) Then
                                     AddQ "Error: You do not have sufficient access to perform the specified " & _
-                                        "action. [" & BotVars.TriggerLong & "help " & Command.name & _
-                                            " --restriction " & restriction.name & " for further information]"
+                                        "action. [" & BotVars.TriggerLong & "help " & Command.Name & _
+                                            " --restriction " & restriction.Name & " for further information]"
                                     
                                     HasAccess = False
                                     

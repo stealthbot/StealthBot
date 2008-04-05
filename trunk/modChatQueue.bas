@@ -135,7 +135,7 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
     Dim i      As Integer  ' ...
     Dim Stats  As String   ' ...
     Dim Clan   As String   ' ...
-    Dim Pos    As Integer  ' ...
+    Dim pos    As Integer  ' ...
 
     ' ...
     ParseStatstring OriginalStatstring, Stats, Clan
@@ -151,12 +151,12 @@ Public Sub Event_QueuedUserInChannel(ByVal Username As String, ByVal Flags As Lo
     ' ...
     If (BotVars.ShowStatsIcons) Then
         ' ...
-        Pos = checkChannel(Username)
+        pos = checkChannel(Username)
         
         ' ...
-        If (Pos) Then
+        If (pos) Then
             ' ...
-            Set found = frmChat.lvChannel.ListItems(Pos)
+            Set found = frmChat.lvChannel.ListItems(pos)
             
             ' ...
             i = UsernameToIndex(Username)
@@ -200,27 +200,20 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
     
     On Error GoTo ERROR_HANDLER
     
-    Dim Pos      As Integer  ' ...
+    Dim pos      As Integer  ' ...
     Dim doUpdate As Boolean  ' ...
     
-    ' are we in the void?
-    If (g_Channel.IsSilent) Then
+    ' we aren't in a silent channel, are we?
+    If (g_Channel.IsSilent = False) Then
         ' ...
-        If (frmChat.mnuDisableVoidView.Checked = False) Then
-            'Call AddName(Username, Product, Flags, Ping)
-        End If
-    
-        Exit Sub
-    Else
-        ' ...
-        Pos = checkChannel(Username)
+        pos = checkChannel(Username)
     
         ' is user being designated?
         If (((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
                 ((prevflags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
     
             ' ...
-            frmChat.lvChannel.ListItems.Remove Pos
+            frmChat.lvChannel.ListItems.Remove pos
             
             ' ...
             Call AddName(Username, Product, Flags, Ping, sClan)
@@ -230,33 +223,28 @@ Public Sub Event_QueuedStatusUpdate(ByVal Username As String, ByVal Flags As Lon
                     RTBColors.JoinedChannelName, Username, RTBColors.JoinedChannelText, _
                             " has acquired ops.")
                             
-            ' ...
-            Exit Sub
-        End If
-        
         ' is user being squelched?
-        If (((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) And _
+        ElseIf (((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) And _
                 ((prevflags And USER_SQUELCHED&) <> USER_SQUELCHED&)) Then
         
             ' ...
             doUpdate = True
-        Else
-            ' is user being unsquelched?
-            If ((prevflags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
-                ' ...
-                doUpdate = True
-            End If
+            
+        ' is user being unsquelched?
+        ElseIf ((prevflags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
+            ' ...
+            doUpdate = True
         End If
     
         ' ...
         If (doUpdate = True) Then
             ' ...
-            If (Pos) Then
+            If (pos) Then
                 ' ...
-                frmChat.lvChannel.ListItems.Remove Pos
+                frmChat.lvChannel.ListItems.Remove pos
                 
                 ' ...
-                Call AddName(Username, Product, Flags, Ping, sClan, Pos)
+                Call AddName(Username, Product, Flags, Ping, sClan, pos)
             End If
         End If
     End If

@@ -138,6 +138,14 @@ Public Property Get Ping() As Long
 
 End Property
 
+Public Property Let Ping(lng As Long)
+
+    ' ...
+    m_ping = lng
+
+End Property
+
+
 Public Property Let JoinDate(jdate As Date)
 
     ' ...
@@ -149,12 +157,5 @@ Public Property Get JoinDate() As Date
 
     ' ...
     JoinDate = m_join_date
-
-End Property
-
-Public Property Let Ping(lng As Long)
-
-    ' ...
-    m_ping = lng
 
 End Property
