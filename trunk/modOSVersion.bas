@@ -25,9 +25,10 @@ End Type
 Public Function IsWin2000Plus() As Boolean
   'returns True if running Windows 2000 or later
   'Updated 11/28/06 to cache responses
+  'Updated 04/05/08 to change Dims to Statics (joetheodd)
   
-    Dim CachedResponseAvailable As Boolean
-    Dim CachedResponse As Boolean
+    Static CachedResponseAvailable As Boolean
+    Static CachedResponse As Boolean
   
     Dim osv As OSVERSIONINFO
 
