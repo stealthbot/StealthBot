@@ -11,7 +11,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' clsChannelUserObj.cls
+' clsUserObj.cls
 ' Copyright (C) 2008 Eric Evans
 ' ...
 
@@ -44,14 +44,14 @@ Private Sub Class_Initialize()
     
 End Sub
 
-Public Property Get name() As String
+Public Property Get Name() As String
 
     ' ...
-    name = m_name
+    Name = m_name
 
 End Property
 
-Public Property Let name(str As String)
+Public Property Let Name(str As String)
 
     ' ...
     m_name = str
@@ -140,12 +140,12 @@ Public Sub ClearBanlist()
 
 End Sub
 
-Public Property Get Self() As clsChannelUserObj
+Public Property Get Self() As clsUserObj
 
     Dim i As Integer ' ...
 
     ' ...
-    Set Self = New clsChannelUserObj
+    Set Self = New clsUserObj
     
     ' ...
     For i = 1 To m_users.Count
@@ -155,7 +155,7 @@ Public Property Get Self() As clsChannelUserObj
             Set Self = m_users(i)
             
             ' ...
-            Exit Function
+            Exit Property
         End If
     Next i
 
@@ -168,7 +168,7 @@ Public Function GetUserIndexByName(ByVal Username As String) As Integer
     ' ...
     For i = 1 To m_users.Count
         ' ...
-        If (StrComp(m_users(i).name, Username, vbBinaryCompare) = 0) Then
+        If (StrComp(m_users(i).Name, Username, vbBinaryCompare) = 0) Then
             ' ...
             GetUserIndexByName = i
             
@@ -213,7 +213,7 @@ Public Function IsOnBanList(ByVal Username As String, Optional Operator As Strin
     ' ...
     For i = 1 To m_banlist.Count
         ' ...
-        If (StrComp(m_banlist(i).name, Username, vbTextCompare) = 0) Then
+        If (StrComp(m_banlist(i).Name, Username, vbTextCompare) = 0) Then
             ' ...
             If (Operator <> vbNullString) Then
                 ' ...
@@ -240,8 +240,8 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
 
     Dim i    As Integer ' ...
     Dim bln  As Boolean ' ...
-    Dim pos  As Integer ' ...
-    Dim name As String  ' ...
+    Dim Pos  As Integer ' ...
+    Dim Name As String  ' ...
 
     ' ...
     Do
@@ -253,17 +253,17 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
             ' ...
             If (StrComp(m_banlist(i).Operator, Username, vbTextCompare) = 0) Then
                 ' ...
-                name = m_banlist(i).name
+                Name = m_banlist(i).Name
             
                 ' ...
                 m_banlist.Remove i
                 
                 ' ...
-                pos = IsOnBanList(name)
+                Pos = IsOnBanList(Name)
                 
                 ' ...
-                If (pos > 0) Then
-                    m_banlist(pos).IsDuplicateBan = False
+                If (Pos > 0) Then
+                    m_banlist(Pos).IsDuplicateBan = False
                 End If
                 
                 ' ...

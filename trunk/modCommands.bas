@@ -2206,13 +2206,13 @@ Private Function OnNext(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim pos As Integer ' ...
+        Dim Pos As Integer ' ...
         
         ' ...
-        pos = MediaPlayer.PlaylistPosition
+        Pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(pos + 1)
+        Call MediaPlayer.PlayTrack(Pos + 1)
         
         ' ...
         tmpBuf = "Skipped forwards."
@@ -4365,13 +4365,13 @@ Private Function OnPrev(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim pos As Integer ' ...
+        Dim Pos As Integer ' ...
         
         ' ...
-        pos = MediaPlayer.PlaylistPosition
+        Pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(pos - 1)
+        Call MediaPlayer.PlayTrack(Pos - 1)
         
         ' ...
         tmpBuf = "Skipped backwards."
@@ -4483,16 +4483,16 @@ Private Function OnPing(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf  As String ' temporary output buffer
-    Dim latency As Long
+    Dim Latency As Long
     Dim user    As String
     
     user = msgData
     
     If (user <> vbNullString) Then
-        latency = GetPing(user)
+        Latency = GetPing(user)
         
-        If (latency >= -1) Then
-            tmpBuf = user & "'s ping at login was " & latency & "ms."
+        If (Latency >= -1) Then
+            tmpBuf = user & "'s ping at login was " & Latency & "ms."
         Else
             tmpBuf = "I can't see " & user & " in the channel."
         End If
@@ -4685,26 +4685,26 @@ Private Function OnGetPing(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf  As String ' temporary output buffer
-    Dim latency As Long
+    Dim Latency As Long
 
     If (InBot) Then
         If (g_Online) Then
             ' grab current latency
-            latency = GetPing(CurrentUsername)
+            Latency = GetPing(CurrentUsername)
         
             ' ...
-            tmpBuf = "Your ping at login was " & latency & "ms."
+            tmpBuf = "Your ping at login was " & Latency & "ms."
         Else
             ' ...
             tmpBuf = "You are not connected."
         End If
     Else
         ' ...
-        latency = GetPing(Username)
+        Latency = GetPing(Username)
     
         ' ...
-        If (latency >= -1) Then
-            tmpBuf = "Your ping at login was " & latency & "ms."
+        If (Latency >= -1) Then
+            tmpBuf = "Your ping at login was " & Latency & "ms."
         End If
     End If
 
@@ -6113,25 +6113,25 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
             
         Else '// unbanning
         
-            For i = 0 To UBound(gBans)
-                If (gBans(i).Username <> vbNullString) Then
+            For i = 1 To g_Channel.Banlist.Count
+                If (g_Channel.Banlist(i).Name <> vbNullString) Then
                     If (sMatch = "*") Then
                         ' unipban user
                         'If (BotVars.IPBans = True) Then
                         '    Call AddQ("/unsquelch " & gBans(i).UsernameActual, 1)
                         'End If
                     
-                        Call AddQ("/" & Typ & gBans(i).UsernameActual)
+                        Call AddQ("/" & Typ & g_Channel.Banlist(i).Name)
                     Else
                         ' unipban user
                         'If (BotVars.IPBans = True) Then
                         '    Call AddQ("/unsquelch " & gBans(i).UsernameActual, 1)
                         'End If
                     
-                        z = PrepareCheck(gBans(i).UsernameActual)
+                        z = PrepareCheck(g_Channel.Banlist(i).Name)
                         
                         If (z Like sMatch) Then
-                            Call AddQ("/" & Typ & gBans(i).UsernameActual)
+                            Call AddQ("/" & Typ & g_Channel.Banlist(i).Name)
                         End If
                     End If
                 End If

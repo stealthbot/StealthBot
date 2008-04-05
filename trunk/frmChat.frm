@@ -1459,7 +1459,7 @@ Private Sub Form_Load()
     #If (BETA = 1) Then
         #If (DEV_RELEASE = 1) Then
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
-                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "8"
+                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "9"
         #Else
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
                 ZeroOffsetEx(App.REVISION, 3) & " Stable"
@@ -5065,7 +5065,7 @@ Private Sub tmrFriendlistUpdate_Timer()
 End Sub
 
 Private Sub tmrSilentChannel_Timer(index As Integer)
-    Dim user    As clsChannelUserObj
+    Dim user    As clsUserObj
     Dim Item    As ListItem
     Dim i       As Integer ' ...
     Dim j       As Integer ' ...
@@ -5137,7 +5137,7 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
                     ParseStatstring colUsersInChannel(i).Statstring, Stats, Clan
                 
                     ' ...
-                    AddName user.DisplayName, user.game, user.Flags, user.Ping, Clan
+                    AddName user.DisplayName, user.Game, user.Flags, user.Ping, Clan
                 End If
                 
                 ' ...

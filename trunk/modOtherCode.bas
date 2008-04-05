@@ -1801,7 +1801,7 @@ Public Sub UpdateSafelistedStatus(ByVal sUser As String, ByVal bStatus As Boolea
     End If
 End Sub
 
-Public Sub AddBannedUser(ByVal sUser As String, ByVal cOperator As String)
+Public Sub AddBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     Const MAX_BAN_COUNT As Integer = 80
 
     Dim i      As Integer ' ...
@@ -1845,7 +1845,7 @@ Public Sub AddBannedUser(ByVal sUser As String, ByVal cOperator As String)
 End Sub
 
 ' collapse array on top of the removed user
-Public Sub UnbanBannedUser(ByVal sUser As String, ByVal cOperator As String)
+Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     Dim i          As Integer
     Dim c          As Integer
     Dim NumRemoved As Integer
@@ -1883,7 +1883,7 @@ Public Sub UnbanBannedUser(ByVal sUser As String, ByVal cOperator As String)
         If (iterations > 9000) Then
             If (MDebug("debug")) Then
                 frmChat.AddChat RTBColors.ErrorMessageText, "Warning: Loop size limit exceeded " & _
-                    "in UnbanBannedUser()!"
+                    "in UnbanBanlistUser()!"
                 frmChat.AddChat RTBColors.ErrorMessageText, "The banned-user list has been reset.. " & _
                     "hope it works!"
             End If

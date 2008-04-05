@@ -10,7 +10,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     On Error GoTo ERROR_HANDLER
     
     Dim clsChatQueue As clsChatQueue
-    Dim UserObj      As clsChannelUserObj
+    Dim UserObj      As clsUserObj
     
     Dim UserIndex    As Integer  ' ...
     Dim i            As Integer  ' ...
@@ -36,7 +36,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         ' ...
         Set UserObj = g_Channel.Users(UserIndex)
     Else
-        Set UserObj = New clsChannelUserObj
+        Set UserObj = New clsUserObj
             
         ' ...
         If (g_Channel.IsSilent = False) Then
@@ -58,7 +58,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         .DisplayName = convertUsername(Username)
         .Flags = Flags
         .Ping = Ping
-        .game = Product
+        .Game = Product
         .Clan = Clan
     End With
     
@@ -769,10 +769,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                     ' ...
                     If (Pos > 0) Then
                         ' ...
-                        Dim BanlistObj As clsBannedUserObj
+                        Dim BanlistObj As clsBanlistUserObj
                         
                         ' ...
-                        Set BanlistObj = New clsBannedUserObj
+                        Set BanlistObj = New clsBanlistUserObj
                         
                         ' ...
                         banpos = g_Channel.IsOnBanList(user, CleanDiablo2Username(Username))
@@ -1027,7 +1027,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     On Error GoTo ERROR_HANDLER
 
     Dim clsChatQueue As clsChatQueue ' ...
-    Dim UserObj      As clsChannelUserObj
+    Dim UserObj      As clsUserObj
     
     Dim UserIndex    As Integer ' ...
     Dim i            As Integer ' ...
@@ -1055,7 +1055,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         Set UserObj = g_Channel.Users(UserIndex)
     Else
         ' ...
-        Set UserObj = New clsChannelUserObj
+        Set UserObj = New clsUserObj
     End If
     
     ' ...
@@ -1263,7 +1263,7 @@ End Sub
 Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal w3icon As String)
     On Error GoTo ERROR_HANDLER
     
-    Dim UserObj     As clsChannelUserObj
+    Dim UserObj     As clsUserObj
     Dim UserToAdd   As clsUserInfo
     
     Dim toCheck     As String
@@ -1287,7 +1287,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     ' ...
     If (UserIndex = 0) Then
         ' ...
-        Set UserObj = New clsChannelUserObj
+        Set UserObj = New clsUserObj
         
         ' ...
         With UserObj
@@ -1295,7 +1295,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             .DisplayName = convertUsername(Username)
             .Flags = Flags
             .Ping = Ping
-            .game = Product
+            .Game = Product
             .JoinDate = Now
         End With
         
@@ -1687,7 +1687,7 @@ End Sub
 Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     On Error GoTo ERROR_HANDLER
 
-    Dim UserObj   As clsChannelUserObj
+    Dim UserObj   As clsUserObj
     
     Dim UserIndex As Integer
     Dim i         As Integer
@@ -1732,7 +1732,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         ' ...
         For i = 0 To UBound(gBans)
             If (StrComp(gBans(i).cOperator, reverseUsername(Username), vbTextCompare) = 0) Then
-                Call UnbanBannedUser(gBans(i).UsernameActual, reverseUsername(Username))
+                Call UnbanBanlistUser(gBans(i).UsernameActual, reverseUsername(Username))
                 
                 Exit For
             End If
