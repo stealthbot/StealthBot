@@ -1061,13 +1061,13 @@ Private Function OnSetName(ByVal Username As String, ByRef dbAccess As udtGetAcc
     Dim tmpBuf As String ' temporary output buffer
 
     ' are we using a beta?
-    #If BETA = 1 Then
-        ' only allow use of setname command while on-line to prevent beta
-        ' authorization bypassing
-        If ((Not (g_Online = True)) Or (g_Connected = False)) Then
-            Exit Function
-        End If
-    #End If
+    '#If BETA = 1 Then
+    '    ' only allow use of setname command while on-line to prevent beta
+    '    ' authorization bypassing
+    '    If ((Not (g_Online = True)) Or (g_Connected = False)) Then
+    '        Exit Function
+    '    End If
+    '#End If
 
     ' write configuration entry
     Call WriteINI("Main", "Username", msgData)
@@ -2201,13 +2201,13 @@ Private Function OnNext(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim pos As Integer ' ...
+        Dim Pos As Integer ' ...
         
         ' ...
-        pos = MediaPlayer.PlaylistPosition
+        Pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(pos + 1)
+        Call MediaPlayer.PlayTrack(Pos + 1)
         
         ' ...
         tmpBuf = "Skipped forwards."
@@ -4360,13 +4360,13 @@ Private Function OnPrev(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim pos As Integer ' ...
+        Dim Pos As Integer ' ...
         
         ' ...
-        pos = MediaPlayer.PlaylistPosition
+        Pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(pos - 1)
+        Call MediaPlayer.PlayTrack(Pos - 1)
         
         ' ...
         tmpBuf = "Skipped backwards."
