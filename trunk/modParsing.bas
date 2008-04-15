@@ -8,7 +8,7 @@ Public Sub SendHeader()
 End Sub
 
 Public Sub BNCSParsePacket(ByVal PacketData As String)
-    On Error GoTo ERROR_HANDLER
+    'On Error GoTo ERROR_HANDLER
 
     Dim pD          As clsPacketDebuffer ' Packet debuffer object
     Dim PacketLen   As Long              ' Length of the packet minus the header
@@ -1113,7 +1113,7 @@ theEnd:
 End Sub
 
 Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As String, ByRef sClan As String) As String
-    Dim Values() As String
+    Dim values() As String
     Dim Temp() As String
     Dim cType As String
     Dim WCG As Boolean
@@ -1134,29 +1134,29 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As Stri
                 If Len(Statstring) > 4 Then
                     Temp() = Split(Statstring, " ")
                     
-                    ReDim Values(3)
+                    ReDim values(3)
                     
                     If StrComp(Right$(Temp(1), 2), "CW") = 0 Then
                         WCG = True
                     Else
-                        Values(1) = Mid$(Statstring, 6, 1)
-                        Values(2) = Mid$(Statstring, 7, 1)
+                        values(1) = Mid$(Statstring, 6, 1)
+                        values(2) = Mid$(Statstring, 7, 1)
                     End If
                     
-                    Values(0) = Temp(2)
+                    values(0) = Temp(2)
                     
                     If UBound(Temp) > 2 Then
-                        Values(3) = StrReverse(Temp(3))
+                        values(3) = StrReverse(Temp(3))
                     End If
                     
-                    g_ThisIconCode = GetRaceAndIcon(Values(1), Values(2), Left$(Statstring, 4), IIf(WCG, Temp(1), ""))
+                    g_ThisIconCode = GetRaceAndIcon(values(1), values(2), Left$(Statstring, 4), IIf(WCG, Temp(1), ""))
                     
-                    sClan = IIf(UBound(Values) > 2, Values(3), "")
+                    sClan = IIf(UBound(values) > 2, values(3), "")
                     
                     If Left$(Statstring, 4) = "3RAW" Then
-                        Call sPrintF(outbuf, "Warcraft III: Reign of Chaos (Level: %s, icon tier %s, %s icon" & IIf(UBound(Temp) > 2, ", in Clan " & sClan, vbNullString) & ")", Values(0), Values(2), Values(1))
+                        Call sPrintF(outbuf, "Warcraft III: Reign of Chaos (Level: %s, icon tier %s, %s icon" & IIf(UBound(Temp) > 2, ", in Clan " & sClan, vbNullString) & ")", values(0), values(2), values(1))
                     Else
-                        Call sPrintF(outbuf, "Warcraft III: The Frozen Throne (Level: %s, icon tier %s, %s icon" & IIf(UBound(Temp) > 2, ", in Clan " & sClan, vbNullString) & ")", Values(0), Values(2), Values(1))
+                        Call sPrintF(outbuf, "Warcraft III: The Frozen Throne (Level: %s, icon tier %s, %s icon" & IIf(UBound(Temp) > 2, ", in Clan " & sClan, vbNullString) & ")", values(0), values(2), values(1))
                     End If
                 Else
                     If Left$(Statstring, 4) = "3RAW" Then
@@ -1172,83 +1172,83 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As Stri
                 Call StrCpy(outbuf, "Starcraft Shareware.")
                 
             Case "RATS"
-                Values() = Split(Mid$(Statstring, 6), " ")
-                If UBound(Values) <> 8 Then
-                    Call sPrintF(outbuf, "a Starcraft %sbot", IIf((Values(3) = 1), " (spawn) ", vbNullString))
+                values() = Split(Mid$(Statstring, 6), " ")
+                If UBound(values) <> 8 Then
+                    Call sPrintF(outbuf, "a Starcraft %sbot", IIf((values(3) = 1), " (spawn) ", vbNullString))
                 Else
-                    If Values(0) > 0 Then
-                        Call sPrintF(outbuf, "Starcraft%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
+                    If values(0) > 0 Then
+                        Call sPrintF(outbuf, "Starcraft%s (%s wins, with a rating of %s on the ladder)", IIf((values(3) = 1), " (spawn) ", vbNullString), values(2), values(0))
                     Else
-                        Call sPrintF(outbuf, "Starcraft%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
+                        Call sPrintF(outbuf, "Starcraft%s (%s wins).", IIf((values(3) = 1), " (spawn) ", vbNullString), values(2))
                     End If
                 End If
                 
             Case "PXES"
-                Values() = Split(Mid(Statstring, 6), " ")
-                If UBound(Values) <> 8 Then
+                values() = Split(Mid(Statstring, 6), " ")
+                If UBound(values) <> 8 Then
                     Call sPrintF(outbuf, "a Starcraft Brood War bot.", vbNullString)
                     
-                    If UBound(Values) > 2 Then
+                    If UBound(values) > 2 Then
                         outbuf = outbuf & "(spawn) "
                     End If
                 Else
-                    If Values(0) > 0 Then
-                        Call sPrintF(outbuf, "Starcraft Brood War%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
+                    If values(0) > 0 Then
+                        Call sPrintF(outbuf, "Starcraft Brood War%s (%s wins, with a rating of %s on the ladder)", IIf((values(3) = 1), " (spawn) ", vbNullString), values(2), values(0))
                     Else
-                        Call sPrintF(outbuf, "Starcraft Brood War%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
+                        Call sPrintF(outbuf, "Starcraft Brood War%s (%s wins).", IIf((values(3) = 1), " (spawn) ", vbNullString), values(2))
                     End If
                 End If
                 
             Case "RTSJ"
-                Values() = Split(Mid(Statstring, 6), " ")
-                If UBound(Values) <> 8 Then
-                    Call sPrintF(outbuf, "a Starcraft Japanese %sbot.", IIf((Values(3) = 1), " (spawn) ", vbNullString))
+                values() = Split(Mid(Statstring, 6), " ")
+                If UBound(values) <> 8 Then
+                    Call sPrintF(outbuf, "a Starcraft Japanese %sbot.", IIf((values(3) = 1), " (spawn) ", vbNullString))
                 Else
-                    If Values(0) > 0 Then
-                        Call sPrintF(outbuf, "Starcraft Japanese%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
+                    If values(0) > 0 Then
+                        Call sPrintF(outbuf, "Starcraft Japanese%s (%s wins, with a rating of %s on the ladder)", IIf((values(3) = 1), " (spawn) ", vbNullString), values(2), values(0))
                     Else
-                        Call sPrintF(outbuf, "Starcraft Japanese%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
+                        Call sPrintF(outbuf, "Starcraft Japanese%s (%s wins).", IIf((values(3) = 1), " (spawn) ", vbNullString), values(2))
                     End If
                 End If
                 
             Case "NB2W"
-                Values() = Split(Mid$(Statstring, 6), " ")
+                values() = Split(Mid$(Statstring, 6), " ")
                 
-                If UBound(Values) <> 8 Then
-                    Call sPrintF(outbuf, "a Warcraft II %sbot.", IIf((Values(3) = 1), " (spawn) ", vbNullString))
+                If UBound(values) <> 8 Then
+                    Call sPrintF(outbuf, "a Warcraft II %sbot.", IIf((values(3) = 1), " (spawn) ", vbNullString))
                 Else
-                    If Values(0) > 0 Then
-                        Call sPrintF(outbuf, "Warcraft II%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
+                    If values(0) > 0 Then
+                        Call sPrintF(outbuf, "Warcraft II%s (%s wins, with a rating of %s on the ladder)", IIf((values(3) = 1), " (spawn) ", vbNullString), values(2), values(0))
                     Else
-                        Call sPrintF(outbuf, "Warcraft II%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
+                        Call sPrintF(outbuf, "Warcraft II%s (%s wins).", IIf((values(3) = 1), " (spawn) ", vbNullString), values(2))
                     End If
                 End If
                 
             Case "RHSD"
-                Values() = Split(Mid$(Statstring, 6), " ")
-                If UBound(Values) <> 8 Then
+                values() = Split(Mid$(Statstring, 6), " ")
+                If UBound(values) <> 8 Then
                     Call StrCpy(outbuf, "A Diablo shareware bot.")
                 Else
-                    Select Case Values(1)
+                    Select Case values(1)
                         Case 0: cType = "warrior"
                         Case 1: cType = "rogue"
                         Case 2: cType = "sorceror"
                     End Select
-                    Call sPrintF(outbuf, "Diablo shareware (Level %s %s with %s dots, %s strength, %s magic, %s dexterity, %s vitality, and %s gold)", Values(0), cType, Values(2), Values(3), Values(4), Values(5), Values(6), Values(7))
+                    Call sPrintF(outbuf, "Diablo shareware (Level %s %s with %s dots, %s strength, %s magic, %s dexterity, %s vitality, and %s gold)", values(0), cType, values(2), values(3), values(4), values(5), values(6), values(7))
                 End If
                 
             Case "LTRD"
-                Values() = Split(Mid$(Statstring, 6), " ")
+                values() = Split(Mid$(Statstring, 6), " ")
                 
-                If UBound(Values) <> 8 Then
+                If UBound(values) <> 8 Then
                     Call StrCpy(outbuf, "A Diablo bot.")
                 Else
-                    Select Case Values(1)
+                    Select Case values(1)
                         Case 0: cType = "warrior"
                         Case 1: cType = "rogue"
                         Case 2: cType = "sorceror"
                     End Select
-                    Call sPrintF(outbuf, "Diablo (Level %s %s with %s dots, %s strength, %s magic, %s dexterity, %s vitality, and %s gold)", Values(0), cType, Values(2), Values(3), Values(4), Values(5), Values(6), Values(7))
+                    Call sPrintF(outbuf, "Diablo (Level %s %s with %s dots, %s strength, %s magic, %s dexterity, %s vitality, and %s gold)", values(0), cType, values(2), values(3), values(4), values(5), values(6), values(7))
                 End If
                 
             Case "PX2D"

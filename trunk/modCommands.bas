@@ -1247,25 +1247,25 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' lazy and you just wish to designate someone as quickly as possible.
     
     ' ...
-    If (checkChannel(msgData)) Then
+    If (g_Channel.GetUserIndex(msgData) > 0) Then
         Dim i          As Integer ' ...
         Dim arrUsers() As String  ' ...
         Dim userCount  As Integer ' ...
         Dim opsCount   As Integer ' ...
     
         ' ...
-        If ((MyFlags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
+        If (g_Channel.Self.IsOperator = False) Then
             ' ...
-            cmdRet(0) = "Error: This command requires channel " & _
-                    "operator status."
+            cmdRet(0) = "Error: This command requires channel operator status."
         
+            ' ...
             Exit Function
         End If
         
         ' ...
         For i = 1 To g_Channel.Users.Count
             ' ...
-            If (StrComp(g_Channel.Users(i).DisplayName, GetCurrentUsername, vbTextCompare) <> 0) Then
+            If (StrComp(g_Channel.Users(i).DisplayName, GetCurrentUsername, vbBinaryCompare) <> 0) Then
                 ' ...
                 If (g_Channel.Users(i).IsOperator) Then
                     ' ...
@@ -1282,26 +1282,20 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
             ' ...
             If (g_Clan.Self.Rank >= 4) Then
                 ' ...
-                For i = 1 To frmChat.lvClanList.ListItems.Count
+                frmChat.cboSend.text = vbNullString
+            
+                ' ...
+                For i = 1 To g_Clan.Shamans.Count
                     ' ...
-                    If (StrComp(frmChat.lvClanList.ListItems(i).text, GetCurrentUsername, _
-                                vbTextCompare) <> 0) Then
-
+                    If (g_Channel.GetUserIndexEx(g_Clan.Shamans(i).Name) > 0) Then
                         ' ...
-                        If (frmChat.lvClanList.ListItems(i).SmallIcon = 3) Then
-                            ' ...
-                            If (g_Channel.GetUserIndex(convertUsername(frmChat.lvClanList.ListItems(i).text)) > 0) Then
-                                ' ...
-                                arrUsers(userCount) = _
-                                    frmChat.lvClanList.ListItems(i).text
-            
-                                ' ...
-                                userCount = (userCount + 1)
-            
-                                ' ...
-                                ReDim Preserve arrUsers(0 To userCount)
-                            End If
-                        End If
+                        arrUsers(userCount) = g_Clan.Shamans(i).Name
+    
+                        ' ...
+                        userCount = (userCount + 1)
+    
+                        ' ...
+                        ReDim Preserve arrUsers(0 To userCount)
                     End If
                 Next i
                 
@@ -1317,7 +1311,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 ' ...
                 If (userCount) Then
                     ' demote shamans
-                    For i = 0 To userCount
+                    For i = 0 To (userCount - 1)
                         ' ...
                         With PBuffer
                             .InsertDWord &H1
@@ -1325,9 +1319,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                             .InsertByte &H2 ' General member (Grunt)
                             .SendPacket &H7A
                         End With
-                        
+
                         ' ...
-                        Call Pause(200, False, True)
+                        Call Pause(200, True, True)
                     Next i
                 End If
             End If
@@ -1339,16 +1333,16 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
             If (opsCount >= 2) Then
                 ' ...
                 cmdRet(0) = "Error: There is currently a channel moderator present that cannot be " & _
-                                "removed from his or her position."
+                    "removed from his or her position."
                 
                 ' ...
                 Exit Function
             End If
         ElseIf (StrComp(Left$(g_Channel.Name, 5), "Clan ", vbTextCompare) = 0) Then
             ' ...
-            If ((StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) <> 0) Or _
-                    (g_Clan.Self.Rank <= 2)) Then
-                
+            If ((g_Clan.Self.Rank <= 2) Or _
+                    (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) <> 0)) Then
+                    
                 ' ...
                 If (opsCount >= 2) Then
                     ' ...
@@ -1363,14 +1357,14 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         
         ' ...
         If (QueueLoad > 0) Then
-            Call Pause(2, False, False)
+            Call Pause(2, True, False)
         End If
         
         ' designate user
         Call bnetSend("/designate " & reverseUsername(msgData))
         
         ' ...
-        Call Pause(2, False, False)
+        Call Pause(2, True, False)
         
         ' rejoin channel
         Call bnetSend("/resign")
@@ -1388,19 +1382,18 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 End With
                 
                 ' ...
-                Call Pause(200, False, True)
+                Call Pause(200, True, True)
             Next i
         End If
         
         ' ...
-        Call Pause(3, False, False)
-        
+        QueueLoad = (QueueLoad + 1)
+
         ' ...
         ReDim arrUsers(0)
     Else
         ' ...
-        cmdRet(0) = "Error: The specified user is not present within the " & _
-            "channel."
+        cmdRet(0) = "Error: The specified user is not present within the channel."
     End If
 End Function ' end function OnGiveUp
 
@@ -2208,13 +2201,13 @@ Private Function OnNext(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim Pos As Integer ' ...
+        Dim pos As Integer ' ...
         
         ' ...
-        Pos = MediaPlayer.PlaylistPosition
+        pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(Pos + 1)
+        Call MediaPlayer.PlayTrack(pos + 1)
         
         ' ...
         tmpBuf = "Skipped forwards."
@@ -4367,13 +4360,13 @@ Private Function OnPrev(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim Pos As Integer ' ...
+        Dim pos As Integer ' ...
         
         ' ...
-        Pos = MediaPlayer.PlaylistPosition
+        pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(Pos - 1)
+        Call MediaPlayer.PlayTrack(pos - 1)
         
         ' ...
         tmpBuf = "Skipped backwards."
@@ -6078,11 +6071,11 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
         
             For i = 1 To g_Channel.Users.Count
                 With g_Channel.Users(i)
-                    If (Not (.IsSelf())) Then
-                        z = PrepareCheck(.Username)
+                    If (StrComp(g_Channel.Users(i).DisplayName, GetCurrentUsername, vbBinaryCompare) <> 0) Then
+                        z = PrepareCheck(.DisplayName)
                         
                         If (z Like sMatch) Then
-                            If (GetSafelist(.Username) = False) Then
+                            If (GetSafelist(.DisplayName) = False) Then
                                 If (.IsOperator = False) Then
                                     Call AddQ("/" & Typ & .DisplayName & Space(1) & smsgData)
                                 End If
@@ -6103,24 +6096,24 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
         Else '// unbanning
         
             For i = 1 To g_Channel.Banlist.Count
-                If ((g_Channel.Banlist(i).IsActive) And (g_Channel.Banlist(i).Name <> vbNullString)) Then
+                If ((g_Channel.Banlist(i).IsActive) And (g_Channel.Banlist(i).DisplayName <> vbNullString)) Then
                     If (sMatch = "*") Then
                         ' unipban user
                         'If (BotVars.IPBans = True) Then
                         '    Call AddQ("/unsquelch " & gBans(i).UsernameActual, 1)
                         'End If
                     
-                        Call AddQ("/" & Typ & g_Channel.Banlist(i).Name)
+                        Call AddQ("/" & Typ & g_Channel.Banlist(i).DisplayName)
                     Else
                         ' unipban user
                         'If (BotVars.IPBans = True) Then
                         '    Call AddQ("/unsquelch " & gBans(i).UsernameActual, 1)
                         'End If
                     
-                        z = PrepareCheck(g_Channel.Banlist(i).Name)
+                        z = PrepareCheck(g_Channel.Banlist(i).DisplayName)
                         
                         If (z Like sMatch) Then
-                            Call AddQ("/" & Typ & g_Channel.Banlist(i).Name)
+                            Call AddQ("/" & Typ & g_Channel.Banlist(i).DisplayName)
                         End If
                     End If
                 End If

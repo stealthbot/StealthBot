@@ -209,6 +209,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
     Dim Username        As String
     Dim CleanedUsername As String
     Dim i               As Integer
+    Dim pos             As Integer
     
     If (LenB(Inpt) > 0) Then
         If (Kick > 2) Then
@@ -216,20 +217,6 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
             
             Exit Function
         End If
-        
-        'If (g_Queue.Count) Then
-        '    For i = 1 To g_Queue.Count
-        '        With g_Queue.Peek
-        '            If (Left$(.Message, 5) = "/ban ") Then
-        '                If (StrComp(LastBan & Space(1), LCase$(Mid$(.Message, 6, Len(LastBan) + 1)), _
-        '                    vbTextCompare) = 0) Then
-        '
-        '                    Exit Function
-        '                End If
-        '            End If
-        '        End With
-        '    Next i
-        'End If
         
         If (g_Channel.Self.IsOperator) Then
             If (InStr(1, Inpt, Space$(1), vbBinaryCompare) <> 0) Then
@@ -246,16 +233,26 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
 
                 If (SpeakerAccess < 999) Then
                     If ((GetSafelist(CleanedUsername)) Or (GetSafelist(Username))) Then
-                        Ban = "That user is safelisted."
+                        Ban = "Error: That user is safelisted."
                         
                         Exit Function
                     End If
                 End If
                 
                 If (GetAccess(Username).Access >= SpeakerAccess) Then
-                    Ban = "You do not have enough access to do that."
+                    Ban = "Error: You do not have sufficient access to do that."
                     
                     Exit Function
+                End If
+                
+                pos = g_Channel.GetUserIndex(Username)
+                
+                If (pos > 0) Then
+                    If (g_Channel.Users(pos).IsOperator) Then
+                        Ban = "Error: You cannot ban a channel operator."
+                    
+                        Exit Function
+                    End If
                 End If
                 
                 If (Kick = 0) Then
@@ -692,7 +689,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             ' ...
                             For j = 1 To g_Channel.Users.Count
                                 If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
-                                    If (StrComp(DB(i).Username, g_Channel.Users(j).Game, vbTextCompare) = 0) Then
+                                    If (StrComp(DB(i).Username, g_Channel.Users(j).game, vbTextCompare) = 0) Then
                                         ' ...
                                         doCheck = True
                                     End If

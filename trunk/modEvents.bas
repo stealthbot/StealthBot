@@ -123,7 +123,10 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     
     ' we aren't in a silent channel, are we?
     If (g_Channel.IsSilent) Then
-        AddName Username, Product, Flags, Ping, Clan
+        ' ...
+        If (frmChat.lvChannel.ListItems.Count < 300) Then
+            AddName Username, Product, Flags, Ping, Clan
+        End If
     Else
         ' ...
         If ((BotVars.ChatDelay = 0) Or (UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then

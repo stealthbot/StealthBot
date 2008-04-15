@@ -27,7 +27,7 @@ Private Const CHAN_GLOBAL     As Long = &H1000
 
 Private m_name             As String
 Private m_flags            As Long
-Private m_designated_heir  As Integer
+Private m_designated_heir  As String
 Private m_num_joins        As Long
 Private m_num_bans         As Long
 Private m_num_kicks        As Long
@@ -291,7 +291,7 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
 
     Dim i    As Integer ' ...
     Dim bln  As Boolean ' ...
-    Dim pos  As Integer ' ...
+    Dim Pos  As Integer ' ...
     Dim Name As String  ' ...
 
     ' ...
@@ -312,11 +312,11 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
                     Banlist.Remove i
                     
                     ' ...
-                    pos = IsOnBanList(Name)
+                    Pos = IsOnBanList(Name)
                     
                     ' ...
-                    If (pos > 0) Then
-                        Banlist(pos).IsDuplicateBan = False
+                    If (Pos > 0) Then
+                        Banlist(Pos).IsDuplicateBan = False
                     End If
                     
                     ' ...
@@ -326,7 +326,7 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
                     Exit For
                 Else
                     ' ...
-                    Banlist(pos).IsActive = False
+                    Banlist(Pos).IsActive = False
                 End If
             End If
         Next i
@@ -342,7 +342,7 @@ Public Function CheckUsers() As Integer
         Dim CurrentUser As clsUserObj
         Dim DBEntry     As udtGetAccessResponse
         Dim i           As Integer ' ...
-        Dim message     As String  ' ...
+        Dim Message     As String  ' ...
         Dim doCheck     As Boolean ' ...
         Dim HighRank    As Integer ' ...
         Dim HighIndex   As Integer ' ...
@@ -400,12 +400,12 @@ Public Function CheckUsers() As Integer
                         doCheck = False
                     Else
                         ' ...
-                        message = GetShitlist(CurrentUser.DisplayName)
+                        Message = GetShitlist(CurrentUser.DisplayName)
                        
                         ' ...
-                        If (message <> vbNullString) Then
+                        If (Message <> vbNullString) Then
                             ' ...
-                            frmChat.AddQ "/ban " & message
+                            frmChat.AddQ "/ban " & Message
                         Else
                             Dim j As Integer ' ...
                 
@@ -487,7 +487,7 @@ Public Function CheckUsers() As Integer
             End If
             
             ' ...
-            message = vbNullString
+            Message = vbNullString
             
             ' ...
             doCheck = True
