@@ -1338,7 +1338,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
             End If
         ElseIf (StrComp(Left$(g_Channel.Name, 5), "Clan ", vbTextCompare) = 0) Then
             ' ...
-            If ((g_Clan.Self.Rank <= 2) Or _
+            If ((g_Clan.Self.Rank <= 3) Or _
                     (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) <> 0)) Then
                     
                 ' ...
