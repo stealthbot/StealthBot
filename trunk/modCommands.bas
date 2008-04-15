@@ -1249,7 +1249,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' ...
     If (g_Channel.GetUserIndex(msgData) > 0) Then
         Dim i          As Integer ' ...
-        Dim arrUsers() As String  ' ...
+        Dim arrUsers() As Integer ' ...
         Dim userCount  As Integer ' ...
         Dim opsCount   As Integer ' ...
     
@@ -1289,7 +1289,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                     ' ...
                     If (g_Channel.GetUserIndexEx(g_Clan.Shamans(i).Name) > 0) Then
                         ' ...
-                        arrUsers(userCount) = g_Clan.Shamans(i).Name
+                        arrUsers(userCount) = i
     
                         ' ...
                         userCount = (userCount + 1)
@@ -1309,19 +1309,17 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 End If
                 
                 ' ...
-                If (userCount) Then
+                If (userCount > 0) Then
                     ' demote shamans
                     For i = 0 To (userCount - 1)
                         ' ...
-                        With PBuffer
-                            .InsertDWord &H1
-                            .InsertNTString arrUsers(i)
-                            .InsertByte &H2 ' General member (Grunt)
-                            .SendPacket &H7A
-                        End With
-
-                        ' ...
-                        Call Pause(200, True, True)
+                        If (arrUsers(i) > 0) Then
+                            ' ...
+                            g_Clan.Shamans(arrUsers(i)).Demote
+                            
+                            ' ...
+                            Call Pause(200, True, True)
+                        End If
                     Next i
                 End If
             End If
@@ -1370,19 +1368,17 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Call bnetSend("/resign")
         
         ' ...
-        If (userCount) Then
+        If (userCount > 0) Then
             ' promote shamans again
             For i = 0 To (userCount - 1)
                 ' ...
-                With PBuffer
-                    .InsertDWord &H3
-                    .InsertNTString arrUsers(i)
-                    .InsertByte &H3 ' Officer (Shaman)
-                    .SendPacket &H7A
-                End With
-                
-                ' ...
-                Call Pause(200, True, True)
+                If (arrUsers(i) > 0) Then
+                    ' ...
+                    g_Clan.Shamans(arrUsers(i)).Promote
+                    
+                    ' ...
+                    Call Pause(200, True, True)
+                End If
             Next i
         End If
         
