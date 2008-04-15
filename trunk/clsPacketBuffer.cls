@@ -76,7 +76,7 @@ Public Function InsertWord(ByVal Data As Integer)
 End Function ' end function InsertWord
 
 ' ...
-Public Function GetWord() As Integer
+Public Function GetWORD() As Integer
 
 End Function ' end function GetWord
 
@@ -93,7 +93,7 @@ Public Function InsertDWord(ByVal Data As Long)
 End Function ' end function InsertDWord
 
 ' ...
-Public Function GetDWord() As Long
+Public Function GetDWORD() As Long
 
 End Function ' end function GetDWord
 
@@ -146,8 +146,8 @@ Public Function GetString() As String
 End Function ' end function GetString
 
 ' ...
-Public Function Length() As Long
-    Length = m_bufpos
+Public Function length() As Long
+    length = m_bufpos
 End Function
 
 ' ...

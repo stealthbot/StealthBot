@@ -38,6 +38,7 @@ Begin VB.Form frmWhisperWindow
       _ExtentY        =   4683
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmWhisperWindow.frx":0000
@@ -194,11 +195,11 @@ Private Sub mnuSave_Click()
             
             Open .filename For Output As #f
                 Print #f, "<html><head>"
-                Print #f, "<title>StealthBot Conversation Log: " & CurrentUsername & " and " & m_sWhisperTo & "</title></head>"
+                Print #f, "<title>StealthBot Conversation Log: " & GetCurrentUsername & " and " & m_sWhisperTo & "</title></head>"
                 Print #f, "<body bgcolor='#000000'>"
                 
                 Print #f, "<p><font color='#FFFFFF'><b>"
-                Print #f, "StealthBot Conversation Log, between " & CurrentUsername & " and " & m_sWhisperTo & ".<br />"
+                Print #f, "StealthBot Conversation Log, between " & GetCurrentUsername & " and " & m_sWhisperTo & ".<br />"
                 Print #f, "Conversation began: " & Format(m_StartDate, "HH:MM:SS, m/dd/yyyy")
                 Print #f, "</b></font></p>"
                 
@@ -214,7 +215,7 @@ Private Sub mnuSave_Click()
                             tMessage = ToSave(i)
                         End If
 
-                        If StrComp(tUsername, CurrentUsername, vbTextCompare) = 0 Then
+                        If StrComp(tUsername, GetCurrentUsername, vbTextCompare) = 0 Then
                             Print #f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.TalkBotUsername)) & "'><b>";
                         Else
                             Print #f, "<font size='-1' color='#" & VBHexToHTMLHex(Hex(RTBColors.WhisperUsernames)) & "'><b>";

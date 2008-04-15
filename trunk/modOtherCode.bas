@@ -366,10 +366,10 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
     ' ...
     If (Left$(Message, 1) <> "/") Then
         If (g_Channel.IsSilent) Then
-            frmChat.AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, CurrentUsername, _
+            frmChat.AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, GetCurrentUsername, _
                 RTBColors.Carats, "> ", RTBColors.WhisperText, Message
         Else
-            frmChat.AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, CurrentUsername, _
+            frmChat.AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, GetCurrentUsername, _
                 RTBColors.Carats, "> ", RTBColors.TalkNormalText, Message
         End If
     End If
@@ -551,7 +551,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Dim found   As Boolean ' ...
     Dim dbIndex As Integer ' ...
     Dim dbCount As Integer ' ...
-    Dim Splt()  As String  ' ...
+    Dim splt()  As String  ' ...
     Dim bln     As Boolean ' ...
     
     ' default index to negative one to
@@ -585,19 +585,19 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                     ' ...
                     If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
                         ' ...
-                        Splt() = Split(DB(i).Groups, ",")
+                        splt() = Split(DB(i).Groups, ",")
                     Else
                         ' ...
-                        ReDim Preserve Splt(0)
+                        ReDim Preserve splt(0)
                         
                         ' ...
-                        Splt(0) = DB(i).Groups
+                        splt(0) = DB(i).Groups
                     End If
                     
                     ' ...
-                    For j = 0 To UBound(Splt)
+                    For j = 0 To UBound(splt)
                         ' ...
-                        gAcc = GetCumulativeGroupAccess(Splt(j))
+                        gAcc = GetCumulativeGroupAccess(splt(j))
                     
                         ' ...
                         If (GetCumulativeAccess.Access < gAcc.Access) Then
@@ -690,13 +690,9 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             End If
                         ElseIf (StrComp(DB(i).Type, "GAME", vbTextCompare) = 0) Then
                             ' ...
-                            For j = 1 To colUsersInChannel.Count
-                                If (StrComp(Username, colUsersInChannel.Item(j).Username, _
-                                        vbTextCompare) = 0) Then
-                                     
-                                    If (StrComp(DB(i).Username, colUsersInChannel.Item(j).Product, _
-                                        vbTextCompare) = 0) Then
-                                
+                            For j = 1 To g_Channel.Users.Count
+                                If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
+                                    If (StrComp(DB(i).Username, g_Channel.Users(j).Game, vbTextCompare) = 0) Then
                                         ' ...
                                         doCheck = True
                                     End If
@@ -706,13 +702,9 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             Next j
                         ElseIf (StrComp(DB(i).Type, "CLAN", vbTextCompare) = 0) Then
                             ' ...
-                            For j = 1 To colUsersInChannel.Count
-                                If (StrComp(Username, colUsersInChannel.Item(j).Username, _
-                                        vbTextCompare) = 0) Then
-                                     
-                                    If (StrComp(DB(i).Username, colUsersInChannel.Item(j).Clan, _
-                                        vbTextCompare) = 0) Then
-                                
+                            For j = 1 To g_Channel.Users.Count
+                                If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
+                                    If (StrComp(DB(i).Username, g_Channel.Users(j).Clan, vbTextCompare) = 0) Then
                                         ' ...
                                         doCheck = True
                                     End If
@@ -734,19 +726,19 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                                 ' ...
                                 If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
                                     ' ...
-                                    Splt() = Split(tmp.Groups, ",")
+                                    splt() = Split(tmp.Groups, ",")
                                 Else
                                     ' ...
-                                    ReDim Preserve Splt(0)
+                                    ReDim Preserve splt(0)
                                     
                                     ' ...
-                                    Splt(0) = tmp.Groups
+                                    splt(0) = tmp.Groups
                                 End If
                                 
                                 ' ...
-                                For j = 0 To UBound(Splt)
+                                For j = 0 To UBound(splt)
                                     ' ...
-                                    gAcc = GetCumulativeGroupAccess(Splt(j))
+                                    gAcc = GetCumulativeGroupAccess(splt(j))
                                 
                                     ' ...
                                     If (tmp.Access < gAcc.Access) Then
@@ -788,7 +780,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             For j = 1 To Len(tmp.Flags)
                                 ' ...
                                 If (InStr(1, GetCumulativeAccess.Flags, Mid$(tmp.Flags, j, 1), _
-                                    vbBinaryCompare) = 0) Then
+                                        vbBinaryCompare) = 0) Then
                                     
                                     ' ...
                                     GetCumulativeAccess.Flags = GetCumulativeAccess.Flags & _
@@ -863,7 +855,7 @@ End Function
 ' ...
 Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccessResponse
     Dim gAcc   As udtGetAccessResponse ' ...
-    Dim Splt() As String               ' ...
+    Dim splt() As String               ' ...
     
     ' ...
     gAcc = GetAccess(Group, "GROUP")
@@ -878,12 +870,12 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
             Dim j As Integer ' ...
         
             ' ...
-            Splt() = Split(gAcc.Groups, ",")
+            splt() = Split(gAcc.Groups, ",")
             
             ' ...
-            For i = 0 To UBound(Splt)
+            For i = 0 To UBound(splt)
                 ' ...
-                recAcc = GetCumulativeGroupAccess(Splt(i))
+                recAcc = GetCumulativeGroupAccess(splt(i))
                     
                 ' ...
                 If (gAcc.Access < recAcc.Access) Then
@@ -948,7 +940,7 @@ End Function
 ' ...
 Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Boolean
     Dim gAcc   As udtGetAccessResponse ' ...
-    Dim Splt() As String               ' ...
+    Dim splt() As String               ' ...
     
     ' ...
     gAcc = GetAccess(Group, "GROUP")
@@ -963,17 +955,17 @@ Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Bool
             Dim j As Integer ' ...
         
             ' ...
-            Splt() = Split(gAcc.Groups, ",")
+            splt() = Split(gAcc.Groups, ",")
             
             ' ...
-            For i = 0 To UBound(Splt)
-                If (StrComp(Splt(i), Check, vbTextCompare) = 0) Then
+            For i = 0 To UBound(splt)
+                If (StrComp(splt(i), Check, vbTextCompare) = 0) Then
                     CheckGroup = True
                     
                     Exit Function
                 Else
                     ' ...
-                    recAcc = CheckGroup(Splt(i), Check)
+                    recAcc = CheckGroup(splt(i), Check)
                 
                     If (recAcc) Then
                         CheckGroup = True
@@ -1127,7 +1119,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
     Dim isPriority As Integer
     Dim IsSelf     As Boolean
     
-    If (StrComp(Username, CurrentUsername, vbTextCompare) = 0) Then
+    If (StrComp(Username, GetCurrentUsername, vbTextCompare) = 0) Then
         MyFlags = Flags
         
         SharedScriptSupport.BotFlags = _
@@ -1562,6 +1554,12 @@ Public Function NameWithoutRealm(ByVal Username As String, Optional ByVal Strict
     End If
 End Function
 
+Public Function GetCurrentUsername() As String
+
+    GetCurrentUsername = convertUsername(CurrentUsername)
+
+End Function
+
 Public Function GetW3Realm(Optional ByVal Username As String) As String
     If (LenB(Username) = 0) Then
         GetW3Realm = BotVars.Gateway
@@ -1794,10 +1792,10 @@ End Function
 Public Sub UpdateSafelistedStatus(ByVal sUser As String, ByVal bStatus As Boolean)
     Dim i As Integer
     
-    i = UsernameToIndex(sUser)
+    'i = UsernameToIndex(sUser)
     
     If i > 0 Then
-        colUsersInChannel.Item(i).Safelisted = bStatus
+        'colUsersInChannel.Item(i).Safelisted = bStatus
     End If
 End Sub
 
@@ -2057,32 +2055,32 @@ Public Function GetUptimeMS() As Double
 End Function
 
 
-Public Function UsernameToIndex(ByVal sUsername As String) As Long
-    Dim user        As clsUserInfo
-    Dim FirstLetter As String * 1
-    Dim i           As Integer
-    
-    FirstLetter = Mid$(sUsername, 1, 1)
-    
-    If (colUsersInChannel.Count > 0) Then
-        For i = 1 To colUsersInChannel.Count
-            Set user = colUsersInChannel.Item(i)
-            
-            With user
-                If (StrComp(Mid$(.Username, 1, 1), FirstLetter, vbTextCompare) = 0) Then
-                    If (StrComp(sUsername, .Username, vbTextCompare) = 0) Then
-                        UsernameToIndex = i
-                        
-                        Exit Function
-                    End If
-                End If
-            End With
-        Next i
-        
-    End If
-    
-    UsernameToIndex = 0
-End Function
+'Public Function UsernameToIndex(ByVal sUsername As String) As Long
+'    Dim user        As clsUserInfo
+'    Dim FirstLetter As String * 1
+'    Dim i           As Integer
+'
+'    FirstLetter = Mid$(sUsername, 1, 1)
+'
+'    If (colUsersInChannel.Count > 0) Then
+'        For i = 1 To colUsersInChannel.Count
+'            Set user = colUsersInChannel.Item(i)
+'
+'            With user
+'                If (StrComp(Mid$(.Username, 1, 1), FirstLetter, vbTextCompare) = 0) Then
+'                    If (StrComp(sUsername, .Username, vbTextCompare) = 0) Then
+'                        UsernameToIndex = i
+'
+'                        Exit Function
+'                    End If
+'                End If
+'            End With
+'        Next i
+'
+'    End If
+'
+'    UsernameToIndex = 0
+'End Function
 
 
 Public Function checkChannel(ByVal NameToFind As String) As Integer
@@ -2167,7 +2165,7 @@ Public Function DoReplacements(ByVal s As String, Optional Username As String, _
     gAcc = GetCumulativeAccess(Username)
 
     s = Replace(s, "%0", Username, 1)
-    s = Replace(s, "%1", CurrentUsername, 1)
+    s = Replace(s, "%1", GetCurrentUsername, 1)
     s = Replace(s, "%c", g_Channel.Name, 1)
     s = Replace(s, "%bc", BanCount, 1)
     
@@ -2297,7 +2295,7 @@ End Sub
 ' Returns a single chunk of a string as if that string were Split() and that chunk
 ' extracted
 ' 1-based
-Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
+Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
     Dim c           As Integer
     Dim i           As Integer
     Dim TargetSpace As Integer
@@ -2307,10 +2305,10 @@ Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
     
     c = 0
     i = 1
-    Pos = Pos
+    pos = pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While ((c < Pos) And (i > 0))
+    While ((c < pos) And (i > 0))
         TargetSpace = i
         
         i = (InStr(i + 1, str, Space(1), vbBinaryCompare))
@@ -2318,7 +2316,7 @@ Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
         c = (c + 1)
     Wend
     
-    If (c >= Pos) Then
+    If (c >= pos) Then
         c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
         If (c > 0) Then
@@ -2382,7 +2380,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     On Error GoTo ERROR_HANDLER
     
     Dim lineCount As Long    ' stores line number
-    Dim Pos       As Long    ' stores position of delimiter
+    Dim pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
     Dim length    As Long    ' stores length after postfix
     Dim bln       As Boolean ' stores result of delimiter split
@@ -2430,7 +2428,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             If (OversizeDelimiter <> vbNullString) Then
                 ' grab position of delimiter character that is
                 ' the closest to our specified length
-                Pos = InStrRev(StringSplit, OversizeDelimiter, _
+                pos = InStrRev(StringSplit, OversizeDelimiter, _
                     length, vbBinaryCompare)
             End If
             
@@ -2439,9 +2437,9 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((Pos) And (Pos >= Round(length / 2))) Then
+            If ((pos) And (pos >= Round(length / 2))) Then
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, Pos - 1)
+                strTmp = Mid$(strTmp, 1, pos - 1)
                 
                 ' indicate that an additional
                 ' character will require removal
@@ -2481,7 +2479,7 @@ End Function
 
 ' Thanks strtok()!
 Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional IsLocal As Boolean = _
-    False, Optional ByVal datasrc As String = "internal") As clsCommandObj
+    False) As clsCommandObj
     
     On Error GoTo ERROR_HANDLER
     
@@ -2563,11 +2561,11 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
             CropLen = (CropLen + Len(BotVars.TriggerLong))
         
             ' ...
-            If (StrComp(Left$(tmp, Len(CurrentUsername) + 1), CurrentUsername & Space(1), _
+            If (StrComp(Left$(tmp, Len(GetCurrentUsername) + 1), GetCurrentUsername & Space(1), _
                     vbTextCompare) = 0) Then
                 
                 ' ...
-                CropLen = (CropLen + Len(CurrentUsername))
+                CropLen = (CropLen + Len(GetCurrentUsername))
             End If
             
             ' ...
@@ -2587,27 +2585,27 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                     End If
                 Else
                     ' ...
-                    If (StrComp(Left$(tmp, Len(CurrentUsername)), CurrentUsername, vbTextCompare) = 0) Then
+                    If (StrComp(Left$(tmp, Len(GetCurrentUsername)), GetCurrentUsername, vbTextCompare) = 0) Then
                         ' ...
-                        If ((Mid$(tmp, Len(CurrentUsername) + 1, 2) = ": ") Or _
-                                (Mid$(tmp, Len(CurrentUsername) + 1, 2) = ", ")) Then
+                        If ((Mid$(tmp, Len(GetCurrentUsername) + 1, 2) = ": ") Or _
+                                (Mid$(tmp, Len(GetCurrentUsername) + 1, 2) = ", ")) Then
                                 
                             ' ...
-                            CropLen = (CropLen + (Len(CurrentUsername) + 2))
+                            CropLen = (CropLen + (Len(GetCurrentUsername) + 2))
                                 
                             ' ...
                             bln = True
                         End If
                         
-                    ElseIf (StrComp(Left$(tmp, Len(reverseUsername(CurrentUsername))), _
-                                reverseUsername(CurrentUsername), vbTextCompare) = 0) Then
+                    ElseIf (StrComp(Left$(tmp, Len(GetCurrentUsername)), _
+                                GetCurrentUsername, vbTextCompare) = 0) Then
                             
                         ' ...
-                        If ((Mid$(tmp, Len(reverseUsername(CurrentUsername)) + 1, 2) = ": ") Or _
-                                (Mid$(tmp, Len(reverseUsername(CurrentUsername)) + 1, 2) = ", ")) Then
+                        If ((Mid$(tmp, Len(GetCurrentUsername) + 1, 2) = ": ") Or _
+                                (Mid$(tmp, Len(GetCurrentUsername) + 1, 2) = ", ")) Then
                                 
                             ' ...
-                            CropLen = (CropLen + (Len(reverseUsername(CurrentUsername)) + 2))
+                            CropLen = (CropLen + (Len(GetCurrentUsername) + 2))
                                 
                             ' ...
                             bln = True
@@ -2685,7 +2683,6 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         With IsCommand
             .IsLocal = IsLocal
             .PublicOutput = PublicOutput
-            .datasrc = datasrc
         End With
 
         ' ...
@@ -2739,7 +2736,7 @@ Public Function convertAlias(ByVal cmdName As String) As String
         
         ' ...
         Call commands.setProperty("SelectionLanguage", "XPath")
-        
+
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
             Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _

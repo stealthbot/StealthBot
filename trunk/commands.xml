@@ -2128,7 +2128,7 @@
     <arguments>
       <argument name="trigger">
         <restriction name="DISABLE_FORWARD_SLASH">
-          <match message="//+" />
+          <match message="[/]+" />
 
           <access />
         </restriction>

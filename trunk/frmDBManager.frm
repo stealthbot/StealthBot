@@ -752,7 +752,7 @@ Private Sub btnSave_Click(index As Integer)
         Call WriteDatabase(GetFilePath("users.txt"))
         
         ' check channel to find potential banned users
-        Call checkUsers
+        Call g_channel.CheckUsers
         
         ' close database form
         Call Unload(frmDBManager)
@@ -1160,29 +1160,29 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
         
         ' is entry a member of a group?
         If (Len(tmp.Groups) And (tmp.Groups <> "%")) Then
-            Dim Splt() As String  ' ...
+            Dim splt() As String  ' ...
             Dim j      As Integer ' ...
         
             ' is entry a member of multiple groups?
             If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
                 ' store working copy of group memberships, splitting up
                 ' multiple groupings by the ',' delimiter.
-                Splt() = Split(tmp.Groups, ",")
+                splt() = Split(tmp.Groups, ",")
             Else
                 ' redefine array size to store group name
-                ReDim Preserve Splt(0)
+                ReDim Preserve splt(0)
                 
                 ' store working copy of group membership
-                Splt(0) = tmp.Groups
+                splt(0) = tmp.Groups
             End If
             
             ' loop through entry's group memberships
-            For i = LBound(Splt) To UBound(Splt)
+            For i = LBound(splt) To UBound(splt)
                 ' loop through our group listing, checking to see if we have any
                 ' matches (since the entry is a member of a group, we better!)
                 For j = 1 To lvGroups.ListItems.Count
                     ' is entry a member of group?
-                    If (StrComp(Splt(i), lvGroups.ListItems(j), vbTextCompare) = 0) Then
+                    If (StrComp(splt(i), lvGroups.ListItems(j), vbTextCompare) = 0) Then
                         ' ...
                         If (m_group_index = -1) Then
                             m_group_index = j
@@ -1493,32 +1493,32 @@ Private Sub trvUsers_AfterLabelEdit(Cancel As Integer, NewString As String)
             For i = LBound(m_DB) To UBound(m_DB)
                 ' ...
                 If ((Len(m_DB(i).Groups) > 0) And (m_DB(i).Groups <> "%")) Then
-                    Dim Splt() As String  ' ...
+                    Dim splt() As String  ' ...
                     Dim j      As Integer ' ...
                 
                     ' ...
                     If (InStr(1, m_DB(i).Groups, ",", vbTextCompare) <> 0) Then
                         ' ...
-                        Splt() = Split(m_DB(i).Groups, ",")
+                        splt() = Split(m_DB(i).Groups, ",")
                     Else
                         ' ...
-                        ReDim Preserve Splt(0)
+                        ReDim Preserve splt(0)
                         
                         ' ...
-                        Splt(0) = m_DB(i).Groups
+                        splt(0) = m_DB(i).Groups
                     End If
                     
                     ' ...
-                    For j = LBound(Splt) To UBound(Splt)
+                    For j = LBound(splt) To UBound(splt)
                         ' ...
-                        If (StrComp(Splt(j), trvUsers.SelectedItem.text, vbTextCompare) = 0) Then
+                        If (StrComp(splt(j), trvUsers.SelectedItem.text, vbTextCompare) = 0) Then
                             ' ...
-                            Splt(j) = NewString
+                            splt(j) = NewString
                         End If
                     Next j
                     
                     ' ...
-                    m_DB(i).Groups = Join(Splt(), ",")
+                    m_DB(i).Groups = Join(splt(), ",")
                 End If
             Next i
         End If
@@ -1528,7 +1528,7 @@ End Sub
 Private Function IsInGroup(ByVal Username As String, ByVal GroupName As String) As Boolean
     Dim i      As Integer ' ...
     Dim j      As Integer ' ...
-    Dim Splt() As String  ' ...
+    Dim splt() As String  ' ...
     
     ' ...
     For i = LBound(m_DB) To UBound(m_DB)
@@ -1539,18 +1539,18 @@ Private Function IsInGroup(ByVal Username As String, ByVal GroupName As String) 
                 ' ...
                 If (InStr(1, m_DB(i).Groups, "%", vbBinaryCompare) <> 0) Then
                     ' ...
-                    Splt() = Split(m_DB(i).Groups, "%")
+                    splt() = Split(m_DB(i).Groups, "%")
                 Else
                     ' ...
-                    ReDim Splt(0)
+                    ReDim splt(0)
                     
                     ' ...
-                    Splt(0) = m_DB(i).Groups
+                    splt(0) = m_DB(i).Groups
                 End If
                 
                 ' ...
-                For j = LBound(Splt) To UBound(Splt)
-                    If (StrComp(GroupName, Splt(j), vbTextCompare) = 0) Then
+                For j = LBound(splt) To UBound(splt)
+                    If (StrComp(GroupName, splt(j), vbTextCompare) = 0) Then
                         ' ...
                         IsInGroup = True
                         
@@ -1804,13 +1804,13 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                 For i = LBound(m_DB) To UBound(m_DB)
                     If (Len(m_DB(i).Groups) And m_DB(i).Groups <> "%") Then
                         If (InStr(1, m_DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
-                            Dim Splt()     As String ' ...
+                            Dim splt()     As String ' ...
                             Dim innerfound As Boolean ' ...
                             
-                            Splt() = Split(m_DB(i).Groups, ",")
+                            splt() = Split(m_DB(i).Groups, ",")
                             
-                            For j = LBound(Splt) To UBound(Splt)
-                                If (StrComp(bak.Username, Splt(j), vbTextCompare) = 0) Then
+                            For j = LBound(splt) To UBound(splt)
+                                If (StrComp(bak.Username, splt(j), vbTextCompare) = 0) Then
                                     innerfound = True
                                 
                                     Exit For
@@ -1820,13 +1820,13 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                             If (innerfound) Then
                                 Dim k As Integer ' ...
                                 
-                                For k = (j + 1) To UBound(Splt)
-                                    Splt(k - 1) = Splt(k)
+                                For k = (j + 1) To UBound(splt)
+                                    splt(k - 1) = splt(k)
                                 Next k
                                 
-                                ReDim Preserve Splt(UBound(Splt) - 1)
+                                ReDim Preserve splt(UBound(splt) - 1)
                                 
-                                m_DB(i).Groups = Join(Splt(), vbNullString)
+                                m_DB(i).Groups = Join(splt(), vbNullString)
                             End If
                         Else
                             If (StrComp(bak.Username, m_DB(i).Groups, vbTextCompare) = 0) Then

@@ -18,6 +18,12 @@ Begin VB.Form frmChat
    ScaleHeight     =   7950
    ScaleWidth      =   12585
    StartUpPosition =   3  'Windows Default
+   Begin VB.Timer tmrClanUpdate 
+      Enabled         =   0   'False
+      Interval        =   30000
+      Left            =   5760
+      Top             =   4680
+   End
    Begin MSComctlLib.ListView lvChannel 
       Height          =   6375
       Left            =   8880
@@ -29,7 +35,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11245
       View            =   3
       LabelEdit       =   1
-      LabelWrap       =   -1  'True
+      LabelWrap       =   0   'False
       HideSelection   =   -1  'True
       HideColumnHeaders=   -1  'True
       OLEDragMode     =   1
@@ -51,11 +57,11 @@ Begin VB.Form frmChat
       OLEDragMode     =   1
       NumItems        =   3
       BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         Object.Width           =   4180
+         Object.Width           =   4145
       EndProperty
       BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
          SubItemIndex    =   1
-         Object.Width           =   1217
+         Object.Width           =   1252
       EndProperty
       BeginProperty ColumnHeader(3) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
          Alignment       =   1
@@ -72,7 +78,7 @@ Begin VB.Form frmChat
    Begin VB.Timer tmrSilentChannel 
       Enabled         =   0   'False
       Index           =   0
-      Interval        =   750
+      Interval        =   500
       Left            =   6240
       Top             =   4680
    End
@@ -183,7 +189,7 @@ Begin VB.Form frmChat
       _ExtentY        =   1005
    End
    Begin VB.Timer tmrFriendlistUpdate 
-      Interval        =   5350
+      Interval        =   10000
       Left            =   7680
       Top             =   4680
    End
@@ -1484,10 +1490,10 @@ Private Sub Form_Load()
     
     ' 4/10/06:
     ' CHECK FOR CONFIG.INI PATH HACK
-    l = InStr(Command(), "-cpath ")
+    l = InStr(command(), "-cpath ")
     
-    If l > 0 And Len(Command()) > (l + 7) Then
-        ConfigOverride = Mid$(Command(), l + 7)
+    If l > 0 And Len(command()) > (l + 7) Then
+        ConfigOverride = Mid$(command(), l + 7)
         
         If InStr(ConfigOverride, " ") > 0 Then
             ConfigOverride = Split(ConfigOverride, " ")(0)
@@ -1620,7 +1626,6 @@ Private Sub Form_Load()
     End If
     
     Set ClanHandler = New clsClanPacketHandler
-    Set colUsersInChannel = New Collection
     Set FriendListHandler = New clsFriendlistHandler
     Set ListToolTip = New CTooltip
     
@@ -1656,9 +1661,7 @@ Private Sub Form_Load()
     Me.Show
     Me.Refresh
     Me.AutoRedraw = True
-
-    Call UTF8Encode("/whoami")
-
+    
     AddChat RTBColors.ConsoleText, "-> Welcome to " & CVERSION & ", by Stealth."
     AddChat RTBColors.ConsoleText, "-> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net"
     
@@ -1690,7 +1693,7 @@ Private Sub Form_Load()
             "the terms of the End-User License Agreement available at http://eula.stealthbot.net."
     End If
     
-    CommandLine = Command()
+    CommandLine = command()
     
     If MDebug("debug") Then _
         AddChat RTBColors.ServerInfoText, " * Program executed in debug mode; unhandled packet " & _
@@ -2090,15 +2093,15 @@ Sub Event_BNLSConnecting()
     AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
 End Sub
 
-Sub Event_BNLSDataError(Message As Byte)
-    If Message = 0 Then
+Sub Event_BNLSDataError(message As Byte)
+    If message = 0 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Your CD-Key was rejected. It may be invalid. Try connecting again."
-    ElseIf Message = 1 Then
+    ElseIf message = 1 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Error! Your CD-Key is bad."
-    ElseIf Message = 2 Then
+    ElseIf message = 2 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Error! BNLS has failed CheckRevision. Please check your bot's settings and try again."
         AddChat RTBColors.ErrorMessageText, "[BNLS] Product: " & StrReverse(BotVars.Product) & "."
-    ElseIf Message = 3 Then
+    ElseIf message = 3 Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] Error! Bad NLS revision."
     End If
 End Sub
@@ -2288,7 +2291,7 @@ Sub Form_Resize()
 End Sub
 
 Function GenerateTooltip() As String
-    GenerateTooltip = IIf(LenB(CurrentUsername) > 0, CurrentUsername, "offline") & " @ " & BotVars.Server & " (" & StrReverse(BotVars.Product) & ")" & vbNullChar
+    GenerateTooltip = IIf(LenB(GetCurrentUsername) > 0, GetCurrentUsername, "offline") & " @ " & BotVars.Server & " (" & StrReverse(BotVars.Product) & ")" & vbNullChar
 End Function
 
 Sub UpdateTrayTooltip()
@@ -2331,11 +2334,20 @@ End Sub
 Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     AddChat vbYellow, "[CLAN] " & Member & " has left the clan."
     
-    Dim X As ListItem
+    Dim X   As ListItem
+    Dim pos As Integer
     
+    pos = g_Clan.GetUserIndexEx(Member)
+    
+    ' ...
+    If (pos > 0) Then
+        g_Clan.Members.Remove pos
+    End If
+    
+
     Set X = lvClanList.FindItem(Member)
     
-    If Not (X Is Nothing) Then
+    If (Not (X Is Nothing)) Then
         lvClanList.ListItems.Remove X.index
         
         lvClanList.Refresh
@@ -2344,11 +2356,14 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     End If
     
     On Error Resume Next
+
     SControl.Run "Event_ClanMemberLeaves", Member
 End Sub
 
 Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
     If Status = 1 Then
+        Set g_Clan = New clsClanObj
+    
         Clan.isUsed = False
         
         ListviewTabs.TabEnabled(2) = False
@@ -2364,10 +2379,10 @@ Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
 End Sub
 
 Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
-    If (Clan.MyRank < NewRank) Then
+    If (g_Clan.Self.Rank < NewRank) Then
         AddChat RTBColors.SuccessText, "[CLAN] You have been promoted. Your new rank is ", _
                 RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
-    ElseIf (Clan.MyRank > NewRank) Then
+    ElseIf (g_Clan.Self.Rank > NewRank) Then
         AddChat RTBColors.SuccessText, "[CLAN] You have been demoted. Your new rank is ", _
                 RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
     Else
@@ -2375,7 +2390,7 @@ Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
                 GetRank(NewRank), RTBColors.SuccessText, "."
     End If
 
-    Clan.MyRank = NewRank
+    g_Clan.Self.Rank = NewRank
     
     On Error Resume Next
     
@@ -2390,9 +2405,13 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
         .isUsed = True
     End With
     
+    With g_Clan
+        .Name = ClanTag
+    End With
+    
     Call InitListviewTabs
     
-    'If Clan.MyRank = 0 Then Clan.MyRank = 1
+    'If g_Clan.Self.Rank = 0 Then g_Clan.Self.Rank = 1
     On Error Resume Next
     
     ClanTag = KillNull(ClanTag)
@@ -2410,7 +2429,7 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
         SControl.Run "Event_BotClanInfo", ClanTag, Rank
     End If
     
-    ClanHandler.RequestClanList
+    RequestClanList
     
     'frmChat.ClanHandler.RequestClanMotd 1
 End Sub
@@ -2432,31 +2451,82 @@ Private Sub ClanHandler_ClanInvitation(ByVal Token As String, ByVal ClanTag As S
 End Sub
 
 Private Sub ClanHandler_ClanMemberList(Members() As String)
-    Dim i As Long
-    On Error Resume Next
+    Dim ClanMember As clsClanMemberObj
+    Dim i          As Long
     
+    ' ...
     If AwaitingClanList = 1 Then
+        ' ...
+        g_Clan.Clear
+    
+        ' ...
         lvClanList.ListItems.Clear
     
-        For i = 0 To UBound(Members) Step 2
-            If Len(Members(i)) > 0 And UBound(Members) >= i + 1 Then
-                AddClanMember Members(i), Mid$(Members(i + 1), 1, 1), Mid$(Members(i + 1), 2, 1)
+        ' ...
+        For i = 0 To UBound(Members) Step 4
+            ' ...
+            Set ClanMember = New clsClanMemberObj
+            
+            ' ...
+            With ClanMember
+                .Name = Members(i)
+                .Rank = Val(Members(i + 1))
+                .Status = Val(Members(i + 2))
+                .Location = Members(i + 3)
+            End With
+
+            ' ...
+            g_Clan.Members.Add ClanMember
+        
+            ' ...
+            If ((Len(Members(i)) > 0) And (UBound(Members) >= i + 1)) Then
+                ' ...
+                AddClanMember Members(i), Val(Members(i + 1)), Val(Members(i + 2))
                 
-                SControl.Run "Event_ClanMemberList", Members(i), Mid$(Members(i + 1), 1, 1), Mid$(Members(i + 1), 2, 1)
+                ' ...
+                SControl.Run "Event_ClanMemberList", Members(i), Val(Members(i + 1)), _
+                    Val(Members(i + 2))
             End If
         Next i
     End If
     
-    lblCurrentChannel.Caption = GetChannelString
+    ' ...
+    lblCurrentChannel.Caption = GetChannelString()
 End Sub
 
 Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
-    Dim X As ListItem
+    Dim X   As ListItem
+    Dim pos As Integer
+    
+    pos = g_Clan.GetUserIndexEx(Username)
+    
+    If (pos > 0) Then
+        With g_Clan.Members(pos)
+            .Rank = Rank
+            .Status = IsOnline
+            .Location = Location
+        End With
+    Else
+        Dim ClanMember As clsClanMemberObj
+        
+        ' ...
+        Set ClanMember = New clsClanMemberObj
+        
+        ' ...
+        With ClanMember
+            .Rank = Rank
+            .Status = IsOnline
+            .Location = Location
+        End With
+        
+        ' ...
+        g_Clan.Members.Add ClanMember
+    End If
     
     Set X = lvClanList.FindItem(Username)
 
     If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
-        Clan.MyRank = IIf(Rank = 0, Rank + 1, Rank)
+        g_Clan.Self.Rank = IIf(Rank = 0, Rank + 1, Rank)
         AwaitingClanInfo = 1
     End If
     
@@ -2476,18 +2546,13 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     SControl.Run "Event_ClanMemberUpdate", Username, Rank, IsOnline
 End Sub
 
-Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
-    If (cookie = 1) Then
-        PassedClanMotdCheck = True
-    End If
-    
-    'If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
-    '    frmChat.AddChat RTBColors.ServerInfoText, Message
-    'End If
+Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal message As String)
+    ' ...
+    g_Clan.MOTD = message
     
     On Error Resume Next
     
-    SControl.Run "Event_ClanMOTD", Message
+    SControl.Run "Event_ClanMOTD", message
 End Sub
 
 Private Sub ClanHandler_DemoteUserReply(ByVal Success As Boolean)
@@ -2557,7 +2622,7 @@ Private Sub ClanHandler_RemoveUserReply(ByVal result As Byte)
             Else
                 AddChat RTBColors.SuccessText, "[CLAN] User removed successfully."
                 lvClanList.ListItems.Clear
-                ClanHandler.RequestClanList
+                RequestClanList
             End If
         
         Case 3
@@ -2664,7 +2729,6 @@ Sub Form_Unload(Cancel As Integer)
     DestroyAllWWs
     Set colWhisperWindows = Nothing
     Set colLastSeen = Nothing
-    Set colUsersInChannel = Nothing
     Set colSafelist = Nothing
     Set dctCallbacks = Nothing
     Set colDynamicMenus = Nothing
@@ -2770,11 +2834,11 @@ Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
     
     Set X = lvFriendList.FindItem(Username)
     
-    If Not (X Is Nothing) Then
+    If (Not (X Is Nothing)) Then
         lvFriendList.ListItems.Remove X.index
+        
+        Set X = Nothing
     End If
-    
-    Set X = Nothing
     
     lblCurrentChannel.Caption = GetChannelString
 End Sub
@@ -2788,7 +2852,7 @@ Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLInd
     Set X = lvFriendList.FindItem(Username)
     
     If Not (X Is Nothing) Then
-        With FriendListHandler.colFriends.Item(FLIndex)
+        With g_Friends.Item(FLIndex)
             Select Case .Location
                 Case FRL_OFFLINE
                     X.ListSubItems.Item(1).ReportIcon = ICOFFLINE
@@ -2945,13 +3009,13 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, 
 
     If Button = 2 Then
         If Not (lvChannel.SelectedItem Is Nothing) Then
-            aInx = UsernameToIndex(GetSelectedUser)
+            aInx = g_channel.GetUserIndex(GetSelectedUser)
             
             If aInx > 0 Then
-                sProd = colUsersInChannel.Item(aInx).Product
+                sProd = g_channel.Users(aInx).Game
             
                 mnuPopWebProfile.Enabled = (sProd = "W3XP" Or sProd = "WAR3")
-                mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And Clan.MyRank >= 3)
+                mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And g_Clan.Self.Rank >= 3)
                 mnuPopKick.Enabled = (MyFlags = 2 Or MyFlags = 18)
                 mnuPopDes.Enabled = (MyFlags = 2 Or MyFlags = 18)
                 mnuPopBan.Enabled = (MyFlags = 2 Or MyFlags = 18)
@@ -2988,10 +3052,10 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
             
             Dim sTemp As String
             
-            If ((lItemIndex > 0) And (FriendListHandler.colFriends.Count > 0)) Then
+            If ((lItemIndex > 0) And (g_Friends.Count > 0)) Then
                 lItemIndex = FriendListHandler.UsernameToFLIndex(lvFriendList.ListItems(m_lCurItemIndex).text)
             
-                With FriendListHandler.colFriends.Item(lItemIndex)
+                With g_Friends.Item(lItemIndex)
 '                    Public Const FRL_OFFLINE& = &H0
 '                    Public Const FRL_NOTINCHAT& = &H1
 '                    Public Const FRL_INCHAT& = &H2
@@ -3050,6 +3114,8 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
     Dim lItemIndex As Long
     Dim sOutBuf As String
     Dim sTemp As String
+    Dim UserAccess As udtGetAccessResponse
+    Dim Clan As String
    
     lvhti.pt.X = X / Screen.TwipsPerPixelX
     lvhti.pt.Y = Y / Screen.TwipsPerPixelY
@@ -3061,15 +3127,41 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
         If m_lCurItemIndex = 0 Then   ' no item under the mouse pointer
             ListToolTip.Destroy
         Else
-            ListToolTip.Title = "Information for " & lvChannel.ListItems(m_lCurItemIndex).text
+            ' ...
+            'UserAccess = GetCumulativeAccess(lvChannel.ListItems(m_lCurItemIndex).text, "USER")
+        
+            ' ...
+            ListToolTip.Title = _
+                "Information for " & lvChannel.ListItems(m_lCurItemIndex).text
+                
+            ' ...
+            'If (UserAccess.Username <> vbNullString) Then
+            '    sTemp = sTemp & "["
+            '
+            '    If (UserAccess.Access > 0) Then
+            '        sTemp = sTemp & "rank: " & UserAccess.Access
+            '    End If
+            '
+            '    If ((UserAccess.Flags <> "%") And (UserAccess.Flags <> vbNullString)) Then
+            '        If (UserAccess.Access > 0) Then
+            '            sTemp = sTemp & ", "
+            '        End If
+            '
+            '        sTemp = sTemp & "flags: " & UserAccess.Flags
+            '    End If
+            '
+            '    sTemp = sTemp & "]" & vbCrLf
+            'End If
+                
             
-            lItemIndex = UsernameToIndex(lvChannel.ListItems(m_lCurItemIndex).text)
+            lItemIndex = g_channel.GetUserIndex(lvChannel.ListItems(m_lCurItemIndex).text)
             
-            If ((lItemIndex > 0) And (colUsersInChannel.Count > 0)) Then
-                With colUsersInChannel.Item(lItemIndex)
-                    sTemp = ParseStatstring(.Statstring, sOutBuf, sTemp)
-                    
-                    sTemp = "Ping at login: " & .Ping & "ms" & vbCrLf
+            If (lItemIndex > 0) Then
+                With g_channel.Users(lItemIndex)
+                    ParseStatstring .Statstring, sOutBuf, Clan
+            
+                    'sTemp = sTemp & vbCrLf
+                    sTemp = sTemp & "Ping at login: " & .Ping & "ms" & vbCrLf
                     sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
                     sTemp = sTemp & sOutBuf
@@ -3421,7 +3513,7 @@ Private Sub mnuPopSafelist_Click()
     
     gAcc.Access = 1000
     
-    Call ProcessCommand(CurrentUsername, "/safeadd " & toSafe, True, False)
+    Call ProcessCommand(GetCurrentUsername, "/safeadd " & toSafe, True, False)
 End Sub
 
 Private Sub mnuPopShitlist_Click()
@@ -3434,7 +3526,7 @@ Private Sub mnuPopShitlist_Click()
     
     gAcc.Access = 1000
     
-    Call ProcessCommand(CurrentUsername, "/shitadd " & toBan, True, False)
+    Call ProcessCommand(GetCurrentUsername, "/shitadd " & toBan, True, False)
 End Sub
 
 Private Sub mnuPopSquelch_Click()
@@ -3483,7 +3575,7 @@ Private Sub mnuPopInvite_Click()
     End If
     
     If LenB(sPlayer) > 0 Then
-        If Clan.MyRank >= 3 Then
+        If g_Clan.Self.Rank >= 3 Then
             InviteToClan (sPlayer)
             AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & GetSelectedUser & ", awaiting reply."
         End If
@@ -4343,15 +4435,15 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 End If
                 
             Case KEY_ENTER
-                n = UsernameToIndex(CurrentUsername)
+                'n = UsernameToIndex(CurrentUsername)
                 
                 'Debug.Print n
                 
-                If (n > 0) Then
-                    With colUsersInChannel
-                        .Item(n).Acts
-                    End With
-                End If
+                'If (n > 0) Then
+                '    With colUsersInChannel
+                '        .Item(n).Acts
+                '    End With
+                'End If
             
                 Select Case (Shift)
                     Case S_CTRL 'CTRL+ENTER - rewhisper
@@ -4399,9 +4491,9 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 s = txtPre.text & cboSend.text & txtPost.text
                                     
                                 If (LCase$(s) = "/fl" And MDebug("debug")) Then
-                                    For n = 1 To FriendListHandler.colFriends.Count
-                                        AddChat vbMagenta, FriendListHandler.colFriends.Item(n).Username & _
-                                            " - " & FriendListHandler.colFriends.Item(n).Product
+                                    For n = 1 To g_Friends.Count
+                                        AddChat vbMagenta, g_Friends.Item(n).Username & _
+                                            " - " & g_Friends.Item(n).Product
                                     Next n
                                 
                                 ElseIf (LCase$(s) = "/accountinfo") Then
@@ -4444,9 +4536,9 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     AddChat RTBColors.ConsoleText, "Flags forced to 2."
                                 
                                 ElseIf ((s = "/flags") And (MDebug("debug"))) Then
-                                    For n = 1 To colUsersInChannel.Count
-                                        With colUsersInChannel.Item(n)
-                                            AddChat RTBColors.ConsoleText, .Username & Space(4) & .Flags
+                                    For n = 1 To g_channel.Users.Count
+                                        With g_channel.Users(n)
+                                            AddChat RTBColors.ConsoleText, .Name & Space$(4) & .Flags
                                         End With
                                     Next n
                                     
@@ -4498,7 +4590,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     
                                     m = OutFilterMsg(s)
                                     
-                                    commandResult = ProcessCommand(CurrentUsername, m, _
+                                    commandResult = ProcessCommand(GetCurrentUsername, m, _
                                         True, False)
                                 Else
                                     Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
@@ -4635,7 +4727,7 @@ Private Sub cboSend_KeyPress(KeyAscii As Integer)
         End If
     End With
     
-    If Len(cboSend.text) > 220 Then
+    If Len(cboSend.text) > 223 Then
         cboSend.ForeColor = vbRed
     Else
         cboSend.ForeColor = vbWhite
@@ -4705,7 +4797,7 @@ Private Sub quLower_Timer()
             
             If Len(strArray(c)) > 1 Then
                 If InStr(Y, "ban") Then
-                    If (g_Channel.Self.IsOperator) Then
+                    If (g_channel.Self.IsOperator) Then
                         Ban strArray(c), (AutoModSafelistValue - 1), 0
                     End If
                 Else
@@ -4722,7 +4814,7 @@ End Sub
 
 
 Private Sub QueueTimer_Timer()
-    Dim Message  As String
+    Dim message  As String
     Dim Tag      As String
     Dim Sent     As Byte
     Dim i        As Integer
@@ -4732,12 +4824,12 @@ Private Sub QueueTimer_Timer()
 
     If ((g_Queue.Count) And (g_Online)) Then
         With g_Queue.Peek
-            Message = .Message
+            message = .message
             Tag = .Tag
             pri = .PRIORITY
         End With
         
-        If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
+        If (StrComp(message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
             '// This is a dummy queue message faking a 70-character queue entry
             QueueLoad = (QueueLoad + 1)
             QueueMaster = (QueueMaster + 3)
@@ -4745,21 +4837,21 @@ Private Sub QueueTimer_Timer()
             ' ...
             Call g_Queue.Pop
         Else
-            If ((StrComp(Left$(Message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
-                (StrComp(Left$(Message, 10), "/unignore ", vbTextCompare) = 0)) Then
+            If ((StrComp(Left$(message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
+                (StrComp(Left$(message, 10), "/unignore ", vbTextCompare) = 0)) Then
                 
                 ' ...
                 unsquelching = True
             End If
 
             If ((QueueLoad < 3) And (QueueMaster < 16)) Then
-                If (Len(Message) <= 70) Then
+                If (Len(message) <= 70) Then
                     QueueLoad = (QueueLoad + 1)
                     QueueMaster = (QueueMaster + 3)
-                ElseIf (Len(Message) <= 130) Then
+                ElseIf (Len(message) <= 130) Then
                     QueueLoad = (QueueLoad + 2)
                     QueueMaster = (QueueMaster + 5)
-                ElseIf (Len(Message) <= 170) Then
+                ElseIf (Len(message) <= 170) Then
                     QueueLoad = (QueueLoad + 3)
                     QueueMaster = (QueueMaster + 7)
                 Else
@@ -4769,7 +4861,7 @@ Private Sub QueueTimer_Timer()
                 
                 Sent = 1
                 
-                Call bnetSend(Message, Tag)
+                Call bnetSend(message, Tag)
             End If
         End If
         
@@ -4783,13 +4875,13 @@ Private Sub QueueTimer_Timer()
         End If
         
         ' ...
-        If (pri = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
-            ' ...
-            Randomize
-            
-            ' ...
-            delay = ((1 + Rnd() * 3) * 100)
-        End If
+        'If (pri = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
+        '    ' ...
+        '    Randomize
+        '
+        '    ' ...
+        '    delay = ((1 + Rnd() * 3) * 100)
+        'End If
     
         If ((QueueMaster >= 15) And (QueueTimer.Interval <> 2400)) Then
             QueueTimer.Interval = (2400 + delay)
@@ -4987,7 +5079,7 @@ Private Sub Timer_Timer()
 
     If IdleWait < 1 Then Exit Sub
     
-    If iCounter >= IdleWait And StrComp(LCase(g_Channel.Name), "op [vl]", vbTextCompare) <> 0 Then
+    If iCounter >= IdleWait And StrComp(LCase(g_channel.Name), "op [vl]", vbTextCompare) <> 0 Then
         iCounter = 0
         'on error resume next
         If IdleType = "msg" Or IdleType = vbNullString Then
@@ -4995,9 +5087,9 @@ Private Sub Timer_Timer()
                 Exit Sub
             End If
             IdleMsg = Replace(IdleMsg, "%cpuup", ConvertTime(GetUptimeMS))
-            IdleMsg = Replace(IdleMsg, "%chan", g_Channel.Name)
-            IdleMsg = Replace(IdleMsg, "%c", g_Channel.Name)
-            IdleMsg = Replace(IdleMsg, "%me", CurrentUsername)
+            IdleMsg = Replace(IdleMsg, "%chan", g_channel.Name)
+            IdleMsg = Replace(IdleMsg, "%c", g_channel.Name)
+            IdleMsg = Replace(IdleMsg, "%me", GetCurrentUsername)
             IdleMsg = Replace(IdleMsg, "%v", CVERSION)
             IdleMsg = Replace(IdleMsg, "%ver", CVERSION)
             IdleMsg = Replace(IdleMsg, "%bc", BanCount)
@@ -5054,10 +5146,14 @@ Send:
     End If
 End Sub
 
+Private Sub tmrClanUpdate_Timer()
+    RequestClanMOTD
+End Sub
+
 Private Sub tmrFriendlistUpdate_Timer()
-    If g_Online Then
-        If BotVars.UsingDirectFList Then
-            If lvFriendList.ListItems.Count > 0 Then
+    If (g_Online) Then
+        If (BotVars.UsingDirectFList) Then
+            If (lvFriendList.ListItems.Count > 0) Then
                 Call FriendListHandler.RequestFriendsList(PBuffer)
             End If
         End If
@@ -5065,15 +5161,18 @@ Private Sub tmrFriendlistUpdate_Timer()
 End Sub
 
 Private Sub tmrSilentChannel_Timer(index As Integer)
+    On Error GoTo ERROR_HANDLER
+
     Dim user    As clsUserObj
     Dim Item    As ListItem
+    
     Dim i       As Integer ' ...
     Dim j       As Integer ' ...
     Dim found   As Boolean ' ...
     Dim WasZero As Boolean ' ...
     
     ' ...
-    If (g_Channel.IsSilent = False) Then
+    If (g_channel.IsSilent = False) Then
         Exit Sub
     End If
 
@@ -5082,70 +5181,31 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
         ' ...
         If (frmChat.mnuDisableVoidView.Checked = False) Then
             ' ...
-            If (g_Channel.Users.Count = 0) Then
-                ' ...
-                If (lvChannel.ListItems.Count > 0) Then
-                    lvChannel.ListItems.Clear
-                End If
-            
-                Exit Sub
-            End If
-        
-            ' ...
-            If (lvChannel.ListItems.Count > 0) Then
-                ' ...
-                Do
-                    ' ...
-                    found = False
-                
-                    ' ...
-                    For i = 1 To lvChannel.ListItems.Count
-                        ' ...
-                        Set Item = lvChannel.ListItems(i)
-                    
-                        ' ...
-                        If (g_Channel.GetUserIndexByDisplayName(Item.text) = 0) Then
-                            ' ...
-                            lvChannel.ListItems.Remove i
-                        
-                            ' ...
-                            found = True
-                            
-                            ' ...
-                            Exit For
-                        End If
-                    Next i
-                    
-                    ' ...
-                    DoEvents
-                Loop While (found = True)
-            Else
-                WasZero = True
-            End If
+            'For i = 1 To g_Channel.Users.Count
+            '    ' with our doevents, we can miss our cue indicating that we
+            '    ' need to stop silent channel processing and cause an rte.
+            '    If (i > g_Channel.Users.Count) Then
+            '        Exit For
+            '    End If
+           '
+           '     ' ...
+           '     Set user = g_Channel.Users(i)
+           '
+            '    ' ...
+            '    If (lvChannel.FindItem(user.DisplayName) Is Nothing) Then
+            '        Dim Stats As String ' ...
+            '        Dim Clan  As String ' ...
+            '
+            '        ' ...
+            '        ParseStatstring user.Statstring, Stats, Clan
+            ''
+            '        ' ...
+            '        AddName user.DisplayName, user.Game, user.Flags, user.Ping, user.Clan
+            '    End If
+            'Next i
             
             ' ...
-            For i = 1 To g_Channel.Users.Count
-                ' ...
-                Set user = g_Channel.Users(i)
-            
-                ' ...
-                If (lvChannel.FindItem(user.DisplayName) Is Nothing) Then
-                    Dim Stats As String ' ...
-                    Dim Clan  As String ' ...
-                
-                    ' ...
-                    ParseStatstring colUsersInChannel(i).Statstring, Stats, Clan
-                
-                    ' ...
-                    AddName user.DisplayName, user.Game, user.Flags, user.Ping, Clan
-                End If
-                
-                ' ...
-                DoEvents
-            Next i
-            
-            ' ...
-            lvChannel.Refresh
+            Call LockWindowUpdate(&H0)
             
             ' ...
             lblCurrentChannel.Caption = GetChannelString()
@@ -5157,15 +5217,22 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
         ' ...
         If (mnuDisableVoidView.Checked = False) Then
             ' ...
-            Set colUsersInChannel = New Collection
+            Call g_channel.ClearUsers
             
             ' ...
-            Call g_Channel.ClearUsers
+            lvChannel.ListItems.Clear
             
             ' ...
-            Call AddQ("/unsquelch " & CurrentUsername)
+            Call AddQ("/unsquelch " & GetCurrentUsername)
         End If
     End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    AddChat vbRed, "Error: " & Err.description & " in tmrSilentChannel_Timer(" & index & ")."
+    
+    Exit Sub
 End Sub
 
 Private Sub txtPre_KeyPress(KeyAscii As Integer)
@@ -5341,7 +5408,7 @@ End Sub
 Private Sub UpTimer_Timer()
     Dim newColor As Long
     Dim i        As Integer
-    Dim ThisPos  As Integer
+    Dim pos      As Integer
 
     uTicks = uTicks + 1000
     
@@ -5361,49 +5428,54 @@ Private Sub UpTimer_Timer()
     If g_Queue.Count > 0 Then
         Ban vbNullString, 0, 3
     End If
-    
-    If MyFlags = 2 Or MyFlags = 18 Then
-        For i = 1 To colUsersInChannel.Count
-            With colUsersInChannel.Item(i)
-                '.TICs = .TICs + 1
-    
-                'If .TimeSinceTalk < 30000 Then .TimeSinceTalk = .TimeSinceTalk + 1
-                
-                If MyFlags = 2 Or MyFlags = 18 Then
-                
-                    'Channel passwording
-                    If BotVars.ChannelPasswordDelay > 0 And Len(BotVars.ChannelPassword) > 0 Then
-                        If .InternalFlags = IF_AWAITING_CHPW Or .InternalFlags = IF_CHPW_AND_IDLEBANS Then
-                            If .TimeInChannel() > BotVars.ChannelPasswordDelay Then
-                                .InternalFlags = 0
-                                Ban .Username & " Password time is up", (AutoModSafelistValue - 1)
-                            End If
+
+    ' ...
+    If (g_channel.IsSilent = False) Then
+        ' ...
+        For i = 1 To g_channel.Users.Count
+            ' ...
+            With g_channel.Users(i)
+                ' ...
+                If (g_channel.Self.IsOperator) Then
+                    ' ...
+                    If (.IsOperator = False) Then
+                        ' channel passwording
+                        If ((BotVars.ChannelPasswordDelay > 0) And (Len(BotVars.ChannelPassword) > 0)) Then
+                            'If .InternalFlags = IF_AWAITING_CHPW Or .InternalFlags = IF_CHPW_AND_IDLEBANS Then
+                            '    If .TimeInChannel() > BotVars.ChannelPasswordDelay Then
+                            '        .InternalFlags = 0
+                            '        Ban .Username & " Password time is up", (AutoModSafelistValue - 1)
+                            '    End If
+                            'End If
+                        End If
+                        
+                        ' idle bans
+                        If ((BotVars.IB_On = BTRUE) And (BotVars.IB_Wait > 0)) Then
+                            'If .InternalFlags = IF_SUBJECT_TO_IDLEBANS Or .InternalFlags = IF_CHPW_AND_IDLEBANS Then
+                            '    If .TimeSinceTalk() > BotVars.IB_Wait Then
+                            '        .InternalFlags = 0
+                            '
+                            '        Ban .DisplayName & " Idle for " & BotVars.IB_Wait & "+ seconds", (AutoModSafelistValue - 1), IIf(BotVars.IB_Kick, 1, 0)
+                            '    End If
+                            'End If
                         End If
                     End If
-                    
-                    'Idle bans
-                    If BotVars.IB_On = BTRUE And BotVars.IB_Wait > 0 Then
-                        If .InternalFlags = IF_SUBJECT_TO_IDLEBANS Or .InternalFlags = IF_CHPW_AND_IDLEBANS Then
-                            If .TimeSinceTalk() > BotVars.IB_Wait Then
-                                .InternalFlags = 0
-                                
-                                If Not ((.Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And Not .Safelisted Then
-                                    Ban .Username & " Idle for " & BotVars.IB_Wait & "+ seconds", (AutoModSafelistValue - 1), IIf(BotVars.IB_Kick, 1, 0)
-                                End If
-                            End If
-                        End If
-                    End If
-                    
                 End If
                 
-                If Not BotVars.NoColoring Then
-                    ThisPos = checkChannel(.Username)
-                    
-                    If ThisPos > 0 And ThisPos < lvChannel.ListItems.Count Then
-                        newColor = GetNameColor(.Flags, .TimeSinceTalk(), .IsSelf)
+                ' ...
+                If (BotVars.NoColoring = False) Then
+                    ' ...
+                    pos = checkChannel(.DisplayName)
+                
+                    ' ...
+                    If (pos > 0) Then
+                        ' ...
+                        newColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
+                            GetCurrentUsername, vbBinaryCompare) = 0)
                         
-                        If lvChannel.ListItems(ThisPos).ForeColor <> newColor Then
-                            lvChannel.ListItems(ThisPos).ForeColor = newColor
+                        ' ...
+                        If (lvChannel.ListItems(pos).ForeColor <> newColor) Then
+                            lvChannel.ListItems(pos).ForeColor = newColor
                         End If
                     End If
                 End If
@@ -5439,14 +5511,14 @@ ERROR_HANDLER:
 End Function
 
 ' ...
-Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optional _
-    ByVal user As String = vbNullString, Optional ByVal Tag As String = vbNullString)
+Sub AddQ(ByVal message As String, Optional msg_priority As Integer = -1, Optional ByVal user As String = _
+    vbNullString, Optional ByVal Tag As String = vbNullString, Optional OversizeDelimiter As String = " ")
     
     ' ...
     On Error GoTo ERROR_HANDLER
     
     ' maximum size of Battle.net messages
-    Const MAX_MESSAGE_LENGTH = 220
+    Const MAX_MESSAGE_LENGTH = 223
 
     ' ...
     Static LastGTC As Long
@@ -5455,21 +5527,21 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     Dim strTmp As String
     
     ' ...
-    strTmp = Message
+    strTmp = message
     
     ' ...
     If (strTmp <> vbNullString) Then
-        Dim Splt()         As String  ' ...
+        Dim splt()         As String  ' ...
         Dim i              As Integer ' ...
         Dim currChar       As Integer ' ...
         Dim Send           As String  ' ...
-        Dim Command        As String  ' ...
+        Dim command        As String  ' ...
         Dim GTC            As Long    ' ...
         Dim strUser        As String  ' ...
         Dim nameConversion As Boolean ' ...
         
         ' ...
-        ReDim Splt(0)
+        ReDim splt(0)
     
         ' check for tabs and replace with spaces (2005-09-23)
         If (InStr(1, strTmp, Chr$(9), vbBinaryCompare) <> 0) Then
@@ -5486,28 +5558,6 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 Exit Sub
             End If
         Next i
-
-        ' ...
-        'If (BotVars.UseGameConventions = False) Then
-        '    nameConversion = True
-        'Else
-        '    ' ...
-        '    If ((StrReverse$(BotVars.Product) = "D2DV") Or _
-        '            (StrReverse$(BotVars.Product) = "D2XP")) Then
-        '
-        '        ' ...
-        '        If (BotVars.UseD2GameConventions = False) Then
-        '            nameConversion = True
-        '        End If
-        '    ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
-        '            (StrReverse$(BotVars.Product) = "W3XP")) Then
-        '
-        '        ' ...
-        '        If (BotVars.UseW3GameConventions = False) Then
-        '            nameConversion = True
-        '        End If
-        '    End If
-        'End If
         
         ' ...
         If (StrComp(Left$(strTmp, 1), "/", vbBinaryCompare) = 0) Then
@@ -5535,102 +5585,102 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             ' ...
             If (index > 2) Then
                 ' ...
-                Command = Mid$(strTmp, 2, (index - 2))
+                command = Mid$(strTmp, 2, (index - 2))
 
                 ' ...
-                If ((Command = "w") Or _
-                    (Command = "whisper") Or _
-                    (Command = "m") Or _
-                    (Command = "msg") Or _
-                    (Command = "message") Or _
-                    (Command = "whois") Or _
-                    (Command = "where") Or _
-                    (Command = "whereis") Or _
-                    (Command = "squelch") Or _
-                    (Command = "unsquelch") Or _
-                    (Command = "ignore") Or _
-                    (Command = "unignore") Or _
-                    (Command = "ban") Or _
-                    (Command = "unban") Or _
-                    (Command = "kick") Or _
-                    (Command = "designate")) Then
+                If ((command = "w") Or _
+                    (command = "whisper") Or _
+                    (command = "m") Or _
+                    (command = "msg") Or _
+                    (command = "message") Or _
+                    (command = "whois") Or _
+                    (command = "where") Or _
+                    (command = "whereis") Or _
+                    (command = "squelch") Or _
+                    (command = "unsquelch") Or _
+                    (command = "ignore") Or _
+                    (command = "unignore") Or _
+                    (command = "ban") Or _
+                    (command = "unban") Or _
+                    (command = "kick") Or _
+                    (command = "designate")) Then
         
                     ' ...
-                    Splt() = Split(strTmp, Space$(1), 3)
+                    splt() = Split(strTmp, Space$(1), 3)
                     
                     ' ...
-                    If (UBound(Splt) > 0) Then
+                    If (UBound(splt) > 0) Then
                         ' ...
-                        Command = Splt(0) & Space$(1) & reverseUsername(Splt(1)) & _
+                        command = splt(0) & Space$(1) & reverseUsername(splt(1)) & _
                             Space$(1)
                             
-                        If (UBound(Splt) > 1) Then
-                            ReDim Preserve Splt(0 To UBound(Splt) - 1)
+                        If (UBound(splt) > 1) Then
+                            ReDim Preserve splt(0 To UBound(splt) - 1)
                         End If
                     End If
-                ElseIf ((Command = "f") Or _
-                        (Command = "friends")) Then
+                ElseIf ((command = "f") Or _
+                        (command = "friends")) Then
                     
                     ' ...
-                    Splt() = Split(strTmp, Space$(1), 3)
+                    splt() = Split(strTmp, Space$(1), 3)
                     
                     ' ...
-                    Command = Splt(0) & Space$(1)
+                    command = splt(0) & Space$(1)
                     
                     ' ...
-                    If (UBound(Splt) >= 1) Then
+                    If (UBound(splt) >= 1) Then
                         ' ...
-                        Command = Command & Splt(1) & Space$(1)
+                        command = command & splt(1) & Space$(1)
                     
                         ' ...
-                        If (UBound(Splt) >= 2) Then
+                        If (UBound(splt) >= 2) Then
                             ' ...
-                            Select Case (LCase$(Splt(1)))
+                            Select Case (LCase$(splt(1)))
                                 Case "m", "msg"
                                     ' ...
-                                    ReDim Preserve Splt(0 To UBound(Splt) - 1)
+                                    ReDim Preserve splt(0 To UBound(splt) - 1)
 
                                 Case Else
                                     ' ...
-                                    Splt() = Split(strTmp, Space$(1), 4)
+                                    splt() = Split(strTmp, Space$(1), 4)
                                 
                                     ' ...
                                     If ((StrReverse$(BotVars.Product) = "WAR3") Or _
                                         (StrReverse$(BotVars.Product) = "W3XP")) Then
                                         
                                         ' ...
-                                        Command = Command & reverseUsername(Splt(2)) & _
+                                        command = command & reverseUsername(splt(2)) & _
                                             Space$(1)
                                     Else
                                         ' ...
-                                        Command = Command & Splt(2) & Space$(1)
+                                        command = command & splt(2) & Space$(1)
                                     End If
                                     
                                     ' ...
-                                    If (UBound(Splt) >= 3) Then
-                                        Command = Command & Splt(3)
+                                    If (UBound(splt) >= 3) Then
+                                        command = command & splt(3)
                                     End If
                             End Select
                         End If
                     End If
                 Else
                     ' ...
-                    Command = "/" & Command & Space$(1)
+                    command = "/" & command & Space$(1)
                     
                     ' ...
-                    strTmp = Mid$(strTmp, Len(Command) + 1)
+                    strTmp = Mid$(strTmp, Len(command) + 1)
                 End If
                 
                 ' ...
-                If (Len(Command) >= MAX_MESSAGE_LENGTH) Then
+                If (Len(command) >= MAX_MESSAGE_LENGTH) Then
                     Exit Sub
                 End If
 
                 ' ...
-                If (UBound(Splt) > 0) Then
+                If (UBound(splt) > 0) Then
                     ' ...
                     strTmp = Mid$(strTmp, _
-                        (Len(Join(Splt(), Space$(1))) + (Len(Space$(1))) + 1))
+                        (Len(Join(splt(), Space$(1))) + (Len(Space$(1))) + 1))
                 End If
             End If
             
@@ -5640,15 +5690,15 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 Dim spaceIndex As Long   ' ...
                 
                 ' ...
-                If (Len(Message) > 1) Then
+                If (Len(message) > 1) Then
                     ' ...
-                    spaceIndex = InStr(1, Message, Space$(1), vbBinaryCompare)
+                    spaceIndex = InStr(1, message, Space$(1), vbBinaryCompare)
                     
                     ' ...
                     If (spaceIndex) Then
-                        cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 2))
+                        cmdName = LCase$(Left$(Mid$(message, 2), spaceIndex - 2))
                     Else
-                        cmdName = LCase$(Mid$(Message, 2))
+                        cmdName = LCase$(Mid$(message, 2))
                     End If
                 
                     ' ...
@@ -5669,18 +5719,19 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         End If
 
         ' ...
-        Call SplitByLen(strTmp, (MAX_MESSAGE_LENGTH - Len(Command)), Splt())
+        Call SplitByLen(strTmp, (MAX_MESSAGE_LENGTH - Len(command)), splt(), " [more]", _
+            OversizeDelimiter)
 
         ' ...
-        ReDim Preserve Splt(0 To UBound(Splt))
+        ReDim Preserve splt(0 To UBound(splt))
 
         ' ...
-        For i = LBound(Splt) To UBound(Splt)
+        For i = LBound(splt) To UBound(splt)
             ' store current tick
             GTC = GetTickCount()
             
             ' store working copy
-            Send = Command & Splt(i)
+            Send = command & splt(i)
 
             ' is efp enabled?
             If (bFlood) Then
@@ -5728,13 +5779,24 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     ' are we issuing a channel moderation command?
                     If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
                         ' do we have ops?
-                        If (g_Channel.Self.IsOperator) Then
-                            ' seed rnd() function
-                            Randomize
-                
-                            ' calculate delay value between 100 and 500 ms
-                            ' and add to default delay value
-                            banDelay = (banDelay + ((1 + Rnd() * 5) * 100))
+                        If (g_channel.Self.IsOperator) Then
+                            ' ...
+                            banDelay = 100
+                            
+                            ' ...
+                            For j = 1 To g_channel.Users.Count
+                                ' ...
+                                If (StrComp(CurrentUsername, g_channel.Users(j).Name, vbBinaryCompare) = 0) Then
+                                    Exit For
+                                ElseIf (g_channel.Users(j).IsOperator) Then
+                                    ' ...
+                                    If ((g_channel.Users(j).Ping >= 1) And (g_channel.Users(j).Ping <= 300)) Then
+                                        banDelay = (banDelay + g_channel.Users(j).Ping)
+                                    Else
+                                        banDelay = (banDelay + 300)
+                                    End If
+                                End If
+                            Next j
                         End If
                     End If
                     
@@ -5756,7 +5818,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 
                 ' ...
                 With Q
-                    .Message = Send
+                    .message = Send
                     .PRIORITY = msg_priority
                     .ResponseTo = vbNullString
                     .Tag = Tag
@@ -5781,26 +5843,17 @@ ERROR_HANDLER:
 End Sub
 
 Sub ClearChannel()
-    With gChannel
-        Set colUsersInChannel = Nothing
-        Set colUsersInChannel = New Collection
-        
-        .Designated = vbNullString
-    End With
-    
-    ReDim gBans(0)
-    BanCount = 0
-    lvChannel.Enabled = False
-    
+    ' ...
+    Set g_channel = New clsChannelObj
+
+    ' ...
     lvChannel.ListItems.Clear
     
+    ' ...
     lblCurrentChannel.Caption = vbNullString
-    lvChannel.Enabled = True
     
-    If (Len(gChannel.staticDesignee) > 0) Then
-        gChannel.Designated = gChannel.staticDesignee
-        gChannel.staticDesignee = vbNullString
-    End If
+    ' ...
+    PassedClanMotdCheck = False
 End Sub
 
 Sub ReloadConfig(Optional Mode As Byte = 0)
@@ -5933,194 +5986,47 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End With
     End If
     
-    gameConventions = ReadCFG(OT, "UseGameConventions")
-    
-    'If (gameConventions = "N") Then
-    '    BotVars.UseGameConventions = False
-    'Else
-    '    BotVars.UseGameConventions = True
-    'End If
-    
-    D2GameConventions = ReadCFG(OT, "UseD2GameConventions")
-  
-    'If (D2GameConventions = "Y") Then
-    '    BotVars.UseD2GameConventions = True
-    'Else
-    '    BotVars.UseD2GameConventions = False
-    'End If
-    
-    W3GameConventions = ReadCFG(OT, "UseW3GameConventions")
-    
-    'If (W3GameConventions = "N") Then
-    '    BotVars.UseW3GameConventions = False
-    'Else
-    '    BotVars.UseW3GameConventions = True
-    'End If
-    
-    'Dim userIndex As Integer
-    'Dim j As Integer
-    
-    'For i = 1 To lvChannel.ListItems.Count
-    '    For j = 1 To colUsersInChannel.Count
-    '        If (StrComp(colUsersInChannel(j).DisplayName, lvChannel.ListItems(i).text, _
-    '            vbTextCompare) = 0) Then
-    '
-    '            lvChannel.ListItems(i).text = _
-    '                colUsersInChannel(userIndex).DisplayName
-    '        End If
-    '    Next j
-    '
-    '    userIndex = UsernameToIndex(lvChannel.ListItems(i).text)
-    '
-    '    If (userIndex > 0) Then
-    '        lvChannel.ListItems(i).text = _
-    '            colUsersInChannel(userIndex).DisplayName
-    '    End If
-    'Next i
-    
-    
-    If (gameConventions = "Y") Then
-        If (D2GameConventions = "N") Then
-            If ((StrReverse$(BotVars.Product) = "D2DV") Or _
-                (StrReverse$(BotVars.Product) = "D2XP")) Then
-    
-                If (BotVars.UseD2GameConventions) Then
-                    doConvert = True
-                End If
-            End If
-        End If
-    
-        If (W3GameConventions = "N") Then
-            If ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                (StrReverse$(BotVars.Product) = "W3XP")) Then
-    
-                If (BotVars.UseW3GameConventions) Then
-                    doConvert = True
-                End If
-            End If
-        End If
+    s = ReadCFG(OT, "RetainOldBans")
+    If (s = "Y") Then
+        BotVars.RetainOldBans = True
     Else
-        If (BotVars.UseGameConventions) Then
-            If ((StrReverse$(BotVars.Product) = "D2DV") Or _
-                (StrReverse$(BotVars.Product) = "D2XP")) Then
-    
-                If (BotVars.UseD2GameConventions) Then
-                    doConvert = True
-                End If
-            ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                    (StrReverse$(BotVars.Product) = "W3XP")) Then
-    
-                If (BotVars.UseW3GameConventions) Then
-                    doConvert = True
-                End If
-            End If
-        End If
+        BotVars.RetainOldBans = False
     End If
     
-    If (doConvert) Then
-        With BotVars
-            .UseGameConventions = IIf((gameConventions = "Y"), _
-                    True, False)
+    gameConventions = ReadCFG(OT, "UseGameConventions")
+    D2GameConventions = ReadCFG(OT, "UseD2GameConventions")
+    W3GameConventions = ReadCFG(OT, "Usew3GameConventions")
     
-            .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
-                True, False)
-    
-            .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
-                True, False)
-        End With
-    
-        If (colUsersInChannel.Count) Then
-            For i = 1 To colUsersInChannel.Count
-                index = _
-                    checkChannel(colUsersInChannel(i).Username)
-    
-                colUsersInChannel(i).Username = _
-                    convertUsername(colUsersInChannel(i).Username)
-    
-                If (index) Then
-                    lvChannel.ListItems(index).text = _
-                        colUsersInChannel(i).Username
-                End If
-            Next i
-        End If
-    
-        If (g_Online) Then
-            CurrentUsername = _
-                convertUsername(CurrentUsername)
-    
-            SetTitle CurrentUsername & ", online in channel " & _
-                g_Channel.Name
-        End If
-    Else
-        If (BotVars.UseGameConventions) Then
-            If ((StrReverse$(BotVars.Product) = "D2DV") Or _
-                (StrReverse$(BotVars.Product) = "D2XP")) Then
-    
-                If (D2GameConventions = "Y") Then
-                    If (BotVars.UseD2GameConventions = False) Then
-                        doConvert = True
-                    End If
-                End If
-            ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                    (StrReverse$(BotVars.Product) = "W3XP")) Then
-    
-                If (W3GameConventions = "Y") Then
-                    If (BotVars.UseW3GameConventions = False) Then
-                        doConvert = True
-                    End If
-                End If
-            End If
-        Else
-            If ((StrReverse$(BotVars.Product) = "D2DV") Or _
-                (StrReverse$(BotVars.Product) = "D2XP")) Then
-    
-                If (D2GameConventions = "Y") Then
-                    doConvert = True
-                End If
-            ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                    (StrReverse$(BotVars.Product) = "W3XP")) Then
-    
-                If (W3GameConventions = "Y") Then
-                    doConvert = True
-                End If
-            End If
-        End If
-    
-        If (doConvert) Then
-            If (colUsersInChannel.Count) Then
-                For i = 1 To colUsersInChannel.Count
-                    index = _
-                        checkChannel(colUsersInChannel(i).Username)
-    
-                    colUsersInChannel(i).Username = _
-                        colUsersInChannel(i).Username
-    
-                    If (index) Then
-                        lvChannel.ListItems(index).text = _
-                            colUsersInChannel(i).Username
-                    End If
-                Next i
-            End If
-    
-            If (g_Online) Then
-                CurrentUsername = _
-                    reverseUsername(CurrentUsername)
-    
-                SetTitle CurrentUsername & ", online in channel " & _
-                    g_Channel.Name
-            End If
-        End If
-    
-        With BotVars
-            .UseGameConventions = IIf((gameConventions = "Y"), _
-                True, False)
-    
-            .UseD2GameConventions = IIf((D2GameConventions = "Y"), _
-                True, False)
-    
-            .UseW3GameConventions = IIf((W3GameConventions = "Y"), _
-                True, False)
-        End With
+    With BotVars
+        .UseGameConventions = (gameConventions = "Y")
+        .UseD2GameConventions = (D2GameConventions = "Y")
+        .UseW3GameConventions = (W3GameConventions = "Y")
+    End With
+
+    ' ...
+    If (g_Online) Then
+        Dim found       As ListItem ' ...
+        Dim CurrentUser As clsUserObj
+        Dim outbuf      As String
+
+        ' ...
+        SetTitle GetCurrentUsername & ", online in channel " & g_channel.Name
+        
+        ' ...
+        lvChannel.ListItems.Clear
+        
+        ' ...
+        For i = 1 To g_channel.Users.Count
+            ' ...
+            Set CurrentUser = g_channel.Users(i)
+            
+            ' ...
+            ParseStatstring CurrentUser.Statstring, outbuf, outbuf
+        
+            ' ...
+            AddName CurrentUser.DisplayName, CurrentUser.Game, CurrentUser.Flags, CurrentUser.Ping, _
+                CurrentUser.Clan
+        Next i
     End If
     
     s = ReadCFG(OT, "JoinLeaves")
@@ -6209,7 +6115,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         ' ...
         If (default_group_access.Username = vbNullString) Then
             ' ...
-            Call ProcessCommand(CurrentUsername, "/add " & BotVars.DefaultShitlistGroup & _
+            Call ProcessCommand(GetCurrentUsername, "/add " & BotVars.DefaultShitlistGroup & _
                     " B --type group --banmsg Shitlisted", True, False, False)
         End If
     End If
@@ -6243,7 +6149,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         ' ...
         If (default_group_access.Username = vbNullString) Then
             ' ...
-            Call ProcessCommand(CurrentUsername, "/add " & BotVars.DefaultSafelistGroup & _
+            Call ProcessCommand(GetCurrentUsername, "/add " & BotVars.DefaultSafelistGroup & _
                     " S --type group", True, False, False)
         End If
     End If
@@ -6467,7 +6373,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     End If
     
     If (g_Online) Then
-        Call checkUsers
+        Call g_channel.CheckUsers
     End If
 End Sub
 
@@ -6771,6 +6677,9 @@ Private Sub sckBNLS_Connect()
         .InsertNTString "stealth"
         .vLSendPacket &HE
     End With
+    
+    SetNagelStatus sckBNLS.SocketHandle, False
+    
     'frmChat.sckBNet.Connect 'BNLS is authorized, proceed to initiate BNet connection.
 End Sub
 
@@ -6863,18 +6772,19 @@ Function GetSelectedUser() As String
 End Function
 
 Function GetRandomPerson() As String
-    Dim i As Integer
+    Dim i As Integer ' ...
     
-    With colUsersInChannel
-        If .Count > 0 Then
-            Randomize
-            
-            i = Rnd * .Count
-            If i = 0 Then i = 1
-            
-            GetRandomPerson = .Item(i).Username
-        End If
-    End With
+    ' ...
+    If (g_channel.Users.Count > 0) Then
+        ' ...
+        Randomize
+        
+        ' ...
+        i = (1 + (Rnd * g_channel.Users.Count))
+
+        ' ...
+        GetRandomPerson = g_channel.Users(i).DisplayName
+    End If
 End Function
 
 Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) As String
@@ -7028,7 +6938,7 @@ Function GetChannelString() As String
         GetChannelString = vbNullString
     Else
         Select Case ListviewTabs.Tab
-            Case 0: GetChannelString = g_Channel.Name & " (" & lvChannel.ListItems.Count & ")"
+            Case 0: GetChannelString = g_channel.Name & " (" & lvChannel.ListItems.Count & ")"
             Case 1: GetChannelString = lvFriendList.ListItems.Count & " friends listed"
             Case 2: GetChannelString = "Clan " & StrReverse(Replace(Clan.DWName, Chr(0), "")) & ": " & lvClanList.ListItems.Count & " members."
         End Select
@@ -7176,7 +7086,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
                     mnuPopDem.Enabled = False
                     mnuPopPro.Enabled = False
                     
-                    If Clan.MyRank > 2 Then
+                    If g_Clan.Self.Rank > 2 Then
                             
                         mnuPopBNProfile.Enabled = True
                         
@@ -7191,7 +7101,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
                                 
                                 mnuPopPro.Enabled = False
                                 
-                                If Clan.MyRank = 4 Then
+                                If g_Clan.Self.Rank = 4 Then
                                     
                                     mnuPopDem.Enabled = True
                                     mnuPopRem.Enabled = True
@@ -7221,8 +7131,8 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
                 End If
             End If
             
-            If StrComp(GetClanSelectedUser(), reverseUsername(CurrentUsername), vbTextCompare) = 0 Then
-                If Clan.MyRank > 0 Then
+            If StrComp(GetClanSelectedUser(), GetCurrentUsername, vbTextCompare) = 0 Then
+                If g_Clan.Self.Rank > 0 Then
                     mnuSP2.Visible = True
                     mnuPopLeaveClan.Visible = True
                 Else
@@ -7246,7 +7156,7 @@ Private Sub mnuPopLeaveClan_Click()
     If MsgBox("Are you sure you want to leave the clan?", vbYesNo, "StealthBot") = vbYes Then
         With PBuffer
             .InsertDWord &H1    '//cookie
-            .InsertNTString reverseUsername(CurrentUsername)
+            .InsertNTString GetCurrentUsername
             .SendPacket &H78
         End With
 
@@ -7343,7 +7253,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         
         Call NLogin.CloseConnection(DoNotShow)
         
-        Set g_Channel = Nothing
+        Set g_channel = Nothing
         
         BotVars.Gateway = vbNullString
         
@@ -7404,8 +7314,6 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         End If
         
         DestroyNLSObject
-        
-        Call ClearChatQueue
         
         PassedClanMotdCheck = False
         

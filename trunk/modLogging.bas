@@ -53,8 +53,8 @@ Public Function OpenLogfile() As Integer
         Print #f, "<html><head><title>"
         Print #f, "StealthBot Log: ";
         
-        If (LenB(CurrentUsername) > 0) Then
-            Print #f, CurrentUsername;
+        If (LenB(GetCurrentUsername) > 0) Then
+            Print #f, GetCurrentUsername;
         Else
             If LenB(BotVars.Username) > 0 Then
                 Print #f, BotVars.Username;
@@ -68,8 +68,8 @@ Public Function OpenLogfile() As Integer
         Print #f, "<LINK REL='stylesheet' HREF='logstyle.css' TYPE='text/css'>"
         Print #f, "</head><body bgcolor='#000000'><span class='title'>Log for ";
         
-        If (LenB(CurrentUsername) > 0) Then
-            Print #f, CurrentUsername;
+        If (LenB(GetCurrentUsername) > 0) Then
+            Print #f, GetCurrentUsername;
         Else
             If LenB(BotVars.Username) > 0 Then
                 Print #f, BotVars.Username;
@@ -126,7 +126,7 @@ Public Sub LogPacketRaw(ByVal Server As enuPL_ServerTypes, ByVal Direction As en
         l = FreeFile
         
         Open PacketLogFilePath For Append As #l
-            Print #l, GetTimestamp() & " "
+            Print #l, GetTimeStamp() & " "
         
             Select Case (Server)
                 Case stBNCS

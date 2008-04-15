@@ -3,19 +3,19 @@ Option Explicit
 '10-18-07 - Hdx - Removed ClanInfoSplit - What was he thinking >.<
 
 'Public sDebugBuf As String
-Public AwaitingClanList As Byte
+Public AwaitingClanList       As Byte
 Public AwaitingClanMembership As Byte
-Public AwaitingClanInfo As Byte
-Public LastRemoval As Long
+Public AwaitingClanInfo       As Byte
+Public LastRemoval            As Long
 
 Public Type udtClan
-    Token As String * 4
+    Token   As String * 4
     Creator As String
-    DWName As String * 4
-    Name As String
-    MyRank As Byte
-    isNew As Byte
-    isUsed As Boolean
+    DWName  As String * 4
+    Name    As String
+    MyRank  As Byte
+    isNew   As Byte
+    isUsed  As Boolean
 End Type
 
 Public Clan As udtClan
@@ -26,6 +26,20 @@ Public Function IsW3() As Boolean
 
 End Function
 
+Public Sub RequestClanList()
+    AwaitingClanList = 1
+    
+    PBuffer.InsertDWord &H1
+    PBuffer.SendPacket &H7D
+End Sub
+
+Public Sub DisbandClan()
+    With PBuffer
+        .InsertDWord &H1
+        .SendPacket &H73
+    End With
+End Sub
+
 Public Sub InviteToClan(Username As String) '//Works
     With PBuffer
         .InsertDWord &H1
@@ -34,29 +48,50 @@ Public Sub InviteToClan(Username As String) '//Works
     End With
 End Sub
 
-Public Sub SetClanMOTD(Message As String) '//Works
+Public Sub RequestClanMOTD(Optional ByVal cookie As Long = &H0)
+    PBuffer.InsertDWord cookie
+    PBuffer.SendPacket &H7C
+End Sub
+
+Public Sub SetClanMOTD(message As String) '//Works
     With PBuffer
         .InsertDWord &H0
-        .InsertNTString Message
+        .InsertNTString message
         .SendPacket &H7B
     End With
 End Sub
 
-Public Sub PromoteMember(Username As String)
+Public Sub PromoteMember(Username As String, Rank As Integer)
     With PBuffer
-        .InsertDWord &HB
-        .InsertNonNTString Username
-        .InsertWord &H3
+        .InsertDWord &H3
+        .InsertNTString Username
+        .InsertByte Rank
         .SendPacket &H7A
     End With
 End Sub
 
-Public Sub DemoteMember(Username As String)
+Public Sub DemoteMember(Username As String, Rank As Integer)
     With PBuffer
         .InsertDWord &H1
         .InsertNTString Username
-        .InsertByte &H1
+        .InsertByte Rank
         .SendPacket &H7A
+    End With
+End Sub
+
+Public Sub RemoveMember(Username As String)
+    With PBuffer
+        .InsertDWord &H1
+        .InsertNTString Username
+        .SendPacket &H78
+    End With
+End Sub
+
+Public Sub MakeMemberChieftain(Username As String)
+    With PBuffer
+        .InsertDWord &H1
+        .InsertNTString Username
+        .SendPacket &H74
     End With
 End Sub
 

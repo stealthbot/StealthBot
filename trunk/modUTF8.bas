@@ -5,10 +5,10 @@ Attribute VB_Name = "modUTF8"
 'http://forum.valhallalegends.com/phpbbs/index.php?board=18;action=display;threadid=1027&start=0
 Option Explicit
 
-Private Declare Function GetLastError Lib "kernel32.dll" () As Long
+Private Declare Function GetLastError Lib "Kernel32.dll" () As Long
 
-Private Declare Function MultiByteToWideChar Lib "kernel32.dll" (ByVal Codepage As Long, ByVal dwFlags As Long, ByVal lpMultiByteStr As String, ByVal cchMultiByte As Long, ByVal lpWideCharStr As String, ByVal cchWideChar As Long) As Long
-Private Declare Function WideCharToMultiByte Lib "kernel32.dll" (ByVal Codepage As Long, ByVal dwFlags As Long, ByVal lpWideCharStr As Long, ByVal cchWideChar As Long, ByVal lpMultiByteStr As Long, ByVal cchMultiByte As Long, ByVal lpDefaultChar As String, ByVal lpUsedDefaultChar As Long) As Long
+Private Declare Function MultiByteToWideChar Lib "Kernel32.dll" (ByVal Codepage As Long, ByVal dwFlags As Long, ByVal lpMultiByteStr As String, ByVal cchMultiByte As Long, ByVal lpWideCharStr As String, ByVal cchWideChar As Long) As Long
+Private Declare Function WideCharToMultiByte Lib "Kernel32.dll" (ByVal Codepage As Long, ByVal dwFlags As Long, ByVal lpWideCharStr As Long, ByVal cchWideChar As Long, ByVal lpMultiByteStr As Long, ByVal cchMultiByte As Long, ByVal lpDefaultChar As String, ByVal lpUsedDefaultChar As Long) As Long
 
 Private Const MB_ERR_INVALID_CHARS As Long = &H8
 
@@ -25,14 +25,11 @@ Public Function UTF8Encode(ByRef str As String) As Byte()
     lstr = str
     
     ' grab length of string after conversion
-    UTF8Chars = WideCharToMultiByte(CP_UTF8, 0, ByVal StrPtr(lstr), Len(lstr), _
-            0, 0, vbNullString, 0)
+    UTF8Chars = WideCharToMultiByte(CP_UTF8, 0, ByVal StrPtr(lstr), Len(lstr), 0, 0, _
+        vbNullString, 0)
     
     ' ...
     If (UTF8Chars = 0) Then
-        ' debug code
-        'frmChat.AddChat vbRed, "DEBUG: GRRR @ UTF8Encode()!"
-        
         ' ...
         Exit Function
     End If
@@ -41,8 +38,8 @@ Public Function UTF8Encode(ByRef str As String) As Byte()
     ReDim UTF8Buffer(0 To UTF8Chars - 1)
     
     ' translate from unicode to utf-8
-    Call WideCharToMultiByte(CP_UTF8, 0, ByVal StrPtr(lstr), Len(lstr), _
-            ByVal VarPtr(UTF8Buffer(0)), UTF8Chars, vbNullString, 0)
+    Call WideCharToMultiByte(CP_UTF8, 0, ByVal StrPtr(lstr), Len(lstr), ByVal VarPtr(UTF8Buffer(0)), _
+        UTF8Chars, vbNullString, 0)
     
     ' return unicode buffer
     UTF8Encode = UTF8Buffer
@@ -58,14 +55,11 @@ Public Function UTF8Decode(ByRef str As String, Optional LocaleID As Long = 1252
     lstr = str
     
     ' grab length of string after conversion
-    UnicodeChars = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, lstr, _
-             Len(lstr), vbNullString, 0)
+    UnicodeChars = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, lstr, Len(lstr), _
+        vbNullString, 0)
             
     ' ...
     If (UnicodeChars = 0) Then
-        ' debug code
-        'frmChat.AddChat vbRed, "DEBUG: GRRR @ UTF8Decode()!"
-    
         ' ...
         Exit Function
     End If

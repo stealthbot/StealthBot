@@ -48,13 +48,13 @@ Public Declare Function timeGetSystemTime Lib "winmm.dll" (lpTime As MMTIME, ByV
 
 Public Declare Function Send Lib "ws2_32.dll" Alias "send" _
    (ByVal s As Long, _
-    ByVal Buf As String, _
+    ByVal buf As String, _
     ByVal datalen As Long, _
     ByVal Flags As Long) As Long
     
 Public Declare Function SendBytes Lib "ws2_32.dll" Alias "send" _
    (ByVal s As Long, _
-    ByRef Buf() As Byte, _
+    ByRef buf() As Byte, _
     ByVal datalen As Long, _
     ByVal Flags As Long) As Long
     
@@ -122,7 +122,7 @@ Public Declare Function ShellExecute Lib "shell32" Alias "ShellExecuteA" ( _
 
 ' Needed for the RTB scroll lock
 Public Declare Function GetScrollRange Lib "user32" (ByVal hWnd As Long, ByVal nBar As Integer, ByRef lpMinPos As Integer, ByRef lpMaxPos As Integer) As Boolean
-'Public Declare Function LockWindowUpdate Lib "user32" (ByVal hwndLock As Long) As Long
+Public Declare Function LockWindowUpdate Lib "user32" (ByVal hwndLock As Long) As Long
 
 Public Declare Function SetActiveWindow Lib "user32" (ByVal hWnd As Long) As Long
 

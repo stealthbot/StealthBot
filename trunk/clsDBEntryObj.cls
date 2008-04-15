@@ -92,8 +92,37 @@ Public Property Let Flags(ByVal strFlags As String)
 End Property
 
 ' ...
+Public Function IsInGroup(ByVal GroupName As String) As Boolean
+
+    Dim i   As Integer ' ...
+    Dim pos As Integer ' ...
+    
+    ' ...
+    For i = 1 To Groups.Count
+        ' ...
+        pos = InStr(1, Groups(i).Name, Space$(1), vbBinaryCompare)
+        
+        ' ...
+        If (pos > 0) Then
+            Groups(i).Name = Mid$(Groups(i).Name, 1, pos - 1)
+        End If
+    
+        ' ...
+        If (StrComp(GroupName, Groups(i).Name, vbTextCompare) = 0) Then
+            ' ...
+            IsInGroup = True
+            
+            ' ...
+            Exit Function
+        End If
+    Next i
+
+End Function
+
+' ...
 Public Function HasFlag(ByVal strFlag As String, Optional ByVal CaseSensitive As Boolean = True) As Boolean
     
+    ' ...
     If (CaseSensitive) Then
         HasFlag = (InStr(1, m_flags, strFlag, vbBinaryCompare) <> 0)
     Else

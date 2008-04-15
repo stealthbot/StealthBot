@@ -24,8 +24,6 @@ Private Const SID_FRIENDUPDATE& = &H66
 Private Const SID_FRIENDADDED& = &H67
 Private Const SID_FRIENDREMOVED& = &H68
 Private Const SID_FRIENDMOVED& = &H69
-    
-Public colFriends As Collection
 
 Public Event FriendUpdate(ByVal Username As String, ByVal FLIndex As Byte)
 Public Event FriendAdded(ByVal Username As String, ByVal Product As String, ByVal Location As Byte, _
@@ -37,7 +35,7 @@ Public Event FriendMoved()
 
 
 Private Sub Class_Initialize()
-    Set colFriends = New Collection
+    Set g_Friends = New Collection
 End Sub
 
 Public Sub RequestFriendsList(ByRef pBuff As PacketBuffer)
@@ -51,7 +49,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
     Dim n As Long, bytTemp As Byte
     Dim s As String
     Dim Position As Long
-    Dim flTemp As clsFriend
+    Dim flTemp As clsFriendObj
 
     Position = 1
     
@@ -67,7 +65,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             Set flTemp = Nothing
             
             For n = 0 To n - 1
-                Set flTemp = New clsFriend
+                Set flTemp = New clsFriendObj
                 
                 ''debug.print DebugOutput(Mid$(Data, Position)) & vbCrLf
                 s = ""
@@ -119,7 +117,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 
                 ''debug.print "Successfully added: " & flTemp.Username
                 
-                colFriends.Add flTemp, flTemp.Username
+                g_Friends.Add flTemp, flTemp.Username
                 
                 RaiseEvent FriendListEntry(flTemp.Username, flTemp.Product, flTemp.Channel, flTemp.Status, _
                     flTemp.Location)
@@ -134,7 +132,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             
             Position = Position + 1
             
-            With colFriends.Item(n)
+            With g_Friends.Item(n)
                 '(BYTE) Flags
                 bytTemp = Asc(Mid$(Data, Position, 1))
                 Position = Position + 1
@@ -159,7 +157,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             End With
         
         Case SID_FRIENDADDED
-            Set flTemp = New clsFriend
+            Set flTemp = New clsFriendObj
         
             With flTemp
                 '(STRING)         Account
@@ -191,7 +189,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 RaiseEvent FriendAdded(.Username, .Product, .Location, .Status, .Channel)
             End With
             
-            colFriends.Add flTemp, flTemp.Username
+            g_Friends.Add flTemp, flTemp.Username
             
             Set flTemp = Nothing
         
@@ -199,9 +197,10 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             '(BYTE)       Entry Number
             bytTemp = Asc(Mid$(Data, 1, 1)) + 1
             
-            If bytTemp > 0 And bytTemp <= colFriends.Count Then
-                RaiseEvent FriendRemoved(colFriends.Item(bytTemp).Username)
-                colFriends.Remove bytTemp
+            If bytTemp > 0 And bytTemp <= g_Friends.Count Then
+                RaiseEvent FriendRemoved(g_Friends.Item(bytTemp).Username)
+                
+                g_Friends.Remove bytTemp
             End If
             
         
@@ -223,21 +222,21 @@ ERROR_HANDLER:
 
     Exit Sub
 
-    'debug.print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParsePacket of Class Module clsFriendlistHandler"
+    'debug.print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParsePacket of Class Module clsFriendListHandler"
     
 End Sub
 
 Public Sub ResetList()
-    Set colFriends = Nothing
-    Set colFriends = New Collection
+    Set g_Friends = Nothing
+    Set g_Friends = New Collection
 End Sub
 
 Public Function UsernameToFLIndex(ByVal sUsername As String) As Integer
     Dim i As Integer
     
-    If colFriends.Count > 0 Then
-        For i = 1 To colFriends.Count
-            If StrComp(sUsername, colFriends.Item(i).Username, vbTextCompare) = 0 Then
+    If g_Friends.Count > 0 Then
+        For i = 1 To g_Friends.Count
+            If StrComp(sUsername, g_Friends.Item(i).Username, vbTextCompare) = 0 Then
                 UsernameToFLIndex = i
                 Exit Function
             End If
@@ -247,7 +246,7 @@ End Function
 
 
 Private Sub Class_Terminate()
-    Set colFriends = Nothing
+    Set g_Friends = Nothing
 End Sub
 
 'Public Sub WriteLog(ByVal s As String, Optional ByVal NoDebug As Boolean = False)

@@ -405,15 +405,15 @@ Private Sub Form_Load()
         Call cmdDisc_Click
     'End If
     
-    Dim users As Collection, X As Integer
+    Dim Users As Collection, X As Integer
     With lvMonitor
         .SmallIcons = frmChat.imlIcons
         .icons = frmChat.imlIcons
         .View = lvwReport
         .ListItems.Clear
-        Set users = monConn.getList
-        For X = 1 To users.Count
-            .ListItems.Add , users.Item(X).Username, users.Item(X).Username, , ICSQUELCH
+        Set Users = monConn.getList
+        For X = 1 To Users.Count
+            .ListItems.Add , Users.Item(X).Username, Users.Item(X).Username, , ICSQUELCH
             .ListItems(.ListItems.Count).ListSubItems.Add 1, "status", "Offline", MONITOR_OFFLINE
             .ListItems(.ListItems.Count).ListSubItems.Add 2, "last", "None"
             .ListItems(.ListItems.Count).Tag = "0"
@@ -433,7 +433,7 @@ Private Sub cmdRem_CLick()
     
     If Not (lvMonitor.SelectedItem Is Nothing) Then
         Call monConn.RemoveUser(lvMonitor.SelectedItem.text)
-        lvMonitor.ListItems.Remove (lvMonitor.SelectedItem.Index)
+        lvMonitor.ListItems.Remove (lvMonitor.SelectedItem.index)
     End If
 End Sub
 
@@ -444,7 +444,7 @@ Public Function RemoveUser(strUser As String) As Boolean
   Set usrItem = lvMonitor.FindItem(strUser)
   If (usrItem Is Nothing) Then Exit Function
   Call monConn.RemoveUser(usrItem.text)
-  lvMonitor.ListItems.Remove usrItem.Index
+  lvMonitor.ListItems.Remove usrItem.index
   RemoveUser = True
 End Function
 
@@ -472,9 +472,9 @@ Private Sub monConn_BNETConnect()
   lblStatus.Caption = "Connecting..."
 End Sub
 
-Private Sub monConn_BNETError(ByVal Number As Integer, ByVal Description As String)
-  Debug.Print "BNET " & Number & " " & Description
-  lblStatus.Caption = "[BNET] " & Number & ": " & Description
+Private Sub monConn_BNETError(ByVal Number As Integer, ByVal description As String)
+  Debug.Print "BNET " & Number & " " & description
+  lblStatus.Caption = "[BNET] " & Number & ": " & description
 End Sub
 
 Private Sub monConn_BNLSClose()
@@ -485,9 +485,9 @@ Private Sub monConn_BNLSConnect()
   Debug.Print "BNLS Connet"
 End Sub
 
-Private Sub monConn_BNLSError(ByVal Number As Integer, ByVal Description As String)
-  Debug.Print "BNLS " & Number & " " & Description
-  lblStatus.Caption = "[BNLS] " & Number & ": " & Description
+Private Sub monConn_BNLSError(ByVal Number As Integer, ByVal description As String)
+  Debug.Print "BNLS " & Number & " " & description
+  lblStatus.Caption = "[BNLS] " & Number & ": " & description
   lblStatus.ToolTipText = "BNLS Hash encountered an error. The server may be down."
 End Sub
 
@@ -529,7 +529,7 @@ Private Sub monConn_OnVersionCheck(ByVal result As Long, PatchFile As String)
   End If
 End Sub
 
-Private Sub monConn_UserInfo(user As clsFriend)
+Private Sub monConn_UserInfo(user As clsFriendObj)
   Debug.Print "User info: " & user.Username & ": " & user.Status
   Call UpdateList(user)
 End Sub
@@ -540,7 +540,7 @@ Private Sub txtAdd_KeyPress(KeyAscii As Integer)
         KeyAscii = 0
     End If
 End Sub
-Private Sub UpdateList(user As clsFriend)
+Private Sub UpdateList(user As clsFriendObj)
     Dim X As ListItem, Holder As Integer, b As Byte
     
     If InStr(1, user.Product, "starcraft", vbTextCompare) <> 0 Then
@@ -586,7 +586,7 @@ Private Sub UpdateList(user As clsFriend)
             StatusOnline user.Username
             X.Icon = 1
         End If
-        With lvMonitor.ListItems(X.Index)
+        With lvMonitor.ListItems(X.index)
             On Error Resume Next
             .SmallIcon = Holder
             .ListSubItems.Clear
@@ -627,7 +627,7 @@ Function SetStatusWatch(ByVal Val As Byte, ByVal Username As String) As Byte
 
 SetStatusWatch_Error:
     SetStatusWatch = 2
-    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure SetStatusWatch of Form frmMonitor"
+    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure SetStatusWatch of Form frmMonitor"
 
 End Function
 

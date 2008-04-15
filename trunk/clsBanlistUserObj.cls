@@ -22,6 +22,14 @@ Private m_banned_date   As Date
 Private m_ban_reason    As String
 Private m_operator      As String
 Private m_duplicate_ban As Boolean
+Private m_active_ban    As Boolean
+
+Private Sub Class_Initialize()
+
+    ' ...
+    m_active_ban = True
+    
+End Sub
 
 Public Property Get Name() As String
 
@@ -34,6 +42,14 @@ Public Property Let Name(str As String)
 
     ' ...
     m_name = str
+
+End Property
+
+' ...
+Public Property Get DisplayName() As String
+
+    ' ...
+    DisplayName = convertUsername(Name)
 
 End Property
 
@@ -90,6 +106,20 @@ Public Property Get IsDuplicateBan() As Boolean
 
     ' ...
     IsDuplicateBan = m_duplicate_ban
+
+End Property
+
+Public Property Let IsActive(bln As Boolean)
+
+    ' ...
+    m_active_ban = bln
+
+End Property
+
+Public Property Get IsActive() As Boolean
+
+    ' ...
+    IsActive = m_active_ban
 
 End Property
 

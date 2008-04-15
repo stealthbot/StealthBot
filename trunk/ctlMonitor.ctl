@@ -64,7 +64,7 @@ Public Event BNETError(ByVal Number As Integer, ByVal description As String)
 Public Event OnVersionCheck(ByVal result As Long, PatchFile As String)
 Public Event OnLogin(ByVal Success As Boolean)
 Public Event OnChatJoin(ByVal UniqueName As String)
-Public Event UserInfo(user As clsFriend)
+Public Event UserInfo(user As clsFriendObj)
 Public Event OnCreateAccount(ByVal blSucces As Boolean)
 
 Public Property Let Username(strData As String)
@@ -102,9 +102,9 @@ Public Sub LoadList()
     If (colUserInfo Is Nothing) Then Set colUserInfo = New Collection
     l = Val(ReadCFG("Monitor", "ListCount"))
     If (l < 1) Then Exit Sub
-    Dim tmpUser As clsFriend
+    Dim tmpUser As clsFriendObj
     For X = 1 To l
-      Set tmpUser = New clsFriend
+      Set tmpUser = New clsFriendObj
       tmpUser.Username = ReadCFG("Monitor", "User" & X)
       colUserInfo.Add tmpUser, LCase(tmpUser.Username)
     Next X
@@ -128,7 +128,7 @@ Public Function AddUser(sUser As String) As Boolean
     For X = 1 To colUserInfo.Count
       If (LCase(colUserInfo.Item(X).Username) = LCase(sUser)) Then Exit Function
     Next X
-    Dim newUser As New clsFriend
+    Dim newUser As New clsFriendObj
     newUser.Username = sUser
     colUserInfo.Add newUser, LCase(sUser)
     SaveList
@@ -264,7 +264,7 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                     With colUserInfo.Item(CurrentIndex)
                         If EventID = 18 Then
                             .Status = 1
-                            Dim Channel As String, game As String
+                            Dim Channel As String, Game As String
                             If InStr(1, text, " in the ", vbTextCompare) > 0 Then
                                 Channel = Mid(text, InStr(1, text, " in the ", vbTextCompare) + 8)
                                 Channel = Left(Channel, Len(Channel) - 1)
@@ -275,10 +275,10 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                                 Channel = "Unknown"
                             End If
                             If InStr(1, text, " using ", vbTextCompare) > 0 Then
-                                game = Mid(text, InStr(1, text, " using ", vbTextCompare) + 7)
-                                game = Left(game, InStr(1, game, " in ", vbTextCompare) - 1)
+                                Game = Mid(text, InStr(1, text, " using ", vbTextCompare) + 7)
+                                Game = Left(Game, InStr(1, Game, " in ", vbTextCompare) - 1)
                             End If
-                            .Product = game
+                            .Product = Game
                             .Channel = Channel
                             
                             If (InStr(1, text, " is refusing messages ", vbTextCompare) = 0) Then

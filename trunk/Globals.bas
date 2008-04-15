@@ -122,8 +122,11 @@ Public g_Online As Boolean
 Public AwaitingSystemKeys As Byte
 Public AwaitingSelfRemoval As Byte
 'Public AttemptedNewVerbyte As Boolean
+
 Public g_Quotes As Collection
 Public g_Channel As New clsChannelObj
+Public g_Clan As New clsClanObj
+Public g_Friends As New Collection
 
 Public UserCancelledConnect As Boolean
 
@@ -162,7 +165,6 @@ Public WatchUser As String
 Public bFlood As Boolean
 Public BotVars As clsBotVars
 
-Public colUsersInChannel As Collection
 Public colLastSeen As Collection
 Public colProfiles As Collection
 

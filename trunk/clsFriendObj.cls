@@ -6,13 +6,13 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "clsFriend"
+Attribute VB_Name = "clsFriendObj"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 '---------------------------------------------------------------------------------------
-' Module    : clsFriend
+' Module    : g_FriendObj
 ' DateTime  : 3/15/2004 18:58
 ' Author    : Stealth
 ' Purpose   : stores friendlist data
@@ -83,5 +83,11 @@ End Property
 Public Property Let Username(ByVal sUsername As String)
 
     msUsername = KillNull(sUsername)
+
+End Property
+
+Public Property Get DisplayName() As String
+
+    DisplayName = convertUsername(msUsername)
 
 End Property

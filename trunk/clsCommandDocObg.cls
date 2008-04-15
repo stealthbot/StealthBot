@@ -27,7 +27,6 @@ Private m_description    As String
 Private m_special_notes  As String
 Private m_params         As Collection
 Private m_enabled        As Boolean
-Private m_datasrc        As String
 
 Private Sub Class_Initialize()
 
@@ -45,8 +44,22 @@ Private Sub Class_Terminate()
     
 End Sub
 
-Public Function OpenCommand(ByVal strCommand As String, ByVal datasrc As String, Optional ByVal DatabasePath _
-    As String = vbNullString) As Boolean
+Public Function OpenDatabase(Optional ByVal DatabasePath As String = vbNullString)
+
+    ' ...
+    If (DatabasePath = vbNullString) Then
+        DatabasePath = App.Path & "\commands.xml"
+    End If
+    
+    ' ...
+    m_database.Load DatabasePath
+    
+    ' ...
+    m_database.setProperty "SelectionLanguage", "XPath"
+
+End Function
+
+Public Function OpenCommand(ByVal strCommand As String) As Boolean
     
     Dim command_access_node   As IXMLDOMNode
     Dim command_documentation As IXMLDOMNode
@@ -54,18 +67,6 @@ Public Function OpenCommand(ByVal strCommand As String, ByVal datasrc As String,
     Dim command_aliases       As IXMLDOMNodeList
     Dim alias                 As IXMLDOMNode
     Dim attrs                 As IXMLDOMAttribute
-    
-    ' ...
-    If (DatabasePath = vbNullString) Then
-        ' ...
-        DatabasePath = App.Path & "\commands.xml"
-    End If
-    
-    ' ...
-    Call m_database.Load(DatabasePath)
-    
-    ' ...
-    Call m_database.setProperty("SelectionLanguage", "XPath")
     
     ' ...
     Set m_command_node = m_database.documentElement
@@ -76,16 +77,10 @@ Public Function OpenCommand(ByVal strCommand As String, ByVal datasrc As String,
         Exit Function
     End If
     
-    If (datasrc = "internal") Then
-        ' ...
-        Set m_command_node = _
-                m_command_node.selectSingleNode("./command[@name='" & strCommand & "']")
-    Else
-        ' ...
-        Set m_command_node = _
-                m_command_node.selectSingleNode("./command[@name='" & strCommand & "' and @datasrc='" & _
-                        datasrc & "']")
-    End If
+    ' ...
+    Set m_command_node = _
+            m_command_node.selectSingleNode("./command[@name='" & strCommand & "']")
+            
     ' ...
     If (m_command_node Is Nothing) Then
         ' ...
@@ -216,12 +211,30 @@ Public Function OpenCommand(ByVal strCommand As String, ByVal datasrc As String,
                 ' ...
                 Set restrictionObj = New clsCommandRestrictionObj
             
+                ' ...
                 With restrictionObj
                     .Name = restriction.Attributes.getNamedItem("name").text
                     .MatchMessage = _
                         restriction.selectSingleNode("./match[@message]").Attributes.getNamedItem("message").text
-                    .RequiredRank = _
-                        restriction.selectSingleNode("./access/rank").text
+                    
+                    Set command_access_node = restriction.selectSingleNode("access")
+                    
+                    If (Not (command_access_node Is Nothing)) Then
+                    
+                        Set command_rank_node = _
+                            command_access_node.selectSingleNode("./access/rank")
+                            
+                        If (Not (command_rank_node Is Nothing)) Then
+                            .RequiredRank = command_rank_node.text
+                        End If
+                            
+                        Set command_flag_nodes = _
+                            command_access_node.selectNodes("./access/flag")
+                        
+                        If (Not (command_flag_nodes Is Nothing)) Then
+                        
+                        End If
+                    End If
                 End With
                 
                 ' ...
@@ -246,18 +259,6 @@ Public Property Get Name() As String
     
 End Property
 
-Public Property Get datasrc() As String
-
-    datasrc = m_datasrc
-    
-End Property
-
-Public Property Let datasrc(str As String)
-
-    m_datasrc = str
-    
-End Property
-
 Public Property Get Aliases() As Collection
 
     ' ...
@@ -279,7 +280,7 @@ End Property
 
 Public Property Let Name(strName As String)
 
-    m_name = Name
+    m_name = strName
     
 End Property
 
@@ -326,36 +327,86 @@ Public Property Get params() As Collection
 End Property
 
 Public Function Save() As Boolean
-    Dim node     As IXMLDOMNode
-    Dim params   As IXMLDOMNode
-    Dim tmp_attr As IXMLDOMAttribute
-    Dim tmp_node As IXMLDOMNode
-    Dim i        As Integer
+    Dim command   As IXMLDOMNode
+    Dim node      As IXMLDOMNode
+    Dim params    As IXMLDOMNode
+    Dim attr      As IXMLDOMAttribute
+    Dim childNode As IXMLDOMNode
+    Dim i         As Integer
     
-    tmp_attr.text = m_name
+    ' ------------------------------------------------
+    ' create command
+    ' ------------------------------------------------
+    
+    Set command = m_database.createNode("element", "command", vbNullString)
+    
+    ' ------------------------------------------------
+    ' set command name
+    ' ------------------------------------------------
+    
+    Set attr = m_database.createAttribute("name")
+    
+    attr.text = m_name
+    
+    command.Attributes.setNamedItem attr
+    
+    ' ------------------------------------------------
+    ' store command documentation
+    ' ------------------------------------------------
+     
+    Set node = m_database.createNode("element", "documentation", vbNullString)
 
-    node.Attributes.setNamedItem tmp_attr
+    Set childNode = m_database.createNode("element", "description", vbNullString)
     
-    'tmp_node.nodeName = "arguments"
+    childNode.text = m_description
     
-    'node.appendChild "arguments"
+    node.appendChild childNode
     
-    For i = 1 To params
-        
-        
-    Next i
+    Set childNode = m_database.createNode("element", "notes", vbNullString)
+    
+    childNode.text = m_special_notes
+    
+    node.appendChild childNode
+    
+    command.appendChild node
+    
+    ' ------------------------------------------------
+    ' store command required access
+    ' ------------------------------------------------
+    
+    Set node = m_database.createNode("element", "access", vbNullString)
+    
+    Set childNode = m_database.createNode("element", "rank", vbNullString)
+    
+    childNode.text = m_required_rank
+    
+    node.appendChild childNode
+    
+    command.appendChild node
+    
+    ' ------------------------------------------------
+    ' save command
+    ' ------------------------------------------------
 
-    ' ...
-    Call Delete
+    m_database.documentElement.appendChild command
     
+    frmChat.AddChat vbRed, m_database.text
     
-    m_command_node.parentNode.appendChild node
+    m_database.Save App.Path & "\commands.xml"
     
 End Function
 
 Public Function Delete() As Boolean
 
     ' ...
-    m_command_node.parentNode.removeChild m_command_node
+    If (Not (m_command_node Is Nothing)) Then
+        m_command_node.parentNode.removeChild m_command_node
+    End If
 
 End Function
+
+Public Sub WriteXML()
+    
+    ' ...
+    
+End Sub

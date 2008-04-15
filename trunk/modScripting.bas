@@ -158,17 +158,17 @@ Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
     SC.Run "Event_Load"
 
     If g_Online Then
-        SC.Run "Event_LoggedOn", CurrentUsername, BotVars.Product
-        SC.Run "Event_ChannelJoin", g_Channel.Name, gChannel.Flags
+        SC.Run "Event_LoggedOn", GetCurrentUsername, BotVars.Product
+        SC.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
 
-        If colUsersInChannel.Count > 0 Then
-            For i = 1 To colUsersInChannel.Count
+        If g_Channel.Users.Count > 0 Then
+            For i = 1 To g_Channel.Users.Count
                 Message = ""
 
-                With colUsersInChannel.Item(i)
+                With g_Channel.Users(i)
                      ParseStatstring .Statstring, Message, .Clan
 
-                     SC.Run "Event_UserInChannel", .Username, .Flags, Message, .Ping, .Product, False
+                     SC.Run "Event_UserInChannel", .DisplayName, .Flags, Message, .Ping, .Game, False
                  End With
              Next i
          End If

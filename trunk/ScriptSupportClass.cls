@@ -292,11 +292,11 @@ End Sub
 '//             use it to control whether or not your command responses display publicly.
 '// CC          CC controls whether or not the command string is passed to the Custom Command processor.
 '//             For scripting purposes I will not allow the user to set CC, it is always 0.
-Public Sub Command(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
+Public Sub command(ByVal Username As String, ByVal message As String, Optional ByVal IsLocal As Boolean = _
     False, Optional ByVal Whispered As Boolean = False)
     
     ' execute command
-    Call ProcessCommand(Username, Message, IsLocal, Whispered)
+    Call ProcessCommand(Username, message, IsLocal, Whispered)
 End Sub
 
 
@@ -317,7 +317,7 @@ End Sub
 '//         ALL uppercase and with no repeating letters, or the bot will become
 '//         somewhat confused.
 
-Public Function CommandEx(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
+Public Function CommandEx(ByVal Username As String, ByVal message As String, Optional ByVal IsLocal As Boolean = _
     False) As String
     
     Dim dbAccess           As udtGetAccessResponse
@@ -340,7 +340,7 @@ Public Function CommandEx(ByVal Username As String, ByVal Message As String, Opt
     End If
 
     ' execute command
-    bln = ExecuteCommand(Username, dbAccess, Message, IsLocal, command_response)
+    bln = ExecuteCommand(Username, dbAccess, message, IsLocal, command_response)
     
     ' ...
     CommandEx = Join(command_response, Chr$(0))
@@ -423,7 +423,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
 
     Dim Temp   As udtGetAccessResponse
     Dim i      As Integer
-    Dim Splt() As String
+    Dim splt() As String
     
     Temp = GetCumulativeAccess(Username, entryType)
     
@@ -449,15 +449,15 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
 
     If ((Temp.Groups <> vbNullString) And (Temp.Groups <> "%")) Then
         If (InStr(1, Temp.Groups, ",", vbBinaryCompare) <> 0) Then
-            Splt() = Split(Temp.Groups, ",")
+            splt() = Split(Temp.Groups, ",")
         Else
-            ReDim Preserve Splt(0)
+            ReDim Preserve splt(0)
         
-            Splt(0) = Temp.Groups
+            splt(0) = Temp.Groups
         End If
     
-        For i = LBound(Splt) To UBound(Splt)
-            GetDBEntry.Groups.Add GetDBEntry(Splt(i), , , "GROUP")
+        For i = LBound(splt) To UBound(splt)
+            GetDBEntry.Groups.Add GetDBEntry(splt(i), , , "GROUP")
         Next i
     End If
 End Function
@@ -556,7 +556,7 @@ Public Sub GetUserProfile(Optional ByVal Username As String)
     If LenB(Username) > 0 Then
         Call RequestProfile(Username)
     Else
-        Call RequestProfile(CurrentUsername)
+        Call RequestProfile(GetCurrentUsername)
     End If
     
 End Sub
@@ -589,7 +589,7 @@ End Function
 '//     this allows you to call that function with (1 to GetInternalUserCount())
 Public Function GetInternalUserCount() As Integer
     
-    GetInternalUserCount = colUsersInChannel.Count
+    GetInternalUserCount = Channel.Users.Count
     
 End Function
 
@@ -602,7 +602,7 @@ Public Function GetInternalDataByUsername(ByVal sUser As String, ByVal lDataType
 
     Dim i As Integer
     
-    i = UsernameToIndex(sUser)
+    i = Channel.GetUserIndex(sUser)
     
     GetInternalDataByUsername = GetInternalData(i, lDataType)
 
@@ -629,28 +629,28 @@ Public Function GetInternalData(ByVal iIndex As Integer, ByVal lDataType As Long
     If iIndex > 0 Then
         Select Case lDataType
             Case GID_CLAN
-                GetInternalData = colUsersInChannel.Item(iIndex).Clan
+                GetInternalData = Channel.Users(iIndex).Clan
                 
             Case GID_FLAGS
-                GetInternalData = colUsersInChannel.Item(iIndex).Flags
+                GetInternalData = Channel.Users(iIndex).Flags
             
             Case GID_PING
-                GetInternalData = colUsersInChannel.Item(iIndex).Ping
+                GetInternalData = Channel.Users(iIndex).Ping
             
             Case GID_PRODUCT
-                GetInternalData = colUsersInChannel.Item(iIndex).Product
+                GetInternalData = Channel.Users(iIndex).Game
             
             Case GID_ISSAFELISTED
-                GetInternalData = colUsersInChannel.Item(iIndex).Safelisted
+                GetInternalData = GetSafelist(Channel.Users(iIndex).DisplayName)
             
             Case GID_STATSTRING
-                GetInternalData = colUsersInChannel.Item(iIndex).Statstring
+                GetInternalData = Channel.Users(iIndex).Statstring
             
             Case GID_TIMEINCHANNEL
-                GetInternalData = colUsersInChannel.Item(iIndex).TimeInChannel()
+                GetInternalData = Channel.Users(iIndex).TimeInChannel
             
             Case GID_TIMESINCETALK
-                GetInternalData = colUsersInChannel.Item(iIndex).TimeSinceTalk()
+                GetInternalData = Channel.Users(iIndex).TimeSinceTalk
             
             Case Else
                 GetInternalData = 0
@@ -1160,7 +1160,7 @@ End Function
 '//             Example: Dsp 3, "Example message", "JoeUser"
 '//         4 = AddChat
 '//             Example: Dsp 4, "Example message", , vbCyan
-'//     Delimiter is " " by default, and only applies for messages > 220 characters.
+'//     Delimiter is " " by default, and only applies for messages > 223 characters.
 Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVal strUsername As String, Optional ByVal lngColor As Long, Optional ByVal strDelimiter As String)
 
     If intID < 4 Then
@@ -1176,7 +1176,7 @@ Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVa
         If Len(strDelimiter) = 0 Then strDelimiter = " "
         
         '// If message is too long to display in a single AddQ, split into multiple messages
-        If Len(strMessage) > 220 And InStr(strMessage, strDelimiter) Then
+        If Len(strMessage) > 223 And InStr(strMessage, strDelimiter) Then
             arrMessage = Split(strMessage)
             
             For i = 0 To UBound(arrMessage)
@@ -1392,27 +1392,30 @@ Public Function GetUIObject(ByVal strPrefix As String, ByVal strForm As String, 
 End Function
 
 ' // ...
-Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Boolean = _
-    False, Optional ByVal datasrc As String = "external") As Object
+Public Function IsCommand(ByVal str As String, Optional DontCheckTrigger As Boolean = False) As Object
     
-    Set IsCommand = modOtherCode.IsCommand(str, DontCheckTrigger, datasrc)
+    Set IsCommand = modOtherCode.IsCommand(str, DontCheckTrigger)
 End Function
 
-Public Function OpenCommand(ByVal strCommand As String, Optional ByVal datasrc As String = "external") As Object
+Public Function OpenCommand(ByVal strCommand As String) As Object
     '// ...
-    Set OpenCommand = modCommandDocsObj.OpenCommand(strCommand, datasrc)
+    Set OpenCommand = modCommandDocsObj.OpenCommand(strCommand)
 End Function
 
-Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String, Optional ByVal _
-    datasrc As String = "external") As Boolean
-    
-    IsCorrectSyntax = modCommandCode.IsCorrectSyntax(CommandName, CommandArgs, datasrc)
+Public Function CreateCommand(ByVal strCommand As String) As Object
+    '// ...
+    Set CreateCommand = modCommandDocsObj.CreateCommand(strCommand)
+End Function
+
+Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String) As Boolean
+    '// ...
+    IsCorrectSyntax = modCommandCode.IsCorrectSyntax(CommandName, CommandArgs)
 End Function
 
 Public Function HasAccess(ByVal Username As String, ByVal CommandName As String, Optional ByVal CommandArgs As _
-    String = vbNullString, Optional ByVal datasrc As String = "external") As Boolean
+    String = vbNullString, Optional ByRef outbuf As String) As Boolean
     
-    HasAccess = modCommandCode.HasAccess(Username, CommandName, CommandArgs, datasrc)
+    HasAccess = modCommandCode.HasAccess(Username, CommandName, CommandArgs)
 End Function
 
 Public Function Quotes() As Collection
@@ -1425,7 +1428,15 @@ Public Function MediaPlayer() As Object
 End Function
 
 Public Function Channel() As Object
-    Set Channel = g_Channel
+    Set Channel = g_channel
+End Function
+
+Public Function Clan() As Object
+    Set Clan = g_Clan
+End Function
+
+Public Function Friends() As Object
+    Set Friends = g_Friends
 End Function
 
 Private Sub Class_Initialize()

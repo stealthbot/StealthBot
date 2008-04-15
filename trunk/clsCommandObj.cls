@@ -22,7 +22,6 @@ Private m_name         As String
 Private m_args         As String
 Private m_local        As Boolean
 Private m_publicOutput As Boolean
-Private m_datasrc      As String
 
 ' ...
 Public Property Get Name() As String
@@ -35,20 +34,6 @@ End Property
 Public Property Let Name(strName As String)
 
     m_name = strName
-    
-End Property
-
-' ...
-Public Property Get datasrc() As String
-    
-    datasrc = m_datasrc
-    
-End Property
-
-' ...
-Public Property Let datasrc(str As String)
-
-    m_datasrc = str
     
 End Property
 
@@ -97,6 +82,6 @@ End Property
 ' ...
 Public Property Get docs() As Object
 
-    Set docs = OpenCommand(m_name, datasrc)
+    Set docs = OpenCommand(m_name)
 
 End Property

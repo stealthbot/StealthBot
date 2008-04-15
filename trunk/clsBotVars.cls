@@ -97,6 +97,8 @@ Private m_safelist_group                As String
 Private m_tagbans_group                 As String
 Private m_autocomplete_postfix          As String
 Private m_show_stats_icons              As Boolean
+Private m_retain_old_bans               As Boolean
+Private m_store_all_bans                As Boolean
 
 Public Property Get Username() As String
     
@@ -1050,4 +1052,33 @@ Public Property Get ShowStatsIcons() As Boolean
     ShowStatsIcons = m_show_stats_icons
 
 End Property
+
+Public Property Let RetainOldBans(bln As Boolean)
+
+    ' ...
+    m_retain_old_bans = bln
+
+End Property
+
+Public Property Get RetainOldBans() As Boolean
+
+    ' ...
+    RetainOldBans = m_retain_old_bans
+
+End Property
+
+Public Property Let StoreAllBans(bln As Boolean)
+
+    ' ...
+    m_store_all_bans = bln
+
+End Property
+
+Public Property Get StoreAllBans() As Boolean
+
+    ' ...
+    StoreAllBans = m_store_all_bans
+
+End Property
+
 

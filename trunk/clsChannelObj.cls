@@ -25,16 +25,17 @@ Private Const CHAN_SYSTEM     As Long = &H10
 Private Const CHAN_PRODUCT    As Long = &H20
 Private Const CHAN_GLOBAL     As Long = &H1000
 
-Private m_name            As String
-Private m_flags           As Long
-Private m_designated_heir As Integer
-Private m_num_joins       As Long
-Private m_num_bans        As Long
-Private m_num_kicks       As Long
-Private m_join_date       As Date
-Private m_users           As Collection
-Private m_banlist         As Collection
-Private m_chat_queue      As Collection
+Private m_name             As String
+Private m_flags            As Long
+Private m_designated_heir  As Integer
+Private m_num_joins        As Long
+Private m_num_bans         As Long
+Private m_num_kicks        As Long
+Private m_join_date        As Date
+Private m_users            As Collection
+Private m_banlist          As Collection
+Private m_chat_queue       As Collection
+Private m_chat_queue_count As Integer
 
 Private Sub Class_Initialize()
     
@@ -58,6 +59,20 @@ Public Property Let Name(str As String)
 
 End Property
 
+Public Property Get OperatorHeir() As String
+
+    ' ...
+    OperatorHeir = m_designated_heir
+
+End Property
+
+Public Property Let OperatorHeir(str As String)
+
+    ' ...
+    m_designated_heir = str
+
+End Property
+
 Public Property Get Flags() As Long
 
     ' ...
@@ -72,17 +87,17 @@ Public Property Let Flags(lng As Long)
 
 End Property
 
-Public Property Let JoinDate(jdate As Date)
+Public Property Let JoinTime(jdate As Date)
 
     ' ...
     m_join_date = jdate
 
 End Property
 
-Public Property Get JoinDate() As Date
+Public Property Get JoinTime() As Date
 
     ' ...
-    JoinDate = m_join_date
+    JoinTime = m_join_date
 
 End Property
 
@@ -93,27 +108,27 @@ Public Property Get IsSilent() As Boolean
 
 End Property
 
-Public Property Get TotalJoinCount() As Long
+Public Property Get JoinCount() As Long
 
     ' ...
 
 End Property
 
-Public Property Get TotalBanCount() As Long
+Public Property Get BanCount() As Long
 
     ' ...
-    TotalBanCount = m_num_bans
+    BanCount = m_num_bans
 
 End Property
 
-Public Property Let TotalBanCount(lng As Long)
+Public Property Let BanCount(lng As Long)
 
     ' ...
     m_num_bans = lng
     
 End Property
 
-Public Property Get TotalKickCount() As Long
+Public Property Get KickCount() As Long
 
     ' ...
 
@@ -148,11 +163,11 @@ Public Property Get Self() As clsUserObj
     Set Self = New clsUserObj
     
     ' ...
-    For i = 1 To m_users.Count
+    For i = 1 To Users.Count
         ' ...
-        If (StrComp(m_users(i).DisplayName, CurrentUsername, vbBinaryCompare) = 0) Then
+        If (StrComp(Users(i).Name, CurrentUsername, vbBinaryCompare) = 0) Then
             ' ...
-            Set Self = m_users(i)
+            Set Self = Users(i)
             
             ' ...
             Exit Property
@@ -161,39 +176,61 @@ Public Property Get Self() As clsUserObj
 
 End Property
 
-Public Function GetUserIndexByName(ByVal Username As String) As Integer
+Public Function GetUserIndexEx(ByVal AccountName As String, Optional SearchLimit As Integer = 0) As Integer
 
     Dim i As Integer ' ...
 
     ' ...
     For i = 1 To m_users.Count
         ' ...
-        If (StrComp(m_users(i).Name, Username, vbBinaryCompare) = 0) Then
+        If (SearchLimit > 0) Then
             ' ...
-            GetUserIndexByName = i
+            If (i >= SearchLimit) Then
+                Exit For
+            End If
+        End If
+    
+        ' ...
+        If (StrComp(m_users(i).Name, AccountName, vbTextCompare) = 0) Then
+            ' ...
+            GetUserIndexEx = i
             
             ' ...
             Exit Function
         End If
     Next i
+    
+    ' ...
+    GetUserIndexEx = 0
 
 End Function
 
-Public Function GetUserIndexByDisplayName(ByVal Username As String) As Integer
+Public Function GetUserIndex(ByVal Username As String, Optional SearchLimit As Integer = 0) As Integer
 
     Dim i As Integer ' ...
 
     ' ...
     For i = 1 To m_users.Count
         ' ...
-        If (StrComp(m_users(i).DisplayName, Username, vbBinaryCompare) = 0) Then
+        If (SearchLimit > 0) Then
             ' ...
-            GetUserIndexByDisplayName = i
+            If (i >= SearchLimit) Then
+                Exit For
+            End If
+        End If
+    
+        ' ...
+        If (StrComp(m_users(i).DisplayName, Username, vbTextCompare) = 0) Then
+            ' ...
+            GetUserIndex = i
             
             ' ...
             Exit Function
         End If
     Next i
+    
+    ' ...
+    GetUserIndex = 0
 
 End Function
 
@@ -213,11 +250,11 @@ Public Function IsOnBanList(ByVal Username As String, Optional Operator As Strin
     ' ...
     For i = 1 To m_banlist.Count
         ' ...
-        If (StrComp(m_banlist(i).Name, Username, vbTextCompare) = 0) Then
+        If (StrComp(Banlist.Name, Username, vbTextCompare) = 0) Then
             ' ...
             If (Operator <> vbNullString) Then
                 ' ...
-                If (StrComp(m_banlist(i).Operator, Operator, vbTextCompare) = 0) Then
+                If (StrComp(Banlist.Operator, Operator, vbTextCompare) = 0) Then
                     bln = True
                 End If
             Else
@@ -236,11 +273,25 @@ Public Function IsOnBanList(ByVal Username As String, Optional Operator As Strin
     IsOnBanList = 0
 End Function
 
+Public Property Get QueueCount() As Integer
+
+    ' ...
+    QueueCount = m_chat_queue_count
+
+End Property
+
+Public Property Let QueueCount(i As Integer)
+
+    ' ...
+    m_chat_queue_count = i
+
+End Property
+
 Public Sub RemoveBansFromOperator(ByVal Username As String)
 
     Dim i    As Integer ' ...
     Dim bln  As Boolean ' ...
-    Dim Pos  As Integer ' ...
+    Dim pos  As Integer ' ...
     Dim Name As String  ' ...
 
     ' ...
@@ -249,30 +300,202 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
         bln = False
     
         ' ...
-        For i = 1 To m_banlist.Count
+        For i = 1 To Banlist.Count
             ' ...
-            If (StrComp(m_banlist(i).Operator, Username, vbTextCompare) = 0) Then
+            If (StrComp(Banlist(i).Operator, Username, vbTextCompare) = 0) Then
                 ' ...
-                Name = m_banlist(i).Name
+                Name = Banlist(i).Name
             
                 ' ...
-                m_banlist.Remove i
-                
-                ' ...
-                Pos = IsOnBanList(Name)
-                
-                ' ...
-                If (Pos > 0) Then
-                    m_banlist(Pos).IsDuplicateBan = False
+                If (BotVars.RetainOldBans = False) Then
+                    ' ...
+                    Banlist.Remove i
+                    
+                    ' ...
+                    pos = IsOnBanList(Name)
+                    
+                    ' ...
+                    If (pos > 0) Then
+                        Banlist(pos).IsDuplicateBan = False
+                    End If
+                    
+                    ' ...
+                    bln = True
+                    
+                    ' ...
+                    Exit For
+                Else
+                    ' ...
+                    Banlist(pos).IsActive = False
                 End If
-                
-                ' ...
-                bln = True
-                
-                ' ...
-                Exit For
             End If
         Next i
     Loop While (bln = True)
 
 End Sub
+
+' ...
+Public Function CheckUsers() As Integer
+
+    ' ...
+    If (Self.IsOperator) Then
+        Dim CurrentUser As clsUserObj
+        Dim DBEntry     As udtGetAccessResponse
+        Dim i           As Integer ' ...
+        Dim message     As String  ' ...
+        Dim doCheck     As Boolean ' ...
+        Dim HighRank    As Integer ' ...
+        Dim HighIndex   As Integer ' ...
+        Dim Count       As Integer ' ...
+        
+        ' ...
+        doCheck = True
+        
+        ' ...
+        If (OperatorHeir = vbNullString) Then
+            ' ...
+            For i = 1 To Users.Count
+                ' ...
+                If (CurrentUser.IsOperator = False) Then
+                    ' ...
+                    DBEntry = _
+                        GetCumulativeAccess(CurrentUser.DisplayName, "USER")
+                
+                    ' ...
+                    If (InStr(1, DBEntry.Flags, "D", vbBinaryCompare) <> 0) Then
+                        ' ...
+                        If (DBEntry.Access > HighRank) Then
+                            ' ...
+                            HighRank = DBEntry.Access
+                            
+                            ' ...
+                            HighIndex = i
+                        End If
+                    End If
+                End If
+            Next i
+            
+            ' ...
+            If (HighIndex > 0) Then
+                ' ...
+                frmChat.AddQ "/designate " & Users(HighIndex).DisplayName
+            End If
+        End If
+    
+        ' ...
+        For i = Users.Count To 1 Step -1
+            ' ...
+            Set CurrentUser = Users(i)
+        
+            ' ...
+            If (CurrentUser.IsOperator = False) Then
+                ' ...
+                If (GetSafelist(CurrentUser.DisplayName) = False) Then
+                    ' ...
+                    If (Protect) Then
+                        ' ...
+                        Ban CurrentUser.DisplayName & Space$(1) & ProtectMsg, (AutoModSafelistValue - 1)
+                        
+                        ' ...
+                        doCheck = False
+                    Else
+                        ' ...
+                        message = GetShitlist(CurrentUser.DisplayName)
+                       
+                        ' ...
+                        If (message <> vbNullString) Then
+                            ' ...
+                            frmChat.AddQ "/ban " & message
+                        Else
+                            Dim j As Integer ' ...
+                
+                            ' ...
+                            If ((doCheck) And (BotVars.BanEvasion)) Then
+                                ' ...
+                                If (IsOnBanList(CurrentUser.Name)) Then
+                                    ' ...
+                                    Ban CurrentUser.DisplayName & " Ban Evasion", (AutoModSafelistValue - 1)
+                                    
+                                    ' ...
+                                    doCheck = False
+                                End If
+                            End If
+                            
+                            ' ...
+                            If ((doCheck) And (BotVars.IPBans)) Then
+                                ' ...
+                                If (CurrentUser.IsSquelched) Then
+                                    ' ...
+                                    Ban CurrentUser.DisplayName & " IPBanned.", (AutoModSafelistValue - 1)
+                                    
+                                    ' ...
+                                    doCheck = False
+                                End If
+                            End If
+                            
+                            ' ...
+                            If ((doCheck) And (BotVars.PlugBan)) Then
+                                ' ...
+                                If ((CurrentUser.Flags And USER_NOUDP) = USER_NOUDP) Then
+                                    ' ...
+                                    Ban CurrentUser.DisplayName & " PlugBan", (AutoModSafelistValue - 1)
+                                    
+                                    ' ...
+                                    doCheck = False
+                                End If
+                            End If
+                            
+                            ' ...
+                            If (doCheck) Then
+                                ' ...
+                                If (CurrentUser.IsUsingDII) Then
+                                    ' ...
+                                    If (BotVars.BanD2UnderLevel) Then
+                                        ' ...
+                                        If (CurrentUser.Stats.Level < BotVars.BanD2UnderLevel) Then
+                                            ' ...
+                                            Ban CurrentUser.DisplayName & Space$(1) & "You are under the required " & _
+                                                "level for entry.", (AutoModSafelistValue - 1)
+                                            
+                                            ' ...
+                                            doCheck = False
+                                        End If
+                                    End If
+                                ElseIf (CurrentUser.IsUsingWarIII) Then
+                                    ' ...
+                                    If (BotVars.BanPeons) Then
+                                        ' ...
+                                        If (CurrentUser.Stats.Tier = 1) Then
+                                            ' ...
+                                            Ban CurrentUser.DisplayName & Space$(1) & "PeonBan", _
+                                                (AutoModSafelistValue - 1)
+                                        
+                                            ' ...
+                                            doCheck = False
+                                        End If
+                                    End If
+                                End If
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+            
+            ' ...
+            If (doCheck = False) Then
+                Count = (Count + 1)
+            End If
+            
+            ' ...
+            message = vbNullString
+            
+            ' ...
+            doCheck = True
+        Next i
+    End If
+    
+    ' ...
+    CheckUsers = Count
+    
+End Function
+

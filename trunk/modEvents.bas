@@ -5,18 +5,20 @@ Attribute VB_Name = "modEvents"
 Option Explicit
 
 Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, ByVal Flags As Long, _
-    ByVal Ping As Long, ByVal Product As String)
+    ByVal Ping As Long, ByVal Product As String, Optional QueuedEventID As Integer = 0)
     
     On Error GoTo ERROR_HANDLER
     
-    Dim clsChatQueue As clsChatQueue
-    Dim UserObj      As clsUserObj
+    Dim UserObj       As clsUserObj
+    Dim UserEvent     As clsUserEventObj
     
-    Dim UserIndex    As Integer  ' ...
-    Dim i            As Integer  ' ...
-    Dim prevflags    As Long     ' ...
-    Dim Clan         As String
-    Dim parsed       As String
+    Dim UserIndex     As Integer  ' ...
+    Dim i             As Integer  ' ...
+    Dim PreviousFlags As Long     ' ...
+    Dim Clan          As String
+    Dim parsed        As String
+    Dim Pos           As Integer  ' ...
+    Dim doUpdate      As Boolean  ' ...
     
     ' if our username is for some reason null, we don't
     ' want to continue, possibly causing further errors
@@ -25,19 +27,44 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     End If
  
     ' ...
-    Call ParseStatstring(Message, parsed, Clan)
-    
-    ' ...
     UserIndex = _
-        g_Channel.GetUserIndexByName(CleanDiablo2Username(Username))
+        g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     ' ...
     If (UserIndex > 0) Then
         ' ...
         Set UserObj = g_Channel.Users(UserIndex)
+        
+        ' ...
+        If (QueuedEventID = 0) Then
+            ' ...
+            If (UserObj.Queue.Count > 0) Then
+                ' ...
+                Set UserEvent = New clsUserEventObj
+                
+                ' ...
+                With UserEvent
+                    .EventID = ID_USERFLAGS
+                    .Flags = Flags
+                    .Ping = Ping
+                    .GameID = Product
+                End With
+                
+                ' ...
+                UserObj.Queue.Add UserEvent
+            Else
+                ' ...
+                PreviousFlags = UserObj.Flags
+            End If
+        Else
+            ' ...
+            PreviousFlags = _
+                UserObj.Queue(QueuedEventID - 1).Flags
+        End If
+        
+        ' ...
+        Clan = UserObj.Clan
     Else
-        Set UserObj = New clsUserObj
-            
         ' ...
         If (g_Channel.IsSilent = False) Then
             frmChat.AddChat vbRed, "Error: (1) There was a flags update received for a user that we do " & _
@@ -45,6 +72,20 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                     
             Exit Sub
         Else
+            ' ...
+            Set UserObj = New clsUserObj
+            
+            ' ...
+            ParseStatstring Message, parsed, Clan
+            
+            ' ...
+            With UserObj
+                .Statstring = Message
+                .Stats.Statstring = Message
+                .Clan = Clan
+            End With
+        
+            ' ...
             With frmChat.tmrSilentChannel(0)
                 .Enabled = False
                 .Enabled = True
@@ -55,11 +96,9 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     ' ...
     With UserObj
         .Name = Username
-        .DisplayName = convertUsername(Username)
         .Flags = Flags
         .Ping = Ping
-        .Game = Product
-        .Clan = Clan
+        .game = Product
     End With
     
     ' ...
@@ -71,58 +110,8 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     ' display format
     Username = UserObj.DisplayName
     
-    ' check for user in channel
-    i = UsernameToIndex(Username)
-    
-    ' the user is already in the
-    ' internal channel listings,
-    ' right?
-    If (i > 0) Then
-        With colUsersInChannel.Item(i)
-            ' create a copy of previous flags for determining
-            ' if a user's flags have just been changed
-            prevflags = .Flags
-            
-            ' update user flags
-            .Flags = Flags
-            
-            ' ...
-            Clan = .Clan
-        End With
-    Else
-        If (g_Channel.IsSilent) Then
-            Dim UserToAdd As clsUserInfo
-            
-            ' ...
-            Set UserToAdd = New clsUserInfo
-        
-            ' ...
-            With UserToAdd
-                .Flags = Flags
-                .Username = Username
-                .Ping = Ping
-                .Product = Product
-                .Safelisted = GetSafelist(Username)
-                .Statstring = Message
-                .JoinTime = GetTickCount
-                .Clan = Clan
-                .IsSelf = (StrComp(Username, CurrentUsername, _
-                    vbBinaryCompare) = 0)
-                .InternalFlags = 0
-            End With
-            
-            ' ...
-            Call colUsersInChannel.Add(UserToAdd)
-        Else
-            frmChat.AddChat vbRed, "Error: (2) There was a flags update received for a user that we do " & _
-                    "not have a record for."
-                    
-            Exit Sub
-        End If
-    End If
-    
     ' are we receiving a flag update for ourselves?
-    If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
+    If (StrComp(Username, GetCurrentUsername, vbBinaryCompare) = 0) Then
         ' assign my current flags to the
         ' relevant internal variable
         MyFlags = Flags
@@ -130,82 +119,86 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         ' assign my current flags to the
         ' relevant scripting variable
         SharedScriptSupport.BotFlags = MyFlags
-        
-        ' if we're on ops, check for the presence of a user that we
-        ' should designate as an heir
-        If (g_Channel.Self.IsOperator) Then
-            If (gChannel.Designated = vbNullString) Then
-                ' loop through list of users
-                For i = 1 To colUsersInChannel.Count
-                    With GetCumulativeAccess(colUsersInChannel.Item(i).Username)
-                        ' check for auto-designation flag
-                        If (InStr(1, .Flags, "D", vbBinaryCompare) > 0) Then
-                            ' is the user already an op?
-                            If ((colUsersInChannel(i).Flags And USER_CHANNELOP&) <> _
-                                 USER_CHANNELOP&) Then
-                                
-                                ' designate user
-                                frmChat.AddQ "/designate " & _
-                                    colUsersInChannel(i).Username
+    End If
     
-                                ' store designee name for future reference
-                                gChannel.staticDesignee = _
-                                    colUsersInChannel(i).Username
-                                
-                                ' we can only designate a
-                                ' single person
-                                Exit For
-                            End If
-                        End If
-                    End With
-                Next i
+    ' we aren't in a silent channel, are we?
+    If (g_Channel.IsSilent) Then
+        AddName Username, Product, Flags, Ping, Clan
+    Else
+        ' ...
+        If ((BotVars.ChatDelay = 0) Or (UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
+            ' ...
+            Pos = checkChannel(Username)
+            
+            ' ...
+            If (Pos > 0) Then
+                ' ...
+                'If (QueuedEventID > 0) Then
+                '    PreviousFlags = UserObj.Queue(QueuedEventID - 1).Flags
+                'End If
+            
+                ' is user being designated?
+                If (((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
+                        ((PreviousFlags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
+            
+                    ' ...
+                    frmChat.lvChannel.ListItems.Remove Pos
+                    
+                    ' ...
+                    AddName Username, Product, Flags, Ping, Clan
+                
+                    ' ...
+                    frmChat.AddChat RTBColors.JoinedChannelText, "-- ", RTBColors.JoinedChannelName, _
+                        Username, RTBColors.JoinedChannelText, " has acquired ops."
+                                    
+                ' is user being squelched?
+                ElseIf (((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) And _
+                            ((PreviousFlags And USER_SQUELCHED&) <> USER_SQUELCHED&)) Then
+                
+                    ' ...
+                    doUpdate = True
+                    
+                ' is user being unsquelched?
+                ElseIf ((PreviousFlags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
+                    ' ...
+                    doUpdate = True
+                End If
+            
+                ' ...
+                If (doUpdate = True) Then
+                    ' ...
+                    If (Pos) Then
+                        ' ...
+                        frmChat.lvChannel.ListItems.Remove Pos
+                        
+                        ' ...
+                        AddName Username, Product, Flags, Ping, Clan, Pos
+                    End If
+                End If
             End If
         End If
-    End If
-    
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' handle the display of user event
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    
-    If (BotVars.ChatDelay) Then
-        For i = 1 To colChatQueue.Count
-            ' ...
-            Set clsChatQueue = colChatQueue(i)
-            
-            If (StrComp(Username, clsChatQueue.Username, _
-                vbBinaryCompare) = 0) Then
-            
-                Exit For
-            End If
-        Next i
-    End If
-    
-    If ((BotVars.ChatDelay = 0) Or _
-            ((colChatQueue.Count = 0) Or (i >= (colChatQueue.Count + 1)))) Then
-        
-        Call Event_QueuedStatusUpdate(Username, Flags, prevflags, Ping, Product, _
-            Clan, Message, vbNullString)
-    Else
-        Set clsChatQueue = colChatQueue(i)
-        
-        Call clsChatQueue.StoreStatusUpdate(Flags, prevflags, Ping, Product, _
-            Clan, Message, vbNullString)
     End If
     
     ' ...
     If (g_Channel.Self.IsOperator) Then
         ' we don't want anyone here that isn't
         ' supposed to be here.
-        Call checkUsers
+        g_Channel.CheckUsers
     End If
+
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
-    ' destroy instance of chat queue
-    Set clsChatQueue = Nothing
+    On Error Resume Next
+    
+    ' ...
+    frmChat.SControl.Run "Event_FlagUpdate", Username, Flags, Ping
     
     Exit Sub
     
 ERROR_HANDLER:
-    MsgBox "Error: " & Err.description & " in Event_FlagsUpdate()"
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in Event_FlagsUpdate()"
 
     Exit Sub
 End Sub
@@ -214,8 +207,14 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     Dim mailCount As Integer ' ...
     Dim ToANSI    As String  ' ...
     
+    ' if our channel is for some reason null, we don't
+    ' want to continue, possibly causing further errors
+    If (Len(ChannelName) < 1) Then
+        Exit Sub
+    End If
+    
     ' ...
-    Set g_Channel = New clsChannelObj
+    Call frmChat.ClearChannel
     
     ' ...
     If (frmChat.mnuUTF8.Checked) Then
@@ -232,36 +231,27 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     With g_Channel
         .Name = ChannelName
         .Flags = Flags
-        .JoinDate = Now
+        .JoinTime = Now
     End With
-
-    ' clear chat queue when
-    ' joining new channel
-    Call ClearChatQueue
     
     ' we want to reset our filter
     ' values when we join a new channel
-    BotVars.JoinWatch = 0
+    'BotVars.JoinWatch = 0
     
     ' ...
     frmChat.tmrSilentChannel(0).Enabled = False
+
     
-    ' if our channel is for some reason null, we don't
-    ' want to continue, possibly causing further errors
-    If (Len(ChannelName) < 1) Then
-        Exit Sub
-    End If
-    
-    With gChannel
-        .Current = ChannelName
-        .Flags = Flags
-    End With
+    'With gChannel
+    '    .Current = ChannelName
+    '    .Flags = Flags
+    'End With
     
     SharedScriptSupport.MyChannel = ChannelName
     
-    If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
-        PassedClanMotdCheck = False
-    End If
+    'If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+    '    PassedClanMotdCheck = False
+    'End If
 
     ' if we've just left another channel, call event script
     ' function indicating that we've done so.
@@ -271,14 +261,10 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         frmChat.SControl.Run "Event_ChannelLeave"
     End If
 
-    BanCount = 0
-    
-    Call frmChat.ClearChannel
-    
     frmChat.AddChat RTBColors.JoinedChannelText, "-- Joined channel: ", _
         RTBColors.JoinedChannelName, ChannelName, RTBColors.JoinedChannelText, " --"
     
-    SetTitle CurrentUsername & ", online in channel " & _
+    SetTitle GetCurrentUsername & ", online in channel " & _
         g_Channel.Name
     
     ' have we just joined the void?
@@ -295,7 +281,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
             frmChat.tmrSilentChannel(1).Enabled = True
         
             ' ...
-            frmChat.AddQ "/unignore " & CurrentUsername
+            frmChat.AddQ "/unignore " & GetCurrentUsername
         End If
     Else
         ' ...
@@ -311,7 +297,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     ' check for mail
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
-    mailCount = GetMailCount(CurrentUsername)
+    mailCount = GetMailCount(GetCurrentUsername)
         
     If (mailCount) Then
         frmChat.AddChat RTBColors.ConsoleText, "You have " & _
@@ -502,11 +488,13 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     
     AttemptedFirstReconnect = False
     
+    CurrentUsername = KillNull(Username)
+    
+    RequestSystemKeys
+    
     Call SetNagelStatus(frmChat.sckBNet.SocketHandle, True)
     
     Call EnableSO_KEEPALIVE(frmChat.sckBNet.SocketHandle)
-    
-    CurrentUsername = KillNull(Username)
     
     If (StrComp(Left$(CurrentUsername, 2), "w#", vbTextCompare) = 0) Then
         CurrentUsername = Mid(CurrentUsername, 3)
@@ -517,12 +505,14 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     With frmChat
         .InitListviewTabs
     
-        .AddChat RTBColors.InformationText, "[BNET] Logged on as ", _
-                RTBColors.SuccessText, Username, RTBColors.InformationText, "."
+        .AddChat RTBColors.InformationText, "[BNET] Logged on as ", RTBColors.SuccessText, Username, _
+            RTBColors.InformationText, "."
             
         .UpTimer.Interval = 1000
         
         .Timer.Interval = 30000
+    
+        .tmrClanUpdate.Enabled = True
     
         'If (Not (DisableMonitor)) Then
         '    .AddChat RTBColors.SuccessText, "User monitor initialized."
@@ -548,8 +538,6 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
         
         ExReconnectTimerID = 0
     End If
-    
-    RequestSystemKeys
     
     With PBuffer
         .InsertNTString "/whoami"
@@ -652,6 +640,9 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Dim ToANSI As String
     
     ' ...
+    Username = convertUsername(CleanUsername(Username))
+    
+    ' ...
     If (frmChat.mnuUTF8.Checked) Then
         ' ...
         ToANSI = UTF8Decode(Message)
@@ -667,8 +658,11 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         ' ...
         If (PassedClanMotdCheck = False) Then
             ' ...
-            If (Message <> vbNullString) Then
-                Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
+            g_Clan.MOTD = Message
+        
+            ' ...
+            If (g_Clan.MOTD <> vbNullString) Then
+                Call frmChat.AddChat(RTBColors.ServerInfoText, g_Clan.MOTD)
             End If
 
             ' ...
@@ -709,11 +703,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 
                 ' ...
                 BotVars.Gateway = Mid$(Message, i + 1)
-    
-                ' we want our username to accurately reflect
-                ' our new discovery of the realm name
-                CurrentUsername = convertUsername(CurrentUsername)
-    
+                
+                ' ...
+                SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
+
                 Exit Sub
             End If
         End If
@@ -761,45 +754,49 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 ' ...
                 If (Len(user) > 0) Then
                     ' ...
-                    g_Channel.TotalBanCount = (g_Channel.TotalBanCount + 1)
-                
-                    ' ...
-                    Pos = g_Channel.GetUserIndexByName(CleanDiablo2Username(Username))
+                    Pos = g_Channel.GetUserIndex(CleanUsername(Username))
                     
                     ' ...
                     If (Pos > 0) Then
                         ' ...
                         Dim BanlistObj As clsBanlistUserObj
-                        
+                                                
                         ' ...
-                        Set BanlistObj = New clsBanlistUserObj
-                        
-                        ' ...
-                        banpos = g_Channel.IsOnBanList(user, CleanDiablo2Username(Username))
+                        banpos = g_Channel.IsOnBanList(user, Username)
                         
                         ' ...
                         If (banpos > 0) Then
                             g_Channel.Banlist.Remove banpos
+                        Else
+                            g_Channel.BanCount = (g_Channel.BanCount + 1)
                         End If
                         
                         ' ...
-                        With BanlistObj
-                            .Name = user
-                            .Operator = CleanDiablo2Username(Username)
-                            .DateOfBan = Now
-                            .IsDuplicateBan = (g_Channel.IsOnBanList(user) > 0)
-                        End With
-                        
-                        ' ...
-                        If (BanlistObj.IsDuplicateBan) Then
+                        If ((BotVars.StoreAllBans) Or _
+                                (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0)) Then
+                            
                             ' ...
-                            With g_Channel.Banlist(g_Channel.IsOnBanList(user))
-                                .IsDuplicateBan = False
+                            Set BanlistObj = New clsBanlistUserObj
+                            
+                            ' ...
+                            With BanlistObj
+                                .Name = user
+                                .Operator = Username
+                                .DateOfBan = Now
+                                .IsDuplicateBan = (g_Channel.IsOnBanList(user) > 0)
                             End With
-                        End If
                         
-                        ' ...
-                        g_Channel.Banlist.Add BanlistObj
+                            ' ...
+                            If (BanlistObj.IsDuplicateBan) Then
+                                ' ...
+                                With g_Channel.Banlist(g_Channel.IsOnBanList(user))
+                                    .IsDuplicateBan = False
+                                End With
+                            End If
+                            
+                            ' ...
+                            g_Channel.Banlist.Add BanlistObj
+                        End If
                     End If
                 End If
                 
@@ -807,11 +804,13 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 Call RemoveBanFromQueue(user)
             ElseIf (InStr(1, Message, MSG_UNBANNED, vbTextCompare) > 0) Then
                 ' ...
-                user = Left$(Message, _
-                                (InStr(1, Message, MSG_UNBANNED, vbBinaryCompare) - 1))
+                user = Left$(Message, (InStr(1, Message, MSG_UNBANNED, vbBinaryCompare) - 1))
                                 
                 ' ...
                 If (Len(user) > 0) Then
+                    ' ...
+                    g_Channel.BanCount = (g_Channel.BanCount - 1)
+                    
                     ' ...
                     Do
                         ' ...
@@ -822,20 +821,6 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                             g_Channel.Banlist.Remove banpos
                         End If
                     Loop While (banpos <> 0)
-                
-                    ' ...
-                    'For i = 1 To g_Channel.Users.Count
-                    '    ' ...
-                    '    If (g_Channel.Users(i).IsOperator) Then
-                    '        ' ...
-                    '        banpos = g_Channel.Users(i).IsOnBanList(user)
-                    '
-                    '        ' ...
-                    '        If (banpos > 0) Then
-                    '            Call g_Channel.Users(i).Banlist.Remove(banpos)
-                    '        End If
-                    '    End If
-                    'Next i
                 End If
             End If
     
@@ -862,7 +847,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         
         ' ...
         If (InStr(1, Message, "designated heir", vbTextCompare) <> 0) Then
-            gChannel.Designated = Left$(Message, Len(Message) - 29)
+            g_Channel.OperatorHeir = Left$(Message, Len(Message) - 29)
         End If
         
         
@@ -904,12 +889,50 @@ Public Sub Event_SomethingUnknown(ByVal UnknownString As String)
         "as possible, copy/paste this entire message."
 End Sub
 
-Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal Message As String)
-    Dim i      As Integer ' ...
-    Dim ToANSI As String ' ...
-
+Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
+    Optional QueuedEventID As Integer = 0)
+        
+    Dim UserEvent   As clsUserEventObj
+    Dim UserObj     As clsUserObj
+    
+    Dim i           As Integer ' ...
+    Dim ToANSI      As String  ' ...
+    Dim Pos         As Integer ' ...
+    Dim PassedQueue As Boolean ' ...
+    
     ' ...
-    Username = convertUsername(Username)
+    Pos = g_Channel.GetUserIndexEx(CleanUsername(Username))
+    
+    ' ...
+    If (Pos > 0) Then
+        ' ...
+        Set UserObj = g_Channel.Users(Pos)
+        
+        ' ...
+        If (QueuedEventID = 0) Then
+            ' ...
+            UserObj.LastTalkTime = Now
+            
+            ' ...
+            If (UserObj.Queue.Count > 0) Then
+                ' ...
+                Set UserEvent = New clsUserEventObj
+                
+                ' ...
+                With UserEvent
+                    .EventID = ID_EMOTE
+                    .Flags = Flags
+                    .Message = Message
+                End With
+                
+                ' ...
+                UserObj.Queue.Add UserEvent
+            End If
+        End If
+        
+        ' ...
+        Username = UserObj.DisplayName
+    End If
     
     ' ...
     If (frmChat.mnuUTF8.Checked) Then
@@ -922,112 +945,91 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
         End If
     End If
     
-    i = UsernameToIndex(Username)
-    
-    If (i > 0) Then
-        colUsersInChannel.Item(i).Acts
-    End If
-    
-    If (Catch(0) <> vbNullString) Then
-        Call CheckPhrase(Username, Message, CPEMOTE)
-    End If
-    
-    If ((Phrasebans) Or (BotVars.QuietTime)) Then
-        If ((g_Channel.Self.IsOperator) And _
-            ((Flags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
+    ' ...
+    If ((BotVars.ChatDelay = 0) Or (UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
+        ' ...
+        If (AllowedToTalk(Username, Message)) Then
+            ' ...
+            frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, Username & _
+                Space$(1), RTBColors.EmoteText, Message & ">"
             
-            If (BotVars.QuietTime) Then
-                If (Not (GetSafelist(Username))) Then
-                    frmChat.AddQ "/ban " & Username & " Quiet-time is enabled."
+            ' ...
+            If (Catch(0) <> vbNullString) Then
+                CheckPhrase Username, Message, CPEMOTE
+            End If
+            
+            ' ...
+            If (frmChat.mnuFlash.Checked) Then
+                FlashWindow
+            End If
+        End If
+    Else
+        ' ...
+        If ((Phrasebans) Or (BotVars.QuietTime)) Then
+            ' ...
+            If ((g_Channel.Self.IsOperator) And ((Flags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
+                ' ...
+                If (BotVars.QuietTime) Then
+                    ' ...
+                    If (GetSafelist(Username) = False) Then
+                        frmChat.AddQ "/ban " & Username & " Quiet-time is enabled."
+                    End If
+                End If
+                
+                ' ...
+                If (Phrasebans) Then
+                    ' ...
+                    For i = LBound(Phrases) To UBound(Phrases)
+                        ' ...
+                        If ((LCase$(Phrases(i)) <> vbNullString) And _
+                                (LCase$(Phrases(i)) <> Space$(1))) Then
+                        
+                            ' ...
+                            If (InStr(1, Message, Phrases(i), vbTextCompare) <> 0) Then
+                                ' ...
+                                If (GetSafelist(Username) = False) Then
+                                    frmChat.AddQ "/ban " & Username & " Banned phrase: " & Phrases(i), 1
+                                End If
+                                
+                                ' ...
+                                Exit For
+                            End If
+                        End If
+                    Next i
                 End If
             End If
-            
-            If (Phrasebans) Then
-                For i = LBound(Phrases) To UBound(Phrases)
-                    If ((LCase$(Phrases(i)) <> vbNullString) And _
-                        (LCase$(Phrases(i)) <> Space$(1))) Then
-                    
-                        If (InStr(1, Message, Phrases(i), vbTextCompare) <> 0) Then
-                            If (Not (GetSafelist(Username))) Then
-                                frmChat.AddQ "/ban " & Username & " Banned phrase: " & _
-                                    Phrases(i), 1
-                            End If
-                            
-                            GoTo theEnd
-                        End If
-                    End If
-                Next i
-            End If
-        End If
-    End If
-    
-    If (Len(Message) >= 100) Then
-        BotVars.JoinWatch = (BotVars.JoinWatch + 5)
-    End If
-    
-    If (BotVars.JoinWatch >= 20) Then
-        If (Filters = False) Then
-            frmChat.AddChat RTBColors.TalkBotUsername, _
-                "Chat filters have been activated due to excessive rejoins and/or " & _
-                    "spam; deactivate them by pressing CTRL + F."
-    
-            Call WriteINI("Other", "Filters", "Y")
-                    
-            Filters = True
-            
-            AutoChatFilter = GetTickCount()
-        End If
-            
-        BotVars.JoinWatch = 0
-        
-        If (AutoChatFilter) Then
-            AutoChatFilter = GetTickCount()
         End If
     End If
 
-theEnd:
-        ' ...
-        If (BotVars.ChatDelay) Then
-            For i = 1 To colChatQueue.Count
-                ' ...
-                Dim clsChatQueue As clsChatQueue
-            
-                ' ...
-                Set clsChatQueue = colChatQueue(i)
-                
-                ' ...
-                If (StrComp(Username, clsChatQueue.Username, _
-                    vbBinaryCompare) = 0) Then
-                
-                    Exit For
-                End If
-            Next i
-        End If
-        
-        ' ...
-        If ((BotVars.ChatDelay = 0) Or _
-            ((colChatQueue.Count = 0) Or (i >= (colChatQueue.Count + 1)))) Then
-            
-            ' ...
-            Call Event_QueuedEmote(Username, Flags, 0, Message)
-        Else
-            ' ...
-            Call clsChatQueue.StoreEmote(Flags, 0, Message)
-            
-            ' ...
-            Set clsChatQueue = Nothing
-        End If
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    ' call event script function
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
+    On Error Resume Next
+    
+    ' ...
+    If ((BotVars.NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
+        If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
+            vbBinaryCompare) = 0) Then
+            
+            Message = BotVars.Trigger & Mid$(Message, Len(BotVars.TriggerLong) + 1)
+        End If
+    End If
+    
+    ' ...
+    frmChat.SControl.Run "Event_UserEmote", Username, Flags, Message
 End Sub
 
-'Ping, Product, sClan, InitStatstring, W3Icon
+'Ping, Product, Clan, InitStatstring, W3Icon
 Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
-    ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, Optional ByVal w3icon As String)
+    ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
+        Optional ByVal w3icon As String, Optional QueuedEventID As Integer = 0)
 
     On Error GoTo ERROR_HANDLER
 
-    Dim clsChatQueue As clsChatQueue ' ...
+    Dim UserEvent    As clsUserEventObj
     Dim UserObj      As clsUserObj
+    Dim found        As ListItem ' ...
     
     Dim UserIndex    As Integer ' ...
     Dim i            As Integer ' ...
@@ -1035,24 +1037,47 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim Level        As Byte    ' ...
     Dim StatUpdate   As Boolean ' ...
     Dim index        As Long    ' ...
+    Dim Stats        As String  ' ...
+    Dim Clan         As String  ' ...
+    Dim Pos          As Integer ' ...
     
     If (Len(Username) < 1) Then
         Exit Sub
     End If
-    
-    ' Error correction code added April 2005
-    ' to fix a mysterious ghosting bug
-    If (Ping >= 200000000) Then
-        Exit Sub
-    End If
-    
+
     ' ...
-    UserIndex = g_Channel.GetUserIndexByName(Username)
+    UserIndex = _
+        g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     ' ...
     If (UserIndex > 0) Then
         ' ...
         Set UserObj = g_Channel.Users(UserIndex)
+        
+        ' ...
+        If (QueuedEventID = 0) Then
+            ' ...
+            If (UserObj.Queue.Count > 0) Then
+                ' ...
+                Set UserEvent = New clsUserEventObj
+                
+                ' ...
+                With UserEvent
+                    .EventID = ID_USER
+                    .Flags = Flags
+                    .Ping = Ping
+                    .GameID = Product
+                    .Clan = sClan
+                    .Statstring = OriginalStatstring
+                End With
+                
+                ' ...
+                UserObj.Queue.Add UserEvent
+            End If
+        End If
+        
+        ' ...
+        StatUpdate = True
     Else
         ' ...
         Set UserObj = New clsUserObj
@@ -1060,12 +1085,14 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
     ' ...
     With UserObj
-        ' ...
-        .Name = CleanDiablo2Username(Username)
-        .DisplayName = convertUsername(Username)
+        .Name = CleanUsername(Username)
         .Flags = Flags
+        .game = Product
         .Ping = Ping
-        .JoinDate = g_Channel.JoinDate
+        .JoinTime = g_Channel.JoinTime
+        .Clan = sClan
+        .Statstring = OriginalStatstring
+        .Stats.Statstring = OriginalStatstring
     End With
     
     ' ...
@@ -1076,168 +1103,75 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     ' ...
     Username = UserObj.DisplayName
     
-    ' are we receiving my user information?
-    If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
-
-        ' we don't want to have an out-of-date
-        ' flag value for ourselves
-        MyFlags = Flags
-        
-        ' we don't want to have an out-of-date
-        ' flag value for ourselves in scripts,
-        ' either
-        SharedScriptSupport.BotFlags = MyFlags
-    End If
-
     ' ...
-    StatUpdate = (checkChannel(Username))
-
+    ParseStatstring OriginalStatstring, Stats, Clan
+    
     ' ...
     If (StatUpdate = False) Then
         ' ...
-        If (BotVars.ChatDelay) Then
-            ' ...
-            For i = 1 To colChatQueue.Count
-                ' ...
-                Set clsChatQueue = colChatQueue(i)
-                
-                ' ...
-                If (StrComp(Username, clsChatQueue.Username, _
-                    vbBinaryCompare) = 0) Then
-                
-                    Exit For
-                End If
-            Next i
+        AddName Username, Product, Flags, Ping, Clan
             
-            If (i < (colChatQueue.Count + 1)) Then
-                StatUpdate = True
+        ' ...
+        frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
+        
+        ' ...
+        DoLastSeen Username
+    Else
+        ' ...
+        If ((BotVars.ChatDelay = 0) Or (UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
+            ' ...
+            If (JoinMessagesOff = False) Then
+                ' ...
+                frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", RTBColors.JoinUsername, _
+                    Username & " [" & Ping & "ms]", RTBColors.JoinText, " is using " & Stats
             End If
-        End If
-    Else
-        ' if we found the user in the channel then we can assume that
-        ' we won't find him again in the incoming chat queue
-        i = (colChatQueue.Count + 1)
-    End If
-    
-    ' ...
-    If (StatUpdate) Then
-        ' ...
-        UserIndex = UsernameToIndex(Username)
-    
-        ' ...
-        If (UserIndex) Then
-            With colUsersInChannel(UserIndex)
-                .Username = Username
-                .Flags = Flags
-                .Ping = Ping
-                .Clan = sClan
-                .Statstring = OriginalStatstring
-            End With
-        End If
-    
-        ' ...
-        If ((BotVars.ChatDelay = 0) Or _
-            ((colChatQueue.Count = 0) Or (i >= (colChatQueue.Count + 1)))) Then
-
-            Call Event_QueuedUserInChannel(Username, Flags, Ping, Product, sClan, _
-                OriginalStatstring, w3icon)
-        Else
-            Call clsChatQueue.StoreUserInChannel(Flags, Ping, Product, sClan, _
-                OriginalStatstring, w3icon)
-        End If
         
-        ' ...
-        Set clsChatQueue = Nothing
-    Else
-        Dim UserToAdd As clsUserInfo ' ...
-        
-        ' create new instance of class
-        Set UserToAdd = New clsUserInfo
-    
-        ' dunno what this does...
-        If ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
-            If (StrComp(Username, CurrentUsername, _
-                vbTextCompare) <> 0) Then
+            ' ...
+            If (BotVars.ShowStatsIcons) Then
+                ' ...
+                Pos = checkChannel(Username)
                 
-                gChannel.Designated = Username
-            End If
-        End If
-        
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        ' Add user to collection
-        ' *necessary*
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        
-        With UserToAdd
-            .Username = Username
-            .Flags = Flags
-            .Ping = Ping
-            .Product = Product
-            .Safelisted = GetSafelist(Username)
-            .Statstring = OriginalStatstring
-            .JoinTime = GetTickCount
-            .Clan = sClan
-            .IsSelf = (StrComp(Username, CurrentUsername, _
-                vbBinaryCompare) = 0)
-        
-            ' if the user isn't safelisted, lets make sure he's abides by the
-            ' channel rules and, if required, inputs the correct channel password.
-            If (Not (.Safelisted)) Then
-                'BotVars.Gateway  the user an operator?  ... or his "he" actually "me"?
-                If (((Flags And USER_CHANNELOP&) <> USER_CHANNELOP&) And _
-                     (StrComp(Username, CurrentUsername, vbBinaryCompare) <> 0)) Then
+                ' ...
+                If (Pos > 0) Then
+                    ' ...
+                    Set found = frmChat.lvChannel.ListItems(Pos)
                     
-                    ' do we have a channel password set?
-                    If ((Len(BotVars.ChannelPassword) > 0) And _
-                        (BotVars.ChannelPasswordDelay > 0)) Then
-                        
-                        .InternalFlags = (.InternalFlags + IF_AWAITING_CHPW)
+                    ' ...
+                    i = g_Channel.GetUserIndex(Username)
+                    
+                    ' ...
+                    If (i > 0) Then
+                        ' ...
+                        If (g_ThisIconCode <> -1) Then
+                            ' ...
+                            If (g_Channel.Users(i).game = "WAR3") Then
+                                ' ...
+                                If (found.SmallIcon = ICWAR3) Then
+                                    ' ...
+                                    found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
+                                End If
+                            ElseIf (g_Channel.Users(i).game = "W3XP") Then
+                                ' ...
+                                If (found.SmallIcon = ICWAR3X) Then
+                                    ' ...
+                                    found.SmallIcon = ((g_ThisIconCode + ICON_START_W3XP) + IIf(g_ThisIconCode + _
+                                            ICON_START_W3XP = ICSCSW, 1, 0))
+                                End If
+                            End If
+                        End If
                     End If
                     
-                    ' do we have idle bans on?
-                    If (BotVars.IB_On = 1) Then
-                        .InternalFlags = (.InternalFlags + _
-                            IF_SUBJECT_TO_IDLEBANS)
-                    End If
+                    ' ...
+                    found.ListSubItems(1).text = sClan
+                    
+                    ' ...
+                    Set found = Nothing
                 End If
             End If
-        End With
-        
-        ' lets add our new friend to the collection
-        Call colUsersInChannel.Add(UserToAdd)
-
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        ' Add to the channel list
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    
-        If (InStr(1, Message, "in clan ", vbTextCompare) > 0) Then
-            strCompare = Mid$(Message, InStr(1, Message, "in clan ", vbTextCompare) + 8)
-            strCompare = Left$(strCompare, Len(strCompare) - 1)
-        
-            Call AddName(Username, Product, Flags, Ping, strCompare)
-        Else
-            Call AddName(Username, Product, Flags, Ping)
         End If
-        
-        Call DoLastSeen(Username)
-        
-        frmChat.lblCurrentChannel.Caption = _
-                frmChat.GetChannelString()
-        
-        ' destroy class
-        Set UserToAdd = Nothing
     End If
     
     ' ...
-    'If (sClan <> vbNullString) Then
-    '    With PBuffer
-    '        .InsertDWord g_Channel.Users.Count
-    '        .InsertNonNTString StrReverse$(sClan)
-    '        .InsertNTString g_Channel.Users(g_Channel.Users.Count).Name
-    '        .SendPacket &H82
-    '    End With
-    'End If
-    
     If (MDebug("statstrings")) Then
         frmChat.AddChat vbMagenta, "Username: " & Username & ", Statstring: " & _
             OriginalStatstring
@@ -1251,7 +1185,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
     frmChat.SControl.Run "Event_UserInChannel", Username, Flags, Message, Ping, _
         Product, StatUpdate
-        
+    
     Exit Sub
     
 ERROR_HANDLER:
@@ -1260,11 +1194,14 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, ByVal w3icon As String)
+Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
+    ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
+        ByVal w3icon As String, Optional QueuedEventID As Integer = 0)
+                
     On Error GoTo ERROR_HANDLER
     
     Dim UserObj     As clsUserObj
-    Dim UserToAdd   As clsUserInfo
+    Dim UserEvent   As clsUserEventObj
     
     Dim toCheck     As String
     Dim strCompare  As String
@@ -1276,405 +1213,152 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim f           As Integer
     Dim UserIndex   As Integer ' ...
     Dim BanningUser As Boolean ' ...
+    Dim pStats      As String
     
     If (Len(Username) < 1) Then
         Exit Sub
     End If
     
     ' ...
-    UserIndex = g_Channel.GetUserIndexByName(Username)
+    UserIndex = _
+        g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     ' ...
-    If (UserIndex = 0) Then
+    If (QueuedEventID > 0) Then
         ' ...
-        Set UserObj = New clsUserObj
-        
+        If (UserIndex = 0) Then
+            Exit Sub
+        End If
+    
         ' ...
-        With UserObj
-            .Name = CleanDiablo2Username(Username)
-            .DisplayName = convertUsername(Username)
-            .Flags = Flags
-            .Ping = Ping
-            .Game = Product
-            .JoinDate = Now
-        End With
-        
-        ' ...
-        g_Channel.Users.Add UserObj
+        Set UserObj = g_Channel.Users(UserIndex)
     Else
-        frmChat.AddChat vbRed, "Error: We have received a join event for a user that we had thought was " & _
-                "already present within the channel."
-        
-        Exit Sub
+        ' ...
+        If (UserIndex = 0) Then
+            ' ...
+            Set UserObj = New clsUserObj
+            
+            ' ...
+            With UserObj
+                .Name = CleanUsername(Username)
+                .Flags = Flags
+                .Ping = Ping
+                .game = Product
+                .JoinTime = Now
+                .Clan = sClan
+                .Statstring = OriginalStatstring
+                .Stats.Statstring = OriginalStatstring
+            End With
+            
+            ' ...
+            Set UserEvent = New clsUserEventObj
+            
+            ' ...
+            With UserEvent
+                .EventID = ID_JOIN
+                .Flags = Flags
+                .Ping = Ping
+                .GameID = Product
+                .Statstring = OriginalStatstring
+                .Clan = sClan
+                .IconCode = w3icon
+            End With
+            
+            ' ...
+            UserObj.Queue.Add UserEvent
+
+            ' ...
+            g_Channel.Users.Add UserObj
+            
+            ' ...
+            Call g_Channel.CheckUsers
+        Else
+            frmChat.AddChat vbRed, "Error: We have received a join event for a user that we had thought was " & _
+                    "already present within the channel."
+            
+            Exit Sub
+        End If
     End If
     
     ' ...
     Username = UserObj.DisplayName
-     
-    Set UserToAdd = New clsUserInfo
-     
-    Banned = True
-    
-    f = FreeFile
-    
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' Add user to collection
-    ' *necessary*
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    
-    With UserToAdd
-        .Flags = Flags
-        .Username = Username
-        .Ping = Ping
-        .Product = Product
-        .Safelisted = GetSafelist(Username)
-        .Statstring = OriginalStatstring
-        .JoinTime = GetTickCount
-        .Clan = sClan
-        .IsSelf = (StrComp(Username, CurrentUsername, _
-            vbBinaryCompare) = 0)
-        .InternalFlags = 0
-        
-        If (Not (.Safelisted)) Then
-            If (((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
-                 (StrComp(Username, CurrentUsername, vbTextCompare) <> 0)) Then
-                
-                If (BotVars.IB_On = 1) Then
-                    .InternalFlags = (.InternalFlags + _
-                        IF_SUBJECT_TO_IDLEBANS)
-                End If
-            End If
-            
-            If ((Len(BotVars.ChannelPassword) > 0) And _
-                (BotVars.ChannelPasswordDelay > 0)) Then
-                
-                If (g_Channel.Self.IsOperator) Then
-                    If ((Len(BotVars.ChannelPassword) > 0) And _
-                        (BotVars.ChannelPasswordDelay > 0)) Then
-                        
-                        .InternalFlags = (.InternalFlags + _
-                            IF_AWAITING_CHPW)
-                        
-                        frmChat.AddQ "/w " & Username & " You have " & _
-                            BotVars.ChannelPasswordDelay & " seconds to whisper a valid " & _
-                                "password or you will be banned."
-                    End If
-                End If
-            End If
-        End If
-    End With
-    
+
     ' ...
-    Call colUsersInChannel.Add(UserToAdd)
+    If ((BotVars.ChatDelay = 0) Or (QueuedEventID > 0)) Then
+        ' ...
+        DoLastSeen Username
     
-                
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' What level are they?
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    If ((Product = "WAR3") Or _
-            (Product = "W3XP")) Then
-        
-        i = InStr(1, Message, "Level: ", vbTextCompare)
-    ElseIf Product = "D2DV" Or Product = "D2XP" Then
-        i = InStr(1, Message, " level ", vbTextCompare)
-    End If
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' GUI
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
-    If (i > 0) Then
-        strCompare = Mid(Message, i + 7, 2)
+        ' ...
+        If (JoinMessagesOff = False) Then
+            ParseStatstring OriginalStatstring, pStats, sClan
         
-        If (Right$(strCompare, 1) = ",") Then
-            strCompare = Left$(strCompare, 1)
+            frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, Username & _
+                " [" & Ping & "ms]", RTBColors.JoinText, " has joined the channel using " & pStats
         End If
         
-        Level = CByte(Val(strCompare))
-    Else
-        Level = 0
-    End If
-    
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' Flash window
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    If (frmChat.mnuFlash.Checked) Then
-        Call FlashWindow
-    End If
-    
-    If (BotVars.ChatDelay) Then
-        Dim clsChatQueue As clsChatQueue
-    
-        Set clsChatQueue = New clsChatQueue
-    
-        With clsChatQueue
-            .Username = Username
-            .Time = GetTickCount()
-        End With
+        ' ...
+        AddName Username, Product, Flags, Ping, sClan
         
-        Call clsChatQueue.StoreJoin(Flags, Ping, Product, sClan, _
-            OriginalStatstring, w3icon)
+        ' ...
+        frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString
         
-        Call colChatQueue.Add(clsChatQueue)
-    Else
-        Call Event_QueuedJoin(Username, Flags, Ping, Product, sClan, _
-            OriginalStatstring, w3icon)
-    End If
-    
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' AUTOMATIC MODERATION FEATURES
-    '  These are all dependent on OPS (determined here)
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    If (g_Channel.Self.IsOperator) Then
-        ' There's no sense trying to perform moderatory actions on
-        ' a moderator
-        If ((Flags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
+        ' flash window
+        If (frmChat.mnuFlash.Checked) Then
+            FlashWindow
+        End If
         
-            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            ' Designate them?
-            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            If (InStr(1, GetCumulativeAccess(Username).Flags, "D", _
-                vbBinaryCompare) > 0) Then
-                
-                If (gChannel.Designated = vbNullString) Then
-                    If Mid$(LCase$(g_Channel.Name), 1, 3) = "op " Then
-                        If (StrComp(Mid$(g_Channel.Name, 4), StripRealm(Username), _
-                            vbTextCompare)) <> 0 Then
-                            
-                            frmChat.AddQ "/designate " & Username
-    
-                            gChannel.staticDesignee = Username
-                        End If
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' Greet message
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+        If (BotVars.UseGreet) Then
+            ' ...
+            If (LenB(BotVars.GreetMsg)) Then
+                ' ...
+                If (StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) <> 0) Then
+                    ' ...
+                    If (BotVars.WhisperGreet) Then
+                        frmChat.AddQ "/w " & Username & _
+                            Space$(1) & DoReplacements(BotVars.GreetMsg, Username, Ping)
                     Else
-                        frmChat.AddQ "/designate " & Username
-    
-                        gChannel.staticDesignee = Username
+                        frmChat.AddQ DoReplacements(BotVars.GreetMsg, Username, Ping)
                     End If
                 End If
             End If
-    
-            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            ' AUTOMATIC MODERATION FEATURES
-            '  These are all dependent on OPS (above if control) and the user's
-            '  SAFELISTED STATUS (determined here)
-            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            If (Not (UserToAdd.Safelisted)) Then
-    
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Warcraft III players: various checks
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                If ((Product = "WAR3") Or (Product = "W3XP")) Then
-                    
-                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    ' Should they be banned for being low?
-                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    If (BotVars.BanUnderLevel > 0) Then
-                        If (Level < BotVars.BanUnderLevel) Then
-                            strCompare = ReadCFG("Other", "LevelbanMsg")
-                            
-                            If (strCompare <> vbNullString) Then
-                                Ban Username & Space(1) & strCompare, _
-                                    (AutoModSafelistValue - 1)
-                            Else
-                                Ban Username & Space(1) & _
-                                    "You are under the required level for entry.", _
-                                        (AutoModSafelistValue - 1)
-                            End If
-                            
-                            GoTo theEnd
-                        End If
-                    End If
-                    
-                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    ' How about peon-banned?
-                    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                    If (BotVars.BanPeons = 1) Then
-                        If (InStr(1, Message, "peon icon", vbTextCompare) > 0) Then
-                            If (Len(ReadCFG("Main", "PeonBanMsg")) > 0) Then
-                                Ban Username & Space(1) & ReadCFG("Main", "PeonBanMsg"), _
-                                    (AutoModSafelistValue - 1)
-                            Else
-                                Ban Username & " PeonBan", (AutoModSafelistValue - 1)
-                            End If
-                            
-                            GoTo theEnd
-                        End If
-                    End If
-                End If ' (end Warcraft III checks)
-                
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Diablo II players: are they levelbanned?
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                If ((Product = "D2DV") Or (Product = "D2XP")) Then
-                    If (BotVars.BanD2UnderLevel > 0) Then
-                        If (Level < BotVars.BanD2UnderLevel) Then
-                            strCompare = ReadCFG("Other", "LevelbanMsg")
-                            
-                            If (strCompare <> vbNullString) Then
-                                Ban Username & Space(1) & strCompare, _
-                                    (AutoModSafelistValue - 1)
-                            Else
-                                Ban Username & Space(1) & _
-                                    "You are under the required level for entry.", _
-                                        (AutoModSafelistValue - 1)
-                            End If
-                            GoTo theEnd
-                        End If
-                    End If
-                End If
-NoLevel:
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Are they plugbanned?
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                If (BotVars.PlugBan) Then
-                    If ((Flags And USER_NOUDP) = USER_NOUDP) Then
-                        
-                        Ban Username & " PlugBan", _
-                            (AutoModSafelistValue - 1)
-                        
-                        GoTo theEnd
-                    End If
-                End If
-                
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Are they evading a ban?
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                'If (InStr(1, Username, "#", vbBinaryCompare) <> 0) Then
-                '    toCheck = LCase(Left$(Username, InStr(1, _
-                '        Username, "#", vbTextCompare) - 1))
-                'Else
-                '    toCheck = LCase$(Username)
-                'End If
+        End If
             
-                'toCheck = StripRealm(toCheck)
-                
-                If (BotVars.BanEvasion) Then
-                    If (g_Channel.IsOnBanList(reverseUsername(Username))) Then
-                        Ban Username & " Ban Evasion", (AutoModSafelistValue - 1)
-                    End If
-                End If
-                
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Are they shitlisted?
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                toCheck = GetShitlist(Username)
-                
-                If (Len(toCheck) > 1) Then
-                    Call frmChat.AddQ("/ban " & toCheck)
-                    
-                    GoTo theEnd
-                End If
-SLSkip:
-                'Close #f
-                
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Is the channel in lockdown?
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                If (Protect) Then
-                    Ban Username & Space(1) & ProtectMsg, (AutoModSafelistValue - 1)
-                    
-                    GoTo theEnd
-                End If
-checkIPBan:
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                ' Are they IP-banned?
-                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                If (BotVars.IPBans) Then
-                    If ((Flags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
-                        Ban Username & " IPBanned.", (AutoModSafelistValue - 1)
-                        
-                        GoTo theEnd
-                    End If
-                End If
-            End If ' (user not safelisted)
-        End If ' (bot has ops)
-    End If
-    
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' If we've gotten this far, and haven't been banned yet, they're
-    '   eligible for a greet message!
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    Banned = False
-    
-    If (BotVars.UseGreet) Then
-        If (LenB(BotVars.GreetMsg) > 0) Then
-            If (StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) <> 0) Then
-                
-                If (QueueLoad = 0) Then
-                    QueueLoad = (QueueLoad + 1)
-                End If
-                
-                If (BotVars.WhisperGreet) Then
-                    frmChat.AddQ "/w " & Username & Space$(1) & _
-                        DoReplacements(BotVars.GreetMsg, Username, Ping)
-                Else
-                    frmChat.AddQ DoReplacements(BotVars.GreetMsg, Username, Ping)
-                End If
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' Botmail
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        
+        If (Mail) Then
+            l = GetMailCount(Username)
+            
+            If (l > 0) Then
+                frmChat.AddQ "/w " & Username & " You have " & l & _
+                    " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
             End If
         End If
-    End If
-    
-    
-theEnd:
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' Is channel flooding or mass-joining happening?
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    BotVars.JoinWatch = (BotVars.JoinWatch + 2)
-    
-    If (BotVars.JoinWatch >= 20) Then
-        'If (Not (JoinMessagesOff)) Then
-        '    If (ForcedJoinsOn = 0) Then
-        '        frmChat.AddChat RTBColors.TalkBotUsername, _
-        '            "Rejoin flooding and/or massloading detected!"
-        '
-        '        frmChat.AddChat RTBColors.TalkBotUsername, _
-        '            "Join/Leave Messages have been disabled due to rejoin flooding. " & _
-        '                "Reactivate them by pressing CTRL + J."
-        '
-        '        JoinMessagesOff = True
-        '
-        '        ForcedJoinsOn = 2
-        '    End If
-        'End If
-        
-        If (Filters = False) Then
-            frmChat.AddChat RTBColors.TalkBotUsername, _
-                "Chat filters have been activated due to excessive rejoins and/or " & _
-                    "spam; deactivate them by pressing CTRL + F."
-    
-            Call WriteINI("Other", "Filters", "Y")
-                    
-            Filters = True
             
-            AutoChatFilter = GetTickCount()
+        ' print their statstring, if desired
+        If (MDebug("statstrings")) Then
+            frmChat.AddChat RTBColors.ErrorMessageText, OriginalStatstring
         End If
         
-        BotVars.JoinWatch = 0
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' call event script function
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         
-        If (AutoChatFilter) Then
-            AutoChatFilter = GetTickCount()
-        End If
+        On Error Resume Next
+
+        ' ...
+        frmChat.SControl.Run "Event_UserJoins", Username, Flags, pStats, Ping, _
+            Product, 0, OriginalStatstring, False
     End If
-    
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' Do they have mail?
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    If (Mail) Then
-        l = GetMailCount(Username)
-        
-        If (l > 0) Then
-            frmChat.AddQ "/w " & Username & " You have " & l & _
-                " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
-        End If
-    End If
-    
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' Print their statstring, if desired
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    If (MDebug("statstrings")) Then
-        frmChat.AddChat RTBColors.ErrorMessageText, OriginalStatstring
-    End If
-    
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' Add them to the LastSeen list
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    Call DoLastSeen(Username)
     
     Exit Sub
     
@@ -1698,16 +1382,23 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     
     ' ...
     UserIndex = _
-        g_Channel.GetUserIndexByName(CleanDiablo2Username(Username))
+        g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     ' ...
     If (UserIndex > 0) Then
         ' ...
         If (g_Channel.Users(UserIndex).IsOperator) Then
-            ' ...
             g_Channel.RemoveBansFromOperator Username
         End If
         
+        ' ...
+        If (g_Channel.Users(UserIndex).Queue.Count = 0) Then
+            ' ...
+            If (JoinMessagesOff = False) Then
+                frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, convertUsername(Username), _
+                    RTBColors.JoinText, " has left the channel."
+            End If
+        End If
         ' ...
         g_Channel.Users.Remove UserIndex
     Else
@@ -1718,92 +1409,19 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     End If
     
     ' ...
+    If (StrComp(Username, g_Channel.OperatorHeir, vbTextCompare) = 0) Then
+        ' ...
+        g_Channel.OperatorHeir = vbNullString
+        
+        ' ...
+        Call g_Channel.CheckUsers
+    End If
+    
+    ' ...
     Username = convertUsername(Username)
     
     ' ...
-    i = UsernameToIndex(Username)
-    
-    ' ...
-    If (i) Then
-        Call colUsersInChannel.Remove(i)
-    End If
-    
-    Do Until (bln = True)
-        ' ...
-        For i = 0 To UBound(gBans)
-            If (StrComp(gBans(i).cOperator, reverseUsername(Username), vbTextCompare) = 0) Then
-                Call UnbanBanlistUser(gBans(i).UsernameActual, reverseUsername(Username))
-                
-                Exit For
-            End If
-        Next i
-        
-        If (i >= UBound(gBans) + 1) Then
-            bln = True
-        End If
-    Loop
-    
-    ' ...
-    If (StrComp(Username, gChannel.Designated, vbTextCompare) = 0) Then
-        ' ...
-        gChannel.Designated = vbNullString
-        
-        ' ...
-        For i = 1 To colUsersInChannel.Count
-            With GetAccess(colUsersInChannel.Item(i).Username)
-                ' ...
-                If (InStr(1, .Flags, "D", vbBinaryCompare) > 0) Then
-                    ' ...
-                    If ((colUsersInChannel.Item(i).Flags And USER_CHANNELOP&) = _
-                         USER_CHANNELOP&) Then
-                        
-                        ' ...
-                        frmChat.AddQ "/designate " & _
-                            colUsersInChannel.Item(i).Username
-
-                        ' ...
-                        gChannel.staticDesignee = colUsersInChannel.Item(i).Username
-                        
-                        ' ...
-                        Exit For
-                    End If
-                End If
-            End With
-        Next i
-    End If
-    
-    ' ...
     Call RemoveBanFromQueue(Username)
-    
-    ' ...
-    If ((JoinMessagesOff = False) And (bFlood = False)) Then
-        If (BotVars.ChatDelay) Then
-            ' ...
-            Dim clsChatQueue As clsChatQueue
-        
-            ' ...
-            For i = 1 To colChatQueue.Count
-                ' ...
-                Set clsChatQueue = colChatQueue(i)
-                
-                ' ...
-                If (StrComp(Username, clsChatQueue.Username, _
-                    vbBinaryCompare) = 0) Then
-                
-                    Exit For
-                End If
-            Next i
-        End If
-        
-        If ((BotVars.ChatDelay = 0) Or _
-            ((colChatQueue.Count = 0) Or (i >= (colChatQueue.Count + 1)))) Then
-            
-            frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, Username, _
-                RTBColors.JoinText, " has left the channel."
-        Else
-            Call colChatQueue.Remove(i)
-        End If
-    End If
     
     ' ...
     UserIndex = checkChannel(Username)
@@ -1812,7 +1430,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     If (UserIndex) Then
         ' ...
         If (frmChat.mnuFlash.Checked) Then
-            Call FlashWindow
+            FlashWindow
         End If
     
         ' ...
@@ -1823,10 +1441,9 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         End With
         
         ' ...
-        frmChat.lblCurrentChannel.Caption = _
-            frmChat.GetChannelString()
+        frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
     End If
-        
+    
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' call event script function
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1844,20 +1461,59 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
-    ByVal Ping As Long)
+        ByVal Ping As Long, Optional QueuedEventID As Integer = 0)
     
-    Dim strSend     As String
-    Dim s           As String
-    Dim u           As String
-    Dim strCompare  As String
-    Dim i           As Integer
-    Dim ColIndex    As Integer
-    Dim b           As Boolean
-    Dim ToANSI      As String
-    Dim BanningUser As Boolean
+    Dim UserObj       As clsUserObj
+    Dim UserEvent     As clsUserEventObj
+    
+    Dim strSend       As String
+    Dim s             As String
+    Dim u             As String
+    Dim strCompare    As String
+    Dim i             As Integer
+    Dim ColIndex      As Integer
+    Dim b             As Boolean
+    Dim ToANSI        As String
+    Dim BanningUser   As Boolean
+    Dim UsernameColor As Long ' ...
+    Dim TextColor     As Long ' ...
+    Dim CaratColor    As Long ' ...
+    Dim Pos           As Integer
     
     ' ...
-    Username = convertUsername(Username)
+    Pos = g_Channel.GetUserIndexEx(CleanUsername(Username))
+    
+    ' ...
+    If (Pos > 0) Then
+        ' ...
+        Set UserObj = g_Channel.Users(Pos)
+        
+        ' ...
+        UserObj.LastTalkTime = Now
+        
+        ' ...
+        If (QueuedEventID = 0) Then
+            ' ...
+            If (UserObj.Queue.Count > 0) Then
+                ' ...
+                Set UserEvent = New clsUserEventObj
+                
+                ' ...
+                With UserEvent
+                    .EventID = ID_TALK
+                    .Flags = Flags
+                    .Ping = Ping
+                    .Message = Message
+                End With
+                
+                ' ...
+                UserObj.Queue.Add UserEvent
+            End If
+        End If
+        
+        ' ...
+        Username = UserObj.DisplayName
+    End If
     
     ' ...
     If (frmChat.mnuUTF8.Checked) Then
@@ -1869,124 +1525,135 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
             Message = ToANSI
         End If
     End If
-
-    i = UsernameToIndex(Username)
     
-    If (i > 0) Then
-        colUsersInChannel.Item(i).Acts
-    End If
-        
-    If (VoteDuration > 0) Then
-        If (InStr(1, LCase(Message), "yes", vbTextCompare) > 0) Then
-            Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDYES, Username)
-        ElseIf (InStr(1, LCase(Message), "no", vbTextCompare) > 0) Then
-            Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDNO, Username)
-        End If
-    End If
-            
-    If (Len(Message) >= 100) Then
-        BotVars.JoinWatch = (BotVars.JoinWatch + 5)
-    End If
-    
-    If (BotVars.JoinWatch >= 20) Then
-        If (Filters = False) Then
-            frmChat.AddChat RTBColors.TalkBotUsername, _
-                "Chat filters have been activated due to excessive rejoins and/or " & _
-                    "spam; deactivate them by pressing CTRL + F."
-    
-            Call WriteINI("Other", "Filters", "Y")
-
-            Filters = True
-            
-            AutoChatFilter = GetTickCount()
-        End If
-            
-        BotVars.JoinWatch = 0
-        
-        If (AutoChatFilter) Then
-            AutoChatFilter = GetTickCount()
-        End If
-    End If
-    
-    b = False
-    
-    If (frmChat.mnuFlash.Checked) Then
-        Call FlashWindow
-    End If
-    
-    If (BotVars.ChatDelay) Then
-        For i = 1 To colChatQueue.Count
-            ' ...
-            Dim clsChatQueue As clsChatQueue
-        
-            ' ...
-            Set clsChatQueue = colChatQueue(i)
-            
-            If (StrComp(Username, clsChatQueue.Username, vbBinaryCompare) = 0) Then
-                Exit For
-            End If
-        Next i
-    End If
-    
-    If ((BotVars.ChatDelay = 0) Or _
-        ((colChatQueue.Count = 0) Or (i >= (colChatQueue.Count + 1)))) Then
-       
-        Call Event_QueuedTalk(Username, Flags, Ping, Message)
-    Else
-        Set clsChatQueue = colChatQueue(i)
-        
-        Call clsChatQueue.StoreTalk(Flags, Ping, Message)
-    End If
-        
-    If (g_Channel.Self.IsOperator) Then
-        If (GetSafelist(Username) = False) Then
-            If (Phrasebans) Then
-                For i = LBound(Phrases) To UBound(Phrases)
-                    If ((Phrases(i) <> vbNullString) And _
-                            (Phrases(i) <> Space$(1))) Then
-                        
-                        If ((InStr(1, Message, Phrases(i), vbTextCompare)) <> 0) Then
-                            Ban Username & " Banned phrase: " & Phrases(i), _
-                                    (AutoModSafelistValue - 1)
-                            
-                            BanningUser = True
-                            
-                            Exit For
-                        End If
-                    End If
-                Next i
-            End If
-            
-            If (BanningUser = False) Then
-                If (BotVars.QuietTime) Then
-                    Ban Username & " Quiet-time is enabled.", (AutoModSafelistValue - 1)
-                ElseIf (BotVars.KickOnYell = 1) Then
-                    If (Len(Message) > 5) Then
-                        If (PercentActualUppercase(Message) > 90) Then
-                            Ban Username & " Yelling", (AutoModSafelistValue - 1), 1
-                        End If
-                    End If
-                End If
-            End If
-        End If
-    End If
-    
-    If (Mail) Then
-        If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-            Dim Msg As udtMail ' ...
-            
-            If (GetMailCount(Username) > 0) Then
-                Call GetMailMessage(Username, Msg)
+    ' ...
+    If ((BotVars.ChatDelay = 0) Or (UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
+        ' ...
+        If (AllowedToTalk(Username, Message)) Then
+            ' are we watching the user?
+            If (StrComp(WatchUser, Username, vbTextCompare) = 0) Then
+                ' ...
+                UsernameColor = RTBColors.ErrorMessageText
                 
-                If (Len(RTrim(Msg.To)) > 0) Then
-                    frmChat.AddQ "/w " & Username & " Message from " & RTrim$(Msg.From) & _
-                            ": " & RTrim$(Msg.Message)
+            ' is user an operator?
+            ElseIf ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+                ' ...
+                UsernameColor = RTBColors.TalkUsernameOp
+            Else
+                ' ...
+                UsernameColor = RTBColors.TalkUsernameNormal
+            End If
+            
+            ' ...
+            If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or ((Flags And USER_SYSOP&) = _
+                    USER_SYSOP&)) Then
+                    
+                ' ...
+                TextColor = RGB(97, 105, 255)
+                
+                ' ...
+                CaratColor = RGB(97, 105, 255)
+            Else
+                ' ...
+                TextColor = RTBColors.TalkNormalText
+                
+                ' ...
+                CaratColor = RTBColors.Carats
+            End If
+            
+            ' ...
+            frmChat.AddChat CaratColor, "<", UsernameColor, Username, CaratColor, "> ", _
+                TextColor, Message
+                
+            ' ...
+            If (Catch(0) <> vbNullString) Then
+                CheckPhrase Username, Message, CPTALK
+            End If
+                
+            ' ...
+            If (frmChat.mnuFlash.Checked) Then
+                FlashWindow
+            End If
+        End If
+        
+        If (VoteDuration > 0) Then
+            If (InStr(1, LCase(Message), "yes", vbTextCompare) > 0) Then
+                Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDYES, Username)
+            ElseIf (InStr(1, LCase(Message), "no", vbTextCompare) > 0) Then
+                Call Voting(BVT_VOTE_ADD, BVT_VOTE_ADDNO, Username)
+            End If
+        End If
+        
+        Call ProcessCommand(Username, Message, False, False)
+        
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' call event script function
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        
+        On Error Resume Next
+        
+        ' ...
+        If ((BotVars.NoSupportMultiCharTrigger) And (Len(BotVars.TriggerLong) > 1)) Then
+            ' ...
+            If (StrComp(Left$(Message, Len(BotVars.TriggerLong)), BotVars.TriggerLong, _
+                    vbBinaryCompare) = 0) Then
+                
+                ' ...
+                Message = BotVars.Trigger & Mid$(Message, Len(BotVars.TriggerLong) + 1)
+            End If
+        End If
+    
+        ' ...
+        frmChat.SControl.Run "Event_UserTalk", Username, Flags, Message, Ping
+    Else
+        If (g_Channel.Self.IsOperator) Then
+            If (GetSafelist(Username) = False) Then
+                If (Phrasebans) Then
+                    For i = LBound(Phrases) To UBound(Phrases)
+                        If ((Phrases(i) <> vbNullString) And _
+                                (Phrases(i) <> Space$(1))) Then
+                            
+                            If ((InStr(1, Message, Phrases(i), vbTextCompare)) <> 0) Then
+                                Ban Username & " Banned phrase: " & Phrases(i), _
+                                        (AutoModSafelistValue - 1)
+                                
+                                BanningUser = True
+                                
+                                Exit For
+                            End If
+                        End If
+                    Next i
+                End If
+                
+                If (BanningUser = False) Then
+                    If (BotVars.QuietTime) Then
+                        Ban Username & " Quiet-time is enabled.", (AutoModSafelistValue - 1)
+                    ElseIf (BotVars.KickOnYell = 1) Then
+                        If (Len(Message) > 5) Then
+                            If (PercentActualUppercase(Message) > 90) Then
+                                Ban Username & " Yelling", (AutoModSafelistValue - 1), 1
+                            End If
+                        End If
+                    End If
+                End If
+            End If
+        End If
+        
+        If (Mail) Then
+            If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
+                Dim Msg As udtMail ' ...
+                
+                If (GetMailCount(Username) > 0) Then
+                    GetMailMessage Username, Msg
+                    
+                    If (Len(RTrim(Msg.To)) > 0) Then
+                        frmChat.AddQ "/w " & Username & " Message from " & RTrim$(Msg.From) & ": " & _
+                            RTrim$(Msg.Message)
+                    End If
                 End If
             End If
         End If
     End If
-    
-    Call ProcessCommand(Username, Message, False, False)
 End Sub
 
 Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
@@ -2126,14 +1793,14 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         End If
         
         If (StrComp(Message, BotVars.ChannelPassword, vbTextCompare) = 0) Then
-            lCarats = UsernameToIndex(Username)
+            lCarats = g_Channel.GetUserIndex(Username)
             
             If (lCarats > 0) Then
-                With colUsersInChannel.Item(lCarats)
-                    If (.InternalFlags >= IF_AWAITING_CHPW) Then
-                        .InternalFlags = .InternalFlags - IF_AWAITING_CHPW
-                    End If
-                End With
+                'With colUsersInChannel.Item(lCarats)
+                '    If (.InternalFlags >= IF_AWAITING_CHPW) Then
+                '        .InternalFlags = .InternalFlags - IF_AWAITING_CHPW
+                '    End If
+                'End With
                 
                 frmChat.AddQ "/w " & Username & " Password accepted."
             End If
@@ -2271,7 +1938,7 @@ Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, By
             
             colWhisperWindows.Item(WWIndex).Caption = "Whisper Window: " & Username
             colWhisperWindows.Item(WWIndex).AddWhisper RTBColors.TalkBotUsername, "> " & _
-                CurrentUsername, RTBColors.WhisperCarats, ": ", RTBColors.WhisperText, Message
+                GetCurrentUsername, RTBColors.WhisperCarats, ": ", RTBColors.WhisperText, Message
         End If
     End If
     
@@ -2346,7 +2013,7 @@ Public Sub Event_ChannelList(sChannels() As String)
     frmChat.SControl.Run "Event_ChannelList", sChannels
 End Sub
 
-Private Function CleanDiablo2Username(ByVal Username As String) As String
+Private Function CleanUsername(ByVal Username As String) As String
     
     Dim tmp As String  ' ...
     Dim Pos As Integer ' ...
@@ -2368,7 +2035,7 @@ Private Function CleanDiablo2Username(ByVal Username As String) As String
     End If
     
     ' ...
-    CleanDiablo2Username = tmp
+    CleanUsername = tmp
     
 End Function
 

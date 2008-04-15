@@ -6,7 +6,7 @@ Attribute VB_Name = "modCommandDocsObj"
 Option Explicit
 
 ' ...
-Public Function OpenCommand(ByVal strCommand As String, Optional ByVal datasrc = "internal") As clsCommandDocObj
+Public Function OpenCommand(ByVal strCommand As String) As clsCommandDocObj
     
     ' ...
     Set OpenCommand = New clsCommandDocObj
@@ -19,7 +19,8 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal datasrc =
     strCommand = Replace(strCommand, "\", "\\")
     
     ' ...
-    OpenCommand.OpenCommand strCommand, datasrc
+    OpenCommand.OpenDatabase
+    OpenCommand.OpenCommand strCommand
     
 End Function
 
@@ -34,5 +35,10 @@ End Function
 Public Function CreateCommand(ByVal strCommand As String) As clsCommandDocObj
 
     ' ...
+    Set CreateCommand = New clsCommandDocObj
+    
+    ' ...
+    CreateCommand.OpenDatabase
+    CreateCommand.Name = strCommand
 
 End Function

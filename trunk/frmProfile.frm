@@ -263,11 +263,11 @@ End Sub
 
 Private Sub Form_Load()
     Me.Icon = frmChat.Icon
-    lblUsername.Caption = reverseUsername(CurrentUsername)
+    lblUsername.Caption = GetCurrentUsername
     txtAge.Enabled = False
     txtSex.Enabled = False ' Starcraft patch 1.15, 2007-06-07
     ProfileRequest = True
-    RequestProfile reverseUsername(CurrentUsername)
+    RequestProfile GetCurrentUsername
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)

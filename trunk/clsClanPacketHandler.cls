@@ -53,18 +53,6 @@ Public Event MemberLeaves(ByVal Member As String)
 Public Event RemovedFromClan(ByVal Status As Byte)
 Public Event ClanMOTD(ByVal cookie As Long, ByVal Message As String)
 
-Public Sub RequestClanList()
-    AwaitingClanList = 1
-    
-    PBuffer.InsertDWord &H1
-    PBuffer.SendPacket &H7D
-End Sub
-
-Public Sub RequestClanMotd(Optional ByVal cookie As Long)
-    PBuffer.InsertDWord cookie
-    PBuffer.SendPacket &H7C
-End Sub
-
 '10-18-07 - Hdx - Changed to use clsPacketDebuffer
 Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
     On Error GoTo ERROR_HANDLER
@@ -136,11 +124,12 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
         Case SID_CLANMEMBERLIST 'Clan listing
             inBuf.RemoveDWORD
             bTemp = inBuf.DebuffBYTE
-            ReDim ary(0 To bTemp * 2 - 1)
+            ReDim ary(0 To bTemp * 4 - 1)
             For iTemp = 0 To bTemp - 1
-              ary(iTemp * 2) = inBuf.DebuffNTString
-              ary(iTemp * 2 + 1) = inBuf.DebuffBYTE & inBuf.DebuffBYTE
-              inBuf.RemoveNTString
+              ary(iTemp * 4) = inBuf.DebuffNTString()
+              ary(iTemp * 4 + 1) = inBuf.DebuffBYTE()
+              ary(iTemp * 4 + 2) = inBuf.DebuffBYTE()
+              ary(iTemp * 4 + 3) = inBuf.DebuffNTString()
             Next iTemp
             RaiseEvent ClanMemberList(ary())
             
