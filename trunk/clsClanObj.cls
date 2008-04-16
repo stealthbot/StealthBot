@@ -166,7 +166,7 @@ Public Property Get Peons() As Collection
 
 End Property
 
-Public Function GetUserIndex(Username As String) As Integer
+Public Function GetUserIndex(ByVal Username As String) As Integer
 
     Dim i As Integer ' ...
     
@@ -181,10 +181,13 @@ Public Function GetUserIndex(Username As String) As Integer
             Exit Function
         End If
     Next i
+    
+    ' ...
+    GetUserIndex = 0
 
 End Function
 
-Public Function GetUserIndexEx(Username As String) As Integer
+Public Function GetUserIndexEx(ByVal Username As String) As Integer
 
     Dim i As Integer ' ...
     
@@ -199,6 +202,9 @@ Public Function GetUserIndexEx(Username As String) As Integer
             Exit Function
         End If
     Next i
+    
+    ' ...
+    GetUserIndexEx = 0
 
 End Function
 

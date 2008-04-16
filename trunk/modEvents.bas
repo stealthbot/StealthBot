@@ -67,7 +67,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Else
         ' ...
         If (g_Channel.IsSilent = False) Then
-            frmChat.AddChat vbRed, "Error: (1) There was a flags update received for a user that we do " & _
+            frmChat.AddChat vbRed, "Error: There was a flags update received for a user that we do " & _
                     "not have a record for."
                     
             Exit Sub
@@ -1398,10 +1398,11 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         If (g_Channel.Users(UserIndex).Queue.Count = 0) Then
             ' ...
             If (JoinMessagesOff = False) Then
-                frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, convertUsername(Username), _
+                frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, g_Channel.Users(UserIndex).DisplayName, _
                     RTBColors.JoinText, " has left the channel."
             End If
         End If
+        
         ' ...
         g_Channel.Users.Remove UserIndex
     Else
@@ -2036,6 +2037,8 @@ Private Function CleanUsername(ByVal Username As String) As String
             tmp = Left$(tmp, Len(tmp) - 1)
         End If
     End If
+    
+    frmChat.AddChat vbRed, tmp
     
     ' ...
     CleanUsername = tmp
