@@ -38,17 +38,17 @@ Private m_expansion       As Boolean
 Private m_hardcore        As Boolean
 Private m_realm           As String
 
-Public Property Let Game(str As String)
+Public Property Let game(str As String)
 
     ' ...
     m_game = str
 
 End Property
 
-Public Property Get Game() As String
+Public Property Get game() As String
 
     ' ...
-    Game = m_game
+    game = m_game
 
 End Property
 
@@ -73,13 +73,6 @@ Public Property Get Race() As String
 
 End Property
 
-Public Property Get RaceName() As String
-
-    ' ...
-    Icon = m_icon
-
-End Property
-
 Public Property Get Tier() As String
 
     ' ...
@@ -89,12 +82,12 @@ End Property
 Public Property Get IconName() As String
 
     ' ...
-    If ((Game = "WAR3") Or (Game = "W3XP")) Then
+    If ((game = "WAR3") Or (game = "W3XP")) Then
         ' ...
         Select Case (Mid$(Icon, 2, 1))
             Case "H" ' Human
                 ' ...
-                If (Game = "WAR3") Then
+                If (game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -117,7 +110,7 @@ Public Property Get IconName() As String
             
             Case "N" ' Night Elf
                 ' ...
-                If (Game = "WAR3") Then
+                If (game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -140,7 +133,7 @@ Public Property Get IconName() As String
                 
             Case "U" ' Undead
                 ' ...
-                If (Game = "WAR3") Then
+                If (game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -163,7 +156,7 @@ Public Property Get IconName() As String
             
             Case "O" ' Orc
                 ' ...
-                If (Game = "WAR3") Then
+                If (game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -186,7 +179,7 @@ Public Property Get IconName() As String
 
             Case "R" ' Random
                 ' ...
-                If (Game = "WAR3") Then
+                If (game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -209,7 +202,7 @@ Public Property Get IconName() As String
 
             Case "D" ' Tournament
                 ' ...
-                If (Game = "W3XP") Then
+                If (game = "W3XP") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -235,7 +228,7 @@ Public Property Let Statstring(str As String)
     End If
 
     ' ...
-    Game = StrReverse$(Left$(str, 4))
+    game = StrReverse$(Left$(str, 4))
 
     ' ...
     m_stat_string = Mid$(str, 6)
@@ -504,7 +497,7 @@ Private Sub Parse()
     End If
 
     ' ...
-    Select Case (Game)
+    Select Case (game)
         ' ...
         Case "SSHR", "STAR", "JSTR", "SEXP"
             Call ParseStarCraft
