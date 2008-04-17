@@ -2818,7 +2818,7 @@ Public Sub AddFriend(ByVal Username As String, ByVal Product As String, IsOnline
 End Sub
 
 Private Sub FriendListHandler_FriendAdded(ByVal Username As String, ByVal Product As String, ByVal Location As Byte, ByVal Status As Byte, ByVal Channel As String)
-    AddFriend Username, Product, (Location > 0)
+    'AddFriend Username, Product, (Location > 0)
     lblCurrentChannel.Caption = GetChannelString
 End Sub
 
@@ -2836,13 +2836,13 @@ End Sub
 Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
     Dim X As ListItem
     
-    Set X = lvFriendList.FindItem(Username)
-    
-    If (Not (X Is Nothing)) Then
-        lvFriendList.ListItems.Remove X.index
-        
-        Set X = Nothing
-    End If
+    'Set X = lvFriendList.FindItem(Username)
+   
+    'If (Not (X Is Nothing)) Then
+    '    lvFriendList.ListItems.Remove X.index
+    '
+    '    Set X = Nothing
+    'End If
     
     lblCurrentChannel.Caption = GetChannelString
 End Sub
@@ -2869,7 +2869,7 @@ Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLInd
                     
                     X.ListSubItems.Item(1).ReportIcon = ICONLINE
                     
-                    Select Case .Game
+                    Select Case .game
                         Case Is = "STAR": i = ICSTAR
                         Case Is = "SEXP": i = ICSEXP
                         Case Is = "D2DV": i = ICD2DV
@@ -3016,7 +3016,7 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, 
             aInx = g_Channel.GetUserIndex(GetSelectedUser)
             
             If aInx > 0 Then
-                sProd = g_Channel.Users(aInx).Game
+                sProd = g_Channel.Users(aInx).game
             
                 mnuPopWebProfile.Enabled = (sProd = "W3XP" Or sProd = "WAR3")
                 mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And g_Clan.Self.Rank >= 3)
@@ -3066,7 +3066,7 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
 '                    Public Const FRL_PUBLICGAME& = &H3
 '                    Public Const FRL_PRIVATEGAME& = &H5
                     If .IsOnline Then
-                        sTemp = sTemp & "Using " & ProductCodeToFullName(.Game) & " "
+                        sTemp = sTemp & "Using " & ProductCodeToFullName(.game) & " "
                     End If
                     
                     Select Case .LocationID
@@ -4497,7 +4497,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 If (LCase$(s) = "/fl" And MDebug("debug")) Then
                                     For n = 1 To g_Friends.Count
                                         AddChat vbMagenta, g_Friends.Item(n).Name & _
-                                            " - " & g_Friends.Item(n).Game
+                                            " - " & g_Friends.Item(n).game
                                     Next n
                                 
                                 ElseIf (LCase$(s) = "/accountinfo") Then
@@ -6031,7 +6031,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             ParseStatstring CurrentUser.Statstring, outbuf, outbuf
         
             ' ...
-            AddName CurrentUser.DisplayName, CurrentUser.Game, CurrentUser.Flags, CurrentUser.Ping, _
+            AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Flags, CurrentUser.Ping, _
                 CurrentUser.Clan
         Next i
         
@@ -6043,7 +6043,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             ' ...
             Set CurrentUser = g_Friends(i)
         
-            AddFriend CurrentUser.DisplayName, CurrentUser.Game, CurrentUser.Status
+            AddFriend CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Status
         Next i
     End If
     

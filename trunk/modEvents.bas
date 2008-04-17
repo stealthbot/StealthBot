@@ -83,7 +83,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                 .Statstring = Message
                 .Stats.Statstring = Message
                 .Clan = Clan
-                .Game = Product
+                .game = Product
             End With
         
             ' ...
@@ -727,8 +727,6 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
             
             frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString
-            
-            unsquelching = True
         End If
         
         'Ban Evasion and banned-user tracking
@@ -1089,7 +1087,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     With UserObj
         .Name = Username
         .Flags = Flags
-        .Game = Product
+        .game = Product
         .Ping = Ping
         .JoinTime = g_Channel.JoinTime
         .Clan = sClan
@@ -1146,13 +1144,13 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                         ' ...
                         If (g_ThisIconCode <> -1) Then
                             ' ...
-                            If (g_Channel.Users(i).Game = "WAR3") Then
+                            If (g_Channel.Users(i).game = "WAR3") Then
                                 ' ...
                                 If (found.SmallIcon = ICWAR3) Then
                                     ' ...
                                     found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
                                 End If
-                            ElseIf (g_Channel.Users(i).Game = "W3XP") Then
+                            ElseIf (g_Channel.Users(i).game = "W3XP") Then
                                 ' ...
                                 If (found.SmallIcon = ICWAR3X) Then
                                     ' ...
@@ -1248,7 +1246,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 .Name = Username
                 .Flags = Flags
                 .Ping = Ping
-                .Game = Product
+                .game = Product
                 .JoinTime = Now
                 .Clan = sClan
                 .Statstring = OriginalStatstring
