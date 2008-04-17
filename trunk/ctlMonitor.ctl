@@ -279,7 +279,7 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                                 game = Left(game, InStr(1, game, " in ", vbTextCompare) - 1)
                             End If
                             .game = game
-                            .Channel = Channel
+                            .Location = Channel
                             
                             If (InStr(1, text, " is refusing messages ", vbTextCompare) = 0) Then
                                 If (InStr(1, text, " is away ", vbTextCompare) = 0) Then
@@ -290,7 +290,7 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                         ElseIf EventID = 19 Then
                             .Status = 0
                             .game = vbNullString
-                            .Channel = "Offline"
+                            .Location = "Offline"
                             RaiseEvent UserInfo(colUserInfo.Item(CurrentIndex))
                             CurrentIndex = CurrentIndex + 1
                         End If

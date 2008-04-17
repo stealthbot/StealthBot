@@ -44,7 +44,7 @@ Public Sub RequestFriendsList(ByRef pBuff As PacketBuffer)
 End Sub
 
 Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
-    'On Error GoTo ERROR_HANDLER
+    On Error GoTo ERROR_HANDLER
     
     Dim n As Long, bytTemp As Byte
     Dim s As String
@@ -149,7 +149,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 '(STRING) Location str (blank = private)
                 s = Mid$(Data, Position)
                 s = Left$(s, Len(s) - 1)
-                .Channel = IIf(LenB(s) > 0, s, "(private)")
+                .Location = IIf(LenB(s) > 0, s, "(private)")
                 
                 RaiseEvent FriendUpdate(.DisplayName, n)
             End With
