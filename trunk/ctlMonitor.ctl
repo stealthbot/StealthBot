@@ -105,8 +105,8 @@ Public Sub LoadList()
     Dim tmpUser As clsFriendObj
     For X = 1 To l
       Set tmpUser = New clsFriendObj
-      tmpUser.Username = ReadCFG("Monitor", "User" & X)
-      colUserInfo.Add tmpUser, LCase(tmpUser.Username)
+      tmpUser.Name = ReadCFG("Monitor", "User" & X)
+      colUserInfo.Add tmpUser, LCase(tmpUser.Name)
     Next X
 End Sub
 Public Function getList() As Collection
@@ -117,7 +117,7 @@ Public Sub SaveList()
     If (colUserInfo Is Nothing) Then Exit Sub
     WriteINI "Monitor", "ListCount", colUserInfo.Count
     For X = 1 To colUserInfo.Count
-      WriteINI "Monitor", "User" & X, colUserInfo.Item(X).Username
+      WriteINI "Monitor", "User" & X, colUserInfo.Item(X).Name
     Next X
 End Sub
 
@@ -126,10 +126,10 @@ Public Function AddUser(sUser As String) As Boolean
     If (InStr(sUser, " ") > 0) Then Exit Function
     Dim X As Integer
     For X = 1 To colUserInfo.Count
-      If (LCase(colUserInfo.Item(X).Username) = LCase(sUser)) Then Exit Function
+      If (LCase(colUserInfo.Item(X).Name) = LCase(sUser)) Then Exit Function
     Next X
     Dim newUser As New clsFriendObj
-    newUser.Username = sUser
+    newUser.Name = sUser
     colUserInfo.Add newUser, LCase(sUser)
     SaveList
     AddUser = True
@@ -137,7 +137,7 @@ End Function
 Public Sub RemoveUser(sUser As String)
     Dim X As Integer
     For X = 1 To colUserInfo.Count
-      If (LCase(colUserInfo.Item(X).Username) = LCase(sUser)) Then
+      If (LCase(colUserInfo.Item(X).Name) = LCase(sUser)) Then
         colUserInfo.Remove (X)
         Exit For
       End If
@@ -170,8 +170,8 @@ End Sub
 Private Sub tmr_Timer()
     If (CurrentIndex > colUserInfo.Count Or CurrentIndex < 1) Then CurrentIndex = 1
     If (colUserInfo.Count > 0) Then
-        Debug.Print "Timer: " & colUserInfo.Item(CurrentIndex).Username
-        Call Send0x0E("/whereis " & colUserInfo.Item(CurrentIndex).Username)
+        Debug.Print "Timer: " & colUserInfo.Item(CurrentIndex).Name
+        Call Send0x0E("/whereis " & colUserInfo.Item(CurrentIndex).Name)
     End If
 End Sub
 
@@ -264,7 +264,7 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                     With colUserInfo.Item(CurrentIndex)
                         If EventID = 18 Then
                             .Status = 1
-                            Dim Channel As String, Game As String
+                            Dim Channel As String, game As String
                             If InStr(1, text, " in the ", vbTextCompare) > 0 Then
                                 Channel = Mid(text, InStr(1, text, " in the ", vbTextCompare) + 8)
                                 Channel = Left(Channel, Len(Channel) - 1)
@@ -275,10 +275,10 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                                 Channel = "Unknown"
                             End If
                             If InStr(1, text, " using ", vbTextCompare) > 0 Then
-                                Game = Mid(text, InStr(1, text, " using ", vbTextCompare) + 7)
-                                Game = Left(Game, InStr(1, Game, " in ", vbTextCompare) - 1)
+                                game = Mid(text, InStr(1, text, " using ", vbTextCompare) + 7)
+                                game = Left(game, InStr(1, game, " in ", vbTextCompare) - 1)
                             End If
-                            .Product = Game
+                            .game = game
                             .Channel = Channel
                             
                             If (InStr(1, text, " is refusing messages ", vbTextCompare) = 0) Then
@@ -289,7 +289,7 @@ Private Sub wsBnet_DataArrival(ByVal bytesTotal As Long)
                             End If
                         ElseIf EventID = 19 Then
                             .Status = 0
-                            .Product = vbNullString
+                            .game = vbNullString
                             .Channel = "Offline"
                             RaiseEvent UserInfo(colUserInfo.Item(CurrentIndex))
                             CurrentIndex = CurrentIndex + 1

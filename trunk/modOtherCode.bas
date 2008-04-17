@@ -209,7 +209,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
     Dim Username        As String
     Dim CleanedUsername As String
     Dim i               As Integer
-    Dim pos             As Integer
+    Dim Pos             As Integer
     
     If (LenB(Inpt) > 0) Then
         If (Kick > 2) Then
@@ -245,10 +245,10 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
                     Exit Function
                 End If
                 
-                pos = g_Channel.GetUserIndex(Username)
+                Pos = g_Channel.GetUserIndex(Username)
                 
-                If (pos > 0) Then
-                    If (g_Channel.Users(pos).IsOperator) Then
+                If (Pos > 0) Then
+                    If (g_Channel.Users(Pos).IsOperator) Then
                         Ban = "Error: You cannot ban a channel operator."
                     
                         Exit Function
@@ -2064,8 +2064,8 @@ End Function
 '            Set user = colUsersInChannel.Item(i)
 '
 '            With user
-'                If (StrComp(Mid$(.Username, 1, 1), FirstLetter, vbTextCompare) = 0) Then
-'                    If (StrComp(sUsername, .Username, vbTextCompare) = 0) Then
+'                If (StrComp(Mid$(.Name, 1, 1), FirstLetter, vbTextCompare) = 0) Then
+'                    If (StrComp(sUsername, .Name, vbTextCompare) = 0) Then
 '                        UsernameToIndex = i
 '
 '                        Exit Function
@@ -2292,7 +2292,7 @@ End Sub
 ' Returns a single chunk of a string as if that string were Split() and that chunk
 ' extracted
 ' 1-based
-Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
+Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
     Dim c           As Integer
     Dim i           As Integer
     Dim TargetSpace As Integer
@@ -2302,10 +2302,10 @@ Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
     
     c = 0
     i = 1
-    pos = pos
+    Pos = Pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While ((c < pos) And (i > 0))
+    While ((c < Pos) And (i > 0))
         TargetSpace = i
         
         i = (InStr(i + 1, str, Space(1), vbBinaryCompare))
@@ -2313,7 +2313,7 @@ Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
         c = (c + 1)
     Wend
     
-    If (c >= pos) Then
+    If (c >= Pos) Then
         c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
         If (c > 0) Then
@@ -2377,7 +2377,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     On Error GoTo ERROR_HANDLER
     
     Dim lineCount As Long    ' stores line number
-    Dim pos       As Long    ' stores position of delimiter
+    Dim Pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
     Dim length    As Long    ' stores length after postfix
     Dim bln       As Boolean ' stores result of delimiter split
@@ -2425,7 +2425,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             If (OversizeDelimiter <> vbNullString) Then
                 ' grab position of delimiter character that is
                 ' the closest to our specified length
-                pos = InStrRev(StringSplit, OversizeDelimiter, _
+                Pos = InStrRev(StringSplit, OversizeDelimiter, _
                     length, vbBinaryCompare)
             End If
             
@@ -2434,9 +2434,9 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((pos) And (pos >= Round(length / 2))) Then
+            If ((Pos) And (Pos >= Round(length / 2))) Then
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, pos - 1)
+                strTmp = Mid$(strTmp, 1, Pos - 1)
                 
                 ' indicate that an additional
                 ' character will require removal

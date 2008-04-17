@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmRealm 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -606,7 +606,7 @@ Private Sub lvwChars_DblClick()
         If Not (.SelectedItem Is Nothing) And CharListReceived Then
             If CharIsExpansion.Item(.SelectedItem.Key) And _
                 Not (StrComp(BotVars.Product, "PX2D") = 0) And _
-                CreatedExpRealmChar <> .SelectedItem.Index Then
+                CreatedExpRealmChar <> .SelectedItem.index Then
                 
                 frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] That is an Expansion character. Please log on using the Diablo II: Lord of Destruction expansion."
                 frmChat.SetFocus
@@ -792,19 +792,19 @@ Private Sub mnuPopDelete_Click()
     
     If Not (lvwChars.SelectedItem Is Nothing) Then
         s = Split(lvwChars.SelectedItem.text, vbCr)(0)
-        IndexToDelete = lvwChars.SelectedItem.Index
+        IndexToDelete = lvwChars.SelectedItem.index
         
         MCPHandler.DeleteCharacter s
     End If
 End Sub
 
-Private Sub optNewCharType_Click(Index As Integer)
+Private Sub optNewCharType_Click(index As Integer)
     Dim i As Integer
     
-    imgCharPortrait.Picture = imlChars.ListImages.Item(Index + 1).Picture
+    imgCharPortrait.Picture = imlChars.ListImages.Item(index + 1).Picture
     
     For i = 1 To 7
-        If i <> Index Then optNewCharType(i).Value = False
+        If i <> index Then optNewCharType(i).Value = False
     Next i
 End Sub
 

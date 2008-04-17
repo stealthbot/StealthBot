@@ -1944,8 +1944,8 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Next i
     
     'For i = LBound(gBans) To UBound(gBans)
-    '    If (gBans(i).Username <> vbNullString) Then
-    '        tmpBuf(tmpCount) = tmpBuf(tmpCount) & ", " & gBans(i).Username
+    '    If (gBans(i).userName <> vbNullString) Then
+    '        tmpBuf(tmpCount) = tmpBuf(tmpCount) & ", " & gBans(i).userName
     '
     '        If ((Len(tmpBuf(tmpCount)) > 90) And (i <> UBound(gBans))) Then
     '            ' increase array size
@@ -2000,7 +2000,7 @@ Private Function OnIPBans(ByVal Username As String, ByRef dbAccess As udtGetAcce
         '    For i = 1 To colUsersInChannel.Count
         '        Select Case colUsersInChannel.Item(i).Flags
         '            Case 20, 30, 32, 48
-        '                Call AddQ("/ban " & colUsersInChannel.Item(i).Username & _
+        '                Call AddQ("/ban " & colUsersInChannel.Item(i).Name & _
         '                    " IPBanned.")
         '        End Select
         '    Next i
@@ -4145,8 +4145,8 @@ Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccess
         ReDim Preserve tmpBuf(0 To 1)
     
         With g_Channel.Users(UserIndex)
-            tmpBuf(0) = "User " & .Username & " is logged on using " & _
-                ProductCodeToFullName(.Product)
+            tmpBuf(0) = "User " & .Name & " is logged on using " & _
+                ProductCodeToFullName(.game)
             
             If (.IsOperator) Then
                 tmpBuf(0) = tmpBuf(0) & " with ops, and a ping time of " & .Ping & "ms."
@@ -5152,14 +5152,10 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                                     If (InStr(1, user, "*", vbBinaryCompare) <> 0) Then
                                         Call WildCardBan(user, vbNullString, 2)
                                     Else
-                                        ' unban user if found in banlist
-                                        For i = LBound(gBans) To UBound(gBans)
-                                            If (StrComp(gBans(i).Username, user, _
-                                                    vbTextCompare) = 0) Then
-                                                
-                                                Call AddQ("/unban " & user)
-                                            End If
-                                        Next i
+                                        ' ...
+                                        If (g_Channel.IsOnBanList(user)) Then
+                                            Call AddQ("/unban " & user)
+                                        End If
                                     End If
                                 End If
                                 
@@ -6096,14 +6092,14 @@ Private Function WildCardBan(ByVal sMatch As String, ByVal smsgData As String, B
                     If (sMatch = "*") Then
                         ' unipban user
                         'If (BotVars.IPBans = True) Then
-                        '    Call AddQ("/unsquelch " & gBans(i).UsernameActual, 1)
+                        '    Call AddQ("/unsquelch " & gBans(i).userNameActual, 1)
                         'End If
                     
                         Call AddQ("/" & Typ & g_Channel.Banlist(i).DisplayName)
                     Else
                         ' unipban user
                         'If (BotVars.IPBans = True) Then
-                        '    Call AddQ("/unsquelch " & gBans(i).UsernameActual, 1)
+                        '    Call AddQ("/unsquelch " & gBans(i).userNameActual, 1)
                         'End If
                     
                         z = PrepareCheck(g_Channel.Banlist(i).DisplayName)
@@ -6683,7 +6679,7 @@ Public Sub LoadDatabase()
                                     .Flags = X(1)
                                     
                                     'If InStr(X(1), "S") > 0 Then
-                                    '    AddToSafelist .Username
+                                    '    AddToSafelist .Name
                                     '    .Flags = Replace(.Flags, "S", "")
                                     'End If
                                 End If

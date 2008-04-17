@@ -168,7 +168,7 @@ Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
                 With g_Channel.Users(i)
                      ParseStatstring .Statstring, Message, .Clan
 
-                     SC.Run "Event_UserInChannel", .DisplayName, .Flags, Message, .Ping, .Game, False
+                     SC.Run "Event_UserInChannel", .DisplayName, .Flags, Message, .Ping, .game, False
                  End With
              Next i
          End If

@@ -853,6 +853,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -878,6 +879,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2867,7 +2869,7 @@ Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLInd
                     
                     X.ListSubItems.Item(1).ReportIcon = ICONLINE
                     
-                    Select Case .Product
+                    Select Case .Game
                         Case Is = "STAR": i = ICSTAR
                         Case Is = "SEXP": i = ICSEXP
                         Case Is = "D2DV": i = ICD2DV
@@ -3014,7 +3016,7 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, 
             aInx = g_Channel.GetUserIndex(GetSelectedUser)
             
             If aInx > 0 Then
-                sProd = g_Channel.Users(aInx).game
+                sProd = g_Channel.Users(aInx).Game
             
                 mnuPopWebProfile.Enabled = (sProd = "W3XP" Or sProd = "WAR3")
                 mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And g_Clan.Self.Rank >= 3)
@@ -3063,11 +3065,11 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
 '                    Public Const FRL_INCHAT& = &H2
 '                    Public Const FRL_PUBLICGAME& = &H3
 '                    Public Const FRL_PRIVATEGAME& = &H5
-                    If .Location <> FRL_OFFLINE Then
-                        sTemp = sTemp & "Using " & ProductCodeToFullName(.Product) & " "
+                    If .IsOnline Then
+                        sTemp = sTemp & "Using " & ProductCodeToFullName(.Game) & " "
                     End If
                     
-                    Select Case .Location
+                    Select Case .LocationID
                         Case FRL_OFFLINE
                             sTemp = sTemp & "This person is offline."
                         Case FRL_NOTINCHAT
@@ -3137,7 +3139,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                 "Information for " & lvChannel.ListItems(m_lCurItemIndex).text
                 
             ' ...
-            'If (UserAccess.Username <> vbNullString) Then
+            'If (UserAccess.Name <> vbNullString) Then
             '    sTemp = sTemp & "["
             '
             '    If (UserAccess.Access > 0) Then
@@ -4494,8 +4496,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     
                                 If (LCase$(s) = "/fl" And MDebug("debug")) Then
                                     For n = 1 To g_Friends.Count
-                                        AddChat vbMagenta, g_Friends.Item(n).Username & _
-                                            " - " & g_Friends.Item(n).Product
+                                        AddChat vbMagenta, g_Friends.Item(n).Name & _
+                                            " - " & g_Friends.Item(n).Game
                                     Next n
                                 
                                 ElseIf (LCase$(s) = "/accountinfo") Then
@@ -5449,7 +5451,7 @@ Private Sub UpTimer_Timer()
                             'If .InternalFlags = IF_AWAITING_CHPW Or .InternalFlags = IF_CHPW_AND_IDLEBANS Then
                             '    If .TimeInChannel() > BotVars.ChannelPasswordDelay Then
                             '        .InternalFlags = 0
-                            '        Ban .Username & " Password time is up", (AutoModSafelistValue - 1)
+                            '        Ban .Name & " Password time is up", (AutoModSafelistValue - 1)
                             '    End If
                             'End If
                         End If
@@ -6011,7 +6013,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     ' ...
     If (g_Online) Then
         Dim found       As ListItem ' ...
-        Dim CurrentUser As clsUserObj
+        Dim CurrentUser As Object
         Dim outbuf      As String
 
         ' ...
@@ -6029,8 +6031,19 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             ParseStatstring CurrentUser.Statstring, outbuf, outbuf
         
             ' ...
-            AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Flags, CurrentUser.Ping, _
+            AddName CurrentUser.DisplayName, CurrentUser.Game, CurrentUser.Flags, CurrentUser.Ping, _
                 CurrentUser.Clan
+        Next i
+        
+        ' ...
+        frmChat.lvFriendList.ListItems.Clear
+        
+        ' ...
+        For i = 1 To g_Friends.Count
+            ' ...
+            Set CurrentUser = g_Friends(i)
+        
+            AddFriend CurrentUser.DisplayName, CurrentUser.Game, CurrentUser.Status
         Next i
     End If
     

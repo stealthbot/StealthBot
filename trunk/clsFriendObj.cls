@@ -20,74 +20,104 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private msUsername  As String
-Private mbyStatus   As Byte
-Private mbyLocation As Byte
-Private msProduct   As String
-Private msChannel   As String
+Private m_username    As String
+Private m_status      As Byte
+Private m_location_id As Byte
+Private m_location    As String
+Private m_game        As String
 
-Public Property Get Channel() As String
+Public Property Get Location() As String
 
-    Channel = msChannel
-
-End Property
-
-Public Property Let Channel(ByVal sChannel As String)
-
-    msChannel = sChannel
+    Location = m_location
 
 End Property
 
-Public Property Get Product() As String
+Public Property Let Location(ByVal sChannel As String)
 
-    Product = msProduct
+    m_location = sChannel
+    
+End Property
+
+Public Property Get Game() As String
+
+    Game = m_game
 
 End Property
 
-Public Property Let Product(ByVal sProduct As String)
+Public Property Let Game(ByVal sProduct As String)
 
-    msProduct = KillNull(sProduct)
-
-End Property
-
-Public Property Get Location() As Byte
-
-    Location = mbyLocation
+    m_game = KillNull(sProduct)
 
 End Property
 
-Public Property Let Location(ByVal byLocation As Byte)
+Public Property Get LocationID() As Byte
 
-    mbyLocation = byLocation
+    LocationID = m_location_id
+
+End Property
+
+Public Property Let LocationID(ByVal byLocation As Byte)
+
+    m_location_id = byLocation
 
 End Property
 
 Public Property Get Status() As Byte
 
-    Status = mbyStatus
+    Status = m_status
 
 End Property
 
 Public Property Let Status(ByVal byStatus As Byte)
 
-    mbyStatus = byStatus
+    m_status = byStatus
 
 End Property
 
-Public Property Get Username() As String
+Public Property Get IsMutual() As Boolean
 
-    Username = msUsername
+    IsMutual = (Status >= 1)
 
 End Property
 
-Public Property Let Username(ByVal sUsername As String)
+Public Property Get IsAway() As Boolean
 
-    msUsername = KillNull(sUsername)
+    IsAway = (Status = 4)
+
+End Property
+
+Public Property Get IsOnline() As Boolean
+
+    IsOnline = (LocationID > 0)
+
+End Property
+
+Public Property Get IsInChannel() As Boolean
+
+    IsInChannel = (LocationID = 2)
+
+End Property
+
+Public Property Get IsInGame() As Boolean
+
+    IsInGame = (LocationID > 2)
+
+End Property
+
+Public Property Get Name() As String
+
+    Name = m_username
+
+End Property
+
+Public Property Let Name(ByVal sUsername As String)
+
+    m_username = KillNull(sUsername)
 
 End Property
 
 Public Property Get DisplayName() As String
 
-    DisplayName = convertUsername(msUsername)
+    DisplayName = convertUsername(m_username)
 
 End Property

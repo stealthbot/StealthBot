@@ -413,7 +413,7 @@ Private Sub Form_Load()
         .ListItems.Clear
         Set Users = monConn.getList
         For X = 1 To Users.Count
-            .ListItems.Add , Users.Item(X).Username, Users.Item(X).Username, , ICSQUELCH
+            .ListItems.Add , Users.Item(X).Name, Users.Item(X).Name, , ICSQUELCH
             .ListItems(.ListItems.Count).ListSubItems.Add 1, "status", "Offline", MONITOR_OFFLINE
             .ListItems(.ListItems.Count).ListSubItems.Add 2, "last", "None"
             .ListItems(.ListItems.Count).Tag = "0"
@@ -530,7 +530,7 @@ Private Sub monConn_OnVersionCheck(ByVal result As Long, PatchFile As String)
 End Sub
 
 Private Sub monConn_UserInfo(user As clsFriendObj)
-  Debug.Print "User info: " & user.Username & ": " & user.Status
+  Debug.Print "User info: " & user.Name & ": " & user.Status
   Call UpdateList(user)
 End Sub
 
@@ -543,36 +543,36 @@ End Sub
 Private Sub UpdateList(user As clsFriendObj)
     Dim X As ListItem, Holder As Integer, b As Byte
     
-    If InStr(1, user.Product, "starcraft", vbTextCompare) <> 0 Then
-        If InStr(1, user.Product, "broodwar", vbTextCompare) <> 0 Then
+    If InStr(1, user.game, "starcraft", vbTextCompare) <> 0 Then
+        If InStr(1, user.game, "broodwar", vbTextCompare) <> 0 Then
             Holder = ICSEXP
-        ElseIf InStr(1, user.Product, "japanese", vbTextCompare) <> 0 Then
+        ElseIf InStr(1, user.game, "japanese", vbTextCompare) <> 0 Then
             Holder = ICJSTR
-        ElseIf InStr(1, user.Product, "shareware", vbTextCompare) <> 0 Then
+        ElseIf InStr(1, user.game, "shareware", vbTextCompare) <> 0 Then
             Holder = ICSCSW
         Else
             Holder = ICSTAR
         End If
-    ElseIf InStr(1, user.Product, "diablo", vbTextCompare) <> 0 Then
-        If InStr(1, user.Product, "ii", vbTextCompare) <> 0 Then
-            If InStr(1, user.Product, "lord of destruction", vbTextCompare) <> 0 Then
+    ElseIf InStr(1, user.game, "diablo", vbTextCompare) <> 0 Then
+        If InStr(1, user.game, "ii", vbTextCompare) <> 0 Then
+            If InStr(1, user.game, "lord of destruction", vbTextCompare) <> 0 Then
                 Holder = ICD2XP
             Else
                 Holder = ICD2DV
             End If
         Else
-            If InStr(1, user.Product, "shareware", vbTextCompare) <> 0 Then
+            If InStr(1, user.game, "shareware", vbTextCompare) <> 0 Then
                 Holder = ICDIABLOSW
             Else
                 Holder = ICDIABLO
             End If
         End If
-    ElseIf InStr(1, user.Product, "chat", vbTextCompare) <> 0 Then
+    ElseIf InStr(1, user.game, "chat", vbTextCompare) <> 0 Then
         Holder = ICCHAT
-    ElseIf InStr(1, user.Product, "warcraft", vbTextCompare) <> 0 Then
-        If InStr(1, user.Product, "iii", vbTextCompare) <> 0 Then
+    ElseIf InStr(1, user.game, "warcraft", vbTextCompare) <> 0 Then
+        If InStr(1, user.game, "iii", vbTextCompare) <> 0 Then
             Holder = ICWAR3
-            If InStr(1, user.Product, "frozen throne", vbTextCompare) <> 0 Then
+            If InStr(1, user.game, "frozen throne", vbTextCompare) <> 0 Then
                 Holder = ICWAR3X
             End If
         Else
@@ -580,10 +580,10 @@ Private Sub UpdateList(user As clsFriendObj)
         End If
     End If
     If Holder = 0 Then Holder = ICUNKNOWN
-    Set X = lvMonitor.FindItem(user.Username)
+    Set X = lvMonitor.FindItem(user.game)
     If Not X Is Nothing Then
-        If user.Location = 1 And Not (X.Icon = 1) Then
-            StatusOnline user.Username
+        If user.LocationID = 1 And Not (X.Icon = 1) Then
+            StatusOnline user.Name
             X.Icon = 1
         End If
         With lvMonitor.ListItems(X.index)
@@ -640,7 +640,7 @@ Function GetStatusWatch(ByVal Username As String) As Byte
     
     Set X = monConn.getList
     For i = 1 To X.Count
-        If (StrComp(Username, X.Item(i).Username, vbTextCompare) = 0) Then
+        If (StrComp(Username, X.Item(i).Name, vbTextCompare) = 0) Then
           GetStatusWatch = X.Item(i).Location
           Exit Function
         End If

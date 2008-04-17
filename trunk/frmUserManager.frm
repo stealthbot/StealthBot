@@ -380,7 +380,7 @@ lblDone_Click_Exit:
 
 lblDone_Click_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure lblDone_Click of Form frmUserManager"
+    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure lblDone_Click of Form frmUserManager"
     Resume lblDone_Click_Exit
 End Sub
 

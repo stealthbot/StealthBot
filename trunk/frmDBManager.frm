@@ -752,7 +752,7 @@ Private Sub btnSave_Click(index As Integer)
         Call WriteDatabase(GetFilePath("users.txt"))
         
         ' check channel to find potential banned users
-        Call g_channel.CheckUsers
+        Call g_Channel.CheckUsers
         
         ' close database form
         Call Unload(frmDBManager)

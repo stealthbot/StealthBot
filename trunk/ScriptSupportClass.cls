@@ -438,7 +438,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     ' ...
     With GetDBEntry
         .entryType = Temp.Type
-        .Name = Temp.Username
+        .Username = Temp.Username
         .Rank = Temp.Access
         .Flags = Temp.Flags
         .CreatedOn = Temp.AddedOn

@@ -53,10 +53,10 @@ Public Sub RequestClanMOTD(Optional ByVal cookie As Long = &H0)
     PBuffer.SendPacket &H7C
 End Sub
 
-Public Sub SetClanMOTD(message As String) '//Works
+Public Sub SetClanMOTD(Message As String) '//Works
     With PBuffer
         .InsertDWord &H0
-        .InsertNTString message
+        .InsertNTString Message
         .SendPacket &H7B
     End With
 End Sub

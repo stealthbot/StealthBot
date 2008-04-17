@@ -74,10 +74,10 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                     'For each entry:
                     '(STRING)         Account
                     s = KillNull(Mid$(Data, Position))
-                    .Username = s
+                    .Name = s
                     'debug.print "Username: " & s
-                    Position = Position + Len(.Username) + 1 'account for chr(0) at end
-                    'debug.print "Position incremented " & Len(.Username) + 1 & " to " & Position
+                    Position = Position + Len(.Name) + 1 'account for chr(0) at end
+                    'debug.print "Position incremented " & Len(.Name) + 1 & " to " & Position
                     
                     '(BYTE)       Status
                     bytTemp = Asc(Mid$(Data, Position, 1))
@@ -89,7 +89,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                     
                     '(BYTE)       Location
                     bytTemp = Asc(Mid$(Data, Position, 1))
-                    .Location = bytTemp
+                    .LocationID = bytTemp
                     Position = Position + 1
                     
                     'debug.print "Location: " & .Location
@@ -98,29 +98,27 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                     '(DWORD)      ProductID
                     s = Mid$(Data, Position, 4)
                     If Conv(s) = 0 Then
-                        .Product = "OFFL"
+                        .Game = "OFFL"
                     Else
-                        .Product = StrReverse(s)
+                        .Game = StrReverse(s)
                     End If
                     Position = Position + 4
                     
-                    'debug.print "ProductID: " & .Product
+                    'debug.print "ProductID: " & .Game
                     'debug.print "Position incremented 4 to " & Position
                     
                     '(STRING)         Channel
                     s = KillNull(Mid$(Data, Position))
                     Position = Position + Len(s) + 1
-                    .Channel = s
-                    
-                    .Username = convertUsername(.Username)
+                    .Location = s
                 End With
                 
-                ''debug.print "Successfully added: " & flTemp.Username
+                ''debug.print "Successfully added: " & flTemp.Name
                 
-                g_Friends.Add flTemp, flTemp.Username
+                g_Friends.Add flTemp
                 
-                RaiseEvent FriendListEntry(flTemp.Username, flTemp.Product, flTemp.Channel, flTemp.Status, _
-                    flTemp.Location)
+                RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.Game, flTemp.Location, flTemp.Status, _
+                     flTemp.LocationID)
                     
                 Set flTemp = Nothing
                 
@@ -146,14 +144,14 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 '(DWORD) Product ID
                 s = Mid$(Data, Position, 4)
                 Position = Position + 4
-                .Product = StrReverse(s)
+                .Game = StrReverse(s)
             
                 '(STRING) Location str (blank = private)
                 s = Mid$(Data, Position)
                 s = Left$(s, Len(s) - 1)
                 .Channel = IIf(LenB(s) > 0, s, "(private)")
                 
-                RaiseEvent FriendUpdate(.Username, n)
+                RaiseEvent FriendUpdate(.DisplayName, n)
             End With
         
         Case SID_FRIENDADDED
@@ -163,7 +161,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 '(STRING)         Account
                 s = KillNull(Mid$(Data, Position))
                 Position = Position + Len(s) + 1
-                .Username = s
+                .Name = s
                             
                 '(BYTE)       Friend Status
                 bytTemp = Asc(Mid$(Data, Position, 1))
@@ -173,23 +171,21 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 '(BYTE)       Friend Location
                 bytTemp = Asc(Mid$(Data, Position, 1))
                 Position = Position + 1
-                .Location = bytTemp
+                .LocationID = bytTemp
                 
                 '(DWORD)      ProductID
                 s = Mid$(Data, Position, 4)
                 Position = Position + 4
-                .Product = IIf(Conv(s) > 0, StrReverse(s), "OFFL")
+                .Game = IIf(Conv(s) > 0, StrReverse(s), "OFFL")
                 
                 '(STRING)         Channel
                 s = KillNull(Mid$(Data, Position))
-                .Channel = s
-                
-                .Username = convertUsername(.Username)
-                
-                RaiseEvent FriendAdded(.Username, .Product, .Location, .Status, .Channel)
+                .Location = s
+
+                RaiseEvent FriendAdded(.DisplayName, .Game, .LocationID, .Status, .Location)
             End With
             
-            g_Friends.Add flTemp, flTemp.Username
+            g_Friends.Add flTemp, flTemp.Name
             
             Set flTemp = Nothing
         
@@ -198,7 +194,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             bytTemp = Asc(Mid$(Data, 1, 1)) + 1
             
             If bytTemp > 0 And bytTemp <= g_Friends.Count Then
-                RaiseEvent FriendRemoved(g_Friends.Item(bytTemp).Username)
+                RaiseEvent FriendRemoved(g_Friends.Item(bytTemp).DisplayName)
                 
                 g_Friends.Remove bytTemp
             End If
@@ -236,7 +232,7 @@ Public Function UsernameToFLIndex(ByVal sUsername As String) As Integer
     
     If g_Friends.Count > 0 Then
         For i = 1 To g_Friends.Count
-            If StrComp(sUsername, g_Friends.Item(i).Username, vbTextCompare) = 0 Then
+            If StrComp(sUsername, g_Friends.Item(i).DisplayName, vbTextCompare) = 0 Then
                 UsernameToFLIndex = i
                 Exit Function
             End If
