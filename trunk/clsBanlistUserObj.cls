@@ -34,7 +34,7 @@ End Sub
 Public Property Get Name() As String
 
     ' ...
-    Name = m_name
+    Name = modEvents.CleanUsername(m_name)
 
 End Property
 
