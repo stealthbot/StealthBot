@@ -17,7 +17,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Dim PreviousFlags As Long     ' ...
     Dim Clan          As String
     Dim parsed        As String
-    Dim Pos           As Integer  ' ...
+    Dim pos           As Integer  ' ...
     Dim doUpdate      As Boolean  ' ...
     
     ' if our username is for some reason null, we don't
@@ -98,7 +98,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         .Name = Username
         .Flags = Flags
         .Ping = Ping
-        .game = Product
+        .Game = Product
     End With
     
     ' ...
@@ -131,10 +131,10 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         ' ...
         If ((BotVars.ChatDelay = 0) Or (UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
             ' ...
-            Pos = checkChannel(Username)
+            pos = checkChannel(Username)
             
             ' ...
-            If (Pos > 0) Then
+            If (pos > 0) Then
                 ' ...
                 'If (QueuedEventID > 0) Then
                 '    PreviousFlags = UserObj.Queue(QueuedEventID - 1).Flags
@@ -145,7 +145,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                         ((PreviousFlags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
             
                     ' ...
-                    frmChat.lvChannel.ListItems.Remove Pos
+                    frmChat.lvChannel.ListItems.Remove pos
                     
                     ' ...
                     AddName Username, Product, Flags, Ping, Clan
@@ -170,12 +170,12 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                 ' ...
                 If (doUpdate = True) Then
                     ' ...
-                    If (Pos) Then
+                    If (pos) Then
                         ' ...
-                        frmChat.lvChannel.ListItems.Remove Pos
+                        frmChat.lvChannel.ListItems.Remove pos
                         
                         ' ...
-                        AddName Username, Product, Flags, Ping, Clan, Pos
+                        AddName Username, Product, Flags, Ping, Clan, pos
                     End If
                 End If
             End If
@@ -643,7 +643,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Dim ToANSI As String
     
     ' ...
-    Username = convertUsername(CleanUsername(Username))
+    Username = convertUsername(Username)
     
     ' ...
     If (frmChat.mnuUTF8.Checked) Then
@@ -744,7 +744,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             Dim user       As String  ' ...
             Dim cOperator  As String  ' ...
             Dim msgPos     As Integer ' ...
-            Dim Pos        As Integer ' ...
+            Dim pos        As Integer ' ...
             Dim tmp        As String
             Dim banpos     As Integer ' ...
             Dim j          As Integer
@@ -757,10 +757,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 ' ...
                 If (Len(user) > 0) Then
                     ' ...
-                    Pos = g_Channel.GetUserIndex(CleanUsername(Username))
+                    pos = g_Channel.GetUserIndex(CleanUsername(Username))
                     
                     ' ...
-                    If (Pos > 0) Then
+                    If (pos > 0) Then
                         ' ...
                         Dim BanlistObj As clsBanlistUserObj
                                                 
@@ -776,7 +776,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                         
                         ' ...
                         If ((BotVars.StoreAllBans) Or _
-                                (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0)) Then
+                                (StrComp(Username, GetCurrentUsername, vbBinaryCompare) = 0)) Then
                             
                             ' ...
                             Set BanlistObj = New clsBanlistUserObj
@@ -900,16 +900,16 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     
     Dim i           As Integer ' ...
     Dim ToANSI      As String  ' ...
-    Dim Pos         As Integer ' ...
+    Dim pos         As Integer ' ...
     Dim PassedQueue As Boolean ' ...
     
     ' ...
-    Pos = g_Channel.GetUserIndexEx(CleanUsername(Username))
+    pos = g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     ' ...
-    If (Pos > 0) Then
+    If (pos > 0) Then
         ' ...
-        Set UserObj = g_Channel.Users(Pos)
+        Set UserObj = g_Channel.Users(pos)
         
         ' ...
         If (QueuedEventID = 0) Then
@@ -1042,7 +1042,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim index        As Long    ' ...
     Dim Stats        As String  ' ...
     Dim Clan         As String  ' ...
-    Dim Pos          As Integer ' ...
+    Dim pos          As Integer ' ...
     
     If (Len(Username) < 1) Then
         Exit Sub
@@ -1088,9 +1088,9 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
     ' ...
     With UserObj
-        .Name = CleanUsername(Username)
+        .Name = Username
         .Flags = Flags
-        .game = Product
+        .Game = Product
         .Ping = Ping
         .JoinTime = g_Channel.JoinTime
         .Clan = sClan
@@ -1132,12 +1132,12 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             ' ...
             If (BotVars.ShowStatsIcons) Then
                 ' ...
-                Pos = checkChannel(Username)
+                pos = checkChannel(Username)
                 
                 ' ...
-                If (Pos > 0) Then
+                If (pos > 0) Then
                     ' ...
-                    Set found = frmChat.lvChannel.ListItems(Pos)
+                    Set found = frmChat.lvChannel.ListItems(pos)
                     
                     ' ...
                     i = g_Channel.GetUserIndex(Username)
@@ -1147,13 +1147,13 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                         ' ...
                         If (g_ThisIconCode <> -1) Then
                             ' ...
-                            If (g_Channel.Users(i).game = "WAR3") Then
+                            If (g_Channel.Users(i).Game = "WAR3") Then
                                 ' ...
                                 If (found.SmallIcon = ICWAR3) Then
                                     ' ...
                                     found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
                                 End If
-                            ElseIf (g_Channel.Users(i).game = "W3XP") Then
+                            ElseIf (g_Channel.Users(i).Game = "W3XP") Then
                                 ' ...
                                 If (found.SmallIcon = ICWAR3X) Then
                                     ' ...
@@ -1230,6 +1230,9 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     If (QueuedEventID > 0) Then
         ' ...
         If (UserIndex = 0) Then
+            frmChat.AddChat vbRed, "Error: We have received a queued join event for a user that we " & _
+                "couldn't find in the channel."
+        
             Exit Sub
         End If
     
@@ -1243,38 +1246,38 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             
             ' ...
             With UserObj
-                .Name = CleanUsername(Username)
+                .Name = Username
                 .Flags = Flags
                 .Ping = Ping
-                .game = Product
+                .Game = Product
                 .JoinTime = Now
                 .Clan = sClan
                 .Statstring = OriginalStatstring
                 .Stats.Statstring = OriginalStatstring
             End With
-            
+
             ' ...
-            Set UserEvent = New clsUserEventObj
-            
-            ' ...
-            With UserEvent
-                .EventID = ID_JOIN
-                .Flags = Flags
-                .Ping = Ping
-                .GameID = Product
-                .Statstring = OriginalStatstring
-                .Clan = sClan
-                .IconCode = w3icon
-            End With
-            
-            ' ...
-            UserObj.Queue.Add UserEvent
+            If (BotVars.ChatDelay > 0) Then
+                ' ...
+                Set UserEvent = New clsUserEventObj
+                
+                ' ...
+                With UserEvent
+                    .EventID = ID_JOIN
+                    .Flags = Flags
+                    .Ping = Ping
+                    .GameID = Product
+                    .Statstring = OriginalStatstring
+                    .Clan = sClan
+                    .IconCode = w3icon
+                End With
+                
+                ' ...
+                UserObj.Queue.Add UserEvent
+            End If
 
             ' ...
             g_Channel.Users.Add UserObj
-            
-            ' ...
-            Call g_Channel.CheckUsers
         Else
             frmChat.AddChat vbRed, "Error: We have received a join event for a user that we had thought was " & _
                     "already present within the channel."
@@ -1380,7 +1383,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim Pos       As Integer
+    Dim pos       As Integer
     Dim bln       As Boolean
     
     ' ...
@@ -1482,15 +1485,15 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     Dim UsernameColor As Long ' ...
     Dim TextColor     As Long ' ...
     Dim CaratColor    As Long ' ...
-    Dim Pos           As Integer
+    Dim pos           As Integer
     
     ' ...
-    Pos = g_Channel.GetUserIndexEx(CleanUsername(Username))
+    pos = g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     ' ...
-    If (Pos > 0) Then
+    If (pos > 0) Then
         ' ...
-        Set UserObj = g_Channel.Users(Pos)
+        Set UserObj = g_Channel.Users(pos)
         
         ' ...
         UserObj.LastTalkTime = Now
@@ -2017,29 +2020,27 @@ Public Sub Event_ChannelList(sChannels() As String)
     frmChat.SControl.Run "Event_ChannelList", sChannels
 End Sub
 
-Private Function CleanUsername(ByVal Username As String) As String
+Public Function CleanUsername(ByVal Username As String) As String
     
     Dim tmp As String  ' ...
-    Dim Pos As Integer ' ...
+    Dim pos As Integer ' ...
     
     ' ...
     tmp = Username
     
     ' ...
-    Pos = InStr(1, tmp, "*", vbBinaryCompare)
+    pos = InStr(1, tmp, "*", vbBinaryCompare)
 
     ' ...
-    If (Pos > 0) Then
-        tmp = Mid$(Username, Pos + 1)
+    If (pos > 0) Then
+        tmp = Mid$(tmp, pos + 1)
         
         ' ...
         If (Right$(tmp, 1) = ")") Then
             tmp = Left$(tmp, Len(tmp) - 1)
         End If
     End If
-    
-    frmChat.AddChat vbRed, tmp
-    
+
     ' ...
     CleanUsername = tmp
     
@@ -2048,14 +2049,14 @@ End Function
 Private Function GetDiablo2CharacterName(ByVal Username As String) As String
 
     Dim tmp As String  ' ...
-    Dim Pos As Integer ' ...
+    Dim pos As Integer ' ...
     
     ' ...
-    Pos = InStr(1, Username, "*", vbBinaryCompare)
+    pos = InStr(1, Username, "*", vbBinaryCompare)
 
     ' ...
-    If (Pos > 0) Then
-        tmp = Mid$(Username, 1, Pos - 1)
+    If (pos > 0) Then
+        tmp = Mid$(Username, 1, pos - 1)
     End If
     
     ' ...

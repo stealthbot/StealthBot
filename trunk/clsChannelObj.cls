@@ -248,13 +248,13 @@ Public Function IsOnBanList(ByVal Username As String, Optional Operator As Strin
     Dim bln As Boolean ' ...
     
     ' ...
-    For i = 1 To m_banlist.Count
+    For i = 1 To Banlist.Count
         ' ...
-        If (StrComp(Banlist.Name, Username, vbTextCompare) = 0) Then
+        If (StrComp(Banlist(i).Name, Username, vbTextCompare) = 0) Then
             ' ...
             If (Operator <> vbNullString) Then
                 ' ...
-                If (StrComp(Banlist.Operator, Operator, vbTextCompare) = 0) Then
+                If (StrComp(Banlist(i).Operator, Operator, vbTextCompare) = 0) Then
                     bln = True
                 End If
             Else

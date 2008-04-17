@@ -65,7 +65,7 @@ End Sub
 Public Property Get Name() As String
 
     ' ...
-    Name = m_actual_name
+    Name = modEvents.CleanUsername(m_actual_name)
 
 End Property
 
@@ -149,7 +149,7 @@ End Property
 Public Property Get DisplayName() As String
 
     ' ...
-    DisplayName = convertUsername(Name)
+    DisplayName = convertUsername(m_actual_name)
 
 End Property
 
