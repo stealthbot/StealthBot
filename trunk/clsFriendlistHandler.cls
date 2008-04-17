@@ -44,7 +44,7 @@ Public Sub RequestFriendsList(ByRef pBuff As PacketBuffer)
 End Sub
 
 Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
-    On Error GoTo ERROR_HANDLER
+    'On Error GoTo ERROR_HANDLER
     
     Dim n As Long, bytTemp As Byte
     Dim s As String
@@ -98,9 +98,9 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                     '(DWORD)      ProductID
                     s = Mid$(Data, Position, 4)
                     If Conv(s) = 0 Then
-                        .Game = "OFFL"
+                        .game = "OFFL"
                     Else
-                        .Game = StrReverse(s)
+                        .game = StrReverse(s)
                     End If
                     Position = Position + 4
                     
@@ -117,7 +117,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 
                 g_Friends.Add flTemp
                 
-                RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.Game, flTemp.Location, flTemp.Status, _
+                RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.game, flTemp.Location, flTemp.Status, _
                      flTemp.LocationID)
                     
                 Set flTemp = Nothing
@@ -144,7 +144,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 '(DWORD) Product ID
                 s = Mid$(Data, Position, 4)
                 Position = Position + 4
-                .Game = StrReverse(s)
+                .game = StrReverse(s)
             
                 '(STRING) Location str (blank = private)
                 s = Mid$(Data, Position)
@@ -176,13 +176,13 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 '(DWORD)      ProductID
                 s = Mid$(Data, Position, 4)
                 Position = Position + 4
-                .Game = IIf(Conv(s) > 0, StrReverse(s), "OFFL")
+                .game = IIf(Conv(s) > 0, StrReverse(s), "OFFL")
                 
                 '(STRING)         Channel
                 s = KillNull(Mid$(Data, Position))
                 .Location = s
 
-                RaiseEvent FriendAdded(.DisplayName, .Game, .LocationID, .Status, .Location)
+                RaiseEvent FriendAdded(.DisplayName, .game, .LocationID, .Status, .Location)
             End With
             
             g_Friends.Add flTemp, flTemp.Name

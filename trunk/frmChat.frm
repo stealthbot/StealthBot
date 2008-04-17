@@ -1557,9 +1557,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -3092,16 +3092,16 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
                         
                         Select Case .Location
                             Case FRL_INCHAT
-                                sTemp = sTemp & ", in channel " & .Channel & "."
+                                sTemp = sTemp & ", in channel " & .Location & "."
                             Case FRL_PRIVATEGAME
-                                sTemp = sTemp & ", in game " & .Channel & "."
+                                sTemp = sTemp & ", in game " & .Location & "."
                             Case Else
                                 sTemp = sTemp & "."
                         End Select
                     End If
                     
                     If .Location = FRL_PUBLICGAME Then
-                        sTemp = sTemp & vbCrLf & "Currently in the public game '" & .Channel & "'."
+                        sTemp = sTemp & vbCrLf & "Currently in the public game '" & .Location & "'."
                     End If
                     
                     ListToolTip.TipText = sTemp
