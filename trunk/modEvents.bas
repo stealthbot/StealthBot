@@ -80,6 +80,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
             
             ' ...
             With UserObj
+                .Name = Username
                 .Statstring = Message
                 .Stats.Statstring = Message
                 .Clan = Clan
@@ -123,7 +124,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     ' we aren't in a silent channel, are we?
     If (g_Channel.IsSilent) Then
         ' ...
-        If (frmChat.lvChannel.ListItems.Count < 300) Then
+        If (frmChat.lvChannel.ListItems.Count < 200) Then
             AddName Username, Product, Flags, Ping, Clan
         End If
     Else
@@ -1047,7 +1048,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
 
     ' ...
     UserIndex = _
-        g_Channel.GetUserIndexEx(CleanUsername(Username))
+        g_Channel.GetUserIndexEx(Username)
     
     ' ...
     If (UserIndex > 0) Then
