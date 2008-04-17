@@ -96,7 +96,6 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     
     ' ...
     With UserObj
-        .Name = Username
         .Flags = Flags
         .Ping = Ping
     End With
