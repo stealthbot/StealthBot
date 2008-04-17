@@ -1214,6 +1214,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim UserIndex   As Integer ' ...
     Dim BanningUser As Boolean ' ...
     Dim pStats      As String
+    Dim IsBanned    As Boolean
     
     If (Len(Username) < 1) Then
         Exit Sub
@@ -1288,9 +1289,6 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
 
     ' ...
     If ((BotVars.ChatDelay = 0) Or (QueuedEventID > 0)) Then
-        ' ...
-        DoLastSeen Username
-    
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' GUI
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1314,36 +1312,45 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             FlashWindow
         End If
         
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        ' Greet message
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-
-        If (BotVars.UseGreet) Then
-            ' ...
-            If (LenB(BotVars.GreetMsg)) Then
+        ' ...
+        Call DoLastSeen(Username)
+        
+        ' ...
+        IsBanned = (g_Channel.CheckUsers > 0)
+        
+        ' ...
+        If (IsBanned = False) Then
+            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+            ' Greet message
+            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    
+            If (BotVars.UseGreet) Then
                 ' ...
-                If (StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) <> 0) Then
+                If (LenB(BotVars.GreetMsg)) Then
                     ' ...
-                    If (BotVars.WhisperGreet) Then
-                        frmChat.AddQ "/w " & Username & _
-                            Space$(1) & DoReplacements(BotVars.GreetMsg, Username, Ping)
-                    Else
-                        frmChat.AddQ DoReplacements(BotVars.GreetMsg, Username, Ping)
+                    If (StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) <> 0) Then
+                        ' ...
+                        If (BotVars.WhisperGreet) Then
+                            frmChat.AddQ "/w " & Username & _
+                                Space$(1) & DoReplacements(BotVars.GreetMsg, Username, Ping)
+                        Else
+                            frmChat.AddQ DoReplacements(BotVars.GreetMsg, Username, Ping)
+                        End If
                     End If
                 End If
             End If
-        End If
+                
+            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+            ' Botmail
+            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
             
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        ' Botmail
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        
-        If (Mail) Then
-            l = GetMailCount(Username)
-            
-            If (l > 0) Then
-                frmChat.AddQ "/w " & Username & " You have " & l & _
-                    " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
+            If (Mail) Then
+                l = GetMailCount(Username)
+                
+                If (l > 0) Then
+                    frmChat.AddQ "/w " & Username & " You have " & l & _
+                        " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
+                End If
             End If
         End If
             
@@ -1360,7 +1367,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
 
         ' ...
         frmChat.SControl.Run "Event_UserJoins", Username, Flags, pStats, Ping, _
-            Product, 0, OriginalStatstring, False
+            Product, 0, OriginalStatstring, IsBanned
     End If
     
     Exit Sub
@@ -1385,7 +1392,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     
     ' ...
     UserIndex = _
-        g_Channel.GetUserIndexEx(CleanUsername(Username))
+        g_Channel.GetUserIndexEx(Username)
     
     ' ...
     If (UserIndex > 0) Then
@@ -1485,7 +1492,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     Dim Pos           As Integer
     
     ' ...
-    Pos = g_Channel.GetUserIndexEx(CleanUsername(Username))
+    Pos = g_Channel.GetUserIndexEx(Username)
     
     ' ...
     If (Pos > 0) Then
