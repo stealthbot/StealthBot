@@ -2819,7 +2819,7 @@ End Sub
 
 Private Sub FriendListHandler_FriendAdded(ByVal Username As String, ByVal Product As String, ByVal Location As Byte, ByVal Status As Byte, ByVal Channel As String)
     'AddFriend Username, Product, (Location > 0)
-    lblCurrentChannel.Caption = GetChannelString
+    'lblCurrentChannel.Caption = GetChannelString
 End Sub
 
 Private Sub FriendListHandler_FriendListEntry(ByVal Username As String, ByVal Product As String, ByVal Channel As String, ByVal Status As Byte, ByVal Location As Byte)
@@ -2834,7 +2834,7 @@ Private Sub FriendListHandler_FriendMoved()
 End Sub
 
 Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
-    Dim X As ListItem
+    'Dim X As ListItem
     
     'Set X = lvFriendList.FindItem(Username)
    
@@ -2844,7 +2844,7 @@ Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
     '    Set X = Nothing
     'End If
     
-    lblCurrentChannel.Caption = GetChannelString
+    'lblCurrentChannel.Caption = GetChannelString
 End Sub
 
 Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLIndex As Byte)
