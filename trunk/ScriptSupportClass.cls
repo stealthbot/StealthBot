@@ -1149,8 +1149,8 @@ End Function
 
 
 '// DSP
-'// Written by Swent. Displays messages via the specified output type and allows for unlimited message lengths.
-'//     Syntax: Dsp Output, Message, [Username], [Color], [Delimiter]
+'//     Displays messages via the specified output type and allows for unlimited message lengths.
+'//     Syntax: Dsp Output, Message, [Username], [Color]
 '//     Output must be one of the following integer values:
 '//         1 = AddQ
 '//             Example: Dsp 1, "Example message"
@@ -1160,53 +1160,22 @@ End Function
 '//             Example: Dsp 3, "Example message", "JoeUser"
 '//         4 = AddChat
 '//             Example: Dsp 4, "Example message", , vbCyan
-'//     Delimiter is " " by default, and only applies for messages > 223 characters.
-Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVal strUsername As String, Optional ByVal lngColor As Long, Optional ByVal strDelimiter As String)
+Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVal strUsername As String, Optional ByVal lngColor As Long = 16777215)
 
-    If intID < 4 Then
-        Dim arrQueue() As String, arrMessage() As String
-        Dim tmpMsgPart As String, strDelim As String, strProduct As String
-        Dim i As Integer
-        ReDim arrQueue(0)
-        
-        If intID = 3 Then
-            strProduct = GetInternalDataByUsername(BotVars.Username, 3)
-            If strProduct = "D2DV" Or strProduct = "D2XP" Then strUsername = "*" & strUsername
-        End If
-        If Len(strDelimiter) = 0 Then strDelimiter = " "
-        
-        '// If message is too long to display in a single AddQ, split into multiple messages
-        If Len(strMessage) > 223 And InStr(strMessage, strDelimiter) Then
-            arrMessage = Split(strMessage)
-            
-            For i = 0 To UBound(arrMessage)
-                If Len(tmpMsgPart & arrMessage(i) & strDelimiter) < 206 Then
-                    tmpMsgPart = tmpMsgPart & arrMessage(i) & strDelimiter
-                Else
-                    arrQueue(UBound(arrQueue)) = tmpMsgPart & "[more]"
-                    ReDim Preserve arrQueue(UBound(arrQueue) + 1)
-                    tmpMsgPart = arrMessage(i) & strDelimiter
-                End If
-            Next
-            arrQueue(UBound(arrQueue)) = Left(tmpMsgPart, Len(tmpMsgPart) - 1)
-        Else
-            arrQueue(0) = strMessage
-        End If
-        If UBound(arrQueue) > 0 Then PadQueueCounter
-
-        '// Display the message(s)
-        For i = 0 To UBound(arrQueue)
-            If Len(arrQueue(i)) > 0 Then
-                Select Case intID
-                    Case 1: AddQ arrQueue(i)
-                    Case 2: AddQ "/me " & arrQueue(i)
-                    Case 3: AddQ "/w " & strUsername & " " & arrQueue(i)
-                End Select
+    Select Case intID
+        Case 1
+            AddQ strMessage
+        Case 2
+            AddQ "/me " & strMessage
+        Case 3
+            If Len(strUsername) = 0 Then
+                AddChat vbRed, "Dsp whisper error: You did not supply a username."
+                Exit Sub
             End If
-        Next
-    Else
-        AddChat lngColor, strMessage
-    End If
+            AddQ "/w " & strUsername & " " & strMessage
+        Case 4
+            AddChat lngColor, strMessage
+    End Select
 End Sub
 
 
