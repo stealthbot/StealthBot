@@ -176,8 +176,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             Message = inBuf.GetNTString
         
             RaiseEvent ClanMOTD(cookie, Message)
-            
-        
+
         Case Else
         
             RaiseEvent UnknownClanEvent(PacketID, DebugOutput(Data))

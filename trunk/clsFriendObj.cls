@@ -86,6 +86,12 @@ Public Property Get IsAway() As Boolean
 
 End Property
 
+Public Property Get DontDisturb() As Boolean
+
+    DontDisturb = (Status = 2)
+
+End Property
+
 Public Property Get IsOnline() As Boolean
 
     IsOnline = (LocationID > 0)

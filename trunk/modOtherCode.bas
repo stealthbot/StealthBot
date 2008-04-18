@@ -209,7 +209,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
     Dim Username        As String
     Dim CleanedUsername As String
     Dim i               As Integer
-    Dim Pos             As Integer
+    Dim pos             As Integer
     
     If (LenB(Inpt) > 0) Then
         If (Kick > 2) Then
@@ -245,10 +245,10 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
                     Exit Function
                 End If
                 
-                Pos = g_Channel.GetUserIndex(Username)
+                pos = g_Channel.GetUserIndex(Username)
                 
-                If (Pos > 0) Then
-                    If (g_Channel.Users(Pos).IsOperator) Then
+                If (pos > 0) Then
+                    If (g_Channel.Users(pos).IsOperator) Then
                         Ban = "Error: You cannot ban a channel operator."
                     
                         Exit Function
@@ -689,7 +689,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             ' ...
                             For j = 1 To g_Channel.Users.Count
                                 If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
-                                    If (StrComp(DB(i).Username, g_Channel.Users(j).game, vbTextCompare) = 0) Then
+                                    If (StrComp(DB(i).Username, g_Channel.Users(j).Game, vbTextCompare) = 0) Then
                                         ' ...
                                         doCheck = True
                                     End If
@@ -2292,7 +2292,7 @@ End Sub
 ' Returns a single chunk of a string as if that string were Split() and that chunk
 ' extracted
 ' 1-based
-Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
+Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
     Dim c           As Integer
     Dim i           As Integer
     Dim TargetSpace As Integer
@@ -2302,10 +2302,10 @@ Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
     
     c = 0
     i = 1
-    Pos = Pos
+    pos = pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While ((c < Pos) And (i > 0))
+    While ((c < pos) And (i > 0))
         TargetSpace = i
         
         i = (InStr(i + 1, str, Space(1), vbBinaryCompare))
@@ -2313,7 +2313,7 @@ Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
         c = (c + 1)
     Wend
     
-    If (c >= Pos) Then
+    If (c >= pos) Then
         c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
         If (c > 0) Then
@@ -2368,18 +2368,21 @@ Public Function InsertDummyQueueEntry()
     frmChat.AddQ "%%%%%blankqueuemessage%%%%%"
 End Function
 
-' This procedure splits a message by a specified length, with optional line postfixes
+' This procedure splits a message by a specified length, with optional line LinePostfixes
 ' and split delimiters.
-Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef StringRet() As String, _
-    Optional LinePostfix As String = " [more]", Optional OversizeDelimiter As String = " ")
+Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef StringRet() As String, Optional LinePrefix As String = _
+    vbNullString, Optional LinePostfix As String = " [more]", Optional OversizeDelimiter As String = " ") As Integer
     
     ' ...
     On Error GoTo ERROR_HANDLER
+
+    ' maximum size of battle.net messages
+    Const BNET_MSG_LENGTH = 223
     
     Dim lineCount As Long    ' stores line number
-    Dim Pos       As Long    ' stores position of delimiter
+    Dim pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
-    Dim length    As Long    ' stores length after postfix
+    Dim length    As Long    ' stores length after LinePostfix
     Dim bln       As Boolean ' stores result of delimiter split
     
     ' initialize our array
@@ -2388,6 +2391,21 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     ' default our first index
     StringRet(0) = vbNullString
     
+    ' ...
+    If (LinePrefix >= SplitLength) Then
+        Exit Function
+    End If
+    
+    ' ...
+    If (LinePostfix >= SplitLength) Then
+        Exit Function
+    End If
+    
+    ' ...
+    If (SplitLength = 0) Then
+        SplitLength = BNET_MSG_LENGTH
+    End If
+    
     ' do loop until our string is empty
     Do While (StringSplit <> vbNullString)
         ' resize array so that it can store
@@ -2395,27 +2413,18 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
         ReDim Preserve StringRet(lineCount)
         
         ' store working copy of string
-        strTmp = StringSplit
+        strTmp = LinePrefix & StringSplit
         
         ' does our string already equal to or fall
         ' below the specified length?
         If (Len(strTmp) <= SplitLength) Then
-            ' ...
-            'If (Right$(strTmp, _
-            '    Len(OversizeDelimiter)) = OversizeDelimiter) Then
-            '
-            '    ' ...
-            '    strTmp = Left$(strTmp, Len(strTmp) - _
-            '        Len(OversizeDelimiter))
-            'End If
-        
             ' assign our string to the current line
             StringRet(lineCount) = strTmp
         Else
             ' Our string is over the size limit, so we're
             ' going to postfix it.  Because of this, we're
             ' going to have to calculate the length after
-            ' the post fix has been accounted for.
+            ' the postfix has been accounted for.
             length = (SplitLength - Len(LinePostfix))
         
             ' if we're going to be splitting the oversized
@@ -2423,10 +2432,9 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' determine the position of the character in the
             ' string
             If (OversizeDelimiter <> vbNullString) Then
-                ' grab position of delimiter character that is
-                ' the closest to our specified length
-                Pos = InStrRev(StringSplit, OversizeDelimiter, _
-                    length, vbBinaryCompare)
+                ' grab position of delimiter character that is the closest to our
+                ' specified length
+                pos = InStrRev(StringSplit, OversizeDelimiter, length, vbBinaryCompare)
             End If
             
             ' if the delimiter we were looking for was found,
@@ -2434,9 +2442,9 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((Pos) And (Pos >= Round(length / 2))) Then
+            If ((pos) And (pos >= Round(length / 2))) Then
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, Pos - 1)
+                strTmp = Mid$(strTmp, 1, pos - 1)
                 
                 ' indicate that an additional
                 ' character will require removal
@@ -2448,13 +2456,11 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             End If
             
             ' store truncated message in line
-            StringRet(lineCount) = strTmp & _
-                LinePostfix
+            StringRet(lineCount) = strTmp & LinePostfix
         End If
         
         ' remove line from official string
-        StringSplit = Mid$(StringSplit, _
-            (Len(strTmp) + 1))
+        StringSplit = Mid$(StringSplit, (Len(strTmp) + 1))
         
         ' if we need to remove an additional
         ' character, lets do so now.
@@ -2466,10 +2472,14 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
         lineCount = (lineCount + 1)
     Loop
     
+    ' ...
+    SplitByLen = lineCount
+    
+    ' ...
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, Err.description & " in SplitByLen().")
+    frmChat.AddChat vbRed, Err.description & " in SplitByLen()."
     
     Exit Function
 End Function

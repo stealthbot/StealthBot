@@ -1886,8 +1886,7 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' ...
     If (g_Channel.Banlist.Count = 0) Then
         ' ...
-        cmdRet(0) = "There have been no users banned since I have joined " & _
-            "the channel."
+        cmdRet(0) = "There are presently no users on the bot's internal banlist."
     
         ' ...
         Exit Function
@@ -2197,13 +2196,13 @@ Private Function OnNext(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim Pos As Integer ' ...
+        Dim pos As Integer ' ...
         
         ' ...
-        Pos = MediaPlayer.PlaylistPosition
+        pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(Pos + 1)
+        Call MediaPlayer.PlayTrack(pos + 1)
         
         ' ...
         tmpBuf = "Skipped forwards."
@@ -4146,7 +4145,7 @@ Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
         With g_Channel.Users(UserIndex)
             tmpBuf(0) = "User " & .Name & " is logged on using " & _
-                ProductCodeToFullName(.game)
+                ProductCodeToFullName(.Game)
             
             If (.IsOperator) Then
                 tmpBuf(0) = tmpBuf(0) & " with ops, and a ping time of " & .Ping & "ms."
@@ -4356,13 +4355,13 @@ Private Function OnPrev(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim Pos As Integer ' ...
+        Dim pos As Integer ' ...
         
         ' ...
-        Pos = MediaPlayer.PlaylistPosition
+        pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(Pos - 1)
+        Call MediaPlayer.PlayTrack(pos - 1)
         
         ' ...
         tmpBuf = "Skipped backwards."
@@ -6274,27 +6273,10 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
 
         If (found = 0) Then
             ' return message
-            arrReturn(0) = _
-                "No such user(s) found."
+            arrReturn(0) = "No such user(s) found."
         Else
-            Dim prefix As String ' ...
-            Dim arr()  As String ' ...
-            
             ' ...
-            prefix = "User(s) found: "
-        
-            ' ...
-            Call SplitByLen(tmpBuf, 80 - _
-                Len(prefix), arr(), " [more]", ", ")
-            
-            ' ...
-            For i = 0 To UBound(arr)
-                ' ...
-                arr(i) = prefix & arr(i)
-            Next i
-            
-            ' return message
-            arrReturn() = arr()
+            Call SplitByLen(tmpBuf, 0, arrReturn(), "User(s) found: ", " [more]", ", ")
         End If
     End If
     
