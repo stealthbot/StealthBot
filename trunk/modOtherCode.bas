@@ -2392,6 +2392,11 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     StringRet(0) = vbNullString
     
     ' ...
+    If (SplitLength = 0) Then
+        SplitLength = BNET_MSG_LENGTH
+    End If
+    
+    ' ...
     If (Len(LinePrefix) >= SplitLength) Then
         Exit Function
     End If
@@ -2399,11 +2404,6 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     ' ...
     If (Len(LinePostfix) >= SplitLength) Then
         Exit Function
-    End If
-    
-    ' ...
-    If (SplitLength = 0) Then
-        SplitLength = BNET_MSG_LENGTH
     End If
     
     ' do loop until our string is empty
@@ -2434,7 +2434,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             If (OversizeDelimiter <> vbNullString) Then
                 ' grab position of delimiter character that is the closest to our
                 ' specified length
-                pos = InStrRev(StringSplit, OversizeDelimiter, length, vbBinaryCompare)
+                pos = InStrRev(strTmp, OversizeDelimiter, length, vbBinaryCompare)
             End If
             
             ' if the delimiter we were looking for was found,
@@ -2460,7 +2460,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
         End If
         
         ' remove line from official string
-        StringSplit = Mid$(StringSplit, (Len(strTmp) + 1))
+        StringSplit = Mid$(StringSplit, Len(strTmp) + 1)
         
         ' if we need to remove an additional
         ' character, lets do so now.

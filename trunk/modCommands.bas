@@ -6115,8 +6115,8 @@ End Function
 
 Private Function searchDatabase(ByRef arrReturn() As String, Optional user As String = vbNullString, _
     Optional ByVal match As String = vbNullString, Optional Group As String = vbNullString, _
-    Optional dbType As String = vbNullString, Optional lowerBound As Integer = -1, _
-    Optional upperBound As Integer = -1, Optional Flags As String = vbNullString) As Integer
+        Optional dbType As String = vbNullString, Optional lowerBound As Integer = -1, _
+            Optional upperBound As Integer = -1, Optional Flags As String = vbNullString) As Integer
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -6276,7 +6276,8 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
             arrReturn(0) = "No such user(s) found."
         Else
             ' ...
-            Call SplitByLen(tmpBuf, 0, arrReturn(), "User(s) found: ", " [more]", ", ")
+            Call SplitByLen(Mid$(tmpBuf, 1, Len(tmpBuf) - Len(", ")), 0, arrReturn(), _
+                "User(s) found: ", " [more]", ", ")
         End If
     End If
     
