@@ -4145,7 +4145,7 @@ Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
         With g_Channel.Users(UserIndex)
             tmpBuf(0) = "User " & .Name & " is logged on using " & _
-                ProductCodeToFullName(.Game)
+                ProductCodeToFullName(.game)
             
             If (.IsOperator) Then
                 tmpBuf(0) = tmpBuf(0) & " with ops, and a ping time of " & .Ping & "ms."
@@ -6276,7 +6276,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
             arrReturn(0) = "No such user(s) found."
         Else
             ' ...
-            Call SplitByLen(Mid$(tmpBuf, 1, Len(tmpBuf) - Len(", ")), 0, arrReturn(), _
+            Call SplitByLen(Mid$(tmpBuf, 1, Len(tmpBuf) - Len(", ")), 180, arrReturn(), _
                 "User(s) found: ", " [more]", ", ")
         End If
     End If

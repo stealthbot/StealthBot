@@ -689,7 +689,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             ' ...
                             For j = 1 To g_Channel.Users.Count
                                 If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
-                                    If (StrComp(DB(i).Username, g_Channel.Users(j).Game, vbTextCompare) = 0) Then
+                                    If (StrComp(DB(i).Username, g_Channel.Users(j).game, vbTextCompare) = 0) Then
                                         ' ...
                                         doCheck = True
                                     End If
@@ -2434,7 +2434,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             If (OversizeDelimiter <> vbNullString) Then
                 ' grab position of delimiter character that is the closest to our
                 ' specified length
-                pos = InStrRev(strTmp, OversizeDelimiter, length, vbBinaryCompare)
+                pos = InStrRev(strTmp, OversizeDelimiter, length, vbTextCompare)
             End If
             
             ' if the delimiter we were looking for was found,
@@ -2460,12 +2460,12 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
         End If
         
         ' remove line from official string
-        StringSplit = Mid$(StringSplit, Len(strTmp) + 1)
+        StringSplit = Mid$(StringSplit, (Len(strTmp) - Len(LinePrefix)) + 1)
         
         ' if we need to remove an additional
         ' character, lets do so now.
         If (bln) Then
-            StringSplit = Mid$(StringSplit, 2)
+            StringSplit = Mid$(StringSplit, Len(OversizeDelimiter) + 1)
         End If
             
         ' increment line counter
