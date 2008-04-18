@@ -117,7 +117,7 @@ Const PS_SET_PATH = "plugins\settings.ini"
 Const PS_PREFIX_DISALLOW = "|ps|script|protect|phrasebans|ipbans|idle|koy|plugban|chpw|ib|efp|floodmode|debug"
 Const PS_COLORS = "65280,39423"
 Const PS_PC_VER = 2.4
-Const PS_SM_VER = 1.1
+Const PS_SM_VER = 1.2
 
 Public psPrefixes       '// holds prefixes of loaded plugins
 Public psTitles         '// holds plugin titles
