@@ -630,6 +630,10 @@ Public Sub Event_ServerError(ByVal Message As String)
 End Sub
 
 Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
+
+    ' ...
+    On Error GoTo ERROR_HANDLER
+
     Const MSG_BANNED      As String = " was banned by "
     Const MSG_UNBANNED    As String = " was unbanned by "
     Const MSG_SQUELCHED   As String = " has been squelched."
@@ -880,6 +884,13 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     On Error Resume Next
     
     frmChat.SControl.Run "Event_ServerInfo", Message
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in Event_ServerInfo()."
+
+    Exit Sub
 End Sub
 
 Public Sub Event_SomethingUnknown(ByVal UnknownString As String)
