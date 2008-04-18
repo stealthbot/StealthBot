@@ -2392,12 +2392,12 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     StringRet(0) = vbNullString
     
     ' ...
-    If (LinePrefix >= SplitLength) Then
+    If (Len(LinePrefix) >= SplitLength) Then
         Exit Function
     End If
     
     ' ...
-    If (LinePostfix >= SplitLength) Then
+    If (Len(LinePostfix) >= SplitLength) Then
         Exit Function
     End If
     
