@@ -2479,7 +2479,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, Err.description & " in SplitByLen()."
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in SplitByLen()."
     
     Exit Function
 End Function
