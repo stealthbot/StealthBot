@@ -853,7 +853,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -879,7 +878,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1757,6 +1755,13 @@ Private Sub Form_Load()
 '    BotVars.ProxyIP = "213.210.194.139"
 '    BotVars.ProxyPort = 1080
     'BotVars.ProxyIsSocks5 = True
+    
+    Dim blah As New clsUserStats
+    
+    With blah
+        .Statstring = "PX2DUSEast,KL-HarvestTime,„€ÿÿQÿÿÿÿÿÿÿÿÿÿÿÿZèšÿÿÿÿ"
+        'AddChat vbBlue, .ActsCompleted
+    End With
 End Sub
 
 Private Sub Form_GotFocus()
@@ -2339,13 +2344,13 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     AddChat vbYellow, "[CLAN] " & Member & " has left the clan."
     
     Dim X   As ListItem
-    Dim pos As Integer
+    Dim Pos As Integer
     
-    pos = g_Clan.GetUserIndexEx(Member)
+    Pos = g_Clan.GetUserIndexEx(Member)
     
     ' ...
-    If (pos > 0) Then
-        g_Clan.Members.Remove pos
+    If (Pos > 0) Then
+        g_Clan.Members.Remove Pos
     End If
     
 
@@ -2500,12 +2505,12 @@ End Sub
 
 Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
     Dim X   As ListItem
-    Dim pos As Integer
+    Dim Pos As Integer
     
-    pos = g_Clan.GetUserIndexEx(Username)
+    Pos = g_Clan.GetUserIndexEx(Username)
     
-    If (pos > 0) Then
-        With g_Clan.Members(pos)
+    If (Pos > 0) Then
+        With g_Clan.Members(Pos)
             .Rank = Rank
             .Status = IsOnline
             .Location = Location
@@ -2869,7 +2874,7 @@ Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLInd
                     
                     X.ListSubItems.Item(1).ReportIcon = ICONLINE
                     
-                    Select Case .Game
+                    Select Case .game
                         Case Is = "STAR": i = ICSTAR
                         Case Is = "SEXP": i = ICSEXP
                         Case Is = "D2DV": i = ICD2DV
@@ -3016,7 +3021,7 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, 
             aInx = g_Channel.GetUserIndex(GetSelectedUser)
             
             If aInx > 0 Then
-                sProd = g_Channel.Users(aInx).Game
+                sProd = g_Channel.Users(aInx).game
             
                 mnuPopWebProfile.Enabled = (sProd = "W3XP" Or sProd = "WAR3")
                 mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And g_Clan.Self.Rank >= 3)
@@ -3066,7 +3071,7 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
 '                    Public Const FRL_PUBLICGAME& = &H3
 '                    Public Const FRL_PRIVATEGAME& = &H5
                     If .IsOnline Then
-                        sTemp = sTemp & "Using " & ProductCodeToFullName(.Game) & " "
+                        sTemp = sTemp & "Using " & ProductCodeToFullName(.game) & " "
                     End If
                     
                     Select Case .LocationID
@@ -4497,7 +4502,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 If (LCase$(s) = "/fl" And MDebug("debug")) Then
                                     For n = 1 To g_Friends.Count
                                         AddChat vbMagenta, g_Friends.Item(n).Name & _
-                                            " - " & g_Friends.Item(n).Game
+                                            " - " & g_Friends.Item(n).game
                                     Next n
                                 
                                 ElseIf (LCase$(s) = "/accountinfo") Then
@@ -5415,7 +5420,7 @@ End Sub
 Private Sub UpTimer_Timer()
     Dim newColor As Long
     Dim i        As Integer
-    Dim pos      As Integer
+    Dim Pos      As Integer
 
     uTicks = uTicks + 1000
     
@@ -5472,17 +5477,17 @@ Private Sub UpTimer_Timer()
                 ' ...
                 If (BotVars.NoColoring = False) Then
                     ' ...
-                    pos = checkChannel(.DisplayName)
+                    Pos = checkChannel(.DisplayName)
                 
                     ' ...
-                    If (pos > 0) Then
+                    If (Pos > 0) Then
                         ' ...
                         newColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
                             GetCurrentUsername, vbBinaryCompare) = 0)
                         
                         ' ...
-                        If (lvChannel.ListItems(pos).ForeColor <> newColor) Then
-                            lvChannel.ListItems(pos).ForeColor = newColor
+                        If (lvChannel.ListItems(Pos).ForeColor <> newColor) Then
+                            lvChannel.ListItems(Pos).ForeColor = newColor
                         End If
                     End If
                 End If
@@ -6039,7 +6044,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             ParseStatstring CurrentUser.Statstring, outbuf, outbuf
         
             ' ...
-            AddName CurrentUser.DisplayName, CurrentUser.Game, CurrentUser.Flags, CurrentUser.Ping, _
+            AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Flags, CurrentUser.Ping, _
                 CurrentUser.Clan
         Next i
         
@@ -6051,7 +6056,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             ' ...
             Set CurrentUser = g_Friends(i)
         
-            AddFriend CurrentUser.DisplayName, CurrentUser.Game, CurrentUser.Status
+            AddFriend CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Status
         Next i
     End If
     

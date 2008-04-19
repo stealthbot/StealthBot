@@ -17,26 +17,29 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_stat_string     As String
-Private m_game            As String
-Private m_icon            As String
-Private m_spawn           As Boolean
-Private m_clan            As String
-Private m_level           As Long
-Private m_character_class As String
-Private m_wins            As Long
-Private m_ladder_rating   As Long
-Private m_high_rating     As Long
-Private m_ladder_rank     As Long
-Private m_strength        As Long
-Private m_dexterity       As Long
-Private m_vitality        As Long
-Private m_gold            As Long
-Private m_magic           As Long
-Private m_dots            As Long
-Private m_expansion       As Boolean
-Private m_hardcore        As Boolean
-Private m_realm           As String
+Private m_stat_string         As String
+Private m_game                As String
+Private m_icon                As String
+Private m_spawn               As Boolean
+Private m_clan                As String
+Private m_level               As Long
+Private m_character_name      As String
+Private m_character_class_id  As Integer
+Private m_character_flags     As Long
+Private m_acts_completed      As Long
+Private m_wins                As Long
+Private m_ladder_rating       As Long
+Private m_high_rating         As Long
+Private m_ladder_rank         As Long
+Private m_strength            As Long
+Private m_dexterity           As Long
+Private m_vitality            As Long
+Private m_gold                As Long
+Private m_magic               As Long
+Private m_dots                As Long
+Private m_expansion           As Boolean
+Private m_hardcore            As Boolean
+Private m_realm               As String
 
 Public Property Let game(str As String)
 
@@ -231,7 +234,7 @@ Public Property Let Statstring(str As String)
     game = StrReverse$(Left$(str, 4))
 
     ' ...
-    m_stat_string = Mid$(str, 6)
+    m_stat_string = Mid$(str, 5)
 
     ' ...
     Call Parse
@@ -343,45 +346,140 @@ Public Property Let Level(lng As Long)
 
 End Property
 
-Public Property Get CharacterClass() As String
+Public Property Get CharacterName() As String
 
     ' ...
-    CharacterClass = m_character_class
+    CharacterName = m_character_name
 
 End Property
 
-Public Property Let CharacterClass(str As String)
+Public Property Let CharacterName(str As String)
 
     ' ...
-    m_character_class = str
+    m_character_name = str
+
+End Property
+
+Public Property Get CharacterClassID() As Integer
+
+    ' ...
+    CharacterClassID = m_character_class_id
+
+End Property
+
+Public Property Let CharacterClassID(i As Integer)
+
+    ' ...
+    m_character_class_id = i
+
+End Property
+
+Public Property Get CharacterClass() As String
+    
+    ' ...
+    If ((game = "D2DV") Or (game = "D2XP")) Then
+    
+        Dim DIIClasses(0 To 7) As String ' ...
+        
+        DIIClasses(0) = "Amazon"
+        DIIClasses(1) = "Sorceress"
+        DIIClasses(2) = "Necromancer"
+        DIIClasses(3) = "Paladin"
+        DIIClasses(4) = "Barbarian"
+        DIIClasses(5) = "Druid"
+        DIIClasses(6) = "Assassin"
+    
+        ' ...
+        If (CharacterClassID - 1 <= UBound(DIIClasses)) Then
+            CharacterClass = DIIClasses(CharacterClassID - 1)
+        End If
+        
+    End If
+
+End Property
+
+Public Property Let CharacterFlags(lng As Long)
+
+    ' ...
+    m_character_flags = lng
+
+End Property
+
+Public Property Get CharacterFlags() As Long
+
+    ' ...
+    CharacterFlags = m_character_flags
 
 End Property
 
 Public Property Get IsHardcoreCharacter() As Boolean
 
     ' ...
-    IsHardcoreCharacter = m_hardcore
+    IsHardcoreCharacter = ((CharacterFlags And &H4) = &H4)
 
 End Property
 
-Public Property Let IsHardcoreCharacter(bln As Boolean)
-
-    ' ...
-    m_hardcore = bln
-
-End Property
+'Public Property Get IsFemaleCharacter() As Boolean
+'
+'    ' ...
+'    IsFemaleCharacter = m_hardcore
+'
+'End Property
 
 Public Property Get IsExpansionCharacter() As Boolean
 
     ' ...
-    IsExpansionCharacter = m_expansion
+    IsExpansionCharacter = ((CharacterFlags And &H20) = &H20)
 
 End Property
 
-Public Property Let IsExpansionCharacter(bln As Boolean)
+Public Property Get IsCharacterDead() As Boolean
 
     ' ...
-    m_expansion = bln
+    IsCharacterDead = ((IsHardcoreCharacter) And ((CharacterFlags And &H8) = &H8))
+
+End Property
+
+Public Property Get IsLadderCharacter() As Boolean
+
+    ' ...
+    IsLadderCharacter = ((CharacterFlags And &H40) = &H40)
+
+End Property
+
+Public Property Get ActsCompleted() As Integer
+
+    ' ...
+    ActsCompleted = m_acts_completed
+
+End Property
+
+Public Property Let ActsCompleted(i As Integer)
+
+    ' ...
+    m_acts_completed = i
+
+End Property
+
+Public Property Get CurrentDifficulty() As String
+
+    Dim difficulty As Integer ' ...
+
+    ' ...
+    If ((game = "D2DV") Or (game = "D2XP")) Then
+        ' ...
+        If (game = "D2DV") Then
+            difficulty = (ActsCompleted / (4 * 3))
+        Else
+            difficulty = (ActsCompleted / (5 * 3))
+        End If
+        
+        Select Case (difficulty)
+            Case 0: CurrentDifficulty = "Normal"
+            Case 1: CurrentDifficulty = "Nightmare"
+            Case 2: CurrentDifficulty = "Hell"
+        End Select
+    End If
 
 End Property
 
@@ -510,6 +608,8 @@ Private Sub Parse()
         Case "D2DV", "D2XP"
             Call ParseDiabloII
             
+            frmChat.AddChat vbYellow, ActsCompleted & " -> " & CurrentDifficulty
+            
         ' ...
         Case "W2BN"
             Call ParseWarCraftII
@@ -557,7 +657,7 @@ Private Sub ParseDiablo()
     
     ' ...
     Level = Val(values(0))
-    CharacterClass = Val(values(1))
+    CharacterClassID = Val(values(1))
     Dots = Val(values(2))
     Strength = Val(values(3))
     Magic = Val(values(4))
@@ -569,11 +669,31 @@ End Sub
 
 Private Sub ParseDiabloII()
 
-    Dim values() As String ' ...
+    Dim values()   As String ' ...
+    Dim charData() As String   ' ...
 
     ' ...
-    values() = Split(Statstring, Space$(1))
-
+    values() = Split(Statstring, ",")
+    
+    ' ...
+    If (UBound(values) > 0) Then
+        frmChat.AddChat vbRed, Statstring
+        
+        ' ...
+        Realm = values(0)
+        CharacterName = values(1)
+        
+        ' ...
+        SplitByLen values(2), 1, charData(), vbNullString, vbNullString
+        
+        ' ...
+        CharacterClassID = Asc(charData(13))
+        Level = Asc(charData(25))
+        CharacterFlags = Asc(charData(26))
+        ActsCompleted = (Asc(charData(27)) And &H18)
+    End If
+    
+    
 End Sub
 
 Private Sub ParseWarCraftII()
