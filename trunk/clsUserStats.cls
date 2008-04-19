@@ -419,12 +419,14 @@ Public Property Get IsHardcoreCharacter() As Boolean
 
 End Property
 
-'Public Property Get IsFemaleCharacter() As Boolean
-'
-'    ' ...
-'    IsFemaleCharacter = m_hardcore
-'
-'End Property
+Public Property Get IsFemaleCharacter() As Boolean
+
+    ' ...
+    IsFemaleCharacter = _
+        ((m_character_class_id = 1) Or (m_character_class_id = 2) Or _
+            (m_character_class_id = 7))
+
+End Property
 
 Public Property Get IsExpansionCharacter() As Boolean
 
