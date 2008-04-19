@@ -461,17 +461,31 @@ Public Property Let ActsCompleted(i As Integer)
 
 End Property
 
-Public Property Get CurrentDifficulty() As String
-
-    Dim difficulty As Integer ' ...
+Public Property Get CurrentAct() As Integer
 
     ' ...
     If ((game = "D2DV") Or (game = "D2XP")) Then
         ' ...
-        If (game = "D2DV") Then
-            difficulty = (ActsCompleted / (4 * 3))
+        If (IsExpansionCharacter = False) Then
+            CurrentAct = (Int(ActsCompleted Mod 4) + 1)
         Else
-            difficulty = (ActsCompleted / (5 * 3))
+            CurrentAct = (Int(ActsCompleted Mod 5) + 1)
+        End If
+    End If
+
+End Property
+
+Public Property Get CurrentDifficulty() As String
+
+    Dim difficulty As String ' ...
+    
+    ' ...
+    If ((game = "D2DV") Or (game = "D2XP")) Then
+        ' ...
+        If (IsExpansionCharacter = False) Then
+            difficulty = Int(ActsCompleted / 4)
+        Else
+            difficulty = Int(ActsCompleted / 5)
         End If
         
         Select Case (difficulty)
@@ -607,9 +621,7 @@ Private Sub Parse()
         ' ...
         Case "D2DV", "D2XP"
             Call ParseDiabloII
-            
-            frmChat.AddChat vbYellow, ActsCompleted & " -> " & CurrentDifficulty
-            
+
         ' ...
         Case "W2BN"
             Call ParseWarCraftII
@@ -673,12 +685,10 @@ Private Sub ParseDiabloII()
     Dim charData() As String   ' ...
 
     ' ...
-    values() = Split(Statstring, ",")
+    values() = Split(Statstring, ",", 3)
     
     ' ...
     If (UBound(values) > 0) Then
-        frmChat.AddChat vbRed, Statstring
-        
         ' ...
         Realm = values(0)
         CharacterName = values(1)
@@ -690,7 +700,7 @@ Private Sub ParseDiabloII()
         CharacterClassID = Asc(charData(13))
         Level = Asc(charData(25))
         CharacterFlags = Asc(charData(26))
-        ActsCompleted = (Asc(charData(27)) And &H18)
+        ActsCompleted = RShift((Asc(charData(27)) - &H80), 1)
     End If
     
     

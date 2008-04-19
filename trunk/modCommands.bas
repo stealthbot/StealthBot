@@ -4135,7 +4135,11 @@ Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim user      As String
     Dim UserIndex As Integer
     Dim tmpBuf()  As String ' temporary output buffer
-
+    
+    ' ...
+    ReDim Preserve tmpBuf(0 To 1)
+    
+    ' ...
     user = msgData
     
     ' ...
@@ -4143,8 +4147,6 @@ Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccess
         UserIndex = g_Channel.GetUserIndex(user)
         
         If (UserIndex > 0) Then
-            ReDim Preserve tmpBuf(0 To 1)
-        
             With g_Channel.Users(UserIndex)
                 tmpBuf(0) = "User " & .DisplayName & " is logged on using " & _
                     ProductCodeToFullName(.game)
