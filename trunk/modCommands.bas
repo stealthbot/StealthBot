@@ -3073,14 +3073,14 @@ Private Function OnPhrases(ByVal Username As String, ByRef dbAccess As udtGetAcc
     Dim tmpBuf() As String ' temporary output buffer
     Dim i        As Integer
     Dim found    As Integer
-    Dim temp     As String
+    Dim Temp     As String
     
     ' ...
-    For i = LBound(phrases) To UBound(phrases)
+    For i = LBound(Phrases) To UBound(Phrases)
         ' ...
-        If ((phrases(i) <> Space$(1)) And (phrases(i) <> vbNullString)) Then
+        If ((Phrases(i) <> Space$(1)) And (Phrases(i) <> vbNullString)) Then
             ' ...
-            temp = temp & phrases(i) & ", "
+            Temp = Temp & Phrases(i) & ", "
             
             ' ...
             found = (found + 1)
@@ -3089,7 +3089,7 @@ Private Function OnPhrases(ByVal Username As String, ByRef dbAccess As udtGetAcc
     
     ' ..
     If (found > 0) Then
-        SplitByLen Mid$(temp, 1, Len(temp) - Len(", ")), 180, tmpBuf, "Phrasebans: ", _
+        SplitByLen Mid$(Temp, 1, Len(Temp) - Len(", ")), 180, tmpBuf, "Phrasebans: ", _
             " [more]", ", "
     Else
         tmpBuf(0) = "There are no phrasebans."
@@ -3114,25 +3114,25 @@ Private Function OnAddPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     
     u = msgData
     
-    For i = LBound(phrases) To UBound(phrases)
-        If (StrComp(u, phrases(i), vbTextCompare) = 0) Then
+    For i = LBound(Phrases) To UBound(Phrases)
+        If (StrComp(u, Phrases(i), vbTextCompare) = 0) Then
             Exit For
         End If
     Next i
 
-    If (i > (UBound(phrases))) Then
-        If ((phrases(UBound(phrases)) <> vbNullString) Or _
-            (phrases(UBound(phrases)) <> " ")) Then
+    If (i > (UBound(Phrases))) Then
+        If ((Phrases(UBound(Phrases)) <> vbNullString) Or _
+            (Phrases(UBound(Phrases)) <> " ")) Then
             
-            ReDim Preserve phrases(0 To UBound(phrases) + 1)
+            ReDim Preserve Phrases(0 To UBound(Phrases) + 1)
         End If
         
-        phrases(UBound(phrases)) = u
+        Phrases(UBound(Phrases)) = u
         
         Open GetFilePath("phrasebans.txt") For Output As #f
-            For c = LBound(phrases) To UBound(phrases)
-                If (Len(phrases(c)) > 0) Then
-                    Print #f, phrases(c)
+            For c = LBound(Phrases) To UBound(Phrases)
+                If (Len(Phrases(c)) > 0) Then
+                    Print #f, Phrases(c)
                 End If
             Next c
         Close #f
@@ -3163,18 +3163,18 @@ Private Function OnDelPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     Open GetFilePath("phrasebans.txt") For Output As #f
         Y = vbNullString
     
-        For c = LBound(phrases) To UBound(phrases)
-            If (StrComp(phrases(c), LCase$(u), vbTextCompare) <> 0) Then
-                Print #f, phrases(c)
+        For c = LBound(Phrases) To UBound(Phrases)
+            If (StrComp(Phrases(c), LCase$(u), vbTextCompare) <> 0) Then
+                Print #f, Phrases(c)
             Else
                 Y = "x"
             End If
         Next c
     Close #f
     
-    ReDim phrases(0)
+    ReDim Phrases(0)
     
-    Call frmChat.LoadArray(LOAD_PHRASES, phrases())
+    Call frmChat.LoadArray(LOAD_PHRASES, Phrases())
     
     If (Len(Y) > 0) Then
         tmpBuf = "Phrase " & Chr(34) & u & Chr(34) & " deleted."
@@ -3717,7 +3717,7 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
             End Select
             
             ' get absolute file path
-            u = Dir$(App.Path & "\" & u)
+            u = Dir$(App.path & "\" & u)
             
             If (u = vbNullString) Then
                 tmpBuf(tmpCount) = "Error: The specified file could not " & _
@@ -4140,7 +4140,7 @@ Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccess
         If (UserIndex > 0) Then
             With g_Channel.Users(UserIndex)
                 tmpBuf(0) = "User " & .DisplayName & " is logged on using " & _
-                    ProductCodeToFullName(.Game)
+                    ProductCodeToFullName(.game)
                 
                 If (.IsOperator) Then
                     tmpBuf(0) = tmpBuf(0) & " with ops, and a ping time of " & .Ping & "ms."
@@ -5355,7 +5355,7 @@ End Function ' end function OnAdd
 Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim temp       As udtMail
+    Dim Temp       As udtMail
     
     Dim strArray() As String
     Dim tmpBuf     As String ' temporary output buffer
@@ -5370,7 +5370,7 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
     
         tmpBuf = "Mass mailing "
 
-        With temp
+        With Temp
             .From = Username
             .Message = strArray(1)
             
@@ -5385,7 +5385,7 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
                         If (gAcc.Access = Track) Then
                             .To = DB(c).Username
                             
-                            Call AddMail(temp)
+                            Call AddMail(Temp)
                         End If
                     End If
                 Next c
@@ -5402,7 +5402,7 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
                                 
                                 .To = DB(c).Username
                                 
-                                Call AddMail(temp)
+                                Call AddMail(Temp)
                                 
                                 Exit For
                             End If
@@ -5427,7 +5427,7 @@ End Function ' end function OnMMail
 Private Function OnBMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim temp       As udtMail ' ...
+    Dim Temp       As udtMail ' ...
 
     Dim strArray() As String ' ...
     Dim tmpBuf     As String ' temporary output buffer
@@ -5437,17 +5437,17 @@ Private Function OnBMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
     
     If (UBound(strArray) > 0) Then
         ' ...
-        With temp
+        With Temp
             .To = strArray(0)
             .From = Username
             .Message = strArray(1)
         End With
         
-        If (Len(temp.To) = 0) Then
+        If (Len(Temp.To) = 0) Then
             tmpBuf = "Error: Invalid user."
         Else
             ' ...
-            Call AddMail(temp)
+            Call AddMail(Temp)
             
             tmpBuf = "Added mail for " & strArray(0) & "."
         End If
@@ -5969,43 +5969,52 @@ End Function
 Public Function Cache(ByVal Inpt As String, ByVal Mode As Byte, Optional ByRef Typ As String) As String
     Static s()  As String
     Static sTyp As String
+    Static bln  As Boolean
+    
     Dim i       As Integer
     
-    'Debug.Print "cache input: " & Inpt
+    ' ...
+    If (Typ <> vbNullString) Then
+        bln = False
+    End If
     
-    If InStr(1, LCase$(Inpt), "in channel ", vbTextCompare) = 0 Then
-        Select Case Mode
+    ' ...
+    If (InStr(1, LCase$(Inpt), "in channel ", vbTextCompare) <> 0) Then
+        bln = True
+    End If
+    
+    ' ...
+    If (bln = True) Then
+        ' ...
+        Select Case (Mode)
             Case 0
                 For i = 0 To UBound(s)
                     Cache = Cache & Replace(s(i), ",", "") & Space(1)
                 Next i
-                
-                'Debug.Print "cache output: " & Cache
-                
+    
                 ReDim s(0)
                 Typ = sTyp
                 
             Case 1
                 ReDim Preserve s(UBound(s) + 1)
                 s(UBound(s)) = Inpt
-                'Debug.Print "-> added " & Inpt & " to cache"
+    
             Case 255
                 ReDim s(0)
                 sTyp = Typ
-                
         End Select
     End If
 End Function
 
 Private Function Expand(ByVal s As String) As String
     Dim i As Integer
-    Dim temp As String
+    Dim Temp As String
     
     If Len(s) > 1 Then
         For i = 1 To Len(s)
-            temp = temp & Mid(s, i, 1) & Space(1)
+            Temp = Temp & Mid(s, i, 1) & Space(1)
         Next i
-        Expand = Trim(temp)
+        Expand = Trim(Temp)
     Else
         Expand = s
     End If
@@ -6583,7 +6592,7 @@ Private Sub DBRemove(ByVal s As String)
     Dim i    As Integer
     Dim c    As Integer
     Dim n    As Integer
-    Dim temp As String
+    Dim Temp As String
     
     s = LCase$(s)
     
@@ -6607,9 +6616,9 @@ Private Sub DBRemove(ByVal s As String)
     
     n = FreeFile
     
-    temp = GetFilePath("users.txt")
+    Temp = GetFilePath("users.txt")
     
-    Open temp For Output As #n
+    Open Temp For Output As #n
         For i = LBound(DB) To UBound(DB)
             Print #n, DB(i).Username & Space(1) & DB(i).Access & Space(1) & DB(i).Flags
         Next i
@@ -6624,18 +6633,18 @@ Public Sub LoadDatabase()
     
     Dim s     As String
     Dim X()   As String
-    Dim Path  As String
+    Dim path  As String
     Dim i     As Integer
     Dim f     As Integer
     Dim found As Boolean
     
     ReDim DB(0)
     
-    Path = GetFilePath("users.txt")
+    path = GetFilePath("users.txt")
     
-    If Dir$(Path) <> vbNullString Then
+    If Dir$(path) <> vbNullString Then
         f = FreeFile
-        Open Path For Input As #f
+        Open path For Input As #f
             
         If LOF(f) > 1 Then
             Do
@@ -6743,7 +6752,7 @@ Public Sub LoadDatabase()
                 .ModifiedOn = Now
             End With
             
-            Call WriteDatabase(Path)
+            Call WriteDatabase(path)
         End If
     End If
 End Sub
@@ -7021,7 +7030,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
         Set commands = New MSXML2.DOMDocument
         
         ' ...
-        If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
+        If (Dir$(App.path & "\commands.xml") = vbNullString) Then
             Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
                 "working directory.")
                 
@@ -7029,7 +7038,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
         End If
 
         ' ...
-        Call commands.Load(App.Path & "\commands.xml")
+        Call commands.Load(App.path & "\commands.xml")
         
         ' ...
         For Each command In commands.documentElement.childNodes
@@ -7126,7 +7135,7 @@ Public Function LoadQuotes(Optional strPath As String = vbNullString)
     Set g_Quotes = New Collection
     
     If (strPath = vbNullString) Then
-        strPath = App.Path & "\quotes.txt"
+        strPath = App.path & "\quotes.txt"
     End If
     
     If (LenB(Dir$(strPath)) > 0) Then
@@ -7301,10 +7310,10 @@ Private Function GetDBDetail(ByVal Username As String) As String
 End Function
 
 ' requires public
-Public Function DateCleanup(ByVal tdate As Date) As String
+Public Function DateCleanup(ByVal TDate As Date) As String
     Dim t As String
     
-    t = Format(tdate, "dd-MM-yyyy_HH:MM:SS")
+    t = Format(TDate, "dd-MM-yyyy_HH:MM:SS")
     
     DateCleanup = Replace(t, " ", "_")
 End Function
@@ -7557,34 +7566,34 @@ Public Function reverseUsername(ByVal Username As String) As String
 End Function
 
 Public Function SecondsToString(ByVal seconds As Long) As String
-    Dim temp  As Long ' ...
+    Dim Temp  As Long ' ...
     Dim secs  As Long ' ...
     Dim mins  As Long ' ...
     Dim hours As Long ' ...
     
     ' ...
-    temp = seconds
+    Temp = seconds
     
     ' ...
-    Do While (temp > 0)
-        If (temp - 3600 >= 0) Then
+    Do While (Temp > 0)
+        If (Temp - 3600 >= 0) Then
             ' ...
-            temp = (temp - 3600)
+            Temp = (Temp - 3600)
             
             ' ...
             hours = (hours + 1)
-        ElseIf (temp - 60 >= 0) Then
+        ElseIf (Temp - 60 >= 0) Then
             ' ...
-            temp = (temp - 60)
+            Temp = (Temp - 60)
             
             ' ...
             mins = (mins + 1)
         Else
             ' ...
-            secs = temp
+            secs = Temp
                    
             ' ...
-            temp = 0
+            Temp = 0
         End If
     Loop
     
