@@ -1757,6 +1757,8 @@ Private Sub Form_Load()
 '    BotVars.ProxyIP = "213.210.194.139"
 '    BotVars.ProxyPort = 1080
     'BotVars.ProxyIsSocks5 = True
+    
+    AddChat vbRed, Format(UtcToLocal(UtcNow), "yyyy-mm-dd hh:mm:ss AM/PM")
 End Sub
 
 Private Sub Form_GotFocus()
