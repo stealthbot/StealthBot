@@ -421,13 +421,13 @@ End Function
 Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Optional ByRef Flags, _
     Optional ByRef entryType As String = "USER") As Object
 
-    Dim temp   As udtGetAccessResponse
+    Dim Temp   As udtGetAccessResponse
     Dim i      As Integer
     Dim splt() As String
     
-    temp = GetCumulativeAccess(Username, entryType)
+    Temp = GetCumulativeAccess(Username, entryType)
     
-    With temp
+    With Temp
         Access = .Access
         Flags = .Flags
     End With
@@ -437,23 +437,23 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     
     ' ...
     With GetDBEntry
-        .entryType = temp.Type
-        .Name = temp.Username
-        .Rank = temp.Access
-        .Flags = temp.Flags
-        .CreatedOn = temp.AddedOn
-        .CreatedBy = temp.AddedBy
-        .ModifiedOn = temp.ModifiedOn
-        .ModifiedBy = temp.ModifiedBy
+        .entryType = Temp.Type
+        .Name = Temp.Username
+        .Rank = Temp.Access
+        .Flags = Temp.Flags
+        .CreatedOn = Temp.AddedOn
+        .CreatedBy = Temp.AddedBy
+        .ModifiedOn = Temp.ModifiedOn
+        .ModifiedBy = Temp.ModifiedBy
     End With
 
-    If ((temp.Groups <> vbNullString) And (temp.Groups <> "%")) Then
-        If (InStr(1, temp.Groups, ",", vbBinaryCompare) <> 0) Then
-            splt() = Split(temp.Groups, ",")
+    If ((Temp.Groups <> vbNullString) And (Temp.Groups <> "%")) Then
+        If (InStr(1, Temp.Groups, ",", vbBinaryCompare) <> 0) Then
+            splt() = Split(Temp.Groups, ",")
         Else
             ReDim Preserve splt(0)
         
-            splt(0) = temp.Groups
+            splt(0) = Temp.Groups
         End If
     
         For i = LBound(splt) To UBound(splt)
@@ -475,11 +475,11 @@ End Function
 Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
     Optional ByRef entryType As String = "USER") '// yum, Variants >:\
 
-    Dim temp As udtGetAccessResponse
+    Dim Temp As udtGetAccessResponse
     
-    temp = GetAccess(Username, entryType)
+    Temp = GetAccess(Username, entryType)
     
-    With temp
+    With Temp
         Access = .Access
         Flags = .Flags
     End With

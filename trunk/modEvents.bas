@@ -1037,7 +1037,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
         Optional ByVal w3icon As String, Optional QueuedEventID As Integer = 0)
 
-    'On Error GoTo ERROR_HANDLER
+    On Error GoTo ERROR_HANDLER
 
     Dim UserEvent    As clsUserEventObj
     Dim UserObj      As clsUserObj

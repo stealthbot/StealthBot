@@ -8,7 +8,7 @@ Public Sub SendHeader()
 End Sub
 
 Public Sub BNCSParsePacket(ByVal PacketData As String)
-    'On Error GoTo ERROR_HANDLER
+    On Error GoTo ERROR_HANDLER
 
     Dim pD          As clsPacketDebuffer ' Packet debuffer object
     Dim PacketLen   As Long              ' Length of the packet minus the header
@@ -930,7 +930,7 @@ Public Sub RequestProfile(strUser As String)
         .InsertDWord 1
         .InsertDWord 4
         .InsertDWord GetTickCount()
-        .InsertNTString strUser
+        .InsertNTString CleanUsername(reverseUsername(strUser))
         .InsertNTString "Profile\Age"
         .InsertNTString "Profile\Sex"
         .InsertNTString "Profile\Location"
@@ -944,7 +944,7 @@ Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
         .InsertDWord 1
         .InsertDWord 1
         .InsertDWord GetTickCount()
-        .InsertNTString sUsername
+        .InsertNTString reverseUsername(sUsername)
         .InsertNTString sKey
         .SendPacket &H26
     End With

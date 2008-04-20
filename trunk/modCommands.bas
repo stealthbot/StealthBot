@@ -3717,7 +3717,7 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
             End Select
             
             ' get absolute file path
-            u = Dir$(App.path & "\" & u)
+            u = Dir$(App.Path & "\" & u)
             
             If (u = vbNullString) Then
                 tmpBuf(tmpCount) = "Error: The specified file could not " & _
@@ -6633,18 +6633,18 @@ Public Sub LoadDatabase()
     
     Dim s     As String
     Dim X()   As String
-    Dim path  As String
+    Dim Path  As String
     Dim i     As Integer
     Dim f     As Integer
     Dim found As Boolean
     
     ReDim DB(0)
     
-    path = GetFilePath("users.txt")
+    Path = GetFilePath("users.txt")
     
-    If Dir$(path) <> vbNullString Then
+    If Dir$(Path) <> vbNullString Then
         f = FreeFile
-        Open path For Input As #f
+        Open Path For Input As #f
             
         If LOF(f) > 1 Then
             Do
@@ -6752,7 +6752,7 @@ Public Sub LoadDatabase()
                 .ModifiedOn = Now
             End With
             
-            Call WriteDatabase(path)
+            Call WriteDatabase(Path)
         End If
     End If
 End Sub
@@ -7030,7 +7030,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
         Set commands = New MSXML2.DOMDocument
         
         ' ...
-        If (Dir$(App.path & "\commands.xml") = vbNullString) Then
+        If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
             Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
                 "working directory.")
                 
@@ -7038,7 +7038,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
         End If
 
         ' ...
-        Call commands.Load(App.path & "\commands.xml")
+        Call commands.Load(App.Path & "\commands.xml")
         
         ' ...
         For Each command In commands.documentElement.childNodes
@@ -7135,7 +7135,7 @@ Public Function LoadQuotes(Optional strPath As String = vbNullString)
     Set g_Quotes = New Collection
     
     If (strPath = vbNullString) Then
-        strPath = App.path & "\quotes.txt"
+        strPath = App.Path & "\quotes.txt"
     End If
     
     If (LenB(Dir$(strPath)) > 0) Then

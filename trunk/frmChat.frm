@@ -853,7 +853,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -879,7 +878,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4148,6 +4146,8 @@ Private Sub cboSend_KeyUp(KeyCode As Integer, Shift As Integer)
 End Sub
 
 Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
+    On Error GoTo ERROR_HANDLER
+    
     Static strBuf        As String ' ...
     Static spaceIndex(2) As Long   ' ...
 
@@ -4173,8 +4173,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     
     'AddChat vbRed, "KeyCode: " & KeyCode
     'AddChat vbRed, "Shift: " & Shift
-    
-   'On Error GoTo cboSend_KeyDown_Error
+
 
     l = cboSend.SelStart
 
@@ -4664,11 +4663,11 @@ theEnd:
 
     Exit Sub
 
-cboSend_KeyDown_Error:
-    If (MDebug("debug")) Then
-        Call AddChat(RTBColors.ErrorMessageText, "Error " & Err.Number & _
-            " (" & Err.description & ") in procedure cboSend_KeyDown")
-    End If
+ERROR_HANDLER:
+    AddChat RTBColors.ErrorMessageText, "Error " & Err.Number & " (" & Err.description & ") " & _
+        "in procedure cboSend_KeyDown"
+        
+    Exit Sub
 End Sub
 
 Private Sub cboSend_KeyPress(KeyAscii As Integer)
@@ -4899,7 +4898,7 @@ End Sub
 
 
 Private Sub SControl_Error()
-    AddChat RTBColors.ErrorMessageText, "Scripting runtime error " & Chr(39) & SControl.Error.Number & Chr(39) & ": (line " & SControl.Error.Line & "; column " & SControl.Error.Column & ")"
+    AddChat RTBColors.ErrorMessageText, "Scripting runtime error " & Chr(39) & SControl.Error.Number & Chr(39) & ": (line " & SControl.Error.line & "; column " & SControl.Error.Column & ")"
     AddChat RTBColors.ErrorMessageText, SControl.Error.description & "."
     AddChat RTBColors.ErrorMessageText, "Offending line: >> " & SControl.Error.text
 End Sub
