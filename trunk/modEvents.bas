@@ -632,7 +632,7 @@ End Sub
 Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
 
     ' ...
-    'On Error GoTo ERROR_HANDLER
+    On Error GoTo ERROR_HANDLER
 
     Const MSG_BANNED      As String = " was banned by "
     Const MSG_UNBANNED    As String = " was unbanned by "

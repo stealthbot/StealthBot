@@ -5809,8 +5809,10 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     ' set default message delay when queue is empty (in ms)
                     banDelay = 25
                     
-                    ' are we issuing a channel moderation command?
-                    If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
+                    ' are we issuing a ban or kick command?
+                    If ((StrComp(Left$(command, 5), "/ban ", vbTextCompare) = 0) Or _
+                        (StrComp(Left$(command, 6), "/kick ", vbTextCompare) = 0)) Then
+                        
                         ' do we have ops?
                         If (g_Channel.Self.IsOperator) Then
                             ' ...
