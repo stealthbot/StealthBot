@@ -107,26 +107,33 @@ Public Function WriteDebug(ByVal Source As String, ByVal sDebugMessage As String
 End Function
 
 ' ...
+Public Function WriteChat(ByVal sMessage As String)
+
+    ' ...
+
+End Function
+
+' ...
 Private Function WriteLine(ByVal line As String)
 
     Dim f        As Integer ' ...
-    Dim filepath As String ' ...
+    Dim FilePath As String ' ...
     
     ' ...
     f = FreeFile
     
     ' ...
-    filepath = (App.path & "\logs\log.txt")
+    FilePath = (App.Path & "\logs\log.txt")
     
     ' ...
-    If (Dir$(filepath) = vbNullString) Then
+    If (Dir$(FilePath) = vbNullString) Then
         ' ...
-        Open filepath For Output As #f
+        Open FilePath For Output As #f
         Close #f
     End If
 
     ' ...
-    Open filepath For Append As #f
+    Open FilePath For Append As #f
         Print #f, Timestamp & Space$(1) & line
     Close #f
 

@@ -4128,30 +4128,40 @@ Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim tmpBuf()  As String ' temporary output buffer
     
     ' ...
-    ReDim Preserve tmpBuf(0 To 1)
-    
-    ' ...
     user = msgData
     
     ' ...
     If (Len(user) > 0) Then
+        ' ...
+        ReDim Preserve tmpBuf(0 To 1)
+    
+        ' ...
         UserIndex = g_Channel.GetUserIndex(user)
         
+        ' ...
         If (UserIndex > 0) Then
+            ' ...
             With g_Channel.Users(UserIndex)
+                ' ...
                 tmpBuf(0) = "User " & .DisplayName & " is logged on using " & _
                     ProductCodeToFullName(.game)
                 
+                ' ...
                 If (.IsOperator) Then
                     tmpBuf(0) = tmpBuf(0) & " with ops, and a ping time of " & .Ping & "ms."
                 Else
                     tmpBuf(0) = tmpBuf(0) & " with a ping time of " & .Ping & "ms."
                 End If
                 
+                ' ...
                 tmpBuf(1) = "He/she has been present in the channel for " & _
                     ConvertTime(.TimeInChannel(), 1) & "."
             End With
         Else
+            ' ...
+            ReDim Preserve tmpBuf(0)
+        
+            ' ...
             tmpBuf(0) = "No such user is present."
         End If
     End If
