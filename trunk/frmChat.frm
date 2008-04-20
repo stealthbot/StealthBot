@@ -853,7 +853,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -879,7 +878,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1666,7 +1664,7 @@ Private Sub Form_Load()
     
     AddChat RTBColors.ConsoleText, "-> Welcome to " & CVERSION & ", by Stealth."
     AddChat RTBColors.ConsoleText, "-> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net"
-    
+
     On Error Resume Next
     If BotVars.Logging < 2 Then
         MakeLoggingDirectory
@@ -1757,8 +1755,6 @@ Private Sub Form_Load()
 '    BotVars.ProxyIP = "213.210.194.139"
 '    BotVars.ProxyPort = 1080
     'BotVars.ProxyIsSocks5 = True
-    
-    AddChat vbRed, Format(UtcToLocal(UtcNow), "yyyy-mm-dd hh:mm:ss AM/PM")
 End Sub
 
 Private Sub Form_GotFocus()
@@ -2341,13 +2337,13 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     AddChat vbYellow, "[CLAN] " & Member & " has left the clan."
     
     Dim X   As ListItem
-    Dim pos As Integer
+    Dim Pos As Integer
     
-    pos = g_Clan.GetUserIndexEx(Member)
+    Pos = g_Clan.GetUserIndexEx(Member)
     
     ' ...
-    If (pos > 0) Then
-        g_Clan.Members.Remove pos
+    If (Pos > 0) Then
+        g_Clan.Members.Remove Pos
     End If
     
 
@@ -2502,12 +2498,12 @@ End Sub
 
 Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
     Dim X   As ListItem
-    Dim pos As Integer
+    Dim Pos As Integer
     
-    pos = g_Clan.GetUserIndexEx(Username)
+    Pos = g_Clan.GetUserIndexEx(Username)
     
-    If (pos > 0) Then
-        With g_Clan.Members(pos)
+    If (Pos > 0) Then
+        With g_Clan.Members(Pos)
             .Rank = Rank
             .Status = IsOnline
             .Location = Location
@@ -5419,7 +5415,7 @@ Private Sub UpTimer_Timer()
 
     Dim newColor  As Long
     Dim i         As Integer
-    Dim pos       As Integer
+    Dim Pos       As Integer
     Dim doCheck   As Boolean
 
     uTicks = (uTicks + 1000)
@@ -5495,17 +5491,17 @@ Private Sub UpTimer_Timer()
                 ' ...
                 If (BotVars.NoColoring = False) Then
                     ' ...
-                    pos = checkChannel(.DisplayName)
+                    Pos = checkChannel(.DisplayName)
                 
                     ' ...
-                    If (pos > 0) Then
+                    If (Pos > 0) Then
                         ' ...
                         newColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
                             GetCurrentUsername, vbBinaryCompare) = 0)
                         
                         ' ...
-                        If (lvChannel.ListItems(pos).ForeColor <> newColor) Then
-                            lvChannel.ListItems(pos).ForeColor = newColor
+                        If (lvChannel.ListItems(Pos).ForeColor <> newColor) Then
+                            lvChannel.ListItems(Pos).ForeColor = newColor
                         End If
                     End If
                 End If

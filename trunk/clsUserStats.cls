@@ -490,13 +490,55 @@ Public Property Get CurrentDifficulty() As String
             difficulty = Int(ActsCompleted / 5)
         End If
         
+        ' ...
         Select Case (difficulty)
             Case 0: CurrentDifficulty = "Normal"
             Case 1: CurrentDifficulty = "Nightmare"
             Case 2: CurrentDifficulty = "Hell"
         End Select
-    End If
 
+End Property
+
+Public Property Get Title() As String
+
+    ' thanks c0ol for multi-dimensional array idea
+    Dim Classic(2, 3, 2)   As String ' ...
+    Dim Expansion(2, 3, 2) As String ' ...
+    
+    ' softcore
+    Classic(0)(0)(0) = "Sir"
+    Classic(0)(0)(1) = "Dame"
+    Classic(0)(1)(0) = "Lord"
+    Classic(0)(1)(1) = "Lady"
+    Classic(0)(2)(0) = "Baron"
+    Classic(0)(2)(1) = "Baroness"
+    
+    ' hardcore
+    Classic(1)(0)(0) = "Count"
+    Classic(1)(0)(1) = "Countess"
+    Classic(1)(1)(0) = "Duke"
+    Classic(1)(1)(1) = "Duchess"
+    Classic(1)(2)(0) = "King"
+    Classic(1)(2)(1) = "Queen"
+    
+    ' softcore
+    Expansion(0)(0)(0) = "Slayer"
+    Expansion(0)(1)(0) = "Champion"
+    Expansion(0)(2)(0) = "Patriarch"
+    Expansion(0)(2)(1) = "Matriarch"
+    
+    ' hardcore
+    Expansion(1)(0)(0) = "Destroyer"
+    Expansion(1)(1)(0) = "Conquerer"
+    Expansion(1)(2)(0) = "Guardian"
+    
+    ' ...
+    If (IsExpansionCharacter = False) Then
+        
+    Else
+    
+    End If
+    
 End Property
 
 Public Property Get Dots() As Long
@@ -600,6 +642,32 @@ End Property
 Public Property Get ToString() As String
 
     ' ...
+    If (Statstring = vbNullString) Then
+        Exit Sub
+    End If
+    
+    ' ...
+    Select Case (Game)
+        ' ...
+        Case "SSHR", "STAR", "JSTR", "SEXP"
+            ToString = StarCraft_ToString()
+            
+        ' ...
+        Case "DSHR", "DRTL"
+            ToString = Diablo_ToString()
+            
+        ' ...
+        Case "D2DV", "D2XP"
+            ToString = DiabloII_ToString()
+
+        ' ...
+        Case "W2BN"
+            ToString = WarCraftII_ToString()
+        
+        ' ...
+        Case "WAR3", "W3XP"
+            ToString = WarCraftIII_ToString()
+    End Select
 
 End Property
 
@@ -683,8 +751,8 @@ End Sub
 
 Private Sub ParseDiabloII()
 
-    Dim values()   As String ' ...
-    Dim charData() As String   ' ...
+    Dim values()   As String  ' ...
+    Dim charData() As Integer ' ...
 
     ' ...
     values() = Split(Statstring, ",", 3)
@@ -696,20 +764,14 @@ Private Sub ParseDiabloII()
         CharacterName = values(1)
         
         ' ...
-        SplitByLen values(2), 1, charData(), vbNullString, vbNullString
+        MakeArr values(2), charData
         
         ' ...
-        If (UBound(charData) >= 31) Then
-            ' ...
-            CharacterClassID = Asc(charData(13))
-            Level = Asc(charData(25))
-            CharacterFlags = Asc(charData(26))
-            ActsCompleted = RShift((Asc(charData(27)) - &H80), 1)
-        Else
-            frmChat.AddChat vbRed, CharacterName
-        End If
+        CharacterClassID = charData(13)
+        Level = charData(25)
+        CharacterFlags = charData(26)
+        ActsCompleted = RShift((charData(27) - &H80), 1)
     End If
-    
     
 End Sub
 
@@ -742,3 +804,76 @@ Private Sub ParseWarCraftIII()
     End If
 
 End Sub
+
+Private Function StarCraft_ToString() As String
+
+    ' ...
+
+End Function
+
+Private Function Diablo_ToString() As String
+
+    ' ...
+
+End Function
+
+Private Function DiabloII_ToString() As String
+
+    ' ...
+
+End Function
+
+Private Function WarCraftII_ToString() As String
+
+    ' ...
+
+End Function
+
+Private Function WarCraftIII_ToString() As String
+
+    ' ...
+
+End Function
+
+Private Sub MakeArr(str As String, arr() As Integer)
+    
+    Dim i As Integer ' ...
+    
+    ' ...
+    For i = 1 To Len(str)
+        ' ...
+        ReDim Preserve arr(0 To i)
+        
+        ' ...
+        arr(i) = Asc(Mid(str, i, 1))
+    Next i
+    
+End Sub
+
+Private Function MakeLongGameName(Game As String) As String
+
+    ' ...
+    Select Case (Game)
+        ' starcraft
+        Case "SSHR": MakeLongGame = "StarCraft: Shareware"
+        Case "STAR": MakeLongGame = "StarCraft"
+        Case "JSTR": MakeLongGame = "StarCraft: Japanese"
+        Case "SEXP": MakeLongGame = "StarCraft: Brood War"
+
+        ' diablo
+        Case "DSHR": MakeLongGame = "Diablo I: Shareware"
+        Case "DRTL": MakeLongGame = "Diablo I: Retail"
+
+        ' diablo ii
+        Case "D2DV": MakeLongGame = "Diablo II"
+        Case "D2XP": MakeLongGame = "Diablo II: Lord of Destruction"
+
+        ' warcraft ii
+        Case "W2BN": MakeLongGame = "WarCraft II"
+
+        ' warcraft iii
+        Case "WAR3": MakeLongGame = "WarCraft III: Reign of Chaos"
+        Case "W3XP": MakeLongGame = "WarCraft III: The Frozen Throne"
+    End Select
+
+End Function
