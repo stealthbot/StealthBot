@@ -496,6 +496,7 @@ Public Property Get CurrentDifficulty() As String
             Case 1: CurrentDifficulty = "Nightmare"
             Case 2: CurrentDifficulty = "Hell"
         End Select
+    End If
 
 End Property
 
@@ -506,31 +507,31 @@ Public Property Get Title() As String
     Dim Expansion(2, 3, 2) As String ' ...
     
     ' softcore
-    Classic(0)(0)(0) = "Sir"
-    Classic(0)(0)(1) = "Dame"
-    Classic(0)(1)(0) = "Lord"
-    Classic(0)(1)(1) = "Lady"
-    Classic(0)(2)(0) = "Baron"
-    Classic(0)(2)(1) = "Baroness"
+    Classic(0, 0, 0) = "Sir"
+    Classic(0, 0, 1) = "Dame"
+    Classic(0, 1, 0) = "Lord"
+    Classic(0, 1, 1) = "Lady"
+    Classic(0, 2, 0) = "Baron"
+    Classic(0, 2, 1) = "Baroness"
     
     ' hardcore
-    Classic(1)(0)(0) = "Count"
-    Classic(1)(0)(1) = "Countess"
-    Classic(1)(1)(0) = "Duke"
-    Classic(1)(1)(1) = "Duchess"
-    Classic(1)(2)(0) = "King"
-    Classic(1)(2)(1) = "Queen"
+    Classic(1, 0, 0) = "Count"
+    Classic(1, 0, 1) = "Countess"
+    Classic(1, 1, 0) = "Duke"
+    Classic(1, 1, 1) = "Duchess"
+    Classic(1, 2, 0) = "King"
+    Classic(1, 2, 1) = "Queen"
     
     ' softcore
-    Expansion(0)(0)(0) = "Slayer"
-    Expansion(0)(1)(0) = "Champion"
-    Expansion(0)(2)(0) = "Patriarch"
-    Expansion(0)(2)(1) = "Matriarch"
+    Expansion(0, 0, 0) = "Slayer"
+    Expansion(0, 1, 0) = "Champion"
+    Expansion(0, 2, 0) = "Patriarch"
+    Expansion(0, 2, 1) = "Matriarch"
     
     ' hardcore
-    Expansion(1)(0)(0) = "Destroyer"
-    Expansion(1)(1)(0) = "Conquerer"
-    Expansion(1)(2)(0) = "Guardian"
+    Expansion(1, 0, 0) = "Destroyer"
+    Expansion(1, 1, 0) = "Conquerer"
+    Expansion(1, 2, 0) = "Guardian"
     
     ' ...
     If (IsExpansionCharacter = False) Then
@@ -855,25 +856,25 @@ Private Function MakeLongGameName(Game As String) As String
     ' ...
     Select Case (Game)
         ' starcraft
-        Case "SSHR": MakeLongGame = "StarCraft: Shareware"
-        Case "STAR": MakeLongGame = "StarCraft"
-        Case "JSTR": MakeLongGame = "StarCraft: Japanese"
-        Case "SEXP": MakeLongGame = "StarCraft: Brood War"
+        Case "SSHR": MakeLongGameName = "StarCraft: Shareware"
+        Case "STAR": MakeLongGameName = "StarCraft"
+        Case "JSTR": MakeLongGameName = "StarCraft: Japanese"
+        Case "SEXP": MakeLongGameName = "StarCraft: Brood War"
 
         ' diablo
-        Case "DSHR": MakeLongGame = "Diablo I: Shareware"
-        Case "DRTL": MakeLongGame = "Diablo I: Retail"
+        Case "DSHR": MakeLongGameName = "Diablo I: Shareware"
+        Case "DRTL": MakeLongGameName = "Diablo I: Retail"
 
         ' diablo ii
-        Case "D2DV": MakeLongGame = "Diablo II"
-        Case "D2XP": MakeLongGame = "Diablo II: Lord of Destruction"
+        Case "D2DV": MakeLongGameName = "Diablo II"
+        Case "D2XP": MakeLongGameName = "Diablo II: Lord of Destruction"
 
         ' warcraft ii
-        Case "W2BN": MakeLongGame = "WarCraft II"
+        Case "W2BN": MakeLongGameName = "WarCraft II"
 
         ' warcraft iii
-        Case "WAR3": MakeLongGame = "WarCraft III: Reign of Chaos"
-        Case "W3XP": MakeLongGame = "WarCraft III: The Frozen Throne"
+        Case "WAR3": MakeLongGameName = "WarCraft III: Reign of Chaos"
+        Case "W3XP": MakeLongGameName = "WarCraft III: The Frozen Throne"
     End Select
 
 End Function
