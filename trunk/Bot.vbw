@@ -92,4 +92,4 @@ clsBanlistUserObj = 154, 203, 966, 691,
 clsUserStats = 22, 29, 834, 517, 
 clsUserEventObj = 0, 0, 0, 0, C
 modDateTime = 110, 145, 922, 633, 
-clsLog = 0, 0, 812, 488, Z
+clsLogger = 0, 0, 812, 488, Z
