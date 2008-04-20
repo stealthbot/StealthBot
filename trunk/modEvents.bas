@@ -234,7 +234,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     With g_Channel
         .Name = ChannelName
         .Flags = Flags
-        .JoinTime = Now
+        .JoinTime = UtcNow
     End With
     
     ' we want to reset our filter
@@ -787,7 +787,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                             With BanlistObj
                                 .Name = user
                                 .Operator = Username
-                                .DateOfBan = Now
+                                .DateOfBan = UtcNow
                                 .IsDuplicateBan = (g_Channel.IsOnBanList(user) > 0)
                             End With
                         
@@ -923,7 +923,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
         ' ...
         If (QueuedEventID = 0) Then
             ' ...
-            UserObj.LastTalkTime = Now
+            UserObj.LastTalkTime = UtcNow
             
             ' ...
             If (UserObj.Queue.Count > 0) Then
@@ -1037,7 +1037,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
         Optional ByVal w3icon As String, Optional QueuedEventID As Integer = 0)
 
-    On Error GoTo ERROR_HANDLER
+    'On Error GoTo ERROR_HANDLER
 
     Dim UserEvent    As clsUserEventObj
     Dim UserObj      As clsUserObj
@@ -1260,7 +1260,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 .Flags = Flags
                 .Ping = Ping
                 .game = Product
-                .JoinTime = Now
+                .JoinTime = UtcNow
                 .Clan = sClan
                 .Statstring = OriginalStatstring
                 .Stats.Statstring = OriginalStatstring
@@ -1512,7 +1512,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         Set UserObj = g_Channel.Users(Pos)
         
         ' ...
-        UserObj.LastTalkTime = Now
+        UserObj.LastTalkTime = UtcNow
         
         ' ...
         If (QueuedEventID = 0) Then

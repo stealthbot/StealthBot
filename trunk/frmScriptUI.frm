@@ -24,7 +24,6 @@ Begin VB.Form frmScriptUI
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
-      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScriptUI.frx":0000
    End
@@ -1127,4 +1126,14 @@ Private Sub cmb_Scroll(index As Integer)
     On Error Resume Next
     
     frmChat.SControl.Run GetCallBack("cmb", index, "Scroll")
+End Sub
+
+Public Sub AddChat(ParamArray saElements() As Variant)
+    Dim arr() As Variant ' ...
+    
+    ' ...
+    arr() = saElements
+    
+    ' ...
+    Call DisplayRichText(frmScriptUI.rtb, arr)
 End Sub

@@ -3962,8 +3962,8 @@ Private Sub Form_Load()
                     nCurrent.MouseOverForeColor = lMouseOver
                     
                     Set nOptLevel = nCurrent.children
-                        nOptLevel.Add , etvwChild, "conn_config", "Configuration"  'general setup
-                        nOptLevel.Add , etvwChild, "conn_advanced", "Advanced Connection Settings"     'proxies/spoofing/bnls
+                        nOptLevel.Add , etvwChild, "conn_config", "General Settings"  'general setup
+                        nOptLevel.Add , etvwChild, "conn_advanced", "Advanced Settings"     'proxies/spoofing/bnls
                         
                     nCurrent.Expanded = True
                 

@@ -57,8 +57,8 @@ Private Sub Class_Initialize()
     Set m_stats = New clsUserStats
     
     ' ...
-    LastTalkTime = Now
-    JoinTime = Now
+    LastTalkTime = UtcNow
+    JoinTime = UtcNow
         
 End Sub
 
@@ -90,14 +90,14 @@ Public Property Let CharacterName(str As String)
 
 End Property
 
-Public Property Get Game() As String
+Public Property Get game() As String
 
     ' ...
-    Game = m_game
+    game = m_game
 
 End Property
 
-Public Property Let Game(str As String)
+Public Property Let game(str As String)
 
     ' ...
     m_game = str
@@ -107,14 +107,14 @@ End Property
 Public Property Get IsUsingDII() As Boolean
 
     ' ...
-    IsUsingDII = ((Game = "D2DV") Or (Game = "D2XP"))
+    IsUsingDII = ((game = "D2DV") Or (game = "D2XP"))
 
 End Property
 
 Public Property Get IsUsingWarIII() As Boolean
 
     ' ...
-    IsUsingWarIII = ((Game = "WAR3") Or (Game = "W3XP"))
+    IsUsingWarIII = ((game = "WAR3") Or (game = "W3XP"))
 
 End Property
 
@@ -209,10 +209,10 @@ Public Property Let Ping(lng As Long)
 
 End Property
 
-Public Property Let LastTalkTime(tdate As Date)
+Public Property Let LastTalkTime(TDate As Date)
 
     ' ...
-    m_last_speak_date = tdate
+    m_last_speak_date = TDate
 
 End Property
 
@@ -224,10 +224,10 @@ Public Property Get LastTalkTime() As Date
 End Property
 
 
-Public Property Let JoinTime(jdate As Date)
+Public Property Let JoinTime(JDate As Date)
 
     ' ...
-    m_join_date = jdate
+    m_join_date = JDate
 
 End Property
 
@@ -238,17 +238,39 @@ Public Property Get JoinTime() As Date
 
 End Property
 
-Public Function TimeSinceTalk() As Long
+Public Function TimeSinceTalk() As Double
 
     ' ...
-    TimeSinceTalk = DateDiff("s", LastTalkTime, Now)
+    On Error GoTo ERROR_HANDLER
+
+    ' ...
+    TimeSinceTalk = DateDiff("s", LastTalkTime, UtcNow)
+    
+    ' ...
+    Exit Function
+
+ERROR_HANDLER:
+
+    ' ...
+    Exit Function
 
 End Function
 
-Public Function TimeInChannel() As Long
+Public Function TimeInChannel() As Double
+
+    ' ...
+    On Error GoTo ERROR_HANDLER
     
     ' ...
-    TimeInChannel = DateDiff("s", JoinTime, Now)
+    TimeInChannel = DateDiff("s", JoinTime, UtcNow)
+    
+    ' ...
+    Exit Function
+
+ERROR_HANDLER:
+
+    ' ...
+    Exit Function
     
 End Function
 

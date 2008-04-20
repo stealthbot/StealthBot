@@ -41,17 +41,17 @@ Private m_expansion           As Boolean
 Private m_hardcore            As Boolean
 Private m_realm               As String
 
-Public Property Let game(str As String)
+Public Property Let Game(str As String)
 
     ' ...
     m_game = str
 
 End Property
 
-Public Property Get game() As String
+Public Property Get Game() As String
 
     ' ...
-    game = m_game
+    Game = m_game
 
 End Property
 
@@ -85,12 +85,12 @@ End Property
 Public Property Get IconName() As String
 
     ' ...
-    If ((game = "WAR3") Or (game = "W3XP")) Then
+    If ((Game = "WAR3") Or (Game = "W3XP")) Then
         ' ...
         Select Case (Mid$(Icon, 2, 1))
             Case "H" ' Human
                 ' ...
-                If (game = "WAR3") Then
+                If (Game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -113,7 +113,7 @@ Public Property Get IconName() As String
             
             Case "N" ' Night Elf
                 ' ...
-                If (game = "WAR3") Then
+                If (Game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -136,7 +136,7 @@ Public Property Get IconName() As String
                 
             Case "U" ' Undead
                 ' ...
-                If (game = "WAR3") Then
+                If (Game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -159,7 +159,7 @@ Public Property Get IconName() As String
             
             Case "O" ' Orc
                 ' ...
-                If (game = "WAR3") Then
+                If (Game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -182,7 +182,7 @@ Public Property Get IconName() As String
 
             Case "R" ' Random
                 ' ...
-                If (game = "WAR3") Then
+                If (Game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -205,7 +205,7 @@ Public Property Get IconName() As String
 
             Case "D" ' Tournament
                 ' ...
-                If (game = "W3XP") Then
+                If (Game = "W3XP") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -231,7 +231,7 @@ Public Property Let Statstring(str As String)
     End If
 
     ' ...
-    game = StrReverse$(Left$(str, 4))
+    Game = StrReverse$(Left$(str, 4))
 
     ' ...
     m_stat_string = Mid$(str, 5)
@@ -377,7 +377,7 @@ End Property
 Public Property Get CharacterClass() As String
     
     ' ...
-    If ((game = "D2DV") Or (game = "D2XP")) Then
+    If ((Game = "D2DV") Or (Game = "D2XP")) Then
     
         Dim DIIClasses(0 To 7) As String ' ...
         
@@ -466,7 +466,7 @@ End Property
 Public Property Get CurrentAct() As Integer
 
     ' ...
-    If ((game = "D2DV") Or (game = "D2XP")) Then
+    If ((Game = "D2DV") Or (Game = "D2XP")) Then
         ' ...
         If (IsExpansionCharacter = False) Then
             CurrentAct = (Int(ActsCompleted Mod 4) + 1)
@@ -482,7 +482,7 @@ Public Property Get CurrentDifficulty() As String
     Dim difficulty As String ' ...
     
     ' ...
-    If ((game = "D2DV") Or (game = "D2XP")) Then
+    If ((Game = "D2DV") Or (Game = "D2XP")) Then
         ' ...
         If (IsExpansionCharacter = False) Then
             difficulty = Int(ActsCompleted / 4)
@@ -611,7 +611,7 @@ Private Sub Parse()
     End If
 
     ' ...
-    Select Case (game)
+    Select Case (Game)
         ' ...
         Case "SSHR", "STAR", "JSTR", "SEXP"
             Call ParseStarCraft
@@ -699,10 +699,15 @@ Private Sub ParseDiabloII()
         SplitByLen values(2), 1, charData(), vbNullString, vbNullString
         
         ' ...
-        CharacterClassID = Asc(charData(13))
-        Level = Asc(charData(25))
-        CharacterFlags = Asc(charData(26))
-        ActsCompleted = RShift((Asc(charData(27)) - &H80), 1)
+        If (UBound(charData) >= 31) Then
+            ' ...
+            CharacterClassID = Asc(charData(13))
+            Level = Asc(charData(25))
+            CharacterFlags = Asc(charData(26))
+            ActsCompleted = RShift((Asc(charData(27)) - &H80), 1)
+        Else
+            frmChat.AddChat vbRed, CharacterName
+        End If
     End If
     
     
