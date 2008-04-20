@@ -485,20 +485,23 @@ Private Sub btnCreateUser_Click()
             "User: " & Username, Username, 3)
     End If
     
-    ' change misc. settings
-    With newNode
-        .Tag = "User"
-        .Selected = True
-    End With
-    
     ' ...
-    m_new_entry = True
-    
-    ' open entry name for editing
-    Call trvUsers.StartLabelEdit
-    
-    ' increment user count
-    userCount = (userCount + 1)
+    If (Not (newNode Is Nothing)) Then
+        ' change misc. settings
+        With newNode
+            .Tag = "User"
+            .Selected = True
+        End With
+        
+        ' ...
+        m_new_entry = True
+        
+        ' open entry name for editing
+        Call trvUsers.StartLabelEdit
+        
+        ' increment user count
+        userCount = (userCount + 1)
+    End If
 End Sub
 
 ' ...
@@ -569,13 +572,16 @@ Private Sub btnCreateGroup_Click()
                 "Group: " & GroupName, GroupName, 1)
         End If
         
-        ' change misc. settings
-        With newNode
-            .Tag = "Group"
-        End With
-        
-        ' increment group counter
-        groupCount = (groupCount + 1)
+        ' ...
+        If (Not (newNode Is Nothing)) Then
+            ' change misc. settings
+            With newNode
+                .Tag = "Group"
+            End With
+            
+            ' increment group counter
+            groupCount = (groupCount + 1)
+        End If
         
     ElseIf (tbsTabs.SelectedItem.index = 2) Then ' Clan Tab
         Dim ClanName As String ' ...
@@ -602,14 +608,17 @@ Private Sub btnCreateGroup_Click()
         ' ...
         Set newNode = trvUsers.Nodes.Add("Database", tvwChild, "Clan: " & _
             ClanName, ClanName, 2)
+        
+        ' ...
+        If (Not (newNode Is Nothing)) Then
+            ' change misc. settings
+            With newNode
+                .Tag = "Clan"
+            End With
             
-        ' change misc. settings
-        With newNode
-            .Tag = "Clan"
-        End With
-            
-        ' increment clan counter
-        clanCount = (clanCount + 1)
+            ' increment clan counter
+            clanCount = (clanCount + 1)
+        End If
         
     ElseIf (tbsTabs.SelectedItem.index = 3) Then ' Game Tab
         ' ...
@@ -634,11 +643,14 @@ Private Sub btnCreateGroup_Click()
                 ' ...
                 Set newNode = trvUsers.Nodes.Add("Database", tvwChild, "Game: " & _
                     m_game, m_game, 2)
-                    
-                ' change misc. settings
-                With newNode
-                    .Tag = "Game"
-                End With
+                
+                ' ...
+                If (Not (newNode Is Nothing)) Then
+                    ' change misc. settings
+                    With newNode
+                        .Tag = "Game"
+                    End With
+                End If
             Else
                 ' alert user that game entry already exists
                 MsgBox "There is already an entry of this type matching " & _
@@ -917,10 +929,13 @@ Private Sub tbsTabs_Click()
                         bln = False
                     End If
                     
-                    ' change misc. settings
-                    With newNode
-                        .Tag = "Group"
-                    End With
+                    ' ...
+                    If (Not (newNode Is Nothing)) Then
+                        ' change misc. settings
+                        With newNode
+                            .Tag = "Group"
+                        End With
+                    End If
                 End If
             Next i
 
@@ -954,10 +969,13 @@ Private Sub tbsTabs_Click()
                             "User: " & m_DB(i).Username, m_DB(i).Username, 3)
                     End If
                     
-                    ' change misc. settings
-                    With newNode
-                        .Tag = "User"
-                    End With
+                    ' ...
+                    If (Not (newNode Is Nothing)) Then
+                        ' change misc. settings
+                        With newNode
+                            .Tag = "User"
+                        End With
+                    End If
                 End If
             Next i
             
@@ -972,11 +990,14 @@ Private Sub tbsTabs_Click()
                     ' create new node
                     Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
                         "Clan: " & m_DB(i).Username, m_DB(i).Username, 2)
-                        
-                    ' change misc. settings
-                    With newNode
-                        .Tag = "Clan"
-                    End With
+                    
+                    ' ...
+                    If (Not (newNode Is Nothing)) Then
+                         ' change misc. settings
+                         With newNode
+                             .Tag = "Clan"
+                         End With
+                     End If
                 End If
             Next i
 
@@ -991,11 +1012,14 @@ Private Sub tbsTabs_Click()
                     ' create new node
                     Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
                         "Group: " & m_DB(i).Username, m_DB(i).Username, 2)
-                        
-                    ' change misc. settings
-                    With newNode
-                        .Tag = "Game"
-                    End With
+                    
+                    ' ...
+                    If (Not (newNode Is Nothing)) Then
+                        ' change misc. settings
+                        With newNode
+                            .Tag = "Game"
+                        End With
+                    End If
                 End If
             Next i
             
