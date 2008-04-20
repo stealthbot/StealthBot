@@ -5984,35 +5984,47 @@ Public Function Cache(ByVal Inpt As String, ByVal Mode As Byte, Optional ByRef T
     Dim i       As Integer
     
     ' ...
-    If (Typ <> vbNullString) Then
+    If (Mode = 255) Then
+        ' ...
+        ReDim s(0)
+        
+        ' ...
+        sTyp = Typ
+        
+        ' ...
         bln = False
     End If
     
     ' ...
     If (InStr(1, LCase$(Inpt), "in channel ", vbTextCompare) <> 0) Then
         bln = True
-    End If
-    
-    ' ...
-    If (bln = True) Then
+    Else
         ' ...
-        Select Case (Mode)
-            Case 0
-                For i = 0 To UBound(s)
-                    Cache = Cache & Replace(s(i), ",", "") & Space(1)
-                Next i
-    
-                ReDim s(0)
-                Typ = sTyp
-                
-            Case 1
-                ReDim Preserve s(UBound(s) + 1)
-                s(UBound(s)) = Inpt
-    
-            Case 255
-                ReDim s(0)
-                sTyp = Typ
-        End Select
+        If (bln = True) Then
+            ' ...
+            Select Case (Mode)
+                ' ...
+                Case 0
+                    ' ...
+                    For i = 0 To UBound(s)
+                        Cache = Cache & Replace(s(i), ",", "") & Space(1)
+                    Next i
+        
+                    ' ...
+                    ReDim s(0)
+                    
+                    ' ...
+                    Typ = sTyp
+                    
+                ' ...
+                Case 1
+                    ' ...
+                    ReDim Preserve s(UBound(s) + 1)
+                    
+                    ' ...
+                    s(UBound(s)) = Inpt
+            End Select
+        End If
     End If
 End Function
 
