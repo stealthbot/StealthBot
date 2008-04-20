@@ -345,6 +345,9 @@ Public Sub Clear()
     ReDim m_QueueObjs(0) As clsQueueOBj
     
     ' ...
+    Set m_QueueObjs(0) = Nothing
+    
+    ' ...
     Set m_QueueObjs(0) = New clsQueueOBj
 
     ' ...

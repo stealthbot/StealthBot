@@ -853,6 +853,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -878,6 +879,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2337,13 +2339,13 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     AddChat vbYellow, "[CLAN] " & Member & " has left the clan."
     
     Dim X   As ListItem
-    Dim Pos As Integer
+    Dim pos As Integer
     
-    Pos = g_Clan.GetUserIndexEx(Member)
+    pos = g_Clan.GetUserIndexEx(Member)
     
     ' ...
-    If (Pos > 0) Then
-        g_Clan.Members.Remove Pos
+    If (pos > 0) Then
+        g_Clan.Members.Remove pos
     End If
     
 
@@ -2498,12 +2500,12 @@ End Sub
 
 Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
     Dim X   As ListItem
-    Dim Pos As Integer
+    Dim pos As Integer
     
-    Pos = g_Clan.GetUserIndexEx(Username)
+    pos = g_Clan.GetUserIndexEx(Username)
     
-    If (Pos > 0) Then
-        With g_Clan.Members(Pos)
+    If (pos > 0) Then
+        With g_Clan.Members(pos)
             .Rank = Rank
             .Status = IsOnline
             .Location = Location
@@ -5412,31 +5414,41 @@ End Sub
 
 '/* Fires every second */
 Private Sub UpTimer_Timer()
-    Dim newColor As Long
-    Dim i        As Integer
-    Dim Pos      As Integer
 
-    uTicks = uTicks + 1000
+    Dim newColor  As Long
+    Dim i         As Integer
+    Dim pos       As Integer
+    Dim doCheck   As Boolean
+
+    uTicks = (uTicks + 1000)
     
-    'Debug.Print colUsersInChannel.Item(UsernameToIndex(CurrentUsername)).TimeSinceTalk
+    If (floodCap > 2) Then
+        floodCap = floodCap - 3
+    End If
     
-    If floodCap > 2 Then floodCap = floodCap - 3
-    
-    If VoteDuration > 0 Then
+    If (VoteDuration > 0) Then
         VoteDuration = VoteDuration - 1
-        If VoteDuration = 0 Then
+        
+        If (VoteDuration = 0) Then
             Dim s As String
+            
             s = Voting(BVT_VOTE_END)
-            If Len(s) > 1 Then AddQ s
+            
+            If (Len(s) > 1) Then
+                AddQ s
+            End If
         End If
     End If
     
-    If g_Queue.Count > 0 Then
+    If (g_Queue.Count > 0) Then
         Ban vbNullString, 0, 3
     End If
 
     ' ...
     If (g_Channel.IsSilent = False) Then
+        ' ...
+        doCheck = True
+    
         ' ...
         For i = 1 To g_Channel.Users.Count
             ' ...
@@ -5445,25 +5457,35 @@ Private Sub UpTimer_Timer()
                 If (g_Channel.Self.IsOperator) Then
                     ' ...
                     If (.IsOperator = False) Then
-                        ' channel passwording
-                        If ((BotVars.ChannelPasswordDelay > 0) And (Len(BotVars.ChannelPassword) > 0)) Then
-                            'If .InternalFlags = IF_AWAITING_CHPW Or .InternalFlags = IF_CHPW_AND_IDLEBANS Then
-                            '    If .TimeInChannel() > BotVars.ChannelPasswordDelay Then
-                            '        .InternalFlags = 0
-                            '        Ban .Name & " Password time is up", (AutoModSafelistValue - 1)
-                            '    End If
-                            'End If
-                        End If
-                        
-                        ' idle bans
-                        If ((BotVars.IB_On = BTRUE) And (BotVars.IB_Wait > 0)) Then
-                            'If .InternalFlags = IF_SUBJECT_TO_IDLEBANS Or .InternalFlags = IF_CHPW_AND_IDLEBANS Then
-                            '    If .TimeSinceTalk() > BotVars.IB_Wait Then
-                            '        .InternalFlags = 0
-                            '
-                            '        Ban .DisplayName & " Idle for " & BotVars.IB_Wait & "+ seconds", (AutoModSafelistValue - 1), IIf(BotVars.IB_Kick, 1, 0)
-                            '    End If
-                            'End If
+                        ' ...
+                        If (GetSafelist(.DisplayName) = False) Then
+                            ' channel password
+                            If ((BotVars.ChannelPasswordDelay > 0) And (Len(BotVars.ChannelPassword) > 0)) Then
+                                ' ...
+                                If (.PassedChannelAuth = False) Then
+                                    ' ...
+                                    If (.TimeInChannel() > BotVars.ChannelPasswordDelay) Then
+                                        ' ...
+                                        Ban .DisplayName & " Password time is up", (AutoModSafelistValue - 1)
+                                         
+                                        ' ...
+                                        doCheck = False
+                                    End If
+                                End If
+                            End If
+                            
+                            ' idle bans
+                            If ((doCheck) And ((BotVars.IB_On = BTRUE) And (BotVars.IB_Wait > 0))) Then
+                                ' ...
+                                If (.TimeSinceTalk() > BotVars.IB_Wait) Then
+                                    ' ...
+                                    Ban .DisplayName & " Idle for " & BotVars.IB_Wait & "+ seconds", _
+                                        (AutoModSafelistValue - 1), IIf(BotVars.IB_Kick, 1, 0)
+                                        
+                                    ' ...
+                                    doCheck = False
+                                End If
+                            End If
                         End If
                     End If
                 End If
@@ -5471,23 +5493,27 @@ Private Sub UpTimer_Timer()
                 ' ...
                 If (BotVars.NoColoring = False) Then
                     ' ...
-                    Pos = checkChannel(.DisplayName)
+                    pos = checkChannel(.DisplayName)
                 
                     ' ...
-                    If (Pos > 0) Then
+                    If (pos > 0) Then
                         ' ...
                         newColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
                             GetCurrentUsername, vbBinaryCompare) = 0)
                         
                         ' ...
-                        If (lvChannel.ListItems(Pos).ForeColor <> newColor) Then
-                            lvChannel.ListItems(Pos).ForeColor = newColor
+                        If (lvChannel.ListItems(pos).ForeColor <> newColor) Then
+                            lvChannel.ListItems(pos).ForeColor = newColor
                         End If
                     End If
                 End If
             End With
+            
+            ' ...
+            doCheck = True
         Next i
     End If
+    
 End Sub
 
 'StealthLock (c) 2003 Stealth, Please do not remove this header

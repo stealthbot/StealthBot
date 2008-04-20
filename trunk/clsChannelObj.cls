@@ -87,10 +87,10 @@ Public Property Let Flags(lng As Long)
 
 End Property
 
-Public Property Let JoinTime(jdate As Date)
+Public Property Let JoinTime(JDate As Date)
 
     ' ...
-    m_join_date = jdate
+    m_join_date = JDate
 
 End Property
 
@@ -296,7 +296,7 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
 
     Dim i    As Integer ' ...
     Dim bln  As Boolean ' ...
-    Dim Pos  As Integer ' ...
+    Dim pos  As Integer ' ...
     Dim Name As String  ' ...
     
     ' ...
@@ -320,11 +320,11 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
                     Banlist.Remove i
                     
                     ' ...
-                    Pos = IsOnBanList(Name)
+                    pos = IsOnBanList(Name)
                     
                     ' ...
-                    If (Pos > 0) Then
-                        Banlist(Pos).IsDuplicateBan = False
+                    If (pos > 0) Then
+                        Banlist(pos).IsDuplicateBan = False
                     End If
                     
                     ' ...
@@ -334,7 +334,7 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
                     Exit For
                 Else
                     ' ...
-                    Banlist(Pos).IsActive = False
+                    Banlist(pos).IsActive = False
                 End If
             End If
         Next i
@@ -487,6 +487,38 @@ Public Function CheckUsers() As Integer
                                     End If
                                 End If
                             End If
+                            
+                            ' ...
+                            'If (doCheck) Then
+                            '    ' ...
+                            '    If ((BotVars.ChannelPasswordDelay) And (Len(BotVars.ChannelPassword) > 0)) Then
+                            '        ' ...
+                            '        If (CurrentUser.TimeInChannel() > BotVars.ChannelPasswordDelay) Then
+                            '            ' ...
+                            '            Ban CurrentUser.DisplayName & " Password time is up", _
+                            '                (AutoModSafelistValue - 1)
+                            '
+                            '            ' ...
+                            '            doCheck = False
+                            '        End If
+                            '    End If
+                            'End If
+                            '
+                            ' ...
+                            'If (doCheck) Then
+                            '    ' ...
+                            '    If ((BotVars.IB_On = BTRUE) And (BotVars.IB_Wait > 0)) Then
+                            '        ' ...
+                            '        If (CurrentUser.TimeSinceTalk() > BotVars.IB_Wait) Then
+                            '            ' ...
+                            '            Ban CurrentUser.DisplayName & " Idle for " & BotVars.IB_Wait & "+ seconds", _
+                            '                (AutoModSafelistValue - 1), IIf(BotVars.IB_Kick, 1, 0)
+                            '
+                            '            ' ...
+                            '            doCheck = False
+                            '        End If
+                            '    End If
+                            'End If
                         End If
                     End If
                 End If
