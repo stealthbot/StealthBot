@@ -125,7 +125,7 @@ Public AwaitingSelfRemoval As Byte
 
 Public g_Quotes As Collection
 Public g_Channel As New clsChannelObj
-Public g_Log As New clsLog
+Public g_Logger As New clsLogger
 Public g_Clan As New clsClanObj
 Public g_Friends As New Collection
 

@@ -6,7 +6,7 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "clsLog"
+Attribute VB_Name = "clsLogger"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
@@ -43,7 +43,7 @@ Public Function WriteWarning(ByVal Source As String, ByVal sWarning As String)
     End If
     
     ' ...
-    WriteLine Source & Space$(1) & sWarning
+    WriteLine "warning " & Source & Space$(1) & sWarning
 
 End Function
 
@@ -64,7 +64,7 @@ Public Function WriteError(ByVal Source As String, ByVal Procedure As String, By
     End If
     
     ' ...
-    WriteLine Source & Space$(1) & Procedure & Space$(1) & sError
+    WriteLine "error " & Source & Space$(1) & Procedure & Space$(1) & sError
 
 End Function
 
@@ -86,7 +86,7 @@ Public Function WriteEvent(ByVal Source As String, ByVal sEventTitle As String, 
     End If
     
     ' ...
-    WriteLine Source & Space$(1) & sEventTitle & Space$(1) & sEvent
+    WriteLine "event " & Source & Space$(1) & sEventTitle & Space$(1) & sEvent
 
 End Function
 
@@ -102,7 +102,7 @@ Public Function WriteDebug(ByVal Source As String, ByVal sDebugMessage As String
     End If
     
     ' ...
-    WriteLine Source & Space$(1) & sDebugMessage
+    WriteLine "debug " & Source & Space$(1) & sDebugMessage
 
 End Function
 
