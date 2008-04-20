@@ -1388,6 +1388,10 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     HasAccess = modCommandCode.HasAccess(Username, CommandName, CommandArgs, outbuf)
 End Function
 
+Public Function Log() As Object
+    Set Log = g_Log
+End Function
+
 Public Function UtcNow() As Date
     UtcNow = modDateTime.UtcNow
 End Function

@@ -105,6 +105,7 @@ Class=clsBanlistUserObj; clsBanlistUserObj.cls
 Class=clsUserStats; clsUserStats.cls
 Class=clsUserEventObj; clsUserEventObj.cls
 Module=modDateTime; modDateTime.bas
+Class=clsLog; clsLog.cls
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""
