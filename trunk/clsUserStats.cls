@@ -41,17 +41,17 @@ Private m_expansion           As Boolean
 Private m_hardcore            As Boolean
 Private m_realm               As String
 
-Public Property Let Game(str As String)
+Public Property Let game(str As String)
 
     ' ...
     m_game = str
 
 End Property
 
-Public Property Get Game() As String
+Public Property Get game() As String
 
     ' ...
-    Game = m_game
+    game = m_game
 
 End Property
 
@@ -85,12 +85,12 @@ End Property
 Public Property Get IconName() As String
 
     ' ...
-    If ((Game = "WAR3") Or (Game = "W3XP")) Then
+    If ((game = "WAR3") Or (game = "W3XP")) Then
         ' ...
         Select Case (Mid$(Icon, 2, 1))
             Case "H" ' Human
                 ' ...
-                If (Game = "WAR3") Then
+                If (game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -113,7 +113,7 @@ Public Property Get IconName() As String
             
             Case "N" ' Night Elf
                 ' ...
-                If (Game = "WAR3") Then
+                If (game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -136,7 +136,7 @@ Public Property Get IconName() As String
                 
             Case "U" ' Undead
                 ' ...
-                If (Game = "WAR3") Then
+                If (game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -159,7 +159,7 @@ Public Property Get IconName() As String
             
             Case "O" ' Orc
                 ' ...
-                If (Game = "WAR3") Then
+                If (game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -182,7 +182,7 @@ Public Property Get IconName() As String
 
             Case "R" ' Random
                 ' ...
-                If (Game = "WAR3") Then
+                If (game = "WAR3") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -205,7 +205,7 @@ Public Property Get IconName() As String
 
             Case "D" ' Tournament
                 ' ...
-                If (Game = "W3XP") Then
+                If (game = "W3XP") Then
                     ' ...
                     Select Case (Val(Mid(Icon, 1, 1)))
                         Case 1: IconName = "peon"
@@ -231,7 +231,7 @@ Public Property Let Statstring(str As String)
     End If
 
     ' ...
-    Game = StrReverse$(Left$(str, 4))
+    game = StrReverse$(Left$(str, 4))
 
     ' ...
     m_stat_string = Mid$(str, 5)
@@ -377,7 +377,7 @@ End Property
 Public Property Get CharacterClass() As String
     
     ' ...
-    If ((Game = "D2DV") Or (Game = "D2XP")) Then
+    If ((game = "D2DV") Or (game = "D2XP")) Then
     
         Dim DIIClasses(0 To 7) As String ' ...
         
@@ -466,12 +466,12 @@ End Property
 Public Property Get CurrentAct() As Integer
 
     ' ...
-    If ((Game = "D2DV") Or (Game = "D2XP")) Then
+    If ((game = "D2DV") Or (game = "D2XP")) Then
         ' ...
         If (IsExpansionCharacter = False) Then
-            CurrentAct = (Int(ActsCompleted Mod 4) + 1)
+            CurrentAct = ((ActsCompleted Mod 4) + 1)
         Else
-            CurrentAct = (Int(ActsCompleted Mod 5) + 1)
+            CurrentAct = ((ActsCompleted Mod 5) + 1)
         End If
     End If
 
@@ -479,25 +479,35 @@ End Property
 
 Public Property Get CurrentDifficulty() As String
 
-    Dim difficulty As String ' ...
-    
     ' ...
-    If ((Game = "D2DV") Or (Game = "D2XP")) Then
+    If ((game = "D2DV") Or (game = "D2XP")) Then
         ' ...
-        If (IsExpansionCharacter = False) Then
-            difficulty = Int(ActsCompleted / 4)
-        Else
-            difficulty = Int(ActsCompleted / 5)
-        End If
-        
-        ' ...
-        Select Case (difficulty)
-            Case 0: CurrentDifficulty = "Normal"
-            Case 1: CurrentDifficulty = "Nightmare"
-            Case 2: CurrentDifficulty = "Hell"
+        Select Case (CurrentDifficultyID)
+            Case 1: CurrentDifficulty = "Normal"
+            Case 2: CurrentDifficulty = "Nightmare"
+            Case 3: CurrentDifficulty = "Hell"
         End Select
     End If
 
+End Property
+
+Public Property Get CurrentDifficultyID() As Integer
+
+    Dim difficulty As String ' ...
+    
+    ' ...
+    If ((game = "D2DV") Or (game = "D2XP")) Then
+        ' ...
+        If (IsExpansionCharacter = False) Then
+            difficulty = ((ActsCompleted / 4) + 1)
+        Else
+            difficulty = ((ActsCompleted / 5) + 1)
+        End If
+    End If
+    
+    ' ...
+    CurrentDifficultyID = Int(difficulty)
+    
 End Property
 
 Public Property Get Title() As String
@@ -534,10 +544,28 @@ Public Property Get Title() As String
     Expansion(1, 2, 0) = "Guardian"
     
     ' ...
-    If (IsExpansionCharacter = False) Then
-        
-    Else
-    
+    If ((game = "D2DV") Or (game = "D2XP")) Then
+        ' ...
+        If ((CurrentDifficultyID - 1) > 0) Then
+            ' ...
+            If (game = "D2DV") Then
+                ' ...
+                Title = Classic(IsHardcoreCharacter, (CurrentDifficultyID - 2), IsFemaleCharacter)
+                
+                ' ...
+                If (Title = vbNullString) Then
+                    Title = Classic(IsHardcoreCharacter, (CurrentDifficultyID - 2), False)
+                End If
+            Else
+                ' ...
+                Title = Expansion(IsHardcoreCharacter, (CurrentDifficultyID - 2), IsFemaleCharacter)
+                
+                ' ...
+                If (Title = vbNullString) Then
+                    Title = Expansion(IsHardcoreCharacter, (CurrentDifficultyID - 2), False)
+                End If
+            End If
+        End If
     End If
     
 End Property
@@ -648,7 +676,7 @@ Public Property Get ToString() As String
     End If
     
     ' ...
-    Select Case (Game)
+    Select Case (game)
         ' ...
         Case "SSHR", "STAR", "JSTR", "SEXP"
             ToString = StarCraft_ToString()
@@ -680,7 +708,7 @@ Private Sub Parse()
     End If
 
     ' ...
-    Select Case (Game)
+    Select Case (game)
         ' ...
         Case "SSHR", "STAR", "JSTR", "SEXP"
             Call ParseStarCraft
@@ -771,7 +799,7 @@ Private Sub ParseDiabloII()
         CharacterClassID = charData(13)
         Level = charData(25)
         CharacterFlags = charData(26)
-        ActsCompleted = RShift((charData(27) - &H80), 1)
+        ActsCompleted = (charData(27) And &H18)
     End If
     
 End Sub
@@ -851,10 +879,10 @@ Private Sub MakeArr(str As String, arr() As Integer)
     
 End Sub
 
-Private Function MakeLongGameName(Game As String) As String
+Private Function MakeLongGameName(game As String) As String
 
     ' ...
-    Select Case (Game)
+    Select Case (game)
         ' starcraft
         Case "SSHR": MakeLongGameName = "StarCraft: Shareware"
         Case "STAR": MakeLongGameName = "StarCraft"

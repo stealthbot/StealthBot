@@ -125,12 +125,14 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             Next n
             
         Case SID_FRIENDUPDATE
+            Call g_Logger.WriteDebug(vbNullString, "S->C: SID_FRIENDUPDATE")
+        
             '(BYTE)       Entry number
             n = Asc(Mid$(Data, Position, 1)) + 1
             
             Position = Position + 1
             
-            With g_Friends.Item(n)
+            With g_Friends(n)
                 '(BYTE) Flags
                 bytTemp = Asc(Mid$(Data, Position, 1))
                 Position = Position + 1
@@ -148,7 +150,12 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             
                 '(STRING) Location str (blank = private)
                 s = Mid$(Data, Position)
-                s = Left$(s, Len(s) - 1)
+                
+                ' ...
+                If (Len(s) > 0) Then
+                    s = Left$(s, Len(s) - 1)
+                End If
+                
                 .Location = IIf(LenB(s) > 0, s, "(private)")
                 
                 RaiseEvent FriendUpdate(.DisplayName, n)
