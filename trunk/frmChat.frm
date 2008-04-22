@@ -853,7 +853,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -879,7 +878,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2612,7 +2610,7 @@ Private Sub ClanHandler_RemoveUserReply(ByVal result As Byte)
     'Debug.Print "Removed successfully!"
     
     Select Case result
-        Case 0, 2, 1
+        Case 0
             If AwaitingSelfRemoval = 1 Then
                 AwaitingSelfRemoval = 0
                 Clan.isUsed = False
@@ -2623,12 +2621,17 @@ Private Sub ClanHandler_RemoveUserReply(ByVal result As Byte)
                 ListviewTabs.TabIndex = 0
                 Call ListviewTabs_Click(2)
                 
+                g_Clan = New clsClanObj
+                
                 AddChat RTBColors.SuccessText, "[CLAN] You have successfully left the clan."
             Else
                 AddChat RTBColors.SuccessText, "[CLAN] User removed successfully."
                 lvClanList.ListItems.Clear
                 RequestClanList
             End If
+            
+        Case 2
+            AddChat RTBColors.ErrorMessageText, "[CLAN] That user is currently on probation."
         
         Case 3
             AddChat RTBColors.ErrorMessageText, "[CLAN] There are not enough members for you to remove that user."

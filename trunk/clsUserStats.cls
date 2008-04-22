@@ -217,8 +217,6 @@ Public Property Get IconName() As String
                     End Select
                 End If
         End Select
-    Else
-
     End If
 
 End Property
@@ -510,7 +508,7 @@ Public Property Get CurrentDifficultyID() As Integer
     
 End Property
 
-Public Property Get Title() As String
+Public Property Get CharacterTitle() As String
 
     ' thanks c0ol for multi-dimensional array idea
     Dim Classic(2, 3, 2)   As String ' ...
