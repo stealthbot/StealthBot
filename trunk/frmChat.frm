@@ -853,6 +853,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -878,6 +879,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4276,12 +4278,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 
                                 If (X(n) <> vbNullString) Then
                                     If (n <> LBound(X)) Then
-                                        AddQ txtPre.text & X(n) & txtPost.text, PRIORITY.CONSOLE_MESSAGE
+                                        AddQ txtPre.text & X(n) & txtPost.text, Priority.CONSOLE_MESSAGE
                                         
                                         cboSend.AddItem txtPre.text & X(n) & txtPost.text, 0
                                     Else
                                         AddQ txtPre.text & cboSend.text & X(n) & txtPost.text, _
-                                            PRIORITY.CONSOLE_MESSAGE
+                                            Priority.CONSOLE_MESSAGE
                                         
                                         cboSend.AddItem txtPre.text & cboSend.text & X(n) & txtPost.text, 0
                                     End If
@@ -4458,7 +4460,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Case S_CTRL 'CTRL+ENTER - rewhisper
                         If LenB(cboSend.text) > 0 Then
                             AddQ "/w " & IIf(Dii, "*", "") & LastWhisperTo & Space(1) & cboSend.text, _
-                                PRIORITY.CONSOLE_MESSAGE
+                                Priority.CONSOLE_MESSAGE
                                 
                             cboSend.text = vbNullString
                         End If
@@ -4466,7 +4468,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Case S_CTRLSHIFT 'CTRL+SHIFT+ENTER - reply
                         If LenB(cboSend.text) > 0 Then
                             AddQ "/w " & IIf(Dii, "*", "") & LastWhisper & Space(1) & cboSend.text, _
-                                PRIORITY.CONSOLE_MESSAGE
+                                Priority.CONSOLE_MESSAGE
                             cboSend.text = vbNullString
                         End If
                 
@@ -4572,7 +4574,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     m = Right(s, (Len(s) - 7))
                                     
                                     AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m), _
-                                        PRIORITY.CONSOLE_MESSAGE
+                                        Priority.CONSOLE_MESSAGE
                                     
                                 ElseIf (LCase(Left$(s, 9)) = "/profile ") Then
                                     If (sckBNet.State = 7) Then
@@ -4602,7 +4604,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     commandResult = ProcessCommand(GetCurrentUsername, m, _
                                         True, False)
                                 Else
-                                    Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
+                                    Call AddQ(OutFilterMsg(s), Priority.CONSOLE_MESSAGE)
                                 End If
                             End If
 theEnd:
@@ -4835,7 +4837,7 @@ Private Sub QueueTimer_Timer()
         With g_Queue.Peek
             Message = .Message
             Tag = .Tag
-            pri = .PRIORITY
+            pri = .Priority
         End With
         
         If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
@@ -5557,7 +5559,8 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     Const BNET_MSG_LENGTH = 223
 
     ' ...
-    Static LastGTC As Long
+    Static LastGTC  As Long
+    Static BanCount As Integer
     
     ' ...
     Dim strTmp As String
@@ -5739,16 +5742,16 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 
                     ' ...
                     Select Case (cmdName)
-                        Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
-                        Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
-                        Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "unban":     msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "squelch":   msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "ignore":    msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "unsquelch": msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "unignore":  msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
+                        Case "designate": msg_priority = Priority.SPECIAL_MESSAGE
+                        Case "resign":    msg_priority = Priority.SPECIAL_MESSAGE
+                        Case "ban":       msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                        Case "unban":     msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                        Case "kick":      msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                        Case "squelch":   msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                        Case "ignore":    msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                        Case "unsquelch": msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                        Case "unignore":  msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                        Case Else:        msg_priority = Priority.MESSAGE_DEFAULT
                     End Select
                 End If
             End If
@@ -5819,22 +5822,28 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         ' do we have ops?
                         If (g_Channel.Self.IsOperator) Then
                             ' ...
-                            banDelay = 100
+                            If (BanCount = 0) Then
+                                ' ...
+                                banDelay = 100
+                                
+                                ' ...
+                                For j = 1 To g_Channel.Users.Count
+                                    ' ...
+                                    If (StrComp(CurrentUsername, g_Channel.Users(j).Name, vbBinaryCompare) = 0) Then
+                                        Exit For
+                                    ElseIf (g_Channel.Users(j).IsOperator) Then
+                                        ' ...
+                                        If ((g_Channel.Users(j).Ping >= 1) And (g_Channel.Users(j).Ping <= 300)) Then
+                                            banDelay = (banDelay + g_Channel.Users(j).Ping)
+                                        Else
+                                            banDelay = (banDelay + 300)
+                                        End If
+                                    End If
+                                Next j
+                            End If
                             
                             ' ...
-                            For j = 1 To g_Channel.Users.Count
-                                ' ...
-                                If (StrComp(CurrentUsername, g_Channel.Users(j).Name, vbBinaryCompare) = 0) Then
-                                    Exit For
-                                ElseIf (g_Channel.Users(j).IsOperator) Then
-                                    ' ...
-                                    If ((g_Channel.Users(j).Ping >= 1) And (g_Channel.Users(j).Ping <= 300)) Then
-                                        banDelay = (banDelay + g_Channel.Users(j).Ping)
-                                    Else
-                                        banDelay = (banDelay + 300)
-                                    End If
-                                End If
-                            Next j
+                            BanCount = (BanCount + 1)
                         End If
                     End If
                     
@@ -5857,7 +5866,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 ' ...
                 With Q
                     .Message = Send
-                    .PRIORITY = msg_priority
+                    .Priority = msg_priority
                     .ResponseTo = vbNullString
                     .Tag = Tag
                 End With

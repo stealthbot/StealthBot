@@ -64,69 +64,69 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             Position = 2
             Set flTemp = Nothing
             
-            For n = 0 To n - 1
-                Set flTemp = New clsFriendObj
-                
-                ''debug.print DebugOutput(Mid$(Data, Position)) & vbCrLf
-                s = ""
-                
-                With flTemp
-                    'For each entry:
-                    '(STRING)         Account
-                    s = KillNull(Mid$(Data, Position))
-                    .Name = s
-                    'debug.print "Username: " & s
-                    Position = Position + Len(.Name) + 1 'account for chr(0) at end
-                    'debug.print "Position incremented " & Len(.Name) + 1 & " to " & Position
+            If (n > 0) Then
+                For n = 0 To n - 1
+                    Set flTemp = New clsFriendObj
                     
-                    '(BYTE)       Status
-                    bytTemp = Asc(Mid$(Data, Position, 1))
-                    .Status = bytTemp
-                    Position = Position + 1
+                    ''debug.print DebugOutput(Mid$(Data, Position)) & vbCrLf
+                    s = ""
                     
-                    'debug.print "Status: " & .Status
-                    'debug.print "Position incremented 1 to " & Position
+                    With flTemp
+                        'For each entry:
+                        '(STRING)         Account
+                        s = KillNull(Mid$(Data, Position))
+                        .Name = s
+                        'debug.print "Username: " & s
+                        Position = Position + Len(.Name) + 1 'account for chr(0) at end
+                        'debug.print "Position incremented " & Len(.Name) + 1 & " to " & Position
+                        
+                        '(BYTE)       Status
+                        bytTemp = Asc(Mid$(Data, Position, 1))
+                        .Status = bytTemp
+                        Position = Position + 1
+                        
+                        'debug.print "Status: " & .Status
+                        'debug.print "Position incremented 1 to " & Position
+                        
+                        '(BYTE)       Location
+                        bytTemp = Asc(Mid$(Data, Position, 1))
+                        .LocationID = bytTemp
+                        Position = Position + 1
+                        
+                        'debug.print "Location: " & .Location
+                        'debug.print "Position incremented 1 to " & Position
+                        
+                        '(DWORD)      ProductID
+                        s = Mid$(Data, Position, 4)
+                        If Conv(s) = 0 Then
+                            .game = "OFFL"
+                        Else
+                            .game = StrReverse(s)
+                        End If
+                        Position = Position + 4
+                        
+                        'debug.print "ProductID: " & .Game
+                        'debug.print "Position incremented 4 to " & Position
+                        
+                        '(STRING)         Channel
+                        s = KillNull(Mid$(Data, Position))
+                        Position = Position + Len(s) + 1
+                        .Location = s
+                    End With
                     
-                    '(BYTE)       Location
-                    bytTemp = Asc(Mid$(Data, Position, 1))
-                    .LocationID = bytTemp
-                    Position = Position + 1
+                    ''debug.print "Successfully added: " & flTemp.Name
                     
-                    'debug.print "Location: " & .Location
-                    'debug.print "Position incremented 1 to " & Position
+                    g_Friends.Add flTemp
                     
-                    '(DWORD)      ProductID
-                    s = Mid$(Data, Position, 4)
-                    If Conv(s) = 0 Then
-                        .game = "OFFL"
-                    Else
-                        .game = StrReverse(s)
-                    End If
-                    Position = Position + 4
+                    RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.game, flTemp.Location, flTemp.Status, _
+                         flTemp.LocationID)
+                        
+                    Set flTemp = Nothing
                     
-                    'debug.print "ProductID: " & .Game
-                    'debug.print "Position incremented 4 to " & Position
-                    
-                    '(STRING)         Channel
-                    s = KillNull(Mid$(Data, Position))
-                    Position = Position + Len(s) + 1
-                    .Location = s
-                End With
-                
-                ''debug.print "Successfully added: " & flTemp.Name
-                
-                g_Friends.Add flTemp
-                
-                RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.game, flTemp.Location, flTemp.Status, _
-                     flTemp.LocationID)
-                    
-                Set flTemp = Nothing
-                
-            Next n
+                Next n
+            End If
             
         Case SID_FRIENDUPDATE
-            Call g_Logger.WriteDebug(vbNullString, "S->C: SID_FRIENDUPDATE")
-        
             '(BYTE)       Entry number
             n = Asc(Mid$(Data, Position, 1)) + 1
             

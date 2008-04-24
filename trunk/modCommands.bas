@@ -88,7 +88,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                         If (IsLocal) Then
                             ' ...
                             If (command.PublicOutput) Then
-                                AddQ command_return(i), PRIORITY.CONSOLE_MESSAGE
+                                AddQ command_return(i), Priority.CONSOLE_MESSAGE
                             Else
                                 frmChat.AddChat RTBColors.ConsoleText, command_return(i)
                             End If
@@ -96,9 +96,9 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                             ' ...
                             If ((BotVars.WhisperCmds) Or (WasWhispered)) Then
                                 AddQ "/w " & Username & Space$(1) & command_return(i), _
-                                        PRIORITY.COMMAND_RESPONSE_MESSAGE
+                                        Priority.COMMAND_RESPONSE_MESSAGE
                             Else
-                                AddQ command_return(i), PRIORITY.COMMAND_RESPONSE_MESSAGE
+                                AddQ command_return(i), Priority.COMMAND_RESPONSE_MESSAGE
                             End If
                         End If
                     Next i
@@ -110,9 +110,9 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                 ' ...
                 If ((BotVars.WhisperCmds) Or (WasWhispered)) Then
                     AddQ "/w " & Username & Space$(1) & command_return(i), _
-                            PRIORITY.COMMAND_RESPONSE_MESSAGE
+                            Priority.COMMAND_RESPONSE_MESSAGE
                 Else
-                    AddQ command_return(i), PRIORITY.COMMAND_RESPONSE_MESSAGE
+                    AddQ command_return(i), Priority.COMMAND_RESPONSE_MESSAGE
                 End If
             End If
         End If
@@ -702,7 +702,7 @@ Private Function OnHome(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ' This command will make the bot join its home channel.
     
     ' ...
-    Call AddQ("/join " & BotVars.HomeChannel, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
+    Call AddQ("/join " & BotVars.HomeChannel, Priority.COMMAND_RESPONSE_MESSAGE, _
         Username)
 End Function ' end function OnHome
 
@@ -722,7 +722,7 @@ Private Function OnClan(ByVal Username As String, ByRef dbAccess As udtGetAccess
                 tmpBuf = "Clan channel is now public."
                 
                 ' set clan channel to public
-                Call AddQ("/clan public", PRIORITY.CHANNEL_MODERATION_MESSAGE, _
+                Call AddQ("/clan public", Priority.CHANNEL_MODERATION_MESSAGE, _
                     Username)
             Else
                 tmpBuf = "Error: The bot must have ops to change clan privacy status."
@@ -735,7 +735,7 @@ Private Function OnClan(ByVal Username As String, ByRef dbAccess As udtGetAccess
                 tmpBuf = "Clan channel is now private."
                 
                 ' set clan channel to private
-                Call AddQ("/clan private", PRIORITY.CHANNEL_MODERATION_MESSAGE, _
+                Call AddQ("/clan private", Priority.CHANNEL_MODERATION_MESSAGE, _
                     Username)
             Else
                 tmpBuf = "Error: The bot must have ops to change clan privacy status."
@@ -743,7 +743,7 @@ Private Function OnClan(ByVal Username As String, ByRef dbAccess As udtGetAccess
             
         Case Else
             ' set clan channel to specified
-            Call AddQ("/clan " & msgData, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
+            Call AddQ("/clan " & msgData, Priority.COMMAND_RESPONSE_MESSAGE, _
                 Username)
     End Select
     
@@ -905,7 +905,7 @@ Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAcces
     ' if sent from within the bot, send "where" command
     ' directly to Battle.net
     If (InBot) Then
-        Call AddQ("/where " & msgData, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
+        Call AddQ("/where " & msgData, Priority.COMMAND_RESPONSE_MESSAGE, _
             "(console)")
     End If
 
@@ -1014,7 +1014,7 @@ Private Function OnSweepBan(ByVal Username As String, ByRef dbAccess As udtGetAc
         Call Cache(vbNullString, 255, "ban ")
         
         ' ...
-        Call AddQ("/who " & msgData, PRIORITY.CHANNEL_MODERATION_MESSAGE, _
+        Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, _
             Username, "request_receipt")
     Else
         ' ...
@@ -1045,7 +1045,7 @@ Private Function OnSweepIgnore(ByVal Username As String, ByRef dbAccess As udtGe
     Call Cache(vbNullString, 255, "squelch ")
     
     ' ...
-    Call AddQ("/who " & msgData, PRIORITY.CHANNEL_MODERATION_MESSAGE, _
+    Call AddQ("/who " & msgData, Priority.CHANNEL_MODERATION_MESSAGE, _
         Username, "request_receipt")
     
     ' return message
@@ -1585,7 +1585,7 @@ Private Function OnJoin(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ' ...
     If (LenB(msgData) > 0) Then
         ' ...
-        Call AddQ("/join " & msgData, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
+        Call AddQ("/join " & msgData, Priority.COMMAND_RESPONSE_MESSAGE, _
             Username)
     End If
 End Function ' end function OnJoin
@@ -1620,7 +1620,7 @@ Private Function OnResign(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Exit Function
     End If
     
-    Call AddQ("/resign", PRIORITY.SPECIAL_MESSAGE, Username)
+    Call AddQ("/resign", Priority.SPECIAL_MESSAGE, Username)
 End Function ' end function OnResign
 
 ' handle clearbanlist
@@ -1675,11 +1675,11 @@ Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' This command will make the bot rejoin the current channel.
     
     ' join temporary channel
-    Call AddQ("/join " & GetCurrentUsername & " Rejoin", PRIORITY.COMMAND_RESPONSE_MESSAGE, _
+    Call AddQ("/join " & GetCurrentUsername & " Rejoin", Priority.COMMAND_RESPONSE_MESSAGE, _
         Username)
     
     ' rejoin previous channel
-    Call AddQ("/join " & g_Channel.Name, PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
+    Call AddQ("/join " & g_Channel.Name, Priority.COMMAND_RESPONSE_MESSAGE, Username)
 End Function ' end function OnRejoin
 
 ' handle quickrejoin command
@@ -2544,7 +2544,7 @@ Private Function OnUnIgPriv(ByVal Username As String, ByRef dbAccess As udtGetAc
     Dim tmpBuf As String ' temporary output buffer
 
     ' ...
-    Call AddQ("/o unigpriv", PRIORITY.COMMAND_RESPONSE_MESSAGE, _
+    Call AddQ("/o unigpriv", Priority.COMMAND_RESPONSE_MESSAGE, _
         Username)
     
     ' ...
@@ -2561,7 +2561,7 @@ Private Function OnIgPriv(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Dim tmpBuf As String ' temporary output buffer
 
     ' ...
-    Call AddQ("/o igpriv", PRIORITY.COMMAND_RESPONSE_MESSAGE, _
+    Call AddQ("/o igpriv", Priority.COMMAND_RESPONSE_MESSAGE, _
         Username)
     
     ' ...
@@ -3273,7 +3273,7 @@ Private Function OnFAdd(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     If (LenB(u) > 0) Then
         ' ...
-        Call AddQ("/f a " & u, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
+        Call AddQ("/f a " & u, Priority.COMMAND_RESPONSE_MESSAGE, _
             Username)
         
         ' ...
@@ -3296,7 +3296,7 @@ Private Function OnFRem(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     If (Len(u) > 0) Then
         ' ...
-        Call AddQ("/f r " & u, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
+        Call AddQ("/f r " & u, Priority.COMMAND_RESPONSE_MESSAGE, _
             Username)
         
         ' ...
@@ -3545,13 +3545,13 @@ Private Function OnDND(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     ' ...
     If (LenB(msgData) = 0) Then
         ' ...
-        Call AddQ("/dnd", PRIORITY.COMMAND_RESPONSE_MESSAGE)
+        Call AddQ("/dnd", Priority.COMMAND_RESPONSE_MESSAGE)
     Else
         ' ...
         DNDMsg = msgData
     
         ' ...
-        Call AddQ("/dnd " & DNDMsg, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
+        Call AddQ("/dnd " & DNDMsg, Priority.COMMAND_RESPONSE_MESSAGE, _
             Username)
     End If
 End Function ' end function OnDND
@@ -4056,19 +4056,15 @@ Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim tmpBuf  As String ' temporary output buffer
     Dim tmpSend As String ' ...
     
-    If (Len(msgData)) Then
-        If (dbAccess.Access >= GetAccessINIValue("say70", 70)) Then
-            If (dbAccess.Access >= GetAccessINIValue("say90", 90)) Then
-                tmpSend = msgData
-            Else
-                tmpSend = Replace(msgData, "/", "")
-            End If
-        Else
-            tmpSend = Username & " says: " & _
-                msgData
+    ' ...
+    If (Len(msgData) > 0) Then
+        ' ...
+        If (Len(msgData) > 223) Then
+            msgData = Mid$(msgData, 1, 223)
         End If
-
-        Call AddQ(tmpSend, PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
+    
+        ' ...
+        Call AddQ(msgData, Priority.COMMAND_RESPONSE_MESSAGE, Username)
     End If
 
     ' return message
@@ -4082,25 +4078,18 @@ Private Function OnExpand(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Dim tmpBuf  As String ' temporary output buffer
     Dim tmpSend As String
 
-    If (Len(msgData)) Then
-        If (dbAccess.Access >= GetAccessINIValue("say70", 70)) Then
-            If (dbAccess.Access >= GetAccessINIValue("say90", 90)) Then
-                tmpSend = msgData
-            Else
-                tmpSend = Replace(msgData, "/", "")
-            End If
-            
-            tmpSend = Expand(msgData)
-        Else
-            tmpSend = Username & " says: " & _
-                Expand(msgData)
-        End If
+    ' ...
+    If (Len(msgData) > 0) Then
+        ' ...
+        tmpSend = Expand(msgData)
         
+        ' ...
         If (Len(tmpSend) > 223) Then
             tmpSend = Mid$(tmpSend, 1, 223)
         End If
         
-        Call AddQ(tmpSend, PRIORITY.COMMAND_RESPONSE_MESSAGE)
+        ' ...
+        Call AddQ(tmpSend, Priority.COMMAND_RESPONSE_MESSAGE)
     End If
     
     ' return message
@@ -4177,21 +4166,18 @@ Private Function OnShout(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Dim tmpBuf  As String ' temporary output buffer
     Dim tmpSend As String
 
-    If (Len(msgData)) Then
-        If (dbAccess.Access > 69) Then
-            If (dbAccess.Access > 89) Then
-                tmpSend = msgData
-            Else
-                tmpSend = Replace(msgData, "/", vbNullString, 1)
-            End If
-            
-            tmpSend = UCase$(tmpSend)
-        Else
-            tmpSend = Username & " shouts: " & _
-                UCase$(msgData)
+    ' ...
+    If (Len(msgData) > 0) Then
+        ' ...
+        tmpSend = UCase$(tmpSend)
+        
+        ' ...
+        If (Len(tmpSend) > 223) Then
+            tmpSend = Mid$(tmpSend, 1, 223)
         End If
         
-        Call AddQ(tmpSend, PRIORITY.COMMAND_RESPONSE_MESSAGE)
+        ' ...
+        Call AddQ(tmpSend, Priority.COMMAND_RESPONSE_MESSAGE)
     End If
     
     ' return message
@@ -4330,14 +4316,14 @@ Private Function OnBack(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ' ...
     If (AwayMsg <> vbNullString) Then
         ' ...
-        Call AddQ("/away", PRIORITY.COMMAND_RESPONSE_MESSAGE, _
+        Call AddQ("/away", Priority.COMMAND_RESPONSE_MESSAGE, _
             Username)
         
         ' ...
         If (InBot = False) Then
             ' alert users of status change
             Call AddQ("/me is back from " & AwayMsg & ".", _
-                PRIORITY.COMMAND_RESPONSE_MESSAGE)
+                Priority.COMMAND_RESPONSE_MESSAGE)
             
             ' set away message
             AwayMsg = vbNullString
@@ -4399,12 +4385,12 @@ Private Function OnAway(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ' ...
     If (LenB(AwayMsg) > 0) Then
         ' send away command to battle.net
-        Call AddQ("/away", PRIORITY.COMMAND_RESPONSE_MESSAGE)
+        Call AddQ("/away", Priority.COMMAND_RESPONSE_MESSAGE)
         
         ' alert users of status change
         If (InBot = False) Then
             Call AddQ("/me is back from (" & AwayMsg & ")", _
-                PRIORITY.COMMAND_RESPONSE_MESSAGE)
+                Priority.COMMAND_RESPONSE_MESSAGE)
         End If
         
         ' set away message
@@ -4415,7 +4401,7 @@ Private Function OnAway(ByVal Username As String, ByRef dbAccess As udtGetAccess
             AwayMsg = msgData
             
             ' send away command to battle.net
-            Call AddQ("/away " & AwayMsg, PRIORITY.COMMAND_RESPONSE_MESSAGE)
+            Call AddQ("/away " & AwayMsg, Priority.COMMAND_RESPONSE_MESSAGE)
             
             ' alert users of status change
             If (InBot = False) Then
@@ -4427,7 +4413,7 @@ Private Function OnAway(ByVal Username As String, ByRef dbAccess As udtGetAccess
             AwayMsg = " - "
         
             ' send away command to battle.net
-            Call AddQ("/away", PRIORITY.COMMAND_RESPONSE_MESSAGE)
+            Call AddQ("/away", Priority.COMMAND_RESPONSE_MESSAGE)
             
             ' alert users of status change
             If (InBot = False) Then
@@ -4774,7 +4760,7 @@ Private Function OnWhoAmI(ByVal Username As String, ByRef dbAccess As udtGetAcce
         tmpBuf = "You are the bot console."
         
         If (g_Online) Then
-            Call AddQ("/whoami", PRIORITY.CONSOLE_MESSAGE)
+            Call AddQ("/whoami", Priority.CONSOLE_MESSAGE)
         End If
     ElseIf (dbAccess.Access = 1000) Then
         tmpBuf = "You are the bot owner, " & Username & "."
@@ -5622,7 +5608,7 @@ Private Function OnWhoIs(ByVal Username As String, ByRef dbAccess As udtGetAcces
     u = msgData
             
     If (InBot) Then
-        Call AddQ("/whois " & u, PRIORITY.CONSOLE_MESSAGE)
+        Call AddQ("/whois " & u, Priority.CONSOLE_MESSAGE)
     End If
 
     If (Len(u)) Then
@@ -6913,10 +6899,11 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     
     On Error GoTo ERROR_HANDLER
     
-    Dim command As clsCommandDocObj
-    Dim user    As clsDBEntryObj
-    Dim regex   As RegExp
-    Dim matches As MatchCollection
+    Dim command     As clsCommandDocObj
+    Dim user        As clsDBEntryObj
+    Dim regex       As RegExp
+    Dim matches     As MatchCollection
+    Dim FailedCheck As Boolean
     
     ' ...
     Set command = OpenCommand(CommandName)
@@ -6926,8 +6913,10 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
         Exit Function
     End If
     
+    ' ...
     Set user = SharedScriptSupport.GetDBEntry(Username, , , "USER")
     
+    ' ...
     If ((command.RequiredRank = 0) And _
             (command.RequiredFlags = vbNullString)) Then
     
@@ -6936,7 +6925,9 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
         Exit Function
     End If
     
+    ' ...
     If ((user.Rank >= command.RequiredRank) = False) Then
+        ' ...
         If (user.HasAnyFlag(command.RequiredFlags) = False) Then
             HasAccess = False
             
@@ -6944,6 +6935,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
         End If
     End If
     
+    ' ...
     If (command.params.Count) Then
         Dim parameter   As clsCommandParamsObj
         Dim restriction As clsCommandRestrictionObj
@@ -6990,19 +6982,19 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
                                     (restriction.RequiredFlags = vbNullString)) Then
                                     
                                 ' ...
-                                HasAccess = False
+                                FailedCheck = True
                             Else
                                 If ((user.Rank >= restriction.RequiredRank) = False) Then
                                     If (user.HasAnyFlag(restriction.RequiredFlags) = False) Then
                                         ' ...
-                                        HasAccess = False
+                                        FailedCheck = True
                                     End If
                                 End If
                             End If
                             
-                            If (HasAccess = False) Then
-                                outbuf = "Error: You do not have sufficient access to perform the specified " & _
-                                    "action. "
+                            If (FailedCheck) Then
+                                AddQ "Error: You do not have sufficient access to perform the specified " & _
+                                    "action."
                                 
                                 Exit Function
                             End If
@@ -7023,6 +7015,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
             
             ' ...
             bln = False
+            FailedCheck = False
         Next i
     End If
     

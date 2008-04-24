@@ -759,7 +759,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 ' ...
                 If (Len(user) > 0) Then
                     ' ...
-                    Pos = g_Channel.GetUserIndex(CleanUsername(Username))
+                    Pos = g_Channel.GetUserIndex(Username)
                     
                     ' ...
                     If (Pos > 0) Then
@@ -803,10 +803,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                             g_Channel.Banlist.Add BanlistObj
                         End If
                     End If
+                    
+                    ' ...
+                    Call RemoveBanFromQueue(user)
                 End If
-                
-                ' ...
-                Call RemoveBanFromQueue(user)
             ElseIf (InStr(1, Message, MSG_UNBANNED, vbTextCompare) > 0) Then
                 ' ...
                 user = Left$(Message, (InStr(1, Message, MSG_UNBANNED, vbBinaryCompare) - 1))
@@ -913,7 +913,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim PassedQueue As Boolean ' ...
     
     ' ...
-    Pos = g_Channel.GetUserIndexEx(CleanUsername(Username))
+    Pos = g_Channel.GetUserIndexEx(Username)
     
     ' ...
     If (Pos > 0) Then
@@ -1233,8 +1233,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     End If
     
     ' ...
-    UserIndex = _
-        g_Channel.GetUserIndexEx(CleanUsername(Username))
+    UserIndex = g_Channel.GetUserIndexEx(Username)
     
     ' ...
     If (QueuedEventID > 0) Then

@@ -999,7 +999,7 @@
           <match message="^[/]" />
 
           <access>
-             <rank>100</rank>
+             <rank>60</rank>
              <flag>T</flag>
           </access>
         </restriction>
