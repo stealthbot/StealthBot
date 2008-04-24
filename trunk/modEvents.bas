@@ -960,19 +960,22 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     ' ...
     If ((BotVars.ChatDelay = 0) Or (UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
         ' ...
-        If (AllowedToTalk(Username, Message)) Then
+        If (Len(Message) > 0) Then
             ' ...
-            frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, Username & _
-                Space$(1), RTBColors.EmoteText, Message & ">"
-            
-            ' ...
-            If (Catch(0) <> vbNullString) Then
-                CheckPhrase Username, Message, CPEMOTE
-            End If
-            
-            ' ...
-            If (frmChat.mnuFlash.Checked) Then
-                FlashWindow
+            If (AllowedToTalk(Username, Message)) Then
+                ' ...
+                frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, Username & _
+                    Space$(1), RTBColors.EmoteText, Message & ">"
+                
+                ' ...
+                If (Catch(0) <> vbNullString) Then
+                    CheckPhrase Username, Message, CPEMOTE
+                End If
+                
+                ' ...
+                If (frmChat.mnuFlash.Checked) Then
+                    FlashWindow
+                End If
             End If
         End If
     Else
@@ -1551,50 +1554,53 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     ' ...
     If ((BotVars.ChatDelay = 0) Or (UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
         ' ...
-        If (AllowedToTalk(Username, Message)) Then
-            ' are we watching the user?
-            If (StrComp(WatchUser, Username, vbTextCompare) = 0) Then
-                ' ...
-                UsernameColor = RTBColors.ErrorMessageText
-                
-            ' is user an operator?
-            ElseIf ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
-                ' ...
-                UsernameColor = RTBColors.TalkUsernameOp
-            Else
-                ' ...
-                UsernameColor = RTBColors.TalkUsernameNormal
-            End If
-            
+        If (Len(Message) > 0) Then
             ' ...
-            If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or ((Flags And USER_SYSOP&) = _
-                    USER_SYSOP&)) Then
+            If (AllowedToTalk(Username, Message)) Then
+                ' are we watching the user?
+                If (StrComp(WatchUser, Username, vbTextCompare) = 0) Then
+                    ' ...
+                    UsernameColor = RTBColors.ErrorMessageText
+                    
+                ' is user an operator?
+                ElseIf ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+                    ' ...
+                    UsernameColor = RTBColors.TalkUsernameOp
+                Else
+                    ' ...
+                    UsernameColor = RTBColors.TalkUsernameNormal
+                End If
+                
+                ' ...
+                If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or ((Flags And USER_SYSOP&) = _
+                        USER_SYSOP&)) Then
+                        
+                    ' ...
+                    TextColor = RGB(97, 105, 255)
+                    
+                    ' ...
+                    CaratColor = RGB(97, 105, 255)
+                Else
+                    ' ...
+                    TextColor = RTBColors.TalkNormalText
+                    
+                    ' ...
+                    CaratColor = RTBColors.Carats
+                End If
+                
+                ' ...
+                frmChat.AddChat CaratColor, "<", UsernameColor, Username, CaratColor, "> ", _
+                    TextColor, Message
+                
+                ' ...
+                If (Catch(0) <> vbNullString) Then
+                    CheckPhrase Username, Message, CPTALK
+                End If
                     
                 ' ...
-                TextColor = RGB(97, 105, 255)
-                
-                ' ...
-                CaratColor = RGB(97, 105, 255)
-            Else
-                ' ...
-                TextColor = RTBColors.TalkNormalText
-                
-                ' ...
-                CaratColor = RTBColors.Carats
-            End If
-            
-            ' ...
-            frmChat.AddChat CaratColor, "<", UsernameColor, Username, CaratColor, "> ", _
-                TextColor, Message
-                
-            ' ...
-            If (Catch(0) <> vbNullString) Then
-                CheckPhrase Username, Message, CPTALK
-            End If
-                
-            ' ...
-            If (frmChat.mnuFlash.Checked) Then
-                FlashWindow
+                If (frmChat.mnuFlash.Checked) Then
+                    FlashWindow
+                End If
             End If
         End If
         
@@ -1632,9 +1638,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
             If (GetSafelist(Username) = False) Then
                 If (Phrasebans) Then
                     For i = LBound(Phrases) To UBound(Phrases)
-                        If ((Phrases(i) <> vbNullString) And _
-                                (Phrases(i) <> Space$(1))) Then
-                            
+                        If ((Phrases(i) <> vbNullString) And (Phrases(i) <> Space$(1))) Then
                             If ((InStr(1, Message, Phrases(i), vbTextCompare)) <> 0) Then
                                 Ban Username & " Banned phrase: " & Phrases(i), _
                                         (AutoModSafelistValue - 1)

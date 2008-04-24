@@ -4991,10 +4991,10 @@ Private Sub InitBasicConfig()
     cboCDKey.text = ReadCFG(MN, "CDKey")
     
     ' Backwards compatibility for old LODKey config entry -a
-    txtExpKey.text = ReadCFG(MN, "LODKey")
+    txtExpKey.text = ReadCFG(MN, "ExpKey")
     
-    If txtExpKey.text <> "" Then
-        txtExpKey.text = ReadCFG(MN, "ExpKey")
+    If (txtExpKey.text = vbNullString) Then
+        txtExpKey.text = ReadCFG(MN, "LODKey")
     End If
     
     txtHomeChan.text = ReadCFG(MN, "HomeChan")

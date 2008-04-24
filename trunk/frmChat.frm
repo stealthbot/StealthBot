@@ -853,7 +853,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -879,7 +878,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -5833,11 +5831,17 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                                         Exit For
                                     ElseIf (g_Channel.Users(j).IsOperator) Then
                                         ' ...
-                                        If ((g_Channel.Users(j).Ping >= 1) And (g_Channel.Users(j).Ping <= 300)) Then
-                                            banDelay = (banDelay + g_Channel.Users(j).Ping)
-                                        Else
-                                            banDelay = (banDelay + 300)
-                                        End If
+                                        Randomize
+                                        
+                                        ' ...
+                                        banDelay = (banDelay + ((Rnd * 3) * 100))
+
+                                        ' blah...
+                                        'If ((g_Channel.Users(j).Ping >= 1) And (g_Channel.Users(j).Ping <= 500)) Then
+                                        '    banDelay = (banDelay + g_Channel.Users(j).Ping)
+                                        'Else
+                                        '    banDelay = (banDelay + 200)
+                                        'End If
                                     End If
                                 Next j
                             End If
