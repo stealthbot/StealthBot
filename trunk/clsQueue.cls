@@ -213,7 +213,7 @@ Private Function FindLines(Optional ByVal strLine As String = vbNullString, Opti
         Set curQueueObj = m_QueueObjs(i)
     
         ' ...
-        If (curQueueObj.PRIORITY <= PriLower) Then
+        If (curQueueObj.Priority <= PriLower) Then
             ' ...
             If (strLine <> vbNullString) Then
                 ' ...
@@ -274,9 +274,9 @@ Private Function GetNextQueueObj() As Integer
         Set curQueueObj = m_QueueObjs(i)
         
         ' ...
-        If (curQueueObj.PRIORITY < lowest) Then
+        If (curQueueObj.Priority < lowest) Then
             ' ...
-            lowest = curQueueObj.PRIORITY
+            lowest = curQueueObj.Priority
             
             ' ...
             lowestIndex = i
@@ -298,13 +298,13 @@ Private Function GetNextQueueObj() As Integer
             Set curQueueObj = m_QueueObjs(i)
 
             ' ...
-            If (curQueueObj.PRIORITY = lowest) Then
+            If (curQueueObj.Priority = lowest) Then
                 ' ...
                 If (StrComp(curQueueObj.ResponseTo, m_lastUser, vbTextCompare) <> 0) Then
                     ' ...
                     For k = 0 To (i - 1)
                         ' ...
-                        If (m_QueueObjs(k).PRIORITY = lowest) Then
+                        If (m_QueueObjs(k).Priority = lowest) Then
                             ' ...
                             If (StrComp(m_QueueObjs(k).ResponseTo, curQueueObj.ResponseTo, _
                                     vbTextCompare) = 0) Then

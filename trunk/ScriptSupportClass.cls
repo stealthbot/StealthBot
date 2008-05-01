@@ -1417,6 +1417,50 @@ Public Function Friends() As Object
     Set Friends = g_Friends
 End Function
 
+Public Function CreateTimerEx(ByVal ModuleID As Integer, ByVal TimerName As String, ByVal TimerInterval As Integer) As Object
+
+    ' ...
+    Call Load(frmChat.tmrScript(frmChat.tmrScript.Count))
+    
+    ' ...
+    With frmChat.tmrScript(frmChat.tmrScript.UBound)
+        .Tag = ModuleID & "_" & TimerName
+        .Interval = TimerInterval
+        .Enabled = True
+    End With
+    
+    ' ...
+    Set CreateTimerEx = frmChat.tmrScript(frmChat.tmrScript.UBound)
+
+End Function
+
+Public Function DeleteTimerEx(ByVal ModuleID As Integer, ByVal TimerName As String)
+
+    ' ...
+
+End Function
+
+Public Function TimerEx(ByVal ModuleID As Integer, ByVal TimerName As String) As Object
+
+    Dim tmr As Timer ' ...
+
+    ' ...
+    For Each tmr In frmChat.tmrScript
+        ' ...
+        If (StrComp(tmr.Tag, ModuleID & "_" & TimerName, vbTextCompare) = 0) Then
+            ' ...
+            Set TimerEx = tmr
+            
+            ' ...
+            Exit Function
+        End If
+    Next
+    
+    ' ...
+    Set TimerEx = Nothing
+
+End Function
+
 Private Sub Class_Initialize()
     Set obScriptForms = CreateObject("Scripting.Dictionary")
 End Sub

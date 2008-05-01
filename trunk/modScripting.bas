@@ -23,6 +23,12 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
     Dim Path As String, intFile As Integer, strLine As String, strContent As String
 
    On Error GoTo LoadPluginSystem_Error
+   
+   ' ...
+    Call InitScriptControl(SC)
+    Call LoadScripts(SC)
+    
+    Exit Sub
 
     If ReadINI("Override", "DisablePS", GetConfigFilePath()) = "Y" Then
         boolOverride = True
@@ -136,6 +142,190 @@ LoadPluginSystem_Error:
     Debug.Print "Using variable: " & Path
 End Sub
 
+Public Sub InitScriptControl(ByRef SC As ScriptControl)
+
+    ' ...
+    SC.Reset
+    
+    ' ...
+    If (ReadINI("Other", "ScriptAllowUI", GetConfigFilePath()) <> "N") Then
+        SC.AllowUI = True
+    End If
+
+    '// Create scripting objects
+    SC.AddObject "ssc", SharedScriptSupport, True
+    SC.AddObject "scTimer", frmChat.scTimer
+    SC.AddObject "scINet", frmChat.INet
+    SC.AddObject "BotVars", BotVars
+
+End Sub
+
+Public Sub LoadScripts(ByRef SC As ScriptControl)
+
+    ' ...
+    On Error GoTo ERROR_HANDLER
+
+    Dim CurrentModule As Module
+
+    Dim strPath       As String  ' ...
+    Dim filename      As String  ' ...
+    Dim f             As Integer ' ...
+    Dim strLine       As String  ' ...
+    Dim strContent    As String  ' ...
+    
+    ' ...
+    f = FreeFile
+    
+    ' ...
+    strPath = App.Path & "\scripts\"
+    
+    ' ...
+    If (Dir(strPath) = vbNullString) Then
+        Exit Sub
+    End If
+
+    ' ...
+    filename = Dir(strPath)
+    
+    ' ...
+    Do While (filename <> vbNullString)
+        ' ...
+        Set CurrentModule = SC.Modules.Add(filename)
+        
+        ' ...
+        CreateModuleProcs SC, filename
+    
+        ' ...
+        FileToModule CurrentModule, strPath & filename
+        
+        ' ...
+        frmChat.AddChat vbGreen, "Script loaded: " & filename
+
+        ' ...
+        filename = Dir()
+    Loop
+    
+    ' ...
+    Exit Sub
+
+' ...
+ERROR_HANDLER:
+
+    ' ...
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in LoadScripts()."
+
+    ' ...
+    Exit Sub
+
+End Sub
+
+Private Sub CreateModuleProcs(ByRef SC As ScriptControl, ByVal filename As String)
+
+    Dim CurrentModule As Module
+    Dim arrCode()     As String ' ...
+
+    ' ...
+    Set CurrentModule = SC.Modules(SC.Modules.Count)
+    
+    ' ...
+    ReDim arrCode(0 To 3)
+    
+    ' ...
+    arrCode(0) = "Function GetModuleID()"
+    arrCode(1) = "   GetModuleID = " & SC.Modules.Count
+    arrCode(2) = "End Function"
+    
+    ' ...
+    CurrentModule.AddCode Join(arrCode, vbCrLf)
+    
+    ' ...
+    arrCode(0) = "Function CreateTimer(TimerName, TimerInterval)"
+    arrCode(1) = "   Set CreateTimer = CreateTimerEx(GetModuleID, TimerName, TimerInterval)"
+    arrCode(2) = "End Function"
+    
+    ' ...
+    CurrentModule.AddCode Join(arrCode, vbCrLf)
+    
+    ' ...
+    arrCode(0) = "Sub DeleteTimer(TimerName)"
+    arrCode(1) = "   DeleteTimerEx GetModuleID, TimerName"
+    arrCode(2) = "End Sub"
+    
+    ' ...
+    CurrentModule.AddCode Join(arrCode, vbCrLf)
+
+    ' ...
+    arrCode(0) = "Function Timer(TimerName)"
+    arrCode(1) = "   Set Timer = TimerEx(GetModuleID, TimerName)"
+    arrCode(2) = "End Function"
+    
+    ' ...
+    CurrentModule.AddCode Join(arrCode, vbCrLf)
+
+End Sub
+
+Private Function FileToModule(ByRef ScriptModule As Module, ByVal FilePath As String)
+
+    Dim strLine    As String  ' ...
+    Dim strContent As String  ' ...
+    Dim f          As Integer ' ...
+    
+    ' ...
+    f = FreeFile
+
+    ' ...
+    Open FilePath For Input As #f
+        ' ...
+        Do While (Not (EOF(f)))
+            ' ...
+            Line Input #f, strLine
+            
+            ' ...
+            If (Len(strLine) > 1) Then
+                ' ...
+                If (StrComp(Left$(Trim(LCase$(strLine)), 8), "#include", vbTextCompare) <> 0) Then
+                    strContent = strContent & strLine & vbCrLf
+                Else
+                    ' ...
+                    If (Len(Trim(LCase$(strLine))) > 8) Then
+                        FileToModule ScriptModule, Mid$(Trim(LCase$(strLine)), 9)
+                    End If
+                End If
+            End If
+            
+            ' ...
+            strLine = vbNullString
+        Loop
+    Close #f
+    
+    ' ...
+    ScriptModule.AddCode strContent
+
+End Function
+
+Public Sub RunInAll(ByRef SC As ScriptControl, ParamArray Parameters() As Variant)
+
+    On Error GoTo ERROR_HANDLER
+
+    Dim i     As Integer ' ...
+    Dim arr() As Variant ' ...
+    
+    ' ...
+    arr() = Parameters()
+
+    ' ...
+    For i = 2 To SC.Modules.Count
+        CallByNameEx SC.Modules(i), "Run", VbMethod, arr
+    Next
+
+    Exit Sub
+    
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in RunInAll()."
+    
+    Exit Sub
+End Sub
+
 
 Public Sub SetVeto(ByVal b As Boolean)
     VetoNextMessage = b
@@ -155,11 +345,11 @@ Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
     On Error GoTo ReInitScriptControl_Error
 
     BotLoaded = True
-    SC.Run "Event_Load"
+    RunInAll frmChat.SControl, "Event_Load"
 
     If g_Online Then
-        SC.Run "Event_LoggedOn", GetCurrentUsername, BotVars.Product
-        SC.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
+        RunInAll frmChat.SControl, "Event_LoggedOn", GetCurrentUsername, BotVars.Product
+        RunInAll frmChat.SControl, "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
 
         If g_Channel.Users.Count > 0 Then
             For i = 1 To g_Channel.Users.Count
@@ -168,7 +358,7 @@ Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
                 With g_Channel.Users(i)
                      ParseStatstring .Statstring, Message, .Clan
 
-                     SC.Run "Event_UserInChannel", .DisplayName, .Flags, Message, .Ping, .game, False
+                     RunInAll frmChat.SControl, "Event_UserInChannel", .DisplayName, .Flags, Message, .Ping, .game, False
                  End With
              Next i
          End If
@@ -202,6 +392,45 @@ Public Sub SetPTEnabled(ByVal strPrefix As String, ByVal strTimerName As String,
     
     dictTimerEnabled(strPrefix & ":" & strTimerName) = boolEnabled
 End Sub
+
+Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCallType, Optional vArgsArray _
+    As Variant)
+    
+    On Error GoTo Handler
+    
+    Dim oTLI    As Object
+    Dim ProcID  As Long
+    Dim numArgs As Long
+    Dim i       As Long
+    Dim v()     As Variant
+
+    Set oTLI = CreateObject("TLI.TLIApplication")
+    
+    ProcID = oTLI.InvokeID(obj, ProcName)
+
+    If (IsMissing(vArgsArray)) Then
+        CallByNameEx = oTLI.InvokeHook(obj, ProcID, CallType)
+    End If
+    
+    If (IsArray(vArgsArray)) Then
+        numArgs = UBound(vArgsArray)
+        
+        ReDim v(numArgs)
+        
+        For i = 0 To numArgs
+            v(i) = vArgsArray(numArgs - i)
+        Next i
+        
+        CallByNameEx = oTLI.InvokeHookArray(obj, ProcID, CallType, v)
+    End If
+    
+    Exit Function
+
+Handler:
+    Debug.Print Err.Number, Err.description
+    
+    Exit Function
+End Function
 
 
 '// Written by Swent. Modifies the count in a running plugin timer.
@@ -268,3 +497,5 @@ Public Function GetPTKeys() As String
 
     GetPTKeys = Join(dictTimerEnabled.Keys)
 End Function
+
+

@@ -118,7 +118,7 @@ Public Sub ProcessMenu(hWnd As Long, lngMenuCommand As Long)
     End If
     
     If LenB(strCallback) > 0 Then
-        frmChat.SControl.Run "psProcessMenu", strCallback, GetPrefixByID(lngMenuCommand)
+        RunInAll frmChat.SControl, "psProcessMenu", strCallback, GetPrefixByID(lngMenuCommand)
     End If
 End Sub
 

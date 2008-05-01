@@ -18,6 +18,11 @@ Begin VB.Form frmChat
    ScaleHeight     =   7950
    ScaleWidth      =   12585
    StartUpPosition =   3  'Windows Default
+   Begin VB.Timer tmrScript 
+      Index           =   0
+      Left            =   5760
+      Top             =   5160
+   End
    Begin VB.Timer tmrClanUpdate 
       Enabled         =   0   'False
       Interval        =   30000
@@ -70,6 +75,7 @@ Begin VB.Form frmChat
       EndProperty
    End
    Begin VB.Timer tmrSilentChannel 
+      Enabled         =   0   'False
       Index           =   1
       Interval        =   30000
       Left            =   6240
@@ -853,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -878,6 +885,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1727,8 +1735,8 @@ Private Sub Form_Load()
         Call INet.Execute(GetNewsURL(), "GET")
     Else
         If Not BotLoaded Then
-            SControl.Run "Event_FirstRun"
-            SControl.Run "Event_Load"
+            RunInAll frmChat.SControl, "Event_FirstRun"
+            RunInAll frmChat.SControl, "Event_Load"
             BotLoaded = True
         End If
     End If
@@ -2360,7 +2368,7 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     
     On Error Resume Next
 
-    SControl.Run "Event_ClanMemberLeaves", Member
+    RunInAll frmChat.SControl, "Event_ClanMemberLeaves", Member
 End Sub
 
 Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
@@ -2377,7 +2385,7 @@ Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
         AddChat RTBColors.ErrorMessageText, "[CLAN] You have been removed from the clan, or it has been disbanded."
         
         On Error Resume Next
-        SControl.Run "Event_BotRemovedFromClan"
+        RunInAll frmChat.SControl, "Event_BotRemovedFromClan"
     End If
 End Sub
 
@@ -2397,7 +2405,7 @@ Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
     
     On Error Resume Next
     
-    SControl.Run "Event_BotClanRankChanged", NewRank
+    RunInAll frmChat.SControl, "Event_BotClanRankChanged", NewRank
 End Sub
 
 Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal Rank As Byte)
@@ -2425,11 +2433,11 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
         AddChat RTBColors.SuccessText, "[CLAN] You are now a member of ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "!"
         AwaitingClanMembership = 0
             
-        SControl.Run "Event_BotJoinedClan", ClanTag
+        RunInAll frmChat.SControl, "Event_BotJoinedClan", ClanTag
     Else
         AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(Rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
         
-        SControl.Run "Event_BotClanInfo", ClanTag, Rank
+        RunInAll frmChat.SControl, "Event_BotClanInfo", ClanTag, Rank
     End If
     
     RequestClanList
@@ -2487,7 +2495,7 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
                 AddClanMember Members(i), Val(Members(i + 1)), Val(Members(i + 2))
                 
                 ' ...
-                SControl.Run "Event_ClanMemberList", Members(i), Val(Members(i + 1)), _
+                RunInAll frmChat.SControl, "Event_ClanMemberList", Members(i), Val(Members(i + 1)), _
                     Val(Members(i + 2))
             End If
         Next i
@@ -2546,7 +2554,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     AddClanMember Username, CInt(Rank), CInt(IsOnline)
     
     On Error Resume Next
-    SControl.Run "Event_ClanMemberUpdate", Username, Rank, IsOnline
+    RunInAll frmChat.SControl, "Event_ClanMemberUpdate", Username, Rank, IsOnline
 End Sub
 
 Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
@@ -2555,7 +2563,7 @@ Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
     
     On Error Resume Next
     
-    SControl.Run "Event_ClanMOTD", Message
+    RunInAll frmChat.SControl, "Event_ClanMOTD", Message
 End Sub
 
 Private Sub ClanHandler_DemoteUserReply(ByVal Success As Boolean)
@@ -2664,7 +2672,7 @@ Sub Form_Unload(Cancel As Integer)
         AddChat RTBColors.ErrorMessageText, "Shutting down..."
     End If
     
-    'SControl.Run "Event_Shutdown"
+    'RunInAll frmChat.SControl, "Event_Shutdown"
     
     If LenB(Dir$(GetConfigFilePath())) > 0 Then
         If Me.WindowState <> vbMinimized Then
@@ -2684,7 +2692,7 @@ Sub Form_Unload(Cancel As Integer)
     
     On Error Resume Next
     
-    SControl.Run "Event_Close"
+    RunInAll frmChat.SControl, "Event_Close"
     
     If BotVars.Logging = 1 Then
         Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt" For Append As #1
@@ -2905,16 +2913,16 @@ Private Sub INet_StateChanged(ByVal State As Integer)
         Call HandleNews(INet.GetChunk(1024, icString))
     
         If (Not (BotLoaded)) Then
-            Call SControl.Run("Event_FirstRun")
-            Call SControl.Run("Event_Load")
+            RunInAll frmChat.SControl, "Event_FirstRun"
+            RunInAll frmChat.SControl, "Event_Load"
             
             BotLoaded = True
         End If
     Else
         If (State = icError) Then
             If (Not (BotLoaded)) Then
-                Call SControl.Run("Event_FirstRun")
-                Call SControl.Run("Event_Load")
+                RunInAll frmChat.SControl, "Event_FirstRun"
+                RunInAll frmChat.SControl, "Event_Load"
                 
                 BotLoaded = True
             End If
@@ -3766,7 +3774,7 @@ Sub mnuReloadScript_Click()
     
     On Error GoTo mnuReloadScript_Click_Error
     
-    SControl.Run "Event_Close"
+    RunInAll frmChat.SControl, "Event_Close"
     SControl.Reset
         
 MRS_Continue:
@@ -4103,12 +4111,17 @@ Private Sub cboSend_GotFocus()
         ' ..
         For i = 0 To (Controls.Count - 1)
             ' ...
-            If (Controls(i).TabStop = False) Then
-                Controls(i).Tag = "False"
-            End If
-        
-            ' ...
-            If (Controls(i).Name <> "cboSend") Then
+            If (TypeOf Controls(i) Is ListView) Or _
+                    (TypeOf Controls(i) Is TabStrip) Or _
+                        (TypeOf Controls(i) Is RichTextBox) Or _
+                            (TypeOf Controls(i) Is TextBox) Then
+                            
+                ' ...
+                If (Controls(i).TabStop = False) Then
+                    Controls(i).Tag = "False"
+                End If
+
+                ' ...
                 Controls(i).TabStop = False
             End If
         Next i
@@ -4127,10 +4140,15 @@ Private Sub cboSend_LostFocus()
         ' ...
         For i = 0 To (Controls.Count - 1)
             ' ...
-            If ((Controls(i).Name <> "cboSend") And _
-                (Controls(i).Tag <> "False")) Then
-                
-                Controls(i).TabStop = True
+            If (TypeOf Controls(i) Is ListView) Or _
+                    (TypeOf Controls(i) Is TabStrip) Or _
+                        (TypeOf Controls(i) Is RichTextBox) Or _
+                            (TypeOf Controls(i) Is TextBox) Then
+                            
+                ' ...
+                If (Controls(i).Tag <> "False") Then
+                    Controls(i).TabStop = True
+                End If
             End If
         Next i
     End If
@@ -4486,7 +4504,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                             
                             SetVeto False
                             
-                            SControl.Run "Event_PressedEnter", cboSend.text
+                            RunInAll frmChat.SControl, "Event_PressedEnter", cboSend.text
                             
                             Vetoed = GetVeto
                             
@@ -4883,14 +4901,13 @@ Private Sub QueueTimer_Timer()
             Call g_Queue.Pop
         End If
         
-        ' ...
-        'If (pri = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
-        '    ' ...
-        '    Randomize
-        '
-        '    ' ...
-        '    delay = ((1 + Rnd() * 3) * 100)
-        'End If
+        ' are we issuing a ban or kick command?
+        If ((StrComp(Left$(Message, 5), "/ban ", vbTextCompare) = 0) Or _
+            (StrComp(Left$(Message, 6), "/kick ", vbTextCompare) = 0)) Then
+            
+            ' ...
+            delay = BanDelay()
+        End If
     
         If ((QueueMaster >= 15) And (QueueTimer.Interval <> 2400)) Then
             QueueTimer.Interval = (2400 + delay)
@@ -4988,7 +5005,7 @@ Private Sub scTimer_Timer()
 
     If modScripting.boolOverride Then
         On Error Resume Next
-        SControl.Run "scTimer_Timer"
+        RunInAll frmChat.SControl, "scTimer_Timer"
         Exit Sub
     End If
 
@@ -5015,7 +5032,7 @@ Private Sub scTimer_Timer()
                 If modScripting.GetPTLeft(strKey(0), strKey(1)) = 1 Then
     
                     '// Execute this timer sub
-                    frmChat.SControl.Run strKey(0) & "_" & strKey(1) & "_Timer"
+                    RunInAll frmChat.SControl, strKey(0) & "_" & strKey(1) & "_Timer"
     
                     '// Handle errors
                     If SControl.Error.Number <> 0 Then
@@ -5170,6 +5187,38 @@ Private Sub tmrFriendlistUpdate_Timer()
             End If
         End If
     End If
+End Sub
+
+Private Sub tmrScript_Timer(index As Integer)
+
+    ' ...
+    On Error GoTo ERROR_HANDLER
+
+    Dim CurrentModule As Module  ' ...
+    Dim i             As Integer ' ...
+    Dim TimerName     As String  ' ...
+    Dim ModuleID      As Integer ' ...
+        
+    ' ...
+    ModuleID = CInt(Left$(tmrScript(index).Tag, _
+        InStr(1, tmrScript(index).Tag, "_", vbBinaryCompare) - 1))
+
+    ' ...
+    TimerName = Mid$(tmrScript(index).Tag, _
+        InStr(1, tmrScript(index).Tag, "_", vbBinaryCompare) + 1)
+        
+    ' ...
+    SControl.Modules(ModuleID).Run TimerName & "_Timer"
+    
+    ' ...
+    Exit Sub
+    
+ERROR_HANDLER:
+    ' ...
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in tmrScript_Timer()."
+    
+    ' ...
+    Exit Sub
 End Sub
 
 Private Sub tmrSilentChannel_Timer(index As Integer)
@@ -5567,6 +5616,11 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     strTmp = Message
     
     ' ...
+    If (g_Queue.Count = 0) Then
+        BanCount = 0
+    End If
+    
+    ' ...
     If (strTmp <> vbNullString) Then
         Dim splt()         As String  ' ...
         Dim i              As Integer ' ...
@@ -5802,7 +5856,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             Else
                 Dim Q        As clsQueueOBj ' ...
                 Dim j        As Integer     ' ...
-                Dim banDelay As Integer     ' ...
+                Dim delay    As Integer     ' ...
                 
                 ' should we subject this message to the typical delay,
                 ' or can we get it out of here a bit faster?  If we
@@ -5811,44 +5865,14 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 ' previous message.
                 If ((QueueLoad = 0) And (GTC - LastGTC >= 10000)) Then
                     ' set default message delay when queue is empty (in ms)
-                    banDelay = 25
+                    delay = 25
                     
                     ' are we issuing a ban or kick command?
                     If ((StrComp(Left$(command, 5), "/ban ", vbTextCompare) = 0) Or _
                         (StrComp(Left$(command, 6), "/kick ", vbTextCompare) = 0)) Then
                         
-                        ' do we have ops?
-                        If (g_Channel.Self.IsOperator) Then
-                            ' ...
-                            If (BanCount = 0) Then
-                                ' ...
-                                banDelay = 100
-                                
-                                ' ...
-                                For j = 1 To g_Channel.Users.Count
-                                    ' ...
-                                    If (StrComp(CurrentUsername, g_Channel.Users(j).Name, vbBinaryCompare) = 0) Then
-                                        Exit For
-                                    ElseIf (g_Channel.Users(j).IsOperator) Then
-                                        ' ...
-                                        Randomize
-                                        
-                                        ' ...
-                                        banDelay = (banDelay + ((Rnd * 3) * 100))
-
-                                        ' blah...
-                                        'If ((g_Channel.Users(j).Ping >= 1) And (g_Channel.Users(j).Ping <= 500)) Then
-                                        '    banDelay = (banDelay + g_Channel.Users(j).Ping)
-                                        'Else
-                                        '    banDelay = (banDelay + 200)
-                                        'End If
-                                    End If
-                                Next j
-                            End If
-                            
-                            ' ...
-                            BanCount = (BanCount + 1)
-                        End If
+                        ' ...
+                        delay = BanDelay()
                     End If
                     
                     ' set the delay before our next queue cycle
@@ -5857,7 +5881,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         .Enabled = False
                         
                         ' set new delay
-                        .Interval = banDelay
+                        .Interval = delay
                         
                         ' enable timer with new delay
                         .Enabled = True
@@ -5892,6 +5916,36 @@ ERROR_HANDLER:
 
     Exit Sub
 End Sub
+
+Private Function BanDelay() As Integer
+
+    ' do we have ops?
+    If (g_Channel.Self.IsOperator) Then
+        Dim OpCount As Integer ' ...
+        Dim j       As Integer ' ...
+    
+        ' ...
+        BanDelay = 100
+        
+        ' ...
+        For j = 1 To g_Channel.Users.Count
+            ' ...
+            If (g_Channel.Users(j).IsOperator) Then
+                OpCount = (OpCount + 1)
+            End If
+        Next j
+        
+        ' ...
+        If (OpCount > 1) Then
+            ' ...
+            Randomize
+        
+            ' ...
+            BanDelay = (BanDelay + ((Rnd * OpCount) * 100))
+        End If
+    End If
+
+End Function
 
 Sub ClearChannel()
     ' ...
@@ -7010,7 +7064,7 @@ Function GetChannelString() As String
         Select Case ListviewTabs.Tab
             Case 0: GetChannelString = g_Channel.Name & " (" & lvChannel.ListItems.Count & ")"
             Case 1: GetChannelString = lvFriendList.ListItems.Count & " friends listed"
-            Case 2: GetChannelString = "Clan " & StrReverse(Replace(Clan.DWName, Chr(0), "")) & ": " & lvClanList.ListItems.Count & " members."
+            Case 2: GetChannelString = "Clan " & g_Clan.Name & ": " & lvClanList.ListItems.Count & " members."
         End Select
     End If
 End Function
@@ -7113,7 +7167,7 @@ Sub AddClanMember(ByVal Name As String, Rank As Integer, Online As Integer)
     End With
     
     On Error Resume Next
-    SControl.Run "Event_ClanInfo", Name, Rank, Online
+    RunInAll frmChat.SControl, "Event_ClanInfo", Name, Rank, Online
 End Sub
 
 Private Function GetClanSelectedUser() As String
@@ -7370,7 +7424,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         lvFriendList.ListItems.Clear
         
         ' ...
-        tmrSilentChannel(0).Enabled = False
+        'tmrSilentChannel(0).Enabled = False
         
         Call g_Queue.Clear
     
@@ -7388,7 +7442,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         PassedClanMotdCheck = False
         
         On Error Resume Next
-        SControl.Run "Event_LoggedOff"
+        RunInAll frmChat.SControl, "Event_LoggedOff"
     End If
 End Sub
 

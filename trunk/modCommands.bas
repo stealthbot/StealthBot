@@ -2527,7 +2527,7 @@ Private Function OnReconnect(ByVal Username As String, ByRef dbAccess As udtGetA
         
         Call frmChat.DoConnect
         
-        'Pause 3, True
+        Pause 3, True
         
         BotVars.HomeChannel = tmp
     Else

@@ -375,7 +375,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
     If (bFlood = False) Then
         On Error Resume Next
         
-        frmChat.SControl.Run "Event_MessageSent", Message, Tag
+        RunInAll frmChat.SControl, "Event_MessageSent", Message, Tag
     End If
 End Sub
 
@@ -1119,8 +1119,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
     If (StrComp(Username, GetCurrentUsername, vbTextCompare) = 0) Then
         MyFlags = Flags
         
-        SharedScriptSupport.BotFlags = _
-            MyFlags
+        SharedScriptSupport.BotFlags = MyFlags
         
         IsSelf = True
     End If
@@ -1181,6 +1180,9 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         
     With frmChat.lvChannel
         ' ...
+        .Enabled = False
+        
+        ' ...
         .ListItems.Add isPriority, , Username, , i
         
         ' ...
@@ -1198,10 +1200,18 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
             .ListItems.Item(isPriority).ForeColor = GetNameColor(Flags, 0, IsSelf)
         End If
         
+        ' ...
+        .Enabled = True
+        
+        ' ...
         .Refresh
     End With
     
+    ' ...
     g_ThisIconCode = -1
+    
+    ' ...
+    frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
 End Sub
 
 
@@ -1714,7 +1724,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
         
     ' ...
     Call g_Queue.RemoveLines(tmp)
-    
+
     ' ...
     If ((StrReverse$(BotVars.Product) = "WAR3") Or _
         (StrReverse$(BotVars.Product) = "W3XP")) Then

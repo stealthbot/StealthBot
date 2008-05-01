@@ -113,7 +113,7 @@ Const PS_TITLE = "The StealthBot Plugin System"
 Const PS_UPDATE_URL = "http://www.stealthbot.net/p/plugs/"
 Const PS_SBNET_URL = "http://www.stealthbot.net/board/index.php?"
 Const PS_ALLOW_UI = True
-Const PS_SET_PATH = "plugins\settings.ini"
+Const PS_SET_PATH = "\scripts\plugins\settings.ini"
 Const PS_PREFIX_DISALLOW = "|ps|script|protect|phrasebans|ipbans|idle|koy|plugban|chpw|ib|efp|floodmode|debug"
 Const PS_COLORS = "65280,39423"
 Const PS_PC_VER = 2.4
@@ -168,7 +168,7 @@ Sub psLoadPlugins()
    extensions = LCase(GetSetting("ps", "allowedExtensions")) & ","
  
    '// Check each file in the plugins folder to see if it should be loaded
-   For Each File In psFSO.GetFolder(BotPath & "plugins").Files
+   For Each File In psFSO.GetFolder(BotPath & "\scripts\plugins").Files
 
       Set curFile = psFSO.GetFile(File)
       If curFile.Size > 0 Then
@@ -594,7 +594,7 @@ Sub ps_getplugin_cmd(cmd, Username, DisplayID)
 
    '// Download the plugin
    AddChat vbLightBlue, "Downloading File: " & pluginFileName
-   SSC.PrintURLToFile "plugins\" & pluginFileName, PS_UPDATE_URL & Files(0)
+   SSC.PrintURLToFile "\scripts\plugins\" & pluginFileName, PS_UPDATE_URL & Files(0)
 
    If Not psPlugins.Exists(Prefix) Then
 
@@ -602,7 +602,7 @@ Sub ps_getplugin_cmd(cmd, Username, DisplayID)
       If UBound(Files) > 0 Then AddChat vbWhite, "*** NOTE: If you get a Script Control pop-up, hit Continue. Hitting End will cause errors!"
       For i = 1 to UBound(Files)
         AddChat vbLightBlue, "Downloading File: " & Files(i)
-	If Files(i) <> "" Then SSC.PrintURLToFile "plugins\" & Files(i), PS_UPDATE_URL & Files(i)
+	If Files(i) <> "" Then SSC.PrintURLToFile "\scripts\plugins\" & Files(i), PS_UPDATE_URL & Files(i)
       Next
 
       If DisplayID = 4 Then trig = "/" Else trig = BotVars.Trigger End If
@@ -812,11 +812,11 @@ Sub ps_pedit_cmd(cmd, Username, DisplayID)
    If UBound(cmd) = 0 Then
       path = BotPath() & PS_SET_PATH
    ElseIf cmd(1) = "plugins" Then
-      path = BotPath() & cmd(1)
+      path = BotPath() & "\scripts\" & cmd(1)
    Else
       If Instr(cmd(1), ".") Then
-         If psFSO.FileExists(BotPath() & "plugins\" & cmd(1)) Then
-            path = BotPath() & "plugins\" & cmd(1)
+         If psFSO.FileExists(BotPath() & "\scripts\plugins\" & cmd(1)) Then
+            path = BotPath() & "\scripts\plugins\" & cmd(1)
          Else
             AddChat vbRed, "Invalid command: The file """ & cmd(1) & """ doesn't exist in your plugins folder."
             Exit Sub
@@ -825,7 +825,7 @@ Sub ps_pedit_cmd(cmd, Username, DisplayID)
          If Not psPrefixExists(cmd(1)) Then Exit Sub
 
 	 If cmd(1) = "ps" Then
-            path = BotPath() & "PluginSystem.dat"
+            path = BotPath() & "\scripts\PluginSystem.dat"
          Else
             path = psPlugins.Item(cmd(1))
          End If
@@ -965,7 +965,7 @@ Sub psAutoUpdate(boolMenuClick)
       End If
 
       '// Get local Plugin System version
-      Set myPSFile = psFSO.OpenTextFile(BotPath() & "PluginSystem.dat", 1)
+      Set myPSFile = psFSO.OpenTextFile(BotPath() & "\scripts\PluginSystem.dat", 1)
       myPSVersion = Mid(myPSFile.ReadLine(), 2)
       myPSFile.Close
  
@@ -975,8 +975,8 @@ Sub psAutoUpdate(boolMenuClick)
             boolFoundUpdate = True
 
             AddChat vbLightBlue, "Downloading an update for " & PS_TITLE
-            psBackUpFile BotPath() & "PluginSystem.dat", myPSVersion
-            PrintURLToFile "PluginSystem.dat", PS_UPDATE_URL & "getplug.php?plugin=pluginsystem"
+            psBackUpFile BotPath() & "\scripts\PluginSystem.dat", myPSVersion
+            PrintURLToFile "\scripts\PluginSystem.dat", PS_UPDATE_URL & "getplug.php?plugin=pluginsystem"
             AddChat psColor1, "The StealthBot Plugin System has been updated."
             AddChat psColor1, "For a list of changes in this version see: http://stealthbot.net/p/plugs/changelog"
             AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
@@ -1195,7 +1195,7 @@ Sub ps_AddCode_Callback()
 
       strFilename = Split(InputBox("Enter a name for the plugin file.", PS_TITLE & " - Add Code"), ".")(0)
       If strFilename <> vbNullString Then
-         strPath = BotPath() & "plugins\" & strFilename & ".plug"
+         strPath = BotPath() & "\scripts\plugins\" & strFilename & ".plug"
       Else
          Exit Sub
       End If
@@ -1511,13 +1511,13 @@ End Function
 Sub psBackUpFile(Path, Version)
 
    If Not psFSO.FileExists(Path) Then Exit Sub
-   If Not psFSO.FolderExists(BotPath() & "plugins\backups\") Then psFSO.CreateFolder(BotPath() & "plugins\backups\")
+   If Not psFSO.FolderExists(BotPath() & "\scripts\plugins\backups\") Then psFSO.CreateFolder(BotPath() & "\scripts\plugins\backups\")
 
    fileName = psFSO.GetBaseName(Path)
    fileExt = psFSO.GetExtensionName(Path)
    If Len(Version) > 0 Then buVersion = "(v" & Version & ")"
    buName = fileName & buVersion
-   buPathStart = BotPath() & "plugins\backups\" & buName
+   buPathStart = BotPath() & "\scripts\plugins\backups\" & buName
 
    fileContents = psGetTextStream(Path)
    Do
@@ -1527,7 +1527,7 @@ Sub psBackUpFile(Path, Version)
          Set File = psFSO.OpenTextFile(buPath, 2, True)
          File.WriteLine(fileContents)
          File.Close
-         AddChat vbCyan, fileName & "." & fileExt & " backed up in file> " & "plugins\backups\" & buName & buNum & "." & fileExt
+         AddChat vbCyan, fileName & "." & fileExt & " backed up in file> " & "\scripts\plugins\backups\" & buName & buNum & "." & fileExt
          Exit Do
       End If
    Loop

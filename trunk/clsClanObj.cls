@@ -71,7 +71,7 @@ Public Property Get Self() As clsClanMemberObj
     ' ...
     For i = 1 To Members.Count
         ' ...
-        If (StrComp(Members(i).Name, CurrentUsername, vbBinaryCompare) = 0) Then
+        If (StrComp(Members(i).Name, CurrentUsername, vbTextCompare) = 0) Then
             ' ...
             Set Self = Members(i)
         
@@ -159,7 +159,7 @@ Public Property Get Peons() As Collection
     ' ...
     For i = 1 To Members.Count
         ' ...
-        If (Members(i).Rank >= 0) Then
+        If ((Members(i).Rank >= 0) And (Members(i).Rank <= 0)) Then
             Peons.Add Members(i)
         End If
     Next i
@@ -221,8 +221,8 @@ Public Sub Disband()
 
 End Sub
 
-Public Sub SetMOTD(MOTD As String)
+Public Sub SetMOTD(ByVal MOTD As String)
 
-    Call SetMOTD(MOTD)
+    Call modWar3Clan.SetClanMOTD(MOTD)
 
 End Sub

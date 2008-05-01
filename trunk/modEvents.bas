@@ -73,6 +73,11 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
             Exit Sub
         Else
             ' ...
+            If (g_Channel.Users.Count >= 200) Then
+                Exit Sub
+            End If
+        
+            ' ...
             Set UserObj = New clsUserObj
             
             ' ...
@@ -88,10 +93,10 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
             End With
         
             ' ...
-            With frmChat.tmrSilentChannel(0)
-                .Enabled = False
-                .Enabled = True
-            End With
+            'With frmChat.tmrSilentChannel(0)
+            '    .Enabled = False
+            '    .Enabled = True
+            'End With
         End If
     End If
     
@@ -124,9 +129,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     ' we aren't in a silent channel, are we?
     If (g_Channel.IsSilent) Then
         ' ...
-        If (frmChat.lvChannel.ListItems.Count < 200) Then
-            AddName Username, Product, Flags, Ping, Clan
-        End If
+        AddName Username, Product, Flags, Ping, Clan
     Else
         ' ...
         If ((BotVars.ChatDelay = 0) Or (UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
@@ -196,7 +199,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     On Error Resume Next
     
     ' ...
-    frmChat.SControl.Run "Event_FlagUpdate", Username, Flags, Ping
+    RunInAll frmChat.SControl, "Event_FlagUpdate", Username, Flags, Ping
     
     Exit Sub
     
@@ -242,7 +245,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     'BotVars.JoinWatch = 0
     
     ' ...
-    frmChat.tmrSilentChannel(0).Enabled = False
+    'frmChat.tmrSilentChannel(0).Enabled = False
 
     
     'With gChannel
@@ -261,7 +264,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     If (LenB(g_Channel.Name)) Then
         On Error Resume Next
         
-        frmChat.SControl.Run "Event_ChannelLeave"
+        RunInAll frmChat.SControl, "Event_ChannelLeave"
     End If
 
     frmChat.AddChat RTBColors.JoinedChannelText, "-- Joined channel: ", _
@@ -281,7 +284,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         ' update message using Battle.net's unignore command.
         If (frmChat.mnuDisableVoidView.Checked = False) Then
             ' ...
-            frmChat.tmrSilentChannel(1).Enabled = True
+            'frmChat.tmrSilentChannel(1).Enabled = True
         
             ' ...
             frmChat.AddQ "/unignore " & GetCurrentUsername
@@ -314,7 +317,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     On Error Resume Next
     
-    frmChat.SControl.Run "Event_ChannelJoin", ChannelName, Flags
+    RunInAll frmChat.SControl, "Event_ChannelJoin", ChannelName, Flags
 End Sub
 
 Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
@@ -330,7 +333,7 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
         ' // We're receiving profile information from a scripter request
         ' // No need to do anything at all with it except set Suppress = False after
         ' // the description comes in, and of course hadn it over to the scripters
-        frmChat.SControl.Run "Event_KeyReturn", KeyName, KeyValue
+        RunInAll frmChat.SControl, "Event_KeyReturn", KeyName, KeyValue
         
         If KeyName = "Profile\Description" Then
             SuppressProfileOutput = False
@@ -350,7 +353,7 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
         
         frmWriteProfile.SetFocus
         
-        frmChat.SControl.Run "Event_KeyReturn", KeyName, KeyValue
+        RunInAll frmChat.SControl, "Event_KeyReturn", KeyName, KeyValue
         
     ' Public Profile Listing
     ElseIf PPL = True Then
@@ -471,7 +474,7 @@ Repeat4:
         End If
         
         frmProfile.SetFocus
-        frmChat.SControl.Run "Event_KeyReturn", KeyName, KeyValue
+        RunInAll frmChat.SControl, "Event_KeyReturn", KeyName, KeyValue
         
     End If
 End Sub
@@ -559,7 +562,7 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
 
     On Error Resume Next
     
-    frmChat.SControl.Run "Event_LoggedOn", Username, Product
+    RunInAll frmChat.SControl, "Event_LoggedOn", Username, Product
 End Sub
 
 ' updated 8-10-05 for new logging system
@@ -626,7 +629,7 @@ Public Sub Event_ServerError(ByVal Message As String)
     
     On Error Resume Next
     
-    frmChat.SControl.Run "Event_ServerError", Message
+    RunInAll frmChat.SControl, "Event_ServerError", Message
 End Sub
 
 Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
@@ -883,7 +886,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     
     On Error Resume Next
     
-    frmChat.SControl.Run "Event_ServerInfo", Message
+    RunInAll frmChat.SControl, "Event_ServerInfo", Message
     
     Exit Sub
     
@@ -1032,7 +1035,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     End If
     
     ' ...
-    frmChat.SControl.Run "Event_UserEmote", Username, Flags, Message
+    RunInAll frmChat.SControl, "Event_UserEmote", Username, Flags, Message
 End Sub
 
 'Ping, Product, Clan, InitStatstring, W3Icon
@@ -1198,7 +1201,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
     On Error Resume Next
     
-    frmChat.SControl.Run "Event_UserInChannel", Username, Flags, Message, Ping, _
+    RunInAll frmChat.SControl, "Event_UserInChannel", Username, Flags, Message, Ping, _
         Product, StatUpdate
     
     Exit Sub
@@ -1380,7 +1383,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         On Error Resume Next
 
         ' ...
-        frmChat.SControl.Run "Event_UserJoins", Username, Flags, pStats, Ping, _
+        RunInAll frmChat.SControl, "Event_UserJoins", Username, Flags, pStats, Ping, _
             Product, 0, OriginalStatstring, IsBanned
     End If
     
@@ -1475,7 +1478,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     
     On Error Resume Next
     
-    frmChat.SControl.Run "Event_UserLeaves", Username, Flags
+    RunInAll frmChat.SControl, "Event_UserLeaves", Username, Flags
     
     Exit Sub
     
@@ -1632,9 +1635,11 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         End If
     
         ' ...
-        frmChat.SControl.Run "Event_UserTalk", Username, Flags, Message, Ping
+        RunInAll frmChat.SControl, "Event_UserTalk", Username, Flags, Message, Ping
     Else
         If (g_Channel.Self.IsOperator) Then
+            frmChat.AddChat vbRed, "!"
+        
             If (GetSafelist(Username) = False) Then
                 If (Phrasebans) Then
                     For i = LBound(Phrases) To UBound(Phrases)
@@ -1909,7 +1914,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         g_lastQueueUser = Username
         
         ' ...
-        frmChat.SControl.Run "Event_WhisperFromUser", Username, Flags, Message
+        RunInAll frmChat.SControl, "Event_WhisperFromUser", Username, Flags, Message
     End If
     
     LastWhisperTime = GetTickCount
@@ -2035,7 +2040,7 @@ Public Sub Event_ChannelList(sChannels() As String)
     
     On Error Resume Next
     
-    frmChat.SControl.Run "Event_ChannelList", sChannels
+    RunInAll frmChat.SControl, "Event_ChannelList", sChannels
 End Sub
 
 Public Function CleanUsername(ByVal Username As String) As String
