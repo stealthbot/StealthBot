@@ -1,10 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<commands
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  version="1.0">
-
+<commands xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
   <command name="find">
-    <alias>findr</alias>
+    <alias>
+      findr
+    </alias>
 
     <documentation>
       <description>
@@ -23,14 +21,24 @@
     </arguments>
 
     <access>
-      <rank>20</rank>
-      <flag>A</flag>
-      <flag>a</flag>
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
     </access>
   </command>
 
   <command name="findgrp">
-    <alias>findgroup</alias>
+    <alias>
+      findgroup
+    </alias>
 
     <documentation>
       <description>
@@ -49,22 +57,30 @@
     </arguments>
 
     <access>
-      <rank>20</rank>
-      <flag>A</flag>
-      <flag>a</flag>
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
     </access>
   </command>
 
   <command name="getmail">
     <documentation>
       <description>
-         ... 
+        ...
       </description>
     </documentation>
 
-    <arguments/>
+    <arguments />
 
-    <access/>
+    <access />
   </command>
 
   <command name="whois">
@@ -85,9 +101,17 @@
     </arguments>
 
     <access>
-      <rank>20</rank>
-      <flag>A</flag>
-      <flag>a</flag>
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
     </access>
   </command>
 
@@ -99,22 +123,56 @@
     </documentation>
 
     <access>
-      <rank>20</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
   <command name="bmail">
-    <alias>mail</alias>
+    <alias>
+      mail
+    </alias>
 
     <documentation>
       <description>
@@ -141,17 +199,49 @@
     </arguments>
 
     <access>
-      <rank>20</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
@@ -161,24 +251,58 @@
         initiates a coin toss and states the results.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>20</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
-    </access>    
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
+    </access>
   </command>
 
   <command name="findattr">
-    <alias>findflag</alias>
+    <alias>
+      findflag
+    </alias>
 
     <documentation>
       <description>
@@ -195,27 +319,45 @@
         </documentation>
       </argument>
     </arguments>
-    
+
     <access>
-      <rank>20</rank>
-      <flag>O</flag>
-      <flag>o</flag>
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
   <command name="designated" token="operator">
-    <alias>des</alias>
+    <alias>
+      des
+    </alias>
 
     <documentation>
       <description>
         states the currently designated user.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>20</rank>
-      <flag>O</flag>
-      <flag>o</flag>
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
@@ -227,17 +369,49 @@
     </documentation>
 
     <access>
-      <rank>20</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
@@ -249,17 +423,49 @@
     </documentation>
 
     <access>
-      <rank>20</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
@@ -269,24 +475,58 @@
         states the requesting user's rank and flags.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>20</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
   <command name="add">
-    <alias>set</alias>
+    <alias>
+      set
+    </alias>
 
     <documentation>
       <description>
@@ -311,236 +551,313 @@
             ...
           </description>
         </documentation>
-       </argument>
+      </argument>
 
-       <argument name="attributes" optional="true">
-         <data type="string" maxLength="52" pattern="\+[A-Za-z]+|-[A-Za-z]+|[A-Za-z]+" />
+      <argument name="attributes" optional="true">
+        <data type="string" maxLength="52" pattern="\+[A-Za-z]+|-[A-Za-z]+|[A-Za-z]+" />
 
-         <documentation>
-           <description>
-             ...
-           </description>
-         </documentation>
+        <documentation>
+          <description>
+            ...
+          </description>
+        </documentation>
 
-         <restriction name="FLAG_A_HIGH">
-           <documentation>
-             <description>
-               ...
-             </description>
-           </documentation>
+        <restriction name="FLAG_A_HIGH">
+          <documentation>
+            <description>
+              ...
+            </description>
+          </documentation>
 
-           <match message="[A]+" />
+          <match message="[A]+" />
 
-           <access>
-             <rank>100</rank>
-             <flag>A</flag>
-           </access>
-         </restriction>
+          <access>
+            <rank>
+              100
+            </rank>
 
-         <restriction name="FLAG_A_LOW">
-           <documentation>
-             <description>
-               ...
-             </description>
-           </documentation>
+            <flag>
+              A
+            </flag>
+          </access>
+        </restriction>
 
-           <match message="[a]+" />
+        <restriction name="FLAG_A_LOW">
+          <documentation>
+            <description>
+              ...
+            </description>
+          </documentation>
 
-           <access>
-             <rank>100</rank>
-             <flag>A</flag>
-           </access>
-         </restriction>
+          <match message="[a]+" />
 
-         <restriction name="FLAG_B">
-           <documentation>
-             <description>
-               ...
-             </description>
-            </documentation>
+          <access>
+            <rank>
+              100
+            </rank>
 
-            <match message="[B]+" />
+            <flag>
+              A
+            </flag>
+          </access>
+        </restriction>
 
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>
-          </restriction>
+        <restriction name="FLAG_B">
+          <documentation>
+            <description>
+              ...
+            </description>
+          </documentation>
 
-          <restriction name="FLAG_C_HIGH">
-            <documentation>
-              <description>
-                ...
-              </description>
-            </documentation>
+          <match message="[B]+" />
 
-            <match message="[c]+" />
+          <access>
+            <rank>
+              100
+            </rank>
 
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>
-          </restriction>
+            <flag>
+              A
+            </flag>
+          </access>
+        </restriction>
 
-          <restriction name="FLAG_C_LOW">
-            <documentation>
-              <description>
-                ...
-              </description>
-            </documentation>
+        <restriction name="FLAG_C_HIGH">
+          <documentation>
+            <description>
+              ...
+            </description>
+          </documentation>
 
-            <match message="[c]+" />
+          <match message="[c]+" />
 
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>
-          </restriction>
+          <access>
+            <rank>
+              100
+            </rank>
 
-          <restriction name="FLAG_D">
-            <documentation>
-              <description>
-                ...
-              </description>
-            </documentation>
+            <flag>
+              A
+            </flag>
+          </access>
+        </restriction>
 
-            <match message="[D]+" />
+        <restriction name="FLAG_C_LOW">
+          <documentation>
+            <description>
+              ...
+            </description>
+          </documentation>
 
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>
-          </restriction>
+          <match message="[c]+" />
 
-          <restriction name="FLAG_I">
-            <documentation>
-              <description>
-                ...
-              </description>
-            </documentation>
+          <access>
+            <rank>
+              100
+            </rank>
 
-            <match message="[I]+" />
+            <flag>
+              A
+            </flag>
+          </access>
+        </restriction>
 
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>
-          </restriction>
+        <restriction name="FLAG_D">
+          <documentation>
+            <description>
+              ...
+            </description>
+          </documentation>
 
-          <restriction name="FLAG_J">
-            <documentation>
-              <description>
-                ...
-              </description>
-            </documentation>
+          <match message="[D]+" />
 
-            <match message="[J]+" />
+          <access>
+            <rank>
+              100
+            </rank>
 
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>
-          </restriction>
+            <flag>
+              A
+            </flag>
+          </access>
+        </restriction>
 
-          <restriction name="FLAG_O_HIGH">
-            <documentation>
-              <description>
-                ...
-              </description>
-            </documentation>
+        <restriction name="FLAG_I">
+          <documentation>
+            <description>
+              ...
+            </description>
+          </documentation>
 
-            <match message="[O]+" />
-  
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>
-          </restriction>
+          <match message="[I]+" />
 
-          <restriction name="FLAG_O_LOW">
-            <documentation>
-              <description>
-                ...
-              </description>
-            </documentation>
+          <access>
+            <rank>
+              100
+            </rank>
 
-            <match message="[o]+" />
+            <flag>
+              A
+            </flag>
+          </access>
+        </restriction>
 
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>
-          </restriction>
+        <restriction name="FLAG_J">
+          <documentation>
+            <description>
+              ...
+            </description>
+          </documentation>
 
-          <restriction name="FLAG_P">
-            <documentation>
-              <description>
-                ...
-              </description>
-            </documentation>
+          <match message="[J]+" />
 
-            <match message="[P]+" />
+          <access>
+            <rank>
+              100
+            </rank>
 
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>
-          </restriction>
+            <flag>
+              A
+            </flag>
+          </access>
+        </restriction>
 
-          <restriction name="FLAG_S_HIGH">
-            <documentation>
-              <description>
-                ...
-              </description>
-            </documentation>
+        <restriction name="FLAG_O_HIGH">
+          <documentation>
+            <description>
+              ...
+            </description>
+          </documentation>
 
-            <match message="[S]+" />
-  
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>
-          </restriction>
+          <match message="[O]+" />
 
-          <restriction name="FLAG_S_LOW">
-            <documentation>
-              <description>
-                ...
-              </description>
-            </documentation>
+          <access>
+            <rank>
+              100
+            </rank>
 
-            <match message="[s]+" />
+            <flag>
+              A
+            </flag>
+          </access>
+        </restriction>
 
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>
-          </restriction>
+        <restriction name="FLAG_O_LOW">
+          <documentation>
+            <description>
+              ...
+            </description>
+          </documentation>
 
-          <restriction name="FLAG_T">
-            <documentation>
-              <description>
-                ...
-              </description>
-            </documentation>
+          <match message="[o]+" />
 
-            <match message="[T]+" />
+          <access>
+            <rank>
+              100
+            </rank>
 
-            <access>
-              <rank>100</rank>
-              <flag>A</flag>
-            </access>
-          </restriction>
-       </argument>
-      </arguments>
+            <flag>
+              A
+            </flag>
+          </access>
+        </restriction>
 
-      <options>
-      </options>
+        <restriction name="FLAG_P">
+          <documentation>
+            <description>
+              ...
+            </description>
+          </documentation>
+
+          <match message="[P]+" />
+
+          <access>
+            <rank>
+              100
+            </rank>
+
+            <flag>
+              A
+            </flag>
+          </access>
+        </restriction>
+
+        <restriction name="FLAG_S_HIGH">
+          <documentation>
+            <description>
+              ...
+            </description>
+          </documentation>
+
+          <match message="[S]+" />
+
+          <access>
+            <rank>
+              100
+            </rank>
+
+            <flag>
+              A
+            </flag>
+          </access>
+        </restriction>
+
+        <restriction name="FLAG_S_LOW">
+          <documentation>
+            <description>
+              ...
+            </description>
+          </documentation>
+
+          <match message="[s]+" />
+
+          <access>
+            <rank>
+              100
+            </rank>
+
+            <flag>
+              A
+            </flag>
+          </access>
+        </restriction>
+
+        <restriction name="FLAG_T">
+          <documentation>
+            <description>
+              ...
+            </description>
+          </documentation>
+
+          <match message="[T]+" />
+
+          <access>
+            <rank>
+              100
+            </rank>
+
+            <flag>
+              A
+            </flag>
+          </access>
+        </restriction>
+      </argument>
+    </arguments>
+
+    <options />
 
     <access>
-      <rank>20</rank>
-      <flag>A</flag>
-      <flag>a</flag>
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
     </access>
   </command>
 
@@ -550,16 +867,26 @@
         states the address of the server that the bot is currently connected to.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>20</rank>
-      <flag>C</flag>
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
   <command name="about">
-    <alias>ver</alias>
-    <alias>version</alias>
+    <alias>
+      ver
+    </alias>
+
+    <alias>
+      version
+    </alias>
 
     <documentation>
       <description>
@@ -568,41 +895,107 @@
     </documentation>
 
     <access>
-      <rank>20</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
   <command name="getping">
-    <alias>pingme</alias>
+    <alias>
+      pingme
+    </alias>
 
     <documentation>
       <description>
         states the requesting user's connection latency with the Battle.net server.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>40</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        40
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
@@ -614,17 +1007,49 @@
     </documentation>
 
     <access>
-      <rank>40</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        40
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
@@ -636,17 +1061,49 @@
     </documentation>
 
     <access>
-      <rank>40</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        40
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
@@ -666,19 +1123,51 @@
         </documentation>
       </argument>
     </arguments>
-    
+
     <access>
-      <rank>50</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
@@ -698,11 +1187,19 @@
         </documentation>
       </argument>
     </arguments>
-    
+
     <access>
-      <rank>50</rank>
-      <flag>o</flag>
-      <flag>O</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -724,9 +1221,17 @@
     </arguments>
 
     <access>
-      <rank>50</rank>
-      <flag>o</flag>
-      <flag>O</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -736,19 +1241,51 @@
         states the results for the most recent or currently active vote.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>50</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
@@ -768,19 +1305,51 @@
         </documentation>
       </argument>
     </arguments>
-    
+
     <access>
-      <rank>50</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
@@ -797,21 +1366,33 @@
           <match message="^[/]" />
 
           <access>
-             <rank>100</rank>
-             <flag>T</flag>
+            <rank>
+              100
+            </rank>
+
+            <flag>
+              T
+            </flag>
           </access>
         </restriction>
       </argument>
     </arguments>
 
     <access>
-      <rank>50</rank>
-      <flag>T</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
   <command name="math">
-    <alias>eval</alias>
+    <alias>
+      eval
+    </alias>
 
     <documentation>
       <description>
@@ -828,19 +1409,51 @@
         </documentation>
       </argument>
     </arguments>
-    
+
     <access>
-      <rank>50</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
@@ -852,17 +1465,49 @@
     </documentation>
 
     <access>
-      <rank>50</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
@@ -894,9 +1539,17 @@
     </arguments>
 
     <access>
-      <rank>50</rank>
-      <flag>A</flag>
-      <flag>a</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
     </access>
   </command>
 
@@ -906,21 +1559,59 @@
         stops all votes that are currently in progress.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>50</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
-      <flag>O</flag>
-      <flag>o</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
@@ -930,20 +1621,55 @@
         states the owner of the bot.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>50</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
-      <flag>C</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
@@ -955,15 +1681,20 @@
     </documentation>
 
     <access>
-      <rank>50</rank>
-      <flag>M</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        M
+      </flag>
     </access>
   </command>
 
-  <command name="say">
+  <command name="say" enabled="true">
     <documentation>
       <description>
-        echos a specified phrase.
+        echos a specified phrase
       </description>
     </documentation>
 
@@ -973,16 +1704,26 @@
           <match message="^[/]" />
 
           <access>
-             <rank>100</rank>
-             <flag>T</flag>
+            <rank>
+              100
+            </rank>
+
+            <flag>
+              T
+            </flag>
           </access>
         </restriction>
       </argument>
     </arguments>
 
     <access>
-      <rank>50</rank>
-      <flag>T</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
@@ -999,22 +1740,37 @@
           <match message="^[/]" />
 
           <access>
-             <rank>60</rank>
-             <flag>T</flag>
+            <rank>
+              60
+            </rank>
+
+            <flag>
+              T
+            </flag>
           </access>
         </restriction>
       </argument>
     </arguments>
 
     <access>
-      <rank>50</rank>
-      <flag>T</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
   <command name="ignore">
-    <alias>ign</alias>
-    <alias>squelch</alias>
+    <alias>
+      ign
+    </alias>
+
+    <alias>
+      squelch
+    </alias>
 
     <documentation>
       <description>
@@ -1033,15 +1789,28 @@
     </arguments>
 
     <access>
-      <rank>50</rank>
-      <flag>O</flag>
-      <flag>o</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
   <command name="unignore" datasrc="external">
-    <alias>unign</alias>
-    <alias>unsquelch</alias>
+    <alias>
+      unign
+    </alias>
+
+    <alias>
+      unsquelch
+    </alias>
 
     <documentation>
       <description>
@@ -1058,11 +1827,19 @@
         </documentation>
       </argument>
     </arguments>
-    
+
     <access>
-      <rank>50</rank>
-      <flag>O</flag>
-      <flag>o</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
@@ -1082,11 +1859,19 @@
         </documentation>
       </argument>
     </arguments>
-    
+
     <access>
-      <rank>50</rank>
-      <flag>a</flag>
-      <flag>A</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
     </access>
   </command>
 
@@ -1098,9 +1883,17 @@
     </documentation>
 
     <access>
-      <rank>50</rank>
-      <flag>a</flag>
-      <flag>A</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
     </access>
   </command>
 
@@ -1122,8 +1915,13 @@
     </arguments>
 
     <access>
-      <rank>50</rank>
-      <flag>C</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
@@ -1135,9 +1933,17 @@
     </documentation>
 
     <access>
-      <rank>50</rank>
-      <flag>C</flag>
-      <flag>M</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        M
+      </flag>
     </access>
   </command>
 
@@ -1157,20 +1963,52 @@
         </documentation>
       </argument>
     </arguments>
-    
+
     <access>
-      <rank>50</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
-    </access>    
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
+    </access>
   </command>
 
   <command name="uptime">
@@ -1179,19 +2017,51 @@
         states the current system and application operational times.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>50</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        50
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
@@ -1201,10 +2071,15 @@
         instructs the bot to remove a specified user from the bot's friends list.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>60</rank>
-      <flag>C</flag>
+      <rank>
+        60
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
@@ -1214,11 +2089,19 @@
         states the current number of users that have been banned from the channel.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>60</rank>
-      <flag>O</flag>
-      <flag>o</flag>
+      <rank>
+        60
+      </rank>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
@@ -1228,11 +2111,19 @@
         ...
       </description>
     </documentation>
-    
+
     <access>
-      <rank>60</rank>
-      <flag>O</flag>
-      <flag>o</flag>
+      <rank>
+        60
+      </rank>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
@@ -1244,52 +2135,100 @@
     </documentation>
 
     <access>
-      <rank>60</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        60
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
   <command name="levelban">
-    <alias>levelbans</alias>
+    <alias>
+      levelbans
+    </alias>
 
     <documentation>
       <description>
         states the minimum level permissible for WarCraft III users joining the channel.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>60</rank>
-      <flag>O</flag>
+      <rank>
+        60
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
   <command name="d2levelban">
-    <alias>d2levelbans</alias>
+    <alias>
+      d2levelbans
+    </alias>
 
     <documentation>
       <description>
         states the minimum level permissible for Diablo II users joining the channel.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>60</rank>
-      <flag>O</flag>
+      <rank>
+        60
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
   <command name="slcheck">
-    <alias>shitcheck</alias>
+    <alias>
+      shitcheck
+    </alias>
 
     <documentation>
       <description>
@@ -1308,14 +2247,24 @@
     </arguments>
 
     <access>
-      <rank>60</rank>
-      <flag>A</flag>
-      <flag>a</flag>
+      <rank>
+        60
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
     </access>
   </command>
 
   <command name="detail">
-    <alias>dbd</alias>
+    <alias>
+      dbd
+    </alias>
 
     <documentation>
       <description>
@@ -1334,23 +2283,39 @@
     </arguments>
 
     <access>
-      <rank>60</rank>
-      <flag>A</flag>
-      <flag>a</flag>
+      <rank>
+        60
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
     </access>
   </command>
- 
+
   <command name="tagcheck">
     <documentation>
       <description>
         states if a specified user matches a tagban.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>60</rank>
-      <flag>A</flag>
-      <flag>a</flag>
+      <rank>
+        60
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
     </access>
   </command>
 
@@ -1362,8 +2327,13 @@
     </documentation>
 
     <access>
-      <rank>60</rank>
-      <flag>C</flag>
+      <rank>
+        60
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
@@ -1375,9 +2345,17 @@
     </documentation>
 
     <access>
-      <rank>60</rank>
-      <flag>O</flag>
-      <flag>o</flag>
+      <rank>
+        60
+      </rank>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
@@ -1399,9 +2377,17 @@
     </arguments>
 
     <access>
-      <rank>60</rank>
-      <flag>O</flag>
-      <flag>o</flag>
+      <rank>
+        60
+      </rank>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
@@ -1413,14 +2399,24 @@
     </documentation>
 
     <access>
-      <rank>60</rank>
-      <flag>O</flag>
-      <flag>o</flag>
+      <rank>
+        60
+      </rank>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
   <command name="lastwhisper">
-    <alias>lw</alias>
+    <alias>
+      lw
+    </alias>
 
     <documentation>
       <description>
@@ -1429,37 +2425,78 @@
     </documentation>
 
     <access>
-      <rank>60</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        60
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
   <command name="phrases">
-    <alias>plist</alias>
+    <alias>
+      plist
+    </alias>
 
     <documentation>
       <description>
         states the currently active phrasebans.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>70</rank>
-      <flag>O</flag>
-    </access>    
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        O
+      </flag>
+    </access>
   </command>
 
   <command name="addphrase">
-    <alias>padd</alias>
+    <alias>
+      padd
+    </alias>
 
     <documentation>
       <description>
@@ -1468,9 +2505,14 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
-      <flag>O</flag>
-    </access>    
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        O
+      </flag>
+    </access>
   </command>
 
   <command name="mmail">
@@ -1481,17 +2523,49 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
@@ -1503,23 +2577,35 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
-      <flag>O</flag>
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
   <command name="delphrase">
-    <alias>pdel</alias>
+    <alias>
+      pdel
+    </alias>
 
     <documentation>
       <description>
         removes a phrase from the phrasebans list.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>70</rank>
-      <flag>O</flag>
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -1531,8 +2617,13 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
-      <flag>O</flag>
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -1544,8 +2635,13 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
-      <flag>O</flag>
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -1555,11 +2651,19 @@
         states the current status of phrasebanning.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>70</rank>
-      <flag>o</flag>
-      <flag>O</flag>
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -1571,14 +2675,24 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
-      <flag>O</flag>
-      <flag>o</flag>
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
   <command name="ipbans" token="operator">
-    <alias>ipbanning</alias>
+    <alias>
+      ipbanning
+    </alias>
 
     <documentation>
       <description>
@@ -1587,9 +2701,17 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
-      <flag>O</flag>
-      <flag>o</flag>
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
@@ -1599,11 +2721,19 @@
         states all users that the bot has banned during the duration of its role as channel moderator.
       </description>
     </documentation>
-    
+
     <access>
-       <rank>70</rank>
-       <flag>O</flag>
-       <flag>o</flag>
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
@@ -1612,11 +2742,13 @@
       <description>
         sends the requesting user a private message when a specified user is discovered to be on-line.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>70</rank>
-    </access>    
+      <rank>
+        70
+      </rank>
+    </access>
   </command>
 
   <command name="denotify">
@@ -1624,10 +2756,12 @@
       <description>
         removes the requesting user's on-line notification for the specified user.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>70</rank>
+      <rank>
+        70
+      </rank>
     </access>
   </command>
 
@@ -1639,7 +2773,9 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
+      <rank>
+        70
+      </rank>
     </access>
   </command>
 
@@ -1648,24 +2784,30 @@
       <description>
         adds a specified user to the bot's user monitor.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>70</rank>
+      <rank>
+        70
+      </rank>
     </access>
   </command>
 
   <command name="shitlist">
-    <alias>sl</alias>
+    <alias>
+      sl
+    </alias>
 
     <documentation>
       <description>
         states the users currently on the shitlist.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>70</rank>
+      <rank>
+        70
+      </rank>
     </access>
   </command>
 
@@ -1674,28 +2816,46 @@
       <description>
         removes a specified user from the shitlist.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>70</rank>
-      <flag>A</flag>
-      <flag>a</flag>
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
     </access>
   </command>
 
   <command name="safeadd">
-    <alias>safelist</alias>
-    
+    <alias>
+      safelist
+    </alias>
+
     <documentation>
       <description>
         safelists a specified user or group of users.
       </description>
-    </documentation>  
+    </documentation>
 
     <access>
-      <rank>70</rank>
-      <flag>A</flag>
-      <flag>a</flag>
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
     </access>
   </command>
 
@@ -1704,13 +2864,21 @@
       <description>
         removes a safelist entry for a specifed user or group of users.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>70</rank>
-      <flag>A</flag>
-      <flag>a</flag>
-    </access>    
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
+    </access>
   </command>
 
   <command name="safelist">
@@ -1718,13 +2886,21 @@
       <description>
         states the users currently on the safelist.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>70</rank>
-      <flag>A</flag>
-      <flag>a</flag>
-    </access>    
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
+    </access>
   </command>
 
   <command name="tagbans">
@@ -1732,30 +2908,51 @@
       <description>
         states the tags currently on the tagban list.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>70</rank>
-      <flag>A</flag>
-      <flag>a</flag>
-    </access>    
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
+    </access>
   </command>
 
   <command name="tagadd">
-    <alias>tagban</alias>
-    <alias>addtag</alias>
+    <alias>
+      tagban
+    </alias>
+
+    <alias>
+      addtag
+    </alias>
 
     <documentation>
       <description>
         adds a specified tag to the tagban list.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>70</rank>
-      <flag>A</flag>
-      <flag>a</flag>
-    </access>    
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
+    </access>
   </command>
 
   <command name="tagdel">
@@ -1763,12 +2960,20 @@
       <description>
         removes a specifed tag from the tagban list.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>70</rank>
-      <flag>A</flag>
-      <flag>a</flag>
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
     </access>
   </command>
 
@@ -1778,9 +2983,11 @@
         states the users that the user monitor currently detects on-line.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>70</rank>
+      <rank>
+        70
+      </rank>
     </access>
   </command>
 
@@ -1789,26 +2996,38 @@
       <description>
         states if a specified user is on-line based off of the results from the user monitor.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>70</rank>
+      <rank>
+        70
+      </rank>
     </access>
   </command>
 
   <command name="shitadd">
-    <alias>pban</alias>
+    <alias>
+      pban
+    </alias>
 
     <documentation>
       <description>
         adds a specified user to the shitlist.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>70</rank>
-      <flag>A</flag>
-      <flag>a</flag>
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
     </access>
   </command>
 
@@ -1820,8 +3039,13 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
-      <flag>O</flag>
+      <rank>
+        70
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -1830,11 +3054,16 @@
       <description>
         enables, disables, or changes the settings of, a welcome message.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>80</rank>
-      <flag>C</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
@@ -1843,36 +3072,75 @@
       <description>
         states the specified user's Battle.net user profile.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>80</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 
   <command name="whispercmds">
-    <alias>wc</alias>
+    <alias>
+      wc
+    </alias>
 
     <documentation>
       <description>
         toggles the use of private messaging as a means for delivering command responses.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>80</rank>
-      <flag>C</flag>
-    </access>    
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        C
+      </flag>
+    </access>
   </command>
 
   <command name="filter">
@@ -1881,11 +3149,16 @@
         The "filter" command will filter any incoming messages containing the specified phrase.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>80</rank>
-      <flag>C</flag>
-    </access>    
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        C
+      </flag>
+    </access>
   </command>
 
   <command name="block">
@@ -1893,11 +3166,16 @@
       <description>
         The "block" command will filter any incoming message from the specified user.
       </description>
-    </documentation>   
-    
+    </documentation>
+
     <access>
-      <rank>80</rank>
-      <flag>C</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
@@ -1906,32 +3184,49 @@
       <description>
         The "allowmp3" command enables or disables the use of mp3 commands.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>80</rank>
-      <flag>M</flag>
-    </access>    
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        M
+      </flag>
+    </access>
   </command>
 
   <command name="kickonyell">
-    <alias>koy</alias>
+    <alias>
+      koy
+    </alias>
 
     <documentation>
       <description>
         The "kickonyell" command will enable or disable kicking on yell.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>O</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
   <command name="clientbans">
-    <alias>clist</alias>
-    <alias>cbans</alias>
+    <alias>
+      clist
+    </alias>
+
+    <alias>
+      cbans
+    </alias>
 
     <documentation>
       <description>
@@ -1940,13 +3235,20 @@
     </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>O</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
   <command name="cadd">
-    <alias>addclient</alias>
+    <alias>
+      addclient
+    </alias>
 
     <documentation>
       <description>
@@ -1965,13 +3267,20 @@
     </arguments>
 
     <access>
-      <rank>80</rank>
-      <flag>O</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
   <command name="cdel">
-    <alias>delclient</alias>
+    <alias>
+      delclient
+    </alias>
 
     <documentation>
       <description>
@@ -1990,8 +3299,13 @@
     </arguments>
 
     <access>
-      <rank>80</rank>
-      <flag>O</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -2003,8 +3317,13 @@
     </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>O</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -2013,11 +3332,16 @@
       <description>
         The "useitunes" command will enable or disable the use of iTunes as the target media player for use with mp3 commands.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>M</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        M
+      </flag>
     </access>
   </command>
 
@@ -2026,11 +3350,16 @@
       <description>
         The "usewinamp" command will enable or disable the use of Winamp as the target media player for use with mp3 commands.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>M</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        M
+      </flag>
     </access>
   </command>
 
@@ -2039,12 +3368,17 @@
       <description>
         The "setidle" command will set the bot's idle to the specified message.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>C</flag>
-    </access>    
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        C
+      </flag>
+    </access>
   </command>
 
   <command name="idletype">
@@ -2052,27 +3386,39 @@
       <description>
         The "idletype" command will set the bot's idle message to the specified type.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>C</flag>
-    </access>    
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        C
+      </flag>
+    </access>
   </command>
 
   <command name="idletime">
-    <alias>idlewait</alias>
+    <alias>
+      idlewait
+    </alias>
 
     <documentation>
       <description>
         sets the bot's idle delay to the specified.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>C</flag>
-    </access>    
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        C
+      </flag>
+    </access>
   </command>
 
   <command name="repeat">
@@ -2081,40 +3427,59 @@
         toggles the selected media player's repeat setting.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>80</rank>
-      <flag>M</flag>
-    </access>    
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        M
+      </flag>
+    </access>
   </command>
 
   <command name="reconnect">
-    <alias>rc</alias>
+    <alias>
+      rc
+    </alias>
 
     <documentation>
       <description>
         forces the bot to reconnect to the selected Battle.net server.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>C</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
   <command name="designate" token="operator">
-    <alias>des</alias>
+    <alias>
+      des
+    </alias>
 
     <documentation>
       <description>
         designates the specified user as heir to the channel moderator position.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>80</rank>
-      <flag>O</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -2124,7 +3489,7 @@
         sets the bot's command identifier to the specified.
       </description>
     </documentation>
- 
+
     <arguments>
       <argument name="trigger">
         <restriction name="DISABLE_FORWARD_SLASH">
@@ -2136,8 +3501,13 @@
     </arguments>
 
     <access>
-      <rank>80</rank>
-      <flag>C</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
@@ -2146,11 +3516,16 @@
       <description>
         makes the bot ignore all messages within private chat channels from users not on the bot's friends list.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>C</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
@@ -2159,28 +3534,43 @@
       <description>
         makes the bot unignore all messages within private chat channels from users not on the bot's friends list.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>80</rank>
-      <flag>C</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
   <command name="rem">
-    <alias>del</alias>
+    <alias>
+      del
+    </alias>
 
     <documentation>
       <description>
         removes a specified user from the bot's database.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>80</rank>
-      <flag>A</flag>
-      <flag>a</flag>
-    </access>    
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        a
+      </flag>
+    </access>
   </command>
 
   <command name="sethome">
@@ -2188,12 +3578,17 @@
       <description>
         sets the bot's home channel to the channel specified.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>C</flag>
-    </access>    
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        C
+      </flag>
+    </access>
   </command>
 
   <command name="idle">
@@ -2201,12 +3596,17 @@
       <description>
         enables or disables the use of idle messages.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>C</flag>
-    </access>    
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        C
+      </flag>
+    </access>
   </command>
 
   <command name="shuffle">
@@ -2217,9 +3617,14 @@
     </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>M</flag>
-    </access>    
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        M
+      </flag>
+    </access>
   </command>
 
   <command name="pause">
@@ -2227,12 +3632,17 @@
       <description>
         pauses playback in the selected media player.
       </description>
-    </documentation>  
-    
+    </documentation>
+
     <access>
-      <rank>80</rank>
-      <flag>M</flag>
-    </access>  
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        M
+      </flag>
+    </access>
   </command>
 
   <command name="fos">
@@ -2241,10 +3651,15 @@
         toggles fade-out stop for the the selected media player.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>80</rank>
-      <flag>M</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        M
+      </flag>
     </access>
   </command>
 
@@ -2253,11 +3668,16 @@
       <description>
         changes the selected media player's volume to the specified level.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>M</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        M
+      </flag>
     </access>
   </command>
 
@@ -2266,11 +3686,16 @@
       <description>
         terminates playback in the currently selected media player.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>M</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        M
+      </flag>
     </access>
   </command>
 
@@ -2279,11 +3704,16 @@
       <description>
         begins playback in the currently selected media player.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>M</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        M
+      </flag>
     </access>
   </command>
 
@@ -2292,58 +3722,90 @@
       <description>
         skips to the next playlist entry in the selected media player's playlist.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>M</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        M
+      </flag>
     </access>
   </command>
 
   <command name="sweepban" token="operator">
-    <alias>cb</alias>
+    <alias>
+      cb
+    </alias>
 
     <documentation>
       <description>
         The "sweepban" command will attempt to ban all users within the specified channel.
       </description>
-    </documentation>   
-    
+    </documentation>
+
     <access>
-      <rank>90</rank>
-      <flag>O</flag>
-      <flag>o</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
   <command name="sweepignore">
-    <alias>cs</alias>
+    <alias>
+      cs
+    </alias>
 
     <documentation>
       <description>
         attempts to ignore all users within the specified channel.
       </description>
     </documentation>
-    
+
     <access>
-      <rank>90</rank>
-      <flag>O</flag>
-      <flag>o</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
     </access>
   </command>
 
   <command name="idlebans">
-    <alias>ib</alias>
+    <alias>
+      ib
+    </alias>
 
     <documentation>
       <description>
         allows the requesting user to check or change the status of idle banning.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>90</rank>
-      <flag>O</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -2355,8 +3817,13 @@
     </documentation>
 
     <access>
-      <rank>90</rank>
-      <flag>C</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
@@ -2365,11 +3832,16 @@
       <description>
         changes the bot's expansion CD-Key configuration entry to the one specified.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>90</rank>
-      <flag>C</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
@@ -2378,10 +3850,12 @@
       <description>
         adds a specified user to the bot's shitlist and will then attempt to ban and ignore the user.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>90</rank>
+      <rank>
+        90
+      </rank>
     </access>
   </command>
 
@@ -2390,40 +3864,56 @@
       <description>
         removes a specified user from the bot's shitlist, and will then attempt to unban and unignore the user.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>90</rank>
+      <rank>
+        90
+      </rank>
     </access>
   </command>
 
   <command name="clearbanlist">
-    <alias>cbl</alias>
+    <alias>
+      cbl
+    </alias>
 
     <documentation>
       <description>
         clears the bot's internal banlist.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>90</rank>
-      <flag>O</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
   <command name="clan" token="operator">
-    <alias>c</alias>
+    <alias>
+      c
+    </alias>
 
     <documentation>
       <description>
         enables or disables clan channel privacy status.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>90</rank>
-      <flag>c</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        c
+      </flag>
     </access>
   </command>
 
@@ -2435,8 +3925,13 @@
     </documentation>
 
     <access>
-      <rank>90</rank>
-      <flag>O</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -2445,10 +3940,12 @@
       <description>
         states the contents of a specified file within the bot's directory.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>90</rank>
+      <rank>
+        90
+      </rank>
     </access>
   </command>
 
@@ -2457,26 +3954,38 @@
       <description>
         makes the bot join the specified channel.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>90</rank>
-      <flag>J</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        J
+      </flag>
     </access>
   </command>
 
   <command name="home">
-    <alias>joinhome</alias>
+    <alias>
+      joinhome
+    </alias>
 
     <documentation>
       <description>
         makes the bot join its home channel.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>90</rank>
-      <flag>J</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        J
+      </flag>
     </access>
   </command>
 
@@ -2485,7 +3994,7 @@
       <description>
         promotes the specified user in the current WarCraft III clan.
       </description>
-    </documentation>    
+    </documentation>
 
     <access />
   </command>
@@ -2495,7 +4004,7 @@
       <description>
         demotes the specified user in the current WarCraft III clan.
       </description>
-    </documentation>    
+    </documentation>
 
     <access />
   </command>
@@ -2505,11 +4014,16 @@
       <description>
         forces the bot to resign from its status as a channel moderator.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>90</rank>
-      <flag>O</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -2518,11 +4032,16 @@
       <description>
         changes the configuration entry for the username to the username specified.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>90</rank>
-      <flag>C</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
@@ -2531,11 +4050,16 @@
       <description>
         changes the configuration entry for the password to the password specified.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>90</rank>
-      <flag>C</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
@@ -2544,73 +4068,107 @@
       <description>
         changes the configuration entry for the server to the server specified.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>90</rank>
-      <flag>C</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
   <command name="rejoin">
-    <alias>rj</alias>
+    <alias>
+      rj
+    </alias>
 
     <documentation>
       <description>
         makes the bot rejoin the current channel.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>80</rank>
-      <flag>J</flag>
+      <rank>
+        80
+      </rank>
+
+      <flag>
+        J
+      </flag>
     </access>
   </command>
 
   <command name="quickrejoin">
-    <alias>qrejoin</alias>
-    <alias>qrj</alias>
+    <alias>
+      qrejoin
+    </alias>
+
+    <alias>
+      qrj
+    </alias>
 
     <documentation>
       <description>
         makes the bot rejoin the current channel.
       </description>
-    </documentation>    
+    </documentation>
 
     <access />
   </command>
 
   <command name="forcejoin">
-    <alias>fjoin</alias>
-    <alias>fj</alias>
+    <alias>
+      fjoin
+    </alias>
+
+    <alias>
+      fj
+    </alias>
 
     <documentation>
       <description>
         makes the bot rejoin the current channel.
       </description>
-    </documentation>    
+    </documentation>
 
     <access />
   </command>
 
   <command name="quiettime">
-    <alias>qt</alias>
+    <alias>
+      qt
+    </alias>
 
     <documentation>
       <description>
         enables or disables the use of quiettime.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>90</rank>
-      <flag>O</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
   <command name="giveup" token="operator">
-    <alias>op</alias>
-    <alias>ddp</alias>
+    <alias>
+      op
+    </alias>
+
+    <alias>
+      ddp
+    </alias>
 
     <documentation>
       <description>
@@ -2619,8 +4177,13 @@
     </documentation>
 
     <access>
-      <rank>90</rank>
-      <flag>O</flag>
+      <rank>
+        90
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -2629,19 +4192,21 @@
       <description>
         invites a specified user into the clan in which the bot is a member.
       </description>
-    </documentation>    
+    </documentation>
 
     <access />
   </command>
 
   <command name="makechieftain">
-    <alias>makechief</alias>
+    <alias>
+      makechief
+    </alias>
 
     <documentation>
       <description>
         ...
       </description>
-    </documentation>    
+    </documentation>
 
     <access />
   </command>
@@ -2651,7 +4216,7 @@
       <description>
         ...
       </description>
-    </documentation>    
+    </documentation>
 
     <access />
   </command>
@@ -2661,7 +4226,7 @@
       <description>
         ...
       </description>
-    </documentation>    
+    </documentation>
 
     <access />
   </command>
@@ -2671,11 +4236,16 @@
       <description>
         sets the clan's message of the day.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>100</rank>
-      <flag>c</flag>
+      <rank>
+        100
+      </rank>
+
+      <flag>
+        c
+      </flag>
     </access>
   </command>
 
@@ -2684,41 +4254,60 @@
       <description>
         opens winamp.
       </description>
-    </documentation>    
-    
+    </documentation>
+
     <access>
-      <rank>100</rank>
-      <flag>M</flag>
+      <rank>
+        100
+      </rank>
+
+      <flag>
+        M
+      </flag>
     </access>
   </command>
 
   <command name="efp">
-    <alias>floodmode</alias>
+    <alias>
+      floodmode
+    </alias>
 
     <documentation>
       <description>
         enables or disables the use of emergency floodbot protection.
       </description>
-    </documentation>   
+    </documentation>
 
     <access>
-      <rank>100</rank>
-      <flag>O</flag>
+      <rank>
+        100
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
   <command name="locktext">
-    <alias>lockchat</alias>
+    <alias>
+      lockchat
+    </alias>
 
     <documentation>
       <description>
         disables the display of incoming chat messages.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>100</rank>
-      <flag>C</flag>
+      <rank>
+        100
+      </rank>
+
+      <flag>
+        C
+      </flag>
     </access>
   </command>
 
@@ -2727,10 +4316,12 @@
       <description>
         terminates application execution.
       </description>
-    </documentation>    
+    </documentation>
 
     <access>
-      <rank>100</rank>
+      <rank>
+        100
+      </rank>
     </access>
   </command>
 
@@ -2742,8 +4333,13 @@
     </documentation>
 
     <access>
-      <rank>100</rank>
-      <flag>O</flag>
+      <rank>
+        100
+      </rank>
+
+      <flag>
+        O
+      </flag>
     </access>
   </command>
 
@@ -2755,17 +4351,49 @@
     </documentation>
 
     <access>
-      <rank>20</rank>
-      <flag>a</flag>
-      <flag>A</flag>
-      <flag>C</flag>
-      <flag>c</flag>
-      <flag>G</flag>
-      <flag>J</flag>
-      <flag>O</flag>
-      <flag>o</flag>
-      <flag>M</flag>
-      <flag>T</flag>
+      <rank>
+        20
+      </rank>
+
+      <flag>
+        a
+      </flag>
+
+      <flag>
+        A
+      </flag>
+
+      <flag>
+        C
+      </flag>
+
+      <flag>
+        c
+      </flag>
+
+      <flag>
+        G
+      </flag>
+
+      <flag>
+        J
+      </flag>
+
+      <flag>
+        O
+      </flag>
+
+      <flag>
+        o
+      </flag>
+
+      <flag>
+        M
+      </flag>
+
+      <flag>
+        T
+      </flag>
     </access>
   </command>
 </commands>

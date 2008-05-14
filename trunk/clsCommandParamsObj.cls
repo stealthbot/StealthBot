@@ -43,10 +43,17 @@ Private Sub Class_Terminate()
 
 End Sub
 
-Public Property Get restrictions() As Collection
+Public Property Get Restrictions() As Collection
 
     ' ...
-    Set restrictions = m_restrictions
+    Set Restrictions = m_restrictions
+
+End Property
+
+Public Property Let Restrictions(ByRef restrics As Collection)
+
+    ' ...
+    Set m_restrictions = restrics
 
 End Property
 

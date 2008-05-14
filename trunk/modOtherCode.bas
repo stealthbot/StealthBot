@@ -3,7 +3,7 @@ Option Explicit
 
 Public Type COMMAND_DATA
     Name         As String
-    params       As String
+    Params       As String
     local        As Boolean
     PublicOutput As Boolean
 End Type
@@ -1581,24 +1581,24 @@ Public Function GetW3Realm(Optional ByVal Username As String) As String
 End Function
 
 Public Function GetConfigFilePath() As String
-    Static FilePath As String
+    Static filePath As String
     
-    If (LenB(FilePath) = 0) Then
+    If (LenB(filePath) = 0) Then
         If ((LenB(ConfigOverride) > 0)) Then
-            FilePath = ConfigOverride
+            filePath = ConfigOverride
         Else
-            FilePath = GetProfilePath()
+            filePath = GetProfilePath()
             
-            FilePath = FilePath & _
-                IIf(Right$(FilePath, 1) = "\", "", "\") & "config.ini"
+            filePath = filePath & _
+                IIf(Right$(filePath, 1) = "\", "", "\") & "config.ini"
         End If
     End If
     
-    If (InStr(1, FilePath, "\", vbBinaryCompare) = 0) Then
-        FilePath = App.Path & "\" & FilePath
+    If (InStr(1, filePath, "\", vbBinaryCompare) = 0) Then
+        filePath = App.Path & "\" & filePath
     End If
     
-    GetConfigFilePath = FilePath
+    GetConfigFilePath = filePath
 End Function
 
 Public Function GetFilePath(ByVal filename As String) As String
@@ -2745,15 +2745,12 @@ Public Function convertAlias(ByVal cmdName As String) As String
 
     ' ...
     If (Len(cmdName) > 0) Then
-        Dim commands As MSXML2.DOMDocument
-        Dim alias    As MSXML2.IXMLDOMNode
+        Dim commands As DOMDocument
+        Dim Alias    As IXMLDOMNode
         
         ' ...
-        Set commands = New MSXML2.DOMDocument
+        Set commands = New DOMDocument
         
-        ' ...
-        Call commands.setProperty("SelectionLanguage", "XPath")
-
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
             Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
@@ -2773,13 +2770,13 @@ Public Function convertAlias(ByVal cmdName As String) As String
         cmdName = Replace(cmdName, "\", "\\")
         
         ' ...
-        Set alias = _
+        Set Alias = _
                 commands.documentElement.selectSingleNode("./command/alias[text()='" & cmdName & "']")
         
         ' ...
-        If (Not (alias Is Nothing)) Then
+        If (Not (Alias Is Nothing)) Then
             ' ...
-            convertAlias = alias.parentNode.Attributes.getNamedItem("name").text
+            convertAlias = Alias.parentNode.Attributes.getNamedItem("name").text
     
             ' ...
             Exit Function

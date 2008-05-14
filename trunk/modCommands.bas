@@ -137,7 +137,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
 ' default (if all else fails) error handler to keep erroneous
 ' commands and/or input formats from killing me
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: " & Err.description & _
+    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: " & Err.Description & _
         " in ProcessCommand().")
 
     ' return command failure result
@@ -2394,7 +2394,7 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim tmpBuf     As String  ' temporary output buffer
     Dim dbType     As String  ' ...
     Dim index      As Long    ' ...
-    Dim params     As String  ' ...
+    Dim Params     As String  ' ...
     Dim strArray() As String  ' ...
     Dim i          As Integer ' ...
 
@@ -2405,20 +2405,20 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     ' did we find such parameters?
     If (index > 0) Then
         ' grab parameters
-        params = Mid$(msgData, index - 1)
+        Params = Mid$(msgData, index - 1)
 
         ' remove paramaters from message
         msgData = Mid$(msgData, 1, index)
     End If
     
     ' do we have any special paramaters?
-    If (Len(params) > 0) Then
+    If (Len(Params) > 0) Then
         ' split message by paramter
-        strArray() = Split(params, " --")
+        strArray() = Split(Params, " --")
         
         ' loop through paramter list
         For i = 1 To UBound(strArray)
-            Dim parameter As String ' ...
+            Dim Parameter As String ' ...
             Dim pmsg      As String ' ...
             
             ' check message for a space
@@ -2427,20 +2427,20 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             ' did our search find a space?
             If (index > 0) Then
                 ' grab parameter
-                parameter = Mid$(strArray(i), 1, index - 1)
+                Parameter = Mid$(strArray(i), 1, index - 1)
                 
                 ' grab parameter message
                 pmsg = Mid$(strArray(i), index + 1)
             Else
                 ' grab parameter
-                parameter = strArray(i)
+                Parameter = strArray(i)
             End If
             
             ' convert parameter to lowercase
-            parameter = LCase$(parameter)
+            Parameter = LCase$(Parameter)
             
             ' handle parameters
-            Select Case (parameter)
+            Select Case (Parameter)
                 Case "type" ' ...
                     ' do we have a valid parameter length?
                     If (Len(pmsg) > 0) Then
@@ -3928,8 +3928,12 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             If (InStr(1, u, "*", vbBinaryCompare) <> 0) Then
                 tmpBuf = WildCardBan(u, banmsg, 1)
             Else
-                Y = Ban(u & IIf(banmsg <> vbNullString, Space$(1) & banmsg, _
-                    vbNullString), dbAccess.Access)
+                If (InBot) Then
+                    frmChat.AddQ "/ban " & msgData
+                Else
+                    Y = Ban(u & IIf(banmsg <> vbNullString, Space$(1) & banmsg, _
+                        vbNullString), dbAccess.Access)
+                End If
             End If
             
             If (Len(Y) > 2) Then
@@ -4016,11 +4020,15 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
                     tmpBuf = WildCardBan(u, banmsg, 0)
                 End If
             Else
-                Y = Ban(u & IIf(Len(banmsg) > 0, Space$(1) & banmsg, vbNullString), _
-                    dbAccess.Access, 1)
-                
-                If (Len(Y) > 1) Then
-                    tmpBuf = Y
+                If (InBot) Then
+                    frmChat.AddQ "/kick " & msgData
+                Else
+                    Y = Ban(u & IIf(Len(banmsg) > 0, Space$(1) & banmsg, vbNullString), _
+                        dbAccess.Access, 1)
+                    
+                    If (Len(Y) > 1) Then
+                        tmpBuf = Y
+                    End If
                 End If
             End If
         End If
@@ -4799,7 +4807,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
     Dim Rank       As Integer ' ...
     Dim Flags      As String  ' ...
     Dim found      As Boolean ' ...
-    Dim params     As String  ' ...
+    Dim Params     As String  ' ...
     Dim index      As Integer ' ...
     Dim sGrp       As String  ' ...
     Dim dbType     As String  ' ...
@@ -4813,7 +4821,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
     ' do they begin after an entry name?
     If (index > 1) Then
         ' grab parameters
-        params = Mid$(msgData, index - 1)
+        Params = Mid$(msgData, index - 1)
 
         ' remove paramaters from message
         msgData = Mid$(msgData, 1, index)
@@ -4854,13 +4862,13 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
         End If
         
         ' do we have any special paramaters?
-        If (Len(params)) Then
+        If (Len(Params)) Then
             ' split message by paramter
-            strArray() = Split(params, " --")
+            strArray() = Split(Params, " --")
             
             ' loop through paramter list
             For i = 1 To UBound(strArray)
-                Dim parameter As String ' ...
+                Dim Parameter As String ' ...
                 Dim pmsg      As String ' ...
                 
                 ' check message for a space
@@ -4869,20 +4877,20 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                 ' did our search find a space?
                 If (index > 0) Then
                     ' grab parameter
-                    parameter = Mid$(strArray(i), 1, index - 1)
+                    Parameter = Mid$(strArray(i), 1, index - 1)
                     
                     ' grab parameter message
                     pmsg = Mid$(strArray(i), index + 1)
                 Else
                     ' grab parameter
-                    parameter = strArray(i)
+                    Parameter = strArray(i)
                 End If
                 
                 ' convert parameter to lowercase
-                parameter = LCase$(parameter)
+                Parameter = LCase$(Parameter)
                 
                 ' handle parameters
-                Select Case (parameter)
+                Select Case (Parameter)
                     Case "type" ' ...
                         ' do we have a valid parameter length?
                         If (Len(pmsg)) Then
@@ -5826,44 +5834,48 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
     End If
 
     ' ...
-    tmpBuf(0) = tmpBuf(0) & ")]: " & CommandDocs.description
+    tmpBuf(0) = tmpBuf(0) & ")]: " & CommandDocs.Description
     
     ' ...
     tmpBuf(0) = tmpBuf(0) & Space$(1) & "(Syntax: " & "<trigger>" & CommandDocs.Name
             
-    If (CommandDocs.params.Count) Then
-        For i = 1 To CommandDocs.params.Count
-            If (CommandDocs.params(i).IsOptional) Then
-                tmpBuf(0) = tmpBuf(0) & " [" & CommandDocs.params(i).Name & "]"
+    If (CommandDocs.Parameters.Count) Then
+        For i = 1 To CommandDocs.Parameters.Count
+            If (CommandDocs.Parameters(i).IsOptional) Then
+                tmpBuf(0) = tmpBuf(0) & " [" & CommandDocs.Parameters(i).Name & "]"
             Else
-                tmpBuf(0) = tmpBuf(0) & " <" & CommandDocs.params(i).Name & ">"
+                tmpBuf(0) = tmpBuf(0) & " <" & CommandDocs.Parameters(i).Name & ">"
             End If
         Next i
     End If
     
     tmpBuf(0) = tmpBuf(0) & "). "
     
-    If ((CommandDocs.RequiredRank = 0) And _
-            (CommandDocs.RequiredFlags = vbNullString)) Then
-    
-        tmpBuf(0) = tmpBuf(0) & " Command is only available to the console"
+    If (CommandDocs.IsEnabled = False) Then
+        tmpBuf(0) = tmpBuf(0) & " Command is currently disabled"
     Else
-        tmpBuf(0) = tmpBuf(0) & " Requires " & CommandDocs.RequiredRank & _
-                " access"
+        If ((CommandDocs.RequiredRank = 0) And _
+                (CommandDocs.RequiredFlags = vbNullString)) Then
+        
+            tmpBuf(0) = tmpBuf(0) & " Command is only available to the console"
+        Else
+            tmpBuf(0) = tmpBuf(0) & " Requires " & CommandDocs.RequiredRank & _
+                    " access"
+                    
+            If (CommandDocs.RequiredFlags <> vbNullString) Then
+                tmpBuf(0) = tmpBuf(0) & " or flags "
                 
-        If (CommandDocs.RequiredFlags <> vbNullString) Then
-            tmpBuf(0) = tmpBuf(0) & " or flags "
-            
-            For i = 1 To Len(CommandDocs.RequiredFlags)
-                tmpBuf(0) = tmpBuf(0) & _
-                        Mid$(CommandDocs.RequiredFlags, i, 1) & ", "
-                        
-                If (i + 1 = Len(CommandDocs.RequiredFlags)) Then
-                    tmpBuf(0) = tmpBuf(0) & "or "
-                End If
-            Next i
-            
-            tmpBuf(0) = Mid$(tmpBuf(0), 1, Len(tmpBuf(0)) - Len(", "))
+                For i = 1 To Len(CommandDocs.RequiredFlags)
+                    tmpBuf(0) = tmpBuf(0) & _
+                            Mid$(CommandDocs.RequiredFlags, i, 1) & ", "
+                            
+                    If (i + 1 = Len(CommandDocs.RequiredFlags)) Then
+                        tmpBuf(0) = tmpBuf(0) & "or "
+                    End If
+                Next i
+                
+                tmpBuf(0) = Mid$(tmpBuf(0), 1, Len(tmpBuf(0)) - Len(", "))
+            End If
         End If
     End If
     
@@ -6297,7 +6309,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.description & " in searchDatabase()."
+    frmChat.AddChat vbRed, "Error: " & Err.Description & " in searchDatabase()."
     
     Exit Function
 End Function
@@ -6491,10 +6503,11 @@ End Function
 
 ' requires public
 Public Function GetSafelist(ByVal Username As String) As Boolean
+
     Dim i As Long ' ...
     
     ' ...
-    If (Not (bFlood)) Then
+    If (bFlood = False) Then
         ' ...
         Dim gAcc As udtGetAccessResponse
         
@@ -6511,6 +6524,7 @@ Public Function GetSafelist(ByVal Username As String) As Boolean
         ' ...
         For i = 0 To (UBound(gFloodSafelist) - 1)
             If PrepareCheck(Username) Like gFloodSafelist(i) Then
+                ' ...
                 GetSafelist = True
                 
                 ' ...
@@ -6518,29 +6532,40 @@ Public Function GetSafelist(ByVal Username As String) As Boolean
             End If
         Next i
     End If
+    
 End Function
 
 ' requires public
 Public Function GetShitlist(ByVal Username As String) As String
-    ' ...
+
     Dim gAcc As udtGetAccessResponse
+    Dim Ban  As Boolean
     
     ' ...
     gAcc = GetCumulativeAccess(Username, "USER")
     
     ' ...
-    If ((InStr(1, gAcc.Flags, "B", vbBinaryCompare) <> 0) And _
-        (InStr(1, gAcc.Flags, "S", vbBinaryCompare) = 0) And _
-        (gAcc.Access < 20)) Then
-        
-        If ((Len(gAcc.BanMessage) > 0) And (gAcc.BanMessage <> "%")) Then
-            GetShitlist = Username & Space(1) & _
-                gAcc.BanMessage
-        Else
-            GetShitlist = Username & Space(1) & _
-                "Shitlisted"
+    If (InStr(1, gAcc.Flags, "Z", vbBinaryCompare) <> 0) Then
+        ' ...
+        Ban = True
+    ElseIf (InStr(1, gAcc.Flags, "B", vbBinaryCompare) <> 0) Then
+        ' ...
+        If (GetSafelist(Username) = False) Then
+            ' ...
+            Ban = True
         End If
     End If
+    
+    ' ...
+    If (Ban) Then
+        ' ...
+        If ((Len(gAcc.BanMessage) > 0) And (gAcc.BanMessage <> "%")) Then
+            GetShitlist = Username & Space(1) & gAcc.BanMessage
+        Else
+            GetShitlist = Username & Space(1) & "Shitlisted"
+        End If
+    End If
+    
 End Function
 
 ' requires public
@@ -6781,9 +6806,9 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
         Exit Function
     End If
     
-    If (command.params.Count) Then
-        Dim parameter   As clsCommandParamsObj
-        Dim restriction As clsCommandRestrictionObj
+    If (command.Parameters.Count) Then
+        Dim Parameter   As clsCommandParamsObj
+        Dim Restriction As clsCommandRestrictionObj
         Dim splt()      As String
         Dim loopCount   As Integer
         Dim bln         As Boolean
@@ -6793,8 +6818,8 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
         ' ...
         spaceIndex = InStr(1, CommandArgs, Space$(1), vbBinaryCompare)
         
-        If ((spaceIndex <> 0) And (command.params.Count > 1)) Then
-            splt() = Split(CommandArgs, Space$(1), command.params.Count)
+        If ((spaceIndex <> 0) And (command.Parameters.Count > 1)) Then
+            splt() = Split(CommandArgs, Space$(1), command.Parameters.Count)
         Else
             If (CommandArgs = vbNullString) Then
                 IsCorrectSyntax = False
@@ -6807,13 +6832,13 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
             splt(0) = CommandArgs
         End If
         
-        For i = 1 To command.params.Count
-            Set parameter = command.params(i)
+        For i = 1 To command.Parameters.Count
+            Set Parameter = command.Parameters(i)
 
-            If (parameter.IsOptional) Then
-                If (command.params.Count > i) Then
-                    If (command.params.Item(i + 1).IsOptional) Then
-                        If (parameter.dataType = "number") Then
+            If (Parameter.IsOptional) Then
+                If (command.Parameters.Count > i) Then
+                    If (command.Parameters.Item(i + 1).IsOptional) Then
+                        If (Parameter.dataType = "number") Then
                             If (StrictIsNumeric(splt(loopCount)) = False) Then
                                 bln = True
                             End If
@@ -6828,7 +6853,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
         
             If (bln = False) Then
                 ' ...
-                If (parameter.dataType = "number") Then
+                If (Parameter.dataType = "number") Then
                     Dim lVal As Long
 
                     If (StrictIsNumeric(splt(loopCount)) = False) Then
@@ -6845,11 +6870,11 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
                     '    Exit Function
                     'End If
                     
-                ElseIf (parameter.dataType = "string") Then
+                ElseIf (Parameter.dataType = "string") Then
                     Set regex = New RegExp
                 
                     With regex
-                        .pattern = parameter.pattern
+                        .pattern = Parameter.pattern
                         .Global = True
                     End With
                     
@@ -6871,7 +6896,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
                 End If
                 
                 ' ...
-                If (parameter.IsOptional) Then
+                If (Parameter.IsOptional) Then
                     Exit For
                 End If
             
@@ -6889,7 +6914,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in IsCorrectSyntax().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in IsCorrectSyntax().")
     
     Exit Function
 End Function
@@ -6936,9 +6961,9 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     End If
     
     ' ...
-    If (command.params.Count) Then
-        Dim parameter   As clsCommandParamsObj
-        Dim restriction As clsCommandRestrictionObj
+    If (command.Parameters.Count) Then
+        Dim Parameter   As clsCommandParamsObj
+        Dim Restriction As clsCommandRestrictionObj
         Dim splt()      As String
         Dim loopCount   As Integer
         Dim bln         As Boolean
@@ -6952,11 +6977,11 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
             splt(0) = CommandArgs
         End If
         
-        For i = 1 To command.params.Count
-            Set parameter = command.params(i)
+        For i = 1 To command.Parameters.Count
+            Set Parameter = command.Parameters(i)
 
-            If (parameter.IsOptional) Then
-                If ((command.params.Count > i) And (command.params.Item(i).IsOptional)) Then
+            If (Parameter.IsOptional) Then
+                If ((command.Parameters.Count > i) And (command.Parameters.Item(i).IsOptional)) Then
                     'If (parameter.dataType = "number") Then
                         If (StrictIsNumeric(splt(loopCount)) = False) Then
                             bln = True
@@ -6966,26 +6991,26 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
             End If
         
             If (bln = False) Then
-                If (parameter.restrictions.Count) Then
+                If (Parameter.Restrictions.Count) Then
                     Set regex = New RegExp
                 
-                    For Each restriction In parameter.restrictions
+                    For Each Restriction In Parameter.Restrictions
                         With regex
-                            .pattern = restriction.MatchMessage
+                            .pattern = Restriction.MatchMessage
                             .Global = True
                         End With
 
                         Set matches = regex.Execute(splt(loopCount))
 
                         If (matches.Count > 0) Then
-                            If ((restriction.RequiredRank = 0) And _
-                                    (restriction.RequiredFlags = vbNullString)) Then
+                            If ((Restriction.RequiredRank = 0) And _
+                                    (Restriction.RequiredFlags = vbNullString)) Then
                                     
                                 ' ...
                                 FailedCheck = True
                             Else
-                                If ((user.Rank >= restriction.RequiredRank) = False) Then
-                                    If (user.HasAnyFlag(restriction.RequiredFlags) = False) Then
+                                If ((user.Rank >= Restriction.RequiredRank) = False) Then
+                                    If (user.HasAnyFlag(Restriction.RequiredFlags) = False) Then
                                         ' ...
                                         FailedCheck = True
                                     End If
@@ -7005,7 +7030,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
                 End If
                 
                 ' ...
-                If (parameter.IsOptional) Then
+                If (Parameter.IsOptional) Then
                     Exit For
                 End If
                 
@@ -7024,7 +7049,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     Exit Function
 
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.description & " in HasAccess()."
+    frmChat.AddChat vbRed, "Error: " & Err.Description & " in HasAccess()."
     
     Exit Function
 End Function
@@ -7091,19 +7116,19 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                 
                 ' ...
                 If (restrictionName <> vbNullString) Then
-                    Dim restrictions As MSXML2.IXMLDOMNodeList
-                    Dim restriction  As MSXML2.IXMLDOMNode
+                    Dim Restrictions As MSXML2.IXMLDOMNodeList
+                    Dim Restriction  As MSXML2.IXMLDOMNode
                     
                     ' ...
-                    Set restrictions = command.selectNodes("restriction")
+                    Set Restrictions = command.selectNodes("restriction")
                     
                     ' ...
-                    For Each restriction In restrictions
-                        If (StrComp(restriction.Attributes.getNamedItem("name").text, _
+                    For Each Restriction In Restrictions
+                        If (StrComp(Restriction.Attributes.getNamedItem("name").text, _
                             restrictionName, vbTextCompare) = 0) Then
                             
                             ' ...
-                            Set accessGroup = restriction.selectSingleNode("access")
+                            Set accessGroup = Restriction.selectSingleNode("access")
                             
                             ' ...
                             For Each Access In accessGroup.childNodes
@@ -7234,7 +7259,7 @@ GetRandomQuote_Exit:
 
 GetRandomQuote_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure GetRandomQuote of Module modCommandCode"
+    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure GetRandomQuote of Module modCommandCode"
     Resume GetRandomQuote_Exit
 End Function
 
@@ -7277,7 +7302,7 @@ WriteDatabase_Exit:
 
 WriteDatabase_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure " & _
+    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure " & _
         "WriteDatabase of Module modCommandCode"
     
     Resume WriteDatabase_Exit

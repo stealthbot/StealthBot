@@ -645,7 +645,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Const MSG_FRIENDS     As String = "Your friends are:"
     
     Dim i      As Integer
-    Dim Temp   As String
+    Dim temp   As String
     Dim bHide  As Boolean
     Dim ToANSI As String
     
@@ -738,12 +738,12 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
         
         'Ban Evasion and banned-user tracking
-        Temp = Split(Message, " ")(1)
+        temp = Split(Message, " ")(1)
         
         ' added 1/21/06 thanks to
         ' http://www.stealthbot.net/forum/index.php?showtopic=24582
         
-        If (Len(Temp) > 0) Then
+        If (Len(temp) > 0) Then
             Dim Banning    As Boolean
             Dim Unbanning  As Boolean
             Dim user       As String  ' ...
@@ -810,6 +810,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                     ' ...
                     Call RemoveBanFromQueue(user)
                 End If
+                
+                If (frmChat.mnuHideBans.Checked) Then
+                    Exit Sub
+                End If
             ElseIf (InStr(1, Message, MSG_UNBANNED, vbTextCompare) > 0) Then
                 ' ...
                 user = Left$(Message, (InStr(1, Message, MSG_UNBANNED, vbBinaryCompare) - 1))
@@ -833,7 +837,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
     
             '// backup channel
-            If (InStr(Len(Temp), Message, "kicked you out", vbTextCompare) > 0) Then
+            If (InStr(Len(temp), Message, "kicked you out", vbTextCompare) > 0) Then
                 If ((StrComp(g_Channel.Name, "Op [vL]", vbTextCompare) <> 0) And _
                     (StrComp(g_Channel.Name, "Op Fatal-Error", vbTextCompare) <> 0)) Then
                         
@@ -848,7 +852,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
             
             ' ...
-            If (InStr(Len(Temp), Message, " has been unsquelched", vbTextCompare) > 0) Then
+            If (InStr(Len(temp), Message, " has been unsquelched", vbTextCompare) > 0) Then
                 unsquelching = True
             End If
         End If
@@ -859,9 +863,9 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
         
         
-        Temp = "Your friends are:"
+        temp = "Your friends are:"
         
-        If (StrComp(Left$(Message, Len(Temp)), Temp) = 0) Then
+        If (StrComp(Left$(Message, Len(temp)), temp) = 0) Then
             If (Not (BotVars.ShowOfflineFriends)) Then
                 Message = Message & _
                     "  ÿci(StealthBot is hiding your offline friends)"
@@ -1224,7 +1228,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim toCheck     As String
     Dim strCompare  As String
     Dim i           As Long
-    Dim Temp        As Byte
+    Dim temp        As Byte
     Dim Level       As Byte
     Dim l           As Long
     Dim Banned      As Boolean

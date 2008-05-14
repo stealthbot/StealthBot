@@ -106,6 +106,7 @@ Class=clsUserStats; clsUserStats.cls
 Class=clsUserEventObj; clsUserEventObj.cls
 Module=modDateTime; modDateTime.bas
 Class=clsLogger; clsLogger.cls
+Class=clsXML; clsXML.cls
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""

@@ -2031,7 +2031,7 @@ Sub Event_BNetDisconnected()
     Call UpdateTrayTooltip
 End Sub
 
-Sub Event_BNetError(ErrorNumber As Integer, description As String)
+Sub Event_BNetError(ErrorNumber As Integer, Description As String)
     Dim s As String
     
     If BotVars.UseProxy And BotVars.ProxyStatus <> psOnline Then
@@ -2040,7 +2040,7 @@ Sub Event_BNetError(ErrorNumber As Integer, description As String)
         s = "[BNET] "
     End If
     
-    AddChat RTBColors.ErrorMessageText, s & ErrorNumber & " -- " & description
+    AddChat RTBColors.ErrorMessageText, s & ErrorNumber & " -- " & Description
     AddChat RTBColors.ErrorMessageText, s & "Disconnected."
     
     If (sckBNet.State <> 0) Then
@@ -2115,9 +2115,9 @@ Sub Event_BNLSDataError(Message As Byte)
     End If
 End Sub
 
-Sub Event_BNLSError(ErrorNumber As Integer, description As String)
+Sub Event_BNLSError(ErrorNumber As Integer, Description As String)
     If sckBNet.State <> 7 Then
-        AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & description
+        AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & Description
         
         If DisplayError(ErrorNumber, 0, BNLS) Then
             'This area is in question
@@ -2392,13 +2392,13 @@ End Sub
 Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
     If (g_Clan.Self.Rank < NewRank) Then
         AddChat RTBColors.SuccessText, "[CLAN] You have been promoted. Your new rank is ", _
-                RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
+                RTBColors.InformationText, getRank(NewRank), RTBColors.SuccessText, "."
     ElseIf (g_Clan.Self.Rank > NewRank) Then
         AddChat RTBColors.SuccessText, "[CLAN] You have been demoted. Your new rank is ", _
-                RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
+                RTBColors.InformationText, getRank(NewRank), RTBColors.SuccessText, "."
     Else
         AddChat RTBColors.SuccessText, "[CLAN] Your new rank is ", RTBColors.InformationText, _
-                GetRank(NewRank), RTBColors.SuccessText, "."
+                getRank(NewRank), RTBColors.SuccessText, "."
     End If
 
     g_Clan.Self.Rank = NewRank
@@ -2435,7 +2435,7 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
             
         RunInAll frmChat.SControl, "Event_BotJoinedClan", ClanTag
     Else
-        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(Rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
+        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, getRank(Rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
         
         RunInAll frmChat.SControl, "Event_BotClanInfo", ClanTag, Rank
     End If
@@ -2543,7 +2543,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     
     If AwaitingClanInfo = 1 Then
         AwaitingClanInfo = 0
-        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(Rank) & "."
+        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & getRank(Rank) & "."
     End If
     
     If Not (X Is Nothing) Then
@@ -3102,7 +3102,7 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
                     If (.Status And FRS_MUTUAL) = FRS_MUTUAL Then
                         sTemp = sTemp & vbCrLf & "Mutual friend"
                         
-                        Select Case .Location
+                        Select Case (.LocationID)
                             Case FRL_INCHAT
                                 sTemp = sTemp & ", in channel " & .Location & "."
                             Case FRL_PRIVATEGAME
@@ -3112,7 +3112,7 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
                         End Select
                     End If
                     
-                    If .Location = FRL_PUBLICGAME Then
+                    If (.LocationID = FRL_PUBLICGAME) Then
                         sTemp = sTemp & vbCrLf & "Currently in the public game '" & .Location & "'."
                     End If
                     
@@ -3823,7 +3823,7 @@ mnuReloadScript_Click_Error: ' No code is present
         Resume MRS_Continue
     Else
         Debug.Print "Unhandled error in mnuReloadScript_Click()"
-        Debug.Print Err.Number & ": " & Err.description
+        Debug.Print Err.Number & ": " & Err.Description
         Resume MRS_Exit
     End If
 End Sub
@@ -4688,7 +4688,7 @@ theEnd:
     Exit Sub
 
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, "Error " & Err.Number & " (" & Err.description & ") " & _
+    AddChat RTBColors.ErrorMessageText, "Error " & Err.Number & " (" & Err.Description & ") " & _
         "in procedure cboSend_KeyDown"
         
     Exit Sub
@@ -4922,7 +4922,7 @@ End Sub
 
 Private Sub SControl_Error()
     AddChat RTBColors.ErrorMessageText, "Scripting runtime error " & Chr(39) & SControl.Error.Number & Chr(39) & ": (line " & SControl.Error.line & "; column " & SControl.Error.Column & ")"
-    AddChat RTBColors.ErrorMessageText, SControl.Error.description & "."
+    AddChat RTBColors.ErrorMessageText, SControl.Error.Description & "."
     AddChat RTBColors.ErrorMessageText, "Offending line: >> " & SControl.Error.text
 End Sub
 
@@ -4961,8 +4961,8 @@ Sub InitBNetConnection()
     End If
 End Sub
 
-Private Sub sckBNet_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    Call Event_BNetError(Number, description)
+Private Sub sckBNet_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+    Call Event_BNetError(Number, Description)
 End Sub
 
 Private Sub sckMCP_Close()
@@ -4990,10 +4990,10 @@ Private Sub sckMCP_DataArrival(ByVal bytesTotal As Long)
     frmRealm.MCPHandler.ParseMCPPacket Data
 End Sub
 
-Private Sub sckMCP_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckMCP_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     If Not g_Online Then
         ' This message is ignored if we've been online for awhile.
-        AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & description
+        AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & Description
         RealmError = True
         Unload frmRealm
     End If
@@ -5215,7 +5215,7 @@ Private Sub tmrScript_Timer(index As Integer)
     
 ERROR_HANDLER:
     ' ...
-    frmChat.AddChat vbRed, "Error: " & Err.description & " in tmrScript_Timer()."
+    frmChat.AddChat vbRed, "Error: " & Err.Description & " in tmrScript_Timer()."
     
     ' ...
     Exit Sub
@@ -5291,7 +5291,7 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error: " & Err.description & " in tmrSilentChannel_Timer(" & index & ")."
+    AddChat vbRed, "Error: " & Err.Description & " in tmrSilentChannel_Timer(" & index & ")."
     
     Exit Sub
 End Sub
@@ -5912,7 +5912,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     Exit Sub
     
 ERROR_HANDLER:
-    Call AddChat(vbRed, "Error: " & Err.description & " in AddQ().")
+    Call AddChat(vbRed, "Error: " & Err.Description & " in AddQ().")
 
     Exit Sub
 End Sub
@@ -6869,8 +6869,8 @@ Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
     End If
 End Sub
 
-Private Sub sckBNLS_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    Call Event_BNLSError(Number, description)
+Private Sub sckBNLS_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+    Call Event_BNLSError(Number, Description)
 End Sub
 
 Function GetSelectedUsers() As Collection
