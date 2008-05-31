@@ -36,7 +36,7 @@ Public floodCap As Byte   ' ...?
 
 ' prepares commands for processing, and calls helper functions associated with
 ' processing
-Public Function ProcessCommand(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As _
+Public Function ProcessCommand(ByVal Username As String, ByVal message As String, Optional ByVal IsLocal As _
         Boolean = False, Optional ByVal WasWhispered As Boolean = False, Optional DisplayOutput As Boolean = _
                 True) As Boolean
     
@@ -54,10 +54,10 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     ReDim Preserve command_return(0)
     
     ' replace message variables
-    Message = Replace(Message, "%me", IIf(IsLocal, GetCurrentUsername, Username), 1)
+    message = Replace(message, "%me", IIf(IsLocal, GetCurrentUsername, Username), 1)
 
     ' ...
-    Set command = IsCommand(Message, IsLocal)
+    Set command = IsCommand(message, IsLocal)
 
     ' ...
     Do While (command.Name <> vbNullString)
@@ -128,7 +128,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     If (IsLocal) Then
         ' ...
         If ((bln = False) And (Count = 0)) Then
-            AddQ Message
+            AddQ message
         End If
     End If
     
@@ -390,7 +390,7 @@ End Function
 
 ' command processing helper function
 Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal Message As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ByVal message As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
 
     Dim tmpmsg   As String  ' stores copy of message
     Dim cmdName  As String  ' stores command name
@@ -403,7 +403,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
     ReDim Preserve cmdRet(0)
     
     ' store local copy of message
-    tmpmsg = Message
+    tmpmsg = message
 
     ' grab command name & message data
     If (InStr(1, tmpmsg, Space(1), vbBinaryCompare) <> 0) Then
@@ -587,7 +587,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
     ' ...
     If (Not (blnNoCmd)) Then
         ' append entry to command log
-        Call LogCommand(Username, Message)
+        Call LogCommand(Username, message)
     End If
     
     ' was a command found? return.
@@ -3516,13 +3516,13 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
         If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
             tmpBuf(0) = "Error: The specified username is invalid."
         Else
-            Dim Msg As String ' ...
+            Dim msg As String ' ...
             
             ' ...
-            Msg = Mid$(msgData, index + 1)
+            msg = Mid$(msgData, index + 1)
         
             ' ...
-            shit_msg = user & shit_msg & " --type USER --banmsg " & Msg
+            shit_msg = user & shit_msg & " --type USER --banmsg " & msg
         End If
     Else
         ' ...
@@ -4551,14 +4551,16 @@ Private Function OnIgnore(ByVal Username As String, ByRef dbAccess As udtGetAcce
         
     u = msgData
     
-    If (Len(u)) Then
-        If ((GetAccess(u).Access >= dbAccess.Access) Or _
-            (InStr(GetAccess(u).Flags, "A"))) Then
-            
+    If (u <> vbNullString) Then
+        ' ...
+        If (GetAccess(u).Access >= dbAccess.Access) Then
+            ' ...
             tmpBuf = "That user has equal or higher access."
         Else
-            Call AddQ("/ignore " & u)
+            ' ...
+            AddQ "/ignore " & u
             
+            ' ...
             tmpBuf = "Ignoring messages from " & Chr(34) & u & Chr(34) & "."
         End If
     End If
@@ -4602,9 +4604,12 @@ Private Function OnUnignore(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     u = msgData
     
-    If (Len(msgData)) Then
-        Call AddQ("/unignore " & u)
+    ' ...
+    If (msgData <> vbNullString) Then
+        ' ...
+        AddQ "/unignore " & u
         
+        ' ...
         tmpBuf = "Receiving messages from """ & u & """."
     End If
     
@@ -4621,13 +4626,13 @@ Private Function OnCQ(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
     ' ...
     If (msgData = vbNullString) Then
         ' ...
-        Call g_Queue.Clear
+        g_Queue.Clear
     
         ' ...
         tmpBuf = "Queue cleared."
     Else
         ' ...
-        Call g_Queue.RemoveLines(vbNullString, msgData)
+        g_Queue.RemoveLines vbNullString, msgData
         
         ' ...
         tmpBuf = "Queue entries for the user " & Chr$(34) & _
@@ -4735,7 +4740,7 @@ End Function ' end function OnCheckMail
 Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim Msg    As udtMail
+    Dim msg    As udtMail
     
     Dim tmpBuf As String ' temporary output buffer
             
@@ -4744,10 +4749,10 @@ Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAcc
     End If
     
     If (GetMailCount(Username) > 0) Then
-        Call GetMailMessage(Username, Msg)
+        Call GetMailMessage(Username, msg)
         
-        If (Len(RTrim(Msg.To)) > 0) Then
-            tmpBuf = "Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
+        If (Len(RTrim(msg.To)) > 0) Then
+            tmpBuf = "Message from " & RTrim(msg.From) & ": " & RTrim(msg.message)
         End If
     Else
         tmpBuf = "You do not currently have any messages " & _
@@ -5376,7 +5381,7 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
 
         With Temp
             .From = Username
-            .Message = strArray(1)
+            .message = strArray(1)
             
             If (StrictIsNumeric(strArray(0))) Then
                 'number games
@@ -5444,7 +5449,7 @@ Private Function OnBMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
         With Temp
             .To = strArray(0)
             .From = Username
-            .Message = strArray(1)
+            .message = strArray(1)
         End With
         
         If (Len(Temp.To) = 0) Then

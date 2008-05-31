@@ -126,17 +126,17 @@ Public Sub MakeChieftain()
 
 End Sub
 
-Public Sub Promote()
+Public Sub Promote(Optional ByVal Rank As Integer = 0)
 
     ' ...
-    Call PromoteMember(m_name, m_rank + 1)
+    Call PromoteMember(m_name, IIf(Rank, Rank, m_rank + 1))
 
 End Sub
 
-Public Sub Demote()
+Public Sub Demote(Optional ByVal Rank As Integer = 0)
 
     ' ...
-    Call DemoteMember(m_name, m_rank - 1)
+    Call DemoteMember(m_name, IIf(Rank, Rank, m_rank - 1))
 
 End Sub
 
