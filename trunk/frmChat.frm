@@ -6168,6 +6168,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             ' ...
             Set CurrentUser = g_Friends(i)
         
+            ' ...
             AddFriend CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Status
         Next i
     End If
