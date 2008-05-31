@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,7 +884,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1732,13 +1730,13 @@ Private Sub Form_Load()
     s = ReadCFG("Override", "DisableSBNews")
     
     If (LenB(s) = 0) Then
-        Call INet.Execute(GetNewsURL(), "GET")
-    Else
-        If Not BotLoaded Then
-            RunInAll frmChat.SControl, "Event_FirstRun"
-            RunInAll frmChat.SControl, "Event_Load"
-            BotLoaded = True
-        End If
+        DisplayNews
+    End If
+    
+    If Not BotLoaded Then
+        RunInAll frmChat.SControl, "Event_FirstRun"
+        RunInAll frmChat.SControl, "Event_Load"
+        BotLoaded = True
     End If
     
     If FrmSplashInUse Then frmSplash.SetFocus
@@ -1747,11 +1745,11 @@ Private Sub Form_Load()
         mnuRecordWindowPos.Visible = False
     End If
     
-    #If BETA = 0 Then
+    '#If BETA = 0 Then
         If ReadCFG("Main", "ConnectOnStartup") = "Y" Then
             Call DoConnect
         End If
-    #End If
+    '#End If
     
     #If COMPILE_DEBUG = 0 Then
         If ReadCFG("Main", "MinimizeOnStartup") = "Y" Then
@@ -1770,6 +1768,18 @@ Private Sub Form_GotFocus()
     If (cboSendHadFocus) Then
         cboSend.SetFocus
     End If
+End Sub
+
+Private Sub DisplayNews()
+
+    Dim ret As String ' ...
+    
+    ' ...
+    ret = INet.OpenURL(GetNewsURL())
+    
+    ' ...
+    HandleNews ret
+
 End Sub
 
 

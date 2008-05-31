@@ -350,7 +350,7 @@ Public Function CheckUsers() As Integer
         Dim CurrentUser As clsUserObj
         Dim DBEntry     As udtGetAccessResponse
         Dim i           As Integer ' ...
-        Dim Message     As String  ' ...
+        Dim message     As String  ' ...
         Dim doCheck     As Boolean ' ...
         Dim HighRank    As Integer ' ...
         Dim HighIndex   As Integer ' ...
@@ -401,12 +401,12 @@ Public Function CheckUsers() As Integer
             ' ...
             If (CurrentUser.IsOperator = False) Then
                 ' ...
-                Message = GetShitlist(CurrentUser.DisplayName)
+                message = GetShitlist(CurrentUser.DisplayName)
                        
                 ' ...
-                If (Message <> vbNullString) Then
+                If (message <> vbNullString) Then
                     ' ...
-                    frmChat.AddQ "/ban " & Message
+                    frmChat.AddQ "/ban " & message
                     
                     ' ...
                     doCheck = False
@@ -533,7 +533,7 @@ Public Function CheckUsers() As Integer
             End If
             
             ' ...
-            Message = vbNullString
+            message = vbNullString
             
             ' ...
             doCheck = True
@@ -545,3 +545,22 @@ Public Function CheckUsers() As Integer
     
 End Function
 
+Public Function CheckQueue(ByVal Username As String) As Boolean
+
+    Dim CurrentUser As clsUserObj
+
+    ' ...
+    For Each CurrentUser In Users
+        ' ...
+        If (StrComp(CurrentUser.DisplayName, Username, vbTextCompare) = 0) Then
+            ' ...
+            If (CurrentUser.Queue.Count) Then
+                CheckQueue = True
+            End If
+            
+            ' ...
+            Exit For
+        End If
+    Next
+
+End Function

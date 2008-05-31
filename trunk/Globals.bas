@@ -140,7 +140,7 @@ Public QC(0 To 8) As String
 Public DisableMonitor As Boolean
 Public JoinMessagesOff As Boolean
 Public Filters As Boolean
-Public Mail As Boolean
+Public mail As Boolean
 Public Mimic As String
 Public BotLoaded As Boolean
 Public ProtectMsg As String

@@ -112,7 +112,7 @@ Public Property Get Location() As String
 End Property
 
 ' ...
-Public Property Let Location(str As String)
+Public Property Let Location(ByVal str As String)
 
     ' ...
     m_location = str

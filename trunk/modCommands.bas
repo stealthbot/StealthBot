@@ -3911,7 +3911,7 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
 
     If ((MyFlags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
         If (InBot) Then
-            tmpBuf = "You are not a channel operator."
+            tmpBuf = "Error: I am not currently a channel operator."
         End If
     Else
         u = msgData
@@ -3955,7 +3955,7 @@ Private Function OnUnban(ByVal Username As String, ByRef dbAccess As udtGetAcces
     
     If ((MyFlags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
        If (InBot) Then
-           tmpBuf = "You are not a channel operator."
+           tmpBuf = "Error: I am not currently a channel operator."
        End If
     Else
         u = msgData
@@ -4000,7 +4000,7 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim Y      As String
     
     If ((MyFlags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
-       tmpBuf = "Error: You are not a channel operator."
+       tmpBuf = "Error: I am not currently a channel operator."
     Else
         u = msgData
         
@@ -4686,7 +4686,7 @@ Private Function OnGetPing(ByVal Username As String, ByRef dbAccess As udtGetAcc
             tmpBuf = "Your ping at login was " & Latency & "ms."
         Else
             ' ...
-            tmpBuf = "You are not connected."
+            tmpBuf = "Error: You are not connected."
         End If
     Else
         ' ...
