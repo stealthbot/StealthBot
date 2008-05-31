@@ -45,11 +45,9 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
     ByVal dwTimer As Long)
     
     Dim CurrentUser  As clsUserObj
-    Dim CurrentEvent As clsUserEventObj
     Dim i            As Integer ' ...
     Dim j            As Integer ' ...
-    Dim blnShow      As Boolean ' ...
-    
+
     ' ...
     If (g_Channel.IsSilent) Then
         Exit Function
@@ -65,55 +63,9 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
             ' ...
             If ((GetTickCount() - CurrentUser.Queue(1).EventTick) >= BotVars.ChatDelay) Then
                 ' ...
-                DisplayEvents CurrentUser
+                CurrentUser.DisplayQueue
             End If
         End If
     Next i
     
-End Function
-
-' ...
-Public Function DisplayEvents(ByRef CurrentUser As clsUserObj)
-
-    Dim CurrentEvent As clsUserEventObj
-    Dim j            As Integer
-    
-    ' ...
-    For j = 1 To CurrentUser.Queue.Count
-        ' ...
-        Set CurrentEvent = CurrentUser.Queue(j)
-    
-        ' ...
-        Select Case (CurrentEvent.EventID)
-            ' ...
-            Case ID_USER
-                Call Event_UserInChannel(CurrentUser.Name, CurrentEvent.Flags, CurrentEvent.Statstring, _
-                    CurrentEvent.Ping, CurrentEvent.GameID, CurrentEvent.Clan, CurrentEvent.Statstring, _
-                        CurrentEvent.IconCode, j)
-                    
-            ' ...
-            Case ID_JOIN
-                Call Event_UserJoins(CurrentUser.Name, CurrentEvent.Flags, CurrentEvent.Statstring, _
-                    CurrentEvent.Ping, CurrentEvent.GameID, CurrentEvent.Clan, CurrentEvent.Statstring, _
-                        CurrentEvent.IconCode, j)
-            
-            ' ...
-            Case ID_TALK
-                Call Event_UserTalk(CurrentUser.Name, CurrentEvent.Flags, CurrentEvent.Message, _
-                    CurrentEvent.Ping, j)
-            
-            ' ...
-            Case ID_EMOTE
-                Call Event_UserEmote(CurrentUser.Name, CurrentEvent.Flags, CurrentEvent.Message, j)
-            
-            ' ...
-            Case ID_USERFLAGS
-                Call Event_FlagsUpdate(CurrentUser.Name, CurrentEvent.Statstring, CurrentEvent.Flags, _
-                    CurrentEvent.Ping, CurrentEvent.GameID, j)
-        End Select
-    Next j
-    
-    ' ...
-    CurrentUser.ClearQueue
-
 End Function

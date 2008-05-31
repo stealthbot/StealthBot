@@ -294,3 +294,48 @@ Public Property Get Stats() As clsUserStats
     Set Stats = m_stats
     
 End Property
+
+' ...
+Public Sub DisplayQueue()
+
+    Dim CurrentEvent As clsUserEventObj
+    Dim j            As Integer
+    
+    ' ...
+    For j = 1 To Queue.Count
+    
+        ' ...
+        Set CurrentEvent = Queue(j)
+    
+        ' ...
+        Select Case (CurrentEvent.EventID)
+            ' ...
+            Case ID_USER
+                Call Event_UserInChannel(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, _
+                    CurrentEvent.GameID, CurrentEvent.Clan, CurrentEvent.Statstring, CurrentEvent.IconCode, j)
+                    
+            ' ...
+            Case ID_JOIN
+                Call Event_UserJoins(Name, CurrentEvent.Flags, CurrentEvent.Statstring, CurrentEvent.Ping, _
+                    CurrentEvent.GameID, CurrentEvent.Clan, CurrentEvent.Statstring, CurrentEvent.IconCode, j)
+            
+            ' ...
+            Case ID_TALK
+                Call Event_UserTalk(Name, CurrentEvent.Flags, CurrentEvent.message, CurrentEvent.Ping, j)
+            
+            ' ...
+            Case ID_EMOTE
+                Call Event_UserEmote(Name, CurrentEvent.Flags, CurrentEvent.message, j)
+            
+            ' ...
+            Case ID_USERFLAGS
+                Call Event_FlagsUpdate(Name, CurrentEvent.Statstring, CurrentEvent.Flags, CurrentEvent.Ping, _
+                    CurrentEvent.GameID, j)
+        End Select
+    Next j
+    
+    ' ...
+    ClearQueue
+
+End Sub
+
