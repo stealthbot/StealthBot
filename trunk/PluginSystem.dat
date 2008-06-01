@@ -1481,8 +1481,8 @@ End Sub
 Sub psAddPFolder()
 
    '// Create the plugins folder if it doesn't exist
-   If Not psFSO.FolderExists(BotPath() & "plugins") Then
-      psFSO.CreateFolder(BotPath() & "plugins")
+   If Not psFSO.FolderExists(BotPath() & "\scripts\plugins\") Then
+      psFSO.CreateFolder(BotPath() & "\scripts\plugins\")
       AddChat vbOrange, "Added the plugins folder to your StealthBot folder."
    End If
 End Sub
