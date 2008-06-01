@@ -1631,7 +1631,7 @@ Sub Event_Load()
    Call psLoadPlugins()
 
    '// Register and populate the plugin menus
-   Call ReloadPluginMenus()
+   'Call ReloadPluginMenus()
 
    '// Enable the script timer
    scTimer.Interval = 1000

@@ -1183,8 +1183,8 @@ End Sub
 '//   Reloads the all plugin menus. All user-added items will be cleared.
 Public Sub ReloadPluginMenus()
 
-    Call DeletePluginMenus
-    Call RegisterPluginMenus
+    'Call DeletePluginMenus
+    'Call RegisterPluginMenus
 End Sub
 
 
