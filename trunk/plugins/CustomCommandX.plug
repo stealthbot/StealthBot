@@ -532,8 +532,8 @@ Class ccxClass
       Me.FuncList.CompareMode = 1
       
       Set Me.FSO = CreateObject("Scripting.FileSystemObject")
-      Me.DL_Path = ".\Plugins\ccx_DL.txt"
-      Me.CC_Path = ".\Plugins\ccx_CC.txt"
+      Me.DL_Path = ".\scripts\plugins\ccx_DL.txt"
+      Me.CC_Path = ".\scripts\plugins\ccx_CC.txt"
       Me.LoadCommands
    End Sub
  

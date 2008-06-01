@@ -1030,7 +1030,7 @@ Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal 
                       Optional ByVal strDescription As String, Optional ByVal boolOverwrite As Boolean = True)
                       
     Dim strPath As String, arrSetting() As String, i As Integer
-    strPath = BotPath() & "plugins\settings.ini"
+    strPath = BotPath() & "scripts\plugins\settings.ini"
 
     If Len(strDescription) > 0 Then
         SetSetting strPrefix, strName & " (info)", strDescription, "", True
@@ -1053,7 +1053,7 @@ End Sub
 '//   Written by Swent. Retrieves plugin settings.
 Public Function GetSetting(ByVal strPrefix As String, ByVal strName As String)
     Dim strPath As String, i As Integer, strAppend As String, tmpValue As String, varValue As Variant
-    strPath = BotPath() & "plugins\settings.ini"
+    strPath = BotPath() & "scripts\plugins\settings.ini"
     If LenB(Dir$(strPath)) = 0 Then Exit Function
     
     Do
