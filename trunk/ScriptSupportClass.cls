@@ -1436,7 +1436,19 @@ End Function
 
 Public Function DeleteTimerEx(ByVal ModuleID As Integer, ByVal TimerName As String)
 
+    Dim tmr As Timer ' ...
+
     ' ...
+    For Each tmr In frmChat.tmrScript
+        ' ...
+        If (StrComp(tmr.Tag, ModuleID & "_" & TimerName, vbTextCompare) = 0) Then
+            ' ...
+            Unload tmr
+            
+            ' ...
+            Exit Function
+        End If
+    Next
 
 End Function
 

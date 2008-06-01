@@ -126,17 +126,27 @@ Public Sub MakeChieftain()
 
 End Sub
 
-Public Sub Promote(Optional ByVal Rank As Integer = 0)
+Public Sub Promote(Optional ByVal Rank As Integer = -1)
 
     ' ...
-    Call PromoteMember(m_name, IIf(Rank, Rank, m_rank + 1))
+    If ((Rank > -1) And (Rank <= m_rank)) Then
+        Exit Sub
+    End If
+
+    ' ...
+    Call PromoteMember(m_name, IIf(Rank > -1, Rank, m_rank + 1))
 
 End Sub
 
-Public Sub Demote(Optional ByVal Rank As Integer = 0)
+Public Sub Demote(Optional ByVal Rank As Integer = -1)
 
     ' ...
-    Call DemoteMember(m_name, IIf(Rank, Rank, m_rank - 1))
+    If ((Rank > -1) And (Rank >= m_rank)) Then
+        Exit Sub
+    End If
+
+    ' ...
+    Call DemoteMember(m_name, IIf(Rank > -1, Rank, m_rank - 1))
 
 End Sub
 

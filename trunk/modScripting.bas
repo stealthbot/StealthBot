@@ -138,7 +138,7 @@ LoadScript_Exit:
    
 LoadPluginSystem_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure LoadPluginSystem of Module modScripting"
+    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure LoadPluginSystem of Module modScripting"
     Debug.Print "Using variable: " & Path
 End Sub
 
@@ -212,7 +212,7 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
 ERROR_HANDLER:
 
     ' ...
-    frmChat.AddChat vbRed, "Error: " & Err.description & " in LoadScripts()."
+    frmChat.AddChat vbRed, "Error: " & Err.Description & " in LoadScripts()."
 
     ' ...
     Exit Sub
@@ -321,7 +321,7 @@ Public Sub RunInAll(ByRef SC As ScriptControl, ParamArray Parameters() As Varian
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.description & " in RunInAll()."
+    frmChat.AddChat vbRed, "Error: " & Err.Description & " in RunInAll()."
     
     Exit Sub
 End Sub
@@ -427,7 +427,7 @@ Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCa
     Exit Function
 
 Handler:
-    Debug.Print Err.Number, Err.description
+    Debug.Print Err.Number, Err.Description
     
     Exit Function
 End Function
