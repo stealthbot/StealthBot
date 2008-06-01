@@ -1,0 +1,1358 @@
+ [2:34:01 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [2:34:01 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [2:34:01 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [2:34:02 PM] The current StealthBot version is ÿcb2.6R3.
+ [2:34:02 PM]  
+ [2:34:02 PM] >> ÿcbStealthBot News
+ [2:34:02 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [2:34:02 PM] ->> 
+ [2:34:02 PM] ->> ÿcbStealthBot Beta News
+ [2:34:02 PM] ->> Happy testing!
+ [2:34:02 PM]  
+ [2:34:02 PM] The current StealthBot Beta version is 2.6993.
+ [2:34:02 PM]  [2:34:02 PM] Loaded 3 plugins (3 enabled). Type  [2:34:02 PM] /plugins [2:34:02 PM]  to view them. Type  [2:34:02 PM] /phelp [2:34:02 PM]  for help using them.
+ [2:34:02 PM]  [2:34:02 PM] Type  [2:34:02 PM] /updates [2:34:02 PM]  in the bot to view updates and new plugins that are available for download.
+ [2:34:03 PM]  [2:34:03 PM] frmExample_Load
+ [2:34:03 PM]  [2:34:03 PM] Form created: True
+ [2:34:03 PM]  [2:34:03 PM] frmExample_Resize( [2:34:03 PM] 4710 [2:34:03 PM] ,  [2:34:03 PM] 3645 [2:34:03 PM] )
+ [2:34:04 PM] Connecting your bot...
+ [2:34:04 PM] Authorizing your private-release bot, please wait.
+ [2:34:05 PM] Private usage authorized, connecting to Battle.Net.
+ [2:34:05 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [2:34:05 PM] [BNLS] Connected!
+ [2:34:05 PM] [BNLS] Authorized!
+ [2:34:05 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [2:34:05 PM] [BNET] Connected!
+ [2:34:05 PM] [BNET] Checking version...
+ [2:34:06 PM] [BNET] Client version accepted!
+ [2:34:06 PM] [BNET] Sending login information...
+ [2:34:06 PM] [BNET] Login successful.
+ [2:34:06 PM] [CLAN] You are a Shaman in Clan SBs.
+ [2:34:08 PM] [BNET] Logged on as Eric[nK].
+ [2:34:08 PM] -- Joined channel: Clan SBs --
+ [2:34:08 PM] Welcome to Battle.net!
+ [2:34:08 PM] This server is hosted by AT&T.
+ [2:34:08 PM] There are currently 55262 users playing 1523 games of Warcraft III The Frozen Throne, and 136808 users playing 34170 games on Battle.net.
+ [2:34:08 PM] Last logon: Mon Nov 26  10:04 AM
+ [2:34:08 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [2:34:08 PM] zomgzomgzogmogzomzgomzgozg
+ [2:34:08 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [2:34:08 PM] Last Logon: 11/26/2007, 22:38:00 (Battle.net time)
+ [2:34:08 PM] Last Logoff: 11/26/2007, 22:38:00 (Battle.net time)
+ [2:34:08 PM] Time Logged: 37 days, 7 hours, 25 minutes and 13 seconds
+ [2:34:28 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [2:34:28 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [2:34:28 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [2:34:29 PM] The current StealthBot version is ÿcb2.6R3.
+ [2:34:29 PM]  
+ [2:34:29 PM] >> ÿcbStealthBot News
+ [2:34:29 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [2:34:29 PM] ->> 
+ [2:34:29 PM] ->> ÿcbStealthBot Beta News
+ [2:34:29 PM] ->> Happy testing!
+ [2:34:29 PM]  
+ [2:34:29 PM] The current StealthBot Beta version is 2.6993.
+ [2:34:29 PM]  [2:34:29 PM] Loaded 3 plugins (3 enabled). Type  [2:34:29 PM] /plugins [2:34:29 PM]  to view them. Type  [2:34:29 PM] /phelp [2:34:29 PM]  for help using them.
+ [2:34:29 PM]  [2:34:29 PM] Type  [2:34:29 PM] /updates [2:34:29 PM]  in the bot to view updates and new plugins that are available for download.
+ [2:34:29 PM]  [2:34:29 PM] frmExample_Load
+ [2:34:29 PM]  [2:34:29 PM] Form created: True
+ [2:34:29 PM]  [2:34:29 PM] frmExample_Resize( [2:34:29 PM] 4710 [2:34:29 PM] ,  [2:34:29 PM] 3645 [2:34:29 PM] )
+ [2:34:31 PM] Connecting your bot...
+ [2:34:31 PM] Authorizing your private-release bot, please wait.
+ [2:34:31 PM] Private usage authorized, connecting to Battle.Net.
+ [2:34:31 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [2:34:31 PM] [BNLS] Connected!
+ [2:34:31 PM] [BNLS] Authorized!
+ [2:34:31 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [2:34:31 PM] [BNET] Connected!
+ [2:34:31 PM] [BNET] Checking version...
+ [2:34:32 PM] [BNET] Client version accepted!
+ [2:34:32 PM] [BNET] Sending login information...
+ [2:34:32 PM] [BNET] Login successful.
+ [2:34:33 PM] [CLAN] You are a Shaman in Clan SBs.
+ [2:34:33 PM] [BNET] Logged on as Eric[nK].
+ [2:34:33 PM] -- Joined channel: Clan SBs --
+ [2:34:33 PM] Welcome to Battle.net!
+ [2:34:33 PM] This server is hosted by AT&T.
+ [2:34:33 PM] There are currently 55262 users playing 1523 games of Warcraft III The Frozen Throne, and 136808 users playing 34170 games on Battle.net.
+ [2:34:33 PM] Last logon: Mon Nov 26  2:42 PM
+ [2:34:33 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [2:34:33 PM] zomgzomgzogmogzomzgomzgozg
+ [2:34:33 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [2:34:33 PM] Last Logon: 11/26/2007, 22:38:00 (Battle.net time)
+ [2:34:33 PM] Last Logoff: 11/26/2007, 22:38:00 (Battle.net time)
+ [2:34:33 PM] Time Logged: 37 days, 7 hours, 25 minutes and 24 seconds
+ [2:34:34 PM] That is not a valid command. Type /help or /? for more info.
+ [2:34:35 PM] <Eric[nK]@Azeroth> .
+ [2:34:38 PM] <Eric[nK]@Azeroth> ....
+ [3:16:16 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [3:16:16 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [3:16:16 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [3:16:16 PM] The current StealthBot version is ÿcb2.6R3.
+ [3:16:16 PM]  
+ [3:16:16 PM] >> ÿcbStealthBot News
+ [3:16:16 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [3:16:16 PM] ->> 
+ [3:16:16 PM] ->> ÿcbStealthBot Beta News
+ [3:16:16 PM] ->> Happy testing!
+ [3:16:16 PM]  
+ [3:16:16 PM] The current StealthBot Beta version is 2.6993.
+ [3:16:16 PM]  [3:16:16 PM] Loaded 3 plugins (3 enabled). Type  [3:16:16 PM] /plugins [3:16:16 PM]  to view them. Type  [3:16:16 PM] /phelp [3:16:16 PM]  for help using them.
+ [3:16:16 PM]  [3:16:16 PM] Type  [3:16:16 PM] /updates [3:16:16 PM]  in the bot to view updates and new plugins that are available for download.
+ [3:16:16 PM]  [3:16:16 PM] frmExample_Load
+ [3:16:16 PM]  [3:16:16 PM] Form created: True
+ [3:16:16 PM]  [3:16:16 PM] frmExample_Resize( [3:16:16 PM] 4710 [3:16:16 PM] ,  [3:16:16 PM] 3645 [3:16:16 PM] )
+ [3:16:18 PM] Connecting your bot...
+ [3:16:18 PM] Authorizing your private-release bot, please wait.
+ [3:16:18 PM] Private usage authorized, connecting to Battle.Net.
+ [3:16:18 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [3:16:18 PM] [BNLS] Connected!
+ [3:16:21 PM] All connections closed.
+ [3:16:21 PM] Connecting your bot...
+ [3:16:21 PM] Authorizing your private-release bot, please wait.
+ [3:16:22 PM] Private usage authorized, connecting to Battle.Net.
+ [3:16:22 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [3:16:22 PM] [BNLS] Connected!
+ [3:16:25 PM] [BNLS] Authorized!
+ [3:16:25 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [3:16:25 PM] [BNET] Connected!
+ [3:16:26 PM] All connections closed.
+ [3:16:26 PM] Connecting your bot...
+ [3:16:26 PM] Authorizing your private-release bot, please wait.
+ [3:16:26 PM] Private usage authorized, connecting to Battle.Net.
+ [3:16:26 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [3:16:27 PM] [BNLS] Connected!
+ [3:27:16 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [3:27:16 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [3:27:16 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [3:27:16 PM] The current StealthBot version is ÿcb2.6R3.
+ [3:27:16 PM]  
+ [3:27:16 PM] >> ÿcbStealthBot News
+ [3:27:16 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [3:27:16 PM] ->> 
+ [3:27:16 PM] ->> ÿcbStealthBot Beta News
+ [3:27:16 PM] ->> Happy testing!
+ [3:27:16 PM]  
+ [3:27:16 PM] The current StealthBot Beta version is 2.6993.
+ [3:27:17 PM]  [3:27:17 PM] Loaded 3 plugins (3 enabled). Type  [3:27:17 PM] /plugins [3:27:17 PM]  to view them. Type  [3:27:17 PM] /phelp [3:27:17 PM]  for help using them.
+ [3:27:17 PM]  [3:27:17 PM] Type  [3:27:17 PM] /updates [3:27:17 PM]  in the bot to view updates and new plugins that are available for download.
+ [3:27:17 PM]  [3:27:17 PM] frmExample_Load
+ [3:27:17 PM]  [3:27:17 PM] Form created: True
+ [3:27:17 PM]  [3:27:17 PM] frmExample_Resize( [3:27:17 PM] 4710 [3:27:17 PM] ,  [3:27:17 PM] 3645 [3:27:17 PM] )
+ [3:27:18 PM] Connecting your bot...
+ [3:27:18 PM] Authorizing your private-release bot, please wait.
+ [3:27:18 PM] Private usage authorized, connecting to Battle.Net.
+ [3:27:18 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [3:27:19 PM] [BNLS] Connected!
+ [3:27:19 PM] [BNLS] Authorized!
+ [3:27:19 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [3:27:20 PM] [BNET] Connected!
+ [3:27:20 PM] [BNET] Checking version...
+ [3:27:21 PM] [BNET] Version check passed!
+ [3:27:21 PM] [BNET] Your CD-key is currently in use under the owner name: Eric[nK].
+ [3:27:21 PM] [BNET] For more information, visit http://www.blizzard.com/support/?id=asc0729p .
+ [3:27:21 PM] All connections closed.
+ [3:27:36 PM] Connecting your bot...
+ [3:27:36 PM] Authorizing your private-release bot, please wait.
+ [3:27:36 PM] Private usage authorized, connecting to Battle.Net.
+ [3:27:36 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [3:27:36 PM] [BNLS] Connected!
+ [3:27:37 PM] [BNLS] Authorized!
+ [3:27:37 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [3:27:37 PM] [BNET] Connected!
+ [3:27:38 PM] [BNET] Checking version...
+ [3:27:42 PM] [BNET] Client version accepted!
+ [3:27:42 PM] [BNET] Sending login information...
+ [3:27:44 PM] [BNET] Login successful.
+ [3:27:44 PM] [CLAN] You are a Shaman in Clan SBs.
+ [3:27:44 PM] [BNET] Logged on as Eric[nK].
+ [3:27:44 PM] -- Joined channel: Clan SBs --
+ [3:27:44 PM] Welcome to Battle.net!
+ [3:27:44 PM] This server is hosted by AT&T.
+ [3:27:44 PM] There are currently 51772 users playing 1334 games of Warcraft III The Frozen Throne, and 131523 users playing 34842 games on Battle.net.
+ [3:27:44 PM] Last logon: Mon Nov 26  3:33 PM
+ [3:27:44 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [3:27:44 PM] PhiX trixed you.
+ [3:27:45 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [3:27:45 PM] Last Logon: 11/26/2007, 23:35:59 (Battle.net time)
+ [3:27:45 PM] Last Logoff: 11/26/2007, 23:35:41 (Battle.net time)
+ [3:27:45 PM] Time Logged: 37 days, 8 hours, 14 minutes and 1 second
+ [5:23:46 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:23:46 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:23:46 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:23:47 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:23:47 PM]  
+ [5:23:47 PM] >> ÿcbStealthBot News
+ [5:23:47 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:23:47 PM] ->> 
+ [5:23:47 PM] ->> ÿcbStealthBot Beta News
+ [5:23:47 PM] ->> Happy testing!
+ [5:23:47 PM]  
+ [5:23:47 PM] The current StealthBot Beta version is 2.6993.
+ [5:23:47 PM]  [5:23:47 PM] Loaded 3 plugins (3 enabled). Type  [5:23:47 PM] /plugins [5:23:47 PM]  to view them. Type  [5:23:47 PM] /phelp [5:23:47 PM]  for help using them.
+ [5:23:47 PM]  [5:23:47 PM] Type  [5:23:47 PM] /updates [5:23:47 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:23:48 PM]  [5:23:48 PM] frmExample_Load
+ [5:23:48 PM]  [5:23:48 PM] Form created: True
+ [5:23:48 PM]  [5:23:48 PM] frmExample_Resize( [5:23:48 PM] 4710 [5:23:48 PM] ,  [5:23:48 PM] 3645 [5:23:48 PM] )
+ [5:23:49 PM] Connecting your bot...
+ [5:23:49 PM] Authorizing your private-release bot, please wait.
+ [5:23:49 PM] Private usage authorized, connecting to Battle.Net.
+ [5:23:49 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [5:23:50 PM] [BNLS] Connected!
+ [5:23:51 PM] [BNLS] Authorized!
+ [5:23:51 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [5:23:52 PM] [BNET] Connected!
+ [5:23:53 PM] [BNET] Checking version...
+ [5:24:43 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:24:43 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:24:43 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:24:43 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:24:43 PM]  
+ [5:24:43 PM] >> ÿcbStealthBot News
+ [5:24:43 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:24:43 PM] ->> 
+ [5:24:43 PM] ->> ÿcbStealthBot Beta News
+ [5:24:44 PM] ->> Happy testing!
+ [5:24:44 PM]  
+ [5:24:44 PM] The current StealthBot Beta version is 2.6993.
+ [5:24:44 PM]  [5:24:44 PM] Loaded 3 plugins (3 enabled). Type  [5:24:44 PM] /plugins [5:24:44 PM]  to view them. Type  [5:24:44 PM] /phelp [5:24:44 PM]  for help using them.
+ [5:24:44 PM]  [5:24:44 PM] Type  [5:24:44 PM] /updates [5:24:44 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:24:44 PM]  [5:24:44 PM] frmExample_Load
+ [5:24:44 PM]  [5:24:44 PM] Form created: True
+ [5:24:44 PM]  [5:24:44 PM] frmExample_Resize( [5:24:44 PM] 4710 [5:24:44 PM] ,  [5:24:44 PM] 3645 [5:24:44 PM] )
+ [5:24:45 PM] Connecting your bot...
+ [5:24:45 PM] Authorizing your private-release bot, please wait.
+ [5:24:45 PM] Private usage authorized, connecting to Battle.Net.
+ [5:24:46 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [5:24:46 PM] [BNLS] Connected!
+ [5:24:46 PM]  [5:24:46 PM] frmExample_UnLoad( [5:24:46 PM] 0 [5:24:46 PM] )
+ [5:24:47 PM] [BNLS] Authorized!
+ [5:24:47 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [5:24:48 PM] [BNET] Connected!
+ [5:24:49 PM] [BNET] Checking version...
+ [5:24:53 PM] [BNET] Client version accepted!
+ [5:24:53 PM] [BNET] Sending login information...
+ [5:24:55 PM] [BNET] Login successful.
+ [5:24:55 PM] [CLAN] You are a Shaman in Clan SBs.
+ [5:24:55 PM] [BNET] Logged on as Eric[nK].
+ [5:24:55 PM] -- Joined channel: Clan SBs --
+ [5:24:55 PM] Welcome to Battle.net!
+ [5:24:55 PM] This server is hosted by AT&T.
+ [5:24:55 PM] There are currently 55022 users playing 1267 games of Warcraft III The Frozen Throne, and 142407 users playing 39669 games on Battle.net.
+ [5:24:55 PM] Last logon: Mon Nov 26  5:32 PM
+ [5:24:56 PM] -- Eric[nK] has acquired ops.
+ [5:24:56 PM] PhiX trixed you.
+ [5:24:56 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [5:24:56 PM] Last Logon: 11/27/2007, 01:33:11 (Battle.net time)
+ [5:24:56 PM] Last Logoff: 11/27/2007, 01:32:57 (Battle.net time)
+ [5:24:56 PM] Time Logged: 37 days, 9 hours, 46 minutes and 11 seconds
+ [5:24:56 PM] -- Joined channel: Clan ThuG --
+ [8:03:59 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [8:03:59 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [8:03:59 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [8:03:59 PM] The current StealthBot version is ÿcb2.6R3.
+ [8:03:59 PM]  
+ [8:03:59 PM] >> ÿcbStealthBot News
+ [8:03:59 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [8:03:59 PM] ->> 
+ [8:03:59 PM] ->> ÿcbStealthBot Beta News
+ [8:03:59 PM] ->> Happy testing!
+ [8:03:59 PM]  
+ [8:03:59 PM] The current StealthBot Beta version is 2.6993.
+ [8:03:59 PM]  [8:03:59 PM] Loaded 3 plugins (3 enabled). Type  [8:03:59 PM] /plugins [8:03:59 PM]  to view them. Type  [8:03:59 PM] /phelp [8:03:59 PM]  for help using them.
+ [8:03:59 PM]  [8:03:59 PM] Type  [8:03:59 PM] /updates [8:03:59 PM]  in the bot to view updates and new plugins that are available for download.
+ [8:04:00 PM]  [8:04:00 PM] frmExample_Load
+ [8:04:00 PM]  [8:04:00 PM] Form created: True
+ [8:04:00 PM]  [8:04:00 PM] frmExample_Resize( [8:04:00 PM] 4710 [8:04:00 PM] ,  [8:04:00 PM] 3645 [8:04:00 PM] )
+ [8:04:01 PM]  [8:04:01 PM] frmExample_UnLoad( [8:04:01 PM] 0 [8:04:01 PM] )
+ [8:04:04 PM] Connecting your bot...
+ [8:04:04 PM] Authorizing your private-release bot, please wait.
+ [8:04:04 PM] Private usage authorized, connecting to Battle.Net.
+ [8:04:04 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [8:04:05 PM] [BNLS] Connected!
+ [8:04:05 PM] [BNLS] Authorized!
+ [8:04:05 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [8:04:05 PM] [BNET] Connected!
+ [8:04:05 PM] [BNET] Checking version...
+ [8:04:06 PM] [BNET] Client version accepted!
+ [8:04:06 PM] [BNET] Sending login information...
+ [8:04:07 PM] [BNET] Login successful.
+ [8:04:07 PM] [CLAN] You are a Shaman in Clan SBs.
+ [8:04:07 PM] [BNET] Logged on as Eric[nK].
+ [8:04:07 PM] -- Joined channel: Clan SBs --
+ [8:04:07 PM] Welcome to Battle.net!
+ [8:04:07 PM] This server is hosted by AT&T.
+ [8:04:07 PM] There are currently 60023 users playing 1324 games of Warcraft III The Frozen Throne, and 154684 users playing 42609 games on Battle.net.
+ [8:04:07 PM] Last logon: Mon Nov 26  7:37 PM
+ [8:04:07 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [8:04:07 PM] PhiX trixed you.
+ [8:04:07 PM] -- Stats updated: Eric[nK]@Azeroth [141ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [8:04:07 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [8:04:07 PM] Last Logon: 11/27/2007, 04:07:17 (Battle.net time)
+ [8:04:07 PM] Last Logoff: 11/27/2007, 04:07:17 (Battle.net time)
+ [8:04:07 PM] Time Logged: 37 days, 12 hours, 23 minutes and 56 seconds
+ [8:04:25 PM] -- Joined channel: Clan ThuG --
+ [8:04:38 PM] <AlienBob@Azeroth> MirageChat v5.0 
+ [8:05:39 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [8:05:39 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [8:05:39 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [8:05:39 PM] The current StealthBot version is ÿcb2.6R3.
+ [8:05:39 PM]  
+ [8:05:39 PM] >> ÿcbStealthBot News
+ [8:05:39 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [8:05:39 PM] ->> 
+ [8:05:39 PM] ->> ÿcbStealthBot Beta News
+ [8:05:39 PM] ->> Happy testing!
+ [8:05:39 PM]  
+ [8:05:39 PM] The current StealthBot Beta version is 2.6993.
+ [8:05:39 PM]  [8:05:39 PM] Loaded 3 plugins (3 enabled). Type  [8:05:39 PM] /plugins [8:05:39 PM]  to view them. Type  [8:05:39 PM] /phelp [8:05:39 PM]  for help using them.
+ [8:05:39 PM]  [8:05:39 PM] Type  [8:05:39 PM] /updates [8:05:39 PM]  in the bot to view updates and new plugins that are available for download.
+ [8:05:39 PM]  [8:05:39 PM] frmExample_Load
+ [8:05:39 PM]  [8:05:39 PM] Form created: True
+ [8:05:39 PM]  [8:05:39 PM] frmExample_Resize( [8:05:39 PM] 4710 [8:05:39 PM] ,  [8:05:39 PM] 3645 [8:05:39 PM] )
+ [8:05:41 PM]  [8:05:41 PM] frmExample_UnLoad( [8:05:41 PM] 0 [8:05:41 PM] )
+ [8:05:45 PM] Connecting your bot...
+ [8:05:45 PM] Authorizing your private-release bot, please wait.
+ [8:05:45 PM] Private usage authorized, connecting to Battle.Net.
+ [8:05:46 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [8:05:46 PM] [BNLS] Connected!
+ [8:05:46 PM] [BNLS] Authorized!
+ [8:05:46 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [8:05:46 PM] [BNET] Connected!
+ [8:05:46 PM] [BNET] Checking version...
+ [8:05:47 PM] [BNET] Client version accepted!
+ [8:05:47 PM] [BNET] Sending login information...
+ [8:05:47 PM] [BNET] Login successful.
+ [8:05:47 PM] [CLAN] You are a Shaman in Clan SBs.
+ [8:05:47 PM] [BNET] Logged on as Eric[nK].
+ [8:05:47 PM] -- Joined channel: Clan SBs --
+ [8:05:47 PM] Welcome to Battle.net!
+ [8:05:47 PM] This server is hosted by AT&T.
+ [8:05:47 PM] There are currently 59983 users playing 1328 games of Warcraft III The Frozen Throne, and 154942 users playing 42723 games on Battle.net.
+ [8:05:47 PM] Last logon: Mon Nov 26  8:13 PM
+ [8:05:47 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [8:05:47 PM] PhiX trixed you.
+ [8:05:48 PM] -- Stats updated: Eric[nK]@Azeroth [141ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [8:05:48 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [8:05:48 PM] Last Logon: 11/27/2007, 04:07:17 (Battle.net time)
+ [8:05:48 PM] Last Logoff: 11/27/2007, 04:07:17 (Battle.net time)
+ [8:05:48 PM] Time Logged: 37 days, 12 hours, 24 minutes and 58 seconds
+ [8:05:52 PM] -- Joined channel: Clan NNG --
+ [8:05:55 PM] <NNG-Vector@Azeroth> a bot without your timers.
+ [8:05:59 PM] <NNG-Vector> say
+ [8:06:04 PM] <NNG-Vector@Azeroth> it just disconnects out of the blue
+ [8:06:05 PM] <ifndef@Azeroth> but you are going to write a plugin for this person
+ [8:06:07 PM] <Eric[nK]@Azeroth> 1337rejoin
+ [8:06:07 PM] -- PyroManiac666@Azeroth has left the channel.
+ [8:06:11 PM] <ifndef@Azeroth> so you could write your own disconnect timers
+ [8:06:12 PM] -- PyroManiac666@Azeroth [31ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan NNG)
+ [8:06:12 PM] -- PyroManiac666@Azeroth has acquired ops.
+ [8:06:16 PM] <NNG-Vector> ah
+ [8:06:16 PM] <ifndef> instead of all this stuff
+ [8:06:22 PM] <Eric[nK]> 1337join God
+ [8:06:24 PM] -- PyroManiac666 has left the channel.
+ [8:06:26 PM] <NNG-Vector> lol
+ [8:06:35 PM] <Eric[nK]> strange
+ [8:06:36 PM] <NNG-Vector> the thing I don't know is.....
+ [8:06:46 PM] <NNG-Vector> if he has access to put my pljgin on the guy's computer
+ [8:06:49 PM] Users in channel Clan NNG:
+ [8:06:49 PM] [PYRO[NNG]], [HAKR_NNG]
+ [8:06:49 PM] ferre7, NNG-Vector
+ [8:06:49 PM] Vector[gnome], ifndef
+ [8:06:49 PM] Eric[nK]
+ [8:06:58 PM] <NNG-Vector> basically he wants me to close the stealthbot, hmmm
+ [8:07:05 PM] <To PyroManiac666> join clan sbs
+ [8:07:08 PM] <ifndef> oh, that won't happen
+ [8:07:09 PM] Users in channel Clan SBs:
+ [8:07:09 PM] LuC1Fr-Tech, Joe-Tech
+ [8:07:09 PM] [TECH-JACK)], Naivete
+ [8:07:09 PM] Hdx@USEast, [PYRO6-TECH]
+ [8:07:09 PM] Tech-PhiX, PrivT-Tech
+ [8:07:09 PM] [BERZERKER-TECH], PyroManiac666
+ [8:07:12 PM] <NNG-Vector> yeah
+ [8:07:13 PM] <To PyroManiac666> join clan nng
+ [8:07:16 PM] <NNG-Vector> that's what I'm saying, lol
+ [8:07:18 PM] -- PyroManiac666 [31ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan NNG)
+ [8:07:18 PM] -- PyroManiac666 has acquired ops.
+ [8:07:19 PM] <Eric[nK]> 1337say .
+ [8:07:20 PM] <PyroManiac666> .
+ [8:07:33 PM] <NNG-Vector> if it was that way, I'd go ahead and make the plugin
+ [8:07:41 PM] -- Joined channel: Clan ThuG --
+ [8:07:49 PM] -- CuzZ [0ms] has joined the channel using Diablo II (Open Character).
+ [8:07:49 PM] <CuzZ> hi
+ [8:07:57 PM] <From NNG-Vector@Azeroth> add me to friends list
+ [8:08:04 PM] -- T]SkoPe has left the channel.
+ [8:08:04 PM] -- iCeY has left the channel.
+ [8:08:04 PM] -- SkoPe has left the channel.
+ [8:08:53 PM] -- T]SkoPe [79ms] has joined the channel using Warcraft II (0 wins).
+ [8:09:02 PM] -- iCeY [79ms] has joined the channel using Warcraft II (0 wins).
+ [8:09:06 PM] Added NNG-Vector to your friends list.
+ [8:10:36 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [8:10:36 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [8:10:36 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [8:10:36 PM] The current StealthBot version is ÿcb2.6R3.
+ [8:10:36 PM]  
+ [8:10:36 PM] >> ÿcbStealthBot News
+ [8:10:36 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [8:10:36 PM] ->> 
+ [8:10:36 PM] ->> ÿcbStealthBot Beta News
+ [8:10:36 PM] ->> Happy testing!
+ [8:10:36 PM]  
+ [8:10:36 PM] The current StealthBot Beta version is 2.6993.
+ [8:10:36 PM]  [8:10:36 PM] Loaded 3 plugins (3 enabled). Type  [8:10:36 PM] /plugins [8:10:36 PM]  to view them. Type  [8:10:36 PM] /phelp [8:10:36 PM]  for help using them.
+ [8:10:36 PM]  [8:10:36 PM] Type  [8:10:36 PM] /updates [8:10:36 PM]  in the bot to view updates and new plugins that are available for download.
+ [8:10:37 PM]  [8:10:37 PM] frmExample_Load
+ [8:10:37 PM]  [8:10:37 PM] Form created: True
+ [8:10:37 PM]  [8:10:37 PM] frmExample_Resize( [8:10:37 PM] 4710 [8:10:37 PM] ,  [8:10:37 PM] 3645 [8:10:37 PM] )
+ [8:10:38 PM]  [8:10:38 PM] frmExample_UnLoad( [8:10:38 PM] 0 [8:10:38 PM] )
+ [8:10:39 PM] Connecting your bot...
+ [8:10:39 PM] Authorizing your private-release bot, please wait.
+ [8:10:39 PM] Private usage authorized, connecting to Battle.Net.
+ [8:10:39 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [8:10:39 PM] [BNLS] Connected!
+ [8:10:40 PM] [BNLS] Authorized!
+ [8:10:40 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [8:10:40 PM] [BNET] Connected!
+ [8:10:40 PM] [BNET] Checking version...
+ [8:10:40 PM] [BNET] Client version accepted!
+ [8:10:40 PM] [BNET] Sending login information...
+ [8:10:41 PM] [BNET] Login successful.
+ [8:10:41 PM] [CLAN] You are a Shaman in Clan SBs.
+ [8:10:41 PM] [BNET] Logged on as Eric[nK].
+ [8:10:41 PM] -- Joined channel: Clan SBs --
+ [8:10:41 PM] Welcome to Battle.net!
+ [8:10:41 PM] This server is hosted by AT&T.
+ [8:10:41 PM] There are currently 60047 users playing 1298 games of Warcraft III The Frozen Throne, and 155358 users playing 42799 games on Battle.net.
+ [8:10:41 PM] Last logon: Mon Nov 26  8:14 PM
+ [8:10:41 PM] -- Eric[nK] has acquired ops.
+ [8:10:41 PM] PhiX trixed you.
+ [8:10:42 PM] -- Stats updated: Eric[nK] [125ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [8:10:42 PM] <Computer(fresh)> Hey Msg VxExNxOxM and AT with him!! HES PRO!!!!
+ [8:10:42 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [8:10:42 PM] Last Logon: 11/27/2007, 04:14:27 (Battle.net time)
+ [8:10:42 PM] Last Logoff: 11/27/2007, 04:17:58 (Battle.net time)
+ [8:10:42 PM] Time Logged: 37 days, 12 hours, 28 minutes and 53 seconds
+ [8:10:43 PM] -- Joined channel: Clan ThuG --
+ [8:10:56 PM] -- NNG-Vector [93ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan NNG)
+ [8:11:03 PM] <NNG-Vector> i am teh stalker, eric
+ [8:11:13 PM] -- NNG-Vector@Azeroth has left the channel.
+ [8:11:22 PM] <Thomas@USEast> lol
+ [8:11:23 PM] -- Joined channel: Clan Recruitment --
+ [8:11:24 PM] Looking for a clan? Looking for members? Clan Recruitment allows you to find both.
+ [8:11:28 PM] <Co-D_Prodi-G> help pleasE?
+ [8:11:28 PM] <e3]Clan.e3@USEast l""""""""""""""Clan e3""""""""""""""l    ~~FMP/Money~ ~24/7 Ops~ ~Gamers Welcome To Chill and Game~ ~Decent Gamers Only~ ~Come Get Tested~ ~Good Mannered~ ~Come and Chill or Game with the Elit3z~~>
+ [8:11:34 PM] <Vector[bot]> ---JOIN CLAN NNG----YOUR PRIMIER SOURCE FOR GAMING----JOIN NOW----
+ [8:11:34 PM] -- SeRiaL~KiLLa@USEast has left the channel.
+ [8:11:37 PM] <DinDerecruteuse@USEast> Si vous voulez joindre un clan de qubcois et juste de qubcois, vn op dindes :D
+ [8:11:38 PM] <TysanRecruiter> The Tysan Clan | Since '97 | Op Tysan | Website | Ventrilo | BW, LoD and TFT | Mature and friendly people only
+ [8:11:41 PM] <CDA-Ducky> Are you looking to join a fun, well organized, and exciting clan? The Confederation might be for you!!! Enlist now at channel op ConFed or stop by for more details.
+ [8:11:45 PM] -- 300-Community [31ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan 300)
+ [8:11:46 PM] <Army> Op Nation ~ 24/7 Idled Accounts ~ Join ~
+ [8:21:39 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [8:21:39 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [8:21:39 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [8:21:39 PM] The current StealthBot version is ÿcb2.6R3.
+ [8:21:39 PM]  
+ [8:21:39 PM] >> ÿcbStealthBot News
+ [8:21:39 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [8:21:39 PM] ->> 
+ [8:21:39 PM] ->> ÿcbStealthBot Beta News
+ [8:21:39 PM] ->> Happy testing!
+ [8:21:39 PM]  
+ [8:21:39 PM] The current StealthBot Beta version is 2.6993.
+ [8:21:40 PM]  [8:21:40 PM] Loaded 3 plugins (3 enabled). Type  [8:21:40 PM] /plugins [8:21:40 PM]  to view them. Type  [8:21:40 PM] /phelp [8:21:40 PM]  for help using them.
+ [8:21:40 PM]  [8:21:40 PM] Type  [8:21:40 PM] /updates [8:21:40 PM]  in the bot to view updates and new plugins that are available for download.
+ [8:21:40 PM]  [8:21:40 PM] frmExample_Load
+ [8:21:40 PM]  [8:21:40 PM] Form created: True
+ [8:21:40 PM]  [8:21:40 PM] frmExample_Resize( [8:21:40 PM] 4710 [8:21:40 PM] ,  [8:21:40 PM] 3645 [8:21:40 PM] )
+ [8:21:41 PM] Connecting your bot...
+ [8:21:41 PM] Authorizing your private-release bot, please wait.
+ [8:21:41 PM] Private usage authorized, connecting to Battle.Net.
+ [8:21:41 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [8:21:41 PM] [BNLS] Connected!
+ [8:21:42 PM] [BNLS] Authorized!
+ [8:21:42 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [8:21:42 PM] [BNET] Connected!
+ [8:21:42 PM] [BNET] Checking version...
+ [8:21:43 PM] [BNET] Client version accepted!
+ [8:21:43 PM] [BNET] Sending login information...
+ [8:21:44 PM] [BNET] Login successful.
+ [8:21:44 PM] [CLAN] You are a Shaman in Clan SBs.
+ [8:21:44 PM] [BNET] Logged on as Eric[nK].
+ [8:21:44 PM] -- Joined channel: Clan SBs --
+ [8:21:44 PM] Welcome to Battle.net!
+ [8:21:44 PM] This server is hosted by AT&T.
+ [8:21:44 PM] There are currently 60258 users playing 1333 games of Warcraft III The Frozen Throne, and 156031 users playing 43071 games on Battle.net.
+ [8:21:44 PM] Last logon: Mon Nov 26  8:26 PM
+ [8:21:44 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [8:21:44 PM] PhiX trixed you.
+ [8:21:44 PM] -- Stats updated: Eric[nK]@Azeroth [141ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [8:21:44 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [8:21:45 PM] Last Logon: 11/27/2007, 04:30:00 (Battle.net time)
+ [8:21:45 PM] Last Logoff: 11/27/2007, 04:29:42 (Battle.net time)
+ [8:21:45 PM] Time Logged: 37 days, 12 hours, 34 minutes and 19 seconds
+ [8:21:45 PM] Hdx
+ [8:21:46 PM] Tech-PhiX@Azeroth
+ [8:21:46 PM] PrivT-Tech@Azeroth
+ [8:21:46 PM] PrivT-Tech@Azeroth
+ [8:21:47 PM] Tech-PhiX@Azeroth
+ [8:21:47 PM] Hdx
+ [8:21:47 PM] Naivete@Azeroth
+ [8:21:47 PM] Joe-Tech@Azeroth
+ [8:21:47 PM] LuC1Fr-Tech@Azeroth
+ [8:21:47 PM] Tech-Jack)@Azeroth
+ [8:21:47 PM] Pyro6-Tech@Azeroth
+ [8:21:47 PM] Eric[nK]@Azeroth
+ [8:22:36 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [8:22:36 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [8:22:36 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [8:22:37 PM] The current StealthBot version is ÿcb2.6R3.
+ [8:22:37 PM]  
+ [8:22:37 PM] >> ÿcbStealthBot News
+ [8:22:37 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [8:22:37 PM] ->> 
+ [8:22:37 PM] ->> ÿcbStealthBot Beta News
+ [8:22:37 PM] ->> Happy testing!
+ [8:22:37 PM]  
+ [8:22:37 PM] The current StealthBot Beta version is 2.6993.
+ [8:22:37 PM]  [8:22:37 PM] Loaded 3 plugins (3 enabled). Type  [8:22:37 PM] /plugins [8:22:37 PM]  to view them. Type  [8:22:37 PM] /phelp [8:22:37 PM]  for help using them.
+ [8:22:37 PM]  [8:22:37 PM] Type  [8:22:37 PM] /updates [8:22:37 PM]  in the bot to view updates and new plugins that are available for download.
+ [8:22:37 PM]  [8:22:37 PM] frmExample_Load
+ [8:22:37 PM]  [8:22:37 PM] Form created: True
+ [8:22:37 PM]  [8:22:37 PM] frmExample_Resize( [8:22:37 PM] 4710 [8:22:37 PM] ,  [8:22:37 PM] 3645 [8:22:37 PM] )
+ [8:22:38 PM] Connecting your bot...
+ [8:22:38 PM] Authorizing your private-release bot, please wait.
+ [8:22:38 PM] Private usage authorized, connecting to Battle.Net.
+ [8:22:38 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [8:22:38 PM] [BNLS] Connected!
+ [8:22:38 PM] [BNLS] Authorized!
+ [8:22:38 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [8:22:38 PM] [BNET] Connected!
+ [8:22:39 PM] [BNET] Checking version...
+ [8:22:39 PM] [BNET] Client version accepted!
+ [8:22:39 PM] [BNET] Sending login information...
+ [8:22:40 PM] [BNET] Login successful.
+ [8:22:40 PM] [CLAN] You are a Shaman in Clan SBs.
+ [8:22:40 PM] [BNET] Logged on as Eric[nK].
+ [8:22:40 PM] -- Joined channel: Clan SBs --
+ [8:22:40 PM] Welcome to Battle.net!
+ [8:22:40 PM] This server is hosted by AT&T.
+ [8:22:40 PM] There are currently 60278 users playing 1326 games of Warcraft III The Frozen Throne, and 155949 users playing 43158 games on Battle.net.
+ [8:22:40 PM] Last logon: Mon Nov 26  8:30 PM
+ [8:22:40 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [8:22:40 PM] !
+ [8:22:40 PM] PhiX trixed you.
+ [8:22:40 PM] !
+ [8:22:40 PM] -- Stats updated: Eric[nK]@Azeroth [109ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [8:22:40 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [8:22:40 PM] Last Logon: 11/27/2007, 04:30:56 (Battle.net time)
+ [8:22:40 PM] Last Logoff: 11/27/2007, 04:30:05 (Battle.net time)
+ [8:22:41 PM] Time Logged: 37 days, 12 hours, 34 minutes and 23 seconds
+ [8:22:41 PM] !
+ [8:22:41 PM] Naivete@Azeroth
+ [8:22:42 PM] !
+ [8:22:42 PM] Hdx
+ [8:22:42 PM] !
+ [8:22:42 PM] !
+ [8:22:42 PM] Tech-PhiX@Azeroth
+ [8:22:42 PM] !
+ [8:22:42 PM] !
+ [8:22:42 PM] PrivT-Tech@Azeroth
+ [8:22:44 PM] !
+ [8:22:44 PM] !
+ [8:22:44 PM] Tech-PhiX@Azeroth
+ [8:22:45 PM] <From Divine[nK]> Your faggoty friend Eric[nK] has entered Battle.net
+ [8:22:45 PM] !
+ [8:22:45 PM] Hdx
+ [8:22:45 PM] !
+ [8:22:45 PM] Naivete@Azeroth
+ [8:22:46 PM] !
+ [8:22:46 PM] Joe-Tech@Azeroth
+ [8:22:46 PM] !
+ [8:22:46 PM] LuC1Fr-Tech@Azeroth
+ [8:22:46 PM] !
+ [8:22:46 PM] Tech-Jack)@Azeroth
+ [8:22:46 PM] !
+ [8:22:46 PM] Pyro6-Tech@Azeroth
+ [8:22:46 PM] !
+ [8:22:46 PM] Eric[nK]@Azeroth
+ [8:23:04 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [8:23:04 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [8:23:04 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [8:23:04 PM] The current StealthBot version is ÿcb2.6R3.
+ [8:23:04 PM]  
+ [8:23:04 PM] >> ÿcbStealthBot News
+ [8:23:04 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [8:23:04 PM] ->> 
+ [8:23:04 PM] ->> ÿcbStealthBot Beta News
+ [8:23:04 PM] ->> Happy testing!
+ [8:23:04 PM]  
+ [8:23:04 PM] The current StealthBot Beta version is 2.6993.
+ [8:23:04 PM]  [8:23:04 PM] Loaded 3 plugins (3 enabled). Type  [8:23:04 PM] /plugins [8:23:04 PM]  to view them. Type  [8:23:04 PM] /phelp [8:23:04 PM]  for help using them.
+ [8:23:04 PM]  [8:23:04 PM] Type  [8:23:04 PM] /updates [8:23:04 PM]  in the bot to view updates and new plugins that are available for download.
+ [8:23:04 PM]  [8:23:04 PM] frmExample_Load
+ [8:23:04 PM]  [8:23:04 PM] Form created: True
+ [8:23:04 PM]  [8:23:04 PM] frmExample_Resize( [8:23:04 PM] 4710 [8:23:04 PM] ,  [8:23:04 PM] 3645 [8:23:04 PM] )
+ [8:23:06 PM] Connecting your bot...
+ [8:23:06 PM] Authorizing your private-release bot, please wait.
+ [8:23:06 PM] Private usage authorized, connecting to Battle.Net.
+ [8:23:06 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [8:23:06 PM] [BNLS] Connected!
+ [8:23:06 PM] [BNLS] Authorized!
+ [8:23:06 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [8:23:06 PM] [BNET] Connected!
+ [8:23:06 PM] [BNET] Checking version...
+ [8:23:07 PM] [BNET] Client version accepted!
+ [8:23:07 PM] [BNET] Sending login information...
+ [8:23:08 PM] [BNET] Login successful.
+ [8:23:08 PM] [CLAN] You are a Shaman in Clan SBs.
+ [8:23:08 PM] [BNET] Logged on as Eric[nK].
+ [8:23:08 PM] -- Joined channel: Clan SBs --
+ [8:23:08 PM] Welcome to Battle.net!
+ [8:23:08 PM] This server is hosted by AT&T.
+ [8:23:08 PM] There are currently 60278 users playing 1326 games of Warcraft III The Frozen Throne, and 155949 users playing 43158 games on Battle.net.
+ [8:23:08 PM] Last logon: Mon Nov 26  8:30 PM
+ [8:23:08 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [8:23:08 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:23:08 PM] PhiX trixed you.
+ [8:23:09 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:23:09 PM] -- Stats updated: Eric[nK]@Azeroth [140ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [8:23:09 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [8:23:09 PM] Last Logon: 11/27/2007, 04:31:25 (Battle.net time)
+ [8:23:09 PM] Last Logoff: 11/27/2007, 04:31:04 (Battle.net time)
+ [8:23:09 PM] Time Logged: 37 days, 12 hours, 34 minutes and 31 seconds
+ [8:23:11 PM] Hdx:Hdx
+ [8:23:11 PM] Hdx
+ [8:23:11 PM] <From Divine[nK]> Your faggoty friend Eric[nK] has exited Battle.net.
+ [8:23:12 PM] Naivete@Azeroth:Naivete@Azeroth
+ [8:23:12 PM] Naivete@Azeroth
+ [8:23:15 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:23:15 PM] Joe-Tech@Azeroth
+ [8:23:15 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech@Azeroth
+ [8:23:15 PM] LuC1Fr-Tech@Azeroth
+ [8:23:16 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:23:16 PM] Tech-Jack)@Azeroth
+ [8:23:17 PM] Pyro6-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:23:17 PM] Pyro6-Tech@Azeroth
+ [8:24:05 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [8:24:05 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [8:24:05 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [8:24:05 PM] The current StealthBot version is ÿcb2.6R3.
+ [8:24:05 PM]  
+ [8:24:05 PM] >> ÿcbStealthBot News
+ [8:24:05 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [8:24:05 PM] ->> 
+ [8:24:05 PM] ->> ÿcbStealthBot Beta News
+ [8:24:05 PM] ->> Happy testing!
+ [8:24:05 PM]  
+ [8:24:05 PM] The current StealthBot Beta version is 2.6993.
+ [8:24:05 PM]  [8:24:05 PM] Loaded 3 plugins (3 enabled). Type  [8:24:05 PM] /plugins [8:24:05 PM]  to view them. Type  [8:24:05 PM] /phelp [8:24:05 PM]  for help using them.
+ [8:24:06 PM]  [8:24:06 PM] Type  [8:24:06 PM] /updates [8:24:06 PM]  in the bot to view updates and new plugins that are available for download.
+ [8:24:06 PM]  [8:24:06 PM] frmExample_Load
+ [8:24:06 PM]  [8:24:06 PM] Form created: True
+ [8:24:06 PM]  [8:24:06 PM] frmExample_Resize( [8:24:06 PM] 4710 [8:24:06 PM] ,  [8:24:06 PM] 3645 [8:24:06 PM] )
+ [8:24:07 PM] All connections closed.
+ [8:24:07 PM] Connecting your bot...
+ [8:24:07 PM] Authorizing your private-release bot, please wait.
+ [8:24:07 PM] Private usage authorized, connecting to Battle.Net.
+ [8:24:07 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [8:24:07 PM] [BNLS] Connected!
+ [8:24:08 PM] [BNLS] Authorized!
+ [8:24:08 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [8:24:08 PM] [BNET] Connected!
+ [8:24:08 PM] [BNET] Checking version...
+ [8:24:09 PM] [BNET] Client version accepted!
+ [8:24:09 PM] [BNET] Sending login information...
+ [8:24:09 PM] [BNET] Login successful.
+ [8:24:09 PM] [CLAN] You are a Shaman in Clan SBs.
+ [8:24:09 PM] [BNET] Logged on as Eric[nK].
+ [8:24:09 PM] -- Joined channel: Clan SBs --
+ [8:24:09 PM] Welcome to Battle.net!
+ [8:24:09 PM] This server is hosted by AT&T.
+ [8:24:09 PM] There are currently 60318 users playing 1367 games of Warcraft III The Frozen Throne, and 156062 users playing 43304 games on Battle.net.
+ [8:24:09 PM] Last logon: Mon Nov 26  8:31 PM
+ [8:24:09 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [8:24:09 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:24:09 PM] PhiX trixed you.
+ [8:24:10 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:24:10 PM] -- Stats updated: Eric[nK]@Azeroth [94ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [8:24:10 PM] Naivete@Azeroth:Naivete@Azeroth
+ [8:24:10 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [8:24:10 PM] Last Logon: 11/27/2007, 04:28:46 (Battle.net time)
+ [8:24:10 PM] Last Logoff: 11/27/2007, 04:31:35 (Battle.net time)
+ [8:24:10 PM] Time Logged: 37 days, 12 hours, 34 minutes and 42 seconds
+ [8:24:10 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:11 PM] Naivete@Azeroth:Naivete@Azeroth
+ [8:24:11 PM] Hdx:Hdx
+ [8:24:11 PM] Tech-PhiX@Azeroth:Tech-Jack)@Azeroth
+ [8:24:11 PM] Tech-PhiX@Azeroth:Tech-PhiX@Azeroth
+ [8:24:11 PM] PrivT-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:11 PM] PrivT-Tech@Azeroth:PrivT-Tech@Azeroth
+ [8:24:12 PM] PrivT-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:12 PM] PrivT-Tech@Azeroth:PrivT-Tech@Azeroth
+ [8:24:12 PM] Tech-PhiX@Azeroth:Tech-Jack)@Azeroth
+ [8:24:12 PM] Tech-PhiX@Azeroth:Tech-PhiX@Azeroth
+ [8:24:12 PM] Hdx:Hdx
+ [8:24:12 PM] Naivete@Azeroth:Naivete@Azeroth
+ [8:24:12 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:12 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech@Azeroth
+ [8:24:12 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:24:13 PM] Pyro6-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:13 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:24:13 PM] Pyro6-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:13 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:24:14 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech@Azeroth
+ [8:24:14 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:14 PM] Naivete@Azeroth:Naivete@Azeroth
+ [8:24:14 PM] Hdx:Hdx
+ [8:24:14 PM] Naivete@Azeroth:Naivete@Azeroth
+ [8:24:14 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:14 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:24:14 PM] Pyro6-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:14 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:24:14 PM] Pyro6-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:14 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:24:14 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech@Azeroth
+ [8:24:14 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:14 PM] Naivete@Azeroth:Naivete@Azeroth
+ [8:24:15 PM] Hdx:Hdx
+ [8:24:15 PM] Tech-PhiX@Azeroth:Tech-Jack)@Azeroth
+ [8:24:15 PM] Tech-PhiX@Azeroth:Tech-PhiX@Azeroth
+ [8:24:15 PM] PrivT-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:15 PM] PrivT-Tech@Azeroth:PrivT-Tech@Azeroth
+ [8:24:15 PM] PrivT-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:15 PM] PrivT-Tech@Azeroth:PrivT-Tech@Azeroth
+ [8:24:15 PM] Hdx:Hdx
+ [8:24:15 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:15 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech@Azeroth
+ [8:24:15 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:24:15 PM] Pyro6-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:15 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:24:15 PM] Pyro6-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:15 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:15 PM] PrivT-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:15 PM] PrivT-Tech@Azeroth:PrivT-Tech@Azeroth
+ [8:24:15 PM] PrivT-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:15 PM] PrivT-Tech@Azeroth:PrivT-Tech@Azeroth
+ [8:24:15 PM] Hdx:Hdx
+ [8:24:15 PM] Naivete@Azeroth:Naivete@Azeroth
+ [8:24:15 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:15 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech@Azeroth
+ [8:24:15 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:24:15 PM] Pyro6-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:16 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:16 PM] Tech-PhiX@Azeroth:Tech-Jack)@Azeroth
+ [8:24:16 PM] Tech-PhiX@Azeroth:Tech-PhiX@Azeroth
+ [8:24:16 PM] Tech-PhiX@Azeroth:Tech-Jack)@Azeroth
+ [8:24:16 PM] Tech-PhiX@Azeroth:Tech-PhiX@Azeroth
+ [8:24:16 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:24:16 PM] Pyro6-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:16 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:16 PM] Tech-PhiX@Azeroth:Tech-Jack)@Azeroth
+ [8:24:16 PM] Tech-PhiX@Azeroth:Tech-PhiX@Azeroth
+ [8:24:16 PM] Tech-PhiX@Azeroth:Tech-Jack)@Azeroth
+ [8:24:16 PM] Tech-PhiX@Azeroth:Tech-PhiX@Azeroth
+ [8:24:16 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech@Azeroth
+ [8:24:16 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:24:16 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:24:16 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:24:16 PM] Tech-PhiX@Azeroth:Tech-Jack)@Azeroth
+ [8:24:16 PM] Tech-PhiX@Azeroth:Tech-PhiX@Azeroth
+ [8:24:16 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech@Azeroth
+ [8:24:16 PM] Pyro6-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:16 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:24:17 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech@Azeroth
+ [8:24:17 PM] Naivete@Azeroth:Naivete@Azeroth
+ [8:24:17 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:24:17 PM] Pyro6-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:17 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:17 PM] Tech-PhiX@Azeroth:Tech-Jack)@Azeroth
+ [8:24:17 PM] Tech-PhiX@Azeroth:Tech-PhiX@Azeroth
+ [8:24:17 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:17 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:24:17 PM] Pyro6-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:17 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:24:17 PM] Pyro6-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:17 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:24:17 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech@Azeroth
+ [8:24:17 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:17 PM] Naivete@Azeroth:Naivete@Azeroth
+ [8:24:17 PM] Naivete@Azeroth:Naivete@Azeroth
+ [8:24:17 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:17 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:24:18 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:24:18 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:18 PM] PrivT-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:18 PM] PrivT-Tech@Azeroth:PrivT-Tech@Azeroth
+ [8:24:18 PM] Tech-PhiX@Azeroth:Tech-Jack)@Azeroth
+ [8:24:18 PM] Tech-PhiX@Azeroth:Tech-PhiX@Azeroth
+ [8:24:18 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech@Azeroth
+ [8:24:18 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:24:18 PM] Tech-Jack)@Azeroth:Tech-Jack)@Azeroth
+ [8:24:18 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:18 PM] PrivT-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:24:18 PM] PrivT-Tech@Azeroth:PrivT-Tech@Azeroth
+ [8:24:18 PM] Joe-Tech@Azeroth:Joe-Tech@Azeroth
+ [8:24:18 PM] Pyro6-Tech@Azeroth:Pyro6-Tech@Azeroth
+ [8:25:50 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [8:25:50 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [8:25:50 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [8:25:50 PM] The current StealthBot version is ÿcb2.6R3.
+ [8:25:50 PM]  
+ [8:25:50 PM] >> ÿcbStealthBot News
+ [8:25:50 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [8:25:50 PM] ->> 
+ [8:25:50 PM] ->> ÿcbStealthBot Beta News
+ [8:25:50 PM] ->> Happy testing!
+ [8:25:50 PM]  
+ [8:25:50 PM] The current StealthBot Beta version is 2.6993.
+ [8:25:50 PM]  [8:25:50 PM] Loaded 3 plugins (3 enabled). Type  [8:25:50 PM] /plugins [8:25:50 PM]  to view them. Type  [8:25:50 PM] /phelp [8:25:50 PM]  for help using them.
+ [8:25:50 PM]  [8:25:50 PM] Type  [8:25:50 PM] /updates [8:25:50 PM]  in the bot to view updates and new plugins that are available for download.
+ [8:25:50 PM]  [8:25:50 PM] frmExample_Load
+ [8:25:50 PM]  [8:25:50 PM] Form created: True
+ [8:25:50 PM]  [8:25:50 PM] frmExample_Resize( [8:25:50 PM] 4710 [8:25:50 PM] ,  [8:25:50 PM] 3645 [8:25:50 PM] )
+ [8:25:52 PM] Connecting your bot...
+ [8:25:52 PM] Authorizing your private-release bot, please wait.
+ [8:25:52 PM] Private usage authorized, connecting to Battle.Net.
+ [8:25:52 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [8:25:52 PM] [BNLS] Connected!
+ [8:25:54 PM] [BNLS] Authorized!
+ [8:25:54 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [8:25:54 PM] [BNET] Connected!
+ [8:25:55 PM] [BNET] Checking version...
+ [8:25:58 PM]  [8:25:58 PM] frmExample_UnLoad( [8:25:58 PM] 0 [8:25:58 PM] )
+ [8:25:59 PM] [BNET] Client version accepted!
+ [8:25:59 PM] [BNET] Sending login information...
+ [8:26:02 PM] [BNET] Login successful.
+ [8:26:02 PM] [CLAN] You are a Shaman in Clan SBs.
+ [8:26:02 PM] [BNET] Logged on as Eric[nK].
+ [8:26:02 PM] -- Joined channel: Clan SBs --
+ [8:26:02 PM] Welcome to Battle.net!
+ [8:26:02 PM] This server is hosted by AT&T.
+ [8:26:02 PM] There are currently 60401 users playing 1338 games of Warcraft III The Frozen Throne, and 156265 users playing 43061 games on Battle.net.
+ [8:26:02 PM] Last logon: Mon Nov 26  8:33 PM
+ [8:26:02 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [8:26:02 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:26:02 PM] PhiX trixed you.
+ [8:26:02 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:26:02 PM] -- Stats updated: Eric[nK]@Azeroth [172ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [8:26:03 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [8:26:03 PM] Last Logon: 11/27/2007, 04:28:46 (Battle.net time)
+ [8:26:03 PM] Last Logoff: 11/27/2007, 04:28:46 (Battle.net time)
+ [8:26:03 PM] Time Logged: 37 days, 12 hours, 35 minutes and 29 seconds
+ [8:26:07 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:26:07 PM] -- Joined channel: Clan Recruitment --
+ [8:26:09 PM] Looking for a clan? Looking for members? Clan Recruitment allows you to find both.
+ [8:26:09 PM] Co-D_Prodi-G@Azeroth:CDA-Ducky@Azeroth
+ [8:26:09 PM] Co-D_Prodi-G@Azeroth:ClancMk@Azeroth
+ [8:26:09 PM] Co-D_Prodi-G@Azeroth:cheesewizz
+ [8:26:09 PM] Co-D_Prodi-G@Azeroth:cal0man@Azeroth
+ [8:26:09 PM] Co-D_Prodi-G@Azeroth:Co-D_Prodi-G@Azeroth
+ [8:26:09 PM] Co-D_Prodi-G@Azeroth:CDA-Ducky@Azeroth
+ [8:26:09 PM] Co-D_Prodi-G@Azeroth:ClancMk@Azeroth
+ [8:26:09 PM] Co-D_Prodi-G@Azeroth:cheesewizz
+ [8:26:09 PM] Co-D_Prodi-G@Azeroth:cal0man@Azeroth
+ [8:26:09 PM] Co-D_Prodi-G@Azeroth:Co-D_Prodi-G@Azeroth
+ [8:26:12 PM] Co-D_Prodi-G@Azeroth:CDA-Ducky@Azeroth
+ [8:26:12 PM] Co-D_Prodi-G@Azeroth:ClancMk@Azeroth
+ [8:26:12 PM] Co-D_Prodi-G@Azeroth:cheesewizz
+ [8:26:12 PM] Co-D_Prodi-G@Azeroth:cal0man@Azeroth
+ [8:26:12 PM] Co-D_Prodi-G@Azeroth:Co-D_Prodi-G@Azeroth
+ [8:26:12 PM] Co-D_Prodi-G@Azeroth:CDA-Ducky@Azeroth
+ [8:26:12 PM] Co-D_Prodi-G@Azeroth:ClancMk@Azeroth
+ [8:26:12 PM] Co-D_Prodi-G@Azeroth:cheesewizz
+ [8:26:12 PM] Co-D_Prodi-G@Azeroth:cal0man@Azeroth
+ [8:26:12 PM] Co-D_Prodi-G@Azeroth:Co-D_Prodi-G@Azeroth
+ [8:26:12 PM] <Co-D_Prodi-G@Azeroth> l8r
+ [8:26:12 PM] OpXBuuX@Azeroth:OpXBuuX@Azeroth
+ [8:26:12 PM] OpXBuuX@Azeroth:OpXBuuX@Azeroth
+ [8:26:13 PM] <OpXBuuX@Azeroth> [Buu] has a unique 100+ Rank system with many Sub-Leaders! 
+ [8:26:13 PM] TysanRecruiter@Azeroth:TysanRecruiter@Azeroth
+ [8:26:13 PM] TysanRecruiter@Azeroth:TysanRecruiter@Azeroth
+ [8:26:13 PM] <TysanRecruiter@Azeroth> The Tysan Clan | Since '97 | Op Tysan | Website | Ventrilo | BW, LoD and TFT | Mature and friendly people only
+ [8:26:14 PM] OpXBuuX@Azeroth:OpXBuuX@Azeroth
+ [8:26:14 PM] OpXBuuX@Azeroth:OpXBuuX@Azeroth
+ [8:26:14 PM] <OpXBuuX@Azeroth> Buu is over 3 years old with hundreds of gamers of all skill levels! 
+ [8:26:15 PM] OpXBuuX@Azeroth:OpXBuuX@Azeroth
+ [8:26:15 PM] OpXBuuX@Azeroth:OpXBuuX@Azeroth
+ [8:26:15 PM] <OpXBuuX@Azeroth> Op XBuuX - Where SC Dreams are made!
+ [8:26:15 PM] uP-Recruiter:uP-Recruiter
+ [8:26:15 PM] uP-Recruiter:uP-Recruiter
+ [8:26:15 PM] <uP-Recruiter> | Clan uP | UltraPoons | Join Today | Visit Our Channel | Looking For Active Members| We Also Have A Ventrilo Server For Communication |
+ [8:26:17 PM] OpXBuuX@Azeroth:OpXBuuX
+ [8:26:17 PM] OpXBuuX@Azeroth
+ [8:26:17 PM] killerb007:Kanti[Bot]@USEast
+ [8:26:17 PM] killerb007:killerb007@USEast
+ [8:26:17 PM] killerb007
+ [8:26:17 PM] Recruiter[AW]:Recruiter[AW]@USEast
+ [8:26:17 PM] Recruiter[AW]
+ [8:26:18 PM] uP-Recruiter:uP-Recruiter@USEast
+ [8:26:18 PM] uP-Recruiter
+ [8:26:18 PM] Vector[bot]@Azeroth:Vector[bot]
+ [8:26:18 PM] Vector[bot]@Azeroth
+ [8:26:20 PM] Vector[bot]:Vector[bot]
+ [8:26:20 PM] Vector[bot]:Vector[bot]
+ [8:26:20 PM] <Vector[bot]> ---JOIN CLAN NNG----YOUR PRIMIER SOURCE FOR GAMING----JOIN NOW----
+ [8:26:23 PM] Kanti[Bot]@USEast:Kanti[Bot]@USEast
+ [8:26:23 PM] Kanti[Bot]@USEast:Kanti[Bot]@USEast
+ [8:26:23 PM] <Kanti[Bot]@USEast Want to join a exciting clan? Come to op ClanFnF! We are recruiting all types, become an elite gamer with clan FnF!>
+ [8:26:24 PM] Army:Army@USEast
+ [8:26:24 PM] Army
+ [8:26:24 PM] sol0.:SRH@USEast
+ [8:26:24 PM] sol0.:Sprint@USEast
+ [8:26:24 PM] sol0.:sol0.@USEast
+ [8:26:24 PM] sol0.
+ [8:26:25 PM] Co-D_Prodi-G:CDA-Ducky
+ [8:26:25 PM] Co-D_Prodi-G:ClancMk
+ [8:26:25 PM] Co-D_Prodi-G:cheesewizz@USEast
+ [8:26:25 PM] Co-D_Prodi-G:cal0man
+ [8:26:25 PM] Co-D_Prodi-G:Co-D_Prodi-G
+ [8:26:25 PM] -- Co-D_Prodi-G has left the channel.
+ [8:26:25 PM] DinDerecruteuse:DinDerecruteuse@USEast
+ [8:26:25 PM] DinDerecruteuse
+ [8:26:28 PM] e3]Clan.e3@USEast:e3]Clan.e3@USEast
+ [8:26:28 PM] e3]Clan.e3@USEast:e3]Clan.e3@USEast
+ [8:26:29 PM] <e3]Clan.e3@USEast l""""""""""""""Clan e3""""""""""""""l    ~~FMP/Money~ ~24/7 Ops~ ~Gamers Welcome To Chill and Game~ ~Decent Gamers Only~ ~Come Get Tested~ ~Good Mannered~ ~Come and Chill or Game with the Elit3z~~>
+ [8:26:31 PM] cal0man@Azeroth:CDA-Ducky
+ [8:26:31 PM] cal0man@Azeroth:ClancMk
+ [8:26:31 PM] cal0man@Azeroth:cheesewizz@USEast
+ [8:26:31 PM] cal0man@Azeroth:cal0man
+ [8:26:31 PM] cal0man@Azeroth
+ [8:26:31 PM] Kanti[Bot]:Kanti[Bot]@USEast
+ [8:26:31 PM] Kanti[Bot]:killerb007@USEast
+ [8:26:31 PM] Kanti[Bot]
+ [8:28:31 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [8:28:31 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [8:28:31 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [8:28:32 PM] The current StealthBot version is ÿcb2.6R3.
+ [8:28:32 PM]  
+ [8:28:32 PM] >> ÿcbStealthBot News
+ [8:28:32 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [8:28:32 PM] ->> 
+ [8:28:32 PM] ->> ÿcbStealthBot Beta News
+ [8:28:32 PM] ->> Happy testing!
+ [8:28:32 PM]  
+ [8:28:32 PM] The current StealthBot Beta version is 2.6993.
+ [8:28:32 PM]  [8:28:32 PM] Loaded 3 plugins (3 enabled). Type  [8:28:32 PM] /plugins [8:28:32 PM]  to view them. Type  [8:28:32 PM] /phelp [8:28:32 PM]  for help using them.
+ [8:28:32 PM]  [8:28:32 PM] Type  [8:28:32 PM] /updates [8:28:32 PM]  in the bot to view updates and new plugins that are available for download.
+ [8:28:32 PM]  [8:28:32 PM] frmExample_Load
+ [8:28:32 PM]  [8:28:32 PM] Form created: True
+ [8:28:32 PM]  [8:28:32 PM] frmExample_Resize( [8:28:32 PM] 4710 [8:28:32 PM] ,  [8:28:32 PM] 3645 [8:28:32 PM] )
+ [8:28:34 PM]  [8:28:34 PM] frmExample_UnLoad( [8:28:34 PM] 0 [8:28:34 PM] )
+ [8:28:34 PM] All connections closed.
+ [8:28:35 PM] Connecting your bot...
+ [8:28:35 PM] Authorizing your private-release bot, please wait.
+ [8:28:35 PM] Private usage authorized, connecting to Battle.Net.
+ [8:28:35 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [8:28:35 PM] [BNLS] Connected!
+ [8:28:37 PM] [BNLS] Authorized!
+ [8:28:37 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [8:28:37 PM] [BNET] Connected!
+ [8:28:38 PM] [BNET] Checking version...
+ [8:28:40 PM] [BNET] Client version accepted!
+ [8:28:40 PM] [BNET] Sending login information...
+ [8:28:42 PM] [BNET] Login successful.
+ [8:28:42 PM] [CLAN] You are a Shaman in Clan SBs.
+ [8:28:42 PM] [BNET] Logged on as Eric[nK].
+ [8:28:42 PM] -- Joined channel: Clan SBs --
+ [8:28:42 PM] Welcome to Battle.net!
+ [8:28:42 PM] This server is hosted by AT&T.
+ [8:28:42 PM] There are currently 60353 users playing 1350 games of Warcraft III The Frozen Throne, and 156364 users playing 43181 games on Battle.net.
+ [8:28:42 PM] Last logon: Mon Nov 26  8:34 PM
+ [8:28:42 PM] -- Eric[nK] has acquired ops.
+ [8:28:42 PM] Eric[nK]:Eric[nK]
+ [8:28:42 PM] PhiX trixed you.
+ [8:28:42 PM] Eric[nK]:Eric[nK]
+ [8:28:42 PM] -- Stats updated: Eric[nK] [125ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [8:28:42 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [8:28:42 PM] Last Logon: 11/27/2007, 04:36:58 (Battle.net time)
+ [8:28:42 PM] Last Logoff: 11/27/2007, 04:28:46 (Battle.net time)
+ [8:28:42 PM] Time Logged: 37 days, 12 hours, 36 minutes and 1 second
+ [8:28:43 PM] Hdx@USEast:Hdx@USEast
+ [8:28:43 PM] Tech-PhiX:Tech-Jack)
+ [8:28:43 PM] Tech-PhiX:Tech-PhiX
+ [8:28:43 PM] Hdx@USEast:Hdx@USEast
+ [8:28:44 PM] Naivete:Naivete
+ [8:28:44 PM] Joe-Tech:Joe-Tech
+ [8:28:44 PM] Naivete:Naivete
+ [8:28:44 PM] Hdx@USEast:Hdx@USEast
+ [8:28:44 PM] Tech-PhiX:Tech-Jack)
+ [8:28:44 PM] Tech-PhiX:Tech-PhiX
+ [8:28:44 PM] Hdx@USEast:Hdx@USEast
+ [8:28:44 PM] Naivete:Naivete
+ [8:28:44 PM] Hdx@USEast:Hdx@USEast
+ [8:28:44 PM] Tech-PhiX:Tech-Jack)
+ [8:28:44 PM] Tech-PhiX:Tech-PhiX
+ [8:28:44 PM] PrivT-Tech:Pyro6-Tech
+ [8:28:44 PM] PrivT-Tech:PrivT-Tech
+ [8:28:45 PM] PrivT-Tech:Pyro6-Tech
+ [8:28:45 PM] PrivT-Tech:PrivT-Tech
+ [8:28:45 PM] Tech-PhiX:Tech-Jack)
+ [8:28:45 PM] Tech-PhiX:Tech-PhiX
+ [8:28:45 PM] Hdx@USEast:Hdx@USEast
+ [8:28:45 PM] Naivete:Naivete
+ [8:28:45 PM] Hdx@USEast:Hdx@USEast
+ [8:28:45 PM] Tech-PhiX:Tech-Jack)
+ [8:28:45 PM] Tech-PhiX:Tech-PhiX
+ [8:28:45 PM] PrivT-Tech:Pyro6-Tech
+ [8:28:45 PM] PrivT-Tech:PrivT-Tech
+ [8:28:49 PM] PrivT-Tech:Pyro6-Tech@Azeroth
+ [8:28:49 PM] PrivT-Tech:PrivT-Tech@Azeroth
+ [8:28:49 PM] PrivT-Tech
+ [8:28:49 PM] Tech-PhiX:Tech-Jack)@Azeroth
+ [8:28:49 PM] Tech-PhiX:Tech-PhiX@Azeroth
+ [8:28:49 PM] Tech-PhiX
+ [8:28:50 PM] Hdx@USEast:Hdx
+ [8:28:50 PM] Hdx@USEast
+ [8:28:51 PM] Naivete:Naivete@Azeroth
+ [8:28:51 PM] Naivete
+ [8:28:52 PM] Joe-Tech:Joe-Tech@Azeroth
+ [8:28:52 PM] Joe-Tech
+ [8:28:54 PM] LuC1Fr-Tech:LuC1Fr-Tech@Azeroth
+ [8:28:54 PM] LuC1Fr-Tech
+ [8:28:54 PM] Tech-Jack):Tech-Jack)@Azeroth
+ [8:28:54 PM] Tech-Jack):Tech-PhiX@Azeroth
+ [8:28:54 PM] Tech-Jack)
+ [8:28:56 PM] LuC1Fr-Tech:LuC1Fr-Tech@Azeroth
+ [8:28:56 PM] LuC1Fr-Tech
+ [8:28:56 PM] Joe-Tech:Joe-Tech@Azeroth
+ [8:28:56 PM] Joe-Tech
+ [8:28:56 PM] LuC1Fr-Tech:LuC1Fr-Tech@Azeroth
+ [8:28:57 PM] LuC1Fr-Tech
+ [8:29:00 PM] PrivT-Tech:Pyro6-Tech
+ [8:29:00 PM] PrivT-Tech:PrivT-Tech
+ [8:29:00 PM] Tech-PhiX:Tech-Jack)
+ [8:29:00 PM] Tech-PhiX:Tech-PhiX
+ [8:29:00 PM] Hdx@USEast:Hdx@USEast
+ [8:29:01 PM] Naivete:Naivete
+ [8:29:01 PM] Joe-Tech:Joe-Tech
+ [8:29:01 PM] Naivete:Naivete
+ [8:29:01 PM] Hdx@USEast:Hdx@USEast
+ [8:29:01 PM] Tech-PhiX:Tech-Jack)
+ [8:29:01 PM] Tech-PhiX:Tech-PhiX
+ [8:29:01 PM] PrivT-Tech:Pyro6-Tech
+ [8:29:01 PM] PrivT-Tech:PrivT-Tech
+ [8:29:01 PM] Tech-PhiX:Tech-Jack)
+ [8:29:01 PM] Tech-PhiX:Tech-PhiX
+ [8:29:01 PM] Hdx@USEast:Hdx@USEast
+ [8:29:01 PM] Naivete:Naivete
+ [8:29:02 PM] Joe-Tech:Joe-Tech
+ [8:29:02 PM] LuC1Fr-Tech:LuC1Fr-Tech
+ [8:29:02 PM] Joe-Tech:Joe-Tech
+ [8:29:02 PM] Naivete:Naivete
+ [8:29:02 PM] Hdx@USEast:Hdx@USEast
+ [8:29:02 PM] Tech-PhiX:Tech-Jack)
+ [8:29:02 PM] Tech-PhiX:Tech-PhiX
+ [8:29:02 PM] Hdx@USEast:Hdx@USEast
+ [8:29:02 PM] Naivete:Naivete
+ [8:29:02 PM] Joe-Tech:Joe-Tech
+ [8:29:02 PM] LuC1Fr-Tech:LuC1Fr-Tech
+ [8:29:02 PM] Tech-Jack):Tech-Jack)
+ [8:29:02 PM] Pyro6-Tech:Pyro6-Tech
+ [8:29:02 PM] Tech-Jack):Tech-Jack)
+ [8:29:02 PM] LuC1Fr-Tech:LuC1Fr-Tech
+ [8:29:02 PM] Joe-Tech:Joe-Tech
+ [8:29:02 PM] Naivete:Naivete
+ [8:29:02 PM] Hdx@USEast:Hdx@USEast
+ [8:29:02 PM] Naivete:Naivete
+ [8:29:02 PM] Joe-Tech:Joe-Tech
+ [8:29:02 PM] LuC1Fr-Tech:LuC1Fr-Tech
+ [8:29:02 PM] Tech-Jack):Tech-Jack)
+ [8:29:03 PM] LuC1Fr-Tech:LuC1Fr-Tech
+ [8:29:03 PM] Joe-Tech:Joe-Tech
+ [8:29:03 PM] Naivete:Naivete
+ [8:29:03 PM] Hdx@USEast:Hdx@USEast
+ [8:29:03 PM] Tech-PhiX:Tech-Jack)
+ [8:29:03 PM] Tech-PhiX:Tech-PhiX
+ [8:29:03 PM] Hdx@USEast:Hdx@USEast
+ [8:29:03 PM] Naivete:Naivete
+ [8:29:03 PM] Joe-Tech:Joe-Tech
+ [8:31:43 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [8:31:43 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [8:31:43 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [8:31:43 PM] The current StealthBot version is ÿcb2.6R3.
+ [8:31:43 PM]  
+ [8:31:43 PM] >> ÿcbStealthBot News
+ [8:31:43 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [8:31:43 PM] ->> 
+ [8:31:43 PM] ->> ÿcbStealthBot Beta News
+ [8:31:43 PM] ->> Happy testing!
+ [8:31:43 PM]  
+ [8:31:43 PM] The current StealthBot Beta version is 2.6993.
+ [8:31:43 PM]  [8:31:43 PM] Loaded 3 plugins (3 enabled). Type  [8:31:43 PM] /plugins [8:31:43 PM]  to view them. Type  [8:31:43 PM] /phelp [8:31:43 PM]  for help using them.
+ [8:31:43 PM]  [8:31:43 PM] Type  [8:31:43 PM] /updates [8:31:43 PM]  in the bot to view updates and new plugins that are available for download.
+ [8:31:44 PM]  [8:31:44 PM] frmExample_Load
+ [8:31:44 PM]  [8:31:44 PM] Form created: True
+ [8:31:44 PM]  [8:31:44 PM] frmExample_Resize( [8:31:44 PM] 4710 [8:31:44 PM] ,  [8:31:44 PM] 3645 [8:31:44 PM] )
+ [8:31:49 PM] Connecting your bot...
+ [8:31:49 PM] Authorizing your private-release bot, please wait.
+ [8:31:49 PM] Private usage authorized, connecting to Battle.Net.
+ [8:31:49 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [8:31:49 PM] [BNLS] Connected!
+ [8:31:52 PM] All connections closed.
+ [8:31:52 PM] Connecting your bot...
+ [8:31:52 PM] Authorizing your private-release bot, please wait.
+ [8:31:52 PM] Private usage authorized, connecting to Battle.Net.
+ [8:31:52 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [8:31:52 PM] [BNLS] Connected!
+ [8:31:54 PM] All connections closed.
+ [8:31:54 PM] Connecting your bot...
+ [8:31:54 PM] Authorizing your private-release bot, please wait.
+ [8:31:54 PM] Private usage authorized, connecting to Battle.Net.
+ [8:31:54 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [8:31:54 PM] [BNLS] Connected!
+ [8:31:56 PM] [BNLS] Authorized!
+ [8:31:56 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [8:31:56 PM] [BNET] Connected!
+ [8:31:58 PM] [BNET] Checking version...
+ [8:32:03 PM] [BNET] Client version accepted!
+ [8:32:03 PM] [BNET] Sending login information...
+ [8:32:06 PM] [BNET] Login successful.
+ [8:32:06 PM] [CLAN] You are a Shaman in Clan SBs.
+ [8:32:06 PM] [BNET] Logged on as Eric[nK].
+ [8:32:06 PM] -- Joined channel: Clan SBs --
+ [8:32:06 PM] Welcome to Battle.net!
+ [8:32:06 PM] This server is hosted by AT&T.
+ [8:32:06 PM] There are currently 60408 users playing 1331 games of Warcraft III The Frozen Throne, and 156430 users playing 43031 games on Battle.net.
+ [8:32:06 PM] Last logon: Mon Nov 26  8:36 PM
+ [8:32:06 PM] -- Eric[nK] has acquired ops.
+ [8:32:06 PM] Eric[nK]:Eric[nK]
+ [8:32:06 PM] PhiX trixed you.
+ [8:32:06 PM] Eric[nK]:Eric[nK]
+ [8:32:06 PM] -- Stats updated: Eric[nK] [93ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [8:32:07 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [8:32:07 PM] Last Logon: 11/27/2007, 04:35:55 (Battle.net time)
+ [8:32:07 PM] Last Logoff: 11/27/2007, 04:37:22 (Battle.net time)
+ [8:32:07 PM] Time Logged: 37 days, 12 hours, 36 minutes and 24 seconds
+ [8:32:07 PM] Tech-PhiX:Tech-Jack)
+ [8:32:07 PM] Tech-PhiX:Tech-PhiX
+ [8:32:07 PM] Hdx@USEast:Hdx@USEast
+ [8:32:08 PM] Naivete:Naivete
+ [8:32:08 PM] Hdx@USEast:Hdx@USEast
+ [8:32:08 PM] Tech-PhiX:Tech-Jack)
+ [8:32:08 PM] Tech-PhiX:Tech-PhiX
+ [8:32:08 PM] Hdx@USEast:Hdx@USEast
+ [8:32:08 PM] Naivete:Naivete
+ [8:32:08 PM] Joe-Tech:Joe-Tech
+ [8:32:08 PM] LuC1Fr-Tech:LuC1Fr-Tech
+ [8:32:08 PM] Tech-Jack):Tech-Jack)
+ [8:32:12 PM] Tech-PhiX:Tech-Jack)@Azeroth
+ [8:32:12 PM] Tech-PhiX:Tech-PhiX@Azeroth
+ [8:32:12 PM] Tech-PhiX
+ [8:32:12 PM] Hdx@USEast:Hdx
+ [8:32:13 PM] Hdx@USEast
+ [8:32:13 PM] Naivete:Naivete@Azeroth
+ [8:32:13 PM] Naivete
+ [8:32:13 PM] Hdx@USEast:Hdx
+ [8:32:13 PM] Hdx@USEast
+ [8:32:13 PM] Tech-PhiX:Tech-Jack)@Azeroth
+ [8:32:13 PM] Tech-PhiX:Tech-PhiX@Azeroth
+ [8:32:13 PM] Tech-PhiX
+ [8:32:14 PM] Hdx@USEast:Hdx
+ [8:32:14 PM] Hdx@USEast
+ [8:32:14 PM] Naivete:Naivete@Azeroth
+ [8:32:14 PM] Naivete
+ [8:32:14 PM] Joe-Tech:Joe-Tech@Azeroth
+ [8:32:14 PM] Joe-Tech
+ [8:32:14 PM] LuC1Fr-Tech:LuC1Fr-Tech@Azeroth
+ [8:32:14 PM] LuC1Fr-Tech
+ [8:32:14 PM] Pyro6-Tech:Pyro6-Tech@Azeroth
+ [8:32:14 PM] Pyro6-Tech:PrivT-Tech@Azeroth
+ [8:32:14 PM] Pyro6-Tech
+ [8:32:15 PM] All connections closed.
+ [8:32:15 PM] Connecting your bot...
+ [8:32:15 PM] Authorizing your private-release bot, please wait.
+ [8:32:15 PM] Private usage authorized, connecting to Battle.Net.
+ [8:32:15 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [8:32:15 PM] [BNLS] Connected!
+ [8:32:17 PM] [BNLS] Authorized!
+ [8:32:17 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [8:32:17 PM] [BNET] Connected!
+ [8:32:18 PM] [BNET] Checking version...
+ [8:32:22 PM] [BNET] Client version accepted!
+ [8:32:22 PM] [BNET] Sending login information...
+ [8:32:24 PM] [BNET] Login successful.
+ [8:32:24 PM] [CLAN] You are a Shaman in Clan SBs.
+ [8:32:24 PM] [BNET] Logged on as Eric[nK].
+ [8:32:24 PM] -- Joined channel: Clan SBs --
+ [8:32:24 PM] Welcome to Battle.net!
+ [8:32:24 PM] This server is hosted by AT&T.
+ [8:32:24 PM] There are currently 60446 users playing 1326 games of Warcraft III The Frozen Throne, and 156420 users playing 43016 games on Battle.net.
+ [8:32:24 PM] Last logon: Mon Nov 26  8:40 PM
+ [8:32:24 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [8:32:24 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:32:24 PM] PhiX trixed you.
+ [8:32:25 PM] Eric[nK]@Azeroth:Eric[nK]@Azeroth
+ [8:32:25 PM] -- Stats updated: Eric[nK]@Azeroth [110ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [8:32:25 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [8:32:25 PM] Last Logon: 11/27/2007, 04:35:55 (Battle.net time)
+ [8:32:25 PM] Last Logoff: 11/27/2007, 04:35:55 (Battle.net time)
+ [8:32:25 PM] Time Logged: 37 days, 12 hours, 36 minutes and 33 seconds
+ [8:32:29 PM] PrivT-Tech@Azeroth:Pyro6-Tech
+ [8:32:29 PM] PrivT-Tech@Azeroth:PrivT-Tech
+ [8:32:29 PM] PrivT-Tech@Azeroth
+ [8:32:29 PM] Tech-PhiX@Azeroth:Tech-Jack)
+ [8:32:29 PM] Tech-PhiX@Azeroth:Tech-PhiX
+ [8:32:29 PM] Tech-PhiX@Azeroth
+ [8:32:29 PM] Naivete@Azeroth:Naivete
+ [8:32:29 PM] Naivete@Azeroth
+ [8:32:29 PM] Tech-PhiX@Azeroth:Tech-Jack)
+ [8:32:29 PM] Tech-PhiX@Azeroth:Tech-PhiX
+ [8:32:29 PM] Tech-PhiX@Azeroth
+ [8:32:30 PM] PrivT-Tech@Azeroth:Pyro6-Tech
+ [8:32:30 PM] PrivT-Tech@Azeroth:PrivT-Tech
+ [8:32:30 PM] PrivT-Tech@Azeroth
+ [8:32:30 PM] PrivT-Tech@Azeroth:Pyro6-Tech
+ [8:32:30 PM] PrivT-Tech@Azeroth:PrivT-Tech
+ [8:32:30 PM] PrivT-Tech@Azeroth
+ [8:32:30 PM] Naivete@Azeroth:Naivete
+ [8:32:30 PM] Naivete@Azeroth
+ [8:32:30 PM] Tech-Jack)@Azeroth:Tech-Jack)
+ [8:32:30 PM] Tech-Jack)@Azeroth:Tech-PhiX
+ [8:32:30 PM] Tech-Jack)@Azeroth
+ [8:32:30 PM] Naivete@Azeroth:Naivete
+ [8:32:30 PM] Naivete@Azeroth
+ [8:32:30 PM] PrivT-Tech@Azeroth:Pyro6-Tech
+ [8:32:30 PM] PrivT-Tech@Azeroth:PrivT-Tech
+ [8:32:30 PM] PrivT-Tech@Azeroth
+ [8:32:30 PM] Naivete@Azeroth:Naivete
+ [8:32:30 PM] Naivete@Azeroth
+ [8:32:30 PM] Joe-Tech@Azeroth:Joe-Tech
+ [8:32:30 PM] Joe-Tech@Azeroth
+ [8:32:30 PM] Naivete@Azeroth:Naivete
+ [8:32:31 PM] Naivete@Azeroth
+ [8:32:31 PM] Tech-PhiX@Azeroth:Tech-Jack)
+ [8:32:31 PM] Tech-PhiX@Azeroth:Tech-PhiX
+ [8:32:31 PM] Tech-PhiX@Azeroth
+ [8:32:31 PM] <From NNG-Vector> what are you testing?
+ [8:32:31 PM] PrivT-Tech@Azeroth:Pyro6-Tech
+ [8:32:31 PM] PrivT-Tech@Azeroth:PrivT-Tech
+ [8:32:31 PM] PrivT-Tech@Azeroth
+ [8:32:31 PM] Pyro6-Tech@Azeroth:Pyro6-Tech
+ [8:32:31 PM] Pyro6-Tech@Azeroth:PrivT-Tech
+ [8:32:31 PM] Pyro6-Tech@Azeroth
+ [8:32:31 PM] Tech-Jack)@Azeroth:Tech-Jack)
+ [8:32:31 PM] Tech-Jack)@Azeroth:Tech-PhiX
+ [8:32:31 PM] Tech-Jack)@Azeroth
+ [8:32:31 PM] Tech-PhiX@Azeroth:Tech-Jack)
+ [8:32:31 PM] Tech-PhiX@Azeroth:Tech-PhiX
+ [8:32:31 PM] Tech-PhiX@Azeroth
+ [8:32:31 PM] PrivT-Tech@Azeroth:Pyro6-Tech
+ [8:32:31 PM] PrivT-Tech@Azeroth:PrivT-Tech
+ [8:32:31 PM] PrivT-Tech@Azeroth
+ [8:32:31 PM] Naivete@Azeroth:Naivete
+ [8:32:31 PM] Naivete@Azeroth
+ [8:32:31 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech
+ [8:32:31 PM] LuC1Fr-Tech@Azeroth
+ [8:32:31 PM] Joe-Tech@Azeroth:Joe-Tech
+ [8:32:31 PM] Joe-Tech@Azeroth
+ [8:32:31 PM] Tech-PhiX@Azeroth:Tech-Jack)
+ [8:32:31 PM] Tech-PhiX@Azeroth:Tech-PhiX
+ [8:32:31 PM] Tech-PhiX@Azeroth
+ [8:32:31 PM] PrivT-Tech@Azeroth:Pyro6-Tech
+ [8:32:31 PM] PrivT-Tech@Azeroth:PrivT-Tech
+ [8:32:31 PM] PrivT-Tech@Azeroth
+ [8:32:31 PM] Tech-PhiX@Azeroth:Tech-Jack)
+ [8:32:31 PM] Tech-PhiX@Azeroth:Tech-PhiX
+ [8:32:31 PM] Tech-PhiX@Azeroth
+ [8:32:32 PM] Naivete@Azeroth:Naivete
+ [8:32:32 PM] Naivete@Azeroth
+ [8:32:32 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech
+ [8:32:32 PM] LuC1Fr-Tech@Azeroth
+ [8:32:37 PM] PrivT-Tech@Azeroth:Pyro6-Tech
+ [8:32:37 PM] PrivT-Tech@Azeroth:PrivT-Tech
+ [8:32:37 PM] PrivT-Tech@Azeroth
+ [8:32:37 PM] Hdx:Hdx@USEast
+ [8:32:37 PM] Hdx
+ [8:32:37 PM] Naivete@Azeroth:Naivete
+ [8:32:37 PM] Naivete@Azeroth
+ [8:32:37 PM] Joe-Tech@Azeroth:Joe-Tech
+ [8:32:37 PM] Joe-Tech@Azeroth
+ [8:32:38 PM] Naivete@Azeroth:Naivete
+ [8:32:38 PM] Naivete@Azeroth
+ [8:32:38 PM] Hdx:Hdx@USEast
+ [8:32:38 PM] Hdx
+ [8:32:38 PM] PrivT-Tech@Azeroth:Pyro6-Tech
+ [8:32:38 PM] PrivT-Tech@Azeroth:PrivT-Tech
+ [8:32:38 PM] PrivT-Tech@Azeroth
+ [8:32:38 PM] PrivT-Tech@Azeroth:Pyro6-Tech
+ [8:32:38 PM] PrivT-Tech@Azeroth:PrivT-Tech
+ [8:32:38 PM] PrivT-Tech@Azeroth
+ [8:32:38 PM] Hdx:Hdx@USEast
+ [8:32:38 PM] Hdx
+ [8:32:38 PM] Joe-Tech@Azeroth:Joe-Tech
+ [8:32:38 PM] Joe-Tech@Azeroth
+ [8:32:38 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech
+ [8:32:38 PM] LuC1Fr-Tech@Azeroth
+ [8:32:38 PM] Joe-Tech@Azeroth:Joe-Tech
+ [8:32:38 PM] Joe-Tech@Azeroth
+ [8:32:38 PM] Naivete@Azeroth:Naivete
+ [8:32:38 PM] Naivete@Azeroth
+ [8:32:38 PM] PrivT-Tech@Azeroth:Pyro6-Tech
+ [8:32:38 PM] PrivT-Tech@Azeroth:PrivT-Tech
+ [8:32:38 PM] PrivT-Tech@Azeroth
+ [8:32:38 PM] Naivete@Azeroth:Naivete
+ [8:32:38 PM] Naivete@Azeroth
+ [8:32:38 PM] Tech-Jack)@Azeroth:Tech-Jack)
+ [8:32:38 PM] Tech-Jack)@Azeroth:Tech-PhiX
+ [8:32:38 PM] Tech-Jack)@Azeroth
+ [8:32:38 PM] LuC1Fr-Tech@Azeroth:LuC1Fr-Tech
+ [8:32:38 PM] LuC1Fr-Tech@Azeroth
+ [8:32:38 PM] Naivete@Azeroth:Naivete
+ [8:32:38 PM] Naivete@Azeroth
+ [8:32:39 PM] Tech-PhiX@Azeroth:Tech-Jack)
+ [8:32:39 PM] Tech-PhiX@Azeroth:Tech-PhiX
+ [8:32:39 PM] Tech-PhiX@Azeroth
+ [8:32:40 PM] All connections closed.
+ [8:32:40 PM] Connecting your bot...
+ [8:32:40 PM] Authorizing your private-release bot, please wait.
+ [8:32:40 PM] Private usage authorized, connecting to Battle.Net.
+ [8:32:40 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [8:32:40 PM] [BNLS] Connected!
+ [8:32:42 PM] [BNLS] Authorized!
+ [8:32:42 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [8:32:42 PM] [BNET] Connected!
+ [8:32:43 PM] [BNET] Checking version...
+ [8:32:46 PM] [BNET] Client version accepted!
+ [8:32:46 PM] [BNET] Sending login information...
+ [8:32:48 PM] [BNET] Login successful.
+ [8:32:48 PM] [CLAN] You are a Shaman in Clan SBs.
+ [8:32:48 PM] [BNET] Logged on as Eric[nK].
+ [8:32:48 PM] -- Joined channel: Clan SBs --
+ [8:32:48 PM] Welcome to Battle.net!
+ [8:32:48 PM] This server is hosted by AT&T.
+ [8:32:48 PM] There are currently 60468 users playing 1303 games of Warcraft III The Frozen Throne, and 156540 users playing 42953 games on Battle.net.
+ [8:32:48 PM] Last logon: Mon Nov 26  8:40 PM
+ [8:32:48 PM] -- Eric[nK] has acquired ops.
+ [8:32:48 PM] Eric[nK]:Eric[nK]
+ [8:32:48 PM] PhiX trixed you.
+ [8:32:49 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [8:32:49 PM] Last Logon: 11/27/2007, 04:35:55 (Battle.net time)
+ [8:32:49 PM] Last Logoff: 11/27/2007, 04:35:55 (Battle.net time)
+ [8:32:49 PM] Time Logged: 37 days, 12 hours, 36 minutes and 49 seconds
+ [8:32:52 PM] PrivT-Tech:Pyro6-Tech
+ [8:32:52 PM] PrivT-Tech:PrivT-Tech
+ [8:32:52 PM] Tech-PhiX:Tech-Jack)
+ [8:32:52 PM] Tech-PhiX:Tech-PhiX
+ [8:32:52 PM] Hdx@USEast:Hdx@USEast
+ [8:32:53 PM] Naivete:Naivete
+ [8:32:53 PM] Joe-Tech:Joe-Tech
+ [8:32:53 PM] LuC1Fr-Tech:LuC1Fr-Tech
+ [8:32:53 PM] Joe-Tech:Joe-Tech
+ [8:32:53 PM] Naivete:Naivete
+ [8:32:53 PM] Hdx@USEast:Hdx@USEast
+ [8:32:53 PM] Tech-PhiX:Tech-Jack)
+ [8:32:53 PM] Tech-PhiX:Tech-PhiX
+ [8:32:53 PM] PrivT-Tech:Pyro6-Tech
+ [8:32:53 PM] PrivT-Tech:PrivT-Tech
+ [8:32:53 PM] Naivete:Naivete
+ [8:32:53 PM] LuC1Fr-Tech:LuC1Fr-Tech
+ [8:32:53 PM] Tech-Jack):Tech-Jack)
+ [8:32:53 PM] LuC1Fr-Tech:LuC1Fr-Tech
+ [8:32:53 PM] Joe-Tech:Joe-Tech
+ [8:32:53 PM] Naivete:Naivete
+ [8:32:53 PM] Tech-PhiX:Tech-Jack)
+ [8:32:53 PM] Tech-PhiX:Tech-PhiX
+ [8:32:54 PM] PrivT-Tech:Pyro6-Tech
+ [8:32:54 PM] PrivT-Tech:PrivT-Tech
+ [8:32:54 PM] Naivete:Naivete

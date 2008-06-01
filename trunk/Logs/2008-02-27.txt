@@ -1,0 +1,2700 @@
+ [09:58:19 AM] [BNET] 10053 -- Connection is aborted due to timeout or other failure
+ [09:58:19 AM] [BNET] Disconnected.
+ [09:58:19 AM] [BNET] The Battle.net server has terminated your connection.
+ [09:58:19 AM] [BNET] Attempting to reconnect...
+ [09:58:20 AM] Authorizing your private-release bot, please wait.
+ [09:58:21 AM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [09:58:21 AM] All connections closed.
+ [10:00:07 AM] Connecting your bot...
+ [10:00:07 AM] Authorizing your private-release bot, please wait.
+ [10:00:07 AM] Private usage authorized, connecting to Battle.Net.
+ [10:00:07 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [10:00:09 AM] All connections closed.
+ [10:00:09 AM] Connecting your bot...
+ [10:00:09 AM] Authorizing your private-release bot, please wait.
+ [10:00:09 AM] Private usage authorized, connecting to Battle.Net.
+ [10:00:09 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [10:00:09 AM] [BNLS] Connected!
+ [10:00:10 AM] [BNLS] Authorized!
+ [10:00:10 AM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [10:00:10 AM] [BNET] Connected!
+ [10:00:10 AM] [BNET] Checking version...
+ [10:00:10 AM] [BNET] Client version accepted!
+ [10:00:10 AM] [BNET] Sending login information...
+ [10:00:10 AM] [BNET] Login successful.
+ [10:00:10 AM] [CLAN] You are a Shaman in Clan SBs.
+ [10:00:11 AM] [BNET] Logged on as Eric[nK].
+ [10:00:11 AM] You are Eric[nK], using Warcraft III in Azeroth
+ [10:00:11 AM] -- Joined channel: Clan SBs --
+ [10:00:11 AM] Welcome to Battle.net!
+ [10:00:11 AM] This server is hosted by AT&T.
+ [10:00:11 AM] There are currently 9358 users playing 466 games of Warcraft III, and 184969 users playing 39747 games on Battle.net.
+ [10:00:11 AM] Last logon: Tue Feb 26  9:43 PM
+ [10:00:11 AM] -- Eric[nK]@Azeroth has acquired ops.
+ [10:00:11 AM] Jack likes your mom
+ [10:00:11 AM] -- Stats updated: Eric[nK]@Azeroth [110ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [10:00:12 AM] -- Joined channel: Clan BoT --
+ [10:00:12 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [10:00:12 AM] Last Logon: 2/27/2008, 18:03:04 (Battle.net time)
+ [10:00:12 AM] Last Logoff: 2/27/2008, 06:21:34 (Battle.net time)
+ [10:00:12 AM] Time Logged: 74 days, 3 hours, 45 minutes and 31 seconds
+ [10:00:12 AM] An update is available for your Plugin Creator. To download hit Plugins > Create New Plugin.
+ [10:07:32 AM] -- VBScript@Azeroth has left the channel.
+ [10:12:34 AM] -- VBScript@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [10:12:35 AM] -- VBScript@Azeroth has acquired ops.
+ [10:12:35 AM] -- Stats updated: VBScript@Azeroth [47ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:15:58 AM] <0x5E@Azeroth :: [00:06:43] <jigsAw[vL]> Why does the "a" in my name have an erection? :: StealthBot Beta v2.6999 :.>
+ [10:20:09 AM] -- Joe-Tech@Azeroth [2563ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [10:20:16 AM] <Joe-Tech@Azeroth> talk losers
+ [10:20:16 AM] <VBScript@Azeroth> Do you wan't to tell me what's on your mind, Joe-Tech?
+ [10:20:17 AM] <Joe-Tech@Azeroth> :)
+ [10:20:36 AM] <Joe-Tech@Azeroth> VBScript, I don't think theres an apostrophe in want.
+ [10:20:50 AM] <Joe-Tech@Azeroth> VBScript, oh, so now you don't respond.
+ [10:28:34 AM] -- VBScript@Azeroth has left the channel.
+ [10:33:36 AM] -- VBScript@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [10:33:37 AM] -- VBScript@Azeroth has acquired ops.
+ [10:33:37 AM] -- Stats updated: VBScript@Azeroth [47ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:36:53 AM] <HaKr[BoT]@Azeroth> Bot uptime- 1 day, 5 hours, 23 minutes and 22 seconds  System uptime-- 14 days, 9 hours, 20 minutes and 41 seconds
+ [10:37:03 AM] <Jd[BoT]@Azeroth> hmm
+ [10:38:09 AM] <Jd[BoT]@Azeroth> ?trigger
+ [10:38:09 AM] <Eric[nK]> The bot's current trigger is " ... " (Length: 3)
+ [10:38:09 AM] <Alendar[BoT]@Azeroth> The bot's current trigger is " !! " (Length: 2)
+ [10:38:09 AM] <VBScript@Azeroth> The bot's current trigger is " - " (Alt + 045)
+ [10:38:09 AM] <Alendar@Azeroth> The bot's current trigger is " ! " (Alt + 033)
+ [10:38:10 AM] <0x5E@Azeroth> The bot's current trigger is " $ " (Alt + 036)
+ [10:38:10 AM] <0x51@Azeroth> The bot's current trigger is " 1337 " (Length: 4)
+ [10:38:10 AM] <IdleBoT@Azeroth> The bot's current trigger is " ## " (Length: 2)
+ [10:38:10 AM] <0x0C@Azeroth> The bot's current trigger is " , " (Alt + 044)
+ [10:38:10 AM] <Pyro[BoT]@Azeroth> The bot's current trigger is " ` " (Alt + 096)
+ [10:38:10 AM] <PhiX[BoT]@Azeroth> The bot's current trigger is " @;; " (Length: 3)
+ [10:38:11 AM] <0x30> The bot's current trigger is " ;-; " (Length: 3)
+ [10:38:16 AM] <Jd[BoT]@Azeroth> ...whoami
+ [10:38:17 AM] <Eric[nK]> [BoT (clan)] has flags aOS.
+ [10:38:24 AM] <Jd[BoT]@Azeroth> mm
+ [10:39:08 AM] <Jd[BoT]@Azeroth> ?trigger; whoami; scq; say hi
+ [10:39:08 AM] <0x51@Azeroth> Jd[BoT] says: hi
+ [10:39:08 AM] <Pyro[BoT]@Azeroth> Jd[BoT] says: hi
+ [10:39:08 AM] <0x30> hi
+ [10:39:08 AM] <0x5E@Azeroth> Jd[BoT] says: hi
+ [10:39:08 AM] <0x0C@Azeroth> Jd[BoT] says: hi
+ [10:39:09 AM] <Alendar@Azeroth> hi
+ [10:39:09 AM] <VBScript@Azeroth> Jd[BoT] says: hi
+ [10:39:09 AM] <Alendar[BoT]@Azeroth> hi
+ [10:39:09 AM] <PhiX[BoT]@Azeroth> Jd[BoT] says: hi
+ [10:39:09 AM] <IdleBoT@Azeroth> hi
+ [10:39:19 AM] <Jd[BoT]@Azeroth> hmm
+ [10:39:31 AM] <Jd[BoT]@Azeroth> ?trigger; whoami; say hi; say hi; scq
+ [10:39:43 AM] <Jd[BoT]@Azeroth> ?trigger; scq; whoami
+ [10:39:43 AM] <Eric[nK]> [BoT (clan)] has flags aOS.
+ [10:39:43 AM] <VBScript@Azeroth> [BoT (clan)] has access 60 and flags S.
+ [10:39:43 AM] <IdleBoT@Azeroth> [BoT (clan)] has access 90.
+ [10:39:44 AM] <Alendar[BoT]@Azeroth> Jd[BoT] [Admin (group), BoT (clan)] has access 100 and flags SO.
+ [10:39:44 AM] <PhiX[BoT]@Azeroth> Jd[BoT] [<3 (group), BoT (clan)] has access 60 and flags OSs.
+ [10:39:44 AM] <0x0C@Azeroth> [BoT (clan)] has access 50.
+ [10:39:44 AM] <0x51@Azeroth> [BoT (clan)] has access 50.
+ [10:39:44 AM] <Alendar@Azeroth> Jd[BoT] [Admin (group), BoT (clan)] has access 100 and flags SO.
+ [10:39:44 AM] <Pyro[BoT]@Azeroth> [BoT (clan)] has access 60 and flags SO.
+ [10:39:44 AM] <0x5E@Azeroth> [BoT (clan)] has access 60.
+ [10:39:45 AM] <0x30> Jd[BoT]@azeroth has access 200.
+ [10:40:25 AM] <Jd[BoT]@Azeroth> ?trigger; rejoin
+ [10:40:25 AM] -- Alendar@Azeroth has left the channel.
+ [10:40:25 AM] -- 0x30 has left the channel.
+ [10:40:26 AM] <0x0C@Azeroth> The bot's current trigger is " , " (Alt + 044)
+ [10:40:26 AM] <0x51@Azeroth> The bot's current trigger is " 1337 " (Length: 4)
+ [10:40:26 AM] <Pyro[BoT]@Azeroth> The bot's current trigger is " ` " (Alt + 096)
+ [10:40:26 AM] -- IdleBoT@Azeroth has left the channel.
+ [10:40:26 AM] <0x5E@Azeroth> The bot's current trigger is " $ " (Alt + 036)
+ [10:40:26 AM] <Eric[nK]> The bot's current trigger is " ... " (Length: 3)
+ [10:40:26 AM] <VBScript@Azeroth> The bot's current trigger is " - " (Alt + 045)
+ [10:40:26 AM] -- Alendar[BoT]@Azeroth has left the channel.
+ [10:40:26 AM] <PhiX[BoT]@Azeroth> The bot's current trigger is " @;; " (Length: 3)
+ [10:40:27 AM] -- 0x30 [0ms] has joined the channel using Diablo II (Open Character).
+ [10:40:27 AM] -- Alendar@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:40:28 AM] -- IdleBoT@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:40:28 AM] -- Alendar[BoT]@Azeroth [31ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:40:29 AM] -- Alendar[BoT]@Azeroth has acquired ops.
+ [10:40:29 AM] <0x30> The bot's current trigger is " ;-; " (Length: 3)
+ [10:40:29 AM] <Alendar@Azeroth> The bot's current trigger is " ! " (Alt + 033)
+ [10:40:29 AM] <IdleBoT@Azeroth> The bot's current trigger is " ## " (Length: 2)
+ [10:40:29 AM] <Alendar[BoT]@Azeroth> The bot's current trigger is " !! " (Length: 2)
+ [10:40:49 AM] <Jd[BoT]@Azeroth> ?trigger; whoami; rejoin; say hi
+ [10:40:49 AM] -- 0x30 has left the channel.
+ [10:40:50 AM] -- IdleBoT@Azeroth has left the channel.
+ [10:40:50 AM] <VBScript@Azeroth> The bot's current trigger is " - " (Alt + 045)
+ [10:40:50 AM] -- Alendar[BoT]@Azeroth has left the channel.
+ [10:40:50 AM] <0x0C@Azeroth> The bot's current trigger is " , " (Alt + 044)
+ [10:40:50 AM] <0x51@Azeroth> The bot's current trigger is " 1337 " (Length: 4)
+ [10:40:50 AM] <PhiX[BoT]@Azeroth> The bot's current trigger is " @;; " (Length: 3)
+ [10:40:50 AM] <Eric[nK]> The bot's current trigger is " ... " (Length: 3)
+ [10:40:50 AM] <Pyro[BoT]@Azeroth> The bot's current trigger is " ` " (Alt + 096)
+ [10:40:50 AM] -- Alendar@Azeroth has left the channel.
+ [10:40:51 AM] <0x5E@Azeroth> The bot's current trigger is " $ " (Alt + 036)
+ [10:40:51 AM] -- 0x30 [0ms] has joined the channel using Diablo II (Open Character).
+ [10:40:51 AM] -- IdleBoT@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:40:52 AM] -- Alendar[BoT]@Azeroth [31ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:40:52 AM] -- Alendar[BoT]@Azeroth has acquired ops.
+ [10:40:52 AM] <VBScript@Azeroth> [BoT (clan)] has access 60 and flags S.
+ [10:40:52 AM] <0x0C@Azeroth> [BoT (clan)] has access 50.
+ [10:40:52 AM] <0x51@Azeroth> [BoT (clan)] has access 50.
+ [10:40:52 AM] <PhiX[BoT]@Azeroth> Jd[BoT] [<3 (group), BoT (clan)] has access 60 and flags OSs.
+ [10:40:52 AM] <Pyro[BoT]@Azeroth> [BoT (clan)] has access 60 and flags SO.
+ [10:40:52 AM] -- Alendar@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:40:53 AM] <0x5E@Azeroth> [BoT (clan)] has access 60.
+ [10:40:53 AM] <IdleBoT@Azeroth> The bot's current trigger is " ## " (Length: 2)
+ [10:40:53 AM] <VBScript@Azeroth> Jd[BoT] says: hi
+ [10:40:53 AM] <Alendar[BoT]@Azeroth> The bot's current trigger is " !! " (Length: 2)
+ [10:40:53 AM] <0x51@Azeroth> Jd[BoT] says: hi
+ [10:40:53 AM] <0x0C@Azeroth> Jd[BoT] says: hi
+ [10:40:53 AM] <PhiX[BoT]@Azeroth> Jd[BoT] says: hi
+ [10:40:53 AM] <Pyro[BoT]@Azeroth> Jd[BoT] says: hi
+ [10:40:53 AM] <Alendar@Azeroth> The bot's current trigger is " ! " (Alt + 033)
+ [10:40:53 AM] <Eric[nK]> [BoT (clan)] has flags aOS.
+ [10:40:53 AM] <0x5E@Azeroth> Jd[BoT] says: hi
+ [10:40:53 AM] <IdleBoT@Azeroth> [BoT (clan)] has access 90.
+ [10:40:53 AM] <Alendar[BoT]@Azeroth> Jd[BoT] [Admin (group), BoT (clan)] has access 100 and flags SO.
+ [10:40:54 AM] <Alendar@Azeroth> Jd[BoT] [Admin (group), BoT (clan)] has access 100 and flags SO.
+ [10:40:54 AM] <IdleBoT@Azeroth> hi
+ [10:40:55 AM] <0x30> The bot's current trigger is " ;-; " (Length: 3)
+ [10:40:56 AM] <Alendar@Azeroth> hi
+ [10:40:57 AM] <0x30> Jd[BoT]@azeroth has access 200.
+ [10:40:57 AM] <Alendar[BoT]@Azeroth> hi
+ [10:40:59 AM] <0x30> hi
+ [10:41:05 AM] <Jd[BoT]@Azeroth> heh
+ [10:41:21 AM] <Jd[BoT]@Azeroth> ?trigger
+ [10:41:21 AM] <VBScript@Azeroth> The bot's current trigger is " - " (Alt + 045)
+ [10:41:21 AM] <Alendar[BoT]@Azeroth> The bot's current trigger is " !! " (Length: 2)
+ [10:41:21 AM] <0x0C@Azeroth> The bot's current trigger is " , " (Alt + 044)
+ [10:41:21 AM] <0x51@Azeroth> The bot's current trigger is " 1337 " (Length: 4)
+ [10:41:21 AM] <PhiX[BoT]@Azeroth> The bot's current trigger is " @;; " (Length: 3)
+ [10:41:21 AM] <Alendar@Azeroth> The bot's current trigger is " ! " (Alt + 033)
+ [10:41:21 AM] <Pyro[BoT]@Azeroth> The bot's current trigger is " ` " (Alt + 096)
+ [10:41:21 AM] <Eric[nK]> The bot's current trigger is " ... " (Length: 3)
+ [10:41:21 AM] <0x5E@Azeroth> The bot's current trigger is " $ " (Alt + 036)
+ [10:41:22 AM] <IdleBoT@Azeroth> The bot's current trigger is " ## " (Length: 2)
+ [10:41:22 AM] <0x30> The bot's current trigger is " ;-; " (Length: 3)
+ [10:41:27 AM] <Jd[BoT]@Azeroth> 1337whoami
+ [10:41:28 AM] <0x51@Azeroth> [BoT (clan)] has access 50.
+ [10:41:55 AM] -- PhiX[BoT]@Azeroth has left the channel.
+ [10:41:56 AM] -- PhiX has left the channel.
+ [10:42:10 AM] <Jd[BoT]@Azeroth , Phix died!>
+ [10:43:06 AM] <Jd[BoT]@Azeroth> get rdy..
+ [10:43:07 AM] <Jd[BoT]@Azeroth> ;)
+ [10:43:08 AM] <Jd[BoT]@Azeroth> ?trigger; say hi; say hi; say hi; say hi; say hi; ?trigger
+ [10:43:08 AM] <Eric[nK]> The bot's current trigger is " ... " (Length: 3)
+ [10:43:09 AM] <VBScript@Azeroth> The bot's current trigger is " - " (Alt + 045)
+ [10:43:09 AM] <IdleBoT@Azeroth> The bot's current trigger is " ## " (Length: 2)
+ [10:43:09 AM] <0x30> The bot's current trigger is " ;-; " (Length: 3)
+ [10:43:09 AM] <Alendar@Azeroth> The bot's current trigger is " ! " (Alt + 033)
+ [10:43:09 AM] <Alendar[BoT]@Azeroth> The bot's current trigger is " !! " (Length: 2)
+ [10:43:09 AM] <IdleBoT@Azeroth> hi
+ [10:43:10 AM] <0x51@Azeroth> The bot's current trigger is " 1337 " (Length: 4)
+ [10:43:10 AM] <Pyro[BoT]@Azeroth> The bot's current trigger is " ` " (Alt + 096)
+ [10:43:10 AM] <0x0C@Azeroth> The bot's current trigger is " , " (Alt + 044)
+ [10:43:10 AM] <VBScript@Azeroth> Jd[BoT] says: hi
+ [10:43:10 AM] <0x5E@Azeroth> The bot's current trigger is " $ " (Alt + 036)
+ [10:43:10 AM] <Alendar@Azeroth> hi
+ [10:43:10 AM] <Alendar[BoT]@Azeroth> hi
+ [10:43:11 AM] <0x51@Azeroth> Jd[BoT] says: hi
+ [10:43:11 AM] <Pyro[BoT]@Azeroth> Jd[BoT] says: hi
+ [10:43:11 AM] <0x0C@Azeroth> Jd[BoT] says: hi
+ [10:43:11 AM] <0x5E@Azeroth> Jd[BoT] says: hi
+ [10:43:12 AM] <0x30> hi
+ [10:43:20 AM] <Jd[BoT]@Azeroth> poop -.-
+ [10:43:36 AM] <Jd[BoT]@Azeroth> ?trigger; say hi; say hi; say hi
+ [10:43:37 AM] <0x30> The bot's current trigger is " ;-; " (Length: 3)
+ [10:43:37 AM] <Alendar[BoT]@Azeroth> The bot's current trigger is " !! " (Length: 2)
+ [10:43:37 AM] <IdleBoT@Azeroth> The bot's current trigger is " ## " (Length: 2)
+ [10:43:37 AM] <Eric[nK]> The bot's current trigger is " ... " (Length: 3)
+ [10:43:37 AM] <0x51@Azeroth> The bot's current trigger is " 1337 " (Length: 4)
+ [10:43:37 AM] <0x0C@Azeroth> The bot's current trigger is " , " (Alt + 044)
+ [10:43:37 AM] <VBScript@Azeroth> The bot's current trigger is " - " (Alt + 045)
+ [10:43:37 AM] <Alendar@Azeroth> The bot's current trigger is " ! " (Alt + 033)
+ [10:43:37 AM] <Pyro[BoT]@Azeroth> The bot's current trigger is " ` " (Alt + 096)
+ [10:43:38 AM] <0x5E@Azeroth> The bot's current trigger is " $ " (Alt + 036)
+ [10:43:38 AM] <Alendar[BoT]@Azeroth> hi
+ [10:43:38 AM] <IdleBoT@Azeroth> hi
+ [10:43:38 AM] <0x51@Azeroth> Jd[BoT] says: hi
+ [10:43:38 AM] <0x0C@Azeroth> Jd[BoT] says: hi
+ [10:43:38 AM] <VBScript@Azeroth> Jd[BoT] says: hi
+ [10:43:39 AM] <Alendar@Azeroth> hi
+ [10:43:39 AM] <Pyro[BoT]@Azeroth> Jd[BoT] says: hi
+ [10:43:39 AM] <0x5E@Azeroth> Jd[BoT] says: hi
+ [10:43:40 AM] <0x30> hi
+ [10:45:58 AM] <0x5E@Azeroth :: [01:33:36] <HarmonicaFreak> would you rather have sex with kerrigan before or after her infestation? :: StealthBot Beta v2.6999 :.>
+ [10:47:02 AM] -- Monkey_Capt@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 19, icon tier Orcs, headhunter icon, in Clan HLW)
+ [10:47:53 AM] -- Monkey_Capt@Azeroth has left the channel.
+ [10:48:02 AM] -- PhiX[BoT]@Azeroth [844ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:48:03 AM] -- PhiX[BoT]@Azeroth has acquired ops.
+ [10:48:03 AM] <To PhiX[BoT]@Azeroth> You have 35909 new messages. Type !inbox to retrieve.
+ [10:48:10 AM] -- PhiX [-1ms] has joined the channel using Warcraft II (0 wins).
+ [10:49:24 AM] <PhiX[BoT]@Azeroth>  [19:50:30.082] <From Eric[nK]> You have 35909 new messages. Type !inbox to retrieve.
+ [10:49:25 AM] <PhiX[BoT]@Azeroth> o.o
+ [10:49:35 AM] -- VBScript@Azeroth has left the channel.
+ [10:50:18 AM] <PhiX[BoT]@Azeroth> !inbox
+ [10:50:19 AM] <To PhiX[BoT]@Azeroth> Message from hi: this is a message
+ [10:53:06 AM] <Eric[nK]> hm
+ [10:54:38 AM] -- VBScript@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [10:54:38 AM] -- VBScript@Azeroth has acquired ops.
+ [10:54:38 AM] -- Stats updated: VBScript@Azeroth [47ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [11:10:37 AM] -- VBScript@Azeroth has left the channel.
+ [11:15:39 AM] -- VBScript@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [11:15:40 AM] -- VBScript@Azeroth has acquired ops.
+ [11:15:40 AM] -- Stats updated: VBScript@Azeroth [47ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [11:15:58 AM] <0x5E@Azeroth :: [17:09:58] <Tech-SugarD> Eric, just out of curiousity, what elementary school did you go to? :: StealthBot Beta v2.6999 :.>
+ [11:16:24 AM] Shutting down...
+ [11:19:32 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [11:19:32 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:19:38 AM] The current StealthBot version is ÿcb2.6R3.
+ [11:19:38 AM]  
+ [11:19:38 AM] >> ÿcbStealthBot News
+ [11:19:38 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:19:38 AM] ->> 
+ [11:19:38 AM] ->> ÿcbStealthBot Beta News
+ [11:19:38 AM] ->> Happy testing!
+ [11:19:38 AM]  
+ [11:19:38 AM] The current StealthBot Beta version is 2.6993.
+ [11:19:38 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [11:19:38 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [11:20:26 AM] Shutting down...
+ [11:22:06 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [11:22:06 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:22:12 AM] The current StealthBot version is ÿcb2.6R3.
+ [11:22:12 AM]  
+ [11:22:12 AM] >> ÿcbStealthBot News
+ [11:22:12 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:22:12 AM] ->> 
+ [11:22:12 AM] ->> ÿcbStealthBot Beta News
+ [11:22:12 AM] ->> Happy testing!
+ [11:22:12 AM]  
+ [11:22:12 AM] The current StealthBot Beta version is 2.6993.
+ [11:22:12 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [11:22:12 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [11:22:20 AM] Shutting down...
+ [11:23:58 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [11:23:58 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:24:03 AM] The current StealthBot version is ÿcb2.6R3.
+ [11:24:03 AM]  
+ [11:24:03 AM] >> ÿcbStealthBot News
+ [11:24:03 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:24:04 AM] ->> 
+ [11:24:04 AM] ->> ÿcbStealthBot Beta News
+ [11:24:04 AM] ->> Happy testing!
+ [11:24:04 AM]  
+ [11:24:04 AM] The current StealthBot Beta version is 2.6993.
+ [11:24:04 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [11:24:04 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [11:24:29 AM] Shutting down...
+ [11:28:40 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [11:28:40 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:28:46 AM] The current StealthBot version is ÿcb2.6R3.
+ [11:28:46 AM]  
+ [11:28:46 AM] >> ÿcbStealthBot News
+ [11:28:46 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:28:46 AM] ->> 
+ [11:28:46 AM] ->> ÿcbStealthBot Beta News
+ [11:28:46 AM] ->> Happy testing!
+ [11:28:46 AM]  
+ [11:28:46 AM] The current StealthBot Beta version is 2.6993.
+ [11:28:46 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [11:28:46 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [11:28:52 AM] Shutting down...
+ [11:32:14 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [11:32:14 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:32:20 AM] The current StealthBot version is ÿcb2.6R3.
+ [11:32:20 AM]  
+ [11:32:20 AM] >> ÿcbStealthBot News
+ [11:32:20 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:32:20 AM] ->> 
+ [11:32:20 AM] ->> ÿcbStealthBot Beta News
+ [11:32:20 AM] ->> Happy testing!
+ [11:32:20 AM]  
+ [11:32:20 AM] The current StealthBot Beta version is 2.6993.
+ [11:32:20 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [11:32:20 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [11:32:22 AM] Shutting down...
+ [11:33:35 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [11:33:35 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:33:40 AM] The current StealthBot version is ÿcb2.6R3.
+ [11:33:40 AM]  
+ [11:33:40 AM] >> ÿcbStealthBot News
+ [11:33:40 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:33:40 AM] ->> 
+ [11:33:40 AM] ->> ÿcbStealthBot Beta News
+ [11:33:40 AM] ->> Happy testing!
+ [11:33:40 AM]  
+ [11:33:40 AM] The current StealthBot Beta version is 2.6993.
+ [11:33:41 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [11:33:41 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [11:34:39 AM] Shutting down...
+ [11:39:39 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [11:39:39 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:39:45 AM] The current StealthBot version is ÿcb2.6R3.
+ [11:39:45 AM]  
+ [11:39:45 AM] >> ÿcbStealthBot News
+ [11:39:45 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:39:45 AM] ->> 
+ [11:39:45 AM] ->> ÿcbStealthBot Beta News
+ [11:39:45 AM] ->> Happy testing!
+ [11:39:45 AM]  
+ [11:39:45 AM] The current StealthBot Beta version is 2.6993.
+ [11:39:45 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [11:39:45 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [11:42:12 AM] Shutting down...
+ [11:46:53 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [11:46:53 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:46:58 AM] The current StealthBot version is ÿcb2.6R3.
+ [11:46:58 AM]  
+ [11:46:58 AM] >> ÿcbStealthBot News
+ [11:46:58 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:46:58 AM] ->> 
+ [11:46:58 AM] ->> ÿcbStealthBot Beta News
+ [11:46:58 AM] ->> Happy testing!
+ [11:46:58 AM]  
+ [11:46:59 AM] The current StealthBot Beta version is 2.6993.
+ [11:46:59 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [11:46:59 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [11:47:47 AM] Shutting down...
+ [11:57:39 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [11:57:39 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:57:46 AM] The current StealthBot version is ÿcb2.6R3.
+ [11:57:46 AM]  
+ [11:57:46 AM] >> ÿcbStealthBot News
+ [11:57:46 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:57:46 AM] ->> 
+ [11:57:46 AM] ->> ÿcbStealthBot Beta News
+ [11:57:46 AM] ->> Happy testing!
+ [11:57:46 AM]  
+ [11:57:46 AM] The current StealthBot Beta version is 2.6993.
+ [11:57:47 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [11:57:47 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [11:57:48 AM] Connecting your bot...
+ [11:57:48 AM] Authorizing your private-release bot, please wait.
+ [11:57:48 AM] Private usage authorized, connecting to Battle.Net.
+ [11:57:48 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [11:57:50 AM] [BNLS] Connected!
+ [11:57:56 AM] [BNLS] Authorized!
+ [11:57:56 AM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [11:57:56 AM] [BNET] Connected!
+ [11:57:56 AM] [BNET] Checking version...
+ [11:57:57 AM] [BNET] Client version accepted!
+ [11:57:57 AM] [BNET] Sending login information...
+ [11:57:57 AM] [BNET] Login successful.
+ [11:57:57 AM] [CLAN] You are a Shaman in Clan SBs.
+ [11:57:57 AM] [BNET] Logged on as Eric[nK].
+ [11:57:57 AM] -- Joined channel: Clan SBs --
+ [11:58:01 AM] Welcome to Battle.net!
+ [11:58:01 AM] This server is hosted by AT&T.
+ [11:58:01 AM] There are currently 8917 users playing 434 games of Warcraft III, and 163121 users playing 33892 games on Battle.net.
+ [11:58:01 AM] Last logon: Wed Feb 27  10:09 AM
+ [11:58:01 AM] -- Eric[nK]@Azeroth has acquired ops.
+ [11:58:01 AM] Jack likes your mom
+ [11:58:02 AM] -- Joined channel: Clan BoT --
+ [11:58:02 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [11:58:02 AM] Last Logon: 2/27/2008, 20:06:52 (Battle.net time)
+ [11:58:02 AM] Last Logoff: 2/27/2008, 19:25:20 (Battle.net time)
+ [11:58:02 AM] Time Logged: 74 days, 5 hours, 1 minutes and 45 seconds
+ [11:58:59 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [11:58:59 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:59:05 AM] The current StealthBot version is ÿcb2.6R3.
+ [11:59:05 AM]  
+ [11:59:05 AM] >> ÿcbStealthBot News
+ [11:59:05 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:59:05 AM] ->> 
+ [11:59:05 AM] ->> ÿcbStealthBot Beta News
+ [11:59:05 AM] ->> Happy testing!
+ [11:59:05 AM]  
+ [11:59:05 AM] The current StealthBot Beta version is 2.6993.
+ [11:59:06 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [11:59:06 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [11:59:16 AM] -- Ribose [31ms] has joined the channel using Starcraft Brood War (38 wins).
+ [11:59:29 AM] Shutting down...
+ [11:59:30 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [11:59:30 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:59:30 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:00:55 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [12:00:55 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:01:01 PM] The current StealthBot version is ÿcb2.6R3.
+ [12:01:01 PM]  
+ [12:01:01 PM] >> ÿcbStealthBot News
+ [12:01:01 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:01:01 PM] ->> 
+ [12:01:01 PM] ->> ÿcbStealthBot Beta News
+ [12:01:01 PM] ->> Happy testing!
+ [12:01:01 PM]  
+ [12:01:01 PM] The current StealthBot Beta version is 2.6993.
+ [12:01:01 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [12:01:01 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [12:02:22 PM] Shutting down...
+ [12:12:51 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [12:12:51 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:13:31 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [12:13:31 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:13:37 PM] The current StealthBot version is ÿcb2.6R3.
+ [12:13:37 PM]  
+ [12:13:37 PM] >> ÿcbStealthBot News
+ [12:13:37 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:13:37 PM] ->> 
+ [12:13:37 PM] ->> ÿcbStealthBot Beta News
+ [12:13:37 PM] ->> Happy testing!
+ [12:13:37 PM]  
+ [12:13:37 PM] The current StealthBot Beta version is 2.6993.
+ [12:13:37 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [12:13:37 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [12:14:22 PM] PyroManiac606 [Techs (group),  ()] has flags maOS.
+ [12:14:38 PM] Shutting down...
+ [12:16:42 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [12:16:42 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:17:13 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [12:17:13 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:17:19 PM] The current StealthBot version is ÿcb2.6R3.
+ [12:17:19 PM]  
+ [12:17:19 PM] >> ÿcbStealthBot News
+ [12:17:19 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:17:19 PM] ->> 
+ [12:17:19 PM] ->> ÿcbStealthBot Beta News
+ [12:17:19 PM] ->> Happy testing!
+ [12:17:19 PM]  
+ [12:17:19 PM] The current StealthBot Beta version is 2.6993.
+ [12:17:19 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [12:17:19 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [12:18:42 PM] Shutting down...
+ [12:22:56 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [12:22:56 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:23:03 PM] The current StealthBot version is ÿcb2.6R3.
+ [12:23:03 PM]  
+ [12:23:03 PM] >> ÿcbStealthBot News
+ [12:23:03 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:23:03 PM] ->> 
+ [12:23:03 PM] ->> ÿcbStealthBot Beta News
+ [12:23:03 PM] ->> Happy testing!
+ [12:23:03 PM]  
+ [12:23:03 PM] The current StealthBot Beta version is 2.6993.
+ [12:23:03 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [12:23:03 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [12:23:23 PM] Shutting down...
+ [12:28:45 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [12:28:45 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:28:50 PM] The current StealthBot version is ÿcb2.6R3.
+ [12:28:50 PM]  
+ [12:28:50 PM] >> ÿcbStealthBot News
+ [12:28:50 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:28:50 PM] ->> 
+ [12:28:50 PM] ->> ÿcbStealthBot Beta News
+ [12:28:50 PM] ->> Happy testing!
+ [12:28:50 PM]  
+ [12:28:50 PM] The current StealthBot Beta version is 2.6993.
+ [12:28:50 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [12:28:50 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [12:33:01 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [12:33:01 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:33:07 PM] The current StealthBot version is ÿcb2.6R3.
+ [12:33:07 PM]  
+ [12:33:07 PM] >> ÿcbStealthBot News
+ [12:33:07 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:33:07 PM] ->> 
+ [12:33:07 PM] ->> ÿcbStealthBot Beta News
+ [12:33:07 PM] ->> Happy testing!
+ [12:33:07 PM]  
+ [12:33:07 PM] The current StealthBot Beta version is 2.6993.
+ [12:33:07 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [12:33:07 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [12:33:14 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [12:33:14 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:33:14 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:34:37 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [12:34:37 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:34:43 PM] The current StealthBot version is ÿcb2.6R3.
+ [12:34:43 PM]  
+ [12:34:43 PM] >> ÿcbStealthBot News
+ [12:34:43 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:34:43 PM] ->> 
+ [12:34:43 PM] ->> ÿcbStealthBot Beta News
+ [12:34:43 PM] ->> Happy testing!
+ [12:34:43 PM]  
+ [12:34:43 PM] The current StealthBot Beta version is 2.6993.
+ [12:34:44 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [12:34:44 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [12:34:58 PM] Shutting down...
+ [12:37:17 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [12:37:17 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:37:22 PM] The current StealthBot version is ÿcb2.6R3.
+ [12:37:22 PM]  
+ [12:37:22 PM] >> ÿcbStealthBot News
+ [12:37:23 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:37:23 PM] ->> 
+ [12:37:23 PM] ->> ÿcbStealthBot Beta News
+ [12:37:23 PM] ->> Happy testing!
+ [12:37:23 PM]  
+ [12:37:23 PM] The current StealthBot Beta version is 2.6993.
+ [12:37:23 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [12:37:23 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [12:38:01 PM] Shutting down...
+ [12:45:30 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [12:45:30 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:45:35 PM] The current StealthBot version is ÿcb2.6R3.
+ [12:45:35 PM]  
+ [12:45:35 PM] >> ÿcbStealthBot News
+ [12:45:35 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:45:35 PM] ->> 
+ [12:45:35 PM] ->> ÿcbStealthBot Beta News
+ [12:45:35 PM] ->> Happy testing!
+ [12:45:35 PM]  
+ [12:45:35 PM] The current StealthBot Beta version is 2.6993.
+ [12:45:36 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [12:45:36 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [02:30:24 PM] Connecting your bot...
+ [02:30:24 PM] Authorizing your private-release bot, please wait.
+ [02:30:24 PM] Private usage authorized, connecting to Battle.Net.
+ [02:30:24 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [02:30:25 PM] [BNLS] Connected!
+ [02:30:26 PM] [BNLS] Authorized!
+ [02:30:26 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [02:30:26 PM] [BNET] Connected!
+ [02:30:26 PM] [BNET] Checking version...
+ [02:30:26 PM] [BNET] Client version accepted!
+ [02:30:26 PM] [BNET] Sending login information...
+ [02:30:26 PM] [BNET] Login successful.
+ [02:30:26 PM] [CLAN] You are a Shaman in Clan SBs.
+ [02:30:27 PM] [BNET] Logged on as Eric[nK].
+ [02:30:27 PM] -- Joined channel: Clan SBs --
+ [02:30:27 PM] Welcome to Battle.net!
+ [02:30:27 PM] This server is hosted by AT&T.
+ [02:30:27 PM] There are currently 8159 users playing 366 games of Warcraft III, and 147369 users playing 37256 games on Battle.net.
+ [02:30:27 PM] Last logon: Wed Feb 27  12:06 PM
+ [02:30:27 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [02:30:27 PM] Jack likes your mom
+ [02:30:28 PM] -- Joined channel: Clan BoT --
+ [02:30:28 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [02:30:28 PM] Last Logon: 2/27/2008, 22:35:05 (Battle.net time)
+ [02:30:28 PM] Last Logoff: 2/27/2008, 20:04:46 (Battle.net time)
+ [02:30:28 PM] Time Logged: 74 days, 5 hours, 3 minutes and 17 seconds
+ [02:30:28 PM] <connection_lost@Azeroth> the perfect angle to get in new versions
+ [02:30:36 PM] <Jd[BoT]@Azeroth> speak of the devil o.o
+ [02:30:41 PM] <connection_lost@Azeroth> idhqdja
+ [02:30:43 PM] <Jd[BoT]@Azeroth> LOL
+ [02:30:47 PM] <Jd[BoT]@Azeroth> :P
+ [02:30:49 PM] <connection_lost@Azeroth> maybe thats the secret summoning spell
+ [02:30:55 PM] <connection_lost@Azeroth> im gonna say that next time i need eric
+ [02:30:55 PM] <Jd[BoT]@Azeroth> possibly.
+ [02:31:05 PM] <connection_lost@Azeroth> eric!~
+ [02:31:11 PM] <connection_lost@Azeroth> you know my food for thought quotes
+ [02:31:12 PM] <Eric[nK]@Azeroth> ...?
+ [02:31:19 PM] <connection_lost@Azeroth> some of them make the bot drop
+ [02:31:23 PM] <connection_lost@Azeroth> disconnect
+ [02:31:37 PM] <connection_lost@Azeroth> mostly when it ends in a "
+ [02:31:39 PM] <connection_lost@Azeroth> o.o
+ [02:31:52 PM] <Eric[nK]@Azeroth> Show me...
+ [02:31:56 PM] <connection_lost@Azeroth> -qp on
+ [02:31:58 PM] <VBScript@Azeroth> No quotes found.
+ [02:32:02 PM] <Jd[BoT]@Azeroth> Eric, have you spoken to andy lately?
+ [02:32:06 PM] <PyroManiac606@Azeroth> "
+ [02:32:11 PM] <PyroManiac606@Azeroth ">
+ [02:32:14 PM] <Eric[nK]@Azeroth> "
+ [02:32:14 PM] <connection_lost@Azeroth> -qp random
+ [02:32:14 PM] <PyroManiac606@Azeroth> hm
+ [02:32:15 PM] <VBScript@Azeroth> [33001] Nobody got anywhere in the world by simply being content.  -Louis L'Amour
+ [02:32:16 PM] <VBScript@Azeroth> [39106] The mint makes it first, it is up to you to make it last.  -Evan Esar
+ [02:32:21 PM] <VBScript@Azeroth> [31372] My life is the story of a man who always wants to carry too much. My spiritual quest is the painful process of learning to let go of things not essential.  -Real Live Preacher RealLivePreacher.com Weblog, [more]
+ [02:32:26 PM] <Eric[nK]@Azeroth> No, Jd.  Why do you ask?
+ [02:32:27 PM] <PyroManiac606@Azeroth "">
+ [02:32:32 PM] <VBScript@Azeroth> December 16, 2002
+ [02:32:36 PM] <VBScript@Azeroth> [27033] Forgiveness is almost a selfish act because of its immense benefits to the one who forgives.  -Lawana Blackwell The Dowry of Miss Lydia Clark, 1999
+ [02:32:37 PM] <Jd[BoT]@Azeroth> Just wondering on how he's doing.
+ [02:32:42 PM] <PyroManiac606@Azeroth> $ci porn
+ [02:32:43 PM] <0x5E@Azeroth> Three Monkeys' [porn] was created on January 2, 2008, has 27 members, and is currently under the command of PudgyGnome.
+ [02:32:44 PM] <Jd[BoT]@Azeroth> If you do can you say i said wuts up?
+ [02:32:46 PM] <VBScript@Azeroth> [955] Organized crime in America takes in over forty billion dollars a year and spends very little on office supplies.  -Woody Allen
+ [02:32:51 PM] <PyroManiac606@Azeroth> ...
+ [02:32:55 PM] <connection_lost@Azeroth> -qp random
+ [02:32:55 PM] <VBScript@Azeroth> [38343] It's better to be a pirate than to join the Navy.  -Steve Jobs Odyssey: Pepsi to Apple
+ [02:33:01 PM] <VBScript@Azeroth> [239] Artificial Intelligence is no match for natural stupidity.  -Unknown
+ [02:33:07 PM] <VBScript@Azeroth> [37962] The only limit to our realization of tomorrow will be our doubts of today. Let us move forward with strong and active faith.  -Franklin D. Roosevelt
+ [02:33:11 PM] <IdleBoT@Azeroth ">
+ [02:33:16 PM] <PyroManiac606@Azeroth> "
+ [02:33:17 PM] <VBScript@Azeroth> [39099] Zoo: An excellent place to study the habits of human beings.  -Evan Esar Esar's Comic Dictionary
+ [02:33:19 PM] <PyroManiac606@Azeroth> !!
+ [02:33:23 PM] <VBScript@Azeroth> "
+ [02:33:28 PM] <VBScript@Azeroth> aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+ [02:33:33 PM] -- Ribose has left the channel.
+ [02:33:36 PM] <VBScript@Azeroth> hmm
+ [02:33:40 PM] <VBScript@Azeroth> twice in a row
+ [02:33:42 PM] <IdleBoT@Azeroth klol this is a very long quote, well not that long because i can't really think of anything, but yes, long.">
+ [02:33:46 PM] <VBScript@Azeroth> it dropped when it said a quote ending in "
+ [02:34:08 PM] <Eric[nK]@Azeroth> aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+ [02:34:13 PM] -- 0x2A has left the channel.
+ [02:34:18 PM] <Eric[nK]@Azeroth> ...?
+ [02:34:29 PM] <VBScript@Azeroth>  [02:38:25 AM] <VBScript> [Food for Thought] The longer I live the more beautiful life becomes.    -Frank Lloyd Wright
+ [02:34:30 PM] <VBScript@Azeroth>  [02:38:25 AM] [BNET] Disconnected.
+ [02:34:36 PM] <Eric[nK]@Azeroth> [Food for Thought] The longer I live the more beautiful life becomes.    -Frank Lloyd Wright
+ [02:34:52 PM] <VBScript@Azeroth> those dont necesarily end in "
+ [02:34:53 PM] <VBScript@Azeroth> [03:20:22 AM] <VBScript> [Food for Thought] The particular human chain we're part of is central to our individual identity.    -Elizabeth Stone
+ [02:34:57 PM] <VBScript@Azeroth>  [03:20:22 AM] [BNET] Disconnected.
+ [02:35:08 PM] <VBScript@Azeroth> [03:41:20 AM] <VBScript> [Food for Thought] I'm all in favor of keeping dangerous weapons out of the hands of fools. Let's start with typewriters.    -Solomon Short
+ [02:35:11 PM] <VBScript@Azeroth>  [03:41:20 AM] [BNET] Disconnected.
+ [02:35:13 PM] <Eric[nK]@Azeroth> I don't know why that would be occurring.
+ [02:35:42 PM] <VBScript@Azeroth> [05:26:14 AM] <VBScript> [Food for Thought] I used to think of all the billions of people in the world, and of all those people, how was I going to meet the right ones? The right ones to be my friends, the right [more]
+ [02:35:47 PM] <VBScript@Azeroth> one to be my husband. Now [more]
+ [02:35:49 PM] <VBScript@Azeroth>  [05:26:14 AM] [BNET] Disconnected.
+ [02:35:56 PM] <VBScript@Azeroth> hmm
+ [02:36:00 PM] <0x5E@Azeroth :: [11:35:04 PM] <Jd[BoT]> i hate fucking butts. :: StealthBot Beta v2.6999 :.>
+ [02:36:03 PM] <VBScript@Azeroth> it also happens randomly less than that
+ [02:36:09 PM] <VBScript@Azeroth> but thats the idea of it
+ [02:36:10 PM] <VBScript@Azeroth> lol
+ [02:36:54 PM] <HaKr[BoT]@Azeroth> Bot uptime- 1 day, 9 hours, 23 minutes and 19 seconds  System uptime-- 14 days, 13 hours, 20 minutes and 41 seconds
+ [02:37:57 PM] -- Plugins [0ms] has joined the channel using Diablo II (Open Character).
+ [02:38:01 PM] <connection_lost@Azeroth> ah
+ [02:38:03 PM] <connection_lost@Azeroth> also:
+ [02:38:11 PM] <Plugins> wow
+ [02:38:12 PM] <Plugins> o.o
+ [02:38:21 PM] <connection_lost@Azeroth> legacy naming screws up if you used a useast name
+ [02:38:23 PM] <connection_lost@Azeroth> in your friends
+ [02:38:25 PM] <Plugins> yay i got the name :P
+ [02:38:28 PM] <connection_lost@Azeroth> or they are in the channel
+ [02:38:31 PM] <Eric[nK]@Azeroth> ...?
+ [02:38:32 PM] <connection_lost@Azeroth> right click -> remove
+ [02:38:36 PM] <connection_lost@Azeroth> will not add useast
+ [02:38:39 PM] <connection_lost@Azeroth> same with kicking
+ [02:39:07 PM] <IdleBoT@Azeroth> cant you run with your bot -debug all?
+ [02:39:22 PM] <connection_lost@Azeroth> for example
+ [02:39:36 PM] <IdleBoT@Azeroth> or packetlog your bot when it disconnects..
+ [02:39:39 PM] -- Plugins has left the channel.
+ [02:39:55 PM] <connection_lost@Azeroth> warcraft bot with diablo naming on
+ [02:39:57 PM] <connection_lost@Azeroth> and not warcraft
+ [02:40:00 PM] <connection_lost@Azeroth> right click someone
+ [02:40:03 PM] <connection_lost@Azeroth> it does not add useast
+ [02:40:05 PM] -- PluGinS [0ms] has joined the channel using Diablo II (Open Character).
+ [02:40:08 PM] <connection_lost@Azeroth> battle.net returns not logged in
+ [02:40:11 PM] <connection_lost@Azeroth> o.o
+ [02:40:21 PM] <Jd[BoT]@Azeroth> ?trigger
+ [02:40:21 PM] <PluGinS> The bot's current trigger is " ;=; " (Length: 3)
+ [02:40:21 PM] <IdleBoT@Azeroth> The bot's current trigger is " ## " (Length: 2)
+ [02:40:21 PM] <0x0C@Azeroth> The bot's current trigger is " , " (Alt + 044)
+ [02:40:21 PM] <0x51@Azeroth> The bot's current trigger is " 1337 " (Length: 4)
+ [02:40:21 PM] <VBScript@Azeroth> The bot's current trigger is " - " (Alt + 045)
+ [02:40:21 PM] <Pyro[BoT]@Azeroth> The bot's current trigger is " ` " (Alt + 096)
+ [02:40:22 PM] <0x5E@Azeroth> The bot's current trigger is " $ " (Alt + 036)
+ [02:40:22 PM] <Alendar[BoT]@Azeroth> The bot's current trigger is " !! " (Length: 2)
+ [02:40:22 PM] <Alendar@Azeroth> The bot's current trigger is " ! " (Alt + 033)
+ [02:40:24 PM] <0x30> The bot's current trigger is " ;-; " (Length: 3)
+ [02:41:26 PM] <connection_lost@Azeroth> what is cold --s
+ [02:43:40 PM] -- PluGinS has left the channel.
+ [02:44:17 PM] -- PluGinS [0ms] has joined the channel using Diablo II (Open Character).
+ [02:49:41 PM] <PyroManiac606@Azeroth> $ci CSE
+ [02:49:42 PM] <0x5E@Azeroth> Clan Silent Empire [CSE] was created on February 18, 2008, has 13 members, and is currently under the command of Silent)Chief. Shamans: Silent_JinX, Silent(5), Silent(4), Silent(1), Silent(3)
+ [02:50:00 PM] <VBScript@Azeroth> someone whisper me
+ [02:50:04 PM] <From PyroManiac606@Azeroth> hi
+ [02:52:46 PM] -- VBScript@Azeroth has left the channel.
+ [02:52:46 PM] -- connection_lost@Azeroth has left the channel.
+ [02:57:49 PM] -- VBScript@Azeroth [31ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [02:57:49 PM] -- VBScript@Azeroth has acquired ops.
+ [02:57:49 PM] -- Stats updated: VBScript@Azeroth [31ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [02:58:35 PM] <To PyroManiac606@Azeroth> hi
+ [02:59:07 PM] <Eric[nK]@Azeroth> The friend's list GUI hasn't been updated to support the use of legacy naming.
+ [02:59:13 PM] <Eric[nK]@Azeroth> Thanks for reminding me, though.
+ [02:59:20 PM] That user is not logged on.
+ [02:59:28 PM] That user is not logged on.
+ [02:59:32 PM] PyroManiac606@USEast is using Diablo II in a private channel.
+ [02:59:36 PM] That user is not logged on.
+ [02:59:57 PM] That user is not logged on.
+ [03:00:07 PM] -- connection_lost@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Undead, crypt fiend icon, in Clan BoT)
+ [03:00:19 PM] <connection_lost@Azeroth> i see
+ [03:00:20 PM] <connection_lost@Azeroth> also
+ [03:00:22 PM] <connection_lost@Azeroth> the user monitor
+ [03:00:23 PM] <connection_lost@Azeroth> gg'd me
+ [03:00:27 PM] <connection_lost@Azeroth> :P
+ [03:04:15 PM] -- connection_lost@Azeroth has left the channel.
+ [03:04:20 PM] -- connection_lost@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Undead, crypt fiend icon, in Clan BoT)
+ [03:04:59 PM] <Eric[nK]@Azeroth> That's not my problem.
+ [03:05:05 PM] <Eric[nK]@Azeroth> ./msg hdx.
+ [03:05:06 PM] <connection_lost@Azeroth> i was tellin pyro
+ [03:05:07 PM] <connection_lost@Azeroth> lol
+ [03:05:28 PM] <Eric[nK]@Azeroth> It's not Pyro's problem either!
+ [03:05:32 PM] <connection_lost@Azeroth> yeah it is
+ [03:05:35 PM] <connection_lost@Azeroth> xd
+ [03:05:59 PM] <0x5E@Azeroth :: [22:43] -- t-dawg[BoT] [110ms] has joined the channel and aquired ops. [22:43] <Vector[gnome]> he's ops? [22:43] <PyroManiac606> No, he's just at the top of the channel list and has a hammer. :: StealthBot Be>
+ [03:07:35 PM] Error: Out of stack space in GetCumulativeAccess().
+ [03:07:36 PM] That user is not logged on.
+ [03:08:04 PM] Shutting down...
+ [03:08:09 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [03:08:09 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [03:08:15 PM] The current StealthBot version is ÿcb2.6R3.
+ [03:08:15 PM]  
+ [03:08:15 PM] >> ÿcbStealthBot News
+ [03:08:15 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [03:08:15 PM] ->> 
+ [03:08:15 PM] ->> ÿcbStealthBot Beta News
+ [03:08:15 PM] ->> Happy testing!
+ [03:08:15 PM]  
+ [03:08:15 PM] The current StealthBot Beta version is 2.6993.
+ [03:08:16 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [03:08:16 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [03:08:27 PM] Shutting down...
+ [03:08:44 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [03:08:44 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [03:08:49 PM] The current StealthBot version is ÿcb2.6R3.
+ [03:08:49 PM]  
+ [03:08:49 PM] >> ÿcbStealthBot News
+ [03:08:49 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [03:08:49 PM] ->> 
+ [03:08:49 PM] ->> ÿcbStealthBot Beta News
+ [03:08:49 PM] ->> Happy testing!
+ [03:08:49 PM]  
+ [03:08:49 PM] The current StealthBot Beta version is 2.6993.
+ [03:08:50 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [03:08:50 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [03:13:25 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [03:13:25 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [03:13:31 PM] The current StealthBot version is ÿcb2.6R3.
+ [03:13:31 PM]  
+ [03:13:31 PM] >> ÿcbStealthBot News
+ [03:13:31 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [03:13:31 PM] ->> 
+ [03:13:31 PM] ->> ÿcbStealthBot Beta News
+ [03:13:31 PM] ->> Happy testing!
+ [03:13:31 PM]  
+ [03:13:31 PM] The current StealthBot Beta version is 2.6993.
+ [03:13:31 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [03:13:31 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [03:14:39 PM] Shutting down...
+ [04:05:21 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [04:05:21 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [04:05:25 PM] Connecting your bot...
+ [04:05:25 PM] Authorizing your private-release bot, please wait.
+ [04:05:25 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [04:05:25 PM] All connections closed.
+ [04:05:25 PM] Connecting your bot...
+ [04:05:25 PM] Authorizing your private-release bot, please wait.
+ [04:05:25 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [04:05:25 PM] All connections closed.
+ [04:05:26 PM] Connecting your bot...
+ [04:05:26 PM] Authorizing your private-release bot, please wait.
+ [04:05:26 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [04:05:26 PM] All connections closed.
+ [04:05:27 PM] Connecting your bot...
+ [04:05:27 PM] Authorizing your private-release bot, please wait.
+ [04:05:27 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [04:05:27 PM] All connections closed.
+ [04:05:27 PM] Connecting your bot...
+ [04:05:27 PM] Authorizing your private-release bot, please wait.
+ [04:05:27 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [04:05:27 PM] All connections closed.
+ [04:05:28 PM] Connecting your bot...
+ [04:05:28 PM] Authorizing your private-release bot, please wait.
+ [04:05:28 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [04:05:28 PM] All connections closed.
+ [04:05:28 PM] Connecting your bot...
+ [04:05:28 PM] Authorizing your private-release bot, please wait.
+ [04:05:28 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [04:05:28 PM] All connections closed.
+ [04:05:30 PM] The current StealthBot version is ÿcb2.6R3.
+ [04:05:30 PM]  
+ [04:05:30 PM] >> ÿcbStealthBot News
+ [04:05:30 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [04:05:30 PM] ->> 
+ [04:05:30 PM] ->> ÿcbStealthBot Beta News
+ [04:05:30 PM] ->> Happy testing!
+ [04:05:30 PM]  
+ [04:05:30 PM] The current StealthBot Beta version is 2.6993.
+ [04:05:30 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [04:05:30 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [04:05:31 PM] Connecting your bot...
+ [04:05:31 PM] Authorizing your private-release bot, please wait.
+ [04:05:31 PM] Private usage authorized, connecting to Battle.Net.
+ [04:05:31 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [04:05:36 PM] All connections closed.
+ [04:05:36 PM] Connecting your bot...
+ [04:05:36 PM] Authorizing your private-release bot, please wait.
+ [04:05:37 PM] Private usage authorized, connecting to Battle.Net.
+ [04:05:37 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [04:05:37 PM] [BNLS] Connected!
+ [04:05:37 PM] [BNLS] Authorized!
+ [04:05:37 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [04:05:38 PM] [BNET] Connected!
+ [04:05:38 PM] [BNET] Checking version...
+ [04:05:39 PM] [BNET] Client version accepted!
+ [04:05:39 PM] [BNET] Sending login information...
+ [04:05:40 PM] [BNET] Login successful.
+ [04:05:40 PM] [CLAN] You are a Shaman in Clan SBs.
+ [04:05:40 PM] [BNET] Logged on as Eric[nK].
+ [04:05:40 PM] -- Joined channel: Clan SBs --
+ [04:05:41 PM] Welcome to Battle.net!
+ [04:05:41 PM] This server is hosted by AT&T.
+ [04:05:41 PM] There are currently 7749 users playing 304 games of Warcraft III, and 152136 users playing 40036 games on Battle.net.
+ [04:05:41 PM] Last logon: Wed Feb 27  2:39 PM
+ [04:05:41 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [04:05:41 PM] Jack likes your mom
+ [04:05:41 PM] <From PansBot2007> Welcome to Clan PaN! Pros Against Newbs! your ping is 187
+ [04:05:41 PM] -- Joined channel: Clan BoT --
+ [04:05:42 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [04:05:42 PM] Last Logon: 2/28/2008, 00:08:09 (Battle.net time)
+ [04:05:42 PM] Last Logoff: 2/27/2008, 23:10:53 (Battle.net time)
+ [04:05:42 PM] Time Logged: 74 days, 5 hours, 40 minutes and 55 seconds
+ [04:05:59 PM] <0x5E@Azeroth :: [00:03:03] <Joe-Tech> I'm sure a bunch of people would suck Andy off for the source code. :: StealthBot Beta v2.6999 :.>
+ [04:06:00 PM] -- Joined channel: Clan SBs --
+ [04:06:00 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [04:06:00 PM] Jack likes your mom
+ [04:06:00 PM] <From PansBot2007> Welcome to Clan PaN! Pros Against Newbs! your ping is 187
+ [04:08:24 PM] <zhkbot@Azeroth> back
+ [04:08:38 PM] <zhkbot@Azeroth> ok
+ [04:08:50 PM] <zhkbot@Azeroth> sry i ahd to put awya food
+ [04:09:16 PM] <zhkbot@Azeroth> i have the javaop2 beta 4.2 i think
+ [04:09:23 PM] <Pyro6-Tech@Azeroth> this is stealthbot support
+ [04:09:24 PM] <zhkbot@Azeroth> yes i no this si sb
+ [04:09:29 PM] <Pyro6-Tech@Azeroth> we only support stealthbot here
+ [04:09:34 PM] <zhkbot@Azeroth> i dont think theres a jbs
+ [04:09:48 PM] <zhkbot@Azeroth> it uses a pyro6 bnls server
+ [04:09:49 PM] <Berzerker-Tech@Azeroth> then your'e SOL
+ [04:09:52 PM] <Pyro6-Tech@Azeroth> there isnt
+ [04:10:00 PM] <zhkbot@Azeroth> ya welll
+ [04:10:08 PM] <zhkbot@Azeroth> how can i get atrivia
+ [04:10:12 PM] <zhkbot@Azeroth> do i need a sb
+ [04:10:16 PM] <Berzerker-Tech@Azeroth> I use JavaOp sometimes, and I could attempt to help you.
+ [04:10:20 PM] <Berzerker-Tech@Azeroth> But I really don't want to.
+ [04:10:35 PM] <zhkbot@Azeroth> hmmm
+ [04:10:46 PM] <zhkbot@Azeroth thinks of something to influence you with>
+ [04:11:05 PM] <zhkbot@Azeroth> damn wheres my friend when i need him
+ [04:11:27 PM] <zhkbot@Azeroth> hmmmmm
+ [04:11:35 PM] <zhkbot@Azeroth> how bout u just help me
+ [04:11:45 PM] <Pyro6-Tech@Azeroth> ..
+ [04:12:06 PM] <zhkbot@Azeroth is thinking of what to do after he is banned>
+ [04:12:15 PM] <zhkbot@Azeroth> lol
+ [04:12:22 PM] <zhkbot@Azeroth> ya uve been ere a few times
+ [04:12:28 PM] <zhkbot@Azeroth> every time i was banned
+ [04:12:51 PM] <zhkbot@Azeroth> so   where can i get trivia
+ [04:13:04 PM] <zhkbot@Azeroth> i google searched it yet i found nothing
+ [04:13:13 PM] <zhkbot@Azeroth> but i did dl a fle named triviaanswers
+ [04:13:22 PM] <zhkbot@Azeroth> says the answers and wo to find trivia
+ [04:13:38 PM] -- Polak(Bot) [62ms] has joined the channel using Diablo II (Open Character).
+ [04:13:44 PM] <zhkbot@Azeroth> ello
+ [04:13:45 PM] -- Polak(Bot) has left the channel.
+ [04:14:03 PM] <zhkbot@Azeroth> squelch?
+ [04:14:45 PM] -- Polak(Bot) [31ms] has joined the channel using Diablo II (Open Character).
+ [04:14:47 PM] -- Polak(Bot) has left the channel.
+ [04:16:29 PM] <zhkbot@Azeroth> hey berserker mind helping mr
+ [04:16:30 PM] <zhkbot@Azeroth> me
+ [04:16:52 PM] <Berzerker-Tech@Azeroth> yes
+ [04:16:55 PM] <Berzerker-Tech@Azeroth> afk.
+ [04:17:04 PM] <Berzerker-Tech@Azeroth> especially when you don't spell my name correctly. :P
+ [04:17:11 PM] <Berzerker-Tech@Azeroth> afk
+ [04:17:12 PM] <zhkbot@Azeroth> ya well
+ [04:17:16 PM] <zhkbot@Azeroth> i bad at spelling
+ [04:17:21 PM] <zhkbot@Azeroth> wadda gonna do
+ [04:17:26 PM] <zhkbot@Azeroth> give me lessons
+ [04:19:44 PM] Shutting down...
+ [04:21:39 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [04:21:39 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [04:21:45 PM] The current StealthBot version is ÿcb2.6R3.
+ [04:21:45 PM]  
+ [04:21:45 PM] >> ÿcbStealthBot News
+ [04:21:45 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [04:21:45 PM] ->> 
+ [04:21:45 PM] ->> ÿcbStealthBot Beta News
+ [04:21:45 PM] ->> Happy testing!
+ [04:21:45 PM]  
+ [04:21:45 PM] The current StealthBot Beta version is 2.6993.
+ [04:21:45 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [04:21:45 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [04:21:45 PM] Shutting down...
+ [04:22:14 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [04:22:14 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [04:22:19 PM] The current StealthBot version is ÿcb2.6R3.
+ [04:22:19 PM]  
+ [04:22:19 PM] >> ÿcbStealthBot News
+ [04:22:19 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [04:22:19 PM] ->> 
+ [04:22:19 PM] ->> ÿcbStealthBot Beta News
+ [04:22:19 PM] ->> Happy testing!
+ [04:22:19 PM]  
+ [04:22:19 PM] The current StealthBot Beta version is 2.6993.
+ [04:22:19 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [04:22:19 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [04:22:53 PM] Shutting down...
+ [04:23:35 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [04:23:35 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [04:23:41 PM] The current StealthBot version is ÿcb2.6R3.
+ [04:23:41 PM]  
+ [04:23:41 PM] >> ÿcbStealthBot News
+ [04:23:41 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [04:23:41 PM] ->> 
+ [04:23:41 PM] ->> ÿcbStealthBot Beta News
+ [04:23:41 PM] ->> Happy testing!
+ [04:23:41 PM]  
+ [04:23:41 PM] The current StealthBot Beta version is 2.6993.
+ [04:23:41 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [04:23:41 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [04:24:46 PM] Shutting down...
+ [04:25:06 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [04:25:06 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [04:25:11 PM] The current StealthBot version is ÿcb2.6R3.
+ [04:25:11 PM]  
+ [04:25:11 PM] >> ÿcbStealthBot News
+ [04:25:11 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [04:25:11 PM] ->> 
+ [04:25:11 PM] ->> ÿcbStealthBot Beta News
+ [04:25:11 PM] ->> Happy testing!
+ [04:25:11 PM]  
+ [04:25:11 PM] The current StealthBot Beta version is 2.6993.
+ [04:25:11 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [04:25:11 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [04:25:17 PM] Shutting down...
+ [04:27:25 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [04:27:25 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [04:27:30 PM] Shutting down...
+ [04:28:58 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [04:28:58 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [04:29:04 PM] The current StealthBot version is ÿcb2.6R3.
+ [04:29:04 PM]  
+ [04:29:04 PM] >> ÿcbStealthBot News
+ [04:29:04 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [04:29:04 PM] ->> 
+ [04:29:04 PM] ->> ÿcbStealthBot Beta News
+ [04:29:04 PM] ->> Happy testing!
+ [04:29:04 PM]  
+ [04:29:04 PM] The current StealthBot Beta version is 2.6993.
+ [04:29:04 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [04:29:04 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [04:29:42 PM] Shutting down...
+ [04:33:33 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [04:33:33 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [04:33:39 PM] The current StealthBot version is ÿcb2.6R3.
+ [04:33:39 PM]  
+ [04:33:39 PM] >> ÿcbStealthBot News
+ [04:33:39 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [04:33:39 PM] ->> 
+ [04:33:39 PM] ->> ÿcbStealthBot Beta News
+ [04:33:39 PM] ->> Happy testing!
+ [04:33:39 PM]  
+ [04:33:39 PM] The current StealthBot Beta version is 2.6993.
+ [04:33:39 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [04:33:39 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [04:33:40 PM] TestGroup2
+ [04:33:40 PM] TestGroup2
+ [04:33:41 PM] TestGroup3
+ [04:33:42 PM] TestGroup3
+ [04:33:42 PM] TestGroup4
+ [04:35:35 PM] Connecting your bot...
+ [04:35:35 PM] Authorizing your private-release bot, please wait.
+ [04:35:35 PM] Private usage authorized, connecting to Battle.Net.
+ [04:35:35 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [04:35:35 PM] [BNLS] Connected!
+ [04:35:35 PM] [BNLS] Authorized!
+ [04:35:35 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [04:35:35 PM] [BNET] Connected!
+ [04:35:36 PM] [BNET] Checking version...
+ [04:35:36 PM] [BNET] Client version accepted!
+ [04:35:36 PM] [BNET] Sending login information...
+ [04:35:37 PM] [BNET] Login successful.
+ [04:35:37 PM] [CLAN] You are a Shaman in Clan SBs.
+ [04:35:37 PM] [BNET] Logged on as Eric[nK].
+ [04:35:37 PM] -- Joined channel: Clan SBs --
+ [04:35:37 PM] Welcome to Battle.net!
+ [04:35:37 PM] This server is hosted by AT&T.
+ [04:35:37 PM] There are currently 7456 users playing 280 games of Warcraft III, and 158720 users playing 43410 games on Battle.net.
+ [04:35:37 PM] Last logon: Wed Feb 27  4:14 PM
+ [04:35:37 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [04:35:37 PM] Jack likes your mom
+ [04:35:38 PM] -- Stats updated: Eric[nK]@Azeroth [94ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [04:35:38 PM] <From PansBot2007> Welcome to Clan PaN! Pros Against Newbs! your ping is 94
+ [04:35:38 PM] -- Joined channel: Clan BoT --
+ [04:35:38 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [04:35:38 PM] Last Logon: 2/28/2008, 00:44:33 (Battle.net time)
+ [04:35:38 PM] Last Logoff: 2/28/2008, 00:22:28 (Battle.net time)
+ [04:35:38 PM] Time Logged: 74 days, 5 hours, 54 minutes and 58 seconds
+ [04:35:40 PM] Shutting down...
+ [04:36:48 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [04:36:48 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [04:36:53 PM] The current StealthBot version is ÿcb2.6R3.
+ [04:36:53 PM]  
+ [04:36:53 PM] >> ÿcbStealthBot News
+ [04:36:53 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [04:36:53 PM] ->> 
+ [04:36:53 PM] ->> ÿcbStealthBot Beta News
+ [04:36:54 PM] ->> Happy testing!
+ [04:36:54 PM]  
+ [04:36:54 PM] The current StealthBot Beta version is 2.6993.
+ [04:36:54 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [04:36:54 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [04:37:14 PM] Shutting down...
+ [04:40:29 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [04:40:29 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [04:40:35 PM] The current StealthBot version is ÿcb2.6R3.
+ [04:40:35 PM]  
+ [04:40:35 PM] >> ÿcbStealthBot News
+ [04:40:35 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [04:40:35 PM] ->> 
+ [04:40:35 PM] ->> ÿcbStealthBot Beta News
+ [04:40:35 PM] ->> Happy testing!
+ [04:40:35 PM]  
+ [04:40:35 PM] The current StealthBot Beta version is 2.6993.
+ [04:40:35 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [04:40:35 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [04:40:44 PM] Shutting down...
+ [04:41:12 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [04:41:12 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [04:41:18 PM] The current StealthBot version is ÿcb2.6R3.
+ [04:41:18 PM]  
+ [04:41:18 PM] >> ÿcbStealthBot News
+ [04:41:18 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [04:41:18 PM] ->> 
+ [04:41:18 PM] ->> ÿcbStealthBot Beta News
+ [04:41:18 PM] ->> Happy testing!
+ [04:41:18 PM]  
+ [04:41:18 PM] The current StealthBot Beta version is 2.6993.
+ [04:41:18 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [04:41:18 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [04:44:19 PM] Shutting down...
+ [04:45:20 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [04:45:20 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [04:45:26 PM] The current StealthBot version is ÿcb2.6R3.
+ [04:45:26 PM]  
+ [04:45:26 PM] >> ÿcbStealthBot News
+ [04:45:26 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [04:45:26 PM] ->> 
+ [04:45:26 PM] ->> ÿcbStealthBot Beta News
+ [04:45:26 PM] ->> Happy testing!
+ [04:45:26 PM]  
+ [04:45:26 PM] The current StealthBot Beta version is 2.6993.
+ [04:45:26 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [04:45:26 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [04:45:48 PM] Shutting down...
+ [05:09:44 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [05:09:44 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [05:09:49 PM] The current StealthBot version is ÿcb2.6R3.
+ [05:09:49 PM]  
+ [05:09:50 PM] >> ÿcbStealthBot News
+ [05:09:50 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [05:09:50 PM] ->> 
+ [05:09:50 PM] ->> ÿcbStealthBot Beta News
+ [05:09:50 PM] ->> Happy testing!
+ [05:09:50 PM]  
+ [05:09:50 PM] The current StealthBot Beta version is 2.6993.
+ [05:09:50 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [05:09:50 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [05:09:50 PM] Connecting your bot...
+ [05:09:50 PM] Authorizing your private-release bot, please wait.
+ [05:09:51 PM] Private usage authorized, connecting to Battle.Net.
+ [05:09:51 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [05:09:52 PM] All connections closed.
+ [05:09:52 PM] Connecting your bot...
+ [05:09:52 PM] Authorizing your private-release bot, please wait.
+ [05:09:52 PM] Private usage authorized, connecting to Battle.Net.
+ [05:09:52 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [05:09:53 PM] [BNLS] Connected!
+ [05:09:53 PM] [BNLS] Authorized!
+ [05:09:53 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [05:09:53 PM] [BNET] Connected!
+ [05:09:53 PM] [BNET] Checking version...
+ [05:09:54 PM] [BNET] Client version accepted!
+ [05:09:54 PM] [BNET] Sending login information...
+ [05:09:54 PM] [BNET] Login successful.
+ [05:09:54 PM] [CLAN] You are a Shaman in Clan SBs.
+ [05:09:54 PM] [BNET] Logged on as Eric[nK].
+ [05:09:55 PM] -- Joined channel: Clan SBs --
+ [05:09:55 PM] Welcome to Battle.net!
+ [05:09:55 PM] This server is hosted by AT&T.
+ [05:09:55 PM] There are currently 7308 users playing 271 games of Warcraft III, and 170660 users playing 46150 games on Battle.net.
+ [05:09:55 PM] Last logon: Wed Feb 27  4:44 PM
+ [05:09:55 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [05:09:55 PM] Jack likes your mom
+ [05:09:55 PM] -- Stats updated: Eric[nK]@Azeroth [109ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [05:09:55 PM] -- Joined channel: Clan BoT --
+ [05:09:56 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [05:09:56 PM] Last Logon: 2/28/2008, 01:12:34 (Battle.net time)
+ [05:09:56 PM] Last Logoff: 2/28/2008, 00:44:36 (Battle.net time)
+ [05:09:56 PM] Time Logged: 74 days, 5 hours, 55 minutes and 2 seconds
+ [05:11:11 PM] -- VBScript@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [05:11:11 PM] -- VBScript@Azeroth has acquired ops.
+ [05:11:11 PM] -- Stats updated: VBScript@Azeroth [62ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:11:57 PM] <VBScript@Azeroth> .
+ [05:12:23 PM] <Eric[nK]@Azeroth> .
+ [05:12:39 PM] <VBScript@Azeroth> i keep getting ipbanned
+ [05:12:40 PM] <Eric[nK]@Azeroth> hm
+ [05:12:41 PM] <VBScript@Azeroth> lol
+ [05:13:02 PM] <Eric[nK]@Azeroth> Well... stop.
+ [05:13:45 PM] Shutting down...
+ [05:14:07 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [05:14:07 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [05:14:12 PM] Connecting your bot...
+ [05:14:12 PM] Authorizing your private-release bot, please wait.
+ [05:14:12 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [05:14:12 PM] All connections closed.
+ [05:14:12 PM] Connecting your bot...
+ [05:14:12 PM] Authorizing your private-release bot, please wait.
+ [05:14:12 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [05:14:12 PM] All connections closed.
+ [05:14:12 PM] Connecting your bot...
+ [05:14:12 PM] Authorizing your private-release bot, please wait.
+ [05:14:12 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [05:14:12 PM] All connections closed.
+ [05:14:13 PM] Connecting your bot...
+ [05:14:13 PM] Authorizing your private-release bot, please wait.
+ [05:14:13 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [05:14:13 PM] All connections closed.
+ [05:14:13 PM] The current StealthBot version is ÿcb2.6R3.
+ [05:14:13 PM]  
+ [05:14:13 PM] >> ÿcbStealthBot News
+ [05:14:13 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [05:14:13 PM] ->> 
+ [05:14:13 PM] ->> ÿcbStealthBot Beta News
+ [05:14:13 PM] ->> Happy testing!
+ [05:14:13 PM]  
+ [05:14:13 PM] The current StealthBot Beta version is 2.6993.
+ [05:14:13 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [05:14:13 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [05:14:14 PM] Connecting your bot...
+ [05:14:14 PM] Authorizing your private-release bot, please wait.
+ [05:14:15 PM] Private usage authorized, connecting to Battle.Net.
+ [05:14:15 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [05:14:15 PM] [BNLS] Connected!
+ [05:14:15 PM] [BNLS] Authorized!
+ [05:14:15 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [05:14:15 PM] [BNET] Connected!
+ [05:14:15 PM] [BNET] Checking version...
+ [05:14:16 PM] [BNET] Client version accepted!
+ [05:14:16 PM] [BNET] Sending login information...
+ [05:14:16 PM] [BNET] Login successful.
+ [05:14:16 PM] 0
+ [05:14:16 PM] [CLAN] You are a Shaman in Clan SBs.
+ [05:14:16 PM] [BNET] Logged on as Eric[nK].
+ [05:14:16 PM] -- Joined channel: Clan SBs --
+ [05:14:17 PM] Welcome to Battle.net!
+ [05:14:17 PM] This server is hosted by AT&T.
+ [05:14:17 PM] There are currently 7343 users playing 263 games of Warcraft III, and 172589 users playing 46804 games on Battle.net.
+ [05:14:17 PM] Last logon: Wed Feb 27  5:18 PM
+ [05:14:17 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [05:14:17 PM] Jack likes your mom
+ [05:14:17 PM] -- Stats updated: Eric[nK]@Azeroth [94ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [05:14:17 PM] -- Joined channel: Clan BoT --
+ [05:14:18 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [05:14:18 PM] Last Logon: 2/28/2008, 01:23:12 (Battle.net time)
+ [05:14:18 PM] Last Logoff: 2/28/2008, 01:22:42 (Battle.net time)
+ [05:14:18 PM] Time Logged: 74 days, 5 hours, 58 minutes and 53 seconds
+ [05:14:19 PM] 1
+ [05:14:19 PM] <Eric[nK]@Azeroth> hm
+ [05:14:26 PM] 0
+ [05:14:26 PM] <Eric[nK]@Azeroth> lalalala
+ [05:14:37 PM] 0
+ [05:14:37 PM] <Eric[nK]@Azeroth> carrot
+ [05:14:43 PM] 0
+ [05:14:44 PM] <Eric[nK]@Azeroth> .;
+ [05:14:44 PM] 1
+ [05:14:45 PM] 1
+ [05:14:45 PM] <Eric[nK]@Azeroth> .
+ [05:14:46 PM] 1
+ [05:14:47 PM] 1
+ [05:14:47 PM] <Eric[nK]@Azeroth> .
+ [05:14:47 PM] 2
+ [05:14:47 PM] 2
+ [05:14:48 PM] <Eric[nK]@Azeroth> .
+ [05:14:55 PM] -- Condemned[WA]@Azeroth [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan WA)
+ [05:14:59 PM] <Condemned[WA]@Azeroth> NEWBLETS
+ [05:15:11 PM] 0
+ [05:15:12 PM] <Eric[nK]@Azeroth> NEWBIE!
+ [05:15:12 PM] -- Condemned[WA]@Azeroth has left the channel.
+ [05:15:14 PM] Shutting down...
+ [05:15:39 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [05:15:39 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [05:15:44 PM] The current StealthBot version is ÿcb2.6R3.
+ [05:15:44 PM]  
+ [05:15:44 PM] >> ÿcbStealthBot News
+ [05:15:44 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [05:15:44 PM] ->> 
+ [05:15:44 PM] ->> ÿcbStealthBot Beta News
+ [05:15:44 PM] ->> Happy testing!
+ [05:15:44 PM]  
+ [05:15:44 PM] The current StealthBot Beta version is 2.6993.
+ [05:15:45 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [05:15:45 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [05:16:11 PM] Shutting down...
+ [05:16:54 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [05:16:54 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [05:16:59 PM] Connecting your bot...
+ [05:16:59 PM] Authorizing your private-release bot, please wait.
+ [05:16:59 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [05:16:59 PM] All connections closed.
+ [05:16:59 PM] The current StealthBot version is ÿcb2.6R3.
+ [05:17:00 PM]  
+ [05:17:00 PM] >> ÿcbStealthBot News
+ [05:17:00 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [05:17:00 PM] ->> 
+ [05:17:00 PM] ->> ÿcbStealthBot Beta News
+ [05:17:00 PM] ->> Happy testing!
+ [05:17:00 PM]  
+ [05:17:00 PM] The current StealthBot Beta version is 2.6993.
+ [05:17:00 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [05:17:00 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [05:17:00 PM] Connecting your bot...
+ [05:17:00 PM] Authorizing your private-release bot, please wait.
+ [05:17:00 PM] Connecting your bot...
+ [05:17:00 PM] Authorizing your private-release bot, please wait.
+ [05:17:00 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [05:17:00 PM] All connections closed.
+ [05:17:00 PM] Private usage authorized, connecting to Battle.Net.
+ [05:17:00 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [05:17:00 PM] All connections closed.
+ [05:17:00 PM] Connecting your bot...
+ [05:17:00 PM] Authorizing your private-release bot, please wait.
+ [05:17:00 PM] Connecting your bot...
+ [05:17:00 PM] Authorizing your private-release bot, please wait.
+ [05:17:00 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [05:17:00 PM] All connections closed.
+ [05:17:00 PM] Private usage authorized, connecting to Battle.Net.
+ [05:17:00 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [05:17:00 PM] [BNLS] Connected!
+ [05:17:01 PM] [BNLS] Authorized!
+ [05:17:01 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [05:17:01 PM] [BNET] Connected!
+ [05:17:01 PM] [BNET] Checking version...
+ [05:17:01 PM] [BNET] Client version accepted!
+ [05:17:01 PM] [BNET] Sending login information...
+ [05:17:02 PM] [BNET] Login successful.
+ [05:17:02 PM] [CLAN] You are a Shaman in Clan SBs.
+ [05:17:02 PM] [BNET] Logged on as Eric[nK].
+ [05:17:02 PM] -- Joined channel: Clan SBs --
+ [05:17:02 PM] Welcome to Battle.net!
+ [05:17:02 PM] This server is hosted by AT&T.
+ [05:17:02 PM] There are currently 7335 users playing 249 games of Warcraft III, and 173572 users playing 47036 games on Battle.net.
+ [05:17:02 PM] Last logon: Wed Feb 27  5:23 PM
+ [05:17:02 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [05:17:02 PM] Jack likes your mom
+ [05:17:03 PM] -- Stats updated: Eric[nK]@Azeroth [125ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [05:17:03 PM] -- Joined channel: Clan BoT --
+ [05:17:03 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [05:17:03 PM] Last Logon: 2/28/2008, 01:19:44 (Battle.net time)
+ [05:17:03 PM] Last Logoff: 2/28/2008, 01:19:44 (Battle.net time)
+ [05:17:03 PM] Time Logged: 74 days, 5 hours, 59 minutes and 51 seconds
+ [05:17:11 PM] <Eric[nK]@Azeroth> hm
+ [05:17:31 PM] <Eric[nK]@Azeroth> hmm
+ [05:17:37 PM] <Eric[nK]@Azeroth> apple apple apple
+ [05:17:47 PM] <Eric[nK]@Azeroth> carrot carrot carrot carrot
+ [05:17:59 PM] <Eric[nK]@Azeroth> carrot carrot carrot carrot
+ [05:20:59 PM] <VBScript@Azeroth> lol
+ [05:21:04 PM] <VBScript@Azeroth> "i have depression"
+ [05:21:08 PM] <VBScript@Azeroth> "SO STOP IT"
+ [05:21:15 PM] <VBScript@Azeroth> "i have cancer..."
+ [05:21:18 PM] <VBScript@Azeroth> "SO STOP IT"
+ [05:23:34 PM] Shutting down...
+ [05:23:59 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [05:23:59 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [05:24:05 PM] The current StealthBot version is ÿcb2.6R3.
+ [05:24:05 PM]  
+ [05:24:05 PM] >> ÿcbStealthBot News
+ [05:24:05 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [05:24:05 PM] ->> 
+ [05:24:05 PM] ->> ÿcbStealthBot Beta News
+ [05:24:05 PM] ->> Happy testing!
+ [05:24:05 PM]  
+ [05:24:05 PM] The current StealthBot Beta version is 2.6993.
+ [05:24:05 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [05:24:05 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [05:24:08 PM] Connecting your bot...
+ [05:24:08 PM] Authorizing your private-release bot, please wait.
+ [05:24:08 PM] Private usage authorized, connecting to Battle.Net.
+ [05:24:08 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [05:24:08 PM] [BNLS] Connected!
+ [05:24:08 PM] [BNLS] Authorized!
+ [05:24:08 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [05:24:08 PM] [BNET] Connected!
+ [05:24:08 PM] [BNET] Checking version...
+ [05:24:09 PM] [BNET] Client version accepted!
+ [05:24:09 PM] [BNET] Sending login information...
+ [05:24:09 PM] [BNET] Login successful.
+ [05:24:09 PM] [CLAN] You are a Shaman in Clan SBs.
+ [05:24:09 PM] [BNET] Logged on as Eric[nK].
+ [05:24:10 PM] -- Joined channel: Clan SBs --
+ [05:24:10 PM] Welcome to Battle.net!
+ [05:24:10 PM] This server is hosted by AT&T.
+ [05:24:10 PM] There are currently 7311 users playing 249 games of Warcraft III, and 176187 users playing 47554 games on Battle.net.
+ [05:24:10 PM] Last logon: Wed Feb 27  5:25 PM
+ [05:24:10 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [05:24:10 PM] Jack likes your mom
+ [05:24:10 PM] -- Stats updated: Eric[nK]@Azeroth [172ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [05:24:11 PM] -- Joined channel: Clan BoT --
+ [05:24:11 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [05:24:11 PM] Last Logon: 2/28/2008, 01:26:53 (Battle.net time)
+ [05:24:11 PM] Last Logoff: 2/28/2008, 01:26:53 (Battle.net time)
+ [05:24:11 PM] Time Logged: 74 days, 6 hours, 6 minutes and 24 seconds
+ [05:24:38 PM] <Eric[nK]@Azeroth> hm
+ [05:24:58 PM] <Eric[nK]@Azeroth> hm
+ [05:27:03 PM] <Eric[nK]@Azeroth> hm
+ [05:27:12 PM] -- VBScript@Azeroth has left the channel.
+ [05:27:20 PM] <Eric[nK]@Azeroth> AHHHHHHHHHHHHHH
+ [05:32:15 PM] -- VBScript@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:32:16 PM] -- VBScript@Azeroth has acquired ops.
+ [05:33:13 PM] <Eric[nK]@Azeroth> ahhhhh
+ [05:33:37 PM] <VBScript@Azeroth> lol
+ [05:33:48 PM] <VBScript@Azeroth> packet logs dont show anything when i get ipbanned
+ [05:33:49 PM] <VBScript@Azeroth> ):
+ [05:34:17 PM] <Eric[nK]@Azeroth> Or at least they don't show anything that you know how to interpret.
+ [05:34:42 PM] <Eric[nK]@Azeroth> Send me a copy of the logs.
+ [05:35:59 PM] <0x5E@Azeroth :: "EET FUK!" -James Hetfield :: StealthBot Beta v2.6999 :.>
+ [05:36:10 PM] <VBScript@Azeroth> i know how to interpret them
+ [05:36:12 PM] <VBScript@Azeroth> sort of
+ [05:36:24 PM] <VBScript@Azeroth> i've been yelling at the monitor over pyro's bot for a while
+ [05:37:51 PM] <VBScript@Azeroth> it sent this
+ [05:37:53 PM] <VBScript@Azeroth> over and over
+ [05:38:03 PM] <VBScript@Azeroth> in the last 3 minutes before i disconnected
+ [05:38:04 PM] <VBScript@Azeroth> http://rafb.net/p/S3A3R184.html
+ [05:38:17 PM] <VBScript@Azeroth> 0x65
+ [05:38:25 PM] <PyroManiac606@Azeroth> that packet is annoying
+ [05:38:26 PM] <PyroManiac606@Azeroth> o.o
+ [05:38:31 PM] <VBScript@Azeroth> what is it for
+ [05:38:32 PM] <VBScript@Azeroth> friends?
+ [05:38:36 PM] <PyroManiac606@Azeroth> yea..
+ [05:38:49 PM] <PyroManiac606@Azeroth> and it gets handled like... every 3 seconds
+ [05:38:54 PM] <VBScript@Azeroth> other bot sends it too
+ [05:38:57 PM] <VBScript@Azeroth> a lot...
+ [05:39:04 PM] <VBScript@Azeroth> and thats all there is in the log for the last few minutes
+ [05:48:16 PM] -- VBScript@Azeroth has left the channel.
+ [05:50:12 PM] <Eric[nK]@Azeroth> ... did it send anything else?
+ [05:51:02 PM] <PyroManiac606@Azeroth>  [20:50:33.393] -- VBScript has left the channel.
+ [05:53:19 PM] -- VBScript@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [05:53:20 PM] -- VBScript@Azeroth has acquired ops.
+ [05:53:20 PM] -- Stats updated: VBScript@Azeroth [47ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:53:39 PM] <Eric[nK]@Azeroth>  [05:50:12 PM] <Eric[nK]@Azeroth> ... did it send anything else?
+ [06:05:59 PM] <0x5E@Azeroth :: [23:37:37] <Shonen_481> let me fux my damn bots now  [23:37:57] <Lagging> that is the best typo ever. :: StealthBot Beta v2.6999 :.>
+ [06:09:18 PM] -- VBScript@Azeroth has left the channel.
+ [06:14:21 PM] -- VBScript@Azeroth [63ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [06:14:21 PM] -- VBScript@Azeroth has acquired ops.
+ [06:14:21 PM] -- Stats updated: VBScript@Azeroth [63ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:24:17 PM] <Hero.A@Azeroth> Hey
+ [06:24:26 PM] <Hero.A@Azeroth> What is the function for a sqr root in VB?
+ [06:24:28 PM] <VBScript@Azeroth> The bot does not have any information about the "function for a sqr root in VB".
+ [06:24:48 PM] <PyroManiac606@Azeroth> $vbs sqr
+ [06:24:49 PM] <0x5E@Azeroth> The Sqr function returns the square root of a number.
+ [06:24:56 PM] <Hero.A@Azeroth> Thankyou
+ [06:25:21 PM] -- Alendar [47ms] has joined the channel using Diablo II (Open Character).
+ [06:25:30 PM] <Alendar> Good evening.
+ [06:25:30 PM] <Hero.A@Azeroth> That is not a vb function..
+ [06:25:47 PM] <PyroManiac606@Azeroth> its a vbs function
+ [06:25:48 PM] <PyroManiac606@Azeroth> o.o
+ [06:25:54 PM] <PyroManiac606@Azeroth> 5
+ [06:25:58 PM] <PyroManiac606@Azeroth> ./exec addq sqr(25)
+ [06:27:03 PM] <Hero.A@Azeroth> Visual BASICS!
+ [06:27:42 PM] <Hero.A@Azeroth> I got it
+ [06:27:48 PM] <Hero.A@Azeroth> answ = System.Math.Sqrt(valXnum)
+ [06:28:30 PM] -- i7-Haxor@Azeroth [46ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 6, icon tier Orcs, peon icon, in Clan i7)
+ [06:28:41 PM] <i7-Haxor@Azeroth> hey
+ [06:28:59 PM] <i7-Haxor@Azeroth> anyone know where i can take cd key for bot ?
+ [06:29:26 PM] -- i7-Haxor@Azeroth has left the channel.
+ [06:30:21 PM] -- VBScript@Azeroth has left the channel.
+ [06:35:30 PM] -- VBScript@Azeroth [3313ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [06:35:30 PM] -- VBScript@Azeroth has acquired ops.
+ [06:35:30 PM] -- Stats updated: VBScript@Azeroth [3313ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:36:00 PM] <0x5E@Azeroth :: [23:40:33] <Ersan> Your Mom is like a struct. She's got no class! :: StealthBot Beta v2.6999 :.>
+ [06:37:04 PM] -- Ninja-Scout@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan NNN)
+ [06:37:14 PM] -- Ninja-Scout@Azeroth has left the channel.
+ [06:45:22 PM] <PyroManiac606@Azeroth> Alendar!
+ [06:45:28 PM] <Alendar> Hello.
+ [06:45:35 PM] <PyroManiac606@Azeroth> hi :)
+ [06:45:41 PM] <Eric[nK]@Azeroth> Alendar!
+ [06:45:46 PM] <Alendar> Hi.
+ [06:45:47 PM] <PyroManiac606@Azeroth> Eric!
+ [06:46:02 PM] <Eric[nK]@Azeroth> PyroManiac606@Azeroth!
+ [06:46:08 PM] <PyroManiac606@Azeroth> lol
+ [06:46:12 PM] <Jd[BoT]@Azeroth> ...lw
+ [06:46:19 PM] <PyroManiac606@Azeroth> ...
+ [06:46:22 PM] <Eric[nK]@Azeroth> ...
+ [06:46:27 PM] <Eric[nK]@Azeroth> "Jd[BoT]@Azeroth" has been given access 100.
+ [06:46:29 PM] The bot has not been whispered since it logged on.
+ [06:46:32 PM] <Jd[BoT]@Azeroth> hm
+ [06:46:34 PM] <PyroManiac606@Azeroth> ...whoami
+ [06:46:36 PM] <Alendar> I think Eric likes me. :o
+ [06:46:36 PM] <Jd[BoT]@Azeroth> ...lw
+ [06:46:37 PM] <Eric[nK]@Azeroth> The bot has not been whispered since it logged on.
+ [06:46:40 PM] <PyroManiac606@Azeroth> OMG
+ [06:46:40 PM] <Eric[nK]@Azeroth> "*" has been given access 100.
+ [06:46:46 PM] <PyroManiac606@Azeroth> YOU TOOK AWAY MY ACCESS
+ [06:46:51 PM] <PyroManiac606@Azeroth> ...whoami
+ [06:46:51 PM] <Eric[nK]@Azeroth> [*] has access 100.
+ [06:46:53 PM] <PyroManiac606@Azeroth> o.o
+ [06:46:58 PM] <Alendar> ..whoisme
+ [06:46:59 PM] <Jd[BoT]@Azeroth> ...whoami
+ [06:46:59 PM] <Eric[nK]@Azeroth> Jd[BoT]@Azeroth [*] has access 100.
+ [06:47:11 PM] <Jd[BoT]@Azeroth> lol
+ [06:47:19 PM] <Jd[BoT]@Azeroth> ...ver
+ [06:47:20 PM] <Eric[nK]@Azeroth> .: StealthBot Beta v2.6999 Development Release 2 by Stealth.
+ [06:47:26 PM] <Jd[BoT]@Azeroth> ;)
+ [06:47:32 PM] <PyroManiac606@Azeroth> um
+ [06:47:42 PM] <PyroManiac606@Azeroth> how can you call it a release when it hasnt been released yet?
+ [06:47:43 PM] <PyroManiac606@Azeroth> o.o
+ [06:48:03 PM] <Jd[BoT]@Azeroth> because it's released to him
+ [06:48:05 PM] <Jd[BoT]@Azeroth> o.o
+ [06:48:15 PM] <Eric[nK]@Azeroth> Exactly.
+ [06:48:19 PM] <Jd[BoT]@Azeroth> :P
+ [06:48:45 PM] <Jd[BoT]@Azeroth> and plus it would be retarded to rename it over a little name ;P
+ [06:51:02 PM] <Alendar> <3 Jack's stupidity
+ [06:51:03 PM] <Alendar> http://www.stealthbot.net/board/index.php?s=&showtopic=29876&view=findpost&p=252790
+ [06:51:18 PM] <PyroManiac606@Azeroth> lol
+ [06:51:23 PM] -- VBScript@Azeroth has left the channel.
+ [06:51:56 PM] <PyroManiac606@Azeroth> It is currently 49°F in Orlando, FL. Mostly Cloudy with Winds: W at 8mph. 60% humidity and a visibility of 10 Miles.
+ [06:51:59 PM] -- LuC1Fr [125ms] has joined the channel using Starcraft Brood War (0 wins).
+ [06:52:01 PM] <LuC1Fr> PENIS
+ [06:52:03 PM] <LuC1Fr> HA
+ [06:52:04 PM] <LuC1Fr> ..
+ [06:52:04 PM] <LuC1Fr> -.-
+ [06:52:05 PM] <PyroManiac606@Azeroth> VAGINA
+ [06:52:06 PM] <PyroManiac606@Azeroth> LOL
+ [06:52:08 PM] <LuC1Fr> ONG
+ [06:52:13 PM] <LuC1Fr> m*
+ [06:52:18 PM] <PyroManiac606@Azeroth> ;p
+ [06:52:35 PM] <LuC1Fr> question
+ [06:52:37 PM] <Alendar> Hello LuC1Fr.
+ [06:52:40 PM] <LuC1Fr> since you're here,
+ [06:52:48 PM] <LuC1Fr> latest beta work with D2DV?
+ [06:52:54 PM] <LuC1Fr> Hi alendar
+ [06:53:07 PM] <PyroManiac606@Azeroth> 0x30: ver
+ [06:53:07 PM] <0x30> .: StealthBot Beta v2.6999 Development Release 1 by Stealth.
+ [06:53:10 PM] <PyroManiac606@Azeroth> yea..
+ [06:53:14 PM] <LuC1Fr> ah ha.
+ [06:53:22 PM] <LuC1Fr> koo koo
+ [06:53:23 PM] <Alendar> .: StealthBot Beta v2.6999 Development Release 1 by Stealth.
+ [06:53:41 PM] <PyroManiac606@Azeroth> lol
+ [06:53:44 PM] <PyroManiac606@Azeroth> alendar
+ [06:53:46 PM] -- LuC1Fr-Tech@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [06:53:47 PM] <Alendar> Hi.
+ [06:53:47 PM] -- LuC1Fr-Tech@Azeroth has left the channel.
+ [06:53:53 PM] <LuC1Fr> o.o
+ [06:53:55 PM] <PyroManiac606@Azeroth> type..
+ [06:53:58 PM] <LuC1Fr> well that sucked
+ [06:54:04 PM] <Alendar> Type what?
+ [06:54:06 PM] <PyroManiac606@Azeroth> type .weather bobs house
+ [06:54:11 PM] <LuC1Fr> .weather bobs house
+ [06:54:23 PM] <Alendar> .weather jills house
+ [06:54:25 PM] <PyroManiac606@Azeroth> It is currently 49°F in Orlando, FL. Mostly Cloudy with Winds: W at 8mph. 60% humidity and a visibility of 10 Miles.
+ [06:54:30 PM] -- LuC1Fr-Tech@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [06:54:31 PM] <PyroManiac606@Azeroth> lol -.-
+ [06:54:31 PM] <LuC1Fr> `ver
+ [06:54:32 PM] <LuC1Fr-Tech@Azeroth> .: StealthBot Beta v2.6999 Development Release 1 by Stealth.
+ [06:54:33 PM] <LuC1Fr> `home
+ [06:54:33 PM] -- LuC1Fr-Tech@Azeroth has left the channel.
+ [06:54:38 PM] <PyroManiac606@Azeroth> ?trigger; scq; ver
+ [06:54:38 PM] <Alendar[BoT]@Azeroth> .: StealthBot Beta v2.6999 Development Release 1 by Stealth.
+ [06:54:38 PM] <Pyro[BoT]@Azeroth> .: StealthBot Beta v2.6999 Development Release 1 by Stealth.
+ [06:54:38 PM] <0x51@Azeroth> .: StealthBot Beta v2.6999 Development Release 1 by Stealth.
+ [06:54:39 PM] <Alendar@Azeroth> .: StealthBot Beta v2.6999 Development Release 1 by Stealth.
+ [06:54:39 PM] <0x0C@Azeroth> .: StealthBot Beta v2.6999 Development Release 1 by Stealth.
+ [06:54:39 PM] <0x5E@Azeroth> .: StealthBot Beta v2.6999 Development Release 1 by Stealth.
+ [06:54:39 PM] <IdleBoT@Azeroth> .: StealthBot Beta v2.6999 Development Release 1 by Stealth.
+ [06:54:39 PM] <Eric[nK]@Azeroth> .: StealthBot Beta v2.6999 Development Release 2 by Stealth.
+ [06:54:40 PM] <0x30> .: StealthBot Beta v2.6999 Development Release 1 by Stealth.
+ [06:54:40 PM] <Jd[BoT]@Azeroth> .: StealthBot Beta v2.6999 Development Release 1 by Stealth.
+ [06:54:42 PM] <LuC1Fr> OW
+ [06:54:52 PM] <PyroManiac606@Azeroth> :x
+ [06:54:52 PM] <Alendar is currently: Awesome Current Project: Getting organized My website: http://alendar.net :->
+ [06:55:04 PM] <PyroManiac606@Azeroth> alendar, your always awesome ;p
+ [06:55:11 PM] <Alendar> I know. ;)
+ [06:55:38 PM] -- LuC1Fr-Tech@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [06:56:05 PM] <LuC1Fr-Tech@Azeroth> oh yeah!??!
+ [06:56:07 PM] <LuC1Fr-Tech@Azeroth> luc1fr.com
+ [06:56:08 PM] <LuC1Fr-Tech@Azeroth> w00t
+ [06:56:10 PM] <LuC1Fr-Tech@Azeroth> -.-
+ [06:56:47 PM] -- VBScript@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [06:56:48 PM] -- VBScript@Azeroth has acquired ops.
+ [06:56:48 PM] -- Stats updated: VBScript@Azeroth [62ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:56:52 PM] <LuC1Fr-Tech@Azeroth> eww
+ [06:56:55 PM] <LuC1Fr-Tech@Azeroth> no wonder no sound
+ [06:56:56 PM] <LuC1Fr-Tech@Azeroth> dug
+ [06:57:00 PM] <LuC1Fr-Tech@Azeroth> duh*
+ [06:57:29 PM] <Alendar> Awesome website.
+ [06:57:34 PM] <Alendar> What's it for?
+ [06:57:43 PM] -- OuT.@Azeroth [16ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 23, icon tier Night Elves, huntress icon, in Clan WaB)
+ [06:57:49 PM] -- OuT.@Azeroth has left the channel.
+ [06:58:16 PM] <LuC1Fr-Tech@Azeroth> absolutly nothing
+ [06:58:50 PM] <LuC1Fr-Tech@Azeroth> had bg sound.. seeing if it works now.
+ [06:58:59 PM] <Jd[BoT]@Azeroth> lol
+ [06:59:21 PM] <LuC1Fr-Tech@Azeroth> yeah!
+ [06:59:23 PM] <LuC1Fr-Tech@Azeroth> refresh
+ [06:59:35 PM] <Jd[BoT]@Azeroth> nothing?
+ [06:59:45 PM] <LuC1Fr-Tech@Azeroth> uhh
+ [06:59:46 PM] <LuC1Fr-Tech@Azeroth> IE
+ [06:59:50 PM] <Jd[BoT]@Azeroth> oh -.-
+ [06:59:52 PM] <Jd[BoT]@Azeroth> stupid f
+ [06:59:52 PM] <LuC1Fr-Tech@Azeroth> dunno if it works in ff
+ [06:59:53 PM] <Jd[BoT]@Azeroth> f
+ [06:59:57 PM] <Jd[BoT]@Azeroth> sec
+ [07:00:04 PM] <Jd[BoT]@Azeroth> btw
+ [07:00:09 PM] <Jd[BoT]@Azeroth> you forgot to do
+ [07:00:12 PM] <LuC1Fr-Tech@Azeroth> yeah.. doesnt work with ff
+ [07:00:13 PM] <PyroManiac606@Azeroth> what the fuck
+ [07:00:13 PM] <Jd[BoT]@Azeroth> <title>yourtitle</title>
+ [07:00:16 PM] <Jd[BoT]@Azeroth> <3
+ [07:00:18 PM] <LuC1Fr-Tech@Azeroth> i know.
+ [07:00:19 PM] <Alendar> If it doesn't work in Fx you fail uberly.
+ [07:00:21 PM] <PyroManiac606@Azeroth> its 11 degrees warmer in miami
+ [07:00:23 PM] <PyroManiac606@Azeroth> than it is here
+ [07:00:23 PM] <LuC1Fr-Tech@Azeroth> stupid dreamweaver
+ [07:00:34 PM] <Jd[BoT]@Azeroth> lol
+ [07:00:37 PM] <Jd[BoT]@Azeroth> i love dreamweaver
+ [07:00:43 PM] -- CarelessWhisper@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon)
+ [07:00:47 PM] -- CarelessWhisper@Azeroth has left the channel.
+ [07:01:38 PM] <LuC1Fr-Tech@Azeroth> there
+ [07:01:40 PM] <LuC1Fr-Tech@Azeroth> titles fixed.
+ [07:01:41 PM] <PyroManiac606@Azeroth> It is currently 61°F in Sacramento, CA. Partly Cloudy with Winds: WNW at 5mph. 59% humidity and a visibility of 10 Miles.
+ [07:01:47 PM] <Alendar> Hand coding for the win?
+ [07:01:47 PM] <PyroManiac606@Azeroth> WTF
+ [07:01:51 PM] <LuC1Fr-Tech@Azeroth> what is it in Farmington, NM
+ [07:01:52 PM] <Jd[BoT]@Azeroth> Lmao
+ [07:02:00 PM] <PyroManiac606@Azeroth> ITS WARMER FURTHER NORTH THAN ME THAN IT IS HERE
+ [07:02:09 PM] <Jd[BoT]@Azeroth> alendar, it seems you like it the hard way as i used to -.-
+ [07:02:12 PM] <Alendar> Haha, owned.
+ [07:02:13 PM] <PyroManiac606@Azeroth> It is currently 42°F in Farmington, NM. Mostly Cloudy with Winds: W at 5mph. 48% humidity and a visibility of 10 Miles.
+ [07:02:18 PM] <PyroManiac606@Azeroth> WTF
+ [07:02:27 PM] <Alendar> I do.
+ [07:03:09 PM] <Jd[BoT]@Azeroth> mmm
+ [07:03:12 PM] <Jd[BoT]@Azeroth> ?trigger
+ [07:03:12 PM] <Eric[nK]@Azeroth> The bot's current trigger is " ... " (Length: 3)
+ [07:03:12 PM] <0x5E@Azeroth> The bot's current trigger is " $ " (Alt + 036)
+ [07:03:12 PM] <Alendar[BoT]@Azeroth> The bot's current trigger is " !! " (Length: 2)
+ [07:03:13 PM] <Alendar@Azeroth> The bot's current trigger is " ! " (Alt + 033)
+ [07:03:13 PM] <0x51@Azeroth> The bot's current trigger is " 1337 " (Length: 4)
+ [07:03:13 PM] <Pyro[BoT]@Azeroth> The bot's current trigger is " ` " (Alt + 096)
+ [07:03:13 PM] <0x0C@Azeroth> The bot's current trigger is " , " (Alt + 044)
+ [07:03:13 PM] <0x30> The bot's current trigger is " ;-; " (Length: 3)
+ [07:03:15 PM] <IdleBoT@Azeroth> The bot's current trigger is " ## " (Length: 2)
+ [07:03:24 PM] <Alendar> I am becoming more active on StealthBot.net.
+ [07:03:30 PM] <Jd[BoT]@Azeroth> ?trigger; whoami
+ [07:03:30 PM] <IdleBoT@Azeroth> The bot's current trigger is " ## " (Length: 2)
+ [07:03:30 PM] <Alendar[BoT]@Azeroth> The bot's current trigger is " !! " (Length: 2)
+ [07:03:30 PM] <0x30> The bot's current trigger is " ;-; " (Length: 3)
+ [07:03:30 PM] <Alendar@Azeroth> The bot's current trigger is " ! " (Alt + 033)
+ [07:03:31 PM] <0x51@Azeroth> The bot's current trigger is " 1337 " (Length: 4)
+ [07:03:31 PM] <Pyro[BoT]@Azeroth> The bot's current trigger is " ` " (Alt + 096)
+ [07:03:31 PM] <0x0C@Azeroth> The bot's current trigger is " , " (Alt + 044)
+ [07:03:31 PM] <0x5E@Azeroth> The bot's current trigger is " $ " (Alt + 036)
+ [07:03:31 PM] <Eric[nK]@Azeroth> The bot's current trigger is " ... " (Length: 3)
+ [07:03:31 PM] <IdleBoT@Azeroth> [BoT (clan)] has access 90.
+ [07:03:31 PM] <Alendar[BoT]@Azeroth> Jd[BoT] [Admin (group), BoT (clan)] has access 100 and flags SO.
+ [07:03:32 PM] <Alendar@Azeroth> Jd[BoT] [Admin (group), BoT (clan)] has access 100 and flags SO.
+ [07:03:32 PM] <0x51@Azeroth> [BoT (clan)] has access 50.
+ [07:03:32 PM] <Pyro[BoT]@Azeroth> [BoT (clan)] has access 60 and flags SO.
+ [07:03:32 PM] <0x0C@Azeroth> [BoT (clan)] has access 50.
+ [07:03:32 PM] <0x5E@Azeroth> [BoT (clan)] has access 60.
+ [07:03:32 PM] <Eric[nK]@Azeroth> Jd[BoT]@Azeroth [*] has access 100.
+ [07:03:33 PM] <0x30> Jd[BoT]@azeroth has access 200.
+ [07:03:41 PM] <Alendar> -_-
+ [07:03:47 PM] <Jd[BoT]@Azeroth> i do a post now and then
+ [07:03:50 PM] <LuC1Fr-Tech@Azeroth> ?trigger
+ [07:03:50 PM] <0x0C@Azeroth> The bot's current trigger is " , " (Alt + 044)
+ [07:03:50 PM] <Eric[nK]@Azeroth> The bot's current trigger is " ... " (Length: 3)
+ [07:03:50 PM] <IdleBoT@Azeroth> The bot's current trigger is " ## " (Length: 2)
+ [07:03:53 PM] <LuC1Fr-Tech@Azeroth> o.o
+ [07:03:54 PM] <Jd[BoT]@Azeroth> when i find it's worth my time ;P
+ [07:04:02 PM] <LuC1Fr-Tech@Azeroth> wow, i actually have access to people
+ [07:04:07 PM] <PyroManiac606@Azeroth> yea
+ [07:04:10 PM] <PyroManiac606@Azeroth> and its all clan based
+ [07:04:18 PM] <LuC1Fr-Tech@Azeroth> ...
+ [07:04:21 PM] <LuC1Fr-Tech@Azeroth> hmm
+ [07:04:31 PM] <Jd[BoT]@Azeroth> weird music luc1fr
+ [07:04:32 PM] <Jd[BoT]@Azeroth> o.o
+ [07:04:35 PM] <LuC1Fr-Tech@Azeroth> i like it
+ [07:04:37 PM] <LuC1Fr-Tech@Azeroth> but tell me 
+ [07:04:41 PM] <LuC1Fr-Tech@Azeroth> (Sec grabbing link)
+ [07:04:43 PM] <Jd[BoT]@Azeroth> nice beat to it though o.o
+ [07:04:43 PM] <PyroManiac606@Azeroth> -weather berlin
+ [07:04:45 PM] <VBScript@Azeroth> It is 25°F (Cloudy) in Berlin, CT with 63% humidity (pressure at 29.67 in).  Wind WNW at 10mph.  Vision at 10 Miles. Time is 10:07PM.
+ [07:04:49 PM] <PyroManiac606@Azeroth> oh
+ [07:04:51 PM] <VBScript@Azeroth> I HAVE OBSERVED SOMETHING INTERESTING
+ [07:04:54 PM] <VBScript@Azeroth> I HAVE NO DROPPED YET
+ [07:04:57 PM] <VBScript@Azeroth> AND I AM NOT USING 2.69
+ [07:05:02 PM] <PyroManiac606@Azeroth> well i can stop complaining, its 25 degrees at phix's house
+ [07:05:03 PM] <PyroManiac606@Azeroth> o.o
+ [07:05:13 PM] <VBScript@Azeroth> that is berlin, connecticut
+ [07:05:17 PM] <PyroManiac606@Azeroth> oh
+ [07:05:20 PM] <VBScript@Azeroth> it does not do other countries
+ [07:05:25 PM] <PyroManiac606@Azeroth> OHHH
+ [07:05:26 PM] <Jd[BoT]@Azeroth> Lol!
+ [07:05:26 PM] <PyroManiac606@Azeroth> k
+ [07:05:27 PM] <PyroManiac606@Azeroth> aw
+ [07:05:32 PM] <PyroManiac606@Azeroth> well
+ [07:05:42 PM] <PyroManiac606@Azeroth> ill make mine do other countries
+ [07:05:44 PM] <PyroManiac606@Azeroth> o.o
+ [07:05:47 PM] <LuC1Fr-Tech@Azeroth> You know what Time Lapse photography is Jd[BoT] ?
+ [07:05:51 PM] <VBScript@Azeroth> have fun finding a website that does that
+ [07:05:57 PM] <PyroManiac606@Azeroth> oh
+ [07:05:58 PM] <PyroManiac606@Azeroth> shit
+ [07:05:59 PM] -- ifndef-tech@Azeroth [94ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [07:05:59 PM] <0x5E@Azeroth :: [18:04:01] <Eric[nK]> Stealth's code scares me. :: StealthBot Beta v2.6999 :.>
+ [07:06:01 PM] <Jd[BoT]@Azeroth> hm?
+ [07:06:10 PM] <LuC1Fr-Tech@Azeroth> this: http://www.crosland.com/images/pr/Night_Time_Lapse.jpg
+ [07:06:14 PM] <Alendar> In four days and two hours it will be David's birthday.
+ [07:06:27 PM] <LuC1Fr-Tech@Azeroth> Basically, it uses a camera, and takes a picture at predetermined times
+ [07:06:31 PM] <LuC1Fr-Tech@Azeroth> for a certain amount of time
+ [07:06:47 PM] <PyroManiac606@Azeroth>  [22:08:32.096] <Alendar@USEast> In four days and two hours it will be David's birthday.
+ [07:06:48 PM] <PyroManiac606@Azeroth> huh?
+ [07:06:55 PM] <LuC1Fr-Tech@Azeroth> Sometimes, you can keep the exposure long (keeping the shutter open) for long periods of times, and producing the image in the link
+ [07:06:59 PM] <Alendar> Birthday      3 March 1992
+ [07:07:02 PM] <Jd[BoT]@Azeroth> lol
+ [07:07:07 PM] <PyroManiac606@Azeroth> OH
+ [07:07:09 PM] <PyroManiac606@Azeroth> LOL
+ [07:07:28 PM] <LuC1Fr-Tech@Azeroth> what i was going to ask, is which would go better. the image that's currently on my page. or the one i linked (or similar)
+ [07:07:45 PM] <PyroManiac606@Azeroth> phixed
+ [07:07:54 PM] <Alendar> By the way, Lucifer, splash pages suck.
+ [07:07:55 PM] <ifndef-tech@Azeroth> what type of page is it?
+ [07:08:03 PM] <LuC1Fr-Tech@Azeroth> Thanks captain obvious
+ [07:08:07 PM] <PyroManiac606@Azeroth> Additional Information
+ [07:08:09 PM] <PyroManiac606@Azeroth> Battle.net Username     PyroManiac606, Pyro6-Tech, Pyro[BoT], 0x5E, 0x74, 0xFF, 0x0C, 0x51
+ [07:08:09 PM] -- PingGnome@Azeroth [656ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [07:08:12 PM] <PyroManiac606@Azeroth> o.o
+ [07:08:23 PM] <PyroManiac606@Azeroth> `b pin*
+ [07:08:23 PM] -- PingGnome@Azeroth has left the channel.
+ [07:08:23 PM] PingGnome was banned by Pyro[BoT] (pin*).
+ [07:08:25 PM] <Jd[BoT]@Azeroth> i want to ban ping gnome!
+ [07:08:28 PM] <ifndef-tech@Azeroth> i finally broke down and signed up for myspace last week
+ [07:08:28 PM] <Alendar> Battle.net Username      Alendar, JosephW, Joseph.W, Alendar[BoT], Tech-Alendar, RealmAdmin, TagCollector
+ [07:08:30 PM] <Jd[BoT]@Azeroth> boo -.-
+ [07:08:34 PM] <VBScript@Azeroth> im gonna make ponggnome
+ [07:08:35 PM] <PyroManiac606@Azeroth> `k her* in the face
+ [07:08:35 PM] <Pyro[BoT]@Azeroth> Encountered 1 safelisted user(s).
+ [07:08:35 PM] PingGnome was banned by Jd[BoT] (pinggnome).
+ [07:08:36 PM] <VBScript@Azeroth> and follow it around
+ [07:08:41 PM] <LuC1Fr-Tech@Azeroth> Well, it's not like i do anything usefull to post on a webpage though, i just have the Webspace to do what ever i want.
+ [07:08:47 PM] <PyroManiac606@Azeroth> !!kick her* in the face
+ [07:08:47 PM] <Alendar[BoT]@Azeroth> Encountered 1 safelisted user(s).
+ [07:08:54 PM] <Alendar> :o
+ [07:08:57 PM] <PyroManiac606@Azeroth> Jd[BoT]: kick her* in the face
+ [07:08:58 PM] <Jd[BoT]@Azeroth> Encountered 1 safelisted user(s).
+ [07:08:59 PM] <LuC1Fr-Tech@Azeroth> Too many blogs on the interwebs, so thats a no.
+ [07:09:00 PM] <PyroManiac606@Azeroth> WTF
+ [07:09:09 PM] <Jd[BoT]@Azeroth> lol
+ [07:09:39 PM] <LuC1Fr-Tech@Azeroth> Has anyone heard of synthian sharp?
+ [07:10:34 PM] <PyroManiac606@Azeroth> no
+ [07:10:36 PM] <PyroManiac606@Azeroth> $reload script
+ [07:10:40 PM] <Alendar> So, what's going on?
+ [07:11:57 PM] <VBScript@Azeroth> found a bug in teh betorz
+ [07:12:01 PM] <PyroManiac606@Azeroth> OMG
+ [07:12:03 PM] -- 3liteGhost [93ms] has joined the channel using Starcraft Brood War (0 wins).
+ [07:12:04 PM] <PyroManiac606@Azeroth> what
+ [07:12:13 PM] <PyroManiac606@Azeroth> #whoami
+ [07:12:18 PM] <PyroManiac606@Azeroth> `settrigger #
+ [07:12:18 PM] <Pyro[BoT]@Azeroth> The new trigger is "#".
+ [07:12:46 PM] -- 3liteGhost has left the channel.
+ [07:14:42 PM] <LuC1Fr> `trigger penis
+ [07:14:42 PM] <LuC1Fr-Tech@Azeroth> The bot's current trigger is " ` " (Alt + 096)
+ [07:14:49 PM] <LuC1Fr> `settrigger penis
+ [07:14:50 PM] <LuC1Fr-Tech@Azeroth> The new trigger is "penis".
+ [07:14:53 PM] <LuC1Fr> yaya
+ [07:14:54 PM] <LuC1Fr> peniswhoami
+ [07:14:56 PM] <LuC1Fr-Tech@Azeroth> LuC1Fr@useast [Admins (group)] has flags EAacCGJOomPSsT.
+ [07:14:58 PM] <LuC1Fr> hmm
+ [07:15:09 PM] <LuC1Fr> penissettrigger 
+ [07:15:14 PM] <LuC1Fr> -_-
+ [07:15:14 PM] <Alendar> Got enough flags there?
+ [07:15:17 PM] <LuC1Fr> No
+ [07:15:19 PM] <LuC1Fr> i need more
+ [07:15:31 PM] <LuC1Fr> i have a jolly roger flag as well
+ [07:15:34 PM] <LuC1Fr> ?Trigger
+ [07:15:35 PM] <LuC1Fr-Tech@Azeroth> The bot's current trigger is " penis " (Length: 5)
+ [07:15:36 PM] <Eric[nK]@Azeroth> The bot's current trigger is " ... " (Length: 3)
+ [07:15:41 PM] <LuC1Fr> penissettrigger `
+ [07:15:42 PM] <LuC1Fr-Tech@Azeroth> The new trigger is "`".
+ [07:15:47 PM] <LuC1Fr> ...whoami
+ [07:15:48 PM] <Eric[nK]@Azeroth> [*] has access 100.
+ [07:15:51 PM] <LuC1Fr> o.o
+ [07:16:12 PM] <LuC1Fr> `home
+ [07:16:13 PM] -- LuC1Fr-Tech@Azeroth has left the channel.
+ [07:16:13 PM] -- LuC1Fr has left the channel.
+ [07:16:53 PM] <Eric[nK]@Azeroth> hm
+ [07:17:00 PM] <VBScript@Azeroth> eric.
+ [07:17:09 PM] <VBScript@Azeroth> i switched all my bots back
+ [07:17:12 PM] <VBScript@Azeroth> only one is using the beta
+ [07:17:17 PM] <VBScript@Azeroth> and they havent dropped in 20 minutes
+ [07:17:20 PM] <VBScript@Azeroth> as apposed to every 5
+ [07:17:28 PM] <Eric[nK]@Azeroth> ...?
+ [07:17:38 PM] <VBScript@Azeroth> i was dropping every 5 minutes
+ [07:17:41 PM] <VBScript@Azeroth> with 2 betas, one 2.6
+ [07:17:46 PM] <VBScript@Azeroth> now 1 beta, 2 2.6
+ [07:17:47 PM] <VBScript@Azeroth [Food for Thought] Live in the sunshine, swim the sea, drink the wild air…    -Ralph Waldo Emerson>
+ [07:17:49 PM] <VBScript@Azeroth> and no dropping
+ [07:17:57 PM] <Alendar> Current MP3 [15/74]: Rise Against - Like The Angel (00:23/02:46)
+ [07:18:21 PM] <Eric[nK]@Azeroth> Start keeping packet logs of the disconnects and send them to me.
+ [07:18:21 PM] <Alendar> -plugins
+ [07:18:39 PM] <Alendar> What about warden? :p
+ [07:18:48 PM] <Alendar> When will we attack that?
+ [07:18:52 PM] <PyroManiac606@Azeroth> its only affecting him
+ [07:18:54 PM] <VBScript@Azeroth> i can't...
+ [07:18:56 PM] <PyroManiac606@Azeroth> and not when the beta
+ [07:18:57 PM] <PyroManiac606@Azeroth> so..
+ [07:18:58 PM] <VBScript@Azeroth> i told you
+ [07:19:01 PM] <VBScript@Azeroth> what the logs saved
+ [07:19:03 PM] <VBScript@Azeroth> lol
+ [07:19:11 PM] <VBScript@Azeroth> the only thing that appears is 0x65
+ [07:19:13 PM] <VBScript@Azeroth> over and over
+ [07:19:18 PM] <VBScript@Azeroth> unless it's connecting
+ [07:19:19 PM] <Eric[nK]@Azeroth> You don't have the knowledge to analyze packet logs.
+ [07:19:27 PM] <VBScript@Azeroth> but i know what it is
+ [07:19:30 PM] <VBScript@Azeroth> and its the same thing
+ [07:19:33 PM] <VBScript@Azeroth> i sent it to you
+ [07:19:34 PM] <VBScript@Azeroth> :P
+ [07:19:37 PM] <Eric[nK]@Azeroth> Then you tell me what the problem is.
+ [07:20:06 PM] <PyroManiac606@Azeroth> gg
+ [07:20:11 PM] <Alendar> Owned?
+ [07:20:40 PM] <From VBScript@Azeroth> http://rafb.net/p/KElD3U41.html
+ [07:21:24 PM] <Eric[nK]@Azeroth> This is the entire log up until the moment of the disconnect?
+ [07:21:54 PM] <VBScript@Azeroth> yes
+ [07:21:59 PM] <Eric[nK]@Azeroth> Where are the C -> S packets?
+ [07:22:08 PM] <VBScript@Azeroth> thats what i sai
+ [07:22:09 PM] <VBScript@Azeroth> said
+ [07:22:24 PM] <Eric[nK]@Azeroth> Client events are likely at fault here.
+ [07:22:53 PM] <VBScript@Azeroth> it only does it when 2 are online at the same time
+ [07:22:57 PM] <VBScript@Azeroth> 2 betas
+ [07:23:01 PM] -- PyroManiac606@Azeroth has left the channel.
+ [07:23:17 PM] -- PyroManiac606@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [07:23:18 PM] <VBScript@Azeroth> want me to try logging with only 1 beta open?
+ [07:23:19 PM] <Eric[nK]@Azeroth> I'd imagine that it's a problem with your connection to Battle.net, nothing more.
+ [07:23:30 PM] <Alendar> Hmm.
+ [07:23:42 PM] <Eric[nK]@Azeroth> However, I need a log that includes events C -> S so as to properly diagnose the issue.
+ [07:24:05 PM] <VBScript@Azeroth> about that...
+ [07:24:09 PM] -- Alendar has left the channel.
+ [07:24:10 PM] <VBScript@Azeroth> they just arent there
+ [07:24:12 PM] <VBScript@Azeroth> lol
+ [07:24:22 PM] <Eric[nK]@Azeroth> Yes, your packet logger is filtering them.
+ [07:24:27 PM] <Eric[nK]@Azeroth> What logger are you using?
+ [07:24:32 PM] <VBScript@Azeroth> the one inside the bot
+ [07:24:39 PM] <Eric[nK]@Azeroth> ah, that explains that then.
+ [07:24:45 PM] -- Alendar [47ms] has joined the channel using Diablo II (Open Character).
+ [07:24:55 PM] <Eric[nK]@Azeroth> The in-bot logger has been temporarily disabled due to a redesign of the packet buffer.
+ [07:25:24 PM] <Eric[nK]@Azeroth> http://www.ethereal.com/
+ [07:25:34 PM] <PyroManiac606@Azeroth> etheral doesnt work for me..
+ [07:26:08 PM] <Alendar> -_- BnetDocs has a bad server...
+ [07:26:22 PM] <Eric[nK]@Azeroth> Why not, Pyro?
+ [07:26:30 PM] <PyroManiac606@Azeroth> everytime i download it
+ [07:26:38 PM] <PyroManiac606@Azeroth> it says the the installation file is corrupted
+ [07:27:30 PM] <Eric[nK]@Azeroth> gah, I hate Microsoft -- they make transitioning impossible.
+ [07:27:42 PM] <PyroManiac606@Azeroth> lol
+ [07:28:55 PM] <Eric[nK]@Azeroth> ah, here we go.
+ [07:29:07 PM] -- Alendar has left the channel.
+ [07:29:13 PM] <Eric[nK]@Azeroth> I want to make a series of C# COM controls as StealthBot transitions into C#.
+ [07:29:23 PM] -- Alendar [31ms] has joined the channel using Diablo II (Open Character).
+ [07:29:31 PM] <VBScript@Azeroth> Eric
+ [07:29:37 PM] <Eric[nK]@Azeroth> Yes?
+ [07:29:37 PM] <VBScript@Azeroth> do you want the ethereal file or the text
+ [07:29:47 PM] <Eric[nK]@Azeroth> The text is sufficient.
+ [07:29:51 PM] <VBScript@Azeroth> ok
+ [07:29:55 PM] <VBScript@Azeroth> im not gonna do this tonight though
+ [07:29:59 PM] <VBScript@Azeroth> its gonna take too long
+ [07:30:02 PM] <VBScript@Azeroth> to get it to disconnect
+ [07:30:04 PM] <VBScript@Azeroth> and such
+ [07:30:36 PM] <VBScript@Azeroth> also
+ [07:30:44 PM] <VBScript@Azeroth> there are often a lot of problems with startup
+ [07:30:48 PM] <VBScript@Azeroth> like real startup
+ [07:30:53 PM] <VBScript@Azeroth> from the folder
+ [07:31:04 PM] <VBScript@Azeroth> if you open the bot too early in windows the plugin system sometimes errors
+ [07:31:13 PM] <VBScript@Azeroth> i told swent but he didnt care
+ [07:31:15 PM] <VBScript@Azeroth> >.>
+ [07:31:17 PM] <PyroManiac606@Azeroth> $weather orlando, fl
+ [07:31:19 PM] <0x5E@Azeroth> It is currently 48°F in Orlando, FL. Mostly Cloudy with Winds: WNW at 10mph. 58% humidity and a visibility of 10 Miles.
+ [07:31:26 PM] <PyroManiac606@Azeroth> lol
+ [07:31:28 PM] <Eric[nK]@Azeroth> You have to fully document the problem in beta dev.
+ [07:31:33 PM] <PyroManiac606@Azeroth> it updated -1 degrees
+ [07:31:49 PM] <VBScript@Azeroth> i looked in to it
+ [07:31:54 PM] <VBScript@Azeroth> and its the comparemodes
+ [07:32:36 PM] <VBScript@Azeroth> this was before the dev release
+ [07:32:37 PM] <VBScript@Azeroth> :P
+ [07:32:49 PM] <VBScript@Azeroth> the new plugin system only did it once
+ [07:32:52 PM] <VBScript@Azeroth> and it wasnt as bad
+ [07:32:56 PM] <VBScript@Azeroth> didnt clear my settings
+ [07:35:13 PM] -- Joe-Tech@Azeroth [828ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [07:35:20 PM] <PyroManiac606@Azeroth> omg hai
+ [07:35:27 PM] <Eric[nK]@Azeroth> omg
+ [07:35:29 PM] <Eric[nK]@Azeroth> haihai
+ [07:35:39 PM] <PyroManiac606@Azeroth> ....lol
+ [07:35:41 PM] <Joe-Tech@Azeroth> omg
+ [07:35:42 PM] <Joe-Tech@Azeroth> haihai
+ [07:35:50 PM] <Joe-Tech@Azeroth> erik noez teh noobspeek?
+ [07:36:00 PM] <0x5E@Azeroth :: [01:15:55.625] <clan_hlwc.best> just ban me now im bout to ask a dumb question :: StealthBot Beta v2.6999 :.>
+ [07:36:01 PM] <Joe-Tech@Azeroth> lol i herd u is scard by steelth's coad.
+ [07:38:07 PM] <VBScript@Azeroth> he opened it up and a dragon came out
+ [07:38:16 PM] <Joe-Tech@Azeroth> woah
+ [07:38:19 PM] <Joe-Tech@Azeroth> vbscript can talk?
+ [07:38:19 PM] <VBScript@Azeroth> Do you wan't to tell me what's on your mind, Joe-Tech?
+ [07:38:34 PM] <Joe-Tech@Azeroth> VBScript, there isn't an apostrophe in want.
+ [07:38:50 PM] <Joe-Tech@Azeroth> Not so talkative now are we? :)
+ [07:38:51 PM] <VBScript@Azeroth> If not that, what?
+ [07:38:51 PM] <PyroManiac606@Azeroth> "what" + "is"
+ [07:38:52 PM] <VBScript@Azeroth> tell that to alice,  joe
+ [07:38:53 PM] <VBScript@Azeroth [Food for Thought] People have a hard time letting go of their suffering. Out of a fear of the unknown, they prefer suffering that is familiar.    -Thich Nhat Hanh>
+ [07:38:58 PM] <VBScript@Azeroth> >.>
+ [07:39:09 PM] <Joe-Tech@Azeroth> Pyro, want isn't what is. That would be what's
+ [07:39:21 PM] <PyroManiac606@Azeroth> W/E
+ [07:39:22 PM] <Joe-Tech@Azeroth> Who's Alice?
+ [07:39:28 PM] <Joe-Tech@Azeroth> Alice Cooper? :-\
+ [07:39:29 PM] <VBScript@Azeroth> the bot im stealing teh db fromz
+ [07:39:47 PM] <Alendar> How can I become more active?
+ [07:39:52 PM] <Joe-Tech@Azeroth> Do I know you by another name VBScript?
+ [07:39:52 PM] <VBScript@Azeroth> How would I know what you know.
+ [07:39:54 PM] StealthBot packet traffic will be logged in the bot's folder, in a file named 2008-02-27-PacketLog.txt.
+ [07:39:54 PM] --
+ [07:39:54 PM] Log packets at your own risk! Please read the note below:
+ [07:39:55 PM] *** CAUTION: THIS LOG MAY CONTAIN PRIVATE INFORMATION.
+ [07:39:55 PM] *** CAUTION: DO NOT DISTRIBUTE it in public posts on StealthBot.net or on any other website!
+ [07:39:55 PM] *** CAUTION: Only produce a packet log if you're specifically instructed to by
+ [07:39:55 PM] *** CAUTION: a StealthBot.net tech, or you know what you're doing!
+ [07:39:55 PM] If you wish to stop logging packets, uncheck the menu item or restart your bot.
+ [07:39:55 PM] This feature only logs StealthBot traffic. It is not a system-wide packet capture utility.
+ [07:39:56 PM] Shutting down...
+ [07:40:17 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [07:40:17 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [07:40:21 PM] StealthBot packet traffic will be logged in the bot's folder, in a file named 2008-02-27-PacketLog.txt.
+ [07:40:21 PM] --
+ [07:40:21 PM] Log packets at your own risk! Please read the note below:
+ [07:40:21 PM] *** CAUTION: THIS LOG MAY CONTAIN PRIVATE INFORMATION.
+ [07:40:21 PM] *** CAUTION: DO NOT DISTRIBUTE it in public posts on StealthBot.net or on any other website!
+ [07:40:21 PM] *** CAUTION: Only produce a packet log if you're specifically instructed to by
+ [07:40:21 PM] *** CAUTION: a StealthBot.net tech, or you know what you're doing!
+ [07:40:21 PM] If you wish to stop logging packets, uncheck the menu item or restart your bot.
+ [07:40:21 PM] This feature only logs StealthBot traffic. It is not a system-wide packet capture utility.
+ [07:40:23 PM] Connecting your bot...
+ [07:40:23 PM] Authorizing your private-release bot, please wait.
+ [07:40:23 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [07:40:23 PM] All connections closed.
+ [07:40:23 PM] The current StealthBot version is ÿcb2.6R3.
+ [07:40:23 PM]  
+ [07:40:23 PM] >> ÿcbStealthBot News
+ [07:40:24 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [07:40:24 PM] ->> 
+ [07:40:24 PM] ->> ÿcbStealthBot Beta News
+ [07:40:24 PM] ->> Happy testing!
+ [07:40:24 PM]  
+ [07:40:24 PM] The current StealthBot Beta version is 2.6993.
+ [07:40:24 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [07:40:24 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [07:40:24 PM] Connecting your bot...
+ [07:40:24 PM] Authorizing your private-release bot, please wait.
+ [07:40:24 PM] Private usage authorized, connecting to Battle.Net.
+ [07:40:24 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [07:40:26 PM] All connections closed.
+ [07:40:26 PM] Connecting your bot...
+ [07:40:26 PM] Authorizing your private-release bot, please wait.
+ [07:40:26 PM] Private usage authorized, connecting to Battle.Net.
+ [07:40:26 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [07:40:26 PM] [BNLS] Connected!
+ [07:40:26 PM] [BNLS] Authorized!
+ [07:40:26 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [07:40:27 PM] [BNET] Connected!
+ [07:40:27 PM] [BNET] Checking version...
+ [07:40:27 PM] [BNET] Client version accepted!
+ [07:40:27 PM] [BNET] Sending login information...
+ [07:40:28 PM] [BNET] Login successful.
+ [07:40:28 PM] [CLAN] You are a Shaman in Clan SBs.
+ [07:40:28 PM] [BNET] Logged on as Eric[nK].
+ [07:40:28 PM] -- Joined channel: Clan SBs --
+ [07:40:28 PM] Welcome to Battle.net!
+ [07:40:28 PM] This server is hosted by AT&T.
+ [07:40:28 PM] There are currently 6170 users playing 206 games of Warcraft III, and 202616 users playing 53201 games on Battle.net.
+ [07:40:28 PM] Last logon: Wed Feb 27  5:33 PM
+ [07:40:28 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [07:40:29 PM] Jack likes your mom
+ [07:40:29 PM] -- Stats updated: Eric[nK]@Azeroth [125ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [07:40:29 PM] -- Joined channel: Clan BoT --
+ [07:40:30 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [07:40:30 PM] Last Logon: 2/28/2008, 03:42:54 (Battle.net time)
+ [07:40:30 PM] Last Logoff: 2/28/2008, 03:42:54 (Battle.net time)
+ [07:40:30 PM] Time Logged: 74 days, 8 hours, 22 minutes and 11 seconds
+ [07:40:31 PM] <VBScript@Azeroth> who are you on the forums
+ [07:40:33 PM] All connections closed.
+ [07:40:33 PM] Connecting your bot...
+ [07:40:33 PM] Authorizing your private-release bot, please wait.
+ [07:40:34 PM] Private usage authorized, connecting to Battle.Net.
+ [07:40:34 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [07:40:34 PM] [BNLS] Connected!
+ [07:40:34 PM] [BNLS] Authorized!
+ [07:40:34 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [07:40:34 PM] [BNET] Connected!
+ [07:40:35 PM] [BNET] Checking version...
+ [07:40:35 PM] [BNET] Client version accepted!
+ [07:40:35 PM] [BNET] Sending login information...
+ [07:40:35 PM] [BNET] Login successful.
+ [07:40:35 PM] [CLAN] You are a Shaman in Clan SBs.
+ [07:40:36 PM] [BNET] Logged on as Eric[nK].
+ [07:40:36 PM] You are Eric[nK], using Warcraft III in Azeroth
+ [07:40:36 PM] -- Joined channel: Clan SBs --
+ [07:40:36 PM] Welcome to Battle.net!
+ [07:40:36 PM] This server is hosted by AT&T.
+ [07:40:36 PM] There are currently 6170 users playing 206 games of Warcraft III, and 202616 users playing 53201 games on Battle.net.
+ [07:40:36 PM] Last logon: Wed Feb 27  7:49 PM
+ [07:40:36 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [07:40:36 PM] Jack likes your mom
+ [07:40:37 PM] -- Stats updated: Eric[nK]@Azeroth [157ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [07:40:37 PM] -- Joined channel: Clan BoT --
+ [07:40:38 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [07:40:38 PM] Last Logon: 2/28/2008, 03:42:54 (Battle.net time)
+ [07:40:38 PM] Last Logoff: 2/28/2008, 03:42:54 (Battle.net time)
+ [07:40:38 PM] Time Logged: 74 days, 8 hours, 22 minutes and 16 seconds
+ [07:40:52 PM] <PyroManiac606@Azeroth> his name is "Inactive"
+ [07:40:57 PM] <Joe-Tech@Azeroth> On SB.net? I'm Joetheodd
+ [07:41:00 PM] <Joe-Tech@Azeroth> Or Joe[e2]
+ [07:41:00 PM] <Alendar> http://www.stealthbot.net/board/index.php?showuser=169
+ [07:41:02 PM] <Joe-Tech@Azeroth> Or Joe[x86]
+ [07:41:03 PM] <Joe-Tech@Azeroth> Or something like that
+ [07:41:07 PM] <Joe-Tech@Azeroth> I don't even know
+ [07:41:08 PM] <PyroManiac606@Azeroth> 69!
+ [07:41:22 PM] <VBScript@Azeroth> lol...
+ [07:41:27 PM] <VBScript@Azeroth> the-fool
+ [07:41:29 PM] <PyroManiac606@Azeroth> http://www.stealthbot.net/board/index.php?showuser=69 gg user
+ [07:41:29 PM] <VBScript@Azeroth> from foolops
+ [07:41:32 PM] <VBScript@Azeroth> is user 69
+ [07:41:38 PM] <Joe-Tech@Azeroth> StealthBot.net latest news:  Merry Christmas!
+ [07:41:40 PM] <Joe-Tech@Azeroth> Sad.
+ [07:41:40 PM] <VBScript@Azeroth> 4 posts
+ [07:41:40 PM] <PyroManiac606@Azeroth> lol
+ [07:41:44 PM] <PyroManiac606@Azeroth> yea
+ [07:41:50 PM] <PyroManiac606@Azeroth> haste is retarded
+ [07:41:55 PM] Shutting down...
+ [07:43:53 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [07:43:53 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [07:43:59 PM] The current StealthBot version is ÿcb2.6R3.
+ [07:43:59 PM]  
+ [07:43:59 PM] >> ÿcbStealthBot News
+ [07:43:59 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [07:43:59 PM] ->> 
+ [07:43:59 PM] ->> ÿcbStealthBot Beta News
+ [07:43:59 PM] ->> Happy testing!
+ [07:43:59 PM]  
+ [07:43:59 PM] The current StealthBot Beta version is 2.6993.
+ [07:43:59 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [07:43:59 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [07:44:00 PM] StealthBot packet traffic will be logged in the bot's folder, in a file named 2008-02-27-PacketLog.txt.
+ [07:44:00 PM] --
+ [07:44:00 PM] Log packets at your own risk! Please read the note below:
+ [07:44:00 PM] *** CAUTION: THIS LOG MAY CONTAIN PRIVATE INFORMATION.
+ [07:44:00 PM] *** CAUTION: DO NOT DISTRIBUTE it in public posts on StealthBot.net or on any other website!
+ [07:44:00 PM] *** CAUTION: Only produce a packet log if you're specifically instructed to by
+ [07:44:00 PM] *** CAUTION: a StealthBot.net tech, or you know what you're doing!
+ [07:44:00 PM] If you wish to stop logging packets, uncheck the menu item or restart your bot.
+ [07:44:00 PM] This feature only logs StealthBot traffic. It is not a system-wide packet capture utility.
+ [07:44:01 PM] Connecting your bot...
+ [07:44:01 PM] Authorizing your private-release bot, please wait.
+ [07:44:01 PM] Private usage authorized, connecting to Battle.Net.
+ [07:44:01 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [07:44:01 PM] [BNLS] Connected!
+ [07:44:01 PM] [BNLS] Authorized!
+ [07:44:01 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [07:44:01 PM] [BNET] Connected!
+ [07:44:02 PM] [BNET] Checking version...
+ [07:44:02 PM] [BNET] Client version accepted!
+ [07:44:02 PM] [BNET] Sending login information...
+ [07:44:02 PM] [BNET] Login successful.
+ [07:44:03 PM] [CLAN] You are a Shaman in Clan SBs.
+ [07:44:03 PM] [BNET] Logged on as Eric[nK].
+ [07:44:03 PM] -- Joined channel: Clan SBs --
+ [07:44:03 PM] Welcome to Battle.net!
+ [07:44:03 PM] This server is hosted by AT&T.
+ [07:44:03 PM] There are currently 6116 users playing 210 games of Warcraft III, and 202793 users playing 53159 games on Battle.net.
+ [07:44:03 PM] Last logon: Wed Feb 27  7:49 PM
+ [07:44:03 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [07:44:03 PM] Jack likes your mom
+ [07:44:04 PM] -- Joined channel: Clan BoT --
+ [07:44:05 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [07:44:05 PM] Last Logon: 2/28/2008, 03:52:59 (Battle.net time)
+ [07:44:05 PM] Last Logoff: 2/28/2008, 03:50:52 (Battle.net time)
+ [07:44:05 PM] Time Logged: 74 days, 8 hours, 23 minutes and 36 seconds
+ [07:44:06 PM] <Eric[nK]@Azeroth> hm
+ [07:44:27 PM] <PyroManiac606@Azeroth> LuC1Fr-Tech: look @ clan sbs @ west\
+ [07:44:38 PM] <Eric[nK]@Azeroth> Did SB ever provide packet logging for MCP packets?
+ [07:44:44 PM] <Joe-Tech@Azeroth> My old username was 1+3+3=7.
+ [07:44:47 PM] <LuC1Fr-Tech@Azeroth> uhhh
+ [07:45:00 PM] <Joe-Tech@Azeroth> Eric[nK]: Didn't you add the initial packet logging yourself?
+ [07:45:08 PM] <Eric[nK]@Azeroth> no, Joe.
+ [07:45:20 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has exited Battle.net.
+ [07:45:20 PM] -- PyroManiac606@Azeroth has left the channel.
+ [07:45:42 PM] <Joe-Tech@Azeroth> By the way, will there be a 2.69991?
+ [07:45:56 PM] <Eric[nK]@Azeroth> no.
+ [07:46:02 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has entered Battle.net.
+ [07:46:03 PM] -- PyroManiac606@Azeroth [46ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [07:46:07 PM] <Joe-Tech@Azeroth> The stealthbot beta cycle is beginning to remind me of Felbot.
+ [07:46:23 PM] <Eric[nK]@Azeroth> Felbot?
+ [07:46:32 PM] <Joe-Tech@Azeroth> "I'll make a stable release some day." "When?" "Eventually." "Any ETA?" "When hell freezes over."
+ [07:46:34 PM] <Joe-Tech@Azeroth> felbot.googlecode.com
+ [07:46:36 PM] <Joe-Tech@Azeroth> My project
+ [07:46:45 PM] <Alendar> http://code.google.com/p/felbot/
+ [07:46:55 PM] <ifndef-tech@Azeroth> Look at how long Google products stay in BETA
+ [07:47:01 PM] <ifndef-tech@Azeroth> gmail is still beta
+ [07:47:10 PM] <PyroManiac606@Azeroth> Project members:
+ [07:47:11 PM] <PyroManiac606@Azeroth>     PyroManiac606
+ [07:47:12 PM] <Joe-Tech@Azeroth> JoeBot 1 is still winning.
+ [07:47:13 PM] <PyroManiac606@Azeroth> lol
+ [07:47:17 PM] <Joe-Tech@Azeroth> It'll NEVER come out of beta.
+ [07:47:26 PM] <Joe-Tech@Azeroth> I lost the source code a few years ago. Pretty safe bet.
+ [07:47:47 PM] <PyroManiac606@Azeroth> lol
+ [07:48:53 PM] <LuC1Fr-Tech@Azeroth> so re-write it
+ [07:48:56 PM] <LuC1Fr-Tech@Azeroth> :P
+ [07:48:58 PM] Shutting down...
+ [07:49:26 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [07:49:26 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [07:49:28 PM] Connecting your bot...
+ [07:49:28 PM] Authorizing your private-release bot, please wait.
+ [07:49:28 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [07:49:28 PM] All connections closed.
+ [07:49:32 PM] The current StealthBot version is ÿcb2.6R3.
+ [07:49:32 PM]  
+ [07:49:32 PM] >> ÿcbStealthBot News
+ [07:49:32 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [07:49:32 PM] ->> 
+ [07:49:32 PM] ->> ÿcbStealthBot Beta News
+ [07:49:32 PM] ->> Happy testing!
+ [07:49:32 PM]  
+ [07:49:32 PM] The current StealthBot Beta version is 2.6993.
+ [07:49:32 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [07:49:32 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [07:49:33 PM] Connecting your bot...
+ [07:49:33 PM] Authorizing your private-release bot, please wait.
+ [07:49:33 PM] Private usage authorized, connecting to Battle.Net.
+ [07:49:33 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [07:49:33 PM] [BNLS] Connected!
+ [07:49:33 PM] [BNLS] Authorized!
+ [07:49:33 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [07:49:33 PM] [BNET] Connected!
+ [07:49:33 PM] [BNET] Checking version...
+ [07:49:34 PM] [BNET] Client version accepted!
+ [07:49:34 PM] [BNET] Sending login information...
+ [07:49:34 PM] [BNET] Login successful.
+ [07:49:34 PM] [CLAN] You are a Shaman in Clan SBs.
+ [07:49:34 PM] [BNET] Logged on as Eric[nK].
+ [07:49:34 PM] -- Joined channel: Clan SBs --
+ [07:49:35 PM] Welcome to Battle.net!
+ [07:49:35 PM] This server is hosted by AT&T.
+ [07:49:35 PM] There are currently 6088 users playing 200 games of Warcraft III, and 202496 users playing 53400 games on Battle.net.
+ [07:49:35 PM] Last logon: Wed Feb 27  7:52 PM
+ [07:49:35 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [07:49:35 PM] Jack likes your mom
+ [07:49:35 PM] -- Stats updated: Eric[nK]@Azeroth [109ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [07:49:35 PM] -- Joined channel: Clan BoT --
+ [07:49:36 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [07:49:36 PM] Last Logon: 2/28/2008, 03:58:31 (Battle.net time)
+ [07:49:36 PM] Last Logoff: 2/28/2008, 03:57:55 (Battle.net time)
+ [07:49:36 PM] Time Logged: 74 days, 8 hours, 28 minutes and 32 seconds
+ [07:49:41 PM] StealthBot packet traffic will be logged in the bot's folder, in a file named 2008-02-27-PacketLog.txt.
+ [07:49:41 PM] --
+ [07:49:41 PM] Log packets at your own risk! Please read the note below:
+ [07:49:41 PM] *** CAUTION: THIS LOG MAY CONTAIN PRIVATE INFORMATION.
+ [07:49:41 PM] *** CAUTION: DO NOT DISTRIBUTE it in public posts on StealthBot.net or on any other website!
+ [07:49:41 PM] *** CAUTION: Only produce a packet log if you're specifically instructed to by
+ [07:49:41 PM] *** CAUTION: a StealthBot.net tech, or you know what you're doing!
+ [07:49:41 PM] If you wish to stop logging packets, uncheck the menu item or restart your bot.
+ [07:49:41 PM] This feature only logs StealthBot traffic. It is not a system-wide packet capture utility.
+ [07:49:41 PM] All connections closed.
+ [07:49:41 PM] Connecting your bot...
+ [07:49:41 PM] Authorizing your private-release bot, please wait.
+ [07:49:41 PM] Private usage authorized, connecting to Battle.Net.
+ [07:49:41 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [07:49:41 PM] [BNLS] Connected!
+ [07:49:42 PM] [BNLS] Authorized!
+ [07:49:42 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [07:49:42 PM] [BNET] Connected!
+ [07:49:42 PM] [BNET] Checking version...
+ [07:49:42 PM] [BNET] Client version accepted!
+ [07:49:42 PM] [BNET] Sending login information...
+ [07:49:43 PM] [BNET] Login successful.
+ [07:49:43 PM] [CLAN] You are a Shaman in Clan SBs.
+ [07:49:43 PM] [BNET] Logged on as Eric[nK].
+ [07:49:43 PM] You are Eric[nK], using Warcraft III in Azeroth
+ [07:49:43 PM] -- Joined channel: Clan SBs --
+ [07:49:44 PM] Welcome to Battle.net!
+ [07:49:44 PM] This server is hosted by AT&T.
+ [07:49:44 PM] There are currently 6084 users playing 197 games of Warcraft III, and 202580 users playing 53421 games on Battle.net.
+ [07:49:44 PM] Last logon: Wed Feb 27  7:58 PM
+ [07:49:44 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [07:49:44 PM] Jack likes your mom
+ [07:49:44 PM] -- Joined channel: Clan BoT --
+ [07:49:45 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [07:49:45 PM] Last Logon: 2/28/2008, 03:58:40 (Battle.net time)
+ [07:49:45 PM] Last Logoff: 2/28/2008, 03:58:38 (Battle.net time)
+ [07:49:45 PM] Time Logged: 74 days, 8 hours, 28 minutes and 39 seconds
+ [07:49:55 PM] <LuC1Fr-Tech@Azeroth> COXUCKER
+ [07:50:45 PM] <LuC1Fr-Tech@Azeroth> iBNLSSuctn
+ [07:50:47 PM] <LuC1Fr-Tech@Azeroth> uhh
+ [07:51:17 PM] <LuC1Fr-Tech@Azeroth> Woah that's kiLuC1Fr-Technda
+ [07:51:19 PM] <LuC1Fr-Tech@Azeroth> What the fuck
+ [07:51:21 PM] Shutting down...
+ [07:52:21 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [07:52:21 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [07:52:27 PM] The current StealthBot version is ÿcb2.6R3.
+ [07:52:27 PM]  
+ [07:52:27 PM] >> ÿcbStealthBot News
+ [07:52:27 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [07:52:27 PM] ->> 
+ [07:52:27 PM] ->> ÿcbStealthBot Beta News
+ [07:52:27 PM] ->> Happy testing!
+ [07:52:27 PM]  
+ [07:52:27 PM] The current StealthBot Beta version is 2.6993.
+ [07:52:27 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [07:52:27 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [07:52:32 PM] Connecting your bot...
+ [07:52:32 PM] Authorizing your private-release bot, please wait.
+ [07:52:32 PM] Private usage authorized, connecting to Battle.Net.
+ [07:52:32 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [07:52:32 PM] [BNLS] Connected!
+ [07:52:32 PM] [BNLS] Authorized!
+ [07:52:32 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [07:52:32 PM] [BNET] Connected!
+ [07:52:33 PM] [BNET] Checking version...
+ [07:52:33 PM] [BNET] Client version accepted!
+ [07:52:33 PM] [BNET] Sending login information...
+ [07:52:33 PM] [BNET] Login successful.
+ [07:52:34 PM] [CLAN] You are a Shaman in Clan SBs.
+ [07:52:34 PM] [BNET] Logged on as Eric[nK].
+ [07:52:34 PM] -- Joined channel: Clan SBs --
+ [07:52:34 PM] Welcome to Battle.net!
+ [07:52:34 PM] This server is hosted by AT&T.
+ [07:52:34 PM] There are currently 6037 users playing 208 games of Warcraft III, and 202391 users playing 53104 games on Battle.net.
+ [07:52:34 PM] Last logon: Wed Feb 27  7:58 PM
+ [07:52:34 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [07:52:34 PM] Jack likes your mom
+ [07:52:35 PM] -- Joined channel: Clan BoT --
+ [07:52:35 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [07:52:35 PM] Last Logon: 2/28/2008, 03:57:13 (Battle.net time)
+ [07:52:35 PM] Last Logoff: 2/28/2008, 04:00:18 (Battle.net time)
+ [07:52:35 PM] Time Logged: 74 days, 8 hours, 30 minutes and 17 seconds
+ [07:52:37 PM] <Alendar> Whore. -_-
+ [07:52:38 PM] StealthBot packet traffic will be logged in the bot's folder, in a file named 2008-02-27-PacketLog.txt.
+ [07:52:38 PM] --
+ [07:52:38 PM] Log packets at your own risk! Please read the note below:
+ [07:52:38 PM] *** CAUTION: THIS LOG MAY CONTAIN PRIVATE INFORMATION.
+ [07:52:38 PM] *** CAUTION: DO NOT DISTRIBUTE it in public posts on StealthBot.net or on any other website!
+ [07:52:38 PM] *** CAUTION: Only produce a packet log if you're specifically instructed to by
+ [07:52:38 PM] *** CAUTION: a StealthBot.net tech, or you know what you're doing!
+ [07:52:38 PM] If you wish to stop logging packets, uncheck the menu item or restart your bot.
+ [07:52:38 PM] This feature only logs StealthBot traffic. It is not a system-wide packet capture utility.
+ [07:52:39 PM] All connections closed.
+ [07:52:39 PM] Connecting your bot...
+ [07:52:39 PM] Authorizing your private-release bot, please wait.
+ [07:52:39 PM] Private usage authorized, connecting to Battle.Net.
+ [07:52:39 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [07:52:39 PM] [BNLS] Connected!
+ [07:52:39 PM] [BNLS] Authorized!
+ [07:52:39 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [07:52:39 PM] [BNET] Connected!
+ [07:52:40 PM] [BNET] Checking version...
+ [07:52:40 PM] [BNET] Client version accepted!
+ [07:52:40 PM] [BNET] Sending login information...
+ [07:52:41 PM] [BNET] Login successful.
+ [07:52:41 PM] [CLAN] You are a Shaman in Clan SBs.
+ [07:52:41 PM] [BNET] Logged on as Eric[nK].
+ [07:52:41 PM] You are Eric[nK], using Warcraft III in Azeroth
+ [07:52:41 PM] -- Joined channel: Clan SBs --
+ [07:52:42 PM] Welcome to Battle.net!
+ [07:52:42 PM] This server is hosted by AT&T.
+ [07:52:42 PM] There are currently 6037 users playing 208 games of Warcraft III, and 202391 users playing 53104 games on Battle.net.
+ [07:52:42 PM] Last logon: Wed Feb 27  8:01 PM
+ [07:52:42 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [07:52:42 PM] Jack likes your mom
+ [07:52:42 PM] -- Joined channel: Clan BoT --
+ [07:53:17 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 2, by Stealth.
+ [07:53:17 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [07:53:20 PM] StealthBot packet traffic will be logged in the bot's folder, in a file named 2008-02-27-PacketLog.txt.
+ [07:53:20 PM] --
+ [07:53:20 PM] Log packets at your own risk! Please read the note below:
+ [07:53:20 PM] *** CAUTION: THIS LOG MAY CONTAIN PRIVATE INFORMATION.
+ [07:53:21 PM] *** CAUTION: DO NOT DISTRIBUTE it in public posts on StealthBot.net or on any other website!
+ [07:53:21 PM] *** CAUTION: Only produce a packet log if you're specifically instructed to by
+ [07:53:21 PM] *** CAUTION: a StealthBot.net tech, or you know what you're doing!
+ [07:53:21 PM] If you wish to stop logging packets, uncheck the menu item or restart your bot.
+ [07:53:21 PM] This feature only logs StealthBot traffic. It is not a system-wide packet capture utility.
+ [07:53:23 PM] The current StealthBot version is ÿcb2.6R3.
+ [07:53:23 PM]  
+ [07:53:23 PM] >> ÿcbStealthBot News
+ [07:53:23 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [07:53:23 PM] ->> 
+ [07:53:23 PM] ->> ÿcbStealthBot Beta News
+ [07:53:23 PM] ->> Happy testing!
+ [07:53:23 PM]  
+ [07:53:23 PM] The current StealthBot Beta version is 2.6993.
+ [07:53:23 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [07:53:23 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [07:53:24 PM] Connecting your bot...
+ [07:53:24 PM] Authorizing your private-release bot, please wait.
+ [07:53:24 PM] Private usage authorized, connecting to Battle.Net.
+ [07:53:24 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [07:53:24 PM] [BNLS] Connected!
+ [07:53:24 PM] [BNLS] Authorized!
+ [07:53:24 PM] [BNET] Connecting to the Battle.net server at 63.240.202.130...
+ [07:53:25 PM] [BNET] Connected!
+ [07:53:25 PM] [BNET] Checking version...
+ [07:53:25 PM] [BNET] Client version accepted!
+ [07:53:25 PM] [BNET] Sending login information...
+ [07:53:26 PM] [BNET] Login successful.
+ [07:53:26 PM] [CLAN] You are a Shaman in Clan SBs.
+ [07:53:26 PM] [BNET] Logged on as Eric[nK].
+ [07:53:26 PM] -- Joined channel: Clan SBs --
+ [07:53:27 PM] Welcome to Battle.net!
+ [07:53:27 PM] This server is hosted by AT&T.
+ [07:53:27 PM] There are currently 6018 users playing 207 games of Warcraft III, and 202199 users playing 53012 games on Battle.net.
+ [07:53:27 PM] Last logon: Wed Feb 27  8:01 PM
+ [07:53:27 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [07:53:27 PM] Jack likes your mom
+ [07:53:28 PM] -- Joined channel: Clan BoT --
+ [07:53:28 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [07:53:28 PM] Last Logon: 2/28/2008, 03:57:13 (Battle.net time)
+ [07:53:28 PM] Last Logoff: 2/28/2008, 03:57:13 (Battle.net time)
+ [07:53:28 PM] Time Logged: 74 days, 8 hours, 30 minutes and 52 seconds
+ [07:53:32 PM] <Eric[nK]@Azeroth> hm
+ [07:53:36 PM] <PyroManiac606@Azeroth> o.o
+ [07:53:40 PM] <Eric[nK]@Azeroth> hm
+ [07:53:43 PM] -- LuC1Fr-Tech@Azeroth [468ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [07:53:47 PM] <LuC1Fr-Tech@Azeroth> n test
+ [07:53:53 PM] <LuC1Fr-Tech@Azeroth> n test
+ [07:53:55 PM] <LuC1Fr-Tech@Azeroth> hmm
+ [07:53:56 PM] <LuC1Fr-Tech@Azeroth> wierd.
+ [07:54:01 PM] <LuC1Fr-Tech@Azeroth> now it works.
+ [07:54:02 PM] <Eric[nK]@Azeroth> The logger's been fixed.
+ [07:54:02 PM] <PyroManiac606@Azeroth> teh fuxz
+ [07:54:31 PM] <PyroManiac606@Azeroth> i bet
+ [07:54:31 PM] <LuC1Fr-Tech@Azeroth> yeah he just needed a new chainsaw
+ [07:54:34 PM] <PyroManiac606@Azeroth> that
+ [07:54:39 PM] <PyroManiac606@Azeroth> when 2.7 comes out
+ [07:54:47 PM] <PyroManiac606@Azeroth> people aren't going to know what to do
+ [07:55:02 PM] <LuC1Fr-Tech@Azeroth> umm
+ [07:55:08 PM] StealthBot packet traffic will no longer be logged.
+ [07:55:10 PM] <LuC1Fr-Tech@Azeroth> people hardly know what to do now..
+ [07:55:16 PM] <Eric[nK]@Azeroth> How do you mean?
+ [07:55:16 PM] <PyroManiac606@Azeroth> no i mean
+ [07:55:25 PM] <PyroManiac606@Azeroth> like they will be so suprised that it actually came out
+ [07:55:28 PM] <VBScript@Azeroth> chaos intervention agency
+ [07:55:32 PM] <PyroManiac606@Azeroth> they'll just stare at it
+ [07:55:36 PM] <LuC1Fr-Tech@Azeroth> lol
+ [07:55:37 PM] <PyroManiac606@Azeroth> and like... poke it
+ [07:55:41 PM] <PyroManiac606@Azeroth> with the mouse
+ [07:55:44 PM] <PyroManiac606@Azeroth> but not open it
+ [07:55:47 PM] <LuC1Fr-Tech@Azeroth> like "Woah, i can't believe it's finnaly released"
+ [07:55:47 PM] <VBScript@Azeroth> IS IT REAL
+ [07:56:01 PM] <LuC1Fr-Tech@Azeroth> yes.
+ [07:56:02 PM] <LuC1Fr-Tech@Azeroth> Finnaly
+ [07:56:05 PM] <LuC1Fr-Tech@Azeroth> not finally
+ [07:56:20 PM] <ifndef-tech@Azeroth> as a tribute to Vista, 2.7 should have a confirm or deny prompt after you type each message
+ [07:56:26 PM] <PyroManiac606@Azeroth> "has it already been eleventy years?"
+ [07:56:28 PM] <PyroManiac606@Azeroth> LOL
+ [07:57:08 PM] <LuC1Fr-Tech@Azeroth> or change a file in the system folder to cause non admins get the Run as admin prompt
+ [07:57:22 PM] <Eric[nK]@Azeroth> dood...
+ [07:57:25 PM] <Eric[nK]@Azeroth> that's a good idea!
+ [07:57:35 PM] <PyroManiac606@Azeroth> o.0.o
+ [07:57:43 PM] <VBScript@Azeroth> no, lets make the vista tribute plugins 20 gb
+ [07:57:49 PM] <VBScript@Azeroth> thats the real way to go
+ [07:57:55 PM] <VBScript@Azeroth> in true vista fashion
+ [07:58:08 PM] <PyroManiac606@Azeroth> and we should change all the functions
+ [07:58:13 PM] <PyroManiac606@Azeroth> so nothing is compatible
+ [07:58:20 PM] <VBScript@Azeroth> right
+ [07:58:21 PM] <LuC1Fr-Tech@Azeroth> a special plugin, that pops up about eleventy billion msgboxes all saying "2.7 YAY ITS ABOUT TIME"
+ [07:58:28 PM] <PyroManiac606@Azeroth> lol
+ [07:58:53 PM] <VBScript@Azeroth> should just keep popping up "Setting up 2.7... please wait"
+ [07:58:59 PM] <LuC1Fr-Tech@Azeroth> lol
+ [07:59:04 PM] <VBScript@Azeroth> should do that on april fools
+ [07:59:09 PM] <VBScript@Azeroth> put a fake mirror up
+ [07:59:10 PM] <VBScript@Azeroth> that does that
+ [07:59:11 PM] <LuC1Fr-Tech@Azeroth> and restart because of some random error
+ [07:59:30 PM] <Alendar is currently: Awesome Current Project: Getting organized My website: http://alendar.net :->
+ [08:00:05 PM] <LuC1Fr-Tech@Azeroth> now that i think about it
+ [08:00:11 PM] <LuC1Fr-Tech@Azeroth> one thing i was going to use my website for.
+ [08:00:12 PM] <PyroManiac606@Azeroth> For a = 1 To 100000: Msgbox("2.7 YAY ITS ABOUT TIME"): For b = 1 To 100000: Msgbox("2.7 YAY ITS ABOUT TIME"): For c = 1 To 100000: Msgbox("2.7 YAY ITS ABOUT TIME"): For d = 1 To 100000: Msgbox("PENIS!"): Next: Next: Next
+ [08:00:14 PM] <LuC1Fr-Tech@Azeroth> was this
+ [08:00:15 PM] <LuC1Fr-Tech@Azeroth> http://www.stealthbot.net/board/index.php?showtopic=31238
+ [08:00:16 PM] <PyroManiac606@Azeroth> :Next
+ [08:00:20 PM] -- ifndef-tech@Azeroth has left the channel.
+ [08:00:22 PM] <VBScript@Azeroth> just do
+ [08:00:25 PM] <VBScript@Azeroth> do while 1
+ [08:00:33 PM] <VBScript@Azeroth> msgbox "2.7 yay its about time"
+ [08:00:36 PM] <VBScript@Azeroth> loop
+ [08:00:57 PM] <PyroManiac606@Azeroth> at least mine actualy ends..
+ [08:01:06 PM] <VBScript@Azeroth [Food for Thought] Whatever is reasonable is true, and whatever is true is reasonable.    -Georg W. Hegel>
+ [08:01:06 PM] <LuC1Fr-Tech@Azeroth> his does too
+ [08:01:11 PM] <LuC1Fr-Tech@Azeroth> with alt-ctrl-del
+ [08:01:17 PM] <LuC1Fr-Tech@Azeroth> or force shutdown :D
+ [08:01:22 PM] <PyroManiac606@Azeroth> naturally..
+ [08:01:26 PM] <Eric[nK]@Azeroth> not if it's run in kernel mode!
+ [08:01:42 PM] <Eric[nK]@Azeroth> Then you're screwed :)
+ [08:01:51 PM] <PyroManiac606@Azeroth> uh
+ [08:02:02 PM] <LuC1Fr-Tech@Azeroth> you should change the splash to a 1900x1280 picture of Andy
+ [08:02:03 PM] <PyroManiac606@Azeroth> <3 the cord in the back of the computer
+ [08:02:08 PM] <PyroManiac606@Azeroth> unless your on a laptop
+ [08:02:12 PM] <PyroManiac606@Azeroth> then your screwed
+ [08:02:18 PM] <PyroManiac606@Azeroth> unless you can take out the battery
+ [08:02:20 PM] <LuC1Fr-Tech@Azeroth> battery.
+ [08:02:33 PM] <LuC1Fr-Tech@Azeroth> sledgehammer works too
+ [08:02:34 PM] <Eric[nK]@Azeroth> The cord = potential harddrive damaging.
+ [08:02:46 PM] <PyroManiac606@Azeroth> but if you cant take out the battery without having the laptop turned off
+ [08:02:47 PM] <Eric[nK]@Azeroth> ... especially if your kernel died.
+ [08:02:51 PM] <PyroManiac606@Azeroth> then your screwed
+ [08:04:05 PM] <PyroManiac606@Azeroth> there are other ways to fuck up your computer, though.
+ [08:04:08 PM] <LuC1Fr-Tech@Azeroth> thats a good idea for april 1st
+ [08:04:13 PM] <PyroManiac606@Azeroth> 1) give vector vnc access
+ [08:04:27 PM] <PyroManiac606@Azeroth> we should release 2.7 on april 1st
+ [08:04:31 PM] <LuC1Fr-Tech@Azeroth> stall the release till after that, and send out a fake 2.7
+ [08:04:34 PM] <PyroManiac606@Azeroth> people will think its a joke
+ [08:04:40 PM] <PyroManiac606@Azeroth> but it will actually be real
+ [08:04:41 PM] <PyroManiac606@Azeroth> lol
+ [08:04:48 PM] <LuC1Fr-Tech@Azeroth> yeah..
+ [08:05:02 PM] <LuC1Fr-Tech@Azeroth> i can see it now, so many threads asking whats the catch
+ [08:05:16 PM] <PyroManiac606@Azeroth> if i know that its going to be released soon
+ [08:05:24 PM] <PyroManiac606@Azeroth> im going to make a topic in the testing forum
+ [08:05:31 PM] <PyroManiac606@Azeroth> that says" 2.7 released tomorrow"
+ [08:05:35 PM] <PyroManiac606@Azeroth> and see how many people notice
+ [08:05:59 PM] <0x5E@Azeroth :: [05:51:01] <Joe[x86]> I'm going back to WoW where people are normal. :: StealthBot Beta v2.6999 :.>
+ [08:06:45 PM] -- LuC1Fr-Tech@Azeroth has left the channel.
+ [08:06:49 PM] -- LuC1Fr-Tech@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [08:07:50 PM] <PyroManiac606@Azeroth>  [23:08:54.065] BROADCAST from Battle.net: This Battle.net server is going down for maintenance.  Please connect to another server.
+ [08:07:54 PM] <PyroManiac606@Azeroth> o.0
+ [08:08:01 PM] <LuC1Fr-Tech@Azeroth>  Time Logged: 300 days, 13 hours, 16 minutes and 58 seconds
+ [08:08:13 PM] <LuC1Fr-Tech@Azeroth> missed it o.O
+ [08:08:19 PM] <PyroManiac606@Azeroth>  [22:26:58.752] Time Logged: 138 days, 16 hours, 43 minutes and 35 seconds
+ [08:08:22 PM] <Alendar>  [11:06:24 PM] <PyroManiac606@Azeroth> we should release 2.7 on april 1st -- I was thinking that as well.
+ [08:08:24 PM] <PyroManiac606@Azeroth> on europe
+ [08:08:33 PM] -- Alendar has left the channel.
+ [08:08:36 PM] -- Alendar [31ms] has joined the channel using Diablo II (Open Character).
+ [08:08:37 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has exited Battle.net.
+ [08:08:37 PM] -- PyroManiac606@Azeroth has left the channel.
+ [08:08:38 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has entered Battle.net.
+ [08:08:39 PM] -- PyroManiac606@Azeroth [171ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [08:08:44 PM] <Alendar>  [11:10:33 PM] Time Logged: 172 days, 15 hours, 46 minutes and 2 seconds
+ [08:08:48 PM] <PyroManiac606@Azeroth> lol i only have 82 days on this account
+ [08:08:49 PM] <From Pyro6-Tech@Azeroth> Your friend Pyro6-Tech has exited Battle.net.
+ [08:08:50 PM] <From Pyro6-Tech@Azeroth> Your friend Pyro6-Tech has entered Battle.net.
+ [08:08:57 PM] <PyroManiac606@Azeroth>  [23:11:08.924] Time Logged: 167 days, 23 hours, 14 minutes and 36 seconds
+ [08:09:01 PM] <LuC1Fr-Tech@Azeroth> heh
+ [08:09:02 PM] <LuC1Fr-Tech@Azeroth> i win
+ [08:09:05 PM] <LuC1Fr-Tech@Azeroth> not now
+ [08:09:07 PM] -- LuC1Fr-Tech@Azeroth has left the channel.
+ [08:09:11 PM] -- LuC1Fr-Tech@Azeroth [140ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [08:09:33 PM] <Joe-Tech@Azeroth> Eric[nK], isn't NTFS a journaling filesystem?
+ [08:09:39 PM] <PyroManiac606@Azeroth> k so if europe 
+ [08:09:45 PM] <PyroManiac606@Azeroth>  [23:11:52.940] BROADCAST from Battle.net: This Battle.net server is going down for maintenance.  Please connect to another server.
+ [08:09:47 PM] <PyroManiac606@Azeroth> then...
+ [08:09:53 PM] <PyroManiac606@Azeroth> o.o
+ [08:09:56 PM] <Joe-Tech@Azeroth> OH NO, NEW PATCH?!
+ [08:10:00 PM] <Joe-Tech@Azeroth> OH SHIT!
+ [08:10:10 PM] <LuC1Fr-Tech@Azeroth> pyro
+ [08:10:11 PM] <LuC1Fr-Tech@Azeroth> west
+ [08:10:12 PM] <PyroManiac606@Azeroth> only europe
+ [08:10:12 PM] <LuC1Fr-Tech@Azeroth> sbs
+ [08:10:50 PM] <LuC1Fr-Tech@Azeroth> gah
+ [08:10:56 PM] <LuC1Fr-Tech@Azeroth> stealthbot needs tabs
+ [08:11:06 PM] <Joe-Tech@Azeroth> agreed.
+ [08:11:12 PM] <Joe-Tech@Azeroth> I intend to implement this some day.
+ [08:11:29 PM] <Joe-Tech@Azeroth> I'll rewrite the entire bot in VBScript
+ [08:11:34 PM] <LuC1Fr-Tech@Azeroth> something like miragechat
+ [08:11:38 PM] <PyroManiac606@Azeroth> and make guis
+ [08:11:39 PM] <Joe-Tech@Azeroth> And use an OCX to hide Stealthbot's window itself
+ [08:11:39 PM] <PyroManiac606@Azeroth> lawl
+ [08:11:45 PM] <Joe-Tech@Azeroth> And make my own gui
+ [08:12:06 PM] <Joe-Tech@Azeroth> The true stealthbot will be nothing but a VBScript execution tool, lawl.
+ [08:12:21 PM] <Joe-Tech@Azeroth> JoeBot, built upon the StealthBot API
+ [08:12:31 PM] <Joe-Tech@Azeroth> "Is that like CleanSlateBot?" "No, more like DirtySlateBot."
+ [08:12:33 PM] <PyroManiac606@Azeroth> i dont think its possible to connect to battle.net with the sb scripting system..
+ [08:12:42 PM] <Joe-Tech@Azeroth> Sure it is
+ [08:12:47 PM] <Joe-Tech@Azeroth> Hdx.ocx can make a socket
+ [08:13:02 PM] <PyroManiac606@Azeroth> yea
+ [08:13:07 PM] <PyroManiac606@Azeroth> well you have fun with that
+ [08:13:20 PM] <Joe-Tech@Azeroth> :)
+ [08:13:26 PM] <Joe-Tech@Azeroth> If someone paid me I'd do it for sure.
+ [08:13:30 PM] <PyroManiac606@Azeroth> or you could just wait until eric ports sb to c# and adds profiles
+ [08:13:40 PM] <Eric[nK]@Azeroth>  [08:09:33 PM] <Joe-Tech@Azeroth> Eric[nK], isn't NTFS a journaling filesystem?
+ [08:13:41 PM] <Eric[nK]@Azeroth> Of course.
+ [08:13:58 PM] <LuC1Fr-Tech@Azeroth> OO OO
+ [08:14:03 PM] <LuC1Fr-Tech@Azeroth> Custom time stamps
+ [08:14:04 PM] <LuC1Fr-Tech@Azeroth> gogo
+ [08:14:06 PM] <Joe-Tech@Azeroth> So, how do you kill your HD by unpluggin the power cord?
+ [08:14:09 PM] <LuC1Fr-Tech@Azeroth> i hate the brackets
+ [08:14:28 PM] <Joe-Tech@Azeroth> ScriptBot will require Stealthbot v2.7
+ [08:14:33 PM] <PyroManiac606@Azeroth>  [23:16:26.643] <LuC1Fr-Tech@Azeroth> i hate the brackets
+ [08:14:34 PM] <Eric[nK]@Azeroth> Journaling file systems only record transactions.
+ [08:14:39 PM] <PyroManiac606@Azeroth> lol
+ [08:14:50 PM] <Eric[nK]@Azeroth> Moreover, a journaling filesystem relies on its kernel to update the journal.
+ [08:15:01 PM] <Eric[nK]@Azeroth> If the kernel dies, the journal doesn't get updated.
+ [08:15:05 PM] <Joe-Tech@Azeroth> That's retarded.
+ [08:15:15 PM] <Joe-Tech@Azeroth> Window's kernel ALWAYS dies.
+ [08:15:26 PM] <PyroManiac606@Azeroth> wait
+ [08:15:32 PM] <Joe-Tech@Azeroth> Here's a Chuck Norris style joke for you guys: Linus Torvalds' kernel never panics.
+ [08:15:34 PM] <PyroManiac606@Azeroth> when did we start talking about popcorn?
+ [08:15:34 PM] <VBScript@Azeroth> Do you wan't to tell me what's on your mind, PyroManiac606?
+ [08:15:34 PM] <Eric[nK]@Azeroth> Actually, such an occurrence is quite rare.
+ [08:15:42 PM] <PyroManiac606@Azeroth> j/k ;p
+ [08:15:54 PM] <Joe-Tech@Azeroth> Linus Torvalds doesn't read man pages, he reads god pages.
+ [08:15:55 PM] <PyroManiac606@Azeroth> -chat
+ [08:15:55 PM] <VBScript@Azeroth> OK, PyroManiac606. I'll see you another time.
+ [08:16:01 PM] <PyroManiac606@Azeroth> o.o
+ [08:16:03 PM] <Joe-Tech@Azeroth> ?
+ [08:16:07 PM] <Joe-Tech@Azeroth> o.O
+ [08:16:17 PM] <PyroManiac606@Azeroth> i never closed the chat session from like..
+ [08:16:19 PM] <PyroManiac606@Azeroth> yesterday
+ [08:16:23 PM] <Alendar> Tabs have been suggested but they were said to be used for "flooding"
+ [08:16:28 PM] <Joe-Tech@Azeroth> Queer eye for the straight guy?
+ [08:16:36 PM] <PyroManiac606@Azeroth> eric said he may add them
+ [08:16:41 PM] <PyroManiac606@Azeroth> o.o
+ [08:16:42 PM] <Alendar> The only way the can be used for flooding is if you do what MirageBot did.
+ [08:16:46 PM] <Joe-Tech@Azeroth> Alendar@USEast, someone who uses SB for flooding is either A) retarded B) dedicated
+ [08:16:51 PM] <PyroManiac606@Azeroth> i can do it
+ [08:16:54 PM] <PyroManiac606@Azeroth> watch
+ [08:16:56 PM] <LuC1Fr-Tech@Azeroth> i choose B
+ [08:16:57 PM] <Alendar> Make // send the command from all the tabs.
+ [08:17:00 PM] <Joe-Tech@Azeroth> Pyro falls under A.
+ [08:17:02 PM] <PyroManiac606@Azeroth> ?trigger; scq; rejoin
+ [08:17:02 PM] -- Joined channel: Eric[nK]@Azeroth Rejoin --
+ [08:17:03 PM] -- Joined channel: Clan BoT --
+ [08:17:04 PM] -- 0x5E@Azeroth [109ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:17:04 PM] -- Pyro[BoT]@Azeroth [2234ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:17:05 PM] -- Pyro[BoT]@Azeroth has acquired ops.
+ [08:17:05 PM] -- Alendar[BoT]@Azeroth [31ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:17:05 PM] -- Alendar[BoT]@Azeroth has acquired ops.
+ [08:17:05 PM] -- IdleBoT@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:17:06 PM] -- 0x51@Azeroth [328ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:17:06 PM] -- 0x0C@Azeroth [172ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:17:07 PM] -- Alendar@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:17:07 PM] 0x5E was kicked out of the channel by VBScript (0).
+ [08:17:07 PM] -- 0x5E@Azeroth has left the channel.
+ [08:17:07 PM] IdleBoT was kicked out of the channel by VBScript (0).
+ [08:17:07 PM] -- IdleBoT@Azeroth has left the channel.
+ [08:17:07 PM] -- IdleBoT@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:17:08 PM] <Joe-Tech@Azeroth> FUCK
+ [08:17:10 PM] 0x51 was kicked out of the channel by VBScript (0).
+ [08:17:10 PM] -- 0x51@Azeroth has left the channel.
+ [08:17:10 PM] -- 0x51@Azeroth [328ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:17:11 PM] <LuC1Fr-Tech@Azeroth> do it twice :D
+ [08:17:12 PM] -- 0x30 has left the channel.
+ [08:17:12 PM] <Joe-Tech@Azeroth> LOL
+ [08:17:13 PM] -- 0x30 [0ms] has joined the channel using Diablo II (Open Character).
+ [08:17:14 PM] 0x0C was kicked out of the channel by VBScript (0).
+ [08:17:14 PM] -- 0x0C@Azeroth has left the channel.
+ [08:17:14 PM] -- 0x0C@Azeroth [172ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:17:18 PM] -- Jd[BoT]@Azeroth has left the channel.
+ [08:17:20 PM] -- Jd[BoT]@Azeroth [94ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:17:20 PM] -- Jd[BoT]@Azeroth has acquired ops.
+ [08:17:43 PM] <Eric[nK]@Azeroth> hm
+ [08:17:44 PM] <PyroManiac606@Azeroth> so yea
+ [08:17:47 PM] <Joe-Tech@Azeroth> lol, eric joined your botnet? :P
+ [08:17:48 PM] <PyroManiac606@Azeroth> flooding with sb isnt that hard
+ [08:17:56 PM] That user is not logged on.
+ [08:17:57 PM] <Eric[nK]@Azeroth> * has access 100.
+ [08:18:07 PM] <Joe-Tech@Azeroth> ?trigger
+ [08:18:07 PM] <0x0C@Azeroth> The bot's current trigger is " , " (Alt + 044)
+ [08:18:08 PM] <Eric[nK]@Azeroth> The bot's current trigger is " ... " (Length: 3)
+ [08:18:08 PM] <IdleBoT@Azeroth> The bot's current trigger is " ## " (Length: 2)
+ [08:18:15 PM] <Joe-Tech@Azeroth> ...say hi pyro
+ [08:18:16 PM] <Eric[nK]@Azeroth> hi pyro
+ [08:18:24 PM] <PyroManiac606@Azeroth> ...say hi joe
+ [08:18:24 PM] <Eric[nK]@Azeroth> hi joe
+ [08:18:28 PM] <Joe-Tech@Azeroth> You're brave.
+ [08:18:31 PM] <LuC1Fr-Tech@Azeroth> ..say hi mom
+ [08:18:37 PM] <LuC1Fr-Tech@Azeroth> ...say hi mom
+ [08:18:37 PM] <PyroManiac606@Azeroth> epic fail
+ [08:18:37 PM] <Eric[nK]@Azeroth> hi mom
+ [08:18:38 PM] <LuC1Fr-Tech@Azeroth> there.
+ [08:18:41 PM] <LuC1Fr-Tech@Azeroth> shut up
+ [08:18:45 PM] <PyroManiac606@Azeroth> ;D
+ [08:18:58 PM] <Joe-Tech@Azeroth> Eric[nK], why would you give everyone 100 access?
+ [08:19:04 PM] <Eric[nK]@Azeroth> Why not?
+ [08:19:12 PM] <Joe-Tech@Azeroth> ...join the void
+ [08:19:13 PM] -- Joined channel: The Void --
+ [08:19:13 PM] If you experience a lot of lag in The Void, try selecting 'Disable Void View' from the Window menu.
+ [08:19:14 PM] This channel does not have chat privileges.
+ [08:19:23 PM] -- Joined channel: Clan BoT --
+ [08:19:28 PM] <Joe-Tech@Azeroth> That's why.
+ [08:19:40 PM] <PyroManiac606@Azeroth>  ?trigger; scq; say ...rejoin
+ [08:19:41 PM] <PyroManiac606@Azeroth> ;p
+ [08:19:42 PM] <Eric[nK]@Azeroth> That gets old pretty fast and, if it doesn't, /rem * isn't difficult.
+ [08:19:58 PM] <Joe-Tech@Azeroth> Meh, well
+ [08:20:02 PM] <Joe-Tech@Azeroth> I'd be more worried about exploits.
+ [08:20:13 PM] <LuC1Fr-Tech@Azeroth> ...math 19017/856.6
+ [08:20:13 PM] <Joe-Tech@Azeroth> Stealthbot has proven to be pretty vulnerable in the past.
+ [08:20:14 PM] <Eric[nK]@Azeroth> StealthBot doesn't have exploits.
+ [08:20:15 PM] <PyroManiac606@Azeroth> like?
+ [08:20:15 PM] <Eric[nK]@Azeroth> The statement "19017/856.6" evaluates to: 22.2005603548914.
+ [08:20:22 PM] <LuC1Fr-Tech@Azeroth> ew
+ [08:20:43 PM] <Joe-Tech@Azeroth> Eric, remember when I told RoMi to calculate the result of finding "CDKey" in "Main" of config.ini?
+ [08:20:58 PM] <Eric[nK]@Azeroth> No I don't.
+ [08:20:58 PM] <Joe-Tech@Azeroth> StealthBot did it in a very friendly manner.
+ [08:21:08 PM] <Joe-Tech@Azeroth> Well, Stealthbot has/had exploits.
+ [08:21:13 PM] <Eric[nK]@Azeroth> The "math" command has been patched.
+ [08:21:34 PM] <Joe-Tech@Azeroth> I'm 99% positive there's at least one exploitable bug in Stealth's code.
+ [08:21:43 PM] <Joe-Tech@Azeroth> I mean, the majority of it was written years ago.
+ [08:21:46 PM] <PyroManiac606@Azeroth> isnt there supposed to be an override to allow the old math exploit to work? o.o
+ [08:21:46 PM] <LuC1Fr-Tech@Azeroth> so get to finding it.
+ [08:21:58 PM] <Eric[nK]@Azeroth> Joe: You're welcome to find it.
+ [08:22:06 PM] <VBScript@Azeroth [Food for Thought] An honor is not diminished for being shared.    -Lois McMaster Bujold "Shards of Honor", 1986>
+ [08:22:13 PM] <Eric[nK]@Azeroth> The bot's current trigger is " ... " (Length: 3)
+ [08:22:18 PM] <Joe-Tech@Azeroth> Eric[nK]: I already found one and didn't get thanked for it. I'll let someone else do this one.
+ [08:22:30 PM] <PyroManiac606@Azeroth> me and phix found one
+ [08:22:34 PM] <PyroManiac606@Azeroth> it was kinda neat
+ [08:22:51 PM] <Eric[nK]@Azeroth> So in other words, you're willing to concede that there are no exploits in StealthBot that you yourself are capable of uncovering?
+ [08:23:09 PM] <PyroManiac606@Azeroth> i could find one, if i tried hard enough.
+ [08:23:15 PM] <PyroManiac606@Azeroth> ;o
+ [08:23:46 PM] -- SamuelDeuter@Azeroth [93ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [08:23:46 PM] -- Stats updated: SamuelDeuter@Azeroth [93ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:23:54 PM] <SamuelDeuter@Azeroth> 'ello
+ [08:23:58 PM] <Eric[nK]@Azeroth> hm
+ [08:24:01 PM] <PyroManiac606@Azeroth> OH MY GOD
+ [08:24:04 PM] <PyroManiac606@Azeroth> WHAT THE FUCK
+ [08:24:07 PM] <Joe-Tech@Azeroth> Thems be fightin words!
+ [08:24:09 PM] <PyroManiac606@Azeroth> BAR B Q
+ [08:24:14 PM] <SamuelDeuter@Azeroth> =O
+ [08:24:24 PM] <PyroManiac606@Azeroth> OH EM GEE
+ [08:24:34 PM] <PyroManiac606@Azeroth> DUBAU TEE EFF
+ [08:24:42 PM] <PyroManiac606@Azeroth> BEE BEE QUU
+ [08:25:06 PM] <Joe-Tech@Azeroth> stfu
+ [08:25:07 PM] <Joe-Tech@Azeroth> afk
+ [08:25:18 PM] <Eric[nK]@Azeroth> I wish there were an easy way to port a project to C#.
+ [08:25:21 PM] <PyroManiac606@Azeroth> ESS TEE EFF UUU
+ [08:25:24 PM] <SamuelDeuter@Azeroth> phonetics = phunetics
+ [08:25:39 PM] <PyroManiac606@Azeroth> SamuelDeuter = Worlds #1 Noob
+ [08:25:45 PM] <SamuelDeuter@Azeroth> =[
+ [08:25:58 PM] <LuC1Fr-Tech@Azeroth> wrong
+ [08:26:01 PM] <LuC1Fr-Tech@Azeroth> killer360
+ [08:26:03 PM] <SamuelDeuter@Azeroth> !
+ [08:26:05 PM] <SamuelDeuter@Azeroth> lol
+ [08:26:05 PM] <PyroManiac606@Azeroth> no
+ [08:26:07 PM] <PyroManiac606@Azeroth> vector
+ [08:26:13 PM] <SamuelDeuter@Azeroth>  /signed?
+ [08:26:17 PM] <LuC1Fr-Tech@Azeroth> touche
+ [08:26:39 PM] <SamuelDeuter@Azeroth> Luc1Fr loses?
+ [08:26:44 PM] <SamuelDeuter@Azeroth> =o
+ [08:26:48 PM] <PyroManiac606@Azeroth> vector -> killer360 -> darkmage -> dark angel zamn -> samueldeuter
+ [08:26:50 PM] <PyroManiac606@Azeroth> o.o
+ [08:27:01 PM] <LuC1Fr-Tech@Azeroth> good nuff for me pyro
+ [08:27:07 PM] <SamuelDeuter@Azeroth> there are some others
+ [08:27:24 PM] <Alendar> Sam is not that bad.
+ [08:27:28 PM] <PyroManiac606@Azeroth> vector -> all of the members of clan mage -> dark angel zamn
+ [08:27:58 PM] <PyroManiac606@Azeroth> -> hilary clinton
+ [08:28:41 PM] <PyroManiac606@Azeroth> someone 
+ [08:28:44 PM] <PyroManiac606@Azeroth> send me $20
+ [08:29:01 PM] <LuC1Fr-Tech@Azeroth> why
+ [08:29:07 PM] <PyroManiac606@Azeroth> cuz
+ [08:29:25 PM] <LuC1Fr-Tech@Azeroth> i sent hdx bout 40 bucks, and all i got was Thanks your rawk
+ [08:29:30 PM] <LuC1Fr-Tech@Azeroth> you*
+ [08:29:32 PM] <Alendar is currently: Awesome Current Project: Getting organized My website: http://alendar.net :->
+ [08:29:37 PM] <SamuelDeuter@Azeroth> whata jip
+ [08:29:53 PM] <PyroManiac606@Azeroth> i sent stealth $5
+ [08:30:00 PM] <LuC1Fr-Tech@Azeroth> Joy
+ [08:30:04 PM] <LuC1Fr-Tech@Azeroth> and joyness
+ [08:30:07 PM] <PyroManiac606@Azeroth> and got. sr member a few weeks later
+ [08:30:09 PM] <PyroManiac606@Azeroth> lol
+ [08:30:12 PM] <LuC1Fr-Tech@Azeroth> Pyro
+ [08:30:15 PM] <PyroManiac606@Azeroth> what
+ [08:30:19 PM] <LuC1Fr-Tech@Azeroth> lets goto candy mountain pyro!
+ [08:30:24 PM] <PyroManiac606@Azeroth> ok!
+ [08:30:32 PM] <LuC1Fr-Tech@Azeroth> la la la la la la la la la la
+ [08:30:38 PM] <LuC1Fr-Tech@Azeroth> Look!
+ [08:30:43 PM] <LuC1Fr-Tech@Azeroth> its a magical leoplurodon
+ [08:30:52 PM] <LuC1Fr-Tech@Azeroth> wow
+ [08:31:00 PM] <LuC1Fr-Tech@Azeroth> my DAD watches that toooo much
+ [08:31:07 PM] <PyroManiac606@Azeroth> lol
+ [08:31:23 PM] <LuC1Fr-Tech@Azeroth> probably shoudn't have shown it to him.
+ [08:31:51 PM] <Alendar> Why do you need 20$, David?
+ [08:31:56 PM] <PyroManiac606@Azeroth> sex
+ [08:32:00 PM] <Jd[BoT]@Azeroth> lol
+ [08:32:01 PM] <Alendar> Then forget it.
+ [08:32:07 PM] <LuC1Fr-Tech@Azeroth> just ask DeathZerg
+ [08:32:09 PM] <PyroManiac606@Azeroth> aww
+ [08:32:11 PM] <SamuelDeuter@Azeroth> probably with phix >.>
+ [08:32:12 PM] <Jd[BoT]@Azeroth> for you to get sex you need 100$ maybe a million
+ [08:32:12 PM] <PyroManiac606@Azeroth> yea
+ [08:32:13 PM] <Jd[BoT]@Azeroth> ;)
+ [08:32:18 PM] <PyroManiac606@Azeroth> phix is 1337
+ [08:32:24 PM] <LuC1Fr-Tech@Azeroth> but he'll take your undergarments
+ [08:32:30 PM] <PyroManiac606@Azeroth> phix? 
+ [08:32:32 PM] <PyroManiac606@Azeroth> o.o
+ [08:32:36 PM] <LuC1Fr-Tech@Azeroth> DZ
+ [08:32:38 PM] <PyroManiac606@Azeroth> oh
+ [08:32:56 PM] <Alendar> There are two DZ's :p
+ [08:33:00 PM] <Alendar> DZs*
+ [08:33:05 PM] <Alendar> >_>
+ [08:33:09 PM] <SamuelDeuter@Azeroth> one of them is cool and a moderator =]
+ [08:33:15 PM] <Alendar> Damned Zerg and Death Zerg
+ [08:33:18 PM] <SamuelDeuter@Azeroth> other one is also kewl
+ [08:33:25 PM] <PyroManiac606@Azeroth> then there is me... whos kewl and a moderator
+ [08:33:37 PM] <SamuelDeuter@Azeroth> pyro your overpowered
+ [08:33:43 PM] <PyroManiac606@Azeroth> then there is alendar... whos awsome and a moderator
+ [08:33:44 PM] <SamuelDeuter@Azeroth> you need a nerf!
+ [08:33:53 PM] <PyroManiac606@Azeroth> *awesome
+ [08:33:58 PM] <Alendar> David <3 :p
+ [08:34:03 PM] <PyroManiac606@Azeroth> <3
+ [08:37:34 PM] <Jd[BoT]@Azeroth> hmm
+ [08:43:07 PM] <VBScript@Azeroth [Food for Thought] If you haven't forgiven yourself something, how can you forgive others?    -Dolores Huerta>
+ [08:49:55 PM] <SamuelDeuter@Azeroth> metallica ftw?
+ [08:51:21 PM] -- 0x5E@Azeroth [109ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:53:51 PM] -- verdugo@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 31, icon tier Night Elves, Maiev icon, in Clan LNP)
+ [08:53:55 PM] <verdugo@Azeroth> .pingme
+ [08:54:06 PM] -- verdugo@Azeroth has left the channel.
+ [08:54:09 PM] <PyroManiac606@Azeroth> #b ver* 47
+ [08:54:10 PM] <PyroManiac606@Azeroth> ksldgjldkgj
+ [08:59:37 PM] <Alendar is currently: Awesome Current Project: Getting organized My website: http://alendar.net :->
+ [08:59:54 PM] <SamuelDeuter@Azeroth> zomg awesome =/= good
+ [09:00:16 PM] -- LuC1Fr-Tech@Azeroth has left the channel.
+ [09:03:41 PM] <PyroManiac606@Azeroth> night
+ [09:04:07 PM] <VBScript@Azeroth [Food for Thought] To have that sense of one's intrinsic worth... is potentially to have everything...    -Joan Didion Oprah Magazine, May 2004>
+ [09:04:31 PM] <SamuelDeuter@Azeroth> bai
+ [09:05:45 PM] -- SmokeDaCaliDoja@Azeroth [0ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan MAGE)
+ [09:05:47 PM] <SmokeDaCaliDoja@Azeroth> hi
+ [09:05:59 PM] <0x5E@Azeroth :: [14:28:43] <DarkMage2303> mine restarted 3 times tomorrow :( :: StealthBot Beta v2.6999 :.>
+ [09:06:25 PM] -- SmokeDaCaliDoja@Azeroth has left the channel.
+ [09:06:57 PM] -- DarkMage2303@Azeroth [282ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier unknown, WCG Professional Gamer icon, in Clan MAGE)
+ [09:07:00 PM] -- DarkMage2303@Azeroth has left the channel.
+ [09:12:58 PM] <Alendar> Good night <3
+ [09:13:04 PM] -- Alendar has left the channel.
+ [09:13:35 PM] <Jd[BoT]@Azeroth> time to watch some   buffy the vampire slayer
+ [09:13:36 PM] <Jd[BoT]@Azeroth> o.o
+ [09:25:08 PM] <VBScript@Azeroth [Food for Thought] I cannot pretend to feel impartial about colours. I rejoice with the brilliant ones and am genuinely sorry for the poor browns.    -Sir Winston Churchill>
+ [09:28:43 PM] <Joe-Tech@Azeroth> VBScript, are you looking at me looking at you?
+ [09:36:00 PM] <0x5E@Azeroth :: [00:09:14] <Eric[nK]> I don't know why Windows doesn't ask if you want to save the screen shot to a file... [00:09:20] <Eric[nK]> StarCraft does... [00:09:24] <Eric[nK]> StarCraft > Windows :: StealthBot Beta>
+ [09:44:31 PM] -- Jd[BoT]@Azeroth has left the channel.
+ [09:44:38 PM] -- Jd[BoT]@Azeroth [234ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:44:39 PM] -- Jd[BoT]@Azeroth has acquired ops.
+ [09:44:42 PM] <From bot-vector@Azeroth> hi jd
+ [09:44:46 PM] <From bot-vector@Azeroth> come to clan mage
+ [09:45:26 PM] <From bot-vector@Azeroth> jd!
+ [09:45:32 PM] <From bot-vector@Azeroth> <3
+ [09:46:08 PM] <VBScript@Azeroth [Food for Thought] Love doesn't sit there like a stone, it has to be made, like bread: remade all the time, made new.    -Og Mandino>
+ [09:51:17 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:53:05 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:53:05 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:53:09 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:53:09 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:53:44 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:53:45 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:53:48 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:53:48 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:53:53 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:53:54 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:53:57 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:53:58 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:54:01 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:54:02 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:54:18 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:54:19 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:54:24 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:54:25 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:54:30 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:54:30 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:54:35 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:54:35 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:54:44 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:54:44 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:54:56 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:54:56 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:55:01 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:55:01 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:55:27 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:55:27 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:56:33 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:56:33 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:57:39 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:57:39 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [09:58:42 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [09:58:44 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [10:00:06 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [10:00:06 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [10:00:26 PM] -- PLUGINS [0ms] has joined the channel using Diablo II (Open Character).
+ [10:00:38 PM] -- PLUGINS has left the channel.
+ [10:01:09 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [10:01:09 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [10:02:17 PM] <From bot-vector@Azeroth> Your friend bot-vector has entered Battle.net.
+ [10:02:17 PM] <From bot-vector@Azeroth> Your friend bot-vector has exited Battle.net.
+ [10:06:00 PM] <0x5E@Azeroth :: <i8b4uUnderground> d-_-b <BonyNoMore> how u make that inverted b? <BonyNoMore> wait <BonyNoMore> never mind :: StealthBot Beta v2.6999 :.>
+ [10:07:09 PM] <VBScript@Azeroth [Food for Thought] Courage is saying, "Maybe what I'm doing isn't working; maybe I should try something else."    -Anna Lappe O Magazine, June 2003>
+ [10:12:47 PM] <SamuelDeuter@Azeroth> gwood nyte
+ [10:12:58 PM] -- SamuelDeuter@Azeroth has left the channel.
+ [10:28:09 PM] <VBScript@Azeroth [Food for Thought] Life shrinks or expands in proportion to one's courage.    -Anais Nin The Diary of Anais Nin, volume 3, 1939-1944>
+ [10:35:59 PM] <0x5E@Azeroth :: [01:44:27] acidangel: r u naked under there  [01:44:43] Yoni: sure  [01:44:48] acidangel: brb gotta jack off :: StealthBot Beta v2.6999 :.>
+ [10:49:09 PM] <VBScript@Azeroth [Food for Thought] In attempts to improve your character, know what is in your power and what is beyond it.    -Francis Thompson>
+ [11:06:00 PM] <0x5E@Azeroth :: [00:06:43] <jigsAw[vL]> Why does the "a" in my name have an erection? :: StealthBot Beta v2.6999 :.>
+ [11:10:10 PM] <VBScript@Azeroth [Food for Thought] Dance is the hidden language of the soul.    -Martha Graham>
+ [11:12:14 PM] -- PingGnome@Azeroth [1453ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [11:12:15 PM] PingGnome was banned by VBScript (Ban Evasion).
+ [11:12:15 PM] -- PingGnome@Azeroth has left the channel.

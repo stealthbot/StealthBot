@@ -1,0 +1,4 @@
+ [10:11:20 AM] [BNET] 10053 -- Connection is aborted due to timeout or other failure
+ [10:11:20 AM] [BNET] Disconnected.
+ [10:11:21 AM] [BNET] You appear to be IPBanned. The bot will attempt to reconnect again in 20 minutes.
+ [10:19:45 AM] Shutting down...

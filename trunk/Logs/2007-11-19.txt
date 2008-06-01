@@ -1,0 +1,39 @@
+ [4:07:24 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [4:07:24 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [4:07:24 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [4:07:24 PM] Cannot find PluginSystem.dat. It must exist in order to load plugins!
+ [4:07:25 PM] The current StealthBot version is ÿcb2.6R3.
+ [4:07:25 PM]  
+ [4:07:25 PM] >> ÿcbStealthBot News
+ [4:07:25 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [4:07:25 PM] ->> 
+ [4:07:25 PM] ->> ÿcbStealthBot Beta News
+ [4:07:25 PM] ->> Happy testing!
+ [4:07:25 PM]  
+ [4:07:25 PM] The current StealthBot Beta version is 2.6993.
+ [4:11:05 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [4:11:05 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [4:11:06 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [4:11:06 PM] Cannot find PluginSystem.dat. It must exist in order to load plugins!
+ [4:11:06 PM] The current StealthBot version is ÿcb2.6R3.
+ [4:11:06 PM]  
+ [4:11:06 PM] >> ÿcbStealthBot News
+ [4:11:06 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [4:11:06 PM] ->> 
+ [4:11:06 PM] ->> ÿcbStealthBot Beta News
+ [4:11:06 PM] ->> Happy testing!
+ [4:11:06 PM]  
+ [4:11:06 PM] The current StealthBot Beta version is 2.6993.
+ [4:11:47 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [4:11:47 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [4:11:47 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [4:11:47 PM] Cannot find PluginSystem.dat. It must exist in order to load plugins!
+ [4:11:47 PM] The current StealthBot version is ÿcb2.6R3.
+ [4:11:47 PM]  
+ [4:11:47 PM] >> ÿcbStealthBot News
+ [4:11:47 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [4:11:47 PM] ->> 
+ [4:11:47 PM] ->> ÿcbStealthBot Beta News
+ [4:11:47 PM] ->> Happy testing!
+ [4:11:47 PM]  
+ [4:11:47 PM] The current StealthBot Beta version is 2.6993.

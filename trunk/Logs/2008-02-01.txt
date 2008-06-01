@@ -1,0 +1,852 @@
+ [12:46:27 PM] -> Welcome to StealthBot Beta v2.6999, by Stealth.
+ [12:46:27 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:46:27 PM] îabcî
+ [12:46:33 PM] The current StealthBot version is ÿcb2.6R3.
+ [12:46:33 PM]  
+ [12:46:33 PM] >> ÿcbStealthBot News
+ [12:46:33 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:46:33 PM] ->> 
+ [12:46:33 PM] ->> ÿcbStealthBot Beta News
+ [12:46:33 PM] ->> Happy testing!
+ [12:46:33 PM]  
+ [12:46:33 PM] The current StealthBot Beta version is 2.6993.
+ [12:46:33 PM]  [12:46:33 PM] Loaded 2 plugins (2 enabled). Type  [12:46:33 PM] /plugins [12:46:33 PM]  to view them. Type  [12:46:33 PM] /phelp [12:46:33 PM]  for help using them.
+ [12:46:33 PM]  [12:46:33 PM] Type  [12:46:33 PM] /updates [12:46:33 PM]  in the bot to view updates and new plugins that are available for download.
+ [12:46:34 PM] Connecting your bot...
+ [12:46:34 PM] Authorizing your private-release bot, please wait.
+ [12:46:34 PM] Private usage authorized, connecting to Battle.Net.
+ [12:46:34 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [12:46:34 PM] [BNLS] Connected!
+ [12:46:34 PM] [BNLS] Authorized!
+ [12:46:34 PM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [12:46:34 PM] [BNET] Connected!
+ [12:46:35 PM] [BNET] Checking version...
+ [12:46:35 PM] [BNET] Client version accepted!
+ [12:46:35 PM] [BNET] Sending login information...
+ [12:46:36 PM] [BNET] Login successful.
+ [12:46:36 PM] [CLAN] You are a Grunt in Clan SBs.
+ [12:46:36 PM] [BNET] Logged on as Eric[nK].
+ [12:46:36 PM] -- Joined channel: Clan SBs --
+ [12:46:36 PM] Welcome to Battle.net!
+ [12:46:36 PM] This server is hosted by AT&T.
+ [12:46:36 PM] There are currently 10418 users playing 504 games of Warcraft III, and 177278 users playing 38820 games on Battle.net.
+ [12:46:36 PM] Last logon: Fri Feb 1  12:53 PM
+ [12:46:36 PM] designated 
+ [12:46:36 PM] -- Joined channel: Clan BoT --
+ [12:46:36 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [12:46:36 PM] Last Logon: 2/1/2008, 20:49:55 (Battle.net time)
+ [12:46:36 PM] Last Logoff: 2/1/2008, 20:49:55 (Battle.net time)
+ [12:46:36 PM] Time Logged: 66 days, 14 hours, 51 minutes and 35 seconds
+ [12:47:40 PM] <0x5E@Azeroth -- <Zanthis(ALE)> AFK, tornado :: StealthBot Beta v2.6998>
+ [12:55:33 PM] <PhiX[BoT]@Azeroth> copy cat
+ [12:58:10 PM] <Alendar> What?
+ [01:00:41 PM] <PhiX[BoT]@Azeroth> your plugin database
+ [01:00:46 PM] <Alendar> So?
+ [01:00:46 PM] <PhiX[BoT]@Azeroth> the php file
+ [01:00:49 PM] <PhiX[BoT]@Azeroth> :P
+ [01:00:58 PM] <Alendar> Are you talking about the layout?
+ [01:00:59 PM] <PhiX[BoT]@Azeroth> Copyright Andy T eh?
+ [01:00:59 PM] <PhiX[BoT]@Azeroth> afk
+ [01:01:24 PM] <Alendar> Right above that it says: <!-- If you decide to use this code, please leave this copyright intact. -->
+ [01:02:32 PM] <Alendar> Ribose
+ [01:02:37 PM] -- IceMajiks@Azeroth [31ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [01:03:16 PM] -- IceMajiks@Azeroth has left the channel.
+ [01:11:31 PM] <Alendar is currently: Good Current Project: Random projects My website: http://alendar.net :->
+ [01:17:40 PM] <0x5E@Azeroth -- [2:11:57] <EMSADLE> tell him to sit on yer lap and talk about the first thing that pops up :: StealthBot Beta v2.6998>
+ [01:20:09 PM] -- PhiX[BoT]@Azeroth has left the channel.
+ [01:33:35 PM] -- PhiX[BoT]@Azeroth [187ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [01:33:35 PM] -- PhiX[BoT]@Azeroth has acquired ops.
+ [01:36:54 PM] <Ribose@Azeroth> WHAT?
+ [01:37:02 PM] <Ribose@Azeroth> http://dontclick.it/
+ [01:37:11 PM] <Ribose@Azeroth> what did you want me to sseee
+ [01:37:13 PM] <PhiX[BoT]@Azeroth> italy? o.0
+ [01:37:27 PM] <PhiX[BoT]@Azeroth> ur mom naked
+ [01:41:44 PM] <Alendar is currently: Good Current Project: Random projects My website: http://alendar.net :->
+ [01:42:00 PM] <Alendar> http://alendar.no-ip.org/pdb/isidlesystem.php
+ [01:47:40 PM] <0x5E@Azeroth -- [01:33:36] <HarmonicaFreak> would you rather have sex with kerrigan before or after her infestation? :: StealthBot Beta v2.6998>
+ [01:48:33 PM] -- DuRa.CeLL@Azeroth [31ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Undead, peon icon)
+ [01:48:50 PM] -- DuRa.CeLL@Azeroth has left the channel.
+ [01:54:00 PM] <PyroManiac606@Azeroth> hm
+ [01:57:58 PM] <VBScript@Azeroth [Chuck Norris can win at solitaire with only 18 cards.] onthefly.no-ip.org>
+ [01:58:39 PM] <Alendar> Hey Davidf
+ [01:58:42 PM] <Alendar> Hey David*
+ [01:58:45 PM] <PyroManiac606@Azeroth> \hi
+ [01:58:54 PM] <Alendar> How are you?
+ [01:59:06 PM] <PyroManiac606@Azeroth> mm good
+ [01:59:14 PM] <Alendar> I had a snow day. ^_^
+ [01:59:26 PM] <PyroManiac606@Azeroth> nice
+ [01:59:32 PM] <PyroManiac606@Azeroth> it doesnt snow where i live >_>
+ [01:59:36 PM] <Alendar> Yes it does.
+ [01:59:42 PM] <PyroManiac606@Azeroth> LIES.
+ [01:59:45 PM] <Alendar> Just not as often.
+ [01:59:57 PM] <Alendar> You told us about a month ago.
+ [02:00:21 PM] <PyroManiac606@Azeroth> Yea... that was the first time in like.... 10 years
+ [02:01:35 PM] <Alendar> David, when posting a plugin for the database at StealthBot.net where do you post the code?
+ [02:01:43 PM] <Alendar> As a URL or in a code box?
+ [02:02:04 PM] <PyroManiac606@Azeroth> In a codebox box.
+ [02:03:17 PM] <Alendar> Why does it do this: & #39;********************************************************
+ [02:03:17 PM] <Alendar> *************
+ [02:05:21 PM] <Alendar> David?
+ [02:05:32 PM] <PyroManiac606@Azeroth> noob ipb
+ [02:05:40 PM] <Alendar> Is there a fix?
+ [02:06:56 PM] [BNET] 10053 -- Connection is aborted due to timeout or other failure
+ [02:06:56 PM] [BNET] Disconnected.
+ [02:06:56 PM] [BNET] The Battle.net server has terminated your connection.
+ [02:06:56 PM] [BNET] Attempting to reconnect...
+ [02:06:57 PM] Authorizing your private-release bot, please wait.
+ [02:06:58 PM] Authorizing your private-release bot, please wait.
+ [02:06:58 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [02:06:58 PM] All connections closed.
+ [02:07:02 PM] Private usage authorized, connecting to Battle.Net.
+ [02:07:02 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [02:07:02 PM] [BNLS] Connected!
+ [02:07:02 PM] [BNLS] Authorized!
+ [02:07:02 PM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [02:07:02 PM] [BNET] Connected!
+ [02:07:03 PM] [BNET] Checking version...
+ [02:07:03 PM] [BNET] Version check passed!
+ [02:07:03 PM] [BNET] Your CD-key is currently in use under the owner name: Eric[nK].
+ [02:07:03 PM] [BNET] For more information, visit http://www.blizzard.com/support/?id=asc0729p .
+ [02:07:03 PM] All connections closed.
+ [02:47:44 PM] Connecting your bot...
+ [02:47:44 PM] Authorizing your private-release bot, please wait.
+ [02:47:45 PM] Private usage authorized, connecting to Battle.Net.
+ [02:47:45 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [02:47:45 PM] [BNLS] Connected!
+ [02:47:45 PM] [BNLS] Authorized!
+ [02:47:45 PM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [02:47:45 PM] [BNET] Connected!
+ [02:47:46 PM] [BNET] Checking version...
+ [02:47:46 PM] [BNET] Client version accepted!
+ [02:47:46 PM] [BNET] Sending login information...
+ [02:47:47 PM] [BNET] Login successful.
+ [02:47:47 PM] [CLAN] You are a Grunt in Clan SBs.
+ [02:47:47 PM] [BNET] Logged on as Eric[nK].
+ [02:47:47 PM] -- Joined channel: Clan SBs --
+ [02:47:47 PM] Welcome to Battle.net!
+ [02:47:47 PM] This server is hosted by AT&T.
+ [02:47:47 PM] There are currently 9517 users playing 395 games of Warcraft III, and 166753 users playing 37729 games on Battle.net.
+ [02:47:47 PM] Last logon: Fri Feb 1  12:54 PM
+ [02:47:47 PM] designated 
+ [02:47:48 PM] -- Joined channel: Clan BoT --
+ [02:47:48 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [02:47:48 PM] Last Logon: 2/1/2008, 22:51:36 (Battle.net time)
+ [02:47:48 PM] Last Logoff: 2/1/2008, 22:08:39 (Battle.net time)
+ [02:47:48 PM] Time Logged: 66 days, 16 hours, 12 minutes and 24 seconds
+ [02:47:52 PM] <HaKr[BoT]@Azeroth> I just sent a file transfer on aim
+ [02:48:16 PM] <PyroManiac606@Azeroth> orly
+ [02:49:03 PM] <HaKr[BoT]@Azeroth> yeah
+ [02:49:07 PM] <HaKr[BoT]@Azeroth> you needa accept thath o
+ [02:49:08 PM] <HaKr[BoT]@Azeroth> ho*
+ [02:49:39 PM] <PyroManiac606@Azeroth> uh
+ [02:49:44 PM] <PyroManiac606@Azeroth> i didnt get it
+ [02:49:45 PM] <Eric[nK]@Azeroth> ™™™™™™™™™™™™™™™™™™™™™™™™
+ [02:50:37 PM] <Alendar> Eric
+ [02:50:49 PM] <Eric[nK]@Azeroth> ...?
+ [02:50:50 PM] <PyroManiac606@Azeroth> -.-
+ [02:50:51 PM] <Alendar> Would I need ; after this $title = $pagetitle; ?
+ [02:51:00 PM] <Eric[nK]@Azeroth> Yes.
+ [02:51:05 PM] <Alendar> OK, thank you.
+ [02:51:22 PM] <Eric[nK]@Azeroth> PHP has line terminators.  You need them after every executable statement.
+ [02:51:36 PM] <Alendar> Ah.
+ [02:52:44 PM] <Alendar> Is there a way to call a variable before it's declared?
+ [02:52:46 PM] <Alendar> Like this:
+ [02:52:55 PM] <Alendar> Echo $title;
+ [02:53:04 PM] <Alendar> $title = "Blah";
+ [02:54:06 PM] <Eric[nK]@Azeroth> In PHP, yes, but it won't contain the string "Blah" until after that statement has executed.
+ [02:54:45 PM] <Alendar> Hmm, because I want the title of pages to be differnt and I am using three different php documents.
+ [02:55:04 PM] <Alendar> header.php, contents.php, and footer.php
+ [02:55:16 PM] <Alendar> I want the $title to go into the contents.
+ [02:55:26 PM] <Eric[nK]@Azeroth> Why in the world did you set up your php page like it were an html page?
+ [02:56:09 PM] <Alendar> Uhhh...
+ [02:56:13 PM] <PyroManiac606@Azeroth> hm
+ [02:56:16 PM] <PyroManiac606@Azeroth> ;o
+ [02:56:19 PM] <Alendar> Sorry, that didn't make sense to me.
+ [02:56:27 PM] <Eric[nK]@Azeroth> index.php should be used for all three of those pages.
+ [02:56:52 PM] <Alendar> Yes, I know but I call header and footer in other .php pages.
+ [02:57:03 PM] <Alendar> http://alendar.no-ip.org/pdb/index.php
+ [02:57:40 PM] <Eric[nK]@Azeroth> Yes, you can create an html page for each, the header and footer and then include them in your php pages.
+ [02:58:15 PM] <Alendar> Ah.
+ [02:58:18 PM] <Alendar> I get it.
+ [02:58:29 PM] <Alendar> Yet, how would I set the title?
+ [02:58:57 PM] <Eric[nK]@Azeroth> Through the php page or through the header html page.
+ [02:59:23 PM] <Alendar> The PHP page.
+ [02:59:30 PM] <Alendar> I think.
+ [03:08:37 PM] <Alendar> David
+ [03:08:53 PM] <Alendar> Do you think Swent is just being lazy here: http://www.stealthbot.net/board/index.php?showtopic=30639
+ [03:08:54 PM] <PyroManiac606@Azeroth> ?
+ [03:09:03 PM] <PyroManiac606@Azeroth> yes
+ [03:09:09 PM] <PyroManiac606@Azeroth> its not even your fault that happens
+ [03:09:17 PM] <PyroManiac606@Azeroth> its ipb / plugin creator
+ [03:09:44 PM] <Alendar> He is pissing me off with that.
+ [03:10:07 PM] <Alendar> Because now it makes me think neither of my plugins will be accepted.
+ [03:11:46 PM] <Alendar is currently: Good Current Project: Random projects My website: http://alendar.net :->
+ [03:16:11 PM] <Ribose@Azeroth .: [14:21:00.093] <Stupid_Monkey@USWest> i went to webpage and went to the pangwen dude [14:21:23.921] <Tech-raylu> u mean Lord[nK]? [14:21:30.093] <Stupid_Monkey@USWest> yeah that guy :: StealthBot Beta v2.6998 :.>
+ [03:17:40 PM] <0x5E@Azeroth -- "Be careful about reading health books. You may die of a misprint." -Mark Twain :: StealthBot Beta v2.6998>
+ [03:19:19 PM] -- ClanGnome@Azeroth [32ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan Spht)
+ [03:19:27 PM] -- ClanGnome@Azeroth has left the channel.
+ [03:19:35 PM] <PyroManiac606@Azeroth> !@#$
+ [03:20:27 PM] <Alendar> Eric?
+ [03:29:30 PM] <Eric[nK]@Azeroth> ...?
+ [03:29:48 PM] <Alendar> How would I fix that title problem?
+ [03:30:07 PM] <Eric[nK]@Azeroth> What about iy?
+ [03:31:19 PM] <Alendar> I want a different title depending on the page.
+ [03:31:31 PM] <Alendar> How would I set the title from the contents.php
+ [03:37:59 PM] <VBScript@Azeroth [The helicopter was invented after Chuck Norris was observed doing 8 roundhouse kicks a second.] onthefly.no-ip.org>
+ [03:39:01 PM] <PyroManiac606@Azeroth> mm
+ [03:39:03 PM] <PyroManiac606@Azeroth> k
+ [03:40:17 PM] -- HaKr_SnAcK@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan MAGE)
+ [03:40:22 PM] -- HaKr_SnAcK@Azeroth has left the channel.
+ [03:40:25 PM] -- HaKr_SnAcK@Azeroth [93ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan MAGE)
+ [03:40:29 PM] -- HaKr_SnAcK@Azeroth has left the channel.
+ [03:41:48 PM] <Alendar is currently: Good Current Project: Random projects My website: http://alendar.net :->
+ [03:45:11 PM] <Alendar> David
+ [03:47:40 PM] <0x5E@Azeroth -- "You cannot shake hands with a clenched fist." -Mahatma Gandhi :: StealthBot Beta v2.6998>
+ [03:47:55 PM] <Alendar> Mr. David
+ [03:50:43 PM] -- m-Cylinder [46ms] has joined the channel using Starcraft Brood War (283 wins, with a rating of 1098 on the ladder)
+ [03:50:49 PM] <m-Cylinder> happy?
+ [03:50:54 PM] <Alendar> Hello.
+ [03:50:56 PM] -- m-Cylinder has left the channel.
+ [03:51:01 PM] -- m-Cylinder [46ms] has joined the channel using Starcraft Brood War (283 wins, with a rating of 1098 on the ladder)
+ [03:51:11 PM] -- m-Cylinder has left the channel.
+ [03:53:58 PM] <PyroManiac606@Azeroth> what
+ [03:54:41 PM] <Alendar> http://alendar.no-ip.org/pdb/plugins/isIdleSystem.plug
+ [03:54:50 PM] <Alendar> Can you install this on a 2.6R3 bot.
+ [03:54:54 PM] <Alendar> Please
+ [03:59:02 PM] <PyroManiac606@Azeroth> i can... but not right now
+ [04:01:54 PM] <Alendar> Please now. :(
+ [04:02:07 PM] -- m-Cylinder [46ms] has joined the channel using Starcraft Brood War (283 wins, with a rating of 1098 on the ladder)
+ [04:03:30 PM] -- m-Cylinder has left the channel.
+ [04:03:44 PM] -- m-Cylinder [46ms] has joined the channel using Starcraft Brood War (283 wins, with a rating of 1098 on the ladder)
+ [04:05:18 PM] -- m-Cylinder has left the channel.
+ [04:05:31 PM] -- m-Cylinder [46ms] has joined the channel using Starcraft Brood War (283 wins, with a rating of 1098 on the ladder)
+ [04:06:52 PM] -- m-Cylinder has left the channel.
+ [04:11:48 PM] <Alendar is currently: Good Current Project: Random projects My website: http://alendar.net :->
+ [04:13:38 PM] -- Zayfox@Azeroth [312ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 1, icon tier Random, peon icon, in Clan TE)
+ [04:13:41 PM] <Zayfox@Azeroth> Niiiice.
+ [04:14:10 PM] -- Zayfox@Azeroth has left the channel.
+ [04:17:40 PM] <0x5E@Azeroth -- [02:39:35] Trust1337: I enjoyed your pictures from the tournament. Added to my porn folder. :: StealthBot Beta v2.6998>
+ [04:21:01 PM] <Alendar> Daqvid
+ [04:21:24 PM] <PyroManiac606@Azeroth> ?
+ [04:24:30 PM] -- Pyro[BoT] [46ms] has joined the channel using Diablo II (Open Character).
+ [04:25:55 PM] <Pyro[BoT]>  [7:27:31 PM] Timer Call Error On Script: Prefix> ps TimerName> SubmitStats
+ [04:25:55 PM] <Pyro[BoT]>  [7:27:31 PM] Error Number: 35761   Description: Request timed out
+ [04:26:00 PM] <Pyro[BoT]> >_>
+ [04:26:15 PM] <Pyro[BoT]>  [7:27:45 PM] Load Call Error On File> V:\StealthBots\Testbot\plugins\is.txt
+ [04:26:15 PM] <Pyro[BoT]>  [7:27:45 PM] Error Number: 13   Description: Type mismatch
+ [04:28:10 PM] <Pyro[BoT]  is currently: hm. Current Project: o.o. :->
+ [04:28:25 PM] <Pyro[BoT]> .: StealthBot v2.6 Revision 3 by Stealth.
+ [04:28:59 PM] -- Pyro[BoT] has left the channel.
+ [04:29:35 PM] <Alendar> Davi
+ [04:29:36 PM] <Alendar> d
+ [04:29:41 PM] <PyroManiac606@Azeroth> ?
+ [04:29:45 PM] <Alendar> Reload that bot please.
+ [04:29:50 PM] <PyroManiac606@Azeroth> ..?
+ [04:29:56 PM] <Alendar> I know how to tfix that/
+ [04:30:01 PM] <PyroManiac606@Azeroth> its fixed
+ [04:30:02 PM] <PyroManiac606@Azeroth> lol
+ [04:30:08 PM] <Alendar> You fixed it?
+ [04:30:12 PM] <PyroManiac606@Azeroth> yes
+ [04:30:19 PM] <Alendar> Using /istime?
+ [04:30:19 PM] <PyroManiac606@Azeroth> by fixing the stupid *'s
+ [04:30:22 PM] <PyroManiac606@Azeroth> no
+ [04:30:23 PM] <PyroManiac606@Azeroth> lol
+ [04:30:33 PM] <Alendar> What about the *'s?
+ [04:30:53 PM] <PyroManiac606@Azeroth> the thing swent mentioned
+ [04:30:55 PM] <Alendar> Show me pleasde.
+ [04:30:57 PM] <PyroManiac606@Azeroth> i fixed that and it worked
+ [04:31:10 PM] -- Pyro[BoT] [47ms] has joined the channel using Diablo II (Open Character).
+ [04:31:20 PM] <PyroManiac606@Azeroth> er
+ [04:31:21 PM] <PyroManiac606@Azeroth> nvm
+ [04:31:30 PM] <PyroManiac606@Azeroth> it only temporarily phixed it
+ [04:31:32 PM] <Alendar> To fix that.
+ [04:31:35 PM] <Alendar> Do this:
+ [04:31:43 PM] <PyroManiac606@Azeroth> it should come fixed
+ [04:31:43 PM] <Alendar> ./istime 30
+ [04:31:53 PM] <Alendar> I know, that's what I am working on.
+ [04:31:59 PM] <Alendar> That's why I need your help.
+ [04:32:22 PM] <Alendar> Once you use /istime reload your script.
+ [04:33:03 PM] <PyroManiac606@Azeroth>  [7:34:39 PM] You must provide a numeric time!
+ [04:33:32 PM] <Alendar> Are you doing the 3
+ [04:33:38 PM] <Alendar> 30*
+ [04:33:44 PM] <Pyro[BoT]> oh
+ [04:33:46 PM] <Pyro[BoT]> lol
+ [04:33:47 PM] <Pyro[BoT]> -.-
+ [04:33:55 PM] <Pyro[BoT]>  [7:35:33 PM] Idle time set to 30.
+ [04:34:00 PM] <Pyro[BoT]> then it works
+ [04:34:28 PM] <Alendar> Yes, for some reason it isn't setting the idle time and getting it on the first loading.
+ [04:35:18 PM] <PyroManiac606@Azeroth> i think i know why
+ [04:35:23 PM] -- Pyro[BoT] has left the channel.
+ [04:36:26 PM] <PyroManiac606@Azeroth> btw
+ [04:36:27 PM] <PyroManiac606@Azeroth> Public IdleMessage
+ [04:36:35 PM] <PyroManiac606@Azeroth> uh, that variable isnt even used any more
+ [04:36:35 PM] <PyroManiac606@Azeroth> lol
+ [04:36:46 PM] <PyroManiac606@Azeroth> er
+ [04:37:17 PM] <PyroManiac606@Azeroth> dsp 1, IdleMessage, 0, 0
+ [04:37:18 PM] <PyroManiac606@Azeroth> error!
+ [04:37:24 PM] <PyroManiac606@Azeroth> idle message isnt set
+ [04:38:08 PM] -- Pyro[BoT] [47ms] has joined the channel using Diablo II (Open Character).
+ [04:38:36 PM] <PyroManiac606@Azeroth> mmk
+ [04:38:37 PM] <PyroManiac606@Azeroth> it works now
+ [04:38:53 PM] <Alendar> Did yo delete it and re-add it?
+ [04:39:07 PM] <PyroManiac606@Azeroth> hm?
+ [04:39:16 PM] <PyroManiac606@Azeroth> i removed  Public IdleMessage
+ [04:39:23 PM] <PyroManiac606@Azeroth> changed dsp 1, IdleMessage, 0, 0
+ [04:39:28 PM] <PyroManiac606@Azeroth> to Call is_idle_timer()
+ [04:39:51 PM] <PyroManiac606@Azeroth> and put the setsettings from the load sub above the getsettings
+ [04:41:02 PM] <Alendar> Show me please.
+ [04:41:48 PM] <Alendar is currently: Good Current Project: Random projects My website: http://alendar.net :->
+ [04:42:19 PM] <PyroManiac606@Azeroth> http://pastebin.com/m2aeb7c80
+ [04:45:12 PM] -- Pyro[BoT] has left the channel.
+ [04:47:40 PM] <0x5E@Azeroth -- [21:49:35.994] <rowR@USEast> cus its a magical cdkey [21:49:45.744] <rowR@USEast> giefs u ops in any channel u enter. :: StealthBot Beta v2.6998>
+ [04:55:34 PM] <Alendar> That's fixed.
+ [04:55:43 PM] <Alendar> Now to test my next thing.
+ [04:55:54 PM] <PyroManiac606@Azeroth> do you want me to update your post?
+ [04:56:08 PM] <Alendar> Why would you need too?
+ [04:56:26 PM] <PyroManiac606@Azeroth> idk
+ [04:56:29 PM] <PyroManiac606@Azeroth> forgot that you can
+ [04:56:31 PM] <PyroManiac606@Azeroth> ;p
+ [04:57:57 PM] <Alendar> :(
+ [04:58:36 PM] <Alendar> Am I really that insignifigant?
+ [04:58:43 PM] <PyroManiac606@Azeroth> of course not
+ [04:58:51 PM] <PyroManiac606@Azeroth> im just really tired
+ [04:59:08 PM] <Alendar> I slept till 2.
+ [04:59:09 PM] <Alendar> :P
+ [04:59:15 PM] <PyroManiac606@Azeroth> i had school
+ [04:59:36 PM] <Alendar> Mmm.
+ [04:59:47 PM] <PyroManiac606@Azeroth> and the 8th graders weren't in band, so this one kid chased be around the room with a big red pole
+ [04:59:52 PM] <PyroManiac606@Azeroth> *me
+ [05:00:11 PM] -- m-Cylinder [46ms] has joined the channel using Starcraft Brood War (283 wins, with a rating of 1098 on the ladder)
+ [05:00:35 PM] -- m-Cylinder has left the channel.
+ [05:00:45 PM] <PyroManiac606@Azeroth> Command "shutup" [1 access/no flags] added.
+ [05:00:53 PM] <PyroManiac606@Azeroth> Quick! Everyone stop talking so he thinks we are all afk!
+ [05:01:39 PM] <Ribose@Azeroth .: [18:58:06.567] <DatH.Support@Blizzard> yes_please@USWest: I think I crashed out while you were typing. If you have trouble joining each other's StarCraft game, it wasn't designed to be shared. :: [more]>
+ [05:01:48 PM] <Ribose@Azeroth StealthBot Beta v2.6998 :.>
+ [05:05:54 PM] <PyroManiac606@Azeroth> lol @ DarkMage's sig
+ [05:06:01 PM] <PyroManiac606@Azeroth> "PyroManiac606 is a faggot - if i get warned it only proves it."
+ [05:06:33 PM] <Alendar> I wanna warn him.
+ [05:06:38 PM] <PyroManiac606@Azeroth> omg me too
+ [05:06:46 PM] <Alendar> That way it's not proved.
+ [05:07:08 PM] <PyroManiac606@Azeroth> me warning him for something that is against the rules does not make me a faggot, even if he says so
+ [05:08:14 PM] <Alendar> !!reload
+ [05:08:30 PM] <Alendar> !phelp qtkick
+ [05:08:42 PM] <Alendar> !qtkick on
+ [05:08:45 PM] <Alendar> !!qtkick on
+ [05:08:49 PM] <Alendar> Hmm.
+ [05:09:02 PM] <PyroManiac606@Azeroth> the plugin system doesnt support multiple character triggers
+ [05:09:03 PM] <Alendar> My plugin doesn't work with muilty trigger.
+ [05:09:08 PM] <Alendar> Stupid Swent.
+ [05:09:14 PM] <Alendar> Everyone blames Swent.
+ [05:09:21 PM] <PyroManiac606@Azeroth> its always swents fault..
+ [05:09:34 PM] <PyroManiac606@Azeroth> $qfind blame swent
+ [05:09:35 PM] <0x5E@Azeroth> Quotes mathching your search term, "blame swent":
+ [05:09:35 PM] <0x5E@Azeroth> Quote [141]:  [16:49:57.625] <Tech-Jack)> dont blame yourself when you can blame swent..
+ [05:09:35 PM] <Alendar> VCF is Swents fault.
+ [05:09:40 PM] <0x5E@Azeroth> End of search results.
+ [05:10:14 PM] <Alendar> Alendar[BoT]: qtkick on
+ [05:10:22 PM] <PyroManiac606@Azeroth> that definately wont work..
+ [05:10:23 PM] <PyroManiac606@Azeroth> lol
+ [05:10:29 PM] <Alendar> Stupid Swent.
+ [05:10:39 PM] <PyroManiac606@Azeroth> yep
+ [05:10:39 PM] <Alendar> !!settrigger [
+ [05:10:43 PM] <Alendar[BoT]@Azeroth> The new trigger is "[".
+ [05:10:47 PM] <Alendar> [cq
+ [05:10:50 PM] <Alendar[BoT]@Azeroth> Queue cleared.
+ [05:10:52 PM] <Alendar> A litle laggy.
+ [05:11:02 PM] <PyroManiac606@Azeroth> scq > cq
+ [05:11:05 PM] <Alendar> [qtkick on
+ [05:11:12 PM] <Alendar> I am talking
+ [05:11:27 PM] <PyroManiac606@Azeroth> the lag is also swents fault
+ [05:11:31 PM] -- Alendar has left the channel.
+ [05:11:58 PM] -- Alendar [47ms] has joined the channel using Diablo II (Open Character).
+ [05:12:19 PM] <Alendar is currently: Good Current Project: Random projects My website: http://alendar.net :->
+ [05:12:39 PM] -- Alendar has left the channel.
+ [05:12:41 PM] VectorSpamAlot was banned by PhiX[BoT] (Shitlisted).
+ [05:12:55 PM] <PyroManiac606@Azeroth> lol.
+ [05:12:55 PM] <Alendar[BoT]@Azeroth> xD
+ [05:12:58 PM] <PyroManiac606@Azeroth> http://www.stealthbot.net/board/index.php?showuser=33245
+ [05:13:09 PM] VectorSpamAlot was unbanned by Alendar[BoT].
+ [05:15:45 PM] -- TestMoron [31ms] has joined the channel using Diablo II (Open Character).
+ [05:15:50 PM] <TestMoron> You morons
+ [05:15:58 PM] <TestMoron> I should be kicked now.
+ [05:16:26 PM] <TestMoron> David
+ [05:16:30 PM] <PyroManiac606@Azeroth> ?
+ [05:16:32 PM] <TestMoron> [qkick on
+ [05:16:41 PM] <TestMoron> Do it
+ [05:16:44 PM] <TestMoron> please <3
+ [05:16:48 PM] <PyroManiac606@Azeroth> [qkick on
+ [05:16:55 PM] <PyroManiac606@Azeroth> [qtkick on
+ [05:16:55 PM] <PyroManiac606@Azeroth> ?
+ [05:17:25 PM] <TestMoron> Test
+ [05:17:26 PM] -- TestMoron has left the channel.
+ [05:17:26 PM] TestMoron was kicked out of the channel by Alendar[BoT] (Quiet-Time is enabled).
+ [05:17:27 PM] -- TestMoron [31ms] has joined the channel using Diablo II (Open Character).
+ [05:17:33 PM] <TestMoron> Blah blah
+ [05:17:34 PM] TestMoron was kicked out of the channel by Alendar[BoT] (Quiet-Time is enabled).
+ [05:17:34 PM] -- TestMoron has left the channel.
+ [05:17:35 PM] -- TestMoron [31ms] has joined the channel using Diablo II (Open Character).
+ [05:17:39 PM] <PyroManiac606@Azeroth> do you use bankickunban?
+ [05:17:39 PM] <0x5E@Azeroth -- "Life is like a card game. If you don't have a partner, you'll need a good hand." -Anonymous :: StealthBot Beta v2.6998>
+ [05:17:44 PM] -- TestMoron has left the channel.
+ [05:17:46 PM] -- Alendar [32ms] has joined the channel using Diablo II (Open Character).
+ [05:17:52 PM] <PyroManiac606@Azeroth> do you use bankickunban?
+ [05:17:57 PM] <Alendar> This plugin is for 2.6R3
+ [05:17:58 PM] <VBScript@Azeroth [The best part of waking up, is not Folgers in your cup, but knowing that Chuck Norris didn't kill you in your sleep.] onthefly.no-ip.org>
+ [05:18:05 PM] <PyroManiac606@Azeroth> bankickunban is in 2.6R3
+ [05:18:13 PM] <Alendar> How do you use it?
+ [05:18:14 PM] <PyroManiac606@Azeroth> and it automatically checks for safelist
+ [05:18:18 PM] <Alendar> Stupid ChatFocus.
+ [05:19:02 PM] <Alendar> So me how to use it please.
+ [05:19:05 PM] <PyroManiac606@Azeroth> BanKickUnban User & Message, Access, Type
+ [05:19:27 PM] <PyroManiac606@Azeroth> Type: 1 = ban, 2 = kick, 3 = unban
+ [05:19:30 PM] <PyroManiac606@Azeroth> er
+ [05:19:32 PM] <PyroManiac606@Azeroth> -1
+ [05:19:35 PM] <PyroManiac606@Azeroth> 0 = ban, etc
+ [05:19:51 PM] <Alendar> I don't think I am going to use it.
+ [05:19:54 PM] <PyroManiac606@Azeroth> Access being the access of the person who is kicking
+ [05:19:54 PM] <Alendar> >_<
+ [05:20:02 PM] <PyroManiac606@Azeroth> but it checks to see if the person is safelisted!
+ [05:20:15 PM] <Alendar> My Quiet-Time kicker does too.
+ [05:20:23 PM] <Alendar> [qkick off
+ [05:20:24 PM] <Alendar[BoT]@Azeroth> Quiet-Time kick is disabled.
+ [05:20:44 PM] <Alendar> [reload
+ [05:20:53 PM] <Alendar> [settrigger !!
+ [05:20:55 PM] <Alendar[BoT]@Azeroth> The new trigger is "!!".
+ [05:20:57 PM] <Alendar> !!reload
+ [05:21:11 PM] <PhiX[BoT]@Azeroth> NIGHT
+ [05:21:17 PM] <PyroManiac606@Azeroth> gnight sexy
+ [05:21:32 PM] <Alendar> Night.
+ [05:25:56 PM] <PyroManiac606@Azeroth> brb
+ [05:25:59 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has exited Battle.net.
+ [05:25:59 PM] -- PyroManiac606@Azeroth has left the channel.
+ [05:25:59 PM] <From Pyro6-Tech@Azeroth> Your friend Pyro6-Tech has exited Battle.net.
+ [05:28:43 PM] <From Pyro6-Tech@Azeroth> Your friend Pyro6-Tech has entered Battle.net.
+ [05:28:45 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has entered Battle.net.
+ [05:28:46 PM] -- PyroManiac606@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [05:29:54 PM] <Alendar> David, do you think my plugins will be accepted?
+ [05:30:16 PM] <PyroManiac606@Azeroth> considering that swent is the in charge of that, there is no telling
+ [05:30:39 PM] <Alendar> Heh...
+ [05:34:38 PM] <Alendar> !!pingme
+ [05:34:47 PM] <Alendar> I think my server died again.
+ [05:34:52 PM] <Alendar> ?trigger
+ [05:34:52 PM] <VBScript@Azeroth> The bot's current trigger is " - " (Alt + 045)
+ [05:34:52 PM] <Pyro[BoT]@Azeroth> The bot's current trigger is " # " (Alt + 035)
+ [05:34:52 PM] <0x5E@Azeroth> The bot's current trigger is " $ " (Alt + 036)
+ [05:34:54 PM] <PhiX[BoT]@Azeroth> The bot's current trigger is " @;; " (Length: 3)
+ [05:35:01 PM] <PyroManiac606@Azeroth> um
+ [05:35:17 PM] <PyroManiac606@Azeroth> did you set a limit on the backlog for your bots?
+ [05:35:29 PM] <Alendar> No.
+ [05:35:32 PM] <PyroManiac606@Azeroth> you should
+ [05:35:36 PM] <PyroManiac606@Azeroth> or else it will build up
+ [05:35:39 PM] <PyroManiac606@Azeroth> and lag your computer
+ [05:35:53 PM] <PyroManiac606@Azeroth> Settings > Bot Settings > General Settings > Maximum backlog size
+ [05:35:54 PM] <Alendar> It happens often when I am working with VNC on it.
+ [05:36:01 PM] <PyroManiac606@Azeroth> i set it to around 50,000
+ [05:36:10 PM] <PyroManiac606@Azeroth> server bots... 5,000
+ [05:36:16 PM] -- Alendar[BoT]@Azeroth has left the channel.
+ [05:36:16 PM] -- Alendar@Azeroth has left the channel.
+ [05:36:21 PM] <PyroManiac606@Azeroth> leaving it unlimited will cause a LOT of lag
+ [05:36:23 PM] <PyroManiac606@Azeroth> after a while
+ [05:36:44 PM] <Alendar> Define backlog
+ [05:37:20 PM] <Alendar> What does backlogging do?
+ [05:37:22 PM] <PyroManiac606@Azeroth> the text
+ [05:37:26 PM] <PyroManiac606@Azeroth> in your screen
+ [05:37:30 PM] <PyroManiac606@Azeroth> when you scroll up
+ [05:37:32 PM] <PyroManiac606@Azeroth> thats the backlog
+ [05:37:47 PM] <Alendar> Oh, I get it.
+ [05:37:57 PM] <Alendar> So it will scroll of the screen.
+ [05:38:18 PM] <PyroManiac606@Azeroth> yea
+ [05:38:26 PM] <PyroManiac606@Azeroth> i would set a limit on all your bots
+ [05:38:32 PM] <PyroManiac606@Azeroth> or use an auto cls script
+ [05:38:33 PM] <PyroManiac606@Azeroth> ;o
+ [05:38:37 PM] <Alendar> 50,000 = 50?
+ [05:38:44 PM] <PyroManiac606@Azeroth> no
+ [05:38:47 PM] <PyroManiac606@Azeroth> dont put a comma
+ [05:38:50 PM] <Alendar> Oh.
+ [05:40:44 PM] <Alendar> >_>
+ [05:41:24 PM] <Alendar> How many lines of text = 50000 bytes?
+ [05:41:26 PM] <VBScript@Azeroth> No relevant conversion was found.
+ [05:41:38 PM] <PyroManiac606@Azeroth> lol
+ [05:41:39 PM] <PyroManiac606@Azeroth> enough
+ [05:41:47 PM] <PyroManiac606@Azeroth> 5,000 is like... not much
+ [05:41:56 PM] <PyroManiac606@Azeroth> so i use it for the bots on my server
+ [05:41:57 PM] -- Alendar[BoT]@Azeroth [157ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [05:41:57 PM] -- Alendar[BoT]@Azeroth has acquired ops.
+ [05:41:57 PM] -- Stats updated: Alendar[BoT]@Azeroth [157ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:42:00 PM] <PyroManiac606@Azeroth> because i dont need to see those
+ [05:42:07 PM] -- Alendar@Azeroth [78ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [05:42:36 PM] <Alendar is currently: Good Current Project: Random projects My website: http://alendar.net :->
+ [05:45:08 PM] <Alendar> Blah
+ [05:45:09 PM] <Alendar> Blah
+ [05:45:10 PM] <Alendar> Blah
+ [05:45:11 PM] <Alendar> Blah
+ [05:45:13 PM] <Alendar> Lawl
+ [05:45:21 PM] <Alendar> 1 Byte = 1 line of text
+ [05:45:41 PM] <Alendar> So 50,000 = 50,000 lines of text? :P
+ [05:45:59 PM] <PyroManiac606@Azeroth> no
+ [05:46:07 PM] <PyroManiac606@Azeroth> 1 byte <> 1 line
+ [05:46:28 PM] <Alendar> For me it was.
+ [05:46:31 PM] <Alendar> Try it.
+ [05:46:36 PM] <PyroManiac606@Azeroth> its not
+ [05:46:41 PM] <PyroManiac606@Azeroth> it just cant show less than one line
+ [05:46:54 PM] <Eric[nK]@Azeroth> One byte equals one characters.
+ [05:47:12 PM] <PyroManiac606@Azeroth> *character
+ [05:47:15 PM] <PyroManiac606@Azeroth> singlular ;p
+ [05:47:27 PM] <Alendar> Oh, I get it.
+ [05:47:36 PM] <Eric[nK]@Azeroth> That's typically the case, anyway.
+ [05:47:39 PM] <0x5E@Azeroth -- [18:26:11] <BeRzErKeR-Tech@USWest> STARVerByte=CD  [18:26:15] <BeRzErKeR-Tech@USWest> And SEXPVerByte=CD  [18:27:02] <Master[k9]@USWest> do i put  "And" ? :: StealthBot Beta v2.6998>
+ [05:47:51 PM] <Eric[nK]@Azeroth> When dealing with Unicode, two bytes could equal one character.
+ [05:48:01 PM] <Alendar> So if I typed half of an "a" it would be half of a byte?
+ [05:48:07 PM] <Alendar> :P
+ [05:48:23 PM] <Eric[nK]@Azeroth> no, there is no such thing as half of an a.
+ [05:48:47 PM] <Eric[nK]@Azeroth> If you were to create such a letter, it would also be one byte.
+ [05:50:26 PM] <Alendar> Hmm, I was kidding but interesting.
+ [05:52:11 PM] <Alendar> Anyhow.
+ [05:52:32 PM] -- HaKr[BoT]@Azeroth has left the channel.
+ [05:54:25 PM] <Alendar> Is it possible to share a whole computer?
+ [05:54:37 PM] <PyroManiac606@Azeroth> What do you mean by 'share'?
+ [05:54:46 PM] <Alendar> On a LAN.
+ [05:54:56 PM] <Alendar> Being able to access and edit the files.
+ [05:55:03 PM] <PyroManiac606@Azeroth> Yea..
+ [05:55:08 PM] <PyroManiac606@Azeroth> Just share the drives.
+ [05:55:17 PM] <Alendar> That's what I was thinking.
+ [05:55:25 PM] <PyroManiac606@Azeroth> Or if you use advanced file sharing.. \\computer\<driveletter>$
+ [05:55:42 PM] <Alendar> Would I have to map that?
+ [05:55:49 PM] <PyroManiac606@Azeroth> no
+ [05:56:10 PM] <PyroManiac606@Azeroth> hm
+ [05:56:32 PM] <PyroManiac606@Azeroth> Current: Installing Microsoft .NET Framework 3.5
+ [05:57:27 PM] <Alendar> It's asking me to connect to the guest account. O_O
+ [05:57:41 PM] <PyroManiac606@Azeroth> Do you have any passwords set for that computer?
+ [05:57:48 PM] <Alendar> Should I?
+ [05:57:50 PM] <Alendar> o_O
+ [05:57:52 PM] <PyroManiac606@Azeroth> -.-
+ [05:57:56 PM] <PyroManiac606@Azeroth> Yes...
+ [05:58:13 PM] <Alendar> Am I being stupid tonight?
+ [05:58:55 PM] <PyroManiac606@Azeroth> kinda..
+ [05:59:01 PM] <PyroManiac606@Azeroth> LOL @ itsryan
+ [05:59:11 PM] <PyroManiac606@Azeroth> Interests      Sitting back and talking to my friends on battle.net
+ [06:00:37 PM] <Alendar>  [9:00:46 PM] <PyroManiac606@Azeroth> kinda.. -- :(
+ [06:00:49 PM] <PyroManiac606@Azeroth> if you've never had a password on your computer..
+ [06:00:51 PM] <Alendar> I set a password for the main account.
+ [06:00:57 PM] <PyroManiac606@Azeroth> and your worried about security..
+ [06:01:03 PM] <Alendar> I have a password on my main computer.
+ [06:01:07 PM] <Alendar> Not my server. :X
+ [06:01:11 PM] <PyroManiac606@Azeroth> ..
+ [06:01:22 PM] <PyroManiac606@Azeroth> server being the MOST important computer..
+ [06:02:28 PM] -- HaKr[BoT]@Azeroth [250ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:02:28 PM] -- HaKr[BoT]@Azeroth has acquired ops.
+ [06:02:37 PM] -- HaKr_@Azeroth [171ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 3, icon tier Night Elves, peon icon, in Clan LXG)
+ [06:02:39 PM] <HaKr_@Azeroth> david
+ [06:02:43 PM] <HaKr_@Azeroth> I need help using my bot
+ [06:02:56 PM] <PyroManiac606@Azeroth> o.o?
+ [06:03:02 PM] <HaKr[BoT]@Azeroth> I can't add myself 
+ [06:03:03 PM] <Alendar> Now I can't access the files on the shared network.
+ [06:03:09 PM] <Alendar feels really stupid>
+ [06:03:09 PM] <HaKr[BoT]@Azeroth> "HaKr_" has been given access 200.
+ [06:03:14 PM] <HaKr_@Azeroth> ?trigger
+ [06:03:15 PM] <PhiX[BoT]@Azeroth> The bot's current trigger is " @;; " (Length: 3)
+ [06:03:15 PM] <HaKr[BoT]@Azeroth> The bot's current trigger is " . " (Alt + 046)
+ [06:03:17 PM] <HaKr_@Azeroth> oh
+ [06:03:18 PM] <HaKr_@Azeroth> NOW it works
+ [06:03:20 PM] <HaKr_@Azeroth> what a hoe
+ [06:03:22 PM] <HaKr_@Azeroth> .whoami
+ [06:03:22 PM] <PyroManiac606@Azeroth> ;p
+ [06:03:23 PM] <HaKr[BoT]@Azeroth> HaKr_ [HaKr_] has access 200.
+ [06:03:28 PM] <PyroManiac606@Azeroth> uh
+ [06:03:33 PM] <PyroManiac606@Azeroth> ..
+ [06:03:42 PM] <HaKr_@Azeroth> how does the group system work anyway?
+ [06:03:47 PM] <PyroManiac606@Azeroth> yea..
+ [06:03:48 PM] <PyroManiac606@Azeroth> uh
+ [06:04:08 PM] <PyroManiac606@Azeroth> ./add groupname access/flags --type group
+ [06:04:17 PM] <PyroManiac606@Azeroth> ./add user --group groupname
+ [06:04:32 PM] <PyroManiac606@Azeroth> ./add clantag access/flags --type clan
+ [06:04:51 PM] <HaKr_@Azeroth> .add Fucking awesome 200/a --type group
+ [06:04:52 PM] <HaKr[BoT]@Azeroth> "Fucking" has been given flags awesom.
+ [06:04:54 PM] <HaKr_@Azeroth> oh
+ [06:04:59 PM] <PyroManiac606@Azeroth> The readme is an amazing place!
+ [06:05:02 PM] <HaKr_@Azeroth> yeah it is
+ [06:05:05 PM] <HaKr_@Azeroth> .rem fucking
+ [06:05:06 PM] <HaKr[BoT]@Azeroth> Successfully removed database entry "fucking."
+ [06:05:15 PM] <PyroManiac606@Azeroth> and its actually access flags
+ [06:05:17 PM] <PyroManiac606@Azeroth> i just did /
+ [06:05:32 PM] <HaKr_@Azeroth> oh k
+ [06:05:51 PM] <HaKr_@Azeroth> .add Admin 200 A --type group
+ [06:05:52 PM] <HaKr[BoT]@Azeroth> Error: You do not have sufficient access to assign an entry with the specified rank.
+ [06:06:06 PM] <HaKr[BoT]@Azeroth> "admin" has been given access 200 and flags A.
+ [06:06:25 PM] <Alendar> Now I can't access the files on the shared network.
+ [06:06:25 PM] <HaKr[BoT]@Azeroth> "HaKr" has been made a member of the group(s): admin.
+ [06:06:26 PM] <PyroManiac606@Azeroth> btw
+ [06:06:31 PM] <PyroManiac606@Azeroth> A means database admin
+ [06:06:40 PM] <PyroManiac606@Azeroth> not full access, like it did before
+ [06:06:45 PM] <HaKr[BoT]@Azeroth> oh
+ [06:06:49 PM] <HaKr[BoT]@Azeroth> 200 is max anyway
+ [06:06:50 PM] <HaKr[BoT]@Azeroth> right?
+ [06:06:56 PM] <PyroManiac606@Azeroth> yea
+ [06:06:57 PM] <PyroManiac606@Azeroth> O is ops
+ [06:07:01 PM] <PyroManiac606@Azeroth> S is safelisted
+ [06:07:06 PM] <Alendar> David
+ [06:07:08 PM] <PyroManiac606@Azeroth> so... /add BoT OS --type clan
+ [06:07:08 PM] <Alendar> >_<
+ [06:07:09 PM] <PyroManiac606@Azeroth> :P
+ [06:07:11 PM] <PyroManiac606@Azeroth> what?
+ [06:07:12 PM] <Alendar> Now I can't access the files on the shared network.
+ [06:07:16 PM] <PyroManiac606@Azeroth> lol
+ [06:07:24 PM] <HaKr[BoT]@Azeroth> why would I give everyone ops?
+ [06:07:29 PM] <PyroManiac606@Azeroth> no
+ [06:07:33 PM] <PyroManiac606@Azeroth> just access to op commands
+ [06:07:44 PM] <HaKr[BoT]@Azeroth> that's what I ment
+ [06:07:52 PM] <PyroManiac606@Azeroth> Alendar, i cant help you because i dont the slightest idea how your network is set up
+ [06:07:58 PM] <PyroManiac606@Azeroth> then at least BoT S
+ [06:08:00 PM] <PyroManiac606@Azeroth> ;p
+ [06:08:23 PM] <Alendar> T_T
+ [06:08:34 PM] <HaKr_@Azeroth> ,add  bot 50 s --type clan
+ [06:08:39 PM] <HaKr_@Azeroth> damn commas
+ [06:08:42 PM] <PyroManiac606@Azeroth> nooo
+ [06:08:45 PM] <PyroManiac606@Azeroth> capital s
+ [06:08:45 PM] <HaKr_@Azeroth> .add bot 50 s --type clan
+ [06:08:46 PM] <HaKr[BoT]@Azeroth> "bot" has been given access 50 and flags s.
+ [06:08:48 PM] <HaKr_@Azeroth> oh
+ [06:08:50 PM] <HaKr_@Azeroth> it matters now?
+ [06:08:51 PM] <PyroManiac606@Azeroth> lowercase s is only friend
+ [06:08:52 PM] <PyroManiac606@Azeroth> yes
+ [06:08:54 PM] <PyroManiac606@Azeroth> -.-
+ [06:08:56 PM] <HaKr_@Azeroth> .rem bot
+ [06:08:57 PM] <HaKr[BoT]@Azeroth> Successfully removed database entry "bot."
+ [06:09:05 PM] <HaKr_@Azeroth> .add bot 50 S --type clan
+ [06:09:05 PM] <HaKr[BoT]@Azeroth> "bot" has been given access 50 and flags S.
+ [06:09:09 PM] -- k21291 [31ms] has joined the channel using Starcraft (0 wins).
+ [06:09:25 PM] <HaKr_@Azeroth> .add pyromaniac606 --type group
+ [06:09:26 PM] <HaKr[BoT]@Azeroth> Error: You have specified an invalid rank.
+ [06:09:27 PM] <HaKr_@Azeroth> oos
+ [06:09:41 PM] <HaKr_@Azeroth> .add pyromaniac606 --type admin
+ [06:09:42 PM] <HaKr[BoT]@Azeroth> Error: You have specified an invalid rank.
+ [06:09:46 PM] <PyroManiac606@Azeroth> um
+ [06:09:48 PM] <PyroManiac606@Azeroth> --group
+ [06:09:49 PM] -- k21291 has left the channel.
+ [06:09:51 PM] <PyroManiac606@Azeroth> ;p
+ [06:09:57 PM] <HaKr_@Azeroth> yeah shh
+ [06:10:06 PM] <HaKr_@Azeroth> .add pyromaniac606 -group admin
+ [06:10:07 PM] <HaKr[BoT]@Azeroth> Error: The specified database entry was not found.
+ [06:10:12 PM] <HaKr_@Azeroth> --
+ [06:10:13 PM] <HaKr_@Azeroth> damn
+ [06:10:16 PM] <PyroManiac606@Azeroth> lol
+ [06:10:21 PM] <HaKr_@Azeroth> .add pyromaniac606 --group admin
+ [06:10:22 PM] <HaKr[BoT]@Azeroth> "pyromaniac606" has been made a member of the group(s): admin.
+ [06:10:25 PM] <HaKr_@Azeroth> I'll get it eventually
+ [06:10:25 PM] <PyroManiac606@Azeroth> yay
+ [06:10:28 PM] <PyroManiac606@Azeroth> brb
+ [06:10:31 PM] <From Pyro6-Tech@Azeroth> Your friend Pyro6-Tech has exited Battle.net.
+ [06:10:31 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has exited Battle.net.
+ [06:10:31 PM] -- PyroManiac606@Azeroth has left the channel.
+ [06:10:33 PM] <HaKr_@Azeroth> .join clan mage
+ [06:10:33 PM] -- HaKr[BoT]@Azeroth has left the channel.
+ [06:10:37 PM] -- HaKr_@Azeroth has left the channel.
+ [06:10:45 PM] -- k21291 [31ms] has joined the channel using Starcraft (0 wins).
+ [06:10:58 PM] -- k21291 has left the channel.
+ [06:12:06 PM] <From Pyro6-Tech@Azeroth> Your friend Pyro6-Tech has entered Battle.net.
+ [06:12:07 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has entered Battle.net.
+ [06:12:08 PM] -- PyroManiac606@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [06:12:22 PM] -- k21291 [31ms] has joined the channel using Starcraft (0 wins).
+ [06:12:37 PM] <Alendar is currently: Good Current Project: Random projects My website: http://alendar.net :->
+ [06:13:05 PM] -- k21291 has left the channel.
+ [06:13:11 PM] -- PyroManiac606@Azeroth has left the channel.
+ [06:13:12 PM] -- PyroManiac606@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [06:13:16 PM] -- PyroManiac606@Azeroth has left the channel.
+ [06:13:17 PM] -- PyroManiac606@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [06:13:34 PM] -- PyroManiac606@Azeroth has left the channel.
+ [06:13:35 PM] -- HaKr[BoT]@Azeroth [250ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:13:35 PM] -- HaKr[BoT]@Azeroth has acquired ops.
+ [06:13:35 PM] -- PyroManiac606@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [06:13:36 PM] -- k21291 [31ms] has joined the channel using Starcraft (0 wins).
+ [06:13:36 PM] <HaKr[BoT]@Azeroth> hmm
+ [06:13:39 PM] <PyroManiac606@Azeroth> yea
+ [06:13:49 PM] <HaKr[BoT]@Azeroth> he's trying to unban you atm
+ [06:13:57 PM] <PyroManiac606@Azeroth> noobs
+ [06:14:06 PM] -- PyroManiac606@Azeroth has left the channel.
+ [06:14:21 PM] -- k21291 has left the channel.
+ [06:17:39 PM] <0x5E@Azeroth -- [05:50:53] <Tech-Snap> Trivia, so easy a caveman could do it :: StealthBot Beta v2.6998>
+ [06:24:20 PM] <Alendar> Where is David?
+ [06:27:24 PM] -- PyroManiac606@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [06:28:39 PM] <Alendar> Holy crap.
+ [06:28:44 PM] <Alendar> I got it working.
+ [06:28:49 PM] <Alendar> Took me long enough.
+ [06:28:57 PM] <HaKr[BoT]@Azeroth> yay!
+ [06:29:22 PM] -- Alendar has left the channel.
+ [06:31:59 PM] <HaKr[BoT]@Azeroth> ?trigger
+ [06:31:59 PM] <Pyro[BoT]@Azeroth> The bot's current trigger is " # " (Alt + 035)
+ [06:31:59 PM] <0x5E@Azeroth> The bot's current trigger is " $ " (Alt + 036)
+ [06:31:59 PM] <Eric[nK]@Azeroth> The bot's current trigger is " ... " (Length: 3)
+ [06:32:00 PM] <Alendar[BoT]@Azeroth> The bot's current trigger is " !! " (Length: 2)
+ [06:32:00 PM] <PhiX[BoT]@Azeroth> The bot's current trigger is " @;; " (Length: 3)
+ [06:32:00 PM] <Alendar@Azeroth> The bot's current trigger is " ! " (Alt + 033)
+ [06:32:03 PM] <HaKr[BoT]@Azeroth> ...whoami
+ [06:32:04 PM] <Eric[nK]@Azeroth> [BoT (clan)] has flags aOS.
+ [06:32:11 PM] <HaKr[BoT]@Azeroth> ah
+ [06:32:11 PM] <PyroManiac606@Azeroth> oh what the fuck
+ [06:32:14 PM] <PyroManiac606@Azeroth> ...whoami
+ [06:32:14 PM] <Eric[nK]@Azeroth> PyroManiac606@Azeroth [SBs (clan)] has access 99 and flags mTGJcCoaOS.
+ [06:32:16 PM] <PyroManiac606@Azeroth> o.o
+ [06:32:20 PM] <HaKr[BoT]@Azeroth> cool
+ [06:32:24 PM] <PyroManiac606@Azeroth> i like my flags
+ [06:32:26 PM] <PyroManiac606@Azeroth> o.o
+ [06:32:28 PM] <HaKr[BoT]@Azeroth> yeah
+ [06:32:35 PM] <HaKr[BoT]@Azeroth> !!whoami
+ [06:32:35 PM] <Alendar[BoT]@Azeroth> [BoT (clan)] has access 50 and flags S.
+ [06:32:40 PM] <HaKr[BoT]@Azeroth> !!banned
+ [06:32:47 PM] <HaKr[BoT]@Azeroth> @;;whoami
+ [06:32:48 PM] <PhiX[BoT]@Azeroth> HaKr[BoT] [<3 (group), BoT (clan)] has access 60 and flags OSs.
+ [06:32:50 PM] <PyroManiac606@Azeroth> !!banned
+ [06:32:50 PM] <Alendar[BoT]@Azeroth> No users have been banned.
+ [06:32:52 PM] <HaKr[BoT]@Azeroth> @;;banned
+ [06:32:52 PM] <PhiX[BoT]@Azeroth> No users have been banned.
+ [06:32:54 PM] <PyroManiac606@Azeroth> @;;sexy
+ [06:32:58 PM] <HaKr[BoT]@Azeroth> @;;shitlist
+ [06:32:58 PM] <PyroManiac606@Azeroth> @;;whothefuckami
+ [06:32:59 PM] <PhiX[BoT]@Azeroth> PyroManiac606 [Admins (group), SBs (clan)] has access 100 and flags SOs.
+ [06:34:08 PM] <PyroManiac606@Azeroth> @;;shitlist
+ [06:34:08 PM] <PhiX[BoT]@Azeroth> User(s) found: BurnInHell\B, Feia0303\B, SeX (clan)\B, Jukebox.\B, MAGE (clan)\B [more]
+ [06:34:08 PM] <PhiX[BoT]@Azeroth> User(s) found: neverseenasonic\B, GnomeBot\B, 1338 (clan)\B, PhiX[BoT]@USEast\B [more]
+ [06:34:14 PM] <PhiX[BoT]@Azeroth> User(s) found: leaderdark\B
+ [06:34:33 PM] <HaKr[BoT]@Azeroth> so
+ [06:34:33 PM] <PyroManiac606@Azeroth> @;;safecheck bot-vector
+ [06:34:33 PM] <PhiX[BoT]@Azeroth> That user is not safelisted.
+ [06:34:35 PM] <HaKr[BoT]@Azeroth> is it possible
+ [06:34:37 PM] <PyroManiac606@Azeroth> hm
+ [06:34:45 PM] <HaKr[BoT]@Azeroth> that we give vector another chance?
+ [06:34:54 PM] <HaKr[BoT]@Azeroth> so I can get that idiot off shaman
+ [06:34:54 PM] <PyroManiac606@Azeroth> not unless phix agrees to give him one
+ [06:36:09 PM] <From PyroManiac606@Azeroth> o.O
+ [06:37:07 PM] -- Alendar [32ms] has joined the channel using Diablo II (Open Character).
+ [06:37:09 PM] <Alendar sighs>
+ [06:37:40 PM] <Alendar> I wonder how secure my network is.
+ [06:39:25 PM] -- SamuelDeuter@Azeroth [94ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [06:39:37 PM] -- SamuelDeuter@Azeroth has left the channel.
+ [06:40:07 PM] <Alendar> Is there a way to test my security?
+ [06:40:35 PM] <PyroManiac606@Azeroth> yes
+ [06:42:48 PM] <PyroManiac606@Azeroth> oh joy
+ [06:42:54 PM] <PyroManiac606@Azeroth> i just owned myself
+ [06:43:01 PM] <PyroManiac606@Azeroth> c
+ [06:43:04 PM] <PyroManiac606@Azeroth> *fuck
+ [06:43:05 PM] <PyroManiac606@Azeroth> <_<
+ [06:43:06 PM] <PyroManiac606@Azeroth> >_>
+ [06:43:18 PM] <PyroManiac606@Azeroth> i have no ideaa
+ [06:43:25 PM] <PyroManiac606@Azeroth> how i could of forgotten..
+ [06:44:23 PM] <Ribose@Azeroth .: [17:33:30.875] <Tech_Funnel> How fat is ur comp?   [17:33:32.796] <Tech_Funnel> *fast :: StealthBot Beta v2.6998 :.>
+ [06:44:32 PM] -- HaKr[BoT]@Azeroth has left the channel.
+ [06:47:39 PM] <0x5E@Azeroth -- <tatclass> YOU ALL SUCK DICK <tatclass> er. <tatclass> hi. <andy\code> A common typo. <tatclass> the keys are like right next to each other. :: StealthBot Beta v2.6998>
+ [06:48:35 PM] <Alendar>  [9:45:28 PM] Scripting runtime error '35761': (line 117; column 1)
+ [06:48:35 PM] <Alendar>  [9:45:28 PM] Request timed out.
+ [06:48:35 PM] <Alendar>  [9:45:28 PM] Offending line: >> 
+ [06:48:41 PM] <Alendar> O_O
+ [06:48:45 PM] <PyroManiac606@Azeroth> o rly?
+ [06:48:49 PM] <Alendar is currently: Good Current Project: Random projects My website: http://alendar.net :->
+ [06:49:07 PM] <Alendar is currently: Good Current Project: Random projects My website: http://alendar.net :->
+ [06:49:15 PM] <Alendar> There.
+ [06:49:32 PM] <PyroManiac606@Azeroth> guess what i forgot on my computer before i formatted
+ [06:49:44 PM] <Alendar> What?
+ [06:49:47 PM] <PyroManiac606@Azeroth> guess
+ [06:49:51 PM] <Alendar> Porn?
+ [06:49:56 PM] <PyroManiac606@Azeroth> no i got all of that
+ [06:50:00 PM] <Alendar> Your bot.
+ [06:50:04 PM] <PyroManiac606@Azeroth> bingo
+ [06:50:06 PM] <PyroManiac606@Azeroth> -.-
+ [06:50:13 PM] <Alendar> :|
+ [06:50:14 PM] <PyroManiac606@Azeroth> meh
+ [06:51:28 PM] <PyroManiac606@Azeroth> brb... again
+ [06:51:29 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has exited Battle.net.
+ [06:51:29 PM] -- PyroManiac606@Azeroth has left the channel.
+ [06:51:29 PM] <From Pyro6-Tech@Azeroth> Your friend Pyro6-Tech has exited Battle.net.
+ [06:52:52 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has entered Battle.net.
+ [06:52:53 PM] -- PyroManiac606@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [06:52:56 PM] <From Pyro6-Tech@Azeroth> Your friend Pyro6-Tech has entered Battle.net.
+ [06:57:59 PM] <VBScript@Azeroth [If ATM stands for Automatic Teller Machine, why do we call it an ATM machine? And if PIN stands for Personal Identification Number, why do we call it a PIN number?] onthefly.no-ip.org>
+ [06:58:19 PM] <PyroManiac606@Azeroth> @#$%
+ [06:58:23 PM] <PyroManiac606@Azeroth> dhds;lkghdflkgjds;gjds;g
+ [06:58:31 PM] -- Chat-Bot@Azeroth [172ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon)
+ [06:58:57 PM] <PyroManiac606@Azeroth> find 3000 MB in GB
+ [06:59:01 PM] <PyroManiac606@Azeroth> hm
+ [06:59:06 PM] <Chat-Bot@Azeroth> its off
+ [06:59:06 PM] <PyroManiac606@Azeroth> what is your mom
+ [06:59:08 PM] <VBScript@Azeroth> The bot does not have any information about "your mom".
+ [06:59:08 PM] <Chat-Bot@Azeroth> lol
+ [06:59:12 PM] <PyroManiac606@Azeroth> o.o
+ [07:00:04 PM] <PyroManiac606@Azeroth> im downloading visual studio 2008
+ [07:00:08 PM] <PyroManiac606@Azeroth> -.-
+ [07:01:14 PM] <Chat-Bot@Azeroth> nice
+ [07:01:17 PM] <Alendar> search 3000 MB in GB
+ [07:01:17 PM] <VBScript@Azeroth> No relevant information was found.
+ [07:01:20 PM] <Chat-Bot@Azeroth> retail or beta?
+ [07:01:27 PM] <PyroManiac606@Azeroth> i... dk
+ [07:01:42 PM] <Alendar> how many gb in 3000 mb
+ [07:01:43 PM] <VBScript@Azeroth> No relevant conversion was found.
+ [07:01:44 PM] <PyroManiac606@Azeroth> i just clicked the download link to one that said "90 day trial (professional edition)
+ [07:01:45 PM] <Chat-Bot@Azeroth> there is a huge bug in beta, it takes like 3+ minutes to open an xml file
+ [07:01:46 PM] <PyroManiac606@Azeroth> "
+ [07:01:47 PM] <Chat-Bot@Azeroth> for some reason
+ [07:05:30 PM] <PyroManiac606@Azeroth> brb.... again
+ [07:05:32 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has exited Battle.net.
+ [07:05:33 PM] -- PyroManiac606@Azeroth has left the channel.
+ [07:05:33 PM] <From Pyro6-Tech@Azeroth> Your friend Pyro6-Tech has exited Battle.net.
+ [07:06:14 PM] -- Chat-Bot@Azeroth has left the channel.
+ [07:07:11 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has entered Battle.net.
+ [07:07:12 PM] -- PyroManiac606@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [07:07:12 PM] -- Stats updated: PyroManiac606@Azeroth [47ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [07:07:15 PM] <From Pyro6-Tech@Azeroth> Your friend Pyro6-Tech has entered Battle.net.
+ [07:11:45 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has exited Battle.net.
+ [07:11:45 PM] -- PyroManiac606@Azeroth has left the channel.
+ [07:11:45 PM] <From Pyro6-Tech@Azeroth> Your friend Pyro6-Tech has exited Battle.net.
+ [07:13:04 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has entered Battle.net.
+ [07:13:04 PM] -- PyroManiac606@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [07:13:04 PM] -- Stats updated: PyroManiac606@Azeroth [47ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [07:13:04 PM] <From Pyro6-Tech@Azeroth> Your friend Pyro6-Tech has entered Battle.net.
+ [07:13:13 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has exited Battle.net.
+ [07:13:13 PM] -- PyroManiac606@Azeroth has left the channel.
+ [07:13:14 PM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has entered Battle.net.
+ [07:13:15 PM] -- PyroManiac606@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [07:13:36 PM] -- ClanGnome@Azeroth [32ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan Spht)
+ [07:13:43 PM] -- ClanGnome@Azeroth has left the channel.
+ [07:17:39 PM] <0x5E@Azeroth -- [23:20:05] <Hdx@USEast> I block every incoming connection when I download things [23:20:15] <Hdx@USEast> and I never share anything AND I rigged my computer to blow up if i flip a switch :: StealthBot Beta v2>
+ [07:19:06 PM] <Alendar is currently: Good Current Project: Random projects My website: http://alendar.net :->
+ [07:29:35 PM] -- HaKr[BoT]@Azeroth [250ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [07:29:35 PM] -- HaKr[BoT]@Azeroth has acquired ops.
+ [07:39:25 PM] <HaKr[BoT]@Azeroth> phix you there?
+ [07:39:29 PM] <HaKr[BoT]@Azeroth> or are you sleeping already
+ [07:41:42 PM] <Alendar>  Is there a place in which I can test the security of my computer and network?
+ [07:45:00 PM] <HaKr[BoT]@Azeroth> well
+ [07:45:02 PM] <HaKr[BoT]@Azeroth> I kinda know a way
+ [07:45:11 PM] <HaKr[BoT]@Azeroth> I have a link to a site that'll give you a virus
+ [07:45:16 PM] <HaKr[BoT]@Azeroth> iof your security is good
+ [07:45:23 PM] <HaKr[BoT]@Azeroth> then you shouldn't get it
+ [07:45:46 PM] <HaKr[BoT]@Azeroth> afk
+ [07:47:39 PM] <0x5E@Azeroth -- "My daddy is the man who boinked my mother, and my conception was the result of said boinkage." -C2Talon :: StealthBot Beta v2.6998>
+ [07:49:07 PM] <Alendar is currently: Good Current Project: Random projects My website: http://alendar.net :->
+ [07:58:03 PM] <PyroManiac606@Azeroth> Alendar, get in touch with a CEH. ;p
+ [11:56:31 PM] [BNET] 10053 -- Connection is aborted due to timeout or other failure
+ [11:56:31 PM] [BNET] Disconnected.
+ [11:56:31 PM] [BNET] The Battle.net server has terminated your connection.
+ [11:56:31 PM] [BNET] Attempting to reconnect...
+ [11:56:32 PM] Authorizing your private-release bot, please wait.
+ [11:56:33 PM] Private usage authorized, connecting to Battle.Net.
+ [11:56:33 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [11:56:33 PM] [BNLS] Connected!
+ [11:56:35 PM] [BNLS] Authorized!
+ [11:56:35 PM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [11:56:35 PM] [BNET] Connected!
+ [11:56:38 PM] [BNET] Checking version...
+ [11:56:41 PM] [BNET] Client version accepted!
+ [11:56:41 PM] [BNET] Sending login information...
+ [11:56:42 PM] [BNET] Login successful.
+ [11:56:42 PM] [CLAN] You are a Grunt in Clan SBs.
+ [11:56:43 PM] [BNET] Logged on as Eric[nK].
+ [11:56:43 PM] -- Joined channel: Clan SBs --
+ [11:56:43 PM] Welcome to Battle.net!
+ [11:56:43 PM] This server is hosted by AT&T.
+ [11:56:43 PM] There are currently 6001 users playing 223 games of Warcraft III, and 243995 users playing 57081 games on Battle.net.
+ [11:56:43 PM] Last logon: Fri Feb 1  2:55 PM
+ [11:56:43 PM] designated 
+ [11:56:43 PM] -- Joined channel: Clan BoT --
+ [11:56:43 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [11:56:43 PM] Last Logon: 2/2/2008, 08:04:32 (Battle.net time)
+ [11:56:43 PM] Last Logoff: 2/2/2008, 04:07:13 (Battle.net time)
+ [11:56:43 PM] Time Logged: 66 days, 21 hours, 24 minutes and 0 seconds
+ [11:58:01 PM] <VBScript@Azeroth [When Chuck Norris calls 1-900 numbers, he doesnt get charged. He holds up the phone and money falls out.] onthefly.no-ip.org>

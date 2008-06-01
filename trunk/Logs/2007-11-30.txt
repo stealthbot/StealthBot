@@ -1,0 +1,274 @@
+ [9:39:29 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [9:39:29 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:39:29 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:39:30 PM] The current StealthBot version is ÿcb2.6R3.
+ [9:39:30 PM]  
+ [9:39:30 PM] >> ÿcbStealthBot News
+ [9:39:30 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:39:30 PM] ->> 
+ [9:39:30 PM] ->> ÿcbStealthBot Beta News
+ [9:39:30 PM] ->> Happy testing!
+ [9:39:30 PM]  
+ [9:39:30 PM] The current StealthBot Beta version is 2.6993.
+ [9:39:30 PM]  [9:39:30 PM] Loaded 3 plugins (3 enabled). Type  [9:39:30 PM] /plugins [9:39:30 PM]  to view them. Type  [9:39:30 PM] /phelp [9:39:30 PM]  for help using them.
+ [9:39:30 PM]  [9:39:30 PM] Type  [9:39:30 PM] /updates [9:39:30 PM]  in the bot to view updates and new plugins that are available for download.
+ [9:39:30 PM]  [9:39:30 PM] frmExample_Load
+ [9:39:30 PM]  [9:39:30 PM] Form created: True
+ [9:39:31 PM]  [9:39:31 PM] frmExample_Resize( [9:39:31 PM] 4710 [9:39:31 PM] ,  [9:39:31 PM] 3645 [9:39:31 PM] )
+ [9:43:11 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [9:43:11 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:43:11 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:43:12 PM] The current StealthBot version is ÿcb2.6R3.
+ [9:43:12 PM]  
+ [9:43:12 PM] >> ÿcbStealthBot News
+ [9:43:12 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:43:12 PM] ->> 
+ [9:43:12 PM] ->> ÿcbStealthBot Beta News
+ [9:43:12 PM] ->> Happy testing!
+ [9:43:12 PM]  
+ [9:43:12 PM] The current StealthBot Beta version is 2.6993.
+ [9:43:12 PM]  [9:43:12 PM] Loaded 3 plugins (3 enabled). Type  [9:43:12 PM] /plugins [9:43:12 PM]  to view them. Type  [9:43:12 PM] /phelp [9:43:12 PM]  for help using them.
+ [9:43:12 PM]  [9:43:12 PM] Type  [9:43:12 PM] /updates [9:43:12 PM]  in the bot to view updates and new plugins that are available for download.
+ [9:43:12 PM]  [9:43:12 PM] frmExample_Load
+ [9:43:12 PM]  [9:43:12 PM] Form created: True
+ [9:43:12 PM]  [9:43:12 PM] frmExample_Resize( [9:43:12 PM] 4710 [9:43:12 PM] ,  [9:43:12 PM] 3645 [9:43:12 PM] )
+ [9:43:18 PM] Error: You have specified an invalid rank.
+ [9:43:35 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [9:43:35 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:43:35 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:43:35 PM] The current StealthBot version is ÿcb2.6R3.
+ [9:43:35 PM]  
+ [9:43:35 PM] >> ÿcbStealthBot News
+ [9:43:35 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:43:35 PM] ->> 
+ [9:43:35 PM] ->> ÿcbStealthBot Beta News
+ [9:43:35 PM] ->> Happy testing!
+ [9:43:35 PM]  
+ [9:43:35 PM] The current StealthBot Beta version is 2.6993.
+ [9:43:35 PM]  [9:43:35 PM] Loaded 3 plugins (3 enabled). Type  [9:43:35 PM] /plugins [9:43:35 PM]  to view them. Type  [9:43:35 PM] /phelp [9:43:35 PM]  for help using them.
+ [9:43:35 PM]  [9:43:35 PM] Type  [9:43:35 PM] /updates [9:43:35 PM]  in the bot to view updates and new plugins that are available for download.
+ [9:43:36 PM]  [9:43:36 PM] frmExample_Load
+ [9:43:36 PM]  [9:43:36 PM] Form created: True
+ [9:43:36 PM]  [9:43:36 PM] frmExample_Resize( [9:43:36 PM] 4710 [9:43:36 PM] ,  [9:43:36 PM] 3645 [9:43:36 PM] )
+ [9:43:43 PM] Error: You have specified an invalid rank.
+ [9:44:00 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [9:44:00 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:44:00 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:44:00 PM] The current StealthBot version is ÿcb2.6R3.
+ [9:44:00 PM]  
+ [9:44:00 PM] >> ÿcbStealthBot News
+ [9:44:00 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:44:00 PM] ->> 
+ [9:44:00 PM] ->> ÿcbStealthBot Beta News
+ [9:44:00 PM] ->> Happy testing!
+ [9:44:00 PM]  
+ [9:44:00 PM] The current StealthBot Beta version is 2.6993.
+ [9:44:00 PM]  [9:44:00 PM] Loaded 3 plugins (3 enabled). Type  [9:44:00 PM] /plugins [9:44:00 PM]  to view them. Type  [9:44:00 PM] /phelp [9:44:00 PM]  for help using them.
+ [9:44:00 PM]  [9:44:00 PM] Type  [9:44:00 PM] /updates [9:44:00 PM]  in the bot to view updates and new plugins that are available for download.
+ [9:44:00 PM]  [9:44:00 PM] frmExample_Load
+ [9:44:00 PM]  [9:44:00 PM] Form created: True
+ [9:44:00 PM]  [9:44:00 PM] frmExample_Resize( [9:44:00 PM] 4710 [9:44:00 PM] ,  [9:44:00 PM] 3645 [9:44:00 PM] )
+ [9:44:02 PM] Connecting your bot...
+ [9:44:02 PM] Authorizing your private-release bot, please wait.
+ [9:44:02 PM] Private usage authorized, connecting to Battle.Net.
+ [9:44:02 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [9:44:02 PM] [BNLS] Connected!
+ [9:44:02 PM] [BNLS] Authorized!
+ [9:44:02 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [9:44:09 PM] Error: You have specified an invalid rank.
+ [9:44:33 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [9:44:33 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:44:33 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:44:33 PM] The current StealthBot version is ÿcb2.6R3.
+ [9:44:34 PM]  
+ [9:44:34 PM] >> ÿcbStealthBot News
+ [9:44:34 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:44:34 PM] ->> 
+ [9:44:34 PM] ->> ÿcbStealthBot Beta News
+ [9:44:34 PM] ->> Happy testing!
+ [9:44:34 PM]  
+ [9:44:34 PM] The current StealthBot Beta version is 2.6993.
+ [9:44:34 PM]  [9:44:34 PM] Loaded 3 plugins (3 enabled). Type  [9:44:34 PM] /plugins [9:44:34 PM]  to view them. Type  [9:44:34 PM] /phelp [9:44:34 PM]  for help using them.
+ [9:44:34 PM]  [9:44:34 PM] Type  [9:44:34 PM] /updates [9:44:34 PM]  in the bot to view updates and new plugins that are available for download.
+ [9:44:34 PM]  [9:44:34 PM] frmExample_Load
+ [9:44:34 PM]  [9:44:34 PM] Form created: True
+ [9:44:34 PM]  [9:44:34 PM] frmExample_Resize( [9:44:34 PM] 4710 [9:44:34 PM] ,  [9:44:34 PM] 3645 [9:44:34 PM] )
+ [9:44:40 PM] Error: One or more of the specified groups could not be found.
+ [9:44:43 PM] User(s) found: Eric[nK]@Azeroth\200, *#*\B, Techs (group)\aOS, Berzerker-Tech, SBs (clan) [more]
+ [9:44:43 PM] User(s) found: Hdx, Tech-RoNiN, PyroManiac666@Azeroth, Naivete@Azeroth, ToSS]ZeR0[@Azeroth\S [more]
+ [9:44:43 PM] User(s) found: Divine[nK], sLy[nK], [nK] (group)\aOS, Tech-PhiX@Azeroth
+ [9:44:48 PM] Error: You have specified an invalid rank.
+ [9:44:50 PM] Error: You have specified an invalid rank.
+ [9:46:00 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [9:46:00 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:46:00 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:46:00 PM] The current StealthBot version is ÿcb2.6R3.
+ [9:46:00 PM]  
+ [9:46:00 PM] >> ÿcbStealthBot News
+ [9:46:00 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:46:00 PM] ->> 
+ [9:46:00 PM] ->> ÿcbStealthBot Beta News
+ [9:46:00 PM] ->> Happy testing!
+ [9:46:00 PM]  
+ [9:46:00 PM] The current StealthBot Beta version is 2.6993.
+ [9:46:01 PM]  [9:46:01 PM] Loaded 3 plugins (3 enabled). Type  [9:46:01 PM] /plugins [9:46:01 PM]  to view them. Type  [9:46:01 PM] /phelp [9:46:01 PM]  for help using them.
+ [9:46:01 PM]  [9:46:01 PM] Type  [9:46:01 PM] /updates [9:46:01 PM]  in the bot to view updates and new plugins that are available for download.
+ [9:46:01 PM]  [9:46:01 PM] frmExample_Load
+ [9:46:01 PM]  [9:46:01 PM] Form created: True
+ [9:46:01 PM]  [9:46:01 PM] frmExample_Resize( [9:46:01 PM] 4710 [9:46:01 PM] ,  [9:46:01 PM] 3645 [9:46:01 PM] )
+ [9:46:08 PM] The user law has been assigned to the group(s): Techs.
+ [9:46:16 PM] law [Techs (group)] has flags aOS.
+ [9:46:24 PM] Error: One or more of the specified groups could not be found.
+ [9:50:23 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [9:50:23 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:50:23 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:50:24 PM] The current StealthBot version is ÿcb2.6R3.
+ [9:50:24 PM]  
+ [9:50:24 PM] >> ÿcbStealthBot News
+ [9:50:24 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:50:24 PM] ->> 
+ [9:50:24 PM] ->> ÿcbStealthBot Beta News
+ [9:50:24 PM] ->> Happy testing!
+ [9:50:24 PM]  
+ [9:50:24 PM] The current StealthBot Beta version is 2.6993.
+ [9:50:24 PM]  [9:50:24 PM] Loaded 3 plugins (3 enabled). Type  [9:50:24 PM] /plugins [9:50:24 PM]  to view them. Type  [9:50:24 PM] /phelp [9:50:24 PM]  for help using them.
+ [9:50:24 PM]  [9:50:24 PM] Type  [9:50:24 PM] /updates [9:50:24 PM]  in the bot to view updates and new plugins that are available for download.
+ [9:50:24 PM]  [9:50:24 PM] frmExample_Load
+ [9:50:24 PM]  [9:50:24 PM] Form created: True
+ [9:50:24 PM]  [9:50:24 PM] frmExample_Resize( [9:50:24 PM] 4710 [9:50:24 PM] ,  [9:50:24 PM] 3645 [9:50:24 PM] )
+ [9:50:31 PM] Error: You cannot make a group a member of itself.
+ [9:50:44 PM] The user bob has been assigned to the group(s): Techs.
+ [9:50:46 PM] Successfully removed userlist entry "bob".
+ [11:03:39 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [11:03:39 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:03:39 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [11:03:40 PM] The current StealthBot version is ÿcb2.6R3.
+ [11:03:40 PM]  
+ [11:03:40 PM] >> ÿcbStealthBot News
+ [11:03:40 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:03:40 PM] ->> 
+ [11:03:40 PM] ->> ÿcbStealthBot Beta News
+ [11:03:40 PM] ->> Happy testing!
+ [11:03:40 PM]  
+ [11:03:40 PM] The current StealthBot Beta version is 2.6993.
+ [11:03:40 PM]  [11:03:40 PM] Loaded 3 plugins (3 enabled). Type  [11:03:40 PM] /plugins [11:03:40 PM]  to view them. Type  [11:03:40 PM] /phelp [11:03:40 PM]  for help using them.
+ [11:03:40 PM]  [11:03:40 PM] Type  [11:03:40 PM] /updates [11:03:40 PM]  in the bot to view updates and new plugins that are available for download.
+ [11:03:40 PM]  [11:03:40 PM] frmExample_Load
+ [11:03:40 PM]  [11:03:40 PM] Form created: True
+ [11:03:40 PM]  [11:03:40 PM] frmExample_Resize( [11:03:40 PM] 4710 [11:03:40 PM] ,  [11:03:40 PM] 3645 [11:03:40 PM] )
+ [11:13:59 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [11:13:59 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:13:59 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [11:14:00 PM] The current StealthBot version is ÿcb2.6R3.
+ [11:14:00 PM]  
+ [11:14:00 PM] >> ÿcbStealthBot News
+ [11:14:00 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:14:00 PM] ->> 
+ [11:14:00 PM] ->> ÿcbStealthBot Beta News
+ [11:14:00 PM] ->> Happy testing!
+ [11:14:00 PM]  
+ [11:14:00 PM] The current StealthBot Beta version is 2.6993.
+ [11:14:00 PM]  [11:14:00 PM] Loaded 3 plugins (3 enabled). Type  [11:14:00 PM] /plugins [11:14:00 PM]  to view them. Type  [11:14:00 PM] /phelp [11:14:00 PM]  for help using them.
+ [11:14:00 PM]  [11:14:00 PM] Type  [11:14:00 PM] /updates [11:14:00 PM]  in the bot to view updates and new plugins that are available for download.
+ [11:14:00 PM]  [11:14:00 PM] frmExample_Load
+ [11:14:00 PM]  [11:14:00 PM] Form created: True
+ [11:14:00 PM]  [11:14:00 PM] frmExample_Resize( [11:14:00 PM] 4710 [11:14:00 PM] ,  [11:14:00 PM] 3645 [11:14:00 PM] )
+ [11:14:06 PM] "" has been given flags b.
+ [11:21:36 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [11:21:36 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:21:36 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [11:21:36 PM] The current StealthBot version is ÿcb2.6R3.
+ [11:21:36 PM]  
+ [11:21:36 PM] >> ÿcbStealthBot News
+ [11:21:36 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:21:36 PM] ->> 
+ [11:21:36 PM] ->> ÿcbStealthBot Beta News
+ [11:21:36 PM] ->> Happy testing!
+ [11:21:36 PM]  
+ [11:21:36 PM] The current StealthBot Beta version is 2.6993.
+ [11:21:37 PM]  [11:21:37 PM] Loaded 3 plugins (3 enabled). Type  [11:21:37 PM] /plugins [11:21:37 PM]  to view them. Type  [11:21:37 PM] /phelp [11:21:37 PM]  for help using them.
+ [11:21:37 PM]  [11:21:37 PM] Type  [11:21:37 PM] /updates [11:21:37 PM]  in the bot to view updates and new plugins that are available for download.
+ [11:21:37 PM]  [11:21:37 PM] frmExample_Load
+ [11:21:37 PM]  [11:21:37 PM] Form created: True
+ [11:21:37 PM]  [11:21:37 PM] frmExample_Resize( [11:21:37 PM] 4710 [11:21:37 PM] ,  [11:21:37 PM] 3645 [11:21:37 PM] )
+ [11:21:45 PM] "bob" has been given access 100, flags B, and has been made a member of the group(s): Techs.
+ [11:22:07 PM] "tom" has been made a member of the group(s): Techs.
+ [11:22:14 PM] "tom" has been given access 100, flags S, and has been made a member of the group(s): Techs.
+ [11:22:19 PM] Successfully removed database entry "tom".
+ [11:22:22 PM] "tom" has been given access 100 and flags S.
+ [11:22:59 PM] "bob" has been given access 100, flags Ba, and has been made a member of the group(s): Techs.
+ [11:36:52 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [11:36:52 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:36:52 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [11:36:53 PM] The current StealthBot version is ÿcb2.6R3.
+ [11:36:53 PM]  
+ [11:36:53 PM] >> ÿcbStealthBot News
+ [11:36:53 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:36:53 PM] ->> 
+ [11:36:53 PM] ->> ÿcbStealthBot Beta News
+ [11:36:53 PM] ->> Happy testing!
+ [11:36:53 PM]  
+ [11:36:53 PM] The current StealthBot Beta version is 2.6993.
+ [11:36:53 PM]  [11:36:53 PM] Loaded 3 plugins (3 enabled). Type  [11:36:53 PM] /plugins [11:36:53 PM]  to view them. Type  [11:36:53 PM] /phelp [11:36:53 PM]  for help using them.
+ [11:36:53 PM]  [11:36:53 PM] Type  [11:36:53 PM] /updates [11:36:53 PM]  in the bot to view updates and new plugins that are available for download.
+ [11:36:53 PM]  [11:36:53 PM] frmExample_Load
+ [11:36:53 PM]  [11:36:53 PM] Form created: True
+ [11:36:53 PM]  [11:36:53 PM] frmExample_Resize( [11:36:53 PM] 4710 [11:36:53 PM] ,  [11:36:53 PM] 3645 [11:36:53 PM] )
+ [11:36:58 PM] "bob" has been given access 100 and flags Bas.
+ [11:37:01 PM] bob [Techs (group)] has access 100 and flags BasOS.
+ [11:37:05 PM] "bob" has been given access 100 and flags Bas.
+ [11:37:15 PM] Successfully removed database entry "bob".
+ [11:37:19 PM] "bob" has been made a member of the group(s): Techs.
+ [11:37:24 PM] "bob" has been given flags d.
+ [11:37:27 PM] .
+ [11:37:31 PM] bob [Techs (group)] has flags aOS.
+ [11:37:34 PM] .
+ [11:42:00 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [11:42:00 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:42:00 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [11:42:01 PM] The current StealthBot version is ÿcb2.6R3.
+ [11:42:01 PM]  
+ [11:42:01 PM] >> ÿcbStealthBot News
+ [11:42:01 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:42:01 PM] ->> 
+ [11:42:01 PM] ->> ÿcbStealthBot Beta News
+ [11:42:01 PM] ->> Happy testing!
+ [11:42:01 PM]  
+ [11:42:01 PM] The current StealthBot Beta version is 2.6993.
+ [11:42:01 PM]  [11:42:01 PM] Loaded 3 plugins (3 enabled). Type  [11:42:01 PM] /plugins [11:42:01 PM]  to view them. Type  [11:42:01 PM] /phelp [11:42:01 PM]  for help using them.
+ [11:42:01 PM]  [11:42:01 PM] Type  [11:42:01 PM] /updates [11:42:01 PM]  in the bot to view updates and new plugins that are available for download.
+ [11:42:01 PM]  [11:42:01 PM] frmExample_Load
+ [11:42:01 PM]  [11:42:01 PM] Form created: True
+ [11:42:01 PM]  [11:42:01 PM] frmExample_Resize( [11:42:01 PM] 4710 [11:42:01 PM] ,  [11:42:01 PM] 3645 [11:42:01 PM] )
+ [11:42:04 PM] User(s) found: Eric[nK]@Azeroth\200, *#*\B, Techs (group)\aOS, Berzerker-Tech, SBs (clan) [more]
+ [11:42:04 PM] User(s) found: Hdx, Tech-RoNiN, PyroManiac666@Azeroth, Naivete@Azeroth, ToSS]ZeR0[@Azeroth\S [more]
+ [11:42:04 PM] User(s) found: Divine[nK], sLy[nK], [nK] (group)\aOS, Tech-PhiX@Azeroth, law, SEXP (game)\b [more]
+ [11:42:04 PM] User(s) found: tom\100\S, bob
+ [11:42:06 PM] Successfully removed database entry "bob".
+ [11:42:07 PM] Successfully removed database entry "tom".
+ [11:42:10 PM] Successfully removed database entry "law".
+ [11:42:12 PM] Successfully removed database entry "sexp".
+ [11:42:14 PM] "sexp" has been given flags b.
+ [11:42:16 PM] Successfully removed database entry "sexp".
+ [11:42:22 PM] "BOB" has been given flags B.
+ [11:42:26 PM] "BOB" has been given flags BO.
+ [11:42:32 PM] "BOB" has been given flags B.
+ [11:42:34 PM] "BOB" has been given flags B.
+ [11:42:37 PM] "BOB" has been removed from the database.
+ [11:43:31 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [11:43:31 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:43:32 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [11:43:32 PM] The current StealthBot version is ÿcb2.6R3.
+ [11:43:32 PM]  
+ [11:43:32 PM] >> ÿcbStealthBot News
+ [11:43:32 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [11:43:32 PM] ->> 
+ [11:43:32 PM] ->> ÿcbStealthBot Beta News
+ [11:43:32 PM] ->> Happy testing!
+ [11:43:32 PM]  
+ [11:43:32 PM] The current StealthBot Beta version is 2.6993.
+ [11:43:32 PM]  [11:43:32 PM] Loaded 3 plugins (3 enabled). Type  [11:43:32 PM] /plugins [11:43:32 PM]  to view them. Type  [11:43:32 PM] /phelp [11:43:32 PM]  for help using them.
+ [11:43:32 PM]  [11:43:32 PM] Type  [11:43:32 PM] /updates [11:43:32 PM]  in the bot to view updates and new plugins that are available for download.
+ [11:43:32 PM]  [11:43:32 PM] frmExample_Load
+ [11:43:32 PM]  [11:43:32 PM] Form created: True
+ [11:43:32 PM]  [11:43:32 PM] frmExample_Resize( [11:43:32 PM] 4710 [11:43:32 PM] ,  [11:43:32 PM] 3645 [11:43:32 PM] )

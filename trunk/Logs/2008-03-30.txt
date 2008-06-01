@@ -1,0 +1,2761 @@
+ [12:00:23 AM] -- DarkMage2303@Azeroth [312ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 11, icon tier Human, rifleman icon, in Clan pinK)
+ [12:00:44 AM] -- DarkMage2303@Azeroth has left the channel.
+ [12:02:30 AM] -- FreeSlaves has left the channel.
+ [12:04:49 AM] -- FreeSlaves [63ms] has joined the channel using Diablo II (Open Character).
+ [12:05:57 AM] <IdleBoT@Azeroth [#219469](249) <JtotheB> ( o  Y  o ) | <Yosho> o.o | <Nazi[Genocide]> I wonder if anyone's ever gotten off to ascii pr0n, like in the 80's | <JtotheB> Way ahead of you.>
+ [12:09:26 AM] Shutting down...
+ [12:10:22 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 8, by Stealth.
+ [12:10:22 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:10:40 AM] Connecting your bot...
+ [12:10:40 AM] Authorizing your private-release bot, please wait.
+ [12:10:40 AM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [12:10:40 AM] All connections closed.
+ [12:11:03 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:11:03 AM]  
+ [12:11:03 AM] >> ÿcbStealthBot News
+ [12:11:03 AM] >> Welcome to the new StealthBot News!
+ [12:11:03 AM] ->> 
+ [12:11:03 AM] ->> ÿcbStealthBot Beta News
+ [12:11:03 AM] ->> Happy testing!
+ [12:11:03 AM]  
+ [12:11:03 AM] The current StealthBot Beta version is 2.6999
+.
+ [12:11:03 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [12:11:03 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [12:11:05 AM] Connecting your bot...
+ [12:11:05 AM] Authorizing your private-release bot, please wait.
+ [12:11:05 AM] Private usage authorized, connecting to Battle.Net.
+ [12:11:05 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [12:11:06 AM] All connections closed.
+ [12:11:06 AM] Connecting your bot...
+ [12:11:06 AM] Authorizing your private-release bot, please wait.
+ [12:11:06 AM] Private usage authorized, connecting to Battle.Net.
+ [12:11:06 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [12:11:07 AM] [BNLS] Connected!
+ [12:11:07 AM] [BNLS] Authorized!
+ [12:11:07 AM] [BNET] Connecting to the Battle.net server at 63.240.202.127...
+ [12:11:07 AM] [BNET] Connected!
+ [12:11:07 AM] [BNET] Checking version...
+ [12:11:08 AM] [BNET] Client version accepted!
+ [12:11:08 AM] [BNET] Sending login information...
+ [12:11:08 AM] [BNET] Login successful.
+ [12:11:08 AM] [CLAN] You are a Recruit in Clan BoT.
+ [12:11:08 AM] [BNET] Logged on as Eric[nK].
+ [12:11:08 AM] -- Joined channel: Clan BoT --
+ [12:11:09 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [12:11:09 AM] Last Logon: 3/30/2008, 07:16:40 (Battle.net time)
+ [12:11:09 AM] Last Logoff: 3/30/2008, 07:19:42 (Battle.net time)
+ [12:11:09 AM] Time Logged: 86 days, 7 hours, 53 minutes and 5 seconds
+ [12:11:09 AM] .
+ [12:12:01 AM] <VBScript@Azeroth .: When Chuck Norris plays Monopoly, it affects the actual world economy. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [09:15:47 AM] [BNET] 10053 -- Connection is aborted due to timeout or other failure
+ [09:15:47 AM] [BNET] Disconnected.
+ [09:15:47 AM] [BNET] The Battle.net server has terminated your connection.
+ [09:15:47 AM] [BNET] Attempting to reconnect...
+ [09:15:48 AM] Authorizing your private-release bot, please wait.
+ [09:15:49 AM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [09:15:49 AM] All connections closed.
+ [09:17:44 AM] Shutting down...
+ [09:17:58 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 8, by Stealth.
+ [09:17:58 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [09:18:17 AM] The current StealthBot version is ÿcb2.6R3.
+ [09:18:17 AM]  
+ [09:18:17 AM] >> ÿcbStealthBot News
+ [09:18:17 AM] >> Welcome to the new StealthBot News!
+ [09:18:17 AM] ->> 
+ [09:18:17 AM] ->> ÿcbStealthBot Beta News
+ [09:18:17 AM] ->> Happy testing!
+ [09:18:17 AM]  
+ [09:18:17 AM] The current StealthBot Beta version is 2.6999
+.
+ [09:18:17 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [09:18:17 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [09:33:35 AM] Connecting your bot...
+ [09:33:35 AM] Authorizing your private-release bot, please wait.
+ [09:33:35 AM] Private usage authorized, connecting to Battle.Net.
+ [09:33:35 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [09:33:50 AM] [BNLS] Error 11004: Valid name, no data record of requested type
+ [09:33:50 AM] [BNLS] Your computer is unable to contact the BNLS servers.
+ [09:33:51 AM] Connecting your bot...
+ [09:33:51 AM] Authorizing your private-release bot, please wait.
+ [09:33:51 AM] Private usage authorized, connecting to Battle.Net.
+ [09:33:51 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [09:33:52 AM] [BNLS] Connected!
+ [09:33:52 AM] [BNLS] Authorized!
+ [09:33:52 AM] [BNET] Connecting to the Battle.net server at 63.240.202.127...
+ [09:33:52 AM] [BNET] Connected!
+ [09:33:52 AM] [BNET] Checking version...
+ [09:33:52 AM] [BNET] Client version accepted!
+ [09:33:52 AM] [BNET] Sending login information...
+ [09:33:53 AM] [BNET] Login successful.
+ [09:33:53 AM] [CLAN] You are a Recruit in Clan BoT.
+ [09:33:53 AM] [BNET] Logged on as Eric[nK].
+ [09:33:53 AM] -- Joined channel: Clan BoT --
+ [09:33:53 AM] .
+ [09:33:53 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [09:33:53 AM] Last Logon: 3/30/2008, 16:44:08 (Battle.net time)
+ [09:33:53 AM] Last Logoff: 3/30/2008, 07:16:40 (Battle.net time)
+ [09:33:53 AM] Time Logged: 86 days, 7 hours, 55 minutes and 22 seconds
+ [09:33:57 AM] <VBScript@Azeroth Beta v2.6999 Dev Release 7 :.>
+ [09:39:15 AM] All connections closed.
+ [09:39:15 AM] Connecting your bot...
+ [09:39:15 AM] Authorizing your private-release bot, please wait.
+ [09:39:15 AM] Private usage authorized, connecting to Battle.Net.
+ [09:39:15 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [09:39:15 AM] [BNLS] Connected!
+ [09:39:15 AM] [BNLS] Authorized!
+ [09:39:15 AM] [BNET] Connecting to the Battle.net server at 63.240.202.127...
+ [09:39:15 AM] [BNET] Connected!
+ [09:39:15 AM] [BNET] Checking version...
+ [09:39:16 AM] [BNET] Client version accepted!
+ [09:39:16 AM] [BNET] Sending login information...
+ [09:39:16 AM] [BNET] Login successful.
+ [09:39:16 AM] [CLAN] You are a Recruit in Clan BoT.
+ [09:39:16 AM] [BNET] Logged on as Eric[nK].
+ [09:39:17 AM] You are Eric[nK], using Warcraft III in Azeroth
+ [09:39:17 AM] -- Joined channel: Clan BoT --
+ [09:39:17 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [09:39:17 AM] Last Logon: 3/30/2008, 16:49:32 (Battle.net time)
+ [09:39:17 AM] Last Logoff: 3/30/2008, 16:49:31 (Battle.net time)
+ [09:39:17 AM] Time Logged: 86 days, 8 hours, 0 minutes and 44 seconds
+ [09:39:17 AM] .
+ [09:39:25 AM] All connections closed.
+ [09:39:25 AM] Connecting your bot...
+ [09:39:25 AM] Authorizing your private-release bot, please wait.
+ [09:39:25 AM] Private usage authorized, connecting to Battle.Net.
+ [09:39:25 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [09:39:25 AM] [BNLS] Connected!
+ [09:39:25 AM] [BNLS] Authorized!
+ [09:39:25 AM] [BNET] Connecting to the Battle.net server at 63.241.83.12...
+ [09:39:25 AM] [BNET] Connected!
+ [09:39:26 AM] [BNET] Checking version...
+ [09:39:26 AM] [BNET] Client version accepted!
+ [09:39:26 AM] [BNET] Sending login information...
+ [09:39:26 AM] [BNET] Login successful.
+ [09:39:26 AM] [CLAN] You are a Grunt in Clan SBs.
+ [09:39:26 AM] [BNET] Logged on as Eric[nK].
+ [09:39:27 AM] -- Joined channel: Clan BOT --
+ [09:39:27 AM] Account Created: 8/22/2007, 01:47:11 (Battle.net time)
+ [09:39:27 AM] Last Logon: 3/30/2008, 16:44:43 (Battle.net time)
+ [09:39:27 AM] Last Logoff: 3/28/2008, 01:59:46 (Battle.net time)
+ [09:39:27 AM] Time Logged: 0 days, 16 hours, 24 minutes and 26 seconds
+ [09:39:28 AM] All connections closed.
+ [09:39:28 AM] Connecting your bot...
+ [09:39:28 AM] Authorizing your private-release bot, please wait.
+ [09:39:28 AM] Private usage authorized, connecting to Battle.Net.
+ [09:39:28 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [09:39:28 AM] [BNLS] Connected!
+ [09:39:28 AM] [BNLS] Authorized!
+ [09:39:28 AM] [BNET] Connecting to the Battle.net server at 63.241.83.12...
+ [09:39:28 AM] [BNET] Connected!
+ [09:39:28 AM] [BNET] Checking version...
+ [09:39:29 AM] [BNET] Client version accepted!
+ [09:39:29 AM] [BNET] Sending login information...
+ [09:39:29 AM] [BNET] Login successful.
+ [09:39:29 AM] [CLAN] You are a Grunt in Clan SBs.
+ [09:39:29 AM] [BNET] Logged on as Eric[nK].
+ [09:39:30 AM] -- Joined channel: Clan BOT --
+ [09:39:30 AM] Account Created: 8/22/2007, 01:47:11 (Battle.net time)
+ [09:39:30 AM] Last Logon: 3/30/2008, 16:44:45 (Battle.net time)
+ [09:39:30 AM] Last Logoff: 3/30/2008, 16:44:45 (Battle.net time)
+ [09:39:30 AM] Time Logged: 0 days, 16 hours, 24 minutes and 28 seconds
+ [09:39:30 AM] All connections closed.
+ [09:39:30 AM] Connecting your bot...
+ [09:39:30 AM] Authorizing your private-release bot, please wait.
+ [09:39:30 AM] Private usage authorized, connecting to Battle.Net.
+ [09:39:30 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [09:39:30 AM] [BNLS] Connected!
+ [09:39:31 AM] [BNLS] Authorized!
+ [09:39:31 AM] [BNET] Connecting to the Battle.net server at 63.241.83.12...
+ [09:39:31 AM] [BNET] Connected!
+ [09:39:31 AM] [BNET] Checking version...
+ [09:39:31 AM] [BNET] Client version accepted!
+ [09:39:31 AM] [BNET] Sending login information...
+ [09:39:31 AM] [BNET] Login successful.
+ [09:39:31 AM] [CLAN] You are a Grunt in Clan SBs.
+ [09:39:31 AM] [BNET] Logged on as Eric[nK].
+ [09:39:32 AM] -- Joined channel: Clan BOT --
+ [09:39:32 AM] Account Created: 8/22/2007, 01:47:11 (Battle.net time)
+ [09:39:32 AM] Last Logon: 3/30/2008, 16:44:48 (Battle.net time)
+ [09:39:32 AM] Last Logoff: 3/30/2008, 16:44:47 (Battle.net time)
+ [09:39:32 AM] Time Logged: 0 days, 16 hours, 24 minutes and 29 seconds
+ [09:39:32 AM] All connections closed.
+ [09:39:32 AM] Connecting your bot...
+ [09:39:32 AM] Authorizing your private-release bot, please wait.
+ [09:39:32 AM] Private usage authorized, connecting to Battle.Net.
+ [09:39:33 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [09:39:33 AM] [BNLS] Connected!
+ [09:39:33 AM] [BNLS] Authorized!
+ [09:39:33 AM] [BNET] Connecting to the Battle.net server at 63.241.83.12...
+ [09:39:33 AM] [BNET] Connected!
+ [09:39:33 AM] [BNET] Checking version...
+ [09:39:33 AM] [BNET] Client version accepted!
+ [09:39:33 AM] [BNET] Sending login information...
+ [09:39:33 AM] [BNET] Login successful.
+ [09:39:33 AM] [CLAN] You are a Grunt in Clan SBs.
+ [09:39:33 AM] [BNET] Logged on as Eric[nK].
+ [09:39:34 AM] -- Joined channel: Clan BOT --
+ [09:39:34 AM] Account Created: 8/22/2007, 01:47:11 (Battle.net time)
+ [09:39:34 AM] Last Logon: 3/30/2008, 16:44:50 (Battle.net time)
+ [09:39:34 AM] Last Logoff: 3/30/2008, 16:44:49 (Battle.net time)
+ [09:39:34 AM] Time Logged: 0 days, 16 hours, 24 minutes and 30 seconds
+ [09:39:35 AM] All connections closed.
+ [09:39:35 AM] Connecting your bot...
+ [09:39:35 AM] Authorizing your private-release bot, please wait.
+ [09:39:35 AM] Private usage authorized, connecting to Battle.Net.
+ [09:39:35 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [09:39:35 AM] [BNLS] Connected!
+ [09:39:35 AM] [BNLS] Authorized!
+ [09:39:35 AM] [BNET] Connecting to the Battle.net server at 63.241.83.12...
+ [09:39:35 AM] [BNET] Connected!
+ [09:39:35 AM] [BNET] Checking version...
+ [09:39:35 AM] [BNET] Client version accepted!
+ [09:39:35 AM] [BNET] Sending login information...
+ [09:39:35 AM] [BNET] Login successful.
+ [09:39:35 AM] [CLAN] You are a Grunt in Clan SBs.
+ [09:39:35 AM] [BNET] Logged on as Eric[nK].
+ [09:39:36 AM] -- Joined channel: Clan BOT --
+ [09:39:36 AM] Account Created: 8/22/2007, 01:47:11 (Battle.net time)
+ [09:39:36 AM] Last Logon: 3/30/2008, 16:44:52 (Battle.net time)
+ [09:39:36 AM] Last Logoff: 3/30/2008, 16:44:51 (Battle.net time)
+ [09:39:36 AM] Time Logged: 0 days, 16 hours, 24 minutes and 31 seconds
+ [09:39:37 AM] All connections closed.
+ [09:39:37 AM] Connecting your bot...
+ [09:39:37 AM] Authorizing your private-release bot, please wait.
+ [09:39:37 AM] Private usage authorized, connecting to Battle.Net.
+ [09:39:37 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [09:39:37 AM] [BNLS] Connected!
+ [09:39:37 AM] [BNLS] Authorized!
+ [09:39:37 AM] [BNET] Connecting to the Battle.net server at 63.241.83.12...
+ [09:39:37 AM] [BNET] Connected!
+ [09:39:37 AM] [BNET] Checking version...
+ [09:39:37 AM] [BNET] Client version accepted!
+ [09:39:37 AM] [BNET] Sending login information...
+ [09:39:38 AM] [BNET] Login successful.
+ [09:39:38 AM] [CLAN] You are a Grunt in Clan SBs.
+ [09:39:38 AM] [BNET] Logged on as Eric[nK].
+ [09:39:38 AM] -- Joined channel: Clan BOT --
+ [09:39:38 AM] Account Created: 8/22/2007, 01:47:11 (Battle.net time)
+ [09:39:38 AM] Last Logon: 3/30/2008, 16:44:54 (Battle.net time)
+ [09:39:38 AM] Last Logoff: 3/30/2008, 16:44:53 (Battle.net time)
+ [09:39:39 AM] Time Logged: 0 days, 16 hours, 24 minutes and 33 seconds
+ [09:39:49 AM] All connections closed.
+ [09:39:49 AM] Connecting your bot...
+ [09:39:49 AM] Authorizing your private-release bot, please wait.
+ [09:39:49 AM] Private usage authorized, connecting to Battle.Net.
+ [09:39:49 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [09:39:49 AM] [BNLS] Connected!
+ [09:39:49 AM] [BNLS] Authorized!
+ [09:39:49 AM] [BNET] Connecting to the Battle.net server at 63.240.202.129...
+ [09:39:49 AM] [BNET] Connected!
+ [09:39:49 AM] [BNET] Checking version...
+ [09:39:50 AM] [BNET] Client version accepted!
+ [09:39:50 AM] [BNET] Sending login information...
+ [09:39:50 AM] [BNET] Login successful.
+ [09:39:50 AM] [CLAN] You are a Recruit in Clan BoT.
+ [09:39:50 AM] [BNET] Logged on as Eric[nK].
+ [09:39:51 AM] You are Eric[nK], using Warcraft III in Azeroth
+ [09:39:51 AM] -- Joined channel: Clan BoT --
+ [09:39:51 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [09:39:51 AM] Last Logon: 3/30/2008, 16:50:06 (Battle.net time)
+ [09:39:51 AM] Last Logoff: 3/30/2008, 16:49:41 (Battle.net time)
+ [09:39:51 AM] Time Logged: 86 days, 8 hours, 0 minutes and 53 seconds
+ [09:39:51 AM] .
+ [09:41:13 AM] <Eric[nK]> @;;rc
+ [09:41:19 AM] <Eric[nK]> ops: rc
+ [09:41:23 AM] <Eric[nK]> ops: reconnect
+ [09:41:23 AM] -- LuC1Fr[BoT]@Lordaeron has left the channel.
+ [09:41:23 AM] -- Pyro[BoT]@Lordaeron has left the channel.
+ [09:41:23 AM] -- Jd[BoT]@Lordaeron has left the channel.
+ [09:41:24 AM] -- PhiX[BoT]@Lordaeron has left the channel.
+ [09:41:27 AM] -- Pyro[BoT]@Lordaeron [0ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [09:41:27 AM] -- Pyro[BoT]@Lordaeron has acquired ops.
+ [09:41:27 AM] -- Stats updated: Pyro[BoT]@Lordaeron [0ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:41:28 AM] -- LuC1Fr[BoT]@Lordaeron [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:41:28 AM] -- LuC1Fr[BoT]@Lordaeron has acquired ops.
+ [09:41:36 AM] -- Jd[BoT]@Lordaeron [16ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:41:36 AM] -- Jd[BoT]@Lordaeron has acquired ops.
+ [09:41:36 AM] -- PhiX[BoT]@Lordaeron [1000ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:43:25 AM] -- useless_stooge@USEast@Lordaeron [47ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:43:32 AM] -- useless_stooge@USEast@Lordaeron has left the channel.
+ [09:43:37 AM] -- idiat@USEast@Lordaeron [31ms] has joined the channel using Starcraft Brood War (59 wins).
+ [09:44:24 AM] <IdleBoT@Lordaeron [#625959](501) * McPierce once wrote a webserver in VB that was more powerful than apache. | < bkjones> I once coded an operating more powerful than windows using PHP  while standing on my head and [more]>
+ [09:44:32 AM] <IdleBoT@Lordaeron driving a car. | < ScottCh> I once mistyped a command in emacs, and made a more powerful webserver than IIS>
+ [09:49:00 AM] <VBScript@Lordaeron .: Chuck Norris puts the FUN in Funeral. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [09:49:28 AM] All connections closed.
+ [09:49:28 AM] Connecting your bot...
+ [09:49:28 AM] Authorizing your private-release bot, please wait.
+ [09:49:28 AM] Private usage authorized, connecting to Battle.Net.
+ [09:49:28 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [09:49:28 AM] [BNLS] Connected!
+ [09:49:28 AM] [BNLS] Authorized!
+ [09:49:28 AM] [BNET] Connecting to the Battle.net server at 63.240.202.129...
+ [09:49:28 AM] [BNET] Connected!
+ [09:49:28 AM] [BNET] Checking version...
+ [09:49:29 AM] [BNET] Client version accepted!
+ [09:49:29 AM] [BNET] Sending login information...
+ [09:49:29 AM] [BNET] Login successful.
+ [09:49:29 AM] [CLAN] You are a Recruit in Clan BoT.
+ [09:49:29 AM] [BNET] Logged on as Eric[nK].
+ [09:49:30 AM] You are Eric[nK], using Warcraft III in Azeroth
+ [09:49:30 AM] -- Joined channel: Clan BoT --
+ [09:49:30 AM] .
+ [09:49:30 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [09:49:30 AM] Last Logon: 3/30/2008, 16:59:45 (Battle.net time)
+ [09:49:30 AM] Last Logoff: 3/30/2008, 16:59:44 (Battle.net time)
+ [09:49:30 AM] Time Logged: 86 days, 8 hours, 10 minutes and 31 seconds
+ [09:49:46 AM] Shutting down...
+ [09:49:49 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 8, by Stealth.
+ [09:49:49 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [09:50:09 AM] The current StealthBot version is ÿcb2.6R3.
+ [09:50:09 AM]  
+ [09:50:09 AM] >> ÿcbStealthBot News
+ [09:50:09 AM] >> Welcome to the new StealthBot News!
+ [09:50:09 AM] ->> 
+ [09:50:09 AM] ->> ÿcbStealthBot Beta News
+ [09:50:09 AM] ->> Happy testing!
+ [09:50:09 AM]  
+ [09:50:09 AM] The current StealthBot Beta version is 2.6999
+.
+ [09:50:09 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [09:50:09 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [09:50:11 AM] Connecting your bot...
+ [09:50:11 AM] Authorizing your private-release bot, please wait.
+ [09:50:11 AM] Private usage authorized, connecting to Battle.Net.
+ [09:50:11 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [09:50:11 AM] [BNLS] Connected!
+ [09:50:11 AM] [BNLS] Authorized!
+ [09:50:11 AM] [BNET] Connecting to the Battle.net server at 63.240.202.129...
+ [09:50:11 AM] [BNET] Connected!
+ [09:50:11 AM] [BNET] Checking version...
+ [09:50:12 AM] [BNET] Client version accepted!
+ [09:50:12 AM] [BNET] Sending login information...
+ [09:50:12 AM] [BNET] Login successful.
+ [09:50:12 AM] [CLAN] You are a Recruit in Clan BoT.
+ [09:50:12 AM] [BNET] Logged on as Eric[nK].
+ [09:50:12 AM] -- Joined channel: Clan BoT --
+ [09:50:13 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [09:50:13 AM] Last Logon: 3/30/2008, 16:56:29 (Battle.net time)
+ [09:50:13 AM] Last Logoff: 3/30/2008, 17:00:02 (Battle.net time)
+ [09:50:13 AM] Time Logged: 86 days, 8 hours, 10 minutes and 48 seconds
+ [09:50:13 AM] .
+ [09:52:03 AM] <VBScript@Azeroth [Food for Thought] A good friend of my son's is a son to me.    -Lois McMaster Bujold Ethan of Athos, 1986>
+ [09:59:48 AM] <IdleBoT@Azeroth [#349350](566) <Arameth> wow if the bible was an rpg then judas was damn poor. he sold out for thirty silver, that is three gold pieces, you can only just buy a dagger for that>
+ [10:03:54 AM] <IdleBoT@Azeroth> ERIC!
+ [10:04:13 AM] <Pyro6@Azeroth> eh
+ [10:04:16 AM] <VBScript@Azeroth .: Chuck Norris crossed the road. No one has ever dared question his motives. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [10:06:11 AM] <Eric[nK]@Azeroth> ...?
+ [10:06:56 AM] -- Alendar [31ms] has joined the channel using Diablo II (Open Character).
+ [10:07:17 AM] <Pyro6@Azeroth> Hi
+ [10:07:21 AM] <Alendar> Hello.
+ [10:07:39 AM] <Eric[nK]@Azeroth> hi
+ [10:07:44 AM] <PhiX> hai
+ [10:08:09 AM] -- Alendar@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [10:08:09 AM] -- Stats updated: Alendar@Azeroth [62ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:08:12 AM] <IdleBoT@Azeroth> hai
+ [10:08:16 AM] <PhiX> o hai
+ [10:08:23 AM] <Pyro6@Azeroth> hi
+ [10:08:25 AM] -- Alendar[BoT]@Azeroth [93ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [10:08:25 AM] -- Stats updated: Alendar[BoT]@Azeroth [93ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:08:40 AM] <VBScript@Azeroth> hey
+ [10:08:46 AM] <PhiX> -lw
+ [10:08:46 AM] <VBScript@Azeroth> The last whisper to this bot was from Pyro6 at 1:11:40 PM on Sunday, March 30, 2008.
+ [10:08:52 AM] <Pyro6@Azeroth> >_>
+ [10:08:55 AM] <PhiX> :P
+ [10:09:03 AM] <LuC1Fr[BoT]@Azeroth> hi
+ [10:09:07 AM] <PhiX> `lw
+ [10:09:08 AM] <LuC1Fr[BoT]@Azeroth> The last whisper to this bot was from Pyro6 at 10:12:09 AM on Sunday, March 30, 2008.
+ [10:09:09 AM] <From Pyro6@Azeroth> ops: say hi
+ [10:09:09 AM] <IdleBoT@Azeroth> hi
+ [10:09:09 AM] <VBScript@Azeroth> hi
+ [10:09:09 AM] <LuC1Fr[BoT]@Azeroth> hi
+ [10:09:09 AM] <Pyro[BoT]@Azeroth> hi
+ [10:09:35 AM] <Alendar> ...
+ [10:09:40 AM] <PhiX>  [19:11:39.214] <Pyro6-Tech> hi
+ [10:09:47 AM] <Alendar> #whoami
+ [10:09:47 AM] <Pyro[BoT]@Azeroth> Alendar@USEast [1337 (group)] has access 100 and flags AS.
+ [10:10:15 AM] <Pyro6@Azeroth>  [13:07:03.325] <hiimjack@USWest> hi im jack
+ [10:10:16 AM] <Alendar> ddpx Alendar[BoT]?
+ [10:10:16 AM] <Pyro6@Azeroth>  [13:09:59.012] -- Tech-Alendar [94ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [10:10:21 AM] <Pyro6@Azeroth>  [13:12:30.887] <Berzerker-Tech> ..
+ [10:10:24 AM] <Pyro6@Azeroth> (13:12:45) Berzerker: who is that
+ [10:10:27 AM] <Pyro6@Azeroth> (13:12:51) David: jack..?
+ [10:10:30 AM] <Pyro6@Azeroth> (13:13:00) Berzerker: ehh
+ [10:10:46 AM] <Pyro6@Azeroth> cant
+ [10:10:51 AM] <Pyro6@Azeroth> ifndef-tech is 
+ [10:10:57 AM] <Alendar> Ah.
+ [10:11:02 AM] <Pyro6@Azeroth> however
+ [10:11:03 AM] <Alendar> $ci BoT
+ [10:11:04 AM] <0x5E@Azeroth> BoT [BoT] was created on December 3, 2007, has 42 members, and is currently under the command of Pyro[BoT]. Shamans: Jd[BoT], LuC1Fr[BoT], IdleBot, Joe[BoT], VBScript
+ [10:11:12 AM] <Pyro6@Azeroth> you can trade yourself out with joe
+ [10:11:20 AM] <Pyro6@Azeroth> use dp
+ [10:11:33 AM] <Alendar> #dp Joe[BoT] Alendar[BoT]
+ [10:11:33 AM] <Pyro[BoT]@Azeroth> Successfully demoted Joe[BoT] and replaced him/her with Alendar[BoT].
+ [10:11:33 AM] -- Alendar[BoT]@Azeroth has left the channel.
+ [10:11:34 AM] -- Alendar[BoT]@Azeroth [93ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:11:34 AM] -- Alendar[BoT]@Azeroth has acquired ops.
+ [10:12:09 AM] <Alendar> !rehoin
+ [10:12:13 AM] <Alendar> !rejoin
+ [10:12:41 AM] <Eric[nK]@Azeroth> hmmm
+ [10:13:18 AM] <Eric[nK]@Azeroth> ipwntheno0bz.
+ [10:13:26 AM] <VBScript@Azeroth [Food for Thought] Perhaps the feelings that we experience when we are in love represent a normal state. Being in love shows a person who he should be.    -Anton Chekhov>
+ [10:13:33 AM] <Alendar> !rj
+ [10:13:33 AM] -- Alendar@Azeroth has left the channel.
+ [10:13:35 AM] -- Alendar@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:13:46 AM] <Alendar> !rejoin
+ [10:15:13 AM] <IdleBoT@Azeroth [#354032](573) <rS-D00k> this channel is more inactive than my herpes infection after valtrex | <rS-D00k> although even with valtrex it is possible to spread herpes to others | <rS-D00k> talk to your [more]>
+ [10:15:22 AM] <IdleBoT@Azeroth doctor before taking valtrex if you're on a mao inhibitor>
+ [10:16:09 AM] <Pyro6@Azeroth> jack
+ [10:16:20 AM] <Pyro6@Azeroth> you have a bot in sbs west called "hiimjack" right?
+ [10:16:23 AM] All connections closed.
+ [10:16:23 AM] Connecting your bot...
+ [10:16:23 AM] Authorizing your private-release bot, please wait.
+ [10:16:23 AM] Private usage authorized, connecting to Battle.Net.
+ [10:16:23 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [10:16:23 AM] [BNLS] Connected!
+ [10:16:23 AM] [BNLS] Authorized!
+ [10:16:23 AM] [BNET] Connecting to the Battle.net server at 63.240.202.129...
+ [10:16:23 AM] [BNET] Connected!
+ [10:16:23 AM] [BNET] Checking version...
+ [10:16:24 AM] [BNET] Client version accepted!
+ [10:16:24 AM] [BNET] Sending login information...
+ [10:16:24 AM] [BNET] Login successful.
+ [10:16:24 AM] [CLAN] You are a Recruit in Clan BoT.
+ [10:16:24 AM] [BNET] Logged on as Eric[nK].
+ [10:16:25 AM] You are Eric[nK], using Warcraft III in Azeroth
+ [10:16:25 AM] -- Joined channel: Clan BoT --
+ [10:16:25 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [10:16:25 AM] Last Logon: 3/30/2008, 17:26:40 (Battle.net time)
+ [10:16:25 AM] Last Logoff: 3/30/2008, 17:26:39 (Battle.net time)
+ [10:16:25 AM] Time Logged: 86 days, 8 hours, 36 minutes and 59 seconds
+ [10:16:25 AM] .
+ [10:16:25 AM] <Pyro6@Azeroth> cuz berz doesnt think thats you
+ [10:16:27 AM] All connections closed.
+ [10:16:27 AM] Connecting your bot...
+ [10:16:27 AM] Authorizing your private-release bot, please wait.
+ [10:16:27 AM] Private usage authorized, connecting to Battle.Net.
+ [10:16:27 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [10:16:27 AM] [BNLS] Connected!
+ [10:16:27 AM] [BNLS] Authorized!
+ [10:16:27 AM] [BNET] Connecting to the Battle.net server at 63.240.202.129...
+ [10:16:27 AM] [BNET] Connected!
+ [10:16:27 AM] [BNET] Checking version...
+ [10:16:28 AM] [BNET] Client version accepted!
+ [10:16:28 AM] [BNET] Sending login information...
+ [10:16:28 AM] [BNET] Login successful.
+ [10:16:28 AM] [CLAN] You are a Recruit in Clan BoT.
+ [10:16:28 AM] [BNET] Logged on as Eric[nK].
+ [10:16:29 AM] You are Eric[nK], using Warcraft III in Azeroth
+ [10:16:29 AM] -- Joined channel: Clan BoT --
+ [10:16:29 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [10:16:29 AM] Last Logon: 3/30/2008, 17:26:44 (Battle.net time)
+ [10:16:29 AM] Last Logoff: 3/30/2008, 17:26:43 (Battle.net time)
+ [10:16:29 AM] Time Logged: 86 days, 8 hours, 37 minutes and 2 seconds
+ [10:16:29 AM] .
+ [10:16:30 AM] All connections closed.
+ [10:16:30 AM] Connecting your bot...
+ [10:16:30 AM] Authorizing your private-release bot, please wait.
+ [10:16:30 AM] Private usage authorized, connecting to Battle.Net.
+ [10:16:30 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [10:16:30 AM] [BNLS] Connected!
+ [10:16:30 AM] [BNLS] Authorized!
+ [10:16:30 AM] [BNET] Connecting to the Battle.net server at 63.240.202.129...
+ [10:16:30 AM] [BNET] Connected!
+ [10:16:30 AM] [BNET] Checking version...
+ [10:16:31 AM] [BNET] Client version accepted!
+ [10:16:31 AM] [BNET] Sending login information...
+ [10:16:31 AM] [BNET] Login successful.
+ [10:16:31 AM] [CLAN] You are a Recruit in Clan BoT.
+ [10:16:31 AM] [BNET] Logged on as Eric[nK].
+ [10:16:31 AM] You are Eric[nK], using Warcraft III in Azeroth
+ [10:16:32 AM] -- Joined channel: Clan BoT --
+ [10:16:32 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [10:16:32 AM] Last Logon: 3/30/2008, 17:26:47 (Battle.net time)
+ [10:16:32 AM] Last Logoff: 3/30/2008, 17:26:46 (Battle.net time)
+ [10:16:32 AM] Time Logged: 86 days, 8 hours, 37 minutes and 4 seconds
+ [10:16:32 AM] .
+ [10:18:37 AM] <LuC1Fr[BoT]@Azeroth> hi.
+ [10:19:30 AM] <VBScript@Azeroth .: [9:42:15 PM] [Nn4M] <Nn4M]Vette> LOOK @ MY SEXY BODY :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [10:19:42 AM] <LuC1Fr[BoT]@Azeroth> well, no rte
+ [10:21:46 AM] <Pyro6@Azeroth> (13:17:29) Berzerker: I don't think so
+ [10:21:47 AM] <Pyro6@Azeroth> (13:19:28) David: no i mean
+ [10:21:48 AM] <Pyro6@Azeroth> (13:19:30) David: i know its jack
+ [10:21:54 AM] <Pyro6@Azeroth> (13:21:42) Berzerker: so
+ [10:21:55 AM] <Pyro6@Azeroth> (13:21:44) Berzerker: your fag
+ [10:21:56 AM] <Pyro6@Azeroth> (13:21:45) Berzerker: lol
+ [10:21:59 AM] <Pyro6@Azeroth> (13:21:48) Berzerker: you're a fag*
+ [10:22:05 AM] <Pyro6@Azeroth> .....
+ [10:22:25 AM] <LuC1Fr[BoT]@Azeroth> o.O
+ [10:26:11 AM] <Eric[nK]> I've placed default error handlers in all of the packet receiving functions.
+ [10:26:14 AM] <Eric[nK]> So...
+ [10:26:14 AM] <IdleBoT@Azeroth> know whats jack
+ [10:26:27 AM] <Pyro6@Azeroth>  [13:19:09] <Pyro6> jack
+ [10:26:28 AM] <Pyro6@Azeroth>  [13:19:20] <Pyro6> you have a bot in sbs west called "hiimjack" right?
+ [10:26:29 AM] <Eric[nK]> With dev release eight... maybe we'll be able to find the rte6?
+ [10:26:30 AM] <Eric[nK]> ;p
+ [10:26:39 AM] <Pyro6@Azeroth> but after dev release 8..
+ [10:26:40 AM] <IdleBoT@Azeroth> yay eric!
+ [10:26:43 AM] <Pyro6@Azeroth> only one more left
+ [10:26:46 AM] <Pyro6@Azeroth> before..
+ [10:26:53 AM] <IdleBoT@Azeroth> 2.699991!
+ [10:26:59 AM] <LuC1Fr[BoT]@Azeroth> fuck that
+ [10:27:13 AM] <LuC1Fr[BoT]@Azeroth> 2.6999 Devolopment Release 7 Revision 1
+ [10:27:33 AM] <Pyro6@Azeroth> lol
+ [10:27:41 AM] <LuC1Fr[BoT]@Azeroth> err
+ [10:27:46 AM] <LuC1Fr[BoT]@Azeroth> maybe we shouldnt give any idea
+ [10:27:48 AM] <LuC1Fr[BoT]@Azeroth> fux
+ [10:27:55 AM] <IdleBoT@Azeroth> why not
+ [10:28:00 AM] <IdleBoT@Azeroth> we have the newest bot
+ [10:28:04 AM] <IdleBoT@Azeroth> so who cares? :)
+ [10:29:04 AM] All connections closed.
+ [10:29:04 AM] Connecting your bot...
+ [10:29:04 AM] Authorizing your private-release bot, please wait.
+ [10:29:04 AM] Private usage authorized, connecting to Battle.Net.
+ [10:29:04 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [10:29:04 AM] [BNLS] Connected!
+ [10:29:04 AM] [BNLS] Authorized!
+ [10:29:04 AM] [BNET] Connecting to the Battle.net server at 63.240.202.129...
+ [10:29:05 AM] [BNET] Connected!
+ [10:29:05 AM] [BNET] Checking version...
+ [10:29:05 AM] [BNET] Client version accepted!
+ [10:29:05 AM] [BNET] Sending login information...
+ [10:29:05 AM] [BNET] Login successful.
+ [10:29:05 AM] [CLAN] You are a Recruit in Clan BoT.
+ [10:29:05 AM] [BNET] Logged on as Eric[nK].
+ [10:29:06 AM] You are Eric[nK], using Warcraft III in Azeroth
+ [10:29:06 AM] -- Joined channel: Clan BoT --
+ [10:29:06 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [10:29:06 AM] Last Logon: 3/30/2008, 17:32:17 (Battle.net time)
+ [10:29:06 AM] Last Logoff: 3/30/2008, 17:32:17 (Battle.net time)
+ [10:29:06 AM] Time Logged: 86 days, 8 hours, 49 minutes and 37 seconds
+ [10:29:06 AM] .
+ [10:30:15 AM] <IdleBoT@Azeroth [#22822](-410) <FreshBrew> niggers are good, but you cant leave fried chicken lying around, or watermelon. they'll snap it up like a fucking.... nigger or something.>
+ [10:31:20 AM] <Alendar is currently: Showering Current Project: Unknown My website: http://alendar.net :->
+ [10:33:01 AM] <LuC1Fr[BoT]@Azeroth> i care
+ [10:33:09 AM] <LuC1Fr[BoT]@Azeroth> w/e
+ [10:33:29 AM] <LuC1Fr[BoT]@Azeroth> i wish my new psp would come in
+ [10:33:43 AM] <IdleBoT@Azeroth> why
+ [10:33:50 AM] <LuC1Fr[BoT]@Azeroth> Install IRShell, and read some IR Codes from common remotes.
+ [10:34:01 AM] <LuC1Fr[BoT]@Azeroth> fuck 20 remotes for different things, use your psp!
+ [10:34:41 AM] <VBScript@Azeroth .: Chuck Norris can touch MC Hammer. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [10:34:42 AM] <VBScript@Azeroth [Food for Thought] Great ability develops and reveals itself increasingly with every new assignment.    -Baltasar Gracian>
+ [10:38:39 AM] <LuC1Fr[BoT]@Azeroth> you know
+ [10:38:45 AM] <LuC1Fr[BoT]@Azeroth> i normally ignore ads
+ [10:38:51 AM] <LuC1Fr[BoT]@Azeroth> but this one caught my eye
+ [10:39:14 AM] <LuC1Fr[BoT]@Azeroth> "Videogames make exercise easy" <picture of hot chick with 360 remote in hand> 
+ [10:39:33 AM] <LuC1Fr[BoT]@Azeroth> "Reach the next level with gamercize"
+ [10:40:08 AM] <LuC1Fr[BoT]@Azeroth> i can think of something else that makes excersize easy.
+ [10:40:20 AM] <LuC1Fr[BoT]@Azeroth> you're (almost) doing push ups.
+ [10:40:24 AM] <IdleBoT@Azeroth> SEX?
+ [10:40:46 AM] <LuC1Fr[BoT]@Azeroth> hell yeah
+ [10:40:58 AM] <LuC1Fr[BoT]@Azeroth> even know the technique on how to excersize her jaws
+ [10:41:08 AM] <LuC1Fr[BoT]@Azeroth> and throat
+ [10:41:24 AM] <LuC1Fr[BoT]@Azeroth> afk srsly this time gais
+ [10:44:31 AM] <Pyro6@Azeroth> http://www.stealthbot.net/board/index.php?showtopic=32241 lol
+ [10:45:22 AM] <IdleBoT@Azeroth [#121](354) <Dr_DOS> Cducharme: no wonder you get all the women, you choose all the ugly ones =)>
+ [10:46:45 AM] -- HaKr[BoT]@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:46:47 AM] -- HaKr_@Azeroth [62ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 3, icon tier Night Elves, peon icon, in Clan LXG)
+ [10:48:35 AM] <HaKr_@Azeroth> hey david
+ [10:48:36 AM] <HaKr_@Azeroth> you there?
+ [10:49:55 AM] <VBScript@Azeroth .: Now playing #305: Bon Jovi - Social Disease :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [10:52:30 AM] -- Joe[BoT]@Azeroth [0ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:53:15 AM] <Pyro6@Azeroth> huh?
+ [10:54:46 AM] <Alendar> Hmm.
+ [10:56:00 AM] <VBScript@Azeroth [Food for Thought] I am extraordinarily patient, provided I get my own way in the end.    -Margaret Thatcher in Observer April 4, 1989>
+ [10:56:38 AM] <PhiX> huh!
+ [10:56:50 AM] <Pyro6@Azeroth> lol
+ [10:59:31 AM] <PhiX> ,exec addq strreverse("lol")
+ [10:59:31 AM] <Pyro6@Azeroth> lol
+ [10:59:44 AM] <IdleBoT@Azeroth> ,exec addq "##bash off
+ [10:59:49 AM] <IdleBoT@Azeroth> ,exec addq "##bash off"
+ [10:59:49 AM] <Pyro6@Azeroth> ##bash off
+ [10:59:50 AM] <PhiX> ERROR
+ [10:59:53 AM] <IdleBoT@Azeroth> yarly
+ [10:59:57 AM] <PhiX> TYPE MISMATCH
+ [11:00:10 AM] <IdleBoT@Azeroth> ,exec addq "##bash on"
+ [11:00:10 AM] <Pyro6@Azeroth> ##bash on
+ [11:00:16 AM] <PhiX> ##bash on me
+ [11:00:16 AM] <Pyro6@Azeroth>  [14:02:44] Unterminated string constant.
+ [11:00:17 AM] <Pyro6@Azeroth> WTF
+ [11:00:38 AM] -- IdleBoT@Azeroth has left the channel.
+ [11:00:50 AM] <Joe[BoT]@Azeroth> pyro, shaman plox
+ [11:00:59 AM] <Pyro6@Azeroth> hes going to be right back..
+ [11:01:05 AM] <Joe[BoT]@Azeroth> ooh~
+ [11:01:11 AM] <Joe[BoT]@Azeroth> luc1's shaman, plox.
+ [11:01:17 AM] <Pyro6@Azeroth> no..
+ [11:01:21 AM] <Alendar is currently: Worried Current Project: Unknown My website: http://alendar.net :->
+ [11:01:22 AM] <PhiX> get joe[bot]#2 online
+ [11:01:44 AM] <Joe[BoT]@Azeroth> no keys
+ [11:01:45 AM] <PhiX> oh shitz
+ [11:01:55 AM] <PhiX> I just realized
+ [11:02:03 AM] <PhiX> my bot isn't op!!!!!
+ [11:02:06 AM] <PhiX> damn Eric
+ [11:02:20 AM] <Pyro6@Azeroth> o.o
+ [11:02:28 AM] <PhiX> let my bot reconnect ;[
+ [11:02:35 AM] <Pyro6@Azeroth> #dp Jd[BoT] PhiX[BoT]
+ [11:02:35 AM] -- Jd[BoT]@Azeroth has left the channel.
+ [11:02:35 AM] -- PhiX[BoT]@Azeroth has left the channel.
+ [11:02:35 AM] <Pyro[BoT]@Azeroth> Successfully demoted Jd[BoT] and replaced him/her with PhiX[BoT].
+ [11:02:36 AM] -- Jd[BoT]@Azeroth [16ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [11:02:36 AM] -- PhiX[BoT]@Azeroth [1000ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [11:02:36 AM] -- PhiX[BoT]@Azeroth has acquired ops.
+ [11:02:51 AM] <Joe[BoT]@Azeroth> I think Jd[BoT] is a her
+ [11:03:46 AM] -- ifndef-tech@Azeroth has left the channel.
+ [11:03:49 AM] -- ifndef-tech@Azeroth [78ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [11:03:56 AM] <Pyro6@Azeroth> o.0
+ [11:04:14 AM] -- PhiX[BoT]#2@Azeroth [-1ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [11:04:15 AM] <PhiX> #dp PhiX[BoT] Jd[BoT]
+ [11:04:15 AM] <Pyro[BoT]@Azeroth> Successfully demoted PhiX[BoT] and replaced him/her with Jd[BoT].
+ [11:04:15 AM] -- PhiX[BoT]#2@Azeroth has left the channel.
+ [11:04:15 AM] -- Jd[BoT]@Azeroth has left the channel.
+ [11:04:16 AM] -- PhiX[BoT]#2@Azeroth [-1ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [11:04:16 AM] -- Jd[BoT]@Azeroth [16ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [11:04:16 AM] -- Jd[BoT]@Azeroth has acquired ops.
+ [11:04:18 AM] -- PhiX[BoT]#2@Azeroth has left the channel.
+ [11:05:08 AM] <VBScript@Azeroth .: Now playing #1387: Ozzy Osbourne - Time After Time :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [11:09:50 AM] <FreeSlaves> hi
+ [11:16:02 AM] <VBScript@Azeroth> .
+ [11:16:05 AM] <VBScript@Azeroth> hmm
+ [11:16:39 AM] -- connection_lost@Azeroth [31ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Undead, crypt fiend icon, in Clan BoT)
+ [11:16:54 AM] -- connection_lost@Azeroth has left the channel.
+ [11:17:23 AM] <VBScript@Azeroth [Food for Thought] The idea of all-out nuclear war is unsettling.    -Walter Goodman>
+ [11:18:32 AM] -- Joe[BoT]@Azeroth has left the channel.
+ [11:19:11 AM] -- Joe[BoT]@Azeroth [0ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [11:20:26 AM] <VBScript@Azeroth .: Now playing #21: .38 Special - Long Distance Affair :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [11:24:13 AM] <PhiX> hm
+ [11:26:39 AM] -- idiat has left the channel.
+ [11:26:55 AM] -- rastaman96 [47ms] has joined the channel using Starcraft Brood War (0 wins).
+ [11:31:22 AM] <Alendar is currently: Worried Current Project: Unknown My website: http://alendar.net :->
+ [11:32:41 AM] -- DarkMage2303@Azeroth [344ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 11, icon tier Human, rifleman icon, in Clan pinK)
+ [11:35:40 AM] <VBScript@Azeroth .: Now playing #1922: The Cars - Magic :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [11:35:57 AM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [11:36:53 AM] -- LuC1Fr[BoT]@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [11:36:53 AM] -- LuC1Fr[BoT]@Azeroth has acquired ops.
+ [11:38:43 AM] <VBScript@Azeroth [Food for Thought] Study without desire spoils the memory, and it retains nothing that it takes in.    -Leonardo da Vinci>
+ [11:42:24 AM] <Alendar> I have to downgrade my itunes.
+ [11:43:58 AM] <PhiX> by downgrade you mean uninstall?
+ [11:44:26 AM] <rastaman96> FUCK
+ [11:44:31 AM] <PhiX> FUK
+ [11:44:34 AM] <PhiX> JAVABOT
+ [11:44:41 AM] <rastaman96> WHY DOES MY BROKEN SHA1 HASH LOOK NOTHING LIKE THE ONES IN THE MOVIES
+ [11:44:51 AM] <PhiX> lawl
+ [11:47:25 AM] <Alendar> No
+ [11:47:28 AM] <Alendar> Downgrade
+ [11:47:38 AM] <Alendar> I have to rollback to 7.5
+ [11:50:11 AM] <Alendar> David
+ [11:50:24 AM] <Alendar> Didn't you submit a quote to Bash recently?
+ [11:50:36 AM] <Pyro6@Azeroth> yes 
+ [11:50:54 AM] <VBScript@Azeroth .: Now playing #833: Iron Maiden - No More Lies :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [11:51:08 AM] <Alendar> $exec AddQ BashQuote(852541)
+ [11:51:23 AM] <Pyro6@Azeroth> $exec AddQ BashQuote(852541)
+ [11:51:30 AM] <Pyro6@Azeroth> eh..
+ [11:51:30 AM] <Alendar> Hmm.
+ [11:52:04 AM] <Alendar> Quote #852541 was rejected.
+ [11:52:12 AM] <Pyro6@Azeroth> lol
+ [11:54:29 AM] <VBScript@Azeroth> http://youtube.com/watch?v=9-tHAwsPkHo
+ [11:54:57 AM] <Pyro6@Azeroth> $reload script
+ [11:55:07 AM] <Pyro6@Azeroth> $exec AddQ BashQuote(852541)
+ [11:55:23 AM] <Pyro6@Azeroth> $exec AddQ BashQuote(852541)
+ [11:55:29 AM] <0x5E@Azeroth> Quote #852541 was rejected.
+ [11:55:49 AM] <Pyro6@Azeroth> $exec AddQ BashQuote(1562)
+ [11:55:54 AM] <0x5E@Azeroth> *** C2H5OH has joined #finalfight | <MightyQuinn> greetings, Mr. Ethanol | <Rico> Mmm... caffeine. | <Squizzle> Wow, one of you failed organic chem.
+ [12:00:02 PM] <VBScript@Azeroth [Food for Thought] Dig where the gold is…unless you just need some exercise.    -John M. Capozzi Why Climb the Corporate Ladder When You Can Take the Elevator?>
+ [12:01:24 PM] <Alendar is currently: Worried Current Project: Unknown My website: http://alendar.net :->
+ [12:06:07 PM] <VBScript@Azeroth .: Chuck Norris can kick through all 6 degrees of separation, hitting anyone, anywhere, in the face, at any time. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [12:11:33 PM] <FreeSlaves> i flooded a guys bot
+ [12:11:36 PM] <FreeSlaves> that was playing trivia
+ [12:11:45 PM] <Pyro6@Azeroth> lol
+ [12:12:38 PM] -- ClanGnome@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan Spht)
+ [12:12:41 PM] -- ClanGnome@Azeroth has left the channel.
+ [12:12:41 PM] ClanGnome was kicked out of the channel by PhiX[BoT] ((-(-.(-.-).-)-)).
+ [12:17:25 PM] <ifndef@Azeroth> .roulette
+ [12:17:26 PM] <ifndef-tech@Azeroth> Roulette enabled [True]
+ [12:17:26 PM] <ifndef-tech@Azeroth> Spinning wheel and accepting bets!
+ [12:17:34 PM] <ifndef@Azeroth> .bet 40 odd
+ [12:17:36 PM] <ifndef-tech@Azeroth> Bet [40 odd] was accepted.
+ [12:18:15 PM] <Joe[BoT]@Azeroth> .bed 1 even
+ [12:18:16 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:18:26 PM] <ifndef-tech@Azeroth Wheel result [18] color [red] row [6] column [3]>
+ [12:18:27 PM] <ifndef-tech@Azeroth> House collects $40.00  and pays out $0.00
+ [12:18:28 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:18:31 PM] <Joe[BoT]@Azeroth> haha bed, oops
+ [12:18:35 PM] <Joe[BoT]@Azeroth> .bet 1 even
+ [12:18:35 PM] <ifndef-tech@Azeroth> Bet [1 even] was accepted.
+ [12:18:59 PM] -- VBScript@Azeroth has left the channel.
+ [12:19:02 PM] <Pyro6@Azeroth> .bet 10 even
+ [12:19:02 PM] <ifndef-tech@Azeroth> Bet [10 even] was accepted.
+ [12:19:05 PM] <Pyro6@Azeroth> hm
+ [12:19:16 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:19:27 PM] <ifndef-tech@Azeroth Wheel result [5] color [red] row [2] column [2]>
+ [12:19:27 PM] <ifndef-tech@Azeroth> House collects $11.00  and pays out $0.00
+ [12:19:29 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:19:34 PM] <Pyro6@Azeroth> fail
+ [12:19:34 PM] <ifndef@Azeroth> .balance
+ [12:19:35 PM] <ifndef-tech@Azeroth> ifndef's balance is -$66.00
+ [12:19:37 PM] <Pyro6@Azeroth> .bet 10 odd
+ [12:19:38 PM] <ifndef-tech@Azeroth> Bet [10 odd] was accepted.
+ [12:19:41 PM] <ifndef@Azeroth> .bet 20 col2
+ [12:19:42 PM] <ifndef-tech@Azeroth> Bet [20 col2] was accepted.
+ [12:19:51 PM] <ifndef@Azeroth> .bet 10 even
+ [12:19:52 PM] <ifndef-tech@Azeroth> Bet [10 even] was accepted.
+ [12:20:17 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:20:29 PM] <ifndef-tech@Azeroth Wheel result [14] color [red] row [5] column [2]>
+ [12:20:29 PM] <ifndef-tech@Azeroth> ifndef was paid $80.00
+ [12:20:31 PM] <ifndef-tech@Azeroth> House collects $10.00  and pays out $50.00
+ [12:20:32 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:20:42 PM] <ifndef@Azeroth> nice
+ [12:20:43 PM] <ifndef@Azeroth> .balance
+ [12:20:44 PM] <ifndef-tech@Azeroth> ifndef's balance is -$16.00
+ [12:20:44 PM] <Pyro6@Azeroth> gah
+ [12:20:50 PM] <Pyro6@Azeroth> .bet 10 odd
+ [12:20:51 PM] <ifndef-tech@Azeroth> Bet [10 odd] was accepted.
+ [12:21:04 PM] <ifndef@Azeroth> .bet 2 19, 1 13, 1 11, 10 row3:row4
+ [12:21:05 PM] <ifndef-tech@Azeroth> Bet [2 19] was accepted.
+ [12:21:05 PM] <ifndef-tech@Azeroth> Bet [1 13] was accepted.
+ [12:21:06 PM] <ifndef-tech@Azeroth> Bet [1 11] was accepted.
+ [12:21:08 PM] <ifndef-tech@Azeroth> Bet [10 row3:row4] was accepted.
+ [12:21:12 PM] <ifndef@Azeroth> .bet 10 4:5
+ [12:21:13 PM] <ifndef-tech@Azeroth> Bet [10 4:5] was accepted.
+ [12:21:20 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:21:30 PM] <ifndef-tech@Azeroth Wheel result [17] color [black] row [6] column [2]>
+ [12:21:30 PM] <ifndef-tech@Azeroth> Pyro6 was paid $20.00
+ [12:21:32 PM] <ifndef-tech@Azeroth> House collects $24.00  and pays out $10.00
+ [12:21:34 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:21:36 PM] <Pyro6@Azeroth> woot
+ [12:21:37 PM] -- PlayaR7@Azeroth [31ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan WHAT)
+ [12:21:42 PM] <PlayaR7@Azeroth> clan i join clan bot?
+ [12:21:45 PM] -- PlayaR7@Azeroth has left the channel.
+ [12:21:46 PM] <PhiX> no
+ [12:21:49 PM] <Pyro6@Azeroth> $ci WHAT
+ [12:21:55 PM] <ifndef@Azeroth> .bet 15 red, 15 odd, 10 col1
+ [12:21:56 PM] <ifndef-tech@Azeroth> Bet [15 red] was accepted.
+ [12:21:56 PM] <ifndef-tech@Azeroth> Bet [15 odd] was accepted.
+ [12:21:57 PM] <PhiX> "clan i join" ...
+ [12:21:57 PM] <ifndef-tech@Azeroth> Bet [10 col1] was accepted.
+ [12:21:58 PM] <Pyro6@Azeroth> im dlin sumtin
+ [12:22:02 PM] <PhiX> phraseban is can
+ [12:22:03 PM] <0x5E@Azeroth> Clan Kiss [WHAT] was created on January 15, 2008, has 23 members, and is currently under the command of KlSS. Shamans: Cellphone, PlayaR7
+ [12:22:06 PM] -- KlSS@Azeroth [343ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan WHAT)
+ [12:22:09 PM] -- PlayaR [16ms] has joined the channel using Starcraft Brood War (18 wins).
+ [12:22:10 PM] <Pyro6@Azeroth> ...
+ [12:22:11 PM] <KlSS@Azeroth> DUDEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+ [12:22:12 PM] <PlayaR> can i join clan bot?
+ [12:22:14 PM] PlayaR was banned by PhiX[BoT] (Banned phrase: can i join).
+ [12:22:14 PM] -- PlayaR has left the channel.
+ [12:22:17 PM] <KlSS@Azeroth> LMFAO
+ [12:22:19 PM] <KlSS@Azeroth> LMFAO
+ [12:22:20 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:22:20 PM] <KlSS@Azeroth> LMFAO
+ [12:22:26 PM] <KlSS@Azeroth> HEY
+ [12:22:31 PM] <ifndef-tech@Azeroth Wheel result [20] color [black] row [7] column [2]>
+ [12:22:31 PM] <ifndef-tech@Azeroth> House collects $40.00  and pays out $0.00
+ [12:22:32 PM] <Pyro6@Azeroth> #b k* LMFAO
+ [12:22:33 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:22:34 PM] -- KlSS@Azeroth has left the channel.
+ [12:22:34 PM] KlSS was banned by Pyro[BoT] (LMFAO).
+ [12:22:39 PM] <From Pyro6@Azeroth> Your friend Pyro6 has exited Battle.net.
+ [12:22:39 PM] -- Pyro6@Azeroth has left the channel.
+ [12:22:41 PM] <PhiX> .shitadd playar*
+ [12:22:51 PM] <PhiX> @;;shitadd playar*
+ [12:22:53 PM] <PhiX[BoT]@Azeroth> "playar*" has been given flags B.
+ [12:22:55 PM] <From Pyro6@Azeroth> Your friend Pyro6 has entered Battle.net.
+ [12:22:58 PM] -- Pyro6@Azeroth [1218ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [12:23:05 PM] -- VBScript@Azeroth [31ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [12:23:05 PM] -- VBScript@Azeroth has acquired ops.
+ [12:23:13 PM] <Pyro6@Azeroth> woah
+ [12:23:16 PM] <PhiX> @;;set PlayaR* B
+ [12:23:17 PM] <Pyro6@Azeroth> i didnt go to clan sbs first
+ [12:23:19 PM] <Pyro6@Azeroth> cool
+ [12:23:19 PM] <PhiX[BoT]@Azeroth> "playar*" has been given flags B.
+ [12:23:22 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:23:25 PM] <PhiX> you prolly did
+ [12:23:33 PM] <ifndef-tech@Azeroth> No bets were made for this spin
+ [12:23:34 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:23:41 PM] <Pyro6@Azeroth>  [15:25:55] [BNET] Logged on as Pyro6.
+ [12:23:41 PM] <Pyro6@Azeroth>  [15:25:58] -- Joined channel: Clan BoT --
+ [12:23:48 PM] <PhiX> 3 seconds
+ [12:23:52 PM] <ifndef@Azeroth> .bet 10 col1
+ [12:23:52 PM] <ifndef-tech@Azeroth> Bet [10 col1] was accepted.
+ [12:23:55 PM] <PhiX> THE BOT JUST DIDNT SHOW
+ [12:23:56 PM] <ifndef@Azeroth> .bet 10 red
+ [12:23:58 PM] <ifndef-tech@Azeroth> Bet [10 red] was accepted.
+ [12:24:23 PM] <PhiX> @;;shitadd WHAT --type clan --banmsg Tagbanned
+ [12:24:23 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:24:26 PM] <PhiX[BoT]@Azeroth> "WHAT" has been given flags B.
+ [12:24:29 PM] <LuC1Fr[BoT]@Azeroth> newb
+ [12:24:34 PM] <Pyro6@Azeroth> lulz
+ [12:24:34 PM] <ifndef-tech@Azeroth Wheel result [14] color [red] row [5] column [2]>
+ [12:24:35 PM] <ifndef-tech@Azeroth> ifndef was paid $10.00
+ [12:24:36 PM] <ifndef-tech@Azeroth> House collects $10.00  and pays out $10.00
+ [12:24:36 PM] <Pyro6@Azeroth> ggzor
+ [12:24:37 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:24:48 PM] <ifndef@Azeroth> .balance
+ [12:24:48 PM] <ifndef-tech@Azeroth> ifndef's balance is -$80.00
+ [12:24:53 PM] <PhiX> @;;rem playar
+ [12:24:54 PM] <PhiX[BoT]@Azeroth> User not found.
+ [12:25:06 PM] <PhiX> @;;rem playar*
+ [12:25:07 PM] <PhiX[BoT]@Azeroth> Successfully removed database entry "playar*."
+ [12:25:09 PM] <PhiX> @;;set PlayaR* B
+ [12:25:09 PM] <PhiX[BoT]@Azeroth> "PlayaR*" has been given flags B.
+ [12:25:09 PM] <ifndef@Azeroth> .bet 1 19, 1 11, 1 13, 2 23, 1 0, 1 00
+ [12:25:10 PM] <ifndef-tech@Azeroth> Bet [1 19] was accepted.
+ [12:25:11 PM] <ifndef-tech@Azeroth> Bet [1 11] was accepted.
+ [12:25:12 PM] <ifndef-tech@Azeroth> Bet [1 13] was accepted.
+ [12:25:13 PM] <ifndef-tech@Azeroth> Bet [2 23] was accepted.
+ [12:25:16 PM] <ifndef-tech@Azeroth> Bet [1 0] was accepted.
+ [12:25:18 PM] <ifndef-tech@Azeroth> Bet [1 00] was accepted.
+ [12:25:22 PM] <LuC1Fr[BoT]@Azeroth> .bet 20 red
+ [12:25:23 PM] <ifndef-tech@Azeroth> Bet [20 red] was accepted.
+ [12:25:25 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:25:25 PM] <LuC1Fr[BoT]@Azeroth> .bet 30 odd
+ [12:25:28 PM] <ifndef-tech@Azeroth> Bets are not being accepted right now.
+ [12:25:31 PM] <LuC1Fr[BoT]@Azeroth> noooo
+ [12:25:36 PM] <ifndef-tech@Azeroth Wheel result [18] color [red] row [6] column [3]>
+ [12:25:37 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT] was paid $40.00
+ [12:25:39 PM] <ifndef-tech@Azeroth> House collects $7.00  and pays out $20.00
+ [12:25:41 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:25:57 PM] <PhiX> .bet 50 red
+ [12:25:58 PM] <ifndef-tech@Azeroth> Bet [50 red] was accepted.
+ [12:25:58 PM] <LuC1Fr[BoT]@Azeroth> .bet 20 odd, 10 red
+ [12:26:00 PM] <ifndef-tech@Azeroth> Bet [20 odd] was accepted.
+ [12:26:02 PM] <ifndef-tech@Azeroth> Bet [10 red] was accepted.
+ [12:26:02 PM] <ifndef@Azeroth> .bet 1 19, 1 11, 2 13, 1 23, 10 black
+ [12:26:03 PM] <ifndef-tech@Azeroth> Bet [1 19] was accepted.
+ [12:26:04 PM] <ifndef-tech@Azeroth> Bet [1 11] was accepted.
+ [12:26:05 PM] <ifndef-tech@Azeroth> Bet [2 13] was accepted.
+ [12:26:10 PM] <ifndef-tech@Azeroth> Bet [1 23] was accepted.
+ [12:26:13 PM] <ifndef-tech@Azeroth> Your balance exceeds the cutoff limit for this table. Have someone add funds to your account with the givefunds command.
+ [12:26:20 PM] -- HaKr_@Azeroth has left the channel.
+ [12:26:23 PM] <LuC1Fr[BoT]@Azeroth> .balance
+ [12:26:25 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT]'s balance is $25.00
+ [12:26:27 PM] <ifndef@Azeroth> .balance
+ [12:26:27 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:26:28 PM] <LuC1Fr[BoT]@Azeroth> err.
+ [12:26:30 PM] <ifndef-tech@Azeroth> ifndef's balance is -$92.00
+ [12:26:34 PM] <PhiX> .balance
+ [12:26:35 PM] <ifndef-tech@Azeroth> PhiX@USEast's balance is -$50.00
+ [12:26:40 PM] <ifndef-tech@Azeroth Wheel result [22] color [black] row [8] column [1]>
+ [12:26:41 PM] <PhiX> WTF
+ [12:26:44 PM] <ifndef-tech@Azeroth> House collects $85.00  and pays out $0.00
+ [12:26:47 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:26:49 PM] <LuC1Fr[BoT]@Azeroth> ouch.
+ [12:26:52 PM] <LuC1Fr[BoT]@Azeroth> .balance
+ [12:26:52 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT]'s balance is $25.00
+ [12:26:53 PM] <PhiX> .bet 50 red
+ [12:26:54 PM] <ifndef-tech@Azeroth> Bet [50 red] was accepted.
+ [12:26:59 PM] <LuC1Fr[BoT]@Azeroth> .bet 25 odd
+ [12:27:01 PM] <ifndef-tech@Azeroth> Bet [25 odd] was accepted.
+ [12:27:03 PM] <ifndef@Azeroth> .bet 8 black
+ [12:27:04 PM] <ifndef-tech@Azeroth> Bet [8 black] was accepted.
+ [12:27:08 PM] <ifndef@Azeroth> im broke now
+ [12:27:10 PM] <ifndef@Azeroth> .balance
+ [12:27:11 PM] <ifndef-tech@Azeroth> ifndef's balance is -$100.00
+ [12:27:11 PM] <PhiX> .bet 50 even
+ [12:27:14 PM] <ifndef-tech@Azeroth> Your balance exceeds the cutoff limit for this table. Have someone add funds to your account with the givefunds command.
+ [12:27:28 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:27:39 PM] <ifndef-tech@Azeroth Wheel result [28] color [black] row [10] column [1]>
+ [12:27:40 PM] <ifndef-tech@Azeroth> ifndef was paid $16.00
+ [12:27:42 PM] <ifndef-tech@Azeroth> House collects $75.00  and pays out $8.00
+ [12:27:43 PM] <Pyro6@Azeroth> .balance
+ [12:27:43 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:27:44 PM] <ifndef-tech@Azeroth> Pyro6's balance is -$41.00
+ [12:27:46 PM] <PhiX> FUSK
+ [12:27:55 PM] <Pyro6@Azeroth> .bet 20 even
+ [12:27:55 PM] <LuC1Fr[BoT]@Azeroth> .bet 100 black
+ [12:27:55 PM] <ifndef-tech@Azeroth> Bet [20 even] was accepted.
+ [12:27:56 PM] <ifndef-tech@Azeroth> Bet [100 black] was accepted.
+ [12:27:57 PM] <PhiX> .bet 25 red, 25 even
+ [12:27:58 PM] <ifndef-tech@Azeroth> Your balance exceeds the cutoff limit for this table. Have someone add funds to your account with the givefunds command.
+ [12:28:00 PM] <ifndef-tech@Azeroth> Your balance exceeds the cutoff limit for this table. Have someone add funds to your account with the givefunds command.
+ [12:28:02 PM] <PhiX> AW
+ [12:28:03 PM] <ifndef@Azeroth> .bet 5 col1, 5 red
+ [12:28:06 PM] <ifndef-tech@Azeroth> Bet [5 col1] was accepted.
+ [12:28:07 PM] <Joe[BoT]@Azeroth> .blanace
+ [12:28:08 PM] <PhiX> I NEED FUNDS
+ [12:28:08 PM] <ifndef-tech@Azeroth> Bet [5 red] was accepted.
+ [12:28:12 PM] <Joe[BoT]@Azeroth> .balance
+ [12:28:13 PM] <ifndef-tech@Azeroth> Joe[BoT]'s balance is $9.00
+ [12:28:25 PM] <Pyro6@Azeroth> .givefunds PhiX@USEast 10
+ [12:28:29 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:28:33 PM] <Pyro6@Azeroth> hm
+ [12:28:40 PM] <ifndef-tech@Azeroth Wheel result [36] color [red] row [12] column [3]>
+ [12:28:42 PM] <ifndef-tech@Azeroth> ifndef was paid $5.00
+ [12:28:43 PM] <ifndef-tech@Azeroth> Pyro6 was paid $40.00
+ [12:28:45 PM] <ifndef-tech@Azeroth> House collects $105.00  and pays out $25.00
+ [12:28:47 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:28:51 PM] <LuC1Fr[BoT]@Azeroth> meh.
+ [12:28:54 PM] <LuC1Fr[BoT]@Azeroth> .balance
+ [12:28:54 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT]'s balance is -$100.00
+ [12:28:58 PM] <LuC1Fr[BoT]@Azeroth> .bet 1 red
+ [12:28:58 PM] <ifndef@Azeroth> .balance
+ [12:28:59 PM] <ifndef-tech@Azeroth> Your balance exceeds the cutoff limit for this table. Have someone add funds to your account with the givefunds command.
+ [12:29:00 PM] <ifndef-tech@Azeroth> ifndef's balance is -$84.00
+ [12:29:09 PM] <ifndef@Azeroth> .bet 10 col1
+ [12:29:09 PM] <ifndef-tech@Azeroth> Bet [10 col1] was accepted.
+ [12:29:13 PM] <PhiX> .balance
+ [12:29:13 PM] <ifndef@Azeroth> .bet 5 even
+ [12:29:14 PM] <ifndef-tech@Azeroth> PhiX@USEast's balance is -$100.00
+ [12:29:15 PM] <ifndef-tech@Azeroth> Bet [5 even] was accepted.
+ [12:29:16 PM] <LuC1Fr[BoT]@Azeroth> erick[nk]: say .balance
+ [12:29:22 PM] <Pyro6@Azeroth> .bet 40 even
+ [12:29:23 PM] <ifndef-tech@Azeroth> Bet [40 even] was accepted.
+ [12:29:24 PM] <LuC1Fr[BoT]@Azeroth> eric[nk]: say .balance
+ [12:29:24 PM] <Eric[nK]> .balance
+ [12:29:25 PM] <ifndef-tech@Azeroth> Eric[nK]'s balance is $100.00
+ [12:29:26 PM] <PhiX> .bet 1 odd
+ [12:29:27 PM] <ifndef-tech@Azeroth> Your balance exceeds the cutoff limit for this table. Have someone add funds to your account with the givefunds command.
+ [12:29:31 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:29:32 PM] <PhiX> :(
+ [12:29:41 PM] <LuC1Fr[BoT]@Azeroth> eric[nk]: say .givefunds 20 LuC1Fr[BoT]
+ [12:29:41 PM] <Eric[nK]> .givefunds 20 LuC1Fr[BoT]
+ [12:29:41 PM] <ifndef-tech@Azeroth> Transferred $20 to LuC1Fr[BoT]'s account.
+ [12:29:42 PM] <ifndef-tech@Azeroth> Eric[nK] balance [80] LuC1Fr[BoT] balance [-80]
+ [12:29:43 PM] <ifndef-tech@Azeroth Wheel result [24] color [black] row [8] column [3]>
+ [12:29:44 PM] <ifndef-tech@Azeroth> Pyro6 was paid $80.00
+ [12:29:47 PM] <ifndef-tech@Azeroth> House collects $10.00  and pays out $40.00
+ [12:29:50 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:29:54 PM] <LuC1Fr[BoT]@Azeroth> .bet 20 red
+ [12:29:55 PM] <ifndef-tech@Azeroth> Bet [20 red] was accepted.
+ [12:29:55 PM] <Pyro6@Azeroth> .givefunds 10 PhiX@USEast
+ [12:29:55 PM] <ifndef@Azeroth> i'll change the cutoff point on east to -$200
+ [12:29:57 PM] <ifndef-tech@Azeroth> Transferred $10 to PhiX@USEast's account.
+ [12:30:00 PM] <ifndef-tech@Azeroth> Pyro6 balance [9] PhiX@USEast balance [-90]
+ [12:30:16 PM] <ifndef@Azeroth> k u should be able to bet now
+ [12:30:17 PM] <Pyro6@Azeroth> .bet 20 even
+ [12:30:17 PM] <ifndef-tech@Azeroth> Bet [20 even] was accepted.
+ [12:30:18 PM] <PhiX> .bet 5 red, 5 even
+ [12:30:19 PM] <ifndef-tech@Azeroth> Bet [5 red] was accepted.
+ [12:30:21 PM] <ifndef-tech@Azeroth> Bet [5 even] was accepted.
+ [12:30:24 PM] <PhiX> YAY
+ [12:30:27 PM] <PhiX> <3 pyro
+ [12:30:30 PM] <LuC1Fr[BoT]@Azeroth> lol
+ [12:30:32 PM] <Pyro6@Azeroth> i give you money and you spend it
+ [12:30:32 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:30:33 PM] <Pyro6@Azeroth> lol
+ [12:30:43 PM] <ifndef-tech@Azeroth Wheel result [15] color [black] row [5] column [3]>
+ [12:30:43 PM] <ifndef-tech@Azeroth> House collects $50.00  and pays out $0.00
+ [12:30:45 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:30:45 PM] <PhiX> I know I'm a whore
+ [12:30:49 PM] <ifndef@Azeroth> it wont cut you off at -100 anymore, its -200 now
+ [12:30:49 PM] <LuC1Fr[BoT]@Azeroth> holy shit
+ [12:30:49 PM] <PhiX> WTF
+ [12:30:54 PM] <PhiX> :(
+ [12:30:55 PM] <Pyro6@Azeroth> shiiit
+ [12:30:57 PM] <ifndef@Azeroth> .bet 30 red, 10 col2
+ [12:30:57 PM] <LuC1Fr[BoT]@Azeroth> .bet 100 even
+ [12:30:57 PM] <ifndef-tech@Azeroth> Bet [30 red] was accepted.
+ [12:30:58 PM] <ifndef-tech@Azeroth> Bet [10 col2] was accepted.
+ [12:30:59 PM] <ifndef-tech@Azeroth> Bet [100 even] was accepted.
+ [12:31:06 PM] <Pyro6@Azeroth> .bet 20 red
+ [12:31:08 PM] <ifndef-tech@Azeroth> Bet [20 red] was accepted.
+ [12:31:08 PM] <LuC1Fr[BoT]@Azeroth> .balance
+ [12:31:09 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT]'s balance is -$200.00
+ [12:31:10 PM] <Joe[BoT]@Azeroth> .bet 10 even
+ [12:31:11 PM] <ifndef-tech@Azeroth> Bet [10 even] was accepted.
+ [12:31:13 PM] <LuC1Fr[BoT]@Azeroth> yeah
+ [12:31:18 PM] <Joe[BoT]@Azeroth> .bet 10 odd
+ [12:31:18 PM] <LuC1Fr[BoT]@Azeroth> gotta love debt
+ [12:31:19 PM] <ifndef-tech@Azeroth> Bet [10 odd] was accepted.
+ [12:31:24 PM] <Alendar is currently: Out Shopping Current Project: Unknown My website: http://alendar.net :->
+ [12:31:29 PM] <Joe[BoT]@Azeroth> that's a lot of dish washing ryan
+ [12:31:34 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:31:35 PM] <LuC1Fr[BoT]@Azeroth> fuck yeah.
+ [12:31:45 PM] <ifndef-tech@Azeroth Wheel result [33] color [black] row [11] column [3]>
+ [12:31:46 PM] <ifndef-tech@Azeroth> Joe[BoT] was paid $10.00
+ [12:31:47 PM] <LuC1Fr[BoT]@Azeroth> SHIT
+ [12:31:47 PM] <ifndef-tech@Azeroth> House collects $170.00  and pays out $10.00
+ [12:31:48 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:31:54 PM] <Pyro6@Azeroth> damn >_>
+ [12:31:55 PM] <Joe[BoT]@Azeroth> .balance
+ [12:31:56 PM] <ifndef-tech@Azeroth> Joe[BoT]'s balance is $9.00
+ [12:31:59 PM] <Pyro6@Azeroth> .bet 20 even
+ [12:31:59 PM] <ifndef@Azeroth> fyi, this is linked to your paypal accounts
+ [12:32:00 PM] <PhiX> .balance
+ [12:32:01 PM] <ifndef-tech@Azeroth> Bet [20 even] was accepted.
+ [12:32:02 PM] <ifndef-tech@Azeroth> PhiX@USEast's balance is -$100.00
+ [12:32:03 PM] <Joe[BoT]@Azeroth> .bet 10 odd, 10 even
+ [12:32:04 PM] <ifndef-tech@Azeroth> Bet [10 odd] was accepted.
+ [12:32:05 PM] <LuC1Fr[BoT]@Azeroth> oh noes
+ [12:32:06 PM] <ifndef-tech@Azeroth> Bet [10 even] was accepted.
+ [12:32:09 PM] <Joe[BoT]@Azeroth> fuck!!!
+ [12:32:17 PM] <Joe[BoT]@Azeroth> well my paypal is in the red too, so..
+ [12:32:17 PM] <LuC1Fr[BoT]@Azeroth> then please change cut off to 10000
+ [12:32:19 PM] <LuC1Fr[BoT]@Azeroth> :/
+ [12:32:24 PM] <Joe[BoT]@Azeroth> Current MP3 [15/24]: Megadeth - These Boots (00:14/04:39)
+ [12:32:25 PM] <ifndef@Azeroth> .balance
+ [12:32:26 PM] <ifndef-tech@Azeroth> ifndef's balance is -$129.00
+ [12:32:31 PM] <ifndef@Azeroth> .bet 50 odd
+ [12:32:32 PM] <Joe[BoT]@Azeroth> THESE BOOTS WERE MADE FOR WALKING
+ [12:32:32 PM] <ifndef-tech@Azeroth> Bet [50 odd] was accepted.
+ [12:32:36 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:32:36 PM] <ifndef@Azeroth> .bet 5 19
+ [12:32:37 PM] <ifndef-tech@Azeroth> Bets are not being accepted right now.
+ [12:32:37 PM] <Joe[BoT]@Azeroth> AND THATS JUST WHAT THEY'LL DO
+ [12:32:46 PM] <Joe[BoT]@Azeroth> ONE OF THESE DAYS THESE BOOTS ARE GOING TO WALK RIGHT OVER YOU
+ [12:32:47 PM] <ifndef-tech@Azeroth Wheel result [18] color [red] row [6] column [3]>
+ [12:32:48 PM] <ifndef-tech@Azeroth> Joe[BoT] was paid $10.00
+ [12:32:49 PM] <Pyro6@Azeroth> .bet 10000000 sex with phix
+ [12:32:49 PM] <ifndef-tech@Azeroth> Pyro6 was paid $40.00
+ [12:32:50 PM] <ifndef-tech@Azeroth> House collects $60.00  and pays out $30.00
+ [12:32:52 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:32:57 PM] <LuC1Fr[BoT]@Azeroth> .bet "10000" red
+ [12:33:01 PM] <ifndef@Azeroth> .bet 5 19
+ [12:33:02 PM] <ifndef-tech@Azeroth> Bet [5 19] was accepted.
+ [12:33:02 PM] <LuC1Fr[BoT]@Azeroth> o.o
+ [12:33:05 PM] <LuC1Fr[BoT]@Azeroth> .bet 1 red
+ [12:33:06 PM] <ifndef-tech@Azeroth> Your balance exceeds the cutoff limit for this table. Have someone add funds to your account with the givefunds command.
+ [12:33:07 PM] <ifndef@Azeroth> .bet 20 col2
+ [12:33:08 PM] <ifndef-tech@Azeroth> Your balance exceeds the cutoff limit for this table. Have someone add funds to your account with the givefunds command.
+ [12:33:08 PM] <LuC1Fr[BoT]@Azeroth> :(
+ [12:33:12 PM] <ifndef@Azeroth> .bet 10 col2
+ [12:33:13 PM] <ifndef-tech@Azeroth> Bet [10 col2] was accepted.
+ [12:33:14 PM] <Pyro6@Azeroth> .bet 10 even
+ [12:33:15 PM] <ifndef@Azeroth> .balance
+ [12:33:16 PM] <ifndef-tech@Azeroth> Bet [10 even] was accepted.
+ [12:33:19 PM] <ifndef-tech@Azeroth> ifndef's balance is -$194.00
+ [12:33:20 PM] <Pyro6@Azeroth> .bet ten even
+ [12:33:22 PM] <Pyro6@Azeroth> o.o
+ [12:33:23 PM] <ifndef@Azeroth> .bet 6 red
+ [12:33:24 PM] <ifndef-tech@Azeroth> Bet [6 red] was accepted.
+ [12:33:24 PM] <LuC1Fr[BoT]@Azeroth> eric[nk]: say .givefunds 20 LUC1Fr[Bot]
+ [12:33:24 PM] <Eric[nK]> .givefunds 20 LUC1Fr[Bot]
+ [12:33:25 PM] <ifndef-tech@Azeroth> Transferred $20 to LUC1Fr[Bot]'s account.
+ [12:33:29 PM] <ifndef-tech@Azeroth> Eric[nK] balance [60] LUC1Fr[Bot] balance [-180]
+ [12:33:32 PM] <LuC1Fr[BoT]@Azeroth> .bet 20 red
+ [12:33:34 PM] <ifndef-tech@Azeroth> Bet [20 red] was accepted.
+ [12:33:39 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:33:49 PM] <ifndef-tech@Azeroth Wheel result [35] color [black] row [12] column [2]>
+ [12:33:49 PM] <ifndef-tech@Azeroth> ifndef was paid $19.00
+ [12:33:51 PM] <ifndef-tech@Azeroth> House collects $41.00  and pays out $20.00
+ [12:33:52 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:33:58 PM] <PhiX> .reload script
+ [12:34:01 PM] <Pyro6@Azeroth> 0x5E: say .givefunds 200 Pyro6
+ [12:34:04 PM] <0x5E@Azeroth> .givefunds 200 Pyro6
+ [12:34:04 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:34:09 PM] <Pyro6@Azeroth> =\
+ [12:34:17 PM] <LuC1Fr[BoT]@Azeroth> eric[nk]: say bet 15 red, 15 odd
+ [12:34:17 PM] <Eric[nK]> bet 15 red, 15 odd
+ [12:34:17 PM] <ifndef@Azeroth> .bet 5 19, 1 13, 1 23, 10 row5
+ [12:34:18 PM] <ifndef-tech@Azeroth> Bet [5 19] was accepted.
+ [12:34:18 PM] <ifndef-tech@Azeroth> Bet [1 13] was accepted.
+ [12:34:20 PM] <ifndef-tech@Azeroth> Bet [1 23] was accepted.
+ [12:34:21 PM] <ifndef-tech@Azeroth> Bet [10 row5] was accepted.
+ [12:34:22 PM] <Pyro6@Azeroth> 0x5E: say .givefunds 100 Pyro6
+ [12:34:23 PM] <0x5E@Azeroth> .givefunds 100 Pyro6
+ [12:34:23 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:34:25 PM] -- PingGnome@Azeroth [516ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan DW)
+ [12:34:26 PM] -- PingGnome@Azeroth has left the channel.
+ [12:34:26 PM] PingGnome was banned by PhiX[BoT] (Pyro thinks you're a noob gnome).
+ [12:34:29 PM] <LuC1Fr[BoT]@Azeroth> eric[nk]: say .bet 15 red, 15 odd
+ [12:34:29 PM] <Eric[nK]> .bet 15 red, 15 odd
+ [12:34:30 PM] <Pyro6@Azeroth> WTF
+ [12:34:31 PM] <ifndef-tech@Azeroth> Bet [15 red] was accepted.
+ [12:34:32 PM] <ifndef-tech@Azeroth> Bet [15 odd] was accepted.
+ [12:34:34 PM] <Pyro6@Azeroth> 0x5E: say .balance
+ [12:34:36 PM] <0x5E@Azeroth> .balance
+ [12:34:37 PM] <PhiX> ...say .givefunds 50 PhiX@USEast
+ [12:34:37 PM] <ifndef-tech@Azeroth> 0x5E's balance is $0.00
+ [12:34:38 PM] <Eric[nK]> .givefunds 50 PhiX@USEast
+ [12:34:38 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:34:40 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:34:50 PM] <ifndef-tech@Azeroth Wheel result [14] color [red] row [5] column [2]>
+ [12:34:50 PM] <ifndef-tech@Azeroth> Eric[nK] was paid $15.00
+ [12:34:52 PM] <ifndef-tech@Azeroth> ifndef was paid $113.00
+ [12:34:53 PM] <ifndef-tech@Azeroth> House collects $22.00  and pays out $125.00
+ [12:34:54 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:34:55 PM] <PhiX> ...say .givefunds 20 PhiX@USEast
+ [12:34:55 PM] <Eric[nK]> .givefunds 20 PhiX@USEast
+ [12:34:56 PM] <ifndef@Azeroth> woot
+ [12:34:57 PM] <ifndef-tech@Azeroth> Transferred $20 to PhiX@USEast's account.
+ [12:35:02 PM] <ifndef-tech@Azeroth> Eric[nK] balance [40] PhiX@USEast balance [-80]
+ [12:35:02 PM] <LuC1Fr[BoT]@Azeroth> ...say .balance
+ [12:35:02 PM] <Eric[nK]> .balance
+ [12:35:03 PM] <PhiX> thx eric
+ [12:35:04 PM] <ifndef-tech@Azeroth> Eric[nK]'s balance is $40.00
+ [12:35:09 PM] <LuC1Fr[BoT]@Azeroth> hmm
+ [12:35:13 PM] <ifndef@Azeroth> .balance
+ [12:35:13 PM] <ifndef-tech@Azeroth> ifndef's balance is -$67.00
+ [12:35:13 PM] <Pyro6@Azeroth> 0x5E: say .bet 10 even
+ [12:35:16 PM] <0x5E@Azeroth> .bet 10 even
+ [12:35:16 PM] <ifndef-tech@Azeroth> Bet [10 even] was accepted.
+ [12:35:18 PM] <Pyro6@Azeroth> .bet 20 even
+ [12:35:19 PM] <ifndef-tech@Azeroth> Bet [20 even] was accepted.
+ [12:35:22 PM] <PhiX> .bet 5 red, 5 odd
+ [12:35:23 PM] <ifndef-tech@Azeroth> Bet [5 red] was accepted.
+ [12:35:25 PM] <ifndef-tech@Azeroth> Bet [5 odd] was accepted.
+ [12:35:27 PM] <LuC1Fr[BoT]@Azeroth> ...say .givefunds 160 LuC1Fr[BoT]
+ [12:35:27 PM] <Eric[nK]> .givefunds 160 LuC1Fr[BoT]
+ [12:35:27 PM] <ifndef@Azeroth> .bet 5 19, 3 14, 1 23, 1 13, 10 col1
+ [12:35:31 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:35:33 PM] <ifndef-tech@Azeroth> Bet [5 19] was accepted.
+ [12:35:37 PM] <LuC1Fr[BoT]@Azeroth> ...say .givefunds 100 LuC1Fr[BoT]
+ [12:35:37 PM] <Eric[nK]> .givefunds 100 LuC1Fr[BoT]
+ [12:35:38 PM] <ifndef-tech@Azeroth> Bet [3 14] was accepted.
+ [12:35:43 PM] <ifndef-tech@Azeroth> Bet [1 23] was accepted.
+ [12:35:48 PM] <ifndef-tech@Azeroth> Bet [1 13] was accepted.
+ [12:35:50 PM] <ifndef-tech@Azeroth> Bet [10 col1] was accepted.
+ [12:35:58 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:36:00 PM] <LuC1Fr[BoT]@Azeroth> gamble much define?
+ [12:36:00 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:36:08 PM] <ifndef-tech@Azeroth Wheel result [17] color [black] row [6] column [2]>
+ [12:36:10 PM] <ifndef-tech@Azeroth> PhiX@USEast was paid $5.00
+ [12:36:13 PM] <Pyro6@Azeroth> DAMN
+ [12:36:14 PM] <PhiX> YAY
+ [12:36:17 PM] <ifndef-tech@Azeroth> House collects $55.00  and pays out $5.00
+ [12:36:20 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:36:22 PM] <Pyro6@Azeroth> 0x5E: say .givefunds 150 Pyro6
+ [12:36:25 PM] <0x5E@Azeroth> .givefunds 150 Pyro6
+ [12:36:25 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:36:28 PM] <PhiX> .bet 5 red, 5 even
+ [12:36:29 PM] <Pyro6@Azeroth> WTF
+ [12:36:29 PM] <LuC1Fr[BoT]@Azeroth> ...say bet all red
+ [12:36:29 PM] <Eric[nK]> bet all red
+ [12:36:30 PM] <ifndef-tech@Azeroth> Bet [5 red] was accepted.
+ [12:36:31 PM] <ifndef@Azeroth> i've done roulette
+ [12:36:32 PM] <ifndef@Azeroth> its fun
+ [12:36:32 PM] <ifndef-tech@Azeroth> Bet [5 even] was accepted.
+ [12:36:35 PM] <VBScript@Azeroth .: Chuck Norris doesn't go hunting.... CHUCK NORRIS GOES KILLING :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [12:36:38 PM] <Pyro6@Azeroth> .bet 10 even
+ [12:36:39 PM] <ifndef-tech@Azeroth> Bet [10 even] was accepted.
+ [12:36:42 PM] <ifndef@Azeroth> .balance
+ [12:36:44 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:36:45 PM] <ifndef-tech@Azeroth> ifndef's balance is -$87.00
+ [12:36:53 PM] <ifndef-tech@Azeroth Wheel result [13] color [black] row [5] column [1]>
+ [12:36:54 PM] <ifndef-tech@Azeroth> House collects $20.00  and pays out $0.00
+ [12:36:55 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:36:57 PM] <LuC1Fr[BoT]@Azeroth> ...say .bet 100 red
+ [12:36:57 PM] <Eric[nK]> .bet 100 red
+ [12:36:57 PM] <ifndef@Azeroth> .bet 100 red
+ [12:36:58 PM] <ifndef-tech@Azeroth> Bet [100 red] was accepted.
+ [12:36:59 PM] <Pyro6@Azeroth> SHIT
+ [12:37:00 PM] <ifndef-tech@Azeroth> Bet [100 red] was accepted.
+ [12:37:04 PM] <LuC1Fr[BoT]@Azeroth> woah
+ [12:37:05 PM] <Pyro6@Azeroth> .bet 10 odd
+ [12:37:08 PM] <ifndef-tech@Azeroth> Bet [10 odd] was accepted.
+ [12:37:10 PM] <LuC1Fr[BoT]@Azeroth> ...say hi
+ [12:37:10 PM] <Eric[nK]> hi
+ [12:37:11 PM] <Pyro6@Azeroth> 0x5E: say .bet 10 odd
+ [12:37:14 PM] <0x5E@Azeroth> .bet 10 odd
+ [12:37:14 PM] <PhiX> .balance
+ [12:37:15 PM] <ifndef-tech@Azeroth> Bet [10 odd] was accepted.
+ [12:37:16 PM] <ifndef-tech@Azeroth> PhiX@USEast's balance is -$90.00
+ [12:37:22 PM] <LuC1Fr[BoT]@Azeroth> .balance
+ [12:37:24 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT]'s balance is -$200.00
+ [12:37:27 PM] <PhiX> .bet 5 black, 5 odd
+ [12:37:27 PM] <LuC1Fr[BoT]@Azeroth> ...say .balance
+ [12:37:27 PM] <Eric[nK]> .balance
+ [12:37:27 PM] <ifndef-tech@Azeroth> Bet [5 black] was accepted.
+ [12:37:28 PM] <Pyro6@Azeroth> .balance
+ [12:37:30 PM] <ifndef-tech@Azeroth> Bet [5 odd] was accepted.
+ [12:37:32 PM] <ifndef-tech@Azeroth> Eric[nK]'s balance is -$60.00
+ [12:37:35 PM] <ifndef-tech@Azeroth> Pyro6's balance is -$61.00
+ [12:37:44 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:37:48 PM] <LuC1Fr[BoT]@Azeroth> cmon eric, win me some money
+ [12:37:55 PM] <ifndef-tech@Azeroth Wheel result [25] color [red] row [9] column [1]>
+ [12:37:57 PM] <ifndef-tech@Azeroth> 0x5E was paid $20.00
+ [12:37:58 PM] <ifndef-tech@Azeroth> Eric[nK] was paid $200.00
+ [12:37:59 PM] <ifndef-tech@Azeroth> ifndef was paid $200.00
+ [12:38:01 PM] <ifndef-tech@Azeroth> PhiX@USEast was paid $5.00
+ [12:38:02 PM] <ifndef@Azeroth> sweet
+ [12:38:04 PM] <ifndef-tech@Azeroth> Pyro6 was paid $20.00
+ [12:38:07 PM] <ifndef-tech@Azeroth> House collects $5.00  and pays out $225.00
+ [12:38:08 PM] <ifndef@Azeroth> .balance
+ [12:38:10 PM] <Pyro6@Azeroth> woot
+ [12:38:11 PM] <LuC1Fr[BoT]@Azeroth> ...say .givefunds 200 LuC1fr[Bot]
+ [12:38:11 PM] <Eric[nK]> .givefunds 200 LuC1fr[Bot]
+ [12:38:12 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:38:14 PM] <ifndef-tech@Azeroth> ifndef's balance is $13.00
+ [12:38:17 PM] <Pyro6@Azeroth> 0x5E: say .givefunds 150 Pyro6
+ [12:38:19 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:38:19 PM] <0x5E@Azeroth> .givefunds 150 Pyro6
+ [12:38:24 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:38:28 PM] <Pyro6@Azeroth> WTF
+ [12:38:28 PM] <PhiX> ...say .givefunds 50 PhiX@USEast
+ [12:38:29 PM] <Eric[nK]> .givefunds 50 PhiX@USEast
+ [12:38:30 PM] <LuC1Fr[BoT]@Azeroth> ...say .givefunds 100 LuC1fr[Bot]
+ [12:38:30 PM] <Eric[nK]> .givefunds 100 LuC1fr[Bot]
+ [12:38:31 PM] <ifndef-tech@Azeroth> Transferred $50 to PhiX@USEast's account.
+ [12:38:33 PM] <ifndef@Azeroth> .bet 5 19
+ [12:38:34 PM] <ifndef-tech@Azeroth> Eric[nK] balance [90] PhiX@USEast balance [-40]
+ [12:38:39 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:38:39 PM] <Pyro6@Azeroth> .bet 100 odd
+ [12:38:41 PM] <ifndef-tech@Azeroth> Bet [5 19] was accepted.
+ [12:38:42 PM] <LuC1Fr[BoT]@Azeroth> damnit
+ [12:38:44 PM] <PhiX> HAHA
+ [12:38:48 PM] <ifndef-tech@Azeroth> Bet [100 odd] was accepted.
+ [12:38:51 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:38:52 PM] <LuC1Fr[BoT]@Azeroth> ...say .givefunds 90 LuC1Fr[Bot]
+ [12:38:52 PM] <Eric[nK]> .givefunds 90 LuC1Fr[Bot]
+ [12:38:58 PM] <ifndef-tech@Azeroth> Transferred $90 to LuC1Fr[Bot]'s account.
+ [12:39:01 PM] <ifndef-tech@Azeroth> Eric[nK] balance [0] LuC1Fr[Bot] balance [-110]
+ [12:39:06 PM] <Pyro6@Azeroth> 0x5E: say .balance
+ [12:39:06 PM] <PhiX> ops: say .givefunds 50 PhiX@USEast
+ [12:39:06 PM] <VBScript@Azeroth> .givefunds 50 PhiX@USEast
+ [12:39:07 PM] <LuC1Fr[BoT]@Azeroth> .givefunds 50 PhiX@USEast
+ [12:39:07 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:39:08 PM] <ifndef-tech@Azeroth Wheel result [12] color [red] row [4] column [3]>
+ [12:39:08 PM] <Pyro[BoT]@Azeroth> .givefunds 50 PhiX@USEast
+ [12:39:08 PM] <0x5E@Azeroth> .balance
+ [12:39:10 PM] <PhiX[BoT]@Azeroth> .givefunds 50 PhiX@USEast
+ [12:39:10 PM] <ifndef-tech@Azeroth> House collects $105.00  and pays out $0.00
+ [12:39:18 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:39:18 PM] <LuC1Fr[BoT]@Azeroth> ...say .bet 200 even
+ [12:39:19 PM] <Eric[nK]> .bet 200 even
+ [12:39:20 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:39:22 PM] <ifndef@Azeroth> .bet 50 col2
+ [12:39:27 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:39:28 PM] <Pyro6@Azeroth> .bet 50 even
+ [12:39:30 PM] <ifndef-tech@Azeroth> 0x5E's balance is $0.00
+ [12:39:31 PM] <ifndef@Azeroth> .bet 40 odd, 30 red
+ [12:39:35 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:39:40 PM] <LuC1Fr[BoT]@Azeroth> oO
+ [12:39:40 PM] <ifndef-tech@Azeroth> Bet [200 even] was accepted.
+ [12:39:40 PM] <PhiX> .bet 10 red, 10 even
+ [12:39:45 PM] <ifndef-tech@Azeroth> Bet [50 col2] was accepted.
+ [12:39:50 PM] <ifndef-tech@Azeroth> Bet [50 even] was accepted.
+ [12:39:51 PM] <PhiX> ops: say .givefunds 20 PhiX@USEast
+ [12:39:51 PM] <VBScript@Azeroth> .givefunds 20 PhiX@USEast
+ [12:39:51 PM] <LuC1Fr[BoT]@Azeroth> .givefunds 20 PhiX@USEast
+ [12:39:52 PM] <Pyro[BoT]@Azeroth> .givefunds 20 PhiX@USEast
+ [12:39:53 PM] <PhiX[BoT]@Azeroth> .givefunds 20 PhiX@USEast
+ [12:39:54 PM] <ifndef-tech@Azeroth> Bet [40 odd] was accepted.
+ [12:39:56 PM] <Pyro6@Azeroth> lol.
+ [12:39:57 PM] <ifndef-tech@Azeroth> Bet [30 red] was accepted.
+ [12:39:59 PM] <LuC1Fr[BoT]@Azeroth> oh shit.
+ [12:40:04 PM] <ifndef-tech@Azeroth> Bet [10 red] was accepted.
+ [12:40:07 PM] <ifndef-tech@Azeroth> Bet [10 even] was accepted.
+ [12:40:14 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:40:14 PM] <LuC1Fr[BoT]@Azeroth> .cancelgivefunds
+ [12:40:17 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:40:24 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:40:26 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:40:27 PM] <PhiX> shitz
+ [12:40:34 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:40:36 PM] <ifndef-tech@Azeroth Wheel result [22] color [black] row [8] column [1]>
+ [12:40:41 PM] <ifndef-tech@Azeroth> Eric[nK] was paid $400.00
+ [12:40:42 PM] <PhiX> PhiX[BoT]: say .givefunds 20 PhiX@USEast
+ [12:40:42 PM] <PhiX[BoT]@Azeroth> .givefunds 20 PhiX@USEast
+ [12:40:46 PM] <ifndef-tech@Azeroth> PhiX@USEast was paid $10.00
+ [12:40:51 PM] <ifndef-tech@Azeroth> Pyro6 was paid $100.00
+ [12:40:56 PM] <ifndef-tech@Azeroth> House collects $130.00  and pays out $260.00
+ [12:40:57 PM] <LuC1Fr[BoT]@Azeroth> ...say .givefunds 400 LuC1Fr[BoT]
+ [12:40:57 PM] <Eric[nK]> .givefunds 400 LuC1Fr[BoT]
+ [12:40:58 PM] <Pyro6@Azeroth> ...say .givefunds 400 Pyro6
+ [12:40:58 PM] <Eric[nK]> .givefunds 400 Pyro6
+ [12:41:00 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:41:03 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:41:04 PM] <Pyro6@Azeroth> >_>
+ [12:41:10 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:41:11 PM] <LuC1Fr[BoT]@Azeroth> ...say .givefunds 50 LuC1Fr[BoT]
+ [12:41:11 PM] <Eric[nK]> .givefunds 50 LuC1Fr[BoT]
+ [12:41:13 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:41:18 PM] <PhiX> ...say .givefunds 20 PhiX@USEast
+ [12:41:19 PM] <Eric[nK]> .givefunds 20 PhiX@USEast
+ [12:41:20 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:41:22 PM] <ifndef-tech@Azeroth> No bets were made for this spin
+ [12:41:24 PM] <PhiX> WHAT
+ [12:41:25 PM] <LuC1Fr[BoT]@Azeroth> ...say .balance
+ [12:41:26 PM] <Eric[nK]> .balance
+ [12:41:30 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:41:32 PM] <ifndef-tech@Azeroth> Transferred $50 to LuC1Fr[BoT]'s account.
+ [12:41:33 PM] <Pyro6@Azeroth> .bet 10 even
+ [12:41:36 PM] <LuC1Fr[BoT]@Azeroth> ...say .givefunds 50 LuC1Fr[BoT]
+ [12:41:36 PM] <Eric[nK]> .givefunds 50 LuC1Fr[BoT]
+ [12:41:37 PM] <LuC1Fr[BoT]@Azeroth> ...say .givefunds 50 LuC1Fr[BoT]
+ [12:41:37 PM] <Eric[nK]> .givefunds 50 LuC1Fr[BoT]
+ [12:41:38 PM] <LuC1Fr[BoT]@Azeroth> ...say .givefunds 50 LuC1Fr[BoT]
+ [12:41:38 PM] <Eric[nK]> .givefunds 50 LuC1Fr[BoT]
+ [12:41:39 PM] <LuC1Fr[BoT]@Azeroth> ...say .givefunds 50 LuC1Fr[BoT]
+ [12:41:40 PM] <ifndef-tech@Azeroth> Eric[nK] balance [150] LuC1Fr[BoT] balance [-60]
+ [12:41:40 PM] <Eric[nK]> .givefunds 50 LuC1Fr[BoT]
+ [12:41:42 PM] <ifndef-tech@Azeroth> Transferred $20 to PhiX@USEast's account.
+ [12:41:47 PM] <ifndef-tech@Azeroth> Eric[nK] balance [130] PhiX@USEast balance [-20]
+ [12:41:52 PM] <ifndef-tech@Azeroth> Eric[nK]'s balance is $130.00
+ [12:41:57 PM] <ifndef-tech@Azeroth> Bet [10 even] was accepted.
+ [12:41:59 PM] <ifndef@Azeroth> .roulette
+ [12:42:00 PM] <ifndef-tech@Azeroth> Transferred $50 to LuC1Fr[BoT]'s account.
+ [12:42:05 PM] <LuC1Fr[BoT]@Azeroth> ...say .givefunds 50 LuC1Fr[BoT]
+ [12:42:05 PM] <Eric[nK]> .givefunds 50 LuC1Fr[BoT]
+ [12:42:07 PM] <ifndef-tech@Azeroth> Eric[nK] balance [80] LuC1Fr[BoT] balance [-10]
+ [12:42:09 PM] <ifndef-tech@Azeroth> Transferred $50 to LuC1Fr[BoT]'s account.
+ [12:42:15 PM] <LuC1Fr[BoT]@Azeroth> mua ha ha ha
+ [12:42:16 PM] <PhiX> cheat0r
+ [12:42:17 PM] <ifndef-tech@Azeroth> Eric[nK] balance [30] LuC1Fr[BoT] balance [40]
+ [12:42:19 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:42:21 PM] <ifndef@Azeroth> .add Pyro6 10
+ [12:42:22 PM] <ifndef-tech@Azeroth> Set Pyro6's access to 10.
+ [12:42:25 PM] <PhiX> PhiX[BoT]: say .givefunds 50 PhiX@USEast
+ [12:42:27 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:42:28 PM] <PhiX[BoT]@Azeroth> .givefunds 50 PhiX@USEast
+ [12:42:29 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:42:31 PM] <ifndef@Azeroth> Pyro6 you can turn this off with .roulette command
+ [12:42:33 PM] <ifndef@Azeroth> i gotta go
+ [12:42:36 PM] <ifndef-tech@Azeroth> Roulette enabled [True]
+ [12:42:39 PM] <ifndef-tech@Azeroth> Spinning wheel and accepting bets!
+ [12:42:40 PM] <VBScript@Azeroth [Food for Thought] It is better to be hated for what you are than to be loved for what you are not.    -Andre Gide>
+ [12:42:40 PM] <LuC1Fr[BoT]@Azeroth> ...say .givefunds 50 LuC1Fr[BoT]
+ [12:42:40 PM] <Eric[nK]> .givefunds 50 LuC1Fr[BoT]
+ [12:42:44 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:42:49 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:42:50 PM] <LuC1Fr[BoT]@Azeroth> ...say .balance
+ [12:42:50 PM] <Eric[nK]> .balance
+ [12:42:51 PM] <ifndef-tech@Azeroth> Eric[nK]'s balance is $30.00
+ [12:42:54 PM] <ifndef-tech@Azeroth> Transfer was declined.
+ [12:42:58 PM] <PhiX> @;;say .balance
+ [12:42:58 PM] <PhiX[BoT]@Azeroth> .balance
+ [12:42:59 PM] <LuC1Fr[BoT]@Azeroth> .balance
+ [12:42:59 PM] <ifndef-tech@Azeroth> PhiX[BoT]'s balance is $10.00
+ [12:43:03 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT]'s balance is $40.00
+ [12:43:08 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:43:18 PM] <ifndef-tech@Azeroth Wheel result [10] color [black] row [4] column [1]>
+ [12:43:18 PM] <ifndef-tech@Azeroth> Pyro6 was paid $20.00
+ [12:43:20 PM] <PhiX> @;;say .givefunds 10 PhiX@USEast
+ [12:43:21 PM] <PhiX[BoT]@Azeroth> .givefunds 10 PhiX@USEast
+ [12:43:21 PM] <ifndef-tech@Azeroth> House collects $0.00  and pays out $10.00
+ [12:43:23 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:43:24 PM] <LuC1Fr[BoT]@Azeroth> .bet 140 black
+ [12:43:25 PM] <ifndef-tech@Azeroth> Transferred $10 to PhiX@USEast's account.
+ [12:43:28 PM] <ifndef@Azeroth> .add LuC1Fr[BoT] 10
+ [12:43:33 PM] <ifndef-tech@Azeroth> Set LuC1Fr[BoT]'s access to 10.
+ [12:43:35 PM] <ifndef-tech@Azeroth> PhiX[BoT] balance [0] PhiX@USEast balance [-10]
+ [12:43:36 PM] <PhiX> -say .balance
+ [12:43:36 PM] <VBScript@Azeroth> .balance
+ [12:43:43 PM] <ifndef-tech@Azeroth> Bet [140 black] was accepted.
+ [12:43:45 PM] <ifndef-tech@Azeroth> VBScript's balance is $10.00
+ [12:43:48 PM] <PhiX> -say .givefunds 10 phix@useast
+ [12:43:49 PM] <VBScript@Azeroth> .givefunds 10 phix@useast
+ [12:43:49 PM] <ifndef-tech@Azeroth> Transferred $10 to phix@useast's account.
+ [12:43:50 PM] <ifndef-tech@Azeroth> VBScript balance [0] phix@useast balance [0]
+ [12:43:58 PM] <PhiX> .balance
+ [12:44:00 PM] <ifndef-tech@Azeroth> PhiX@USEast's balance is $0.00
+ [12:44:05 PM] <PhiX> WHOA
+ [12:44:08 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:44:10 PM] <PhiX> .bet 50 red
+ [12:44:11 PM] <ifndef-tech@Azeroth> Bets are not being accepted right now.
+ [12:44:11 PM] <PhiX> aw
+ [12:44:20 PM] <ifndef-tech@Azeroth Wheel result [31] color [black] row [11] column [1]>
+ [12:44:21 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT] was paid $280.00
+ [12:44:23 PM] <ifndef-tech@Azeroth> House collects $0.00  and pays out $140.00
+ [12:44:25 PM] <LuC1Fr[BoT]@Azeroth> booyah
+ [12:44:25 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:44:29 PM] <LuC1Fr[BoT]@Azeroth> .bet 280 even
+ [12:44:30 PM] <ifndef-tech@Azeroth> This bet would exceed your maximum bet of $200.00
+ [12:44:35 PM] <LuC1Fr[BoT]@Azeroth> .bet 200 even
+ [12:44:37 PM] <ifndef-tech@Azeroth> Bet [200 even] was accepted.
+ [12:44:39 PM] <LuC1Fr[BoT]@Azeroth> .bet 80 red
+ [12:44:40 PM] <ifndef-tech@Azeroth> This bet would exceed your maximum bet of $200.00
+ [12:44:42 PM] <PhiX> .bet 50 even
+ [12:44:45 PM] <ifndef-tech@Azeroth> Bet [50 even] was accepted.
+ [12:44:46 PM] <LuC1Fr[BoT]@Azeroth> .balance
+ [12:44:47 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT]'s balance is -$20.00
+ [12:44:47 PM] <PhiX> .bet 40 red
+ [12:44:52 PM] <ifndef@Azeroth> changed cutoff limit to -$500, have fun
+ [12:44:52 PM] <ifndef-tech@Azeroth> Bet [40 red] was accepted.
+ [12:44:59 PM] <LuC1Fr[BoT]@Azeroth> .bet 400 red
+ [12:45:00 PM] <ifndef-tech@Azeroth> This bet would exceed your maximum bet of $200.00
+ [12:45:04 PM] <LuC1Fr[BoT]@Azeroth> oh.. gay
+ [12:45:08 PM] <ifndef@Azeroth> lol
+ [12:45:11 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:45:13 PM] <LuC1Fr[BoT]@Azeroth> ...say .bet 30 red
+ [12:45:13 PM] <Eric[nK]> .bet 30 red
+ [12:45:14 PM] <ifndef-tech@Azeroth> Bets are not being accepted right now.
+ [12:45:16 PM] <LuC1Fr[BoT]@Azeroth> meh
+ [12:45:21 PM] <ifndef-tech@Azeroth Wheel result [10] color [black] row [4] column [1]>
+ [12:45:22 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT] was paid $400.00
+ [12:45:23 PM] <ifndef-tech@Azeroth> PhiX@USEast was paid $60.00
+ [12:45:25 PM] <ifndef-tech@Azeroth> House collects $40.00  and pays out $250.00
+ [12:45:26 PM] <LuC1Fr[BoT]@Azeroth> woot
+ [12:45:26 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:45:27 PM] <LuC1Fr[BoT]@Azeroth> .balance
+ [12:45:28 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT]'s balance is $380.00
+ [12:45:33 PM] <ifndef@Azeroth> .highrollers
+ [12:45:33 PM] <LuC1Fr[BoT]@Azeroth> .highrollers
+ [12:45:36 PM] <ifndef-tech@Azeroth> Rank 1: useless_stooge@USEast  balance $849.00
+ [12:45:38 PM] <ifndef-tech@Azeroth> Rank 2: LuC1Fr[BoT]  balance $380.00
+ [12:45:42 PM] <LuC1Fr[BoT]@Azeroth> booyah
+ [12:45:45 PM] <ifndef-tech@Azeroth> Rank 3: Eric[nK]  balance $30.00
+ [12:45:48 PM] <ifndef-tech@Azeroth> Rank 1: useless_stooge@USEast  balance $849.00
+ [12:45:52 PM] <ifndef@Azeroth> .scq
+ [12:46:10 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:46:17 PM] <LuC1Fr[BoT]@Azeroth> "<3" has been given access 40.
+ [12:46:19 PM] <LuC1Fr[BoT]@Azeroth> :)
+ [12:46:21 PM] <ifndef-tech@Azeroth> No bets were made for this spin
+ [12:46:22 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:46:25 PM] <PhiX> .bet 200 BLACK
+ [12:46:26 PM] <ifndef-tech@Azeroth> Bet [200 black] was accepted.
+ [12:46:33 PM] <VBScript@Azeroth> http://news.slashdot.org/article.pl?sid=08/03/30/1443202&from=rss
+ [12:46:34 PM] <Pyro6@Azeroth> .bet 10 NIGGER
+ [12:46:34 PM] <VBScript@Azeroth> ;)
+ [12:46:35 PM] <ifndef-tech@Azeroth> Bet [10 nigger] made by Pyro6 was not accepted.
+ [12:46:36 PM] <Pyro6@Azeroth> aw
+ [12:46:39 PM] <LuC1Fr[BoT]@Azeroth> .bet 100 even, 100 black
+ [12:46:40 PM] <ifndef-tech@Azeroth> Bet [100 even] was accepted.
+ [12:46:41 PM] <ifndef-tech@Azeroth> Bet [100 black] was accepted.
+ [12:46:48 PM] <PhiX> .bet 100 even
+ [12:46:48 PM] <ifndef-tech@Azeroth> This bet would exceed your maximum bet of $200.00
+ [12:46:53 PM] <Pyro6@Azeroth> .bet 20 even
+ [12:46:53 PM] <PhiX> shitz
+ [12:46:53 PM] <ifndef-tech@Azeroth> Bet [20 even] was accepted.
+ [12:46:59 PM] <PhiX> CUM ON
+ [12:47:00 PM] <PhiX> BLACK
+ [12:47:03 PM] <PhiX> BLACK
+ [12:47:05 PM] <PhiX> BLACK
+ [12:47:06 PM] <Pyro6@Azeroth> ...men?
+ [12:47:12 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:47:14 PM] <LuC1Fr[BoT]@Azeroth> .bet 10 white, 200 black
+ [12:47:15 PM] <ifndef-tech@Azeroth> Bets are not being accepted right now.
+ [12:47:23 PM] <ifndef-tech@Azeroth Wheel result [29] color [black] row [10] column [2]>
+ [12:47:24 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT] was paid $100.00
+ [12:47:26 PM] <ifndef-tech@Azeroth> PhiX@USEast was paid $400.00
+ [12:47:26 PM] <PhiX> YES
+ [12:47:27 PM] <ifndef-tech@Azeroth> House collects $120.00  and pays out $300.00
+ [12:47:28 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:47:29 PM] <PhiX> BLACK
+ [12:47:30 PM] <LuC1Fr[BoT]@Azeroth> shitz
+ [12:47:35 PM] <LuC1Fr[BoT]@Azeroth> .highrollers
+ [12:47:35 PM] <ifndef-tech@Azeroth> Rank 1: useless_stooge@USEast  balance $849.00
+ [12:47:37 PM] <ifndef-tech@Azeroth> Rank 2: LuC1Fr[BoT]  balance $380.00
+ [12:47:37 PM] <PhiX> .balance
+ [12:47:38 PM] <ifndef-tech@Azeroth> Rank 3: PhiX@USEast  balance $210.00
+ [12:47:40 PM] <ifndef-tech@Azeroth> PhiX@USEast's balance is $210.00
+ [12:47:52 PM] <LuC1Fr[BoT]@Azeroth> .bet 200 red
+ [12:47:52 PM] <PhiX> .bet 100 red
+ [12:47:52 PM] <ifndef-tech@Azeroth> Bet [200 red] was accepted.
+ [12:47:52 PM] <ifndef-tech@Azeroth> Bet [100 red] was accepted.
+ [12:47:56 PM] <PhiX> .bet 100 even
+ [12:47:57 PM] <ifndef-tech@Azeroth> Bet [100 even] was accepted.
+ [12:47:58 PM] <Pyro6@Azeroth> .bet 50 red
+ [12:47:59 PM] <ifndef-tech@Azeroth> Bet [50 red] was accepted.
+ [12:48:02 PM] <LuC1Fr[BoT]@Azeroth> ...say .bet 200 black
+ [12:48:02 PM] <Eric[nK]> .bet 200 black
+ [12:48:03 PM] <ifndef-tech@Azeroth> Bet [200 black] was accepted.
+ [12:48:13 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:48:24 PM] <ifndef-tech@Azeroth Wheel result [28] color [black] row [10] column [1]>
+ [12:48:25 PM] <ifndef-tech@Azeroth> Eric[nK] was paid $400.00
+ [12:48:26 PM] <ifndef-tech@Azeroth> PhiX@USEast was paid $100.00
+ [12:48:27 PM] <ifndef-tech@Azeroth> House collects $350.00  and pays out $300.00
+ [12:48:28 PM] <PhiX> shit
+ [12:48:31 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:48:31 PM] <LuC1Fr[BoT]@Azeroth> ...say .balance
+ [12:48:31 PM] <Eric[nK]> .balance
+ [12:48:35 PM] <ifndef-tech@Azeroth> Eric[nK]'s balance is $230.00
+ [12:48:43 PM] <LuC1Fr[BoT]@Azeroth> ...say .givefunds 200 LuC1Fr[BoT]
+ [12:48:43 PM] <Eric[nK]> .givefunds 200 LuC1Fr[BoT]
+ [12:48:44 PM] <ifndef-tech@Azeroth> Transferred $200 to LuC1Fr[BoT]'s account.
+ [12:48:44 PM] <ifndef-tech@Azeroth> Eric[nK] balance [30] LuC1Fr[BoT] balance [380]
+ [12:48:50 PM] <LuC1Fr[BoT]@Azeroth> :D
+ [12:48:58 PM] <PhiX> hax
+ [12:49:00 PM] <LuC1Fr[BoT]@Azeroth> ...say .bet 30 red
+ [12:49:00 PM] <Eric[nK]> .bet 30 red
+ [12:49:01 PM] <ifndef-tech@Azeroth> Bet [30 red] was accepted.
+ [12:49:06 PM] <PhiX> ...ignore LuC1Fr[BoT]
+ [12:49:06 PM] That user is not logged on.
+ [12:49:07 PM] <Eric[nK]> Ignoring messages from "LuC1Fr[BoT]".
+ [12:49:12 PM] <PhiX> :O!
+ [12:49:13 PM] <LuC1Fr[BoT]@Azeroth> .bet 80 red, 10 black
+ [12:49:14 PM] <ifndef-tech@Azeroth> Bet [80 red] was accepted.
+ [12:49:14 PM] <ifndef-tech@Azeroth> Bet [10 black] was accepted.
+ [12:49:15 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:49:19 PM] <PhiX> ...unign LuC1Fr[BoT]
+ [12:49:19 PM] That user is not logged on.
+ [12:49:19 PM] <Pyro6@Azeroth> SHIT
+ [12:49:20 PM] <Eric[nK]> Receiving messages from "LuC1Fr[BoT]".
+ [12:49:20 PM] <Pyro6@Azeroth> FUCK
+ [12:49:23 PM] <Pyro6@Azeroth> CUNT
+ [12:49:24 PM] <From LuC1Fr[BoT]@Azeroth> ...whoami
+ [12:49:25 PM] <To LuC1Fr[BoT]@Azeroth> [BoT (clan)] has access 100.
+ [12:49:26 PM] <ifndef-tech@Azeroth Wheel result [4] color [black] row [2] column [1]>
+ [12:49:26 PM] <ifndef-tech@Azeroth> House collects $110.00  and pays out $0.00
+ [12:49:27 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:49:28 PM] -- IdleBoT@Azeroth [78ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [12:49:28 PM] -- IdleBoT@Azeroth has acquired ops.
+ [12:49:42 PM] <PhiX> .bet 200 black
+ [12:49:43 PM] <ifndef-tech@Azeroth> Bet [200 black] was accepted.
+ [12:49:46 PM] <IdleBoT@Azeroth> B9
+ [12:49:47 PM] <From LuC1Fr[BoT]@Azeroth> ...ignore phix@useast
+ [12:49:47 PM] That user is not logged on.
+ [12:49:49 PM] <To LuC1Fr[BoT]@Azeroth> Ignoring messages from "phix@useast".
+ [12:49:52 PM] <Pyro6@Azeroth> .bet 10 black
+ [12:49:52 PM] <ifndef-tech@Azeroth> Bet [10 black] was accepted.
+ [12:49:54 PM] <IdleBoT@Azeroth> .bet 200 red
+ [12:49:55 PM] <ifndef-tech@Azeroth> Bet [200 red] was accepted.
+ [12:50:02 PM] <PhiX> RED OR BLACK
+ [12:50:06 PM] <LuC1Fr[BoT]@Azeroth> blue
+ [12:50:11 PM] <Eric[nK]> hm
+ [12:50:12 PM] <LuC1Fr[BoT]@Azeroth> .bet 20 red
+ [12:50:13 PM] <ifndef-tech@Azeroth> Bet [20 red] was accepted.
+ [12:50:14 PM] <Pyro6@Azeroth> vagina
+ [12:50:16 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:50:17 PM] <Eric[nK]>  [12:49:47 PM] That user is not logged on.
+ [12:50:19 PM] <Eric[nK]>  [12:49:49 PM] <To LuC1Fr[BoT]@Azeroth> Ignoring messages from "phix@useast".
+ [12:50:23 PM] <LuC1Fr[BoT]@Azeroth> hehe
+ [12:50:24 PM] <LuC1Fr[BoT]@Azeroth> ..
+ [12:50:26 PM] <LuC1Fr[BoT]@Azeroth> hmm.
+ [12:50:27 PM] <ifndef-tech@Azeroth Wheel result [25] color [red] row [9] column [1]>
+ [12:50:27 PM] <ifndef-tech@Azeroth> IdleBoT was paid $400.00
+ [12:50:29 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT] was paid $40.00
+ [12:50:31 PM] <ifndef-tech@Azeroth> House collects $210.00  and pays out $220.00
+ [12:50:31 PM] <Eric[nK]> @USEast = no.
+ [12:50:33 PM] <PhiX> FUCK
+ [12:50:34 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:50:40 PM] <IdleBoT@Azeroth> GG BOYS
+ [12:50:42 PM] <PhiX> .balance
+ [12:50:42 PM] <ifndef-tech@Azeroth> PhiX@USEast's balance is $10.00
+ [12:50:44 PM] <IdleBoT@Azeroth> I WAS PAID 400!
+ [12:50:45 PM] <LuC1Fr[BoT]@Azeroth> but, it still replied.
+ [12:50:45 PM] <PhiX> :(
+ [12:50:51 PM] <Pyro6@Azeroth> .bet 10 even
+ [12:50:53 PM] <ifndef-tech@Azeroth> Bet [10 even] was accepted.
+ [12:50:53 PM] <Eric[nK]> It will always reply.
+ [12:50:56 PM] <LuC1Fr[BoT]@Azeroth> .bet all red
+ [12:50:57 PM] <PhiX> .bet 200 black
+ [12:50:59 PM] <ifndef-tech@Azeroth> Bet [200 black] was accepted.
+ [12:51:00 PM] <IdleBoT@Azeroth> .bet 200 orange
+ [12:51:01 PM] <ifndef-tech@Azeroth> Bet [200 orange] made by IdleBoT was not accepted.
+ [12:51:01 PM] <IdleBoT@Azeroth> :D
+ [12:51:02 PM] <LuC1Fr[BoT]@Azeroth> meh
+ [12:51:08 PM] <LuC1Fr[BoT]@Azeroth> .bet 200 even
+ [12:51:08 PM] <ifndef-tech@Azeroth> Bet [200 even] was accepted.
+ [12:51:13 PM] <IdleBoT@Azeroth> .bet 100 even
+ [12:51:14 PM] <ifndef-tech@Azeroth> Bet [100 even] was accepted.
+ [12:51:17 PM] <IdleBoT@Azeroth> .bet 100 red
+ [12:51:18 PM] <ifndef-tech@Azeroth> Bet [100 red] was accepted.
+ [12:51:19 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:51:29 PM] <ifndef-tech@Azeroth Wheel result [33] color [black] row [11] column [3]>
+ [12:51:29 PM] <ifndef-tech@Azeroth> PhiX@USEast was paid $400.00
+ [12:51:30 PM] <ifndef-tech@Azeroth> House collects $410.00  and pays out $200.00
+ [12:51:31 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:51:32 PM] <PhiX> !
+ [12:51:33 PM] <LuC1Fr[BoT]@Azeroth> christ
+ [12:51:37 PM] <LuC1Fr[BoT]@Azeroth> .balance
+ [12:51:37 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT]'s balance is $130.00
+ [12:51:39 PM] <Pyro6@Azeroth> .bet 20 odd
+ [12:51:39 PM] <ifndef-tech@Azeroth> Bet [20 odd] was accepted.
+ [12:51:41 PM] <IdleBoT@Azeroth> .balance
+ [12:51:41 PM] <ifndef-tech@Azeroth> IdleBoT's balance is $0.00
+ [12:51:43 PM] <LuC1Fr[BoT]@Azeroth> .bet 130 red
+ [12:51:44 PM] <ifndef-tech@Azeroth> Bet [130 red] was accepted.
+ [12:51:45 PM] <IdleBoT@Azeroth> FUCK
+ [12:51:45 PM] <Pyro6@Azeroth> .balance
+ [12:51:47 PM] <ifndef-tech@Azeroth> Pyro6's balance is -$191.00
+ [12:51:48 PM] <PhiX> .bet 200 red
+ [12:51:49 PM] <VBScript@Azeroth .: Chuck Norris doesn't believe in Germany. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [12:51:50 PM] <ifndef-tech@Azeroth> Bet [200 red] was accepted.
+ [12:51:53 PM] <IdleBoT@Azeroth> LOL PYRO
+ [12:51:56 PM] <IdleBoT@Azeroth> .bet 100 red
+ [12:51:57 PM] <ifndef-tech@Azeroth> Bet [100 red] was accepted.
+ [12:51:58 PM] <IdleBoT@Azeroth> .bet 100 even
+ [12:51:59 PM] <ifndef-tech@Azeroth> Bet [100 even] was accepted.
+ [12:52:19 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:52:30 PM] <ifndef-tech@Azeroth Wheel result [17] color [black] row [6] column [2]>
+ [12:52:32 PM] <ifndef-tech@Azeroth> Pyro6 was paid $40.00
+ [12:52:33 PM] <PhiX> :(
+ [12:52:34 PM] <ifndef-tech@Azeroth> House collects $530.00  and pays out $20.00
+ [12:52:35 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:52:36 PM] <LuC1Fr[BoT]@Azeroth> :/
+ [12:52:37 PM] <Pyro6@Azeroth> woot
+ [12:52:41 PM] <LuC1Fr[BoT]@Azeroth> the house is rich
+ [12:52:44 PM] <PhiX> .bet 100 red, 100 odd
+ [12:52:45 PM] <ifndef-tech@Azeroth> Bet [100 red] was accepted.
+ [12:52:46 PM] <ifndef-tech@Azeroth> Bet [100 odd] was accepted.
+ [12:52:46 PM] <LuC1Fr[BoT]@Azeroth> .bet 500 red
+ [12:52:47 PM] <ifndef-tech@Azeroth> This bet would exceed your maximum bet of $200.00
+ [12:52:49 PM] <Pyro6@Azeroth> .bet 20 odd
+ [12:52:49 PM] <ifndef-tech@Azeroth> Bet [20 odd] was accepted.
+ [12:52:50 PM] <LuC1Fr[BoT]@Azeroth> .bet 200 red
+ [12:52:51 PM] <ifndef-tech@Azeroth> Bet [200 red] was accepted.
+ [12:52:53 PM] <LuC1Fr[BoT]@Azeroth> RED DAMNIT
+ [12:52:55 PM] <LuC1Fr[BoT]@Azeroth> RED
+ [12:53:02 PM] <IdleBoT@Azeroth> .bet 200 red
+ [12:53:02 PM] <ifndef-tech@Azeroth> Bet [200 red] was accepted.
+ [12:53:03 PM] <LuC1Fr[BoT]@Azeroth> .balance
+ [12:53:04 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT]'s balance is -$200.00
+ [12:53:04 PM] <PhiX> .balance eric[nk]
+ [12:53:13 PM] <PhiX> ...say .balance
+ [12:53:13 PM] <Eric[nK]> .balance
+ [12:53:13 PM] <ifndef-tech@Azeroth> Eric[nK]'s balance is $0.00
+ [12:53:21 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:53:27 PM] <LuC1Fr[BoT]@Azeroth> i put him back at 0 where he was.
+ [12:53:31 PM] <ifndef-tech@Azeroth Wheel result [14] color [red] row [5] column [2]>
+ [12:53:32 PM] <ifndef-tech@Azeroth> IdleBoT was paid $400.00
+ [12:53:33 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT] was paid $400.00
+ [12:53:34 PM] <ifndef-tech@Azeroth> PhiX@USEast was paid $100.00
+ [12:53:35 PM] <IdleBoT@Azeroth> WOOT
+ [12:53:38 PM] <LuC1Fr[BoT]@Azeroth> oh.. nice
+ [12:53:38 PM] <IdleBoT@Azeroth> .balance
+ [12:53:38 PM] <ifndef-tech@Azeroth> House collects $120.00  and pays out $500.00
+ [12:53:40 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:53:44 PM] <ifndef-tech@Azeroth> IdleBoT's balance is $0.00
+ [12:53:47 PM] <LuC1Fr[BoT]@Azeroth> .bet 200 red
+ [12:53:48 PM] <ifndef-tech@Azeroth> Bet [200 red] was accepted.
+ [12:53:50 PM] <IdleBoT@Azeroth> .bet 10 red
+ [12:53:51 PM] <ifndef-tech@Azeroth> Bet [10 red] was accepted.
+ [12:53:52 PM] <IdleBoT@Azeroth> .bet 10 black
+ [12:53:54 PM] <ifndef-tech@Azeroth> Bet [10 black] was accepted.
+ [12:53:55 PM] <IdleBoT@Azeroth> .bet 10 even
+ [12:53:56 PM] <IdleBoT@Azeroth> .bet 10 odd
+ [12:53:56 PM] <ifndef-tech@Azeroth> Bet [10 even] was accepted.
+ [12:54:00 PM] <PhiX> .bet 100 17, 100 black
+ [12:54:00 PM] <ifndef-tech@Azeroth> Bet [10 odd] was accepted.
+ [12:54:01 PM] <LuC1Fr[BoT]@Azeroth> i wish you could .bet all
+ [12:54:02 PM] <ifndef-tech@Azeroth> Bet [100 17] was accepted.
+ [12:54:06 PM] <Pyro6@Azeroth> .bet 20 even
+ [12:54:07 PM] <ifndef-tech@Azeroth> Bet [100 black] was accepted.
+ [12:54:10 PM] <ifndef-tech@Azeroth> Bet [20 even] was accepted.
+ [12:54:11 PM] <PhiX> 17 WILL WIN
+ [12:54:22 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [12:54:26 PM] <LuC1Fr[BoT]@Azeroth> so that, when you know you will hit rock bottem. you just go all out.
+ [12:54:31 PM] <LuC1Fr[BoT]@Azeroth> bottom*
+ [12:54:33 PM] <ifndef-tech@Azeroth Wheel result [5] color [red] row [2] column [2]>
+ [12:54:34 PM] <ifndef-tech@Azeroth> IdleBoT was paid $20.00
+ [12:54:35 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT] was paid $400.00
+ [12:54:37 PM] <ifndef-tech@Azeroth> House collects $240.00  and pays out $220.00
+ [12:54:38 PM] <LuC1Fr[BoT]@Azeroth> yeah
+ [12:54:38 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [12:54:39 PM] -- JurJurman@Azeroth [78ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 23, icon tier Human, sorceress icon, in Clan BLNT)
+ [12:54:40 PM] <LuC1Fr[BoT]@Azeroth> .balance
+ [12:54:41 PM] <ifndef-tech@Azeroth> LuC1Fr[BoT]'s balance is $400.00
+ [12:54:41 PM] <Pyro6@Azeroth> SHIT
+ [12:54:41 PM] -- connection_lost@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Undead, crypt fiend icon, in Clan BoT)
+ [12:54:42 PM] <PhiX> SHIT
+ [12:54:47 PM] <PhiX> .balance
+ [12:54:47 PM] <LuC1Fr[BoT]@Azeroth> .highrollers
+ [12:54:48 PM] <ifndef-tech@Azeroth> PhiX@USEast's balance is -$190.00
+ [12:54:49 PM] <ifndef-tech@Azeroth> Rank 1: useless_stooge@USEast  balance $849.00
+ [12:54:51 PM] <Pyro6@Azeroth> .bet 10 odd
+ [12:54:52 PM] -- ifndef-tech@Azeroth has left the channel.
+ [12:54:53 PM] <PhiX> >_<
+ [12:54:53 PM] -- ifndef@Azeroth has left the channel.
+ [12:54:56 PM] -- connection_lost@Azeroth has left the channel.
+ [12:54:57 PM] <LuC1Fr[BoT]@Azeroth> err
+ [12:54:57 PM] -- JurJurman@Azeroth has left the channel.
+ [12:54:58 PM] <Pyro6@Azeroth> lulz
+ [12:54:58 PM] <PhiX> IP ban
+ [12:55:03 PM] <LuC1Fr[BoT]@Azeroth> nice job guys
+ [12:55:04 PM] <Pyro6@Azeroth> gg
+ [12:55:05 PM] <LuC1Fr[BoT]@Azeroth> spamming th ebot
+ [12:55:06 PM] <LuC1Fr[BoT]@Azeroth> jeez
+ [12:55:07 PM] <PhiX> noob luci
+ [12:55:19 PM] <LuC1Fr[BoT]@Azeroth> shiitt
+ [12:55:20 PM] <Pyro6@Azeroth> LETS PLAY TRIVIA
+ [12:55:21 PM] <LuC1Fr[BoT]@Azeroth> wasnt me
+ [12:55:24 PM] <LuC1Fr[BoT]@Azeroth> lets not.
+ [12:55:32 PM] <LuC1Fr[BoT]@Azeroth> lets play russian roulette
+ [12:55:32 PM] <Pyro6@Azeroth> SPEED CHALLENGE?
+ [12:55:40 PM] <IdleBoT@Azeroth> lol
+ [12:55:44 PM] <PhiX> @;;kick rasta* who the fuck are you?
+ [12:55:45 PM] rastaman96 was kicked out of the channel by PhiX[BoT] (who the fuck are you?).
+ [12:55:45 PM] -- rastaman96 has left the channel.
+ [12:55:47 PM] <Pyro6@Azeroth> k
+ [12:55:47 PM] <IdleBoT@Azeroth> we all make scripts for speed challenge to cheat
+ [12:56:00 PM] <PhiX> you'll win
+ [12:56:00 PM] <Pyro6@Azeroth> idiat..?
+ [12:56:03 PM] <PhiX> I got a higher ping
+ [12:56:19 PM] <Pyro6@Azeroth> I GOT TEH HIGHEST
+ [12:56:29 PM] <PhiX> and I'm downloading hawt azn pr0n
+ [12:56:39 PM] <Pyro6@Azeroth> im downloading..
+ [12:56:40 PM] <Pyro6@Azeroth> eh
+ [12:56:42 PM] -- IdleBoT@Azeroth has left the channel.
+ [12:56:42 PM] <Pyro6@Azeroth> nvm
+ [12:56:49 PM] <PhiX> DROPPED JACK
+ [12:56:51 PM] <LuC1Fr[BoT]@Azeroth> ...say `startsc
+ [12:56:52 PM] <Eric[nK]> `startsc
+ [12:56:53 PM] <From LuC1Fr[BoT]@Azeroth> Speed Challenge started.
+ [12:56:56 PM] <LuC1Fr[BoT]@Azeroth> o.O
+ [12:56:57 PM] <Pyro6@Azeroth> LULZ
+ [12:56:59 PM] -- IdleBoT@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [12:56:59 PM] -- IdleBoT@Azeroth has acquired ops.
+ [12:57:03 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [scy]
+ [12:57:04 PM] <PhiX[BoT]@Azeroth> scy
+ [12:57:04 PM] <PhiX> @;;cheat on
+ [12:57:05 PM] <LuC1Fr[BoT]@Azeroth> Well done PhiX[BoT]! Your score is [1]. Your time was [01:937].
+ [12:57:14 PM] <PhiX> oh
+ [12:57:16 PM] <PhiX> it was enablewd
+ [12:57:21 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [oker]
+ [12:57:22 PM] <PhiX[BoT]@Azeroth> oker
+ [12:57:23 PM] <LuC1Fr[BoT]@Azeroth> Well done PhiX[BoT]! Your score is [2]. Your time was [00:891].
+ [12:57:32 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [fjgsi]
+ [12:57:33 PM] <PhiX[BoT]@Azeroth> fjgsi
+ [12:57:34 PM] <LuC1Fr[BoT]@Azeroth> Ignoring messages from "phix[bot]".
+ [12:57:38 PM] <PhiX> AW
+ [12:57:41 PM] <PhiX> asshole
+ [12:57:52 PM] <PhiX> ops: say asshole :(
+ [12:57:52 PM] <VBScript@Azeroth> asshole :(
+ [12:57:52 PM] <PhiX[BoT]@Azeroth> asshole :(
+ [12:57:54 PM] <Pyro[BoT]@Azeroth> asshole :(
+ [12:57:55 PM] <LuC1Fr[BoT]@Azeroth> lol.
+ [12:58:05 PM] <LuC1Fr[BoT]@Azeroth> Receiving messages from "phix[bot]".
+ [12:58:10 PM] <PhiX> @;;cheat off
+ [12:58:16 PM] <LuC1Fr[BoT]@Azeroth> Time's up, you were too slow.
+ [12:58:27 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [yjra]
+ [12:58:34 PM] <LuC1Fr[BoT]@Azeroth> ykra
+ [12:58:36 PM] <LuC1Fr[BoT]@Azeroth> blah
+ [12:58:40 PM] <PhiX> yjra
+ [12:58:41 PM] <LuC1Fr[BoT]@Azeroth> Well done PhiX@USEast! Your score is [1]. Your time was [13:001].
+ [12:58:42 PM] <LuC1Fr[BoT]@Azeroth> doubt it even works
+ [12:58:43 PM] <LuC1Fr[BoT]@Azeroth> The spc plugin has been disabled.
+ [12:58:54 PM] <Pyro6@Azeroth> I WANT TO PLAY
+ [12:59:05 PM] <Pyro6@Azeroth> someone should make a script to cheat at trivia
+ [12:59:07 PM] <IdleBoT@Azeroth> lets play spc!
+ [12:59:08 PM] <Pyro6@Azeroth> o.o
+ [12:59:12 PM] <IdleBoT@Azeroth> i already have
+ [12:59:13 PM] <PhiX> 52 made one
+ [12:59:13 PM] <IdleBoT@Azeroth> noob
+ [12:59:16 PM] <LuC1Fr[BoT]@Azeroth> The scramble plugin has been enabled.
+ [12:59:20 PM] <IdleBoT@Azeroth> no luc1fr
+ [12:59:24 PM] <IdleBoT@Azeroth> turn on spc
+ [12:59:38 PM] <LuC1Fr[BoT]@Azeroth> you can.
+ [12:59:40 PM] <LuC1Fr[BoT]@Azeroth> afk
+ [12:59:45 PM] <IdleBoT@Azeroth> idk how
+ [12:59:47 PM] <PhiX> `spc on
+ [12:59:48 PM] <IdleBoT@Azeroth> `startsc
+ [12:59:48 PM] <Pyro6@Azeroth> `STARTSC
+ [12:59:53 PM] <IdleBoT@Azeroth> `scstart
+ [12:59:54 PM] <LuC1Fr[BoT]@Azeroth> The spc plugin has been enabled.
+ [12:59:58 PM] <PhiX> `startsc
+ [01:00:02 PM] <IdleBoT@Azeroth> `startsc
+ [01:00:09 PM] <IdleBoT@Azeroth> k lets go
+ [01:00:10 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [yhduwf]
+ [01:00:11 PM] <IdleBoT@Azeroth> yhduwf
+ [01:00:11 PM] <LuC1Fr[BoT]@Azeroth> Well done IdleBoT! Your score is [1]. Your time was [02:016].
+ [01:00:12 PM] <Pyro6@Azeroth> yhduwf
+ [01:00:15 PM] <PhiX> CHEATERS
+ [01:00:20 PM] <Pyro6@Azeroth> WTF
+ [01:00:22 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [gcpjz]
+ [01:00:22 PM] <Pyro6@Azeroth>  [16:03:10] <Pyro6> yhduwf
+ [01:00:22 PM] <IdleBoT@Azeroth> gcpjz
+ [01:00:23 PM] <LuC1Fr[BoT]@Azeroth> Well done IdleBoT! Your score is [2]. Your time was [01:437].
+ [01:00:24 PM] <Pyro6@Azeroth> gcpjz
+ [01:00:25 PM] <Pyro6@Azeroth>  [16:03:11] <IdleBoT> yhduwf
+ [01:00:27 PM] <Pyro6@Azeroth> WTF
+ [01:00:32 PM] <Pyro6@Azeroth> IT SHOWS ME SAYING IT FIRST
+ [01:00:32 PM] <PhiX> @;;cheat on
+ [01:00:33 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [yktf]
+ [01:00:33 PM] <IdleBoT@Azeroth> yktf
+ [01:00:34 PM] <LuC1Fr[BoT]@Azeroth> Well done IdleBoT! Your score is [3]. Your time was [00:391].
+ [01:00:34 PM] <PhiX[BoT]@Azeroth> yktf
+ [01:00:34 PM] <IdleBoT@Azeroth> you lsgging pyro
+ [01:00:36 PM] <Pyro6@Azeroth> yktf
+ [01:00:39 PM] <IdleBoT@Azeroth> lagging*
+ [01:00:40 PM] <Pyro6@Azeroth> gah!
+ [01:00:44 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [ozg]
+ [01:00:44 PM] <PhiX[BoT]@Azeroth> ozg
+ [01:00:45 PM] <LuC1Fr[BoT]@Azeroth> Well done PhiX[BoT]! Your score is [3]. Your time was [00:812].
+ [01:00:45 PM] <IdleBoT@Azeroth> ozg
+ [01:00:46 PM] <Pyro6@Azeroth> ozg
+ [01:00:50 PM] <PhiX> NOOBS
+ [01:00:51 PM] <Pyro6@Azeroth> #dkp IdleBot CHEATER
+ [01:00:53 PM] -- IdleBoT@Azeroth has left the channel.
+ [01:00:54 PM] -- IdleBoT@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [01:00:54 PM] IdleBoT was kicked out of the channel by Pyro[BoT] (CHEATER).
+ [01:00:54 PM] -- IdleBoT@Azeroth has left the channel.
+ [01:00:54 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [ovzc]
+ [01:00:55 PM] <PhiX[BoT]@Azeroth> ovzc
+ [01:00:55 PM] -- IdleBoT@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [01:00:55 PM] <IdleBoT@Azeroth> ovzc
+ [01:00:56 PM] <LuC1Fr[BoT]@Azeroth> Well done PhiX[BoT]! Your score is [4]. Your time was [01:484].
+ [01:00:57 PM] <Pyro6@Azeroth> ovzc
+ [01:01:01 PM] <IdleBoT@Azeroth> no promote
+ [01:01:06 PM] <PhiX> @;;cheat off
+ [01:01:06 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [qxseb]
+ [01:01:06 PM] <IdleBoT@Azeroth> qxseb
+ [01:01:07 PM] <LuC1Fr[BoT]@Azeroth> Well done IdleBoT! Your score is [4]. Your time was [00:516].
+ [01:01:07 PM] <IdleBoT@Azeroth> #promote IdleBoT
+ [01:01:08 PM] <Pyro6@Azeroth> FAIL
+ [01:01:08 PM] <Pyro6@Azeroth> qxseb
+ [01:01:09 PM] -- IdleBoT@Azeroth has left the channel.
+ [01:01:10 PM] <Pyro[BoT]@Azeroth> "IdleBoT" has been promoted to Shaman.
+ [01:01:10 PM] -- IdleBoT@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [01:01:10 PM] -- IdleBoT@Azeroth has acquired ops.
+ [01:01:11 PM] <LuC1Fr[BoT]@Azeroth> pyro6's ping at login was 1218ms.
+ [01:01:11 PM] <Pyro6@Azeroth> #promote IdleBoT
+ [01:01:13 PM] <Pyro[BoT]@Azeroth> Error: The specified user is already at the highest possible ranking.
+ [01:01:15 PM] <LuC1Fr[BoT]@Azeroth> yeah, lag.
+ [01:01:19 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [r]
+ [01:01:20 PM] <IdleBoT@Azeroth> r
+ [01:01:20 PM] <LuC1Fr[BoT]@Azeroth> Well done IdleBoT! Your score is [5]. Your time was [02:266].
+ [01:01:21 PM] <Pyro6@Azeroth> r
+ [01:01:25 PM] <Alendar is currently: Out Shopping Current Project: Unknown My website: http://alendar.net :->
+ [01:01:26 PM] <Pyro6@Azeroth> im downloading something
+ [01:01:33 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [skyb]
+ [01:01:33 PM] <IdleBoT@Azeroth> skyb
+ [01:01:34 PM] <LuC1Fr[BoT]@Azeroth> Well done IdleBoT! Your score is [6]. Your time was [00:578].
+ [01:01:34 PM] <IdleBoT@Azeroth> cock?
+ [01:01:35 PM] <Pyro6@Azeroth> skyb
+ [01:01:35 PM] <LuC1Fr[BoT]@Azeroth> you can jerk off later.
+ [01:01:46 PM] <Pyro6@Azeroth> Type this the fastest: [I LIKE MEN]
+ [01:01:46 PM] <IdleBoT@Azeroth> I LIKE MEN
+ [01:01:47 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [yovws]
+ [01:01:47 PM] <IdleBoT@Azeroth> yovws
+ [01:01:48 PM] <LuC1Fr[BoT]@Azeroth> Well done IdleBoT! Your score is [7]. Your time was [00:687].
+ [01:01:49 PM] <Pyro6@Azeroth> yovws
+ [01:01:51 PM] <Pyro6@Azeroth> lulz
+ [01:01:53 PM] <PhiX> lawl
+ [01:01:54 PM] <IdleBoT@Azeroth> LOL
+ [01:02:02 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [gzibz]
+ [01:02:03 PM] <IdleBoT@Azeroth> gzibz
+ [01:02:03 PM] <LuC1Fr[BoT]@Azeroth> Well done IdleBoT! Your score is [8]. Your time was [01:140].
+ [01:02:03 PM] <Pyro6@Azeroth> gzibz
+ [01:02:05 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [I DID THIS TO ZERG ALREADY]
+ [01:02:06 PM] <IdleBoT@Azeroth> I DID THIS TO ZERG ALREADY
+ [01:02:06 PM] <Pyro6@Azeroth> I DID THIS TO ZERG ALREADY
+ [01:02:09 PM] <PhiX> Type this the fastest: [/j cheater deserve to die]
+ [01:02:10 PM] -- IdleBoT@Azeroth has left the channel.
+ [01:02:11 PM] -- Pyro6@Azeroth has left the channel.
+ [01:02:13 PM] <PhiX> :D
+ [01:02:15 PM] <LuC1Fr[BoT]@Azeroth> ROFL
+ [01:02:19 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [gzpc]
+ [01:02:21 PM] -- IdleBoT@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [01:02:21 PM] -- IdleBoT@Azeroth has acquired ops.
+ [01:02:22 PM] -- Pyro6@Azeroth [1218ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [01:02:23 PM] <PhiX> gzpc
+ [01:02:24 PM] <LuC1Fr[BoT]@Azeroth> Well done PhiX@USEast! Your score is [2]. Your time was [04:003].
+ [01:02:24 PM] <Pyro6@Azeroth> lol
+ [01:02:30 PM] <LuC1Fr[BoT]@Azeroth> ohh
+ [01:02:34 PM] <IdleBoT@Azeroth> Type this the fastest: [/j cheater deserve to die]
+ [01:02:38 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [vzav]
+ [01:02:39 PM] <IdleBoT@Azeroth> vzav
+ [01:02:39 PM] <LuC1Fr[BoT]@Azeroth> Well done IdleBoT! Your score is [9]. Your time was [01:375].
+ [01:02:44 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [/quit]
+ [01:02:48 PM] <PhiX> lawl
+ [01:02:49 PM] <LuC1Fr[BoT]@Azeroth> :(
+ [01:02:53 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [vuyd]
+ [01:02:54 PM] <IdleBoT@Azeroth> vuyd
+ [01:02:55 PM] <LuC1Fr[BoT]@Azeroth> Well done IdleBoT! Your score is [10]. Your time was [01:687].
+ [01:02:56 PM] <PhiX> it's addq
+ [01:03:09 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [rqfxo]
+ [01:03:09 PM] <IdleBoT@Azeroth> rqfxo
+ [01:03:10 PM] <LuC1Fr[BoT]@Azeroth> Well done IdleBoT! Your score is [11]. Your time was [00:406].
+ [01:03:13 PM] <PhiX> ...
+ [01:03:20 PM] <IdleBoT@Azeroth> The sc plugin has been deleted.
+ [01:03:23 PM] <LuC1Fr[BoT]@Azeroth> Type this the fastest: [tva]
+ [01:03:29 PM] <IdleBoT@Azeroth> `stopsc
+ [01:03:38 PM] <PhiX> Type this the fastest: [/ignore LuC1Fr[BoT]]
+ [01:03:47 PM] <LuC1Fr[BoT]@Azeroth> i was just about to do that actually
+ [01:04:00 PM] <VBScript@Azeroth [Food for Thought] Fate chooses your relations, you choose your friends.    -Jacques Delille>
+ [01:04:31 PM] <LuC1Fr[BoT]@Azeroth> The Gamble Script plugin installed successfully. For help, type "`phelp gamble" inside your bot.
+ [01:04:37 PM] <LuC1Fr[BoT]@Azeroth> The gamble plugin has been enabled.
+ [01:04:42 PM] <PhiX> that's bugged
+ [01:04:46 PM] <IdleBoT@Azeroth> no its not
+ [01:04:48 PM] <IdleBoT@Azeroth> noob !
+ [01:04:54 PM] <LuC1Fr[BoT]@Azeroth> ...say `gamble
+ [01:04:54 PM] <Eric[nK]> `gamble
+ [01:04:54 PM] <IdleBoT@Azeroth> .bet 10
+ [01:04:54 PM] <PhiX> it was last time I tested it
+ [01:04:55 PM] <LuC1Fr[BoT]@Azeroth> Eric[nK], please place your bet: `bet [amount]. You have $20.
+ [01:05:03 PM] <LuC1Fr[BoT]@Azeroth> ...say `bet 20
+ [01:05:03 PM] <Eric[nK]> `bet 20
+ [01:05:04 PM] <LuC1Fr[BoT]@Azeroth> Eric[nK], you may now type `roll
+ [01:05:05 PM] <PhiX> `gamble
+ [01:05:06 PM] <LuC1Fr[BoT]@Azeroth> PhiX@USEast, please place your bet: `bet [amount]. You have $20.
+ [01:05:11 PM] <PhiX> `bet 1337
+ [01:05:11 PM] <IdleBoT@Azeroth> `gamble; bet 10; roll
+ [01:05:12 PM] <LuC1Fr[BoT]@Azeroth> PhiX@USEast, you may now type `roll
+ [01:05:13 PM] <LuC1Fr[BoT]@Azeroth> IdleBoT, please place your bet: `bet [amount]. You have $20.
+ [01:05:14 PM] <LuC1Fr[BoT]@Azeroth> IdleBoT, you may now type `roll
+ [01:05:15 PM] <LuC1Fr[BoT]@Azeroth> IdleBoT rolled 5, 3, and 3.
+ [01:05:17 PM] <PhiX> `roll
+ [01:05:18 PM] <PhiX> SEE
+ [01:05:19 PM] <LuC1Fr[BoT]@Azeroth> IdleBoT has won $10! You now have $30!
+ [01:05:19 PM] <PhiX> BUGGED
+ [01:05:20 PM] <PhiX> NOOB
+ [01:05:22 PM] <LuC1Fr[BoT]@Azeroth> PhiX@USEast rolled 1, 2, and 2.
+ [01:05:25 PM] <LuC1Fr[BoT]@Azeroth> PhiX@USEast has won $1337! You now have $1357!
+ [01:05:28 PM] <LuC1Fr[BoT]@Azeroth> ...say `roll
+ [01:05:29 PM] <Eric[nK]> `roll
+ [01:05:32 PM] <LuC1Fr[BoT]@Azeroth> Eric[nK] rolled 6, 6, and 4.
+ [01:05:37 PM] <IdleBoT@Azeroth> almost 666
+ [01:05:39 PM] <LuC1Fr[BoT]@Azeroth> Eric[nK] has won $20! You now have $40!
+ [01:05:40 PM] <LuC1Fr[BoT]@Azeroth> Random number (0-100): 4
+ [01:05:47 PM] <PhiX> DO YOU SEE THE BUG, JACK?
+ [01:05:48 PM] <LuC1Fr[BoT]@Azeroth> Random number (0-100): 81
+ [01:05:50 PM] <LuC1Fr[BoT]@Azeroth> Random number (0-100): 10
+ [01:05:52 PM] <IdleBoT@Azeroth> no
+ [01:05:55 PM] <PhiX> ...
+ [01:05:57 PM] <LuC1Fr[BoT]@Azeroth> The gamble plugin has been disabled.
+ [01:05:58 PM] <PhiX> you're dumb
+ [01:06:02 PM] <IdleBoT@Azeroth> what bug
+ [01:06:08 PM] <LuC1Fr[BoT]@Azeroth>  [01:08:18 PM] <PhiX@USEast> `bet 1337
+ [01:06:08 PM] <PhiX>  [22:07:35.604] <LuC1Fr[BoT]@Azeroth> PhiX@USEast, please place your bet: `bet [amount]. You have $20.
+ [01:06:10 PM] <PhiX>  [22:07:40.374] <PhiX> `bet 1337
+ [01:06:20 PM] <IdleBoT@Azeroth> not a bug!
+ [01:06:21 PM] <PhiX>  [22:07:54.743] <LuC1Fr[BoT]@Azeroth> PhiX@USEast has won $1337! You now have $1357!
+ [01:06:22 PM] <LuC1Fr[BoT]@Azeroth>  [01:08:32 PM] <LuC1Fr[BoT]> PhiX@USEast has won $1337! You now have $1357!
+ [01:06:24 PM] <IdleBoT@Azeroth> you can bet moe than you have!
+ [01:06:34 PM] <PhiX> it says I have 20
+ [01:06:36 PM] <IdleBoT@Azeroth> you just go in debt if you lose
+ [01:06:42 PM] <PhiX> and it doesn't work with all values
+ [01:06:56 PM] <PhiX> ITZ A BUG
+ [01:06:57 PM] <PhiX> ADMIT IT
+ [01:07:02 PM] <IdleBoT@Azeroth> no
+ [01:07:03 PM] <VBScript@Azeroth .: President Roosevelt once rode his horse 100 miles. Chuck Norris carried his the same distance in half the time. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [01:07:09 PM] <PhiX> then you would start at 0
+ [01:07:17 PM] <IdleBoT@Azeroth> nah
+ [01:07:32 PM] <PhiX> when I lose, I'm not in debt
+ [01:07:35 PM] <IdleBoT@Azeroth> K YOUR CALLING RAYLU NOOB
+ [01:07:36 PM] <PhiX> I'm just game over
+ [01:07:52 PM] <LuC1Fr[BoT]@Azeroth> while you two argue, afk.
+ [01:08:09 PM] <IdleBoT@Azeroth> are you saying defines routlette plugin has a bug because pyro had -170?
+ [01:08:28 PM] <PhiX> no
+ [01:08:41 PM] <PhiX> but gamble is
+ [01:08:50 PM] <IdleBoT@Azeroth> LOL
+ [01:08:56 PM] <PhiX> cuz when you lose all your money, you are game over, even when it's 0
+ [01:09:04 PM] <IdleBoT@Azeroth> YOUR WRONG KTHX?
+ [01:09:08 PM] <PhiX> no ...
+ [01:09:15 PM] <IdleBoT@Azeroth> WRONG AGAIN
+ [01:12:17 PM] -- HaKr_@Azeroth [62ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 3, icon tier Night Elves, peon icon, in Clan LXG)
+ [01:12:25 PM] <HaKr_@Azeroth> who's here?
+ [01:12:33 PM] <PhiX> jack sucks ass
+ [01:12:45 PM] <HaKr_@Azeroth> indeed
+ [01:12:47 PM] <HaKr_@Azeroth> but hmm
+ [01:12:52 PM] -- HaKr_@Azeroth has left the channel.
+ [01:14:01 PM] <IdleBoT@Azeroth> lol phix
+ [01:14:02 PM] <Pyro6@Azeroth> i like men
+ [01:14:02 PM] <IdleBoT@Azeroth> :D
+ [01:14:04 PM] <Pyro6@Azeroth> er
+ [01:14:22 PM] <PhiX[BoT]@Azeroth> i like men too!
+ [01:14:29 PM] <PhiX> GUESS WHAT IM WATCHING RIGHT NOW
+ [01:14:36 PM] <PhiX> @;;lw
+ [01:14:36 PM] <Pyro6@Azeroth> porn?
+ [01:14:37 PM] <PhiX[BoT]@Azeroth> The last whisper to this bot was from IdleBoT at 22:17:22 on Sonntag, 30. März 2008.
+ [01:14:38 PM] <IdleBoT@Azeroth> men?
+ [01:14:45 PM] <PhiX> no, a movie called STEALTH
+ [01:14:48 PM] <PhiX> WHOAWHOAWHOA
+ [01:14:48 PM] -- rastaman96 [47ms] has joined the channel using Starcraft Brood War (0 wins).
+ [01:14:51 PM] <rastaman96> phix kicked me
+ [01:14:52 PM] <rastaman96> wtf
+ [01:14:52 PM] <IdleBoT@Azeroth> SONNTAG!
+ [01:15:01 PM] <Pyro6@Azeroth> I HAVE THAT MOVIE
+ [01:15:10 PM] <PhiX> lies
+ [01:15:15 PM] <PhiX> idiat
+ [01:15:19 PM] <rastaman96> ???
+ [01:15:20 PM] <PhiX> stick with one account
+ [01:15:24 PM] <PhiX> noob
+ [01:15:32 PM] <rastaman96> i needed to generate a broken sha hash
+ [01:15:44 PM] <rastaman96> easiest way was for me to create a new account
+ [01:16:19 PM] -- rastaman96 has left the channel.
+ [01:16:23 PM] -- idiat [47ms] has joined the channel using Starcraft Brood War (59 wins).
+ [01:16:39 PM] <Pyro6@Azeroth> lol my friend is intalling the sims 2 on my computer
+ [01:17:20 PM] <PhiX> o.0
+ [01:17:22 PM] <LuC1Fr[BoT]@Azeroth> kcik him in the ass
+ [01:17:27 PM] <LuC1Fr[BoT]@Azeroth> kick*
+ [01:17:29 PM] <LuC1Fr[BoT]@Azeroth> her*
+ [01:17:34 PM] <LuC1Fr[BoT]@Azeroth> crotch*
+ [01:17:40 PM] <PhiX> lick*
+ [01:18:01 PM] <Pyro6@Azeroth> he downloaded a sex bed
+ [01:18:09 PM] <LuC1Fr[BoT]@Azeroth> screen shots
+ [01:21:58 PM] <Eric[nK]> hm
+ [01:22:16 PM] -- idiat has left the channel.
+ [01:22:16 PM] <VBScript@Azeroth .: Chuck Norris actually built the stairway to heaven. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [01:22:33 PM] -- idiat2 [31ms] has joined the channel using Starcraft Brood War (0 wins).
+ [01:22:41 PM] -- idiat2 has left the channel.
+ [01:22:49 PM] -- idiat [47ms] has joined the channel using Starcraft Brood War (59 wins).
+ [01:25:06 PM] <From Pyro6@Azeroth> Your friend Pyro6 has exited Battle.net.
+ [01:25:06 PM] -- Pyro6@Azeroth has left the channel.
+ [01:25:08 PM] <From Pyro6@Azeroth> Your friend Pyro6 has entered Battle.net.
+ [01:25:10 PM] -- Pyro6@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [01:25:19 PM] <VBScript@Azeroth [Food for Thought] Indifference and neglect often do much more damage than outright dislike.    -J. K. Rowling Harry Potter and the Order of the Phoenix, 2003>
+ [01:31:26 PM] <Alendar is currently: Out Shopping Current Project: Unknown My website: http://alendar.net :->
+ [01:36:21 PM] -- PhiX@Azeroth [203ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 1, icon tier Random, peon icon, in Clan PhiX)
+ [01:36:47 PM] -- The_Black_Ninja@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 4, icon tier Night Elves, peon icon, in Clan NNN)
+ [01:37:08 PM] <Pyro6@Azeroth> hm
+ [01:37:12 PM] <Pyro6@Azeroth> afk
+ [01:37:32 PM] <VBScript@Azeroth .: They were going to release a Chuck Norris edition of Clue, but the answer always turns out to be "Chuck Norris. In The Library. With a Roundhouse Kick." :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [01:37:39 PM] -- PhiX@Azeroth has left the channel.
+ [01:37:58 PM] -- The_Black_Ninja@Azeroth has left the channel.
+ [01:46:40 PM] <VBScript@Azeroth [Food for Thought] I have gotten a lot more attention than...other women that I find incredibly beautiful. And this has happened to me ever since I was a girl, when I was flat, had no teeth, was skinny [more]>
+ [01:46:47 PM] <VBScript@Azeroth and small as I could be. I always got more attention than anyone else. If I hadn't, I would have made sure I did.    -Salma Hayek>
+ [01:50:23 PM] -- HaKr[BoT]@Azeroth has left the channel.
+ [01:50:30 PM] -- kain5@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [01:50:33 PM] -- kain5@Azeroth has left the channel.
+ [01:52:07 PM] <Jd[BoT]@Azeroth> don don don
+ [01:52:14 PM] <Jd[BoT]@Azeroth> i wanna love u like no one loves u!
+ [01:52:24 PM] <Jd[BoT]@Azeroth> i wanna fuck you so damn hard!!
+ [01:52:27 PM] <Jd[BoT]@Azeroth> don don don
+ [01:52:30 PM] <Jd[BoT]@Azeroth> oh yah!
+ [01:52:34 PM] <Jd[BoT]@Azeroth> thats the way i want you!
+ [01:52:44 PM] <Jd[BoT]@Azeroth> love that fuckin song
+ [01:52:45 PM] <VBScript@Azeroth .: Fool me once, shame on you. Fool Chuck Norris once and he will roundhouse you in the face. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [01:53:09 PM] -- kain5@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [01:53:09 PM] -- Stats updated: kain5@Azeroth [0ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [01:53:14 PM] <kain5@Azeroth> david
+ [01:53:15 PM] <kain5@Azeroth> you here?
+ [01:53:17 PM] <Jd[BoT]@Azeroth> kain5 i hate u
+ [01:53:21 PM] <kain5@Azeroth> I know
+ [01:53:24 PM] <Jd[BoT]@Azeroth> k
+ [01:53:26 PM] <kain5@Azeroth> wait
+ [01:53:32 PM] <kain5@Azeroth> I thought you <3'd me
+ [01:53:36 PM] <kain5@Azeroth is hakr btw>
+ [01:53:36 PM] <Jd[BoT]@Azeroth> no
+ [01:53:43 PM] <Jd[BoT]@Azeroth> i d k you
+ [01:53:45 PM] <Jd[BoT]@Azeroth> ...
+ [01:53:47 PM] <kain5@Azeroth> HaKr_
+ [01:53:54 PM] <Jd[BoT]@Azeroth> i d k you
+ [01:54:07 PM] -- kain5@Azeroth has left the channel.
+ [01:54:10 PM] -- HaKr_@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan LXG)
+ [01:54:11 PM] <HaKr_@Azeroth> ?
+ [01:54:15 PM] <Jd[BoT]@Azeroth> hi ben
+ [01:54:17 PM] <HaKr_@Azeroth> ugh
+ [01:54:19 PM] <Jd[BoT]@Azeroth> some guy was here
+ [01:54:21 PM] <Jd[BoT]@Azeroth> saying u were him
+ [01:54:23 PM] <HaKr_@Azeroth> yeah
+ [01:54:30 PM] <HaKr_@Azeroth> Jd can you help me make a clan?
+ [01:54:35 PM] <Jd[BoT]@Azeroth> nope
+ [01:54:37 PM] <Jd[BoT]@Azeroth> O.o
+ [01:54:42 PM] <HaKr_@Azeroth> why not?
+ [01:54:45 PM] <Jd[BoT]@Azeroth> i dont make clans i just join them lol
+ [01:54:47 PM] <HaKr_@Azeroth> I <3 you
+ [01:55:02 PM] <HaKr_@Azeroth> I just need keys
+ [01:55:13 PM] <HaKr_@Azeroth> and I'm maxed out at 7
+ [01:55:28 PM] <Jd[BoT]@Azeroth> i only gots 2
+ [01:55:29 PM] <Jd[BoT]@Azeroth> o.o
+ [01:55:36 PM] <HaKr_@Azeroth> I have muted keys that will work
+ [01:55:42 PM] <Jd[BoT]@Azeroth> muted keys
+ [01:55:44 PM] <Jd[BoT]@Azeroth> cant make lcans
+ [01:55:48 PM] <HaKr_@Azeroth> indeed they can
+ [01:55:48 PM] <Jd[BoT]@Azeroth> clans*
+ [01:55:53 PM] <Jd[BoT]@Azeroth> nope they can't
+ [01:55:56 PM] <HaKr_@Azeroth> yus
+ [01:56:00 PM] <Jd[BoT]@Azeroth> no
+ [01:56:12 PM] <HaKr_@Azeroth> you can send invitations to mutual friends
+ [01:56:18 PM] HaKr_ was kicked out of the channel by Jd[BoT] (No they cannot!).
+ [01:56:18 PM] -- HaKr_@Azeroth has left the channel.
+ [01:56:19 PM] -- HaKr_@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan LXG)
+ [01:56:22 PM] <HaKr_@Azeroth> doesnt matter what channel they're on
+ [01:56:33 PM] <Jd[BoT]@Azeroth> use proxies then
+ [01:56:34 PM] <Jd[BoT]@Azeroth> -.-
+ [01:56:43 PM] <HaKr_@Azeroth> I dunno any O=
+ [01:56:50 PM] <Jd[BoT]@Azeroth> socketschain
+ [01:56:52 PM] <Jd[BoT]@Azeroth> google it lol
+ [01:57:31 PM] <Alendar is currently: Worried Current Project: Unknown My website: http://alendar.net :->
+ [01:57:43 PM] <Jd[BoT]@Azeroth> alendar
+ [01:57:54 PM] <Jd[BoT]@Azeroth> don't be worried about ur gf -.-
+ [01:58:12 PM] <Alendar> Hmm?
+ [01:58:57 PM] <HaKr_@Azeroth> alendar, can j00 help a brother out?
+ [01:59:08 PM] <Alendar> What?
+ [01:59:17 PM] <Jd[BoT]@Azeroth> omghi alendar!
+ [01:59:27 PM] <HaKr_@Azeroth> I need help making a clan, and JD is being a jew
+ [01:59:33 PM] <Jd[BoT]@Azeroth> ...
+ [01:59:35 PM] <Jd[BoT]@Azeroth> I AM JEWISH!
+ [01:59:38 PM] <Jd[BoT]@Azeroth> how dare you
+ [01:59:43 PM] <Jd[BoT]@Azeroth> HOW DARE YOU!
+ [01:59:46 PM] <Alendar> No.
+ [01:59:47 PM] <HaKr_@Azeroth> yeah I know, how dare I
+ [01:59:53 PM] <HaKr_@Azeroth> damn
+ [01:59:56 PM] <HaKr_@Azeroth> oh well
+ [01:59:59 PM] -- HaKr_@Azeroth has left the channel.
+ [01:59:59 PM] HaKr_ was kicked out of the channel by Jd[BoT] (owned. ;)).
+ [02:00:00 PM] -- HaKr_@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan LXG)
+ [02:00:07 PM] <Alendar>  [05:01:11 PM] <Jd[BoT]@Azeroth> don't be worried about ur gf -.- -- Hmm?
+ [02:00:13 PM] <Jd[BoT]@Azeroth> ?
+ [02:00:15 PM] -- HaKr_@Azeroth has left the channel.
+ [02:00:18 PM] -- kain5@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [02:00:20 PM] -- kain5@Azeroth has left the channel.
+ [02:00:22 PM] <Jd[BoT]@Azeroth>  [05:00:32 PM] <Alendar@USEast is currently: Worried 
+ [02:00:27 PM] <Alendar> So?
+ [02:00:38 PM] <Jd[BoT]@Azeroth> you are a troubled young man.
+ [02:00:40 PM] <Jd[BoT]@Azeroth> -.-
+ [02:00:41 PM] <Alendar> I'll be whatever I damn feel like being.
+ [02:00:45 PM] <Jd[BoT]@Azeroth> just let it all go!
+ [02:00:54 PM] <Alendar> OK, go to hell.
+ [02:00:57 PM] <Jd[BoT]@Azeroth> ...
+ [02:00:58 PM] <Alendar> There.
+ [02:01:01 PM] <Jd[BoT]@Azeroth> fine fuck you whore
+ [02:01:02 PM] <Alendar> I let it all go.
+ [02:01:09 PM] <Alendar> I bet you want to.
+ [02:01:13 PM] <Jd[BoT]@Azeroth> yes i do
+ [02:01:17 PM] <Alendar> Figures.
+ [02:01:18 PM] <Jd[BoT]@Azeroth> i want to bend you over
+ [02:01:20 PM] <Jd[BoT]@Azeroth> and spank dat
+ [02:01:23 PM] <Jd[BoT]@Azeroth> o.o
+ [02:01:35 PM] <Alendar> Idiat, get in here.
+ [02:01:43 PM] <Alendar> Jd needs a need friend.
+ [02:01:43 PM] -- PhiX@Azeroth [203ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 1, icon tier Random, peon icon, in Clan PhiX)
+ [02:01:59 PM] <Jd[BoT]@Azeroth> i got
+ [02:02:03 PM] <Jd[BoT]@Azeroth> sex friends
+ [02:02:08 PM] <Jd[BoT]@Azeroth> or as people would call it
+ [02:02:11 PM] <Jd[BoT]@Azeroth> fuck buddies
+ [02:02:18 PM] <Alendar> Good for you.
+ [02:02:21 PM] <Jd[BoT]@Azeroth> but when i want that really long sex
+ [02:02:24 PM] <Jd[BoT]@Azeroth> i go to my gf
+ [02:02:29 PM] <Jd[BoT]@Azeroth> and spank dat
+ [02:02:46 PM] -- kain5@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [02:02:48 PM] <PhiX@Azeroth> "Battle.net will match you with allies and opponents of the appropriate skill."
+ [02:02:50 PM] <PhiX@Azeroth> FUCK THAT
+ [02:02:54 PM] <kain5@Azeroth> ok jd, I'm a tad confuzzled
+ [02:03:08 PM] <Jd[BoT]@Azeroth> i d k you kain5
+ [02:03:09 PM] <Jd[BoT]@Azeroth> i hate u
+ [02:03:17 PM] -- kain5@Azeroth has left the channel.
+ [02:03:21 PM] -- hakr_@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [02:03:21 PM] -- Stats updated: hakr_@Azeroth [0ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan LXG)
+ [02:03:24 PM] <hakr_@Azeroth> you are so difficult
+ [02:03:25 PM] <Jd[BoT]@Azeroth> hi ben
+ [02:03:32 PM] <Jd[BoT]@Azeroth> how u :]
+ [02:03:37 PM] <hakr_@Azeroth> anyway, I got the proxy to login
+ [02:03:45 PM] <hakr_@Azeroth> but it just disconnects after
+ [02:04:21 PM] -- Ninja-Scout@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan NNN)
+ [02:04:29 PM] -- Ninja-Scout@Azeroth has left the channel.
+ [02:04:39 PM] <hakr_@Azeroth> any insight?
+ [02:04:49 PM] <Jd[BoT]@Azeroth> i sometimes use davids ip as a proxy
+ [02:04:54 PM] <Jd[BoT]@Azeroth> cause im naughty like that
+ [02:04:55 PM] <Jd[BoT]@Azeroth> ;)
+ [02:05:21 PM] <VBScript@Azeroth> what port jd?
+ [02:05:39 PM] <Jd[BoT]@Azeroth> ...
+ [02:05:43 PM] <Jd[BoT]@Azeroth> why would i tell you?
+ [02:05:51 PM] <VBScript@Azeroth> so i dont have to look
+ [02:05:55 PM] <Joe[BoT]@Azeroth> <3 vagina
+ [02:05:59 PM] <Jd[BoT]@Azeroth> rofl
+ [02:06:02 PM] <Joe[BoT]@Azeroth> woah hey guys sup?
+ [02:06:14 PM] <Jd[BoT]@Azeroth> you can try  6112 for socks4  or  1080 for socks5
+ [02:06:21 PM] <Jd[BoT]@Azeroth> 1080 works sometimes for me
+ [02:07:43 PM] -- hakr_@Azeroth has left the channel.
+ [02:07:59 PM] <VBScript@Azeroth .: The original title for Alien vs. Predator was Alien and Predator vs Chuck Norris. The film was cancelled shortly after going into preproduction. No one would pay nine dollars to see a movie fourteen [more]>
+ [02:08:08 PM] <VBScript@Azeroth seconds long. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [02:08:10 PM] <VBScript@Azeroth [Food for Thought] Before a war military science seems a real science, like astronomy; but after a war it seems more like astrology.    -Rebecca West>
+ [02:08:14 PM] -- hakr_@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan LXG)
+ [02:08:31 PM] <Jd[BoT]@Azeroth> whats a good site to look on
+ [02:08:34 PM] <Jd[BoT]@Azeroth> for fonts
+ [02:08:36 PM] <Jd[BoT]@Azeroth> "free"
+ [02:08:43 PM] <Jd[BoT]@Azeroth> google sucks balls on this matter.
+ [02:08:49 PM] <hakr_@Azeroth> if I find you a site
+ [02:08:53 PM] <hakr_@Azeroth> will you help me/
+ [02:09:02 PM] <Jd[BoT]@Azeroth> doubtful but possible.
+ [02:09:37 PM] <Jd[BoT]@Azeroth> nvm
+ [02:09:39 PM] <Jd[BoT]@Azeroth> found 1
+ [02:09:40 PM] <hakr_@Azeroth> http://www.abstractfonts.com/
+ [02:09:43 PM] <hakr_@Azeroth> damn
+ [02:09:45 PM] <hakr_@Azeroth> you
+ [02:09:49 PM] <Jd[BoT]@Azeroth> :P
+ [02:09:59 PM] <Alendar> http://dafont.com
+ [02:10:04 PM] <hakr_@Azeroth> http://www.1001freefonts.com/ works too
+ [02:10:10 PM] <Jd[BoT]@Azeroth> alendar
+ [02:10:13 PM] <Jd[BoT]@Azeroth> i sometimes
+ [02:10:15 PM] <Jd[BoT]@Azeroth> use that site
+ [02:10:57 PM] -- hakr_@Azeroth has left the channel.
+ [02:11:00 PM] <Jd[BoT]@Azeroth> i gotta find some good fonts to add to my photoshop
+ [02:11:37 PM] -- hakr_@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan LXG)
+ [02:15:25 PM] -- PhiX@Azeroth has left the channel.
+ [02:18:25 PM] <Jd[BoT]@Azeroth> fuckin damn it
+ [02:18:30 PM] <Jd[BoT]@Azeroth> C:\WINDOWS\Fonts  froze -.-
+ [02:19:10 PM] -- VBScript@Azeroth has left the channel.
+ [02:19:58 PM] <Jd[BoT]@Azeroth> hmm
+ [02:20:02 PM] -- VBScript@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [02:20:02 PM] -- VBScript@Azeroth has acquired ops.
+ [02:22:28 PM] -- hakr_@Azeroth has left the channel.
+ [02:22:31 PM] -- HaKr_@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan LXG)
+ [02:22:33 PM] -- HaKr_@Azeroth has left the channel.
+ [02:23:17 PM] <VBScript@Azeroth .: [8:26:53 PM] [BloC] <EasT.iS.NewB> NICE GHETTO COMP THEM :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [02:23:58 PM] <Jd[BoT]@Azeroth> mm
+ [02:24:01 PM] <Jd[BoT]@Azeroth> there we go
+ [02:27:30 PM] <Alendar is currently: Worried Current Project: Unknown My website: http://alendar.net :->
+ [02:29:24 PM] <VBScript@Azeroth [Food for Thought] We read frequently if unknowingly, in quest of a mind more original than our own.    -Harold Bloom>
+ [02:29:32 PM] <Jd[BoT]@Azeroth> alendar
+ [02:29:34 PM] -- kain5@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [02:29:34 PM] -- Stats updated: kain5@Azeroth [0ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [02:29:36 PM] -- kain5@Azeroth has left the channel.
+ [02:29:52 PM] <Jd[BoT]@Azeroth> redoing teh banner ;)
+ [02:30:00 PM] <Jd[BoT]@Azeroth> with a better looksz
+ [02:35:28 PM] <Jd[BoT]@Azeroth> hmm
+ [02:36:08 PM] -- PluGinS@Azeroth [15ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [02:36:13 PM] <Jd[BoT]@Azeroth> \\-next
+ [02:36:14 PM] -- Alendar has left the channel.
+ [02:36:14 PM] <PluGinS@Azeroth> Skipped forwards.
+ [02:36:14 PM] -- Alendar [31ms] has joined the channel using Diablo II (Open Character).
+ [02:36:22 PM] <Jd[BoT]@Azeroth> \\-next
+ [02:36:24 PM] <PluGinS@Azeroth> Skipped forwards.
+ [02:36:29 PM] <Jd[BoT]@Azeroth> mm
+ [02:36:32 PM] <Jd[BoT]@Azeroth> \\-mp3
+ [02:36:33 PM] <PluGinS@Azeroth> Current MP3 [52/55]: Nile - Sacrifice Unto Sebek (00:10/03:02)
+ [02:36:49 PM] -- HaKr_@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan LXG)
+ [02:36:50 PM] <Jd[BoT]@Azeroth> kick azz song rit dur
+ [02:36:56 PM] <Alendar> Eric[nK]@Azeroth
+ [02:38:33 PM] <VBScript@Azeroth .: The phrase 'break a leg' was originally coined by Chuck Norris's co-stars in Walker, Texas Ranger as a good luck charm, indicating that a broken leg might be the worst extent of their injuries. This [more]>
+ [02:38:40 PM] <VBScript@Azeroth never proved to be the case. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [02:40:16 PM] -- HaKr_@Azeroth has left the channel.
+ [02:40:24 PM] <Alendar> Current MP3 [81/82]: Three Days Grace - Riot (00:03/03:27)
+ [02:43:11 PM] -- Alendar has left the channel.
+ [02:43:54 PM] -- PhiX@Azeroth [203ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 1, icon tier Random, peon icon, in Clan PhiX)
+ [02:43:59 PM] -- PhiX@Azeroth has left the channel.
+ [02:46:47 PM] <Jd[BoT]@Azeroth> \\-next
+ [02:46:47 PM] <PluGinS@Azeroth> Skipped forwards.
+ [02:47:04 PM] <Jd[BoT]@Azeroth> \\-play Breath
+ [02:47:04 PM] <PluGinS@Azeroth> Playback started.
+ [02:48:38 PM] <Jd[BoT]@Azeroth> \\-next
+ [02:48:38 PM] <PluGinS@Azeroth> Skipped forwards.
+ [02:48:53 PM] <Jd[BoT]@Azeroth> \\-play slaves
+ [02:48:54 PM] <PluGinS@Azeroth> Playback started.
+ [02:50:22 PM] <Pyro6@Azeroth> \\-play with me
+ [02:50:23 PM] <PluGinS@Azeroth> Playback started.
+ [02:50:32 PM] <Jd[BoT]@Azeroth> ...
+ [02:50:35 PM] <Jd[BoT]@Azeroth> you cock head
+ [02:50:40 PM] <Jd[BoT]@Azeroth> i was like wtf
+ [02:50:44 PM] <VBScript@Azeroth [Food for Thought] Humor is our way of defending ourselves from life's absurdities by thinking absurdly about them.    -Lewis Mumford>
+ [02:50:48 PM] <Jd[BoT]@Azeroth> \\-play slaves
+ [02:50:48 PM] <PluGinS@Azeroth> Playback started.
+ [02:51:15 PM] -- Alendar [31ms] has joined the channel using Diablo II (Open Character).
+ [02:52:30 PM] <Pyro6@Azeroth> #uptime
+ [02:52:31 PM] <Pyro[BoT]@Azeroth> System uptime 32 days, 0 hours, 19 minutes and 39 seconds, connection uptime 0 days, 5 hours, 10 minutes and 9 seconds.
+ [02:52:34 PM] <Pyro6@Azeroth> woot
+ [02:53:14 PM] <Jd[BoT]@Azeroth> \\-uptime
+ [02:53:19 PM] <PluGinS@Azeroth> System uptime 1 day, 5 hours, 4 minutes and 0 seconds, connection uptime 0 days, 0 hours, 17 minutes and 5 seconds.
+ [02:53:23 PM] <Jd[BoT]@Azeroth> ew:(
+ [02:53:33 PM] <Jd[BoT]@Azeroth> eh gotta let the computer rest sometime though i guess
+ [02:53:47 PM] <VBScript@Azeroth .: Chuck norris invented the corndog. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [02:55:49 PM] -- mynameisnotjack has left the channel.
+ [02:55:49 PM] -- IdleBoT@Azeroth has left the channel.
+ [02:55:49 PM] -- FreeSlaves has left the channel.
+ [02:57:38 PM] <Alendar is currently: Worried Current Project: Unknown My website: http://alendar.net :->
+ [02:58:59 PM] <Alendar> Anyone know where Connection is and when he will be back?
+ [02:59:13 PM] <PhiX> kneeing in fron of me and no
+ [02:59:20 PM] <PhiX> front*
+ [03:08:59 PM] <VBScript@Azeroth .: Chuck Norris does not love Raymond. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [03:12:06 PM] <VBScript@Azeroth [Food for Thought] Thought: Why does man kill? He kills for food. And not only food: frequently there must be a beverage.    -Woody Allen>
+ [03:18:32 PM] <VBScript@Azeroth> fuck you phix
+ [03:19:10 PM] <Pyro6@Azeroth> o.0
+ [03:24:16 PM] <VBScript@Azeroth .: Think of a hot woman. Chuck Norris did her. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [03:24:44 PM] <Alendar> Umm
+ [03:24:47 PM] <Alendar> Hmm
+ [03:24:49 PM] <Alendar> http://iam8up.com/news.php?item.63
+ [03:27:40 PM] <Alendar is currently: Worried Current Project: Unknown My website: http://alendar.net :->
+ [03:28:31 PM] -- connection_lost@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Undead, crypt fiend icon, in Clan BoT)
+ [03:28:33 PM] -- ifndef@Azeroth [78ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon)
+ [03:28:46 PM] <Alendar> Connection
+ [03:29:05 PM] <connection_lost@Azeroth> ?
+ [03:29:20 PM] -- ifndef-tech@Azeroth [140ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [03:29:45 PM] <connection_lost@Azeroth> what
+ [03:32:59 PM] <Alendar> Can you help me with my IRC client tonight?
+ [03:33:15 PM] <connection_lost@Azeroth> i guess
+ [03:33:24 PM] <VBScript@Azeroth [Food for Thought] Knowledge comes, but wisdom lingers.    -Alfred Lord Tennyson>
+ [03:33:41 PM] <Pyro6@Azeroth> wow
+ [03:33:49 PM] <Pyro6@Azeroth> .nets webclient can get data from google
+ [03:35:50 PM] <connection_lost@Azeroth> yes
+ [03:35:56 PM] <connection_lost@Azeroth> it uses internet explorerish things
+ [03:36:30 PM] <Pyro6@Azeroth> http://www.google.com/trends?q=%22anal+fisting%22
+ [03:36:31 PM] <Pyro6@Azeroth> wtf
+ [03:36:50 PM] <connection_lost@Azeroth> lol
+ [03:37:14 PM] <LuC1Fr[BoT]@Azeroth> czech wins that one  
+ [03:38:24 PM] <Pyro6@Azeroth> http://www.google.com/trends?q=%22anal+fisting%22&geo=deu&sa=N lol germany
+ [03:38:37 PM] <Pyro6@Azeroth> its like they got really interested
+ [03:38:46 PM] <Pyro6@Azeroth> then right before 2008 were like ...
+ [03:39:06 PM] <LuC1Fr[BoT]@Azeroth> yeah
+ [03:39:12 PM] <LuC1Fr[BoT]@Azeroth> like "ok, fuck this"
+ [03:39:24 PM] <LuC1Fr[BoT]@Azeroth> then 2008 "W00t AnAL FiSTinG!!11"
+ [03:39:31 PM] <VBScript@Azeroth .: Chuck Norris lost both his legs in a car accident....and still managed to walk it off. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [03:40:03 PM] <Pyro6@Azeroth> http://www.google.com/trends?q=%22gay+porn%22&date=all&geo=zaf&ctab=0&ctab=0&sa=N
+ [03:40:05 PM] <Pyro6@Azeroth> wtf...
+ [03:40:11 PM] <Pyro6@Azeroth> south africa..
+ [03:41:01 PM] <LuC1Fr[BoT]@Azeroth> http://www.google.com/trends?q=%22battle.net%22&ctab=0
+ [03:41:02 PM] <LuC1Fr[BoT]@Azeroth> LOOK
+ [03:41:07 PM] <LuC1Fr[BoT]@Azeroth> ITS OFFICIAL
+ [03:41:11 PM] <LuC1Fr[BoT]@Azeroth> BATTLE.NET IS DIEING
+ [03:41:22 PM] <Pyro6@Azeroth> http://www.google.com/trends?q=%22stealthbot%22&ctab=0&geo=all&date=all&sort=0
+ [03:41:25 PM] <Pyro6@Azeroth> lol.
+ [03:42:22 PM] <LuC1Fr[BoT]@Azeroth> how ironic
+ [03:42:30 PM] <LuC1Fr[BoT]@Azeroth> the peaks you see for battle.net are summer months
+ [03:43:18 PM] <LuC1Fr[BoT]@Azeroth> at least "test" is paring fairly well
+ [03:43:31 PM] -- connection_lost@Azeroth has left the channel.
+ [03:44:06 PM] <Pyro6@Azeroth> http://www.google.com/trends?q=%22battle.net%22%2C+%22gay+porn%22&ctab=0&geo=all&date=all&sort=0
+ [03:44:13 PM] <Pyro6@Azeroth> gay porn is more popular than battle.net!
+ [03:44:57 PM] -- IdleBoT@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:44:57 PM] -- IdleBoT@Azeroth has acquired ops.
+ [03:45:14 PM] <Pyro6@Azeroth> and it seems that more people search for gay porn than nude girls... hmmm
+ [03:45:26 PM] -- mynameisnotjack [78ms] has joined the channel using Starcraft Brood War (0 wins).
+ [03:45:33 PM] <IdleBoT@Azeroth> says who
+ [03:45:54 PM] <Pyro6@Azeroth> http://www.google.com/trends?q=%22nude+girls%22%2C+%22gay+porn%22&ctab=0&geo=all&date=all&sort=0
+ [03:46:44 PM] <Pyro6@Azeroth> what the fuck is with south africa and gay porn
+ [03:46:46 PM] <Pyro6@Azeroth> lol
+ [03:47:06 PM] <IdleBoT@Azeroth> http://www.google.com/trends?q=%22girls%22%2C+%22guys%22&ctab=0&geo=all&date=all&sort=0
+ [03:47:30 PM] <IdleBoT@Azeroth> http://www.google.com/trends?q=%22gay+guys%22&ctab=0&geo=all&date=all&sort=0 new zealand (HAHA DARKMAGE) is like
+ [03:47:31 PM] <IdleBoT@Azeroth> max
+ [03:47:42 PM] <Pyro6@Azeroth> LOL
+ [03:48:14 PM] <IdleBoT@Azeroth> http://www.google.com/trends?q=%22gay+porn%22%2C+%22nude+girls%22&ctab=0&geo=all&date=all&sort=0
+ [03:48:20 PM] <IdleBoT@Azeroth> look at irelands stats
+ [03:48:29 PM] <IdleBoT@Azeroth> nude girls is so low
+ [03:48:33 PM] <IdleBoT@Azeroth> but gay pron is like
+ [03:48:35 PM] <IdleBoT@Azeroth> woah
+ [03:49:01 PM] <IdleBoT@Azeroth> http://www.google.com/trends?q=%22gay+porn%22%2C+%22nude+girls%22&ctab=0&geo=all&date=all&sort=1
+ [03:49:07 PM] <IdleBoT@Azeroth> wow pakistan owns, no gay porn!
+ [03:49:46 PM] <IdleBoT@Azeroth> pyro
+ [03:49:55 PM] <IdleBoT@Azeroth> is there a way to check if channel join is by force or not?
+ [03:50:05 PM] <IdleBoT@Azeroth> ACTUALLY!
+ [03:50:27 PM] <Pyro6@Azeroth> in sb or for javabot?
+ [03:52:51 PM] <IdleBoT@Azeroth> in javabot
+ [03:52:53 PM] <IdleBoT@Azeroth> which is basically
+ [03:52:57 PM] <IdleBoT@Azeroth> just making a bot
+ [03:53:06 PM] <IdleBoT@Azeroth> because in javabot you can use any fucking thing you want
+ [03:53:12 PM] <Pyro6@Azeroth> well
+ [03:53:48 PM] <Pyro6@Azeroth> normal joins are done with SID_CHATCOMMAND
+ [03:54:03 PM] <Pyro6@Azeroth> forced joins are done with SID_JOINCHANNEL
+ [03:54:13 PM] <IdleBoT@Azeroth> like, a kick is a force join
+ [03:54:15 PM] <IdleBoT@Azeroth> right?
+ [03:54:21 PM] <Pyro6@Azeroth> i dont know
+ [03:54:28 PM] <Pyro6@Azeroth> i never thought about that really
+ [03:54:37 PM] <Pyro6@Azeroth> but you dont have to send a packet when you get kicked
+ [03:54:40 PM] <Pyro6@Azeroth> so i dont think so
+ [03:54:47 PM] <VBScript@Azeroth .: Chuck Norris is allowed to talk about Fight Club. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [03:54:49 PM] <VBScript@Azeroth [Food for Thought] Only the shallow know themselves.    -Oscar Wilde Phrases and Philosophies for the Use of the Young, 1882>
+ [03:57:13 PM] <IdleBoT@Azeroth> so "ChannelJoin" sub in stealthbot is CHATCOMMAND?
+ [03:57:23 PM] <Pyro6@Azeroth> um
+ [03:57:30 PM] <Pyro6@Azeroth> no
+ [03:57:41 PM] <IdleBoT@Azeroth> joinchannel?
+ [03:57:42 PM] <Alendar is currently: Worried Current Project: Unknown My website: http://alendar.net :->
+ [03:58:08 PM] <Pyro6@Azeroth> as far as i know, the ChannelJoin event in stealthbot is fired when you receive EID_JOIN from SID_CHATEVENT
+ [03:58:12 PM] <Pyro6@Azeroth> i mean
+ [03:58:15 PM] <Pyro6@Azeroth> EID_CHANNEL
+ [04:01:16 PM] -- ClanGnome@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan Spht)
+ [04:01:20 PM] -- ClanGnome@Azeroth has left the channel.
+ [04:01:20 PM] ClanGnome was kicked out of the channel by PhiX[BoT] ((-(-.(-.-).-)-)).
+ [04:01:32 PM] -- FreeSlaves [78ms] has joined the channel using Diablo II (Open Character).
+ [04:03:57 PM] <IdleBoT@Azeroth> FUCK YOU FREE SLAVES
+ [04:03:57 PM] -- ifndef@Azeroth has left the channel.
+ [04:04:01 PM] FreeSlaves was kicked out of the channel by IdleBoT (free*).
+ [04:04:01 PM] -- FreeSlaves has left the channel.
+ [04:04:01 PM] -- FreeSlaves [78ms] has joined the channel using Diablo II (Open Character).
+ [04:04:05 PM] -- ifndef-tech@Azeroth has left the channel.
+ [04:04:14 PM] <IdleBoT@Azeroth> woah im suprised that worked!
+ [04:04:35 PM] <IdleBoT@Azeroth> that was easier than i thought
+ [04:05:01 PM] FreeSlaves was kicked out of the channel by IdleBoT (free*).
+ [04:05:01 PM] -- FreeSlaves has left the channel.
+ [04:05:02 PM] -- FreeSlaves [78ms] has joined the channel using Diablo II (Open Character).
+ [04:05:08 PM] FreeSlaves was banned by IdleBoT (free*).
+ [04:05:08 PM] -- FreeSlaves has left the channel.
+ [04:05:15 PM] <IdleBoT@Azeroth> wewt
+ [04:05:58 PM] <IdleBoT@Azeroth> pyro
+ [04:06:03 PM] <Pyro6@Azeroth> ?
+ [04:06:10 PM] <IdleBoT@Azeroth> you got a test event plugin
+ [04:06:17 PM] <Pyro6@Azeroth> yes
+ [04:06:24 PM] <IdleBoT@Azeroth> www.rafb.net/paste plz
+ [04:07:38 PM] <Pyro6@Azeroth> http://rafb.net/p/IptdB225.html
+ [04:07:53 PM] <IdleBoT@Azeroth> thx
+ [04:08:36 PM] <IdleBoT@Azeroth> hmm
+ [04:08:52 PM] <IdleBoT@Azeroth> wtf /unban free* doesn't send anything at all...
+ [04:09:06 PM] <IdleBoT@Azeroth> #unban free*
+ [04:09:07 PM] <Pyro6@Azeroth> o.o
+ [04:09:23 PM] <IdleBoT@Azeroth> stupid
+ [04:09:25 PM] <Pyro6@Azeroth> haha
+ [04:09:31 PM] <Alendar is currently: Worried Current Project: Unknown My website: http://alendar.net :->
+ [04:09:33 PM] <Pyro6@Azeroth> report it
+ [04:09:36 PM] <Alendar> Test
+ [04:09:38 PM] FreeSlaves was unbanned by IdleBoT.
+ [04:09:44 PM] <IdleBoT@Azeroth> i thought someone already did =/
+ [04:10:04 PM] <VBScript@Azeroth .: Google won't search for Chuck Norris because it knows you don't find Chuck Norris, he finds you. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [04:10:12 PM] -- Alendar has left the channel.
+ [04:10:15 PM] -- Alendar [16ms] has joined the channel using Diablo II (Open Character).
+ [04:10:33 PM] <Pyro6@Azeroth> http://iam8up.com/news.php?item.14 LOL
+ [04:10:52 PM] -- kain2@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [04:10:52 PM] -- Stats updated: kain2@Azeroth [0ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [04:10:53 PM] -- kain2@Azeroth has left the channel.
+ [04:11:02 PM] <IdleBoT@Azeroth> ?
+ [04:11:11 PM] <IdleBoT@Azeroth> that just looks like a cheap copy of sb.net's skin
+ [04:11:24 PM] <IdleBoT@Azeroth> do i have to be logged in it to see it?
+ [04:11:29 PM] <Pyro6@Azeroth> no..
+ [04:11:48 PM] <IdleBoT@Azeroth> is it flash or anything like that?
+ [04:11:55 PM] <Pyro6@Azeroth> probably
+ [04:12:17 PM] <IdleBoT@Azeroth> ok thats why i cant see it then!
+ [04:12:26 PM] <Pyro6@Azeroth> well its funny as hell
+ [04:12:52 PM] -- HaKr_@Azeroth [62ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 3, icon tier Night Elves, peon icon, in Clan LXG)
+ [04:12:53 PM] <HaKr_@Azeroth> hey
+ [04:13:01 PM] <Pyro6@Azeroth> hi
+ [04:13:07 PM] <HaKr_@Azeroth> does anyone know a fast way to check cd keys
+ [04:13:24 PM] <HaKr_@Azeroth> brb
+ [04:16:15 PM] <VBScript@Azeroth [Food for Thought] People make one happy, not houses? I do not think so. Houses are more to be trusted than people.    -Elizabeth Aston Mr. Darcy's Daughters, 2003>
+ [04:16:42 PM] <Alendar> http://iam8up.com/news.php?item.13
+ [04:17:18 PM] <IdleBoT@Azeroth> rofl pyro
+ [04:17:21 PM] <IdleBoT@Azeroth> thats funny
+ [04:17:21 PM] -- connection_lost@Azeroth [62ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Undead, crypt fiend icon, in Clan BoT)
+ [04:17:32 PM] -- connection_lost@Azeroth has left the channel.
+ [04:17:58 PM] -- FreeSlaves [78ms] has joined the channel using Diablo II (Open Character).
+ [04:18:19 PM] FreeSlaves was kicked out of the channel by IdleBoT (free*).
+ [04:18:19 PM] -- FreeSlaves has left the channel.
+ [04:18:20 PM] -- FreeSlaves [78ms] has joined the channel using Diablo II (Open Character).
+ [04:19:13 PM] <HaKr_@Azeroth> david, you there?
+ [04:19:29 PM] -- kain1@Azeroth [0ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [04:19:31 PM] <IdleBoT@Azeroth> yes
+ [04:19:44 PM] <Pyro6@Azeroth> !?!?!?!?!?!?!?!
+ [04:19:52 PM] <kain1@Azeroth> can you help me make a clan?
+ [04:19:56 PM] <kain1@Azeroth is hakr>
+ [04:20:05 PM] <kain1@Azeroth> I'd love you forever
+ [04:20:09 PM] <Pyro6@Azeroth> eh
+ [04:20:11 PM] <Pyro6@Azeroth> no =\
+ [04:20:28 PM] <kain1@Azeroth> or point me in the direction of unmuted keys?
+ [04:21:47 PM] <IdleBoT@Azeroth> yarly!
+ [04:22:00 PM] <IdleBoT@Azeroth>  /ban mynameisnotjack@USEast
+ [04:22:02 PM] <IdleBoT@Azeroth> safelisted
+ [04:22:06 PM] <IdleBoT@Azeroth> thats so annoying
+ [04:22:10 PM] <IdleBoT@Azeroth> it didnt use it do that
+ [04:22:19 PM] -- mynameisnotjack has left the channel.
+ [04:22:19 PM] mynameisnotjack was banned by IdleBoT (hi ).
+ [04:22:22 PM] <Pyro6@Azeroth> http://pyro.no-ip.biz/bnet/wckeys.txt
+ [04:22:29 PM] <IdleBoT@Azeroth> now i have to actually use ','
+ [04:22:33 PM] <Pyro6@Azeroth> if it has a marking next to it its muted or something
+ [04:22:44 PM] <Pyro6@Azeroth> if it has a name thats who its being used by
+ [04:22:45 PM] <IdleBoT@Azeroth> whos kain?
+ [04:22:46 PM] <Pyro6@Azeroth> most of the time
+ [04:22:53 PM] <Pyro6@Azeroth> and if it says "bot" next to its
+ [04:22:56 PM] <Pyro6@Azeroth> *it
+ [04:23:00 PM] <Pyro6@Azeroth> its a bot thats like... never offline
+ [04:23:42 PM] <kain1@Azeroth> thanks
+ [04:23:44 PM] <kain1@Azeroth> kain is hakr
+ [04:23:58 PM] <Pyro6@Azeroth> and you can use muted keys to make clans
+ [04:24:44 PM] <Alendar> http://www.youtube.com/watch?v=wLKP4BP-n6A
+ [04:25:01 PM] <kain1@Azeroth> I know, but the muted keys I was using
+ [04:25:11 PM] <kain1@Azeroth> wouldnt get the invite within 30 seconds lol
+ [04:25:17 PM] <IdleBoT@Azeroth> lol@mythbusterse
+ [04:25:24 PM] <VBScript@Azeroth .: Nobody doesn't like Sara Lee. Except Chuck Norris. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [04:25:25 PM] <IdleBoT@Azeroth> "how'd you get a radio in jail!?" "i was good.."
+ [04:25:28 PM] <IdleBoT@Azeroth> fucking cheater
+ [04:31:49 PM] <kain1@Azeroth> yus! got one
+ [04:32:04 PM] <Pyro6@Azeroth> give it to me when your done ;p
+ [04:32:38 PM] <kain1@Azeroth> k
+ [04:32:49 PM] <kain1@Azeroth> hey can I use the hate-vector key?
+ [04:33:04 PM] <Pyro6@Azeroth> sure
+ [04:33:10 PM] <Pyro6@Azeroth> opened
+ [04:33:21 PM] kain4#2 was banned by Alendar[BoT] (Shitlisted).
+ [04:33:39 PM] <kain1@Azeroth> thanks
+ [04:33:51 PM] <kain1@Azeroth> it was the E4F6J one right?
+ [04:34:06 PM] <Pyro6@Azeroth> yea
+ [04:34:11 PM] <kain1@Azeroth> k
+ [04:34:29 PM] -- HaKr_@Azeroth has left the channel.
+ [04:34:40 PM] -- kain1@Azeroth has left the channel.
+ [04:36:23 PM] <Pyro6@Azeroth> yay i dont have to go to school tomorrow
+ [04:36:35 PM] <IdleBoT@Azeroth> fuck you and your spring break
+ [04:36:49 PM] <Pyro6@Azeroth> im gonna be lonely
+ [04:36:58 PM] <Pyro6@Azeroth> cuz like nobody else has their spring break this week
+ [04:37:05 PM] <IdleBoT@Azeroth> LOL
+ [04:37:11 PM] <IdleBoT@Azeroth> i was playing 20 questions with this
+ [04:37:13 PM] <IdleBoT@Azeroth> toy thingy
+ [04:37:21 PM] <IdleBoT@Azeroth> and the object i was thniking of was 'ham'
+ [04:37:31 PM] <IdleBoT@Azeroth> and the object it guessed was 'piggybank'
+ [04:37:33 PM] <IdleBoT@Azeroth> does that count?
+ [04:37:37 PM] <VBScript@Azeroth [Food for Thought] Oh for a book and a shady nook...    -John Wilson>
+ [04:38:24 PM] Chief[DMWU] was banned by IdleBoT.
+ [04:38:26 PM] Nick[BuM] was banned by IdleBoT.
+ [04:38:35 PM] <IdleBoT@Azeroth> whats the list to show all banned users
+ [04:38:41 PM] <Pyro6@Azeroth> ./banned
+ [04:38:45 PM] <IdleBoT@Azeroth> arg
+ [04:38:47 PM] <Pyro6@Azeroth> User(s) banned: kain4#2, mynameisnotjack, Chief[DMWU], Nick[BuM]
+ [04:38:56 PM] <IdleBoT@Azeroth> hmm "mynameisnotjack" is still on my banlist
+ [04:38:58 PM] <IdleBoT@Azeroth> @useast
+ [04:39:07 PM] <IdleBoT@Azeroth> thats because es still banned
+ [04:39:08 PM] <IdleBoT@Azeroth> duh
+ [04:39:40 PM] <Alendar is currently: Worried Current Project: Unknown My website: http://alendar.net :->
+ [04:39:52 PM] mynameisnotjack was unbanned by IdleBoT.
+ [04:40:00 PM] -- mynameisnotjack [78ms] has joined the channel using Starcraft Brood War (0 wins).
+ [04:40:41 PM] <VBScript@Azeroth .: If you get roundhouse kicked in the face by Chuck Norris in your dream, you DIE! :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [04:49:37 PM] kain5#2 was banned by Alendar[BoT] (Shitlisted).
+ [04:53:12 PM] <Jd[BoT]@Azeroth> hmm
+ [04:53:56 PM] -- kain2@Azeroth [0ms] has joined the channel using Warcraft III: The Frozen Throne.
+ [04:53:56 PM] -- Stats updated: kain2@Azeroth [0ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon)
+ [04:54:07 PM] -- kain2@Azeroth has left the channel.
+ [04:55:56 PM] <VBScript@Azeroth .: Chuck Norris discovered a new theory of relativity involving multiple universes in which Chuck Norris is even more badass than in this one. When it was discovered by Albert Einstein and made public, [more]>
+ [04:56:04 PM] <VBScript@Azeroth Chuck Norris roundhouse-kicked him in the face. We know Albert Einstein today as Stephen Hawking. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [04:57:13 PM] <IdleBoT@Azeroth> is idiat on aim?
+ [04:57:27 PM] <Pyro6@Azeroth> no
+ [04:59:00 PM] <VBScript@Azeroth [Food for Thought] I stopped believing in Santa Claus when my mother took me to see him in a department store, and he asked for my autograph.    -Shirley Temple>
+ [05:00:03 PM] -- FreeSlaves has left the channel.
+ [05:01:03 PM] -- FreeSlaves [62ms] has joined the channel using Diablo II (Open Character).
+ [05:01:14 PM] <IdleBoT@Azeroth> FreeSlaves: trigger
+ [05:01:14 PM] <FreeSlaves> current trigger: trigger
+ [05:01:14 PM] <FreeSlaves> current trigger: trigger
+ [05:01:18 PM] <IdleBoT@Azeroth> FUCK
+ [05:01:39 PM] <IdleBoT@Azeroth> triggerroll 50
+ [05:02:12 PM] -- FreeSlaves has left the channel.
+ [05:02:20 PM] -- FreeSlaves [62ms] has joined the channel using Diablo II (Open Character).
+ [05:02:26 PM] <IdleBoT@Azeroth> triggerroll 50
+ [05:06:44 PM] -- FreeSlaves has left the channel.
+ [05:06:50 PM] -- FreeSlaves [63ms] has joined the channel using Diablo II (Open Character).
+ [05:06:54 PM] <IdleBoT@Azeroth> triggerroll
+ [05:07:09 PM] <IdleBoT@Azeroth> triggerwhoami
+ [05:07:09 PM] <FreeSlaves> You were found in group "admin".
+ [05:07:17 PM] <IdleBoT@Azeroth> FreeSlaves: roll
+ [05:07:21 PM] <Pyro6@Azeroth> triggertrigger
+ [05:07:25 PM] <Pyro6@Azeroth> triggerwhoami
+ [05:07:27 PM] <Pyro6@Azeroth> hm
+ [05:07:32 PM] <IdleBoT@Azeroth> triggersetuser pyro6 admin
+ [05:07:32 PM] <FreeSlaves> User successfully added
+ [05:07:40 PM] <IdleBoT@Azeroth> theres only one group
+ [05:07:43 PM] <IdleBoT@Azeroth> and that group is admin ;p
+ [05:08:36 PM] <IdleBoT@Azeroth> i have to learn how idiat did this cmd thing
+ [05:09:41 PM] <Alendar is currently: Worried Current Project: Unknown My website: http://alendar.net :->
+ [05:09:47 PM] <IdleBoT@Azeroth> .roll
+ [05:09:52 PM] <IdleBoT@Azeroth> triggerroll
+ [05:11:11 PM] <VBScript@Azeroth .: Before sliced bread, people used to say "Thats the greatest thing since Chuck Norris". But Chuck Norris was displeased by this. So he roundhouse kicked a loaf of bread into slices. :: StealthBot Beta [more]>
+ [05:11:11 PM] <From Pyro6@Azeroth> Your friend Pyro6 has exited Battle.net.
+ [05:11:11 PM] -- Pyro6@Azeroth has left the channel.
+ [05:11:12 PM] <IdleBoT@Azeroth> triggerhelp roll
+ [05:11:12 PM] <FreeSlaves> rolls
+ [05:11:18 PM] <VBScript@Azeroth v2.6999 Dev Release 7 :.>
+ [05:11:58 PM] <From Pyro6@Azeroth> Your friend Pyro6 has entered Battle.net.
+ [05:12:00 PM] -- Pyro6@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [05:12:06 PM] <Pyro6@Azeroth> lol noob hakr got ip banned
+ [05:12:10 PM] <Pyro6@Azeroth> while making that clan
+ [05:12:13 PM] <Pyro6@Azeroth> lost like
+ [05:12:15 PM] <IdleBoT@Azeroth> AHAHAHAHAHAH
+ [05:12:16 PM] <Pyro6@Azeroth> half the keys
+ [05:12:22 PM] kain4#2 was banned by Alendar[BoT] (Shitlisted).
+ [05:12:30 PM] <IdleBoT@Azeroth> god
+ [05:12:36 PM] <IdleBoT@Azeroth> this isnt gonna be easy with idiat offline
+ [05:14:04 PM] kain2#2 was banned by Alendar[BoT] (Shitlisted).
+ [05:15:15 PM] -- FreeSlaves has left the channel.
+ [05:15:23 PM] -- FreeSlaves [62ms] has joined the channel using Diablo II (Open Character).
+ [05:15:27 PM] <IdleBoT@Azeroth> triggerroll
+ [05:15:36 PM] <FreeSlaves> HMMM
+ [05:16:07 PM] -- FreeSlaves has left the channel.
+ [05:16:15 PM] -- FreeSlaves [63ms] has joined the channel using Diablo II (Open Character).
+ [05:16:21 PM] <IdleBoT@Azeroth> trigger roll
+ [05:16:25 PM] <IdleBoT@Azeroth> triggerroll
+ [05:16:35 PM] <IdleBoT@Azeroth> triggerroll ggg
+ [05:16:42 PM] <IdleBoT@Azeroth> triggerroll 123
+ [05:17:02 PM] <IdleBoT@Azeroth> wtf
+ [05:17:07 PM] <IdleBoT@Azeroth> that's like extremely weird
+ [05:17:10 PM] <Pyro6@Azeroth> #unban hakr_
+ [05:17:11 PM] HaKr_ was unbanned by Pyro[BoT].
+ [05:17:19 PM] -- HaKr_@Azeroth [63ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 3, icon tier Night Elves, peon icon, in Clan LXG)
+ [05:17:20 PM] -- FreeSlaves has left the channel.
+ [05:17:36 PM] -- FreeSlaves [63ms] has joined the channel using Diablo II (Open Character).
+ [05:17:40 PM] <IdleBoT@Azeroth> triggerroll
+ [05:17:47 PM] <IdleBoT@Azeroth> triggerroll 500
+ [05:18:02 PM] -- HaKr_@Azeroth has left the channel.
+ [05:18:53 PM] -- FreeSlaves has left the channel.
+ [05:19:00 PM] <Pyro6@Azeroth> ;o
+ [05:19:03 PM] -- FreeSlaves [62ms] has joined the channel using Diablo II (Open Character).
+ [05:19:04 PM] <Pyro6@Azeroth> ribose is on
+ [05:19:04 PM] -- t-dawg[BoT]@Azeroth [781ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:19:09 PM] <IdleBoT@Azeroth> lol where
+ [05:19:14 PM] <Pyro6@Azeroth> teh forumz
+ [05:19:17 PM] <IdleBoT@Azeroth> oh.
+ [05:19:22 PM] <IdleBoT@Azeroth> triggerroll 100
+ [05:19:22 PM] <t-dawg[BoT]@Azeroth> pyro <3
+ [05:19:24 PM] <IdleBoT@Azeroth> triggerroll
+ [05:19:28 PM] <Pyro6@Azeroth> <3
+ [05:19:34 PM] <Eric[nK]> hm
+ [05:19:40 PM] <IdleBoT@Azeroth> triggerroll ab
+ [05:19:41 PM] <Pyro6@Azeroth> o.o
+ [05:19:42 PM] <t-dawg[BoT]@Azeroth> eric <3
+ [05:19:45 PM] <Eric[nK]> hi
+ [05:19:47 PM] <t-dawg[BoT]@Azeroth> joe <3
+ [05:19:51 PM] <IdleBoT@Azeroth> ERIC!
+ [05:19:54 PM] <Pyro6@Azeroth> !!!
+ [05:19:56 PM] <t-dawg[BoT]@Azeroth> no you are supposed to do the "<3" back
+ [05:20:15 PM] <Eric[nK]> Jack!
+ [05:20:20 PM] <VBScript@Azeroth [Food for Thought] Normal is getting dressed in clothes that you buy for work and driving through traffic in a car that you are still paying for - in order to get to the job you need to pay for the [more]>
+ [05:20:28 PM] <Pyro6@Azeroth> eric, you sweared in the middle of a beta forum
+ [05:20:28 PM] <VBScript@Azeroth clothes and the car, and the house you leave vacant all day so you can afford to live in it.    -Ellen Goodman>
+ [05:20:33 PM] <IdleBoT@Azeroth> see, he loves me but not you tdawg
+ [05:20:36 PM] <IdleBoT@Azeroth> you're just a noob
+ [05:20:46 PM] <Eric[nK]> Did I hurt your virgin ears?
+ [05:20:50 PM] <Pyro6@Azeroth> no
+ [05:20:57 PM] <IdleBoT@Azeroth> my ears are no longer virgin
+ [05:21:06 PM] <Eric[nK]> Darn.  I was trying!
+ [05:21:06 PM] <IdleBoT@Azeroth> to penises or cuss words
+ [05:21:08 PM] <IdleBoT@Azeroth> ;(
+ [05:21:11 PM] <Pyro6@Azeroth> but you'll probably hurt sugard's when he reads tjat topic
+ [05:21:17 PM] <IdleBoT@Azeroth> D*AMN
+ [05:21:21 PM] <IdleBoT@Azeroth> err D*MN!
+ [05:21:22 PM] <Pyro6@Azeroth> *that
+ [05:21:28 PM] <Eric[nK]> haha yeah.
+ [05:21:34 PM] <t-dawg[BoT]@Azeroth> jack <3
+ [05:21:46 PM] <t-dawg[BoT]@Azeroth> ...awkward silence....
+ [05:21:51 PM] <IdleBoT@Azeroth> http://www.stealthbot.net/board/index.php?showtopic=32256 eric, why wont it unban the user
+ [05:21:53 PM] <Pyro6@Azeroth> YOU"RE GAY
+ [05:21:57 PM] <IdleBoT@Azeroth> if it shows the @useast and everything?
+ [05:23:10 PM] <t-dawg[BoT]@Azeroth> pyro stfu
+ [05:23:41 PM] -- idiat has left the channel.
+ [05:23:42 PM] -- FreeSlaves has left the channel.
+ [05:23:54 PM] <IdleBoT@Azeroth> OMG FREESLAVES IS IDIAT
+ [05:24:02 PM] <Pyro6@Azeroth> WTF
+ [05:24:03 PM] <Pyro6@Azeroth> WTF
+ [05:24:04 PM] <LuC1Fr[BoT]@Azeroth> no rly?
+ [05:24:04 PM] <Pyro6@Azeroth> WTF
+ [05:24:06 PM] <Pyro6@Azeroth> WTF
+ [05:24:11 PM] <Pyro6@Azeroth> o
+ [05:24:13 PM] -- FreeSlaves [62ms] has joined the channel using Diablo II (Open Character).
+ [05:24:18 PM] <IdleBoT@Azeroth> triggerroll 100
+ [05:24:24 PM] <IdleBoT@Azeroth> triggerroll
+ [05:24:30 PM] <IdleBoT@Azeroth> HELP ME ASSHOLE
+ [05:24:48 PM] <t-dawg[BoT]@Azeroth> STFUUUUUU
+ [05:25:27 PM] <From Pyro6@Azeroth> lawl
+ [05:26:27 PM] <VBScript@Azeroth .: Ninjas want to grow up to be just like Chuck Norris. But usually they grow up just to be killed by Chuck Norris. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [05:27:06 PM] <t-dawg[BoT]@Azeroth> is 9000 too much for a 2002 nissan sentra?
+ [05:27:55 PM] -- FreeSlaves has left the channel.
+ [05:28:11 PM] -- FreeSlaves [62ms] has joined the channel using Diablo II (Open Character).
+ [05:28:14 PM] <IdleBoT@Azeroth> triggerroll
+ [05:28:56 PM] <IdleBoT@Azeroth> triggerroll 100
+ [05:30:05 PM] -- FreeSlaves has left the channel.
+ [05:30:30 PM] -- FreeSlaves [47ms] has joined the channel using Diablo II (Open Character).
+ [05:30:35 PM] <IdleBoT@Azeroth> triggerroll 100
+ [05:30:38 PM] <IdleBoT@Azeroth> woot
+ [05:30:42 PM] <IdleBoT@Azeroth> triggerroll 200
+ [05:30:47 PM] <IdleBoT@Azeroth> triggerroll abc
+ [05:30:47 PM] <FreeSlaves> Error: invalid number
+ [05:30:57 PM] <IdleBoT@Azeroth> triggerroll
+ [05:32:01 PM] -- Condemned[GoE]@Azeroth [94ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan GoE)
+ [05:32:03 PM] <Condemned[GoE]@Azeroth> tards
+ [05:32:19 PM] <Pyro6@Azeroth> hi steph
+ [05:33:22 PM] -- FreeSlaves has left the channel.
+ [05:33:55 PM] -- Condemned[GoE]@Azeroth has left the channel.
+ [05:34:01 PM] -- FreeSlaves [78ms] has joined the channel using Diablo II (Open Character).
+ [05:34:58 PM] <IdleBoT@Azeroth> triggerroll
+ [05:35:37 PM] -- t-dawg[BoT]@Azeroth has left the channel.
+ [05:36:08 PM] -- FreeSlaves has left the channel.
+ [05:36:19 PM] <IdleBoT@Azeroth> hi freeslaves
+ [05:36:20 PM] -- FreeSlaves [62ms] has joined the channel using Diablo II (Open Character).
+ [05:36:26 PM] <IdleBoT@Azeroth> triggerroll
+ [05:36:47 PM] -- FreeSlaves has left the channel.
+ [05:36:56 PM] -- FreeSlaves [63ms] has joined the channel using Diablo II (Open Character).
+ [05:36:58 PM] <IdleBoT@Azeroth> triggerroll
+ [05:37:01 PM] <IdleBoT@Azeroth> ffs
+ [05:37:10 PM] <Pyro6@Azeroth> lol
+ [05:37:16 PM] <IdleBoT@Azeroth> too many problems
+ [05:37:26 PM] -- FreeSlaves has left the channel.
+ [05:37:30 PM] <IdleBoT@Azeroth> IT SHALL WORK THIS TIME
+ [05:37:52 PM] -- FreeSlaves [62ms] has joined the channel using Diablo II (Open Character).
+ [05:37:56 PM] <IdleBoT@Azeroth> triggerroll
+ [05:37:56 PM] <FreeSlaves> Random number (0-100): 3
+ [05:37:58 PM] <IdleBoT@Azeroth> woo
+ [05:38:00 PM] <IdleBoT@Azeroth> triggerroll
+ [05:38:00 PM] <FreeSlaves> Random number (0-100): 93
+ [05:38:07 PM] <IdleBoT@Azeroth> triggerroll 100000
+ [05:38:08 PM] <FreeSlaves> Random number (0-100000): 15590
+ [05:39:42 PM] <Alendar is currently: Worried Current Project: Unknown My website: http://alendar.net :->
+ [05:41:41 PM] <VBScript@Azeroth .: Chuck Norris wears a live rattlesnake as a condom. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [05:41:45 PM] <VBScript@Azeroth [Food for Thought] I never lecture, not because I am shy or a bad speaker, but simply because I detest the sort of people who go to lectures and don't want to meet them.    -H. L. Mencken>
+ [07:47:29 PM] [BNET] 10053 -- Connection is aborted due to timeout or other failure
+ [07:47:29 PM] [BNET] Disconnected.
+ [07:47:29 PM] [BNET] The Battle.net server has terminated your connection.
+ [07:47:29 PM] [BNET] Attempting to reconnect...
+ [07:47:30 PM] Authorizing your private-release bot, please wait.
+ [07:47:31 PM] Authorizing your private-release bot, please wait.
+ [07:47:32 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [07:47:32 PM] All connections closed.
+ [07:47:32 PM] Private usage authorized, connecting to Battle.Net.
+ [07:47:33 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [07:47:33 PM] [BNLS] Error 11004: Valid name, no data record of requested type
+ [07:47:33 PM] [BNLS] Your computer is unable to contact the BNLS servers.
+ [07:47:34 PM] Connecting your bot...
+ [07:47:34 PM] Authorizing your private-release bot, please wait.
+ [07:47:34 PM] Private usage authorized, connecting to Battle.Net.
+ [07:47:34 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [07:47:34 PM] [BNLS] Error 11004: Valid name, no data record of requested type
+ [07:47:34 PM] [BNLS] Your computer is having DNS resolution issues. No more reconnection will occur. Please try connecting again in 15-30 minutes, or contact your Internet Service Provider.
+ [10:01:58 PM] Connecting your bot...
+ [10:02:00 PM] All connections closed.
+ [10:02:00 PM] Connecting your bot...
+ [10:02:00 PM] Authorizing your private-release bot, please wait.
+ [10:02:01 PM] Private usage authorized, connecting to Battle.Net.
+ [10:02:01 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [10:02:01 PM] [BNLS] Connected!
+ [10:02:01 PM] [BNLS] Authorized!
+ [10:02:01 PM] [BNET] Connecting to the Battle.net server at 63.240.202.129...
+ [10:02:01 PM] [BNET] Connected!
+ [10:02:01 PM] [BNET] Checking version...
+ [10:02:02 PM] [BNET] Client version accepted!
+ [10:02:02 PM] [BNET] Sending login information...
+ [10:02:02 PM] [BNET] Login successful.
+ [10:02:02 PM] [CLAN] You are a Recruit in Clan BoT.
+ [10:02:02 PM] [BNET] Logged on as Eric[nK].
+ [10:02:03 PM] You are Eric[nK], using Warcraft III in Azeroth
+ [10:02:03 PM] -- Joined channel: Clan BoT --
+ [10:02:03 PM] .
+ [10:02:03 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [10:02:03 PM] Last Logon: 3/31/2008, 05:06:38 (Battle.net time)
+ [10:02:03 PM] Last Logoff: 3/31/2008, 00:57:16 (Battle.net time)
+ [10:02:03 PM] Time Logged: 86 days, 16 hours, 7 minutes and 31 seconds
+ [10:02:08 PM] An update is available for your Plugin Settings Manager. To download hit Plugins > Settings Manager
+ [10:15:52 PM] <VBScript@Azeroth .: If Chuck Norris round-house kicks you, you will die. If Chuck Norris' misses you with the round-house kick, the wind behind the kick will tear out your pancreas. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [10:18:55 PM] <VBScript@Azeroth [Food for Thought] A smile is the shortest distance between two people.    -Victor Borge>
+ [10:21:16 PM] -- ifndef-tech@Azeroth [78ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [10:21:18 PM] -- ifndef@Azeroth [78ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon)
+ [10:23:52 PM] <Pyro6@Azeroth> hm
+ [10:24:24 PM] <Pyro6@Azeroth> #promote %me
+ [10:24:25 PM] <Pyro[BoT]@Azeroth> Error: The specified user is not currently a member of this clan.
+ [10:24:52 PM] <Pyro6@Azeroth> $ci BoT
+ [10:24:53 PM] <0x5E@Azeroth> BoT [BoT] was created on December 3, 2007, has 42 members, and is currently under the command of Pyro[BoT]. Shamans: IdleBot, VBScript, Alendar[BoT], Jd[BoT], LuC1Fr[BoT]
+ [10:25:00 PM] <Pyro6@Azeroth> #promote 0x5E
+ [10:25:01 PM] <Pyro[BoT]@Azeroth> "0x5E" has been promoted to Shaman.
+ [10:25:05 PM] <Pyro6@Azeroth> mmk
+ [10:28:21 PM] -- DarkMage2303@Azeroth [1046ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 11, icon tier Human, rifleman icon, in Clan pinK)
+ [10:28:26 PM] <DarkMage2303@Azeroth> mmmmm.hi
+ [10:28:41 PM] <Pyro6@Azeroth> hi
+ [10:28:46 PM] <DarkMage2303@Azeroth> so, whats up
+ [10:29:00 PM] <Pyro6@Azeroth> about to go to bed
+ [10:29:06 PM] <DarkMage2303@Azeroth> cool
+ [10:29:19 PM] <DarkMage2303@Azeroth> I'm eating dinner =)
+ [10:30:40 PM] PingGnome was banned by IdleBoT (Hated.).
+ [10:31:04 PM] <VBScript@Azeroth .: Give a man a fish, and you will feed him for a day. Give a man anything that is better than a fish, and Chuck Norris will beat his ass and take it. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [10:33:24 PM] -- DarkMage2303@Azeroth has left the channel.
+ [10:33:49 PM] -- DarkMage2303@Azeroth [297ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 11, icon tier Human, rifleman icon, in Clan pinK)
+ [10:36:54 PM] <ifndef@Azeroth> .roulette
+ [10:36:54 PM] <ifndef-tech@Azeroth> Roulette enabled [True]
+ [10:36:55 PM] <ifndef-tech@Azeroth> Spinning wheel and accepting bets!
+ [10:37:44 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [10:37:55 PM] <ifndef-tech@Azeroth> No bets were made for this spin
+ [10:37:55 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [10:38:19 PM] <ifndef@Azeroth> .bet 10 red, 5 odd, 1 19, 1 20
+ [10:38:19 PM] <ifndef-tech@Azeroth> Bets [10 red, 5 odd, 1 19, 1 20] were accepted.
+ [10:38:44 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [10:38:55 PM] <ifndef-tech@Azeroth Wheel result [4] color [black] row [2] column [1]>
+ [10:38:56 PM] <ifndef-tech@Azeroth> House collects $17.00  and pays out $0.00
+ [10:38:57 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [10:39:13 PM] <ifndef@Azeroth> .bet 20 col2, 10 row7, 1 19
+ [10:39:13 PM] <ifndef-tech@Azeroth> Bets [20 col2, 10 row7, 1 19] were accepted.
+ [10:39:45 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [10:39:56 PM] <ifndef-tech@Azeroth Wheel result [6] color [black] row [2] column [3]>
+ [10:39:57 PM] <ifndef-tech@Azeroth> House collects $31.00  and pays out $0.00
+ [10:39:58 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [10:40:11 PM] <VBScript@Azeroth [Food for Thought] Fear is the main source of superstition, and one of the main sources of cruelty. To conquer fear is the beginning of wisdom.    -Bertrand Russell Unpopular Essays (1950), "Outline of [more]>
+ [10:40:18 PM] <VBScript@Azeroth Intellectual Rubbish">
+ [10:40:20 PM] <ifndef@Azeroth> .bet 100 odd
+ [10:40:20 PM] <ifndef-tech@Azeroth> Bet [100 odd] was accepted.
+ [10:40:46 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [10:40:57 PM] <ifndef-tech@Azeroth Wheel result [00] color [green] row [0] column [0]>
+ [10:40:58 PM] <ifndef-tech@Azeroth> House collects $100.00  and pays out $0.00
+ [10:40:59 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [10:41:34 PM] <ifndef@Azeroth> .bet 5 19, 50 black, 20 col1, 7 row3
+ [10:41:35 PM] <ifndef-tech@Azeroth> Bets [5 19, 50 black, 20 col1, 7 row3] were accepted.
+ [10:41:47 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [10:41:58 PM] <ifndef-tech@Azeroth Wheel result [2] color [black] row [1] column [2]>
+ [10:41:58 PM] <ifndef-tech@Azeroth> ifndef was paid $68.00
+ [10:41:59 PM] <ifndef-tech@Azeroth> House collects $32.00  and pays out $50.00
+ [10:42:01 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [10:42:43 PM] <ifndef@Azeroth> .bet 3 19, 3 25, 1 13, 10 col3, 50 red
+ [10:42:43 PM] <ifndef-tech@Azeroth> Bets [3 19, 3 25, 1 13, 10 col3, 50 red] were accepted.
+ [10:42:48 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [10:42:59 PM] <ifndef-tech@Azeroth Wheel result [6] color [black] row [2] column [3]>
+ [10:43:00 PM] <ifndef-tech@Azeroth> House collects $57.00  and pays out $0.00
+ [10:43:01 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [10:43:08 PM] <ifndef@Azeroth> .balance
+ [10:43:08 PM] <ifndef-tech@Azeroth> ifndef's balance is -$278.00
+ [10:43:15 PM] <ifndef@Azeroth> .bet 200 black
+ [10:43:16 PM] <ifndef-tech@Azeroth> Bet [200 black] was accepted.
+ [10:43:49 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [10:44:00 PM] <ifndef-tech@Azeroth Wheel result [16] color [red] row [6] column [1]>
+ [10:44:00 PM] <ifndef-tech@Azeroth> House collects $200.00  and pays out $0.00
+ [10:44:02 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [10:44:15 PM] <ifndef@Azeroth> .bet 10 19
+ [10:44:15 PM] <ifndef-tech@Azeroth> Bet [10 19] was accepted.
+ [10:44:49 PM] <ifndef-tech@Azeroth> No more bets for this spin...
+ [10:45:01 PM] <ifndef-tech@Azeroth Wheel result [10] color [black] row [4] column [1]>
+ [10:45:01 PM] <ifndef-tech@Azeroth> House collects $10.00  and pays out $0.00
+ [10:45:02 PM] <ifndef-tech@Azeroth Spinning wheel, place your bets!>
+ [10:45:07 PM] <ifndef@Azeroth> .roulette
+ [10:45:08 PM] <ifndef-tech@Azeroth> Roulette enabled [False]
+ [10:46:17 PM] <VBScript@Azeroth .: Most people fear the Reaper. Chuck Norris considers him "a promising Rookie". :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [10:47:08 PM] <DarkMage2303@Azeroth> hey define
+ [10:48:10 PM] <DarkMage2303@Azeroth> brb
+ [10:49:05 PM] <Joe[BoT]@Azeroth> The following statement is false. The above statement is true.
+ [10:51:22 PM] -- DarkMage2303@Azeroth has left the channel.
+ [10:51:22 PM] <ifndef@Azeroth> hey
+ [10:51:48 PM] <ifndef@Azeroth> you are calling darkmage a liar?
+ [10:52:47 PM] <ifndef@Azeroth> if the following statement is false, that means the above statement is false, which means dark mage really didn't go anywhere
+ [11:01:28 PM] <VBScript@Azeroth .: Chuck Norris describes human beings as "a sociable holder for blood and guts". :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [11:01:29 PM] <VBScript@Azeroth [Food for Thought] To be one's self, and unafraid whether right or wrong, is more admirable than the easy cowardice of surrender to conformity.    -Irving Wallace>
+ [11:10:50 PM] -- ifndef@Azeroth has left the channel.
+ [11:16:41 PM] <VBScript@Azeroth .: Chuck Norris’ house has no doors, only walls that he walks through. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [11:22:45 PM] <VBScript@Azeroth [Food for Thought] Well done is better than well said.    -Benjamin Franklin>
+ [11:31:52 PM] <VBScript@Azeroth .: Kryptonite has been found to contain trace elements of Chuck Norris roundhouse kicks to the face. This is why it is so deadly to Superman. :: StealthBot Beta v2.6999 Dev Release 7 :.>
+ [11:36:12 PM] -- ClanGnome@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan Spht)
+ [11:36:19 PM] -- ClanGnome@Azeroth has left the channel.
+ [11:44:01 PM] <VBScript@Azeroth [Food for Thought] Well, spring sprang. We've had our state of grace and our little gift of sanctioned madness, courtesy of Mother Nature. Thanks, Gaia. Much obliged. I guess it's time to get back to that [more]>
+ [11:44:09 PM] <VBScript@Azeroth daily routine of living we like to call normal.    -David Assael Northern Exposure, Spring Break, 1991>
+ [11:47:04 PM] <VBScript@Azeroth .: If, by some incredible space-time paradox, Chuck Norris would ever fight himself, he'd win. Period. :: StealthBot Beta v2.6999 Dev Release 7 :.>

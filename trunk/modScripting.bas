@@ -364,12 +364,12 @@ Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
          End If
     End If
 
-    On Error GoTo 0
     Exit Sub
 
 ReInitScriptControl_Error:
-
-    'Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ReInitScriptControl of Module modScripting"
+    frmChat.AddChat vbRed, "Error: " & Err.Description & " in ReInitScriptControl()"
+    
+    Exit Sub
 End Sub
 
 
@@ -427,8 +427,8 @@ Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCa
     Exit Function
 
 Handler:
-    Debug.Print Err.Number, Err.Description
-    
+    frmChat.AddChat vbRed, "Error: " & Err.Description & " in CallByNameEx()"
+
     Exit Function
 End Function
 

@@ -1,0 +1,346 @@
+[21:46:08 11/30/07] bot console adds : law 
+[21:50:44 11/30/07] bot console adds : bob 
+[21:50:46 11/30/07] bot console removes bob: bob
+[23:14:06 11/30/07] bot console adds : sexp b 
+[23:21:45 11/30/07] bot console adds : bob 100 B 
+[23:22:07 11/30/07] bot console adds : tom 
+[23:22:14 11/30/07] bot console modifies tom: tom 100 S
+[23:22:19 11/30/07] bot console removes tom: tom
+[23:22:22 11/30/07] bot console adds : tom 100 S
+[23:22:59 11/30/07] bot console modifies bob: bob +a
+[23:36:58 11/30/07] bot console modifies bob: bob +s
+[23:37:05 11/30/07] bot console modifies bob: bob -O
+[23:37:15 11/30/07] bot console removes bob: bob
+[23:37:19 11/30/07] bot console adds : bob 
+[23:37:24 11/30/07] bot console modifies bob: bob +d
+[23:37:27 11/30/07] bot console modifies bob: bob -d
+[23:37:34 11/30/07] bot console modifies bob: bob -a
+[23:42:06 11/30/07] bot console removes bob: bob
+[23:42:07 11/30/07] bot console removes tom: tom
+[23:42:10 11/30/07] bot console removes law: law
+[23:42:12 11/30/07] bot console removes sexp: sexp
+[23:42:14 11/30/07] bot console adds : sexp b
+[23:42:16 11/30/07] bot console removes sexp: sexp
+[23:42:22 11/30/07] bot console adds : BOB B
+[23:42:26 11/30/07] bot console modifies BOB: BOB +BO
+[23:42:32 11/30/07] bot console modifies BOB: BOB -O
+[23:42:34 11/30/07] bot console modifies BOB: BOB -o
+[10:58:43 12/02/07] Eric[nK] adds : blob b
+[14:54:12 12/02/07] bot console adds : Trinitiy 200 
+[14:54:14 12/02/07] bot console removes Trinitiy: Trinitiy
+[15:10:39 12/02/07] bot console adds : Trinity 200 
+[15:10:46 12/02/07] bot console adds : father 
+[15:10:52 12/02/07] bot console adds : son 
+[15:32:20 12/02/07] bot console adds : Trinity 200 
+[15:32:28 12/02/07] bot console adds : holyspirit 
+[15:32:54 12/02/07] bot console adds : trinity 200 
+[15:33:02 12/02/07] bot console adds : father 
+[15:33:08 12/02/07] bot console adds : son 
+[15:34:05 12/02/07] bot console removes father: father
+[15:35:07 12/02/07] bot console adds : trinity 200 
+[15:35:12 12/02/07] bot console adds : Father 
+[15:35:17 12/02/07] bot console adds : son 
+[15:35:21 12/02/07] bot console adds : HolySpirit 
+[15:41:14 12/02/07] bot console removes blob: blob
+[15:41:25 12/02/07] bot console adds : Trinity 200 
+[15:41:32 12/02/07] bot console adds : Father 
+[15:41:35 12/02/07] bot console adds : Son 
+[15:41:40 12/02/07] bot console adds : HolySpirit 
+[15:42:44 12/02/07] bot console adds : Trinity 200 
+[15:42:57 12/02/07] bot console adds : father 
+[15:43:00 12/02/07] bot console adds : son 
+[15:43:05 12/02/07] bot console adds : holyspirit 
+[15:45:02 12/02/07] bot console adds : Trinity 200 
+[15:45:08 12/02/07] bot console adds : Father 
+[15:45:12 12/02/07] bot console adds : Son 
+[15:45:16 12/02/07] bot console adds : HolySpirit 
+[15:45:19 12/02/07] bot console removes Trinity: Trinity
+[15:45:55 12/02/07] bot console adds : Trinity 200 
+[15:46:00 12/02/07] bot console adds : father 
+[15:48:16 12/02/07] bot console adds : Trinity 200 
+[15:48:21 12/02/07] bot console adds : Father 
+[15:48:23 12/02/07] bot console adds : Son 
+[15:48:26 12/02/07] bot console adds : hs 
+[15:51:08 12/02/07] bot console adds : dog 200 
+[15:51:12 12/02/07] bot console adds : cat 
+[15:51:15 12/02/07] bot console adds : bird 
+[15:51:19 12/02/07] bot console adds : sam 
+[15:53:10 12/02/07] bot console adds : dog 200 
+[15:53:15 12/02/07] bot console adds : cat 
+[15:54:47 12/02/07] bot console adds : dog 200 
+[15:54:50 12/02/07] bot console adds : cat 
+[00:07:17 12/03/07] bot console adds : bob b
+[00:07:19 12/03/07] bot console modifies bob: bob b
+[00:07:21 12/03/07] bot console adds bob: bob 2
+[00:07:39 12/03/07] bot console removes bob: bob
+[00:08:00 12/03/07] bot console adds : bob s
+[00:08:02 12/03/07] bot console modifies bob: bob s
+[00:08:26 12/03/07] bot console adds : god b
+[00:08:29 12/03/07] bot console adds god: god b
+[00:08:31 12/03/07] bot console adds god: god b
+[11:16:12 12/03/07] bot console removes bob: bob
+[11:16:14 12/03/07] bot console removes god: god
+[11:16:20 12/03/07] bot console adds : Bible 200 
+[11:16:27 12/03/07] bot console adds : Trinity 200 
+[11:16:33 12/03/07] bot console adds Bible: Bible 200 
+[11:17:50 12/03/07] bot console adds Bible: Bible 200 
+[11:17:59 12/03/07] bot console adds : Trinity 200 
+[11:18:05 12/03/07] bot console adds Trinity: Trinity 200 
+[11:18:27 12/03/07] bot console removes Trinity: Trinity
+[11:18:31 12/03/07] bot console adds : Bible 200 
+[11:18:34 12/03/07] bot console adds : Trinity 200 
+[11:18:44 12/03/07] bot console adds Trinity: Trinity 200 
+[11:18:47 12/03/07] bot console adds Trinity: Trinity 200 
+[11:19:17 12/03/07] bot console modifies Bible: Bible 200
+[11:19:45 12/03/07] bot console adds Bible: Bible 
+[11:19:59 12/03/07] bot console removes bible: bible
+[11:20:03 12/03/07] bot console removes bible: bible
+[11:20:13 12/03/07] bot console adds : Bible 200 
+[11:20:20 12/03/07] bot console adds : Trinity 200 
+[11:20:33 12/03/07] bot console adds Bible: Bible 200 
+[11:32:30 12/03/07] bot console adds : *bob* +B
+[11:32:36 12/03/07] bot console removes *bob*: *bob*
+[11:35:04 12/03/07] bot console adds : bob +B 
+[11:35:10 12/03/07] bot console removes bob: bob
+[14:06:55 12/03/07] bot console adds : PrimaryGroup 200 
+[14:07:08 12/03/07] bot console adds : SecondaryGroup 200 
+[14:43:31 12/03/07] bot console adds : TertiaryGroup 
+[14:44:00 12/03/07] bot console adds : TertiaryUser1 
+[21:07:52 12/03/07] bot console modifies Bible: Bible 100 
+[21:07:55 12/03/07] bot console adds Bible: Bible 100 
+[21:07:59 12/03/07] bot console removes bible: bible
+[21:08:02 12/03/07] bot console adds Bible: Bible 100 
+[21:08:11 12/03/07] bot console removes bible: bible
+[21:08:22 12/03/07] bot console adds : Bible S--type group
+[21:08:27 12/03/07] bot console adds Bible: Bible S 
+[21:08:32 12/03/07] bot console removes bible: bible
+[21:08:34 12/03/07] bot console adds Bible: Bible 100 
+[21:08:49 12/03/07] bot console adds : Trinity 
+[21:09:06 12/03/07] bot console adds Bible: Bible 100 
+[21:09:35 12/03/07] bot console removes bible: bible
+[21:09:39 12/03/07] bot console adds : Bible 100 
+[21:09:48 12/03/07] bot console adds : Trinity 100 
+[21:09:54 12/03/07] bot console adds Bible: Bible 100 
+[21:11:35 12/03/07] bot console removes bible: bible
+[21:11:40 12/03/07] bot console adds : Bible 100 
+[21:11:48 12/03/07] bot console adds : Trinity 
+[21:11:56 12/03/07] bot console adds Bible: Bible 
+[21:14:12 12/03/07] bot console removes bible: bible
+[21:14:17 12/03/07] bot console adds : Bible 200 
+[21:14:25 12/03/07] bot console adds : Trinity 
+[21:14:40 12/03/07] bot console adds Bible: Bible 200 
+[21:15:46 12/03/07] bot console removes bible: bible
+[21:15:58 12/03/07] bot console adds : Bible 200 
+[21:16:04 12/03/07] bot console adds : Trinity 200 
+[21:16:09 12/03/07] bot console removes Trinity: Trinity
+[21:16:16 12/03/07] bot console adds : Trinity 200 
+[21:16:38 12/03/07] bot console removes Trinity: Trinity
+[21:16:40 12/03/07] bot console removes Bible: Bible
+[21:16:45 12/03/07] bot console adds : bob S 
+[21:16:55 12/03/07] bot console adds : bob2 
+[21:17:02 12/03/07] bot console adds : bob3 
+[22:48:42 12/04/07] bot console adds : sexp +B 
+[19:49:12 12/16/07] Eric[nK]@Azeroth removes SEXP: SEXP
+[16:17:57 12/21/07] Pyro[BoT]@Azeroth adds TestUser [TestGroup (group)]: testuser 
+[17:17:33 01/18/08] Eric[nK]@Azeroth modifies Pyro[BoT]@Azeroth: Pyro[BoT]@Azeroth 100
+[16:11:38 01/20/08] PyroManiac606@Azeroth adds : PyroManiac606 +m
+[16:12:00 01/20/08] PyroManiac606@Azeroth adds : PyroManiac606@Azeroth +m
+[16:13:36 01/20/08] PyroManiac606@Azeroth modifies PyroManiac606@Azeroth: PyroManiac606@Azeroth +T
+[16:15:41 01/20/08] PyroManiac606@Azeroth modifies PyroManiac606@Azeroth: PyroManiac606@Azeroth +G
+[16:19:39 01/20/08] PyroManiac606@Azeroth modifies PyroManiac606@Azeroth: PyroManiac606@Azeroth +J
+[16:25:23 01/20/08] PyroManiac606@Azeroth modifies PyroManiac606@Azeroth: PyroManiac606@Azeroth +c
+[16:25:30 01/20/08] PyroManiac606@Azeroth modifies PyroManiac606@Azeroth: PyroManiac606@Azeroth +C
+[16:26:34 01/20/08] PyroManiac606@Azeroth modifies PyroManiac606@Azeroth: PyroManiac606@Azeroth +o
+[16:32:09 01/20/08] Pyro[BoT]@Azeroth modifies PyroManiac606@Azeroth: PyroManiac606@Azeroth 99
+[16:32:41 01/20/08] Pyro[BoT]@Azeroth modifies PyroManiac606@Azeroth: PyroManiac606@Azeroth 99 mTGJcCoaOS
+[16:34:36 01/20/08] PyroManiac606@Azeroth adds : BoT aOS 
+[16:35:54 01/20/08] PyroManiac606@Azeroth adds : Alendar S
+[16:39:45 01/20/08] PyroManiac606@Azeroth adds : lawlzggk +B 
+[16:41:36 01/20/08] PyroManiac606@Azeroth adds : lawlzggk +B 
+[21:58:42 01/20/08] Pyro6-Tech@Azeroth adds : Pyro6-Tech@Azeroth +mTGJcCo
+[18:03:10 01/21/08] Eric[nK]@Azeroth modifies Pyro[BoT]@Azeroth: Pyro[BoT]@Azeroth 100
+[21:52:27 01/21/08] Eric[nK]@Azeroth modifies Pyro[BoT]@Azeroth: Pyro[BoT]@Azeroth 200
+[09:14:03 02/22/08] Eric[nK] adds : 0x5E@Azeroth 100
+[21:37:00 02/24/08] Eric[nK]@Azeroth adds : IdleBot@Azeroth 100
+[18:46:27 02/27/08] Eric[nK]@Azeroth adds : Jd[BoT]@Azeroth 100
+[18:46:39 02/27/08] Eric[nK]@Azeroth adds : * 100
+[09:52:32 03/01/08] Hero.A@Azeroth adds : hi.my.name.is +B 
+[10:01:00 03/01/08] Eric[nK]@Azeroth removes *: *
+[15:54:37 03/02/08] Eric[nK] adds : blah +B 
+[17:18:25 03/05/08] Eric[nK]@Azeroth adds : PhiX 100
+[17:18:49 03/05/08] Eric[nK]@Azeroth adds : PhiX[BoT]@Azeroth 100
+[17:53:52 03/05/08] Eric[nK]@Azeroth modifies PhiX[BoT]@Azeroth: PhiX[BoT]@Azeroth 70
+[22:17:58 03/06/08] Eric[nK] adds : Pyro[BoT]@Azeroth 100
+[22:36:16 03/06/08] bot console adds : BoT 100 
+[22:53:20 03/06/08] Eric[nK]@Azeroth modifies BoT: BoT 100 
+[22:53:37 03/06/08] Eric[nK]@Azeroth adds : IdleBoT@Azeroth +I
+[15:01:51 03/07/08] Ribose@Azeroth adds : Ribose@Azeroth +S
+[15:02:11 03/07/08] Ribose@Azeroth adds : ribose@useast +S
+[01:24:29 03/08/08] Pyro[BoT]@Azeroth modifies bob: bob 1 T
+[01:24:39 03/08/08] Eric[nK]@Azeroth modifies Pyro[BoT]@Azeroth: Pyro[BoT]@Azeroth 99 I
+[01:40:18 03/08/08] Pyro[BoT]@Azeroth adds : hm 1 T
+[11:36:54 03/08/08] bot console modifies bob: bob 1 T
+[11:36:56 03/08/08] bot console modifies bob: bob 1 *(#@*&(R*
+[11:37:00 03/08/08] bot console modifies bob: bob 1 *(#@*&(R*
+[13:33:28 03/08/08] Pyro[BoT]@Azeroth removes idlebot@azeroth: idlebot@azeroth
+[11:30:51 03/10/08] bot console modifies bob: bob 1 T
+[11:30:55 03/10/08] bot console removes bob: bob
+[13:46:40 03/10/08] bot console adds : bob 1 T
+[13:46:41 03/10/08] bot console modifies bob: bob 1 T E
+[13:52:03 03/10/08] Eric[nK]@Azeroth modifies bob: bob 1 T
+[14:24:09 03/10/08] bot console modifies bob: bob T
+[14:25:56 03/10/08] bot console modifies bob: bob T
+[14:30:32 03/10/08] Eric[nK]@Azeroth modifies bob: bob 1
+[14:30:34 03/10/08] Eric[nK]@Azeroth modifies bob: bob T
+[14:30:36 03/10/08] Eric[nK]@Azeroth modifies bob: bob 1 T
+[14:30:40 03/10/08] Eric[nK]@Azeroth removes bob: bob
+[18:14:31 03/10/08] Eric[nK]@Azeroth adds : bob 1
+[18:14:32 03/10/08] Eric[nK]@Azeroth modifies bob: bob T
+[18:16:16 03/10/08] bot console modifies bob: bob 1 T
+[18:16:18 03/10/08] bot console modifies bob: bob 1 T f
+[18:16:19 03/10/08] bot console modifies bob: bob 1 T f f
+[18:16:21 03/10/08] bot console modifies bob: bob 1 T f f f
+[18:21:07 03/10/08] Eric[nK]@Azeroth modifies bob: bob 1 t
+[18:21:08 03/10/08] Eric[nK]@Azeroth modifies bob: bob 1 t d
+[18:21:10 03/10/08] Eric[nK]@Azeroth modifies bob: bob 1 t
+[18:21:13 03/10/08] Eric[nK]@Azeroth modifies bob: bob 1
+[18:21:14 03/10/08] Eric[nK]@Azeroth modifies bob: bob t
+[18:27:45 03/10/08] Eric[nK]@Azeroth modifies bob: bob 1 t
+[18:27:46 03/10/08] Eric[nK]@Azeroth modifies bob: bob 1 t d
+[18:27:48 03/10/08] Eric[nK]@Azeroth modifies bob: bob 1
+[18:27:50 03/10/08] Eric[nK]@Azeroth modifies bob: bob T
+[21:39:57 03/10/08] Eric[nK] adds : SBs 100 
+[21:41:53 03/10/08] Eric[nK] modifies SBs: SBs 100 
+[10:28:00 03/12/08] bot console modifies bob: bob b
+[10:28:02 03/12/08] bot console modifies bob: bob B
+[10:28:19 03/12/08] Eric[nK]@Azeroth modifies bob: bob B
+[10:50:14 03/12/08] Eric[nK]@Azeroth modifies bob: bob B
+[10:55:00 03/12/08] Eric[nK]@Azeroth modifies bob: bob B
+[10:55:19 03/12/08] Eric[nK] adds : apple C
+[10:55:21 03/12/08] Eric[nK] modifies apple: apple B
+[10:55:26 03/12/08] Eric[nK] modifies apple: apple 200
+[10:55:29 03/12/08] Eric[nK] modifies apple: apple 200
+[10:55:31 03/12/08] Eric[nK] modifies apple: apple B
+[13:51:32 03/12/08] Eric[nK]@Azeroth modifies bob: bob B 
+[13:51:34 03/12/08] Eric[nK]@Azeroth modifies bob: bob B 
+[13:51:38 03/12/08] Eric[nK]@Azeroth modifies bob: bob B -banmsg bob
+[13:51:43 03/12/08] Eric[nK]@Azeroth modifies bob: bob B 
+[13:51:47 03/12/08] Eric[nK]@Azeroth modifies bob: bob B 
+[13:51:53 03/12/08] Eric[nK]@Azeroth modifies bob: bob B banmsg $
+[13:51:58 03/12/08] Eric[nK]@Azeroth modifies bob: bob dfwef
+[13:52:00 03/12/08] Eric[nK]@Azeroth modifies bob: bob 22
+[14:55:20 03/12/08] Eric[nK]@Azeroth modifies bob: bob +B
+[14:55:22 03/12/08] Eric[nK]@Azeroth modifies bob: bob +C
+[14:55:25 03/12/08] Eric[nK]@Azeroth modifies bob: bob d
+[14:55:28 03/12/08] Eric[nK]@Azeroth modifies bob: bob -D
+[14:58:53 03/12/08] Eric[nK]@Azeroth adds : bob +dwsf
+[15:09:09 03/12/08] Eric[nK]@Azeroth modifies bob: bob ABC
+[15:10:11 03/12/08] Eric[nK]@Azeroth modifies Eric[nK]@Azeroth: Eric[nK]@Azeroth 10
+[15:10:15 03/12/08] Eric[nK]@Azeroth modifies Eric[nK]@Azeroth: Eric[nK]@Azeroth 10
+[15:10:22 03/12/08] Eric[nK]@Azeroth modifies apple: apple ABC
+[15:14:08 03/12/08] Eric[nK]@Azeroth adds : apple2 ABC
+[21:48:56 03/12/08] Eric[nK]@Azeroth adds : Joe[BoT]@Azeroth 100
+[23:12:32 03/12/08] bot console modifies bob: bob B
+[13:46:52 03/14/08] Eric[nK] adds : Pyro[BoT] 200
+[15:28:35 03/17/08] Eric[nK]@Azeroth modifies Pyro[BoT]@Azeroth: Pyro[BoT]@Azeroth 100
+[10:21:49 03/18/08] Eric[nK]@Azeroth modifies bob: bob 
+[16:20:59 03/20/08] bot console modifies bob: bob +S
+[16:24:02 03/20/08] bot console adds : Safelist 1 
+[16:26:22 03/20/08] bot console adds : Shitlist 
+[16:26:37 03/20/08] bot console modifies bob: bob +S 
+[16:27:10 03/20/08] bot console modifies bob: bob 2
+[16:33:39 03/20/08] bot console adds : Shitlist 
+[16:33:52 03/20/08] bot console adds : Shitlist 
+[16:33:52 03/20/08] bot console adds : Safelist 
+[16:35:04 03/20/08] Eric[nK]@Azeroth modifies bob: bob +S 
+[16:37:23 03/20/08] Eric[nK]@Azeroth removes bob: bob
+[16:37:28 03/20/08] Eric[nK]@Azeroth adds : bob +S 
+[16:37:35 03/20/08] Eric[nK]@Azeroth modifies apple: apple +B 
+[16:37:39 03/20/08] Eric[nK]@Azeroth adds : cat +B 
+[17:18:34 03/20/08] bot console adds : Shitlist B 
+[17:18:34 03/20/08] bot console adds : Safelist S 
+[17:18:49 03/20/08] bot console adds : Shitlist B 
+[17:18:49 03/20/08] bot console adds : Safelist S 
+[17:21:37 03/20/08] bot console adds : bob 
+[17:23:15 03/20/08] bot console adds : dwfd 
+[17:23:18 03/20/08] bot console modifies bob: bob 
+[17:23:21 03/20/08] bot console modifies bob: bob 
+[17:25:57 03/20/08] bot console adds : Shitlist B 
+[17:25:57 03/20/08] bot console adds : Safelist S 
+[17:33:14 03/20/08] bot console adds : Shitlist B 
+[17:33:14 03/20/08] bot console adds : Safelist S 
+[17:37:29 03/20/08] Eric[nK]@Azeroth adds : carrot 
+[17:37:42 03/20/08] Eric[nK]@Azeroth modifies carrot: carrot 
+[17:58:42 03/20/08] Eric[nK]@Azeroth adds : apple 
+[17:59:02 03/20/08] Eric[nK]@Azeroth adds : Jack)@Azeroth 100
+[17:59:27 03/20/08] Jack)@Azeroth modifies apple2: apple2 
+[18:03:35 03/20/08] Eric[nK]@Azeroth modifies carrot: carrot 100
+[18:03:39 03/20/08] Eric[nK]@Azeroth modifies carrot: carrot 
+[10:52:44 03/21/08] bot console adds : Tagbans B 
+[20:51:15 03/21/08] Eric[nK]@Azeroth adds : Pyro6@Azeroth 100
+[10:47:03 03/22/08] Eric[nK]@Azeroth adds : Ribose-5 100
+[12:21:37 03/22/08] Eric[nK]@Azeroth adds : Alendar[BoT]@Azeroth 
+[12:21:44 03/22/08] Eric[nK]@Azeroth modifies Alendar[BoT]@Azeroth: Alendar[BoT]@Azeroth 
+[16:06:30 03/22/08] Eric[nK]@Azeroth adds : *bob* 
+[16:06:45 03/22/08] Eric[nK]@Azeroth adds : *god* 
+[16:06:50 03/22/08] Eric[nK]@Azeroth adds : *god 
+[16:07:24 03/22/08] bot console modifies *bob*: *bob* +B 
+[16:07:28 03/22/08] bot console adds : bob +B 
+[16:07:33 03/22/08] bot console modifies bob: bob +S
+[19:20:36 03/22/08] Pyro[BoT] removes Ribose-5: Ribose-5
+[15:44:37 04/09/08] Eric[nK]@Azeroth modifies apple: apple D
+[15:47:09 04/09/08] Eric[nK]@Azeroth modifies Pyro[BoT]@Azeroth: Pyro[BoT]@Azeroth 90
+[15:47:25 04/09/08] Pyro[BoT] modifies apple: apple A
+[15:48:16 04/09/08] Pyro[BoT] modifies apple: apple A
+[15:49:07 04/09/08] Pyro[BoT] modifies apple: apple 1 A
+[15:49:47 04/09/08] Eric[nK]@Azeroth adds : yourmom a
+[15:49:49 04/09/08] Eric[nK]@Azeroth modifies yourmom: yourmom A
+[15:54:51 04/09/08] Pyro[BoT] modifies apple: apple A
+[15:55:08 04/09/08] Eric[nK]@Azeroth modifies Pyro[BoT]: Pyro[BoT] 90
+[15:55:10 04/09/08] Eric[nK]@Azeroth removes apple: apple
+[15:57:09 04/09/08] Eric[nK]@Azeroth modifies bob: bob a
+[15:57:18 04/09/08] Eric[nK]@Azeroth adds : apple a
+[15:57:33 04/09/08] Eric[nK]@Azeroth modifies apple: apple a
+[15:57:38 04/09/08] Eric[nK]@Azeroth adds : bad a
+[16:02:02 04/09/08] Eric[nK] modifies bob: bob 1
+[16:02:16 04/09/08] Eric[nK] modifies bob: bob A
+[16:02:18 04/09/08] Eric[nK] modifies bob: bob A
+[16:07:28 04/09/08] Eric[nK] modifies Eric[nK]@Azeroth: Eric[nK]@Azeroth 0
+[16:07:37 04/09/08] Eric[nK] modifies bob: bob a
+[16:07:39 04/09/08] Eric[nK] modifies bob: bob A
+[16:08:51 04/09/08] Eric[nK] modifies apple: apple A
+[16:08:53 04/09/08] Eric[nK] modifies apple: apple a
+[16:09:52 04/09/08] Eric[nK] adds : Eric[nK] 8
+[16:09:55 04/09/08] Eric[nK] modifies bob: bob A
+[16:10:14 04/09/08] Eric[nK] modifies Eric[nK]: Eric[nK] 60
+[16:10:18 04/09/08] Eric[nK] modifies Eric[nK]: Eric[nK] 90
+[16:10:21 04/09/08] Eric[nK] modifies bob: bob A
+[16:15:43 04/09/08] Eric[nK] modifies bob: bob A
+[20:37:08 04/09/08] Eric[nK]@Azeroth modifies bob: bob A
+[20:41:21 04/09/08] Eric[nK]@Azeroth modifies bob: bob A
+[20:44:11 04/09/08] Eric[nK]@Azeroth modifies Eric[nK]@Azeroth: Eric[nK]@Azeroth 90
+[20:44:14 04/09/08] Eric[nK]@Azeroth modifies bob: Bob A
+[21:00:57 04/09/08] Eric[nK]@Azeroth adds : IdleBoT@Azeroth 90
+[21:02:31 04/09/08] Eric[nK]@Azeroth adds : ilikepi 100
+[14:29:22 04/15/08] Eric[nK]@Azeroth removes bot: bot
+[16:13:16 04/22/08] Eric[nK]@Azeroth adds : Pyro6@Azeroth 100
+[09:36:41 05/12/08] Eric[nK]@Azeroth adds : Eric 50
+[09:36:45 05/12/08] Eric[nK]@Azeroth modifies Eric: Eric 60
+[09:37:06 05/12/08] Eric[nK]@Azeroth adds : Eric@Azeroth 60
+[09:37:49 05/12/08] Eric[nK]@Azeroth modifies Eric@Azeroth: Eric@Azeroth 20
+[09:41:40 05/12/08] Eric[nK]@Azeroth modifies Eric@Azeroth: Eric@Azeroth 60
+[09:48:40 05/12/08] Eric[nK]@Azeroth modifies Eric@Azeroth: Eric@Azeroth 100
+[09:48:58 05/12/08] Eric[nK]@Azeroth adds : Phix 100
+[19:48:49 05/13/08] Eric[nK]@Azeroth adds : Cuba Z
+[20:04:44 05/13/08] Eric[nK]@Azeroth adds : bob +S
+[20:04:47 05/13/08] Eric[nK]@Azeroth removes bob: bob
+[20:05:00 05/13/08] Eric[nK]@Azeroth adds : bob +S
+[20:06:15 05/13/08] bot console adds : carrot +S
+[08:49:16 05/14/08] Eric[nK]@Azeroth adds : Ribose S
+[15:08:55 05/26/08] Eric[nK] adds : * 100
+[15:08:59 05/26/08] Eric[nK] adds : VBScript I
+[15:09:30 05/26/08] Eric[nK] adds : BoT 100 
+[20:13:07 05/29/08] Eric[nK] removes *: *
+[15:55:51 05/31/08] Pyro6 adds : PhiX@USEast +S
+[16:40:21 05/31/08] Pyro6 modifies PhiX@USEast: PhiX@USEast 
+[16:43:04 05/31/08] Pyro6 removes PhiX@USEast: PhiX@USEast

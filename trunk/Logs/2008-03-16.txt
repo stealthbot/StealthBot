@@ -1,0 +1,756 @@
+ [09:39:21 AM] Shutting down...
+ [10:08:48 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 4, by Stealth.
+ [10:08:48 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:08:59 AM] The current StealthBot version is ˇcb2.6R3.
+ [10:08:59 AM]  
+ [10:08:59 AM] >> ˇcbStealthBot News
+ [10:08:59 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [10:08:59 AM] ->> 
+ [10:08:59 AM] ->> ˇcbStealthBot Beta News
+ [10:08:59 AM] ->> Happy testing!
+ [10:08:59 AM]  
+ [10:08:59 AM] The current StealthBot Beta version is 2.6993.
+ [10:09:00 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [10:09:00 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [10:09:14 AM] Connecting your bot...
+ [10:09:14 AM] Authorizing your private-release bot, please wait.
+ [10:09:14 AM] Private usage authorized, connecting to Battle.Net.
+ [10:09:14 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [10:09:15 AM] [BNLS] Connected!
+ [10:09:15 AM] [BNLS] Authorized!
+ [10:09:15 AM] [BNET] Connecting to the Battle.net server at 63.240.202.131...
+ [10:09:15 AM] [BNET] Connected!
+ [10:09:15 AM] [BNET] Checking version...
+ [10:09:16 AM] [BNET] Client version accepted!
+ [10:09:16 AM] [BNET] Sending login information...
+ [10:09:16 AM] [BNET] Login successful.
+ [10:09:16 AM] [CLAN] You are a Shaman in Clan SBs.
+ [10:09:16 AM] [BNET] Logged on as Eric[nK].
+ [10:09:16 AM] -- Joined channel: Clan SBs --
+ [10:09:17 AM] Welcome to Battle.net!
+ [10:09:17 AM] This server is hosted by AT&T.
+ [10:09:17 AM] There are currently 12121 users playing 593 games of Warcraft III, and 213990 users playing 46389 games on Battle.net.
+ [10:09:17 AM] Last logon: Sat Mar 15  7:59 PM
+ [10:09:17 AM] -- Eric[nK]@Azeroth has acquired ops.
+ [10:09:17 AM] -- Stats updated: Eric[nK]@Azeroth [94ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [10:09:17 AM] -- Joined channel: Clan BoT --
+ [10:09:17 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [10:09:17 AM] Last Logon: 3/16/2008, 17:13:06 (Battle.net time)
+ [10:09:17 AM] Last Logoff: 3/16/2008, 03:01:15 (Battle.net time)
+ [10:09:17 AM] Time Logged: 81 days, 0 hours, 36 minutes and 8 seconds
+ [10:09:19 AM] <From Joe[BoT]@Azeroth> Welcome to Clan BoT. This is not a bot support channel. Do not ask for assistance in creating or using a bot.
+ [10:09:22 AM] <Pyro6@Azeroth> yes
+ [10:09:22 AM] <IdleBoT@Azeroth> hai erik
+ [10:09:26 AM] <IdleBoT@Azeroth> we wweren't abusing last night
+ [10:09:29 AM] <IdleBoT@Azeroth> nope, notu s
+ [10:09:55 AM] <Pyro6@Azeroth> no i dont, jack
+ [10:10:06 AM] <IdleBoT@Azeroth> i switched ribose with eric
+ [10:10:07 AM] <IdleBoT@Azeroth> ;)
+ [10:10:12 AM] <Pyro6@Azeroth> ok?
+ [10:10:14 AM] <IdleBoT@Azeroth> and i fixed his pingzor
+ [10:10:15 AM] <Pyro6@Azeroth> i knew that
+ [10:10:31 AM] <From IdleBoT@Azeroth> /say hai boies
+ [10:10:31 AM] <Eric[nK]@Azeroth> hai boies
+ [10:10:57 AM] Shutting down...
+ [10:11:58 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:11:58 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:12:09 AM] The current StealthBot version is ˇcb2.6R3.
+ [10:12:09 AM]  
+ [10:12:09 AM] >> ˇcbStealthBot News
+ [10:12:09 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [10:12:09 AM] ->> 
+ [10:12:09 AM] ->> ˇcbStealthBot Beta News
+ [10:12:09 AM] ->> Happy testing!
+ [10:12:09 AM]  
+ [10:12:09 AM] The current StealthBot Beta version is 2.6993.
+ [10:12:09 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [10:12:09 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [10:12:10 AM] Connecting your bot...
+ [10:12:10 AM] Authorizing your private-release bot, please wait.
+ [10:12:10 AM] Private usage authorized, connecting to Battle.Net.
+ [10:12:10 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [10:12:10 AM] [BNLS] Connected!
+ [10:12:10 AM] [BNLS] Authorized!
+ [10:12:10 AM] [BNET] Connecting to the Battle.net server at 63.240.202.131...
+ [10:12:10 AM] [BNET] Connected!
+ [10:12:11 AM] [BNET] Checking version...
+ [10:12:11 AM] [BNET] Client version accepted!
+ [10:12:11 AM] [BNET] Sending login information...
+ [10:12:11 AM] [BNET] Login successful.
+ [10:12:11 AM] [CLAN] You are a Shaman in Clan SBs.
+ [10:12:12 AM] [BNET] Logged on as Eric[nK].
+ [10:12:12 AM] -- Joined channel: Clan SBs --
+ [10:12:12 AM] Welcome to Battle.net!
+ [10:12:12 AM] This server is hosted by AT&T.
+ [10:12:12 AM] There are currently 12174 users playing 605 games of Warcraft III, and 213283 users playing 46351 games on Battle.net.
+ [10:12:12 AM] Last logon: Sun Mar 16  10:18 AM
+ [10:12:12 AM] -- Eric[nK]@Azeroth has acquired ops.
+ [10:12:12 AM] -- Joined channel: Clan BoT --
+ [10:12:12 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [10:12:12 AM] Last Logon: 3/16/2008, 17:21:54 (Battle.net time)
+ [10:12:12 AM] Last Logoff: 3/16/2008, 17:20:40 (Battle.net time)
+ [10:12:12 AM] Time Logged: 81 days, 0 hours, 37 minutes and 49 seconds
+ [10:12:13 AM] <From Joe[BoT]@Azeroth> Welcome to Clan BoT. This is not a bot support channel. Do not ask for assistance in creating or using a bot.
+ [10:13:08 AM] <Eric[nK]@Azeroth> hm
+ [10:13:18 AM] <Eric[nK]@Azeroth> I need aliases back.
+ [10:13:21 AM] <Eric[nK]@Azeroth> .: StealthBot Beta v2.6999 Development Release 5 by Stealth.
+ [10:13:23 AM] about
+ [10:13:24 AM] <Eric[nK]@Azeroth> .: StealthBot Beta v2.6999 Development Release 5 by Stealth.
+ [10:13:27 AM] version
+ [10:13:27 AM] That is not a valid command. Type /help or /? for more info.
+ [10:14:49 AM] <VBScript@Azeroth> New on StealthBot Recent:  Stealthbot issues; changing the key word?; changing the key word?
+ [10:15:44 AM] version
+ [10:15:45 AM] That is not a valid command. Type /help or /? for more info.
+ [10:15:46 AM] aple
+ [10:15:46 AM] That is not a valid command. Type /help or /? for more info.
+ [10:15:49 AM] apple
+ [10:15:50 AM] That is not a valid command. Type /help or /? for more info.
+ [10:16:05 AM] car
+ [10:16:05 AM] That is not a valid command. Type /help or /? for more info.
+ [10:16:12 AM] Error: The syntax for the specified command is invalid. [//help ban for further information]
+ [10:16:45 AM] Shutting down...
+ [10:17:08 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:17:08 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:17:10 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:17:12 AM] .: StealthBot Beta v2.6999 Development Release 5 by Stealth.
+ [10:17:15 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:17:18 AM] Shutting down...
+ [10:17:50 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:17:50 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:17:51 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:17:52 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:17:54 AM] Shutting down...
+ [10:18:44 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:18:44 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:18:44 AM] !
+ [10:18:47 AM] !
+ [10:18:48 AM] .: StealthBot Beta v2.6999 Development Release 5 by Stealth.
+ [10:18:51 AM] Shutting down...
+ [10:19:36 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:19:36 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:19:37 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:19:39 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:19:40 AM] Shutting down...
+ [10:20:06 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:20:06 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:20:06 AM] about
+ [10:20:07 AM] .: StealthBot Beta v2.6999 Development Release 5 by Stealth.
+ [10:20:10 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:20:12 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:20:16 AM] The current StealthBot version is ˇcb2.6R3.
+ [10:20:16 AM]  
+ [10:20:16 AM] >> ˇcbStealthBot News
+ [10:20:16 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [10:20:17 AM] ->> 
+ [10:20:17 AM] ->> ˇcbStealthBot Beta News
+ [10:20:17 AM] ->> Happy testing!
+ [10:20:17 AM]  
+ [10:20:17 AM] The current StealthBot Beta version is 2.6993.
+ [10:20:17 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [10:20:17 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [10:20:19 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:20:25 AM] .: StealthBot Beta v2.6999 Development Release 5 by Stealth.
+ [10:20:26 AM] about
+ [10:20:26 AM] .: StealthBot Beta v2.6999 Development Release 5 by Stealth.
+ [10:20:29 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:20:30 AM] Shutting down...
+ [10:21:02 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:21:02 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:21:03 AM] 0
+ [10:21:08 AM] 1
+ [10:21:10 AM] Shutting down...
+ [10:25:33 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:25:33 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:25:34 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:25:36 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:25:37 AM] Shutting down...
+ [10:26:35 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:26:35 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:26:36 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:26:37 AM] Shutting down...
+ [10:28:27 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:28:27 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:28:28 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:28:30 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:28:31 AM] Shutting down...
+ [10:29:28 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:29:28 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:29:29 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:29:30 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:29:31 AM] Shutting down...
+ [10:30:25 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:30:25 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:30:26 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:30:28 AM] Shutting down...
+ [10:31:09 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:31:09 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:31:10 AM] Error: XML Database Processor has encountered an error during alias lookup.
+ [10:31:12 AM] Shutting down...
+ [10:32:35 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:32:35 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:32:35 AM] ver
+ [10:32:37 AM] version
+ [10:32:39 AM] Shutting down...
+ [10:33:40 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:33:40 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:33:41 AM] !
+ [10:33:43 AM] !
+ [10:33:45 AM] .: StealthBot Beta v2.6999 Development Release 5 by Stealth.
+ [10:33:47 AM] Shutting down...
+ [10:34:41 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:34:41 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:34:41 AM] about
+ [10:34:41 AM] .: StealthBot Beta v2.6999 Development Release 5 by Stealth.
+ [10:34:44 AM] .: StealthBot Beta v2.6999 Development Release 5 by Stealth.
+ [10:34:45 AM] about
+ [10:34:45 AM] .: StealthBot Beta v2.6999 Development Release 5 by Stealth.
+ [10:34:47 AM] Shutting down...
+ [10:37:15 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:37:15 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:37:26 AM] The current StealthBot version is ˇcb2.6R3.
+ [10:37:26 AM]  
+ [10:37:26 AM] >> ˇcbStealthBot News
+ [10:37:26 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [10:37:26 AM] ->> 
+ [10:37:26 AM] ->> ˇcbStealthBot Beta News
+ [10:37:26 AM] ->> Happy testing!
+ [10:37:26 AM]  
+ [10:37:26 AM] The current StealthBot Beta version is 2.6993.
+ [10:37:26 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [10:37:26 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [10:37:29 AM] Connecting your bot...
+ [10:37:29 AM] Authorizing your private-release bot, please wait.
+ [10:37:29 AM] Private usage authorized, connecting to Battle.Net.
+ [10:37:29 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [10:37:29 AM] [BNLS] Connected!
+ [10:37:29 AM] [BNLS] Authorized!
+ [10:37:29 AM] [BNET] Connecting to the Battle.net server at 63.240.202.131...
+ [10:37:29 AM] [BNET] Connected!
+ [10:37:30 AM] [BNET] Checking version...
+ [10:37:30 AM] [BNET] Client version accepted!
+ [10:37:30 AM] [BNET] Sending login information...
+ [10:37:31 AM] [BNET] Login successful.
+ [10:37:31 AM] [CLAN] You are a Shaman in Clan SBs.
+ [10:37:31 AM] [BNET] Logged on as Eric[nK].
+ [10:37:31 AM] -- Joined channel: Clan SBs --
+ [10:37:31 AM] Welcome to Battle.net!
+ [10:37:31 AM] This server is hosted by AT&T.
+ [10:37:31 AM] There are currently 12254 users playing 618 games of Warcraft III, and 208631 users playing 45247 games on Battle.net.
+ [10:37:31 AM] Last logon: Sun Mar 16  10:21 AM
+ [10:37:31 AM] -- Eric[nK]@Azeroth has acquired ops.
+ [10:37:31 AM] -- Stats updated: Eric[nK]@Azeroth [94ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [10:37:31 AM] -- Joined channel: Clan BoT --
+ [10:37:31 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [10:37:31 AM] Last Logon: 3/16/2008, 17:41:44 (Battle.net time)
+ [10:37:31 AM] Last Logoff: 3/16/2008, 17:20:15 (Battle.net time)
+ [10:37:31 AM] Time Logged: 81 days, 0 hours, 42 minutes and 23 seconds
+ [10:37:32 AM] <Eric[nK]@Azeroth> .: StealthBot Beta v2.6999 Development Release 5 by Stealth.
+ [10:37:34 AM] <From Joe[BoT]@Azeroth> Welcome to Clan BoT. This is not a bot support channel. Do not ask for assistance in creating or using a bot.
+ [10:37:34 AM] <Eric[nK]@Azeroth> .: StealthBot Beta v2.6999 Development Release 5 by Stealth.
+ [10:37:39 AM] <Eric[nK]@Azeroth> yay @ working aliases.
+ [10:37:45 AM] <JavaBot> ??
+ [10:38:51 AM] <VBScript@Azeroth [Food for Thought] Everyone has a doctor in him or her; we just have to help it in its work. The natural healing force within each one of us is the greatest force in getting well. Our food should be our [more]>
+ [10:38:59 AM] <VBScript@Azeroth medicine. Our medicine should be our food. But to eat when you are sick, is to feed your sickness.    -Hippocrates>
+ [10:39:03 AM]  [10:39:11 AM]  [10:39:15 AM]  [10:39:25 AM] <From PhiX> /say did you fix this yet?
+ [10:39:25 AM] <Eric[nK]@Azeroth> did you fix this yet?
+ [10:39:27 AM] <IdleBoT@Azeroth [#22955] <Elly_May>  i'm so sick of fucking my father | <Shitshe>  you mean i'm so sick of MY fucking father | <Elly_May> whatever makes you happy you conservative piece of shit>
+ [10:40:09 AM] <Eric[nK]@Azeroth> I thought that I had.
+ [10:40:19 AM]  [10:40:23 AM] <From Bot-Vector@Azeroth> hey ferre7
+ [10:40:29 AM] <Pyro6@Azeroth> ...?
+ [10:40:31 AM]  [10:40:35 AM] <From Bot-Vector@Azeroth> Eric, did you just remove me again?
+ [10:40:36 AM]  [10:40:39 AM] Shutting down...
+ [10:42:51 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 5, by Stealth.
+ [10:42:51 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:42:53 AM]  [10:42:58 AM] Scripting runtime error '438': (line 0; column 0)
+ [10:42:58 AM] Object doesn't support this property or method: 'iscommand(...).requiredrank'.
+ [10:42:58 AM] Offending line: >> 
+ [10:42:58 AM] Scripting runtime error '438': (line 0; column 0)
+ [10:42:58 AM] Object doesn't support this property or method: 'iscommand(...).requiredrank'.
+ [10:42:58 AM] Offending line: >> 
+ [10:43:02 AM] The current StealthBot version is ˇcb2.6R3.
+ [10:43:02 AM]  
+ [10:43:02 AM] >> ˇcbStealthBot News
+ [10:43:02 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [10:43:02 AM] ->> 
+ [10:43:02 AM] ->> ˇcbStealthBot Beta News
+ [10:43:02 AM] ->> Happy testing!
+ [10:43:02 AM]  
+ [10:43:02 AM] The current StealthBot Beta version is 2.6993.
+ [10:43:02 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [10:43:02 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [10:43:03 AM] 0
+ [10:43:07 AM]  [10:43:13 AM]  [10:43:18 AM] 0
+ [10:43:25 AM] Connecting your bot...
+ [10:43:25 AM] Authorizing your private-release bot, please wait.
+ [10:43:26 AM] Private usage authorized, connecting to Battle.Net.
+ [10:43:26 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [10:43:26 AM] [BNLS] Connected!
+ [10:43:26 AM] [BNLS] Authorized!
+ [10:43:26 AM] [BNET] Connecting to the Battle.net server at 63.240.202.131...
+ [10:43:26 AM] [BNET] Connected!
+ [10:43:26 AM] [BNET] Checking version...
+ [10:43:26 AM] [BNET] Client version accepted!
+ [10:43:26 AM] [BNET] Sending login information...
+ [10:43:27 AM] [BNET] Login successful.
+ [10:43:27 AM] [CLAN] You are a Shaman in Clan SBs.
+ [10:43:27 AM] [BNET] Logged on as Eric[nK].
+ [10:43:27 AM] -- Joined channel: Clan SBs --
+ [10:43:27 AM] Welcome to Battle.net!
+ [10:43:27 AM] This server is hosted by AT&T.
+ [10:43:27 AM] There are currently 12310 users playing 604 games of Warcraft III, and 208008 users playing 45010 games on Battle.net.
+ [10:43:27 AM] Last logon: Sun Mar 16  10:47 AM
+ [10:43:27 AM] -- Eric[nK]@Azeroth has acquired ops.
+ [10:43:27 AM] -- Stats updated: Eric[nK]@Azeroth [109ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [10:43:28 AM] -- Joined channel: Clan BoT --
+ [10:43:28 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [10:43:28 AM] Last Logon: 3/16/2008, 17:48:53 (Battle.net time)
+ [10:43:28 AM] Last Logoff: 3/16/2008, 17:50:21 (Battle.net time)
+ [10:43:28 AM] Time Logged: 81 days, 0 hours, 45 minutes and 31 seconds
+ [10:43:29 AM] <From Joe[BoT]@Azeroth> Welcome to Clan BoT. This is not a bot support channel. Do not ask for assistance in creating or using a bot.
+ [10:43:52 AM] <IdleBoT@Azeroth> nominate a new dev eric.
+ [10:43:57 AM] <PyroManiac606@Azeroth> ...whoami
+ [10:44:00 AM] <PyroManiac606@Azeroth> hm
+ [10:44:06 AM] <Eric[nK]@Azeroth> dev release?
+ [10:44:10 AM] <Eric[nK]@Azeroth> five is soon.
+ [10:44:18 AM] <Pyro6@Azeroth> eric!
+ [10:44:19 AM] <Eric[nK]@Azeroth> Kind of a silly bug, actually.
+ [10:44:22 AM] <Pyro6@Azeroth> add meh to ur f list ;p
+ [10:44:33 AM] Added Pyro6 to your friends list.
+ [10:44:36 AM] <Eric[nK]@Azeroth>  [10:44:33 AM] Added Pyro6 to your friends list.
+ [10:44:41 AM] <Pyro6@Azeroth> yay :)
+ [10:44:51 AM] <From PyroManiac606@Azeroth> Your friend PyroManiac606 has exited Battle.net.
+ [10:44:51 AM] -- PyroManiac606@Azeroth has left the channel.
+ [10:44:56 AM] <From Pyro6-Tech@Azeroth> Your friend Pyro6-Tech has entered Battle.net.
+ [10:44:57 AM] -- Pyro6-Tech@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [10:45:00 AM] -- Pyro6-Tech@Azeroth has left the channel.
+ [10:45:09 AM] <IdleBoT@Azeroth> no eric, a new dev person
+ [10:45:29 AM] <Pyro6@Azeroth> like who?
+ [10:45:35 AM] Error: Object variable or With block variable not set in IsCommand().
+ [10:45:35 AM] Error: Object variable or With block variable not set in HasAccess().
+ [10:45:35 AM] Error: Object variable or With block variable not set in IsCorrectSyntax().
+ [10:45:35 AM] Error: The syntax for the specified command is invalid. [//help settrigger for further information]
+ [10:45:46 AM] <IdleBoT@Azeroth> anybody he fucking wants ;p
+ [10:47:00 AM] <Pyro6@Azeroth> who did you have in mind?
+ [10:47:16 AM] <IdleBoT@Azeroth> someone who knows vb6
+ [10:47:18 AM] <IdleBoT@Azeroth> afk
+ [10:47:22 AM] <IdleBoT@Azeroth> pooping
+ [10:47:29 AM] <Pyro6@Azeroth> you do that a lot.
+ [10:47:53 AM] <VBScript@Azeroth .: Now playing #969: Killswitch Engage - This Fire Burns :: StealthBot Beta v2.6999 Dev Release 3 :.>
+ [10:49:45 AM] <IdleBoT@Azeroth [#55626] <[Ars]Michael> is there any way to make a noise when u get a pm | <[Ars]Mikoyan> you could grunt in pleasure>
+ [10:50:19 AM] <0x5E@Azeroth :: [18:04:01] <Eric[nK]> Stealth's code scares me. :: StealthBot Beta v2.6999 :.>
+ [10:50:48 AM] <Eric[nK]@Azeroth> hm
+ [10:51:01 AM] <Eric[nK]@Azeroth> .: StealthBot Beta v2.6999 Development Release 5 by Stealth.
+ [10:51:04 AM] <Eric[nK]@Azeroth> yay aliases :)
+ [10:51:53 AM] <PhiX> pyro, you could have just used the exploit
+ [10:52:06 AM] <PhiX> ...whoami
+ [10:52:25 AM] <From PhiX> /fadd PhiX[BoT]
+ [10:52:25 AM] Added PhiX[BoT]@USEast to your friends list.
+ [10:52:26 AM] <To PhiX> Added user "PhiX[BoT]" to this account's friends list.
+ [10:52:38 AM] <PhiX> :o
+ [10:52:45 AM] <Eric[nK]@Azeroth> It just "seems" to work.
+ [10:52:50 AM] PhiX@USEast is using Starcraft Broodwar in a private channel.
+ [10:52:51 AM] <Eric[nK]@Azeroth> PhiX has access 100.
+ [10:53:01 AM] <PhiX> ...whoami
+ [10:53:10 AM] <PhiX> ...whoisme
+ [10:53:15 AM] The bot's current trigger is " // " (Length: 2)
+ [10:53:20 AM] <Eric[nK]@Azeroth> The bot's current trigger is " // " (Length: 2)
+ [10:53:20 AM] <PhiX> broked
+ [10:53:26 AM] Error: Object variable or With block variable not set in IsCommand().
+ [10:53:26 AM] Error: Object variable or With block variable not set in HasAccess().
+ [10:53:26 AM] Error: Object variable or With block variable not set in IsCorrectSyntax().
+ [10:53:26 AM] <Eric[nK]@Azeroth> Error: The syntax for the specified command is invalid. [//help settrigger for further information]
+ [10:53:32 AM] <Eric[nK]@Azeroth> ick, need to fix that.
+ [10:53:33 AM] <PhiX> ...whoami
+ [10:53:48 AM] <Eric[nK]@Azeroth> The new trigger is "...".
+ [10:53:54 AM] <PhiX> OH
+ [10:54:25 AM] <Eric[nK]@Azeroth> hm
+ [10:54:47 AM]  [10:54:50 AM] whoami
+ [10:55:10 AM] <PhiX> ...whoami
+ [10:55:10 AM] <Eric[nK]@Azeroth> PhiX has access 100.
+ [10:55:30 AM] <PhiX> add a findgroups command pl0x
+ [10:55:39 AM] <Eric[nK]@Azeroth> already did.
+ [10:55:46 AM] <Pyro6@Azeroth>  [01:56:04 PM] <PhiX@USEast> pyro, you could have just used the exploit
+ [10:55:47 AM] <Eric[nK]@Azeroth> oh, you mean by type
+ [10:55:49 AM] <Pyro6@Azeroth> huh?
+ [10:55:51 AM] <PhiX> a command that lists all groups?
+ [10:56:04 AM] <PhiX>  [18:54:43.031] <To Eric[nK]@Azeroth> \fadd PhiX[BoT]
+ [10:56:09 AM] <Eric[nK]@Azeroth> ./find * (group) would work.
+ [10:56:09 AM] <PhiX>  [18:54:44.463] <From Eric[nK]@Azeroth> Added user "PhiX[BoT]" to this account's friends list.
+ [10:56:13 AM] Error: You have specified an invalid range.
+ [10:56:16 AM] Error: You have specified an invalid range.
+ [10:56:19 AM] No such user(s) found.
+ [10:56:22 AM] No such user(s) found.
+ [10:56:29 AM] User(s) found: Eric[nK]@Azeroth\10, New_Group_#2 (group) [more]
+ [10:56:29 AM] User(s) found:  New_Group_#3 (group), New_Group_#4 (group) [more]
+ [10:56:29 AM] User(s) found:  New_Group_#5 (group), New_Group_#7 (group) [more]
+ [10:56:29 AM] User(s) found:  New_Group_#8 (group), New_Group_#9 (group) [more]
+ [10:56:29 AM] User(s) found:  New_Group_#10 (group), PhiX\100, PhiX[BoT]@Azeroth\70 [more]
+ [10:56:29 AM] User(s) found:  Pyro[BoT]@Azeroth\99\I, BoT (clan)\100 [more]
+ [10:56:29 AM] User(s) found:  Ribose@Azeroth\S, ribose@useast\S, hm\1\T [more]
+ [10:56:29 AM] User(s) found:  SBs (clan)\100, Eric[nK]@Azerothf\200, apple\ABC, bob\B [more]
+ [10:56:29 AM] User(s) found:  apple2\ABC, Joe[BoT]@Azeroth\100, Pyro[BoT]\200, 
+ [10:56:30 AM] <PhiX> really?
+ [10:56:30 AM] <PhiX> since when
+ [10:56:35 AM] <Eric[nK]@Azeroth> or, I thought it would.
+ [10:56:40 AM] <Pyro6@Azeroth> @;;find admin
+ [10:56:41 AM] <Eric[nK]@Azeroth> I'll add it later.
+ [10:56:44 AM] <PhiX[BoT]@Azeroth> No such user(s) found.
+ [10:56:47 AM] <Eric[nK]@Azeroth> bug fixes and commands.xml completion for now.
+ [10:56:50 AM] <PhiX> plural
+ [10:56:56 AM] <Pyro6@Azeroth> @;;find admins
+ [10:56:58 AM] <PhiX[BoT]@Azeroth> User(s) found: Admins (group)\100\S, 
+ [10:57:10 AM] <PhiX> @;;find * (group)
+ [10:57:13 AM] <PhiX[BoT]@Azeroth> Error: You have specified an invalid range.
+ [10:57:22 AM] <PhiX> doesn't like spaces
+ [10:58:18 AM] <Pyro6@Azeroth> #find my mom
+ [10:58:18 AM] <Pyro[BoT]@Azeroth> Error: You have specified an invalid range.
+ [10:58:29 AM] <Pyro6@Azeroth> shes jus that big
+ [10:58:31 AM] <PhiX> YOUR MOM IS OUT OF RANGE
+ [10:58:33 AM] <Pyro6@Azeroth> *just
+ [10:58:36 AM] <PhiX> lawl
+ [10:59:04 AM] <PhiX> #ping my dick
+ [10:59:05 AM] <Pyro[BoT]@Azeroth> I can't see my dick in the channel.
+ [10:59:16 AM] <PhiX> there should be a restriction as well
+ [10:59:16 AM] <PhiX> no spaces
+ [10:59:51 AM] <Eric[nK]@Azeroth> It can take spaces.
+ [10:59:57 AM] <Eric[nK]@Azeroth> ./find 1 100
+ [10:59:57 AM] <VBScript@Azeroth [Food for Thought] Anger makes dull men witty, but it keeps them poor.    -Elizabeth I in Francis Bacon, Apophthegms, 1625>
+ [10:59:59 AM] User(s) found: Eric[nK]@Azeroth\10, PhiX\100, PhiX[BoT]@Azeroth\70 [more]
+ [10:59:59 AM] User(s) found:  Pyro[BoT]@Azeroth\99\I, BoT (clan)\100, hm\1\T [more]
+ [10:59:59 AM] User(s) found:  SBs (clan)\100, Joe[BoT]@Azeroth\100, 
+ [11:00:30 AM] <Eric[nK]@Azeroth> equal to /find 1 - 100 or /findr 1 100
+ [11:00:50 AM] <PhiX> o.o
+ [11:00:59 AM] <VBScript@Azeroth .: All roads lead to Chuck Norris. And by the transitive property, a roundhouse kick to the face. :: StealthBot Beta v2.6999 Dev Release 3 :.>
+ [11:01:22 AM] -- JavaBot has left the channel.
+ [11:01:28 AM] <IdleBoT@Azeroth [#16590] <setuid_w00t> KT: and you act like you're six | <KT> setuid_w00t: how else is a 21 yr old supposed to act like?! | <setuid_w00t> don't ask me, I'm only 20>
+ [11:01:32 AM] -- JavaBot [32ms] has joined the channel using Diablo II (Open Character).
+ [11:01:38 AM] <IdleBoT@Azeroth> why dont you just do
+ [11:01:46 AM] <PhiX> are you going to add the aliases k, b, and ub for kick, ban and unban by default?
+ [11:01:47 AM] <IdleBoT@Azeroth> @;;find *(group)
+ [11:01:49 AM] <PhiX[BoT]@Azeroth> No such user(s) found.
+ [11:02:06 AM] <Eric[nK]@Azeroth> doubtful, why?
+ [11:02:07 AM] <IdleBoT@Azeroth> but "group" isnt part of the name so it wont work
+ [11:02:10 AM] <PhiX> the (group) isn't part of the name
+ [11:02:15 AM] <PhiX> eh
+ [11:02:16 AM] -- JavaBot has left the channel.
+ [11:02:32 AM] -- JavaBot [31ms] has joined the channel using Diablo II (Open Character).
+ [11:02:36 AM] <PhiX> @;;find *group*
+ [11:02:39 AM] <PhiX[BoT]@Azeroth> No such user(s) found.
+ [11:02:51 AM] <PhiX> @;;find * --groups
+ [11:02:54 AM] <PhiX[BoT]@Azeroth> Error: You have specified an invalid range.
+ [11:02:59 AM] <IdleBoT@Azeroth> @;;find *
+ [11:03:00 AM] <PhiX> @;;DO IT
+ [11:03:02 AM] <IdleBoT@Azeroth> ;p
+ [11:03:02 AM] <PhiX[BoT]@Azeroth> User(s) found: PhiX@USEast\200, Owner (group)\200\SA, PhiX, PhiX-Ops [more]
+ [11:03:04 AM] <PhiX[BoT]@Azeroth> kk ^_^
+ [11:03:04 AM] <PhiX[BoT]@Azeroth> User(s) found:  PhiX-Opz, PhiX-BoT, Tech-PhiX, N-R-G@USEast, N-R-G [more]
+ [11:03:10 AM] <PhiX[BoT]@Azeroth> User(s) found:  Admins (group)\100\S, <3 (group)\60\OS, PyroManiac606 [more]
+ [11:03:10 AM] <Eric[nK]@Azeroth> I need to add the concept of options to commands.xml.
+ [11:03:12 AM] <PhiX> whoa
+ [11:03:14 AM] <IdleBoT@Azeroth> OWNER IS A GROUP
+ [11:03:15 AM] <IdleBoT@Azeroth> <3 AND ADMIN
+ [11:03:16 AM] <PhiX[BoT]@Azeroth> User(s) found:  Alendar@USEast, BoT (clan)\50\s, Eric[nK], t-dawg[BoT] [more]
+ [11:03:17 AM] <PhiX> @;;cq
+ [11:03:20 AM] <PhiX[BoT]@Azeroth> Queue cleared.
+ [11:03:25 AM] -- JavaBot has left the channel.
+ [11:03:42 AM] <PhiX> what if I added a new group?
+ [11:03:46 AM] -- JavaBot [32ms] has joined the channel using Diablo II (Open Character).
+ [11:03:51 AM] <IdleBoT@Azeroth> then we do find * again ;)
+ [11:03:58 AM] <PhiX> >_>
+ [11:04:02 AM] <PhiX> <_<
+ [11:04:04 AM] <JavaBot> that's rich
+ [11:04:08 AM] <Eric[nK]@Azeroth> find searches the entire database for matches.
+ [11:04:17 AM] <sleathbot@Azeroth> >.<
+ [11:04:21 AM] <IdleBoT@Azeroth> exactly
+ [11:04:23 AM] <Eric[nK]@Azeroth> It will find groups as well, but you just can't use to search specifically by type./
+ [11:04:25 AM] <PhiX> <_>
+ [11:04:25 AM] <IdleBoT@Azeroth> @;;findgrp *
+ [11:04:28 AM] <PhiX[BoT]@Azeroth> No such user(s) found.
+ [11:04:30 AM] <Pyro6@Azeroth> @;;find * --type group
+ [11:04:32 AM] <Pyro6@Azeroth> o.o
+ [11:04:33 AM] <PhiX[BoT]@Azeroth> Error: You have specified an invalid range.
+ [11:04:42 AM] -- JavaBot has left the channel.
+ [11:04:47 AM] <IdleBoT@Azeroth> @;;findgrp Admins
+ [11:04:50 AM] <PhiX[BoT]@Azeroth> User(s) found: PyroManiac606, Alendar@USEast, Eric[nK], Eric[nK]@USEast [more]
+ [11:04:52 AM] <Pyro6@Azeroth> @;;findgrp *
+ [11:04:53 AM] <PhiX[BoT]@Azeroth> User(s) found:  IdleBoT\1, Pyro6\1, 
+ [11:04:57 AM] <PhiX[BoT]@Azeroth> No such user(s) found.
+ [11:05:28 AM] <IdleBoT@Azeroth> me and pyro gotz 1 access <3
+ [11:05:41 AM] <PhiX> yeah, due to the bug
+ [11:05:51 AM] <PhiX> and pyro added himself
+ [11:06:02 AM] <Pyro6@Azeroth> should i be able to add other users to the same group i am in?
+ [11:06:08 AM] <PhiX> no
+ [11:06:08 AM] <Eric[nK]@Azeroth> Yes.
+ [11:06:11 AM] -- JavaBot [32ms] has joined the channel using Diablo II (Open Character).
+ [11:06:22 AM] <PhiX> why?
+ [11:06:24 AM] <Eric[nK]@Azeroth> (If you have the A flag, that is)
+ [11:06:31 AM] <Pyro6@Azeroth> so normal admins on a forum should be able to promote other admins?
+ [11:06:33 AM] <Pyro6@Azeroth> oh
+ [11:06:35 AM] <Eric[nK]@Azeroth> I need to add commands.xml support for options.
+ [11:06:35 AM] <PhiX> you were never able to give someone else 70 access when you also had 70
+ [11:06:39 AM] <Pyro6@Azeroth> but i didnt
+ [11:06:52 AM] -- JavaBot has left the channel.
+ [11:07:00 AM] <IdleBoT@Azeroth> eric
+ [11:07:02 AM] <Eric[nK]@Azeroth> normal admins on a forum can promote others to the same position.
+ [11:07:05 AM] <Eric[nK]@Azeroth> moderators can't.
+ [11:07:10 AM] <IdleBoT@Azeroth> should i beable to add I flags to people with more access than me?
+ [11:07:18 AM] <Pyro6@Azeroth> they can? i didnt know that o.o
+ [11:07:19 AM] <Eric[nK]@Azeroth> no.
+ [11:07:26 AM] <IdleBoT@Azeroth> @;;whois phix[bot]
+ [11:07:29 AM] <Alendar is currently: BORED Current Project: Unknown My website: http://alendar.net :->
+ [11:07:30 AM] <PhiX[BoT]@Azeroth> [BoT (clan)] has access 50 and flags s.
+ [11:07:32 AM] <IdleBoT@Azeroth> @;;whois phix@useast
+ [11:07:36 AM] <PhiX[BoT]@Azeroth> PhiX@USEast [Owner (group)] has access 200 and flags SA.
+ [11:07:42 AM] <IdleBoT@Azeroth> @;;add phix@useast I
+ [11:07:44 AM] <PhiX[BoT]@Azeroth> Error: You do not have sufficient access to modify the specified entry.
+ [11:07:49 AM] <Pyro6@Azeroth> lol
+ [11:07:50 AM] <IdleBoT@Azeroth> joe did it!
+ [11:08:08 AM] <Eric[nK]@Azeroth> You can *never* modify a user with a higher rank than you, period.
+ [11:08:20 AM] <IdleBoT@Azeroth> @;;add pyro6 I
+ [11:08:22 AM] <PhiX[BoT]@Azeroth> "Pyro6" has been given flags I.
+ [11:08:26 AM] <IdleBoT@Azeroth> ;o
+ [11:08:31 AM] <Pyro6@Azeroth> asshole!
+ [11:08:33 AM] <PhiX> yeah, and I think add/set should be at 100 by default
+ [11:08:33 AM] <Pyro6@Azeroth> @;;whoami
+ [11:08:39 AM] <IdleBoT@Azeroth> NOBODY ANYMORE
+ [11:08:44 AM] <IdleBoT@Azeroth> he had the same access as me
+ [11:08:47 AM] <PhiX> I don't want users with 20 access being able to add others with 19 or whatever
+ [11:08:54 AM] <Pyro6@Azeroth> GIVE ME MY FUKIN ACCES BACK
+ [11:09:00 AM] <Pyro6@Azeroth> ASSFACE
+ [11:09:04 AM] <IdleBoT@Azeroth> @;;add pyro6 -I
+ [11:09:07 AM] <PhiX[BoT]@Azeroth> "Pyro6" has been removed from the database.
+ [11:09:12 AM] <Pyro6@Azeroth> OMFG
+ [11:09:14 AM] <IdleBoT@Azeroth> lol...
+ [11:09:15 AM] <IdleBoT@Azeroth> stupid bot
+ [11:09:17 AM] <Pyro6@Azeroth> @;;whoami
+ [11:09:19 AM] <PhiX> @;;add Pyro6 1 --group Admins
+ [11:09:19 AM] <PhiX[BoT]@Azeroth> [BoT (clan)] has access 50 and flags s.
+ [11:09:20 AM] <PhiX[BoT]@Azeroth> "Pyro6" has been given access 1, and has been made a member of the group(s): Admins.
+ [11:09:24 AM] <Pyro6@Azeroth> thank you <3
+ [11:09:39 AM] <IdleBoT@Azeroth> User(s) found: phix[bot], 
+ [11:09:50 AM] <IdleBoT@Azeroth> phix@useast [AwEsOmE! (group)] has access 100 and flags AsS.
+ [11:10:02 AM] <PhiX> I'm one awesome ass
+ [11:10:07 AM] <Pyro6@Azeroth> User(s) found: PhiX@USEast\100, Eric[nK]\100, 
+ [11:10:10 AM] <Pyro6@Azeroth> hm
+ [11:10:36 AM] <IdleBoT@Azeroth> eric
+ [11:10:37 AM] <Pyro6@Azeroth> 0.o
+ [11:10:38 AM] <IdleBoT@Azeroth> IsCommand(cmdname, false, "internal") 
+ [11:10:39 AM] <IdleBoT@Azeroth> whats false for
+ [11:10:53 AM] <Eric[nK]@Azeroth> I think I may remove that.
+ [11:11:02 AM] <IdleBoT@Azeroth> yea thats stupid
+ [11:11:04 AM] <Eric[nK]@Azeroth> It keeps it from checking for a trigger.
+ [11:11:23 AM] <IdleBoT@Azeroth> about
+ [11:11:23 AM] <Eric[nK]@Azeroth> e.g., "say hi" would return say as a command if it were set to true.
+ [11:11:40 AM] <IdleBoT@Azeroth>  /exec addq iscommand("##about", true, "internal").name
+ [11:11:46 AM] <IdleBoT@Azeroth> doesnt return anything?
+ [11:11:54 AM] <Eric[nK]@Azeroth>  [11:11:23 AM] <IdleBoT@Azeroth> about
+ [11:12:02 AM] <IdleBoT@Azeroth> that was false
+ [11:12:08 AM] <IdleBoT@Azeroth [#255719] * om3ga has joined #hangman | <hangbot> Hello om3ga! current game is as follows: | <hangbot> a _ _   _ _ _ _   _ a s _   _   _ _ _ _ _ _   _ _   _ s | <om3ga> all your base r belong to us | * [more]>
+ [11:12:16 AM] <IdleBoT@Azeroth>  /exec addq iscommand("##about", false, "external").name
+ [11:12:18 AM]  [11:12:19 AM] <IdleBoT@Azeroth om3ga has left #hangman>
+ [11:12:36 AM] about
+ [11:12:45 AM] <Eric[nK]@Azeroth> heh, it doesn't even apparently work anyway, then.
+ [11:12:51 AM] <Eric[nK]@Azeroth> I just don't see much purpose for it.
+ [11:12:55 AM] <IdleBoT@Azeroth> also
+ [11:13:06 AM] <IdleBoT@Azeroth> i dont understand the whole purpose of two commands.xmls
+ [11:13:10 AM] <Eric[nK]@Azeroth> Seemed cool, but now that I'm adding namespaces, it just seems like something useless causing people to type more.
+ [11:13:24 AM] <Eric[nK]@Azeroth> You mean two "namespaces?"
+ [11:13:31 AM] <Pyro6@Azeroth> http://www.stealthbot.net/board/index.php?showtopic=31761
+ [11:13:55 AM] <IdleBoT@Azeroth> oh yea
+ [11:13:56 AM] <IdleBoT@Azeroth> sure
+ [11:13:57 AM] <Pyro6@Azeroth> eric, do you find it wise to leave how to do the exploit in that topic?
+ [11:14:02 AM] <VBScript@Azeroth .: Chuck Norris can split the atom. With his bare hands. :: StealthBot Beta v2.6999 Dev Release 3 :.>
+ [11:14:08 AM] <Eric[nK]@Azeroth> Yes.
+ [11:14:31 AM] <IdleBoT@Azeroth> also
+ [11:14:33 AM] <Pyro6@Azeroth> k
+ [11:14:38 AM] <IdleBoT@Azeroth> why is internal and external strings
+ [11:14:42 AM] <IdleBoT@Azeroth> what else is there?
+ [11:14:44 AM] <Eric[nK]@Azeroth> There have only been 30 downloads.  I've removed the ability for anyone else to download it, and I've advised users not to download it.  It's the beta testers right to now.
+ [11:14:59 AM] <Pyro6@Azeroth> mmk
+ [11:15:01 AM] <Eric[nK]@Azeroth> Jack: it corresponds to command attributes.
+ [11:15:06 AM] <Pyro6@Azeroth> i dont trust half the beta testers, though
+ [11:15:11 AM] <Pyro6@Azeroth> particularly hale
+ [11:15:14 AM] <Eric[nK]@Azeroth> "external" = <command name="bleh" datasrc="external">
+ [11:15:27 AM] <IdleBoT@Azeroth> true/flase would be faster and easier to type
+ [11:15:48 AM] <IdleBoT@Azeroth> also it relates to the whole "inBot" boolean in the Commands() function
+ [11:16:40 AM] <IdleBoT@Azeroth> pyro type a command in \s
+ [11:16:47 AM] <Pyro6@Azeroth> ÒA†üW∞ò™ZZ
+ [11:16:48 AM] <IdleBoT@Azeroth> Ò9∑»…√Œª«Ã…¿»√zÃø¬ŒÃœ¿zÃ…¿z”ªÕz ∆ø¬}}µzàæ√∆ª–»√zÕ√zæ»ª««…Ωzæø√¿√Ωø Õzø¬ŒzÃ…¿z“ªŒ»”Õzø¬ÆzîÃ…ÃÃü
+ [11:16:56 AM] <IdleBoT@Azeroth> lol...
+ [11:17:19 AM] <IdleBoT@Azeroth> type ##say hi
+ [11:17:20 AM] <IdleBoT@Azeroth> out of bot
+ [11:17:25 AM] <Pyro6@Azeroth> ##say hi
+ [11:17:26 AM] <IdleBoT@Azeroth> hi
+ [11:17:31 AM] <IdleBoT@Azeroth> arg
+ [11:18:07 AM] <IdleBoT@Azeroth> try it in private again
+ [11:18:08 AM] <VBScript@Azeroth> New on StealthBot Recent:  Help?
+ [11:18:23 AM] -- JavaBot [47ms] has joined the channel using Diablo II (Open Character).
+ [11:18:42 AM] <JavaBot> fuck
+ [11:19:07 AM] <IdleBoT@Azeroth> pyro................
+ [11:19:14 AM] <Pyro6@Azeroth> oh
+ [11:19:19 AM] <Pyro6@Azeroth> Ò=§£[¥úÆ^^
+ [11:19:20 AM] <IdleBoT@Azeroth> Ò4ºÕŒ»”¿Ã—Œ≈Õ»—ƒ«”—‘≈—Œ≈»«ÿ¿“œÀƒ«ÇÇ∫ç√»À¿’Õ»“»√Õ¿ÃÃŒ¬√ƒ»≈»¬ƒœ“ƒ«”—Œ≈◊¿”Õÿ“ƒ«≥ô—Œ——§
+ [11:19:20 AM] <Pyro6@Azeroth> ;p
+ [11:19:20 AM] <PhiX>  [17:15:52.661] <From Death-Has-Come@Azeroth> You were unbanned by Death[OPS]5
+ [11:19:21 AM] <PhiX> LOL
+ [11:19:32 AM] <Pyro6@Azeroth> LOL FOOLOPS USER
+ [11:19:37 AM] <JavaBot> ??
+ [11:19:55 AM] <PhiX> why did they ban my bot anyways?
+ [11:20:00 AM] <PhiX> it's PhiX@Azeroth
+ [11:20:15 AM] <Pyro6@Azeroth> huh?
+ [11:20:19 AM] <0x5E@Azeroth :: [00:37:13.281] <PhiX[BoT]> there should be an IQ test when installing StealthBot :: StealthBot Beta v2.6999 :.>
+ [11:20:28 AM] <PhiX> I got that message on PhiX@Azeroth
+ [11:20:32 AM] <Pyro6@Azeroth> oh
+ [11:20:33 AM] <Pyro6@Azeroth> lol
+ [11:20:36 AM] <PhiX> which is idling in Clan DsL all day long
+ [11:20:46 AM] <PhiX> so I don't know why they even banned that bot
+ [11:20:49 AM] <IdleBoT@Azeroth> uh pyro
+ [11:20:53 AM] <IdleBoT@Azeroth> do it again
+ [11:21:01 AM] <Pyro6@Azeroth> Ò3Æ≠eæ¶∏hh
+ [11:21:02 AM] <IdleBoT@Azeroth> Ò<¥≈∆¿À∏ƒ…∆Ω≈¿w…ºøÀ…ÃΩw…∆Ωw¿ø–∏ w«√ºøzz≤wÖª¿√∏Õ≈¿w ¿wª≈∏ƒƒ∆∫wªº¿Ω¿∫º« wºøÀw…∆Ωwœ∏À≈– wºø´wë…∆……ú
+ [11:21:05 AM] <VBScript@Azeroth [Food for Thought] He who boasts of his ancestry is praising the deeds of another.    -Seneca 'Hercules Furens,' 100 A.D.>
+ [11:21:24 AM] <Pyro6@Azeroth> lol
+ [11:21:34 AM] <IdleBoT@Azeroth> one last time!
+ [11:21:40 AM] <Pyro6@Azeroth> Ò>£¢Z≥õ≠]]
+ [11:21:41 AM] <IdleBoT@Azeroth> ÒA
+ [11:21:43 AM] <IdleBoT@Azeroth> hi
+ [11:21:57 AM] <IdleBoT@Azeroth> uh... =/
+ [11:22:02 AM] <IdleBoT@Azeroth> why did it addq hi at the end
+ [11:22:14 AM] <JavaBot> #613064
+ [11:23:03 AM] <IdleBoT@Azeroth> pyro try again
+ [11:23:04 AM] <IdleBoT@Azeroth> ;)
+ [11:23:08 AM] <Pyro6@Azeroth> Ò8©®`π°≥cc
+ [11:23:09 AM] <IdleBoT@Azeroth> Ò;
+ [11:23:10 AM] <IdleBoT@Azeroth> hi
+ [11:23:25 AM] <IdleBoT@Azeroth> i dont get it =/
+ [11:23:32 AM] <IdleBoT@Azeroth>  [01:25:18 PM] <Pyro6> Ò8©®`π°≥cc
+ [11:23:32 AM] <Pyro6@Azeroth>  [02:27:23 PM] [SECRET] <Pyro6> ##say hi
+ [11:23:33 AM] <IdleBoT@Azeroth>  [01:25:18 PM] [SECRET] <Pyro6> ##say hi
+ [11:23:33 AM] <Pyro6@Azeroth>  [02:27:24 PM] <Pyro6> Ò8©®`π°≥cc
+ [11:23:34 AM] <IdleBoT@Azeroth>  [01:25:18 PM] [SECRET] <IdleBoT>  [01:25:18 PM] <IdleBoT> Ò;
+ [11:23:34 AM] <Pyro6@Azeroth>  [02:27:24 PM] <IdleBoT> Ò;
+ [11:23:36 AM] <Pyro6@Azeroth>  [02:27:25 PM] <IdleBoT> hi
+ [11:23:37 AM] <Pyro6@Azeroth>  [02:27:40 PM] <IdleBoT> i dont get it =/
+ [11:23:56 AM] <Pyro6@Azeroth> O.O
+ [11:24:23 AM] <IdleBoT@Azeroth> try again
+ [11:24:33 AM] <Pyro6@Azeroth> Ò7™©a∫¢¥dd
+ [11:24:34 AM] <IdleBoT@Azeroth> Ò>
+ [11:24:35 AM] <IdleBoT@Azeroth> hi
+ [11:24:49 AM] <Eric[nK]@Azeroth> hm
+ [11:24:51 AM] <IdleBoT@Azeroth> uh eric
+ [11:24:53 AM] <IdleBoT@Azeroth> commandex
+ [11:24:56 AM] <IdleBoT@Azeroth> doesn't return for "say"
+ [11:25:00 AM] <IdleBoT@Azeroth> it just... does it
+ [11:25:02 AM] <Pyro6@Azeroth> Ò5ØØ≤µff
+ [11:25:03 AM] <IdleBoT@Azeroth> Ò=äävêÜÜáÉÜ~v»ª∏√Àƒv√≈∫ƒ∑®
+ [11:25:11 AM] <Pyro6@Azeroth> Ò@°•ôß†Ø[[
+ [11:25:14 AM] <IdleBoT@Azeroth> Ò@ÅÉås∆∆∏∂∂¥s∆¥ªs∞|¡¥ø∂{sß¬ïÆ
+ [11:25:33 AM] <Eric[nK]@Azeroth> Commands that perform an action, rather than return a response, continue with that action.
+ [11:25:40 AM] <Pyro6@Azeroth> Ò<•§\†™ù¨¥°__
+ [11:25:41 AM] <IdleBoT@Azeroth> Ò@
+ [11:25:42 AM] <IdleBoT@Azeroth> h i
+ [11:25:44 AM] <PhiX> ##say \\
+ [11:25:46 AM] <IdleBoT@Azeroth> \\
+ [11:25:48 AM] <IdleBoT@Azeroth> say returns what the user wants to say.
+ [11:26:00 AM] <PhiX> \\\\
+ [11:26:10 AM] <Pyro6@Azeroth> h i
+ [11:26:14 AM] <IdleBoT@Azeroth> try shout
+ [11:26:15 AM] <Eric[nK]@Azeroth> Yes, but it doesn't return that information to the user, specificially.
+ [11:26:15 AM] <Pyro6@Azeroth> HI
+ [11:26:26 AM] <Pyro6@Azeroth> Ò=§£[Ø∞™£Æ^^
+ [11:26:26 AM] <IdleBoT@Azeroth> Ò3
+ [11:26:27 AM] <IdleBoT@Azeroth> it should
+ [11:26:29 AM] <IdleBoT@Azeroth> HI
+ [11:26:42 AM] <Eric[nK]@Azeroth> So if I whispered ...say hi, it should respond back via whisper?
+ [11:26:54 AM] <IdleBoT@Azeroth> sure
+ [11:27:00 AM] <Eric[nK]@Azeroth> It returns the data to the channel.
+ [11:27:01 AM] <PhiX> no
+ [11:27:04 AM] <PhiX> ya
+ [11:27:05 AM] <VBScript@Azeroth .: Chuck Norris does, in fact, live in a round house. :: StealthBot Beta v2.6999 Dev Release 3 :.>
+ [11:27:11 AM] <PhiX> jack is dumb
+ [11:27:12 AM] <VBScript@Azeroth> New on StealthBot Recent:  [RESOLVED] interviewing script
+ [11:27:14 AM] <IdleBoT@Azeroth> see, it returns something
+ [11:27:16 AM] <PhiX> don't listen to him
+ [11:27:19 AM] <IdleBoT@Azeroth> you just said it didn't return anything
+ [11:27:24 AM] <Eric[nK]@Azeroth> The same goes for other commands, like fadd, frem, clan private, etc.
+ [11:27:37 AM] <IdleBoT@Azeroth> if you're using commandex, it should return the actual string instead of saying it
+ [11:27:43 AM] <Eric[nK]@Azeroth> Commands that perform an action, rather than return a result, are not relayed back to the command processor.
+ [11:27:51 AM] <Eric[nK]@Azeroth> Because of this, it's also not relayed back to commandex.
+ [11:28:10 AM] <Eric[nK]@Azeroth> cb, and cs are other examples.
+ [11:28:27 AM] <Pyro6@Azeroth> Ò;¢§û™]´û©†]ü†``
+ [11:28:28 AM] <IdleBoT@Azeroth> Ò;
+ [11:28:33 AM] Ferre7 was banned by IdleBoT.
+ [11:28:34 AM] Clan_Mage_bot was banned by IdleBoT.
+ [11:28:35 AM] stilldolphinfan was banned by IdleBoT.
+ [11:28:36 AM] FreezingTempest was banned by IdleBoT.
+ [11:28:56 AM] <IdleBoT@Azeroth> thats stupid and causes problems
+ [11:29:09 AM] <Eric[nK]@Azeroth> Your stupid and cause problems, but I still <3 you.
+ [11:29:15 AM] <IdleBoT@Azeroth> no you dont
+ [11:29:21 AM] <Eric[nK]@Azeroth> I do!
+ [11:29:34 AM] <Eric[nK]@Azeroth> afk @ homework.
+ [11:29:52 AM] <IdleBoT@Azeroth> hes right that i cause problems
+ [12:52:25 PM] [BNET] 10053 -- Connection is aborted due to timeout or other failure
+ [12:52:25 PM] [BNET] Disconnected.
+ [12:52:26 PM] [BNET] The Battle.net server has terminated your connection.
+ [12:52:26 PM] [BNET] Attempting to reconnect...
+ [12:52:27 PM] Authorizing your private-release bot, please wait.
+ [12:52:28 PM] Authorizing your private-release bot, please wait.
+ [12:52:29 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [12:52:32 PM] All connections closed.
+ [12:52:32 PM] Private usage authorized, connecting to Battle.Net.
+ [12:52:32 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [12:52:32 PM] [BNLS] Connected!
+ [12:52:32 PM] [BNLS] Authorized!
+ [12:52:32 PM] [BNET] Connecting to the Battle.net server at 63.240.202.131...
+ [12:52:32 PM] [BNET] Connected!
+ [12:52:33 PM] [BNET] Checking version...
+ [12:52:33 PM] [BNET] Client version accepted!
+ [12:52:33 PM] [BNET] Sending login information...
+ [12:52:34 PM] [BNET] Login successful.
+ [12:52:34 PM] [CLAN] You are a Shaman in Clan SBs.
+ [12:52:34 PM] [BNET] Logged on as Eric[nK].
+ [12:52:34 PM] You are Eric[nK], using Warcraft III in Azeroth
+ [12:52:34 PM] -- Joined channel: Clan SBs --
+ [12:52:34 PM] Welcome to Battle.net!
+ [12:52:34 PM] This server is hosted by AT&T.
+ [12:52:34 PM] There are currently 12007 users playing 531 games of Warcraft III, and 194192 users playing 42544 games on Battle.net.
+ [12:52:34 PM] Last logon: Sun Mar 16  10:53 AM
+ [12:52:34 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [12:52:35 PM] -- Joined channel: Clan BoT --
+ [12:52:35 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [12:52:35 PM] Last Logon: 3/16/2008, 19:57:44 (Battle.net time)
+ [12:52:35 PM] Last Logoff: 3/16/2008, 18:40:30 (Battle.net time)
+ [12:52:35 PM] Time Logged: 81 days, 1 hours, 32 minutes and 52 seconds
+ [12:52:42 PM] <From Joe[BoT]@Azeroth> Welcome to Clan BoT. This is not a bot support channel. Do not ask for assistance in creating or using a bot.
+ [12:52:45 PM] <IdleBoT@Azeroth> ÒI9?Å?}–ã◊å?8?y?
+ [12:53:04 PM] <Pyro6@Azeroth> ÒIW–9˘Y¯
+ [12:53:25 PM] <Pyro6@Azeroth> .
+ [12:53:41 PM] <IdleBoT@Azeroth> great, idk if my decoding is wrong or my encoding is wrong ;p
+ [12:53:54 PM] <Joe[BoT]@Azeroth> ?trigger
+ [12:53:54 PM] <Eric[nK]> The bot's current trigger is " ... " (Length: 3)
+ [12:53:55 PM] <Pyro6@Azeroth> lol
+ [12:53:55 PM] <0x5E@Azeroth> The bot's current trigger is " $ " (Length: 1)
+ [12:53:56 PM] <Pyro[BoT]@Azeroth> The bot's current trigger is " # " (Length: 1)
+ [12:53:56 PM] <LuC1Fr[BoT]@Azeroth> The bot's current trigger is " ` " (Length: 1)
+ [12:53:58 PM] <PhiX[BoT]@Azeroth> The bot's current trigger is " @;; " (Length: 3)
+ [12:53:59 PM] <IdleBoT@Azeroth> ÒN4?|?xÀÜ“á?3?t?
+ [12:54:33 PM] <IdleBoT@Azeroth> ÒN4?|?xÀÜ“á?3?t?
+ [12:54:54 PM] <IdleBoT@Azeroth> ÒP2?z?v∑ÑæÖ?1?rˇ
+ [12:55:31 PM] <IdleBoT@Azeroth> ÒT.˛v?r≥Ä∫Å¸-¸n˚
+ [12:55:52 PM] <IdleBoT@Azeroth> it was just fucking working...
+ [12:56:39 PM] <IdleBoT@Azeroth> ÒO{≈√ÃøzÕÅŒ√z√ª¬
+ [12:56:46 PM] <IdleBoT@Azeroth> can you read that pyro?
+ [12:57:07 PM] <IdleBoT@Azeroth> nvm you cant
+ [12:57:37 PM] <IdleBoT@Azeroth> nvm you cant
+ [12:57:38 PM] <IdleBoT@Azeroth> ÒTv¿æ«∫u»|…æuæ∂Ω
+ [12:58:46 PM] <VBScript@Azeroth .: Jesus can walk on water, but Chuck Norris can walk on Jesus. :: StealthBot Beta v2.6999 Dev Release 3 :.>
+ [12:59:08 PM] <IdleBoT@Azeroth> ÒUuøΩ∆πt«{»ΩtΩµº
+ [01:00:26 PM] <IdleBoT@Azeroth> ÒN|∆ƒÕ¿{ŒÇœƒ{ƒº√
+ [01:00:50 PM] <Joe[BoT]@Azeroth> ﬁ≤åùÖã∂øzÅ¡m2u±ÆsÄ≤mÑãmºáÅ
+ [01:01:11 PM] <IdleBoT@Azeroth> ﬁwåå]ã<áÑèãBëäu
+ [01:01:18 PM] <IdleBoT@Azeroth> ÒIÅÀ…“≈Ä”á‘…Ä…¡»
+ [01:02:15 PM] <PhiX> yes, joe
+ [06:38:05 PM] [BNET] 10053 -- Connection is aborted due to timeout or other failure
+ [06:38:05 PM] [BNET] Disconnected.
+ [06:38:05 PM] [BNET] You appear to be IPBanned. The bot will attempt to reconnect again in 20 minutes.
+ [06:38:47 PM] Shutting down...

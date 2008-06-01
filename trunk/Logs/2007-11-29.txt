@@ -1,0 +1,224 @@
+ [6:03:54 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [6:03:54 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [6:03:54 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [6:03:55 PM] The current StealthBot version is ÿcb2.6R3.
+ [6:03:55 PM]  
+ [6:03:55 PM] >> ÿcbStealthBot News
+ [6:03:55 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [6:03:55 PM] ->> 
+ [6:03:55 PM] ->> ÿcbStealthBot Beta News
+ [6:03:55 PM] ->> Happy testing!
+ [6:03:55 PM]  
+ [6:03:55 PM] The current StealthBot Beta version is 2.6993.
+ [6:03:55 PM]  [6:03:55 PM] Loaded 3 plugins (3 enabled). Type  [6:03:55 PM] /plugins [6:03:55 PM]  to view them. Type  [6:03:55 PM] /phelp [6:03:55 PM]  for help using them.
+ [6:03:55 PM]  [6:03:55 PM] Type  [6:03:55 PM] /updates [6:03:55 PM]  in the bot to view updates and new plugins that are available for download.
+ [6:03:55 PM]  [6:03:55 PM] frmExample_Load
+ [6:03:56 PM]  [6:03:56 PM] Form created: True
+ [6:03:56 PM]  [6:03:56 PM] frmExample_Resize( [6:03:56 PM] 4710 [6:03:56 PM] ,  [6:03:56 PM] 3645 [6:03:56 PM] )
+ [6:03:56 PM] Connecting your bot...
+ [6:03:56 PM] Authorizing your private-release bot, please wait.
+ [6:03:57 PM] Private usage authorized, connecting to Battle.Net.
+ [6:03:57 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [6:03:57 PM] [BNLS] Connected!
+ [6:03:58 PM] [BNLS] Authorized!
+ [6:03:58 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [6:03:58 PM] [BNET] Connected!
+ [6:03:58 PM] [BNET] Checking version...
+ [6:03:59 PM] [BNET] Client version accepted!
+ [6:03:59 PM] [BNET] Sending login information...
+ [6:04:02 PM] [BNET] Login successful.
+ [6:04:02 PM] [CLAN] You are a Shaman in Clan SBs.
+ [6:04:03 PM] [BNET] Logged on as Eric[nK].
+ [6:04:03 PM] -- Joined channel: Clan SBs --
+ [6:04:03 PM] Welcome to Battle.net!
+ [6:04:03 PM] This server is hosted by AT&T.
+ [6:04:03 PM] There are currently 55795 users playing 1271 games of Warcraft III The Frozen Throne, and 143192 users playing 38907 games on Battle.net.
+ [6:04:03 PM] Last logon: Thu Nov 29  4:23 PM
+ [6:04:03 PM] -- Eric[nK] has acquired ops.
+ [6:04:03 PM] No one hears you.
+ [6:04:03 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [6:04:03 PM] Last Logon: 11/30/2007, 02:12:28 (Battle.net time)
+ [6:04:03 PM] Last Logoff: 11/30/2007, 02:12:17 (Battle.net time)
+ [6:04:03 PM] Time Logged: 38 days, 22 hours, 49 minutes and 0 seconds
+ [6:04:10 PM] -- Joined channel: Clan NNG --
+ [6:04:11 PM] <DarkMage[NNG]>  [15:07:42.281] Error: XML Database Processor has encountered an error during alias lookup.
+ [6:04:14 PM] <Vector[gnome]> eric 
+ [6:04:17 PM] <DarkMage[NNG]>  [15:07:42.296] Error: XML Database Processor has encountered an error during access validation.
+ [6:04:17 PM] <Eric[nK]> ...?
+ [6:04:17 PM] <DarkMage2303> ee
+ [6:04:21 PM] <DarkMage2303> eew
+ [6:04:23 PM] <DarkMage2303> ?trigger
+ [6:04:23 PM] <Pyro[Bot]> The bot's current trigger is " 1337 " (Length: 4)
+ [6:04:24 PM] <Vector[gnome]> are you going to let berzerker push on me?
+ [6:04:38 PM] <Eric[nK]> What did you change in commands.xml, DarkMage?
+ [6:04:39 PM] <Berzerker[NNG]> This doesn't have anything to do with Stealthbot.
+ [6:04:42 PM] <Berzerker[NNG]> Eric doesn't care.
+ [6:04:50 PM] <Vector[gnome]> Berzerker, then drop it.
+ [6:04:53 PM] <Berzerker[NNG]> No
+ [6:04:55 PM] <Berzerker[NNG]> this is fun.
+ [6:04:56 PM] <DarkMage2303> ?trigger
+ [6:04:56 PM] <Pyro[Bot]> The bot's current trigger is " 1337 " (Length: 4)
+ [6:04:59 PM] <PyroManiac666 :: "People are having way too much fun with it, and I, as a Canadian, hate seeing people happy." -iago[x86] :: StealthBot Beta v2.6997 :.>
+ [6:05:03 PM] <DarkMage[NNG]>  [15:08:39.671] Error: XML Database Processor has encountered an error during alias lookup.
+ [6:05:04 PM] <DarkMage[NNG]>  [15:08:39.687] Error: XML Database Processor has encountered an error during access validation.
+ [6:05:06 PM] <DarkMage2303> hmm
+ [6:05:08 PM] <PyroManiac666> The Stealthbot.net hierarchy has no effect outside of Stealthbot.net.
+ [6:05:09 PM] <Eric[nK]> What did you change?
+ [6:05:15 PM] <PyroManiac666> So..
+ [6:05:23 PM] <DarkMage2303> Lol, i was in the Access/Flags file, i'll replace it
+ [6:05:35 PM] <Vector[gnome]> now unban nng-vector, berazerker.
+ [6:05:37 PM] -- On.The.Fly [63ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan xNLG)
+ [6:05:39 PM] <Vector[gnome]> And, no, this is not fun.
+ [6:05:42 PM]  [6:05:42 PM] frmExample_UnLoad( [6:05:42 PM] 0 [6:05:42 PM] )
+ [6:05:43 PM] <Berzerker[NNG]> no
+ [6:05:43 PM] <DarkMage2303> i wasn't sure how to chage the amount of access required to do a command
+ [6:05:47 PM] <PyroManiac666> kill the fly!
+ [6:05:47 PM] <On.The.Fly screams very loudly and runs away>
+ [6:05:51 PM] <PyroManiac666> kill the fly!
+ [6:05:51 PM] -- On.The.Fly has left the channel.
+ [6:05:56 PM] -- Berzerker[NNG] has left the channel.
+ [6:05:57 PM] -- Berzerker[NNG] [15ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [6:05:57 PM] -- Stats updated: Berzerker[NNG] [15ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan NNG)
+ [6:05:58 PM] -- DarkMage[NNG] has left the channel.
+ [6:06:03 PM] <Eric[nK]> change the <rank></rank> or <flag></flag> values.
+ [6:06:09 PM] <DarkMage2303> kk
+ [6:06:20 PM] <Eric[nK]> You can add or remove them, as well.
+ [7:35:32 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [7:35:32 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [7:35:32 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [7:35:33 PM] The current StealthBot version is ÿcb2.6R3.
+ [7:35:33 PM]  
+ [7:35:33 PM] >> ÿcbStealthBot News
+ [7:35:33 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [7:35:33 PM] ->> 
+ [7:35:33 PM] ->> ÿcbStealthBot Beta News
+ [7:35:33 PM] ->> Happy testing!
+ [7:35:33 PM]  
+ [7:35:33 PM] The current StealthBot Beta version is 2.6993.
+ [7:35:33 PM]  [7:35:33 PM] Loaded 3 plugins (3 enabled). Type  [7:35:33 PM] /plugins [7:35:33 PM]  to view them. Type  [7:35:33 PM] /phelp [7:35:33 PM]  for help using them.
+ [7:35:33 PM]  [7:35:33 PM] Type  [7:35:33 PM] /updates [7:35:33 PM]  in the bot to view updates and new plugins that are available for download.
+ [7:35:33 PM]  [7:35:33 PM] frmExample_Load
+ [7:35:33 PM]  [7:35:33 PM] Form created: True
+ [7:35:33 PM]  [7:35:33 PM] frmExample_Resize( [7:35:33 PM] 4710 [7:35:33 PM] ,  [7:35:33 PM] 3645 [7:35:33 PM] )
+ [7:35:35 PM] Connecting your bot...
+ [7:35:35 PM] Authorizing your private-release bot, please wait.
+ [7:35:35 PM] Private usage authorized, connecting to Battle.Net.
+ [7:35:35 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [7:35:35 PM] [BNLS] Connected!
+ [7:35:36 PM] [BNLS] Authorized!
+ [7:35:36 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [7:35:36 PM] [BNET] Connected!
+ [7:35:37 PM] [BNET] Checking version...
+ [7:35:38 PM] [BNET] Client version accepted!
+ [7:35:38 PM] [BNET] Sending login information...
+ [7:35:41 PM] [BNET] Login successful.
+ [7:35:41 PM] [CLAN] You are a Shaman in Clan SBs.
+ [7:35:41 PM] [BNET] Logged on as Eric[nK].
+ [7:35:41 PM] -- Joined channel: Clan SBs --
+ [7:35:42 PM] Welcome to Battle.net!
+ [7:35:42 PM] This server is hosted by AT&T.
+ [7:35:42 PM] There are currently 60297 users playing 1382 games of Warcraft III The Frozen Throne, and 154808 users playing 41584 games on Battle.net.
+ [7:35:42 PM] Last logon: Thu Nov 29  6:17 PM
+ [7:35:42 PM] -- Eric[nK] has acquired ops.
+ [7:35:42 PM] No one hears you.
+ [7:35:42 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [7:35:42 PM] Last Logon: 11/30/2007, 03:44:07 (Battle.net time)
+ [7:35:42 PM] Last Logoff: 11/30/2007, 03:43:56 (Battle.net time)
+ [7:35:42 PM] Time Logged: 39 days, 0 hours, 18 minutes and 15 seconds
+ [7:37:11 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [7:37:11 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [7:37:11 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [7:37:11 PM] The current StealthBot version is ÿcb2.6R3.
+ [7:37:12 PM]  
+ [7:37:12 PM] >> ÿcbStealthBot News
+ [7:37:12 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [7:37:12 PM] ->> 
+ [7:37:12 PM] ->> ÿcbStealthBot Beta News
+ [7:37:12 PM] ->> Happy testing!
+ [7:37:12 PM]  
+ [7:37:12 PM] The current StealthBot Beta version is 2.6993.
+ [7:37:12 PM]  [7:37:12 PM] Loaded 3 plugins (3 enabled). Type  [7:37:12 PM] /plugins [7:37:12 PM]  to view them. Type  [7:37:12 PM] /phelp [7:37:12 PM]  for help using them.
+ [7:37:12 PM]  [7:37:12 PM] Type  [7:37:12 PM] /updates [7:37:12 PM]  in the bot to view updates and new plugins that are available for download.
+ [7:37:12 PM]  [7:37:12 PM] frmExample_Load
+ [7:37:12 PM]  [7:37:12 PM] Form created: True
+ [7:37:12 PM]  [7:37:12 PM] frmExample_Resize( [7:37:12 PM] 4710 [7:37:12 PM] ,  [7:37:12 PM] 3645 [7:37:12 PM] )
+ [7:37:59 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [7:37:59 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [7:37:59 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [7:37:59 PM] The current StealthBot version is ÿcb2.6R3.
+ [7:37:59 PM]  
+ [7:37:59 PM] >> ÿcbStealthBot News
+ [7:37:59 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [7:37:59 PM] ->> 
+ [7:37:59 PM] ->> ÿcbStealthBot Beta News
+ [7:37:59 PM] ->> Happy testing!
+ [7:37:59 PM]  
+ [7:37:59 PM] The current StealthBot Beta version is 2.6993.
+ [7:37:59 PM]  [7:37:59 PM] Loaded 3 plugins (3 enabled). Type  [7:37:59 PM] /plugins [7:37:59 PM]  to view them. Type  [7:37:59 PM] /phelp [7:37:59 PM]  for help using them.
+ [7:37:59 PM]  [7:37:59 PM] Type  [7:37:59 PM] /updates [7:37:59 PM]  in the bot to view updates and new plugins that are available for download.
+ [7:38:00 PM]  [7:38:00 PM] frmExample_Load
+ [7:38:00 PM]  [7:38:00 PM] Form created: True
+ [7:38:00 PM]  [7:38:00 PM] frmExample_Resize( [7:38:00 PM] 4710 [7:38:00 PM] ,  [7:38:00 PM] 3645 [7:38:00 PM] )
+ [7:38:23 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [7:38:23 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [7:38:23 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [7:38:24 PM] The current StealthBot version is ÿcb2.6R3.
+ [7:38:24 PM]  
+ [7:38:24 PM] >> ÿcbStealthBot News
+ [7:38:24 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [7:38:24 PM] ->> 
+ [7:38:24 PM] ->> ÿcbStealthBot Beta News
+ [7:38:24 PM] ->> Happy testing!
+ [7:38:24 PM]  
+ [7:38:24 PM] The current StealthBot Beta version is 2.6993.
+ [7:38:24 PM]  [7:38:24 PM] Loaded 3 plugins (3 enabled). Type  [7:38:24 PM] /plugins [7:38:24 PM]  to view them. Type  [7:38:24 PM] /phelp [7:38:24 PM]  for help using them.
+ [7:38:24 PM]  [7:38:24 PM] Type  [7:38:24 PM] /updates [7:38:24 PM]  in the bot to view updates and new plugins that are available for download.
+ [7:38:24 PM]  [7:38:24 PM] frmExample_Load
+ [7:38:24 PM]  [7:38:24 PM] Form created: True
+ [7:38:24 PM]  [7:38:24 PM] frmExample_Resize( [7:38:24 PM] 4710 [7:38:24 PM] ,  [7:38:24 PM] 3645 [7:38:24 PM] )
+ [7:39:13 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [7:39:13 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [7:39:13 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [7:39:14 PM] The current StealthBot version is ÿcb2.6R3.
+ [7:39:14 PM]  
+ [7:39:14 PM] >> ÿcbStealthBot News
+ [7:39:14 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [7:39:14 PM] ->> 
+ [7:39:14 PM] ->> ÿcbStealthBot Beta News
+ [7:39:14 PM] ->> Happy testing!
+ [7:39:14 PM]  
+ [7:39:14 PM] The current StealthBot Beta version is 2.6993.
+ [7:39:14 PM]  [7:39:14 PM] Loaded 3 plugins (3 enabled). Type  [7:39:14 PM] /plugins [7:39:14 PM]  to view them. Type  [7:39:14 PM] /phelp [7:39:14 PM]  for help using them.
+ [7:39:14 PM]  [7:39:14 PM] Type  [7:39:14 PM] /updates [7:39:14 PM]  in the bot to view updates and new plugins that are available for download.
+ [7:39:14 PM]  [7:39:14 PM] frmExample_Load
+ [7:39:14 PM]  [7:39:14 PM] Form created: True
+ [7:39:14 PM]  [7:39:14 PM] frmExample_Resize( [7:39:14 PM] 4710 [7:39:14 PM] ,  [7:39:14 PM] 3645 [7:39:14 PM] )
+ [7:39:15 PM] Connecting your bot...
+ [7:39:15 PM] Authorizing your private-release bot, please wait.
+ [7:39:15 PM] Private usage authorized, connecting to Battle.Net.
+ [7:39:16 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [7:39:16 PM] [BNLS] Connected!
+ [7:39:16 PM] [BNLS] Authorized!
+ [7:39:16 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [7:39:16 PM] [BNET] Connected!
+ [7:39:17 PM] [BNET] Checking version...
+ [7:39:19 PM] [BNET] Client version accepted!
+ [7:39:19 PM] [BNET] Sending login information...
+ [7:39:20 PM] [BNET] Login successful.
+ [7:39:20 PM] [CLAN] You are a Shaman in Clan SBs.
+ [7:39:20 PM] [BNET] Logged on as Eric[nK].
+ [7:39:20 PM] -- Joined channel: Clan SBs --
+ [7:39:20 PM] Welcome to Battle.net!
+ [7:39:20 PM] This server is hosted by AT&T.
+ [7:39:20 PM] There are currently 60387 users playing 1364 games of Warcraft III The Frozen Throne, and 155080 users playing 42022 games on Battle.net.
+ [7:39:20 PM] Last logon: Thu Nov 29  7:44 PM
+ [7:39:20 PM] -- Eric[nK] has acquired ops.
+ [7:39:20 PM] No one hears you.
+ [7:39:21 PM] -- Stats updated: Eric[nK] [438ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [7:39:21 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [7:39:21 PM] Last Logon: 11/30/2007, 03:42:15 (Battle.net time)
+ [7:39:21 PM] Last Logoff: 11/30/2007, 03:44:37 (Battle.net time)
+ [7:39:21 PM] Time Logged: 39 days, 0 hours, 18 minutes and 44 seconds
+ [7:39:25 PM] <BNU-ZeDoX> r u there yet?
+ [7:39:31 PM] <Pyro6-Tech> ..?
+ [7:39:48 PM] <BNU-ZeDoX> that ddl: SSubTmr6.dll, I need put on my bot folder?

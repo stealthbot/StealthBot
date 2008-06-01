@@ -1,0 +1,19 @@
+ [8:42:34 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [8:42:34 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [8:42:34 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [8:42:34 PM] The current StealthBot version is ÿcb2.6R3.
+ [8:42:34 PM]  
+ [8:42:34 PM] >> ÿcbStealthBot News
+ [8:42:34 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [8:42:34 PM] ->> 
+ [8:42:34 PM] ->> ÿcbStealthBot Beta News
+ [8:42:34 PM] ->> Happy testing!
+ [8:42:34 PM]  
+ [8:42:34 PM] The current StealthBot Beta version is 2.6993.
+ [8:42:35 PM]  [8:42:35 PM] Loaded 2 plugins (2 enabled). Type  [8:42:35 PM] /plugins [8:42:35 PM]  to view them. Type  [8:42:35 PM] /phelp [8:42:35 PM]  for help using them.
+ [8:42:35 PM]  [8:42:35 PM] Type  [8:42:35 PM] /updates [8:42:35 PM]  in the bot to view updates and new plugins that are available for download.
+ [8:42:35 PM]  [8:42:35 PM] frmExample_Load
+ [8:42:35 PM]  [8:42:35 PM] Form created: True
+ [8:42:35 PM]  [8:42:35 PM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [8:42:35 PM]  [8:42:35 PM] Variable is undefined.
+ [8:42:36 PM] You are the bot console.

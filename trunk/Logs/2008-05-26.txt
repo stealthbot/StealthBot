@@ -1,0 +1,2393 @@
+ [11:18:32 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 11, by Stealth.
+ [11:18:32 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:18:32 AM] Script loaded: blah.txt
+ [11:18:33 AM] Script loaded: PluginSystem.dat
+ [11:18:33 AM] Connecting your bot...
+ [11:18:33 AM] Authorizing your private-release bot, please wait.
+ [11:18:33 AM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [11:18:33 AM] All connections closed.
+ [11:18:38 AM] The current StealthBot version is ˇcb2.6R3.
+ [11:18:38 AM]  
+ [11:18:38 AM] >> ˇcbStealthBot News
+ [11:18:38 AM] >> Welcome to the new StealthBot News!
+ [11:18:38 AM] ->> 
+ [11:18:38 AM] ->> ˇcbStealthBot Beta News
+ [11:18:38 AM] ->> Happy testing!
+ [11:18:38 AM]  
+ [11:18:38 AM] The current StealthBot Beta version is 2.6999.
+ [11:18:39 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [11:18:39 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [11:18:39 AM] Scripting runtime error '13': (line 1; column 0)
+ [11:18:39 AM] Type mismatch: 'Join'.
+ [11:18:39 AM] Offending line: >> 
+ [11:18:39 AM] Scripting runtime error '13': (line 1260; column 3)
+ [11:18:39 AM] Type mismatch: 'Join'.
+ [11:18:39 AM] Offending line: >> 
+ [11:19:03 AM] Shutting down...
+ [11:23:58 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 11, by Stealth.
+ [11:23:58 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:23:58 AM] Script loaded: blah.txt
+ [11:23:58 AM] Script loaded: PluginSystem.dat
+ [11:24:04 AM] The current StealthBot version is ˇcb2.6R3.
+ [11:24:04 AM]  
+ [11:24:04 AM] >> ˇcbStealthBot News
+ [11:24:04 AM] >> Welcome to the new StealthBot News!
+ [11:24:04 AM] ->> 
+ [11:24:04 AM] ->> ˇcbStealthBot Beta News
+ [11:24:04 AM] ->> Happy testing!
+ [11:24:04 AM]  
+ [11:24:04 AM] The current StealthBot Beta version is 2.6999.
+ [11:24:04 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [11:24:04 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [11:24:04 AM] Scripting runtime error '13': (line 1; column 0)
+ [11:24:04 AM] Type mismatch: 'Join'.
+ [11:24:04 AM] Offending line: >> 
+ [11:24:04 AM] Scripting runtime error '13': (line 1260; column 3)
+ [11:24:04 AM] Type mismatch: 'Join'.
+ [11:24:04 AM] Offending line: >> 
+ [11:24:04 AM] Connecting your bot...
+ [11:24:04 AM] Authorizing your private-release bot, please wait.
+ [11:24:04 AM] Private usage authorized, connecting to Battle.Net.
+ [11:24:04 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [11:24:07 AM] [BNLS] Connected!
+ [11:24:07 AM] [BNLS] Authorized!
+ [11:24:07 AM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [11:24:07 AM] [BNET] Connected!
+ [11:24:07 AM] [BNET] Checking version...
+ [11:24:08 AM] [BNET] Client version accepted!
+ [11:24:08 AM] [BNET] Sending login information...
+ [11:24:08 AM] [BNET] Login successful.
+ [11:24:08 AM] [CLAN] You are a Grunt in Clan BoT.
+ [11:24:08 AM] [BNET] Logged on as Eric[nK].
+ [11:24:09 AM] -- Joined channel: Clan BoT --
+ [11:24:09 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [11:24:09 AM] Last Logon: 5/26/2008, 18:26:22 (Battle.net time)
+ [11:24:09 AM] Last Logoff: 5/22/2008, 17:50:04 (Battle.net time)
+ [11:24:09 AM] Time Logged: 106 days, 19 hours, 5 minutes and 35 seconds
+ [11:24:09 AM] You are now marked as being a person who likes men.
+ [11:24:11 AM] -- t-dawg[BoT]@Azeroth has left the channel.
+ [11:24:11 AM] -- Joined channel: Clan BoT --
+ [11:24:11 AM] -- Eric[nK]@Azeroth has acquired ops.
+ [11:24:11 AM] [CLAN] You have been promoted. Your new rank is Shaman.
+ [11:24:11 AM] [CLAN] Member update: Eric[nK] is now a Shaman.
+ [11:24:11 AM] You are now marked as being a person who likes men.
+ [11:24:36 AM] <VBScript@Azeroth | New on StealthBot Recent:  bcp runtime error 9>
+ [11:24:44 AM] All connections closed.
+ [11:24:44 AM] Connecting your bot...
+ [11:24:44 AM] Authorizing your private-release bot, please wait.
+ [11:24:45 AM] Private usage authorized, connecting to Battle.Net.
+ [11:24:45 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [11:24:45 AM] [BNLS] Connected!
+ [11:24:45 AM] [BNLS] Authorized!
+ [11:24:45 AM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [11:24:45 AM] [BNET] Connected!
+ [11:24:45 AM] [BNET] Checking version...
+ [11:24:46 AM] [BNET] Client version accepted!
+ [11:24:46 AM] [BNET] Sending login information...
+ [11:24:46 AM] [BNET] Login successful.
+ [11:24:46 AM] [CLAN] You are a Grunt in Clan BoT.
+ [11:24:46 AM] [BNET] Logged on as Eric[nK].
+ [11:24:47 AM] -- Joined channel: Clan BoT --
+ [11:24:47 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [11:24:47 AM] Last Logon: 5/26/2008, 18:26:22 (Battle.net time)
+ [11:24:47 AM] Last Logoff: 5/26/2008, 18:26:22 (Battle.net time)
+ [11:24:47 AM] Time Logged: 106 days, 19 hours, 6 minutes and 12 seconds
+ [11:24:47 AM] You are now marked as being a person who likes men.
+ [11:24:48 AM] Shutting down...
+ [11:24:53 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 11, by Stealth.
+ [11:24:53 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:24:53 AM] Script loaded: blah.txt
+ [11:24:53 AM] Script loaded: PluginSystem.dat
+ [11:24:59 AM] The current StealthBot version is ˇcb2.6R3.
+ [11:24:59 AM]  
+ [11:24:59 AM] >> ˇcbStealthBot News
+ [11:24:59 AM] >> Welcome to the new StealthBot News!
+ [11:24:59 AM] ->> 
+ [11:24:59 AM] ->> ˇcbStealthBot Beta News
+ [11:24:59 AM] ->> Happy testing!
+ [11:24:59 AM]  
+ [11:24:59 AM] The current StealthBot Beta version is 2.6999.
+ [11:24:59 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [11:24:59 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [11:24:59 AM] Scripting runtime error '13': (line 1; column 0)
+ [11:24:59 AM] Type mismatch: 'Join'.
+ [11:24:59 AM] Offending line: >> 
+ [11:24:59 AM] Scripting runtime error '13': (line 1260; column 3)
+ [11:24:59 AM] Type mismatch: 'Join'.
+ [11:24:59 AM] Offending line: >> 
+ [11:25:02 AM] Connecting your bot...
+ [11:25:02 AM] Authorizing your private-release bot, please wait.
+ [11:25:02 AM] Private usage authorized, connecting to Battle.Net.
+ [11:25:02 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [11:25:02 AM] [BNLS] Connected!
+ [11:25:02 AM] [BNLS] Authorized!
+ [11:25:02 AM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [11:25:03 AM] [BNET] Connected!
+ [11:25:03 AM] [BNET] Checking version...
+ [11:25:03 AM] [BNET] Client version accepted!
+ [11:25:03 AM] [BNET] Sending login information...
+ [11:25:03 AM] [BNET] Login successful.
+ [11:25:03 AM] [CLAN] You are a Grunt in Clan BoT.
+ [11:25:04 AM] Shutting down...
+ [11:25:08 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 11, by Stealth.
+ [11:25:08 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [11:25:08 AM] Script loaded: blah.txt
+ [11:25:08 AM] Script loaded: PluginSystem.dat
+ [11:25:09 AM] Connecting your bot...
+ [11:25:09 AM] Authorizing your private-release bot, please wait.
+ [11:25:09 AM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [11:25:09 AM] All connections closed.
+ [11:25:09 AM] Connecting your bot...
+ [11:25:09 AM] Authorizing your private-release bot, please wait.
+ [11:25:09 AM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [11:25:09 AM] All connections closed.
+ [11:25:09 AM] Connecting your bot...
+ [11:25:09 AM] Authorizing your private-release bot, please wait.
+ [11:25:09 AM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [11:25:09 AM] All connections closed.
+ [11:25:09 AM] Connecting your bot...
+ [11:25:09 AM] Authorizing your private-release bot, please wait.
+ [11:25:09 AM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [11:25:09 AM] All connections closed.
+ [11:25:09 AM] Connecting your bot...
+ [11:25:09 AM] Authorizing your private-release bot, please wait.
+ [11:25:09 AM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [11:25:09 AM] All connections closed.
+ [11:25:10 AM] Connecting your bot...
+ [11:25:10 AM] Authorizing your private-release bot, please wait.
+ [11:25:10 AM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [11:25:10 AM] All connections closed.
+ [11:25:14 AM] The current StealthBot version is ˇcb2.6R3.
+ [11:25:14 AM]  
+ [11:25:14 AM] >> ˇcbStealthBot News
+ [11:25:14 AM] >> Welcome to the new StealthBot News!
+ [11:25:14 AM] ->> 
+ [11:25:14 AM] ->> ˇcbStealthBot Beta News
+ [11:25:14 AM] ->> Happy testing!
+ [11:25:14 AM]  
+ [11:25:14 AM] The current StealthBot Beta version is 2.6999.
+ [11:25:14 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [11:25:14 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [11:25:14 AM] Scripting runtime error '13': (line 1; column 0)
+ [11:25:14 AM] Type mismatch: 'Join'.
+ [11:25:14 AM] Offending line: >> 
+ [11:25:14 AM] Scripting runtime error '13': (line 1260; column 3)
+ [11:25:14 AM] Type mismatch: 'Join'.
+ [11:25:14 AM] Offending line: >> 
+ [11:26:55 AM] Connecting your bot...
+ [11:26:55 AM] Authorizing your private-release bot, please wait.
+ [11:26:55 AM] Private usage authorized, connecting to Battle.Net.
+ [11:26:55 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [11:26:55 AM] [BNLS] Connected!
+ [11:26:55 AM] [BNLS] Authorized!
+ [11:26:55 AM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [11:26:55 AM] [BNET] Connected!
+ [11:26:55 AM] [BNET] Checking version...
+ [11:26:56 AM] [BNET] Client version accepted!
+ [11:26:56 AM] [BNET] Sending login information...
+ [11:26:56 AM] [BNET] Login successful.
+ [11:26:56 AM] [CLAN] You are a Grunt in Clan BoT.
+ [11:26:56 AM] [BNET] Logged on as Eric[nK].
+ [11:26:57 AM] -- Joined channel: Clan BoT --
+ [11:26:57 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [11:26:57 AM] Last Logon: 5/26/2008, 18:35:19 (Battle.net time)
+ [11:26:57 AM] Last Logoff: 5/26/2008, 18:26:22 (Battle.net time)
+ [11:26:57 AM] Time Logged: 106 days, 19 hours, 6 minutes and 15 seconds
+ [11:26:57 AM] You are now marked as being a person who likes men.
+ [11:26:58 AM] -- t-dawg[BoT]@Azeroth has left the channel.
+ [11:26:58 AM] -- Joined channel: Clan BoT --
+ [11:26:58 AM] -- Eric[nK]@Azeroth has acquired ops.
+ [11:26:58 AM] [CLAN] You have been promoted. Your new rank is Shaman.
+ [11:26:58 AM] [CLAN] Member update: Eric[nK] is now a Shaman.
+ [11:26:58 AM] You are now marked as being a person who likes men.
+ [11:27:29 AM] <Eric@Azeroth> hai eric
+ [11:28:56 AM] <Pyro6@Azeroth> erm
+ [11:29:00 AM] <Pyro6@Azeroth> hi
+ [11:29:45 AM] <Eric[nK]@Azeroth> hi
+ [11:29:48 AM] <DeAtHZeRg@Azeroth> hi
+ [11:30:26 AM] <VBScript@Azeroth .: [2:51:46 PM] [TGIN] <Demus.Wife> WTF We dont play with homo's labete!! :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [11:30:54 AM] <Eric[nK]@Azeroth> yay @ connect on start up
+ [11:34:26 AM] <DeAtHZeRg@Azeroth> afk
+ [11:35:32 AM] All connections closed.
+ [11:35:33 AM] Connecting your bot...
+ [11:35:33 AM] Authorizing your private-release bot, please wait.
+ [11:35:33 AM] Private usage authorized, connecting to Battle.Net.
+ [11:35:33 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [11:35:33 AM] [BNLS] Connected!
+ [11:35:33 AM] [BNLS] Authorized!
+ [11:35:33 AM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [11:35:33 AM] [BNET] Connected!
+ [11:35:33 AM] [BNET] Checking version...
+ [11:35:34 AM] [BNET] Client version accepted!
+ [11:35:34 AM] [BNET] Sending login information...
+ [11:35:34 AM] [BNET] Login successful.
+ [11:35:34 AM] [CLAN] You are a Grunt in Clan BoT.
+ [11:35:34 AM] [BNET] Logged on as Eric[nK].
+ [11:35:34 AM] -- Joined channel: Clan BoT --
+ [11:35:35 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [11:35:35 AM] Last Logon: 5/26/2008, 18:43:57 (Battle.net time)
+ [11:35:35 AM] Last Logoff: 5/26/2008, 18:43:56 (Battle.net time)
+ [11:35:35 AM] Time Logged: 106 days, 19 hours, 14 minutes and 52 seconds
+ [11:35:35 AM] You are now marked as being a person who likes men.
+ [11:35:37 AM] -- t-dawg[BoT] has left the channel.
+ [11:35:37 AM] -- Joined channel: Clan BoT --
+ [11:35:37 AM] -- Eric[nK] has acquired ops.
+ [11:35:37 AM] [CLAN] You have been promoted. Your new rank is Shaman.
+ [11:35:37 AM] [CLAN] Member update: Eric[nK] is now a Shaman.
+ [11:35:37 AM] You are now marked as being a person who likes men.
+ [11:44:46 AM] <VBScript | New on SlashDot:  Getting the "Free" Business Model Wrong Doesn't Mean the Model is Flawed>
+ [11:45:36 AM] <VBScript .: [10:13:10 PM] [BLT] <Fetus_Stabber> then 5 hit tauren :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [11:55:14 AM] <LuC1Fr[BoT]> http://www.meatspin.com
+ [11:55:19 AM] <DeAtHZeRg -: System Uptime: 5 days, 17 hours, 6 minutes and 3 seconds :: Connection Uptime: 1 day, 4 hours, 54 minutes and 3 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [11:55:20 AM] <LuC1Fr[BoT]> RAWR
+ [11:56:05 AM] <PhiX@USEast> rofl
+ [11:56:13 AM] <PhiX@USEast> charlie the unicorn
+ [11:56:15 AM] <PhiX@USEast> is just great
+ [12:00:43 PM] <VBScript .: Custom Idle 1.0 by ConnectioN_LosT :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [12:02:09 PM] -- idiatic has left the channel.
+ [12:02:41 PM] -- HaKr_ [63ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [12:02:56 PM] -- idiatic [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [12:03:13 PM] -- HaKr_ has left the channel.
+ [12:03:22 PM] <PhiX@USEast> @;;uptime
+ [12:03:24 PM] -- idiatic has left the channel.
+ [12:03:25 PM] <PhiX[BoT]> System uptime 1 day, 10 hours, 4 minutes and 58 seconds, connection uptime 1 day, 8 hours, 15 minutes and 54 seconds.
+ [12:10:02 PM] <VBScript | New on StealthBot Recent:  Little question BCP>
+ [12:15:52 PM] <VBScript .: [6:09:34 PM] [SWWT] <SWWTDoodle@USEast> Murloc_Master: STOP TALKING ABOUT DOTA IM UNDERAGE :( :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [12:16:48 PM] -- idiatic [47ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [12:16:48 PM] -- Stats updated: idiatic [47ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [12:16:52 PM] -- HaKr_ [63ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [12:16:55 PM] -- HaKr_ has left the channel.
+ [12:17:05 PM] -- idiatic has left the channel.
+ [12:19:07 PM] <VBScript | New on StealthBot Recent:  [RESOLVED] qtkick problems...>
+ [12:22:54 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [12:23:07 PM] <Hero.A> Phix and pyro
+ [12:23:11 PM] <Pyro6> ?
+ [12:23:17 PM] <Hero.A> You are naughty boys
+ [12:23:18 PM] <LuC1Fr[BoT]> sittin in a tree
+ [12:23:27 PM] <LuC1Fr[BoT]> k.i.s.s.i.n.g
+ [12:23:29 PM] <LuC1Fr[BoT]> o.o
+ [12:23:32 PM] <Pyro6> :D
+ [12:25:01 PM] -- Hero.A has left the channel.
+ [12:25:37 PM] <PhiX@USEast> K.I.S.S.
+ [12:25:47 PM] <Pyro6> I.N.G.
+ [12:25:49 PM] <PhiX@USEast> keep it simple stupid
+ [12:26:08 PM] <Pyro6> wow
+ [12:26:12 PM] <Pyro6> forsaken ops sucks
+ [12:26:48 PM] <PhiX@USEast> NO U
+ [12:27:01 PM] <Pyro6> like one bot with a # joined the channel
+ [12:27:09 PM] <Pyro6> and it banned that same bot 4 times
+ [12:27:24 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [12:27:27 PM] <Pyro6> fucking ne_sucks
+ [12:27:32 PM] <Hero.A> Friggin maker of genocide
+ [12:27:40 PM] <Pyro6> lol /who nes
+ [12:27:44 PM] <Hero.A> yeah
+ [12:27:52 PM] -- Pyro6 has left the channel.
+ [12:27:53 PM] <Hero.A> He is spamming lots of places
+ [12:27:55 PM] <Hero.A> here too?
+ [12:27:56 PM] -- PhiX@USEast has left the channel.
+ [12:28:12 PM] <VBScript | New on StealthBot Recent:  [more]; [RESOLVED] bcp runtime error 9; Bot kick Commands>
+ [12:28:14 PM] -- Hero.A has left the channel.
+ [12:31:01 PM] <VBScript .: [1:29:07 PM] <i_gO_Poopie -: LikeOhMyGod! Can i have ur Autograph? :-> :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [12:31:13 PM] <VBScript | New on StealthBot S&P:  [more]>
+ [12:35:09 PM] -- PhiX@USEast [-1ms] has joined the channel using Starcraft Brood War (1337 wins).
+ [12:35:13 PM] -- Wasp@USEast [0ms] has joined the channel using Diablo II (Open Character).
+ [12:35:16 PM] <PhiX@USEast> FUCK
+ [12:35:20 PM] <PhiX@USEast> THEY BANNED ME
+ [12:35:25 PM] <PhiX@USEast>  [21:35:03.450] PhiX was banned by AntiLib(Ximp) (BotBan-PingSpoof(Low)).
+ [12:35:31 PM] <PhiX@USEast> ping ban is so noob
+ [12:35:34 PM] -- Pyro6 [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [12:35:35 PM] <Wasp@USEast> who did
+ [12:35:41 PM] <PhiX@USEast> clan ximp
+ [12:35:45 PM] <PhiX@USEast> LETZ LOAD EM
+ [12:35:48 PM] <Pyro6> DO IT
+ [12:35:52 PM] <Pyro6> @;;DO IT
+ [12:35:53 PM] <PhiX[BoT]> kk ^_^
+ [12:35:53 PM] <Wasp@USEast> Are they assholes or something?
+ [12:35:54 PM] <PhiX@USEast> WITH SBS
+ [12:35:57 PM] <PhiX@USEast> no
+ [12:36:01 PM] <PhiX@USEast> they just banned me
+ [12:36:04 PM] <Wasp@USEast> hah
+ [12:36:05 PM] <Pyro6> #load clan ximp
+ [12:36:06 PM] <Wasp@USEast> fair enough
+ [12:36:18 PM] <PhiX@USEast>  [21:34:54.681] <Jake[EvO]>  /j clan ximp
+ [12:36:22 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [12:36:22 PM] <Pyro[BoT]> Now loading Clan ximp with 1129058 bots.
+ [12:36:26 PM] <Hero.A> Lame spamming
+ [12:36:26 PM] <PhiX@USEast> AND THEN THEY BAN ME
+ [12:36:28 PM] <Hero.A> Rofl
+ [12:36:34 PM] <Hero.A> Pyro
+ [12:36:39 PM] <Pyro6> what
+ [12:36:46 PM] <Hero.A> You wish you had that many bots
+ [12:36:50 PM] <PhiX@USEast> ops, say ops, say ?trigger
+ [12:36:50 PM] <LuC1Fr[BoT]> ops, say ?trigger
+ [12:36:51 PM] <VBScript> ops, say ?trigger
+ [12:36:51 PM] <PhiX[BoT]> ops, say ?trigger
+ [12:36:51 PM] <LuC1Fr[BoT]> ?trigger
+ [12:36:51 PM] <Pyro6> i do
+ [12:36:52 PM] <Eric> The bot's current trigger is " * " (Length: 1)
+ [12:36:52 PM] <VBScript> LuC1Fr[BoT] says: ?trigger
+ [12:36:52 PM] <LuC1Fr[BoT]> ?trigger
+ [12:36:53 PM] <PhiX[BoT]> ?trigger
+ [12:36:53 PM] <t-dawg[BoT]> The bot's current trigger is " ? " (Alt + 063)
+ [12:36:53 PM] <Eric> The bot's current trigger is " * " (Length: 1)
+ [12:36:53 PM] <VBScript> PhiX[BoT] says: ?trigger
+ [12:36:54 PM] <LuC1Fr[BoT]> The bot's current trigger is " ` " (Length: 1)
+ [12:36:54 PM] <PhiX[BoT]> ?trigger
+ [12:36:54 PM] <t-dawg[BoT]> The bot's current trigger is " ? " (Alt + 063)
+ [12:36:54 PM] <Eric> The bot's current trigger is " * " (Length: 1)
+ [12:36:54 PM] <VBScript> The bot's current trigger is " - " (Length: 1)
+ [12:36:55 PM] <LuC1Fr[BoT]> The bot's current trigger is " ` " (Length: 1)
+ [12:36:55 PM] <PhiX[BoT]> The bot's current trigger is " @;; " (Length: 3)
+ [12:36:55 PM] <Eric> The bot's current trigger is " * " (Length: 1)
+ [12:36:56 PM] <VBScript> The bot's current trigger is " - " (Length: 1)
+ [12:36:56 PM] <PhiX[BoT]> The bot's current trigger is " @;; " (Length: 3)
+ [12:36:58 PM] <Hero.A> Genocide?
+ [12:36:59 PM] <VBScript> The bot's current trigger is " - " (Length: 1)
+ [12:36:59 PM] <PhiX@USEast> SB SPAM!
+ [12:37:00 PM] <Pyro6> i just dont have enough cd keys
+ [12:37:03 PM] <VBScript> The bot's current trigger is " - " (Length: 1)
+ [12:37:03 PM] <Pyro[BoT]> ops, say ?trigger
+ [12:37:04 PM] <PhiX[BoT]> Pyro[BoT] says: ?trigger
+ [12:37:04 PM] <LuC1Fr[BoT]> ?trigger
+ [12:37:05 PM] <Eric> The bot's current trigger is " * " (Length: 1)
+ [12:37:05 PM] <PhiX[BoT]> The bot's current trigger is " @;; " (Length: 3)
+ [12:37:05 PM] <VBScript> Pyro[BoT] says: ?trigger
+ [12:37:06 PM] <Wasp@USEast> brb
+ [12:37:09 PM] <VBScript> The bot's current trigger is " - " (Length: 1)
+ [12:37:10 PM] -- Wasp@USEast has left the channel.
+ [12:37:18 PM] <VBScript | New on StealthBot Recent:  whsiper pingme>
+ [12:38:45 PM] -- PhiX@USEast has left the channel.
+ [12:39:19 PM] <Pyro6> #exec AddQ GetInternalDataByUsername("Pyro6", 2)
+ [12:39:20 PM] <Pyro[BoT]> 156
+ [12:40:04 PM] -- PhiX@USEast [-1ms] has joined the channel using Starcraft Brood War (1337 wins).
+ [12:40:12 PM] <PhiX@USEast> LOADED CLAN PHIX GG
+ [12:40:56 PM] -- Hero.A has left the channel.
+ [12:41:13 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [12:41:16 PM] <Hero.A> Amazing
+ [12:41:24 PM] <Hero.A> you are owning clan phix
+ [12:41:31 PM] -- Pyro6 has left the channel.
+ [12:41:45 PM] <PhiX@USEast> I LOADED THOSE NEWBS
+ [12:41:46 PM] -- Wasp@USEast [0ms] has joined the channel using Diablo II (Open Character).
+ [12:41:52 PM] -- Pyro6 [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [12:41:53 PM] <Pyro6> luzl
+ [12:41:56 PM] <Pyro6> lulz*
+ [12:41:59 PM] <Pyro6> nothing is happeneing
+ [12:42:04 PM] <PhiX@USEast> where?
+ [12:42:14 PM] <Pyro6> in clan phix
+ [12:42:15 PM] <Pyro6> ;o
+ [12:42:20 PM] <PhiX@USEast> I loaded the channel
+ [12:42:29 PM] <PhiX@USEast> with the one bot I'm on
+ [12:42:45 PM] <Wasp@USEast> are you trying to work a flooder?
+ [12:42:53 PM] <PhiX@USEast> huh?
+ [12:43:06 PM] <Wasp@USEast> are you trying to load/flood
+ [12:43:08 PM] <PhiX@USEast> warring is for newbs
+ [12:43:17 PM] <Hero.A> Yeah he is trying to flood your mom with sperm
+ [12:43:22 PM] <PhiX@USEast> ...
+ [12:43:26 PM] <PhiX@USEast> very mature
+ [12:43:28 PM] <Hero.A> I know
+ [12:43:33 PM] <Hero.A> I tend to be that way sometimes.
+ [12:43:35 PM] <Pyro6> hero
+ [12:43:36 PM] <PhiX@USEast> LOLOLOL HERO WAS TRYING TO BE FUNNY
+ [12:43:39 PM] <Pyro6> i like how last night
+ [12:43:43 PM] <Pyro6> you were talking about fucking my mom
+ [12:43:49 PM] <Pyro6> but when andy said he wanted your cock
+ [12:43:59 PM] <Pyro6> you were like "shush my moms behind me"
+ [12:44:07 PM] <PhiX@USEast> HERO HASNT GOT A COCK LOLOL
+ [12:44:12 PM] <Pyro6> LOLOL
+ [12:44:16 PM] <Pyro6> ROFL
+ [12:44:17 PM] <Hero.A> PhiX you already know I do :p
+ [12:44:18 PM] <PhiX@USEast> loL
+ [12:44:26 PM] <Hero.A> Tried to rape me :(
+ [12:44:35 PM] <Pyro6> l_ol_
+ [12:44:43 PM] <PhiX@USEast> @;;bunnies
+ [12:44:43 PM] <PhiX[BoT]>   /)/)(\(\
+ [12:44:45 PM] <PhiX[BoT]>  ( '.')('.' )
+ [12:44:46 PM] <PhiX[BoT]> ('')('')('')('')
+ [12:44:51 PM] <PhiX@USEast> FEEL THE LOVE
+ [12:45:18 PM] <PhiX@USEast> you know what would own
+ [12:45:33 PM] <PhiX@USEast> if you couldn't get disconnected for flooding when banning users from the channel
+ [12:45:44 PM] <Pyro6> ol
+ [12:45:46 PM] <Pyro6> lol
+ [12:45:51 PM] <Wasp@USEast> No way, deathzerg is a SB mod now?
+ [12:45:52 PM] <Pyro6> then it would be like mass pwnage
+ [12:45:54 PM] <PhiX@USEast> they should add that
+ [12:45:57 PM] <Pyro6> uh
+ [12:45:59 PM] <Pyro6> hes been one
+ [12:46:02 PM] <Pyro6> ...
+ [12:46:04 PM] <Wasp@USEast> i never knew
+ [12:46:05 PM] <PhiX@USEast> he "moderates" the Off-Topic forum
+ [12:46:09 PM] <VBScript .: [2:58:01 PM] [wds] <Man-Spider> Who is on the fly? :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [12:46:17 PM] -- Edgar2000 [171ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 11, icon tier Orcs, headhunter icon)
+ [12:46:31 PM] <PhiX@USEast> Hello and welcome to Clan BoT! If you want to know your current ping, type .pingme
+ [12:46:49 PM] <Edgar2000> .pingme
+ [12:46:49 PM] Edgar2000 was banned by PhiX[BoT] (171).
+ [12:46:49 PM] -- Edgar2000 has left the channel.
+ [12:46:52 PM] <PhiX@USEast> pwnt
+ [12:47:07 PM] <Wasp@USEast> so mean
+ [12:47:08 PM] <Wasp@USEast> lol
+ [12:47:12 PM] <PhiX@USEast> I know :)
+ [12:47:26 PM] <PhiX@USEast> but he does know his ping now
+ [12:47:31 PM] <PhiX@USEast> I didn't lie
+ [12:47:37 PM] <Pyro6> *addcmd abc&&123
+ [12:47:37 PM] <Eric> Example: !addcc givetea 20 /me gives %1 tea. Compliments of %user
+ [12:47:45 PM] <Pyro6> *addcmd asdf 1 abc&&123
+ [12:47:46 PM] <Eric> Command "asdf" [1 access/no flags] added.
+ [12:48:08 PM] <Pyro6> *asdf
+ [12:48:09 PM] <Eric> abc&&123
+ [12:48:12 PM] <Pyro6> fuck
+ [12:48:19 PM] <PhiX@USEast> ?
+ [12:48:22 PM] <Pyro6> *delcmd asdf
+ [12:48:22 PM] <Eric> Command "asdf" deleted.
+ [12:48:26 PM] <Pyro6> how do you do seperate lines
+ [12:48:31 PM] <PhiX@USEast> & 
+ [12:48:31 PM] <Pyro6> &_ ?
+ [12:48:33 PM] <PhiX@USEast> with a space
+ [12:48:34 PM] <PhiX@USEast> after
+ [12:48:37 PM] <Pyro6> only & ?
+ [12:48:39 PM] <Pyro6> ..
+ [12:48:40 PM] <PhiX@USEast> ya
+ [12:48:58 PM] <PhiX@USEast> same functionality as in 2.6
+ [12:49:08 PM] <Pyro6> *addcmd asdf 1 abc& 123
+ [12:49:08 PM] <Eric> Command "asdf" [1 access/no flags] added.
+ [12:49:13 PM] <Pyro6> i thought i was && in 2.6
+ [12:49:16 PM] <Pyro6> *asdf
+ [12:49:17 PM] <Eric> abc
+ [12:49:19 PM] <Eric> 123
+ [12:49:19 PM] <PhiX@USEast> no
+ [12:49:24 PM] <PhiX@USEast> that was for greet messages
+ [12:49:26 PM] <Pyro6> *delcmd asdf
+ [12:49:26 PM] <Eric> Command "asdf" deleted.
+ [12:49:26 PM] <PhiX@USEast> but it doesn't work
+ [12:49:28 PM] <PhiX@USEast> anyways
+ [12:49:48 PM] <Pyro6> *addcmd lol 1 l      ______  l& l      l    l  l& l____  l____l  l____
+ [12:49:49 PM] <Eric> Command "lol" [1 access/no flags] added.
+ [12:49:52 PM] <Pyro6> *lol
+ [12:49:52 PM] <Eric> l      ______  l
+ [12:49:54 PM] <Eric> l      l    l  l
+ [12:49:55 PM] <Eric> l____  l____l  l____
+ [12:49:58 PM] <Pyro6> gah fail
+ [12:49:59 PM] <PhiX@USEast> lololol
+ [12:50:20 PM] <Hero.A> *lol
+ [12:50:20 PM] <Eric> l      ______  l
+ [12:50:21 PM] <Eric> l      l    l  l
+ [12:50:23 PM] <Eric> l____  l____l  l____
+ [12:50:27 PM] <Hero.A> Thats kinda close
+ [12:50:32 PM] <Pyro6> not really
+ [12:50:33 PM] <Pyro6> ..
+ [12:50:49 PM] <Hero.A> ..
+ [12:50:57 PM] <PhiX@USEast> hero likes men
+ [12:51:04 PM] <Pyro6> it shows up fine in notepad
+ [12:51:07 PM] <Pyro6> lol
+ [12:51:08 PM] <Pyro6> fucking bnet
+ [12:51:17 PM] <PhiX@USEast> change the font in notepad to tahoma
+ [12:51:21 PM] -- HaKr_ [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [12:51:24 PM] -- HaKr_ has left the channel.
+ [12:51:45 PM] <Pyro6> i dunno how
+ [12:52:00 PM] <PhiX@USEast> format
+ [12:52:09 PM] <Pyro6> notepad++
+ [12:52:26 PM] <Pyro6> l      ______   l
+ [12:52:27 PM] <Pyro6> l         l    l  l
+ [12:52:28 PM] <Pyro6> l____  l____l  l____
+ [12:52:35 PM] <PhiX@USEast> ugh
+ [12:52:41 PM] <Hero.A> Nice
+ [12:52:42 PM] <PhiX@USEast> use notepad
+ [12:52:43 PM] <PhiX@USEast> ;o
+ [12:52:53 PM] <Pyro6> l          ______   l
+ [12:52:54 PM] <Pyro6> l          l    l  l
+ [12:52:55 PM] <Pyro6> l____  l____l  l____
+ [12:52:56 PM] <PhiX@USEast> and in notepad++ it's the style configurator
+ [12:53:06 PM] <Pyro6> l          ______   l
+ [12:53:07 PM] <Pyro6> l          l       l  l
+ [12:53:08 PM] <Pyro6> l____  l____l  l____
+ [12:53:26 PM] <Pyro6> l          ____      l
+ [12:53:28 PM] <Pyro6> l          l        l  l
+ [12:53:29 PM] <Pyro6> l____  l____l  l____
+ [12:53:36 PM] <Pyro6> fuck
+ [12:53:37 PM] <Pyro6> l          ____    l
+ [12:53:38 PM] <Pyro6> l          l        l  l
+ [12:53:40 PM] <Pyro6> l____  l____l  l____
+ [12:53:44 PM] <Pyro6> yay
+ [12:53:54 PM] <Pyro6> l          ____   l
+ [12:53:55 PM] <Pyro6> l          l        l  l
+ [12:53:56 PM] <Pyro6> l____  l____l  l____
+ [12:54:04 PM] <Pyro6> i remember when i did a swastika
+ [12:54:06 PM] <Pyro6> for ribose
+ [12:54:19 PM] <Hero.A> Hmm
+ [12:54:26 PM] <Hero.A> I just finished that
+ [12:55:14 PM] <Pyro6> *lol
+ [12:55:15 PM] <Eric> l      ______  l
+ [12:55:16 PM] <Eric> l      l    l  l
+ [12:55:17 PM] <Eric> l____  l____l  l____
+ [12:55:25 PM] <DeAtHZeRg -: System Uptime: 5 days, 18 hours, 6 minutes and 8 seconds :: Connection Uptime: 1 day, 5 hours, 52 minutes and 26 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [12:55:25 PM] <Pyro6> *exec reloadscript
+ [12:55:28 PM] <Pyro6> *lol
+ [12:55:29 PM] <Eric> l          ____   l
+ [12:55:29 PM] -- Wasp@USEast has left the channel.
+ [12:55:30 PM] <Eric> l          l        l  l
+ [12:55:31 PM] <Eric> l____  l____l  l____
+ [12:55:34 PM] <Pyro6> ASSHOLE
+ [12:55:37 PM] <Pyro6> *lol
+ [12:55:37 PM] <Eric> l          ____   l
+ [12:55:38 PM] <Eric> l          l        l  l
+ [12:55:40 PM] <Eric> l____  l____l  l____
+ [12:55:50 PM] <Hero.A> Damnit
+ [12:55:53 PM] <Hero.A> Stupid notepad
+ [12:55:58 PM] <Pyro6> *exec reloadscript
+ [12:56:04 PM] <Pyro6> k
+ [01:01:05 PM] <Hero.A> |          |
+ [01:01:06 PM] <Hero.A> |   _____  |
+ [01:01:08 PM] <Hero.A> |   |    | |
+ [01:01:09 PM] <Hero.A> |___|____| |___
+ [01:01:11 PM] <Hero.A> Fail
+ [01:01:12 PM] <Pyro6> fail
+ [01:01:17 PM] <VBScript .: [12:30:57 AM] [Nn4M] <pRawN*31> my balls are on firee :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [01:01:34 PM] <Hero.A> Oh
+ [01:01:36 PM] <Hero.A> Font
+ [01:02:01 PM] <Hero.A> Hmm I got it now
+ [01:07:08 PM] <Eric[nK]> hm
+ [01:07:28 PM] <Pyro6> eric
+ [01:07:41 PM] <Eric[nK]> ...?
+ [01:07:58 PM] <Pyro6> r u gonna be releasing any new betas any time soon? ;o
+ [01:09:33 PM] <VBScript | New on SlashDot:  What Web 2.0 Means for Hardware and the Datacenter>
+ [01:10:20 PM] <Eric[nK]> Hopefully.
+ [01:10:25 PM] <Pyro6> :D
+ [01:10:29 PM] <Eric[nK]> finals are over.
+ [01:16:25 PM] <VBScript .: <ClanGnome> I'll miss you :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [01:24:17 PM] <PhiX@USEast> @;;addcc lol 1 L     LLLL  L& L     L   L  L& LLL  LLLL  LLL
+ [01:24:18 PM] <PhiX[BoT]> Command "lol" [1 access/no flags] added.
+ [01:24:51 PM] <PhiX@USEast> zieh dir den ersten teil rein
+ [01:24:57 PM] <PhiX@USEast> oops
+ [01:24:58 PM] <PhiX@USEast> wrong window
+ [01:25:01 PM] <Pyro6> o.o
+ [01:25:29 PM] <Pyro6>  [16:28:06.219] Loaded 143 into the command list file.
+ [01:25:30 PM] <PhiX@USEast> r ew blind?
+ [01:25:32 PM] <Pyro6> :p
+ [01:25:49 PM] <PhiX@USEast> WHAT MOVIE
+ [01:25:53 PM] <PhiX@USEast> HM??
+ [01:27:28 PM] -- ReTaeHC [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 8, icon tier Random, myrmidon icon, in Clan DoL)
+ [01:27:53 PM] <ReTaeHC> rumour has it hero.a is terribad
+ [01:28:18 PM] -- t-dawg[BoT] has left the channel.
+ [01:29:05 PM] -- ReTaeHC has left the channel.
+ [01:31:33 PM] <VBScript .: <ClanGnome> You are a menace.  A walking pestilence :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [01:32:44 PM] <Hero.A> @;;lol
+ [01:32:45 PM] <PhiX[BoT]> L     LLLL  L
+ [01:32:46 PM] <PhiX[BoT]> L     L   L  L
+ [01:32:47 PM] <PhiX[BoT]> LLL  LLLL  LLL
+ [01:32:50 PM] <Hero.A> Lol
+ [01:32:56 PM] <Hero.A> Thats hot
+ [01:33:05 PM] -- Hero.A has left the channel.
+ [01:43:59 PM] <Pyro6> lol
+ [01:44:09 PM] <Pyro6> clan ls is filled up to 47
+ [01:46:41 PM] <VBScript .: <ClanGnome> I almost had a psychic girlfriend but she left me before we met :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [01:47:03 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [01:47:06 PM] <Hero.A> Rawr
+ [01:48:05 PM] <From Pyro6> Your friend Pyro6 has exited Battle.net.
+ [01:48:05 PM] -- Pyro6 has left the channel.
+ [01:48:09 PM] -- Pyro6-Tech [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [01:48:11 PM] -- Pyro6-Tech has left the channel.
+ [01:49:20 PM] <From Pyro6> Your friend Pyro6 has entered Battle.net.
+ [01:49:21 PM] -- Pyro6 [157ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [01:50:16 PM] -- idiatic [47ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [01:50:16 PM] -- Stats updated: idiatic [47ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [01:50:42 PM] <Hero.A> idiat
+ [01:50:45 PM] <Hero.A> ic?
+ [01:51:01 PM] <idiatic> aaaaaaaaaaaaaaaaaaaaa
+ [01:51:03 PM] -- AntiLiberalist@USEast [47ms] has joined the channel using Starcraft Brood War (61 wins).
+ [01:51:08 PM] <idiatic> AntiLiberalist@USEast
+ [01:51:12 PM] <AntiLiberalist@USEast> Yeah?
+ [01:51:25 PM] <idiatic> >.<
+ [01:51:28 PM] <AntiLiberalist@USEast> What's wrong?
+ [01:51:51 PM] <AntiLiberalist@USEast> Is Phix idle?
+ [01:51:59 PM] <Pyro6> yo phix
+ [01:52:01 PM] <Pyro6> are you idle
+ [01:52:03 PM] <AntiLiberalist@USEast> Hi pyro.
+ [01:52:07 PM] <AntiLiberalist@USEast> I know you.
+ [01:52:13 PM] <AntiLiberalist@USEast> From the forums.
+ [01:52:15 PM] <AntiLiberalist@USEast> :O
+ [01:52:16 PM] <Pyro6> idk u
+ [01:52:18 PM] <Pyro6> STALKER
+ [01:52:20 PM] <Hero.A> HEY
+ [01:52:21 PM] <AntiLiberalist@USEast> :/
+ [01:52:24 PM] <Hero.A> I KNOW THIS GUY
+ [01:52:24 PM] <From Pyro6> Your friend Pyro6 has exited Battle.net.
+ [01:52:24 PM] -- Pyro6 has left the channel.
+ [01:52:26 PM] <Hero.A> Its bob
+ [01:52:28 PM] <AntiLiberalist@USEast> I just read the forums mostly
+ [01:52:30 PM] <AntiLiberalist@USEast> But don't post.
+ [01:52:32 PM] <From Pyro6> Your friend Pyro6 has entered Battle.net.
+ [01:52:33 PM] <AntiLiberalist@USEast> that much.
+ [01:52:34 PM] -- Pyro6 [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [01:52:36 PM] <Pyro6> *mi idiot
+ [01:52:38 PM] <Eric> idiot & is not in any clan on Azeroth.
+ [01:52:44 PM] <Pyro6> ;o
+ [01:52:44 PM] <Hero.A> Whats the forum name?
+ [01:52:47 PM] <Pyro6> *mi idiat
+ [01:52:48 PM] <Eric> idiat & is not in any clan on Azeroth.
+ [01:52:48 PM] <AntiLiberalist@USEast> Stealthbot.
+ [01:52:51 PM] <Hero.A> *mi Hero.A
+ [01:52:53 PM] <Eric> Hero.A is a peon (on probation) in Clan EoA. He/she joined the clan on May 23, 2008.
+ [01:52:58 PM] <Hero.A> Hmm
+ [01:53:02 PM] <Pyro6> why the fuck
+ [01:53:05 PM] <Hero.A> Speed up stupid probation
+ [01:53:12 PM] <Pyro6> does the last online thing never work
+ [01:53:25 PM] <Hero.A> *mi SmokeDaCaliDoja
+ [01:53:26 PM] <Eric> SmokeDaCaliDoja is a grunt in Clan NNN. He/she joined the clan on May 4, 2008.
+ [01:53:35 PM] <Hero.A> *ci NNN
+ [01:53:36 PM] <AntiLiberalist@USEast> Pyro, you're the one who is an administrator on the Stealthbot forums?
+ [01:53:37 PM] <Eric> Ninety Nine Ninjas [NNN] was created on September 21, 2006, has 82 members, and is currently under the command of The_Black_Ninja. Shamans:  six, Ninja-Security, wayne_gretzky, I_C_Y, elmayo.
+ [01:53:39 PM] <Hero.A> ROFL
+ [01:53:42 PM] <Pyro6> no
+ [01:53:46 PM] <Hero.A> I just guessed the command name
+ [01:53:51 PM] <Hero.A> Pyro is a global mod
+ [01:53:58 PM] <Hero.A> Do you know who I am
+ [01:54:01 PM] <Hero.A> !!
+ [01:54:07 PM] <AntiLiberalist@USEast> Never saw you on the forums.
+ [01:54:08 PM] <AntiLiberalist@USEast> >.>
+ [01:54:11 PM] <Hero.A> Nooooo
+ [01:54:12 PM] <AntiLiberalist@USEast> Well
+ [01:54:13 PM] <Pyro6> hero is a noob.
+ [01:54:16 PM] <AntiLiberalist@USEast> Maybe I need to read more.
+ [01:54:17 PM] <Hero.A> I will lie down and die now
+ [01:54:18 PM] <Pyro6> thats all you need to know
+ [01:54:19 PM] <Pyro6> :D
+ [01:54:21 PM] <AntiLiberalist@USEast> Lol.
+ [01:54:25 PM] <Hero.A> I post in Scripting & Plugins
+ [01:54:26 PM] <Hero.A> so :p
+ [01:54:33 PM] <Hero.A> @;;kick pyro* DIE
+ [01:54:34 PM] <PhiX[BoT]> Encountered 2 safelisted user(s).
+ [01:54:44 PM] <Hero.A> Comon
+ [01:54:54 PM] <PhiX@USEast> @;;ign hero.a
+ [01:54:55 PM] <AntiLiberalist@USEast> I like the strict rules on the forums.
+ [01:54:56 PM] <Hero.A> Pyro come to my channel so I can kick you
+ [01:54:56 PM] <PhiX[BoT]> Ignoring messages from "hero.a".
+ [01:55:00 PM] <Hero.A> Hey!
+ [01:55:19 PM] <Pyro6> #kick her* in the face
+ [01:55:20 PM] Hero.A was kicked out of the channel by Pyro[BoT] (in the face).
+ [01:55:20 PM] -- Hero.A has left the channel.
+ [01:55:21 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [01:55:21 PM] <Hero.A> @;;whoami
+ [01:55:25 PM] <Hero.A> Dangit
+ [01:55:26 PM] <AntiLiberalist@USEast> heh.
+ [01:55:27 PM] <DeAtHZeRg -: System Uptime: 5 days, 19 hours, 6 minutes and 11 seconds :: Connection Uptime: 1 day, 6 hours, 51 minutes and 30 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [01:55:29 PM] <Hero.A> Bad phix
+ [01:55:30 PM] <idiatic> ?trigger
+ [01:55:30 PM] <LuC1Fr[BoT]> The bot's current trigger is " ` " (Length: 1)
+ [01:55:30 PM] <VBScript> The bot's current trigger is " - " (Length: 1)
+ [01:55:30 PM] <Eric> The bot's current trigger is " * " (Length: 1)
+ [01:55:30 PM] <PhiX[BoT]> The bot's current trigger is " @;; " (Length: 3)
+ [01:55:31 PM] <AntiLiberalist@USEast> Almost got banned for FastRejoin.
+ [01:55:31 PM] <AntiLiberalist@USEast> xCd
+ [01:55:35 PM] <AntiLiberalist@USEast> xD
+ [01:55:38 PM] <idiatic> *whoami
+ [01:55:39 PM] <Eric> [BoT (clan)] has access 70.
+ [01:55:45 PM] <Hero.A> ops, kick hero.A
+ [01:55:48 PM] <Hero.A> Thats sad
+ [01:55:53 PM] <idiatic> ops, kick hero.a
+ [01:55:54 PM] <PhiX[BoT]> Error: That user is safelisted.
+ [01:55:54 PM] -- Hero.A has left the channel.
+ [01:55:54 PM] Hero.A was kicked out of the channel by LuC1Fr[BoT].
+ [01:55:55 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [01:56:00 PM] <Hero.A> Thanks idiat
+ [01:56:02 PM] <idiatic> np
+ [01:56:10 PM] <PhiX@USEast> @;;unign hero.a
+ [01:56:11 PM] <Pyro6> ops, kick her* ass
+ [01:56:12 PM] Hero.A was kicked out of the channel by LuC1Fr[BoT] (ass).
+ [01:56:12 PM] -- Hero.A has left the channel.
+ [01:56:13 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [01:56:14 PM] <PhiX[BoT]> Receiving messages from "hero.a".
+ [01:56:15 PM] <Hero.A> Rofl
+ [01:56:15 PM] <AntiLiberalist@USEast> Hi Phix.
+ [01:56:15 PM] <PhiX[BoT]> Encountered 1 safelisted user(s).
+ [01:56:22 PM] <PhiX@USEast> er, hi
+ [01:56:23 PM] <Hero.A> As soon as I see you say that I will change channels
+ [01:56:27 PM] <Hero.A> see if it kicks me
+ [01:56:39 PM] <Pyro6> +kick hero.a
+ [01:56:40 PM] <Vortigaunt> Error: You are not a channel operator.
+ [01:56:43 PM] <Pyro6> GG
+ [01:56:46 PM] <Pyro6> noob error message
+ [01:56:48 PM] <Hero.A> Lol
+ [01:56:49 PM] <AntiLiberalist@USEast> I like your avatars on the forums, PhiX.
+ [01:56:59 PM] <PhiX@USEast> I know they're hot
+ [01:57:00 PM] <Pyro6> Eric
+ [01:57:01 PM] <AntiLiberalist@USEast> The one with the elephant and the other one before it.
+ [01:57:02 PM] <Hero.A> PhiX has good avatars?
+ [01:57:14 PM] <Pyro6> fuck
+ [01:57:16 PM] <Pyro6> me
+ [01:57:22 PM] <Hero.A> Oh that one
+ [01:57:49 PM] <Hero.A> Anti
+ [01:57:51 PM] <AntiLiberalist@USEast> ?
+ [01:57:52 PM] <Hero.A> http://www.stealthbot.net/board/index.php?showuser=29291
+ [01:57:54 PM] <Hero.A> brb
+ [01:59:41 PM] <Hero.A> Zomg
+ [02:00:09 PM] <AntiLiberalist@USEast> I saw it.
+ [02:00:14 PM] <AntiLiberalist@USEast> You have over 1000 posts.
+ [02:00:15 PM] <AntiLiberalist@USEast> Nice.
+ [02:00:22 PM] <Pyro6> I HAVE OVER 3000
+ [02:00:27 PM] <Pyro6> and phix has over 6000
+ [02:00:28 PM] <Eric[nK]> hm
+ [02:00:28 PM] <Pyro6> >_>
+ [02:00:32 PM] <AntiLiberalist@USEast> Pwnage.
+ [02:00:40 PM] <Pyro6> +kick hero.a
+ [02:00:42 PM] <Vortigaunt> Error: You are not a channel operator.
+ [02:00:48 PM] <Pyro6> eric, phix that error message :o
+ [02:00:54 PM] <Hero.A> I have returned
+ [02:00:56 PM] <Eric[nK]> ...?
+ [02:01:03 PM] <Hero.A> ROFL
+ [02:01:04 PM] <Pyro6> it says that im not a channel operator
+ [02:01:09 PM] <Pyro6> it should say that the bot isnt
+ [02:01:11 PM] <Hero.A> I just now got that message
+ [02:01:12 PM] <AntiLiberalist@USEast> All the ops in here are SB's?
+ [02:01:19 PM] <Hero.A> Yes of course
+ [02:01:23 PM] <Pyro6> ops, ver
+ [02:01:23 PM] <VBScript> .: StealthBot Beta v2.6999 Development Release 10 by Stealth.
+ [02:01:23 PM] <LuC1Fr[BoT]> .: StealthBot Beta v2.6999 Development Release 10 by Stealth.
+ [02:01:24 PM] <Pyro[BoT]> .: StealthBot Beta v2.6999 Development Release 10 by Stealth.
+ [02:01:24 PM] <PhiX[BoT]> .: StealthBot Beta v2.6999 Development Release 10 by Stealth.
+ [02:01:25 PM] <DeAtHZeRg> .: StealthBot Beta v2.6999 Development Release 10 by Stealth.
+ [02:01:28 PM] <AntiLiberalist@USEast> :OL
+ [02:01:29 PM] <AntiLiberalist@USEast> :o
+ [02:01:30 PM] <AntiLiberalist@USEast> beta
+ [02:01:35 PM] <Hero.A> Hmm
+ [02:01:36 PM] <Hero.A> .: StealthBot Beta v2.6999 Development Release 8 by Stealth.
+ [02:01:38 PM] <AntiLiberalist@USEast> Never saw those versions.
+ [02:01:42 PM] <Hero.A> I run 10 on my real bots
+ [02:01:42 PM] <Pyro6> noob hero!
+ [02:01:50 PM] <VBScript .: [03:55:09 PM] <PhiX@USEast> ONLY NOOBS USE CAPS :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [02:02:07 PM] <Hero.A> Bah, eric needs to add an
+ [02:02:14 PM] <Hero.A>  /updatemybetanow command
+ [02:02:19 PM] <Hero.A> xD
+ [02:02:26 PM] <Pyro6> how about you just not be lazy?
+ [02:02:28 PM] <Pyro6> ;o
+ [02:02:34 PM] <Hero.A> Because I have always been lazy?
+ [02:02:43 PM] <Eric[nK]> tmpBuf = "Error: I am not a channel operator."
+ [02:02:56 PM] <Pyro6> lol
+ [02:02:57 PM] <idiatic> REPODEPOT
+ [02:03:00 PM] <AntiLiberalist@USEast> Clan SB's still running?
+ [02:03:06 PM] <Hero.A> yes
+ [02:03:08 PM] <Hero.A> Clan SbS
+ [02:03:10 PM] <Pyro6> *ci sb
+ [02:03:11 PM] <idiatic> *CI sb
+ [02:03:11 PM] <Eric> Sorry, the bot is currently busy, please try again later.
+ [02:03:11 PM] <AntiLiberalist@USEast> I saw the advertisement on the forums.
+ [02:03:12 PM] <Hero.A> SBs *
+ [02:03:12 PM] <Eric> SouL BreaKers [SB] was created on May 24, 2008, has 15 members, and is currently under the command of FeaKTowN. The clan has no shamans..
+ [02:03:24 PM] <AntiLiberalist@USEast> Heh.
+ [02:03:27 PM] <idiatic> hohjipjp
+ [02:03:30 PM] <idiatic> sb fucks
+ [02:03:30 PM] <Pyro6> *ci sbs
+ [02:03:33 PM] <Eric> Stealthbot Sppt [SBs] was created on June 1, 2006, has 58 members, and is currently under the command of Tech-Pyro. Shamans:  Tech-raylu, Tech-PhiX, Tech-Alendar, Tech-Skull.
+ [02:03:37 PM] <Hero.A> I thought you meant sbs :o
+ [02:03:57 PM] <Hero.A> *ci c4b
+ [02:03:58 PM] <Eric> Call For Blood [C4B] was created on December 5, 2006, has 25 members, and is currently under the command of ThE_4_HoRsEmEn_. Shamans:  Black_Hawk, rarafury, GOD_OF_ALL, Real_Christian, DaRk_DeMBe.
+ [02:04:06 PM] That user is not logged on.
+ [02:04:10 PM] <Hero.A> *ci roof
+ [02:04:10 PM] <Eric> Roofies [RooF] was created on September 18, 2004, has 59 members, and is currently under the command of l)eathMasta. Shamans:  masda70, ClanRooF, Zylograth, Zulkhas, Dark_Tangent.
+ [02:04:12 PM] <Eric[nK]> apple plum cakes
+ [02:04:16 PM] <Hero.A> Roof is sooo old
+ [02:04:30 PM] <Hero.A> I helped make that clan
+ [02:04:31 PM] <Hero.A> lol
+ [02:04:52 PM] <Pyro6> yet, there are more people in here than there
+ [02:05:03 PM] <Hero.A> *ci bot
+ [02:05:04 PM] <Eric> BoT [BoT] was created on December 3, 2007, has 49 members, and is currently under the command of Pyro[BoT]. Shamans:  Eric[nK], VBScript, LuC1Fr[BoT], DeAtHZeRg, PhiX[BoT].
+ [02:05:10 PM] <Hero.A> 49 to 59
+ [02:05:12 PM] <Hero.A> you lose
+ [02:05:13 PM] <idiatic> ACTUALLY IN THE CHANNEL
+ [02:05:15 PM] <Pyro6> i mean the channel
+ [02:05:17 PM] <Hero.A> Oh
+ [02:05:17 PM] <Pyro6> noob
+ [02:05:19 PM] <Hero.A> who cares
+ [02:05:20 PM] <Pyro6> <3 idiat
+ [02:05:24 PM] <Pyro6> i do
+ [02:05:25 PM] <Hero.A> they are actually playing
+ [02:05:28 PM] -- Joined channel: Clan BoT --
+ [02:05:28 PM] -- Eric[nK] has acquired ops.
+ [02:05:28 PM] You are now marked as being a person who likes men.
+ [02:05:28 PM] -- Joined channel: Clan BoT --
+ [02:05:29 PM] -- Eric[nK] has acquired ops.
+ [02:05:29 PM] You are now marked as being a person who likes men.
+ [02:05:29 PM] -- Joined channel: Clan BoT --
+ [02:05:29 PM] -- Eric[nK] has acquired ops.
+ [02:05:29 PM] You are now marked as being a person who likes men.
+ [02:05:29 PM] -- Joined channel: Clan BoT --
+ [02:05:29 PM] -- Eric[nK] has acquired ops.
+ [02:05:30 PM] You are now marked as being a person who likes men.
+ [02:05:32 PM] <Hero.A> instead of messing with bots
+ [02:05:43 PM] <idiatic> bots > playing
+ [02:05:44 PM] <LuC1Fr[BoT]> Then.. go play
+ [02:05:57 PM] <Hero.A> ... Luc1fr did you read the whole convo..
+ [02:06:03 PM] <Pyro6> noob hero
+ [02:06:23 PM] <LuC1Fr[BoT]> yes
+ [02:06:24 PM] <LuC1Fr[BoT]> i did
+ [02:06:26 PM] <Hero.A> Well
+ [02:06:44 PM] <Hero.A> That was a stupid commen then
+ [02:06:53 PM] <LuC1Fr[BoT]> not really
+ [02:06:56 PM] <Hero.A> really
+ [02:07:02 PM] <idiatic> ?trigger
+ [02:07:02 PM] <VBScript> The bot's current trigger is " - " (Length: 1)
+ [02:07:02 PM] <Eric> The bot's current trigger is " * " (Length: 1)
+ [02:07:02 PM] <LuC1Fr[BoT]> The bot's current trigger is " ` " (Length: 1)
+ [02:07:03 PM] <PhiX[BoT]> The bot's current trigger is " @;; " (Length: 3)
+ [02:07:07 PM] <LuC1Fr[BoT]> you're the one whos making a fit about which clan is better.
+ [02:07:12 PM] <Hero.A> ..
+ [02:07:15 PM] <LuC1Fr[BoT]> When they is practically no comparison.
+ [02:07:22 PM] <Hero.A>  [04:05:53 PM] <Hero.A> Roof is sooo old
+ [02:07:23 PM] <Hero.A>  [04:06:07 PM] <Hero.A> I helped make that clan
+ [02:07:24 PM] <Hero.A>  [04:06:08 PM] <Hero.A> lol
+ [02:07:25 PM] <LuC1Fr[BoT]> whe there*
+ [02:07:26 PM] <Hero.A>  [04:06:29 PM] <Pyro6> yet, there are more people in here than there
+ [02:07:26 PM] <Pyro6> they are *
+ [02:07:34 PM] <Pyro6> they have*
+ [02:07:36 PM] <Pyro6> FUCK
+ [02:07:43 PM] <Hero.A> How is that my fault?
+ [02:07:49 PM] <Pyro6> ops, say hero is a noob
+ [02:07:50 PM] <VBScript> hero is a noob
+ [02:07:50 PM] <LuC1Fr[BoT]> hero is a noob
+ [02:07:50 PM] <PhiX[BoT]> hero is a noob
+ [02:07:51 PM] <Pyro[BoT]> hero is a noob
+ [02:07:53 PM] <Hero.A> How is that me making a fit*
+ [02:07:58 PM] <DeAtHZeRg> hero is a noob
+ [02:08:09 PM] <Hero.A> ops, say hero is not a noob
+ [02:08:10 PM] <PhiX[BoT]> hero is not a noob
+ [02:08:11 PM] <Hero.A> owned
+ [02:08:13 PM] <LuC1Fr[BoT]> Pyro should turn the server on, and do that alot better.
+ [02:08:19 PM] <LuC1Fr[BoT]> ha.. only one bot :/
+ [02:08:20 PM] <Pyro6> huh?
+ [02:08:34 PM] <Hero.A> Thats cause I am not in clan bot anymore..
+ [02:08:35 PM] <LuC1Fr[BoT]> ops, say test
+ [02:08:36 PM] <VBScript> LuC1Fr[BoT] says: test
+ [02:08:36 PM] <PhiX[BoT]> test
+ [02:08:39 PM] <LuC1Fr[BoT]> I've noticed.
+ [02:08:49 PM] <AntiLiberalist@USEast>  
+ [02:08:53 PM] <AntiLiberalist@USEast> Dam.
+ [02:08:54 PM] <LuC1Fr[BoT]> wiat.. btu yuo rea here.
+ [02:08:58 PM] <AntiLiberalist@USEast> Those blank messages.
+ [02:09:01 PM] <Hero.A>  
+ [02:09:03 PM] <Hero.A>  
+ [02:09:04 PM] <Hero.A>  
+ [02:09:05 PM] <Hero.A>  
+ [02:09:05 PM] <AntiLiberalist@USEast> Battle.net forces me to do it.
+ [02:09:07 PM] Hero.A was kicked out of the channel by LuC1Fr[BoT].
+ [02:09:07 PM] -- Hero.A has left the channel.
+ [02:09:09 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [02:09:10 PM] <AntiLiberalist@USEast> Lol.
+ [02:09:10 PM] Hero.A was kicked out of the channel by LuC1Fr[BoT].
+ [02:09:10 PM] -- Hero.A has left the channel.
+ [02:09:14 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [02:09:17 PM] <Hero.A> Lol
+ [02:09:26 PM] <Hero.A> I love you too luc1fr.
+ [02:09:26 PM] <Pyro6> #ban her* ass
+ [02:09:27 PM] Hero.A was banned by Pyro[BoT] (ass).
+ [02:09:27 PM] -- Hero.A has left the channel.
+ [02:09:29 PM] <PhiX@USEast>  [23:02:10.066] <Hero.A@Azeroth>  /updatemybetanow command
+ [02:09:33 PM] <Pyro6> shit
+ [02:09:38 PM] <AntiLiberalist@USEast> He is cd-key banned?
+ [02:09:38 PM] <Pyro6> #unban her* ass
+ [02:09:43 PM] <PhiX@USEast>  /SIGNED
+ [02:09:44 PM] <Pyro6> #unban her
+ [02:09:47 PM] <Pyro6> #unban her*
+ [02:09:48 PM] <PhiX@USEast>  [23:05:58.483] <Pyro6@Azeroth> noob hero
+ [02:09:48 PM] Hero.A was unbanned by Pyro[BoT].
+ [02:09:51 PM] <PhiX@USEast>  /SIGNED AS WELL
+ [02:09:56 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [02:09:59 PM] <Hero.A> Now now
+ [02:10:06 PM] <VBScript | New on SlashDot:  A Look at the Lightweight Equinox Desktop Environment>
+ [02:10:11 PM] <Hero.A> Play nice pyro
+ [02:10:16 PM] <LuC1Fr[BoT]> afk
+ [02:10:22 PM] <Pyro6> hey, who wants me to kick her* ass ?
+ [02:10:36 PM] <AntiLiberalist@USEast> um..
+ [02:10:39 PM] <idiatic> do it
+ [02:10:42 PM] <AntiLiberalist@USEast> swent?
+ [02:10:45 PM] <Pyro6> #kick her* ass
+ [02:10:45 PM] Hero.A was kicked out of the channel by Pyro[BoT] (ass).
+ [02:10:45 PM] -- Hero.A has left the channel.
+ [02:10:47 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [02:10:47 PM] -- Hero.A has left the channel.
+ [02:10:53 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [02:10:53 PM] <Pyro6> noob hero
+ [02:10:54 PM] <Hero.A> Damnit
+ [02:10:55 PM] <idiatic> #boot her* ass
+ [02:10:55 PM] <Pyro6> rofl
+ [02:10:58 PM] <idiatic> ?trigger
+ [02:10:58 PM] <VBScript> The bot's current trigger is " - " (Length: 1)
+ [02:10:58 PM] <LuC1Fr[BoT]> The bot's current trigger is " ` " (Length: 1)
+ [02:10:58 PM] <Eric> The bot's current trigger is " * " (Length: 1)
+ [02:10:59 PM] <PhiX[BoT]> The bot's current trigger is " @;; " (Length: 3)
+ [02:10:59 PM] <Hero.A> I hit it a second late
+ [02:11:04 PM] <idiatic> ops, boot hero.a
+ [02:11:07 PM] <Hero.A> Hmm
+ [02:11:10 PM] <Hero.A> That went well
+ [02:11:10 PM] <idiatic> why is boot not a command
+ [02:11:17 PM] <Hero.A> Can't you add aliases in beta?
+ [02:11:19 PM] <AntiLiberalist@USEast> .k
+ [02:11:24 PM] <idiatic> boot > kick
+ [02:11:32 PM] <Hero.A> boot < shoe
+ [02:11:36 PM] <idiatic> ...
+ [02:11:38 PM] <Hero.A> .shoe pyro6
+ [02:11:41 PM] <Hero.A> ownage
+ [02:12:01 PM] <idiatic> ops, igore hero.a
+ [02:12:05 PM] <Hero.A> @;;addcmd 0 shoe /kick %1
+ [02:12:09 PM] <Hero.A> Aww
+ [02:12:10 PM] <idiatic> why is igore not a command
+ [02:12:11 PM] <AntiLiberalist@USEast> What about stating how many times a person should be kicked from a channel consecutively?
+ [02:12:13 PM] <AntiLiberalist@USEast> xD
+ [02:12:19 PM] <AntiLiberalist@USEast> For punishment.
+ [02:12:32 PM] <PhiX[BoT]> ERIC
+ [02:12:33 PM] <Hero.A> It would take a script
+ [02:12:34 PM] <idiatic> [04:05:29 PM] <Hero.A> you lose
+ [02:12:34 PM] <idiatic> [04:05:29 PM] <Pyro6> i mean the channel
+ [02:12:35 PM] <Pyro6> @;;addcmd x 0 /kick Hero.A %rest
+ [02:12:35 PM] <idiatic> [04:05:29 PM] <Hero.A> Oh
+ [02:12:37 PM] <PhiX[BoT]> Command "x" [0 access/no flags] added.
+ [02:12:38 PM] <idiatic> [04:05:29 PM] <Pyro6> noob
+ [02:12:41 PM] <idiatic> [04:05:29 PM] <Hero.A> who cares
+ [02:12:44 PM] <idiatic> [04:05:29 PM] <Pyro6> <3 idiat
+ [02:12:46 PM] <idiatic> [04:05:29 PM] <Pyro6> i do
+ [02:12:47 PM] <Pyro6> @;;x noob
+ [02:12:48 PM] Hero.A was kicked out of the channel by PhiX[BoT] (noob).
+ [02:12:48 PM] -- Hero.A has left the channel.
+ [02:12:49 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [02:12:50 PM] <idiatic> [04:05:29 PM] <Hero.A> they are actually playing
+ [02:12:52 PM] <Hero.A> Well now
+ [02:12:54 PM] <idiatic> [04:05:29 PM] Eric[nK] has left the channel
+ [02:12:59 PM] <idiatic> [04:05:29 PM] Eric[nK] [93ms] has joined the channel using Warcraft III (Clan BoT).
+ [02:13:00 PM] <PhiX[BoT]> I NEED ERIC
+ [02:13:03 PM] <idiatic> [04:05:29 PM] Eric[nK] has gained operator status.
+ [02:13:05 PM] <Hero.A> What are you quoting?
+ [02:13:12 PM] <idiatic> i am quoting the timestamps
+ [02:13:13 PM] <idiatic> look at them
+ [02:13:14 PM] <Pyro6> this channel, obviously
+ [02:13:20 PM] <idiatic> they are ultra accurate
+ [02:13:21 PM] <Hero.A> Whoa
+ [02:13:25 PM] <AntiLiberalist@USEast> A script
+ [02:13:26 PM] <AntiLiberalist@USEast> Hmm.
+ [02:13:38 PM] <Hero.A> Yeah it would take me like 5 minutes
+ [02:13:44 PM] <PhiX[BoT]> how do I set a command to 0 access? >_>
+ [02:13:50 PM] <Hero.A> Phix
+ [02:13:53 PM] <idiatic> faggot jewrickter
+ [02:13:56 PM] <Hero.A> You type 
+ [02:13:58 PM] <Hero.A>  /quit
+ [02:14:01 PM] <idiatic> who wants to play inklink
+ [02:14:08 PM] <PhiX[BoT]> you mean ALT + F4
+ [02:14:08 PM] <AntiLiberalist@USEast> .setcmd 0 commandname?
+ [02:14:08 PM] <Pyro6> @;;x retard
+ [02:14:09 PM] Hero.A was kicked out of the channel by PhiX[BoT] (retard).
+ [02:14:09 PM] -- Hero.A has left the channel.
+ [02:14:10 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [02:14:16 PM] <Hero.A> Forl no anti
+ [02:14:19 PM] <PhiX[BoT]>     <access>
+ [02:14:20 PM] <AntiLiberalist@USEast> Forl?
+ [02:14:21 PM] <PhiX[BoT]>       <rank>0</rank>
+ [02:14:22 PM] <PhiX[BoT]>     </access>
+ [02:14:24 PM] <Hero.A> rofl*
+ [02:14:24 PM] <idiatic> @;;x
+ [02:14:24 PM] Hero.A was kicked out of the channel by PhiX[BoT].
+ [02:14:24 PM] -- Hero.A has left the channel.
+ [02:14:25 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [02:14:31 PM] <Hero.A> I deleted the say command
+ [02:14:33 PM] <PhiX[BoT]> says only available to the console >_<
+ [02:14:40 PM] <Hero.A> removed the whole thing from commands.xml
+ [02:14:53 PM] <Pyro6> remove that
+ [02:14:53 PM] <Hero.A> If you go over 200 in beta
+ [02:14:55 PM] <Hero.A> it fails
+ [02:15:01 PM] <Pyro6> but leave <access> and </access>
+ [02:15:07 PM] <idiatic> @;;x; x; x; x; x; x
+ [02:15:08 PM] Hero.A was kicked out of the channel by PhiX[BoT].
+ [02:15:08 PM] -- Hero.A has left the channel.
+ [02:15:09 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [02:15:09 PM] Hero.A was kicked out of the channel by PhiX[BoT].
+ [02:15:09 PM] -- Hero.A has left the channel.
+ [02:15:10 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [02:15:11 PM] Hero.A was kicked out of the channel by PhiX[BoT].
+ [02:15:11 PM] -- Hero.A has left the channel.
+ [02:15:12 PM] <AntiLiberalist@USEast> lol
+ [02:15:12 PM] Hero.A was kicked out of the channel by PhiX[BoT].
+ [02:15:13 PM] <AntiLiberalist@USEast> phix
+ [02:15:13 PM] Hero.A was kicked out of the channel by PhiX[BoT].
+ [02:15:16 PM] <AntiLiberalist@USEast> You did that?
+ [02:15:18 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [02:15:22 PM] <Hero.A> <3
+ [02:15:27 PM] <Hero.A> Thats some fast rejoin
+ [02:15:35 PM] <Pyro6> #ban her* ATTEMPTING TO FLOOD PHIX's BOT
+ [02:15:35 PM] Hero.A was banned by Pyro[BoT] (ATTEMPTING TO FLOOD PHIX's BOT).
+ [02:15:35 PM] -- Hero.A has left the channel.
+ [02:15:40 PM] <PhiX[BoT]> nope
+ [02:15:42 PM] <PhiX[BoT]> still
+ [02:15:47 PM] <PhiX[BoT]> only available to console
+ [02:15:50 PM] <Pyro6> i dunno
+ [02:15:57 PM] <PhiX[BoT]> noob bot
+ [02:16:06 PM] <PhiX[BoT]> ima switch back to 2.6
+ [02:16:23 PM] <Pyro6> why
+ [02:16:25 PM] Hero.A was unbanned by PhiX[BoT].
+ [02:16:28 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [02:16:32 PM] <PhiX[BoT]> when you fix the like 20 exploits ... it's kinda safe
+ [02:16:33 PM] <Hero.A> Haha...
+ [02:16:41 PM] <PhiX[BoT]> AND IT WORKS
+ [02:16:43 PM] <Pyro6> #ban her* BAN EVASION
+ [02:16:43 PM] Hero.A was banned by Pyro[BoT] (BAN EVASION).
+ [02:16:44 PM] -- Hero.A has left the channel.
+ [02:16:46 PM] <AntiLiberalist@USEast> Lol.
+ [02:16:56 PM] <VBScript .: <ClanGnome> I'll miss you :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [02:16:59 PM] <idiatic> WHY
+ [02:17:02 PM] <Pyro6> what commands are you trying to set to 0?
+ [02:17:13 PM] <PhiX@USEast> @;;help kickheronow
+ [02:17:13 PM] <PhiX[BoT]> [kickheronow (aliases: none)]: kicks the newb Hero.A out of the channel. (Syntax: <trigger>kickheronow).  Command is only available to the console.
+ [02:17:28 PM] Hero.A was unbanned by PhiX[BoT].
+ [02:17:29 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [02:17:33 PM] <Hero.A> Rawr
+ [02:17:44 PM] <idiatic> 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 5
+ [02:17:44 PM] <PhiX@USEast> STOP BANNING HERO
+ [02:17:48 PM] <PhiX@USEast> OR HES GONNA CRY
+ [02:17:51 PM] <Hero.A> mhm
+ [02:17:54 PM] <Pyro6> #kick her* CRY PLZ
+ [02:17:54 PM] Hero.A was kicked out of the channel by Pyro[BoT] (CRY PLZ).
+ [02:17:54 PM] -- Hero.A has left the channel.
+ [02:17:56 PM] -- Hero.A [110ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [02:17:56 PM] <Hero.A sniffles>
+ [02:17:56 PM] <AntiLiberalist@USEast> Gonna cry to who?
+ [02:18:01 PM] <Hero.A> My mom
+ [02:18:07 PM] <Pyro6> is a whore
+ [02:18:07 PM] <PhiX@USEast> everyone's mom
+ [02:18:11 PM] <Hero.A> She will beat yo ass pyro
+ [02:18:16 PM] <idiatic> hmm
+ [02:18:17 PM] <Hero.A> I will tell your mommy on you
+ [02:18:18 PM] <Pyro6> haha right
+ [02:18:25 PM] <AntiLiberalist@USEast> What if he cries on the forums?
+ [02:18:25 PM] <AntiLiberalist@USEast> xD
+ [02:18:29 PM] <Hero.A> Ohh
+ [02:18:29 PM] <idiatic> my message only sent the first 60
+ [02:18:30 PM] <Pyro6> then i warn him
+ [02:18:31 PM] <Hero.A> good idea
+ [02:18:33 PM] <Hero.A> ima pm stealth
+ [02:18:36 PM] <Hero.A> what now!
+ [02:18:40 PM] <Pyro6> i warn you
+ [02:18:41 PM] <PhiX@USEast> bannage
+ [02:18:48 PM] <Hero.A> How the hell can you tell if I pm someone?
+ [02:18:55 PM] <Pyro6> pm log
+ [02:18:56 PM] <Pyro6> s
+ [02:19:06 PM] <PhiX@USEast> we added some hidden mods
+ [02:19:16 PM] <Hero.A> Dangit
+ [02:19:23 PM] <Hero.A> I'll borrow someones account
+ [02:19:24 PM] <Hero.A> what now?
+ [02:19:34 PM] <Hero.A> How about I just whisper stealth right now
+ [02:19:38 PM] <Pyro6> then we ban you for using someone elses account
+ [02:19:42 PM] <Hero.A> Uhh what was his account again..
+ [02:19:46 PM] <AntiLiberalist@USEast> I thought Phix doesn't read PM's because it says in his signature that he doesn't give technical support through PM's >.>
+ [02:20:01 PM] <Hero.A> That doesn't matter
+ [02:20:06 PM] <PhiX@USEast> doesn't mean I don't read them
+ [02:20:34 PM] <AntiLiberalist@USEast> Lol.
+ [02:20:38 PM] <idiatic> a = [1, 1]
+ [02:20:38 PM] <idiatic> for x in range(100):
+ [02:21:30 PM] <idiatic> why isn't the first number a 0?
+ [02:22:08 PM] -- AntiLiberalist@USEast has left the channel.
+ [02:23:53 PM] -- Pyro6 has left the channel.
+ [02:27:27 PM] -- PhiX@USEast has left the channel.
+ [02:27:30 PM] -- PhiX@USEast [-1ms] has joined the channel using Starcraft Brood War (1337 wins).
+ [02:27:43 PM] <PhiX@USEast> assholes
+ [02:28:07 PM] -- Pyro6 [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [02:28:21 PM] <Pyro6> lol
+ [02:28:26 PM] <Pyro6>  [17:30:09.260] PhiX was banned by Nexus (X).
+ [02:28:36 PM] <PhiX@USEast> orly?
+ [02:28:42 PM] <PhiX@USEast>  [23:27:46.300] <From RouTe> unbanned
+ [02:28:43 PM] <PhiX@USEast>  [23:27:52.844] <To RouTe> NO THX
+ [02:28:52 PM] <Pyro6>  [17:30:19.649] <Piece@USEast> *u phix*
+ [02:30:40 PM] -- PhiX@USEast has left the channel.
+ [02:32:04 PM] <VBScript .: <PyroManiac606> $math vector=smart ... <0x5E> The statement "vector=smart" evaluates to: True. :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [02:33:12 PM] -- PhiX@USEast [-1ms] has joined the channel using Starcraft Brood War (1337 wins).
+ [02:33:16 PM] <PhiX@USEast> fusk
+ [02:44:21 PM] <VBScript | New on StealthBot Recent:  Little question BCP; Can someone make a plugin with this>
+ [02:46:20 PM] <Pyro6> someone just pmed me asking how to make an sbs help tool
+ [02:46:21 PM] <Pyro6> lol
+ [02:46:23 PM] <VBScript | New on SlashDot:  A Look At the Lightweight Equinox Desktop Environment>
+ [02:47:12 PM] <VBScript .: [8:38:19 PM] [TnP] <wr.rain> I DONT KNO WUTS WRONG WIT IT :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [02:55:33 PM] <DeAtHZeRg -: System Uptime: 5 days, 20 hours, 6 minutes and 16 seconds :: Connection Uptime: 1 day, 7 hours, 48 minutes and 56 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [02:56:17 PM] -- ClanGnome [32ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan Spht)
+ [02:56:25 PM] -- ClanGnome has left the channel.
+ [02:57:41 PM] -- Hero.A has left the channel.
+ [02:58:02 PM] -- Pimpin215 [31ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 15, icon tier Undead, banshee icon, in Clan C4B)
+ [02:58:06 PM] -- Pimpin215 has left the channel.
+ [02:59:37 PM] <Eric[nK]> hm
+ [02:59:50 PM] -- Makai-Enkou [15ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, myrmidon icon)
+ [03:00:06 PM] -- Makai-Enkou has left the channel.
+ [03:02:03 PM] <PhiX@USEast> eric
+ [03:02:18 PM] <VBScript .: [10:21:21 PM] [sex2] <Celine@USEast> Ninjas are especialized in mastering everything. :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [03:03:14 PM] <Eric[nK]> ...?
+ [03:03:44 PM] <PhiX@USEast> how can I set a command to 0 access?
+ [03:04:13 PM] <Eric[nK]> <access />
+ [03:04:25 PM] <PhiX[BoT]> that makes it accessible to the console only
+ [03:04:28 PM] <Eric[nK]> Or, you mean, so that anyone can use it?
+ [03:04:32 PM] <PhiX[BoT]> yeah
+ [03:04:39 PM] <Eric[nK]> You can't.
+ [03:04:39 PM] <PhiX[BoT]>     <access>
+ [03:04:41 PM] <PhiX[BoT]>       <rank>0</rank>
+ [03:04:42 PM] <PhiX[BoT]>     </access>
+ [03:04:44 PM] <Eric[nK]> Set it to 1, and add * 1.
+ [03:04:45 PM] <PhiX[BoT]> doesn't work either
+ [03:04:55 PM] <PhiX[BoT]> that's ... dumb ;[
+ [03:05:04 PM] <Eric[nK]> So is adding a command with zero access.
+ [03:05:10 PM] <Eric[nK]> That doesn't make sense.
+ [03:05:11 PM] <PhiX[BoT]> no
+ [03:05:20 PM] <PhiX[BoT]> see how many people are doing it
+ [03:05:31 PM] <Eric[nK]> If you have zero access, you have no access to commands.
+ [03:05:50 PM] <PhiX[BoT]> except for the commands you don't need access for >_>
+ [03:06:01 PM] <PhiX[BoT]> then why does !inbox work? :o!
+ [03:06:16 PM] <Eric[nK]> Because inbox works on the precondition that you have mail.
+ [03:06:29 PM] <PhiX[BoT]> it's still a command you are using
+ [03:06:48 PM] <Eric[nK]> It's not a command in the traditional sense.
+ [03:06:52 PM] <LuC1Fr[BoT]> thats hardcoded into the bot though.
+ [03:07:06 PM] <Eric> all of the commands are
+ [03:07:08 PM] <PhiX[BoT]> shush luci
+ [03:07:11 PM] <Eric> lol
+ [03:07:31 PM] <LuC1Fr[BoT]> well, my point was that its hard coded to not require any access, just the fact if you have mail.
+ [03:07:57 PM] <Eric[nK]> If you set a command to zero access, you open yourself up to potential abuse.
+ [03:08:07 PM] <VBScript> pingme can srsly be abused
+ [03:08:08 PM] <PhiX[BoT]> if peopel decide to do so ...
+ [03:08:09 PM] <VBScript> ;(
+ [03:08:09 PM] <Eric[nK]> At least if you set * to 1, you can easily disable all access.
+ [03:08:23 PM] <Eric> i agree with eric on that point
+ [03:08:25 PM] <Eric[nK]> You can also set individual users to 'I' and have their access muted.
+ [03:08:25 PM] <Eric> ;o
+ [03:08:36 PM] <PhiX[BoT]> I can already hear all the newbs asking for it
+ [03:08:37 PM] <VBScript> no you cant ;D
+ [03:08:42 PM] <Eric[nK]> Yes, you can.
+ [03:08:45 PM] <VBScript> didnt work for me
+ [03:08:52 PM] <Eric> it works for me
+ [03:08:53 PM] <VBScript> i set their flags to I and they couldnt be banned
+ [03:08:53 PM] <Eric> ;o
+ [03:08:56 PM] <Eric[nK]> "*" has been given access 100.
+ [03:08:56 PM] <VBScript> it said they were safelisted
+ [03:08:59 PM] Error: Subscript out of range in HasAccess().
+ [03:08:59 PM] <Eric[nK]> "VBScript" has been given flags I.
+ [03:09:03 PM] VBScript is using Warcraft III in a private channel.
+ [03:09:04 PM] <Eric[nK]> VBScript has flags I.
+ [03:09:12 PM] <Eric[nK]> kthx.
+ [03:09:14 PM] <VBScript> add a clan bot access
+ [03:09:16 PM] <VBScript> and try
+ [03:09:26 PM] <Eric> it works
+ [03:09:27 PM] <Eric> lol
+ [03:09:30 PM] "BoT" has been given access 100.
+ [03:09:35 PM] That user is not logged on.
+ [03:09:36 PM] <Eric[nK]> BoT (clan) has access 100.
+ [03:09:37 PM] <Eric> User(s) found: BoT (clan)\70
+ [03:09:38 PM] <VBScript> [bot (clan)] has access 60.
+ [03:09:41 PM] VBScript is using Warcraft III in a private channel.
+ [03:09:42 PM] <Eric[nK]> VBScript has flags I.
+ [03:09:47 PM] <VBScript> [bot (clan)] has access 60.
+ [03:09:49 PM] <Eric[nK]> .: StealthBot Beta v2.6999 Development Release 11 by Stealth.
+ [03:09:50 PM] <VBScript> thats what it says
+ [03:09:54 PM] <VBScript> when i do /whois Eric
+ [03:09:54 PM] <Eric[nK]> Eric: ver
+ [03:09:54 PM] <Eric> .: StealthBot Beta v2.6999 Development Release 10 by Stealth.
+ [03:10:04 PM] <Eric[nK]> VBScript: ver
+ [03:10:04 PM] <VBScript> .: StealthBot Beta v2.6999 Development Release 10 by Stealth.
+ [03:10:27 PM] <Eric[nK]> 'I' or 'i'?
+ [03:10:35 PM] <VBScript | New on SlashDot:  Eric Lerner's Focus Fusion Device Gets Funded>
+ [03:10:43 PM] <VBScript> Eric has flags I.
+ [03:10:48 PM] <Eric> -whoami
+ [03:10:49 PM] <VBScript> User not found.
+ [03:10:51 PM] <VBScript> Successfully removed database entry "eric."
+ [03:10:57 PM] <VBScript> [bot (clan)] has access 60.
+ [03:11:00 PM] <VBScript> ;/
+ [03:11:01 PM] <Eric> -whoami
+ [03:11:02 PM] <VBScript> [bot (clan)] has access 60.
+ [03:11:07 PM] <Eric> add me I
+ [03:11:13 PM] <VBScript> i did
+ [03:11:20 PM] <Eric> --find Eric
+ [03:11:27 PM] <Eric> -find Eric
+ [03:11:27 PM] <VBScript> No such user(s) found.
+ [03:11:32 PM] <Eric> no you didnt
+ [03:11:38 PM] <PhiX[BoT]>  [00:10:38.562] <VBScript> Eric has flags I.
+ [03:11:38 PM] <VBScript>  [06:10:43 PM] <VBScript> Eric has flags I.
+ [03:12:05 PM] <Eric>  [18:10:53.123] <VBScript> Successfully removed database entry "eric."
+ [03:12:12 PM] <VBScript> right
+ [03:12:22 PM] <Eric> so you took it away
+ [03:12:30 PM] <PhiX@USEast> cuz he was done testing
+ [03:12:33 PM] <Eric> -.-
+ [03:12:40 PM] <VBScript> pyro
+ [03:12:44 PM] <Eric> what
+ [03:12:45 PM] <VBScript> try joining a diff channel on eric
+ [03:12:50 PM] <VBScript> lemme see something
+ [03:12:53 PM] <Eric> it works.. >_>
+ [03:13:16 PM] <Eric> wtf
+ [03:13:19 PM] <Eric>  /j agk;j
+ [03:13:25 PM] <Eric>  [18:13:11.435] That is not a valid command. Type /help or /? for more info.
+ [03:13:43 PM] <Pyro6> Eric: join penis
+ [03:13:43 PM] -- Eric has left the channel.
+ [03:17:27 PM] <VBScript .: [4:14:33 PM] <Alendar@USEast> We need a jewish tech support person. :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [03:18:55 PM] <From Pyro6> asfd
+ [03:19:01 PM] -- On.The.Fly [47ms] has joined the channel using Warcraft III: The Frozen Throne.
+ [03:19:01 PM] -- Stats updated: On.The.Fly [47ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:19:18 PM] <Pyro6> do you still not my bot to not be in the channel..?
+ [03:20:42 PM] <VBScript | New on StealthBot Recent:  [RESOLVED] whsiper pingme; [RESOLVED] [more]; [RESOLVED] Little question BCP>
+ [03:20:43 PM] <VBScript | New on StealthBot S&P:  [RESOLVED] [more]; [RESOLVED] Little question BCP>
+ [03:20:44 PM] <Pyro6> i will take that as a no.
+ [03:20:48 PM] <From Pyro6> Eric: home
+ [03:20:49 PM] -- Eric [297ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:20:59 PM] <Pyro6> Eric: say !inbox
+ [03:20:59 PM] <Eric> !inbox
+ [03:21:13 PM] <Pyro6> inbox doesnt even wokr
+ [03:21:16 PM] <Pyro6> work
+ [03:21:17 PM] <Pyro6> lol
+ [03:27:40 PM] -- LCN.TOXICWASTE [188ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 25, icon tier Random, sea witch icon, in Clan HOAP)
+ [03:27:45 PM] -- LCN.TOXICWASTE has left the channel.
+ [03:32:35 PM] <VBScript .: [9:42:15 PM] [Nn4M] <Nn4M]Vette> LOOK @ MY SEXY BODY :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [03:42:41 PM] -- On.The.Fly has left the channel.
+ [03:43:47 PM] -- HaKr_ [62ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [03:44:02 PM] -- HaKr_ has left the channel.
+ [03:47:29 PM] <Eric[nK]> hm
+ [03:47:42 PM] <VBScript .: [5:55:17 PM] [Risk] <TubbyTheFat> You like imaginary stuff [Risk] <TubbyTheFat> Like you're gf [Risk] <TubbyTheFat> and your dick :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [03:48:17 PM] -- connection_lost [46ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Undead, crypt fiend icon, in Clan BoT)
+ [03:48:25 PM] -- connection_lost has left the channel.
+ [03:50:02 PM] -- theTacomaster@USEast [78ms] has joined the channel using Starcraft Brood War (0 wins).
+ [03:50:26 PM] -- theTacomaster@USEast has left the channel.
+ [03:53:33 PM] <Alendar> Hello.
+ [03:54:27 PM] <Eric> hai
+ [03:55:51 PM] <DeAtHZeRg -: System Uptime: 5 days, 21 hours, 6 minutes and 34 seconds :: Connection Uptime: 1 day, 8 hours, 47 minutes and 45 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [03:56:58 PM] <VBScript | New on StealthBot Recent:  Something wrong with proxies; Trivia Streak Names>
+ [04:02:48 PM] <VBScript .: [12:30:57 AM] [Nn4M] <pRawN*31> my balls are on firee :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [04:05:09 PM] <Pyro6>  wtf
+ [04:05:33 PM] <Pyro6> i linked someone to the vnc help creator thingy
+ [04:05:38 PM] <Pyro6> and they offered to give me money
+ [04:06:33 PM] <VBScript> how much
+ [04:06:44 PM] <Pyro6> thats what they asked me
+ [04:06:45 PM] <Pyro6> o.o
+ [04:09:20 PM] <LuC1Fr[BoT]> 300 bucks
+ [04:09:25 PM] <LuC1Fr[BoT]> not to much, not to little.
+ [04:09:36 PM] <LuC1Fr[BoT]> And
+ [04:09:42 PM] <LuC1Fr[BoT]> i thought Berzerker left.
+ [04:09:55 PM] <Eric> he did
+ [04:09:58 PM] <Eric> why
+ [04:10:01 PM] <LuC1Fr[BoT]> ./who clan sbs
+ [04:10:06 PM] <Eric> yea
+ [04:10:12 PM] <Eric> he hasnt left there
+ [04:10:16 PM] <Eric> or the irc channel
+ [04:10:17 PM] <LuC1Fr[BoT]> so kick him :)
+ [04:10:22 PM] <Eric> BAN HIS ASS
+ [04:10:26 PM] <Eric> SHITLIST
+ [04:10:28 PM] <Eric> IP BAN
+ [04:10:41 PM] <LuC1Fr[BoT]> JA! IPBANNAGE
+ [04:10:55 PM] <LuC1Fr[BoT]> soo
+ [04:11:07 PM] <LuC1Fr[BoT]> did we get the read the title off a youtube link?
+ [04:11:27 PM] <LuC1Fr[BoT]> http://youtube.com/watch?v=FHwuYV3SmQw
+ [04:11:56 PM] <Pyro6>  [19:14:07.499] <LuC1Fr[BoT]> http://youtube.com/watch?v=FHwuYV3SmQw
+ [04:11:58 PM] <Pyro6>  [19:14:08.753] [URL] YouTube - Girl Burns Down Ex-BF's House over Prom Date 
+ [04:12:06 PM] <LuC1Fr[BoT]> cool
+ [04:12:19 PM] <LuC1Fr[BoT]> your just finding <title> arn't you?
+ [04:12:32 PM] <Pyro6> yep
+ [04:12:42 PM] <VBScript> umm
+ [04:12:48 PM] <VBScript> ne_sucks is going to every channel
+ [04:12:50 PM] <VBScript> and flooding it
+ [04:12:53 PM] <VBScript>  /who clan tda
+ [04:12:54 PM] <LuC1Fr[BoT]> oh noes.
+ [04:12:55 PM] <Pyro6> he hasnt come here
+ [04:13:01 PM] <Pyro6> and hes been doing that all day
+ [04:13:03 PM] <VBScript> hes been to my little wc3 clan
+ [04:13:05 PM] <Pyro6> weekend*
+ [04:13:06 PM] <LuC1Fr[BoT]> he's just hitting his normal clans that he hates.
+ [04:13:07 PM] <VBScript> and a few others
+ [04:13:15 PM] <LuC1Fr[BoT]> and some that other people hate*
+ [04:13:17 PM] <Pyro6> hes been flooding ls all weekend
+ [04:13:27 PM] <Pyro6> hes not right now
+ [04:13:31 PM] <Pyro6> but its been on and off
+ [04:13:38 PM] <Pyro6> he floods like... 20 channels at a time, though
+ [04:13:42 PM] <Pyro6> I WANT HIM TO COME HERE
+ [04:14:06 PM] -- Pyro6 has left the channel.
+ [04:14:57 PM] -- Pyro6 [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [04:15:08 PM] <VBScript | New on StealthBot Recent:  Trivia keeps asking same thing.; Updated 'apply' script>
+ [04:15:19 PM] <LuC1Fr[BoT]> http://abclocal.go.com/wpvi/story?section=news/local&id=6164257
+ [04:15:37 PM] <Pyro6>  [19:17:59.889] [URL] 6abc.com: Police: Spurned girl set house fire 5/25/08 
+ [04:15:40 PM] <Pyro6> lol
+ [04:16:48 PM] <LuC1Fr[BoT]> http://youtube.com/watch?v=fnlPB7Lt4dU
+ [04:16:49 PM] <LuC1Fr[BoT]> :)
+ [04:17:13 PM] <Pyro6> porn!
+ [04:17:58 PM] <VBScript .: <ClanGnome> What happens if you get scared half to death twice? :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [04:22:22 PM] <LuC1Fr[BoT]> http://www.meatspin.com
+ [04:24:23 PM] <Eric> i am beginning to see how this could be exploited
+ [04:25:02 PM] <Pyro6> you have the ability to force me to download any page that you say outloud in the channel
+ [04:25:14 PM] <Pyro6> =\
+ [04:26:05 PM] <Alendar> ops, ver
+ [04:26:05 PM] <Eric[nK]> .: StealthBot Beta v2.6999 Development Release 11 by Stealth.
+ [04:26:05 PM] <VBScript> .: StealthBot Beta v2.6999 Development Release 10 by Stealth.
+ [04:26:05 PM] <LuC1Fr[BoT]> .: StealthBot Beta v2.6999 Development Release 10 by Stealth.
+ [04:26:06 PM] <Pyro[BoT]> .: StealthBot Beta v2.6999 Development Release 10 by Stealth.
+ [04:26:08 PM] <PhiX[BoT]> .: StealthBot Beta v2.6999 Development Release 10 by Stealth.
+ [04:26:23 PM] <Eric> ...whoami
+ [04:26:23 PM] <Eric[nK]> Eric [*, BoT (clan)] has access 100.
+ [04:26:27 PM] <Eric> lol
+ [04:26:43 PM] <Alendar> What can be exploited?
+ [04:27:03 PM] <LuC1Fr[BoT]> hmm
+ [04:27:08 PM] <LuC1Fr[BoT]> we can test that.
+ [04:27:15 PM] <Eric> lets not
+ [04:27:30 PM] <Eric> dont paste any links to sites with trojans pl0x
+ [04:28:45 PM] <Eric> Alendar: i made a plugin that gets the title of the page of any link someone says in the channel
+ [04:28:52 PM] <LuC1Fr[BoT]> http://luc1fr.com/108484_This_Is_Metalloween.mp3
+ [04:29:03 PM] <Eric> that page doesnt have a title
+ [04:29:03 PM] <Eric> o.o
+ [04:29:17 PM] <Eric> error!
+ [04:29:29 PM] <LuC1Fr[BoT]> well that was my intentions
+ [04:29:40 PM] <LuC1Fr[BoT]> i know what you're talking about though
+ [04:29:56 PM] <LuC1Fr[BoT]> Any page with malicious Active X components
+ [04:30:32 PM] <Eric> im not sure if scInet gets those, though
+ [04:30:41 PM] <LuC1Fr[BoT]> http://www.youareanidiot.org
+ [04:30:49 PM] <LuC1Fr[BoT]> afk
+ [04:30:59 PM] <LuC1Fr[BoT]> if it works, i know im in deep shit :/
+ [04:31:07 PM] <LuC1Fr[BoT]> hell
+ [04:31:11 PM] <LuC1Fr[BoT]> fuck it
+ [04:31:11 PM] <Pyro6>  [19:33:21.936] [URL] You are an Idiot! (dot org)
+ [04:31:13 PM] <Pyro6> lol
+ [04:31:14 PM] <LuC1Fr[BoT]> ill do it myself.
+ [04:31:57 PM] <LuC1Fr[BoT]> Current Song: Queens of the Stone Age - Little Sister : On Channel: 48 SquiZZ xL
+ [04:33:05 PM] <VBScript .: <ClanGnome> A fine conscience I turned out to be! :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [04:33:18 PM] <VBScript | New on StealthBot Recent:  time / o¥clock script?>
+ [04:47:27 PM] <VBScript | New on SlashDot:  Buses as Mobile Sensing Platforms?>
+ [04:48:16 PM] <VBScript .: [6:31:13 PM] [Public Chat 1] <o-FORCE> can you read the words that im typing?????? :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [04:55:51 PM] <DeAtHZeRg -: System Uptime: 5 days, 22 hours, 6 minutes and 34 seconds :: Connection Uptime: 1 day, 9 hours, 47 minutes and 25 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [05:00:36 PM] <VBScript | New on StealthBot Recent:  SB for wii?>
+ [05:03:25 PM] <VBScript .: [9:32:43 PM] [4tw] <TMNT)> wewt? [4tw] <TMNT)> omg [4tw] <TMNT)> its boots of travel clan [4tw] <ForYou.> too good :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [05:09:40 PM] <VBScript | New on StealthBot Recent:  Unable to connect>
+ [05:09:41 PM] <VBScript | New on StealthBot S&P:  Unable to connect>
+ [05:14:36 PM] -- AntiLiberalist@USEast [47ms] has joined the channel using Starcraft Brood War (61 wins).
+ [05:14:52 PM] -- AntiLiberalist@USEast has left the channel.
+ [05:15:41 PM] <VBScript | New on On This Day:  1964: Light goes out in India as Nehru dies; 1955: Election victory for Tories under Eden; 1963: Kenyatta to be Kenya's first premier; 1994: Dissident writer Solzhenitsyn returns; 1980: [more]>
+ [05:15:48 PM] <VBScript Peach death was 'misadventure'; 2000: GM blunder leaves farmers in uproar>
+ [05:17:19 PM] <Eric[nK]> hm
+ [05:18:04 PM] -- Joined channel: Clan Recruitment --
+ [05:18:05 PM] Looking for a clan? Looking for members? Clan Recruitment allows you to find both.
+ [05:18:05 PM] <From Deify> http://www.PoIsOnNetwork.net -- For all your b.net, warez & pr0n needs and more!
+ [05:18:06 PM] -- Oo.Cabbit.oO@USEast [78ms] has joined the channel using Starcraft Brood War (15 wins).
+ [05:18:13 PM] -- DsX-drOne@USEast has left the channel.
+ [05:18:14 PM] -- damsit@USEast [297ms] has joined the channel using Starcraft Brood War (3 wins).
+ [05:18:18 PM] <Godofwar[cMk]> Come to clan cmk , Were a gaming clan , mostly fastest and low money but we do play ums too ...If your lookin for a good clan to game with friends join clan cmk...Channel is... clan cmk
+ [05:18:19 PM] -- DsX-drOne@USEast [156ms] has joined the channel using Starcraft Brood War (768 wins).
+ [05:18:26 PM] -- KiLLa_SkuLL@USEast [110ms] has joined the channel using Warcraft II (33 wins).
+ [05:18:26 PM] <CDA-Ducky.> Are you looking to join a fun, well organized, and exciting clan? The Confederation might be for you!!! Enlist now at channel op ConFed or stop by for more details.
+ [05:18:29 PM] <From DsX-drOne@USEast> Op Prolix
+ [05:18:29 PM] <DotaTeam[RED]@USEast> Clan Red | Recruiting Dota players | Ask for Tryouts |     No Amatures | 24/7 Dota Trivia | Must have Ventrilo | We host Inhouses everyday | Join Clan Red today!
+ [05:18:31 PM] <E-Recruit@USEast Clan Empire, 5 years old and still here; Come on by we game/idle/chat and much More!We accept all clients.  /j Clan Emp - Idle for 17 hours, and 15 minutes>
+ [05:18:31 PM] <BnetAccess@USEast> ~Register and Post on~   http://bnetaccess.yap365.com/   ~A brand new Battle.net Discussion Forum~
+ [05:18:34 PM] -- oVeR_sCoRe@USEast [94ms] has joined the channel using Starcraft Brood War (1 wins).
+ [05:18:36 PM] <From DsX-drOne@USEast> nK is in Op Prolix
+ [05:18:38 PM] <00MxE00> Are u sick and tired of the old clan you were in well Clan Mxe, Join Mafia Empire now. Clan was just made yesterday!
+ [05:18:40 PM] -- damsit@USEast has left the channel.
+ [05:18:44 PM] -- Oo.Cabbit.oO@USEast has left the channel.
+ [05:18:45 PM] <OpXBuuX> Do you want a clan where you can be a leader? 
+ [05:18:45 PM] <OpXBuuX> Do you want a clan without people telling you what to do? 
+ [05:18:46 PM] <OpXBuuX> Come to OP XBUUX or CLAN BUU and join [Buu]! We're over 4 years old!
+ [05:18:51 PM] <Sprint@USEast> Clan Mxe, Join Mafia Empire now. Clan was just made yesterday!
+ [05:18:53 PM] -- KiLLa_SkuLL@USEast has left the channel.
+ [05:18:56 PM] -- DsX-drOne@USEast has left the channel.
+ [05:19:13 PM] -- Oo.Cabbit.oO@USEast [78ms] has joined the channel using Starcraft Brood War (15 wins).
+ [05:19:13 PM] -- oVeR_sCoRe@USEast has left the channel.
+ [05:19:18 PM] <Godofwar[cMk]> Come to clan cmk , Were a gaming clan , mostly fastest and low money but we do play ums too ...If your lookin for a good clan to game with friends join clan cmk...Channel is... clan cmk
+ [05:19:21 PM] -- Oo.Cabbit.oO@USEast has left the channel.
+ [05:19:26 PM] <CDA-Ducky.> Are you looking to join a fun, well organized, and exciting clan? The Confederation might be for you!!! Enlist now at channel op ConFed or stop by for more details.
+ [05:19:27 PM] -- Cavaliers-23@USEast [62ms] has joined the channel using Starcraft Brood War (5 wins).
+ [05:19:29 PM] <DotaTeam[RED]@USEast> Clan Red | Recruiting Dota players | Ask for Tryouts |     No Amatures | 24/7 Dota Trivia | Must have Ventrilo | We host Inhouses everyday | Join Clan Red today!
+ [05:19:31 PM] <E-Recruit@USEast Clan Empire, 5 years old and still here; Come on by we game/idle/chat and much More!We accept all clients.  /j Clan Emp - Idle for 17 hours, and 15 minutes>
+ [05:19:31 PM] <BnetAccess@USEast> ~Register and Post on~   http://bnetaccess.yap365.com/   ~A brand new Battle.net Discussion Forum~
+ [05:19:34 PM] -- Cavaliers-23@USEast has left the channel.
+ [05:19:36 PM] -- DotaTeam[RED]@USEast has left the channel.
+ [05:19:37 PM] -- damsit@USEast [297ms] has joined the channel using Starcraft Brood War (3 wins).
+ [05:19:38 PM] <00MxE00> Are u sick and tired of the old clan you were in well Clan Mxe, Join Mafia Empire now. Clan was just made yesterday!
+ [05:19:43 PM] -- DotaTeam[RED]@USEast [62ms] has joined the channel using Starcraft Brood War (0 wins).
+ [05:19:45 PM] <OpXBuuX> Do you want a clan where you can be a leader? 
+ [05:19:45 PM] <OpXBuuX> Do you want a clan without people telling you what to do? 
+ [05:19:47 PM] <OpXBuuX> Come to OP XBUUX or CLAN BUU and join [Buu]! We're over 4 years old!
+ [05:19:49 PM] -- damsit@USEast has left the channel.
+ [05:19:50 PM] -- Joined channel: Clan BoT --
+ [05:19:50 PM] -- Eric[nK] has acquired ops.
+ [05:19:50 PM] You are now marked as being a person who likes men.
+ [05:25:21 PM] -- Joseph.W has left the channel.
+ [05:25:24 PM] -- Alendar has left the channel.
+ [05:33:40 PM] <VBScript .: [12:30:57 AM] [Nn4M] <pRawN*31> my balls are on firee :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [05:45:58 PM] <VBScript | New on StealthBot S&P:  [RESOLVED] Error: Can't establish a connection>
+ [05:45:59 PM] <VBScript | New on StealthBot Tech Support:  Unable to connect>
+ [05:47:59 PM] <VBScript | New on SlashDot:  The Smartest Browser and OS>
+ [05:48:48 PM] <VBScript .: [9:43:36 PM] [frozen throne usa-2] <ALT_TEAl3AG> how do i make games with linksys beacuse it wont elt me :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [05:53:36 PM] -- Joseph.W [31ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:53:41 PM] -- Alendar [63ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:53:46 PM] <Pyro6> hai
+ [05:53:49 PM] <Alendar> Hello.
+ [05:55:01 PM] <VBScript | New on StealthBot Recent:  [RESOLVED] Unable to connect>
+ [05:55:52 PM] <DeAtHZeRg -: System Uptime: 5 days, 23 hours, 6 minutes and 35 seconds :: Connection Uptime: 1 day, 10 hours, 47 minutes and 23 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [05:56:04 PM] <VBScript> whats on you are an idiot
+ [05:56:40 PM] <Pyro6> i dunno
+ [05:58:04 PM] <VBScript | New on StealthBot Tech Support:  [RESOLVED] Unable to connect>
+ [06:03:09 PM] <LuC1Fr[BoT]> You should go find out :x
+ [06:03:54 PM] <VBScript .: <ClanGnome> I almost had a psychic girlfriend but she left me before we met :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [06:04:07 PM] <VBScript | New on StealthBot Recent:  time / o¥clock script?>
+ [06:14:18 PM] <Pyro6> ...
+ [06:17:17 PM] -- HaKr_ [63ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [06:17:25 PM] -- HaKr_ has left the channel.
+ [06:17:36 PM] -- HaKr_ [63ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [06:17:40 PM] <HaKr_> wtf is this, all these bots
+ [06:18:13 PM] -- HaKr_ has left the channel.
+ [06:18:42 PM] <LuC1Fr[BoT]> http://www.youtube.com/watch?v=xsU_5bP8eGg
+ [06:18:50 PM] <Pyro6> im not looking at orgies
+ [06:18:55 PM] <LuC1Fr[BoT]> lol
+ [06:19:01 PM] <LuC1Fr[BoT]> no seriously, check that out
+ [06:19:02 PM] <VBScript .: <zack> my math teacher staples burger king applications to failed tests :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [06:19:21 PM] -- HaKr_ [63ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [06:19:32 PM] -- HaKr_ has left the channel.
+ [06:19:38 PM] <Pyro6> ,uptime
+ [06:19:38 PM] <Ozark-a> System uptime 7 days, 9 hours, 53 minutes and 19 seconds, connection uptime 7 days, 3 hours, 39 minutes and 17 seconds.
+ [06:19:38 PM] <Ozark> System uptime 7 days, 9 hours, 53 minutes and 19 seconds, connection uptime 3 days, 21 hours, 18 minutes and 8 seconds.
+ [06:19:43 PM] <Pyro6> wtf
+ [06:19:59 PM] <Pyro6> `you
+ [06:20:10 PM] <Pyro6> you're not allowed to have a 7 day uptime
+ [06:20:12 PM] <Pyro6> asshole
+ [06:20:21 PM] <From LuC1Fr[BoT]> Your friend LuC1Fr[BoT] has exited Battle.net.
+ [06:20:21 PM] -- LuC1Fr[BoT] has left the channel.
+ [06:20:22 PM] -- Vortigaunt has left the channel.
+ [06:20:23 PM] -- Vortigaunt [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:20:23 PM] -- Vortigaunt has acquired ops.
+ [06:20:26 PM] <Pyro6> .
+ [06:20:30 PM] <Pyro6> #uptime
+ [06:20:30 PM] <Pyro[BoT]> System uptime 39 days, 0 hours, 35 minutes and 55 seconds, connection uptime 1 day, 3 hours, 11 minutes and 41 seconds.
+ [06:22:16 PM] <VBScript | New on StealthBot Recent:  [RESOLVED] time / o¥clock script?>
+ [06:31:09 PM] -- Goliath [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [06:31:12 PM] <From LuC1Fr[BoT]> Your friend LuC1Fr[BoT] has entered Battle.net.
+ [06:31:14 PM] -- LuC1Fr[BoT] [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:31:14 PM] -- Vortigaunt has left the channel.
+ [06:31:14 PM] -- LuC1Fr[BoT] has left the channel.
+ [06:31:15 PM] -- Vortigaunt [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:31:15 PM] -- LuC1Fr[BoT] [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:31:15 PM] -- LuC1Fr[BoT] has acquired ops.
+ [06:31:15 PM] -- Goliath has left the channel.
+ [06:32:02 PM] <LuC1Fr[BoT]> you know
+ [06:32:11 PM] <LuC1Fr[BoT]> im surprised nes hasnt hit sbs yet.
+ [06:32:33 PM] <Eric> i want him to hit either here or there
+ [06:32:35 PM] <Eric> ;o
+ [06:34:10 PM] <VBScript .: [6:31:13 PM] [Public Chat 1] <o-FORCE> can you read the words that im typing?????? :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [06:36:23 PM] <VBScript | New on SlashDot:  UK Academics Arrested For Researching al-Qaida>
+ [06:49:17 PM] <VBScript .: <ClanGnome> You are a menace.  A walking pestilence :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [06:50:36 PM] -- UrSaWaRRioR [125ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 7, icon tier Orcs, peon icon, in Clan DotX)
+ [06:50:51 PM] <UrSaWaRRioR> does anyone know how to stop nes from being a fucker
+ [06:50:51 PM] -- Makai-Enkou [15ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, myrmidon icon)
+ [06:50:58 PM] <Makai-Enkou> lulz
+ [06:50:59 PM] <Makai-Enkou> hey ursa
+ [06:51:00 PM] <Makai-Enkou> >.>
+ [06:51:02 PM] <UrSaWaRRioR> hi.
+ [06:51:17 PM] -- UrSaWaRRioR has left the channel.
+ [06:51:21 PM] <Eric> Hello.
+ [06:52:13 PM] -- Makai-Enkou has left the channel.
+ [06:53:12 PM] -- PingGnome [531ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 13, icon tier Undead, ghoul icon, in Clan TsF)
+ [06:53:13 PM] -- Pyro6 has left the channel.
+ [06:53:20 PM] -- PingGnome has left the channel.
+ [06:55:52 PM] <DeAtHZeRg -: System Uptime: 6 days, 0 hours, 6 minutes and 35 seconds :: Connection Uptime: 1 day, 11 hours, 47 minutes and 14 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [06:55:58 PM] -- Pyro6 [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:56:09 PM] -- Pyro6 has left the channel.
+ [06:58:35 PM] <VBScript | New on StealthBot Recent:  AT list?; Updated 'apply' script>
+ [06:58:36 PM] <VBScript | New on StealthBot S&P:  AT list?>
+ [06:59:48 PM] -- Pyro6 [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [07:01:14 PM] -- Goliath [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [07:01:15 PM] <Goliath> FooLOps v1.9.9 (AK Edition)
+ [07:01:20 PM] <Pyro6> ...
+ [07:01:29 PM] <Goliath> !!
+ [07:01:43 PM] <LuC1Fr[BoT]> err
+ [07:01:46 PM] <LuC1Fr[BoT]> wow slow..
+ [07:01:49 PM] <Goliath> `ver
+ [07:01:50 PM] <LuC1Fr[BoT]> .: StealthBot Beta v2.6999 Development Release 10 by Stealth.
+ [07:02:46 PM] <Goliath> test
+ [07:03:14 PM] <Goliath> test
+ [07:03:48 PM] <Goliath> test
+ [07:04:26 PM] <VBScript .: [1:25:39 AM] [Public Chat 1] <Vanessa> I have a 16 incher :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [07:04:41 PM] <LuC1Fr[BoT]> ?trigger
+ [07:04:41 PM] <idiatic> Current trigger(s): '.',.
+ [07:04:41 PM] <Eric[nK]> The bot's current trigger is " ... " (Length: 3)
+ [07:04:41 PM] <Eric> The bot's current trigger is " * " (Length: 1)
+ [07:04:41 PM] <VBScript> The bot's current trigger is " - " (Length: 1)
+ [07:04:44 PM] <PhiX[BoT]> The bot's current trigger is " @;; " (Length: 3)
+ [07:04:58 PM] <Pyro6> ...whoami
+ [07:04:58 PM] <Eric[nK]> [*, BoT (clan)] has access 100.
+ [07:05:03 PM] <LuC1Fr[BoT]> .cq
+ [07:05:07 PM] <LuC1Fr[BoT]> o.o
+ [07:05:08 PM] <Pyro6> ...find bot
+ [07:05:08 PM] <Eric[nK]> User(s) found: BoT (clan)\100
+ [07:05:15 PM] <Pyro6> ...find *
+ [07:05:15 PM] <Eric[nK]> User(s) found: Eric[nK]@Azeroth\200, Pyro6@Azeroth\100, Eric\60, Eric@Azeroth\100, Phix\100, Cuba\Z, Ribose\S, *\100, VBScript\I, BoT (clan)\100
+ [07:05:29 PM] <Pyro6> ...whois *
+ [07:05:29 PM] <Eric[nK]> * has access 100.
+ [07:05:30 PM] <Goliath> hmm
+ [07:05:54 PM] -- Goliath has left the channel.
+ [07:06:25 PM] -- Goliath [125ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [07:06:25 PM] -- Stats updated: Goliath [125ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [07:06:29 PM] <Pyro6> 125
+ [07:06:33 PM] <Goliath> I knoq.
+ [07:06:36 PM] <Goliath> know*
+ [07:06:38 PM] <Goliath> ..
+ [07:06:42 PM] <Pyro6> lol
+ [07:06:44 PM] <Goliath> ok, now it sends messages fine
+ [07:06:49 PM] <Goliath> what the fuck.. seriously.
+ [07:06:57 PM] <Pyro6> noob foolops
+ [07:06:58 PM] <Pyro6> :P
+ [07:07:54 PM] -- Goliath has left the channel.
+ [07:16:44 PM] <VBScript | New on StealthBot Recent:  beep/page plugin>
+ [07:19:34 PM] <VBScript .: [10:25:17 PM] <From GoDdEsSOfRvWs> 47 I don't approve of political jokes. I've seen too many of them get elected. :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [07:19:48 PM] <Pyro6> holy shit
+ [07:19:54 PM] <Pyro6> this guy in ls has a 1 minute idle
+ [07:20:00 PM] <Pyro6> and guess what the message is!
+ [07:20:02 PM] <Pyro6> his uptime!!
+ [07:22:25 PM] <LuC1Fr[BoT]> uhh
+ [07:22:27 PM] <LuC1Fr[BoT]> who?
+ [07:22:35 PM] <Pyro6> HackerS@USEast
+ [07:22:46 PM] <VBScript | New on StealthBot S&P:  beep/page plugin>
+ [07:22:54 PM] <Pyro6> the bottom 5 people in the channel list
+ [07:24:41 PM] <Pyro6> k well it stopped
+ [07:24:48 PM] <Pyro6>  [22:13:54.649] <HackerS@USEast System: 4|14:54:35, Connection: 0|0:32:59>
+ [07:24:49 PM] <Pyro6>  [22:14:54.659] <HackerS@USEast System: 4|14:55:35, Connection: 0|0:33:59>
+ [07:24:53 PM] <Pyro6>  [22:15:54.656] <HackerS@USEast System: 4|14:56:35, Connection: 0|0:34:59>
+ [07:25:01 PM] <Pyro6>  [22:16:54.644] <HackerS@USEast System: 4|14:57:35, Connection: 0|0:35:59>
+ [07:25:07 PM] <Pyro6> you get the picture.
+ [07:25:16 PM] <LuC1Fr[BoT]> yeah.
+ [07:26:18 PM] <Pyro6> why is it so freakin quiet in here
+ [07:29:48 PM] -- Goliath [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [07:29:52 PM] -- Goliath has left the channel.
+ [07:34:40 PM] <VBScript .: [9:49:57 PM] [TwH] <Lich_King_7> some harry huge poetry speaking guy [TwH] <Lich_King_7> tells me my dick is small :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [07:34:54 PM] <VBScript | New on StealthBot Recent:  Stealthbot Commands>
+ [07:39:26 PM] -- HaKr_ [63ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [07:39:43 PM] -- HaKr_ has left the channel.
+ [07:39:50 PM] -- HaKr_ [63ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [07:39:59 PM] -- HaKr_ has left the channel.
+ [07:44:01 PM] <VBScript | New on StealthBot Recent:  can't connect with bot; how do i auto set access>
+ [07:49:52 PM] <VBScript .: [10:22:01 PM] [SaDs] <gill44> heres the deal [SaDs] <gill44> you lika play [SaDs] <gill44> i lika play [SaDs] <gill44> lets plya :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [07:53:05 PM] <VBScript | New on StealthBot Recent:  huu?  what error does this mean?; Plugins to Connection problem>
+ [07:55:52 PM] <DeAtHZeRg -: System Uptime: 6 days, 1 hours, 6 minutes and 35 seconds :: Connection Uptime: 1 day, 12 hours, 46 minutes and 59 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [08:01:43 PM] -- Goliath [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [08:01:49 PM] -- Goliath has left the channel.
+ [08:02:10 PM] -- Goliath [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [08:02:11 PM] <VBScript | New on StealthBot Recent:  Trouble connecting; connecting problem still; help w/ connecting>
+ [08:02:17 PM] -- Saruman@USEast [31ms] has joined the channel using Starcraft Brood War (211 wins).
+ [08:02:21 PM] MorelikeFagcoma was banned by LuC1Fr[BoT].
+ [08:02:22 PM] ne_sucks.3 was banned by LuC1Fr[BoT].
+ [08:02:34 PM] <LuC1Fr[BoT]> umm
+ [08:02:35 PM] <LuC1Fr[BoT]> hi?
+ [08:02:46 PM] Saruman was banned by LuC1Fr[BoT] (Bye?).
+ [08:02:46 PM] -- Saruman@USEast has left the channel.
+ [08:02:51 PM] -- Jd[BoT] [16ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:02:56 PM] -- Jd[BoT] has left the channel.
+ [08:02:59 PM] <Pyro6> o.o
+ [08:03:20 PM] -- Pyro6 has left the channel.
+ [08:03:28 PM] -- TimeToParty [62ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 18, icon tier Random, sea witch icon, in Clan DiL)
+ [08:03:43 PM] <LuC1Fr[BoT]> TimeToParty, can i help you?
+ [08:03:46 PM] <TimeToParty> Yes!
+ [08:03:49 PM] -- Goliath has left the channel.
+ [08:03:53 PM] <TimeToParty> Do you guys know how 2 stop floods?
+ [08:04:01 PM] <TimeToParty> other then /clan priv
+ [08:04:03 PM] <LuC1Fr[BoT]> quit life?
+ [08:04:06 PM] -- Pyro6 [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:04:17 PM] <TimeToParty> =(
+ [08:04:19 PM] -- TimeToParty has left the channel.
+ [08:04:23 PM] <Pyro6> ...?
+ [08:04:34 PM] <Pyro6> #ddpx Vortigaunt
+ [08:04:35 PM] -- VBScript has left the channel.
+ [08:04:35 PM] -- PhiX[BoT] has left the channel.
+ [08:04:35 PM] -- LuC1Fr[BoT] has left the channel.
+ [08:04:35 PM] -- DeAtHZeRg has left the channel.
+ [08:04:35 PM] -- Joined channel: Clan BoT --
+ [08:04:35 PM] [CLAN] You have been demoted. Your new rank is Grunt.
+ [08:04:35 PM] [CLAN] Member update: Eric[nK] is now a Grunt.
+ [08:04:35 PM] You are now marked as being a person who likes men.
+ [08:04:38 PM] -- Vortigaunt has acquired ops.
+ [08:04:38 PM] -- Pyro[BoT] has left the channel.
+ [08:04:40 PM] -- Pyro[BoT] [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:04:40 PM] -- Pyro[BoT] has acquired ops.
+ [08:04:42 PM] -- VBScript has left the channel.
+ [08:04:42 PM] -- PhiX[BoT] has left the channel.
+ [08:04:42 PM] -- LuC1Fr[BoT] has left the channel.
+ [08:04:42 PM] -- DeAtHZeRg has left the channel.
+ [08:04:42 PM] -- Joined channel: Clan BoT --
+ [08:04:42 PM] -- Eric[nK] has acquired ops.
+ [08:04:43 PM] [CLAN] You have been promoted. Your new rank is Shaman.
+ [08:04:43 PM] [CLAN] Member update: Eric[nK] is now a Shaman.
+ [08:04:43 PM] You are now marked as being a person who likes men.
+ [08:05:00 PM] <VBScript .: [9:43:36 PM] [frozen throne usa-2] <ALT_TEAl3AG> how do i make games with linksys beacuse it wont elt me :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [08:05:16 PM] -- LuC1Fr[BoT] has left the channel.
+ [08:05:18 PM] -- LuC1Fr[BoT] [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:05:18 PM] -- LuC1Fr[BoT] has acquired ops.
+ [08:05:23 PM] <LuC1Fr[BoT]> hmm
+ [08:05:55 PM] <Pyro6> ...
+ [08:06:01 PM] <Pyro6> Cesar.
+ [08:06:09 PM] <Pyro6> just like bumped 20 month old topics
+ [08:06:19 PM] <Pyro6> and posted the same link in each of them
+ [08:06:30 PM] <Pyro6> 20 topics, not 20 month old
+ [08:06:31 PM] -- LuC1Fr[BoT] has left the channel.
+ [08:06:34 PM] -- LuC1Fr[BoT] [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:06:34 PM] -- LuC1Fr[BoT] has acquired ops.
+ [08:06:38 PM] <LuC1Fr[BoT]> interesting.
+ [08:06:50 PM] -- LuC1Fr[BoT] has left the channel.
+ [08:06:51 PM] -- LuC1Fr[BoT] [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:06:51 PM] -- LuC1Fr[BoT] has acquired ops.
+ [08:06:58 PM] <LuC1Fr[BoT]> hmm
+ [08:07:18 PM] -- LuC1Fr[BoT] has left the channel.
+ [08:07:19 PM] -- LuC1Fr[BoT] [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:07:19 PM] -- LuC1Fr[BoT] has acquired ops.
+ [08:07:54 PM] -- LuC1Fr[BoT] has left the channel.
+ [08:07:55 PM] -- LuC1Fr[BoT] [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:07:55 PM] -- LuC1Fr[BoT] has acquired ops.
+ [08:08:02 PM] <LuC1Fr[BoT]> wow
+ [08:08:12 PM] <LuC1Fr[BoT]> Pyro6: rejoin
+ [08:08:15 PM] <LuC1Fr[BoT]> :(
+ [08:09:07 PM] <Alendar> Ugh, school tomorrow.
+ [08:09:35 PM] <Pyro6> last week
+ [08:09:38 PM] <Pyro6> thankfully
+ [08:10:17 PM] <Alendar> Lucky.
+ [08:10:23 PM] -- LuC1Fr[BoT] has left the channel.
+ [08:10:23 PM] <Alendar> I still have a full month.
+ [08:10:24 PM] -- LuC1Fr[BoT] [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:10:24 PM] -- LuC1Fr[BoT] has acquired ops.
+ [08:10:33 PM] <Pyro6> ew, that sucks.
+ [08:10:48 PM] <LuC1Fr[BoT]> o.o
+ [08:10:56 PM] <Alendar> I can't wait.
+ [08:11:14 PM] <VBScript | New on StealthBot Recent:  helppp>
+ [08:11:41 PM] <Alendar> Over the summer I am going to hang out with my friends and girlfriend and I am going to hang out around here during the late night hours or when I am not hanging out and I am just going to go plugin and programming crazy.
+ [08:12:35 PM] <Pyro6> i have two weeks of summer school in june
+ [08:12:37 PM] <Pyro6> =\
+ [08:13:27 PM] <LuC1Fr[BoT]> hmm
+ [08:13:37 PM] <LuC1Fr[BoT]> a plugin that creates plugins randomly
+ [08:13:38 PM] <LuC1Fr[BoT]> o.o
+ [08:14:14 PM] <Alendar> Why?
+ [08:14:21 PM] <Pyro6> have fun with that
+ [08:14:29 PM] <LuC1Fr[BoT]> seriously.
+ [08:14:55 PM] <Alendar> Actual plugins or like randomly named .plug files? :p
+ [08:15:05 PM] <Alendar>  [11:12:50 PM] <Pyro6> i have two weeks of summer school in june -- Why?
+ [08:15:24 PM] <LuC1Fr[BoT]> actual plugins :P
+ [08:15:28 PM] <Pyro6> because i miss a lot of school during the year
+ [08:15:37 PM] <Pyro6> i have to take some classes over the summer
+ [08:16:08 PM] <Pyro6> its not punishment... just lets me do funner stuff during the year
+ [08:16:45 PM] <LuC1Fr[BoT]> basically.. in classes you didnt get your full credits?
+ [08:16:47 PM] <DeAtHZeRg> I like that idea lucifr
+ [08:16:50 PM] <Alendar> While I won't be here during the day in June so it's not like you're missing much.
+ [08:16:54 PM] <DeAtHZeRg> i might get on it
+ [08:17:07 PM] <Pyro6> no i just dont have the classes
+ [08:17:10 PM] <DeAtHZeRg> tho they won't have any real function and they will all be broken but hey they will be random
+ [08:17:15 PM] <LuC1Fr[BoT]> i see
+ [08:17:19 PM] <Pyro6> i had 2 free periods this year, because i was needed for other stuff
+ [08:17:46 PM] <LuC1Fr[BoT]> well you could get more advanced, and have it fix any bugs as well :)
+ [08:18:19 PM] <Pyro6> an even better idea would be to have the plugin post them on sbnet
+ [08:18:25 PM] <Pyro6> and have other people fix them for you
+ [08:18:30 PM] <Pyro6> oo
+ [08:18:39 PM] <LuC1Fr[BoT]> lol.
+ [08:18:45 PM] <Pyro6> a plugin that crawls sbnet and downloads all of the plugins ever posted on it
+ [08:19:04 PM] <LuC1Fr[BoT]> even the old forums*
+ [08:19:11 PM] <Pyro6> mhm
+ [08:19:21 PM] <Pyro6> the old forums... that i dont have access to
+ [08:19:23 PM] <LuC1Fr[BoT]> create your own version of plugins.stealthbot.net
+ [08:20:06 PM] <VBScript .: [10:21:21 PM] [sex2] <Celine@USEast> Ninjas are especialized in mastering everything. :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [08:21:44 PM] -- Funnel9111[BoT] [5437ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:22:19 PM] <From Alendar[BoT]> Your friend Alendar[BoT] has entered Battle.net.
+ [08:22:21 PM] -- Alendar[BoT] [63ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:22:21 PM] -- LuC1Fr[BoT] has left the channel.
+ [08:22:21 PM] -- Alendar[BoT] has left the channel.
+ [08:22:22 PM] -- LuC1Fr[BoT] [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:22:22 PM] -- Alendar[BoT] [63ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:22:22 PM] -- Alendar[BoT] has acquired ops.
+ [08:22:36 PM] <Alendar> That MOTD is annoying.
+ [08:22:45 PM] <Pyro6> lol
+ [08:22:52 PM] <Pyro6> #setmotd Penis!
+ [08:22:53 PM] <Pyro[BoT]> Clan MOTD set.
+ [08:23:09 PM] <Alendar> Ehh, better... :|
+ [08:23:12 PM] <Pyro6> +setmotd penis
+ [08:23:13 PM] <Vortigaunt> Error: Shaman or Chieftain rank is required to set the MOTD.
+ [08:23:13 PM] <Alendar> :p
+ [08:23:18 PM] <Pyro6> hah
+ [08:23:19 PM] <Pyro6> !
+ [08:24:07 PM] <DeAtHZeRg> rejoice!
+ [08:24:23 PM] -- DeAtHZeRg has left the channel.
+ [08:24:25 PM] -- DeAtHZeRg [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Human, peon icon, in Clan BoT)
+ [08:24:25 PM] -- DeAtHZeRg has acquired ops.
+ [08:24:28 PM] <Pyro6> penis
+ [08:24:34 PM] <DeAtHZeRg>  [11:24:15 PM] -- Joined channel: Clan BoT --
+ [08:24:36 PM] <DeAtHZeRg>  [11:24:17 PM] -- DeAtHZeRg has acquired ops.
+ [08:24:38 PM] <DeAtHZeRg>  [11:24:18 PM] ( . Y . )
+ [08:24:43 PM] -- Pyro6 has left the channel.
+ [08:24:45 PM] -- Pyro6 [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:24:52 PM] <DeAtHZeRg> epic
+ [08:24:54 PM] <Pyro6> :D
+ [08:25:08 PM] <Pyro6 >_>
+ [08:25:27 PM] <DeAtHZeRg> ( .Y    .   ) < your mothers tits
+ [08:25:39 PM] <DeAtHZeRg> actuly that almost looks like a side shot
+ [08:25:57 PM] <Pyro6> (                 .                 )   (                       .                      )
+ [08:26:04 PM] <DeAtHZeRg> them look like mine
+ [08:26:05 PM] <Pyro6> (the right is bigger than the left)
+ [08:26:17 PM] <Pyro6> wait, wait
+ [08:26:17 PM] <DeAtHZeRg> (.Y.) my girlfriends :(
+ [08:26:37 PM] <DeAtHZeRg> wall-e looks fucking amazing
+ [08:26:41 PM] <Pyro6> (                        o                         )   (                        o                         )
+ [08:26:56 PM] <Pyro6> ( o Y o )
+ [08:26:57 PM] <Pyro6> o.o
+ [08:26:57 PM] <DeAtHZeRg> http://gizmodo.com/367071/pixars-walle-new-full-trailer-blasts-us-into-space
+ [08:27:03 PM] <DeAtHZeRg> holy fucking huge nipple
+ [08:27:15 PM] <Pyro6> ( O Y O )
+ [08:27:26 PM] <Pyro6> TITS OR OWL?
+ [08:27:39 PM] <DeAtHZeRg> both
+ [08:27:42 PM] <DeAtHZeRg> owl tits actuly
+ [08:28:07 PM] <Pyro6> gg
+ [08:28:24 PM] <DeAtHZeRg> http://gizmodo.com/367071/pixars-walle-new-full-trailer-blasts-us-into-space
+ [08:28:26 PM] <DeAtHZeRg> go!
+ [08:35:13 PM] <VBScript .: [4:16:00 PM] [tora] <papertowelroll> cable comes from cable :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [08:35:25 PM] <VBScript | New on StealthBot Tech Support:  [RESOLVED] helppp>
+ [08:35:44 PM] -- LuC1Fr[BoT] has left the channel.
+ [08:36:50 PM] <DeAtHZeRg> http://idiat.com/
+ [08:36:53 PM] <DeAtHZeRg> go go go
+ [08:37:16 PM] -- LuC1Fr[BoT] [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:37:26 PM] <VBScript | New on SlashDot:  Anti-Counterfeiting Trade Agreement>
+ [08:37:28 PM] <Alendar> http://www.stealthbot.net/board/index.php?showtopic=33526
+ [08:38:04 PM] <Pyro6> lol
+ [08:38:09 PM] <Pyro6> wtf
+ [08:38:15 PM] <Pyro6>  [23:39:30.670] <DeAtHZeRg> http://idiat.com/
+ [08:38:16 PM] <Pyro6>  [23:39:31.159] [URL] 
+ [08:38:17 PM] <Pyro6>             idiat.com
+ [08:38:18 PM] <Pyro6>         
+ [08:38:28 PM] <VBScript | New on StealthBot Recent:  [RESOLVED] helppp>
+ [08:38:45 PM] -- t-dawg[BoT] [438ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:38:52 PM] -- t-dawg[BoT] has left the channel.
+ [08:38:55 PM] -- t-dawg[BoT] [109ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:39:45 PM] <Alendar> I am taking TS for right now.
+ [08:41:11 PM] <DeAtHZeRg> I love rooting through the trash can
+ [08:41:44 PM] <Pyro6> i saw those topics earlier
+ [08:42:00 PM] <Pyro6>  [23:08:41.006] <Pyro6> Cesar.
+ [08:42:01 PM] <Pyro6>  [23:08:49.353] <Pyro6> just like bumped 20 month old topics
+ [08:42:02 PM] <Pyro6>  [23:08:58.882] <Pyro6> and posted the same link in each of them
+ [08:42:04 PM] <Alendar> http://www.stealthbot.net/board/index.php?s=&showtopic=33477&view=findpost&p=267098 - -_-
+ [08:42:14 PM] <Pyro6> lol
+ [08:44:39 PM] <Pyro6> o.0
+ [08:45:00 PM] <Pyro6> i just realized in the first topic you linked to in the warn, that i even mentioned that anyone else who posted would be warned
+ [08:45:02 PM] <Pyro6> o.o
+ [08:47:33 PM] <Pyro6> lol DeAtHZeRg has a warn log
+ [08:49:22 PM] <DeAtHZeRg> :)
+ [08:49:52 PM] <Pyro6> i am suspending berzerker until further notice.
+ [08:50:01 PM] <Alendar> Hmm.
+ [08:50:11 PM] <DeAtHZeRg> why?
+ [08:50:13 PM] <Alendar> I took care of TS.
+ [08:50:15 PM] <Pyro6> CUZ I CAN
+ [08:50:21 PM] <VBScript .: [10:25:17 PM] <From GoDdEsSOfRvWs> 47 I don't approve of political jokes. I've seen too many of them get elected. :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [08:50:47 PM] <DeAtHZeRg> http://www.stealthbot.net/board/index.php?act=warn&mid=58&CODE=view
+ [08:50:48 PM] <Alendar> I should step down now.
+ [08:51:01 PM] <Alendar> Haste is talking about leaving.
+ [08:51:20 PM] <DeAtHZeRg> Stallion      Warned on Mar 6 2006, 11:17 PM
+ [08:51:22 PM] <DeAtHZeRg> Added to warn level     Don't you ever post a picture of a mostly nude David Hasslehoff EVER again. DO YOU HEAR ME?! NEVER AGAIN.
+ [08:51:29 PM] <DeAtHZeRg> thats the best warning ever
+ [08:52:08 PM] <Pyro6> can you use XmlHttp to login to IPB and see a page?
+ [08:52:16 PM] <DeAtHZeRg> idk
+ [08:52:21 PM] <Pyro6> if so, i wanna make a plugin to view warn logs
+ [08:52:23 PM] <LuC1Fr[BoT]> haste told me he left already o.o
+ [08:52:24 PM] <Pyro6> :D
+ [08:52:35 PM] <Pyro6> dont leave alendar!
+ [08:52:53 PM] <Pyro6> if you leave, then there will be no more active mods
+ [08:54:08 PM] <Pyro6> why is C2Talon on my xFire friends list..
+ [08:54:29 PM] <DeAtHZeRg> idk if im on yours
+ [08:54:43 PM] <Pyro6> it doesnt even say what common friend we have
+ [08:54:46 PM] <Pyro6> wtf!!
+ [08:54:52 PM] <Alendar> I'm not needed though.
+ [08:54:58 PM] <Pyro6> yes you are alendar
+ [08:55:00 PM] <DeAtHZeRg> who cares if your needed
+ [08:55:06 PM] <DeAtHZeRg> its all about the fun times
+ [08:55:08 PM] <DeAtHZeRg> and the spam
+ [08:55:13 PM] <DeAtHZeRg> http://www.stealthbot.net/board/index.php?showtopic=33531
+ [08:55:15 PM] <DeAtHZeRg> and that topic
+ [08:55:44 PM] <DeAtHZeRg> :)
+ [08:55:59 PM] <DeAtHZeRg -: System Uptime: 6 days, 2 hours, 6 minutes and 41 seconds :: Connection Uptime: 1 day, 13 hours, 45 minutes and 16 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [08:56:12 PM] <Pyro6> wow that picture is annoying
+ [08:56:14 PM] <Pyro6> but funny!
+ [08:56:56 PM] <DeAtHZeRg> http://photos-b.ak.facebook.com/photos-ak-sf2p/v251/80/72/8645211/n8645211_43218273_6867.jpg
+ [08:56:58 PM] <Alendar> We should all start breaking Berzerker's rule
+ [08:56:59 PM] <DeAtHZeRg> suprise butsex
+ [08:57:04 PM] <Pyro6> LuC1Fr[BoT] post "hoho" after alendars post
+ [08:57:06 PM] <Alendar> "NO RICKROLLIN LINKS (or any other form of a rickroll). Any links to any website that contains the video anywhere on the site gets warned and his/her topic trashed."
+ [08:57:26 PM] <Pyro6> is that stallion raping stealth? o.0
+ [08:57:41 PM] <Alendar> WHAT!?
+ [08:58:03 PM] <Pyro6> i like how the "NO RICKROLLIN LINKS" thing is a link
+ [08:58:08 PM] <Alendar> I know.
+ [08:58:15 PM] <DeAtHZeRg> im to the song never gonna give you up
+ [08:58:16 PM] <LuC1Fr[BoT]> done.
+ [08:58:17 PM] <Pyro6> the sites not up anymore
+ [08:58:18 PM] <DeAtHZeRg> i think its a good son
+ [08:58:21 PM] <Pyro6> im gonna update it
+ [08:58:30 PM] <DeAtHZeRg> post them to that video and not the rick roll videos
+ [08:59:02 PM] <Pyro6> k link updated
+ [08:59:33 PM] <DeAtHZeRg> :)
+ [08:59:35 PM] <Pyro6> someone give me an idea
+ [08:59:37 PM] <VBScript | New on StealthBot S&P:  need script>
+ [08:59:54 PM] <Alendar> If I do decide to leave StealthBot.net I am going to go out with a banf.
+ [08:59:55 PM] <Pyro6> something to do with someones post
+ [08:59:56 PM] <Alendar> bang*
+ [09:00:07 PM] <DeAtHZeRg> nothing beats the band
+ [09:00:17 PM] <DeAtHZeRg> of randall + like 6 other people (including myself)
+ [09:00:18 PM] <LuC1Fr[BoT]> speaking of band
+ [09:00:27 PM] <DeAtHZeRg> we where given admin
+ [09:00:32 PM] <DeAtHZeRg> and fucked the crap out of erics account
+ [09:00:33 PM] <LuC1Fr[BoT]> you failed at rickrolling them.
+ [09:00:38 PM] <DeAtHZeRg> and went hog wild on everything
+ [09:01:04 PM] <Pyro6> i want to do something like this: http://www.stealthbot.net/board/index.php?showtopic=13337
+ [09:01:20 PM] <Pyro6> cuz that topic pwns
+ [09:01:28 PM] <DeAtHZeRg> hum
+ [09:01:29 PM] <Alendar> David, link to RickRoll mp3 please
+ [09:01:39 PM] <LuC1Fr[BoT]> http://www.stealthbot.net/board/index.php?showtopic=1337
+ [09:01:40 PM] <Pyro6> ooo
+ [09:01:43 PM] <LuC1Fr[BoT]> that topic owned
+ [09:01:43 PM] <Pyro6> imbed
+ [09:01:45 PM] <LuC1Fr[BoT]> before it was owned.
+ [09:01:47 PM] <DeAtHZeRg> who remembers when me, randall, distant and someone else all changed usernames?
+ [09:01:49 PM] <LuC1Fr[BoT]> omg
+ [09:01:56 PM] <LuC1Fr[BoT]> hidden embed?
+ [09:02:00 PM] <Pyro6> im gonna embed the rickroll into random topics
+ [09:02:06 PM] <Alendar> NO
+ [09:02:10 PM] <LuC1Fr[BoT]> make sure its hidden
+ [09:02:11 PM] <Alendar> MY IDEA DAMN YOU
+ [09:02:11 PM] <LuC1Fr[BoT]> damnit
+ [09:02:12 PM] <Pyro6> just the song
+ [09:02:18 PM] <Pyro6> k alendar, ill let you
+ [09:02:31 PM] <Alendar> :p
+ [09:02:41 PM] <Alendar> I'm in a good mood tonight.
+ [09:02:45 PM] <Alendar> Hehe...
+ [09:03:03 PM] <DeAtHZeRg> off topic is free game
+ [09:03:04 PM] <DeAtHZeRg> im ok with it
+ [09:03:16 PM] <Pyro6> its not like someone can warn me
+ [09:03:18 PM] <Pyro6> or alendar
+ [09:03:19 PM] <Pyro6> lol
+ [09:03:27 PM] <LuC1Fr[BoT]> any of us
+ [09:03:33 PM] <Alendar> It's not breaking the rules either.
+ [09:03:33 PM] <LuC1Fr[BoT]> cept sr. members
+ [09:03:39 PM] <Alendar> "video"
+ [09:03:45 PM] <Alendar> "link"
+ [09:03:46 PM] <Pyro6> fuck, i lost the rickroll mp3
+ [09:03:48 PM] <LuC1Fr[BoT]> which them and above are the only ones that can do html
+ [09:03:54 PM] <Alendar> It's embeded
+ [09:05:21 PM] <LuC1Fr[BoT]> where?
+ [09:05:27 PM] <VBScript .: [10:22:01 PM] [SaDs] <gill44> heres the deal [SaDs] <gill44> you lika play [SaDs] <gill44> i lika play [SaDs] <gill44> lets plya :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [09:05:27 PM] <Alendar> Not yet anyway.
+ [09:05:31 PM] <Alendar> Working on it.
+ [09:05:39 PM] <Pyro6> give me the mp3
+ [09:05:40 PM] <VBScript | New on StealthBot Recent:  need script>
+ [09:05:43 PM] <Pyro6> !
+ [09:07:10 PM] <Alendar> http://search.playlist.com/tracks/Never%20Gonna%20Give%20you%20Up
+ [09:07:15 PM] <Alendar> Take your pick.
+ [09:07:38 PM] <Alendar> I have to start this though.
+ [09:08:07 PM] <LuC1Fr[BoT]> DONT forget to add hidden=true
+ [09:08:27 PM] <Alendar> Oh yeah.
+ [09:09:04 PM] <t-dawg[BoT]> omrgm
+ [09:09:13 PM] <t-dawg[BoT]> ablalblablalblba
+ [09:09:20 PM] <Pyro6> oops
+ [09:09:29 PM] <LuC1Fr[BoT]> lol
+ [09:09:31 PM] <Pyro6> i put idiats post at the front of DeAtHZeRg's topic
+ [09:09:35 PM] <DeAtHZeRg> lmfao
+ [09:09:58 PM] <DeAtHZeRg> you totaly let idiat ninja my topic
+ [09:10:30 PM] <Pyro6> with a post from 2007
+ [09:10:44 PM] <LuC1Fr[BoT]> oops
+ [09:10:46 PM] <Pyro6> i think that changed the topic id too
+ [09:10:48 PM] <LuC1Fr[BoT]> refresh.
+ [09:10:50 PM] <Pyro6> rofl
+ [09:11:14 PM] <LuC1Fr[BoT]> just kidding alendar.
+ [09:12:02 PM] <DeAtHZeRg> yah
+ [09:12:07 PM] <Alendar> Wait what?
+ [09:12:08 PM] <DeAtHZeRg> its now a resolved resoled topic
+ [09:12:28 PM] <Alendar> I am waiting for a link to the MP3 from David.
+ [09:12:34 PM] <LuC1Fr[BoT]> <embed src="http://dirtypoodle.com/mp3s/SAW/NeverGonnaGiveYouUp.mp3" hidden=true></embed>
+ [09:12:45 PM] <Pyro6> i dont have one
+ [09:12:48 PM] <Pyro6> you get it
+ [09:12:49 PM] <Pyro6> :x
+ [09:12:59 PM] <LuC1Fr[BoT]> theres the damn code
+ [09:13:16 PM] <DeAtHZeRg> hum
+ [09:13:24 PM] <DeAtHZeRg> how do i turn off the edited code in my posts?
+ [09:13:29 PM] <Pyro6> you cant
+ [09:13:39 PM] <Pyro6> i can :)
+ [09:13:55 PM] <Pyro6> which post?
+ [09:14:25 PM] <DeAtHZeRg> i fail
+ [09:14:27 PM] <DeAtHZeRg> lol
+ [09:14:29 PM] <Alendar> http://www.stealthbot.net/board/index.php?showtopic=33536
+ [09:14:31 PM] <DeAtHZeRg> http://www.stealthbot.net/board/index.php?act=ST&f=7&t=33531&st=0#entry267501
+ [09:14:57 PM] <DeAtHZeRg> win
+ [09:15:04 PM] <Pyro6> i put vector in there
+ [09:15:05 PM] <Pyro6> lol
+ [09:15:17 PM] <Pyro6> http://www.stealthbot.net/board/index.php?s=&showtopic=31794&view=findpost&p=267537
+ [09:15:40 PM] <DeAtHZeRg> epic
+ [09:15:43 PM] <DeAtHZeRg> lol
+ [09:15:48 PM] <DeAtHZeRg> you know
+ [09:15:51 PM] <DeAtHZeRg> we should form our own topic
+ [09:15:53 PM] <DeAtHZeRg> with deleted posts
+ [09:15:59 PM] <Pyro6> we did
+ [09:16:02 PM] <LuC1Fr[BoT]>  lol
+ [09:16:02 PM] <Pyro6> topic 13337
+ [09:16:11 PM] <Pyro6> none of that is original posts
+ [09:16:52 PM] <Pyro6> i have to have additional plugins to hear the rickroll
+ [09:16:54 PM] <Pyro6> lol
+ [09:17:02 PM] <DeAtHZeRg> who the fuck deleted my topic!
+ [09:17:02 PM] <LuC1Fr[BoT]>  lol.
+ [09:17:21 PM] <DeAtHZeRg> haste!
+ [09:17:26 PM] <Pyro6> i may of accidentally done it
+ [09:17:32 PM] <DeAtHZeRg> :(
+ [09:17:33 PM] <Pyro6> when i took vectors post from the trash
+ [09:18:09 PM] <Pyro6> http://www.stealthbot.net/board/index.php?s=&showtopic=33332&view=findpost&p=267599 ...?
+ [09:20:01 PM] <Alendar> Man, this is too much fun.
+ [09:20:06 PM] <LuC1Fr[BoT]>  ECHO
+ [09:20:09 PM] <LuC1Fr[BoT]>  NIGGAS
+ [09:20:38 PM] <VBScript .: [10:14:46 PM] [Re] <Re-Chavez> i have a bergina :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [09:20:42 PM] <LuC1Fr[BoT]>  wow
+ [09:20:47 PM] <LuC1Fr[BoT]>  it actually sounds better this way.
+ [09:20:55 PM] <Pyro6> FUCK
+ [09:21:03 PM] <Pyro6> the topic is in tech support
+ [09:21:18 PM] <Alendar> OH!?
+ [09:21:21 PM] <Pyro6> i queued it as a tutorial :x
+ [09:21:23 PM] <Alendar> Music for your moods
+ [09:22:53 PM] <Alendar> I guess my bang came early.
+ [09:23:02 PM] <Pyro6> dont leave, though
+ [09:23:05 PM] <Pyro6> plz
+ [09:23:26 PM] <Alendar> I'm not planning on it now.
+ [09:23:37 PM] <DeAtHZeRg> you know
+ [09:23:41 PM] <Alendar> I'll laugh if I get banned.
+ [09:23:48 PM] <Alendar> Or removed from the staff.
+ [09:23:50 PM] <DeAtHZeRg> can admins edit page?
+ [09:24:00 PM] <Pyro6> admins can see mod logs!
+ [09:24:03 PM] <LuC1Fr[BoT]>  edit.. posts? or the actual page?
+ [09:24:18 PM] <Alendar> Stealthbot.net has been RickRoll'd
+ [09:24:31 PM] <LuC1Fr[BoT]>  lol
+ [09:24:35 PM] <Pyro6> No_Skill keeps like showing up in topics im messing with
+ [09:24:36 PM] <LuC1Fr[BoT]>  im going to find old posts of mine
+ [09:24:39 PM] <DeAtHZeRg> quick somoene edit the main page!
+ [09:24:40 PM] <LuC1Fr[BoT]>  and place the embed in them.
+ [09:24:55 PM] <DeAtHZeRg> yah no_skill posted in my resolved topic
+ [09:24:57 PM] <DeAtHZeRg> idk who he is
+ [09:25:02 PM] <Pyro6> nobody here is an admin except eric
+ [09:25:56 PM] <DeAtHZeRg> thats a problem
+ [09:25:59 PM] <Alendar> http://www.stealthbot.net/board/index.php?s=&showtopic=33519&view=findpost&p=267612
+ [09:26:26 PM] <Pyro6> alendar
+ [09:26:29 PM] <Alendar> What?
+ [09:26:33 PM] <Pyro6> the file your using is quicktime
+ [09:26:41 PM] <Alendar> I know.
+ [09:26:42 PM] <Pyro6> and some people dont have that installed
+ [09:26:48 PM] <Pyro6> you should try and find a windows format
+ [09:26:50 PM] <Alendar> Then they fail.
+ [09:26:55 PM] <LuC1Fr[BoT]>  embed
+ [09:26:55 PM] <Alendar> Find me one.
+ [09:26:59 PM] <Pyro6> asshole, i dont have it installed
+ [09:26:59 PM] <LuC1Fr[BoT]>  is quicktime
+ [09:27:01 PM] <LuC1Fr[BoT]>  not the file
+ [09:27:02 PM] <LuC1Fr[BoT]>  plus
+ [09:27:07 PM] <LuC1Fr[BoT]>  it works for meh
+ [09:27:09 PM] <LuC1Fr[BoT]>  on ff
+ [09:27:53 PM] <Pyro6> lol @ haste
+ [09:28:01 PM] <DeAtHZeRg> what haste do?
+ [09:28:14 PM] <Pyro6> http://www.stealthbot.net/board/index.php?s=&showtopic=33537&view=findpost&p=267537]
+ [09:28:15 PM] <Pyro6> Anyone see anything wrong with that post?
+ [09:28:20 PM] <DeAtHZeRg> oh lol
+ [09:28:21 PM] <Pyro6> ~Haste
+ [09:28:25 PM] <DeAtHZeRg> vector lol
+ [09:29:00 PM] <Alendar> (12:28:59 AM) Chris W: The forums are going to hell.
+ [09:29:06 PM] <DeAtHZeRg> lol
+ [09:29:10 PM] <LuC1Fr[BoT]>  lol.
+ [09:29:21 PM] <Alendar> 12:29:26 AM) Alendar: I know, isn't it lovely?
+ [09:29:22 PM] <Alendar> (12:29:30 AM) Chris W: Lol
+ [09:29:30 PM] <Pyro6> whats hastes im
+ [09:29:31 PM] <DeAtHZeRg> who is chris W?
+ [09:29:45 PM] <Alendar> (12:29:42 AM) Chris W: get on MSN right quick
+ [09:30:00 PM] <Alendar> Ice Kit 82394
+ [09:30:03 PM] <DeAtHZeRg> lol
+ [09:30:16 PM] <DeAtHZeRg> i think its embeded too many times in my resolved topic
+ [09:31:42 PM] <DeAtHZeRg> hum
+ [09:31:49 PM] <DeAtHZeRg> i wonder how much of this will backlash onto me?
+ [09:31:54 PM] <LuC1Fr[BoT]>  http://www.stealthbot.net/board/index.php?act=ST&f=7&t=33537&st=60#entry267620
+ [09:31:56 PM] <Pyro6> lol
+ [09:31:57 PM] <LuC1Fr[BoT]>  whoops
+ [09:32:22 PM] <DeAtHZeRg> gg
+ [09:32:23 PM] <Pyro6> it looks like the old forum
+ [09:32:24 PM] <Pyro6> rofl
+ [09:32:34 PM] <Alendar> WHOOOO!
+ [09:32:44 PM] <DeAtHZeRg> lol
+ [09:32:51 PM] <Alendar> (12:32:43 AM) Chris W: I msged Eric yesterday and told him I was done with being a mod.
+ [09:32:53 PM] <DeAtHZeRg> how many times is that thing embedded?
+ [09:33:07 PM] <LuC1Fr[BoT]>  how many tabs do you have open?
+ [09:33:15 PM] <DeAtHZeRg> just that one
+ [09:33:24 PM] <LuC1Fr[BoT]>  others might have thiers on a delay
+ [09:33:29 PM] <LuC1Fr[BoT]>  ill remove mine
+ [09:33:37 PM] <LuC1Fr[BoT]>  but im keeping the old sb theme thing going.
+ [09:33:52 PM] -- AntiLiberalist@USEast [47ms] has joined the channel using Starcraft Brood War (61 wins).
+ [09:33:57 PM] <DeAtHZeRg> thats fine
+ [09:34:01 PM] -- AntiLiberalist@USEast has left the channel.
+ [09:34:52 PM] <LuC1Fr[BoT]>  who dat.
+ [09:35:04 PM] <DeAtHZeRg> so who can edit the news posts?
+ [09:35:10 PM] <Pyro6> i think i can
+ [09:35:17 PM] <t-dawg[BoT]> .....
+ [09:35:25 PM] <LuC1Fr[BoT]>  lol.
+ [09:35:26 PM] <t-dawg[BoT]> you guys are out of control
+ [09:35:34 PM] <LuC1Fr[BoT]>  no we're not.
+ [09:35:34 PM] <DeAtHZeRg> we are not
+ [09:35:46 PM] <VBScript .: [5:55:17 PM] [Risk] <TubbyTheFat> You like imaginary stuff [Risk] <TubbyTheFat> Like you're gf [Risk] <TubbyTheFat> and your dick :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [09:35:51 PM] <LuC1Fr[BoT]>  your the one in control, being pushed around
+ [09:35:57 PM] <LuC1Fr[BoT]>  and all that jive
+ [09:35:59 PM] <t-dawg[BoT]> no
+ [09:36:03 PM] <DeAtHZeRg> yes
+ [09:36:04 PM] <t-dawg[BoT]> everything i say
+ [09:36:06 PM] <t-dawg[BoT]> i get warned for
+ [09:36:25 PM] <LuC1Fr[BoT]>  uh oh
+ [09:36:31 PM] <LuC1Fr[BoT]>  megas here to own me
+ [09:36:38 PM] <t-dawg[BoT]> mega is a bitch
+ [09:36:49 PM] <DeAtHZeRg> i don't warn you!
+ [09:36:56 PM] <t-dawg[BoT]> you dont <3
+ [09:36:58 PM] <DeAtHZeRg> html { overflow-x: auto }
+ [09:37:17 PM] <t-dawg[BoT]> just mega couldnt back the argument so he warned and suspended
+ [09:37:30 PM] <Pyro6> lol a blip to idiats site is on the main page
+ [09:37:57 PM] -- DiaBLo.of.AH@USEast [0ms] has joined the channel using Diablo II (Open Character).
+ [09:38:03 PM] -- DiaBLo.of.AH@USEast has left the channel.
+ [09:38:56 PM] <DeAtHZeRg> ah fuck
+ [09:38:59 PM] <DeAtHZeRg> it didn't work!
+ [09:39:22 PM] <Pyro6> yea, reverted
+ [09:39:26 PM] <DeAtHZeRg> :(
+ [09:40:16 PM] -- raylu@USEast [63ms] has joined the channel using Starcraft Brood War (4 wins).
+ [09:40:19 PM] <raylu@USEast> wewt
+ [09:40:23 PM] <Pyro6> lol only like 2 pages have the old format
+ [09:40:26 PM] <Pyro6> raylu!
+ [09:40:32 PM] <LuC1Fr[BoT]>  DUDE
+ [09:40:33 PM] <Pyro6> you can help us destroy the forums
+ [09:40:38 PM] <LuC1Fr[BoT]>  WHTS A RAYLU
+ [09:40:46 PM] <DeAtHZeRg> we are not destorying
+ [09:40:48 PM] <Alendar> Raylu with a capital r
+ [09:40:51 PM] <DeAtHZeRg> we are reviving!
+ [09:41:00 PM] <Alendar> Bring the life back.
+ [09:41:01 PM] <LuC1Fr[BoT]>  Not if the message is in all caps.
+ [09:41:17 PM] <LuC1Fr[BoT]>  just like Idiat is bad, BUT IDIAT ISNT.
+ [09:41:33 PM] -- Tech-raylu [0ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [09:41:34 PM] <Tech-raylu> o.0
+ [09:41:38 PM] <Tech-raylu> apparently, i have trouble disconnected
+ [09:41:41 PM] <Tech-raylu> *disconnecting
+ [09:41:45 PM] <Pyro6> yea
+ [09:41:50 PM] <Tech-raylu> T.T
+ [09:41:52 PM] <Pyro6> hdx's warden thing is ghey liek that
+ [09:41:57 PM] <Pyro6> cuz hdx is FAT
+ [09:41:57 PM] <LuC1Fr[BoT]>  stealthbot.net/board/index.php?showtopic=33537
+ [09:42:05 PM] <Tech-raylu> how do i kill the server?
+ [09:42:16 PM] -- raylu@USEast has left the channel.
+ [09:42:21 PM] <Tech-raylu> :D
+ [09:42:22 PM] <Tech-raylu> there we go
+ [09:42:28 PM] <LuC1Fr[BoT]>  just wish upon a star.
+ [09:42:30 PM] <DeAtHZeRg> :)
+ [09:42:31 PM] -- raylu@USEast [46ms] has joined the channel using Starcraft Brood War (4 wins).
+ [09:42:33 PM] -- Tech-raylu has left the channel.
+ [09:42:46 PM] <Alendar> Did I start all of this?
+ [09:42:52 PM] <Alendar> :o!
+ [09:42:52 PM] <LuC1Fr[BoT]>  i think so
+ [09:43:37 PM] <Pyro6> i wonder what eric is going to say when he gets back
+ [09:43:52 PM] <Alendar> "2.7 is released"
+ [09:43:55 PM] <LuC1Fr[BoT]>  something along the lines of, "What, the fuck."
+ [09:44:22 PM] <DeAtHZeRg> prob remove all of our rights
+ [09:44:25 PM] <DeAtHZeRg> and find a new staff
+ [09:44:28 PM] <Pyro6> lol
+ [09:44:32 PM] -- raylu@USEast has left the channel.
+ [09:44:50 PM] <Alendar> Stealthbot.net would die without us.
+ [09:44:59 PM] <Alendar> TS would flood.
+ [09:45:06 PM] <Pyro6> i would flood ts
+ [09:45:15 PM] <Alendar> Who is he going to pick for TS anyway?
+ [09:45:24 PM] <Pyro6> huh?
+ [09:45:24 PM] <Alendar> There are no good techs anymore besides us,
+ [09:45:32 PM] <Pyro6> yea
+ [09:45:37 PM] <Alendar> He would only be left with once choice.
+ [09:45:39 PM] <Alendar> Vector.
+ [09:45:44 PM] <Pyro6> no.
+ [09:45:48 PM] <Pyro6> not only no. but hell no.
+ [09:45:51 PM] <Pyro6> FUCK NO.
+ [09:45:52 PM] <DeAtHZeRg> no skill fails
+ [09:45:56 PM] <Alendar>  /signed
+ [09:45:59 PM] <LuC1Fr[BoT]>  i dont think he would result to vector
+ [09:46:10 PM] <Pyro6> it would be better to just not ban us
+ [09:46:24 PM] <Pyro6> even though at most, a suspension for me cuz i havent really done anything :P
+ [09:46:33 PM] <DeAtHZeRg> i mean we are just fucking with off topic
+ [09:46:35 PM] <DeAtHZeRg> for now...
+ [09:46:44 PM] <LuC1Fr[BoT]>  Dun dun dun
+ [09:46:49 PM] <Pyro6> lol that resolved topic has been in tech support
+ [09:46:54 PM] <Pyro6> for like 10 seconds
+ [09:46:57 PM] <DeAtHZeRg> omfg
+ [09:46:59 PM] <DeAtHZeRg> lol
+ [09:47:10 PM] <LuC1Fr[BoT]>  hmm
+ [09:47:21 PM] <DeAtHZeRg> no its not...
+ [09:47:25 PM] <LuC1Fr[BoT]>  Plus the guys we are hotlinking the mp3 file from would be like WTF
+ [09:47:26 PM] <Pyro6> it was
+ [09:47:37 PM] <Alendar> RESOLVE IT AGAIN
+ [09:49:22 PM] <Alendar> DeathZerg!
+ [09:49:28 PM] -- raylu@USEast [63ms] has joined the channel using Starcraft Brood War (4 wins).
+ [09:49:30 PM] <DeAtHZeRg> I DID
+ [09:49:33 PM] <raylu@USEast> HE DID
+ [09:49:37 PM] <Pyro6> I DID
+ [09:49:43 PM] <raylu@USEast> IT DID
+ [09:49:46 PM] <DeAtHZeRg> http://bogglesworldesl.com/files/Qq1.jpg
+ [09:49:58 PM] <Pyro6> fuck error
+ [09:50:17 PM] <DeAtHZeRg> we are allready at 100 pages
+ [09:50:28 PM] <Pyro6> wtf?
+ [09:50:31 PM] <Pyro6> you mean posts
+ [09:50:42 PM] <DeAtHZeRg> wtf no
+ [09:50:46 PM] <DeAtHZeRg> yes...
+ [09:50:47 PM] <LuC1Fr[BoT]>  wtf yes
+ [09:50:48 PM] <DeAtHZeRg> hum
+ [09:50:48 PM] <Alendar> For this, I should be promoted.
+ [09:50:54 PM] -- Hero.A [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [09:50:55 PM] <VBScript .: [9:32:43 PM] [4tw] <TMNT)> wewt? [4tw] <TMNT)> omg [4tw] <TMNT)> its boots of travel clan [4tw] <ForYou.> too good :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [09:50:58 PM] <Hero.A> Yo
+ [09:50:59 PM] <Pyro6> hero
+ [09:51:00 PM] <DeAtHZeRg> i wonder if we can transplant panties vs thong to the current site
+ [09:51:08 PM] <Hero.A> What?
+ [09:51:11 PM] <DeAtHZeRg> hero
+ [09:51:15 PM] <LuC1Fr[BoT]>  hmm
+ [09:51:20 PM] <Pyro6> it would be tricky
+ [09:51:22 PM] <DeAtHZeRg> Why can't you be Hero.B?
+ [09:51:23 PM] <Pyro6> but almost doable
+ [09:51:33 PM] <LuC1Fr[BoT]>  well
+ [09:51:37 PM] <Hero.A> Because its Hero.Assasin
+ [09:51:45 PM] <Hero.A> And Hero.B is my diablo 2 bot
+ [09:51:46 PM] <LuC1Fr[BoT]>  zerg managed to replicate Stealths post that one time.
+ [09:51:59 PM] <DeAtHZeRg> oh
+ [09:52:03 PM] <DeAtHZeRg> well thats a dumb reason
+ [09:52:06 PM] <DeAtHZeRg> your bot should be A
+ [09:52:08 PM] <Hero.A> If you have access to the database can't you just take the values
+ [09:52:19 PM] <DeAtHZeRg> zergmaster did do that once your right
+ [09:52:27 PM] <Pyro6> i can take stealths or lords posts out of the trash and put them in our topic
+ [09:52:36 PM] <LuC1Fr[BoT]>  Well, that does no good
+ [09:52:46 PM] <DeAtHZeRg> and then we can edit them to our liking!
+ [09:52:46 PM] <LuC1Fr[BoT]>  Ribose created a post from scratch Correct?
+ [09:52:48 PM] <DeAtHZeRg> go!
+ [09:52:51 PM] <Hero.A> What topic
+ [09:52:55 PM] <Pyro6> i've done that
+ [09:53:01 PM] <Pyro6> we made a whole topic from scratch
+ [09:53:10 PM] <Hero.A> Whoa what did you guys do to [RESOLVED] [RESOLVED] 
+ [09:53:12 PM] <Hero.A> and so on
+ [09:53:17 PM] <LuC1Fr[BoT]>  hax
+ [09:53:20 PM] <DeAtHZeRg> nothing
+ [09:53:23 PM] <DeAtHZeRg> we are being hacked
+ [09:53:27 PM] <LuC1Fr[BoT]>  who did that?
+ [09:53:30 PM] <LuC1Fr[BoT]>  woah.
+ [09:53:39 PM] <Hero.A> It totally fucks up my skin
+ [09:53:40 PM] <Pyro6> WHAT THE FUCK
+ [09:53:41 PM] <DeAtHZeRg> i can't log into my account....
+ [09:53:53 PM] <Pyro6> on old forum?
+ [09:54:11 PM] <DeAtHZeRg> no on stealthbot.net!
+ [09:54:15 PM] <Pyro6> o.0
+ [09:54:20 PM] <Hero.A> ROFROFL
+ [09:54:25 PM] <Hero.A> WHO DID THE VECTOR POST
+ [09:54:30 PM] <Pyro6> me
+ [09:54:37 PM] <Hero.A> Nice
+ [09:54:42 PM] <Pyro6> its not the first time
+ [09:54:45 PM] <Pyro6> topic 13337
+ [09:54:48 PM] <Pyro6> (3 3's)
+ [09:54:54 PM] <LuC1Fr[BoT]>  hmm
+ [09:54:59 PM] <Hero.A> Yeah I read that one forever ago
+ [09:55:05 PM] <LuC1Fr[BoT]>  yeah, i do feel an ownage stick coming for this you guys :/
+ [09:55:06 PM] <DeAtHZeRg> hum
+ [09:55:09 PM] <Hero.A> You guys should make a post by stealth
+ [09:55:15 PM] <DeAtHZeRg> as do i...
+ [09:55:21 PM] <Pyro6> i can make it appear as if we never did this
+ [09:55:22 PM] <DeAtHZeRg> i kinda feel bad
+ [09:55:30 PM] <LuC1Fr[BoT]>  but
+ [09:55:35 PM] <LuC1Fr[BoT]>  then we lost all the glory
+ [09:55:39 PM] <Pyro6> true
+ [09:55:40 PM] <Pyro6> ;x
+ [09:55:47 PM] <Pyro6> and lord is kinda... in this channel
+ [09:55:49 PM] <Pyro6> lol
+ [09:55:54 PM] <DeAtHZeRg> lol
+ [09:55:57 PM] <LuC1Fr[BoT]>  lets fix it
+ [09:55:59 PM] <LuC1Fr[BoT]> ﬁùæ∏ëx
+ [09:56:04 PM] <Pyro6> really?
+ [09:56:05 PM] <DeAtHZeRg -: System Uptime: 6 days, 3 hours, 6 minutes and 48 seconds :: Connection Uptime: 1 day, 14 hours, 43 minutes and 8 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [09:56:11 PM] <LuC1Fr[BoT]>   [10:58:14 PM] [ENC] <LuC1Fr[BoT]> not
+ [09:56:11 PM] <Pyro6> i can make the whole topic disappear
+ [09:56:12 PM] <LuC1Fr[BoT]>   [10:58:14 PM] <LuC1Fr[BoT]> ﬁùæ∏ëx
+ [09:56:21 PM] <Pyro6> oh, i dont have that plugin
+ [09:56:25 PM] <Pyro6> pastebin it for meh
+ [09:56:26 PM] <Pyro6> !
+ [09:56:27 PM] <LuC1Fr[BoT]>  meh
+ [09:56:29 PM] <Hero.A> Hmm
+ [09:56:31 PM] <Hero.A> Mine >>
+ [09:56:43 PM] <Hero.A> å¥´û§¢]^jdz†
+ [09:56:52 PM] <Hero.A>  [11:58:20 PM] [DECRYPTED] <Hero.A> Ownage !
+ [09:56:58 PM] <Pyro6> ya like
+ [09:57:03 PM] <Pyro6> nobody can read yours
+ [09:57:04 PM] <Pyro6> so..
+ [09:57:11 PM] <Hero.A> So like,, yes they can?
+ [09:57:15 PM] <DeAtHZeRg> i vote we leave it
+ [09:57:19 PM] <Pyro6> not in this channel
+ [09:57:23 PM] <Hero.A> So?
+ [09:57:28 PM] <raylu@USEast> HERO
+ [09:57:29 PM] <Pyro6> so using it is retarded
+ [09:57:34 PM] <raylu@USEast> the guy who asked for 36 names to be authed :D
+ [09:57:38 PM] <Hero.A> Lolol
+ [09:57:39 PM] <Pyro6> you may as well be whispering to yourself
+ [09:57:46 PM] <Hero.A> Idk why you people wont just do it
+ [09:57:54 PM] <Hero.A> All you had to do was copy and paste!
+ [09:58:00 PM] <raylu@USEast> we're not into stupidity
+ [09:58:03 PM] <LuC1Fr[BoT]>  because you dont have 36 names connected at one time?
+ [09:58:14 PM] <Hero.A> Because I use them all!
+ [09:58:14 PM] <LuC1Fr[BoT]>  and, i doubt you connect that many names a day.
+ [09:58:15 PM] <Hero.A> http://www.stealthbot.net/board/index.php?showtopic=33537&st=90&gopid=267644&#entry267644
+ [09:58:15 PM] <Alendar> Hmm.
+ [09:58:33 PM] <Pyro6> LOL HERO LOVES VECTOR
+ [09:58:41 PM] <Hero.A> Thats not what it says :p
+ [09:58:45 PM] <Pyro6> uh
+ [09:58:52 PM] <Pyro6> yes it is..
+ [09:59:03 PM] <raylu@USEast> "I <3 Vector"
+ [09:59:12 PM] <LuC1Fr[BoT]>  /w DeAtHZeRg are you not using StealthBot?
+ [09:59:16 PM] <raylu@USEast> Thats just kind of a mean thing to say about yourself.
+ [09:59:16 PM] <LuC1Fr[BoT]>  uhh
+ [09:59:18 PM] <Hero.A> YOU
+ [09:59:19 PM] <LuC1Fr[BoT]>  thats interesting.
+ [09:59:20 PM] <raylu@USEast> lmao
+ [09:59:24 PM] <Hero.A> WHO EDITED IT
+ [09:59:26 PM] <DeAtHZeRg>    1.
+ [09:59:29 PM] <LuC1Fr[BoT]> there.
+ [09:59:36 PM] <Hero.A> It was pyro
+ [09:59:37 PM] <Hero.A> I bet
+ [09:59:40 PM] <Pyro6> ﬁÉöïòßÅ
+ [09:59:46 PM] -- Joseph.W has left the channel.
+ [09:59:55 PM] <LuC1Fr[BoT]> ﬁÄfûtàñtm
+ [09:59:55 PM] <Alendar> ﬁ~5põ4ÑèêuÜùäyáGGàyèq
+ [09:59:55 PM] <Pyro6> ﬁó;ã∂:ä™´{å∏•çbbé™t
+ [09:59:55 PM] <PhiX@USEast> ﬁ¢7ï¿6Ü¥µwà¬Ø{âllä{¥r
+ [09:59:56 PM] <PhiX[BoT]> ﬁÖ?y§>éòôê¶ìÉëPPíÉòv
+ [09:59:59 PM] <Hero.A> ]lÇ}edz†
+ [10:00:01 PM] <LuC1Fr[BoT]> wow.
+ [10:00:07 PM] <Hero.A> ïééFôéïïFçáîàçõùèçàüõááüõçèãçáèõçgkz†
+ [10:00:09 PM] <Alendar> ﬁ§Ωòèx
+ [10:00:15 PM] <Hero.A> ëü°ëìãùêåîãåìãhez†
+ [10:00:18 PM] <Alendar> ﬁè{èíì±\äÖ\Æãâ™\çõ≤°ÖD§ØDò®•êy
+ [10:00:25 PM] <Hero.A> QRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRfy†
+ [10:00:30 PM] <Hero.A> Wow
+ [10:00:32 PM] <Hero.A> thats a wierd one
+ [10:00:41 PM] <Hero.A> é£°õïïññ£ïûõù©ñ´ïõ≠©ñ´ïõù©ñß´õù©´ñïõù©õù´ïñ†ùïïññïõ£ùõ®ñöô´≠ùïõñ®≠ô´õó≠®´•ö¶iez†
+ [10:00:44 PM] <Hero.A> TOp that 
+ [10:00:44 PM] <Pyro6> lol hero
+ [10:00:47 PM] <Hero.A> That ones beastly
+ [10:00:49 PM] <Pyro6> nobody edited your post
+ [10:00:51 PM] -- raylu@USEast has left the channel.
+ [10:00:53 PM] <Hero.A> yeah..
+ [10:00:57 PM] <Pyro6> haste even quoted it
+ [10:01:00 PM] <Alendar> ﬁnZníìê;äÖ;çãââ;çõëÄÖDÉéDòáÑêy
+ [10:01:05 PM] <Hero.A> I don't make
+ [10:01:09 PM] <Hero.A> stupid typos
+ [10:01:11 PM] <LuC1Fr[BoT]> ﬁë|†¶(võWwÅ•ü|WW{múk
+ [10:01:11 PM] <Pyro6> ﬁjäÖßXãÄ´≠<äü¶êãüd<<°ö<ë¨É
+ [10:01:11 PM] <Hero.A> Someone did
+ [10:01:22 PM] <Alendar> ﬁÅVàûçóê£êH[ùHóxûHõóOâó•ñçHOûú{
+ [10:01:28 PM] -- raylu@USEast [63ms] has joined the channel using Starcraft Brood War (4 wins).
+ [10:01:40 PM] <Hero.A> ç|îáêÄfjz†
+ [10:01:42 PM] <Hero.A> Y0xqÑu0âÖ1eiz†
+ [10:01:57 PM] <Hero.A> I tried making the encryption spell a word
+ [10:01:59 PM] <Hero.A> once
+ [10:02:04 PM] <Alendar> ﬁö_ìΩèè∏∏ÖífµÜçªµéîfw
+ [10:02:05 PM] <Hero.A> it is impossible though :(
+ [10:02:13 PM] <LuC1Fr[BoT]> ﬁ`>{|y((xui~Üqmm0|(uÇ(wt0m6s>q{tymptÑ((ÑÄwm0uso
+ [10:02:17 PM] <DeAtHZeRg> hum wtf
+ [10:02:18 PM] <Hero.A> UV(jy†
+ [10:02:28 PM] <Pyro6> ﬁëéß°Év
+ [10:02:29 PM] <Hero.A> C|chpc"uciwck"hwem"r{tq"jcwdkihciey†
+ [10:02:31 PM] <DeAtHZeRg> oh its the color code loading slowlyoh 
+ [10:02:41 PM] <Pyro6> ﬁ¢∞±o(Ω´wi∞∂|(hµ4iª≥sm´hq|¥∞kmhh≠∞nwh¥imhh||ª∑}x≤±(k∞h|o±∑(h©Å©k
+ [10:02:47 PM] <Hero.A> FUCK YOU
+ [10:02:49 PM] <Hero.A> DID IT AGAIN
+ [10:03:11 PM] <Alendar> ﬁëOÜ∞´´uÇY®v}Æ®~ÑYo
+ [10:03:18 PM] <LuC1Fr[BoT]> ﬁxTèöFèáFçôòôãèãìFFïïîöFFëçãîãèñïFçáFôöFïùîãFíìíáTFFãoîåïFFnòzïsårFFèáFàRèäíãèëöïèúããôòFFçöãz
+ [10:03:27 PM] <LuC1Fr[BoT]> ﬁw5ìVu&éìqu<ézuãâsj
+ [10:03:32 PM] <Pyro6> ﬁkèãôñ;èï\é;•ô;;¢ûÄÄ¶
+ [10:03:34 PM] <Hero.A> Bad boys
+ [10:03:44 PM] <LuC1Fr[BoT]> shush, infedel
+ [10:04:13 PM] <Hero.A> Lol
+ [10:04:28 PM] <raylu@USEast -- StealthBot Beta v2.6999 Development Release 10>
+ [10:04:33 PM] <Hero.A> GOT U PYRO
+ [10:04:50 PM] <Pyro6> huh?
+ [10:04:58 PM] <Pyro6> oh, forgot to remove the edited by thing
+ [10:05:00 PM] <Hero.A> I SAW IT
+ [10:05:02 PM] <Hero.A> LOL
+ [10:05:03 PM] <Pyro6> #kick her* ass
+ [10:05:04 PM] Hero.A was kicked out of the channel by Pyro[BoT] (ass).
+ [10:05:04 PM] -- Hero.A has left the channel.
+ [10:05:05 PM] -- Hero.A [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [10:06:02 PM] <VBScript .: [10:21:21 PM] [sex2] <Celine@USEast> Ninjas are especialized in mastering everything. :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [10:07:05 PM] <Alendar> Hah! http://www.stealthbot.net/board/index.php?showtopic=33540
+ [10:07:20 PM] <Pyro6> wow thats the first time hes posted since i suspended him
+ [10:07:31 PM] <DeAtHZeRg> ﬁ]é|{t
+ [10:07:35 PM] <LuC1Fr[BoT]> ﬁ£ª±ki¥j
+ [10:07:48 PM] <DeAtHZeRg> ﬁpèàñ£îçNNÖâí¢è@ë•Öèíú@G¢~
+ [10:08:10 PM] <Alendar> http://www.stealthbot.net/board/index.php?showtopic=33541
+ [10:08:32 PM] <LuC1Fr[BoT]> ﬁä¢ÆÆì¢üÆì¢üÆì°ü≠°°≠≠°°≠~
+ [10:08:32 PM] <DeAtHZeRg> ﬁ¢<©{:k
+ [10:08:39 PM] <Alendar> Good night.
+ [10:08:40 PM] <DeAtHZeRg> ﬁùp™©uÑ≠ºuu≠m
+ [10:08:46 PM] <LuC1Fr[BoT]> ﬁ|fßßôÉ
+ [10:08:46 PM] <DeAtHZeRg> Night
+ [10:08:52 PM] <LuC1Fr[BoT]> Night!
+ [10:08:57 PM] -- Alendar has left the channel.
+ [10:09:05 PM] <DeAtHZeRg> ﬁmÉ}wsäçÖvè6Ö{66ÄÑ{ysãÇ~~Üè22{Ñzwä{2vÑ6ÑÜwÖw2Çp
+ [10:09:16 PM] <VBScript | New on StealthBot Recent:  I just wanna say; wtf; [RESOLVED] yay>
+ [10:11:07 PM] <DeAtHZeRg> joetheodd (1:10:36 AM): i'm browsing stealtbot, right
+ [10:11:09 PM] <DeAtHZeRg> joetheodd (1:10:41 AM): and all of a sudden, i get rickrolled
+ [10:11:11 PM] <DeAtHZeRg> joetheodd (1:10:45 AM): no warning or anything
+ [10:11:12 PM] <LuC1Fr[BoT]> i think im gonna gead off to bed as well
+ [10:11:13 PM] <LuC1Fr[BoT]> LOL
+ [10:11:27 PM] <DeAtHZeRg> win
+ [10:12:07 PM] <Hero.A> Uhh pyro
+ [10:12:18 PM] <Hero.A> I was kinda going to respond to that
+ [10:12:38 PM] <DeAtHZeRg> Spencer Ragen
+ [10:12:40 PM] <DeAtHZeRg> who the fuck is this
+ [10:12:42 PM] <Hero.A> In sort of the way I responded to that one idiot who made a new topic after I pasted the code
+ [10:12:46 PM] <Pyro6> lol me and haste warned the same person at the same time
+ [10:13:02 PM] <Hero.A> Dang
+ [10:13:07 PM] <Hero.A> I wanted to yell at him!!!
+ [10:13:42 PM] <Hero.A> I knew I should have posted faster
+ [10:14:15 PM] <Pyro6> it wasnt me who trashed it
+ [10:14:19 PM] <VBScript | New on SlashDot:  Avalanche Effect Demonstrated In Solar Cells>
+ [10:16:41 PM] <DeAtHZeRg> Frozen!
+ [10:18:08 PM] <DeAtHZeRg> hum
+ [10:18:16 PM] <DeAtHZeRg> i kinda wanna pin every topic in off topic
+ [10:18:21 PM] <VBScript | New on StealthBot Recent:  WTF>
+ [10:19:28 PM] <raylu@USEast : [20:59:02.343] <Tech-Swent> (StarCraft,Blizzard Games,Games,RTS) For $1.09: Upgrades: What does Caduceus Reactor do? [20:59:07.812] <Swent.> react>
+ [10:19:38 PM] <LuC1Fr[BoT]> not just any topic
+ [10:19:44 PM] <LuC1Fr[BoT]> that topics that have no meaning.
+ [10:19:51 PM] <LuC1Fr[BoT]> the topics that failed
+ [10:19:59 PM] <LuC1Fr[BoT]> ours.. should be at the top though.
+ [10:20:40 PM] <DeAtHZeRg> http://www.stealthbot.net/board/index.php?showtopic=718
+ [10:21:11 PM] <VBScript .: [22:04:21.901] <TaintedSilence@USEast> <* i hate typos :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [10:22:54 PM] <LuC1Fr[BoT]> anyways
+ [10:22:57 PM] <LuC1Fr[BoT]> nightyo
+ [10:23:17 PM] <Pyro6> same
+ [10:23:54 PM] <Hero.A> My god
+ [10:24:03 PM] <Hero.A> this is going to be a huge plugin
+ [10:24:13 PM] -- Goliath [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [10:24:15 PM] -- Goliath has left the channel.
+ [10:24:30 PM] <Hero.A> ROFL
+ [10:24:35 PM] <Hero.A> You guys pinned it
+ [10:26:35 PM] <DeAtHZeRg> quit acting cool
+ [10:26:41 PM] <DeAtHZeRg> ﬁêuó¢jkô§e"üô"j£®w"®h
+ [10:26:54 PM] <Hero.A> Uhh
+ [10:26:59 PM] <Hero.A> With the ps
+ [10:27:01 PM] <Hero.A> is it
+ [10:27:05 PM] <Hero.A> 'prefix
+ [10:27:06 PM] <Hero.A> 'ver
+ [10:27:12 PM] <Hero.A> 'creator:description
+ [10:29:29 PM] <DeAtHZeRg> http://www.stealthbot.net/board/index.php?showtopic=7676
+ [10:29:32 PM] <DeAtHZeRg> lol
+ [10:30:13 PM] <Hero.A> lol
+ [10:30:40 PM] <DeAtHZeRg> too ad there is no super pin
+ [10:30:52 PM] <Hero.A> Aww
+ [10:31:14 PM] <DeAtHZeRg> im going to bed
+ [10:31:16 PM] <DeAtHZeRg> actuly no
+ [10:31:18 PM] <DeAtHZeRg> im pooping
+ [10:31:21 PM] <DeAtHZeRg> then going to bed
+ [10:31:23 PM] <Hero.A> Lol
+ [10:31:32 PM] <Hero.A> Hmm I am not tired
+ [10:31:34 PM] <Hero.A> ima code all night
+ [10:31:41 PM] <Hero.A> then sleep all through school
+ [10:34:28 PM] <raylu@USEast : [17:50:18.576] <nicksup@Lordaeron> ya it hurt but i dont feel pain>
+ [10:36:17 PM] <VBScript .: [9:51:07 PM] [clan DGK] <ZeGhC*203> my sister dosnt like to i trun off frewll :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [10:36:30 PM] <VBScript | New on StealthBot Recent:  HL League Plugin.>
+ [10:38:44 PM] <DeAtHZeRg> ill fix off topic later
+ [10:49:28 PM] <raylu@USEast : [23:37] Sailesh: it seems i cant type anymore>
+ [10:51:26 PM] <VBScript .: [1:29:07 PM] <i_gO_Poopie -: LikeOhMyGod! Can i have ur Autograph? :-> :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [10:52:57 PM] -- raylu@USEast has left the channel.
+ [10:54:39 PM] <VBScript | New on StealthBot Recent:  I'm running vista but....>
+ [10:56:21 PM] <DeAtHZeRg -: System Uptime: 6 days, 4 hours, 7 minutes and 3 seconds :: Connection Uptime: 1 day, 15 hours, 40 minutes and 21 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [11:06:34 PM] <VBScript .: [9:51:07 PM] [clan DGK] <ZeGhC*203> my sister dosnt like to i trun off frewll :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [11:17:59 PM] -- Hero.A has left the channel.
+ [11:18:03 PM] -- Hero.A [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EoA)
+ [11:21:40 PM] <VBScript .: <ClanGnome> You are a menace.  A walking pestilence :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [11:21:53 PM] <VBScript | New on StealthBot Recent:  apply plugin error>
+ [11:24:55 PM] <VBScript | New on StealthBot Tech Support:  apply plugin error>
+ [11:36:48 PM] <VBScript .: [11:42:13 PM] [Public Chat 1] <DEATHb4disHONOR*16> i thought blizzard screened these chat logs and blocked this kinda $!@%? :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [11:37:00 PM] <VBScript | New on StealthBot S&P:  apply plugin error>
+ [11:37:01 PM] <VBScript | New on StealthBot Tech Support:  [RESOLVED] run time 53 error>
+ [11:51:57 PM] <VBScript .: <drow> I wouldn't beat my mother, she is pretty nice, and makes me pancakes on sunday morning. :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [11:56:21 PM] <DeAtHZeRg -: System Uptime: 6 days, 5 hours, 7 minutes and 3 seconds :: Connection Uptime: 1 day, 16 hours, 40 minutes and 19 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [11:58:12 PM] <VBScript | New on StealthBot Recent:  Beta Tester>

@@ -1,0 +1,67 @@
+ [03:51:15 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 10, by Stealth.
+ [03:51:15 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [03:51:18 PM] Connecting your bot...
+ [03:51:18 PM] Authorizing your private-release bot, please wait.
+ [03:51:18 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [03:51:18 PM] All connections closed.
+ [03:51:20 PM] The current StealthBot version is ÿcb2.6R3.
+ [03:51:20 PM]  
+ [03:51:20 PM] >> ÿcbStealthBot News
+ [03:51:20 PM] >> Welcome to the new StealthBot News!
+ [03:51:20 PM] ->> 
+ [03:51:20 PM] ->> ÿcbStealthBot Beta News
+ [03:51:20 PM] ->> Happy testing!
+ [03:51:20 PM]  
+ [03:51:20 PM] The current StealthBot Beta version is 2.6999.
+ [03:51:21 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [03:51:21 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [03:53:01 PM] Shutting down...
+ [03:55:47 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 10, by Stealth.
+ [03:55:47 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [03:55:53 PM] The current StealthBot version is ÿcb2.6R3.
+ [03:55:53 PM]  
+ [03:55:53 PM] >> ÿcbStealthBot News
+ [03:55:53 PM] >> Welcome to the new StealthBot News!
+ [03:55:53 PM] ->> 
+ [03:55:53 PM] ->> ÿcbStealthBot Beta News
+ [03:55:53 PM] ->> Happy testing!
+ [03:55:53 PM]  
+ [03:55:53 PM] The current StealthBot Beta version is 2.6999.
+ [03:55:54 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [03:55:54 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [03:55:55 PM] Connecting your bot...
+ [03:55:55 PM] Authorizing your private-release bot, please wait.
+ [03:55:55 PM] Private usage authorized, connecting to Battle.Net.
+ [03:55:55 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [03:55:57 PM] All connections closed.
+ [03:55:57 PM] Connecting your bot...
+ [03:55:57 PM] Authorizing your private-release bot, please wait.
+ [03:55:57 PM] Private usage authorized, connecting to Battle.Net.
+ [03:55:57 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [03:55:58 PM] [BNLS] Connected!
+ [03:55:58 PM] [BNLS] Authorized!
+ [03:55:58 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [03:55:58 PM] [BNET] Connected!
+ [03:55:58 PM] [BNET] Checking version...
+ [03:55:58 PM] [BNET] Client version accepted!
+ [03:55:58 PM] [BNET] Sending login information...
+ [03:55:59 PM] [BNET] Login successful.
+ [03:55:59 PM] [BNET] Asking Battle.net for a list of Realm servers...
+ [03:55:59 PM] [BNET] Battle.net has responded!
+ [03:55:59 PM] [REALM] Opening a connection to the Diablo II Realm...
+ [03:55:59 PM] [REALM] Connection established!
+ [03:55:59 PM] [REALM] Connected to Diablo II realm.
+ [03:56:02 PM] [REALM] Realm login successful.
+ [03:56:02 PM] [BNET] Logged on as Eric[nK].
+ [03:56:02 PM] -- Joined channel: Diablo II USEast-USA-1 --
+ [03:56:03 PM] Account Created: 3/22/2007, 21:13:55 (Battle.net time)
+ [03:56:03 PM] Last Logon: 4/19/2008, 22:55:30 (Battle.net time)
+ [03:56:03 PM] Last Logoff: 4/19/2008, 22:45:00 (Battle.net time)
+ [03:56:03 PM] Time Logged: 3 days, 21 hours, 46 minutes and 51 seconds
+ [03:56:03 PM] <jimbotron> like to come say hi to my friends though
+ [03:56:03 PM] <lil_secrets> just left me
+ [03:56:08 PM] -- unscphobia has left the channel.
+ [03:56:10 PM] <minty_cbo2> i cant find my exp cd ftl...otherwise i would actually play..
+ [03:56:10 PM] -- HITS(SoM) has left the channel.
+ [03:56:14 PM] <lil_secrets> lol
+ [03:56:16 PM] <jimbotron> you said you were going to play GW

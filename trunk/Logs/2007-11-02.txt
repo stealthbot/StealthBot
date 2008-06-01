@@ -1,0 +1,148 @@
+ [2:46:34 PM]  [2:46:34 PM] Loaded 2 plugins (2 enabled). Type  [2:46:34 PM] /plugins [2:46:34 PM]  to view them. Type  [2:46:34 PM] /phelp [2:46:34 PM]  for help using them.
+ [2:46:34 PM]  [2:46:34 PM] Type  [2:46:34 PM] /updates [2:46:34 PM]  in the bot to view updates and new plugins that are available for download.
+ [2:46:34 PM]  [2:46:34 PM] frmExample_Load
+ [2:46:34 PM]  [2:46:34 PM] Form created: True
+ [2:46:34 PM]  [2:46:34 PM] frmExample_Resize( [2:46:34 PM] 4800 [2:46:34 PM] ,  [2:46:34 PM] 3705 [2:46:34 PM] )
+ [2:46:34 PM]  [2:46:34 PM] frmExample_Resize( [2:46:34 PM] 4800 [2:46:34 PM] ,  [2:46:34 PM] 3705 [2:46:34 PM] )
+ [2:46:34 PM]  [2:46:34 PM] frmExample_Resize( [2:46:34 PM] 4800 [2:46:34 PM] ,  [2:46:34 PM] 3705 [2:46:34 PM] )
+ [2:46:34 PM]  [2:46:34 PM] frmExample_Resize( [2:46:34 PM] 4800 [2:46:34 PM] ,  [2:46:34 PM] 3705 [2:46:34 PM] )
+ [2:46:34 PM]  [2:46:34 PM] frmExample_Resize( [2:46:34 PM] 4800 [2:46:34 PM] ,  [2:46:34 PM] 3705 [2:46:34 PM] )
+ [2:46:36 PM]  [2:46:36 PM] frmExample_UnLoad( [2:46:36 PM] 0 [2:46:36 PM] )
+ [2:46:52 PM]  [2:46:52 PM] Loaded 2 plugins (2 enabled). Type  [2:46:52 PM] /plugins [2:46:52 PM]  to view them. Type  [2:46:52 PM] /phelp [2:46:52 PM]  for help using them.
+ [2:46:52 PM]  [2:46:52 PM] Type  [2:46:52 PM] /updates [2:46:52 PM]  in the bot to view updates and new plugins that are available for download.
+ [2:46:52 PM]  [2:46:52 PM] frmExample_Load
+ [2:46:52 PM]  [2:46:52 PM] Form created: True
+ [2:46:52 PM]  [2:46:52 PM] frmExample_Resize( [2:46:52 PM] 4800 [2:46:52 PM] ,  [2:46:52 PM] 3705 [2:46:52 PM] )
+ [2:46:52 PM]  [2:46:52 PM] frmExample_Resize( [2:46:52 PM] 4800 [2:46:52 PM] ,  [2:46:52 PM] 3705 [2:46:52 PM] )
+ [2:46:52 PM]  [2:46:52 PM] frmExample_Resize( [2:46:52 PM] 4800 [2:46:52 PM] ,  [2:46:52 PM] 3705 [2:46:52 PM] )
+ [2:46:52 PM]  [2:46:52 PM] frmExample_Resize( [2:46:52 PM] 4800 [2:46:52 PM] ,  [2:46:52 PM] 3705 [2:46:52 PM] )
+ [2:46:52 PM]  [2:46:52 PM] frmExample_Resize( [2:46:52 PM] 4800 [2:46:52 PM] ,  [2:46:52 PM] 3705 [2:46:52 PM] )
+ [2:47:39 PM]  [2:47:39 PM] Loaded 2 plugins (2 enabled). Type  [2:47:39 PM] /plugins [2:47:39 PM]  to view them. Type  [2:47:39 PM] /phelp [2:47:39 PM]  for help using them.
+ [2:47:39 PM]  [2:47:39 PM] Type  [2:47:39 PM] /updates [2:47:39 PM]  in the bot to view updates and new plugins that are available for download.
+ [2:47:39 PM]  [2:47:39 PM] frmExample_Load
+ [2:47:39 PM]  [2:47:39 PM] Form created: True
+ [2:47:39 PM]  [2:47:39 PM] frmExample_Resize( [2:47:39 PM] 4800 [2:47:39 PM] ,  [2:47:39 PM] 3705 [2:47:39 PM] )
+ [2:47:39 PM]  [2:47:39 PM] frmExample_Resize( [2:47:39 PM] 4800 [2:47:39 PM] ,  [2:47:39 PM] 3705 [2:47:39 PM] )
+ [2:47:39 PM]  [2:47:39 PM] frmExample_Resize( [2:47:39 PM] 4800 [2:47:39 PM] ,  [2:47:39 PM] 3705 [2:47:39 PM] )
+ [2:47:39 PM]  [2:47:39 PM] frmExample_Resize( [2:47:39 PM] 4800 [2:47:39 PM] ,  [2:47:39 PM] 3705 [2:47:39 PM] )
+ [2:47:39 PM]  [2:47:39 PM] frmExample_Resize( [2:47:39 PM] 4800 [2:47:39 PM] ,  [2:47:39 PM] 3705 [2:47:39 PM] )
+ [3:01:33 PM]  [3:01:33 PM] Loaded 2 plugins (2 enabled). Type  [3:01:33 PM] /plugins [3:01:33 PM]  to view them. Type  [3:01:33 PM] /phelp [3:01:33 PM]  for help using them.
+ [3:01:33 PM]  [3:01:33 PM] Type  [3:01:33 PM] /updates [3:01:33 PM]  in the bot to view updates and new plugins that are available for download.
+ [3:01:33 PM]  [3:01:33 PM] frmExample_Load
+ [3:01:33 PM]  [3:01:33 PM] Form created: True
+ [3:01:33 PM]  [3:01:33 PM] frmExample_Resize( [3:01:33 PM] 4800 [3:01:33 PM] ,  [3:01:33 PM] 3705 [3:01:33 PM] )
+ [3:01:33 PM]  [3:01:33 PM] frmExample_Resize( [3:01:33 PM] 4800 [3:01:33 PM] ,  [3:01:33 PM] 3705 [3:01:33 PM] )
+ [3:01:33 PM]  [3:01:33 PM] frmExample_Resize( [3:01:33 PM] 4800 [3:01:33 PM] ,  [3:01:33 PM] 3705 [3:01:33 PM] )
+ [3:01:33 PM]  [3:01:33 PM] frmExample_Resize( [3:01:33 PM] 4800 [3:01:33 PM] ,  [3:01:33 PM] 3705 [3:01:33 PM] )
+ [3:01:33 PM]  [3:01:33 PM] frmExample_Resize( [3:01:33 PM] 4800 [3:01:33 PM] ,  [3:01:33 PM] 3705 [3:01:33 PM] )
+ [3:59:33 PM]  [3:59:33 PM] Loaded 2 plugins (2 enabled). Type  [3:59:33 PM] /plugins [3:59:33 PM]  to view them. Type  [3:59:33 PM] /phelp [3:59:33 PM]  for help using them.
+ [3:59:33 PM]  [3:59:33 PM] Type  [3:59:33 PM] /updates [3:59:33 PM]  in the bot to view updates and new plugins that are available for download.
+ [3:59:33 PM]  [3:59:33 PM] frmExample_Load
+ [3:59:33 PM]  [3:59:33 PM] Form created: True
+ [3:59:33 PM]  [3:59:33 PM] frmExample_Resize( [3:59:33 PM] 4800 [3:59:33 PM] ,  [3:59:33 PM] 3705 [3:59:33 PM] )
+ [3:59:33 PM]  [3:59:33 PM] frmExample_Resize( [3:59:33 PM] 4800 [3:59:33 PM] ,  [3:59:33 PM] 3705 [3:59:33 PM] )
+ [3:59:33 PM]  [3:59:33 PM] frmExample_Resize( [3:59:33 PM] 4800 [3:59:33 PM] ,  [3:59:33 PM] 3705 [3:59:33 PM] )
+ [3:59:33 PM]  [3:59:33 PM] frmExample_Resize( [3:59:33 PM] 4800 [3:59:33 PM] ,  [3:59:33 PM] 3705 [3:59:33 PM] )
+ [3:59:33 PM]  [3:59:33 PM] frmExample_Resize( [3:59:33 PM] 4800 [3:59:33 PM] ,  [3:59:33 PM] 3705 [3:59:33 PM] )
+ [3:59:35 PM]  [3:59:35 PM] frmExample_UnLoad( [3:59:35 PM] 0 [3:59:35 PM] )
+ [4:14:18 PM]  [4:14:18 PM] Loaded 2 plugins (2 enabled). Type  [4:14:18 PM] /plugins [4:14:18 PM]  to view them. Type  [4:14:18 PM] /phelp [4:14:18 PM]  for help using them.
+ [4:14:18 PM]  [4:14:18 PM] Type  [4:14:18 PM] /updates [4:14:18 PM]  in the bot to view updates and new plugins that are available for download.
+ [4:14:18 PM]  [4:14:18 PM] frmExample_Load
+ [4:14:18 PM]  [4:14:18 PM] Form created: True
+ [4:14:18 PM]  [4:14:18 PM] frmExample_Resize( [4:14:18 PM] 4800 [4:14:18 PM] ,  [4:14:18 PM] 3705 [4:14:18 PM] )
+ [4:14:18 PM]  [4:14:18 PM] frmExample_Resize( [4:14:18 PM] 4800 [4:14:18 PM] ,  [4:14:18 PM] 3705 [4:14:18 PM] )
+ [4:14:18 PM]  [4:14:18 PM] frmExample_Resize( [4:14:18 PM] 4800 [4:14:18 PM] ,  [4:14:18 PM] 3705 [4:14:18 PM] )
+ [4:14:18 PM]  [4:14:18 PM] frmExample_Resize( [4:14:18 PM] 4800 [4:14:18 PM] ,  [4:14:18 PM] 3705 [4:14:18 PM] )
+ [4:14:18 PM]  [4:14:18 PM] frmExample_Resize( [4:14:18 PM] 4800 [4:14:18 PM] ,  [4:14:18 PM] 3705 [4:14:18 PM] )
+ [4:14:35 PM]  [4:14:35 PM] Loaded 2 plugins (2 enabled). Type  [4:14:35 PM] /plugins [4:14:35 PM]  to view them. Type  [4:14:35 PM] /phelp [4:14:35 PM]  for help using them.
+ [4:14:35 PM]  [4:14:35 PM] Type  [4:14:35 PM] /updates [4:14:35 PM]  in the bot to view updates and new plugins that are available for download.
+ [4:14:35 PM]  [4:14:35 PM] frmExample_Load
+ [4:14:35 PM]  [4:14:35 PM] Form created: True
+ [4:14:35 PM]  [4:14:35 PM] frmExample_Resize( [4:14:35 PM] 4800 [4:14:35 PM] ,  [4:14:35 PM] 3705 [4:14:35 PM] )
+ [4:14:35 PM]  [4:14:35 PM] frmExample_Resize( [4:14:35 PM] 4800 [4:14:35 PM] ,  [4:14:35 PM] 3705 [4:14:35 PM] )
+ [4:14:35 PM]  [4:14:35 PM] frmExample_Resize( [4:14:35 PM] 4800 [4:14:35 PM] ,  [4:14:35 PM] 3705 [4:14:35 PM] )
+ [4:14:35 PM]  [4:14:35 PM] frmExample_Resize( [4:14:35 PM] 4800 [4:14:35 PM] ,  [4:14:35 PM] 3705 [4:14:35 PM] )
+ [4:14:35 PM]  [4:14:35 PM] frmExample_Resize( [4:14:35 PM] 4800 [4:14:35 PM] ,  [4:14:35 PM] 3705 [4:14:35 PM] )
+ [4:15:09 PM]  [4:15:09 PM] Loaded 2 plugins (2 enabled). Type  [4:15:09 PM] /plugins [4:15:09 PM]  to view them. Type  [4:15:09 PM] /phelp [4:15:09 PM]  for help using them.
+ [4:15:09 PM]  [4:15:09 PM] Type  [4:15:09 PM] /updates [4:15:09 PM]  in the bot to view updates and new plugins that are available for download.
+ [4:15:09 PM]  [4:15:09 PM] frmExample_Load
+ [4:15:09 PM]  [4:15:09 PM] Form created: True
+ [4:15:09 PM]  [4:15:09 PM] frmExample_Resize( [4:15:09 PM] 4800 [4:15:09 PM] ,  [4:15:09 PM] 3705 [4:15:09 PM] )
+ [4:15:09 PM]  [4:15:09 PM] frmExample_Resize( [4:15:09 PM] 4800 [4:15:09 PM] ,  [4:15:09 PM] 3705 [4:15:09 PM] )
+ [4:15:09 PM]  [4:15:09 PM] frmExample_Resize( [4:15:09 PM] 4800 [4:15:09 PM] ,  [4:15:09 PM] 3705 [4:15:09 PM] )
+ [4:15:09 PM]  [4:15:09 PM] frmExample_Resize( [4:15:09 PM] 4800 [4:15:09 PM] ,  [4:15:09 PM] 3705 [4:15:09 PM] )
+ [4:15:09 PM]  [4:15:09 PM] frmExample_Resize( [4:15:09 PM] 4800 [4:15:09 PM] ,  [4:15:09 PM] 3705 [4:15:09 PM] )
+ [4:16:47 PM]  [4:16:47 PM] Loaded 2 plugins (2 enabled). Type  [4:16:47 PM] /plugins [4:16:47 PM]  to view them. Type  [4:16:47 PM] /phelp [4:16:47 PM]  for help using them.
+ [4:16:47 PM]  [4:16:47 PM] Type  [4:16:47 PM] /updates [4:16:47 PM]  in the bot to view updates and new plugins that are available for download.
+ [4:16:47 PM]  [4:16:47 PM] frmExample_Load
+ [4:16:47 PM]  [4:16:47 PM] Form created: True
+ [4:16:47 PM]  [4:16:47 PM] frmExample_Resize( [4:16:47 PM] 4800 [4:16:47 PM] ,  [4:16:47 PM] 3705 [4:16:47 PM] )
+ [4:16:47 PM]  [4:16:47 PM] frmExample_Resize( [4:16:47 PM] 4800 [4:16:47 PM] ,  [4:16:47 PM] 3705 [4:16:47 PM] )
+ [4:16:47 PM]  [4:16:47 PM] frmExample_Resize( [4:16:47 PM] 4800 [4:16:47 PM] ,  [4:16:47 PM] 3705 [4:16:47 PM] )
+ [4:16:47 PM]  [4:16:47 PM] frmExample_Resize( [4:16:47 PM] 4800 [4:16:47 PM] ,  [4:16:47 PM] 3705 [4:16:47 PM] )
+ [4:16:47 PM]  [4:16:47 PM] frmExample_Resize( [4:16:47 PM] 4800 [4:16:47 PM] ,  [4:16:47 PM] 3705 [4:16:47 PM] )
+ [4:18:20 PM]  [4:18:20 PM] Loaded 2 plugins (2 enabled). Type  [4:18:20 PM] /plugins [4:18:20 PM]  to view them. Type  [4:18:20 PM] /phelp [4:18:20 PM]  for help using them.
+ [4:18:20 PM]  [4:18:20 PM] Type  [4:18:20 PM] /updates [4:18:20 PM]  in the bot to view updates and new plugins that are available for download.
+ [4:18:20 PM]  [4:18:20 PM] frmExample_Load
+ [4:18:20 PM]  [4:18:20 PM] Form created: True
+ [4:18:20 PM]  [4:18:20 PM] frmExample_Resize( [4:18:20 PM] 4800 [4:18:20 PM] ,  [4:18:20 PM] 3705 [4:18:20 PM] )
+ [4:18:20 PM]  [4:18:20 PM] frmExample_Resize( [4:18:20 PM] 4800 [4:18:20 PM] ,  [4:18:20 PM] 3705 [4:18:20 PM] )
+ [4:18:20 PM]  [4:18:20 PM] frmExample_Resize( [4:18:20 PM] 4800 [4:18:20 PM] ,  [4:18:20 PM] 3705 [4:18:20 PM] )
+ [4:18:20 PM]  [4:18:20 PM] frmExample_Resize( [4:18:20 PM] 4800 [4:18:20 PM] ,  [4:18:20 PM] 3705 [4:18:20 PM] )
+ [4:18:20 PM]  [4:18:20 PM] frmExample_Resize( [4:18:20 PM] 4800 [4:18:20 PM] ,  [4:18:20 PM] 3705 [4:18:20 PM] )
+ [4:21:38 PM]  [4:21:38 PM] Loaded 2 plugins (2 enabled). Type  [4:21:38 PM] /plugins [4:21:38 PM]  to view them. Type  [4:21:38 PM] /phelp [4:21:38 PM]  for help using them.
+ [4:21:38 PM]  [4:21:38 PM] Type  [4:21:38 PM] /updates [4:21:38 PM]  in the bot to view updates and new plugins that are available for download.
+ [4:21:38 PM]  [4:21:38 PM] frmExample_Load
+ [4:21:38 PM]  [4:21:38 PM] Form created: True
+ [4:21:38 PM]  [4:21:38 PM] frmExample_Resize( [4:21:38 PM] 4800 [4:21:38 PM] ,  [4:21:38 PM] 3705 [4:21:38 PM] )
+ [4:21:38 PM]  [4:21:38 PM] frmExample_Resize( [4:21:38 PM] 4800 [4:21:38 PM] ,  [4:21:38 PM] 3705 [4:21:38 PM] )
+ [4:21:38 PM]  [4:21:38 PM] frmExample_Resize( [4:21:38 PM] 4800 [4:21:38 PM] ,  [4:21:38 PM] 3705 [4:21:38 PM] )
+ [4:21:38 PM]  [4:21:38 PM] frmExample_Resize( [4:21:38 PM] 4800 [4:21:38 PM] ,  [4:21:38 PM] 3705 [4:21:38 PM] )
+ [4:21:38 PM]  [4:21:38 PM] frmExample_Resize( [4:21:38 PM] 4800 [4:21:38 PM] ,  [4:21:38 PM] 3705 [4:21:38 PM] )
+ [9:10:22 PM]  [9:10:22 PM] Loaded 2 plugins (2 enabled). Type  [9:10:22 PM] /plugins [9:10:22 PM]  to view them. Type  [9:10:22 PM] /phelp [9:10:22 PM]  for help using them.
+ [9:10:22 PM]  [9:10:22 PM] Type  [9:10:22 PM] /updates [9:10:22 PM]  in the bot to view updates and new plugins that are available for download.
+ [9:10:22 PM]  [9:10:22 PM] frmExample_Load
+ [9:10:22 PM]  [9:10:22 PM] Form created: True
+ [9:10:22 PM]  [9:10:22 PM] frmExample_Resize( [9:10:22 PM] 4800 [9:10:22 PM] ,  [9:10:22 PM] 3705 [9:10:22 PM] )
+ [9:10:22 PM]  [9:10:22 PM] frmExample_Resize( [9:10:22 PM] 4800 [9:10:22 PM] ,  [9:10:22 PM] 3705 [9:10:22 PM] )
+ [9:10:22 PM]  [9:10:22 PM] frmExample_Resize( [9:10:22 PM] 4800 [9:10:22 PM] ,  [9:10:22 PM] 3705 [9:10:22 PM] )
+ [9:10:22 PM]  [9:10:22 PM] frmExample_Resize( [9:10:22 PM] 4800 [9:10:22 PM] ,  [9:10:22 PM] 3705 [9:10:22 PM] )
+ [9:10:22 PM]  [9:10:22 PM] frmExample_Resize( [9:10:22 PM] 4800 [9:10:22 PM] ,  [9:10:22 PM] 3705 [9:10:22 PM] )
+ [9:11:09 PM]  [9:11:09 PM] Loaded 2 plugins (2 enabled). Type  [9:11:09 PM] /plugins [9:11:09 PM]  to view them. Type  [9:11:09 PM] /phelp [9:11:09 PM]  for help using them.
+ [9:11:09 PM]  [9:11:09 PM] Type  [9:11:09 PM] /updates [9:11:09 PM]  in the bot to view updates and new plugins that are available for download.
+ [9:11:09 PM]  [9:11:09 PM] frmExample_Load
+ [9:11:09 PM]  [9:11:09 PM] Form created: True
+ [9:11:09 PM]  [9:11:09 PM] frmExample_Resize( [9:11:09 PM] 4800 [9:11:09 PM] ,  [9:11:09 PM] 3705 [9:11:09 PM] )
+ [9:11:09 PM]  [9:11:09 PM] frmExample_Resize( [9:11:09 PM] 4800 [9:11:09 PM] ,  [9:11:09 PM] 3705 [9:11:09 PM] )
+ [9:11:09 PM]  [9:11:09 PM] frmExample_Resize( [9:11:09 PM] 4800 [9:11:09 PM] ,  [9:11:09 PM] 3705 [9:11:09 PM] )
+ [9:11:09 PM]  [9:11:09 PM] frmExample_Resize( [9:11:09 PM] 4800 [9:11:09 PM] ,  [9:11:09 PM] 3705 [9:11:09 PM] )
+ [9:11:09 PM]  [9:11:09 PM] frmExample_Resize( [9:11:09 PM] 4800 [9:11:09 PM] ,  [9:11:09 PM] 3705 [9:11:09 PM] )
+ [9:14:20 PM]  [9:14:20 PM] Loaded 2 plugins (2 enabled). Type  [9:14:20 PM] /plugins [9:14:20 PM]  to view them. Type  [9:14:20 PM] /phelp [9:14:20 PM]  for help using them.
+ [9:14:20 PM]  [9:14:20 PM] Type  [9:14:20 PM] /updates [9:14:20 PM]  in the bot to view updates and new plugins that are available for download.
+ [9:14:20 PM]  [9:14:20 PM] frmExample_Load
+ [9:14:20 PM]  [9:14:20 PM] Form created: True
+ [9:14:20 PM]  [9:14:20 PM] frmExample_Resize( [9:14:20 PM] 4800 [9:14:20 PM] ,  [9:14:20 PM] 3705 [9:14:20 PM] )
+ [9:14:20 PM]  [9:14:20 PM] frmExample_Resize( [9:14:20 PM] 4800 [9:14:20 PM] ,  [9:14:20 PM] 3705 [9:14:20 PM] )
+ [9:14:20 PM]  [9:14:20 PM] frmExample_Resize( [9:14:20 PM] 4800 [9:14:20 PM] ,  [9:14:20 PM] 3705 [9:14:20 PM] )
+ [9:14:20 PM]  [9:14:20 PM] frmExample_Resize( [9:14:20 PM] 4800 [9:14:20 PM] ,  [9:14:20 PM] 3705 [9:14:20 PM] )
+ [9:14:20 PM]  [9:14:20 PM] frmExample_Resize( [9:14:20 PM] 4800 [9:14:20 PM] ,  [9:14:20 PM] 3705 [9:14:20 PM] )
+ [9:15:19 PM]  [9:15:19 PM] Loaded 2 plugins (2 enabled). Type  [9:15:19 PM] /plugins [9:15:19 PM]  to view them. Type  [9:15:19 PM] /phelp [9:15:19 PM]  for help using them.
+ [9:15:19 PM]  [9:15:19 PM] Type  [9:15:19 PM] /updates [9:15:19 PM]  in the bot to view updates and new plugins that are available for download.
+ [9:15:19 PM]  [9:15:19 PM] frmExample_Load
+ [9:15:19 PM]  [9:15:19 PM] Form created: True
+ [9:15:19 PM]  [9:15:19 PM] frmExample_Resize( [9:15:19 PM] 4800 [9:15:19 PM] ,  [9:15:19 PM] 3705 [9:15:19 PM] )
+ [9:15:19 PM]  [9:15:19 PM] frmExample_Resize( [9:15:19 PM] 4800 [9:15:19 PM] ,  [9:15:19 PM] 3705 [9:15:19 PM] )
+ [9:15:19 PM]  [9:15:19 PM] frmExample_Resize( [9:15:19 PM] 4800 [9:15:19 PM] ,  [9:15:19 PM] 3705 [9:15:19 PM] )
+ [9:15:19 PM]  [9:15:19 PM] frmExample_Resize( [9:15:19 PM] 4800 [9:15:19 PM] ,  [9:15:19 PM] 3705 [9:15:19 PM] )
+ [9:15:19 PM]  [9:15:19 PM] frmExample_Resize( [9:15:19 PM] 4800 [9:15:19 PM] ,  [9:15:19 PM] 3705 [9:15:19 PM] )
+ [9:15:54 PM]  [9:15:54 PM] Loaded 2 plugins (2 enabled). Type  [9:15:54 PM] /plugins [9:15:54 PM]  to view them. Type  [9:15:54 PM] /phelp [9:15:54 PM]  for help using them.
+ [9:15:54 PM]  [9:15:54 PM] Type  [9:15:54 PM] /updates [9:15:54 PM]  in the bot to view updates and new plugins that are available for download.
+ [9:15:54 PM]  [9:15:54 PM] frmExample_Load
+ [9:15:54 PM]  [9:15:54 PM] Form created: True
+ [9:15:54 PM]  [9:15:54 PM] frmExample_Resize( [9:15:54 PM] 4800 [9:15:54 PM] ,  [9:15:54 PM] 3705 [9:15:54 PM] )
+ [9:15:54 PM]  [9:15:54 PM] frmExample_Resize( [9:15:54 PM] 4800 [9:15:54 PM] ,  [9:15:54 PM] 3705 [9:15:54 PM] )
+ [9:15:54 PM]  [9:15:54 PM] frmExample_Resize( [9:15:54 PM] 4800 [9:15:54 PM] ,  [9:15:54 PM] 3705 [9:15:54 PM] )
+ [9:15:54 PM]  [9:15:54 PM] frmExample_Resize( [9:15:54 PM] 4800 [9:15:54 PM] ,  [9:15:54 PM] 3705 [9:15:54 PM] )
+ [9:15:54 PM]  [9:15:54 PM] frmExample_Resize( [9:15:54 PM] 4800 [9:15:54 PM] ,  [9:15:54 PM] 3705 [9:15:54 PM] )
+ [9:29:16 PM]  [9:29:16 PM] Loaded 2 plugins (2 enabled). Type  [9:29:16 PM] /plugins [9:29:16 PM]  to view them. Type  [9:29:16 PM] /phelp [9:29:16 PM]  for help using them.
+ [9:29:16 PM]  [9:29:16 PM] Type  [9:29:16 PM] /updates [9:29:16 PM]  in the bot to view updates and new plugins that are available for download.

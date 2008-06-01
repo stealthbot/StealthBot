@@ -1,0 +1,40 @@
+ [12:27:43 PM] -> Welcome to StealthBot Beta v2.6999, by Stealth.
+ [12:27:43 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:27:43 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:27:43 PM] The current StealthBot version is ÿcb2.6R3.
+ [12:27:43 PM]  
+ [12:27:43 PM] >> ÿcbStealthBot News
+ [12:27:44 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:27:44 PM] ->> 
+ [12:27:44 PM] ->> ÿcbStealthBot Beta News
+ [12:27:44 PM] ->> Happy testing!
+ [12:27:44 PM]  
+ [12:27:44 PM] The current StealthBot Beta version is 2.6993.
+ [12:27:44 PM]  [12:27:44 PM] Loaded 2 plugins (2 enabled). Type  [12:27:44 PM] /plugins [12:27:44 PM]  to view them. Type  [12:27:44 PM] /phelp [12:27:44 PM]  for help using them.
+ [12:27:44 PM]  [12:27:44 PM] Type  [12:27:44 PM] /updates [12:27:44 PM]  in the bot to view updates and new plugins that are available for download.
+ [12:27:44 PM] Connecting your bot...
+ [12:27:44 PM] Authorizing your private-release bot, please wait.
+ [12:27:44 PM] Private usage authorized, connecting to Battle.Net.
+ [12:27:44 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [12:27:45 PM] [BNLS] Connected!
+ [12:27:45 PM] [BNLS] Authorized!
+ [12:27:45 PM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [12:27:45 PM] [BNET] Connected!
+ [12:27:45 PM] [BNET] Checking version...
+ [12:27:46 PM] [BNET] Client version accepted!
+ [12:27:46 PM] [BNET] Sending login information...
+ [12:27:46 PM] [BNET] Login successful.
+ [12:27:46 PM] [CLAN] You are a Shaman in Clan SBs.
+ [12:27:46 PM] [BNET] Logged on as Eric[nK].
+ [12:27:46 PM] -- Joined channel: Clan SBs --
+ [12:27:47 PM] Welcome to Battle.net!
+ [12:27:47 PM] This server is hosted by AT&T.
+ [12:27:47 PM] There are currently 88824 users playing 2513 games of Warcraft III The Frozen Throne, and 187745 users playing 35621 games on Battle.net.
+ [12:27:47 PM] Last logon: Thu Jan 3  6:15 PM
+ [12:27:47 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [12:27:47 PM] Everyone give Berzerker@USEast access
+ [12:27:47 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [12:27:47 PM] Last Logon: 1/4/2008, 20:34:20 (Battle.net time)
+ [12:27:47 PM] Last Logoff: 1/4/2008, 02:10:38 (Battle.net time)
+ [12:27:47 PM] Time Logged: 54 days, 22 hours, 9 minutes and 50 seconds
+ [12:27:50 PM] <To Bob> hi

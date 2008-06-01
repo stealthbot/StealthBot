@@ -1,0 +1,418 @@
+ [9:12:01 AM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [9:12:01 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:12:01 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:12:01 AM] The current StealthBot version is ÿcb2.6R3.
+ [9:12:01 AM]  
+ [9:12:01 AM] >> ÿcbStealthBot News
+ [9:12:01 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:12:01 AM] ->> 
+ [9:12:01 AM] ->> ÿcbStealthBot Beta News
+ [9:12:01 AM] ->> Happy testing!
+ [9:12:01 AM]  
+ [9:12:01 AM] The current StealthBot Beta version is 2.6993.
+ [9:12:02 AM]  [9:12:02 AM] Loaded 2 plugins (2 enabled). Type  [9:12:02 AM] /plugins [9:12:02 AM]  to view them. Type  [9:12:02 AM] /phelp [9:12:02 AM]  for help using them.
+ [9:12:02 AM]  [9:12:02 AM] Type  [9:12:02 AM] /updates [9:12:02 AM]  in the bot to view updates and new plugins that are available for download.
+ [9:12:02 AM]  [9:12:02 AM] frmExample_Load
+ [9:12:02 AM]  [9:12:02 AM] Form created: True
+ [9:12:02 AM]  [9:12:02 AM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [9:12:02 AM]  [9:12:02 AM] Variable is undefined.
+ [9:12:03 AM] Connecting your bot...
+ [9:12:03 AM] Authorizing your private-release bot, please wait.
+ [9:12:03 AM] Private usage authorized, connecting to Battle.Net.
+ [9:12:03 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [9:12:03 AM] [BNLS] Connected!
+ [9:12:03 AM] [BNLS] Authorized!
+ [9:12:03 AM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [9:12:03 AM] [BNET] Connected!
+ [9:12:04 AM] [BNET] Checking version...
+ [9:12:04 AM] [BNET] Client version accepted!
+ [9:12:04 AM] [BNET] Sending login information...
+ [9:12:05 AM] [BNET] Login successful.
+ [9:12:05 AM] [CLAN] You are a Shaman in Clan SBs.
+ [9:12:05 AM] [BNET] Logged on as Eric[nK].
+ [9:12:05 AM] -- Joined channel: Clan SBs --
+ [9:12:05 AM] Welcome to Battle.net!
+ [9:12:05 AM] This server is hosted by AT&T.
+ [9:12:05 AM] There are currently 93578 users playing 2686 games of Warcraft III The Frozen Throne, and 213024 users playing 43606 games on Battle.net.
+ [9:12:05 AM] Last logon: Sun Nov 18  9:18 AM
+ [9:12:05 AM] -- Eric[nK] has acquired ops.
+ [9:12:05 AM] -- Stats updated: Eric[nK] [204ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [9:12:06 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [9:12:06 AM] Last Logon: 11/18/2007, 17:19:52 (Battle.net time)
+ [9:12:06 AM] Last Logoff: 11/18/2007, 17:18:54 (Battle.net time)
+ [9:12:06 AM] Time Logged: 32 days, 15 hours, 42 minutes and 27 seconds
+ [9:12:10 AM] <Eric[nK]> Once more.
+ [9:30:19 AM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [9:30:19 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:30:19 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:30:20 AM] The current StealthBot version is ÿcb2.6R3.
+ [9:30:20 AM]  
+ [9:30:20 AM] >> ÿcbStealthBot News
+ [9:30:20 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:30:20 AM] ->> 
+ [9:30:20 AM] ->> ÿcbStealthBot Beta News
+ [9:30:20 AM] ->> Happy testing!
+ [9:30:20 AM]  
+ [9:30:20 AM] The current StealthBot Beta version is 2.6993.
+ [9:30:20 AM]  [9:30:20 AM] Loaded 2 plugins (2 enabled). Type  [9:30:20 AM] /plugins [9:30:20 AM]  to view them. Type  [9:30:20 AM] /phelp [9:30:20 AM]  for help using them.
+ [9:30:20 AM]  [9:30:20 AM] Type  [9:30:20 AM] /updates [9:30:20 AM]  in the bot to view updates and new plugins that are available for download.
+ [9:30:20 AM]  [9:30:20 AM] frmExample_Load
+ [9:30:20 AM]  [9:30:20 AM] Form created: True
+ [9:30:20 AM]  [9:30:20 AM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [9:30:20 AM]  [9:30:20 AM] Variable is undefined.
+ [9:30:30 AM] Connecting your bot...
+ [9:30:30 AM] Authorizing your private-release bot, please wait.
+ [9:30:30 AM] Private usage authorized, connecting to Battle.Net.
+ [9:30:30 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [9:30:30 AM] [BNLS] Connected!
+ [9:30:30 AM] [BNLS] Authorized!
+ [9:30:30 AM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [9:30:30 AM] [BNET] Connected!
+ [9:30:31 AM] [BNET] Checking version...
+ [9:30:31 AM] [BNET] Client version accepted!
+ [9:30:32 AM] [BNET] Sending login information...
+ [9:30:32 AM] [BNET] Login successful.
+ [9:30:32 AM] [CLAN] You are a Shaman in Clan SBs.
+ [9:30:32 AM] [BNET] Logged on as Eric[nK].
+ [9:30:32 AM] -- Joined channel: Clan SBs --
+ [9:30:32 AM] Welcome to Battle.net!
+ [9:30:32 AM] This server is hosted by AT&T.
+ [9:30:32 AM] There are currently 92887 users playing 2636 games of Warcraft III The Frozen Throne, and 210113 users playing 42947 games on Battle.net.
+ [9:30:32 AM] Last logon: Sun Nov 18  9:34 AM
+ [9:30:32 AM] -- Eric[nK] has acquired ops.
+ [9:30:33 AM] -- Stats updated: Eric[nK] [141ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [9:30:33 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [9:30:33 AM] Last Logon: 11/18/2007, 17:32:32 (Battle.net time)
+ [9:30:33 AM] Last Logoff: 11/18/2007, 17:32:32 (Battle.net time)
+ [9:30:33 AM] Time Logged: 32 days, 15 hours, 56 minutes and 43 seconds
+ [9:30:35 AM] -- Joined channel: dd --
+ [9:30:42 AM] <Eric[nK]> eric[nK]
+ [9:30:42 AM] No one hears you.
+ [9:31:16 AM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [9:31:16 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:31:16 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:31:16 AM] The current StealthBot version is ÿcb2.6R3.
+ [9:31:16 AM]  
+ [9:31:16 AM] >> ÿcbStealthBot News
+ [9:31:16 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:31:16 AM] ->> 
+ [9:31:16 AM] ->> ÿcbStealthBot Beta News
+ [9:31:16 AM] ->> Happy testing!
+ [9:31:16 AM]  
+ [9:31:16 AM] The current StealthBot Beta version is 2.6993.
+ [9:31:16 AM]  [9:31:16 AM] Loaded 2 plugins (2 enabled). Type  [9:31:16 AM] /plugins [9:31:16 AM]  to view them. Type  [9:31:16 AM] /phelp [9:31:16 AM]  for help using them.
+ [9:31:16 AM]  [9:31:16 AM] Type  [9:31:16 AM] /updates [9:31:16 AM]  in the bot to view updates and new plugins that are available for download.
+ [9:31:16 AM]  [9:31:16 AM] frmExample_Load
+ [9:31:16 AM]  [9:31:16 AM] Form created: True
+ [9:31:16 AM]  [9:31:16 AM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [9:31:16 AM]  [9:31:16 AM] Variable is undefined.
+ [9:31:17 AM] Connecting your bot...
+ [9:31:17 AM] Authorizing your private-release bot, please wait.
+ [9:31:17 AM] Private usage authorized, connecting to Battle.Net.
+ [9:31:17 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [9:31:17 AM] [BNLS] Connected!
+ [9:31:17 AM] [BNLS] Authorized!
+ [9:31:17 AM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [9:31:18 AM] [BNET] Connected!
+ [9:31:18 AM] [BNET] Checking version...
+ [9:31:19 AM] [BNET] Client version accepted!
+ [9:31:19 AM] [BNET] Sending login information...
+ [9:31:19 AM] [BNET] Login successful.
+ [9:31:19 AM] [CLAN] You are a Shaman in Clan SBs.
+ [9:31:19 AM] [BNET] Logged on as Eric[nK].
+ [9:31:19 AM] -- Joined channel: Clan SBs --
+ [9:31:19 AM] Welcome to Battle.net!
+ [9:31:19 AM] This server is hosted by AT&T.
+ [9:31:19 AM] There are currently 92913 users playing 2646 games of Warcraft III The Frozen Throne, and 210042 users playing 42981 games on Battle.net.
+ [9:31:19 AM] Last logon: Sun Nov 18  9:38 AM
+ [9:31:19 AM] -- Eric[nK] has acquired ops.
+ [9:31:20 AM] -- Stats updated: Eric[nK] [110ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [9:31:20 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [9:31:20 AM] Last Logon: 11/18/2007, 17:32:32 (Battle.net time)
+ [9:31:20 AM] Last Logoff: 11/18/2007, 17:32:32 (Battle.net time)
+ [9:31:20 AM] Time Logged: 32 days, 15 hours, 56 minutes and 55 seconds
+ [9:31:20 AM] -- Joined channel: dddd --
+ [9:31:24 AM] <Eric[nK]> eric[nK]
+ [9:31:24 AM] No one hears you.
+ [9:32:19 AM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [9:32:19 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:32:19 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:32:19 AM] The current StealthBot version is ÿcb2.6R3.
+ [9:32:19 AM]  
+ [9:32:19 AM] >> ÿcbStealthBot News
+ [9:32:19 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:32:19 AM] ->> 
+ [9:32:19 AM] ->> ÿcbStealthBot Beta News
+ [9:32:19 AM] ->> Happy testing!
+ [9:32:19 AM]  
+ [9:32:19 AM] The current StealthBot Beta version is 2.6993.
+ [9:32:20 AM]  [9:32:20 AM] Loaded 2 plugins (2 enabled). Type  [9:32:20 AM] /plugins [9:32:20 AM]  to view them. Type  [9:32:20 AM] /phelp [9:32:20 AM]  for help using them.
+ [9:32:20 AM]  [9:32:20 AM] Type  [9:32:20 AM] /updates [9:32:20 AM]  in the bot to view updates and new plugins that are available for download.
+ [9:32:20 AM]  [9:32:20 AM] frmExample_Load
+ [9:32:20 AM]  [9:32:20 AM] Form created: True
+ [9:32:20 AM]  [9:32:20 AM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [9:32:20 AM]  [9:32:20 AM] Variable is undefined.
+ [9:32:20 AM] Connecting your bot...
+ [9:32:20 AM] Authorizing your private-release bot, please wait.
+ [9:32:20 AM] Private usage authorized, connecting to Battle.Net.
+ [9:32:20 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [9:32:20 AM] [BNLS] Connected!
+ [9:32:21 AM] [BNLS] Authorized!
+ [9:32:21 AM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [9:32:21 AM] [BNET] Connected!
+ [9:32:21 AM] [BNET] Checking version...
+ [9:32:22 AM] [BNET] Client version accepted!
+ [9:32:22 AM] [BNET] Sending login information...
+ [9:32:22 AM] [BNET] Login successful.
+ [9:32:22 AM] [CLAN] You are a Shaman in Clan SBs.
+ [9:32:22 AM] [BNET] Logged on as Eric[nK].
+ [9:32:22 AM] -- Joined channel: Clan SBs --
+ [9:32:22 AM] Welcome to Battle.net!
+ [9:32:22 AM] This server is hosted by AT&T.
+ [9:32:22 AM] There are currently 92834 users playing 2692 games of Warcraft III The Frozen Throne, and 209896 users playing 42929 games on Battle.net.
+ [9:32:22 AM] Last logon: Sun Nov 18  9:39 AM
+ [9:32:23 AM] -- Eric[nK] has acquired ops.
+ [9:32:23 AM] -- Stats updated: Eric[nK] [157ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [9:32:23 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [9:32:23 AM] Last Logon: 11/18/2007, 17:40:09 (Battle.net time)
+ [9:32:23 AM] Last Logoff: 11/18/2007, 17:32:32 (Battle.net time)
+ [9:32:23 AM] Time Logged: 32 days, 15 hours, 57 minutes and 9 seconds
+ [9:32:25 AM] -- Joined channel: ddd --
+ [9:32:27 AM] <Eric[nK]> Eric[nK]
+ [9:32:32 AM] <Eric[nK]> Eric[nK]
+ [9:32:35 AM] Shutting down...
+ [9:34:02 AM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [9:34:02 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:34:02 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:34:02 AM] The current StealthBot version is ÿcb2.6R3.
+ [9:34:02 AM]  
+ [9:34:02 AM] >> ÿcbStealthBot News
+ [9:34:02 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:34:02 AM] ->> 
+ [9:34:02 AM] ->> ÿcbStealthBot Beta News
+ [9:34:02 AM] ->> Happy testing!
+ [9:34:02 AM]  
+ [9:34:02 AM] The current StealthBot Beta version is 2.6993.
+ [9:34:02 AM]  [9:34:02 AM] Loaded 2 plugins (2 enabled). Type  [9:34:02 AM] /plugins [9:34:02 AM]  to view them. Type  [9:34:02 AM] /phelp [9:34:02 AM]  for help using them.
+ [9:34:03 AM]  [9:34:03 AM] Type  [9:34:03 AM] /updates [9:34:03 AM]  in the bot to view updates and new plugins that are available for download.
+ [9:34:03 AM]  [9:34:03 AM] frmExample_Load
+ [9:34:03 AM]  [9:34:03 AM] Form created: True
+ [9:34:03 AM]  [9:34:03 AM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [9:34:03 AM]  [9:34:03 AM] Variable is undefined.
+ [9:34:04 AM] Connecting your bot...
+ [9:34:04 AM] Authorizing your private-release bot, please wait.
+ [9:34:04 AM] Private usage authorized, connecting to Battle.Net.
+ [9:34:04 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [9:34:04 AM] [BNLS] Connected!
+ [9:34:04 AM] [BNLS] Authorized!
+ [9:34:04 AM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [9:34:04 AM] [BNET] Connected!
+ [9:34:05 AM] [BNET] Checking version...
+ [9:34:05 AM] [BNET] Client version accepted!
+ [9:34:05 AM] [BNET] Sending login information...
+ [9:34:06 AM] [BNET] Login successful.
+ [9:34:06 AM] [CLAN] You are a Shaman in Clan SBs.
+ [9:34:06 AM] [BNET] Logged on as Eric[nK].
+ [9:34:06 AM] -- Joined channel: Clan SBs --
+ [9:34:06 AM] Welcome to Battle.net!
+ [9:34:06 AM] This server is hosted by AT&T.
+ [9:34:06 AM] There are currently 92792 users playing 2701 games of Warcraft III The Frozen Throne, and 209632 users playing 42886 games on Battle.net.
+ [9:34:06 AM] Last logon: Sun Nov 18  9:40 AM
+ [9:34:06 AM] -- Eric[nK] has acquired ops.
+ [9:34:06 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [9:34:06 AM] Last Logon: 11/18/2007, 17:41:53 (Battle.net time)
+ [9:34:06 AM] Last Logoff: 11/18/2007, 17:40:22 (Battle.net time)
+ [9:34:06 AM] Time Logged: 32 days, 15 hours, 57 minutes and 23 seconds
+ [9:34:08 AM] -- Joined channel: God --
+ [9:34:10 AM] <Eric[nK]> Eric[n
+ [9:34:10 AM] No one hears you.
+ [9:34:23 AM] <Eric[nK]> Eric[
+ [9:34:23 AM] No one hears you.
+ [9:34:27 AM] <Eric[nK]> Er
+ [9:34:27 AM] No one hears you.
+ [9:34:30 AM] Shutting down...
+ [9:36:30 AM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [9:36:30 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:36:30 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:36:31 AM] The current StealthBot version is ÿcb2.6R3.
+ [9:36:31 AM]  
+ [9:36:31 AM] >> ÿcbStealthBot News
+ [9:36:31 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:36:31 AM] ->> 
+ [9:36:31 AM] ->> ÿcbStealthBot Beta News
+ [9:36:31 AM] ->> Happy testing!
+ [9:36:31 AM]  
+ [9:36:31 AM] The current StealthBot Beta version is 2.6993.
+ [9:36:31 AM]  [9:36:31 AM] Loaded 2 plugins (2 enabled). Type  [9:36:31 AM] /plugins [9:36:31 AM]  to view them. Type  [9:36:31 AM] /phelp [9:36:31 AM]  for help using them.
+ [9:36:31 AM]  [9:36:31 AM] Type  [9:36:31 AM] /updates [9:36:31 AM]  in the bot to view updates and new plugins that are available for download.
+ [9:36:31 AM]  [9:36:31 AM] frmExample_Load
+ [9:36:31 AM]  [9:36:31 AM] Form created: True
+ [9:36:31 AM]  [9:36:31 AM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [9:36:31 AM]  [9:36:31 AM] Variable is undefined.
+ [9:36:32 AM] Connecting your bot...
+ [9:36:32 AM] Authorizing your private-release bot, please wait.
+ [9:36:33 AM] Private usage authorized, connecting to Battle.Net.
+ [9:36:33 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [9:36:33 AM] [BNLS] Connected!
+ [9:36:33 AM] [BNLS] Authorized!
+ [9:36:33 AM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [9:36:33 AM] [BNET] Connected!
+ [9:36:34 AM] [BNET] Checking version...
+ [9:36:34 AM] [BNET] Client version accepted!
+ [9:36:34 AM] [BNET] Sending login information...
+ [9:36:35 AM] [BNET] Login successful.
+ [9:36:35 AM] [CLAN] You are a Shaman in Clan SBs.
+ [9:36:35 AM] [BNET] Logged on as Eric[nK].
+ [9:36:35 AM] -- Joined channel: Clan SBs --
+ [9:36:35 AM] Welcome to Battle.net!
+ [9:36:35 AM] This server is hosted by AT&T.
+ [9:36:35 AM] There are currently 92688 users playing 2694 games of Warcraft III The Frozen Throne, and 209203 users playing 42712 games on Battle.net.
+ [9:36:35 AM] Last logon: Sun Nov 18  9:41 AM
+ [9:36:35 AM] -- Eric[nK] has acquired ops.
+ [9:36:35 AM] -- Stats updated: Eric[nK] [125ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [9:36:35 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [9:36:35 AM] Last Logon: 11/18/2007, 17:39:41 (Battle.net time)
+ [9:36:35 AM] Last Logoff: 11/18/2007, 17:42:17 (Battle.net time)
+ [9:36:36 AM] Time Logged: 32 days, 15 hours, 57 minutes and 48 seconds
+ [9:36:37 AM] -- Joined channel: god --
+ [9:36:40 AM] <Eric[nK]> Er
+ [9:36:42 AM] <Eric[nK]> Er
+ [9:36:49 AM] <Eric[nK]> Eri
+ [9:36:52 AM] -- Lazer_Knuckles has left the channel.
+ [9:36:55 AM] <Eric[nK]> ERic[nK]
+ [9:36:55 AM] No one hears you.
+ [9:36:59 AM]  [9:36:59 AM] Scripting runtime error '450' on "dictionary_Event_PressedEnter" call in file "dictionary.plug"
+ [9:36:59 AM]  [9:36:59 AM] Wrong number of arguments or invalid property assignment.
+ [9:37:04 AM]  [9:37:04 AM] Scripting runtime error '450' on "dictionary_Event_PressedEnter" call in file "dictionary.plug"
+ [9:37:04 AM]  [9:37:04 AM] Wrong number of arguments or invalid property assignment.
+ [9:37:18 AM] -- 0god0 [140ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 3, icon tier Random, peon icon)
+ [9:37:19 AM] <Eric[nK]> E
+ [9:37:24 AM] <Eric[nK]> ER
+ [9:37:43 AM] -- 0god0 has left the channel.
+ [9:37:57 AM] Shutting down...
+ [9:49:55 AM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [9:49:55 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:49:55 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:49:56 AM] The current StealthBot version is ÿcb2.6R3.
+ [9:49:56 AM]  
+ [9:49:56 AM] >> ÿcbStealthBot News
+ [9:49:56 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:49:56 AM] ->> 
+ [9:49:56 AM] ->> ÿcbStealthBot Beta News
+ [9:49:56 AM] ->> Happy testing!
+ [9:49:56 AM]  
+ [9:49:56 AM] The current StealthBot Beta version is 2.6993.
+ [9:49:56 AM]  [9:49:56 AM] Loaded 2 plugins (2 enabled). Type  [9:49:56 AM] /plugins [9:49:56 AM]  to view them. Type  [9:49:56 AM] /phelp [9:49:56 AM]  for help using them.
+ [9:49:56 AM]  [9:49:56 AM] Type  [9:49:56 AM] /updates [9:49:56 AM]  in the bot to view updates and new plugins that are available for download.
+ [9:49:56 AM]  [9:49:56 AM] frmExample_Load
+ [9:49:56 AM]  [9:49:56 AM] Form created: True
+ [9:49:56 AM]  [9:49:56 AM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [9:49:56 AM]  [9:49:56 AM] Variable is undefined.
+ [9:50:23 AM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [9:50:23 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [9:50:23 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [9:50:23 AM] The current StealthBot version is ÿcb2.6R3.
+ [9:50:23 AM]  
+ [9:50:23 AM] >> ÿcbStealthBot News
+ [9:50:23 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [9:50:23 AM] ->> 
+ [9:50:23 AM] ->> ÿcbStealthBot Beta News
+ [9:50:23 AM] ->> Happy testing!
+ [9:50:23 AM]  
+ [9:50:23 AM] The current StealthBot Beta version is 2.6993.
+ [9:50:24 AM]  [9:50:24 AM] Loaded 2 plugins (2 enabled). Type  [9:50:24 AM] /plugins [9:50:24 AM]  to view them. Type  [9:50:24 AM] /phelp [9:50:24 AM]  for help using them.
+ [9:50:24 AM]  [9:50:24 AM] Type  [9:50:24 AM] /updates [9:50:24 AM]  in the bot to view updates and new plugins that are available for download.
+ [9:50:24 AM]  [9:50:24 AM] frmExample_Load
+ [9:50:24 AM]  [9:50:24 AM] Form created: True
+ [9:50:24 AM]  [9:50:24 AM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [9:50:24 AM]  [9:50:24 AM] Variable is undefined.
+ [4:32:38 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [4:32:38 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [4:32:38 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [4:32:39 PM] The current StealthBot version is ÿcb2.6R3.
+ [4:32:39 PM]  
+ [4:32:39 PM] >> ÿcbStealthBot News
+ [4:32:39 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [4:32:39 PM] ->> 
+ [4:32:39 PM] ->> ÿcbStealthBot Beta News
+ [4:32:39 PM] ->> Happy testing!
+ [4:32:39 PM]  
+ [4:32:39 PM] The current StealthBot Beta version is 2.6993.
+ [4:32:39 PM]  [4:32:39 PM] Loaded 2 plugins (2 enabled). Type  [4:32:39 PM] /plugins [4:32:39 PM]  to view them. Type  [4:32:39 PM] /phelp [4:32:39 PM]  for help using them.
+ [4:32:39 PM]  [4:32:39 PM] Type  [4:32:39 PM] /updates [4:32:39 PM]  in the bot to view updates and new plugins that are available for download.
+ [4:32:39 PM]  [4:32:39 PM] frmExample_Load
+ [4:32:39 PM]  [4:32:39 PM] Form created: True
+ [4:32:39 PM]  [4:32:39 PM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [4:32:39 PM]  [4:32:39 PM] Variable is undefined.
+ [4:32:52 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [4:32:52 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [4:32:52 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [4:32:52 PM] The current StealthBot version is ÿcb2.6R3.
+ [4:32:52 PM]  
+ [4:32:52 PM] >> ÿcbStealthBot News
+ [4:32:52 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [4:32:52 PM] ->> 
+ [4:32:52 PM] ->> ÿcbStealthBot Beta News
+ [4:32:52 PM] ->> Happy testing!
+ [4:32:52 PM]  
+ [4:32:52 PM] The current StealthBot Beta version is 2.6993.
+ [4:32:52 PM]  [4:32:52 PM] Loaded 2 plugins (2 enabled). Type  [4:32:52 PM] /plugins [4:32:52 PM]  to view them. Type  [4:32:52 PM] /phelp [4:32:52 PM]  for help using them.
+ [4:32:52 PM]  [4:32:52 PM] Type  [4:32:52 PM] /updates [4:32:52 PM]  in the bot to view updates and new plugins that are available for download.
+ [4:32:52 PM]  [4:32:52 PM] frmExample_Load
+ [4:32:52 PM]  [4:32:52 PM] Form created: True
+ [4:32:52 PM]  [4:32:52 PM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [4:32:52 PM]  [4:32:52 PM] Variable is undefined.
+ [4:34:05 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [4:34:05 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [4:34:05 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [4:34:05 PM] The current StealthBot version is ÿcb2.6R3.
+ [4:34:05 PM]  
+ [4:34:05 PM] >> ÿcbStealthBot News
+ [4:34:05 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [4:34:05 PM] ->> 
+ [4:34:05 PM] ->> ÿcbStealthBot Beta News
+ [4:34:05 PM] ->> Happy testing!
+ [4:34:05 PM]  
+ [4:34:05 PM] The current StealthBot Beta version is 2.6993.
+ [4:34:05 PM]  [4:34:05 PM] Loaded 2 plugins (2 enabled). Type  [4:34:05 PM] /plugins [4:34:05 PM]  to view them. Type  [4:34:05 PM] /phelp [4:34:05 PM]  for help using them.
+ [4:34:05 PM]  [4:34:05 PM] Type  [4:34:05 PM] /updates [4:34:05 PM]  in the bot to view updates and new plugins that are available for download.
+ [4:34:06 PM]  [4:34:06 PM] frmExample_Load
+ [4:34:06 PM]  [4:34:06 PM] Form created: True
+ [4:34:06 PM]  [4:34:06 PM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [4:34:06 PM]  [4:34:06 PM] Variable is undefined.
+ [4:34:33 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [4:34:33 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [4:34:33 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [4:34:33 PM] The current StealthBot version is ÿcb2.6R3.
+ [4:34:33 PM]  
+ [4:34:33 PM] >> ÿcbStealthBot News
+ [4:34:33 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [4:34:33 PM] ->> 
+ [4:34:33 PM] ->> ÿcbStealthBot Beta News
+ [4:34:34 PM] ->> Happy testing!
+ [4:34:34 PM]  
+ [4:34:34 PM] The current StealthBot Beta version is 2.6993.
+ [4:34:34 PM]  [4:34:34 PM] Loaded 2 plugins (2 enabled). Type  [4:34:34 PM] /plugins [4:34:34 PM]  to view them. Type  [4:34:34 PM] /phelp [4:34:34 PM]  for help using them.
+ [4:34:34 PM]  [4:34:34 PM] Type  [4:34:34 PM] /updates [4:34:34 PM]  in the bot to view updates and new plugins that are available for download.
+ [4:34:34 PM]  [4:34:34 PM] frmExample_Load
+ [4:34:34 PM]  [4:34:34 PM] Form created: True
+ [4:34:34 PM]  [4:34:34 PM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [4:34:34 PM]  [4:34:34 PM] Variable is undefined.
+ [8:01:57 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [8:01:57 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [8:01:57 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [8:01:57 PM] The current StealthBot version is ÿcb2.6R3.
+ [8:01:58 PM]  
+ [8:01:58 PM] >> ÿcbStealthBot News
+ [8:01:58 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [8:01:58 PM] ->> 
+ [8:01:58 PM] ->> ÿcbStealthBot Beta News
+ [8:01:58 PM] ->> Happy testing!
+ [8:01:58 PM]  
+ [8:01:58 PM] The current StealthBot Beta version is 2.6993.
+ [8:01:58 PM]  [8:01:58 PM] Loaded 2 plugins (2 enabled). Type  [8:01:58 PM] /plugins [8:01:58 PM]  to view them. Type  [8:01:58 PM] /phelp [8:01:58 PM]  for help using them.
+ [8:01:58 PM]  [8:01:58 PM] Type  [8:01:58 PM] /updates [8:01:58 PM]  in the bot to view updates and new plugins that are available for download.
+ [8:01:58 PM]  [8:01:58 PM] frmExample_Load
+ [8:01:58 PM]  [8:01:58 PM] Form created: True
+ [8:01:58 PM]  [8:01:58 PM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [8:01:58 PM]  [8:01:58 PM] Variable is undefined.

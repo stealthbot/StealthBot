@@ -1,0 +1,66 @@
+ [4:38:01 PM] -> Welcome to StealthBot Beta v2.6999, by Stealth.
+ [4:38:01 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [4:38:01 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [4:38:02 PM] The current StealthBot version is ÿcb2.6R3.
+ [4:38:02 PM]  
+ [4:38:02 PM] >> ÿcbStealthBot News
+ [4:38:02 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [4:38:02 PM] ->> 
+ [4:38:02 PM] ->> ÿcbStealthBot Beta News
+ [4:38:02 PM] ->> Happy testing!
+ [4:38:02 PM]  
+ [4:38:02 PM] The current StealthBot Beta version is 2.6993.
+ [4:38:02 PM]  [4:38:02 PM] Loaded 2 plugins (2 enabled). Type  [4:38:02 PM] /plugins [4:38:02 PM]  to view them. Type  [4:38:02 PM] /phelp [4:38:02 PM]  for help using them.
+ [4:38:02 PM]  [4:38:02 PM] Type  [4:38:02 PM] /updates [4:38:02 PM]  in the bot to view updates and new plugins that are available for download.
+ [4:38:02 PM] Connecting your bot...
+ [4:38:02 PM] Authorizing your private-release bot, please wait.
+ [4:38:03 PM] Private usage authorized, connecting to Battle.Net.
+ [4:38:03 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [4:38:03 PM] [BNLS] Connected!
+ [4:38:06 PM] All connections closed.
+ [4:38:06 PM] Connecting your bot...
+ [4:38:06 PM] Authorizing your private-release bot, please wait.
+ [4:38:06 PM] Private usage authorized, connecting to Battle.Net.
+ [4:38:06 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [4:38:07 PM] [BNLS] Connected!
+ [4:38:08 PM] All connections closed.
+ [4:38:08 PM] Connecting your bot...
+ [4:38:08 PM] Authorizing your private-release bot, please wait.
+ [4:38:08 PM] Private usage authorized, connecting to Battle.Net.
+ [4:38:08 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [4:38:09 PM] [BNLS] Connected!
+ [4:38:12 PM] [BNLS] Authorized!
+ [4:38:12 PM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [4:38:12 PM] [BNET] Connected!
+ [4:38:13 PM] [BNET] Checking version...
+ [4:38:18 PM] [BNET] Client version accepted!
+ [4:38:18 PM] [BNET] Sending login information...
+ [4:38:20 PM] [BNET] Login successful.
+ [4:38:20 PM] [CLAN] You are a Grunt in Clan SBs.
+ [4:38:20 PM] [BNET] Logged on as Eric[nK].
+ [4:38:20 PM] -- Joined channel: Clan SBs --
+ [4:38:20 PM] Welcome to Battle.net!
+ [4:38:20 PM] This server is hosted by AT&T.
+ [4:38:20 PM] There are currently 76585 users playing 1873 games of Warcraft III The Frozen Throne, and 174904 users playing 41469 games on Battle.net.
+ [4:38:20 PM] Last logon: Sat Jan 12  4:41 PM
+ [4:38:20 PM] This is the East server. Get the fuck over it.
+ [4:38:20 PM] -- Stats updated: Eric[nK]@Azeroth [204ms] is using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [4:38:21 PM] -- Joined channel: Clan BoT --
+ [4:38:21 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [4:38:21 PM] Last Logon: 1/13/2008, 00:41:13 (Battle.net time)
+ [4:38:21 PM] Last Logoff: 1/13/2008, 00:41:13 (Battle.net time)
+ [4:38:21 PM] Time Logged: 58 days, 17 hours, 30 minutes and 20 seconds
+ [4:38:28 PM] <Eric[nK]@Azeroth> #say /kick Eric[nK]
+ [4:38:29 PM] Eric[nK] was kicked out of the channel by Pyro[BoT].
+ [4:38:29 PM] Pyro[BoT] kicked you out of the channel!
+ [4:38:29 PM] -- Joined channel: The Void --
+ [4:38:29 PM] If you experience a lot of lag in The Void, try selecting 'Disable Void View' from the Window menu.
+ [4:38:29 PM] This channel does not have chat privileges.
+ [4:38:30 PM] -- Joined channel: Clan BoT --
+ [4:38:47 PM] <Eric[nK]@Azeroth> #say /kick Eric[nK]
+ [4:38:48 PM] Eric[nK] was kicked out of the channel by Pyro[BoT].
+ [4:38:48 PM] Pyro[BoT] kicked you out of the channel!
+ [4:38:48 PM] -- Joined channel: The Void --
+ [4:38:48 PM] If you experience a lot of lag in The Void, try selecting 'Disable Void View' from the Window menu.
+ [4:38:48 PM] This channel does not have chat privileges.
+ [4:38:56 PM] -- PyroManiac606@Azeroth [31ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)

@@ -1,0 +1,119 @@
+Line 75: Class TabDlg.SSTab of control ListviewTabs was not a loaded control class.
+Line 110: Class MSComctlLib.ListView of control lvChannel was not a loaded control class.
+Line 150: Class MSScriptControlCtl.ScriptControl of control SCRestricted was not a loaded control class.
+Line 162: Class MSScriptControlCtl.ScriptControl of control SControl was not a loaded control class.
+Line 173: Class MSComctlLib.ImageList of control imlClan was not a loaded control class.
+Line 233: Class MSWinsockLib.Winsock of control sckMCP was not a loaded control class.
+Line 245: Class InetCtlsObjects.Inet of control INet was not a loaded control class.
+Line 252: Class MSWinsockLib.Winsock of control sckBNLS was not a loaded control class.
+Line 260: Class MSWinsockLib.Winsock of control sckBNet was not a loaded control class.
+Line 268: Class MSComctlLib.ImageList of control imlIcons was not a loaded control class.
+Line 731: Class MSComctlLib.ListView of control lvClanList was not a loaded control class.
+Line 779: Class MSComctlLib.ListView of control lvFriendList was not a loaded control class.
+Line 820: Class RichTextLib.RichTextBox of control rtbWhispers was not a loaded control class.
+Line 846: Class RichTextLib.RichTextBox of control rtbChat was not a loaded control class.
+Line 81: The property name _ExtentX in ListviewTabs is invalid.
+Line 82: The property name _ExtentY in ListviewTabs is invalid.
+Line 83: The property name _Version in ListviewTabs is invalid.
+Line 84: The property name TabOrientation in ListviewTabs is invalid.
+Line 85: The property name Style in ListviewTabs is invalid.
+Line 86: The property name Tab in ListviewTabs is invalid.
+Line 87: The property name TabHeight in ListviewTabs is invalid.
+Line 97: The property name TabCaption(0) in ListviewTabs is invalid.
+Line 98: The property name TabPicture(0) in ListviewTabs is invalid.
+Line 99: The property name Tab(0).ControlEnabled in ListviewTabs is invalid.
+Line 100: The property name Tab(0).ControlCount in ListviewTabs is invalid.
+Line 101: The property name TabCaption(1) in ListviewTabs is invalid.
+Line 102: The property name TabPicture(1) in ListviewTabs is invalid.
+Line 103: The property name Tab(1).ControlEnabled in ListviewTabs is invalid.
+Line 104: The property name Tab(1).ControlCount in ListviewTabs is invalid.
+Line 105: The property name TabCaption(2) in ListviewTabs is invalid.
+Line 106: The property name TabPicture(2) in ListviewTabs is invalid.
+Line 107: The property name Tab(2).ControlEnabled in ListviewTabs is invalid.
+Line 108: The property name Tab(2).ControlCount in ListviewTabs is invalid.
+Line 117: The property name _ExtentX in lvChannel is invalid.
+Line 118: The property name _ExtentY in lvChannel is invalid.
+Line 119: The property name View in lvChannel is invalid.
+Line 120: The property name LabelEdit in lvChannel is invalid.
+Line 121: The property name LabelWrap in lvChannel is invalid.
+Line 122: The property name HideSelection in lvChannel is invalid.
+Line 123: The property name HideColumnHeaders in lvChannel is invalid.
+Line 125: The property name _Version in lvChannel is invalid.
+Line 126: The property name SmallIcons in lvChannel is invalid.
+Line 141: The property name NumItems in lvChannel is invalid.
+Line 144: The property name ColumnHeader(1) in lvChannel is invalid.
+Line 148: The property name ColumnHeader(2) in lvChannel is invalid.
+Line 153: The property name _ExtentX in SCRestricted is invalid.
+Line 154: The property name _ExtentY in SCRestricted is invalid.
+Line 155: The property name AllowUI in SCRestricted is invalid.
+Line 165: The property name _ExtentX in SControl is invalid.
+Line 166: The property name _ExtentY in SControl is invalid.
+Line 176: The property name _ExtentX in imlClan is invalid.
+Line 177: The property name _ExtentY in imlClan is invalid.
+Line 179: The property name ImageWidth in imlClan is invalid.
+Line 180: The property name ImageHeight in imlClan is invalid.
+Line 181: The property name MaskColor in imlClan is invalid.
+Line 182: The property name _Version in imlClan is invalid.
+Line 213: The property name Images in imlClan is invalid.
+Line 236: The property name _ExtentX in sckMCP is invalid.
+Line 237: The property name _ExtentY in sckMCP is invalid.
+Line 238: The property name _Version in sckMCP is invalid.
+Line 248: The property name _ExtentX in INet is invalid.
+Line 249: The property name _ExtentY in INet is invalid.
+Line 250: The property name _Version in INet is invalid.
+Line 255: The property name _ExtentX in sckBNLS is invalid.
+Line 256: The property name _ExtentY in sckBNLS is invalid.
+Line 257: The property name _Version in sckBNLS is invalid.
+Line 258: The property name RemotePort in sckBNLS is invalid.
+Line 263: The property name _ExtentX in sckBNet is invalid.
+Line 264: The property name _ExtentY in sckBNet is invalid.
+Line 265: The property name _Version in sckBNet is invalid.
+Line 266: The property name RemotePort in sckBNet is invalid.
+Line 271: The property name _ExtentX in imlIcons is invalid.
+Line 272: The property name _ExtentY in imlIcons is invalid.
+Line 274: The property name ImageWidth in imlIcons is invalid.
+Line 275: The property name ImageHeight in imlIcons is invalid.
+Line 276: The property name MaskColor in imlIcons is invalid.
+Line 277: The property name _Version in imlIcons is invalid.
+Line 716: The property name Images in imlIcons is invalid.
+Line 738: The property name _ExtentX in lvClanList is invalid.
+Line 739: The property name _ExtentY in lvClanList is invalid.
+Line 740: The property name View in lvClanList is invalid.
+Line 741: The property name LabelEdit in lvClanList is invalid.
+Line 742: The property name LabelWrap in lvClanList is invalid.
+Line 743: The property name HideSelection in lvClanList is invalid.
+Line 744: The property name HideColumnHeaders in lvClanList is invalid.
+Line 746: The property name _Version in lvClanList is invalid.
+Line 747: The property name SmallIcons in lvClanList is invalid.
+Line 762: The property name NumItems in lvClanList is invalid.
+Line 765: The property name ColumnHeader(1) in lvClanList is invalid.
+Line 769: The property name ColumnHeader(2) in lvClanList is invalid.
+Line 773: The property name ColumnHeader(3) in lvClanList is invalid.
+Line 777: The property name ColumnHeader(4) in lvClanList is invalid.
+Line 786: The property name _ExtentX in lvFriendList is invalid.
+Line 787: The property name _ExtentY in lvFriendList is invalid.
+Line 788: The property name View in lvFriendList is invalid.
+Line 789: The property name LabelEdit in lvFriendList is invalid.
+Line 790: The property name LabelWrap in lvFriendList is invalid.
+Line 791: The property name HideSelection in lvFriendList is invalid.
+Line 792: The property name HideColumnHeaders in lvFriendList is invalid.
+Line 794: The property name _Version in lvFriendList is invalid.
+Line 795: The property name Icons in lvFriendList is invalid.
+Line 796: The property name SmallIcons in lvFriendList is invalid.
+Line 811: The property name NumItems in lvFriendList is invalid.
+Line 814: The property name ColumnHeader(1) in lvFriendList is invalid.
+Line 818: The property name ColumnHeader(2) in lvFriendList is invalid.
+Line 827: The property name _ExtentX in rtbWhispers is invalid.
+Line 828: The property name _ExtentY in rtbWhispers is invalid.
+Line 829: The property name _Version in rtbWhispers is invalid.
+Line 832: The property name ReadOnly in rtbWhispers is invalid.
+Line 833: The property name ScrollBars in rtbWhispers is invalid.
+Line 834: The property name AutoVerbMenu in rtbWhispers is invalid.
+Line 835: The property name TextRTF in rtbWhispers is invalid.
+Line 853: The property name _ExtentX in rtbChat is invalid.
+Line 854: The property name _ExtentY in rtbChat is invalid.
+Line 855: The property name _Version in rtbChat is invalid.
+Line 858: The property name ReadOnly in rtbChat is invalid.
+Line 859: The property name ScrollBars in rtbChat is invalid.
+Line 860: The property name AutoVerbMenu in rtbChat is invalid.
+Line 862: The property name TextRTF in rtbChat is invalid.

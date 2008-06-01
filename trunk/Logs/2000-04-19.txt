@@ -1,0 +1,133 @@
+ [03:57:06 AM] -> Welcome to StealthBot Beta v2.6999 Development Release 10, by Stealth.
+ [03:57:06 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [03:57:06 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [03:57:12 AM] The current StealthBot version is ÿcb2.6R3.
+ [03:57:12 AM]  
+ [03:57:12 AM] >> ÿcbStealthBot News
+ [03:57:12 AM] >> Welcome to the new StealthBot News!
+ [03:57:12 AM] ->> 
+ [03:57:12 AM] ->> ÿcbStealthBot Beta News
+ [03:57:12 AM] ->> Happy testing!
+ [03:57:12 AM]  
+ [03:57:12 AM] The current StealthBot Beta version is 2.6999.
+ [03:57:12 AM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [03:57:12 AM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [03:57:14 AM] Connecting your bot...
+ [03:57:14 AM] Authorizing your private-release bot, please wait.
+ [03:57:14 AM] Private usage authorized, connecting to Battle.Net.
+ [03:57:14 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [03:57:14 AM] [BNLS] Connected!
+ [03:57:14 AM] [BNLS] Authorized!
+ [03:57:14 AM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [03:57:14 AM] [BNET] Connected!
+ [03:57:15 AM] [BNET] Checking version...
+ [03:57:15 AM] [BNET] Client version accepted!
+ [03:57:15 AM] [BNET] Sending login information...
+ [03:57:15 AM] [BNET] Login successful.
+ [03:57:15 AM] [BNET] Asking Battle.net for a list of Realm servers...
+ [03:57:15 AM] [BNET] Battle.net has responded!
+ [03:57:15 AM] [REALM] Opening a connection to the Diablo II Realm...
+ [03:57:16 AM] [REALM] Connection established!
+ [03:57:16 AM] [REALM] Connected to Diablo II realm.
+ [03:57:17 AM] [REALM] Realm login successful.
+ [03:57:17 AM] [BNET] Logged on as Eric[nK].
+ [03:57:17 AM] -- Joined channel: Diablo II USEast-USA-1 --
+ [03:57:17 AM] Account Created: 3/22/2007, 21:13:55 (Battle.net time)
+ [03:57:17 AM] Last Logon: 4/19/2008, 22:52:10 (Battle.net time)
+ [03:57:17 AM] Last Logoff: 4/19/2008, 22:52:10 (Battle.net time)
+ [03:57:17 AM] Time Logged: 3 days, 21 hours, 47 minutes and 48 seconds
+ [03:57:19 AM] <From fsadvfs> WWW.D2HI.COM - 24/7 Live Help Online, Instant Delivery, Cheapest Price, Register now get 10% off !
+ [03:57:21 AM] <Greeenz> Need clan partner thats online pretty m uch everyday, there will be a baal bot and clan ranks, you will be able to promote people, and you will be a leader.. if you want to be my partner /w *greeenz
+ [03:57:24 AM] <minty_cbo2> i thought spooki had it bad.. they really shlt on me..
+ [03:57:26 AM] <lil_secrets> i have ben playing mob wars alot lately though
+ [03:57:30 AM] -- Greeenz has left the channel.
+ [03:58:11 PM] <minty_cbo2> i been playin command and conquer red alertt 2 for the past couple weeks..gettin bored with it again..
+ [03:58:16 PM] <lil_secrets> its a game on face book him i sent you an invite
+ [03:58:18 PM] -- 3yearslater [15ms] has joined the channel using Diablo II Lord of Destruction (Champion nacho_sinner, a level 87 assassin on realm USEast).
+ [03:58:22 PM] <Eric[nK]> hm
+ [03:58:25 PM] <lil_secrets> i love that game chuck
+ [03:58:26 PM] -- vwsoverlord [46ms] has joined the channel using Diablo II Lord of Destruction (Champion MFParadice, a ladder level 88 sorceress on realm USEast).
+ [04:01:06 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 10, by Stealth.
+ [04:01:06 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [04:01:11 PM] The current StealthBot version is ÿcb2.6R3.
+ [04:01:11 PM]  
+ [04:01:11 PM] >> ÿcbStealthBot News
+ [04:01:11 PM] >> Welcome to the new StealthBot News!
+ [04:01:11 PM] ->> 
+ [04:01:11 PM] ->> ÿcbStealthBot Beta News
+ [04:01:11 PM] ->> Happy testing!
+ [04:01:11 PM]  
+ [04:01:11 PM] The current StealthBot Beta version is 2.6999.
+ [04:01:11 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [04:01:11 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [04:01:14 PM] Connecting your bot...
+ [04:01:14 PM] Authorizing your private-release bot, please wait.
+ [04:01:14 PM] Private usage authorized, connecting to Battle.Net.
+ [04:01:14 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [04:01:14 PM] [BNLS] Connected!
+ [04:01:14 PM] [BNLS] Authorized!
+ [04:01:14 PM] [BNET] Connecting to the Battle.net server at 63.240.202.121...
+ [04:01:14 PM] [BNET] Connected!
+ [04:01:14 PM] [BNET] Checking version...
+ [04:01:15 PM] [BNET] Client version accepted!
+ [04:01:15 PM] [BNET] Sending login information...
+ [04:01:15 PM] [BNET] Login successful.
+ [04:01:15 PM] [BNET] Asking Battle.net for a list of Realm servers...
+ [04:01:15 PM] [BNET] Battle.net has responded!
+ [04:01:15 PM] [REALM] Opening a connection to the Diablo II Realm...
+ [04:01:15 PM] [REALM] Connection established!
+ [04:01:15 PM] [REALM] Connected to Diablo II realm.
+ [04:01:17 PM] [REALM] Realm login successful.
+ [04:01:17 PM] [BNET] Logged on as Eric[nK].
+ [04:01:17 PM] -- Joined channel: Diablo II USEast-USA-1 --
+ [04:01:17 PM] Account Created: 3/22/2007, 21:13:55 (Battle.net time)
+ [04:01:17 PM] Last Logon: 4/19/2008, 23:00:53 (Battle.net time)
+ [04:01:17 PM] Last Logoff: 4/19/2008, 22:52:10 (Battle.net time)
+ [04:01:17 PM] Time Logged: 3 days, 21 hours, 49 minutes and 2 seconds
+ [04:01:18 PM] <lil_secrets> train works
+ [04:01:22 PM] <jimbotron> lol ed
+ [04:01:36 PM] -- d2pickit has left the channel.
+ [04:01:39 PM] <swordlordx> got the ticket for the lottery tonight we will see
+ [04:01:41 PM] <jimbotron> ill look it up... bet its a lot cheaper
+ [04:01:49 PM] <lil_secrets> yeah prolly so
+ [04:01:56 PM] -- 8h4NKWES has left the channel.
+ [04:01:58 PM] <jimbotron> lol longer though
+ [04:02:02 PM] <lil_secrets> thats fine
+ [04:02:08 PM] <lil_secrets> atleast im on the ground
+ [04:02:09 PM] <lil_secrets> lmao
+ [04:02:12 PM] <jimbotron> lol
+ [04:02:21 PM] -- flint49ers [63ms] has joined the channel using Diablo II Lord of Destruction (Champion acb_badasssmite, a level 88 paladin on realm USEast).
+ [04:02:28 PM] -- flint49ers has left the channel.
+ [04:02:35 PM] <jimbotron> ya so far this year we have bought a new tv, new couches, and new bed
+ [04:02:35 PM] <minty_cbo2> aawwwww!!!! there it is...just found my exp cd.. ran acroos the original c&c cdtoo..lol
+ [04:02:45 PM] -- fsadvfs has left the channel.
+ [04:02:46 PM] <lil_secrets> nice jim
+ [04:02:46 PM] <swordlordx> now tonya thre are times when you prefer your feet arent on the ground no diffeent than a plane
+ [04:02:48 PM] -- fsadvfs [297ms] has joined the channel using Diablo II Lord of Destruction (dasgasgf, a ladder level 1 amazon on realm USEast).
+ [04:02:51 PM] -- people_who_rock [78ms] has joined the channel using Diablo II Lord of Destruction (Champion Zeal_Onim, a ladder level 90 paladin on realm USEast).
+ [04:02:54 PM] <jimbotron> lol
+ [04:02:56 PM] -- people_who_rock has left the channel.
+ [04:02:58 PM] <jimbotron> bad ed bad
+ [04:02:59 PM] <lil_secrets> i dont need a new bed it never gets misshandled
+ [04:03:04 PM] <lil_secrets> lmao
+ [04:03:12 PM] -- Joined channel: Clan BoT --
+ [04:03:22 PM] -- ClanGnome@Azeroth [32ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan Spht)
+ [04:03:25 PM] ClanGnome was kicked out of the channel by PhiX[BoT] ((-(-.(-.-).-)-)).
+ [04:03:25 PM] -- ClanGnome@Azeroth has left the channel.
+ [04:05:25 PM] <VBScript@Azeroth .: Chuck Norris’ IQ can be expressed simply as a sideways eight :: StealthBot Beta v2.6999 Dev Release 9 :.>
+ [04:08:14 PM] <IdleBoT@Azeroth [#142649](871) <JB> When I was a kid, you could just admire a naked woman. She didn't have to be defecating.>
+ [04:08:25 PM] <VBScript@Azeroth [Food for Thought] It is impossible to go through life without trust: That is to be imprisoned in the worst cell of all, oneself.    -Graham Greene The Ministry of Fear>
+ [04:10:55 PM] Shutting down...
+ [04:13:55 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 10, by Stealth.
+ [04:13:55 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [04:14:01 PM] The current StealthBot version is ÿcb2.6R3.
+ [04:14:01 PM]  
+ [04:14:01 PM] >> ÿcbStealthBot News
+ [04:14:01 PM] >> Welcome to the new StealthBot News!
+ [04:14:01 PM] ->> 
+ [04:14:01 PM] ->> ÿcbStealthBot Beta News
+ [04:14:01 PM] ->> Happy testing!
+ [04:14:01 PM]  
+ [04:14:01 PM] The current StealthBot Beta version is 2.6999.
+ [04:14:01 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [04:14:01 PM] Type /updates in the bot to view updates and new plugins that are available for download.

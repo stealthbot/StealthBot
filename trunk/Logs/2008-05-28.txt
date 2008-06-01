@@ -1,0 +1,262 @@
+ [08:31:13 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 11, by Stealth.
+ [08:31:13 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [08:31:13 PM] Script loaded: blah.txt
+ [08:31:13 PM] Script loaded: PluginSystem.dat
+ [08:31:20 PM] The current StealthBot version is ÿcb2.6R3.
+ [08:31:20 PM]  
+ [08:31:20 PM] >> ÿcbStealthBot News
+ [08:31:20 PM] >> Welcome to the new StealthBot News!
+ [08:31:20 PM] ->> 
+ [08:31:20 PM] ->> ÿcbStealthBot Beta News
+ [08:31:20 PM] ->> Happy testing!
+ [08:31:20 PM]  
+ [08:31:20 PM] The current StealthBot Beta version is 2.6999.
+ [08:31:21 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [08:31:21 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [08:31:21 PM] Scripting runtime error '13': (line 1; column 0)
+ [08:31:21 PM] Type mismatch: 'Join'.
+ [08:31:21 PM] Offending line: >> 
+ [08:31:21 PM] Scripting runtime error '13': (line 1260; column 3)
+ [08:31:21 PM] Type mismatch: 'Join'.
+ [08:31:21 PM] Offending line: >> 
+ [08:31:21 PM] Connecting your bot...
+ [08:31:21 PM] Authorizing your private-release bot, please wait.
+ [08:31:21 PM] Private usage authorized, connecting to Battle.Net.
+ [08:31:21 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [08:31:24 PM] [BNLS] Connected!
+ [08:31:24 PM] [BNLS] Authorized!
+ [08:31:24 PM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [08:31:25 PM] [BNET] Connected!
+ [08:31:25 PM] [BNET] Checking version...
+ [08:31:26 PM] [BNET] Client version accepted!
+ [08:31:26 PM] [BNET] Sending login information...
+ [08:31:27 PM] [BNET] Login successful.
+ [08:31:27 PM] [CLAN] You are a Grunt in Clan BoT.
+ [08:31:27 PM] [BNET] Logged on as Eric[nK].
+ [08:31:28 PM] -- Joined channel: Clan BoT --
+ [08:31:29 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [08:31:29 PM] Last Logon: 5/29/2008, 03:35:11 (Battle.net time)
+ [08:31:29 PM] Last Logoff: 5/27/2008, 19:08:08 (Battle.net time)
+ [08:31:29 PM] Time Logged: 107 days, 18 hours, 15 minutes and 51 seconds
+ [08:31:29 PM] You are now marked as being gay.
+ [08:32:40 PM] <Alendar> Hello Eric
+ [08:34:07 PM] -- Alendar has left the channel.
+ [08:34:26 PM] <VBScript | New on LifeHacker:  Memorial Day Editor Post Picks [Editor Picks] >
+ [08:34:37 PM] <Eric[nK]> hi
+ [08:35:20 PM] -- Alendar [329ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:36:12 PM] -- Alendar has left the channel.
+ [08:36:29 PM] -- Alendar [329ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:36:33 PM] <Alendar> o_o
+ [08:36:36 PM] -- Alendar has left the channel.
+ [08:36:57 PM] -- Alendar [329ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:37:02 PM] <Alendar> ./join #
+ [08:37:07 PM] -- Alendar has left the channel.
+ [08:37:13 PM] -- Alendar [329ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:37:22 PM] <LuC1Fr[BoT]> o.o
+ [08:37:34 PM] <Alendar> I wanted IRC channels! :p
+ [08:37:36 PM] <LuC1Fr[BoT]> wtf
+ [08:37:40 PM] -- LuC1Fr[BoT] has left the channel.
+ [08:37:46 PM] -- idiatic has left the channel.
+ [08:37:48 PM] -- LuC1Fr[BoT] [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:37:57 PM] <LuC1Fr[BoT]> liek srsly
+ [08:38:04 PM] -- idiatic [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:44:09 PM] <Alendar> ?
+ [08:44:54 PM] <VBScript .: [12:30:57 AM] [Nn4M] <pRawN*31> my balls are on firee :: StealthBot Beta v2.6999 Dev Release 9 :.>
+ [08:45:27 PM] <LuC1Fr[BoT]> i think im going to change my display name to "If you were a nob, I'd be a running."
+ [08:48:05 PM] <Alendar> Time for sleep.
+ [08:48:07 PM] <Alendar> Good night.
+ [08:50:45 PM] -- Alendar has left the channel.
+ [08:51:48 PM] -- Joseph.W has left the channel.
+ [08:51:57 PM] -- HaKr_ [62ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [08:59:49 PM] -- HaKr_ has left the channel.
+ [09:00:00 PM] <VBScript .: <ClanGnome> A fine conscience I turned out to be! :: StealthBot Beta v2.6999 Dev Release 9 :.>
+ [09:00:07 PM] -- HaKr_ [47ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [09:00:07 PM] -- Stats updated: HaKr_ [47ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:00:12 PM] <HaKr_> LuC1Fr[BoT]
+ [09:00:18 PM] <HaKr_> any news on the hale stuff?
+ [09:02:15 PM] -- pOYQaLdJckhfU@USEast [1406ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:02:15 PM] <pOYQaLdJckhfU@USEast> zomg
+ [09:02:19 PM] <pOYQaLdJckhfU@USEast> zomg
+ [09:02:38 PM] <pOYQaLdJckhfU@USEast> shut ..
+ [09:02:42 PM] <pOYQaLdJckhfU@USEast> ..
+ [09:02:44 PM] <pOYQaLdJckhfU@USEast> lag*
+ [09:03:36 PM] <{DK}DeAtHZeRg@USEast -: System Uptime: 0 days, 23 hours, 4 minutes and 47 seconds :: Connection Uptime: 0 days, 22 hours, 58 minutes and 45 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [09:03:59 PM] <DeAtHZeRg -: System Uptime: 0 days, 23 hours, 5 minutes and 10 seconds :: Connection Uptime: 0 days, 22 hours, 58 minutes and 33 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [09:04:22 PM] -- eXUmqqpgFln@USEast [1140ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:05:22 PM] -- eXUmqqpgFln@USEast has left the channel.
+ [09:05:22 PM] -- pOYQaLdJckhfU@USEast has left the channel.
+ [09:09:42 PM] <VBScript | New on StealthBot Recent:  change where files get placed>
+ [09:10:45 PM] <VBScript | New on LifeHacker:  BrowserPlus Offers Drag and Drop Uploads and More [Sneak Preview] >
+ [09:15:09 PM] <VBScript .: [10:25:17 PM] <From GoDdEsSOfRvWs> 47 I don't approve of political jokes. I've seen too many of them get elected. :: StealthBot Beta v2.6999 Dev Release 9 :.>
+ [09:15:30 PM] -- pOYQaLdJckhfU@USEast [1406ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:15:30 PM] -- eXUmqqpgFln@USEast [1140ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:15:31 PM] -- ZXCUAjpjYCcr@USEast [359ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:15:42 PM] <eXUmqqpgFln@USEast> hi
+ [09:15:42 PM] <ZXCUAjpjYCcr@USEast> hi
+ [09:15:42 PM] <pOYQaLdJckhfU@USEast> hi
+ [09:16:07 PM] -- ZXCUAjpjYCcr@USEast has left the channel.
+ [09:16:07 PM] -- pOYQaLdJckhfU@USEast has left the channel.
+ [09:16:07 PM] -- eXUmqqpgFln@USEast has left the channel.
+ [09:17:09 PM] -- ZXCUAjpjYCcr@USEast [359ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:17:09 PM] -- pOYQaLdJckhfU@USEast [1406ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:17:09 PM] -- eXUmqqpgFln@USEast [1140ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:17:41 PM] -- ClanGnome [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan Spht)
+ [09:17:46 PM] <pOYQaLdJckhfU@USEast> Pyro And Phix Are Smexy Beasts
+ [09:17:46 PM] -- pOYQaLdJckhfU@USEast has left the channel.
+ [09:17:47 PM] <eXUmqqpgFln@USEast> Pyro And Phix Are Smexy Beasts
+ [09:17:47 PM] -- eXUmqqpgFln@USEast has left the channel.
+ [09:17:47 PM] -- ClanGnome has left the channel.
+ [09:17:49 PM] <ZXCUAjpjYCcr@USEast> Pyro And Phix Are Smexy Beasts
+ [09:17:49 PM] -- ZXCUAjpjYCcr@USEast has left the channel.
+ [09:18:12 PM] -- ZXCUAjpjYCcr@USEast [359ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:18:13 PM] -- eXUmqqpgFln@USEast [1140ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:18:13 PM] -- pOYQaLdJckhfU@USEast [1406ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:18:37 PM] -- ZXCUAjpjYCcr@USEast has left the channel.
+ [09:18:38 PM] -- pOYQaLdJckhfU@USEast has left the channel.
+ [09:18:38 PM] -- eXUmqqpgFln@USEast has left the channel.
+ [09:18:42 PM] <LuC1Fr[BoT]> Night
+ [09:18:51 PM] -- eXUmqqpgFln@USEast [1140ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:18:52 PM] -- pOYQaLdJckhfU@USEast [1406ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:18:53 PM] <eXUmqqpgFln@USEast> Pyro And Phix Are Smexy Beasts
+ [09:18:53 PM] <eXUmqqpgFln@USEast> oooh so sexy sexy.
+ [09:18:53 PM] -- eXUmqqpgFln@USEast has left the channel.
+ [09:18:53 PM] <pOYQaLdJckhfU@USEast> Pyro And Phix Are Smexy Beasts
+ [09:18:53 PM] <pOYQaLdJckhfU@USEast> oooh so sexy sexy.
+ [09:18:53 PM] -- pOYQaLdJckhfU@USEast has left the channel.
+ [09:19:27 PM] -- eXUmqqpgFln@USEast [1140ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:19:29 PM] <eXUmqqpgFln@USEast> Why did you guys have to go and ban me?
+ [09:19:29 PM] <eXUmqqpgFln@USEast> Now i am Angry, 
+ [09:19:29 PM] -- eXUmqqpgFln@USEast has left the channel.
+ [09:27:44 PM] -- PhiX@USEast [-1ms] has joined the channel using Starcraft Brood War (1337 wins).
+ [09:30:17 PM] <VBScript .: [4:14:33 PM] <Alendar@USEast> We need a jewish tech support person. :: StealthBot Beta v2.6999 Dev Release 9 :.>
+ [09:30:25 PM] <LuC1Fr[BoT]> guys
+ [09:30:28 PM] <LuC1Fr[BoT]> guys
+ [09:30:31 PM] <LuC1Fr[BoT]> your gonna hate me for this
+ [09:30:32 PM] <LuC1Fr[BoT]> but
+ [09:30:36 PM] <LuC1Fr[BoT]> it needs to be done
+ [09:30:40 PM] -- UaWVfgVChz@USEast [1672ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:30:40 PM] -- TJtFRyJhgj@USEast [1594ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:30:42 PM] <TJtFRyJhgj@USEast> Never gonna give you up
+ [09:30:42 PM] <TJtFRyJhgj@USEast> Never gonna let you down
+ [09:30:42 PM] -- TJtFRyJhgj@USEast has left the channel.
+ [09:30:42 PM] <UaWVfgVChz@USEast> A full commitment's what I'm thinking of
+ [09:30:42 PM] <UaWVfgVChz@USEast> You wouldn't get this from any other guy
+ [09:30:42 PM] -- UaWVfgVChz@USEast has left the channel.
+ [09:30:52 PM] <PhiX@USEast> ,ixed up
+ [09:30:53 PM] <PhiX@USEast> newb
+ [09:30:57 PM] <PhiX@USEast> mixed*
+ [09:31:08 PM] <LuC1Fr[BoT]> but its the thought that counts
+ [09:31:33 PM] -- UaWVfgVChz@USEast [1672ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:31:33 PM] -- TJtFRyJhgj@USEast [1594ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:31:35 PM] <UaWVfgVChz@USEast> And if you ask me how I'm feeling
+ [09:31:35 PM] <UaWVfgVChz@USEast> Don't tell me you're too blind to see
+ [09:31:35 PM] -- UaWVfgVChz@USEast has left the channel.
+ [09:31:35 PM] <TJtFRyJhgj@USEast> Never gonna run around and desert you
+ [09:31:35 PM] <TJtFRyJhgj@USEast> Never gonna make you cry
+ [09:31:35 PM] -- TJtFRyJhgj@USEast has left the channel.
+ [09:32:01 PM] -- UaWVfgVChz@USEast [1672ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:32:01 PM] -- TJtFRyJhgj@USEast [1594ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:32:02 PM] <UaWVfgVChz@USEast> Never gonna give you up
+ [09:32:02 PM] <UaWVfgVChz@USEast> Never gonna let you down
+ [09:32:02 PM] -- UaWVfgVChz@USEast has left the channel.
+ [09:32:03 PM] <TJtFRyJhgj@USEast> Never gonna say goodbye
+ [09:32:03 PM] <TJtFRyJhgj@USEast> Never gonna tell a lie and hurt you
+ [09:32:03 PM] -- TJtFRyJhgj@USEast has left the channel.
+ [09:32:28 PM] -- UaWVfgVChz@USEast [1672ms] has joined the channel using Starcraft Brood War (0 wins).
+ [09:32:29 PM] <UaWVfgVChz@USEast> Oooooooh
+ [09:32:29 PM] <UaWVfgVChz@USEast> Give you UP)
+ [09:32:29 PM] -- UaWVfgVChz@USEast has left the channel.
+ [09:36:51 PM] <idiatic> ;\
+ [09:45:23 PM] <VBScript .: [9:09:26 PM] <From Steven-Hawking>  WHO R U WHY DID U JOIN CHANNEL CLAN PGC??? :: StealthBot Beta v2.6999 Dev Release 9 :.>
+ [09:55:11 PM] <VBScript | New on StealthBot Recent:  i need help now&#33;>
+ [10:00:36 PM] <VBScript .: [9:56:56 PM] [viri] <southside_balla> can any1 host sum porn i need to jack off [viri] <AutoResponse> Don't go blind now [viri] <uber_immortal> lol :: StealthBot Beta v2.6999 Dev Release 9 :.>
+ [10:03:42 PM] <{DK}DeAtHZeRg@USEast -: System Uptime: 1 day, 0 hours, 4 minutes and 53 seconds :: Connection Uptime: 0 days, 23 hours, 58 minutes and 21 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [10:04:04 PM] <DeAtHZeRg -: System Uptime: 1 day, 0 hours, 5 minutes and 15 seconds :: Connection Uptime: 0 days, 23 hours, 57 minutes and 58 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [10:04:15 PM] <VBScript | New on StealthBot Recent:  Bot keeps disconnecting; [teamRandomizer] plugin>
+ [10:07:17 PM] <VBScript | New on StealthBot Tech Support:  Bot keeps disconnecting; i need help now!>
+ [10:09:17 PM] <VBScript | New on SlashDot:  New Robots Developed to Climb Walls>
+ [10:12:13 PM] -- WzuOjEPPXbc@USEast [484ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:12:13 PM] -- nnchHupTylZ@USEast [453ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:12:13 PM] <WzuOjEPPXbc@USEast> Hi guys!
+ [10:12:13 PM] <nnchHupTylZ@USEast> Hi guys!
+ [10:12:13 PM] <nnchHupTylZ@USEast> Phix, Sex.. your house.. tonight?
+ [10:12:13 PM] <WzuOjEPPXbc@USEast> Phix, Sex.. your house.. tonight?
+ [10:12:13 PM] -- nnchHupTylZ@USEast has left the channel.
+ [10:12:13 PM] -- WzuOjEPPXbc@USEast has left the channel.
+ [10:12:17 PM] -- NequCurzigBct@USEast [1500ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:12:17 PM] <NequCurzigBct@USEast> Hi guys!
+ [10:12:17 PM] <NequCurzigBct@USEast> Phix, Sex.. your house.. tonight?
+ [10:12:17 PM] -- NequCurzigBct@USEast has left the channel.
+ [10:12:36 PM] -- NTucJqNaEvot@USEast [953ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:12:37 PM] <NTucJqNaEvot@USEast> Hi guys!
+ [10:12:37 PM] <NTucJqNaEvot@USEast> Phix, Sex.. your house.. tonight?
+ [10:12:37 PM] -- NTucJqNaEvot@USEast has left the channel.
+ [10:15:36 PM] <LuC1Fr[BoT]> Hey
+ [10:15:38 PM] <LuC1Fr[BoT]> dont hate me.
+ [10:15:45 PM] <VBScript .: [12:30:57 AM] [Nn4M] <pRawN*31> my balls are on firee :: StealthBot Beta v2.6999 Dev Release 9 :.>
+ [10:16:15 PM] -- cYtJiIVeqtG@USEast [500ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:16:15 PM] -- WZANlVwsScYF@USEast [453ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:16:16 PM] -- WzuOjEPPXbc@USEast [484ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:16:16 PM] -- WpDnnscwbYC@USEast [937ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:16:16 PM] -- nnchHupTylZ@USEast [453ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:16:16 PM] -- GoTFeAiqQU@USEast [688ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:16:16 PM] -- vNFxgBllrPQi@USEast [781ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:16:16 PM] -- qucqUzIYkx@USEast [8812ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:16:16 PM] -- FzdAtwcjECum@USEast [10765ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:16:16 PM] -- VGkNXKGcYWtfe@USEast [703ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:16:16 PM] WpDnnscwbYC was kicked out of the channel by VBScript (Yelling).
+ [10:16:16 PM] -- WpDnnscwbYC@USEast has left the channel.
+ [10:16:17 PM] -- UHiMZdYvVuWe@USEast [1641ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:16:18 PM] cYtJiIVeqtG was banned by Pyro[BoT] (L).
+ [10:16:18 PM] -- cYtJiIVeqtG@USEast has left the channel.
+ [10:16:19 PM] WZANlVwsScYF was banned by Pyro[BoT] (L).
+ [10:16:19 PM] -- WZANlVwsScYF@USEast has left the channel.
+ [10:16:20 PM] WzuOjEPPXbc was banned by Pyro[BoT] (L).
+ [10:16:20 PM] -- WzuOjEPPXbc@USEast has left the channel.
+ [10:16:21 PM] qucqUzIYkx was kicked out of the channel by Alendar[BoT] (Yelling).
+ [10:16:21 PM] -- qucqUzIYkx@USEast has left the channel.
+ [10:16:21 PM] nnchHupTylZ was banned by Pyro[BoT] (L).
+ [10:16:21 PM] -- nnchHupTylZ@USEast has left the channel.
+ [10:16:21 PM] -- kKOOtVshmwlqP@USEast [39016ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:16:22 PM] -- GoTFeAiqQU@USEast has left the channel.
+ [10:16:22 PM] GoTFeAiqQU was banned by Pyro[BoT] (L).
+ [10:16:26 PM] vNFxgBllrPQi was banned by Pyro[BoT] (L).
+ [10:16:26 PM] -- vNFxgBllrPQi@USEast has left the channel.
+ [10:16:28 PM] FzdAtwcjECum was banned by Pyro[BoT] (L).
+ [10:16:29 PM] -- FzdAtwcjECum@USEast has left the channel.
+ [10:16:32 PM] VGkNXKGcYWtfe was banned by Pyro[BoT] (L).
+ [10:16:32 PM] -- VGkNXKGcYWtfe@USEast has left the channel.
+ [10:16:33 PM] -- QXBOKBxFooX@USEast [27562ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:16:33 PM] -- SQuKdrSrBXTZ@USEast [28719ms] has joined the channel using Starcraft Brood War (0 wins).
+ [10:16:36 PM] UHiMZdYvVuWe was banned by Pyro[BoT] (L).
+ [10:16:36 PM] -- UHiMZdYvVuWe@USEast has left the channel.
+ [10:16:38 PM] kKOOtVshmwlqP was banned by Pyro[BoT] (L).
+ [10:16:38 PM] -- kKOOtVshmwlqP@USEast has left the channel.
+ [10:16:45 PM] <LuC1Fr[BoT]> lol.
+ [10:17:20 PM] -- SQuKdrSrBXTZ@USEast has left the channel.
+ [10:17:20 PM] -- QXBOKBxFooX@USEast has left the channel.
+ [10:22:02 PM] <{DK}DeAtHZeRg@USEast> boobies
+ [10:22:44 PM] <DeAtHZeRg> wtf did i miss lol
+ [10:25:56 PM] <LuC1Fr[BoT]> me.
+ [10:30:55 PM] <VBScript .: <ClanGnome> What happens if you get scared half to death twice? :: StealthBot Beta v2.6999 Dev Release 9 :.>
+ [10:46:05 PM] <VBScript .: [9:49:54 PM] [TwH] <Zanius> and he likes brokeback mountain :: StealthBot Beta v2.6999 Dev Release 9 :.>
+ [10:58:48 PM] <VBScript | New on StealthBot Recent:  [RESOLVED] Bot keeps disconnecting>
+ [11:01:12 PM] <VBScript .: [1:52:35 PM] <PhiX[BoT]> afk, spongebob :: StealthBot Beta v2.6999 Dev Release 9 :.>
+ [11:03:43 PM] <{DK}DeAtHZeRg@USEast -: System Uptime: 1 day, 1 hours, 4 minutes and 54 seconds :: Connection Uptime: 1 day, 0 hours, 57 minutes and 36 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [11:04:06 PM] <DeAtHZeRg -: System Uptime: 1 day, 1 hours, 5 minutes and 16 seconds :: Connection Uptime: 1 day, 0 hours, 57 minutes and 16 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [11:07:52 PM] <VBScript | New on StealthBot Tech Support:  [RESOLVED] Bot keeps disconnecting>
+ [11:16:17 PM] <VBScript .: [10:31:20 PM] [Open Tech Support] <REVENGE@USEast*47> Cartoon Network is a myth. :: StealthBot Beta v2.6999 Dev Release 9 :.>
+ [11:16:18 PM] -- PingGnome [797ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 12, icon tier Undead, ghoul icon, in Clan TsF)
+ [11:16:27 PM] -- PingGnome has left the channel.
+ [11:31:25 PM] <VBScript .: <ClanGnome> The less people speak of their greatness, the more we think of it :: StealthBot Beta v2.6999 Dev Release 9 :.>
+ [11:35:04 PM] <VBScript | New on StealthBot Recent:  Help update ladder plugin>
+ [11:45:08 PM] -- HaKr_ has left the channel.
+ [11:45:09 PM] -- HaKr[BoT] has left the channel.
+ [11:45:10 PM] -- Ozark has left the channel.
+ [11:46:33 PM] <VBScript .: <From Sun-Jian[Bot]> Hi Welcome to Clan DWT! to join PM a Shaman or This Bot. we Will have CRAZY CONVERSATIONS!!!!!!!!! :: StealthBot Beta v2.6999 Dev Release 9 :.>
+ [11:47:21 PM] -- HaKr_ [62ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [11:47:21 PM] -- Stats updated: HaKr_ [62ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [11:47:22 PM] -- HaKr[BoT] [78ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [11:47:34 PM] -- Ozark [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan EgL)
+ [11:57:31 PM] -- titsmcgee4440@USEast [63ms] has joined the channel using Diablo II Lord of Destruction (Champion dRose, a level 85 sorceress on realm USEast).
+ [11:57:42 PM] -- titsmcgee4440@USEast has left the channel.

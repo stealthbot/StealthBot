@@ -1,0 +1,755 @@
+ [12:01:55 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:01:55 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:01:55 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:01:56 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:01:56 AM]  
+ [12:01:56 AM] >> ÿcbStealthBot News
+ [12:01:56 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:01:56 AM] ->> 
+ [12:01:56 AM] ->> ÿcbStealthBot Beta News
+ [12:01:56 AM] ->> Happy testing!
+ [12:01:56 AM]  
+ [12:01:56 AM] The current StealthBot Beta version is 2.6993.
+ [12:01:56 AM]  [12:01:56 AM] Loaded 2 plugins (2 enabled). Type  [12:01:56 AM] /plugins [12:01:56 AM]  to view them. Type  [12:01:56 AM] /phelp [12:01:56 AM]  for help using them.
+ [12:01:56 AM]  [12:01:56 AM] Type  [12:01:56 AM] /updates [12:01:56 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:01:57 AM] Connecting your bot...
+ [12:01:57 AM] Authorizing your private-release bot, please wait.
+ [12:01:57 AM] Private usage authorized, connecting to Battle.Net.
+ [12:01:57 AM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [12:01:57 AM] [BNLS] Connected!
+ [12:01:57 AM] [BNLS] Authorized!
+ [12:01:57 AM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [12:01:57 AM] [BNET] Connected!
+ [12:01:57 AM] [BNET] Checking version...
+ [12:01:58 AM] [BNET] Client version accepted!
+ [12:01:58 AM] [BNET] Sending login information...
+ [12:01:58 AM] [BNET] Login successful.
+ [12:01:58 AM] [CLAN] You are a Shaman in Clan SBs.
+ [12:01:58 AM] [BNET] Logged on as Eric[nK].
+ [12:01:59 AM] -- Joined channel: Clan SBs --
+ [12:01:59 AM] Welcome to Battle.net!
+ [12:01:59 AM] This server is hosted by AT&T.
+ [12:01:59 AM] There are currently 71603 users playing 1521 games of Warcraft III The Frozen Throne, and 189115 users playing 47926 games on Battle.net.
+ [12:01:59 AM] Last logon: Thu Dec 6  11:58 PM
+ [12:01:59 AM] -- Eric[nK]@Azeroth has acquired ops.
+ [12:01:59 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [12:01:59 AM] Last Logon: 12/7/2007, 08:05:58 (Battle.net time)
+ [12:01:59 AM] Last Logoff: 12/7/2007, 08:05:58 (Battle.net time)
+ [12:01:59 AM] Time Logged: 41 days, 15 hours, 20 minutes and 15 seconds
+ [12:02:33 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:02:33 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:02:33 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:02:33 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:02:33 AM]  
+ [12:02:33 AM] >> ÿcbStealthBot News
+ [12:02:33 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:02:33 AM] ->> 
+ [12:02:33 AM] ->> ÿcbStealthBot Beta News
+ [12:02:33 AM] ->> Happy testing!
+ [12:02:33 AM]  
+ [12:02:33 AM] The current StealthBot Beta version is 2.6993.
+ [12:02:33 AM]  [12:02:33 AM] Loaded 2 plugins (2 enabled). Type  [12:02:33 AM] /plugins [12:02:33 AM]  to view them. Type  [12:02:33 AM] /phelp [12:02:33 AM]  for help using them.
+ [12:02:33 AM]  [12:02:33 AM] Type  [12:02:33 AM] /updates [12:02:33 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:02:36 AM] Connecting your bot...
+ [12:02:36 AM] Authorizing your private-release bot, please wait.
+ [12:02:36 AM] Private usage authorized, connecting to Battle.Net.
+ [12:02:36 AM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [12:02:36 AM] [BNLS] Connected!
+ [12:02:36 AM] [BNLS] Authorized!
+ [12:02:36 AM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [12:02:36 AM] [BNET] Connected!
+ [12:02:36 AM] [BNET] Checking version...
+ [12:02:37 AM] [BNET] Client version accepted!
+ [12:02:37 AM] [BNET] Sending login information...
+ [12:02:37 AM] [BNET] Login successful.
+ [12:02:37 AM] [CLAN] You are a Shaman in Clan SBs.
+ [12:02:37 AM] [BNET] Logged on as Eric[nK].
+ [12:02:37 AM] -- Joined channel: Clan SBs --
+ [12:02:37 AM] Welcome to Battle.net!
+ [12:02:38 AM] This server is hosted by AT&T.
+ [12:02:38 AM] There are currently 71592 users playing 1542 games of Warcraft III The Frozen Throne, and 189099 users playing 48039 games on Battle.net.
+ [12:02:38 AM] Last logon: Fri Dec 7  12:10 AM
+ [12:02:38 AM] -- Eric[nK]@Azeroth has acquired ops.
+ [12:02:38 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [12:02:38 AM] Last Logon: 12/7/2007, 08:05:58 (Battle.net time)
+ [12:02:38 AM] Last Logoff: 12/7/2007, 08:05:58 (Battle.net time)
+ [12:02:38 AM] Time Logged: 41 days, 15 hours, 20 minutes and 31 seconds
+ [12:04:25 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:04:25 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:04:25 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:04:26 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:04:26 AM]  
+ [12:04:26 AM] >> ÿcbStealthBot News
+ [12:04:26 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:04:26 AM] ->> 
+ [12:04:26 AM] ->> ÿcbStealthBot Beta News
+ [12:04:26 AM] ->> Happy testing!
+ [12:04:26 AM]  
+ [12:04:26 AM] The current StealthBot Beta version is 2.6993.
+ [12:04:26 AM]  [12:04:26 AM] Loaded 2 plugins (2 enabled). Type  [12:04:26 AM] /plugins [12:04:26 AM]  to view them. Type  [12:04:26 AM] /phelp [12:04:26 AM]  for help using them.
+ [12:04:26 AM]  [12:04:26 AM] Type  [12:04:26 AM] /updates [12:04:26 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:05:07 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:05:07 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:05:07 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:05:07 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:05:07 AM]  
+ [12:05:07 AM] >> ÿcbStealthBot News
+ [12:05:07 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:05:07 AM] ->> 
+ [12:05:07 AM] ->> ÿcbStealthBot Beta News
+ [12:05:07 AM] ->> Happy testing!
+ [12:05:07 AM]  
+ [12:05:07 AM] The current StealthBot Beta version is 2.6993.
+ [12:05:07 AM]  [12:05:07 AM] Loaded 2 plugins (2 enabled). Type  [12:05:07 AM] /plugins [12:05:07 AM]  to view them. Type  [12:05:07 AM] /phelp [12:05:07 AM]  for help using them.
+ [12:05:07 AM]  [12:05:07 AM] Type  [12:05:07 AM] /updates [12:05:07 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:05:21 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:05:21 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:05:21 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:05:21 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:05:21 AM]  
+ [12:05:21 AM] >> ÿcbStealthBot News
+ [12:05:21 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:05:21 AM] ->> 
+ [12:05:21 AM] ->> ÿcbStealthBot Beta News
+ [12:05:21 AM] ->> Happy testing!
+ [12:05:21 AM]  
+ [12:05:21 AM] The current StealthBot Beta version is 2.6993.
+ [12:05:21 AM]  [12:05:21 AM] Loaded 2 plugins (2 enabled). Type  [12:05:21 AM] /plugins [12:05:21 AM]  to view them. Type  [12:05:21 AM] /phelp [12:05:21 AM]  for help using them.
+ [12:05:21 AM]  [12:05:21 AM] Type  [12:05:21 AM] /updates [12:05:21 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:37:03 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:37:03 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:37:03 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:37:03 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:37:03 AM]  
+ [12:37:03 AM] >> ÿcbStealthBot News
+ [12:37:03 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:37:03 AM] ->> 
+ [12:37:04 AM] ->> ÿcbStealthBot Beta News
+ [12:37:04 AM] ->> Happy testing!
+ [12:37:04 AM]  
+ [12:37:04 AM] The current StealthBot Beta version is 2.6993.
+ [12:37:04 AM]  [12:37:04 AM] Loaded 2 plugins (2 enabled). Type  [12:37:04 AM] /plugins [12:37:04 AM]  to view them. Type  [12:37:04 AM] /phelp [12:37:04 AM]  for help using them.
+ [12:37:04 AM]  [12:37:04 AM] Type  [12:37:04 AM] /updates [12:37:04 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:38:40 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:38:40 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:38:40 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:38:40 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:38:40 AM]  
+ [12:38:40 AM] >> ÿcbStealthBot News
+ [12:38:40 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:38:40 AM] ->> 
+ [12:38:40 AM] ->> ÿcbStealthBot Beta News
+ [12:38:40 AM] ->> Happy testing!
+ [12:38:40 AM]  
+ [12:38:40 AM] The current StealthBot Beta version is 2.6993.
+ [12:38:41 AM]  [12:38:41 AM] Loaded 2 plugins (2 enabled). Type  [12:38:41 AM] /plugins [12:38:41 AM]  to view them. Type  [12:38:41 AM] /phelp [12:38:41 AM]  for help using them.
+ [12:38:41 AM]  [12:38:41 AM] Type  [12:38:41 AM] /updates [12:38:41 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:39:09 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:39:09 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:39:09 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:39:10 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:39:10 AM]  
+ [12:39:10 AM] >> ÿcbStealthBot News
+ [12:39:10 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:39:10 AM] ->> 
+ [12:39:10 AM] ->> ÿcbStealthBot Beta News
+ [12:39:10 AM] ->> Happy testing!
+ [12:39:10 AM]  
+ [12:39:10 AM] The current StealthBot Beta version is 2.6993.
+ [12:39:10 AM]  [12:39:10 AM] Loaded 2 plugins (2 enabled). Type  [12:39:10 AM] /plugins [12:39:10 AM]  to view them. Type  [12:39:10 AM] /phelp [12:39:10 AM]  for help using them.
+ [12:39:10 AM]  [12:39:10 AM] Type  [12:39:10 AM] /updates [12:39:10 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:41:12 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:41:12 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:41:12 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:41:13 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:41:13 AM]  
+ [12:41:13 AM] >> ÿcbStealthBot News
+ [12:41:13 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:41:13 AM] ->> 
+ [12:41:13 AM] ->> ÿcbStealthBot Beta News
+ [12:41:13 AM] ->> Happy testing!
+ [12:41:13 AM]  
+ [12:41:13 AM] The current StealthBot Beta version is 2.6993.
+ [12:41:13 AM]  [12:41:13 AM] Loaded 2 plugins (2 enabled). Type  [12:41:13 AM] /plugins [12:41:13 AM]  to view them. Type  [12:41:13 AM] /phelp [12:41:13 AM]  for help using them.
+ [12:41:13 AM]  [12:41:13 AM] Type  [12:41:13 AM] /updates [12:41:13 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:42:16 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:42:16 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:42:16 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:42:16 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:42:16 AM]  
+ [12:42:16 AM] >> ÿcbStealthBot News
+ [12:42:16 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:42:16 AM] ->> 
+ [12:42:16 AM] ->> ÿcbStealthBot Beta News
+ [12:42:16 AM] ->> Happy testing!
+ [12:42:16 AM]  
+ [12:42:16 AM] The current StealthBot Beta version is 2.6993.
+ [12:42:17 AM]  [12:42:17 AM] Loaded 2 plugins (2 enabled). Type  [12:42:17 AM] /plugins [12:42:17 AM]  to view them. Type  [12:42:17 AM] /phelp [12:42:17 AM]  for help using them.
+ [12:42:17 AM]  [12:42:17 AM] Type  [12:42:17 AM] /updates [12:42:17 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:42:46 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:42:46 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:42:46 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:42:46 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:42:46 AM]  
+ [12:42:46 AM] >> ÿcbStealthBot News
+ [12:42:46 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:42:46 AM] ->> 
+ [12:42:46 AM] ->> ÿcbStealthBot Beta News
+ [12:42:46 AM] ->> Happy testing!
+ [12:42:46 AM]  
+ [12:42:46 AM] The current StealthBot Beta version is 2.6993.
+ [12:42:46 AM]  [12:42:46 AM] Loaded 2 plugins (2 enabled). Type  [12:42:46 AM] /plugins [12:42:46 AM]  to view them. Type  [12:42:46 AM] /phelp [12:42:46 AM]  for help using them.
+ [12:42:46 AM]  [12:42:46 AM] Type  [12:42:46 AM] /updates [12:42:46 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:44:40 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:44:40 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:44:40 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:44:40 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:44:40 AM]  
+ [12:44:40 AM] >> ÿcbStealthBot News
+ [12:44:40 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:44:40 AM] ->> 
+ [12:44:40 AM] ->> ÿcbStealthBot Beta News
+ [12:44:40 AM] ->> Happy testing!
+ [12:44:40 AM]  
+ [12:44:40 AM] The current StealthBot Beta version is 2.6993.
+ [12:44:40 AM]  [12:44:40 AM] Loaded 2 plugins (2 enabled). Type  [12:44:40 AM] /plugins [12:44:40 AM]  to view them. Type  [12:44:40 AM] /phelp [12:44:40 AM]  for help using them.
+ [12:44:40 AM]  [12:44:40 AM] Type  [12:44:40 AM] /updates [12:44:40 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:45:14 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:45:14 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:45:14 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:45:15 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:45:15 AM]  
+ [12:45:15 AM] >> ÿcbStealthBot News
+ [12:45:15 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:45:15 AM] ->> 
+ [12:45:15 AM] ->> ÿcbStealthBot Beta News
+ [12:45:15 AM] ->> Happy testing!
+ [12:45:15 AM]  
+ [12:45:15 AM] The current StealthBot Beta version is 2.6993.
+ [12:45:15 AM]  [12:45:15 AM] Loaded 2 plugins (2 enabled). Type  [12:45:15 AM] /plugins [12:45:15 AM]  to view them. Type  [12:45:15 AM] /phelp [12:45:15 AM]  for help using them.
+ [12:45:15 AM]  [12:45:15 AM] Type  [12:45:15 AM] /updates [12:45:15 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:48:50 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:48:50 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:48:50 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:48:50 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:48:50 AM]  
+ [12:48:50 AM] >> ÿcbStealthBot News
+ [12:48:50 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:48:50 AM] ->> 
+ [12:48:50 AM] ->> ÿcbStealthBot Beta News
+ [12:48:50 AM] ->> Happy testing!
+ [12:48:50 AM]  
+ [12:48:50 AM] The current StealthBot Beta version is 2.6993.
+ [12:48:50 AM]  [12:48:50 AM] Loaded 2 plugins (2 enabled). Type  [12:48:50 AM] /plugins [12:48:50 AM]  to view them. Type  [12:48:50 AM] /phelp [12:48:50 AM]  for help using them.
+ [12:48:50 AM]  [12:48:50 AM] Type  [12:48:50 AM] /updates [12:48:50 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:49:18 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:49:18 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:49:18 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:49:18 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:49:18 AM]  
+ [12:49:18 AM] >> ÿcbStealthBot News
+ [12:49:18 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:49:18 AM] ->> 
+ [12:49:18 AM] ->> ÿcbStealthBot Beta News
+ [12:49:18 AM] ->> Happy testing!
+ [12:49:18 AM]  
+ [12:49:18 AM] The current StealthBot Beta version is 2.6993.
+ [12:49:19 AM]  [12:49:19 AM] Loaded 2 plugins (2 enabled). Type  [12:49:19 AM] /plugins [12:49:19 AM]  to view them. Type  [12:49:19 AM] /phelp [12:49:19 AM]  for help using them.
+ [12:49:19 AM]  [12:49:19 AM] Type  [12:49:19 AM] /updates [12:49:19 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:49:48 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:49:48 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:49:48 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:49:48 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:49:48 AM]  
+ [12:49:48 AM] >> ÿcbStealthBot News
+ [12:49:48 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:49:48 AM] ->> 
+ [12:49:48 AM] ->> ÿcbStealthBot Beta News
+ [12:49:48 AM] ->> Happy testing!
+ [12:49:48 AM]  
+ [12:49:48 AM] The current StealthBot Beta version is 2.6993.
+ [12:49:48 AM]  [12:49:48 AM] Loaded 2 plugins (2 enabled). Type  [12:49:48 AM] /plugins [12:49:48 AM]  to view them. Type  [12:49:48 AM] /phelp [12:49:48 AM]  for help using them.
+ [12:49:48 AM]  [12:49:48 AM] Type  [12:49:48 AM] /updates [12:49:48 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:50:25 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:50:25 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:50:25 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:50:25 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:50:25 AM]  
+ [12:50:25 AM] >> ÿcbStealthBot News
+ [12:50:25 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:50:25 AM] ->> 
+ [12:50:25 AM] ->> ÿcbStealthBot Beta News
+ [12:50:25 AM] ->> Happy testing!
+ [12:50:25 AM]  
+ [12:50:25 AM] The current StealthBot Beta version is 2.6993.
+ [12:50:26 AM]  [12:50:26 AM] Loaded 2 plugins (2 enabled). Type  [12:50:26 AM] /plugins [12:50:26 AM]  to view them. Type  [12:50:26 AM] /phelp [12:50:26 AM]  for help using them.
+ [12:50:26 AM]  [12:50:26 AM] Type  [12:50:26 AM] /updates [12:50:26 AM]  in the bot to view updates and new plugins that are available for download.
+ [12:50:50 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [12:50:50 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [12:50:50 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [12:50:51 AM] The current StealthBot version is ÿcb2.6R3.
+ [12:50:51 AM]  
+ [12:50:51 AM] >> ÿcbStealthBot News
+ [12:50:51 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [12:50:51 AM] ->> 
+ [12:50:51 AM] ->> ÿcbStealthBot Beta News
+ [12:50:51 AM] ->> Happy testing!
+ [12:50:51 AM]  
+ [12:50:51 AM] The current StealthBot Beta version is 2.6993.
+ [12:50:51 AM]  [12:50:51 AM] Loaded 2 plugins (2 enabled). Type  [12:50:51 AM] /plugins [12:50:51 AM]  to view them. Type  [12:50:51 AM] /phelp [12:50:51 AM]  for help using them.
+ [12:50:51 AM]  [12:50:51 AM] Type  [12:50:51 AM] /updates [12:50:51 AM]  in the bot to view updates and new plugins that are available for download.
+ [10:19:33 AM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [10:19:33 AM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [10:19:33 AM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [10:19:34 AM] The current StealthBot version is ÿcb2.6R3.
+ [10:19:34 AM]  
+ [10:19:34 AM] >> ÿcbStealthBot News
+ [10:19:34 AM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [10:19:34 AM] ->> 
+ [10:19:34 AM] ->> ÿcbStealthBot Beta News
+ [10:19:34 AM] ->> Happy testing!
+ [10:19:34 AM]  
+ [10:19:34 AM] The current StealthBot Beta version is 2.6993.
+ [10:19:34 AM]  [10:19:34 AM] Loaded 2 plugins (2 enabled). Type  [10:19:34 AM] /plugins [10:19:34 AM]  to view them. Type  [10:19:34 AM] /phelp [10:19:34 AM]  for help using them.
+ [10:19:34 AM]  [10:19:34 AM] Type  [10:19:34 AM] /updates [10:19:34 AM]  in the bot to view updates and new plugins that are available for download.
+ [3:42:29 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [3:42:29 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [3:42:29 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [3:42:30 PM] The current StealthBot version is ÿcb2.6R3.
+ [3:42:30 PM]  
+ [3:42:30 PM] >> ÿcbStealthBot News
+ [3:42:30 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [3:42:30 PM] ->> 
+ [3:42:30 PM] ->> ÿcbStealthBot Beta News
+ [3:42:30 PM] ->> Happy testing!
+ [3:42:30 PM]  
+ [3:42:30 PM] The current StealthBot Beta version is 2.6993.
+ [3:42:30 PM]  [3:42:30 PM] Loaded 2 plugins (2 enabled). Type  [3:42:30 PM] /plugins [3:42:30 PM]  to view them. Type  [3:42:30 PM] /phelp [3:42:30 PM]  for help using them.
+ [3:42:30 PM]  [3:42:30 PM] Type  [3:42:30 PM] /updates [3:42:30 PM]  in the bot to view updates and new plugins that are available for download.
+ [3:42:38 PM] Error: Command processor has encountered an error.
+ [3:45:02 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [3:45:02 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [3:45:02 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [3:45:02 PM] The current StealthBot version is ÿcb2.6R3.
+ [3:45:02 PM]  
+ [3:45:02 PM] >> ÿcbStealthBot News
+ [3:45:02 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [3:45:02 PM] ->> 
+ [3:45:02 PM] ->> ÿcbStealthBot Beta News
+ [3:45:02 PM] ->> Happy testing!
+ [3:45:02 PM]  
+ [3:45:02 PM] The current StealthBot Beta version is 2.6993.
+ [3:45:03 PM]  [3:45:03 PM] Loaded 2 plugins (2 enabled). Type  [3:45:03 PM] /plugins [3:45:03 PM]  to view them. Type  [3:45:03 PM] /phelp [3:45:03 PM]  for help using them.
+ [3:45:03 PM]  [3:45:03 PM] Type  [3:45:03 PM] /updates [3:45:03 PM]  in the bot to view updates and new plugins that are available for download.
+ [3:45:09 PM] Error: Command processor has encountered an error.
+ [3:47:03 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [3:47:03 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [3:47:03 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [3:47:04 PM] The current StealthBot version is ÿcb2.6R3.
+ [3:47:04 PM]  
+ [3:47:04 PM] >> ÿcbStealthBot News
+ [3:47:04 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [3:47:04 PM] ->> 
+ [3:47:04 PM] ->> ÿcbStealthBot Beta News
+ [3:47:04 PM] ->> Happy testing!
+ [3:47:04 PM]  
+ [3:47:04 PM] The current StealthBot Beta version is 2.6993.
+ [3:47:04 PM]  [3:47:04 PM] Loaded 2 plugins (2 enabled). Type  [3:47:04 PM] /plugins [3:47:04 PM]  to view them. Type  [3:47:04 PM] /phelp [3:47:04 PM]  for help using them.
+ [3:47:04 PM]  [3:47:04 PM] Type  [3:47:04 PM] /updates [3:47:04 PM]  in the bot to view updates and new plugins that are available for download.
+ [3:47:10 PM] Error: Command processor has encountered an error.
+ [3:47:22 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [3:47:22 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [3:47:22 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [3:47:23 PM] The current StealthBot version is ÿcb2.6R3.
+ [3:47:23 PM]  
+ [3:47:23 PM] >> ÿcbStealthBot News
+ [3:47:23 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [3:47:23 PM] ->> 
+ [3:47:23 PM] ->> ÿcbStealthBot Beta News
+ [3:47:23 PM] ->> Happy testing!
+ [3:47:23 PM]  
+ [3:47:23 PM] The current StealthBot Beta version is 2.6993.
+ [3:47:23 PM]  [3:47:23 PM] Loaded 2 plugins (2 enabled). Type  [3:47:23 PM] /plugins [3:47:23 PM]  to view them. Type  [3:47:23 PM] /phelp [3:47:23 PM]  for help using them.
+ [3:47:23 PM]  [3:47:23 PM] Type  [3:47:23 PM] /updates [3:47:23 PM]  in the bot to view updates and new plugins that are available for download.
+ [3:47:29 PM] Error: Command processor has encountered an error.
+ [3:47:58 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [3:47:58 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [3:47:58 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [3:47:58 PM] The current StealthBot version is ÿcb2.6R3.
+ [3:47:58 PM]  
+ [3:47:58 PM] >> ÿcbStealthBot News
+ [3:47:58 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [3:47:58 PM] ->> 
+ [3:47:58 PM] ->> ÿcbStealthBot Beta News
+ [3:47:58 PM] ->> Happy testing!
+ [3:47:58 PM]  
+ [3:47:58 PM] The current StealthBot Beta version is 2.6993.
+ [3:47:58 PM]  [3:47:58 PM] Loaded 2 plugins (2 enabled). Type  [3:47:58 PM] /plugins [3:47:58 PM]  to view them. Type  [3:47:58 PM] /phelp [3:47:58 PM]  for help using them.
+ [3:47:58 PM]  [3:47:58 PM] Type  [3:47:58 PM] /updates [3:47:58 PM]  in the bot to view updates and new plugins that are available for download.
+ [3:48:03 PM] Error: Command processor has encountered an error.
+ [3:48:40 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [3:48:40 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [3:48:40 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [3:48:41 PM] The current StealthBot version is ÿcb2.6R3.
+ [3:48:41 PM]  
+ [3:48:41 PM] >> ÿcbStealthBot News
+ [3:48:41 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [3:48:41 PM] ->> 
+ [3:48:41 PM] ->> ÿcbStealthBot Beta News
+ [3:48:41 PM] ->> Happy testing!
+ [3:48:41 PM]  
+ [3:48:41 PM] The current StealthBot Beta version is 2.6993.
+ [3:48:42 PM]  [3:48:42 PM] Loaded 2 plugins (2 enabled). Type  [3:48:42 PM] /plugins [3:48:42 PM]  to view them. Type  [3:48:42 PM] /phelp [3:48:42 PM]  for help using them.
+ [3:48:42 PM]  [3:48:42 PM] Type  [3:48:42 PM] /updates [3:48:42 PM]  in the bot to view updates and new plugins that are available for download.
+ [3:48:46 PM] Error: Command processor has encountered an error.
+ [3:49:14 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [3:49:14 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [3:49:14 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [3:49:15 PM] The current StealthBot version is ÿcb2.6R3.
+ [3:49:15 PM]  
+ [3:49:15 PM] >> ÿcbStealthBot News
+ [3:49:15 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [3:49:15 PM] ->> 
+ [3:49:15 PM] ->> ÿcbStealthBot Beta News
+ [3:49:15 PM] ->> Happy testing!
+ [3:49:15 PM]  
+ [3:49:15 PM] The current StealthBot Beta version is 2.6993.
+ [3:49:15 PM]  [3:49:15 PM] Loaded 2 plugins (2 enabled). Type  [3:49:15 PM] /plugins [3:49:15 PM]  to view them. Type  [3:49:15 PM] /phelp [3:49:15 PM]  for help using them.
+ [3:49:15 PM]  [3:49:15 PM] Type  [3:49:15 PM] /updates [3:49:15 PM]  in the bot to view updates and new plugins that are available for download.
+ [3:49:23 PM] Error: You have specified an invalid entry name.
+ [3:54:11 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [3:54:11 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [3:54:11 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [3:54:11 PM] The current StealthBot version is ÿcb2.6R3.
+ [3:54:11 PM]  
+ [3:54:11 PM] >> ÿcbStealthBot News
+ [3:54:11 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [3:54:11 PM] ->> 
+ [3:54:11 PM] ->> ÿcbStealthBot Beta News
+ [3:54:11 PM] ->> Happy testing!
+ [3:54:11 PM]  
+ [3:54:11 PM] The current StealthBot Beta version is 2.6993.
+ [3:54:11 PM]  [3:54:11 PM] Loaded 2 plugins (2 enabled). Type  [3:54:11 PM] /plugins [3:54:11 PM]  to view them. Type  [3:54:11 PM] /phelp [3:54:11 PM]  for help using them.
+ [3:54:11 PM]  [3:54:11 PM] Type  [3:54:11 PM] /updates [3:54:11 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:05:59 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:05:59 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:05:59 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:06:00 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:06:00 PM]  
+ [5:06:00 PM] >> ÿcbStealthBot News
+ [5:06:01 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:06:01 PM] ->> 
+ [5:06:01 PM] ->> ÿcbStealthBot Beta News
+ [5:06:01 PM] ->> Happy testing!
+ [5:06:01 PM]  
+ [5:06:01 PM] The current StealthBot Beta version is 2.6993.
+ [5:06:01 PM]  [5:06:01 PM] Loaded 2 plugins (2 enabled). Type  [5:06:01 PM] /plugins [5:06:01 PM]  to view them. Type  [5:06:01 PM] /phelp [5:06:01 PM]  for help using them.
+ [5:06:01 PM]  [5:06:01 PM] Type  [5:06:01 PM] /updates [5:06:01 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:06:05 PM] Error: You may only specify a file within the program directory or subdirectories.
+ [5:06:25 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:06:25 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:06:25 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:06:26 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:06:26 PM]  
+ [5:06:26 PM] >> ÿcbStealthBot News
+ [5:06:26 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:06:26 PM] ->> 
+ [5:06:26 PM] ->> ÿcbStealthBot Beta News
+ [5:06:26 PM] ->> Happy testing!
+ [5:06:26 PM]  
+ [5:06:26 PM] The current StealthBot Beta version is 2.6993.
+ [5:06:26 PM]  [5:06:26 PM] Loaded 2 plugins (2 enabled). Type  [5:06:26 PM] /plugins [5:06:26 PM]  to view them. Type  [5:06:26 PM] /phelp [5:06:26 PM]  for help using them.
+ [5:06:26 PM]  [5:06:26 PM] Type  [5:06:26 PM] /updates [5:06:26 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:06:32 PM] Error: You may only specify a file within the program directory or subdirectories.
+ [5:06:39 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:06:39 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:06:39 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:06:40 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:06:40 PM]  
+ [5:06:40 PM] >> ÿcbStealthBot News
+ [5:06:40 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:06:40 PM] ->> 
+ [5:06:40 PM] ->> ÿcbStealthBot Beta News
+ [5:06:40 PM] ->> Happy testing!
+ [5:06:40 PM]  
+ [5:06:40 PM] The current StealthBot Beta version is 2.6993.
+ [5:06:40 PM]  [5:06:40 PM] Loaded 2 plugins (2 enabled). Type  [5:06:40 PM] /plugins [5:06:40 PM]  to view them. Type  [5:06:40 PM] /phelp [5:06:40 PM]  for help using them.
+ [5:06:40 PM]  [5:06:40 PM] Type  [5:06:40 PM] /updates [5:06:40 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:06:45 PM] Error: You may only specify a file within the program directory or subdirectories.
+ [5:06:56 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:06:56 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:06:56 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:06:57 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:06:57 PM]  
+ [5:06:57 PM] >> ÿcbStealthBot News
+ [5:06:57 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:06:57 PM] ->> 
+ [5:06:57 PM] ->> ÿcbStealthBot Beta News
+ [5:06:57 PM] ->> Happy testing!
+ [5:06:57 PM]  
+ [5:06:57 PM] The current StealthBot Beta version is 2.6993.
+ [5:06:57 PM]  [5:06:57 PM] Loaded 2 plugins (2 enabled). Type  [5:06:57 PM] /plugins [5:06:57 PM]  to view them. Type  [5:06:57 PM] /phelp [5:06:57 PM]  for help using them.
+ [5:06:57 PM]  [5:06:57 PM] Type  [5:06:57 PM] /updates [5:06:57 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:07:01 PM] Error: You may only specify a file within the program directory or subdirectories.
+ [5:07:24 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:07:24 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:07:24 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:07:25 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:07:25 PM]  
+ [5:07:25 PM] >> ÿcbStealthBot News
+ [5:07:25 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:07:25 PM] ->> 
+ [5:07:25 PM] ->> ÿcbStealthBot Beta News
+ [5:07:25 PM] ->> Happy testing!
+ [5:07:25 PM]  
+ [5:07:25 PM] The current StealthBot Beta version is 2.6993.
+ [5:07:25 PM]  [5:07:25 PM] Loaded 2 plugins (2 enabled). Type  [5:07:25 PM] /plugins [5:07:25 PM]  to view them. Type  [5:07:25 PM] /phelp [5:07:25 PM]  for help using them.
+ [5:07:25 PM]  [5:07:25 PM] Type  [5:07:25 PM] /updates [5:07:25 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:07:31 PM] Error: The specified file could not be found.
+ [5:07:36 PM] Error: You may only specify a file within the program directory or subdirectories.
+ [5:09:19 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:09:19 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:09:19 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:09:20 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:09:20 PM]  
+ [5:09:20 PM] >> ÿcbStealthBot News
+ [5:09:20 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:09:20 PM] ->> 
+ [5:09:20 PM] ->> ÿcbStealthBot Beta News
+ [5:09:20 PM] ->> Happy testing!
+ [5:09:20 PM]  
+ [5:09:20 PM] The current StealthBot Beta version is 2.6993.
+ [5:09:21 PM]  [5:09:21 PM] Loaded 2 plugins (2 enabled). Type  [5:09:21 PM] /plugins [5:09:21 PM]  to view them. Type  [5:09:21 PM] /phelp [5:09:21 PM]  for help using them.
+ [5:09:21 PM]  [5:09:21 PM] Type  [5:09:21 PM] /updates [5:09:21 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:09:24 PM] Error: You may only specify a file within the program directory or subdirectories.
+ [5:09:34 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:09:34 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:09:34 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:09:35 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:09:35 PM]  
+ [5:09:35 PM] >> ÿcbStealthBot News
+ [5:09:35 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:09:35 PM] ->> 
+ [5:09:35 PM] ->> ÿcbStealthBot Beta News
+ [5:09:35 PM] ->> Happy testing!
+ [5:09:35 PM]  
+ [5:09:35 PM] The current StealthBot Beta version is 2.6993.
+ [5:09:36 PM]  [5:09:36 PM] Loaded 2 plugins (2 enabled). Type  [5:09:36 PM] /plugins [5:09:36 PM]  to view them. Type  [5:09:36 PM] /phelp [5:09:36 PM]  for help using them.
+ [5:09:36 PM]  [5:09:36 PM] Type  [5:09:36 PM] /updates [5:09:36 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:09:38 PM] There was an error reading the file.
+ [5:11:55 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:11:55 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:11:55 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:11:56 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:11:56 PM]  
+ [5:11:56 PM] >> ÿcbStealthBot News
+ [5:11:56 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:11:56 PM] ->> 
+ [5:11:56 PM] ->> ÿcbStealthBot Beta News
+ [5:11:56 PM] ->> Happy testing!
+ [5:11:56 PM]  
+ [5:11:56 PM] The current StealthBot Beta version is 2.6993.
+ [5:11:57 PM]  [5:11:57 PM] Loaded 2 plugins (2 enabled). Type  [5:11:57 PM] /plugins [5:11:57 PM]  to view them. Type  [5:11:57 PM] /phelp [5:11:57 PM]  for help using them.
+ [5:11:57 PM]  [5:11:57 PM] Type  [5:11:57 PM] /updates [5:11:57 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:11:59 PM] There was an error reading the file.
+ [5:12:23 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:12:23 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:12:23 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:12:24 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:12:24 PM]  
+ [5:12:24 PM] >> ÿcbStealthBot News
+ [5:12:24 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:12:24 PM] ->> 
+ [5:12:24 PM] ->> ÿcbStealthBot Beta News
+ [5:12:24 PM] ->> Happy testing!
+ [5:12:24 PM]  
+ [5:12:24 PM] The current StealthBot Beta version is 2.6993.
+ [5:12:24 PM]  [5:12:24 PM] Loaded 2 plugins (2 enabled). Type  [5:12:24 PM] /plugins [5:12:24 PM]  to view them. Type  [5:12:24 PM] /phelp [5:12:24 PM]  for help using them.
+ [5:12:24 PM]  [5:12:24 PM] Type  [5:12:24 PM] /updates [5:12:24 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:12:26 PM] Error: The specified file could not be found.
+ [5:12:29 PM] Error: You cannot read that file.
+ [5:13:50 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:13:50 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:13:50 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:13:50 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:13:50 PM]  
+ [5:13:50 PM] >> ÿcbStealthBot News
+ [5:13:50 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:13:50 PM] ->> 
+ [5:13:50 PM] ->> ÿcbStealthBot Beta News
+ [5:13:51 PM] ->> Happy testing!
+ [5:13:51 PM]  
+ [5:13:51 PM] The current StealthBot Beta version is 2.6993.
+ [5:13:51 PM]  [5:13:51 PM] Loaded 2 plugins (2 enabled). Type  [5:13:51 PM] /plugins [5:13:51 PM]  to view them. Type  [5:13:51 PM] /phelp [5:13:51 PM]  for help using them.
+ [5:13:51 PM]  [5:13:51 PM] Type  [5:13:51 PM] /updates [5:13:51 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:13:55 PM] There was an error reading the specified file.
+ [5:14:09 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:14:09 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:14:09 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:14:09 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:14:09 PM]  
+ [5:14:09 PM] >> ÿcbStealthBot News
+ [5:14:09 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:14:09 PM] ->> 
+ [5:14:09 PM] ->> ÿcbStealthBot Beta News
+ [5:14:09 PM] ->> Happy testing!
+ [5:14:09 PM]  
+ [5:14:09 PM] The current StealthBot Beta version is 2.6993.
+ [5:14:09 PM]  [5:14:09 PM] Loaded 2 plugins (2 enabled). Type  [5:14:09 PM] /plugins [5:14:09 PM]  to view them. Type  [5:14:09 PM] /phelp [5:14:09 PM]  for help using them.
+ [5:14:09 PM]  [5:14:09 PM] Type  [5:14:09 PM] /updates [5:14:09 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:14:18 PM] There was an error reading the specified file.
+ [5:14:32 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:14:32 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:14:32 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:14:33 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:14:33 PM]  
+ [5:14:33 PM] >> ÿcbStealthBot News
+ [5:14:33 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:14:33 PM] ->> 
+ [5:14:33 PM] ->> ÿcbStealthBot Beta News
+ [5:14:33 PM] ->> Happy testing!
+ [5:14:33 PM]  
+ [5:14:33 PM] The current StealthBot Beta version is 2.6993.
+ [5:14:33 PM]  [5:14:33 PM] Loaded 2 plugins (2 enabled). Type  [5:14:33 PM] /plugins [5:14:33 PM]  to view them. Type  [5:14:33 PM] /phelp [5:14:33 PM]  for help using them.
+ [5:14:33 PM]  [5:14:33 PM] Type  [5:14:33 PM] /updates [5:14:33 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:14:37 PM] Contents of file users.txt:
+ [5:14:37 PM] Eric[nK]@Azeroth 200 % % % Eric[nK]@Azeroth 16-11-2007_19:05:15 USER % %
+ [5:14:37 PM] *#* 0 B Eric[nK]@Azeroth 11-12-2007_15:08:43 Eric[nK]@Azeroth 18-11-2007_17:27:05 USER % *#*
+ [5:14:37 PM] Techs 0 aOS Eric[nK]@Azeroth 11-12-2007_15:32:39 Eric[nK] 23-11-2007_16:58:05 GROUP % %
+ [5:14:37 PM] Berzerker-Tech 0 % Eric[nK]@Azeroth 14-11-2007_11:44:22 Eric[nK]@Azeroth 14-11-2007_11:44:22 USER Techs %
+ [5:14:37 PM] SBs 0 % Eric[nK]@Azeroth 14-11-2007_11:59:06 Eric[nK]@Azeroth 23-11-2007_11:40:13 CLAN Techs %
+ [5:14:37 PM] Hdx 0 % Eric[nK]@Azeroth 14-11-2007_12:33:42 Eric[nK]@Azeroth 14-11-2007_12:33:42 USER Techs %
+ [5:14:37 PM] Tech-RoNiN 0 % Eric[nK]@Azeroth 14-11-2007_17:49:07 Eric[nK]@Azeroth 14-11-2007_17:49:07 USER techs %
+ [5:14:37 PM] PyroManiac666@Azeroth 0 % Eric[nK]@Azeroth 16-11-2007_15:55:35 Eric[nK]@Azeroth 16-11-2007_15:55:35 USER Techs %
+ [5:14:37 PM] Naivete@Azeroth 0 % Eric[nK]@Azeroth 17-11-2007_11:11:19 Eric[nK]@Azeroth 17-11-2007_11:11:19 USER Techs %
+ [5:14:37 PM] ToSS]ZeR0[@Azeroth 0 S Eric[nK]@Azeroth 20-11-2007_10:31:08 Eric[nK]@Azeroth 20-11-2007_10:31:16 USER % %
+ [5:14:37 PM] Divine[nK] 0 % Eric[nK]@Azeroth 20-11-2007_10:33:38 Eric[nK]@Azeroth 20-11-2007_10:33:38 USER [nK] %
+ [5:14:37 PM] sLy[nK] 0 % Eric[nK]@Azeroth 20-11-2007_10:33:54 Eric[nK]@Azeroth 20-11-2007_10:33:54 USER [nK] %
+ [5:14:37 PM] [nK] 0 aOS Eric[nK]@Azeroth 20-11-2007_10:35:07 (console) 12-06-2007_18:00:22 GROUP % %
+ [5:14:37 PM] Tech-PhiX@Azeroth 0 % Eric[nK] 23-11-2007_16:47:23 Eric[nK] 23-11-2007_16:59:32 USER Techs %
+ [5:14:37 PM] SEXP 0 B % 12-04-2007_22:48:42 % 12-04-2007_22:48:42 GAME % %
+ [5:14:37 PM] End of File.
+ [5:15:19 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:15:20 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:15:20 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:15:20 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:15:20 PM]  
+ [5:15:20 PM] >> ÿcbStealthBot News
+ [5:15:20 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:15:20 PM] ->> 
+ [5:15:20 PM] ->> ÿcbStealthBot Beta News
+ [5:15:20 PM] ->> Happy testing!
+ [5:15:20 PM]  
+ [5:15:20 PM] The current StealthBot Beta version is 2.6993.
+ [5:15:20 PM]  [5:15:20 PM] Loaded 2 plugins (2 enabled). Type  [5:15:20 PM] /plugins [5:15:20 PM]  to view them. Type  [5:15:20 PM] /phelp [5:15:20 PM]  for help using them.
+ [5:15:20 PM]  [5:15:20 PM] Type  [5:15:20 PM] /updates [5:15:20 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:15:24 PM] Contents of file users.txt:
+ [5:15:24 PM] Eric[nK]@Azeroth 200 % % % Eric[nK]@Azeroth 16-11-2007_19:05:15 USER % %
+ [5:15:24 PM] *#* 0 B Eric[nK]@Azeroth 11-12-2007_15:08:43 Eric[nK]@Azeroth 18-11-2007_17:27:05 USER % *#*
+ [5:15:24 PM] Techs 0 aOS Eric[nK]@Azeroth 11-12-2007_15:32:39 Eric[nK] 23-11-2007_16:58:05 GROUP % %
+ [5:15:24 PM] Berzerker-Tech 0 % Eric[nK]@Azeroth 14-11-2007_11:44:22 Eric[nK]@Azeroth 14-11-2007_11:44:22 USER Techs %
+ [5:15:24 PM] SBs 0 % Eric[nK]@Azeroth 14-11-2007_11:59:06 Eric[nK]@Azeroth 23-11-2007_11:40:13 CLAN Techs %
+ [5:15:24 PM] Hdx 0 % Eric[nK]@Azeroth 14-11-2007_12:33:42 Eric[nK]@Azeroth 14-11-2007_12:33:42 USER Techs %
+ [5:15:24 PM] Tech-RoNiN 0 % Eric[nK]@Azeroth 14-11-2007_17:49:07 Eric[nK]@Azeroth 14-11-2007_17:49:07 USER techs %
+ [5:15:24 PM] PyroManiac666@Azeroth 0 % Eric[nK]@Azeroth 16-11-2007_15:55:35 Eric[nK]@Azeroth 16-11-2007_15:55:35 USER Techs %
+ [5:15:24 PM] Naivete@Azeroth 0 % Eric[nK]@Azeroth 17-11-2007_11:11:19 Eric[nK]@Azeroth 17-11-2007_11:11:19 USER Techs %
+ [5:15:24 PM] ToSS]ZeR0[@Azeroth 0 S Eric[nK]@Azeroth 20-11-2007_10:31:08 Eric[nK]@Azeroth 20-11-2007_10:31:16 USER % %
+ [5:15:24 PM] Divine[nK] 0 % Eric[nK]@Azeroth 20-11-2007_10:33:38 Eric[nK]@Azeroth 20-11-2007_10:33:38 USER [nK] %
+ [5:15:24 PM] sLy[nK] 0 % Eric[nK]@Azeroth 20-11-2007_10:33:54 Eric[nK]@Azeroth 20-11-2007_10:33:54 USER [nK] %
+ [5:15:24 PM] [nK] 0 aOS Eric[nK]@Azeroth 20-11-2007_10:35:07 (console) 12-06-2007_18:00:22 GROUP % %
+ [5:15:24 PM] Tech-PhiX@Azeroth 0 % Eric[nK] 23-11-2007_16:47:23 Eric[nK] 23-11-2007_16:59:32 USER Techs %
+ [5:15:24 PM] SEXP 0 B % 12-04-2007_22:48:42 % 12-04-2007_22:48:42 GAME % %
+ [5:15:24 PM] End of File.
+ [5:16:18 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:16:18 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:16:18 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:16:19 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:16:19 PM]  
+ [5:16:19 PM] >> ÿcbStealthBot News
+ [5:16:19 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:16:19 PM] ->> 
+ [5:16:19 PM] ->> ÿcbStealthBot Beta News
+ [5:16:19 PM] ->> Happy testing!
+ [5:16:19 PM]  
+ [5:16:19 PM] The current StealthBot Beta version is 2.6993.
+ [5:16:19 PM]  [5:16:19 PM] Loaded 2 plugins (2 enabled). Type  [5:16:19 PM] /plugins [5:16:19 PM]  to view them. Type  [5:16:19 PM] /phelp [5:16:19 PM]  for help using them.
+ [5:16:19 PM]  [5:16:19 PM] Type  [5:16:19 PM] /updates [5:16:19 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:16:25 PM] Contents of file users.txt:
+ [5:16:25 PM] Eric[nK]@Azeroth 200 % % % Eric[nK]@Azeroth 16-11-2007_19:05:15 USER % %
+ [5:16:25 PM] *#* 0 B Eric[nK]@Azeroth 11-12-2007_15:08:43 Eric[nK]@Azeroth 18-11-2007_17:27:05 USER % *#*
+ [5:16:25 PM] Techs 0 aOS Eric[nK]@Azeroth 11-12-2007_15:32:39 Eric[nK] 23-11-2007_16:58:05 GROUP % %
+ [5:16:25 PM] Berzerker-Tech 0 % Eric[nK]@Azeroth 14-11-2007_11:44:22 Eric[nK]@Azeroth 14-11-2007_11:44:22 USER Techs %
+ [5:16:25 PM] SBs 0 % Eric[nK]@Azeroth 14-11-2007_11:59:06 Eric[nK]@Azeroth 23-11-2007_11:40:13 CLAN Techs %
+ [5:16:25 PM] Hdx 0 % Eric[nK]@Azeroth 14-11-2007_12:33:42 Eric[nK]@Azeroth 14-11-2007_12:33:42 USER Techs %
+ [5:16:25 PM] Tech-RoNiN 0 % Eric[nK]@Azeroth 14-11-2007_17:49:07 Eric[nK]@Azeroth 14-11-2007_17:49:07 USER techs %
+ [5:16:25 PM] PyroManiac666@Azeroth 0 % Eric[nK]@Azeroth 16-11-2007_15:55:35 Eric[nK]@Azeroth 16-11-2007_15:55:35 USER Techs %
+ [5:16:25 PM] Naivete@Azeroth 0 % Eric[nK]@Azeroth 17-11-2007_11:11:19 Eric[nK]@Azeroth 17-11-2007_11:11:19 USER Techs %
+ [5:16:25 PM] ToSS]ZeR0[@Azeroth 0 S Eric[nK]@Azeroth 20-11-2007_10:31:08 Eric[nK]@Azeroth 20-11-2007_10:31:16 USER % %
+ [5:16:25 PM] Divine[nK] 0 % Eric[nK]@Azeroth 20-11-2007_10:33:38 Eric[nK]@Azeroth 20-11-2007_10:33:38 USER [nK] %
+ [5:16:25 PM] sLy[nK] 0 % Eric[nK]@Azeroth 20-11-2007_10:33:54 Eric[nK]@Azeroth 20-11-2007_10:33:54 USER [nK] %
+ [5:16:25 PM] [nK] 0 aOS Eric[nK]@Azeroth 20-11-2007_10:35:07 (console) 12-06-2007_18:00:22 GROUP % %
+ [5:16:25 PM] Tech-PhiX@Azeroth 0 % Eric[nK] 23-11-2007_16:47:23 Eric[nK] 23-11-2007_16:59:32 USER Techs %
+ [5:16:25 PM] SEXP 0 B % 12-04-2007_22:48:42 % 12-04-2007_22:48:42 GAME % %
+ [5:16:25 PM] End of File.
+ [5:16:42 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:16:42 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:16:42 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:16:42 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:16:42 PM]  
+ [5:16:42 PM] >> ÿcbStealthBot News
+ [5:16:42 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:16:42 PM] ->> 
+ [5:16:42 PM] ->> ÿcbStealthBot Beta News
+ [5:16:42 PM] ->> Happy testing!
+ [5:16:42 PM]  
+ [5:16:42 PM] The current StealthBot Beta version is 2.6993.
+ [5:16:42 PM]  [5:16:42 PM] Loaded 2 plugins (2 enabled). Type  [5:16:42 PM] /plugins [5:16:42 PM]  to view them. Type  [5:16:42 PM] /phelp [5:16:42 PM]  for help using them.
+ [5:16:42 PM]  [5:16:42 PM] Type  [5:16:42 PM] /updates [5:16:42 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:16:51 PM] Contents of file users.txt:
+ [5:16:51 PM] Eric[nK]@Azeroth 200 % % % Eric[nK]@Azeroth 16-11-2007_19:05:15 USER % %
+ [5:16:51 PM] *#* 0 B Eric[nK]@Azeroth 11-12-2007_15:08:43 Eric[nK]@Azeroth 18-11-2007_17:27:05 USER % *#*
+ [5:16:51 PM] Techs 0 aOS Eric[nK]@Azeroth 11-12-2007_15:32:39 Eric[nK] 23-11-2007_16:58:05 GROUP % %
+ [5:16:51 PM] Berzerker-Tech 0 % Eric[nK]@Azeroth 14-11-2007_11:44:22 Eric[nK]@Azeroth 14-11-2007_11:44:22 USER Techs %
+ [5:16:51 PM] SBs 0 % Eric[nK]@Azeroth 14-11-2007_11:59:06 Eric[nK]@Azeroth 23-11-2007_11:40:13 CLAN Techs %
+ [5:16:51 PM] Hdx 0 % Eric[nK]@Azeroth 14-11-2007_12:33:42 Eric[nK]@Azeroth 14-11-2007_12:33:42 USER Techs %
+ [5:16:51 PM] Tech-RoNiN 0 % Eric[nK]@Azeroth 14-11-2007_17:49:07 Eric[nK]@Azeroth 14-11-2007_17:49:07 USER techs %
+ [5:16:51 PM] PyroManiac666@Azeroth 0 % Eric[nK]@Azeroth 16-11-2007_15:55:35 Eric[nK]@Azeroth 16-11-2007_15:55:35 USER Techs %
+ [5:16:51 PM] Naivete@Azeroth 0 % Eric[nK]@Azeroth 17-11-2007_11:11:19 Eric[nK]@Azeroth 17-11-2007_11:11:19 USER Techs %
+ [5:16:51 PM] ToSS]ZeR0[@Azeroth 0 S Eric[nK]@Azeroth 20-11-2007_10:31:08 Eric[nK]@Azeroth 20-11-2007_10:31:16 USER % %
+ [5:16:51 PM] Divine[nK] 0 % Eric[nK]@Azeroth 20-11-2007_10:33:38 Eric[nK]@Azeroth 20-11-2007_10:33:38 USER [nK] %
+ [5:16:51 PM] sLy[nK] 0 % Eric[nK]@Azeroth 20-11-2007_10:33:54 Eric[nK]@Azeroth 20-11-2007_10:33:54 USER [nK] %
+ [5:16:51 PM] [nK] 0 aOS Eric[nK]@Azeroth 20-11-2007_10:35:07 (console) 12-06-2007_18:00:22 GROUP % %
+ [5:16:51 PM] Tech-PhiX@Azeroth 0 % Eric[nK] 23-11-2007_16:47:23 Eric[nK] 23-11-2007_16:59:32 USER Techs %
+ [5:16:51 PM] SEXP 0 B % 12-04-2007_22:48:42 % 12-04-2007_22:48:42 GAME % %
+ [5:16:51 PM] End of File.
+ [5:17:01 PM] -> Welcome to StealthBot Beta v2.6998, by Stealth.
+ [5:17:01 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [5:17:01 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [5:17:02 PM] The current StealthBot version is ÿcb2.6R3.
+ [5:17:02 PM]  
+ [5:17:02 PM] >> ÿcbStealthBot News
+ [5:17:02 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [5:17:02 PM] ->> 
+ [5:17:02 PM] ->> ÿcbStealthBot Beta News
+ [5:17:02 PM] ->> Happy testing!
+ [5:17:02 PM]  
+ [5:17:02 PM] The current StealthBot Beta version is 2.6993.
+ [5:17:02 PM]  [5:17:02 PM] Loaded 2 plugins (2 enabled). Type  [5:17:02 PM] /plugins [5:17:02 PM]  to view them. Type  [5:17:02 PM] /phelp [5:17:02 PM]  for help using them.
+ [5:17:02 PM]  [5:17:02 PM] Type  [5:17:02 PM] /updates [5:17:02 PM]  in the bot to view updates and new plugins that are available for download.
+ [5:17:14 PM] Contents of file users.txt:
+ [5:17:14 PM] Eric[nK]@Azeroth 200 % % % Eric[nK]@Azeroth 16-11-2007_19:05:15 USER % %
+ [5:17:14 PM] *#* 0 B Eric[nK]@Azeroth 11-12-2007_15:08:43 Eric[nK]@Azeroth 18-11-2007_17:27:05 USER % *#*
+ [5:17:14 PM] Techs 0 aOS Eric[nK]@Azeroth 11-12-2007_15:32:39 Eric[nK] 23-11-2007_16:58:05 GROUP % %
+ [5:17:14 PM] Berzerker-Tech 0 % Eric[nK]@Azeroth 14-11-2007_11:44:22 Eric[nK]@Azeroth 14-11-2007_11:44:22 USER Techs %
+ [5:17:14 PM] SBs 0 % Eric[nK]@Azeroth 14-11-2007_11:59:06 Eric[nK]@Azeroth 23-11-2007_11:40:13 CLAN Techs %
+ [5:17:14 PM] Hdx 0 % Eric[nK]@Azeroth 14-11-2007_12:33:42 Eric[nK]@Azeroth 14-11-2007_12:33:42 USER Techs %
+ [5:17:14 PM] Tech-RoNiN 0 % Eric[nK]@Azeroth 14-11-2007_17:49:07 Eric[nK]@Azeroth 14-11-2007_17:49:07 USER techs %
+ [5:17:14 PM] PyroManiac666@Azeroth 0 % Eric[nK]@Azeroth 16-11-2007_15:55:35 Eric[nK]@Azeroth 16-11-2007_15:55:35 USER Techs %
+ [5:17:14 PM] Naivete@Azeroth 0 % Eric[nK]@Azeroth 17-11-2007_11:11:19 Eric[nK]@Azeroth 17-11-2007_11:11:19 USER Techs %
+ [5:17:14 PM] ToSS]ZeR0[@Azeroth 0 S Eric[nK]@Azeroth 20-11-2007_10:31:08 Eric[nK]@Azeroth 20-11-2007_10:31:16 USER % %
+ [5:17:14 PM] Divine[nK] 0 % Eric[nK]@Azeroth 20-11-2007_10:33:38 Eric[nK]@Azeroth 20-11-2007_10:33:38 USER [nK] %
+ [5:17:14 PM] sLy[nK] 0 % Eric[nK]@Azeroth 20-11-2007_10:33:54 Eric[nK]@Azeroth 20-11-2007_10:33:54 USER [nK] %
+ [5:17:14 PM] [nK] 0 aOS Eric[nK]@Azeroth 20-11-2007_10:35:07 (console) 12-06-2007_18:00:22 GROUP % %
+ [5:17:14 PM] Tech-PhiX@Azeroth 0 % Eric[nK] 23-11-2007_16:47:23 Eric[nK] 23-11-2007_16:59:32 USER Techs %
+ [5:17:14 PM] SEXP 0 B % 12-04-2007_22:48:42 % 12-04-2007_22:48:42 GAME % %
+ [5:17:14 PM] End of File.

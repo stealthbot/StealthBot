@@ -1,0 +1,108 @@
+ [06:21:06 PM] -> Welcome to StealthBot Beta v2.6999, by Stealth.
+ [06:21:06 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [06:21:06 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [06:21:07 PM] The current StealthBot version is ÿcb2.6R3.
+ [06:21:07 PM]  
+ [06:21:07 PM] >> ÿcbStealthBot News
+ [06:21:07 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [06:21:07 PM] ->> 
+ [06:21:07 PM] ->> ÿcbStealthBot Beta News
+ [06:21:07 PM] ->> Happy testing!
+ [06:21:07 PM]  
+ [06:21:07 PM] The current StealthBot Beta version is 2.6993.
+ [06:21:07 PM]  [06:21:07 PM] Loaded 2 plugins (2 enabled). Type  [06:21:07 PM] /plugins [06:21:07 PM]  to view them. Type  [06:21:07 PM] /phelp [06:21:07 PM]  for help using them.
+ [06:21:07 PM]  [06:21:07 PM] Type  [06:21:07 PM] /updates [06:21:07 PM]  in the bot to view updates and new plugins that are available for download.
+ [06:21:07 PM] Connecting your bot...
+ [06:21:07 PM] Authorizing your private-release bot, please wait.
+ [06:21:07 PM] Private usage authorized, connecting to Battle.Net.
+ [06:21:07 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [06:21:08 PM] [BNLS] Connected!
+ [06:21:08 PM] [BNLS] Authorized!
+ [06:21:08 PM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [06:21:08 PM] [BNET] Connected!
+ [06:21:08 PM] [BNET] Checking version...
+ [06:21:09 PM] [BNET] Client version accepted!
+ [06:21:09 PM] [BNET] Sending login information...
+ [06:21:09 PM] [BNET] Login successful.
+ [06:21:09 PM] [CLAN] You are a Grunt in Clan SBs.
+ [06:21:09 PM] [BNET] Logged on as Eric[nK].
+ [06:21:52 PM] -> Welcome to StealthBot Beta v2.6999, by Stealth.
+ [06:21:52 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [06:21:52 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [06:21:52 PM] The current StealthBot version is ÿcb2.6R3.
+ [06:21:52 PM]  
+ [06:21:52 PM] >> ÿcbStealthBot News
+ [06:21:52 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [06:21:52 PM] ->> 
+ [06:21:52 PM] ->> ÿcbStealthBot Beta News
+ [06:21:52 PM] ->> Happy testing!
+ [06:21:52 PM]  
+ [06:21:52 PM] The current StealthBot Beta version is 2.6993.
+ [06:21:53 PM]  [06:21:53 PM] Loaded 2 plugins (2 enabled). Type  [06:21:53 PM] /plugins [06:21:53 PM]  to view them. Type  [06:21:53 PM] /phelp [06:21:53 PM]  for help using them.
+ [06:21:53 PM]  [06:21:53 PM] Type  [06:21:53 PM] /updates [06:21:53 PM]  in the bot to view updates and new plugins that are available for download.
+ [06:21:53 PM] Connecting your bot...
+ [06:21:53 PM] Authorizing your private-release bot, please wait.
+ [06:21:54 PM] Private usage authorized, connecting to Battle.Net.
+ [06:21:54 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [06:21:54 PM] [BNLS] Connected!
+ [06:21:54 PM] [BNLS] Authorized!
+ [06:21:54 PM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [06:21:54 PM] [BNET] Connected!
+ [06:21:54 PM] [BNET] Checking version...
+ [06:21:55 PM] [BNET] Client version accepted!
+ [06:21:55 PM] [BNET] Sending login information...
+ [06:21:55 PM] [BNET] Login successful.
+ [06:21:55 PM] [CLAN] You are a Grunt in Clan SBs.
+ [06:21:55 PM] [BNET] Logged on as Eric[nK].
+ [06:21:55 PM] -- Joined channel: Clan SBs --
+ [06:21:55 PM] Welcome to Battle.net!
+ [06:21:55 PM] This server is hosted by AT&T.
+ [06:21:55 PM] There are currently 6875 users playing 218 games of Warcraft III, and 174655 users playing 46585 games on Battle.net.
+ [06:21:55 PM] Last logon: Wed Jan 16  6:28 PM
+ [06:21:56 PM] -- Joined channel: Clan BoT --
+ [06:21:56 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [06:21:56 PM] Last Logon: 1/17/2008, 02:23:51 (Battle.net time)
+ [06:21:56 PM] Last Logoff: 1/17/2008, 02:23:51 (Battle.net time)
+ [06:21:56 PM] Time Logged: 60 days, 4 hours, 54 minutes and 14 seconds
+ [06:22:46 PM] -> Welcome to StealthBot Beta v2.6999, by Stealth.
+ [06:22:46 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [06:22:46 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [06:23:50 PM] -> Welcome to StealthBot Beta v2.6999, by Stealth.
+ [06:23:50 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [06:23:51 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [06:23:51 PM] The current StealthBot version is ÿcb2.6R3.
+ [06:23:51 PM]  
+ [06:23:51 PM] >> ÿcbStealthBot News
+ [06:23:51 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [06:23:51 PM] ->> 
+ [06:23:51 PM] ->> ÿcbStealthBot Beta News
+ [06:23:51 PM] ->> Happy testing!
+ [06:23:51 PM]  
+ [06:23:51 PM] The current StealthBot Beta version is 2.6993.
+ [06:23:51 PM]  [06:23:51 PM] Loaded 2 plugins (2 enabled). Type  [06:23:51 PM] /plugins [06:23:51 PM]  to view them. Type  [06:23:51 PM] /phelp [06:23:51 PM]  for help using them.
+ [06:23:51 PM]  [06:23:51 PM] Type  [06:23:51 PM] /updates [06:23:51 PM]  in the bot to view updates and new plugins that are available for download.
+ [06:23:52 PM] Connecting your bot...
+ [06:23:52 PM] Authorizing your private-release bot, please wait.
+ [06:23:52 PM] Private usage authorized, connecting to Battle.Net.
+ [06:23:52 PM] [BNLS] Connecting to the BNLS server at jbls.org...
+ [06:23:52 PM] [BNLS] Connected!
+ [06:23:52 PM] [BNLS] Authorized!
+ [06:23:52 PM] [BNET] Connecting to the Battle.net server at useast.battle.net...
+ [06:23:52 PM] [BNET] Connected!
+ [06:23:52 PM] [BNET] Checking version...
+ [06:23:53 PM] [BNET] Client version accepted!
+ [06:23:53 PM] [BNET] Sending login information...
+ [06:23:53 PM] [BNET] Login successful.
+ [06:23:54 PM] [CLAN] You are a Grunt in Clan SBs.
+ [06:23:54 PM] [BNET] Logged on as Eric[nK].
+ [06:24:00 PM] -- Joined channel: Clan SBs --
+ [06:24:02 PM] Welcome to Battle.net!
+ [06:24:02 PM] This server is hosted by AT&T.
+ [06:24:02 PM] There are currently 6889 users playing 228 games of Warcraft III, and 175135 users playing 46486 games on Battle.net.
+ [06:24:02 PM] Last logon: Wed Jan 16  6:29 PM
+ [06:24:02 PM] -- Stats updated: Eric[nK]@Azeroth [125ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [06:24:02 PM] -- Joined channel: Clan BoT --
+ [06:24:03 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [06:24:03 PM] Last Logon: 1/17/2008, 02:31:01 (Battle.net time)
+ [06:24:03 PM] Last Logoff: 1/17/2008, 02:23:51 (Battle.net time)
+ [06:24:03 PM] Time Logged: 60 days, 4 hours, 54 minutes and 34 seconds

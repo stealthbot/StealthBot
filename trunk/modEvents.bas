@@ -1689,13 +1689,16 @@ Private Function CheckMessage(Username As String, Message As String) As Boolean
         If (BotVars.QuietTime) Then
             ' ...
             Ban Username & " Quiet-time is enabled.", (AutoModSafelistValue - 1)
-        ElseIf (BotVars.KickOnYell = 1) Then
+        Else
             ' ...
-            If (Len(Message) > 5) Then
+            If (BotVars.KickOnYell = 1) Then
                 ' ...
-                If (PercentActualUppercase(Message) > 90) Then
+                If (Len(Message) > 5) Then
                     ' ...
-                    Ban Username & " Yelling", (AutoModSafelistValue - 1), 1
+                    If (PercentActualUppercase(Message) > 90) Then
+                        ' ...
+                        Ban Username & " Yelling", (AutoModSafelistValue - 1), 1
+                    End If
                 End If
             End If
         End If

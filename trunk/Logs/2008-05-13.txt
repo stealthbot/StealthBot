@@ -1,0 +1,1142 @@
+ [08:58:49 AM] [BNET] 10053 -- Connection is aborted due to timeout or other failure
+ [08:58:50 AM] [BNET] Disconnected.
+ [08:58:53 AM] [BNET] The Battle.net server has terminated your connection.
+ [08:58:53 AM] [BNET] Attempting to reconnect...
+ [08:58:55 AM] Authorizing your private-release bot, please wait.
+ [08:58:56 AM] Authorizing your private-release bot, please wait.
+ [08:58:56 AM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [08:58:56 AM] All connections closed.
+ [08:59:14 AM] Private usage authorized, connecting to Battle.Net.
+ [08:59:14 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [08:59:16 AM] [BNLS] Connected!
+ [08:59:17 AM] [BNLS] Authorized!
+ [08:59:17 AM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [08:59:18 AM] [BNET] Connected!
+ [08:59:18 AM] [BNET] Checking version...
+ [08:59:19 AM] [BNET] Client version accepted!
+ [08:59:19 AM] [BNET] Sending login information...
+ [08:59:19 AM] [BNET] Login successful.
+ [08:59:19 AM] [CLAN] You are a Grunt in Clan BoT.
+ [08:59:19 AM] [BNET] Logged on as Eric[nK].
+ [08:59:20 AM] -- Joined channel: The Void --
+ [08:59:20 AM] If you experience a lot of lag while within this channel, try selecting 'Disable Silent Channel View' from the Window menu.
+ [08:59:20 AM] This channel does not have chat privileges.
+ [08:59:20 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [08:59:20 AM] Last Logon: 5/13/2008, 16:05:36 (Battle.net time)
+ [08:59:20 AM] Last Logoff: 5/13/2008, 06:17:20 (Battle.net time)
+ [08:59:20 AM] Time Logged: 102 days, 8 hours, 19 minutes and 21 seconds
+ [10:37:18 AM] [BNET] 10053 -- Connection is aborted due to timeout or other failure
+ [10:37:18 AM] [BNET] Disconnected.
+ [10:37:18 AM] [BNET] You appear to be IPBanned. The bot will attempt to reconnect again in 20 minutes.
+ [01:13:07 PM] Connecting your bot...
+ [01:13:08 PM] Authorizing your private-release bot, please wait.
+ [01:13:08 PM] Private usage authorized, connecting to Battle.Net.
+ [01:13:08 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [01:13:11 PM] [BNLS] Connected!
+ [01:13:11 PM] [BNLS] Authorized!
+ [01:13:11 PM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [01:13:11 PM] [BNET] Connected!
+ [01:13:11 PM] [BNET] Checking version...
+ [01:13:12 PM] [BNET] Client version accepted!
+ [01:13:12 PM] [BNET] Sending login information...
+ [01:13:13 PM] [BNET] Login successful.
+ [01:13:13 PM] [CLAN] You are a Grunt in Clan BoT.
+ [01:13:13 PM] [BNET] Logged on as Eric[nK].
+ [01:13:14 PM] -- Joined channel: The Void --
+ [01:13:14 PM] If you experience a lot of lag while within this channel, try selecting 'Disable Silent Channel View' from the Window menu.
+ [01:13:14 PM] This channel does not have chat privileges.
+ [01:13:14 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [01:13:14 PM] Last Logon: 5/13/2008, 20:14:51 (Battle.net time)
+ [01:13:14 PM] Last Logoff: 5/13/2008, 17:37:22 (Battle.net time)
+ [01:13:14 PM] Time Logged: 102 days, 9 hours, 57 minutes and 45 seconds
+ [01:23:09 PM] -- Joined channel: Clan BoT --
+ [01:23:09 PM] !&!@$inur!@!@!@
+ [01:30:40 PM] <IdleBoT@Azeroth [#8613](-1) <zealot_> man, if aids made you not want to masterbate, it would be the most | awful disease ever>
+ [01:37:30 PM] <From Bot-Vector@Azeroth> Eric
+ [01:37:44 PM] <IdleBoT@Azeroth> http://en.wikipedia.org/wiki/COBOL#Defense i would
+ [01:37:46 PM] <IdleBoT@Azeroth> hate that
+ [01:37:47 PM] <IdleBoT@Azeroth> so much
+ [01:37:57 PM] <From Bot-Vector@Azeroth> I suggest that if you are a root administrator, and I believe you are, you should get FTP access to stealthbot.net, and its subdomains
+ [01:37:59 PM] <IdleBoT@Azeroth> ERiC NK GUESS WHAT
+ [01:38:25 PM] <Eric[nK]@Azeroth> ...?
+ [01:38:34 PM] <IdleBoT@Azeroth> well
+ [01:38:35 PM] <To Bot-Vector@Azeroth> ...?
+ [01:38:44 PM] <IdleBoT@Azeroth> it's more of a question, when's next release?
+ [01:38:51 PM] <Eric[nK]@Azeroth> oh, the hell if I know.
+ [01:38:54 PM] <Eric[nK]@Azeroth> finals.
+ [01:38:59 PM] <From Bot-Vector@Azeroth> Well, Eric, it's like this.
+ [01:39:00 PM] <IdleBoT@Azeroth> you get tired of working on it?
+ [01:39:06 PM] <IdleBoT@Azeroth> i got those in 2 weeks
+ [01:39:07 PM] <IdleBoT@Azeroth> wewt
+ [01:39:09 PM] <From Bot-Vector@Azeroth> You should get access to the entire FTP
+ [01:39:13 PM] <From Bot-Vector@Azeroth> Why don't you?
+ [01:39:21 PM] <Pyro6@Azeroth>  [16:38:48.064] <From connection_lost> Your friend connection_lost entered a Warcraft III The Frozen Throne game called awol.
+ [01:39:23 PM] <Pyro6@Azeroth>  [16:38:48.104] Error: Invalid procedure call or argument in ParsePacket().
+ [01:39:24 PM] <To Bot-Vector@Azeroth> What would I do with such access?
+ [01:39:50 PM] <From Bot-Vector@Azeroth> It's so you can manage the entire site, with whatever you need.
+ [01:40:06 PM] <To Bot-Vector@Azeroth> I can manage the entire site with or without ftp access.
+ [01:40:11 PM] <From Bot-Vector@Azeroth> I'm just stating a very old plugin on the plugin system.
+ [01:40:51 PM] <From Bot-Vector@Azeroth> You have access to the admin interface, yeah..
+ [01:41:12 PM] <From Bot-Vector@Azeroth> The admin interface to stealthbot.net, not IPB, I mean.
+ [01:41:18 PM] <Alendar[BoT]@Azeroth> ...
+ [01:41:20 PM] <From Bot-Vector@Azeroth> Well
+ [01:41:28 PM] <From Bot-Vector@Azeroth> Is that sufficient to what I want?
+ [01:42:05 PM] <To Bot-Vector@Azeroth> The IPB admin console controls the entire site.  It's the "admin interface."
+ [01:42:34 PM] <From Bot-Vector@Azeroth> Well, the forum, yes.
+ [01:42:54 PM] <From Bot-Vector@Azeroth> But it cannot act as a means of adding, and removing files.
+ [01:42:58 PM] <To Bot-Vector@Azeroth> For all practical purposes, the entire site.
+ [01:43:03 PM] <From Bot-Vector@Azeroth> oh
+ [01:43:06 PM] <From Bot-Vector@Azeroth> ok
+ [01:43:15 PM] <From Bot-Vector@Azeroth> But can you notify Swent for me?
+ [01:43:19 PM] <To Bot-Vector@Azeroth> Why would I need to upload files?
+ [01:43:22 PM] <To Bot-Vector@Azeroth> no.
+ [01:43:26 PM] -- Alendar@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [01:43:33 PM] <From Bot-Vector@Azeroth> Eric.. I cannot reach him.
+ [01:43:42 PM] <To Bot-Vector@Azeroth> aim.
+ [01:43:50 PM] <From Bot-Vector@Azeroth> I have his skype name, but I forgot his e-mail
+ [01:43:55 PM] <From Bot-Vector@Azeroth> Meh..
+ [01:54:12 PM] -- IdleBoT@Azeroth has left the channel.
+ [01:54:12 PM] -- Joined channel: Clan BoT --
+ [01:54:13 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [01:54:13 PM] [CLAN] You have been promoted. Your new rank is Shaman.
+ [01:54:13 PM] [CLAN] Member update: Eric[nK] is now a Shaman.
+ [01:54:13 PM] !&!@$inur!@!@!@
+ [01:55:27 PM] -- Joined channel: Clan BoT --
+ [01:55:27 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [01:55:27 PM] !&!@$inur!@!@!@
+ [01:55:29 PM] -- Joined channel: Clan BoT --
+ [01:55:29 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [01:55:29 PM] !&!@$inur!@!@!@
+ [01:55:31 PM] All connections closed.
+ [01:55:31 PM] Connecting your bot...
+ [01:55:31 PM] Authorizing your private-release bot, please wait.
+ [01:55:32 PM] Private usage authorized, connecting to Battle.Net.
+ [01:55:32 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [01:55:32 PM] [BNLS] Connected!
+ [01:55:32 PM] [BNLS] Authorized!
+ [01:55:33 PM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [01:55:33 PM] [BNET] Connected!
+ [01:55:33 PM] [BNET] Checking version...
+ [01:55:34 PM] [BNET] Client version accepted!
+ [01:55:34 PM] [BNET] Sending login information...
+ [01:55:35 PM] [BNET] Login successful.
+ [01:55:35 PM] [CLAN] You are a Grunt in Clan BoT.
+ [01:55:35 PM] [BNET] Logged on as Eric[nK].
+ [01:55:36 PM] -- Joined channel: The Void --
+ [01:55:36 PM] If you experience a lot of lag while within this channel, try selecting 'Disable Silent Channel View' from the Window menu.
+ [01:55:36 PM] This channel does not have chat privileges.
+ [01:55:36 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [01:55:36 PM] Last Logon: 5/13/2008, 20:57:48 (Battle.net time)
+ [01:55:36 PM] Last Logoff: 5/13/2008, 20:57:48 (Battle.net time)
+ [01:55:36 PM] Time Logged: 102 days, 10 hours, 39 minutes and 57 seconds
+ [01:55:42 PM] -- Joined channel: Clan BoT --
+ [01:55:43 PM] !&!@$inur!@!@!@
+ [01:55:43 PM] -- HaKr[BoT]@Azeroth has left the channel.
+ [01:55:43 PM] -- Joined channel: Clan BoT --
+ [01:55:43 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [01:55:43 PM] [CLAN] You have been promoted. Your new rank is Shaman.
+ [01:55:43 PM] [CLAN] Member update: Eric[nK] is now a Shaman.
+ [01:55:43 PM] !&!@$inur!@!@!@
+ [01:57:57 PM] -- IdleBoT@Azeroth [78ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [01:57:57 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [01:57:57 PM] -- IdleBoT@Azeroth has left the channel.
+ [01:57:58 PM] -- LuC1Fr[BoT]@Azeroth [141ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [01:57:58 PM] -- IdleBoT@Azeroth [78ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [01:57:58 PM] -- IdleBoT@Azeroth has acquired ops.
+ [01:58:05 PM] <IdleBoT@Azeroth> so uh
+ [01:58:07 PM] <IdleBoT@Azeroth> people
+ [01:58:11 PM] <IdleBoT@Azeroth> asking for 2 million dollars
+ [01:58:15 PM] <IdleBoT@Azeroth> and they wont abort their baby
+ [01:58:17 PM] <IdleBoT@Azeroth> http://www.twomilliondollarbaby.blogspot.com/
+ [01:58:49 PM] -- ozark@Azeroth has left the channel.
+ [01:58:55 PM] -- HaKr[BoT]@Azeroth has left the channel.
+ [02:13:09 PM] <VBScript@Azeroth> eric
+ [02:13:16 PM] <VBScript@Azeroth> xp key doesnt say
+ [02:13:18 PM] <From Pyro6@Azeroth> Your friend Pyro6 has exited Battle.net.
+ [02:13:18 PM] -- Pyro6@Azeroth has left the channel.
+ [02:13:19 PM] <VBScript@Azeroth> save*
+ [02:15:08 PM] -- Ribose@Azeroth [46ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [02:16:03 PM] -- Ribose [47ms] has joined the channel using Starcraft Brood War (38 wins).
+ [02:19:08 PM] <From Pyro6@Azeroth> Your friend Pyro6 has entered Battle.net.
+ [02:19:09 PM] -- Pyro6@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [02:23:36 PM] -- Hero.A@Azeroth [78ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [02:23:40 PM] -- Hero.A@Azeroth has left the channel.
+ [02:25:55 PM] <VBScript@Azeroth | New on StealthBot S&P:  bcp question>
+ [02:26:48 PM] <PhiX> BCP QUESTION ZOMG
+ [02:38:24 PM] -- ozark@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [02:39:29 PM] -- ozark@Azeroth has left the channel.
+ [02:39:37 PM] -- HaKr[BoT]@Azeroth [79ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [02:45:03 PM] -- HaKr_@Azeroth [62ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [02:45:10 PM] -- HaKr_@Azeroth has left the channel.
+ [03:00:57 PM] -- HaKr_@Azeroth [62ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [03:00:58 PM] -- HaKr_@Azeroth has left the channel.
+ [03:08:09 PM] <From Alendar[BoT]@Azeroth> Your friend Alendar[BoT] has exited Battle.net.
+ [03:08:09 PM] -- Alendar[BoT]@Azeroth has left the channel.
+ [03:08:09 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [03:08:10 PM] -- LuC1Fr[BoT]@Azeroth [141ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:08:10 PM] -- LuC1Fr[BoT]@Azeroth has acquired ops.
+ [03:08:36 PM] <From Bot-Vector@Azeroth> Hiya Ninja
+ [03:09:23 PM] <From Bot-Vector@Azeroth> *ahem*, ninja?
+ [03:09:33 PM] <From Bot-Vector@Azeroth> Is there a white ninja in your clan? o.o
+ [03:09:51 PM] <From Bot-Vector@Azeroth> You're not a ninja, Chipp.
+ [03:10:03 PM] <From Bot-Vector@Azeroth> lmao Cameron
+ [03:10:12 PM] <From Bot-Vector@Azeroth> Ninja, are you there, your bot just went aloof
+ [03:12:45 PM] <From Bot-Vector@Azeroth> Heather, WTF?
+ [03:13:06 PM] <From Bot-Vector@Azeroth> Your bot is insane. Just bans me on site -.-
+ [03:14:22 PM] <VBScript@Azeroth | New on StealthBot S&P:  Hello>
+ [03:15:57 PM] <From Bot-Vector@Azeroth> Fancy an unban, Ninja?
+ [03:16:10 PM] -- HaKr_@Azeroth [62ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [03:16:13 PM] <From Bot-Vector@Azeroth> I had some person really confused
+ [03:16:20 PM] <HaKr_@Azeroth> That channel is restricted.
+ [03:16:37 PM] <From Bot-Vector@Azeroth> lol
+ [03:16:39 PM] <From Bot-Vector@Azeroth> k
+ [03:17:15 PM] <From Bot-Vector@Azeroth> *Sigh*
+ [03:17:43 PM] -- Hero.A@Azeroth [78ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [03:17:46 PM] <Hero.A@Azeroth> Hmm
+ [03:17:54 PM] <Pyro6@Azeroth> what channel
+ [03:18:00 PM] -- Joseph.W@Azeroth [32ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [03:18:00 PM] -- Stats updated: Joseph.W@Azeroth [32ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:18:18 PM] -- Hero.A@Azeroth has left the channel.
+ [03:18:33 PM] <From Bot-Vector@Azeroth> Yes Hero?
+ [03:18:38 PM] <From Bot-Vector@Azeroth> I am in Clan Pink
+ [03:18:45 PM] <From Bot-Vector@Azeroth> Not 'hiding'
+ [03:18:57 PM] <From Bot-Vector@Azeroth> I'm not unbanned from Ninety-Nine-Ninjas
+ [03:21:52 PM] <From Alendar[BoT]@Azeroth> Your friend Alendar[BoT] has entered Battle.net.
+ [03:21:54 PM] -- Alendar[BoT]@Azeroth [109ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:21:54 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [03:21:54 PM] -- Alendar[BoT]@Azeroth has left the channel.
+ [03:21:55 PM] -- LuC1Fr[BoT]@Azeroth [141ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:21:55 PM] -- Alendar[BoT]@Azeroth [109ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:21:55 PM] -- Alendar[BoT]@Azeroth has acquired ops.
+ [03:25:38 PM] That channel does not exist.
+ [03:25:38 PM] (If you are trying to search for a user, use the /whois command.)
+ [03:31:01 PM] <From Bot-Vector@Azeroth> Devin, no hai? o.OO
+ [03:33:01 PM] <From Bot-Vector@Azeroth> Orly, Ninja?
+ [03:34:08 PM] <From Bot-Vector@Azeroth> That was a shitlist, ninja..
+ [03:41:21 PM] <From PhiX[BoT]@Azeroth> Your friend PhiX[BoT] has exited Battle.net.
+ [03:41:21 PM] -- PhiX[BoT]@Azeroth has left the channel.
+ [03:41:21 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [03:41:22 PM] -- LuC1Fr[BoT]@Azeroth [141ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:41:22 PM] -- LuC1Fr[BoT]@Azeroth has acquired ops.
+ [03:41:38 PM] <Pyro6@Azeroth> GZEJFGNMBHMX4E7BYZFWGVBFBB
+ [03:41:43 PM] <PhiX> wtfux
+ [03:42:02 PM] <Pyro6@Azeroth> free uh
+ [03:42:04 PM] <Pyro6@Azeroth> wc3 key
+ [03:43:18 PM] -- PhiX has left the channel.
+ [03:43:45 PM] -- PhiX [-1ms] has joined the channel using Starcraft Brood War (1337 wins).
+ [03:43:47 PM] <From PhiX[BoT]@Azeroth> Your friend PhiX[BoT] has entered Battle.net.
+ [03:43:53 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [03:43:53 PM] -- PhiX[BoT]@Azeroth [188ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:43:53 PM] -- PhiX[BoT]@Azeroth has left the channel.
+ [03:43:54 PM] -- LuC1Fr[BoT]@Azeroth [141ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:43:54 PM] -- PhiX[BoT]@Azeroth [188ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:43:54 PM] -- PhiX[BoT]@Azeroth has acquired ops.
+ [03:48:06 PM] <Pyro6@Azeroth>  [18:46:38.466] FaDe.FTW#1119 was banned by Elder (TAGBAN).
+ [03:48:08 PM] <Pyro6@Azeroth> >_>
+ [03:52:39 PM] <From PhiX[BoT]@Azeroth> Your friend PhiX[BoT] has exited Battle.net.
+ [03:52:39 PM] -- PhiX[BoT]@Azeroth has left the channel.
+ [03:52:40 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [03:52:40 PM] -- PhiX has left the channel.
+ [03:52:40 PM] -- LuC1Fr[BoT]@Azeroth [141ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:52:40 PM] -- LuC1Fr[BoT]@Azeroth has acquired ops.
+ [03:54:02 PM] -- PhiX [-1ms] has joined the channel using Starcraft Brood War (1337 wins).
+ [03:54:03 PM] <From PhiX[BoT]@Azeroth> Your friend PhiX[BoT] has entered Battle.net.
+ [03:54:03 PM] Error: Invalid procedure call or argument in ParsePacket().
+ [03:54:04 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [03:54:05 PM] -- PhiX[BoT]@Azeroth [406ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:54:05 PM] -- PhiX[BoT]@Azeroth has left the channel.
+ [03:54:05 PM] -- LuC1Fr[BoT]@Azeroth [141ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:54:06 PM] -- PhiX[BoT]@Azeroth [406ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [03:54:06 PM] -- PhiX[BoT]@Azeroth has acquired ops.
+ [03:58:52 PM] -- Ribose@Azeroth has left the channel.
+ [03:58:53 PM] -- Ribose has left the channel.
+ [04:03:36 PM] -- Ribose@Azeroth [266ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [04:03:55 PM] <Ribose@Azeroth> hm thats neat
+ [04:04:23 PM] -- Ribose@Azeroth has left the channel.
+ [04:12:38 PM] -- Name.here@Azeroth [109ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 2, icon tier Undead, peon icon, in Clan CAKE)
+ [04:12:45 PM] -- Ribose@Azeroth [234ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [04:12:52 PM] -- Name.here@Azeroth has left the channel.
+ [04:14:46 PM] -- connection_lost@Azeroth [31ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Undead, crypt fiend icon, in Clan BoT)
+ [04:14:51 PM] -- connection_lost@Azeroth has left the channel.
+ [04:15:11 PM] -- Ribose@Azeroth has left the channel.
+ [04:28:29 PM] -- HaKr_@Azeroth has left the channel.
+ [04:39:01 PM] <VBScript@Azeroth | New on StealthBot Tech Support:  question in commands>
+ [04:40:14 PM] <From Bot-Vector@Azeroth> Your friend Bot-Vector has exited Battle.net.
+ [04:41:01 PM] -- Ribose [31ms] has joined the channel using Starcraft Brood War (38 wins).
+ [04:41:13 PM] -- Ribose@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [04:42:55 PM] -- Ribose@Azeroth has left the channel.
+ [04:42:55 PM] -- Ribose has left the channel.
+ [04:56:11 PM] -- Hero.A@Azeroth [31ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [04:56:14 PM] -- Hero.A@Azeroth has left the channel.
+ [04:56:57 PM] <Alendar@Azeroth>  [07:54:58 PM] <rockermongoose> MY CD KEY IS 3502-57284-4829 AND MY PASSWORD IS: COOKIE [07:54:58 PM] <rockermongoose> MY CD KEY IS 3502-57284-4829 AND MY PASSWORD IS: COOKIE
+ [04:57:00 PM] <Alendar@Azeroth>  [07:55:01 PM] <rockermongoose> lol jk
+ [04:57:04 PM] <Alendar@Azeroth>  [07:55:09 PM] <rockermongoose> i wish i knew my key :'(
+ [04:57:17 PM] <Pyro6@Azeroth> lol noobs
+ [04:59:40 PM] -- Ninja-Scout@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan NNN)
+ [04:59:47 PM] <Pyro6@Azeroth> ninja!'
+ [04:59:47 PM] <Ninja-Scout@Azeroth> You're in Clan [BoT]. I've seen you [135] time(s) with a high ping of [1657ms] and a low of [31ms]. Thanks for kicking me [0] times. I have seen ClanGnome 153 times in Clan channels alone!
+ [04:59:50 PM] -- Ninja-Scout@Azeroth has left the channel.
+ [05:03:12 PM] <VBScript@Azeroth | New on StealthBot S&P:  Auto promoting script>
+ [05:05:35 PM] -- Vortigaunt@Azeroth has left the channel.
+ [05:05:44 PM] <From Pyro6@Azeroth> Your friend Pyro6 has exited Battle.net.
+ [05:05:44 PM] -- Pyro6@Azeroth has left the channel.
+ [05:05:45 PM] -- Eric@Azeroth has left the channel.
+ [05:05:47 PM] <From Pyro[BoT]@Azeroth> Your friend Pyro[BoT] has exited Battle.net.
+ [05:05:47 PM] -- Pyro[BoT]@Azeroth has left the channel.
+ [05:11:34 PM] -- Sol [16ms] has joined the channel using Starcraft Brood War (0 wins).
+ [05:11:42 PM] <Sol> >.>
+ [05:11:45 PM] <Sol> i haxed?
+ [05:11:52 PM] <Sol> anyone alive in this jon?
+ [05:13:23 PM] -- Sol has left the channel.
+ [05:17:52 PM] -- Joseph.W@Azeroth has left the channel.
+ [05:21:11 PM] -- connection_lost@Azeroth [31ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Undead, crypt fiend icon, in Clan BoT)
+ [05:21:13 PM] -- connection_lost@Azeroth has left the channel.
+ [05:21:24 PM] <VBScript@Azeroth | New on On This Day:  1955: Communist states sign Warsaw Pact; 1991: Mandela's wife jailed for kidnaps; 1964: Nasser and Khrushchev divert the Nile; 1957: Cheers as petrol rationing ended; 2001: Scientists warn [more]>
+ [05:21:30 PM] <VBScript@Azeroth of more CJD cases>
+ [05:23:24 PM] <Alendar@Azeroth> I hate research projects.
+ [05:26:27 PM] <Alendar@Azeroth>  [08:24:56 PM] <Marty[Ls]> 07:23:22 PM | ´Desktop@USEastª 08:23:21 PM | ´From: RouTeª /f r route <~ Committing suicide Bye Everyone <3 - Idle for 1 hour, and 38 minutes
+ [05:35:01 PM] -- HaKr_@Azeroth [62ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [05:36:17 PM] -- Ribose@Azeroth [360ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:37:28 PM] -- Ribose@Azeroth has left the channel.
+ [05:43:07 PM] -- Ribose@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:45:34 PM] <Funnel9111[BoT]@Azeroth> LOL!
+ [05:45:46 PM] <Funnel9111[BoT]@Azeroth> I've seen you with a high ping of 1657 ms?
+ [05:45:47 PM] <Funnel9111[BoT]@Azeroth> WOW
+ [05:45:52 PM] <Funnel9111[BoT]@Azeroth> They havn't seen my piung
+ [05:45:58 PM] <Funnel9111[BoT]@Azeroth> *ping
+ [05:46:14 PM] <Ribose@Azeroth> ..?
+ [05:46:27 PM] <Funnel9111[BoT]@Azeroth>  [19:58:01.532] <Pyro6> ninja!'
+ [05:46:27 PM] <Funnel9111[BoT]@Azeroth>  [19:58:01.643] <Ninja-Scout> You're in Clan [BoT]. I've seen you [135] time(s) with a high ping of [1657ms] and a low of [31ms]. Thanks for kicking me [0] times. I have seen ClanGnome 153 times in Clan channels alone!
+ [05:46:31 PM] <Ribose@Azeroth> you're the only one with a red ping, everyong else is green
+ [05:46:52 PM] <Funnel9111[BoT]@Azeroth> lol
+ [05:46:54 PM] <Funnel9111[BoT]@Azeroth> I know
+ [05:47:06 PM] <Funnel9111[BoT]@Azeroth> its because it lags when i try to reconnect 3 bots at the same time
+ [05:47:07 PM] <Ribose@Azeroth> hm, phix[bot] is green with a tint of yellow
+ [05:47:33 PM] <Funnel9111[BoT]@Azeroth> ffs
+ [05:47:38 PM] <Funnel9111[BoT]@Azeroth> VS is down again...
+ [05:47:45 PM] -- Eric@Azeroth [938ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:47:52 PM] <Ribose@Azeroth> visual studio? lol
+ [05:47:54 PM] <From Pyro[BoT]@Azeroth> Your friend Pyro[BoT] has entered Battle.net.
+ [05:47:54 PM] <Ribose@Azeroth> whats vs
+ [05:47:56 PM] -- Pyro[BoT]@Azeroth [296ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:47:56 PM] -- Pyro[BoT]@Azeroth has acquired ops.
+ [05:47:59 PM] <Funnel9111[BoT]@Azeroth> no
+ [05:48:02 PM] <Funnel9111[BoT]@Azeroth> ViewSat
+ [05:48:09 PM] -- Vortigaunt@Azeroth [219ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [05:48:09 PM] -- Stats updated: Vortigaunt@Azeroth [219ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:48:23 PM] <Ribose@Azeroth> HAI
+ [05:48:29 PM] <Funnel9111[BoT]@Azeroth> When its down...it means it can't get those Satellites you idiots pay 600 bucks a year for
+ [05:48:40 PM] <Ribose@Azeroth> lol
+ [05:48:50 PM] <Funnel9111[BoT]@Azeroth> and I get more than 1 satellite :D
+ [05:48:56 PM] <Ribose@Azeroth> bnet is so noob
+ [05:49:04 PM] <Funnel9111[BoT]@Azeroth> yes very...
+ [05:49:16 PM] <Ribose@Azeroth> it has to update everyones flags when someone is unsquelched
+ [05:49:23 PM] <Funnel9111[BoT]@Azeroth> lol
+ [05:49:41 PM] <Funnel9111[BoT]@Azeroth> bnet
+ [05:49:42 PM] <Funnel9111[BoT]@Azeroth> is
+ [05:49:43 PM] <Funnel9111[BoT]@Azeroth> gay
+ [05:49:53 PM] <Funnel9111[BoT]@Azeroth> wowa...
+ [05:50:09 PM] <Eric@Azeroth> thats a good thing ribose
+ [05:50:23 PM] <Eric@Azeroth> if it didnt, we wouldnt be able to see users in silent channels =\
+ [05:50:38 PM] <Funnel9111[BoT]@Azeroth> lol
+ [05:50:59 PM] <Ribose@Azeroth> it gives a giant blob of random data when connecting witha legacy client (its like 0x100 bytes of it), which none of it is actually used (its like some memory block from bnet...)
+ [05:51:01 PM] <Funnel9111[BoT]@Azeroth> I wonder if they ever cracked the SB beta....
+ [05:51:31 PM] <Ribose@Azeroth> it also gives you YOUR product string (not your friends) when a mutual friend's status changes
+ [05:51:42 PM] <From Pyro6@Azeroth> Your friend Pyro6 has entered Battle.net.
+ [05:51:43 PM] -- Pyro6@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:51:57 PM] <Pyro6@Azeroth> #ddpx Vortigaunt
+ [05:51:57 PM] -- VBScript@Azeroth has left the channel.
+ [05:51:57 PM] -- PhiX[BoT]@Azeroth has left the channel.
+ [05:51:57 PM] -- Alendar[BoT]@Azeroth has left the channel.
+ [05:51:57 PM] -- IdleBoT@Azeroth has left the channel.
+ [05:51:57 PM] -- Joined channel: Clan BoT --
+ [05:51:58 PM] [CLAN] You have been demoted. Your new rank is Grunt.
+ [05:51:58 PM] [CLAN] Member update: Eric[nK] is now a Grunt.
+ [05:51:58 PM] !&!@$inur!@!@!@
+ [05:51:59 PM] -- Vortigaunt@Azeroth has acquired ops.
+ [05:51:59 PM] -- Pyro[BoT]@Azeroth has left the channel.
+ [05:52:01 PM] -- Pyro[BoT]@Azeroth [296ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:52:01 PM] -- Pyro[BoT]@Azeroth has acquired ops.
+ [05:52:01 PM] -- VBScript@Azeroth has left the channel.
+ [05:52:01 PM] -- PhiX[BoT]@Azeroth has left the channel.
+ [05:52:01 PM] -- Alendar[BoT]@Azeroth has left the channel.
+ [05:52:01 PM] -- IdleBoT@Azeroth has left the channel.
+ [05:52:01 PM] -- Joined channel: Clan BoT --
+ [05:52:02 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [05:52:02 PM] [CLAN] You have been promoted. Your new rank is Shaman.
+ [05:52:02 PM] [CLAN] Member update: Eric[nK] is now a Shaman.
+ [05:52:02 PM] !&!@$inur!@!@!@
+ [05:52:09 PM] <Ribose@Azeroth> whats the big idea
+ [05:52:18 PM] -- Ribose@Azeroth has left the channel.
+ [05:52:21 PM] -- Ribose@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [05:53:00 PM] <Funnel9111[BoT]@Azeroth> lol
+ [05:53:00 PM] <Ribose@Azeroth> rofl
+ [05:53:02 PM] <Ribose@Azeroth> !
+ [05:53:06 PM] <Funnel9111[BoT]@Azeroth> !
+ [05:53:44 PM] <Ribose@Azeroth> somehow felbot thinks phix is hidden when his flags update... may need to fix that lol
+ [05:54:02 PM] -- DiaBLo.of.AH [94ms] has joined the channel using Diablo II Lord of Destruction (Champion XF-WiiiindBlTCH, a level 88 druid on realm USEast).
+ [05:54:04 PM] <Funnel9111[BoT]@Azeroth> maybe u should
+ [05:54:06 PM] <Funnel9111[BoT]@Azeroth> ....
+ [05:54:10 PM] <Pyro6@Azeroth> phix@useast?
+ [05:54:20 PM] <Ribose@Azeroth> its probably related to the alias system i have made the framework for
+ [05:54:22 PM] <Ribose@Azeroth> yea
+ [05:54:23 PM] <Pyro6@Azeroth> lol noob bot
+ [05:54:27 PM] <Pyro6@Azeroth> he has a udp plug
+ [05:54:27 PM] <Funnel9111[BoT]@Azeroth> DiaBLo.of.AH@USEast
+ [05:54:31 PM] <Funnel9111[BoT]@Azeroth> type .pingme for a sec
+ [05:54:39 PM] <Funnel9111[BoT]@Azeroth> i wanna see if it displays it properly
+ [05:54:49 PM] <Pyro6@Azeroth> hey its a beta tester whos account i just authorized!
+ [05:54:59 PM] <Funnel9111[BoT]@Azeroth> ?
+ [05:55:08 PM] <Ribose@Azeroth> (i set it to hide gateways) and since it didn't find phix (@azeroth0 when his flags updated, it marked him as invisible
+ [05:55:09 PM] <Pyro6@Azeroth> i just authed that name
+ [05:55:11 PM] <Pyro6@Azeroth> for the beta
+ [05:55:18 PM] <Ribose@Azeroth> lol
+ [05:55:20 PM] <Funnel9111[BoT]@Azeroth> Who?
+ [05:55:24 PM] <Pyro6@Azeroth> ...
+ [05:55:26 PM] <Pyro6@Azeroth> DiaBLo.of.AH@USEast
+ [05:55:27 PM] <Funnel9111[BoT]@Azeroth> Im so slow...
+ [05:55:29 PM] <Funnel9111[BoT]@Azeroth> aww
+ [05:55:30 PM] <Funnel9111[BoT]@Azeroth> BOO!
+ [05:55:35 PM] <Funnel9111[BoT]@Azeroth> Auth me ya little shit!
+ [05:55:36 PM] <Ribose@Azeroth> LOL
+ [05:55:36 PM] <Funnel9111[BoT]@Azeroth> :P
+ [05:55:43 PM] <Pyro6@Azeroth> k
+ [05:55:49 PM] <Funnel9111[BoT]@Azeroth> lol
+ [05:55:53 PM] <Funnel9111[BoT]@Azeroth> i hear him typing /ban
+ [05:55:53 PM] <Ribose@Azeroth> yup its definately the alias system flags update
+ [05:56:05 PM] <Ribose@Azeroth> need to fix that before i add the alias list...
+ [05:56:06 PM] <Funnel9111[BoT]@Azeroth> lol
+ [05:56:11 PM] <Funnel9111[BoT]@Azeroth> hmm
+ [05:56:13 PM] <Funnel9111[BoT]@Azeroth> nice
+ [05:56:20 PM] <Funnel9111[BoT]@Azeroth> Ribose
+ [05:56:23 PM] <Pyro6@Azeroth> my mom has alias'
+ [05:56:28 PM] <Funnel9111[BoT]@Azeroth> u said myndfyre was making his csb or w/e?
+ [05:56:45 PM] <Ribose@Azeroth> hmm
+ [05:56:50 PM] <Ribose@Azeroth> yea
+ [05:56:54 PM] <Funnel9111[BoT]@Azeroth> Are you sure?
+ [05:57:06 PM] <Ribose@Azeroth> i dont know if he's actively working on it no
+ [05:57:11 PM] <Funnel9111[BoT]@Azeroth> oh
+ [05:57:13 PM] <Ribose@Azeroth> you'd have to stalk him to know that ;p
+ [05:57:18 PM] <Funnel9111[BoT]@Azeroth> lol
+ [05:57:25 PM] <Funnel9111[BoT]@Azeroth> I'm no stalker...
+ [05:57:42 PM] <Ribose@Azeroth> lol, felbot still knows phix's "actual name: phix@useast"
+ [05:58:04 PM] <Funnel9111[BoT]@Azeroth> point?
+ [05:58:13 PM] <Ribose@Azeroth> its just weird
+ [05:58:18 PM] <Funnel9111[BoT]@Azeroth> oh
+ [05:58:19 PM] <Funnel9111[BoT]@Azeroth> w/e lol
+ [05:58:25 PM] <Funnel9111[BoT]@Azeroth> I gotta work on my csab
+ [05:58:27 PM] <Funnel9111[BoT]@Azeroth> *csb
+ [05:58:44 PM] <Funnel9111[BoT]@Azeroth> I'd like to finish it by the end of the week
+ [05:58:51 PM] <Ribose@Azeroth> haha found the bug
+ [05:58:55 PM] <Ribose@Azeroth> lol finish?
+ [05:58:59 PM] <Pyro6@Azeroth> @;;who op richard
+ [05:59:02 PM] <Funnel9111[BoT]@Azeroth> I already made most of it
+ [05:59:06 PM] <PhiX[BoT]@Azeroth> Users in channel op richard: [RICHARD@USEAST], [KEND.SUPPORT@BLIZZARD] (2 users)
+ [05:59:07 PM] <Ribose@Azeroth> dude, a project like that won't be finished so fast
+ [05:59:12 PM] <Funnel9111[BoT]@Azeroth> no
+ [05:59:18 PM] <Funnel9111[BoT]@Azeroth> I mean I had it started 2-3 weeks ago
+ [05:59:20 PM] <Pyro6@Azeroth> OMG KEND IS IN OP RICHARD
+ [05:59:22 PM] <Pyro6@Azeroth> WTF
+ [05:59:28 PM] <Funnel9111[BoT]@Azeroth> wowa
+ [05:59:31 PM] <Funnel9111[BoT]@Azeroth> lets go visit
+ [05:59:39 PM] <Pyro6@Azeroth> i dun wanna get ip banned again
+ [05:59:40 PM] <Pyro6@Azeroth> lol
+ [05:59:44 PM] -- Funnel9111[BoT]@Azeroth has left the channel.
+ [05:59:48 PM] <Ribose@Azeroth> [8:58:26 PM] Joined channel: op richard
+ [05:59:50 PM] <Ribose@Azeroth> [8:58:26 PM] *Richard is in the channel using Diablo II (Not on Realm).
+ [05:59:52 PM] <Ribose@Azeroth> [8:58:26 PM] *KenD.Support is in the channel using Chat Client.
+ [05:59:54 PM] <Ribose@Azeroth> [8:58:26 PM] *c4rb0n is in the channel using Diablo II: Lord of Destruction (Not on Realm).
+ [05:59:56 PM] <Ribose@Azeroth> [8:58:27 PM] c4rb0n was banned by a Battle.net representative.
+ [05:59:58 PM] <Ribose@Azeroth> [8:58:27 PM] a Battle.net representative kicked you out of the channel!
+ [06:00:15 PM] <Pyro6@Azeroth> @;;who op richard
+ [06:00:18 PM] <PhiX[BoT]@Azeroth> Users in channel op richard: [RICHARD@USEAST], [KEND.SUPPORT@BLIZZARD] (2 users)
+ [06:00:24 PM] <Pyro6@Azeroth> hm... lol @ funnel
+ [06:00:26 PM] -- Funnel9111[BoT]@Azeroth [14360ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:00:29 PM] <Funnel9111[BoT]@Azeroth> LMAO!
+ [06:00:32 PM] <Funnel9111[BoT]@Azeroth>  [20:58:01.779] <Funnel9111[BoT]>  [20:57:51.254] Funnel9111[BoT] was banned by a Battle.net representative.
+ [06:00:33 PM] <Funnel9111[BoT]@Azeroth>  [20:58:02.921] <Funnel9111[BoT]>  [20:57:51.304] a Battle.net representative kicked you out of the channel!
+ [06:00:35 PM] <Ribose@Azeroth> it bant me
+ [06:00:39 PM] <Funnel9111[BoT]@Azeroth>  [20:58:16.180] <To KenD.Support@Blizzard> THANKS JACKASS!
+ [06:00:45 PM] <Pyro6@Azeroth> hey uh
+ [06:00:47 PM] -- Funnel9111[BoT]@Azeroth has left the channel.
+ [06:00:49 PM] <Pyro6@Azeroth> your gonna get ip banned
+ [06:00:51 PM] <Pyro6@Azeroth> lol
+ [06:01:12 PM] <Pyro6@Azeroth> from all servers for 24 hours..
+ [06:01:14 PM] <Pyro6@Azeroth> ;p
+ [06:01:29 PM] <Ribose@Azeroth> did that happen to you
+ [06:01:32 PM] <Pyro6@Azeroth> yes
+ [06:01:35 PM] <Pyro6@Azeroth> i told him to suck it
+ [06:01:42 PM] <Ribose@Azeroth> haha!
+ [06:02:23 PM] <Ribose@Azeroth> lol
+ [06:02:33 PM] <Pyro6@Azeroth> someone should ask ken to come here
+ [06:02:37 PM] <Ribose@Azeroth> i joined blizz tech and jond immediately left
+ [06:03:04 PM] <From Pyro6@Azeroth> Your friend Pyro6 has exited Battle.net.
+ [06:03:04 PM] -- Pyro6@Azeroth has left the channel.
+ [06:03:21 PM] <From Pyro6@Azeroth> Your friend Pyro6 has entered Battle.net.
+ [06:03:26 PM] -- Pyro6@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:03:54 PM] <VBScript@Azeroth | New on StealthBot S&P:  combine of BCP and CRS?>
+ [06:03:55 PM] <VBScript@Azeroth | New on StealthBot Tech Support:  [RESOLVED] [Help] How To Use Proxy With Bot?>
+ [06:03:57 PM] <Ribose@Azeroth> fixing flagupdate bug
+ [06:03:58 PM] -- Ribose@Azeroth has left the channel.
+ [06:04:31 PM] -- Pyro6@Azeroth has left the channel.
+ [06:04:33 PM] -- Ribose@Azeroth [32ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:05:09 PM] -- Pyro6@Azeroth [62ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:05:29 PM] <Ribose@Azeroth> yay
+ [06:05:45 PM] <Ribose@Azeroth> fwuag updates phix3d
+ [06:06:45 PM] <Pyro6@Azeroth> HaKr[BoT]: whoami
+ [06:06:46 PM] <HaKr[BoT]@Azeroth> pyro6 [admin (group), BoT (clan)] has access 100 and flags AOS.
+ [06:06:54 PM] <Pyro6@Azeroth> ?trigger
+ [06:06:54 PM] <Eric[nK]@Azeroth> The bot's current trigger is " ... " (Length: 3)
+ [06:06:54 PM] <LuC1Fr[BoT]@Azeroth> The bot's current trigger is " ` " (Length: 1)
+ [06:06:54 PM] <Pyro[BoT]@Azeroth> The bot's current trigger is " # " (Length: 1)
+ [06:06:54 PM] <Vortigaunt@Azeroth> The bot's current trigger is " + " (Length: 1)
+ [06:06:55 PM] <VBScript@Azeroth> The bot's current trigger is " - " (Length: 1)
+ [06:06:55 PM] <IdleBoT@Azeroth> The bot's current trigger is " ## " (Length: 2)
+ [06:06:55 PM] <Alendar[BoT]@Azeroth> The bot's current trigger is " ! " (Length: 1)
+ [06:06:55 PM] <Eric@Azeroth> The bot's current trigger is " * " (Length: 1)
+ [06:06:56 PM] <PhiX[BoT]@Azeroth> The bot's current trigger is " @;; " (Length: 3)
+ [06:06:56 PM] <HaKr[BoT]@Azeroth> The bot's current trigger is " . " (Length: 1)
+ [06:07:02 PM] <Pyro6@Azeroth> .o unigw
+ [06:07:06 PM] <Pyro6@Azeroth> .say hi
+ [06:07:07 PM] <HaKr[BoT]@Azeroth> hi
+ [06:07:13 PM] <Pyro6@Azeroth> .say /o unigw
+ [06:07:25 PM] <HaKr[BoT]@Azeroth> hm
+ [06:08:45 PM] <Ribose@Azeroth> AssGnome
+ [06:09:00 PM] -- Ribose@Azeroth has left the channel.
+ [06:09:18 PM] <HaKr_@Azeroth> apparently
+ [06:09:22 PM] <HaKr_@Azeroth> I don't owe you anything
+ [06:09:24 PM] <HaKr_@Azeroth> go figure
+ [06:09:27 PM] -- HaKr_@Azeroth has left the channel.
+ [06:09:56 PM] <Alendar@Azeroth> Yay.
+ [06:10:00 PM] <Alendar@Azeroth> David is back.
+ [06:10:13 PM] <Pyro6@Azeroth> lol i was messing with my router
+ [06:10:22 PM] <Alendar@Azeroth> Heh.
+ [06:12:14 PM] <Pyro6@Azeroth> god im bored
+ [06:12:53 PM] <Alendar@Azeroth> I wish I was you right now.
+ [06:12:59 PM] <Pyro6@Azeroth> why
+ [06:13:00 PM] <Alendar@Azeroth> I rather be bored then doing this.
+ [06:13:05 PM] <Alendar@Azeroth> Stupid research paper.
+ [06:13:06 PM] <Pyro6@Azeroth> lol what are you doing
+ [06:13:08 PM] <Pyro6@Azeroth> oh
+ [06:13:10 PM] <Pyro6@Azeroth> sucks for you
+ [06:13:11 PM] <Pyro6@Azeroth> lol
+ [06:13:15 PM] -- WaSp [219ms] has joined the channel using Diablo II (Open Character).
+ [06:13:18 PM] <Alendar@Azeroth> The KKK during the 1920s
+ [06:13:28 PM] <WaSp> Thank you Pyro, for authorizing my Account names ^ ^
+ [06:13:33 PM] <Pyro6@Azeroth> no problem
+ [06:13:35 PM] <Pyro6@Azeroth> :D
+ [06:13:47 PM] <WaSp> I'm muted on my other cdkey
+ [06:13:53 PM] <Pyro6@Azeroth> =\
+ [06:13:58 PM] <WaSp> so its been hard listening to you guys talk, when i couldnt say anything
+ [06:14:01 PM] <WaSp> ha
+ [06:14:06 PM] <Pyro6@Azeroth> lol
+ [06:14:30 PM] <WaSp> BUt I appreciate the fast response, I applied for the help and got it within minutes
+ [06:14:38 PM] <Pyro6@Azeroth> heh
+ [06:14:56 PM] -- DiaBLo.of.AH has left the channel.
+ [06:16:19 PM] <Pyro6@Azeroth> funnel got owned
+ [06:16:20 PM] <Pyro6@Azeroth> rofl
+ [06:18:11 PM] -- WaSp has left the channel.
+ [06:18:31 PM] <From Pyro6@Azeroth> Your friend Pyro6 has exited Battle.net.
+ [06:18:31 PM] -- Pyro6@Azeroth has left the channel.
+ [06:19:33 PM] <From Pyro6@Azeroth> Your friend Pyro6 has entered Battle.net.
+ [06:19:38 PM] -- Pyro6@Azeroth [46ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:23:43 PM] -- Pyro6@Azeroth has left the channel.
+ [06:24:09 PM] -- Pyro6@Azeroth [46ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:25:40 PM] -- Pyro6@Azeroth has left the channel.
+ [06:26:39 PM] -- Pyro6@Azeroth [46ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:27:04 PM] <From Pyro6@Azeroth> Your friend Pyro6 has exited Battle.net.
+ [06:27:04 PM] -- Pyro6@Azeroth has left the channel.
+ [06:27:11 PM] <From Pyro6@Azeroth> Your friend Pyro6 has entered Battle.net.
+ [06:27:12 PM] -- Pyro6@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:32:14 PM] -- HaKr_@Azeroth [62ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [06:32:40 PM] <HaKr_@Azeroth> LOLZ can u guyz tel me hoe 2 h4x sum nub wit a bot?
+ [06:33:03 PM] <HaKr_@Azeroth> wow
+ [06:33:12 PM] <HaKr_@Azeroth> amazingly I only spelled 3 words in the right
+ [06:33:22 PM] <HaKr_@Azeroth> wait, no..
+ [06:33:23 PM] <HaKr_@Azeroth> four
+ [06:33:37 PM] <HaKr_@Azeroth> "can" "me" "h4x" and "bot"
+ [06:33:47 PM] <Pyro6@Azeroth> ...
+ [06:33:51 PM] <Pyro6@Azeroth> h4x isnt a word
+ [06:34:04 PM] <HaKr_@Azeroth>  it's not?
+ [06:34:13 PM] <Pyro6@Azeroth> it has a number in it... its not a word
+ [06:34:14 PM] <Pyro6@Azeroth> lol
+ [06:34:18 PM] <HaKr_@Azeroth> eh
+ [06:34:21 PM] <HaKr_@Azeroth> stufu
+ [06:34:35 PM] <Pyro6@Azeroth> shut the up fuck up?
+ [06:34:58 PM] <HaKr_@Azeroth> no
+ [06:35:02 PM] <HaKr_@Azeroth> Shut the ULTIMATE fuck up
+ [06:35:09 PM] <Pyro6@Azeroth> noob
+ [06:35:18 PM] <HaKr_@Azeroth> Hey, I try.
+ [06:36:10 PM] <HaKr_@Azeroth> though I've got 2 words for you
+ [06:36:15 PM] <HaKr_@Azeroth> Nick Fury
+ [06:36:41 PM] -- smily132@Azeroth [62ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 3, icon tier Night Elves, peon icon, in Clan UR)
+ [06:36:42 PM] <smily132@Azeroth> lol
+ [06:36:46 PM] -- smily132@Azeroth has left the channel.
+ [06:37:15 PM] -- HaKr_@Azeroth has left the channel.
+ [06:38:21 PM] -- HaKr_@Azeroth [62ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [06:40:01 PM] -- StabU2Dead@Azeroth [141ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan EsL)
+ [06:40:15 PM] -- StabU2Dead@Azeroth has left the channel.
+ [06:40:30 PM] <HaKr_@Azeroth> Who the fuck is smily132
+ [06:42:02 PM] -- matt_1777@Azeroth [63ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 23, icon tier Human, sorceress icon, in Clan IA)
+ [06:42:14 PM] <matt_1777@Azeroth> wait how much it cost for a bot?
+ [06:42:21 PM] <matt_1777@Azeroth> from u guys?
+ [06:42:40 PM] <Pyro6@Azeroth> hm..
+ [06:42:51 PM] <matt_1777@Azeroth> or free?
+ [06:43:23 PM] <Pyro6@Azeroth> ten million five hundred and seventy four thousand six hundred and ninety three dollars and twenty two cents
+ [06:43:36 PM] <matt_1777@Azeroth> ok well ty i dont need then
+ [06:43:53 PM] <matt_1777@Azeroth> so glad i not doing busniess with u ty
+ [06:44:24 PM] -- matt_1777@Azeroth has left the channel.
+ [06:44:35 PM] -- HaKr_@Azeroth has left the channel.
+ [06:45:20 PM] <IdleBoT@Azeroth> cobol is ugly language
+ [06:46:21 PM] -- WaSp [219ms] has joined the channel using Diablo II (Open Character).
+ [06:46:31 PM] -- Cuba [78ms] has joined the channel using Diablo II (Open Character).
+ [06:47:21 PM] -- SNIPER-of-WIND@Azeroth [172ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 24, icon tier Random, dragon turtle icon, in Clan IA)
+ [06:47:32 PM] <SNIPER-of-WIND@Azeroth> hello
+ [06:47:34 PM] -- HaKr_@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [06:48:16 PM] <SNIPER-of-WIND@Azeroth> i need some clan filler bots to help me
+ [06:48:19 PM] <SNIPER-of-WIND@Azeroth> wisper me p[ls
+ [06:48:25 PM] -- SNIPER-of-WIND@Azeroth has left the channel.
+ [06:53:40 PM] -- SNIPER-of-WIND@Azeroth [172ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 24, icon tier Random, dragon turtle icon, in Clan IA)
+ [06:54:08 PM] <SNIPER-of-WIND@Azeroth> hello?
+ [06:54:29 PM] <SNIPER-of-WIND@Azeroth> will sum1 help me make a clan on  a few  of these bots
+ [06:54:31 PM] <SNIPER-of-WIND@Azeroth> :
+ [06:54:35 PM] <Pyro6@Azeroth> no
+ [06:54:39 PM] <SNIPER-of-WIND@Azeroth> lol
+ [06:54:43 PM] <SNIPER-of-WIND@Azeroth> ok
+ [06:54:46 PM] <SNIPER-of-WIND@Azeroth> pyro
+ [06:55:02 PM] <Pyro6@Azeroth> ?
+ [06:55:02 PM] <SNIPER-of-WIND@Azeroth> did u use to play war 2
+ [06:55:11 PM] <Pyro6@Azeroth> a very long time ago..
+ [06:55:18 PM] <SNIPER-of-WIND@Azeroth> i think i rember u
+ [06:55:23 PM] <SNIPER-of-WIND@Azeroth> aka jasonbourne)fs)
+ [06:55:24 PM] <Pyro6@Azeroth> ...
+ [06:55:42 PM] <SNIPER-of-WIND@Azeroth> it was a long time ago
+ [06:55:56 PM] <SNIPER-of-WIND@Azeroth> chan clan ia to help me
+ [06:55:58 PM] <Pyro6@Azeroth> prolly wasnt me
+ [06:56:01 PM] -- SNIPER-of-WIND@Azeroth has left the channel.
+ [07:03:34 PM] <VBScript@Azeroth> eric...
+ [07:03:35 PM] -- DiaBLo.of.AH2 [32ms] has joined the channel using Diablo II Lord of Destruction (Champion Cheney, a level 89 paladin on realm USEast).
+ [07:03:42 PM] <VBScript@Azeroth> someone has flags S and i can't shitlist them
+ [07:03:43 PM] <VBScript@Azeroth> ;O
+ [07:04:51 PM] -- DiaBLo.of.AH2 has left the channel.
+ [07:07:28 PM] -- Cuba has left the channel.
+ [07:10:19 PM] <WaSp -: System Uptime: 0 days, 9 hours, 58 minutes and 12 seconds :: Connection Uptime: 0 days, 0 hours, 56 minutes and 48 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [07:16:19 PM] <WaSp -: System Uptime: 0 days, 10 hours, 4 minutes and 12 seconds :: Connection Uptime: 0 days, 1 hours, 2 minutes and 47 seconds :: StealthBot Beta v2.6999 Development Release 10 :->
+ [07:30:25 PM] -- HaKr_@Azeroth has left the channel.
+ [07:35:29 PM] -- Cuba [78ms] has joined the channel using Diablo II (Open Character).
+ [07:36:27 PM] <Eric[nK]@Azeroth> ./shitadd <user>
+ [07:36:49 PM] <Pyro6@Azeroth> S > B
+ [07:36:55 PM] <Pyro6@Azeroth> so it wouldnt matter
+ [07:37:10 PM] <Eric[nK]@Azeroth> mhm
+ [07:42:07 PM] -- HaKr_@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [07:44:57 PM] [BNET] 10053 -- Connection is aborted due to timeout or other failure
+ [07:44:57 PM] [BNET] Disconnected.
+ [07:44:57 PM] [BNET] The Battle.net server has terminated your connection.
+ [07:44:57 PM] [BNET] Attempting to reconnect...
+ [07:44:58 PM] Authorizing your private-release bot, please wait.
+ [07:44:58 PM] Private usage authorized, connecting to Battle.Net.
+ [07:44:58 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [07:45:01 PM] [BNLS] Connected!
+ [07:45:01 PM] [BNLS] Authorized!
+ [07:45:01 PM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [07:45:02 PM] [BNET] Connected!
+ [07:45:02 PM] [BNET] Checking version...
+ [07:45:05 PM] [BNET] Version check passed!
+ [07:45:05 PM] [BNET] Your CD-key is currently in use under the owner name: BoB.
+ [07:45:05 PM] [BNET] For more information, visit http://www.blizzard.com/support/?id=asc0729p .
+ [07:45:05 PM] All connections closed.
+ [07:46:57 PM] Shutting down...
+ [07:47:35 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 11, by Stealth.
+ [07:47:35 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [07:47:35 PM] Script loaded: blah.txt
+ [07:47:35 PM] Script loaded: PluginSystem.dat
+ [07:47:42 PM] The current StealthBot version is ˇcb2.6R3.
+ [07:47:42 PM]  
+ [07:47:42 PM] >> ˇcbStealthBot News
+ [07:47:42 PM] >> Welcome to the new StealthBot News!
+ [07:47:42 PM] ->> 
+ [07:47:42 PM] ->> ˇcbStealthBot Beta News
+ [07:47:42 PM] ->> Happy testing!
+ [07:47:42 PM]  
+ [07:47:42 PM] The current StealthBot Beta version is 2.6999.
+ [07:47:43 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [07:47:43 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [07:47:43 PM] Scripting runtime error '13': (line 1; column 0)
+ [07:47:43 PM] Type mismatch: 'Join'.
+ [07:47:43 PM] Offending line: >> 
+ [07:47:43 PM] Scripting runtime error '13': (line 1260; column 3)
+ [07:47:43 PM] Type mismatch: 'Join'.
+ [07:47:43 PM] Offending line: >> 
+ [07:48:15 PM] Connecting your bot...
+ [07:48:15 PM] Authorizing your private-release bot, please wait.
+ [07:48:18 PM] Private usage authorized, connecting to Battle.Net.
+ [07:48:18 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [07:48:18 PM] [BNLS] Connected!
+ [07:48:19 PM] [BNLS] Authorized!
+ [07:48:19 PM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [07:48:22 PM] [BNET] Connected!
+ [07:48:22 PM] [BNET] Checking version...
+ [07:48:23 PM] [BNET] Client version accepted!
+ [07:48:23 PM] [BNET] Sending login information...
+ [07:48:24 PM] [BNET] Login successful.
+ [07:48:24 PM] [CLAN] You are a Grunt in Clan BoT.
+ [07:48:24 PM] [BNET] Logged on as Eric[nK].
+ [07:48:25 PM] -- Joined channel: The Void --
+ [07:48:25 PM] If you experience a lot of lag while within this channel, try selecting 'Disable Silent Channel View' from the Window menu.
+ [07:48:25 PM] This channel does not have chat privileges.
+ [07:48:25 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [07:48:25 PM] Last Logon: 5/14/2008, 02:48:33 (Battle.net time)
+ [07:48:25 PM] Last Logoff: 5/14/2008, 02:48:33 (Battle.net time)
+ [07:48:25 PM] Time Logged: 102 days, 16 hours, 28 minutes and 53 seconds
+ [07:48:38 PM] -- Joined channel: Clan BoT --
+ [07:48:38 PM] !&!@$inur!@!@!@
+ [07:48:49 PM] Error: Subscript out of range in HasAccess().
+ [07:48:49 PM] "Cuba" has been given flags Z.
+ [07:49:02 PM] <Eric[nK]@Azeroth> #ddpx Eric[nK]
+ [07:49:03 PM] <Pyro[BoT]@Azeroth> Error: You do not have enough access to use the ddpx command. [100 required]
+ [07:49:08 PM] <Eric[nK]@Azeroth> #whoami
+ [07:49:09 PM] -- HaKr_@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [07:49:13 PM] <HaKr_@Azeroth> ur mom
+ [07:49:17 PM] <Eric[nK]@Azeroth> ops, rc
+ [07:49:17 PM] -- IdleBoT@Azeroth has left the channel.
+ [07:49:17 PM] <From Alendar[BoT]@Azeroth> Your friend Alendar[BoT] has exited Battle.net.
+ [07:49:17 PM] -- Alendar[BoT]@Azeroth has left the channel.
+ [07:49:17 PM] <From LuC1Fr[BoT]@Azeroth> Your friend LuC1Fr[BoT] has exited Battle.net.
+ [07:49:17 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [07:49:17 PM] -- Joined channel: Clan BoT --
+ [07:49:18 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [07:49:18 PM] [CLAN] You have been promoted. Your new rank is Shaman.
+ [07:49:18 PM] [CLAN] Member update: Eric[nK] is now a Shaman.
+ [07:49:18 PM] -- Joined channel: Clan BoT --
+ [07:49:18 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [07:49:18 PM] [CLAN] Your new rank is Shaman.
+ [07:49:18 PM] [CLAN] Member update: Eric[nK] is now a Shaman.
+ [07:49:18 PM] !&!@$inur!@!@!@
+ [07:49:18 PM] !&!@$inur!@!@!@
+ [07:49:18 PM] -- HaKr[BoT]@Azeroth has left the channel.
+ [07:49:18 PM] Cuba@USEast was banned by Eric[nK] (Shitlisted).
+ [07:49:18 PM] -- Cuba has left the channel.
+ [07:49:18 PM] -- HaKr[BoT]@Azeroth [79ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [07:49:18 PM] -- HaKr[BoT]@Azeroth has acquired ops.
+ [07:49:19 PM] <From PhiX[BoT]@Azeroth> Your friend PhiX[BoT] has exited Battle.net.
+ [07:49:19 PM] -- PhiX[BoT]@Azeroth has left the channel.
+ [07:49:20 PM] <HaKr_@Azeroth> ops: hellp
+ [07:49:21 PM] <From Alendar[BoT]@Azeroth> Your friend Alendar[BoT] has entered Battle.net.
+ [07:49:21 PM] -- IdleBoT@Azeroth [94ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [07:49:21 PM] -- IdleBoT@Azeroth has acquired ops.
+ [07:49:22 PM] <From LuC1Fr[BoT]@Azeroth> Your friend LuC1Fr[BoT] has entered Battle.net.
+ [07:49:23 PM] -- Alendar[BoT]@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [07:49:23 PM] -- Alendar[BoT]@Azeroth has acquired ops.
+ [07:49:24 PM] -- HaKr[BoT]@Azeroth has left the channel.
+ [07:49:24 PM] <From PhiX[BoT]@Azeroth> Your friend PhiX[BoT] has entered Battle.net.
+ [07:49:24 PM] -- HaKr[BoT]@Azeroth [79ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [07:49:24 PM] -- LuC1Fr[BoT]@Azeroth [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [07:49:25 PM] -- LuC1Fr[BoT]@Azeroth has acquired ops.
+ [07:49:26 PM] <HaKr_@Azeroth> rc?
+ [07:49:30 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [07:49:30 PM] -- LuC1Fr[BoT]@Azeroth [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [07:49:31 PM] -- PhiX[BoT]@Azeroth [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [07:49:31 PM] -- PhiX[BoT]@Azeroth has acquired ops.
+ [07:49:32 PM] <Eric[nK]@Azeroth> #help rc
+ [07:49:34 PM] <HaKr_@Azeroth> oh
+ [07:49:35 PM] <HaKr_@Azeroth> reconnect
+ [07:49:37 PM] <HaKr_@Azeroth> ftw
+ [07:50:12 PM] <Eric[nK]@Azeroth> hm
+ [07:50:25 PM] -- HaKr_@Azeroth has left the channel.
+ [07:50:29 PM] -- HaKr_@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [07:50:33 PM] -- HaKr_@Azeroth has left the channel.
+ [07:57:42 PM] -- Ribose@Azeroth [1687ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [07:58:40 PM] -- Ribose [1140ms] has joined the channel using Starcraft Brood War (38 wins).
+ [07:58:52 PM] -- Ribose has left the channel.
+ [07:59:20 PM] -- Ribose@Azeroth has left the channel.
+ [08:04:44 PM] "bob" has been given flags S.
+ [08:04:47 PM] Successfully removed database entry "bob."
+ [08:04:50 PM] There was no such user found.
+ [08:04:50 PM] That user is not logged on.
+ [08:05:00 PM] "bob" has been given flags S.
+ [08:05:02 PM] "bob" has been removed from the database.
+ [08:06:09 PM] [BNET] 10053 -- Connection is aborted due to timeout or other failure
+ [08:06:09 PM] [BNET] Disconnected.
+ [08:06:09 PM] [BNET] The Battle.net server has terminated your connection.
+ [08:06:09 PM] [BNET] Attempting to reconnect...
+ [08:06:10 PM] Authorizing your private-release bot, please wait.
+ [08:06:11 PM] Authorizing your private-release bot, please wait.
+ [08:06:11 PM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [08:06:11 PM] All connections closed.
+ [08:06:13 PM] Private usage authorized, connecting to Battle.Net.
+ [08:06:13 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [08:06:13 PM] [BNLS] Connected!
+ [08:06:14 PM] [BNLS] Authorized!
+ [08:06:14 PM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [08:06:15 PM] "carrot" has been given flags S.
+ [08:06:19 PM] "carrot" has been removed from the database.
+ [08:06:32 PM] All connections closed.
+ [08:06:32 PM] Connecting your bot...
+ [08:06:32 PM] Authorizing your private-release bot, please wait.
+ [08:06:32 PM] Private usage authorized, connecting to Battle.Net.
+ [08:06:32 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [08:06:33 PM] [BNLS] Connected!
+ [08:06:33 PM] [BNLS] Authorized!
+ [08:06:33 PM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [08:06:36 PM] [BNET] Connected!
+ [08:06:36 PM] [BNET] Checking version...
+ [08:06:37 PM] [BNET] Client version accepted!
+ [08:06:37 PM] [BNET] Sending login information...
+ [08:06:38 PM] [BNET] Login successful.
+ [08:06:38 PM] [CLAN] You are a Grunt in Clan BoT.
+ [08:06:38 PM] [BNET] Logged on as Eric[nK].
+ [08:06:38 PM] -- Joined channel: Clan BoT --
+ [08:06:38 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [08:06:38 PM] Last Logon: 5/14/2008, 03:13:22 (Battle.net time)
+ [08:06:39 PM] Last Logoff: 5/14/2008, 03:13:18 (Battle.net time)
+ [08:06:39 PM] Time Logged: 102 days, 16 hours, 47 minutes and 0 seconds
+ [08:06:39 PM] !&!@$inur!@!@!@
+ [08:06:47 PM] -- HaKr_@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [08:07:30 PM] <HaKr_@Azeroth> lol
+ [08:07:35 PM] <HaKr_@Azeroth> my interent was going uber slow
+ [08:07:38 PM] <HaKr_@Azeroth> so I was like wtf?
+ [08:07:53 PM] <HaKr_@Azeroth> then I realized I set my torrents to start downloading at 10
+ [08:10:35 PM] -- Eric@Azeroth has left the channel.
+ [08:10:43 PM] -- Eric@Azeroth [938ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:12:36 PM] Shutting down...
+ [08:14:01 PM] -> Welcome to StealthBot Beta v2.6999 Development Release 11, by Stealth.
+ [08:14:01 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [08:14:01 PM] Script loaded: blah.txt
+ [08:14:01 PM] Script loaded: PluginSystem.dat
+ [08:14:16 PM] The current StealthBot version is ˇcb2.6R3.
+ [08:14:16 PM]  
+ [08:14:16 PM] >> ˇcbStealthBot News
+ [08:14:16 PM] >> Welcome to the new StealthBot News!
+ [08:14:16 PM] ->> 
+ [08:14:17 PM] ->> ˇcbStealthBot Beta News
+ [08:14:17 PM] ->> Happy testing!
+ [08:14:17 PM]  
+ [08:14:17 PM] The current StealthBot Beta version is 2.6999.
+ [08:14:17 PM] Loaded 2 plugins (2 enabled). Type /plugins to view them. Type /phelp for help using them.
+ [08:14:17 PM] Type /updates in the bot to view updates and new plugins that are available for download.
+ [08:14:17 PM] Scripting runtime error '13': (line 1; column 0)
+ [08:14:17 PM] Type mismatch: 'Join'.
+ [08:14:17 PM] Offending line: >> 
+ [08:14:17 PM] Scripting runtime error '13': (line 1260; column 3)
+ [08:14:17 PM] Type mismatch: 'Join'.
+ [08:14:17 PM] Offending line: >> 
+ [08:14:19 PM] Connecting your bot...
+ [08:14:19 PM] Authorizing your private-release bot, please wait.
+ [08:14:19 PM] Private usage authorized, connecting to Battle.Net.
+ [08:14:19 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [08:14:19 PM] [BNLS] Connected!
+ [08:14:20 PM] [BNLS] Authorized!
+ [08:14:20 PM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [08:14:20 PM] [BNET] Connected!
+ [08:14:21 PM] [BNET] Checking version...
+ [08:14:22 PM] [BNET] Client version accepted!
+ [08:14:22 PM] [BNET] Sending login information...
+ [08:14:23 PM] [BNET] Login successful.
+ [08:14:23 PM] [CLAN] You are a Grunt in Clan BoT.
+ [08:14:23 PM] [BNET] Logged on as Eric[nK].
+ [08:14:23 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [08:14:23 PM] Last Logon: 5/14/2008, 03:17:11 (Battle.net time)
+ [08:14:23 PM] Last Logoff: 5/14/2008, 03:19:20 (Battle.net time)
+ [08:14:23 PM] Time Logged: 102 days, 16 hours, 52 minutes and 58 seconds
+ [08:14:23 PM] -- Joined channel: Clan BoT --
+ [08:14:24 PM] !&!@$inur!@!@!@
+ [08:41:09 PM] <VBScript@Azeroth | New on StealthBot Tech Support:  Does not send Greet Message>
+ [08:48:17 PM] <IdleBoT@Azeroth> FAIL PYRO
+ [08:50:01 PM] -- IdleBoT@Azeroth has left the channel.
+ [08:50:07 PM] -- IdleBoT@Azeroth [94ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [08:50:07 PM] -- IdleBoT@Azeroth has acquired ops.
+ [08:50:29 PM] <Alendar@Azeroth> What's with all the 10060 errors?
+ [08:50:39 PM] <IdleBoT@Azeroth> where
+ [08:50:52 PM] <Alendar@Azeroth> Clan SBs
+ [08:51:19 PM] <IdleBoT@Azeroth> who the hell looks there
+ [08:53:46 PM] <Alendar@Azeroth> What happened to Clan Ls?
+ [08:56:15 PM] <LuC1Fr[BoT]@Azeroth> My fucking dog is so lazy, he makes couch patatoes look fit.
+ [08:57:42 PM] <Pyro6@Azeroth> clan ls got taken over
+ [08:57:51 PM] <Pyro6@Azeroth> and what did i do to fail this time?
+ [08:58:40 PM] -- TheGaMe] [312ms] has joined the channel using Warcraft II (0 wins).
+ [08:58:42 PM] <TheGaMe]> LOL
+ [08:58:50 PM] <LuC1Fr[BoT]@Azeroth> hi.
+ [08:58:54 PM] <TheGaMe]> PHIX
+ [08:58:56 PM] <TheGaMe]> FROM STEALTHBOT?
+ [08:58:58 PM] <TheGaMe]> LOL
+ [08:59:14 PM] -- TheGaMe] has left the channel.
+ [08:59:26 PM] <LuC1Fr[BoT]@Azeroth> lol..
+ [08:59:31 PM] <LuC1Fr[BoT]@Azeroth> <TheGaMe]@USEast> DESKTOP
+ [08:59:33 PM] <LuC1Fr[BoT]@Azeroth> <TheGaMe]@USEast> I FOUND WHERE LS RAN TO
+ [08:59:34 PM] <LuC1Fr[BoT]@Azeroth> <TheGaMe]@USEast> SOME
+ [08:59:35 PM] <LuC1Fr[BoT]@Azeroth> <TheGaMe]@USEast> CLAN BOT LOl
+ [08:59:52 PM] <LuC1Fr[BoT]@Azeroth> ehhh
+ [09:00:00 PM] <LuC1Fr[BoT]@Azeroth> i think its time to load up Anti war bots
+ [09:00:22 PM] <LuC1Fr[BoT]@Azeroth> <TheGaMe]@USEast> DESKTOP
+ [09:00:23 PM] <LuC1Fr[BoT]@Azeroth> <TheGaMe]@USEast> I FOUND WHERE LS RAN TO
+ [09:00:25 PM] <LuC1Fr[BoT]@Azeroth> woah
+ [09:01:11 PM] -- TheGaMe] [312ms] has joined the channel using Warcraft II (0 wins).
+ [09:01:12 PM] <TheGaMe]> ROBOTZ
+ [09:01:20 PM] <LuC1Fr[BoT]@Azeroth> TheGaMe]@USEast, can i help you with something?
+ [09:01:33 PM] <TheGaMe]> ya
+ [09:01:35 PM] <TheGaMe]> is that Phix
+ [09:01:38 PM] <TheGaMe]> from stealthbot..net
+ [09:01:40 PM] <TheGaMe]> ?
+ [09:01:43 PM] <LuC1Fr[BoT]@Azeroth> Maybe, why?
+ [09:01:47 PM] <TheGaMe]> wondering..
+ [09:01:48 PM] <TheGaMe]> rofl
+ [09:01:48 PM] <Pyro6@Azeroth> we are all from stealthbot.net lol
+ [09:01:55 PM] <TheGaMe]> oooooooooo
+ [09:02:04 PM] <LuC1Fr[BoT]@Azeroth> oh and, ls didnt run here. Just infiltrated.
+ [09:02:07 PM] <LuC1Fr[BoT]@Azeroth> So yeah.
+ [09:02:14 PM] -- DeAtHZeRg@Azeroth has left the channel.
+ [09:02:59 PM] <LuC1Fr[BoT]@Azeroth> anyways.
+ [09:03:17 PM] <Alendar@Azeroth> Restarting my computer.
+ [09:03:29 PM] <Alendar@Azeroth> I probably will go to bed though.
+ [09:03:33 PM] <Alendar@Azeroth> So, good night.
+ [09:03:35 PM] <LuC1Fr[BoT]@Azeroth> ﬁmCh>uéá|yàÑÖo
+ [09:03:45 PM] <Alendar@Azeroth> ﬁézíòåúy
+ [09:03:50 PM] <LuC1Fr[BoT]@Azeroth> ﬁ~^óùPûíú•
+ [09:03:53 PM] <Pyro6@Azeroth> ﬁy™sì|VJèû¢èéV§éã•ûèJ©™Jò©óôç£Vèå™©íJüúòìùVJùü©Jèô¢ãí§´Jû¢hôñóVéÇ
+ [09:03:55 PM] <TheGaMe]> korean?
+ [09:03:59 PM] <Pyro6@Azeroth> ﬁö∂¨ö£≥æ•Nj≥ìN≤ÆNùæøê~
+ [09:04:08 PM] <LuC1Fr[BoT]@Azeroth> ﬁ`Q}}ëôâxíPuuP¢yqñì0ÉßPu~Pë{sïPuu†ß00§ïqrú©{qôù~0ó\0uú£yuõòuÑP
+ [09:04:15 PM] <Pyro6@Azeroth> ﬁå™¢ß•V≥≤òÇ
+ [09:04:16 PM] <Alendar@Azeroth> ﬁjHs¶óÇ{ôöÉF†R:{ñ†âì°öaâR©H:ñ{:îì:á°RéÅR°ÅÉ†Ä
+ [09:04:18 PM] <Pyro6@Azeroth> no, spanish
+ [09:04:19 PM] <LuC1Fr[BoT]@Azeroth> ﬁütØÄ,©Ωq{¥ªzxµ™o,f≤Ä{¥ß{pΩf,=∫xuÅf∫:t¥≤{qππm´r~,f®qÅ≥∫{,π¨,{∏m
+ [09:04:23 PM] <LuC1Fr[BoT]@Azeroth> ﬁdT`Üèéyz
+ [09:04:34 PM] <TheGaMe]> no
+ [09:04:38 PM] <TheGaMe]> encryption?
+ [09:04:42 PM] <LuC1Fr[BoT]@Azeroth> its the new age 1337
+ [09:04:43 PM] <Pyro6@Azeroth> duh
+ [09:04:44 PM] <Pyro6@Azeroth> .
+ [09:04:46 PM] <TheGaMe]> stfu
+ [09:04:56 PM] <LuC1Fr[BoT]@Azeroth> umm
+ [09:04:57 PM] <LuC1Fr[BoT]@Azeroth> why?
+ [09:05:02 PM] <TheGaMe]> [12:06:28 AM] ´Pyro6@Azerothª duh
+ [09:05:02 PM] <TheGaMe]> [12:06:30 AM] ´Pyro6@Azerothª .
+ [09:05:13 PM] <TheGaMe]> pyro bitch mad cuz i raped ur noob clan
+ [09:05:18 PM] <VBScript@Azeroth | New on StealthBot Tech Support:  Wrong channel direction>
+ [09:05:20 PM] <Pyro6@Azeroth> lol its not my clan
+ [09:05:26 PM] <Pyro6@Azeroth> i only joined it for the shits
+ [09:05:32 PM] <Alendar@Azeroth> Wow, do you have a life?
+ [09:05:41 PM] <LuC1Fr[BoT]@Azeroth> mainly to listen to Kayla rant and rave about idiotic things
+ [09:05:46 PM] <LuC1Fr[BoT]@Azeroth> is why i was in there :/
+ [09:05:53 PM] <TheGaMe]> kayla is a fag
+ [09:05:57 PM] <Alendar@Azeroth> All I ever see you doing is raging on about Battle.net and warring with channels.
+ [09:06:00 PM] <TheGaMe]> bitch sucks reps dicks
+ [09:06:10 PM] <LuC1Fr[BoT]@Azeroth> You know, i have to agree with you on that.
+ [09:06:17 PM] <Alendar@Azeroth> That's one thing I think we can all agree on.
+ [09:06:17 PM] <TheGaMe]> god dammit i fucked up my comp
+ [09:06:17 PM] <LuC1Fr[BoT]@Azeroth> they're corrupt.
+ [09:06:18 PM] <TheGaMe]> brb
+ [09:06:27 PM] <TheGaMe]> ksjkjfadf
+ [09:06:28 PM] <TheGaMe]> fucker
+ [09:06:36 PM] <Alendar@Azeroth> To much porn?
+ [09:06:46 PM] <LuC1Fr[BoT]@Azeroth> too much WoW, even the reps admit it.
+ [09:07:13 PM] <Pyro6@Azeroth> someone just fucking called my house
+ [09:07:17 PM] <LuC1Fr[BoT]@Azeroth> All the 'WoW will destroy your life' videos, are infact made by blizzard Representative.
+ [09:07:19 PM] <Pyro6@Azeroth> at 12 in the fucking morning
+ [09:07:21 PM] <LuC1Fr[BoT]@Azeroth> (s)
+ [09:07:31 PM] <TheGaMe]> alander
+ [09:07:32 PM] <TheGaMe]> stfu
+ [09:07:34 PM] <TheGaMe]> u fucking nerd
+ [09:07:36 PM] <TheGaMe]> get a fucking life
+ [09:07:42 PM] <TheGaMe]> faggot ass stealthbot nerd
+ [09:07:45 PM] <Pyro6@Azeroth> lol thats going to go real well
+ [09:07:45 PM] <TheGaMe]> go make me a bot bitch
+ [09:07:56 PM] <TheGaMe]> stealthbot sucks dick
+ [09:07:56 PM] <LuC1Fr[BoT]@Azeroth> probably one of those stupid fucking Arabs, wanting to do a survey on some stupid topic.
+ [09:07:59 PM] <TheGaMe]> ill rape this channel al night
+ [09:08:03 PM] <TheGaMe]> fuck yall
+ [09:08:08 PM] <TheGaMe]> brb with 1k
+ [09:08:10 PM] <Pyro6@Azeroth> #b theg* bye
+ [09:08:11 PM] TheGaMe] was banned by Pyro[BoT] (bye).
+ [09:08:11 PM] -- TheGaMe] has left the channel.
+ [09:08:13 PM] <LuC1Fr[BoT]@Azeroth> <TheGaMe]@USEast> DESKTOP
+ [09:08:14 PM] <Pyro6@Azeroth> hm..
+ [09:08:14 PM] <Alendar@Azeroth> Noo.
+ [09:08:15 PM] <LuC1Fr[BoT]@Azeroth> <TheGaMe]@USEast> I FOUND WHERE LS RAN TO
+ [09:08:18 PM] <LuC1Fr[BoT]@Azeroth> errr
+ [09:08:21 PM] <Alendar@Azeroth> You always steal my kill.
+ [09:08:24 PM] <LuC1Fr[BoT]@Azeroth> afk, finding 12uthless.
+ [09:08:25 PM] <Pyro6@Azeroth> well i guess i should uh
+ [09:08:49 PM] <LuC1Fr[BoT]@Azeroth> pyro. send me your copy (Minus config entries)
+ [09:08:56 PM] <LuC1Fr[BoT]@Azeroth> maybe mines an old compile.
+ [09:09:06 PM] <LuC1Fr[BoT]@Azeroth> hell
+ [09:09:12 PM] <LuC1Fr[BoT]@Azeroth> put it on your site, ill just download it.
+ [09:09:26 PM] <Alendar@Azeroth> ./w TheGaMe]@USEast You're so cool, I wish I could be as cool as you.
+ [09:10:21 PM] <Pyro6@Azeroth> http://pyro.no-ip.biz/files/12.rar
+ [09:10:55 PM] -- Vortigaunt@Azeroth has left the channel.
+ [09:11:10 PM] -- Vortigaunt@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:11:16 PM] <Pyro6@Azeroth> +a
+ [09:11:16 PM] <Vortigaunt@Azeroth> User: Pyro6@Azeroth - Access: 101
+ [09:11:21 PM] <Pyro6@Azeroth> #ddpx Vortigaunt
+ [09:11:21 PM] -- VBScript@Azeroth has left the channel.
+ [09:11:21 PM] -- PhiX[BoT]@Azeroth has left the channel.
+ [09:11:21 PM] -- Alendar[BoT]@Azeroth has left the channel.
+ [09:11:21 PM] -- IdleBoT@Azeroth has left the channel.
+ [09:11:21 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [09:11:22 PM] -- VBScript@Azeroth [78ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:11:22 PM] -- PhiX[BoT]@Azeroth [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:11:22 PM] -- Alendar[BoT]@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:11:22 PM] -- IdleBoT@Azeroth [94ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:11:22 PM] -- LuC1Fr[BoT]@Azeroth [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:11:22 PM] -- Vortigaunt@Azeroth has acquired ops.
+ [09:11:22 PM] -- Pyro[BoT]@Azeroth has left the channel.
+ [09:11:24 PM] -- Pyro[BoT]@Azeroth [296ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:11:24 PM] -- Pyro[BoT]@Azeroth has acquired ops.
+ [09:11:24 PM] -- VBScript@Azeroth has left the channel.
+ [09:11:24 PM] -- PhiX[BoT]@Azeroth has left the channel.
+ [09:11:25 PM] -- Alendar[BoT]@Azeroth has left the channel.
+ [09:11:25 PM] -- IdleBoT@Azeroth has left the channel.
+ [09:11:25 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [09:11:25 PM] -- VBScript@Azeroth [78ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:11:25 PM] -- VBScript@Azeroth has acquired ops.
+ [09:11:25 PM] -- PhiX[BoT]@Azeroth [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:11:25 PM] -- PhiX[BoT]@Azeroth has acquired ops.
+ [09:11:25 PM] -- Alendar[BoT]@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:11:25 PM] -- Alendar[BoT]@Azeroth has acquired ops.
+ [09:11:25 PM] -- IdleBoT@Azeroth [94ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:11:25 PM] -- IdleBoT@Azeroth has acquired ops.
+ [09:11:25 PM] -- LuC1Fr[BoT]@Azeroth [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:11:25 PM] -- LuC1Fr[BoT]@Azeroth has acquired ops.
+ [09:12:45 PM] -- HaKr_@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [09:13:12 PM] <Pyro6@Azeroth> -tagadd *#* Tagban: *#*
+ [09:13:13 PM] <VBScript@Azeroth> "*#*" has been given flags B.
+ [09:13:21 PM] <VBScript@Azeroth | New on xkcd:  Finish Line>
+ [09:13:25 PM] <LuC1Fr[BoT]@Azeroth> -ver
+ [09:13:26 PM] <VBScript@Azeroth> .: StealthBot Beta v2.6999 Development Release 10 by Stealth.
+ [09:13:30 PM] <LuC1Fr[BoT]@Azeroth> ehh
+ [09:13:31 PM] <LuC1Fr[BoT]@Azeroth> !!v
+ [09:13:34 PM] <Alendar@Azeroth> !tagban *#*
+ [09:13:34 PM] <Alendar[BoT]@Azeroth> "*#*" has been given flags B.
+ [09:13:36 PM] <LuC1Fr[BoT]@Azeroth> \\v
+ [09:13:40 PM] <LuC1Fr[BoT]@Azeroth> -_-
+ [09:13:42 PM] <Pyro6@Azeroth> only me and phix
+ [09:13:47 PM] <LuC1Fr[BoT]@Azeroth> what version is it.
+ [09:13:51 PM] <Pyro6@Azeroth> +v
+ [09:13:54 PM] <Pyro6@Azeroth> +ver
+ [09:13:54 PM] <Vortigaunt@Azeroth> l2uthless Ops 2.11j - By: l2k-Shadow
+ [09:13:58 PM] <LuC1Fr[BoT]@Azeroth> hmm
+ [09:14:04 PM] <Pyro6@Azeroth>  [00:08:48.150] <Pyro6> http://pyro.no-ip.biz/files/12.rar
+ [09:14:35 PM] <LuC1Fr[BoT]@Azeroth> +war3 hashes?
+ [09:14:39 PM] <Pyro6@Azeroth> yes
+ [09:14:42 PM] <Pyro6@Azeroth> they are there
+ [09:15:16 PM] <Alendar@Azeroth> I think TheGame has no life.
+ [09:15:23 PM] <Pyro6@Azeroth> he doesnt
+ [09:15:25 PM] <Pyro6@Azeroth> but meh
+ [09:15:30 PM] <Pyro6@Azeroth> ima head off to bed
+ [09:15:34 PM] <Alendar@Azeroth> Same.
+ [09:15:39 PM] <Alendar@Azeroth> Good night.
+ [09:15:42 PM] <Pyro6@Azeroth> IF
+ [09:15:46 PM] <Pyro6@Azeroth> something happens
+ [09:15:56 PM] <Alendar@Azeroth> !plugins
+ [09:15:56 PM] <Pyro6@Azeroth> regroup in clan sbs
+ [09:16:12 PM] <Pyro6@Azeroth> thats only if like we lose ops
+ [09:16:17 PM] <Pyro6@Azeroth> or some shit
+ [09:17:33 PM] <From LuC1Fr[BoT]@Azeroth> Your friend LuC1Fr[BoT] has exited Battle.net.
+ [09:17:33 PM] Error: Invalid procedure call or argument in ParsePacket().
+ [09:17:33 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [09:17:33 PM] -- Joined channel: Clan BoT --
+ [09:17:33 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [09:17:34 PM] [CLAN] You have been promoted. Your new rank is Shaman.
+ [09:17:34 PM] [CLAN] Member update: Eric[nK] is now a Shaman.
+ [09:17:34 PM] !&!@$inur!@!@!@
+ [09:17:37 PM] <From LuC1Fr[BoT]@Azeroth> Your friend LuC1Fr[BoT] has entered Battle.net.
+ [09:17:38 PM] -- LuC1Fr[BoT]@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos.
+ [09:17:38 PM] -- Stats updated: LuC1Fr[BoT]@Azeroth [125ms] is using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:17:45 PM] -- Alendar@Azeroth has left the channel.
+ [09:17:46 PM] <Pyro6@Azeroth> #exec srHold = True
+ [09:17:49 PM] -- Goliath@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [09:17:53 PM] <Goliath@Azeroth> ?trigger
+ [09:17:53 PM] <LuC1Fr[BoT]@Azeroth> Current trigger: #
+ [09:17:53 PM] <Infiltrated[Ls]@Azeroth> The bot's current trigger is " ) " (Length: 1)
+ [09:17:56 PM] <Pyro6@Azeroth> #demote Eric[nK]; promote LuC1Fr[BoT]
+ [09:17:56 PM] -- Joined channel: Clan BoT --
+ [09:17:56 PM] [CLAN] You have been demoted. Your new rank is Grunt.
+ [09:17:56 PM] [CLAN] Member update: Eric[nK] is now a Grunt.
+ [09:17:56 PM] !&!@$inur!@!@!@
+ [09:17:56 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [09:17:57 PM] -- LuC1Fr[BoT]@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:17:58 PM] -- LuC1Fr[BoT]@Azeroth has acquired ops.
+ [09:18:03 PM] <Goliath@Azeroth> #settrigger 1
+ [09:18:09 PM] <Goliath@Azeroth> #trigger 1
+ [09:18:09 PM] <LuC1Fr[BoT]@Azeroth> Trigger set to: 1
+ [09:18:36 PM] <Pyro6@Azeroth> #exec srHold = False
+ [09:19:44 PM] <Pyro6@Azeroth> hes prolly not even gonna do anything
+ [09:19:46 PM] <Pyro6@Azeroth> lol
+ [09:20:26 PM] <Goliath@Azeroth> !!a
+ [09:20:30 PM] <Goliath@Azeroth> \\a
+ [09:20:30 PM] <LuC1Fr[BoT]@Azeroth> User: Goliath@Azeroth - Access: 101
+ [09:20:37 PM] <Pyro6@Azeroth> \\a
+ [09:20:37 PM] <Vortigaunt@Azeroth> User: Pyro6@Azeroth - Access: 101
+ [09:20:37 PM] <LuC1Fr[BoT]@Azeroth> User: Pyro6@Azeroth - Access: 101
+ [09:22:30 PM] <Goliath@Azeroth> 1safeadd Eric
+ [09:22:30 PM] <LuC1Fr[BoT]@Azeroth> Eric@azeroth has been safelisted.
+ [09:22:55 PM] <Goliath@Azeroth> 1pb 300+,0-
+ [09:22:55 PM] <LuC1Fr[BoT]@Azeroth> Pingban enabled.
+ [09:22:55 PM] <Pyro6@Azeroth> +unhide
+ [09:23:00 PM] <Pyro6@Azeroth> +show
+ [09:23:03 PM] <Pyro6@Azeroth> FU
+ [09:23:18 PM] <Pyro6@Azeroth> +hide off
+ [09:23:18 PM] <Vortigaunt@Azeroth> l2uthless Ops is now visible.
+ [09:25:26 PM] -- Vortigaunt@Azeroth has left the channel.
+ [09:25:34 PM] -- Vortigaunt@Azeroth [157ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:25:43 PM] <Pyro6@Azeroth> #ddpx Vortigaunt
+ [09:25:43 PM] -- VBScript@Azeroth has left the channel.
+ [09:25:43 PM] -- PhiX[BoT]@Azeroth has left the channel.
+ [09:25:43 PM] -- Alendar[BoT]@Azeroth has left the channel.
+ [09:25:43 PM] -- IdleBoT@Azeroth has left the channel.
+ [09:25:43 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [09:25:44 PM] -- VBScript@Azeroth [78ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:25:44 PM] -- PhiX[BoT]@Azeroth [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:25:44 PM] -- Alendar[BoT]@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:25:44 PM] -- IdleBoT@Azeroth [94ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:25:44 PM] -- LuC1Fr[BoT]@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:25:44 PM] -- Vortigaunt@Azeroth has acquired ops.
+ [09:25:44 PM] -- Pyro[BoT]@Azeroth has left the channel.
+ [09:25:47 PM] -- Pyro[BoT]@Azeroth [296ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:25:47 PM] -- Pyro[BoT]@Azeroth has acquired ops.
+ [09:25:47 PM] -- VBScript@Azeroth has left the channel.
+ [09:25:47 PM] -- PhiX[BoT]@Azeroth has left the channel.
+ [09:25:47 PM] -- Alendar[BoT]@Azeroth has left the channel.
+ [09:25:47 PM] -- IdleBoT@Azeroth has left the channel.
+ [09:25:47 PM] -- LuC1Fr[BoT]@Azeroth has left the channel.
+ [09:25:48 PM] -- VBScript@Azeroth [78ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:25:48 PM] -- VBScript@Azeroth has acquired ops.
+ [09:25:48 PM] -- PhiX[BoT]@Azeroth [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:25:48 PM] -- PhiX[BoT]@Azeroth has acquired ops.
+ [09:25:48 PM] -- Alendar[BoT]@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:25:48 PM] -- Alendar[BoT]@Azeroth has acquired ops.
+ [09:25:48 PM] -- IdleBoT@Azeroth [94ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:25:48 PM] -- IdleBoT@Azeroth has acquired ops.
+ [09:25:48 PM] -- LuC1Fr[BoT]@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [09:25:48 PM] -- LuC1Fr[BoT]@Azeroth has acquired ops.
+ [09:25:54 PM] <Pyro6@Azeroth> game is to occupied with someone else atm
+ [09:26:02 PM] <Pyro6@Azeroth> and ... i doubt hes gonna do anything
+ [09:26:03 PM] <Pyro6@Azeroth> so afk
+ [09:26:34 PM] <Goliath@Azeroth> i dont think so either, But he could get someone else to.
+ [09:27:06 PM] <Pyro6@Azeroth> ill stick with sb
+ [09:27:11 PM] <Pyro6@Azeroth> night
+ [09:28:19 PM] <Goliath@Azeroth> 1idleipsweep Clan Phat 60
+ [09:28:23 PM] Compassionate was banned by LuC1Fr[BoT] (Sweep).
+ [09:28:30 PM] 40-Oz was banned by LuC1Fr[BoT] (Sweep).
+ [09:28:37 PM] CyberHunter was banned by LuC1Fr[BoT] (Sweep).
+ [09:28:44 PM] loads-of-fun was banned by LuC1Fr[BoT] (Sweep).
+ [09:28:51 PM] 40-Oz was banned by LuC1Fr[BoT] (Sweep).
+ [09:28:58 PM] Secrete.Service was banned by LuC1Fr[BoT] (Sweep).
+ [09:29:05 PM] The[FBI] was banned by LuC1Fr[BoT] (Sweep).
+ [09:29:12 PM] The[NSA] was banned by LuC1Fr[BoT] (Sweep).
+ [09:29:19 PM] The[DEA] was banned by LuC1Fr[BoT] (Sweep).
+ [09:29:26 PM] The[CIA] was banned by LuC1Fr[BoT] (Sweep).
+ [09:29:28 PM] <VBScript@Azeroth | New on StealthBot S&P:  Score System W/ Rank list>
+ [09:29:33 PM] 0('')0 was banned by LuC1Fr[BoT] (Sweep).
+ [09:29:40 PM] Ammunition]FBP[ was banned by LuC1Fr[BoT] (Sweep).
+ [09:29:47 PM] In-The-End was banned by LuC1Fr[BoT] (Sweep).
+ [09:30:48 PM] <Goliath@Azeroth> 1hide on
+ [10:18:46 PM] -- WaSp has left the channel.
+ [10:35:56 PM] <Goliath@Azeroth> 1hide off
+ [10:59:26 PM] -- t-dawg[BoT]@Azeroth has left the channel.
+ [10:59:29 PM] -- t-dawg[BoT]@Azeroth [94ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [10:59:33 PM] <t-dawg[BoT]@Azeroth> :O
+ [10:59:37 PM] <t-dawg[BoT]@Azeroth> where the hell is JD
+ [11:37:38 PM] -- PingGnome@Azeroth [1515ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 13, icon tier Undead, ghoul icon, in Clan TsF)
+ [11:37:39 PM] PingGnome was banned by IdleBoT (Hated.).
+ [11:37:39 PM] -- PingGnome@Azeroth has left the channel.

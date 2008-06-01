@@ -1,0 +1,453 @@
+ [09:22:40 AM] [BNET] 10053 -- Connection is aborted due to timeout or other failure
+ [09:22:40 AM] [BNET] Disconnected.
+ [09:22:45 AM] [BNET] The Battle.net server has terminated your connection.
+ [09:22:45 AM] [BNET] Attempting to reconnect...
+ [09:22:46 AM] Authorizing your private-release bot, please wait.
+ [09:24:49 AM] Authorizing your private-release bot, please wait.
+ [09:24:51 AM] - - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -
+ [09:24:52 AM] All connections closed.
+ [09:24:59 AM] Private usage authorized, connecting to Battle.Net.
+ [09:24:59 AM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [09:25:20 AM] [BNLS] Connected!
+ [09:25:20 AM] [BNLS] Authorized!
+ [09:25:20 AM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [09:25:21 AM] [BNET] Connected!
+ [09:25:21 AM] [BNET] Checking version...
+ [09:25:21 AM] [BNET] Client version accepted!
+ [09:25:21 AM] [BNET] Sending login information...
+ [09:25:22 AM] [BNET] Login successful.
+ [09:25:22 AM] [CLAN] You are a Shaman in Clan BoT.
+ [09:25:22 AM] [BNET] Logged on as Eric[nK].
+ [09:25:22 AM] -- Joined channel: Clan BoT --
+ [09:25:23 AM] -- Eric[nK]@Azeroth has acquired ops.
+ [09:25:23 AM] !&!@$inur!@!@!@
+ [09:25:23 AM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [09:25:23 AM] Last Logon: 5/15/2008, 16:33:31 (Battle.net time)
+ [09:25:23 AM] Last Logoff: 5/15/2008, 07:12:48 (Battle.net time)
+ [09:25:23 AM] Time Logged: 103 days, 20 hours, 43 minutes and 28 seconds
+ [09:25:29 AM] An update is available for your Plugin Settings Manager. To download hit Plugins > Settings Manager
+ [09:39:58 AM] <VBScript@Azeroth | New on SlashDot:  Securing Your Notebook Against US Customs>
+ [10:14:12 AM] [BNET] 10053 -- Connection is aborted due to timeout or other failure
+ [10:14:12 AM] [BNET] Disconnected.
+ [10:14:12 AM] [BNET] You appear to be IPBanned. The bot will attempt to reconnect again in 20 minutes.
+ [01:30:11 PM] Connecting your bot...
+ [01:30:11 PM] Authorizing your private-release bot, please wait.
+ [01:30:12 PM] Private usage authorized, connecting to Battle.Net.
+ [01:30:12 PM] [BNLS] Connecting to the BNLS server at logon.berzerkerjbls.com...
+ [01:30:19 PM] [BNLS] Connected!
+ [01:30:20 PM] [BNLS] Authorized!
+ [01:30:20 PM] [BNET] Connecting to the Battle.net server at 63.240.202.128...
+ [01:30:20 PM] [BNET] Connected!
+ [01:30:21 PM] [BNET] Checking version...
+ [01:30:24 PM] [BNET] Client version accepted!
+ [01:30:24 PM] [BNET] Sending login information...
+ [01:30:26 PM] [BNET] Login successful.
+ [01:30:26 PM] [CLAN] You are a Grunt in Clan BoT.
+ [01:30:27 PM] [BNET] Logged on as Eric[nK].
+ [01:30:27 PM] -- Joined channel: Clan BoT --
+ [01:30:28 PM] Account Created: 8/22/2007, 02:22:10 (Battle.net time)
+ [01:30:28 PM] Last Logon: 5/15/2008, 20:33:57 (Battle.net time)
+ [01:30:28 PM] Last Logoff: 5/15/2008, 17:13:31 (Battle.net time)
+ [01:30:28 PM] Time Logged: 103 days, 21 hours, 30 minutes and 23 seconds
+ [01:30:28 PM] !&!@$inur!@!@!@
+ [01:30:28 PM] -- Funnel9111[BoT]@Azeroth has left the channel.
+ [01:30:28 PM] -- Joined channel: Clan BoT --
+ [01:30:29 PM] -- Eric[nK]@Azeroth has acquired ops.
+ [01:30:29 PM] [CLAN] You have been promoted. Your new rank is Shaman.
+ [01:30:29 PM] [CLAN] Member update: Eric[nK] is now a Shaman.
+ [01:30:29 PM] !&!@$inur!@!@!@
+ [01:30:48 PM] -- Ribose@Azeroth has left the channel.
+ [01:34:50 PM] -- Clan_BONE@Azeroth [109ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon)
+ [01:34:52 PM] <Clan_BONE@Azeroth is a StealthBot v2.6 Revision 3 by Stealth - http://www.stealthbot.net>
+ [01:35:05 PM] -- Clan_BONE@Azeroth has left the channel.
+ [01:42:06 PM] Users in channel Clan BONE:
+ [01:42:06 PM] Zachster48
+ [01:52:42 PM] <VBScript@Azeroth | New on SlashDot:  Online Quiz As a Gateway to P2P>
+ [02:23:26 PM] <From VBScript@Azeroth> Your friend VBScript has exited Battle.net.
+ [02:23:26 PM] -- VBScript@Azeroth has left the channel.
+ [02:23:27 PM] -- Funnel9111[BoT]@Azeroth has left the channel.
+ [02:23:27 PM] -- Funnel9111[BoT]@Azeroth [2437ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [02:23:27 PM] -- Funnel9111[BoT]@Azeroth has acquired ops.
+ [02:25:54 PM] <From VBScript@Azeroth> Your friend VBScript has entered Battle.net.
+ [02:25:56 PM] -- Funnel9111[BoT]@Azeroth has left the channel.
+ [02:25:57 PM] -- Funnel9111[BoT]@Azeroth [2437ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [02:25:57 PM] -- VBScript@Azeroth [1719ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [02:25:57 PM] -- VBScript@Azeroth has acquired ops.
+ [02:44:14 PM] <VBScript@Azeroth | New on StealthBot Recent:  Need Help With BCP Commands>
+ [03:04:28 PM] <VBScript@Azeroth | New on SlashDot:  Comcast; Cox Slow BitTorrent Traffic All Day>
+ [03:06:29 PM] <VBScript@Azeroth | New on LifeHacker:  Run the Ultimate Boot CD from Your Thumb Drive [How To] ; Google Doctype like Wikipedia for Web Development [Google] >
+ [03:11:35 PM] <From Bot-Vector@Azeroth> Your friend Bot-Vector has entered Battle.net.
+ [03:13:05 PM] -- HaKr_@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [03:14:55 PM] -- HaKr_@Azeroth has left the channel.
+ [03:16:35 PM] <VBScript@Azeroth | New on SlashDot:  Changing a School's Tech Disposal Policy?>
+ [03:20:54 PM] -- ClanGnome@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan Spht)
+ [03:21:00 PM] -- ClanGnome@Azeroth has left the channel.
+ [03:28:41 PM] <VBScript@Azeroth | New on SlashDot:  Moving Toward a Single Linux UI?>
+ [03:29:44 PM] <VBScript@Azeroth | New on StealthBot Recent:  [RESOLVED] Auto Acces>
+ [03:36:48 PM] <From Bot-Vector@Azeroth> Hey Collin
+ [03:38:25 PM] -- connection_lost@Azeroth [31ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Undead, crypt fiend icon, in Clan BoT)
+ [03:38:30 PM] -- connection_lost@Azeroth has left the channel.
+ [03:43:35 PM] -- d2playertko [62ms] has joined the channel using Diablo II Lord of Destruction (TkO-NvrGonaDie, a hardcore ladder level 26 paladin on realm USEast).
+ [03:43:51 PM] -- Ninja-Scout@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan NNN)
+ [03:44:00 PM] <Pyro6@Azeroth> ninja!
+ [03:44:01 PM] <Ninja-Scout@Azeroth> You're in Clan [BoT]. I've seen you [138] time(s) with a high ping of [1657ms] and a low of [31ms]. Thanks for kicking me [0] times. The most Brood War wins I've seen was 99999 wins (Vexorian@USEast).
+ [03:44:04 PM] -- Ninja-Scout@Azeroth has left the channel.
+ [03:44:25 PM] <d2playertko> ninja!
+ [03:44:39 PM] -- d2playertko has left the channel.
+ [03:47:41 PM] <From Bot-Vector@Azeroth> Hi Cameron
+ [03:52:26 PM] -- ch0wn@Azeroth [31ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 1, icon tier Random, peon icon, in Clan ddd)
+ [03:52:30 PM] -- ch0wn@Azeroth has left the channel.
+ [04:00:55 PM] <From Bot-Vector@Azeroth> /yawn
+ [04:01:50 PM] -- HaKr_@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [04:04:25 PM] <From Pyro6@Azeroth> Your friend Pyro6 has exited Battle.net.
+ [04:04:25 PM] -- Pyro6@Azeroth has left the channel.
+ [04:04:27 PM] -- PyroBot@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [04:04:35 PM] -- PyroBot@Azeroth has left the channel.
+ [04:04:36 PM] <From Pyro6@Azeroth> Your friend Pyro6 has entered Battle.net.
+ [04:04:37 PM] -- Pyro6@Azeroth [156ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [04:05:17 PM] <From Pyro6@Azeroth> Your friend Pyro6 has exited Battle.net.
+ [04:05:17 PM] -- Pyro6@Azeroth has left the channel.
+ [04:05:19 PM] -- PyroBot@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [04:05:26 PM] -- PyroBot@Azeroth has left the channel.
+ [04:05:27 PM] <From Pyro6@Azeroth> Your friend Pyro6 has entered Battle.net.
+ [04:05:29 PM] -- Pyro6@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [04:11:51 PM] -- Piece [15ms] has joined the channel using Starcraft Brood War (0 wins).
+ [04:11:56 PM] <Pyro6@Azeroth> lol
+ [04:12:00 PM] <Piece> sup
+ [04:12:12 PM] <Pyro6@Azeroth> nm
+ [04:15:13 PM] <VBScript@Azeroth | New on StealthBot Recent:  Users on safelist and shitlist?>
+ [04:15:14 PM] <VBScript@Azeroth | New on StealthBot S&P:  Users on safelist and shitlist?>
+ [04:15:34 PM] -- DFND-Hip [31ms] has joined the channel using Starcraft Brood War (17 wins).
+ [04:15:37 PM] <DFND-Hip> :)
+ [04:15:39 PM] -- DFND-Hip has left the channel.
+ [04:15:49 PM] -- Piece has left the channel.
+ [04:24:21 PM] <VBScript@Azeroth | New on StealthBot Recent:  Mediocore Vouch Script; help w/ .join command w/ acces 0?>
+ [04:25:54 PM] <VBScript@Azeroth> eric
+ [04:26:02 PM] <VBScript@Azeroth> can we please get some solid documentation on the objects
+ [04:26:09 PM] <VBScript@Azeroth> for ex.
+ [04:26:20 PM] <VBScript@Azeroth> what are all the integer values in Clan.Member.Status
+ [04:30:29 PM] <Pyro6@Azeroth> uh
+ [04:30:49 PM] <Pyro6@Azeroth> #exec addq clan.members(1).name
+ [04:30:49 PM] <Pyro[BoT]@Azeroth> Pyro[BoT]
+ [04:30:59 PM] <Pyro6@Azeroth> #exec addq clan.members(1).status
+ [04:30:59 PM] <Pyro[BoT]@Azeroth> 1
+ [04:31:25 PM] <Pyro6@Azeroth> 0 = offline
+ [04:31:29 PM] <Pyro6@Azeroth> 1 = online
+ [04:31:41 PM] <Pyro6@Azeroth> 2 = in channel
+ [04:31:43 PM] <Pyro6@Azeroth> ...
+ [04:31:48 PM] <Pyro6@Azeroth> 3 = public game
+ [04:31:52 PM] <Pyro6@Azeroth> 5 = private game
+ [04:32:07 PM] <Pyro6@Azeroth> at least... thats what bnet docs says
+ [04:35:26 PM] <VBScript@Azeroth> thanx
+ [04:37:42 PM] <VBScript@Azeroth> whata bout  .rank
+ [04:37:44 PM] <VBScript@Azeroth> 0 = peon
+ [04:37:46 PM] <VBScript@Azeroth> 1 = grunt
+ [04:37:48 PM] <VBScript@Azeroth> ?
+ [04:37:49 PM] <VBScript@Azeroth> etc?
+ [04:37:54 PM] <Pyro6@Azeroth> mhm
+ [04:37:57 PM] <Pyro6@Azeroth> well
+ [04:38:05 PM] <Pyro6@Azeroth> 0 = peon (less than 7 days)
+ [04:38:12 PM] <Pyro6@Azeroth> 1 = peon (> 7 days)
+ [04:38:13 PM] <Pyro6@Azeroth> then so on
+ [04:38:40 PM] <Pyro6@Azeroth> actually...
+ [04:38:45 PM] <Pyro6@Azeroth> status is either 0 or 1
+ [04:38:48 PM] <Pyro6@Azeroth> offline = 0
+ [04:38:51 PM] <Pyro6@Azeroth> online = 1
+ [04:38:58 PM] <Pyro6@Azeroth> http://www.bnetdocs.org/?op=packet&pid=216
+ [04:41:31 PM] <VBScript@Azeroth | New on SlashDot:  Details for Guitar Hero 4 Released>
+ [04:42:23 PM] <From Bot-Vector@Azeroth> Your friend Bot-Vector has exited Battle.net.
+ [04:43:33 PM] <VBScript@Azeroth | New on LifeHacker:  What Are You Doing with Your Stimulus Check? [Reader Poll] ; Put Google Reader in Your Sidebar [Google Reader] >
+ [04:44:08 PM] <Pyro6@Azeroth> k wtf
+ [04:44:47 PM] <Pyro6@Azeroth> fucking shit is being gay
+ [04:45:54 PM] <Pyro6@Azeroth> im getting a packet
+ [04:46:04 PM] <Pyro6@Azeroth> and the packetlogger shows the last 4 bytes as
+ [04:46:14 PM] <Pyro6@Azeroth> BA AA 2E 37
+ [04:46:28 PM] <Pyro6@Azeroth> but the bot sees the last 4 bytes as 
+ [04:46:34 PM] <Pyro6@Azeroth> BA AA 2E 00
+ [04:46:39 PM] <Pyro6@Azeroth> ...
+ [04:51:37 PM] <VBScript@Azeroth | New on StealthBot Recent:  chanel open/closed; Need Help (completely Lost)>
+ [04:55:39 PM] <VBScript@Azeroth | New on LifeHacker:  Uploadjockey Sends Your File to Multiple Hosting Services [File Sharing] >
+ [04:59:22 PM] -- YOUReSOFT@Azeroth [63ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 19, icon tier Tournament, infernal icon, in Clan RoA)
+ [04:59:34 PM] -- YOUReSOFT@Azeroth has left the channel.
+ [05:07:33 PM] <IdleBoT@Azeroth> some guy at google asked barak obama
+ [05:07:41 PM] <IdleBoT@Azeroth> "whats the best way to sort 32 million integers"
+ [05:07:45 PM] <VBScript@Azeroth | New on LifeHacker:  What Are You Doing with Your Stimulus Check? [Reader Poll] >
+ [05:07:47 PM] <IdleBoT@Azeroth> in an interview
+ [05:09:00 PM] <VBScript@Azeroth> quicksort
+ [05:09:07 PM] <VBScript@Azeroth> or turtle sort thing
+ [05:09:14 PM] <VBScript@Azeroth> WIF SEED .3
+ [05:09:17 PM] <VBScript@Azeroth> i think
+ [05:09:22 PM] <VBScript@Azeroth> or is it .7
+ [05:09:30 PM] <IdleBoT@Azeroth> NAH
+ [05:09:33 PM] <IdleBoT@Azeroth> USE GOOGLE
+ [05:09:53 PM] <IdleBoT@Azeroth> baraks answer was "well i know bubblesort isn't the correct answer"
+ [05:09:56 PM] <IdleBoT@Azeroth> and of course they cheated
+ [05:09:59 PM] <IdleBoT@Azeroth> cuz hes black
+ [05:10:04 PM] <IdleBoT@Azeroth> and aint no shit bout compz
+ [05:13:07 PM] -- connection_lost@Azeroth [31ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Undead, crypt fiend icon, in Clan BoT)
+ [05:13:32 PM] -- connection_lost@Azeroth has left the channel.
+ [05:18:02 PM] <Alendar@Azeroth> Crap
+ [05:21:04 PM] <Pyro6@Azeroth> ?
+ [05:21:55 PM] <VBScript@Azeroth | New on On This Day:  1943: Germans crush Jewish uprising; 1974: Dozens die as Israel retaliates for Ma'alot; 1985: Miners jailed for pit strike murder; 1968: Three die as tower block collapses; 1990: Gummer [more]>
+ [05:22:01 PM] <VBScript@Azeroth enlists daughter in BSE fight; 2001: Prescott punches protester>
+ [05:23:03 PM] <Alendar@Azeroth> I fell asleep.
+ [05:23:30 PM] <Pyro6@Azeroth> lol
+ [05:30:23 PM] <Eric[nK]@Azeroth> ><
+ [05:30:47 PM] <Pyro6@Azeroth> i just told a rep something about battlenet that he didnt know!
+ [05:31:08 PM] <Eric[nK]@Azeroth> ...?
+ [05:31:35 PM] <Pyro6@Azeroth>  [20:27:45.223] <Pyro6> if its against the ToU or w/e to have more than one connection to bnet at a time, why does the ability to login more than once per ip exist?
+ [05:31:46 PM] <Pyro6@Azeroth>  [20:28:30.949] <JonD.Support@Blizzard> Pyro6@Lordaeron: I do not believe it is a violation of the ToU to have more than one connection to battle.net.  It is not supported however.
+ [05:31:48 PM] -- Goliath@Azeroth has left the channel.
+ [05:31:54 PM] <Pyro6@Azeroth>  [20:29:26.559] <Pyro6> (xvii) create or maintain, under any circumstance, more than one simultaneous connection to Battle.net.
+ [05:32:03 PM] <Pyro6@Azeroth>  [20:30:28.679] <JonD.Support@Blizzard> Pyro6@Lordaeron: I see.  I did not know that.  =)
+ [05:32:30 PM] <Eric[nK]@Azeroth> It's meant to allow several users on one connection to play a single game.
+ [05:32:37 PM] <Eric[nK]@Azeroth> (duh?)
+ [05:32:53 PM] <Pyro6@Azeroth> but if you're not allowed to have more than one connection..
+ [05:33:14 PM] <Eric[nK]@Azeroth> You're not maintaining multiple connections if you are playing against other players.
+ [05:33:21 PM] <Eric[nK]@Azeroth> You're only maintaining one connection.
+ [05:33:35 PM] <Eric[nK]@Azeroth> Your friend is maintaining another, etc.
+ [05:33:45 PM] <Pyro6@Azeroth> hmm
+ [05:35:00 PM] <Eric[nK]@Azeroth> hmm'
+ [05:37:07 PM] <VBScript@Azeroth | New on StealthBot Recent:  Who is in the channel ?>
+ [05:42:13 PM] <VBScript@Azeroth | New on SlashDot:  Microsoft and OLPC Agree To Put XP On the XO Laptop>
+ [05:56:27 PM] <VBScript@Azeroth | New on LifeHacker:  Uploadjockey Sends Your File to Multiple Hosting Services [File Sharing] >
+ [06:04:33 PM] <VBScript@Azeroth | New on StealthBot Recent:  Whats the problem>
+ [06:04:34 PM] <VBScript@Azeroth | New on StealthBot Tech Support:  Whats the problem>
+ [06:08:36 PM] <VBScript@Azeroth | New on LifeHacker:  What Are You Doing with Your Stimulus Check? [Reader Poll] >
+ [06:16:14 PM] !
+ [06:16:14 PM] -- WlI@Azeroth [16ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 10, icon tier Night Elves, dryad icon)
+ [06:16:14 PM] <WlI@Azeroth> Hey
+ [06:16:17 PM] <WlI@Azeroth> can anyone help me make a clan ?
+ [06:16:22 PM] <Pyro6@Azeroth> no.
+ [06:16:33 PM] <WlI@Azeroth> come on i bet u got like 90909 bots that can help real fast
+ [06:16:43 PM] <Pyro6@Azeroth> uh
+ [06:16:45 PM] <Pyro6@Azeroth> no.
+ [06:16:53 PM] <WlI@Azeroth> sigh
+ [06:16:57 PM] <Pyro6@Azeroth> ?trigger
+ [06:16:57 PM] <Ozark-a@Azeroth> The bot's current trigger is " , " (Alt + 044)
+ [06:16:57 PM] -- WlI@Azeroth has left the channel.
+ [06:16:57 PM] <Alendar[BoT]@Azeroth> The bot's current trigger is " ! " (Length: 1)
+ [06:16:57 PM] <HaKr[BoT]@Azeroth> The bot's current trigger is " . " (Length: 1)
+ [06:16:58 PM] <Pyro[BoT]@Azeroth> The bot's current trigger is " # " (Length: 1)
+ [06:16:58 PM] <Vortigaunt@Azeroth> The bot's current trigger is " + " (Length: 1)
+ [06:16:58 PM] <Eric[nK]@Azeroth> The bot's current trigger is " ... " (Length: 3)
+ [06:16:58 PM] <IdleBoT@Azeroth> The bot's current trigger is " ## " (Length: 2)
+ [06:16:58 PM] <VBScript@Azeroth> The bot's current trigger is " - " (Length: 1)
+ [06:16:59 PM] <Eric@Azeroth> The bot's current trigger is " * " (Length: 1)
+ [06:23:46 PM] -- connection_lost@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Undead, crypt fiend icon, in Clan BoT)
+ [06:23:47 PM] -- connection_lost@Azeroth has left the channel.
+ [06:28:32 PM] <From Pyro6@Azeroth> Your friend Pyro6 has exited Battle.net.
+ [06:28:32 PM] -- Pyro6@Azeroth has left the channel.
+ [06:32:57 PM] <VBScript@Azeroth | New on LifeHacker:  Uploadjockey Sends Your File to Multiple Hosting Services [File Sharing] >
+ [06:33:12 PM] <Alendar@Azeroth> Its an PEBKAC error.
+ [06:33:26 PM] <From Pyro6@Azeroth> Your friend Pyro6 has entered Battle.net.
+ [06:33:27 PM] -- Pyro6@Azeroth [47ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [06:33:31 PM] <Alendar@Azeroth> Its an PEBKAC error.
+ [06:33:39 PM] <Pyro6@Azeroth> hm
+ [06:33:49 PM] <Pyro6@Azeroth> sp3 looks... the same as sp2
+ [06:33:50 PM] <Alendar@Azeroth> What?
+ [06:33:50 PM] <Pyro6@Azeroth> lol
+ [06:34:45 PM] <Pyro6@Azeroth> wtf..
+ [06:35:00 PM] <Pyro6@Azeroth> i just got
+ [06:35:02 PM] <Pyro6@Azeroth>  [21:34:29.700] Did not load plugin in file "bot.txt". Its prefix "bot" already exists in file "bot.txt".
+ [06:35:09 PM] <Pyro6@Azeroth> for every one of my plugins
+ [06:35:18 PM] <Alendar@Azeroth> I have had that happen.
+ [06:35:19 PM] <Pyro6@Azeroth> fucking noob swent
+ [06:35:51 PM] <Alendar@Azeroth> Feature was not beta tested.
+ [06:36:04 PM] <Pyro6@Azeroth> designer is moron*
+ [06:36:16 PM] <Alendar@Azeroth> http://www.usrbingeek.com/excuse.php
+ [06:38:35 PM] <VBScript@Azeroth> Current MP3 [376/2231]: Cradle Of Filth - Nymphetamine (00:39/05:01)
+ [06:39:19 PM] -- connection_lost@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Undead, crypt fiend icon, in Clan BoT)
+ [06:39:25 PM] <Pyro6@Azeroth> im
+ [06:39:31 PM] <Pyro6@Azeroth> downloading mario for my calculator
+ [06:41:46 PM] <Alendar@Azeroth> ...
+ [06:44:59 PM] -- connection_lost@Azeroth has left the channel.
+ [06:50:01 PM] <VBScript@Azeroth | New on StealthBot Recent:  BCP PLUGIN HELP>
+ [06:53:02 PM] <VBScript@Azeroth | New on StealthBot S&P:  BCP PLUGIN HELP>
+ [06:53:04 PM] <VBScript@Azeroth | New on StealthBot Tech Support:  I need some help...; [RESOLVED] how do u make the bot stop saying y>
+ [06:56:05 PM] <VBScript@Azeroth .: Now playing #232: Bad Company - Shooting Star :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [06:57:05 PM] <VBScript@Azeroth | New on LifeHacker:  Uploadjockey Sends Your File to Multiple Hosting Services [File Sharing] >
+ [06:59:08 PM] <VBScript@Azeroth | New on StealthBot Recent:  DoTa Script; Stealth Bot Problem; [RESOLVED] how do u make the bot stop saying y>
+ [07:00:05 PM] -- LuC1Fr-Tech@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan SBs)
+ [07:00:22 PM] -- Goliath@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [07:00:24 PM] <Goliath@Azeroth> 1join clan sbs
+ [07:00:24 PM] -- LuC1Fr-Tech@Azeroth has left the channel.
+ [07:00:26 PM] -- Goliath@Azeroth has left the channel.
+ [07:05:12 PM] <VBScript@Azeroth | New on StealthBot Tech Support:  Stealth Bot Problem>
+ [07:08:01 PM] -- Ribose [1469ms] has joined the channel using Starcraft Brood War (38 wins).
+ [07:08:19 PM] <Ribose> =[ my home channel is /c prived =[
+ [07:08:32 PM] -- Ribose@Azeroth [906ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon, in Clan BoT)
+ [07:09:15 PM] <Ribose@Azeroth> yay windows xp is so pimped out
+ [07:09:17 PM] <VBScript@Azeroth | New on LifeHacker:  What Are You Doing with Your Stimulus Check? [Reader Poll] >
+ [07:09:49 PM] <HaKr_@Azeroth> The ground beat the shit out of me today
+ [07:10:42 PM] -- HaKr_@Azeroth has left the channel.
+ [07:11:18 PM] <VBScript@Azeroth .: Now playing #1878: The Beatles - Child Of Nature :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [07:11:43 PM] -- Ribose has left the channel.
+ [07:11:47 PM] -- Ribose [1469ms] has joined the channel using Starcraft Brood War (38 wins).
+ [07:16:19 PM] -- ClanGnome@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan Spht)
+ [07:16:30 PM] -- ClanGnome@Azeroth has left the channel.
+ [07:17:13 PM] <Ozark-a@Azeroth> “Yes darling, of course you are.” his mother answered.
+ [07:17:14 PM] <Ozark-a@Azeroth> “Are you SURE I’m a polar bear?”
+ [07:17:15 PM] <Ozark-a@Azeroth> “Yes dear,” his mother replied, “You are. I am, you sister is, you’re father is, we’re all polar bears.”
+ [07:17:18 PM] <Ozark-a@Azeroth> “Are you POSITIVE?”
+ [07:17:21 PM] <VBScript@Azeroth | New on StealthBot Recent:  [RESOLVED] I need some help...>
+ [07:17:22 PM] <VBScript@Azeroth | New on StealthBot Tech Support:  [RESOLVED] I need some help...>
+ [07:17:22 PM] <Ozark-a@Azeroth> oops
+ [07:17:25 PM] <Ozark-a@Azeroth> s
+ [07:17:30 PM] <Ozark-a@Azeroth> started at a wrong spot
+ [07:17:37 PM] <Ozark-a@Azeroth> A polar bear asks his Mother, ‘Mom, am I a real polar bear?”
+ [07:17:38 PM] <Ozark-a@Azeroth> “Yes darling, of course you are.” his mother answered.
+ [07:17:39 PM] <Ozark-a@Azeroth> “Are you SURE I’m a polar bear?”
+ [07:17:41 PM] <Ozark-a@Azeroth> “Yes dear,” his mother replied, “You are. I am, you sister is, you’re father is, we’re all polar bears.”
+ [07:17:47 PM] <Ozark-a@Azeroth> “Are you POSITIVE?”
+ [07:17:50 PM] <Ozark-a@Azeroth> “Yes, yes, for the last time, you’re a polar bear! Why do you keep asking?”
+ [07:17:57 PM] <Ozark-a@Azeroth> “‘Cause I’m fucking freezing!”
+ [07:19:22 PM] <VBScript@Azeroth | New on SlashDot:  Streamlining and Testing RFID Technology>
+ [07:26:27 PM] <VBScript@Azeroth .: Now playing #1780: Stevie Ray Vaughan - Voodoo Child :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [07:27:13 PM] <VBScript@Azeroth> hmm
+ [07:38:08 PM] -- Goliath@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [07:38:19 PM] -- Goliath@Azeroth has left the channel.
+ [07:39:28 PM] -- Goliath@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [07:41:36 PM] <VBScript@Azeroth .: Now playing #1736: Soundgarden - Fresh Tendrills :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [07:42:23 PM] -- 13leach@Azeroth [562ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan CGoA)
+ [07:42:36 PM] <13leach@Azeroth> .ping
+ [07:42:37 PM] <Pyro6@Azeroth> *ci noob
+ [07:42:39 PM] <Eric@Azeroth> The NooB Slayers was created on May 15, 2008, has 13 members, and is currently under the command of MagicAndMayHem. The clan has no shamans.
+ [07:42:47 PM] <13leach@Azeroth> *pingme
+ [07:42:53 PM] <13leach@Azeroth> =/
+ [07:42:59 PM] <Pyro6@Azeroth> #b 13* 562
+ [07:42:59 PM] -- 13leach@Azeroth has left the channel.
+ [07:42:59 PM] 13leach was banned by Pyro[BoT] (562).
+ [07:44:11 PM] -- Ribose has left the channel.
+ [07:44:11 PM] -- Ribose@Azeroth has left the channel.
+ [07:45:38 PM] <VBScript@Azeroth | New on LifeHacker:  Uploadjockey Sends Your File to Multiple Hosting Services [File Sharing] >
+ [07:50:09 PM] <Pyro6@Azeroth> http://www.stealthbot.net/board/index.php?s=&showtopic=26562&view=findpost&p=265533 ...
+ [07:52:50 PM] <Goliath@Azeroth> uhh
+ [07:52:59 PM] <Goliath@Azeroth> Wow, the Canadian Seal hunt..
+ [07:53:13 PM] <Pyro6@Azeroth> not only that, haste is a tech support mod
+ [07:53:17 PM] <Pyro6@Azeroth> not off-topic
+ [07:53:20 PM] <Goliath@Azeroth> that
+ [07:53:30 PM] <Goliath@Azeroth> and the picture is actually pretty funny.
+ [07:53:42 PM] <VBScript@Azeroth | New on StealthBot Recent:  [RESOLVED] Stealth Bot Problem>
+ [07:53:43 PM] <VBScript@Azeroth | New on StealthBot Tech Support:  [RESOLVED] Stealth Bot Problem>
+ [07:53:55 PM] <Pyro6@Azeroth> i feel like being a dick
+ [07:54:00 PM] <Pyro6@Azeroth> and reversing the warn
+ [07:54:05 PM] <Goliath@Azeroth> Dick away.
+ [07:54:43 PM] <Goliath@Azeroth> Because technically you're right. He's not a moderator of the Off-topic Forums. He should have PM'ed one.
+ [07:54:58 PM] <Eric[nK]@Azeroth> hm
+ [07:55:20 PM] <Pyro6@Azeroth> then again im not an admin
+ [07:55:26 PM] <Pyro6@Azeroth> and cant do anything to mods
+ [07:55:37 PM] <Goliath@Azeroth> change thier profile
+ [07:55:40 PM] <Goliath@Azeroth> mua ha ha ha
+ [07:55:42 PM] <Goliath@Azeroth> ..ha..ha
+ [07:55:59 PM] <Eric[nK]@Azeroth> Current MP3 [1/1]: Joe Anderson - Hey Jude (02:05/04:10)
+ [07:56:16 PM] <Pyro6@Azeroth> so eric, can i reverse that warn?
+ [07:56:45 PM] <VBScript@Azeroth .: Now playing #376: Cradle Of Filth - Nymphetamine :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [07:57:08 PM] <Goliath@Azeroth> i think VBScript is me, in an alternate Dimension.
+ [07:57:17 PM] <Goliath@Azeroth> he listens to the same crap i do.
+ [07:57:48 PM] <Goliath@Azeroth> Current MP3 [53/1479]: Cradle Of Filth - Nymphetamine (Overdose) (00:03/09:14)
+ [07:57:50 PM] <Eric[nK]@Azeroth> Current MP3 [2/7]: The Teaching Company, The World of Byzantium - AudioTrack 07 (00:03/05:04)
+ [07:57:52 PM] <Eric[nK]@Azeroth> owned.
+ [07:57:57 PM] <Pyro6@Azeroth> lol
+ [07:58:05 PM] <Goliath@Azeroth> ?trigger
+ [07:58:05 PM] <Pyro6@Azeroth> Current MP3 [44/45]: Rick Astley - Never Gonna Give You Up (00:03/03:35)
+ [07:58:07 PM] <Pyro6@Azeroth> gg
+ [07:58:11 PM] <Goliath@Azeroth> .
+ [07:58:25 PM] <Goliath@Azeroth> Current MP3 [180/1479]: Korn - Ass Itch (00:03/03:39)
+ [07:58:29 PM] <Goliath@Azeroth> yeah yeah
+ [08:00:00 PM] <Goliath@Azeroth> http://luc1fr.com/playlist.html
+ [08:00:33 PM] <Pyro6@Azeroth> Current MP3 [1/1]: Marc Seales, composer. New Stories. Ernie Watts, saxophone. - "Highway Blues" (00:03/01:33)
+ [08:00:44 PM] <Goliath@Azeroth> lol.
+ [08:00:52 PM] <Pyro6@Azeroth> thats your #4
+ [08:00:54 PM] <Pyro6@Azeroth> ;p
+ [08:01:07 PM] <Goliath@Azeroth> yeaeh
+ [08:01:14 PM] <Goliath@Azeroth> i need to rearrange my playlist.
+ [08:01:24 PM] <Goliath@Azeroth> And add music that i have hiding around
+ [08:01:25 PM] <Pyro6@Azeroth> Current MP3 [1/1]: Amy Holland - She's On Fire (00:03/03:43)
+ [08:01:26 PM] <Pyro6@Azeroth> ;o
+ [08:01:32 PM] <Goliath@Azeroth> about another 200 tracks worth.
+ [08:04:30 PM] -- Goliath@Azeroth has left the channel.
+ [08:04:48 PM] -- Goliath@Azeroth [125ms] has joined the channel using Warcraft III: Reign of Chaos (Level: 0, icon tier Random, peon icon)
+ [08:06:15 PM] <IdleBoT@Azeroth> WOW HASTE IS A FUCKING IDIOT
+ [08:06:42 PM] <IdleBoT@Azeroth> OMG ITS A SEAL
+ [08:06:45 PM] <IdleBoT@Azeroth>  /CRY
+ [08:07:55 PM] <Pyro6@Azeroth> i thought it was only 3 weeks
+ [08:07:56 PM] <Pyro6@Azeroth> lol
+ [08:09:13 PM] <Alendar@Azeroth> I agree with Haste, that picture was very uncalled for and not needed.
+ [08:09:23 PM] <Alendar@Azeroth> Though, the 3 months.
+ [08:09:28 PM] <Pyro6@Azeroth> weeks*
+ [08:09:45 PM] <Alendar@Azeroth> That I can agree with then.
+ [08:10:01 PM] <Alendar@Azeroth> Sam has been pushing it to much with his stupidity and his spam.
+ [08:10:27 PM] <Goliath@Azeroth> but that picture is fucking funny.
+ [08:10:34 PM] <Goliath@Azeroth> "So, a seal walks into a club.."
+ [08:10:47 PM] <Goliath@Azeroth> ehh
+ [08:10:53 PM] <Goliath@Azeroth> im an ass.
+ [08:10:56 PM] <Pyro6@Azeroth> its not that funny
+ [08:10:57 PM] <Pyro6@Azeroth> lol
+ [08:11:10 PM] <Alendar@Azeroth> It's not funny period.
+ [08:11:18 PM] <Goliath@Azeroth> to me it is.. i look at that picture, and i feel better.
+ [08:11:25 PM] <Goliath@Azeroth> But don't mind me.. like i said, im an ass.
+ [08:11:56 PM] <VBScript@Azeroth | New on StealthBot Recent:  Bumping>
+ [08:11:59 PM] <VBScript@Azeroth .: <drow> I wouldn't beat my mother, she is pretty nice, and makes me pancakes on sunday morning. :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [08:12:47 PM] -- Joseph.W@Azeroth has left the channel.
+ [08:20:17 PM] <Pyro6@Azeroth> http://www.youtube.com/watch?v=DjqsB1huDxg ...
+ [08:21:27 PM] Current MP3 [1/2]: The Teaching Company, The World of Byzantium - AudioTrack 11 (03:35/05:22)
+ [08:27:03 PM] <VBScript@Azeroth .: [03:55:09 PM] <PhiX@USEast> ONLY NOOBS USE CAPS :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [08:30:05 PM] <VBScript@Azeroth | New on StealthBot Recent:  Lost Uninstall&#33;>
+ [08:31:57 PM] <IdleBoT@Azeroth> its not funny
+ [08:32:03 PM] <IdleBoT@Azeroth> but it's not like "OMG LETS BAN HIM
+ [08:32:09 PM] <IdleBoT@Azeroth> it
+ [08:32:17 PM] <IdleBoT@Azeroth> it's not like im going to cry because of a picture of a dead seal
+ [08:32:18 PM] <IdleBoT@Azeroth> holy shit
+ [08:32:48 PM] <IdleBoT@Azeroth> not like i threw up because it was a girl shiting into the air or a guy sticking a ball up his ass
+ [08:32:59 PM] <IdleBoT@Azeroth> a picture
+ [08:33:02 PM] <IdleBoT@Azeroth> of a dead animal
+ [08:33:03 PM] <IdleBoT@Azeroth> who gives a shit
+ [08:33:13 PM] <Pyro6@Azeroth> haste does
+ [08:33:15 PM] <Pyro6@Azeroth> ;p
+ [08:33:18 PM] <IdleBoT@Azeroth> haste is a fucking idiot
+ [08:33:25 PM] <IdleBoT@Azeroth> thats why he dropped out of high school to work at randalls
+ [08:33:55 PM] <IdleBoT@Azeroth> also he doesnt know when hes right or wrong, he thinks hes always right to do whatever the fuck he wants
+ [08:34:07 PM] <VBScript@Azeroth | New on LifeHacker:  What Are You Doing with Your Stimulus Check? [Reader Poll] >
+ [08:34:08 PM] <IdleBoT@Azeroth> off topic and a picture of a dead seal, what else is fucking new?
+ [08:40:26 PM] <Alendar@Azeroth> Good night.
+ [08:40:49 PM] -- Alendar@Azeroth has left the channel.
+ [08:42:13 PM] <VBScript@Azeroth .: [11:42:13 PM] [Public Chat 1] <DEATHb4disHONOR*16> i thought blizzard screened these chat logs and blocked this kinda $!@%? :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [08:46:13 PM] <VBScript@Azeroth | New on LifeHacker:  Uploadjockey Sends Your File to Multiple Hosting Services [File Sharing] >
+ [08:48:16 PM] <VBScript@Azeroth | New on StealthBot Recent:  BCP Request; BNLS w/ bncsutil.dll problem>
+ [08:49:41 PM] -- HaKr_@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [08:49:43 PM] -- HaKr_@Azeroth has left the channel.
+ [08:54:25 PM] <VBScript@Azeroth | New on StealthBot S&P:  BCP Request>
+ [08:54:26 PM] <VBScript@Azeroth | New on StealthBot Tech Support:  BNLS w/ bncsutil.dll problem>
+ [08:57:29 PM] <VBScript@Azeroth .: [9:26:50 PM] [OD] <Dav(OD)@USEast> don't ask him about it. he'll talk as if he's proud of it :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [08:58:29 PM] <VBScript@Azeroth | New on LifeHacker:  What Are You Doing with Your Stimulus Check? [Reader Poll] >
+ [09:02:30 PM] <VBScript@Azeroth | New on xkcd:  Security Holes>
+ [09:06:28 PM] -- Goliath@Azeroth has left the channel.
+ [09:06:33 PM] <VBScript@Azeroth | New on StealthBot Recent:  BCP PLUGIN HELP>
+ [09:12:37 PM] <VBScript@Azeroth .: [4:16:00 PM] [tora] <papertowelroll> cable comes from cable :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [09:13:42 PM] -- HaKr_@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 6, icon tier Night Elves, peon icon, in Clan BoT)
+ [09:25:12 PM] <Ozark-a@Azeroth> David
+ [09:25:17 PM] <Ozark-a@Azeroth> where did you find that shit?
+ [09:27:45 PM] <VBScript@Azeroth .: <ClanGnome> I'll miss you :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [09:28:05 PM] <Ozark-a@Azeroth> She moves her eyes a lot
+ [09:33:49 PM] <VBScript@Azeroth | New on StealthBot Recent:  change where files get placed>
+ [09:42:59 PM] <VBScript@Azeroth .: [9:42:15 PM] [Nn4M] <Nn4M]Vette> LOOK @ MY SEXY BODY :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [09:44:49 PM] -- HaKr_@Azeroth has left the channel.
+ [09:44:58 PM] <VBScript@Azeroth | New on SlashDot:  Black Holes Don't Trap Information Forever>
+ [09:50:12 PM] -- pretendo [0ms] has joined the channel using Warcraft II (0 wins).
+ [09:50:15 PM] -- pretendo has left the channel.
+ [09:58:02 PM] <VBScript@Azeroth .: [9:42:15 PM] [Nn4M] <Nn4M]Vette> LOOK @ MY SEXY BODY :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [10:11:05 PM] <VBScript@Azeroth | New on LifeHacker:  Uploadjockey Sends Your File to Multiple Hosting Services [File Sharing] >
+ [10:13:06 PM] <VBScript@Azeroth .: <ClanGnome> The trouble with being punctual is that nobody's there to appreciate it :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [10:23:08 PM] <VBScript@Azeroth | New on LifeHacker:  What Are You Doing with Your Stimulus Check? [Reader Poll] >
+ [10:28:10 PM] <VBScript@Azeroth .: [8:26:53 PM] [BloC] <EasT.iS.NewB> NICE GHETTO COMP THEM :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [10:43:16 PM] <VBScript@Azeroth .: <ClanGnome> The less people speak of their greatness, the more we think of it :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [10:58:21 PM] <VBScript@Azeroth .: <ClanGnome> The trouble with being punctual is that nobody's there to appreciate it :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [11:08:16 PM] -- ClanGnome@Azeroth [47ms] has joined the channel using Warcraft III: The Frozen Throne (Level: 0, icon tier Random, peon icon, in Clan Spht)
+ [11:08:27 PM] -- ClanGnome@Azeroth has left the channel.
+ [11:11:24 PM] <VBScript@Azeroth | New on LifeHacker:  Uploadjockey Sends Your File to Multiple Hosting Services [File Sharing] >
+ [11:13:26 PM] <VBScript@Azeroth .: [9:09:26 PM] <From Steven-Hawking>  WHO R U WHY DID U JOIN CHANNEL CLAN PGC??? :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [11:23:29 PM] <VBScript@Azeroth | New on LifeHacker:  What Are You Doing with Your Stimulus Check? [Reader Poll] >
+ [11:28:30 PM] <VBScript@Azeroth .: <ClanGnome> A fine conscience I turned out to be! :: StealthBot Beta v2.6999 Dev Release 10 :.>
+ [11:33:32 PM] <VBScript@Azeroth | New on SlashDot:  Carl Icahn Takes on Yahoo's Board>
+ [11:35:32 PM] <VBScript@Azeroth | New on LifeHacker:  Uploadjockey Sends Your File to Multiple Hosting Services [File Sharing] >

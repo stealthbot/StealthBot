@@ -1,0 +1,119 @@
+ [2:07:13 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [2:07:13 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [2:07:13 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [2:07:14 PM] The current StealthBot version is ÿcb2.6R3.
+ [2:07:14 PM]  
+ [2:07:14 PM] >> ÿcbStealthBot News
+ [2:07:14 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [2:07:14 PM] ->> 
+ [2:07:14 PM] ->> ÿcbStealthBot Beta News
+ [2:07:14 PM] ->> Happy testing!
+ [2:07:14 PM]  
+ [2:07:14 PM] The current StealthBot Beta version is 2.6993.
+ [2:07:15 PM]  [2:07:15 PM] Loaded 2 plugins (2 enabled). Type  [2:07:15 PM] /plugins [2:07:15 PM]  to view them. Type  [2:07:15 PM] /phelp [2:07:15 PM]  for help using them.
+ [2:07:15 PM]  [2:07:15 PM] Type  [2:07:15 PM] /updates [2:07:15 PM]  in the bot to view updates and new plugins that are available for download.
+ [2:07:15 PM]  [2:07:15 PM] frmExample_Load
+ [2:07:15 PM]  [2:07:15 PM] Form created: True
+ [2:07:15 PM]  [2:07:15 PM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [2:07:15 PM]  [2:07:15 PM] Variable is undefined.
+ [2:07:17 PM] Channel password protection is disabled.
+ [2:12:31 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [2:12:31 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [2:12:31 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [2:12:32 PM] The current StealthBot version is ÿcb2.6R3.
+ [2:12:32 PM]  
+ [2:12:32 PM] >> ÿcbStealthBot News
+ [2:12:32 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [2:12:32 PM] ->> 
+ [2:12:32 PM] ->> ÿcbStealthBot Beta News
+ [2:12:32 PM] ->> Happy testing!
+ [2:12:32 PM]  
+ [2:12:32 PM] The current StealthBot Beta version is 2.6993.
+ [2:12:32 PM]  [2:12:32 PM] Loaded 2 plugins (2 enabled). Type  [2:12:32 PM] /plugins [2:12:32 PM]  to view them. Type  [2:12:32 PM] /phelp [2:12:32 PM]  for help using them.
+ [2:12:32 PM]  [2:12:32 PM] Type  [2:12:32 PM] /updates [2:12:32 PM]  in the bot to view updates and new plugins that are available for download.
+ [2:12:32 PM]  [2:12:32 PM] frmExample_Load
+ [2:12:32 PM]  [2:12:32 PM] Form created: True
+ [2:12:32 PM]  [2:12:32 PM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [2:12:32 PM]  [2:12:32 PM] Variable is undefined.
+ [2:12:35 PM] Error: Invalid channel password.
+ [2:12:38 PM] Error: Command processor has encountered an error.
+ [2:12:39 PM] Error: Command processor has encountered an error.
+ [2:13:06 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [2:13:06 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [2:13:06 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [2:13:07 PM] The current StealthBot version is ÿcb2.6R3.
+ [2:13:07 PM]  
+ [2:13:07 PM] >> ÿcbStealthBot News
+ [2:13:07 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [2:13:07 PM] ->> 
+ [2:13:07 PM] ->> ÿcbStealthBot Beta News
+ [2:13:07 PM] ->> Happy testing!
+ [2:13:07 PM]  
+ [2:13:07 PM] The current StealthBot Beta version is 2.6993.
+ [2:13:07 PM]  [2:13:07 PM] Loaded 2 plugins (2 enabled). Type  [2:13:07 PM] /plugins [2:13:07 PM]  to view them. Type  [2:13:07 PM] /phelp [2:13:07 PM]  for help using them.
+ [2:13:07 PM]  [2:13:07 PM] Type  [2:13:07 PM] /updates [2:13:07 PM]  in the bot to view updates and new plugins that are available for download.
+ [2:13:07 PM]  [2:13:07 PM] frmExample_Load
+ [2:13:07 PM]  [2:13:07 PM] Form created: True
+ [2:13:07 PM]  [2:13:07 PM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [2:13:07 PM]  [2:13:07 PM] Variable is undefined.
+ [2:13:10 PM] Error: Invalid channel password.
+ [2:13:12 PM] Error: Invalid channel password.
+ [2:13:33 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [2:13:33 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [2:13:33 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [2:13:34 PM] The current StealthBot version is ÿcb2.6R3.
+ [2:13:34 PM]  
+ [2:13:34 PM] >> ÿcbStealthBot News
+ [2:13:34 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [2:13:34 PM] ->> 
+ [2:13:34 PM] ->> ÿcbStealthBot Beta News
+ [2:13:34 PM] ->> Happy testing!
+ [2:13:34 PM]  
+ [2:13:34 PM] The current StealthBot Beta version is 2.6993.
+ [2:13:34 PM]  [2:13:34 PM] Loaded 2 plugins (2 enabled). Type  [2:13:34 PM] /plugins [2:13:34 PM]  to view them. Type  [2:13:34 PM] /phelp [2:13:34 PM]  for help using them.
+ [2:13:34 PM]  [2:13:34 PM] Type  [2:13:34 PM] /updates [2:13:34 PM]  in the bot to view updates and new plugins that are available for download.
+ [2:13:34 PM]  [2:13:34 PM] frmExample_Load
+ [2:13:34 PM]  [2:13:34 PM] Form created: True
+ [2:13:34 PM]  [2:13:34 PM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [2:13:34 PM]  [2:13:34 PM] Variable is undefined.
+ [2:13:36 PM] Error: Invalid channel password.
+ [2:13:38 PM] Error: Invalid channel password.
+ [2:13:39 PM] Channel password protection enabled, delay set to 30.
+ [2:13:43 PM] Channel password protection is enabled. Password [s], Delay [30].
+ [4:28:27 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [4:28:27 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [4:28:27 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [4:28:27 PM] The current StealthBot version is ÿcb2.6R3.
+ [4:28:27 PM]  
+ [4:28:27 PM] >> ÿcbStealthBot News
+ [4:28:27 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [4:28:27 PM] ->> 
+ [4:28:27 PM] ->> ÿcbStealthBot Beta News
+ [4:28:27 PM] ->> Happy testing!
+ [4:28:27 PM]  
+ [4:28:27 PM] The current StealthBot Beta version is 2.6993.
+ [4:28:27 PM]  [4:28:27 PM] Loaded 2 plugins (2 enabled). Type  [4:28:27 PM] /plugins [4:28:27 PM]  to view them. Type  [4:28:27 PM] /phelp [4:28:27 PM]  for help using them.
+ [4:28:27 PM]  [4:28:27 PM] Type  [4:28:27 PM] /updates [4:28:27 PM]  in the bot to view updates and new plugins that are available for download.
+ [4:28:27 PM]  [4:28:27 PM] frmExample_Load
+ [4:28:27 PM]  [4:28:27 PM] Form created: True
+ [4:28:27 PM]  [4:28:27 PM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [4:28:27 PM]  [4:28:27 PM] Variable is undefined.
+ [4:29:13 PM] -> Welcome to StealthBot Beta v2.6997, by Stealth.
+ [4:29:13 PM] -> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net
+ [4:29:13 PM]  * Program executed in debug mode; unhandled packet information will be displayed.
+ [4:29:13 PM] The current StealthBot version is ÿcb2.6R3.
+ [4:29:13 PM]  
+ [4:29:13 PM] >> ÿcbStealthBot News
+ [4:29:13 PM] >> Welcome to the new StealthBot News! Blah blah blah.
+ [4:29:13 PM] ->> 
+ [4:29:13 PM] ->> ÿcbStealthBot Beta News
+ [4:29:13 PM] ->> Happy testing!
+ [4:29:13 PM]  
+ [4:29:13 PM] The current StealthBot Beta version is 2.6993.
+ [4:29:13 PM]  [4:29:13 PM] Loaded 2 plugins (2 enabled). Type  [4:29:13 PM] /plugins [4:29:13 PM]  to view them. Type  [4:29:13 PM] /phelp [4:29:13 PM]  for help using them.
+ [4:29:13 PM]  [4:29:13 PM] Type  [4:29:13 PM] /updates [4:29:13 PM]  in the bot to view updates and new plugins that are available for download.
+ [4:29:13 PM]  [4:29:13 PM] frmExample_Load
+ [4:29:13 PM]  [4:29:13 PM] Form created: True
+ [4:29:13 PM]  [4:29:13 PM] Scripting runtime error '500' on "uiexample_Event_Load" call in file "UIExample.plug"
+ [4:29:13 PM]  [4:29:13 PM] Variable is undefined.
+ [4:29:15 PM] You are the bot console.
