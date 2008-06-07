@@ -315,7 +315,7 @@ Public Sub RunInAll(ByRef SC As ScriptControl, ParamArray Parameters() As Varian
 
     ' ...
     For i = 2 To SC.Modules.Count
-        CallByNameEx SC.Modules(i), "Run", VbMethod, arr
+        CallByName SC.Modules(i), "Run", VbMethod, Parameters
     Next
 
     Exit Sub
@@ -398,14 +398,14 @@ Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCa
     
     On Error GoTo Handler
     
-    Dim oTLI    As Object
+    Dim oTLI    As TLIApplication
     Dim ProcID  As Long
     Dim numArgs As Long
     Dim i       As Long
     Dim v()     As Variant
-
-    Set oTLI = CreateObject("TLI.TLIApplication")
     
+    Set oTLI = New TLIApplication
+
     ProcID = oTLI.InvokeID(obj, ProcName)
 
     If (IsMissing(vArgsArray)) Then

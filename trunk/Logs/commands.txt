@@ -9324,3 +9324,24 @@
 [13:46:49 06/01/08][Eric[nK]]-> about 
 [14:48:21 06/01/08][Eric[nK]]-> about 
 [14:48:22 06/01/08][Eric[nK]]-> about 
+[22:04:59 06/01/08][Pyro6]-> server 
+[23:54:09 06/01/08][LuC1Fr[BoT]]-> trigger 
+[12:04:05 06/02/08][idiatic]-> trigger 
+[12:13:04 06/02/08][Pyro6]-> trigger 
+[12:15:29 06/02/08][Alendar[BoT]]-> trigger 
+[12:15:29 06/02/08][LuC1Fr[BoT]]-> trigger 
+[12:15:31 06/02/08][LuC1Fr[BoT]]-> trigger 
+[12:15:31 06/02/08][PhiX[BoT]]-> trigger 
+[12:15:32 06/02/08][LuC1Fr[BoT]]-> trigger 
+[12:15:33 06/02/08][PhiX[BoT]]-> trigger 
+[12:15:33 06/02/08][LuC1Fr[BoT]]-> trigger 
+[12:28:59 06/02/08][Eric[nK]]-> math pi
+[12:29:07 06/02/08][Eric[nK]]-> math pu
+[13:24:40 06/02/08][Eric]-> trigger 
+[21:22:55 06/02/08][Pyro6]-> trigger 
+[11:54:52 06/03/08][Pyro6]-> trigger 
+[12:00:12 06/03/08][Pyro6]-> about 
+[12:23:03 06/03/08][Pyro6]-> safeadd -=-Zerg-=-@USEast
+[13:18:05 06/03/08][Pyro6]-> say hm
+[14:17:25 06/03/08][Pyro6]-> about 
+[20:29:58 06/03/08][Pyro6]-> say y
