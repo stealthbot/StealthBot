@@ -4771,7 +4771,7 @@ ShowCurrentColor_Exit:
 
 ShowCurrentColor_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure ShowCurrentColor of Form frmSettings"
+    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ShowCurrentColor of Form frmSettings"
     Resume ShowCurrentColor_Exit
 End Sub
 

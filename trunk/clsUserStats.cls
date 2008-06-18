@@ -396,7 +396,7 @@ Public Property Get CharacterClass() As String
 
 End Property
 
-Public Property Let CharacterFlags(lng As Long)
+Public Property Let CharacterFlags(ByVal lng As Long)
 
     ' ...
     m_character_flags = lng

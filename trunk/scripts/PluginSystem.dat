@@ -119,15 +119,16 @@ Const PS_COLORS = "65280,39423"
 Const PS_PC_VER = 2.4
 Const PS_SM_VER = 1.2
 
-Public psPrefixes       '// holds prefixes of loaded plugins
-Public psTitles         '// holds plugin titles
-Public psUpdateCounter  '// holds seconds since last updates check
-Public psLoaded         '// holds True if the Plugin System has finished loading
-Public psFirstRun       '// holds True if it's the first script load (so at bot opening)
-Public psArgsAdded      '// holds True if missing plugin event arguments were added during load
-Public psNewContent     '// holds modified plugin content after missing event arguments are added
-Public psEventNames     '// holds all possible plugin event names
-Public psD2             '// holds "*" If bot is using D2
+Public psPrefixes           '// holds prefixes of loaded plugins
+Public psTitles             '// holds plugin titles
+Public psUpdateCounter      '// holds seconds since last updates check
+Public psLoaded             '// holds True if the Plugin System has finished loading
+Public psFirstRun           '// holds True if it's the first script load (so at bot opening)
+Public psArgsAdded          '// holds True if missing plugin event arguments were added during load
+Public psNewContent         '// holds modified plugin content after missing event arguments are added
+Public psEventNames         '// holds all possible plugin event names
+Public psD2                 '// holds "*" If bot is using D2
+Public psBackwardsTrigger() '// ...
  
 '// Hold RGB values for custom vbColors (use with AddChat)
 Public vbGrey, vbBrown, vbOrange, vbPink, vbLightBlue
@@ -139,13 +140,16 @@ Set psSC = GetScriptControl()
 Set psFSO = CreateObject("Scripting.FileSystemObject")
 Set psWshShell = CreateObject("WScript.Shell")
 Set psAppShell = CreateObject("Shell.Application")
-Set psLoadError = CreateObject("Scripting.Dictionary")     '// holds load error status (errored or not)
-Set psCodeLoaded = CreateObject("Scripting.Dictionary")    '// holds status of plugin code (loaded or not)
-Set psPlugins = CreateObject("Scripting.Dictionary")       '// holds plugin file paths
-Set psVersions = CreateObject("Scripting.Dictionary")      '// holds plugin versions
-Set psHelp = CreateObject("Scripting.Dictionary")          '// holds plugin help output
-Set psEvents = CreateObject("Scripting.Dictionary")        '// holds event names found in each plugin
-
+Set psLoadError = CreateObject("Scripting.Dictionary")       '// holds load error status (errored or not)
+Set psCodeLoaded = CreateObject("Scripting.Dictionary")      '// holds status of plugin code (loaded or not)
+Set psPlugins = CreateObject("Scripting.Dictionary")         '// holds plugin file paths
+Set psVersions = CreateObject("Scripting.Dictionary")        '// holds plugin versions
+Set psHelp = CreateObject("Scripting.Dictionary")            '// holds plugin help output
+Set psEvents = CreateObject("Scripting.Dictionary")          '// holds event names found in each plugin
+Set dictSettings = CreateObject("Scripting.Dictionary")      '// ...
+Set dictTimerInterval = CreateObject("Scripting.Dictionary") '// ...
+Set dictTimerEnabled = CreateObject("Scripting.Dictionary")  '// ...
+Set dictTimerCount = CreateObject("Scripting.Dictionary")    '// ...
 
 
 
@@ -210,8 +214,13 @@ Sub psLoadPlugins()
                      "ins", psColor1, " to view them. Type ", psColor2, "/phelp", psColor1, " for help using them."
    AddChat psColor1, "Type ", psColor2, "/updates", psColor1, " in the bot to view updates and new plugins that are available for download."
 
-   If BotVars.NoSupportMultiCharTrigger Then
-      AddChat vbYellow, "Plugins have been loaded that do not support multi-character triggers. Backwards compatibility mode has been enabled."
+   If (BotVars.NoSupportMultiCharTrigger) Then
+      AddChat vbRed, "The following plugins do not support multiple-character triggers and have thus forced " & _
+         "the use of a backwards-compatibility mode:"
+
+      'For backwardsIndex = 0 To UBound(psBackwardsTrigger)
+      '   AddChat vbRed, Space(1) & psBackwardsTrigger(psBackwardsTrigger)
+      'Next
    End If
 
    psPrefixes = psPlugins.Keys
@@ -219,7 +228,7 @@ Sub psLoadPlugins()
 End Sub
 
  
-Sub psLoadPlugin(Prefix, Version, Path, Content, ByVal Lines)
+Sub psLoadPlugin(Prefix, Version, Path, Content, Lines)
 
    '// Get the names of all events that exist in this plugin
    psArgsAdded = False
@@ -286,7 +295,7 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, ByVal Lines)
 End Sub
 
 
-Sub psLoadCode(Prefix, Path, ByVal Content)
+Sub psLoadCode(Prefix, Path, Content)
 
    '// Load the plugin's code (unless it's disabled)
    On Error Resume Next
@@ -297,13 +306,17 @@ Sub psLoadCode(Prefix, Path, ByVal Content)
       End If
       
       '// Check if plugin supports multiple-character triggers
-      If Not BotVars.NoSupportMultiCharTrigger Then
-         If ((InStr(1, Content, ", 1) = BotVars.Trigger", vbTextCompare) <> 0) Or _
+      If ((InStr(1, Content, ", 1) = BotVars.Trigger", vbTextCompare) <> 0) Or _
              (InStr(1, Content, ", 1) <> BotVars.Trigger", vbTextCompare) <> 0)) Then
-  
-            '// Not supported -- enable backwards compatibility mode
-            BotVars.NoSupportMultiCharTrigger = True
-         End If
+ 
+         '// ...
+         BotVars.NoSupportMultiCharTrigger = True
+
+         '// ...
+         'ReDim Preserve psBackwardsTrigger(UBound(psBackwardsTrigger))
+
+         '// ...
+         'psBackwardsTrigger(UBound(psBackwardsTrigger)) = Prefix
       End If
 
       psSC.AddCode Content
@@ -383,7 +396,7 @@ End Sub
 '/// [[[ PLUGIN SYSTEM COMMANDS ]]]
  
 
-Sub psProcessCmd(ByVal Message, Username, DisplayID)
+Sub psProcessCmd(Message, Username, DisplayID)
 
    '// Has the Plugin System loaded completely?
    If Not psLoaded Then Exit Sub
@@ -594,7 +607,7 @@ Sub ps_getplugin_cmd(cmd, Username, DisplayID)
 
    '// Download the plugin
    AddChat vbLightBlue, "Downloading File: " & pluginFileName
-   SSC.PrintURLToFile "\plugins\" & pluginFileName, PS_UPDATE_URL & Files(0)
+   SSC.PrintURLToFile "\scripts\plugins\" & pluginFileName, PS_UPDATE_URL & Files(0)
 
    If Not psPlugins.Exists(Prefix) Then
 
@@ -1609,9 +1622,94 @@ Function psMultiCmd(Message, EventName, Args)
 End Function
 
 
+'// Written by Swent. Modifies the count in a running plugin timer.
+Sub SetPTCount(strPrefix, strTimerName, intCount)
+    
+    dictTimerCount(strPrefix & ":" & strTimerName) = intCount
+End Sub
 
 
- 
+'// Written by Swent. Gets the enabled status of a plugin timer.
+Function GetPTEnabled(strPrefix, strTimerName)
+    Dim strKey
+
+    strKey = strPrefix & ":" & strTimerName
+    
+    If dictTimerEnabled.Exists(strKey) Then
+        GetPTEnabled = dictTimerEnabled(strKey)
+    Else
+        GetPTEnabled = -1
+    End If
+End Function
+
+
+'// Written by Swent. Gets a plugin timer's interval setting.
+Function GetPTInterval(strPrefix, strTimerName)
+    Dim strKey
+
+    strKey = strPrefix & ":" & strTimerName
+    
+    If dictTimerInterval.Exists(strKey) Then
+        GetPTInterval = dictTimerInterval(strKey)
+    Else
+        GetPTInterval = -1
+    End If
+End Function
+
+
+'// Written by Swent. Get's the seconds left before a plugin timer sub executes.
+Function GetPTLeft(strPrefix, strTimerName)
+    Dim strKey
+
+    strKey = strPrefix & ":" & strTimerName
+
+    If dictTimerCount.Exists(strKey) Then
+        GetPTLeft = dictTimerCount(strKey)
+    Else
+        GetPTLeft = -1
+    End If
+End Function
+
+
+'// Written by Swent. Gets the time since a plugin timer sub was last executed.
+Function GetPTWaiting(strPrefix, strTimerName)
+    Dim strKey
+
+    strKey = strPrefix & ":" & strTimerName
+    
+    If dictTimerCount.Exists(strKey) Then
+        GetPTWaiting = dictTimerInterval(strKey) - dictTimerCount(strKey) + 1
+    Else
+        GetPTWaiting = -1
+    End If
+End Function
+
+
+'// Written by Swent. Gets keys for the timer dictionaries.
+Function GetPTKeys()
+
+    GetPTKeys = Join(dictTimerEnabled.Keys)
+End Function
+
+Sub SetPTInterval(strPrefix, strTimerName, intInterval)
+    Dim strKey
+
+    strKey = strPrefix & ":" & strTimerName
+
+    dictTimerInterval(strKey) = intInterval
+    dictTimerCount(strKey) = intInterval
+    
+    If Not dictTimerEnabled.Exists(strKey) Then
+       dictTimerEnabled(strKey) = False
+    End If
+End Sub
+
+
+'// Written by Swent. Enables or disables a plugin timer.
+Sub SetPTEnabled(strPrefix, strTimerName, boolEnabled)
+    
+    'dictTimerEnabled(strPrefix & ":" & strTimerName) = boolEnabled
+End Sub 
 
 '// [[[ EVENTS ]]]
 
@@ -1634,13 +1732,132 @@ Sub Event_Load()
    'Call ReloadPluginMenus()
 
    '// Enable the script timer
-   scTimer.Interval = 1000
-   scTimer.Enabled = True
+   'scTimer.Interval = 1000
+   'scTimer.Enabled = True
+
+   CreateTimer "scTimer", 1000
 
    psExecuteEvent "FirstRun", 0
    psExecuteEvent "Load", 0
 End Sub
 
+Sub scTimer_Timer()
+    '// Are plugins enabled?
+    If Not CBool(GetSetting("ps", "enabled")) Then Exit Sub
+    
+    Dim strKeys(), strKey(), i
+    
+    On Error Resume Next
+
+    strKeys = Split(GetPTKeys)
+
+    '// Execute all existing plugin timer subs at the appropriate intervals
+    For i = 0 To dictTimerEnabled.Count - 1
+        strKey = Split(strKeys(i), ":")
+    
+        '// Is this timer enabled?
+        If GetPTEnabled(strKey(0), strKey(1)) Then
+    
+            '// Is the plugin that this timer belongs to enabled?
+            If CBool(GetSetting(strKey(0), "enabled")) Then
+    
+                '// Has this timer reached the end of its interval countdown?
+                If GetPTLeft(strKey(0), strKey(1)) = 1 Then
+    
+                    '// Execute this timer sub
+                    CallByName strKey(0) & "_" & strKey(1) & "_Timer"
+    
+                    '// Handle errors
+                    If SControl.Error.Number <> 0 Then
+                        AddChat vbYellow, "The """ & strKey(1) & """ timer in your """ & strKey(0) & """ plugin has been disabled due to an error."
+                        SetPTEnabled strKey(0), strKey(1), False
+                    End If
+    
+                    '// Reset this timer's countdown
+                    SetPTCount strKey(0), strKey(1), GetPTInterval(strKey(0), strKey(1))
+                Else
+                    '// Subtract one second from this timer's countdown
+                    SetPTCount strKey(0), strKey(1), GetPTLeft(strKey(0), strKey(1)) - 1
+                End If
+            End If
+        End If
+    Next
+End Sub
+
+'// PLUGINENABLED
+'//   Enables or disables a plugin.
+Sub PluginEnabled(strPrefix, boolEnabled)
+    
+    SetSetting strPrefix, "enabled", boolEnabled
+End Sub
+
+
+'// GETPLUGINENABLED
+'//   Gets a plugin's enabled status. Returns -1 if the plugin doesn't exist.
+Function GetPluginEnabled(strPrefix)
+    Dim strEnabled
+    
+    strEnabled = GetSetting(strPrefix, "enabled")
+    If Len(strEnabled) > 0 Then
+        GetPluginEnabled = CBool(strEnabled)
+    Else
+        GetPluginEnabled = -1
+    End If
+End Function
+
+'// TIMERINTERVAL
+'//   Sets a plugin timer's interval. The timer is created if it doesn't exist.
+Sub TimerInterval(strPrefix, strTimerName, intInterval)
+
+    SetPTInterval strPrefix, strTimerName, Int(intInterval)
+End Sub
+
+
+'// GETTIMERINTERVAL
+'//   Gets a plugin timer's interval setting. This and all further timer functions return -1 if timer doesn't exist.
+Function GetTimerInterval(strPrefix, strTimerName)
+
+    GetTimerInterval = GetPTInterval(strPrefix, strTimerName)
+End Function
+
+
+'// TIMERENABLED
+'//   Enables or disables a plugin timer.
+Sub TimerEnabled(strPrefix, strTimerName, boolEnabled)
+
+    SetPTEnabled strPrefix, strTimerName, boolEnabled
+End Sub
+
+
+'// GETTIMERENABLED
+'//   Get's the time left (in seconds) until a plugin timer sub is executed.
+Function GetTimerEnabled(strPrefix, strTimerName)
+
+    GetTimerEnabled = GetPTEnabled(strPrefix, strTimerName)
+End Function
+
+
+'// TIMELEFT
+'//   Allows you to modify the time left (in seconds) until a plugin timer sub is executed.
+Sub TimeLeft(strPrefix, strTimerName, intCount)
+
+    SetPTCount strPrefix, strTimerName, Int(intCount)
+End Sub
+
+'// GETTIMELEFT
+'//   Get's the time left (in seconds) until a plugin timer sub is executed.
+Function GetTimeLeft(strPrefix, strTimerName)
+
+    GetTimeLeft = GetPTLeft(strPrefix, strTimerName)
+End Function
+
+
+'// GETTIMERWAITING
+'//   Get's the time (in seconds) since a plugin timer sub was last executed.
+Function GetTimerWaiting(strPrefix, strTimerName)
+
+    GetTimerWaiting = GetPTWaiting(strPrefix, strTimerName)
+End Function
 
 Sub Event_FirstRun()
 

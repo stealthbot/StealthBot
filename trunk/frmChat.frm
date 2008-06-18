@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,7 +884,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1534,12 +1532,12 @@ Private Sub Form_Load()
         
     Set colDynamicMenus = New Collection
     
-    Set dictTimerInterval = New Dictionary
-    Set dictTimerEnabled = New Dictionary
-    Set dictTimerCount = New Dictionary
-    dictTimerInterval.CompareMode = TextCompare
-    dictTimerEnabled.CompareMode = TextCompare
-    dictTimerCount.CompareMode = TextCompare
+    'Set dictTimerInterval = New Dictionary
+    'Set dictTimerEnabled = New Dictionary
+    'Set dictTimerCount = New Dictionary
+    'dictTimerInterval.CompareMode = TextCompare
+    'dictTimerEnabled.CompareMode = TextCompare
+    'dictTimerCount.CompareMode = TextCompare
     
     With mnuTrayCaption
         .Caption = CVERSION
@@ -2764,9 +2762,9 @@ Sub Form_Unload(Cancel As Integer)
     
     Set dictMenuIDs = Nothing
     Set dictItemIDs = Nothing
-    Set dictTimerInterval = Nothing
-    Set dictTimerCount = Nothing
-    Set dictTimerEnabled = Nothing
+    'Set dictTimerInterval = Nothing
+    'Set dictTimerCount = Nothing
+    'Set dictTimerEnabled = Nothing
     
     Unload frmAbout
     Unload frmCatch
@@ -4933,10 +4931,12 @@ Private Sub QueueTimer_Timer()
 End Sub
 
 
-Private Sub SControl_Error()
+Public Sub SControl_Error()
     AddChat RTBColors.ErrorMessageText, "Scripting runtime error " & Chr(39) & SControl.Error.Number & Chr(39) & ": (line " & SControl.Error.line & "; column " & SControl.Error.Column & ")"
     AddChat RTBColors.ErrorMessageText, SControl.Error.Description & "."
     AddChat RTBColors.ErrorMessageText, "Offending line: >> " & SControl.Error.text
+    
+    SControl.Error.Clear
 End Sub
 
 Private Sub sckBNet_Close()
@@ -5015,54 +5015,9 @@ End Sub
 
 '// Written by Swent. Executes plugin timer subs.
 Private Sub scTimer_Timer()
-
-    If modScripting.boolOverride Then
-        On Error Resume Next
-        RunInAll frmChat.SControl, "scTimer_Timer"
-        Exit Sub
-    End If
-
-    '// Are plugins enabled?
-    If Not CBool(SharedScriptSupport.GetSetting("ps", "enabled")) Then Exit Sub
-    
-    Dim strKeys() As String, strKey() As String, i As Integer
-    
     On Error Resume Next
-    SControl.Error.Clear
-    strKeys = Split(modScripting.GetPTKeys)
-
-    '// Execute all existing plugin timer subs at the appropriate intervals
-    For i = 0 To modScripting.dictTimerEnabled.Count - 1
-        strKey = Split(strKeys(i), ":")
     
-        '// Is this timer enabled?
-        If modScripting.GetPTEnabled(strKey(0), strKey(1)) Then
-    
-            '// Is the plugin that this timer belongs to enabled?
-            If CBool(SharedScriptSupport.GetSetting(strKey(0), "enabled")) Then
-    
-                '// Has this timer reached the end of its interval countdown?
-                If modScripting.GetPTLeft(strKey(0), strKey(1)) = 1 Then
-    
-                    '// Execute this timer sub
-                    RunInAll frmChat.SControl, strKey(0) & "_" & strKey(1) & "_Timer"
-    
-                    '// Handle errors
-                    If SControl.Error.Number <> 0 Then
-                        AddChat vbYellow, "The """ & strKey(1) & """ timer in your """ & strKey(0) & """ plugin has been disabled due to an error."
-                        modScripting.SetPTEnabled strKey(0), strKey(1), False
-                        SControl.Error.Clear
-                    End If
-    
-                    '// Reset this timer's countdown
-                    modScripting.SetPTCount strKey(0), strKey(1), modScripting.GetPTInterval(strKey(0), strKey(1))
-                Else
-                    '// Subtract one second from this timer's countdown
-                    modScripting.SetPTCount strKey(0), strKey(1), modScripting.GetPTLeft(strKey(0), strKey(1)) - 1
-                End If
-            End If
-        End If
-    Next
+    RunInAll frmChat.SControl, "scTimer_Timer"
 End Sub
 
 Private Sub Timer_Timer()
@@ -5227,8 +5182,14 @@ Private Sub tmrScript_Timer(index As Integer)
     Exit Sub
     
 ERROR_HANDLER:
+    ' object does not support property or method
+    If (Err.Number = 438) Then
+        Exit Sub
+    End If
+
     ' ...
-    frmChat.AddChat vbRed, "Error: " & Err.Description & " in tmrScript_Timer()."
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
+        " in tmrScript_Timer()."
     
     ' ...
     Exit Sub
@@ -6002,9 +5963,10 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     BotVars.Password = ReadCFG(MN, "Password")
     BotVars.CDKey = UCase$(ReadCFG(MN, "CDKey"))
-    BotVars.ExpKey = UCase$(ReadCFG(MN, "LODKey"))
+    BotVars.ExpKey = UCase$(ReadCFG(MN, "ExpKey"))
+    
     If BotVars.ExpKey = "" Then
-        BotVars.ExpKey = UCase$(ReadCFG(MN, "ExpKey"))
+        BotVars.ExpKey = UCase$(ReadCFG(MN, "LODKey"))
     End If
     
     BotVars.Product = ReadCFG(MN, "Product")

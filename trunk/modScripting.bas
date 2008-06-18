@@ -10,13 +10,6 @@ Option Explicit
 Public VetoNextMessage As Boolean
 Public boolOverride As Boolean
 
-Public dictSettings As Dictionary
-Public dictTimerInterval As Dictionary
-Public dictTimerEnabled As Dictionary
-Public dictTimerCount As Dictionary
-
-
-
 '// Loads the Plugin System
 '//   Called from Form_Load() and mnuReloadScript_Click() in frmChat
 Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
@@ -315,30 +308,41 @@ Public Sub RunInAll(ByRef SC As ScriptControl, ParamArray Parameters() As Varian
 
     ' ...
     For i = 2 To SC.Modules.Count
-        CallByName SC.Modules(i), "Run", VbMethod, Parameters
+        CallByNameEx SC.Modules(i), "Run", VbMethod, arr()
     Next
 
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.Description & " in RunInAll()."
+    ' object does not support property or method
+    If (Err.Number = 438) Then
+        Exit Sub
+    End If
+
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
+        " in RunInAll()."
     
     Exit Sub
+    
 End Sub
 
-
 Public Sub SetVeto(ByVal b As Boolean)
+
     VetoNextMessage = b
+
 End Sub
 
 
 Public Function GetVeto() As Boolean
+
     GetVeto = VetoNextMessage
     VetoNextMessage = False
+    
 End Function
 
 
 Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
+
     Dim i As Integer
     Dim Message As String
 
@@ -370,33 +374,13 @@ ReInitScriptControl_Error:
     frmChat.AddChat vbRed, "Error: " & Err.Description & " in ReInitScriptControl()"
     
     Exit Sub
-End Sub
-
-
-'// Written by Swent. Sets a plugin timer's interval.
-Public Sub SetPTInterval(ByVal strPrefix As String, ByVal strTimerName As String, ByVal intInterval As Integer)
-    Dim strKey As String
-    strKey = strPrefix & ":" & strTimerName
-
-    dictTimerInterval(strKey) = intInterval
-    dictTimerCount(strKey) = intInterval
     
-    If Not dictTimerEnabled.Exists(strKey) Then
-       dictTimerEnabled(strKey) = False
-    End If
-End Sub
-
-
-'// Written by Swent. Enables or disables a plugin timer.
-Public Sub SetPTEnabled(ByVal strPrefix As String, ByVal strTimerName As String, ByVal boolEnabled As Boolean)
-    
-    dictTimerEnabled(strPrefix & ":" & strTimerName) = boolEnabled
 End Sub
 
 Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCallType, Optional vArgsArray _
     As Variant)
     
-    On Error GoTo Handler
+    On Error GoTo ERROR_HANDLER
     
     Dim oTLI    As TLIApplication
     Dim ProcID  As Long
@@ -426,76 +410,16 @@ Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCa
     
     Exit Function
 
-Handler:
-    frmChat.AddChat vbRed, "Error: " & Err.Description & " in CallByNameEx()"
+ERROR_HANDLER:
+    ' ...
+    If (frmChat.SControl.Error) Then
+        Exit Function
+    End If
 
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
+        " in CallByNameEx()."
+        
     Exit Function
-End Function
-
-
-'// Written by Swent. Modifies the count in a running plugin timer.
-Public Sub SetPTCount(ByVal strPrefix As String, ByVal strTimerName As String, ByVal intCount As Integer)
-    
-    dictTimerCount(strPrefix & ":" & strTimerName) = intCount
-End Sub
-
-
-'// Written by Swent. Gets the enabled status of a plugin timer.
-Public Function GetPTEnabled(ByVal strPrefix As String, ByVal strTimerName As String)
-    Dim strKey As String
-    strKey = strPrefix & ":" & strTimerName
-    
-    If dictTimerEnabled.Exists(strKey) Then
-        GetPTEnabled = dictTimerEnabled(strKey)
-    Else
-        GetPTEnabled = -1
-    End If
-End Function
-
-
-'// Written by Swent. Gets a plugin timer's interval setting.
-Public Function GetPTInterval(ByVal strPrefix As String, ByVal strTimerName As String) As Integer
-    Dim strKey As String
-    strKey = strPrefix & ":" & strTimerName
-    
-    If dictTimerInterval.Exists(strKey) Then
-        GetPTInterval = dictTimerInterval(strKey)
-    Else
-        GetPTInterval = -1
-    End If
-End Function
-
-
-'// Written by Swent. Get's the seconds left before a plugin timer sub executes.
-Public Function GetPTLeft(ByVal strPrefix As String, ByVal strTimerName As String) As Integer
-    Dim strKey As String
-    strKey = strPrefix & ":" & strTimerName
-
-    If dictTimerCount.Exists(strKey) Then
-        GetPTLeft = dictTimerCount(strKey)
-    Else
-        GetPTLeft = -1
-    End If
-End Function
-
-
-'// Written by Swent. Gets the time since a plugin timer sub was last executed.
-Public Function GetPTWaiting(ByVal strPrefix As String, ByVal strTimerName As String) As Integer
-    Dim strKey As String
-    strKey = strPrefix & ":" & strTimerName
-    
-    If dictTimerCount.Exists(strKey) Then
-        GetPTWaiting = dictTimerInterval(strKey) - dictTimerCount(strKey) + 1
-    Else
-        GetPTWaiting = -1
-    End If
-End Function
-
-
-'// Written by Swent. Gets keys for the timer dictionaries.
-Public Function GetPTKeys() As String
-
-    GetPTKeys = Join(dictTimerEnabled.Keys)
 End Function
 
 

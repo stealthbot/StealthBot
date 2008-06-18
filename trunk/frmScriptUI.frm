@@ -24,7 +24,6 @@ Begin VB.Form frmScriptUI
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
-      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScriptUI.frx":0000
    End
@@ -215,7 +214,7 @@ Private Function AddControl(ByVal strName As String, ByVal strCtlName As String,
     
     ' ...
     If (oNames Is Nothing) Then
-        Set oNames = CreateObject("Scriptin.Dictionary")
+        Set oNames = CreateObject("Scripting.Dictionary")
     End If
     
     ' does control already exist?
