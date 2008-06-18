@@ -351,10 +351,14 @@ End Function
 
 Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
 
-    Dim i As Integer
-    Dim Message As String
+    On Error GoTo ERROR_HANDLER
 
-    On Error GoTo ReInitScriptControl_Error
+    Dim i       As Integer
+    Dim Message As String
+    
+    SC.Reset
+    
+    LoadScripts SC
 
     BotLoaded = True
     RunInAll frmChat.SControl, "Event_Load"
@@ -378,7 +382,8 @@ Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
 
     Exit Sub
 
-ReInitScriptControl_Error:
+ERROR_HANDLER:
+
     frmChat.AddChat vbRed, "Error: " & Err.Description & " in ReInitScriptControl()"
     
     Exit Sub
