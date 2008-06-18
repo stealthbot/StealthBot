@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,6 +885,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1733,12 +1735,6 @@ Private Sub Form_Load()
     End If
     
     LoadPluginSystem SControl
-    
-    If Not BotLoaded Then
-        RunInAll frmChat.SControl, "Event_FirstRun"
-        RunInAll frmChat.SControl, "Event_Load"
-        BotLoaded = True
-    End If
     
     If FrmSplashInUse Then frmSplash.SetFocus
     
@@ -2923,20 +2919,20 @@ Private Sub INet_StateChanged(ByVal State As Integer)
     If (State = icResponseCompleted) Then
         Call HandleNews(INet.GetChunk(1024, icString))
     
-        If (Not (BotLoaded)) Then
-            RunInAll frmChat.SControl, "Event_FirstRun"
-            RunInAll frmChat.SControl, "Event_Load"
-            
-            BotLoaded = True
-        End If
+        'If (Not (BotLoaded)) Then
+        '    RunInAll frmChat.SControl, "Event_FirstRun"
+        '    RunInAll frmChat.SControl, "Event_Load"
+        '
+        '    BotLoaded = True
+        'End If
     Else
         If (State = icError) Then
-            If (Not (BotLoaded)) Then
-                RunInAll frmChat.SControl, "Event_FirstRun"
-                RunInAll frmChat.SControl, "Event_Load"
-                
-                BotLoaded = True
-            End If
+            'If (Not (BotLoaded)) Then
+            '    RunInAll frmChat.SControl, "Event_FirstRun"
+            '    RunInAll frmChat.SControl, "Event_Load"
+            '
+            '    BotLoaded = True
+            'End If
             
             'Call AddChat(RTBColors.ErrorMessageText, "Error: There was an error " & _
             '    "loading the news.")
@@ -3780,6 +3776,11 @@ Private Sub mnuFListRefresh_Click()
 End Sub
 
 Sub mnuReloadScript_Click()
+
+    ReInitScriptControl SControl
+
+    Exit Sub
+
     Dim i As Integer, lMenu As Long
     'Dim Message As String
     

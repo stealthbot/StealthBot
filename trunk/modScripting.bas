@@ -20,7 +20,20 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
    ' ...
     Call InitScriptControl(SC)
     Call LoadScripts(SC)
+
+    ' ...
+    If (BotLoaded = False) Then
+        ' ...
+        RunInAll frmChat.SControl, "Event_FirstRun"
+        
+        ' ...
+        BotLoaded = True
+    End If
     
+    ' ...
+    RunInAll frmChat.SControl, "Event_Load"
+
+    ' ...
     Exit Sub
 
     If ReadINI("Override", "DisablePS", GetConfigFilePath()) = "Y" Then
@@ -192,7 +205,7 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
         FileToModule CurrentModule, strPath & filename
         
         ' ...
-        frmChat.AddChat vbGreen, "Script loaded: " & filename
+        'frmChat.AddChat vbGreen, "Script loaded: " & filename
 
         ' ...
         filename = Dir()
@@ -356,16 +369,18 @@ Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
     Dim i       As Integer
     Dim Message As String
     
+    ' ...
+    RunInAll frmChat.SControl, "Event_Close"
+    
+    ' ...
     SC.Reset
     
-    LoadScripts SC
-
-    BotLoaded = True
-    RunInAll frmChat.SControl, "Event_Load"
+    ' ...
+    LoadPluginSystem SC
 
     If g_Online Then
-        RunInAll frmChat.SControl, "Event_LoggedOn", GetCurrentUsername, BotVars.Product
-        RunInAll frmChat.SControl, "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
+        RunInAll SC, "Event_LoggedOn", GetCurrentUsername, BotVars.Product
+        RunInAll SC, "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
 
         If g_Channel.Users.Count > 0 Then
             For i = 1 To g_Channel.Users.Count
@@ -374,7 +389,7 @@ Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
                 With g_Channel.Users(i)
                      ParseStatstring .Statstring, Message, .Clan
 
-                     RunInAll frmChat.SControl, "Event_UserInChannel", .DisplayName, .Flags, Message, .Ping, .game, False
+                     RunInAll SC, "Event_UserInChannel", .DisplayName, .Flags, Message, .Ping, .game, False
                  End With
              Next i
          End If
