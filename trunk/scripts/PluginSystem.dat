@@ -156,7 +156,6 @@ Set dictTimerCount = CreateObject("Scripting.Dictionary")    '// ...
 
 '// [[[ PLUGIN LOADING ]]]
 
-
 Sub psLoadPlugins()
 
    If Not psLatestSB() Then Exit Sub
@@ -215,12 +214,11 @@ Sub psLoadPlugins()
    AddChat psColor1, "Type ", psColor2, "/updates", psColor1, " in the bot to view updates and new plugins that are available for download."
 
    If (BotVars.NoSupportMultiCharTrigger) Then
-      AddChat vbRed, "The following plugins do not support multiple-character triggers and have thus forced " & _
-         "the use of a backwards-compatibility mode:"
+      strBackwardsTrigger = Join(psBackwardsTrigger, ", ")
 
-      'For backwardsIndex = 0 To UBound(psBackwardsTrigger)
-      '   AddChat vbRed, Space(1) & psBackwardsTrigger(psBackwardsTrigger)
-      'Next
+      AddChat vbRed, "The following plugins do not support multiple-character triggers and have thus forced " & _
+         "the use of a backwards-compatibility mode for all plugins: " & Left(strBackwardsTrigger, _
+            Len(strBackwardsTrigger) - 2) & "."
    End If
 
    psPrefixes = psPlugins.Keys
@@ -313,10 +311,10 @@ Sub psLoadCode(Prefix, Path, Content)
          BotVars.NoSupportMultiCharTrigger = True
 
          '// ...
-         'ReDim Preserve psBackwardsTrigger(UBound(psBackwardsTrigger))
+         psBackwardsTrigger(UBound(psBackwardsTrigger)) = Prefix
 
          '// ...
-         'psBackwardsTrigger(UBound(psBackwardsTrigger)) = Prefix
+         ReDim Preserve psBackwardsTrigger(UBound(psBackwardsTrigger) + 1)
       End If
 
       psSC.AddCode Content
@@ -1711,36 +1709,6 @@ Sub SetPTEnabled(strPrefix, strTimerName, boolEnabled)
     'dictTimerEnabled(strPrefix & ":" & strTimerName) = boolEnabled
 End Sub 
 
-'// [[[ EVENTS ]]]
-
-
-Sub Event_Load()
-
-   '// Set color values
-   Call psSetPSColors()
-
-   '// Add plugins folder (if necessary)
-   Call psAddPFolder()
-
-   '// Create the plugin system settings
-   Call psCreatePSSettings()
-
-   '// Load the plugins
-   Call psLoadPlugins()
-
-   '// Register and populate the plugin menus
-   'Call ReloadPluginMenus()
-
-   '// Enable the script timer
-   'scTimer.Interval = 1000
-   'scTimer.Enabled = True
-
-   CreateTimer "scTimer", 1000
-
-   psExecuteEvent "FirstRun", 0
-   psExecuteEvent "Load", 0
-End Sub
-
 Sub scTimer_Timer()
     '// Are plugins enabled?
     If Not CBool(GetSetting("ps", "enabled")) Then Exit Sub
@@ -1805,13 +1773,13 @@ Function GetPluginEnabled(strPrefix)
     End If
 End Function
 
+
 '// TIMERINTERVAL
 '//   Sets a plugin timer's interval. The timer is created if it doesn't exist.
 Sub TimerInterval(strPrefix, strTimerName, intInterval)
 
     SetPTInterval strPrefix, strTimerName, Int(intInterval)
 End Sub
-
 
 '// GETTIMERINTERVAL
 '//   Gets a plugin timer's interval setting. This and all further timer functions return -1 if timer doesn't exist.
@@ -1858,6 +1826,38 @@ Function GetTimerWaiting(strPrefix, strTimerName)
 
     GetTimerWaiting = GetPTWaiting(strPrefix, strTimerName)
 End Function
+
+'// [[[ EVENTS ]]]
+
+Sub Event_Load()
+
+   '// ...
+   ReDim psBackwardsTrigger(0)
+
+   '// Set color values
+   Call psSetPSColors()
+
+   '// Add plugins folder (if necessary)
+   Call psAddPFolder()
+
+   '// Create the plugin system settings
+   Call psCreatePSSettings()
+
+   '// Load the plugins
+   Call psLoadPlugins()
+
+   '// Register and populate the plugin menus
+   'Call ReloadPluginMenus()
+
+   '// Enable the script timer
+   'scTimer.Interval = 1000
+   'scTimer.Enabled = True
+
+   CreateTimer "scTimer", 1000
+
+   psExecuteEvent "FirstRun", 0
+   psExecuteEvent "Load", 0
+End Sub
 
 Sub Event_FirstRun()
 

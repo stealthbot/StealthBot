@@ -951,9 +951,9 @@ End Sub
 
 '// GETSCRIPTCONTROL
 '// Returns the Script Control as an object
-Public Function GetScriptControl() As Variant
+Public Function GetScriptControlEx(ByVal ModuleID As Integer) As Object
 
-    Set GetScriptControl = frmChat.SControl
+    Set GetScriptControlEx = frmChat.SControl.Modules(ModuleID)
 End Function
 
 

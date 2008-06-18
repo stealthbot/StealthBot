@@ -254,6 +254,14 @@ Private Sub CreateModuleProcs(ByRef SC As ScriptControl, ByVal filename As Strin
     
     ' ...
     CurrentModule.AddCode Join(arrCode, vbCrLf)
+    
+    ' ...
+    arrCode(0) = "Function GetScriptControl()"
+    arrCode(1) = "   Set GetScriptControl = GetScriptControlEx(GetModuleID)"
+    arrCode(2) = "End Function"
+    
+    ' ...
+    CurrentModule.AddCode Join(arrCode, vbCrLf)
 
 End Sub
 
