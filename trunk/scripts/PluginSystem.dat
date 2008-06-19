@@ -129,6 +129,7 @@ Public psNewContent         '// holds modified plugin content after missing even
 Public psEventNames         '// holds all possible plugin event names
 Public psD2                 '// holds "*" If bot is using D2
 Public psBackwardsTrigger() '// ...
+Public PluginPath           '// ...
  
 '// Hold RGB values for custom vbColors (use with AddChat)
 Public vbGrey, vbBrown, vbOrange, vbPink, vbLightBlue
@@ -605,7 +606,7 @@ Sub ps_getplugin_cmd(cmd, Username, DisplayID)
 
    '// Download the plugin
    AddChat vbLightBlue, "Downloading File: " & pluginFileName
-   SSC.PrintURLToFile "\scripts\plugins\" & pluginFileName, PS_UPDATE_URL & Files(0)
+   SSC.PrintURLToFile "\plugins\" & pluginFileName, PS_UPDATE_URL & Files(0)
 
    If Not psPlugins.Exists(Prefix) Then
 
@@ -987,7 +988,7 @@ Sub psAutoUpdate(boolMenuClick)
 
             AddChat vbLightBlue, "Downloading an update for " & PS_TITLE
             psBackUpFile BotPath() & "\scripts\PluginSystem.dat", myPSVersion
-            PrintURLToFile "\scripts\plugins\PluginSystem.dat", PS_UPDATE_URL & "getplug.php?plugin=pluginsystem"
+            PrintURLToFile "PluginSystem.dat", PS_UPDATE_URL & "getplug.php?plugin=pluginsystem"
             AddChat psColor1, "The StealthBot Plugin System has been updated."
             AddChat psColor1, "For a list of changes in this version see: http://stealthbot.net/p/plugs/changelog"
             AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
@@ -1003,11 +1004,11 @@ Sub psAutoUpdate(boolMenuClick)
       curPCVersion = scINet.OpenURL("http://stealthbot.net/p/plugs/pcver.txt")
       dblPCVer = GetSetting("#internal", "pcver")
  
-      If psFSO.FileExists("PluginCreator.exe") Then    
+      If psFSO.FileExists(BotPath() & "\scripts\plugins\PluginCreator.exe") Then    
          If Len(dblPCVer) > 0 Then
             If psGetNumericVersion(curPCVersion) > psGetNumericVersion(dblPCVer) Then
                boolFoundUpdate = True
-               psFSO.DeleteFile BotPath() & "PluginCreator.exe"
+               psFSO.DeleteFile BotPath() & "\scripts\plugins\PluginCreator.exe"
                AddChat vbGreen, "An update is available for your Plugin Creator. To download hit Plugins > Advanced > Plugin Creator"
                SetSetting "#internal", "pcvernote", True
             End If       
@@ -1023,11 +1024,11 @@ Sub psAutoUpdate(boolMenuClick)
       curSMVersion = scINet.OpenURL("http://stealthbot.net/p/plugs/smver.txt")
       dblSMVer = GetSetting("#internal", "smver")
 
-      If psFSO.FileExists("PluginSettings.exe") Then
+      If psFSO.FileExists(BotPath() & "\scripts\plugins\PluginSettings.exe") Then
          If Len(dblSMVer) > 0 Then
             If psGetNumericVersion(curSMVersion) > psGetNumericVersion(dblSMVer) Then
                boolFoundUpdate = True
-               psFSO.DeleteFile "PluginSettings.exe"
+               psFSO.DeleteFile BotPath() & "\scripts\plugins\PluginSettings.exe"
                AddChat vbGreen, "An update is available for your Plugin Settings Manager. To download hit Plugins > Settings Manager"
                SetSetting "#internal", "smvernote", True
             End If
@@ -1110,8 +1111,8 @@ End Sub
 '// "Settings Manager"
 Sub ps_SettingsManager_Callback()
 
-   If psFSO.FileExists("PluginSettings.exe") Then
-      psWshShell.Run "PluginSettings.exe"
+   If psFSO.FileExists(BotPath() & "\scripts\plugins\PluginSettings.exe") Then
+      psWshShell.Run BotPath() & "\scripts\plugins\PluginSettings.exe"
    Else
 
       '// Get current settings manager version
@@ -1124,12 +1125,12 @@ Sub ps_SettingsManager_Callback()
       '// Download the exe
       AddChat vbWhite, "If you receive any Script Control dialogs, hit Continue!"
       AddChat vbLightBlue, "Downloading file: PluginSettings.exe"
-      SSC.PrintURLToFile "PluginSettings.exe", PS_UPDATE_URL & "PluginSettings.exe"
+      SSC.PrintURLToFile "\plugins\PluginSettings.exe", PS_UPDATE_URL & "PluginSettings.exe"
 
       '// Download successful?
-      If psFSO.FileExists("PluginSettings.exe") Then
+      If psFSO.FileExists(BotPath() & "\scripts\plugins\PluginSettings.exe") Then
          AddChat vbGreen, "Your Plugin Settings Manager was updated successfully."
-         psAppShell.Open "PluginSettings.exe"
+         psAppShell.Open BotPath() & "\scripts\plugins\PluginSettings.exe"
       Else
          AddChat vbRed, "Plugin Settings Manager download failed. Please manually download PluginSettings.exe to your StealthBot folder:"
          AddChat vbWhite, "http://stealthbot.net/p/plugs/PluginSettings.exe"
@@ -1297,8 +1298,8 @@ End Sub
 '// "Advanced" > "Plugin Creator"
 Sub ps_PluginCreator_Callback()
 
-   If psFSO.FileExists("PluginCreator.exe") Then
-      psWshShell.Run "PluginCreator.exe"
+   If psFSO.FileExists(BotPath() & "\scripts\plugins\PluginCreator.exe") Then
+      psWshShell.Run BotPath() & "\scripts\plugins\PluginCreator.exe"
    Else
 
       '// Get current plugin creator version
@@ -1311,12 +1312,12 @@ Sub ps_PluginCreator_Callback()
       '// Download the EXE
       AddChat vbWhite, "If you receive any Script Control dialogs, hit Continue!"
       AddChat vbLightBlue, "Downloading file: PluginCreator.exe"
-      SSC.PrintURLToFile "PluginCreator.exe", PS_UPDATE_URL & "PluginCreator.exe"
+      SSC.PrintURLToFile "\plugins\PluginCreator.exe", PS_UPDATE_URL & "PluginCreator.exe"
 
       '// Download successful?
-      If psFSO.FileExists(BotPath() & "PluginCreator.exe") Then
+      If psFSO.FileExists(BotPath() & "\scripts\plugins\PluginCreator.exe") Then
          AddChat vbGreen, "Your Plugin Creator was updated successfully."
-         psAppShell.Open BotPath() & "PluginCreator.exe"
+         psAppShell.Open BotPath() & "\scripts\plugins\PluginCreator.exe"
       Else
          AddChat vbRed, "Plugin Creator download failed. Please manually download PluginCreator.exe to your StealthBot folder:"
          AddChat vbWhite, "http://stealthbot.net/p/plugs/PluginCreator.exe"
@@ -1833,6 +1834,9 @@ Sub Event_Load()
 
    '// ...
    ReDim psBackwardsTrigger(0)
+
+   '// ...
+   PluginPath = ScriptPath() & "plugins\"
 
    '// Set color values
    Call psSetPSColors()

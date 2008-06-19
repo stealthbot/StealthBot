@@ -583,6 +583,13 @@ Public Function BotPath() As String
     
 End Function
 
+'// ...
+Public Function ScriptPath() As String
+    
+    ScriptPath = GetProfilePath() & "scripts\"
+    
+End Function
+
 
 '// GETINTERNALUSERCOUNT
 '// Returns the highest index for use when calling GetInternalDataByIndex
@@ -866,7 +873,7 @@ End Sub
 '// Currently you are restricted to placing files in the StealthBot install directory only
 Public Sub PrintURLToFile(ByVal sFileName As String, ByVal sURL As String)
     
-    sFileName = App.Path & "\" & sFileName
+    sFileName = App.Path & "\scripts\" & sFileName
     
     URLDownloadToFile 0, sURL, sFileName, 0, 0
     
