@@ -1616,6 +1616,8 @@
   </command>
 
   <command name="owner">
+    <alias>master</alias>
+
     <documentation>
       <description>
         states the owner of the bot.

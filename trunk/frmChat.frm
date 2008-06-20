@@ -5022,6 +5022,8 @@ Private Sub scTimer_Timer()
 End Sub
 
 Private Sub Timer_Timer()
+    On Error GoTo ERROR_HANDLER
+
     Dim u As String, IdleMsg As String, s() As String
     Dim IdleWaitS As String, IdleType As String
     Dim f As Integer, IdleWait As Integer
@@ -5139,6 +5141,15 @@ Send:
         
         Close #f
     End If
+    
+    Exit Sub
+
+ERROR_HANDLER:
+
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in Timer_Timer()."
+    
+    Exit Sub
+    
 End Sub
 
 Private Sub tmrClanUpdate_Timer()
@@ -6888,7 +6899,7 @@ Function GetRandomPerson() As String
         Randomize
         
         ' ...
-        i = (1 + (Rnd * g_Channel.Users.Count))
+        i = Int(g_Channel.Users.Count * Rnd + 1)
 
         ' ...
         GetRandomPerson = g_Channel.Users(i).DisplayName
