@@ -4312,22 +4312,32 @@ End Sub
 Private Function DoCDKeyLengthCheck(ByVal sKey As String, ByVal sProd As String) As Boolean
     Dim DesiredLen As Integer
     
-    Select Case sProd
-        Case "STAR", "SEXP"
-            DesiredLen = 13
-        Case "W2BN", "D2DV", "D2XP"
-            DesiredLen = 16
-        Case "W3XP", "WAR3"
-            DesiredLen = 26
-    End Select
-    
     sKey = CDKeyReplacements(sKey)
     
-    If Len(sKey) <> DesiredLen Then
-        DoCDKeyLengthCheck = False
-    Else
-        DoCDKeyLengthCheck = True
-    End If
+    Select Case sProd
+        Case "STAR", "SEXP"
+            If ((Len(sKey) <> 13) And (Len(sKey) <> 26)) Then
+                DoCDKeyLengthCheck = False
+                
+                Exit Function
+            End If
+            
+        Case "W2BN", "D2DV", "D2XP"
+            If (Len(sKey) <> 16) Then
+                DoCDKeyLengthCheck = False
+                
+                Exit Function
+            End If
+            
+        Case "W3XP", "WAR3"
+            If (Len(sKey) <> 26) Then
+                DoCDKeyLengthCheck = False
+                
+                Exit Function
+            End If
+    End Select
+    
+    DoCDKeyLengthCheck = True
 End Function
 
 Private Function SaveSettings() As Boolean

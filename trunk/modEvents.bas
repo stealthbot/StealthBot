@@ -325,7 +325,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
 
 ERROR_HANDLER:
 
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in Event_JoinedChannel()."
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in Event_JoinedChannel()."
 
     Exit Sub
     
