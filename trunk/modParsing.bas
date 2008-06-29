@@ -543,7 +543,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.description & " in BNCSParsePacket()."
+    frmChat.AddChat vbRed, "Error: " & Err.Description & " in BNCSParsePacket()."
     
     Exit Sub
 End Sub
@@ -705,7 +705,7 @@ Cont:
     
 ErrorTrapped:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, "D2/W2 CDKey decoding error occurred!")
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, Err.Number & ": " & Err.description)
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, Err.Number & ": " & Err.Description)
 End Function
 
 Public Function DecodeStarcraftKey(ByVal sKey As String) As String
@@ -950,17 +950,17 @@ Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
     End With
 End Sub
 
-Public Sub SetProfile(ByVal Location As String, ByVal description As String)
+Public Sub SetProfile(ByVal Location As String, ByVal Description As String)
     'Dim i As Byte
     Const MAX_DESCR As Long = 510
     Const MAX_SEX As Long = 200
     Const MAX_LOC As Long = 200
     
     '// Sanity checks
-    If LenB(description) = 0 Then
-        description = Space(1)
-    ElseIf Len(description) > MAX_DESCR Then
-        description = Left$(description, MAX_DESCR)
+    If LenB(Description) = 0 Then
+        Description = Space(1)
+    ElseIf Len(Description) > MAX_DESCR Then
+        Description = Left$(Description, MAX_DESCR)
     End If
     
 '    If LenB(Sex) = 0 Then
@@ -985,7 +985,7 @@ Public Sub SetProfile(ByVal Location As String, ByVal description As String)
         .InsertNTString "Profile\Description"
                                             '// values
         .InsertNTString Location
-        .InsertNTString description
+        .InsertNTString Description
         
         .SendPacket &H27
     End With
@@ -995,7 +995,7 @@ End Sub
 '//  Will not ERASE if a field is left blank
 '// 2007-06-07: SEX value is ignored because Blizzard removed that
 '//     field from profiles
-Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
+Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
     'Dim i As Byte
     Const MAX_DESCR As Long = 510
     Const MAX_SEX As Long = 200
@@ -1014,9 +1014,9 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
     End If
     
     '// Sanity checks
-    If (LenB(description) > 0) Then
-        If (Len(description) > MAX_DESCR) Then
-            description = Left$(description, MAX_DESCR)
+    If (LenB(Description) > 0) Then
+        If (Len(Description) > MAX_DESCR) Then
+            Description = Left$(Description, MAX_DESCR)
         End If
         
         nKeys = nKeys + 1
@@ -1045,7 +1045,7 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
             Next i
            
             .InsertNTString Location
-            .InsertNTString description '// values
+            .InsertNTString Description '// values
             
             .SendPacket &H27
         End With
@@ -1274,7 +1274,7 @@ ParseStatString_Exit:
 
 ParseStatString_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure ParseStatString of Module modParsing"
+    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParseStatString of Module modParsing"
     outbuf = "- Error parsing statstring. [" & Replace(Statstring, Chr(0), "") & "]"
     
     Resume ParseStatString_Exit

@@ -843,7 +843,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in " & _
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in " & _
         "GetCumulativeAccess().")
 
     Exit Function
@@ -1581,24 +1581,24 @@ Public Function GetW3Realm(Optional ByVal Username As String) As String
 End Function
 
 Public Function GetConfigFilePath() As String
-    Static filePath As String
+    Static FilePath As String
     
-    If (LenB(filePath) = 0) Then
+    If (LenB(FilePath) = 0) Then
         If ((LenB(ConfigOverride) > 0)) Then
-            filePath = ConfigOverride
+            FilePath = ConfigOverride
         Else
-            filePath = GetProfilePath()
+            FilePath = GetProfilePath()
             
-            filePath = filePath & _
-                IIf(Right$(filePath, 1) = "\", "", "\") & "config.ini"
+            FilePath = FilePath & _
+                IIf(Right$(FilePath, 1) = "\", "", "\") & "config.ini"
         End If
     End If
     
-    If (InStr(1, filePath, "\", vbBinaryCompare) = 0) Then
-        filePath = App.Path & "\" & filePath
+    If (InStr(1, FilePath, "\", vbBinaryCompare) = 0) Then
+        FilePath = App.Path & "\" & FilePath
     End If
     
-    GetConfigFilePath = filePath
+    GetConfigFilePath = FilePath
 End Function
 
 Public Function GetFilePath(ByVal filename As String) As String
@@ -2292,7 +2292,7 @@ Public Sub LogCommand(ByVal Caller As String, ByVal CString As String)
     Exit Sub
 
 LogCommand_Error:
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in " & _
+    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in " & _
         "Procedure; LogCommand; of; Module; modOtherCode; "
     
     Exit Sub
@@ -2489,7 +2489,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.description & " in SplitByLen()."
+    frmChat.AddChat vbRed, "Error: " & Err.Description & " in SplitByLen()."
     
     Exit Function
 End Function
@@ -2733,7 +2733,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in IsCommand().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in IsCommand().")
     
     Exit Function
 End Function
@@ -2801,7 +2801,7 @@ ERROR_HANDLER:
 End Function
 
 Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Variant)
-    On Error Resume Next
+    On Error GoTo ERROR_HANDLER
     
     Dim s              As String
     Dim l              As Long
@@ -2968,4 +2968,13 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     'SendMessage frmChat.rtbChat.hWnd, WM_SETTEXT, 0, ByVal StrPtr(hm)
     
     'rtbChat.Refresh
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in DisplayRichText()."
+    
+    Exit Sub
+    
 End Sub

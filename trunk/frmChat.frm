@@ -885,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1564,9 +1563,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -1762,9 +1761,18 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_GotFocus()
+    On Error GoTo ERROR_HANDLER
+
     If (cboSendHadFocus) Then
         cboSend.SetFocus
     End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in Form_GotFocus()."
+
+    Exit Sub
 End Sub
 
 Private Sub DisplayNews()
@@ -4774,6 +4782,8 @@ Private Sub cboSend_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub quLower_Timer()
+    On Error GoTo ERROR_HANDLER
+
     If QueueLoad > 0 Then QueueLoad = QueueLoad - 1
     If QueueMaster > 0 Then QueueMaster = QueueMaster - 2
     If QueueMaster <= 0 Then QueueMaster = 0
@@ -4849,10 +4859,20 @@ Private Sub quLower_Timer()
     End If
     
     If unsquelching Then unsquelching = False
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in quLower_Timer()."
+
+    Exit Sub
 End Sub
 
 
 Private Sub QueueTimer_Timer()
+    On Error GoTo ERROR_HANDLER
+
     Dim Message  As String
     Dim Tag      As String
     Dim Sent     As Byte
@@ -4929,6 +4949,15 @@ Private Sub QueueTimer_Timer()
             QueueTimer.Interval = (1175 + delay)
         End If
     End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in QueueTimer_Timer()."
+
+    Exit Sub
+
 End Sub
 
 
@@ -5454,6 +5483,8 @@ End Sub
 '/* Fires every second */
 Private Sub UpTimer_Timer()
 
+    On Error GoTo ERROR_HANDLER
+
     Dim newColor  As Long
     Dim i         As Integer
     Dim Pos       As Integer
@@ -5552,6 +5583,13 @@ Private Sub UpTimer_Timer()
             doCheck = True
         Next i
     End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in UpTimer_Timer()."
+
+    Exit Sub
     
 End Sub
 
@@ -6657,6 +6695,8 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
 End Sub
 
 Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
+    On Error GoTo ERROR_HANDLER
+
     Dim strTemp     As String
     Dim fTemp       As String
     Dim BufferLimit As Long
@@ -6720,8 +6760,14 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
         'proxy is ON and NOT CONNECTED
         'parse incoming data
         ParseProxyPacket strTemp
-        
     End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in sckBNet_DataArrival()."
+    
+    Exit Sub
 End Sub
 
 Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)

@@ -210,6 +210,8 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
+    On Error GoTo ERROR_HANDLER
+
     Dim mailCount As Integer ' ...
     Dim ToANSI    As String  ' ...
     
@@ -318,6 +320,15 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     On Error Resume Next
     
     RunInAll frmChat.SControl, "Event_ChannelJoin", ChannelName, Flags
+    
+    Exit Sub
+
+ERROR_HANDLER:
+
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in Event_JoinedChannel()."
+
+    Exit Sub
+    
 End Sub
 
 Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)

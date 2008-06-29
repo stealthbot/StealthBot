@@ -197,15 +197,12 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     Do While (filename <> vbNullString)
         ' ...
         Set CurrentModule = SC.Modules.Add(filename)
-        
+ 
         ' ...
         CreateModuleProcs SC, filename
     
         ' ...
         FileToModule CurrentModule, strPath & filename
-        
-        ' ...
-        'frmChat.AddChat vbGreen, "Script loaded: " & filename
 
         ' ...
         filename = Dir()
