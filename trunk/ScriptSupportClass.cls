@@ -259,7 +259,7 @@ Public Sub AddQ(ByVal sText As String, Optional ByVal msg_priority As Integer = 
     
     '// priority zero reserved for internal usage only
     If (msg_priority = 0) Then
-        Exit Sub
+        msg_priority = 1
     End If
 
     '// ...

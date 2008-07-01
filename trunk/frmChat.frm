@@ -1563,9 +1563,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5638,6 +5638,16 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     
     ' ...
     strTmp = Message
+    
+    ' ...
+    If (msg_priority < 0) Then
+        msg_priority = 0
+    End If
+    
+    ' ...
+    If (msg_priority > 100) Then
+        msg_priority = 100
+    End If
     
     ' ...
     If (g_Queue.Count = 0) Then
