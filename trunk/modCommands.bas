@@ -36,7 +36,7 @@ Public floodCap As Byte   ' ...?
 
 ' prepares commands for processing, and calls helper functions associated with
 ' processing
-Public Function ProcessCommand(ByVal Username As String, ByVal message As String, Optional ByVal IsLocal As _
+Public Function ProcessCommand(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As _
         Boolean = False, Optional ByVal WasWhispered As Boolean = False, Optional DisplayOutput As Boolean = _
                 True) As Boolean
     
@@ -54,10 +54,10 @@ Public Function ProcessCommand(ByVal Username As String, ByVal message As String
     ReDim Preserve command_return(0)
     
     ' replace message variables
-    message = Replace(message, "%me", IIf(IsLocal, GetCurrentUsername, Username), 1)
+    Message = Replace(Message, "%me", IIf(IsLocal, GetCurrentUsername, Username), 1)
 
     ' ...
-    Set command = IsCommand(message, IsLocal)
+    Set command = IsCommand(Message, IsLocal)
 
     ' ...
     Do While (command.Name <> vbNullString)
@@ -128,7 +128,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal message As String
     If (IsLocal) Then
         ' ...
         If ((bln = False) And (Count = 0)) Then
-            AddQ message
+            AddQ Message
         End If
     End If
     
@@ -390,7 +390,7 @@ End Function
 
 ' command processing helper function
 Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal message As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    ByVal Message As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
 
     Dim tmpmsg   As String  ' stores copy of message
     Dim cmdName  As String  ' stores command name
@@ -403,7 +403,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
     ReDim Preserve cmdRet(0)
     
     ' store local copy of message
-    tmpmsg = message
+    tmpmsg = Message
 
     ' grab command name & message data
     If (InStr(1, tmpmsg, Space(1), vbBinaryCompare) <> 0) Then
@@ -587,7 +587,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
     ' ...
     If (Not (blnNoCmd)) Then
         ' append entry to command log
-        Call LogCommand(Username, message)
+        Call LogCommand(Username, Message)
     End If
     
     ' was a command found? return.
@@ -3516,13 +3516,13 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
         If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
             tmpBuf(0) = "Error: The specified username is invalid."
         Else
-            Dim msg As String ' ...
+            Dim Msg As String ' ...
             
             ' ...
-            msg = Mid$(msgData, index + 1)
+            Msg = Mid$(msgData, index + 1)
         
             ' ...
-            shit_msg = user & shit_msg & " --type USER --banmsg " & msg
+            shit_msg = user & shit_msg & " --type USER --banmsg " & Msg
         End If
     Else
         ' ...
@@ -4740,7 +4740,7 @@ End Function ' end function OnCheckMail
 Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim msg    As udtMail
+    Dim Msg    As udtMail
     
     Dim tmpBuf As String ' temporary output buffer
             
@@ -4749,10 +4749,10 @@ Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAcc
     End If
     
     If (GetMailCount(Username) > 0) Then
-        Call GetMailMessage(Username, msg)
+        Call GetMailMessage(Username, Msg)
         
-        If (Len(RTrim(msg.To)) > 0) Then
-            tmpBuf = "Message from " & RTrim(msg.From) & ": " & RTrim(msg.message)
+        If (Len(RTrim(Msg.To)) > 0) Then
+            tmpBuf = "Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
         End If
     Else
         tmpBuf = "You do not currently have any messages " & _
@@ -5038,7 +5038,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
         End If
         
         ' grab access for entry
-        gAcc = GetAccess(user, dbType)
+        gAcc = GetCumulativeAccess(user, dbType)
         
         ' if we've found a matching user, lets correct
         ' the casing of the name that we've entered
@@ -5381,7 +5381,7 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
 
         With Temp
             .From = Username
-            .message = strArray(1)
+            .Message = strArray(1)
             
             If (StrictIsNumeric(strArray(0))) Then
                 'number games
@@ -5449,7 +5449,7 @@ Private Function OnBMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
         With Temp
             .To = strArray(0)
             .From = Username
-            .message = strArray(1)
+            .Message = strArray(1)
         End With
         
         If (Len(Temp.To) = 0) Then

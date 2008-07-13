@@ -1633,14 +1633,17 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
                 ' ...
                 If (GetMailCount(Username) > 0) Then
                     ' ...
-                    GetMailMessage Username, Msg
-                    
-                    ' ...
-                    If (Len(RTrim(Msg.To)) > 0) Then
+                    Do
                         ' ...
-                        frmChat.AddQ "/w " & Username & " Message from " & RTrim$(Msg.From) & ": " & _
-                            RTrim$(Msg.Message)
-                    End If
+                        GetMailMessage Username, Msg
+                        
+                        ' ...
+                        If (Len(RTrim(Msg.To)) > 0) Then
+                            ' ...
+                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(Msg.From) & ": " & _
+                                RTrim$(Msg.Message)
+                        End If
+                    Loop While (GetMailCount(Username) > 0)
                 End If
             End If
         End If
