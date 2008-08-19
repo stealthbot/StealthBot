@@ -33,7 +33,7 @@ Public Declare Function KillTimer Lib "user32" (ByVal hWnd As Long, ByVal nIDEve
 
 Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 
-Public Declare Function GetTimeZoneInformation Lib "kernel32.dll" _
+Public Declare Function GetTimeZoneInformation Lib "Kernel32.dll" _
 (lpTimeZoneInformation As TIME_ZONE_INFORMATION) As Long
 
 Public Declare Function GetTickCount Lib "kernel32" () As Long
@@ -159,6 +159,7 @@ Public Declare Function GetUserName Lib "advapi32.dll" Alias "GetUserNameA" (ByV
 Public Declare Function GetSystemDefaultLCID Lib "kernel32" () As Long
 Public Declare Sub GetSystemTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
 Public Declare Function SystemTimeToFileTime Lib "kernel32" (lpSystemTime As SYSTEMTIME, lpFileTime As FILETIME) As Long
+Public Declare Function GetFocus Lib "user" () As Integer
 
 Public Const LOCALE_SABBREVCTRYNAME As Long = &H7
 Public Const LOCALE_SENGCOUNTRY     As Long = &H1002

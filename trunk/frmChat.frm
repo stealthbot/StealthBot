@@ -1,16 +1,16 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "Msinet.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
    ClientLeft      =   165
-   ClientTop       =   855
+   ClientTop       =   735
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1438,8 +1438,6 @@ Attribute VB_Exposed = False
 'Source Code Version: 2.6R3+
 Option Explicit
 
-Private Declare Function GetFocus Lib "user" () As Integer
-
 'Classes
 Public WithEvents ClanHandler As clsClanPacketHandler
 Attribute ClanHandler.VB_VarHelpID = -1
@@ -1453,14 +1451,6 @@ Private doAuth As Boolean
 
 'Forms
 Public SettingsForm As frmSettings
-
-Private Const WM_SETREDRAW    As Integer = &HB
-Private Const WM_USER         As Integer = &H400
-Private Const EM_GETEVENTMASK As Integer = (WM_USER + 59)
-Private Const EM_SETEVENTMASK As Integer = (WM_USER + 69)
-Private Const EM_LIMITTEXT    As Integer = (WM_USER + 21)
-Private Const EM_SETLIMITTEXT As Integer = &HC5
-Private Const WM_SETTEXT      As Integer = &HC
 
 ' LET IT BEGIN
 Private Sub Form_Load()
@@ -1563,9 +1553,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
