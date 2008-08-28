@@ -1406,12 +1406,18 @@ Private Sub Class_Initialize()
 End Sub
 
 Private Sub Class_Terminate()
-    'Go through and destroy all the Forms the user has created
-    Dim X As Integer
-    For X = 0 To obScriptForms.Count
-        Unload obScriptForms.Item(0)
-        Call obScriptForms.Remove(0)
-    Next X
-    Set obScriptForms = Nothing
+    'Check objects exist before attempting to unload them - FrOzeN
+    If obScriptForms.Count <> 0 Then
+    
+        'Go through and destroy all the Forms the user has created
+        Dim X As Integer
+        
+        For X = 0 To obScriptForms.Count
+            Unload obScriptForms.Item(X)
+            Call obScriptForms.Remove(X)
+        Next X
+        
+        Set obScriptForms = Nothing
+    End If
 End Sub
 

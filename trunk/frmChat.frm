@@ -1,16 +1,16 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "Msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
    ClientLeft      =   165
-   ClientTop       =   735
+   ClientTop       =   855
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1553,9 +1553,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2764,6 +2764,8 @@ Sub Form_Unload(Cancel As Integer)
     Unload frmCatch
     'Unload frmCCEditor
     'Unload frmChat: we are doing this now
+    
+    Unload frmCommands
     Unload frmClanInvite
     Unload frmEMailReg
     Unload frmFilters
@@ -2776,7 +2778,7 @@ Sub Form_Unload(Cancel As Integer)
     Unload frmSplash
     'Unload frmUserManager
     Unload frmWriteProfile
-    Call ExitProcess(0)
+    'Call ExitProcess(0)
 End Sub
 
 
@@ -3935,6 +3937,21 @@ Private Sub mnuWindow_Click()
     End Select
 End Sub
 
+Private Sub rtbChat_KeyDown(KeyCode As Integer, Shift As Integer)
+    If (Shift = vbCtrlMask) And ((KeyCode = vbKeyL) Or (KeyCode = vbKeyE) Or (KeyCode = vbKeyR)) Then
+        'Call Ctrl+L and Ctrl+R keyboard shortcuts as they code to automatically handle them will be canceled out below
+        Select Case KeyCode
+            Case vbKeyL
+                Call mnuLock_Click
+            Case vbKeyR
+                Call mnuReloadScript_Click
+        End Select
+        
+        'Disable Ctrl+L, Ctrl+E, and Ctrl+R
+        KeyCode = 0
+    End If
+End Sub
+
 Private Sub rtbChat_KeyPress(KeyAscii As Integer)
     ' ...
     If (KeyAscii < 32) Then
@@ -3946,6 +3963,21 @@ Private Sub rtbChat_KeyPress(KeyAscii As Integer)
     
     ' ...
     cboSend.SelText = Chr$(KeyAscii)
+End Sub
+
+Private Sub rtbWhispers_KeyDown(KeyCode As Integer, Shift As Integer)
+    If (Shift = vbCtrlMask) And ((KeyCode = vbKeyL) Or (KeyCode = vbKeyE) Or (KeyCode = vbKeyR)) Then
+        'Call Ctrl+L and Ctrl+R keyboard shortcuts as they code to automatically handle them will be canceled out below
+        Select Case KeyCode
+            Case vbKeyL
+                Call mnuLock_Click
+            Case vbKeyR
+                Call mnuReloadScript_Click
+        End Select
+        
+        'Disable Ctrl+L, Ctrl+E, and Ctrl+R
+        KeyCode = 0
+    End If
 End Sub
 
 Private Sub rtbWhispers_KeyPress(KeyAscii As Integer)
@@ -4632,6 +4664,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 Else
                                     Call AddQ(OutFilterMsg(s), Priority.CONSOLE_MESSAGE)
                                 End If
+                                
+                                'Ignore rest of code as the bot is closing
+                                If BotIsClosing Then
+                                    Exit Sub
+                                End If
+                                
                             End If
 theEnd:
                             cboSend.AddItem cboSend.text, 0

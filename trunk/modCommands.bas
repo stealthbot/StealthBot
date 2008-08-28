@@ -80,6 +80,12 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                     
             ' ...
             If (DisplayOutput) Then
+            
+                'Ignore code as bot is closing
+                If BotIsClosing Then
+                    Exit Function
+                End If
+            
                 ' ...
                 If (command_return(0) <> vbNullString) Then
                     ' ...
@@ -583,6 +589,9 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case Else
             blnNoCmd = True
     End Select
+    
+    'Bot has unloaded
+    If BotIsClosing Then Exit Function
 
     ' ...
     If (Not (blnNoCmd)) Then
@@ -599,7 +608,10 @@ Private Function OnQuit(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     ' This command will initiate the bot's termination sequence.
     
-    Call frmChat.Form_Unload(0)
+    BotIsClosing = True
+    
+    Unload frmChat
+    Set frmChat = Nothing
 End Function ' end function OnQuit
 
 ' handle locktext command

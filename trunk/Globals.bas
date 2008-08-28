@@ -131,6 +131,9 @@ Public g_Friends As New Collection
 
 Public UserCancelledConnect As Boolean
 
+'For closing the bot with the quit command
+Public BotIsClosing As Boolean
+
 'VARIABLES
 Public CurrentUsername As String
 Public ProfileRequest As Boolean

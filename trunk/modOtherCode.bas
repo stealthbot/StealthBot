@@ -2742,6 +2742,9 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         .Args = vbNullString
     End With
     
+    'Unload memory
+    Set IsCommand = Nothing
+    
     Exit Function
     
 ERROR_HANDLER:
