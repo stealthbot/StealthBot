@@ -48,6 +48,7 @@
 		was sent while UTF-8 was disabled (thanks PhiX & Jack)
 	- The use of certain messages within the clan motd can now no longer be used to trigger event handlers
 		unrelated to the motd (thanks PyroManiac and PhiX)
+	- The bot now unloads all the script timers correctly.
 
 
 	<b>INTERFACE</b>
@@ -86,6 +87,8 @@
 		(those games don't allow you to reject UDP packets, thanks Imhotep[Nu])
 	- Double-clicking a name will now insert it at your cursor or overwrite any selected text in the send box
 		(provided that text was selected using any method but click-and-drag)
+	- The keys Ctrl+L, Ctrl+E, and Ctrl+R can now be used in the chat windows without changing the text
+		alignment.
 
 
 	<b>COMMANDS</b>
@@ -113,6 +116,7 @@
 	- The /time command used from inside the bot no longer sends a redundant /time to Battle.net
 		(thanks Jack)
 	- The math command will no longer allow the execution of potentially harmful code (thanks various).
+	- The quit command will no close the bot correctly without the forced use of ExitProcess.
 
 	
 	<b>SECURITY</b>
