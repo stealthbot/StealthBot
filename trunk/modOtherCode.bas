@@ -3,7 +3,7 @@ Option Explicit
 
 Public Type COMMAND_DATA
     Name         As String
-    Params       As String
+    params       As String
     local        As Boolean
     PublicOutput As Boolean
 End Type
@@ -328,6 +328,20 @@ Public Function StripInvalidNameChars(ByVal Username As String) As String
         StripInvalidNameChars = NewUsername
     End If
 End Function
+
+'// Utility Function for joining strings
+'// EXAMPLE
+'// String("This is an {1} of its {0}.", Array("use", "example")) '// This is an example of its use.
+'// 08/29/2008 JSM - Created
+Public Function StringFormat(Source As String, params() As Variant) As String
+    Dim retval As String, i As Integer
+    retval = Source
+    For i = LBound(params) To UBound(params)
+        retval = Replace(retval, "{" & i & "}", CStr(params(i)))
+    Next
+    StringFormat = retval
+End Function
+
 
 Public Function StripRealm(ByVal Username As String) As String
     If (InStr(1, Username, "@", vbBinaryCompare) > 0) Then

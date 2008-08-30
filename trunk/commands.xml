@@ -528,17 +528,21 @@
       set
     </alias>
 
+    
     <documentation>
       <description>
         creates or modifies a specified database entry.
       </description>
+      <specialnotes>
+        woot woot - 52
+      </specialnotes>
     </documentation>
 
     <arguments>
       <argument name="username">
         <documentation>
           <description>
-            ...
+            TODO: username arg description
           </description>
         </documentation>
       </argument>
