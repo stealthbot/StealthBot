@@ -72,7 +72,7 @@ Begin VB.Form frmCommands
          List            =   "frmCommands.frx":0002
          TabIndex        =   13
          Top             =   600
-         Width           =   885
+         Width           =   1005
       End
       Begin VB.ComboBox cboAlias 
          BackColor       =   &H00993300&
@@ -95,12 +95,13 @@ Begin VB.Form frmCommands
          Top             =   600
          Width           =   1215
       End
-      Begin VB.CheckBox chkDisableCommand 
-         Caption         =   "Disable Command"
+      Begin VB.CheckBox chkDisable 
+         Caption         =   "Disable"
          Height          =   255
          Left            =   240
          TabIndex        =   5
          Top             =   4320
+         Visible         =   0   'False
          Width           =   2535
       End
       Begin VB.TextBox txtDescription 
@@ -108,6 +109,8 @@ Begin VB.Form frmCommands
          ForeColor       =   &H00FFFFFF&
          Height          =   1575
          Left            =   240
+         MultiLine       =   -1  'True
+         ScrollBars      =   2  'Vertical
          TabIndex        =   2
          Top             =   1200
          Width           =   3975
@@ -117,14 +120,15 @@ Begin VB.Form frmCommands
          ForeColor       =   &H00FFFFFF&
          Height          =   1095
          Left            =   240
+         MultiLine       =   -1  'True
+         ScrollBars      =   2  'Vertical
          TabIndex        =   1
          Top             =   3120
          Width           =   3975
       End
-      Begin VB.Label Label1 
+      Begin VB.Label lblAlias 
          Caption         =   "Custom aliases:"
          Height          =   255
-         Index           =   1
          Left            =   1605
          TabIndex        =   10
          Top             =   360
@@ -146,19 +150,17 @@ Begin VB.Form frmCommands
          Top             =   360
          Width           =   975
       End
-      Begin VB.Label Label2 
+      Begin VB.Label lblDescription 
          Caption         =   "Description:"
          Height          =   255
-         Index           =   0
          Left            =   240
          TabIndex        =   4
          Top             =   960
          Width           =   2175
       End
-      Begin VB.Label Label2 
+      Begin VB.Label lblSpecialNotes 
          Caption         =   "Special notes:"
          Height          =   255
-         Index           =   1
          Left            =   240
          TabIndex        =   3
          Top             =   2880
@@ -241,8 +243,11 @@ Private Sub PopulateTreeView()
     Dim j                 As Integer
     Dim i                 As Integer
 
+    '// reset the treeview
+    trvCommands.Nodes.Clear
+
+    '// loop through all child nodes
     For Each xmlCommand In m_CommandsDoc.documentElement.childNodes
-        
         CommandName = xmlCommand.Attributes.getNamedItem("name").text
         Set nCommand = trvCommands.Nodes.Add(, , , CommandName)
         
@@ -272,24 +277,30 @@ Private Sub trvCommands_NodeClick(ByVal node As MSComctlLib.node)
     Dim CommandName As String
     Dim argumentName As String
     Dim restrictionName As String
-    Dim options() As Variant
+    Dim options() As Variant '// <-- boo
     
     Dim xpath As String
     Dim xmlElement As MSXML2.IXMLDOMElement
     
+    '// figure out what type of node was clicked on
     nt = GetNodeInfo(node, CommandName, argumentName, restrictionName)
+    '// create an array for the StringFormat function, this function will replace
+    '// the {0} {1} and {2} with their respective values found below
     '//                {0}           {1}             {2}
     options = Array(CommandName, argumentName, restrictionName)
     
     Select Case nt
         Case NodeType.nCommand
             fraCommand.Caption = StringFormat("{0}", options)
+            chkDisable.Caption = StringFormat("Disable {0} command", options)
             xpath = StringFormat("/commands/command[@name='{0}']", options)
         Case NodeType.nArgument
             fraCommand.Caption = StringFormat("{0} => {1}", options)
+            chkDisable.Caption = StringFormat("Disable {1} argument", options)
             xpath = StringFormat("/commands/command[@name='{0}']/arguments/argument[@name='{1}']", options)
         Case NodeType.nRestriction
             fraCommand.Caption = StringFormat("{0} => {1} => {2}", options)
+            chkDisable.Caption = StringFormat("Disable {2} restriction", options)
             xpath = StringFormat("/commands/command[@name='{0}']/arguments/argument[@name='{1}']/restriction[@name='{2}']", options)
     End Select
     
@@ -315,96 +326,148 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As MSXML2.IXMLDOMElement)
     Select Case nt
         Case NodeType.nCommand
             '// txtRank
+            txtRank.Enabled = True
+            lblRank.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("access/rank")
             If Not (xmlNode Is Nothing) Then
                 txtRank.text = xmlElement.selectSingleNode("access/rank").text
             End If
             '// cboAlias
+            cboAlias.Enabled = True
+            lblAlias.Enabled = True
             For Each xmlNode In xmlElement.selectNodes("alias")
                 cboAlias.AddItem xmlNode.text
             Next xmlNode
             '// cboFlags
+            cboFlags.Enabled = True
+            lblFlags.Enabled = True
             For Each xmlNode In xmlElement.selectNodes("access/flag")
                 cboFlags.AddItem xmlNode.text
             Next xmlNode
             '// txtDescription
+            txtDescription.Enabled = True
+            lblDescription.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/description")
             If Not (xmlNode Is Nothing) Then
                 txtDescription.text = xmlElement.selectSingleNode("documentation/description").text
             End If
             '// txtSpecialNotes
+            txtSpecialNotes.Enabled = True
+            lblSpecialNotes.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/specialnotes")
             If Not (xmlNode Is Nothing) Then
                 txtSpecialNotes.text = xmlElement.selectSingleNode("documentation/specialnotes").text
             End If
+            '// chkDisable
+            chkDisable.Enabled = True
+            chkDisable.Visible = True
+            
         Case NodeType.nArgument
             '// txtRank
-            Set xmlNode = xmlElement.selectSingleNode("access/rank")
-            If Not (xmlNode Is Nothing) Then
-                txtRank.text = xmlElement.selectSingleNode("access/rank").text
-            End If
+            'txtRank.Enabled = True
+            'lblRank.Enabled = True
+            'Set xmlNode = xmlElement.selectSingleNode("access/rank")
+            'If Not (xmlNode Is Nothing) Then
+            '    txtRank.text = xmlElement.selectSingleNode("access/rank").text
+            'End If
             '// cboAlias
-            For Each xmlNode In xmlElement.selectNodes("alias")
-                cboAlias.AddItem xmlNode.text
-            Next xmlNode
+            'cboAlias.Enabled = True
+            'lblAlias.Enabled = True
+            'For Each xmlNode In xmlElement.selectNodes("alias")
+            '    cboAlias.AddItem xmlNode.text
+            'Next xmlNode
             '// cboFlags
-            For Each xmlNode In xmlElement.selectNodes("access/flag")
-                cboFlags.AddItem xmlNode.text
-            Next xmlNode
+            'cboFlags.Enabled = True
+            'lblFlags.Enabled = True
+            'For Each xmlNode In xmlElement.selectNodes("access/flag")
+            '    cboFlags.AddItem xmlNode.text
+            'Next xmlNode
             '// txtDescription
+            txtDescription.Enabled = True
+            lblDescription.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/description")
             If Not (xmlNode Is Nothing) Then
                 txtDescription.text = xmlElement.selectSingleNode("documentation/description").text
             End If
             '// txtSpecialNotes
+            txtSpecialNotes.Enabled = True
+            lblSpecialNotes.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/specialnotes")
             If Not (xmlNode Is Nothing) Then
                 txtSpecialNotes.text = xmlElement.selectSingleNode("documentation/specialnotes").text
             End If
+            '// chkDisable
+            'chkDisable.Enabled = True
+            'chkDisable.Visible = True
+            
         Case NodeType.nRestriction
             '// txtRank
+            txtRank.Enabled = True
+            lblRank.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("access/rank")
             If Not (xmlNode Is Nothing) Then
                 txtRank.text = xmlElement.selectSingleNode("access/rank").text
             End If
             '// cboAlias
-            For Each xmlNode In xmlElement.selectNodes("alias")
-                cboAlias.AddItem xmlNode.text
-            Next xmlNode
+            'cboAlias.Enabled = True
+            'lblAlias.Enabled = True
+            'For Each xmlNode In xmlElement.selectNodes("alias")
+            '    cboAlias.AddItem xmlNode.text
+            'Next xmlNode
             '// cboFlags
+            cboFlags.Enabled = True
+            lblFlags.Enabled = True
             For Each xmlNode In xmlElement.selectNodes("access/flag")
                 cboFlags.AddItem xmlNode.text
             Next xmlNode
             '// txtDescription
+            txtDescription.Enabled = True
+            lblDescription.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/description")
             If Not (xmlNode Is Nothing) Then
                 txtDescription.text = xmlElement.selectSingleNode("documentation/description").text
             End If
             '// txtSpecialNotes
-            Set xmlNode = xmlElement.selectSingleNode("documentation/specialnotes")
-            If Not (xmlNode Is Nothing) Then
-                txtSpecialNotes.text = xmlElement.selectSingleNode("documentation/specialnotes").text
-            End If
-        
+            'txtSpecialNotes.Enabled = True
+            'lblSpecialNotes.Enabled = True
+            'Set xmlNode = xmlElement.selectSingleNode("documentation/specialnotes")
+            'If Not (xmlNode Is Nothing) Then
+            '    txtSpecialNotes.text = xmlElement.selectSingleNode("documentation/specialnotes").text
+            'End If
+            '// chkDisable
+            chkDisable.Enabled = True
+            chkDisable.Visible = True
             
     End Select
-    
-    
-    
-    
-    
-    
+
 End Sub
 
 '// Clears all edit controls. Treeview is left intact
 '// 08/29/2008 JSM - Created
 Private Sub ResetForm()
-    cboAlias.Clear
+    
     txtRank.text = ""
+    cboAlias.Clear
     cboFlags.Clear
     txtDescription.text = ""
     txtSpecialNotes.text = ""
-    chkDisableCommand.Value = 0
+    chkDisable.Value = 0
+    
+    txtRank.Enabled = False
+    cboAlias.Enabled = False
+    cboFlags.Enabled = False
+    txtDescription.Enabled = False
+    txtSpecialNotes.Enabled = False
+    chkDisable.Enabled = False
+    
+    lblRank.Enabled = False
+    lblAlias.Enabled = False
+    lblFlags.Enabled = False
+    lblDescription.Enabled = False
+    lblSpecialNotes.Enabled = False
+    
+    chkDisable.Visible = False
+        
 End Sub
 
 '// 08/29/2008 JSM - Created
@@ -477,7 +540,7 @@ Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
         
         '// If we made it this far, it should be safe to add it to the list
         cboAlias.AddItem cboAlias.text
-        cboAlias.text =
+        cboAlias.text = ""
     End If
     
     '// Delete
