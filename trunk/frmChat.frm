@@ -1,9 +1,9 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3221,7 +3221,7 @@ Sub mnuClearWW_Click()
 End Sub
 
 Private Sub mnuCommandManager_Click()
-    frmCommands.Show
+    frmCommands.Show vbModal, Me
 End Sub
 
 Private Sub mnuConnect2_Click()
@@ -4027,24 +4027,24 @@ End Sub
 
 Private Sub mnuUserlistWhois_Click()
     On Error Resume Next
-    Dim Temp As udtGetAccessResponse
+    Dim temp As udtGetAccessResponse
     Dim s As String
     
     s = GetSelectedUser
     
-    Temp = GetAccess(s)
+    temp = GetAccess(s)
     
     With RTBColors
-        If Temp.Access > -1 Then
-            If Temp.Access > 0 Then
-                If Temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & " and flags " & Temp.Flags & "."
+        If temp.Access > -1 Then
+            If temp.Access > 0 Then
+                If temp.Flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & temp.Access & " and flags " & temp.Flags & "."
                 Else
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & Temp.Access & "."
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & temp.Access & "."
                 End If
             Else
-                If Temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with flags " & Temp.Flags & "."
+                If temp.Flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with flags " & temp.Flags & "."
                 Else
                     AddChat .ConsoleText, "User not found."
                 End If
@@ -4217,7 +4217,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Static strBuf        As String ' ...
     Static spaceIndex(2) As Long   ' ...
 
-    Dim Temp As udtGetAccessResponse
+    Dim temp As udtGetAccessResponse
     
     Dim i As Long
     Dim l As Long
@@ -4336,12 +4336,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 
                                 If (X(n) <> vbNullString) Then
                                     If (n <> LBound(X)) Then
-                                        AddQ txtPre.text & X(n) & txtPost.text, Priority.CONSOLE_MESSAGE
+                                        AddQ txtPre.text & X(n) & txtPost.text, PRIORITY.CONSOLE_MESSAGE
                                         
                                         cboSend.AddItem txtPre.text & X(n) & txtPost.text, 0
                                     Else
                                         AddQ txtPre.text & cboSend.text & X(n) & txtPost.text, _
-                                            Priority.CONSOLE_MESSAGE
+                                            PRIORITY.CONSOLE_MESSAGE
                                         
                                         cboSend.AddItem txtPre.text & cboSend.text & X(n) & txtPost.text, 0
                                     End If
@@ -4518,7 +4518,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Case S_CTRL 'CTRL+ENTER - rewhisper
                         If LenB(cboSend.text) > 0 Then
                             AddQ "/w " & IIf(Dii, "*", "") & LastWhisperTo & Space(1) & cboSend.text, _
-                                Priority.CONSOLE_MESSAGE
+                                PRIORITY.CONSOLE_MESSAGE
                                 
                             cboSend.text = vbNullString
                         End If
@@ -4526,7 +4526,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Case S_CTRLSHIFT 'CTRL+SHIFT+ENTER - reply
                         If LenB(cboSend.text) > 0 Then
                             AddQ "/w " & IIf(Dii, "*", "") & LastWhisper & Space(1) & cboSend.text, _
-                                Priority.CONSOLE_MESSAGE
+                                PRIORITY.CONSOLE_MESSAGE
                             cboSend.text = vbNullString
                         End If
                 
@@ -4632,7 +4632,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     m = Right(s, (Len(s) - 7))
                                     
                                     AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m), _
-                                        Priority.CONSOLE_MESSAGE
+                                        PRIORITY.CONSOLE_MESSAGE
                                     
                                 ElseIf (LCase(Left$(s, 9)) = "/profile ") Then
                                     If (sckBNet.State = 7) Then
@@ -4654,15 +4654,15 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     '    End If
                                     'End If
                                     
-                                    Temp.Access = 201
-                                    Temp.Flags = "A"
+                                    temp.Access = 201
+                                    temp.Flags = "A"
                                     
                                     m = OutFilterMsg(s)
                                     
                                     commandResult = ProcessCommand(GetCurrentUsername, m, _
                                         True, False)
                                 Else
-                                    Call AddQ(OutFilterMsg(s), Priority.CONSOLE_MESSAGE)
+                                    Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
                                 End If
                                 
                                 'Ignore rest of code as the bot is closing
@@ -4913,7 +4913,7 @@ Private Sub QueueTimer_Timer()
         With g_Queue.Peek
             Message = .Message
             Tag = .Tag
-            pri = .Priority
+            pri = .PRIORITY
         End With
         
         If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
@@ -5856,16 +5856,16 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 
                     ' ...
                     Select Case (cmdName)
-                        Case "designate": msg_priority = Priority.SPECIAL_MESSAGE
-                        Case "resign":    msg_priority = Priority.SPECIAL_MESSAGE
-                        Case "ban":       msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                        Case "unban":     msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                        Case "kick":      msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                        Case "squelch":   msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                        Case "ignore":    msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                        Case "unsquelch": msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                        Case "unignore":  msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
-                        Case Else:        msg_priority = Priority.MESSAGE_DEFAULT
+                        Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
+                        Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
+                        Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        Case "unban":     msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        Case "squelch":   msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        Case "ignore":    msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        Case "unsquelch": msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        Case "unignore":  msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
                     End Select
                 End If
             End If
@@ -5956,7 +5956,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 ' ...
                 With Q
                     .Message = Send
-                    .Priority = msg_priority
+                    .PRIORITY = msg_priority
                     .ResponseTo = vbNullString
                     .Tag = Tag
                 End With
@@ -6811,7 +6811,7 @@ End Sub
 Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
     Dim f As Integer
     Dim Path As String
-    Dim Temp As String
+    Dim temp As String
     Dim i As Integer
     Dim c As Integer
     
@@ -6835,22 +6835,22 @@ Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
             ReDim tArray(0)
             If Mode <> LOAD_FILTERS Then
                 Do
-                    Line Input #f, Temp
-                    If Len(Temp) > 0 Then
+                    Line Input #f, temp
+                    If Len(temp) > 0 Then
                         ' removed for 2.5 - why am I PCing it ?
                         'If Mode = LOAD_SAFELIST Then temp = PrepareCheck(temp)
-                        tArray(UBound(tArray)) = LCase(Temp)
+                        tArray(UBound(tArray)) = LCase(temp)
                         ReDim Preserve tArray(UBound(tArray) + 1)
                     End If
                 Loop While Not EOF(f)
             Else
-                Temp = ReadINI(FI, "Total", "filters.ini")
-                If Temp <> vbNullString And CInt(Temp) > -1 Then
-                    c = Int(Temp)
+                temp = ReadINI(FI, "Total", "filters.ini")
+                If temp <> vbNullString And CInt(temp) > -1 Then
+                    c = Int(temp)
                     For i = 1 To c
-                        Temp = ReadINI(FI, "Filter" & i, "filters.ini")
-                        If Temp <> vbNullString Then
-                            tArray(UBound(tArray)) = LCase(Temp)
+                        temp = ReadINI(FI, "Filter" & i, "filters.ini")
+                        If temp <> vbNullString Then
+                            tArray(UBound(tArray)) = LCase(temp)
                             If i <> c Then ReDim Preserve tArray(UBound(tArray) + 1)
                         End If
                     Next i
