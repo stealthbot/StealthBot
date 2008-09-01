@@ -240,17 +240,40 @@ End Sub
 
 Private Sub Form_Load()
 
+    On Error GoTo ErrorHandler
+
     '// Load commands.xml
     Set m_CommandsDoc = New MSXML2.DOMDocument
     
     If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
         Exit Sub
     End If
+    '// 08/31/2008 JSM - ensure schema file is present
+    If (Dir$(App.Path & "\commands.xsd") = vbNullString) Then
+        Exit Sub
+    End If
+    
+    
+    If Not ValidateXML(App.Path & "\commands.xml", App.Path & "\commands.xsd") Then
+        Exit Sub
+    End If
+    
     
     Call m_CommandsDoc.Load(App.Path & "\commands.xml")
     
     Call ResetForm
     Call PopulateTreeView
+    
+    Exit Sub
+    
+ErrorHandler:
+
+    MsgBox Err.Description, vbCritical + vbOKOnly, Me.Caption
+    Call ResetForm
+    '// Disable our buttons
+    cmdSave.Enabled = False
+    cmdDiscard.Enabled = False
+    Exit Sub
     
 End Sub
 

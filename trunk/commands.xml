@@ -1,4405 +1,3562 @@
 <commands xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
-  <command name="find">
-    <alias>
+	<command name="find">
+		<alias>
       findr
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         states a specified user's rank and flags.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="username">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="username">
+				<documentation>
+					<description>
             The username to search for.
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="findgrp">
-    <alias>
+		</access>
+	</command>
+	<command name="findgrp">
+		<alias>
       findgroup
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         ...
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="group">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="group">
+				<documentation>
+					<description>
             ...
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="getmail">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="getmail">
+		<documentation>
+			<description>
         ...
       </description>
-    </documentation>
-
-    <arguments />
-
-    <access />
-  </command>
-
-  <command name="whois">
-    <documentation>
-      <description>
+		</documentation>
+		<arguments/>
+		<access/>
+	</command>
+	<command name="whois">
+		<documentation>
+			<description>
         ...
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="username">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="username">
+				<documentation>
+					<description>
             The username to search for.
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="roll">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="roll">
+		<documentation>
+			<description>
         states a random value between 0 and 100.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="bmail">
-    <alias>
+		</access>
+	</command>
+	<command name="bmail">
+		<alias>
       mail
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         stores a message for the specified user.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="recipient">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="recipient">
+				<documentation>
+					<description>
             The recipient of the message.
           </description>
-        </documentation>
-      </argument>
-
-      <argument name="message" type="string">
-        <documentation>
-          <description>
+				</documentation>
+			</argument>
+			<argument name="message" type="string">
+				<documentation>
+					<description>
             The message to be sent.
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="flip">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="flip">
+		<documentation>
+			<description>
         initiates a coin toss and states the results.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="findattr">
-    <alias>
+		</access>
+	</command>
+	<command name="findattr">
+		<alias>
       findflag
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         states all users with the specified flag(s).
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="attributes">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="attributes">
+				<documentation>
+					<description>
             The attribute or attributes of the search query.
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="designated" token="operator">
-    <alias>
+		</access>
+	</command>
+	<command name="designated" token="operator">
+		<alias>
       des
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         states the currently designated user.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="scq">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="scq">
+		<documentation>
+			<description>
         silently clears the outgoing message queue.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="cq">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="cq">
+		<documentation>
+			<description>
         clears the outgoing chat message queue.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="whoami" datasrc="external">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="whoami" datasrc="external">
+		<documentation>
+			<description>
         states the requesting user's rank and flags.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="add">
-    <alias>
+		</access>
+	</command>
+	<command name="add">
+		<alias>
       set
     </alias>
-
-    
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         creates or modifies a specified database entry.
       </description>
-      <specialnotes>
+			<specialnotes>
         woot woot - 52
       </specialnotes>
-    </documentation>
-
-    <arguments>
-      <argument name="username">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="username">
+				<documentation>
+					<description>
             TODO: username arg description
           </description>
-        </documentation>
-      </argument>
-
-      <argument name="rank" optional="true">
-        <data type="number" min="1" max="100" />
-
-        <documentation>
-          <description>
+				</documentation>
+			</argument>
+			<argument name="rank" optional="true">
+				<data type="number" min="1" max="100"/>
+				<documentation>
+					<description>
             ...
           </description>
-        </documentation>
-      </argument>
-
-      <argument name="attributes" optional="true">
-        <data type="string" maxLength="52" pattern="\+[A-Za-z]+|-[A-Za-z]+|[A-Za-z]+" />
-
-        <documentation>
-          <description>
+				</documentation>
+			</argument>
+			<argument name="attributes" optional="true">
+				<data type="string" maxLength="52" pattern="\+[A-Za-z]+|-[A-Za-z]+|[A-Za-z]+"/>
+				<documentation>
+					<description>
             ...
           </description>
-        </documentation>
-
-        <restriction name="FLAG_A_HIGH">
-          <documentation>
-            <description>
+				</documentation>
+				<restriction name="FLAG_A_HIGH">
+					<documentation>
+						<description>...</description>
+					</documentation>
+					<match message="[A]+"/>
+					<access>
+						<rank>100</rank>
+						<flag>A</flag></access>
+				</restriction>
+				<restriction name="FLAG_A_LOW">
+					<documentation>
+						<description>
               ...
             </description>
-          </documentation>
-
-          <match message="[A]+" />
-
-          <access>
-            <rank>
+					</documentation>
+					<match message="[a]+"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               A
             </flag>
-          </access>
-        </restriction>
-
-        <restriction name="FLAG_A_LOW">
-          <documentation>
-            <description>
+					</access>
+				</restriction>
+				<restriction name="FLAG_B">
+					<documentation>
+						<description>
               ...
             </description>
-          </documentation>
-
-          <match message="[a]+" />
-
-          <access>
-            <rank>
+					</documentation>
+					<match message="[B]+"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               A
             </flag>
-          </access>
-        </restriction>
-
-        <restriction name="FLAG_B">
-          <documentation>
-            <description>
+					</access>
+				</restriction>
+				<restriction name="FLAG_C_HIGH">
+					<documentation>
+						<description>
               ...
             </description>
-          </documentation>
-
-          <match message="[B]+" />
-
-          <access>
-            <rank>
+					</documentation>
+					<match message="[c]+"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               A
             </flag>
-          </access>
-        </restriction>
-
-        <restriction name="FLAG_C_HIGH">
-          <documentation>
-            <description>
+					</access>
+				</restriction>
+				<restriction name="FLAG_C_LOW">
+					<documentation>
+						<description>
               ...
             </description>
-          </documentation>
-
-          <match message="[c]+" />
-
-          <access>
-            <rank>
+					</documentation>
+					<match message="[c]+"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               A
             </flag>
-          </access>
-        </restriction>
-
-        <restriction name="FLAG_C_LOW">
-          <documentation>
-            <description>
+					</access>
+				</restriction>
+				<restriction name="FLAG_D">
+					<documentation>
+						<description>
               ...
             </description>
-          </documentation>
-
-          <match message="[c]+" />
-
-          <access>
-            <rank>
+					</documentation>
+					<match message="[D]+"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               A
             </flag>
-          </access>
-        </restriction>
-
-        <restriction name="FLAG_D">
-          <documentation>
-            <description>
+					</access>
+				</restriction>
+				<restriction name="FLAG_I">
+					<documentation>
+						<description>
               ...
             </description>
-          </documentation>
-
-          <match message="[D]+" />
-
-          <access>
-            <rank>
+					</documentation>
+					<match message="[I]+"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               A
             </flag>
-          </access>
-        </restriction>
-
-        <restriction name="FLAG_I">
-          <documentation>
-            <description>
+					</access>
+				</restriction>
+				<restriction name="FLAG_J">
+					<documentation>
+						<description>
               ...
             </description>
-          </documentation>
-
-          <match message="[I]+" />
-
-          <access>
-            <rank>
+					</documentation>
+					<match message="[J]+"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               A
             </flag>
-          </access>
-        </restriction>
-
-        <restriction name="FLAG_J">
-          <documentation>
-            <description>
+					</access>
+				</restriction>
+				<restriction name="FLAG_O_HIGH">
+					<documentation>
+						<description>
               ...
             </description>
-          </documentation>
-
-          <match message="[J]+" />
-
-          <access>
-            <rank>
+					</documentation>
+					<match message="[O]+"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               A
             </flag>
-          </access>
-        </restriction>
-
-        <restriction name="FLAG_O_HIGH">
-          <documentation>
-            <description>
+					</access>
+				</restriction>
+				<restriction name="FLAG_O_LOW">
+					<documentation>
+						<description>
               ...
             </description>
-          </documentation>
-
-          <match message="[O]+" />
-
-          <access>
-            <rank>
+					</documentation>
+					<match message="[o]+"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               A
             </flag>
-          </access>
-        </restriction>
-
-        <restriction name="FLAG_O_LOW">
-          <documentation>
-            <description>
+					</access>
+				</restriction>
+				<restriction name="FLAG_P">
+					<documentation>
+						<description>
               ...
             </description>
-          </documentation>
-
-          <match message="[o]+" />
-
-          <access>
-            <rank>
+					</documentation>
+					<match message="[P]+"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               A
             </flag>
-          </access>
-        </restriction>
-
-        <restriction name="FLAG_P">
-          <documentation>
-            <description>
+					</access>
+				</restriction>
+				<restriction name="FLAG_S_HIGH">
+					<documentation>
+						<description>
               ...
             </description>
-          </documentation>
-
-          <match message="[P]+" />
-
-          <access>
-            <rank>
+					</documentation>
+					<match message="[S]+"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               A
             </flag>
-          </access>
-        </restriction>
-
-        <restriction name="FLAG_S_HIGH">
-          <documentation>
-            <description>
+					</access>
+				</restriction>
+				<restriction name="FLAG_S_LOW">
+					<documentation>
+						<description>
               ...
             </description>
-          </documentation>
-
-          <match message="[S]+" />
-
-          <access>
-            <rank>
+					</documentation>
+					<match message="[s]+"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               A
             </flag>
-          </access>
-        </restriction>
-
-        <restriction name="FLAG_S_LOW">
-          <documentation>
-            <description>
+					</access>
+				</restriction>
+				<restriction name="FLAG_T">
+					<documentation>
+						<description>
               ...
             </description>
-          </documentation>
-
-          <match message="[s]+" />
-
-          <access>
-            <rank>
+					</documentation>
+					<match message="[T]+"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               A
             </flag>
-          </access>
-        </restriction>
-
-        <restriction name="FLAG_T">
-          <documentation>
-            <description>
-              ...
-            </description>
-          </documentation>
-
-          <match message="[T]+" />
-
-          <access>
-            <rank>
-              100
-            </rank>
-
-            <flag>
-              A
-            </flag>
-          </access>
-        </restriction>
-      </argument>
-    </arguments>
-
-    <options />
-
-    <access>
-      <rank>
+					</access>
+				</restriction>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="server">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="server">
+		<documentation>
+			<description>
         states the address of the server that the bot is currently connected to.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="about">
-    <alias>
+		</access>
+	</command>
+	<command name="about">
+		<alias>
       ver
     </alias>
-
-    <alias>
+		<alias>
       version
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         states the application's version information.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="getping">
-    <alias>
+		</access>
+	</command>
+	<command name="getping">
+		<alias>
       pingme
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         states the requesting user's connection latency with the Battle.net server.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         40
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="trigger">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="trigger">
+		<documentation>
+			<description>
         states the current string used for command identification.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         40
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="time">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="time">
+		<documentation>
+			<description>
         states the current system time.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         40
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="vote">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="vote">
+		<documentation>
+			<description>
         initiates a tally of "yes" and "no" responses.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="duration">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="duration">
+				<documentation>
+					<description>
             The duration of the voting session.
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="voteban" token="operator">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="voteban" token="operator">
+		<documentation>
+			<description>
         initiates a tally of "yes" and "no" responses, potentially resulting in the banning of a specified user from the channel.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="username">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="username">
+				<documentation>
+					<description>
             The username to initiate a tally for.
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="votekick" token="operator">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="votekick" token="operator">
+		<documentation>
+			<description>
         initiates a tally of "yes" and "no" responses, potentially resulting in the kicking of a specified user from the channel.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="username">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="username">
+				<documentation>
+					<description>
             The username to initiate a tally for.
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="tally">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="tally">
+		<documentation>
+			<description>
         states the results for the most recent or currently active vote.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="info">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="info">
+		<documentation>
+			<description>
         states basic information about a specified user residing within the channel.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="username">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="username">
+				<documentation>
+					<description>
             The username to find information on.
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="expand" token="speech">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="expand" token="speech">
+		<documentation>
+			<description>
         echos a specified phrase, placing a space after each character.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="message">
-        <restriction name="DISALLOW_COMMAND_USAGE">
-          <match message="^[/]" />
-
-          <access>
-            <rank>
+		</documentation>
+		<arguments>
+			<argument name="message">
+				<restriction name="DISALLOW_COMMAND_USAGE">
+					<match message="^[/]"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               T
             </flag>
-          </access>
-        </restriction>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+					</access>
+				</restriction>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="math">
-    <alias>
+		</access>
+	</command>
+	<command name="math">
+		<alias>
       eval
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         states the result of specified mathematical expression.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="expression">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="expression">
+				<documentation>
+					<description>
             The mathematical expression to evalulate.
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="where">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="where">
+		<documentation>
+			<description>
         states the channel that the bot is currently residing within.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="safecheck">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="safecheck">
+		<documentation>
+			<description>
         states the safelist status of a specified user or tag.
       </description>
-    </documentation>
-
-    <arguments>
-      <arguments>
-        <argument name="user">
-          <documentation>
-            <description>
-              The username to check.
-            </description>
-          </documentation>
-        </argument>
-
-        <argument name="tag">
-          <documentation>
-            <description>
-              The tag to check.
-            </description>
-          </documentation>
-        </argument>
-      </arguments>
-    </arguments>
-
-    <access>
-      <rank>
+		</documentation>
+		<arguments>
+			<argument name="user">
+				<documentation>
+					<description>
+            The username to check.
+          </description>
+				</documentation>
+			</argument>
+			<argument name="tag">
+				<documentation>
+					<description>
+            The tag to check.
+          </description>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="cancel">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="cancel">
+		<documentation>
+			<description>
         stops all votes that are currently in progress.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="owner">
-    <alias>master</alias>
-
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="owner">
+		<alias>master</alias>
+		<documentation>
+			<description>
         states the owner of the bot.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="mp3">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="mp3">
+		<documentation>
+			<description>
         states the currently playing track from a compatibile media player running on the local computer.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         M
       </flag>
-    </access>
-  </command>
-
-  <command name="say" enabled="true">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="say" enabled="true">
+		<documentation>
+			<description>
         echos a specified phrase
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="message">
-        <restriction name="DISALLOW_COMMAND_USAGE">
-          <match message="^[/]" />
-
-          <access>
-            <rank>
+		</documentation>
+		<arguments>
+			<argument name="message">
+				<restriction name="DISALLOW_COMMAND_USAGE">
+					<match message="^[/]"/>
+					<access>
+						<rank>
               100
             </rank>
-
-            <flag>
+						<flag>
               T
             </flag>
-          </access>
-        </restriction>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+					</access>
+				</restriction>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="shout">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="shout">
+		<documentation>
+			<description>
         echos a specified phrase using all capital letters.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="message">
-        <restriction name="DISALLOW_COMMAND_USAGE">
-          <match message="^[/]" />
-
-          <access>
-            <rank>
+		</documentation>
+		<arguments>
+			<argument name="message">
+				<restriction name="DISALLOW_COMMAND_USAGE">
+					<match message="^[/]"/>
+					<access>
+						<rank>
               60
             </rank>
-
-            <flag>
+						<flag>
               T
             </flag>
-          </access>
-        </restriction>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+					</access>
+				</restriction>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="ignore">
-    <alias>
+		</access>
+	</command>
+	<command name="ignore">
+		<alias>
       ign
     </alias>
-
-    <alias>
+		<alias>
       squelch
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         instructs the bot to squelch a specified user.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="username">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="username">
+				<documentation>
+					<description>
             The user to ignore.
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="unignore" datasrc="external">
-    <alias>
+		</access>
+	</command>
+	<command name="unignore" datasrc="external">
+		<alias>
       unign
     </alias>
-
-    <alias>
+		<alias>
       unsquelch
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         instructs the bot to unsquelch a specified user.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="username">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="username">
+				<documentation>
+					<description>
             The user to unignore.
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="addquote">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="addquote">
+		<documentation>
+			<description>
         adds a quote to the quote database.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="quote">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="quote">
+				<documentation>
+					<description>
             The quote to add.
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-    </access>
-  </command>
-
-  <command name="quote">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="quote">
+		<documentation>
+			<description>
         echos a random quote from the quote database.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-    </access>
-  </command>
-
-  <command name="away">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="away">
+		<documentation>
+			<description>
         instructs the bot to set an away message using the specified phrase.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="message">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="message">
+				<documentation>
+					<description>
             The desired away message.
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="back">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="back">
+		<documentation>
+			<description>
         instructs the bot to clear any currently set away message.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-    </access>
-  </command>
-
-  <command name="ping">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="ping">
+		<documentation>
+			<description>
         states a specified user's latency with the Battle.net server if the user is present within the current channel.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="username">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="username">
+				<documentation>
+					<description>
             The user to ping.
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="uptime">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="uptime">
+		<documentation>
+			<description>
         states the current system and application operational times.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         50
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="frem">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="frem">
+		<documentation>
+			<description>
         instructs the bot to remove a specified user from the bot's friends list.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         60
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="bancount">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="bancount">
+		<documentation>
+			<description>
         states the current number of users that have been banned from the channel.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         60
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="banlistcount">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="banlistcount">
+		<documentation>
+			<description>
         ...
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         60
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="allseen">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="allseen">
+		<documentation>
+			<description>
         states the last fifteen users that the bot has seen.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         60
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="levelban">
-    <alias>
+		</access>
+	</command>
+	<command name="levelban">
+		<alias>
       levelbans
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         states the minimum level permissible for WarCraft III users joining the channel.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         60
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="d2levelban">
-    <alias>
+		</access>
+	</command>
+	<command name="d2levelban">
+		<alias>
       d2levelbans
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         states the minimum level permissible for Diablo II users joining the channel.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         60
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="slcheck">
-    <alias>
+		</access>
+	</command>
+	<command name="slcheck">
+		<alias>
       shitcheck
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         ...
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="username">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="username">
+				<documentation>
+					<description>
             ...
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         60
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="detail">
-    <alias>
+		</access>
+	</command>
+	<command name="detail">
+		<alias>
       dbd
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         ...
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="username">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="username">
+				<documentation>
+					<description>
             ...
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         60
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="tagcheck">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="tagcheck">
+		<documentation>
+			<description>
         states if a specified user matches a tagban.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         60
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="fadd">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="fadd">
+		<documentation>
+			<description>
         instructs the bot to add a specified user to the bot's friends list.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         60
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="kick" token="operator">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="kick" token="operator">
+		<documentation>
+			<description>
         temporarily removes a user from the channel.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         60
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="ban" token="operator">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="ban" token="operator">
+		<documentation>
+			<description>
         removes a user from the channel for the duration of the bot's role as a channel moderator.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="username">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="username">
+				<documentation>
+					<description>
             ...
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         60
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="unban" token="operator">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="unban" token="operator">
+		<documentation>
+			<description>
         unbans a user from the channel.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         60
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="lastwhisper">
-    <alias>
+		</access>
+	</command>
+	<command name="lastwhisper">
+		<alias>
       lw
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         states the name of the user whom last privately messaged the bot.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         60
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="phrases">
-    <alias>
+		</access>
+	</command>
+	<command name="phrases">
+		<alias>
       plist
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         states the currently active phrasebans.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="addphrase">
-    <alias>
+		</access>
+	</command>
+	<command name="addphrase">
+		<alias>
       padd
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         adds the specified phrase to the phrasebans list.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="mmail">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="mmail">
+		<documentation>
+			<description>
         stores a message for all users matching the specified rank or flag.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="setpmsg">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="setpmsg">
+		<documentation>
+			<description>
         defines a message for use during channel protection.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="delphrase">
-    <alias>
+		</access>
+	</command>
+	<command name="delphrase">
+		<alias>
       pdel
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         removes a phrase from the phrasebans list.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="pon">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="pon">
+		<documentation>
+			<description>
         enables the use of phrasebanning.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="poff">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="poff">
+		<documentation>
+			<description>
         disables the use of phrasebanning.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="pstatus">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="pstatus">
+		<documentation>
+			<description>
         states the current status of phrasebanning.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="ipban" token="operator">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="ipban" token="operator">
+		<documentation>
+			<description>
         instructs the bot to squelch and ban a specified user.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="ipbans" token="operator">
-    <alias>
+		</access>
+	</command>
+	<command name="ipbans" token="operator">
+		<alias>
       ipbanning
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         ...
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="banned">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="banned">
+		<documentation>
+			<description>
         states all users that the bot has banned during the duration of its role as channel moderator.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="notify">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="notify">
+		<documentation>
+			<description>
         sends the requesting user a private message when a specified user is discovered to be on-line.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-    </access>
-  </command>
-
-  <command name="denotify">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="denotify">
+		<documentation>
+			<description>
         removes the requesting user's on-line notification for the specified user.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-    </access>
-  </command>
-
-  <command name="unmonitor">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="unmonitor">
+		<documentation>
+			<description>
         removes a specified user from the bot's user monitor.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-    </access>
-  </command>
-
-  <command name="monitor">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="monitor">
+		<documentation>
+			<description>
         adds a specified user to the bot's user monitor.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-    </access>
-  </command>
-
-  <command name="shitlist">
-    <alias>
+		</access>
+	</command>
+	<command name="shitlist">
+		<alias>
       sl
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         states the users currently on the shitlist.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-    </access>
-  </command>
-
-  <command name="shitdel">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="shitdel">
+		<documentation>
+			<description>
         removes a specified user from the shitlist.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="safeadd">
-    <alias>
+		</access>
+	</command>
+	<command name="safeadd">
+		<alias>
       safelist
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         safelists a specified user or group of users.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="safedel">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="safedel">
+		<documentation>
+			<description>
         removes a safelist entry for a specifed user or group of users.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="safelist">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="safelist">
+		<documentation>
+			<description>
         states the users currently on the safelist.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="tagbans">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="tagbans">
+		<documentation>
+			<description>
         states the tags currently on the tagban list.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="tagadd">
-    <alias>
+		</access>
+	</command>
+	<command name="tagadd">
+		<alias>
       tagban
     </alias>
-
-    <alias>
+		<alias>
       addtag
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         adds a specified tag to the tagban list.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="tagdel">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="tagdel">
+		<documentation>
+			<description>
         removes a specifed tag from the tagban list.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="online">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="online">
+		<documentation>
+			<description>
         states the users that the user monitor currently detects on-line.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-    </access>
-  </command>
-
-  <command name="check">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="check">
+		<documentation>
+			<description>
         states if a specified user is on-line based off of the results from the user monitor.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-    </access>
-  </command>
-
-  <command name="shitadd">
-    <alias>
+		</access>
+	</command>
+	<command name="shitadd">
+		<alias>
       pban
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         adds a specified user to the shitlist.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="protect">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="protect">
+		<documentation>
+			<description>
         allows the requesting user to enable, disable, or check the status of, channel protection.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         70
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="greet">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="greet">
+		<documentation>
+			<description>
         enables, disables, or changes the settings of, a welcome message.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="profile">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="profile">
+		<documentation>
+			<description>
         states the specified user's Battle.net user profile.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
-
-  <command name="whispercmds">
-    <alias>
+		</access>
+	</command>
+	<command name="whispercmds">
+		<alias>
       wc
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         toggles the use of private messaging as a means for delivering command responses.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="filter">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="filter">
+		<documentation>
+			<description>
         The "filter" command will filter any incoming messages containing the specified phrase.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="block">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="block">
+		<documentation>
+			<description>
         The "block" command will filter any incoming message from the specified user.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="allowmp3">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="allowmp3">
+		<documentation>
+			<description>
         The "allowmp3" command enables or disables the use of mp3 commands.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         M
       </flag>
-    </access>
-  </command>
-
-  <command name="kickonyell">
-    <alias>
+		</access>
+	</command>
+	<command name="kickonyell">
+		<alias>
       koy
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         The "kickonyell" command will enable or disable kicking on yell.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="clientbans">
-    <alias>
+		</access>
+	</command>
+	<command name="clientbans">
+		<alias>
       clist
     </alias>
-
-    <alias>
+		<alias>
       cbans
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         ...
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="cadd">
-    <alias>
+		</access>
+	</command>
+	<command name="cadd">
+		<alias>
       addclient
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         ...
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="game">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="game">
+				<documentation>
+					<description>
             ...
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="cdel">
-    <alias>
+		</access>
+	</command>
+	<command name="cdel">
+		<alias>
       delclient
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         ...
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="game">
-        <documentation>
-          <description>
+		</documentation>
+		<arguments>
+			<argument name="game">
+				<documentation>
+					<description>
             ...
           </description>
-        </documentation>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+				</documentation>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="plugban">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="plugban">
+		<documentation>
+			<description>
         The "plugban" command will enable, disable, or state the status of, UDP plug banning.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="useitunes">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="useitunes">
+		<documentation>
+			<description>
         The "useitunes" command will enable or disable the use of iTunes as the target media player for use with mp3 commands.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         M
       </flag>
-    </access>
-  </command>
-
-  <command name="usewinamp">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="usewinamp">
+		<documentation>
+			<description>
         The "usewinamp" command will enable or disable the use of Winamp as the target media player for use with mp3 commands.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         M
       </flag>
-    </access>
-  </command>
-
-  <command name="setidle">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="setidle">
+		<documentation>
+			<description>
         The "setidle" command will set the bot's idle to the specified message.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="idletype">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="idletype">
+		<documentation>
+			<description>
         The "idletype" command will set the bot's idle message to the specified type.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="idletime">
-    <alias>
+		</access>
+	</command>
+	<command name="idletime">
+		<alias>
       idlewait
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         sets the bot's idle delay to the specified.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="repeat">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="repeat">
+		<documentation>
+			<description>
         toggles the selected media player's repeat setting.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         M
       </flag>
-    </access>
-  </command>
-
-  <command name="reconnect">
-    <alias>
+		</access>
+	</command>
+	<command name="reconnect">
+		<alias>
       rc
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         forces the bot to reconnect to the selected Battle.net server.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="designate" token="operator">
-    <alias>
+		</access>
+	</command>
+	<command name="designate" token="operator">
+		<alias>
       des
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         designates the specified user as heir to the channel moderator position.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="settrigger">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="settrigger">
+		<documentation>
+			<description>
         sets the bot's command identifier to the specified.
       </description>
-    </documentation>
-
-    <arguments>
-      <argument name="trigger">
-        <restriction name="DISABLE_FORWARD_SLASH">
-          <match message="[/]+" />
-
-          <access />
-        </restriction>
-      </argument>
-    </arguments>
-
-    <access>
-      <rank>
+		</documentation>
+		<arguments>
+			<argument name="trigger">
+				<restriction name="DISABLE_FORWARD_SLASH">
+					<match message="[/]+"/>
+					<access/>
+				</restriction>
+			</argument>
+		</arguments>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="igpriv">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="igpriv">
+		<documentation>
+			<description>
         makes the bot ignore all messages within private chat channels from users not on the bot's friends list.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="unigpriv">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="unigpriv">
+		<documentation>
+			<description>
         makes the bot unignore all messages within private chat channels from users not on the bot's friends list.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="rem">
-    <alias>
+		</access>
+	</command>
+	<command name="rem">
+		<alias>
       del
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         removes a specified user from the bot's database.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         a
       </flag>
-    </access>
-  </command>
-
-  <command name="sethome">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="sethome">
+		<documentation>
+			<description>
         sets the bot's home channel to the channel specified.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="idle">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="idle">
+		<documentation>
+			<description>
         enables or disables the use of idle messages.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="shuffle">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="shuffle">
+		<documentation>
+			<description>
         toggles the use of shuffle mode for the selected media player.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         M
       </flag>
-    </access>
-  </command>
-
-  <command name="pause">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="pause">
+		<documentation>
+			<description>
         pauses playback in the selected media player.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         M
       </flag>
-    </access>
-  </command>
-
-  <command name="fos">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="fos">
+		<documentation>
+			<description>
         toggles fade-out stop for the the selected media player.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         M
       </flag>
-    </access>
-  </command>
-
-  <command name="setvol">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="setvol">
+		<documentation>
+			<description>
         changes the selected media player's volume to the specified level.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         M
       </flag>
-    </access>
-  </command>
-
-  <command name="stop">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="stop">
+		<documentation>
+			<description>
         terminates playback in the currently selected media player.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         M
       </flag>
-    </access>
-  </command>
-
-  <command name="play">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="play">
+		<documentation>
+			<description>
         begins playback in the currently selected media player.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         M
       </flag>
-    </access>
-  </command>
-
-  <command name="next">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="next">
+		<documentation>
+			<description>
         skips to the next playlist entry in the selected media player's playlist.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         M
       </flag>
-    </access>
-  </command>
-
-  <command name="sweepban" token="operator">
-    <alias>
+		</access>
+	</command>
+	<command name="sweepban" token="operator">
+		<alias>
       cb
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         The "sweepban" command will attempt to ban all users within the specified channel.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="sweepignore">
-    <alias>
+		</access>
+	</command>
+	<command name="sweepignore">
+		<alias>
       cs
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         attempts to ignore all users within the specified channel.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-    </access>
-  </command>
-
-  <command name="idlebans">
-    <alias>
+		</access>
+	</command>
+	<command name="idlebans">
+		<alias>
       ib
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         allows the requesting user to check or change the status of idle banning.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="setkey">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="setkey">
+		<documentation>
+			<description>
         changes the bot's CD-Key configuration entry to the one specified.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="setexpkey">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="setexpkey">
+		<documentation>
+			<description>
         changes the bot's expansion CD-Key configuration entry to the one specified.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="exile" token="operator">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="exile" token="operator">
+		<documentation>
+			<description>
         adds a specified user to the bot's shitlist and will then attempt to ban and ignore the user.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-    </access>
-  </command>
-
-  <command name="unexile" token="operator">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="unexile" token="operator">
+		<documentation>
+			<description>
         removes a specified user from the bot's shitlist, and will then attempt to unban and unignore the user.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-    </access>
-  </command>
-
-  <command name="clearbanlist">
-    <alias>
+		</access>
+	</command>
+	<command name="clearbanlist">
+		<alias>
       cbl
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         clears the bot's internal banlist.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="clan" token="operator">
-    <alias>
+		</access>
+	</command>
+	<command name="clan" token="operator">
+		<alias>
       c
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         enables or disables clan channel privacy status.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         c
       </flag>
-    </access>
-  </command>
-
-  <command name="chpw">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="chpw">
+		<documentation>
+			<description>
         enables or disables channel password protection.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="readfile">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="readfile">
+		<documentation>
+			<description>
         states the contents of a specified file within the bot's directory.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-    </access>
-  </command>
-
-  <command name="join">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="join">
+		<documentation>
+			<description>
         makes the bot join the specified channel.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         J
       </flag>
-    </access>
-  </command>
-
-  <command name="home">
-    <alias>
+		</access>
+	</command>
+	<command name="home">
+		<alias>
       joinhome
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         makes the bot join its home channel.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         J
       </flag>
-    </access>
-  </command>
-
-  <command name="promote">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="promote">
+		<documentation>
+			<description>
         promotes the specified user in the current WarCraft III clan.
       </description>
-    </documentation>
-
-    <access />
-  </command>
-
-  <command name="demote">
-    <documentation>
-      <description>
+		</documentation>
+		<access/>
+	</command>
+	<command name="demote">
+		<documentation>
+			<description>
         demotes the specified user in the current WarCraft III clan.
       </description>
-    </documentation>
-
-    <access />
-  </command>
-
-  <command name="resign" token="operator">
-    <documentation>
-      <description>
+		</documentation>
+		<access/>
+	</command>
+	<command name="resign" token="operator">
+		<documentation>
+			<description>
         forces the bot to resign from its status as a channel moderator.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="setname">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="setname">
+		<documentation>
+			<description>
         changes the configuration entry for the username to the username specified.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="setpass">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="setpass">
+		<documentation>
+			<description>
         changes the configuration entry for the password to the password specified.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="setserver">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="setserver">
+		<documentation>
+			<description>
         changes the configuration entry for the server to the server specified.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="rejoin">
-    <alias>
+		</access>
+	</command>
+	<command name="rejoin">
+		<alias>
       rj
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         makes the bot rejoin the current channel.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         80
       </rank>
-
-      <flag>
+			<flag>
         J
       </flag>
-    </access>
-  </command>
-
-  <command name="quickrejoin">
-    <alias>
+		</access>
+	</command>
+	<command name="quickrejoin">
+		<alias>
       qrejoin
     </alias>
-
-    <alias>
+		<alias>
       qrj
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         makes the bot rejoin the current channel.
       </description>
-    </documentation>
-
-    <access />
-  </command>
-
-  <command name="forcejoin">
-    <alias>
+		</documentation>
+		<access/>
+	</command>
+	<command name="forcejoin">
+		<alias>
       fjoin
     </alias>
-
-    <alias>
+		<alias>
       fj
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         makes the bot rejoin the current channel.
       </description>
-    </documentation>
-
-    <access />
-  </command>
-
-  <command name="quiettime">
-    <alias>
+		</documentation>
+		<access/>
+	</command>
+	<command name="quiettime">
+		<alias>
       qt
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         enables or disables the use of quiettime.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="giveup" token="operator">
-    <alias>
+		</access>
+	</command>
+	<command name="giveup" token="operator">
+		<alias>
       op
     </alias>
-
-    <alias>
+		<alias>
       ddp
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         designates the specified user and resigns from channel moderator position.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         90
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="invite">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="invite">
+		<documentation>
+			<description>
         invites a specified user into the clan in which the bot is a member.
       </description>
-    </documentation>
-
-    <access />
-  </command>
-
-  <command name="makechieftain">
-    <alias>
+		</documentation>
+		<access/>
+	</command>
+	<command name="makechieftain">
+		<alias>
       makechief
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         ...
       </description>
-    </documentation>
-
-    <access />
-  </command>
-
-  <command name="disbandclan">
-    <documentation>
-      <description>
+		</documentation>
+		<access/>
+	</command>
+	<command name="disbandclan">
+		<documentation>
+			<description>
         ...
       </description>
-    </documentation>
-
-    <access />
-  </command>
-
-  <command name="createclan">
-    <documentation>
-      <description>
+		</documentation>
+		<access/>
+	</command>
+	<command name="createclan">
+		<documentation>
+			<description>
         ...
       </description>
-    </documentation>
-
-    <access />
-  </command>
-
-  <command name="setmotd" token="operator">
-    <documentation>
-      <description>
+		</documentation>
+		<access/>
+	</command>
+	<command name="setmotd" token="operator">
+		<documentation>
+			<description>
         sets the clan's message of the day.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         100
       </rank>
-
-      <flag>
+			<flag>
         c
       </flag>
-    </access>
-  </command>
-
-  <command name="loadwinamp">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="loadwinamp">
+		<documentation>
+			<description>
         opens winamp.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         100
       </rank>
-
-      <flag>
+			<flag>
         M
       </flag>
-    </access>
-  </command>
-
-  <command name="efp">
-    <alias>
+		</access>
+	</command>
+	<command name="efp">
+		<alias>
       floodmode
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         enables or disables the use of emergency floodbot protection.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         100
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="locktext">
-    <alias>
+		</access>
+	</command>
+	<command name="locktext">
+		<alias>
       lockchat
     </alias>
-
-    <documentation>
-      <description>
+		<documentation>
+			<description>
         disables the display of incoming chat messages.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         100
       </rank>
-
-      <flag>
+			<flag>
         C
       </flag>
-    </access>
-  </command>
-
-  <command name="quit">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="quit">
+		<documentation>
+			<description>
         terminates application execution.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         100
       </rank>
-    </access>
-  </command>
-
-  <command name="peonban">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="peonban">
+		<documentation>
+			<description>
         enables or disables WarCraft III peon banning.
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         100
       </rank>
-
-      <flag>
+			<flag>
         O
       </flag>
-    </access>
-  </command>
-
-  <command name="help">
-    <documentation>
-      <description>
+		</access>
+	</command>
+	<command name="help">
+		<documentation>
+			<description>
         ...
       </description>
-    </documentation>
-
-    <access>
-      <rank>
+		</documentation>
+		<access>
+			<rank>
         20
       </rank>
-
-      <flag>
+			<flag>
         a
       </flag>
-
-      <flag>
+			<flag>
         A
       </flag>
-
-      <flag>
+			<flag>
         C
       </flag>
-
-      <flag>
+			<flag>
         c
       </flag>
-
-      <flag>
+			<flag>
         G
       </flag>
-
-      <flag>
+			<flag>
         J
       </flag>
-
-      <flag>
+			<flag>
         O
       </flag>
-
-      <flag>
+			<flag>
         o
       </flag>
-
-      <flag>
+			<flag>
         M
       </flag>
-
-      <flag>
+			<flag>
         T
       </flag>
-    </access>
-  </command>
+		</access>
+	</command>
 </commands>

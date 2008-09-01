@@ -342,6 +342,52 @@ Public Function StringFormat(Source As String, params() As Variant) As String
     StringFormat = retval
 End Function
 
+'// http://www.nonhostile.com/howto-validate-xml-xsd-in-vb6.asp
+'// 08/31/2008 JSM - Created
+Public Function ValidateXML(ByVal strXMLPath As String, ByVal strXSDPath As String) As Boolean
+
+    Dim objSchemas As MSXML2.XMLSchemaCache40
+    Dim objXML As MSXML2.DOMDocument40
+    Dim objXSD As MSXML2.DOMDocument40
+    Dim objErr As MSXML2.IXMLDOMParseError
+   
+    ' load XSD as DOM to populate in Schema Cache
+    Set objXSD = New MSXML2.DOMDocument40
+    objXSD.async = False
+    If Not objXSD.Load(strXSDPath) Then
+        Err.Raise 1, "Validate", "Load XSD failed: " & objXSD.parseError.Reason
+    End If
+   
+    ' populate schema cache
+    Set objSchemas = New MSXML2.XMLSchemaCache40
+    objSchemas.Add "", objXSD
+   
+    ' load XML file (without validation - that comes later)
+    Set objXML = New MSXML2.DOMDocument40
+    objXML.async = False
+    objXML.validateOnParse = False
+    objXML.resolveExternals = False
+   
+    ' load XML, without any validation
+    If Not objXML.Load(strXMLPath) Then
+        Err.Raise 1, "Validate", "Load XML failed: " & objXML.parseError.Reason
+    End If
+   
+    ' bind Schema Cache to DOM
+    Set objXML.schemas = objSchemas
+   
+    ' does this XML measure up?
+    Set objErr = objXML.Validate()
+   
+    ' any good?
+    ValidateXML = (objErr.errorCode = 0)
+    If objErr.errorCode <> 0 Then
+        Err.Raise 1, "ValidateXML", objErr.Reason
+    End If
+
+End Function
+
+
 
 Public Function StripRealm(ByVal Username As String) As String
     If (InStr(1, Username, "@", vbBinaryCompare) > 0) Then
