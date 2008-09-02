@@ -573,6 +573,16 @@ Private Sub SaveForm()
             Next i
         End If
         
+        
+        '// chkDisable
+        If .TheNodeType = NodeType.nCommand Then
+            If chkDisable.Value = 1 Then
+                Call .TheXMLElement.setAttribute("enabled", "false")
+            Else
+                Call .TheXMLElement.setAttribute("enabled", "true")
+            End If
+        End If
+        
         Call m_CommandsDoc.Save(App.Path & "\commands.xml")
         Call PrepareForm(.TheNodeType, .TheXMLElement)
         
@@ -632,6 +642,11 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As MSXML2.IXMLDOMElement)
             '// chkDisable
             chkDisable.Enabled = True
             chkDisable.Visible = True
+            If LCase(xmlElement.getAttribute("enabled")) = "false" Then
+                chkDisable.Value = 1
+            Else
+                chkDisable.Value = 0
+            End If
             
         Case NodeType.nArgument
             '// txtRank
@@ -706,8 +721,8 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As MSXML2.IXMLDOMElement)
             '    txtSpecialNotes.text = xmlNode.text
             'End If
             '// chkDisable
-            chkDisable.Enabled = True
-            chkDisable.Visible = True
+            'chkDisable.Enabled = True
+            'chkDisable.Visible = True
             
     End Select
     
