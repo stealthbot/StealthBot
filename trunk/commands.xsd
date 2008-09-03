@@ -5,8 +5,14 @@
       <xsd:sequence>
         <xsd:element name="command" maxOccurs="unbounded">
           <xsd:complexType>
-            <xsd:sequence>
-              <xsd:element name="alias" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:all>
+              <xsd:element name="aliases" minOccurs="1" maxOccurs="1">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="alias" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>  
               <xsd:element name="documentation" minOccurs="1" maxOccurs="1">
                 <xsd:complexType>
                   <xsd:sequence>
@@ -83,7 +89,7 @@
                   </xsd:sequence>
                 </xsd:complexType>
               </xsd:element>
-            </xsd:sequence>
+            </xsd:all>
             <xsd:attribute name="name" type="xsd:string" />
             <xsd:attribute name="token" type="xsd:string" />
             <xsd:attribute name="datasrc" type="xsd:string" />

@@ -540,13 +540,13 @@ Private Sub SaveForm()
 
         '// cboAlias
         If .TheNodeType = NodeType.nCommand Then
-            For Each xmlNode In .TheXMLElement.selectNodes("alias")
-                .TheXMLElement.removeChild xmlNode
+            For Each xmlNode In .TheXMLElement.selectNodes("aliases/alias")
+                .TheXMLElement.selectSingleNode("aliases").removeChild xmlNode
             Next xmlNode
             For i = 0 To cboAlias.ListCount - 1
                 Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "alias", "")
                 xmlNewNode.text = cboAlias.List(i)
-                .TheXMLElement.appendChild xmlNewNode
+                .TheXMLElement.selectSingleNode("aliases").appendChild xmlNewNode
             Next i
         End If
         
@@ -616,7 +616,7 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As MSXML2.IXMLDOMElement)
             '// cboAlias
             cboAlias.Enabled = True
             lblAlias.Enabled = True
-            For Each xmlNode In xmlElement.selectNodes("alias")
+            For Each xmlNode In xmlElement.selectNodes("aliases/alias")
                 cboAlias.AddItem xmlNode.text
             Next xmlNode
             '// cboFlags
@@ -659,7 +659,7 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As MSXML2.IXMLDOMElement)
             '// cboAlias
             'cboAlias.Enabled = True
             'lblAlias.Enabled = True
-            'For Each xmlNode In xmlElement.selectNodes("alias")
+            'For Each xmlNode In xmlElement.selectNodes("aliases/alias")
             '    cboAlias.AddItem xmlNode.text
             'Next xmlNode
             '// cboFlags
@@ -697,7 +697,7 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As MSXML2.IXMLDOMElement)
             '// cboAlias
             'cboAlias.Enabled = True
             'lblAlias.Enabled = True
-            'For Each xmlNode In xmlElement.selectNodes("alias")
+            'For Each xmlNode In xmlElement.selectNodes("aliases/alias")
             '    cboAlias.AddItem xmlNode.text
             'Next xmlNode
             '// cboFlags
