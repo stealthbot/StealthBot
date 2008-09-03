@@ -2844,16 +2844,12 @@ Public Function convertAlias(ByVal cmdName As String) As String
     
         cmdName = Replace(cmdName, "\", "\\")
         
-        ' ...
-        Set Alias = _
-                commands.documentElement.selectSingleNode("./command/alias[text()='" & cmdName & "']")
-        
-        ' ...
+        '// 09/03/2008 JSM - Modified code to use the <aliases> element
+        Set Alias = commands.documentElement.selectSingleNode("./command/aliases/alias[text()='" & cmdName & "']")
+
         If (Not (Alias Is Nothing)) Then
-            ' ...
-            convertAlias = Alias.parentNode.Attributes.getNamedItem("name").text
-    
-            ' ...
+            '// 09/03/2008 JSM - Modified code to use the <aliases> element
+            convertAlias = Alias.parentNode.parentNode.Attributes.getNamedItem("name").text
             Exit Function
         End If
     End If

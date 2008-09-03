@@ -304,8 +304,8 @@ Private Function getAliases(ByRef AnyNode As IXMLDOMNode) As Collection
         Exit Function
     End If
     
-    ' ...
-    Set Aliases = AnyNode.selectNodes("alias")
+    '// 09/03/2008 JSM - Modified code to use the <aliases> element
+    Set Aliases = AnyNode.selectNodes("aliases/alias")
     
     ' ...
     If ((Aliases Is Nothing) = False) Then
@@ -328,22 +328,22 @@ Private Function setAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Coll
         Exit Function
     End If
     
-    ' ...
-    Set Aliases = AnyNode.selectNodes("alias")
+    '// 09/03/2008 JSM - Modified code to use the <aliases> element
+    Set Aliases = AnyNode.selectNodes("aliases/alias")
     
     ' ...
     If ((Aliases Is Nothing) = False) Then
         ' ...
         For Each Alias In Aliases
-            AnyNode.removeChild Alias
+            '// 09/03/2008 JSM - Modified code to use the <aliases> element
+            AnyNode.selectSingleNode("aliases").removeChild Alias
         Next
     End If
     
     ' ...
     For i = 1 To AliasCol.Count
-        ' ...
-        Set Alias = _
-            AnyNode.appendChild(m_database.createNode("element", "alias", vbNullString))
+        '// 09/03/2008 JSM - Modified code to use the <aliases> element
+        Set Alias = AnyNode.selectSingleNode("aliases").appendChild(m_database.createNode("element", "alias", vbNullString))
             
         ' ...
         Alias.text = AliasCol(i)
