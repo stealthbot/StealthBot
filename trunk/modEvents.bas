@@ -204,7 +204,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.Description & " in Event_FlagsUpdate()"
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in Event_FlagsUpdate()"
 
     Exit Sub
 End Sub
@@ -325,7 +325,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in Event_JoinedChannel()."
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in Event_JoinedChannel()."
 
     Exit Sub
     
@@ -626,9 +626,9 @@ Public Sub Event_RealmConnecting()
     frmChat.AddChat RTBColors.InformationText, "Realm: Connecting..."
 End Sub
 
-Public Sub Event_RealmError(ErrorNumber As Integer, Description As String)
+Public Sub Event_RealmError(ErrorNumber As Integer, description As String)
     frmChat.AddChat RTBColors.ErrorMessageText, "Realm: Error " & _
-        ErrorNumber & ": " & Description
+        ErrorNumber & ": " & description
 End Sub
 
 Public Sub Event_ServerError(ByVal Message As String)
@@ -656,7 +656,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Const MSG_FRIENDS     As String = "Your friends are:"
     
     Dim i      As Integer
-    Dim Temp   As String
+    Dim temp   As String
     Dim bHide  As Boolean
     Dim ToANSI As String
     
@@ -749,12 +749,12 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
         
         'Ban Evasion and banned-user tracking
-        Temp = Split(Message, " ")(1)
+        temp = Split(Message, " ")(1)
         
         ' added 1/21/06 thanks to
         ' http://www.stealthbot.net/forum/index.php?showtopic=24582
         
-        If (Len(Temp) > 0) Then
+        If (Len(temp) > 0) Then
             Dim Banning    As Boolean
             Dim Unbanning  As Boolean
             Dim user       As String  ' ...
@@ -848,7 +848,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
     
             '// backup channel
-            If (InStr(Len(Temp), Message, "kicked you out", vbTextCompare) > 0) Then
+            If (InStr(Len(temp), Message, "kicked you out", vbTextCompare) > 0) Then
                 If ((StrComp(g_Channel.Name, "Op [vL]", vbTextCompare) <> 0) And _
                     (StrComp(g_Channel.Name, "Op Fatal-Error", vbTextCompare) <> 0)) Then
                         
@@ -863,7 +863,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
             
             ' ...
-            If (InStr(Len(Temp), Message, " has been unsquelched", vbTextCompare) > 0) Then
+            If (InStr(Len(temp), Message, " has been unsquelched", vbTextCompare) > 0) Then
                 unsquelching = True
             End If
         End If
@@ -874,9 +874,9 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
         
         
-        Temp = "Your friends are:"
+        temp = "Your friends are:"
         
-        If (StrComp(Left$(Message, Len(Temp)), Temp) = 0) Then
+        If (StrComp(Left$(Message, Len(temp)), temp) = 0) Then
             If (Not (BotVars.ShowOfflineFriends)) Then
                 Message = Message & _
                     "  ÿci(StealthBot is hiding your offline friends)"
@@ -906,7 +906,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.Description & " in Event_ServerInfo()."
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in Event_ServerInfo()."
 
     Exit Sub
 End Sub
@@ -1199,7 +1199,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Exit Sub
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in Event_UserInChannel().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in Event_UserInChannel().")
     
     Exit Sub
 End Sub
@@ -1216,7 +1216,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim toCheck     As String
     Dim strCompare  As String
     Dim i           As Long
-    Dim Temp        As Byte
+    Dim temp        As Byte
     Dim Level       As Byte
     Dim l           As Long
     Dim Banned      As Boolean
@@ -1382,7 +1382,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Exit Sub
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in Event_UserJoins().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in Event_UserJoins().")
     
     Exit Sub
 End Sub
@@ -1475,7 +1475,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Exit Sub
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in Event_UserLeaves().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in Event_UserLeaves().")
     
     Exit Sub
 End Sub
@@ -1740,8 +1740,17 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
                 "The version byte for this attempt was 0x" & Hex(GetVerByte(BotVars.Product)) & "."
 
             If (BotVars.BNLS) Then
-                frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] BNLS has not been updated yet, " & _
-                    "or you experienced an error. Try connecting again."
+                'Check the user has using BNLS server finder enabled
+                If Not (ReadCFG("Main", "DisableAltBNLS") = "Y") Then
+                    LocatingAltBNLS = True
+                    frmChat.sckBNet.Close
+                    
+                    Call frmChat.FindAltBNLS
+                    Exit Sub
+                Else
+                    frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] BNLS has not been updated yet, " & _
+                        "or you experienced an error. Try connecting again."
+                End If
             Else
                 frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Please ensure you " & _
                     "have updated your hash files using more current ones from the directory " & _

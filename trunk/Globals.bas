@@ -134,6 +134,10 @@ Public UserCancelledConnect As Boolean
 'For closing the bot with the quit command
 Public BotIsClosing As Boolean
 
+'To determine when to reset the BNLS list for the auto-BNLS server locator
+Public GotBNLSList As Boolean
+Public LocatingAltBNLS As Boolean
+
 'VARIABLES
 Public CurrentUsername As String
 Public ProfileRequest As Boolean

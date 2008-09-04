@@ -608,6 +608,25 @@ Begin VB.Form frmSettings
       TabIndex        =   97
       Top             =   0
       Width           =   6615
+      Begin VB.CheckBox chkBNLSAlt 
+         BackColor       =   &H00000000&
+         Caption         =   "Disable Automatic BNLS Server Finder (not recommended)"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FFFFFF&
+         Height          =   255
+         Left            =   360
+         TabIndex        =   194
+         Top             =   4440
+         Width           =   4695
+      End
       Begin VB.ComboBox cboBNLSServer 
          BackColor       =   &H00993300&
          BeginProperty Font 
@@ -4464,6 +4483,7 @@ Private Function SaveSettings() As Boolean
     'special case, proxyissocks5 didn't like being set properly
     WINI "ProxyIsSocks5", IIf(optSocks5.Value, "Y", "N"), secMain
     WINI "UDP", Cv(chkUDP.Value), secMain
+    WINI "DisableAltBNLS", Cv(chkBNLSAlt.Value), secMain
     
     '// this section must written _absolutely correctly_ or the SetTimer API call will fail
     s = txtReconDelay.text
@@ -4781,7 +4801,7 @@ ShowCurrentColor_Exit:
 
 ShowCurrentColor_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ShowCurrentColor of Form frmSettings"
+    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure ShowCurrentColor of Form frmSettings"
     Resume ShowCurrentColor_Exit
 End Sub
 
@@ -5257,6 +5277,9 @@ Private Sub InitConnAdvanced()
         
     s = ReadCFG(MN, "UDP")
     If s = "Y" Then chkUDP.Value = 1 Else chkUDP.Value = 0
+    
+    s = ReadCFG(MN, "DisableAltBNLS")
+    If s = "Y" Then chkBNLSAlt.Value = 1 Else chkBNLSAlt.Value = 0
     
     txtReconDelay.text = ReadCFG(MN, "ReconnectDelay")
     If LenB(txtReconDelay.text) = 0 Then txtReconDelay.text = 1000

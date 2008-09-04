@@ -1760,7 +1760,7 @@ Private Sub Form_GotFocus()
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in Form_GotFocus()."
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in Form_GotFocus()."
 
     Exit Sub
 End Sub
@@ -2036,7 +2036,7 @@ Sub Event_BNetDisconnected()
     Call UpdateTrayTooltip
 End Sub
 
-Sub Event_BNetError(ErrorNumber As Integer, Description As String)
+Sub Event_BNetError(ErrorNumber As Integer, description As String)
     Dim s As String
     
     If BotVars.UseProxy And BotVars.ProxyStatus <> psOnline Then
@@ -2045,7 +2045,7 @@ Sub Event_BNetError(ErrorNumber As Integer, Description As String)
         s = "[BNET] "
     End If
     
-    AddChat RTBColors.ErrorMessageText, s & ErrorNumber & " -- " & Description
+    AddChat RTBColors.ErrorMessageText, s & ErrorNumber & " -- " & description
     AddChat RTBColors.ErrorMessageText, s & "Disconnected."
     
     If (sckBNet.State <> 0) Then
@@ -2120,9 +2120,17 @@ Sub Event_BNLSDataError(Message As Byte)
     End If
 End Sub
 
-Sub Event_BNLSError(ErrorNumber As Integer, Description As String)
+Sub Event_BNLSError(ErrorNumber As Integer, description As String)
     If sckBNet.State <> 7 Then
-        AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & Description
+        
+        'Check the user has using BNLS server finder enabled
+        If Not (ReadCFG("Main", "DisableAltBNLS") = "Y") Then
+            Call FindAltBNLS
+                
+            Exit Sub
+        End If
+        
+        AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & description
         
         If DisplayError(ErrorNumber, 0, BNLS) Then
             'This area is in question
@@ -2130,13 +2138,92 @@ Sub Event_BNLSError(ErrorNumber As Integer, Description As String)
             Pause 1
             
             If Not UserCancelledConnect Then
-                Call DoConnect
+                'Call DoConnect - The bot shouldn't try connecting again with the same values, it's more than likely to just fail again
             End If
         Else
             Call DoDisconnect
             SetTitle "Disconnected"
         End If
     End If
+End Sub
+
+'Locates alternative BNLS servers for the bot to use if the current one fails
+'Added by FrOzeN on 2/sep/09
+'Last updated by FrOzeN on 4/sep/09
+Public Sub FindAltBNLS()
+    'Error handler
+    On Error GoTo BNLS_Alt_Finder_Error
+    
+    Static strBNLS() As String, intCounter As Integer
+    Const FIND_ALT_BNLS_ERROR As Integer = 12345
+        
+    intCounter = intCounter + 1
+    
+    'Close the current BNLS connection
+    sckBNLS.Close
+    
+    'Notify user the current BNLS server failed
+    AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BNLSServer & " failed."
+    
+    'Notify user other BNLS servers are being located
+    AddChat RTBColors.InformationText, "[BNLS] Locating other BNLS servers..."
+    
+    'Check if the BNLS list has been downloaded
+    If Not GotBNLSList Then
+        Dim strReturn As String
+        
+        'Reset the counter
+        intCounter = 1
+                
+        If Not INet.StillExecuting Then
+            'Get the servers as a list from http://stealthbot.net/p/bnls.txt
+            strReturn = INet.OpenURL("http://www.stealthbot.net/p/bnls.txt")
+            
+            'Place the servers into the array
+            strBNLS() = Split(strReturn, vbLf)
+
+            'Assign the first BNLS server to BotVars.BNLSServer
+            BotVars.BNLSServer = strBNLS(intCounter)
+            
+            'Mark GotBNLSList as True so it's no longer downloaded for each attempt
+            GotBNLSList = True
+        Else
+            'The Inet control seems to still be running
+            Err.Raise FIND_ALT_BNLS_ERROR, , "Unable to use BNLS server finder. Visit http://stealthbot.net/ " & _
+                                             "and check the Technical Support forum for more information."
+        End If
+    Else
+        If intCounter > UBound(strBNLS) Then
+            'All BNLS servers have been tried and failed
+            Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://stealthbot.net/ " & _
+                                             "and check the Technical Support forum for more information."
+        End If
+    End If
+    
+    'Assign the next BNLS server to BotVars.BNLSServer
+    BotVars.BNLSServer = strBNLS(intCounter)
+    
+    'Reconnect BNLS using the newly located BNLS server
+    sckBNLS.RemoteHost = BotVars.BNLSServer
+    sckBNLS.Connect
+            
+    AddChat RTBColors.InformationText, "[BNLS] Connecting to " & BotVars.BNLSServer & "..."
+    
+    Exit Sub
+BNLS_Alt_Finder_Error:
+    
+    'Display the error message to the user
+    If Err.Number = FIND_ALT_BNLS_ERROR Then
+        AddChat RTBColors.ErrorMessageText, "[BNLS] " & Err.description
+    Else
+        AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured when trying to locate an alternative BNLS server. " & _
+                                            "Visit http://stealthbot.net/ and check the Technical Support forum for " & _
+                                            "more information."
+    End If
+    
+    'Disconnect the bot
+    Call DoDisconnect
+    SetTitle "Disconnected"
 End Sub
 
 ' This code commented out 10/18/06 - what's it for? I dunno. It's old.
@@ -2397,13 +2484,13 @@ End Sub
 Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
     If (g_Clan.Self.Rank < NewRank) Then
         AddChat RTBColors.SuccessText, "[CLAN] You have been promoted. Your new rank is ", _
-                RTBColors.InformationText, getRank(NewRank), RTBColors.SuccessText, "."
+                RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
     ElseIf (g_Clan.Self.Rank > NewRank) Then
         AddChat RTBColors.SuccessText, "[CLAN] You have been demoted. Your new rank is ", _
-                RTBColors.InformationText, getRank(NewRank), RTBColors.SuccessText, "."
+                RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
     Else
         AddChat RTBColors.SuccessText, "[CLAN] Your new rank is ", RTBColors.InformationText, _
-                getRank(NewRank), RTBColors.SuccessText, "."
+                GetRank(NewRank), RTBColors.SuccessText, "."
     End If
 
     g_Clan.Self.Rank = NewRank
@@ -2440,7 +2527,7 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
             
         RunInAll frmChat.SControl, "Event_BotJoinedClan", ClanTag
     Else
-        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, getRank(Rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
+        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(Rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
         
         RunInAll frmChat.SControl, "Event_BotClanInfo", ClanTag, Rank
     End If
@@ -2548,7 +2635,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     
     If AwaitingClanInfo = 1 Then
         AwaitingClanInfo = 0
-        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & getRank(Rank) & "."
+        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(Rank) & "."
     End If
     
     If Not (X Is Nothing) Then
@@ -3835,7 +3922,7 @@ mnuReloadScript_Click_Error: ' No code is present
         Resume MRS_Continue
     Else
         Debug.Print "Unhandled error in mnuReloadScript_Click()"
-        Debug.Print Err.Number & ": " & Err.Description
+        Debug.Print Err.Number & ": " & Err.description
         Resume MRS_Exit
     End If
 End Sub
@@ -4736,7 +4823,7 @@ theEnd:
     Exit Sub
 
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, "Error " & Err.Number & " (" & Err.Description & ") " & _
+    AddChat RTBColors.ErrorMessageText, "Error " & Err.Number & " (" & Err.description & ") " & _
         "in procedure cboSend_KeyDown"
         
     Exit Sub
@@ -4892,7 +4979,7 @@ Private Sub quLower_Timer()
     
 ERROR_HANDLER:
 
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in quLower_Timer()."
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in quLower_Timer()."
 
     Exit Sub
 End Sub
@@ -4982,7 +5069,7 @@ Private Sub QueueTimer_Timer()
     
 ERROR_HANDLER:
 
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in QueueTimer_Timer()."
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in QueueTimer_Timer()."
 
     Exit Sub
 
@@ -4991,7 +5078,7 @@ End Sub
 
 Public Sub SControl_Error()
     AddChat RTBColors.ErrorMessageText, "Scripting runtime error " & Chr(39) & SControl.Error.Number & Chr(39) & ": (line " & SControl.Error.line & "; column " & SControl.Error.Column & ")"
-    AddChat RTBColors.ErrorMessageText, SControl.Error.Description & "."
+    AddChat RTBColors.ErrorMessageText, SControl.Error.description & "."
     AddChat RTBColors.ErrorMessageText, "Offending line: >> " & SControl.Error.text
     
     SControl.Error.Clear
@@ -5000,7 +5087,14 @@ End Sub
 Private Sub sckBNet_Close()
     sckBNet.Close
     If sckBNLS.State <> 0 Then sckBNLS.Close
-    Call Event_BNetDisconnected
+    
+    'If it's locating another BNLS then don't message the user about the disconnection to Battle.net
+    If LocatingAltBNLS Then
+        LocatingAltBNLS = False
+    Else
+        Call Event_BNetDisconnected
+    End If
+    
     g_Connected = False
 End Sub
 
@@ -5032,8 +5126,8 @@ Sub InitBNetConnection()
     End If
 End Sub
 
-Private Sub sckBNet_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    Call Event_BNetError(Number, Description)
+Private Sub sckBNet_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+    Call Event_BNetError(Number, description)
 End Sub
 
 Private Sub sckMCP_Close()
@@ -5061,10 +5155,10 @@ Private Sub sckMCP_DataArrival(ByVal bytesTotal As Long)
     frmRealm.MCPHandler.ParseMCPPacket Data
 End Sub
 
-Private Sub sckMCP_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckMCP_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     If Not g_Online Then
         ' This message is ignored if we've been online for awhile.
-        AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & Description
+        AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & description
         RealmError = True
         Unload frmRealm
     End If
@@ -5203,7 +5297,7 @@ Send:
 
 ERROR_HANDLER:
 
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in Timer_Timer()."
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in Timer_Timer()."
     
     Exit Sub
     
@@ -5257,7 +5351,7 @@ ERROR_HANDLER:
     End If
 
     ' ...
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
         " in tmrScript_Timer()."
     
     ' ...
@@ -5334,7 +5428,7 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error: " & Err.Description & " in tmrSilentChannel_Timer(" & index & ")."
+    AddChat vbRed, "Error: " & Err.description & " in tmrSilentChannel_Timer(" & index & ")."
     
     Exit Sub
 End Sub
@@ -5618,7 +5712,7 @@ Private Sub UpTimer_Timer()
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in UpTimer_Timer()."
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in UpTimer_Timer()."
 
     Exit Sub
     
@@ -5977,7 +6071,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     Exit Sub
     
 ERROR_HANDLER:
-    Call AddChat(vbRed, "Error: " & Err.Description & " in AddQ().")
+    Call AddChat(vbRed, "Error: " & Err.description & " in AddQ().")
 
     Exit Sub
 End Sub
@@ -6806,7 +6900,7 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in sckBNet_DataArrival()."
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in sckBNet_DataArrival()."
     
     Exit Sub
 End Sub
@@ -6951,8 +7045,8 @@ Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
     End If
 End Sub
 
-Private Sub sckBNLS_Error(ByVal Number As Integer, Description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    Call Event_BNLSError(Number, Description)
+Private Sub sckBNLS_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+    Call Event_BNLSError(Number, description)
 End Sub
 
 Function GetSelectedUsers() As Collection
@@ -7442,6 +7536,9 @@ Sub DoConnect()
     uTicks = 0
     
     UserCancelledConnect = False
+    
+    'Reset the BNLS auto-locator list
+    GotBNLSList = False
     
     If Not IsValidIPAddress(BotVars.Server) And BotVars.UseProxy Then
         AddChat RTBColors.ErrorMessageText, "[PROXY] Proxied connections must use a direct server IP address, such as those listed below your desired gateway in the Connection Settings menu, to connect."
