@@ -271,7 +271,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in Ban()."
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in Ban()."
 
     Exit Function
 End Function
@@ -915,7 +915,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in " & _
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in " & _
         "GetCumulativeAccess().")
 
     Exit Function
@@ -2364,7 +2364,7 @@ Public Sub LogCommand(ByVal Caller As String, ByVal CString As String)
     Exit Sub
 
 LogCommand_Error:
-    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in " & _
+    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in " & _
         "Procedure; LogCommand; of; Module; modOtherCode; "
     
     Exit Sub
@@ -2561,7 +2561,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.Description & " in SplitByLen()."
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in SplitByLen()."
     
     Exit Function
 End Function
@@ -2803,12 +2803,12 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     End With
     
     'Unload memory
-    Set IsCommand = Nothing
+    'Set IsCommand = Nothing - this memory shouldn't be unloaded here as it is still be referenced
     
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in IsCommand().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in IsCommand().")
     
     Exit Function
 End Function
@@ -3044,7 +3044,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in DisplayRichText()."
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in DisplayRichText()."
     
     Exit Sub
     
