@@ -7101,6 +7101,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
         For Each command In commands.documentElement.childNodes
             Dim accessGroup As MSXML2.IXMLDOMNode
             Dim Access      As MSXML2.IXMLDOMNode
+            Dim Flag        As MSXML2.IXMLDOMNode
         
             ' ...
             If (StrComp(command.Attributes.getNamedItem("name").text, _
@@ -7117,12 +7118,14 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                         
                             Exit For
                         End If
-                    ElseIf (LCase$(Access.nodeName = "flag")) Then
-                        If (InStr(1, gAcc.Flags, Access.text, vbBinaryCompare) <> 0) Then
-                            ValidateAccess = True
-                        
-                            Exit For
-                        End If
+                    '// 09/03/2008 JSM - Modified code to use the <flags> element
+                    ElseIf (LCase$(Access.nodeName = "flags")) Then
+                        For Each Flag in Access.childNodes
+                            If (InStr(1, gAcc.Flags, Flag.text, vbBinaryCompare) <> 0) Then
+                                ValidateAccess = True
+                                Exit For
+                            End If
+                        Next
                     End If
                 Next
                 
@@ -7137,7 +7140,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                     Dim Restriction  As MSXML2.IXMLDOMNode
                     
                     ' ...
-                    Set Restrictions = command.selectNodes("restriction")
+                    Set Restrictions = command.selectNodes("restrictions/restriction")
                     
                     ' ...
                     For Each Restriction In Restrictions
@@ -7155,12 +7158,14 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                                     
                                         Exit For
                                     End If
-                                ElseIf (LCase$(Access.nodeName = "flag")) Then
-                                    If (InStr(1, gAcc.Flags, Access.text, vbBinaryCompare) <> 0) Then
-                                        ValidateAccess = True
-                                    
-                                        Exit For
-                                    End If
+                                '// 09/03/2008 JSM - Modified code to use the <flags> element
+                                ElseIf (LCase$(Access.nodeName = "flags")) Then
+                                    For Each Flag in Access.childNodes
+                                        If (InStr(1, gAcc.Flags, Flag.text, vbBinaryCompare) <> 0) Then
+                                            ValidateAccess = True
+                                            Exit For
+                                        End If
+                                    Next
                                 End If
                             Next
                         End If

@@ -227,6 +227,9 @@ Private Type SelectedElement
     CommandName As String
     ArgumentName As String
     restrictionName As String
+    
+    
+    
 End Type
 
 '// 08/30/2008 JSM - Created
@@ -268,7 +271,7 @@ Private Sub Form_Load()
     
 ErrorHandler:
 
-    MsgBox Err.Description, vbCritical + vbOKOnly, Me.Caption
+    MsgBox Err.description, vbCritical + vbOKOnly, Me.Caption
     Call ResetForm
     '// Disable our buttons
     cmdSave.Enabled = False
@@ -325,7 +328,7 @@ Private Sub PopulateTreeView()
         For i = 0 To (xmlArgs.length - 1)
             ArgumentName = xmlArgs(i).Attributes.getNamedItem("name").text
             Set nArg = trvCommands.Nodes.Add(nCommand, tvwChild, , ArgumentName)
-            Set xmlArgRestricions = xmlArgs(i).selectNodes("restriction")
+            Set xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
             
             For j = 0 To (xmlArgRestricions.length - 1)
                 restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").text
@@ -423,7 +426,7 @@ Private Sub trvCommands_NodeClick(ByVal node As MSComctlLib.node)
         Case NodeType.nRestriction
             fraCommand.Caption = StringFormat("{0} => {1} => {2}", options)
             chkDisable.Caption = StringFormat("Disable {2} restriction", options)
-            xpath = StringFormat("/commands/command[@name='{0}']/arguments/argument[@name='{1}']/restriction[@name='{2}']", options)
+            xpath = StringFormat("/commands/command[@name='{0}']/arguments/argument[@name='{1}']/restrictions/restriction[@name='{2}']", options)
     End Select
     
     '// Update m_SelectedElement so we know which element we are viewing

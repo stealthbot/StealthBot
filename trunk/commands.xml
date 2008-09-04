@@ -23,12 +23,14 @@
 			<rank>
                 20
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="findgrp">
@@ -55,12 +57,14 @@
 			<rank>
                 20
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="getmail">
@@ -93,12 +97,14 @@
 			<rank>
                 20
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="roll">
@@ -112,36 +118,38 @@
 			<rank>
                 20
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="bmail">
@@ -175,36 +183,38 @@
 			<rank>
                 20
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="flip">
@@ -218,36 +228,38 @@
 			<rank>
                 20
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="findattr">
@@ -274,12 +286,14 @@
 			<rank>
                 20
             </rank>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="designated" token="operator">
@@ -297,12 +311,14 @@
 			<rank>
                 20
             </rank>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="scq">
@@ -316,36 +332,38 @@
 			<rank>
                 20
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="cq">
@@ -359,36 +377,38 @@
 			<rank>
                 20
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="whoami" datasrc="external">
@@ -402,36 +422,38 @@
 			<rank>
                 20
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="add" enabled="true">
@@ -444,9 +466,8 @@
 		<arguments>
 			<argument name="username">
 				<documentation>
-					<description>
-                        TODO: username arg description
-                    </description>
+					<description/>
+					<specialnotes/>
 				</documentation>
 			</argument>
 			<argument name="rank" optional="true">
@@ -464,228 +485,257 @@
                         ...
                     </description>
 				</documentation>
-				<restriction name="FLAG_A_HIGH">
-					<documentation>
-						<description>...</description>
-					</documentation>
-					<match message="[A]+"/>
-					<access>
-						<rank>100</rank>
-						<flag>A</flag></access>
-				</restriction>
-				<restriction name="FLAG_A_LOW">
-					<documentation>
-						<description>
+				<restrictions>
+					<restriction name="FLAG_A_HIGH">
+						<documentation>
+							<description>...</description>
+						</documentation>
+						<match message="[A]+"/>
+						<access>
+							<rank>100</rank>
+							<flags>
+								<flag>A</flag>
+							</flags>
+						</access>
+					</restriction>
+					<restriction name="FLAG_A_LOW">
+						<documentation>
+							<description>...</description>
+						</documentation>
+						<match message="[a]+"/>
+						<access>
+							<rank>100</rank>
+							<flags>
+								<flag>A</flag>
+							</flags>
+						</access>
+					</restriction>
+					<restriction name="FLAG_B">
+						<documentation>
+							<description>
                             ...
                         </description>
-					</documentation>
-					<match message="[a]+"/>
-					<access>
-						<rank>
+						</documentation>
+						<match message="[B]+"/>
+						<access>
+							<rank>
                             100
                         </rank>
-						<flag>
-                            A
-                        </flag>
-					</access>
-				</restriction>
-				<restriction name="FLAG_B">
-					<documentation>
-						<description>
+							<flags>
+								<flag>
+                                A
+                            </flag>
+							</flags>
+						</access>
+					</restriction>
+					<restriction name="FLAG_C_HIGH">
+						<documentation>
+							<description>
                             ...
                         </description>
-					</documentation>
-					<match message="[B]+"/>
-					<access>
-						<rank>
+						</documentation>
+						<match message="[c]+"/>
+						<access>
+							<rank>
                             100
                         </rank>
-						<flag>
-                            A
-                        </flag>
-					</access>
-				</restriction>
-				<restriction name="FLAG_C_HIGH">
-					<documentation>
-						<description>
+							<flags>
+								<flag>
+                                A
+                            </flag>
+							</flags>
+						</access>
+					</restriction>
+					<restriction name="FLAG_C_LOW">
+						<documentation>
+							<description>
                             ...
                         </description>
-					</documentation>
-					<match message="[c]+"/>
-					<access>
-						<rank>
+						</documentation>
+						<match message="[c]+"/>
+						<access>
+							<rank>
                             100
                         </rank>
-						<flag>
-                            A
-                        </flag>
-					</access>
-				</restriction>
-				<restriction name="FLAG_C_LOW">
-					<documentation>
-						<description>
+							<flags>
+								<flag>
+                                A
+                            </flag>
+							</flags>
+						</access>
+					</restriction>
+					<restriction name="FLAG_D">
+						<documentation>
+							<description>
                             ...
                         </description>
-					</documentation>
-					<match message="[c]+"/>
-					<access>
-						<rank>
+						</documentation>
+						<match message="[D]+"/>
+						<access>
+							<rank>
                             100
                         </rank>
-						<flag>
-                            A
-                        </flag>
-					</access>
-				</restriction>
-				<restriction name="FLAG_D">
-					<documentation>
-						<description>
+							<flags>
+								<flag>
+                                A
+                            </flag>
+							</flags>
+						</access>
+					</restriction>
+					<restriction name="FLAG_I">
+						<documentation>
+							<description>
                             ...
                         </description>
-					</documentation>
-					<match message="[D]+"/>
-					<access>
-						<rank>
+						</documentation>
+						<match message="[I]+"/>
+						<access>
+							<rank>
                             100
                         </rank>
-						<flag>
-                            A
-                        </flag>
-					</access>
-				</restriction>
-				<restriction name="FLAG_I">
-					<documentation>
-						<description>
+							<flags>
+								<flag>
+                                A
+                            </flag>
+							</flags>
+						</access>
+					</restriction>
+					<restriction name="FLAG_J">
+						<documentation>
+							<description>
                             ...
                         </description>
-					</documentation>
-					<match message="[I]+"/>
-					<access>
-						<rank>
+						</documentation>
+						<match message="[J]+"/>
+						<access>
+							<rank>
                             100
                         </rank>
-						<flag>
-                            A
-                        </flag>
-					</access>
-				</restriction>
-				<restriction name="FLAG_J">
-					<documentation>
-						<description>
+							<flags>
+								<flag>
+                                A
+                            </flag>
+							</flags>
+						</access>
+					</restriction>
+					<restriction name="FLAG_O_HIGH">
+						<documentation>
+							<description>
                             ...
                         </description>
-					</documentation>
-					<match message="[J]+"/>
-					<access>
-						<rank>
+						</documentation>
+						<match message="[O]+"/>
+						<access>
+							<rank>
                             100
                         </rank>
-						<flag>
-                            A
-                        </flag>
-					</access>
-				</restriction>
-				<restriction name="FLAG_O_HIGH">
-					<documentation>
-						<description>
+							<flags>
+								<flag>
+                                A
+                            </flag>
+							</flags>
+						</access>
+					</restriction>
+					<restriction name="FLAG_O_LOW">
+						<documentation>
+							<description>
                             ...
                         </description>
-					</documentation>
-					<match message="[O]+"/>
-					<access>
-						<rank>
+						</documentation>
+						<match message="[o]+"/>
+						<access>
+							<rank>
                             100
                         </rank>
-						<flag>
-                            A
-                        </flag>
-					</access>
-				</restriction>
-				<restriction name="FLAG_O_LOW">
-					<documentation>
-						<description>
+							<flags>
+								<flag>
+                                A
+                            </flag>
+							</flags>
+						</access>
+					</restriction>
+					<restriction name="FLAG_P">
+						<documentation>
+							<description>
                             ...
                         </description>
-					</documentation>
-					<match message="[o]+"/>
-					<access>
-						<rank>
+						</documentation>
+						<match message="[P]+"/>
+						<access>
+							<rank>
                             100
                         </rank>
-						<flag>
-                            A
-                        </flag>
-					</access>
-				</restriction>
-				<restriction name="FLAG_P">
-					<documentation>
-						<description>
+							<flags>
+								<flag>
+                                A
+                            </flag>
+							</flags>
+						</access>
+					</restriction>
+					<restriction name="FLAG_S_HIGH">
+						<documentation>
+							<description>
                             ...
                         </description>
-					</documentation>
-					<match message="[P]+"/>
-					<access>
-						<rank>
+						</documentation>
+						<match message="[S]+"/>
+						<access>
+							<rank>
                             100
                         </rank>
-						<flag>
-                            A
-                        </flag>
-					</access>
-				</restriction>
-				<restriction name="FLAG_S_HIGH">
-					<documentation>
-						<description>
+							<flags>
+								<flag>
+                                A
+                            </flag>
+							</flags>
+						</access>
+					</restriction>
+					<restriction name="FLAG_S_LOW">
+						<documentation>
+							<description>
                             ...
                         </description>
-					</documentation>
-					<match message="[S]+"/>
-					<access>
-						<rank>
+						</documentation>
+						<match message="[s]+"/>
+						<access>
+							<rank>
                             100
                         </rank>
-						<flag>
-                            A
-                        </flag>
-					</access>
-				</restriction>
-				<restriction name="FLAG_S_LOW">
-					<documentation>
-						<description>
+							<flags>
+								<flag>
+                                A
+                            </flag>
+							</flags>
+						</access>
+					</restriction>
+					<restriction name="FLAG_T">
+						<documentation>
+							<description>
                             ...
                         </description>
-					</documentation>
-					<match message="[s]+"/>
-					<access>
-						<rank>
+						</documentation>
+						<match message="[T]+"/>
+						<access>
+							<rank>
                             100
                         </rank>
-						<flag>
-                            A
-                        </flag>
-					</access>
-				</restriction>
-				<restriction name="FLAG_T">
-					<documentation>
-						<description>
-                            ...
-                        </description>
-					</documentation>
-					<match message="[T]+"/>
-					<access>
-						<rank>
-                            100
-                        </rank>
-						<flag>
-                            A
-                        </flag>
-					</access>
-				</restriction>
+							<flags>
+								<flag>
+                                A
+                            </flag>
+							</flags>
+						</access>
+					</restriction>
+				</restrictions>
 			</argument>
 		</arguments>
 		<access>
 			<rank>20</rank>
-			<flag>A</flag><flag>a</flag></access>
+			<flags>
+				<flag>A</flag>
+				<flag>a</flag>
+			</flags>
+		</access>
 	</command>
 	<command name="server">
 		<aliases/>
@@ -698,9 +748,11 @@
 			<rank>
                 20
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="about" enabled="true">
@@ -709,10 +761,23 @@
 		</aliases>
 		<documentation>
 			<description>states the application's version information.</description>
-			<specialnotes></specialnotes></documentation>
+			<specialnotes/>
+		</documentation>
 		<access>
 			<rank>20</rank>
-			<flag>a</flag><flag>A</flag><flag>C</flag><flag>c</flag><flag>G</flag><flag>J</flag><flag>O</flag><flag>o</flag><flag>M</flag><flag>T</flag></access>
+			<flags>
+				<flag>a</flag>
+				<flag>A</flag>
+				<flag>C</flag>
+				<flag>c</flag>
+				<flag>G</flag>
+				<flag>J</flag>
+				<flag>O</flag>
+				<flag>o</flag>
+				<flag>M</flag>
+				<flag>T</flag>
+			</flags>
+		</access>
 	</command>
 	<command name="getping">
 		<aliases>
@@ -729,36 +794,38 @@
 			<rank>
                 40
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="trigger">
@@ -772,36 +839,38 @@
 			<rank>
                 40
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="time">
@@ -815,36 +884,38 @@
 			<rank>
                 40
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="vote">
@@ -867,36 +938,38 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="voteban" token="operator">
@@ -919,12 +992,14 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                o
-            </flag>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="votekick" token="operator">
@@ -947,12 +1022,14 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                o
-            </flag>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="tally">
@@ -966,36 +1043,38 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="info">
@@ -1018,36 +1097,38 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="expand" token="speech">
@@ -1059,26 +1140,32 @@
 		</documentation>
 		<arguments>
 			<argument name="message">
-				<restriction name="DISALLOW_COMMAND_USAGE">
-					<match message="^[/]"/>
-					<access>
-						<rank>
-                            100
-                        </rank>
-						<flag>
-                            T
-                        </flag>
-					</access>
-				</restriction>
+				<restrictions>
+					<restriction name="DISALLOW_COMMAND_USAGE">
+						<match message="^[/]"/>
+						<access>
+							<rank>
+                                100
+                            </rank>
+							<flags>
+								<flag>
+                                    T
+                                </flag>
+							</flags>
+						</access>
+					</restriction>
+				</restrictions>
 			</argument>
 		</arguments>
 		<access>
 			<rank>
                 50
             </rank>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="math">
@@ -1105,36 +1192,38 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="where">
@@ -1148,36 +1237,38 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="safecheck">
@@ -1207,12 +1298,14 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="cancel">
@@ -1226,42 +1319,44 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="owner">
@@ -1279,39 +1374,41 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="mp3">
@@ -1325,9 +1422,11 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                M
-            </flag>
+			<flags>
+				<flag>
+                    M
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="say" enabled="true">
@@ -1339,26 +1438,32 @@
 		</documentation>
 		<arguments>
 			<argument name="message">
-				<restriction name="DISALLOW_COMMAND_USAGE">
-					<match message="^[/]"/>
-					<access>
-						<rank>
-                            100
-                        </rank>
-						<flag>
-                            T
-                        </flag>
-					</access>
-				</restriction>
+				<restrictions>
+					<restriction name="DISALLOW_COMMAND_USAGE">
+						<match message="^[/]"/>
+						<access>
+							<rank>
+                                100
+                            </rank>
+							<flags>
+								<flag>
+                                    T
+                                </flag>
+							</flags>
+						</access>
+					</restriction>
+				</restrictions>
 			</argument>
 		</arguments>
 		<access>
 			<rank>
                 50
             </rank>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="shout">
@@ -1370,26 +1475,32 @@
 		</documentation>
 		<arguments>
 			<argument name="message">
-				<restriction name="DISALLOW_COMMAND_USAGE">
-					<match message="^[/]"/>
-					<access>
-						<rank>
-                            60
-                        </rank>
-						<flag>
-                            T
-                        </flag>
-					</access>
-				</restriction>
+				<restrictions>
+					<restriction name="DISALLOW_COMMAND_USAGE">
+						<match message="^[/]"/>
+						<access>
+							<rank>
+                                60
+                            </rank>
+							<flags>
+								<flag>
+                                    T
+                                </flag>
+							</flags>
+						</access>
+					</restriction>
+				</restrictions>
 			</argument>
 		</arguments>
 		<access>
 			<rank>
                 50
             </rank>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="ignore">
@@ -1419,12 +1530,14 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="unignore" datasrc="external">
@@ -1454,12 +1567,14 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="addquote">
@@ -1482,12 +1597,14 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="quote">
@@ -1501,12 +1618,14 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="away">
@@ -1529,9 +1648,11 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="back">
@@ -1545,12 +1666,14 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                C
-            </flag>
-			<flag>
-                M
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    M
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="ping">
@@ -1573,36 +1696,38 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="uptime">
@@ -1616,36 +1741,38 @@
 			<rank>
                 50
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="frem">
@@ -1659,9 +1786,11 @@
 			<rank>
                 60
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="bancount">
@@ -1675,12 +1804,14 @@
 			<rank>
                 60
             </rank>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="banlistcount">
@@ -1694,12 +1825,14 @@
 			<rank>
                 60
             </rank>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="allseen">
@@ -1713,36 +1846,38 @@
 			<rank>
                 60
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="levelban">
@@ -1760,9 +1895,11 @@
 			<rank>
                 60
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="d2levelban">
@@ -1780,9 +1917,11 @@
 			<rank>
                 60
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="slcheck">
@@ -1809,12 +1948,14 @@
 			<rank>
                 60
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="detail">
@@ -1841,12 +1982,14 @@
 			<rank>
                 60
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="tagcheck">
@@ -1860,12 +2003,14 @@
 			<rank>
                 60
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="fadd">
@@ -1879,9 +2024,11 @@
 			<rank>
                 60
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="kick" token="operator">
@@ -1895,12 +2042,14 @@
 			<rank>
                 60
             </rank>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="ban" token="operator">
@@ -1923,12 +2072,14 @@
 			<rank>
                 60
             </rank>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="unban" token="operator">
@@ -1942,12 +2093,14 @@
 			<rank>
                 60
             </rank>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="lastwhisper">
@@ -1965,36 +2118,38 @@
 			<rank>
                 60
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="phrases">
@@ -2012,9 +2167,11 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="addphrase">
@@ -2032,9 +2189,11 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="mmail">
@@ -2048,36 +2207,38 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="setpmsg">
@@ -2091,9 +2252,11 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="delphrase">
@@ -2111,9 +2274,11 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="pon">
@@ -2127,9 +2292,11 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="poff">
@@ -2143,9 +2310,11 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="pstatus">
@@ -2159,12 +2328,14 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                o
-            </flag>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="ipban" token="operator">
@@ -2178,12 +2349,14 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="ipbans" token="operator">
@@ -2201,12 +2374,14 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="banned">
@@ -2220,12 +2395,14 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="notify">
@@ -2239,6 +2416,8 @@
 			<rank>
                 70
             </rank>
+			<flags>
+			</flags>
 		</access>
 	</command>
 	<command name="denotify">
@@ -2252,6 +2431,8 @@
 			<rank>
                 70
             </rank>
+			<flags>
+			</flags>
 		</access>
 	</command>
 	<command name="unmonitor">
@@ -2265,6 +2446,8 @@
 			<rank>
                 70
             </rank>
+			<flags>
+			</flags>
 		</access>
 	</command>
 	<command name="monitor">
@@ -2278,6 +2461,8 @@
 			<rank>
                 70
             </rank>
+			<flags>
+			</flags>
 		</access>
 	</command>
 	<command name="shitlist">
@@ -2295,6 +2480,8 @@
 			<rank>
                 70
             </rank>
+			<flags>
+			</flags>
 		</access>
 	</command>
 	<command name="shitdel">
@@ -2308,12 +2495,14 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="safeadd">
@@ -2331,12 +2520,14 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="safedel">
@@ -2350,12 +2541,14 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="safelist">
@@ -2369,12 +2562,14 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="tagbans">
@@ -2388,12 +2583,14 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="tagadd">
@@ -2414,12 +2611,14 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="tagdel">
@@ -2433,12 +2632,14 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="online">
@@ -2452,6 +2653,8 @@
 			<rank>
                 70
             </rank>
+			<flags>
+			</flags>
 		</access>
 	</command>
 	<command name="check">
@@ -2465,6 +2668,8 @@
 			<rank>
                 70
             </rank>
+			<flags>
+			</flags>
 		</access>
 	</command>
 	<command name="shitadd">
@@ -2482,12 +2687,14 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="protect">
@@ -2501,9 +2708,11 @@
 			<rank>
                 70
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="greet">
@@ -2517,9 +2726,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="profile">
@@ -2533,36 +2744,38 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="whispercmds">
@@ -2580,9 +2793,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="filter">
@@ -2596,9 +2811,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="block">
@@ -2612,9 +2829,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="allowmp3">
@@ -2628,9 +2847,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                M
-            </flag>
+			<flags>
+				<flag>
+                    M
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="kickonyell">
@@ -2648,9 +2869,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="clientbans">
@@ -2671,9 +2894,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="cadd">
@@ -2700,9 +2925,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="cdel">
@@ -2729,9 +2956,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="plugban">
@@ -2745,9 +2974,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="useitunes">
@@ -2761,9 +2992,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                M
-            </flag>
+			<flags>
+				<flag>
+                    M
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="usewinamp">
@@ -2777,9 +3010,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                M
-            </flag>
+			<flags>
+				<flag>
+                    M
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="setidle">
@@ -2793,9 +3028,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="idletype">
@@ -2809,9 +3046,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="idletime">
@@ -2829,9 +3068,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="repeat">
@@ -2845,9 +3086,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                M
-            </flag>
+			<flags>
+				<flag>
+                    M
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="reconnect">
@@ -2865,9 +3108,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="designate" token="operator">
@@ -2885,9 +3130,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="settrigger">
@@ -2899,19 +3146,23 @@
 		</documentation>
 		<arguments>
 			<argument name="trigger">
-				<restriction name="DISABLE_FORWARD_SLASH">
-					<match message="[/]+"/>
-					<access/>
-				</restriction>
+				<restrictions>
+					<restriction name="DISABLE_FORWARD_SLASH">
+						<match message="[/]+"/>
+						<access/>
+					</restriction>
+				</restrictions>
 			</argument>
 		</arguments>
 		<access>
 			<rank>
                 80
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="igpriv">
@@ -2925,9 +3176,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="unigpriv">
@@ -2941,9 +3194,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="rem">
@@ -2961,12 +3216,14 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                A
-            </flag>
-			<flag>
-                a
-            </flag>
+			<flags>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    a
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="sethome">
@@ -2980,9 +3237,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="idle">
@@ -2996,9 +3255,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="shuffle">
@@ -3012,9 +3273,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                M
-            </flag>
+			<flags>
+				<flag>
+                    M
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="pause">
@@ -3028,9 +3291,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                M
-            </flag>
+			<flags>
+				<flag>
+                    M
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="fos">
@@ -3044,9 +3309,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                M
-            </flag>
+			<flags>
+				<flag>
+                    M
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="setvol">
@@ -3060,9 +3327,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                M
-            </flag>
+			<flags>
+				<flag>
+                    M
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="stop">
@@ -3076,9 +3345,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                M
-            </flag>
+			<flags>
+				<flag>
+                    M
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="play">
@@ -3092,9 +3363,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                M
-            </flag>
+			<flags>
+				<flag>
+                    M
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="next">
@@ -3108,9 +3381,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                M
-            </flag>
+			<flags>
+				<flag>
+                    M
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="sweepban" token="operator">
@@ -3128,12 +3403,14 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="sweepignore">
@@ -3151,12 +3428,14 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="idlebans">
@@ -3174,9 +3453,11 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="setkey">
@@ -3190,9 +3471,11 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="setexpkey">
@@ -3206,9 +3489,11 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="exile" token="operator">
@@ -3222,6 +3507,8 @@
 			<rank>
                 90
             </rank>
+			<flags>
+			</flags>
 		</access>
 	</command>
 	<command name="unexile" token="operator">
@@ -3235,6 +3522,8 @@
 			<rank>
                 90
             </rank>
+			<flags>
+			</flags>
 		</access>
 	</command>
 	<command name="clearbanlist">
@@ -3252,9 +3541,11 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="clan" token="operator">
@@ -3272,9 +3563,11 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                c
-            </flag>
+			<flags>
+				<flag>
+                    c
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="chpw">
@@ -3288,9 +3581,11 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="readfile">
@@ -3304,6 +3599,8 @@
 			<rank>
                 90
             </rank>
+			<flags>
+			</flags>
 		</access>
 	</command>
 	<command name="join">
@@ -3317,9 +3614,11 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                J
-            </flag>
+			<flags>
+				<flag>
+                    J
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="home">
@@ -3337,9 +3636,11 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                J
-            </flag>
+			<flags>
+				<flag>
+                    J
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="promote">
@@ -3371,9 +3672,11 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="setname">
@@ -3387,9 +3690,11 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="setpass">
@@ -3403,9 +3708,11 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="setserver">
@@ -3419,9 +3726,11 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="rejoin">
@@ -3439,9 +3748,11 @@
 			<rank>
                 80
             </rank>
-			<flag>
-                J
-            </flag>
+			<flags>
+				<flag>
+                    J
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="quickrejoin">
@@ -3491,9 +3802,11 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="giveup" token="operator">
@@ -3514,9 +3827,11 @@
 			<rank>
                 90
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="invite">
@@ -3570,9 +3885,11 @@
 			<rank>
                 100
             </rank>
-			<flag>
-                c
-            </flag>
+			<flags>
+				<flag>
+                    c
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="loadwinamp">
@@ -3586,9 +3903,11 @@
 			<rank>
                 100
             </rank>
-			<flag>
-                M
-            </flag>
+			<flags>
+				<flag>
+                    M
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="efp">
@@ -3606,9 +3925,11 @@
 			<rank>
                 100
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="locktext">
@@ -3626,9 +3947,11 @@
 			<rank>
                 100
             </rank>
-			<flag>
-                C
-            </flag>
+			<flags>
+				<flag>
+                    C
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="quit">
@@ -3642,6 +3965,8 @@
 			<rank>
                 100
             </rank>
+			<flags>
+			</flags>
 		</access>
 	</command>
 	<command name="peonban">
@@ -3655,9 +3980,11 @@
 			<rank>
                 100
             </rank>
-			<flag>
-                O
-            </flag>
+			<flags>
+				<flag>
+                    O
+                </flag>
+			</flags>
 		</access>
 	</command>
 	<command name="help">
@@ -3671,36 +3998,38 @@
 			<rank>
                 20
             </rank>
-			<flag>
-                a
-            </flag>
-			<flag>
-                A
-            </flag>
-			<flag>
-                C
-            </flag>
-			<flag>
-                c
-            </flag>
-			<flag>
-                G
-            </flag>
-			<flag>
-                J
-            </flag>
-			<flag>
-                O
-            </flag>
-			<flag>
-                o
-            </flag>
-			<flag>
-                M
-            </flag>
-			<flag>
-                T
-            </flag>
+			<flags>
+				<flag>
+                    a
+                </flag>
+				<flag>
+                    A
+                </flag>
+				<flag>
+                    C
+                </flag>
+				<flag>
+                    c
+                </flag>
+				<flag>
+                    G
+                </flag>
+				<flag>
+                    J
+                </flag>
+				<flag>
+                    O
+                </flag>
+				<flag>
+                    o
+                </flag>
+				<flag>
+                    M
+                </flag>
+				<flag>
+                    T
+                </flag>
+			</flags>
 		</access>
 	</command>
 </commands>

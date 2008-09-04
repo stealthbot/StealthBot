@@ -5,7 +5,7 @@
       <xsd:sequence>
         <xsd:element name="command" maxOccurs="unbounded">
           <xsd:complexType>
-            <xsd:all>
+            <xsd:sequence>
               <xsd:element name="aliases" minOccurs="1" maxOccurs="1">
                 <xsd:complexType>
                   <xsd:sequence>
@@ -21,7 +21,7 @@
                   </xsd:sequence>
                 </xsd:complexType>
               </xsd:element>
-              <xsd:element name="arguments" minOccurs="0">
+              <xsd:element name="arguments" minOccurs="0" maxOccurs="1">
                 <xsd:complexType>
                   <xsd:sequence>
                     <xsd:element name="argument" minOccurs="0" maxOccurs="unbounded">
@@ -44,32 +44,44 @@
                               </xsd:sequence>
                             </xsd:complexType>
                           </xsd:element>
-                          <xsd:element name="restriction" minOccurs="0" maxOccurs="unbounded">
+                          <xsd:element name="restrictions" minOccurs="0" maxOccurs="1">
                             <xsd:complexType>
-                              <xsd:all>
-                                <xsd:element name="match" minOccurs="0" maxOccurs="1">
-                                  <xsd:complexType>
-                                    <xsd:attribute name="message" type="xsd:string" />
-                                  </xsd:complexType>
-                                </xsd:element>
-                                <xsd:element name="documentation" minOccurs="0" maxOccurs="1">
+                              <xsd:sequence>
+                                <xsd:element name="restriction" minOccurs="0" maxOccurs="unbounded">
                                   <xsd:complexType>
                                     <xsd:sequence>
-                                      <xsd:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
-                                      <xsd:element name="specialnotes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                                      <xsd:element name="documentation" minOccurs="0" maxOccurs="1">
+                                        <xsd:complexType>
+                                          <xsd:sequence>
+                                            <xsd:element name="description" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                                            <xsd:element name="specialnotes" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+                                          </xsd:sequence>
+                                        </xsd:complexType>
+                                      </xsd:element>
+                                      <xsd:element name="match" minOccurs="0" maxOccurs="1">
+                                        <xsd:complexType>
+                                          <xsd:attribute name="message" type="xsd:string" />
+                                        </xsd:complexType>
+                                      </xsd:element>                                      
+                                      <xsd:element name="access" minOccurs="0" maxOccurs="1">
+                                        <xsd:complexType>
+                                          <xsd:sequence>
+                                            <xsd:element name="rank" type="xsd:string" minOccurs="0" maxOccurs="1" />
+                                            <xsd:element name="flags" minOccurs="0" maxOccurs="1">
+                                              <xsd:complexType>
+                                                <xsd:sequence>
+                                                  <xsd:element name="flag" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+                                                </xsd:sequence>
+                                              </xsd:complexType>
+                                            </xsd:element>                                            
+                                          </xsd:sequence>
+                                        </xsd:complexType>
+                                      </xsd:element>                                
                                     </xsd:sequence>
+                                    <xsd:attribute name="name" type="xsd:string" />
                                   </xsd:complexType>
                                 </xsd:element>
-                                <xsd:element name="access" minOccurs="0" maxOccurs="1">
-                                  <xsd:complexType>
-                                    <xsd:sequence>
-                                      <xsd:element name="rank" type="xsd:string" minOccurs="0" maxOccurs="1" />
-                                      <xsd:element name="flag" type="xsd:string" minOccurs="0" />
-                                    </xsd:sequence>
-                                  </xsd:complexType>
-                                </xsd:element>                                
-                              </xsd:all>
-                              <xsd:attribute name="name" type="xsd:string" />
+                              </xsd:sequence>
                             </xsd:complexType>
                           </xsd:element>
                         </xsd:sequence>
@@ -85,11 +97,17 @@
                 <xsd:complexType>
                   <xsd:sequence>
                     <xsd:element name="rank" type="xsd:string" minOccurs="0" maxOccurs="1" />
-                    <xsd:element maxOccurs="unbounded" name="flag" type="xsd:string" minOccurs="0" />
+                    <xsd:element name="flags" minOccurs="0" maxOccurs="1">
+                      <xsd:complexType>
+                        <xsd:sequence>
+                          <xsd:element name="flag" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+                        </xsd:sequence>
+                      </xsd:complexType>
+                    </xsd:element>
                   </xsd:sequence>
                 </xsd:complexType>
               </xsd:element>
-            </xsd:all>
+            </xsd:sequence>
             <xsd:attribute name="name" type="xsd:string" />
             <xsd:attribute name="token" type="xsd:string" />
             <xsd:attribute name="datasrc" type="xsd:string" />
