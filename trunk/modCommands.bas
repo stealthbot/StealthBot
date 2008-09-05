@@ -129,10 +129,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         ' ...
         Set command = IsCommand(vbNullString, IsLocal)
     Loop
-    
-    'Unload memory
-    Set IsCommand = Nothing
-    
+        
     ' ...
     If (IsLocal) Then
         ' ...
