@@ -2803,7 +2803,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     End With
     
     'Unload memory
-    Set IsCommand = Nothing
+    'Set IsCommand = Nothing - this memory shouldn't be unloaded here as it is still be referenced
     
     Exit Function
     
