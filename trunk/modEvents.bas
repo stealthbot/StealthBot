@@ -199,7 +199,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     On Error Resume Next
     
     ' ...
-    RunInAll frmChat.SControl, "Event_FlagUpdate", Username, Flags, Ping
+    frmChat.SControl.Run "Event_FlagUpdate", Username, Flags, Ping
     
     Exit Sub
     
@@ -266,7 +266,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     If (g_Channel.Name <> vbNullString) Then
         On Error Resume Next
         
-        RunInAll frmChat.SControl, "Event_ChannelLeave"
+        frmChat.SControl.Run "Event_ChannelLeave"
     End If
 
     frmChat.AddChat RTBColors.JoinedChannelText, "-- Joined channel: ", _
@@ -319,7 +319,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     On Error Resume Next
     
-    RunInAll frmChat.SControl, "Event_ChannelJoin", ChannelName, Flags
+    frmChat.SControl.Run "Event_ChannelJoin", ChannelName, Flags
     
     Exit Sub
 
@@ -344,7 +344,7 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
         ' // We're receiving profile information from a scripter request
         ' // No need to do anything at all with it except set Suppress = False after
         ' // the description comes in, and of course hadn it over to the scripters
-        RunInAll frmChat.SControl, "Event_KeyReturn", KeyName, KeyValue
+        frmChat.SControl.Run "Event_KeyReturn", KeyName, KeyValue
         
         If KeyName = "Profile\Description" Then
             SuppressProfileOutput = False
@@ -364,7 +364,7 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
         
         frmWriteProfile.SetFocus
         
-        RunInAll frmChat.SControl, "Event_KeyReturn", KeyName, KeyValue
+        frmChat.SControl.Run "Event_KeyReturn", KeyName, KeyValue
         
     ' Public Profile Listing
     ElseIf PPL = True Then
@@ -485,7 +485,7 @@ Repeat4:
         End If
         
         frmProfile.SetFocus
-        RunInAll frmChat.SControl, "Event_KeyReturn", KeyName, KeyValue
+        frmChat.SControl.Run "Event_KeyReturn", KeyName, KeyValue
         
     End If
 End Sub
@@ -573,7 +573,7 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
 
     On Error Resume Next
     
-    RunInAll frmChat.SControl, "Event_LoggedOn", Username, Product
+    frmChat.SControl.Run "Event_LoggedOn", Username, Product
 End Sub
 
 ' updated 8-10-05 for new logging system
@@ -640,7 +640,7 @@ Public Sub Event_ServerError(ByVal Message As String)
     
     On Error Resume Next
     
-    RunInAll frmChat.SControl, "Event_ServerError", Message
+    frmChat.SControl.Run "Event_ServerError", Message
 End Sub
 
 Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
@@ -656,7 +656,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Const MSG_FRIENDS     As String = "Your friends are:"
     
     Dim i      As Integer
-    Dim temp   As String
+    Dim Temp   As String
     Dim bHide  As Boolean
     Dim ToANSI As String
     
@@ -749,12 +749,12 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
         
         'Ban Evasion and banned-user tracking
-        temp = Split(Message, " ")(1)
+        Temp = Split(Message, " ")(1)
         
         ' added 1/21/06 thanks to
         ' http://www.stealthbot.net/forum/index.php?showtopic=24582
         
-        If (Len(temp) > 0) Then
+        If (Len(Temp) > 0) Then
             Dim Banning    As Boolean
             Dim Unbanning  As Boolean
             Dim user       As String  ' ...
@@ -848,7 +848,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
     
             '// backup channel
-            If (InStr(Len(temp), Message, "kicked you out", vbTextCompare) > 0) Then
+            If (InStr(Len(Temp), Message, "kicked you out", vbTextCompare) > 0) Then
                 If ((StrComp(g_Channel.Name, "Op [vL]", vbTextCompare) <> 0) And _
                     (StrComp(g_Channel.Name, "Op Fatal-Error", vbTextCompare) <> 0)) Then
                         
@@ -863,7 +863,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
             
             ' ...
-            If (InStr(Len(temp), Message, " has been unsquelched", vbTextCompare) > 0) Then
+            If (InStr(Len(Temp), Message, " has been unsquelched", vbTextCompare) > 0) Then
                 unsquelching = True
             End If
         End If
@@ -874,9 +874,9 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
         
         
-        temp = "Your friends are:"
+        Temp = "Your friends are:"
         
-        If (StrComp(Left$(Message, Len(temp)), temp) = 0) Then
+        If (StrComp(Left$(Message, Len(Temp)), Temp) = 0) Then
             If (Not (BotVars.ShowOfflineFriends)) Then
                 Message = Message & _
                     "  ÿci(StealthBot is hiding your offline friends)"
@@ -901,7 +901,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     
     On Error Resume Next
     
-    RunInAll frmChat.SControl, "Event_ServerInfo", Message
+    frmChat.SControl.Run "Event_ServerInfo", Message
     
     Exit Sub
     
@@ -1025,7 +1025,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
         End If
         
         ' ...
-        RunInAll frmChat.SControl, "Event_UserEmote", Username, Flags, Message
+        frmChat.SControl.Run "Event_UserEmote", Username, Flags, Message
     End If
     
 End Sub
@@ -1193,7 +1193,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
     On Error Resume Next
     
-    RunInAll frmChat.SControl, "Event_UserInChannel", Username, Flags, Message, Ping, _
+    frmChat.SControl.Run "Event_UserInChannel", Username, Flags, Message, Ping, _
         Product, StatUpdate
     
     Exit Sub
@@ -1216,7 +1216,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim toCheck     As String
     Dim strCompare  As String
     Dim i           As Long
-    Dim temp        As Byte
+    Dim Temp        As Byte
     Dim Level       As Byte
     Dim l           As Long
     Dim Banned      As Boolean
@@ -1375,7 +1375,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         On Error Resume Next
 
         ' ...
-        RunInAll frmChat.SControl, "Event_UserJoins", Username, Flags, pStats, Ping, _
+        frmChat.SControl.Run "Event_UserJoins", Username, Flags, pStats, Ping, _
             Product, 0, OriginalStatstring, IsBanned
     End If
     
@@ -1470,7 +1470,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     
     On Error Resume Next
     
-    RunInAll frmChat.SControl, "Event_UserLeaves", Username, Flags
+    frmChat.SControl.Run "Event_UserLeaves", Username, Flags
     
     Exit Sub
     
@@ -1669,7 +1669,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         End If
     
         ' ...
-        RunInAll frmChat.SControl, "Event_UserTalk", Username, Flags, Message, Ping
+        frmChat.SControl.Run "Event_UserTalk", Username, Flags, Message, Ping
     End If
 End Sub
 
@@ -1964,7 +1964,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         g_lastQueueUser = Username
         
         ' ...
-        RunInAll frmChat.SControl, "Event_WhisperFromUser", Username, Flags, Message
+        frmChat.SControl.Run "Event_WhisperFromUser", Username, Flags, Message
     End If
     
     LastWhisperTime = GetTickCount
@@ -2090,7 +2090,7 @@ Public Sub Event_ChannelList(sChannels() As String)
     
     On Error Resume Next
     
-    RunInAll frmChat.SControl, "Event_ChannelList", sChannels
+    frmChat.SControl.Run "Event_ChannelList", sChannels
 End Sub
 
 Public Function CleanUsername(ByVal Username As String) As String
