@@ -420,7 +420,7 @@ Sub CloseConnection(Optional ByVal DoNotShow As Byte = 0)
     
     On Error Resume Next
     
-    RunInAll frmChat.SControl, "Event_ServerError", "All connections closed."
+    frmChat.SControl.Run "Event_ServerError", "All connections closed."
 End Sub
 
 Private Sub Send_BNLS0x51()
