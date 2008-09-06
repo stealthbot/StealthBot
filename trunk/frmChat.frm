@@ -1,16 +1,16 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   165
-   ClientTop       =   855
+   ClientLeft      =   225
+   ClientTop       =   825
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1523,12 +1523,12 @@ Private Sub Form_Load()
         
     Set colDynamicMenus = New Collection
     
-    'Set dictTimerInterval = New Dictionary
-    'Set dictTimerEnabled = New Dictionary
-    'Set dictTimerCount = New Dictionary
-    'dictTimerInterval.CompareMode = TextCompare
-    'dictTimerEnabled.CompareMode = TextCompare
-    'dictTimerCount.CompareMode = TextCompare
+    Set dictTimerInterval = New Dictionary
+    Set dictTimerEnabled = New Dictionary
+    Set dictTimerCount = New Dictionary
+    dictTimerInterval.CompareMode = TextCompare
+    dictTimerEnabled.CompareMode = TextCompare
+    dictTimerCount.CompareMode = TextCompare
     
     With mnuTrayCaption
         .Caption = CVERSION
@@ -1553,9 +1553,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -1711,19 +1711,16 @@ Private Sub Form_Load()
     cboSend.SetFocus
     
     LoadQuickChannels
-    
     LoadQuotes
+    
+    LoadPluginSystem SControl
     
     On Error Resume Next
     'News call and scripting events
     
     s = ReadCFG("Override", "DisableSBNews")
     
-    If (LenB(s) = 0) Then
-        DisplayNews
-    End If
-    
-    LoadPluginSystem SControl
+    If (LenB(s) = 0) Then DisplayNews
     
     If FrmSplashInUse Then frmSplash.SetFocus
     
@@ -2460,7 +2457,7 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     
     On Error Resume Next
 
-    RunInAll frmChat.SControl, "Event_ClanMemberLeaves", Member
+    SControl.Run "Event_ClanMemberLeaves", Member
 End Sub
 
 Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
@@ -2477,7 +2474,7 @@ Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
         AddChat RTBColors.ErrorMessageText, "[CLAN] You have been removed from the clan, or it has been disbanded."
         
         On Error Resume Next
-        RunInAll frmChat.SControl, "Event_BotRemovedFromClan"
+        SControl.Run "Event_BotRemovedFromClan"
     End If
 End Sub
 
@@ -2497,7 +2494,7 @@ Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
     
     On Error Resume Next
     
-    RunInAll frmChat.SControl, "Event_BotClanRankChanged", NewRank
+    SControl.Run "Event_BotClanRankChanged", NewRank
 End Sub
 
 Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal Rank As Byte)
@@ -2525,11 +2522,11 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
         AddChat RTBColors.SuccessText, "[CLAN] You are now a member of ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "!"
         AwaitingClanMembership = 0
             
-        RunInAll frmChat.SControl, "Event_BotJoinedClan", ClanTag
+        SControl.Run "Event_BotJoinedClan", ClanTag
     Else
         AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(Rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
         
-        RunInAll frmChat.SControl, "Event_BotClanInfo", ClanTag, Rank
+        SControl.Run "Event_BotClanInfo", ClanTag, Rank
     End If
     
     RequestClanList
@@ -2587,7 +2584,7 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
                 AddClanMember Members(i), Val(Members(i + 1)), Val(Members(i + 2))
                 
                 ' ...
-                RunInAll frmChat.SControl, "Event_ClanMemberList", Members(i), Val(Members(i + 1)), _
+                SControl.Run "Event_ClanMemberList", Members(i), Val(Members(i + 1)), _
                     Val(Members(i + 2))
             End If
         Next i
@@ -2646,7 +2643,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     AddClanMember Username, CInt(Rank), CInt(IsOnline)
     
     On Error Resume Next
-    RunInAll frmChat.SControl, "Event_ClanMemberUpdate", Username, Rank, IsOnline
+    SControl.Run "Event_ClanMemberUpdate", Username, Rank, IsOnline
 End Sub
 
 Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
@@ -2655,7 +2652,7 @@ Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
     
     On Error Resume Next
     
-    RunInAll frmChat.SControl, "Event_ClanMOTD", Message
+    SControl.Run "Event_ClanMOTD", Message
 End Sub
 
 Private Sub ClanHandler_DemoteUserReply(ByVal Success As Boolean)
@@ -2764,7 +2761,7 @@ Sub Form_Unload(Cancel As Integer)
         AddChat RTBColors.ErrorMessageText, "Shutting down..."
     End If
     
-    'RunInAll frmChat.SControl, "Event_Shutdown"
+    'SControl.Run "Event_Shutdown"
     
     If LenB(Dir$(GetConfigFilePath())) > 0 Then
         If Me.WindowState <> vbMinimized Then
@@ -2784,7 +2781,7 @@ Sub Form_Unload(Cancel As Integer)
     
     On Error Resume Next
     
-    RunInAll frmChat.SControl, "Event_Close"
+    SControl.Run "Event_Close"
     
     If BotVars.Logging = 1 Then
         Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt" For Append As #1
@@ -3005,25 +3002,19 @@ Private Sub INet_StateChanged(ByVal State As Integer)
 
     If (State = icResponseCompleted) Then
         Call HandleNews(INet.GetChunk(1024, icString))
-    
-        'If (Not (BotLoaded)) Then
-        '    RunInAll frmChat.SControl, "Event_FirstRun"
-        '    RunInAll frmChat.SControl, "Event_Load"
-        '
-        '    BotLoaded = True
-        'End If
     Else
         If (State = icError) Then
-            'If (Not (BotLoaded)) Then
-            '    RunInAll frmChat.SControl, "Event_FirstRun"
-            '    RunInAll frmChat.SControl, "Event_Load"
-            '
-            '    BotLoaded = True
-            'End If
             
-            'Call AddChat(RTBColors.ErrorMessageText, "Error: There was an error " & _
-            '    "loading the news.")
+            Call AddChat(RTBColors.ErrorMessageText, "Error: There was an error " & _
+                "loading the news.")
         End If
+    End If
+    
+    If (Not (BotLoaded)) Then
+        SControl.Run "Event_FirstRun"
+        SControl.Run "Event_Load"
+            
+        BotLoaded = True
     End If
     
     Exit Sub
@@ -3864,16 +3855,16 @@ End Sub
 
 Sub mnuReloadScript_Click()
 
-    ReInitScriptControl SControl
+    'ReInitScriptControl SControl
 
-    Exit Sub
+    'Exit Sub
 
     Dim i As Integer, lMenu As Long
     'Dim Message As String
     
     On Error GoTo mnuReloadScript_Click_Error
     
-    RunInAll frmChat.SControl, "Event_Close"
+    SControl.Run "Event_Close"
     SControl.Reset
         
 MRS_Continue:
@@ -4633,7 +4624,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                             
                             SetVeto False
                             
-                            RunInAll frmChat.SControl, "Event_PressedEnter", cboSend.text
+                            SControl.Run "Event_PressedEnter", cboSend.text
                             
                             Vetoed = GetVeto
                             
@@ -5165,12 +5156,58 @@ Private Sub sckMCP_Error(ByVal Number As Integer, description As String, ByVal S
 End Sub
 
 
-'// Written by Swent. Executes plugin timer subs.
+'// Written by Swent. Executes plugin timer subs
 Private Sub scTimer_Timer()
-    On Error Resume Next
+
+    If modScripting.boolOverride Then
+        On Error Resume Next
+        SControl.Run "scTimer_Timer"
+        Exit Sub
+    End If
+
+    '// Are plugins enabled?
+    If Not CBool(SharedScriptSupport.GetSetting("ps", "enabled")) Then Exit Sub
     
-    RunInAll frmChat.SControl, "scTimer_Timer"
+    Dim strKeys() As String, strKey() As String, i As Integer
+    
+    On Error Resume Next
+    SControl.Error.Clear
+    strKeys = Split(modScripting.GetPTKeys)
+
+    '// Execute all existing plugin timer subs at the appropriate intervals
+    For i = 0 To modScripting.dictTimerEnabled.Count - 1
+        strKey = Split(strKeys(i), ":")
+    
+        '// Is this timer enabled?
+        If modScripting.GetPTEnabled(strKey(0), strKey(1)) Then
+    
+            '// Is the plugin that this timer belongs to enabled?
+            If CBool(SharedScriptSupport.GetSetting(strKey(0), "enabled")) Then
+    
+                '// Has this timer reached the end of its interval countdown?
+                If modScripting.GetPTLeft(strKey(0), strKey(1)) = 1 Then
+    
+                    '// Execute this timer sub
+                    frmChat.SControl.Run strKey(0) & "_" & strKey(1) & "_Timer"
+    
+                    '// Handle errors
+                    If SControl.Error.Number <> 0 Then
+                        AddChat vbYellow, "The """ & strKey(1) & """ timer in your """ & strKey(0) & """ plugin has been disabled due to an error."
+                        modScripting.SetPTEnabled strKey(0), strKey(1), False
+                        SControl.Error.Clear
+                    End If
+    
+                    '// Reset this timer's countdown
+                    modScripting.SetPTCount strKey(0), strKey(1), modScripting.GetPTInterval(strKey(0), strKey(1))
+                Else
+                    '// Subtract one second from this timer's countdown
+                    modScripting.SetPTCount strKey(0), strKey(1), modScripting.GetPTLeft(strKey(0), strKey(1)) - 1
+                End If
+            End If
+        End If
+    Next
 End Sub
+
 
 Private Sub Timer_Timer()
     On Error GoTo ERROR_HANDLER
@@ -5320,43 +5357,7 @@ Private Sub tmrFriendlistUpdate_Timer()
     End If
 End Sub
 
-Private Sub tmrScript_Timer(index As Integer)
 
-    ' ...
-    On Error GoTo ERROR_HANDLER
-
-    Dim CurrentModule As Module  ' ...
-    Dim i             As Integer ' ...
-    Dim TimerName     As String  ' ...
-    Dim ModuleID      As Integer ' ...
-        
-    ' ...
-    ModuleID = CInt(Left$(tmrScript(index).Tag, _
-        InStr(1, tmrScript(index).Tag, "_", vbBinaryCompare) - 1))
-
-    ' ...
-    TimerName = Mid$(tmrScript(index).Tag, _
-        InStr(1, tmrScript(index).Tag, "_", vbBinaryCompare) + 1)
-        
-    ' ...
-    SControl.Modules(ModuleID).Run TimerName & "_Timer"
-    
-    ' ...
-    Exit Sub
-    
-ERROR_HANDLER:
-    ' object does not support property or method
-    If (Err.Number = 438) Then
-        Exit Sub
-    End If
-
-    ' ...
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
-        " in tmrScript_Timer()."
-    
-    ' ...
-    Exit Sub
-End Sub
 
 Private Sub tmrSilentChannel_Timer(index As Integer)
     On Error GoTo ERROR_HANDLER
@@ -7343,7 +7344,7 @@ Sub AddClanMember(ByVal Name As String, Rank As Integer, Online As Integer)
     End With
     
     On Error Resume Next
-    RunInAll frmChat.SControl, "Event_ClanInfo", Name, Rank, Online
+    SControl.Run "Event_ClanInfo", Name, Rank, Online
 End Sub
 
 Private Function GetClanSelectedUser() As String
@@ -7619,7 +7620,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         PassedClanMotdCheck = False
         
         On Error Resume Next
-        RunInAll frmChat.SControl, "Event_LoggedOff"
+        SControl.Run "Event_LoggedOff"
     End If
 End Sub
 
