@@ -444,7 +444,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
     If (bFlood = False) Then
         On Error Resume Next
         
-        RunInAll frmChat.SControl, "Event_MessageSent", Message, Tag
+        frmChat.SControl.Run "Event_MessageSent", Message, Tag
     End If
 End Sub
 
