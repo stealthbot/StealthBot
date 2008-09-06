@@ -118,7 +118,7 @@ Public Sub ProcessMenu(hWnd As Long, lngMenuCommand As Long)
     End If
     
     If LenB(strCallback) > 0 Then
-        RunInAll frmChat.SControl, "psProcessMenu", strCallback, GetPrefixByID(lngMenuCommand)
+        frmChat.SControl.Run "psProcessMenu", strCallback, GetPrefixByID(lngMenuCommand)
     End If
 End Sub
 
@@ -313,7 +313,7 @@ Public Function RegisterScriptMenu(ByVal sMenuCaption As String) As Long
     RegisterScriptMenu = ThisScript_MenuID
     DrawMenuBar frmChat.hWnd
     colDynamicMenus.Add ThisScript_MenuID
-    
+
 End Function
 
 
@@ -724,4 +724,6 @@ Public Function GetParentMenu(ByVal hMenuBar As Long, ByVal hChildMenu As Long, 
   Next lngPosition
   
 End Function
+
+
 
