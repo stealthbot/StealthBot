@@ -508,6 +508,11 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             Case &H59 'SID_SETEMAIL
                 AwaitingEmailReg = 1
                 frmEMailReg.Show
+                
+            '###########################################################################
+            Case &H5E 'SID_WARDEN
+                'Call Send Warden, strip header from PacketData
+                Call Send0x5E(Mid$(PacketData, 5))
             
             '###########################################################################
             Case Is >= &H65 'Friends List or Clan-related packet
@@ -543,7 +548,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: " & Err.Description & " in BNCSParsePacket()."
+    frmChat.AddChat vbRed, "Error: " & Err.description & " in BNCSParsePacket()."
     
     Exit Sub
 End Sub
@@ -593,11 +598,11 @@ Public Function DecodeD2Key(ByVal Key As String) As String
     Dim r As Double, n As Double, n2 As Double, v As Double, _
     v2 As Double, KeyValue As Double, c1 As Integer, c2 As Integer, _
     c As Byte, i As Integer, aryKey(0 To 15) As String, _
-    codevalues As String ', bValid as boolean
+    codeValues As String ', bValid as boolean
     
     On Error GoTo ErrorTrapped
     
-    codevalues = "246789BCDEFGHJKMNPRTVWXZ"
+    codeValues = "246789BCDEFGHJKMNPRTVWXZ"
     r = 1
     KeyValue = 0
     
@@ -608,11 +613,11 @@ Public Function DecodeD2Key(ByVal Key As String) As String
     Next i
     
     For i = 0 To 15 Step 2
-        c1 = InStr(1, codevalues, aryKey(i)) - 1
+        c1 = InStr(1, codeValues, aryKey(i)) - 1
         If c1 < 0 Then c1 = &HFF
         If c1 > 255 Then c1 = 255
         n = c1 * 3
-        c2 = InStr(1, codevalues, aryKey(i + 1)) - 1
+        c2 = InStr(1, codeValues, aryKey(i + 1)) - 1
         If c2 = -1 Then c2 = &HFF
         If c2 > 255 Then c2 = 255
         n = c2 + n * 8
@@ -705,7 +710,7 @@ Cont:
     
 ErrorTrapped:
     Call frmChat.AddChat(RTBColors.ErrorMessageText, "D2/W2 CDKey decoding error occurred!")
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, Err.Number & ": " & Err.Description)
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, Err.Number & ": " & Err.description)
 End Function
 
 Public Function DecodeStarcraftKey(ByVal sKey As String) As String
@@ -950,17 +955,17 @@ Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
     End With
 End Sub
 
-Public Sub SetProfile(ByVal Location As String, ByVal Description As String)
+Public Sub SetProfile(ByVal Location As String, ByVal description As String)
     'Dim i As Byte
     Const MAX_DESCR As Long = 510
     Const MAX_SEX As Long = 200
     Const MAX_LOC As Long = 200
     
     '// Sanity checks
-    If LenB(Description) = 0 Then
-        Description = Space(1)
-    ElseIf Len(Description) > MAX_DESCR Then
-        Description = Left$(Description, MAX_DESCR)
+    If LenB(description) = 0 Then
+        description = Space(1)
+    ElseIf Len(description) > MAX_DESCR Then
+        description = Left$(description, MAX_DESCR)
     End If
     
 '    If LenB(Sex) = 0 Then
@@ -983,9 +988,9 @@ Public Sub SetProfile(ByVal Location As String, ByVal Description As String)
                                             '// keys
         .InsertNTString "Profile\Location"
         .InsertNTString "Profile\Description"
-                                            '// values
+                                            '// Values()
         .InsertNTString Location
-        .InsertNTString Description
+        .InsertNTString description
         
         .SendPacket &H27
     End With
@@ -995,7 +1000,7 @@ End Sub
 '//  Will not ERASE if a field is left blank
 '// 2007-06-07: SEX value is ignored because Blizzard removed that
 '//     field from profiles
-Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
+Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
     'Dim i As Byte
     Const MAX_DESCR As Long = 510
     Const MAX_SEX As Long = 200
@@ -1014,9 +1019,9 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
     End If
     
     '// Sanity checks
-    If (LenB(Description) > 0) Then
-        If (Len(Description) > MAX_DESCR) Then
-            Description = Left$(Description, MAX_DESCR)
+    If (LenB(description) > 0) Then
+        If (Len(description) > MAX_DESCR) Then
+            description = Left$(description, MAX_DESCR)
         End If
         
         nKeys = nKeys + 1
@@ -1045,7 +1050,7 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
             Next i
            
             .InsertNTString Location
-            .InsertNTString Description '// values
+            .InsertNTString description '// Values()
             
             .SendPacket &H27
         End With
@@ -1114,7 +1119,7 @@ End Sub
 
 Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As String, ByRef sClan As String) As String
     Dim values() As String
-    Dim Temp() As String
+    Dim temp() As String
     Dim cType As String
     Dim WCG As Boolean
    On Error GoTo ParseStatString_Error
@@ -1132,31 +1137,31 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As Stri
         Select Case Left$(Statstring, 4)
             Case "3RAW", "PX3W"
                 If Len(Statstring) > 4 Then
-                    Temp() = Split(Statstring, " ")
+                    temp() = Split(Statstring, " ")
                     
                     ReDim values(3)
                     
-                    If StrComp(Right$(Temp(1), 2), "CW") = 0 Then
+                    If StrComp(Right$(temp(1), 2), "CW") = 0 Then
                         WCG = True
                     Else
                         values(1) = Mid$(Statstring, 6, 1)
                         values(2) = Mid$(Statstring, 7, 1)
                     End If
                     
-                    values(0) = Temp(2)
+                    values(0) = temp(2)
                     
-                    If UBound(Temp) > 2 Then
-                        values(3) = StrReverse(Temp(3))
+                    If UBound(temp) > 2 Then
+                        values(3) = StrReverse(temp(3))
                     End If
                     
-                    g_ThisIconCode = GetRaceAndIcon(values(1), values(2), Left$(Statstring, 4), IIf(WCG, Temp(1), ""))
+                    g_ThisIconCode = GetRaceAndIcon(values(1), values(2), Left$(Statstring, 4), IIf(WCG, temp(1), ""))
                     
                     sClan = IIf(UBound(values) > 2, values(3), "")
                     
                     If Left$(Statstring, 4) = "3RAW" Then
-                        Call sPrintF(outbuf, "Warcraft III: Reign of Chaos (Level: %s, icon tier %s, %s icon" & IIf(UBound(Temp) > 2, ", in Clan " & sClan, vbNullString) & ")", values(0), values(2), values(1))
+                        Call sPrintF(outbuf, "Warcraft III: Reign of Chaos (Level: %s, icon tier %s, %s icon" & IIf(UBound(temp) > 2, ", in Clan " & sClan, vbNullString) & ")", values(0), values(2), values(1))
                     Else
-                        Call sPrintF(outbuf, "Warcraft III: The Frozen Throne (Level: %s, icon tier %s, %s icon" & IIf(UBound(Temp) > 2, ", in Clan " & sClan, vbNullString) & ")", values(0), values(2), values(1))
+                        Call sPrintF(outbuf, "Warcraft III: The Frozen Throne (Level: %s, icon tier %s, %s icon" & IIf(UBound(temp) > 2, ", in Clan " & sClan, vbNullString) & ")", values(0), values(2), values(1))
                     End If
                 Else
                     If Left$(Statstring, 4) = "3RAW" Then
@@ -1274,7 +1279,7 @@ ParseStatString_Exit:
 
 ParseStatString_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParseStatString of Module modParsing"
+    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure ParseStatString of Module modParsing"
     outbuf = "- Error parsing statstring. [" & Replace(Statstring, Chr(0), "") & "]"
     
     Resume ParseStatString_Exit
@@ -1284,7 +1289,7 @@ End Function
 Public Function ParseD2Stats(ByVal Stats As String)
     Dim Female As Boolean, Expansion As Boolean
     Dim sLen As Byte, Version As Byte, CharClass As Byte, Hardcore As Byte, CharLevel As Byte
-    Dim StatBuf As String, p() As String, Server As String, Name As String
+    Dim StatBuf As String, P() As String, Server As String, Name As String
     
     Dim D2Classes(0 To 7) As String
         D2Classes(0) = "amazon"
@@ -1299,7 +1304,7 @@ Public Function ParseD2Stats(ByVal Stats As String)
     If Len(Stats) > 4 Then
         sLen = GetServer(Stats, Server)
         sLen = GetCharacterName(Stats, sLen, Name)
-        Call MakeArray(Mid$(Stats, sLen), p())
+        Call MakeArray(Mid$(Stats, sLen), P())
     End If
     
     If Left$(Stats, 4) = "VD2D" Then
@@ -1311,9 +1316,9 @@ Public Function ParseD2Stats(ByVal Stats As String)
     If (Len(Stats) = 4) Then
         Call StrCpy(StatBuf, "Open Character).")
     Else
-        Version = Asc(p(0)) - &H80
+        Version = Asc(P(0)) - &H80
         
-        CharClass = Asc(p(13)) - 1
+        CharClass = Asc(P(13)) - 1
         If (CharClass < 0) Or (CharClass > 6) Then
             CharClass = 7
         End If
@@ -1324,12 +1329,12 @@ Public Function ParseD2Stats(ByVal Stats As String)
             Female = False
         End If
         
-        CharLevel = Asc(p(25))
-        Hardcore = Asc(p(26)) And 4
+        CharLevel = Asc(P(25))
+        Hardcore = Asc(P(26)) And 4
     
         If Left$(Stats, 4) = "PX2D" Then
-            If (Asc(p(26)) And &H20) Then
-                Select Case RShift((Asc(p(27)) And &H18), 3)
+            If (Asc(P(26)) And &H20) Then
+                Select Case RShift((Asc(P(27)) And &H18), 3)
                     Case 1
                         If Hardcore Then
                             Call StrCpy(StatBuf, "Destroyer ")
@@ -1359,7 +1364,7 @@ Public Function ParseD2Stats(ByVal Stats As String)
         End If
         
         If Not Expansion Then
-            Select Case RShift((Asc(p(27)) And &H18), 3)
+            Select Case RShift((Asc(P(27)) And &H18), 3)
                 Case 1
                     If Female = False Then
                         If Hardcore Then
@@ -1408,13 +1413,13 @@ Public Function ParseD2Stats(ByVal Stats As String)
         Call sPrintF(StatBuf, "%s, a ", Name)
         
         If Hardcore Then
-            If (Asc(p(26)) And &H8) Then
+            If (Asc(P(26)) And &H8) Then
                 Call StrCpy(StatBuf, "dead ")
             End If
             Call StrCpy(StatBuf, "hardcore ")
         End If
         
-        If Asc(p(26)) And &H40 Then
+        If Asc(P(26)) And &H40 Then
             Call StrCpy(StatBuf, "ladder ")
         End If
         
@@ -1753,7 +1758,7 @@ Public Function Conv(ByVal RawString As String) As Long
     If Len(RawString) = 4 Then
         Call CopyMemory(lReturn, ByVal RawString, 4)
     Else
-        Debug.Print "---------- WARNING: Invalid string length in Conv()!"
+        Debug.Print "---------- WARNING: Invalid string Length in Conv()!"
         Debug.Print "---------- Length: " & Len(RawString)
         Debug.Print DebugOutput(RawString)
     End If
@@ -1766,17 +1771,17 @@ End Function
 Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef l As Long)
     Dim i As Long
     Dim s As String
-    Dim Temp As Long
+    Dim temp As Long
     
     If l = 0 Then l = 1
     
-    Temp = l
+    temp = l
     
     With rtb
-        If InStr(Temp, .text, "ÿc", vbTextCompare) > 0 Then
+        If InStr(temp, .text, "ÿc", vbTextCompare) > 0 Then
             .Visible = False
             Do
-                i = InStr(Temp, .text, "ÿc", vbTextCompare)
+                i = InStr(temp, .text, "ÿc", vbTextCompare)
                 
                 If StrictIsNumeric(Mid$(.text, i + 2, 1)) Then
                     s = GetColorVal(Mid$(.text, i + 2, 1))
@@ -1850,18 +1855,18 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef l As Long)
                         'Case Else: Debug.Print s
                     End Select
                 End If
-                Temp = Temp + 1
+                temp = temp + 1
                 
-            Loop While InStr(Temp, .text, "ÿc", vbTextCompare) > 0
+            Loop While InStr(temp, .text, "ÿc", vbTextCompare) > 0
             .Visible = True
         End If
         
         '// Check for SC color codes
-        Temp = l
+        temp = l
         
-        If InStr(Temp, .text, "Á", vbBinaryCompare) > 0 Then
+        If InStr(temp, .text, "Á", vbBinaryCompare) > 0 Then
             Do
-                i = InStr(Temp, .text, "Á", vbBinaryCompare)
+                i = InStr(temp, .text, "Á", vbBinaryCompare)
                 s = GetSCColorString(Mid$(.text, i + 1, 1))
                 
                 If Len(s) > 0 Then
@@ -1875,9 +1880,9 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef l As Long)
                     .Visible = True
                 End If
                 
-                Temp = Temp + 1
+                temp = temp + 1
                 
-            Loop While InStr(Temp, .text, "Á", vbBinaryCompare) > 0
+            Loop While InStr(temp, .text, "Á", vbBinaryCompare) > 0
         End If
     End With
 End Sub

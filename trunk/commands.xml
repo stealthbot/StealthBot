@@ -757,11 +757,10 @@
 	</command>
 	<command name="about" enabled="true">
 		<aliases>
-			<alias>version</alias>
-		</aliases>
+			<alias>version</alias><alias>ver</alias></aliases>
 		<documentation>
 			<description>states the application's version information.</description>
-			<specialnotes/>
+			<specialnotes></specialnotes>
 		</documentation>
 		<access>
 			<rank>20</rank>

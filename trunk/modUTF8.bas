@@ -24,7 +24,7 @@ Public Function UTF8Encode(ByRef str As String) As Byte()
     ' ...
     lstr = str
     
-    ' grab length of string after conversion
+    ' grab Length of string after conversion
     UTF8Chars = WideCharToMultiByte(CP_UTF8, 0, ByVal StrPtr(lstr), Len(lstr), 0, 0, _
         vbNullString, 0)
     
@@ -54,7 +54,7 @@ Public Function UTF8Decode(ByRef str As String, Optional LocaleID As Long = 1252
     ' ...
     lstr = str
     
-    ' grab length of string after conversion
+    ' grab Length of string after conversion
     UnicodeChars = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, lstr, Len(lstr), _
         vbNullString, 0)
             

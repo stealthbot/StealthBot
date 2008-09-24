@@ -187,7 +187,7 @@ Public Sub ParseMCPPacket(ByVal Data As String)
                     '0x15: Invalid Name
                     Select Case n
                         Case &H0: RaiseEvent CharCreateResponse(0, "Character creation successful.")
-                        Case &H14: RaiseEvent CharCreateResponse(1, "That character name already exists, or exceeds the maximum name length.")
+                        Case &H14: RaiseEvent CharCreateResponse(1, "That character name already exists, or exceeds the maximum name Length.")
                         Case &H15: RaiseEvent CharCreateResponse(2, "That character name is invalid.")
                         Case Else: RaiseEvent CharCreateResponse(3, "Unknown response to MCP_CHARCREATE: 0x" & Right$("00000000" & Hex(n), 4))
                     End Select
@@ -420,7 +420,7 @@ End Property
 '0010:  FF FF FF FF FF FF FF 01 A0 80 FF FF FF FF FF      ÿÿÿÿÿÿÿ €ÿÿÿÿÿ.
 
 
-'A dumbed-down version of full d2 statstring parsing that returns values
+'A dumbed-down version of full d2 statstring parsing that returns Values()
 ' for use in adding people to the character list listview.
 Public Sub GetD2CharStats(ByVal sIn As String, ByRef Class As String, ByRef ClassByte As Byte, _
                                 ByRef Level As Byte, ByRef IsHardcore As Boolean, ByRef IsDead As Boolean, _

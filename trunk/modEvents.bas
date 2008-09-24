@@ -243,7 +243,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     End With
     
     ' we want to reset our filter
-    ' values when we join a new channel
+    ' Values() when we join a new channel
     'BotVars.JoinWatch = 0
     
     ' ...
@@ -335,7 +335,7 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
     On Error Resume Next
     
     Dim s() As String
-    Dim u   As String
+    Dim U   As String
     Dim i   As Integer
 
     ' Some of the oldest code in this project lives right here
@@ -370,9 +370,9 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
     ElseIf PPL = True Then
         
         If LenB(PPLRespondTo) > 0 Then
-            u = "/w " & IIf(Dii, "*", "") & PPLRespondTo & " "
+            U = "/w " & IIf(Dii, "*", "") & PPLRespondTo & " "
         Else
-            u = ""
+            U = ""
         End If
         
         If KeyName = "Profile\Location" Then
@@ -381,20 +381,20 @@ Repeat2:
             
             If Len(KeyValue) > 90 Then
                 If i <> 0 Then
-                    frmChat.AddQ u & "[Location] " & Left$(KeyValue, Len(KeyValue) - i)
+                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - i)
                     KeyValue = Right(KeyValue, Len(KeyValue) - i)
                     
                     GoTo Repeat2
                 Else
-                    frmChat.AddQ u & "[Location] " & KeyValue
+                    frmChat.AddQ U & "[Location] " & KeyValue
                 End If
             Else
                 If i <> 0 Then
-                    frmChat.AddQ u & "[Location] " & Left$(KeyValue, Len(KeyValue) - i)
+                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - i)
                     KeyValue = Right(KeyValue, Len(KeyValue) - i)
                     GoTo Repeat2
                 Else
-                    frmChat.AddQ u & "[Location] " & KeyValue
+                    frmChat.AddQ U & "[Location] " & KeyValue
                 End If
             End If
             
@@ -411,9 +411,9 @@ Repeat2:
                 If Len(s(0)) > 200 Then s(0) = Left$(s(0), 200)
                 
                 If i = LBound(X) Then
-                    frmChat.AddQ u & "[Descr] " & s(0)
+                    frmChat.AddQ U & "[Descr] " & s(0)
                 Else
-                    frmChat.AddQ u & "[Descr] " & Right(s(0), Len(s(0)) - 1)
+                    frmChat.AddQ U & "[Descr] " & Right(s(0), Len(s(0)) - 1)
                 End If
             Next i
             
@@ -426,11 +426,11 @@ Repeat2:
         ElseIf KeyName = "Profile\Sex" Then
 Repeat4:
             If Len(KeyValue) > 90 Then
-                frmChat.AddQ u & "[Sex] " & Left$(KeyValue, 80) & " [more]"
+                frmChat.AddQ U & "[Sex] " & Left$(KeyValue, 80) & " [more]"
                 KeyValue = Right(KeyValue, Len(KeyValue) - 80)
                 GoTo Repeat4
             Else
-                frmChat.AddQ u & "[Sex] " & KeyValue
+                frmChat.AddQ U & "[Sex] " & KeyValue
             End If
             
         Else
@@ -656,7 +656,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Const MSG_FRIENDS     As String = "Your friends are:"
     
     Dim i      As Integer
-    Dim Temp   As String
+    Dim temp   As String
     Dim bHide  As Boolean
     Dim ToANSI As String
     
@@ -749,12 +749,12 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
         
         'Ban Evasion and banned-user tracking
-        Temp = Split(Message, " ")(1)
+        temp = Split(Message, " ")(1)
         
         ' added 1/21/06 thanks to
         ' http://www.stealthbot.net/forum/index.php?showtopic=24582
         
-        If (Len(Temp) > 0) Then
+        If (Len(temp) > 0) Then
             Dim Banning    As Boolean
             Dim Unbanning  As Boolean
             Dim user       As String  ' ...
@@ -848,7 +848,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
     
             '// backup channel
-            If (InStr(Len(Temp), Message, "kicked you out", vbTextCompare) > 0) Then
+            If (InStr(Len(temp), Message, "kicked you out", vbTextCompare) > 0) Then
                 If ((StrComp(g_Channel.Name, "Op [vL]", vbTextCompare) <> 0) And _
                     (StrComp(g_Channel.Name, "Op Fatal-Error", vbTextCompare) <> 0)) Then
                         
@@ -863,7 +863,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
             
             ' ...
-            If (InStr(Len(Temp), Message, " has been unsquelched", vbTextCompare) > 0) Then
+            If (InStr(Len(temp), Message, " has been unsquelched", vbTextCompare) > 0) Then
                 unsquelching = True
             End If
         End If
@@ -874,9 +874,9 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
         
         
-        Temp = "Your friends are:"
+        temp = "Your friends are:"
         
-        If (StrComp(Left$(Message, Len(Temp)), Temp) = 0) Then
+        If (StrComp(Left$(Message, Len(temp)), temp) = 0) Then
             If (Not (BotVars.ShowOfflineFriends)) Then
                 Message = Message & _
                     "  ÿci(StealthBot is hiding your offline friends)"
@@ -1216,7 +1216,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim toCheck     As String
     Dim strCompare  As String
     Dim i           As Long
-    Dim Temp        As Byte
+    Dim temp        As Byte
     Dim Level       As Byte
     Dim l           As Long
     Dim Banned      As Boolean
@@ -1488,7 +1488,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     
     Dim strSend       As String
     Dim s             As String
-    Dim u             As String
+    Dim U             As String
     Dim strCompare    As String
     Dim i             As Integer
     Dim ColIndex      As Integer
@@ -1741,15 +1741,25 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
 
             If (BotVars.BNLS) Then
                 'Check the user has using BNLS server finder enabled
-                If Not (ReadCFG("Main", "DisableAltBNLS") = "Y") Then
+                If ReadCFG("Main", "UseAltBNLS") = "Y" Then
                     LocatingAltBNLS = True
                     frmChat.sckBNet.Close
                     
                     Call frmChat.FindAltBNLS
                     Exit Sub
-                Else
+                ElseIf ReadCFG("Main", "UseAltBNLS") = "N" Then
                     frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] BNLS has not been updated yet, " & _
                         "or you experienced an error. Try connecting again."
+                Else
+                    'Ask the user if they would like to enable the BNLS Automatic Server finder
+                    Dim msgResult As VbMsgBoxResult
+                    msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
+                                       "Would you like to enable the BNLS Automatic Server Finder?", _
+                                       vbYesNo, "BNLS Error")
+                    
+                    'Save their answer to the config, and the call this procedure again to reevaluate what to do
+                    WriteINI "Main", "UseAltBNLS", IIf(msgResult = vbYes, "Y", "N")
+                    Call Event_VersionCheck(Message, ExtraInfo)
                 End If
             Else
                 frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Please ensure you " & _

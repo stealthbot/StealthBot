@@ -21,12 +21,12 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Public Sub ServToken(ByRef s As String, ByVal Setting As Byte)
+Public Sub ServToken(ByRef S As String, ByVal Setting As Byte)
     Static Token As String
     
     Select Case Setting
-        Case 0: s = Token
-        Case 1: Token = s
+        Case 0: S = Token
+        Case 1: Token = S
     End Select
 End Sub
 
@@ -175,9 +175,9 @@ Public Sub Send_0x1A(ByVal ProductID As Long, ByVal Flags As Long, ByVal cookie 
     Packet.vLSendPacket &H1A
 End Sub
 
-Public Sub SendGenPacket(ByVal s As String, ByVal PacketID As Byte) 'Send back packets that consist
+Public Sub SendGenPacket(ByVal S As String, ByVal PacketID As Byte) 'Send back packets that consist
                                                                     'entirely of data from BNLS.
-    Packet.InsertNonNTString s
+    Packet.InsertNonNTString S
     Packet.SendPacket PacketID
     
 End Sub
@@ -439,6 +439,11 @@ Private Sub Send_BNLS0x51()
         
         .InsertDWord &H0
         .InsertNonNTString ds.GetKeyHash(1)
+        
+        'Add warden support
+        If BotVars.Product = "RATS" Or BotVars.Product = "PXES" Then
+            modWarden.InitializeWarden Mid$(ds.GetKeyHash(1), 17, 4)
+        End If
         
         If ((BotVars.Product = "PX2D") Or _
             (BotVars.Product = "PX3W")) Then

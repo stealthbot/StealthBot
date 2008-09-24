@@ -42,7 +42,7 @@ Public Function InsertByte(ByVal Data As Byte)
     ' copy data to buffer
     m_buf(m_bufpos) = Data
     
-    ' store buffer length
+    ' store buffer Length
     m_bufpos = (m_bufpos + 1)
 End Function ' end function InsertByte
 
@@ -54,7 +54,7 @@ Public Function InsertByteArr(ByRef Data() As Byte)
     ' copy data to buffer
     Call CopyMemory(m_buf(m_bufpos), Data(0), (UBound(Data) + 1))
 
-    ' store buffer length
+    ' store buffer Length
     m_bufpos = (m_bufpos + (UBound(Data) + 1))
 End Function ' end function InsertByte
 
@@ -71,7 +71,7 @@ Public Function InsertWord(ByVal Data As Integer)
     ' copy data to buffer
     Call CopyMemory(m_buf(m_bufpos), Data, 2)
     
-    ' store buffer length
+    ' store buffer Length
     m_bufpos = (m_bufpos + 2)
 End Function ' end function InsertWord
 
@@ -88,7 +88,7 @@ Public Function InsertDWord(ByVal Data As Long)
     ' copy data to buffer
     Call CopyMemory(m_buf(m_bufpos), Data, 4)
     
-    ' store buffer length
+    ' store buffer Length
     m_bufpos = (m_bufpos + 4)
 End Function ' end function InsertDWord
 
@@ -105,7 +105,7 @@ Public Function InsertNonNTString(ByVal Data As String)
     ' copy data to buffer
     Call CopyMemory(m_buf(m_bufpos), ByVal Data, Len(Data))
     
-    ' store buffer length
+    ' store buffer Length
     m_bufpos = (m_bufpos + Len(Data))
 End Function ' end function InsertNonNTString
 
@@ -136,7 +136,7 @@ Public Function InsertNTString(ByRef Data As String, _
         Call CopyMemory(m_buf(m_bufpos), arrStr(0), (UBound(arrStr) + 1))
     End If
 
-    ' store buffer length
+    ' store buffer Length
     m_bufpos = (m_bufpos + (UBound(arrStr) + 2))
 End Function ' end function InsertNTString
 
@@ -146,8 +146,8 @@ Public Function GetString() As String
 End Function ' end function GetString
 
 ' ...
-Public Function length() As Long
-    length = m_bufpos
+Public Function Length() As Long
+    Length = m_bufpos
 End Function
 
 ' ...
@@ -158,7 +158,7 @@ Public Function Clear()
     ' clear first index
     m_buf(0) = 0
     
-    ' reset buffer length
+    ' reset buffer Length
     m_bufpos = 0
 End Function ' end function Clear
 
@@ -171,7 +171,7 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
         ' resize temporary data buffer
         ReDim buf(m_bufpos + 2)
 
-         ' copy packet data length to temporary buffer
+         ' copy packet data Length to temporary buffer
         Call CopyMemory(buf(0), m_bufpos + 3, 2)
         
         buf(2) = PacketID ' packet identification number
@@ -217,7 +217,7 @@ Public Function SendPacket(Optional PacketID As Byte)
         buf(0) = &HFF     ' header
         buf(1) = PacketID ' packet identification number
         
-        ' copy packet data length to temporary buffer
+        ' copy packet data Length to temporary buffer
         Call CopyMemory(buf(2), m_bufpos + 4, 2)
         
         ' ...
@@ -259,7 +259,7 @@ Public Function vLSendPacket(Optional PacketID As Byte)
         ' resize temporary data buffer
         ReDim buf(m_bufpos + 2)
     
-        ' copy packet data length to temporary buffer
+        ' copy packet data Length to temporary buffer
         Call CopyMemory(buf(0), m_bufpos + 3, 2)
 
         buf(2) = PacketID ' packet identification number

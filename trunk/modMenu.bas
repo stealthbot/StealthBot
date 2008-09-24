@@ -13,7 +13,7 @@ Attribute VB_Name = "modMenu"
 
 Option Explicit
 
-'Possible values for wFlags
+'Possible Values() for wFlags
 Public Const MF_BITMAP = &H4&        'Menu item is bitmap. lpNewItem = handle to bitmap.
 Public Const MF_CHECKED = &H8&       'Check flag.
 Public Const MF_DISABLED = &H2&      'Disable flag.

@@ -75,7 +75,7 @@ Private Sub DivertTo(ByVal HexCode As String)
     
     HexCode = Replace$(HexCode, " ", "") 'remove spaces from hex code
     
-    CodeSize = Len(HexCode) / 2 'length of the resulting binary code (2 hex chars per byte of code)
+    CodeSize = Len(HexCode) / 2 'Length of the resulting binary code (2 hex chars per byte of code)
 
     With ProcDetails(VTIndex)
         .hMem = GlobalAlloc(0, CodeSize) 'get memory for m/c code and save handle

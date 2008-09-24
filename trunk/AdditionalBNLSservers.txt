@@ -1,4 +1,5 @@
-jbls.org
+pyro.no-ip.biz
+aaa
 logon.berzerkerjbls.com
 hdx.no-ip.org
 

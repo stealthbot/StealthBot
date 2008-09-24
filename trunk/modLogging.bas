@@ -143,7 +143,7 @@ Public Sub LogPacketRaw(ByVal Server As enuPL_ServerTypes, ByVal Direction As en
             End Select
             
             Print #l, " -- Packet ID " & Right$("00" & Hex(PacketID), 2) & _
-                "h (" & PacketID & "d) length " & PacketLen
+                "h (" & PacketID & "d) Length " & PacketLen
             Print #l, vbNullString
             Print #l, DebugOutput(PacketData)
             Print #l, vbCrLf

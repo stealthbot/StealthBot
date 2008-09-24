@@ -75,7 +75,7 @@ Public Function FullPacket() As Boolean
                 If lngPacketLen < 10000 Then
                     FullPacket = True
                 Else
-                    frmChat.AddChat vbRed, "Error: Packet length of unusually high length detected! Packet " & _
+                    frmChat.AddChat vbRed, "Error: Packet Length of unusually high Length detected! Packet " & _
                             "dropped. Buffer content at this time: " & vbCrLf & DebugOutput(strData)
                             
                     Call ClearBuffer
@@ -113,7 +113,7 @@ Public Function GetPacket() As String
     'WriteLog "Pulling a packet. Length: " & lngPacketLen, True
     
     If lngPacketLen > 0 Then
-        'frmChat.AddChat RTBColors.ErrorMessageText, "-> Warning: Invalid [low] packet length specified! Flushing the BNCS receive buffer"
+        'frmChat.AddChat RTBColors.ErrorMessageText, "-> Warning: Invalid [low] packet Length specified! Flushing the BNCS receive buffer"
         GetPacket = Mid$(strData, 1, lngPacketLen)
         
         'WriteLog GetPacket

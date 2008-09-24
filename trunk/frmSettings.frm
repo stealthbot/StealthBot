@@ -610,7 +610,7 @@ Begin VB.Form frmSettings
       Width           =   6615
       Begin VB.CheckBox chkBNLSAlt 
          BackColor       =   &H00000000&
-         Caption         =   "Disable Automatic BNLS Server Finder (not recommended)"
+         Caption         =   "Enable Automatic BNLS Server Finder"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -4049,11 +4049,11 @@ Private Sub Form_Load()
     End With
     
     With cboBNLSServer
-        .AddItem "bnls.valhallalegends.com"
         .AddItem "jbls.org"
+        .AddItem "bnls.valhallalegends.com"
         
         If BotVars.BNLSServer = "jbls.org" Then
-            .ListIndex = 1
+            .ListIndex = 0
         ElseIf Len(BotVars.BNLSServer) > 0 And BotVars.BNLSServer <> "bnls.valhallalegends.com" Then
             .AddItem BotVars.BNLSServer
             .ListIndex = BNLS_SERVER_COUNT
@@ -4364,7 +4364,7 @@ Private Function SaveSettings() As Boolean
     Dim Clients(6) As String
     Dim i As Long, j As Long
     
-    '// First, CDKey length check and corresponding stuff that needs to run first:
+    '// First, CDKey Length check and corresponding stuff that needs to run first:
     Select Case True
         Case optSTAR.Value: s = "STAR"
         Case optSEXP.Value: s = "SEXP"
@@ -4377,7 +4377,7 @@ Private Function SaveSettings() As Boolean
     End Select
     
     If Not DoCDKeyLengthCheck(cboCDKey.text, s) Then
-        If MsgBox("Your CD key is of an invalid length for the product you have chosen. Do you want to save anyway?", vbExclamation + vbYesNo, "StealthBot Settings") = vbNo Then
+        If MsgBox("Your CD key is of an invalid Length for the product you have chosen. Do you want to save anyway?", vbExclamation + vbYesNo, "StealthBot Settings") = vbNo Then
             ShowPanel spConnectionConfig
             cboCDKey.SetFocus
             SaveSettings = False
@@ -4386,7 +4386,7 @@ Private Function SaveSettings() As Boolean
     End If
     
     If txtExpKey.Enabled And Not DoCDKeyLengthCheck(txtExpKey.text, s) Then
-        If MsgBox("Your expansion CD key is of an invalid length for the product you have chosen. Do you want to anyway?", vbInformation + vbYesNo, "StealthBot Settings") = vbNo Then
+        If MsgBox("Your expansion CD key is of an invalid Length for the product you have chosen. Do you want to anyway?", vbInformation + vbYesNo, "StealthBot Settings") = vbNo Then
             ShowPanel spConnectionConfig
             txtExpKey.SetFocus
             SaveSettings = False
@@ -4483,7 +4483,11 @@ Private Function SaveSettings() As Boolean
     'special case, proxyissocks5 didn't like being set properly
     WINI "ProxyIsSocks5", IIf(optSocks5.Value, "Y", "N"), secMain
     WINI "UDP", Cv(chkUDP.Value), secMain
-    WINI "DisableAltBNLS", Cv(chkBNLSAlt.Value), secMain
+    
+    'Don't save this value until the user has been prompted once, or at least specifically enabled it
+    If Len(ReadCFG(MN, "UseAltBNLS")) = 1 Or chkBNLSAlt.Value = vbChecked Then
+        WINI "UseAltBNLS", Cv(chkBNLSAlt.Value), secMain
+    End If
     
     '// this section must written _absolutely correctly_ or the SetTimer API call will fail
     s = txtReconDelay.text
@@ -4749,7 +4753,7 @@ Private Sub cmdHTMLGen_Click()
 End Sub
 
 Private Sub cmdDefaults_Click()
-    If MsgBox("Are you sure you want to restore the default values?" & vbCrLf & _
+    If MsgBox("Are you sure you want to restore the default Values()?" & vbCrLf & _
             "(All current color data will be lost unless exported)", vbYesNo + vbExclamation) = vbYes Then
             
         If Dir$(GetProfilePath() & "\colors.sclf") <> vbNullString Then
@@ -5278,7 +5282,7 @@ Private Sub InitConnAdvanced()
     s = ReadCFG(MN, "UDP")
     If s = "Y" Then chkUDP.Value = 1 Else chkUDP.Value = 0
     
-    s = ReadCFG(MN, "DisableAltBNLS")
+    s = ReadCFG(MN, "UseAltBNLS")
     If s = "Y" Then chkBNLSAlt.Value = 1 Else chkBNLSAlt.Value = 0
     
     txtReconDelay.text = ReadCFG(MN, "ReconnectDelay")

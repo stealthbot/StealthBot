@@ -10,6 +10,9 @@ Private Declare Function GetVersionEx Lib "kernel32" Alias "GetVersionExA" _
   
 Private Const VER_PLATFORM_WIN32_NT As Long = 2
 
+Private Const VER_PLATFORM_ID_VISTA As Long = 2
+Private Const VER_MAJOR_VISTA As Long = 6
+
 Private Type OSVERSIONINFO
   OSVSize         As Long         'size, in bytes, of this data structure
   dwVerMajor      As Long         'ie NT 3.51, dwVerMajor = 3; NT 4.0, dwVerMajor = 4.
@@ -43,4 +46,25 @@ Public Function IsWin2000Plus() As Boolean
     End If
     
     IsWin2000Plus = CachedResponse
+End Function
+
+'Added by FrOzeN on 18th September, 2008.
+'Returns true if Vista, false if not.
+Public Function IsVista() As Boolean
+    Static CachedResponseAvailable As Boolean
+    Static CachedResponse As Boolean
+        
+    Dim osv As OSVERSIONINFO
+    
+    If Not CachedResponseAvailable Then
+        osv.OSVSize = Len(osv)
+        
+        If GetVersionEx(osv) = 1 Then
+            CachedResponse = (osv.PlatformID = VER_PLATFORM_ID_VISTA) And _
+                             (osv.dwVerMajor = VER_MAJOR_VISTA)
+            CachedResponseAvailable = True
+        End If
+    End If
+    
+    IsVista = CachedResponse
 End Function

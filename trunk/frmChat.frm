@@ -1,16 +1,16 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   225
-   ClientTop       =   825
+   ClientLeft      =   165
+   ClientTop       =   855
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1463,7 +1463,7 @@ Private Sub Form_Load()
     #If (BETA = 1) Then
         #If (DEV_RELEASE = 1) Then
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
-                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "11"
+                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "13"
         #Else
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
                 ZeroOffsetEx(App.REVISION, 3) & " Stable"
@@ -1476,7 +1476,8 @@ Private Sub Form_Load()
     #If (COMPILE_RELEASE = 1) Then
         If (Not ValidateExecutable) Then
             MsgBox GetHexProtectionMessage, vbOKOnly + vbCritical
-            Call Form_Unload(0)
+            'Call Form_Unload(0)
+            Unload frmChat
             Exit Sub
         End If
     #End If
@@ -2121,25 +2122,33 @@ Sub Event_BNLSError(ErrorNumber As Integer, description As String)
     If sckBNet.State <> 7 Then
         
         'Check the user has using BNLS server finder enabled
-        If Not (ReadCFG("Main", "DisableAltBNLS") = "Y") Then
+        If ReadCFG("Main", "UseAltBNLS") = "Y" Then
             Call FindAltBNLS
-                
-            Exit Sub
-        End If
-        
-        AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & description
-        
-        If DisplayError(ErrorNumber, 0, BNLS) Then
-            'This area is in question
-            Call DoDisconnect(1, True)
-            Pause 1
+        ElseIf ReadCFG("Main", "UseAltBNLS") = "N" Then
+            AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & description
             
-            If Not UserCancelledConnect Then
-                'Call DoConnect - The bot shouldn't try connecting again with the same values, it's more than likely to just fail again
+            If DisplayError(ErrorNumber, 0, BNLS) Then
+                'This area is in question
+                Call DoDisconnect(1, True)
+                Pause 1
+                
+                If Not UserCancelledConnect Then
+                    'Call DoConnect - The bot shouldn't try connecting again with the same Values(), it's more than likely to just fail again
+                End If
+            Else
+                Call DoDisconnect
+                SetTitle "Disconnected"
             End If
         Else
-            Call DoDisconnect
-            SetTitle "Disconnected"
+            'Ask the user if they would like to enable the BNLS Automatic Server finder
+            Dim msgResult As VbMsgBoxResult
+            msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
+                               "Would you like to enable the BNLS Automatic Server Finder?", _
+                               vbYesNo, "BNLS Error")
+            
+            'Save their answer to the config, and the call this procedure again to reevaluate what to do
+            WriteINI "Main", "UseAltBNLS", IIf(msgResult = vbYes, "Y", "N")
+            Call Event_BNLSError(ErrorNumber, description)
         End If
     End If
 End Sub
@@ -2268,8 +2277,12 @@ Sub Form_Resize()
         
         'sizing + positioning
         
+        'Added IsVista() call within an IIf() statement.
+        'This shrinks the size of the entire layout by a further 80 twips.
+        'This will act as a fix for Vista's screen cut off issues.
+        '   - FrOzeN
         With lvChannel
-            rtbChat.Width = Me.Width - .Width - 120
+            rtbChat.Width = Me.Width - .Width - IIf(IsVista, 200, 120)
         
         '    .Width = (Me.Width / 4) - 120 'magic number?
         '    If .Width > (.ColumnHeaders.Item(1).Width + 700) Then
@@ -2341,9 +2354,10 @@ Sub Form_Resize()
         lvFriendList.Height = lvChannel.Height
         lvClanList.Height = lvChannel.Height
         
+        'Minus 80 twips from rtbWhispers.Width if using Vista to fix width issue
         With rtbWhispers
             If .Visible Then
-                .Move rtbChat.Left, cboSend.Top + cboSend.Height, Me.Width - cmdShowHide.Width - 10 * Screen.TwipsPerPixelX
+                .Move rtbChat.Left, cboSend.Top + cboSend.Height, (Me.Width - cmdShowHide.Width - 10 * Screen.TwipsPerPixelX) - IIf(IsVista, 80, 0)
             End If
         End With
         
@@ -3002,12 +3016,16 @@ Private Sub INet_StateChanged(ByVal State As Integer)
 
     If (State = icResponseCompleted) Then
         Call HandleNews(INet.GetChunk(1024, icString))
-    Else
-        If (State = icError) Then
+        
+    'The code below is useless, icError doesn't mean it's an issue with the news as it could also be a script _
+        calling the the INet control. - FrOzeN
+    
+    'Else
+    '    If (State = icError) Then
             
-            Call AddChat(RTBColors.ErrorMessageText, "Error: There was an error " & _
+            'Call AddChat(RTBColors.ErrorMessageText, "Error: There was an error " & _
                 "loading the news.")
-        End If
+    '    End If
     End If
     
     If (Not (BotLoaded)) Then
@@ -3051,7 +3069,7 @@ End Sub
 '  (zeroed) at both access time in this method AND in the _LostFocus sub
 Private Sub lvChannel_dblClick()
     Dim s           As String
-    Dim t           As String
+    Dim T           As String
     Dim oldSelStart As Long
     
     s = GetSelectedUser
@@ -4150,7 +4168,8 @@ Private Sub mnuTrayExit_click()
     If MsgBox("Are you sure you want to quit?", vbYesNo, "StealthBot") = vbYes Then
         'RESTORE FORM
         Call NewWindowProc(frmChat.hWnd, 0&, ID_TASKBARICON, WM_LBUTTONDOWN)
-        Call Form_Unload(0)
+        'Call Form_Unload(0)
+        Unload frmChat
     End If
 End Sub
 
@@ -4186,7 +4205,8 @@ Sub mnuDisconnect_Click()
 End Sub
 
 Private Sub mnuExit_Click()
-    Call Form_Unload(0)
+    'Call Form_Unload(0)
+    Unload frmChat
 End Sub
 
 Private Sub mnuSetup_Click()
@@ -4414,12 +4434,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 
                                 If (X(n) <> vbNullString) Then
                                     If (n <> LBound(X)) Then
-                                        AddQ txtPre.text & X(n) & txtPost.text, PRIORITY.CONSOLE_MESSAGE
+                                        AddQ txtPre.text & X(n) & txtPost.text, Priority.CONSOLE_MESSAGE
                                         
                                         cboSend.AddItem txtPre.text & X(n) & txtPost.text, 0
                                     Else
                                         AddQ txtPre.text & cboSend.text & X(n) & txtPost.text, _
-                                            PRIORITY.CONSOLE_MESSAGE
+                                            Priority.CONSOLE_MESSAGE
                                         
                                         cboSend.AddItem txtPre.text & cboSend.text & X(n) & txtPost.text, 0
                                     End If
@@ -4596,7 +4616,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Case S_CTRL 'CTRL+ENTER - rewhisper
                         If LenB(cboSend.text) > 0 Then
                             AddQ "/w " & IIf(Dii, "*", "") & LastWhisperTo & Space(1) & cboSend.text, _
-                                PRIORITY.CONSOLE_MESSAGE
+                                Priority.CONSOLE_MESSAGE
                                 
                             cboSend.text = vbNullString
                         End If
@@ -4604,7 +4624,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Case S_CTRLSHIFT 'CTRL+SHIFT+ENTER - reply
                         If LenB(cboSend.text) > 0 Then
                             AddQ "/w " & IIf(Dii, "*", "") & LastWhisper & Space(1) & cboSend.text, _
-                                PRIORITY.CONSOLE_MESSAGE
+                                Priority.CONSOLE_MESSAGE
                             cboSend.text = vbNullString
                         End If
                 
@@ -4710,7 +4730,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     m = Right(s, (Len(s) - 7))
                                     
                                     AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m), _
-                                        PRIORITY.CONSOLE_MESSAGE
+                                        Priority.CONSOLE_MESSAGE
                                     
                                 ElseIf (LCase(Left$(s, 9)) = "/profile ") Then
                                     If (sckBNet.State = 7) Then
@@ -4740,7 +4760,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     commandResult = ProcessCommand(GetCurrentUsername, m, _
                                         True, False)
                                 Else
-                                    Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
+                                    Call AddQ(OutFilterMsg(s), Priority.CONSOLE_MESSAGE)
                                 End If
                                 
                                 'Ignore rest of code as the bot is closing
@@ -4899,7 +4919,7 @@ Private Sub quLower_Timer()
     If (Caching) Then ' time to retrieve stored information and squelch or ban a channel
         Dim strArray() As String
         Dim ret As String
-        Dim lpos As Long
+        Dim lPos As Long
         Dim Y As String
         Dim c As Integer, n As Integer
         
@@ -4909,10 +4929,10 @@ Private Sub quLower_Timer()
         ret = Cache(vbNullString, 0, Y)
         
         ' ...
-        lpos = InStr(1, ret, Space$(1), vbBinaryCompare)
+        lPos = InStr(1, ret, Space$(1), vbBinaryCompare)
         
         ' ...
-        If (lpos) Then
+        If (lPos) Then
             ' ...
             strArray() = Split(ret, " ")
         Else
@@ -4991,7 +5011,7 @@ Private Sub QueueTimer_Timer()
         With g_Queue.Peek
             Message = .Message
             Tag = .Tag
-            pri = .PRIORITY
+            pri = .Priority
         End With
         
         If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
@@ -5212,7 +5232,7 @@ End Sub
 Private Sub Timer_Timer()
     On Error GoTo ERROR_HANDLER
 
-    Dim u As String, IdleMsg As String, s() As String
+    Dim U As String, IdleMsg As String, s() As String
     Dim IdleWaitS As String, IdleType As String
     Dim f As Integer, IdleWait As Integer
     Static iCounter As Integer, UDP As Byte
@@ -5299,9 +5319,9 @@ Private Sub Timer_Timer()
             IdleMsg = "/me -: Now Playing: " & WindowTitle & " :: " & CVERSION & " :-"
             
         ElseIf IdleType = "quote" Then
-            u = GetRandomQuote
-            If Len(u) > 217 Then GoTo Error
-            IdleMsg = "/me : " & u
+            U = GetRandomQuote
+            If Len(U) > 217 Then GoTo Error
+            IdleMsg = "/me : " & U
             
         End If
         GoTo Send
@@ -5954,16 +5974,16 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 
                     ' ...
                     Select Case (cmdName)
-                        Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
-                        Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
-                        Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "unban":     msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "squelch":   msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "ignore":    msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "unsquelch": msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "unignore":  msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
+                        Case "designate": msg_priority = Priority.SPECIAL_MESSAGE
+                        Case "resign":    msg_priority = Priority.SPECIAL_MESSAGE
+                        Case "ban":       msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                        Case "unban":     msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                        Case "kick":      msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                        Case "squelch":   msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                        Case "ignore":    msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                        Case "unsquelch": msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                        Case "unignore":  msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                        Case Else:        msg_priority = Priority.MESSAGE_DEFAULT
                     End Select
                 End If
             End If
@@ -6054,7 +6074,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 ' ...
                 With Q
                     .Message = Send
-                    .PRIORITY = msg_priority
+                    .Priority = msg_priority
                     .ResponseTo = vbNullString
                     .Tag = Tag
                 End With
@@ -6288,7 +6308,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     If (g_Online) Then
         Dim found       As ListItem ' ...
         Dim CurrentUser As Object
-        Dim outbuf      As String
+        Dim outBuf      As String
 
         ' ...
         SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
@@ -6302,7 +6322,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             Set CurrentUser = g_Channel.Users(i)
             
             ' ...
-            ParseStatstring CurrentUser.Statstring, outbuf, outbuf
+            ParseStatstring CurrentUser.Statstring, outBuf, outBuf
         
             ' ...
             AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Flags, CurrentUser.Ping, _
@@ -7095,7 +7115,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     Dim CurrentName As String  ' ...
     Dim atChar      As Integer ' ...
     Dim index       As Integer ' ...
-    Dim loops       As Integer ' ...
+    Dim Loops       As Integer ' ...
 
     i = InStr(1, toMatch, " ", vbBinaryCompare)
     
@@ -7122,7 +7142,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                 index = startIndex
             End If
         
-            While (loops < 2)
+            While (Loops < 2)
                 For i = index To .Count 'for each user
                     CurrentName = .Item(i).text
                 
@@ -7150,11 +7170,11 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                 index = 1
                 
                 ' ...
-                loops = (loops + 1)
+                Loops = (Loops + 1)
             Wend
             
             ' ...
-            loops = 0
+            Loops = 0
         End If
     End With
     
@@ -7187,7 +7207,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         If (Len(toMatch) >= (atChar + 1)) Then
             tmp = Mid$(toMatch, atChar + 1)
 
-            While (loops < 2)
+            While (Loops < 2)
                 ' ...
                 For i = index To UBound(realms)
                     ' ...
@@ -7212,7 +7232,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                 index = 0
                 
                 ' ...
-                loops = (loops + 1)
+                Loops = (Loops + 1)
             Wend
         Else
             If (tmp = vbNullString) Then

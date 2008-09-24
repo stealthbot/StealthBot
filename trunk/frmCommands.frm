@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmCommands 
    BackColor       =   &H00000000&
    BorderStyle     =   3  'Fixed Dialog
@@ -325,12 +325,12 @@ Private Sub PopulateTreeView()
         Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
         '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
         '//                  something, even if nothing matches the XPath expression.
-        For i = 0 To (xmlArgs.length - 1)
+        For i = 0 To (xmlArgs.Length - 1)
             ArgumentName = xmlArgs(i).Attributes.getNamedItem("name").text
             Set nArg = trvCommands.Nodes.Add(nCommand, tvwChild, , ArgumentName)
             Set xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
             
-            For j = 0 To (xmlArgRestricions.length - 1)
+            For j = 0 To (xmlArgRestricions.Length - 1)
                 restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").text
                 Set nArgRestriction = trvCommands.Nodes.Add(nArg, tvwChild, , restrictionName)
             Next j
@@ -410,7 +410,7 @@ Private Sub trvCommands_NodeClick(ByVal node As MSComctlLib.node)
     '// figure out what type of node was clicked on
     nt = GetNodeInfo(node, CommandName, ArgumentName, restrictionName)
     '// create an array for the StringFormat function, this function will replace
-    '// the {0} {1} and {2} with their respective values found below
+    '// the {0} {1} and {2} with their respective Values() found below
     '//                {0}           {1}             {2}
     options = Array(CommandName, ArgumentName, restrictionName)
     

@@ -72,7 +72,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
     Dim EXEInfo As String       ' EXE Information
     Dim Checksum As Long        ' EXE Checksum
     Dim Version As Long         ' EXE Version
-    Dim ValueString As String   ' "Hash Command" -- valuestring used in checkrevision
+    Dim ValueString As String   ' "Hash Command" -- Values()tring used in checkrevision
     Dim Value1 As Long          ' CDKey Value 1
     Dim ProductID As Long       ' CDKey Product ID
     Dim MPQRevision As Long     ' MPQ Revision
@@ -148,6 +148,15 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                 .InsertDWord &H0
                 .InsertNonNTString KeyHash
                 
+                'Warden code commented out for local hashing as I'm not sure if KeyHash actually contains the cd-key hash
+                'Uncomment this when it's verified, hashing seems to be completely broken for me, so I couldn't test it
+                '   ~ FrOzeN
+                
+                'Add warden support
+                'If BotVars.Product = "RATS" Or BotVars.Product = "PXES" Then
+                '    modWarden.InitializeWarden Left$(KeyHash, 4)
+                'End If
+                
                 If BotVars.Product = "PX2D" Or BotVars.Product = "PX3W" Then
                     Call DecodeCDKey(BotVars.ExpKey, ServerToken, ClientToken, KeyHash, Value1, ProductID, MPQRevision)
                     
@@ -157,7 +166,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                     .InsertDWord &H0
                     .InsertNonNTString KeyHash
                 End If
-                
+
                 .InsertNTString EXEInfo
                 
                 If (LenB(ReadCFG("Override", "OwnerName")) > 0) Then
@@ -204,7 +213,7 @@ Public Sub DecodeCDKey(ByVal sCDKey As String, ByVal ServerToken As Long, ByVal 
         
             If HashSize <= 0 Then
                 frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid. [kd_calculateHash() <= 0]"
-                frmChat.AddChat RTBColors.ErrorMessageText, "Please make sure you typed your CD-Key correctly. This error is often generated when the CD-Key is not the correct length."
+                frmChat.AddChat RTBColors.ErrorMessageText, "Please make sure you typed your CD-Key correctly. This error is often generated when the CD-Key is not the correct Length."
                 frmChat.DoDisconnect
                 
             Else
@@ -370,4 +379,25 @@ Public Sub Send0x54(ByVal Salt As String, ByVal ServerKey As String)
         .InsertNonNTString sBuffer
         .SendPacket &H54
     End With
+End Sub
+
+Public Sub Send0x5E(ByRef PacketData As String) 'SID_WARDEN
+    Dim strWardenPacket As String
+    strWardenPacket = modWarden.HandleWarden(PacketData)
+
+    If LenB(strWardenPacket) > 0 Then
+        PBuffer.InsertNonNTString strWardenPacket
+        PBuffer.SendPacket &H5E
+    End If
+    
+    Static blWarden As Boolean
+    If Not blWarden Then
+        blWarden = True
+        
+        If LenB(strWardenPacket) > 0 Then
+            MsgBox "Warden working"
+        Else
+            MsgBox "Warden broken"
+        End If
+    End If
 End Sub

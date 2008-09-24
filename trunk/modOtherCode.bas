@@ -1523,7 +1523,7 @@ Public Function ProductCodeToFullName(ByVal pCode As String) As String
     End Select
 End Function
 
-' Assumes that sIn has length >=1
+' Assumes that sIn has Length >=1
 Public Function PercentActualUppercase(ByVal sIn As String) As Double
     Dim UppercaseChars As Integer
     Dim i              As Integer
@@ -2450,7 +2450,7 @@ Public Function InsertDummyQueueEntry()
     frmChat.AddQ "%%%%%blankqueuemessage%%%%%"
 End Function
 
-' This procedure splits a message by a specified length, with optional line LinePostfixes
+' This procedure splits a message by a specified Length, with optional line LinePostfixes
 ' and split delimiters.
 Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef StringRet() As String, Optional LinePrefix As String = _
     vbNullString, Optional LinePostfix As String = " [more]", Optional OversizeDelimiter As String = " ") As Long
@@ -2464,7 +2464,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     Dim lineCount As Long    ' stores line number
     Dim Pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
-    Dim length    As Long    ' stores length after LinePostfix
+    Dim Length    As Long    ' stores Length after LinePostfix
     Dim bln       As Boolean ' stores result of delimiter split
     
     ' initialize our array
@@ -2498,16 +2498,16 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
         strTmp = LinePrefix & StringSplit
         
         ' does our string already equal to or fall
-        ' below the specified length?
+        ' below the specified Length?
         If (Len(strTmp) <= SplitLength) Then
             ' assign our string to the current line
             StringRet(lineCount) = strTmp
         Else
             ' Our string is over the size limit, so we're
             ' going to postfix it.  Because of this, we're
-            ' going to have to calculate the length after
+            ' going to have to calculate the Length after
             ' the postfix has been accounted for.
-            length = (SplitLength - Len(LinePostfix))
+            Length = (SplitLength - Len(LinePostfix))
         
             ' if we're going to be splitting the oversized
             ' message at a specified character, we need to
@@ -2515,8 +2515,8 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' string
             If (OversizeDelimiter <> vbNullString) Then
                 ' grab position of delimiter character that is the closest to our
-                ' specified length
-                Pos = InStrRev(strTmp, OversizeDelimiter, length, vbTextCompare)
+                ' specified Length
+                Pos = InStrRev(strTmp, OversizeDelimiter, Length, vbTextCompare)
             End If
             
             ' if the delimiter we were looking for was found,
@@ -2524,7 +2524,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((Pos) And (Pos >= Round(length / 2))) Then
+            If ((Pos) And (Pos >= Round(Length / 2))) Then
                 ' truncate message
                 strTmp = Mid$(strTmp, 1, Pos - 1)
                 
@@ -2534,7 +2534,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
                 bln = True
             Else
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, length)
+                strTmp = Mid$(strTmp, 1, Length)
             End If
             
             ' store truncated message in line
@@ -2803,7 +2803,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     End With
     
     'Unload memory
-    Set IsCommand = Nothing
+    'Set IsCommand = Nothing
     
     Exit Function
     
