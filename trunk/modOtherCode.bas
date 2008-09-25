@@ -915,8 +915,11 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in " & _
-        "GetCumulativeAccess().")
+    'Ignores error 28: "Out of stack memory"
+    If Err.Number <> 28 Then
+        Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in " & _
+            "GetCumulativeAccess().")
+    End If
 
     Exit Function
 End Function
@@ -2170,7 +2173,7 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
     If (lvItem Is Nothing) Then
         checkChannel = 0
     Else
-        checkChannel = lvItem.index
+        checkChannel = lvItem.Index
     End If
 End Function
 
@@ -2579,7 +2582,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     Static CropLen    As Integer ' ...
     Static HasTrigger As Boolean ' ...
 
-    Dim index        As Integer ' ...
+    Dim Index        As Integer ' ...
     Dim bln          As Boolean ' ...
     Dim tmp          As String  ' ...
     Dim console      As Boolean ' ...
@@ -2731,15 +2734,15 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     ' ...
     If (HasTrigger) Then
         ' check our message for a command delimiter
-        index = InStr(Len(BotVars.TriggerLong) + 1, tmp, CMD_DELIMITER, _
+        Index = InStr(Len(BotVars.TriggerLong) + 1, tmp, CMD_DELIMITER, _
             vbBinaryCompare)
         
         ' using a delimiter can be undesirable at times, so
         ' we require a way of bypassing such a feature, and
         ' that way is to entirely disable internal support!
-        If (index) Then
+        If (Index) Then
             ' ...
-            tmp = Mid$(tmp, 1, index - 1)
+            tmp = Mid$(tmp, 1, Index - 1)
             
             ' ...
             CropLen = (CropLen + (Len(tmp) + Len(CMD_DELIMITER)))
@@ -2755,13 +2758,13 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     ' ...
     If ((IsLocal) Or (HasTrigger)) Then
         ' ...
-        index = InStr(1, tmp, Space$(1), vbBinaryCompare)
+        Index = InStr(1, tmp, Space$(1), vbBinaryCompare)
         
         ' ...
-        If (index) Then
+        If (Index) Then
             With IsCommand
-                .Name = Mid$(tmp, 1, index - 1)
-                .Args = Mid$(tmp, index + 1)
+                .Name = Mid$(tmp, 1, Index - 1)
+                .Args = Mid$(tmp, Index + 1)
             End With
         Else
             IsCommand.Name = tmp
@@ -2801,10 +2804,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         .Name = vbNullString
         .Args = vbNullString
     End With
-    
-    'Unload memory
-    'Set IsCommand = Nothing
-    
+        
     Exit Function
     
 ERROR_HANDLER:

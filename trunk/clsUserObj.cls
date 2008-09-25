@@ -296,7 +296,9 @@ Public Property Get Stats() As clsUserStats
 End Property
 
 ' ...
+'Added error handling - FrOzeN
 Public Sub DisplayQueue()
+    On Error GoTo ERROR_HANDLER
 
     Dim CurrentEvent As clsUserEventObj
     Dim j            As Integer
@@ -321,11 +323,11 @@ Public Sub DisplayQueue()
             
             ' ...
             Case ID_TALK
-                Call Event_UserTalk(Name, CurrentEvent.Flags, CurrentEvent.message, CurrentEvent.Ping, j)
+                Call Event_UserTalk(Name, CurrentEvent.Flags, CurrentEvent.Message, CurrentEvent.Ping, j)
             
             ' ...
             Case ID_EMOTE
-                Call Event_UserEmote(Name, CurrentEvent.Flags, CurrentEvent.message, j)
+                Call Event_UserEmote(Name, CurrentEvent.Flags, CurrentEvent.Message, j)
             
             ' ...
             Case ID_USERFLAGS
@@ -337,5 +339,9 @@ Public Sub DisplayQueue()
     ' ...
     ClearQueue
 
+    Exit Sub
+
+ERROR_HANDLER:
+    Exit Sub
 End Sub
 

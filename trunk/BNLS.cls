@@ -21,12 +21,12 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Public Sub ServToken(ByRef S As String, ByVal Setting As Byte)
+Public Sub ServToken(ByRef s As String, ByVal Setting As Byte)
     Static Token As String
     
     Select Case Setting
-        Case 0: S = Token
-        Case 1: Token = S
+        Case 0: s = Token
+        Case 1: Token = s
     End Select
 End Sub
 
@@ -175,14 +175,16 @@ Public Sub Send_0x1A(ByVal ProductID As Long, ByVal Flags As Long, ByVal cookie 
     Packet.vLSendPacket &H1A
 End Sub
 
-Public Sub SendGenPacket(ByVal S As String, ByVal PacketID As Byte) 'Send back packets that consist
+Public Sub SendGenPacket(ByVal s As String, ByVal PacketID As Byte) 'Send back packets that consist
                                                                     'entirely of data from BNLS.
-    Packet.InsertNonNTString S
+    Packet.InsertNonNTString s
     Packet.SendPacket PacketID
     
 End Sub
 
 Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
+    On Error GoTo ERROR_HANDLER
+    
     Dim pD        As clsPacketDebuffer
     
     Dim sTemp     As String
@@ -400,8 +402,13 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
                 Call Send_BNLS0x51
             End If
         
-        
     End Select
+    
+    Exit Sub
+
+ERROR_HANDLER:
+    Exit Sub
+    
 End Sub
 
 Sub CloseConnection(Optional ByVal DoNotShow As Byte = 0)
