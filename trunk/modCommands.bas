@@ -1270,9 +1270,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' ...
     If (g_Channel.GetUserIndex(msgData) > 0) Then
         Dim I          As Integer ' ...
-        Dim arrUsers() As Integer ' ...
         Dim userCount  As Integer ' ...
         Dim opsCount   As Integer ' ...
+        Dim arrUsers() As String ' ...
     
         ' ...
         If (g_Channel.Self.IsOperator = False) Then
@@ -1301,7 +1301,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
             ReDim Preserve arrUsers(0)
             
             ' ...
-            If (g_Clan.Self.Rank >= 4) Then
+            If (g_Clan.Self.Rank >= 0) Then ' 4
                 ' ...
                 frmChat.cboSend.text = vbNullString
             
@@ -1310,7 +1310,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                     ' ...
                     If (g_Channel.GetUserIndexEx(g_Clan.Shamans(I).Name) > 0) Then
                         ' ...
-                        arrUsers(userCount) = I
+                        arrUsers(userCount) = g_Clan.Shamans(I).Name
     
                         ' ...
                         userCount = (userCount + 1)
@@ -1332,15 +1332,16 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 ' ...
                 If (userCount > 0) Then
                     ' demote shamans
-                    For I = 0 To userCount
+                    For I = 0 To (userCount - 1)
                         ' ...
-                        If (arrUsers(I) > 0) Then
-                            ' ...
-                            g_Clan.Shamans(arrUsers(I)).Demote
- 
-                            ' ...
-                            Call Pause(200, True, True)
-                        End If
+                        g_Clan.Members(g_Clan.GetUserIndexEx(arrUsers(I))).Demote
+                        
+                        ' ...
+                        frmChat.AddChat vbRed, _
+                            "DEBUG: DEMOTE " & g_Clan.Members(g_Clan.GetUserIndexEx(arrUsers(I))).DisplayName
+    
+                        ' ...
+                        Call Pause(200, True, True)
                     Next I
                 End If
                 
@@ -1370,7 +1371,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                     "removed from his or her position."
                 
                 ' ...
-                Exit Function
+                'Exit Function
             End If
         ElseIf (StrComp(Left$(g_Channel.Name, 5), "Clan ", vbTextCompare) = 0) Then
             ' ...
@@ -1384,7 +1385,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                             "cannot be removed from his or her position."
                     
                     ' ...
-                    Exit Function
+                    'Exit Function
                 End If
             End If
         End If
@@ -1398,17 +1399,27 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Call bnetSend("/designate " & reverseUsername(msgData))
         
         ' ...
+        frmChat.AddChat vbRed, "DEBUG: DESIGNATE " & msgData
+        
+        ' ...
         Call Pause(2, True, False)
         
         ' rejoin channel
         Call bnetSend("/resign")
+        
+        ' ...
+        frmChat.AddChat vbRed, "DEBUG: RESIGN"
 
         ' ...
         If (userCount > 0) Then
             ' promote shamans again
-            For I = 0 To userCount
+            For I = 0 To (userCount - 1)
                 ' ...
-                g_Clan.Shamans(arrUsers(I)).Promote
+                g_Clan.Members(g_Clan.GetUserIndexEx(arrUsers(I))).Promote
+                
+                ' ...
+                frmChat.AddChat vbRed, _
+                    "DEBUG: PROMOTE " & g_Clan.Members(g_Clan.GetUserIndexEx(arrUsers(I))).DisplayName
                 
                 ' ...
                 Call Pause(200, True, True)
