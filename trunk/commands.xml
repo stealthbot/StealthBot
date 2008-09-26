@@ -596,8 +596,6 @@
       </argument>
 
       <argument name="rank" optional="true">
-        <data type="number" min="1" max="100" />
-
         <documentation>
           <description>
             ...
@@ -606,8 +604,6 @@
       </argument>
 
       <argument name="attributes" optional="true">
-        <data type="string" maxLength="52" pattern="\+[A-Za-z]+|-[A-Za-z]+|[A-Za-z]+" />
-
         <documentation>
           <description>
             ...

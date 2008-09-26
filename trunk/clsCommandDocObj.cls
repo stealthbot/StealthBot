@@ -135,11 +135,18 @@ Private Function getRestrictions(ByRef ParameterNode As IXMLDOMNode) As Collecti
     Dim temp         As clsCommandRestrictionObj
     
     Set getRestrictions = New Collection
+    
     If (ParameterNode Is Nothing) Then
         Exit Function
     End If
     
-    Set Restrictions = ParameterNode.selectSingleNode("restrictions").selectNodes("restriction")
+    Set Restrictions = ParameterNode.selectNodes("restrictions")
+    
+    If (Restrictions.Length = 0) Then
+        Exit Function
+    End If
+    
+    Set Restrictions = Restrictions.Item(0).selectNodes("restriction")
     
     For Each Restriction In Restrictions
         Set temp = New clsCommandRestrictionObj
