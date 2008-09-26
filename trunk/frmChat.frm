@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1554,9 +1554,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -3126,7 +3126,7 @@ Private Sub lvClanList_dblClick()
     End If
 End Sub
 
-Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Dim aInx As Integer
     Dim sProd As String * 4
 
@@ -3151,18 +3151,18 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, 
     End If
 End Sub
 
-Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = vbRightButton Then
         PopupMenu mnuFLpop
     End If
 End Sub
 
-Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Dim lvhti As LVHITTESTINFO
     Dim lItemIndex As Long
    
     lvhti.pt.X = X / Screen.TwipsPerPixelX
-    lvhti.pt.y = y / Screen.TwipsPerPixelY
+    lvhti.pt.Y = Y / Screen.TwipsPerPixelY
     lItemIndex = SendMessageAny(lvFriendList.hWnd, LVM_HITTEST, 0, lvhti) + 1
    
     If m_lCurItemIndex <> lItemIndex Then
@@ -3226,13 +3226,13 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
                     ListToolTip.TipText = sTemp
                 End With
                 
-                Call ListToolTip.Create(lvFriendList.hWnd, CLng(X), CLng(y))
+                Call ListToolTip.Create(lvFriendList.hWnd, CLng(X), CLng(Y))
             End If
         End If
     End If
 End Sub
 
-Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Dim lvhti As LVHITTESTINFO
     Dim lItemIndex As Long
     Dim sOutBuf As String
@@ -3241,7 +3241,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
     Dim Clan As String
    
     lvhti.pt.X = X / Screen.TwipsPerPixelX
-    lvhti.pt.y = y / Screen.TwipsPerPixelY
+    lvhti.pt.Y = Y / Screen.TwipsPerPixelY
     lItemIndex = SendMessageAny(lvChannel.hWnd, LVM_HITTEST, -1, lvhti) + 1
  
     If m_lCurItemIndex <> lItemIndex Then
@@ -3293,7 +3293,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     
                 End With
                 
-                Call ListToolTip.Create(lvChannel.hWnd, CLng(X), CLng(y))
+                Call ListToolTip.Create(lvChannel.hWnd, CLng(X), CLng(Y))
             End If
         End If
     End If
@@ -4093,7 +4093,7 @@ Private Sub rtbWhispers_KeyPress(KeyAscii As Integer)
     cboSend.SelText = Chr$(KeyAscii)
 End Sub
 
-Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
     If Button = 1 And Len(rtbChat.SelText) > 0 Then
@@ -4104,7 +4104,7 @@ Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, X As Single, y 
     End If
 End Sub
 
-Private Sub rtbWhispers_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub rtbWhispers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
     If Button = 1 And Len(rtbWhispers.SelText) > 0 Then
@@ -4940,13 +4940,13 @@ Private Sub quLower_Timer()
         Dim strArray() As String
         Dim ret As String
         Dim lPos As Long
-        Dim y As String
+        Dim Y As String
         Dim C As Integer, n As Integer
         
         Caching = False
         
         ' ...
-        ret = Cache(vbNullString, 0, y)
+        ret = Cache(vbNullString, 0, Y)
         
         ' ...
         lPos = InStr(1, ret, Space$(1), vbBinaryCompare)
@@ -4991,7 +4991,7 @@ Private Sub quLower_Timer()
             strArray(C) = convertUsername(strArray(C))
             
             If Len(strArray(C)) > 1 Then
-                If InStr(y, "ban") Then
+                If InStr(Y, "ban") Then
                     If (g_Channel.Self.IsOperator) Then
                         Ban strArray(C), (AutoModSafelistValue - 1), 0
                     End If
@@ -5654,8 +5654,6 @@ End Sub
 
 '/* Fires every second */
 Private Sub UpTimer_Timer()
-
-    Exit Sub
 
     On Error GoTo ERROR_HANDLER
 
@@ -7410,7 +7408,7 @@ Private Function GetClanSelectedUser() As String
     End With
 End Function
 
-Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
+Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = vbRightButton Then
         lvClanList.SetFocus
         
@@ -7418,7 +7416,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
         Dim lItemIndex As Long, m_lCurItemIndex As Long
         
         lvhti.pt.X = X / Screen.TwipsPerPixelX
-        lvhti.pt.y = y / Screen.TwipsPerPixelY
+        lvhti.pt.Y = Y / Screen.TwipsPerPixelY
         lItemIndex = SendMessageAny(lvClanList.hWnd, LVM_HITTEST, 0, lvhti) + 1
         
         If lItemIndex > 0 Then
