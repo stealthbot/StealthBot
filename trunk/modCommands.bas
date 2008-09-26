@@ -1332,17 +1332,32 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 ' ...
                 If (userCount > 0) Then
                     ' demote shamans
-                    For I = 0 To (userCount - 1)
+                    For I = 0 To userCount
                         ' ...
                         If (arrUsers(I) > 0) Then
                             ' ...
                             g_Clan.Shamans(arrUsers(I)).Demote
-                            
+ 
                             ' ...
                             Call Pause(200, True, True)
                         End If
                     Next I
                 End If
+                
+                ' ...
+                opsCount = 0
+                
+                ' ...
+                For I = 1 To g_Channel.Users.Count
+                    ' ...
+                    If (StrComp(g_Channel.Users(I).DisplayName, GetCurrentUsername, vbBinaryCompare) <> 0) Then
+                        ' ...
+                        If (g_Channel.Users(I).IsOperator) Then
+                            ' ...
+                            opsCount = (opsCount + 1)
+                        End If
+                    End If
+                Next I
             End If
         End If
         
@@ -1387,19 +1402,16 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         
         ' rejoin channel
         Call bnetSend("/resign")
-        
+
         ' ...
         If (userCount > 0) Then
             ' promote shamans again
-            For I = 0 To (userCount - 1)
+            For I = 0 To userCount
                 ' ...
-                If (arrUsers(I) > 0) Then
-                    ' ...
-                    g_Clan.Shamans(arrUsers(I)).Promote
-                    
-                    ' ...
-                    Call Pause(200, True, True)
-                End If
+                g_Clan.Shamans(arrUsers(I)).Promote
+                
+                ' ...
+                Call Pause(200, True, True)
             Next I
         End If
         
