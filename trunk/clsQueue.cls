@@ -37,6 +37,9 @@ End Sub ' end function Class_Terminate
 
 ' ...
 Public Function Push(ByRef obj As clsQueueOBj)
+    
+    On Error GoTo ERROR_HANDLER
+
     ' ...
     If (m_objCount) Then
         Dim lines As Boolean ' ...
@@ -62,10 +65,21 @@ Public Function Push(ByRef obj As clsQueueOBj)
     
     ' ...
     m_objCount = (m_objCount + 1)
+    
+    Exit Function
+
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsQueue::Push().")
+
+    Exit Function
+    
 End Function ' end function Push
 
 ' ...
 Public Function Pop() As clsQueueOBj
+
+    On Error GoTo ERROR_HANDLER
+
     Dim qindex As Integer ' ...
     Dim i      As Integer ' ...
     
@@ -95,12 +109,21 @@ Public Function Pop() As clsQueueOBj
     
     ' ...
     m_objCount = (m_objCount - 1)
+    
+    Exit Function
+
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsQueue::Pop().")
+
+    Exit Function
 End Function ' end function Pop
 
 ' ...
 Public Function Peek() As clsQueueOBj
+
     ' ...
     Set Peek = m_QueueObjs(GetNextQueueObj())
+    
 End Function ' end function Peek
 
 ' ...
@@ -213,7 +236,7 @@ Private Function FindLines(Optional ByVal strLine As String = vbNullString, Opti
         Set curQueueObj = m_QueueObjs(i)
     
         ' ...
-        If (curQueueObj.Priority <= PriLower) Then
+        If (curQueueObj.PRIORITY <= PriLower) Then
             ' ...
             If (strLine <> vbNullString) Then
                 ' ...
@@ -258,6 +281,9 @@ End Function
 
 ' ...
 Private Function GetNextQueueObj() As Integer
+
+    On Error GoTo ERROR_HANDLER
+
     Static lastLowestIndex As Integer
 
     Dim curQueueObj As clsQueueOBj
@@ -274,9 +300,9 @@ Private Function GetNextQueueObj() As Integer
         Set curQueueObj = m_QueueObjs(i)
         
         ' ...
-        If (curQueueObj.Priority < lowest) Then
+        If (curQueueObj.PRIORITY < lowest) Then
             ' ...
-            lowest = curQueueObj.Priority
+            lowest = curQueueObj.PRIORITY
             
             ' ...
             lowestIndex = i
@@ -298,13 +324,13 @@ Private Function GetNextQueueObj() As Integer
             Set curQueueObj = m_QueueObjs(i)
 
             ' ...
-            If (curQueueObj.Priority = lowest) Then
+            If (curQueueObj.PRIORITY = lowest) Then
                 ' ...
                 If (StrComp(curQueueObj.ResponseTo, m_lastUser, vbTextCompare) <> 0) Then
                     ' ...
                     For k = 0 To (i - 1)
                         ' ...
-                        If (m_QueueObjs(k).Priority = lowest) Then
+                        If (m_QueueObjs(k).PRIORITY = lowest) Then
                             ' ...
                             If (StrComp(m_QueueObjs(k).ResponseTo, curQueueObj.ResponseTo, _
                                     vbTextCompare) = 0) Then
@@ -332,6 +358,14 @@ Private Function GetNextQueueObj() As Integer
     
     ' ...
     GetNextQueueObj = lastLowestIndex
+    
+    Exit Function
+
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsQueue::GetNextQueueObj().")
+
+    Exit Function
+    
 End Function ' end function GetNextQueueObj
 
 ' ...

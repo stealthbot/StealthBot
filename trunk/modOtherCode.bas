@@ -408,6 +408,9 @@ Public Function StripRealm(ByVal Username As String) As String
 End Function
 
 Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNullString)
+    
+    On Error GoTo ERROR_HANDLER
+
     If (frmChat.sckBNet.State = 7) Then
         With PBuffer
             If (frmChat.mnuUTF8.Checked) Then
@@ -446,6 +449,14 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
         
         frmChat.SControl.Run "Event_MessageSent", Message, Tag
     End If
+    
+    Exit Sub
+
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in bnetSend().")
+
+    Exit Sub
+    
 End Sub
 
 Public Sub APISend(ByRef s As String) '// faster API-based sending for EFP
@@ -1927,7 +1938,7 @@ End Sub
 ' collapse array on top of the removed user
 Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     Dim i          As Integer
-    Dim c          As Integer
+    Dim C          As Integer
     Dim NumRemoved As Integer
     Dim iterations As Long
     Dim uBnd       As Integer
@@ -1939,9 +1950,9 @@ Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     While (i <= (uBnd - NumRemoved))
         If (StrComp(sUser, gBans(i).Username, vbTextCompare) = 0) Then
             If (i <> UBound(gBans)) Then
-                For c = i To UBound(gBans)
+                For C = i To UBound(gBans)
                     gBans(i) = gBans(i + 1)
-                Next c
+                Next C
             End If
             
             ' UBound(gBans) - 1 when UBound(gBans) = 0
@@ -2173,7 +2184,7 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
     If (lvItem Is Nothing) Then
         checkChannel = 0
     Else
-        checkChannel = lvItem.Index
+        checkChannel = lvItem.index
     End If
 End Function
 
@@ -2378,31 +2389,31 @@ End Sub
 ' extracted
 ' 1-based
 Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
-    Dim c           As Integer
+    Dim C           As Integer
     Dim i           As Integer
     Dim TargetSpace As Integer
     
     'one two three
     '   1   2
     
-    c = 0
+    C = 0
     i = 1
     Pos = Pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While ((c < Pos) And (i > 0))
+    While ((C < Pos) And (i > 0))
         TargetSpace = i
         
         i = (InStr(i + 1, str, Space(1), vbBinaryCompare))
         
-        c = (c + 1)
+        C = (C + 1)
     Wend
     
-    If (c >= Pos) Then
-        c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
+    If (C >= Pos) Then
+        C = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
-        If (c > 0) Then
-            GetStringChunk = Mid$(str, TargetSpace, c - (TargetSpace))
+        If (C > 0) Then
+            GetStringChunk = Mid$(str, TargetSpace, C - (TargetSpace))
         Else
             GetStringChunk = Mid$(str, TargetSpace)
         End If
@@ -2582,7 +2593,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     Static CropLen    As Integer ' ...
     Static HasTrigger As Boolean ' ...
 
-    Dim Index        As Integer ' ...
+    Dim index        As Integer ' ...
     Dim bln          As Boolean ' ...
     Dim tmp          As String  ' ...
     Dim console      As Boolean ' ...
@@ -2734,15 +2745,15 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     ' ...
     If (HasTrigger) Then
         ' check our message for a command delimiter
-        Index = InStr(Len(BotVars.TriggerLong) + 1, tmp, CMD_DELIMITER, _
+        index = InStr(Len(BotVars.TriggerLong) + 1, tmp, CMD_DELIMITER, _
             vbBinaryCompare)
         
         ' using a delimiter can be undesirable at times, so
         ' we require a way of bypassing such a feature, and
         ' that way is to entirely disable internal support!
-        If (Index) Then
+        If (index) Then
             ' ...
-            tmp = Mid$(tmp, 1, Index - 1)
+            tmp = Mid$(tmp, 1, index - 1)
             
             ' ...
             CropLen = (CropLen + (Len(tmp) + Len(CMD_DELIMITER)))
@@ -2758,13 +2769,13 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     ' ...
     If ((IsLocal) Or (HasTrigger)) Then
         ' ...
-        Index = InStr(1, tmp, Space$(1), vbBinaryCompare)
+        index = InStr(1, tmp, Space$(1), vbBinaryCompare)
         
         ' ...
-        If (Index) Then
+        If (index) Then
             With IsCommand
-                .Name = Mid$(tmp, 1, Index - 1)
-                .Args = Mid$(tmp, Index + 1)
+                .Name = Mid$(tmp, 1, index - 1)
+                .Args = Mid$(tmp, index + 1)
             End With
         Else
             IsCommand.Name = tmp
@@ -2875,7 +2886,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     On Error GoTo ERROR_HANDLER
     
     Dim s              As String
-    Dim l              As Long
+    Dim L              As Long
     Dim lngVerticalPos As Long
     Dim Diff           As Long
     Dim i              As Integer
@@ -2954,19 +2965,19 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
             
             If (Len(saElements(i + 1)) > 0) Then
-                l = InStr(1, saElements(i + 1), "{\rtf", vbTextCompare)
+                L = InStr(1, saElements(i + 1), "{\rtf", vbTextCompare)
                 
-                While (l > 0)
-                    Mid$(saElements(i + 1), l + 1, 1) = "/"
+                While (L > 0)
+                    Mid$(saElements(i + 1), L + 1, 1) = "/"
                     
-                    l = InStr(1, saElements(i + 1), "{\rtf", vbTextCompare)
+                    L = InStr(1, saElements(i + 1), "{\rtf", vbTextCompare)
                 Wend
             
                 With rtb
                     .SelStart = Len(.text)
                     
                     ' store position of selection
-                    l = .SelStart
+                    L = .SelStart
                     
                     .SelLength = 0
                     .SelColor = saElements(i)
@@ -3008,7 +3019,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         Next i
         
-        Call ColorModify(rtb, l)
+        Call ColorModify(rtb, L)
 
         If (blUnlock) Then
             rtb.Visible = True
