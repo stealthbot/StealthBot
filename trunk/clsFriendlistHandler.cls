@@ -169,6 +169,8 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             End With
         
         Case SID_FRIENDADDED
+            Exit Sub
+        
             Set flTemp = New clsFriendObj
         
             With flTemp
@@ -204,6 +206,8 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             Set flTemp = Nothing
         
         Case SID_FRIENDREMOVED
+            Exit Sub
+        
             '(BYTE)       Entry Number
             bytTemp = Asc(Mid$(Data, 1, 1)) + 1
             
@@ -215,6 +219,8 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             
         
         Case SID_FRIENDMOVED
+            Exit Sub
+        
             '(BYTE) Old Position
             '(BYTE) New Position
             Set flTemp = Nothing
@@ -238,7 +244,7 @@ End Sub
 
 Public Sub ResetList()
     ' ...
-    frmChat.lvFriendList.ListItems.Clear
+    'frmChat.lvFriendList.ListItems.Clear
     
     ' ...
     Set g_Friends = Nothing

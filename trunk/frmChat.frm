@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1554,9 +1554,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2949,7 +2949,7 @@ Private Sub FriendListHandler_FriendListEntry(ByVal Username As String, ByVal Pr
 End Sub
 
 Private Sub FriendListHandler_FriendMoved()
-    lvFriendList.ListItems.Clear
+    'lvFriendList.ListItems.Clear
     Call FriendListHandler.ResetList
     Call FriendListHandler.RequestFriendsList(PBuffer)
 End Sub
@@ -3881,7 +3881,7 @@ Private Sub mnuEditUsers_Click()
 End Sub
 
 Private Sub mnuFListRefresh_Click()
-    'lvFriendList.ListItems.Clear
+    lvFriendList.ListItems.Clear
     Call FriendListHandler.RequestFriendsList(PBuffer)
 End Sub
 

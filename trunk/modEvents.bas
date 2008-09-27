@@ -739,13 +739,12 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         End If
         
         If ((InStr(1, Message, " from your friends list.", vbBinaryCompare) > 0) Or _
-            (InStr(1, Message, " to your friends list.", vbBinaryCompare) > 0)) Then
+            (InStr(1, Message, " to your friends list.", vbBinaryCompare) > 0) Or _
+            (InStr(1, Message, " in your friends list.", vbBinaryCompare) > 0)) Then
             
             frmChat.lvFriendList.ListItems.Clear
             
             Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
-            
-            frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString
         End If
         
         'Ban Evasion and banned-user tracking
