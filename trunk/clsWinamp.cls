@@ -315,6 +315,10 @@ Public Sub QuitPlayback()
     Call SendMessage(m_hWnd, WM_COMMAND, WA_STOP, 0)
 End Sub
 
+Public Sub FadeOutToStop()
+    Call SendMessage(m_hWnd, WM_COMMAND, WA_FADEOUTSTOP, 0)
+End Sub
+
 ' Winamp 2.05+ Only
 Public Property Get PlaylistPosition() As Long
     ' ...
@@ -347,7 +351,7 @@ End Property
 
 ' ...
 Public Property Let Shuffle(blnShuffle As Boolean)
-    Call SendMessage(m_hWnd, WM_WA_IPC, blnShuffle, IPC_SET_REPEAT)
+    Call SendMessage(m_hWnd, WM_WA_IPC, blnShuffle, IPC_SET_SHUFFLE)
 End Property
 
 ' ...
