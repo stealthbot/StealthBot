@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1554,9 +1554,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -3415,7 +3415,7 @@ Private Sub mnuFLpopDemote_Click()
         With lvFriendList.SelectedItem
             If (.index < lvFriendList.ListItems.Count) Then
               AddQ "/f d " & .text
-              MoveFriend .index, .index + 1
+              'MoveFriend .index, .index + 1
             End If
         End With
     End If
@@ -3427,7 +3427,7 @@ Private Sub mnuFLpopPromote_Click()
         With lvFriendList.SelectedItem
             If (.index > 1) Then
               AddQ "/f p " & .text
-              MoveFriend .index, .index - 1
+              'MoveFriend .index, .index - 1
             End If
         End With
     End If
