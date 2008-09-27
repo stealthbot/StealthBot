@@ -167,30 +167,33 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     Dim buf() As Byte ' ...
     
     ' ...
-    If (frmChat.sckMCP.State <> 0) Then
-        ' resize temporary data buffer
-        ReDim buf(m_bufpos + 2)
-
-         ' copy packet data Length to temporary buffer
-        Call CopyMemory(buf(0), m_bufpos + 3, 2)
-        
-        buf(2) = PacketID ' packet identification number
-    
-        ' ...
-        If (m_bufpos) Then
-            ' copy data from buffer to temporary buffer
-            Call CopyMemory(buf(3), m_buf(0), m_bufpos)
-        End If
-        
-        ' ...
-        If (MDebug("all")) Then
-            frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & _
-                Right$("00" & Hex(PacketID), 2)
-        End If
-        
-        ' ...
-        Call frmChat.sckMCP.SendData(buf)
+    If (frmChat.sckMCP.State <> sckConnected) Then
+        Exit Function
     End If
+    
+    ' resize temporary data buffer
+    ReDim buf(m_bufpos + 2)
+
+     ' copy packet data Length to temporary buffer
+    Call CopyMemory(buf(0), m_bufpos + 3, 2)
+    
+    ' ...
+    buf(2) = PacketID ' packet identification number
+
+    ' ...
+    If (m_bufpos) Then
+        ' copy data from buffer to temporary buffer
+        Call CopyMemory(buf(3), m_buf(0), m_bufpos)
+    End If
+    
+    ' ...
+    If (MDebug("all")) Then
+        frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & _
+            Right$("00" & Hex(PacketID), 2)
+    End If
+    
+    ' ...
+    Call frmChat.sckMCP.SendData(buf)
     
     ' clear buffer contents
     Call Clear
@@ -198,10 +201,15 @@ End Function ' end function SendPacketMCP
 
 ' ...
 Public Function SendPacket(Optional PacketID As Byte)
-    Dim l     As Long    ' ...
+    Dim L     As Long    ' ...
     Dim buf() As Byte    ' ...
-    Dim i     As Integer ' ...
+    Dim I     As Integer ' ...
     Dim log   As String  ' ...
+    
+    ' ...
+    If (frmChat.sckBNet.State <> sckConnected) Then
+        Exit Function
+    End If
     
     ' resize temporary data buffer
     ReDim buf(m_bufpos + 3)
@@ -213,22 +221,20 @@ Public Function SendPacket(Optional PacketID As Byte)
     End If
     
     ' ...
-    If (frmChat.sckBNet.State <> 0) Then
-        buf(0) = &HFF     ' header
-        buf(1) = PacketID ' packet identification number
-        
-        ' copy packet data Length to temporary buffer
-        Call CopyMemory(buf(2), m_bufpos + 4, 2)
-        
-        ' ...
-        If (m_bufpos) Then
-            ' copy data from buffer to temporary buffer
-            Call CopyMemory(buf(4), m_buf(0), m_bufpos)
-        End If
-        
-        ' ...
-        Call frmChat.sckBNet.SendData(buf)
+    buf(0) = &HFF     ' header
+    buf(1) = PacketID ' packet identification number
+    
+    ' copy packet data Length to temporary buffer
+    Call CopyMemory(buf(2), m_bufpos + 4, 2)
+    
+    ' ...
+    If (m_bufpos) Then
+        ' copy data from buffer to temporary buffer
+        Call CopyMemory(buf(4), m_buf(0), m_bufpos)
     End If
+    
+    ' ...
+    Call frmChat.sckBNet.SendData(buf)
     
     ' ...
     log = String$(m_bufpos + 4, vbNullChar)
@@ -249,30 +255,33 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     Dim log   As String ' ...
     
     ' ...
+    If (frmChat.sckBNLS.State <> sckConnected) Then
+        Exit Function
+    End If
+    
+    ' ...
     If (MDebug("all")) Then
         frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & _
             Right$("00" & Hex(PacketID), 2)
     End If
     
-    ' ...
-    If (frmChat.sckBNLS.State <> 0) Then
-        ' resize temporary data buffer
-        ReDim buf(m_bufpos + 2)
-    
-        ' copy packet data Length to temporary buffer
-        Call CopyMemory(buf(0), m_bufpos + 3, 2)
+    ' resize temporary data buffer
+    ReDim buf(m_bufpos + 2)
 
-        buf(2) = PacketID ' packet identification number
-        
-        ' ...
-        If (m_bufpos) Then
-            ' copy data from buffer to temporary buffer
-            Call CopyMemory(buf(3), m_buf(0), m_bufpos)
-        End If
-        
-        ' ...
-        Call frmChat.sckBNLS.SendData(buf)
+    ' copy packet data Length to temporary buffer
+    Call CopyMemory(buf(0), m_bufpos + 3, 2)
+
+    ' ...
+    buf(2) = PacketID ' packet identification number
+    
+    ' ...
+    If (m_bufpos) Then
+        ' copy data from buffer to temporary buffer
+        Call CopyMemory(buf(3), m_buf(0), m_bufpos)
     End If
+    
+    ' ...
+    Call frmChat.sckBNLS.SendData(buf)
     
     ' ...
     log = String$(m_bufpos + 3, vbNullChar)
