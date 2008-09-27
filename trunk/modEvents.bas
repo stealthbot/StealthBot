@@ -978,22 +978,19 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     ' ...
     If (g_Channel.CheckQueue(Username) = False) Then
         ' ...
-        If (Len(Message) > 0) Then
+        If (AllowedToTalk(Username, Message)) Then
             ' ...
-            If (AllowedToTalk(Username, Message)) Then
-                ' ...
-                frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, Username & _
-                    Space$(1), RTBColors.EmoteText, Message & ">"
-                
-                ' ...
-                If (Catch(0) <> vbNullString) Then
-                    CheckPhrase Username, Message, CPEMOTE
-                End If
-                
-                ' ...
-                If (frmChat.mnuFlash.Checked) Then
-                    FlashWindow
-                End If
+            frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, Username & _
+                Space$(1), RTBColors.EmoteText, Message & ">"
+            
+            ' ...
+            If (Catch(0) <> vbNullString) Then
+                CheckPhrase Username, Message, CPEMOTE
+            End If
+            
+            ' ...
+            If (frmChat.mnuFlash.Checked) Then
+                FlashWindow
             End If
         End If
     End If

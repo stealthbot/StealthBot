@@ -55,6 +55,15 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     
     ' replace message variables
     Message = Replace(Message, "%me", IIf(IsLocal, GetCurrentUsername, Username), 1)
+    
+    ' ...
+    If (Left$(Message, 3) = "///") Then
+        ' ...
+        AddQ Mid$(Message, 3)
+        
+        ' ...
+        Exit Function
+    End If
 
     ' ...
     Set command = IsCommand(Message, IsLocal)
@@ -1026,7 +1035,7 @@ Private Function OnSweepBan(ByVal Username As String, ByRef dbAccess As udtGetAc
     ' user from the current channel using Battle.net's "ban" command.
     
     Dim U      As String ' ...
-    Dim y      As String ' ...
+    Dim Y      As String ' ...
     Dim tmpBuf As String ' ...
 
     ' ...
@@ -1059,7 +1068,7 @@ Private Function OnSweepIgnore(ByVal Username As String, ByRef dbAccess As udtGe
     ' temporary amount of time.
     
     Dim U      As String ' ...
-    Dim y      As String ' ...
+    Dim Y      As String ' ...
     Dim tmpBuf As String ' ...
 
     ' ...
@@ -3201,7 +3210,7 @@ Private Function OnDelPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     
     Dim f      As Integer
     Dim U      As String
-    Dim y      As String
+    Dim Y      As String
     Dim tmpBuf As String ' temporary output buffer
     Dim C      As Integer
     
@@ -3210,13 +3219,13 @@ Private Function OnDelPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     f = FreeFile
     
     Open GetFilePath("phrasebans.txt") For Output As #f
-        y = vbNullString
+        Y = vbNullString
     
         For C = LBound(Phrases) To UBound(Phrases)
             If (StrComp(Phrases(C), LCase$(U), vbTextCompare) <> 0) Then
                 Print #f, Phrases(C)
             Else
-                y = "x"
+                Y = "x"
             End If
         Next C
     Close #f
@@ -3225,7 +3234,7 @@ Private Function OnDelPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     
     Call frmChat.LoadArray(LOAD_PHRASES, Phrases())
     
-    If (Len(y) > 0) Then
+    If (Len(Y) > 0) Then
         tmpBuf = "Phrase " & Chr(34) & U & Chr(34) & " deleted."
     Else
         tmpBuf = "Error: That phrase is not banned."
@@ -3417,17 +3426,17 @@ Private Function OnSafeCheck(ByVal Username As String, ByRef dbAccess As udtGetA
     ' ...
     Dim gAcc   As udtGetAccessResponse
     
-    Dim y      As String ' ...
+    Dim Y      As String ' ...
     Dim tmpBuf As String ' temporary output buffer
 
     ' ...
-    y = msgData
+    Y = msgData
             
     ' ...
-    If (LenB(y) > 0) Then
+    If (LenB(Y) > 0) Then
         ' ...
-        If (GetSafelist(y)) Then
-            tmpBuf = y & " is on the bot's safelist."
+        If (GetSafelist(Y)) Then
+            tmpBuf = Y & " is on the bot's safelist."
         Else
             tmpBuf = "That user is not safelisted."
         End If
@@ -3445,7 +3454,7 @@ Private Function OnExile(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Dim saCmdRet() As String ' ...
     Dim ibCmdRet() As String ' ...
     Dim U          As String ' ...
-    Dim y          As String ' ...
+    Dim Y          As String ' ...
     
     ' ...
     ReDim Preserve saCmdRet(0)
@@ -3660,19 +3669,19 @@ Private Function OnTagCheck(ByVal Username As String, ByRef dbAccess As udtGetAc
     ' ...
     Dim gAcc   As udtGetAccessResponse
     
-    Dim y      As String
+    Dim Y      As String
     Dim tmpBuf As String ' temporary output buffer
 
-    y = msgData
+    Y = msgData
             
-    If (Len(y) > 0) Then
-        gAcc = GetCumulativeAccess(y)
+    If (Len(Y) > 0) Then
+        gAcc = GetCumulativeAccess(Y)
         
         If (InStr(1, gAcc.Flags, "B") <> 0) Then
-            tmpBuf = y & " has been matched to one or more tagbans"
+            tmpBuf = Y & " has been matched to one or more tagbans"
         
             If (InStr(1, gAcc.Flags, "S") <> 0) Then
-                tmpBuf = tmpBuf & "; however, " & y & " has also been found on the bot's " & _
+                tmpBuf = tmpBuf & "; however, " & Y & " has also been found on the bot's " & _
                     "safelist and therefore will not be banned"
             End If
         Else
@@ -3693,19 +3702,19 @@ Private Function OnSLCheck(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ' ...
     Dim gAcc   As udtGetAccessResponse
     
-    Dim y      As String
+    Dim Y      As String
     Dim tmpBuf As String ' temporary output buffer
 
-    y = msgData
+    Y = msgData
             
-    If (Len(y) > 0) Then
-        gAcc = GetCumulativeAccess(y)
+    If (Len(Y) > 0) Then
+        gAcc = GetCumulativeAccess(Y)
         
         If (InStr(1, gAcc.Flags, "B") <> 0) Then
-            tmpBuf = y & " is on the bot's shitlist"
+            tmpBuf = Y & " is on the bot's shitlist"
         
             If (InStr(1, gAcc.Flags, "S") <> 0) Then
-                tmpBuf = tmpBuf & "; however, " & y & " is also on the " & _
+                tmpBuf = tmpBuf & "; however, " & Y & " is also on the " & _
                     "bot's safelist and therefore will not be banned"
             End If
         Else
@@ -3742,19 +3751,19 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
         ElseIf (InStr(1, U, ".ini", vbTextCompare) <> 0) Then
             tmpBuf(tmpCount) = "Error: You may not read configuration files."
         Else
-            Dim y As String  ' ...
+            Dim Y As String  ' ...
             Dim f As Integer ' ...
         
             ' grab a file number
             f = FreeFile
         
             If (InStr(1, U, ".", vbBinaryCompare) > 0) Then
-                y = Left$(U, InStr(1, U, ".", vbBinaryCompare) - 1)
+                Y = Left$(U, InStr(1, U, ".", vbBinaryCompare) - 1)
             Else
-                y = U
+                Y = U
             End If
             
-            Select Case (UCase$(y))
+            Select Case (UCase$(Y))
                 Case "CON", "PRN", "AUX", "CLOCK$", "NUL", "COM1", _
                      "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", _
                      "COM8", "COM9", "LPT1", "LPT2", "LPT3", "LPT4", _
@@ -3955,7 +3964,7 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim U       As String
     Dim tmpBuf  As String ' temporary output buffer
     Dim banmsg  As String
-    Dim y       As String
+    Dim Y       As String
     Dim I       As Integer
 
     If ((MyFlags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
@@ -3980,13 +3989,13 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                 If (InBot) Then
                     frmChat.AddQ "/ban " & msgData
                 Else
-                    y = Ban(U & IIf(banmsg <> vbNullString, Space$(1) & banmsg, _
+                    Y = Ban(U & IIf(banmsg <> vbNullString, Space$(1) & banmsg, _
                         vbNullString), dbAccess.Access)
                 End If
             End If
             
-            If (Len(y) > 2) Then
-                tmpBuf = y
+            If (Len(Y) > 2) Then
+                tmpBuf = Y
             End If
         End If
     End If
@@ -4046,7 +4055,7 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim I      As Integer
     Dim banmsg As String
     Dim tmpBuf As String ' temporary output buffer
-    Dim y      As String
+    Dim Y      As String
     
     If ((MyFlags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
        tmpBuf = "Error: I am not currently a channel operator."
@@ -4072,11 +4081,11 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
                 If (InBot) Then
                     frmChat.AddQ "/kick " & msgData
                 Else
-                    y = Ban(U & IIf(Len(banmsg) > 0, Space$(1) & banmsg, vbNullString), _
+                    Y = Ban(U & IIf(Len(banmsg) > 0, Space$(1) & banmsg, vbNullString), _
                         dbAccess.Access, 1)
                     
-                    If (Len(y) > 1) Then
-                        tmpBuf = y
+                    If (Len(Y) > 1) Then
+                        tmpBuf = Y
                     End If
                 End If
             End If
@@ -4547,7 +4556,7 @@ Private Function OnAddQuote(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     Dim f      As Integer
     Dim U      As String
-    Dim y      As String
+    Dim Y      As String
     Dim tmpBuf As String ' temporary output buffer
     
     f = FreeFile
@@ -4555,14 +4564,14 @@ Private Function OnAddQuote(ByVal Username As String, ByRef dbAccess As udtGetAc
     U = msgData
     
     If (Len(U)) Then
-        y = Dir$(GetFilePath("quotes.txt"))
+        Y = Dir$(GetFilePath("quotes.txt"))
         
-        If (Len(y) = 0) Then
+        If (Len(Y) = 0) Then
             Open GetFilePath("quotes.txt") For Output As #f
                 Print #f, U
             Close #f
         Else
-            Open y For Append As #f
+            Open Y For Append As #f
                 Print #f, U
             Close #f
         End If
