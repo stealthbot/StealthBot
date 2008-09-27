@@ -232,7 +232,7 @@ Public Property Let Statstring(str As String)
     game = StrReverse$(Left$(str, 4))
 
     ' ...
-    m_stat_string = Mid$(str, 5)
+    m_stat_string = Mid$(str, 6)
 
     ' ...
     Call Parse
@@ -365,10 +365,10 @@ Public Property Get CharacterClassID() As Integer
 
 End Property
 
-Public Property Let CharacterClassID(i As Integer)
+Public Property Let CharacterClassID(I As Integer)
 
     ' ...
-    m_character_class_id = i
+    m_character_class_id = I
 
 End Property
 
@@ -454,10 +454,10 @@ Public Property Get ActsCompleted() As Integer
 
 End Property
 
-Public Property Let ActsCompleted(i As Integer)
+Public Property Let ActsCompleted(I As Integer)
 
     ' ...
-    m_acts_completed = i
+    m_acts_completed = I
 
 End Property
 
@@ -732,66 +732,66 @@ End Sub
 
 Private Sub ParseStarCraft()
 
-    Dim values() As String ' ...
+    Dim Values() As String ' ...
 
     ' ...
-    values() = Split(Statstring, Space$(1))
+    Values() = Split(Statstring, Space$(1))
     
     ' ...
-    If (UBound(values) < 7) Then
+    If (UBound(Values) < 7) Then
         Exit Sub
     End If
             
     ' ....
-    LadderRating = Val(values(0))
-    LadderRank = Val(values(1))
-    Wins = Val(values(2))
-    IsSpawn = CBool(values(3))
-    LadderRank = Val(values(5))
-    Icon = values(8)
+    LadderRating = Val(Values(0))
+    LadderRank = Val(Values(1))
+    Wins = Val(Values(2))
+    IsSpawn = CBool(Values(3))
+    LadderRank = Val(Values(5))
+    Icon = Values(8)
 
 End Sub
 
 Private Sub ParseDiablo()
 
-    Dim values() As String ' ...
+    Dim Values() As String ' ...
 
     ' ...
-    values() = Split(Statstring, Space$(1))
+    Values() = Split(Statstring, Space$(1))
     
     ' ...
-    If (UBound(values) < 7) Then
+    If (UBound(Values) < 7) Then
         Exit Sub
     End If
     
     ' ...
-    Level = Val(values(0))
-    CharacterClassID = Val(values(1))
-    Dots = Val(values(2))
-    Strength = Val(values(3))
-    Magic = Val(values(4))
-    Dexterity = Val(values(5))
-    Vitality = Val(values(6))
-    Gold = Val(values(7))
+    Level = Val(Values(0))
+    CharacterClassID = Val(Values(1))
+    Dots = Val(Values(2))
+    Strength = Val(Values(3))
+    Magic = Val(Values(4))
+    Dexterity = Val(Values(5))
+    Vitality = Val(Values(6))
+    Gold = Val(Values(7))
     
 End Sub
 
 Private Sub ParseDiabloII()
 
-    Dim values()   As String  ' ...
+    Dim Values()   As String  ' ...
     Dim charData() As Integer ' ...
 
     ' ...
-    values() = Split(Statstring, ",", 3)
+    Values() = Split(Statstring, ",", 3)
     
     ' ...
-    If (UBound(values) > 0) Then
+    If (UBound(Values) > 0) Then
         ' ...
-        Realm = values(0)
-        CharacterName = values(1)
+        Realm = Values(0)
+        CharacterName = Values(1)
         
         ' ...
-        MakeArr values(2), charData
+        MakeArr Values(2), charData
         
         ' ...
         CharacterClassID = charData(13)
@@ -811,23 +811,23 @@ End Sub
 
 Private Sub ParseWarCraftIII()
 
-    Dim values() As String ' ...
+    Dim Values() As String ' ...
 
     ' ...
-    values() = Split(Statstring, Space$(1))
+    Values() = Split(Statstring, Space$(1))
     
     ' ...
-    If (UBound(values) < 1) Then
+    If (UBound(Values) < 1) Then
         Exit Sub
     End If
     
     ' ...
-    Icon = values(0)
-    Level = Val(values(1))
+    Icon = Values(0)
+    Level = Val(Values(1))
     
     ' ...
-    If (UBound(values) > 1) Then
-        Clan = StrReverse$(values(2))
+    If (UBound(Values) > 1) Then
+        Clan = StrReverse$(Values(2))
     End If
 
 End Sub
@@ -864,16 +864,16 @@ End Function
 
 Private Sub MakeArr(str As String, arr() As Integer)
     
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
-    For i = 1 To Len(str)
+    For I = 1 To Len(str)
         ' ...
-        ReDim Preserve arr(0 To i)
+        ReDim Preserve arr(0 To I)
         
         ' ...
-        arr(i) = Asc(Mid(str, i, 1))
-    Next i
+        arr(I) = Asc(Mid(str, I, 1))
+    Next I
     
 End Sub
 

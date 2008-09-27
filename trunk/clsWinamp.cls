@@ -344,9 +344,7 @@ End Property
 ' ...
 Public Property Get TrackName() As String
     ' ...
-    If (IsPlaying) Then
-        TrackName = GetWinampSongTitle()
-    End If
+    TrackName = GetWinampSongTitle()
 End Property
 
 ' ...
