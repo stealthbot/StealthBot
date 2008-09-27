@@ -1301,7 +1301,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
             ReDim Preserve arrUsers(0)
             
             ' ...
-            If (g_Clan.Self.Rank >= 0) Then ' 4
+            If (g_Clan.Self.Rank >= 4) Then
                 ' ...
                 frmChat.cboSend.text = vbNullString
             
@@ -1337,11 +1337,11 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                         g_Clan.Members(g_Clan.GetUserIndexEx(arrUsers(I))).Demote
                         
                         ' ...
-                        frmChat.AddChat vbRed, _
-                            "DEBUG: DEMOTE " & g_Clan.Members(g_Clan.GetUserIndexEx(arrUsers(I))).DisplayName
+                        'frmChat.AddChat vbRed, _
+                        '    "DEBUG: DEMOTE " & g_Clan.Members(g_Clan.GetUserIndexEx(arrUsers(I))).DisplayName
     
                         ' ...
-                        Call Pause(200, True, True)
+                        'Call Pause(200, True, True)
                     Next I
                 End If
                 
@@ -1371,7 +1371,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                     "removed from his or her position."
                 
                 ' ...
-                'Exit Function
+                Exit Function
             End If
         ElseIf (StrComp(Left$(g_Channel.Name, 5), "Clan ", vbTextCompare) = 0) Then
             ' ...
@@ -1385,7 +1385,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                             "cannot be removed from his or her position."
                     
                     ' ...
-                    'Exit Function
+                    Exit Function
                 End If
             End If
         End If
@@ -1399,7 +1399,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Call bnetSend("/designate " & reverseUsername(msgData))
         
         ' ...
-        frmChat.AddChat vbRed, "DEBUG: DESIGNATE " & msgData
+        'frmChat.AddChat vbRed, "DEBUG: DESIGNATE " & msgData
         
         ' ...
         Call Pause(2, True, False)
@@ -1408,7 +1408,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Call bnetSend("/resign")
         
         ' ...
-        frmChat.AddChat vbRed, "DEBUG: RESIGN"
+        'frmChat.AddChat vbRed, "DEBUG: RESIGN"
 
         ' ...
         If (userCount > 0) Then
@@ -1418,11 +1418,11 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 g_Clan.Members(g_Clan.GetUserIndexEx(arrUsers(I))).Promote
                 
                 ' ...
-                frmChat.AddChat vbRed, _
-                    "DEBUG: PROMOTE " & g_Clan.Members(g_Clan.GetUserIndexEx(arrUsers(I))).DisplayName
+                'frmChat.AddChat vbRed, _
+                '    "DEBUG: PROMOTE " & g_Clan.Members(g_Clan.GetUserIndexEx(arrUsers(I))).DisplayName
                 
                 ' ...
-                Call Pause(200, True, True)
+                'Call Pause(200, True, True)
             Next I
         End If
         
