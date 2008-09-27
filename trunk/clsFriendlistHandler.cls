@@ -59,18 +59,18 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             '(BYTE)       Number of Entries
             n = Asc(Mid$(Data, 1, 1))
             
-            'Call ResetList
+            Call ResetList
             
             Position = 2
             'Set flTemp = Nothing
             
             If (n > 0) Then
                 For n = 0 To n - 1
-                    If (g_Friends.Count > n) Then
-                        Set flTemp = g_Friends(n + 1)
-                    Else
+                    'If (g_Friends.Count > n) Then
+                    '    Set flTemp = g_Friends(n + 1)
+                    'Else
                         Set flTemp = New clsFriendObj
-                    End If
+                    'End If
                     ''debug.print DebugOutput(Mid$(Data, Position)) & vbCrLf
                     s = ""
                     
@@ -119,16 +119,16 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                     
                     ''debug.print "Successfully added: " & flTemp.Name
                     
-                    If (g_Friends.Count > n) Then
-                        RaiseEvent FriendUpdate(flTemp.DisplayName, n + 1)
-                    Else
+                    'If (g_Friends.Count > n) Then
+                    '    RaiseEvent FriendUpdate(flTemp.DisplayName, n + 1)
+                    'Else
                         g_Friends.Add flTemp
                         
                         RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.game, flTemp.Location, flTemp.Status, _
                              flTemp.LocationID)
-                    End If
+                    'End If
                         
-                    'Set flTemp = Nothing
+                    Set flTemp = Nothing
                     
                 Next n
             End If
@@ -237,6 +237,10 @@ ERROR_HANDLER:
 End Sub
 
 Public Sub ResetList()
+    ' ...
+    frmChat.lvFriendList.ListItems.Clear
+    
+    ' ...
     Set g_Friends = Nothing
     Set g_Friends = New Collection
 End Sub
