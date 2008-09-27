@@ -1548,7 +1548,19 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     End If
     
     ' ...
-    If (g_Channel.CheckQueue(Username) = False) Then
+    If (QueuedEventID = 0) Then
+        ' ...
+        If (g_Channel.Self.IsOperator) Then
+            ' ...
+            If (GetSafelist(Username) = False) Then
+                ' ...
+                CheckMessage Username, Message
+            End If
+        End If
+    End If
+    
+    ' ...
+    If (UserObj.Queue.Count = 0) Then
         ' ...
         If (Message <> vbNullString) Then
             ' ...
@@ -1597,18 +1609,6 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
                 If (frmChat.mnuFlash.Checked) Then
                     FlashWindow
                 End If
-            End If
-        End If
-    End If
-    
-    ' ...
-    If ((g_Channel.CheckQueue(Username)) Or ((QueuedEventID > 0) = False)) Then
-        ' ...
-        If (g_Channel.Self.IsOperator) Then
-            ' ...
-            If (GetSafelist(Username) = False) Then
-                ' ...
-                CheckMessage Username, Message
             End If
         End If
         

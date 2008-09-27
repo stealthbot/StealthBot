@@ -296,7 +296,6 @@ Public Property Get Stats() As clsUserStats
 End Property
 
 ' ...
-'Added error handling - FrOzeN
 Public Sub DisplayQueue()
     On Error GoTo ERROR_HANDLER
 
@@ -339,9 +338,13 @@ Public Sub DisplayQueue()
     ' ...
     ClearQueue
 
+    ' ...
     Exit Sub
 
 ERROR_HANDLER:
+    frmChat.AddChat vbRed, _
+        "Error (#" & Err.Number & "): " & Err.description & " in clsUserObj::DisplayQueue()."
+
     Exit Sub
 End Sub
 
