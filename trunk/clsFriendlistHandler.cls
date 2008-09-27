@@ -130,7 +130,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             '(BYTE)       Entry number
             n = Asc(Mid$(Data, Position, 1)) + 1
             
-            Position = Position + 1
+            Position = 2 ' Position + 1
             
             With g_Friends(n)
                 '(BYTE) Flags
@@ -141,7 +141,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 '(BYTE) Location
                 bytTemp = Asc(Mid$(Data, Position, 1))
                 Position = Position + 1
-                .Location = bytTemp
+                .LocationID = bytTemp
                 
                 '(DWORD) Product ID
                 s = Mid$(Data, Position, 4)
@@ -152,7 +152,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 s = Mid$(Data, Position)
                 
                 ' ...
-                If (Len(s) > 0) Then
+                If (Len(s) > 1) Then
                     s = Left$(s, Len(s) - 1)
                 End If
                 
@@ -235,15 +235,15 @@ Public Sub ResetList()
 End Sub
 
 Public Function UsernameToFLIndex(ByVal sUsername As String) As Integer
-    Dim i As Integer
+    Dim I As Integer
     
     If g_Friends.Count > 0 Then
-        For i = 1 To g_Friends.Count
-            If StrComp(sUsername, g_Friends.Item(i).DisplayName, vbTextCompare) = 0 Then
-                UsernameToFLIndex = i
+        For I = 1 To g_Friends.Count
+            If StrComp(sUsername, g_Friends.Item(I).DisplayName, vbTextCompare) = 0 Then
+                UsernameToFLIndex = I
                 Exit Function
             End If
-        Next i
+        Next I
     End If
 End Function
 
