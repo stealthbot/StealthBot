@@ -2435,7 +2435,7 @@ Private Function OnFos(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim tmpBuf As String ' temporary output buffer
 
    If (BotVars.DisableMP3Commands = False) Then
-        'Call SendMessage(hWndWA, WM_COMMAND, WA_FADEOUTSTOP, 0)
+        MediaPlayer.FadeOutToStop
         
         tmpBuf = "Fade-out stop."
     End If
