@@ -39,14 +39,14 @@ Private Sub Class_Initialize()
 End Sub
 
 Public Sub RequestFriendsList(ByRef pBuff As PacketBuffer)
-    ResetList
+    'ResetList
     pBuff.SendPacket &H65
 End Sub
 
 Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
     On Error GoTo ERROR_HANDLER
     
-    Dim n As Long, bytTemp As Byte
+    Dim n As Integer, bytTemp As Byte
     Dim s As String
     Dim Position As Long
     Dim flTemp As clsFriendObj
@@ -59,15 +59,18 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
             '(BYTE)       Number of Entries
             n = Asc(Mid$(Data, 1, 1))
             
-            Call ResetList
+            'Call ResetList
             
             Position = 2
-            Set flTemp = Nothing
+            'Set flTemp = Nothing
             
             If (n > 0) Then
                 For n = 0 To n - 1
-                    Set flTemp = New clsFriendObj
-                    
+                    If (g_Friends.Count > n) Then
+                        Set flTemp = g_Friends(n + 1)
+                    Else
+                        Set flTemp = New clsFriendObj
+                    End If
                     ''debug.print DebugOutput(Mid$(Data, Position)) & vbCrLf
                     s = ""
                     
@@ -116,12 +119,16 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                     
                     ''debug.print "Successfully added: " & flTemp.Name
                     
-                    g_Friends.Add flTemp
-                    
-                    RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.game, flTemp.Location, flTemp.Status, _
-                         flTemp.LocationID)
+                    If (g_Friends.Count > n) Then
+                        RaiseEvent FriendUpdate(flTemp.DisplayName, n + 1)
+                    Else
+                        g_Friends.Add flTemp
                         
-                    Set flTemp = Nothing
+                        RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.game, flTemp.Location, flTemp.Status, _
+                             flTemp.LocationID)
+                    End If
+                        
+                    'Set flTemp = Nothing
                     
                 Next n
             End If
@@ -147,7 +154,7 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                 s = Mid$(Data, Position, 4)
                 Position = Position + 4
                 .game = StrReverse(s)
-            
+
                 '(STRING) Location str (blank = private)
                 s = Mid$(Data, Position)
                 
