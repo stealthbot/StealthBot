@@ -4782,14 +4782,6 @@ Private Sub SaveColors(Optional sPath As String)
     Close #f
 End Sub
 
-Private Sub txtBanD2_Change()
-
-End Sub
-
-Private Sub txtMaxBackLogSize_Change()
-
-End Sub
-
 Private Sub txtValue_Change()
     On Error Resume Next
     lblEg.BackColor = Val(txtValue.text)

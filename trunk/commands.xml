@@ -595,7 +595,7 @@
         </documentation>
       </argument>
 
-      <argument name="rank" optional="true">
+      <argument name="rank" optional="true" type="number">
         <documentation>
           <description>
             ...
@@ -603,7 +603,7 @@
         </documentation>
       </argument>
 
-      <argument name="attributes" optional="true">
+      <argument name="attributes" optional="true" type="string">
         <documentation>
           <description>
             ...

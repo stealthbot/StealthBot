@@ -164,24 +164,24 @@ End Function
 
 'Gets a WORD from the Debuffer
 Function GetWORD() As Integer
-    Dim word As Integer
+    Dim Word As Integer
     Dim sTemp As String * 2
     
     sTemp = Mid$(Debuffer, 1, 2)
-    CopyMemory word, ByVal sTemp, 2
+    CopyMemory Word, ByVal sTemp, 2
     
-    GetWORD = word
+    GetWORD = Word
 End Function
 
 'Gets a DWORD from the Debuffer
 Function GetDWORD() As Long
-    Dim dword As Long
+    Dim DWord As Long
     Dim sTemp As String * 4
     
     sTemp = Mid$(Debuffer, 1, 4)
-    CopyMemory dword, ByVal sTemp, 4
+    CopyMemory DWord, ByVal sTemp, 4
     
-    GetDWORD = dword
+    GetDWORD = DWord
 End Function
 
 'Gets a FILETIME from the Debuffer

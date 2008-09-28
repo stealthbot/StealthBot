@@ -8,7 +8,7 @@ Public Sub SendHeader()
 End Sub
 
 Public Sub BNCSParsePacket(ByVal PacketData As String)
-    On Error GoTo ERROR_HANDLER
+    'On Error GoTo ERROR_HANDLER
 
     Dim pD          As clsPacketDebuffer ' Packet debuffer object
     Dim PacketLen   As Long              ' Length of the packet minus the header
@@ -287,6 +287,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 pD.Advance 12
                 
                 s = pD.DebuffNTString
+                
                 Call frmChat.AddChat(RTBColors.SuccessText, "[BNET] Battle.net has responded!")
                 Call frmChat.AddChat(RTBColors.InformationText, "[REALM] Opening a connection to the Diablo II Realm...")
                 
