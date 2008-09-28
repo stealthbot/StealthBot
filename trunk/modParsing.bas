@@ -955,7 +955,7 @@ Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
     End With
 End Sub
 
-Public Sub SetProfile(ByVal Location As String, ByVal description As String)
+Public Sub SetProfile(ByVal Location As String, ByVal description As String, Optional ByVal Sex As String = vbNullString)
     'Dim i As Byte
     Const MAX_DESCR As Long = 510
     Const MAX_SEX As Long = 200
@@ -968,11 +968,11 @@ Public Sub SetProfile(ByVal Location As String, ByVal description As String)
         description = Left$(description, MAX_DESCR)
     End If
     
-'    If LenB(Sex) = 0 Then
-'        Sex = Space(1)
-'    ElseIf Len(Sex) > MAX_SEX Then
-'        Sex = Left$(Sex, MAX_SEX)
-'    End If
+    If LenB(Sex) = 0 Then
+        Sex = Space(1)
+    ElseIf Len(Sex) > MAX_SEX Then
+        Sex = Left$(Sex, MAX_SEX)
+    End If
     
     If LenB(Location) = 0 Then
         Location = Space(1)
@@ -983,14 +983,17 @@ Public Sub SetProfile(ByVal Location As String, ByVal description As String)
     
     With PBuffer
         .InsertDWord &H1                    '// #accounts
-        .InsertDWord 2                      '// #keys
+        .InsertDWord 3                      '// #keys
+        
         .InsertNTString CurrentUsername     '// account to update
                                             '// keys
         .InsertNTString "Profile\Location"
         .InsertNTString "Profile\Description"
+        .InsertNTString "Profile\Sex"
                                             '// Values()
         .InsertNTString Location
         .InsertNTString description
+        .InsertNTString Sex
         
         .SendPacket &H27
     End With

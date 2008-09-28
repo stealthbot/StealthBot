@@ -257,7 +257,7 @@ Private Sub cmdCancel_Click()
 End Sub
 
 Private Sub cmdOK_Click()
-    SetProfile txtLoc.text, txtDescr.text
+    SetProfile txtLoc.text, txtDescr.text, txtSex.text
     Unload Me
 End Sub
 
@@ -265,7 +265,7 @@ Private Sub Form_Load()
     Me.Icon = frmChat.Icon
     lblUsername.Caption = GetCurrentUsername
     txtAge.Enabled = False
-    txtSex.Enabled = False ' Starcraft patch 1.15, 2007-06-07
+    'txtSex.Enabled = False ' Starcraft patch 1.15, 2007-06-07
     ProfileRequest = True
     RequestProfile GetCurrentUsername
 End Sub
