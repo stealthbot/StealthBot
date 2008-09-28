@@ -10,7 +10,7 @@ Begin VB.Form frmChat
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
    ClientLeft      =   165
-   ClientTop       =   855
+   ClientTop       =   780
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -4342,7 +4342,7 @@ End Sub
 Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     On Error GoTo ERROR_HANDLER
     
-    Static strBuf        As String ' ...
+    Static strbuf        As String ' ...
     Static spaceIndex(2) As Long   ' ...
 
     Dim temp As udtGetAccessResponse
@@ -4539,7 +4539,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 End If
                 
             Case KEY_DELETE
-                strBuf = vbNullString
+                strbuf = vbNullString
                 
             Case vbKeyTab
                 Dim prevStart As Long   ' ...
@@ -4556,7 +4556,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     End If
                 Else
                     With cboSend
-                        If (strBuf = vbNullString) Then
+                        If (strbuf = vbNullString) Then
                             ' grab space before cursor
                             spaceIndex(0) = InStrRev(.text, Space(1), IIf(.SelStart, _
                                 .SelStart, 1), vbBinaryCompare)
@@ -4578,7 +4578,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 End If
                             End If
                             
-                            strBuf = Mid$(.text, spaceIndex(0) + 1, _
+                            strbuf = Mid$(.text, spaceIndex(0) + 1, _
                                 (.SelStart - spaceIndex(0)))
                                 
                             ' ...
@@ -4588,8 +4588,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                             MatchIndex = (MatchIndex + 1)
                         End If
                         
-                        If (strBuf <> vbNullString) Then
-                            res = MatchClosest(strBuf, _
+                        If (strbuf <> vbNullString) Then
+                            res = MatchClosest(strbuf, _
                                 IIf(MatchIndex, MatchIndex, 1))
                             
                             ' final check
@@ -4858,7 +4858,7 @@ theEnd:
     End With
     
     If (KeyCode <> vbKeyTab) Then
-        strBuf = vbNullString
+        strbuf = vbNullString
     End If
 
     Exit Sub
@@ -6899,7 +6899,7 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
 End Sub
 
 Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
-    On Error GoTo ERROR_HANDLER
+    'On Error GoTo ERROR_HANDLER
 
     Dim strTemp     As String
     Dim fTemp       As String

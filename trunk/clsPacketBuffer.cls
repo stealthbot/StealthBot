@@ -164,11 +164,18 @@ End Function ' end function Clear
 
 ' ...
 Public Function SendPacketMCP(Optional PacketID As Byte)
-    Dim buf() As Byte ' ...
+    Dim buf()  As Byte ' ...
+    Dim strbuf As String ' ...
     
     ' ...
     If (frmChat.sckMCP.State <> sckConnected) Then
         Exit Function
+    End If
+    
+    ' ...
+    If (MDebug("all")) Then
+        frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & _
+            Right$("00" & Hex(PacketID), 2)
     End If
     
     ' resize temporary data buffer
@@ -187,13 +194,14 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     End If
     
     ' ...
-    If (MDebug("all")) Then
-        frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & _
-            Right$("00" & Hex(PacketID), 2)
-    End If
+    strbuf = String$(m_bufpos + 3, vbNullChar)
+        
+    ' ...
+    Call CopyMemory(ByVal strbuf, buf(0), m_bufpos + 3)
     
     ' ...
-    Call frmChat.sckMCP.SendData(buf)
+    'Call frmChat.sckMCP.SendData(strbuf)
+    Call Send(frmChat.sckMCP.SocketHandle, strbuf, m_bufpos + 3, 0)
     
     ' clear buffer contents
     Call Clear
@@ -212,14 +220,14 @@ Public Function SendPacket(Optional PacketID As Byte)
         Exit Function
     End If
     
-    ' resize temporary data buffer
-    ReDim buf(m_bufpos + 3)
-    
     ' ...
     If (MDebug("all")) Then
         frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & Right$("00" & _
             Hex(PacketID), 2)
     End If
+    
+    ' resize temporary data buffer
+    ReDim buf(m_bufpos + 3)
     
     ' ...
     buf(0) = &HFF     ' header
@@ -232,26 +240,26 @@ Public Function SendPacket(Optional PacketID As Byte)
     If (m_bufpos) Then
         ' copy data from buffer to temporary buffer
         Call CopyMemory(buf(4), m_buf(0), m_bufpos)
-        
-        ' ...
-        strbuf = String$(m_bufpos + 4, vbNullChar)
-        
-        ' ...
-        Call CopyMemory(ByVal strbuf, buf(0), m_bufpos + 4)
     End If
     
     ' ...
-    Call frmChat.sckBNet.SendData(buf)
-    'Call APISend(buf)
+    strbuf = String$(m_bufpos + 4, vbNullChar)
+        
+    ' ...
+    Call CopyMemory(ByVal strbuf, buf(0), m_bufpos + 4)
     
     ' ...
-    log = String$(m_bufpos + 4, vbNullChar)
+    'Call frmChat.sckBNet.SendData(strbuf)
+    Call Send(frmChat.sckBNet.SocketHandle, strbuf, m_bufpos + 4, 0)
     
     ' ...
-    Call CopyMemory(ByVal log, buf(0), m_bufpos + 4)
+    'log = String$(m_bufpos + 4, vbNullChar)
     
     ' ...
-    Call LogPacketRaw(stBNCS, CtoS, PacketID, m_bufpos + 4, log)
+    'Call CopyMemory(ByVal log, buf(0), m_bufpos + 4)
+    
+    ' ...
+    Call LogPacketRaw(stBNCS, CtoS, PacketID, m_bufpos + 4, strbuf)
     
     ' clear buffer contents
     Call Clear
@@ -259,8 +267,9 @@ End Function ' end function SendPacket
 
 ' ...
 Public Function vLSendPacket(Optional PacketID As Byte)
-    Dim buf() As Byte   ' ...
-    Dim log   As String ' ...
+    Dim buf()  As Byte   ' ...
+    Dim log    As String ' ...
+    Dim strbuf As String ' ...
     
     ' ...
     If (frmChat.sckBNLS.State <> sckConnected) Then
@@ -289,16 +298,23 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     End If
     
     ' ...
-    Call frmChat.sckBNLS.SendData(buf)
+    strbuf = String$(m_bufpos + 3, vbNullChar)
+        
+    ' ...
+    Call CopyMemory(ByVal strbuf, buf(0), m_bufpos + 3)
     
     ' ...
-    log = String$(m_bufpos + 3, vbNullChar)
+    'Call frmChat.sckBNLS.SendData(strbuf)
+    Call Send(frmChat.sckBNLS.SocketHandle, strbuf, m_bufpos + 3, 0)
     
     ' ...
-    Call CopyMemory(ByVal log, buf(0), m_bufpos + 3)
+    'log = String$(m_bufpos + 3, vbNullChar)
     
     ' ...
-    Call LogPacketRaw(stBNLS, CtoS, PacketID, m_bufpos + 3, log)
+    'Call CopyMemory(ByVal log, buf(0), m_bufpos + 3)
+    
+    ' ...
+    Call LogPacketRaw(stBNLS, CtoS, PacketID, m_bufpos + 3, strbuf)
     
     ' clear buffer contents
     Call Clear
