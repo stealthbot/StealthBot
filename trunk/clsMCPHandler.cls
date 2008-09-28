@@ -123,12 +123,14 @@ Public Sub LogonToRealm(ByVal cookie As Long, ByVal ServerToken As Long, ByVal R
     '(DWORD)      Cookie
     '(DWORD[5])   Hashed realm password
     '(STRING)     Realm title
-    Dim Buffer As String
+    Dim Buffer As String * 20
     RealmError = False
     
     Buffer = String$(20, vbNullChar)
     Call calcHashBuf("password", 8, Buffer)
     Call calcHashBuf(MKL(cookie) & MKL(ServerToken) & Buffer, 28, Buffer)
+    
+    frmChat.AddChat vbRed, RealmName
     
     With PBuffer
         .InsertDWord cookie

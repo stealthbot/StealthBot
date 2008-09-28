@@ -203,6 +203,9 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     'Call frmChat.sckMCP.SendData(strbuf)
     Call Send(frmChat.sckMCP.SocketHandle, strbuf, m_bufpos + 3, 0)
     
+    ' ...
+    Call LogPacketRaw(stMCP, CtoS, PacketID, m_bufpos + 3, strbuf)
+    
     ' clear buffer contents
     Call Clear
 End Function ' end function SendPacketMCP

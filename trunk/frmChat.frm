@@ -10,7 +10,7 @@ Begin VB.Form frmChat
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
    ClientLeft      =   165
-   ClientTop       =   780
+   ClientTop       =   855
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -5190,10 +5190,20 @@ Private Sub sckMCP_Connect()
 End Sub
 
 Private Sub sckMCP_DataArrival(ByVal bytesTotal As Long)
+    On Error GoTo ERROR_HANDLER
+
     Dim Data As String
     
     sckMCP.GetData Data, vbString
     frmRealm.MCPHandler.ParseMCPPacket Data
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    AddChat vbRed, _
+        "Error (#" & Err.Number & "): " & Err.description & " in sckMCP_DataArrival()."
+
+    Exit Sub
 End Sub
 
 Private Sub sckMCP_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
@@ -6899,7 +6909,7 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
 End Sub
 
 Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
-    'On Error GoTo ERROR_HANDLER
+    On Error GoTo ERROR_HANDLER
 
     Dim strTemp     As String
     Dim fTemp       As String
@@ -7064,6 +7074,8 @@ End Sub
 'End Function
 
 Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
+    On Error GoTo ERROR_HANDLER
+
     Dim strTemp As String
     
     sckBNLS.GetData strTemp, vbString
@@ -7112,6 +7124,14 @@ Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
             NLogin.ParsePacket BNLSBuffer.GetPacket
         Wend
     End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    AddChat vbRed, _
+        "Error (#" & Err.Number & "): " & Err.description & " in sckBNLS_DataArrival()."
+
+    Exit Sub
 End Sub
 
 Private Sub sckBNLS_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)

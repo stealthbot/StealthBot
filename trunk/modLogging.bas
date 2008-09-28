@@ -119,36 +119,38 @@ End Function
 ' Written 2007-06-08 to produce packet logs or do other things
 '  -at
 Public Sub LogPacketRaw(ByVal Server As enuPL_ServerTypes, ByVal Direction As enuPL_DirectionTypes, ByVal PacketID As Long, ByVal PacketLen As Long, ByRef PacketData As String)
-    Dim l As Long
+    Dim L As Long
     
     If (LogPacketTraffic) Then
         'Log this packet!
-        l = FreeFile
+        L = FreeFile
         
-        Open PacketLogFilePath For Append As #l
-            Print #l, GetTimeStamp() & " "
+        Open PacketLogFilePath For Append As #L
+            Print #L, GetTimeStamp() & " "
         
             Select Case (Server)
                 Case stBNCS
-                    Print #l, "BNCS";
+                    Print #L, "BNCS";
+                Case stMCP
+                    Print #L, "MCP";
                 Case stBNLS
-                    Print #l, "BNLS";
+                    Print #L, "BNLS";
             End Select
             
             Select Case (Direction)
                 Case CtoS
-                    Print #l, " C->S";
+                    Print #L, " C->S";
                 Case StoC
-                    Print #l, " S->C";
+                    Print #L, " S->C";
             End Select
             
-            Print #l, " -- Packet ID " & Right$("00" & Hex(PacketID), 2) & _
+            Print #L, " -- Packet ID " & Right$("00" & Hex(PacketID), 2) & _
                 "h (" & PacketID & "d) Length " & PacketLen
-            Print #l, vbNullString
-            Print #l, DebugOutput(PacketData)
-            Print #l, vbCrLf
-        Close #l
+            Print #L, vbNullString
+            Print #L, DebugOutput(PacketData)
+            Print #L, vbCrLf
+        Close #L
         
-        l = 0
+        L = 0
     End If
 End Sub
