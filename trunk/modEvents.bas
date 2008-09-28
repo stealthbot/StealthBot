@@ -286,7 +286,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         ' update message using Battle.net's unignore command.
         If (frmChat.mnuDisableVoidView.Checked = False) Then
             ' ...
-            'frmChat.tmrSilentChannel(1).Enabled = True
+            frmChat.tmrSilentChannel(1).Enabled = True
         
             ' ...
             frmChat.AddQ "/unignore " & GetCurrentUsername
@@ -864,6 +864,11 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             ' ...
             If (InStr(Len(temp), Message, " has been unsquelched", vbTextCompare) > 0) Then
                 unsquelching = True
+                
+                ' ...
+                If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
+                    frmChat.lvChannel.ListItems.Clear
+                End If
             End If
         End If
         

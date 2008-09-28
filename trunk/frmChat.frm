@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   165
-   ClientTop       =   855
+   ClientLeft      =   225
+   ClientTop       =   780
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -5486,11 +5486,14 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
         ' ...
         If (mnuDisableVoidView.Checked = False) Then
             ' ...
-            Call g_Channel.ClearUsers
-            
-            ' ...
-            lvChannel.ListItems.Clear
-            
+            If (g_Channel.IsSilent) Then
+                ' ...
+                Call g_Channel.ClearUsers
+                
+                ' ...
+                frmChat.lvChannel.ListItems.Clear
+            End If
+        
             ' ...
             Call AddQ("/unsquelch " & GetCurrentUsername)
         End If
@@ -5937,7 +5940,20 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         ' ...
                         command = splt(0) & Space$(1) & reverseUsername(splt(1)) & _
                             Space$(1)
-                            
+
+                        ' ...
+                        If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
+                            ' ...
+                            If ((LCase$(splt(0)) = "/unignore") Or (LCase$(splt(0)) = "/unsquelch")) Then
+                                ' ...
+                                If (StrComp(splt(1), GetCurrentUsername, vbTextCompare) = 0) Then
+                                    ' ...
+                                    lvChannel.ListItems.Clear
+                                End If
+                            End If
+                        End If
+                        
+                        ' ...
                         If (UBound(splt) > 1) Then
                             ReDim Preserve splt(0 To UBound(splt) - 1)
                         End If
