@@ -33,9 +33,6 @@ Public Sub ChatQueue_Terminate()
     If (m_TimerID > 0) Then
         ' ...
         m_TimerID = KillTimer(0, m_TimerID)
-        
-        ' ...
-        Set colChatQueue = Nothing
     End If
     
 End Sub
@@ -45,8 +42,13 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
     ByVal dwTimer As Long)
     
     Dim CurrentUser  As clsUserObj
-    Dim i            As Integer ' ...
+    Dim I            As Integer ' ...
     Dim j            As Integer ' ...
+    
+    ' ...
+    If (g_Channel Is Nothing) Then
+        Exit Function
+    End If
 
     ' ...
     If (g_Channel.IsSilent) Then
@@ -54,18 +56,18 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
     End If
     
     ' ...
-    For i = 1 To g_Channel.Users.Count
+    For I = 1 To g_Channel.Users.Count
         ' ...
-        Set CurrentUser = g_Channel.Users(i)
+        Set CurrentUser = g_Channel.Users(I)
     
         ' ...
         If (CurrentUser.Queue.Count > 0) Then
             ' ...
             If ((GetTickCount() - CurrentUser.Queue(1).EventTick) >= BotVars.ChatDelay) Then
                 ' ...
-                CurrentUser.DisplayQueue
+                Call CurrentUser.DisplayQueue
             End If
         End If
-    Next i
+    Next I
     
 End Function

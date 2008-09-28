@@ -62,6 +62,14 @@ Private Sub Class_Initialize()
         
 End Sub
 
+Private Sub Class_Terminate()
+
+    ' ...
+    Set m_queue = Nothing
+    Set m_stats = Nothing
+
+End Sub
+
 Public Property Get Name() As String
 
     ' ...
@@ -301,6 +309,11 @@ Public Sub DisplayQueue()
 
     Dim CurrentEvent As clsUserEventObj
     Dim j            As Integer
+    
+    ' ...
+    If (Queue Is Nothing) Then
+        Exit Sub
+    End If
     
     ' ...
     For j = 1 To Queue.Count
