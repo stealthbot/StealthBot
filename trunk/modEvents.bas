@@ -1765,7 +1765,7 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
                 frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] In addition, you can try " & _
                     "choosing ""Update version bytes from StealthBot.net"" from the Bot menu."
                 
-                Message = 0
+                'Message = 0
             End If
         
         Case 2:
