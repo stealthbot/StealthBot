@@ -56,11 +56,29 @@ Public Property Get Rank() As Integer
 End Property
 
 ' ...
-Public Property Let Rank(i As Integer)
+Public Property Let Rank(I As Integer)
 
     ' ...
-    m_rank = i
+    m_rank = I
 
+End Property
+
+Public Property Get RankName() As String
+
+    ' ...
+    Select Case m_rank
+        Case 0
+            RankName = "initiate"
+        Case 1
+            RankName = "peon"
+        Case 2
+            RankName = "grunt"
+        Case 3
+            RankName = "shaman"
+        Case 4
+            RankName = "chieftain"
+    End Select
+    
 End Property
 
 ' ...
@@ -88,10 +106,10 @@ Public Property Get Status() As Integer
 End Property
 
 ' ...
-Public Property Let Status(i As Integer)
+Public Property Let Status(I As Integer)
 
     ' ...
-    m_status = i
+    m_status = I
 
 End Property
 
