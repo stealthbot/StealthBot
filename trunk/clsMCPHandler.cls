@@ -130,7 +130,7 @@ Public Sub LogonToRealm(ByVal cookie As Long, ByVal ServerToken As Long, ByVal R
     Call calcHashBuf("password", 8, Buffer)
     Call calcHashBuf(MKL(cookie) & MKL(ServerToken) & Buffer, 28, Buffer)
     
-    frmChat.AddChat vbRed, RealmName
+    'frmChat.AddChat vbRed, RealmName
     
     With PBuffer
         .InsertDWord cookie

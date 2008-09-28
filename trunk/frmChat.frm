@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -5158,7 +5158,8 @@ End Sub
 Sub InitBNetConnection()
     g_Connected = True
     
-    sckBNet.SendData ChrW(1)
+    'sckBNet.SendData ChrW(1)
+    Call Send(sckBNet.SocketHandle, ChrW(1), 1, 0)
     
     If BotVars.BNLS Then
         NLogin.Send_0x10 BotVars.Product
@@ -5185,7 +5186,10 @@ Private Sub sckMCP_Connect()
     End If
     
     AddChat RTBColors.SuccessText, "[REALM] Connection established!"
-    sckMCP.SendData ChrW(1)
+    
+    'sckMCP.SendData ChrW(1)
+    Call Send(sckMCP.SocketHandle, ChrW(1), 1, 0)
+    
     frmRealm.MCPHandler.SendStartup
 End Sub
 
