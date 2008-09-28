@@ -507,7 +507,7 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     
     CurrentUsername = KillNull(Username)
     
-    RequestSystemKeys
+    'RequestSystemKeys
     
     Call SetNagelStatus(frmChat.sckBNet.SocketHandle, True)
     
@@ -544,7 +544,7 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     
     'INetQueue inqReset
     
-    'FullJoin BotVars.HomeChannel
+    'FullJoin BotVars.HomeChannel, 1
 
     QueueLoad = (QueueLoad + 2)
     
@@ -556,16 +556,14 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
         ExReconnectTimerID = 0
     End If
     
-    With PBuffer
-        .InsertNTString "/whoami"
-        .SendPacket &HE
-    End With
-    
     If (BotVars.UsingDirectFList) Then
         Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
     End If
     
-    Call FullJoin(BotVars.HomeChannel)
+    Call FullJoin(BotVars.HomeChannel, 5)
+    Call FullJoin(BotVars.HomeChannel, 0)
+    
+    'Call FullJoin(BotVars.HomeChannel)
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' call event script function

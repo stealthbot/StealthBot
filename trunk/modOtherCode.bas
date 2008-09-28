@@ -1086,7 +1086,7 @@ Public Sub RequestSystemKeys()
         .InsertDWord &H1
         .InsertDWord &H4
         .InsertDWord GetTickCount()
-        .InsertNTString CurrentUsername
+        .InsertNTString BotVars.Username
             
         .InsertNTString "System\Account Created"
         .InsertNTString "System\Last Logon"

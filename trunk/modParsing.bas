@@ -902,8 +902,8 @@ Public Sub NullTruncString(ByRef text As String)
     text = Left$(text, I - 1)
 End Sub
 
-Public Sub FullJoin(Channel As String, Optional ByVal I As Byte)
-    If I > 0 Then
+Public Sub FullJoin(Channel As String, Optional ByVal I As Long = -1)
+    If I >= 0 Then
         PBuffer.InsertDWord CLng(I)
     Else
         PBuffer.InsertDWord &H2

@@ -283,13 +283,20 @@ Public Sub Send0x0A()
         .InsertNTString g_username
         .InsertNTString vbNullString
         .SendPacket &HA
-        
+    End With
+    
+    RequestSystemKeys
+    
+    With PBuffer
         .InsertNonNTString BotVars.Product
         .SendPacket &HB
-        
-        .InsertDWord &H0
-        .InsertNTString g_username & " #" & num
-        .SendPacket &HC
+    End With
+    
+    FullJoin BotVars.HomeChannel & ":" & num, 0
+    
+    With PBuffer
+        .InsertNTString "/whoami"
+        .SendPacket &HE
     End With
     
     Call InsertDummyQueueEntry
