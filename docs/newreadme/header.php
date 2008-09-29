@@ -57,7 +57,7 @@ a:hover
 <body>
 <?php openTable(); ?>
 <h1>StealthBot Online Readme</h1>
-<a href='index.php?act=index'>Readme Home</a> | <a href='index.php?act=viewPage&c=setup'>Getting Started</a> | <a href='index.php?act=featureList'>Features</a> | <a href='index.php?act=cmdList'>Commands</a> | <a href='index.php?act=viewPage&c=script'>Scripting</a> | <a href='index.php?act=viewPage&c=adv'>Advanced</a> | <a href='index.php?act=viewPage&c=donate'>Donate</a> | <a href='index.php?act=team'>Development Team</a>
+<a href='index.php?act=index'>Readme Home</a> | <a href='index.php?act=viewPage&amp;c=setup'>Getting Started</a> | <a href='index.php?act=featureList'>Features</a> | <a href='commands.php?xslt=commandlist'>Commands</a> | <a href='index.php?act=viewPage&amp;c=script'>Scripting</a> | <a href='index.php?act=viewPage&amp;c=adv'>Advanced</a> | <a href='index.php?act=viewPage&amp;c=donate'>Donate</a> | <a href='index.php?act=team'>Development Team</a>
 <?php closeTable(); 
       openTable(); ?>
     

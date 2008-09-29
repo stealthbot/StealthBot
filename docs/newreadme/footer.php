@@ -8,7 +8,7 @@
 </span>
 <span style='font-size: 9px'>
 <!-- If you decide to use this code, please leave this copyright intact. -->
-System &copy;2006 <a href='mailto:stealth@stealthbot.net'>Andy T</a> (Stealth@USEast).
+System &#169;2006 <a href='mailto:stealth@stealthbot.net'>Andy T</a> (Stealth@USEast).
 <!-- Thank you! -->
 All other trademark and copyright information is listed <a href='http://www.stealthbot.net/legal/web/'>here</a>.</span>
 <?php closeTable(); ?>
