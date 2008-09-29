@@ -27,15 +27,6 @@
                     <xsd:element name="argument" minOccurs="0" maxOccurs="unbounded">
                       <xsd:complexType>
                         <xsd:sequence>
-                          <xsd:element name="data" minOccurs="0" maxOccurs="1">
-                            <xsd:complexType>
-                              <xsd:attribute name="type" type="xsd:string" />
-                              <xsd:attribute name="min" type="xsd:string" />
-                              <xsd:attribute name="max" type="xsd:string" />
-                              <xsd:attribute name="maxLength" type="xsd:string" />
-                              <xsd:attribute name="pattern" type="xsd:string" />
-                            </xsd:complexType>
-                          </xsd:element>
                           <xsd:element name="documentation" minOccurs="0" maxOccurs="1">
                             <xsd:complexType>
                               <xsd:sequence>
@@ -87,7 +78,6 @@
                         </xsd:sequence>
                         <xsd:attribute name="name" type="xsd:string" />
                         <xsd:attribute name="type" type="xsd:string" />
-                        <xsd:attribute name="optional" type="xsd:string" />
                       </xsd:complexType>
                     </xsd:element>
                   </xsd:sequence>
@@ -110,7 +100,6 @@
             </xsd:sequence>
             <xsd:attribute name="name" type="xsd:string" />
             <xsd:attribute name="token" type="xsd:string" />
-            <xsd:attribute name="datasrc" type="xsd:string" />
             <xsd:attribute name="enabled" type="xsd:string" />
           </xsd:complexType>
         </xsd:element>
