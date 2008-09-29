@@ -14,7 +14,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>' . "\r\n";
 startPage("Command: " . $cmd);
 ?>
     <h2><xsl:value-of select="@name" /> (<xsl:value-of select="access/rank" />)</h2>
-    <p><b>Alias<xsl:if test="count(aliases/alias) &gt; 0">es</xsl:if></b><br />
+    <p><b>Alias<xsl:if test="count(aliases/alias) &gt; 1">es</xsl:if></b><br />
     <xsl:if test="count(aliases/alias) &gt; 0">
         <xsl:for-each select="aliases/alias">
             <xsl:value-of select="." /> 
@@ -28,7 +28,7 @@ startPage("Command: " . $cmd);
      </xsl:if>
     </p>
     <p><b>Description</b><br /><xsl:value-of select="documentation/description" /></p>
-    <p><b>Arguments</b><br />
+    <p><b>Argument<xsl:if test="count(arguments/argument) &gt; 1">es</xsl:if></b><br />
     <xsl:if test="count(arguments/argument) &gt; 0">
         <ul>
             <xsl:for-each select="arguments/argument">
