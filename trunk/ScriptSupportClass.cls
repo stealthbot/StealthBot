@@ -200,6 +200,7 @@ Public Enum ControlTypes
 End Enum
 
 Private obScriptForms As Object
+Private DictionaryKeys As String
 
 
 
@@ -422,7 +423,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     Optional ByRef entryType As String = "USER") As Object
 
     Dim temp   As udtGetAccessResponse
-    Dim i      As Integer
+    Dim I      As Integer
     Dim splt() As String
     
     temp = GetCumulativeAccess(Username, entryType)
@@ -456,9 +457,9 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
             splt(0) = temp.Groups
         End If
     
-        For i = LBound(splt) To UBound(splt)
-            GetDBEntry.Groups.Add GetDBEntry(splt(i), , , "GROUP")
-        Next i
+        For I = LBound(splt) To UBound(splt)
+            GetDBEntry.Groups.Add GetDBEntry(splt(I), , , "GROUP")
+        Next I
     End If
 End Function
 
@@ -600,11 +601,11 @@ End Function
 '//  See lDataType constants in GetInternalData() below
 Public Function GetInternalDataByUsername(ByVal sUser As String, ByVal lDataType As Long) As Variant
 
-    Dim i As Integer
+    Dim I As Integer
     
-    i = Channel.GetUserIndex(sUser)
+    I = Channel.GetUserIndex(sUser)
     
-    GetInternalDataByUsername = GetInternalData(i, lDataType)
+    GetInternalDataByUsername = GetInternalData(I, lDataType)
 
 End Function
 
@@ -989,7 +990,7 @@ Public Sub GetWinCursorPos(ByRef lCursorX As Long, ByRef lCursorY As Long)
     GetCursorPos PAPI
     
     lCursorX = PAPI.X
-    lCursorY = PAPI.Y
+    lCursorY = PAPI.y
 End Sub
 
 
@@ -1030,7 +1031,7 @@ End Function
 Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal varValue As Variant, _
                       Optional ByVal strDescription As String, Optional ByVal boolOverwrite As Boolean = True)
                       
-    Dim strPath As String, arrSetting() As String, i As Integer
+    Dim strPath As String, arrSetting() As String, I As Integer
     strPath = BotPath() & "plugins\settings.ini"
 
     If Len(strDescription) > 0 Then
@@ -1041,8 +1042,8 @@ Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal 
         If Len(strName & varValue) > 254 Then
             WriteConfigEntry UCase(strPrefix), strName, Left(varValue, 254 - Len(strName)), strPath
             arrSetting = Split(strName, "*")
-            If UBound(arrSetting) > 0 Then i = arrSetting(1) + 1 Else i = 1
-            SetSetting strPrefix, arrSetting(0) & "*" & i, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
+            If UBound(arrSetting) > 0 Then I = arrSetting(1) + 1 Else I = 1
+            SetSetting strPrefix, arrSetting(0) & "*" & I, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
         Else
             WriteConfigEntry UCase(strPrefix), strName, varValue, strPath
         End If
@@ -1053,12 +1054,12 @@ End Sub
 '// GETSETTING
 '//   Written by Swent. Retrieves plugin settings.
 Public Function GetSetting(ByVal strPrefix As String, ByVal strName As String)
-    Dim strPath As String, i As Integer, strAppend As String, tmpValue As String, varValue As Variant
+    Dim strPath As String, I As Integer, strAppend As String, tmpValue As String, varValue As Variant
     strPath = BotPath() & "plugins\settings.ini"
     If LenB(Dir$(strPath)) = 0 Then Exit Function
     
     Do
-        If i > 0 Then strAppend = "*" & i
+        If I > 0 Then strAppend = "*" & I
         tmpValue = GetConfigEntry(strPrefix, Left(strName, Len(strName)) & strAppend, strPath)
         varValue = varValue & tmpValue
         If Len(tmpValue) = 0 Then
@@ -1066,7 +1067,7 @@ Public Function GetSetting(ByVal strPrefix As String, ByVal strName As String)
             GetSetting = varValue
             Exit Do
         End If
-        i = i + 1
+        I = I + 1
     Loop
 End Function
 
@@ -1297,6 +1298,7 @@ Public Function CreateForm(ByVal strPrefix As String, ByVal strName As String) A
         frmUI.FillPrefixName strPrefix, strName
         Load frmUI
         Call obScriptForms.Add(strPrefix & "|" & strName, frmUI)
+        DictionaryKeys = DictionaryKeys & strPrefix & "|" & strName & vbCrLf
         CreateForm = True
     End If
 End Function
@@ -1318,6 +1320,7 @@ End Sub
 '//    Writtin by Hdx - Adds an object of the selected type to a Script's form.
 '//    Returns False if the form does not exits, or the name is already taken
 Public Function AddFormObject(ByVal strPrefix As String, ByVal strFormName As String, ByVal strName As String, ByVal btType As ControlTypes) As Boolean
+    On Error Resume Next
     If (obScriptForms.Exists(strPrefix & "|" & strFormName)) Then
         Dim frmUI As frmScriptUI
         Set frmUI = obScriptForms.Item(strPrefix & "|" & strFormName)
@@ -1418,23 +1421,51 @@ Public Function Friends() As Object
     Set Friends = g_Friends
 End Function
 
+'Class_Terminate doesn't run when a UI form is created via a script. I made this sub so the bot's Unload sub can explicitly _
+    call the code within Class_Terminate to kill all the objects. - FrOzeN
+Public Sub Dispose()
+    Call Class_Terminate
+End Sub
+
 Private Sub Class_Initialize()
     Set obScriptForms = CreateObject("Scripting.Dictionary")
 End Sub
 
+'Re-coded this sub so it properly kills all the UI forms created that are still open. - FrOzeN
 Private Sub Class_Terminate()
-    'Check objects exist before attempting to unload them - FrOzeN
-    If obScriptForms.Count <> 0 Then
+    Static Disposed As Boolean
     
-        'Go through and destroy all the Forms the user has created
-        Dim X As Integer
+    If Not Disposed Then
+        Dim I As Integer, strParts() As String, frmTemp As frmScriptUI
+        strParts() = Split(DictionaryKeys, vbCrLf)
+            
+        For I = 0 To UBound(strParts) - 1
+            If obScriptForms.Exists(strParts(I)) Then
+                Set frmTemp = obScriptForms.Item(strParts(I))
+                frmTemp.DestroyObjects
+                Unload frmTemp
+                Set frmTemp = Nothing
+            End If
+        Next I
         
-        For X = 0 To obScriptForms.Count
-            Unload obScriptForms.Item(X)
-            Call obScriptForms.Remove(X)
-        Next X
-        
+        obScriptForms.RemoveAll
         Set obScriptForms = Nothing
+        
+        Disposed = True
     End If
+    
+'    'Check objects exist before attempting to unload them - FrOzeN
+'    If obScriptForms.Count <> 0 Then
+'
+'        'Go through and destroy all the Forms the user has created
+'        Dim X As Integer
+'
+'        For X = 0 To obScriptForms.Count
+'            Unload obScriptForms.Item(X)
+'            Call obScriptForms.Remove(X)
+'        Next X
+'
+'        Set obScriptForms = Nothing
+'    End If
 End Sub
 

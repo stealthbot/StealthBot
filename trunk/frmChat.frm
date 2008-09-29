@@ -1,16 +1,16 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   225
-   ClientTop       =   780
+   ClientLeft      =   165
+   ClientTop       =   855
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2840,6 +2840,8 @@ Sub Form_Unload(Cancel As Integer)
     UnhookWindowProc
     UnhookSendBoxWindowProc
     
+    Call SharedScriptSupport.Dispose 'Explicit call the Class_Terminate sub in the ScriptSupportClass to destroy all the forms. - FrOzeN
+    
     Set BotVars = Nothing
     Set ClanHandler = Nothing
     Set ListToolTip = Nothing
@@ -3136,7 +3138,7 @@ Private Sub lvClanList_dblClick()
     End If
 End Sub
 
-Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
     Dim aInx As Integer
     Dim sProd As String * 4
 
@@ -3161,18 +3163,18 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, 
     End If
 End Sub
 
-Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
     If Button = vbRightButton Then
         PopupMenu mnuFLpop
     End If
 End Sub
 
-Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Single, y As Single)
     Dim lvhti As LVHITTESTINFO
     Dim lItemIndex As Long
    
     lvhti.pt.X = X / Screen.TwipsPerPixelX
-    lvhti.pt.Y = Y / Screen.TwipsPerPixelY
+    lvhti.pt.y = y / Screen.TwipsPerPixelY
     lItemIndex = SendMessageAny(lvFriendList.hWnd, LVM_HITTEST, 0, lvhti) + 1
    
     If m_lCurItemIndex <> lItemIndex Then
@@ -3236,13 +3238,13 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
                     ListToolTip.TipText = sTemp
                 End With
                 
-                Call ListToolTip.Create(lvFriendList.hWnd, CLng(X), CLng(Y))
+                Call ListToolTip.Create(lvFriendList.hWnd, CLng(X), CLng(y))
             End If
         End If
     End If
 End Sub
 
-Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single, y As Single)
     Dim lvhti As LVHITTESTINFO
     Dim lItemIndex As Long
     Dim sOutBuf As String
@@ -3251,7 +3253,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
     Dim Clan As String
    
     lvhti.pt.X = X / Screen.TwipsPerPixelX
-    lvhti.pt.Y = Y / Screen.TwipsPerPixelY
+    lvhti.pt.y = y / Screen.TwipsPerPixelY
     lItemIndex = SendMessageAny(lvChannel.hWnd, LVM_HITTEST, -1, lvhti) + 1
  
     If m_lCurItemIndex <> lItemIndex Then
@@ -3303,7 +3305,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     
                 End With
                 
-                Call ListToolTip.Create(lvChannel.hWnd, CLng(X), CLng(Y))
+                Call ListToolTip.Create(lvChannel.hWnd, CLng(X), CLng(y))
             End If
         End If
     End If
@@ -4103,7 +4105,7 @@ Private Sub rtbWhispers_KeyPress(KeyAscii As Integer)
     cboSend.SelText = Chr$(KeyAscii)
 End Sub
 
-Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
     On Error Resume Next
     
     If Button = 1 And Len(rtbChat.SelText) > 0 Then
@@ -4114,7 +4116,7 @@ Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, X As Single, Y 
     End If
 End Sub
 
-Private Sub rtbWhispers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub rtbWhispers_MouseUp(Button As Integer, Shift As Integer, X As Single, y As Single)
     On Error Resume Next
     
     If Button = 1 And Len(rtbWhispers.SelText) > 0 Then
@@ -4950,13 +4952,13 @@ Private Sub quLower_Timer()
         Dim strArray() As String
         Dim ret As String
         Dim lPos As Long
-        Dim Y As String
+        Dim y As String
         Dim C As Integer, n As Integer
         
         Caching = False
         
         ' ...
-        ret = Cache(vbNullString, 0, Y)
+        ret = Cache(vbNullString, 0, y)
         
         ' ...
         lPos = InStr(1, ret, Space$(1), vbBinaryCompare)
@@ -5001,7 +5003,7 @@ Private Sub quLower_Timer()
             strArray(C) = convertUsername(strArray(C))
             
             If Len(strArray(C)) > 1 Then
-                If InStr(Y, "ban") Then
+                If InStr(y, "ban") Then
                     If (g_Channel.Self.IsOperator) Then
                         Ban strArray(C), (AutoModSafelistValue - 1), 0
                     End If
@@ -7467,7 +7469,7 @@ Private Function GetClanSelectedUser() As String
     End With
 End Function
 
-Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Single, y As Single)
     If Button = vbRightButton Then
         lvClanList.SetFocus
         
@@ -7475,7 +7477,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
         Dim lItemIndex As Long, m_lCurItemIndex As Long
         
         lvhti.pt.X = X / Screen.TwipsPerPixelX
-        lvhti.pt.Y = Y / Screen.TwipsPerPixelY
+        lvhti.pt.y = y / Screen.TwipsPerPixelY
         lItemIndex = SendMessageAny(lvClanList.hWnd, LVM_HITTEST, 0, lvhti) + 1
         
         If lItemIndex > 0 Then
