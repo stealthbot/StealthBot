@@ -865,34 +865,16 @@
 
               <access>
                 <rank>
-                  100
+                  60
                 </rank>
 
                 <flags>
                   <flag>
                     A
                   </flag>
-                </flags>
-              </access>
-            </restriction>
 
-            <restriction name="FLAG_S_LOW">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
-
-              <match message="[s]+" />
-
-              <access>
-                <rank>
-                  100
-                </rank>
-
-                <flags>
                   <flag>
-                    A
+                    a
                   </flag>
                 </flags>
               </access>

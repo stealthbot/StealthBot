@@ -121,9 +121,30 @@ Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
         
         With temp
             .Name = getName(Parameter)
-            .IsOptional = getOptional(Parameter)
             .dataType = getType(Parameter)
             .Restrictions = getRestrictions(Parameter)
+            .IsOptional = False
+        End With
+        
+        getParameters.Add temp
+        
+        Set temp = Nothing
+    Next
+    
+    Set Parameters = CommandNode.selectNodes("arguments/optional/arguments")
+    
+    If (CommandNode Is Nothing) Then
+        Exit Function
+    End If
+    
+    For Each Parameter In Parameters
+        Set temp = New clsCommandParamsObj
+        
+        With temp
+            .Name = getName(Parameter)
+            .dataType = getType(Parameter)
+            .Restrictions = getRestrictions(Parameter)
+            .IsOptional = True
         End With
         
         getParameters.Add temp
@@ -133,29 +154,12 @@ Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
 
 End Function
 
-Private Function getOptional(ByRef ParameterNode As IXMLDOMNode) As Boolean
-    
-    Dim attrOptional As IXMLDOMAttribute
-
-    ' ...
-    Set attrOptional = ParameterNode.attributes.getNamedItem("optional")
-    
-    ' ...
-    If (attrOptional Is Nothing) Then
-        Exit Function
-    End If
-    
-    ' ...
-    getOptional = attrOptional.nodeValue
-    
-End Function
-
 Private Function getType(ByRef ParameterNode As IXMLDOMNode) As String
     
     Dim attrType As IXMLDOMAttribute
 
     ' ...
-    Set attrType = ParameterNode.attributes.getNamedItem("type")
+    Set attrType = ParameterNode.Attributes.getNamedItem("type")
     
     ' ...
     If (attrType Is Nothing) Then
@@ -262,7 +266,7 @@ Private Function getName(ByRef AnyNode As IXMLDOMNode) As String
         Exit Function
     End If
     
-    Set temp = AnyNode.attributes.getNamedItem("name")
+    Set temp = AnyNode.Attributes.getNamedItem("name")
     If (temp Is Nothing) Then
         Exit Function
     End If
@@ -283,7 +287,7 @@ Private Function getMatchMessage(ByRef AnyNode As IXMLDOMNode) As String
         Exit Function
     End If
     
-    Set temp = temp.attributes.getNamedItem("message")
+    Set temp = temp.Attributes.getNamedItem("message")
     If (temp Is Nothing) Then
         Exit Function
     End If
@@ -300,7 +304,7 @@ Private Function getEnabled(ByRef AnyNode As IXMLDOMNode) As Boolean
     If (AnyNode Is Nothing) Then
         Exit Function
     End If
-    Set temp = AnyNode.attributes.getNamedItem("enabled")
+    Set temp = AnyNode.Attributes.getNamedItem("enabled")
     getEnabled = True
     
     If (temp Is Nothing) Then
@@ -322,9 +326,9 @@ Private Function setEnabled(ByRef AnyNode As IXMLDOMNode, ByVal Enabled As Boole
         Exit Function
     End If
 
-    Set temp = AnyNode.attributes.getNamedItem("enabled")
+    Set temp = AnyNode.Attributes.getNamedItem("enabled")
     If (temp Is Nothing) Then
-        Set temp = AnyNode.attributes.setNamedItem(m_database.createAttribute("enabled"))
+        Set temp = AnyNode.Attributes.setNamedItem(m_database.createAttribute("enabled"))
     End If
 
     If (Enabled = True) Then
