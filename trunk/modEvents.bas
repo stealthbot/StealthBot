@@ -561,7 +561,7 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     End If
     
     Call FullJoin(BotVars.HomeChannel, 5)
-    Call FullJoin(BotVars.HomeChannel, 0)
+    Call FullJoin(BotVars.HomeChannel, 2)
     
     'Call FullJoin(BotVars.HomeChannel)
     
