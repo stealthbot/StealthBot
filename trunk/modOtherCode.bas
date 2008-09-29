@@ -2344,9 +2344,9 @@ Public Sub LogCommand(ByVal Caller As String, ByVal CString As String)
 
     If (LenB(CString) > 0) Then
         f = FreeFile
-        
-        sPath = GetProfilePath() & "\Logs\commands.txt"
-        
+
+        sPath = GetProfilePath()
+
         If (LenB(Caller) = 0) Then
             Caller = "bot console"
         End If
@@ -2890,6 +2890,12 @@ End Function
 
 ' Fixed font issue when an element was only 1 character long -Pyro (9/28/08)
 ' Fixed issue with displaying null text.
+
+' I changed the location of where fontStr was being declared. I can't figure out why it makes any difference, but _
+    when I have it declared above I get memory errors, my IDE crashes, I runtime erro 380 and _
+  - Error (#-2147417848): Method 'SelFontName' of object 'IRichText' failed in DisplayRichText().
+'I believe it's something to do with the subclassing overwriting the memory, but it only occurs when run from the IDE. - FrOzeN
+
 Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Variant)
     On Error GoTo ERROR_HANDLER
     
@@ -2902,11 +2908,12 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim f              As Integer
     Dim blUnlock       As Boolean
     Dim LogThis        As Boolean
-    Dim fontStr        As String
-    
+    'Dim fontStr        As String
+
     If (BotVars.LockChat = False) Then
         f = FreeFile
-    
+        
+        Dim fontStr As String   'Declared here instead. - FrOzeN
         fontStr = frmChat.rtbChat.Font.Name
         
         If (IsWin2000Plus()) Then

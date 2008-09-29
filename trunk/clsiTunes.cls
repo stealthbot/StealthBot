@@ -78,7 +78,9 @@ Public Sub PlayTrack(Optional Track As Variant)
         ' ...
         Set TrackCollection = _
             m_iTunesObj.LibraryPlaylist.Tracks
-            
+        
+        Dim TrackObj As Object
+        
         For Each TrackObj In TrackCollection
             If (StrComp(TrackObj.Name, Track, vbTextCompare) > 0) Then
                 Call TrackObj.Play
