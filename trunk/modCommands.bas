@@ -5124,13 +5124,18 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
         End If
         
         ' grab access for entry
-        gAcc = GetCumulativeAccess(user, dbType)
+        gAcc = GetAccess(user, dbType)
         
         ' if we've found a matching user, lets correct
         ' the casing of the name that we've entered
-        If (Len(gAcc.Username)) Then
-            user = gAcc.Username
+        If (Len(gAcc.Username) > 0) Then
+            If (StrComp(gAcc.Type, dbType, vbTextCompare) = 0) Then
+                user = gAcc.Username
+            End If
         End If
+        
+        ' grab access for entry
+        gAcc = GetCumulativeAccess(user, dbType)
 
         ' is rank valid?
         If ((Rank <= 0) And (Flags = vbNullString) And _
@@ -7071,6 +7076,9 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
         For I = 1 To command.Parameters.Count
             Set Parameter = command.Parameters(I)
             
+            'frmChat.AddChat vbRed, Parameter.dataType
+            'frmChat.AddChat vbRed, StrictIsNumeric(splt(loopCount))
+            
             ' ...
             If (Parameter.IsOptional) Then
                 ' ...
@@ -7124,11 +7132,6 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
                     Next
                     
                     Set regex = Nothing
-                End If
-                
-                ' ...
-                If (Parameter.IsOptional) Then
-                    Exit For
                 End If
                 
                 ' ...

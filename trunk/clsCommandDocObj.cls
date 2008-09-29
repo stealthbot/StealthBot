@@ -131,7 +131,7 @@ Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
         Set temp = Nothing
     Next
     
-    Set Parameters = CommandNode.selectNodes("arguments/optional/arguments")
+    Set Parameters = CommandNode.selectNodes("arguments/optional/argument")
     
     If (CommandNode Is Nothing) Then
         Exit Function
