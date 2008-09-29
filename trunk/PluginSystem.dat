@@ -509,10 +509,12 @@ Sub ps_updates_cmd(cmd, Username, DisplayID)
    If Instr(Content, "|||") = 0 Then
       Call psCannotConnect(): Exit Sub
    End If
+
    Lines = Split(Content, vbCrLf)
    strUpdates = "%4 Color Key: %1 New, %2Updated, %3Installed%4"
- 
+
    For i = 0 to UBound(Lines)
+
       curLine = Split(Lines(i), "|||")
       curPrefix = LCase(curLine(1))
  
@@ -527,12 +529,15 @@ Sub ps_updates_cmd(cmd, Username, DisplayID)
          dispColor = "%3"
 	 dlList = dlList & "(" & curPrefix & "), "
       End If
- 
-      If Lines(i) <> vbNullString Then
+
+      '// scInet.OpenURL didn't seem to get the entire amount of information. So I made it exist after _
+      '//   the first broken line is found. - FrOzeN
+      If (LenB(Lines(i)) <> 0) And (UBound(curLine) = 4) Then
          strUpdates = strUpdates & dispColor & "%4 [ " & curLine(0) & " ]%4 Author: " & curLine(4) & vbTab & " Version: " & _
                       curLine(2) & "%4 " & "Description: " & curLine(3) & "%4 " & "Prefix: " & curPrefix & "%4"
       End If
    Next
+
    If DisplayID < 4 Then
       dsp DisplayID, "Plugin Downloads: " & Left(dlList, Len(dlList) - 2), Username, 0
    Else
