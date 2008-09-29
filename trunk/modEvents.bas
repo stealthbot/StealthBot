@@ -1939,8 +1939,9 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
                 
             frmChat.rtbWhispers.Visible = rtbWhispersVisible
                            
-            If ((frmChat.mnuToggleWWUse.Checked) And _
-                (frmChat.WindowState <> vbMinimized)) Then
+            If (frmChat.mnuToggleWWUse.Checked) Then
+            'If ((frmChat.mnuToggleWWUse.Checked) And _
+                '(frmChat.WindowState <> vbMinimized)) Then
                 
                 If (Not (IrrelevantWhisper(Message, Username))) Then
                     WWIndex = AddWhisperWindow(Username)

@@ -2369,10 +2369,20 @@ Private Function OnPlay(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     If (BotVars.DisableMP3Commands = False) Then
         ' ...
-        Call MediaPlayer.PlayTrack(msgData)
-        
-        ' ...
-        tmpBuf = "Playback started."
+        If (Not (MediaPlayer.IsLoaded())) Then
+            tmpBuf = "Error: " & MediaPlayer.Name & " is not loaded."
+        Else
+            If ((MediaPlayer.Name = "iTunes") And (Not (StrictIsNumeric(msgData)))) Then
+                tmpBuf = "Error: You must specify a track number."
+            Else
+                If (msgData = vbNullString) Then
+                    Call MediaPlayer.PlayTrack
+                Else
+                    Call MediaPlayer.PlayTrack(msgData)
+                End If
+                tmpBuf = "Playback started."
+            End If
+        End If
     End If
 
     ' return message
@@ -2435,9 +2445,13 @@ Private Function OnFos(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     Dim tmpBuf As String ' temporary output buffer
 
    If (BotVars.DisableMP3Commands = False) Then
-        MediaPlayer.FadeOutToStop
+        If (MediaPlayer.IsLoaded()) Then
+            MediaPlayer.FadeOutToStop
         
-        tmpBuf = "Fade-out stop."
+            tmpBuf = "Fade-out stop."
+        Else
+            tmpBuf = MediaPlayer.Name & " is not loaded."
+        End If
     End If
         
     ' return message
@@ -4418,16 +4432,20 @@ Private Function OnPrev(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim Pos As Integer ' ...
+        If (MediaPlayer.IsLoaded()) Then
+            Dim Pos As Integer ' ...
         
-        ' ...
-        Pos = MediaPlayer.PlaylistPosition
+            ' ...
+            Pos = MediaPlayer.PlaylistPosition
     
-        ' ...
-        Call MediaPlayer.PlayTrack(Pos - 1)
+            ' ...
+            Call MediaPlayer.PlayTrack(Pos - 1)
         
-        ' ...
-        tmpBuf = "Skipped backwards."
+            ' ...
+            tmpBuf = "Skipped backwards."
+        Else
+            tmpBuf = MediaPlayer.Name & " is not loaded."
+        End If
     End If
     
     ' return message
@@ -4523,7 +4541,7 @@ Private Function OnMP3(ByVal Username As String, ByRef dbAccess As udtGetAccessR
         TrackLength = MediaPlayer.TrackLength
         
         If (TrackName = vbNullString) Then
-            tmpBuf = "Winamp is not loaded."
+            tmpBuf = MediaPlayer.Name & " is not loaded."
         Else
             tmpBuf = "Current MP3 " & _
                 "[" & ListPosition & "/" & ListCount & "]: " & _

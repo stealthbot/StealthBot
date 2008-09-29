@@ -47,15 +47,24 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Public Sub PlayTrack(Optional Track As Integer)
+Public Property Get Name() As String
+    Name = "iTunes"
+End Property
+
+Public Function IsLoaded() As Boolean
+    IsLoaded = Not CBool(m_iTunesObj Is Nothing)
+End Function
+
+Public Sub PlayTrack(Optional Track As Variant)
     ' ...
     If (Not (m_iTunesObj Is Nothing)) Then
         Call CreateiTunesObj
     End If
     
+    Dim TrackCollection As Object ' ...
+    
     ' ...
-    If (Track) Then
-        Dim TrackCollection As Object ' ...
+    If StrictIsNumeric(Track) Then
   
         ' ...
         Set TrackCollection = _
@@ -63,6 +72,18 @@ Public Sub PlayTrack(Optional Track As Integer)
             
         ' ...
         Call TrackCollection(Track).Play
+        Call TrackCollection(Track).Name
+    ElseIf (Track <> vbNullString) Then
+  
+        ' ...
+        Set TrackCollection = _
+            m_iTunesObj.LibraryPlaylist.Tracks
+            
+        For Each TrackObj In TrackCollection
+            If (StrComp(TrackObj.Name, Track, vbTextCompare) > 0) Then
+                Call TrackObj.Play
+            End If
+        Next
     Else
         ' ...
         Call m_iTunesObj.Play
@@ -99,7 +120,7 @@ Public Property Get TrackName() As String
     ' ...
     If (IsPlaying) Then
         ' ...
-        TrackName = m_iTunesObj.CurrentTrack.Name
+        TrackName = m_iTunesObj.CurrentTrack.Artist & " - " & m_iTunesObj.CurrentTrack.Name
     Else
         ' ...
         TrackName = vbNullString

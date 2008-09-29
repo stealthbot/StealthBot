@@ -66,18 +66,7 @@ End Property
 Public Property Get RankName() As String
 
     ' ...
-    Select Case m_rank
-        Case 0
-            RankName = "initiate"
-        Case 1
-            RankName = "peon"
-        Case 2
-            RankName = "grunt"
-        Case 3
-            RankName = "shaman"
-        Case 4
-            RankName = "chieftain"
-    End Select
+    RankName = GetRank(CByte(m_rank))
     
 End Property
 

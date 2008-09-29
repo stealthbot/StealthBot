@@ -204,6 +204,18 @@ Private Function GetWinampSongTitle(Optional ByVal entryNumber As Integer = 0) A
     GetWinampSongTitle = ret
 End Function
 
+Public Property Get Name() As String
+    Name = "Winamp"
+End Property
+
+Public Function IsLoaded() As Boolean
+    If (GetWindowHandle() = 0) Then
+        IsLoaded = False
+    Else
+        IsLoaded = True
+    End If
+End Function
+
 ' ...
 Public Function OpenPlayer(Optional FilePath As String) As Boolean
     ' ...
