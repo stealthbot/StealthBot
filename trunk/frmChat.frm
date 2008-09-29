@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1554,9 +1554,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -3160,7 +3160,7 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, 
             
             If aInx > 0 Then
                 sProd = g_Channel.Users(aInx).game
-            
+
                 mnuPopWebProfile.Enabled = (sProd = "W3XP" Or sProd = "WAR3")
                 mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And g_Clan.Self.Rank >= 3)
                 mnuPopKick.Enabled = (MyFlags = 2 Or MyFlags = 18)
@@ -3170,6 +3170,8 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, 
         Else
             mnuPopWebProfile.Enabled = False
         End If
+        
+        mnuPopup.Tag = lvChannel.SelectedItem.text 'Record which user is selected at time of right-clicking. - FrOzeN
         
         PopupMenu mnuPopup
     End If
@@ -3607,6 +3609,8 @@ End Sub
 
 Private Sub mnuPopAddLeft_Click()
     On Error Resume Next
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     If txtPre.Enabled Then 'fix for topic 25290 -a
         If Dii Then txtPre.text = "/w *" Else txtPre.text = "/w "
         
@@ -3618,6 +3622,8 @@ Private Sub mnuPopAddLeft_Click()
 End Sub
 
 Private Sub mnuPopAddToFList_Click()
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     If Not (lvChannel.SelectedItem Is Nothing) Then
         AddQ "/f a " & GetSelectedUser
     End If
@@ -3631,6 +3637,7 @@ End Sub
 
 Private Sub mnuPopDes_Click()
     On Error Resume Next
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
 
     AddQ "/designate " & IIf(Dii, "*", "") & GetSelectedUser
 End Sub
@@ -3651,6 +3658,8 @@ Private Sub mnuPopFLWhois_Click()
 End Sub
 
 Private Sub mnuPopSafelist_Click()
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     Dim gAcc As udtGetAccessResponse
     Dim toSafe As String
     
@@ -3664,6 +3673,8 @@ Private Sub mnuPopSafelist_Click()
 End Sub
 
 Private Sub mnuPopShitlist_Click()
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     Dim gAcc As udtGetAccessResponse
     Dim toBan As String
     
@@ -3678,6 +3689,7 @@ End Sub
 
 Private Sub mnuPopSquelch_Click()
     On Error Resume Next
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     AddQ "/squelch " & GetSelectedUser
 End Sub
@@ -3685,12 +3697,15 @@ End Sub
 
 Private Sub mnuPopUnsquelch_Click()
     On Error Resume Next
-
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     AddQ "/unsquelch " & GetSelectedUser
 End Sub
 
 Private Sub mnuPopWhisper_Click()
     On Error Resume Next
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     If cboSend.text <> vbNullString Then
         AddQ "/w " & GetSelectedUser & Space(1) & cboSend.text
         
@@ -3710,11 +3725,13 @@ End Sub
 
 Private Sub mnuPopWhois_Click()
     On Error Resume Next
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     AddQ "/whois " & GetSelectedUser
 End Sub
 
 Private Sub mnuPopInvite_Click()
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     Dim sPlayer As String
     
     If Not lvChannel.SelectedItem Is Nothing Then
@@ -3730,6 +3747,8 @@ Private Sub mnuPopInvite_Click()
 End Sub
 
 Private Sub mnuPopWebProfileWAR3_Click()
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     Dim sPlayer As String
     
     sPlayer = GetSelectedUser
@@ -3738,6 +3757,7 @@ Private Sub mnuPopWebProfileWAR3_Click()
 End Sub
 
 Private Sub mnuPopWebProfileW3XP_Click()
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     Dim sPlayer As String
     
     sPlayer = GetSelectedUser
@@ -3977,22 +3997,32 @@ End Sub
 'End Sub
 
 Private Sub mnuStatsBW_Click()
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     AddQ "/stats " & GetSelectedUser & " SEXP"
 End Sub
 
 Private Sub mnuStatsFT_Click()
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     AddQ "/stats " & GetSelectedUser & " W3XP"
 End Sub
 
 Private Sub mnuStatsSC_Click()
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     AddQ "/stats " & GetSelectedUser & " STAR"
 End Sub
 
 Private Sub mnuStatsW2_Click()
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     AddQ "/stats " & GetSelectedUser & " W2BN"
 End Sub
 
 Private Sub mnuStatsW3_Click()
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     AddQ "/stats " & GetSelectedUser & " WAR3"
 End Sub
 
@@ -4006,6 +4036,7 @@ End Sub
 
 Private Sub mnuPopPLookup_Click()
     On Error Resume Next
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     RequestProfile GetSelectedUser
     
@@ -4015,6 +4046,8 @@ End Sub
 
 Private Sub mnuPopCopy_Click()
     On Error Resume Next
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     Clipboard.Clear
     
     Clipboard.SetText GetSelectedUser
@@ -4151,6 +4184,8 @@ End Sub
 
 Private Sub mnuUserlistWhois_Click()
     On Error Resume Next
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     Dim temp As udtGetAccessResponse
     Dim s As String
     
@@ -4185,10 +4220,14 @@ Private Sub mnuConnect_Click()
 End Sub
 
 Private Sub mnuPopKick_Click()
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     If MyFlags = 2 Or MyFlags = 18 Then AddQ "/kick " & IIf(Dii, "*", "") & GetSelectedUser
 End Sub
 
 Private Sub mnuPopBan_Click()
+    If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
+    
     If MyFlags = 2 Or MyFlags = 18 Then AddQ "/ban " & IIf(Dii, "*", "") & GetSelectedUser
 End Sub
 
@@ -7172,6 +7211,18 @@ Private Sub sckBNLS_Error(ByVal Number As Integer, description As String, ByVal 
     Call Event_BNLSError(Number, description)
 End Sub
 
+'This function checks if the user selected when right-clicked is the same one when they click on the menu option. - FrOzeN
+Private Function PopupMenuUserCheck() As Boolean
+    If Not (lvChannel.SelectedItem Is Nothing) Then
+        If mnuPopup.Tag <> lvChannel.SelectedItem.text Then
+            PopupMenuUserCheck = False
+            Exit Function
+        End If
+    End If
+    
+    PopupMenuUserCheck = True
+End Function
+
 Function GetSelectedUsers() As Collection
     Dim I As Integer ' ...
 
@@ -7190,7 +7241,7 @@ Function GetSelectedUser() As String
     
         Exit Function
     End If
-
+    
     GetSelectedUser = lvChannel.SelectedItem.text
 End Function
 
