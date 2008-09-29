@@ -1554,9 +1554,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -1622,6 +1622,13 @@ Private Sub Form_Load()
     Else
         Me.Left = (Screen.Width - Me.Width) / 2
         Me.Top = (Screen.Height - Me.Height) / 2
+    End If
+    
+    'Support for recording maxmized position. - FrOzeN
+    s = ReadCFG("Position", "Maximized")
+    
+    If CBool(s) Then
+        Me.WindowState = vbMaximized
     End If
     
     Set ClanHandler = New clsClanPacketHandler
@@ -2388,6 +2395,7 @@ Sub Form_Resize()
     
     If Me.WindowState = vbMaximized Then
         WasMaximized = True
+        Call RecordWindowPosition(True)
     ElseIf Me.WindowState = vbMinimized Then
         If WasMaximized Then
             WasMaximized = False
@@ -2783,7 +2791,11 @@ Sub Form_Unload(Cancel As Integer)
     
     If LenB(Dir$(GetConfigFilePath())) > 0 Then
         If Me.WindowState <> vbMinimized Then
-            RecordWindowPosition
+            If Me.WindowState = vbMaximized Then
+                Call RecordWindowPosition(True)
+            Else
+                RecordWindowPosition
+            End If
         End If
         
         WriteINI "Main", "ConfigVersion", CONFIG_VERSION
@@ -7742,11 +7754,16 @@ Public Sub ParseClanPacket(ByVal PacketID As Long, ByVal Contents As String)
     ClanHandler.ParseClanPacket PacketID, Contents
 End Sub
 
-Public Sub RecordWindowPosition()
-    WriteINI "Position", "Left", Int(Me.Left / Screen.TwipsPerPixelX)
-    WriteINI "Position", "Top", Int(Me.Top / Screen.TwipsPerPixelY)
-    WriteINI "Position", "Height", Int(Me.Height / Screen.TwipsPerPixelY)
-    WriteINI "Position", "Width", Int(Me.Width / Screen.TwipsPerPixelX)
+Public Sub RecordWindowPosition(Optional Maximized As Boolean = False)
+    'Don't record other position information if maximized, otherwise when they unmaximize it will be fullscreen width and height. - FrOzeN
+    If Not Maximized Then
+        WriteINI "Position", "Left", Int(Me.Left / Screen.TwipsPerPixelX)
+        WriteINI "Position", "Top", Int(Me.Top / Screen.TwipsPerPixelY)
+        WriteINI "Position", "Height", Int(Me.Height / Screen.TwipsPerPixelY)
+        WriteINI "Position", "Width", Int(Me.Width / Screen.TwipsPerPixelX)
+    End If
+    
+    WriteINI "Position", "Maximized", CStr(Maximized)
     WriteINI "Main", "ConfigVersion", CONFIG_VERSION
 End Sub
 
