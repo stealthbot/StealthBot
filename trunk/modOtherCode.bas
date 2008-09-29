@@ -2888,6 +2888,8 @@ ERROR_HANDLER:
     Exit Function
 End Function
 
+' Fixed font issue when an element was only 1 character long -Pyro (9/28/08)
+' Fixed issue with displaying null text.
 Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Variant)
     On Error GoTo ERROR_HANDLER
     
@@ -2900,10 +2902,13 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim f              As Integer
     Dim blUnlock       As Boolean
     Dim LogThis        As Boolean
+    Dim fontStr        As String
     
     If (BotVars.LockChat = False) Then
         f = FreeFile
     
+        fontStr = frmChat.rtbChat.Font.Name
+        
         If (IsWin2000Plus()) Then
             Call GetScrollRange(rtb.hWnd, SB_VERT, 0, intRange)
             
@@ -2930,6 +2935,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 .Visible = False
                 .SelStart = 0
                 .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
+                .SelFontName = fontStr
                 
                 rtbChatLength = (rtbChatLength - .SelLength)
                 
@@ -2947,6 +2953,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             If .SelBold = True Then: .SelBold = False
             If .SelItalic = True Then: .SelItalic = False
             If .SelUnderline = True Then: .SelUnderline = False
+            .SelFontName = fontStr
             .SelText = s
             .SelStart = Len(.text)
         End With
@@ -2970,7 +2977,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 Call KillNull(saElements(I + 1))
             End If
             
-            If (Len(saElements(I + 1)) > 0) Then
+            If (Len(saElements(I + 1)) > -1) Then
                 L = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
                 
                 While (L > 0)
@@ -2986,6 +2993,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                     L = .SelStart
                     
                     .SelLength = 0
+                    .SelFontName = fontStr
                     .SelColor = saElements(I)
                     .SelText = saElements(I + 1) & _
                         Left$(vbCrLf, -2 * CLng((I + 1) = UBound(saElements)))
