@@ -1654,6 +1654,8 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         ' call event script function
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         
+        If BotIsClosing Then Exit Sub
+        
         On Error Resume Next
         
         ' ...
@@ -1967,6 +1969,8 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' call event script function
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        
+        If BotIsClosing Then Exit Sub
         
         On Error Resume Next
         

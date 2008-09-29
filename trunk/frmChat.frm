@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -940,9 +940,11 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuMonitor 
          Caption         =   "User &Monitor"
+         Visible         =   0   'False
       End
       Begin VB.Menu mnuSepXY 
          Caption         =   "-"
+         Visible         =   0   'False
       End
       Begin VB.Menu mnuGetNews 
          Caption         =   "Get &News and Check for Updates"
