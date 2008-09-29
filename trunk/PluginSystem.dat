@@ -501,7 +501,6 @@ End Sub
 
 '// Displays new plugins and updates available for download - Thanks FiftyToo!
 Sub ps_updates_cmd(cmd, Username, DisplayID)
-
    If scINet.StillExecuting Then
       AddChat vbRed, "Connection to plugins server is busy. Try again in a couple minutes.": Exit Sub
    End If
@@ -670,8 +669,13 @@ Sub ps_plugins_cmd(cmd, Username, DisplayID)
       strPList = strPList & prefixLine & status & "vbCrLf & " & titleLine & plugVer & fileLine
    Next
 
-   AddChat psColor1, "ÿcbÿcuLoaded Plugins (" & psPlugins.Count & ")ÿcuÿcbÿciÿci"
-   Execute("AddChat " & Left(strPList, Len(strPList) - 2))
+   If LenB(strPList) > 0 Then
+      AddChat psColor1, "ÿcbÿcuLoaded Plugins (" & psPlugins.Count & ")ÿcuÿcbÿciÿci"
+      Execute("AddChat " & Left(strPList, Len(strPList) - 2))
+   Else
+      AddChat psColor1, "No Plugins found."
+   End If
+
    If Not GetSetting("ps", "enabled") Then AddChat vbRed, "Plugins have been globally disabled. To reverse this type /ps on"
 End Sub
 
