@@ -132,7 +132,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         AddName Username, Product, Flags, Ping, Clan
     Else
         ' ...
-        If ((BotVars.ChatDelay = 0) Or (UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
+        If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
             ' ...
             Pos = checkChannel(Username)
             
@@ -192,14 +192,17 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         g_Channel.CheckUsers
     End If
 
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' call event script function
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    
-    On Error Resume Next
-    
     ' ...
-    frmChat.SControl.Run "Event_FlagUpdate", Username, Flags, Ping
+    If ((g_Channel.IsSilent) Or ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0))) Then
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' call event script function
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        
+        On Error Resume Next
+        
+        ' ...
+        frmChat.SControl.Run "Event_FlagUpdate", Username, Flags, Ping
+    End If
     
     Exit Sub
     
@@ -978,7 +981,19 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     End If
     
     ' ...
-    If (g_Channel.CheckQueue(Username) = False) Then
+    If (QueuedEventID = 0) Then
+        ' ...
+        If (g_Channel.Self.IsOperator) Then
+            ' ...
+            If (GetSafelist(Username) = False) Then
+                ' ...
+                CheckMessage Username, Message
+            End If
+        End If
+    End If
+    
+    ' ...
+    If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
         ' ...
         If (AllowedToTalk(Username, Message)) Then
             ' ...
@@ -993,18 +1008,6 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
             ' ...
             If (frmChat.mnuFlash.Checked) Then
                 FlashWindow
-            End If
-        End If
-    End If
-    
-    ' ...
-    If ((g_Channel.CheckQueue(Username)) Or ((QueuedEventID > 0) = False)) Then
-        ' ...
-        If (g_Channel.Self.IsOperator) Then
-            ' ...
-            If (GetSafelist(Username) = False) Then
-                ' ...
-                CheckMessage Username, Message
             End If
         End If
         
@@ -1127,7 +1130,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         DoLastSeen Username
     Else
         ' ...
-        If ((BotVars.ChatDelay = 0) Or (UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
+        If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
             ' ...
             If (JoinMessagesOff = False) Then
                 ' ...
@@ -1181,19 +1184,22 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     End If
     
     ' ...
+    If ((StatUpdate) Or ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0))) Then
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' call event script function
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        
+        On Error Resume Next
+        
+        frmChat.SControl.Run "Event_UserInChannel", Username, Flags, Message, Ping, _
+            Product, StatUpdate
+    End If
+    
+    ' ...
     If (MDebug("statstrings")) Then
         frmChat.AddChat vbMagenta, "Username: " & Username & ", Statstring: " & _
             OriginalStatstring
     End If
-    
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' call event script function
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    
-    On Error Resume Next
-    
-    frmChat.SControl.Run "Event_UserInChannel", Username, Flags, Message, Ping, _
-        Product, StatUpdate
     
     Exit Sub
     
@@ -1296,7 +1302,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Username = UserObj.DisplayName
 
     ' ...
-    If ((BotVars.ChatDelay = 0) Or (QueuedEventID > 0)) Then
+    If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' GUI
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1461,15 +1467,15 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         
         ' ...
         frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
+        
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ' call event script function
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        
+        On Error Resume Next
+        
+        frmChat.SControl.Run "Event_UserLeaves", Username, Flags
     End If
-    
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    ' call event script function
-    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    
-    On Error Resume Next
-    
-    frmChat.SControl.Run "Event_UserLeaves", Username, Flags
     
     Exit Sub
     
