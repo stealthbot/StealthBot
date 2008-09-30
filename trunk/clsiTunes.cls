@@ -55,40 +55,31 @@ Public Function IsLoaded() As Boolean
     IsLoaded = Not CBool(m_iTunesObj Is Nothing)
 End Function
 
-Public Sub PlayTrack(Optional Track As Variant)
+Public Sub PlayTrack(ByVal Track As Variant)
     ' ...
     If (Not (m_iTunesObj Is Nothing)) Then
         Call CreateiTunesObj
     End If
     
-    Dim TrackCollection As Object ' ...
-    
-    ' ...
-    If StrictIsNumeric(Track) Then
-  
-        ' ...
+    If (StrictIsNumeric(Track)) Then
+        
+        Dim TrackCollection As Object
+        
         Set TrackCollection = _
             m_iTunesObj.LibraryPlaylist.Tracks
             
-        ' ...
-        Call TrackCollection(Track).Play
-        Call TrackCollection(Track).Name
-    ElseIf (Track <> vbNullString) Then
-  
-        ' ...
-        Set TrackCollection = _
-            m_iTunesObj.LibraryPlaylist.Tracks
+        Call TrackCollection.Item(CInt(Track)).Play
         
-        Dim TrackObj As Object
+    ElseIf (Track = vbNullString) Then
         
-        For Each TrackObj In TrackCollection
-            If (StrComp(TrackObj.Name, Track, vbTextCompare) > 0) Then
-                Call TrackObj.Play
-            End If
-        Next
-    Else
-        ' ...
         Call m_iTunesObj.Play
+    
+    Else
+        
+        Dim colTracks As Object
+        Set colTracks = m_iTunesObj.LibraryPlaylist.Search(Track, 5)
+        Call colTracks.Item(1).Play
+        
     End If
 End Sub
 
