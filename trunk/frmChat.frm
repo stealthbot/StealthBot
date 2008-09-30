@@ -1,9 +1,9 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4600,6 +4600,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 Dim prevStart As Long   ' ...
                 Dim tmpStr    As String ' ...
                 Dim res       As String ' ...
+                Dim remainingText As String
             
                 If (Shift) Then
                     Call cboSend_LostFocus
@@ -4612,6 +4613,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 Else
                     With cboSend
                         If (strbuf = vbNullString) Then
+                            If .SelStart <> Len(.text) Then 'If the cursor isn't in the furthest right position.
+                                remainingText = Mid$(.text, .SelStart + 1)
+                                .SelLength = Len(remainingText)
+                                .SelText = vbNullString
+                            End If
+                            
                             ' grab space before cursor
                             spaceIndex(0) = InStrRev(.text, Space(1), IIf(.SelStart, _
                                 .SelStart, 1), vbBinaryCompare)
@@ -4678,7 +4685,10 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     .text = Mid$(tmp, _
                                         spaceIndex(1))
                                 End If
-                            
+                                
+                                .SelStart = Len(.text)
+                                .SelText = remainingText
+                                
                                 ' ...
                                 .SelStart = SelStart
                             End If
@@ -6435,7 +6445,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     If (g_Online) Then
         Dim found       As ListItem ' ...
         Dim CurrentUser As Object
-        Dim outbuf      As String
+        Dim outBuf      As String
 
         ' ...
         SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
@@ -6449,7 +6459,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             Set CurrentUser = g_Channel.Users(I)
             
             ' ...
-            ParseStatstring CurrentUser.Statstring, outbuf, outbuf
+            ParseStatstring CurrentUser.Statstring, outBuf, outBuf
         
             ' ...
             AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Flags, CurrentUser.Ping, _
