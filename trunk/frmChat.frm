@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1556,9 +1556,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5145,10 +5145,7 @@ Private Sub QueueTimer_Timer()
         End If
         
         ' are we issuing a ban or kick command?
-        If ((StrComp(Left$(Message, 5), "/ban ", vbTextCompare) = 0) Or _
-            (StrComp(Left$(Message, 6), "/kick ", vbTextCompare) = 0)) Then
-            
-            ' ...
+        If (pri = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
             delay = BanDelay()
         End If
     
@@ -6172,10 +6169,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     delay = 25
                     
                     ' are we issuing a ban or kick command?
-                    If ((StrComp(Left$(command, 5), "/ban ", vbTextCompare) = 0) Or _
-                        (StrComp(Left$(command, 6), "/kick ", vbTextCompare) = 0)) Then
-                        
-                        ' ...
+                    If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
                         delay = BanDelay()
                     End If
                     
