@@ -2345,7 +2345,7 @@ Public Sub LogCommand(ByVal Caller As String, ByVal CString As String)
     If (LenB(CString) > 0) Then
         f = FreeFile
 
-        sPath = GetProfilePath()
+        sPath = GetProfilePath() & "\Logs\commands.txt"
 
         If (LenB(Caller) = 0) Then
             Caller = "bot console"
