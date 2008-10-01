@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2905,7 +2905,8 @@ Sub Form_Unload(Cancel As Integer)
     Unload frmSplash
     'Unload frmUserManager
     Unload frmWriteProfile
-    'Call ExitProcess(0)
+    
+    End
 End Sub
 
 
