@@ -971,38 +971,47 @@ Begin VB.Form frmChat
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel1"
+            Enabled         =   0   'False
             Index           =   0
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel2"
+            Enabled         =   0   'False
             Index           =   1
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel3"
+            Enabled         =   0   'False
             Index           =   2
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel4"
+            Enabled         =   0   'False
             Index           =   3
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel5"
+            Enabled         =   0   'False
             Index           =   4
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel6"
+            Enabled         =   0   'False
             Index           =   5
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel7"
+            Enabled         =   0   'False
             Index           =   6
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel8"
+            Enabled         =   0   'False
             Index           =   7
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel9"
+            Enabled         =   0   'False
             Index           =   8
          End
       End
@@ -1422,7 +1431,7 @@ Begin VB.Form frmChat
       End
    End
    Begin VB.Menu mnuQuickChannels 
-      Caption         =   "Quick Channels"
+      Caption         =   "&Quick Channels"
       Visible         =   0   'False
       Begin VB.Menu mnuPublicChannels 
          Caption         =   ""
@@ -1434,9 +1443,9 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuCustomChannels 
          Caption         =   ""
+         Enabled         =   0   'False
          Index           =   0
          Shortcut        =   {F1}
-         Visible         =   0   'False
       End
       Begin VB.Menu mnuCustomChannels 
          Caption         =   ""
