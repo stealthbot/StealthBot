@@ -7852,7 +7852,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         
         mnuPublicChannels(0).Caption = vbNullString
         
-        For i = 1 To mnuPublicChannels.Count
+        For i = 1 To mnuPublicChannels.Count - 1
             Call Unload(mnuPublicChannels(i))
         Next i
         
