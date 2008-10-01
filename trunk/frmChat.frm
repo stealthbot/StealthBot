@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -972,47 +972,38 @@ Begin VB.Form frmChat
          Begin VB.Menu mnuQC 
             Caption         =   "channel1"
             Index           =   0
-            Shortcut        =   {F1}
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel2"
             Index           =   1
-            Shortcut        =   {F2}
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel3"
             Index           =   2
-            Shortcut        =   {F3}
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel4"
             Index           =   3
-            Shortcut        =   {F4}
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel5"
             Index           =   4
-            Shortcut        =   {F5}
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel6"
             Index           =   5
-            Shortcut        =   {F6}
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel7"
             Index           =   6
-            Shortcut        =   {F7}
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel8"
             Index           =   7
-            Shortcut        =   {F8}
          End
          Begin VB.Menu mnuQC 
             Caption         =   "channel9"
             Index           =   8
-            Shortcut        =   {F9}
          End
       End
       Begin VB.Menu mnuSep2 
@@ -1428,6 +1419,72 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuFListRefresh 
          Caption         =   "R&efresh and Reorder"
+      End
+   End
+   Begin VB.Menu mnuQuickChannels 
+      Caption         =   "Quick Channels"
+      Visible         =   0   'False
+      Begin VB.Menu mnuPublicChannels 
+         Caption         =   ""
+         Index           =   0
+      End
+      Begin VB.Menu mnuDash 
+         Caption         =   "-"
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuCustomChannels 
+         Caption         =   ""
+         Index           =   0
+         Shortcut        =   {F1}
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuCustomChannels 
+         Caption         =   ""
+         Index           =   1
+         Shortcut        =   {F2}
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuCustomChannels 
+         Caption         =   ""
+         Index           =   2
+         Shortcut        =   {F3}
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuCustomChannels 
+         Caption         =   ""
+         Index           =   3
+         Shortcut        =   {F4}
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuCustomChannels 
+         Caption         =   ""
+         Index           =   4
+         Shortcut        =   {F5}
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuCustomChannels 
+         Caption         =   ""
+         Index           =   5
+         Shortcut        =   {F6}
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuCustomChannels 
+         Caption         =   ""
+         Index           =   6
+         Shortcut        =   {F7}
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuCustomChannels 
+         Caption         =   ""
+         Index           =   7
+         Shortcut        =   {F8}
+         Visible         =   0   'False
+      End
+      Begin VB.Menu mnuCustomChannels 
+         Caption         =   ""
+         Index           =   8
+         Shortcut        =   {F9}
+         Visible         =   0   'False
       End
    End
 End
@@ -3071,6 +3128,27 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
+Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+    ' ...
+    If ((mnuPublicChannels(0).Caption <> vbNullString) Or _
+            (mnuCustomChannels(0).Caption <> vbNullString)) Then
+    
+        ' ...
+        If ((mnuPublicChannels(0).Caption <> vbNullString) And _
+                (mnuCustomChannels(0).Caption <> vbNullString)) Then
+            
+            ' ...
+            frmChat.mnuDash.Visible = True
+        Else
+            ' ...
+            frmChat.mnuDash.Visible = False
+        End If
+        
+        ' ...
+        PopupMenu mnuQuickChannels
+    End If
+End Sub
+
 Private Sub ListviewTabs_Click(PreviousTab As Integer)
     Dim CurrentTab As Integer
     
@@ -3337,6 +3415,18 @@ End Sub
 
 Private Sub mnuCatchPhrases_Click()
     frmCatch.Show
+End Sub
+
+Private Sub mnuPublicChannels_Click(index As Integer)
+    'FullJoin mnuChannels(Index).Caption
+    
+    AddQ "/join " & mnuPublicChannels(index).Caption
+End Sub
+
+Private Sub mnuCustomChannels_Click(index As Integer)
+    'FullJoin mnuChannels(Index).Caption
+    
+    AddQ "/join " & mnuCustomChannels(index).Caption
 End Sub
 
 'Private Sub mnuCCEditor_Click()

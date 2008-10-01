@@ -9,7 +9,7 @@ Public Sub LoadQuickChannels()
     Dim B As Boolean
     
     B = (Len(Dir$(GetFilePath("quickchannels.ini"))) > 0)
-    
+
     For I = 0 To 8
         If B Then
             s = GetQC(I)
@@ -17,10 +17,23 @@ Public Sub LoadQuickChannels()
             s = GetDefaultQC(I)
         End If
         
+        If (s = vbNullString) Then
+            Exit For
+        End If
+
         QC(I) = s
-        frmChat.mnuQC(I).Caption = s
+        'frmChat.mnuQC(I).Caption = s
+        
+        'If (frmChat.mnuCustomChannels(0).Caption <> vbNullString) Then
+        '    Call Load(frmChat.mnuCustomChannels(frmChat.mnuCustomChannels.Count))
+        'End If
+        
+        With frmChat.mnuCustomChannels(I)
+            .Caption = s
+            .Visible = True
+        End With
     Next I
-    
+
     DoQCMenu
 End Sub
 
@@ -30,12 +43,12 @@ End Function
 
 Public Function GetDefaultQC(ByVal index As Integer) As String
     Select Case index
-        Case (0): GetDefaultQC = "Clan SBS"
-        Case (1): GetDefaultQC = "Clan BoT"
-        Case (2): GetDefaultQC = "Clan DKe"
-        Case (3): GetDefaultQC = "Clan TDA"
-        Case (4): GetDefaultQC = "Clan BNU"
-        Case (5): GetDefaultQC = "Op W@R"
+        Case 0: GetDefaultQC = "Clan SBS"
+        Case 1: GetDefaultQC = "Clan BoT"
+        Case 2: GetDefaultQC = "Clan DKe"
+        Case 3: GetDefaultQC = "Clan TDA"
+        Case 4: GetDefaultQC = "Clan BNU"
+        Case 5: GetDefaultQC = "Op W@R"
     End Select
 End Function
 

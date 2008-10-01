@@ -1048,7 +1048,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim strCompare   As String  ' ...
     Dim Level        As Byte    ' ...
     Dim StatUpdate   As Boolean ' ...
-    Dim index        As Long    ' ...
+    Dim Index        As Long    ' ...
     Dim Stats        As String  ' ...
     Dim Clan         As String  ' ...
     Dim Pos          As Integer ' ...
@@ -2093,16 +2093,20 @@ End Function
 
 '11/22/07 - Hdx - Pass the channel listing (0x0B) directly off to scriptors for there needs. (What other use is there?)
 Public Sub Event_ChannelList(sChannels() As String)
+    Dim X As Integer
+        
     If (MDebug("all")) Then
-        Dim X As Integer
-        
         frmChat.AddChat RTBColors.InformationText, "Received Channel List: "
-        
-        For X = 0 To UBound(sChannels)
-            frmChat.AddChat RTBColors.InformationText, vbTab & _
-                sChannels(X)
-        Next X
     End If
+    
+    For X = 0 To UBound(sChannels)
+        ' ...
+        If (frmChat.mnuPublicChannels(0).Caption <> vbNullString) Then
+            Call Load(frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.Count))
+        End If
+        
+        frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.Count - 1).Caption = sChannels(X)
+    Next X
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' call event script function
