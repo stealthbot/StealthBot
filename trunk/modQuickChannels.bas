@@ -4,32 +4,32 @@ Attribute VB_Name = "modQuickChannels"
 '   June 2006
 
 Public Sub LoadQuickChannels()
-    Dim I As Integer
+    Dim i As Integer
     Dim s As String
     Dim B As Boolean
     
     B = (Len(Dir$(GetFilePath("quickchannels.ini"))) > 0)
 
-    For I = 0 To 8
+    For i = 0 To 8
         If B Then
-            s = GetQC(I)
+            s = GetQC(i)
         Else
-            s = GetDefaultQC(I)
+            s = GetDefaultQC(i)
         End If
         
         If (s = vbNullString) Then
             Exit For
         End If
 
-        QC(I) = s
+        QC(i) = s
         'frmChat.mnuQC(I).Caption = s
         
         'If (frmChat.mnuCustomChannels(0).Caption <> vbNullString) Then
         '    Call Load(frmChat.mnuCustomChannels(frmChat.mnuCustomChannels.Count))
         'End If
         
-        frmChat.mnuCustomChannels(I).Caption = s
-    Next I
+        frmChat.mnuCustomChannels(i).Caption = s
+    Next i
 
     DoQCMenu
 End Sub
@@ -42,29 +42,28 @@ Public Function GetDefaultQC(ByVal index As Integer) As String
     Select Case index
         Case 0: GetDefaultQC = "Clan SBS"
         Case 1: GetDefaultQC = "Clan BoT"
-        Case 2: GetDefaultQC = "Clan DKe"
-        Case 3: GetDefaultQC = "Clan TDA"
-        Case 4: GetDefaultQC = "Clan BNU"
-        Case 5: GetDefaultQC = "Op W@R"
+        Case 2: GetDefaultQC = "Clan TDA"
+        Case 3: GetDefaultQC = "Clan BNU"
+        Case 4: GetDefaultQC = "Op W@R"
     End Select
 End Function
 
 Public Sub SaveQCs()
-    Dim I As Integer
+    Dim i As Integer
     
-    For I = 0 To 8
-        WriteINI "QuickChannels", I, QC(I), "quickchannels.ini"
-    Next I
+    For i = 0 To 8
+        WriteINI "QuickChannels", i, QC(i), "quickchannels.ini"
+    Next i
 End Sub
 
 Public Sub DoQCMenu()
-    For I = 0 To 8
-        If LenB(QC(I)) > 0 Then
+    For i = 0 To 8
+        If LenB(QC(i)) > 0 Then
             'frmChat.mnuQC(I).Visible = True
-            frmChat.mnuCustomChannels(I).Visible = True
+            frmChat.mnuCustomChannels(i).Visible = True
         Else
             'frmChat.mnuQC(I).Visible = False
-            frmChat.mnuCustomChannels(I).Visible = False
+            frmChat.mnuCustomChannels(i).Visible = False
         End If
-    Next I
+    Next i
 End Sub
