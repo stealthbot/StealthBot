@@ -1443,7 +1443,6 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuCustomChannels 
          Caption         =   ""
-         Enabled         =   0   'False
          Index           =   0
          Shortcut        =   {F1}
       End
