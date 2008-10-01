@@ -97,7 +97,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             inBuf.RemoveBYTE 'Unknown (0)
             ClanTag = inBuf.DebuffRaw(4)
             bRank = inBuf.DebuffBYTE
-            RaiseEvent ClanInfo(StrReverse(ClanTag), ClanTag, bRank)
+            RaiseEvent ClanInfo(KillNull(StrReverse(ClanTag)), ClanTag, bRank)
             
         Case SID_CHANGERANK 'Action Response
             
