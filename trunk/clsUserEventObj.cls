@@ -35,6 +35,13 @@ Private Sub Class_Initialize()
 
 End Sub
 
+Private Sub Class_Terminate()
+
+    ' ...
+    Set m_stats = Nothing
+
+End Sub
+
 Public Property Get EventID() As Long
 
     ' ...

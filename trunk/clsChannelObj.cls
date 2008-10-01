@@ -34,8 +34,6 @@ Private m_num_kicks        As Long
 Private m_join_date        As Date
 Private m_users            As Collection
 Private m_banlist          As Collection
-Private m_chat_queue       As Collection
-Private m_chat_queue_count As Integer
 
 Private Sub Class_Initialize()
     
@@ -285,20 +283,6 @@ Public Function IsOnBanList(ByVal Username As String, Optional Operator As Strin
 
     IsOnBanList = 0
 End Function
-
-Public Property Get QueueCount() As Integer
-
-    ' ...
-    QueueCount = m_chat_queue_count
-
-End Property
-
-Public Property Let QueueCount(I As Integer)
-
-    ' ...
-    m_chat_queue_count = I
-
-End Property
 
 Public Sub RemoveBansFromOperator(ByVal Username As String)
 

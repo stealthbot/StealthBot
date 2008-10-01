@@ -285,6 +285,9 @@ End Function
 Public Sub ClearQueue()
 
     ' ...
+    Set m_queue = Nothing
+    
+    ' ...
     Set m_queue = New Collection
 
 End Sub

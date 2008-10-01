@@ -19,35 +19,51 @@ Private m_response As String
 Private m_tag      As String
 
 Public Property Let Message(ByVal Msg As String)
+
     m_message = Msg
+    
 End Property
 
 Public Property Get Message() As String
+
     Message = m_message
+    
 End Property
 
-Public Property Let Priority(ByVal pri As Integer)
+Public Property Let PRIORITY(ByVal pri As Integer)
+
     m_priority = pri
+    
 End Property
 
-Public Property Get Priority() As Integer
-    Priority = m_priority
+Public Property Get PRIORITY() As Integer
+
+    PRIORITY = m_priority
+    
 End Property
 
 Public Property Let Tag(ByVal Tag As String)
+
     m_tag = Tag
+
 End Property
 
 Public Property Get Tag() As String
+
     Tag = m_tag
+
 End Property
 
 Public Property Let ResponseTo(ByVal sUser As String)
+
     m_response = sUser
+
 End Property
 
 Public Property Get ResponseTo() As String
+
     ResponseTo = m_response
+
 End Property
 
 

@@ -1474,7 +1474,7 @@ Private Sub Form_Load()
     #If (BETA = 1) Then
         #If (DEV_RELEASE = 1) Then
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
-                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "16"
+                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "17"
         #Else
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
                 ZeroOffsetEx(App.REVISION, 3) & " Stable"
@@ -6326,6 +6326,9 @@ ERROR_HANDLER:
 End Function
 
 Sub ClearChannel()
+    ' ...
+    Set g_Channel = Nothing
+    
     ' ...
     Set g_Channel = New clsChannelObj
 
