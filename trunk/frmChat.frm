@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -7789,6 +7789,8 @@ Sub DoConnect()
 End Sub
 
 Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAlone As Boolean = False)
+    Dim i As Integer
+    
     If (Not (UserCancelledConnect)) Then
         SetTitle "Disconnected"
         
@@ -7847,6 +7849,12 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
     
         Passed0x0F = 0
         uTicks = 0
+        
+        mnuPublicChannels(0).Caption = vbNullString
+        
+        For i = 1 To mnuPublicChannels.Count
+            Call Unload(mnuPublicChannels(i))
+        Next i
         
         If ((Me.WindowState = vbNormal) And _
             (DoNotShow = 0)) Then
