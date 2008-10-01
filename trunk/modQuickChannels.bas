@@ -28,10 +28,7 @@ Public Sub LoadQuickChannels()
         '    Call Load(frmChat.mnuCustomChannels(frmChat.mnuCustomChannels.Count))
         'End If
         
-        With frmChat.mnuCustomChannels(I)
-            .Caption = s
-            .Visible = True
-        End With
+        frmChat.mnuCustomChannels(I).Caption = s
     Next I
 
     DoQCMenu
@@ -63,9 +60,11 @@ End Sub
 Public Sub DoQCMenu()
     For I = 0 To 8
         If LenB(QC(I)) > 0 Then
-            frmChat.mnuQC(I).Visible = True
+            'frmChat.mnuQC(I).Visible = True
+            frmChat.mnuCustomChannels(I).Visible = True
         Else
-            frmChat.mnuQC(I).Visible = False
+            'frmChat.mnuQC(I).Visible = False
+            frmChat.mnuCustomChannels(I).Visible = False
         End If
     Next I
 End Sub

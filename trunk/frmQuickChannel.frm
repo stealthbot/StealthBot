@@ -502,11 +502,11 @@ Private Sub Form_Load()
     
     frmQuickChannel.KeyPreview = True
     
-    Dim i As Integer
+    Dim I As Integer
     
-    For i = 0 To 8
-        Channel(i) = QC(i)
-    Next i
+    For I = 0 To 8
+        Channel(I) = QC(I)
+    Next I
 End Sub
 
 Private Sub cmdCancel_Click()
@@ -520,14 +520,15 @@ Private Sub Form_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub cmdDone_Click()
-    Dim i As Integer
+    Dim I As Integer
     
     'write the qc list
-    For i = 0 To 8
-        WriteINI "QuickChannels", i, Channel(i).text, "quickchannels.ini"
-        frmChat.mnuQC(i).Caption = Channel(i).text
-        QC(i) = Channel(i).text
-    Next i
+    For I = 0 To 8
+        WriteINI "QuickChannels", I, Channel(I).text, "quickchannels.ini"
+        'frmChat.mnuQC(I).Caption = Channel(I).text
+        frmChat.mnuCustomChannels(I).Caption = Channel(I).text
+        QC(I) = Channel(I).text
+    Next I
     
     DoQCMenu
     
