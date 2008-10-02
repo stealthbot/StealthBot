@@ -663,7 +663,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     
     ' ...
     Username = convertUsername(Username)
-    
+
     ' ...
     If (frmChat.mnuUTF8.Checked) Then
         ' ...
@@ -678,17 +678,19 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     ' ...
     If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
         ' ...
-        If (PassedClanMotdCheck = False) Then
-            ' ...
-            g_Clan.MOTD = Message
+        If ((PassedClanMotdCheck = False) And (Message = g_Clan.MOTD)) Then
+            'frmChat.AddChat vbRed, "DEBUG: SERVER INFO CLAN MOTD RECEIVED"
         
+            ' ...
+            'g_Clan.MOTD = Message
+
             ' ...
             If (g_Clan.MOTD <> vbNullString) Then
                 Call frmChat.AddChat(RTBColors.ServerInfoText, g_Clan.MOTD)
             End If
 
             ' ...
-            PassedClanMotdCheck = True
+            'PassedClanMotdCheck = True
             
             ' ...
             Exit Sub
@@ -1037,7 +1039,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
         Optional ByVal w3icon As String, Optional QueuedEventID As Integer = 0)
 
-    On Error GoTo ERROR_HANDLER
+    'On Error GoTo ERROR_HANDLER
 
     Dim UserEvent    As clsUserEventObj
     Dim UserObj      As clsUserObj

@@ -2567,6 +2567,7 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
     End If
     
     RequestClanList
+    RequestClanMOTD
     
     'frmChat.ClanHandler.RequestClanMotd 1
 End Sub
@@ -2684,6 +2685,9 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
 End Sub
 
 Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
+    ' ...
+    PassedClanMotdCheck = True
+
     ' ...
     g_Clan.MOTD = Message
     
