@@ -277,6 +277,8 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     SetTitle GetCurrentUsername & ", online in channel " & _
         g_Channel.Name
+        
+    frmChat.ListviewTabs_Click 0
     
     ' have we just joined the void?
     If (g_Channel.IsSilent) Then
