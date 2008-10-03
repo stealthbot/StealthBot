@@ -933,6 +933,8 @@ End Sub
 
 Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
     Optional QueuedEventID As Integer = 0)
+    
+    On Error GoTo ERROR_HANDLER
         
     Dim UserEvent   As clsUserEventObj
     Dim UserObj     As clsUserObj
@@ -974,6 +976,9 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
         
         ' ...
         Username = UserObj.DisplayName
+    Else
+        ' create new user object for invisible representatives...
+        Set UserObj = New clsUserObj
     End If
     
     ' ...
@@ -1037,6 +1042,12 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
         frmChat.SControl.Run "Event_UserEmote", Username, Flags, Message
     End If
     
+    Exit Sub
+    
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, "Error (" & Err.Number & "): " & Err.description & " in Event_UserEmote()."
+    
+    Exit Sub
 End Sub
 
 'Ping, Product, Clan, InitStatstring, W3Icon
@@ -1495,6 +1506,8 @@ End Sub
 Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
         ByVal Ping As Long, Optional QueuedEventID As Integer = 0)
     
+    On Error GoTo ERROR_HANDLER
+    
     Dim UserObj       As clsUserObj
     Dim UserEvent     As clsUserEventObj
     
@@ -1546,6 +1559,9 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         
         ' ...
         Username = UserObj.DisplayName
+    Else
+        ' create new user object for invisible representatives...
+        Set UserObj = New clsUserObj
     End If
     
     ' ...
@@ -1685,6 +1701,14 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         ' ...
         frmChat.SControl.Run "Event_UserTalk", Username, Flags, Message, Ping
     End If
+    
+    ' ...
+    Exit Sub
+    
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, "Error (" & Err.Number & "): " & Err.description & " in Event_UserTalk()."
+    
+    Exit Sub
 End Sub
 
 Private Function CheckMessage(Username As String, Message As String) As Boolean
