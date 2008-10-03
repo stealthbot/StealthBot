@@ -40,6 +40,16 @@ Public Property Get SType() As String
     Dim tmp As String ' ...
     
     ' ...
+    If ((Flags And CHAN_RESTRICTED) = CHAN_RESTRICTED) Then
+        tmp = tmp & "restricted, "
+    End If
+    
+    ' ...
+    If ((Flags And CHAN_GLOBAL) = CHAN_GLOBAL) Then
+        tmp = tmp & "global, "
+    End If
+    
+    ' ...
     If ((Flags And CHAN_PUBLIC) = CHAN_PUBLIC) Then
         tmp = tmp & "public, "
     End If
@@ -50,13 +60,8 @@ Public Property Get SType() As String
     End If
     
     ' ...
-    If ((Flags And CHAN_RESTRICTED) = CHAN_RESTRICTED) Then
-        tmp = tmp & "restricted, "
-    End If
-    
-    ' ...
-    If ((Flags And CHAN_SILENT) = CHAN_SILENT) Then
-        tmp = tmp & "silent, "
+    If ((Flags And CHAN_PRODUCT) = CHAN_PRODUCT) Then
+        tmp = tmp & "product-specific, "
     End If
     
     ' ...
@@ -64,14 +69,9 @@ Public Property Get SType() As String
         tmp = tmp & "system, "
     End If
     
-    ' ...
-    If ((Flags And CHAN_PRODUCT) = CHAN_PRODUCT) Then
-        tmp = tmp & "product-specific, "
-    End If
-    
-    ' ...
-    If ((Flags And CHAN_GLOBAL) = CHAN_GLOBAL) Then
-        tmp = tmp & "global, "
+        ' ...
+    If ((Flags And CHAN_SILENT) = CHAN_SILENT) Then
+        tmp = tmp & "silent, "
     End If
     
     ' ...

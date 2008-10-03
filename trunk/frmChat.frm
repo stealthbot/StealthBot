@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2570,6 +2570,9 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
     RequestClanMOTD
     
     'frmChat.ClanHandler.RequestClanMotd 1
+    
+    ' ...
+    frmChat.ListviewTabs_Click 0
 End Sub
 
 Private Sub ClanHandler_ClanInvitation(ByVal Token As String, ByVal ClanTag As String, ByVal RawClanTag As String, ByVal ClanName As String, ByVal InvitedBy As String, ByVal NewClan As Boolean)
@@ -2630,6 +2633,9 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
     
     ' ...
     lblCurrentChannel.Caption = GetChannelString()
+    
+    ' ...
+    frmChat.ListviewTabs_Click 0
 End Sub
 
 Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
@@ -2966,6 +2972,12 @@ Public Sub AddFriend(ByVal Username As String, ByVal Product As String, IsOnline
         
         Set f = Nothing
     End If
+    
+    ' ...
+    lblCurrentChannel.Caption = GetChannelString()
+    
+    ' ...
+    frmChat.ListviewTabs_Click 0
 End Sub
 
 Private Sub FriendListHandler_FriendAdded(ByVal Username As String, ByVal Product As String, ByVal Location As Byte, ByVal Status As Byte, ByVal Channel As String)
@@ -3120,7 +3132,7 @@ Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, X As 
     End If
 End Sub
 
-Private Sub ListviewTabs_Click(PreviousTab As Integer)
+Public Sub ListviewTabs_Click(PreviousTab As Integer)
     Dim CurrentTab As Integer
     
     CurrentTab = ListviewTabs.Tab
@@ -7603,6 +7615,12 @@ Sub AddClanMember(ByVal Name As String, Rank As Integer, Online As Integer)
         .SortOrder = lvwDescending
         .Sorted = True
     End With
+    
+    ' ...
+    lblCurrentChannel.Caption = GetChannelString()
+    
+    ' ...
+    frmChat.ListviewTabs_Click 0
     
     On Error Resume Next
     SControl.Run "Event_ClanInfo", Name, Rank, Online

@@ -1055,7 +1055,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal OriginalStatstring As String, _
         Optional ByVal w3icon As String, Optional QueuedEventID As Integer = 0)
 
-    'On Error GoTo ERROR_HANDLER
+    On Error GoTo ERROR_HANDLER
 
     Dim UserEvent    As clsUserEventObj
     Dim UserObj      As clsUserObj
@@ -1143,6 +1143,9 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             
         ' ...
         frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
+        
+        ' ...
+        frmChat.ListviewTabs_Click 0
         
         ' ...
         DoLastSeen Username
@@ -1339,6 +1342,9 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         ' ...
         frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString
         
+        ' ...
+        frmChat.ListviewTabs_Click 0
+        
         ' flash window
         If (frmChat.mnuFlash.Checked) Then
             FlashWindow
@@ -1485,6 +1491,9 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         
         ' ...
         frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
+        
+        ' ...
+        frmChat.ListviewTabs_Click 0
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' call event script function
