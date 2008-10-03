@@ -2686,7 +2686,7 @@ End Sub
 
 Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
     ' ...
-    PassedClanMotdCheck = True
+    'PassedClanMotdCheck = True
 
     ' ...
     g_Clan.MOTD = Message
@@ -3125,19 +3125,33 @@ Private Sub ListviewTabs_Click(PreviousTab As Integer)
     
     CurrentTab = ListviewTabs.Tab
     
-    If PreviousTab <> CurrentTab And ListviewTabs.TabEnabled(CurrentTab) Then
+    'If PreviousTab <> CurrentTab And ListviewTabs.TabEnabled(CurrentTab) Then
         Select Case CurrentTab
             Case LVW_BUTTON_CHANNEL ' = 0 = Channel button clicked
+                ' ...
+                lblCurrentChannel.ToolTipText = "Currently in " & g_Channel.SType() & _
+                    " channel " & g_Channel.Name & " (" & g_Channel.Users.Count & ")"
+                
+                ' ...
                 lvChannel.ZOrder vbBringToFront
                 
             Case LVW_BUTTON_FRIENDS ' = 1 = Friends button clicked
+                ' ...
+                lblCurrentChannel.ToolTipText = "Currently viewing " & g_Friends.Count & " friends"
+            
+                ' ...
                 lvFriendList.ZOrder vbBringToFront
                 
             Case LVW_BUTTON_CLAN ' = 2 = Clan button clicked
+                ' ...
+                lblCurrentChannel.ToolTipText = "Currently viewing " & _
+                    g_Clan.Members.Count & " members of clan " & Clan.Name
+            
+                ' ...
                 lvClanList.ZOrder vbBringToFront
                 
         End Select
-    End If
+    'End If
     
     lblCurrentChannel.Caption = GetChannelString
 End Sub

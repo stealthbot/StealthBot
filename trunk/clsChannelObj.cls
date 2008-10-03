@@ -35,6 +35,59 @@ Private m_join_date        As Date
 Private m_users            As Collection
 Private m_banlist          As Collection
 
+Public Property Get SType() As String
+    
+    Dim tmp As String ' ...
+    
+    ' ...
+    If ((Flags And CHAN_PUBLIC) = CHAN_PUBLIC) Then
+        tmp = tmp & "public, "
+    End If
+    
+    ' ...
+    If ((Flags And CHAN_MODERATED) = CHAN_MODERATED) Then
+        tmp = tmp & "moderated, "
+    End If
+    
+    ' ...
+    If ((Flags And CHAN_RESTRICTED) = CHAN_RESTRICTED) Then
+        tmp = tmp & "restricted, "
+    End If
+    
+    ' ...
+    If ((Flags And CHAN_SILENT) = CHAN_SILENT) Then
+        tmp = tmp & "silent, "
+    End If
+    
+    ' ...
+    If ((Flags And CHAN_SYSTEM) = CHAN_SYSTEM) Then
+        tmp = tmp & "system, "
+    End If
+    
+    ' ...
+    If ((Flags And CHAN_PRODUCT) = CHAN_PRODUCT) Then
+        tmp = tmp & "product-specific, "
+    End If
+    
+    ' ...
+    If ((Flags And CHAN_GLOBAL) = CHAN_GLOBAL) Then
+        tmp = tmp & "global, "
+    End If
+    
+    ' ...
+    If (Flags = &H0) Then
+        tmp = "private, "
+    End If
+    
+    ' ...
+    tmp = Mid$(tmp, 1, Len(tmp) - 2)
+    
+    ' ...
+    SType = tmp
+    
+End Property
+
+
 Private Sub Class_Initialize()
     
     ' ...

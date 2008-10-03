@@ -662,6 +662,11 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Dim ToANSI As String
     
     ' ...
+    If (Message = vbNullString) Then
+        Exit Sub
+    End If
+    
+    ' ...
     Username = convertUsername(Username)
 
     ' ...
@@ -690,7 +695,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
 
             ' ...
-            'PassedClanMotdCheck = True
+            PassedClanMotdCheck = True
             
             ' ...
             Exit Sub
