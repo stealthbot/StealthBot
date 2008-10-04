@@ -111,13 +111,7 @@ Public Property Get TrackName() As String
     End If
 
     ' ...
-    If (IsPlaying) Then
-        ' ...
-        TrackName = m_iTunesObj.CurrentTrack.Artist & " - " & m_iTunesObj.CurrentTrack.Name
-    Else
-        ' ...
-        TrackName = vbNullString
-    End If
+    TrackName = m_iTunesObj.CurrentTrack.Artist & " - " & m_iTunesObj.CurrentTrack.Name
 End Property
 
 ' ...
@@ -159,6 +153,11 @@ Public Property Get IsPlaying() As Boolean
     IsPlaying = (m_iTunesObj.PlayerState > 0)
 End Property
 
+' ...
+Public Property Get IsPaused() As Boolean
+    IsPaused = False
+End Property
+
 Public Property Get TrackLength() As Long
     ' ...
     If (Not (m_iTunesObj Is Nothing)) Then
@@ -166,10 +165,6 @@ Public Property Get TrackLength() As Long
     End If
 
     ' ...
-    If (IsPlaying) Then
-        TrackLength = m_iTunesObj.CurrentTrack.Finish
-    Else
-        TrackLength = 0
-    End If
+    TrackLength = m_iTunesObj.CurrentTrack.Finish
 End Property
 

@@ -380,9 +380,7 @@ Public Property Get Repeat() As Boolean
 End Property
 
 Public Property Get TrackTime() As Long
-    If (IsPlaying) Then
-        TrackTime = (SendMessage(m_hWnd, WM_WA_IPC, 0&, WA_GETTRACKPOSITION) / 1000)
-    End If
+    TrackTime = (SendMessage(m_hWnd, WM_WA_IPC, 0&, WA_GETTRACKPOSITION) / 1000)
 End Property
 
 Public Property Get TrackLength() As Long
@@ -392,4 +390,9 @@ End Property
 ' ...
 Public Property Get IsPlaying() As Boolean
     IsPlaying = (SendMessage(m_hWnd, WM_WA_IPC, 0, WA_GETSTATUS) = 1)
+End Property
+
+' ...
+Public Property Get IsPaused() As Boolean
+    IsPaused = (SendMessage(m_hWnd, WM_WA_IPC, 0, WA_GETSTATUS) = 3)
 End Property

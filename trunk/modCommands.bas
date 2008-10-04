@@ -48,7 +48,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Dim Count            As Integer
     Dim bln              As Boolean
     Dim command_return() As String
-    Dim outBuf           As String
+    Dim outbuf           As String
     
     ' ...
     ReDim Preserve command_return(0)
@@ -72,7 +72,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Do While (command.Name <> vbNullString)
         ' ...
         If ((command.IsLocal) Or _
-                (HasAccess(Username, command.Name, command.Args, outBuf))) Then
+                (HasAccess(Username, command.Name, command.Args, outbuf))) Then
                 
             ' ...
             If (IsLocal) Then
@@ -121,7 +121,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             End If
         Else
             ' ...
-            If ((DisplayOutput) And (LenB(outBuf))) Then
+            If ((DisplayOutput) And (LenB(outbuf))) Then
                 ' ...
                 If ((BotVars.WhisperCmds) Or (WasWhispered)) Then
                     AddQ "/w " & Username & Space$(1) & command_return(I), _
@@ -4538,7 +4538,13 @@ Private Function OnMP3(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             tmpBuf = "Current MP3 " & _
                 "[" & ListPosition & "/" & ListCount & "]: " & _
                     TrackName & " (" & SecondsToString(TrackTime) & _
-                        "/" & SecondsToString(TrackLength) & ")"
+                        "/" & SecondsToString(TrackLength)
+            
+            If (MediaPlayer.IsPaused) Then
+                tmpBuf = ", paused)"
+            Else
+                tmpBuf = ")"
+            End If
         End If
     End If
     
@@ -7008,7 +7014,7 @@ ERROR_HANDLER:
 End Function
 
 Public Function HasAccess(ByVal Username As String, ByVal CommandName As String, Optional ByVal CommandArgs As _
-    String = vbNullString, Optional ByRef outBuf As String) As Boolean
+    String = vbNullString, Optional ByRef outbuf As String) As Boolean
     
     On Error GoTo ERROR_HANDLER
     

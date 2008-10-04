@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5521,8 +5521,13 @@ Private Sub Timer_Timer()
                 IdleMsg = "/me .: " & CVERSION & " :: anti-idle :."
                 GoTo Send
             End If
-            IdleMsg = "/me -: Now Playing: " & WindowTitle & " :: " & CVERSION & " :-"
             
+            If (MediaPlayer.IsPaused) Then
+                IdleMsg = "/me -: Now Playing: " & WindowTitle & " (paused) :: " & CVERSION & " :-"
+            Else
+                IdleMsg = "/me -: Now Playing: " & WindowTitle & " :: " & CVERSION & " :-"
+            End If
+ 
         ElseIf IdleType = "quote" Then
             U = GetRandomQuote
             If Len(U) > 217 Then GoTo Error
