@@ -6000,9 +6000,9 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     strTmp = Message
     
     ' ...
-    If (msg_priority < 0) Then
-        msg_priority = 0
-    End If
+    'If (msg_priority < 0) Then
+    '    msg_priority = 0
+    'End If
     
     ' ...
     If (msg_priority > 100) Then
@@ -6215,7 +6215,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 End If
             End If
         End If
-
+        
         ' ...
         Call SplitByLen(strTmp, (BNET_MSG_LENGTH - Len(command)), splt(), vbNullString, _
             " [more]", OversizeDelimiter)
@@ -6350,6 +6350,8 @@ Private Function BanDelay() As Integer
             BanDelay = (BanDelay + ((Rnd * OpCount) * 100))
         End If
     End If
+    
+    'AddChat vbBlue, BanDelay
     
     Exit Function
     
