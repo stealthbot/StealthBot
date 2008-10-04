@@ -4541,9 +4541,9 @@ Private Function OnMP3(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                         "/" & SecondsToString(TrackLength)
             
             If (MediaPlayer.IsPaused) Then
-                tmpBuf = ", paused)"
+                tmpBuf = tmpBuf & ", paused)"
             Else
-                tmpBuf = ")"
+                tmpBuf = tmpBuf & ")"
             End If
         End If
     End If
