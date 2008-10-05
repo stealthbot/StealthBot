@@ -4,7 +4,7 @@ Attribute VB_Name = "modChatQueue"
 Option Explicit
 
 ' ...
-Public colChatQueue  As Collection
+'Public colChatQueue  As Collection
 
 ' ...
 Private m_TimerID    As Long
@@ -17,7 +17,7 @@ Public Sub ChatQueue_Initialize()
     ' ...
     If (BotVars.ChatDelay > 0) Then
         ' ...
-        Set colChatQueue = New Collection
+        'Set colChatQueue = New Collection
     
         ' ...
         m_TimerID = SetTimer(0, m_TimerID, _
@@ -65,9 +65,12 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
             ' ...
             If ((GetTickCount() - CurrentUser.Queue(1).EventTick) >= BotVars.ChatDelay) Then
                 ' ...
-                Call CurrentUser.DisplayQueue
+                CurrentUser.DisplayQueue
             End If
         End If
     Next I
+    
+    ' ...
+    Set CurrentUser = Nothing
     
 End Function

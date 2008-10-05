@@ -101,7 +101,7 @@ Private Sub Class_Terminate()
     ' ...
     Set m_users = Nothing
     Set m_banlist = Nothing
-
+    
 End Sub
 
 Public Property Get Name() As String
@@ -201,6 +201,9 @@ Public Property Get Users() As Collection
 End Property
 
 Public Sub ClearUsers()
+
+    ' ...
+    Set m_users = Nothing
 
     ' ...
     Set m_users = New Collection

@@ -65,6 +65,9 @@ End Sub
 Private Sub Class_Terminate()
 
     ' ...
+    ClearQueue
+
+    ' ...
     Set m_queue = Nothing
     Set m_stats = Nothing
 
@@ -285,10 +288,20 @@ End Function
 Public Sub ClearQueue()
 
     ' ...
-    Set m_queue = Nothing
+    'Set m_queue = Nothing
     
     ' ...
-    Set m_queue = New Collection
+    'Set m_queue = New Collection
+    
+    Dim i As Integer ' ...
+    
+    ' ...
+    For i = Queue.Count To 1 Step -1
+    
+        Queue.Remove i
+    
+    Next i
+    
 
 End Sub
 
