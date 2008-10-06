@@ -419,8 +419,111 @@ End Sub ' end function Form_Load
 ' ...
 Public Sub ImportDatabase(strPath As String, dbType As Integer)
     
+    Dim F    As Integer ' ...
+    Dim buf  As String  ' ...
+    Dim n    As node    ' ...
+    
     ' ...
-    MsgBox strPath & ":" & dbType
+    F = FreeFile
+
+    ' ...
+    If (dbType = 0) Then
+    
+        Open strPath For Input As #F
+            ' ...
+            Do While (EOF(F) = False)
+                Line Input #F, buf
+                
+                ' ...
+                If (buf <> vbNullString) Then
+                    ' redefine array to support new entry
+                    ReDim Preserve m_DB(UBound(m_DB) + 1)
+                    
+                    ' create new database entry
+                    With m_DB(UBound(m_DB))
+                        .Username = buf
+                        .Type = "USER"
+                        .AddedBy = "(console)"
+                        .AddedOn = Now
+                        .ModifiedBy = "(console)"
+                        .ModifiedOn = Now
+                        .Flags = "S"
+                        
+                        ' ...
+                        If (Not (trvUsers.DropHighlight Is Nothing)) Then
+                            ' ...
+                            If (StrComp(trvUsers.DropHighlight.Tag, "Group", vbTextCompare) = 0) Then
+                                .Groups = trvUsers.DropHighlight.text
+                            End If
+                        End If
+                        
+                        ' ...
+                        If (.Groups = vbNullString) Then
+                            .Groups = "%"
+                        End If
+                    End With
+                End If
+            Loop ' end loop
+        Close #F
+        
+    ElseIf ((dbType = 1) Or (dbType = 2)) Then
+        
+        Dim user As String ' ...
+        Dim msg  As String ' ...
+    
+        Open strPath For Input As #F
+            ' ...
+            Do While (EOF(F) = False)
+                Line Input #F, buf
+                
+                ' ...
+                If (InStr(1, buf, Space$(1), vbBinaryCompare) <> 0) Then
+                    ' ...
+                    user = Left$(buf, InStr(1, buf, Space$(1), vbBinaryCompare) - 1)
+                    
+                    ' ...
+                    msg = Mid$(buf, Len(user) + 1)
+                Else
+                    user = buf
+                End If
+                
+                ' ...
+                If (buf <> vbNullString) Then
+                    ' redefine array to support new entry
+                    ReDim Preserve m_DB(UBound(m_DB) + 1)
+                    
+                    ' create new database entry
+                    With m_DB(UBound(m_DB))
+                        .Username = user
+                        .Type = "USER"
+                        .AddedBy = "(console)"
+                        .AddedOn = Now
+                        .ModifiedBy = "(console)"
+                        .ModifiedOn = Now
+                        .Flags = "B"
+                        .BanMessage = buf
+                        
+                        ' ...
+                        If (Not (trvUsers.DropHighlight Is Nothing)) Then
+                            ' ...
+                            If (StrComp(trvUsers.DropHighlight.Tag, "Group", vbTextCompare) = 0) Then
+                                .Groups = trvUsers.DropHighlight.text
+                            End If
+                        End If
+                        
+                        ' ...
+                        If (.Groups = vbNullString) Then
+                            .Groups = "%"
+                        End If
+                    End With
+                End If
+            Loop ' end loop
+        Close #F
+        
+    End If
+    
+    ' ...
+    tbsTabs_Click
 
 End Sub
 

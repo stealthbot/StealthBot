@@ -35,7 +35,7 @@ Begin VB.Form frmDBType
       Height          =   315
       ItemData        =   "frmDBType.frx":0000
       Left            =   120
-      List            =   "frmDBType.frx":000A
+      List            =   "frmDBType.frx":000D
       Style           =   2  'Dropdown List
       TabIndex        =   0
       Top             =   120
