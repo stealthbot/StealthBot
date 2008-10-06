@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -3429,14 +3429,26 @@ Private Sub mnuCatchPhrases_Click()
 End Sub
 
 Private Sub mnuPublicChannels_Click(index As Integer)
+    ' ...
+    If (StrComp(mnuPublicChannels(index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
+        Exit Sub
+    End If
+    
     'FullJoin mnuChannels(Index).Caption
     
+    ' ...
     AddQ "/join " & mnuPublicChannels(index).Caption
 End Sub
 
 Private Sub mnuCustomChannels_Click(index As Integer)
+    ' ...
+    If (StrComp(mnuCustomChannels(index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
+        Exit Sub
+    End If
+
     'FullJoin mnuChannels(Index).Caption
     
+    ' ...
     AddQ "/join " & mnuCustomChannels(index).Caption
 End Sub
 
