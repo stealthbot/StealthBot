@@ -569,7 +569,7 @@
     </access>
   </command>
 
-  <command name="add" enabled="true">
+  <command name="add">
     <aliases>
       <alias>
         set
@@ -581,9 +581,7 @@
         creates or modifies a specified database entry.
       </description>
 
-      <specialnotes>
-        woot woot - 52
-      </specialnotes>
+      <specialnotes />
     </documentation>
 
     <arguments>

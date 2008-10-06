@@ -3581,13 +3581,13 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
         If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
             tmpBuf(0) = "Error: The specified username is invalid."
         Else
-            Dim Msg As String ' ...
+            Dim msg As String ' ...
             
             ' ...
-            Msg = Mid$(msgData, index + 1)
+            msg = Mid$(msgData, index + 1)
         
             ' ...
-            shit_msg = user & shit_msg & " --type USER --banmsg " & Msg
+            shit_msg = user & shit_msg & " --type USER --banmsg " & msg
         End If
     Else
         ' ...
@@ -4824,7 +4824,7 @@ End Function ' end function OnCheckMail
 Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim Msg    As udtMail
+    Dim msg    As udtMail
     
     Dim tmpBuf As String ' temporary output buffer
             
@@ -4833,10 +4833,10 @@ Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAcc
     End If
     
     If (GetMailCount(Username) > 0) Then
-        Call GetMailMessage(Username, Msg)
+        Call GetMailMessage(Username, msg)
         
-        If (Len(RTrim(Msg.To)) > 0) Then
-            tmpBuf = "Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
+        If (Len(RTrim(msg.To)) > 0) Then
+            tmpBuf = "Message from " & RTrim(msg.From) & ": " & RTrim(msg.Message)
         End If
     Else
         tmpBuf = "You do not currently have any messages " & _
@@ -7072,6 +7072,12 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
         End If
         
         For I = 1 To command.Parameters.Count
+            ' ...
+            If (loopCount > UBound(splt)) Then
+                Exit For
+            End If
+        
+            ' ...
             Set Parameter = command.Parameters(I)
             
             'frmChat.AddChat vbRed, Parameter.dataType
