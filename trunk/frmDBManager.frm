@@ -844,12 +844,15 @@ End Sub
 
 ' handle tab clicks and initial loading
 Private Sub tbsTabs_Click()
+    On Error GoTo ERROR_HANDLER
+
     Dim newNode As node ' ...
 
     Dim I       As Integer ' ...
-    Dim grp     As String ' ...
+    Dim grp     As String  ' ...
     Dim j       As Integer ' ...
     Dim Pos     As Integer ' ...
+    Dim blnDuplicateFound As Boolean
 
     ' clear treeview
     Call trvUsers.Nodes.Clear
@@ -1052,6 +1055,32 @@ Private Sub tbsTabs_Click()
     
     ' ...
     Call LockGUI
+    
+    ' ...
+    If (blnDuplicateFound = True) Then
+        ' ...
+        MsgBox "There were one or more duplicate database entries found which could not be loaded.", _
+            vbExclamation, "Error"
+    End If
+    
+    ' ...
+    Exit Sub
+    
+ERROR_HANDLER:
+    ' ...
+    If (Err.Number = 35602) Then
+        ' ...
+        DB_remove m_DB(I).Username, m_DB(I).Type
+    
+        ' ...
+        blnDuplicateFound = True
+        
+        ' ...
+        Resume Next
+    End If
+
+    ' ...
+    Exit Sub
 End Sub
 
 Private Sub LockGUI()
