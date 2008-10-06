@@ -110,6 +110,7 @@ Class=clsLogger; clsLogger.cls
 Class=clsXML; clsXML.cls
 Module=modWarden; modWarden.bas
 Module=modSHA1; modSHA1.bas
+Form=frmDBType.frm
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""
