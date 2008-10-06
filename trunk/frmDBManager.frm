@@ -419,20 +419,20 @@ End Sub ' end function Form_Load
 ' ...
 Public Sub ImportDatabase(strPath As String, dbType As Integer)
     
-    Dim F    As Integer ' ...
+    Dim f    As Integer ' ...
     Dim buf  As String  ' ...
     Dim n    As node    ' ...
     
     ' ...
-    F = FreeFile
+    f = FreeFile
 
     ' ...
     If (dbType = 0) Then
     
-        Open strPath For Input As #F
+        Open strPath For Input As #f
             ' ...
-            Do While (EOF(F) = False)
-                Line Input #F, buf
+            Do While (EOF(f) = False)
+                Line Input #f, buf
                 
                 ' ...
                 If (buf <> vbNullString) Then
@@ -464,17 +464,17 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                     End With
                 End If
             Loop ' end loop
-        Close #F
+        Close #f
         
     ElseIf ((dbType = 1) Or (dbType = 2)) Then
         
         Dim user As String ' ...
         Dim msg  As String ' ...
     
-        Open strPath For Input As #F
+        Open strPath For Input As #f
             ' ...
-            Do While (EOF(F) = False)
-                Line Input #F, buf
+            Do While (EOF(f) = False)
+                Line Input #f, buf
                 
                 ' ...
                 If (InStr(1, buf, Space$(1), vbBinaryCompare) <> 0) Then
@@ -518,7 +518,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                     End With
                 End If
             Loop ' end loop
-        Close #F
+        Close #f
         
     End If
     
@@ -557,7 +557,7 @@ Private Sub btnCreateUser_Click()
     ' do we have an item (hopefully a group) selected?
     If (Not (trvUsers.SelectedItem Is Nothing)) Then
         ' is the item really just the root item?
-        If (trvUsers.SelectedItem.Index = 1) Then
+        If (trvUsers.SelectedItem.index = 1) Then
             Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
                 tvwChild, "User: " & Username, Username, 3)
                 
@@ -623,7 +623,7 @@ Private Sub btnCreateGroup_Click()
     Dim newNode       As node    ' ...
     
     ' ...
-    If (tbsTabs.SelectedItem.Index = 1) Then ' Users and Groups Tab
+    If (tbsTabs.SelectedItem.index = 1) Then ' Users and Groups Tab
         Dim GroupName As String ' ...
     
         ' ...
@@ -648,7 +648,7 @@ Private Sub btnCreateGroup_Click()
         ' do we have an item (hopefully a group) selected?
         If (Not (trvUsers.SelectedItem Is Nothing)) Then
             ' is the item reall just the root node?
-            If (trvUsers.SelectedItem.Index = 1) Then
+            If (trvUsers.SelectedItem.index = 1) Then
                 ' ...
                 Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
                     tvwChild, "Group: " & GroupName, GroupName, 1)
@@ -694,7 +694,7 @@ Private Sub btnCreateGroup_Click()
             groupCount = (groupCount + 1)
         End If
         
-    ElseIf (tbsTabs.SelectedItem.Index = 2) Then ' Clan Tab
+    ElseIf (tbsTabs.SelectedItem.index = 2) Then ' Clan Tab
         Dim ClanName As String ' ...
     
         ' ...
@@ -731,7 +731,7 @@ Private Sub btnCreateGroup_Click()
             clanCount = (clanCount + 1)
         End If
         
-    ElseIf (tbsTabs.SelectedItem.Index = 3) Then ' Game Tab
+    ElseIf (tbsTabs.SelectedItem.index = 3) Then ' Game Tab
         ' ...
         Call frmGameSelection.Show(vbModal, frmDBManager)
         
@@ -778,7 +778,7 @@ Private Sub btnCreateGroup_Click()
         End With
 
         ' ...
-        If ((tbsTabs.SelectedItem.Index = 1) Or (tbsTabs.SelectedItem.Index = 2)) Then
+        If ((tbsTabs.SelectedItem.index = 1) Or (tbsTabs.SelectedItem.index = 2)) Then
             ' ...
             m_new_entry = True
         
@@ -795,12 +795,12 @@ Private Sub btnCancel_Click()
 End Sub
 
 ' ...
-Private Sub btnSave_Click(Index As Integer)
+Private Sub btnSave_Click(index As Integer)
     Dim I As Integer ' ...
     Dim j As Integer ' ...
 
     ' are we looking at a single entry or are we saving it all?
-    If (Index = 1) Then
+    If (index = 1) Then
         ' if we have no selected user... escape quick!
         If (trvUsers.SelectedItem Is Nothing) Then
             ' break from function
@@ -964,7 +964,7 @@ Private Sub tbsTabs_Click()
     Call trvUsers.Nodes.Add(, , "Database", "Database")
 
     ' which tab index are we on?
-    Select Case (tbsTabs.SelectedItem.Index)
+    Select Case (tbsTabs.SelectedItem.index)
         Case 1: ' Users and Groups
             For I = LBound(m_DB) To UBound(m_DB)
                 ' we're handling groups first; is this entry a group?
@@ -1282,7 +1282,7 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
     m_group_index = -1
 
     ' ...
-    If (node.Index > 1) Then
+    If (node.index > 1) Then
         ' ...
         Call ClearGroupList
     
@@ -1399,7 +1399,7 @@ Private Sub trvUsers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y
         ' ...
         If (Not (trvUsers.SelectedItem Is Nothing)) Then
             ' ...
-            If (trvUsers.SelectedItem.Index > 1) Then
+            If (trvUsers.SelectedItem.index > 1) Then
                 ' ...
                 If (StrComp(trvUsers.SelectedItem.Tag, "Group", vbTextCompare) = 0) Then
                     ' ...
@@ -1447,7 +1447,7 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
     Dim res      As Integer ' ...
     Dim I        As Integer ' ...
     Dim found    As Integer ' ...
-    
+
     ' ...
     If (Data.GetFormat(15) = True) Then
         ' ...
@@ -1463,7 +1463,7 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
         Set nodePrev = trvUsers.SelectedItem
             
         ' ...
-        If (nodeNow.Index = 1) Then
+        If (nodeNow.index = 1) Then
             ' ...
             For I = LBound(m_DB) To UBound(m_DB)
                 ' ...
@@ -1486,14 +1486,14 @@ Private Sub trvUsers_OLEDragDrop(Data As MSComctlLib.DataObject, Effect As Long,
             Next I
         Else
             ' ...
-            If (nodePrev.Index <> 1) Then
+            If (nodePrev.index <> 1) Then
                 ' ...
                 If (StrComp(nodeNow.Tag, "Group", vbTextCompare) <> 0) Then
                     ' ...
                     Set nodeNow = nodeNow.Parent
                     
                     ' ...
-                    If (nodeNow.Index = 1) Then
+                    If (nodeNow.index = 1) Then
                         ' ...
                         Set trvUsers.DropHighlight = nodeNow
                     
@@ -1751,7 +1751,7 @@ Private Sub HandleDeleteEvent(ByRef NodeToDelete As node)
     End If
 
     ' ...
-    If (temp.Index > 1) Then
+    If (temp.index > 1) Then
         Dim response As Integer ' ...
         Dim isGroup  As Boolean ' ...
         
@@ -1775,18 +1775,18 @@ Private Sub HandleDeleteEvent(ByRef NodeToDelete As node)
                 ' ...
                 If (temp.Previous Is Nothing) Then
                     ' ...
-                    trvUsers.Nodes(temp.Parent.Index).Checked = True
+                    trvUsers.Nodes(temp.Parent.index).Checked = True
                 Else
                     ' ...
-                    trvUsers.Nodes(temp.Previous.Index).Checked = True
+                    trvUsers.Nodes(temp.Previous.index).Checked = True
                 End If
             Else
                 ' ...
-                trvUsers.Nodes(temp.Next.Index).Checked = True
+                trvUsers.Nodes(temp.Next.index).Checked = True
             End If
             
             ' ...
-            Call trvUsers.Nodes.Remove(temp.Index)
+            Call trvUsers.Nodes.Remove(temp.index)
             
             ' ...
             Call trvUsers_NodeClick(trvUsers.SelectedItem)
