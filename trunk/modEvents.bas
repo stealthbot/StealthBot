@@ -245,6 +245,11 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
         .JoinTime = UtcNow
     End With
     
+    ' ...
+    If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+        RequestClanMOTD 1
+    End If
+    
     ' we want to reset our filter
     ' Values() when we join a new channel
     'BotVars.JoinWatch = 0
@@ -685,20 +690,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     ' ...
     If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
         ' ...
-        If ((PassedClanMotdCheck = False) And (Message = g_Clan.MOTD)) Then
-            'frmChat.AddChat vbRed, "DEBUG: SERVER INFO CLAN MOTD RECEIVED"
-        
+        If (PassedClanMotdCheck = False) Then
             ' ...
-            'g_Clan.MOTD = Message
+            Call frmChat.AddChat(RTBColors.ServerInfoText, Message)
 
-            ' ...
-            If (g_Clan.MOTD <> vbNullString) Then
-                Call frmChat.AddChat(RTBColors.ServerInfoText, g_Clan.MOTD)
-            End If
-
-            ' ...
-            PassedClanMotdCheck = True
-            
             ' ...
             Exit Sub
         End If
@@ -1667,20 +1662,20 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         If (mail) Then
             ' ...
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim Msg As udtMail ' ...
+                Dim msg As udtMail ' ...
                 
                 ' ...
                 If (GetMailCount(Username) > 0) Then
                     ' ...
                     Do
                         ' ...
-                        GetMailMessage Username, Msg
+                        GetMailMessage Username, msg
                         
                         ' ...
-                        If (Len(RTrim(Msg.To)) > 0) Then
+                        If (Len(RTrim(msg.To)) > 0) Then
                             ' ...
-                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(Msg.From) & ": " & _
-                                RTrim$(Msg.Message)
+                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(msg.From) & ": " & _
+                                RTrim$(msg.Message)
                         End If
                     Loop While (GetMailCount(Username) > 0)
                 End If
@@ -1962,14 +1957,14 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         '####### Mail check
         If (mail) Then
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim Msg As udtMail
+                Dim msg As udtMail
                 
                 If (GetMailCount(Username) > 0) Then
-                    Call GetMailMessage(Username, Msg)
+                    Call GetMailMessage(Username, msg)
                     
-                    If (Len(RTrim(Msg.To)) > 0) Then
+                    If (Len(RTrim(msg.To)) > 0) Then
                         frmChat.AddQ "/w " & Username & " Message from " & _
-                            RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
+                            RTrim$(msg.From) & ": " & RTrim$(msg.Message)
                     End If
                 End If
             End If
