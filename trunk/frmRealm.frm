@@ -549,7 +549,7 @@ Private CreatedExpRealmChar As Integer
 '    Assassin& = &H7
 
 Private Sub Form_Load()
-    Dim b As Boolean
+    Dim B As Boolean
     
     Me.Icon = frmChat.Icon
     
@@ -562,11 +562,11 @@ Private Sub Form_Load()
     
     lblExpiration.Visible = True
     
-    b = (BotVars.Product = "PX2D")
+    B = (BotVars.Product = "PX2D")
     
-    chkExpansion.Enabled = b
-    optNewCharType(6).Enabled = b
-    optNewCharType(7).Enabled = b
+    chkExpansion.Enabled = B
+    optNewCharType(6).Enabled = B
+    optNewCharType(7).Enabled = B
     
     lvwChars.ListItems.Add , "temp", "Please wait..."
     
@@ -640,7 +640,7 @@ Private Sub lvwChars_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub cmdCreate_Click()
-    Dim i As Integer
+    Dim I As Integer
     Dim Flags As Long
     
     CreatedExpRealmChar = 0
@@ -658,12 +658,12 @@ Private Sub cmdCreate_Click()
             
             If chkHardcore.Value = 1 Then Flags = Flags Or &H4
             
-            For i = 1 To 7
-                If optNewCharType(i).Value = True Then
-                    MCPHandler.CreateMCPCharacter i - 1, Flags, txtCharName.text
+            For I = 1 To 7
+                If optNewCharType(I).Value = True Then
+                    MCPHandler.CreateMCPCharacter I - 1, Flags, txtCharName.text
                     Exit For
                 End If
-            Next i
+            Next I
         End If
     End If
 End Sub
@@ -799,13 +799,13 @@ Private Sub mnuPopDelete_Click()
 End Sub
 
 Private Sub optNewCharType_Click(index As Integer)
-    Dim i As Integer
+    Dim I As Integer
     
     imgCharPortrait.Picture = imlChars.ListImages.Item(index + 1).Picture
     
-    For i = 1 To 7
-        If i <> index Then optNewCharType(i).Value = False
-    Next i
+    For I = 1 To 7
+        If I <> index Then optNewCharType(I).Value = False
+    Next I
 End Sub
 
 Private Sub optViewExisting_Click()
@@ -841,7 +841,7 @@ Private Sub tmrLoginTimeout_Timer()
     If lvwChars.ListItems.Count > 0 Then
         lblWarning.Caption = lvwChars.ListItems.Item(1).Key & vbCrLf & " will be chosen automatically in"
         
-        If mTicks = 30 Then
+        If mTicks >= 30 Then
             MCPHandler.LogonToCharacter lvwChars.ListItems.Item(1).Key
             Unload_SuccessfulLogin = True
             tmrLoginTimeout.Enabled = False
@@ -849,7 +849,7 @@ Private Sub tmrLoginTimeout_Timer()
     Else
         lblWarning.Caption = "You have no characters! Realm login will be cancelled in"
         
-        If mTicks = 30 Then
+        If mTicks >= 30 Then
             frmChat.sckMCP.Close
             Send0x0A
             Unload Me
@@ -860,16 +860,16 @@ Private Sub tmrLoginTimeout_Timer()
 End Sub
 
 Private Function FindKey(ByVal sKey As String) As Boolean
-    Dim i As Long
+    Dim I As Long
     
     With lvwChars.ListItems
         If .Count > 0 Then
-            For i = 1 To .Count
-                If .Item(i).Key = sKey Then
+            For I = 1 To .Count
+                If .Item(I).Key = sKey Then
                     FindKey = True
                     Exit Function
                 End If
-            Next i
+            Next I
         End If
     End With
     
