@@ -501,7 +501,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                         .ModifiedBy = "(console)"
                         .ModifiedOn = Now
                         .Flags = "B"
-                        .BanMessage = buf
+                        .BanMessage = msg
                         
                         ' ...
                         If (Not (trvUsers.DropHighlight Is Nothing)) Then
