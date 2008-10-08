@@ -3818,7 +3818,7 @@ End Sub
 
 
 Private Sub mnuPopUnsquelch_Click()
-    On Error Resume Next
+    'On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     AddQ "/unsquelch " & GetSelectedUser

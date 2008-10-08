@@ -8,7 +8,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     ByVal Ping As Long, ByVal Product As String, Optional QueuedEventID As Integer = 0)
     
     On Error GoTo ERROR_HANDLER
-    
+
     Dim UserObj       As clsUserObj
     Dim UserEvent     As clsUserEventObj
     
@@ -126,6 +126,20 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         SharedScriptSupport.BotFlags = MyFlags
     End If
     
+    ' ...
+    If (QueuedEventID = 0) Then
+        ' ...
+        If (g_Channel.Self.IsOperator) Then
+            ' we don't want anyone here that isn't
+            ' supposed to be here.
+            If ((PreviousFlags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
+                g_Channel.CheckUsers
+            Else
+                g_Channel.CheckUser Username
+            End If
+        End If
+    End If
+    
     ' we aren't in a silent channel, are we?
     If (g_Channel.IsSilent) Then
         ' ...
@@ -184,16 +198,9 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
             End If
         End If
     End If
-    
-    ' ...
-    If (g_Channel.Self.IsOperator) Then
-        ' we don't want anyone here that isn't
-        ' supposed to be here.
-        g_Channel.CheckUsers
-    End If
 
     ' ...
-    If ((g_Channel.IsSilent) Or ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0))) Then
+    If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' call event script function
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -204,6 +211,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         frmChat.SControl.Run "Event_FlagUpdate", Username, Flags, Ping
     End If
     
+    ' ...
     Exit Sub
     
 ERROR_HANDLER:
@@ -852,7 +860,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
     
             '// backup channel
-            If (InStr(Len(temp), Message, "kicked you out", vbTextCompare) > 0) Then
+            If (InStr(1, Message, "kicked you out", vbTextCompare) > 0) Then
                 If ((StrComp(g_Channel.Name, "Op [vL]", vbTextCompare) <> 0) And _
                     (StrComp(g_Channel.Name, "Op Fatal-Error", vbTextCompare) <> 0)) Then
                         
@@ -867,8 +875,8 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             End If
             
             ' ...
-            If (InStr(Len(temp), Message, " has been unsquelched", vbTextCompare) > 0) Then
-                unsquelching = True
+            If (InStr(1, Message, " has been unsquelched", vbTextCompare) > 0) Then
+                'unsquelching = True
                 
                 ' ...
                 If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
@@ -1351,7 +1359,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         Call DoLastSeen(Username)
         
         ' ...
-        IsBanned = (g_Channel.CheckUsers > 0)
+        IsBanned = (g_Channel.CheckUser(Username, UserObj))
         
         ' ...
         If (IsBanned = False) Then

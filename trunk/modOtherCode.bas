@@ -618,6 +618,8 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     
     On Error GoTo ERROR_HANDLER
 
+    Static dynGroups() As String ' ...
+    
     Dim gAcc    As udtGetAccessResponse ' ...
     
     Dim I       As Integer ' ...
@@ -1328,7 +1330,7 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
     End If
 End Function
 
-Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
+Public Function CheckMsg(ByVal msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
         Long) As Boolean
     
     Dim I As Integer ' ...
@@ -1336,14 +1338,14 @@ Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String,
     For I = 0 To UBound(gFilters)
         If (Len(gFilters(I)) > 0) Then
             If (InStr(1, gFilters(I), "%", vbBinaryCompare) > 0) Then
-                If (InStr(1, Msg, DoReplacements(gFilters(I), Username, Ping), vbTextCompare) > 0) Then
+                If (InStr(1, msg, DoReplacements(gFilters(I), Username, Ping), vbTextCompare) > 0) Then
                     
                     CheckMsg = True
                     
                     Exit Function
                 End If
             Else
-                If (InStr(1, Msg, gFilters(I), vbTextCompare) <> 0) Then
+                If (InStr(1, msg, gFilters(I), vbTextCompare) <> 0) Then
                     CheckMsg = True
                     
                     Exit Function
@@ -1830,7 +1832,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
     End If
 End Sub
 
-Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boolean
+Public Function AllowedToTalk(ByVal sUser As String, ByVal msg As String) As Boolean
     Dim I As Integer
     
     ' default to true
@@ -1855,7 +1857,7 @@ Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boo
     ' ...
     If (Filters) Then
         ' ...
-        If ((CheckBlock(sUser)) Or (CheckMsg(Msg, sUser, -5))) Then
+        If ((CheckBlock(sUser)) Or (CheckMsg(msg, sUser, -5))) Then
             AllowedToTalk = False
         End If
     End If
@@ -2189,7 +2191,7 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
 End Function
 
 
-Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mType As Byte)
+Public Sub CheckPhrase(ByRef Username As String, ByRef msg As String, ByVal mType As Byte)
     Dim I As Integer
     
     If UBound(Catch) = 0 Then
@@ -2198,8 +2200,8 @@ Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mTyp
     
     For I = LBound(Catch) To UBound(Catch)
         If (Catch(I) <> vbNullString) Then
-            If (InStr(1, LCase(Msg), Catch(I), vbTextCompare) <> 0) Then
-                Call CaughtPhrase(Username, Msg, Catch(I), mType)
+            If (InStr(1, LCase(msg), Catch(I), vbTextCompare) <> 0) Then
+                Call CaughtPhrase(Username, msg, Catch(I), mType)
                 
                 Exit Sub
             End If
@@ -2208,7 +2210,7 @@ Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mTyp
 End Sub
 
 
-Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phrase As String, ByVal mType As Byte)
+Public Sub CaughtPhrase(ByVal Username As String, ByVal msg As String, ByVal Phrase As String, ByVal mType As Byte)
     Dim I As Integer
     Dim s As String
     
@@ -2239,12 +2241,12 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phr
             Open GetProfilePath() & "\caughtphrases.htm" For Output As #I
         End If
         
-        Msg = Replace(Msg, "<", "&lt;", 1)
-        Msg = Replace(Msg, ">", "&gt;", 1)
+        msg = Replace(msg, "<", "&lt;", 1)
+        msg = Replace(msg, ">", "&gt;", 1)
         
         Print #I, "<B>" & Format(Date, "MM-dd-yyyy") & " - " & Time & _
             " - " & s & Space(1) & Username & ": </B>" & _
-                Replace(Msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
+                Replace(msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
                     "<br>"
     Close #I
 End Sub
