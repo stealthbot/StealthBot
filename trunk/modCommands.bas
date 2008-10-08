@@ -1411,7 +1411,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         'frmChat.AddChat vbRed, "DEBUG: DESIGNATE " & msgData
         
         ' ...
-        Call Pause(2, True, False)
+        Call Pause(3, True, False)
         
         ' rejoin channel
         Call bnetSend("/resign")
@@ -7484,7 +7484,7 @@ Private Function GetAccessINIValue(ByVal sKey As String, Optional ByVal Default 
     End If
 End Function
 
-Private Function checkUser(ByVal user As String, Optional ByVal _
+Private Function CheckUser(ByVal user As String, Optional ByVal _
     allow_illegal As Boolean = False) As Boolean
     
     Dim I       As Integer ' ...
@@ -7592,15 +7592,15 @@ Private Function checkUser(ByVal user As String, Optional ByVal _
             ' do we allow illegal
             ' characters?
             If (allow_illegal) Then
-                checkUser = True
+                CheckUser = True
             Else
-                checkUser = False
+                CheckUser = False
             End If
         Else
-            checkUser = True
+            CheckUser = True
         End If
     Else
-        checkUser = False
+        CheckUser = False
     End If
 End Function
 
