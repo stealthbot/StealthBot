@@ -1,0 +1,5 @@
+'This file is no longer loaded due to the implementation of the Plugin System.
+'Plugin System info: http://www.stealthbot.net/board/index.php?showtopic=6052
+
+'If you'd like to revert to regular script.txt usage (not recommended), add this line to the [Overrides] section of your config.ini:
+'DisablePS=Y
