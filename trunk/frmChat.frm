@@ -5793,6 +5793,9 @@ Sub Connect()
                 Else
                     MsgBox "You have selected to use proxies, but no proxy is configured. Please set one up in the Advanced " & _
                         " section of Bot Settings."
+                        
+                    DoDisconnect
+                    
                     Exit Sub
                 End If
             End If
@@ -5975,23 +5978,41 @@ End Sub
 'StealthLock (c) 2003 Stealth, Please do not remove this header
 Private Function GetAuth(ByVal Username As String) As Boolean
     On Error GoTo ERROR_HANDLER
+    
+    Static lastAuth As Boolean ' ...
 
     Dim res As String ' string variable for storing beta authorization result
                       ' 0 == unauthorized
                       ' 1 == authorized
+                      
+    ' ...
+    If (lastAuth = True) Then
+        ' ...
+        GetAuth = True
+        
+        ' ...
+        Exit Function
+    End If
 
+    ' ...
     res = INet.OpenURL("http://www.stealthbot.net/board/sbauth.php?username=" & Username)
 
+    ' ...
     Do While INet.StillExecuting
         DoEvents
     Loop
 
+    ' ...
     If (res = "1") Then
-        GetAuth = True
+        lastAuth = True
     Else
-        GetAuth = False
+        lastAuth = False
     End If
+    
+    ' ...
+    GetAuth = lastAuth
 
+    ' ...
     Exit Function
 
 ERROR_HANDLER:
