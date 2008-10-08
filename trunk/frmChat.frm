@@ -5979,7 +5979,9 @@ End Sub
 Private Function GetAuth(ByVal Username As String) As Boolean
     On Error GoTo ERROR_HANDLER
     
-    Static lastAuth As Boolean ' ...
+    Static lastAuth     As Boolean ' ...
+    Static lastAuthName As String  ' ...
+    
 
     Dim res As String ' string variable for storing beta authorization result
                       ' 0 == unauthorized
@@ -5988,10 +5990,13 @@ Private Function GetAuth(ByVal Username As String) As Boolean
     ' ...
     If (lastAuth = True) Then
         ' ...
-        GetAuth = True
-        
-        ' ...
-        Exit Function
+        If (StrComp(Username, lastAuthName, vbTextCompare) = 0) Then
+            ' ...
+            GetAuth = True
+            
+            ' ...
+            Exit Function
+        End If
     End If
 
     ' ...
@@ -6001,6 +6006,9 @@ Private Function GetAuth(ByVal Username As String) As Boolean
     Do While INet.StillExecuting
         DoEvents
     Loop
+    
+    ' ...
+    lastAuthName = Username
 
     ' ...
     If (res = "1") Then
