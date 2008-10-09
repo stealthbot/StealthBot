@@ -657,7 +657,12 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     ' ...
     If (DateDiff("s", dModified, nModified) > 0) Then
         ' ...
-        ReDim Preserve dynGroups(0)
+        ReDim dynGroups(0)
+        
+        ' ...
+        With dynGroups(0)
+            .Username = vbNullString
+        End With
     
         ' ...
         For I = LBound(DB) To UBound(DB)
