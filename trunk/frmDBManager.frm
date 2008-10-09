@@ -811,57 +811,60 @@ Private Sub btnSave_Click(index As Integer)
         For I = LBound(m_DB) To UBound(m_DB)
             ' is this the user we were looking for?
             If (StrComp(trvUsers.SelectedItem.text, m_DB(I).Username, vbTextCompare) = 0) Then
-                ' modifiy user data
-                With m_DB(I)
-                    .Access = Val(txtRank.text)
-                    .Flags = txtFlags.text
-                    .ModifiedBy = "(console)"
-                    .ModifiedOn = Now
-                    .BanMessage = txtBanMessage.text
-                End With
-                
                 ' ...
-                'If (m_group_change) Then
-                '    ' ...
-                '    If (m_group_index > -1) Then
-                '        m_DB(i).Groups = lstGroups.List(m_group_index)
-                '
-                '        ' ...
-                '        If (tbsTabs.SelectedItem.index = 1) Then
-                '            Set trvUsers.SelectedItem.Parent = _
-                '                    trvUsers.Nodes(Exists(m_DB(i).Groups, "Group"))
-                '        End If
-                '    Else
-                '        m_DB(i).Groups = vbNullString
-                '
-                '        ' ...
-                '        If (tbsTabs.SelectedItem.index = 1) Then
-                '            Set trvUsers.SelectedItem.Parent = trvUsers.Nodes(1)
-                '        End If
-                '    End If
-                '
-                '    ' ...
-                '    If (lstGroups.SelCount > 1) Then
-                '        ' ...
-                '        For j = 0 To (lstGroups.ListCount - 1)
-                '            ' ...
-                '            If (j <> m_group_index) Then
-                '                ' ...
-                '                If (lstGroups.Selected(j) = True) Then
-                '                    ' ...
-                '                    m_DB(i).Groups = m_DB(i).Groups & "," & _
-                '                        lstGroups.List(j)
-                '                End If
-                '            End If
-                '        Next j
-                '    End If
-                '
-                '    ' ...
-                '    m_group_change = False
-                'End If
-                
-                ' break loop
-                Exit For
+                If (StrComp(trvUsers.SelectedItem.Tag, m_DB(I).Type, vbTextCompare) = 0) Then
+                    ' modifiy user data
+                    With m_DB(I)
+                        .Access = Val(txtRank.text)
+                        .Flags = txtFlags.text
+                        .ModifiedBy = "(console)"
+                        .ModifiedOn = Now
+                        .BanMessage = txtBanMessage.text
+                    End With
+                    
+                    ' ...
+                    'If (m_group_change) Then
+                    '    ' ...
+                    '    If (m_group_index > -1) Then
+                    '        m_DB(i).Groups = lstGroups.List(m_group_index)
+                    '
+                    '        ' ...
+                    '        If (tbsTabs.SelectedItem.index = 1) Then
+                    '            Set trvUsers.SelectedItem.Parent = _
+                    '                    trvUsers.Nodes(Exists(m_DB(i).Groups, "Group"))
+                    '        End If
+                    '    Else
+                    '        m_DB(i).Groups = vbNullString
+                    '
+                    '        ' ...
+                    '        If (tbsTabs.SelectedItem.index = 1) Then
+                    '            Set trvUsers.SelectedItem.Parent = trvUsers.Nodes(1)
+                    '        End If
+                    '    End If
+                    '
+                    '    ' ...
+                    '    If (lstGroups.SelCount > 1) Then
+                    '        ' ...
+                    '        For j = 0 To (lstGroups.ListCount - 1)
+                    '            ' ...
+                    '            If (j <> m_group_index) Then
+                    '                ' ...
+                    '                If (lstGroups.Selected(j) = True) Then
+                    '                    ' ...
+                    '                    m_DB(i).Groups = m_DB(i).Groups & "," & _
+                    '                        lstGroups.List(j)
+                    '                End If
+                    '            End If
+                    '        Next j
+                    '    End If
+                    '
+                    '    ' ...
+                    '    m_group_change = False
+                    'End If
+                    
+                    ' break loop
+                    Exit For
+                End If
             End If
         Next I
         
