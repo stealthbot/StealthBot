@@ -646,9 +646,6 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     dbIndex = -1
     
     ' ...
-    ReDim Preserve dynGroups(0)
-    
-    ' ...
     Set fso = New FileSystemObject
     
     ' ...
@@ -660,13 +657,15 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     ' ...
     If (DateDiff("s", dModified, nModified) > 0) Then
         ' ...
+        ReDim Preserve dynGroups(0)
+    
+        ' ...
         For I = LBound(DB) To UBound(DB)
             ' ...
             If ((InStr(1, DB(I).Username, "*", vbBinaryCompare) <> 0) Or _
                 (InStr(1, DB(I).Username, "?", vbBinaryCompare) <> 0) Or _
                     (DB(I).Type = "GAME") Or _
-                    (DB(I).Type = "CLAN") Or _
-                    (DB(I).Type = "GROUP")) Then
+                    (DB(I).Type = "CLAN")) Then
                                 
                 ' ...
                 If (dynGroups(0).Username <> vbNullString) Then

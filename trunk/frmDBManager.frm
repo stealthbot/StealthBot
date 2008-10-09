@@ -820,6 +820,22 @@ Private Sub btnSave_Click(index As Integer)
                         .ModifiedBy = "(console)"
                         .ModifiedOn = Now
                         .BanMessage = txtBanMessage.text
+                        
+                        ' ...
+                        .Groups = vbNullString
+                        
+                        ' ...
+                        For j = 1 To lvGroups.ListItems.Count
+                            ' ...
+                            If (lvGroups.ListItems(j).Checked) Then
+                                .Groups = .Groups & lvGroups.ListItems(j).text & ","
+                            End If
+                        Next j
+                        
+                        ' ...
+                        If (Len(.Groups) > 1) Then
+                            .Groups = Left$(.Groups, Len(.Groups) - 1)
+                        End If
                     End With
                     
                     ' ...
@@ -894,6 +910,9 @@ Private Sub lvGroups_MouseDown(Button As Integer, Shift As Integer, X As Single,
             .Checked = False
         End With
     Next I
+    
+    ' enable entry save command
+    btnSave(1).Enabled = True
     
     ' ...
     Set trvUsers.DropHighlight = Nothing
@@ -1951,7 +1970,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
 
         ' we aren't removing the last array
         ' element, are we?
-        If (I >= UBound(m_DB)) Then
+        If (I > UBound(m_DB)) Then
             ' ...
             ReDim m_DB(0)
             
