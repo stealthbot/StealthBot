@@ -1948,71 +1948,85 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
 
         ' we aren't removing the last array
         ' element, are we?
-        If (I < UBound(m_DB)) Then
+        If (I >= UBound(m_DB)) Then
+            ' ...
+            ReDim m_DB(0)
+            
+            ' ...
+            With m_DB(0)
+                .Username = vbNullString
+                .Flags = vbNullString
+                .Access = 0
+                .Groups = vbNullString
+                .AddedBy = vbNullString
+                .ModifiedBy = vbNullString
+                .AddedOn = Now
+                .ModifiedOn = Now
+            End With
+        Else
+            ' ...
             For j = (I + 1) To UBound(m_DB)
                 m_DB(j - 1) = m_DB(j)
             Next j
-        End If
-        
-        If (UBound(m_DB)) Then
+            
             ' redefine array size
             ReDim Preserve m_DB(UBound(m_DB) - 1)
-        End If
-        
-        ' if we're removing a group, we need to also fix our
-        ' group memberships, in case anything is broken now
-        If (StrComp(bak.Type, "GROUP", vbBinaryCompare) = 0) Then
-            Dim res As Boolean ' ...
-       
-            ' if we remove a user from the database during the
-            ' execution of the inner loop, we have to reset our
-            ' inner loop variables, otherwise we create errors
-            ' due to incorrect database indexes.  Because of this,
-            ' we have to dual-loop until our inner loop runs out
-            ' of matching users.
-            Do
-                ' reset loop variable
-                res = False
             
-                ' loop through database checking for users that
-                ' were members of the group that we just removed
-                For I = LBound(m_DB) To UBound(m_DB)
-                    If (Len(m_DB(I).Groups) And m_DB(I).Groups <> "%") Then
-                        If (InStr(1, m_DB(I).Groups, ",", vbBinaryCompare) <> 0) Then
-                            Dim splt()     As String ' ...
-                            Dim innerfound As Boolean ' ...
-                            
-                            splt() = Split(m_DB(I).Groups, ",")
-                            
-                            For j = LBound(splt) To UBound(splt)
-                                If (StrComp(bak.Username, splt(j), vbTextCompare) = 0) Then
-                                    innerfound = True
+            ' if we're removing a group, we need to also fix our
+            ' group memberships, in case anything is broken now
+            If (StrComp(bak.Type, "GROUP", vbBinaryCompare) = 0) Then
+                Dim res As Boolean ' ...
+            
+                ' if we remove a user from the database during the
+                ' execution of the inner loop, we have to reset our
+                ' inner loop variables, otherwise we create errors
+                ' due to incorrect database indexes.  Because of this,
+                ' we have to dual-loop until our inner loop runs out
+                ' of matching users.
+                Do
+                    ' reset loop variable
+                    res = False
+                
+                    ' loop through database checking for users that
+                    ' were members of the group that we just removed
+                    For I = LBound(m_DB) To UBound(m_DB)
+                        If (Len(m_DB(I).Groups) And m_DB(I).Groups <> "%") Then
+                            If (InStr(1, m_DB(I).Groups, ",", vbBinaryCompare) <> 0) Then
+                                Dim splt()     As String ' ...
+                                Dim innerfound As Boolean ' ...
                                 
+                                splt() = Split(m_DB(I).Groups, ",")
+                                
+                                For j = LBound(splt) To UBound(splt)
+                                    If (StrComp(bak.Username, splt(j), vbTextCompare) = 0) Then
+                                        innerfound = True
+                                    
+                                        Exit For
+                                    End If
+                                Next j
+                            
+                                If (innerfound) Then
+                                    Dim k As Integer ' ...
+                                    
+                                    For k = (j + 1) To UBound(splt)
+                                        splt(k - 1) = splt(k)
+                                    Next k
+                                    
+                                    ReDim Preserve splt(UBound(splt) - 1)
+                                    
+                                    m_DB(I).Groups = Join(splt(), vbNullString)
+                                End If
+                            Else
+                                If (StrComp(bak.Username, m_DB(I).Groups, vbTextCompare) = 0) Then
+                                    res = DB_remove(m_DB(I).Username, m_DB(I).Type)
+                                    
                                     Exit For
                                 End If
-                            Next j
-                        
-                            If (innerfound) Then
-                                Dim k As Integer ' ...
-                                
-                                For k = (j + 1) To UBound(splt)
-                                    splt(k - 1) = splt(k)
-                                Next k
-                                
-                                ReDim Preserve splt(UBound(splt) - 1)
-                                
-                                m_DB(I).Groups = Join(splt(), vbNullString)
-                            End If
-                        Else
-                            If (StrComp(bak.Username, m_DB(I).Groups, vbTextCompare) = 0) Then
-                                res = DB_remove(m_DB(I).Username, m_DB(I).Type)
-                                
-                                Exit For
                             End If
                         End If
-                    End If
-                Next I
-            Loop While (res)
+                    Next I
+                Loop While (res)
+            End If
         End If
         
         ' commit modifications
