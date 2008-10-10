@@ -41,6 +41,16 @@ Begin VB.Form frmDBManager
       TabIndex        =   6
       Top             =   480
       Width           =   3025
+      Begin VB.ComboBox cbxGroups 
+         Height          =   315
+         ItemData        =   "frmDBManager.frx":0000
+         Left            =   240
+         List            =   "frmDBManager.frx":0007
+         Style           =   2  'Dropdown List
+         TabIndex        =   23
+         Top             =   2543
+         Width           =   2570
+      End
       Begin VB.CommandButton btnSave 
          Caption         =   "Save"
          Enabled         =   0   'False
@@ -69,13 +79,13 @@ Begin VB.Form frmDBManager
          Width           =   2535
       End
       Begin MSComctlLib.ListView lvGroups 
-         Height          =   1555
+         Height          =   1200
          Left            =   240
          TabIndex        =   19
-         Top             =   2520
+         Top             =   2920
          Width           =   2565
          _ExtentX        =   4524
-         _ExtentY        =   2752
+         _ExtentY        =   2117
          View            =   3
          LabelEdit       =   1
          LabelWrap       =   -1  'True
@@ -261,15 +271,15 @@ Begin VB.Form frmDBManager
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   3
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0000
+            Picture         =   "frmDBManager.frx":0013
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0552
+            Picture         =   "frmDBManager.frx":0565
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmDBManager.frx":0AA4
+            Picture         =   "frmDBManager.frx":0AB7
             Key             =   ""
          EndProperty
       EndProperty
@@ -278,7 +288,7 @@ Begin VB.Form frmDBManager
       Caption         =   "Create Group"
       Height          =   375
       Left            =   1800
-      Picture         =   "frmDBManager.frx":0FF6
+      Picture         =   "frmDBManager.frx":1009
       TabIndex        =   2
       ToolTipText     =   "Create Group"
       Top             =   5378
@@ -289,7 +299,7 @@ Begin VB.Form frmDBManager
       Height          =   375
       Left            =   120
       MaskColor       =   &H00000000&
-      Picture         =   "frmDBManager.frx":145E
+      Picture         =   "frmDBManager.frx":1471
       TabIndex        =   1
       ToolTipText     =   "Create User"
       Top             =   5378
@@ -400,6 +410,28 @@ Private m_new_entry    As Boolean
 Private m_DBDate       As Long
 Private m_group_index  As Integer
 Private m_group_change As Boolean
+
+Private Sub cbxGroups_Click()
+    Dim I As Integer ' ...
+    
+    ' ...
+    For I = 1 To lvGroups.ListItems.Count
+        ' ...
+        If (StrComp(cbxGroups.text, lvGroups.ListItems(I), vbTextCompare) = 0) Then
+            ' ...
+            lvGroups.ListItems(I).Checked = False
+            
+            ' ...
+            Exit For
+        End If
+    Next I
+    
+    ' enable entry save command
+    btnSave(1).Enabled = True
+    
+    ' ...
+    m_group_change = True
+End Sub
 
 ' ...
 Private Sub Form_Load()
@@ -822,7 +854,14 @@ Private Sub btnSave_Click(index As Integer)
                         .BanMessage = txtBanMessage.text
                         
                         ' ...
-                        .Groups = vbNullString
+                        If (cbxGroups.ListIndex > 0) Then
+                            .Groups = cbxGroups.text
+                        Else
+                            .Groups = vbNullString
+                        End If
+                        
+                        ' ...
+                        .Groups = .Groups & ","
                         
                         ' ...
                         For j = 1 To lvGroups.ListItems.Count
@@ -886,6 +925,15 @@ Private Sub btnSave_Click(index As Integer)
         
         ' disable entry save command
         btnSave(1).Enabled = False
+        
+        ' ...
+        If (m_group_change) Then
+            ' ...
+            tbsTabs_Click
+        
+            ' ...
+            m_group_change = False
+        End If
     Else
         ' write temporary database to official
         DB() = m_DB()
@@ -901,14 +949,36 @@ Private Sub btnSave_Click(index As Integer)
     End If
 End Sub
 
-Private Sub lvGroups_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
-    Dim I As Integer
+Private Sub lvGroups_Click()
+    Dim I As Integer ' ...
     
+    ' ...
+    'cbxGroups.ListIndex = 0
+        
+    ' ...
+    ' ...
     For I = 1 To lvGroups.ListItems.Count
-        With lvGroups.ListItems(I)
-            .Selected = False
-            .Checked = False
-        End With
+        ' ...
+        If (lvGroups.ListItems(I).Selected) Then
+            ' ...
+            With lvGroups.ListItems(I)
+                ' ...
+                If (.Checked = True) Then
+                    .Checked = False
+                Else
+                    .Checked = True
+                End If
+            End With
+        End If
+    
+        ' ...
+        If (StrComp(cbxGroups.text, lvGroups.ListItems(I), vbTextCompare) = 0) Then
+            ' ...
+            With lvGroups.ListItems(I)
+                .Checked = False
+                .Selected = False
+            End With
+        End If
     Next I
     
     ' enable entry save command
@@ -1089,17 +1159,25 @@ Private Sub tbsTabs_Click()
                             ' no need for special handling...
                             grp = m_DB(I).Groups
                         End If
-                    
-                        ' search for our group
-                        Pos = Exists(grp, "Group")
-                            
-                        ' does our group exist?
-                        If (Pos) Then
-                            ' create user node and move into group
-                            Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
-                                tvwChild, "User: " & m_DB(I).Username, m_DB(I).Username, 3)
+                        
+                        ' ...
+                        If (grp = vbNullString) Then
+                            Pos = False
+                        Else
+                            ' search for our group
+                            Pos = Exists(grp, "Group")
+                                
+                            ' does our group exist?
+                            If (Pos) Then
+                                ' create user node and move into group
+                                Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
+                                    tvwChild, "User: " & m_DB(I).Username, m_DB(I).Username, 3)
+                            End If
                         End If
-                    Else
+                    End If
+                    
+                    ' ...
+                    If (Pos = False) Then
                         ' create new user node under root
                         Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
                             "User: " & m_DB(I).Username, m_DB(I).Username, 3)
@@ -1227,8 +1305,9 @@ Private Sub LockGUI()
     ' loop through listbox and clear selected items
     Call ClearGroupList
     
-    ' disable group list
-    'lstGroups.Enabled = False
+    ' disable group lists
+    lvGroups.Enabled = False
+    cbxGroups.Enabled = False
     
     ' disable & clear ban message
     txtBanMessage.Enabled = False
@@ -1249,10 +1328,17 @@ End Sub
 
 Private Sub ClearGroupList()
     Dim I As Integer ' ...
+    
+    ' ...
+    cbxGroups.ListIndex = 0
 
     ' loop through listbox and clear selected items
     For I = 1 To lvGroups.ListItems.Count
-        lvGroups.ListItems(I).Checked = False
+        ' ...
+        With lvGroups.ListItems(I)
+            .Checked = False
+            .Ghosted = False
+        End With
     Next I
 End Sub
 
@@ -1273,6 +1359,10 @@ Private Sub UnlockGUI()
     
     ' enable entry delete button
     btnDelete.Enabled = True
+    
+    ' enable group lists
+    lvGroups.Enabled = True
+    cbxGroups.Enabled = True
 End Sub
 
 ' handle node collapse
@@ -1364,28 +1454,36 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
             
             ' loop through entry's group memberships
             For I = LBound(splt) To UBound(splt)
-                ' loop through our group listing, checking to see if we have any
-                ' matches (since the entry is a member of a group, we better!)
-                For j = 1 To lvGroups.ListItems.Count
-                    ' is entry a member of group?
-                    If (StrComp(splt(I), lvGroups.ListItems(j), vbTextCompare) = 0) Then
-                        ' ...
-                        If (m_group_index = -1) Then
-                            m_group_index = j
+                ' ...
+                If (I = 0) Then
+                    ' loop through our group listing, checking to see if we have any
+                    ' matches (since the entry is a member of a group, we better!)
+                    For j = 1 To lvGroups.ListItems.Count
+                        ' is entry a member of group?
+                        If (StrComp(splt(I), cbxGroups.List(j), vbTextCompare) = 0) Then
+                            ' ...
+                            cbxGroups.ListIndex = j
+                            
+                            ' ...
+                            Exit For
                         End If
-                    
-                        ' select group if entry is a member
-                        lvGroups.ListItems(j).Checked = True
-                    End If
-                Next j
+                    Next j
+                Else
+                    ' loop through our group listing, checking to see if we have any
+                    ' matches (since the entry is a member of a group, we better!)
+                    For j = 1 To lvGroups.ListItems.Count
+                        ' ...
+                        If (StrComp(splt(I), lvGroups.ListItems(j), vbTextCompare) = 0) Then
+                            ' select group if entry is a member
+                            lvGroups.ListItems(j).Checked = True
+                        End If
+                    Next j
+                End If
             Next I
         End If
         
         ' ...
-        If ((tmp.BanMessage <> vbNullString) And (tmp.BanMessage <> _
-                "%")) Then
-                
-            ' ...
+        If ((tmp.BanMessage <> vbNullString) And (tmp.BanMessage <> "%")) Then
             txtBanMessage.text = tmp.BanMessage
         End If
         
@@ -1824,6 +1922,12 @@ Private Sub UpdateGroupListBox()
 
     ' clear group selection listing
     Call lvGroups.ListItems.Clear
+    
+    ' ...
+    Call cbxGroups.Clear
+    
+    ' ...
+    Call cbxGroups.AddItem("[none]", 0)
 
     ' go through group listing
     For I = LBound(m_DB) To UBound(m_DB)
@@ -1831,6 +1935,9 @@ Private Sub UpdateGroupListBox()
         If (StrComp(m_DB(I).Type, "Group", vbTextCompare) = 0) Then
             ' add group to group selection listbox
             Call lvGroups.ListItems.Add(, , m_DB(I).Username)
+            
+            ' ...
+            Call cbxGroups.AddItem(m_DB(I).Username)
         End If
     Next I
 End Sub
