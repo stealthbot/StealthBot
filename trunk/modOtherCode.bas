@@ -1,7 +1,7 @@
 Attribute VB_Name = "modOtherCode"
 Option Explicit
 
-Private Declare Function GetFileTime Lib "Kernel32.dll" (hFile As Integer, ftCreationTime As FILETIME, ftLastAccessTime As FILETIME, lastWriteTime As FILETIME) As Boolean
+Private Declare Function GetFILETIME Lib "Kernel32.dll" Alias "GetFileTime" (hFile As Integer, ftCreationTime As FILETIME, ftLastAccessTime As FILETIME, lastWriteTime As FILETIME) As Boolean
 
 Public Type COMMAND_DATA
     Name         As String
@@ -648,6 +648,11 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     ' ...
     Set fso = New FileSystemObject
     
+    ' If for some reason the users file doesn't exist, create it. ' 10/13/08 ~Pyro
+    If (Not (fso.FileExists("./users.txt"))) Then
+        Call fso.CreateTextFile("./users.txt", False)
+    End If
+        
     ' ...
     Set f = fso.GetFile("./users.txt")
     
@@ -1383,7 +1388,7 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
     End If
 End Function
 
-Public Function CheckMsg(ByVal msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
+Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
         Long) As Boolean
     
     Dim I As Integer ' ...
@@ -1391,14 +1396,14 @@ Public Function CheckMsg(ByVal msg As String, Optional ByVal Username As String,
     For I = 0 To UBound(gFilters)
         If (Len(gFilters(I)) > 0) Then
             If (InStr(1, gFilters(I), "%", vbBinaryCompare) > 0) Then
-                If (InStr(1, msg, DoReplacements(gFilters(I), Username, Ping), vbTextCompare) > 0) Then
+                If (InStr(1, Msg, DoReplacements(gFilters(I), Username, Ping), vbTextCompare) > 0) Then
                     
                     CheckMsg = True
                     
                     Exit Function
                 End If
             Else
-                If (InStr(1, msg, gFilters(I), vbTextCompare) <> 0) Then
+                If (InStr(1, Msg, gFilters(I), vbTextCompare) <> 0) Then
                     CheckMsg = True
                     
                     Exit Function
@@ -1885,7 +1890,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
     End If
 End Sub
 
-Public Function AllowedToTalk(ByVal sUser As String, ByVal msg As String) As Boolean
+Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boolean
     Dim I As Integer
     
     ' default to true
@@ -1910,7 +1915,7 @@ Public Function AllowedToTalk(ByVal sUser As String, ByVal msg As String) As Boo
     ' ...
     If (Filters) Then
         ' ...
-        If ((CheckBlock(sUser)) Or (CheckMsg(msg, sUser, -5))) Then
+        If ((CheckBlock(sUser)) Or (CheckMsg(Msg, sUser, -5))) Then
             AllowedToTalk = False
         End If
     End If
@@ -2239,12 +2244,12 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
     If (lvItem Is Nothing) Then
         checkChannel = 0
     Else
-        checkChannel = lvItem.index
+        checkChannel = lvItem.Index
     End If
 End Function
 
 
-Public Sub CheckPhrase(ByRef Username As String, ByRef msg As String, ByVal mType As Byte)
+Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mType As Byte)
     Dim I As Integer
     
     If UBound(Catch) = 0 Then
@@ -2253,8 +2258,8 @@ Public Sub CheckPhrase(ByRef Username As String, ByRef msg As String, ByVal mTyp
     
     For I = LBound(Catch) To UBound(Catch)
         If (Catch(I) <> vbNullString) Then
-            If (InStr(1, LCase(msg), Catch(I), vbTextCompare) <> 0) Then
-                Call CaughtPhrase(Username, msg, Catch(I), mType)
+            If (InStr(1, LCase(Msg), Catch(I), vbTextCompare) <> 0) Then
+                Call CaughtPhrase(Username, Msg, Catch(I), mType)
                 
                 Exit Sub
             End If
@@ -2263,7 +2268,7 @@ Public Sub CheckPhrase(ByRef Username As String, ByRef msg As String, ByVal mTyp
 End Sub
 
 
-Public Sub CaughtPhrase(ByVal Username As String, ByVal msg As String, ByVal Phrase As String, ByVal mType As Byte)
+Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phrase As String, ByVal mType As Byte)
     Dim I As Integer
     Dim s As String
     
@@ -2294,12 +2299,12 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal msg As String, ByVal Phr
             Open GetProfilePath() & "\caughtphrases.htm" For Output As #I
         End If
         
-        msg = Replace(msg, "<", "&lt;", 1)
-        msg = Replace(msg, ">", "&gt;", 1)
+        Msg = Replace(Msg, "<", "&lt;", 1)
+        Msg = Replace(Msg, ">", "&gt;", 1)
         
         Print #I, "<B>" & Format(Date, "MM-dd-yyyy") & " - " & Time & _
             " - " & s & Space(1) & Username & ": </B>" & _
-                Replace(msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
+                Replace(Msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
                     "<br>"
     Close #I
 End Sub
@@ -2648,7 +2653,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     Static CropLen    As Integer ' ...
     Static HasTrigger As Boolean ' ...
 
-    Dim index        As Integer ' ...
+    Dim Index        As Integer ' ...
     Dim bln          As Boolean ' ...
     Dim tmp          As String  ' ...
     Dim console      As Boolean ' ...
@@ -2806,15 +2811,15 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     ' ...
     If (HasTrigger) Then
         ' check our message for a command delimiter
-        index = InStr(Len(BotVars.TriggerLong) + 1, tmp, CMD_DELIMITER, _
+        Index = InStr(Len(BotVars.TriggerLong) + 1, tmp, CMD_DELIMITER, _
             vbBinaryCompare)
         
         ' using a delimiter can be undesirable at times, so
         ' we require a way of bypassing such a feature, and
         ' that way is to entirely disable internal support!
-        If (index) Then
+        If (Index) Then
             ' ...
-            tmp = Mid$(tmp, 1, index - 1)
+            tmp = Mid$(tmp, 1, Index - 1)
             
             ' ...
             CropLen = (CropLen + (Len(tmp) + Len(CMD_DELIMITER)))
@@ -2830,13 +2835,13 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     ' ...
     If ((IsLocal) Or (HasTrigger)) Then
         ' ...
-        index = InStr(1, tmp, Space$(1), vbBinaryCompare)
+        Index = InStr(1, tmp, Space$(1), vbBinaryCompare)
         
         ' ...
-        If (index) Then
+        If (Index) Then
             With IsCommand
-                .Name = Mid$(tmp, 1, index - 1)
-                .Args = Mid$(tmp, index + 1)
+                .Name = Mid$(tmp, 1, Index - 1)
+                .Args = Mid$(tmp, Index + 1)
             End With
         Else
             IsCommand.Name = tmp
