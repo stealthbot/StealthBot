@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -6254,10 +6254,10 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
                         Case "unban":     msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
                         Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "squelch":   msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "ignore":    msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "unsquelch": msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "unignore":  msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        'Case "squelch":   msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        'Case "ignore":    msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        'Case "unsquelch": msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                        'Case "unignore":  msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
                         Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
                     End Select
                 End If
@@ -6372,14 +6372,14 @@ End Sub
 Private Function BanDelay() As Integer
 
     On Error GoTo ERROR_HANDLER
+    
+    ' ...
+    BanDelay = 100
 
     ' do we have ops?
     If (g_Channel.Self.IsOperator) Then
         Dim OpCount As Integer ' ...
         Dim j       As Integer ' ...
-    
-        ' ...
-        BanDelay = 100
         
         ' ...
         For j = 1 To g_Channel.Users.Count
@@ -6399,8 +6399,7 @@ Private Function BanDelay() As Integer
         End If
     End If
     
-    'AddChat vbBlue, BanDelay
-    
+    ' ...
     Exit Function
     
 ERROR_HANDLER:
