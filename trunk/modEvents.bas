@@ -1071,11 +1071,11 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim strCompare   As String  ' ...
     Dim Level        As Byte    ' ...
     Dim StatUpdate   As Boolean ' ...
-    Dim index        As Long    ' ...
+    Dim Index        As Long    ' ...
     Dim Stats        As String  ' ...
     Dim Clan         As String  ' ...
     Dim Pos          As Integer ' ...
-    
+
     If (Len(Username) < 1) Then
         Exit Sub
     End If
@@ -1083,9 +1083,10 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     ' ...
     UserIndex = _
         g_Channel.GetUserIndexEx(Username)
-    
+
     ' ...
     If (UserIndex > 0) Then
+
         ' ...
         Set UserObj = g_Channel.Users(UserIndex)
         
@@ -1166,9 +1167,10 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             
             ' ...
             Pos = checkChannel(Username)
-            
+
             ' ...
             If (Pos > 0) Then
+            
                 ' ...
                 Set found = frmChat.lvChannel.ListItems(Pos)
                 
@@ -1179,6 +1181,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                     
                     ' ...
                     If (I > 0) Then
+                        
                         ' ...
                         If (g_ThisIconCode <> -1) Then
                             ' ...
@@ -1200,8 +1203,10 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                     End If
                 End If
                 
-                ' ...
-                found.ListSubItems(1).text = sClan
+                If (found.ListSubItems.Count > 0) Then
+                    ' ...
+                    found.ListSubItems(1).text = sClan
+                End If
                 
                 ' ...
                 Set found = Nothing
@@ -1231,6 +1236,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
 ERROR_HANDLER:
     Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in Event_UserInChannel().")
+    Call frmChat.AddChat(vbRed, "Error Source: " & Err.Source)
     
     Exit Sub
 End Sub
@@ -1670,20 +1676,20 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         If (mail) Then
             ' ...
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim msg As udtMail ' ...
+                Dim Msg As udtMail ' ...
                 
                 ' ...
                 If (GetMailCount(Username) > 0) Then
                     ' ...
                     Do
                         ' ...
-                        GetMailMessage Username, msg
+                        GetMailMessage Username, Msg
                         
                         ' ...
-                        If (Len(RTrim(msg.To)) > 0) Then
+                        If (Len(RTrim(Msg.To)) > 0) Then
                             ' ...
-                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(msg.From) & ": " & _
-                                RTrim$(msg.Message)
+                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(Msg.From) & ": " & _
+                                RTrim$(Msg.Message)
                         End If
                     Loop While (GetMailCount(Username) > 0)
                 End If
@@ -1965,14 +1971,14 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         '####### Mail check
         If (mail) Then
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim msg As udtMail
+                Dim Msg As udtMail
                 
                 If (GetMailCount(Username) > 0) Then
-                    Call GetMailMessage(Username, msg)
+                    Call GetMailMessage(Username, Msg)
                     
-                    If (Len(RTrim(msg.To)) > 0) Then
+                    If (Len(RTrim(Msg.To)) > 0) Then
                         frmChat.AddQ "/w " & Username & " Message from " & _
-                            RTrim$(msg.From) & ": " & RTrim$(msg.Message)
+                            RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
                     End If
                 End If
             End If
