@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2835,7 +2835,7 @@ Sub Form_Unload(Cancel As Integer)
 
     Call DoDisconnect(1)
 
-    Shell_NotifyIcon NIM_DELETE, nid
+    'Shell_NotifyIcon NIM_DELETE, nid
     
     On Error Resume Next
     
@@ -2922,6 +2922,8 @@ Sub Form_Unload(Cancel As Integer)
     Unload frmSplash
     'Unload frmUserManager
     Unload frmWriteProfile
+    
+    Shell_NotifyIcon NIM_DELETE, nid
     
     End
 End Sub
