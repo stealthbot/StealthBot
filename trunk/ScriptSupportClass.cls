@@ -990,7 +990,7 @@ Public Sub GetWinCursorPos(ByRef lCursorX As Long, ByRef lCursorY As Long)
     GetCursorPos PAPI
     
     lCursorX = PAPI.X
-    lCursorY = PAPI.y
+    lCursorY = PAPI.Y
 End Sub
 
 
@@ -1453,6 +1453,9 @@ Private Sub Class_Terminate()
         
         Disposed = True
     End If
+
+    frmChat.SControl.Reset
+    'frmChat.SCRestricted.Reset
     
 '    'Check objects exist before attempting to unload them - FrOzeN
 '    If obScriptForms.Count <> 0 Then

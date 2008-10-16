@@ -74,7 +74,7 @@ Public Declare Function CallWindowProc Lib "user32" _
    Alias "CallWindowProcA" _
   (ByVal lpPrevWndFunc As Long, _
    ByVal hWnd As Long, _
-   ByVal Msg As Long, _
+   ByVal msg As Long, _
    ByVal wParam As Long, _
    ByVal lParam As Long) As Long
 
@@ -95,7 +95,7 @@ Public Declare Function PostMessage Lib "user32" Alias "PostMessageA" (ByVal hWn
 Public Declare Function SendMessageByString Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As String) As Long
 Public Declare Function SetForegroundWindow Lib "user32" (ByVal hWnd As Long) As Long
 
-Public Declare Function Shell_NotifyIcon Lib "shell32.dll" Alias "Shell_NotifyIconA" (ByVal dwMessage As Long, lpData As NOTIFYICONDATA) As Long
+Public Declare Function Shell_NotifyIcon Lib "shell32.dll" Alias "Shell_NotifyIconA" (ByVal dwMessage As Long, ByRef lpData As NOTIFYICONDATA) As Long
 
 Public Declare Function FindWindowEx Lib "user32" Alias "FindWindowExA" (ByVal hWnd1 As Long, ByVal hWnd2 As Long, ByVal lpsz1 As String, ByVal lpsz2 As String) As Long
 
@@ -110,7 +110,7 @@ Public Declare Function SetWindowLong Lib "user32" Alias "SetWindowLongA" ( _
 Public Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" ( _
     Destination As Any, _
     Source As Any, _
-    ByVal length As Long)
+    ByVal Length As Long)
     
 Public Declare Function ShellExecute Lib "shell32" Alias "ShellExecuteA" ( _
     ByVal hWnd As Long, _

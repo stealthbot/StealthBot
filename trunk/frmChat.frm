@@ -2811,9 +2811,13 @@ End Sub
 Sub Form_Unload(Cancel As Integer)
     Dim Key As String, L As Long
     
+    'Cancel = 1
+    
     If BotVars.Logging = 0 Then
         AddChat RTBColors.ErrorMessageText, "Shutting down..."
     End If
+    
+    'Shell_NotifyIcon NIM_DELETE, nid
     
     'SControl.Run "Event_Shutdown"
     
@@ -2835,7 +2839,7 @@ Sub Form_Unload(Cancel As Integer)
 
     Call DoDisconnect(1)
 
-    'Shell_NotifyIcon NIM_DELETE, nid
+    Shell_NotifyIcon NIM_DELETE, nid
     
     On Error Resume Next
     
@@ -2922,8 +2926,6 @@ Sub Form_Unload(Cancel As Integer)
     Unload frmSplash
     'Unload frmUserManager
     Unload frmWriteProfile
-    
-    Shell_NotifyIcon NIM_DELETE, nid
     
     End
 End Sub
