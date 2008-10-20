@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3715,18 +3715,6 @@ Private Sub mnuPacketLog_Click()
         AddChat RTBColors.ErrorMessageText, "*** CAUTION: a StealthBot.net tech, or you know what you're doing!"
         AddChat RTBColors.SuccessText, "If you wish to stop logging packets, uncheck the menu item or restart your bot."
         AddChat RTBColors.SuccessText, "This feature only logs StealthBot traffic. It is not a system-wide packet capture utility."
-        
-        If LenB(Dir$(GetProfilePath() & Format(Date, "yyyy-MM-dd") & "-PacketLog.txt")) = 0 Then
-            f = FreeFile
-            
-            Open GetProfilePath() & Format(Date, "yyyy-MM-dd") & "-PacketLog.txt" For Output As #f
-                Print #f, "StealthBot packet log, started " & Format(Date, "yyyy-MM-dd") & "."
-                Print #f, "- - - - PROTECT THIS PACKET LOG AS IT MAY CONTAIN PRIVATE INFORMATION"
-                Print #f, vbCrLf
-            Close #f
-        End If
-        
-        PacketLogFilePath = GetProfilePath() & Format(Date, "yyyy-MM-dd") & "-PacketLog.txt"
     End If
     
     mnuPacketLog.Checked = Not mnuPacketLog.Checked

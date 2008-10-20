@@ -120,8 +120,21 @@ End Function
 '  -at
 Public Sub LogPacketRaw(ByVal Server As enuPL_ServerTypes, ByVal Direction As enuPL_DirectionTypes, ByVal PacketID As Long, ByVal PacketLen As Long, ByRef PacketData As String)
     Dim L As Long
+    Dim f As Integer
     
     If (LogPacketTraffic) Then
+        PacketLogFilePath = GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-PACKETLOG.txt"
+    
+        If (LenB(Dir$(PacketLogFilePath)) = 0) Then
+            f = FreeFile
+            
+            Open PacketLogFilePath For Output As #f
+                Print #f, "StealthBot packet log, started " & Format(Date, "yyyy-MM-dd") & "."
+                Print #f, "- - - - PROTECT THIS PACKET LOG AS IT MAY CONTAIN PRIVATE INFORMATION"
+                Print #f, vbCrLf
+            Close #f
+        End If
+    
         'Log this packet!
         L = FreeFile
         
