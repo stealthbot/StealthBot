@@ -443,8 +443,9 @@ End Property
 Public Property Get IsLadderCharacter() As Boolean
 
     ' ...
-    IsLadderCharacter = ((CharacterFlags And &H40) = &H40)
-
+    IsLadderCharacter = _
+        IIf(IsCharacterDead(), False, ((CharacterFlags And &H40) = &H40))
+    
 End Property
 
 Public Property Get ActsCompleted() As Integer
@@ -867,12 +868,17 @@ Private Sub MakeArr(str As String, arr() As Integer)
     Dim I As Integer ' ...
     
     ' ...
+    ReDim arr(0)
+    
+    ' ...
     For I = 1 To Len(str)
         ' ...
-        ReDim Preserve arr(0 To I)
+        If (I > 1) Then
+            ReDim Preserve arr(0 To I - 1)
+        End If
         
         ' ...
-        arr(I) = Asc(Mid(str, I, 1))
+        arr(I - 1) = Asc(Mid(str, I, 1))
     Next I
     
 End Sub

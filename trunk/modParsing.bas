@@ -1423,8 +1423,11 @@ Public Function ParseD2Stats(ByVal Stats As String)
             Call StrCpy(StatBuf, "hardcore ")
         End If
         
-        If Asc(P(26)) And &H40 Then
-            Call StrCpy(StatBuf, "ladder ")
+        If (Asc(P(26)) And &H40 = &H40) Then
+            'frmChat.AddChat vbRed, Asc(P(26))
+            If ((Asc(P(26)) And &H8) = &H0) Then
+                Call StrCpy(StatBuf, "ladder ")
+            End If
         End If
         
         Call sPrintF(StatBuf, "level %s ", CharLevel)
