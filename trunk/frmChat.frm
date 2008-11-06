@@ -2791,7 +2791,7 @@ Private Sub ClanHandler_RemoveUserReply(ByVal result As Byte)
             AddChat RTBColors.ErrorMessageText, "[CLAN] You are not authorized to remove that user."
             
         Case 8
-            AddChat RTBColors.ErrorMessageText, "[CLAN] That user is not in your clan."
+            AddChat RTBColors.ErrorMessageText, "[CLAN] You are not allowed to remove that user."
             
         Case Else
             AddChat RTBColors.InformationText, "[CLAN] 0x78 Response code: 0x" & Hex(result)
@@ -2810,8 +2810,11 @@ End Sub
 
 Sub Form_Unload(Cancel As Integer)
     Dim Key As String, L As Long
-    
+
     'Cancel = 1
+    
+    'scTimer.Enabled = False
+    'SControl.Reset
     
     If BotVars.Logging = 0 Then
         AddChat RTBColors.ErrorMessageText, "Shutting down..."
@@ -2841,7 +2844,7 @@ Sub Form_Unload(Cancel As Integer)
 
     Shell_NotifyIcon NIM_DELETE, nid
     
-    On Error Resume Next
+    'On Error Resume Next
     
     SControl.Run "Event_Close"
     
@@ -2881,7 +2884,7 @@ Sub Form_Unload(Cancel As Integer)
     Call ChatQueue_Terminate
 
     DisableURLDetect
-    UnhookWindowProc
+    'UnhookWindowProc
     UnhookSendBoxWindowProc
     
     Call SharedScriptSupport.Dispose 'Explicit call the Class_Terminate sub in the ScriptSupportClass to destroy all the forms. - FrOzeN
@@ -3854,7 +3857,7 @@ Private Sub mnuPopInvite_Click()
     
     If LenB(sPlayer) > 0 Then
         If g_Clan.Self.Rank >= 3 Then
-            InviteToClan (sPlayer)
+            InviteToClan (reverseUsername(sPlayer))
             AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & GetSelectedUser & ", awaiting reply."
         End If
     End If
@@ -4347,8 +4350,9 @@ End Sub
 
 Private Sub mnuTrayExit_click()
     If MsgBox("Are you sure you want to quit?", vbYesNo, "StealthBot") = vbYes Then
+        UnhookWindowProc
         'RESTORE FORM
-        Call NewWindowProc(frmChat.hWnd, 0&, ID_TASKBARICON, WM_LBUTTONDOWN)
+        'Call NewWindowProc(frmChat.hWnd, 0&, ID_TASKBARICON, WM_LBUTTONDOWN)
         'Call Form_Unload(0)
         Unload frmChat
     End If

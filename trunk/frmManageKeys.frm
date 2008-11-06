@@ -140,7 +140,7 @@ Private Sub Form_Load()
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
-    On Error Resume Next
+    'On Error Resume Next
     frmChat.SettingsForm.Show
     frmChat.SettingsForm.SetFocus
 End Sub
@@ -154,25 +154,25 @@ Private Sub txtActiveKey_Change()
 End Sub
 
 Private Sub Local_WriteCDKeys()
-    Dim i As Integer
+    Dim I As Integer
 
     WriteINI "StoredKeys", "Count", lstKeys.ListCount + 1
     
-    For i = 0 To NumCDKeysOnOpen
-        If i <= lstKeys.ListCount Then
-            If Len(lstKeys.List(i)) > 0 Then
-                WriteINI "StoredKeys", "Key" & (i + 1), lstKeys.List(i)
+    For I = 0 To NumCDKeysOnOpen
+        If I <= lstKeys.ListCount Then
+            If Len(lstKeys.List(I)) > 0 Then
+                WriteINI "StoredKeys", "Key" & (I + 1), lstKeys.List(I)
             Else
-                WriteINI "StoredKeys", "Key" & (i + 1), ""
+                WriteINI "StoredKeys", "Key" & (I + 1), ""
             End If
         Else
-            WriteINI "StoredKeys", "Key" & (i + 1), ""
+            WriteINI "StoredKeys", "Key" & (I + 1), ""
         End If
-    Next i
+    Next I
     
-    If i < lstKeys.ListCount Then
-        If Len(lstKeys.List(i)) > 0 Then
-            WriteINI "StoredKeys", "Key" & (i + 1), lstKeys.List(i)
+    If I < lstKeys.ListCount Then
+        If Len(lstKeys.List(I)) > 0 Then
+            WriteINI "StoredKeys", "Key" & (I + 1), lstKeys.List(I)
         End If
     End If
 End Sub

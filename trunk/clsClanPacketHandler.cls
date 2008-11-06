@@ -134,7 +134,10 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             RaiseEvent ClanMemberList(ary())
             
             
-        Case SID_REMOVEMEMBER:    RaiseEvent RemoveUserReply(inBuf.GetByte)
+        Case SID_REMOVEMEMBER
+            inBuf.RemoveDWORD
+            RaiseEvent RemoveUserReply(inBuf.GetByte)
+            
         Case SID_MEMBERLEFT:      RaiseEvent MemberLeaves(inBuf.GetNTString)
         Case SID_REMOVEDFROMCLAN: RaiseEvent RemovedFromClan(inBuf.DebuffBYTE)
             

@@ -65,6 +65,8 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
     SC.AddObject "scINet", frmChat.INet
     SC.AddObject "BotVars", BotVars
     
+    'Exit Sub
+    
     If Not boolOverride Then
     
         '// Load PluginSystem.dat
@@ -80,7 +82,7 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
         SC.AddCode strContent
     Else
     
-        Dim strFilesToLoad() As String, i As Integer
+        Dim strFilesToLoad() As String, I As Integer
         ReDim strFilesToLoad(0)
         strFilesToLoad(0) = "script.txt"
     
@@ -106,10 +108,10 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
         Close #intFile
     
         '// Load script.txt and any includes
-        For i = 0 To UBound(strFilesToLoad)
+        For I = 0 To UBound(strFilesToLoad)
             strContent = ""
             intFile = FreeFile
-            Path = GetFilePath(strFilesToLoad(i))
+            Path = GetFilePath(strFilesToLoad(I))
             
             Open Path For Input As #intFile
     
@@ -118,7 +120,7 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
                     Line Input #intFile, strLine
                     
                     If Len(strLine) > 1 Then
-                        If i = 0 Then
+                        If I = 0 Then
                             If Left$(Trim(LCase(strLine)), 8) = "#include" Then strLine = ""
                         End If
                         strContent = strContent & strLine & vbCrLf
@@ -141,8 +143,8 @@ LoadPluginSystem_Error:
 End Sub
 
 
-Public Sub SetVeto(ByVal b As Boolean)
-    VetoNextMessage = b
+Public Sub SetVeto(ByVal B As Boolean)
+    VetoNextMessage = B
 End Sub
 
 
@@ -153,7 +155,7 @@ End Function
 
 
 Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
-    Dim i As Integer
+    Dim I As Integer
     Dim Message As String
 
     On Error GoTo ReInitScriptControl_Error
@@ -166,15 +168,15 @@ Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
         SC.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
 
         If g_Channel.Users.Count > 0 Then
-            For i = 1 To g_Channel.Users.Count
+            For I = 1 To g_Channel.Users.Count
                 Message = ""
 
-                With g_Channel.Users(i)
+                With g_Channel.Users(I)
                      ParseStatstring .Statstring, Message, .Clan
 
                      SC.Run "Event_UserInChannel", .DisplayName, .Flags, Message, .Ping, .game, False
                  End With
-             Next i
+             Next I
          End If
     End If
 
