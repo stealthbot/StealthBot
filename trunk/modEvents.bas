@@ -67,8 +67,8 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Else
         ' ...
         If (g_Channel.IsSilent = False) Then
-            frmChat.AddChat vbRed, "Error: There was a flags update received for a user that we do " & _
-                    "not have a record for."
+            frmChat.AddChat vbRed, "Warning: There was a flags update received for a user that we do " & _
+                    "not have a record for.  This may be indicative of a server split or other technical difficulty."
                     
             Exit Sub
         Else
@@ -1071,7 +1071,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim strCompare   As String  ' ...
     Dim Level        As Byte    ' ...
     Dim StatUpdate   As Boolean ' ...
-    Dim Index        As Long    ' ...
+    Dim index        As Long    ' ...
     Dim Stats        As String  ' ...
     Dim Clan         As String  ' ...
     Dim Pos          As Integer ' ...
@@ -1323,8 +1323,8 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             ' ...
             g_Channel.Users.Add UserObj
         Else
-            frmChat.AddChat vbRed, "Error: We have received a join event for a user that we had thought was " & _
-                    "already present within the channel."
+            frmChat.AddChat vbRed, "Warning: We have received a join event for a user that we had thought was " & _
+                    "already present within the channel.  This may be indicative of a server split or other technical difficulty."
             
             Exit Sub
         End If
@@ -1462,8 +1462,8 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         ' ...
         g_Channel.Users.Remove UserIndex
     Else
-        frmChat.AddChat vbRed, "Error: We have received a leave event for a user that we didn't know " & _
-                "was in the channel."
+        frmChat.AddChat vbRed, "Warning: We have received a leave event for a user that we didn't know " & _
+                "was in the channel.  This may be indicative of a server split or other technical difficulty."
     
         Exit Sub
     End If
@@ -1676,20 +1676,20 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         If (mail) Then
             ' ...
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim Msg As udtMail ' ...
+                Dim msg As udtMail ' ...
                 
                 ' ...
                 If (GetMailCount(Username) > 0) Then
                     ' ...
                     Do
                         ' ...
-                        GetMailMessage Username, Msg
+                        GetMailMessage Username, msg
                         
                         ' ...
-                        If (Len(RTrim(Msg.To)) > 0) Then
+                        If (Len(RTrim(msg.To)) > 0) Then
                             ' ...
-                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(Msg.From) & ": " & _
-                                RTrim$(Msg.Message)
+                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(msg.From) & ": " & _
+                                RTrim$(msg.Message)
                         End If
                     Loop While (GetMailCount(Username) > 0)
                 End If
@@ -1971,14 +1971,14 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         '####### Mail check
         If (mail) Then
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim Msg As udtMail
+                Dim msg As udtMail
                 
                 If (GetMailCount(Username) > 0) Then
-                    Call GetMailMessage(Username, Msg)
+                    Call GetMailMessage(Username, msg)
                     
-                    If (Len(RTrim(Msg.To)) > 0) Then
+                    If (Len(RTrim(msg.To)) > 0) Then
                         frmChat.AddQ "/w " & Username & " Message from " & _
-                            RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
+                            RTrim$(msg.From) & ": " & RTrim$(msg.Message)
                     End If
                 End If
             End If
