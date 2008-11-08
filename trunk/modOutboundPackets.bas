@@ -402,9 +402,9 @@ Public Sub Send0x5E(ByRef PacketData As String) 'SID_WARDEN
         blWarden = True
         
         If LenB(strWardenPacket) > 0 Then
-            MsgBox "Warden working"
+            frmChat.AddChat vbGreen, "Warden working."
         Else
-            MsgBox "Warden broken"
+            frmChat.AddChat vbRed, "Warden broken."
         End If
     End If
 End Sub
