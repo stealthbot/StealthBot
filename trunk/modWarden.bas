@@ -71,30 +71,30 @@ End Sub
 '/// <param name="Key">Warden key to be used for the encryption.</param>
 '/// <param name="PacketOut">The packet returned as encrypted.</param>
 Public Sub RunCrypt(ByRef PacketIn() As Byte, ByRef Key() As Byte, ByRef PacketOut() As Byte)
-    Dim i As Integer
-    Dim z As Long, y As Long
+    Dim I As Integer
+    Dim z As Long, Y As Long
     Dim byteSwap As Byte
     
     ReDim PacketOut(UBound(PacketIn))
     
     CopyMemory PacketOut(0), PacketIn(0), UBound(PacketIn) + 1
     
-    y = Key(&H100)
+    Y = Key(&H100)
     z = Key(&H101)
     
-    For i = 0 To UBound(PacketIn)
-        y = (y + 1) And &HFF
-        z = (z + Key(y)) And &HFF
+    For I = 0 To UBound(PacketIn)
+        Y = (Y + 1) And &HFF
+        z = (z + Key(Y)) And &HFF
         
         'Swap Key(y) with Key(z)
-        byteSwap = Key(y)
-        Key(y) = Key(z)
+        byteSwap = Key(Y)
+        Key(Y) = Key(z)
         Key(z) = byteSwap
         
-        PacketOut(i) = PacketOut(i) Xor Key((CInt(Key(y)) + CInt(Key(z))) And &HFF)
-    Next i
+        PacketOut(I) = PacketOut(I) Xor Key((CInt(Key(Y)) + CInt(Key(z))) And &HFF)
+    Next I
     
-    Key(&H100) = y
+    Key(&H100) = Y
     Key(&H101) = z
 End Sub
 
@@ -105,22 +105,22 @@ End Sub
 '/// <param name="Source">The source to be used to generate the key.</param>
 Private Sub Generate_Key(ByRef Key() As Byte, ByRef Source() As Byte)
     Dim Value As Long, Position As Long
-    Dim i As Integer, j As Integer
+    Dim I As Integer, j As Integer
     Dim SwapByte As Byte
     
     'Populate keys
-    For i = 0 To &HFF
-        Key(i) = i
-    Next i
+    For I = 0 To &HFF
+        Key(I) = I
+    Next I
     
-    For i = 0 To &HFF
-        Value = Value + Key(i) + Source(i Mod 16)
+    For I = 0 To &HFF
+        Value = Value + Key(I) + Source(I Mod 16)
         
         'Swap Key(i) with Key(Value And &HFF)
-        SwapByte = Key(i)
-        Key(i) = Key(Value And &HFF)
+        SwapByte = Key(I)
+        Key(I) = Key(Value And &HFF)
         Key(Value And &HFF) = SwapByte
-    Next i
+    Next I
 End Sub
 
 '/// <summary>
@@ -156,6 +156,10 @@ Private Function GetWardenChecksum(ByRef Addresses() As Long) As Long
     ElseIf CompareAddresses(Addresses, WARDEN_H3, WARDEN_H1, WARDEN_H2) Then
         GetWardenChecksum = &HC04CF757
     Else
+        ' ...
+        frmChat.AddChat vbRed, "Error: Unable to determine Warden checksum."
+    
+        ' ...
         GetWardenChecksum = 0&
     End If
 End Function
@@ -185,6 +189,8 @@ Private Function GetWardenMemory(ByVal Address As Long) As String
             GetWardenMemory = Warden_Memory_2
         Case WARDEN_H3
             GetWardenMemory = Warden_Memory_3
+        Case Else
+            frmChat.AddChat vbRed, "Error: Unknown Warden memory address (0x" & Hex(Address) & ")."
     End Select
 End Function
 
@@ -202,7 +208,7 @@ Public Function HandleWarden(ByRef Packet As String) As String
     
     'Decrypt the packet.
     RunCrypt PacketData, KeyIn, DecryptedPacket
-    
+
     Select Case DecryptedPacket(0)
         Case &H0
             'Resize the packet to 1 byte and set it to 0x01
@@ -210,7 +216,7 @@ Public Function HandleWarden(ByRef Packet As String) As String
             PacketData(0) = &H1
         
         Case &H2
-            Dim LoopAmount As Integer, Position As Integer, i As Integer
+            Dim LoopAmount As Integer, Position As Integer, I As Integer
             Dim Values() As String
             Dim Addresses() As Long, Checksum As Long
             
@@ -221,7 +227,7 @@ Public Function HandleWarden(ByRef Packet As String) As String
             
             Position = 2
             
-            For i = 0 To LoopAmount - 1
+            For I = 0 To LoopAmount - 1
                 'WORD   (Unknown) - Don't know what this is
                 'DWORD  (Addresses)
                 'Byte   (ReadLength) - Don't know what this is, called it ReadLength because Andy did
@@ -229,13 +235,13 @@ Public Function HandleWarden(ByRef Packet As String) As String
                 Position = Position + 2     'Skip (Unknown) WORD
                 
                 'Addresses(i) = GetDWORD(DecryptedPacket)
-                CopyMemory Addresses(i), DecryptedPacket(Position), 4
+                CopyMemory Addresses(I), DecryptedPacket(Position), 4
                 
                 Position = Position + 5     'Move 4 bytes for DWORD, and then 1 extra byte to skip the (ReadLength) byte
                 
                 'Get the warden memory based on the addresses.
-                Values(i) = GetWardenMemory(Addresses(i))
-            Next i
+                Values(I) = GetWardenMemory(Addresses(I))
+            Next I
 
             'Get warden's checksum based on the Addresses.
             Checksum = GetWardenChecksum(Addresses)
@@ -245,11 +251,11 @@ Public Function HandleWarden(ByRef Packet As String) As String
                 Exit Function
             End If
             
-            For i = 0 To LoopAmount - 1
+            For I = 0 To LoopAmount - 1
                 'Packet.InsertByte &H0
                 'Packet.InsertString Values(i)
-                Buffer = Buffer & Chr$(0) & Values(i)
-            Next i
+                Buffer = Buffer & Chr$(0) & Values(I)
+            Next I
             
             Dim tmpLength As String * 2     'WORD
             Dim tmpChecksum As String * 4   'DWORD
@@ -264,7 +270,10 @@ Public Function HandleWarden(ByRef Packet As String) As String
             PacketData = StrConv(Buffer, vbFromUnicode)
             
         Case Else
+            frmChat.AddChat vbRed, "Error: Unhandled Warden ID (0x" & Hex(DecryptedPacket(0)) & ")."
+        
             HandleWarden = vbNullString
+            
             Exit Function
     
     End Select
@@ -307,21 +316,21 @@ End Sub
 '/// <param name="Destination">Byte array that the data will be assigned to.</param>
 '/// <param name="Length">Amount of data (in bytes) that needs to be retrieved.</param>
 Private Sub Random_Data_GetBytes(ByRef Destination() As Byte, ByVal Length As Integer)
-    Dim i As Integer
+    Dim I As Integer
     
     'Clears the Destination byte array and resizes it.
     ReDim Destination(Length)
     
     'Loops through the random data and places it into the Destination byte array byte by byte.
-    For i = 0 To Length
-        Destination(i) = rd.RandomData(rd.CurrentPosition)
+    For I = 0 To Length
+        Destination(I) = rd.RandomData(rd.CurrentPosition)
         rd.CurrentPosition = rd.CurrentPosition + 1
         
         'Every 20 bytes it updates the random data.
         If rd.CurrentPosition >= &H14 Then
             Call Random_Data_Update
         End If
-    Next i
+    Next I
 End Sub
 
 '/// <summary>

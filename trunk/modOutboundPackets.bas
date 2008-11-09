@@ -6,6 +6,7 @@ Attribute VB_Name = "modOutboundPackets"
 Option Explicit
 
 Public g_username As String
+'Public strWardenPacket As String
 
 Public Sub Send0x50(Optional lVerByte As Long)
     Dim CAbbr As String, cName As String
@@ -402,9 +403,9 @@ Public Sub Send0x5E(ByRef PacketData As String) 'SID_WARDEN
         blWarden = True
         
         If LenB(strWardenPacket) > 0 Then
-            frmChat.AddChat vbGreen, "Warden working."
+            'frmChat.AddChat QBColor(8), "Warden has been found to be currently enabled for the selected game."
         Else
-            frmChat.AddChat vbRed, "Warden broken."
+            'frmChat.AddChat QBColor(8), "Warden has been found to be currently disabled for the selected game."
         End If
     End If
 End Sub
