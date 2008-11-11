@@ -118,7 +118,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         
                     Case ID_WHISPER
                         If (Not (bFlood)) Then
-                            Call Event_WhisperFromUser(Username, UserFlags, s)
+                            Call Event_WhisperFromUser(Username, UserFlags, s, UserPing)
                         End If
                         
                     Case ID_TALK
