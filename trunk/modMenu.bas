@@ -109,7 +109,8 @@ Public Declare Function RemoveMenu Lib "user32" _
 'ProcessMenu: Called when the user has clicked a menu item.
 '  Modified by Swent 2/12/08
 Public Sub ProcessMenu(hWnd As Long, lngMenuCommand As Long)
-    On Error Resume Next
+    On Error GoTo ERROR_HANDLER
+    
     Dim strCallback As String
   
     ' Call the callback function installed with this menu item
@@ -120,6 +121,13 @@ Public Sub ProcessMenu(hWnd As Long, lngMenuCommand As Long)
     If LenB(strCallback) > 0 Then
         frmChat.SControl.Run "psProcessMenu", strCallback, GetPrefixByID(lngMenuCommand)
     End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in ProcessMenu()."
+    
+    Exit Sub
 End Sub
 
 

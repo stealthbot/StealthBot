@@ -73,10 +73,10 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wPara
     End If
     
     If msg = WM_NOTIFY Then
-        CopyMemory uHead, ByVal lParam, Len(uHead)
+        CopyMemory uHead, ByVal lParam, LenB(uHead)
         
         If (uHead.hWndFrom = hWndRTB) And (uHead.code = EN_LINK) Then
-            CopyMemory eLink, ByVal lParam, Len(eLink)
+            CopyMemory eLink, ByVal lParam, LenB(eLink)
             
             With eLink
                 If .msg = WM_LBUTTONDBLCLK Then
