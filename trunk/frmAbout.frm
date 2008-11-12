@@ -372,22 +372,22 @@ Sub TitleClicked()
     End If
 End Sub
 
-Private Sub lblURL_Click(index As Integer)
-    If index = 3 Then
+Private Sub lblURL_Click(Index As Integer)
+    If Index = 3 Then
         ShellExecute Me.hWnd, "Open", "mailto:stealth@stealthbot.net", 0&, 0&, 0&
-    ElseIf index = 0 Then
+    ElseIf Index = 0 Then
         ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net", 0&, 0&, 0&
-    ElseIf index = 6 Then
+    ElseIf Index = 6 Then
         ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/readme/", 0&, 0&, 0&
-    ElseIf index = 5 Then
+    ElseIf Index = 5 Then
         ShellExecute Me.hWnd, "Open", "http://contributors.stealthbot.net", 0&, 0&, 0&
     End If
 End Sub
 
-Private Sub lblURL_MouseMove(index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lblURL_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     Dim I As Byte
     For I = 0 To 6
         lblURL(I).ForeColor = vbWhite
     Next I
-    lblURL(index).ForeColor = vbBlue
+    lblURL(Index).ForeColor = vbBlue
 End Sub
