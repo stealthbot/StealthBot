@@ -50,11 +50,11 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wPara
     On Error GoTo ERROR_HANDLER
     
     Dim Rezult As Long
-    Dim uHead As NMHDR
-    Dim eLink As ENLINK
-    Dim eText As TEXTRANGE
-    Dim sText As String
-    Dim lLen As Long
+    Dim uHead  As NMHDR
+    Dim eLink  As ENLINK
+    Dim eText  As TEXTRANGE
+    Dim sText  As String
+    Dim lLen   As Long
     
     If msg = TASKBARCREATED_MSGID Then
         Shell_NotifyIcon NIM_ADD, nid

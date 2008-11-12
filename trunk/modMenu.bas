@@ -118,7 +118,10 @@ Public Sub ProcessMenu(hWnd As Long, lngMenuCommand As Long)
         strCallback = dctCallbacks.Item(CStr(lngMenuCommand))
     End If
     
+    ' ...
     If LenB(strCallback) > 0 Then
+        On Error Resume Next
+    
         frmChat.SControl.Run "psProcessMenu", strCallback, GetPrefixByID(lngMenuCommand)
     End If
     
