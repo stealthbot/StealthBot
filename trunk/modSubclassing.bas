@@ -75,7 +75,7 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wPara
     If msg = WM_NOTIFY Then
         CopyMemory uHead, ByVal lParam, LenB(uHead)
         
-        If (uHead.hWndFrom = hWndRTB) And (uHead.code = EN_LINK) Then
+        If (uHead.hWndFrom = hWndRTB) And (uHead.Code = EN_LINK) Then
             CopyMemory eLink, ByVal lParam, LenB(eLink)
             
             With eLink

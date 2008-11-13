@@ -202,6 +202,51 @@ End Enum
 Private obScriptForms As Object
 Private DictionaryKeys As String
 
+Private Type Timer
+    ID       As Integer
+    Script   As Module
+    Code     As String
+    Interval As Integer
+End Type
+
+Private Timers     As Collection
+Private TimerCount As Integer
+
+' ...
+Public Function setInterval(ScriptModule As Module, strCode As String, intInterval As Integer) As Integer
+
+    On Error Resume Next
+
+    Dim tmr As Timer ' ...
+    
+    ' ...
+    With tmr
+        .ID = TimerCount + 1
+        .Script = ScriptModule
+        .Code = strCode
+        .Interval = intInterval
+    End With
+    
+    ' ...
+    Timers.Add tmr, TimerCount
+    
+    ' ...
+    setInterval = TimerCount
+
+    ' ...
+    TimerCount = TimerCount + 1
+    
+End Function
+
+' ...
+Public Sub clearInterval(ScriptModule As Module, intIntervalID As Integer)
+
+    On Error Resume Next
+
+    ' ...
+    Timers.Remove intIntervalID
+    
+End Sub
 
 
 '/* ******************************************************************************************
