@@ -205,7 +205,7 @@ Private DictionaryKeys As String
 Private Type Timer
     ID       As Integer
     Script   As Module
-    Code     As String
+    code     As String
     Interval As Integer
 End Type
 
@@ -223,7 +223,7 @@ Public Function setInterval(ScriptModule As Module, strCode As String, intInterv
     With tmr
         .ID = TimerCount + 1
         .Script = ScriptModule
-        .Code = strCode
+        .code = strCode
         .Interval = intInterval
     End With
     
@@ -302,6 +302,10 @@ End Sub
 '// Nonzero priority messages will be sent with precedence over 0-priority messages.
 Public Sub AddQ(ByVal sText As String, Optional ByVal msg_priority As Integer = -1, Optional ByVal _
     Tag As String = vbNullString)
+    
+    '// Disabled while in Clan SBs.
+    If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) = 0) And _
+        (IsStealthBotTech() = False)) Then Exit Sub
     
     '// priority zero reserved for internal usage only
     If (msg_priority = 0) Then

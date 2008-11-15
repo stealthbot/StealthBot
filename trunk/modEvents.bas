@@ -331,6 +331,15 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
                 ". Type /getmail to retrieve."
     End If
     
+    ' Check if the channel is Clan SBs.
+    If (StrComp(ChannelName, "Clan SBs", vbTextCompare) = 0) Then
+        ' Are we a tech?
+        If (IsStealthBotTech() = False) Then
+            frmChat.AddChat vbRed, "You have joined Clan SBs. For the consideration of the Technical Support Staff: greet, idle, and all scripted messages have been temporarily disabled."
+        End If
+    End If
+    
+    
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' call event script function
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1377,7 +1386,9 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 ' ...
                 If (LenB(BotVars.GreetMsg)) Then
                     ' ...
-                    If (StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) <> 0) Then
+                    If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) <> 0) Or _
+                        (IsStealthBotTech() = True)) Then
+                        
                         ' ...
                         If (BotVars.WhisperGreet) Then
                             frmChat.AddQ "/w " & Username & _
