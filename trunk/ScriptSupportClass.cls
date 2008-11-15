@@ -1466,6 +1466,14 @@ Public Function Friends() As Object
     Set Friends = g_Friends
 End Function
 
+Public Function GetSystemUptime() As String
+    GetSystemUptime = ConvertTime(GetUptimeMS)
+End Function
+
+Public Function GetConnectionUptime() As String
+    GetConnectionUptime = ConvertTime(uTicks)
+End Function
+
 'Class_Terminate doesn't run when a UI form is created via a script. I made this sub so the bot's Unload sub can explicitly _
     call the code within Class_Terminate to kill all the objects. - FrOzeN
 Public Sub Dispose()
