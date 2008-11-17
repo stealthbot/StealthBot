@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   225
-   ClientTop       =   825
+   ClientLeft      =   165
+   ClientTop       =   855
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -2238,6 +2238,7 @@ Public Sub FindAltBNLS()
     AddChat RTBColors.InformationText, "[BNLS] Connecting to " & BotVars.BNLSServer & "..."
     
     Exit Sub
+    
 BNLS_Alt_Finder_Error:
     
     'Display the error message to the user
@@ -2252,6 +2253,8 @@ BNLS_Alt_Finder_Error:
     'Disconnect the bot
     Call DoDisconnect
     SetTitle "Disconnected"
+    
+    Exit Sub
 End Sub
 
 ' This code commented out 10/18/06 - what's it for? I dunno. It's old.
@@ -3404,7 +3407,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     sTemp = sTemp & "Ping at login: " & .Ping & "ms" & vbCrLf
                     sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
-                    sTemp = sTemp & .stats.ToString
+                    sTemp = sTemp & .Stats.ToString
                 
                     ListToolTip.TipText = sTemp
                     
@@ -6592,7 +6595,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     If (g_Online) Then
         Dim found       As ListItem ' ...
         Dim CurrentUser As Object
-        Dim outbuf      As String
+        Dim outBuf      As String
 
         ' ...
         SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
@@ -7965,6 +7968,13 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         On Error Resume Next
         SControl.Run "Event_LoggedOff"
     End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in DoDisconnect()."
+    
+    Exit Sub
 End Sub
 
 Public Sub ParseFriendsPacket(ByVal PacketID As Long, ByVal Contents As String)
