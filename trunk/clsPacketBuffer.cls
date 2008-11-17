@@ -164,7 +164,8 @@ End Function ' end function Clear
 
 ' ...
 Public Function SendPacketMCP(Optional PacketID As Byte)
-    Dim buf()  As Byte ' ...
+    'Dim pkt    As modPacketBuffer.PACKETCACHEITEM
+    Dim buf()  As Byte   ' ...
     Dim strbuf As String ' ...
     
     ' ...
@@ -204,6 +205,22 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     Call Send(frmChat.sckMCP.SocketHandle, strbuf, m_bufpos + 3, 0)
     
     ' ...
+    'With pkt
+    '    .Type = stMCP
+    '    .ID = PacketID
+    '    .Data = strbuf
+    '    .Len = Len(.Data)
+    'End With
+    
+    ' ...
+    'If (PacketCache.Count >= MAX_PACKET_CACHE_SIZE) Then
+    '    PacketCache.Remove 1
+    'End If
+    
+    ' ...
+    'PacketCache.Add pkt
+    
+    ' ...
     Call LogPacketRaw(stMCP, CtoS, PacketID, m_bufpos + 3, strbuf)
     
     ' clear buffer contents
@@ -212,6 +229,7 @@ End Function ' end function SendPacketMCP
 
 ' ...
 Public Function SendPacket(Optional PacketID As Byte)
+    'Dim pkt    As modPacketBuffer.PACKETCACHEITEM  ' ...
     Dim L      As Long    ' ...
     Dim buf()  As Byte    ' ...
     Dim I      As Integer ' ...
@@ -262,6 +280,22 @@ Public Function SendPacket(Optional PacketID As Byte)
     'Call CopyMemory(ByVal log, buf(0), m_bufpos + 4)
     
     ' ...
+    'With pkt
+    '    .Type = stBNCS
+    '    .ID = PacketID
+    '    .Data = strbuf
+    '    .Len = Len(.Data)
+    'End With
+    
+    ' ...
+    'If (PacketCache.Count >= MAX_PACKET_CACHE_SIZE) Then
+    '    PacketCache.Remove 1
+    'End If
+    
+    ' ...
+    'PacketCache.Add pkt
+    
+    ' ...
     Call LogPacketRaw(stBNCS, CtoS, PacketID, m_bufpos + 4, strbuf)
     
     ' clear buffer contents
@@ -270,6 +304,7 @@ End Function ' end function SendPacket
 
 ' ...
 Public Function vLSendPacket(Optional PacketID As Byte)
+    'Dim pkt    As modPacketBuffer.PACKETCACHEITEM ' ...
     Dim buf()  As Byte   ' ...
     Dim log    As String ' ...
     Dim strbuf As String ' ...
@@ -315,6 +350,22 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     
     ' ...
     'Call CopyMemory(ByVal log, buf(0), m_bufpos + 3)
+    
+    ' ...
+    'With pkt
+    '    .Type = stBNLS
+    '    .ID = PacketID
+    '    .Data = strbuf
+    '    .Len = Len(.Data)
+    'End With
+    
+    ' ...
+    'If (PacketCache.Count >= MAX_PACKET_CACHE_SIZE) Then
+    '    PacketCache.Remove 1
+    'End If
+    
+    ' ...
+    'PacketCache.Add pkt
     
     ' ...
     Call LogPacketRaw(stBNLS, CtoS, PacketID, m_bufpos + 3, strbuf)

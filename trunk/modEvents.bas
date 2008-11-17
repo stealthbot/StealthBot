@@ -81,14 +81,14 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
             Set UserObj = New clsUserObj
             
             ' ...
-            ParseStatstring Message, parsed, Clan
+            'ParseStatstring Message, parsed, Clan
             
             ' ...
             With UserObj
                 .Name = Username
                 .Statstring = Message
                 .Stats.Statstring = Message
-                .Clan = Clan
+                .Clan = .Stats.Clan
                 .game = Product
             End With
         
@@ -1149,12 +1149,12 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Username = UserObj.DisplayName
     
     ' ...
-    ParseStatstring OriginalStatstring, Stats, Clan
+    'ParseStatstring OriginalStatstring, Stats, Clan
     
     ' ...
     If (StatUpdate = False) Then
         ' ...
-        AddName Username, Product, Flags, Ping, Clan
+        AddName Username, Product, Flags, Ping, sClan
             
         ' ...
         frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
@@ -1171,7 +1171,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             If (JoinMessagesOff = False) Then
                 ' ...
                 frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", RTBColors.JoinUsername, _
-                    Username & " [" & Ping & "ms]", RTBColors.JoinText, " is using " & Stats
+                    Username & " [" & Ping & "ms]", RTBColors.JoinText, " is using " & UserObj.Stats.ToString
             End If
             
             ' ...
@@ -1231,7 +1231,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         
         On Error Resume Next
         
-        frmChat.SControl.Run "Event_UserInChannel", Username, Flags, Message, Ping, _
+        frmChat.SControl.Run "Event_UserInChannel", Username, Flags, UserObj.Stats.ToString, Ping, _
             Product, StatUpdate
     End If
     
@@ -1350,10 +1350,10 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     
         ' ...
         If (JoinMessagesOff = False) Then
-            ParseStatstring OriginalStatstring, pStats, sClan
+            'ParseStatstring OriginalStatstring, pStats, sClan
         
             frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, Username & _
-                " [" & Ping & "ms]", RTBColors.JoinText, " has joined the channel using " & pStats
+                " [" & Ping & "ms]", RTBColors.JoinText, " has joined the channel using " & UserObj.Stats.ToString
         End If
         
         ' ...
@@ -1426,7 +1426,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         On Error Resume Next
 
         ' ...
-        frmChat.SControl.Run "Event_UserJoins", Username, Flags, pStats, Ping, _
+        frmChat.SControl.Run "Event_UserJoins", Username, Flags, UserObj.Stats.ToString, Ping, _
             Product, 0, OriginalStatstring, IsBanned
     End If
     

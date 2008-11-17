@@ -79,6 +79,18 @@ End Property
 Public Property Get Tier() As String
 
     ' ...
+    If ((game = "WAR3") Or (game = "W3XP")) Then
+        ' ...
+        Select Case (Mid$(Icon, 2, 1))
+            Case "H": Tier = "Human"
+            Case "N": Tier = "Night Elf"
+            Case "U": Tier = "Undead"
+            Case "O": Tier = "Orc"
+            Case "R": Tier = "Random"
+            Case "D": Tier = "Tournament"
+            Case Else: Tier = "unknown"
+        End Select
+    End If
 
 End Property
 
@@ -217,6 +229,11 @@ Public Property Get IconName() As String
                     End Select
                 End If
         End Select
+        
+        ' ...
+        If (IconName = vbNullString) Then
+            IconName = "unknown"
+        End If
     End If
 
 End Property
@@ -224,18 +241,32 @@ End Property
 Public Property Let Statstring(str As String)
 
     ' ...
-    If (Len(str) < 6) Then
+    If (Len(str) < 4) Then
         Exit Property
     End If
+    
+    ' ...
+    g_ThisIconCode = -1
 
     ' ...
     game = StrReverse$(Left$(str, 4))
 
     ' ...
-    m_stat_string = Mid$(str, 6)
-
-    ' ...
-    Call Parse
+    If (Len(str) >= 5) Then
+        ' ...
+        str = Mid$(str, 5)
+        
+        ' ...
+        If (Left$(str, 1) = " ") Then
+            str = Mid$(str, 2)
+        End If
+        
+        ' ...
+        m_stat_string = str
+    
+        ' ...
+        Call Parse
+    End If
 
 End Property
 
@@ -388,10 +419,9 @@ Public Property Get CharacterClass() As String
         DIIClasses(6) = "Assassin"
     
         ' ...
-        If (CharacterClassID - 1 <= UBound(DIIClasses)) Then
+        If (CharacterClassID - 1 < UBound(DIIClasses)) Then
             CharacterClass = DIIClasses(CharacterClassID - 1)
         End If
-        
     End If
 
 End Property
@@ -413,7 +443,7 @@ End Property
 Public Property Get IsHardcoreCharacter() As Boolean
 
     ' ...
-    IsHardcoreCharacter = ((CharacterFlags And &H4) = &H4)
+    IsHardcoreCharacter = (((CharacterFlags And &H4) = &H4) = &H1)
 
 End Property
 
@@ -421,22 +451,23 @@ Public Property Get IsFemaleCharacter() As Boolean
 
     ' ...
     IsFemaleCharacter = _
-        ((m_character_class_id = 1) Or (m_character_class_id = 2) Or _
-            (m_character_class_id = 7))
+        (((m_character_class_id = 1) Or (m_character_class_id = 2) Or _
+            (m_character_class_id = 7)) = &H1)
 
 End Property
 
 Public Property Get IsExpansionCharacter() As Boolean
 
     ' ...
-    IsExpansionCharacter = ((CharacterFlags And &H20) = &H20)
+    IsExpansionCharacter = (((CharacterFlags And &H20) = &H20) = &H1)
 
 End Property
 
 Public Property Get IsCharacterDead() As Boolean
 
     ' ...
-    IsCharacterDead = ((IsHardcoreCharacter) And ((CharacterFlags And &H8) = &H8))
+    IsCharacterDead = _
+        (((IsHardcoreCharacter) And ((CharacterFlags And &H8) = &H8)) = &H1)
 
 End Property
 
@@ -444,7 +475,7 @@ Public Property Get IsLadderCharacter() As Boolean
 
     ' ...
     IsLadderCharacter = _
-        IIf(IsCharacterDead(), False, ((CharacterFlags And &H40) = &H40))
+        IIf(IsCharacterDead(), False, (((CharacterFlags And &H40) = &H40) = &H1))
     
 End Property
 
@@ -466,6 +497,11 @@ Public Property Get CurrentAct() As Integer
 
     ' ...
     If ((game = "D2DV") Or (game = "D2XP")) Then
+        ' ...
+        If (CurrentDifficultyID >= 4) Then
+            Exit Property
+        End If
+    
         ' ...
         If (IsExpansionCharacter = False) Then
             CurrentAct = ((ActsCompleted Mod 4) + 1)
@@ -492,20 +528,15 @@ End Property
 
 Public Property Get CurrentDifficultyID() As Integer
 
-    Dim difficulty As String ' ...
+    Dim difficulty As Integer ' ...
     
     ' ...
     If ((game = "D2DV") Or (game = "D2XP")) Then
-        ' ...
-        If (IsExpansionCharacter = False) Then
-            difficulty = ((ActsCompleted / 4) + 1)
-        Else
-            difficulty = ((ActsCompleted / 5) + 1)
-        End If
+        difficulty = (RShift(ActsCompleted, 3) + 1)
     End If
-    
+
     ' ...
-    CurrentDifficultyID = Int(difficulty)
+    CurrentDifficultyID = difficulty
     
 End Property
 
@@ -534,35 +565,27 @@ Public Property Get CharacterTitle() As String
     ' softcore
     Expansion(0, 0, 0) = "Slayer"
     Expansion(0, 1, 0) = "Champion"
-    Expansion(0, 2, 0) = "Patriarch"
-    Expansion(0, 2, 1) = "Matriarch"
+    Expansion(0, 2, 0) = "Champion"
+    Expansion(0, 3, 0) = "Patriarch"
+    Expansion(0, 3, 1) = "Matriarch"
     
     ' hardcore
     Expansion(1, 0, 0) = "Destroyer"
     Expansion(1, 1, 0) = "Conquerer"
-    Expansion(1, 2, 0) = "Guardian"
+    Expansion(1, 2, 0) = "Conquerer"
+    Expansion(1, 3, 0) = "Guardian"
     
     ' ...
     If ((game = "D2DV") Or (game = "D2XP")) Then
         ' ...
-        If ((CurrentDifficultyID - 1) > 0) Then
+        If (CurrentDifficultyID >= 0) Then
             ' ...
             If (game = "D2DV") Then
                 ' ...
-                CharacterTitle = Classic(IsHardcoreCharacter, (CurrentDifficultyID - 2), IsFemaleCharacter)
-                
-                ' ...
-                If (CharacterTitle = vbNullString) Then
-                    CharacterTitle = Classic(IsHardcoreCharacter, (CurrentDifficultyID - 2), False)
-                End If
+                CharacterTitle = Classic(IsHardcoreCharacter, CurrentDifficultyID - 1, IsFemaleCharacter)
             Else
                 ' ...
-                CharacterTitle = Expansion(IsHardcoreCharacter, (CurrentDifficultyID - 2), IsFemaleCharacter)
-                
-                ' ...
-                If (CharacterTitle = vbNullString) Then
-                    CharacterTitle = Expansion(IsHardcoreCharacter, (CurrentDifficultyID - 2), False)
-                End If
+                CharacterTitle = Expansion(IsHardcoreCharacter, CurrentDifficultyID - 1, IsFemaleCharacter)
             End If
         End If
     End If
@@ -669,33 +692,43 @@ End Property
 
 Public Property Get ToString() As String
 
+    Dim buf As String ' ...
+    
     ' ...
-    If (Statstring = vbNullString) Then
-        Exit Sub
-    End If
+    buf = MakeLongGameName(game)
     
     ' ...
     Select Case (game)
         ' ...
         Case "SSHR", "STAR", "JSTR", "SEXP"
-            ToString = StarCraft_ToString()
+            buf = buf & StarCraft_ToString()
             
         ' ...
         Case "DSHR", "DRTL"
-            ToString = Diablo_ToString()
+            buf = buf & Diablo_ToString()
             
         ' ...
         Case "D2DV", "D2XP"
-            ToString = DiabloII_ToString()
+            buf = buf & DiabloII_ToString()
 
         ' ...
         Case "W2BN"
-            ToString = WarCraftII_ToString()
+            buf = buf & WarCraftII_ToString()
         
         ' ...
         Case "WAR3", "W3XP"
-            ToString = WarCraftIII_ToString()
+            buf = buf & WarCraftIII_ToString()
+            
+        ' ...
+        Case Else
+            Exit Property
     End Select
+    
+    ' ...
+    buf = buf & "."
+    
+    ' ...
+    ToString = buf
 
 End Property
 
@@ -734,6 +767,9 @@ End Sub
 Private Sub ParseStarCraft()
 
     Dim Values() As String ' ...
+    
+    ' ...
+    ReDim Preserve Values(0)
 
     ' ...
     Values() = Split(Statstring, Space$(1))
@@ -756,6 +792,9 @@ End Sub
 Private Sub ParseDiablo()
 
     Dim Values() As String ' ...
+    
+    ' ...
+    ReDim Preserve Values(0)
 
     ' ...
     Values() = Split(Statstring, Space$(1))
@@ -781,24 +820,34 @@ Private Sub ParseDiabloII()
 
     Dim Values()   As String  ' ...
     Dim charData() As Integer ' ...
+    
+    ' ...
+    ReDim Preserve Values(0)
 
     ' ...
     Values() = Split(Statstring, ",", 3)
-    
+  
     ' ...
-    If (UBound(Values) > 0) Then
+    If (UBound(Values) >= 1) Then
         ' ...
         Realm = Values(0)
         CharacterName = Values(1)
         
         ' ...
-        MakeArr Values(2), charData
+        If (UBound(Values) >= 2) Then
+            ' ...
+            MakeArr Values(2), charData
         
-        ' ...
-        CharacterClassID = charData(13)
-        Level = charData(25)
-        CharacterFlags = charData(26)
-        ActsCompleted = (charData(27) And &H18)
+            ' ...
+            CharacterClassID = charData(13)
+            Level = charData(25)
+            CharacterFlags = charData(26)
+        
+            ' ...
+            If (UBound(charData) >= 26) Then
+                ActsCompleted = (charData(27) And &H18)
+            End If
+        End If
     End If
     
 End Sub
@@ -813,6 +862,9 @@ End Sub
 Private Sub ParseWarCraftIII()
 
     Dim Values() As String ' ...
+    
+    ' ...
+    ReDim Preserve Values(0)
 
     ' ...
     Values() = Split(Statstring, Space$(1))
@@ -830,36 +882,93 @@ Private Sub ParseWarCraftIII()
     If (UBound(Values) > 1) Then
         Clan = StrReverse$(Values(2))
     End If
+    
+    ' ...
+    g_ThisIconCode = GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), "")
 
 End Sub
 
 Private Function StarCraft_ToString() As String
 
+    Dim buf As String ' ...
+    
     ' ...
-
+    buf = _
+        " (" & Wins() & " wins" & IIf(LadderRating(), ", with a rating of " & LadderRating() & _
+            " on the ladder", "") & ")"
+            
+    ' ...
+    If (IsSpawn()) Then
+        buf = buf & " (spawn)"
+    End If
+    
+    ' ...
+    StarCraft_ToString = buf
+    
 End Function
 
 Private Function Diablo_ToString() As String
 
-    ' ...
+    Dim buf As String ' ...
 
 End Function
 
 Private Function DiabloII_ToString() As String
 
+    Dim buf As String ' ...
+
     ' ...
+    If (Statstring = vbNullString) Then
+        buf = " (Open Character)"
+    Else
+        ' ...
+        buf = " ("
+        
+        ' ...
+        If (Len(CharacterTitle()) > 0) Then
+            buf = buf & CharacterTitle() & " "
+        End If
+        
+        ' ...
+        buf = _
+            buf & CharacterName() & ", a " & IIf(IsCharacterDead(), "dead ", vbNullString) & _
+                IIf(IsHardcoreCharacter(), "hardcore ", vbNullString) & "level " & Level() & " " & _
+                    IIf(IsLadderCharacter(), "ladder ", vbNullString) & CharacterClass() & _
+                        IIf(CurrentAct() > 0, " in Act " & MakeRomanNum(CurrentAct()) & " of " & CurrentDifficulty(), "") & _
+                            " on " & Realm() & ")"
+    End If
+    
+    ' ...
+    DiabloII_ToString = buf
 
 End Function
 
 Private Function WarCraftII_ToString() As String
 
     ' ...
+    WarCraftII_ToString = StarCraft_ToString()
 
 End Function
 
 Private Function WarCraftIII_ToString() As String
 
+    Dim buf As String ' ...
+    
     ' ...
+    buf = _
+        " (Level: " & Level() & ", icon tier " & Tier() & ", " & IconName() & _
+            " icon"
+    
+    ' ...
+    If (Clan() <> vbNullString) Then
+        buf = buf & ", in clan " & Clan()
+    End If
+    
+    ' ...
+    buf = buf & ")"
+            
+    ' ...
+    WarCraftIII_ToString = buf
 
 End Function
 
@@ -909,4 +1018,15 @@ Private Function MakeLongGameName(game As String) As String
         Case "W3XP": MakeLongGameName = "WarCraft III: The Frozen Throne"
     End Select
 
+End Function
+
+Private Function MakeRomanNum(num As Integer) As String
+    ' ...
+    Select Case (num)
+        Case 1: MakeRomanNum = "I"
+        Case 2: MakeRomanNum = "II"
+        Case 3: MakeRomanNum = "III"
+        Case 4: MakeRomanNum = "IV"
+        Case 5: MakeRomanNum = "V"
+    End Select
 End Function

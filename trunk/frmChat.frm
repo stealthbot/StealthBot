@@ -3398,13 +3398,13 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
             
             If (lItemIndex > 0) Then
                 With g_Channel.Users(lItemIndex)
-                    ParseStatstring .Statstring, sOutBuf, Clan
+                    'ParseStatstring .Statstring, sOutBuf, Clan
             
                     'sTemp = sTemp & vbCrLf
                     sTemp = sTemp & "Ping at login: " & .Ping & "ms" & vbCrLf
                     sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
-                    sTemp = sTemp & sOutBuf
+                    sTemp = sTemp & .stats.ToString
                 
                     ListToolTip.TipText = sTemp
                     
@@ -6606,7 +6606,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             Set CurrentUser = g_Channel.Users(I)
             
             ' ...
-            ParseStatstring CurrentUser.Statstring, outbuf, outbuf
+            'ParseStatstring CurrentUser.Statstring, outbuf, outbuf
         
             ' ...
             AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Flags, CurrentUser.Ping, _

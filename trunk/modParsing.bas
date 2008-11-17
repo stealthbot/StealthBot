@@ -96,7 +96,21 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 s2 = ""
                 
                 If LenB(s) > 0 Then
-                    Product = ParseStatstring(s, s2, ClanTag)
+                    Dim UserStats As clsUserStats
+                    
+                    ' ...
+                    Set UserStats = New clsUserStats
+                    
+                    ' ...
+                    UserStats.Statstring = s
+                    
+                    ' ...
+                    Product = UserStats.game
+                    s2 = UserStats.ToString
+                    ClanTag = UserStats.Clan
+                    
+                    ' ...
+                    Set UserStats = Nothing
                 End If
                 
                 If Product = "WAR3" Or Product = "W3XP" Then
@@ -1290,7 +1304,7 @@ ParseStatString_Error:
 End Function
 
 ' This code cleaned 3/4/2005
-Public Function ParseD2Stats(ByVal Stats As String)
+Public Function ParseD2Stats(ByVal stats As String)
     Dim Female As Boolean, Expansion As Boolean
     Dim sLen As Byte, Version As Byte, CharClass As Byte, Hardcore As Byte, CharLevel As Byte
     Dim StatBuf As String, P() As String, Server As String, Name As String
@@ -1305,19 +1319,19 @@ Public Function ParseD2Stats(ByVal Stats As String)
         D2Classes(6) = "assassin"
         D2Classes(7) = "unknown class"
     
-    If Len(Stats) > 4 Then
-        sLen = GetServer(Stats, Server)
-        sLen = GetCharacterName(Stats, sLen, Name)
-        Call MakeArray(Mid$(Stats, sLen), P())
+    If Len(stats) > 4 Then
+        sLen = GetServer(stats, Server)
+        sLen = GetCharacterName(stats, sLen, Name)
+        Call MakeArray(Mid$(stats, sLen), P())
     End If
     
-    If Left$(Stats, 4) = "VD2D" Then
+    If Left$(stats, 4) = "VD2D" Then
         Call StrCpy(StatBuf, "Diablo II (")
     Else
         Call StrCpy(StatBuf, "Diablo II Lord of Destruction (")
     End If
     
-    If (Len(Stats) = 4) Then
+    If (Len(stats) = 4) Then
         Call StrCpy(StatBuf, "Open Character).")
     Else
         Version = Asc(P(0)) - &H80
@@ -1336,7 +1350,7 @@ Public Function ParseD2Stats(ByVal Stats As String)
         CharLevel = Asc(P(25))
         Hardcore = Asc(P(26)) And 4
     
-        If Left$(Stats, 4) = "PX2D" Then
+        If Left$(stats, 4) = "PX2D" Then
             If (Asc(P(26)) And &H20) Then
                 Select Case RShift((Asc(P(27)) And &H18), 3)
                     Case 1

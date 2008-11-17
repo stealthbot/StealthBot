@@ -4,12 +4,39 @@ Attribute VB_Name = "modPacketBuffer"
 
 Option Explicit
 
+Public Const MAX_PACKET_CACHE_SIZE = 30 ' ...
+
+Public pkt As PACKETCACHEITEM ' ...
+
+Private m_cache As Collection ' ...
+
+' ...
+Public Type PACKETCACHEITEM
+    Type As enuPL_ServerTypes
+    ID   As Integer
+    Len  As Integer
+    Data As String
+End Type
+
 ' ...
 Public Enum STRINGENCODING
     ANSI = 1
     UTF8 = 2
     UTF16 = 3
 End Enum
+
+' ...
+Public Function PacketCache() As Collection
+
+    ' ...
+    If (m_cache Is Nothing) Then
+        Set m_cache = New Collection
+    End If
+    
+    ' ...
+    Set PacketCache = m_cache
+
+End Function
 
 ' ...
 Public Function DWordToString(ByVal Data As Long) As String
