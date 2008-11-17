@@ -238,29 +238,6 @@ Private TimerCount As Integer
 '
 'End Function
 
-    On Error Resume Next
-
-    Dim tmr As Timer ' ...
-    
-    ' ...
-    With tmr
-        .ID = TimerCount + 1
-        .Script = ScriptModule
-        .code = strCode
-        .Interval = intInterval
-    End With
-    
-    ' ...
-    Timers.Add tmr, TimerCount
-    
-    ' ...
-    setInterval = TimerCount
-
-    ' ...
-    TimerCount = TimerCount + 1
-    
-End Function
-
 ' ...
 'Public Sub clearInterval(ScriptModule As Module, intIntervalID As Integer)
 '
