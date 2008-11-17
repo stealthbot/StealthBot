@@ -213,7 +213,30 @@ Private Timers     As Collection
 Private TimerCount As Integer
 
 ' ...
-Public Function setInterval(ScriptModule As Module, strCode As String, intInterval As Integer) As Integer
+'Public Function setInterval(ScriptModule As Module, strCode As String, intInterval As Integer) As Integer
+'
+'    On Error Resume Next
+'
+'    Dim tmr As Timer ' ...
+'
+'    ' ...
+'    With tmr
+'        .ID = TimerCount + 1
+'        Set .Script = ScriptModule
+'        .Code = strCode
+'        .Interval = intInterval
+'    End With
+'
+'    ' ...
+'    Timers.Add tmr, TimerCount
+'
+'    ' ...
+'    setInterval = TimerCount
+'
+'    ' ...
+'    TimerCount = TimerCount + 1
+'
+'End Function
 
     On Error Resume Next
 
@@ -239,14 +262,14 @@ Public Function setInterval(ScriptModule As Module, strCode As String, intInterv
 End Function
 
 ' ...
-Public Sub clearInterval(ScriptModule As Module, intIntervalID As Integer)
-
-    On Error Resume Next
-
-    ' ...
-    Timers.Remove intIntervalID
-    
-End Sub
+'Public Sub clearInterval(ScriptModule As Module, intIntervalID As Integer)
+'
+'    On Error Resume Next'
+'
+'    ' ...
+'    Timers.Remove intIntervalID
+'
+'End Sub
 
 
 '/* ******************************************************************************************
@@ -1024,10 +1047,21 @@ End Function
 '//         if you wish to use it in parsing
 Public Function DoStatstringParse(ByVal sStatstring As String, ByVal sClanTag As String) As String
     Dim sBuffer As String
+    Dim UserStats As clsUserStats
     
-    Call ParseStatstring(sStatstring, sBuffer, sClanTag)
+    'Call ParseStatstring(sStatstring, sBuffer, sClanTag)
     
-    DoStatstringParse = sBuffer
+    ' ...
+    Set UserStats = New clsUserStats
+    
+    ' ...
+    UserStats.Statstring = sStatstring
+    
+    ' ...
+    DoStatstringParse = UserStats.ToString
+    
+    ' ...
+    Set UserStats = Nothing
 End Function
 
 
