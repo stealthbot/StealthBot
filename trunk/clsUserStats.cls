@@ -459,7 +459,11 @@ End Property
 Public Property Get IsExpansionCharacter() As Boolean
 
     ' ...
-    IsExpansionCharacter = (((CharacterFlags And &H20) = &H20) = &H1)
+    If (game = "D2XP") Then
+        IsExpansionCharacter = &H1
+    Else
+        IsExpansionCharacter = (((CharacterFlags And &H20) = &H20) = &H1)
+    End If
 
 End Property
 
@@ -475,7 +479,7 @@ Public Property Get IsLadderCharacter() As Boolean
 
     ' ...
     IsLadderCharacter = _
-        IIf(IsCharacterDead(), False, (((CharacterFlags And &H40) = &H40) = &H1))
+        IIf(IsCharacterDead(), False, ((CharacterFlags And &H40) = &H40))
     
 End Property
 
@@ -496,17 +500,17 @@ End Property
 Public Property Get CurrentAct() As Integer
 
     ' ...
-    If ((game = "D2DV") Or (game = "D2XP")) Then
+    If ((game() = "D2DV") Or (game() = "D2XP")) Then
         ' ...
-        If (CurrentDifficultyID >= 4) Then
+        If ((CurrentDifficultyID() <= 0) Or (CurrentDifficultyID() >= 4)) Then
             Exit Property
         End If
     
         ' ...
-        If (IsExpansionCharacter = False) Then
-            CurrentAct = ((ActsCompleted Mod 4) + 1)
+        If (IsExpansionCharacter() = False) Then
+            CurrentAct = ((ActsCompleted() Mod 4) + 1)
         Else
-            CurrentAct = ((ActsCompleted Mod 5) + 1)
+            CurrentAct = ((ActsCompleted() Mod 5) + 1)
         End If
     End If
 
