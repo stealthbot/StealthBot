@@ -460,7 +460,7 @@ Public Property Get IsExpansionCharacter() As Boolean
 
     ' ...
     If (game = "D2XP") Then
-        IsExpansionCharacter = &H1
+        IsExpansionCharacter = True
     Else
         IsExpansionCharacter = (((CharacterFlags And &H20) = &H20) = &H1)
     End If
