@@ -1,4 +1,16 @@
 <commands xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
+  <command name="dump">
+    <aliases />
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+
+    <access />
+  </command>
+
   <command name="find">
     <aliases>
       <alias>

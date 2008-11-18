@@ -221,6 +221,9 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     'PacketCache.Add pkt
     
     ' ...
+    CachePacket CtoS, stMCP, PacketID, Len(strbuf), strbuf
+    
+    ' ...
     Call LogPacketRaw(stMCP, CtoS, PacketID, m_bufpos + 3, strbuf)
     
     ' clear buffer contents
@@ -296,6 +299,9 @@ Public Function SendPacket(Optional PacketID As Byte)
     'PacketCache.Add pkt
     
     ' ...
+    CachePacket CtoS, stBNCS, PacketID, Len(strbuf), strbuf
+    
+    ' ...
     Call LogPacketRaw(stBNCS, CtoS, PacketID, m_bufpos + 4, strbuf)
     
     ' clear buffer contents
@@ -366,6 +372,9 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     
     ' ...
     'PacketCache.Add pkt
+    
+    ' ...
+    CachePacket CtoS, stBNLS, PacketID, Len(strbuf), strbuf
     
     ' ...
     Call LogPacketRaw(stBNLS, CtoS, PacketID, m_bufpos + 3, strbuf)

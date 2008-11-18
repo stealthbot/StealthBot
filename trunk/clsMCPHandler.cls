@@ -142,6 +142,8 @@ End Sub
 
 Public Sub ParseMCPPacket(ByVal Data As String)
 
+    On Error GoTo ERROR_HANDLER
+
     'Debug.Print "MCP Inbound:"
     'Debug.Print DebugOutput(Data)
     
@@ -163,7 +165,14 @@ Public Sub ParseMCPPacket(ByVal Data As String)
         If Len(sBuffer) >= PacketLen Then
             Data = Mid$(sBuffer, 1, PacketLen)
             
-            If InStr(1, CommandLine, "-all") > 0 Then frmChat.AddChat COLOR_BLUE, "MCP RECV 0x" & Right$("00" & Hex(Asc(Mid$(Data, 3, 1))), 2)
+            ' ...
+            CachePacket StoC, stMCP, Asc(Mid$(Data, 3, 1)), Len(Data), Data
+    
+            ' ...
+            LogPacketRaw stMCP, StoC, Asc(Mid$(Data, 3, 1)), Len(Data), Data
+            
+            If InStr(1, CommandLine, "-all") > 0 Then _
+                frmChat.AddChat COLOR_BLUE, "MCP RECV 0x" & Right$("00" & Hex(Asc(Mid$(Data, 3, 1))), 2)
             
             Select Case Asc(Mid$(Data, 3, 1))
                 Case MCP_STARTUP
@@ -280,6 +289,13 @@ Public Sub ParseMCPPacket(ByVal Data As String)
             IncompletePacketInBuffer = True
         End If
     Wend
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in ParseMCPPacket()."
+    
+    Exit Sub
 End Sub
 
 Public Property Get CurrentChunk() As String

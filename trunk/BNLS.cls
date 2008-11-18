@@ -191,7 +191,7 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     Dim lTemp     As Long
     Dim lCheckSum As Long
     Dim splt()    As String
-    Dim PacketID  As Long
+    Dim PacketID  As Byte
     
     Set pD = New clsPacketDebuffer
     
@@ -203,6 +203,8 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
         frmChat.AddChat COLOR_BLUE, "BNLS RECV 0x" & _
             Right$("00" & Hex(PacketID), 2)
     End If
+    
+    CachePacket StoC, stBNLS, PacketID, Len(Data), Data
     
     ' Added 2007-06-08 for a packet logging menu feature to aid tech support
     LogPacketRaw BNLS, StoC, PacketID, Len(Data), Data

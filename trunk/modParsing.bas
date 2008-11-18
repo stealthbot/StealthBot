@@ -47,6 +47,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             frmChat.AddChat COLOR_BLUE, "BNET RECV 0x" & Hex(PacketID)
         End If
         
+        ' ...
+        CachePacket StoC, stBNCS, PacketID, Len(PacketData), PacketData
+        
         ' Added 2007-06-08 for a packet logging menu feature to aid tech support
         LogPacketRaw stBNCS, StoC, PacketID, PacketLen, PacketData
         
@@ -1135,7 +1138,7 @@ theEnd:
     Source = Source & nText
 End Sub
 
-Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As String, ByRef sClan As String) As String
+Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As String, ByRef sClan As String) As String
     Dim Values() As String
     Dim temp() As String
     Dim cType As String
@@ -1177,60 +1180,60 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As Stri
                     sClan = IIf(UBound(Values) > 2, Values(3), "")
                     
                     If Left$(Statstring, 4) = "3RAW" Then
-                        Call sPrintF(outbuf, "Warcraft III: Reign of Chaos (Level: %s, icon tier %s, %s icon" & IIf(UBound(temp) > 2, ", in Clan " & sClan, vbNullString) & ")", Values(0), Values(2), Values(1))
+                        Call sPrintF(outBuf, "Warcraft III: Reign of Chaos (Level: %s, icon tier %s, %s icon" & IIf(UBound(temp) > 2, ", in Clan " & sClan, vbNullString) & ")", Values(0), Values(2), Values(1))
                     Else
-                        Call sPrintF(outbuf, "Warcraft III: The Frozen Throne (Level: %s, icon tier %s, %s icon" & IIf(UBound(temp) > 2, ", in Clan " & sClan, vbNullString) & ")", Values(0), Values(2), Values(1))
+                        Call sPrintF(outBuf, "Warcraft III: The Frozen Throne (Level: %s, icon tier %s, %s icon" & IIf(UBound(temp) > 2, ", in Clan " & sClan, vbNullString) & ")", Values(0), Values(2), Values(1))
                     End If
                 Else
                     If Left$(Statstring, 4) = "3RAW" Then
-                        Call StrCpy(outbuf, "Warcraft III: Reign of Chaos.")
+                        Call StrCpy(outBuf, "Warcraft III: Reign of Chaos.")
                         g_ThisIconCode = -56
                     Else
-                        Call StrCpy(outbuf, "Warcraft III: The Frozen Throne.")
+                        Call StrCpy(outBuf, "Warcraft III: The Frozen Throne.")
                         g_ThisIconCode = -10
                     End If
                 End If
                 
             Case "RHSS"
-                Call StrCpy(outbuf, "Starcraft Shareware.")
+                Call StrCpy(outBuf, "Starcraft Shareware.")
                 
             Case "RATS"
                 Values() = Split(Mid$(Statstring, 6), " ")
                 If UBound(Values) <> 8 Then
-                    Call sPrintF(outbuf, "a Starcraft %sbot", IIf((Values(3) = 1), " (spawn) ", vbNullString))
+                    Call sPrintF(outBuf, "a Starcraft %sbot", IIf((Values(3) = 1), " (spawn) ", vbNullString))
                 Else
                     If Values(0) > 0 Then
-                        Call sPrintF(outbuf, "Starcraft%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
+                        Call sPrintF(outBuf, "Starcraft%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
                     Else
-                        Call sPrintF(outbuf, "Starcraft%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
+                        Call sPrintF(outBuf, "Starcraft%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
                     End If
                 End If
                 
             Case "PXES"
                 Values() = Split(Mid(Statstring, 6), " ")
                 If UBound(Values) <> 8 Then
-                    Call sPrintF(outbuf, "a Starcraft Brood War bot.", vbNullString)
+                    Call sPrintF(outBuf, "a Starcraft Brood War bot.", vbNullString)
                     
                     If UBound(Values) > 2 Then
-                        outbuf = outbuf & "(spawn) "
+                        outBuf = outBuf & "(spawn) "
                     End If
                 Else
                     If Values(0) > 0 Then
-                        Call sPrintF(outbuf, "Starcraft Brood War%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
+                        Call sPrintF(outBuf, "Starcraft Brood War%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
                     Else
-                        Call sPrintF(outbuf, "Starcraft Brood War%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
+                        Call sPrintF(outBuf, "Starcraft Brood War%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
                     End If
                 End If
                 
             Case "RTSJ"
                 Values() = Split(Mid(Statstring, 6), " ")
                 If UBound(Values) <> 8 Then
-                    Call sPrintF(outbuf, "a Starcraft Japanese %sbot.", IIf((Values(3) = 1), " (spawn) ", vbNullString))
+                    Call sPrintF(outBuf, "a Starcraft Japanese %sbot.", IIf((Values(3) = 1), " (spawn) ", vbNullString))
                 Else
                     If Values(0) > 0 Then
-                        Call sPrintF(outbuf, "Starcraft Japanese%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
+                        Call sPrintF(outBuf, "Starcraft Japanese%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
                     Else
-                        Call sPrintF(outbuf, "Starcraft Japanese%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
+                        Call sPrintF(outBuf, "Starcraft Japanese%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
                     End If
                 End If
                 
@@ -1238,53 +1241,53 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As Stri
                 Values() = Split(Mid$(Statstring, 6), " ")
                 
                 If UBound(Values) <> 8 Then
-                    Call sPrintF(outbuf, "a Warcraft II %sbot.", IIf((Values(3) = 1), " (spawn) ", vbNullString))
+                    Call sPrintF(outBuf, "a Warcraft II %sbot.", IIf((Values(3) = 1), " (spawn) ", vbNullString))
                 Else
                     If Values(0) > 0 Then
-                        Call sPrintF(outbuf, "Warcraft II%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
+                        Call sPrintF(outBuf, "Warcraft II%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
                     Else
-                        Call sPrintF(outbuf, "Warcraft II%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
+                        Call sPrintF(outBuf, "Warcraft II%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
                     End If
                 End If
                 
             Case "RHSD"
                 Values() = Split(Mid$(Statstring, 6), " ")
                 If UBound(Values) <> 8 Then
-                    Call StrCpy(outbuf, "A Diablo shareware bot.")
+                    Call StrCpy(outBuf, "A Diablo shareware bot.")
                 Else
                     Select Case Values(1)
                         Case 0: cType = "warrior"
                         Case 1: cType = "rogue"
                         Case 2: cType = "sorceror"
                     End Select
-                    Call sPrintF(outbuf, "Diablo shareware (Level %s %s with %s dots, %s strength, %s magic, %s dexterity, %s vitality, and %s gold)", Values(0), cType, Values(2), Values(3), Values(4), Values(5), Values(6), Values(7))
+                    Call sPrintF(outBuf, "Diablo shareware (Level %s %s with %s dots, %s strength, %s magic, %s dexterity, %s vitality, and %s gold)", Values(0), cType, Values(2), Values(3), Values(4), Values(5), Values(6), Values(7))
                 End If
                 
             Case "LTRD"
                 Values() = Split(Mid$(Statstring, 6), " ")
                 
                 If UBound(Values) <> 8 Then
-                    Call StrCpy(outbuf, "A Diablo bot.")
+                    Call StrCpy(outBuf, "A Diablo bot.")
                 Else
                     Select Case Values(1)
                         Case 0: cType = "warrior"
                         Case 1: cType = "rogue"
                         Case 2: cType = "sorceror"
                     End Select
-                    Call sPrintF(outbuf, "Diablo (Level %s %s with %s dots, %s strength, %s magic, %s dexterity, %s vitality, and %s gold)", Values(0), cType, Values(2), Values(3), Values(4), Values(5), Values(6), Values(7))
+                    Call sPrintF(outBuf, "Diablo (Level %s %s with %s dots, %s strength, %s magic, %s dexterity, %s vitality, and %s gold)", Values(0), cType, Values(2), Values(3), Values(4), Values(5), Values(6), Values(7))
                 End If
                 
             Case "PX2D"
-                Call StrCpy(outbuf, ParseD2Stats(Statstring))
+                Call StrCpy(outBuf, ParseD2Stats(Statstring))
                 
             Case "VD2D"
-                Call StrCpy(outbuf, ParseD2Stats(Statstring))
+                Call StrCpy(outBuf, ParseD2Stats(Statstring))
                 
             Case "TAHC"
-                Call StrCpy(outbuf, "a Chat bot.")
+                Call StrCpy(outBuf, "a Chat bot.")
                 
             Case Else
-                Call StrCpy(outbuf, "an unknown client.")
+                Call StrCpy(outBuf, "an unknown client.")
                 
         End Select
         
@@ -1298,13 +1301,13 @@ ParseStatString_Exit:
 ParseStatString_Error:
 
     Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure ParseStatString of Module modParsing"
-    outbuf = "- Error parsing statstring. [" & Replace(Statstring, Chr(0), "") & "]"
+    outBuf = "- Error parsing statstring. [" & Replace(Statstring, Chr(0), "") & "]"
     
     Resume ParseStatString_Exit
 End Function
 
 ' This code cleaned 3/4/2005
-Public Function ParseD2Stats(ByVal stats As String)
+Public Function ParseD2Stats(ByVal Stats As String)
     Dim Female As Boolean, Expansion As Boolean
     Dim sLen As Byte, Version As Byte, CharClass As Byte, Hardcore As Byte, CharLevel As Byte
     Dim StatBuf As String, P() As String, Server As String, Name As String
@@ -1319,19 +1322,19 @@ Public Function ParseD2Stats(ByVal stats As String)
         D2Classes(6) = "assassin"
         D2Classes(7) = "unknown class"
     
-    If Len(stats) > 4 Then
-        sLen = GetServer(stats, Server)
-        sLen = GetCharacterName(stats, sLen, Name)
-        Call MakeArray(Mid$(stats, sLen), P())
+    If Len(Stats) > 4 Then
+        sLen = GetServer(Stats, Server)
+        sLen = GetCharacterName(Stats, sLen, Name)
+        Call MakeArray(Mid$(Stats, sLen), P())
     End If
     
-    If Left$(stats, 4) = "VD2D" Then
+    If Left$(Stats, 4) = "VD2D" Then
         Call StrCpy(StatBuf, "Diablo II (")
     Else
         Call StrCpy(StatBuf, "Diablo II Lord of Destruction (")
     End If
     
-    If (Len(stats) = 4) Then
+    If (Len(Stats) = 4) Then
         Call StrCpy(StatBuf, "Open Character).")
     Else
         Version = Asc(P(0)) - &H80
@@ -1350,7 +1353,7 @@ Public Function ParseD2Stats(ByVal stats As String)
         CharLevel = Asc(P(25))
         Hardcore = Asc(P(26)) And 4
     
-        If Left$(stats, 4) = "PX2D" Then
+        If Left$(Stats, 4) = "PX2D" Then
             If (Asc(P(26)) And &H20) Then
                 Select Case RShift((Asc(P(27)) And &H18), 3)
                     Case 1

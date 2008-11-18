@@ -4,18 +4,15 @@ Attribute VB_Name = "modPacketBuffer"
 
 Option Explicit
 
-Public Const MAX_PACKET_CACHE_SIZE = 30 ' ...
-
-Public pkt As PACKETCACHEITEM ' ...
-
-Private m_cache As Collection ' ...
+Private Const MAX_PACKET_CACHE_SIZE = 30 ' ...
 
 ' ...
-Public Type PACKETCACHEITEM
-    Type As enuPL_ServerTypes
-    ID   As Integer
-    Len  As Integer
-    Data As String
+Private Type PACKETCACHEITEM
+    Direction As enuPL_DirectionTypes
+    PKT_Type  As enuPL_ServerTypes
+    ID        As Byte
+    Length    As Integer
+    Data      As String
 End Type
 
 ' ...
@@ -25,18 +22,76 @@ Public Enum STRINGENCODING
     UTF16 = 3
 End Enum
 
-' ...
-Public Function PacketCache() As Collection
+Private m_cache()     As PACKETCACHEITEM  ' ...
+Private m_cache_count As Integer          ' ...
 
-    ' ...
-    If (m_cache Is Nothing) Then
-        Set m_cache = New Collection
-    End If
+Public Function CachePacket(Direction As enuPL_DirectionTypes, PKT_Type As enuPL_ServerTypes, ID As Byte, Length As Integer, Data As String)
+
+    Dim pkt As PACKETCACHEITEM ' ...
     
     ' ...
-    Set PacketCache = m_cache
+    With pkt
+        .Direction = Direction
+        .PKT_Type = PKT_Type
+        .ID = ID
+        .Length = Length
+        .Data = Data
+    End With
+    
+    ' ...
+    If (m_cache_count + 1 >= MAX_PACKET_CACHE_SIZE) Then
+        Dim I As Integer ' ...
+        
+        ' ...
+        For I = 0 To m_cache_count - 1
+            m_cache(I) = m_cache(I + 1)
+        Next I
+        
+        ' ...
+        m_cache(m_cache_count) = pkt
+    Else
+        ' ...
+        If (m_cache_count = 0) Then
+            ReDim m_cache(0)
+        Else
+            ReDim Preserve m_cache(0 To m_cache_count + 1)
+        End If
+        
+        ' ...
+        m_cache(m_cache_count) = pkt
+        
+        ' ...
+        m_cache_count = m_cache_count + 1
+    End If
 
 End Function
+
+' ...
+Public Sub DumpPacketCache()
+    
+    Dim pkt     As PACKETCACHEITEM ' ...
+    Dim I       As Integer ' ...
+    Dim Traffic As Boolean ' ...
+    
+    ' ...
+    Traffic = LogPacketTraffic
+    
+    ' ...
+    LogPacketTraffic = True
+    
+    ' ...
+    For I = 0 To m_cache_count
+        ' ...
+        pkt = m_cache(I)
+        
+        ' ...
+        LogPacketRaw pkt.PKT_Type, pkt.Direction, pkt.ID, pkt.Length, pkt.Data
+    Next I
+    
+    ' ...
+    LogPacketTraffic = Traffic
+    
+End Sub
 
 ' ...
 Public Function DWordToString(ByVal Data As Long) As String
