@@ -87,8 +87,8 @@ Public Property Get Tier() As String
             Case "U": Tier = "Undead"
             Case "O": Tier = "Orc"
             Case "R": Tier = "Random"
-            Case "D": Tier = "Tournament"
-            Case Else: Tier = "unknown"
+            Case "T", "D": Tier = "Tournament"
+            Case Else: Tier = "unknown (" & Mid$(Icon, 2, 1) & ")"
         End Select
     End If
 
@@ -215,7 +215,7 @@ Public Property Get IconName() As String
                     End Select
                 End If
 
-            Case "D" ' Tournament
+            Case "T", "D" ' Tournament
                 ' ...
                 If (game = "W3XP") Then
                     ' ...
@@ -396,17 +396,30 @@ Public Property Get CharacterClassID() As Integer
 
 End Property
 
-Public Property Let CharacterClassID(I As Integer)
+Public Property Let CharacterClassID(i As Integer)
 
     ' ...
-    m_character_class_id = I
+    m_character_class_id = i
 
 End Property
 
 Public Property Get CharacterClass() As String
     
     ' ...
-    If ((game = "D2DV") Or (game = "D2XP")) Then
+    If ((game = "DSHR") Or (game = "DRTL")) Then
+        
+        Dim DIClasses(0 To 3) As String ' ...
+        
+        DIClasses(0) = "warrior"
+        DIClasses(1) = "rogue"
+        DIClasses(2) = "sorceror"
+        
+        ' ...
+        If (CharacterClassID < UBound(DIClasses)) Then
+            CharacterClass = DIClasses(CharacterClassID)
+        End If
+        
+    ElseIf ((game = "D2DV") Or (game = "D2XP")) Then
     
         Dim DIIClasses(0 To 7) As String ' ...
         
@@ -490,10 +503,10 @@ Public Property Get ActsCompleted() As Integer
 
 End Property
 
-Public Property Let ActsCompleted(I As Integer)
+Public Property Let ActsCompleted(i As Integer)
 
     ' ...
-    m_acts_completed = I
+    m_acts_completed = i
 
 End Property
 
@@ -666,17 +679,17 @@ Public Property Let Dexterity(lng As Long)
 
 End Property
 
-Public Property Get Vitality() As Boolean
+Public Property Get Vitality() As Long
 
     ' ...
     Vitality = m_vitality
 
 End Property
 
-Public Property Let Vitality(bln As Boolean)
+Public Property Let Vitality(lng As Long)
 
     ' ...
-    m_vitality = bln
+    m_vitality = lng
 
 End Property
 
@@ -888,7 +901,8 @@ Private Sub ParseWarCraftIII()
     End If
     
     ' ...
-    g_ThisIconCode = GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), "")
+    g_ThisIconCode = _
+        GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), "")
 
 End Sub
 
@@ -914,6 +928,20 @@ End Function
 Private Function Diablo_ToString() As String
 
     Dim buf As String ' ...
+    
+    ' ...
+    buf = _
+        " (Level " & Level() & " " & CharacterClass() & " with " & Dots() & " dots, " & Strength() & _
+            " strength, " & Magic() & " magic, " & Dexterity() & " dexterity, " & Vitality() & _
+                " vitality, and " & Gold() & " gold)"
+    
+    ' ...
+    If (IsSpawn()) Then
+        buf = buf & " (spawn)"
+    End If
+    
+    ' ...
+    Diablo_ToString = buf
 
 End Function
 
@@ -978,21 +1006,21 @@ End Function
 
 Private Sub MakeArr(str As String, arr() As Integer)
     
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
     
     ' ...
     ReDim arr(0)
     
     ' ...
-    For I = 1 To Len(str)
+    For i = 1 To Len(str)
         ' ...
-        If (I > 1) Then
-            ReDim Preserve arr(0 To I - 1)
+        If (i > 1) Then
+            ReDim Preserve arr(0 To i - 1)
         End If
         
         ' ...
-        arr(I - 1) = Asc(Mid(str, I, 1))
-    Next I
+        arr(i - 1) = Asc(Mid(str, i, 1))
+    Next i
     
 End Sub
 
