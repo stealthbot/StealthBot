@@ -396,10 +396,10 @@ Public Property Get CharacterClassID() As Integer
 
 End Property
 
-Public Property Let CharacterClassID(i As Integer)
+Public Property Let CharacterClassID(I As Integer)
 
     ' ...
-    m_character_class_id = i
+    m_character_class_id = I
 
 End Property
 
@@ -503,10 +503,10 @@ Public Property Get ActsCompleted() As Integer
 
 End Property
 
-Public Property Let ActsCompleted(i As Integer)
+Public Property Let ActsCompleted(I As Integer)
 
     ' ...
-    m_acts_completed = i
+    m_acts_completed = I
 
 End Property
 
@@ -787,6 +787,11 @@ Private Sub ParseStarCraft()
     
     ' ...
     ReDim Preserve Values(0)
+    
+    ' ...
+    If (Statstring = vbNullString) Then
+        Exit Sub
+    End If
 
     ' ...
     Values() = Split(Statstring, Space$(1))
@@ -812,6 +817,11 @@ Private Sub ParseDiablo()
     
     ' ...
     ReDim Preserve Values(0)
+    
+    ' ...
+    If (Statstring = vbNullString) Then
+        Exit Sub
+    End If
 
     ' ...
     Values() = Split(Statstring, Space$(1))
@@ -840,6 +850,11 @@ Private Sub ParseDiabloII()
     
     ' ...
     ReDim Preserve Values(0)
+    
+    ' ...
+    If (Statstring = vbNullString) Then
+        Exit Sub
+    End If
 
     ' ...
     Values() = Split(Statstring, ",", 3)
@@ -882,6 +897,11 @@ Private Sub ParseWarCraftIII()
     
     ' ...
     ReDim Preserve Values(0)
+    
+    ' ...
+    If (Statstring = vbNullString) Then
+        Exit Sub
+    End If
 
     ' ...
     Values() = Split(Statstring, Space$(1))
@@ -911,9 +931,13 @@ Private Function StarCraft_ToString() As String
     Dim buf As String ' ...
     
     ' ...
-    buf = _
-        " (" & Wins() & " wins" & IIf(LadderRating(), ", with a rating of " & LadderRating() & _
-            " on the ladder", "") & ")"
+    If (Statstring = vbNullString) Then
+        buf = " (No stats available)"
+    Else
+        buf = _
+            " (" & Wins() & " wins" & IIf(LadderRating(), ", with a rating of " & LadderRating() & _
+                " on the ladder", "") & ")"
+    End If
             
     ' ...
     If (IsSpawn()) Then
@@ -930,16 +954,20 @@ Private Function Diablo_ToString() As String
     Dim buf As String ' ...
     
     ' ...
-    buf = _
-        " (Level " & Level() & " " & CharacterClass() & " with " & Dots() & " dots, " & Strength() & _
-            " strength, " & Magic() & " magic, " & Dexterity() & " dexterity, " & Vitality() & _
-                " vitality, and " & Gold() & " gold)"
+    If (Statstring = vbNullString) Then
+        buf = " (No stats available)"
+    Else
+        buf = _
+            " (Level " & Level() & " " & CharacterClass() & " with " & Dots() & " dots, " & Strength() & _
+                " strength, " & Magic() & " magic, " & Dexterity() & " dexterity, " & Vitality() & _
+                    " vitality, and " & Gold() & " gold)"
+    End If
     
     ' ...
     If (IsSpawn()) Then
         buf = buf & " (spawn)"
     End If
-    
+
     ' ...
     Diablo_ToString = buf
 
@@ -953,15 +981,12 @@ Private Function DiabloII_ToString() As String
     If (Statstring = vbNullString) Then
         buf = " (Open Character)"
     Else
-        ' ...
         buf = " ("
-        
-        ' ...
+
         If (Len(CharacterTitle()) > 0) Then
             buf = buf & CharacterTitle() & " "
         End If
-        
-        ' ...
+
         buf = _
             buf & CharacterName() & ", a " & IIf(IsCharacterDead(), "dead ", vbNullString) & _
                 IIf(IsHardcoreCharacter(), "hardcore ", vbNullString) & "level " & Level() & " " & _
@@ -987,17 +1012,19 @@ Private Function WarCraftIII_ToString() As String
     Dim buf As String ' ...
     
     ' ...
-    buf = _
-        " (Level: " & Level() & ", icon tier " & Tier() & ", " & IconName() & _
-            " icon"
-    
-    ' ...
-    If (Clan() <> vbNullString) Then
-        buf = buf & ", in clan " & Clan()
+    If (Statstring = vbNullString) Then
+        buf = " (No stats available)"
+    Else
+        buf = _
+            " (Level: " & Level() & ", icon tier " & Tier() & ", " & IconName() & _
+                " icon"
+
+        If (Clan() <> vbNullString) Then
+            buf = buf & ", in clan " & Clan()
+        End If
+        
+        buf = buf & ")"
     End If
-    
-    ' ...
-    buf = buf & ")"
             
     ' ...
     WarCraftIII_ToString = buf
@@ -1006,21 +1033,21 @@ End Function
 
 Private Sub MakeArr(str As String, arr() As Integer)
     
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
     ReDim arr(0)
     
     ' ...
-    For i = 1 To Len(str)
+    For I = 1 To Len(str)
         ' ...
-        If (i > 1) Then
-            ReDim Preserve arr(0 To i - 1)
+        If (I > 1) Then
+            ReDim Preserve arr(0 To I - 1)
         End If
         
         ' ...
-        arr(i - 1) = Asc(Mid(str, i, 1))
-    Next i
+        arr(I - 1) = Asc(Mid(str, I, 1))
+    Next I
     
 End Sub
 

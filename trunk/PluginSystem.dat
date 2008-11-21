@@ -361,7 +361,7 @@ Sub psExecuteEvent(EventName, Parameters)
          '// Call the specified event sub in this plugin
          If IsArray(Parameters) Then
             For j = 0 to UBound(Parameters)
-               paramString = paramString & "ByVal psEcho(Parameters(" & j & "))" & ","
+               paramString = paramString & "(psEcho(Parameters(" & j & ")))" & ","
             Next
             paramString = Left(paramString, Len(paramString) - 1)
          End If

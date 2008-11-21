@@ -213,7 +213,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
     Dim Username        As String
     Dim CleanedUsername As String
     Dim I               As Integer
-    Dim Pos             As Integer
+    Dim pos             As Integer
     
     If (LenB(Inpt) > 0) Then
         If (Kick > 2) Then
@@ -249,10 +249,10 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
                     Exit Function
                 End If
                 
-                Pos = g_Channel.GetUserIndex(Username)
+                pos = g_Channel.GetUserIndex(Username)
                 
-                If (Pos > 0) Then
-                    If (g_Channel.Users(Pos).IsOperator) Then
+                If (pos > 0) Then
+                    If (g_Channel.Users(pos).IsOperator) Then
                         Ban = "Error: You cannot ban a channel operator."
                     
                         Exit Function
@@ -1998,7 +1998,7 @@ End Sub
 ' collapse array on top of the removed user
 Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     Dim I          As Integer
-    Dim C          As Integer
+    Dim c          As Integer
     Dim NumRemoved As Integer
     Dim iterations As Long
     Dim uBnd       As Integer
@@ -2010,9 +2010,9 @@ Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     While (I <= (uBnd - NumRemoved))
         If (StrComp(sUser, gBans(I).Username, vbTextCompare) = 0) Then
             If (I <> UBound(gBans)) Then
-                For C = I To UBound(gBans)
+                For c = I To UBound(gBans)
                     gBans(I) = gBans(I + 1)
-                Next C
+                Next c
             End If
             
             ' UBound(gBans) - 1 when UBound(gBans) = 0
@@ -2448,32 +2448,32 @@ End Sub
 ' Returns a single chunk of a string as if that string were Split() and that chunk
 ' extracted
 ' 1-based
-Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
-    Dim C           As Integer
+Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
+    Dim c           As Integer
     Dim I           As Integer
     Dim TargetSpace As Integer
     
     'one two three
     '   1   2
     
-    C = 0
+    c = 0
     I = 1
-    Pos = Pos
+    pos = pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While ((C < Pos) And (I > 0))
+    While ((c < pos) And (I > 0))
         TargetSpace = I
         
         I = (InStr(I + 1, str, Space(1), vbBinaryCompare))
         
-        C = (C + 1)
+        c = (c + 1)
     Wend
     
-    If (C >= Pos) Then
-        C = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
+    If (c >= pos) Then
+        c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
-        If (C > 0) Then
-            GetStringChunk = Mid$(str, TargetSpace, C - (TargetSpace))
+        If (c > 0) Then
+            GetStringChunk = Mid$(str, TargetSpace, c - (TargetSpace))
         Else
             GetStringChunk = Mid$(str, TargetSpace)
         End If
@@ -2536,7 +2536,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     Const BNET_MSG_LENGTH = 223
     
     Dim lineCount As Long    ' stores line number
-    Dim Pos       As Long    ' stores position of delimiter
+    Dim pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
     Dim Length    As Long    ' stores Length after LinePostfix
     Dim bln       As Boolean ' stores result of delimiter split
@@ -2590,7 +2590,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             If (OversizeDelimiter <> vbNullString) Then
                 ' grab position of delimiter character that is the closest to our
                 ' specified Length
-                Pos = InStrRev(strTmp, OversizeDelimiter, Length, vbTextCompare)
+                pos = InStrRev(strTmp, OversizeDelimiter, Length, vbTextCompare)
             End If
             
             ' if the delimiter we were looking for was found,
@@ -2598,9 +2598,9 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((Pos) And (Pos >= Round(Length / 2))) Then
+            If ((pos) And (pos >= Round(Length / 2))) Then
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, Pos - 1)
+                strTmp = Mid$(strTmp, 1, pos - 1)
                 
                 ' indicate that an additional
                 ' character will require removal
@@ -2995,8 +2995,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         
         LogThis = (BotVars.Logging <= 1)
         
-        If ((BotVars.MaxBacklogSize) And _
-            (rtbChatLength >= BotVars.MaxBacklogSize)) Then
+        If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
             
             With rtb
                 .Visible = False
@@ -3040,11 +3039,15 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         End If
 
         For I = LBound(saElements) To UBound(saElements) Step 2
+            If (I >= UBound(saElements)) Then
+                Exit For
+            End If
+        
             If (InStr(1, saElements(I + 1), Chr(0), vbBinaryCompare) > 0) Then
                 Call KillNull(saElements(I + 1))
             End If
-            
-            If (Len(saElements(I + 1)) > -1) Then
+        
+            If ((StrictIsNumeric(saElements(I))) And (Len(saElements(I + 1)) > 0)) Then
                 L = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
                 
                 While (L > 0)
