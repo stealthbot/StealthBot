@@ -1,5 +1,5 @@
 pyro.no-ip.biz
-logon.berzerkerjbls.com
 pyro.no-ip.biz
+logon.berzerkerjbls.com
 hdx.no-ip.org
 

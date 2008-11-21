@@ -549,7 +549,7 @@ Private CreatedExpRealmChar As Integer
 '    Assassin& = &H7
 
 Private Sub Form_Load()
-    Dim B As Boolean
+    Dim b As Boolean
     
     Me.Icon = frmChat.Icon
     
@@ -562,11 +562,11 @@ Private Sub Form_Load()
     
     lblExpiration.Visible = True
     
-    B = (BotVars.Product = "PX2D")
+    b = (BotVars.Product = "PX2D")
     
-    chkExpansion.Enabled = B
-    optNewCharType(6).Enabled = B
-    optNewCharType(7).Enabled = B
+    chkExpansion.Enabled = b
+    optNewCharType(6).Enabled = b
+    optNewCharType(7).Enabled = b
     
     lvwChars.ListItems.Add , "temp", "Please wait..."
     
@@ -589,10 +589,12 @@ Private Sub Form_Unload(Cancel As Integer)
         Call Send0x0A
     End If
     
+    RealmError = False
+    mTicks = 0
+    
     Set MCPHandler = Nothing
     Set CharIsExpansion = Nothing
     Set CharExpiration = Nothing
-    If RealmError Then RealmError = False
 End Sub
 
 Private Sub lvwChars_Click()
@@ -600,7 +602,7 @@ Private Sub lvwChars_Click()
 End Sub
 
 Private Sub lvwChars_DblClick()
-    On Error Resume Next
+    'On Error Resume Next
 
     With lvwChars
         If Not (.SelectedItem Is Nothing) And CharListReceived Then
@@ -608,11 +610,12 @@ Private Sub lvwChars_DblClick()
                 Not (StrComp(BotVars.Product, "PX2D") = 0) And _
                 CreatedExpRealmChar <> .SelectedItem.Index Then
                 
-                frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] That is an Expansion character. Please log on using the Diablo II: Lord of Destruction expansion."
+                frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] That is an expansion character. Please log on using Diablo II: Lord of Destruction."
                 frmChat.SetFocus
             Else
                 MCPHandler.LogonToCharacter .SelectedItem.Key
                 Unload_SuccessfulLogin = True
+                RealmError = False
             End If
             'Debug.Print "-- " & CharIsExpansion.Item(.SelectedItem.Key)
         End If
@@ -708,7 +711,7 @@ Private Sub MCPHandler_CharCreateResponse(ByVal Status As Byte, ByVal Message As
         frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
         lvwChars.ListItems.Clear
         
-        ClearExpansionCollection
+        CharListReceived = False
         
         MCPHandler.RequestCharacterList
         Call optViewExisting_Click
@@ -741,9 +744,9 @@ Private Sub MCPHandler_CharListEntry(ByVal CharName As String, ByVal Statstring 
             If .ListItems.Item(1).Key = "temp" Then
                 .ListItems.Clear
             End If
-            
-            CharIsExpansion.Add IsExpansion, CharName
         End If
+            
+        CharIsExpansion.Add IsExpansion, CharName
     
         If LenB(CharName) > 0 Then
             
