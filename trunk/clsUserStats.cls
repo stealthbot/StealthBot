@@ -749,6 +749,12 @@ Public Property Get ToString() As String
 
 End Property
 
+Public Property Get IconCode() As Integer
+
+    
+
+End Property
+
 Private Sub Parse()
 
     ' ...

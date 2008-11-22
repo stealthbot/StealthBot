@@ -2968,12 +2968,40 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim f              As Integer
     Dim blUnlock       As Boolean
     Dim LogThis        As Boolean
-    'Dim fontStr        As String
+    Dim Length         As Integer
 
+    ' ...
+    For I = LBound(saElements) To UBound(saElements) Step 2
+        ' ...
+        If (VarType(saElements(I)) = vbError) Then
+            Exit Sub
+        End If
+    
+        ' ...
+        If (I >= UBound(saElements)) Then
+            Exit Sub
+        End If
+
+        ' ...
+        If (StrictIsNumeric(saElements(I)) = False) Then
+            Exit Sub
+        End If
+        
+        ' ...
+        Length = Length + Len(KillNull(saElements(I + 1)))
+    Next I
+    
+    ' ...
+    If (Length = 0) Then
+        Exit Sub
+    End If
+
+    ' ...
     If (BotVars.LockChat = False) Then
+        Dim fontStr As String ' ...
+    
         f = FreeFile
         
-        Dim fontStr As String   'Declared here instead. - FrOzeN
         fontStr = frmChat.rtbChat.Font.Name
         
         If (IsWin2000Plus()) Then
@@ -2996,7 +3024,6 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         LogThis = (BotVars.Logging <= 1)
         
         If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
-            
             With rtb
                 .Visible = False
                 .SelStart = 0
@@ -3039,10 +3066,6 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         End If
 
         For I = LBound(saElements) To UBound(saElements) Step 2
-            If (I >= UBound(saElements)) Then
-                Exit For
-            End If
-        
             If (InStr(1, saElements(I + 1), Chr(0), vbBinaryCompare) > 0) Then
                 Call KillNull(saElements(I + 1))
             End If
