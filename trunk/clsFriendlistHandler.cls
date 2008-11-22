@@ -55,6 +55,8 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
     
     Select Case PacketID
         Case SID_FRIENDLIST
+            Set g_Friends = New Collection
+        
             '0x65 packet format
             '(BYTE)       Number of Entries
             n = Asc(Mid$(Data, 1, 1))
