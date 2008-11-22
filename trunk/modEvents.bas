@@ -254,8 +254,11 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     End With
     
     ' ...
-    If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
-        RequestClanMOTD 1
+    If (Len(g_Clan.Name) > 0) Then
+        ' ...
+        If (StrComp(g_Channel.Name, "Clan " & g_Clan.Name, vbTextCompare) = 0) Then
+            RequestClanMOTD 1
+        End If
     End If
     
     ' we want to reset our filter
