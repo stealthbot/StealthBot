@@ -17,6 +17,51 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+' game icons
+Private Const ICSTAR = 1
+Private Const ICSEXP = 2
+Private Const ICD2DV = 3
+Private Const ICD2XP = 4
+Private Const ICW2BN = 5
+Private Const ICWAR3 = 6
+Private Const ICGAVEL = 7
+Private Const ICUNKNOWN = 8
+Private Const ICBLIZZ = 9
+Private Const ICSYSOP = 103
+Private Const ICCHAT = 10
+Private Const ICDIABLO = 11
+Private Const ICDIABLOSW = 12
+Private Const ICSQUELCH = 13
+Private Const ICJSTR = 14
+Private Const ICWAR3X = 15
+Private Const LAG_PLUG = 16
+Private Const LAG_1 = 17
+Private Const LAG_2 = 18
+Private Const LAG_3 = 19
+Private Const LAG_4 = 20
+Private Const LAG_5 = 21
+Private Const LAG_6 = 22
+Private Const MONITOR_ONLINE = 23
+Private Const MONITOR_OFFLINE = 24
+Private Const ICSCSW = 25
+
+' world cyber games icons
+Private Const IC_WCG_PLAYER = 89
+Private Const IC_WCG_REF = 90
+Private Const IC_WCRF = 104
+Private Const IC_WCPL = 105
+Private Const IC_WCGO = 106
+Private Const IC_WCSI = 107
+Private Const IC_WCBR = 108
+Private Const IC_WCPG = 109
+
+' pgtour icons
+Private Const IC_PGT_A = 92
+Private Const IC_PGT_B = 95
+Private Const IC_PGT_C = 98
+Private Const IC_PGT_D = 101
+
+' variables
 Private m_stat_string         As String
 Private m_game                As String
 Private m_icon                As String
@@ -40,6 +85,7 @@ Private m_dots                As Long
 Private m_expansion           As Boolean
 Private m_hardcore            As Boolean
 Private m_realm               As String
+Private m_wcg                 As String
 
 Public Property Let game(str As String)
 
@@ -52,6 +98,27 @@ Public Property Get game() As String
 
     ' ...
     game = m_game
+
+End Property
+
+Public Property Let WCGCode(str As String)
+
+    ' ...
+    m_wcg = str
+
+End Property
+
+Public Property Get WCGCode() As String
+
+    ' ...
+    WCGCode = m_wcg
+
+End Property
+
+Public Property Get IsWCG() As Boolean
+
+    ' ...
+    IsWCG = (Len(WCGCode) > 0)
 
 End Property
 
@@ -215,7 +282,7 @@ Public Property Get IconName() As String
                     End Select
                 End If
 
-            Case "T", "D" ' Tournament
+            Case "D" ' Tournament
                 ' ...
                 If (game = "W3XP") Then
                     ' ...
@@ -456,7 +523,7 @@ End Property
 Public Property Get IsHardcoreCharacter() As Boolean
 
     ' ...
-    IsHardcoreCharacter = (((CharacterFlags And &H4) = &H4) = &H1)
+    IsHardcoreCharacter = ((CharacterFlags And &H4) = &H4)
 
 End Property
 
@@ -464,8 +531,8 @@ Public Property Get IsFemaleCharacter() As Boolean
 
     ' ...
     IsFemaleCharacter = _
-        (((m_character_class_id = 1) Or (m_character_class_id = 2) Or _
-            (m_character_class_id = 7)) = &H1)
+        ((m_character_class_id = 1) Or (m_character_class_id = 2) Or _
+            (m_character_class_id = 7))
 
 End Property
 
@@ -475,7 +542,7 @@ Public Property Get IsExpansionCharacter() As Boolean
     If (game = "D2XP") Then
         IsExpansionCharacter = True
     Else
-        IsExpansionCharacter = (((CharacterFlags And &H20) = &H20) = &H1)
+        IsExpansionCharacter = ((CharacterFlags And &H20) = &H20)
     End If
 
 End Property
@@ -484,7 +551,7 @@ Public Property Get IsCharacterDead() As Boolean
 
     ' ...
     IsCharacterDead = _
-        (((IsHardcoreCharacter) And ((CharacterFlags And &H8) = &H8)) = &H1)
+        ((IsHardcoreCharacter) And ((CharacterFlags And &H8) = &H8))
 
 End Property
 
@@ -582,27 +649,27 @@ Public Property Get CharacterTitle() As String
     ' softcore
     Expansion(0, 0, 0) = "Slayer"
     Expansion(0, 1, 0) = "Champion"
-    Expansion(0, 2, 0) = "Champion"
-    Expansion(0, 3, 0) = "Patriarch"
-    Expansion(0, 3, 1) = "Matriarch"
+    Expansion(0, 2, 0) = "Patriarch"
+    Expansion(0, 2, 1) = "Matriarch"
     
     ' hardcore
     Expansion(1, 0, 0) = "Destroyer"
     Expansion(1, 1, 0) = "Conquerer"
-    Expansion(1, 2, 0) = "Conquerer"
-    Expansion(1, 3, 0) = "Guardian"
+    Expansion(1, 2, 0) = "Guardian"
     
     ' ...
     If ((game = "D2DV") Or (game = "D2XP")) Then
         ' ...
-        If (CurrentDifficultyID >= 0) Then
+        If (CurrentDifficultyID >= 2) Then
             ' ...
             If (game = "D2DV") Then
                 ' ...
-                CharacterTitle = Classic(IsHardcoreCharacter, CurrentDifficultyID - 1, IsFemaleCharacter)
+                CharacterTitle = _
+                    Classic(IIf(IsHardcoreCharacter, 1, 0), CurrentDifficultyID - 2, IIf(IsFemaleCharacter, 1, 0))
             Else
                 ' ...
-                CharacterTitle = Expansion(IsHardcoreCharacter, CurrentDifficultyID - 1, IsFemaleCharacter)
+                CharacterTitle = _
+                    Expansion(IIf(IsHardcoreCharacter, 1, 0), CurrentDifficultyID - 2, IIf(IsFemaleCharacter, 1, 0))
             End If
         End If
     End If
@@ -751,7 +818,74 @@ End Property
 
 Public Property Get IconCode() As Integer
 
-    
+    ' ...
+    If (BotVars.ShowStatsIcons) Then
+        ' ...
+        If (StrReverse$(Icon) <> game) Then
+            ' ...
+            Select Case (StrReverse$(Icon))
+                Case "WCRF": IconCode = IC_WCRF
+                Case "WCPL": IconCode = IC_WCPL
+                Case "WCGO": IconCode = IC_WCGO
+                Case "WCSI": IconCode = IC_WCSI
+                Case "WCBR": IconCode = IC_WCBR
+                Case "WCPG": IconCode = IC_WCPG
+            End Select
+        
+            ' ...
+            If (IconCode) Then
+                Exit Property
+            End If
+        End If
+    End If
+
+    ' ...
+    Select Case (game)
+        Case "STAR": IconCode = ICSTAR
+        Case "SEXP": IconCode = ICSEXP
+        Case "D2DV": IconCode = ICD2DV
+        Case "D2XP": IconCode = ICD2XP
+        Case "W2BN": IconCode = ICW2BN
+        
+        Case "WAR3"
+            
+            ' ...
+            If (BotVars.ShowStatsIcons) Then
+                ' ...
+                IconCode = _
+                    GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), "")
+            
+                ' ...
+                If (BotVars.ShowStatsIcons) Then
+                    IconCode = (ICON_START_WAR3 + IconCode)
+                End If
+            Else
+                IconCode = ICWAR3
+            End If
+            
+        Case "W3XP"
+            
+            ' ...
+            If (BotVars.ShowStatsIcons) Then
+                ' ...
+                IconCode = _
+                    GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), "")
+            
+                ' ...
+                IconCode = (ICON_START_W3XP + IconCode)
+            Else
+                IconCode = ICWAR3X
+            End If
+            
+        Case "CHAT": IconCode = ICCHAT
+        Case "DRTL": IconCode = ICDIABLO
+        Case "DSHR": IconCode = ICDIABLOSW
+        Case "JSTR": IconCode = ICJSTR
+        Case "SSHR": IconCode = ICSCSW
+        
+        Case Else
+            IconCode = ICUNKNOWN
+    End Select
 
 End Property
 

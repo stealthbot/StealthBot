@@ -606,374 +606,378 @@
       </argument>
 
       <optional>
-        <argument name="rank" type="number">
-          <documentation>
-            <description>
-              ...
-            </description>
-          </documentation>
-        </argument>
+        <number>
+          <argument name="rank">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
+          </argument>
+        </number>
 
-        <argument name="attributes" type="string">
-          <documentation>
-            <description>
-              ...
-            </description>
-          </documentation>
+        <string>
+          <argument name="attributes">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
 
-          <restrictions>
-            <restriction name="FLAG_A_HIGH">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+            <restrictions>
+              <restriction name="FLAG_A_HIGH">
+                <documentation>
+                  <description>
+                    ...
+                  </description>
+                </documentation>
 
-              <match message="[A]+" />
+                <match message="[A]+" />
 
-              <access>
-                <rank>
-                  100
-                </rank>
+                <access>
+                  <rank>
+                    100
+                  </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-            </restriction>
+                  <flags>
+                    <flag>
+                      A
+                    </flag>
+                  </flags>
+                </access>
+              </restriction>
 
-            <restriction name="FLAG_A_LOW">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+              <restriction name="FLAG_A_LOW">
+                <documentation>
+                  <description>
+                    ...
+                  </description>
+                </documentation>
 
-              <match message="[a]+" />
+                <match message="[a]+" />
 
-              <access>
-                <rank>
-                  100
-                </rank>
+                <access>
+                  <rank>
+                    100
+                  </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-            </restriction>
+                  <flags>
+                    <flag>
+                      A
+                    </flag>
+                  </flags>
+                </access>
+              </restriction>
 
-            <restriction name="FLAG_B">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+              <restriction name="FLAG_B">
+                <documentation>
+                  <description>
+                    ...
+                  </description>
+                </documentation>
 
-              <match message="[B]+" />
+                <match message="[B]+" />
 
-              <access>
-                <rank>
-                  100
-                </rank>
+                <access>
+                  <rank>
+                    100
+                  </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-            </restriction>
+                  <flags>
+                    <flag>
+                      A
+                    </flag>
+                  </flags>
+                </access>
+              </restriction>
 
-            <restriction name="FLAG_C_HIGH">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+              <restriction name="FLAG_C_HIGH">
+                <documentation>
+                  <description>
+                    ...
+                  </description>
+                </documentation>
 
-              <match message="[c]+" />
+                <match message="[c]+" />
 
-              <access>
-                <rank>
-                  100
-                </rank>
+                <access>
+                  <rank>
+                    100
+                  </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-            </restriction>
+                  <flags>
+                    <flag>
+                      A
+                    </flag>
+                  </flags>
+                </access>
+              </restriction>
 
-            <restriction name="FLAG_C_LOW">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+              <restriction name="FLAG_C_LOW">
+                <documentation>
+                  <description>
+                    ...
+                  </description>
+                </documentation>
 
-              <match message="[c]+" />
+                <match message="[c]+" />
 
-              <access>
-                <rank>
-                  100
-                </rank>
+                <access>
+                  <rank>
+                    100
+                  </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-            </restriction>
+                  <flags>
+                    <flag>
+                      A
+                    </flag>
+                  </flags>
+                </access>
+              </restriction>
 
-            <restriction name="FLAG_D">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+              <restriction name="FLAG_D">
+                <documentation>
+                  <description>
+                    ...
+                  </description>
+                </documentation>
 
-              <match message="[D]+" />
+                <match message="[D]+" />
 
-              <access>
-                <rank>
-                  100
-                </rank>
+                <access>
+                  <rank>
+                    100
+                  </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-            </restriction>
+                  <flags>
+                    <flag>
+                      A
+                    </flag>
+                  </flags>
+                </access>
+              </restriction>
 
-            <restriction name="FLAG_I">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+              <restriction name="FLAG_I">
+                <documentation>
+                  <description>
+                    ...
+                  </description>
+                </documentation>
 
-              <match message="[I]+" />
+                <match message="[I]+" />
 
-              <access>
-                <rank>
-                  100
-                </rank>
+                <access>
+                  <rank>
+                    100
+                  </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-            </restriction>
+                  <flags>
+                    <flag>
+                      A
+                    </flag>
+                  </flags>
+                </access>
+              </restriction>
 
-            <restriction name="FLAG_J">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+              <restriction name="FLAG_J">
+                <documentation>
+                  <description>
+                    ...
+                  </description>
+                </documentation>
 
-              <match message="[J]+" />
+                <match message="[J]+" />
 
-              <access>
-                <rank>
-                  100
-                </rank>
+                <access>
+                  <rank>
+                    100
+                  </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-            </restriction>
+                  <flags>
+                    <flag>
+                      A
+                    </flag>
+                  </flags>
+                </access>
+              </restriction>
 
-            <restriction name="FLAG_O_HIGH">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+              <restriction name="FLAG_O_HIGH">
+                <documentation>
+                  <description>
+                    ...
+                  </description>
+                </documentation>
 
-              <match message="[O]+" />
+                <match message="[O]+" />
 
-              <access>
-                <rank>
-                  100
-                </rank>
+                <access>
+                  <rank>
+                    100
+                  </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-            </restriction>
+                  <flags>
+                    <flag>
+                      A
+                    </flag>
+                  </flags>
+                </access>
+              </restriction>
 
-            <restriction name="FLAG_O_LOW">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+              <restriction name="FLAG_O_LOW">
+                <documentation>
+                  <description>
+                    ...
+                  </description>
+                </documentation>
 
-              <match message="[o]+" />
+                <match message="[o]+" />
 
-              <access>
-                <rank>
-                  100
-                </rank>
+                <access>
+                  <rank>
+                    100
+                  </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-            </restriction>
+                  <flags>
+                    <flag>
+                      A
+                    </flag>
+                  </flags>
+                </access>
+              </restriction>
 
-            <restriction name="FLAG_P">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+              <restriction name="FLAG_P">
+                <documentation>
+                  <description>
+                    ...
+                  </description>
+                </documentation>
 
-              <match message="[P]+" />
+                <match message="[P]+" />
 
-              <access>
-                <rank>
-                  100
-                </rank>
+                <access>
+                  <rank>
+                    100
+                  </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-            </restriction>
+                  <flags>
+                    <flag>
+                      A
+                    </flag>
+                  </flags>
+                </access>
+              </restriction>
 
-            <restriction name="FLAG_S_HIGH">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+              <restriction name="FLAG_S_HIGH">
+                <documentation>
+                  <description>
+                    ...
+                  </description>
+                </documentation>
 
-              <match message="[S]+" />
+                <match message="[S]+" />
 
-              <access>
-                <rank>
-                  60
-                </rank>
+                <access>
+                  <rank>
+                    60
+                  </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
+                  <flags>
+                    <flag>
+                      A
+                    </flag>
 
-                  <flag>
-                    a
-                  </flag>
-                </flags>
-              </access>
-            </restriction>
+                    <flag>
+                      a
+                    </flag>
+                  </flags>
+                </access>
+              </restriction>
 
-            <restriction name="FLAG_T">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+              <restriction name="FLAG_T">
+                <documentation>
+                  <description>
+                    ...
+                  </description>
+                </documentation>
 
-              <match message="[T]+" />
+                <match message="[T]+" />
 
-              <access>
-                <rank>
-                  100
-                </rank>
+                <access>
+                  <rank>
+                    100
+                  </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-            </restriction>
-          </restrictions>
-        </argument>
+                  <flags>
+                    <flag>
+                      A
+                    </flag>
+                  </flags>
+                </access>
+              </restriction>
+            </restrictions>
+          </argument>
+        </string>
 
         <switches>
-           <switch l_name="type" s_name="t">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+          <switch l_name="type" s_name="t">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
 
-              <access>
-                <rank>
-                  100
-                </rank>
+            <access>
+              <rank>
+                100
+              </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-           </switch>
+              <flags>
+                <flag>
+                  A
+                </flag>
+              </flags>
+            </access>
+          </switch>
 
-           <switch l_name="group" s_name="g">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+          <switch l_name="group" s_name="g">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
 
-              <access>
-                <rank>
-                  100
-                </rank>
+            <access>
+              <rank>
+                100
+              </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-           </switch>
+              <flags>
+                <flag>
+                  A
+                </flag>
+              </flags>
+            </access>
+          </switch>
 
-           <switch l_name="banmsg" s_name="b">
-              <documentation>
-                <description>
-                  ...
-                </description>
-              </documentation>
+          <switch l_name="ban_message" s_name="b">
+            <documentation>
+              <description>
+                ...
+              </description>
+            </documentation>
 
-              <access>
-                <rank>
-                  100
-                </rank>
+            <access>
+              <rank>
+                100
+              </rank>
 
-                <flags>
-                  <flag>
-                    A
-                  </flag>
-                </flags>
-              </access>
-           </switch>
+              <flags>
+                <flag>
+                  A
+                </flag>
+              </flags>
+            </access>
+          </switch>
         </switches>
       </optional>
     </arguments>

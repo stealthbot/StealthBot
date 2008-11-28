@@ -1193,7 +1193,7 @@ Public Function ZeroOffsetEx(ByVal lInpt As Long, ByVal lDigits As Long) As Stri
     ZeroOffsetEx = Right$(String(lDigits, "0") & lInpt, lDigits)
 End Function
 
-Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long) As Long
+Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long, IconCode As Integer) As Long
     Dim I As Long
     
     If ((Flags And USER_BLIZZREP) = USER_BLIZZREP) Then 'Flags = 1: blizzard rep
@@ -1204,59 +1204,53 @@ Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long) As L
         I = ICGAVEL
     ElseIf (Flags And USER_SQUELCHED) = USER_SQUELCHED Then 'squelched
         I = ICSQUELCH
-    ElseIf ((BotVars.ShowStatsIcons) And (g_ThisIconCode <> -1)) Then
-        ' ...
-        If (sProduct = "W3XP") Then
-            I = g_ThisIconCode + ICON_START_W3XP + _
-                    IIf(g_ThisIconCode + ICON_START_W3XP = ICSCSW, 1, 0)
-        ElseIf (sProduct = "WAR3") Then
-            I = g_ThisIconCode + ICON_START_WAR3
-        End If
     Else
-        Select Case (UCase$(sProduct))
-            Case Is = "STAR": I = ICSTAR
-            Case Is = "SEXP": I = ICSEXP
-            Case Is = "D2DV": I = ICD2DV
-            Case Is = "D2XP": I = ICD2XP
-            Case Is = "W2BN": I = ICW2BN
-            Case Is = "CHAT": I = ICCHAT
-            Case Is = "DRTL": I = ICDIABLO
-            Case Is = "DSHR": I = ICDIABLOSW
-            Case Is = "JSTR": I = ICJSTR
-            Case Is = "SSHR": I = ICSCSW
-            Case Is = "WAR3": I = ICWAR3
-            Case Is = "W3XP": I = ICWAR3X
-                
-            '*** Special icons for WCG added 6/24/07 ***
-            Case Is = "WCRF": I = IC_WCRF
-            Case Is = "WCPL": I = IC_WCPL
-            Case Is = "WCGO": I = IC_WCGO
-            Case Is = "WCSI": I = IC_WCSI
-            Case Is = "WCBR": I = IC_WCBR
-            Case Is = "WCPG": I = IC_WCPG
-                
-            '*** Special icons for PGTour ***
-            Case Is = "__A+": I = IC_PGT_A + 1
-            Case Is = "___A": I = IC_PGT_A
-            Case Is = "__A-": I = IC_PGT_A - 1
-            Case Is = "__B+": I = IC_PGT_B + 1
-            Case Is = "___B": I = IC_PGT_B
-            Case Is = "__B-": I = IC_PGT_B - 1
-            Case Is = "__C+": I = IC_PGT_C + 1
-            Case Is = "___C": I = IC_PGT_C
-            Case Is = "__C-": I = IC_PGT_C - 1
-            Case Is = "__D+": I = IC_PGT_D + 1
-            Case Is = "___D": I = IC_PGT_D
-            Case Is = "__D-": I = IC_PGT_D - 1
-                
-            Case Else: I = ICUNKNOWN
-        End Select
+        I = IconCode
+    'Else
+    '    Select Case (UCase$(sProduct))
+    '        Case Is = "STAR": I = ICSTAR
+    '        Case Is = "SEXP": I = ICSEXP
+    '        Case Is = "D2DV": I = ICD2DV
+    '        Case Is = "D2XP": I = ICD2XP
+    '        Case Is = "W2BN": I = ICW2BN
+    '        Case Is = "CHAT": I = ICCHAT
+    '        Case Is = "DRTL": I = ICDIABLO
+    '        Case Is = "DSHR": I = ICDIABLOSW
+    '        Case Is = "JSTR": I = ICJSTR
+    '        Case Is = "SSHR": I = ICSCSW
+    '        Case Is = "WAR3": I = ICWAR3
+    '        Case Is = "W3XP": I = ICWAR3X
+    '
+    '        '*** Special icons for WCG added 6/24/07 ***
+    '        Case Is = "WCRF": I = IC_WCRF
+    '        Case Is = "WCPL": I = IC_WCPL
+    '        Case Is = "WCGO": I = IC_WCGO
+    '        Case Is = "WCSI": I = IC_WCSI
+    '        Case Is = "WCBR": I = IC_WCBR
+    '        Case Is = "WCPG": I = IC_WCPG
+    '
+    '        '*** Special icons for PGTour ***
+    '        Case Is = "__A+": I = IC_PGT_A + 1
+    '        Case Is = "___A": I = IC_PGT_A
+    '        Case Is = "__A-": I = IC_PGT_A - 1
+    '        Case Is = "__B+": I = IC_PGT_B + 1
+    '        Case Is = "___B": I = IC_PGT_B
+    '        Case Is = "__B-": I = IC_PGT_B - 1
+    '        Case Is = "__C+": I = IC_PGT_C + 1
+    '        Case Is = "___C": I = IC_PGT_C
+    '        Case Is = "__C-": I = IC_PGT_C - 1
+    '        Case Is = "__D+": I = IC_PGT_D + 1
+    '        Case Is = "___D": I = IC_PGT_D
+    '        Case Is = "__D-": I = IC_PGT_D - 1
+    '
+    '        Case Else: I = ICUNKNOWN
+    '    End Select
     End If
     
     GetSmallIcon = I
 End Function
 
-Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flags As Long, ByVal Ping As Long, Optional Clan As String, Optional ForcePosition As Integer)
+Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flags As Long, ByVal Ping As Long, IconCode As Integer, Optional Clan As String, Optional ForcePosition As Integer)
     Dim I          As Integer
     Dim LagIcon    As Integer
     Dim isPriority As Integer
@@ -1299,7 +1293,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
     
     isPriority = (frmChat.lvChannel.ListItems.Count + 1)
     
-    I = GetSmallIcon(Product, Flags)
+    I = GetSmallIcon(Product, Flags, IconCode)
     
     'Special Cases
     'If i = ICSQUELCH Then
@@ -2959,6 +2953,8 @@ End Function
 Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Variant)
     On Error GoTo ERROR_HANDLER
     
+    Static rtbChat_LoopCount As Integer ' ...
+    
     Dim s              As String
     Dim L              As Long
     Dim lngVerticalPos As Long
@@ -2969,6 +2965,10 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim blUnlock       As Boolean
     Dim LogThis        As Boolean
     Dim Length         As Integer
+
+    ' *****************************************
+    '              SANITY CHECKS
+    ' *****************************************
 
     ' ...
     For I = LBound(saElements) To UBound(saElements) Step 2
@@ -2997,12 +2997,12 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     End If
 
     ' ...
-    If (BotVars.LockChat = False) Then
+    If ((BotVars.LockChat = False) Or (rtb <> frmChat.rtbChat)) Then
         Dim fontStr As String ' ...
     
         f = FreeFile
         
-        fontStr = frmChat.rtbChat.Font.Name
+        fontStr = rtb.Font.Name
         
         If (IsWin2000Plus()) Then
             Call GetScrollRange(rtb.hWnd, SB_VERT, 0, intRange)
@@ -3021,7 +3021,48 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         End If
         
-        LogThis = (BotVars.Logging <= 1)
+        ' ...
+        If (rtb = frmChat.rtbChat) Then
+            ' ...
+            LogThis = (BotVars.Logging <= 1)
+            
+            ' ...
+            If (LogThis) Then
+                Dim filename  As String  ' ...
+            
+                ' ...
+                Do
+                    ' ...
+                    filename = _
+                        GetProfilePath() & "\Logs\" & Format(Date, "YYYY-MM-DD") & _
+                            IIf(rtbChat_LoopCount, "_" & rtbChat_LoopCount + 1, "") & ".txt"
+                
+                    ' ...
+                    If (Dir$(filename) = vbNullString) Then
+                        Open filename For Output As #f
+                    Else
+                        Open filename For Append As #f
+                    End If
+                    
+                    ' ...
+                    If ((BotVars.MaxLogFileSize) And (LOF(f) >= BotVars.MaxLogFileSize)) Then
+                        ' ...
+                        rtbChat_LoopCount = (rtbChat_LoopCount + 1)
+                    
+                        ' ...
+                        LogThis = False
+                        
+                        ' ...
+                        Close #f
+                    Else
+                        LogThis = True
+                    End If
+                Loop While (LogThis = False)
+            End If
+            
+        ElseIf (rtb = frmChat.rtbWhispers) Then
+
+        End If
         
         If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
             With rtb
@@ -3052,17 +3093,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         End With
         
         If (LogThis) Then
-            Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #f
-            
-            If ((BotVars.MaxLogFileSize) And _
-                (LOF(f) >= BotVars.MaxLogFileSize)) Then
-                
-                LogThis = False
-                
-                Close #f
-            Else
-                Print #f, s;
-            End If
+            Print #f, s;
         End If
 
         For I = LBound(saElements) To UBound(saElements) Step 2
@@ -3098,27 +3129,8 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                     
                     .SelStart = Len(.text)
                 End With
-                
-                'With TextBox1
-                '    .SelStart = Len(.text)
-                '
-                '    ' store position of selection
-                '    l = .SelStart
-                '
-                '    .SelLength = 0
-                '    '.SelColor = saElements(i)
-                '    .SelText = saElements(i + 1) & _
-                '        Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
-                '
-                '    rtbChatLength = (rtbChatLength + _
-                '                     Len(s) + _
-                '                     Len(saElements(i + 1)) + _
-                '                     Len(Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))))
-                '
-                '    .SelStart = Len(.text)
-                'End With
-                
-                ' Fixed 11/21/06 to properly log timestamps
+
+                ' ...
                 If (LogThis) Then
                     Print #f, saElements(I + 1) & _
                                     Left$(vbCrLf, -2 * CLng((I + 1) = UBound(saElements)));
@@ -3139,24 +3151,6 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             Close #f
         End If
     End If
-    
-    'Dim hm As String
-    
-    
-    'Dim blah As Object
-    
-    'set blah = CreateObject(
-    
-    'hm = &HC0C9
-    
-    'With rtbChat
-    '    .SelStart = Len(.text)
-    '    .SelFontName = "Arial Unicode MS"
-    'End With
-
-    'SendMessage frmChat.rtbChat.hWnd, WM_SETTEXT, 0, ByVal StrPtr(hm)
-    
-    'rtbChat.Refresh
     
     Exit Sub
     

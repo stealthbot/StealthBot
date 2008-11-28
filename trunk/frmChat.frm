@@ -1763,6 +1763,16 @@ Private Sub Form_Load()
     'Now loads scripts when the bot opens, instead of after connecting. - FrOzeN
     SControl.Run "Event_FirstRun"
     SControl.Run "Event_Load"
+    
+    'Dim I As Integer
+    'Dim tmp As String
+    'Dim str As String
+    
+    'str = "flood"
+    
+    'For I = 1 To Len(str)
+    '   tmp = tmp & Hex(Asc(Mid(str, I, 1)))
+    'Next I
 
 '    BotVars.UseProxy = True
 '    BotVars.ProxyIP = "213.210.194.139"
@@ -2053,6 +2063,11 @@ Sub Event_BNetDisconnected()
     Passed0x0F = 0
     
     Call UpdateTrayTooltip
+    
+    'If Not UserCancelledConnect Then
+    '    ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
+    '        AddressOf Reconnect_TimerProc)
+    'End If
 End Sub
 
 Sub Event_BNetError(ErrorNumber As Integer, description As String)
@@ -2081,6 +2096,8 @@ Sub Event_BNetError(ErrorNumber As Integer, description As String)
     
     g_Connected = False
     
+    UserCancelledConnect = False
+    
     DoDisconnect (1)
     SetTitle "Disconnected"
     
@@ -2097,10 +2114,10 @@ Sub Event_BNetError(ErrorNumber As Integer, description As String)
     If DisplayError(ErrorNumber, IIf(BotVars.UseProxy And BotVars.ProxyStatus <> psOnline, 2, 1), BNET) = True Then
         AddChat RTBColors.ErrorMessageText, IIf(BotVars.UseProxy And BotVars.ProxyStatus <> psOnline, "[PROXY] ", "[BNET] ") & "Attempting to reconnect..."
         
-        UserCancelledConnect = False 'this should fix the beta reconnect problems
-        
-        ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
-            AddressOf Reconnect_TimerProc)
+        'UserCancelledConnect = False 'this should fix the beta reconnect problems
+
+        'ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
+        '    AddressOf Reconnect_TimerProc)
         
         'ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, _
         '    BotVars.ReconnectDelay, AddressOf ExtendedReconnect_TimerProc)
@@ -2153,13 +2170,21 @@ Sub Event_BNLSError(ErrorNumber As Integer, description As String)
                 Call DoDisconnect(1, True)
                 Pause 1
                 
-                If Not UserCancelledConnect Then
+                'If Not UserCancelledConnect Then
                     'Call DoConnect - The bot shouldn't try connecting again with the same Values(), it's more than likely to just fail again
-                End If
+                'End If
             Else
                 Call DoDisconnect
                 SetTitle "Disconnected"
             End If
+            
+            'If Not UserCancelledConnect Then
+            '    AddChat vbRed, BotVars.ReconnectDelay
+            '
+            '
+            '    ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
+            '        AddressOf Reconnect_TimerProc)
+            'End If
         Else
             'Ask the user if they would like to enable the BNLS Automatic Server finder
             Dim msgResult As VbMsgBoxResult
@@ -2848,7 +2873,7 @@ Sub Form_Unload(Cancel As Integer)
 
     Shell_NotifyIcon NIM_DELETE, nid
     
-    'On Error Resume Next
+    On Error Resume Next
     
     SControl.Run "Event_Close"
     
@@ -3300,11 +3325,11 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
                 lItemIndex = FriendListHandler.UsernameToFLIndex(lvFriendList.ListItems(m_lCurItemIndex).text)
             
                 With g_Friends.Item(lItemIndex)
-'                    Public Const FRL_OFFLINE& = &H0
-'                    Public Const FRL_NOTINCHAT& = &H1
-'                    Public Const FRL_INCHAT& = &H2
-'                    Public Const FRL_PUBLICGAME& = &H3
-'                    Public Const FRL_PRIVATEGAME& = &H5
+'                    Private Const FRL_OFFLINE& = &H0
+'                    Private Const FRL_NOTINCHAT& = &H1
+'                    Private Const FRL_INCHAT& = &H2
+'                    Private Const FRL_PUBLICGAME& = &H3
+'                    Private Const FRL_PRIVATEGAME& = &H5
                     If .IsOnline Then
                         sTemp = sTemp & "Using " & ProductCodeToFullName(.game) & " "
                     End If
@@ -3322,10 +3347,10 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
                             sTemp = sTemp & "in a private game."
                     End Select
                     
-'                    Public Const FRS_NONE& = &H0
-'                    Public Const FRS_MUTUAL& = &H1
-'                    Public Const FRS_DND& = &H2
-'                    Public Const FRS_AWAY& = &H4
+'                    Private Const FRS_NONE& = &H0
+'                    Private Const FRS_MUTUAL& = &H1
+'                    Private Const FRS_DND& = &H2
+'                    Private Const FRS_AWAY& = &H4
 
                     If (.Status And FRS_MUTUAL) = FRS_MUTUAL Then
                         sTemp = sTemp & vbCrLf & "Mutual friend"
@@ -3408,7 +3433,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     sTemp = sTemp & "Ping at login: " & .Ping & "ms" & vbCrLf
                     sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
-                    sTemp = sTemp & .Stats.ToString
+                    sTemp = sTemp & .stats.ToString
                 
                     ListToolTip.TipText = sTemp
                     
@@ -3455,7 +3480,7 @@ Private Sub mnuPublicChannels_Click(Index As Integer)
     'FullJoin mnuChannels(Index).Caption
     
     ' ...
-    AddQ "/join " & mnuPublicChannels(Index).Caption
+    AddQ "/join " & mnuPublicChannels(Index).Caption, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuCustomChannels_Click(Index As Integer)
@@ -3467,7 +3492,7 @@ Private Sub mnuCustomChannels_Click(Index As Integer)
     'FullJoin mnuChannels(Index).Caption
     
     ' ...
-    AddQ "/join " & mnuCustomChannels(Index).Caption
+    AddQ "/join " & mnuCustomChannels(Index).Caption, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 'Private Sub mnuCCEditor_Click()
@@ -3563,7 +3588,7 @@ Private Sub mnuFLpopDemote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
             If (.Index < lvFriendList.ListItems.Count) Then
-              AddQ "/f d " & .text
+              AddQ "/f d " & .text, PRIORITY.CONSOLE_MESSAGE
               'MoveFriend .index, .index + 1
             End If
         End With
@@ -3575,7 +3600,7 @@ Private Sub mnuFLpopPromote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
             If (.Index > 1) Then
-              AddQ "/f p " & .text
+              AddQ "/f p " & .text, PRIORITY.CONSOLE_MESSAGE
               'MoveFriend .index, .index - 1
             End If
         End With
@@ -3599,13 +3624,15 @@ End Sub
 
 Private Sub mnuFLPopRemove_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
-        AddQ "/f r " & lvFriendList.SelectedItem.text
+        AddQ "/f r " & lvFriendList.SelectedItem.text, PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
 Private Sub mnuFLPopWhisper_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
-        AddQ "/w " & IIf(Dii, "*", "") & lvFriendList.SelectedItem.text & Space(1) & cboSend.text
+        AddQ "/w " & IIf(Dii, "*", "") & _
+            lvFriendList.SelectedItem.text & Space(1) & cboSend.text, PRIORITY.CONSOLE_MESSAGE
+            
         cboSend.text = ""
     End If
 End Sub
@@ -3746,13 +3773,13 @@ Private Sub mnuPopAddToFList_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If Not (lvChannel.SelectedItem Is Nothing) Then
-        AddQ "/f a " & GetSelectedUser
+        AddQ "/f a " & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
 Private Sub mnuPopClanWhois_Click()
     If Not (lvClanList.SelectedItem Is Nothing) Then
-        AddQ "/whois " & lvClanList.SelectedItem.text
+        AddQ "/whois " & lvClanList.SelectedItem.text, PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -3760,7 +3787,7 @@ Private Sub mnuPopDes_Click()
     On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
 
-    AddQ "/designate " & IIf(Dii, "*", "") & GetSelectedUser
+    AddQ "/designate " & IIf(Dii, "*", "") & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopFLProfile_Click()
@@ -3774,7 +3801,7 @@ End Sub
 
 Private Sub mnuPopFLWhois_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
-        AddQ "/whois " & lvFriendList.SelectedItem.text
+        AddQ "/whois " & lvFriendList.SelectedItem.text, PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -3812,7 +3839,7 @@ Private Sub mnuPopSquelch_Click()
     On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/squelch " & GetSelectedUser
+    AddQ "/squelch " & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 
@@ -3820,7 +3847,7 @@ Private Sub mnuPopUnsquelch_Click()
     'On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/unsquelch " & GetSelectedUser
+    AddQ "/unsquelch " & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopWhisper_Click()
@@ -3828,7 +3855,7 @@ Private Sub mnuPopWhisper_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If cboSend.text <> vbNullString Then
-        AddQ "/w " & GetSelectedUser & Space(1) & cboSend.text
+        AddQ "/w " & GetSelectedUser & Space(1) & cboSend.text, PRIORITY.CONSOLE_MESSAGE
         
         cboSend.AddItem cboSend.text, 0
         cboSend.text = vbNullString
@@ -3848,7 +3875,7 @@ Private Sub mnuPopWhois_Click()
     On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/whois " & GetSelectedUser
+    AddQ "/whois " & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopInvite_Click()
@@ -3893,7 +3920,7 @@ End Sub
 
 Private Sub mnuQC_Click(Index As Integer)
     If Len(QC(Index)) > 0 Then
-        AddQ "/join " & QC(Index)
+        AddQ "/join " & QC(Index), PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -4120,31 +4147,31 @@ End Sub
 Private Sub mnuStatsBW_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & GetSelectedUser & " SEXP"
+    AddQ "/stats " & GetSelectedUser & " SEXP", PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuStatsFT_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & GetSelectedUser & " W3XP"
+    AddQ "/stats " & GetSelectedUser & " W3XP", PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuStatsSC_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & GetSelectedUser & " STAR"
+    AddQ "/stats " & GetSelectedUser & " STAR", PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuStatsW2_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & GetSelectedUser & " W2BN"
+    AddQ "/stats " & GetSelectedUser & " W2BN", PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuStatsW3_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & GetSelectedUser & " WAR3"
+    AddQ "/stats " & GetSelectedUser & " WAR3", PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuTerms_Click()
@@ -4343,13 +4370,17 @@ End Sub
 Private Sub mnuPopKick_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    If MyFlags = 2 Or MyFlags = 18 Then AddQ "/kick " & IIf(Dii, "*", "") & GetSelectedUser
+    If MyFlags = 2 Or MyFlags = 18 Then
+        AddQ "/kick " & IIf(Dii, "*", "") & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE
+    End If
 End Sub
 
 Private Sub mnuPopBan_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    If MyFlags = 2 Or MyFlags = 18 Then AddQ "/ban " & IIf(Dii, "*", "") & GetSelectedUser
+    If MyFlags = 2 Or MyFlags = 18 Then
+        AddQ "/ban " & IIf(Dii, "*", "") & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE
+    End If
 End Sub
 
 Private Sub mnuTrayExit_click()
@@ -5270,11 +5301,11 @@ Private Sub QueueTimer_Timer()
         End If
     
         If ((QueueMaster >= 15) And (QueueTimer.Interval <> 2400)) Then
-            QueueTimer.Interval = (2400 + delay)
+            QueueTimer.Interval = (2400 + delay) ' 2400
         ElseIf ((QueueMaster < 15) And (QueueTimer.Interval = 2400)) Then
-            QueueTimer.Interval = (1175 + delay)
+            QueueTimer.Interval = (1175 + delay) ' 1175
         Else
-            QueueTimer.Interval = (1175 + delay)
+            QueueTimer.Interval = (1175 + delay) ' 1175
         End If
     End If
     
@@ -5675,7 +5706,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
             End If
         
             ' ...
-            Call AddQ("/unsquelch " & GetCurrentUsername)
+            Call AddQ("/unsquelch " & GetCurrentUsername, PRIORITY.SPECIAL_MESSAGE)
         End If
     End If
     
@@ -6608,13 +6639,10 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         For I = 1 To g_Channel.Users.Count
             ' ...
             Set CurrentUser = g_Channel.Users(I)
-            
-            ' ...
-            'ParseStatstring CurrentUser.Statstring, outbuf, outbuf
         
             ' ...
             AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Flags, CurrentUser.Ping, _
-                CurrentUser.Clan
+                CurrentUser.stats.IconCode, CurrentUser.Clan
         Next I
         
         ' ...
@@ -7886,6 +7914,8 @@ Sub DoConnect()
 End Sub
 
 Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAlone As Boolean = False)
+    On Error GoTo ERROR_HANDLER
+
     Dim I As Integer
     
     If (Not (UserCancelledConnect)) Then
@@ -7909,19 +7939,23 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
             UserCancelledConnect = True
         End If
         
-        If ReconnectTimerID > 0 Then
-            KillTimer 0, ReconnectTimerID
-            ReconnectTimerID = 0
-        End If
+        If (UserCancelledConnect) Then
+            AddChat vbRed, "DISC!"
         
-        If ExReconnectTimerID > 0 Then
-            KillTimer 0, ExReconnectTimerID
-            ExReconnectTimerID = 0
-        End If
-        
-        If SCReloadTimerID > 0 Then
-            KillTimer 0, SCReloadTimerID
-            SCReloadTimerID = 0
+            If ReconnectTimerID > 0 Then
+                KillTimer 0, ReconnectTimerID
+                ReconnectTimerID = 0
+            End If
+            
+            If ExReconnectTimerID > 0 Then
+                KillTimer 0, ExReconnectTimerID
+                ExReconnectTimerID = 0
+            End If
+            
+            If SCReloadTimerID > 0 Then
+                KillTimer 0, SCReloadTimerID
+                SCReloadTimerID = 0
+            End If
         End If
         
         DisableListviewTabs

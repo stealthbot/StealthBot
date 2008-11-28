@@ -143,7 +143,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     ' we aren't in a silent channel, are we?
     If (g_Channel.IsSilent) Then
         ' ...
-        AddName Username, Product, Flags, Ping, Clan
+        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, Clan
     Else
         ' ...
         If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
@@ -165,7 +165,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                     frmChat.lvChannel.ListItems.Remove pos
                     
                     ' ...
-                    AddName Username, Product, Flags, Ping, Clan
+                    AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, Clan
                 
                     ' ...
                     frmChat.AddChat RTBColors.JoinedChannelText, "-- ", RTBColors.JoinedChannelName, _
@@ -192,7 +192,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                         frmChat.lvChannel.ListItems.Remove pos
                         
                         ' ...
-                        AddName Username, Product, Flags, Ping, Clan, pos
+                        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, Clan, pos
                     End If
                 End If
             End If
@@ -1156,8 +1156,10 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     
     ' ...
     If (StatUpdate = False) Then
+        'frmChat.AddChat vbRed, UserObj.Stats.IconCode
+    
         ' ...
-        AddName Username, Product, Flags, Ping, sClan
+        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, sClan
             
         ' ...
         frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
@@ -1195,20 +1197,20 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                     If (I > 0) Then
                         
                         ' ...
-                        If (g_ThisIconCode <> -1) Then
+                        If (UserObj.Stats.IconCode <> -1) Then
                             ' ...
                             If (g_Channel.Users(I).game = "WAR3") Then
                                 ' ...
                                 If (found.SmallIcon = ICWAR3) Then
                                     ' ...
-                                    found.SmallIcon = (g_ThisIconCode + ICON_START_WAR3)
+                                    found.SmallIcon = (UserObj.Stats.IconCode + ICON_START_WAR3)
                                 End If
                             ElseIf (g_Channel.Users(I).game = "W3XP") Then
                                 ' ...
                                 If (found.SmallIcon = ICWAR3X) Then
                                     ' ...
-                                    found.SmallIcon = ((g_ThisIconCode + ICON_START_W3XP) + IIf(g_ThisIconCode + _
-                                            ICON_START_W3XP = ICSCSW, 1, 0))
+                                    found.SmallIcon = ((UserObj.Stats.IconCode + ICON_START_W3XP) + _
+                                        IIf(UserObj.Stats.IconCode + ICON_START_W3XP = ICSCSW, 1, 0))
                                 End If
                             End If
                         End If
@@ -1360,7 +1362,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         End If
         
         ' ...
-        AddName Username, Product, Flags, Ping, sClan
+        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, sClan
         
         ' ...
         frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString
