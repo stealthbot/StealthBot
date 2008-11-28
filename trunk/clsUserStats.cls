@@ -101,24 +101,17 @@ Public Property Get game() As String
 
 End Property
 
-Public Property Let WCGCode(str As String)
-
-    ' ...
-    m_wcg = str
-
-End Property
-
-Public Property Get WCGCode() As String
-
-    ' ...
-    WCGCode = m_wcg
-
-End Property
-
 Public Property Get IsWCG() As Boolean
 
     ' ...
-    IsWCG = (Len(WCGCode) > 0)
+    Select Case (StrReverse$(Icon))
+        Case "WCRF": IsWCG = True
+        Case "WCPL": IsWCG = True
+        Case "WCGO": IsWCG = True
+        Case "WCSI": IsWCG = True
+        Case "WCBR": IsWCG = True
+        Case "WCPG": IsWCG = True
+    End Select
 
 End Property
 
@@ -136,26 +129,19 @@ Public Property Get Icon() As String
 
 End Property
 
-Public Property Get Race() As String
-
-    ' ...
-    Icon = m_icon
-
-End Property
-
-Public Property Get Tier() As String
+Public Property Get IconTier() As String
 
     ' ...
     If ((game = "WAR3") Or (game = "W3XP")) Then
         ' ...
         Select Case (Mid$(Icon, 2, 1))
-            Case "H": Tier = "Human"
-            Case "N": Tier = "Night Elf"
-            Case "U": Tier = "Undead"
-            Case "O": Tier = "Orc"
-            Case "R": Tier = "Random"
-            Case "D": Tier = "Tournament"
-            Case Else: Tier = "unknown (" & Mid$(Icon, 2, 1) & ")"
+            Case "H": IconTier = "Human"
+            Case "N": IconTier = "Night Elf"
+            Case "U": IconTier = "Undead"
+            Case "O": IconTier = "Orc"
+            Case "R": IconTier = "Random"
+            Case "D": IconTier = "Tournament"
+            Case Else: IconTier = Mid$(Icon, 2, 1)
         End Select
     End If
 
@@ -326,9 +312,6 @@ Public Property Let Statstring(str As String)
     If (Len(str) < 4) Then
         Exit Property
     End If
-    
-    ' ...
-    g_ThisIconCode = -1
 
     ' ...
     game = StrReverse$(Left$(str, 4))
@@ -1088,8 +1071,8 @@ Private Sub ParseWarCraftIII()
     End If
     
     ' ...
-    g_ThisIconCode = _
-        GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), "")
+    'g_ThisIconCode = _
+    '    GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), "")
 
 End Sub
 
@@ -1182,14 +1165,22 @@ Private Function WarCraftIII_ToString() As String
     If (Statstring = vbNullString) Then
         buf = " (No stats available)"
     Else
-        buf = _
-            " (Level: " & Level() & ", icon tier " & Tier() & ", " & IconName() & _
-                " icon"
-
+        ' ...
+        If (IsWCG) Then
+            buf = _
+                " (" & IconName() & " icon"
+        Else
+            buf = _
+                " (Level: " & Level() & ", icon tier " & IconTier() & ", " & IconName() & _
+                    " icon"
+        End If
+        
+        ' ...
         If (Clan() <> vbNullString) Then
             buf = buf & ", in clan " & Clan()
         End If
         
+        ' ...
         buf = buf & ")"
     End If
             
