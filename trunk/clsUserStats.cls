@@ -85,7 +85,6 @@ Private m_dots                As Long
 Private m_expansion           As Boolean
 Private m_hardcore            As Boolean
 Private m_realm               As String
-Private m_wcg                 As String
 
 Public Property Let game(str As String)
 
@@ -1070,10 +1069,6 @@ Private Sub ParseWarCraftIII()
         Clan = StrReverse$(Values(2))
     End If
     
-    ' ...
-    'g_ThisIconCode = _
-    '    GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), "")
-
 End Sub
 
 Private Function StarCraft_ToString() As String
@@ -1213,6 +1208,9 @@ Private Function MakeLongGameName(game As String) As String
 
     ' ...
     Select Case (game)
+        ' chat/telnet
+        Case "CHAT": MakeLongGameName = "Chat"
+    
         ' starcraft
         Case "SSHR": MakeLongGameName = "StarCraft: Shareware"
         Case "STAR": MakeLongGameName = "StarCraft"
