@@ -154,7 +154,7 @@ Public Property Get Tier() As String
             Case "U": Tier = "Undead"
             Case "O": Tier = "Orc"
             Case "R": Tier = "Random"
-            Case "T", "D": Tier = "Tournament"
+            Case "D": Tier = "Tournament"
             Case Else: Tier = "unknown (" & Mid$(Icon, 2, 1) & ")"
         End Select
     End If
@@ -165,6 +165,21 @@ Public Property Get IconName() As String
 
     ' ...
     If ((game = "WAR3") Or (game = "W3XP")) Then
+        ' ...
+        Select Case (StrReverse$(Icon))
+            Case "WCRF": IconName = "WCG Referee"
+            Case "WCPL": IconName = "WCG Player"
+            Case "WCGO": IconName = "WCG Gold Medalist"
+            Case "WCSI": IconName = "WCG Silver Medalist"
+            Case "WCBR": IconName = "WCG Bronze Medalist"
+            Case "WCPG": IconName = "WCG Professional Gamer"
+        End Select
+        
+        ' ...
+        If (Len(IconName) > 0) Then
+            Exit Property
+        End If
+    
         ' ...
         Select Case (Mid$(Icon, 2, 1))
             Case "H" ' Human
@@ -821,28 +836,30 @@ Public Property Get IconCode() As Integer
     ' ...
     If (BotVars.ShowStatsIcons) Then
         ' ...
-        If (StrReverse$(Icon) <> game) Then
-            ' ...
-            Select Case (StrReverse$(Icon))
-                Case "WCRF": IconCode = IC_WCRF
-                Case "WCPL": IconCode = IC_WCPL
-                Case "WCGO": IconCode = IC_WCGO
-                Case "WCSI": IconCode = IC_WCSI
-                Case "WCBR": IconCode = IC_WCBR
-                Case "WCPG": IconCode = IC_WCPG
-            End Select
-        
-            ' ...
-            If (IconCode) Then
-                Exit Property
-            End If
+        Select Case (StrReverse$(Icon))
+            Case "WCRF": IconCode = IC_WCRF
+            Case "WCPL": IconCode = IC_WCPL
+            Case "WCGO": IconCode = IC_WCGO
+            Case "WCSI": IconCode = IC_WCSI
+            Case "WCBR": IconCode = IC_WCBR
+            Case "WCPG": IconCode = IC_WCPG
+        End Select
+    
+        ' ...
+        If (IconCode) Then
+            Exit Property
         End If
     End If
 
     ' ...
     Select Case (game)
+        Case "CHAT": IconCode = ICCHAT
+        Case "SSHR": IconCode = ICSCSW
         Case "STAR": IconCode = ICSTAR
+        Case "JSTR": IconCode = ICJSTR
         Case "SEXP": IconCode = ICSEXP
+        Case "DSHR": IconCode = ICDIABLOSW
+        Case "DRTL": IconCode = ICDIABLO
         Case "D2DV": IconCode = ICD2DV
         Case "D2XP": IconCode = ICD2XP
         Case "W2BN": IconCode = ICW2BN
@@ -856,9 +873,16 @@ Public Property Get IconCode() As Integer
                     GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), "")
             
                 ' ...
-                If (BotVars.ShowStatsIcons) Then
-                    IconCode = (ICON_START_WAR3 + IconCode)
+                If (IconCode = ICUNKNOWN) Then
+                    ' ...
+                    IconCode = ICWAR3
+                    
+                    ' ...
+                    Exit Property
                 End If
+            
+                ' ...
+                IconCode = (ICON_START_WAR3 + IconCode)
             Else
                 IconCode = ICWAR3
             End If
@@ -872,16 +896,19 @@ Public Property Get IconCode() As Integer
                     GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), "")
             
                 ' ...
+                If (IconCode = ICUNKNOWN) Then
+                    ' ...
+                    IconCode = ICWAR3X
+                    
+                    ' ...
+                    Exit Property
+                End If
+            
+                ' ...
                 IconCode = (ICON_START_W3XP + IconCode)
             Else
                 IconCode = ICWAR3X
             End If
-            
-        Case "CHAT": IconCode = ICCHAT
-        Case "DRTL": IconCode = ICDIABLO
-        Case "DSHR": IconCode = ICDIABLOSW
-        Case "JSTR": IconCode = ICJSTR
-        Case "SSHR": IconCode = ICSCSW
         
         Case Else
             IconCode = ICUNKNOWN

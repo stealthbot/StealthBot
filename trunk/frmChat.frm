@@ -3433,7 +3433,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     sTemp = sTemp & "Ping at login: " & .Ping & "ms" & vbCrLf
                     sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
-                    sTemp = sTemp & .stats.ToString
+                    sTemp = sTemp & .Stats.ToString
                 
                     ListToolTip.TipText = sTemp
                     
@@ -6642,7 +6642,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         
             ' ...
             AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Flags, CurrentUser.Ping, _
-                CurrentUser.stats.IconCode, CurrentUser.Clan
+                CurrentUser.Stats.IconCode, CurrentUser.Clan
         Next I
         
         ' ...
@@ -7940,7 +7940,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         End If
         
         If (UserCancelledConnect) Then
-            AddChat vbRed, "DISC!"
+            'AddChat vbRed, "DISC!"
         
             If ReconnectTimerID > 0 Then
                 KillTimer 0, ReconnectTimerID

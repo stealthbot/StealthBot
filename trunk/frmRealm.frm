@@ -115,9 +115,9 @@ Begin VB.Form frmRealm
       _ExtentX        =   16325
       _ExtentY        =   7223
       Arrange         =   1
-      LabelEdit       =   1
       LabelWrap       =   -1  'True
       HideSelection   =   -1  'True
+      HideColumnHeaders=   -1  'True
       _Version        =   393217
       Icons           =   "imlChars"
       ForeColor       =   16777215

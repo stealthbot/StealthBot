@@ -24,7 +24,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Dim ClanTag     As String            ' User clan tag
     Dim Product     As String            ' User product
     Dim w3icon      As String            ' Warcraft III icon code
-    Dim B           As Boolean           ' Temporary bool
+    Dim b           As Boolean           ' Temporary bool
     Dim sArr()      As String            ' Temp String array
     
     Static ServerToken As Long           ' Server token used in various packets
@@ -196,9 +196,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             Case &H3D 'SID_CREATEACCT2
                 L = pD.DebuffDWORD
                 
-                B = Event_AccountCreateResponse(L)
+                b = Event_AccountCreateResponse(L)
                 
-                If B Then
+                If b Then
                     Send0x3A ds.GetServerToken
                 Else
                     Call frmChat.DoDisconnect
@@ -365,11 +365,11 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 ' b is being used as a NoProceed boolean
                 L = pD.DebuffDWORD
                 s = pD.DebuffNTString
-                B = True    'Default action: Do not proceed
+                b = True    'Default action: Do not proceed
                 
                 Select Case L
                     Case &H0    'SUCCESS
-                        B = False
+                        b = False
                         Call Event_VersionCheck(0, vbNullString)
                         
                     Case &H100  'OLD Version
@@ -404,13 +404,13 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     
                     Case Else
                         If (ReadCFG("Override", "Ignore0x51Reply") = "Y") Then
-                            B = False
+                            b = False
                         End If
                         
                         Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(L, 4))
                 End Select
                 
-                If frmChat.sckBNet.State = 7 And AwaitingEmailReg = 0 And Not B Then
+                If frmChat.sckBNet.State = 7 And AwaitingEmailReg = 0 And Not b Then
                     Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Sending login information...")
             
                     If ds.LogonType = 2 Then ' NLS! Proceed to 0x52+
@@ -615,7 +615,7 @@ Public Function DecodeD2Key(ByVal Key As String) As String
 
     Dim r As Double, n As Double, n2 As Double, v As Double, _
     v2 As Double, KeyValue As Double, c1 As Integer, c2 As Integer, _
-    C As Byte, I As Integer, aryKey(0 To 15) As String, _
+    c As Byte, I As Integer, aryKey(0 To 15) As String, _
     codeValues As String ', bValid as boolean
     
     On Error GoTo ErrorTrapped
@@ -661,8 +661,8 @@ Cont:
     
     For I = 0 To 15
     
-        C = GetNumValue(aryKey(I))
-        n = Val(C)
+        c = GetNumValue(aryKey(I))
+        n = Val(c)
         n2 = v * 2
         n = n Xor n2
         v = v + n
@@ -673,7 +673,7 @@ Cont:
     
     For I = 15 To 0 Step -1
     
-        C = Asc(aryKey(I))
+        c = Asc(aryKey(I))
         
         If I > 8 Then
         
@@ -688,7 +688,7 @@ Cont:
         n = n And &HF
         c2 = Asc(aryKey(n))
         aryKey(I) = Chr$(c2)
-        aryKey(n) = Chr$(C)
+        aryKey(n) = Chr$(c)
         
     Next I
     
@@ -696,24 +696,24 @@ Cont:
     
     For I = 15 To 0 Step -1
     
-        C = Asc(UCase(aryKey(I)))
-        aryKey(I) = Chr$(C)
+        c = Asc(UCase(aryKey(I)))
+        aryKey(I) = Chr$(c)
         
-        If Val(C) <= Asc("7") Then
+        If Val(c) <= Asc("7") Then
         
             v = v2
             c2 = v And &HF
             c2 = c2 And 7
-            c2 = c2 Xor C
+            c2 = c2 Xor c
             v = RShift(v, 3)
             aryKey(I) = Chr$(c2)
             v2 = v
             
-        ElseIf Val(C) < Asc("A") Then
+        ElseIf Val(c) < Asc("A") Then
         
             c2 = CByte(I)
             c2 = c2 And 1
-            c2 = c2 Xor C
+            c2 = c2 Xor c
             aryKey(I) = Chr$(c2)
             
         End If
@@ -733,7 +733,7 @@ End Function
 
 Public Function DecodeStarcraftKey(ByVal sKey As String) As String
     Dim n As Double, n2 As Double, v As Double, _
-    v2 As Double, c2 As Byte, C As Byte, _
+    v2 As Double, c2 As Byte, c As Byte, _
     bValid As Boolean, I As Integer, aryKey(0 To 12) As String 'r as double, keyvalue as double, c1 as byte
     
     For I = 1 To 13
@@ -746,8 +746,8 @@ Public Function DecodeStarcraftKey(ByVal sKey As String) As String
     
     For I = 0 To 11
     
-        C = aryKey(I)
-        n = Val(C)
+        c = aryKey(I)
+        n = Val(c)
         n2 = v * 2
         n = n Xor n2
         v = v + n
@@ -767,13 +767,13 @@ Public Function DecodeStarcraftKey(ByVal sKey As String) As String
     For I = 11 To 0 Step -1
     
         If v < 7 Then GoTo continue
-        C = aryKey(I)
+        c = aryKey(I)
         n = CInt(v / 12)
         n2 = v Mod 12
         v = v - 17
         c2 = aryKey(n2)
         aryKey(I) = c2
-        aryKey(n2) = C
+        aryKey(n2) = c
         
     Next I
     
@@ -783,24 +783,24 @@ continue:
     
     For I = 11 To 0 Step -1
     
-        C = UCase$(aryKey(I))
-        aryKey(I) = C
+        c = UCase$(aryKey(I))
+        aryKey(I) = c
         
-        If Asc(C) <= Asc("7") Then
+        If Asc(c) <= Asc("7") Then
         
             v = v2
             c2 = v And &HFF
             c2 = c2 And 7
-            c2 = c2 Xor C
+            c2 = c2 Xor c
             v = RShift(CLng(v), 3)
             aryKey(I) = c2
             v2 = v
             
-        ElseIf Asc(C) < 65 Then
+        ElseIf Asc(c) < 65 Then
         
             c2 = CByte(I)
             c2 = c2 And 1
-            c2 = c2 Xor C
+            c2 = c2 Xor c
             aryKey(I) = c2
             
         End If
@@ -893,17 +893,17 @@ Public Function GetHexValue(ByVal v As Long) As String
     
 End Function
 
-Public Function GetNumValue(ByVal C As String) As Long
+Public Function GetNumValue(ByVal c As String) As Long
 'on error resume next
-    C = UCase(C)
+    c = UCase(c)
     
-    If StrictIsNumeric(C) Then
+    If StrictIsNumeric(c) Then
     
-        GetNumValue = Asc(C) - &H30
+        GetNumValue = Asc(c) - &H30
         
     Else
     
-        GetNumValue = Asc(C) - &H37
+        GetNumValue = Asc(c) - &H37
         
     End If
     
@@ -1081,19 +1081,19 @@ End Sub
 Public Function StringToDWord(Data As String) As Long
     Dim tmp As String
     tmp = StrToHex(Data)
-    Dim A As String, B As String, C As String, D As String
+    Dim A As String, b As String, c As String, D As String
     A = Mid(tmp, 1, 2)
-    B = Mid(tmp, 3, 2)
-    C = Mid(tmp, 5, 2)
+    b = Mid(tmp, 3, 2)
+    c = Mid(tmp, 5, 2)
     D = Mid(tmp, 7, 2)
-    tmp = D & C & B & A
+    tmp = D & c & b & A
     StringToDWord = Val("&H" & tmp)
 End Function
 
 Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
     Optional ByVal A As Variant, _
-    Optional ByVal B As Variant, _
-    Optional ByVal C As Variant, _
+    Optional ByVal b As Variant, _
+    Optional ByVal c As Variant, _
     Optional ByVal D As Variant, _
     Optional ByVal E As Variant, _
     Optional ByVal f As Variant, _
@@ -1111,11 +1111,11 @@ Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
                 If IsEmpty(A) Then GoTo theEnd
                 nText = Replace(nText, "%s", A, 1, 1)
             Case 1
-                If IsEmpty(B) Then GoTo theEnd
-                nText = Replace(nText, "%s", B, 1, 1)
+                If IsEmpty(b) Then GoTo theEnd
+                nText = Replace(nText, "%s", b, 1, 1)
             Case 2
-                If IsEmpty(C) Then GoTo theEnd
-                nText = Replace(nText, "%s", C, 1, 1)
+                If IsEmpty(c) Then GoTo theEnd
+                nText = Replace(nText, "%s", c, 1, 1)
             Case 3
                 If IsEmpty(D) Then GoTo theEnd
                 nText = Replace(nText, "%s", D, 1, 1)
