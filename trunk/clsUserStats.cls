@@ -556,7 +556,7 @@ Public Property Get IsLadderCharacter() As Boolean
 
     ' ...
     IsLadderCharacter = _
-        IIf(IsCharacterDead(), False, ((CharacterFlags And &H40) = &H40))
+        IIf(((CharacterFlags And &H8) = &H8), False, ((CharacterFlags And &H40) = &H40))
     
 End Property
 
@@ -852,10 +852,11 @@ Public Property Get IconCode() As Integer
             If (BotVars.ShowStatsIcons) Then
                 ' ...
                 IconCode = _
-                    GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), "")
+                    GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), _
+                        IIf(IsWCG, Icon, ""))
             
                 ' ...
-                If (IconCode = ICUNKNOWN) Then
+                If (ICON_START_WAR3 + IconCode = ICUNKNOWN) Then
                     ' ...
                     IconCode = ICWAR3
                     
@@ -875,10 +876,11 @@ Public Property Get IconCode() As Integer
             If (BotVars.ShowStatsIcons) Then
                 ' ...
                 IconCode = _
-                    GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), "")
-            
+                    GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), _
+                        IIf(IsWCG, Icon, ""))
+                        
                 ' ...
-                If (IconCode = ICUNKNOWN) Then
+                If (ICON_START_W3XP + IconCode = ICUNKNOWN) Then
                     ' ...
                     IconCode = ICWAR3X
                     

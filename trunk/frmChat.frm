@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -3273,6 +3273,11 @@ End Sub
 Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Dim aInx As Integer
     Dim sProd As String * 4
+    
+    ' ...
+    If (lvChannel.SelectedItem Is Nothing) Then
+        Exit Sub
+    End If
 
     If Button = 2 Then
         If Not (lvChannel.SelectedItem Is Nothing) Then
@@ -3431,7 +3436,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
             
                     'sTemp = sTemp & vbCrLf
                     sTemp = sTemp & "Ping at login: " & .Ping & "ms" & vbCrLf
-                    sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
+                    sTemp = sTemp & "Flags: " & FlagDescription(.flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
                     sTemp = sTemp & .Stats.ToString
                 
@@ -4344,14 +4349,14 @@ Private Sub mnuUserlistWhois_Click()
     With RTBColors
         If temp.Access > -1 Then
             If temp.Access > 0 Then
-                If temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & temp.Access & " and flags " & temp.Flags & "."
+                If temp.flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & temp.Access & " and flags " & temp.flags & "."
                 Else
                     AddChat .ConsoleText, "Found user " & s & ", with access " & temp.Access & "."
                 End If
             Else
-                If temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with flags " & temp.Flags & "."
+                If temp.flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with flags " & temp.flags & "."
                 Else
                     AddChat .ConsoleText, "User not found."
                 End If
@@ -4932,7 +4937,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 ElseIf ((s = "/flags") And (MDebug("debug"))) Then
                                     For n = 1 To g_Channel.Users.Count
                                         With g_Channel.Users(n)
-                                            AddChat RTBColors.ConsoleText, .Name & Space$(4) & .Flags
+                                            AddChat RTBColors.ConsoleText, .Name & Space$(4) & .flags
                                         End With
                                     Next n
                                     
@@ -4980,7 +4985,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     'End If
                                     
                                     temp.Access = 201
-                                    temp.Flags = "A"
+                                    temp.flags = "A"
                                     
                                     m = OutFilterMsg(s)
                                     
@@ -5984,7 +5989,7 @@ Private Sub UpTimer_Timer()
                     ' ...
                     If (pos > 0) Then
                         ' ...
-                        newColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
+                        newColor = GetNameColor(.flags, .TimeSinceTalk, StrComp(.DisplayName, _
                             GetCurrentUsername, vbBinaryCompare) = 0)
                         
                         ' ...
@@ -6641,7 +6646,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             Set CurrentUser = g_Channel.Users(I)
         
             ' ...
-            AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Flags, CurrentUser.Ping, _
+            AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.flags, CurrentUser.Ping, _
                 CurrentUser.Stats.IconCode, CurrentUser.Clan
         Next I
         
