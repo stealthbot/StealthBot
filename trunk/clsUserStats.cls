@@ -659,14 +659,24 @@ Public Property Get CharacterTitle() As String
         ' ...
         If (CurrentDifficultyID >= 2) Then
             ' ...
-            If (game = "D2DV") Then
+            If (IsExpansionCharacter = False) Then
                 ' ...
                 CharacterTitle = _
                     Classic(IIf(IsHardcoreCharacter, 1, 0), CurrentDifficultyID - 2, IIf(IsFemaleCharacter, 1, 0))
+            
+                ' run again with is female as false
+                If (CharacterTitle = vbNullString) Then
+                    CharacterTitle = Classic(IIf(IsHardcoreCharacter, 1, 0), CurrentDifficultyID - 2, 0)
+                End If
             Else
                 ' ...
                 CharacterTitle = _
                     Expansion(IIf(IsHardcoreCharacter, 1, 0), CurrentDifficultyID - 2, IIf(IsFemaleCharacter, 1, 0))
+            
+                ' run again with is female as false
+                If (CharacterTitle = vbNullString) Then
+                    CharacterTitle = Expansion(IIf(IsHardcoreCharacter, 1, 0), CurrentDifficultyID - 2, 0)
+                End If
             End If
         End If
     End If
