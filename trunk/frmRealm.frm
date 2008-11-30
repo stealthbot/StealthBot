@@ -561,6 +561,7 @@ Private Sub Form_Load()
     Call optViewExisting_Click
     
     lblExpiration.Visible = True
+    Unload_SuccessfulLogin = False
     
     b = (BotVars.Product = "PX2D")
     
@@ -582,10 +583,13 @@ End Sub
 Private Sub Form_Unload(Cancel As Integer)
     lvwChars.ListItems.Clear
     
-    If (Not Unload_SuccessfulLogin) Or RealmError Then
+    If ((Not (Unload_SuccessfulLogin)) Or (RealmError)) Then
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Login cancelled, proceeding with non-realm login."
         
-        If frmChat.sckMCP.State <> 0 Then frmChat.sckMCP.Close
+        If frmChat.sckMCP.State <> 0 Then
+            frmChat.sckMCP.Close
+        End If
+        
         Call Send0x0A
     End If
     
@@ -644,7 +648,7 @@ End Sub
 
 Private Sub cmdCreate_Click()
     Dim I As Integer
-    Dim Flags As Long
+    Dim flags As Long
     
     CreatedExpRealmChar = 0
     
@@ -652,18 +656,18 @@ Private Sub cmdCreate_Click()
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Your account is full! Delete a character before trying to create another."
     Else
         If Len(txtCharName.text) > 2 Then
-            If chkLadder.Value = 1 Then Flags = Flags Or &H40
+            If chkLadder.Value = 1 Then flags = flags Or &H40
             
             If chkExpansion.Value = 1 Then
-                Flags = Flags Or &H20
+                flags = flags Or &H20
                 CreatedExpRealmChar = lvwChars.ListItems.Count
             End If
             
-            If chkHardcore.Value = 1 Then Flags = Flags Or &H4
+            If chkHardcore.Value = 1 Then flags = flags Or &H4
             
             For I = 1 To 7
                 If optNewCharType(I).Value = True Then
-                    MCPHandler.CreateMCPCharacter I - 1, Flags, txtCharName.text
+                    MCPHandler.CreateMCPCharacter I - 1, flags, txtCharName.text
                     Exit For
                 End If
             Next I
@@ -786,7 +790,7 @@ Private Sub MCPHandler_RealmStartup(ByVal Status As Byte, ByVal Message As Strin
     Else
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
         RealmError = True
-        frmRealm.Hide
+        Unload frmRealm
     End If
 End Sub
 

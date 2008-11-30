@@ -100,8 +100,6 @@
       </description>
     </documentation>
 
-    <arguments />
-
     <access />
   </command>
 
@@ -917,68 +915,6 @@
             </restrictions>
           </argument>
         </string>
-
-        <switches>
-          <switch l_name="type" s_name="t">
-            <documentation>
-              <description>
-                ...
-              </description>
-            </documentation>
-
-            <access>
-              <rank>
-                100
-              </rank>
-
-              <flags>
-                <flag>
-                  A
-                </flag>
-              </flags>
-            </access>
-          </switch>
-
-          <switch l_name="group" s_name="g">
-            <documentation>
-              <description>
-                ...
-              </description>
-            </documentation>
-
-            <access>
-              <rank>
-                100
-              </rank>
-
-              <flags>
-                <flag>
-                  A
-                </flag>
-              </flags>
-            </access>
-          </switch>
-
-          <switch l_name="ban_message" s_name="b">
-            <documentation>
-              <description>
-                ...
-              </description>
-            </documentation>
-
-            <access>
-              <rank>
-                100
-              </rank>
-
-              <flags>
-                <flag>
-                  A
-                </flag>
-              </flags>
-            </access>
-          </switch>
-        </switches>
       </optional>
     </arguments>
 
