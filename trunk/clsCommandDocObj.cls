@@ -73,6 +73,7 @@ Public Function OpenCommand(ByVal strCommand As String) As Boolean
     End If
     
     Set m_command_node = m_command_node.selectSingleNode("./command[@name='" & strCommand & "']")
+    
     If (m_command_node Is Nothing) Then
         Exit Function
     End If
@@ -81,11 +82,18 @@ End Function
 
 Public Function Save() As Boolean
 
-    Dim XML As clsXML
+    Dim XML As clsXML ' ...
     
+    ' ...
     Set XML = New clsXML
+    
+    ' ...
     XML.Path = App.Path & "\commands.xml"
+    
+    ' ...
     XML.WriteNode m_database
+    
+    ' ...
     Set XML = Nothing
     
 End Function
@@ -121,7 +129,6 @@ Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
         
         With temp
             .Name = getName(Parameter)
-            .dataType = getType(Parameter)
             .Restrictions = getRestrictions(Parameter)
             .IsOptional = False
         End With
@@ -131,45 +138,79 @@ Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
         Set temp = Nothing
     Next
     
-    Set Parameters = CommandNode.selectNodes("arguments/optional/argument")
-    
-    If (CommandNode Is Nothing) Then
-        Exit Function
-    End If
-    
-    For Each Parameter In Parameters
-        Set temp = New clsCommandParamsObj
-        
-        With temp
-            .Name = getName(Parameter)
-            .dataType = getType(Parameter)
-            .Restrictions = getRestrictions(Parameter)
-            .IsOptional = True
-        End With
-        
-        getParameters.Add temp
-        
-        Set temp = Nothing
-    Next
-
-End Function
-
-Private Function getType(ByRef ParameterNode As IXMLDOMNode) As String
-    
-    Dim attrType As IXMLDOMAttribute
-
     ' ...
-    Set attrType = ParameterNode.Attributes.getNamedItem("type")
+    Set Parameters = CommandNode.selectNodes("arguments/optional/number/argument")
     
     ' ...
-    If (attrType Is Nothing) Then
-        Exit Function
+    If (Not (Parameters Is Nothing)) Then
+        ' ...
+        For Each Parameter In Parameters
+            ' ...
+            Set temp = New clsCommandParamsObj
+            
+            ' ...
+            With temp
+                .Name = getName(Parameter)
+                .dataType = "number"
+                .Restrictions = getRestrictions(Parameter)
+                .IsOptional = True
+            End With
+            
+            ' ...
+            getParameters.Add temp
+            
+            ' ...
+            Set temp = Nothing
+        Next
     End If
     
     ' ...
-    getType = attrType.nodeValue
+    Set Parameters = CommandNode.selectNodes("arguments/optional/string/argument")
     
+    ' ...
+    If (Not (Parameters Is Nothing)) Then
+        ' ...
+        For Each Parameter In Parameters
+            ' ...
+            Set temp = New clsCommandParamsObj
+            
+            ' ...
+            With temp
+                .Name = getName(Parameter)
+                .dataType = "string"
+                .Restrictions = getRestrictions(Parameter)
+                .IsOptional = True
+            End With
+            
+            ' ...
+            getParameters.Add temp
+            
+            ' ...
+            Set temp = Nothing
+        Next
+    End If
+
+    ' ...
+    Set Parameters = Nothing
+
 End Function
+
+'Private Function getType(ByRef ParameterNode As IXMLDOMNode) As String
+'
+'    Dim attrType As IXMLDOMAttribute
+'
+'    ' ...
+'    Set attrType = ParameterNode.Attributes.getNamedItem("type")
+'
+'    ' ...
+'    If (attrType Is Nothing) Then
+'        Exit Function
+'    End If
+'
+'    ' ...
+'    getType = attrType.nodeValue
+'
+'End Function
 
 Private Function getRestrictions(ByRef ParameterNode As IXMLDOMNode) As Collection
 
@@ -485,7 +526,7 @@ Private Function getFlags(ByRef AnyNode As IXMLDOMNode) As String
     
 End Function
 
-Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) As String
+Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal flags As String) As String
 
     Dim temp As IXMLDOMNode
     Dim flag As IXMLDOMNode
@@ -504,10 +545,10 @@ Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) A
             temp.appendChild(m_database.createNode("element", "flags", vbNullString))
     End If
     
-    For I = 1 To Len(Flags)
+    For I = 1 To Len(flags)
         Set flag = temp.appendChild(m_database.createNode("element", "flag", vbNullString))
         
-        flag.text = Mid$(Flags, I, 1)
+        flag.text = Mid$(flags, I, 1)
     Next I
     
     Call Save
