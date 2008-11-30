@@ -2725,11 +2725,18 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
             CropLen = (CropLen + Len(BotVars.TriggerLong))
         
             ' ...
-            If (StrComp(Left$(tmp, Len(GetCurrentUsername) + 1), GetCurrentUsername & Space(1), _
+            If (StrComp(Left$(tmp, Len(CurrentUsername) + 1), CurrentUsername & Space(1), _
+                    vbTextCompare) = 0) Then
+                
+                ' ...
+                CropLen = (CropLen + Len(CurrentUsername))
+                
+            ElseIf (StrComp(Left$(tmp, Len(GetCurrentUsername) + 1), GetCurrentUsername & Space(1), _
                     vbTextCompare) = 0) Then
                 
                 ' ...
                 CropLen = (CropLen + Len(GetCurrentUsername))
+                
             End If
             
             ' ...
@@ -2749,10 +2756,24 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                     End If
                 Else
                     ' ...
-                    If (StrComp(Left$(tmp, Len(GetCurrentUsername)), GetCurrentUsername, vbTextCompare) = 0) Then
+                    If (StrComp(Left$(tmp, Len(CurrentUsername)), CurrentUsername, vbTextCompare) = 0) Then
+                        
+                        ' ...
+                        If ((Mid$(tmp, Len(CurrentUsername) + 1, 2) = ": ") Or _
+                            (Mid$(tmp, Len(CurrentUsername) + 1, 2) = ", ")) Then
+                                
+                            ' ...
+                            CropLen = (CropLen + (Len(CurrentUsername) + 2))
+                                
+                            ' ...
+                            bln = True
+                        End If
+                        
+                    ElseIf (StrComp(Left$(tmp, Len(GetCurrentUsername)), GetCurrentUsername, vbTextCompare) = 0) Then
+                        
                         ' ...
                         If ((Mid$(tmp, Len(GetCurrentUsername) + 1, 2) = ": ") Or _
-                                (Mid$(tmp, Len(GetCurrentUsername) + 1, 2) = ", ")) Then
+                            (Mid$(tmp, Len(GetCurrentUsername) + 1, 2) = ", ")) Then
                                 
                             ' ...
                             CropLen = (CropLen + (Len(GetCurrentUsername) + 2))
@@ -2761,23 +2782,10 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                             bln = True
                         End If
                         
-                    ElseIf (StrComp(Left$(tmp, Len(GetCurrentUsername)), _
-                                GetCurrentUsername, vbTextCompare) = 0) Then
-                            
-                        ' ...
-                        If ((Mid$(tmp, Len(GetCurrentUsername) + 1, 2) = ": ") Or _
-                                (Mid$(tmp, Len(GetCurrentUsername) + 1, 2) = ", ")) Then
-                                
-                            ' ...
-                            CropLen = (CropLen + (Len(GetCurrentUsername) + 2))
-                                
-                            ' ...
-                            bln = True
-                        End If
                     Else
                         ' ...
                         If ((StrComp(Left$(Message, Len("ops: ")), "ops: ", vbTextCompare) = 0) Or _
-                                (StrComp(Left$(Message, Len("ops, ")), "ops, ", vbTextCompare) = 0)) Then
+                            (StrComp(Left$(Message, Len("ops, ")), "ops, ", vbTextCompare) = 0)) Then
                                 
                             ' ...
                             If (g_Channel.Self.IsOperator) Then
@@ -2787,6 +2795,16 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                                 ' ...
                                 bln = True
                             End If
+                            
+                        ElseIf ((StrComp(Left$(Message, Len("all: ")), "all: ", vbTextCompare) = 0) Or _
+                                (StrComp(Left$(Message, Len("all, ")), "all, ", vbTextCompare) = 0)) Then
+                            
+                            ' ...
+                            CropLen = (CropLen + 5)
+                                
+                            ' ...
+                            bln = True
+                            
                         End If
                     End If
                 End If
