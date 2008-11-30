@@ -569,7 +569,8 @@ Private Sub Form_Load()
     optNewCharType(6).Enabled = b
     optNewCharType(7).Enabled = b
     
-    lvwChars.ListItems.Add , "temp", "Please wait..."
+    'lvwChars.ListItems.Add , "temp", "Please wait..."
+    lblExpiration.Caption = "Please wait..."
     
     IndexToDelete = -1
 End Sub
@@ -648,7 +649,7 @@ End Sub
 
 Private Sub cmdCreate_Click()
     Dim I As Integer
-    Dim flags As Long
+    Dim Flags As Long
     
     CreatedExpRealmChar = 0
     
@@ -656,18 +657,18 @@ Private Sub cmdCreate_Click()
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] Your account is full! Delete a character before trying to create another."
     Else
         If Len(txtCharName.text) > 2 Then
-            If chkLadder.Value = 1 Then flags = flags Or &H40
+            If chkLadder.Value = 1 Then Flags = Flags Or &H40
             
             If chkExpansion.Value = 1 Then
-                flags = flags Or &H20
+                Flags = Flags Or &H20
                 CreatedExpRealmChar = lvwChars.ListItems.Count
             End If
             
-            If chkHardcore.Value = 1 Then flags = flags Or &H4
+            If chkHardcore.Value = 1 Then Flags = Flags Or &H4
             
             For I = 1 To 7
                 If optNewCharType(I).Value = True Then
-                    MCPHandler.CreateMCPCharacter I - 1, flags, txtCharName.text
+                    MCPHandler.CreateMCPCharacter I - 1, Flags, txtCharName.text
                     Exit For
                 End If
             Next I
@@ -699,8 +700,6 @@ Private Sub MCPHandler_CharDeleteResponse(ByVal Success As Boolean)
 End Sub
 
 Private Sub MCPHandler_CharListResponse(ByVal NumCharacters As Integer)
-    CharListReceived = True
-    
     If NumCharacters = 0 Then
         lvwChars.ListItems.Clear
     End If
@@ -708,6 +707,8 @@ Private Sub MCPHandler_CharListResponse(ByVal NumCharacters As Integer)
     ClearExpansionCollection
     ClearExpirationCollection
     ClearExpirationLabel
+    
+    CharListReceived = True
 End Sub
 
 Private Sub MCPHandler_CharCreateResponse(ByVal Status As Byte, ByVal Message As String)

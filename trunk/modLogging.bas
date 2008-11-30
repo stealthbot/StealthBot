@@ -118,7 +118,7 @@ End Function
 
 ' Written 2007-06-08 to produce packet logs or do other things
 '  -at
-Public Sub LogPacketRaw(ByVal Server As enuPL_ServerTypes, ByVal Direction As enuPL_DirectionTypes, ByVal PacketID As Long, ByVal PacketLen As Long, ByRef PacketData As String)
+Public Sub LogPacketRaw(ByVal Server As enuPL_ServerTypes, ByVal Direction As enuPL_DirectionTypes, ByVal PacketID As Long, ByVal PacketLen As Long, ByRef PacketData As String, Optional ByVal DateTime As Date)
     Dim L As Long
     Dim f As Integer
     
@@ -139,7 +139,7 @@ Public Sub LogPacketRaw(ByVal Server As enuPL_ServerTypes, ByVal Direction As en
         L = FreeFile
         
         Open PacketLogFilePath For Append As #L
-            Print #L, GetTimeStamp() & " "
+            Print #L, GetTimeStamp(DateTime) & " "
         
             Select Case (Server)
                 Case stBNCS

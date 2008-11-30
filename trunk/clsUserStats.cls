@@ -72,6 +72,7 @@ Private m_character_name      As String
 Private m_character_class_id  As Integer
 Private m_character_flags     As Long
 Private m_acts_completed      As Long
+Private m_character_ladder    As Boolean
 Private m_wins                As Long
 Private m_ladder_rating       As Long
 Private m_high_rating         As Long
@@ -552,11 +553,17 @@ Public Property Get IsCharacterDead() As Boolean
 
 End Property
 
+Public Property Let IsLadderCharacter(ByVal bln As Boolean)
+
+    ' ...
+    m_character_ladder = bln
+    
+End Property
+
 Public Property Get IsLadderCharacter() As Boolean
 
     ' ...
-    IsLadderCharacter = _
-        IIf(((CharacterFlags And &H8) = &H8), False, ((CharacterFlags And &H40) = &H40))
+    IsLadderCharacter = m_character_ladder
     
 End Property
 
@@ -613,7 +620,12 @@ Public Property Get CurrentDifficultyID() As Integer
     
     ' ...
     If ((game = "D2DV") Or (game = "D2XP")) Then
-        difficulty = (RShift(ActsCompleted, 3) + 1)
+        ' ...
+        If (IsExpansionCharacter = False) Then
+            difficulty = (Fix(ActsCompleted / 4) - 1)
+        Else
+            difficulty = (Fix(ActsCompleted / 5) - 1)
+        End If
     End If
 
     ' ...
@@ -1038,7 +1050,25 @@ Private Sub ParseDiabloII()
         
             ' ...
             If (UBound(charData) >= 26) Then
-                ActsCompleted = (charData(27) And &H18)
+                ' ...
+                If (IsExpansionCharacter = False) Then
+                    ' ...
+                    If ((charData(27) And &H98) = &H98) Then
+                        ActsCompleted = 25
+                    End If
+                Else
+                    ' ...
+                    If ((charData(27) And &H9E) = &H9E) Then
+                        ActsCompleted = 25
+                    End If
+                End If
+                
+                ' ...
+                If (ActsCompleted = 0) Then
+                    ActsCompleted = (charData(27) And &H18)
+                End If
+
+                IsLadderCharacter = ((charData(30) And &H5) = &H5)
             End If
         End If
     End If

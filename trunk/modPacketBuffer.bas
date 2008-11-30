@@ -4,7 +4,7 @@ Attribute VB_Name = "modPacketBuffer"
 
 Option Explicit
 
-Private Const MAX_PACKET_CACHE_SIZE = 30 ' ...
+Private Const MAX_PACKET_CACHE_SIZE = 100 ' ...
 
 ' ...
 Private Type PACKETCACHEITEM
@@ -13,6 +13,7 @@ Private Type PACKETCACHEITEM
     ID        As Byte
     Length    As Integer
     Data      As String
+    DateTime  As Date
 End Type
 
 ' ...
@@ -36,6 +37,7 @@ Public Function CachePacket(Direction As enuPL_DirectionTypes, PKT_Type As enuPL
         .ID = ID
         .Length = Length
         .Data = Data
+        .DateTime = Now
     End With
     
     ' ...
@@ -85,7 +87,7 @@ Public Sub DumpPacketCache()
         pkt = m_cache(I)
         
         ' ...
-        LogPacketRaw pkt.PKT_Type, pkt.Direction, pkt.ID, pkt.Length, pkt.Data
+        LogPacketRaw pkt.PKT_Type, pkt.Direction, pkt.ID, pkt.Length, pkt.Data, pkt.DateTime
     Next I
     
     ' ...

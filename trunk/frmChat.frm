@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2913,29 +2913,29 @@ Sub Form_Unload(Cancel As Integer)
     Call ChatQueue_Terminate
 
     DisableURLDetect
-    'UnhookWindowProc
+    UnhookWindowProc
     UnhookSendBoxWindowProc
     
     Call SharedScriptSupport.Dispose 'Explicit call the Class_Terminate sub in the ScriptSupportClass to destroy all the forms. - FrOzeN
+    
+    'DeconstructSettings
+    'DeconstructMonitor
+    DestroyAllWWs
     
     Set BotVars = Nothing
     Set ClanHandler = Nothing
     Set ListToolTip = Nothing
     Set GErrorHandler = Nothing
-    DeconstructSettings
-    'DeconstructMonitor
     Set FriendListHandler = Nothing
     Set colQueue = Nothing
-    
-    DestroyAllWWs
     Set colWhisperWindows = Nothing
     Set colLastSeen = Nothing
     Set colSafelist = Nothing
     Set dctCallbacks = Nothing
     Set colDynamicMenus = Nothing
-    
     Set dictMenuIDs = Nothing
     Set dictItemIDs = Nothing
+    
     'Set dictTimerInterval = Nothing
     'Set dictTimerCount = Nothing
     'Set dictTimerEnabled = Nothing
@@ -3436,7 +3436,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
             
                     'sTemp = sTemp & vbCrLf
                     sTemp = sTemp & "Ping at login: " & .Ping & "ms" & vbCrLf
-                    sTemp = sTemp & "Flags: " & FlagDescription(.flags) & vbCrLf
+                    sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
                     sTemp = sTemp & .Stats.ToString
                 
@@ -4349,14 +4349,14 @@ Private Sub mnuUserlistWhois_Click()
     With RTBColors
         If temp.Access > -1 Then
             If temp.Access > 0 Then
-                If temp.flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & temp.Access & " and flags " & temp.flags & "."
+                If temp.Flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & temp.Access & " and flags " & temp.Flags & "."
                 Else
                     AddChat .ConsoleText, "Found user " & s & ", with access " & temp.Access & "."
                 End If
             Else
-                If temp.flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with flags " & temp.flags & "."
+                If temp.Flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with flags " & temp.Flags & "."
                 Else
                     AddChat .ConsoleText, "User not found."
                 End If
@@ -4937,7 +4937,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 ElseIf ((s = "/flags") And (MDebug("debug"))) Then
                                     For n = 1 To g_Channel.Users.Count
                                         With g_Channel.Users(n)
-                                            AddChat RTBColors.ConsoleText, .Name & Space$(4) & .flags
+                                            AddChat RTBColors.ConsoleText, .Name & Space$(4) & .Flags
                                         End With
                                     Next n
                                     
@@ -4985,7 +4985,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     'End If
                                     
                                     temp.Access = 201
-                                    temp.flags = "A"
+                                    temp.Flags = "A"
                                     
                                     m = OutFilterMsg(s)
                                     
@@ -5989,7 +5989,7 @@ Private Sub UpTimer_Timer()
                     ' ...
                     If (pos > 0) Then
                         ' ...
-                        newColor = GetNameColor(.flags, .TimeSinceTalk, StrComp(.DisplayName, _
+                        newColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
                             GetCurrentUsername, vbBinaryCompare) = 0)
                         
                         ' ...
@@ -6646,7 +6646,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             Set CurrentUser = g_Channel.Users(I)
         
             ' ...
-            AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.flags, CurrentUser.Ping, _
+            AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Flags, CurrentUser.Ping, _
                 CurrentUser.Stats.IconCode, CurrentUser.Clan
         Next I
         
