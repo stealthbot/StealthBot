@@ -676,7 +676,7 @@ Begin VB.Form frmChat
       AllowUI         =   0   'False
    End
    Begin VB.Timer quLower 
-      Interval        =   3150
+      Interval        =   5360
       Left            =   7200
       Top             =   5160
    End
@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2098,7 +2098,7 @@ Sub Event_BNetError(ErrorNumber As Integer, description As String)
     
     UserCancelledConnect = False
     
-    DoDisconnect (1)
+    DoDisconnect 1, True
     SetTitle "Disconnected"
     
     Call ClearChannel
@@ -2114,13 +2114,15 @@ Sub Event_BNetError(ErrorNumber As Integer, description As String)
     If DisplayError(ErrorNumber, IIf(BotVars.UseProxy And BotVars.ProxyStatus <> psOnline, 2, 1), BNET) = True Then
         AddChat RTBColors.ErrorMessageText, IIf(BotVars.UseProxy And BotVars.ProxyStatus <> psOnline, "[PROXY] ", "[BNET] ") & "Attempting to reconnect..."
         
-        'UserCancelledConnect = False 'this should fix the beta reconnect problems
-
+        UserCancelledConnect = False 'this should fix the beta reconnect problems
+        
         'ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
         '    AddressOf Reconnect_TimerProc)
         
+        'ExReconTicks = 0
+        'ExReconMinutes = BotVars.ReconnectDelay / 1000
         'ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, _
-        '    BotVars.ReconnectDelay, AddressOf ExtendedReconnect_TimerProc)
+        '    1000, AddressOf ExtendedReconnect_TimerProc)
     End If
 End Sub
 
@@ -2166,7 +2168,7 @@ Sub Event_BNLSError(ErrorNumber As Integer, description As String)
             AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & description
             
             If DisplayError(ErrorNumber, 0, BNLS) Then
-                'This area is in question
+                UserCancelledConnect = False
                 Call DoDisconnect(1, True)
                 Pause 1
                 
@@ -5247,6 +5249,7 @@ Private Sub QueueTimer_Timer()
     Dim override As Integer
     Dim pri      As Integer
     Dim delay    As Integer
+    Static Count As Integer
     
     If ((g_Queue.Count) And (g_Online)) Then
         With g_Queue.Peek
@@ -5304,14 +5307,23 @@ Private Sub QueueTimer_Timer()
         If (pri = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
             delay = BanDelay()
         End If
+        
     
         If ((QueueMaster >= 15) And (QueueTimer.Interval <> 2400)) Then
             QueueTimer.Interval = (2400 + delay) ' 2400
         ElseIf ((QueueMaster < 15) And (QueueTimer.Interval = 2400)) Then
-            QueueTimer.Interval = (1175 + delay) ' 1175
+            QueueTimer.Interval = (1175 + delay)  ' 1175
         Else
             QueueTimer.Interval = (1175 + delay) ' 1175
         End If
+        
+        If (Count >= 5) Then
+            QueueTimer.Interval = QueueTimer.Interval + 2360
+            
+            Count = 0
+        End If
+        
+        Count = Count + 1
     End If
     
     Exit Sub
@@ -7221,13 +7233,13 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
             Call BNCSParsePacket(strTemp)
             
             ' ...
-            interations = (interations + 1)
-            
-            If (interations >= 2000) Then
-                MsgBox "ahhhh!"
-            
-                Exit Sub
-            End If
+            'interations = (interations + 1)
+           
+            'If (interations >= 2000) Then
+            '    MsgBox "ahhhh!"
+            '
+            '    Exit Sub
+            'End If
             
             ' Why do we need this?  Anyway, it's causing topic id #26093
             ' (The Void issue).
@@ -7961,6 +7973,12 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
                 KillTimer 0, SCReloadTimerID
                 SCReloadTimerID = 0
             End If
+        Else
+            'ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
+            '    AddressOf Reconnect_TimerProc)
+            '
+            'ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, _
+            '    BotVars.ReconnectDelay, AddressOf ExtendedReconnect_TimerProc)
         End If
         
         DisableListviewTabs

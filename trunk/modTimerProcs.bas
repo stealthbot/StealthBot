@@ -19,15 +19,19 @@ Public Sub ExtendedReconnect_TimerProc(ByVal hWnd As Long, ByVal uMsg As Long, _
     '// Ticks = number of 30-second intervals passed since timer was initiated
     ExReconTicks = (ExReconTicks + 1)
     
-    If ((ExReconTicks >= (ExReconMinutes * 2)) And _
-        (UserCancelledConnect = False)) Then
-       
+    If ((ExReconTicks >= ExReconMinutes) And (UserCancelledConnect = False)) Then
+        Call KillTimer(0, ExReconnectTimerID)
+        
+        UserCancelledConnect = False
+        
         Call frmChat.Connect
+        
+        ExReconnectTimerID = 0
+        ExReconTicks = 0
+        ExReconMinutes = 0
     End If
     
-    If ((ExReconTicks >= (ExReconMinutes * 2)) Or _
-        (UserCancelledConnect)) Then
-       
+    If ((ExReconTicks >= ExReconMinutes) Or (UserCancelledConnect)) Then
         Call KillTimer(0, ExReconnectTimerID)
         
         UserCancelledConnect = False

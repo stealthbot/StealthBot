@@ -37,6 +37,9 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
         Case MCP:  sServerType = "Realm"
     End Select
     
+    ExReconTicks = 0
+    ExReconMinutes = 0
+    
     Select Case (lErrNum)
         Case 10053, 10054
             Count10053 = (Count10053 + 1)
@@ -60,12 +63,9 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
                     Call KillTimer(0, ReconnectTimerID)
                 End If
                 
-                ExReconTicks = 0
-                ExReconMinutes = 1
-                ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, 30000, _
-                    AddressOf ExtendedReconnect_TimerProc)
+                ExReconMinutes = (20 * 60)
                 
-                miNoProceed = 1
+                miNoProceed = 0
             End If
         
         Case 11004, 11001
@@ -128,9 +128,16 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
             miNoProceed = 0
     End Select
     
-    If (miNoProceed) Then
+    If (miNoProceed > 0) Then
         UserCancelledConnect = True
     Else
+        If (ExReconMinutes = 0) Then
+            ExReconMinutes = BotVars.ReconnectDelay / 1000
+        End If
+    
+        ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, 1000, _
+            AddressOf ExtendedReconnect_TimerProc)
+    
         UserCancelledConnect = False
     End If
 End Function
