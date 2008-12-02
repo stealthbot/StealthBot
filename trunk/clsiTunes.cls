@@ -89,6 +89,18 @@ Public Sub PlayTrack(ByVal Track As Variant)
     End If
 End Sub
 
+Public Sub NextTrack()
+
+   m_iTunesObj.NextTrack
+   
+End Sub
+
+Public Sub PreviousTrack()
+
+    m_iTunesObj.PreviousTrack
+
+End Sub
+
 Public Sub PausePlayback()
     ' ...
     If (Not (m_iTunesObj Is Nothing)) Then

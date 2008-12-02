@@ -571,7 +571,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "tally":         Call OnTally(Username, dbAccess, msgData, InBot, cmdRet())
         Case "cancel":        Call OnCancel(Username, dbAccess, msgData, InBot, cmdRet())
         Case "back":          Call OnBack(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "prev":          Call OnPrev(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "previous":      Call OnPrevious(Username, dbAccess, msgData, InBot, cmdRet())
         Case "uptime":        Call OnUptime(Username, dbAccess, msgData, InBot, cmdRet())
         Case "away":          Call OnAway(Username, dbAccess, msgData, InBot, cmdRet())
         Case "mp3":           Call OnMP3(Username, dbAccess, msgData, InBot, cmdRet())
@@ -2264,13 +2264,16 @@ Private Function OnNext(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        Dim pos As Integer ' ...
+        'Dim pos As Integer ' ...
         
         ' ...
-        pos = MediaPlayer.PlaylistPosition
+        'pos = MediaPlayer.PlaylistPosition
     
         ' ...
-        Call MediaPlayer.PlayTrack(pos + 1)
+        'Call MediaPlayer.PlayTrack(pos + 1)
+        
+        ' ...
+        Call MediaPlayer.NextTrack
         
         ' ...
         tmpBuf = "Skipped forwards."
@@ -3185,7 +3188,7 @@ Private Function OnAddPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim f      As Integer
-    Dim c      As Integer
+    Dim C      As Integer
     Dim tmpBuf As String ' temporary output buffer
     Dim U      As String
     Dim I      As Integer
@@ -3211,11 +3214,11 @@ Private Function OnAddPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
         Phrases(UBound(Phrases)) = U
         
         Open GetFilePath("phrasebans.txt") For Output As #f
-            For c = LBound(Phrases) To UBound(Phrases)
-                If (Len(Phrases(c)) > 0) Then
-                    Print #f, Phrases(c)
+            For C = LBound(Phrases) To UBound(Phrases)
+                If (Len(Phrases(C)) > 0) Then
+                    Print #f, Phrases(C)
                 End If
-            Next c
+            Next C
         Close #f
         
         tmpBuf = "Phraseban " & Chr(34) & U & Chr(34) & " added."
@@ -3235,7 +3238,7 @@ Private Function OnDelPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     Dim U      As String
     Dim Y      As String
     Dim tmpBuf As String ' temporary output buffer
-    Dim c      As Integer
+    Dim C      As Integer
     
     U = msgData
     
@@ -3244,13 +3247,13 @@ Private Function OnDelPhrase(ByVal Username As String, ByRef dbAccess As udtGetA
     Open GetFilePath("phrasebans.txt") For Output As #f
         Y = vbNullString
     
-        For c = LBound(Phrases) To UBound(Phrases)
-            If (StrComp(Phrases(c), LCase$(U), vbTextCompare) <> 0) Then
-                Print #f, Phrases(c)
+        For C = LBound(Phrases) To UBound(Phrases)
+            If (StrComp(Phrases(C), LCase$(U), vbTextCompare) <> 0) Then
+                Print #f, Phrases(C)
             Else
                 Y = "x"
             End If
-        Next c
+        Next C
     Close #f
     
     ReDim Phrases(0)
@@ -4425,14 +4428,13 @@ Private Function OnBack(ByVal Username As String, ByRef dbAccess As udtGetAccess
         End If
     Else
         ' ...
-        Call OnPrev(Username, dbAccess, msgData, InBot, _
-            cmdRet())
+        Call OnPrevious(Username, dbAccess, msgData, InBot, cmdRet())
     End If
 
 End Function ' end function OnBack
 
 ' handle prev command
-Private Function OnPrev(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+Private Function OnPrevious(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf As String ' temporary output buffer
@@ -4441,13 +4443,16 @@ Private Function OnPrev(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
         If (MediaPlayer.IsLoaded()) Then
-            Dim pos As Integer ' ...
+            'Dim pos As Integer ' ...
         
             ' ...
-            pos = MediaPlayer.PlaylistPosition
+            'pos = MediaPlayer.PlaylistPosition
     
             ' ...
-            Call MediaPlayer.PlayTrack(pos - 1)
+            'Call MediaPlayer.PlayTrack(pos - 1)
+            
+            ' ...
+            Call MediaPlayer.PreviousTrack
         
             ' ...
             tmpBuf = "Skipped backwards."
@@ -5473,7 +5478,7 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
     
     Dim strArray() As String
     Dim tmpBuf     As String ' temporary output buffer
-    Dim c          As Integer
+    Dim C          As Integer
     Dim f          As Integer
     Dim Track      As Long
     
@@ -5492,29 +5497,29 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
                 'number games
                 Track = Val(strArray(0))
                 
-                For c = 0 To UBound(DB)
-                    gAcc = GetCumulativeAccess(DB(c).Username)
+                For C = 0 To UBound(DB)
+                    gAcc = GetCumulativeAccess(DB(C).Username)
                     
                     If (StrComp(gAcc.Type, "USER", vbTextCompare) = 0) Then
                         If (gAcc.Access = Track) Then
-                            .To = DB(c).Username
+                            .To = DB(C).Username
                             
                             Call AddMail(temp)
                         End If
                     End If
-                Next c
+                Next C
                 
                 tmpBuf = tmpBuf & "to users with access " & Track
             Else
-                For c = 0 To UBound(DB)
-                    gAcc = GetCumulativeAccess(DB(c).Username)
+                For C = 0 To UBound(DB)
+                    gAcc = GetCumulativeAccess(DB(C).Username)
                 
                     For f = 1 To Len(strArray(0))
                         If (StrComp(gAcc.Type, "USER", vbTextCompare) = 0) Then
                             If (InStr(1, gAcc.Flags, Mid$(strArray(0), f, 1), _
                                 vbBinaryCompare) > 0) Then
                                 
-                                .To = DB(c).Username
+                                .To = DB(C).Username
                                 
                                 Call AddMail(temp)
                                 
@@ -5522,7 +5527,7 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
                             End If
                         End If
                     Next f
-                Next c
+                Next C
                 
                 tmpBuf = tmpBuf & "to users with any of the flags " & strArray(0)
             End If
@@ -6749,7 +6754,7 @@ Private Sub DBRemove(ByVal s As String)
     Dim T()  As udtDatabase
     
     Dim I    As Integer
-    Dim c    As Integer
+    Dim C    As Integer
     Dim n    As Integer
     Dim temp As String
     
@@ -6758,17 +6763,17 @@ Private Sub DBRemove(ByVal s As String)
     For I = LBound(DB) To UBound(DB)
         If StrComp(DB(I).Username, s, vbTextCompare) = 0 Then
             ReDim T(0 To UBound(DB) - 1)
-            For c = LBound(DB) To UBound(DB)
-                If c <> I Then
-                    T(n) = DB(c)
+            For C = LBound(DB) To UBound(DB)
+                If C <> I Then
+                    T(n) = DB(C)
                     n = n + 1
                 End If
-            Next c
+            Next C
             
             ReDim DB(UBound(T))
-            For c = LBound(T) To UBound(T)
-                DB(c) = T(c)
-            Next c
+            For C = LBound(T) To UBound(T)
+                DB(C) = T(C)
+            Next C
             Exit Sub
         End If
     Next I
@@ -7495,13 +7500,13 @@ Public Function DateCleanup(ByVal TDate As Date) As String
 End Function
 
 Private Function GetAccessINIValue(ByVal sKey As String, Optional ByVal Default As Long) As Long
-    Dim s As String, L As Long
+    Dim s As String, l As Long
     
     s = ReadINI("Numeric", sKey, "access.ini")
-    L = Val(s)
+    l = Val(s)
     
-    If L > 0 Then
-        GetAccessINIValue = L
+    If l > 0 Then
+        GetAccessINIValue = l
     Else
         If Default > 0 Then
             GetAccessINIValue = Default

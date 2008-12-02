@@ -123,7 +123,7 @@ End Type
 
 Private Type FILEINFO
     file  As String
-    index As Long
+    Index As Long
 End Type
 
 Private m_hWnd As Long
@@ -234,6 +234,18 @@ Public Function OpenPlayer(Optional FilePath As String) As Boolean
         Call Shell(WA_DEFAULT_PATH, vbNormalFocus)
     End If
 End Function
+
+Public Sub NextTrack()
+
+   PlayTrack PlaylistPosition + 1
+   
+End Sub
+
+Public Sub PreviousTrack()
+
+    PlayTrack PlaylistPosition - 1
+
+End Sub
 
 ' ...
 Public Sub PlayTrack(Optional Track As Variant = vbNullString)
