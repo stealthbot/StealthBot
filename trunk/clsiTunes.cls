@@ -76,9 +76,15 @@ Public Sub PlayTrack(ByVal Track As Variant)
     
     Else
         
-        Dim colTracks As Object
+        Dim colTracks As Object ' ...
+        
+        ' ...
         Set colTracks = m_iTunesObj.LibraryPlaylist.Search(Track, 5)
-        Call colTracks.Item(1).Play
+        
+        ' ...
+        If (Not (colTracks Is Nothing)) Then
+            Call colTracks.Item(1).Play
+        End If
         
     End If
 End Sub
