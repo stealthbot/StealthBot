@@ -540,6 +540,11 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
             End If
         End If
     End If
+    
+    ' ...
+    If (doCheck) Then
+        CurrentUser.PendingBan = True
+    End If
 
 End Function
 

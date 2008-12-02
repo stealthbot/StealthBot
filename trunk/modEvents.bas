@@ -1346,93 +1346,98 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     
     ' ...
     Username = UserObj.DisplayName
-
+    
     ' ...
-    If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        ' GUI
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    
+    If (QueuedEventID = 0) Then
+        g_Channel.CheckUser Username, UserObj
+    Else
         ' ...
-        If (JoinMessagesOff = False) Then
-            'ParseStatstring OriginalStatstring, pStats, sClan
-        
-            frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, Username & _
-                " [" & Ping & "ms]", RTBColors.JoinText, " has joined the channel using " & UserObj.Stats.ToString
-        End If
-        
-        ' ...
-        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, sClan
-        
-        ' ...
-        frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString
-        
-        ' ...
-        frmChat.ListviewTabs_Click 0
-        
-        ' flash window
-        If (frmChat.mnuFlash.Checked) Then
-            FlashWindow
-        End If
-        
-        ' ...
-        Call DoLastSeen(Username)
-        
-        ' ...
-        IsBanned = (g_Channel.CheckUser(Username, UserObj))
-        
-        ' ...
-        If (IsBanned = False) Then
+        If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            ' Greet message
+            ' GUI
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    
-            If (BotVars.UseGreet) Then
-                ' ...
-                If (LenB(BotVars.GreetMsg)) Then
+        
+            ' ...
+            If (JoinMessagesOff = False) Then
+                'ParseStatstring OriginalStatstring, pStats, sClan
+            
+                frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, Username & _
+                    " [" & Ping & "ms]", RTBColors.JoinText, " has joined the channel using " & UserObj.Stats.ToString
+            End If
+            
+            ' ...
+            AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, sClan
+            
+            ' ...
+            frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString
+            
+            ' ...
+            frmChat.ListviewTabs_Click 0
+            
+            ' flash window
+            If (frmChat.mnuFlash.Checked) Then
+                FlashWindow
+            End If
+            
+            ' ...
+            Call DoLastSeen(Username)
+            
+            ' ...
+            IsBanned = (UserObj.PendingBan)
+            
+            ' ...
+            If (IsBanned = False) Then
+                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                ' Greet message
+                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        
+                If (BotVars.UseGreet) Then
                     ' ...
-                    If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) <> 0) Or _
-                        (IsStealthBotTech() = True)) Then
-                        
+                    If (LenB(BotVars.GreetMsg)) Then
                         ' ...
-                        If (BotVars.WhisperGreet) Then
-                            frmChat.AddQ "/w " & Username & _
-                                Space$(1) & DoReplacements(BotVars.GreetMsg, Username, Ping)
-                        Else
-                            frmChat.AddQ DoReplacements(BotVars.GreetMsg, Username, Ping)
+                        If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) <> 0) Or _
+                            (IsStealthBotTech() = True)) Then
+                            
+                            ' ...
+                            If (BotVars.WhisperGreet) Then
+                                frmChat.AddQ "/w " & Username & _
+                                    Space$(1) & DoReplacements(BotVars.GreetMsg, Username, Ping)
+                            Else
+                                frmChat.AddQ DoReplacements(BotVars.GreetMsg, Username, Ping)
+                            End If
                         End If
+                    End If
+                End If
+                    
+                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                ' Botmail
+                ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+                
+                If (mail) Then
+                    L = GetMailCount(Username)
+                    
+                    If (L > 0) Then
+                        frmChat.AddQ "/w " & Username & " You have " & L & _
+                            " new message" & IIf(L = 1, "", "s") & ". Type !inbox to retrieve."
                     End If
                 End If
             End If
                 
-            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            ' Botmail
-            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-            
-            If (mail) Then
-                L = GetMailCount(Username)
-                
-                If (L > 0) Then
-                    frmChat.AddQ "/w " & Username & " You have " & L & _
-                        " new message" & IIf(L = 1, "", "s") & ". Type !inbox to retrieve."
-                End If
+            ' print their statstring, if desired
+            If (MDebug("statstrings")) Then
+                frmChat.AddChat RTBColors.ErrorMessageText, OriginalStatstring
             End If
-        End If
             
-        ' print their statstring, if desired
-        If (MDebug("statstrings")) Then
-            frmChat.AddChat RTBColors.ErrorMessageText, OriginalStatstring
+            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+            ' call event script function
+            ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+            
+            On Error Resume Next
+    
+            ' ...
+            frmChat.SControl.Run "Event_UserJoins", Username, Flags, UserObj.Stats.ToString, Ping, _
+                Product, 0, OriginalStatstring, IsBanned
         End If
-        
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        ' call event script function
-        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        
-        On Error Resume Next
-
-        ' ...
-        frmChat.SControl.Run "Event_UserJoins", Username, Flags, UserObj.Stats.ToString, Ping, _
-            Product, 0, OriginalStatstring, IsBanned
     End If
     
     Exit Sub

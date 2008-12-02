@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4599,7 +4599,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Dim I As Long
     Dim L As Long
     Dim n As Integer
-    Dim c As Integer ',oldSelStart As Integer
+    Dim C As Integer ',oldSelStart As Integer
     Dim X() As String
     Dim m As String
     Dim s As String ',sClosest As String
@@ -4670,9 +4670,9 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     If (I > 0) Then
                         .ListItems.Item(1).Selected = True
                         
-                        For c = 1 To .ListItems.Count
-                            .ListItems.Item(c).Ghosted = False
-                        Next c
+                        For C = 1 To .ListItems.Count
+                            .ListItems.Item(C).Ghosted = False
+                        Next C
                         
                         .ListItems.Item(1).Ghosted = True
     
@@ -4734,25 +4734,25 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 
             Case KEY_A
                 If (Shift = S_CTRL) Then
-                    c = ListviewTabs.TabIndex
+                    C = ListviewTabs.TabIndex
                     ListviewTabs.TabIndex = 0
-                    Call ListviewTabs_Click(c)
+                    Call ListviewTabs_Click(C)
                 End If
                 
             Case KEY_S
                 If (Shift = S_CTRL) Then
-                    c = ListviewTabs.TabIndex
+                    C = ListviewTabs.TabIndex
                     ListviewTabs.TabIndex = 1
-                    Call ListviewTabs_Click(c)
+                    Call ListviewTabs_Click(C)
                 End If
                 
             Case KEY_D
                 If (Shift = S_CTRL) Then
-                    c = ListviewTabs.TabIndex
+                    C = ListviewTabs.TabIndex
                     
                     ListviewTabs.TabIndex = 2
                     
-                    Call ListviewTabs_Click(c)
+                    Call ListviewTabs_Click(C)
                 End If
                 
             Case KEY_B
@@ -5199,7 +5199,7 @@ Private Sub quLower_Timer()
         Dim ret As String
         Dim lPos As Long
         Dim Y As String
-        Dim c As Integer, n As Integer
+        Dim C As Integer, n As Integer
         
         Caching = False
         
@@ -5221,45 +5221,45 @@ Private Sub quLower_Timer()
             strArray(0) = ret
         End If
         
-        For c = 0 To UBound(strArray)
+        For C = 0 To UBound(strArray)
             ' [CHANNELOP]  -  [*CHANNELOP]  -  [CHARACTER@USEast (*CHANNELOP)]
-            If StrComp(UCase(strArray(c)), strArray(c), vbTextCompare) = 0 Then
-                If Left$(strArray(c), 1) = "[" And Right$(strArray(c), 1) = "]" Then
-                    strArray(c) = Mid(strArray(c), 2, Len(strArray(c)) - 2)
+            If StrComp(UCase(strArray(C)), strArray(C), vbTextCompare) = 0 Then
+                If Left$(strArray(C), 1) = "[" And Right$(strArray(C), 1) = "]" Then
+                    strArray(C) = Mid(strArray(C), 2, Len(strArray(C)) - 2)
                 End If
             End If
         
-            n = InStr(strArray(c), "(*")
+            n = InStr(strArray(C), "(*")
             
             If n > 0 Then
                 ' This covers Character@USeast (*Username)
                 
-                strArray(c) = Mid$(strArray(c), n + 2)
-                strArray(c) = Left$(strArray(c), Len(strArray(c)) - 1)
+                strArray(C) = Mid$(strArray(C), n + 2)
+                strArray(C) = Left$(strArray(C), Len(strArray(C)) - 1)
             Else
-                n = InStr(strArray(c), "*")
+                n = InStr(strArray(C), "*")
                 
                 ' This covers *Username
                 
                 If n > 0 Then
-                    strArray(c) = Mid$(strArray(c), n + 1)
+                    strArray(C) = Mid$(strArray(C), n + 1)
                 End If
             End If
             
-            strArray(c) = convertUsername(strArray(c))
+            strArray(C) = convertUsername(strArray(C))
             
-            If Len(strArray(c)) > 1 Then
+            If Len(strArray(C)) > 1 Then
                 If InStr(Y, "ban") Then
                     If (g_Channel.Self.IsOperator) Then
-                        Ban strArray(c), (AutoModSafelistValue - 1), 0
+                        Ban strArray(C), (AutoModSafelistValue - 1), 0
                     End If
                 Else
-                    If (GetSafelist(strArray(c)) = False) Then
-                        AddQ "/squelch " & strArray(c)
+                    If (GetSafelist(strArray(C)) = False) Then
+                        AddQ "/squelch " & strArray(C)
                     End If
                 End If
             End If
-        Next c
+        Next C
     End If
     
     If unsquelching Then unsquelching = False
@@ -6481,7 +6481,7 @@ Private Function BanDelay() As Integer
             Randomize
         
             ' ...
-            BanDelay = (BanDelay + ((Rnd * OpCount) * 100))
+            BanDelay = (BanDelay + ((Rnd * OpCount) * 200))
         End If
     End If
     
@@ -7299,7 +7299,7 @@ Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
     Dim Path As String
     Dim temp As String
     Dim I As Integer
-    Dim c As Integer
+    Dim C As Integer
     
     f = FreeFile
     
@@ -7332,12 +7332,12 @@ Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
             Else
                 temp = ReadINI(FI, "Total", "filters.ini")
                 If temp <> vbNullString And CInt(temp) > -1 Then
-                    c = Int(temp)
-                    For I = 1 To c
+                    C = Int(temp)
+                    For I = 1 To C
                         temp = ReadINI(FI, "Filter" & I, "filters.ini")
                         If temp <> vbNullString Then
                             tArray(UBound(tArray)) = LCase(temp)
-                            If I <> c Then ReDim Preserve tArray(UBound(tArray) + 1)
+                            If I <> C Then ReDim Preserve tArray(UBound(tArray) + 1)
                         End If
                     Next I
                 End If
@@ -7524,7 +7524,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     
     With lstView.ListItems
         If (.Count > 0) Then
-            Dim c As Integer ' ...
+            Dim C As Integer ' ...
             
             If (startIndex > .Count) Then
                 Index = 1
@@ -7537,15 +7537,15 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                     CurrentName = .Item(I).text
                 
                     If (Len(CurrentName) >= Len(toMatch)) Then
-                        For c = 1 To Len(toMatch) 'for each letter in their name
-                            If (StrComp(Mid$(toMatch, c, 1), Mid$(CurrentName, c, 1), _
+                        For C = 1 To Len(toMatch) 'for each letter in their name
+                            If (StrComp(Mid$(toMatch, C, 1), Mid$(CurrentName, C, 1), _
                                 vbTextCompare) <> 0) Then
                                 
                                 Exit For
                             End If
-                        Next c
+                        Next C
                         
-                        If (c >= (Len(toMatch) + 1)) Then
+                        If (C >= (Len(toMatch) + 1)) Then
                             MatchClosest = _
                                     .Item(I).text & BotVars.AutoCompletePostfix
                             

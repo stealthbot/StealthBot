@@ -49,6 +49,7 @@ Private m_operator_date    As Date
 Private m_queue            As Collection
 Private m_passed_chan_auth As Boolean
 Private m_stats            As clsUserStats
+Private m_pending_ban      As Boolean
 
 Private Sub Class_Initialize()
     
@@ -112,6 +113,20 @@ Public Property Let game(str As String)
 
     ' ...
     m_game = str
+
+End Property
+
+Public Property Get PendingBan() As Boolean
+
+    ' ...
+    PendingBan = m_pending_ban
+
+End Property
+
+Public Property Let PendingBan(bln As Boolean)
+
+    ' ...
+    m_pending_ban = bln
 
 End Property
 
@@ -293,14 +308,14 @@ Public Sub ClearQueue()
     ' ...
     'Set m_queue = New Collection
     
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
-    For i = Queue.Count To 1 Step -1
+    For I = Queue.Count To 1 Step -1
     
-        Queue.Remove i
+        Queue.Remove I
     
-    Next i
+    Next I
     
 
 End Sub
