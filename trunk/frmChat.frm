@@ -2237,7 +2237,7 @@ Public Sub FindAltBNLS()
             strBNLS() = Split(strReturn, vbLf)
 
             'Assign the first BNLS server to BotVars.BNLSServer
-            BotVars.BNLSServer = strBNLS(intCounter)
+            'BotVars.BNLSServer = strBNLS(intCounter)
             
             'Mark GotBNLSList as True so it's no longer downloaded for each attempt
             GotBNLSList = True
@@ -2252,6 +2252,30 @@ Public Sub FindAltBNLS()
             Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://stealthbot.net/ " & _
                                              "and check the Technical Support forum for more information."
         End If
+    End If
+    
+    ' ...
+    ReDim Preserve strBNLS(0 To 1)
+    
+    ' ...
+    If (strBNLS(1) = vbNullString) Then
+        ' ...
+        AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured when trying to locate an alternative BNLS server. " & _
+            "Visit http://stealthbot.net/ and check the Technical Support forum for more information."
+    
+        ' ...
+        Call DoDisconnect
+    
+        ' ...
+        GotBNLSList = False
+    
+        ' ...
+        Exit Sub
+    End If
+    
+    ' ...
+    If (intCounter >= UBound(strBNLS)) Then
+        intCounter = 1
     End If
     
     'Assign the next BNLS server to BotVars.BNLSServer
@@ -2271,9 +2295,7 @@ BNLS_Alt_Finder_Error:
     If Err.Number = FIND_ALT_BNLS_ERROR Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] " & Err.description
     Else
-        AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured when trying to locate an alternative BNLS server. " & _
-                                            "Visit http://stealthbot.net/ and check the Technical Support forum for " & _
-                                            "more information."
+        AddChat RTBColors.ErrorMessageText, "Error (#" & Err.Number & "): " & Err.description & " in FindAltBNLS()"
     End If
     
     'Disconnect the bot
