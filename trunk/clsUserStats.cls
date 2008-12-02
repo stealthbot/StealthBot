@@ -878,7 +878,7 @@ Public Property Get IconCode() As Integer
                         IIf(IsWCG, Icon, ""))
             
                 ' ...
-                If (ICON_START_WAR3 + IconCode = ICUNKNOWN) Then
+                If (ICON_START_WAR3 + IconCode = 88) Then
                     ' ...
                     IconCode = ICWAR3
                     
@@ -902,7 +902,7 @@ Public Property Get IconCode() As Integer
                         IIf(IsWCG, Icon, ""))
                         
                 ' ...
-                If (ICON_START_W3XP + IconCode = ICUNKNOWN) Then
+                If (ICON_START_W3XP + IconCode = 88) Then
                     ' ...
                     IconCode = ICWAR3X
                     
