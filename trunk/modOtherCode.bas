@@ -1746,13 +1746,13 @@ Public Function GetConfigFilePath() As String
     GetConfigFilePath = FilePath
 End Function
 
-Public Function GetFilePath(ByVal filename As String) As String
+Public Function GetFilePath(ByVal FileName As String) As String
     Dim s As String
     
-    If (InStr(filename, "\") = 0) Then
-        GetFilePath = GetProfilePath() & "\" & filename
+    If (InStr(FileName, "\") = 0) Then
+        GetFilePath = GetProfilePath() & "\" & FileName
         
-        s = ReadCFG("FilePaths", filename)
+        s = ReadCFG("FilePaths", FileName)
         
         If (LenB(s) > 0) Then
             If (LenB(Dir$(s))) Then
@@ -1760,7 +1760,7 @@ Public Function GetFilePath(ByVal filename As String) As String
             End If
         End If
     Else
-        GetFilePath = filename
+        GetFilePath = FileName
     End If
 End Function
 
@@ -2976,7 +2976,8 @@ End Function
 Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Variant)
     On Error GoTo ERROR_HANDLER
     
-    Static rtbChat_LoopCount As Integer ' ...
+    Static rtbChat_LoopCount     As Integer ' ...
+    Static rtbWhispers_LoopCount As Integer ' ...
     
     Dim s              As String
     Dim L              As Long
@@ -2992,6 +2993,10 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     ' *****************************************
     '              SANITY CHECKS
     ' *****************************************
+    
+    ' ...
+    
+    rtbChatLength = Len(rtb.text)
 
     ' ...
     For I = LBound(saElements) To UBound(saElements) Step 2
@@ -3022,11 +3027,12 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
     ' ...
     If ((BotVars.LockChat = False) Or (rtb <> frmChat.rtbChat)) Then
-        Dim fontStr As String ' ...
+        Dim FontStr  As String ' ...
+        Dim FileName As String ' ...
     
         f = FreeFile
         
-        fontStr = rtb.Font.Name
+        FontStr = rtb.Font.Name
         
         If (IsWin2000Plus()) Then
             Call GetScrollRange(rtb.hWnd, SB_VERT, 0, intRange)
@@ -3052,20 +3058,17 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             
             ' ...
             If (LogThis) Then
-                Dim filename  As String  ' ...
-            
-                ' ...
                 Do
                     ' ...
-                    filename = _
+                    FileName = _
                         GetProfilePath() & "\Logs\" & Format(Date, "YYYY-MM-DD") & _
                             IIf(rtbChat_LoopCount, "_" & rtbChat_LoopCount + 1, "") & ".txt"
                 
                     ' ...
-                    If (Dir$(filename) = vbNullString) Then
-                        Open filename For Output As #f
+                    If (Dir$(FileName) = vbNullString) Then
+                        Open FileName For Output As #f
                     Else
-                        Open filename For Append As #f
+                        Open FileName For Append As #f
                     End If
                     
                     ' ...
@@ -3086,6 +3089,40 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             
         ElseIf (rtb = frmChat.rtbWhispers) Then
 
+            ' ...
+            LogThis = (BotVars.Logging <= 1)
+            
+            ' ...
+            If (LogThis) Then
+                Do
+                    ' ...
+                    FileName = _
+                        GetProfilePath() & "\Logs\" & Format(Date, "YYYY-MM-DD") & "-WHISPERS" & _
+                            IIf(rtbWhispers_LoopCount, "_" & rtbChat_LoopCount + 1, "") & ".txt"
+                
+                    ' ...
+                    If (Dir$(FileName) = vbNullString) Then
+                        Open FileName For Output As #f
+                    Else
+                        Open FileName For Append As #f
+                    End If
+                    
+                    ' ...
+                    If ((BotVars.MaxLogFileSize) And (LOF(f) >= BotVars.MaxLogFileSize)) Then
+                        ' ...
+                        rtbWhispers_LoopCount = (rtbWhispers_LoopCount + 1)
+                    
+                        ' ...
+                        LogThis = False
+                        
+                        ' ...
+                        Close #f
+                    Else
+                        LogThis = True
+                    End If
+                Loop While (LogThis = False)
+            End If
+
         End If
         
         If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
@@ -3093,9 +3130,9 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 .Visible = False
                 .SelStart = 0
                 .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
-                .SelFontName = fontStr
+                .SelFontName = FontStr
                 
-                rtbChatLength = (rtbChatLength - .SelLength)
+                'rtbChatLength = (rtbChatLength - .SelLength)
                 
                 .SelText = ""
                 .Visible = True
@@ -3111,7 +3148,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             If .SelBold = True Then: .SelBold = False
             If .SelItalic = True Then: .SelItalic = False
             If .SelUnderline = True Then: .SelUnderline = False
-            .SelFontName = fontStr
+            .SelFontName = FontStr
             .SelText = s
             .SelStart = Len(.text)
         End With
@@ -3141,15 +3178,15 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                     L = .SelStart
                     
                     .SelLength = 0
-                    .SelFontName = fontStr
+                    .SelFontName = FontStr
                     .SelColor = saElements(I)
                     .SelText = saElements(I + 1) & _
                         Left$(vbCrLf, -2 * CLng((I + 1) = UBound(saElements)))
                     
-                    rtbChatLength = (rtbChatLength + _
-                                     Len(s) + _
-                                     Len(saElements(I + 1)) + _
-                                     Len(Left$(vbCrLf, -2 * CLng((I + 1) = UBound(saElements)))))
+                    'rtbChatLength = (rtbChatLength + _
+                    '                 Len(s) + _
+                    '                 Len(saElements(I + 1)) + _
+                    '                 Len(Left$(vbCrLf, -2 * CLng((I + 1) = UBound(saElements)))))
                     
                     .SelStart = Len(.text)
                 End With

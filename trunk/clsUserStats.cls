@@ -1068,7 +1068,7 @@ Private Sub ParseDiabloII()
                     ActsCompleted = (charData(27) And &H18)
                 End If
 
-                IsLadderCharacter = ((charData(30) And &H5) = &H5)
+                IsLadderCharacter = (charData(30) <> &HFF)
             End If
         End If
     End If

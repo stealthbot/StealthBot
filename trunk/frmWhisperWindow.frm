@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "Richtx32.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
 Begin VB.Form frmWhisperWindow 
    BackColor       =   &H00000000&
    Caption         =   "< account name >"
@@ -176,7 +176,7 @@ End Sub
 
 Private Sub mnuSave_Click()
     Dim ToSave() As String
-    Dim f As Integer, i As Integer
+    Dim f As Integer, I As Integer
     Dim tUsername As String, tMessage As String
 
     With cdl
@@ -204,14 +204,14 @@ Private Sub mnuSave_Click()
                 
                 Print #f, "<p>"
                 
-                For i = 0 To UBound(ToSave)
-                    If LenB(ToSave(i)) > 0 Then
-                        If InStr(ToSave(i), ":") > 0 Then
-                            tMessage = Mid$(ToSave(i), InStr(ToSave(i), ":") + 2)
-                            tUsername = Split(ToSave(i), " ")(1)
+                For I = 0 To UBound(ToSave)
+                    If LenB(ToSave(I)) > 0 Then
+                        If InStr(ToSave(I), ":") > 0 Then
+                            tMessage = Mid$(ToSave(I), InStr(ToSave(I), ":") + 2)
+                            tUsername = Split(ToSave(I), " ")(1)
                             tUsername = Left$(tUsername, InStr(tUsername, ":") - 1)
                         Else
-                            tMessage = ToSave(i)
+                            tMessage = ToSave(I)
                         End If
 
                         If StrComp(tUsername, GetCurrentUsername, vbTextCompare) = 0 Then
@@ -228,7 +228,7 @@ Private Sub mnuSave_Click()
                             Print #f, tMessage & "</font><br />"
                               
                     End If
-                Next i
+                Next I
                 
                 Print #f, "</p>"
                 Print #f, "</body></html>"
@@ -267,7 +267,7 @@ Private Sub txtSend_KeyPress(KeyAscii As Integer)
     End If
     
     Dim X() As String
-    Dim i As Integer
+    Dim I As Integer
     
     If KeyAscii = 22 Then
         On Error Resume Next
@@ -276,15 +276,15 @@ Private Sub txtSend_KeyPress(KeyAscii As Integer)
         
             X() = Split(Clipboard.GetText, Chr(10))
             If UBound(X) > 0 Then
-                For i = LBound(X) To UBound(X)
-                    If i = LBound(X) Then X(i) = txtSend.text & X(i)
+                For I = LBound(X) To UBound(X)
+                    If I = LBound(X) Then X(I) = txtSend.text & X(I)
                 
-                    X(i) = Replace(X(i), Chr(13), vbNullString)
+                    X(I) = Replace(X(I), Chr(13), vbNullString)
                     
-                    If X(i) <> vbNullString Then
-                        frmChat.AddQ "/w " & m_sWhisperTo & Space(1) & X(i)
+                    If X(I) <> vbNullString Then
+                        frmChat.AddQ "/w " & m_sWhisperTo & Space(1) & X(I)
                     End If
-                Next i
+                Next I
                 txtSend.text = vbNullString
                 KeyAscii = 0
             End If
@@ -293,10 +293,11 @@ Private Sub txtSend_KeyPress(KeyAscii As Integer)
 End Sub
 
 Sub AddWhisper(ParamArray saElements() As Variant)
+
     On Error Resume Next
     Dim s As String
-    Dim l As Long
-    Dim i As Integer, oldSelStart As Integer, oldSelLength As Integer
+    Dim L As Long
+    Dim I As Integer, oldSelStart As Integer, oldSelLength As Integer
     
     oldSelStart = txtSend.SelStart
     oldSelStart = oldSelStart + txtSend.SelLength
@@ -314,23 +315,23 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             .SelStart = Len(.text)
         End With
         
-        For i = LBound(saElements) To UBound(saElements) Step 2
-            If InStr(1, saElements(i), Chr(0), vbBinaryCompare) > 0 Then _
-                KillNull saElements(i)
+        For I = LBound(saElements) To UBound(saElements) Step 2
+            If InStr(1, saElements(I), Chr(0), vbBinaryCompare) > 0 Then _
+                KillNull saElements(I)
             
-            If Len(saElements(i + 1)) > 0 Then
+            If Len(saElements(I + 1)) > 0 Then
                 With rtbWhispers
                     .SelStart = Len(.text)
-                    l = .SelStart
+                    L = .SelStart
                     .SelLength = 0
-                    .SelColor = saElements(i)
-                    .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
+                    .SelColor = saElements(I)
+                    .SelText = saElements(I + 1) & Left$(vbCrLf, -2 * CLng((I + 1) = UBound(saElements)))
                     .SelStart = Len(.text)
                 End With
             End If
-        Next i
+        Next I
         
-        Call ColorModify(rtbWhispers, l)
+        Call ColorModify(rtbWhispers, L)
         
         txtSend.SelStart = oldSelStart
         txtSend.SelLength = oldSelLength
