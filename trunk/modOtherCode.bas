@@ -1746,13 +1746,13 @@ Public Function GetConfigFilePath() As String
     GetConfigFilePath = FilePath
 End Function
 
-Public Function GetFilePath(ByVal FileName As String) As String
+Public Function GetFilePath(ByVal filename As String) As String
     Dim s As String
     
-    If (InStr(FileName, "\") = 0) Then
-        GetFilePath = GetProfilePath() & "\" & FileName
+    If (InStr(filename, "\") = 0) Then
+        GetFilePath = GetProfilePath() & "\" & filename
         
-        s = ReadCFG("FilePaths", FileName)
+        s = ReadCFG("FilePaths", filename)
         
         If (LenB(s) > 0) Then
             If (LenB(Dir$(s))) Then
@@ -1760,7 +1760,7 @@ Public Function GetFilePath(ByVal FileName As String) As String
             End If
         End If
     Else
-        GetFilePath = FileName
+        GetFilePath = filename
     End If
 End Function
 
@@ -1997,7 +1997,7 @@ End Sub
 ' collapse array on top of the removed user
 Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     Dim I          As Integer
-    Dim c          As Integer
+    Dim C          As Integer
     Dim NumRemoved As Integer
     Dim iterations As Long
     Dim uBnd       As Integer
@@ -2009,9 +2009,9 @@ Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     While (I <= (uBnd - NumRemoved))
         If (StrComp(sUser, gBans(I).Username, vbTextCompare) = 0) Then
             If (I <> UBound(gBans)) Then
-                For c = I To UBound(gBans)
+                For C = I To UBound(gBans)
                     gBans(I) = gBans(I + 1)
-                Next c
+                Next C
             End If
             
             ' UBound(gBans) - 1 when UBound(gBans) = 0
@@ -2448,31 +2448,31 @@ End Sub
 ' extracted
 ' 1-based
 Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
-    Dim c           As Integer
+    Dim C           As Integer
     Dim I           As Integer
     Dim TargetSpace As Integer
     
     'one two three
     '   1   2
     
-    c = 0
+    C = 0
     I = 1
     pos = pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While ((c < pos) And (I > 0))
+    While ((C < pos) And (I > 0))
         TargetSpace = I
         
         I = (InStr(I + 1, str, Space(1), vbBinaryCompare))
         
-        c = (c + 1)
+        C = (C + 1)
     Wend
     
-    If (c >= pos) Then
-        c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
+    If (C >= pos) Then
+        C = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
-        If (c > 0) Then
-            GetStringChunk = Mid$(str, TargetSpace, c - (TargetSpace))
+        If (C > 0) Then
+            GetStringChunk = Mid$(str, TargetSpace, C - (TargetSpace))
         Else
             GetStringChunk = Mid$(str, TargetSpace)
         End If
@@ -3028,7 +3028,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     ' ...
     If ((BotVars.LockChat = False) Or (rtb <> frmChat.rtbChat)) Then
         Dim FontStr  As String ' ...
-        Dim FileName As String ' ...
+        Dim filename As String ' ...
     
         f = FreeFile
         
@@ -3060,15 +3060,17 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             If (LogThis) Then
                 Do
                     ' ...
-                    FileName = _
+                    filename = _
                         GetProfilePath() & "\Logs\" & Format(Date, "YYYY-MM-DD") & _
                             IIf(rtbChat_LoopCount, "_" & rtbChat_LoopCount + 1, "") & ".txt"
                 
                     ' ...
-                    If (Dir$(FileName) = vbNullString) Then
-                        Open FileName For Output As #f
+                    If (Dir$(filename) = vbNullString) Then
+                        frmChat.MakeLoggingDirectory
+                        
+                        Open filename For Output As #f
                     Else
-                        Open FileName For Append As #f
+                        Open filename For Append As #f
                     End If
                     
                     ' ...
@@ -3096,15 +3098,17 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             If (LogThis) Then
                 Do
                     ' ...
-                    FileName = _
+                    filename = _
                         GetProfilePath() & "\Logs\" & Format(Date, "YYYY-MM-DD") & "-WHISPERS" & _
                             IIf(rtbWhispers_LoopCount, "_" & rtbChat_LoopCount + 1, "") & ".txt"
                 
                     ' ...
-                    If (Dir$(FileName) = vbNullString) Then
-                        Open FileName For Output As #f
+                    If (Dir$(filename) = vbNullString) Then
+                        frmChat.MakeLoggingDirectory
+                    
+                        Open filename For Output As #f
                     Else
-                        Open FileName For Append As #f
+                        Open filename For Append As #f
                     End If
                     
                     ' ...

@@ -128,6 +128,8 @@ Public Sub LogPacketRaw(ByVal Server As enuPL_ServerTypes, ByVal Direction As en
         If (LenB(Dir$(PacketLogFilePath)) = 0) Then
             f = FreeFile
             
+            frmChat.MakeLoggingDirectory
+            
             Open PacketLogFilePath For Output As #f
                 Print #f, "StealthBot packet log, started " & Format(Date, "yyyy-MM-dd") & "."
                 Print #f, "- - - - PROTECT THIS PACKET LOG AS IT MAY CONTAIN PRIVATE INFORMATION"
