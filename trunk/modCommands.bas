@@ -48,7 +48,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Dim Count            As Integer
     Dim bln              As Boolean
     Dim command_return() As String
-    Dim outBuf           As String
+    Dim outbuf           As String
     Dim execCommand      As Boolean
     
     ' ...
@@ -74,7 +74,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         ' ...
         If (command.IsLocal) Then
             execCommand = True
-        ElseIf (HasAccess(Username, command.Name, command.Args, outBuf)) Then
+        ElseIf (HasAccess(Username, command.Name, command.Args, outbuf)) Then
             execCommand = True
         End If
         
@@ -127,7 +127,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             End If
         Else
             ' ...
-            If ((DisplayOutput) And (LenB(outBuf))) Then
+            If ((DisplayOutput) And (LenB(outbuf))) Then
                 ' ...
                 If ((BotVars.WhisperCmds) Or (WasWhispered)) Then
                     AddQ "/w " & Username & Space$(1) & command_return(I), _
@@ -2417,7 +2417,7 @@ Private Function OnUseiTunes(ByVal Username As String, ByRef dbAccess As udtGetA
     tmpBuf = "iTunes is ready."
     
     ' ...
-    Call WriteINI("OT", "MediaPlayer", "iTunes")
+    Call WriteINI("Other", "MediaPlayer", "iTunes")
         
     ' return message
     cmdRet(0) = tmpBuf
@@ -2436,7 +2436,7 @@ Private Function OnUseWinamp(ByVal Username As String, ByRef dbAccess As udtGetA
     tmpBuf = "Winamp is ready."
     
     ' ...
-    Call WriteINI("OT", "MediaPlayer", "Winamp")
+    Call WriteINI("Other", "MediaPlayer", "Winamp")
 
     ' return message
     cmdRet(0) = tmpBuf
@@ -7060,7 +7060,7 @@ ERROR_HANDLER:
 End Function
 
 Public Function HasAccess(ByVal Username As String, ByVal CommandName As String, Optional ByVal CommandArgs As _
-    String = vbNullString, Optional ByRef outBuf As String) As Boolean
+    String = vbNullString, Optional ByRef outbuf As String) As Boolean
     
     On Error GoTo ERROR_HANDLER
     
