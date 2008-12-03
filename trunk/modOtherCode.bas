@@ -2980,7 +2980,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Static rtbWhispers_LoopCount As Integer ' ...
     
     Dim s              As String
-    Dim L              As Long
+    Dim l              As Long
     Dim lngVerticalPos As Long
     Dim Diff           As Long
     Dim I              As Integer
@@ -3167,19 +3167,19 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         
             If ((StrictIsNumeric(saElements(I))) And (Len(saElements(I + 1)) > 0)) Then
-                L = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
+                l = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
                 
-                While (L > 0)
-                    Mid$(saElements(I + 1), L + 1, 1) = "/"
+                While (l > 0)
+                    Mid$(saElements(I + 1), l + 1, 1) = "/"
                     
-                    L = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
+                    l = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
                 Wend
             
                 With rtb
                     .SelStart = Len(.text)
                     
                     ' store position of selection
-                    L = .SelStart
+                    l = .SelStart
                     
                     .SelLength = 0
                     .SelFontName = FontStr
@@ -3203,7 +3203,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         Next I
         
-        Call ColorModify(rtb, L)
+        Call ColorModify(rtb, l)
 
         If (blUnlock) Then
             rtb.Visible = True

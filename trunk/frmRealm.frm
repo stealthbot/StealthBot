@@ -700,15 +700,15 @@ Private Sub MCPHandler_CharDeleteResponse(ByVal Success As Boolean)
 End Sub
 
 Private Sub MCPHandler_CharListResponse(ByVal NumCharacters As Integer)
-    If NumCharacters = 0 Then
-        lvwChars.ListItems.Clear
-    End If
-    
+    lvwChars.ListItems.Clear
+
     ClearExpansionCollection
     ClearExpirationCollection
     ClearExpirationLabel
     
     CharListReceived = True
+    
+    'tmrLoginTimeout.Enabled = True
 End Sub
 
 Private Sub MCPHandler_CharCreateResponse(ByVal Status As Byte, ByVal Message As String)
@@ -745,24 +745,26 @@ Private Sub MCPHandler_CharListEntry(ByVal CharName As String, ByVal Statstring 
                                     IIf(IsExpansion, "expansion ", "") & Class & ")"
     
     With lvwChars
-        If .ListItems.Count > 0 Then
-            If .ListItems.Item(1).Key = "temp" Then
-                .ListItems.Clear
-            End If
-        End If
+        'If .ListItems.Count > 0 Then
+        '    .ListItems.Clear
+        'End If
             
         CharIsExpansion.Add IsExpansion, CharName
     
         If LenB(CharName) > 0 Then
             
             If Not FindKey(CharName) Then
-                .ListItems.Add IIf(Expired, .ListItems.Count + 1, 1), CharName, sOut, ClassByte + 1
+            
+                .ListItems.Add , CharName, sOut, ClassByte + 1
+                
+                'frmChat.AddChat vbRed, CharName & " (" & .ListItems(1).Key & ")"
                 
                 If Expired Then
                     .ListItems.Item(.ListItems.Count).ForeColor = vbRed
                 End If
                 
                 CharExpiration.Add IIf(Expired, "Expired ", "Expires ") & vbCrLf & ExpirationDate, CharName
+                
                 .SetFocus
             End If
         End If
@@ -844,13 +846,36 @@ Sub StopLoginTimer()
 End Sub
 
 Private Sub tmrLoginTimeout_Timer()
+    Static indexValid As Integer ' ...
+    
+    ' ...
+    If (indexValid = 0) Then
+        Dim I As Integer ' ...
+        Dim j As Integer ' ...
+        
+        ' ...
+        For I = 1 To lvwChars.ListItems.Count
+            ' ...
+            If (Len(CharExpiration(I)) >= Len("Expired ")) Then
+                ' ...
+                If (Left$(CharExpiration(I), Len("Expired ")) <> "Expired ") Then
+                    ' ...
+                    indexValid = I
+                    
+                    ' ...
+                    Exit For
+                End If
+            End If
+        Next I
+    End If
+
     mTicks = mTicks + 1
 
-    If lvwChars.ListItems.Count > 0 Then
-        lblWarning.Caption = lvwChars.ListItems.Item(1).Key & vbCrLf & " will be chosen automatically in"
+    If (indexValid > 0) Then
+        lblWarning.Caption = lvwChars.ListItems(indexValid).Key & vbCrLf & " will be chosen automatically in"
         
         If mTicks >= 30 Then
-            MCPHandler.LogonToCharacter lvwChars.ListItems.Item(1).Key
+            MCPHandler.LogonToCharacter lvwChars.ListItems(indexValid).Key
             Unload_SuccessfulLogin = True
             tmrLoginTimeout.Enabled = False
         End If
@@ -884,15 +909,19 @@ Private Function FindKey(ByVal sKey As String) As Boolean
 End Function
 
 Sub ClearExpansionCollection()
-    While CharIsExpansion.Count > 0
-        CharIsExpansion.Remove 1
-    Wend
+    'While CharIsExpansion.Count > 0
+    '    CharIsExpansion.Remove 1
+    'Wend
+    
+    Set CharIsExpansion = New Collection
 End Sub
 
 Sub ClearExpirationCollection()
-    While CharExpiration.Count > 0
-        CharExpiration.Remove 1
-    Wend
+    'While CharExpiration.Count > 0
+    '    CharExpiration.Remove 1
+    'Wend
+    
+    Set CharExpiration = New Collection
 End Sub
 
 Sub ClearExpirationLabel()
