@@ -1474,7 +1474,7 @@ Private Sub Form_Load()
     #If (BETA = 1) Then
         #If (DEV_RELEASE = 1) Then
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
-                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "22"
+                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "23"
         #Else
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
                 ZeroOffsetEx(App.REVISION, 3) & " Stable"
@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -7005,9 +7005,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Else
         BotVars.MediaPlayer = "Winamp"
     End If
-    
-    MsgBox s
-    
+
     s = ReadCFG(MN, "UseRealm")
     If s = "Y" Then BotVars.UseRealm = True Else BotVars.UseRealm = False
     
