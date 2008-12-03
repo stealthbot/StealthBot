@@ -424,6 +424,9 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
                     
                     ' ...
                     frmChat.AddQ "/ban " & Message
+                    
+                    ' ...
+                    doCheck = False
                 Else
                     
                     ' ...
@@ -542,7 +545,7 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
     End If
     
     ' ...
-    If (doCheck) Then
+    If (doCheck = False) Then
         CurrentUser.PendingBan = True
     End If
 
