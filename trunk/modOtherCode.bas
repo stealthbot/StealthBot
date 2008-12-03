@@ -74,7 +74,7 @@ End Function
 
 Public Function GetTimeStamp(Optional DateTime As Date) As String
     ' ...
-    If (Format(DateTime, "hh:mm:ss mm/dd/yyyy") = "00:00:00 12/30/1899") Then
+    If (DateDiff("s", DateTime, "00:00:00 12/30/1899") = 0) Then
         DateTime = Time
     End If
 
