@@ -49,6 +49,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Dim bln              As Boolean
     Dim command_return() As String
     Dim outBuf           As String
+    Dim execCommand      As Boolean
     
     ' ...
     ReDim Preserve command_return(0)
@@ -71,9 +72,14 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     ' ...
     Do While (command.Name <> vbNullString)
         ' ...
-        If ((command.IsLocal) Or _
-                (HasAccess(Username, command.Name, command.Args, outBuf))) Then
-                
+        If (command.IsLocal) Then
+            execCommand = True
+        ElseIf (HasAccess(Username, command.Name, command.Args, outBuf)) Then
+            execCommand = True
+        End If
+        
+        ' ...
+        If (execCommand) Then
             ' ...
             If (IsLocal) Then
                 With dbAccess
@@ -84,7 +90,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             End If
             
             ' ...
-            Call ExecuteCommand(Username, dbAccess, command.Name & Space$(1) & command.Args, _
+            Call executeCommand(Username, dbAccess, command.Name & Space$(1) & command.Args, _
                     IsLocal, command_return)
                     
             ' ...
@@ -133,10 +139,13 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         End If
         
         ' ...
+        Set command = IsCommand(vbNullString, IsLocal)
+        
+        ' ...
         Count = (Count + 1)
         
         ' ...
-        Set command = IsCommand(vbNullString, IsLocal)
+        execCommand = False
     Loop
         
     ' ...
@@ -413,7 +422,7 @@ End Function
 'End Function ' end function ProcessCommand
 
 ' command processing helper function
-Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal Message As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
 
     Dim tmpmsg   As String  ' stores copy of message
@@ -619,7 +628,7 @@ Public Function ExecuteCommand(ByVal Username As String, ByRef dbAccess As udtGe
     End If
     
     ' was a command found? return.
-    ExecuteCommand = (Not (blnNoCmd))
+    executeCommand = (Not (blnNoCmd))
 End Function
 
 ' handle dump command
