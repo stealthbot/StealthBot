@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -6457,9 +6457,14 @@ End Sub
 
 Private Function BanDelay() As Integer
 
+    ' define default error handler
     On Error GoTo ERROR_HANDLER
     
-    ' ...
+    ' base ban delay
+    ' The base delay serves two functions: it prevents likely ineffectual attempts at
+    ' banning fast floodbots & it provides a small window for bots without similar ban
+    ' delay functions to do banning without incurring the high risk of double bans.
+    ' The base delay prevents banning at any lower interval than what is specified.
     BanDelay = 100
 
     ' do we have ops?
@@ -6467,30 +6472,34 @@ Private Function BanDelay() As Integer
         Dim OpCount As Integer ' ...
         Dim j       As Integer ' ...
         
-        ' ...
+        ' loop through users in channel
         For j = 1 To g_Channel.Users.Count
-            ' ...
+            ' is user an operator?
             If (g_Channel.Users(j).IsOperator) Then
                 OpCount = (OpCount + 1)
             End If
         Next j
         
-        ' ...
+        ' do we have more than one op?
         If (OpCount > 1) Then
-            ' ...
+            ' seed rnd function
             Randomize
         
-            ' ...
-            BanDelay = (BanDelay + ((Rnd * OpCount) * 200))
+            ' set random ban delay based primarily on op count
+            BanDelay = _
+                (BanDelay + ((1 + Rnd * OpCount) * (1 + Rnd * 200)))
         End If
     End If
     
-    ' ...
+    ' exit procedure
     Exit Function
-    
+
+' default error handler
 ERROR_HANDLER:
+    ' display error message
     Call AddChat(vbRed, "Error: " & Err.description & " in BanDelay().")
 
+    ' exit procedure
     Exit Function
 
 End Function
