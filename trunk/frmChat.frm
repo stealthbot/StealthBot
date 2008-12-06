@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5342,7 +5342,6 @@ Private Sub QueueTimer_Timer()
         If (pri = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
             delay = BanDelay()
         End If
-        
     
         If ((QueueMaster >= 15) And (QueueTimer.Interval <> 2400)) Then
             QueueTimer.Interval = (2400 + delay) ' 2400
@@ -5352,13 +5351,13 @@ Private Sub QueueTimer_Timer()
             QueueTimer.Interval = (1175 + delay) ' 1175
         End If
         
-        If (Count >= 5) Then
-            QueueTimer.Interval = QueueTimer.Interval + 2360
-            
-            Count = 0
-        End If
+        'If (Count >= 5) Then
+        '    QueueTimer.Interval = QueueTimer.Interval + 2360
+        '
+        '    Count = 0
+        'End If
         
-        Count = Count + 1
+        'Count = Count + 1
     End If
     
     Exit Sub
@@ -6337,13 +6336,10 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     Select Case (cmdName)
                         Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
                         Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
+                        Case "who":       msg_priority = PRIORITY.SPECIAL_MESSAGE
                         Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
                         Case "unban":     msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
                         Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        'Case "squelch":   msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        'Case "ignore":    msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        'Case "unsquelch": msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        'Case "unignore":  msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
                         Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
                     End Select
                 End If
@@ -6415,13 +6411,8 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     
                     ' set the delay before our next queue cycle
                     With frmChat.QueueTimer
-                        ' disable timer with
                         .Enabled = False
-                        
-                        ' set new delay
                         .Interval = delay
-                        
-                        ' enable timer with new delay
                         .Enabled = True
                     End With
                 End If
@@ -6490,7 +6481,7 @@ Private Function BanDelay() As Integer
                 (BanDelay + ((1 + Rnd * OpCount) * (1 + Rnd * 200)))
         End If
     End If
-    
+
     ' exit procedure
     Exit Function
 
