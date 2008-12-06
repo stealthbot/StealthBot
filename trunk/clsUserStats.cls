@@ -1160,10 +1160,10 @@ Private Function DiabloII_ToString() As String
                 IIf(IsHardcoreCharacter(), "hardcore ", vbNullString) & "level " & Level() & " " & _
                     IIf(IsLadderCharacter(), "ladder ", vbNullString) & CharacterClass()
                     
-        If (CurrentDifficultyID <= 2) Then
-            buf = _
-                buf & " in Act " & MakeRomanNum(CurrentAct()) & " of " & CurrentDifficulty()
-        End If
+        'If (CurrentDifficultyID <= 2) Then
+        '    buf = _
+        '        buf & " in Act " & MakeRomanNum(CurrentAct()) & " of " & CurrentDifficulty()
+        'End If
         
         buf = _
             buf & " on " & Realm() & ")"

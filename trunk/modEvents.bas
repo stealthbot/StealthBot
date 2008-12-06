@@ -990,13 +990,16 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
                 UserObj.Queue.Add UserEvent
             End If
         End If
-        
-        ' ...
-        Username = UserObj.DisplayName
     Else
         ' create new user object for invisible representatives...
         Set UserObj = New clsUserObj
+        
+        ' store user name
+        UserObj.Name = Username
     End If
+    
+    ' convert user name
+    Username = UserObj.DisplayName
     
     ' ...
     If (frmChat.mnuUTF8.Checked) Then
@@ -1597,13 +1600,16 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
                 UserObj.Queue.Add UserEvent
             End If
         End If
-        
-        ' ...
-        Username = UserObj.DisplayName
     Else
         ' create new user object for invisible representatives...
         Set UserObj = New clsUserObj
+        
+        ' store user name
+        UserObj.Name = Username
     End If
+    
+    ' convert user name
+    Username = UserObj.DisplayName
     
     ' ...
     If (frmChat.mnuUTF8.Checked) Then
