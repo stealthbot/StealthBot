@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5277,14 +5277,15 @@ End Sub
 Private Sub QueueTimer_Timer()
     On Error GoTo ERROR_HANDLER
 
+    Static delay As Integer
+    Static Count As Integer
+
     Dim Message  As String
     Dim Tag      As String
     Dim Sent     As Byte
     Dim I        As Integer
     Dim override As Integer
     Dim pri      As Integer
-    Dim delay    As Integer
-    Static Count As Integer
     
     If ((g_Queue.Count) And (g_Online)) Then
         With g_Queue.Peek
@@ -5329,35 +5330,29 @@ Private Sub QueueTimer_Timer()
             End If
         End If
         
-        If (Sent = 1) Then
-            'If (Left$(Message, 1) <> "/") Then
-            '    AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, CurrentUsername, _
-            '        RTBColors.Carats, "> ", RTBColors.TalkNormalText, Message
-            'End If
-            
-            Call g_Queue.Pop
-        End If
-        
-        ' are we issuing a ban or kick command?
-        If (pri = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
-            delay = BanDelay()
-        End If
-    
-        If ((QueueMaster >= 15) And (QueueTimer.Interval <> 2400)) Then
-            QueueTimer.Interval = (2400 + delay) ' 2400
-        ElseIf ((QueueMaster < 15) And (QueueTimer.Interval = 2400)) Then
-            QueueTimer.Interval = (1175 + delay)  ' 1175
+        If ((QueueMaster >= 15) And ((QueueTimer.Interval - delay) <> 2400)) Then
+            QueueTimer.Interval = 2400 ' 2400
+        ElseIf ((QueueMaster < 15) And ((QueueTimer.Interval - delay) = 2400)) Then
+            QueueTimer.Interval = 1175 ' 1175
         Else
-            QueueTimer.Interval = (1175 + delay) ' 1175
+            QueueTimer.Interval = 1175 ' 1175
         End If
         
-        'If (Count >= 5) Then
-        '    QueueTimer.Interval = QueueTimer.Interval + 2360
-        '
-        '    Count = 0
-        'End If
-        
-        'Count = Count + 1
+        If (Sent = 1) Then
+            ' ...
+            Call g_Queue.Pop
+            
+            ' are we issuing a ban or kick command?
+            If (g_Queue.Peek.PRIORITY = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
+                ' ...
+                delay = BanDelay()
+                
+                ' ...
+                QueueTimer.Interval = _
+                    QueueTimer.Interval + delay
+            End If
+        End If
+
     End If
     
     Exit Sub
@@ -6402,7 +6397,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 ' previous message.
                 If ((QueueLoad = 0) And (GTC - LastGTC >= 10000)) Then
                     ' set default message delay when queue is empty (in ms)
-                    delay = 25
+                    delay = 10
                     
                     ' are we issuing a ban or kick command?
                     If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
