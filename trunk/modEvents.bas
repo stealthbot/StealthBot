@@ -1205,15 +1205,12 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                             If (g_Channel.Users(I).game = "WAR3") Then
                                 ' ...
                                 If (found.SmallIcon = ICWAR3) Then
-                                    ' ...
-                                    found.SmallIcon = (UserObj.Stats.IconCode + ICON_START_WAR3)
+                                    found.SmallIcon = UserObj.Stats.IconCode
                                 End If
                             ElseIf (g_Channel.Users(I).game = "W3XP") Then
                                 ' ...
                                 If (found.SmallIcon = ICWAR3X) Then
-                                    ' ...
-                                    found.SmallIcon = ((UserObj.Stats.IconCode + ICON_START_W3XP) + _
-                                        IIf(UserObj.Stats.IconCode + ICON_START_W3XP = ICSCSW, 1, 0))
+                                    found.SmallIcon = UserObj.Stats.IconCode
                                 End If
                             End If
                         End If
