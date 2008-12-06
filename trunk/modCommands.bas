@@ -7655,15 +7655,17 @@ Public Function convertUsername(ByVal Username As String) As String
     End If
 
     If ((StrReverse$(BotVars.Product) = "D2DV") Or _
-        (StrReverse$(BotVars.Product) = "D2XP")) Then
+            (StrReverse$(BotVars.Product) = "D2XP")) Then
         
         If ((BotVars.UseGameConventions = False) Or _
                 ((BotVars.UseD2GameConventions = False))) Then
            
             Index = InStr(1, Username, "*", vbBinaryCompare)
         
-            If (Index <> 0) Then
+            If (Index > 0) Then
                 convertUsername = Mid$(Username, Index + 1)
+            Else
+                convertUsername = Username
             End If
         Else
             Index = InStr(1, Username, "*", vbBinaryCompare)
@@ -7676,7 +7678,7 @@ Public Function convertUsername(ByVal Username As String) As String
             End If
         End If
     ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
-            (StrReverse$(BotVars.Product) = "W3XP")) Then
+                (StrReverse$(BotVars.Product) = "W3XP")) Then
             
         If ((BotVars.UseGameConventions = False)) Or _
                 ((BotVars.UseW3GameConventions = False)) Then
@@ -7689,7 +7691,7 @@ Public Function convertUsername(ByVal Username As String) As String
                     Case "Northrend": Index = InStr(1, Username, "@Europe", vbTextCompare)
                 End Select
                 
-                If (Index <> 0) Then
+                If (Index > 1) Then
                     convertUsername = Left$(Username, Index - 1)
                 Else
                     convertUsername = Username & "@" & BotVars.Gateway

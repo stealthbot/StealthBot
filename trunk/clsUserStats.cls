@@ -586,11 +586,6 @@ Public Property Get CurrentAct() As Integer
     ' ...
     If ((game() = "D2DV") Or (game() = "D2XP")) Then
         ' ...
-        If ((CurrentDifficultyID() <= 0) Or (CurrentDifficultyID() >= 4)) Then
-            Exit Property
-        End If
-    
-        ' ...
         If (IsExpansionCharacter() = False) Then
             CurrentAct = ((ActsCompleted() Mod 4) + 1)
         Else
@@ -606,9 +601,9 @@ Public Property Get CurrentDifficulty() As String
     If ((game = "D2DV") Or (game = "D2XP")) Then
         ' ...
         Select Case (CurrentDifficultyID)
-            Case 1: CurrentDifficulty = "Normal"
-            Case 2: CurrentDifficulty = "Nightmare"
-            Case 3: CurrentDifficulty = "Hell"
+            Case 0: CurrentDifficulty = "Normal"
+            Case 1: CurrentDifficulty = "Nightmare"
+            Case 2: CurrentDifficulty = "Hell"
         End Select
     End If
 
@@ -622,9 +617,9 @@ Public Property Get CurrentDifficultyID() As Integer
     If ((game = "D2DV") Or (game = "D2XP")) Then
         ' ...
         If (IsExpansionCharacter = False) Then
-            difficulty = (Fix(ActsCompleted / 4) - 1)
+            difficulty = Fix(ActsCompleted / 4)
         Else
-            difficulty = (Fix(ActsCompleted / 5) - 1)
+            difficulty = Fix(ActsCompleted / 5)
         End If
     End If
 
@@ -669,25 +664,25 @@ Public Property Get CharacterTitle() As String
     ' ...
     If ((game = "D2DV") Or (game = "D2XP")) Then
         ' ...
-        If (CurrentDifficultyID >= 2) Then
+        If (CurrentDifficultyID >= 1) Then
             ' ...
             If (IsExpansionCharacter = False) Then
                 ' ...
                 CharacterTitle = _
-                    Classic(IIf(IsHardcoreCharacter, 1, 0), CurrentDifficultyID - 2, IIf(IsFemaleCharacter, 1, 0))
+                    Classic(IIf(IsHardcoreCharacter, 1, 0), CurrentDifficultyID - 1, IIf(IsFemaleCharacter, 1, 0))
             
                 ' run again with is female as false
                 If (CharacterTitle = vbNullString) Then
-                    CharacterTitle = Classic(IIf(IsHardcoreCharacter, 1, 0), CurrentDifficultyID - 2, 0)
+                    CharacterTitle = Classic(IIf(IsHardcoreCharacter, 1, 0), CurrentDifficultyID - 1, 0)
                 End If
             Else
                 ' ...
                 CharacterTitle = _
-                    Expansion(IIf(IsHardcoreCharacter, 1, 0), CurrentDifficultyID - 2, IIf(IsFemaleCharacter, 1, 0))
+                    Expansion(IIf(IsHardcoreCharacter, 1, 0), CurrentDifficultyID - 1, IIf(IsFemaleCharacter, 1, 0))
             
                 ' run again with is female as false
                 If (CharacterTitle = vbNullString) Then
-                    CharacterTitle = Expansion(IIf(IsHardcoreCharacter, 1, 0), CurrentDifficultyID - 2, 0)
+                    CharacterTitle = Expansion(IIf(IsHardcoreCharacter, 1, 0), CurrentDifficultyID - 1, 0)
                 End If
             End If
         End If
@@ -1051,23 +1046,9 @@ Private Sub ParseDiabloII()
             ' ...
             If (UBound(charData) >= 26) Then
                 ' ...
-                If (IsExpansionCharacter = False) Then
-                    ' ...
-                    If ((charData(27) And &H98) = &H98) Then
-                        ActsCompleted = 25
-                    End If
-                Else
-                    ' ...
-                    If ((charData(27) And &H9E) = &H9E) Then
-                        ActsCompleted = 25
-                    End If
-                End If
-                
-                ' ...
-                If (ActsCompleted = 0) Then
-                    ActsCompleted = (charData(27) And &H18)
-                End If
+                ActsCompleted = ((charData(27) Xor &H80) / 2)
 
+                ' ...
                 IsLadderCharacter = (charData(30) <> &HFF)
             End If
         End If
@@ -1177,9 +1158,15 @@ Private Function DiabloII_ToString() As String
         buf = _
             buf & CharacterName() & ", a " & IIf(IsCharacterDead(), "dead ", vbNullString) & _
                 IIf(IsHardcoreCharacter(), "hardcore ", vbNullString) & "level " & Level() & " " & _
-                    IIf(IsLadderCharacter(), "ladder ", vbNullString) & CharacterClass() & _
-                        IIf(CurrentAct() > 0, " in Act " & MakeRomanNum(CurrentAct()) & " of " & CurrentDifficulty(), "") & _
-                            " on " & Realm() & ")"
+                    IIf(IsLadderCharacter(), "ladder ", vbNullString) & CharacterClass()
+                    
+        If (CurrentDifficultyID <= 2) Then
+            buf = _
+                buf & " in Act " & MakeRomanNum(CurrentAct()) & " of " & CurrentDifficulty()
+        End If
+        
+        buf = _
+            buf & " on " & Realm() & ")"
     End If
     
     ' ...
