@@ -86,6 +86,7 @@ Private m_dots                As Long
 Private m_expansion           As Boolean
 Private m_hardcore            As Boolean
 Private m_realm               As String
+Private m_are_stats_valid     As Boolean
 
 Public Property Let game(str As String)
 
@@ -98,6 +99,20 @@ Public Property Get game() As String
 
     ' ...
     game = m_game
+
+End Property
+
+Public Property Let IsValid(bln As Boolean)
+
+    ' ...
+    m_are_stats_valid = bln
+
+End Property
+
+Public Property Get IsValid() As Boolean
+
+    ' ...
+    IsValid = m_are_stats_valid
 
 End Property
 
@@ -469,6 +484,8 @@ Public Property Let CharacterClassID(I As Integer)
 End Property
 
 Public Property Get CharacterClass() As String
+
+    On Error GoTo ERROR_HANDLER
     
     ' ...
     If ((game = "DSHR") Or (game = "DRTL")) Then
@@ -501,6 +518,17 @@ Public Property Get CharacterClass() As String
             CharacterClass = DIIClasses(CharacterClassID - 1)
         End If
     End If
+    
+    ' ...
+    Exit Property
+    
+ERROR_HANDLER:
+
+    ' ...
+    IsValid = False
+
+    ' ...
+    Exit Property
 
 End Property
 
@@ -630,6 +658,8 @@ End Property
 
 Public Property Get CharacterTitle() As String
 
+    On Error GoTo ERROR_HANDLER
+
     ' thanks c0ol for multi-dimensional array idea
     Dim Classic(2, 3, 2)   As String ' ...
     Dim Expansion(2, 3, 2) As String ' ...
@@ -687,6 +717,17 @@ Public Property Get CharacterTitle() As String
             End If
         End If
     End If
+    
+    ' ...
+    Exit Property
+    
+ERROR_HANDLER:
+
+    ' ...
+    CharacterTitle = vbNullString
+    
+    ' ...
+    Exit Property
     
 End Property
 
@@ -919,6 +960,11 @@ End Property
 
 Private Sub Parse()
 
+    On Error GoTo ERROR_HANDLER
+    
+    ' ...
+    IsValid = True
+
     ' ...
     If (Statstring = vbNullString) Then
         Exit Sub
@@ -946,7 +992,18 @@ Private Sub Parse()
         Case "WAR3", "W3XP"
             Call ParseWarCraftIII
     End Select
+    
+    ' ...
+    Exit Sub
+    
+ERROR_HANDLER:
 
+    ' ...
+    IsValid = False
+    
+    ' ...
+    Exit Sub
+    
 End Sub
 
 Private Sub ParseStarCraft()
@@ -955,17 +1012,16 @@ Private Sub ParseStarCraft()
     
     ' ...
     ReDim Preserve Values(0)
-    
-    ' ...
-    If (Statstring = vbNullString) Then
-        Exit Sub
-    End If
 
     ' ...
     Values() = Split(Statstring, Space$(1))
     
     ' ...
-    If (UBound(Values) < 7) Then
+    If (UBound(Values) <> 8) Then
+        ' ...
+        IsValid = False
+    
+        ' ...
         Exit Sub
     End If
             
@@ -973,9 +1029,9 @@ Private Sub ParseStarCraft()
     LadderRating = Val(Values(0))
     LadderRank = Val(Values(1))
     Wins = Val(Values(2))
-    IsSpawn = CBool(Values(3))
+    IsSpawn = CBool(Val(Values(3)))
     LadderRank = Val(Values(5))
-    Icon = Values(8)
+    Icon = CStr(Values(8))
 
 End Sub
 
@@ -985,17 +1041,16 @@ Private Sub ParseDiablo()
     
     ' ...
     ReDim Preserve Values(0)
-    
-    ' ...
-    If (Statstring = vbNullString) Then
-        Exit Sub
-    End If
 
     ' ...
     Values() = Split(Statstring, Space$(1))
     
     ' ...
-    If (UBound(Values) < 7) Then
+    If (UBound(Values) <> 8) Then
+        ' ...
+        IsValid = False
+    
+        ' ...
         Exit Sub
     End If
     
@@ -1018,11 +1073,6 @@ Private Sub ParseDiabloII()
     
     ' ...
     ReDim Preserve Values(0)
-    
-    ' ...
-    If (Statstring = vbNullString) Then
-        Exit Sub
-    End If
 
     ' ...
     Values() = Split(Statstring, ",", 3)
@@ -1069,17 +1119,12 @@ Private Sub ParseWarCraftIII()
     
     ' ...
     ReDim Preserve Values(0)
-    
-    ' ...
-    If (Statstring = vbNullString) Then
-        Exit Sub
-    End If
 
     ' ...
     Values() = Split(Statstring, Space$(1))
     
     ' ...
-    If (UBound(Values) < 1) Then
+    If (UBound(Values) = 0) Then
         Exit Sub
     End If
     
@@ -1099,7 +1144,7 @@ Private Function StarCraft_ToString() As String
     Dim buf As String ' ...
     
     ' ...
-    If (Statstring = vbNullString) Then
+    If ((Statstring = vbNullString) Or (IsValid = False)) Then
         buf = " (No stats available)"
     Else
         buf = _
@@ -1122,7 +1167,7 @@ Private Function Diablo_ToString() As String
     Dim buf As String ' ...
     
     ' ...
-    If (Statstring = vbNullString) Then
+    If ((Statstring = vbNullString) Or (IsValid = False)) Then
         buf = " (No stats available)"
     Else
         buf = _
@@ -1146,7 +1191,7 @@ Private Function DiabloII_ToString() As String
     Dim buf As String ' ...
 
     ' ...
-    If (Statstring = vbNullString) Then
+    If ((Statstring = vbNullString) Or (IsValid = False)) Then
         buf = " (Open Character)"
     Else
         buf = " ("
@@ -1160,6 +1205,7 @@ Private Function DiabloII_ToString() As String
                 IIf(IsHardcoreCharacter(), "hardcore ", vbNullString) & "level " & Level() & " " & _
                     IIf(IsLadderCharacter(), "ladder ", vbNullString) & CharacterClass()
                     
+        ' bnet bug prevents accurate display of d2xp act five
         'If (CurrentDifficultyID <= 2) Then
         '    buf = _
         '        buf & " in Act " & MakeRomanNum(CurrentAct()) & " of " & CurrentDifficulty()
@@ -1186,7 +1232,7 @@ Private Function WarCraftIII_ToString() As String
     Dim buf As String ' ...
     
     ' ...
-    If (Statstring = vbNullString) Then
+    If ((Statstring = vbNullString) Or (IsValid = False)) Then
         buf = " (No stats available)"
     Else
         ' ...
