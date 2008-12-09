@@ -48,7 +48,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Dim Count            As Integer
     Dim bln              As Boolean
     Dim command_return() As String
-    Dim outbuf           As String
+    Dim outBuf           As String
     Dim execCommand      As Boolean
     
     ' ...
@@ -74,7 +74,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         ' ...
         If (command.IsLocal) Then
             execCommand = True
-        ElseIf (HasAccess(Username, command.Name, command.Args, outbuf)) Then
+        ElseIf (HasAccess(Username, command.Name, command.Args, outBuf)) Then
             execCommand = True
         End If
         
@@ -127,7 +127,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             End If
         Else
             ' ...
-            If ((DisplayOutput) And (LenB(outbuf))) Then
+            If ((DisplayOutput) And (LenB(outBuf))) Then
                 ' ...
                 If ((BotVars.WhisperCmds) Or (WasWhispered)) Then
                     AddQ "/w " & Username & Space$(1) & command_return(I), _
@@ -2118,7 +2118,7 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
     If (Len(tmpAcc) > 0) Then
         ' ...
         If (InStr(1, tmpAcc, "@") > 0) Then
-            tmpAcc = StripRealm(msgData)
+            tmpAcc = StripRealm(tmpAcc)
         End If
         
         ' ...
@@ -3875,12 +3875,20 @@ Private Function OnGreet(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Dim strSplit()   As String
     Dim greetCommand As String
     
+    ' do we have parameters?
+    If (msgData = vbNullString) Then
+        tmpBuf = "Greet messages are currently "
+        tmpBuf = tmpBuf & IIf(BotVars.UseGreet, "enabled", "disabled") & "."
+        cmdRet(0) = tmpBuf
+        Exit Function
+    End If
+    
     ' split string by spaces
     strSplit() = Split(msgData, Space(1), 2)
-    
+
     ' grab greet command
     greetCommand = strSplit(0)
-    
+
     ' ...
     If (greetCommand = "on") Then
         BotVars.UseGreet = True
@@ -7060,7 +7068,7 @@ ERROR_HANDLER:
 End Function
 
 Public Function HasAccess(ByVal Username As String, ByVal CommandName As String, Optional ByVal CommandArgs As _
-    String = vbNullString, Optional ByRef outbuf As String) As Boolean
+    String = vbNullString, Optional ByRef outBuf As String) As Boolean
     
     On Error GoTo ERROR_HANDLER
     
@@ -7509,13 +7517,13 @@ Public Function DateCleanup(ByVal TDate As Date) As String
 End Function
 
 Private Function GetAccessINIValue(ByVal sKey As String, Optional ByVal Default As Long) As Long
-    Dim s As String, l As Long
+    Dim s As String, L As Long
     
     s = ReadINI("Numeric", sKey, "access.ini")
-    l = Val(s)
+    L = Val(s)
     
-    If l > 0 Then
-        GetAccessINIValue = l
+    If L > 0 Then
+        GetAccessINIValue = L
     Else
         If Default > 0 Then
             GetAccessINIValue = Default
