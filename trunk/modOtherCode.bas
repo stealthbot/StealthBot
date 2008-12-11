@@ -2980,7 +2980,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Static rtbWhispers_LoopCount As Integer ' ...
     
     Dim s              As String
-    Dim l              As Long
+    Dim L              As Long
     Dim lngVerticalPos As Long
     Dim Diff           As Long
     Dim I              As Integer
@@ -3167,19 +3167,19 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         
             If ((StrictIsNumeric(saElements(I))) And (Len(saElements(I + 1)) > 0)) Then
-                l = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
+                L = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
                 
-                While (l > 0)
-                    Mid$(saElements(I + 1), l + 1, 1) = "/"
+                While (L > 0)
+                    Mid$(saElements(I + 1), L + 1, 1) = "/"
                     
-                    l = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
+                    L = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
                 Wend
             
                 With rtb
                     .SelStart = Len(.text)
                     
                     ' store position of selection
-                    l = .SelStart
+                    L = .SelStart
                     
                     .SelLength = 0
                     .SelFontName = FontStr
@@ -3203,7 +3203,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         Next I
         
-        Call ColorModify(rtb, l)
+        Call ColorModify(rtb, L)
 
         If (blUnlock) Then
             rtb.Visible = True
@@ -3249,17 +3249,14 @@ Public Function IsStealthBotTech() As Boolean
         InClanSBs = False
     End If
     
-    If (InStr(1, g_Channel.Self.Name, "tech", vbTextCompare) > 0) Then
+    If (InStr(1, CurrentUsername, "tech", vbTextCompare) > 0) Then
         TechName = True
     Else
         TechName = False
     End If
     
-    If ((InClanSBs) Or ((ConfigHacked) And (TechName))) Then
-        IsStealthBotTech = True
-    Else
-        IsStealthBotTech = False
-    End If
+    IsStealthBotTech = ((InClanSBs) Or ((ConfigHacked) And (TechName)))
+        
 End Function
 
 
