@@ -464,17 +464,12 @@
 			</flags>
 		</access>
 	</command>
-	<command name="add">
+	<command name="add" enabled="true">
 		<aliases>
-			<alias>
-        set
-      </alias>
-		</aliases>
+			<alias>set</alias></aliases>
 		<documentation>
-			<description>
-        creates or modifies a specified database entry.
-      </description>
-			<specialnotes/>
+			<description>creates or modifies a specified database entry.</description>
+			<specialnotes>g</specialnotes>
 		</documentation>
 		<arguments>
 			<argument name="username">
@@ -744,9 +739,7 @@
 			</optional>
 		</arguments>
 		<access>
-			<rank>
-        20
-      </rank>
+			<rank>20</rank>
 			<flags>
 				<flag>
           A
@@ -754,7 +747,7 @@
 				<flag>
           a
         </flag>
-			</flags>
+				<flag>A</flag><flag>a</flag><flag>A</flag><flag>a</flag><flag>A</flag><flag>a</flag></flags>
 		</access>
 	</command>
 	<command name="server">
@@ -777,23 +770,13 @@
 	</command>
 	<command name="about" enabled="true">
 		<aliases>
-			<alias>
-        version
-      </alias>
-			<alias>
-        ver
-      </alias>
-		</aliases>
+			<alias>version</alias><alias>ver</alias></aliases>
 		<documentation>
-			<description>
-        states the application's version information.
-      </description>
-			<specialnotes/>
+			<description>states the application's version information.</description>
+			<specialnotes>ddd</specialnotes>
 		</documentation>
 		<access>
-			<rank>
-        20
-      </rank>
+			<rank>20</rank>
 			<flags>
 				<flag>
           a
@@ -825,7 +808,7 @@
 				<flag>
           T
         </flag>
-			</flags>
+				<flag>a</flag><flag>A</flag><flag>C</flag><flag>c</flag><flag>G</flag><flag>J</flag><flag>O</flag><flag>o</flag><flag>M</flag><flag>T</flag><flag>a</flag><flag>A</flag><flag>C</flag><flag>c</flag><flag>G</flag><flag>J</flag><flag>O</flag><flag>o</flag><flag>M</flag><flag>T</flag><flag>a</flag><flag>A</flag><flag>C</flag><flag>c</flag><flag>G</flag><flag>J</flag><flag>O</flag><flag>o</flag><flag>M</flag><flag>T</flag><flag>a</flag><flag>A</flag><flag>C</flag><flag>c</flag><flag>G</flag><flag>J</flag><flag>O</flag><flag>o</flag><flag>M</flag><flag>T</flag><flag>a</flag><flag>A</flag><flag>C</flag><flag>c</flag><flag>G</flag><flag>J</flag><flag>O</flag><flag>o</flag><flag>M</flag><flag>T</flag><flag>a</flag><flag>A</flag><flag>C</flag><flag>c</flag><flag>G</flag><flag>J</flag><flag>O</flag><flag>o</flag><flag>M</flag><flag>T</flag><flag>a</flag><flag>A</flag><flag>C</flag><flag>c</flag><flag>G</flag><flag>J</flag><flag>O</flag><flag>o</flag><flag>M</flag><flag>T</flag></flags>
 		</access>
 	</command>
 	<command name="getping">
@@ -1677,13 +1660,11 @@
 			</flags>
 		</access>
 	</command>
-	<command name="away">
+	<command name="away" enabled="true">
 		<aliases/>
 		<documentation>
-			<description>
-        instructs the bot to set an away message using the specified phrase.
-      </description>
-		</documentation>
+			<description>instructs the bot to set an away message using the specified phrase.</description>
+			<specialnotes>d</specialnotes></documentation>
 		<arguments>
 			<argument name="message">
 				<documentation>
@@ -1694,27 +1675,21 @@
 			</argument>
 		</arguments>
 		<access>
-			<rank>
-        50
-      </rank>
+			<rank>50</rank>
 			<flags>
 				<flag>
           C
         </flag>
-			</flags>
+				<flag>C</flag></flags>
 		</access>
 	</command>
-	<command name="back">
+	<command name="back" enabled="true">
 		<aliases/>
 		<documentation>
-			<description>
-        instructs the bot to clear any currently set away message.
-      </description>
-		</documentation>
+			<description>instructs the bot to clear any currently set away message.</description>
+			<specialnotes></specialnotes></documentation>
 		<access>
-			<rank>
-        50
-      </rank>
+			<rank>50</rank>
 			<flags>
 				<flag>
           C
@@ -1884,17 +1859,13 @@
 			</flags>
 		</access>
 	</command>
-	<command name="allseen">
+	<command name="allseen" enabled="true">
 		<aliases/>
 		<documentation>
-			<description>
-        states the last fifteen users that the bot has seen.
-      </description>
-		</documentation>
+			<description>states the last fifteen users that the bot has seen.d</description>
+			<specialnotes></specialnotes></documentation>
 		<access>
-			<rank>
-        60
-      </rank>
+			<rank>60</rank>
 			<flags>
 				<flag>
           a
@@ -2223,26 +2194,19 @@
 			</flags>
 		</access>
 	</command>
-	<command name="addphrase">
+	<command name="addphrase" enabled="true">
 		<aliases>
-			<alias>
-        padd
-      </alias>
-		</aliases>
+			<alias>padd</alias></aliases>
 		<documentation>
-			<description>
-        adds the specified phrase to the phrasebans list.
-      </description>
-		</documentation>
+			<description>adds the specified phrase to the phrasebans list.dddd</description>
+			<specialnotes></specialnotes></documentation>
 		<access>
-			<rank>
-        70
-      </rank>
+			<rank>70</rank>
 			<flags>
 				<flag>
           O
         </flag>
-			</flags>
+				<flag>O</flag><flag>O</flag><flag>O</flag><flag>O</flag><flag>O</flag><flag>O</flag><flag>O</flag><flag>O</flag><flag>O</flag><flag>O</flag><flag>O</flag><flag>O</flag><flag>O</flag><flag>O</flag><flag>O</flag></flags>
 		</access>
 	</command>
 	<command name="mmail">

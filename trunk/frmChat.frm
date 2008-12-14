@@ -1469,7 +1469,7 @@ Private Sub Form_Load()
     Dim f As Integer ', i As Integer
     Dim l As Long
     Dim FrmSplashInUse As Boolean
-
+    
     ' COMPILER FLAGS
     #If (BETA = 1) Then
         #If (DEV_RELEASE = 1) Then
@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -3475,7 +3475,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     sTemp = sTemp & "Ping at login: " & .Ping & "ms" & vbCrLf
                     sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
-                    sTemp = sTemp & .stats.ToString
+                    sTemp = sTemp & .Stats.ToString
                 
                     ListToolTip.TipText = sTemp
                     
@@ -6689,7 +6689,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         
             ' ...
             AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Flags, CurrentUser.Ping, _
-                CurrentUser.stats.IconCode, CurrentUser.Clan
+                CurrentUser.Stats.IconCode, CurrentUser.Clan
         Next I
         
         ' ...

@@ -567,12 +567,22 @@ Private Sub SaveForm()
                 Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "access", "")
                 .TheXMLElement.appendChild xmlNewNode
             End If
-           
+            
+            Set xmlNode = .TheXMLElement.selectSingleNode("access/flags")
+            If xmlNode Is Nothing Then
+                Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "access/flags", "")
+                .TheXMLElement.appendChild xmlNewNode
+            End If
+
             '// loop through cboFlags and add the text
             For I = 0 To cboFlags.ListCount - 1
-                Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "flag", "")
-                xmlNewNode.text = cboFlags.List(I)
-                xmlNode.appendChild xmlNewNode
+                Set xmlNewNode = xmlNode.selectSingleNode("flag[text()='" & cboFlags.List(I) & "']")
+                
+                If (xmlNewNode Is Nothing) Then
+                    Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "flag", "")
+                    xmlNewNode.text = cboFlags.List(I)
+                    xmlNode.appendChild xmlNewNode
+                End If
             Next I
         End If
         
@@ -625,9 +635,13 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As MSXML2.IXMLDOMElement)
             '// cboFlags
             cboFlags.Enabled = True
             lblFlags.Enabled = True
-            For Each xmlNode In xmlElement.selectNodes("access/flag")
+            For Each xmlNode In xmlElement.selectNodes("access/flags/flag")
                 cboFlags.AddItem xmlNode.text
             Next xmlNode
+            If (cboFlags.ListCount) Then
+                cboFlags.text = cboFlags.List(0)
+            End If
+            
             '// txtDescription
             txtDescription.Enabled = True
             lblDescription.Enabled = True
