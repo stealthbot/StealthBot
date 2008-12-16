@@ -46,7 +46,7 @@ Public Sub UnhookSendBoxWindowProc()
     End If
 End Sub
 
-Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     On Error GoTo ERROR_HANDLER
     
     Dim Rezult As Long
@@ -56,7 +56,7 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wPara
     Dim sText  As String
     Dim lLen   As Long
     
-    If msg = TASKBARCREATED_MSGID Then
+    If Msg = TASKBARCREATED_MSGID Then
         Shell_NotifyIcon NIM_ADD, nid
     End If
     
@@ -72,14 +72,14 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wPara
         End Select
     End If
     
-    If msg = WM_NOTIFY Then
+    If Msg = WM_NOTIFY Then
         CopyMemory uHead, ByVal lParam, LenB(uHead)
         
-        If (uHead.hWndFrom = hWndRTB) And (uHead.Code = EN_LINK) Then
+        If (uHead.hWndFrom = hWndRTB) And (uHead.code = EN_LINK) Then
             CopyMemory eLink, ByVal lParam, LenB(eLink)
             
             With eLink
-                If .msg = WM_LBUTTONDBLCLK Then
+                If .Msg = WM_LBUTTONDBLCLK Then
                     eText.chrg.cpMin = .chrg.cpMin
                     eText.chrg.cpMax = .chrg.cpMax
                     eText.lpstrText = Space$(1024)
@@ -91,13 +91,13 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wPara
                 End If
             End With
         End If
-    ElseIf msg = WM_COMMAND Then
+    ElseIf Msg = WM_COMMAND Then
         If lParam = 0 Then
             Call ProcessMenu(hWnd, wParam)
         End If
     End If
     
-    NewWindowProc = CallWindowProc(OldWindowProc, hWndSet, msg, wParam, lParam)
+    NewWindowProc = CallWindowProc(OldWindowProc, hWndSet, Msg, wParam, lParam)
     
     Exit Function
     
@@ -107,10 +107,10 @@ ERROR_HANDLER:
     Exit Function
 End Function
 
-Public Function NewSendBoxWindowProc(ByVal hWnd As Long, ByVal msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Function NewSendBoxWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     Const WM_ACTIVATE As Long = 6
     
-    NewSendBoxWindowProc = CallWindowProc(SendBox_OldWindowProc, SendBox_hWndSet, msg, wParam, lParam)
+    NewSendBoxWindowProc = CallWindowProc(SendBox_OldWindowProc, SendBox_hWndSet, Msg, wParam, lParam)
 End Function
 
 Public Sub SetTransparency()

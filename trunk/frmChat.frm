@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2691,6 +2691,9 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
                 AddClanMember Members(I), Val(Members(I + 1)), Val(Members(I + 2))
                 
                 ' ...
+                On Error Resume Next
+                
+                ' ...
                 SControl.Run "Event_ClanMemberList", Members(I), Val(Members(I + 1)), _
                     Val(Members(I + 2))
             End If
@@ -2877,7 +2880,7 @@ End Sub
 Sub Form_Unload(Cancel As Integer)
     Dim Key As String, l As Long
 
-    'Cancel = 1
+    Cancel = 1
     
     'scTimer.Enabled = False
     'SControl.Reset
@@ -2913,6 +2916,8 @@ Sub Form_Unload(Cancel As Integer)
     On Error Resume Next
     
     SControl.Run "Event_Close"
+    
+    On Error GoTo 0
     
     If BotVars.Logging = 1 Then
         Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt" For Append As #1
@@ -4427,7 +4432,7 @@ End Sub
 
 Private Sub mnuTrayExit_click()
     If MsgBox("Are you sure you want to quit?", vbYesNo, "StealthBot") = vbYes Then
-        UnhookWindowProc
+        'UnhookWindowProc
         'RESTORE FORM
         'Call NewWindowProc(frmChat.hWnd, 0&, ID_TASKBARICON, WM_LBUTTONDOWN)
         'Call Form_Unload(0)
@@ -6144,7 +6149,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     
     ' ...
     If (strTmp <> vbNullString) Then
-        Dim splt()         As String  ' ...
+        Dim Splt()         As String  ' ...
         Dim I              As Long    ' ...
         Dim currChar       As Integer ' ...
         Dim Send           As String  ' ...
@@ -6154,7 +6159,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         Dim nameConversion As Boolean ' ...
         
         ' ...
-        ReDim splt(0)
+        ReDim Splt(0)
     
         ' check for tabs and replace with spaces (2005-09-23)
         If (InStr(1, strTmp, Chr$(9), vbBinaryCompare) <> 0) Then
@@ -6219,20 +6224,20 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     (command = "designate")) Then
         
                     ' ...
-                    splt() = Split(strTmp, Space$(1), 3)
+                    Splt() = Split(strTmp, Space$(1), 3)
                     
                     ' ...
-                    If (UBound(splt) > 0) Then
+                    If (UBound(Splt) > 0) Then
                         ' ...
-                        command = splt(0) & Space$(1) & reverseUsername(splt(1)) & _
+                        command = Splt(0) & Space$(1) & reverseUsername(Splt(1)) & _
                             Space$(1)
 
                         ' ...
                         If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
                             ' ...
-                            If ((LCase$(splt(0)) = "/unignore") Or (LCase$(splt(0)) = "/unsquelch")) Then
+                            If ((LCase$(Splt(0)) = "/unignore") Or (LCase$(Splt(0)) = "/unsquelch")) Then
                                 ' ...
-                                If (StrComp(splt(1), GetCurrentUsername, vbTextCompare) = 0) Then
+                                If (StrComp(Splt(1), GetCurrentUsername, vbTextCompare) = 0) Then
                                     ' ...
                                     lvChannel.ListItems.Clear
                                 End If
@@ -6240,51 +6245,51 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         End If
                         
                         ' ...
-                        If (UBound(splt) > 1) Then
-                            ReDim Preserve splt(0 To UBound(splt) - 1)
+                        If (UBound(Splt) > 1) Then
+                            ReDim Preserve Splt(0 To UBound(Splt) - 1)
                         End If
                     End If
                 ElseIf ((command = "f") Or _
                         (command = "friends")) Then
                     
                     ' ...
-                    splt() = Split(strTmp, Space$(1), 3)
+                    Splt() = Split(strTmp, Space$(1), 3)
                     
                     ' ...
-                    command = splt(0) & Space$(1)
+                    command = Splt(0) & Space$(1)
                     
                     ' ...
-                    If (UBound(splt) >= 1) Then
+                    If (UBound(Splt) >= 1) Then
                         ' ...
-                        command = command & splt(1) & Space$(1)
+                        command = command & Splt(1) & Space$(1)
                     
                         ' ...
-                        If (UBound(splt) >= 2) Then
+                        If (UBound(Splt) >= 2) Then
                             ' ...
-                            Select Case (LCase$(splt(1)))
+                            Select Case (LCase$(Splt(1)))
                                 Case "m", "msg"
                                     ' ...
-                                    ReDim Preserve splt(0 To UBound(splt) - 1)
+                                    ReDim Preserve Splt(0 To UBound(Splt) - 1)
 
                                 Case Else
                                     ' ...
-                                    splt() = Split(strTmp, Space$(1), 4)
+                                    Splt() = Split(strTmp, Space$(1), 4)
                                 
                                     ' ...
                                     If ((StrReverse$(BotVars.Product) = "WAR3") Or _
                                         (StrReverse$(BotVars.Product) = "W3XP")) Then
                                         
                                         ' ...
-                                        command = command & reverseUsername(splt(2)) & _
+                                        command = command & reverseUsername(Splt(2)) & _
                                             Space$(1)
                                     Else
                                         ' ...
-                                        command = command & splt(2) & Space$(1)
+                                        command = command & Splt(2) & Space$(1)
                                     End If
                                     
                                     ' ...
-                                    If (UBound(splt) >= 3) Then
-                                        command = command & splt(3)
+                                    If (UBound(Splt) >= 3) Then
+                                        command = command & Splt(3)
                                     End If
                             End Select
                         End If
@@ -6303,10 +6308,10 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 End If
 
                 ' ...
-                If (UBound(splt) > 0) Then
+                If (UBound(Splt) > 0) Then
                     ' ...
                     strTmp = Mid$(strTmp, _
-                        (Len(Join(splt(), Space$(1))) + (Len(Space$(1))) + 1))
+                        (Len(Join(Splt(), Space$(1))) + (Len(Space$(1))) + 1))
                 End If
             End If
             
@@ -6342,19 +6347,19 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         End If
         
         ' ...
-        Call SplitByLen(strTmp, (BNET_MSG_LENGTH - Len(command)), splt(), vbNullString, _
+        Call SplitByLen(strTmp, (BNET_MSG_LENGTH - Len(command)), Splt(), vbNullString, _
             " [more]", OversizeDelimiter)
 
         ' ...
-        ReDim Preserve splt(0 To UBound(splt))
+        ReDim Preserve Splt(0 To UBound(Splt))
 
         ' ...
-        For I = LBound(splt) To UBound(splt)
+        For I = LBound(Splt) To UBound(Splt)
             ' store current tick
             GTC = GetTickCount()
             
             ' store working copy
-            Send = command & splt(I)
+            Send = command & Splt(I)
 
             ' is efp enabled?
             If (bFlood) Then
@@ -6548,6 +6553,12 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.HomeChannel = ReadCFG(MN, "HomeChan")
     BotVars.BotOwner = ReadCFG(MN, "Owner")
     BotVars.Trigger = ReadCFG(MN, "Trigger")
+    
+    If (ReadCFG(MN, "LocalIP") <> vbNullString) Then
+        sckBNet.Bind sckBNet.SocketHandle, ReadCFG(MN, "LocalIP")
+        sckBNLS.Bind sckBNet.SocketHandle, ReadCFG(MN, "LocalIP")
+        sckMCP.Bind sckBNet.SocketHandle, ReadCFG(MN, "LocalIP")
+    End If
     
     If (BotVars.TriggerLong = vbNullString) Then
         BotVars.Trigger = "."
