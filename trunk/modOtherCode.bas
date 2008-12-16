@@ -75,7 +75,7 @@ End Function
 Public Function GetTimeStamp(Optional DateTime As Date) As String
     ' ...
     If (DateDiff("s", DateTime, "00:00:00 12/30/1899") = 0) Then
-        DateTime = Time
+        DateTime = Now
     End If
 
     Select Case (BotVars.TSSetting)
@@ -92,7 +92,8 @@ Public Function GetTimeStamp(Optional DateTime As Date) As String
                 " [" & Format(DateTime, "HH:MM:SS") & "." & Right$("000" & GetCurrentMS, 3) & "] "
         
         Case Else
-            GetTimeStamp = vbNullString
+            GetTimeStamp = _
+                " [" & Format(DateTime, "HH:MM:SS AM/PM") & "] "
     End Select
 End Function
 
@@ -638,7 +639,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Dim found     As Boolean  ' ...
     Dim dbIndex   As Integer  ' ...
     Dim dbCount   As Integer  ' ...
-    Dim splt()    As String   ' ...
+    Dim Splt()    As String   ' ...
     Dim bln       As Boolean  ' ...
     Dim modified  As FILETIME ' ...
     Dim creation  As FILETIME ' ...
@@ -729,19 +730,19 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                         ' ...
                         If (InStr(1, DB(I).Groups, ",", vbBinaryCompare) <> 0) Then
                             ' ...
-                            splt() = Split(DB(I).Groups, ",")
+                            Splt() = Split(DB(I).Groups, ",")
                         Else
                             ' ...
-                            ReDim Preserve splt(0)
+                            ReDim Preserve Splt(0)
                             
                             ' ...
-                            splt(0) = DB(I).Groups
+                            Splt(0) = DB(I).Groups
                         End If
                         
                         ' ...
-                        For j = 0 To UBound(splt)
+                        For j = 0 To UBound(Splt)
                             ' ...
-                            gAcc = GetCumulativeGroupAccess(splt(j))
+                            gAcc = GetCumulativeGroupAccess(Splt(j))
                         
                             ' ...
                             If (GetCumulativeAccess.Access < gAcc.Access) Then
@@ -871,19 +872,19 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                                 ' ...
                                 If (InStr(1, tmp.Groups, ",", vbBinaryCompare) <> 0) Then
                                     ' ...
-                                    splt() = Split(tmp.Groups, ",")
+                                    Splt() = Split(tmp.Groups, ",")
                                 Else
                                     ' ...
-                                    ReDim Preserve splt(0)
+                                    ReDim Preserve Splt(0)
                                     
                                     ' ...
-                                    splt(0) = tmp.Groups
+                                    Splt(0) = tmp.Groups
                                 End If
                                 
                                 ' ...
-                                For j = 0 To UBound(splt)
+                                For j = 0 To UBound(Splt)
                                     ' ...
-                                    gAcc = GetCumulativeGroupAccess(splt(j))
+                                    gAcc = GetCumulativeGroupAccess(Splt(j))
                                 
                                     ' ...
                                     If (tmp.Access < gAcc.Access) Then
@@ -1003,7 +1004,7 @@ End Function
 ' ...
 Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccessResponse
     Dim gAcc   As udtGetAccessResponse ' ...
-    Dim splt() As String               ' ...
+    Dim Splt() As String               ' ...
     
     ' ...
     gAcc = GetAccess(Group, "GROUP")
@@ -1018,12 +1019,12 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
             Dim j As Integer ' ...
         
             ' ...
-            splt() = Split(gAcc.Groups, ",")
+            Splt() = Split(gAcc.Groups, ",")
             
             ' ...
-            For I = 0 To UBound(splt)
+            For I = 0 To UBound(Splt)
                 ' ...
-                recAcc = GetCumulativeGroupAccess(splt(I))
+                recAcc = GetCumulativeGroupAccess(Splt(I))
                     
                 ' ...
                 If (gAcc.Access < recAcc.Access) Then
@@ -1088,7 +1089,7 @@ End Function
 ' ...
 Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Boolean
     Dim gAcc   As udtGetAccessResponse ' ...
-    Dim splt() As String               ' ...
+    Dim Splt() As String               ' ...
     
     ' ...
     gAcc = GetAccess(Group, "GROUP")
@@ -1103,17 +1104,17 @@ Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Bool
             Dim j As Integer ' ...
         
             ' ...
-            splt() = Split(gAcc.Groups, ",")
+            Splt() = Split(gAcc.Groups, ",")
             
             ' ...
-            For I = 0 To UBound(splt)
-                If (StrComp(splt(I), Check, vbTextCompare) = 0) Then
+            For I = 0 To UBound(Splt)
+                If (StrComp(Splt(I), Check, vbTextCompare) = 0) Then
                     CheckGroup = True
                     
                     Exit Function
                 Else
                     ' ...
-                    recAcc = CheckGroup(splt(I), Check)
+                    recAcc = CheckGroup(Splt(I), Check)
                 
                     If (recAcc) Then
                         CheckGroup = True
@@ -1387,7 +1388,7 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
     End If
 End Function
 
-Public Function CheckMsg(ByVal msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
+Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
         Long) As Boolean
     
     Dim I As Integer ' ...
@@ -1395,14 +1396,14 @@ Public Function CheckMsg(ByVal msg As String, Optional ByVal Username As String,
     For I = 0 To UBound(gFilters)
         If (Len(gFilters(I)) > 0) Then
             If (InStr(1, gFilters(I), "%", vbBinaryCompare) > 0) Then
-                If (InStr(1, msg, DoReplacements(gFilters(I), Username, Ping), vbTextCompare) > 0) Then
+                If (InStr(1, Msg, DoReplacements(gFilters(I), Username, Ping), vbTextCompare) > 0) Then
                     
                     CheckMsg = True
                     
                     Exit Function
                 End If
             Else
-                If (InStr(1, msg, gFilters(I), vbTextCompare) <> 0) Then
+                If (InStr(1, Msg, gFilters(I), vbTextCompare) <> 0) Then
                     CheckMsg = True
                     
                     Exit Function
@@ -1889,7 +1890,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
     End If
 End Sub
 
-Public Function AllowedToTalk(ByVal sUser As String, ByVal msg As String) As Boolean
+Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boolean
     Dim I As Integer
     
     ' default to true
@@ -1914,7 +1915,7 @@ Public Function AllowedToTalk(ByVal sUser As String, ByVal msg As String) As Boo
     ' ...
     If (Filters) Then
         ' ...
-        If ((CheckBlock(sUser)) Or (CheckMsg(msg, sUser, -5))) Then
+        If ((CheckBlock(sUser)) Or (CheckMsg(Msg, sUser, -5))) Then
             AllowedToTalk = False
         End If
     End If
@@ -2248,7 +2249,7 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
 End Function
 
 
-Public Sub CheckPhrase(ByRef Username As String, ByRef msg As String, ByVal mType As Byte)
+Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mType As Byte)
     Dim I As Integer
     
     If UBound(Catch) = 0 Then
@@ -2257,8 +2258,8 @@ Public Sub CheckPhrase(ByRef Username As String, ByRef msg As String, ByVal mTyp
     
     For I = LBound(Catch) To UBound(Catch)
         If (Catch(I) <> vbNullString) Then
-            If (InStr(1, LCase(msg), Catch(I), vbTextCompare) <> 0) Then
-                Call CaughtPhrase(Username, msg, Catch(I), mType)
+            If (InStr(1, LCase(Msg), Catch(I), vbTextCompare) <> 0) Then
+                Call CaughtPhrase(Username, Msg, Catch(I), mType)
                 
                 Exit Sub
             End If
@@ -2267,7 +2268,7 @@ Public Sub CheckPhrase(ByRef Username As String, ByRef msg As String, ByVal mTyp
 End Sub
 
 
-Public Sub CaughtPhrase(ByVal Username As String, ByVal msg As String, ByVal Phrase As String, ByVal mType As Byte)
+Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phrase As String, ByVal mType As Byte)
     Dim I As Integer
     Dim s As String
     
@@ -2298,12 +2299,12 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal msg As String, ByVal Phr
             Open GetProfilePath() & "\caughtphrases.htm" For Output As #I
         End If
         
-        msg = Replace(msg, "<", "&lt;", 1)
-        msg = Replace(msg, ">", "&gt;", 1)
+        Msg = Replace(Msg, "<", "&lt;", 1)
+        Msg = Replace(Msg, ">", "&gt;", 1)
         
         Print #I, "<B>" & Format(Date, "MM-dd-yyyy") & " - " & Time & _
             " - " & s & Space(1) & Username & ": </B>" & _
-                Replace(msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
+                Replace(Msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
                     "<br>"
     Close #I
 End Sub
@@ -2980,7 +2981,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Static rtbWhispers_LoopCount As Integer ' ...
     
     Dim s              As String
-    Dim L              As Long
+    Dim l              As Long
     Dim lngVerticalPos As Long
     Dim Diff           As Long
     Dim I              As Integer
@@ -3167,19 +3168,19 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         
             If ((StrictIsNumeric(saElements(I))) And (Len(saElements(I + 1)) > 0)) Then
-                L = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
+                l = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
                 
-                While (L > 0)
-                    Mid$(saElements(I + 1), L + 1, 1) = "/"
+                While (l > 0)
+                    Mid$(saElements(I + 1), l + 1, 1) = "/"
                     
-                    L = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
+                    l = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
                 Wend
             
                 With rtb
                     .SelStart = Len(.text)
                     
                     ' store position of selection
-                    L = .SelStart
+                    l = .SelStart
                     
                     .SelLength = 0
                     .SelFontName = FontStr
@@ -3203,7 +3204,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         Next I
         
-        Call ColorModify(rtb, L)
+        Call ColorModify(rtb, l)
 
         If (blUnlock) Then
             rtb.Visible = True

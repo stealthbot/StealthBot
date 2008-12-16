@@ -6513,6 +6513,8 @@ Sub ClearChannel()
 End Sub
 
 Sub ReloadConfig(Optional Mode As Byte = 0)
+    On Error GoTo ERROR_HANDLER
+
     Const MN                 As String = "Main"
     Const OT                 As String = "Other"
 
@@ -6527,6 +6529,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Dim bln                  As Boolean
     Dim doConvert            As Boolean
     Dim command_output()     As String
+        
+    s = ReadCFG(OT, "Timestamp")
+    If StrictIsNumeric(s) And Val(s) < 4 Then BotVars.TSSetting = CInt(s) Else BotVars.TSSetting = 0
     
     s = BotVars.Username
     
@@ -6553,12 +6558,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     BotVars.HomeChannel = ReadCFG(MN, "HomeChan")
     BotVars.BotOwner = ReadCFG(MN, "Owner")
     BotVars.Trigger = ReadCFG(MN, "Trigger")
-    
-    If (ReadCFG(MN, "LocalIP") <> vbNullString) Then
-        sckBNet.Bind sckBNet.SocketHandle, ReadCFG(MN, "LocalIP")
-        sckBNLS.Bind sckBNet.SocketHandle, ReadCFG(MN, "LocalIP")
-        sckMCP.Bind sckBNet.SocketHandle, ReadCFG(MN, "LocalIP")
-    End If
     
     If (BotVars.TriggerLong = vbNullString) Then
         BotVars.Trigger = "."
@@ -6735,9 +6734,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
 '
     s = ReadCFG(OT, "BanEvasion")
     If s = "N" Then BotVars.BanEvasion = False Else BotVars.BanEvasion = True
-    
-    s = ReadCFG(OT, "Timestamp")
-    If StrictIsNumeric(s) And Val(s) < 4 Then BotVars.TSSetting = CInt(s) Else BotVars.TSSetting = 0
+
     
     s = ReadCFG(OT, "Logging")
     If StrictIsNumeric(s) Then BotVars.Logging = Val(s) Else BotVars.Logging = 2
@@ -7061,6 +7058,23 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     If (g_Online) Then
         Call g_Channel.CheckUsers
+    Else
+        Err.Clear
+    
+        If (ReadCFG(MN, "LocalIP") <> vbNullString) Then
+            If (Err.Number = 0) Then: sckBNet.Bind , ReadCFG(MN, "LocalIP")
+            If (Err.Number = 0) Then: sckBNLS.Bind , ReadCFG(MN, "LocalIP")
+            If (Err.Number = 0) Then: sckMCP.Bind , ReadCFG(MN, "LocalIP")
+        End If
+    End If
+    
+    Exit Sub
+
+ERROR_HANDLER:
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in ReloadConfig()."
+    
+    If (Err.Number = 10049) Then
+        Resume Next
     End If
 End Sub
 
