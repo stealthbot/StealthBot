@@ -55,7 +55,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     ReDim Preserve command_return(0)
     
     ' replace message variables
-    Message = Replace(Message, "%me", IIf(IsLocal, GetCurrentUsername, Username), 1)
+    Message = Replace(Message, "%me", IIf(IsLocal, GetCurrentUsername, Username), 1, -1, vbTextCompare)
     
     ' ...
     If (Left$(Message, 3) = "///") Then
