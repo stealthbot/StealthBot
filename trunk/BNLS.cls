@@ -31,12 +31,14 @@ Public Sub ServToken(ByRef s As String, ByVal Setting As Byte)
 End Sub
 
 Public Sub Send_0x01(ByVal sCDKey As String) 'BNLS_CDKEY
+    ' dis paket es gross.
     Packet.InsertDWord ds.GetServerToken
     Packet.InsertNTString sCDKey
     Packet.vLSendPacket &H1
 End Sub
 
 Public Sub Send_0x02(sUser As String, sPass As String) 'BNLS_LOGONCHALLENGE
+    ' sos dis 1
     Packet.InsertNTString sUser
     Packet.InsertNTString LCase(sPass)
     Packet.vLSendPacket &H2
@@ -48,12 +50,14 @@ Public Sub Send_0x03(sData As String) 'BNLS_LOGONPROOF
 End Sub
 
 Public Sub Send_0x04(sUser As String, sPass As String) 'BNLS_CREATEACCOUNT
+    ' n dis 1
     Packet.InsertNTString sUser
     Packet.InsertNTString LCase(sPass)
     Packet.vLSendPacket &H4
 End Sub
 
 Public Sub Send_0x05(ByVal sUser As String, ByVal sOldPass As String, ByVal sNewPass As String) 'BNLS_CHANGECHALLENGE
+    ' dis 1 2
     Packet.InsertNTString sUser
     Packet.InsertNTString sOldPass
     Packet.InsertNTString sNewPass
@@ -66,6 +70,7 @@ Public Sub Send_0x06(ByVal sData As String) 'BNLS_CHANGEPROOF
 End Sub
 
 Public Sub Send_0x07(ByVal sUser As String, ByVal sPass As String) 'BNLS_UPGRADECHALLENGE
+    ' dis 1 duznt do nuffin
     Packet.InsertNTString sUser
     Packet.InsertNTString LCase(sPass)
     Packet.InsertNTString LCase(sPass)
@@ -262,7 +267,10 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
                 pD.Advance 4
                 ds.SetVerByte pD.DebuffDWORD
                 
-                Call Send_0x01(BotVars.CDKey)
+                ' removed cd key hashing @ bnls ~Pyro
+                'Call Send_0x01(BotVars.CDKey)
+                
+                Call Send_BNLS0x51
 
             Else
                 frmChat.Event_BNLSDataError 2
@@ -288,11 +296,12 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
                 
                 ds.SetKeyHash Mid$(Data, 12, 36), 1
                 
-                If BotVars.Product = "PX3W" Or BotVars.Product = "PX2D" Then
-                    Call Send_0x0C(BotVars.ExpKey)
-                Else
-                    Call Send_BNLS0x51
-                End If
+                'If BotVars.Product = "PX3W" Or BotVars.Product = "PX2D" Then
+                    ' no more bnls key hashing
+                    'Call Send_0x0C(BotVars.ExpKey)
+                'Else
+                    'Call Send_BNLS0x51
+                'End If
                 
             End If
             
@@ -370,7 +379,8 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
                 ds.SetCheckSum Conv(Mid$(Data, 12, 4))
                 ds.SetExeInfo KillNull(Right$(Data, Len(Data) - 15))
                 
-                Call Send_0x01(BotVars.CDKey)
+                ' no more bnls key hashing
+                'Call Send_0x01(BotVars.CDKey)
 
             Else
                 frmChat.Event_BNLSDataError 2
@@ -433,6 +443,10 @@ Sub CloseConnection(Optional ByVal DoNotShow As Byte = 0)
 End Sub
 
 Private Sub Send_BNLS0x51()
+    Dim KeyHash As String       ' CDKey hash
+    Dim Value1 As Long          ' CDKey Value 1
+    Dim ProductID As Long       ' CDKey Product ID
+    
     With PBuffer
         .InsertDWord ds.GetGTC
         .InsertDWord ds.GetVersion
@@ -447,7 +461,17 @@ Private Sub Send_BNLS0x51()
         End If
         
         .InsertDWord &H0
-        .InsertNonNTString ds.GetKeyHash(1)
+        
+        ' no more bnls key hashing
+        '.InsertNonNTString ds.GetKeyHash(1)
+        
+        Call DecodeCDKey(BotVars.CDKey, ds.GetServerToken, ds.GetGTC, KeyHash, Value1, ProductID, ds.GetMPQRev)
+        
+        .InsertDWord Len(BotVars.CDKey)
+        .InsertDWord ProductID
+        .InsertDWord Value1
+        .InsertDWord &H0
+        .InsertNonNTString KeyHash
         
         'Add warden support
         If BotVars.Product = "RATS" Or BotVars.Product = "PXES" Then
@@ -457,7 +481,16 @@ Private Sub Send_BNLS0x51()
         If ((BotVars.Product = "PX2D") Or _
             (BotVars.Product = "PX3W")) Then
             
-            .InsertNonNTString ds.GetKeyHash(2)
+            ' no more bnls key hashing
+            '.InsertNonNTString ds.GetKeyHash(2)
+            
+            Call DecodeCDKey(BotVars.ExpKey, ds.GetServerToken, ds.GetGTC, KeyHash, Value1, ProductID, ds.GetMPQRev)
+        
+            .InsertDWord Len(BotVars.ExpKey)
+            .InsertDWord ProductID
+            .InsertDWord Value1
+            .InsertDWord &H0
+            .InsertNonNTString KeyHash
         End If
         
         'Debug.Print ds.getExeInfo
