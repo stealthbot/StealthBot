@@ -2110,9 +2110,14 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
 
     Dim tmpBuf As String ' temporary output buffer
     Dim tmpAcc As String ' ...
+    
+    Dim msgFirstPart As String ' ...
 
+    ' Get the first part of the message. (the username given)
+    msgFirstPart = Split(msgData, " ")(0)
+    
     ' ...
-    tmpAcc = StripInvalidNameChars(msgData)
+    tmpAcc = StripInvalidNameChars(msgFirstPart)
 
     ' ...
     If (Len(tmpAcc) > 0) Then
@@ -2123,7 +2128,7 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
         
         ' ...
         If (dbAccess.Access <= 100) Then
-            If ((GetSafelist(tmpAcc)) Or (GetSafelist(msgData))) Then
+            If ((GetSafelist(tmpAcc)) Or (GetSafelist(msgFirstPart))) Then
                 ' return message
                 cmdRet(0) = "Error: That user is safelisted."
                 
@@ -2132,7 +2137,7 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
         End If
         
         ' ...
-        gAcc = GetAccess(msgData)
+        gAcc = GetAccess(msgFirstPart)
         
         ' ...
         If ((gAcc.Access >= dbAccess.Access) Or _
@@ -2140,9 +2145,10 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
 
             tmpBuf = "Error: You do not have enough access to do that."
         Else
-            Call AddQ("/squelch " & msgData, , Username)
+            Call AddQ("/ban " & msgData, , Username)
+            Call AddQ("/squelch " & msgFirstPart, , Username)
         
-            tmpBuf = "User " & Chr(34) & msgData & Chr(34) & " IPBanned."
+            tmpBuf = "User " & Chr(34) & msgFirstPart & Chr(34) & " IPBanned."
         End If
     Else
         ' return message

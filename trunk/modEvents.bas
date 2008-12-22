@@ -334,12 +334,10 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
                 ". Type /getmail to retrieve."
     End If
     
-    ' Check if the channel is Clan SBs.
-    If (StrComp(ChannelName, "Clan SBs", vbTextCompare) = 0) Then
-        ' Are we a tech?
-        If (IsStealthBotTech() = False) Then
+    ' Give a message to them if they're in Clan SBs.
+    If ((StrComp(ChannelName, "Clan SBs", vbTextCompare) = 0) And _
+        (IsStealthBotTech() = False)) Then
             frmChat.AddChat vbRed, "You have joined Clan SBs. For the consideration of the Technical Support Staff: greet, idle, and all scripted messages have been temporarily disabled."
-        End If
     End If
     
     
@@ -1275,7 +1273,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim I           As Long
     Dim temp        As Byte
     Dim Level       As Byte
-    Dim l           As Long
+    Dim L           As Long
     Dim Banned      As Boolean
     Dim f           As Integer
     Dim UserIndex   As Integer ' ...
@@ -1431,11 +1429,11 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
             
             If (mail) Then
-                l = GetMailCount(Username)
+                L = GetMailCount(Username)
                 
-                If (l > 0) Then
-                    frmChat.AddQ "/w " & Username & " You have " & l & _
-                        " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
+                If (L > 0) Then
+                    frmChat.AddQ "/w " & Username & " You have " & L & _
+                        " new message" & IIf(L = 1, "", "s") & ". Type !inbox to retrieve."
                 End If
             End If
         End If
@@ -1574,7 +1572,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     Dim strCompare    As String
     Dim I             As Integer
     Dim ColIndex      As Integer
-    Dim b             As Boolean
+    Dim B             As Boolean
     Dim ToANSI        As String
     Dim BanningUser   As Boolean
     Dim UsernameColor As Long ' ...
@@ -1827,7 +1825,7 @@ Private Function CheckMessage(Username As String, Message As String) As Boolean
 End Function
 
 Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
-    Dim l As Long
+    Dim L As Long
 
     Select Case (Message)
         Case 0:
