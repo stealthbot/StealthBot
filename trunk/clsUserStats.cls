@@ -565,7 +565,7 @@ End Property
 Public Property Get IsExpansionCharacter() As Boolean
 
     ' ...
-    If (game = "D2XP") Then
+    If (StrReverse$(game) = "D2XP") Then
         IsExpansionCharacter = True
     Else
         IsExpansionCharacter = ((CharacterFlags And &H20) = &H20)
@@ -913,6 +913,9 @@ Public Property Get IconCode() As Integer
                     GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), _
                         IIf(IsWCG, Icon, ""))
             
+                ' ..
+                'frmChat.AddChat vbRed, ICON_START_WAR3 + IconCode
+            
                 ' ...
                 If (ICON_START_WAR3 + IconCode = 88) Then
                     ' ...
@@ -937,8 +940,11 @@ Public Property Get IconCode() As Integer
                     GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), _
                         IIf(IsWCG, Icon, ""))
                         
+                ' ..
+                'frmChat.AddChat vbRed, ICON_START_W3XP + IconCode
+                        
                 ' ...
-                If (ICON_START_W3XP + IconCode = 88) Then
+                If (ICON_START_WAR3 + IconCode = 88) Then
                     ' ...
                     IconCode = ICWAR3X
                     

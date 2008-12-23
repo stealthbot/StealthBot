@@ -28,7 +28,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
  
     ' ...
     UserIndex = _
-        g_Channel.GetUserIndexEx(Username)
+        g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     ' ...
     If (UserIndex > 0) Then
@@ -960,7 +960,8 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim PassedQueue As Boolean ' ...
     
     ' ...
-    pos = g_Channel.GetUserIndexEx(Username)
+    pos = _
+        g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     ' ...
     If (pos > 0) Then
@@ -1096,7 +1097,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
 
     ' ...
     UserIndex = _
-        g_Channel.GetUserIndexEx(Username)
+        g_Channel.GetUserIndexEx(CleanUsername(Username))
 
     ' ...
     If (UserIndex > 0) Then
@@ -1286,7 +1287,8 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     End If
     
     ' ...
-    UserIndex = g_Channel.GetUserIndexEx(Username)
+    UserIndex = _
+        g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     ' ...
     If (QueuedEventID > 0) Then
@@ -1400,6 +1402,8 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         ' ...
         IsBanned = (UserObj.PendingBan)
         
+        'frmChat.AddChat vbRed, IsBanned
+        
         ' ...
         If (IsBanned = False) Then
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1476,7 +1480,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     
     ' ...
     UserIndex = _
-        g_Channel.GetUserIndexEx(Username)
+        g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     ' ...
     If (UserIndex > 0) Then
@@ -1582,7 +1586,8 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     Dim blnCheck      As Boolean
     
     ' ...
-    pos = g_Channel.GetUserIndexEx(Username)
+    pos = _
+        g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     ' ...
     If (pos > 0) Then
@@ -1714,20 +1719,20 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         If (mail) Then
             ' ...
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim msg As udtMail ' ...
+                Dim Msg As udtMail ' ...
                 
                 ' ...
                 If (GetMailCount(Username) > 0) Then
                     ' ...
                     Do
                         ' ...
-                        GetMailMessage Username, msg
+                        GetMailMessage Username, Msg
                         
                         ' ...
-                        If (Len(RTrim(msg.To)) > 0) Then
+                        If (Len(RTrim(Msg.To)) > 0) Then
                             ' ...
-                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(msg.From) & ": " & _
-                                RTrim$(msg.Message)
+                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(Msg.From) & ": " & _
+                                RTrim$(Msg.Message)
                         End If
                     Loop While (GetMailCount(Username) > 0)
                 End If
@@ -2009,14 +2014,14 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         '####### Mail check
         If (mail) Then
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim msg As udtMail
+                Dim Msg As udtMail
                 
                 If (GetMailCount(Username) > 0) Then
-                    Call GetMailMessage(Username, msg)
+                    Call GetMailMessage(Username, Msg)
                     
-                    If (Len(RTrim(msg.To)) > 0) Then
+                    If (Len(RTrim(Msg.To)) > 0) Then
                         frmChat.AddQ "/w " & Username & " Message from " & _
-                            RTrim$(msg.From) & ": " & RTrim$(msg.Message)
+                            RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
                     End If
                 End If
             End If

@@ -4889,7 +4889,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 Select Case (Shift)
                     Case S_CTRL 'CTRL+ENTER - rewhisper
                         If LenB(cboSend.text) > 0 Then
-                            AddQ "/w " & IIf(Dii, "*", "") & LastWhisperTo & Space(1) & cboSend.text, _
+                            AddQ "/w " & LastWhisperTo & Space(1) & cboSend.text, _
                                 PRIORITY.CONSOLE_MESSAGE
                                 
                             cboSend.text = vbNullString
@@ -4897,7 +4897,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         
                     Case S_CTRLSHIFT 'CTRL+SHIFT+ENTER - reply
                         If LenB(cboSend.text) > 0 Then
-                            AddQ "/w " & IIf(Dii, "*", "") & LastWhisper & Space(1) & cboSend.text, _
+                            AddQ "/w " & LastWhisper & Space(1) & cboSend.text, _
                                 PRIORITY.CONSOLE_MESSAGE
                             cboSend.text = vbNullString
                         End If
@@ -5065,7 +5065,7 @@ theEnd:
                                 If StrComp(Left$(.text, 2), "/r", vbTextCompare) = 0 Then
                                     .SelStart = 0
                                     .SelLength = Len(.text)
-                                    .SelText = "/w " & IIf(Dii, "*", "") & LastWhisper
+                                    .SelText = "/w " & LastWhisper
                                     .SelStart = Len(.text)
                                 End If
                             End If

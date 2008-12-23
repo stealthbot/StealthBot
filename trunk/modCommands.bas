@@ -48,7 +48,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Dim Count            As Integer
     Dim bln              As Boolean
     Dim command_return() As String
-    Dim outBuf           As String
+    Dim outbuf           As String
     Dim execCommand      As Boolean
     
     ' ...
@@ -74,7 +74,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         ' ...
         If (command.IsLocal) Then
             execCommand = True
-        ElseIf (HasAccess(Username, command.Name, command.Args, outBuf)) Then
+        ElseIf (HasAccess(Username, command.Name, command.Args, outbuf)) Then
             execCommand = True
         End If
         
@@ -127,7 +127,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             End If
         Else
             ' ...
-            If ((DisplayOutput) And (LenB(outBuf))) Then
+            If ((DisplayOutput) And (LenB(outbuf))) Then
                 ' ...
                 If ((BotVars.WhisperCmds) Or (WasWhispered)) Then
                     AddQ "/w " & Username & Space$(1) & command_return(I), _
@@ -3615,13 +3615,13 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
         If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
             tmpBuf(0) = "Error: The specified username is invalid."
         Else
-            Dim msg As String ' ...
+            Dim Msg As String ' ...
             
             ' ...
-            msg = Mid$(msgData, Index + 1)
+            Msg = Mid$(msgData, Index + 1)
         
             ' ...
-            shit_msg = user & shit_msg & " --type USER --banmsg " & msg
+            shit_msg = user & shit_msg & " --type USER --banmsg " & Msg
         End If
     Else
         ' ...
@@ -4868,7 +4868,7 @@ End Function ' end function OnCheckMail
 Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim msg    As udtMail
+    Dim Msg    As udtMail
     
     Dim tmpBuf As String ' temporary output buffer
             
@@ -4877,10 +4877,10 @@ Private Function OnGetMail(ByVal Username As String, ByRef dbAccess As udtGetAcc
     End If
     
     If (GetMailCount(Username) > 0) Then
-        Call GetMailMessage(Username, msg)
+        Call GetMailMessage(Username, Msg)
         
-        If (Len(RTrim(msg.To)) > 0) Then
-            tmpBuf = "Message from " & RTrim(msg.From) & ": " & RTrim(msg.Message)
+        If (Len(RTrim(Msg.To)) > 0) Then
+            tmpBuf = "Message from " & RTrim(Msg.From) & ": " & RTrim(Msg.Message)
         End If
     Else
         tmpBuf = "You do not currently have any messages " & _
@@ -5086,7 +5086,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                     Case "group" ' ...
                         ' do we have a valid parameter Length?
                         If (Len(pmsg)) Then
-                            Dim splt() As String
+                            Dim Splt() As String
                             Dim j      As Integer
                         
                             If (InStr(1, pmsg, ",", vbBinaryCompare) <> 0) Then
@@ -5100,16 +5100,16 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                                         
                                 Exit Function
                             Else
-                                ReDim Preserve splt(0)
+                                ReDim Preserve Splt(0)
                                 
-                                splt(0) = pmsg
+                                Splt(0) = pmsg
                             End If
                             
-                            For j = 0 To UBound(splt)
+                            For j = 0 To UBound(Splt)
                                 Dim tmp As udtGetAccessResponse ' ...
                                 
                                 ' ...
-                                tmp = GetAccess(splt(j), "GROUP")
+                                tmp = GetAccess(Splt(j), "GROUP")
                             
                                 If (dbAccess.Access < tmp.Access) Then
                                     cmdRet(0) = "Error: You do not have sufficient access to " & _
@@ -5118,7 +5118,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                                     Exit Function
                                 End If
                                 
-                                If ((StrComp(splt(j), user, vbTextCompare) = 0) And _
+                                If ((StrComp(Splt(j), user, vbTextCompare) = 0) And _
                                     (dbType = "GROUP")) Then
                                     
                                     cmdRet(0) = "Error: You cannot make a group a member of " & _
@@ -5146,7 +5146,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                                 End If
                             Next j
                             
-                            If (j < (UBound(splt) + 1)) Then
+                            If (j < (UBound(Splt) + 1)) Then
                                 cmdRet(0) = "Error: The specified group(s) could " & _
                                     "not be found."
                                     
@@ -6597,13 +6597,13 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                     For I = LBound(DB) To UBound(DB)
                         If (Len(DB(I).Groups) And DB(I).Groups <> "%") Then
                             If (InStr(1, DB(I).Groups, ",", vbBinaryCompare) <> 0) Then
-                                Dim splt()     As String ' ...
+                                Dim Splt()     As String ' ...
                                 Dim innerfound As Boolean ' ...
                                 
-                                splt() = Split(DB(I).Groups, ",")
+                                Splt() = Split(DB(I).Groups, ",")
                                 
-                                For j = LBound(splt) To UBound(splt)
-                                    If (StrComp(bak.Username, splt(j), vbTextCompare) = 0) Then
+                                For j = LBound(Splt) To UBound(Splt)
+                                    If (StrComp(bak.Username, Splt(j), vbTextCompare) = 0) Then
                                         innerfound = True
                                     
                                         Exit For
@@ -6613,13 +6613,13 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                                 If (innerfound) Then
                                     Dim k As Integer ' ...
                                     
-                                    For k = (j + 1) To UBound(splt)
-                                        splt(k - 1) = splt(k)
+                                    For k = (j + 1) To UBound(Splt)
+                                        Splt(k - 1) = Splt(k)
                                     Next k
                                     
-                                    ReDim Preserve splt(UBound(splt) - 1)
+                                    ReDim Preserve Splt(UBound(Splt) - 1)
                                     
-                                    DB(I).Groups = Join(splt(), vbNullString)
+                                    DB(I).Groups = Join(Splt(), vbNullString)
                                 End If
                             Else
                                 If (StrComp(bak.Username, DB(I).Groups, vbTextCompare) = 0) Then
@@ -6963,7 +6963,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
     If (command.Parameters.Count) Then
         Dim Parameter   As clsCommandParamsObj
         Dim Restriction As clsCommandRestrictionObj
-        Dim splt()      As String
+        Dim Splt()      As String
         Dim loopCount   As Integer
         Dim bln         As Boolean
         Dim I           As Integer
@@ -6973,7 +6973,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
         spaceIndex = InStr(1, CommandArgs, Space$(1), vbBinaryCompare)
         
         If ((spaceIndex <> 0) And (command.Parameters.Count > 1)) Then
-            splt() = Split(CommandArgs, Space$(1), command.Parameters.Count)
+            Splt() = Split(CommandArgs, Space$(1), command.Parameters.Count)
         Else
             If (CommandArgs = vbNullString) Then
                 IsCorrectSyntax = False
@@ -6981,9 +6981,9 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
                 Exit Function
             End If
         
-            ReDim Preserve splt(0)
+            ReDim Preserve Splt(0)
         
-            splt(0) = CommandArgs
+            Splt(0) = CommandArgs
         End If
         
         For I = 1 To command.Parameters.Count
@@ -6993,7 +6993,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
                 If (command.Parameters.Count > I) Then
                     If (command.Parameters.Item(I + 1).IsOptional) Then
                         If (Parameter.dataType = "number") Then
-                            If (StrictIsNumeric(splt(loopCount)) = False) Then
+                            If (StrictIsNumeric(Splt(loopCount)) = False) Then
                                 bln = True
                             End If
                         Else
@@ -7010,7 +7010,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
                 If (Parameter.dataType = "number") Then
                     Dim lVal As Long
 
-                    If (StrictIsNumeric(splt(loopCount)) = False) Then
+                    If (StrictIsNumeric(Splt(loopCount)) = False) Then
                         IsCorrectSyntax = False
                         
                         Exit Function
@@ -7032,14 +7032,14 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
                         .Global = True
                     End With
                     
-                    Set matches = regex.Execute(splt(loopCount))
+                    Set matches = regex.Execute(Splt(loopCount))
                     
                     If (matches.Count = 0) Then
                         IsCorrectSyntax = False
                         
                         Exit Function
                     Else
-                        If (matches.Item(0).Value <> splt(loopCount)) Then
+                        If (matches.Item(0).Value <> Splt(loopCount)) Then
                             IsCorrectSyntax = False
                             
                             Exit Function
@@ -7074,7 +7074,7 @@ ERROR_HANDLER:
 End Function
 
 Public Function HasAccess(ByVal Username As String, ByVal CommandName As String, Optional ByVal CommandArgs As _
-    String = vbNullString, Optional ByRef outBuf As String) As Boolean
+    String = vbNullString, Optional ByRef outbuf As String) As Boolean
     
     On Error GoTo ERROR_HANDLER
     
@@ -7118,22 +7118,22 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     If (command.Parameters.Count) Then
         Dim Parameter   As clsCommandParamsObj
         Dim Restriction As clsCommandRestrictionObj
-        Dim splt()      As String
+        Dim Splt()      As String
         Dim loopCount   As Integer
         Dim bln         As Boolean
         Dim I           As Integer
         
         If (InStr(1, CommandArgs, Space$(1), vbBinaryCompare) <> 0) Then
-            splt() = Split(CommandArgs, Space$(1))
+            Splt() = Split(CommandArgs, Space$(1))
         Else
-            ReDim Preserve splt(0)
+            ReDim Preserve Splt(0)
             
-            splt(0) = CommandArgs
+            Splt(0) = CommandArgs
         End If
         
         For I = 1 To command.Parameters.Count
             ' ...
-            If (loopCount > UBound(splt)) Then
+            If (loopCount > UBound(Splt)) Then
                 Exit For
             End If
         
@@ -7148,7 +7148,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
                 ' ...
                 If (Parameter.dataType = "number") Then
                     ' ...
-                    If (StrictIsNumeric(splt(loopCount)) = False) Then
+                    If (StrictIsNumeric(Splt(loopCount)) = False) Then
                         bln = True
                     End If
                 End If
@@ -7164,7 +7164,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
                             .Global = True
                         End With
 
-                        Set matches = regex.Execute(splt(loopCount))
+                        Set matches = regex.Execute(Splt(loopCount))
 
                         If (matches.Count > 0) Then
                             If ((Restriction.RequiredRank = 0) And _
@@ -7523,13 +7523,13 @@ Public Function DateCleanup(ByVal TDate As Date) As String
 End Function
 
 Private Function GetAccessINIValue(ByVal sKey As String, Optional ByVal Default As Long) As Long
-    Dim s As String, L As Long
+    Dim s As String, l As Long
     
     s = ReadINI("Numeric", sKey, "access.ini")
-    L = Val(s)
+    l = Val(s)
     
-    If L > 0 Then
-        GetAccessINIValue = L
+    If l > 0 Then
+        GetAccessINIValue = l
     Else
         If Default > 0 Then
             GetAccessINIValue = Default
@@ -7685,8 +7685,7 @@ Public Function convertUsername(ByVal Username As String) As String
             Index = InStr(1, Username, "*", vbBinaryCompare)
         
             If (Index > 1) Then
-                convertUsername = Left$(Username, Index - 1) & _
-                    " (" & Mid$(Username, Index) & ")"
+                convertUsername = Left$(Username, Index - 1)
             Else
                 convertUsername = Username
             End If
