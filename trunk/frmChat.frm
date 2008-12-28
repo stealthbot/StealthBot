@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -6064,13 +6064,19 @@ End Sub
 Private Function GetAuth(ByVal Username As String) As Boolean
     On Error GoTo ERROR_HANDLER
     
+    ' ...
+    Const auth_url As String = "http://www.stealthbot.net/board/sbauth.php?username="
+    
     Static lastAuth     As Boolean ' ...
     Static lastAuthName As String  ' ...
     
-
+    Dim clsCRC32 As clsCRC32 ' ...
     Dim res As String ' string variable for storing beta authorization result
                       ' 0 == unauthorized
                       ' 1 == authorized
+                      
+    ' ...
+    Set clsCRC32 = New clsCRC32
                       
     ' ...
     If (lastAuth = True) Then
@@ -6083,9 +6089,18 @@ Private Function GetAuth(ByVal Username As String) As Boolean
             Exit Function
         End If
     End If
+    
+    ' ...
+    If (clsCRC32.GenerateCRC32(auth_url) <> 716038006) Then
+        ' ...
+        GetAuth = False
+            
+        ' ...
+        Exit Function
+    End If
 
     ' ...
-    res = INet.OpenURL("http://www.stealthbot.net/board/sbauth.php?username=" & Username)
+    res = INet.OpenURL(auth_url & Username)
 
     ' ...
     Do While INet.StillExecuting
@@ -6104,12 +6119,21 @@ Private Function GetAuth(ByVal Username As String) As Boolean
     
     ' ...
     GetAuth = lastAuth
+    
+    ' ...
+    Set clsCRC32 = Nothing
 
     ' ...
     Exit Function
 
 ERROR_HANDLER:
+
+    ' ...
     GetAuth = False
+    
+    ' ...
+    Exit Function
+    
 End Function
 
 ' ...
