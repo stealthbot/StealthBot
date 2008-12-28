@@ -498,21 +498,29 @@ Repeat4:
         End If
         
     Else
-    
-        frmProfile.Show
+        With frmProfile
+            .Show
+            
+            Select Case KeyName
+                Case "Profile\Age"
+                    .rtbAge.text = vbNullString
+                    .AddText .rtbAge, vbWhite, KeyValue
+                Case "Profile\Location"
+                    .rtbLocation.text = vbNullString
+                    .AddText .rtbLocation, vbWhite, KeyValue
+                Case "Profile\Description"
+                    .rtbProfile.text = vbNullString
+                    .AddText .rtbProfile, vbWhite, KeyValue
+                Case "Profile\Sex"
+                    .rtbSex.text = vbNullString
+                    .AddText .rtbSex, vbWhite, KeyValue
+                Case Else
+                    Exit Sub
+            End Select
         
-        If KeyName = "Profile\Age" Then
-            frmProfile.txtAge.text = KeyValue
-        ElseIf KeyName = "Profile\Location" Then
-            frmProfile.txtLoc.text = KeyValue
-        ElseIf KeyName = "Profile\Description" Then
-            frmProfile.rtbProfile.text = vbNullString
-            frmProfile.AddText vbWhite, KeyValue
-        ElseIf KeyName = "Profile\Sex" Then
-            frmProfile.txtSex.text = KeyValue
-        End If
+            .SetFocus
+        End With
         
-        frmProfile.SetFocus
         frmChat.SControl.Run "Event_KeyReturn", KeyName, KeyValue
         
     End If
@@ -1719,20 +1727,20 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         If (mail) Then
             ' ...
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim Msg As udtMail ' ...
+                Dim msg As udtMail ' ...
                 
                 ' ...
                 If (GetMailCount(Username) > 0) Then
                     ' ...
                     Do
                         ' ...
-                        GetMailMessage Username, Msg
+                        GetMailMessage Username, msg
                         
                         ' ...
-                        If (Len(RTrim(Msg.To)) > 0) Then
+                        If (Len(RTrim(msg.To)) > 0) Then
                             ' ...
-                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(Msg.From) & ": " & _
-                                RTrim$(Msg.Message)
+                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(msg.From) & ": " & _
+                                RTrim$(msg.Message)
                         End If
                     Loop While (GetMailCount(Username) > 0)
                 End If
@@ -2014,14 +2022,14 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         '####### Mail check
         If (mail) Then
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim Msg As udtMail
+                Dim msg As udtMail
                 
                 If (GetMailCount(Username) > 0) Then
-                    Call GetMailMessage(Username, Msg)
+                    Call GetMailMessage(Username, msg)
                     
-                    If (Len(RTrim(Msg.To)) > 0) Then
+                    If (Len(RTrim(msg.To)) > 0) Then
                         frmChat.AddQ "/w " & Username & " Message from " & _
-                            RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
+                            RTrim$(msg.From) & ": " & RTrim$(msg.Message)
                     End If
                 End If
             End If
