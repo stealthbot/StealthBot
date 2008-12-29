@@ -121,10 +121,10 @@ Public Function Peek() As clsQueueOBj
 End Function ' end function Peek
 
 ' ...
-Public Function Item(lItem As Long) As Object
+Public Function Item(index As Integer) As Object
 
     ' ...
-    If ((lItem - 1 < 0) Or (lItem - 1 >= m_objCount)) Then
+    If ((index < 0) Or (index + 1 >= m_objCount)) Then
         ' ...
         Set Item = New clsQueueOBj
     
@@ -133,7 +133,7 @@ Public Function Item(lItem As Long) As Object
     End If
 
     ' ...
-    Set Item = m_QueueObjs(lItem - 1)
+    Set Item = m_QueueObjs(index - 1)
     
 End Function ' end function Item
 
@@ -372,7 +372,7 @@ Public Sub RemoveItem(ByVal index As Integer)
     Dim i As Integer ' ...
 
     ' ...
-    If ((index - 1 < 0) Or (index - 1 >= m_objCount)) Then
+    If ((index < 0) Or (index + 1 >= m_objCount)) Then
         Exit Sub
     End If
 
