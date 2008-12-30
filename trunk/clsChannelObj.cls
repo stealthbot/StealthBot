@@ -338,6 +338,52 @@ Public Function IsOnBanList(ByVal Username As String, Optional Operator As Strin
     Next I
 
     IsOnBanList = 0
+    
+End Function
+
+Public Function IsOnRecentBanList(ByVal Username As String, Optional Operator As String = vbNullString) As Integer
+
+    Dim I   As Integer ' ...
+    Dim bln As Boolean ' ...
+    
+    ' ...
+    Username = CleanUsername(Username)
+    
+    ' ...
+    For I = Banlist.Count To (Banlist.Count - 5) Step -1
+        ' ...
+        If (I <= 0) Then
+            Exit For
+        End If
+
+        ' ...
+        If (StrComp(Banlist(I).Name, Username, vbTextCompare) = 0) Then
+            ' ...
+            If (Operator <> vbNullString) Then
+                ' ...
+                If (StrComp(Banlist(I).Operator, Operator, vbTextCompare) = 0) Then
+                    bln = True
+                End If
+            Else
+                bln = True
+            End If
+        
+            ' ...
+            If (bln) Then
+                frmChat.AddChat vbYellow, DateDiff("s", Banlist(I).DateOfBan, UtcNow)
+            
+                ' ...
+                If (DateDiff("s", Banlist(I).DateOfBan, UtcNow) <= 3) Then
+                    IsOnRecentBanList = I
+                
+                    Exit Function
+                End If
+            End If
+        End If
+    Next I
+
+    IsOnRecentBanList = 0
+    
 End Function
 
 Public Sub RemoveBansFromOperator(ByVal Username As String)

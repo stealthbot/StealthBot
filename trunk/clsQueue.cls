@@ -25,14 +25,16 @@ Private m_lastUser    As String
 
 ' ...
 Private Sub Class_Initialize()
-    ' ...
+
     Call Clear
+    
 End Sub ' end function Class_Initialize
 
 ' ...
 Private Sub Class_Terminate()
-    ' ...
+
     Call Clear
+    
 End Sub ' end function Class_Terminate
 
 ' ...
@@ -40,38 +42,41 @@ Public Function Push(ByRef obj As clsQueueOBj)
     
     On Error GoTo ERROR_HANDLER
     
-    Dim index As Integer ' ...
-    Dim i     As Integer ' ...
+    Dim Index As Integer ' ...
+    Dim I     As Integer ' ...
+    
+    ' ...
+    Index = m_objCount
     
     ' ...
     If (m_objCount) Then
         ' ...
-        For i = 0 To m_objCount - 1
+        For I = 0 To m_objCount - 1
             ' ...
-            If (obj.PRIORITY < m_QueueObjs(i).PRIORITY) Then
+            If (obj.PRIORITY < m_QueueObjs(I).PRIORITY) Then
                 ' ...
-                index = i
+                Index = I
                 
                 ' ...
                 Exit For
             End If
-        Next i
+        Next I
     
         ' ...
         ReDim Preserve m_QueueObjs(0 To m_objCount)
     End If
     
     ' ...
-    If (index >= m_objCount) Then
+    If (Index >= m_objCount) Then
         Set m_QueueObjs(m_objCount) = obj
     Else
         ' ...
-        For i = index + 1 To m_objCount
-            Set m_QueueObjs(i) = m_QueueObjs(i - 1)
-        Next i
+        For I = Index + 1 To m_objCount
+            Set m_QueueObjs(I) = m_QueueObjs(I - 1)
+        Next I
         
         ' ...
-        Set m_QueueObjs(index) = obj
+        Set m_QueueObjs(Index) = obj
     End If
     
     ' ...
@@ -93,7 +98,7 @@ Public Function Pop() As clsQueueOBj
 
     On Error GoTo ERROR_HANDLER
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
 
     ' ...
     Set Pop = m_QueueObjs(0)
@@ -121,10 +126,10 @@ Public Function Peek() As clsQueueOBj
 End Function ' end function Peek
 
 ' ...
-Public Function Item(index As Integer) As Object
+Public Function Item(Index As Integer) As Object
 
     ' ...
-    If ((index < 0) Or (index + 1 >= m_objCount)) Then
+    If ((Index < 0) Or (Index + 1 > m_objCount)) Then
         ' ...
         Set Item = New clsQueueOBj
     
@@ -133,7 +138,7 @@ Public Function Item(index As Integer) As Object
     End If
 
     ' ...
-    Set Item = m_QueueObjs(index - 1)
+    Set Item = m_QueueObjs(Index - 1)
     
 End Function ' end function Item
 
@@ -144,244 +149,266 @@ Public Property Get Count() As Long
     
 End Property
 
-' ...
-Public Sub RemoveLines(Optional ByVal strLine As String = vbNullString, Optional ByVal strUser As String = _
-    vbNullString)
+Public Sub RemoveLines(match As String)
 
-    Dim curQueueObj As clsQueueOBj
-    Dim i           As Integer ' ...
-    Dim bln         As Boolean ' ...
-    Dim j           As Integer ' ...
-    Dim tmp         As String  ' ...
+    Dim curQueueObj As clsQueueOBj ' ...
+    Dim I           As Integer     ' ...
     
     ' ...
     Do
-        ' reset boolean
-        i = 0
-        bln = False
-    
         ' ...
-        For i = i To (m_objCount - 1)
-            ' ...
-            Set curQueueObj = m_QueueObjs(i)
-        
-            ' ...
-            If (strLine <> vbNullString) Then
-                ' ...
-                If (Len(curQueueObj.Message) >= Len(strLine)) Then
-                    ' ...
-                    tmp = Left$(curQueueObj.Message, Len(strLine))
-            
-                    ' ...
-                    If (StrComp(tmp, strLine, vbTextCompare) = 0) Then
-                        ' ...
-                        If (strUser <> vbNullString) Then
-                            ' ...
-                            If (curQueueObj.ResponseTo = strUser) Then
-                                ' ...
-                                bln = True
-                            End If
-                        Else
-                            ' ...
-                            bln = True
-                        End If
-                    End If
-                End If
-            Else
-                ' ...
-                If (curQueueObj.ResponseTo = strUser) Then
-                    ' ...
-                    bln = True
-                End If
-            End If
-            
-            ' ...
-            If (bln) Then
-                Exit For
-            End If
-        Next i
+        Set curQueueObj = m_QueueObjs(I)
         
         ' ...
-        If (bln) Then
-            ' ...
-            For j = i + 1 To m_objCount - 1
-                Set m_QueueObjs(j - 1) = m_QueueObjs(j)
-            Next j
+        If (curQueueObj.Message Like PrepareCheck(match)) Then
+            RemoveItem I
             
-            ' ...
-            ReDim Preserve m_QueueObjs(0 To (m_objCount - 1))
-            
-            ' ...
-            m_objCount = (m_objCount - 1)
+            I = 0
+        Else
+            I = I + 1
         End If
-    Loop While (bln = True)
-    
-End Sub ' end function RemoveLines
+    Loop While (I < Count())
 
-Private Function FindLines(Optional ByVal strLine As String = vbNullString, Optional ByVal strUser As String = _
-    vbNullString, Optional PriLower As Integer = MAX_PRIORITY_LEVEL) As Integer
-    
-    Dim curQueueObj As clsQueueOBj
-    Dim i           As Integer ' ...
-    Dim bln         As Boolean ' ...
-    Dim j           As Integer ' ...
-    Dim tmp         As String  ' ...
-
-    ' ...
-    For i = 0 To (m_objCount - 1)
-        ' ...
-        Set curQueueObj = m_QueueObjs(i)
-    
-        ' ...
-        If (curQueueObj.PRIORITY <= PriLower) Then
-            ' ...
-            If (strLine <> vbNullString) Then
-                ' ...
-                If (Len(curQueueObj.Message) >= Len(strLine)) Then
-                    ' ...
-                    tmp = Left$(curQueueObj.Message, Len(strLine))
-            
-                    ' ...
-                    If (StrComp(tmp, strLine, vbTextCompare) = 0) Then
-                        ' ...
-                        If (strUser <> vbNullString) Then
-                            ' ...
-                            If (curQueueObj.ResponseTo = strUser) Then
-                                ' ...
-                                bln = True
-                            End If
-                        Else
-                            ' ...
-                            bln = True
-                        End If
-                    End If
-                End If
-            Else
-                ' ...
-                If (curQueueObj.ResponseTo = strUser) Then
-                    ' ...
-                    bln = True
-                End If
-            End If
-        End If
-        
-        ' ...
-        If (bln) Then
-            ' ...
-            FindLines = (FindLines + 1)
-            
-            ' ...
-            bln = False
-        End If
-    Next i
-    
-End Function
+End Sub
 
 ' ...
-Private Function GetNextQueueObj() As Integer
+'Public Sub RemoveLines(Optional ByVal strLine As String = vbNullString, Optional ByVal strUser As String = _
+'    vbNullString)
+'
+'    Dim curQueueObj As clsQueueOBj
+'    Dim i           As Integer ' ...
+'    Dim bln         As Boolean ' ...
+'    Dim j           As Integer ' ...
+'    Dim tmp         As String  ' ...
+'
+'    ' ...
+'    Do
+'        ' reset boolean
+'        i = 0
+'        bln = False
+'
+'        ' ...
+'        For i = i To (m_objCount - 1)
+'            ' ...
+'            Set curQueueObj = m_QueueObjs(i)
+'
+'            ' ...
+'            If (strLine <> vbNullString) Then
+'                ' ...
+'                If (Len(curQueueObj.Message) >= Len(strLine)) Then
+'                    ' ...
+'                    tmp = Left$(curQueueObj.Message, Len(strLine))
+'
+'                    ' ...
+'                    If (StrComp(tmp, strLine, vbTextCompare) = 0) Then
+'                        ' ...
+'                        If (strUser <> vbNullString) Then
+'                            ' ...
+'                            If (curQueueObj.ResponseTo = strUser) Then
+'                                ' ...
+'                                bln = True
+'                            End If
+'                        Else
+'                            ' ...
+'                            bln = True
+'                        End If
+'                    End If
+'                End If
+'            Else
+'                ' ...
+'                If (curQueueObj.ResponseTo = strUser) Then
+'                    ' ...
+'                    bln = True
+'                End If
+'            End If
+'
+'            ' ...
+'            If (bln) Then
+'                Exit For
+'            End If
+'        Next i
+'
+'        ' ...
+'        If (bln) Then
+'            ' ...
+'            For j = i + 1 To m_objCount - 1
+'                Set m_QueueObjs(j - 1) = m_QueueObjs(j)
+'            Next j
+'
+'            ' ...
+'            ReDim Preserve m_QueueObjs(0 To (m_objCount - 1))
+'
+'            ' ...
+'            m_objCount = (m_objCount - 1)
+'        End If
+'    Loop While (bln = True)
+'
+'End Sub ' end function RemoveLines
 
-    On Error GoTo ERROR_HANDLER
-
-    Static lastLowestIndex As Integer
-
-    Dim curQueueObj As clsQueueOBj
-    Dim i           As Integer
-    Dim lowest      As Integer
-    Dim lowestIndex As Integer
-    
-    ' ...
-    lowest = MAX_PRIORITY_LEVEL
-    
-    ' ....
-    For i = 0 To (m_objCount - 1)
-        ' ...
-        Set curQueueObj = m_QueueObjs(i)
-        
-        ' ...
-        If (curQueueObj.PRIORITY < lowest) Then
-            ' ...
-            lowest = curQueueObj.PRIORITY
-            
-            ' ...
-            lowestIndex = i
-        End If
-    Next i
-    
-    ' ...
-    If (m_lastUser <> vbNullString) Then
-        Dim j   As Integer ' ...
-        Dim k   As Integer ' ...
-        Dim bln As Boolean ' ...
-    
-        ' ...
-        i = lastLowestIndex
-
-        ' ...
-        For i = i To (m_objCount - 1)
-            ' ...
-            Set curQueueObj = m_QueueObjs(i)
-
-            ' ...
-            If (curQueueObj.PRIORITY = lowest) Then
-                ' ...
-                If (StrComp(curQueueObj.ResponseTo, m_lastUser, vbTextCompare) <> 0) Then
-                    ' ...
-                    For k = 0 To (i - 1)
-                        ' ...
-                        If (m_QueueObjs(k).PRIORITY = lowest) Then
-                            ' ...
-                            If (StrComp(m_QueueObjs(k).ResponseTo, curQueueObj.ResponseTo, _
-                                    vbTextCompare) = 0) Then
-                                    
-                                Exit For
-                            End If
-                        End If
-                    Next k
-                    
-                    ' ...
-                    If (k >= i) Then
-                        ' ...
-                        lowestIndex = i
-
-                        ' ...
-                        Exit For
-                    End If
-                End If
-            End If
-        Next i
-    End If
-
-    ' ...
-    lastLowestIndex = lowestIndex
-    
-    ' ...
-    GetNextQueueObj = lastLowestIndex
-    
-    Exit Function
-
-ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsQueue::GetNextQueueObj().")
-
-    Exit Function
-    
-End Function ' end function GetNextQueueObj
+'Private Function FindLines(Optional ByVal strLine As String = vbNullString, Optional ByVal strUser As String = _
+'    vbNullString, Optional PriLower As Integer = MAX_PRIORITY_LEVEL) As Integer
+'
+'    Dim curQueueObj As clsQueueOBj
+'    Dim i           As Integer ' ...
+'    Dim bln         As Boolean ' ...
+'    Dim j           As Integer ' ...
+'    Dim tmp         As String  ' ...
+'
+'    ' ...
+'    For i = 0 To (m_objCount - 1)
+'        ' ...
+'        Set curQueueObj = m_QueueObjs(i)
+'
+'        ' ...
+'        If (curQueueObj.PRIORITY <= PriLower) Then
+'            ' ...
+'            If (strLine <> vbNullString) Then
+'                ' ...
+'                If (Len(curQueueObj.Message) >= Len(strLine)) Then
+'                    ' ...
+'                    tmp = Left$(curQueueObj.Message, Len(strLine))
+'
+'                    ' ...
+'                    If (StrComp(tmp, strLine, vbTextCompare) = 0) Then
+'                        ' ...
+'                        If (strUser <> vbNullString) Then
+'                            ' ...
+'                            If (curQueueObj.ResponseTo = strUser) Then
+'                                ' ...
+'                                bln = True
+'                            End If
+'                        Else
+'                            ' ...
+'                            bln = True
+'                        End If
+'                    End If
+'                End If
+'            Else
+'                ' ...
+'                If (curQueueObj.ResponseTo = strUser) Then
+'                    ' ...
+'                    bln = True
+'                End If
+'            End If
+'        End If
+'
+'        ' ...
+'        If (bln) Then
+'            ' ...
+'            FindLines = (FindLines + 1)
+'
+'            ' ...
+'            bln = False
+'        End If
+'    Next i
+'
+'End Function
 
 ' ...
-Public Sub RemoveItem(ByVal index As Integer)
+'Private Function GetNextQueueObj() As Integer
+'
+'    On Error GoTo ERROR_HANDLER
+'
+'    Static lastLowestIndex As Integer
+'
+'    Dim curQueueObj As clsQueueOBj
+'    Dim i           As Integer
+'    Dim lowest      As Integer
+'    Dim lowestIndex As Integer
+'
+'    ' ...
+'    lowest = MAX_PRIORITY_LEVEL
+'
+'    ' ....
+'    For i = 0 To (m_objCount - 1)
+'        ' ...
+'        Set curQueueObj = m_QueueObjs(i)
+'
+'        ' ...
+'        If (curQueueObj.PRIORITY < lowest) Then
+'            ' ...
+'            lowest = curQueueObj.PRIORITY
+'
+'            ' ...
+'            lowestIndex = i
+'        End If
+'    Next i
+'
+'    ' ...
+'    If (m_lastUser <> vbNullString) Then
+'        Dim j   As Integer ' ...
+'        Dim k   As Integer ' ...
+'        Dim bln As Boolean ' ...
+'
+'        ' ...
+'        i = lastLowestIndex
+'
+'        ' ...
+'        For i = i To (m_objCount - 1)
+'            ' ...
+'            Set curQueueObj = m_QueueObjs(i)
+'
+'            ' ...
+'            If (curQueueObj.PRIORITY = lowest) Then
+'                ' ...
+'                If (StrComp(curQueueObj.ResponseTo, m_lastUser, vbTextCompare) <> 0) Then
+'                    ' ...
+'                    For k = 0 To (i - 1)
+'                        ' ...
+'                        If (m_QueueObjs(k).PRIORITY = lowest) Then
+'                            ' ...
+'                            If (StrComp(m_QueueObjs(k).ResponseTo, curQueueObj.ResponseTo, _
+'                                    vbTextCompare) = 0) Then
+'
+'                                Exit For
+'                            End If
+'                        End If
+'                    Next k
+'
+'                    ' ...
+'                    If (k >= i) Then
+'                        ' ...
+'                        lowestIndex = i
+'
+'                        ' ...
+'                        Exit For
+'                    End If
+'                End If
+'            End If
+'        Next i
+'    End If
+'
+'    ' ...
+'    lastLowestIndex = lowestIndex
+'
+'    ' ...
+'    GetNextQueueObj = lastLowestIndex
+'
+'    Exit Function
+'
+'ERROR_HANDLER:
+'    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsQueue::GetNextQueueObj().")
+'
+'    Exit Function
+'
+'End Function ' end function GetNextQueueObj
 
-    Dim i As Integer ' ...
+' ...
+Public Sub RemoveItem(ByVal Index As Integer)
+
+    Dim I As Integer ' ...
 
     ' ...
-    If ((index < 0) Or (index + 1 >= m_objCount)) Then
+    If ((Index < 0) Or (Index + 1 > m_objCount)) Then
         Exit Sub
     End If
 
     ' ...
     If (m_objCount) Then
         ' ...
-        For i = index To ((m_objCount - 1) - 1)
-            Set m_QueueObjs(i) = m_QueueObjs(i + 1)
-        Next i
+        For I = Index To ((m_objCount - 1) - 1)
+            Set m_QueueObjs(I) = m_QueueObjs(I + 1)
+        Next I
         
         ' ...
         ReDim Preserve m_QueueObjs(0 To m_objCount - 1)
@@ -397,12 +424,12 @@ End Sub ' end function RemoveItem
 ' ...
 Public Sub Clear()
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
 
     ' ...
-    For i = 0 To m_objCount - 1
-        Set m_QueueObjs(i) = Nothing
-    Next i
+    For I = 0 To m_objCount - 1
+        Set m_QueueObjs(I) = Nothing
+    Next I
 
     ' ...
     ReDim m_QueueObjs(0) As clsQueueOBj

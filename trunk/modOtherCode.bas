@@ -1869,7 +1869,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
     tmp = "/ban " & sUser
         
     ' ...
-    Call g_Queue.RemoveLines(tmp)
+    Call g_Queue.RemoveLines(tmp & "*")
 
     ' ...
     If ((StrReverse$(BotVars.Product) = "WAR3") Or _
@@ -1886,7 +1886,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
         End Select
         
         ' ...
-        Call g_Queue.RemoveLines(tmp & strGateway)
+        Call g_Queue.RemoveLines(tmp & strGateway & "*")
     End If
 End Sub
 

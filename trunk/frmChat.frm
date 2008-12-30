@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5299,6 +5299,42 @@ Private Sub QueueTimer_Timer()
             pri = .PRIORITY
         End With
         
+        ' ...
+        If (pri = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
+            ' ...
+            If (Left$(Message, 5) = "/ban ") Then
+                Dim user As String ' ...
+                
+                ' ...
+                If (Len(Message) >= 6) Then
+                    user = Mid$(Message, 6)
+                    
+                    If (InStr(user, " ") <> 0) Then
+                        user = Mid$(user, 1, InStr(user, " ") - 1)
+                    End If
+                End If
+                
+                ' ...
+                If ((g_Channel.IsOnRecentBanList(user)) Or _
+                        (g_Channel.IsOnRecentBanList(StripRealm(user)))) Then
+                        
+                    ' ...
+                    'AddChat vbRed, "FOUND ONE!"
+                    
+                    ' ...
+                    Call g_Queue.Pop
+                    
+                    ' ...
+                    Call QueueTimer_Timer
+                    
+                    ' ...
+                    Exit Sub
+                End If
+            End If
+        End If
+        
+        'frmChat.AddChat vbYellow, Message
+        
         If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
             '// This is a dummy queue message faking a 70-character queue entry
             QueueLoad = (QueueLoad + 1)
@@ -5331,6 +5367,8 @@ Private Sub QueueTimer_Timer()
                 
                 Sent = 1
                 
+                'frmChat.AddChat vbRed, Message
+                
                 Call bnetSend(Message, Tag)
             End If
         End If
@@ -5353,8 +5391,7 @@ Private Sub QueueTimer_Timer()
                 delay = BanDelay()
                 
                 ' ...
-                QueueTimer.Interval = _
-                    QueueTimer.Interval + delay
+                QueueTimer.Interval = (QueueTimer.Interval + delay)
             End If
         End If
 
@@ -6424,7 +6461,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 ' want it out of here quick, we need an empty queue
                 ' and have had at least 10 seconds elapse since the
                 ' previous message.
-                If ((QueueLoad = 0) And (GTC - LastGTC >= 10000)) Then
+                If ((QueueLoad = 0) Or (GTC - LastGTC >= 10000)) Then
                     ' set default message delay when queue is empty (in ms)
                     delay = 10
                     
@@ -6439,6 +6476,18 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         .Interval = delay
                         .Enabled = True
                     End With
+                Else
+                    ' ...
+                    'If (g_Queue.Count() = 0) Then
+                    '    ' are we issuing a ban or kick command?
+                    '    If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
+                    '        delay = BanDelay()
+                    '
+                    '        ' set the delay before our next queue cycle
+                    '        frmChat.QueueTimer.Interval = _
+                    '            frmChat.QueueTimer.Interval + delay
+                    '    End If
+                    'End If
                 End If
                 
                 ' ...
@@ -6502,10 +6551,10 @@ Private Function BanDelay() As Integer
         
             ' set random ban delay based primarily on op count
             BanDelay = _
-                (BanDelay + ((1 + Rnd * OpCount) * (1 + Rnd * 200)))
+                (BanDelay + ((1 + Rnd * (OpCount * 2)) * (1 + Rnd * 200)))
         End If
     End If
-
+    
     ' exit procedure
     Exit Function
 
