@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   165
-   ClientTop       =   855
+   ClientLeft      =   225
+   ClientTop       =   825
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1467,7 +1467,7 @@ Public SettingsForm As frmSettings
 Private Sub Form_Load()
     Dim s As String
     Dim f As Integer ', i As Integer
-    Dim l As Long
+    Dim L As Long
     Dim FrmSplashInUse As Boolean
     
     ' COMPILER FLAGS
@@ -1500,10 +1500,10 @@ Private Sub Form_Load()
     
     ' 4/10/06:
     ' CHECK FOR CONFIG.INI PATH HACK
-    l = InStr(command(), "-cpath ")
+    L = InStr(command(), "-cpath ")
     
-    If l > 0 And Len(command()) > (l + 7) Then
-        ConfigOverride = Mid$(command(), l + 7)
+    If L > 0 And Len(command()) > (L + 7) Then
+        ConfigOverride = Mid$(command(), L + 7)
         
         If InStr(ConfigOverride, " ") > 0 Then
             ConfigOverride = Split(ConfigOverride, " ")(0)
@@ -1605,13 +1605,13 @@ Private Sub Form_Load()
 
     s = ReadCFG("Position", "Height")
     If LenB(s) > 0 And StrictIsNumeric(s) Then
-        l = (IIf(CLng(s) < 400, 400, CLng(s)) * Screen.TwipsPerPixelY)
+        L = (IIf(CLng(s) < 400, 400, CLng(s)) * Screen.TwipsPerPixelY)
         
         If (rtbWhispersVisible) Then
-            l = l - (rtbWhispers.Height / Screen.TwipsPerPixelY)
+            L = L - (rtbWhispers.Height / Screen.TwipsPerPixelY)
         End If
         
-        Me.Height = l
+        Me.Height = L
     End If
     
     s = ReadCFG("Position", "Width")
@@ -1838,7 +1838,7 @@ End Sub
 Sub AddChatFont(ParamArray saElements() As Variant)
     On Error Resume Next
     Dim s As String
-    Dim l As Long, lngVerticalPos As Long
+    Dim L As Long, lngVerticalPos As Long
     Dim I As Integer, intRange As Integer, f As Integer
     Dim blUnlock As Boolean, LogThis As Boolean
     
@@ -1912,17 +1912,17 @@ Sub AddChatFont(ParamArray saElements() As Variant)
                 KillNull saElements(I + 2)
             
             If Len(saElements(I + 2)) > 0 Then
-                l = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
+                L = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
                 
-                While (l > 0)
-                    Mid$(saElements(I + 2), l + 2, 1) = "/"
+                While (L > 0)
+                    Mid$(saElements(I + 2), L + 2, 1) = "/"
                     
-                    l = InStr(1, saElements(I + 2), "{\rtf", vbTextCompare)
+                    L = InStr(1, saElements(I + 2), "{\rtf", vbTextCompare)
                 Wend
             
                 With rtbChat
                     .SelStart = Len(.text)
-                    l = .SelStart
+                    L = .SelStart
                     .SelLength = 0
                     .SelFontName = saElements(I)
                     .SelColor = saElements(I + 1)
@@ -1941,7 +1941,7 @@ Sub AddChatFont(ParamArray saElements() As Variant)
             
         Next I
         
-        Call ColorModify(rtbChat, l)
+        Call ColorModify(rtbChat, L)
     
         If LogThis Then
             Close #f
@@ -1973,7 +1973,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
     
     
     Dim s As String
-    Dim l As Long
+    Dim L As Long
     Dim I As Integer
     
     If Not BotVars.LockChat Then
@@ -2019,7 +2019,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             If Len(saElements(I + 1)) > 0 Then
                 With rtbWhispers
                     .SelStart = Len(.text)
-                    l = .SelStart
+                    L = .SelStart
                     .SelLength = 0
                     .SelColor = saElements(I)
                     .SelText = saElements(I + 1) & Left$(vbCrLf, -2 * CLng((I + 1) = UBound(saElements)))
@@ -2028,7 +2028,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             End If
         Next I
         
-        Call ColorModify(rtbWhispers, l)
+        Call ColorModify(rtbWhispers, L)
     End If
 End Sub
 
@@ -2563,16 +2563,21 @@ End Sub
 
 Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
     If Status = 1 Then
-        Set g_Clan = New clsClanObj
-    
-        Clan.isUsed = False
+        If (AwaitingSelfRemoval = 0) Then
+            Set g_Clan = New clsClanObj
         
-        ListviewTabs.TabEnabled(2) = False
-        lvClanList.ListItems.Clear
-        ListviewTabs.Tab = 0
-        Call ListviewTabs_Click(2)
+            Clan.isUsed = False
         
-        AddChat RTBColors.ErrorMessageText, "[CLAN] You have been removed from the clan, or it has been disbanded."
+            ListviewTabs.TabEnabled(2) = False
+            lvClanList.ListItems.Clear
+            ListviewTabs.Tab = 0
+            Call ListviewTabs_Click(2)
+        
+            AddChat RTBColors.ErrorMessageText, "[CLAN] You have been removed from the clan, or it has been disbanded."
+        
+            On Error Resume Next
+            SControl.Run "Event_BotRemovedFromClan"
+        End If
         
         On Error Resume Next
         SControl.Run "Event_BotRemovedFromClan"
@@ -2841,7 +2846,7 @@ Private Sub ClanHandler_RemoveUserReply(ByVal result As Byte)
                 ListviewTabs.TabIndex = 0
                 Call ListviewTabs_Click(2)
                 
-                g_Clan = New clsClanObj
+                Set g_Clan = New clsClanObj
                 
                 AddChat RTBColors.SuccessText, "[CLAN] You have successfully left the clan."
             Else
@@ -2878,7 +2883,7 @@ Private Sub ClanHandler_UnknownClanEvent(ByVal PacketID As Byte, ByVal Data As S
 End Sub
 
 Sub Form_Unload(Cancel As Integer)
-    Dim Key As String, l As Long
+    Dim Key As String, L As Long
 
     Cancel = 1
     
@@ -3566,7 +3571,7 @@ Private Sub mnuDisableVoidView_Click()
 End Sub
 
 Private Sub mnuDisconnect2_Click()
-    Dim Key As String, l As Long
+    Dim Key As String, L As Long
     Key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
@@ -4458,7 +4463,7 @@ Sub mnuLock_Click()
 End Sub
 
 Sub mnuDisconnect_Click()
-    Dim Key As String, l As Long
+    Dim Key As String, L As Long
     Key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
@@ -4602,7 +4607,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Dim temp As udtGetAccessResponse
     
     Dim I As Long
-    Dim l As Long
+    Dim L As Long
     Dim n As Integer
     Dim C As Integer ',oldSelStart As Integer
     Dim X() As String
@@ -4623,7 +4628,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     'AddChat vbRed, "Shift: " & Shift
 
 
-    l = cboSend.SelStart
+    L = cboSend.SelStart
 
     With lvChannel
 
@@ -4641,7 +4646,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     End If
 
                     cboSend.SetFocus
-                    cboSend.SelStart = l
+                    cboSend.SelStart = L
                     Exit Sub
                 End If
 
@@ -4654,7 +4659,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     End If
 
                     cboSend.SetFocus
-                    cboSend.SelStart = l
+                    cboSend.SelStart = L
                     Exit Sub
                 End If
 
@@ -4682,13 +4687,13 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         .ListItems.Item(1).Ghosted = True
     
                         cboSend.SetFocus
-                        cboSend.SelStart = l
+                        cboSend.SelStart = L
                     Else
                         If .ListItems.Count > 0 Then
                             .ListItems(1).Selected = True
                             .ListItems(1).Ghosted = True
                             cboSend.SetFocus
-                            cboSend.SelStart = l
+                            cboSend.SelStart = L
                         End If
                     End If
                 End If
@@ -4701,7 +4706,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         .ListItems.Item(.ListItems.Count).Ghosted = True
     
                         cboSend.SetFocus
-                        cboSend.SelLength = l
+                        cboSend.SelLength = L
                     End If
                 End If
                 
@@ -6210,7 +6215,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     
     ' ...
     If (strTmp <> vbNullString) Then
-        Dim Splt()         As String  ' ...
+        Dim splt()         As String  ' ...
         Dim I              As Long    ' ...
         Dim currChar       As Integer ' ...
         Dim Send           As String  ' ...
@@ -6220,7 +6225,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         Dim nameConversion As Boolean ' ...
         
         ' ...
-        ReDim Splt(0)
+        ReDim splt(0)
     
         ' check for tabs and replace with spaces (2005-09-23)
         If (InStr(1, strTmp, Chr$(9), vbBinaryCompare) <> 0) Then
@@ -6285,20 +6290,20 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     (command = "designate")) Then
         
                     ' ...
-                    Splt() = Split(strTmp, Space$(1), 3)
+                    splt() = Split(strTmp, Space$(1), 3)
                     
                     ' ...
-                    If (UBound(Splt) > 0) Then
+                    If (UBound(splt) > 0) Then
                         ' ...
-                        command = Splt(0) & Space$(1) & reverseUsername(Splt(1)) & _
+                        command = splt(0) & Space$(1) & reverseUsername(splt(1)) & _
                             Space$(1)
 
                         ' ...
                         If ((g_Channel.IsSilent) And (frmChat.mnuDisableVoidView.Checked = False)) Then
                             ' ...
-                            If ((LCase$(Splt(0)) = "/unignore") Or (LCase$(Splt(0)) = "/unsquelch")) Then
+                            If ((LCase$(splt(0)) = "/unignore") Or (LCase$(splt(0)) = "/unsquelch")) Then
                                 ' ...
-                                If (StrComp(Splt(1), GetCurrentUsername, vbTextCompare) = 0) Then
+                                If (StrComp(splt(1), GetCurrentUsername, vbTextCompare) = 0) Then
                                     ' ...
                                     lvChannel.ListItems.Clear
                                 End If
@@ -6306,51 +6311,51 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         End If
                         
                         ' ...
-                        If (UBound(Splt) > 1) Then
-                            ReDim Preserve Splt(0 To UBound(Splt) - 1)
+                        If (UBound(splt) > 1) Then
+                            ReDim Preserve splt(0 To UBound(splt) - 1)
                         End If
                     End If
                 ElseIf ((command = "f") Or _
                         (command = "friends")) Then
                     
                     ' ...
-                    Splt() = Split(strTmp, Space$(1), 3)
+                    splt() = Split(strTmp, Space$(1), 3)
                     
                     ' ...
-                    command = Splt(0) & Space$(1)
+                    command = splt(0) & Space$(1)
                     
                     ' ...
-                    If (UBound(Splt) >= 1) Then
+                    If (UBound(splt) >= 1) Then
                         ' ...
-                        command = command & Splt(1) & Space$(1)
+                        command = command & splt(1) & Space$(1)
                     
                         ' ...
-                        If (UBound(Splt) >= 2) Then
+                        If (UBound(splt) >= 2) Then
                             ' ...
-                            Select Case (LCase$(Splt(1)))
+                            Select Case (LCase$(splt(1)))
                                 Case "m", "msg"
                                     ' ...
-                                    ReDim Preserve Splt(0 To UBound(Splt) - 1)
+                                    ReDim Preserve splt(0 To UBound(splt) - 1)
 
                                 Case Else
                                     ' ...
-                                    Splt() = Split(strTmp, Space$(1), 4)
+                                    splt() = Split(strTmp, Space$(1), 4)
                                 
                                     ' ...
                                     If ((StrReverse$(BotVars.Product) = "WAR3") Or _
                                         (StrReverse$(BotVars.Product) = "W3XP")) Then
                                         
                                         ' ...
-                                        command = command & reverseUsername(Splt(2)) & _
+                                        command = command & reverseUsername(splt(2)) & _
                                             Space$(1)
                                     Else
                                         ' ...
-                                        command = command & Splt(2) & Space$(1)
+                                        command = command & splt(2) & Space$(1)
                                     End If
                                     
                                     ' ...
-                                    If (UBound(Splt) >= 3) Then
-                                        command = command & Splt(3)
+                                    If (UBound(splt) >= 3) Then
+                                        command = command & splt(3)
                                     End If
                             End Select
                         End If
@@ -6369,10 +6374,10 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 End If
 
                 ' ...
-                If (UBound(Splt) > 0) Then
+                If (UBound(splt) > 0) Then
                     ' ...
                     strTmp = Mid$(strTmp, _
-                        (Len(Join(Splt(), Space$(1))) + (Len(Space$(1))) + 1))
+                        (Len(Join(splt(), Space$(1))) + (Len(Space$(1))) + 1))
                 End If
             End If
             
@@ -6408,19 +6413,19 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         End If
         
         ' ...
-        Call SplitByLen(strTmp, (BNET_MSG_LENGTH - Len(command)), Splt(), vbNullString, _
+        Call SplitByLen(strTmp, (BNET_MSG_LENGTH - Len(command)), splt(), vbNullString, _
             " [more]", OversizeDelimiter)
 
         ' ...
-        ReDim Preserve Splt(0 To UBound(Splt))
+        ReDim Preserve splt(0 To UBound(splt))
 
         ' ...
-        For I = LBound(Splt) To UBound(Splt)
+        For I = LBound(splt) To UBound(splt)
             ' store current tick
             GTC = GetTickCount()
             
             ' store working copy
-            Send = command & Splt(I)
+            Send = command & splt(I)
 
             ' is efp enabled?
             If (bFlood) Then
@@ -8016,11 +8021,11 @@ Private Sub mnuPopPro_Click()
 End Sub
 
 Private Sub mnuPopRem_Click()
-    Dim l As Long
-    l = TimeSinceLastRemoval
+    Dim L As Long
+    L = TimeSinceLastRemoval
 
-    If l < 30 Then
-        AddChat RTBColors.ErrorMessageText, "You must wait " & 30 - l & " more seconds before you " & _
+    If L < 30 Then
+        AddChat RTBColors.ErrorMessageText, "You must wait " & 30 - L & " more seconds before you " & _
                 "can remove another user from your clan."
     Else
         If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, _
