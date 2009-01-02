@@ -771,7 +771,8 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         
         If ((InStr(1, Message, " from your friends list.", vbBinaryCompare) > 0) Or _
             (InStr(1, Message, " to your friends list.", vbBinaryCompare) > 0) Or _
-            (InStr(1, Message, " in your friends list.", vbBinaryCompare) > 0)) Then
+            (InStr(1, Message, " in your friends list.", vbBinaryCompare) > 0) Or _
+            (InStr(1, Message, " of your friends list.", vbBinaryCompare) > 0)) Then
             
             frmChat.lvFriendList.ListItems.Clear
             
@@ -1282,7 +1283,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim I           As Long
     Dim temp        As Byte
     Dim Level       As Byte
-    Dim L           As Long
+    Dim l           As Long
     Dim Banned      As Boolean
     Dim f           As Integer
     Dim UserIndex   As Integer ' ...
@@ -1441,11 +1442,11 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
             
             If (mail) Then
-                L = GetMailCount(Username)
+                l = GetMailCount(Username)
                 
-                If (L > 0) Then
-                    frmChat.AddQ "/w " & Username & " You have " & L & _
-                        " new message" & IIf(L = 1, "", "s") & ". Type !inbox to retrieve."
+                If (l > 0) Then
+                    frmChat.AddQ "/w " & Username & " You have " & l & _
+                        " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
                 End If
             End If
         End If
@@ -1584,7 +1585,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     Dim strCompare    As String
     Dim I             As Integer
     Dim ColIndex      As Integer
-    Dim B             As Boolean
+    Dim b             As Boolean
     Dim ToANSI        As String
     Dim BanningUser   As Boolean
     Dim UsernameColor As Long ' ...
@@ -1727,20 +1728,20 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         If (mail) Then
             ' ...
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim msg As udtMail ' ...
+                Dim Msg As udtMail ' ...
                 
                 ' ...
                 If (GetMailCount(Username) > 0) Then
                     ' ...
                     Do
                         ' ...
-                        GetMailMessage Username, msg
+                        GetMailMessage Username, Msg
                         
                         ' ...
-                        If (Len(RTrim(msg.To)) > 0) Then
+                        If (Len(RTrim(Msg.To)) > 0) Then
                             ' ...
-                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(msg.From) & ": " & _
-                                RTrim$(msg.Message)
+                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(Msg.From) & ": " & _
+                                RTrim$(Msg.Message)
                         End If
                     Loop While (GetMailCount(Username) > 0)
                 End If
@@ -1838,7 +1839,7 @@ Private Function CheckMessage(Username As String, Message As String) As Boolean
 End Function
 
 Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
-    Dim L As Long
+    Dim l As Long
 
     Select Case (Message)
         Case 0:
@@ -2022,14 +2023,14 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         '####### Mail check
         If (mail) Then
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim msg As udtMail
+                Dim Msg As udtMail
                 
                 If (GetMailCount(Username) > 0) Then
-                    Call GetMailMessage(Username, msg)
+                    Call GetMailMessage(Username, Msg)
                     
-                    If (Len(RTrim(msg.To)) > 0) Then
+                    If (Len(RTrim(Msg.To)) > 0) Then
                         frmChat.AddQ "/w " & Username & " Message from " & _
-                            RTrim$(msg.From) & ": " & RTrim$(msg.Message)
+                            RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
                     End If
                 End If
             End If
