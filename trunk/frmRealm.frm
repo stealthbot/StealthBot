@@ -23,6 +23,7 @@ Begin VB.Form frmRealm
    Begin VB.OptionButton optCreateNew 
       BackColor       =   &H00000000&
       Caption         =   "Create New Character"
+      Enabled         =   0   'False
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -538,6 +539,7 @@ Private CharIsExpansion As Collection
 Private CharExpiration As Collection
 Private IndexToDelete As Integer
 Private CreatedExpRealmChar As Integer
+Private CharacterCount As Integer
 
 '    Unknown& = &H0
 '    Amazon& = &H1
@@ -549,7 +551,7 @@ Private CreatedExpRealmChar As Integer
 '    Assassin& = &H7
 
 Private Sub Form_Load()
-    Dim b As Boolean
+    Dim B As Boolean
     
     Me.Icon = frmChat.Icon
     
@@ -563,11 +565,11 @@ Private Sub Form_Load()
     lblExpiration.Visible = True
     Unload_SuccessfulLogin = False
     
-    b = (BotVars.Product = "PX2D")
+    B = (BotVars.Product = "PX2D")
     
-    chkExpansion.Enabled = b
-    optNewCharType(6).Enabled = b
-    optNewCharType(7).Enabled = b
+    chkExpansion.Enabled = B
+    optNewCharType(6).Enabled = B
+    optNewCharType(7).Enabled = B
     
     'lvwChars.ListItems.Add , "temp", "Please wait..."
     lblExpiration.Caption = "Please wait..."
@@ -708,6 +710,12 @@ Private Sub MCPHandler_CharListResponse(ByVal NumCharacters As Integer)
     
     CharListReceived = True
     
+    CharacterCount = NumCharacters
+    
+    If CharacterCount = 0 Then
+        optCreateNew.Enabled = True
+    End If
+    
     'tmrLoginTimeout.Enabled = True
 End Sub
 
@@ -766,6 +774,10 @@ Private Sub MCPHandler_CharListEntry(ByVal CharName As String, ByVal Statstring 
                 CharExpiration.Add IIf(Expired, "Expired ", "Expires ") & vbCrLf & ExpirationDate, CharName
                 
                 .SetFocus
+                
+                If (.ListItems.Count = CharacterCount) Then
+                    optCreateNew.Enabled = True
+                End If
             End If
         End If
     End With
