@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1605,7 +1605,7 @@ Private Sub Form_Load()
 
     s = ReadCFG("Position", "Height")
     If LenB(s) > 0 And StrictIsNumeric(s) Then
-        L = (IIf(CLng(s) < 400, 400, CLng(s)) * Screen.TwipsPerPixelY)
+        L = (IIf(CLng(s) < 200, 200, CLng(s)) * Screen.TwipsPerPixelY)
         
         If (rtbWhispersVisible) Then
             L = L - (rtbWhispers.Height / Screen.TwipsPerPixelY)
