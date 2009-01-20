@@ -390,7 +390,7 @@ Public Function CommandEx(ByVal Username As String, ByVal Message As String, Opt
     End If
 
     ' execute command
-    bln = ExecuteCommand(Username, dbAccess, Message, IsLocal, command_response)
+    bln = executeCommand(Username, dbAccess, Message, IsLocal, command_response)
     
     ' ...
     CommandEx = Join(command_response, Chr$(0))
@@ -473,7 +473,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
 
     Dim temp   As udtGetAccessResponse
     Dim I      As Integer
-    Dim splt() As String
+    Dim Splt() As String
     
     temp = GetCumulativeAccess(Username, entryType)
     
@@ -499,15 +499,15 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
 
     If ((temp.Groups <> vbNullString) And (temp.Groups <> "%")) Then
         If (InStr(1, temp.Groups, ",", vbBinaryCompare) <> 0) Then
-            splt() = Split(temp.Groups, ",")
+            Splt() = Split(temp.Groups, ",")
         Else
-            ReDim Preserve splt(0)
+            ReDim Preserve Splt(0)
         
-            splt(0) = temp.Groups
+            Splt(0) = temp.Groups
         End If
     
-        For I = LBound(splt) To UBound(splt)
-            GetDBEntry.Groups.Add GetDBEntry(splt(I), , , "GROUP")
+        For I = LBound(Splt) To UBound(Splt)
+            GetDBEntry.Groups.Add GetDBEntry(Splt(I), , , "GROUP")
         Next I
     End If
 End Function

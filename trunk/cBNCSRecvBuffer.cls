@@ -112,7 +112,7 @@ Public Function GetPacket() As String
     
     'WriteLog "Pulling a packet. Length: " & lngPacketLen, True
     
-    If lngPacketLen > 0 Then
+    If lngPacketLen >= 0 Then
         'frmChat.AddChat RTBColors.ErrorMessageText, "-> Warning: Invalid [low] packet Length specified! Flushing the BNCS receive buffer"
         GetPacket = Mid$(strData, 1, lngPacketLen)
         
@@ -149,11 +149,11 @@ End Sub
 'End Function
 
 Private Function ToHex(Data As String) As String
-    Dim i As Integer
+    Dim I As Integer
     
-    For i = 1 To Len(Data)
-        ToHex = ToHex & Right("00" & Hex(Asc(Mid(Data, i, 1))), 2)
-    Next i
+    For I = 1 To Len(Data)
+        ToHex = ToHex & Right("00" & Hex(Asc(Mid(Data, I, 1))), 2)
+    Next I
 End Function
 
 

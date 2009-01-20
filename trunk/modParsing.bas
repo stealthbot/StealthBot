@@ -14,7 +14,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Dim PacketLen   As Long              ' Length of the packet minus the header
     Dim PacketID    As Byte              ' Battle.net packet ID
     Dim s           As String            ' Temporary string
-    Dim L           As Long              ' Temporary long
+    Dim l           As Long              ' Temporary long
     Dim EventID     As Long              ' 0x0F packet Event ID
     Dim UserFlags   As Long              ' 0x0F user's flags
     Dim UserPing    As Long              ' 0x0F user's ping
@@ -24,7 +24,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Dim ClanTag     As String            ' User clan tag
     Dim Product     As String            ' User product
     Dim w3icon      As String            ' Warcraft III icon code
-    Dim B           As Boolean           ' Temporary bool
+    Dim b           As Boolean           ' Temporary bool
     Dim sArr()      As String            ' Temp String array
     
     Static ServerToken As Long           ' Server token used in various packets
@@ -37,7 +37,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     
     '###########################################################################
     
-    If PacketLen > 0 Then
+    If PacketLen >= 0 Then
         ' Start packet debuffer
         pD.DebuffPacket Mid$(PacketData, 5)
         ' Get packet ID
@@ -60,9 +60,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         Select Case PacketID
             '###########################################################################
             Case &HB 'SID_GETCHANNELLIST
-                L = InStr(5, PacketData, String(2, Chr$(0)))
-                If L < 6 Then L = LenB(PacketData) - 5
-                sArr = Split(Mid$(PacketData, 5, L - 5), Chr$(0))
+                l = InStr(5, PacketData, String(2, Chr$(0)))
+                If l < 6 Then l = LenB(PacketData) - 5
+                sArr = Split(Mid$(PacketData, 5, l - 5), Chr$(0))
                 Call Event_ChannelList(sArr)
                 
             '##########################################################################
@@ -194,11 +194,11 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H3D 'SID_CREATEACCT2
-                L = pD.DebuffDWORD
+                l = pD.DebuffDWORD
                 
-                B = Event_AccountCreateResponse(L)
+                b = Event_AccountCreateResponse(l)
                 
-                If B Then
+                If b Then
                     Send0x3A ds.GetServerToken
                 Else
                     Call frmChat.DoDisconnect
@@ -212,9 +212,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H3A 'SID_LOGONRESPONSE2
-                L = pD.DebuffDWORD
+                l = pD.DebuffDWORD
             
-                Select Case L
+                Select Case l
                     Case &H0  'Successful login.
                         Event_LogonEvent 2
                         
@@ -247,7 +247,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     Case Else
                         ' WTF?
                         frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Invalid response to 0x3A!"
-                        frmChat.AddChat RTBColors.ErrorMessageText, "Status code: " & L
+                        frmChat.AddChat RTBColors.ErrorMessageText, "Status code: " & l
                         frmChat.AddChat RTBColors.ErrorMessageText, "Packet dump: " & vbCrLf & _
                             DebugOutput(PacketData)
                         Call frmChat.DoDisconnect
@@ -266,13 +266,13 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     
                     s2 = ""
                     
-                    For L = 1 To 4 ' IP
-                        s2 = s2 & Asc(pD.DebuffRaw(1)) & IIf(L < 4, ".", "")
-                    Next L
+                    For l = 1 To 4 ' IP
+                        s2 = s2 & Asc(pD.DebuffRaw(1)) & IIf(l < 4, ".", "")
+                    Next l
                     
                     
-                    L = pD.DebuffDWORD 'Port
-                    L = ntohs(L)        'Fix byte order
+                    l = pD.DebuffDWORD 'Port
+                    l = ntohs(l)        'Fix byte order
                     'Debug.Print l
                     'Debug.Print ntohl(l)
                     
@@ -282,7 +282,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         If .State <> 0 Then .Close
                         
                         .RemoteHost = s2
-                        .RemotePort = L
+                        .RemotePort = l
                     End With
                     
                     frmRealm.MCPHandler.CurrentChunk = s
@@ -294,9 +294,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     
                 Else
                     pD.Advance 4
-                    L = pD.DebuffDWORD
+                    l = pD.DebuffDWORD
                     
-                    Call Event_RealmStatusError(L)
+                    Call Event_RealmStatusError(l)
                     Unload frmRealm
                 End If
                 
@@ -318,8 +318,8 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H50 'SID_AUTH_INFO
-                L = pD.DebuffDWORD ' Logon type
-                ds.LogonType = L
+                l = pD.DebuffDWORD ' Logon type
+                ds.LogonType = l
                 
                 ServerToken = pD.DebuffDWORD
                 ds.SetServerToken ServerToken
@@ -363,13 +363,13 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &H51 'SID_AUTH_CHECK
                 ' b is being used as a NoProceed boolean
-                L = pD.DebuffDWORD
+                l = pD.DebuffDWORD
                 s = pD.DebuffNTString
-                B = True    'Default action: Do not proceed
+                b = True    'Default action: Do not proceed
                 
-                Select Case L
+                Select Case l
                     Case &H0    'SUCCESS
-                        B = False
+                        b = False
                         Call Event_VersionCheck(0, vbNullString)
                         
                     Case &H100  'OLD Version
@@ -404,13 +404,13 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     
                     Case Else
                         If (ReadCFG("Override", "Ignore0x51Reply") = "Y") Then
-                            B = False
+                            b = False
                         End If
                         
-                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(L, 4))
+                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(l, 4))
                 End Select
                 
-                If frmChat.sckBNet.State = 7 And AwaitingEmailReg = 0 And Not B Then
+                If frmChat.sckBNet.State = 7 And AwaitingEmailReg = 0 And Not b Then
                     Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Sending login information...")
             
                     If ds.LogonType = 2 Then ' NLS! Proceed to 0x52+
@@ -429,9 +429,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H52 'SID_AUTH_ACCOUNTCREATE
-                L = pD.DebuffDWORD
+                l = pD.DebuffDWORD
                 
-                Select Case L
+                Select Case l
                     Case &H0
                         Call Event_LogonEvent(4)
                         
@@ -454,11 +454,11 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 
             '###########################################################################
             Case &H53 'SID_AUTH_ACCOUNTLOGON
-                L = pD.DebuffDWORD
+                l = pD.DebuffDWORD
                 s = pD.DebuffRaw(32) 'Salt [s]
                 s2 = pD.DebuffRaw(32) ' Server key [B]
                 
-                Select Case L
+                Select Case l
                     Case &H0    'Accepted, requires proof
                         ' no more bnls hashing
                         'If BotVars.BNLS Then
@@ -488,7 +488,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         End If
                         
                     Case Else
-                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Unknown response to 0x53: 0x" & ZeroOffset(L, 4))
+                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Unknown response to 0x53: 0x" & ZeroOffset(l, 4))
                         frmChat.DoDisconnect
                         
                 End Select
@@ -496,9 +496,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 
             '###########################################################################
             Case &H54 'SID_AUTH_ACCOUNTLOGONPROOF
-                L = pD.DebuffDWORD
+                l = pD.DebuffDWORD
                 
-                Select Case L
+                Select Case l
                     Case &H0   'Success
                         Call Event_LogonEvent(2)
                         Send0x0A
@@ -1084,18 +1084,18 @@ End Sub
 Public Function StringToDWord(Data As String) As Long
     Dim tmp As String
     tmp = StrToHex(Data)
-    Dim A As String, B As String, C As String, D As String
+    Dim A As String, b As String, C As String, D As String
     A = Mid(tmp, 1, 2)
-    B = Mid(tmp, 3, 2)
+    b = Mid(tmp, 3, 2)
     C = Mid(tmp, 5, 2)
     D = Mid(tmp, 7, 2)
-    tmp = D & C & B & A
+    tmp = D & C & b & A
     StringToDWord = Val("&H" & tmp)
 End Function
 
 Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
     Optional ByVal A As Variant, _
-    Optional ByVal B As Variant, _
+    Optional ByVal b As Variant, _
     Optional ByVal C As Variant, _
     Optional ByVal D As Variant, _
     Optional ByVal E As Variant, _
@@ -1114,8 +1114,8 @@ Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
                 If IsEmpty(A) Then GoTo theEnd
                 nText = Replace(nText, "%s", A, 1, 1)
             Case 1
-                If IsEmpty(B) Then GoTo theEnd
-                nText = Replace(nText, "%s", B, 1, 1)
+                If IsEmpty(b) Then GoTo theEnd
+                nText = Replace(nText, "%s", b, 1, 1)
             Case 2
                 If IsEmpty(C) Then GoTo theEnd
                 nText = Replace(nText, "%s", C, 1, 1)
@@ -1141,7 +1141,7 @@ theEnd:
     Source = Source & nText
 End Sub
 
-Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As String, ByRef sClan As String) As String
+Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As String, ByRef sClan As String) As String
     Dim Values() As String
     Dim temp() As String
     Dim cType As String
@@ -1183,60 +1183,60 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As Stri
                     sClan = IIf(UBound(Values) > 2, Values(3), "")
                     
                     If Left$(Statstring, 4) = "3RAW" Then
-                        Call sPrintF(outBuf, "Warcraft III: Reign of Chaos (Level: %s, icon tier %s, %s icon" & IIf(UBound(temp) > 2, ", in Clan " & sClan, vbNullString) & ")", Values(0), Values(2), Values(1))
+                        Call sPrintF(outbuf, "Warcraft III: Reign of Chaos (Level: %s, icon tier %s, %s icon" & IIf(UBound(temp) > 2, ", in Clan " & sClan, vbNullString) & ")", Values(0), Values(2), Values(1))
                     Else
-                        Call sPrintF(outBuf, "Warcraft III: The Frozen Throne (Level: %s, icon tier %s, %s icon" & IIf(UBound(temp) > 2, ", in Clan " & sClan, vbNullString) & ")", Values(0), Values(2), Values(1))
+                        Call sPrintF(outbuf, "Warcraft III: The Frozen Throne (Level: %s, icon tier %s, %s icon" & IIf(UBound(temp) > 2, ", in Clan " & sClan, vbNullString) & ")", Values(0), Values(2), Values(1))
                     End If
                 Else
                     If Left$(Statstring, 4) = "3RAW" Then
-                        Call StrCpy(outBuf, "Warcraft III: Reign of Chaos.")
+                        Call StrCpy(outbuf, "Warcraft III: Reign of Chaos.")
                         g_ThisIconCode = -56
                     Else
-                        Call StrCpy(outBuf, "Warcraft III: The Frozen Throne.")
+                        Call StrCpy(outbuf, "Warcraft III: The Frozen Throne.")
                         g_ThisIconCode = -10
                     End If
                 End If
                 
             Case "RHSS"
-                Call StrCpy(outBuf, "Starcraft Shareware.")
+                Call StrCpy(outbuf, "Starcraft Shareware.")
                 
             Case "RATS"
                 Values() = Split(Mid$(Statstring, 6), " ")
                 If UBound(Values) <> 8 Then
-                    Call sPrintF(outBuf, "a Starcraft %sbot", IIf((Values(3) = 1), " (spawn) ", vbNullString))
+                    Call sPrintF(outbuf, "a Starcraft %sbot", IIf((Values(3) = 1), " (spawn) ", vbNullString))
                 Else
                     If Values(0) > 0 Then
-                        Call sPrintF(outBuf, "Starcraft%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
+                        Call sPrintF(outbuf, "Starcraft%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
                     Else
-                        Call sPrintF(outBuf, "Starcraft%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
+                        Call sPrintF(outbuf, "Starcraft%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
                     End If
                 End If
                 
             Case "PXES"
                 Values() = Split(Mid(Statstring, 6), " ")
                 If UBound(Values) <> 8 Then
-                    Call sPrintF(outBuf, "a Starcraft Brood War bot.", vbNullString)
+                    Call sPrintF(outbuf, "a Starcraft Brood War bot.", vbNullString)
                     
                     If UBound(Values) > 2 Then
-                        outBuf = outBuf & "(spawn) "
+                        outbuf = outbuf & "(spawn) "
                     End If
                 Else
                     If Values(0) > 0 Then
-                        Call sPrintF(outBuf, "Starcraft Brood War%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
+                        Call sPrintF(outbuf, "Starcraft Brood War%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
                     Else
-                        Call sPrintF(outBuf, "Starcraft Brood War%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
+                        Call sPrintF(outbuf, "Starcraft Brood War%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
                     End If
                 End If
                 
             Case "RTSJ"
                 Values() = Split(Mid(Statstring, 6), " ")
                 If UBound(Values) <> 8 Then
-                    Call sPrintF(outBuf, "a Starcraft Japanese %sbot.", IIf((Values(3) = 1), " (spawn) ", vbNullString))
+                    Call sPrintF(outbuf, "a Starcraft Japanese %sbot.", IIf((Values(3) = 1), " (spawn) ", vbNullString))
                 Else
                     If Values(0) > 0 Then
-                        Call sPrintF(outBuf, "Starcraft Japanese%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
+                        Call sPrintF(outbuf, "Starcraft Japanese%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
                     Else
-                        Call sPrintF(outBuf, "Starcraft Japanese%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
+                        Call sPrintF(outbuf, "Starcraft Japanese%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
                     End If
                 End If
                 
@@ -1244,53 +1244,53 @@ Public Function ParseStatstring(ByVal Statstring As String, ByRef outBuf As Stri
                 Values() = Split(Mid$(Statstring, 6), " ")
                 
                 If UBound(Values) <> 8 Then
-                    Call sPrintF(outBuf, "a Warcraft II %sbot.", IIf((Values(3) = 1), " (spawn) ", vbNullString))
+                    Call sPrintF(outbuf, "a Warcraft II %sbot.", IIf((Values(3) = 1), " (spawn) ", vbNullString))
                 Else
                     If Values(0) > 0 Then
-                        Call sPrintF(outBuf, "Warcraft II%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
+                        Call sPrintF(outbuf, "Warcraft II%s (%s wins, with a rating of %s on the ladder)", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2), Values(0))
                     Else
-                        Call sPrintF(outBuf, "Warcraft II%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
+                        Call sPrintF(outbuf, "Warcraft II%s (%s wins).", IIf((Values(3) = 1), " (spawn) ", vbNullString), Values(2))
                     End If
                 End If
                 
             Case "RHSD"
                 Values() = Split(Mid$(Statstring, 6), " ")
                 If UBound(Values) <> 8 Then
-                    Call StrCpy(outBuf, "A Diablo shareware bot.")
+                    Call StrCpy(outbuf, "A Diablo shareware bot.")
                 Else
                     Select Case Values(1)
                         Case 0: cType = "warrior"
                         Case 1: cType = "rogue"
                         Case 2: cType = "sorceror"
                     End Select
-                    Call sPrintF(outBuf, "Diablo shareware (Level %s %s with %s dots, %s strength, %s magic, %s dexterity, %s vitality, and %s gold)", Values(0), cType, Values(2), Values(3), Values(4), Values(5), Values(6), Values(7))
+                    Call sPrintF(outbuf, "Diablo shareware (Level %s %s with %s dots, %s strength, %s magic, %s dexterity, %s vitality, and %s gold)", Values(0), cType, Values(2), Values(3), Values(4), Values(5), Values(6), Values(7))
                 End If
                 
             Case "LTRD"
                 Values() = Split(Mid$(Statstring, 6), " ")
                 
                 If UBound(Values) <> 8 Then
-                    Call StrCpy(outBuf, "A Diablo bot.")
+                    Call StrCpy(outbuf, "A Diablo bot.")
                 Else
                     Select Case Values(1)
                         Case 0: cType = "warrior"
                         Case 1: cType = "rogue"
                         Case 2: cType = "sorceror"
                     End Select
-                    Call sPrintF(outBuf, "Diablo (Level %s %s with %s dots, %s strength, %s magic, %s dexterity, %s vitality, and %s gold)", Values(0), cType, Values(2), Values(3), Values(4), Values(5), Values(6), Values(7))
+                    Call sPrintF(outbuf, "Diablo (Level %s %s with %s dots, %s strength, %s magic, %s dexterity, %s vitality, and %s gold)", Values(0), cType, Values(2), Values(3), Values(4), Values(5), Values(6), Values(7))
                 End If
                 
             Case "PX2D"
-                Call StrCpy(outBuf, ParseD2Stats(Statstring))
+                Call StrCpy(outbuf, ParseD2Stats(Statstring))
                 
             Case "VD2D"
-                Call StrCpy(outBuf, ParseD2Stats(Statstring))
+                Call StrCpy(outbuf, ParseD2Stats(Statstring))
                 
             Case "TAHC"
-                Call StrCpy(outBuf, "a Chat bot.")
+                Call StrCpy(outbuf, "a Chat bot.")
                 
             Case Else
-                Call StrCpy(outBuf, "an unknown client.")
+                Call StrCpy(outbuf, "an unknown client.")
                 
         End Select
         
@@ -1304,7 +1304,7 @@ ParseStatString_Exit:
 ParseStatString_Error:
 
     Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure ParseStatString of Module modParsing"
-    outBuf = "- Error parsing statstring. [" & Replace(Statstring, Chr(0), "") & "]"
+    outbuf = "- Error parsing statstring. [" & Replace(Statstring, Chr(0), "") & "]"
     
     Resume ParseStatString_Exit
 End Function
@@ -1795,14 +1795,14 @@ End Function
 
 
 '// COLORMODIFY - where L is passed as the start position of the text to be checked
-Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
+Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef l As Long)
     Dim I As Long
     Dim s As String
     Dim temp As Long
     
-    If L = 0 Then L = 1
+    If l = 0 Then l = 1
     
-    temp = L
+    temp = l
     
     With rtb
         If InStr(temp, .text, "ÿc", vbTextCompare) > 0 Then
@@ -1889,7 +1889,7 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
         End If
         
         '// Check for SC color codes
-        temp = L
+        temp = l
         
         If InStr(temp, .text, "Á", vbBinaryCompare) > 0 Then
             Do
