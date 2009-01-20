@@ -3939,9 +3939,9 @@ Private Enum enuConfigSection
     secOther = 1
 End Enum
 
-Private Sub chkGameConventions_Click(index As Integer)
-    If (index = 0) Then
-        If (chkGameConventions(index).Value = 0) Then
+Private Sub chkGameConventions_Click(Index As Integer)
+    If (Index = 0) Then
+        If (chkGameConventions(Index).Value = 0) Then
             chkGameConventions(1).Enabled = False
             chkGameConventions(2).Enabled = False
         Else
@@ -4186,7 +4186,7 @@ Function KeyToIndex(ByVal sKey As String) As Byte
     
 End Function
 
-Sub ShowPanel(ByVal index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
+Sub ShowPanel(ByVal Index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
 
     Static ActivePanel As Integer
     
@@ -4196,8 +4196,8 @@ Sub ShowPanel(ByVal index As enuSettingsPanels, Optional ByVal Mode As Byte = 0)
             ActivePanel = KeyToIndex("splash")
         Else
             'fraPanel(ActivePanel).ZOrder vbSendToBack
-            fraPanel(index).ZOrder vbBringToFront
-            ActivePanel = index
+            fraPanel(Index).ZOrder vbBringToFront
+            ActivePanel = Index
             WriteINI "Position", "LastSettingsPanel", ActivePanel
             
             'Debug.Print "Writing: " & ActivePanel
@@ -4720,10 +4720,10 @@ End Sub
 
 Private Sub cmdExport_Click()
     With cDLG
-        .filename = vbNullString
+        .Filename = vbNullString
         .ShowSave
-        If .filename <> vbNullString Then
-            SaveColors .filename
+        If .Filename <> vbNullString Then
+            SaveColors .Filename
             MsgBox "ColorList exported.", vbOKOnly
         End If
     End With
@@ -4731,10 +4731,10 @@ End Sub
 
 Private Sub cmdImport_Click()
     With cDLG
-        .filename = vbNullString
+        .Filename = vbNullString
         .ShowOpen
-        If .filename <> vbNullString Then
-            GetColorLists (.filename)
+        If .Filename <> vbNullString Then
+            GetColorLists (.Filename)
             cboColorList.Clear
             Call Form_Load
         End If
@@ -4915,7 +4915,7 @@ End Sub
 Sub optD2XP_Click()
     txtExpKey.Enabled = True
     chkUseRealm.Enabled = True
-    lblHashPath.Caption = GetGamePath("VD2D")
+    lblHashPath.Caption = GetGamePath("PX2D")
     chkUDP.Enabled = False
 End Sub
 

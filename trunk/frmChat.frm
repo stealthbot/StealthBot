@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1474,7 +1474,7 @@ Private Sub Form_Load()
     #If (BETA = 1) Then
         #If (DEV_RELEASE = 1) Then
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
-                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "24"
+                ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "25"
         #Else
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
                 ZeroOffsetEx(App.REVISION, 3) & " Stable"
@@ -6762,7 +6762,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     If (g_Online) Then
         Dim found       As ListItem ' ...
         Dim CurrentUser As Object
-        Dim outbuf      As String
+        Dim outBuf      As String
 
         ' ...
         SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
