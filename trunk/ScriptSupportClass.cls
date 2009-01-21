@@ -648,7 +648,7 @@ End Function
 '// Retrieves the specified stored internal data for a given user in the channel
 '//  If the specified user isn't present, the return value is -5
 '//  See lDataType constants in GetInternalData() below
-Public Function GetInternalDataByUsername(ByVal sUser As String, ByVal lDataType As Long) As Variant
+Public Function GetInternalDataByUsername(ByVal sUser As String, ByVal lDataType As Long) As String
 
     Dim I As Integer
     
@@ -662,7 +662,7 @@ End Function
 '// GETINTERNALDATA
 '// Retrieves the specified stored internal data for a given user in the channel
 '//  If the specified user is not present, return value is '-5'
-Public Function GetInternalData(ByVal iIndex As Integer, ByVal lDataType As Long) As Variant
+Public Function GetInternalData(ByVal iIndex As Integer, ByVal lDataType As Long) As String
     ' -- '
     '       these constants will be useful in making calls to this function
     '                           |   <purpose>
@@ -1501,6 +1501,7 @@ End Sub
 
 'Re-coded this sub so it properly kills all the UI forms created that are still open. - FrOzeN
 Private Sub Class_Terminate()
+
     Static Disposed As Boolean
     
     If Not Disposed Then
