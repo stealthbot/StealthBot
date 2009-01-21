@@ -17,7 +17,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Dim PreviousFlags As Long     ' ...
     Dim Clan          As String
     Dim parsed        As String
-    Dim Pos           As Integer  ' ...
+    Dim pos           As Integer  ' ...
     Dim doUpdate      As Boolean  ' ...
     
     ' if our username is for some reason null, we don't
@@ -148,10 +148,10 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         ' ...
         If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
             ' ...
-            Pos = checkChannel(Username)
+            pos = checkChannel(Username)
             
             ' ...
-            If (Pos > 0) Then
+            If (pos > 0) Then
                 ' ...
                 'If (QueuedEventID > 0) Then
                 '    PreviousFlags = UserObj.Queue(QueuedEventID - 1).Flags
@@ -162,7 +162,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                         ((PreviousFlags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
             
                     ' ...
-                    frmChat.lvChannel.ListItems.Remove Pos
+                    frmChat.lvChannel.ListItems.Remove pos
                     
                     ' ...
                     AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, Clan
@@ -187,12 +187,12 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                 ' ...
                 If (doUpdate = True) Then
                     ' ...
-                    If (Pos) Then
+                    If (pos) Then
                         ' ...
-                        frmChat.lvChannel.ListItems.Remove Pos
+                        frmChat.lvChannel.ListItems.Remove pos
                         
                         ' ...
-                        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, Clan, Pos
+                        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, Clan, pos
                     End If
                 End If
             End If
@@ -498,26 +498,35 @@ Repeat4:
         End If
         
     Else
+        Dim rtb As RichTextBox
+        
         With frmProfile
             .Show
             
+            'frmChat.AddChat vbWhite, "[Profile] " & KeyName & " == " & KeyValue
+            
             Select Case KeyName
                 Case "Profile\Age"
-                    .rtbAge.text = vbNullString
-                    .AddText .rtbAge, vbWhite, KeyValue
+                    Set rtb = .rtbAge
                 Case "Profile\Location"
-                    .rtbLocation.text = vbNullString
-                    .AddText .rtbLocation, vbWhite, KeyValue
+                    Set rtb = .rtbLocation
                 Case "Profile\Description"
-                    .rtbProfile.text = vbNullString
-                    .AddText .rtbProfile, vbWhite, KeyValue
+                    Set rtb = .rtbProfile
                 Case "Profile\Sex"
-                    .rtbSex.text = vbNullString
-                    .AddText .rtbSex, vbWhite, KeyValue
+                    Set rtb = .rtbSex
                 Case Else
                     Exit Sub
             End Select
-        
+            
+            rtb.text = vbNullString
+            
+            rtb.SelStart = 0
+            rtb.SelLength = 0
+            rtb.SelColor = vbWhite
+            rtb.SelText = KeyValue
+            
+            Call ColorModify(rtb, 0)
+            
             .SetFocus
         End With
         
@@ -791,7 +800,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             Dim user       As String  ' ...
             Dim cOperator  As String  ' ...
             Dim msgPos     As Integer ' ...
-            Dim Pos        As Integer ' ...
+            Dim pos        As Integer ' ...
             Dim tmp        As String
             Dim banpos     As Integer ' ...
             Dim j          As Integer
@@ -804,10 +813,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                 ' ...
                 If (Len(user) > 0) Then
                     ' ...
-                    Pos = g_Channel.GetUserIndex(Username)
+                    pos = g_Channel.GetUserIndex(Username)
                     
                     ' ...
-                    If (Pos > 0) Then
+                    If (pos > 0) Then
                         ' ...
                         Dim BanlistObj As clsBanlistUserObj
                                                 
@@ -965,17 +974,17 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     
     Dim I           As Integer ' ...
     Dim ToANSI      As String  ' ...
-    Dim Pos         As Integer ' ...
+    Dim pos         As Integer ' ...
     Dim PassedQueue As Boolean ' ...
     
     ' ...
-    Pos = _
+    pos = _
         g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     ' ...
-    If (Pos > 0) Then
+    If (pos > 0) Then
         ' ...
-        Set UserObj = g_Channel.Users(Pos)
+        Set UserObj = g_Channel.Users(pos)
         
         ' ...
         If (QueuedEventID = 0) Then
@@ -1097,7 +1106,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim Index        As Long    ' ...
     Dim Stats        As String  ' ...
     Dim Clan         As String  ' ...
-    Dim Pos          As Integer ' ...
+    Dim pos          As Integer ' ...
     Dim showUpdate   As Boolean ' ...
 
     If (LenB(Username) < 1) Then
@@ -1197,13 +1206,13 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
             End If
             
             ' ...
-            Pos = checkChannel(Username)
+            pos = checkChannel(Username)
 
             ' ...
-            If (Pos > 0) Then
+            If (pos > 0) Then
             
                 ' ...
-                Set found = frmChat.lvChannel.ListItems(Pos)
+                Set found = frmChat.lvChannel.ListItems(pos)
                 
                 ' ...
                 If (BotVars.ShowStatsIcons) Then
@@ -1283,7 +1292,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim I           As Long
     Dim temp        As Byte
     Dim Level       As Byte
-    Dim l           As Long
+    Dim L           As Long
     Dim Banned      As Boolean
     Dim f           As Integer
     Dim UserIndex   As Integer ' ...
@@ -1442,11 +1451,11 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
             
             If (mail) Then
-                l = GetMailCount(Username)
+                L = GetMailCount(Username)
                 
-                If (l > 0) Then
-                    frmChat.AddQ "/w " & Username & " You have " & l & _
-                        " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
+                If (L > 0) Then
+                    frmChat.AddQ "/w " & Username & " You have " & L & _
+                        " new message" & IIf(L = 1, "", "s") & ". Type !inbox to retrieve."
                 End If
             End If
         End If
@@ -1484,7 +1493,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim I         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
-    Dim Pos       As Integer
+    Dim pos       As Integer
     Dim bln       As Boolean
     
     ' ...
@@ -1585,23 +1594,23 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     Dim strCompare    As String
     Dim I             As Integer
     Dim ColIndex      As Integer
-    Dim b             As Boolean
+    Dim B             As Boolean
     Dim ToANSI        As String
     Dim BanningUser   As Boolean
     Dim UsernameColor As Long ' ...
     Dim TextColor     As Long ' ...
     Dim CaratColor    As Long ' ...
-    Dim Pos           As Integer
+    Dim pos           As Integer
     Dim blnCheck      As Boolean
     
     ' ...
-    Pos = _
+    pos = _
         g_Channel.GetUserIndexEx(CleanUsername(Username))
     
     ' ...
-    If (Pos > 0) Then
+    If (pos > 0) Then
         ' ...
-        Set UserObj = g_Channel.Users(Pos)
+        Set UserObj = g_Channel.Users(pos)
         
         ' ...
         UserObj.LastTalkTime = UtcNow
@@ -1728,20 +1737,20 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         If (mail) Then
             ' ...
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim Msg As udtMail ' ...
+                Dim msg As udtMail ' ...
                 
                 ' ...
                 If (GetMailCount(Username) > 0) Then
                     ' ...
                     Do
                         ' ...
-                        GetMailMessage Username, Msg
+                        GetMailMessage Username, msg
                         
                         ' ...
-                        If (Len(RTrim(Msg.To)) > 0) Then
+                        If (Len(RTrim(msg.To)) > 0) Then
                             ' ...
-                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(Msg.From) & ": " & _
-                                RTrim$(Msg.Message)
+                            frmChat.AddQ "/w " & Username & " Message from " & RTrim$(msg.From) & ": " & _
+                                RTrim$(msg.Message)
                         End If
                     Loop While (GetMailCount(Username) > 0)
                 End If
@@ -1839,7 +1848,7 @@ Private Function CheckMessage(Username As String, Message As String) As Boolean
 End Function
 
 Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
-    Dim l As Long
+    Dim L As Long
 
     Select Case (Message)
         Case 0:
@@ -2023,14 +2032,14 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         '####### Mail check
         If (mail) Then
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim Msg As udtMail
+                Dim msg As udtMail
                 
                 If (GetMailCount(Username) > 0) Then
-                    Call GetMailMessage(Username, Msg)
+                    Call GetMailMessage(Username, msg)
                     
-                    If (Len(RTrim(Msg.To)) > 0) Then
+                    If (Len(RTrim(msg.To)) > 0) Then
                         frmChat.AddQ "/w " & Username & " Message from " & _
-                            RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
+                            RTrim$(msg.From) & ": " & RTrim$(msg.Message)
                     End If
                 End If
             End If
@@ -2222,17 +2231,17 @@ End Sub
 Public Function CleanUsername(ByVal Username As String) As String
     
     Dim tmp As String  ' ...
-    Dim Pos As Integer ' ...
+    Dim pos As Integer ' ...
     
     ' ...
     tmp = Username
     
     ' ...
-    Pos = InStr(1, tmp, "*", vbBinaryCompare)
+    pos = InStr(1, tmp, "*", vbBinaryCompare)
 
     ' ...
-    If (Pos > 0) Then
-        tmp = Mid$(tmp, Pos + 1)
+    If (pos > 0) Then
+        tmp = Mid$(tmp, pos + 1)
         
         ' ...
         If (Right$(tmp, 1) = ")") Then
@@ -2248,14 +2257,14 @@ End Function
 Private Function GetDiablo2CharacterName(ByVal Username As String) As String
 
     Dim tmp As String  ' ...
-    Dim Pos As Integer ' ...
+    Dim pos As Integer ' ...
     
     ' ...
-    Pos = InStr(1, Username, "*", vbBinaryCompare)
+    pos = InStr(1, Username, "*", vbBinaryCompare)
 
     ' ...
-    If (Pos > 0) Then
-        tmp = Mid$(Username, 1, Pos - 1)
+    If (pos > 0) Then
+        tmp = Mid$(Username, 1, pos - 1)
     End If
     
     ' ...
