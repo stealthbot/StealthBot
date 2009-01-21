@@ -952,7 +952,7 @@ End Sub
 
 '// GETSCRIPTCONTROL
 '// Returns the Script Control as an object
-Public Function GetScriptControl() As Variant
+Public Function GetScriptControl() As Object
 
     Set GetScriptControl = frmChat.SControl
 End Function
