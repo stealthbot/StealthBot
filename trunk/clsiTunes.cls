@@ -81,8 +81,6 @@ Public Function IsLoaded() As Boolean
     Exit Function
     
 ERROR_HANDLER:
-    MsgBox ":!"
-
     Exit Function
     
 End Function
