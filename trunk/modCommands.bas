@@ -1064,7 +1064,7 @@ Private Function OnSweepBan(ByVal Username As String, ByRef dbAccess As udtGetAc
     ' ...
     If (g_Channel.Self.IsOperator) Then
         ' ...
-        Call Cache(vbNullString, 255, "ban ")
+        Call cache(vbNullString, 255, "ban ")
         
         ' ...
         Call AddQ("/who " & msgData, PRIORITY.CHANNEL_MODERATION_MESSAGE, _
@@ -1095,7 +1095,7 @@ Private Function OnSweepIgnore(ByVal Username As String, ByRef dbAccess As udtGe
     Dim tmpBuf As String ' ...
 
     ' ...
-    Call Cache(vbNullString, 255, "squelch ")
+    Call cache(vbNullString, 255, "squelch ")
     
     ' ...
     Call AddQ("/who " & msgData, PRIORITY.CHANNEL_MODERATION_MESSAGE, _
@@ -4571,25 +4571,31 @@ Private Function OnMP3(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
-        ' ...
-        TrackName = MediaPlayer.TrackName
-        ListPosition = MediaPlayer.PlaylistPosition
-        ListCount = MediaPlayer.PlaylistCount
-        TrackTime = MediaPlayer.TrackTime
-        TrackLength = MediaPlayer.TrackLength
-        
-        If (TrackName = vbNullString) Then
+        If (MediaPlayer.IsLoaded = False) Then
             tmpBuf = MediaPlayer.Name & " is not loaded."
         Else
-            tmpBuf = "Current MP3 " & _
-                "[" & ListPosition & "/" & ListCount & "]: " & _
-                    TrackName & " (" & SecondsToString(TrackTime) & _
-                        "/" & SecondsToString(TrackLength)
+            ' ...
+            TrackName = MediaPlayer.TrackName
+            ListPosition = MediaPlayer.PlaylistPosition
+            ListCount = MediaPlayer.PlaylistCount
+            TrackTime = MediaPlayer.TrackTime
+            TrackLength = MediaPlayer.TrackLength
             
-            If (MediaPlayer.IsPaused) Then
-                tmpBuf = tmpBuf & ", paused)"
+            ' ...
+            If (TrackName = vbNullString) Then
+                tmpBuf = MediaPlayer.Name & " is not currently playing any media."
             Else
-                tmpBuf = tmpBuf & ")"
+                tmpBuf = "Current MP3 " & _
+                    "[" & ListPosition & "/" & ListCount & "]: " & _
+                        TrackName & " (" & SecondsToString(TrackTime) & _
+                            "/" & SecondsToString(TrackLength)
+                
+                ' ...
+                If (MediaPlayer.IsPaused) Then
+                    tmpBuf = tmpBuf & ", paused)"
+                Else
+                    tmpBuf = tmpBuf & ")"
+                End If
             End If
         End If
     End If
@@ -6103,7 +6109,7 @@ Private Function OnDemote(ByVal Username As String, ByRef dbAccess As udtGetAcce
 End Function
 
 ' requires public
-Public Function Cache(ByVal Inpt As String, ByVal Mode As Byte, Optional ByRef Typ As String) As String
+Public Function cache(ByVal Inpt As String, ByVal Mode As Byte, Optional ByRef Typ As String) As String
     Static s()  As String
     Static sTyp As String
     Static bln  As Boolean
@@ -6134,7 +6140,7 @@ Public Function Cache(ByVal Inpt As String, ByVal Mode As Byte, Optional ByRef T
                 Case 0
                     ' ...
                     For I = 0 To UBound(s)
-                        Cache = Cache & Replace(s(I), ",", "") & Space(1)
+                        cache = cache & Replace(s(I), ",", "") & Space(1)
                     Next I
         
                     ' ...
