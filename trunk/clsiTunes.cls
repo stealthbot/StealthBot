@@ -16,18 +16,30 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private m_iTunesObj As Object
+Private m_iTunesObj As Object ' ...
 
 Private Sub Class_Initialize()
-    ' ...
-    Call CreateiTunesObj
+
+    Start
+    
 End Sub
 
 Private Sub Class_Terminate()
+
+    ' ...
     Set m_iTunesObj = Nothing
+    
+End Sub
+
+Public Sub Start()
+
+    ' ...
+    CreateiTunesObj
+
 End Sub
 
 Private Sub CreateiTunesObj()
+
     On Error GoTo ERROR_HANDLER
     
     ' ...
@@ -45,20 +57,41 @@ ERROR_HANDLER:
 
     ' ...
     Exit Sub
+    
 End Sub
 
 Public Property Get Name() As String
+
+    ' ...
     Name = "iTunes"
+    
 End Property
 
 Public Function IsLoaded() As Boolean
-    IsLoaded = Not CBool(m_iTunesObj Is Nothing)
+
+    On Error GoTo ERROR_HANDLER
+
+    ' ...
+    IIf m_iTunesObj.PlayerState > 0, True, False
+    
+    ' ...
+    IsLoaded = True
+    
+    ' ...
+    Exit Function
+    
+ERROR_HANDLER:
+    MsgBox ":!"
+
+    Exit Function
+    
 End Function
 
 Public Sub PlayTrack(ByVal Track As Variant)
+
     ' ...
-    If (Not (m_iTunesObj Is Nothing)) Then
-        Call CreateiTunesObj
+    If (IsLoaded() = False) Then
+        Exit Sub
     End If
     
     If (StrictIsNumeric(Track)) Then
@@ -68,14 +101,14 @@ Public Sub PlayTrack(ByVal Track As Variant)
         Set TrackCollection = _
             m_iTunesObj.LibraryPlaylist.Tracks
             
-        Call TrackCollection.Item(CInt(Track)).Play
+        TrackCollection.Item(CInt(Track)).Play
         
     ElseIf (Track = vbNullString) Then
         
-        Call m_iTunesObj.Play
+        m_iTunesObj.Play
     
     Else
-        
+    
         Dim colTracks As Object ' ...
         
         ' ...
@@ -87,58 +120,84 @@ Public Sub PlayTrack(ByVal Track As Variant)
         End If
         
     End If
+
 End Sub
 
 Public Sub NextTrack()
 
-   m_iTunesObj.NextTrack
-   
+    ' ...
+    If (IsLoaded() = False) Then
+        Exit Sub
+    End If
+
+    ' ...
+    m_iTunesObj.NextTrack
+
 End Sub
 
 Public Sub PreviousTrack()
 
+    ' ...
+    If (IsLoaded() = False) Then
+        Exit Sub
+    End If
+
+    ' ...
     m_iTunesObj.PreviousTrack
 
 End Sub
 
 Public Sub PausePlayback()
+
     ' ...
-    If (Not (m_iTunesObj Is Nothing)) Then
-        Call CreateiTunesObj
+    If (IsPlaying() = False) Then
+        Exit Sub
     End If
 
     ' ...
-    Call m_iTunesObj.PlayPause
+    m_iTunesObj.PlayPause
+
 End Sub
 
 Public Sub QuitPlayback()
+
     ' ...
-    If (Not (m_iTunesObj Is Nothing)) Then
-        Call CreateiTunesObj
+    If (IsPlaying() = False) Then
+        Exit Sub
     End If
 
     ' ...
-    Call m_iTunesObj.Stop
+    m_iTunesObj.Stop
+    
 End Sub
 
 ' ...
 Public Property Get TrackName() As String
+
     ' ...
-    If (Not (m_iTunesObj Is Nothing)) Then
-        Call CreateiTunesObj
+    If (IsPlaying() = False) Then
+        Exit Property
+    End If
+    
+    ' ...
+    If (m_iTunesObj.CurrentTrack Is Nothing) Then
+        Exit Property
     End If
 
     ' ...
-    TrackName = m_iTunesObj.CurrentTrack.Artist & " - " & m_iTunesObj.CurrentTrack.Name
+    TrackName = _
+        m_iTunesObj.CurrentTrack.Artist & " - " & m_iTunesObj.CurrentTrack.Name
+        
 End Property
 
 ' ...
 Public Property Get PlaylistCount() As Integer
+
     Dim TrackCollection As Object ' ...
     
     ' ...
-    If (Not (m_iTunesObj Is Nothing)) Then
-        Call CreateiTunesObj
+    If (IsLoaded() = False) Then
+        Exit Property
     End If
 
     ' ...
@@ -147,42 +206,73 @@ Public Property Get PlaylistCount() As Integer
         
     ' ...
     PlaylistCount = TrackCollection.Count
+
 End Property
 
 Public Property Get PlaylistPosition() As Long
+
     ' ...
-    If (Not (m_iTunesObj Is Nothing)) Then
-        Call CreateiTunesObj
+    If (IsPlaying() = False) Then
+        Exit Property
     End If
 
-    PlaylistPosition = m_iTunesObj.CurrentTrack.PlayOrderIndex
+    ' ...
+    PlaylistPosition = _
+        m_iTunesObj.CurrentTrack.PlayOrderIndex
+
 End Property
 
 Public Property Get TrackTime() As Long
+
     ' ...
-    If (Not (m_iTunesObj Is Nothing)) Then
-        Call CreateiTunesObj
+    If (IsPlaying() = False) Then
+        Exit Property
     End If
 
+    ' ...
     TrackTime = m_iTunesObj.PlayerPosition
+
 End Property
 
 Public Property Get IsPlaying() As Boolean
+
+    ' ...
+    If (IsLoaded() = False) Then
+        Exit Property
+    End If
+
+    ' ...
     IsPlaying = (m_iTunesObj.PlayerState > 0)
+    
 End Property
 
 ' ...
 Public Property Get IsPaused() As Boolean
+
+    ' ...
+    If (IsLoaded() = False) Then
+        Exit Property
+    End If
+
+    ' ...
     IsPaused = False
+
 End Property
 
 Public Property Get TrackLength() As Long
+
     ' ...
-    If (Not (m_iTunesObj Is Nothing)) Then
-        Call CreateiTunesObj
+    If (IsLoaded() = False) Then
+        Exit Property
+    End If
+    
+    ' ...
+    If (m_iTunesObj.CurrentTrack Is Nothing) Then
+        Exit Property
     End If
 
     ' ...
     TrackLength = m_iTunesObj.CurrentTrack.Finish
+
 End Property
 

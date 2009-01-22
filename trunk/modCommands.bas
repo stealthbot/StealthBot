@@ -698,7 +698,7 @@ Private Function OnLoadWinamp(ByVal Username As String, ByRef dbAccess As udtGet
     Set clsWinamp = New clsWinamp
 
     ' ...
-    bln = clsWinamp.OpenPlayer(ReadCFG("Other", "WinampPath"))
+    bln = clsWinamp.Start(ReadCFG("Other", "WinampPath"))
        
     ' ...
     If (bln) Then
@@ -2397,17 +2397,20 @@ Private Function OnPlay(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim tmpBuf As String ' temporary output buffer
-    Dim Track  As Long
+    Dim Track  As Long   ' ...
     
+    ' ...
     If (BotVars.DisableMP3Commands = False) Then
         ' ...
-        If (Not (MediaPlayer.IsLoaded())) Then
-            tmpBuf = "Error: " & MediaPlayer.Name & " is not loaded."
-        Else
-            Call MediaPlayer.PlayTrack(msgData)
-            
-            tmpBuf = "Playback started."
+        If (MediaPlayer.IsLoaded() = False) Then
+            MediaPlayer.Start
         End If
+
+        ' ...
+        MediaPlayer.PlayTrack msgData
+        
+        ' ...
+        tmpBuf = "Playback started."
     End If
 
     ' return message
@@ -2459,9 +2462,13 @@ Private Function OnPause(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Dim tmpBuf As String ' temporary output buffer
     
     If (BotVars.DisableMP3Commands = False) Then
-        Call MediaPlayer.PausePlayback
+        If (MediaPlayer.IsLoaded()) Then
+            Call MediaPlayer.PausePlayback
         
-        tmpBuf = "Paused/resumed play."
+            tmpBuf = "Paused/resumed play."
+        Else
+            tmpBuf = MediaPlayer.Name & " is not loaded."
+        End If
     End If
         
     ' return message
@@ -4469,16 +4476,8 @@ Private Function OnPrevious(ByVal Username As String, ByRef dbAccess As udtGetAc
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
         If (MediaPlayer.IsLoaded()) Then
-            'Dim pos As Integer ' ...
-        
             ' ...
-            'pos = MediaPlayer.PlaylistPosition
-    
-            ' ...
-            'Call MediaPlayer.PlayTrack(pos - 1)
-            
-            ' ...
-            Call MediaPlayer.PreviousTrack
+            MediaPlayer.PreviousTrack
         
             ' ...
             tmpBuf = "Skipped backwards."
