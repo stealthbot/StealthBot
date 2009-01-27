@@ -20,7 +20,7 @@ Private m_iTunesObj As Object ' ...
 
 Private Sub Class_Initialize()
 
-    Start
+    'Start
     
 End Sub
 
@@ -37,6 +37,19 @@ Public Sub Start()
     CreateiTunesObj
 
 End Sub
+
+' ...
+Private Function GetWindowHandle() As Long
+
+    Dim lRet As Long ' ...
+    
+    ' ...
+    lRet = (FindWindow("iTunes", vbNullString))
+    
+    ' ...
+    GetWindowHandle = lRet
+    
+End Function
 
 Private Sub CreateiTunesObj()
 
@@ -70,6 +83,11 @@ End Property
 Public Function IsLoaded() As Boolean
 
     On Error GoTo ERROR_HANDLER
+    
+    ' ...
+    If (GetWindowHandle() = 0) Then
+        Exit Function
+    End If
 
     ' ...
     IIf m_iTunesObj.PlayerState > 0, True, False
