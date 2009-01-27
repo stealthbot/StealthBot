@@ -2536,13 +2536,13 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     AddChat vbYellow, "[CLAN] " & Member & " has left the clan."
     
     Dim X   As ListItem
-    Dim pos As Integer
+    Dim Pos As Integer
     
-    pos = g_Clan.GetUserIndexEx(Member)
+    Pos = g_Clan.GetUserIndexEx(Member)
     
     ' ...
-    If (pos > 0) Then
-        g_Clan.Members.Remove pos
+    If (Pos > 0) Then
+        g_Clan.Members.Remove Pos
     End If
     
 
@@ -2655,7 +2655,7 @@ Private Sub ClanHandler_ClanInvitation(ByVal Token As String, ByVal ClanTag As S
         If NewClan Then Clan.isNew = 1
         
         With RTBColors
-            AddChat .SuccessText, "[CLAN] ", .InformationText, InvitedBy, .SuccessText, " has invited you to join ", .InformationText, "Clan " & ClanName, .SuccessText, "!"
+            AddChat .SuccessText, "[CLAN] ", .InformationText, InvitedBy, .SuccessText, " has invited you to join a clan: ", .InformationText, ClanName, .SuccessText, " [", .InformationText, ClanTag, .SuccessText, "]"
         End With
         
         frmClanInvite.Show
@@ -2714,12 +2714,12 @@ End Sub
 
 Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
     Dim X   As ListItem
-    Dim pos As Integer
+    Dim Pos As Integer
     
-    pos = g_Clan.GetUserIndexEx(Username)
+    Pos = g_Clan.GetUserIndexEx(Username)
     
-    If (pos > 0) Then
-        With g_Clan.Members(pos)
+    If (Pos > 0) Then
+        With g_Clan.Members(Pos)
             .Rank = Rank
             .Status = IsOnline
             .Location = Location
@@ -2956,6 +2956,8 @@ Sub Form_Unload(Cancel As Integer)
 '        l = CLng(Val("&H" & ReadCFG("Main", Key & "VerByte")))
 '        WriteINI "Main", Key & "VerByte", Hex(l - 1)
 '    End If
+
+    Call modWARDEN.WardenCleanUp
 
     Call ChatQueue_Terminate
 
@@ -4608,7 +4610,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     
     Dim I As Long
     Dim L As Long
-    Dim n As Integer
+    Dim N As Integer
     Dim C As Integer ',oldSelStart As Integer
     Dim X() As String
     Dim m As String
@@ -4718,22 +4720,22 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         X() = Split(Clipboard.GetText, Chr(10))
                         
                         If UBound(X) > 0 Then
-                            For n = LBound(X) To UBound(X)
-                                X(n) = Replace(X(n), Chr(13), vbNullString)
+                            For N = LBound(X) To UBound(X)
+                                X(N) = Replace(X(N), Chr(13), vbNullString)
                                 
-                                If (X(n) <> vbNullString) Then
-                                    If (n <> LBound(X)) Then
-                                        AddQ txtPre.text & X(n) & txtPost.text, PRIORITY.CONSOLE_MESSAGE
+                                If (X(N) <> vbNullString) Then
+                                    If (N <> LBound(X)) Then
+                                        AddQ txtPre.text & X(N) & txtPost.text, PRIORITY.CONSOLE_MESSAGE
                                         
-                                        cboSend.AddItem txtPre.text & X(n) & txtPost.text, 0
+                                        cboSend.AddItem txtPre.text & X(N) & txtPost.text, 0
                                     Else
-                                        AddQ txtPre.text & cboSend.text & X(n) & txtPost.text, _
+                                        AddQ txtPre.text & cboSend.text & X(N) & txtPost.text, _
                                             PRIORITY.CONSOLE_MESSAGE
                                         
-                                        cboSend.AddItem txtPre.text & cboSend.text & X(n) & txtPost.text, 0
+                                        cboSend.AddItem txtPre.text & cboSend.text & X(N) & txtPost.text, 0
                                     End If
                                 End If
-                            Next n
+                            Next N
                             
                             cboSend.text = vbNullString
                             
@@ -4937,10 +4939,10 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 s = txtPre.text & cboSend.text & txtPost.text
                                     
                                 If (LCase$(s) = "/fl" And MDebug("debug")) Then
-                                    For n = 1 To g_Friends.Count
-                                        AddChat vbMagenta, g_Friends.Item(n).Name & _
-                                            " - " & g_Friends.Item(n).game
-                                    Next n
+                                    For N = 1 To g_Friends.Count
+                                        AddChat vbMagenta, g_Friends.Item(N).Name & _
+                                            " - " & g_Friends.Item(N).game
+                                    Next N
                                 
                                 ElseIf (LCase$(s) = "/accountinfo") Then
                                     RequestSystemKeys
@@ -4982,13 +4984,13 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     AddChat RTBColors.ConsoleText, "Flags forced to 2."
                                 
                                 ElseIf ((s = "/flags") And (MDebug("debug"))) Then
-                                    For n = 1 To g_Channel.Users.Count
-                                        With g_Channel.Users(n)
+                                    For N = 1 To g_Channel.Users.Count
+                                        With g_Channel.Users(N)
                                             AddChat RTBColors.ConsoleText, .Name & Space$(4) & .Flags
                                         End With
-                                    Next n
+                                    Next N
                                     
-                                    n = 0
+                                    N = 0
                                     
                                     GoTo theEnd
                                     
@@ -5209,12 +5211,12 @@ Private Sub quLower_Timer()
         Dim ret As String
         Dim lPos As Long
         Dim Y As String
-        Dim C As Integer, n As Integer
+        Dim C As Integer, N As Integer
         
         Caching = False
         
         ' ...
-        ret = Cache(vbNullString, 0, Y)
+        ret = cache(vbNullString, 0, Y)
         
         ' ...
         lPos = InStr(1, ret, Space$(1), vbBinaryCompare)
@@ -5239,20 +5241,20 @@ Private Sub quLower_Timer()
                 End If
             End If
         
-            n = InStr(strArray(C), "(*")
+            N = InStr(strArray(C), "(*")
             
-            If n > 0 Then
+            If N > 0 Then
                 ' This covers Character@USeast (*Username)
                 
-                strArray(C) = Mid$(strArray(C), n + 2)
+                strArray(C) = Mid$(strArray(C), N + 2)
                 strArray(C) = Left$(strArray(C), Len(strArray(C)) - 1)
             Else
-                n = InStr(strArray(C), "*")
+                N = InStr(strArray(C), "*")
                 
                 ' This covers *Username
                 
-                If n > 0 Then
-                    strArray(C) = Mid$(strArray(C), n + 1)
+                If N > 0 Then
+                    strArray(C) = Mid$(strArray(C), N + 1)
                 End If
             End If
             
@@ -5993,7 +5995,7 @@ Private Sub UpTimer_Timer()
 
     Dim newColor  As Long
     Dim I         As Integer
-    Dim pos       As Integer
+    Dim Pos       As Integer
     Dim doCheck   As Boolean
 
     uTicks = (uTicks + 1000)
@@ -6072,17 +6074,17 @@ Private Sub UpTimer_Timer()
                 ' ...
                 If (BotVars.NoColoring = False) Then
                     ' ...
-                    pos = checkChannel(.DisplayName)
+                    Pos = checkChannel(.DisplayName)
                 
                     ' ...
-                    If (pos > 0) Then
+                    If (Pos > 0) Then
                         ' ...
                         newColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
                             GetCurrentUsername, vbBinaryCompare) = 0)
                         
                         ' ...
-                        If (lvChannel.ListItems(pos).ForeColor <> newColor) Then
-                            lvChannel.ListItems(pos).ForeColor = newColor
+                        If (lvChannel.ListItems(Pos).ForeColor <> newColor) Then
+                            lvChannel.ListItems(Pos).ForeColor = newColor
                         End If
                     End If
                 End If
@@ -7317,7 +7319,7 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
 End Sub
 
 Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
-    On Error GoTo ERROR_HANDLER
+    'On Error GoTo ERROR_HANDLER
 
     Dim strTemp     As String
     Dim fTemp       As String
