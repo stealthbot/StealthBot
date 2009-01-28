@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2957,7 +2957,9 @@ Sub Form_Unload(Cancel As Integer)
 '        WriteINI "Main", Key & "VerByte", Hex(l - 1)
 '    End If
 
-    Call modWARDEN.WardenCleanUp
+    ' COMMENTED OUT 2009-28-01 Eric[nK]
+    '  BREAKS COMPILATION
+    'Call modWarden.WardenCleanUp
 
     Call ChatQueue_Terminate
 
@@ -4610,7 +4612,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     
     Dim I As Long
     Dim l As Long
-    Dim N As Integer
+    Dim n As Integer
     Dim C As Integer ',oldSelStart As Integer
     Dim X() As String
     Dim m As String
@@ -4720,22 +4722,22 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         X() = Split(Clipboard.GetText, Chr(10))
                         
                         If UBound(X) > 0 Then
-                            For N = LBound(X) To UBound(X)
-                                X(N) = Replace(X(N), Chr(13), vbNullString)
+                            For n = LBound(X) To UBound(X)
+                                X(n) = Replace(X(n), Chr(13), vbNullString)
                                 
-                                If (X(N) <> vbNullString) Then
-                                    If (N <> LBound(X)) Then
-                                        AddQ txtPre.text & X(N) & txtPost.text, PRIORITY.CONSOLE_MESSAGE
+                                If (X(n) <> vbNullString) Then
+                                    If (n <> LBound(X)) Then
+                                        AddQ txtPre.text & X(n) & txtPost.text, PRIORITY.CONSOLE_MESSAGE
                                         
-                                        cboSend.AddItem txtPre.text & X(N) & txtPost.text, 0
+                                        cboSend.AddItem txtPre.text & X(n) & txtPost.text, 0
                                     Else
-                                        AddQ txtPre.text & cboSend.text & X(N) & txtPost.text, _
+                                        AddQ txtPre.text & cboSend.text & X(n) & txtPost.text, _
                                             PRIORITY.CONSOLE_MESSAGE
                                         
-                                        cboSend.AddItem txtPre.text & cboSend.text & X(N) & txtPost.text, 0
+                                        cboSend.AddItem txtPre.text & cboSend.text & X(n) & txtPost.text, 0
                                     End If
                                 End If
-                            Next N
+                            Next n
                             
                             cboSend.text = vbNullString
                             
@@ -4939,10 +4941,10 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 s = txtPre.text & cboSend.text & txtPost.text
                                     
                                 If (LCase$(s) = "/fl" And MDebug("debug")) Then
-                                    For N = 1 To g_Friends.Count
-                                        AddChat vbMagenta, g_Friends.Item(N).Name & _
-                                            " - " & g_Friends.Item(N).game
-                                    Next N
+                                    For n = 1 To g_Friends.Count
+                                        AddChat vbMagenta, g_Friends.Item(n).Name & _
+                                            " - " & g_Friends.Item(n).game
+                                    Next n
                                 
                                 ElseIf (LCase$(s) = "/accountinfo") Then
                                     RequestSystemKeys
@@ -4984,13 +4986,13 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     AddChat RTBColors.ConsoleText, "Flags forced to 2."
                                 
                                 ElseIf ((s = "/flags") And (MDebug("debug"))) Then
-                                    For N = 1 To g_Channel.Users.Count
-                                        With g_Channel.Users(N)
+                                    For n = 1 To g_Channel.Users.Count
+                                        With g_Channel.Users(n)
                                             AddChat RTBColors.ConsoleText, .Name & Space$(4) & .Flags
                                         End With
-                                    Next N
+                                    Next n
                                     
-                                    N = 0
+                                    n = 0
                                     
                                     GoTo theEnd
                                     
@@ -5211,7 +5213,7 @@ Private Sub quLower_Timer()
         Dim ret As String
         Dim lPos As Long
         Dim Y As String
-        Dim C As Integer, N As Integer
+        Dim C As Integer, n As Integer
         
         Caching = False
         
@@ -5241,20 +5243,20 @@ Private Sub quLower_Timer()
                 End If
             End If
         
-            N = InStr(strArray(C), "(*")
+            n = InStr(strArray(C), "(*")
             
-            If N > 0 Then
+            If n > 0 Then
                 ' This covers Character@USeast (*Username)
                 
-                strArray(C) = Mid$(strArray(C), N + 2)
+                strArray(C) = Mid$(strArray(C), n + 2)
                 strArray(C) = Left$(strArray(C), Len(strArray(C)) - 1)
             Else
-                N = InStr(strArray(C), "*")
+                n = InStr(strArray(C), "*")
                 
                 ' This covers *Username
                 
-                If N > 0 Then
-                    strArray(C) = Mid$(strArray(C), N + 1)
+                If n > 0 Then
+                    strArray(C) = Mid$(strArray(C), n + 1)
                 End If
             End If
             

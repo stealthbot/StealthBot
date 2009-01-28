@@ -382,7 +382,7 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
     
     ElseIf ProfileRequest = True Then
     
-        MsgBox "!!"
+        'MsgBox "!!"
     
         If KeyName = "Profile\Age" Then
             frmWriteProfile.txtAge.text = KeyValue
@@ -746,7 +746,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         Caching = True
     
         ' ...
-        Cache Message, 1
+        cache Message, 1
         
         ' ...
         With frmChat.quLower

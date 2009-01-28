@@ -36,7 +36,7 @@ Public Function UtcToLocal(ByRef UtcDate As Date) As Date
 End Function
 
 ' ...
-Public Function FileTimeToDate(ByRef FTime As FILETIME)
+Public Function FileTimeToDate(ByRef FTime As FILETIME) As Date
 
     Dim STime As SYSTEMTIME ' ...
 
@@ -62,7 +62,7 @@ Public Function DateToFileTime(ByRef DDate As Date) As FILETIME
 End Function
 
 ' ...
-Public Function SystemTimeToDate(ByRef STime As SYSTEMTIME)
+Public Function SystemTimeToDate(ByRef STime As SYSTEMTIME) As Date
 
     Dim tempDate As Date ' ...
     Dim tempTime As Date ' ...

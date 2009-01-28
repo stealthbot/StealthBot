@@ -1005,6 +1005,8 @@ End Sub
 '//  ip-ban you for requesting some keys.
 '//  The result will come back to you in an Event_KeyReturn.
 Public Sub RequestProfileKey(ByVal sUsername As String, ByVal sKey As String)
+    SuppressProfileOutput = True
+
     RequestSpecificKey sUsername, sKey
 End Sub
 
@@ -1458,6 +1460,24 @@ End Function
 
 Public Function UtcNow() As Date
     UtcNow = modDateTime.UtcNow
+End Function
+
+Public Function FileTimeToDate(ByRef strTime As String) As Date
+
+    Dim FTime As FILETIME ' ...
+    
+    ' ...
+    With FTime
+        .dwHighDateTime = _
+            CLng(Left$(strTime, InStr(1, strTime, " ", vbBinaryCompare)))
+
+        .dwLowDateTime = _
+            CLng(Mid$(strTime, InStr(1, strTime, " ", vbBinaryCompare) + 1))
+    End With
+    
+    ' ...
+    FileTimeToDate = modDateTime.FileTimeToDate(FTime)
+    
 End Function
 
 Public Function Quotes() As Collection
