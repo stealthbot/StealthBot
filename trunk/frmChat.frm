@@ -4629,6 +4629,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Const S_CTRLALT = 6
     Const S_CTRLSHIFT = 3
     Const S_CTRLSHIFTALT = 7
+    Const L_ARROW = 38
+    Const R_ARROW = 39
 
     Const K_END = 35
     
@@ -4643,6 +4645,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
         If (Not (.SelectedItem Is Nothing)) Then
             I = .SelectedItem.Index
         End If
+        
+        'MsgBox KeyCode
 
         Select Case (KeyCode)
             Case KEY_PGDN 'ALT + PAGEDOWN
@@ -5070,46 +5074,42 @@ theEnd:
                 
                 '########## end ENTER cases
             
-            Case KEY_SPACE ' check for /r and /rw and replace accordingly
+            Case KEY_SPACE
                 With cboSend
-                    Select Case Len(.text)
-                        Case 2 '/r
-                            If LenB(LastWhisper) > 0 Then
-                                If StrComp(Left$(.text, 2), "/r", vbTextCompare) = 0 Then
-                                    .SelStart = 0
-                                    .SelLength = Len(.text)
-                                    .SelText = "/w " & LastWhisper
-                                    .SelStart = Len(.text)
-                                End If
+                    If (LenB(LastWhisper) > 0) Then
+                        If (Len(.text) >= 2) Then
+                            If StrComp(Left$(.text, 2), "/r", vbTextCompare) = 0 Then
+                                .SelStart = 0
+                                .SelLength = Len(.text)
+                                .SelText = "/w " & LastWhisper
+                                .SelStart = Len(.text)
                             End If
-                            
-                        Case 6 '/reply
-                            If LenB(LastWhisper) > 0 Then
-                                If StrComp(Left$(.text, 6), "/reply", vbTextCompare) = 0 Then
-                                    .SelStart = 0
-                                    .SelLength = Len(.text)
-                                    .SelText = "/w " & LastWhisper
-                                    .SelStart = Len(.text)
-                                End If
-                            End If
+                        End If
                         
-                        Case 3 '/rw
-                            If LenB(LastWhisperTo) > 0 Then
-                                If StrComp(Left$(.text, 3), "/rw", vbTextCompare) = 0 Then
-                                    .SelStart = 0
-                                    .SelLength = Len(.text)
-                                    
-                                    If StrComp(LastWhisperTo, "%f%") = 0 Then
-                                        .SelText = "/f m"
-                                    Else
-                                        .SelText = "/w " & LastWhisperTo
-                                    End If
-                                    
-                                    .SelStart = Len(.text)
+                        If (Len(.text) >= 3) Then
+                            If StrComp(Left$(.text, 3), "/rw", vbTextCompare) = 0 Then
+                                .SelStart = 0
+                                .SelLength = Len(.text)
+                                
+                                If StrComp(LastWhisperTo, "%f%") = 0 Then
+                                    .SelText = "/f m"
+                                Else
+                                    .SelText = "/w " & LastWhisperTo
                                 End If
+                                
+                                .SelStart = Len(.text)
                             End If
+                        End If
                         
-                    End Select
+                        If (Len(.text) >= 6) Then
+                            If StrComp(Left$(.text, 6), "/reply", vbTextCompare) = 0 Then
+                                .SelStart = 0
+                                .SelLength = Len(.text)
+                                .SelText = "/w " & LastWhisper
+                                .SelStart = Len(.text)
+                            End If
+                        End If
+                    End If
                 End With
         End Select
     End With
