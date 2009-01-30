@@ -6523,7 +6523,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
             Dim bln As Boolean ' ...
         
             If (Len(dbType)) Then
-                If (StrComp(DB(I).Type, dbType, vbBinaryCompare) = 0) Then
+                If (StrComp(DB(I).Type, dbType, vbTextCompare) = 0) Then
                     bln = True
                 End If
             Else
@@ -6550,7 +6550,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
 
         ' we aren't removing the last array
         ' element, are we?
-        If (I > UBound(DB)) Then
+        If (I >= UBound(DB)) Then
             ' redefine array size
             ReDim DB(0)
             
@@ -6644,8 +6644,8 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Error: DB_remove() has encountered an error while " & _
-        "removing a database entry.")
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, _
+        "Error (#" & Err.Number & "): " & Err.description & " in DB_remove().")
         
     DB_remove = False
     
