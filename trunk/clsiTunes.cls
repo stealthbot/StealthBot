@@ -20,7 +20,10 @@ Private m_iTunesObj As Object ' ...
 
 Private Sub Class_Initialize()
 
-    'Start
+    ' ...
+    If (IsLoaded() = True) Then
+        Start
+    End If
     
 End Sub
 
@@ -44,7 +47,7 @@ Private Function GetWindowHandle() As Long
     Dim lRet As Long ' ...
     
     ' ...
-    lRet = (FindWindow("iTunes", vbNullString))
+    lRet = (FindWindow("iTunes", "iTunes"))
     
     ' ...
     GetWindowHandle = lRet
@@ -87,11 +90,10 @@ Public Function IsLoaded() As Boolean
     ' ...
     If (GetWindowHandle() = 0) Then
         Exit Function
+    Else
+        Start
     End If
 
-    ' ...
-    IIf m_iTunesObj.PlayerState > 0, True, False
-    
     ' ...
     IsLoaded = True
     
