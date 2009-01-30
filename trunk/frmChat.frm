@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -3281,7 +3281,7 @@ Private Sub lvChannel_dblClick()
             .SelText = s
             
             ' This is correct - sets the cursor properly
-            cboSendSelStart = oldSelStart + Len(s)
+            cboSendSelStart = Len(.text)
             cboSendSelLength = 0
             
             .SetFocus
