@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3289,17 +3289,21 @@ Private Sub lvChannel_dblClick()
     End If
 End Sub
 
-Private Sub lvChannel_Keyup(KeyCode As Integer, Shift As Integer)
+Private Sub lvChannel_KeyUp(KeyCode As Integer, Shift As Integer)
     Const S_ALT = 4
    
     If Shift = S_ALT And KeyCode = KEY_ALTN Then
+        Dim sStart As Integer
+        
         With lvChannel
             If Not (.SelectedItem Is Nothing) Then
+                cboSend.SelStart = Len(cboSend.text)
                 cboSend.SelText = .SelectedItem.text
-                cboSend.SelStart = cboSend.SelStart + Len(.SelectedItem.text)
     
                 KeyCode = 0
                 Shift = 0
+                
+                Exit Sub
             End If
         End With
     End If
