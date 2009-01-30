@@ -641,7 +641,7 @@ Sub ps_plugins_cmd(cmd, Username, DisplayID)
    arrPrefixes = psPlugins.Keys
    arrTitles = Split(psTitles, "|||")
 
-   If DisplayID = 3 Or DisplayID = 1 Then
+   If DisplayID = 1 Or DisplayID = 3 Or DisplayID = 4 Then
       For i = 0 to UBound(arrPrefixes)
          If Not psPluginEnabled(arrPrefixes(i)) Then
             arrPrefixes(i) = "(" & arrPrefixes(i) & ")"

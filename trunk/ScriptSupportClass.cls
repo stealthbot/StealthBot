@@ -1284,7 +1284,7 @@ Public Sub AddMenuItem(ByVal strPrefix As String, ByVal strName As String, Optio
     '// Insert a separator and warning if this is the first user-added item
     If intItemCount < 7 Then
         AddScriptMenuItem lngMenu, 0, 0, 1
-        AddScriptMenuItem lngMenu, "(use at your own risk)", 0, , 1
+        'AddScriptMenuItem lngMenu, "(use at your own risk)", 0, , 1
     End If
 
     '// Create the initial callback sub
