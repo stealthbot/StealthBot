@@ -195,7 +195,7 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     Dim sTemp     As String
     Dim lTemp     As Long
     Dim lCheckSum As Long
-    Dim splt()    As String
+    Dim Splt()    As String
     Dim PacketID  As Byte
     
     Set pD = New clsPacketDebuffer
