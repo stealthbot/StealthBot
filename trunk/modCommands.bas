@@ -7437,11 +7437,7 @@ Public Sub WriteDatabase(ByVal U As String)
     Open U For Output As #f
         For I = LBound(DB) To UBound(DB)
             ' ...
-            If ((DB(I).Access > 0) Or _
-                (Len(DB(I).Flags) > 0) Or _
-                (Len(DB(I).Groups) > 0)) Then
-                
-                ' ...
+            If (LenB(DB(I).Username) > 0) Then
                 Print #f, DB(I).Username;
                 Print #f, " " & DB(I).Access;
                 Print #f, " " & IIf(Len(DB(I).Flags) > 0, DB(I).Flags, "%");
