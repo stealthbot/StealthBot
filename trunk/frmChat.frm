@@ -8164,6 +8164,8 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
         
         DestroyNLSObject
         
+        Unload frmRealm
+        
         PassedClanMotdCheck = False
         
         On Error Resume Next
