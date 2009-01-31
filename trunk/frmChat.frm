@@ -1565,9 +1565,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -6388,36 +6388,36 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         (Len(Join(Splt(), Space$(1))) + (Len(Space$(1))) + 1))
                 End If
             End If
+        End If
+        
+        ' ...
+        If (msg_priority = -1) Then
+            Dim cmdName    As String ' ...
+            Dim spaceIndex As Long   ' ...
             
             ' ...
-            If (msg_priority = -1) Then
-                Dim cmdName    As String ' ...
-                Dim spaceIndex As Long   ' ...
+            If (Len(Message) >= 2) Then
+                ' ...
+                spaceIndex = InStr(1, Message, Space$(1), vbBinaryCompare)
                 
                 ' ...
-                If (Len(Message) > 1) Then
-                    ' ...
-                    spaceIndex = InStr(1, Message, Space$(1), vbBinaryCompare)
-                    
-                    ' ...
-                    If (spaceIndex) Then
-                        cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 2))
-                    Else
-                        cmdName = LCase$(Mid$(Message, 2))
-                    End If
-                
-                    ' ...
-                    Select Case (cmdName)
-                        Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
-                        Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
-                        Case "who":       msg_priority = PRIORITY.SPECIAL_MESSAGE
-                        Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "unban":     msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                        Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
-                    End Select
+                If (spaceIndex) Then
+                    cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 2))
+                Else
+                    cmdName = LCase$(Mid$(Message, 2))
                 End If
             End If
+            
+            ' ...
+            Select Case (cmdName)
+                Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
+                Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
+                Case "who":       msg_priority = PRIORITY.SPECIAL_MESSAGE
+                Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                Case "unban":     msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
+                Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
+            End Select
         End If
         
         ' ...
@@ -6813,7 +6813,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     End If
     
     s = ReadCFG(OT, "Mail")
-    If s = "Y" Then mail = True Else mail = False
+    If s = "N" Then mail = False Else mail = True
     
 '    s = ReadCFG(OT, "DisableMonitor")
 '    If s = "Y" Then DisableMonitor = True Else DisableMonitor = False

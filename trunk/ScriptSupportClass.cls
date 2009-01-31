@@ -316,9 +316,9 @@ Public Sub AddQ(ByVal sText As String, Optional ByVal msg_priority As Integer = 
     Call frmChat.AddQ(sText, msg_priority, g_lastQueueUser, Tag)
     
     '// ...
-    If (g_lastQueueUser <> vbNullString) Then
-        g_lastQueueUser = vbNullString
-    End If
+    'If (g_lastQueueUser <> vbNullString) Then
+    '    g_lastQueueUser = vbNullString
+    'End If
 End Sub
 
 
@@ -1228,15 +1228,15 @@ Public Sub Dsp(ByVal intID As Integer, ByVal strMessage As String, Optional ByVa
 
     Select Case intID
         Case 1
-            AddQ strMessage
+            Me.AddQ strMessage
         Case 2
-            AddQ "/me " & strMessage
+            Me.AddQ "/me " & strMessage
         Case 3
             If Len(strUsername) = 0 Then
                 AddChat vbRed, "Dsp whisper error: You did not supply a username."
                 Exit Sub
             End If
-            AddQ "/w " & strUsername & " " & strMessage
+            Me.AddQ "/w " & strUsername & " " & strMessage
         Case 4
             AddChat lngColor, strMessage
     End Select

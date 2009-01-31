@@ -1600,7 +1600,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     Dim strCompare    As String
     Dim I             As Integer
     Dim ColIndex      As Integer
-    Dim b             As Boolean
+    Dim B             As Boolean
     Dim ToANSI        As String
     Dim BanningUser   As Boolean
     Dim UsernameColor As Long ' ...

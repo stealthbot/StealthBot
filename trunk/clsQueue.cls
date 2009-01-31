@@ -65,13 +65,13 @@ Public Function Push(ByRef obj As clsQueueOBj)
         ' ...
         ReDim Preserve m_QueueObjs(0 To m_objCount)
     End If
-    
+
     ' ...
     If (Index >= m_objCount) Then
         Set m_QueueObjs(m_objCount) = obj
     Else
         ' ...
-        For I = Index + 1 To m_objCount
+        For I = m_objCount To Index + 1 Step -1
             Set m_QueueObjs(I) = m_QueueObjs(I - 1)
         Next I
         
