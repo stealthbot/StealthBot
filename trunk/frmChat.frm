@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -5077,8 +5077,8 @@ theEnd:
             Case KEY_SPACE
                 With cboSend
                     If (LenB(LastWhisper) > 0) Then
-                        If (Len(.text) >= 2) Then
-                            If StrComp(Left$(.text, 2), "/r", vbTextCompare) = 0 Then
+                        If (Len(.text) >= 3) Then
+                            If StrComp(Left$(.text, 3), "/r ", vbTextCompare) = 0 Then
                                 .SelStart = 0
                                 .SelLength = Len(.text)
                                 .SelText = "/w " & LastWhisper
@@ -5086,8 +5086,8 @@ theEnd:
                             End If
                         End If
                         
-                        If (Len(.text) >= 3) Then
-                            If StrComp(Left$(.text, 3), "/rw", vbTextCompare) = 0 Then
+                        If (Len(.text) >= 4) Then
+                            If StrComp(Left$(.text, 4), "/rw ", vbTextCompare) = 0 Then
                                 .SelStart = 0
                                 .SelLength = Len(.text)
                                 
@@ -5101,8 +5101,8 @@ theEnd:
                             End If
                         End If
                         
-                        If (Len(.text) >= 6) Then
-                            If StrComp(Left$(.text, 6), "/reply", vbTextCompare) = 0 Then
+                        If (Len(.text) >= 7) Then
+                            If StrComp(Left$(.text, 7), "/reply ", vbTextCompare) = 0 Then
                                 .SelStart = 0
                                 .SelLength = Len(.text)
                                 .SelText = "/w " & LastWhisper
