@@ -83,6 +83,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
     
     Path = GetGamePath(BotVars.Product)
     ClientToken = GetTickCount()
+    ds.SetGTC ClientToken
     
     Select Case BotVars.Product
         Case "VD2D", "PX2D"
@@ -246,7 +247,7 @@ Public Sub Send0x3A(ByVal ServerToken As Long)
     
     With PBuffer
         .InsertDWord ds.GetGTC
-        .InsertDWord ds.GetServerToken
+        .InsertDWord ServerToken
         .InsertNonNTString PasswordHash
         .InsertNTString g_username
         .SendPacket &H3A

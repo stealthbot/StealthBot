@@ -446,6 +446,10 @@ Private Sub Send_BNLS0x51()
     Dim KeyHash As String       ' CDKey hash
     Dim Value1 As Long          ' CDKey Value 1
     Dim ProductID As Long       ' CDKey Product ID
+    Dim ClientToken As Long
+    
+    ClientToken = GetTickCount()
+    ds.SetGTC ClientToken
     
     With PBuffer
         .InsertDWord ds.GetGTC
@@ -474,9 +478,9 @@ Private Sub Send_BNLS0x51()
         .InsertNonNTString KeyHash
         
         'Add warden support
-        If BotVars.Product = "RATS" Or BotVars.Product = "PXES" Then
-            modWarden.InitializeWarden Mid$(ds.GetKeyHash(1), 17, 4)
-        End If
+        'If BotVars.Product = "RATS" Or BotVars.Product = "PXES" Then
+        '    modWarden.InitializeWarden Mid$(ds.GetKeyHash(1), 17, 4)
+        'End If
         
         If ((BotVars.Product = "PX2D") Or _
             (BotVars.Product = "PX3W")) Then
