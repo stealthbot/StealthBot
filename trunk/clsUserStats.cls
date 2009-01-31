@@ -907,7 +907,7 @@ Public Property Get IconCode() As Integer
         Case "WAR3"
             
             ' ...
-            If (BotVars.ShowStatsIcons) Then
+            If ((BotVars.ShowStatsIcons) And (LenB(Statstring) > 0)) Then
                 ' ...
                 IconCode = _
                     GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), _
@@ -925,7 +925,7 @@ Public Property Get IconCode() As Integer
         Case "W3XP"
             
             ' ...
-            If (BotVars.ShowStatsIcons) Then
+            If ((BotVars.ShowStatsIcons) And (LenB(Statstring) > 0)) Then
                 ' ...
                 IconCode = _
                     GetRaceAndIcon(Val(Mid$(Icon(), 1, 1)), Mid$(Icon(), 2, 1), StrReverse$(game), _

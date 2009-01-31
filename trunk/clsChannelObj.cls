@@ -370,7 +370,7 @@ Public Function IsOnRecentBanList(ByVal Username As String, Optional Operator As
         
             ' ...
             If (bln) Then
-                frmChat.AddChat vbYellow, DateDiff("s", Banlist(I).DateOfBan, UtcNow)
+                'frmChat.AddChat vbYellow, DateDiff("s", Banlist(I).DateOfBan, UtcNow)
             
                 ' ...
                 If (DateDiff("s", Banlist(I).DateOfBan, UtcNow) <= 3) Then
@@ -390,7 +390,7 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
 
     Dim I    As Integer ' ...
     Dim bln  As Boolean ' ...
-    Dim pos  As Integer ' ...
+    Dim Pos  As Integer ' ...
     Dim Name As String  ' ...
     
     ' ...
@@ -414,11 +414,11 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
                     Banlist.Remove I
                     
                     ' ...
-                    pos = IsOnBanList(Name)
+                    Pos = IsOnBanList(Name)
                     
                     ' ...
-                    If (pos > 0) Then
-                        Banlist(pos).IsDuplicateBan = False
+                    If (Pos > 0) Then
+                        Banlist(Pos).IsDuplicateBan = False
                     End If
                     
                     ' ...
@@ -428,7 +428,7 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
                     Exit For
                 Else
                     ' ...
-                    Banlist(pos).IsActive = False
+                    Banlist(Pos).IsActive = False
                 End If
             End If
         Next I
