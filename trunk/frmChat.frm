@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1154,9 +1154,11 @@ Begin VB.Form frmChat
       Caption         =   "&Window"
       Begin VB.Menu mnuToggle 
          Caption         =   "&Toggle Join/Leave Messages"
+         Shortcut        =   ^J
       End
       Begin VB.Menu mnuHideBans 
          Caption         =   "Hide& Ban Messages"
+         Shortcut        =   ^H
       End
       Begin VB.Menu mnuLock 
          Caption         =   "To&ggle Chat Window Lock"
@@ -1201,9 +1203,11 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuClear 
          Caption         =   "&Clear Chat Window"
+         Shortcut        =   {DEL}
       End
       Begin VB.Menu mnuClearWW 
          Caption         =   "Cl&ear Whisper Window"
+         Shortcut        =   +{DEL}
       End
       Begin VB.Menu mnuSepD 
          Caption         =   "-"
@@ -1565,9 +1569,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
