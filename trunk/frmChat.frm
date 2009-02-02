@@ -4612,6 +4612,46 @@ End Sub
 
 Private Sub cboSend_KeyUp(KeyCode As Integer, Shift As Integer)
     RecordcboSendSelInfo
+    
+    Select Case (KeyCode)
+        Case KEY_SPACE
+            With cboSend
+                If (LenB(LastWhisper) > 0) Then
+                    If (Len(.text) >= 3) Then
+                        If StrComp(Left$(.text, 3), "/r ", vbTextCompare) = 0 Then
+                            .SelStart = 0
+                            .SelLength = Len(.text)
+                            .SelText = "/w " & LastWhisper
+                            .SelStart = Len(.text)
+                        End If
+                    End If
+                    
+                    If (Len(.text) >= 4) Then
+                        If StrComp(Left$(.text, 4), "/rw ", vbTextCompare) = 0 Then
+                            .SelStart = 0
+                            .SelLength = Len(.text)
+                            
+                            If StrComp(LastWhisperTo, "%f%") = 0 Then
+                                .SelText = "/f m"
+                            Else
+                                .SelText = "/w " & LastWhisperTo
+                            End If
+                            
+                            .SelStart = Len(.text)
+                        End If
+                    End If
+                    
+                    If (Len(.text) >= 7) Then
+                        If StrComp(Left$(.text, 7), "/reply ", vbTextCompare) = 0 Then
+                            .SelStart = 0
+                            .SelLength = Len(.text)
+                            .SelText = "/w " & LastWhisper
+                            .SelStart = Len(.text)
+                        End If
+                    End If
+                End If
+            End With
+    End Select
 End Sub
 
 Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
@@ -5026,11 +5066,11 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 'ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
                                 '
                                 '   m = Right(s, (Len(s) - 7))
-                                ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
-                                    m = Right(s, (Len(s) - 7))
-                                    
-                                    AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m), _
-                                        PRIORITY.CONSOLE_MESSAGE
+                                'ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
+                                '    m = Right(s, (Len(s) - 7))
+                                '
+                                '    AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m), _
+                                '        PRIORITY.CONSOLE_MESSAGE
                                     
                                 ElseIf (LCase(Left$(s, 9)) = "/profile ") Then
                                     If (sckBNet.State = 7) Then
@@ -5083,43 +5123,7 @@ theEnd:
                 
                 '########## end ENTER cases
             
-            Case KEY_SPACE
-                With cboSend
-                    If (LenB(LastWhisper) > 0) Then
-                        If (Len(.text) >= 3) Then
-                            If StrComp(Left$(.text, 3), "/r ", vbTextCompare) = 0 Then
-                                .SelStart = 0
-                                .SelLength = Len(.text)
-                                .SelText = "/w " & LastWhisper
-                                .SelStart = Len(.text)
-                            End If
-                        End If
-                        
-                        If (Len(.text) >= 4) Then
-                            If StrComp(Left$(.text, 4), "/rw ", vbTextCompare) = 0 Then
-                                .SelStart = 0
-                                .SelLength = Len(.text)
-                                
-                                If StrComp(LastWhisperTo, "%f%") = 0 Then
-                                    .SelText = "/f m"
-                                Else
-                                    .SelText = "/w " & LastWhisperTo
-                                End If
-                                
-                                .SelStart = Len(.text)
-                            End If
-                        End If
-                        
-                        If (Len(.text) >= 7) Then
-                            If StrComp(Left$(.text, 7), "/reply ", vbTextCompare) = 0 Then
-                                .SelStart = 0
-                                .SelLength = Len(.text)
-                                .SelText = "/w " & LastWhisper
-                                .SelStart = Len(.text)
-                            End If
-                        End If
-                    End If
-                End With
+            
         End Select
     End With
     
