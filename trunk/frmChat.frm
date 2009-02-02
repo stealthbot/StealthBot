@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1203,11 +1203,10 @@ Begin VB.Form frmChat
       End
       Begin VB.Menu mnuClear 
          Caption         =   "&Clear Chat Window"
-         Shortcut        =   {DEL}
+         Shortcut        =   +{DEL}
       End
       Begin VB.Menu mnuClearWW 
          Caption         =   "Cl&ear Whisper Window"
-         Shortcut        =   +{DEL}
       End
       Begin VB.Menu mnuSepD 
          Caption         =   "-"
@@ -1569,9 +1568,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5297,7 +5296,7 @@ Private Sub quLower_Timer()
         Next C
     End If
     
-    If unsquelching Then unsquelching = False
+    If Unsquelching Then Unsquelching = False
     
     Exit Sub
     
@@ -5377,7 +5376,7 @@ Private Sub QueueTimer_Timer()
                 (StrComp(Left$(Message, 10), "/unignore ", vbTextCompare) = 0)) Then
                 
                 ' ...
-                unsquelching = True
+                Unsquelching = True
             End If
 
             If ((QueueLoad < 3) And (QueueMaster < 16)) Then
