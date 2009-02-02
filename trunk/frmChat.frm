@@ -7170,11 +7170,11 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Exit Sub
 
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in ReloadConfig()."
-    
     If (Err.Number = 10049) Then
-        Resume Next
+        AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in ReloadConfig()."
     End If
+    
+    Resume Next
 End Sub
 
 'returns OK to Proceed
