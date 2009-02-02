@@ -8,8 +8,8 @@ Option Explicit
 
 ' ...
 Private m_TimerID    As Long
-Private m_QueueCount As Long
-Private m_QueueGTC   As Long
+'Private m_QueueCount As Long
+'Private m_QueueGTC   As Long
 
 ' ...
 Public Sub ChatQueue_Initialize()

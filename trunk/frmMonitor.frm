@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmMonitor 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -350,9 +350,8 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private StatusWatch() As Byte
-Private Sent() As Byte
-Attribute Sent.VB_VarHelpID = -1
+'Private StatusWatch() As Byte
+'Private Sent() As Byte
 
 Public Sub Shutdown()
   monConn.Disconnect
@@ -433,7 +432,7 @@ Private Sub cmdRem_CLick()
     
     If Not (lvMonitor.SelectedItem Is Nothing) Then
         Call monConn.RemoveUser(lvMonitor.SelectedItem.text)
-        lvMonitor.ListItems.Remove (lvMonitor.SelectedItem.index)
+        lvMonitor.ListItems.Remove (lvMonitor.SelectedItem.Index)
     End If
 End Sub
 
@@ -444,7 +443,7 @@ Public Function RemoveUser(strUser As String) As Boolean
   Set usrItem = lvMonitor.FindItem(strUser)
   If (usrItem Is Nothing) Then Exit Function
   Call monConn.RemoveUser(usrItem.text)
-  lvMonitor.ListItems.Remove usrItem.index
+  lvMonitor.ListItems.Remove usrItem.Index
   RemoveUser = True
 End Function
 
@@ -541,7 +540,7 @@ Private Sub txtAdd_KeyPress(KeyAscii As Integer)
     End If
 End Sub
 Private Sub UpdateList(user As clsFriendObj)
-    Dim X As ListItem, Holder As Integer, b As Byte
+    Dim X As ListItem, Holder As Integer ', B As Byte
     
     If InStr(1, user.game, "starcraft", vbTextCompare) <> 0 Then
         If InStr(1, user.game, "broodwar", vbTextCompare) <> 0 Then
@@ -586,7 +585,7 @@ Private Sub UpdateList(user As clsFriendObj)
             StatusOnline user.Name
             X.Icon = 1
         End If
-        With lvMonitor.ListItems(X.index)
+        With lvMonitor.ListItems(X.Index)
             On Error Resume Next
             .SmallIcon = Holder
             .ListSubItems.Clear
@@ -636,15 +635,15 @@ Sub StatusOnline(ByVal Username As String)
 End Sub
 
 Function GetStatusWatch(ByVal Username As String) As Byte
-    Dim X As Collection, i As Integer
+    Dim X As Collection, I As Integer
     
     Set X = monConn.getList
-    For i = 1 To X.Count
-        If (StrComp(Username, X.Item(i).Name, vbTextCompare) = 0) Then
-          GetStatusWatch = X.Item(i).Location
+    For I = 1 To X.Count
+        If (StrComp(Username, X.Item(I).Name, vbTextCompare) = 0) Then
+          GetStatusWatch = X.Item(I).Location
           Exit Function
         End If
-    Next i
+    Next I
 End Function
 
 Function GetUserStatus(ByVal Username As String) As Integer

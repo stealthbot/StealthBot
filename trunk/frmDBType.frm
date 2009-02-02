@@ -1,11 +1,12 @@
 VERSION 5.00
 Begin VB.Form frmDBType 
+   BackColor       =   &H00000000&
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Database Type"
-   ClientHeight    =   855
+   ClientHeight    =   900
    ClientLeft      =   45
    ClientTop       =   315
-   ClientWidth     =   2055
+   ClientWidth     =   2160
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -18,20 +19,22 @@ Begin VB.Form frmDBType
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   855
-   ScaleWidth      =   2055
+   ScaleHeight     =   900
+   ScaleWidth      =   2160
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
    Begin VB.CommandButton btnSave 
       Caption         =   "OK"
       Height          =   300
       Index           =   1
-      Left            =   1080
+      Left            =   120
       TabIndex        =   1
       Top             =   480
-      Width           =   855
+      Width           =   975
    End
    Begin VB.ComboBox cbxChoice 
+      BackColor       =   &H00993300&
+      ForeColor       =   &H00FFFFFF&
       Height          =   315
       ItemData        =   "frmDBType.frx":0000
       Left            =   120
@@ -39,15 +42,15 @@ Begin VB.Form frmDBType
       Style           =   2  'Dropdown List
       TabIndex        =   0
       Top             =   120
-      Width           =   1815
+      Width           =   1935
    End
    Begin VB.CommandButton btnDelete 
       Caption         =   "Cancel"
       Height          =   300
-      Left            =   240
+      Left            =   1080
       TabIndex        =   2
       Top             =   480
-      Width           =   855
+      Width           =   975
    End
 End
 Attribute VB_Name = "frmDBType"

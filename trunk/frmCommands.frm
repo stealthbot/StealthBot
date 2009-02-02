@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmCommands 
    BackColor       =   &H00000000&
    BorderStyle     =   3  'Fixed Dialog
@@ -280,7 +280,7 @@ ErrorHandler:
     
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
     Set m_CommandsDoc = Nothing
 End Sub
 

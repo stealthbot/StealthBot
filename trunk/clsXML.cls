@@ -81,7 +81,7 @@ Public Sub WriteNode(ByRef temp As IXMLDOMNode, Optional ByVal Spaces As Integer
     End If
 
     ' ...
-    If (temp.nodeType = NODE_DOCUMENT) Then
+    If (temp.NodeType = NODE_DOCUMENT) Then
         ' ..
         Set xml_doc = temp
 
@@ -93,7 +93,7 @@ Public Sub WriteNode(ByRef temp As IXMLDOMNode, Optional ByVal Spaces As Integer
     End If
     
     ' ...
-    If (temp.nodeType = NODE_ELEMENT) Then
+    If (temp.NodeType = NODE_ELEMENT) Then
         ' ...
         m_fs.Write Space$(Spaces)
         m_fs.Write "<" & temp.nodeName
@@ -110,7 +110,7 @@ Public Sub WriteNode(ByRef temp As IXMLDOMNode, Optional ByVal Spaces As Integer
             Set tempList = temp.childNodes
             
             ' ...
-            For Count = 0 To tempList.length
+            For Count = 0 To tempList.Length
                 WriteNode tempList(Count), (Spaces + 2)
             Next
             
@@ -127,7 +127,7 @@ Public Sub WriteNode(ByRef temp As IXMLDOMNode, Optional ByVal Spaces As Integer
         End If
     Else
         ' ...
-        If (temp.nodeType = NODE_TEXT) Then
+        If (temp.NodeType = NODE_TEXT) Then
             WriteData temp, Spaces
         End If
     End If
@@ -159,7 +159,7 @@ End Sub
 ' ...
 Private Sub WriteData(ByRef temp As IXMLDOMNode, Optional ByVal Spaces As Integer = 0)
 
-    Dim tempNode As IXMLDOMNode
+    'Dim tempNode As IXMLDOMNode
 
     ' ...
     If (temp Is Nothing) Then
@@ -167,7 +167,7 @@ Private Sub WriteData(ByRef temp As IXMLDOMNode, Optional ByVal Spaces As Intege
     End If
     
     ' ...
-    If (temp.nodeType = NODE_TEXT) Then
+    If (temp.NodeType = NODE_TEXT) Then
         m_fs.WriteLine Space$(Spaces) & temp.text
     End If
 End Sub

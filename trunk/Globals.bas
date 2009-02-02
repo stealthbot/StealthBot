@@ -162,7 +162,7 @@ Public Dii As Boolean
 Public PPL As Boolean
 Public PPLRespondTo As String
 Public MyFlags As Long
-Public unsquelching As Boolean
+Public Unsquelching As Boolean
 Public BanCount As Integer
 Public g_lastQueueUser As String
 Public PassedClanMotdCheck As Boolean

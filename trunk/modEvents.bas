@@ -629,7 +629,7 @@ End Sub
 Public Sub Event_LogonEvent(ByVal Message As Byte, Optional ByVal ExtraInfo As String)
     Dim lColor       As Long
     Dim sMessage     As String
-    Dim UseExtraInfo As Boolean
+    'Dim UseExtraInfo As Boolean
 
     Select Case (Message)
         Case 0:
@@ -1298,7 +1298,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim I           As Long
     Dim temp        As Byte
     Dim Level       As Byte
-    Dim l           As Long
+    Dim L           As Long
     Dim Banned      As Boolean
     Dim f           As Integer
     Dim UserIndex   As Integer ' ...
@@ -1457,11 +1457,11 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
             
             If (mail) Then
-                l = GetMailCount(Username)
+                L = GetMailCount(Username)
                 
-                If (l > 0) Then
-                    frmChat.AddQ "/w " & Username & " You have " & l & _
-                        " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
+                If (L > 0) Then
+                    frmChat.AddQ "/w " & Username & " You have " & L & _
+                        " new message" & IIf(L = 1, "", "s") & ". Type !inbox to retrieve."
                 End If
             End If
         End If
@@ -1854,7 +1854,7 @@ Private Function CheckMessage(Username As String, Message As String) As Boolean
 End Function
 
 Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
-    Dim l As Long
+    'Dim L As Long
 
     Select Case (Message)
         Case 0:
@@ -1967,7 +1967,7 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
 End Sub
 
 Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long)
-    Dim s       As String
+    'Dim s       As String
     Dim lCarats As Long
     Dim WWIndex As Integer
     Dim ToANSI  As String
@@ -1996,8 +1996,8 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
     If (0 = 0) Then
         If (Not (CheckBlock(Username))) Then
             LastWhisper = Username
-
             LastWhisperFromTime = Now
+            
         End If
         
         If (Catch(0) <> vbNullString) Then
@@ -2260,20 +2260,20 @@ Public Function CleanUsername(ByVal Username As String) As String
     
 End Function
 
-Private Function GetDiablo2CharacterName(ByVal Username As String) As String
-
-    Dim tmp As String  ' ...
-    Dim Pos As Integer ' ...
-    
-    ' ...
-    Pos = InStr(1, Username, "*", vbBinaryCompare)
-
-    ' ...
-    If (Pos > 0) Then
-        tmp = Mid$(Username, 1, Pos - 1)
-    End If
-    
-    ' ...
-    GetDiablo2CharacterName = tmp
-
-End Function
+'Private Function GetDiablo2CharacterName(ByVal Username As String) As String
+'
+'    Dim tmp As String  ' ...
+'    Dim Pos As Integer ' ...
+'
+'    ' ...
+'    Pos = InStr(1, Username, "*", vbBinaryCompare)
+'
+'    ' ...
+'    If (Pos > 0) Then
+'        tmp = Mid$(Username, 1, Pos - 1)
+'    End If
+'
+'    ' ...
+'    GetDiablo2CharacterName = tmp
+'
+'End Function

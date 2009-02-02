@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.0#0"; "vbalTreeView6.ocx"
 Begin VB.Form frmSettings 
    BackColor       =   &H00000000&
@@ -4267,7 +4267,7 @@ Private Sub cmdWebsite_Click()
     Call frmChat.mnuHelpWebsite_Click
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Private Sub Form_Unload(cancel As Integer)
     Call frmChat.DeconstructSettings
     Set colProfiles = Nothing
 End Sub
@@ -4329,7 +4329,7 @@ Private Sub WINI(ByVal sKey As String, ByVal sVal As String, ByVal Section As en
 End Sub
 
 Private Function DoCDKeyLengthCheck(ByVal sKey As String, ByVal sProd As String) As Boolean
-    Dim DesiredLen As Integer
+    'Dim DesiredLen As Integer
     
     sKey = CDKeyReplacements(sKey)
     
@@ -4720,10 +4720,10 @@ End Sub
 
 Private Sub cmdExport_Click()
     With cDLG
-        .Filename = vbNullString
+        .filename = vbNullString
         .ShowSave
-        If .Filename <> vbNullString Then
-            SaveColors .Filename
+        If .filename <> vbNullString Then
+            SaveColors .filename
             MsgBox "ColorList exported.", vbOKOnly
         End If
     End With
@@ -4731,10 +4731,10 @@ End Sub
 
 Private Sub cmdImport_Click()
     With cDLG
-        .Filename = vbNullString
+        .filename = vbNullString
         .ShowOpen
-        If .Filename <> vbNullString Then
-            GetColorLists (.Filename)
+        If .filename <> vbNullString Then
+            GetColorLists (.filename)
             cboColorList.Clear
             Call Form_Load
         End If
@@ -5133,7 +5133,7 @@ Private Sub InitBasicConfig()
 End Sub
 
 Private Sub InitGenMod()
-    Dim s As String
+    'Dim s As String
     
     chkPhrasebans.Value = YesToTrue(ReadCFG(OT, "Phrasebans"), 1)
     chkIPBans.Value = YesToTrue(ReadCFG(OT, "IPBans"), 0)

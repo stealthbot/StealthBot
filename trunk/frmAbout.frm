@@ -297,6 +297,9 @@ Private Sub Form_Load()
     AddLine "The list of current StealthBot project contributors can be found at"
     AddLine "-> http://contributors.stealthbot.net <-"
     AddCrLf
+    AddLine "StealthBot is updated and maintained by a team of developers who mostly volunteer their time."
+    AddLine "-> The current list of developers can be found at http://devteam.stealthbot.net."
+    AddCrLf
     AddLine "All Blizzard copyrights are (c) 1996-2007 Blizzard Entertainment."
     AddLine "For a detailed listing of Blizzard copyrights, please visit"
     AddLine "  http://www.blizzard.com/copyright.shtml"
@@ -306,30 +309,26 @@ Private Sub Form_Load()
     AddLine "- Grok[vL] - AddChat and DebugOutput are invaluable"
     AddLine "- Skywing[vL] and Yoni[vL] for their development and maintenance of the BNLS system"
     AddLine "- Hdx for his maintenance of the JBLS server at jbls.org"
-    AddLine "- API information from NSDN for Winamp features"
-    AddLine "- Barumonk and Pr0pHeT]ZeR0[ for their help during my struggle with 0x51 :)"
+    AddLine "- Barumonk and Pr0pHeT]ZeR0["
+    AddLine "- The staff and users at StealthBot.net for their continued support"
     AddCrLf
-    AddLine "- 6th period Intro to Programming, sophomore year in high school, and my teacher Mr. P"
+    AddLine "- 6th period Intro to Programming, sophomore year in high school (2002), and my teacher Mr. P"
     AddCrLf
     AddLine "- Thanks to all of my beta testers and people who suggested features to me -- StealthBot wouldn't be possible without you, you know who you are"
     AddLine "- Thanks to Retain, Jack, Hdx, and Berzerker, for their long lists of suggestions and bug reports"
     AddLine "- Thanks to UserLoser and Eric for their help with Diablo II Realm-related things"
+    AddLine "- Thanks to PhiX for his excellent continued support help on StealthBot.net"
     AddCrLf
     AddLine "- My website administrators, liQuid, MetaLMilitiA and Eric for their continued help in managing the stealthbot.net forums"
     AddLine "- Eric, DaRk-FeAnOr and Ethereal for their help regarding Warcraft III"
     AddLine "- Arta[vL]'s BNetDocs and BNU-Camel's OpenBNetDocs wiki, as references for all things BNCS-related"
-    AddCrLf
-    AddLine "- InternationaL, for his help with the CHM readme"
-    AddCrLf
     AddLine "- LW-Killbound for the splash screen image"
-    AddLine "- ZeKe for getting me the account Stealth@USEast"
-    AddLine "- Thanks to Jake and Marc for getting me Stealth@Azeroth"
     AddCrLf
     AddLine "- And, an extra-special thanks to:"
     AddLine "-> The tech support people on StealthBot.net and in Clan SBS, for giving their time"
     AddLine "-> The people who have donated to the StealthBot project - you can find a current list at http://contributors.stealthbot.net - THANK YOU!"
                              
-    lblBottom.Caption = "(c)2002-2007 Andy T (" & Chr(34) & "Stealth@USEast" & Chr(34) & ") - All Rights Reserved." & vbCrLf & "Use of this program is subject to the License Agreement found at http://eula.stealthbot.net."
+    lblBottom.Caption = "(c)2002-2009 Andy T (""AndyT@USEast"") - all rights reserved." & vbCrLf & "Use of this program is subject to the License Agreement found at http://eula.stealthbot.net."
 End Sub
 
 Private Sub AddLine(ByVal sIn As String)

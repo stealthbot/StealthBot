@@ -1,8 +1,6 @@
 Attribute VB_Name = "modOtherCode"
 Option Explicit
 
-Private Declare Function GetFILETIME Lib "Kernel32.dll" Alias "GetFileTime" (hFile As Integer, ftCreationTime As FILETIME, ftLastAccessTime As FILETIME, lastWriteTime As FILETIME) As Boolean
-
 Public Type COMMAND_DATA
     Name         As String
     params       As String
@@ -2538,7 +2536,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     Dim lineCount As Long    ' stores line number
     Dim Pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
-    Dim length    As Long    ' stores Length after LinePostfix
+    Dim Length    As Long    ' stores Length after LinePostfix
     Dim bln       As Boolean ' stores result of delimiter split
     
     ' initialize our array
@@ -2581,7 +2579,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' going to postfix it.  Because of this, we're
             ' going to have to calculate the Length after
             ' the postfix has been accounted for.
-            length = (SplitLength - Len(LinePostfix))
+            Length = (SplitLength - Len(LinePostfix))
         
             ' if we're going to be splitting the oversized
             ' message at a specified character, we need to
@@ -2590,7 +2588,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             If (OversizeDelimiter <> vbNullString) Then
                 ' grab position of delimiter character that is the closest to our
                 ' specified Length
-                Pos = InStrRev(strTmp, OversizeDelimiter, length, vbTextCompare)
+                Pos = InStrRev(strTmp, OversizeDelimiter, Length, vbTextCompare)
             End If
             
             ' if the delimiter we were looking for was found,
@@ -2598,7 +2596,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((Pos) And (Pos >= Round(length / 2))) Then
+            If ((Pos) And (Pos >= Round(Length / 2))) Then
                 ' truncate message
                 strTmp = Mid$(strTmp, 1, Pos - 1)
                 
@@ -2608,7 +2606,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
                 bln = True
             Else
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, length)
+                strTmp = Mid$(strTmp, 1, Length)
             End If
             
             ' store truncated message in line
@@ -2981,7 +2979,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Static rtbWhispers_LoopCount As Integer ' ...
     
     Dim s              As String
-    Dim l              As Long
+    Dim L              As Long
     Dim lngVerticalPos As Long
     Dim Diff           As Long
     Dim I              As Integer
@@ -2989,7 +2987,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim f              As Integer
     Dim blUnlock       As Boolean
     Dim LogThis        As Boolean
-    Dim length         As Integer
+    Dim Length         As Integer
 
     ' *****************************************
     '              SANITY CHECKS
@@ -3018,11 +3016,11 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         End If
         
         ' ...
-        length = length + Len(KillNull(saElements(I + 1)))
+        Length = Length + Len(KillNull(saElements(I + 1)))
     Next I
     
     ' ...
-    If (length = 0) Then
+    If (Length = 0) Then
         Exit Sub
     End If
 
@@ -3168,19 +3166,19 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         
             If ((StrictIsNumeric(saElements(I))) And (Len(saElements(I + 1)) > 0)) Then
-                l = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
+                L = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
                 
-                While (l > 0)
-                    Mid$(saElements(I + 1), l + 1, 1) = "/"
+                While (L > 0)
+                    Mid$(saElements(I + 1), L + 1, 1) = "/"
                     
-                    l = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
+                    L = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
                 Wend
             
                 With rtb
                     .SelStart = Len(.text)
                     
                     ' store position of selection
-                    l = .SelStart
+                    L = .SelStart
                     
                     .SelLength = 0
                     .SelFontName = FontStr
@@ -3204,7 +3202,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         Next I
         
-        Call ColorModify(rtb, l)
+        Call ColorModify(rtb, L)
 
         If (blUnlock) Then
             rtb.Visible = True

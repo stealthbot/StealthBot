@@ -26,9 +26,9 @@ Option Explicit
 'Private Const WA_STOP        As Long = 40047 ' ...
 'Private Const WA_FADEOUTSTOP As Long = 40147 ' ...
 
-Private m_dbAccess     As udtGetAccessResponse
-Private m_username     As String  ' ...
-Private m_IsLocal      As Boolean ' ...
+'Private m_dbAccess     As udtGetAccessResponse
+'Private m_username     As String  ' ...
+'Private m_IsLocal      As Boolean ' ...
 Private m_WasWhispered As Boolean ' ...
 
 Public flood    As String ' ...?
@@ -432,7 +432,7 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
     Dim cmdName  As String  ' stores command name
     Dim msgData  As String  ' stores unparsed command parameters
     Dim blnNoCmd As Boolean ' stores result of command switch (true = no command found)
-    Dim I        As Integer ' loop counter
+    'Dim I        As Integer ' loop counter
     
     ' create single command data array element for safe bounds checking
     ' and to help aide in a reduction of command function overhead
@@ -6112,11 +6112,11 @@ End Function
 Public Function cache(ByVal Inpt As String, ByVal Mode As Byte, Optional ByRef Typ As String) As String
     Static s()  As String
     Static sTyp As String
-    Static bln  As Boolean
+    Static bChannelListFollows  As Boolean 'renamed this variable for clarity
     
     Dim I       As Integer
     
-    ' ...
+    ' Mode=255 means we're resetting to get ready for a sweepban. [ugly]-andy
     If (Mode = 255) Then
         ' ...
         ReDim s(0)
@@ -6125,36 +6125,34 @@ Public Function cache(ByVal Inpt As String, ByVal Mode As Byte, Optional ByRef T
         sTyp = Typ
         
         ' ...
-        bln = False
+        bChannelListFollows = False
     End If
     
-    ' ...
     If (InStr(1, LCase$(Inpt), "in channel ", vbTextCompare) <> 0) Then
-        bln = True
+        ' we weren't expecting a channel list, but we are now
+        bChannelListFollows = True
     Else
-        ' ...
-        If (bln = True) Then
-            ' ...
+        If (bChannelListFollows = True) Then
+            ' if we're expecting a channel list, process it
             Select Case (Mode)
-                ' ...
-                Case 0
-                    ' ...
+                Case 0 ' RETRIEVE
+                    ' Merge all the cache array items into one space-delimited string
                     For I = 0 To UBound(s)
                         cache = cache & Replace(s(I), ",", "") & Space(1)
                     Next I
         
-                    ' ...
+                    ' Clear the cache array
                     ReDim s(0)
                     
-                    ' ...
                     Typ = sTyp
                     
-                ' ...
-                Case 1
-                    ' ...
+                Case 1 ' ADD
+                    ' Expand the cache array out one value
                     ReDim Preserve s(UBound(s) + 1)
                     
-                    ' ...
+                    ' Add this item to the cache array
+                    ' With some extra processing for D2 realm characters...
+                    
                     s(UBound(s)) = Inpt
             End Select
         End If
@@ -6770,44 +6768,44 @@ Public Function ReversePrepareCheck(ByVal toCheck As String) As String
     ReversePrepareCheck = LCase$(toCheck)
 End Function
 
-Private Sub DBRemove(ByVal s As String)
-    Dim T()  As udtDatabase
-    
-    Dim I    As Integer
-    Dim C    As Integer
-    Dim n    As Integer
-    Dim temp As String
-    
-    s = LCase$(s)
-    
-    For I = LBound(DB) To UBound(DB)
-        If StrComp(DB(I).Username, s, vbTextCompare) = 0 Then
-            ReDim T(0 To UBound(DB) - 1)
-            For C = LBound(DB) To UBound(DB)
-                If C <> I Then
-                    T(n) = DB(C)
-                    n = n + 1
-                End If
-            Next C
-            
-            ReDim DB(UBound(T))
-            For C = LBound(T) To UBound(T)
-                DB(C) = T(C)
-            Next C
-            Exit Sub
-        End If
-    Next I
-    
-    n = FreeFile
-    
-    temp = GetFilePath("users.txt")
-    
-    Open temp For Output As #n
-        For I = LBound(DB) To UBound(DB)
-            Print #n, DB(I).Username & Space(1) & DB(I).Access & Space(1) & DB(I).Flags
-        Next I
-    Close #n
-End Sub
+'Private Sub DBRemove(ByVal s As String)
+'    Dim T()  As udtDatabase
+'
+'    Dim I    As Integer
+'    Dim C    As Integer
+'    Dim n    As Integer
+'    Dim temp As String
+'
+'    s = LCase$(s)
+'
+'    For I = LBound(DB) To UBound(DB)
+'        If StrComp(DB(I).Username, s, vbTextCompare) = 0 Then
+'            ReDim T(0 To UBound(DB) - 1)
+'            For C = LBound(DB) To UBound(DB)
+'                If C <> I Then
+'                    T(n) = DB(C)
+'                    n = n + 1
+'                End If
+'            Next C
+'
+'            ReDim DB(UBound(T))
+'            For C = LBound(T) To UBound(T)
+'                DB(C) = T(C)
+'            Next C
+'            Exit Sub
+'        End If
+'    Next I
+'
+'    n = FreeFile
+'
+'    temp = GetFilePath("users.txt")
+'
+'    Open temp For Output As #n
+'        For I = LBound(DB) To UBound(DB)
+'            Print #n, DB(I).Username & Space(1) & DB(I).Access & Space(1) & DB(I).Flags
+'        Next I
+'    Close #n
+'End Sub
 
 ' requires public
 Public Sub LoadDatabase()
@@ -7516,13 +7514,13 @@ Public Function DateCleanup(ByVal TDate As Date) As String
 End Function
 
 Private Function GetAccessINIValue(ByVal sKey As String, Optional ByVal Default As Long) As Long
-    Dim s As String, l As Long
+    Dim s As String, L As Long
     
     s = ReadINI("Numeric", sKey, "access.ini")
-    l = Val(s)
+    L = Val(s)
     
-    If l > 0 Then
-        GetAccessINIValue = l
+    If L > 0 Then
+        GetAccessINIValue = L
     Else
         If Default > 0 Then
             GetAccessINIValue = Default
@@ -7658,56 +7656,57 @@ Public Function convertUsername(ByVal Username As String) As String
     If (Len(Username) < 1) Then
         convertUsername = Username
     
-        Exit Function
-    End If
-
-    If ((StrReverse$(BotVars.Product) = "D2DV") Or _
-            (StrReverse$(BotVars.Product) = "D2XP")) Then
+    Else
         
-        If ((BotVars.UseGameConventions = False) Or _
-                ((BotVars.UseD2GameConventions = False))) Then
-           
-            Index = InStr(1, Username, "*", vbBinaryCompare)
-        
-            If (Index > 0) Then
-                convertUsername = Mid$(Username, Index + 1)
-            Else
-                convertUsername = Username
-            End If
-        Else
-            Index = InStr(1, Username, "*", vbBinaryCompare)
-        
-            If (Index > 1) Then
-                convertUsername = Left$(Username, Index - 1)
-            Else
-                convertUsername = Username
-            End If
-        End If
-    ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
-                (StrReverse$(BotVars.Product) = "W3XP")) Then
+        If ((StrReverse$(BotVars.Product) = "D2DV") Or _
+                (StrReverse$(BotVars.Product) = "D2XP")) Then
             
-        If ((BotVars.UseGameConventions = False)) Or _
-                ((BotVars.UseW3GameConventions = False)) Then
-
-            If (BotVars.Gateway <> vbNullString) Then
-                Select Case (BotVars.Gateway)
-                    Case "Lordaeron": Index = InStr(1, Username, "@USWest", vbTextCompare)
-                    Case "Azeroth":   Index = InStr(1, Username, "@USEast", vbTextCompare)
-                    Case "Kalimdor":  Index = InStr(1, Username, "@Asia", vbTextCompare)
-                    Case "Northrend": Index = InStr(1, Username, "@Europe", vbTextCompare)
-                End Select
-                
+            If ((BotVars.UseGameConventions = False) Or _
+                    ((BotVars.UseD2GameConventions = False))) Then
+               
+                Index = InStr(1, Username, "*", vbBinaryCompare)
+            
+                If (Index > 0) Then
+                    convertUsername = Mid$(Username, Index + 1)
+                Else
+                    convertUsername = Username
+                End If
+            Else
+                Index = InStr(1, Username, "*", vbBinaryCompare)
+            
                 If (Index > 1) Then
                     convertUsername = Left$(Username, Index - 1)
                 Else
-                    convertUsername = Username & "@" & BotVars.Gateway
+                    convertUsername = Username
+                End If
+            End If
+            
+        ElseIf ((StrReverse$(BotVars.Product) = "WAR3") Or _
+                    (StrReverse$(BotVars.Product) = "W3XP")) Then
+                
+            If ((BotVars.UseGameConventions = False)) Or _
+                    ((BotVars.UseW3GameConventions = False)) Then
+    
+                If (BotVars.Gateway <> vbNullString) Then
+                    Select Case (BotVars.Gateway)
+                        Case "Lordaeron": Index = InStr(1, Username, "@USWest", vbTextCompare)
+                        Case "Azeroth":   Index = InStr(1, Username, "@USEast", vbTextCompare)
+                        Case "Kalimdor":  Index = InStr(1, Username, "@Asia", vbTextCompare)
+                        Case "Northrend": Index = InStr(1, Username, "@Europe", vbTextCompare)
+                    End Select
+                    
+                    If (Index > 1) Then
+                        convertUsername = Left$(Username, Index - 1)
+                    Else
+                        convertUsername = Username & "@" & BotVars.Gateway
+                    End If
                 End If
             End If
         End If
-    End If
-    
-    If (convertUsername = vbNullString) Then
-        convertUsername = Username
+        
+        If (convertUsername = vbNullString) Then
+            convertUsername = Username
+        End If
     End If
 End Function
 

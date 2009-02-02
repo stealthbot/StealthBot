@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmRealm 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -738,7 +738,7 @@ End Sub
 
 Private Sub MCPHandler_CharListEntry(ByVal CharName As String, ByVal Statstring As String, ByVal ExpirationDate As Date)
     Dim sOut As String
-    Dim Hardcore As Boolean, Ladder As Boolean, Dead As Boolean, Expired As Boolean, Expansion As Boolean
+    Dim Hardcore As Boolean, Ladder As Boolean, Dead As Boolean, Expired As Boolean ', Expansion As Boolean
     Dim IsExpansion As Boolean
     Dim Level As Byte, ClassByte As Byte
     Dim Class As String

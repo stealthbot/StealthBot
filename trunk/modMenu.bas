@@ -138,13 +138,13 @@ End Sub
 Public Function GetMenuFlags(ByVal MenuID As Long, ByVal MenuCommandID As Long) As Long
     Const MIIM_STATE As Long = &H1&
 
-    Dim l As Long
+    Dim L As Long
     Dim MII As MENUITEMINFO
     
     MII.cbSize = LenB(MII)
     MII.fMask = MIIM_STATE
     
-    l = GetMenuItemInfo(MenuID, MenuCommandID, False, MII)
+    L = GetMenuItemInfo(MenuID, MenuCommandID, False, MII)
     
     GetMenuFlags = MII.fState
 End Function
@@ -550,17 +550,17 @@ End Function
 '  Returns 1 if the item was previously checked, 0 if it was unchecked, and -1 if the menu item doesn't exist.
 Public Function SetMenuCheck(ByVal lMenuHandle As Long, ByVal lMenuCommandID As Long, ByVal bNewCheckState As Boolean) As Long
     
-    Dim l As Long
+    Dim L As Long
     
-    l = CheckMenuItem(lMenuHandle, lMenuCommandID, IIf(bNewCheckState, MF_CHECKED, MF_UNCHECKED))
+    L = CheckMenuItem(lMenuHandle, lMenuCommandID, IIf(bNewCheckState, MF_CHECKED, MF_UNCHECKED))
     
     DrawMenuBar frmChat.hWnd
     
-    If (l And MF_CHECKED) = MF_CHECKED Then
-        l = 1
+    If (L And MF_CHECKED) = MF_CHECKED Then
+        L = 1
     End If
     
-    SetMenuCheck = l
+    SetMenuCheck = L
     
 End Function
 
@@ -569,11 +569,11 @@ End Function
 'Written by Andy. Toggles whether or not a menu item is grayed out.
 Public Sub SetMenuEnabled(ByVal lMenuHandle As Long, ByVal lMenuCommandID As Long, ByVal bNewEnabledState As Boolean)
     
-    Dim l As Long
+    Dim L As Long
     Dim s As String
     
     s = GetMenuCaptionByCommand(frmChat.hWnd, lMenuCommandID)
-    l = ModifyMenu(lMenuHandle, lMenuCommandID, IIf(bNewEnabledState, MF_STRING, MF_GRAYED), lMenuCommandID, s)
+    L = ModifyMenu(lMenuHandle, lMenuCommandID, IIf(bNewEnabledState, MF_STRING, MF_GRAYED), lMenuCommandID, s)
     
     DrawMenuBar frmChat.hWnd
     
@@ -651,7 +651,7 @@ End Sub
 'deletes any orphaned parents.
 Public Sub DeleteMenuItem(ByVal hMenuBar As Long, hDeleteMenu As Long, _
                                                        lngDeletePosition As Long)
-  Dim lngItemCount As Long
+  'Dim lngItemCount As Long
   Dim hParentMenu As Long
   Dim lngParentPosition As Long
   Dim bDeleteParent As Boolean
@@ -680,17 +680,17 @@ End Sub
 '   Modified by Swent 1/16/08
 Public Sub DeleteMenuItemByID(ByVal lId As Long)
     Dim hMenuBar As Long
-    Dim l As Long
+    Dim L As Long
     Dim lngParentPosition As Long
-    Dim hParentMenu As Long
+    'Dim hParentMenu As Long
     
     hMenuBar = GetMenu(frmChat.hWnd)
     
-    l = GetMenuItemCount(lId)
+    L = GetMenuItemCount(lId)
     
-    For l = 0 To l
+    For L = 0 To L
         DeleteMenuItem ScriptMenu_ParentID, lId, lngParentPosition
-    Next l
+    Next L
 End Sub
 
 

@@ -209,8 +209,8 @@ Private Type Timer
     Interval As Integer
 End Type
 
-Private Timers     As Collection
-Private TimerCount As Integer
+'Private Timers     As Collection
+'Private TimerCount As Integer
 
 ' ...
 'Public Function setInterval(ScriptModule As Module, strCode As String, intInterval As Integer) As Integer
@@ -1025,7 +1025,7 @@ End Function
 '//     You will need to provide the clan tag separately by another GetInternalData() request
 '//         if you wish to use it in parsing
 Public Function DoStatstringParse(ByVal sStatstring As String, ByVal sClanTag As String) As String
-    Dim sBuffer As String
+    'Dim sBuffer As String
     Dim UserStats As clsUserStats
     
     'Call ParseStatstring(sStatstring, sBuffer, sClanTag)

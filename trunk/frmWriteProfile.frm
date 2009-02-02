@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Begin VB.Form frmProfile 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -26,7 +26,6 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
-      Enabled         =   -1  'True
       TextRTF         =   $"frmWriteProfile.frx":0CCA
    End
    Begin VB.CommandButton cmdDone 
@@ -56,7 +55,6 @@ Begin VB.Form frmProfile
       _ExtentY        =   4895
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmWriteProfile.frx":0D4C
@@ -81,7 +79,6 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
-      Enabled         =   -1  'True
       TextRTF         =   $"frmWriteProfile.frx":0DC7
    End
    Begin RichTextLib.RichTextBox rtbAge 
@@ -95,7 +92,6 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
-      Enabled         =   -1  'True
       TextRTF         =   $"frmWriteProfile.frx":0E49
    End
    Begin VB.Label Label5 
@@ -281,14 +277,3 @@ Private Sub rtbProfile_KeyPress(KeyAscii As Integer)
     Call Form_KeyPress(KeyAscii)
 End Sub
 
-Private Sub txtAge_KeyPress(KeyAscii As Integer)
-    Call Form_KeyPress(KeyAscii)
-End Sub
-
-Private Sub txtLoc_KeyPress(KeyAscii As Integer)
-    Call Form_KeyPress(KeyAscii)
-End Sub
-
-Private Sub txtSex_KeyPress(KeyAscii As Integer)
-    Call Form_KeyPress(KeyAscii)
-End Sub
