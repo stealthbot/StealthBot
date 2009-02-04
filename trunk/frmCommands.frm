@@ -209,7 +209,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private m_CommandsDoc As MSXML2.DOMDocument40
+Private m_CommandsDoc As DOMDocument40
 Private m_SelectedElement As SelectedElement
 
 '// Enums
@@ -222,14 +222,11 @@ End Enum
 '// Stores information about the selected node in the treeview
 Private Type SelectedElement
     TheNodeType As NodeType
-    TheXMLElement As MSXML2.IXMLDOMElement
+    TheXMLElement As IXMLDOMElement
     IsDirty As Boolean
     CommandName As String
     ArgumentName As String
     restrictionName As String
-    
-    
-    
 End Type
 
 '// 08/30/2008 JSM - Created
@@ -246,7 +243,7 @@ Private Sub Form_Load()
     On Error GoTo ErrorHandler
 
     '// Load commands.xml
-    Set m_CommandsDoc = New MSXML2.DOMDocument40
+    Set m_CommandsDoc = New DOMDocument40
     
     If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
         Exit Sub
@@ -286,9 +283,9 @@ End Sub
 
 '// Reads commands.xml and
 Private Sub PopulateTreeView()
-    Dim xmlCommand        As MSXML2.IXMLDOMNode
-    Dim xmlArgs           As MSXML2.IXMLDOMNodeList
-    Dim xmlArgRestricions As MSXML2.IXMLDOMNodeList
+    Dim xmlCommand        As IXMLDOMNode
+    Dim xmlArgs           As IXMLDOMNodeList
+    Dim xmlArgRestricions As IXMLDOMNodeList
 
     Dim nCommand          As node
     Dim nArg              As node
@@ -299,11 +296,11 @@ Private Sub PopulateTreeView()
     Dim restrictionName   As String
     
     '// 08/30/2008 JSM - used to get the first command alphabetically
-    Dim defaultNode       As MSComctlLib.node
+    Dim defaultNode       As IXMLDOMNode
     
     '// Counters
     Dim j                 As Integer
-    Dim I                 As Integer
+    Dim i                 As Integer
 
     '// reset the treeview
     trvCommands.Nodes.Clear
@@ -325,16 +322,16 @@ Private Sub PopulateTreeView()
         Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
         '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
         '//                  something, even if nothing matches the XPath expression.
-        For I = 0 To (xmlArgs.length - 1)
-            ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").text
+        For i = 0 To (xmlArgs.length - 1)
+            ArgumentName = xmlArgs(i).Attributes.getNamedItem("name").text
             Set nArg = trvCommands.Nodes.Add(nCommand, tvwChild, , ArgumentName)
-            Set xmlArgRestricions = xmlArgs(I).selectNodes("restrictions/restriction")
+            Set xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
             
             For j = 0 To (xmlArgRestricions.length - 1)
                 restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").text
                 Set nArgRestriction = trvCommands.Nodes.Add(nArg, tvwChild, , restrictionName)
             Next j
-        Next I
+        Next i
         
     Next
     
@@ -399,7 +396,7 @@ Private Sub trvCommands_NodeClick(ByVal node As MSComctlLib.node)
     Dim options() As Variant '// <-- boo
     
     Dim xpath As String
-    Dim xmlElement As MSXML2.IXMLDOMElement
+    Dim xmlElement As IXMLDOMElement
     
     '// This function will prompt the user to save changes if necessary. If the
     '// return value is false, then the use clicked cancel so we should gtfo of here.
@@ -475,10 +472,10 @@ End Function
 '// 08/30/2008 JSM - Created
 Private Sub SaveForm()
     
-    Dim xmlNode As MSXML2.IXMLDOMNode
-    Dim xmlNewNode As MSXML2.IXMLDOMNode
+    Dim xmlNode As IXMLDOMNode
+    Dim xmlNewNode As IXMLDOMNode
 
-    Dim I As Integer
+    Dim i As Integer
     
     With m_SelectedElement
         '// txtRank
@@ -487,13 +484,13 @@ Private Sub SaveForm()
             If xmlNode Is Nothing Then
                 Set xmlNode = .TheXMLElement.selectSingleNode("access")
                 If xmlNode Is Nothing Then
-                    Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "access", "")
+                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "access", "")
                     .TheXMLElement.appendChild xmlNewNode
                     Set xmlNode = xmlNewNode.cloneNode(True)
-                    Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "rank", "")
+                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "rank", "")
                     xmlNode.appendChild xmlNewNode
                 Else
-                    Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "rank", "")
+                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "rank", "")
                     xmlNode.appendChild xmlNewNode
                 End If
                 Set xmlNode = .TheXMLElement.selectSingleNode("access/rank")
@@ -507,13 +504,13 @@ Private Sub SaveForm()
             If xmlNode Is Nothing Then
                 Set xmlNode = .TheXMLElement.selectSingleNode("documentation")
                 If xmlNode Is Nothing Then
-                    Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "documentation", "")
+                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "documentation", "")
                     .TheXMLElement.appendChild xmlNewNode
                     Set xmlNode = xmlNewNode.cloneNode(True)
-                    Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "description", "")
+                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "description", "")
                     xmlNode.appendChild xmlNewNode
                 Else
-                    Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "description", "")
+                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "description", "")
                     xmlNode.appendChild xmlNewNode
                 End If
                 Set xmlNode = .TheXMLElement.selectSingleNode("documentation/description")
@@ -527,13 +524,13 @@ Private Sub SaveForm()
             If xmlNode Is Nothing Then
                 Set xmlNode = .TheXMLElement.selectSingleNode("documentation")
                 If xmlNode Is Nothing Then
-                    Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "documentation", "")
+                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "documentation", "")
                     .TheXMLElement.appendChild xmlNewNode
                     Set xmlNode = xmlNewNode.cloneNode(True)
-                    Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "specialnotes", "")
+                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "specialnotes", "")
                     xmlNode.appendChild xmlNewNode
                 Else
-                    Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "specialnotes", "")
+                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "specialnotes", "")
                     xmlNode.appendChild xmlNewNode
                 End If
                 Set xmlNode = .TheXMLElement.selectSingleNode("documentation/specialnotes")
@@ -546,11 +543,11 @@ Private Sub SaveForm()
             For Each xmlNode In .TheXMLElement.selectNodes("aliases/alias")
                 .TheXMLElement.selectSingleNode("aliases").removeChild xmlNode
             Next xmlNode
-            For I = 0 To cboAlias.ListCount - 1
-                Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "alias", "")
-                xmlNewNode.text = cboAlias.List(I)
+            For i = 0 To cboAlias.ListCount - 1
+                Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "alias", "")
+                xmlNewNode.text = cboAlias.List(i)
                 .TheXMLElement.selectSingleNode("aliases").appendChild xmlNewNode
-            Next I
+            Next i
         End If
         
         '// cboFlags
@@ -564,26 +561,26 @@ Private Sub SaveForm()
             '// make sue the access element exists
             Set xmlNode = .TheXMLElement.selectSingleNode("access")
             If xmlNode Is Nothing Then
-                Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "access", "")
+                Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "access", "")
                 .TheXMLElement.appendChild xmlNewNode
             End If
             
             Set xmlNode = .TheXMLElement.selectSingleNode("access/flags")
             If xmlNode Is Nothing Then
-                Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "access/flags", "")
+                Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "access/flags", "")
                 .TheXMLElement.appendChild xmlNewNode
             End If
 
             '// loop through cboFlags and add the text
-            For I = 0 To cboFlags.ListCount - 1
-                Set xmlNewNode = xmlNode.selectSingleNode("flag[text()='" & cboFlags.List(I) & "']")
+            For i = 0 To cboFlags.ListCount - 1
+                Set xmlNewNode = xmlNode.selectSingleNode("flag[text()='" & cboFlags.List(i) & "']")
                 
                 If (xmlNewNode Is Nothing) Then
-                    Set xmlNewNode = m_CommandsDoc.createNode(MSXML2.NODE_ELEMENT, "flag", "")
-                    xmlNewNode.text = cboFlags.List(I)
+                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "flag", "")
+                    xmlNewNode.text = cboFlags.List(i)
                     xmlNode.appendChild xmlNewNode
                 End If
-            Next I
+            Next i
         End If
         
         
@@ -610,9 +607,9 @@ End Sub
 '// When a node in the treeview is clicked, it should locate the XML element that was
 '// used to create the node and call this method to populate appropriate form controls.
 '// 08/29/2008 JSM - Created
-Private Sub PrepareForm(nt As NodeType, xmlElement As MSXML2.IXMLDOMElement)
+Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
     
-    Dim xmlNode As MSXML2.IXMLDOMNode
+    Dim xmlNode As IXMLDOMNode
     
     '// Reset controls
     Call ResetForm
@@ -786,7 +783,7 @@ End Sub
 
 '// 08/29/2008 JSM - Created
 Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
-    Dim I As Integer
+    Dim i As Integer
     
     '// Enter
     If KeyCode = 13 Then
@@ -798,12 +795,12 @@ Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
             Exit Sub
         End If
         '// Make sure its not already a flag
-        For I = 0 To cboFlags.ListCount - 1
-            If cboFlags.List(I) = cboFlags.text Then
+        For i = 0 To cboFlags.ListCount - 1
+            If cboFlags.List(i) = cboFlags.text Then
                 cboFlags.text = ""
                 Exit Sub
             End If
-        Next I
+        Next i
         
         '// If we made it this far, it should be safe to add it to the list
         cboFlags.AddItem cboFlags.text
@@ -813,16 +810,16 @@ Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
 
     '// Delete
     If KeyCode = 46 Then
-        For I = 0 To cboFlags.ListCount - 1
+        For i = 0 To cboFlags.ListCount - 1
             '// If the current text is already in the list, lets delete it. Otherwise,
             '// this code should behave like a normal delete keypress.
-            If cboFlags.List(I) = cboFlags.text Then
-                cboFlags.RemoveItem I
+            If cboFlags.List(i) = cboFlags.text Then
+                cboFlags.RemoveItem i
                 cboFlags.text = ""
                 Call FormIsDirty
                 Exit Sub
             End If
-        Next I
+        Next i
     End If
     
     
@@ -831,7 +828,7 @@ End Sub
 
 '// 08/29/2008 JSM - Created
 Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
-    Dim I As Integer
+    Dim i As Integer
     
     '// Enter
     If KeyCode = 13 Then
@@ -843,12 +840,12 @@ Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
             Exit Sub
         End If
         '// Make sure its not already an alias
-        For I = 0 To cboAlias.ListCount - 1
-            If cboAlias.List(I) = cboAlias.text Then
+        For i = 0 To cboAlias.ListCount - 1
+            If cboAlias.List(i) = cboAlias.text Then
                 cboAlias.text = ""
                 Exit Sub
             End If
-        Next I
+        Next i
             
         '// TODO: Make sure its not an alias for another command. Must loop through the
         '// m_CommandsDoc elements to get all aliases and make sure its unique. This logic
@@ -862,16 +859,16 @@ Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
     
     '// Delete
     If KeyCode = 46 Then
-        For I = 0 To cboAlias.ListCount - 1
+        For i = 0 To cboAlias.ListCount - 1
             '// If the current text is already in the list, lets delete it. Otherwise,
             '// this code should behave like a normal delete keypress.
-            If cboAlias.List(I) = cboAlias.text Then
-                cboAlias.RemoveItem I
+            If cboAlias.List(i) = cboAlias.text Then
+                cboAlias.RemoveItem i
                 cboAlias.text = ""
                 Call FormIsDirty
                 Exit Sub
             End If
-        Next I
+        Next i
     End If
     
 End Sub

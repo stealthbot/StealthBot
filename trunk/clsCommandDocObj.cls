@@ -33,7 +33,7 @@ Private m_enabled        As Boolean
 
 Private Sub Class_Initialize()
 
-    Set m_database = New MSXML2.DOMDocument40
+    Set m_database = New DOMDocument40
     Set m_params = New Collection
     Set m_aliases = New Collection
     
@@ -271,7 +271,7 @@ Private Function setAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Coll
 
     Dim Alias   As IXMLDOMNode
     Dim Aliases As IXMLDOMNodeList
-    Dim I       As Integer
+    Dim i       As Integer
     
     If (AnyNode Is Nothing) Then
         Exit Function
@@ -287,12 +287,12 @@ Private Function setAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Coll
         Next
     End If
     
-    For I = 1 To AliasCol.Count
+    For i = 1 To AliasCol.Count
         '// 09/03/2008 JSM - Modified code to use the <aliases> element
         Set Alias = _
             AnyNode.selectSingleNode("aliases").appendChild(m_database.createNode("element", "alias", vbNullString))
         
-        Alias.text = AliasCol(I)
+        Alias.text = AliasCol(i)
     Next
     
     Call Save
@@ -526,11 +526,11 @@ Private Function getFlags(ByRef AnyNode As IXMLDOMNode) As String
     
 End Function
 
-Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) As String
+Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal flags As String) As String
 
     Dim temp As IXMLDOMNode
     Dim flag As IXMLDOMNode
-    Dim I    As Integer
+    Dim i    As Integer
     
     If (AnyNode Is Nothing) Then
         Exit Function
@@ -545,11 +545,11 @@ Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) A
             temp.appendChild(m_database.createNode("element", "flags", vbNullString))
     End If
     
-    For I = 1 To Len(Flags)
+    For i = 1 To Len(flags)
         Set flag = temp.appendChild(m_database.createNode("element", "flag", vbNullString))
         
-        flag.text = Mid$(Flags, I, 1)
-    Next I
+        flag.text = Mid$(flags, i, 1)
+    Next i
     
     Call Save
     
