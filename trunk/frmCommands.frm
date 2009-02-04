@@ -296,7 +296,7 @@ Private Sub PopulateTreeView()
     Dim restrictionName   As String
     
     '// 08/30/2008 JSM - used to get the first command alphabetically
-    Dim defaultNode       As IXMLDOMNode
+    Dim defaultNode       As node
     
     '// Counters
     Dim j                 As Integer
