@@ -860,6 +860,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,7 +886,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4868,10 +4868,10 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     End With
                 End If
                 
-            Case KEY_J
-                If (Shift = S_CTRL) Then
-                    Call mnuToggle_Click
-                End If
+            'Case KEY_J
+            '    If (Shift = S_CTRL) Then
+            '        Call mnuToggle_Click
+            '    End If
                 
             Case KEY_U
                 If (Shift = S_CTRL) Then
