@@ -1569,9 +1569,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2269,6 +2269,9 @@ Public Sub FindAltBNLS()
             strBNLS() = Split(strReturn, vbLf)
             
             ' ...
+            ReDim Preserve strBNLS(0 To 1)
+            
+            ' ...
             If (strBNLS(1) = vbNullString) Then
                 ' ...
                 AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured when trying to locate an alternative BNLS server. " & _
@@ -2307,12 +2310,12 @@ Public Sub FindAltBNLS()
     ' ...
     If (StrComp(strBNLS(intCounter), firstServer, vbTextCompare) = 0) Then
         intCounter = intCounter + 1
-    End If
-    
-    If intCounter > UBound(strBNLS) Then
-        'All BNLS servers have been tried and failed
-        Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://stealthbot.net/ " & _
-            "and check the Technical Support forum for more information."
+        
+        If intCounter > UBound(strBNLS) Then
+            'All BNLS servers have been tried and failed
+            Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://stealthbot.net/ " & _
+                "and check the Technical Support forum for more information."
+        End If
     End If
     
     ' ...
