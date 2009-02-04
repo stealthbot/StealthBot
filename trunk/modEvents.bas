@@ -1394,9 +1394,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             
             ' ...
             Set UserStats = New clsUserStats
-            
-            'frmChat.AddChat vbRed, JoinMessagesOff
-            
+
             ' ...
             UserStats.Statstring = OriginalStatstring
         
@@ -1478,12 +1476,9 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         
         On Error Resume Next
-        
-        ' ...
+    
         frmChat.SControl.Run "Event_UserJoins", Username, Flags, UserObj.Stats.ToString, Ping, _
             Product, 0, OriginalStatstring, IsBanned
-            
-        Err.Clear
     End If
     
     Exit Sub

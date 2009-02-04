@@ -219,51 +219,51 @@ End Sub
 
 Public Property Get Self() As clsUserObj
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     ' ...
     Set Self = New clsUserObj
     
     ' ...
-    For I = 1 To Users.Count
+    For i = 1 To Users.Count
         ' ...
-        If (StrComp(Users(I).Name, CurrentUsername, vbTextCompare) = 0) Then
+        If (StrComp(Users(i).Name, CurrentUsername, vbTextCompare) = 0) Then
             ' ...
-            Set Self = Users(I)
+            Set Self = Users(i)
             
             ' ...
             Exit Property
         End If
-    Next I
+    Next i
 
 End Property
 
 Public Function GetUserIndexEx(ByVal AccountName As String, Optional SearchLimit As Integer = 0) As Integer
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
     
     ' ...
     AccountName = modEvents.CleanUsername(AccountName)
 
     ' ...
-    For I = 1 To Users.Count
+    For i = 1 To Users.Count
         ' ...
         If (SearchLimit > 0) Then
             ' ...
-            If (I >= SearchLimit) Then
+            If (i >= SearchLimit) Then
                 Exit For
             End If
         End If
     
         ' ...
-        If (StrComp(Users(I).Name, AccountName, vbTextCompare) = 0) Then
+        If (StrComp(Users(i).Name, AccountName, vbTextCompare) = 0) Then
             ' ...
-            GetUserIndexEx = I
+            GetUserIndexEx = i
             
             ' ...
             Exit Function
         End If
-    Next I
+    Next i
     
     ' ...
     GetUserIndexEx = 0
@@ -272,27 +272,27 @@ End Function
 
 Public Function GetUserIndex(ByVal Username As String, Optional SearchLimit As Integer = 0) As Integer
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     ' ...
-    For I = 1 To m_users.Count
+    For i = 1 To m_users.Count
         ' ...
         If (SearchLimit > 0) Then
             ' ...
-            If (I >= SearchLimit) Then
+            If (i >= SearchLimit) Then
                 Exit For
             End If
         End If
     
         ' ...
-        If (StrComp(m_users(I).DisplayName, Username, vbTextCompare) = 0) Then
+        If (StrComp(m_users(i).DisplayName, Username, vbTextCompare) = 0) Then
             ' ...
-            GetUserIndex = I
+            GetUserIndex = i
             
             ' ...
             Exit Function
         End If
-    Next I
+    Next i
     
     ' ...
     GetUserIndex = 0
@@ -308,20 +308,20 @@ End Property
 
 Public Function IsOnBanList(ByVal Username As String, Optional Operator As String = vbNullString) As Integer
 
-    Dim I   As Integer ' ...
+    Dim i   As Integer ' ...
     Dim bln As Boolean ' ...
     
     ' ...
     Username = CleanUsername(Username)
     
     ' ...
-    For I = 1 To Banlist.Count
+    For i = 1 To Banlist.Count
         ' ...
-        If (StrComp(Banlist(I).Name, Username, vbTextCompare) = 0) Then
+        If (StrComp(Banlist(i).Name, Username, vbTextCompare) = 0) Then
             ' ...
             If (Operator <> vbNullString) Then
                 ' ...
-                If (StrComp(Banlist(I).Operator, Operator, vbTextCompare) = 0) Then
+                If (StrComp(Banlist(i).Operator, Operator, vbTextCompare) = 0) Then
                     bln = True
                 End If
             Else
@@ -330,12 +330,12 @@ Public Function IsOnBanList(ByVal Username As String, Optional Operator As Strin
         
             ' ...
             If (bln) Then
-                IsOnBanList = I
+                IsOnBanList = i
                 
                 Exit Function
             End If
         End If
-    Next I
+    Next i
 
     IsOnBanList = 0
     
@@ -343,25 +343,25 @@ End Function
 
 Public Function IsOnRecentBanList(ByVal Username As String, Optional Operator As String = vbNullString) As Integer
 
-    Dim I   As Integer ' ...
+    Dim i   As Integer ' ...
     Dim bln As Boolean ' ...
     
     ' ...
     Username = CleanUsername(Username)
     
     ' ...
-    For I = Banlist.Count To (Banlist.Count - 5) Step -1
+    For i = Banlist.Count To (Banlist.Count - 5) Step -1
         ' ...
-        If (I <= 0) Then
+        If (i <= 0) Then
             Exit For
         End If
 
         ' ...
-        If (StrComp(Banlist(I).Name, Username, vbTextCompare) = 0) Then
+        If (StrComp(Banlist(i).Name, Username, vbTextCompare) = 0) Then
             ' ...
             If (Operator <> vbNullString) Then
                 ' ...
-                If (StrComp(Banlist(I).Operator, Operator, vbTextCompare) = 0) Then
+                If (StrComp(Banlist(i).Operator, Operator, vbTextCompare) = 0) Then
                     bln = True
                 End If
             Else
@@ -373,14 +373,14 @@ Public Function IsOnRecentBanList(ByVal Username As String, Optional Operator As
                 'frmChat.AddChat vbYellow, DateDiff("s", Banlist(I).DateOfBan, UtcNow)
             
                 ' ...
-                If (DateDiff("s", Banlist(I).DateOfBan, UtcNow) <= 3) Then
-                    IsOnRecentBanList = I
+                If (DateDiff("s", Banlist(i).DateOfBan, UtcNow) <= 3) Then
+                    IsOnRecentBanList = i
                 
                     Exit Function
                 End If
             End If
         End If
-    Next I
+    Next i
 
     IsOnRecentBanList = 0
     
@@ -388,7 +388,7 @@ End Function
 
 Public Sub RemoveBansFromOperator(ByVal Username As String)
 
-    Dim I    As Integer ' ...
+    Dim i    As Integer ' ...
     Dim bln  As Boolean ' ...
     Dim Pos  As Integer ' ...
     Dim Name As String  ' ...
@@ -402,16 +402,16 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
         bln = False
     
         ' ...
-        For I = 1 To Banlist.Count
+        For i = 1 To Banlist.Count
             ' ...
-            If (StrComp(Banlist(I).Operator, Username, vbTextCompare) = 0) Then
+            If (StrComp(Banlist(i).Operator, Username, vbTextCompare) = 0) Then
                 ' ...
-                Name = Banlist(I).Name
+                Name = Banlist(i).Name
             
                 ' ...
                 If (BotVars.RetainOldBans = False) Then
                     ' ...
-                    Banlist.Remove I
+                    Banlist.Remove i
                     
                     ' ...
                     Pos = IsOnBanList(Name)
@@ -431,7 +431,7 @@ Public Sub RemoveBansFromOperator(ByVal Username As String)
                     Banlist(Pos).IsActive = False
                 End If
             End If
-        Next I
+        Next i
     Loop While (bln = True)
 
 End Sub
@@ -446,7 +446,7 @@ Public Function CheckUser(Username As String, Optional ByRef CurrentUser As clsU
     ' ...
     If (Self.IsOperator) Then
         Dim DBEntry  As udtGetAccessResponse
-        Dim I        As Integer ' ...
+        Dim i        As Integer ' ...
         Dim Message  As String  ' ...
         
         ' ...
@@ -605,7 +605,7 @@ Public Function CheckUsers() As Integer
     If (Self.IsOperator) Then
         Dim CurrentUser As clsUserObj
         Dim DBEntry     As udtGetAccessResponse
-        Dim I           As Integer ' ...
+        Dim i           As Integer ' ...
         Dim Message     As String  ' ...
         Dim doCheck     As Boolean ' ...
         Dim HighRank    As Integer ' ...
@@ -618,9 +618,9 @@ Public Function CheckUsers() As Integer
         ' ...
         If (OperatorHeir = vbNullString) Then
             ' ...
-            For I = 1 To Users.Count
+            For i = 1 To Users.Count
                 ' ...
-                Set CurrentUser = Users(I)
+                Set CurrentUser = Users(i)
             
                 ' ...
                 If (CurrentUser.IsOperator = False) Then
@@ -636,11 +636,11 @@ Public Function CheckUsers() As Integer
                             HighRank = DBEntry.Access
                             
                             ' ...
-                            HighIndex = I
+                            HighIndex = i
                         End If
                     End If
                 End If
-            Next I
+            Next i
             
             ' ...
             If (HighIndex > 0) Then
@@ -650,9 +650,9 @@ Public Function CheckUsers() As Integer
         End If
     
         ' ...
-        For I = Users.Count To 1 Step -1
+        For i = Users.Count To 1 Step -1
             ' ...
-            Set CurrentUser = Users(I)
+            Set CurrentUser = Users(i)
         
             ' ...
             If (CurrentUser.IsOperator = False) Then
@@ -661,7 +661,7 @@ Public Function CheckUsers() As Integer
                     Count = (Count + 1)
                 End If
             End If
-        Next I
+        Next i
     End If
     
     ' ...
