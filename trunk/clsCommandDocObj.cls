@@ -33,7 +33,7 @@ Private m_enabled        As Boolean
 
 Private Sub Class_Initialize()
 
-    Set m_database = New MSXML2.DOMDocument
+    Set m_database = New MSXML2.DOMDocument40
     Set m_params = New Collection
     Set m_aliases = New Collection
     
@@ -226,7 +226,7 @@ Private Function getRestrictions(ByRef ParameterNode As IXMLDOMNode) As Collecti
     
     Set Restrictions = ParameterNode.selectNodes("restrictions")
     
-    If (Restrictions.Length = 0) Then
+    If (Restrictions.length = 0) Then
         Exit Function
     End If
     
@@ -526,7 +526,7 @@ Private Function getFlags(ByRef AnyNode As IXMLDOMNode) As String
     
 End Function
 
-Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal flags As String) As String
+Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) As String
 
     Dim temp As IXMLDOMNode
     Dim flag As IXMLDOMNode
@@ -545,10 +545,10 @@ Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal flags As String) A
             temp.appendChild(m_database.createNode("element", "flags", vbNullString))
     End If
     
-    For I = 1 To Len(flags)
+    For I = 1 To Len(Flags)
         Set flag = temp.appendChild(m_database.createNode("element", "flag", vbNullString))
         
-        flag.text = Mid$(flags, I, 1)
+        flag.text = Mid$(Flags, I, 1)
     Next I
     
     Call Save

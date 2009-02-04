@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmCommands 
    BackColor       =   &H00000000&
    BorderStyle     =   3  'Fixed Dialog
@@ -209,7 +209,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private m_CommandsDoc As MSXML2.DOMDocument
+Private m_CommandsDoc As MSXML2.DOMDocument40
 Private m_SelectedElement As SelectedElement
 
 '// Enums
@@ -246,7 +246,7 @@ Private Sub Form_Load()
     On Error GoTo ErrorHandler
 
     '// Load commands.xml
-    Set m_CommandsDoc = New MSXML2.DOMDocument
+    Set m_CommandsDoc = New MSXML2.DOMDocument40
     
     If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
         Exit Sub
@@ -280,7 +280,7 @@ ErrorHandler:
     
 End Sub
 
-Private Sub Form_Unload(cancel As Integer)
+Private Sub Form_Unload(Cancel As Integer)
     Set m_CommandsDoc = Nothing
 End Sub
 
@@ -325,12 +325,12 @@ Private Sub PopulateTreeView()
         Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
         '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
         '//                  something, even if nothing matches the XPath expression.
-        For I = 0 To (xmlArgs.Length - 1)
+        For I = 0 To (xmlArgs.length - 1)
             ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").text
             Set nArg = trvCommands.Nodes.Add(nCommand, tvwChild, , ArgumentName)
             Set xmlArgRestricions = xmlArgs(I).selectNodes("restrictions/restriction")
             
-            For j = 0 To (xmlArgRestricions.Length - 1)
+            For j = 0 To (xmlArgRestricions.length - 1)
                 restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").text
                 Set nArgRestriction = trvCommands.Nodes.Add(nArg, tvwChild, , restrictionName)
             Next j

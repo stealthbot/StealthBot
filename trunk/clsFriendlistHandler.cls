@@ -126,6 +126,8 @@ Public Sub ParsePacket(ByVal PacketID As Long, ByRef Data As String)
                     'Else
                         g_Friends.Add flTemp
                         
+                        'frmChat.AddChat vbRed, flTemp.Name & ":" & flTemp.DisplayName
+                        
                         RaiseEvent FriendListEntry(flTemp.DisplayName, flTemp.game, flTemp.Location, flTemp.Status, _
                              flTemp.LocationID)
                     'End If

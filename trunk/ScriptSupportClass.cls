@@ -293,7 +293,13 @@ End Sub
 '//     AddChatFont "Courier New", vbRed, "Hello, world!"
 '// will display that phrase in the Courier New font and red color.
 Public Sub AddChatFont(ParamArray saElements() As Variant)
-    'Call frmChat.AddChatFont(saElements())
+    Dim arr() As Variant ' ...
+    
+    ' ...
+    arr() = saElements
+    
+    ' ...
+    Call DisplayRichText(frmChat.rtbChat, arr)
 End Sub
 
 

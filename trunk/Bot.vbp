@@ -111,6 +111,7 @@ Class=clsXML; clsXML.cls
 Module=modWarden; modWarden.bas
 Module=modSHA1; modSHA1.bas
 Form=frmDBType.frm
+Class=clsConfiguration; clsConfiguration.cls
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""

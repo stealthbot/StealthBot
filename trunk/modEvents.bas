@@ -1298,7 +1298,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim I           As Long
     Dim temp        As Byte
     Dim Level       As Byte
-    Dim L           As Long
+    Dim l           As Long
     Dim Banned      As Boolean
     Dim f           As Integer
     Dim UserIndex   As Integer ' ...
@@ -1457,11 +1457,11 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
             
             If (mail) Then
-                L = GetMailCount(Username)
+                l = GetMailCount(Username)
                 
-                If (L > 0) Then
-                    frmChat.AddQ "/w " & Username & " You have " & L & _
-                        " new message" & IIf(L = 1, "", "s") & ". Type !inbox to retrieve."
+                If (l > 0) Then
+                    frmChat.AddQ "/w " & Username & " You have " & l & _
+                        " new message" & IIf(l = 1, "", "s") & ". Type !inbox to retrieve."
                 End If
             End If
         End If
@@ -1804,7 +1804,7 @@ Private Function CheckMessage(Username As String, Message As String) As Boolean
     Dim I           As Integer ' ...
     
     ' ...
-    If (Phrasebans) Then
+    If (PhraseBans) Then
         ' ...
         For I = LBound(Phrases) To UBound(Phrases)
             ' ...
@@ -2120,6 +2120,8 @@ Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, By
         Message = ToANSI
     End If
     
+    'frmChat.AddChat vbRed, Username
+    
     ' ...
     If (StrComp(Username, "your friends", vbTextCompare) <> 0) Then
         Username = convertUsername(Username)
@@ -2131,16 +2133,14 @@ Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, By
 
     If (Not (frmChat.mnuHideWhispersInrtbChat.Checked)) Then
         frmChat.AddChat RTBColors.WhisperCarats, "<To ", RTBColors.WhisperUsernames, _
-            IIf(Dii, Mid$(Username, InStr(Username, "*") + 1), Username), _
-                RTBColors.WhisperCarats, "> ", RTBColors.WhisperText, Message
+            Username, RTBColors.WhisperCarats, "> ", RTBColors.WhisperText, Message
     End If
     
     If ((frmChat.mnuHideWhispersInrtbChat.Checked) Or _
         (frmChat.mnuToggleShowOutgoing.Checked)) Then
         
-        frmChat.AddWhisper RTBColors.WhisperCarats, "<To ", _
-            RTBColors.WhisperUsernames, IIf(Dii, Mid$(Username, InStr(Username, "*") + 1), _
-                Username), RTBColors.WhisperCarats, "> ", RTBColors.WhisperText, Message
+        frmChat.AddWhisper RTBColors.WhisperCarats, "<To ", RTBColors.WhisperUsernames, _
+            Username, RTBColors.WhisperCarats, "> ", RTBColors.WhisperText, Message
     End If
 
     If (frmChat.mnuToggleWWUse.Checked) Then
