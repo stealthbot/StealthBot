@@ -42,8 +42,9 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
     ByVal dwTimer As Long)
     
     Dim CurrentUser  As clsUserObj
-    Dim I            As Integer ' ...
+    Dim i            As Integer ' ...
     Dim j            As Integer ' ...
+    Dim lastTimer    As Long    ' ...
     
     ' ...
     If (g_Channel Is Nothing) Then
@@ -56,9 +57,19 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
     End If
     
     ' ...
-    For I = 1 To g_Channel.Users.Count
+    'If (GetTickCount() - lastTimer < BotVars.ChatDelay) Then
+    '    Exit Function
+    'End If
+    
+    ' ...
+    For i = 1 To g_Channel.Users.Count
         ' ...
-        Set CurrentUser = g_Channel.Users(I)
+        If (i > g_Channel.Users.Count) Then
+            Exit For
+        End If
+    
+        ' ...
+        Set CurrentUser = g_Channel.Users(i)
     
         ' ...
         If (CurrentUser.Queue.Count > 0) Then
@@ -68,7 +79,10 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
                 CurrentUser.DisplayQueue
             End If
         End If
-    Next I
+    Next i
+    
+    ' ...
+    'lastTimer = GetTickCount()
     
     ' ...
     Set CurrentUser = Nothing

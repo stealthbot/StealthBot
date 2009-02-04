@@ -308,14 +308,14 @@ Public Sub ClearQueue()
     ' ...
     'Set m_queue = New Collection
     
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
     
     ' ...
-    For I = Queue.Count To 1 Step -1
+    For i = Queue.Count To 1 Step -1
     
-        Queue.Remove I
+        Queue.Remove i
     
-    Next I
+    Next i
     
 
 End Sub
@@ -348,6 +348,10 @@ Public Sub DisplayQueue()
     
     ' ...
     For j = 1 To Queue.Count
+        ' ...
+        If (j > Queue.Count) Then
+            Exit For
+        End If
     
         ' ...
         Set CurrentEvent = Queue(j)

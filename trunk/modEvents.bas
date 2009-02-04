@@ -13,7 +13,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Dim UserEvent     As clsUserEventObj
     
     Dim UserIndex     As Integer  ' ...
-    Dim I             As Integer  ' ...
+    Dim i             As Integer  ' ...
     Dim PreviousFlags As Long     ' ...
     Dim Clan          As String
     Dim parsed        As String
@@ -364,7 +364,7 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
     
     Dim s() As String
     Dim U   As String
-    Dim I   As Integer
+    Dim i   As Integer
     
     'MsgBox PPL
 
@@ -411,21 +411,21 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
         
         If KeyName = "Profile\Location" Then
 Repeat2:
-            I = InStr(1, KeyValue, Chr(13))
+            i = InStr(1, KeyValue, Chr(13))
             
             If Len(KeyValue) > 90 Then
-                If I <> 0 Then
-                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - I)
-                    KeyValue = Right(KeyValue, Len(KeyValue) - I)
+                If i <> 0 Then
+                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - i)
+                    KeyValue = Right(KeyValue, Len(KeyValue) - i)
                     
                     GoTo Repeat2
                 Else
                     frmChat.AddQ U & "[Location] " & KeyValue
                 End If
             Else
-                If I <> 0 Then
-                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - I)
-                    KeyValue = Right(KeyValue, Len(KeyValue) - I)
+                If i <> 0 Then
+                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - i)
+                    KeyValue = Right(KeyValue, Len(KeyValue) - i)
                     GoTo Repeat2
                 Else
                     frmChat.AddQ U & "[Location] " & KeyValue
@@ -439,17 +439,17 @@ Repeat2:
             X() = Split(KeyValue, Chr(13))
             ReDim s(0)
             
-            For I = LBound(X) To UBound(X)
-                s(0) = X(I)
+            For i = LBound(X) To UBound(X)
+                s(0) = X(i)
                 
                 If Len(s(0)) > 200 Then s(0) = Left$(s(0), 200)
                 
-                If I = LBound(X) Then
+                If i = LBound(X) Then
                     frmChat.AddQ U & "[Descr] " & s(0)
                 Else
                     frmChat.AddQ U & "[Descr] " & Right(s(0), Len(s(0)) - 1)
                 End If
-            Next I
+            Next i
             
             PPL = False
             
@@ -704,7 +704,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Const MSG_KICKEDOUT   As String = " kicked you out of the channel!"
     Const MSG_FRIENDS     As String = "Your friends are:"
     
-    Dim I      As Integer
+    Dim i      As Integer
     Dim temp   As String
     Dim bHide  As Boolean
     Dim ToANSI As String
@@ -766,10 +766,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                     (InStr(1, Message, "game", vbTextCompare) = 0)) Then
                     
                 ' ...
-                I = InStrRev(Message, Space$(1))
+                i = InStrRev(Message, Space$(1))
                 
                 ' ...
-                BotVars.Gateway = Mid$(Message, I + 1)
+                BotVars.Gateway = Mid$(Message, i + 1)
                 
                 ' ...
                 SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
@@ -978,7 +978,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim UserEvent   As clsUserEventObj
     Dim UserObj     As clsUserObj
     
-    Dim I           As Integer ' ...
+    Dim i           As Integer ' ...
     Dim ToANSI      As String  ' ...
     Dim Pos         As Integer ' ...
     Dim PassedQueue As Boolean ' ...
@@ -1105,7 +1105,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim found        As ListItem ' ...
     
     Dim UserIndex    As Integer ' ...
-    Dim I            As Integer ' ...
+    Dim i            As Integer ' ...
     Dim strCompare   As String  ' ...
     Dim Level        As Byte    ' ...
     Dim StatUpdate   As Boolean ' ...
@@ -1223,20 +1223,20 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 ' ...
                 If (BotVars.ShowStatsIcons) Then
                     ' ...
-                    I = g_Channel.GetUserIndex(Username)
+                    i = g_Channel.GetUserIndex(Username)
                     
                     ' ...
-                    If (I > 0) Then
+                    If (i > 0) Then
                         
                         ' ...
                         If (UserObj.Stats.IconCode <> -1) Then
                             ' ...
-                            If (g_Channel.Users(I).game = "WAR3") Then
+                            If (g_Channel.Users(i).game = "WAR3") Then
                                 ' ...
                                 If (found.SmallIcon = ICWAR3) Then
                                     found.SmallIcon = UserObj.Stats.IconCode
                                 End If
-                            ElseIf (g_Channel.Users(I).game = "W3XP") Then
+                            ElseIf (g_Channel.Users(i).game = "W3XP") Then
                                 ' ...
                                 If (found.SmallIcon = ICWAR3X) Then
                                     found.SmallIcon = UserObj.Stats.IconCode
@@ -1295,7 +1295,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     
     Dim toCheck     As String
     Dim strCompare  As String
-    Dim I           As Long
+    Dim i           As Long
     Dim temp        As Byte
     Dim Level       As Byte
     Dim l           As Long
@@ -1395,6 +1395,8 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             ' ...
             Set UserStats = New clsUserStats
             
+            'frmChat.AddChat vbRed, JoinMessagesOff
+            
             ' ...
             UserStats.Statstring = OriginalStatstring
         
@@ -1480,6 +1482,8 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         ' ...
         frmChat.SControl.Run "Event_UserJoins", Username, Flags, UserObj.Stats.ToString, Ping, _
             Product, 0, OriginalStatstring, IsBanned
+            
+        Err.Clear
     End If
     
     Exit Sub
@@ -1496,7 +1500,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim UserObj   As clsUserObj
     
     Dim UserIndex As Integer
-    Dim I         As Integer
+    Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
     Dim Pos       As Integer
@@ -1598,7 +1602,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     Dim s             As String
     Dim U             As String
     Dim strCompare    As String
-    Dim I             As Integer
+    Dim i             As Integer
     Dim ColIndex      As Integer
     Dim B             As Boolean
     Dim ToANSI        As String
@@ -1801,17 +1805,17 @@ End Sub
 Private Function CheckMessage(Username As String, Message As String) As Boolean
     
     Dim BanningUser As Boolean ' ...
-    Dim I           As Integer ' ...
+    Dim i           As Integer ' ...
     
     ' ...
     If (PhraseBans) Then
         ' ...
-        For I = LBound(Phrases) To UBound(Phrases)
+        For i = LBound(Phrases) To UBound(Phrases)
             ' ...
-            If ((Phrases(I) <> vbNullString) And (Phrases(I) <> Space$(1))) Then
+            If ((Phrases(i) <> vbNullString) And (Phrases(i) <> Space$(1))) Then
                 ' ...
-                If ((InStr(1, Message, Phrases(I), vbTextCompare)) <> 0) Then
-                    Ban Username & " Banned phrase: " & Phrases(I), _
+                If ((InStr(1, Message, Phrases(i), vbTextCompare)) <> 0) Then
+                    Ban Username & " Banned phrase: " & Phrases(i), _
                             (AutoModSafelistValue - 1)
                     
                     BanningUser = True
@@ -1819,7 +1823,7 @@ Private Function CheckMessage(Username As String, Message As String) As Boolean
                     Exit For
                 End If
             End If
-        Next I
+        Next i
     End If
     
     ' ...

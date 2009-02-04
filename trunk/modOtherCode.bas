@@ -2997,7 +2997,7 @@ End Function
 'I believe it's something to do with the subclassing overwriting the memory, but it only occurs when run from the IDE. - FrOzeN
 
 Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Variant)
-    'On Error GoTo ERROR_HANDLER
+    On Error GoTo ERROR_HANDLER
     
     Static rtbChat_LoopCount     As Integer ' ...
     Static rtbWhispers_LoopCount As Integer ' ...
@@ -3014,13 +3014,14 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim LogThis        As Boolean
     Dim length         As Integer
     Dim Count          As Integer
+    Dim arrCount       As Integer
 
     ' *****************************************
     '              SANITY CHECKS
     ' *****************************************
-
+    
     ' ...
-    If ((UBound(saElements) + 1) Mod 3 > 0) Then
+    If (StrictIsNumeric(saElements(0))) Then
         ' ...
         Count = 2
     
@@ -3047,17 +3048,11 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
     ' ...
     For i = LBound(saElements) To UBound(saElements) Step 3
-        ' checks if saElements(0) is empty - type mismatch is thrown if true
-        ' (use of VarType() here doesn't seem to work on all computers.)
-        If (saElements(i + 1) = 0) Then
-            Exit Sub
-        End If
-    
         ' ...
         If (i >= UBound(saElements)) Then
             Exit Sub
         End If
-
+    
         ' ...
         If (StrictIsNumeric(saElements(i + 1)) = False) Then
             Exit Sub
