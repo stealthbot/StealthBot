@@ -57,11 +57,6 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
     End If
     
     ' ...
-    'If (GetTickCount() - lastTimer < BotVars.ChatDelay) Then
-    '    Exit Function
-    'End If
-    
-    ' ...
     For i = 1 To g_Channel.Users.Count
         ' ...
         If (i > g_Channel.Users.Count) Then
@@ -80,9 +75,6 @@ Public Function ChatQueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal
             End If
         End If
     Next i
-    
-    ' ...
-    'lastTimer = GetTickCount()
     
     ' ...
     Set CurrentUser = Nothing

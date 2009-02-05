@@ -860,6 +860,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,7 +886,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2520,6 +2520,11 @@ Sub Form_Resize()
     End If
     
     Call rtbChat.Refresh
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in Form_Resize()."
 End Sub
 
 Function GenerateTooltip() As String
@@ -2918,7 +2923,7 @@ End Sub
 Sub Form_Unload(Cancel As Integer)
     Dim Key As String, l As Long
 
-    Cancel = 1
+    'Cancel = 1
     
     'scTimer.Enabled = False
     'SControl.Reset
@@ -2943,9 +2948,9 @@ Sub Form_Unload(Cancel As Integer)
         WriteINI "Main", "ConfigVersion", CONFIG_VERSION
     End If
     
-    With frmChat.INet
-        If .StillExecuting Then .Cancel
-    End With
+    'With frmChat.INet
+    '    If .StillExecuting Then .Cancel
+    'End With
 
     Call DoDisconnect(1)
 
@@ -3000,7 +3005,7 @@ Sub Form_Unload(Cancel As Integer)
     UnhookWindowProc
     UnhookSendBoxWindowProc
     
-    Call SharedScriptSupport.Dispose 'Explicit call the Class_Terminate sub in the ScriptSupportClass to destroy all the forms. - FrOzeN
+    'Call SharedScriptSupport.Dispose 'Explicit call the Class_Terminate sub in the ScriptSupportClass to destroy all the forms. - FrOzeN
     
     'DeconstructSettings
     'DeconstructMonitor
@@ -3019,6 +3024,7 @@ Sub Form_Unload(Cancel As Integer)
     Set colDynamicMenus = Nothing
     Set dictMenuIDs = Nothing
     Set dictItemIDs = Nothing
+    Set SharedScriptSupport = Nothing
     
     'Set dictTimerInterval = Nothing
     'Set dictTimerCount = Nothing
@@ -4485,6 +4491,8 @@ End Sub
 
 Private Sub mnuTrayExit_click()
     If MsgBox("Are you sure you want to quit?", vbYesNo, "StealthBot") = vbYes Then
+        'frmChat.Show
+    
         'UnhookWindowProc
         'RESTORE FORM
         'Call NewWindowProc(frmChat.hWnd, 0&, ID_TASKBARICON, WM_LBUTTONDOWN)

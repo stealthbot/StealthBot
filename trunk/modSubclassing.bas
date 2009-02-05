@@ -97,7 +97,7 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wPara
         End If
     End If
     
-    NewWindowProc = CallWindowProc(OldWindowProc, hWndSet, Msg, wParam, lParam)
+    NewWindowProc = CallWindowProc(OldWindowProc, hWnd, Msg, wParam, lParam)
     
     Exit Function
     
