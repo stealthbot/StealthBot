@@ -18,7 +18,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 
-Private m_database       As DOMDocument
+Private m_database       As DOMDocument60
 Private m_command_node   As IXMLDOMNode
 
 
@@ -33,7 +33,7 @@ Private m_enabled        As Boolean
 
 Private Sub Class_Initialize()
 
-    Set m_database = New DOMDocument
+    Set m_database = New DOMDocument60
     Set m_params = New Collection
     Set m_aliases = New Collection
     

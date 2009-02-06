@@ -351,13 +351,13 @@ End Function
 '// 08/31/2008 JSM - Created
 Public Function ValidateXML(ByVal strXMLPath As String, ByVal strXSDPath As String) As Boolean
 
-    Dim objSchemas As XMLSchemaCache
-    Dim objXML As DOMDocument
-    Dim objXSD As DOMDocument
+    Dim objSchemas As XMLSchemaCache60
+    Dim objXML As DOMDocument60
+    Dim objXSD As DOMDocument60
     Dim objErr As IXMLDOMParseError
 
     ' load XSD as DOM to populate in Schema Cache
-    Set objXSD = New DOMDocument40
+    Set objXSD = New DOMDocument60
     
     objXSD.async = False
     objXSD.validateOnParse = False
@@ -368,13 +368,13 @@ Public Function ValidateXML(ByVal strXMLPath As String, ByVal strXSDPath As Stri
     End If
    
     ' populate schema cache
-    Set objSchemas = New XMLSchemaCache40
+    Set objSchemas = New XMLSchemaCache60
 
     ' ERROR!
     objSchemas.Add "", objXSD
    
     ' load XML file (without validation - that comes later)
-    Set objXML = New DOMDocument40
+    Set objXML = New DOMDocument60
     
     objXML.async = False
     objXML.validateOnParse = False
@@ -2944,11 +2944,11 @@ Public Function convertAlias(ByVal cmdName As String) As String
 
     ' ...
     If (Len(cmdName) > 0) Then
-        Dim commands As DOMDocument
+        Dim commands As DOMDocument60
         Dim Alias    As IXMLDOMNode
         
         ' ...
-        Set commands = New DOMDocument
+        Set commands = New DOMDocument60
         
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then

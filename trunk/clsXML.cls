@@ -66,7 +66,7 @@ End Sub
 ' ...
 Public Sub WriteNode(ByRef temp As IXMLDOMNode, Optional ByVal Spaces As Integer = 0)
 
-    Dim xml_doc  As DOMDocument
+    Dim xml_doc  As DOMDocument60
     Dim tempList As IXMLDOMNodeList
     Dim Count    As Integer
 
@@ -110,7 +110,7 @@ Public Sub WriteNode(ByRef temp As IXMLDOMNode, Optional ByVal Spaces As Integer
             Set tempList = temp.childNodes
             
             ' ...
-            For Count = 0 To tempList.Length
+            For Count = 0 To tempList.length
                 WriteNode tempList(Count), (Spaces + 2)
             Next
             

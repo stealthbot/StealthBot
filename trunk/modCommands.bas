@@ -7224,11 +7224,11 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
     
     ' ...
     If (Len(CWord) > 0) Then
-        Dim commands As DOMDocument
+        Dim commands As DOMDocument60
         Dim command  As IXMLDOMNode
         
         ' ...
-        Set commands = New DOMDocument
+        Set commands = New DOMDocument60
         
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
