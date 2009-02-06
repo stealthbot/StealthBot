@@ -25,7 +25,7 @@ Private Type PROFILE
     UseProxy       As Integer
     ProxySrv       As String
     ProxyPort      As Integer
-    Game           As String
+    game           As String
     CDKey()        As String
     CDKeyCount     As Integer
     HomeChannel    As String

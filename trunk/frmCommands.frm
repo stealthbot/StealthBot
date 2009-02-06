@@ -209,7 +209,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 
-Private m_CommandsDoc As DOMDocument40
+Private m_CommandsDoc As DOMDocument
 Private m_SelectedElement As SelectedElement
 
 '// Enums
@@ -243,7 +243,7 @@ Private Sub Form_Load()
     On Error GoTo ErrorHandler
 
     '// Load commands.xml
-    Set m_CommandsDoc = New DOMDocument40
+    Set m_CommandsDoc = New DOMDocument
     
     If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
         Exit Sub

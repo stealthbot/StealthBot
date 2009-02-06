@@ -698,7 +698,7 @@ Private Function OnLoadWinamp(ByVal Username As String, ByRef dbAccess As udtGet
     Set clsWinamp = New clsWinamp
 
     ' ...
-    bln = clsWinamp.Start(ReadCFG("Other", "WinampPath"))
+    bln = clsWinamp.Start(ReadCfg("Other", "WinampPath"))
        
     ' ...
     If (bln) Then
@@ -7224,11 +7224,11 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
     
     ' ...
     If (Len(CWord) > 0) Then
-        Dim commands As DOMDocument40
+        Dim commands As DOMDocument
         Dim command  As IXMLDOMNode
         
         ' ...
-        Set commands = New DOMDocument40
+        Set commands = New DOMDocument
         
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then

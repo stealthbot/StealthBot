@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema"> 
+<xsd:schema attributeFormDefault="unqualified" elementFormDefault="qualified" version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <xsd:element name="argument">
     <xsd:complexType>
       <xsd:sequence>
@@ -55,7 +55,8 @@
       <xsd:attribute name="name" type="xsd:string" />
       <xsd:attribute name="type" type="xsd:string" />
     </xsd:complexType>
-  </xsd:element>  
+  </xsd:element>
+  
 
   <xsd:element name="commands">
     <xsd:complexType>
@@ -126,7 +127,7 @@
           </xsd:complexType>
         </xsd:element>
       </xsd:sequence>
-    <xsd:attribute name="version" type="xsd:decimal"  />
+    <xsd:attribute name="version" type="xsd:decimal" />
     </xsd:complexType>
   </xsd:element>
 </xsd:schema>

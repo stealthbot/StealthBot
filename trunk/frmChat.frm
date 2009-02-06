@@ -1518,7 +1518,7 @@ Private Sub Form_Load()
     End If
         
     ' SPLASH SCREEN
-    If ReadCFG("Main", "ShowSplash") <> "N" Then
+    If ReadCfg("Main", "ShowSplash") <> "N" Then
         frmSplash.Show
         FrmSplashInUse = True
     End If
@@ -1568,9 +1568,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -1579,14 +1579,14 @@ Private Sub Form_Load()
     ReDim gOutFilters(0)
     ReDim gFilters(0)
     
-    s = ReadCFG("Main", "ShowWhisperWindow")
+    s = ReadCfg("Main", "ShowWhisperWindow")
     If s = "Y" Then
         If Not rtbWhispersVisible Then Call cmdShowHide_Click
     Else
         If rtbWhispersVisible Then Call cmdShowHide_Click
     End If
     
-    CfgVersion = Val(ReadCFG("Main", "ConfigVersion"))
+    CfgVersion = Val(ReadCfg("Main", "ConfigVersion"))
 '
 '    If CfgVersion < 3 Then
 '
@@ -1606,7 +1606,7 @@ Private Sub Form_Load()
 '
 '    End If
 
-    s = ReadCFG("Position", "Height")
+    s = ReadCfg("Position", "Height")
     If LenB(s) > 0 And StrictIsNumeric(s) Then
         l = (IIf(CLng(s) < 200, 200, CLng(s)) * Screen.TwipsPerPixelY)
         
@@ -1617,19 +1617,19 @@ Private Sub Form_Load()
         Me.Height = l
     End If
     
-    s = ReadCFG("Position", "Width")
+    s = ReadCfg("Position", "Width")
     If LenB(s) > 0 And StrictIsNumeric(s) Then
         Me.Width = (IIf(CLng(s) < 300, 300, CLng(s)) * Screen.TwipsPerPixelX)
     End If
 
     ' 2.7 must discard old position data
     If CfgVersion >= 4 Then
-        s = ReadCFG("Position", "Left")
+        s = ReadCfg("Position", "Left")
         If LenB(s) > 0 And StrictIsNumeric(s) Then
             Me.Left = CLng(s) * Screen.TwipsPerPixelX
         End If
         
-        s = ReadCFG("Position", "Top")
+        s = ReadCfg("Position", "Top")
         If LenB(s) > 0 And StrictIsNumeric(s) Then
             Me.Top = CLng(s) * Screen.TwipsPerPixelY
         End If
@@ -1639,7 +1639,7 @@ Private Sub Form_Load()
     End If
     
     'Support for recording maxmized position. - FrOzeN
-    s = ReadCFG("Position", "Maximized")
+    s = ReadCfg("Position", "Maximized")
     
     If s = "True" Then
         Me.WindowState = vbMaximized
@@ -1740,7 +1740,7 @@ Private Sub Form_Load()
     On Error Resume Next
     'News call and scripting events
     
-    s = ReadCFG("Override", "DisableSBNews")
+    s = ReadCfg("Override", "DisableSBNews")
     
     If (LenB(s) = 0) Then DisplayNews
     
@@ -1751,13 +1751,13 @@ Private Sub Form_Load()
     End If
     
     '#If BETA = 0 Then
-        If ReadCFG("Main", "ConnectOnStartup") = "Y" Then
+        If ReadCfg("Main", "ConnectOnStartup") = "Y" Then
             Call DoConnect
         End If
     '#End If
     
     #If COMPILE_DEBUG = 0 Then
-        If ReadCFG("Main", "MinimizeOnStartup") = "Y" Then
+        If ReadCfg("Main", "MinimizeOnStartup") = "Y" Then
             frmChat.WindowState = vbMinimized
             Call Form_Resize
         End If
@@ -2190,9 +2190,9 @@ Sub Event_BNLSError(ErrorNumber As Integer, description As String)
     If sckBNet.State <> 7 Then
         
         'Check the user has using BNLS server finder enabled
-        If ReadCFG("Main", "UseAltBNLS") = "Y" Then
+        If ReadCfg("Main", "UseAltBNLS") = "Y" Then
             Call FindAltBNLS
-        ElseIf ReadCFG("Main", "UseAltBNLS") = "N" Then
+        ElseIf ReadCfg("Main", "UseAltBNLS") = "N" Then
             AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & description
             
             If DisplayError(ErrorNumber, 0, BNLS) Then
@@ -5659,7 +5659,7 @@ Private Sub Timer_Timer()
     '    Close #1
     'End If
     
-    If ReadCFG("Other", "ProfileAmp") = "Y" And g_Online Then Call UpdateProfile
+    If ReadCfg("Other", "ProfileAmp") = "Y" And g_Online Then Call UpdateProfile
     
     
     BotVars.JoinWatch = 0
@@ -5686,16 +5686,16 @@ Private Sub Timer_Timer()
         End If
     End If
     
-    IdleMsg = ReadCFG("Main", "Idles")
+    IdleMsg = ReadCfg("Main", "Idles")
     
     If IdleMsg <> "Y" Then Exit Sub
     
     If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) = 0) And _
         (IsStealthBotTech = False)) Then Exit Sub
     
-    IdleMsg = ReadCFG("Main", "IdleMsg")
-    IdleWaitS = ReadCFG("Main", "IdleWait")
-    IdleType = ReadCFG("Main", "IdleType")
+    IdleMsg = ReadCfg("Main", "IdleMsg")
+    IdleWaitS = ReadCfg("Main", "IdleWait")
+    IdleType = ReadCfg("Main", "IdleType")
     
     If StrictIsNumeric(IdleWaitS) Then IdleWait = IdleWaitS
 
@@ -5705,9 +5705,11 @@ Private Sub Timer_Timer()
         iCounter = 0
         'on error resume next
         If IdleType = "msg" Or IdleType = vbNullString Then
+        
             If StrComp(IdleMsg, "null", vbTextCompare) = 0 Or IdleMsg = vbNullString Then
                 Exit Sub
             End If
+            
             IdleMsg = Replace(IdleMsg, "%cpuup", ConvertTime(GetUptimeMS))
             IdleMsg = Replace(IdleMsg, "%chan", g_Channel.Name)
             IdleMsg = Replace(IdleMsg, "%c", g_Channel.Name)
@@ -5720,6 +5722,10 @@ Private Sub Timer_Timer()
             IdleMsg = Replace(IdleMsg, "%quote", GetRandomQuote)
             IdleMsg = Replace(IdleMsg, "%rnd", GetRandomPerson)
             IdleMsg = Replace(IdleMsg, "%t", Time$)
+            
+            If (IdleMsg = vbNullString) Then
+                GoTo Error
+            End If
             
         ElseIf IdleType = "uptime" Then
             IdleMsg = "/me -: System Uptime: " & ConvertTime(GetUptimeMS()) & " :: Connection Uptime: " & ConvertTime(uTicks) & " :: " & CVERSION & " :-"
@@ -6674,12 +6680,12 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Dim doConvert            As Boolean
     Dim command_output()     As String
         
-    s = ReadCFG(OT, "Timestamp")
+    s = ReadCfg(OT, "Timestamp")
     If StrictIsNumeric(s) And Val(s) < 4 Then BotVars.TSSetting = CInt(s) Else BotVars.TSSetting = 0
     
     s = BotVars.Username
     
-    BotVars.Username = ReadCFG(MN, "Username")
+    BotVars.Username = ReadCfg(MN, "Username")
     
     If LenB(s) > 0 Then
         If StrComp(BotVars.Username, s, vbTextCompare) <> 0 Then
@@ -6687,21 +6693,21 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    BotVars.Password = ReadCFG(MN, "Password")
-    BotVars.CDKey = UCase$(ReadCFG(MN, "CDKey"))
-    BotVars.ExpKey = UCase$(ReadCFG(MN, "ExpKey"))
+    BotVars.Password = ReadCfg(MN, "Password")
+    BotVars.CDKey = UCase$(ReadCfg(MN, "CDKey"))
+    BotVars.ExpKey = UCase$(ReadCfg(MN, "ExpKey"))
     
     If BotVars.ExpKey = "" Then
-        BotVars.ExpKey = UCase$(ReadCFG(MN, "LODKey"))
+        BotVars.ExpKey = UCase$(ReadCfg(MN, "LODKey"))
     End If
     
-    BotVars.Product = ReadCFG(MN, "Product")
-    BotVars.Server = ReadCFG(MN, "Server")
-    BotVars.BanUnderLevel = Val(ReadCFG(OT, "BanUnderLevel"))
-    BotVars.BanD2UnderLevel = Val(ReadCFG(OT, "BanD2UnderLevel"))
-    BotVars.HomeChannel = ReadCFG(MN, "HomeChan")
-    BotVars.BotOwner = ReadCFG(MN, "Owner")
-    BotVars.Trigger = ReadCFG(MN, "Trigger")
+    BotVars.Product = ReadCfg(MN, "Product")
+    BotVars.Server = ReadCfg(MN, "Server")
+    BotVars.BanUnderLevel = Val(ReadCfg(OT, "BanUnderLevel"))
+    BotVars.BanD2UnderLevel = Val(ReadCfg(OT, "BanD2UnderLevel"))
+    BotVars.HomeChannel = ReadCfg(MN, "HomeChan")
+    BotVars.BotOwner = ReadCfg(MN, "Owner")
+    BotVars.Trigger = ReadCfg(MN, "Trigger")
     
     If (BotVars.TriggerLong = vbNullString) Then
         BotVars.Trigger = "."
@@ -6710,24 +6716,24 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Call LoadDatabase
     
     If Mode <> 1 Then
-        s = ReadCFG(OT, "ChatFont")
+        s = ReadCfg(OT, "ChatFont")
         If s <> vbNullString And s <> rtbChat.Font.Name Then
             rtbChat.Font.Name = s
         End If
         
-        s = ReadCFG(OT, "ChanFont")
+        s = ReadCfg(OT, "ChanFont")
         If s <> vbNullString And s <> lvChannel.Font.Name Then
             lvChannel.Font.Name = s
         End If
         
-        s = ReadCFG(OT, "ChatSize")
+        s = ReadCfg(OT, "ChatSize")
         If StrictIsNumeric(s) Then
             If CInt(s) <> rtbChat.Font.Size Then
                 rtbChat.Font.Size = s
             End If
         End If
         
-        s = ReadCFG(OT, "ChanSize")
+        s = ReadCfg(OT, "ChanSize")
         If StrictIsNumeric(s) Then
             If CInt(s) <> lvChannel.Font.Size Then
                 lvChannel.Font.Size = s
@@ -6735,7 +6741,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    s = ReadCFG(OT, "Filters")
+    s = ReadCfg(OT, "Filters")
     
     If s = "Y" Then
         Filters = True
@@ -6746,7 +6752,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     End If
     
     BotVars.AutofilterMS = 300 'default
-    s = ReadCFG(MN, "AutofilterMS")
+    s = ReadCfg(MN, "AutofilterMS")
     
     If LenB(s) > 0 Then
         If StrictIsNumeric(s) Then
@@ -6754,21 +6760,21 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    s = ReadCFG("Override", "AutoModerationSafelistValue")
+    s = ReadCfg("Override", "AutoModerationSafelistValue")
     If Val(s) > 0 And Val(s) < 1001 Then
         AutoModSafelistValue = Val(s)
     Else
         AutoModSafelistValue = 20
     End If
     
-    s = ReadCFG(MN, "BNLSServer")
+    s = ReadCfg(MN, "BNLSServer")
     If LenB(s) = 0 Then
         s = "bnls.valhallalegends.com"
     End If
     
     BotVars.BNLSServer = s
         
-    s = ReadCFG(MN, "ShowOfflineFriends")
+    s = ReadCfg(MN, "ShowOfflineFriends")
     
     If s = "Y" Then
         BotVars.ShowOfflineFriends = True
@@ -6776,7 +6782,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         BotVars.ShowOfflineFriends = False
     End If
     
-    s = ReadCFG(OT, "HideClanDisplay")
+    s = ReadCfg(OT, "HideClanDisplay")
     If (s = "Y") Then
         With lvChannel
             .Width = (.Width - .ColumnHeaders(2).Width)
@@ -6784,7 +6790,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End With
     End If
     
-    s = ReadCFG(OT, "HidePingDisplay")
+    s = ReadCfg(OT, "HidePingDisplay")
     If (s = "Y") Then
         With lvChannel
             .Width = (.Width - .ColumnHeaders(3).Width)
@@ -6792,23 +6798,23 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End With
     End If
     
-    s = ReadCFG(OT, "RetainOldBans")
+    s = ReadCfg(OT, "RetainOldBans")
     If (s = "Y") Then
         BotVars.RetainOldBans = True
     Else
         BotVars.RetainOldBans = False
     End If
     
-    s = ReadCFG(OT, "StoreAllBans")
+    s = ReadCfg(OT, "StoreAllBans")
     If (s = "Y") Then
         BotVars.StoreAllBans = True
     Else
         BotVars.StoreAllBans = False
     End If
     
-    gameConventions = ReadCFG(OT, "UseGameConventions")
-    D2GameConventions = ReadCFG(OT, "UseD2GameConventions")
-    W3GameConventions = ReadCFG(OT, "Usew3GameConventions")
+    gameConventions = ReadCfg(OT, "UseGameConventions")
+    D2GameConventions = ReadCfg(OT, "UseD2GameConventions")
+    W3GameConventions = ReadCfg(OT, "Usew3GameConventions")
     
     If (gameConventions = vbNullString) Then
         gameConventions = "Y"
@@ -6859,10 +6865,10 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         Next i
     End If
     
-    s = ReadCFG(OT, "JoinLeaves")
+    s = ReadCfg(OT, "JoinLeaves")
     If s = "Y" Then JoinMessagesOff = False Else JoinMessagesOff = True
     
-    s = ReadCFG(OT, "ShowStatsIcons")
+    s = ReadCfg(OT, "ShowStatsIcons")
     
     If s = "N" Then
         BotVars.ShowStatsIcons = False
@@ -6870,43 +6876,43 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         BotVars.ShowStatsIcons = True
     End If
     
-    s = ReadCFG(OT, "Mail")
+    s = ReadCfg(OT, "Mail")
     If s = "N" Then mail = False Else mail = True
     
 '    s = ReadCFG(OT, "DisableMonitor")
 '    If s = "Y" Then DisableMonitor = True Else DisableMonitor = False
 '
-    s = ReadCFG(OT, "BanEvasion")
+    s = ReadCfg(OT, "BanEvasion")
     If s = "N" Then BotVars.BanEvasion = False Else BotVars.BanEvasion = True
 
     
-    s = ReadCFG(OT, "Logging")
+    s = ReadCfg(OT, "Logging")
     If StrictIsNumeric(s) Then BotVars.Logging = Val(s) Else BotVars.Logging = 2
         
-    mnuToggleWWUse.Checked = (ReadCFG("Main", "UseWWs") = "Y")
+    mnuToggleWWUse.Checked = (ReadCfg("Main", "UseWWs") = "Y")
     
-    s = ReadCFG(MN, "WhisperBack")
+    s = ReadCfg(MN, "WhisperBack")
     If s = "N" Then BotVars.WhisperCmds = False Else BotVars.WhisperCmds = True
     
-    s = ReadCFG(OT, "Phrasebans")
+    s = ReadCfg(OT, "Phrasebans")
     If s = "Y" Then PhraseBans = True Else PhraseBans = False
     
-    s = ReadCFG(OT, "AutoCompletePostfix")
+    s = ReadCfg(OT, "AutoCompletePostfix")
     BotVars.AutoCompletePostfix = s
     
-    s = ReadCFG(MN, "UseBNLS")
+    s = ReadCfg(MN, "UseBNLS")
     If s = "N" Then BotVars.BNLS = False Else BotVars.BNLS = True
     
-    s = ReadCFG(MN, "LogDBActions")
+    s = ReadCfg(MN, "LogDBActions")
     If s = "Y" Then BotVars.LogDBActions = True Else BotVars.LogDBActions = False
     
-    s = ReadCFG(MN, "LogAllCommands")
+    s = ReadCfg(MN, "LogAllCommands")
     If s = "Y" Then BotVars.LogCommands = True Else BotVars.LogCommands = False
     
     '/* time to idle: defaults to 600 seconds / 10 minutes idle */
     BotVars.SecondsToIdle = 600
     
-    s = ReadCFG("Override", "SecondsToIdle")
+    s = ReadCfg("Override", "SecondsToIdle")
     If LenB(s) > 0 Then
         If StrictIsNumeric(s) Then
             If Val(s) < 1000000 Then
@@ -6915,14 +6921,14 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    s = ReadCFG(OT, "PeonBans")
+    s = ReadCfg(OT, "PeonBans")
     If s = "1" Then BotVars.BanPeons = 1 Else BotVars.BanPeons = 0
     
-    s = ReadCFG(OT, "KickOnYell")
+    s = ReadCfg(OT, "KickOnYell")
     If s = "Y" Then BotVars.KickOnYell = 1 Else BotVars.KickOnYell = 0
     
     ' Capped at 32767, topic=29986 -Andy
-    s = ReadCFG(OT, "IdleBanDelay")
+    s = ReadCfg(OT, "IdleBanDelay")
     If StrictIsNumeric(s) Then
         If Val(s) < 32767 Then
             BotVars.IB_Wait = CInt(s)
@@ -6931,7 +6937,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    s = ReadCFG(OT, "DefaultShitlistGroup")
+    s = ReadCfg(OT, "DefaultShitlistGroup")
     BotVars.DefaultShitlistGroup = s
     
     ' ...
@@ -6948,7 +6954,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    s = ReadCFG(OT, "DefaultTagbansGroup")
+    s = ReadCfg(OT, "DefaultTagbansGroup")
     BotVars.DefaultTagbansGroup = s
     
     ' ...
@@ -6965,7 +6971,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    s = ReadCFG(OT, "DefaultSafelistGroup")
+    s = ReadCfg(OT, "DefaultSafelistGroup")
     BotVars.DefaultSafelistGroup = s
     
     ' ...
@@ -6982,31 +6988,31 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         End If
     End If
     
-    s = ReadCFG(OT, "AllowMP3")
+    s = ReadCfg(OT, "AllowMP3")
     If s = "N" Then BotVars.DisableMP3Commands = True Else BotVars.DisableMP3Commands = False
     
-    s = ReadCFG(MN, "MaxBacklogSize")
+    s = ReadCfg(MN, "MaxBacklogSize")
     If ((s = vbNullString) Or (StrictIsNumeric(s) = False)) Then
         BotVars.MaxBacklogSize = 10000
     Else
         BotVars.MaxBacklogSize = Val(s)
     End If
     
-    s = ReadCFG(MN, "MaxLogFileSize")
+    s = ReadCfg(MN, "MaxLogFileSize")
     If ((s = vbNullString) Or (StrictIsNumeric(s) = False)) Then
         BotVars.MaxLogFileSize = 50000000
     Else
         BotVars.MaxLogFileSize = Val(s)
     End If
     
-    s = ReadCFG(MN, "DoNotUseDirectFList")
+    s = ReadCfg(MN, "DoNotUseDirectFList")
     If s = "Y" Then
         BotVars.UsingDirectFList = False
     Else
         BotVars.UsingDirectFList = True
     End If
     
-    s = ReadCFG(MN, "URLDetect")
+    s = ReadCfg(MN, "URLDetect")
     If s = "Y" Then
         EnableURLDetect rtbChat.hWnd
     Else
@@ -7017,7 +7023,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     If BotVars.MaxLogFileSize < 0 Then BotVars.MaxLogFileSize = 50000000
     
     '// this section must read _absolutely correctly_ or the SetTimer API call will fail
-    s = ReadCFG(MN, "ReconnectDelay")
+    s = ReadCfg(MN, "ReconnectDelay")
     If LenB(s) > 0 Then
         If StrictIsNumeric(s) Then
             If Val(s) < 60000 Then
@@ -7036,17 +7042,17 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         BotVars.ReconnectDelay = 1000
     End If
     
-    s = ReadCFG(MN, "UseBackupChan")
+    s = ReadCfg(MN, "UseBackupChan")
     If s = "Y" Then BotVars.UseBackupChan = True Else BotVars.UseBackupChan = False
     
-    BotVars.BackupChan = ReadCFG(MN, "BackupChan")
+    BotVars.BackupChan = ReadCfg(MN, "BackupChan")
     
-    s = ReadCFG("Main", "UTF8")
+    s = ReadCfg("Main", "UTF8")
     If s = "N" Then mnuUTF8.Checked = False Else mnuUTF8.Checked = True
     
-    mnuToggleShowOutgoing.Checked = (ReadCFG("Main", "ShowOutgoingWhispers") = "Y")
-    mnuHideWhispersInrtbChat.Checked = (ReadCFG("Main", "HideWhispersInMain") = "Y")
-    mnuIgnoreInvites.Checked = (ReadCFG("Main", "IgnoreClanInvitations") = "Y")
+    mnuToggleShowOutgoing.Checked = (ReadCfg("Main", "ShowOutgoingWhispers") = "Y")
+    mnuHideWhispersInrtbChat.Checked = (ReadCfg("Main", "HideWhispersInMain") = "Y")
+    mnuIgnoreInvites.Checked = (ReadCfg("Main", "IgnoreClanInvitations") = "Y")
     
     'LoadSafelist
     LoadArray LOAD_PHRASES, Phrases()
@@ -7066,21 +7072,21 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
          'quLower.Interval = 2500
     'End If
     
-    ProtectMsg = ReadCFG("Other", "ProtectMsg")
+    ProtectMsg = ReadCfg("Other", "ProtectMsg")
     If ProtectMsg = vbNullString Then ProtectMsg = "Channel Protection"
     
     Call LoadOutFilters
     
-    s = ReadCFG(OT, "IdleBans")
+    s = ReadCfg(OT, "IdleBans")
     If s = "Y" Then BotVars.IB_On = BTRUE Else BotVars.IB_On = BFALSE
     
-    s = ReadCFG(OT, "KickIdle")
+    s = ReadCfg(OT, "KickIdle")
     If s = "Y" Then BotVars.IB_Kick = True Else BotVars.IB_Kick = False
     
-    s = ReadCFG(OT, "IdleBanDelay")
+    s = ReadCfg(OT, "IdleBanDelay")
     If (StrictIsNumeric(s) And s <> vbNullString) Then BotVars.IB_Wait = CInt(s) Else BotVars.IB_Wait = 0
     
-    s = ReadCFG(MN, "Spoof")
+    s = ReadCfg(MN, "Spoof")
     If StrictIsNumeric(Left$(s, 1)) Then
         Select Case Left$(s, 1)
             Case "0": BotVars.Spoof = 0
@@ -7092,13 +7098,13 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         BotVars.Spoof = 0
     End If
     
-    s = ReadCFG(MN, "Protect")
+    s = ReadCfg(MN, "Protect")
     If s = "Y" Then Protect = True Else Protect = False
     
-    s = ReadCFG(MN, "UDP")
+    s = ReadCfg(MN, "UDP")
     If s = "Y" Then BotVars.UseUDP = True Else BotVars.UseUDP = False
     
-    s = ReadCFG(OT, "IPBans")
+    s = ReadCfg(OT, "IPBans")
     If s = "Y" Then BotVars.IPBans = True Else BotVars.IPBans = False
     
     's = ReadCFG(OT, "ClientBansOn")
@@ -7108,13 +7114,13 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     'ClientBans() = Split(s, " ")
     'If UBound(ClientBans) = -1 Then ReDim ClientBans(0)
     
-    s = ReadCFG(MN, "QuietTime")
+    s = ReadCfg(MN, "QuietTime")
     If s = "Y" Then BotVars.QuietTime = True Else BotVars.QuietTime = False
     
-    s = ReadCFG(OT, "FlashWindow")
+    s = ReadCfg(OT, "FlashWindow")
     If s = "Y" Then mnuFlash.Checked = True Else mnuFlash.Checked = False
     
-    s = ReadCFG(MN, "UseProxy")
+    s = ReadCfg(MN, "UseProxy")
     If s = "Y" Then
         BotVars.UseProxy = True 'Added comment so the thing would let me commit. To shut Swent up
         If (sckBNet.State = sckConnected) Then BotVars.ProxyStatus = psOnline
@@ -7122,62 +7128,62 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         BotVars.UseProxy = False
     End If
     
-    s = ReadCFG(MN, "ProxyPort")
+    s = ReadCfg(MN, "ProxyPort")
     If StrictIsNumeric(s) Then
         If Val(s) < 65536 Then BotVars.ProxyPort = CLng(s) Else BotVars.ProxyPort = 0
     Else
         BotVars.ProxyPort = 0
     End If
     
-    s = ReadCFG(MN, "ProxyIsSocks5")
+    s = ReadCfg(MN, "ProxyIsSocks5")
     'Debug.Print s
     If s = "Y" Then BotVars.ProxyIsSocks5 = True Else BotVars.ProxyIsSocks5 = False
     'Debug.Print BotVars.ProxyIsSocks5
     
-    s = ReadCFG(OT, "NoTray")
+    s = ReadCfg(OT, "NoTray")
     If s = "Y" Then BotVars.NoTray = True Else BotVars.NoTray = False
     
-    s = ReadCFG(OT, "NoAutocomplete")
+    s = ReadCfg(OT, "NoAutocomplete")
     If s = "Y" Then BotVars.NoAutocompletion = True Else BotVars.NoAutocompletion = False
     
-    s = ReadCFG(OT, "NoColoring")
+    s = ReadCfg(OT, "NoColoring")
     If s = "Y" Then BotVars.NoColoring = True Else BotVars.NoColoring = False
     
-    s = ReadCFG(OT, "DisableVoidView")
+    s = ReadCfg(OT, "DisableVoidView")
     If s = "Y" Then mnuDisableVoidView.Checked = True Else mnuDisableVoidView.Checked = False
     
-    s = ReadCFG(OT, "MediaPlayer")
+    s = ReadCfg(OT, "MediaPlayer")
     If s <> vbNullString Then
         BotVars.MediaPlayer = s
     Else
         BotVars.MediaPlayer = "Winamp"
     End If
 
-    s = ReadCFG(MN, "UseRealm")
+    s = ReadCfg(MN, "UseRealm")
     If s = "Y" Then BotVars.UseRealm = True Else BotVars.UseRealm = False
     
     txtPre.text = ""
     txtPost.text = ""
     
-    s = ReadCFG(OT, "DisablePrefix")
+    s = ReadCfg(OT, "DisablePrefix")
     If s = "Y" Then txtPre.Visible = False Else txtPre.Visible = True
     
-    s = ReadCFG(OT, "DisableSuffix")
+    s = ReadCfg(OT, "DisableSuffix")
     If s = "Y" Then txtPost.Visible = False Else txtPost.Visible = True
     
     '[Other] MathAllowUI - Will allow People to use MessageBox/InputBox or other UI related commands in the .eval/.math commands ~Hdx 09-25-07
-    s = ReadCFG(OT, "MathAllowUI")
+    s = ReadCfg(OT, "MathAllowUI")
     If s = "Y" Then SCRestricted.AllowUI = True Else SCRestricted.AllowUI = False
     
-    BotVars.NoRTBAutomaticCopy = (ReadCFG("Override", "NoRTBAutomaticCopy") = "Y")
+    BotVars.NoRTBAutomaticCopy = (ReadCfg("Override", "NoRTBAutomaticCopy") = "Y")
     
-    BotVars.GreetMsg = ReadCFG(OT, "GreetMsg")
-    BotVars.UseGreet = (ReadCFG(OT, "UseGreets") = "Y")
-    BotVars.WhisperGreet = (ReadCFG(OT, "WhisperGreet") = "Y")
+    BotVars.GreetMsg = ReadCfg(OT, "GreetMsg")
+    BotVars.UseGreet = (ReadCfg(OT, "UseGreets") = "Y")
+    BotVars.WhisperGreet = (ReadCfg(OT, "WhisperGreet") = "Y")
     
-    BotVars.ProxyIP = ReadCFG(MN, "ProxyIP")
+    BotVars.ProxyIP = ReadCfg(MN, "ProxyIP")
     
-    s = ReadCFG(OT, "ChatDelay")
+    s = ReadCfg(OT, "ChatDelay")
     If (s = vbNullString) Then
         BotVars.ChatDelay = 500
     Else
@@ -7205,10 +7211,10 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Else
         Err.Clear
     
-        If (ReadCFG(MN, "LocalIP") <> vbNullString) Then
-            If (Err.Number = 0) Then: sckBNet.Bind , ReadCFG(MN, "LocalIP")
-            If (Err.Number = 0) Then: sckBNLS.Bind , ReadCFG(MN, "LocalIP")
-            If (Err.Number = 0) Then: sckMCP.Bind , ReadCFG(MN, "LocalIP")
+        If (ReadCfg(MN, "LocalIP") <> vbNullString) Then
+            If (Err.Number = 0) Then: sckBNet.Bind , ReadCfg(MN, "LocalIP")
+            If (Err.Number = 0) Then: sckBNLS.Bind , ReadCfg(MN, "LocalIP")
+            If (Err.Number = 0) Then: sckMCP.Bind , ReadCfg(MN, "LocalIP")
         End If
     End If
     
