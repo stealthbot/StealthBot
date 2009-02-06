@@ -2133,7 +2133,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
             Dim bln As Boolean ' ...
         
             If (Len(dbType)) Then
-                If (StrComp(m_DB(i).Type, dbType, vbBinaryCompare) = 0) Then
+                If (StrComp(m_DB(i).Type, dbType, vbTextCompare) = 0) Then
                     bln = True
                 End If
             Else
@@ -2160,7 +2160,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
 
         ' we aren't removing the last array
         ' element, are we?
-        If (i > UBound(m_DB)) Then
+        If (UBound(m_DB) = 0) Then
             ' ...
             ReDim m_DB(0)
             
@@ -2177,8 +2177,8 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
             End With
         Else
             ' ...
-            For j = i To UBound(DB) - 1
-                DB(j) = DB(j + 1)
+            For j = i To UBound(m_DB) - 1
+                m_DB(j) = m_DB(j + 1)
             Next j
             
             ' redefine array size
@@ -2242,7 +2242,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
         End If
         
         ' commit modifications
-        Call WriteDatabase(GetFilePath("users.txt"))
+        'Call WriteDatabase(GetFilePath("users.txt"))
         
         DB_remove = True
         

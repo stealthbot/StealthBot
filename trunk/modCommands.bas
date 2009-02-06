@@ -6555,7 +6555,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
 
         ' we aren't removing the last array
         ' element, are we?
-        If (i > UBound(DB)) Then
+        If (UBound(DB) = 0) Then
             ' redefine array size
             ReDim DB(0)
             
