@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmRealm 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -650,7 +650,7 @@ Private Sub lvwChars_KeyPress(KeyAscii As Integer)
 End Sub
 
 Private Sub cmdCreate_Click()
-    Dim I As Integer
+    Dim i As Integer
     Dim Flags As Long
     
     CreatedExpRealmChar = 0
@@ -668,12 +668,12 @@ Private Sub cmdCreate_Click()
             
             If chkHardcore.Value = 1 Then Flags = Flags Or &H4
             
-            For I = 1 To 7
-                If optNewCharType(I).Value = True Then
-                    MCPHandler.CreateMCPCharacter I - 1, Flags, txtCharName.text
+            For i = 1 To 7
+                If optNewCharType(i).Value = True Then
+                    MCPHandler.CreateMCPCharacter i - 1, Flags, txtCharName.text
                     Exit For
                 End If
-            Next I
+            Next i
         End If
     End If
 End Sub
@@ -786,15 +786,14 @@ End Sub
 Private Sub MCPHandler_CharLogonResponse(ByVal Status As Byte, ByVal Message As String)
     If Status = 0 Then
         frmChat.AddChat RTBColors.SuccessText, "[REALM] " & Message
+        
         Send0x0A
-        Unload Me
     Else
         frmChat.AddChat RTBColors.ErrorMessageText, "[REALM] " & Message
         RealmError = True
-        'Call frmChat.mnuDisconnect_Click
-        'Unload Me
-        'appears not necessary to disconnect&close at this point
     End If
+    
+    Unload Me
 End Sub
 
 Private Sub MCPHandler_RealmStartup(ByVal Status As Byte, ByVal Message As String)
@@ -821,13 +820,13 @@ Private Sub mnuPopDelete_Click()
 End Sub
 
 Private Sub optNewCharType_Click(Index As Integer)
-    Dim I As Integer
+    Dim i As Integer
     
     imgCharPortrait.Picture = imlChars.ListImages.Item(Index + 1).Picture
     
-    For I = 1 To 7
-        If I <> Index Then optNewCharType(I).Value = False
-    Next I
+    For i = 1 To 7
+        If i <> Index Then optNewCharType(i).Value = False
+    Next i
 End Sub
 
 Private Sub optViewExisting_Click()
@@ -862,23 +861,23 @@ Private Sub tmrLoginTimeout_Timer()
     
     ' ...
     If (indexValid = 0) Then
-        Dim I As Integer ' ...
+        Dim i As Integer ' ...
         Dim j As Integer ' ...
         
         ' ...
-        For I = 1 To lvwChars.ListItems.Count
+        For i = 1 To lvwChars.ListItems.Count
             ' ...
-            If (Len(CharExpiration(I)) >= Len("Expired ")) Then
+            If (Len(CharExpiration(i)) >= Len("Expired ")) Then
                 ' ...
-                If (Left$(CharExpiration(I), Len("Expired ")) <> "Expired ") Then
+                If (Left$(CharExpiration(i), Len("Expired ")) <> "Expired ") Then
                     ' ...
-                    indexValid = I
+                    indexValid = i
                     
                     ' ...
                     Exit For
                 End If
             End If
-        Next I
+        Next i
     End If
 
     mTicks = mTicks + 1
@@ -905,16 +904,16 @@ Private Sub tmrLoginTimeout_Timer()
 End Sub
 
 Private Function FindKey(ByVal sKey As String) As Boolean
-    Dim I As Long
+    Dim i As Long
     
     With lvwChars.ListItems
         If .Count > 0 Then
-            For I = 1 To .Count
-                If .Item(I).Key = sKey Then
+            For i = 1 To .Count
+                If .Item(i).Key = sKey Then
                     FindKey = True
                     Exit Function
                 End If
-            Next I
+            Next i
         End If
     End With
     
