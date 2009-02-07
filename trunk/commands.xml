@@ -337,7 +337,7 @@
     </access>
   </command>
 
-  <command name="add" enabled="true">
+  <command name="add">
     <aliases>
       <alias>set</alias>
     </aliases>
@@ -346,10 +346,6 @@
       <description>
         creates or modifies a specified database entry.
       </description>
-
-      <specialnotes>
-        g
-      </specialnotes>
     </documentation>
 
     <arguments>
@@ -640,7 +636,7 @@
     </access>
   </command>
 
-  <command name="about" enabled="true">
+  <command name="about">
     <aliases>
       <alias>version</alias>
       <alias>ver</alias>
@@ -1115,7 +1111,7 @@
     </access>
   </command>
 
-  <command name="say" enabled="true">
+  <command name="say">
     <aliases />
 
     <documentation>
@@ -1291,7 +1287,7 @@
     </access>
   </command>
 
-  <command name="away" enabled="true">
+  <command name="away"">
     <aliases />
 
     <documentation>
@@ -1323,7 +1319,7 @@
     </access>
   </command>
 
-  <command name="back" enabled="true">
+  <command name="back">
     <aliases />
 
     <documentation>
@@ -1458,7 +1454,7 @@
     </access>
   </command>
 
-  <command name="allseen" enabled="true">
+  <command name="allseen">
     <aliases />
 
     <documentation>
@@ -1730,7 +1726,7 @@
     </access>
   </command>
 
-  <command name="addphrase" enabled="true">
+  <command name="addphrase">
     <aliases>
       <alias>padd</alias>
     </aliases>
@@ -3366,7 +3362,7 @@
     </access>
   </command>
 
-  <command name="quit" enabled="false">
+  <command name="quit">
     <aliases />
 
     <documentation>
