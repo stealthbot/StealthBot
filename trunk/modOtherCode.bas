@@ -2944,11 +2944,11 @@ Public Function convertAlias(ByVal cmdName As String) As String
 
     ' ...
     If (Len(cmdName) > 0) Then
-        Dim commands As DOMDocument40
+        Dim commands As DOMDocument60
         Dim Alias    As IXMLDOMNode
         
         ' ...
-        Set commands = New DOMDocument40
+        Set commands = New DOMDocument60
         
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
@@ -2967,10 +2967,11 @@ Public Function convertAlias(ByVal cmdName As String) As String
         End If
     
         cmdName = Replace(cmdName, "\", "\\")
-        
+
         '// 09/03/2008 JSM - Modified code to use the <aliases> element
         Set Alias = _
-            commands.documentElement.selectSingleNode("./command/aliases/alias[text()='" & cmdName & "']")
+            commands.documentElement.selectSingleNode( _
+                "./command/aliases/alias[contains(text(), '" & cmdName & "')]")
 
         If (Not (Alias Is Nothing)) Then
             '// 09/03/2008 JSM - Modified code to use the <aliases> element
