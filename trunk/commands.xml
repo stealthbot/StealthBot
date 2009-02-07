@@ -13,9 +13,7 @@
 
   <command name="find">
     <aliases>
-      <alias>
-        findr
-      </alias>
+      <alias>findr</alias>
     </aliases>
 
     <documentation>
@@ -35,27 +33,17 @@
     </arguments>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
 
   <command name="findgrp">
     <aliases>
-      <alias>
-        findgroup
-      </alias>
+      <alias>findgroup</alias>
     </aliases>
 
     <documentation>
@@ -75,18 +63,10 @@
     </arguments>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
@@ -123,18 +103,10 @@
     </arguments>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
@@ -149,59 +121,25 @@
     </documentation>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
 
   <command name="bmail">
     <aliases>
-      <alias>
-        mail
-      </alias>
+      <alias>mail</alias>
     </aliases>
 
     <documentation>
@@ -229,50 +167,18 @@
     </arguments>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -287,59 +193,25 @@
     </documentation>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
 
   <command name="findattr">
     <aliases>
-      <alias>
-        findflag
-      </alias>
+      <alias>findflag</alias>
     </aliases>
 
     <documentation>
@@ -359,27 +231,17 @@
     </arguments>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
 
   <command name="designated" token="operator">
     <aliases>
-      <alias>
-        des
-      </alias>
+      <alias>des</alias>
     </aliases>
 
     <documentation>
@@ -389,18 +251,10 @@
     </documentation>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
@@ -415,50 +269,18 @@
     </documentation>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -473,50 +295,18 @@
     </documentation>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -531,59 +321,25 @@
     </documentation>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
 
   <command name="add" enabled="true">
     <aliases>
-      <alias>
-        set
-      </alias>
+      <alias>set</alias>
     </aliases>
 
     <documentation>
@@ -635,14 +391,9 @@
                 <match message="[A]+" />
 
                 <access>
-                  <rank>
-                    100
-                  </rank>
-
+                  <rank>100</rank>
                   <flags>
-                    <flag>
-                      A
-                    </flag>
+                    <flag>A</flag>
                   </flags>
                 </access>
               </restriction>
@@ -657,14 +408,9 @@
                 <match message="[a]+" />
 
                 <access>
-                  <rank>
-                    100
-                  </rank>
-
+                  <rank>100</rank>
                   <flags>
-                    <flag>
-                      A
-                    </flag>
+                    <flag>A</flag>
                   </flags>
                 </access>
               </restriction>
@@ -679,14 +425,9 @@
                 <match message="[B]+" />
 
                 <access>
-                  <rank>
-                    100
-                  </rank>
-
+                  <rank>100</rank>
                   <flags>
-                    <flag>
-                      A
-                    </flag>
+                    <flag>A</flag>
                   </flags>
                 </access>
               </restriction>
@@ -701,14 +442,9 @@
                 <match message="[c]+" />
 
                 <access>
-                  <rank>
-                    100
-                  </rank>
-
+                  <rank>100</rank>
                   <flags>
-                    <flag>
-                      A
-                    </flag>
+                    <flag>A</flag>
                   </flags>
                 </access>
               </restriction>
@@ -723,14 +459,9 @@
                 <match message="[c]+" />
 
                 <access>
-                  <rank>
-                    100
-                  </rank>
-
+                  <rank>100</rank>
                   <flags>
-                    <flag>
-                      A
-                    </flag>
+                    <flag>A</flag>
                   </flags>
                 </access>
               </restriction>
@@ -745,14 +476,9 @@
                 <match message="[D]+" />
 
                 <access>
-                  <rank>
-                    100
-                  </rank>
-
+                  <rank>100</rank>
                   <flags>
-                    <flag>
-                      A
-                    </flag>
+                    <flag>A</flag>
                   </flags>
                 </access>
               </restriction>
@@ -767,14 +493,9 @@
                 <match message="[I]+" />
 
                 <access>
-                  <rank>
-                    100
-                  </rank>
-
+                  <rank>100</rank>
                   <flags>
-                    <flag>
-                      A
-                    </flag>
+                    <flag>A</flag>
                   </flags>
                 </access>
               </restriction>
@@ -789,14 +510,9 @@
                 <match message="[J]+" />
 
                 <access>
-                  <rank>
-                    100
-                  </rank>
-
+                  <rank>100</rank>
                   <flags>
-                    <flag>
-                      A
-                    </flag>
+                    <flag>A</flag>
                   </flags>
                 </access>
               </restriction>
@@ -811,14 +527,9 @@
                 <match message="[O]+" />
 
                 <access>
-                  <rank>
-                    100
-                  </rank>
-
+                  <rank>100</rank>
                   <flags>
-                    <flag>
-                      A
-                    </flag>
+                    <flag>A</flag>
                   </flags>
                 </access>
               </restriction>
@@ -833,14 +544,9 @@
                 <match message="[o]+" />
 
                 <access>
-                  <rank>
-                    100
-                  </rank>
-
+                  <rank>100</rank>
                   <flags>
-                    <flag>
-                      A
-                    </flag>
+                    <flag>A</flag>
                   </flags>
                 </access>
               </restriction>
@@ -855,14 +561,9 @@
                 <match message="[P]+" />
 
                 <access>
-                  <rank>
-                    100
-                  </rank>
-
+                  <rank>100</rank>
                   <flags>
-                    <flag>
-                      A
-                    </flag>
+                    <flag>A</flag>
                   </flags>
                 </access>
               </restriction>
@@ -877,18 +578,10 @@
                 <match message="[S]+" />
 
                 <access>
-                  <rank>
-                    60
-                  </rank>
-
+                  <rank>60</rank>
                   <flags>
-                    <flag>
-                      A
-                    </flag>
-
-                    <flag>
-                      a
-                    </flag>
+                    <flag>A</flag>
+                    <flag>a</flag>
                   </flags>
                 </access>
               </restriction>
@@ -903,14 +596,9 @@
                 <match message="[T]+" />
 
                 <access>
-                  <rank>
-                    100
-                  </rank>
-
+                  <rank>100</rank>
                   <flags>
-                    <flag>
-                      A
-                    </flag>
+                    <flag>A</flag>
                   </flags>
                 </access>
               </restriction>
@@ -921,42 +609,16 @@
     </arguments>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
@@ -971,27 +633,17 @@
     </documentation>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
 
   <command name="about" enabled="true">
     <aliases>
-      <alias>
-        version
-      </alias>
-
-      <alias>
-        ver
-      </alias>
+      <alias>version</alias>
+      <alias>ver</alias>
     </aliases>
 
     <documentation>
@@ -1005,59 +657,25 @@
     </documentation>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
 
   <command name="getping">
     <aliases>
-      <alias>
-        pingme
-      </alias>
+      <alias>pingme</alias>
     </aliases>
 
     <documentation>
@@ -1067,50 +685,18 @@
     </documentation>
 
     <access>
-      <rank>
-        40
-      </rank>
-
+      <rank>40</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -1125,50 +711,18 @@
     </documentation>
 
     <access>
-      <rank>
-        40
-      </rank>
-
+      <rank>40</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -1183,50 +737,18 @@
     </documentation>
 
     <access>
-      <rank>
-        40
-      </rank>
-
+      <rank>40</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -1251,50 +773,18 @@
     </arguments>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -1319,18 +809,10 @@
     </arguments>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          O
-        </flag>
+        <flag>o</flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -1355,18 +837,10 @@
     </arguments>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          O
-        </flag>
+        <flag>o</flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -1381,50 +855,18 @@
     </documentation>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -1449,50 +891,18 @@
     </arguments>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -1513,14 +923,9 @@
             <match message="^[/]" />
 
             <access>
-              <rank>
-                100
-              </rank>
-
+              <rank>100</rank>
               <flags>
-                <flag>
-                  T
-                </flag>
+                <flag>T</flag>
               </flags>
             </access>
           </restriction>
@@ -1529,23 +934,16 @@
     </arguments>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          T
-        </flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
 
   <command name="math">
     <aliases>
-      <alias>
-        eval
-      </alias>
+      <alias>eval</alias>
     </aliases>
 
     <documentation>
@@ -1565,50 +963,18 @@
     </arguments>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -1623,50 +989,18 @@
     </documentation>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -1699,18 +1033,10 @@
     </arguments>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
@@ -1725,67 +1051,27 @@
     </documentation>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
 
   <command name="owner">
     <aliases>
-      <alias>
-        master
-      </alias>
+      <alias>master</alias>
     </aliases>
 
     <documentation>
@@ -1795,54 +1081,19 @@
     </documentation>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
-
-        <flag>
-          C
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -1857,14 +1108,9 @@
     </documentation>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          M
-        </flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
@@ -1885,14 +1131,9 @@
             <match message="^[/]" />
 
             <access>
-              <rank>
-                100
-              </rank>
-
+              <rank>100</rank>
               <flags>
-                <flag>
-                  T
-                </flag>
+                <flag>T</flag>
               </flags>
             </access>
           </restriction>
@@ -1901,14 +1142,9 @@
     </arguments>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          T
-        </flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -1929,14 +1165,9 @@
             <match message="^[/]" />
 
             <access>
-              <rank>
-                60
-              </rank>
-
+              <rank>60</rank>
               <flags>
-                <flag>
-                  T
-                </flag>
+                <flag>T</flag>
               </flags>
             </access>
           </restriction>
@@ -1945,27 +1176,17 @@
     </arguments>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          T
-        </flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
 
   <command name="ignore">
     <aliases>
-      <alias>
-        ign
-      </alias>
-
-      <alias>
-        squelch
-      </alias>
+      <alias>ign</alias>
+      <alias>squelch</alias>
     </aliases>
 
     <documentation>
@@ -1985,31 +1206,18 @@
     </arguments>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
 
   <command name="unignore">
     <aliases>
-      <alias>
-        unign
-      </alias>
-
-      <alias>
-        unsquelch
-      </alias>
+      <alias>unign</alias>
+      <alias>unsquelch</alias>
     </aliases>
 
     <documentation>
@@ -2029,18 +1237,10 @@
     </arguments>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
@@ -2065,18 +1265,10 @@
     </arguments>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
       </flags>
     </access>
   </command>
@@ -2091,18 +1283,10 @@
     </documentation>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
       </flags>
     </access>
   </command>
@@ -2131,18 +1315,10 @@
     </arguments>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -2159,18 +1335,10 @@
     </documentation>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          M
-        </flag>
+        <flag>C</flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
@@ -2195,50 +1363,18 @@
     </arguments>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -2253,50 +1389,18 @@
     </documentation>
 
     <access>
-      <rank>
-        50
-      </rank>
-
+      <rank>50</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -2311,14 +1415,9 @@
     </documentation>
 
     <access>
-      <rank>
-        60
-      </rank>
-
+      <rank>60</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -2333,18 +1432,10 @@
     </documentation>
 
     <access>
-      <rank>
-        60
-      </rank>
-
+      <rank>60</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
@@ -2359,18 +1450,10 @@
     </documentation>
 
     <access>
-      <rank>
-        60
-      </rank>
-
+      <rank>60</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
@@ -2387,59 +1470,25 @@
     </documentation>
 
     <access>
-      <rank>
-        60
-      </rank>
-
+      <rank>60</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
 
   <command name="levelban">
     <aliases>
-      <alias>
-        levelbans
-      </alias>
+      <alias>levelbans</alias>
     </aliases>
 
     <documentation>
@@ -2449,23 +1498,16 @@
     </documentation>
 
     <access>
-      <rank>
-        60
-      </rank>
-
+      <rank>60</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
 
   <command name="d2levelban">
     <aliases>
-      <alias>
-        d2levelbans
-      </alias>
+      <alias>d2levelbans</alias>
     </aliases>
 
     <documentation>
@@ -2475,23 +1517,16 @@
     </documentation>
 
     <access>
-      <rank>
-        60
-      </rank>
-
+      <rank>60</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
 
   <command name="slcheck">
     <aliases>
-      <alias>
-        shitcheck
-      </alias>
+      <alias>shitcheck</alias>
     </aliases>
 
     <documentation>
@@ -2511,27 +1546,17 @@
     </arguments>
 
     <access>
-      <rank>
-        60
-      </rank>
-
+      <rank>60</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
 
   <command name="detail">
     <aliases>
-      <alias>
-        dbd
-      </alias>
+      <alias>dbd</alias>
     </aliases>
 
     <documentation>
@@ -2551,18 +1576,10 @@
     </arguments>
 
     <access>
-      <rank>
-        60
-      </rank>
-
+      <rank>60</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
@@ -2577,18 +1594,10 @@
     </documentation>
 
     <access>
-      <rank>
-        60
-      </rank>
-
+      <rank>60</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
@@ -2603,14 +1612,9 @@
     </documentation>
 
     <access>
-      <rank>
-        60
-      </rank>
-
+      <rank>60</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -2625,18 +1629,10 @@
     </documentation>
 
     <access>
-      <rank>
-        60
-      </rank>
-
+      <rank>60</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
@@ -2661,18 +1657,10 @@
     </arguments>
 
     <access>
-      <rank>
-        60
-      </rank>
-
+      <rank>60</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
@@ -2687,27 +1675,17 @@
     </documentation>
 
     <access>
-      <rank>
-        60
-      </rank>
-
+      <rank>60</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
 
   <command name="lastwhisper">
     <aliases>
-      <alias>
-        lw
-      </alias>
+      <alias>lw</alias>
     </aliases>
 
     <documentation>
@@ -2717,59 +1695,25 @@
     </documentation>
 
     <access>
-      <rank>
-        60
-      </rank>
-
+      <rank>60</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
 
   <command name="phrases">
     <aliases>
-      <alias>
-        plist
-      </alias>
+      <alias>plist</alias>
     </aliases>
 
     <documentation>
@@ -2779,23 +1723,16 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
 
   <command name="addphrase" enabled="true">
     <aliases>
-      <alias>
-        padd
-      </alias>
+      <alias>padd</alias>
     </aliases>
 
     <documentation>
@@ -2807,74 +1744,24 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
+        <flag>O</flag>
+        <flag>O</flag>
+        <flag>O</flag>
+        <flag>O</flag>
+        <flag>O</flag>
+        <flag>O</flag>
+        <flag>O</flag>
+        <flag>O</flag>
+        <flag>O</flag>
+        <flag>O</flag>
+        <flag>O</flag>
+        <flag>O</flag>
+        <flag>O</flag>
+        <flag>O</flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -2889,50 +1776,18 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
@@ -2947,23 +1802,16 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
 
   <command name="delphrase">
     <aliases>
-      <alias>
-        pdel
-      </alias>
+      <alias>pdel</alias>
     </aliases>
 
     <documentation>
@@ -2973,14 +1821,9 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -2995,14 +1838,9 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -3017,14 +1855,9 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -3039,18 +1872,10 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          O
-        </flag>
+        <flag>o</flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -3065,27 +1890,17 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
 
   <command name="ipbans" token="operator">
     <aliases>
-      <alias>
-        ipbanning
-      </alias>
+      <alias>ipbanning</alias>
     </aliases>
 
     <documentation>
@@ -3095,18 +1910,10 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
@@ -3121,18 +1928,10 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
@@ -3147,10 +1946,7 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags />
     </access>
   </command>
@@ -3165,10 +1961,7 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags />
     </access>
   </command>
@@ -3183,10 +1976,7 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags />
     </access>
   </command>
@@ -3201,19 +1991,14 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags />
     </access>
   </command>
 
   <command name="shitlist">
     <aliases>
-      <alias>
-        sl
-      </alias>
+      <alias>sl</alias>
     </aliases>
 
     <documentation>
@@ -3223,10 +2008,7 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags />
     </access>
   </command>
@@ -3241,27 +2023,17 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
 
   <command name="safeadd">
     <aliases>
-      <alias>
-        safelist
-      </alias>
+      <alias>safelist</alias>
     </aliases>
 
     <documentation>
@@ -3271,18 +2043,10 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
@@ -3297,18 +2061,10 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
@@ -3323,18 +2079,10 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
@@ -3349,31 +2097,18 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
 
   <command name="tagadd">
     <aliases>
-      <alias>
-        tagban
-      </alias>
-
-      <alias>
-        addtag
-      </alias>
+      <alias>tagban</alias>
+      <alias>addtag</alias>
     </aliases>
 
     <documentation>
@@ -3383,18 +2118,10 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
@@ -3409,18 +2136,10 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
@@ -3435,10 +2154,7 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags />
     </access>
   </command>
@@ -3453,19 +2169,14 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags />
     </access>
   </command>
 
   <command name="shitadd">
     <aliases>
-      <alias>
-        pban
-      </alias>
+      <alias>pban</alias>
     </aliases>
 
     <documentation>
@@ -3475,18 +2186,10 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
@@ -3501,14 +2204,9 @@
     </documentation>
 
     <access>
-      <rank>
-        70
-      </rank>
-
+      <rank>70</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -3523,14 +2221,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -3545,59 +2238,25 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>
 
   <command name="whispercmds">
     <aliases>
-      <alias>
-        wc
-      </alias>
+      <alias>wc</alias>
     </aliases>
 
     <documentation>
@@ -3607,14 +2266,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -3629,14 +2283,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -3651,14 +2300,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -3673,23 +2317,16 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          M
-        </flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
 
   <command name="kickonyell">
     <aliases>
-      <alias>
-        koy
-      </alias>
+      <alias>koy</alias>
     </aliases>
 
     <documentation>
@@ -3699,27 +2336,17 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
 
   <command name="clientbans">
     <aliases>
-      <alias>
-        clist
-      </alias>
-
-      <alias>
-        cbans
-      </alias>
+      <alias>clist</alias>
+      <alias>cbans</alias>
     </aliases>
 
     <documentation>
@@ -3729,23 +2356,16 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
 
   <command name="cadd">
     <aliases>
-      <alias>
-        addclient
-      </alias>
+      <alias>addclient</alias>
     </aliases>
 
     <documentation>
@@ -3765,23 +2385,16 @@
     </arguments>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
 
   <command name="cdel">
     <aliases>
-      <alias>
-        delclient
-      </alias>
+      <alias>delclient</alias>
     </aliases>
 
     <documentation>
@@ -3801,14 +2414,9 @@
     </arguments>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -3823,14 +2431,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -3845,14 +2448,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          M
-        </flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
@@ -3867,14 +2465,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          M
-        </flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
@@ -3889,14 +2482,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -3911,23 +2499,16 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
 
   <command name="idletime">
     <aliases>
-      <alias>
-        idlewait
-      </alias>
+      <alias>idlewait</alias>
     </aliases>
 
     <documentation>
@@ -3937,14 +2518,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -3959,23 +2535,16 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          M
-        </flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
 
   <command name="reconnect">
     <aliases>
-      <alias>
-        rc
-      </alias>
+      <alias>rc</alias>
     </aliases>
 
     <documentation>
@@ -3985,23 +2554,16 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
 
   <command name="designate" token="operator">
     <aliases>
-      <alias>
-        des
-      </alias>
+      <alias>des</alias>
     </aliases>
 
     <documentation>
@@ -4011,14 +2573,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -4045,14 +2602,9 @@
     </arguments>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -4067,14 +2619,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -4089,23 +2636,16 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
 
   <command name="rem">
     <aliases>
-      <alias>
-        del
-      </alias>
+      <alias>del</alias>
     </aliases>
 
     <documentation>
@@ -4115,18 +2655,10 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          a
-        </flag>
+        <flag>A</flag>
+        <flag>a</flag>
       </flags>
     </access>
   </command>
@@ -4141,14 +2673,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -4163,14 +2690,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -4185,14 +2707,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          M
-        </flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
@@ -4207,14 +2724,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          M
-        </flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
@@ -4229,14 +2741,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          M
-        </flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
@@ -4251,14 +2758,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          M
-        </flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
@@ -4273,14 +2775,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          M
-        </flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
@@ -4295,14 +2792,9 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          M
-        </flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
@@ -4317,23 +2809,16 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          M
-        </flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
 
   <command name="previous">
     <aliases>
-      <alias>
-        prev
-      </alias>
+      <alias>prev</alias>
     </aliases>
 
     <documentation>
@@ -4343,23 +2828,16 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          M
-        </flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
 
   <command name="sweepban" token="operator">
     <aliases>
-      <alias>
-        cb
-      </alias>
+      <alias>cb</alias>
     </aliases>
 
     <documentation>
@@ -4369,27 +2847,17 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
 
   <command name="sweepignore">
     <aliases>
-      <alias>
-        cs
-      </alias>
+      <alias>cs</alias>
     </aliases>
 
     <documentation>
@@ -4399,27 +2867,17 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
+        <flag>O</flag>
+        <flag>o</flag>
       </flags>
     </access>
   </command>
 
   <command name="idlebans">
     <aliases>
-      <alias>
-        ib
-      </alias>
+      <alias>ib</alias>
     </aliases>
 
     <documentation>
@@ -4429,14 +2887,9 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -4451,14 +2904,9 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -4473,14 +2921,9 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -4495,10 +2938,7 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags />
     </access>
   </command>
@@ -4513,19 +2953,14 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags />
     </access>
   </command>
 
   <command name="clearbanlist">
     <aliases>
-      <alias>
-        cbl
-      </alias>
+      <alias>cbl</alias>
     </aliases>
 
     <documentation>
@@ -4535,23 +2970,16 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
 
   <command name="clan" token="operator">
     <aliases>
-      <alias>
-        c
-      </alias>
+      <alias>c</alias>
     </aliases>
 
     <documentation>
@@ -4561,14 +2989,9 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          c
-        </flag>
+        <flag>c</flag>
       </flags>
     </access>
   </command>
@@ -4583,14 +3006,9 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -4605,10 +3023,7 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags />
     </access>
   </command>
@@ -4623,23 +3038,16 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          J
-        </flag>
+        <flag>J</flag>
       </flags>
     </access>
   </command>
 
   <command name="home">
     <aliases>
-      <alias>
-        joinhome
-      </alias>
+      <alias>joinhome</alias>
     </aliases>
 
     <documentation>
@@ -4649,14 +3057,9 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          J
-        </flag>
+        <flag>J</flag>
       </flags>
     </access>
   </command>
@@ -4695,14 +3098,9 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -4717,14 +3115,9 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -4739,14 +3132,9 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -4761,23 +3149,16 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
 
   <command name="rejoin">
     <aliases>
-      <alias>
-        rj
-      </alias>
+      <alias>rj</alias>
     </aliases>
 
     <documentation>
@@ -4787,27 +3168,17 @@
     </documentation>
 
     <access>
-      <rank>
-        80
-      </rank>
-
+      <rank>80</rank>
       <flags>
-        <flag>
-          J
-        </flag>
+        <flag>J</flag>
       </flags>
     </access>
   </command>
 
   <command name="quickrejoin">
     <aliases>
-      <alias>
-        qrejoin
-      </alias>
-
-      <alias>
-        qrj
-      </alias>
+      <alias>qrejoin</alias>
+      <alias>qrj</alias>
     </aliases>
 
     <documentation>
@@ -4821,13 +3192,8 @@
 
   <command name="forcejoin">
     <aliases>
-      <alias>
-        fjoin
-      </alias>
-
-      <alias>
-        fj
-      </alias>
+      <alias>fjoin</alias>
+      <alias>fj</alias>
     </aliases>
 
     <documentation>
@@ -4841,9 +3207,7 @@
 
   <command name="quiettime">
     <aliases>
-      <alias>
-        qt
-      </alias>
+      <alias>qt</alias>
     </aliases>
 
     <documentation>
@@ -4853,27 +3217,17 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
 
   <command name="giveup" token="operator">
     <aliases>
-      <alias>
-        op
-      </alias>
-
-      <alias>
-        ddp
-      </alias>
+      <alias>op</alias>
+      <alias>ddp</alias>
     </aliases>
 
     <documentation>
@@ -4883,14 +3237,9 @@
     </documentation>
 
     <access>
-      <rank>
-        90
-      </rank>
-
+      <rank>90</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -4909,9 +3258,7 @@
 
   <command name="makechieftain">
     <aliases>
-      <alias>
-        makechief
-      </alias>
+      <alias>makechief</alias>
     </aliases>
 
     <documentation>
@@ -4957,14 +3304,9 @@
     </documentation>
 
     <access>
-      <rank>
-        100
-      </rank>
-
+      <rank>100</rank>
       <flags>
-        <flag>
-          c
-        </flag>
+        <flag>c</flag>
       </flags>
     </access>
   </command>
@@ -4979,23 +3321,16 @@
     </documentation>
 
     <access>
-      <rank>
-        100
-      </rank>
-
+      <rank>100</rank>
       <flags>
-        <flag>
-          M
-        </flag>
+        <flag>M</flag>
       </flags>
     </access>
   </command>
 
   <command name="efp">
     <aliases>
-      <alias>
-        floodmode
-      </alias>
+      <alias>floodmode</alias>
     </aliases>
 
     <documentation>
@@ -5005,23 +3340,16 @@
     </documentation>
 
     <access>
-      <rank>
-        100
-      </rank>
-
+      <rank>100</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
 
   <command name="locktext">
     <aliases>
-      <alias>
-        lockchat
-      </alias>
+      <alias>lockchat</alias>
     </aliases>
 
     <documentation>
@@ -5031,14 +3359,9 @@
     </documentation>
 
     <access>
-      <rank>
-        100
-      </rank>
-
+      <rank>100</rank>
       <flags>
-        <flag>
-          C
-        </flag>
+        <flag>C</flag>
       </flags>
     </access>
   </command>
@@ -5055,10 +3378,7 @@
     </documentation>
 
     <access>
-      <rank>
-        100
-      </rank>
-
+      <rank>100</rank>
       <flags />
     </access>
   </command>
@@ -5073,14 +3393,9 @@
     </documentation>
 
     <access>
-      <rank>
-        100
-      </rank>
-
+      <rank>100</rank>
       <flags>
-        <flag>
-          O
-        </flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -5095,50 +3410,18 @@
     </documentation>
 
     <access>
-      <rank>
-        20
-      </rank>
-
+      <rank>20</rank>
       <flags>
-        <flag>
-          a
-        </flag>
-
-        <flag>
-          A
-        </flag>
-
-        <flag>
-          C
-        </flag>
-
-        <flag>
-          c
-        </flag>
-
-        <flag>
-          G
-        </flag>
-
-        <flag>
-          J
-        </flag>
-
-        <flag>
-          O
-        </flag>
-
-        <flag>
-          o
-        </flag>
-
-        <flag>
-          M
-        </flag>
-
-        <flag>
-          T
-        </flag>
+        <flag>a</flag>
+        <flag>A</flag>
+        <flag>C</flag>
+        <flag>c</flag>
+        <flag>G</flag>
+        <flag>J</flag>
+        <flag>O</flag>
+        <flag>o</flag>
+        <flag>M</flag>
+        <flag>T</flag>
       </flags>
     </access>
   </command>

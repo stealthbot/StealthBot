@@ -2971,7 +2971,12 @@ Public Function convertAlias(ByVal cmdName As String) As String
         '// 09/03/2008 JSM - Modified code to use the <aliases> element
         Set Alias = _
             commands.documentElement.selectSingleNode( _
-                "./command/aliases/alias[contains(text(), '" & cmdName & "')]")
+                "./command/aliases/alias[text()='" & cmdName & "']")
+        
+        ' ...
+        'Set Alias = _
+        '    commands.documentElement.selectSingleNode( _
+        '        "./command/aliases/alias[contains(text(), '" & cmdName & "')]")
 
         If (Not (Alias Is Nothing)) Then
             '// 09/03/2008 JSM - Modified code to use the <aliases> element

@@ -104,7 +104,11 @@ Public Sub WriteNode(ByRef temp As IXMLDOMNode, Optional ByVal Spaces As Integer
         ' ...
         If (temp.hasChildNodes) Then
             ' ...
-            m_fs.WriteLine ">"
+            If (writeOnSameLine(temp)) Then
+                m_fs.Write ">"
+            Else
+                m_fs.WriteLine ">"
+            End If
         
             ' ...
             Set tempList = temp.childNodes
@@ -115,14 +119,18 @@ Public Sub WriteNode(ByRef temp As IXMLDOMNode, Optional ByVal Spaces As Integer
             Next
             
             ' ...
-            m_fs.Write Space$(Spaces)
-            m_fs.WriteLine "</" & temp.nodeName & ">"
+            If (writeOnSameLine(temp)) Then
+                m_fs.WriteLine "</" & temp.nodeName & ">"
+            Else
+                m_fs.WriteLine _
+                    Space$(Spaces) & "</" & temp.nodeName & ">"
+            End If
         Else
             m_fs.WriteLine " />"
         End If
         
         ' ...
-        If ((temp.nextSibling Is Nothing) = False) Then
+        If ((Not (temp.nextSibling Is Nothing))) And (Not (writeOnSameLine(temp))) Then
             m_fs.WriteLine vbNullString
         End If
     Else
@@ -159,8 +167,6 @@ End Sub
 ' ...
 Private Sub WriteData(ByRef temp As IXMLDOMNode, Optional ByVal Spaces As Integer = 0)
 
-    'Dim tempNode As IXMLDOMNode
-
     ' ...
     If (temp Is Nothing) Then
         Exit Sub
@@ -168,6 +174,40 @@ Private Sub WriteData(ByRef temp As IXMLDOMNode, Optional ByVal Spaces As Intege
     
     ' ...
     If (temp.NodeType = NODE_TEXT) Then
-        m_fs.WriteLine Space$(Spaces) & temp.text
+        If (writeOnSameLine(temp.parentNode)) Then
+            m_fs.Write temp.text
+        Else
+            m_fs.WriteLine Space$(Spaces) & temp.text
+        End If
     End If
 End Sub
+
+Private Function writeOnSameLine(ByRef temp As IXMLDOMNode) As Boolean
+
+    ' ...
+    Dim nodeCollection As New Collection
+    Dim i As Integer ' ...
+    
+    ' ...
+    With nodeCollection
+        .Add "alias"
+        .Add "rank"
+        .Add "flag"
+    End With
+    
+    ' ...
+    For i = 1 To nodeCollection.Count
+        ' ...
+        If (StrComp(temp.nodeName, nodeCollection(i), vbTextCompare) = 0) Then
+            ' ...
+            writeOnSameLine = True
+            
+            ' ...
+            Exit Function
+        End If
+    Next i
+    
+    ' ...
+    writeOnSameLine = False
+    
+End Function
