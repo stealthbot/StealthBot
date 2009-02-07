@@ -3015,6 +3015,13 @@ Private Function OnSetTrigger(ByVal Username As String, ByRef dbAccess As udtGet
             
             ' ...
             Exit Function
+        ElseIf (Left$(newTrigger, 1) = "/") Then
+            ' ...
+            cmdRet(0) = "Error: Trigger may not begin with a " & _
+                "forward slash."
+            
+            ' ...
+            Exit Function
         End If
         
         ' set new trigger
