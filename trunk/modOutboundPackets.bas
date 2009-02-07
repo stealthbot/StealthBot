@@ -130,8 +130,8 @@ Public Sub Send0x51(ByVal ServerToken As Long)
 
             With PBuffer
                 .InsertDWord ClientToken ' Client token
-                .InsertDWord (Version + frmChat.GetAuthMagic()) ' CheckRevision version
-                .InsertDWord (Checksum - frmChat.GetAuthMagic()) ' CheckRevision checksum
+                .InsertDWord Version     ' CheckRevision version
+                .InsertDWord Checksum    ' CheckRevision checksum
                 
                 ' Number of CDKeys
                 If BotVars.Product = "PX2D" Or BotVars.Product = "PX3W" Then
@@ -146,7 +146,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                 .InsertDWord &H0
                 .InsertDWord Len(BotVars.CDKey)
                 .InsertDWord ProductID
-                .InsertDWord Value1
+                .InsertDWord (Value1 + frmChat.GetAuthMagic())
                 .InsertDWord &H0
                 .InsertNonNTString KeyHash
                 
@@ -164,7 +164,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                     
                     .InsertDWord Len(BotVars.ExpKey)
                     .InsertDWord ProductID
-                    .InsertDWord Value1
+                    .InsertDWord (Value1 - frmChat.GetAuthMagic())
                     .InsertDWord &H0
                     .InsertNonNTString KeyHash
                 End If

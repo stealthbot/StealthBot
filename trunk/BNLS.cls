@@ -453,8 +453,8 @@ Private Sub Send_BNLS0x51()
     
     With PBuffer
         .InsertDWord ds.GetGTC
-        .InsertDWord (ds.GetVersion + frmChat.GetAuthMagic())
-        .InsertDWord (ds.GetChecksum - frmChat.GetAuthMagic())
+        .InsertDWord ds.GetVersion
+        .InsertDWord ds.GetChecksum
         
         If ((BotVars.Product = "PX2D") Or _
             (BotVars.Product = "PX3W")) Then
@@ -473,8 +473,9 @@ Private Sub Send_BNLS0x51()
         
         .InsertDWord Len(BotVars.CDKey)
         .InsertDWord ProductID
-        .InsertDWord Value1
+        .InsertDWord (Value1 + frmChat.GetAuthMagic())
         .InsertDWord &H0
+
         .InsertNonNTString KeyHash
         
         'Add warden support
@@ -492,7 +493,7 @@ Private Sub Send_BNLS0x51()
         
             .InsertDWord Len(BotVars.ExpKey)
             .InsertDWord ProductID
-            .InsertDWord Value1
+            .InsertDWord (Value1 - frmChat.GetAuthMagic())
             .InsertDWord &H0
             .InsertNonNTString KeyHash
         End If
