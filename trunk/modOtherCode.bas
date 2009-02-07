@@ -2944,11 +2944,11 @@ Public Function convertAlias(ByVal cmdName As String) As String
 
     ' ...
     If (Len(cmdName) > 0) Then
-        Dim commands As DOMDocument60
+        Dim commands As DOMDocument40
         Dim Alias    As IXMLDOMNode
         
         ' ...
-        Set commands = New DOMDocument60
+        Set commands = New DOMDocument40
         
         ' ...
         If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
@@ -2969,11 +2969,14 @@ Public Function convertAlias(ByVal cmdName As String) As String
         cmdName = Replace(cmdName, "\", "\\")
         
         '// 09/03/2008 JSM - Modified code to use the <aliases> element
-        Set Alias = commands.documentElement.selectSingleNode("./command/aliases/alias[text()='" & cmdName & "']")
+        Set Alias = _
+            commands.documentElement.selectSingleNode("./command/aliases/alias[text()='" & cmdName & "']")
 
         If (Not (Alias Is Nothing)) Then
             '// 09/03/2008 JSM - Modified code to use the <aliases> element
-            convertAlias = Alias.parentNode.parentNode.Attributes.getNamedItem("name").text
+            convertAlias = _
+                Alias.parentNode.parentNode.Attributes.getNamedItem("name").text
+            
             Exit Function
         End If
     End If
@@ -2986,6 +2989,7 @@ Public Function convertAlias(ByVal cmdName As String) As String
     
 ' ...
 ERROR_HANDLER:
+
     Call frmChat.AddChat(RTBColors.ConsoleText, "Error: XML Database Processor has encountered an error " & _
         "during alias lookup.")
         
@@ -2993,6 +2997,7 @@ ERROR_HANDLER:
     convertAlias = cmdName
 
     Exit Function
+    
 End Function
 
 ' Fixed font issue when an element was only 1 character long -Pyro (9/28/08)

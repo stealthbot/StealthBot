@@ -169,9 +169,6 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
 ERROR_HANDLER:
     Call frmChat.AddChat(RTBColors.ConsoleText, "Error: " & Err.description & _
         " in ProcessCommand().")
-        
-    Call frmChat.AddChat(RTBColors.ConsoleText, "Username: " & Username & _
-                         "Message: " & Message)
 
     'Unload memory - FrOzeN
     Set command = Nothing

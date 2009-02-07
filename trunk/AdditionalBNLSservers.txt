@@ -1,6 +1,7 @@
-jbls.org
-bobo.com
+erdsg
+alendar.no-ip.org
 pyro.no-ip.biz
-logon.berzerkerjbls.com
 hdx.no-ip.org
+logon.berzerkerjbls.com
+bobo.com
 

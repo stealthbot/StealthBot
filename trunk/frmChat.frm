@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2261,17 +2261,14 @@ Public Sub FindAltBNLS()
         intCounter = 1
                 
         If (INet.StillExecuting = False) Then
+            ' store first bnls server used so that we can avoid connecting to it again
+            firstServer = BotVars.BNLSServer
+        
             'Get the servers as a list from http://stealthbot.net/p/bnls.php
             strReturn = INet.OpenURL("http://www.stealthbot.net/p/bnls.php")
             
-            'Place the servers into the array
-            strBNLS() = Split(strReturn, vbLf)
-            
             ' ...
-            ReDim Preserve strBNLS(0 To 1)
-            
-            ' ...
-            If (strBNLS(1) = vbNullString) Then
+            If (strReturn = vbNullString) Then
                 ' ...
                 AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured when trying to locate an alternative BNLS server. " & _
                     "Visit http://stealthbot.net/ and check the Technical Support forum for more information."
@@ -2286,8 +2283,8 @@ Public Sub FindAltBNLS()
                 Exit Sub
             End If
             
-            ' store first bnls server used so that we can avoid connecting to it again
-            firstServer = BotVars.BNLSServer
+            'Place the servers into the array
+            strBNLS() = Split(strReturn, vbLf)
             
             'Mark GotBNLSList as True so it's no longer downloaded for each attempt
             GotBNLSList = True
@@ -2296,14 +2293,12 @@ Public Sub FindAltBNLS()
             Err.Raise FIND_ALT_BNLS_ERROR, , "Unable to use BNLS server finder. Visit http://stealthbot.net/ " & _
                 "and check the Technical Support forum for more information."
         End If
-    Else
-        intCounter = intCounter + 1
-        
-        If intCounter > UBound(strBNLS) Then
-            'All BNLS servers have been tried and failed
-            Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://stealthbot.net/ " & _
-                "and check the Technical Support forum for more information."
-        End If
+    End If
+    
+    If intCounter > UBound(strBNLS) Then
+        'All BNLS servers have been tried and failed
+        Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://stealthbot.net/ " & _
+            "and check the Technical Support forum for more information."
     End If
     
     ' ...
@@ -4683,7 +4678,7 @@ Private Sub cboSend_KeyUp(KeyCode As Integer, Shift As Integer)
                             .SelLength = Len(.text)
                             
                             If StrComp(LastWhisperTo, "%f%") = 0 Then
-                                .SelText = "/f m"
+                                .SelText = "/f m "
                             Else
                                 .SelText = _
                                     "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(LastWhisperTo) & " "
