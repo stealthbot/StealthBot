@@ -8,6 +8,10 @@ Public Const VERCODE As String = "2697"
 Public Const BNCSUTIL_VERSION As String = "1.3.1"
 Public Const CONFIG_VERSION As String = "5"
 
+Public Const BETA_AUTH_URL As String = _
+    "http://www.stealthbot.net/board/sbauth.php?username="
+Public Const BETA_AUTH_URL_CRC32 As Long = 716038006
+
 Public Const COLOR_TEAL& = &H99CC00
 Public Const COLOR_BLUE& = &HCC9900
 Public Const GWL_WNDPROC = (-4)
@@ -183,7 +187,7 @@ Public QueueMaster As Long
 'ARRAYS
 Public Phrases() As String
 Public ClientBans() As String
-Public Phrasebans As Boolean
+Public PhraseBans As Boolean
 Public SuppressProfileOutput As Boolean
 Public Catch() As String
 Public gChannel As udtChanList

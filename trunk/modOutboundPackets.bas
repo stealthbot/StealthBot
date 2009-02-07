@@ -15,7 +15,7 @@ Public Sub Send0x50(Optional lVerByte As Long)
     With PBuffer
         .InsertDWord &H0 'Protocol ID (Zero)
         
-        s = StrReverse(UCase(ReadCFG("Override", GetProductKey() & "PlatID")))
+        s = StrReverse(UCase(ReadCfg("Override", GetProductKey() & "PlatID")))
         
         If Len(s) > 0 Then
             If Len(s) > 4 Then s = Mid$(s, 1, 4)
@@ -35,7 +35,7 @@ Public Sub Send0x50(Optional lVerByte As Long)
         .InsertDWord &H0 ' Local IP (defunct)
         .InsertDWord GetTimeZoneBias ' Timezone bias
         
-        If LenB(ReadCFG("Override", "ForceDefaultLocaleID")) > 0 Then
+        If LenB(ReadCfg("Override", "ForceDefaultLocaleID")) > 0 Then
             .InsertDWord 1033 ' US English
             .InsertDWord 1033
         Else
@@ -127,11 +127,11 @@ Public Sub Send0x51(ByVal ServerToken As Long)
         
         If checkRevision(ValueString, HashPaths(0), HashPaths(1), HashPaths(2), MPQRevision, Checksum) Then
             Version = getExeInfo(HashPaths(0), EXEInfo)
-            
+
             With PBuffer
-                .InsertDWord ClientToken    ' Client token
-                .InsertDWord Version        ' CheckRevision version
-                .InsertDWord Checksum       ' CheckRevision checksum
+                .InsertDWord ClientToken ' Client token
+                .InsertDWord (Version + frmChat.GetAuthMagic()) ' CheckRevision version
+                .InsertDWord (Checksum - frmChat.GetAuthMagic()) ' CheckRevision checksum
                 
                 ' Number of CDKeys
                 If BotVars.Product = "PX2D" Or BotVars.Product = "PX3W" Then
@@ -171,8 +171,8 @@ Public Sub Send0x51(ByVal ServerToken As Long)
 
                 .InsertNTString EXEInfo
                 
-                If (LenB(ReadCFG("Override", "OwnerName")) > 0) Then
-                    .InsertNTString ReadCFG("Override", "OwnerName")
+                If (LenB(ReadCfg("Override", "OwnerName")) > 0) Then
+                    .InsertNTString ReadCfg("Override", "OwnerName")
                 Else
                     .InsertNTString g_username
                 End If
@@ -239,7 +239,7 @@ End Sub
 Public Sub Send0x3A(ByVal ServerToken As Long)
     Dim PasswordHash As String
     
-    If LenB(ReadCFG("Override", "UppercasePassword")) > 0 Then
+    If LenB(ReadCfg("Override", "UppercasePassword")) > 0 Then
         PasswordHash = doubleHashPassword(BotVars.Password, ds.GetGTC, ServerToken)
     Else
         PasswordHash = doubleHashPassword(LCase(BotVars.Password), ds.GetGTC, ServerToken)
@@ -262,8 +262,8 @@ Public Sub Send0x0A()
         
         If Not BotVars.UseUDP Then
             With PBuffer
-                If Len(ReadCFG("Override", "UDPString")) = 4 Then
-                    .InsertNonNTString ReadCFG("Override", "UDPString")
+                If Len(ReadCfg("Override", "UDPString")) = 4 Then
+                    .InsertNonNTString ReadCfg("Override", "UDPString")
                 Else
                     .InsertNonNTString "tenb"
                 End If

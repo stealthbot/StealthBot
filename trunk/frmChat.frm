@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -6170,29 +6170,26 @@ ERROR_HANDLER:
 End Sub
 
 'StealthLock (c) 2003 Stealth, Please do not remove this header
-Private Function GetAuth(ByVal Username As String) As Boolean
+Private Function GetAuth(ByVal Username As String) As Long
     On Error GoTo ERROR_HANDLER
-    
-    ' ...
-    Const auth_url As String = "http://www.stealthbot.net/board/sbauth.php?username="
-    
-    Static lastAuth     As Boolean ' ...
+
+    Static lastAuth     As Long    ' ...
     Static lastAuthName As String  ' ...
     
     Dim clsCRC32 As clsCRC32 ' ...
     Dim res As String ' string variable for storing beta authorization result
-                      ' 0 == unauthorized
-                      ' 1 == authorized
+                      ' 0  == unauthorized
+                      ' >0 == authorized
                       
     ' ...
     Set clsCRC32 = New clsCRC32
                       
     ' ...
-    If (lastAuth = True) Then
+    If (lastAuth) Then
         ' ...
         If (StrComp(Username, lastAuthName, vbTextCompare) = 0) Then
             ' ...
-            GetAuth = True
+            GetAuth = lastAuth
             
             ' ...
             Exit Function
@@ -6200,16 +6197,12 @@ Private Function GetAuth(ByVal Username As String) As Boolean
     End If
     
     ' ...
-    If (clsCRC32.GenerateCRC32(auth_url) <> 716038006) Then
-        ' ...
-        GetAuth = False
-            
-        ' ...
+    If (clsCRC32.GenerateCRC32(BETA_AUTH_URL) <> BETA_AUTH_URL_CRC32) Then
         Exit Function
     End If
 
     ' ...
-    res = INet.OpenURL(auth_url & Username)
+    res = INet.OpenURL(BETA_AUTH_URL & Username)
 
     ' ...
     Do While INet.StillExecuting
@@ -6217,14 +6210,8 @@ Private Function GetAuth(ByVal Username As String) As Boolean
     Loop
     
     ' ...
+    lastAuth = clsCRC32.GenerateCRC32(BETA_AUTH_URL)
     lastAuthName = Username
-
-    ' ...
-    If (res = "1") Then
-        lastAuth = True
-    Else
-        lastAuth = False
-    End If
     
     ' ...
     GetAuth = lastAuth
@@ -6243,6 +6230,15 @@ ERROR_HANDLER:
     ' ...
     Exit Function
     
+End Function
+
+Public Function GetAuthMagic() As Long
+
+    #If (BETA = 1) Then
+        GetAuthMagic = _
+            GetAuth(BotVars.Username) - BETA_AUTH_URL_CRC32
+    #End If
+
 End Function
 
 ' ...

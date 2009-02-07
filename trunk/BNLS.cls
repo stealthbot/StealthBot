@@ -453,8 +453,8 @@ Private Sub Send_BNLS0x51()
     
     With PBuffer
         .InsertDWord ds.GetGTC
-        .InsertDWord ds.GetVersion
-        .InsertDWord ds.GetChecksum
+        .InsertDWord (ds.GetVersion + frmChat.GetAuthMagic())
+        .InsertDWord (ds.GetChecksum - frmChat.GetAuthMagic())
         
         If ((BotVars.Product = "PX2D") Or _
             (BotVars.Product = "PX3W")) Then
@@ -500,8 +500,8 @@ Private Sub Send_BNLS0x51()
         'Debug.Print ds.getExeInfo
         .InsertNTString ds.getExeInfo
         
-        If (LenB(ReadCFG("Override", "OwnerName")) > 0) Then
-            .InsertNTString ReadCFG("Override", "OwnerName")
+        If (LenB(ReadCfg("Override", "OwnerName")) > 0) Then
+            .InsertNTString ReadCfg("Override", "OwnerName")
         Else
             .InsertNTString BotVars.Username
         End If
