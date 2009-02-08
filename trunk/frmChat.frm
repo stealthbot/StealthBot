@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -5646,7 +5646,7 @@ Private Sub Timer_Timer()
     Dim f As Integer, IdleWait As Integer
     Static iCounter As Integer, UDP As Byte
      
-    If iCounter = 32760 Then iCounter = 0
+    If iCounter >= 32760 Then iCounter = 0
     
     'If LenB(Dir$(GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt")) = 0 Then
     '    'On Error Resume Next
@@ -5694,7 +5694,7 @@ Private Sub Timer_Timer()
     
     If StrictIsNumeric(IdleWaitS) Then IdleWait = IdleWaitS
 
-    If IdleWait < 1 Then Exit Sub
+    If IdleWait < 2 Then Exit Sub
     
     If iCounter >= IdleWait And StrComp(LCase(g_Channel.Name), "op [vl]", vbTextCompare) <> 0 Then
         iCounter = 0
