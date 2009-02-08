@@ -197,8 +197,8 @@ Private Sub cmdBrowse_Click()
         .InitDir = App.Path
         .ShowSave
     
-        If Len(.FileName) > 0 Then
-            txtPath.text = .FileName
+        If Len(.filename) > 0 Then
+            txtPath.text = .filename
         End If
     End With
 End Sub

@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.0#0"; "vbalTreeView6.ocx"
 Begin VB.Form frmSettings 
    BackColor       =   &H00000000&
@@ -3960,7 +3960,7 @@ Private Sub Form_Load()
     Dim nOptLevel As cTreeViewNodes
     Dim lMouseOver As Long
     Dim s As String
-    Dim I As Long, j As Long
+    Dim i As Long, j As Long
     
     '##########################################
     ' TREEVIEW INITIALIZATION CODE
@@ -3975,12 +3975,12 @@ Private Sub Form_Load()
         Set nRoot = .Nodes.Add(, etvwFirst, "root", "StealthBot Settings")
             nRoot.MouseOverForeColor = lMouseOver
         
-            Set nTopLevel = nRoot.children
+            Set nTopLevel = nRoot.Children
             
                 Set nCurrent = nTopLevel.Add(, etvwChild, "connection", "Connection Settings")
                     nCurrent.MouseOverForeColor = lMouseOver
                     
-                    Set nOptLevel = nCurrent.children
+                    Set nOptLevel = nCurrent.Children
                         nOptLevel.Add , etvwChild, "conn_config", "General Settings"  'general setup
                         nOptLevel.Add , etvwChild, "conn_advanced", "Advanced Settings"     'proxies/spoofing/bnls
                         
@@ -3989,7 +3989,7 @@ Private Sub Form_Load()
                 Set nCurrent = nTopLevel.Add(, etvwChild, "interface", "Interface Settings")
                     nCurrent.MouseOverForeColor = lMouseOver
                     
-                    Set nOptLevel = nCurrent.children
+                    Set nOptLevel = nCurrent.Children
                         nOptLevel.Add , etvwChild, "int_general", "General Settings"
                         nOptLevel.Add , etvwChild, "int_fonts", "Fonts and Colors"
                         
@@ -3998,7 +3998,7 @@ Private Sub Form_Load()
                 Set nCurrent = nTopLevel.Add(, etvwChild, "general", "General Settings")
                     nCurrent.MouseOverForeColor = lMouseOver
                     
-                    Set nOptLevel = nCurrent.children
+                    Set nOptLevel = nCurrent.Children
                         nOptLevel.Add , etvwChild, "op_moderation", "Moderation Settings"
                         nOptLevel.Add , etvwChild, "op_greets", "Greet Message Settings"
                         nOptLevel.Add , etvwChild, "op_idles", "Idle Message Settings"
@@ -4063,11 +4063,11 @@ Private Sub Form_Load()
         
         If LenB(Dir$(GetFilePath("AdditionalBNLSservers.txt"))) > 0 Then
             With cboBNLSServer
-                I = FreeFile
+                i = FreeFile
                 
-                Open GetFilePath("AdditionalBNLSservers.txt") For Input As #I
-                    While Not EOF(I)
-                        Line Input #I, s
+                Open GetFilePath("AdditionalBNLSservers.txt") For Input As #i
+                    While Not EOF(i)
+                        Line Input #i, s
                         
                         For j = 0 To .ListCount
                             If StrComp(.List(j), s, vbTextCompare) = 0 Then
@@ -4080,7 +4080,7 @@ Private Sub Form_Load()
                             .AddItem s
                         End If
                     Wend
-                Close #I
+                Close #i
             End With
         End If
     End With
@@ -4140,7 +4140,7 @@ Private Sub Form_Load()
     '   LAST SETTINGS PANEL
     '##########################################
     
-    s = ReadCFG("Position", "LastSettingsPanel")
+    s = ReadCfg("Position", "LastSettingsPanel")
     
     If LenB(s) > 0 Then
         If StrictIsNumeric(s) Then
@@ -4267,23 +4267,23 @@ Private Sub cmdWebsite_Click()
     Call frmChat.mnuHelpWebsite_Click
 End Sub
 
-Private Sub Form_Unload(cancel As Integer)
+Private Sub Form_Unload(Cancel As Integer)
     Call frmChat.DeconstructSettings
     Set colProfiles = Nothing
 End Sub
 
 Sub lblAddCurrentKey_Click()
-    Dim I As Integer
+    Dim i As Integer
     Dim s As String
     
     s = CDKeyReplacements(cboCDKey.text)
     
     If cboCDKey.ListCount > -1 Then
-        For I = 0 To cboCDKey.ListCount
-            If StrComp(cboCDKey.List(I), s, vbTextCompare) = 0 Then
+        For i = 0 To cboCDKey.ListCount
+            If StrComp(cboCDKey.List(i), s, vbTextCompare) = 0 Then
                 Exit Sub
             End If
-        Next I
+        Next i
     End If
     
     cboCDKey.AddItem s
@@ -4362,7 +4362,7 @@ End Function
 Private Function SaveSettings() As Boolean
     Dim s As String
     Dim Clients(6) As String
-    Dim I As Long, j As Long
+    Dim i As Long, j As Long
     
     '// First, CDKey Length check and corresponding stuff that needs to run first:
     Select Case True
@@ -4417,17 +4417,17 @@ Private Function SaveSettings() As Boolean
         Next j
         
         If j >= 0 Or .ListCount > BNLS_SERVER_COUNT Then
-            I = FreeFile
+            i = FreeFile
             
-            Open GetFilePath("AdditionalBNLSservers.txt") For Output As #I
+            Open GetFilePath("AdditionalBNLSservers.txt") For Output As #i
                 s = cboBNLSServer.text
                         
-                Print #I, .text
+                Print #i, .text
                 
                 For j = BNLS_SERVER_COUNT To .ListCount
-                    Print #I, .List(j)
+                    Print #i, .List(j)
                 Next j
-            Close #I
+            Close #i
         End If
     End With
     
@@ -4483,10 +4483,13 @@ Private Function SaveSettings() As Boolean
     'special case, proxyissocks5 didn't like being set properly
     WINI "ProxyIsSocks5", IIf(optSocks5.Value, "Y", "N"), secMain
     WINI "UDP", Cv(chkUDP.Value), secMain
+    WINI "UseAltBNLS", Cv(chkBNLSAlt.Value), secMain
     
     'Don't save this value until the user has been prompted once, or at least specifically enabled it
-    If Len(ReadCFG(MN, "UseAltBNLS")) = 1 Or chkBNLSAlt.Value = vbChecked Then
-        WINI "UseAltBNLS", Cv(chkBNLSAlt.Value), secMain
+    If chkBNLSAlt.Value = vbChecked Then
+        BotVars.UseAltBnls = True
+    Else
+        BotVars.UseAltBnls = False
     End If
     
     '// this section must written _absolutely correctly_ or the SetTimer API call will fail
@@ -4495,21 +4498,21 @@ Private Function SaveSettings() As Boolean
         If StrictIsNumeric(s) Then
             If Val(s) < 60000 Then
                 If Val(s) > 0 Then
-                    I = Val(s)
+                    i = Val(s)
                 Else
-                    I = 1000
+                    i = 1000
                 End If
             Else
-                I = 60000
+                i = 60000
             End If
         Else
-            I = 1000
+            i = 1000
         End If
     Else
-        I = 1000
+        i = 1000
     End If
     
-    WINI "ReconnectDelay", CStr(I), secMain
+    WINI "ReconnectDelay", CStr(i), secMain
     
     '// Interface Settings
     WINI "ChatFont", txtChatFont.text, secOther
@@ -4544,16 +4547,16 @@ Private Function SaveSettings() As Boolean
     Clients(W3X) = "W3XP"
     Clients(W2) = "W2BN"
 
-    For I = 0 To 6
-        If (chkCBan(I).Value = 1) Then
-            If (GetAccess(Clients(I), "GAME").Username = _
+    For i = 0 To 6
+        If (chkCBan(i).Value = 1) Then
+            If (GetAccess(Clients(i), "GAME").Username = _
                 vbNullString) Then
                 
                 ' redefine array size
                 ReDim Preserve DB(UBound(DB) + 1)
                 
                 With DB(UBound(DB))
-                    .Username = Clients(I)
+                    .Username = Clients(i)
                     .Flags = "B"
                     .ModifiedBy = "(console)"
                     .ModifiedOn = Now
@@ -4567,16 +4570,16 @@ Private Function SaveSettings() As Boolean
                 
                 ' log actions
                 If (BotVars.LogDBActions) Then
-                    Call LogDBAction(AddEntry, "(console)", Clients(I), "")
+                    Call LogDBAction(AddEntry, "(console)", Clients(i), "")
                 End If
             Else
                 For j = LBound(DB) To UBound(DB)
-                    If ((StrComp(DB(j).Username, Clients(I), vbTextCompare) = 0) And _
+                    If ((StrComp(DB(j).Username, Clients(i), vbTextCompare) = 0) And _
                         (StrComp(DB(j).Type, "GAME", vbTextCompare) = 0)) Then
                         
                         If (InStr(1, DB(j).Flags, "B", vbBinaryCompare) = 0) Then
                             With DB(j)
-                                .Username = Clients(I)
+                                .Username = Clients(i)
                                 .Flags = "B" & .Flags
                                 .ModifiedBy = "(console)"
                                 .ModifiedOn = Now
@@ -4584,7 +4587,7 @@ Private Function SaveSettings() As Boolean
                             
                             ' log actions
                             If (BotVars.LogDBActions) Then
-                                Call LogDBAction(ModEntry, "(console)", Clients(I), "")
+                                Call LogDBAction(ModEntry, "(console)", Clients(i), "")
                             End If
                             
                             ' commit modifications
@@ -4597,11 +4600,11 @@ Private Function SaveSettings() As Boolean
                 Next j
             End If
         Else
-            If (GetAccess(Clients(I), "GAME").Username <> _
+            If (GetAccess(Clients(i), "GAME").Username <> _
                 vbNullString) Then
 
                 For j = LBound(DB) To UBound(DB)
-                    If ((StrComp(DB(j).Username, Clients(I), vbTextCompare) = 0) And _
+                    If ((StrComp(DB(j).Username, Clients(i), vbTextCompare) = 0) And _
                         (StrComp(DB(j).Type, "GAME", vbTextCompare) = 0)) Then
                         
                         If ((Len(DB(j).Flags) > 1) Or _
@@ -4609,7 +4612,7 @@ Private Function SaveSettings() As Boolean
                             (Len(DB(j).Groups) > 1)) Then
 
                             With DB(j)
-                                .Username = Clients(I)
+                                .Username = Clients(i)
                                 .Flags = Replace(.Flags, "B", vbNullString)
                                 .ModifiedBy = "(console)"
                                 .ModifiedOn = Now
@@ -4617,18 +4620,18 @@ Private Function SaveSettings() As Boolean
                             
                             ' log actions
                             If (BotVars.LogDBActions) Then
-                                Call LogDBAction(ModEntry, "(console)", Clients(I), "")
+                                Call LogDBAction(ModEntry, "(console)", Clients(i), "")
                             End If
                             
                             ' commit modifications
                             Call WriteDatabase(GetFilePath("users.txt"))
                         Else
-                            Call RemoveItem(Clients(I), "users", _
+                            Call RemoveItem(Clients(i), "users", _
                                 "GAME")
                                 
                             ' log actions
                             If (BotVars.LogDBActions) Then
-                                Call LogDBAction(RemEntry, "(console)", Clients(I), "")
+                                Call LogDBAction(RemEntry, "(console)", Clients(i), "")
                             End If
                             
                             ' reload database entries
@@ -4641,7 +4644,7 @@ Private Function SaveSettings() As Boolean
                 Next j
             End If
         End If
-    Next I
+    Next i
     
     WINI "QuietTime", Cv(chkQuiet.Value), secMain
     WINI "KickOnYell", Cv(chkKOY.Value), secOther
@@ -4766,7 +4769,7 @@ End Sub
 
 Private Sub SaveColors(Optional sPath As String)
     Dim f As Integer
-    Dim I As Integer
+    Dim i As Integer
     
     f = FreeFile
     
@@ -4774,10 +4777,10 @@ Private Sub SaveColors(Optional sPath As String)
     
     Open sPath For Random As #f Len = 4
     
-    For I = LBound(mColors) To UBound(mColors)
-        Put #f, I + 1, CLng(mColors(I))
+    For i = LBound(mColors) To UBound(mColors)
+        Put #f, i + 1, CLng(mColors(i))
         'Debug.Print "Putting color; " & i & ":" & mColors(i)
-    Next I
+    Next i
     
     Close #f
 End Sub
@@ -4940,48 +4943,48 @@ End Sub
 '##########################################
 
 Private Sub InitGenMisc()
-    chkPAmp.Value = YesToTrue(ReadCFG(OT, "ProfileAmp"), 0)
-    chkWhisperCmds.Value = YesToTrue(ReadCFG(MN, "WhisperBack"), 0)
-    chkMail.Value = YesToTrue(ReadCFG(OT, "Mail"), 1)
+    chkPAmp.Value = YesToTrue(ReadCfg(OT, "ProfileAmp"), 0)
+    chkWhisperCmds.Value = YesToTrue(ReadCfg(MN, "WhisperBack"), 0)
+    chkMail.Value = YesToTrue(ReadCfg(OT, "Mail"), 1)
     
-    chkDisablePrefix.Value = YesToTrue(ReadCFG(OT, "DisablePrefix"), 0)
-    chkDisableSuffix.Value = YesToTrue(ReadCFG(OT, "DisableSuffix"), 0)
+    chkDisablePrefix.Value = YesToTrue(ReadCfg(OT, "DisablePrefix"), 0)
+    chkDisableSuffix.Value = YesToTrue(ReadCfg(OT, "DisableSuffix"), 0)
     
     'Debug.Print "Loaded value: " & YesToTrue(readcfg(OT, "TTT"), 1) & " converted to " & IIf(YesToTrue(readcfg(OT, "TTT"), 1) = 1, 0, 1)
     
 '    chkDisableMonitor.Value = YesToTrue(ReadCFG(OT, "DisableMonitor"), 1)
-    chkAllowMP3.Value = YesToTrue(ReadCFG(OT, "AllowMP3"), 1)
-    chkConnectOnStartup.Value = YesToTrue(ReadCFG(MN, "ConnectOnStartup"), 0)
-    chkMinimizeOnStartup.Value = YesToTrue(ReadCFG(MN, "MinimizeOnStartup"), 0)
-    chkShowOffline.Value = YesToTrue(ReadCFG(MN, "ShowOfflineFriends"), 0)
+    chkAllowMP3.Value = YesToTrue(ReadCfg(OT, "AllowMP3"), 1)
+    chkConnectOnStartup.Value = YesToTrue(ReadCfg(MN, "ConnectOnStartup"), 0)
+    chkMinimizeOnStartup.Value = YesToTrue(ReadCfg(MN, "MinimizeOnStartup"), 0)
+    chkShowOffline.Value = YesToTrue(ReadCfg(MN, "ShowOfflineFriends"), 0)
     
-    chkGameConventions(0).Value = YesToTrue(ReadCFG(OT, "UseGameConventions"), 1)
+    chkGameConventions(0).Value = YesToTrue(ReadCfg(OT, "UseGameConventions"), 1)
     Call chkGameConventions_Click(0)
     
-    chkGameConventions(1).Value = YesToTrue(ReadCFG(OT, "UseD2GameConventions"), 0)
-    chkGameConventions(2).Value = YesToTrue(ReadCFG(OT, "UseW3GameConventions"), 1)
+    chkGameConventions(1).Value = YesToTrue(ReadCfg(OT, "UseD2GameConventions"), 0)
+    chkGameConventions(2).Value = YesToTrue(ReadCfg(OT, "UseW3GameConventions"), 1)
     
-    chkURLDetect.Value = YesToTrue(ReadCFG(MN, "URLDetect"), 1)
-    chkDoNotUsePacketFList.Value = YesToTrue(ReadCFG(MN, "DoNotUseDirectFList"), 0)
+    chkURLDetect.Value = YesToTrue(ReadCfg(MN, "URLDetect"), 1)
+    chkDoNotUsePacketFList.Value = YesToTrue(ReadCfg(MN, "DoNotUseDirectFList"), 0)
           
-    chkBackup.Value = YesToTrue(ReadCFG(MN, "UseBackupChan"), 0)
+    chkBackup.Value = YesToTrue(ReadCfg(MN, "UseBackupChan"), 0)
     Call chkBackup_Click
     
-    txtBackupChan.text = ReadCFG(MN, "BackupChan")
+    txtBackupChan.text = ReadCfg(MN, "BackupChan")
     
-    chkLogDBActions.Value = YesToTrue(ReadCFG(MN, "LogDBActions"), 0)
-    chkLogAllCommands.Value = YesToTrue(ReadCFG(MN, "LogCommands"), 0)
+    chkLogDBActions.Value = YesToTrue(ReadCfg(MN, "LogDBActions"), 0)
+    chkLogAllCommands.Value = YesToTrue(ReadCfg(MN, "LogCommands"), 0)
 End Sub
 
 Private Sub InitGenIdles()
     Dim s As String
     
-    s = ReadCFG(MN, "IdleWait")
+    s = ReadCfg(MN, "IdleWait")
     If StrictIsNumeric(s) Then
         txtIdleWait.text = Val(s) / 2
     End If
     
-    s = ReadCFG(MN, "IdleType")
+    s = ReadCfg(MN, "IdleType")
     Select Case s
         Case "msg", vbNullString
             optMsg.Value = True
@@ -5000,43 +5003,43 @@ Private Sub InitGenIdles()
             Call optMsg_Click
     End Select
     
-    txtIdleMsg.text = ReadCFG(MN, "IdleMsg")
+    txtIdleMsg.text = ReadCfg(MN, "IdleMsg")
     If LenB(txtIdleMsg.text) = 0 Then txtIdleMsg.text = "/me is a %v by Stealth - http://www.stealthbot.net"
     
-    chkIdles.Value = YesToTrue(ReadCFG(MN, "Idles"), 0)
+    chkIdles.Value = YesToTrue(ReadCfg(MN, "Idles"), 0)
     Call chkIdles_Click
     
 End Sub
 
 Private Sub InitGenGreets()
-    txtGreetMsg.text = ReadCFG(OT, "GreetMsg")
-    chkGreetMsg.Value = YesToTrue(ReadCFG(OT, "UseGreets"), 0)
+    txtGreetMsg.text = ReadCfg(OT, "GreetMsg")
+    chkGreetMsg.Value = YesToTrue(ReadCfg(OT, "UseGreets"), 0)
     Call chkGreetMsg_Click
     
-    chkWhisperGreet.Value = YesToTrue(ReadCFG(OT, "WhisperGreet"), 0)
+    chkWhisperGreet.Value = YesToTrue(ReadCfg(OT, "WhisperGreet"), 0)
 End Sub
 
 Private Sub InitBasicConfig()
     Dim s As String
     Dim f As Integer
     
-    txtUsername.text = ReadCFG(MN, "Username")
-    txtPassword.text = ReadCFG(MN, "Password")
-    cboCDKey.text = ReadCFG(MN, "CDKey")
+    txtUsername.text = ReadCfg(MN, "Username")
+    txtPassword.text = ReadCfg(MN, "Password")
+    cboCDKey.text = ReadCfg(MN, "CDKey")
     
     ' Backwards compatibility for old LODKey config entry -a
-    txtExpKey.text = ReadCFG(MN, "ExpKey")
+    txtExpKey.text = ReadCfg(MN, "ExpKey")
     
     If (txtExpKey.text = vbNullString) Then
-        txtExpKey.text = ReadCFG(MN, "LODKey")
+        txtExpKey.text = ReadCfg(MN, "LODKey")
     End If
     
-    txtHomeChan.text = ReadCFG(MN, "HomeChan")
-    txtOwner.text = ReadCFG(MN, "Owner")
+    txtHomeChan.text = ReadCfg(MN, "HomeChan")
+    txtOwner.text = ReadCfg(MN, "Owner")
     
     OldBotOwner = txtOwner.text
     
-    s = ReadCFG(MN, "Server")
+    s = ReadCfg(MN, "Server")
     
     With cboServer
         .AddItem "useast.battle.net"
@@ -5111,10 +5114,10 @@ Private Sub InitBasicConfig()
         
     End With
     
-    s = ReadCFG(MN, "Trigger")
+    s = ReadCfg(MN, "Trigger")
     txtTrigger.text = s
     
-    s = ReadCFG(MN, "Product")
+    s = ReadCfg(MN, "Product")
     Select Case StrReverse(UCase(s))
         Case "STAR":    Call optSTAR_Click: optSTAR.Value = True
         Case "SEXP":    Call optSEXP_Click: optSEXP.Value = True
@@ -5126,7 +5129,7 @@ Private Sub InitBasicConfig()
         Case Else:      Call optSTAR_Click: optSTAR.Value = True
     End Select
     
-    chkUseRealm.Value = YesToTrue(ReadCFG(MN, "UseRealm"), 0)
+    chkUseRealm.Value = YesToTrue(ReadCfg(MN, "UseRealm"), 0)
     
     Call LoadCDKeys(cboCDKey)
     
@@ -5135,24 +5138,24 @@ End Sub
 Private Sub InitGenMod()
     'Dim s As String
     
-    chkPhrasebans.Value = YesToTrue(ReadCFG(OT, "Phrasebans"), 1)
-    chkIPBans.Value = YesToTrue(ReadCFG(OT, "IPBans"), 0)
-    chkQuiet.Value = YesToTrue(ReadCFG(MN, "QuietTime"), 0)
-    chkKOY.Value = YesToTrue(ReadCFG(OT, "KickOnYell"), 0)
-    chkPlugban.Value = YesToTrue(ReadCFG(OT, "PlugBans"), 0)
-    chkPeonbans.Value = IIf(ReadCFG(OT, "PeonBans") = "1", 1, 0)
-    chkBanEvasion.Value = YesToTrue(ReadCFG(OT, "BanEvasion"), 1)
+    chkPhrasebans.Value = YesToTrue(ReadCfg(OT, "Phrasebans"), 1)
+    chkIPBans.Value = YesToTrue(ReadCfg(OT, "IPBans"), 0)
+    chkQuiet.Value = YesToTrue(ReadCfg(MN, "QuietTime"), 0)
+    chkKOY.Value = YesToTrue(ReadCfg(OT, "KickOnYell"), 0)
+    chkPlugban.Value = YesToTrue(ReadCfg(OT, "PlugBans"), 0)
+    chkPeonbans.Value = IIf(ReadCfg(OT, "PeonBans") = "1", 1, 0)
+    chkBanEvasion.Value = YesToTrue(ReadCfg(OT, "BanEvasion"), 1)
     
-    chkProtect.Value = YesToTrue(ReadCFG(MN, "Protect"), 0)
+    chkProtect.Value = YesToTrue(ReadCfg(MN, "Protect"), 0)
     Call chkProtect_Click
     
-    txtProtectMsg.text = ReadCFG(OT, "ProtectMsg")
+    txtProtectMsg.text = ReadCfg(OT, "ProtectMsg")
     
-    chkIdlebans.Value = YesToTrue(ReadCFG(OT, "IdleBans"), 0)
-    chkIdleKick.Value = YesToTrue(ReadCFG(OT, "KickIdle"), 0)
+    chkIdlebans.Value = YesToTrue(ReadCfg(OT, "IdleBans"), 0)
+    chkIdleKick.Value = YesToTrue(ReadCfg(OT, "KickIdle"), 0)
     Call chkIdlebans_click
     
-    txtIdleBanDelay.text = ReadCFG(OT, "IdleBanDelay")
+    txtIdleBanDelay.text = ReadCfg(OT, "IdleBanDelay")
     
     ' grab client ban settings from database
     
@@ -5198,48 +5201,48 @@ Private Sub InitGenMod()
         chkCBan(W3X).Value = 1
     End If
 
-    txtLevelBanMsg.text = ReadCFG(OT, "LevelbanMsg")
+    txtLevelBanMsg.text = ReadCfg(OT, "LevelbanMsg")
     If LenB(txtLevelBanMsg.text) = 0 Then txtLevelBanMsg.text = "You are below the required level for entry."
     
-    txtBanD2.text = Val(ReadCFG(OT, "BanD2UnderLevel"))
-    txtBanW3.text = Val(ReadCFG(OT, "BanUnderLevel"))
+    txtBanD2.text = Val(ReadCfg(OT, "BanD2UnderLevel"))
+    txtBanW3.text = Val(ReadCfg(OT, "BanUnderLevel"))
 End Sub
 
 Private Sub InitGenInterface()
     Dim s As String
     
-    chkJoinLeaves.Value = YesToTrue(ReadCFG(OT, "JoinLeaves"), 1)
-    chkFilter.Value = YesToTrue(ReadCFG(OT, "Filters"), 1)
-    chkSplash.Value = YesToTrue(ReadCFG(MN, "ShowSplash"), 0)
-    chkUTF8.Value = YesToTrue(ReadCFG(MN, "UTF8"), 1)
-    chkFlash.Value = YesToTrue(ReadCFG(OT, "FlashWindow"), 0)
-    chkNoTray.Value = YesToTrue(ReadCFG(OT, "NoTray"), 0)
-    chkNoAutocomplete.Value = YesToTrue(ReadCFG(OT, "NoAutocomplete"), 0)
-    chkNoColoring.Value = YesToTrue(ReadCFG(OT, "NoColoring"), 0)
+    chkJoinLeaves.Value = YesToTrue(ReadCfg(OT, "JoinLeaves"), 1)
+    chkFilter.Value = YesToTrue(ReadCfg(OT, "Filters"), 1)
+    chkSplash.Value = YesToTrue(ReadCfg(MN, "ShowSplash"), 0)
+    chkUTF8.Value = YesToTrue(ReadCfg(MN, "UTF8"), 1)
+    chkFlash.Value = YesToTrue(ReadCfg(OT, "FlashWindow"), 0)
+    chkNoTray.Value = YesToTrue(ReadCfg(OT, "NoTray"), 0)
+    chkNoAutocomplete.Value = YesToTrue(ReadCfg(OT, "NoAutocomplete"), 0)
+    chkNoColoring.Value = YesToTrue(ReadCfg(OT, "NoColoring"), 0)
     
-    s = ReadCFG(OT, "Logging")
+    s = ReadCfg(OT, "Logging")
     If Len(s) > 1 Then s = Left$(s, 1)
     
     If StrictIsNumeric(s) And Val(s) < 5 Then
         cboLogging.ListIndex = Val(s)
     End If
     
-    s = ReadCFG(OT, "Timestamp")
+    s = ReadCfg(OT, "Timestamp")
     If Len(s) > 1 Then s = Left$(s, 1)
     'Debug.Print "Loaded: " & s
     If StrictIsNumeric(s) And Val(s) < 5 Then
         cboTimestamp.ListIndex = Val(s)
     End If
     
-    s = ReadCFG(MN, "MaxBacklogSize")
+    s = ReadCfg(MN, "MaxBacklogSize")
     
     If (s <> vbNullString) Then
-        txtMaxBackLogSize.text = Val(ReadCFG(MN, "MaxBacklogSize"))
+        txtMaxBackLogSize.text = Val(ReadCfg(MN, "MaxBacklogSize"))
     Else
         txtMaxBackLogSize.text = 10000
     End If
     
-    txtMaxLogSize.text = Val(ReadCFG(MN, "MaxLogFileSize"))
+    txtMaxLogSize.text = Val(ReadCfg(MN, "MaxLogFileSize"))
     
 End Sub
 
@@ -5265,10 +5268,10 @@ End Sub
 Private Sub InitConnAdvanced()
     Dim s As String
     
-    s = ReadCFG(MN, "UseBNLS")
+    s = ReadCfg(MN, "UseBNLS")
     If s = "N" Then cboConnMethod.ListIndex = 1 Else cboConnMethod.ListIndex = 0
     
-    s = ReadCFG(MN, "Spoof")
+    s = ReadCfg(MN, "Spoof")
     If StrictIsNumeric(s) Then
         If Val(s) < 3 Then
             cboSpoof.ListIndex = Val(s)
@@ -5279,24 +5282,24 @@ Private Sub InitConnAdvanced()
         cboSpoof.ListIndex = 0
     End If
         
-    s = ReadCFG(MN, "UDP")
+    s = ReadCfg(MN, "UDP")
     If s = "Y" Then chkUDP.Value = 1 Else chkUDP.Value = 0
     
-    s = ReadCFG(MN, "UseAltBNLS")
+    s = ReadCfg(MN, "UseAltBNLS")
     If s = "Y" Then chkBNLSAlt.Value = 1 Else chkBNLSAlt.Value = 0
     
-    txtReconDelay.text = ReadCFG(MN, "ReconnectDelay")
+    txtReconDelay.text = ReadCfg(MN, "ReconnectDelay")
     If LenB(txtReconDelay.text) = 0 Then txtReconDelay.text = 1000
     
-    chkUseProxies.Value = YesToTrue(ReadCFG(MN, "UseProxy"), 0)
+    chkUseProxies.Value = YesToTrue(ReadCfg(MN, "UseProxy"), 0)
     Call chkUseProxies_Click
 '    Call chkUseProxies_Click
 '    If Not YesToTrue(readcfg(MN, "UseProxy"), 0) = 0 Then Call chkUseProxies_Click
     
-    txtProxyPort.text = ReadCFG(MN, "ProxyPort")
-    txtProxyIP.text = ReadCFG(MN, "ProxyIP")
+    txtProxyPort.text = ReadCfg(MN, "ProxyPort")
+    txtProxyIP.text = ReadCfg(MN, "ProxyIP")
     
-    If ReadCFG(MN, "ProxyIsSocks5") = "Y" Then
+    If ReadCfg(MN, "ProxyIsSocks5") = "Y" Then
         optSocks5.Value = True
         optSocks4.Value = False
     Else
@@ -5336,8 +5339,8 @@ Private Function YesToTrue(ByVal s As String, ByVal bDefault As Integer) As Inte
     End If
 End Function
 
-Private Function Cv(ByVal I As Integer) As String
-    Select Case I
+Private Function Cv(ByVal i As Integer) As String
+    Select Case i
         Case 0: Cv = "N"
         Case 1: Cv = "Y"
     End Select

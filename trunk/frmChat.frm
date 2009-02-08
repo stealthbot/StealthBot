@@ -1568,9 +1568,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2190,9 +2190,9 @@ Sub Event_BNLSError(ErrorNumber As Integer, description As String)
     If sckBNet.State <> 7 Then
         
         'Check the user has using BNLS server finder enabled
-        If ReadCfg("Main", "UseAltBNLS") = "Y" Then
+        If BotVars.UseAltBnls = True Then
             Call FindAltBNLS
-        ElseIf ReadCfg("Main", "UseAltBNLS") = "N" Then
+        ElseIf BotVars.UseAltBnls = False Then
             AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & description
             
             If DisplayError(ErrorNumber, 0, BNLS) Then
@@ -2208,6 +2208,28 @@ Sub Event_BNLSError(ErrorNumber As Integer, description As String)
                 SetTitle "Disconnected"
             End If
             
+            If (askedBnls = False) Then
+                'Ask the user if they would like to enable the BNLS Automatic Server finder
+                Dim msgResult As VbMsgBoxResult
+                
+                msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
+                                   "Would you like to enable the BNLS Automatic Server Finder?", _
+                                   vbYesNo, "BNLS Error")
+                
+                'Save their answer to the config, and the call this procedure again to reevaluate what to do
+                WriteINI "Main", "UseAltBNLS", IIf(msgResult = vbYes, "Y", "N")
+                
+                If (msgResult = vbYes) Then
+                    BotVars.UseAltBnls = True
+                    
+                    Call Event_BNLSError(ErrorNumber, description)
+                Else
+                    BotVars.UseAltBnls = False
+                End If
+                
+                askedBnls = True
+            End If
+            
             'If Not UserCancelledConnect Then
             '    AddChat vbRed, BotVars.ReconnectDelay
             '
@@ -2215,16 +2237,6 @@ Sub Event_BNLSError(ErrorNumber As Integer, description As String)
             '    ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
             '        AddressOf Reconnect_TimerProc)
             'End If
-        Else
-            'Ask the user if they would like to enable the BNLS Automatic Server finder
-            Dim msgResult As VbMsgBoxResult
-            msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
-                               "Would you like to enable the BNLS Automatic Server Finder?", _
-                               vbYesNo, "BNLS Error")
-            
-            'Save their answer to the config, and the call this procedure again to reevaluate what to do
-            WriteINI "Main", "UseAltBNLS", IIf(msgResult = vbYes, "Y", "N")
-            Call Event_BNLSError(ErrorNumber, description)
         End If
     End If
 End Sub

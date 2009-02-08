@@ -99,6 +99,7 @@ Private m_autocomplete_postfix          As String
 Private m_show_stats_icons              As Boolean
 Private m_retain_old_bans               As Boolean
 Private m_store_all_bans                As Boolean
+Private m_use_alt_bnls                  As Boolean
 
 Public Property Get Username() As String
     
@@ -1078,6 +1079,20 @@ Public Property Get StoreAllBans() As Boolean
 
     ' ...
     StoreAllBans = m_store_all_bans
+
+End Property
+
+Public Property Let UseAltBnls(bln As Boolean)
+
+    ' ...
+    m_use_alt_bnls = bln
+
+End Property
+
+Public Property Get UseAltBnls() As Boolean
+
+    ' ...
+    UseAltBnls = m_use_alt_bnls
 
 End Property
 

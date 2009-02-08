@@ -1,8 +1,4 @@
+bob
 pyro.no-ip.biz
-pyro.no-ip.biz
-alendar.no-ip.org
-erdsg
-hdx.no-ip.org
-logon.berzerkerjbls.com
-bobo.com
+bob
 

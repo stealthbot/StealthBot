@@ -351,3 +351,5 @@ Public Const NLS_GET_A_             As Long = 32
 Public Const NLS_GET_K_             As Long = 40
 Public Const NLS_GET_M1_            As Long = 20
 
+Public askedBnls As Boolean
+
