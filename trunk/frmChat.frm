@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1568,9 +1568,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -6177,12 +6177,19 @@ Private Function GetAuth(ByVal Username As String) As Long
     Static lastAuthName As String  ' ...
     
     Dim clsCRC32 As clsCRC32 ' ...
-    Dim res As String ' string variable for storing beta authorization result
-                      ' 0  == unauthorized
-                      ' >0 == authorized
+    Dim arr(4)   As String   ' ...
+    Dim res      As Integer  ' string variable for storing beta authorization result
+                             ' 0  == unauthorized
+                             ' >0 == authorized
                       
     ' ...
     Set clsCRC32 = New clsCRC32
+    
+    ' ...
+    arr(0) = "1"
+    arr(1) = "0"
+    arr(2) = "2"
+    arr(3) = "3"
                       
     ' ...
     If (lastAuth) Then
@@ -6198,11 +6205,15 @@ Private Function GetAuth(ByVal Username As String) As Long
     
     ' ...
     If (clsCRC32.GenerateCRC32(BETA_AUTH_URL) <> BETA_AUTH_URL_CRC32) Then
+        ' ...
+        GetAuth = False
+    
+        ' ...
         Exit Function
     End If
 
     ' ...
-    res = INet.OpenURL(BETA_AUTH_URL & Username)
+    res = CInt(Val(INet.OpenURL(BETA_AUTH_URL & Username)))
 
     ' ...
     Do While INet.StillExecuting
@@ -6210,8 +6221,10 @@ Private Function GetAuth(ByVal Username As String) As Long
     Loop
     
     ' ...
-    lastAuth = clsCRC32.GenerateCRC32(BETA_AUTH_URL)
-    lastAuthName = Username
+    If (res) Then
+        lastAuth = (clsCRC32.GenerateCRC32(BETA_AUTH_URL) + arr(res))
+        lastAuthName = Username
+    End If
     
     ' ...
     GetAuth = lastAuth
