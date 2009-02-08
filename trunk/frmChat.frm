@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1568,9 +1568,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2578,7 +2578,7 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     End If
     
 
-    Set X = lvClanList.FindItem(Member)
+    Set X = lvClanList.FindItem(convertUsername(Member))
     
     If (Not (X Is Nothing)) Then
         lvClanList.ListItems.Remove X.Index
@@ -2773,7 +2773,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
         g_Clan.Members.Add ClanMember
     End If
     
-    Set X = lvClanList.FindItem(Username)
+    Set X = lvClanList.FindItem(convertUsername(Username))
 
     If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
         g_Clan.Self.Rank = IIf(Rank = 0, Rank + 1, Rank)

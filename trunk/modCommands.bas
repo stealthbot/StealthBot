@@ -6041,7 +6041,7 @@ Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAcc
         
         ' ...
         Set liUser = _
-            frmChat.lvClanList.FindItem(reverseUsername(msgData))
+            frmChat.lvClanList.FindItem(msgData)
     
         ' ...
         If (liUser Is Nothing) Then
@@ -6085,7 +6085,7 @@ Private Function OnDemote(ByVal Username As String, ByRef dbAccess As udtGetAcce
         
         ' ...
         Set liUser = _
-            frmChat.lvClanList.FindItem(reverseUsername(msgData))
+            frmChat.lvClanList.FindItem(msgData)
     
         ' ...
         If (liUser Is Nothing) Then
