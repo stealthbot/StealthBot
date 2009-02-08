@@ -1568,9 +1568,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -6177,8 +6177,8 @@ Private Function GetAuth(ByVal Username As String) As Long
     Static lastAuthName As String  ' ...
     
     Dim clsCRC32 As clsCRC32 ' ...
-    Dim arr(4)   As String   ' ...
-    Dim res      As Integer  ' string variable for storing beta authorization result
+    Dim arr(5)   As String   ' ...
+    Dim result   As Integer  ' string variable for storing beta authorization result
                              ' 0  == unauthorized
                              ' >0 == authorized
                       
@@ -6186,10 +6186,11 @@ Private Function GetAuth(ByVal Username As String) As Long
     Set clsCRC32 = New clsCRC32
     
     ' ...
-    arr(0) = "1"
-    arr(1) = "0"
-    arr(2) = "2"
-    arr(3) = "3"
+    arr(0) = &H1
+    arr(1) = &H2
+    arr(2) = &H0
+    arr(3) = &H3
+    arr(4) = &H4
                       
     ' ...
     If (lastAuth) Then
@@ -6213,7 +6214,7 @@ Private Function GetAuth(ByVal Username As String) As Long
     End If
 
     ' ...
-    res = CInt(Val(INet.OpenURL(BETA_AUTH_URL & Username)))
+    result = CInt(Val(INet.OpenURL(BETA_AUTH_URL & Username)))
 
     ' ...
     Do While INet.StillExecuting
@@ -6221,13 +6222,15 @@ Private Function GetAuth(ByVal Username As String) As Long
     Loop
     
     ' ...
-    If (res) Then
-        lastAuth = (clsCRC32.GenerateCRC32(BETA_AUTH_URL) + arr(res))
+    If (result) Then
+        ' ...
+        lastAuth = _
+            (clsCRC32.GenerateCRC32(BETA_AUTH_URL) + arr(result + &H1))
         lastAuthName = Username
+        
+        ' ...
+        GetAuth = lastAuth
     End If
-    
-    ' ...
-    GetAuth = lastAuth
     
     ' ...
     Set clsCRC32 = Nothing
@@ -6236,6 +6239,9 @@ Private Function GetAuth(ByVal Username As String) As Long
     Exit Function
 
 ERROR_HANDLER:
+
+    ' ...
+    Set clsCRC32 = Nothing
 
     ' ...
     GetAuth = False
