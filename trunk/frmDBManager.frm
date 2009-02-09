@@ -28,7 +28,7 @@ Begin VB.Form frmDBManager
    WhatsThisHelp   =   -1  'True
    Begin MSComDlg.CommonDialog CommonDialog 
       Left            =   2880
-      Top             =   4320
+      Top             =   4680
       _ExtentX        =   847
       _ExtentY        =   847
       _Version        =   393216
