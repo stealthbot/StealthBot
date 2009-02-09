@@ -859,7 +859,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -885,6 +884,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2188,6 +2188,8 @@ End Sub
 
 Sub Event_BNLSError(ErrorNumber As Integer, description As String)
     If sckBNet.State <> 7 Then
+    
+        sckBNet.Close
         
         'Check the user has using BNLS server finder enabled
         If BotVars.UseAltBnls = True Then
@@ -2195,18 +2197,9 @@ Sub Event_BNLSError(ErrorNumber As Integer, description As String)
         ElseIf BotVars.UseAltBnls = False Then
             AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & description
             
-            If DisplayError(ErrorNumber, 0, BNLS) Then
-                UserCancelledConnect = False
-                Call DoDisconnect(1, True)
-                Pause 1
-                
-                'If Not UserCancelledConnect Then
-                    'Call DoConnect - The bot shouldn't try connecting again with the same Values(), it's more than likely to just fail again
-                'End If
-            Else
-                Call DoDisconnect
-                SetTitle "Disconnected"
-            End If
+            UserCancelledConnect = False
+            
+            DoDisconnect 1, True
             
             If (askedBnls = False) Then
                 'Ask the user if they would like to enable the BNLS Automatic Server finder
@@ -2229,6 +2222,18 @@ Sub Event_BNLSError(ErrorNumber As Integer, description As String)
                 
                 askedBnls = True
             End If
+            
+            If (BotVars.UseAltBnls = False) Then
+                DisplayError ErrorNumber, 0, BNLS
+            End If
+            
+            'If DisplayError(ErrorNumber, 0, BNLS) Then
+            '    UserCancelledConnect = False
+            '    Call DoDisconnect(1, True)
+            'Else
+            '    Call DoDisconnect
+            '    SetTitle "Disconnected"
+            'End If
             
             'If Not UserCancelledConnect Then
             '    AddChat vbRed, BotVars.ReconnectDelay
@@ -2260,7 +2265,9 @@ Public Sub FindAltBNLS()
     sckBNLS.Close
     
     'Notify user the current BNLS server failed
-    AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BNLSServer & " failed."
+    If (intCounter > 1) Then
+        AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BNLSServer & " failed."
+    End If
     
     'Notify user other BNLS servers are being located
     AddChat RTBColors.InformationText, "[BNLS] Locating other BNLS servers..."
@@ -2589,8 +2596,9 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
         g_Clan.Members.Remove Pos
     End If
     
+    Member = convertUsername(Member)
 
-    Set X = lvClanList.FindItem(convertUsername(Member))
+    Set X = lvClanList.FindItem(Member)
     
     If (Not (X Is Nothing)) Then
         lvClanList.ListItems.Remove X.Index
@@ -2699,7 +2707,7 @@ Private Sub ClanHandler_ClanInvitation(ByVal Token As String, ByVal ClanTag As S
         If NewClan Then Clan.isNew = 1
         
         With RTBColors
-            AddChat .SuccessText, "[CLAN] ", .InformationText, InvitedBy, .SuccessText, " has invited you to join a clan: ", .InformationText, ClanName, .SuccessText, " [", .InformationText, ClanTag, .SuccessText, "]"
+            AddChat .SuccessText, "[CLAN] ", .InformationText, convertUsername(InvitedBy), .SuccessText, " has invited you to join a clan: ", .InformationText, ClanName, .SuccessText, " [", .InformationText, ClanTag, .SuccessText, "]"
         End With
         
         frmClanInvite.Show
@@ -2785,7 +2793,9 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
         g_Clan.Members.Add ClanMember
     End If
     
-    Set X = lvClanList.FindItem(convertUsername(Username))
+    Username = convertUsername(Username)
+    
+    Set X = lvClanList.FindItem(Username)
 
     If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
         g_Clan.Self.Rank = IIf(Rank = 0, Rank + 1, Rank)
@@ -2929,6 +2939,8 @@ End Sub
 Sub Form_Unload(Cancel As Integer)
     Dim Key As String, L As Long
 
+    UserCancelledConnect = True
+
     'Cancel = 1
     
     'scTimer.Enabled = False
@@ -3023,6 +3035,8 @@ Sub Form_Unload(Cancel As Integer)
     Set dictMenuIDs = Nothing
     Set dictItemIDs = Nothing
     Set SharedScriptSupport = Nothing
+    Set ds = Nothing
+    Set NLogin = Nothing
     
     'Set dictTimerInterval = Nothing
     'Set dictTimerCount = Nothing
@@ -7125,6 +7139,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     s = ReadCfg(OT, "IPBans")
     If s = "Y" Then BotVars.IPBans = True Else BotVars.IPBans = False
+    
+    s = ReadCfg(MN, "UseAltBnls")
+    If s = "Y" Then BotVars.UseAltBnls = True Else BotVars.UseAltBnls = False
     
     's = ReadCFG(OT, "ClientBansOn")
     'If s = "Y" Then BotVars.ClientBans = True Else BotVars.ClientBans = False

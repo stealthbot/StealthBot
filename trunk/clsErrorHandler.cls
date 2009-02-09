@@ -73,7 +73,7 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
             
             If Count11004 = 1 Then
                 GetErrorString = "Your computer is unable to contact the " & _
-                    sServerType & " servers."
+                    sServerType & " server."
                     
                 miNoProceed = 0
             Else
@@ -131,9 +131,7 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
     If (miNoProceed > 0) Then
         UserCancelledConnect = True
     Else
-        If (ExReconMinutes = 0) Then
-            ExReconMinutes = BotVars.ReconnectDelay / 1000
-        End If
+        ExReconMinutes = (BotVars.ReconnectDelay / 1000)
     
         ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, 1000, _
             AddressOf ExtendedReconnect_TimerProc)

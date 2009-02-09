@@ -86,7 +86,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             
     
         Case SID_CLANMEMBERUPDATE 'Clan Info Update
-            sTemp = convertUsername(inBuf.DebuffNTString)
+            sTemp = inBuf.DebuffNTString
             bRank = inBuf.DebuffBYTE
             bStatus = inBuf.DebuffBYTE
             sTemp2 = inBuf.DebuffNTString
