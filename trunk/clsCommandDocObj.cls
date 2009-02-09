@@ -472,6 +472,8 @@ Private Function GetRank(ByRef AnyNode As IXMLDOMNode) As Integer
     Set temp = AnyNode.selectSingleNode("access/rank")
     
     If (temp Is Nothing) Then
+        GetRank = -1
+    
         Exit Function
     End If
     
@@ -489,9 +491,9 @@ Private Function setRank(ByRef AnyNode As IXMLDOMNode, ByVal Rank As Integer) As
     
     Set temp = AnyNode.selectSingleNode("access/rank")
     
-        
     If (temp Is Nothing) Then
         Set temp = AnyNode.selectSingleNode("access")
+        
         If (temp Is Nothing) Then
             Set temp = AnyNode.appendChild(m_database.createNode("element", "access", vbNullString))
         End If

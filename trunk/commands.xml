@@ -71,8 +71,12 @@
     </access>
   </command>
 
-  <command name="getmail">
-    <aliases />
+  <command name="inbox">
+    <aliases>
+      <alias>getmail</alias>
+      <alias>readmail</alias>
+      <alias>mailread</alias>
+    </aliases>
 
     <documentation>
       <description>
@@ -80,7 +84,9 @@
       </description>
     </documentation>
 
-    <access />
+    <access>
+      <rank>0</rank>
+    </access>
   </command>
 
   <command name="whois">
