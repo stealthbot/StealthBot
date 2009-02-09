@@ -2939,7 +2939,7 @@ End Sub
 Sub Form_Unload(Cancel As Integer)
     Dim Key As String, l As Long
 
-    UserCancelledConnect = True
+    'UserCancelledConnect = False
 
     'Cancel = 1
     
