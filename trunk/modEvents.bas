@@ -331,7 +331,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     If (mailCount) Then
         frmChat.AddChat RTBColors.ConsoleText, "You have " & _
             mailCount & " new message" & IIf(mailCount = 1, "", "s") & _
-                ". Type /getmail to retrieve."
+                ". Type /inbox to retrieve."
     End If
     
     ' Give a message to them if they're in Clan SBs.
