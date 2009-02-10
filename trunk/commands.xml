@@ -11,6 +11,30 @@
     <access />
   </command>
 
+  <command name="connect">
+    <aliases />
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+
+    <access />
+  </command>
+
+  <command name="disconnect">
+    <aliases />
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+
+    <access />
+  </command>
+
   <command name="find">
     <aliases>
       <alias>findr</alias>

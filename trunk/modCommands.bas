@@ -615,6 +615,8 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "help":          Call OnHelp(Username, dbAccess, msgData, InBot, cmdRet())
         Case "promote":       Call OnPromote(Username, dbAccess, msgData, InBot, cmdRet())
         Case "demote":        Call OnDemote(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "connect":       Call OnConnect(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "disconnect":    Call OnDisconnect(Username, dbAccess, msgData, InBot, cmdRet())
         Case Else
             blnNoCmd = True
     End Select
@@ -631,6 +633,24 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
     ' was a command found? return.
     executeCommand = (Not (blnNoCmd))
 End Function
+
+' handle connect command
+Private Function OnConnect(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    ' ...
+    frmChat.DoConnect
+    
+End Function ' end function OnConnect
+
+' handle disconnect command
+Private Function OnDisconnect(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    ' ...
+    frmChat.DoDisconnect
+    
+End Function ' end function OnDisconnect
 
 ' handle dump command
 Private Function OnDump(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
