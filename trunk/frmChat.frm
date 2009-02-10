@@ -1568,9 +1568,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5503,6 +5503,7 @@ Public Sub SControl_Error()
     AddChat RTBColors.ErrorMessageText, "Offending line: >> " & SControl.Error.text
     
     SControl.Error.Clear
+    INet.Cancel
 End Sub
 
 Private Sub sckBNet_Close()

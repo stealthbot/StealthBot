@@ -365,6 +365,7 @@ Sub psExecuteEvent(EventName, Parameters)
             Next
             paramString = Left(paramString, Len(paramString) - 1)
          End If
+
          Execute("Call " & psPrefixes(i) & "_Event_" & EventName & "(" & paramString & ")")
  
          '// Handle errors
@@ -373,6 +374,7 @@ Sub psExecuteEvent(EventName, Parameters)
                             EventName & """ call in file """ & psFSO.GetFileName(psPlugins.Items()(i)) & """"
 	    AddChat vbRed, Err.Description & "."
             Err.Clear
+	    scInet.Cancel
          End If
       End If
       paramString = vbNullString

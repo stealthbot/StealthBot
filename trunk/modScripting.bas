@@ -82,7 +82,7 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
         SC.AddCode strContent
     Else
     
-        Dim strFilesToLoad() As String, I As Integer
+        Dim strFilesToLoad() As String, i As Integer
         ReDim strFilesToLoad(0)
         strFilesToLoad(0) = "script.txt"
     
@@ -108,10 +108,10 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
         Close #intFile
     
         '// Load script.txt and any includes
-        For I = 0 To UBound(strFilesToLoad)
+        For i = 0 To UBound(strFilesToLoad)
             strContent = ""
             intFile = FreeFile
-            Path = GetFilePath(strFilesToLoad(I))
+            Path = GetFilePath(strFilesToLoad(i))
             
             Open Path For Input As #intFile
     
@@ -120,7 +120,7 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
                     Line Input #intFile, strLine
                     
                     If Len(strLine) > 1 Then
-                        If I = 0 Then
+                        If i = 0 Then
                             If Left$(Trim(LCase(strLine)), 8) = "#include" Then strLine = ""
                         End If
                         strContent = strContent & strLine & vbCrLf
@@ -155,7 +155,7 @@ End Function
 
 
 Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
-    Dim I As Integer
+    Dim i As Integer
     Dim Message As String
 
     On Error GoTo ReInitScriptControl_Error
@@ -168,15 +168,15 @@ Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
         SC.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
 
         If g_Channel.Users.Count > 0 Then
-            For I = 1 To g_Channel.Users.Count
+            For i = 1 To g_Channel.Users.Count
                 Message = ""
 
-                With g_Channel.Users(I)
+                With g_Channel.Users(i)
                      'ParseStatstring .Statstring, Message, .Clan
 
-                     SC.Run "Event_UserInChannel", .DisplayName, .Flags, .stats.ToString, .Ping, .game, False
+                     SC.Run "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, .game, False
                  End With
-             Next I
+             Next i
          End If
     End If
 
