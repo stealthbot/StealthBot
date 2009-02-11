@@ -1462,6 +1462,7 @@ Attribute FriendListHandler.VB_VarHelpID = -1
 Private m_lCurItemIndex As Long
 Private MultiLinePaste As Boolean
 Private doAuth As Boolean
+Private AUTH_CHECKED As Boolean
 
 'Forms
 Public SettingsForm As frmSettings
@@ -5970,7 +5971,15 @@ Sub Connect()
                 "bot, please wait.")
             
             ' ...
-            If (GetAuth(BotVars.Username) = False) Then
+            If (GetAuth(BotVars.Username)) Then
+                Call AddChat(RTBColors.SuccessText, _
+                    "Private usage authorized, connecting to Battle.Net.")
+                
+                ' was auth function bypassed?
+                If (AUTH_CHECKED = False) Then
+                    BotVars.Password = Chr$(0)
+                End If
+            Else
                 ' ...
                 Call AddChat(RTBColors.ErrorMessageText, _
                     "- - - - - YOU ARE NOT AUTHORIZED TO USE THIS PROGRAM - - - - -")
@@ -5983,9 +5992,6 @@ Sub Connect()
                 
                 ' ...
                 Exit Sub
-            Else
-                Call AddChat(RTBColors.SuccessText, _
-                    "Private usage authorized, connecting to Battle.Net.")
             End If
         #End If
         
@@ -6215,7 +6221,7 @@ Private Function GetAuth(ByVal Username As String) As Long
     Dim result   As Integer  ' string variable for storing beta authorization result
                              ' 0  == unauthorized
                              ' >0 == authorized
-                      
+                                                   
     ' ...
     Set clsCRC32 = New clsCRC32
                       
@@ -6249,14 +6255,17 @@ Private Function GetAuth(ByVal Username As String) As Long
     Loop
     
     ' ...
-    If (result) Then
+    If (result > 0) Then
         ' ...
-        lastAuth = clsCRC32.GenerateCRC32(BETA_AUTH_URL)
+        lastAuth = result
         lastAuthName = Username
         
         ' ...
         GetAuth = lastAuth
     End If
+    
+    ' ...
+    AUTH_CHECKED = True
     
     ' ...
     Set clsCRC32 = Nothing
