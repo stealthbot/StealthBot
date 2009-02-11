@@ -238,6 +238,26 @@ Public Property Get Self() As clsUserObj
 
 End Property
 
+Public Function GetUserEx(ByVal AccountName As String, Optional SearchLimit As Integer = 0) As Object
+
+    Dim index As Integer ' ...
+    
+    ' ...
+    If (StrictIsNumeric(AccountName)) Then
+        index = CInt(Val(AccountName))
+    Else
+        index = GetUserIndexEx(AccountName, SearchLimit)
+    End If
+    
+    ' ...
+    If ((index >= 1) And (index <= Users.Count)) Then
+        Set GetUserEx = Users(index)
+    Else
+        Set GetUserEx = New clsUserObj
+    End If
+
+End Function
+
 Public Function GetUserIndexEx(ByVal AccountName As String, Optional SearchLimit As Integer = 0) As Integer
 
     Dim i As Integer ' ...
@@ -267,6 +287,26 @@ Public Function GetUserIndexEx(ByVal AccountName As String, Optional SearchLimit
     
     ' ...
     GetUserIndexEx = 0
+
+End Function
+
+Public Function GetUser(ByVal Username As String, Optional SearchLimit As Integer = 0) As Object
+
+    Dim index As Integer ' ...
+    
+    ' ...
+    If (StrictIsNumeric(Username)) Then
+        index = CInt(Val(Username))
+    Else
+        index = GetUserIndex(Username, SearchLimit)
+    End If
+    
+    ' ...
+    If ((index >= 1) And (index <= Users.Count)) Then
+        Set GetUser = Users(index)
+    Else
+        Set GetUser = New clsUserObj
+    End If
 
 End Function
 

@@ -166,6 +166,26 @@ Public Property Get Peons() As Collection
 
 End Property
 
+Public Function GetUser(ByVal Username As String) As Object
+
+    Dim index As Integer ' ...
+    
+    ' ...
+    If (StrictIsNumeric(Username)) Then
+        index = CInt(Val(Username))
+    Else
+        index = GetUserIndex(Username)
+    End If
+    
+    ' ...
+    If ((index >= 1) And (index <= Members.Count)) Then
+        Set GetUser = Members(index)
+    Else
+        Set GetUser = New clsClanMemberObj
+    End If
+
+End Function
+
 Public Function GetUserIndex(ByVal Username As String) As Integer
 
     Dim i As Integer ' ...
@@ -184,6 +204,26 @@ Public Function GetUserIndex(ByVal Username As String) As Integer
     
     ' ...
     GetUserIndex = 0
+
+End Function
+
+Public Function GetUserEx(ByVal Username As String) As Object
+
+    Dim index As Integer ' ...
+    
+    ' ...
+    If (StrictIsNumeric(Username)) Then
+        index = CInt(Val(Username))
+    Else
+        index = GetUserIndexEx(Username)
+    End If
+    
+    ' ...
+    If ((index >= 1) And (index <= Members.Count)) Then
+        Set GetUserEx = Members(index)
+    Else
+        Set GetUserEx = New clsClanMemberObj
+    End If
 
 End Function
 
