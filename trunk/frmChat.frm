@@ -859,6 +859,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -884,7 +885,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1470,7 +1470,7 @@ Public SettingsForm As frmSettings
 Private Sub Form_Load()
     Dim s As String
     Dim f As Integer ', i As Integer
-    Dim l As Long
+    Dim L As Long
     Dim FrmSplashInUse As Boolean
     
     ' COMPILER FLAGS
@@ -1503,10 +1503,10 @@ Private Sub Form_Load()
     
     ' 4/10/06:
     ' CHECK FOR CONFIG.INI PATH HACK
-    l = InStr(command(), "-cpath ")
+    L = InStr(command(), "-cpath ")
     
-    If l > 0 And Len(command()) > (l + 7) Then
-        ConfigOverride = Mid$(command(), l + 7)
+    If L > 0 And Len(command()) > (L + 7) Then
+        ConfigOverride = Mid$(command(), L + 7)
         
         If InStr(ConfigOverride, " ") > 0 Then
             ConfigOverride = Split(ConfigOverride, " ")(0)
@@ -1608,13 +1608,13 @@ Private Sub Form_Load()
 
     s = ReadCfg("Position", "Height")
     If LenB(s) > 0 And StrictIsNumeric(s) Then
-        l = (IIf(CLng(s) < 200, 200, CLng(s)) * Screen.TwipsPerPixelY)
+        L = (IIf(CLng(s) < 200, 200, CLng(s)) * Screen.TwipsPerPixelY)
         
         If (rtbWhispersVisible) Then
-            l = l - (rtbWhispers.Height / Screen.TwipsPerPixelY)
+            L = L - (rtbWhispers.Height / Screen.TwipsPerPixelY)
         End If
         
-        Me.Height = l
+        Me.Height = L
     End If
     
     s = ReadCfg("Position", "Width")
@@ -1686,6 +1686,7 @@ Private Sub Form_Load()
     AddChat RTBColors.ConsoleText, "-> If you enjoy StealthBot, consider supporting its development at http://support.stealthbot.net"
 
     On Error Resume Next
+
     If BotVars.Logging < 2 Then
         MakeLoggingDirectory
     
@@ -1988,7 +1989,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
     
     
     Dim s As String
-    Dim l As Long
+    Dim L As Long
     Dim i As Integer
     
     If Not BotVars.LockChat Then
@@ -2034,7 +2035,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             If Len(saElements(i + 1)) > 0 Then
                 With rtbWhispers
                     .SelStart = Len(.text)
-                    l = .SelStart
+                    L = .SelStart
                     .SelLength = 0
                     .SelColor = saElements(i)
                     .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
@@ -2043,7 +2044,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             End If
         Next i
         
-        Call ColorModify(rtbWhispers, l)
+        Call ColorModify(rtbWhispers, L)
     End If
 End Sub
 
@@ -2382,12 +2383,12 @@ Sub Form_Resize()
                 Me.Hide
                 
                 With nid
-                    .cbSize = Len(nid)
+                    .cbSize = LenB(nid)
                     .hWnd = frmChat.hWnd
                     .uId = ID_TASKBARICON
                     .uFlags = NIF_ICON Or NIF_TIP Or NIF_MESSAGE
                     .uCallBackMessage = WM_ICONNOTIFY
-                    .hIcon = frmChat.Icon
+                    .hIcon = frmChat.Icon.Handle
                     .szTip = GenerateTooltip()
                 End With
                 
@@ -2541,7 +2542,8 @@ ERROR_HANDLER:
 End Sub
 
 Function GenerateTooltip() As String
-    GenerateTooltip = IIf(LenB(GetCurrentUsername) > 0, GetCurrentUsername, "offline") & " @ " & BotVars.Server & " (" & StrReverse(BotVars.Product) & ")" & vbNullChar
+    GenerateTooltip = String(64, vbNullChar)
+    GenerateTooltip = IIf(LenB(GetCurrentUsername) > 0, GetCurrentUsername, "offline") & " @ " & BotVars.Server & " (" & StrReverse(BotVars.Product) & ")" & Chr$(0)
 End Function
 
 Sub UpdateTrayTooltip()
@@ -2549,12 +2551,12 @@ Sub UpdateTrayTooltip()
 
     If Me.WindowState = vbMinimized Then
         With nid
-            .cbSize = Len(nid)
+            .cbSize = LenB(nid)
             .hWnd = frmChat.hWnd
             .uId = ID_TASKBARICON
             .uFlags = NIF_ICON Or NIF_TIP Or NIF_MESSAGE
             .uCallBackMessage = WM_ICONNOTIFY
-            .hIcon = frmChat.Icon
+            .hIcon = frmChat.Icon.Handle
             .szTip = GenerateTooltip()
         End With
         
@@ -2937,7 +2939,10 @@ Private Sub ClanHandler_UnknownClanEvent(ByVal PacketID As Byte, ByVal Data As S
 End Sub
 
 Sub Form_Unload(Cancel As Integer)
-    Dim Key As String, l As Long
+    Dim Key As String, L As Long
+    
+    'Me.WindowState = vbNormal
+    'Me.Show
 
     'UserCancelledConnect = False
 
@@ -2945,6 +2950,8 @@ Sub Form_Unload(Cancel As Integer)
     
     'scTimer.Enabled = False
     'SControl.Reset
+    
+    INet.Cancel
     
     If BotVars.Logging = 0 Then
         AddChat RTBColors.ErrorMessageText, "Shutting down..."
@@ -3220,8 +3227,8 @@ End Sub
 Private Sub INet_StateChanged(ByVal State As Integer)
     On Error GoTo ERROR_HANDLER
 
-    If (State = icResponseCompleted) Then
-        Call HandleNews(INet.GetChunk(1024, icString))
+    'If (State = icResponseCompleted) Then
+    '    Call HandleNews(INet.GetChunk(1024, icString))
         
     'The code below is useless, icError doesn't mean it's an issue with the news as it could also be a script _
         calling the the INet control. - FrOzeN
@@ -3232,7 +3239,7 @@ Private Sub INet_StateChanged(ByVal State As Integer)
             'Call AddChat(RTBColors.ErrorMessageText, "Error: There was an error " & _
                 "loading the news.")
     '    End If
-    End If
+    'End If
     
     If (Not (BotLoaded)) Then
         'SControl.Run "Event_FirstRun"
@@ -3635,7 +3642,7 @@ Private Sub mnuDisableVoidView_Click()
 End Sub
 
 Private Sub mnuDisconnect2_Click()
-    Dim Key As String, l As Long
+    Dim Key As String, L As Long
     Key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
@@ -4507,7 +4514,11 @@ Private Sub mnuPopBan_Click()
 End Sub
 
 Private Sub mnuTrayExit_click()
-    If MsgBox("Are you sure you want to quit?", vbYesNo, "StealthBot") = vbYes Then
+    Dim result As VbMsgBoxResult
+
+    result = MsgBox("Are you sure you want to quit?", vbYesNo, "StealthBot")
+    
+    If (result = vbYes) Then
         'frmChat.Show
     
         'UnhookWindowProc
@@ -4536,7 +4547,7 @@ Sub mnuLock_Click()
 End Sub
 
 Sub mnuDisconnect_Click()
-    Dim Key As String, l As Long
+    Dim Key As String, L As Long
     Key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
@@ -4725,7 +4736,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Dim temp As udtGetAccessResponse
     
     Dim i As Long
-    Dim l As Long
+    Dim L As Long
     Dim n As Integer
     Dim C As Integer ',oldSelStart As Integer
     Dim X() As String
@@ -4748,7 +4759,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     'AddChat vbRed, "Shift: " & Shift
 
 
-    l = cboSend.SelStart
+    L = cboSend.SelStart
 
     With lvChannel
 
@@ -4768,7 +4779,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     End If
 
                     cboSend.SetFocus
-                    cboSend.SelStart = l
+                    cboSend.SelStart = L
                     Exit Sub
                 End If
 
@@ -4781,7 +4792,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     End If
 
                     cboSend.SetFocus
-                    cboSend.SelStart = l
+                    cboSend.SelStart = L
                     Exit Sub
                 End If
 
@@ -4809,13 +4820,13 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         .ListItems.Item(1).Ghosted = True
     
                         cboSend.SetFocus
-                        cboSend.SelStart = l
+                        cboSend.SelStart = L
                     Else
                         If .ListItems.Count > 0 Then
                             .ListItems(1).Selected = True
                             .ListItems(1).Ghosted = True
                             cboSend.SetFocus
-                            cboSend.SelStart = l
+                            cboSend.SelStart = L
                         End If
                     End If
                 End If
@@ -4828,7 +4839,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         .ListItems.Item(.ListItems.Count).Ghosted = True
     
                         cboSend.SetFocus
-                        cboSend.SelLength = l
+                        cboSend.SelLength = L
                     End If
                 End If
                 
@@ -8130,11 +8141,11 @@ Private Sub mnuPopPro_Click()
 End Sub
 
 Private Sub mnuPopRem_Click()
-    Dim l As Long
-    l = TimeSinceLastRemoval
+    Dim L As Long
+    L = TimeSinceLastRemoval
 
-    If l < 30 Then
-        AddChat RTBColors.ErrorMessageText, "You must wait " & 30 - l & " more seconds before you " & _
+    If L < 30 Then
+        AddChat RTBColors.ErrorMessageText, "You must wait " & 30 - L & " more seconds before you " & _
                 "can remove another user from your clan."
     Else
         If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, _

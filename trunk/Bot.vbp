@@ -134,8 +134,8 @@ VersionProductName="StealthBot v2.7"
 CondComp="BETA = 1 : DEV_RELEASE = 1"
 CompilationType=0
 OptimizationType=0
-FavorPentiumPro(tm)=0
-CodeViewDebugInfo=-1
+FavorPentiumPro(tm)=-1
+CodeViewDebugInfo=0
 NoAliasing=0
 BoundsCheck=0
 OverflowCheck=0
