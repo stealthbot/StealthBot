@@ -146,7 +146,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                 .InsertDWord &H0
                 .InsertDWord Len(BotVars.CDKey)
                 .InsertDWord ProductID
-                .InsertDWord (Value1 + frmChat.GetAuthMagic())
+                .InsertDWord Value1
                 .InsertDWord &H0
                 .InsertNonNTString KeyHash
                 
@@ -164,7 +164,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                     
                     .InsertDWord Len(BotVars.ExpKey)
                     .InsertDWord ProductID
-                    .InsertDWord (Value1 - frmChat.GetAuthMagic())
+                    .InsertDWord Value1
                     .InsertDWord &H0
                     .InsertNonNTString KeyHash
                 End If

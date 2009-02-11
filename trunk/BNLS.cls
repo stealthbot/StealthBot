@@ -473,7 +473,7 @@ Private Sub Send_BNLS0x51()
         
         .InsertDWord Len(BotVars.CDKey)
         .InsertDWord ProductID
-        .InsertDWord (Value1 + frmChat.GetAuthMagic())
+        .InsertDWord Value1
         .InsertDWord &H0
 
         .InsertNonNTString KeyHash
@@ -493,7 +493,7 @@ Private Sub Send_BNLS0x51()
         
             .InsertDWord Len(BotVars.ExpKey)
             .InsertDWord ProductID
-            .InsertDWord (Value1 - frmChat.GetAuthMagic())
+            .InsertDWord Value1
             .InsertDWord &H0
             .InsertNonNTString KeyHash
         End If
