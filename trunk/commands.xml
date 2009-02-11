@@ -3100,6 +3100,23 @@
     <access />
   </command>
 
+  <command name="motd">
+    <aliases />
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+
+    <access>
+      <rank>20</rank>
+      <flags>
+        <flag>C</flag>
+      </flags>
+    </access>
+  </command>
+
   <command name="demote">
     <aliases />
 
