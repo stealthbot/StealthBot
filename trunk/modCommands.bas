@@ -873,7 +873,7 @@ Private Function OnMotd(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     If (g_Clan.Self.Name <> vbNullString) Then
         tmpbuf = _
-            "Clan " & g_Clan.Name & " Message of the Day: " & g_Clan.MOTD
+            "Clan " & g_Clan.Name & " MOTD: " & g_Clan.MOTD
     Else
         tmpbuf = "Error: I am not a member of a clan."
     End If
