@@ -1569,9 +1569,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5091,7 +5091,11 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 If (Left$(s, 6) = "/tell ") Then
                                     s = "/w " & Mid$(s, 7)
                                     
-                                'If (LCase$(s) = "/fl" And MDebug("debug")) Then
+                                    Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
+                                    
+                                    GoTo theEnd
+                                    
+                                'ElseIf (LCase$(s) = "/fl" And MDebug("debug")) Then
                                 '    For n = 1 To g_Friends.Count
                                 '        AddChat vbMagenta, g_Friends.Item(n).Name & _
                                 '            " - " & g_Friends.Item(n).game
