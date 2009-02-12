@@ -5086,12 +5086,10 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                             Vetoed = GetVeto
                             
                             If (Not (Vetoed)) Then
-                                If ((Left$(s, 6) = "/tell ") And _
-                                    (Len(s) > 6)) Then
-                                    
-                                    s = "/w " & Mid$(s, 7)
-                                
                                 s = txtPre.text & cboSend.text & txtPost.text
+                            
+                                If (Left$(s, 6) = "/tell ") Then
+                                    s = "/w " & Mid$(s, 7)
                                     
                                 'If (LCase$(s) = "/fl" And MDebug("debug")) Then
                                 '    For n = 1 To g_Friends.Count
