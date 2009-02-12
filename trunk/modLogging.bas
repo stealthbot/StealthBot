@@ -6,6 +6,8 @@ Attribute VB_Name = "modLogging"
 '  and later in a plane to Milwaukee
 
 ' Created to enhance and clean up event and text logging
+Option Explicit
+
 Private iActiveDay As Integer
 
 ' START ENHANCED LOGGING

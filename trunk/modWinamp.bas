@@ -14,7 +14,7 @@ End Type
 
 Private Type FILEINFO
     file  As String
-    index As Long
+    Index As Long
 End Type
 
 Option Explicit

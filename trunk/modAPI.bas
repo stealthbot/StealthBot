@@ -74,7 +74,7 @@ Public Declare Function CallWindowProc Lib "user32" _
    Alias "CallWindowProcA" _
   (ByVal lpPrevWndFunc As Long, _
    ByVal hWnd As Long, _
-   ByVal msg As Long, _
+   ByVal Msg As Long, _
    ByVal wParam As Long, _
    ByVal lParam As Long) As Long
 

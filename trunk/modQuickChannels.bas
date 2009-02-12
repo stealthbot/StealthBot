@@ -2,44 +2,45 @@ Attribute VB_Name = "modQuickChannels"
 'modQuickChannels - Project StealthBot
 '   by Andy
 '   June 2006
+Option Explicit
 
 Public Sub LoadQuickChannels()
-    Dim i As Integer
+    Dim I As Integer
     Dim s As String
     Dim B As Boolean
     
     B = (Len(Dir$(GetFilePath("quickchannels.ini"))) > 0)
 
-    For i = 0 To 8
+    For I = 0 To 8
         If B Then
-            s = GetQC(i)
+            s = GetQC(I)
         Else
-            s = GetDefaultQC(i)
+            s = GetDefaultQC(I)
         End If
         
         If (s = vbNullString) Then
             Exit For
         End If
 
-        QC(i) = s
+        QC(I) = s
         'frmChat.mnuQC(I).Caption = s
         
         'If (frmChat.mnuCustomChannels(0).Caption <> vbNullString) Then
         '    Call Load(frmChat.mnuCustomChannels(frmChat.mnuCustomChannels.Count))
         'End If
         
-        frmChat.mnuCustomChannels(i).Caption = s
-    Next i
+        frmChat.mnuCustomChannels(I).Caption = s
+    Next I
 
     DoQCMenu
 End Sub
 
-Public Function GetQC(ByVal index As Integer) As String
-    GetQC = ReadINI("QuickChannels", index, "quickchannels.ini")
+Public Function GetQC(ByVal Index As Integer) As String
+    GetQC = ReadINI("QuickChannels", Index, "quickchannels.ini")
 End Function
 
-Public Function GetDefaultQC(ByVal index As Integer) As String
-    Select Case index
+Public Function GetDefaultQC(ByVal Index As Integer) As String
+    Select Case Index
         Case 0: GetDefaultQC = "Clan SBS"
         Case 1: GetDefaultQC = "Clan BoT"
         Case 2: GetDefaultQC = "Clan TDA"
@@ -49,21 +50,23 @@ Public Function GetDefaultQC(ByVal index As Integer) As String
 End Function
 
 Public Sub SaveQCs()
-    Dim i As Integer
+    Dim I As Integer
     
-    For i = 0 To 8
-        WriteINI "QuickChannels", i, QC(i), "quickchannels.ini"
-    Next i
+    For I = 0 To 8
+        WriteINI "QuickChannels", I, QC(I), "quickchannels.ini"
+    Next I
 End Sub
 
 Public Sub DoQCMenu()
-    For i = 0 To 8
-        If LenB(QC(i)) > 0 Then
+    Dim I As Integer
+    
+    For I = 0 To 8
+        If LenB(QC(I)) > 0 Then
             'frmChat.mnuQC(I).Visible = True
-            frmChat.mnuCustomChannels(i).Visible = True
+            frmChat.mnuCustomChannels(I).Visible = True
         Else
             'frmChat.mnuQC(I).Visible = False
-            frmChat.mnuCustomChannels(i).Visible = False
+            frmChat.mnuCustomChannels(I).Visible = False
         End If
-    Next i
+    Next I
 End Sub

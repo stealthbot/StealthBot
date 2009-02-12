@@ -14,6 +14,7 @@ Attribute VB_Exposed = False
 ' clsXML.cls
 ' Copyright (C) 2008 Eric Evans
 ' ...
+Option Explicit
 
 Private m_fso  As FileSystemObject
 Private m_fs   As Object
@@ -114,7 +115,7 @@ Public Sub WriteNode(ByRef temp As IXMLDOMNode, Optional ByVal Spaces As Integer
             Set tempList = temp.childNodes
             
             ' ...
-            For Count = 0 To tempList.length
+            For Count = 0 To tempList.Length
                 WriteNode tempList(Count), (Spaces + 2)
             Next
             
@@ -186,7 +187,7 @@ Private Function writeOnSameLine(ByRef temp As IXMLDOMNode) As Boolean
 
     ' ...
     Dim nodeCollection As New Collection
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
     With nodeCollection
@@ -196,16 +197,16 @@ Private Function writeOnSameLine(ByRef temp As IXMLDOMNode) As Boolean
     End With
     
     ' ...
-    For i = 1 To nodeCollection.Count
+    For I = 1 To nodeCollection.Count
         ' ...
-        If (StrComp(temp.nodeName, nodeCollection(i), vbTextCompare) = 0) Then
+        If (StrComp(temp.nodeName, nodeCollection(I), vbTextCompare) = 0) Then
             ' ...
             writeOnSameLine = True
             
             ' ...
             Exit Function
         End If
-    Next i
+    Next I
     
     ' ...
     writeOnSameLine = False

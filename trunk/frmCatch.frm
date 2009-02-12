@@ -162,8 +162,10 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Option Explicit
+
 Private Sub cmdDone_Click()
-    Dim i As Integer, f As Integer
+    Dim I As Integer, f As Integer
     ReDim Preserve Catch(0)
     If lbCatch.ListCount < 0 Then
         Unload Me
@@ -173,11 +175,11 @@ Private Sub cmdDone_Click()
     f = FreeFile
     Open GetProfilePath() & "\catchphrases.txt" For Output As #f
     
-    For i = 0 To lbCatch.ListCount
-        Catch(i) = lbCatch.List(i)
-        Print #f, lbCatch.List(i)
-        If i <> lbCatch.ListCount Then ReDim Preserve Catch(0 To UBound(Catch) + 1)
-    Next i
+    For I = 0 To lbCatch.ListCount
+        Catch(I) = lbCatch.List(I)
+        Print #f, lbCatch.List(I)
+        If I <> lbCatch.ListCount Then ReDim Preserve Catch(0 To UBound(Catch) + 1)
+    Next I
     
     Close #f
     Unload Me
@@ -205,12 +207,12 @@ End Sub
 
 Private Sub Form_Load()
     Me.Icon = frmChat.Icon
-    Dim i As Integer
-    For i = LBound(Catch) To UBound(Catch)
-        If Catch(i) <> vbNullString Then
-            lbCatch.AddItem Catch(i)
+    Dim I As Integer
+    For I = LBound(Catch) To UBound(Catch)
+        If Catch(I) <> vbNullString Then
+            lbCatch.AddItem Catch(I)
         End If
-    Next i
+    Next I
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
