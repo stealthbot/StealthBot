@@ -1,16 +1,16 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "Msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
    ClientLeft      =   165
-   ClientTop       =   735
+   ClientTop       =   855
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -2939,6 +2939,27 @@ Private Sub ClanHandler_UnknownClanEvent(ByVal PacketID As Byte, ByVal Data As S
     End If
 End Sub
 
+Public Function GetLogFilePath() As String
+
+    Dim Path As String  ' ...
+    Dim f    As Integer ' ...
+    
+    ' ...
+    f = FreeFile
+    
+    ' ...
+    Path = _
+        GetProfilePath() & "\Logs\" & Format(Date, "YYYY-MM-DD") & ".txt"
+
+    If (Dir$(Path) = vbNullString) Then
+        Open Path For Output As #f
+        Close #1
+    End If
+    
+    GetLogFilePath = Path
+
+End Function
+
 Sub Form_Unload(Cancel As Integer)
     Dim Key As String, L As Long
     
@@ -5069,76 +5090,75 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     (Len(s) > 6)) Then
                                     
                                     s = "/w " & Mid$(s, 7)
-                                End If
                                 
                                 s = txtPre.text & cboSend.text & txtPost.text
                                     
-                                If (LCase$(s) = "/fl" And MDebug("debug")) Then
-                                    For n = 1 To g_Friends.Count
-                                        AddChat vbMagenta, g_Friends.Item(n).Name & _
-                                            " - " & g_Friends.Item(n).game
-                                    Next n
+                                'If (LCase$(s) = "/fl" And MDebug("debug")) Then
+                                '    For n = 1 To g_Friends.Count
+                                '        AddChat vbMagenta, g_Friends.Item(n).Name & _
+                                '            " - " & g_Friends.Item(n).game
+                                '    Next n
                                 
                                 ElseIf (LCase$(s) = "/accountinfo") Then
                                     RequestSystemKeys
                                     
                                     GoTo theEnd
                                     
-                                ElseIf (LCase$(s) = "/lvchandims") Then
-                                    Dim j As Integer ' ...
-                                
-                                    AddChat vbRed, "lvChannel:"
-                                    AddChat vbRed, " Height: " & lvChannel.Height
-                                    AddChat vbRed, " Width: " & lvChannel.Width
-                                    
-                                    For j = 1 To lvChannel.ColumnHeaders.Count
-                                        AddChat vbRed, " Column " & j & ":"
-                                        AddChat vbRed, "  Width:" & lvChannel.ColumnHeaders(j).Width
-                                    Next j
-                                    
+                                'ElseIf (LCase$(s) = "/lvchandims") Then
+                                '    Dim j As Integer ' ...
+                                '
+                                '    AddChat vbRed, "lvChannel:"
+                                '    AddChat vbRed, " Height: " & lvChannel.Height
+                                '    AddChat vbRed, " Width: " & lvChannel.Width
+                                '
+                                '    For j = 1 To lvChannel.ColumnHeaders.Count
+                                '        AddChat vbRed, " Column " & j & ":"
+                                '        AddChat vbRed, "  Width:" & lvChannel.ColumnHeaders(j).Width
+                                '    Next j
+                                '
                                 ElseIf (LCase$(s) = "/cls") Then
                                     Call mnuClear_Click
                                     
                                     GoTo theEnd
                                     
-                                ElseIf (LCase$(s) = "/ds_list") Then
-                                    Call ds.List
-                                    
-                                    GoTo theEnd
-                                    
-                                ElseIf (Left$(LCase$(s), 7) = "/setcl ") Then
-                                    CommandLine = Mid$(s, 8)
-                                    frmChat.AddChat RTBColors.SuccessText, _
-                                            "The command line for this instance has been changed."
-                                    
-                                    GoTo theEnd
-                                    
-                                ElseIf ((s = "/force") And (MDebug("debug"))) Then
-                                    MyFlags = 2
-                                    SharedScriptSupport.BotFlags = MyFlags
-                                    AddChat RTBColors.ConsoleText, "Flags forced to 2."
-                                
-                                ElseIf ((s = "/flags") And (MDebug("debug"))) Then
-                                    For n = 1 To g_Channel.Users.Count
-                                        With g_Channel.Users(n)
-                                            AddChat RTBColors.ConsoleText, .Name & Space$(4) & .Flags
-                                        End With
-                                    Next n
-                                    
-                                    n = 0
-                                    
-                                    GoTo theEnd
-                                    
-                                ElseIf LCase(Left$(s, 7)) = "/watch " Then
-                                    WatchUser = LCase(Right(s, Len(s) - 7))
-                                    AddChat RTBColors.ConsoleText, "Watching " & Right(s, Len(s) - 7)
-                                    
-                                    GoTo theEnd
-                                    
-                                ElseIf LCase$(s) = "/watchoff" Then
-                                    WatchUser = vbNullString
-                                    AddChat RTBColors.ConsoleText, "Watch off."
-                                    GoTo theEnd
+                                'ElseIf (LCase$(s) = "/ds_list") Then
+                                '    Call ds.List
+                                '
+                                '    GoTo theEnd
+                                '
+                                'ElseIf (Left$(LCase$(s), 7) = "/setcl ") Then
+                                '    CommandLine = Mid$(s, 8)
+                                '    frmChat.AddChat RTBColors.SuccessText, _
+                                '            "The command line for this instance has been changed."
+                                '
+                                '    GoTo theEnd
+                                '
+                                'ElseIf ((s = "/force") And (MDebug("debug"))) Then
+                                '    MyFlags = 2
+                                '    SharedScriptSupport.BotFlags = MyFlags
+                                '    AddChat RTBColors.ConsoleText, "Flags forced to 2."
+                                '
+                                'ElseIf ((s = "/flags") And (MDebug("debug"))) Then
+                                '    For n = 1 To g_Channel.Users.Count
+                                '        With g_Channel.Users(n)
+                                '            AddChat RTBColors.ConsoleText, .Name & Space$(4) & .Flags
+                                '        End With
+                                '    Next n
+                                '
+                                '    n = 0
+                                '
+                                '    GoTo theEnd
+                                '
+                                'ElseIf LCase(Left$(s, 7)) = "/watch " Then
+                                '    WatchUser = LCase(Right(s, Len(s) - 7))
+                                '    AddChat RTBColors.ConsoleText, "Watching " & Right(s, Len(s) - 7)
+                                '
+                                '    GoTo theEnd
+                                '
+                                'ElseIf LCase$(s) = "/watchoff" Then
+                                '    WatchUser = vbNullString
+                                '    AddChat RTBColors.ConsoleText, "Watch off."
+                                '    GoTo theEnd
                                 'ElseIf (LCase(Left$(s, 7)) = "/reply ") Then
                                 '
                                 '   m = Right(s, (Len(s) - 7))
