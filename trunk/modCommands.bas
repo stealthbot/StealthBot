@@ -4923,7 +4923,11 @@ Private Function OnInbox(ByVal Username As String, ByRef dbAccess As udtGetAcces
     mcount = GetMailCount(Username)
     
     ' ...
-    ReDim tmpBuf(mcount)
+    If (mcount > 1) Then
+        ReDim tmpBuf(mcount - 1)
+    Else
+        ReDim tmpBuf(0)
+    End If
     
     ' ...
     If (mcount > 0) Then
