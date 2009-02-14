@@ -26,6 +26,7 @@ Private Enum LOG
     WHISPER_MSG = &H6
     SCK_OUT_MSG = &H7
     SCK_IN_MSG = &H8
+    COMMAND_MSG = &H9
 End Enum
 
 ' ...
@@ -70,6 +71,14 @@ Public Function WriteEvent(ByVal sEvent As String, Optional ByVal Source As Stri
     Else
         WriteLine EVENT_MSG, "event " & sEvent
     End If
+
+End Function
+
+' ...
+Public Function WriteCommand(ByVal sCommand As String)
+
+    ' ...
+    WriteLine COMMAND_MSG, sCommand
 
 End Function
 
@@ -135,6 +144,10 @@ Private Function WriteLine(ByVal ltype As LOG, ByVal line As String)
         Case WARNING_MSG, ERROR_MSG, EVENT_MSG, DEBUG_MSG
             filePath = _
                 (App.Path & "\logs\master.txt")
+        
+        Case COMMAND_MSG
+            filePath = _
+                (App.Path & "\logs\commands.txt")
                 
         Case CHAT_MSG
             filePath = _
@@ -147,6 +160,7 @@ Private Function WriteLine(ByVal ltype As LOG, ByVal line As String)
         Case SCK_IN_MSG, SCK_OUT_MSG
             filePath = _
                 (App.Path & "\logs\" & Datestamp() & "-PACKETLOG.txt")
+                
     End Select
     
     ' ...
@@ -162,6 +176,7 @@ Private Function WriteLine(ByVal ltype As LOG, ByVal line As String)
     ' ...
     Close #f
     
+    ' ...
     Exit Function
     
 ERROR_HANDLER:

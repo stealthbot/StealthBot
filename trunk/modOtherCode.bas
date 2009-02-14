@@ -30,7 +30,7 @@ Public Function ReadCfg$(ByVal riSection$, ByVal riKey$)
     
     riFile = GetConfigFilePath()
     
-    If (Dir(riFile) <> vbNullString) Then
+    If (dir(riFile) <> vbNullString) Then
         sRiBuffer = String(255, vbNull)
         
         sRiLong = GetPrivateProfileString(riSection, riKey, Chr$(1), _
@@ -55,7 +55,7 @@ Public Function ReadINI$(ByVal riSection$, ByVal riKey$, ByVal riFile$)
         riFile$ = GetFilePath(riFile)
     End If
     
-    If (Dir(riFile$) <> vbNullString) Then
+    If (dir(riFile$) <> vbNullString) Then
         sRiBuffer = String(255, vbNull)
         
         sRiLong = GetPrivateProfileString(riSection, riKey, Chr$(1), _
@@ -200,7 +200,7 @@ Function MKI(Value As Integer) As String
 End Function
 
 Public Function CheckPath(ByVal sPath As String) As Long
-    If (LenB(Dir$(sPath)) = 0) Then
+    If (LenB(dir$(sPath)) = 0) Then
         frmChat.AddChat RTBColors.ErrorMessageText, "[HASHES] " & _
             Mid$(sPath, InStrRev(sPath, "\") + 1) & " is missing."
             
@@ -1394,7 +1394,7 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
     Dim s As String
     Dim I As Integer
     
-    If (Dir$(GetFilePath("filters.ini")) <> vbNullString) Then
+    If (dir$(GetFilePath("filters.ini")) <> vbNullString) Then
         s = ReadINI("BlockList", "Total", "filters.ini")
         
         If (StrictIsNumeric(s)) Then
@@ -1785,7 +1785,7 @@ Public Function GetFilePath(ByVal filename As String) As String
         s = ReadCfg("FilePaths", filename)
         
         If (LenB(s) > 0) Then
-            If (LenB(Dir$(s))) Then
+            If (LenB(dir$(s))) Then
                 GetFilePath = s
             End If
         End If
@@ -2313,7 +2313,7 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phr
         Case CPWHISPER: s = "WHISPER"
     End Select
     
-    If (Dir$(GetProfilePath() & "\caughtphrases.htm") = vbNullString) Then
+    If (dir$(GetProfilePath() & "\caughtphrases.htm") = vbNullString) Then
         Open GetProfilePath() & "\caughtphrases.htm" For Output As #I
             Print #I, "<html>"
         Close #I
@@ -2394,7 +2394,7 @@ Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String,
         Caller = "bot console"
     End If
     
-    If (LenB(Dir$(sPath)) = 0) Then
+    If (LenB(dir$(sPath)) = 0) Then
         Open sPath For Output As #f
     Else
         Open sPath For Append As #f
@@ -2432,36 +2432,42 @@ Public Sub LogCommand(ByVal Caller As String, ByVal CString As String)
     Dim f      As Integer
 
     If (LenB(CString) > 0) Then
-        f = FreeFile
-
-        sPath = GetProfilePath() & "\Logs\commands.txt"
-
         If (LenB(Caller) = 0) Then
-            Caller = "bot console"
+            Caller = "console"
         End If
-        
-        If (LenB(Dir$(sPath)) = 0) Then
-            Open sPath For Output As #f
-        Else
-            Open sPath For Append As #f
-            
-            If ((LOF(f) > BotVars.MaxLogFileSize) And (BotVars.MaxLogFileSize > 0)) Then
-                Close #f
-                
-                Call Kill(sPath)
-                
-                Open sPath For Output As #f
-                    Print #f, "Logfile cleared automatically on " & _
-                        Format(Now, "HH:MM:SS MM/DD/YY") & "."
-            End If
-        End If
-        
-        Action = "[" & Format(Now, "HH:MM:SS MM/DD/YY") & _
-            "][" & Caller & "]-> " & CString
-        
-        Print #f, Action
-        
-        Close #f
+    
+        g_Logger.WriteCommand Caller & " -> " & CString
+    
+        'f = FreeFile
+        '
+        'sPath = GetProfilePath() & "\Logs\commands.txt"
+        '
+        'If (LenB(Caller) = 0) Then
+        '    Caller = "bot console"
+        'End If
+        '
+        'If (LenB(dir$(sPath)) = 0) Then
+        '    Open sPath For Output As #f
+        'Else
+        '    Open sPath For Append As #f
+        '
+        '    If ((LOF(f) > BotVars.MaxLogFileSize) And (BotVars.MaxLogFileSize > 0)) Then
+        '        Close #f
+        '
+        '        Call Kill(sPath)
+        '
+        '        Open sPath For Output As #f
+        '            Print #f, "Logfile cleared automatically on " & _
+        '                Format(Now, "HH:MM:SS MM/DD/YY") & "."
+        '    End If
+        'End If
+        '
+        'Action = "[" & Format(Now, "HH:MM:SS MM/DD/YY") & _
+        '    "][" & Caller & "]-> " & CString
+        '
+        'Print #f, Action
+        '
+        'Close #f
     End If
 
     Exit Sub
@@ -2954,7 +2960,7 @@ Public Function convertAlias(ByVal cmdName As String) As String
         Set commands = New DOMDocument60
         
         ' ...
-        If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
+        If (dir$(App.Path & "\commands.xml") = vbNullString) Then
             Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
                 "working directory.")
                 
