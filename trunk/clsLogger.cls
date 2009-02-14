@@ -17,6 +17,18 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
+Private Enum LOG
+    WARNING_MSG = &H1
+    ERROR_MSG = &H2
+    EVENT_MSG = &H3
+    DEBUG_MSG = &H4
+    CHAT_MSG = &H5
+    WHISPER_MSG = &H6
+    SCK_OUT_MSG = &H7
+    SCK_IN_MSG = &H8
+End Enum
+
+
 ' ...
 Private Sub Class_Initialize()
 
@@ -36,57 +48,43 @@ Public Function WriteWarning(ByVal Source As String, ByVal sWarning As String)
 
     ' ...
     Source = LCase$(Source)
-    
+
     ' ...
-    If (Source = vbNullString) Then
-        Source = "stealthbot"
+    If (LenB(Source) > 0) Then
+        WriteLine WARNING_MSG, "warning " & Source & Space$(1) & sWarning
+    Else
+        WriteLine WARNING_MSG, "warning " & sWarning
     End If
-    
-    ' ...
-    WriteLine "warning " & Source & Space$(1) & sWarning
 
 End Function
 
 ' ...
-Public Function WriteError(ByVal Source As String, ByVal Procedure As String, ByVal sError As String)
-
-    ' ...
-    If (Procedure = vbNullString) Then
-        Exit Function
-    End If
+Public Function WriteError(ByVal Source As String, ByVal sError As String)
     
     ' ...
     Source = LCase$(Source)
     
     ' ...
-    If (Source = vbNullString) Then
-        Source = "stealthbot"
+    If (LenB(Source) > 0) Then
+        WriteLine ERROR_MSG, "error " & Source & Space$(1) & sError
+    Else
+        WriteLine ERROR_MSG, "error " & sError
     End If
-    
-    ' ...
-    WriteLine "error " & Source & Space$(1) & Procedure & Space$(1) & sError
 
 End Function
 
 ' ...
-Public Function WriteEvent(ByVal Source As String, ByVal sEventTitle As String, ByVal sEvent As String)
-
-    ' ...
-    If (sEventTitle = vbNullString) Then
-        Exit Function
-    End If
+Public Function WriteEvent(ByVal Source As String, ByVal sEvent As String)
 
     ' ...
     Source = LCase$(Source)
-    sEventTitle = LCase$(sEventTitle)
     
     ' ...
-    If (Source = vbNullString) Then
-        Source = "stealthbot"
+    If (LenB(Source) > 0) Then
+        WriteLine EVENT_MSG, "event " & Source & Space$(1) & sEvent
+    Else
+        WriteLine EVENT_MSG, "event " & sEvent
     End If
-    
-    ' ...
-    WriteLine "event " & Source & Space$(1) & sEventTitle & Space$(1) & sEvent
 
 End Function
 
@@ -97,12 +95,11 @@ Public Function WriteDebug(ByVal Source As String, ByVal sDebugMessage As String
     Source = LCase$(Source)
     
     ' ...
-    If (Source = vbNullString) Then
-        Source = "stealthbot"
+    If (LenB(Source) > 0) Then
+        WriteLine DEBUG_MSG, "debug " & Source & Space$(1) & sDebugMessage
+    Else
+        WriteLine DEBUG_MSG, "debug " & sDebugMessage
     End If
-    
-    ' ...
-    WriteLine "debug " & Source & Space$(1) & sDebugMessage
 
 End Function
 
@@ -110,11 +107,36 @@ End Function
 Public Function WriteChat(ByVal sMessage As String)
 
     ' ...
+    WriteLine CHAT_MSG, sMessage
 
 End Function
 
 ' ...
-Private Function WriteLine(ByVal line As String)
+Public Function WriteWhisper(ByVal sMessage As String)
+
+    ' ...
+    WriteLine WHISPER_MSG, sMessage
+
+End Function
+
+' ...
+Public Function WriteSckOutData(ByVal src As String, ByVal sMessage As String)
+
+    ' ...
+    WriteLine SCK_OUT_MSG, sMessage
+
+End Function
+
+' ...
+Public Function WriteSckInData(ByVal src As String, ByVal sMessage As String)
+
+    ' ...
+    WriteLine SCK_IN_MSG, sMessage
+
+End Function
+
+' ...
+Private Function WriteLine(ByVal ltype As LOG, ByVal line As String)
 
     Dim f        As Integer ' ...
     Dim FilePath As String ' ...
@@ -123,18 +145,51 @@ Private Function WriteLine(ByVal line As String)
     f = FreeFile
     
     ' ...
-    FilePath = (App.Path & "\logs\log.txt")
+    Select Case (ltype)
+        Case WARNING_MSG, ERROR_MSG, EVENT_MSG, DEBUG_MSG
+            FilePath = (App.path & "\logs\master.txt")
+        Case CHAT_MSG
+            FilePath = (App.path & "\logs\" & Timestamp() & ".txt")
+        Case WHISPER_MSG
+            FilePath = (App.path & "\logs\" & Timestamp() & "-WHISPERS.txt")
+        Case SCK_IN_MSG, SCK_OUT_MSG
+            FilePath = (App.path & "\logs\" & Timestamp() & "-PACKETLOG.txt")
+    End Select
     
     ' ...
-    If (Dir$(FilePath) = vbNullString) Then
-        ' ...
-        Open FilePath For Output As #f
-        Close #f
+    f = OpenLogFile(FilePath)
+    
+    ' ...
+    Print #f, Timestamp & Space$(1) & line
+    
+    ' ...
+    CloseLogFile f
+
+End Function
+
+' ...
+Private Function OpenLogFile(ByVal path As String) As Integer
+    
+    Dim f As Integer ' ...
+    
+    ' ...
+    f = FreeFile
+    
+    ' ...
+    If (Dir$(path) = vbNullString) Then
+        Open path For Output As #f
+    Else
+        
     End If
+    
+    ' ...
+    OpenLogFile = f
+    
+End Function
+
+Private Function CloseLogFile(ByVal f As Integer)
 
     ' ...
-    Open FilePath For Append As #f
-        Print #f, Timestamp & Space$(1) & line
     Close #f
 
 End Function
@@ -142,7 +197,6 @@ End Function
 ' ...
 Private Function Timestamp() As String
 
-    ' ...
     Timestamp = Format(Now, "yyyy-mm-dd HH:MM:SS")
 
 End Function
