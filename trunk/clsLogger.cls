@@ -17,7 +17,7 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private Enum LOG
+Private Enum LOG_TYPES
     WARNING_MSG = &H1
     ERROR_MSG = &H2
     EVENT_MSG = &H3
@@ -132,7 +132,7 @@ Public Function WriteSckInData(ByVal sMessage As String)
 End Function
 
 ' ...
-Private Function WriteLine(ByVal ltype As LOG, ByVal line As String)
+Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal line As String)
 
     On Error GoTo ERROR_HANDLER
 
@@ -197,38 +197,39 @@ Private Function OpenLog(ByVal Path As String) As Integer
     f = FreeFile
     
     ' ...
-    If (dir$(Path) = vbNullString) Then
+    If (Dir$(Path) = vbNullString) Then
         Dim dir_path As String ' ...
         
         ' ...
         dir_path = Mid$(Path, 1, InStrRev(Path, "\"))
     
         ' ...
-        If (dir$(dir_path) = vbNullString) Then
+        If (Dir$(dir_path) = vbNullString) Then
             MkDir dir_path
         End If
     
         ' ...
         Open Path For Output As #f
     Else
-        Dim arr() As String  ' ...
-        Dim I     As Integer ' ...
-        Dim str   As String  ' ...
-        Dim bln   As Boolean ' ...
+        Dim arr()     As String  ' ...
+        Dim I         As Double  ' ...
+        Dim str       As String  ' ...
+        Dim bln       As Boolean ' ...
+        Dim lineCount As Long    ' ...
     
         ' ...
         Open Path For Input As #f
             If (BotVars.MaxLogFileSize) Then
                 If (LOF(f) >= BotVars.MaxLogFileSize) Then
-                    ReDim arr(LOF(f) - 1)
-                    
-                    For I = 0 To LOF(f)
+                    Do Until (EOF(f))
                         Line Input #f, str
+                        
+                        ReDim Preserve arr(lineCount)
                     
-                        If (I > 0) Then
-                            arr(I - 1) = str
-                        End If
-                    Next I
+                        arr(lineCount) = str
+                        
+                        lineCount = (lineCount + 1)
+                    Loop
                     
                     bln = True
                 End If
@@ -237,12 +238,28 @@ Private Function OpenLog(ByVal Path As String) As Integer
     
         ' ...
         If (bln) Then
-            Open Path For Binary As #f
-                Put #f, , arr()
+            Dim offset As Integer ' ...
+            Dim bytes  As Integer ' ...
+            
+            ' ...
+            For I = UBound(arr) To 0 Step -1
+                bytes = (bytes + Len(arr(I)))
+                
+                If (bytes >= BotVars.MaxLogFileSize) Then
+                    offset = I
+                    
+                    Exit For
+                End If
+            Next I
+        
+            ' ...
+            Open Path For Output As #f
+                For I = offset + 1 To UBound(arr)
+                    Print #f, arr(I)
+                Next I
             Close #f
         End If
         
-        ' ...
         Open Path For Append As #f
     End If
     
