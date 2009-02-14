@@ -123,34 +123,55 @@ End Function
 ' ...
 Private Function WriteLine(ByVal ltype As LOG, ByVal line As String)
 
-    Dim f        As Integer ' ...
-    Dim filePath As String ' ...
+    On Error GoTo ERROR_HANDLER
+
+    Dim f         As Integer ' ...
+    Dim filePath  As String  ' ...
     
     ' ...
     Select Case (ltype)
         Case WARNING_MSG, ERROR_MSG, EVENT_MSG, DEBUG_MSG
-            filePath = (App.path & "\logs\master.txt")
+            filePath = _
+                (App.Path & "\logs\master.txt")
+                
         Case CHAT_MSG
-            filePath = (App.path & "\logs\" & Timestamp() & ".txt")
+            filePath = _
+                (App.Path & "\logs\" & Datestamp() & ".txt")
+                
         Case WHISPER_MSG
-            filePath = (App.path & "\logs\" & Timestamp() & "-WHISPERS.txt")
+            filePath = _
+                (App.Path & "\logs\" & Datestamp() & "-WHISPERS.txt")
+                
         Case SCK_IN_MSG, SCK_OUT_MSG
-            filePath = (App.path & "\logs\" & Timestamp() & "-PACKETLOG.txt")
+            filePath = _
+                (App.Path & "\logs\" & Datestamp() & "-PACKETLOG.txt")
     End Select
     
     ' ...
     f = OpenLog(filePath)
     
     ' ...
-    Print #f, Timestamp & Space$(1) & line
+    If ((ltype = CHAT_MSG) Or (ltype = WHISPER_MSG)) Then
+        Print #f, "[" & Timestamp() & "] " & line
+    Else
+        Print #f, "[" & Datestamp() & " " & Timestamp() & "] " & line
+    End If
     
     ' ...
     Close #f
+    
+    Exit Function
+    
+ERROR_HANDLER:
+
+    MsgBox "Error (#" & Err.Number & "): " & Err.description & " in WriteLine()."
 
 End Function
 
 ' ...
-Private Function OpenLog(ByVal path As String) As Integer
+Private Function OpenLog(ByVal Path As String) As Integer
+
+    On Error GoTo ERROR_HANDLER
     
     Dim f As Integer ' ...
     
@@ -158,27 +179,38 @@ Private Function OpenLog(ByVal path As String) As Integer
     f = FreeFile
     
     ' ...
-    If (Dir$(path) = vbNullString) Then
-        Open path For Output As #f
+    If (dir$(Path) = vbNullString) Then
+        Dim dir_path As String ' ...
+        
+        ' ...
+        dir_path = Mid$(Path, 1, InStrRev(Path, "\"))
+    
+        ' ...
+        If (dir$(dir_path) = vbNullString) Then
+            MkDir dir_path
+        End If
+    
+        ' ...
+        Open Path For Output As #f
     Else
         Dim arr() As String  ' ...
-        Dim i     As Integer ' ...
+        Dim I     As Integer ' ...
         Dim str   As String  ' ...
         Dim bln   As Boolean ' ...
     
         ' ...
-        Open path For Input As #f
+        Open Path For Input As #f
             If (BotVars.MaxLogFileSize) Then
                 If (LOF(f) >= BotVars.MaxLogFileSize) Then
                     ReDim arr(LOF(f) - 1)
                     
-                    For i = 0 To LOF(f)
+                    For I = 0 To LOF(f)
                         Line Input #f, str
                     
-                        If (i > 0) Then
-                            arr(i - 1) = str
+                        If (I > 0) Then
+                            arr(I - 1) = str
                         End If
-                    Next i
+                    Next I
                     
                     bln = True
                 End If
@@ -187,24 +219,50 @@ Private Function OpenLog(ByVal path As String) As Integer
     
         ' ...
         If (bln) Then
-            Open path For Binary As #f
+            Open Path For Binary As #f
                 Put #f, , arr()
             Close #f
         End If
         
         ' ...
-        Open path For Append As #f
+        Open Path For Append As #f
     End If
     
     ' ...
     OpenLog = f
     
+    Exit Function
+    
+ERROR_HANDLER:
+
+    MsgBox "Error (#" & Err.Number & "): " & Err.description & " in OpenLog()."
+    
 End Function
 
-' ...
+Private Function Datestamp() As String
+
+    ' ...
+    Datestamp = Format(Now, "YYYY-MM-DD")
+
+End Function
+
 Private Function Timestamp() As String
 
-    Timestamp = _
-        "[" & Format(Now, "YYYY-MM-DD HH:MM:SS") & "]"
+    ' ...
+    Select Case (BotVars.TSSetting)
+        Case 0
+            Timestamp = Format(Now, "HH:MM:SS AM/PM")
+            
+        Case 1
+            Timestamp = Format(Now, "HH:MM:SS")
+        
+        Case 2
+            Timestamp = _
+                Format(Now, "HH:MM:SS") & "." & _
+                    Right$("000" & GetCurrentMS, 3)
+        
+        Case Else
+            Timestamp = Format(Now, "HH:MM:SS AM/PM")
+    End Select
 
 End Function

@@ -13,7 +13,7 @@ Private iActiveDay As Integer
 ' START ENHANCED LOGGING
 ' Call before using any methods in this module
 Public Sub StartEnhancedLogging()
-    If LenB(Dir$(GetProfilePath() & "\LogsHTML\logstyle.css")) = 0 Then
+    If LenB(dir$(GetProfilePath() & "\LogsHTML\logstyle.css")) = 0 Then
         Call CreateLogfileCSS
     End If
 End Sub
@@ -47,7 +47,7 @@ Public Function OpenLogfile() As Integer
     sLogFilename = GetLogFilename
     f = FreeFile
     
-    If LenB(Dir$(sLogFilename)) > 0 Then
+    If LenB(dir$(sLogFilename)) > 0 Then
         Open sLogFilename For Append As #f
     Else
         Open sLogFilename For Output As #f
@@ -127,7 +127,7 @@ Public Sub LogPacketRaw(ByVal Server As enuPL_ServerTypes, ByVal Direction As en
     If (LogPacketTraffic) Then
         PacketLogFilePath = GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-PACKETLOG.txt"
     
-        If (LenB(Dir$(PacketLogFilePath)) = 0) Then
+        If (LenB(dir$(PacketLogFilePath)) = 0) Then
             f = FreeFile
             
             frmChat.MakeLoggingDirectory

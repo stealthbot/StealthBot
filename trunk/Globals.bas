@@ -96,6 +96,7 @@ Public CfgVersion As Long
 Public VoteInitiator As udtGetAccessResponse
 
 Public g_Queue As New clsQueue
+'Public g_Logger As New clsLogger
 
 Public AttemptedFirstReconnect As Boolean
 
