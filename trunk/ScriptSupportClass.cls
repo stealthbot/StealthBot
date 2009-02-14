@@ -1124,7 +1124,7 @@ End Sub
 Public Function GetSetting(ByVal strPrefix As String, ByVal strName As String)
     Dim strPath As String, I As Integer, strAppend As String, tmpValue As String, varValue As Variant
     strPath = BotPath() & "plugins\settings.ini"
-    If LenB(Dir$(strPath)) = 0 Then Exit Function
+    If LenB(dir$(strPath)) = 0 Then Exit Function
     
     Do
         If I > 0 Then strAppend = "*" & I
@@ -1460,12 +1460,20 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     HasAccess = modCommandCode.HasAccess(Username, CommandName, CommandArgs, outbuf)
 End Function
 
-Public Function Logger() As Object
-    Set Logger = g_Logger
-End Function
-
 Public Function UtcNow() As Date
     UtcNow = modDateTime.UtcNow
+End Function
+
+Public Function Logger() As Object
+
+    Set Logger = g_Logger
+
+End Function
+
+Public Function isDebug() As Boolean
+
+    isDebug = modGlobals.isDebug()
+    
 End Function
 
 Public Function FileTimeToDate(ByRef strTime As String) As Date

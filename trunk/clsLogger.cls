@@ -29,7 +29,7 @@ Private Enum LOG
 End Enum
 
 ' ...
-Public Function WriteWarning(ByVal Source As String, ByVal sWarning As String)
+Public Function WriteWarning(ByVal sWarning As String, Optional ByVal Source As String)
 
     ' ...
     Source = LCase$(Source)
@@ -44,7 +44,7 @@ Public Function WriteWarning(ByVal Source As String, ByVal sWarning As String)
 End Function
 
 ' ...
-Public Function WriteError(ByVal Source As String, ByVal sError As String)
+Public Function WriteError(ByVal sError As String, Optional ByVal Source As String)
     
     ' ...
     Source = LCase$(Source)
@@ -59,7 +59,7 @@ Public Function WriteError(ByVal Source As String, ByVal sError As String)
 End Function
 
 ' ...
-Public Function WriteEvent(ByVal Source As String, ByVal sEvent As String)
+Public Function WriteEvent(ByVal sEvent As String, Optional ByVal Source As String)
 
     ' ...
     Source = LCase$(Source)
@@ -74,16 +74,18 @@ Public Function WriteEvent(ByVal Source As String, ByVal sEvent As String)
 End Function
 
 ' ...
-Public Function WriteDebug(ByVal Source As String, ByVal sDebugMessage As String)
+Public Function WriteDebug(ByVal sDebugMessage As String, Optional ByVal Source As String)
 
     ' ...
     Source = LCase$(Source)
     
     ' ...
-    If (LenB(Source) > 0) Then
-        WriteLine DEBUG_MSG, "debug " & Source & Space$(1) & sDebugMessage
-    Else
-        WriteLine DEBUG_MSG, "debug " & sDebugMessage
+    If (isDebug) Then
+        If (LenB(Source) > 0) Then
+            WriteLine DEBUG_MSG, "debug " & Source & Space$(1) & sDebugMessage
+        Else
+            WriteLine DEBUG_MSG, "debug " & sDebugMessage
+        End If
     End If
 
 End Function
@@ -105,7 +107,7 @@ Public Function WriteWhisper(ByVal sMessage As String)
 End Function
 
 ' ...
-Public Function WriteSckOutData(ByVal src As String, ByVal sMessage As String)
+Public Function WriteSckOutData(ByVal sMessage As String, ByVal src As String)
 
     ' ...
     WriteLine SCK_OUT_MSG, sMessage
@@ -113,7 +115,7 @@ Public Function WriteSckOutData(ByVal src As String, ByVal sMessage As String)
 End Function
 
 ' ...
-Public Function WriteSckInData(ByVal src As String, ByVal sMessage As String)
+Public Function WriteSckInData(ByVal sMessage As String, ByVal src As String)
 
     ' ...
     WriteLine SCK_IN_MSG, sMessage
