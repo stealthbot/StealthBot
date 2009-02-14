@@ -6271,16 +6271,10 @@ Private Function GetAuth(ByVal Username As String) As Long
     End If
     
     ' ...
-    If (clsCRC32.GenerateCRC32(BETA_AUTH_URL) <> BETA_AUTH_URL_CRC32) Then
-        ' ...
-        GetAuth = False
-    
-        ' ...
-        Exit Function
+    If (clsCRC32.GenerateCRC32(BETA_AUTH_URL) = BETA_AUTH_URL_CRC32) Then
+        result = _
+            CInt(Val(INet.OpenURL(BETA_AUTH_URL & Username)))
     End If
-
-    ' ...
-    result = CInt(Val(INet.OpenURL(BETA_AUTH_URL & Username)))
 
     ' ...
     Do While INet.StillExecuting
@@ -6295,10 +6289,10 @@ Private Function GetAuth(ByVal Username As String) As Long
         
         ' ...
         GetAuth = lastAuth
+        
+        ' ...
+        AUTH_CHECKED = True
     End If
-    
-    ' ...
-    AUTH_CHECKED = True
     
     ' ...
     Set clsCRC32 = Nothing

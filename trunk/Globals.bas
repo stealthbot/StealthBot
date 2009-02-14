@@ -354,3 +354,12 @@ Public Const NLS_GET_M1_            As Long = 20
 
 Public askedBnls As Boolean
 
+Public Function IsDebug() As Boolean
+
+    ' ...
+    If (MDebug("all")) Then
+        IsDebug = True
+    End If
+
+End Function
+
