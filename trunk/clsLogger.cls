@@ -139,36 +139,33 @@ End Function
 Private Function WriteLine(ByVal ltype As LOG, ByVal line As String)
 
     Dim f        As Integer ' ...
-    Dim FilePath As String ' ...
-    
-    ' ...
-    f = FreeFile
+    Dim filePath As String ' ...
     
     ' ...
     Select Case (ltype)
         Case WARNING_MSG, ERROR_MSG, EVENT_MSG, DEBUG_MSG
-            FilePath = (App.path & "\logs\master.txt")
+            filePath = (App.path & "\logs\master.txt")
         Case CHAT_MSG
-            FilePath = (App.path & "\logs\" & Timestamp() & ".txt")
+            filePath = (App.path & "\logs\" & Timestamp() & ".txt")
         Case WHISPER_MSG
-            FilePath = (App.path & "\logs\" & Timestamp() & "-WHISPERS.txt")
+            filePath = (App.path & "\logs\" & Timestamp() & "-WHISPERS.txt")
         Case SCK_IN_MSG, SCK_OUT_MSG
-            FilePath = (App.path & "\logs\" & Timestamp() & "-PACKETLOG.txt")
+            filePath = (App.path & "\logs\" & Timestamp() & "-PACKETLOG.txt")
     End Select
     
     ' ...
-    f = OpenLogFile(FilePath)
+    f = OpenLog(filePath)
     
     ' ...
     Print #f, Timestamp & Space$(1) & line
     
     ' ...
-    CloseLogFile f
+    Close #f
 
 End Function
 
 ' ...
-Private Function OpenLogFile(ByVal path As String) As Integer
+Private Function OpenLog(ByVal path As String) As Integer
     
     Dim f As Integer ' ...
     
@@ -179,24 +176,50 @@ Private Function OpenLogFile(ByVal path As String) As Integer
     If (Dir$(path) = vbNullString) Then
         Open path For Output As #f
     Else
+        Dim arr() As String  ' ...
+        Dim i     As Integer ' ...
+        Dim str   As String  ' ...
+        Dim bln   As Boolean ' ...
+    
+        ' ...
+        Open path For Input As #f
+            If (BotVars.MaxLogFileSize) Then
+                If (LOF(f) >= BotVars.MaxLogFileSize) Then
+                    ReDim arr(LOF(f) - 1)
+                    
+                    For i = 0 To LOF(f)
+                        Line Input #f, str
+                    
+                        If (i > 0) Then
+                            arr(i - 1) = str
+                        End If
+                    Next i
+                    
+                    bln = True
+                End If
+            End If
+        Close #f
+    
+        ' ...
+        If (bln) Then
+            Open path For Binary As #f
+                Put #f, , arr()
+            Close #f
+        End If
         
+        ' ...
+        Open path For Append As #f
     End If
     
     ' ...
-    OpenLogFile = f
+    OpenLog = f
     
-End Function
-
-Private Function CloseLogFile(ByVal f As Integer)
-
-    ' ...
-    Close #f
-
 End Function
 
 ' ...
 Private Function Timestamp() As String
 
-    Timestamp = Format(Now, "yyyy-mm-dd HH:MM:SS")
+    Timestamp = _
+        "[" & Format(Now, "YYYY-MM-DD HH:MM:SS") & "]"
 
 End Function
