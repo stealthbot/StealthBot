@@ -82,7 +82,7 @@ Public Sub DumpPacketCache()
     LogPacketTraffic = True
     
     ' ...
-    For I = 0 To m_cache_count
+    For I = 0 To m_cache_count - 1
         ' ...
         pkt = m_cache(I)
         

@@ -121,53 +121,89 @@ End Function
 ' Written 2007-06-08 to produce packet logs or do other things
 '  -at
 Public Sub LogPacketRaw(ByVal Server As enuPL_ServerTypes, ByVal Direction As enuPL_DirectionTypes, ByVal PacketID As Long, ByVal PacketLen As Long, ByRef PacketData As String, Optional ByVal DateTime As Date)
-    Dim L As Long
-    Dim f As Integer
+    'Dim L As Long
+    'Dim f As Integer
     
     If (LogPacketTraffic) Then
-        PacketLogFilePath = GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-PACKETLOG.txt"
-    
-        If (LenB(dir$(PacketLogFilePath)) = 0) Then
-            f = FreeFile
+        Dim serverType As String ' ...
+        Dim str        As String ' ...
+        
+        ' ...
+        'str = str & vbNewLine
+        
+        ' ...
+        Select Case (Server)
+            Case stBNCS: serverType = "BNCS"
+            Case stBNLS: serverType = "BNLS"
+            Case stMCP:  serverType = "MCP"
+        End Select
+        
+        ' ...
+        If (Direction = StoC) Then
+            str = str & _
+                serverType & " S -> C " & " -- Packet ID " & Right$("00" & Hex(PacketID), _
+                    2) & "h (" & PacketID & "d) Length " & PacketLen & _
+                        vbNewLine & vbNewLine
+                    
+            str = str & DebugOutput(PacketData) & _
+                vbNewLine
             
-            frmChat.MakeLoggingDirectory
+            g_Logger.WriteSckInData str
+        Else
+            str = str & _
+                serverType & " C -> S " & " -- Packet ID " & Right$("00" & Hex(PacketID), _
+                    2) & "h (" & PacketID & "d) Length " & PacketLen & _
+                        vbNewLine & vbNewLine
+                    
+            str = str & DebugOutput(PacketData) & _
+                vbNewLine
             
-            Open PacketLogFilePath For Output As #f
-                Print #f, "StealthBot packet log, started " & Format(Date, "yyyy-MM-dd") & "."
-                Print #f, "- - - - PROTECT THIS PACKET LOG AS IT MAY CONTAIN PRIVATE INFORMATION"
-                Print #f, vbCrLf
-            Close #f
+            g_Logger.WriteSckOutData str
         End If
     
+        'PacketLogFilePath = GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-PACKETLOG.txt"
+        '
+        'If (LenB(dir$(PacketLogFilePath)) = 0) Then
+        '    f = FreeFile
+        '
+        '    frmChat.MakeLoggingDirectory
+        '
+        '    Open PacketLogFilePath For Output As #f
+        '        Print #f, "StealthBot packet log, started " & Format(Date, "yyyy-MM-dd") & "."
+        '        Print #f, "- - - - PROTECT THIS PACKET LOG AS IT MAY CONTAIN PRIVATE INFORMATION"
+        '        Print #f, vbCrLf
+        '    Close #f
+        'End If
+        '
         'Log this packet!
-        L = FreeFile
-        
-        Open PacketLogFilePath For Append As #L
-            Print #L, GetTimeStamp(DateTime) & " "
-        
-            Select Case (Server)
-                Case stBNCS
-                    Print #L, "BNCS";
-                Case stMCP
-                    Print #L, "MCP";
-                Case stBNLS
-                    Print #L, "BNLS";
-            End Select
-            
-            Select Case (Direction)
-                Case CtoS
-                    Print #L, " C->S";
-                Case StoC
-                    Print #L, " S->C";
-            End Select
-            
-            Print #L, " -- Packet ID " & Right$("00" & Hex(PacketID), 2) & _
-                "h (" & PacketID & "d) Length " & PacketLen
-            Print #L, vbNullString
-            Print #L, DebugOutput(PacketData)
-            Print #L, vbCrLf
-        Close #L
-        
-        L = 0
+        'L = FreeFile
+        '
+        'Open PacketLogFilePath For Append As #L
+        '    Print #L, GetTimeStamp(DateTime) & " "
+        '
+        '    Select Case (Server)
+        '        Case stBNCS
+        '            Print #L, "BNCS";
+        '        Case stMCP
+        '            Print #L, "MCP";
+        '        Case stBNLS
+        '            Print #L, "BNLS";
+        '    End Select
+        '
+        '    Select Case (Direction)
+        '        Case CtoS
+        '            Print #L, " C->S";
+        '        Case StoC
+        '            Print #L, " S->C";
+        '    End Select
+        '
+        '    Print #L, " -- Packet ID " & Right$("00" & Hex(PacketID), 2) & _
+        '        "h (" & PacketID & "d) Length " & PacketLen
+        '    Print #L, vbNullString
+        '    Print #L, DebugOutput(PacketData)
+        '    Print #L, vbCrLf
+        'Close #L
+        '
+        'L = 0
     End If
 End Sub

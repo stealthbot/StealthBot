@@ -116,7 +116,7 @@ Public Function WriteWhisper(ByVal sMessage As String)
 End Function
 
 ' ...
-Public Function WriteSckOutData(ByVal sMessage As String, ByVal src As String)
+Public Function WriteSckOutData(ByVal sMessage As String)
 
     ' ...
     WriteLine SCK_OUT_MSG, sMessage
@@ -124,7 +124,7 @@ Public Function WriteSckOutData(ByVal sMessage As String, ByVal src As String)
 End Function
 
 ' ...
-Public Function WriteSckInData(ByVal sMessage As String, ByVal src As String)
+Public Function WriteSckInData(ByVal sMessage As String)
 
     ' ...
     WriteLine SCK_IN_MSG, sMessage
@@ -167,11 +167,12 @@ Private Function WriteLine(ByVal ltype As LOG, ByVal line As String)
     f = OpenLog(filePath)
     
     ' ...
-    If ((ltype = CHAT_MSG) Or (ltype = WHISPER_MSG)) Then
-        Print #f, "[" & Timestamp() & "] " & line
-    Else
-        Print #f, "[" & Datestamp() & " " & Timestamp() & "] " & line
-    End If
+    Select Case (ltype)
+        Case CHAT_MSG, WHISPER_MSG, SCK_IN_MSG, SCK_OUT_MSG
+            Print #f, "[" & Timestamp() & "] " & line
+        Case Else
+            Print #f, "[" & Datestamp() & " " & Timestamp() & "] " & line
+    End Select
     
     ' ...
     Close #f
