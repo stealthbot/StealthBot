@@ -865,7 +865,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -891,6 +890,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3233,7 +3233,7 @@ Public Sub AddFriend(ByVal Username As String, ByVal Product As String, IsOnline
     If (f Is Nothing) Then
         With lvFriendList.ListItems
             .Add , , Username, , I
-            .Item(.count).ListSubItems.Add , , , OnlineIcon
+            .Item(.Count).ListSubItems.Add , , , OnlineIcon
         End With
     Else
         f.SmallIcon = I
@@ -3385,7 +3385,7 @@ Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, X As 
         End If
         
         ' ...
-        For I = 0 To mnuPublicChannels.count - 1
+        For I = 0 To mnuPublicChannels.Count - 1
             ' ...
             If (mnuPublicChannels(I).Caption <> vbNullString) Then
                 mnuPublicChannels(I).Visible = True
@@ -3411,14 +3411,14 @@ Public Sub ListviewTabs_Click(PreviousTab As Integer)
             Case LVW_BUTTON_CHANNEL ' = 0 = Channel button clicked
                 ' ...
                 lblCurrentChannel.ToolTipText = "Currently in " & g_Channel.SType() & _
-                    " channel " & g_Channel.Name & " (" & g_Channel.Users.count & ")"
+                    " channel " & g_Channel.Name & " (" & g_Channel.Users.Count & ")"
                 
                 ' ...
                 lvChannel.ZOrder vbBringToFront
                 
             Case LVW_BUTTON_FRIENDS ' = 1 = Friends button clicked
                 ' ...
-                lblCurrentChannel.ToolTipText = "Currently viewing " & g_Friends.count & " friends"
+                lblCurrentChannel.ToolTipText = "Currently viewing " & g_Friends.Count & " friends"
             
                 ' ...
                 lvFriendList.ZOrder vbBringToFront
@@ -3426,7 +3426,7 @@ Public Sub ListviewTabs_Click(PreviousTab As Integer)
             Case LVW_BUTTON_CLAN ' = 2 = Clan button clicked
                 ' ...
                 lblCurrentChannel.ToolTipText = "Currently viewing " & _
-                    g_Clan.Members.count & " members of clan " & Clan.Name
+                    g_Clan.Members.Count & " members of clan " & Clan.Name
             
                 ' ...
                 lvClanList.ZOrder vbBringToFront
@@ -3556,7 +3556,7 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
             
             Dim sTemp As String
             
-            If ((lItemIndex > 0) And (g_Friends.count > 0)) Then
+            If ((lItemIndex > 0) And (g_Friends.Count > 0)) Then
                 lItemIndex = FriendListHandler.UsernameToFLIndex(lvFriendList.ListItems(m_lCurItemIndex).text)
             
                 With g_Friends.Item(lItemIndex)
@@ -3693,7 +3693,7 @@ Private Sub mnuBot_Click()
     mnuDash.Visible = False
 
     ' ...
-    For I = 0 To mnuPublicChannels.count - 1
+    For I = 0 To mnuPublicChannels.Count - 1
         mnuPublicChannels(I).Visible = False
     Next I
     
@@ -3822,7 +3822,7 @@ End Sub
 Private Sub mnuFLpopDemote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.Index < lvFriendList.ListItems.count) Then
+            If (.Index < lvFriendList.ListItems.Count) Then
               AddQ "/f d " & .text, PRIORITY.CONSOLE_MESSAGE
               'MoveFriend .index, .index + 1
             End If
@@ -4332,7 +4332,7 @@ MRS_Continue:
     lMenu = GetMenu(frmChat.hWnd)
     
     ' Remove each of the subitems for all of the script menus
-    While colDynamicMenus.count > 0
+    While colDynamicMenus.Count > 0
         I = GetMenuItemCount(colDynamicMenus.Item(1))
     
         For I = 0 To I
@@ -4725,7 +4725,7 @@ Private Sub cboSend_GotFocus()
 
     If (BotVars.NoAutocompletion = False) Then
         ' ..
-        For I = 0 To (Controls.count - 1)
+        For I = 0 To (Controls.Count - 1)
             ' ...
             If (TypeOf Controls(I) Is ListView) Or _
                     (TypeOf Controls(I) Is SSTab) Or _
@@ -4762,7 +4762,7 @@ Private Sub cboSend_LostFocus()
     
     If (BotVars.NoAutocompletion = False) Then
         ' ...
-        For I = 0 To (Controls.count - 1)
+        For I = 0 To (Controls.Count - 1)
             ' ...
             If (TypeOf Controls(I) Is ListView) Or _
                     (TypeOf Controls(I) Is TabStrip) Or _
@@ -4884,7 +4884,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
         Select Case (KeyCode)
             Case KEY_PGDN 'ALT + PAGEDOWN
                 If Shift = S_ALT Then
-                    If I < .ListItems.count Then
+                    If I < .ListItems.Count Then
                         .ListItems.Item(I + 1).Selected = True
                         .ListItems.Item(I).Ghosted = False
                         .ListItems.Item(I + 1).Ghosted = True
@@ -4925,7 +4925,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     If (I > 0) Then
                         .ListItems.Item(1).Selected = True
                         
-                        For C = 1 To .ListItems.count
+                        For C = 1 To .ListItems.Count
                             .ListItems.Item(C).Ghosted = False
                         Next C
                         
@@ -4934,7 +4934,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         cboSend.SetFocus
                         cboSend.SelStart = L
                     Else
-                        If .ListItems.count > 0 Then
+                        If .ListItems.Count > 0 Then
                             .ListItems(1).Selected = True
                             .ListItems(1).Ghosted = True
                             cboSend.SetFocus
@@ -4945,10 +4945,10 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
 
             Case KEY_END 'ALT+END
                 If Shift = S_ALT Then
-                    If (.ListItems.count > 0) Then
-                        .ListItems.Item(.ListItems.count).Selected = True
+                    If (.ListItems.Count > 0) Then
+                        .ListItems.Item(.ListItems.Count).Selected = True
                         .ListItems.Item(I).Ghosted = False
-                        .ListItems.Item(.ListItems.count).Ghosted = True
+                        .ListItems.Item(.ListItems.Count).Ghosted = True
     
                         cboSend.SetFocus
                         cboSend.SelLength = L
@@ -5425,7 +5425,7 @@ Private Sub QueueTimer_Timer()
     On Error GoTo ERROR_HANDLER
 
     Static delay As Integer
-    Static count As Integer
+    Static Count As Integer
 
     Dim Message  As String
     Dim Tag      As String
@@ -5433,12 +5433,14 @@ Private Sub QueueTimer_Timer()
     Dim I        As Integer
     Dim override As Integer
     Dim pri      As Integer
+    Dim id       As Integer
     
-    If ((g_Queue.count) And (g_Online)) Then
+    If ((g_Queue.Count) And (g_Online)) Then
         With g_Queue.Peek
             Message = .Message
             Tag = .Tag
             pri = .PRIORITY
+            id = .id
         End With
         
         ' ...
@@ -5511,7 +5513,7 @@ Private Sub QueueTimer_Timer()
                 
                 'frmChat.AddChat vbRed, Message
                 
-                Call bnetSend(Message, Tag)
+                Call bnetSend(Message, Tag, id)
             End If
         End If
         
@@ -5674,7 +5676,7 @@ Private Sub scTimer_Timer()
     strKeys = Split(modScripting.GetPTKeys)
 
     '// Execute all existing plugin timer subs at the appropriate intervals
-    For I = 0 To modScripting.dictTimerEnabled.count - 1
+    For I = 0 To modScripting.dictTimerEnabled.Count - 1
         strKey = Split(strKeys(I), ":")
     
         '// Is this timer enabled?
@@ -5870,7 +5872,7 @@ End Sub
 Private Sub tmrFriendlistUpdate_Timer()
     If (g_Online) Then
         If (BotVars.UsingDirectFList) Then
-            If (lvFriendList.ListItems.count > 0) Then
+            If (lvFriendList.ListItems.Count > 0) Then
                 Call FriendListHandler.RequestFriendsList(PBuffer)
             End If
         End If
@@ -6165,7 +6167,7 @@ Private Sub UpTimer_Timer()
         End If
     End If
     
-    If (g_Queue.count > 0) Then
+    If (g_Queue.Count > 0) Then
         Ban vbNullString, 0, 3
     End If
 
@@ -6175,7 +6177,7 @@ Private Sub UpTimer_Timer()
         doCheck = True
     
         ' ...
-        For I = 1 To g_Channel.Users.count
+        For I = 1 To g_Channel.Users.Count
             ' ...
             With g_Channel.Users(I)
                 ' ...
@@ -6352,7 +6354,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     End If
     
     ' ...
-    If (g_Queue.count = 0) Then
+    If (g_Queue.Count = 0) Then
         BanCount = 0
     End If
     
@@ -6685,7 +6687,7 @@ Private Function BanDelay() As Integer
         Dim j       As Integer ' ...
         
         ' loop through users in channel
-        For j = 1 To g_Channel.Users.count
+        For j = 1 To g_Channel.Users.Count
             ' is user an operator?
             If (g_Channel.Users(j).IsOperator) Then
                 OpCount = (OpCount + 1)
@@ -6914,7 +6916,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         lvChannel.ListItems.Clear
         
         ' ...
-        For I = 1 To g_Channel.Users.count
+        For I = 1 To g_Channel.Users.Count
             ' ...
             Set CurrentUser = g_Channel.Users(I)
         
@@ -6927,7 +6929,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         frmChat.lvFriendList.ListItems.Clear
         
         ' ...
-        For I = 1 To g_Friends.count
+        For I = 1 To g_Friends.Count
             ' ...
             Set CurrentUser = g_Friends(I)
         
@@ -7431,7 +7433,7 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
             
             ReDim gFloodSafelist(0)
             
-            For I = 1 To colSafelist.count
+            For I = 1 To colSafelist.Count
                 If (Not (GetSafelist(colSafelist.Item(I).Name))) Then
                     gFloodSafelist(UBound(gFloodSafelist)) = _
                         Replace(PrepareCheck(colSafelist.Item(I).Name), Space(1), _
@@ -7709,7 +7711,7 @@ Function GetSelectedUsers() As Collection
 
     Set GetSelectedUsers = New Collection
     
-    For I = 1 To lvChannel.ListItems.count
+    For I = 1 To lvChannel.ListItems.Count
         If (lvChannel.ListItems(I).Selected) Then
             Call GetSelectedUsers.Add(lvChannel.ListItems(I).text)
         End If
@@ -7730,12 +7732,12 @@ Function GetRandomPerson() As String
     Dim I As Integer ' ...
     
     ' ...
-    If (g_Channel.Users.count > 0) Then
+    If (g_Channel.Users.Count > 0) Then
         ' ...
         Randomize
         
         ' ...
-        I = Int(g_Channel.Users.count * Rnd + 1)
+        I = Int(g_Channel.Users.Count * Rnd + 1)
 
         ' ...
         GetRandomPerson = g_Channel.Users(I).DisplayName
@@ -7767,17 +7769,17 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     End Select
     
     With lstView.ListItems
-        If (.count > 0) Then
+        If (.Count > 0) Then
             Dim C As Integer ' ...
             
-            If (startIndex > .count) Then
+            If (startIndex > .Count) Then
                 Index = 1
             Else
                 Index = startIndex
             End If
         
             While (Loops < 2)
-                For I = Index To .count 'for each user
+                For I = Index To .Count 'for each user
                     CurrentName = .Item(I).text
                 
                     If (Len(CurrentName) >= Len(toMatch)) Then
@@ -7893,9 +7895,9 @@ Function GetChannelString() As String
         GetChannelString = vbNullString
     Else
         Select Case ListviewTabs.Tab
-            Case 0: GetChannelString = g_Channel.Name & " (" & lvChannel.ListItems.count & ")"
-            Case 1: GetChannelString = lvFriendList.ListItems.count & " friends listed"
-            Case 2: GetChannelString = "Clan " & g_Clan.Name & ": " & lvClanList.ListItems.count & " members."
+            Case 0: GetChannelString = g_Channel.Name & " (" & lvChannel.ListItems.Count & ")"
+            Case 1: GetChannelString = lvFriendList.ListItems.Count & " friends listed"
+            Case 2: GetChannelString = "Clan " & g_Clan.Name & ": " & lvClanList.ListItems.Count & " members."
         End Select
     End If
 End Function
@@ -7989,9 +7991,9 @@ Sub AddClanMember(ByVal Name As String, Rank As Integer, Online As Integer)
     Name = KillNull(Name)
     
     With lvClanList
-        .ListItems.Add .ListItems.count + 1, , Name, , Rank
-        .ListItems(.ListItems.count).ListSubItems.Add , , , Online + 6
-        .ListItems(.ListItems.count).ListSubItems.Add , , Rank
+        .ListItems.Add .ListItems.Count + 1, , Name, , Rank
+        .ListItems(.ListItems.Count).ListSubItems.Add , , , Online + 6
+        .ListItems(.ListItems.Count).ListSubItems.Add , , Rank
         .SortKey = 2
         .SortOrder = lvwDescending
         .Sorted = True
@@ -8290,7 +8292,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
             .Visible = False
         End With
         
-        For I = 1 To mnuPublicChannels.count - 1
+        For I = 1 To mnuPublicChannels.Count - 1
             Call Unload(mnuPublicChannels(I))
         Next I
         

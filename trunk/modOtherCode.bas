@@ -420,7 +420,8 @@ Public Function StripRealm(ByVal Username As String) As String
     StripRealm = Username
 End Function
 
-Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNullString)
+Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNullString, Optional ByVal _
+    id As Integer = 0)
     
     On Error GoTo ERROR_HANDLER
 
@@ -460,7 +461,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
     If (bFlood = False) Then
         On Error Resume Next
         
-        frmChat.SControl.Run "Event_MessageSent", Message, Tag
+        frmChat.SControl.Run "Event_MessageSent", id, Message, Tag
     End If
     
     Exit Sub
@@ -865,7 +866,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             End If
                         ElseIf (StrComp(dynGroups(I).Type, "GAME", vbTextCompare) = 0) Then
                             ' ...
-                            For j = 1 To g_Channel.Users.count
+                            For j = 1 To g_Channel.Users.Count
                                 If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
                                     If (StrComp(dynGroups(I).Username, g_Channel.Users(j).game, vbTextCompare) = 0) Then
                                         ' ...
@@ -877,7 +878,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             Next j
                         ElseIf (StrComp(dynGroups(I).Type, "CLAN", vbTextCompare) = 0) Then
                             ' ...
-                            For j = 1 To g_Channel.Users.count
+                            For j = 1 To g_Channel.Users.Count
                                 If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
                                     If (StrComp(dynGroups(I).Username, g_Channel.Users(j).Clan, vbTextCompare) = 0) Then
                                         ' ...
@@ -1326,7 +1327,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         LagIcon = LAG_PLUG
     End If
     
-    isPriority = (frmChat.lvChannel.ListItems.count + 1)
+    isPriority = (frmChat.lvChannel.ListItems.Count + 1)
     
     I = GetSmallIcon(Product, Flags, IconCode)
     
@@ -1349,8 +1350,8 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         End If
     End If
     
-    If (I > frmChat.imlIcons.ListImages.count) Then
-        I = frmChat.imlIcons.ListImages.count
+    If (I > frmChat.imlIcons.ListImages.Count) Then
+        I = frmChat.imlIcons.ListImages.Count
     End If
         
     With frmChat.lvChannel
@@ -1513,19 +1514,19 @@ End Function
 '---------------------------------------------------------------------------------------
 '
 Public Sub LoadCDKeys(ByRef cboCDKey As ComboBox)
-    Dim count As Integer
+    Dim Count As Integer
     Dim sKey  As String
     
-    count = Val(ReadCfg("StoredKeys", "Count"))
+    Count = Val(ReadCfg("StoredKeys", "Count"))
     
-    If (count) Then
-        For count = 1 To count
-            sKey = ReadCfg("StoredKeys", "Key" & count)
+    If (Count) Then
+        For Count = 1 To Count
+            sKey = ReadCfg("StoredKeys", "Key" & Count)
             
             If (Len(sKey) > 0) Then
                 cboCDKey.AddItem sKey
             End If
-        Next count
+        Next Count
     End If
 End Sub
 
@@ -1699,8 +1700,8 @@ Public Sub DoLastSeen(ByVal Username As String)
     Dim I     As Integer
     Dim found As Boolean
     
-    If (colLastSeen.count > 0) Then
-        For I = 1 To colLastSeen.count
+    If (colLastSeen.Count > 0) Then
+        For I = 1 To colLastSeen.Count
             If (StrComp(colLastSeen.Item(I), Username, _
                 vbTextCompare) = 0) Then
                 
@@ -1714,7 +1715,7 @@ Public Sub DoLastSeen(ByVal Username As String)
     If (Not (found)) Then
         colLastSeen.Add Username
         
-        If (colLastSeen.count > 15) Then
+        If (colLastSeen.Count > 15) Then
             Call colLastSeen.Remove(1)
         End If
     End If
@@ -3044,7 +3045,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim blUnlock       As Boolean
     Dim LogThis        As Boolean
     Dim Length         As Integer
-    Dim count          As Integer
+    Dim Count          As Integer
     Dim str            As String
     Dim arrCount       As Integer
 
@@ -3055,20 +3056,20 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     ' ...
     If (StrictIsNumeric(saElements(0))) Then
         ' ...
-        count = 2
+        Count = 2
     
         ' ...
         For I = LBound(saElements) To UBound(saElements) Step 2
             ' ...
-            ReDim Preserve arr(0 To count) As Variant
+            ReDim Preserve arr(0 To Count) As Variant
             
             ' ...
-            arr(count) = saElements(I + 1)
-            arr(count - 1) = saElements(I)
-            arr(count - 2) = rtb.Font.Name
+            arr(Count) = saElements(I + 1)
+            arr(Count - 1) = saElements(I)
+            arr(Count - 2) = rtb.Font.Name
             
             ' ...
-            count = count + 3
+            Count = Count + 3
         Next I
         
         ' ...
