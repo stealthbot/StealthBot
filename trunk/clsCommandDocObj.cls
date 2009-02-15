@@ -21,7 +21,6 @@ Option Explicit
 Private m_database       As DOMDocument60
 Private m_command_node   As IXMLDOMNode
 
-
 Private m_aliases        As Collection
 Private m_params         As Collection
 Private m_name           As String
@@ -195,23 +194,6 @@ Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
 
 End Function
 
-'Private Function getType(ByRef ParameterNode As IXMLDOMNode) As String
-'
-'    Dim attrType As IXMLDOMAttribute
-'
-'    ' ...
-'    Set attrType = ParameterNode.Attributes.getNamedItem("type")
-'
-'    ' ...
-'    If (attrType Is Nothing) Then
-'        Exit Function
-'    End If
-'
-'    ' ...
-'    getType = attrType.nodeValue
-'
-'End Function
-
 Private Function getRestrictions(ByRef ParameterNode As IXMLDOMNode) As Collection
 
     Dim Restriction  As IXMLDOMNode
@@ -226,7 +208,7 @@ Private Function getRestrictions(ByRef ParameterNode As IXMLDOMNode) As Collecti
     
     Set Restrictions = ParameterNode.selectNodes("restrictions")
     
-    If (Restrictions.length = 0) Then
+    If (Restrictions.Length = 0) Then
         Exit Function
     End If
     
@@ -271,7 +253,7 @@ Private Function setAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Coll
 
     Dim Alias   As IXMLDOMNode
     Dim Aliases As IXMLDOMNodeList
-    Dim i       As Integer
+    Dim I       As Integer
     
     If (AnyNode Is Nothing) Then
         Exit Function
@@ -287,12 +269,12 @@ Private Function setAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Coll
         Next
     End If
     
-    For i = 1 To AliasCol.Count
+    For I = 1 To AliasCol.Count
         '// 09/03/2008 JSM - Modified code to use the <aliases> element
         Set Alias = _
             AnyNode.selectSingleNode("aliases").appendChild(m_database.createNode("element", "alias", vbNullString))
         
-        Alias.text = AliasCol(i)
+        Alias.text = AliasCol(I)
     Next
     
     Call Save
@@ -532,7 +514,7 @@ Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) A
 
     Dim temp As IXMLDOMNode
     Dim flag As IXMLDOMNode
-    Dim i    As Integer
+    Dim I    As Integer
     
     If (AnyNode Is Nothing) Then
         Exit Function
@@ -547,58 +529,102 @@ Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) A
             temp.appendChild(m_database.createNode("element", "flags", vbNullString))
     End If
     
-    For i = 1 To Len(Flags)
+    For I = 1 To Len(Flags)
         Set flag = temp.appendChild(m_database.createNode("element", "flag", vbNullString))
         
-        flag.text = Mid$(Flags, i, 1)
-    Next i
+        flag.text = Mid$(Flags, I, 1)
+    Next I
     
     Call Save
     
 End Function
 
 Public Property Get Name() As String
+
     Name = getName(m_command_node)
+    
 End Property
+
 Public Property Get Aliases() As Collection
+
     Set Aliases = getAliases(m_command_node)
+    
 End Property
+
 Public Property Let Aliases(ByVal col As Collection)
+
     setAliases m_command_node, col
+
 End Property
+
 Public Property Get IsEnabled() As Boolean
+    
     IsEnabled = getEnabled(m_command_node)
+
 End Property
+
 Public Property Let IsEnabled(bln As Boolean)
+    
     setEnabled m_command_node, bln
+
 End Property
+
 Public Property Let Name(strName As String)
+    
     m_name = strName
+
 End Property
+
 Public Property Get RequiredRank() As Integer
+    
     RequiredRank = GetRank(m_command_node)
+
 End Property
+
 Public Property Let RequiredRank(ByVal Rank As Integer)
+    
     setRank m_command_node, Rank
+
 End Property
+
 Public Property Get RequiredFlags() As String
+    
     RequiredFlags = getFlags(m_command_node)
+
 End Property
+
 Public Property Let RequiredFlags(ByVal str As String)
+   
    setFlags m_command_node, str
+
 End Property
+
 Public Property Get description() As String
+    
     description = getDescription(m_command_node)
+
 End Property
+
 Public Property Let description(ByVal strDescription As String)
+    
     setDescription m_command_node, strDescription
+
 End Property
+
 Public Property Get Notes() As String
+    
     Notes = getNotes(m_command_node)
+
 End Property
+
 Public Property Let Notes(ByVal strNotes As String)
+    
     setNotes m_command_node, strNotes
+
 End Property
+
 Public Property Get Parameters() As Collection
+    
     Set Parameters = getParameters(m_command_node)
+
 End Property
