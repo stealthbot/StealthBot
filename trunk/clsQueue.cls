@@ -143,33 +143,38 @@ Public Function Item(Index As Integer) As Object
 End Function ' end function Item
 
 ' ...
-Public Property Get Count() As Long
+Public Property Get count() As Long
 
-    Count = m_objCount
+    count = m_objCount
     
 End Property
 
-Public Sub RemoveLines(match As String)
+Public Function RemoveLines(ByVal match As String) As Integer
 
     Dim curQueueObj As clsQueueOBj ' ...
     Dim I           As Integer     ' ...
+    Dim found       As Integer     ' ...
     
     ' ...
     Do
         ' ...
         Set curQueueObj = m_QueueObjs(I)
-        
+
         ' ...
-        If (curQueueObj.Message Like PrepareCheck(match)) Then
+        If (PrepareCheck(curQueueObj.Message) Like PrepareCheck(match)) Then
             RemoveItem I
+            
+            found = (found + 1)
             
             I = 0
         Else
-            I = I + 1
+            I = (I + 1)
         End If
-    Loop While (I < Count())
+    Loop While (I < count())
+    
+    RemoveLines = found
 
-End Sub
+End Function
 
 ' ...
 'Public Sub RemoveLines(Optional ByVal strLine As String = vbNullString, Optional ByVal strUser As String = _

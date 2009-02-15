@@ -30,7 +30,7 @@ Public Function ReadCfg$(ByVal riSection$, ByVal riKey$)
     
     riFile = GetConfigFilePath()
     
-    If (dir(riFile) <> vbNullString) Then
+    If (Dir(riFile) <> vbNullString) Then
         sRiBuffer = String(255, vbNull)
         
         sRiLong = GetPrivateProfileString(riSection, riKey, Chr$(1), _
@@ -55,7 +55,7 @@ Public Function ReadINI$(ByVal riSection$, ByVal riKey$, ByVal riFile$)
         riFile$ = GetFilePath(riFile)
     End If
     
-    If (dir(riFile$) <> vbNullString) Then
+    If (Dir(riFile$) <> vbNullString) Then
         sRiBuffer = String(255, vbNull)
         
         sRiLong = GetPrivateProfileString(riSection, riKey, Chr$(1), _
@@ -200,7 +200,7 @@ Function MKI(Value As Integer) As String
 End Function
 
 Public Function CheckPath(ByVal sPath As String) As Long
-    If (LenB(dir$(sPath)) = 0) Then
+    If (LenB(Dir$(sPath)) = 0) Then
         frmChat.AddChat RTBColors.ErrorMessageText, "[HASHES] " & _
             Mid$(sPath, InStrRev(sPath, "\") + 1) & " is missing."
             
@@ -865,7 +865,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             End If
                         ElseIf (StrComp(dynGroups(I).Type, "GAME", vbTextCompare) = 0) Then
                             ' ...
-                            For j = 1 To g_Channel.Users.Count
+                            For j = 1 To g_Channel.Users.count
                                 If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
                                     If (StrComp(dynGroups(I).Username, g_Channel.Users(j).game, vbTextCompare) = 0) Then
                                         ' ...
@@ -877,7 +877,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             Next j
                         ElseIf (StrComp(dynGroups(I).Type, "CLAN", vbTextCompare) = 0) Then
                             ' ...
-                            For j = 1 To g_Channel.Users.Count
+                            For j = 1 To g_Channel.Users.count
                                 If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
                                     If (StrComp(dynGroups(I).Username, g_Channel.Users(j).Clan, vbTextCompare) = 0) Then
                                         ' ...
@@ -1326,7 +1326,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         LagIcon = LAG_PLUG
     End If
     
-    isPriority = (frmChat.lvChannel.ListItems.Count + 1)
+    isPriority = (frmChat.lvChannel.ListItems.count + 1)
     
     I = GetSmallIcon(Product, Flags, IconCode)
     
@@ -1349,8 +1349,8 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         End If
     End If
     
-    If (I > frmChat.imlIcons.ListImages.Count) Then
-        I = frmChat.imlIcons.ListImages.Count
+    If (I > frmChat.imlIcons.ListImages.count) Then
+        I = frmChat.imlIcons.ListImages.count
     End If
         
     With frmChat.lvChannel
@@ -1394,7 +1394,7 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
     Dim s As String
     Dim I As Integer
     
-    If (dir$(GetFilePath("filters.ini")) <> vbNullString) Then
+    If (Dir$(GetFilePath("filters.ini")) <> vbNullString) Then
         s = ReadINI("BlockList", "Total", "filters.ini")
         
         If (StrictIsNumeric(s)) Then
@@ -1513,19 +1513,19 @@ End Function
 '---------------------------------------------------------------------------------------
 '
 Public Sub LoadCDKeys(ByRef cboCDKey As ComboBox)
-    Dim Count As Integer
+    Dim count As Integer
     Dim sKey  As String
     
-    Count = Val(ReadCfg("StoredKeys", "Count"))
+    count = Val(ReadCfg("StoredKeys", "Count"))
     
-    If (Count) Then
-        For Count = 1 To Count
-            sKey = ReadCfg("StoredKeys", "Key" & Count)
+    If (count) Then
+        For count = 1 To count
+            sKey = ReadCfg("StoredKeys", "Key" & count)
             
             If (Len(sKey) > 0) Then
                 cboCDKey.AddItem sKey
             End If
-        Next Count
+        Next count
     End If
 End Sub
 
@@ -1699,8 +1699,8 @@ Public Sub DoLastSeen(ByVal Username As String)
     Dim I     As Integer
     Dim found As Boolean
     
-    If (colLastSeen.Count > 0) Then
-        For I = 1 To colLastSeen.Count
+    If (colLastSeen.count > 0) Then
+        For I = 1 To colLastSeen.count
             If (StrComp(colLastSeen.Item(I), Username, _
                 vbTextCompare) = 0) Then
                 
@@ -1714,7 +1714,7 @@ Public Sub DoLastSeen(ByVal Username As String)
     If (Not (found)) Then
         colLastSeen.Add Username
         
-        If (colLastSeen.Count > 15) Then
+        If (colLastSeen.count > 15) Then
             Call colLastSeen.Remove(1)
         End If
     End If
@@ -1785,7 +1785,7 @@ Public Function GetFilePath(ByVal filename As String) As String
         s = ReadCfg("FilePaths", filename)
         
         If (LenB(s) > 0) Then
-            If (LenB(dir$(s))) Then
+            If (LenB(Dir$(s))) Then
                 GetFilePath = s
             End If
         End If
@@ -1898,7 +1898,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
     tmp = "/ban " & sUser
         
     ' ...
-    Call g_Queue.RemoveLines(tmp & "*")
+    g_Queue.RemoveLines tmp & "*"
 
     ' ...
     If ((StrReverse$(BotVars.Product) = "WAR3") Or _
@@ -1915,8 +1915,12 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
         End Select
         
         ' ...
-        Call g_Queue.RemoveLines(tmp & strGateway & "*")
+        If (InStr(1, tmp, strGateway, vbTextCompare) = 0) Then
+            g_Queue.RemoveLines tmp & strGateway & "*"
+        End If
     End If
+    
+    'frmChat.AddChat vbRed, tmp & "*" & " : " & tmp & strGateway & "*"
 End Sub
 
 Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boolean
@@ -2313,7 +2317,7 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phr
         Case CPWHISPER: s = "WHISPER"
     End Select
     
-    If (dir$(GetProfilePath() & "\caughtphrases.htm") = vbNullString) Then
+    If (Dir$(GetProfilePath() & "\caughtphrases.htm") = vbNullString) Then
         Open GetProfilePath() & "\caughtphrases.htm" For Output As #I
             Print #I, "<html>"
         Close #I
@@ -2394,7 +2398,7 @@ Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String,
         Caller = "bot console"
     End If
     
-    If (LenB(dir$(sPath)) = 0) Then
+    If (LenB(Dir$(sPath)) = 0) Then
         Open sPath For Output As #f
     Else
         Open sPath For Append As #f
@@ -2960,7 +2964,7 @@ Public Function convertAlias(ByVal cmdName As String) As String
         Set commands = New DOMDocument60
         
         ' ...
-        If (dir$(App.Path & "\commands.xml") = vbNullString) Then
+        If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
             Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
                 "working directory.")
                 
@@ -3040,7 +3044,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim blUnlock       As Boolean
     Dim LogThis        As Boolean
     Dim Length         As Integer
-    Dim Count          As Integer
+    Dim count          As Integer
     Dim str            As String
     Dim arrCount       As Integer
 
@@ -3051,20 +3055,20 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     ' ...
     If (StrictIsNumeric(saElements(0))) Then
         ' ...
-        Count = 2
+        count = 2
     
         ' ...
         For I = LBound(saElements) To UBound(saElements) Step 2
             ' ...
-            ReDim Preserve arr(0 To Count) As Variant
+            ReDim Preserve arr(0 To count) As Variant
             
             ' ...
-            arr(Count) = saElements(I + 1)
-            arr(Count - 1) = saElements(I)
-            arr(Count - 2) = rtb.Font.Name
+            arr(count) = saElements(I + 1)
+            arr(count - 1) = saElements(I)
+            arr(count - 2) = rtb.Font.Name
             
             ' ...
-            Count = Count + 3
+            count = count + 3
         Next I
         
         ' ...
