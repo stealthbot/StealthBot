@@ -3103,8 +3103,8 @@ Sub Form_Unload(Cancel As Integer)
             End If
         Close #1
     ElseIf BotVars.Logging = 2 Then
-        Kill GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt"
-        Kill GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt"
+        'Kill GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt"
+        'Kill GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt"
     End If
     
     'If ReconnectTimerID > 0 Then
