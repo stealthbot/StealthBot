@@ -28,6 +28,27 @@ Private Enum LOG_TYPES
     COMMAND_MSG = &H8
 End Enum
 
+Private m_logsCreated As Collection ' ...
+
+Private Sub Class_Initialize()
+
+    ' ...
+    Set m_logsCreated = New Collection
+
+End Sub
+
+Private Sub Class_Teriminate()
+
+    ' ...
+    Set m_logsCreated = Nothing
+    
+    ' ...
+    If (BotVars.Logging = 2) Then
+        RemoveLogsCreated
+    End If
+
+End Sub
+
 ' ...
 Public Function WriteWarning(ByVal sWarning As String, Optional ByVal Source As String)
 
@@ -183,14 +204,15 @@ Private Function OpenLog(ByVal Path As String) As Integer
     On Error GoTo ERROR_HANDLER
     
     Dim f As Integer ' ...
+    Dim i As Double  ' ...
     
     ' ...
     f = FreeFile
     
     ' ...
     If (Dir$(Path) = vbNullString) Then
-        Dim dir_path As String ' ...
-        
+        Dim dir_path As String  ' ...
+
         ' ...
         dir_path = Mid$(Path, 1, InStrRev(Path, "\"))
     
@@ -201,9 +223,20 @@ Private Function OpenLog(ByVal Path As String) As Integer
     
         ' ...
         Open Path For Output As #f
+        
+        ' ...
+        For i = 1 To m_logsCreated.Count
+            If (StrComp(m_logsCreated(i), Path, vbTextCompare) = 0) Then
+                Exit For
+            End If
+        Next i
+        
+        ' ...
+        If (i >= m_logsCreated.Count + 1) Then
+            m_logsCreated.Add Path
+        End If
     Else
         Dim arr()     As String  ' ...
-        Dim I         As Double  ' ...
         Dim str       As String  ' ...
         Dim bln       As Boolean ' ...
         Dim lineCount As Long    ' ...
@@ -233,21 +266,21 @@ Private Function OpenLog(ByVal Path As String) As Integer
             Dim bytes  As Integer ' ...
             
             ' ...
-            For I = UBound(arr) To 0 Step -1
-                bytes = (bytes + Len(arr(I)))
+            For i = UBound(arr) To 0 Step -1
+                bytes = (bytes + Len(arr(i)))
                 
                 If (bytes >= BotVars.MaxLogFileSize) Then
-                    offset = I
+                    offset = i
                     
                     Exit For
                 End If
-            Next I
+            Next i
         
             ' ...
             Open Path For Output As #f
-                For I = offset + 1 To UBound(arr)
-                    Print #f, arr(I)
-                Next I
+                For i = offset + 1 To UBound(arr)
+                    Print #f, arr(i)
+                Next i
             Close #f
         End If
         
@@ -264,6 +297,20 @@ ERROR_HANDLER:
     MsgBox "Error (#" & Err.Number & "): " & Err.description & " in OpenLog()."
     
 End Function
+
+' ...
+Public Sub RemoveLogsCreated()
+
+    On Error Resume Next
+
+    Dim i As Integer ' ...
+    
+    ' ...
+    For i = 1 To m_logsCreated.Count
+        Kill m_logsCreated(i)
+    Next i
+
+End Sub
 
 Private Function Datestamp() As String
 
