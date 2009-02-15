@@ -19,15 +19,15 @@ Private m_priority As Integer
 Private m_response As String
 Private m_tag      As String
 
-Public Property Let ID(ByVal i As Double)
+Public Property Let id(ByVal I As Double)
 
-    m_obj_id = i
+    m_obj_id = I
     
 End Property
 
-Public Property Get ID() As Double
+Public Property Get id() As Double
 
-    ID = m_obj_id
+    id = m_obj_id
     
 End Property
 

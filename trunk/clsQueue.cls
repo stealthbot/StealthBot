@@ -91,7 +91,7 @@ Public Function Push(ByRef obj As clsQueueOBj)
     On Error Resume Next
     
     ' ...
-    frmChat.SControl.Run "Event_MessageQueued", m_lastObjID, obj.Message
+    frmChat.SControl.Run "Event_MessageQueued", m_lastObjID, obj.Message, obj.Tag
     
     ' ...
     m_objCount = (m_objCount + 1)

@@ -1783,9 +1783,9 @@ Sub Event_MessageSent(MessageID, Message, Tag)
    psExecuteEvent "MessageSent", Array(MessageID, Message, Tag)
 End Sub
 
-Sub Event_MessageQueued(MessageID, Message)
+Sub Event_MessageQueued(MessageID, Message, Tag)
  
-   psExecuteEvent "MessageQueued", Array(MessageID, Message)
+   psExecuteEvent "MessageQueued", Array(MessageID, Message, Tag)
 End Sub
 
 
