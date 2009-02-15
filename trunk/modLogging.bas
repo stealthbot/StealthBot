@@ -13,7 +13,7 @@ Private iActiveDay As Integer
 ' START ENHANCED LOGGING
 ' Call before using any methods in this module
 Public Sub StartEnhancedLogging()
-    If LenB(dir$(GetProfilePath() & "\LogsHTML\logstyle.css")) = 0 Then
+    If LenB(Dir$(GetProfilePath() & "\LogsHTML\logstyle.css")) = 0 Then
         Call CreateLogfileCSS
     End If
 End Sub
@@ -47,7 +47,7 @@ Public Function OpenLogfile() As Integer
     sLogFilename = GetLogFilename
     f = FreeFile
     
-    If LenB(dir$(sLogFilename)) > 0 Then
+    If LenB(Dir$(sLogFilename)) > 0 Then
         Open sLogFilename For Append As #f
     Else
         Open sLogFilename For Output As #f
@@ -144,22 +144,17 @@ Public Sub LogPacketRaw(ByVal Server As enuPL_ServerTypes, ByVal Direction As en
                 serverType & " S -> C " & " -- Packet ID " & Right$("00" & Hex(PacketID), _
                     2) & "h (" & PacketID & "d) Length " & PacketLen & _
                         vbNewLine & vbNewLine
-                    
-            str = str & DebugOutput(PacketData) & _
-                vbNewLine
-            
-            g_Logger.WriteSckInData str
         Else
             str = str & _
                 serverType & " C -> S " & " -- Packet ID " & Right$("00" & Hex(PacketID), _
                     2) & "h (" & PacketID & "d) Length " & PacketLen & _
                         vbNewLine & vbNewLine
-                    
-            str = str & DebugOutput(PacketData) & _
-                vbNewLine
-            
-            g_Logger.WriteSckOutData str
         End If
+        
+        str = str & DebugOutput(PacketData) & _
+                vbNewLine
+        
+        g_Logger.WriteSckData str
     
         'PacketLogFilePath = GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-PACKETLOG.txt"
         '

@@ -24,9 +24,8 @@ Private Enum LOG_TYPES
     DEBUG_MSG = &H4
     CHAT_MSG = &H5
     WHISPER_MSG = &H6
-    SCK_OUT_MSG = &H7
-    SCK_IN_MSG = &H8
-    COMMAND_MSG = &H9
+    SCK_MSG = &H7
+    COMMAND_MSG = &H8
 End Enum
 
 ' ...
@@ -116,18 +115,10 @@ Public Function WriteWhisper(ByVal sMessage As String)
 End Function
 
 ' ...
-Public Function WriteSckOutData(ByVal sMessage As String)
+Public Function WriteSckData(ByVal sMessage As String)
 
     ' ...
-    WriteLine SCK_OUT_MSG, sMessage
-
-End Function
-
-' ...
-Public Function WriteSckInData(ByVal sMessage As String)
-
-    ' ...
-    WriteLine SCK_IN_MSG, sMessage
+    WriteLine SCK_MSG, sMessage
 
 End Function
 
@@ -157,7 +148,7 @@ Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal line As String)
             filePath = _
                 (App.Path & "\logs\" & Datestamp() & "-WHISPERS.txt")
                 
-        Case SCK_IN_MSG, SCK_OUT_MSG
+        Case SCK_MSG
             filePath = _
                 (App.Path & "\logs\" & Datestamp() & "-PACKETLOG.txt")
                 
@@ -168,7 +159,7 @@ Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal line As String)
     
     ' ...
     Select Case (ltype)
-        Case CHAT_MSG, WHISPER_MSG, SCK_IN_MSG, SCK_OUT_MSG
+        Case CHAT_MSG, WHISPER_MSG, SCK_MSG
             Print #f, "[" & Timestamp() & "] " & line
         Case Else
             Print #f, "[" & Datestamp() & " " & Timestamp() & "] " & line
