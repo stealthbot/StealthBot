@@ -162,7 +162,7 @@ Sub psLoadPlugins()
    '// Create an array of all existing StealthBot events
    psEventNames = Split("load|firstrun|serverinfo|servererror|usertalk|useremote|whisperfromuser|userjoins|userleaves|" & _
                         "flagupdate|loggedon|loggedoff|userinchannel|channeljoin|channellist|pressedenter|keyreturn|" & _
-                        "messagesent|claninfo|clanmemberlist|clanmemberupdate|clanmotd|clanmemberleaves|" & _
+                        "messagesent|messagequeued|claninfo|clanmemberlist|clanmemberupdate|clanmotd|clanmemberleaves|" & _
                         "botremovedfromclan|botclanrankchanged|botjoinedclan|botclaninfo|close|shutdown", "|")
 
    '// Get list of allowed plugin file extensions
