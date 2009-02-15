@@ -865,7 +865,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -891,6 +890,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3089,19 +3089,19 @@ Sub Form_Unload(Cancel As Integer)
     On Error GoTo 0
     
     If BotVars.Logging = 1 Then
-        Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt" For Append As #1
-            If LOF(1) < BotVars.MaxLogFileSize Then
-                Print #1, "Bot application closed, dumping chat screen."
-                Print #1, rtbChat.text
-            End If
-        Close #1
+        'Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt" For Append As #1
+        '    If LOF(1) < BotVars.MaxLogFileSize Then
+        '        Print #1, "Bot application closed, dumping chat screen."
+        '        Print #1, rtbChat.text
+        '    End If
+        'Close #1
         
-        Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt" For Append As #1
-            If LOF(1) < BotVars.MaxLogFileSize Then
-                Print #1, "Bot application closed, dumping whisper screen."
-                Print #1, rtbWhispers.text
-            End If
-        Close #1
+        'Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt" For Append As #1
+        '    If LOF(1) < BotVars.MaxLogFileSize Then
+        '        Print #1, "Bot application closed, dumping whisper screen."
+        '        Print #1, rtbWhispers.text
+        '    End If
+        'Close #1
     ElseIf BotVars.Logging = 2 Then
         'Kill GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt"
         'Kill GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt"
