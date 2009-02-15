@@ -76,7 +76,7 @@ Public Function WriteError(ByVal sError As String, Optional ByVal Source As Stri
     Else
         WriteLine ERROR_MSG, "error " & sError
     End If
-
+        
 End Function
 
 ' ...
@@ -98,7 +98,19 @@ End Function
 Public Function WriteCommand(ByVal sCommand As String)
 
     ' ...
-    WriteLine COMMAND_MSG, sCommand
+    If (BotVars.LogCommands) Then
+        WriteLine COMMAND_MSG, sCommand
+    End If
+
+End Function
+
+' ...
+Public Function WriteDatabase(ByVal sEvent As String)
+
+    ' ...
+    If (BotVars.LogDBActions) Then
+        WriteLine COMMAND_MSG, sEvent
+    End If
 
 End Function
 
@@ -123,7 +135,9 @@ End Function
 Public Function WriteChat(ByVal sMessage As String)
 
     ' ...
-    WriteLine CHAT_MSG, sMessage
+    If (BotVars.Logging >= 1) Then
+        WriteLine CHAT_MSG, sMessage
+    End If
 
 End Function
 
@@ -131,7 +145,9 @@ End Function
 Public Function WriteWhisper(ByVal sMessage As String)
 
     ' ...
-    WriteLine WHISPER_MSG, sMessage
+    If (BotVars.Logging >= 1) Then
+        WriteLine WHISPER_MSG, sMessage
+    End If
 
 End Function
 
@@ -139,7 +155,9 @@ End Function
 Public Function WriteSckData(ByVal sMessage As String)
 
     ' ...
-    WriteLine SCK_MSG, sMessage
+    If (LogPacketTraffic) Then
+        WriteLine SCK_MSG, sMessage
+    End If
 
 End Function
 
@@ -176,7 +194,7 @@ Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal line As String)
     End Select
     
     ' ...
-    f = OpenLog(filePath)
+    f = OpenLog(ltype, filePath)
     
     ' ...
     Select Case (ltype)
@@ -199,12 +217,12 @@ ERROR_HANDLER:
 End Function
 
 ' ...
-Private Function OpenLog(ByVal Path As String) As Integer
+Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Integer
 
     On Error GoTo ERROR_HANDLER
     
     Dim f As Integer ' ...
-    Dim i As Double  ' ...
+    Dim I As Double  ' ...
     
     ' ...
     f = FreeFile
@@ -225,15 +243,17 @@ Private Function OpenLog(ByVal Path As String) As Integer
         Open Path For Output As #f
         
         ' ...
-        For i = 1 To m_logsCreated.Count
-            If (StrComp(m_logsCreated(i), Path, vbTextCompare) = 0) Then
-                Exit For
+        If ((ltype = CHAT_MSG) Or (ltype = WHISPER_MSG)) Then
+            For I = 1 To m_logsCreated.Count
+                If (StrComp(m_logsCreated(I), Path, vbTextCompare) = 0) Then
+                    Exit For
+                End If
+            Next I
+            
+            ' ...
+            If (I >= m_logsCreated.Count + 1) Then
+                m_logsCreated.Add Path
             End If
-        Next i
-        
-        ' ...
-        If (i >= m_logsCreated.Count + 1) Then
-            m_logsCreated.Add Path
         End If
     Else
         Dim arr()     As String  ' ...
@@ -266,21 +286,21 @@ Private Function OpenLog(ByVal Path As String) As Integer
             Dim bytes  As Integer ' ...
             
             ' ...
-            For i = UBound(arr) To 0 Step -1
-                bytes = (bytes + Len(arr(i)))
+            For I = UBound(arr) To 0 Step -1
+                bytes = (bytes + Len(arr(I)))
                 
                 If (bytes >= BotVars.MaxLogFileSize) Then
-                    offset = i
+                    offset = I
                     
                     Exit For
                 End If
-            Next i
+            Next I
         
             ' ...
             Open Path For Output As #f
-                For i = offset + 1 To UBound(arr)
-                    Print #f, arr(i)
-                Next i
+                For I = offset + 1 To UBound(arr)
+                    Print #f, arr(I)
+                Next I
             Close #f
         End If
         
@@ -303,12 +323,12 @@ Public Sub RemoveLogsCreated()
 
     On Error Resume Next
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
-    For i = 1 To m_logsCreated.Count
-        Kill m_logsCreated(i)
-    Next i
+    For I = 1 To m_logsCreated.Count
+        Kill m_logsCreated(I)
+    Next I
 
 End Sub
 
