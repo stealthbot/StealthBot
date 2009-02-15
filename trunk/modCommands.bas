@@ -454,14 +454,9 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         cmdName = tmpmsg
     End If
 
-    ' initial access check
-    'If (IsCorrectSyntax(cmdName, msgData) = False) Then
-    '    cmdRet(0) = "Error: The syntax for the specified command is invalid. [" & _
-    '            BotVars.TriggerLong & "help " & cmdName & " for further information]"
-    '
-    '    Exit Function
-    'End If
-    
+    ' ...
+    LogCommand IIf(InBot, vbNullString, Username), Message
+            
     ' command switch
     Select Case (cmdName)
         Case "dump":          Call OnDump(Username, dbAccess, msgData, InBot, cmdRet())
@@ -624,13 +619,6 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
     
     'Bot has unloaded
     If BotIsClosing Then Exit Function
-
-    ' ...
-    If (Not (blnNoCmd)) Then
-        ' append entry to command log
-        LogCommand _
-            IIf(InBot, vbNullString, Username), Message
-    End If
     
     ' was a command found? return.
     executeCommand = (Not (blnNoCmd))
@@ -2633,7 +2621,7 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             
             If (res) Then
                 If (BotVars.LogDBActions) Then
-                    Call LogDBAction(RemEntry, Username, U, msgData)
+                    Call LogDBAction(RemEntry, Username, U, vbNullString)
                 End If
                 
                 tmpBuf = "Successfully removed database entry " & Chr$(34) & _
@@ -3868,7 +3856,7 @@ Private Function OnReadFile(ByVal Username As String, ByRef dbAccess As udtGetAc
             End Select
             
             ' get absolute file path
-            U = dir$(App.Path & "\" & U)
+            U = Dir$(App.Path & "\" & U)
             
             If (U = vbNullString) Then
                 tmpBuf(tmpCount) = "Error: The specified file could not " & _
@@ -4684,7 +4672,7 @@ Private Function OnAddQuote(ByVal Username As String, ByRef dbAccess As udtGetAc
     U = msgData
     
     If (Len(U)) Then
-        Y = dir$(GetFilePath("quotes.txt"))
+        Y = Dir$(GetFilePath("quotes.txt"))
         
         If (Len(Y) = 0) Then
             Open GetFilePath("quotes.txt") For Output As #f
@@ -5482,7 +5470,8 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                     
                     ' log actions
                     If (BotVars.LogDBActions) Then
-                        Call LogDBAction(ModEntry, Username, gAcc.Username, msgData)
+                        Call LogDBAction(ModEntry, Username, gAcc.Username, DB(I).Access & _
+                            " " & DB(I).Flags)
                     End If
                     
                     ' we have found the
@@ -5525,7 +5514,8 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                 
                 ' log actions
                 If (BotVars.LogDBActions) Then
-                    Call LogDBAction(AddEntry, Username, gAcc.Username, msgData)
+                    Call LogDBAction(AddEntry, Username, gAcc.Username, DB(UBound(DB)).Access & _
+                        " " & DB(UBound(DB)).Flags)
                 End If
             End If
             
@@ -5794,7 +5784,7 @@ Private Function OnFind(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     U = GetFilePath("users.txt")
             
-    If (dir$(U) = vbNullString) Then
+    If (Dir$(U) = vbNullString) Then
         tmpBuf(0) = "No userlist available. Place a users.txt file" & _
             "in the bot's root directory."
     End If
@@ -6565,7 +6555,7 @@ Public Function RemoveItem(ByVal rItem As String, file As String, Optional ByVal
     
     f = FreeFile
     
-    If dir$(GetFilePath(file & ".txt")) = vbNullString Then
+    If Dir$(GetFilePath(file & ".txt")) = vbNullString Then
         RemoveItem = "No %msgex% file found. Create one using .add, .addtag, or .shitlist."
         Exit Function
     End If
@@ -6931,7 +6921,7 @@ Public Sub LoadDatabase()
     
     Path = GetFilePath("users.txt")
     
-    If dir$(Path) <> vbNullString Then
+    If Dir$(Path) <> vbNullString Then
         f = FreeFile
         Open Path For Input As #f
             
@@ -7331,7 +7321,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
         Set commands = New DOMDocument60
         
         ' ...
-        If (dir$(App.Path & "\commands.xml") = vbNullString) Then
+        If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
             Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
                 "working directory.")
                 
@@ -7444,7 +7434,7 @@ Public Function LoadQuotes(Optional strPath As String = vbNullString)
         strPath = App.Path & "\quotes.txt"
     End If
     
-    If (LenB(dir$(strPath)) > 0) Then
+    If (LenB(Dir$(strPath)) > 0) Then
         f = FreeFile
         
         Open (GetFilePath("quotes.txt")) For Input As #f
@@ -7475,7 +7465,7 @@ Public Function GetRandomQuote() As String
     
     Set colQuotes = New Collection
 
-    If LenB(dir$(GetFilePath("quotes.txt"))) > 0 Then
+    If LenB(Dir$(GetFilePath("quotes.txt"))) > 0 Then
     
         f = FreeFile
         Open (GetFilePath("quotes.txt")) For Input As #f

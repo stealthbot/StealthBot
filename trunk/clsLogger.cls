@@ -57,7 +57,7 @@ Public Function WriteWarning(ByVal sWarning As String, Optional ByVal Source As 
 
     ' ...
     If (LenB(Source) > 0) Then
-        WriteLine WARNING_MSG, "warning " & Source & Space$(1) & sWarning
+        WriteLine WARNING_MSG, "warning " & Source & " " & sWarning
     Else
         WriteLine WARNING_MSG, "warning " & sWarning
     End If
@@ -72,7 +72,7 @@ Public Function WriteError(ByVal sError As String, Optional ByVal Source As Stri
     
     ' ...
     If (LenB(Source) > 0) Then
-        WriteLine ERROR_MSG, "error " & Source & Space$(1) & sError
+        WriteLine ERROR_MSG, "error " & Source & " " & sError
     Else
         WriteLine ERROR_MSG, "error " & sError
     End If
@@ -80,16 +80,16 @@ Public Function WriteError(ByVal sError As String, Optional ByVal Source As Stri
 End Function
 
 ' ...
-Public Function WriteEvent(ByVal sEvent As String, Optional ByVal Source As String)
+Public Function WriteEvent(ByVal sTitle As String, ByVal sEvent As String, Optional ByVal Source As String)
 
     ' ...
     Source = LCase$(Source)
     
     ' ...
     If (LenB(Source) > 0) Then
-        WriteLine EVENT_MSG, "event " & Source & Space$(1) & sEvent
+        WriteLine EVENT_MSG, "event " & sTitle & " " & Source & " " & sEvent
     Else
-        WriteLine EVENT_MSG, "event " & sEvent
+        WriteLine EVENT_MSG, "event " & sTitle & " " & sEvent
     End If
 
 End Function
@@ -99,7 +99,7 @@ Public Function WriteCommand(ByVal sCommand As String)
 
     ' ...
     If (BotVars.LogCommands) Then
-        WriteLine COMMAND_MSG, sCommand
+        WriteEvent "command", sCommand
     End If
 
 End Function
@@ -109,7 +109,7 @@ Public Function WriteDatabase(ByVal sEvent As String)
 
     ' ...
     If (BotVars.LogDBActions) Then
-        WriteLine COMMAND_MSG, sEvent
+        WriteEvent "database", sEvent
     End If
 
 End Function
@@ -123,7 +123,7 @@ Public Function WriteDebug(ByVal sDebugMessage As String, Optional ByVal Source 
     ' ...
     If (isDebug) Then
         If (LenB(Source) > 0) Then
-            WriteLine DEBUG_MSG, "debug " & Source & Space$(1) & sDebugMessage
+            WriteLine DEBUG_MSG, "debug " & Source & " " & sDebugMessage
         Else
             WriteLine DEBUG_MSG, "debug " & sDebugMessage
         End If

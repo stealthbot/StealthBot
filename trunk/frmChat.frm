@@ -6970,7 +6970,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCfg(MN, "LogDBActions")
     If s = "Y" Then BotVars.LogDBActions = True Else BotVars.LogDBActions = False
     
-    s = ReadCfg(MN, "LogAllCommands")
+    s = ReadCfg(MN, "LogCommands")
     If s = "Y" Then BotVars.LogCommands = True Else BotVars.LogCommands = False
     
     '/* time to idle: defaults to 600 seconds / 10 minutes idle */
