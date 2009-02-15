@@ -478,7 +478,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     Optional ByRef entryType As String = "USER") As Object
 
     Dim temp   As udtGetAccessResponse
-    Dim I      As Integer
+    Dim i      As Integer
     Dim Splt() As String
     
     temp = GetCumulativeAccess(Username, entryType)
@@ -512,9 +512,9 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
             Splt(0) = temp.Groups
         End If
     
-        For I = LBound(Splt) To UBound(Splt)
-            GetDBEntry.Groups.Add GetDBEntry(Splt(I), , , "GROUP")
-        Next I
+        For i = LBound(Splt) To UBound(Splt)
+            GetDBEntry.Groups.Add GetDBEntry(Splt(i), , , "GROUP")
+        Next i
     End If
 End Function
 
@@ -656,11 +656,11 @@ End Function
 '//  See lDataType constants in GetInternalData() below
 Public Function GetInternalDataByUsername(ByVal sUser As String, ByVal lDataType As Long) As String
 
-    Dim I As Integer
+    Dim i As Integer
     
-    I = Channel.GetUserIndex(sUser)
+    i = Channel.GetUserIndex(sUser)
     
-    GetInternalDataByUsername = GetInternalData(I, lDataType)
+    GetInternalDataByUsername = GetInternalData(i, lDataType)
 
 End Function
 
@@ -1099,7 +1099,7 @@ End Function
 Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal varValue As Variant, _
                       Optional ByVal strDescription As String, Optional ByVal boolOverwrite As Boolean = True)
                       
-    Dim strPath As String, arrSetting() As String, I As Integer
+    Dim strPath As String, arrSetting() As String, i As Integer
     strPath = BotPath() & "plugins\settings.ini"
 
     If Len(strDescription) > 0 Then
@@ -1110,8 +1110,8 @@ Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal 
         If Len(strName & varValue) > 254 Then
             WriteConfigEntry UCase(strPrefix), strName, Left(varValue, 254 - Len(strName)), strPath
             arrSetting = Split(strName, "*")
-            If UBound(arrSetting) > 0 Then I = arrSetting(1) + 1 Else I = 1
-            SetSetting strPrefix, arrSetting(0) & "*" & I, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
+            If UBound(arrSetting) > 0 Then i = arrSetting(1) + 1 Else i = 1
+            SetSetting strPrefix, arrSetting(0) & "*" & i, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
         Else
             WriteConfigEntry UCase(strPrefix), strName, varValue, strPath
         End If
@@ -1122,12 +1122,12 @@ End Sub
 '// GETSETTING
 '//   Written by Swent. Retrieves plugin settings.
 Public Function GetSetting(ByVal strPrefix As String, ByVal strName As String)
-    Dim strPath As String, I As Integer, strAppend As String, tmpValue As String, varValue As Variant
+    Dim strPath As String, i As Integer, strAppend As String, tmpValue As String, varValue As Variant
     strPath = BotPath() & "plugins\settings.ini"
-    If LenB(dir$(strPath)) = 0 Then Exit Function
+    If LenB(Dir$(strPath)) = 0 Then Exit Function
     
     Do
-        If I > 0 Then strAppend = "*" & I
+        If i > 0 Then strAppend = "*" & i
         tmpValue = GetConfigEntry(strPrefix, Left(strName, Len(strName)) & strAppend, strPath)
         varValue = varValue & tmpValue
         If Len(tmpValue) = 0 Then
@@ -1135,7 +1135,7 @@ Public Function GetSetting(ByVal strPrefix As String, ByVal strName As String)
             GetSetting = varValue
             Exit Do
         End If
-        I = I + 1
+        i = i + 1
     Loop
 End Function
 
@@ -1515,6 +1515,10 @@ Public Function Friends() As Object
     Set Friends = g_Friends
 End Function
 
+Public Function Queue() As Object
+    Set Queue = g_Queue
+End Function
+
 Public Function GetSystemUptime() As String
     GetSystemUptime = ConvertTime(GetUptimeMS)
 End Function
@@ -1539,17 +1543,17 @@ Private Sub Class_Terminate()
     Static Disposed As Boolean
     
     If Not Disposed Then
-        Dim I As Integer, strParts() As String, frmTemp As frmScriptUI
+        Dim i As Integer, strParts() As String, frmTemp As frmScriptUI
         strParts() = Split(DictionaryKeys, vbCrLf)
             
-        For I = 0 To UBound(strParts) - 1
-            If obScriptForms.Exists(strParts(I)) Then
-                Set frmTemp = obScriptForms.Item(strParts(I))
+        For i = 0 To UBound(strParts) - 1
+            If obScriptForms.Exists(strParts(i)) Then
+                Set frmTemp = obScriptForms.Item(strParts(i))
                 frmTemp.DestroyObjects
                 Unload frmTemp
                 Set frmTemp = Nothing
             End If
-        Next I
+        Next i
         
         obScriptForms.RemoveAll
         Set obScriptForms = Nothing

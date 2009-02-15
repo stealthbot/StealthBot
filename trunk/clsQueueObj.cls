@@ -13,10 +13,23 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
+Private m_obj_id   As Double
 Private m_message  As String
 Private m_priority As Integer
 Private m_response As String
 Private m_tag      As String
+
+Public Property Let ID(ByVal i As Double)
+
+    m_obj_id = i
+    
+End Property
+
+Public Property Get ID() As Double
+
+    ID = m_obj_id
+    
+End Property
 
 Public Property Let Message(ByVal Msg As String)
 

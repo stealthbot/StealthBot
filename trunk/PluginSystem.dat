@@ -1783,6 +1783,11 @@ Sub Event_MessageSent(Message, Tag)
    psExecuteEvent "MessageSent", Array(Message, Tag)
 End Sub
 
+Sub Event_MessageQueued(MessageID, Message)
+ 
+   psExecuteEvent "MessageQueued", Array(MessageID, Message)
+End Sub
+
 
 Sub Event_ClanInfo(Name, Rank, Online)
 
