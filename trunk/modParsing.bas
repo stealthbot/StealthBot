@@ -14,7 +14,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Dim PacketLen   As Long              ' Length of the packet minus the header
     Dim PacketID    As Byte              ' Battle.net packet ID
     Dim s           As String            ' Temporary string
-    Dim l           As Long              ' Temporary long
+    Dim L           As Long              ' Temporary long
     Dim EventID     As Long              ' 0x0F packet Event ID
     Dim UserFlags   As Long              ' 0x0F user's flags
     Dim UserPing    As Long              ' 0x0F user's ping
@@ -24,7 +24,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Dim ClanTag     As String            ' User clan tag
     Dim Product     As String            ' User product
     Dim w3icon      As String            ' Warcraft III icon code
-    Dim b           As Boolean           ' Temporary bool
+    Dim B           As Boolean           ' Temporary bool
     Dim sArr()      As String            ' Temp String array
     
     Static ServerToken As Long           ' Server token used in various packets
@@ -60,9 +60,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         Select Case PacketID
             '###########################################################################
             Case &HB 'SID_GETCHANNELLIST
-                l = InStr(5, PacketData, String(2, Chr$(0)))
-                If l < 6 Then l = LenB(PacketData) - 5
-                sArr = Split(Mid$(PacketData, 5, l - 5), Chr$(0))
+                L = InStr(5, PacketData, String(2, Chr$(0)))
+                If L < 6 Then L = LenB(PacketData) - 5
+                sArr = Split(Mid$(PacketData, 5, L - 5), Chr$(0))
                 Call Event_ChannelList(sArr)
                 
             '##########################################################################
@@ -194,11 +194,11 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H3D 'SID_CREATEACCT2
-                l = pD.DebuffDWORD
+                L = pD.DebuffDWORD
                 
-                b = Event_AccountCreateResponse(l)
+                B = Event_AccountCreateResponse(L)
                 
-                If b Then
+                If B Then
                     Send0x3A ds.GetServerToken
                 Else
                     Call frmChat.DoDisconnect
@@ -212,9 +212,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H3A 'SID_LOGONRESPONSE2
-                l = pD.DebuffDWORD
+                L = pD.DebuffDWORD
             
-                Select Case l
+                Select Case L
                     Case &H0  'Successful login.
                         Event_LogonEvent 2
                         
@@ -247,7 +247,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     Case Else
                         ' WTF?
                         frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Invalid response to 0x3A!"
-                        frmChat.AddChat RTBColors.ErrorMessageText, "Status code: " & l
+                        frmChat.AddChat RTBColors.ErrorMessageText, "Status code: " & L
                         frmChat.AddChat RTBColors.ErrorMessageText, "Packet dump: " & vbCrLf & _
                             DebugOutput(PacketData)
                         Call frmChat.DoDisconnect
@@ -266,13 +266,13 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     
                     s2 = ""
                     
-                    For l = 1 To 4 ' IP
-                        s2 = s2 & Asc(pD.DebuffRaw(1)) & IIf(l < 4, ".", "")
-                    Next l
+                    For L = 1 To 4 ' IP
+                        s2 = s2 & Asc(pD.DebuffRaw(1)) & IIf(L < 4, ".", "")
+                    Next L
                     
                     
-                    l = pD.DebuffDWORD 'Port
-                    l = ntohs(l)        'Fix byte order
+                    L = pD.DebuffDWORD 'Port
+                    L = ntohs(L)        'Fix byte order
                     'Debug.Print l
                     'Debug.Print ntohl(l)
                     
@@ -282,7 +282,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         If .State <> 0 Then .Close
                         
                         .RemoteHost = s2
-                        .RemotePort = l
+                        .RemotePort = L
                     End With
                     
                     frmRealm.MCPHandler.CurrentChunk = s
@@ -294,9 +294,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     
                 Else
                     pD.Advance 4
-                    l = pD.DebuffDWORD
+                    L = pD.DebuffDWORD
                     
-                    Call Event_RealmStatusError(l)
+                    Call Event_RealmStatusError(L)
                     Unload frmRealm
                 End If
                 
@@ -318,8 +318,8 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H50 'SID_AUTH_INFO
-                l = pD.DebuffDWORD ' Logon type
-                ds.LogonType = l
+                L = pD.DebuffDWORD ' Logon type
+                ds.LogonType = L
                 
                 ServerToken = pD.DebuffDWORD
                 ds.SetServerToken ServerToken
@@ -363,13 +363,13 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &H51 'SID_AUTH_CHECK
                 ' b is being used as a NoProceed boolean
-                l = pD.DebuffDWORD
+                L = pD.DebuffDWORD
                 s = pD.DebuffNTString
-                b = True    'Default action: Do not proceed
+                B = True    'Default action: Do not proceed
                 
-                Select Case l
+                Select Case L
                     Case &H0    'SUCCESS
-                        b = False
+                        B = False
                         Call Event_VersionCheck(0, vbNullString)
                         
                     Case &H100  'OLD Version
@@ -403,14 +403,14 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         Call Event_VersionCheck(10, vbNullString)
                     
                     Case Else
-                        If (ReadCFG("Override", "Ignore0x51Reply") = "Y") Then
-                            b = False
+                        If (ReadCfg("Override", "Ignore0x51Reply") = "Y") Then
+                            B = False
                         End If
                         
-                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(l, 4))
+                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(L, 4))
                 End Select
                 
-                If frmChat.sckBNet.State = 7 And AwaitingEmailReg = 0 And Not b Then
+                If frmChat.sckBNet.State = 7 And AwaitingEmailReg = 0 And Not B Then
                     Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Sending login information...")
             
                     If ds.LogonType = 2 Then ' NLS! Proceed to 0x52+
@@ -429,9 +429,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H52 'SID_AUTH_ACCOUNTCREATE
-                l = pD.DebuffDWORD
+                L = pD.DebuffDWORD
                 
-                Select Case l
+                Select Case L
                     Case &H0
                         Call Event_LogonEvent(4)
                         
@@ -455,11 +455,11 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 
             '###########################################################################
             Case &H53 'SID_AUTH_ACCOUNTLOGON
-                l = pD.DebuffDWORD
+                L = pD.DebuffDWORD
                 s = pD.DebuffRaw(32) 'Salt [s]
                 s2 = pD.DebuffRaw(32) ' Server key [B]
                 
-                Select Case l
+                Select Case L
                     Case &H0    'Accepted, requires proof
                         ' no more bnls hashing
                         'If BotVars.BNLS Then
@@ -489,7 +489,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         End If
                         
                     Case Else
-                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Unknown response to 0x53: 0x" & ZeroOffset(l, 4))
+                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Unknown response to 0x53: 0x" & ZeroOffset(L, 4))
                         frmChat.DoDisconnect
                         
                 End Select
@@ -497,9 +497,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 
             '###########################################################################
             Case &H54 'SID_AUTH_ACCOUNTLOGONPROOF
-                l = pD.DebuffDWORD
+                L = pD.DebuffDWORD
                 
-                Select Case l
+                Select Case L
                     Case &H0   'Success
                         Call Event_LogonEvent(2)
                         Send0x0A
@@ -548,6 +548,10 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 Else
                     If (g_request_receipt) Then
                         g_request_receipt = False
+                        
+                        If (Caching) Then
+                            frmChat.cacheTimer_Timer
+                        End If
                         
                         Exit Sub
                     End If
@@ -1085,18 +1089,18 @@ End Sub
 Public Function StringToDWord(Data As String) As Long
     Dim tmp As String
     tmp = StrToHex(Data)
-    Dim A As String, b As String, C As String, D As String
+    Dim A As String, B As String, C As String, D As String
     A = Mid(tmp, 1, 2)
-    b = Mid(tmp, 3, 2)
+    B = Mid(tmp, 3, 2)
     C = Mid(tmp, 5, 2)
     D = Mid(tmp, 7, 2)
-    tmp = D & C & b & A
+    tmp = D & C & B & A
     StringToDWord = Val("&H" & tmp)
 End Function
 
 Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
     Optional ByVal A As Variant, _
-    Optional ByVal b As Variant, _
+    Optional ByVal B As Variant, _
     Optional ByVal C As Variant, _
     Optional ByVal D As Variant, _
     Optional ByVal E As Variant, _
@@ -1115,8 +1119,8 @@ Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
                 If IsEmpty(A) Then GoTo theEnd
                 nText = Replace(nText, "%s", A, 1, 1)
             Case 1
-                If IsEmpty(b) Then GoTo theEnd
-                nText = Replace(nText, "%s", b, 1, 1)
+                If IsEmpty(B) Then GoTo theEnd
+                nText = Replace(nText, "%s", B, 1, 1)
             Case 2
                 If IsEmpty(C) Then GoTo theEnd
                 nText = Replace(nText, "%s", C, 1, 1)
@@ -1796,14 +1800,14 @@ End Function
 
 
 '// COLORMODIFY - where L is passed as the start position of the text to be checked
-Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef l As Long)
+Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
     Dim I As Long
     Dim s As String
     Dim temp As Long
     
-    If l = 0 Then l = 1
+    If L = 0 Then L = 1
     
-    temp = l
+    temp = L
     
     With rtb
         If InStr(temp, .text, "ÿc", vbTextCompare) > 0 Then
@@ -1890,7 +1894,7 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef l As Long)
         End If
         
         '// Check for SC color codes
-        temp = l
+        temp = L
         
         If InStr(temp, .text, "Á", vbBinaryCompare) > 0 Then
             Do

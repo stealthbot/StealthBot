@@ -38,7 +38,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         ' ...
         If (QueuedEventID = 0) Then
             ' ...
-            If (UserObj.Queue.count > 0) Then
+            If (UserObj.Queue.Count > 0) Then
                 ' ...
                 Set UserEvent = New clsUserEventObj
                 
@@ -73,7 +73,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
             Exit Sub
         Else
             ' ...
-            If (g_Channel.Users.count >= 200) Then
+            If (g_Channel.Users.Count >= 200) Then
                 Exit Sub
             End If
         
@@ -146,7 +146,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, Clan
     Else
         ' ...
-        If ((UserObj.Queue.count = 0) Or (QueuedEventID > 0)) Then
+        If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
             ' ...
             Pos = checkChannel(Username)
             
@@ -200,7 +200,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     End If
 
     ' ...
-    If ((UserObj.Queue.count = 0) Or (QueuedEventID > 0)) Then
+    If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' call event script function
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -749,10 +749,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         cache Message, 1
         
         ' ...
-        With frmChat.cacheTimer
-            .Enabled = False
-            .Enabled = True
-        End With
+        'With frmChat.cacheTimer
+        '    .Enabled = False
+        '    .Enabled = True
+        'End With
     End If
     
     ' what is our current gateway name?
@@ -999,7 +999,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
             UserObj.LastTalkTime = UtcNow
             
             ' ...
-            If (UserObj.Queue.count > 0) Then
+            If (UserObj.Queue.Count > 0) Then
                 ' ...
                 Set UserEvent = New clsUserEventObj
                 
@@ -1049,7 +1049,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     End If
     
     ' ...
-    If ((UserObj.Queue.count = 0) Or (QueuedEventID > 0)) Then
+    If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
         ' ...
         If (AllowedToTalk(Username, Message)) Then
             ' ...
@@ -1133,7 +1133,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         ' ...
         If (QueuedEventID = 0) Then
             ' ...
-            If (UserObj.Queue.count > 0) Then
+            If (UserObj.Queue.Count > 0) Then
                 ' ...
                 If (UserObj.Stats.Statstring = vbNullString) Then
                     showUpdate = True
@@ -1204,7 +1204,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         DoLastSeen Username
     Else
         ' ...
-        If ((UserObj.Queue.count = 0) Or (QueuedEventID > 0)) Then
+        If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
             ' ...
             If (JoinMessagesOff = False) Then
                 ' ...
@@ -1247,7 +1247,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                     End If
                 End If
                 
-                If (found.ListSubItems.count > 0) Then
+                If (found.ListSubItems.Count > 0) Then
                     ' ...
                     found.ListSubItems(1).text = sClan
                 End If
@@ -1259,7 +1259,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     End If
     
     ' ...
-    If ((UserObj.Queue.count = 0) Or (QueuedEventID > 0)) Then
+    If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' call event script function
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1379,12 +1379,12 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Username = UserObj.DisplayName
     
     ' ...
-    If ((UserObj.Queue.count = 0) Or (QueuedEventID = 0)) Then
+    If ((UserObj.Queue.Count = 0) Or (QueuedEventID = 0)) Then
         g_Channel.CheckUser Username, UserObj
     End If
     
     ' ...
-    If ((UserObj.Queue.count = 0) Or (QueuedEventID > 0)) Then
+    If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' GUI
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1516,7 +1516,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         End If
         
         ' ...
-        If (g_Channel.Users(UserIndex).Queue.count = 0) Then
+        If (g_Channel.Users(UserIndex).Queue.Count = 0) Then
             ' ...
             If (JoinMessagesOff = False) Then
                 frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, g_Channel.Users(UserIndex).DisplayName, _
@@ -1626,7 +1626,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         ' ...
         If (QueuedEventID = 0) Then
             ' ...
-            If (UserObj.Queue.count > 0) Then
+            If (UserObj.Queue.Count > 0) Then
                 ' ...
                 Set UserEvent = New clsUserEventObj
                 
@@ -1677,7 +1677,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     End If
     
     ' ...
-    If ((UserObj.Queue.count = 0) Or (QueuedEventID > 0)) Then
+    If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
         ' ...
         If (Message <> vbNullString) Then
             ' ...
@@ -2232,10 +2232,10 @@ Public Sub Event_ChannelList(sChannels() As String)
     For X = 0 To UBound(sChannels)
         ' ...
         If (frmChat.mnuPublicChannels(0).Caption <> vbNullString) Then
-            Call Load(frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.count))
+            Call Load(frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.Count))
         End If
         
-        frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.count - 1).Caption = sChannels(X)
+        frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.Count - 1).Caption = sChannels(X)
     Next X
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
