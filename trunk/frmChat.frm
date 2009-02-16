@@ -1660,9 +1660,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5608,7 +5608,7 @@ Sub InitBNetConnection()
     g_Connected = True
     
     'sckBNet.SendData ChrW(1)
-    Call Send(sckBNet.SocketHandle, ChrW(1), 1, 0)
+    Call send(sckBNet.SocketHandle, ChrW(1), 1, 0)
     
     If BotVars.BNLS Then
         NLogin.Send_0x10 BotVars.Product
@@ -5637,7 +5637,7 @@ Private Sub sckMCP_Connect()
     AddChat RTBColors.SuccessText, "[REALM] Connection established!"
     
     'sckMCP.SendData ChrW(1)
-    Call Send(sckMCP.SocketHandle, ChrW(1), 1, 0)
+    Call send(sckMCP.SocketHandle, ChrW(1), 1, 0)
     
     frmRealm.MCPHandler.SendStartup
 End Sub
@@ -5824,7 +5824,7 @@ Private Sub Timer_Timer()
             
             If WindowTitle = vbNullString Then
                 IdleMsg = "/me .: " & CVERSION & " :: anti-idle :."
-                GoTo Send
+                GoTo send
             End If
             
             If (MediaPlayer.IsPaused) Then
@@ -5839,10 +5839,10 @@ Private Sub Timer_Timer()
             IdleMsg = "/me : " & U
             
         End If
-        GoTo Send
+        GoTo send
 Error:
         IdleMsg = "/me -- " & CVERSION
-Send:
+send:
         If sckBNet.State = 7 Then
             If InStr(1, IdleMsg, "& ", vbTextCompare) And IdleType = "msg" Then
                 s = Split(IdleMsg, "& ")
@@ -6357,11 +6357,6 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     strTmp = Message
     
     ' ...
-    'If (msg_priority < 0) Then
-    '    msg_priority = 0
-    'End If
-    
-    ' ...
     If (msg_priority > 100) Then
         msg_priority = 100
     End If
@@ -6373,14 +6368,17 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
     
     ' ...
     If (strTmp <> vbNullString) Then
-        Dim Splt()         As String  ' ...
-        Dim I              As Long    ' ...
-        Dim currChar       As Long    ' ...
-        Dim Send           As String  ' ...
-        Dim command        As String  ' ...
-        Dim GTC            As Double  ' ...
-        Dim strUser        As String  ' ...
-        Dim nameConversion As Boolean ' ...
+        Dim Splt()         As String      ' ...
+        Dim I              As Long        ' ...
+        Dim currChar       As Long        ' ...
+        Dim send           As String      ' ...
+        Dim command        As String      ' ...
+        Dim GTC            As Double      ' ...
+        Dim strUser        As String      ' ...
+        Dim nameConversion As Boolean     ' ...
+        Dim Q              As clsQueueOBj ' ...
+        Dim j              As Integer     ' ...
+        Dim delay          As Integer     ' ...
         
         ' ...
         ReDim Splt(0)
@@ -6541,7 +6539,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         End If
         
         ' ...
-        If (msg_priority = -1) Then
+        If (msg_priority < 0) Then
             Dim cmdName    As String ' ...
             Dim spaceIndex As Long   ' ...
             
@@ -6583,48 +6581,30 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             GTC = GetTickCount()
             
             ' store working copy
-            Send = command & Splt(I)
-
-            ' is efp enabled?
-            If (bFlood) Then
-                ' are we on-line?
-                If (g_Online) Then
-                    ' we don't want to display (or even send!) our
-                    ' scripted queue delays.
-                    If (StrComp(Send, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
-                        ' delay queue
-                        QueueMaster = (QueueMaster + 3)
-                        
-                        ' ...
-                        QueueLoad = (QueueLoad + 1)
-                    Else
-                        ' send our message on its way
-                        Call bnetSend(KillNull(Send), Tag)
+            send = _
+                command & Splt(I)
             
-                        ' if we're not issuing a command, lets show the user
-                        ' what he's saying.
-                        'If (InStr(1, Send, "/", vbBinaryCompare) <> 1) Then
-                        '    AddChat RTBColors.Carats, "<", RTBColors.TalkBotUsername, CurrentUsername, _
-                        '        RTBColors.Carats, "> ", vbWhite, Send
-                        'End If
-                        
-                        ' lets alert our queue of the direct
-                        ' transmission of the message through
-                        ' this delay.
-                        QueueLoad = (QueueLoad + 1)
-                    End If
-                End If
-            Else
-                Dim Q        As clsQueueOBj ' ...
-                Dim j        As Integer     ' ...
-                Dim delay    As Integer     ' ...
-                
-                ' should we subject this message to the typical delay,
-                ' or can we get it out of here a bit faster?  If we
-                ' want it out of here quick, we need an empty queue
-                ' and have had at least 10 seconds elapse since the
-                ' previous message.
-                If (g_Queue.Count() = 0) Then
+            ' ...
+            Set Q = New clsQueueOBj
+            
+            ' ...
+            With Q
+                .Message = send
+                .PRIORITY = msg_priority
+                .ResponseTo = vbNullString
+                .Tag = Tag
+            End With
+
+            ' ...
+            Call g_Queue.Push(Q)
+            
+            ' should we subject this message to the typical delay,
+            ' or can we get it out of here a bit faster?  If we
+            ' want it out of here quick, we need an empty queue
+            ' and have had at least 10 seconds elapse since the
+            ' previous message.
+            If (g_Queue.Count() = 0) Then
+                If (GTC - LastGTC >= 10000) Then
                     ' set default message delay when queue is empty (in ms)
                     delay = 10
                     
@@ -6639,27 +6619,20 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         .Interval = delay
                         .Enabled = True
                     End With
+                Else
+                    ' are we issuing a ban or kick command?
+                    If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
+                        delay = BanDelay()
+                        
+                        frmChat.QueueTimer.Interval = _
+                            (frmChat.QueueTimer.Interval + delay)
+                    End If
                 End If
-                
-                ' ...
-                Set Q = New clsQueueOBj
-                
-                ' ...
-                With Q
-                    .Message = Send
-                    .PRIORITY = msg_priority
-                    .ResponseTo = vbNullString
-                    .Tag = Tag
-                End With
-
-                ' ...
-                Call g_Queue.Push(Q)
             End If
-            
-            ' store our tick
-            ' for future reference
-            LastGTC = GTC
         Next I
+        
+        ' store our tick for future reference
+        LastGTC = GTC
     End If
         
     Exit Sub
