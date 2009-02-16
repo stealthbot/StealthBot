@@ -18,6 +18,12 @@ Begin VB.Form frmChat
    ScaleHeight     =   7950
    ScaleWidth      =   12585
    StartUpPosition =   3  'Windows Default
+   Begin VB.Timer ChatQueueTimer 
+      Enabled         =   0   'False
+      Interval        =   500
+      Left            =   5280
+      Top             =   5160
+   End
    Begin VB.Timer cacheTimer 
       Enabled         =   0   'False
       Interval        =   2500
@@ -1546,6 +1552,10 @@ Private Sub cacheTimer_Timer()
     End If
     
     cacheTimer.Enabled = False
+End Sub
+
+Private Sub ChatQueueTimer_Timer()
+    modChatQueue.ChatQueueTimerProc
 End Sub
 
 ' LET IT BEGIN
@@ -3127,7 +3137,7 @@ Sub Form_Unload(Cancel As Integer)
     '  BREAKS COMPILATION
     'Call modWarden.WardenCleanUp
 
-    Call ChatQueue_Terminate
+    'Call ChatQueue_Terminate
 
     DisableURLDetect
     UnhookWindowProc
