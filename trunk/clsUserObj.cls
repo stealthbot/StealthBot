@@ -301,21 +301,15 @@ ERROR_HANDLER:
 End Function
 
 Public Sub ClearQueue()
-
-    ' ...
-    'Set m_queue = Nothing
+    
+    Dim I As Integer ' ...
     
     ' ...
-    'Set m_queue = New Collection
+    For I = Queue.Count To 1 Step -1
     
-    Dim i As Integer ' ...
+        Queue.Remove I
     
-    ' ...
-    For i = Queue.Count To 1 Step -1
-    
-        Queue.Remove i
-    
-    Next i
+    Next I
     
 
 End Sub

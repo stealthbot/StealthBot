@@ -604,9 +604,9 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "whois":         Call OnWhoIs(Username, dbAccess, msgData, InBot, cmdRet())
         Case "findattr":      Call OnFindAttr(Username, dbAccess, msgData, InBot, cmdRet())
         Case "findgrp":       Call OnFindGrp(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "monitor":       Call OnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "unmonitor":     Call OnUnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "online":        Call OnOnline(Username, dbAccess, msgData, InBot, cmdRet())
+        'Case "monitor":       Call OnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
+        'Case "unmonitor":     Call OnUnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
+        'Case "online":        Call OnOnline(Username, dbAccess, msgData, InBot, cmdRet())
         Case "help":          Call OnHelp(Username, dbAccess, msgData, InBot, cmdRet())
         Case "promote":       Call OnPromote(Username, dbAccess, msgData, InBot, cmdRet())
         Case "demote":        Call OnDemote(Username, dbAccess, msgData, InBot, cmdRet())
@@ -617,8 +617,10 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
             blnNoCmd = True
     End Select
     
-    'Bot has unloaded
-    If BotIsClosing Then Exit Function
+    ' is the bot unloading?
+    If (BotIsClosing) Then
+        Exit Function
+    End If
     
     ' was a command found? return.
     executeCommand = (Not (blnNoCmd))
@@ -2525,6 +2527,7 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     
     Dim U          As String  ' ...
     Dim tmpBuf     As String  ' temporary output buffer
+    Dim user       As udtGetAccessResponse
     Dim dbType     As String  ' ...
     Dim Index      As Long    ' ...
     Dim params     As String  ' ...
@@ -2600,6 +2603,7 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     End If
 
     U = msgData
+    user = GetAccess(U, dbType)
     
     If (Len(U) > 0) Then
         If ((GetAccess(U, dbType).Access = -1) And _
@@ -2621,7 +2625,7 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             
             If (res) Then
                 If (BotVars.LogDBActions) Then
-                    Call LogDBAction(RemEntry, Username, U, vbNullString)
+                    Call LogDBAction(RemEntry, IIf(InBot, "console", Username), U)
                 End If
                 
                 tmpBuf = "Successfully removed database entry " & Chr$(34) & _
@@ -5470,8 +5474,8 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                     
                     ' log actions
                     If (BotVars.LogDBActions) Then
-                        Call LogDBAction(ModEntry, Username, gAcc.Username, DB(I).Access & _
-                            " " & DB(I).Flags)
+                        Call LogDBAction(ModEntry, IIf(InBot, "console", Username), DB(I).Username, _
+                            DB(I).Access, DB(I).Flags)
                     End If
                     
                     ' we have found the
@@ -5514,8 +5518,8 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                 
                 ' log actions
                 If (BotVars.LogDBActions) Then
-                    Call LogDBAction(AddEntry, Username, gAcc.Username, DB(UBound(DB)).Access & _
-                        " " & DB(UBound(DB)).Flags)
+                    Call LogDBAction(AddEntry, IIf(InBot, "console", Username), DB(UBound(DB)).Username, _
+                        DB(UBound(DB)).Access, DB(UBound(DB)).Flags)
                 End If
             End If
             
@@ -5921,86 +5925,86 @@ Private Function OnFindGrp(ByVal Username As String, ByRef dbAccess As udtGetAcc
 End Function ' end function OnFindAttr
 
 ' handle monitor command
-Private Function OnMonitor(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpBuf As String ' temporary output buffer
-    
-    If (Len(msgData) > 0) Then
-        If (LCase$(msgData) = "on") Then
-            If (Not (MonitorExists)) Then
-                InitMonitor
-                If (MonitorForm.Connect(False)) Then
-                    tmpBuf = "User monitor connecting."
-                Else
-                    tmpBuf = "User monitor login information not filled in."
-                End If
-            Else
-                tmpBuf = "User montor already enabled."
-            End If
-        ElseIf (LCase$(msgData) = "off") Then
-            If (Not MonitorExists) Then
-                tmpBuf = "User monitor is not running."
-            Else
-                MonitorForm.ShutdownMonitor
-                tmpBuf = "User monitor disabled."
-            End If
-        Else
-            If (Not (MonitorExists())) Then
-                Call InitMonitor
-            End If
-            
-            If (MonitorForm.AddUser(msgData)) Then
-                tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & _
-                    " added to the monitor list."
-            Else
-                tmpBuf = "Failed to add user " & Chr$(&H22) & msgData & Chr$(&H22) & _
-                    " to the monitor list. (Contains Spaces, or already in the list)"
-            End If
-        End If
-    End If
-    
-    ' return message
-    cmdRet(0) = tmpBuf
-End Function ' end function OnMonitor
+'Private Function OnMonitor(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+'    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+'
+'    Dim tmpBuf As String ' temporary output buffer
+'
+'    If (Len(msgData) > 0) Then
+'        If (LCase$(msgData) = "on") Then
+'            If (Not (MonitorExists)) Then
+'                InitMonitor
+'                If (MonitorForm.Connect(False)) Then
+'                    tmpBuf = "User monitor connecting."
+'                Else
+'                    tmpBuf = "User monitor login information not filled in."
+'                End If
+'            Else
+'                tmpBuf = "User montor already enabled."
+'            End If
+'        ElseIf (LCase$(msgData) = "off") Then
+'            If (Not MonitorExists) Then
+'                tmpBuf = "User monitor is not running."
+'            Else
+'                MonitorForm.ShutdownMonitor
+'                tmpBuf = "User monitor disabled."
+'            End If
+'        Else
+'            If (Not (MonitorExists())) Then
+'                Call InitMonitor
+'            End If
+'
+'            If (MonitorForm.AddUser(msgData)) Then
+'                tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & _
+'                    " added to the monitor list."
+'            Else
+'                tmpBuf = "Failed to add user " & Chr$(&H22) & msgData & Chr$(&H22) & _
+'                    " to the monitor list. (Contains Spaces, or already in the list)"
+'            End If
+'        End If
+'    End If
+'
+'    ' return message
+'    cmdRet(0) = tmpBuf
+'End Function ' end function OnMonitor
 
 ' handle unmonitor command
-Private Function OnUnMonitor(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpBuf As String ' temporary output buffer
-    
-    If (Len(msgData) > 0) Then
-        If (MonitorExists) Then
-            If (MonitorForm.RemoveUser(msgData)) Then
-                tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & " was removed from the monitor list."
-            Else
-                tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & " was not found in the monitor list."
-            End If
-        Else
-            tmpBuf = "User monitor is not enabled."
-        End If
-    End If
-    
-    ' return message
-    cmdRet(0) = tmpBuf
-End Function ' end function OnUnMonitor
+'Private Function OnUnMonitor(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+'    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+'
+'    Dim tmpBuf As String ' temporary output buffer
+'
+'    If (Len(msgData) > 0) Then
+'        If (MonitorExists) Then
+'            If (MonitorForm.RemoveUser(msgData)) Then
+'                tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & " was removed from the monitor list."
+'            Else
+'                tmpBuf = "User " & Chr$(&H22) & msgData & Chr$(&H22) & " was not found in the monitor list."
+'            End If
+'        Else
+'            tmpBuf = "User monitor is not enabled."
+'        End If
+'    End If
+'
+'    ' return message
+'    cmdRet(0) = tmpBuf
+'End Function ' end function OnUnMonitor
 
 ' handle online command
-Private Function OnOnline(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpBuf As String ' temporary output buffer
-    
-    If (MonitorExists) Then
-        tmpBuf = MonitorForm.OnlineUsers
-    Else
-        tmpBuf = "User monitor is not enabled."
-    End If
-    
-    ' return message
-    cmdRet = Split(tmpBuf, vbNewLine)
-End Function ' end function OnOnline
+'Private Function OnOnline(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+'    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+'
+'    Dim tmpBuf As String ' temporary output buffer
+'
+'    If (MonitorExists) Then
+'        tmpBuf = MonitorForm.OnlineUsers
+'    Else
+'        tmpBuf = "User monitor is not enabled."
+'    End If
+'
+'    ' return message
+'    cmdRet = Split(tmpBuf, vbNewLine)
+'End Function ' end function OnOnline
 
 ' handle help command
 Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -7568,26 +7572,25 @@ Private Function GetDBDetail(ByVal Username As String) As String
         With DB(I)
             If (StrComp(Username, .Username, vbTextCompare) = 0) Then
                 If .AddedBy <> "%" And LenB(.AddedBy) > 0 Then
-                    sRetAdd = " was added by " & .AddedBy & " on " & _
+                    sRetAdd = .Username & " was added by " & .AddedBy & " on " & _
                         .AddedOn & "."
                 End If
                 
                 If ((.ModifiedBy <> "%") And (LenB(.ModifiedBy) > 0)) Then
                     If ((.AddedOn <> .ModifiedOn) Or (.AddedBy <> .ModifiedBy)) Then
-                        sRetMod = " was last modified by " & .ModifiedBy & _
+                        sRetMod = " The entry was last modified by " & .ModifiedBy & _
                             " on " & .ModifiedOn & "."
                     Else
-                        sRetMod = " have not been modified since they were added."
+                        sRetMod = " The entry has not been modified since it was added."
                     End If
                 End If
                 
                 If ((LenB(sRetAdd) > 0) Or (LenB(sRetMod) > 0)) Then
                     If (LenB(sRetAdd) > 0) Then
-                        GetDBDetail = DB(I).Username & sRetAdd & " They" & _
-                            sRetMod
+                        GetDBDetail = sRetAdd & sRetMod
                     Else
                         'no add, but we could have a modify
-                        GetDBDetail = DB(I).Username & sRetMod
+                        GetDBDetail = sRetMod
                     End If
                 Else
                     GetDBDetail = "No detailed information is available for that user."

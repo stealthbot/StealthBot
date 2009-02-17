@@ -214,7 +214,7 @@ Public ExReconTicks As Long
 Public ExReconMinutes As Long
 
 Public VoteDuration As Integer
-Public MonitorForm As frmMonitor
+'Public MonitorForm As frmMonitor
 Public PBuffer As New PacketBuffer
 Public ListToolTip As CTooltip
 Public AwaitingEmailReg As Byte
@@ -354,11 +354,11 @@ Public Const NLS_GET_M1_            As Long = 20
 
 Public askedBnls As Boolean
 
-Public Function IsDebug() As Boolean
+Public Function isDebug() As Boolean
 
     ' ...
     If (MDebug("all")) Then
-        IsDebug = True
+        isDebug = True
     End If
 
 End Function

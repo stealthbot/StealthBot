@@ -1192,12 +1192,6 @@ Private Function DiabloII_ToString() As String
             buf & CharacterName() & ", a " & IIf(IsCharacterDead(), "dead ", vbNullString) & _
                 IIf(IsHardcoreCharacter(), "hardcore ", vbNullString) & "level " & Level() & " " & _
                     IIf(IsLadderCharacter(), "ladder ", vbNullString) & CharacterClass()
-                    
-        ' bnet bug prevents accurate display of d2xp act five
-        'If (CurrentDifficultyID <= 2) Then
-        '    buf = _
-        '        buf & " in Act " & MakeRomanNum(CurrentAct()) & " of " & CurrentDifficulty()
-        'End If
         
         buf = _
             buf & " on " & Realm() & ")"

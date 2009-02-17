@@ -871,7 +871,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -897,6 +896,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2388,7 +2388,7 @@ Public Sub FindAltBNLS()
             strReturn = INet.OpenURL("http://www.stealthbot.net/p/bnls.php")
             
             ' ...
-            If (strReturn = vbNullString) Then
+            If ((strReturn = vbNullString) Or (Left(strReturn, 1) <> vbLf)) Then
                 ' ...
                 AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured when trying to locate an alternative BNLS server. " & _
                     "Visit http://stealthbot.net/ and check the Technical Support forum for more information."
@@ -2403,7 +2403,7 @@ Public Sub FindAltBNLS()
                 Exit Sub
             End If
             
-            'Place the servers into the array
+            ' ...
             strBNLS() = Split(strReturn, vbLf)
             
             'Mark GotBNLSList as True so it's no longer downloaded for each attempt
@@ -3183,15 +3183,15 @@ Sub Form_Unload(Cancel As Integer)
     Unload frmFilters
     Unload frmGameSelection
     Unload frmManageKeys
-    Unload frmMonitor
+    'Unload frmMonitor
     Unload frmProfile
-    Unload frmProfileManager
+    'Unload frmProfileManager
     Unload frmQuickChannel
     Unload frmRealm
     Unload frmScriptUI
     Unload frmSettings
     Unload frmSplash
-    Unload frmUserManager
+    'Unload frmUserManager
     Unload frmWhisperWindow
     Unload frmWriteProfile
     
@@ -3968,13 +3968,13 @@ End Sub
 '    mnuLog3.Checked = True
 'End Sub
 
-Private Sub mnuMonitor_Click()
-    If Not MonitorExists Then
-        InitMonitor
-    End If
-
-    MonitorForm.Show
-End Sub
+'Private Sub mnuMonitor_Click()
+'    If Not MonitorExists Then
+'        InitMonitor
+'    End If
+'
+'    MonitorForm.Show
+'End Sub
 
 Private Sub mnuOpenBotFolder_Click()
     Shell "explorer.exe " & App.Path, vbNormalFocus
@@ -5608,7 +5608,7 @@ Sub InitBNetConnection()
     g_Connected = True
     
     'sckBNet.SendData ChrW(1)
-    Call send(sckBNet.SocketHandle, ChrW(1), 1, 0)
+    Call Send(sckBNet.SocketHandle, ChrW(1), 1, 0)
     
     If BotVars.BNLS Then
         NLogin.Send_0x10 BotVars.Product
@@ -5637,7 +5637,7 @@ Private Sub sckMCP_Connect()
     AddChat RTBColors.SuccessText, "[REALM] Connection established!"
     
     'sckMCP.SendData ChrW(1)
-    Call send(sckMCP.SocketHandle, ChrW(1), 1, 0)
+    Call Send(sckMCP.SocketHandle, ChrW(1), 1, 0)
     
     frmRealm.MCPHandler.SendStartup
 End Sub
@@ -5824,7 +5824,7 @@ Private Sub Timer_Timer()
             
             If WindowTitle = vbNullString Then
                 IdleMsg = "/me .: " & CVERSION & " :: anti-idle :."
-                GoTo send
+                GoTo Send
             End If
             
             If (MediaPlayer.IsPaused) Then
@@ -5839,10 +5839,10 @@ Private Sub Timer_Timer()
             IdleMsg = "/me : " & U
             
         End If
-        GoTo send
+        GoTo Send
 Error:
         IdleMsg = "/me -- " & CVERSION
-send:
+Send:
         If sckBNet.State = 7 Then
             If InStr(1, IdleMsg, "& ", vbTextCompare) And IdleType = "msg" Then
                 s = Split(IdleMsg, "& ")
@@ -6371,7 +6371,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         Dim Splt()         As String      ' ...
         Dim I              As Long        ' ...
         Dim currChar       As Long        ' ...
-        Dim send           As String      ' ...
+        Dim Send           As String      ' ...
         Dim command        As String      ' ...
         Dim GTC            As Double      ' ...
         Dim strUser        As String      ' ...
@@ -6581,7 +6581,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             GTC = GetTickCount()
             
             ' store working copy
-            send = _
+            Send = _
                 command & Splt(I)
             
             ' ...
@@ -6589,7 +6589,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             
             ' ...
             With Q
-                .Message = send
+                .Message = Send
                 .PRIORITY = msg_priority
                 .ResponseTo = vbNullString
                 .Tag = Tag
@@ -6620,6 +6620,9 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         .Enabled = True
                     End With
                 Else
+                    AddChat vbRed, _
+                        "STRANGE INTERVAL: " & frmChat.QueueTimer.Interval
+                
                     ' are we issuing a ban or kick command?
                     If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
                         delay = BanDelay()
@@ -7897,11 +7900,11 @@ Sub DeconstructSettings()
     End If
 End Sub
 
-Sub DeconstructMonitor()
-    If Not (MonitorForm Is Nothing) Then
-        Set MonitorForm = Nothing
-    End If
-End Sub
+'Sub DeconstructMonitor()
+'    If Not (MonitorForm Is Nothing) Then
+'        Set MonitorForm = Nothing
+'    End If
+'End Sub
 
 'SHOW/HIDE STUFF
 Public Sub cmdShowHide_Click()

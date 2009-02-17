@@ -40,12 +40,12 @@ End Sub
 Private Sub Class_Teriminate()
 
     ' ...
-    Set m_logsCreated = Nothing
-    
-    ' ...
     If (BotVars.Logging = 2) Then
         RemoveLogsCreated
     End If
+
+    ' ...
+    Set m_logsCreated = Nothing
 
 End Sub
 

@@ -4570,7 +4570,8 @@ Private Function SaveSettings() As Boolean
                 
                 ' log actions
                 If (BotVars.LogDBActions) Then
-                    Call LogDBAction(AddEntry, vbNullString, Clients(I), DB(UBound(DB)).Flags)
+                    Call LogDBAction(AddEntry, "console", DB(UBound(DB)).Username, _
+                        DB(UBound(DB)).Access, DB(UBound(DB)).Flags)
                 End If
             Else
                 For j = LBound(DB) To UBound(DB)
@@ -4587,7 +4588,8 @@ Private Function SaveSettings() As Boolean
                             
                             ' log actions
                             If (BotVars.LogDBActions) Then
-                                Call LogDBAction(ModEntry, vbNullString, Clients(I), DB(j).Flags)
+                                Call LogDBAction(ModEntry, "console", DB(j).Username, DB(j).Access, _
+                                    DB(j).Flags)
                             End If
                             
                             ' commit modifications
@@ -4620,7 +4622,8 @@ Private Function SaveSettings() As Boolean
                             
                             ' log actions
                             If (BotVars.LogDBActions) Then
-                                Call LogDBAction(ModEntry, vbNullString, Clients(I), "")
+                                Call LogDBAction(ModEntry, "console", DB(j).Username, DB(j).Access, _
+                                    DB(j).Flags)
                             End If
                             
                             ' commit modifications
@@ -4631,7 +4634,8 @@ Private Function SaveSettings() As Boolean
                                 
                             ' log actions
                             If (BotVars.LogDBActions) Then
-                                Call LogDBAction(RemEntry, vbNullString, Clients(I), "")
+                                Call LogDBAction(RemEntry, "console", DB(j).Username, DB(j).Access, _
+                                    DB(j).Flags)
                             End If
                             
                             ' reload database entries

@@ -1594,19 +1594,19 @@ Public Sub EnableSO_KEEPALIVE(ByVal lSocketHandle As Long)
     Call SetSockOpt(lSocketHandle, IPPROTO_TCP, SO_KEEPALIVE, True, 4) 'thanks Eric
 End Sub
 
-Function MonitorExists() As Boolean
-    MonitorExists = (Not (MonitorForm Is Nothing))
-End Function
+'Function MonitorExists() As Boolean
+'    MonitorExists = (Not (MonitorForm Is Nothing))
+'End Function
 
-Sub InitMonitor()
-    If (MonitorExists) Then
-        frmChat.DeconstructMonitor
-    End If
-    
-    Set MonitorForm = New frmMonitor
-    
-    Call frmMonitor.Hide
-End Sub
+'Sub InitMonitor()
+'    If (MonitorExists) Then
+'        frmChat.DeconstructMonitor
+'    End If
+'
+'    Set MonitorForm = New frmMonitor
+'
+'    Call frmMonitor.Hide
+'End Sub
 
 Public Function ProductCodeToFullName(ByVal pCode As String) As String
     Select Case (pCode)
@@ -2387,7 +2387,9 @@ Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean
     End If
 End Sub
 
-Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String, ByVal Target As String, ByVal Instruction As String)
+Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String, ByVal Target As String, _
+    Optional ByVal Rank As Integer, Optional ByVal Flags As String)
+    
     'Dim sPath  As String
     Dim Action As String
     'Dim f      As Integer
@@ -2395,7 +2397,7 @@ Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String,
     'f = FreeFile
     'sPath = GetProfilePath() & "\Logs\database.txt"
     
-    If (LenB(Caller) = 0) Then
+    If ((LenB(Caller) = 0) Or (Caller = "(console)")) Then
         Caller = "console"
     End If
     
@@ -2415,23 +2417,23 @@ Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String,
     '    End If
     'End If
     
-    Select Case (ActionType)
-        Case AddEntry
-            Action = Caller & _
-                " adds " & Target & " " & Instruction
-                
-        Case ModEntry
-            Action = Caller & _
-                " modifies " & Target & " " & Instruction
-        
-        Case RemEntry
-            Action = Caller & " removes " & Target
-    End Select
+    'Select Case (ActionType)
+    '    Case AddEntry
+    '        Action = Caller & _
+    '            " adds " & Target & " " & Instruction
+    '
+    '    Case ModEntry
+    '        Action = Caller & _
+    '            " modifies " & Target & " " & Instruction
+    '
+    '    Case RemEntry
+    '        Action = Caller & " removes " & Target
+    'End Select
     
     'Action = _
     '    Caller & " " & Action & Space(1) & Target & ": " & Instruction
         
-    g_Logger.WriteDatabase Action
+    'g_Logger.WriteDatabase Action
     
     'Print #f, Action
     

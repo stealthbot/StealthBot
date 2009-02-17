@@ -42,10 +42,10 @@ End Function
 Public Function GetDefaultQC(ByVal Index As Integer) As String
     Select Case Index
         Case 0: GetDefaultQC = "Clan SBS"
-        Case 1: GetDefaultQC = "Clan BoT"
-        Case 2: GetDefaultQC = "Clan TDA"
-        Case 3: GetDefaultQC = "Clan BNU"
-        Case 4: GetDefaultQC = "Op W@R"
+        'Case 1: GetDefaultQC = "Clan BoT"
+        'Case 2: GetDefaultQC = "Clan TDA"
+        'Case 3: GetDefaultQC = "Clan BNU"
+        'Case 4: GetDefaultQC = "Op W@R"
     End Select
 End Function
 
