@@ -24,6 +24,14 @@ Begin VB.Form frmCommands
    ScaleWidth      =   9330
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
+   Begin VB.CommandButton cmdFlagRemove 
+      Caption         =   "-"
+      Height          =   315
+      Left            =   8725
+      TabIndex        =   17
+      Top             =   840
+      Width           =   270
+   End
    Begin MSComctlLib.TreeView trvCommands 
       Height          =   4935
       Left            =   120
@@ -83,7 +91,7 @@ Begin VB.Form frmCommands
          List            =   "frmCommands.frx":0002
          TabIndex        =   12
          Top             =   600
-         Width           =   1005
+         Width           =   700
       End
       Begin VB.ComboBox cboAlias 
          BackColor       =   &H00993300&
@@ -138,6 +146,14 @@ Begin VB.Form frmCommands
          TabIndex        =   1
          Top             =   3120
          Width           =   4695
+      End
+      Begin VB.CommandButton cmdFlagAdd 
+         Caption         =   "+"
+         Height          =   315
+         Left            =   4388
+         TabIndex        =   16
+         Top             =   600
+         Width           =   270
       End
       Begin VB.Label lblAlias 
          BackStyle       =   0  'Transparent
@@ -233,6 +249,35 @@ End Type
 Private Sub cmdDiscard_Click()
     Call PrepareForm(m_SelectedElement.TheNodeType, m_SelectedElement.TheXMLElement)
 End Sub
+
+Private Sub cmdFlagAdd_Click()
+
+    ' ...
+    cboFlags.AddItem cboFlags.text
+    
+    ' ...
+    cboFlags.text = ""
+
+End Sub
+
+Private Sub cmdFlagRemove_Click()
+
+    Dim i As Integer ' ...
+    
+    ' ...
+    For i = 1 To cboFlags.ListCount
+        If (StrComp(cboFlags.text, cboFlags.List(i), vbBinaryCompare) = 0) Then
+            cboFlags.RemoveItem i
+            
+            Exit For
+        End If
+    Next i
+    
+    ' ...
+    cboFlags.text = ""
+
+End Sub
+
 '// 08/30/2008 JSM - Created
 Private Sub cmdSave_Click()
     Call SaveForm
@@ -322,12 +367,12 @@ Private Sub PopulateTreeView()
         Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
         '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
         '//                  something, even if nothing matches the XPath expression.
-        For i = 0 To (xmlArgs.length - 1)
+        For i = 0 To (xmlArgs.Length - 1)
             ArgumentName = xmlArgs(i).Attributes.getNamedItem("name").text
             Set nArg = trvCommands.Nodes.Add(nCommand, tvwChild, , ArgumentName)
             Set xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
             
-            For j = 0 To (xmlArgRestricions.length - 1)
+            For j = 0 To (xmlArgRestricions.Length - 1)
                 restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").text
                 Set nArgRestriction = trvCommands.Nodes.Add(nArg, tvwChild, , restrictionName)
             Next j
