@@ -723,8 +723,8 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             '// cboAlias
             cboAlias.Enabled = True
             lblAlias.Enabled = True
-            cmdAliasAdd.Enabled = False
-            cmdAliasRemove.Enabled = False
+            cmdAliasAdd.Enabled = True
+            cmdAliasRemove.Enabled = True
             For Each xmlNode In xmlElement.selectNodes("aliases/alias")
                 cboAlias.AddItem xmlNode.text
             Next xmlNode
