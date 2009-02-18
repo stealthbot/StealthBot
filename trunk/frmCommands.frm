@@ -265,7 +265,7 @@ Private Sub cmdFlagRemove_Click()
     Dim i As Integer ' ...
     
     ' ...
-    For i = 1 To cboFlags.ListCount
+    For i = 0 To cboFlags.ListCount - 1
         If (StrComp(cboFlags.text, cboFlags.List(i), vbBinaryCompare) = 0) Then
             cboFlags.RemoveItem i
             
