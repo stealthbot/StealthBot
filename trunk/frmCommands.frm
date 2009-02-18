@@ -24,6 +24,14 @@ Begin VB.Form frmCommands
    ScaleWidth      =   9330
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
+   Begin VB.CommandButton cmdAliasAdd 
+      Caption         =   "+"
+      Height          =   315
+      Left            =   7010
+      TabIndex        =   19
+      Top             =   840
+      Width           =   270
+   End
    Begin VB.CommandButton cmdFlagRemove 
       Caption         =   "-"
       Height          =   315
@@ -98,20 +106,20 @@ Begin VB.Form frmCommands
          ForeColor       =   &H00FFFFFF&
          Height          =   315
          ItemData        =   "frmCommands.frx":0004
-         Left            =   1725
+         Left            =   1605
          List            =   "frmCommands.frx":0006
          TabIndex        =   9
          Top             =   600
-         Width           =   1605
+         Width           =   1245
       End
       Begin VB.TextBox txtRank 
          BackColor       =   &H00993300&
          ForeColor       =   &H00FFFFFF&
-         Height          =   285
+         Height          =   307
          Left            =   240
          MaxLength       =   25
          TabIndex        =   6
-         Top             =   630
+         Top             =   608
          Width           =   1215
       End
       Begin VB.CheckBox chkDisable 
@@ -155,12 +163,20 @@ Begin VB.Form frmCommands
          Top             =   600
          Width           =   270
       End
+      Begin VB.CommandButton cmdAliasRemove 
+         Caption         =   "-"
+         Height          =   315
+         Left            =   3200
+         TabIndex        =   18
+         Top             =   600
+         Width           =   270
+      End
       Begin VB.Label lblAlias 
          BackStyle       =   0  'Transparent
          Caption         =   "Custom aliases:"
          ForeColor       =   &H00FFFFFF&
          Height          =   255
-         Left            =   1725
+         Left            =   1605
          TabIndex        =   10
          Top             =   360
          Width           =   1215
@@ -244,6 +260,38 @@ Private Type SelectedElement
     ArgumentName As String
     restrictionName As String
 End Type
+
+Private Sub cmdAliasAdd_Click()
+
+    ' ...
+    cboAlias.AddItem cboAlias.text
+    
+    ' ...
+    cboAlias.text = ""
+    
+    Call FormIsDirty
+
+End Sub
+
+Private Sub cmdAliasRemove_Click()
+
+    Dim I As Integer ' ...
+    
+    ' ...
+    For I = 0 To cboAlias.ListCount - 1
+        If (StrComp(cboAlias.text, cboAlias.List(I), vbTextCompare) = 0) Then
+            cboAlias.RemoveItem I
+            
+            Exit For
+        End If
+    Next I
+    
+    ' ...
+    cboAlias.text = ""
+    
+    Call FormIsDirty
+
+End Sub
 
 '// 08/30/2008 JSM - Created
 Private Sub cmdDiscard_Click()
@@ -675,12 +723,16 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             '// cboAlias
             cboAlias.Enabled = True
             lblAlias.Enabled = True
+            cmdAliasAdd.Enabled = False
+            cmdAliasRemove.Enabled = False
             For Each xmlNode In xmlElement.selectNodes("aliases/alias")
                 cboAlias.AddItem xmlNode.text
             Next xmlNode
             '// cboFlags
             cboFlags.Enabled = True
             lblFlags.Enabled = True
+            cmdFlagAdd.Enabled = True
+            cmdFlagRemove.Enabled = True
             For Each xmlNode In xmlElement.selectNodes("access/flags/flag")
                 cboFlags.AddItem xmlNode.text
             Next xmlNode
@@ -824,10 +876,13 @@ Private Sub ResetForm()
     lblDescription.Enabled = False
     lblSpecialNotes.Enabled = False
     
+    cmdAliasAdd.Enabled = False
+    cmdAliasRemove.Enabled = False
+    cmdFlagAdd.Enabled = False
+    cmdFlagRemove.Enabled = False
+    
     chkDisable.Visible = False
     
-   
-        
 End Sub
 
 '// 08/29/2008 JSM - Created
