@@ -197,15 +197,17 @@ Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal line As String)
     f = OpenLog(ltype, filePath)
     
     ' ...
-    Select Case (ltype)
-        Case CHAT_MSG, WHISPER_MSG, SCK_MSG
-            Print #f, "[" & Timestamp() & "] " & line
-        Case Else
-            Print #f, "[" & Datestamp() & " " & Timestamp() & "] " & line
-    End Select
-    
-    ' ...
-    Close #f
+    If (f > 0) Then
+        Select Case (ltype)
+            Case CHAT_MSG, WHISPER_MSG, SCK_MSG
+                Print #f, "[" & Timestamp() & "] " & line
+            Case Else
+                Print #f, "[" & Datestamp() & " " & Timestamp() & "] " & line
+        End Select
+        
+        ' ...
+        Close #f
+    End If
     
     ' ...
     Exit Function
@@ -220,6 +222,9 @@ End Function
 Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Integer
 
     On Error GoTo ERROR_HANDLER
+    
+    ' ...
+    Static failed_attempts As Integer
     
     Dim f As Integer ' ...
     Dim I As Double  ' ...
@@ -310,11 +315,24 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
     ' ...
     OpenLog = f
     
+    ' ...
+    failed_attempts = 0
+    
+    ' ...
     Exit Function
     
 ERROR_HANDLER:
-
-    MsgBox "Error (#" & Err.Number & "): " & Err.description & " in OpenLog()."
+    
+    ' permission denied?  is someone else trying to save the file?
+    If (Err.Number = 70) Then
+        failed_attempts = (failed_attempts + 1)
+        
+        If (failed_attempts >= 3) Then
+            Exit Function
+        End If
+    
+        OpenLog ltype, Path
+    End If
     
 End Function
 
