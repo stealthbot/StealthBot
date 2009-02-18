@@ -2410,7 +2410,7 @@ Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String,
     End Select
     
     If (StrComp(TargetType, "user", vbTextCompare) <> 0) Then
-        str = str & " (" & TargetType & ")"
+        str = str & " (" & LCase$(TargetType) & ")"
     End If
     
     If (Rank > 0) Then

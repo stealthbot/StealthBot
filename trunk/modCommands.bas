@@ -5478,7 +5478,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                     ' log actions
                     If (BotVars.LogDBActions) Then
                         Call LogDBAction(ModEntry, IIf(InBot, "console", Username), DB(I).Username, _
-                            DB(I).Type, DB(I).Access, DB(I).Flags)
+                            DB(I).Type, DB(I).Access, DB(I).Flags, DB(I).Groups)
                     End If
                     
                     ' we have found the
@@ -5522,7 +5522,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                 ' log actions
                 If (BotVars.LogDBActions) Then
                     Call LogDBAction(AddEntry, IIf(InBot, "console", Username), DB(UBound(DB)).Username, _
-                        DB(UBound(DB)).Type, DB(UBound(DB)).Access, DB(UBound(DB)).Flags)
+                        DB(UBound(DB)).Type, DB(UBound(DB)).Access, DB(UBound(DB)).Flags, DB(UBound(DB)).Groups)
                 End If
             End If
             
