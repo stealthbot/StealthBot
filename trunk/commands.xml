@@ -11,6 +11,44 @@
     <access />
   </command>
 
+  <command name="watch">
+    <aliases />
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+
+    <access />
+  </command>
+
+  <command name="watchoff">
+    <aliases />
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+
+    <access />
+  </command>
+
+  <command name="clear">
+    <aliases>
+      <alias>cls</alias>
+    </aliases>
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+
+    <access />
+  </command>
+
   <command name="connect">
     <aliases />
 

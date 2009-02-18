@@ -4570,7 +4570,7 @@ Private Function SaveSettings() As Boolean
                 
                 ' log actions
                 If (BotVars.LogDBActions) Then
-                    Call LogDBAction(AddEntry, "console", DB(UBound(DB)).Username, _
+                    Call LogDBAction(AddEntry, "console", DB(UBound(DB)).Username, "game", _
                         DB(UBound(DB)).Access, DB(UBound(DB)).Flags)
                 End If
             Else
@@ -4588,8 +4588,8 @@ Private Function SaveSettings() As Boolean
                             
                             ' log actions
                             If (BotVars.LogDBActions) Then
-                                Call LogDBAction(ModEntry, "console", DB(j).Username, DB(j).Access, _
-                                    DB(j).Flags)
+                                Call LogDBAction(ModEntry, "console", DB(j).Username, "game", _
+                                    DB(j).Access, DB(j).Flags)
                             End If
                             
                             ' commit modifications
@@ -4622,8 +4622,8 @@ Private Function SaveSettings() As Boolean
                             
                             ' log actions
                             If (BotVars.LogDBActions) Then
-                                Call LogDBAction(ModEntry, "console", DB(j).Username, DB(j).Access, _
-                                    DB(j).Flags)
+                                Call LogDBAction(ModEntry, "console", DB(j).Username, "game", _
+                                    DB(j).Access, DB(j).Flags)
                             End If
                             
                             ' commit modifications
@@ -4634,8 +4634,8 @@ Private Function SaveSettings() As Boolean
                                 
                             ' log actions
                             If (BotVars.LogDBActions) Then
-                                Call LogDBAction(RemEntry, "console", DB(j).Username, DB(j).Access, _
-                                    DB(j).Flags)
+                                Call LogDBAction(RemEntry, "console", DB(j).Username, "game", _
+                                    DB(j).Access, DB(j).Flags)
                             End If
                             
                             ' reload database entries

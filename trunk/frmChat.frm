@@ -5218,11 +5218,11 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 '        AddChat vbRed, "  Width:" & lvChannel.ColumnHeaders(j).Width
                                 '    Next j
                                 '
-                                ElseIf (LCase$(s) = "/cls") Then
-                                    Call mnuClear_Click
-                                    
-                                    GoTo theEnd
-                                    
+                                'ElseIf (LCase$(s) = "/cls") Then
+                                '    Call mnuClear_Click
+                                '
+                                '    GoTo theEnd
+                                '
                                 'ElseIf (LCase$(s) = "/ds_list") Then
                                 '    Call ds.List
                                 '
@@ -6619,17 +6619,6 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                         .Interval = delay
                         .Enabled = True
                     End With
-                Else
-                    AddChat vbRed, _
-                        "STRANGE INTERVAL: " & frmChat.QueueTimer.Interval
-                
-                    ' are we issuing a ban or kick command?
-                    If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
-                        delay = BanDelay()
-                        
-                        frmChat.QueueTimer.Interval = _
-                            (frmChat.QueueTimer.Interval + delay)
-                    End If
                 End If
             End If
         Next I

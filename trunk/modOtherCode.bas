@@ -2388,18 +2388,47 @@ Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean
 End Sub
 
 Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String, ByVal Target As String, _
-    Optional ByVal Rank As Integer, Optional ByVal Flags As String)
+    ByVal TargetType As String, Optional ByVal Rank As Integer, Optional ByVal Flags As String, _
+        Optional ByVal Group As String)
     
     'Dim sPath  As String
-    Dim Action As String
+    'Dim Action As String
     'Dim f      As Integer
+    Dim str As String ' ...
+    
+    If ((LenB(Caller) = 0) Or (StrComp(Caller, "(console)", vbTextCompare) = 0)) Then
+        Caller = "console"
+    End If
+    
+    Select Case (ActionType)
+        Case AddEntry
+            str = Caller & " adds " & Target
+        Case ModEntry
+            str = Caller & " modifies " & Target
+        Case RemEntry
+            str = Caller & " removes " & Target
+    End Select
+    
+    If (StrComp(TargetType, "user", vbTextCompare) <> 0) Then
+        str = str & " (" & TargetType & ")"
+    End If
+    
+    If (Rank > 0) Then
+        str = str & " " & Rank
+    End If
+    
+    If (Flags <> vbNullString) Then
+        str = str & " " & Flags
+    End If
+    
+    If (Group <> vbNullString) Then
+        str = str & ", groups: " & Group
+    End If
+    
+    g_Logger.WriteDatabase str
     
     'f = FreeFile
     'sPath = GetProfilePath() & "\Logs\database.txt"
-    
-    If ((LenB(Caller) = 0) Or (Caller = "(console)")) Then
-        Caller = "console"
-    End If
     
     'If (LenB(Dir$(sPath)) = 0) Then
     '    Open sPath For Output As #f

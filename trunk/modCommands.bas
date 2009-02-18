@@ -599,6 +599,9 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "designated":    Call OnDesignated(Username, dbAccess, msgData, InBot, cmdRet())
         Case "flip":          Call OnFlip(Username, dbAccess, msgData, InBot, cmdRet())
         Case "about":         Call OnAbout(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "watch":         Call OnWatch(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "watchoff":      Call OnWatchOff(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "clear":         Call OnClear(Username, dbAccess, msgData, InBot, cmdRet())
         Case "server":        Call OnServer(Username, dbAccess, msgData, InBot, cmdRet())
         Case "find":          Call OnFind(Username, dbAccess, msgData, InBot, cmdRet())
         Case "whois":         Call OnWhoIs(Username, dbAccess, msgData, InBot, cmdRet())
@@ -2625,7 +2628,7 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             
             If (res) Then
                 If (BotVars.LogDBActions) Then
-                    Call LogDBAction(RemEntry, IIf(InBot, "console", Username), U)
+                    Call LogDBAction(RemEntry, IIf(InBot, "console", Username), U, dbType)
                 End If
                 
                 tmpBuf = "Successfully removed database entry " & Chr$(34) & _
@@ -5475,7 +5478,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                     ' log actions
                     If (BotVars.LogDBActions) Then
                         Call LogDBAction(ModEntry, IIf(InBot, "console", Username), DB(I).Username, _
-                            DB(I).Access, DB(I).Flags)
+                            DB(I).Type, DB(I).Access, DB(I).Flags)
                     End If
                     
                     ' we have found the
@@ -5519,7 +5522,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                 ' log actions
                 If (BotVars.LogDBActions) Then
                     Call LogDBAction(AddEntry, IIf(InBot, "console", Username), DB(UBound(DB)).Username, _
-                        DB(UBound(DB)).Access, DB(UBound(DB)).Flags)
+                        DB(UBound(DB)).Type, DB(UBound(DB)).Access, DB(UBound(DB)).Flags)
                 End If
             End If
             
@@ -5745,6 +5748,46 @@ Private Function OnAbout(ByVal Username As String, ByRef dbAccess As udtGetAcces
     ' return message
     cmdRet(0) = tmpBuf
 End Function ' end function OnAbout
+
+' handle watch command
+Private Function OnWatch(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim tmpBuf As String ' temporary output buffer
+    
+    WatchUser = msgData
+    
+    tmpBuf = "Watching " & WatchUser
+        
+    ' return message
+    cmdRet(0) = tmpBuf
+End Function ' end function OnWatch
+
+' handle watchoff command
+Private Function OnWatchOff(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim tmpBuf As String ' temporary output buffer
+    
+    WatchUser = vbNullString
+    
+    tmpBuf = "Watch off."
+    
+    ' return message
+    cmdRet(0) = tmpBuf
+End Function ' end function OnWatchOff
+
+' handle clear command
+Private Function OnClear(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim tmpBuf As String ' temporary output buffer
+    
+    frmChat.mnuClear_Click
+    
+    ' return message
+    cmdRet(0) = tmpBuf
+End Function ' end function OnClear
 
 ' handle server command
 Private Function OnServer(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _

@@ -262,8 +262,8 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
         Dim lineCount As Long    ' ...
     
         ' ...
-        Open Path For Input As #f
-            If (BotVars.MaxLogFileSize) Then
+        If (BotVars.MaxLogFileSize) Then
+            Open Path For Input As #f
                 If (LOF(f) >= BotVars.MaxLogFileSize) Then
                     Do Until (EOF(f))
                         Line Input #f, str
@@ -277,8 +277,8 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
                     
                     bln = True
                 End If
-            End If
-        Close #f
+            Close #f
+        End If
     
         ' ...
         If (bln) Then
