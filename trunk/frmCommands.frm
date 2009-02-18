@@ -257,24 +257,28 @@ Private Sub cmdFlagAdd_Click()
     
     ' ...
     cboFlags.text = ""
+    
+    Call FormIsDirty
 
 End Sub
 
 Private Sub cmdFlagRemove_Click()
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
-    For i = 0 To cboFlags.ListCount - 1
-        If (StrComp(cboFlags.text, cboFlags.List(i), vbBinaryCompare) = 0) Then
-            cboFlags.RemoveItem i
+    For I = 0 To cboFlags.ListCount - 1
+        If (StrComp(cboFlags.text, cboFlags.List(I), vbBinaryCompare) = 0) Then
+            cboFlags.RemoveItem I
             
             Exit For
         End If
-    Next i
+    Next I
     
     ' ...
     cboFlags.text = ""
+    
+    Call FormIsDirty
 
 End Sub
 
@@ -345,7 +349,7 @@ Private Sub PopulateTreeView()
     
     '// Counters
     Dim j                 As Integer
-    Dim i                 As Integer
+    Dim I                 As Integer
 
     '// reset the treeview
     trvCommands.Nodes.Clear
@@ -367,16 +371,16 @@ Private Sub PopulateTreeView()
         Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
         '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
         '//                  something, even if nothing matches the XPath expression.
-        For i = 0 To (xmlArgs.Length - 1)
-            ArgumentName = xmlArgs(i).Attributes.getNamedItem("name").text
+        For I = 0 To (xmlArgs.Length - 1)
+            ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").text
             Set nArg = trvCommands.Nodes.Add(nCommand, tvwChild, , ArgumentName)
-            Set xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
+            Set xmlArgRestricions = xmlArgs(I).selectNodes("restrictions/restriction")
             
             For j = 0 To (xmlArgRestricions.Length - 1)
                 restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").text
                 Set nArgRestriction = trvCommands.Nodes.Add(nArg, tvwChild, , restrictionName)
             Next j
-        Next i
+        Next I
         
     Next
     
@@ -520,7 +524,7 @@ Private Sub SaveForm()
     Dim xmlNode As IXMLDOMNode
     Dim xmlNewNode As IXMLDOMNode
 
-    Dim i As Integer
+    Dim I As Integer
     
     With m_SelectedElement
         '// txtRank
@@ -588,11 +592,11 @@ Private Sub SaveForm()
             For Each xmlNode In .TheXMLElement.selectNodes("aliases/alias")
                 .TheXMLElement.selectSingleNode("aliases").removeChild xmlNode
             Next xmlNode
-            For i = 0 To cboAlias.ListCount - 1
+            For I = 0 To cboAlias.ListCount - 1
                 Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "alias", "")
-                xmlNewNode.text = cboAlias.List(i)
+                xmlNewNode.text = cboAlias.List(I)
                 .TheXMLElement.selectSingleNode("aliases").appendChild xmlNewNode
-            Next i
+            Next I
         End If
         
         '// cboFlags
@@ -617,15 +621,15 @@ Private Sub SaveForm()
             End If
 
             '// loop through cboFlags and add the text
-            For i = 0 To cboFlags.ListCount - 1
-                Set xmlNewNode = xmlNode.selectSingleNode("flag[text()='" & cboFlags.List(i) & "']")
+            For I = 0 To cboFlags.ListCount - 1
+                Set xmlNewNode = xmlNode.selectSingleNode("flag[text()='" & cboFlags.List(I) & "']")
                 
                 If (xmlNewNode Is Nothing) Then
                     Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "flag", "")
-                    xmlNewNode.text = cboFlags.List(i)
+                    xmlNewNode.text = cboFlags.List(I)
                     xmlNode.appendChild xmlNewNode
                 End If
-            Next i
+            Next I
         End If
         
         
@@ -828,7 +832,7 @@ End Sub
 
 '// 08/29/2008 JSM - Created
 Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
-    Dim i As Integer
+    Dim I As Integer
     
     '// Enter
     If KeyCode = 13 Then
@@ -840,12 +844,12 @@ Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
             Exit Sub
         End If
         '// Make sure its not already a flag
-        For i = 0 To cboFlags.ListCount - 1
-            If cboFlags.List(i) = cboFlags.text Then
+        For I = 0 To cboFlags.ListCount - 1
+            If cboFlags.List(I) = cboFlags.text Then
                 cboFlags.text = ""
                 Exit Sub
             End If
-        Next i
+        Next I
         
         '// If we made it this far, it should be safe to add it to the list
         cboFlags.AddItem cboFlags.text
@@ -855,16 +859,16 @@ Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
 
     '// Delete
     If KeyCode = 46 Then
-        For i = 0 To cboFlags.ListCount - 1
+        For I = 0 To cboFlags.ListCount - 1
             '// If the current text is already in the list, lets delete it. Otherwise,
             '// this code should behave like a normal delete keypress.
-            If cboFlags.List(i) = cboFlags.text Then
-                cboFlags.RemoveItem i
+            If cboFlags.List(I) = cboFlags.text Then
+                cboFlags.RemoveItem I
                 cboFlags.text = ""
                 Call FormIsDirty
                 Exit Sub
             End If
-        Next i
+        Next I
     End If
     
     
@@ -873,7 +877,7 @@ End Sub
 
 '// 08/29/2008 JSM - Created
 Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
-    Dim i As Integer
+    Dim I As Integer
     
     '// Enter
     If KeyCode = 13 Then
@@ -885,12 +889,12 @@ Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
             Exit Sub
         End If
         '// Make sure its not already an alias
-        For i = 0 To cboAlias.ListCount - 1
-            If cboAlias.List(i) = cboAlias.text Then
+        For I = 0 To cboAlias.ListCount - 1
+            If cboAlias.List(I) = cboAlias.text Then
                 cboAlias.text = ""
                 Exit Sub
             End If
-        Next i
+        Next I
             
         '// TODO: Make sure its not an alias for another command. Must loop through the
         '// m_CommandsDoc elements to get all aliases and make sure its unique. This logic
@@ -904,16 +908,16 @@ Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
     
     '// Delete
     If KeyCode = 46 Then
-        For i = 0 To cboAlias.ListCount - 1
+        For I = 0 To cboAlias.ListCount - 1
             '// If the current text is already in the list, lets delete it. Otherwise,
             '// this code should behave like a normal delete keypress.
-            If cboAlias.List(i) = cboAlias.text Then
-                cboAlias.RemoveItem i
+            If cboAlias.List(I) = cboAlias.text Then
+                cboAlias.RemoveItem I
                 cboAlias.text = ""
                 Call FormIsDirty
                 Exit Sub
             End If
-        Next i
+        Next I
     End If
     
 End Sub
