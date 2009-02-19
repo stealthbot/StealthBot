@@ -654,7 +654,7 @@ End Function
 '// Retrieves the specified stored internal data for a given user in the channel
 '//  If the specified user isn't present, the return value is -5
 '//  See lDataType constants in GetInternalData() below
-Public Function GetInternalDataByUsername(ByVal sUser As String, ByVal lDataType As Long) As String
+Public Function GetInternalDataByUsername(ByVal sUser As String, ByVal lDataType As Long) As Variant
 
     Dim I As Integer
     
@@ -668,7 +668,7 @@ End Function
 '// GETINTERNALDATA
 '// Retrieves the specified stored internal data for a given user in the channel
 '//  If the specified user is not present, return value is '-5'
-Public Function GetInternalData(ByVal iIndex As Integer, ByVal lDataType As Long) As String
+Public Function GetInternalData(ByVal iIndex As Integer, ByVal lDataType As Long) As Variant
     ' -- '
     '       these constants will be useful in making calls to this function
     '                           |   <purpose>
