@@ -83,7 +83,6 @@ Class=PacketBuffer; clsPacketBuffer.cls
 Class=ScriptSupportClass; ScriptSupportClass.cls
 Class=clsCommandObj; clsCommandObj.cls
 Class=clsDBEntryObj; clsDBEntryObj.cls
-Module=modWinamp; modWinamp.bas
 Module=modQueueObj; modQueueObj.bas
 Class=clsCommandDocObj; clsCommandDocObj.cls
 Module=modCommandDocsObj; modCommandDocsObj.bas

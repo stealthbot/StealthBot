@@ -266,7 +266,7 @@ Public Sub PlayTrack(Optional ByVal Track As Variant = vbNullString)
     End If
     
     ' ...
-    If (Track <> vbNullString) Then
+    If (Track = vbNullString) Then
         ' ...
         QuitPlayback
         

@@ -112,7 +112,11 @@ Public Sub PlayTrack(ByVal Track As Variant)
         Exit Sub
     End If
     
-    If (StrictIsNumeric(Track)) Then
+    If (Track = vbNullString) Then
+        
+        m_iTunesObj.Play
+    
+    ElseIf (StrictIsNumeric(Track)) Then
         
         Dim TrackCollection As Object
         
@@ -120,17 +124,14 @@ Public Sub PlayTrack(ByVal Track As Variant)
             m_iTunesObj.LibraryPlaylist.Tracks
             
         TrackCollection.Item(CInt(Track)).Play
-        
-    ElseIf (Track = vbNullString) Then
-        
-        m_iTunesObj.Play
     
     Else
     
         Dim colTracks As Object ' ...
         
         ' ...
-        Set colTracks = m_iTunesObj.LibraryPlaylist.Search(Track, 5)
+        Set colTracks = _
+            m_iTunesObj.LibraryPlaylist.Search(Track, 5)
         
         ' ...
         If (Not (colTracks Is Nothing)) Then
@@ -209,7 +210,7 @@ Public Property Get TrackName() As String
 End Property
 
 ' ...
-Public Property Get PlaylistCount() As Integer
+Public Property Get PlaylistCount() As Long
 
     Dim TrackCollection As Object ' ...
     
