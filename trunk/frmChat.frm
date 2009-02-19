@@ -871,6 +871,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -896,7 +897,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1660,9 +1660,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -7949,17 +7949,21 @@ End Sub
 
 Sub AddClanMember(ByVal Name As String, Rank As Integer, Online As Integer)
     
-    If Rank = 0 Then Rank = 1
-    If Rank > 4 Then Rank = 5 '// handle bad ranks
+    Dim visible_rank As Integer
+    
+    visible_rank = Rank
+    
+    If visible_rank = 0 Then visible_rank = 1
+    If visible_rank > 4 Then visible_rank = 5 '// handle bad ranks
     
     '// add user
     
     Name = KillNull(Name)
     
     With lvClanList
-        .ListItems.Add .ListItems.Count + 1, , Name, , Rank
+        .ListItems.Add .ListItems.Count + 1, , Name, , visible_rank
         .ListItems(.ListItems.Count).ListSubItems.Add , , , Online + 6
-        .ListItems(.ListItems.Count).ListSubItems.Add , , Rank
+        .ListItems(.ListItems.Count).ListSubItems.Add , , visible_rank
         .SortKey = 2
         .SortOrder = lvwDescending
         .Sorted = True
