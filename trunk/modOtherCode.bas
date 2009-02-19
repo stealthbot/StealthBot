@@ -394,8 +394,10 @@ Public Function ValidateXML(ByVal strXMLPath As String, ByVal strXSDPath As Stri
     ' any good?
     ValidateXML = (objErr.errorCode = 0)
     If objErr.errorCode <> 0 Then
-        MsgBox objErr.line
-        Err.Raise 1, "ValidateXML", objErr.Reason
+        MsgBox "Error (#" & objErr.errorCode & ") on Line " & objErr.line & ": " & _
+            objErr.Reason, vbOKOnly, "ValidateXML"
+            
+        'Err.Raise 1, "ValidateXML", objErr.Reason
     End If
 
 End Function
