@@ -1125,7 +1125,7 @@
     <arguments>
       <argument name="message">
         <restrictions>
-          <restriction name="DISALLOW_COMMAND_USAGE">
+          <restriction name="COMMAND_USAGE">
             <match message="^[/]" />
 
             <access>
@@ -1309,7 +1309,7 @@
     <arguments>
       <argument name="message">
         <restrictions>
-          <restriction name="DISALLOW_COMMAND_USAGE">
+          <restriction name="COMMAND_USAGE">
             <match message="^[/]" />
 
             <access>
@@ -1343,7 +1343,7 @@
     <arguments>
       <argument name="message">
         <restrictions>
-          <restriction name="DISALLOW_COMMAND_USAGE">
+          <restriction name="COMMAND_USAGE">
             <match message="^[/]" />
 
             <access>
