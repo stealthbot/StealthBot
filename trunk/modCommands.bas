@@ -612,6 +612,7 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         'Case "online":        Call OnOnline(Username, dbAccess, msgData, InBot, cmdRet())
         Case "help":          Call OnHelp(Username, dbAccess, msgData, InBot, cmdRet())
         Case "helpattr":      Call OnHelpAttr(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "helprank":      Call OnHelpRank(Username, dbAccess, msgData, InBot, cmdRet())
         Case "promote":       Call OnPromote(Username, dbAccess, msgData, InBot, cmdRet())
         Case "demote":        Call OnDemote(Username, dbAccess, msgData, InBot, cmdRet())
         Case "connect":       Call OnConnect(Username, dbAccess, msgData, InBot, cmdRet())
@@ -6217,7 +6218,7 @@ Private Function OnHelpAttr(ByVal Username As String, ByRef dbAccess As udtGetAc
             "./command/access/flags/flag[text()=" & flagstr & "]")
     
     ' ...
-    If (Not (commands Is Nothing)) Then
+    If (commands.Length > 0) Then
         For I = 0 To commands.Length - 1
             thisCommand = commands(I).parentNode.parentNode.parentNode. _
                 Attributes.getNamedItem("name").text
@@ -6250,6 +6251,82 @@ ERROR_HANDLER:
     Exit Function
 
 End Function ' end function OnHelpAttr
+
+' handle helprank command
+Private Function OnHelpRank(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    On Error GoTo ERROR_HANDLER
+    
+    Dim tmpBuf      As String  ' temporary output buffer
+    Dim I           As Integer ' ...
+    Dim xmldoc      As DOMDocument60
+    Dim commands    As IXMLDOMNodeList
+    Dim flagstr     As String
+    Dim lastCommand As String
+    Dim thisCommand As String
+        
+    ' ...
+    Set xmldoc = New DOMDocument60
+    
+    ' ...
+    If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
+        Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
+            "working directory.")
+            
+        Exit Function
+    End If
+    
+    ' ...
+    xmldoc.Load App.Path & "\commands.xml"
+    
+    ' ...
+    If (InStr(1, msgData, "'", vbBinaryCompare) > 0) Then
+        Exit Function
+    End If
+
+    ' ...
+    msgData = Replace(msgData, "\", "\\")
+        
+    ' ...
+    Set commands = _
+        xmldoc.documentElement.selectNodes( _
+            "./command/access/rank[number() <= " & msgData & "]")
+    
+    ' ...
+    If (commands.Length > 0) Then
+        For I = 0 To commands.Length - 1
+            thisCommand = commands(I).parentNode.parentNode.Attributes. _
+                getNamedItem("name").text
+                
+            If (StrComp(thisCommand, lastCommand, vbTextCompare) <> 0) Then
+                tmpBuf = tmpBuf & thisCommand & ", "
+            End If
+            
+            lastCommand = thisCommand
+        Next I
+        
+        ' ...
+        tmpBuf = _
+            Left$(tmpBuf, Len(tmpBuf) - 2)
+        
+        tmpBuf = "Commands available to specified rank: " & tmpBuf
+    Else
+        tmpBuf = "No commands are available to the given rank."
+    End If
+    
+    ' ...
+    cmdRet(0) = tmpBuf
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, _
+        "Error (#" & Err.Number & "): " & Err.description & " in OnHelpAttr()."
+
+    Exit Function
+
+End Function ' end function OnHelpRank
 
 ' handle promote command
 Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _

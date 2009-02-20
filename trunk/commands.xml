@@ -3435,4 +3435,27 @@
       </flags>
     </access>
   </command>
+
+  <command name="helprank">
+    <aliases>
+      <alias>helpr</alias>
+    </aliases>
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+
+    <access>
+      <rank>20</rank>
+      <flags>
+        <flag>A</flag>
+        <flag>J</flag>
+        <flag>M</flag>
+        <flag>O</flag>
+        <flag>T</flag>
+      </flags>
+    </access>
+  </command>
 </commands>
