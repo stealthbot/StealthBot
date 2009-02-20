@@ -4444,7 +4444,15 @@ Private Function SaveSettings() As Boolean
     WINI "FlashWindow", Cv(chkFlash.Value), secOther
     WINI "Timestamp", cboTimestamp.ListIndex, secOther
     WINI "UTF8", Cv(chkUTF8.Value), secMain
-    WINI "Logging", cboLogging.ListIndex + 1, secOther
+    
+    If (cboLogging.ListIndex = 0) Then
+        WINI "Logging", 2, secOther
+    ElseIf (cboLogging.ListIndex = 1) Then
+        WINI "Logging", 1, secOther
+    ElseIf (cboLogging.ListIndex = 2) Then
+        WINI "Logging", 0, secOther
+    End If
+    
     WINI "MaxBacklogSize", txtMaxBackLogSize.text, secMain
     WINI "MaxLogFileSize", txtMaxLogSize.text, secMain
     WINI "NoTray", Cv(chkNoTray.Value), secOther
@@ -5228,7 +5236,13 @@ Private Sub InitGenInterface()
     If Len(s) > 1 Then s = Left$(s, 1)
     
     If StrictIsNumeric(s) And Val(s) < 5 Then
-        cboLogging.ListIndex = Val(s)
+        If (Val(s) = 2) Then
+            cboLogging.ListIndex = 0
+        ElseIf (Val(s) = 1) Then
+            cboLogging.ListIndex = 1
+        ElseIf (Val(s) = 0) Then
+            cboLogging.ListIndex = 2
+        End If
     End If
     
     s = ReadCfg(OT, "Timestamp")
