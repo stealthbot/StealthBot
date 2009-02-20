@@ -571,6 +571,7 @@ Private Sub SaveForm()
     
     Dim xmlNode As IXMLDOMNode
     Dim xmlNewNode As IXMLDOMNode
+    Dim clsXML As New clsXML
 
     Dim I As Integer
     
@@ -690,7 +691,12 @@ Private Sub SaveForm()
             End If
         End If
         
-        Call m_CommandsDoc.Save(App.Path & "\commands.xml")
+        With clsXML
+            .Path = App.Path & "\commands.xml"
+            .WriteNode m_CommandsDoc
+        End With
+        
+        'Call m_CommandsDoc.Save(App.Path & "\commands.xml")
         Call PrepareForm(.TheNodeType, .TheXMLElement)
         
     End With

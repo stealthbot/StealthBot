@@ -518,7 +518,7 @@
                   </flags>
                 </access>
               </restriction>
-  
+
               <restriction name="FLAG_G">
                 <documentation>
                   <description>
@@ -900,7 +900,9 @@
         states the application's version information.
       </description>
 
-      <specialnotes />
+      <specialnotes>
+        
+      </specialnotes>
     </documentation>
 
     <access>
