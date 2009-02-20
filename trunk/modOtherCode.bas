@@ -3169,7 +3169,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         ' ...
         If (rtb = frmChat.rtbChat) Then
             ' ...
-            LogThis = (BotVars.Logging <= 2)
+            LogThis = (BotVars.Logging > 0)
             
             ' ...
             If (LogThis) Then
@@ -3207,7 +3207,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         ElseIf (rtb = frmChat.rtbWhispers) Then
 
             ' ...
-            LogThis = (BotVars.Logging <= 2)
+            LogThis = (BotVars.Logging > 0)
             
             ' ...
             If (LogThis) Then

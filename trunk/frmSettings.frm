@@ -4444,7 +4444,7 @@ Private Function SaveSettings() As Boolean
     WINI "FlashWindow", Cv(chkFlash.Value), secOther
     WINI "Timestamp", cboTimestamp.ListIndex, secOther
     WINI "UTF8", Cv(chkUTF8.Value), secMain
-    WINI "Logging", cboLogging.ListIndex, secOther
+    WINI "Logging", cboLogging.ListIndex + 1, secOther
     WINI "MaxBacklogSize", txtMaxBackLogSize.text, secMain
     WINI "MaxLogFileSize", txtMaxLogSize.text, secMain
     WINI "NoTray", Cv(chkNoTray.Value), secOther

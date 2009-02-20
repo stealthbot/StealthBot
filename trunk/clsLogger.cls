@@ -40,7 +40,7 @@ End Sub
 Private Sub Class_Teriminate()
 
     ' ...
-    If (BotVars.Logging = 2) Then
+    If (BotVars.Logging = 1) Then
         RemoveLogsCreated
     End If
 

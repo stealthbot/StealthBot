@@ -871,7 +871,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -897,6 +896,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3074,9 +3074,7 @@ Sub Form_Unload(Cancel As Integer)
     
     INet.Cancel
     
-    If BotVars.Logging = 0 Then
-        AddChat RTBColors.ErrorMessageText, "Shutting down..."
-    End If
+    AddChat RTBColors.ErrorMessageText, "Shutting down..."
     
     If LenB(Dir$(GetConfigFilePath())) > 0 Then
         If Me.WindowState <> vbMinimized Then
@@ -3925,8 +3923,8 @@ Private Sub mnuIgnoreInvites_Click()
 End Sub
 
 Private Sub mnuLog0_Click()
-    BotVars.Logging = 0
-    WriteINI "Other", "Logging", "0"
+    BotVars.Logging = 2
+    WriteINI "Other", "Logging", "2"
     AddChat RTBColors.InformationText, "Full text logging enabled."
     mnuLog1.Checked = False
     mnuLog0.Checked = True
@@ -3949,8 +3947,8 @@ Private Sub mnuLog1_Click()
 End Sub
 
 Private Sub mnuLog2_Click()
-    BotVars.Logging = 2
-    WriteINI "Other", "Logging", "2"
+    BotVars.Logging = 0
+    WriteINI "Other", "Logging", "0"
     AddChat RTBColors.InformationText, "Logging disabled."
     mnuLog1.Checked = False
     mnuLog0.Checked = False
@@ -4490,9 +4488,9 @@ Private Sub mnuWindow_Click()
     'mnuLog3.Checked = False
     
     Select Case BotVars.Logging
-        Case 0: mnuLog0.Checked = True
+        Case 2: mnuLog0.Checked = True
         Case 1: mnuLog1.Checked = True
-        Case 2: mnuLog2.Checked = True
+        Case 0: mnuLog2.Checked = True
         'Case 3: mnuLog3.Checked = True
     End Select
 End Sub
@@ -6926,7 +6924,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
 
     
     s = ReadCfg(OT, "Logging")
-    If StrictIsNumeric(s) Then BotVars.Logging = Val(s) Else BotVars.Logging = 2
+    If StrictIsNumeric(s) Then BotVars.Logging = Val(s) Else BotVars.Logging = 1
         
     mnuToggleWWUse.Checked = (ReadCfg("Main", "UseWWs") = "Y")
     
