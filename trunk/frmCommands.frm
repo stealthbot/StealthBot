@@ -891,6 +891,16 @@ Private Sub ResetForm()
     
 End Sub
 
+Private Sub cboFlags_Change()
+
+    If (BotVars.CaseSensitiveFlags = False) Then
+        cboFlags.text = UCase$(cboFlags.text)
+        
+        cboFlags.SelStart = Len(cboFlags.text)
+    End If
+    
+End Sub
+
 '// 08/29/2008 JSM - Created
 Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
     Dim I As Integer

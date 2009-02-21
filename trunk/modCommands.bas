@@ -5067,6 +5067,11 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
             Flags = strArray(1)
         End If
         
+        ' ...
+        If (BotVars.CaseSensitiveFlags = False) Then
+            Flags = UCase$(Flags)
+        End If
+        
         ' do we have any special paramaters?
         If (Len(params)) Then
             ' split message by paramter
@@ -6201,6 +6206,11 @@ Private Function OnHelpAttr(ByVal Username As String, ByRef dbAccess As udtGetAc
 
     ' ...
     msgData = Replace(msgData, "\", "\\")
+    
+    ' ...
+    If (BotVars.CaseSensitiveFlags = False) Then
+        msgData = UCase$(msgData)
+    End If
     
     ' ...
     For I = 1 To Len(msgData)

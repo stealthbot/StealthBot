@@ -100,6 +100,7 @@ Private m_show_stats_icons              As Boolean
 Private m_retain_old_bans               As Boolean
 Private m_store_all_bans                As Boolean
 Private m_use_alt_bnls                  As Boolean
+Private m_case_sensitive_flags          As Boolean
 
 Public Property Get Username() As String
     
@@ -1093,6 +1094,20 @@ Public Property Get UseAltBnls() As Boolean
 
     ' ...
     UseAltBnls = m_use_alt_bnls
+
+End Property
+
+Public Property Let CaseSensitiveFlags(bln As Boolean)
+
+    ' ...
+    m_case_sensitive_flags = bln
+
+End Property
+
+Public Property Get CaseSensitiveFlags() As Boolean
+
+    ' ...
+    CaseSensitiveFlags = m_case_sensitive_flags
 
 End Property
 
