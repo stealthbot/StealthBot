@@ -29,7 +29,8 @@ Option Explicit
 'Private m_dbAccess     As udtGetAccessResponse
 'Private m_username     As String  ' ...
 'Private m_IsLocal      As Boolean ' ...
-Private m_WasWhispered As Boolean ' ...
+Private m_WasWhispered  As Boolean ' ...
+Private m_DisplayOutput As Boolean ' ...
 
 Public flood    As String ' ...?
 Public floodCap As Byte   ' ...?
@@ -56,6 +57,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     
     ' store file scope copy of whisper status
     m_WasWhispered = WasWhispered
+    m_DisplayOutput = DisplayOutput
     
     ' replace message variables
     Message = Replace(Message, "%me", IIf(IsLocal, GetCurrentUsername, Username), 1, -1, vbTextCompare)
@@ -2881,17 +2883,23 @@ Private Function OnProfile(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
     Dim U      As String
-    'Dim PPL    As Boolean
     Dim tmpBuf As String ' temporary output buffer
     
     U = msgData
     
     If (Len(U) > 0) Then
-        PPL = True
+        If ((InBot) And (Not (m_DisplayOutput))) Then
+            With frmProfile
+                .lblUsername.Caption = U
+                .Show
+            End With
+        Else
+            PPL = True
     
-        ' ...
-        If (BotVars.WhisperCmds Or m_WasWhispered) Then
-            PPLRespondTo = Username
+            ' ...
+            If (BotVars.WhisperCmds Or m_WasWhispered) Then
+                PPLRespondTo = Username
+            End If
         End If
         
         Call RequestProfile(U)

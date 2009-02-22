@@ -1660,9 +1660,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5268,13 +5268,13 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 '    AddQ "/w " & LastWhisper & Space(1) & OutFilterMsg(m), _
                                 '        PRIORITY.CONSOLE_MESSAGE
                                     
-                                ElseIf (LCase(Left$(s, 9)) = "/profile ") Then
-                                    If (sckBNet.State = 7) Then
-                                        RequestProfile Right(s, Len(s) - 9)
-                                    End If
-                                    
-                                    frmProfile.lblUsername.Caption = Right(s, Len(s) - 9)
-                                    frmProfile.Show
+                                'ElseIf (LCase(Left$(s, 9)) = "/profile ") Then
+                                '    If (sckBNet.State = 7) Then
+                                '        RequestProfile Right(s, Len(s) - 9)
+                                '    End If
+                                '
+                                '    frmProfile.lblUsername.Caption = Right(s, Len(s) - 9)
+                                '    frmProfile.Show
                                 
                                 ElseIf (LCase(Left$(s, 1)) = "/") Then
                                     Dim commandResult As Boolean ' ..
