@@ -7214,7 +7214,13 @@ Public Sub LoadDatabase()
                                 
                             End If
                             
-                            If .Access > 200 Then: .Access = 200
+                            If .Access > 200 Then
+                                .Access = 200
+                            End If
+                            
+                            If .Type = "" Or .Type = "%" Then
+                                .Type = "USER"
+                            End If
                         End With
 
                         I = I + 1
@@ -7761,7 +7767,7 @@ Public Sub WriteDatabase(ByVal U As String)
                 Print #f, " " & IIf(DB(I).AddedOn > 0, DateCleanup(DB(I).AddedOn), "%");
                 Print #f, " " & IIf(Len(DB(I).ModifiedBy) > 0, DB(I).ModifiedBy, "%");
                 Print #f, " " & IIf(DB(I).ModifiedOn > 0, DateCleanup(DB(I).ModifiedOn), "%");
-                Print #f, " " & IIf(Len(DB(I).Type) > 0, DB(I).Type, "%");
+                Print #f, " " & IIf(Len(DB(I).Type) > 0, DB(I).Type, "USER");
                 Print #f, " " & IIf(Len(DB(I).Groups) > 0, DB(I).Groups, "%");
                 Print #f, " " & IIf(Len(DB(I).BanMessage) > 0, DB(I).BanMessage, "%");
                 Print #f, vbCr
