@@ -2879,7 +2879,6 @@ Private Function OnTagDel(ByVal Username As String, ByRef dbAccess As udtGetAcce
     cmdRet() = tmpBuf()
 End Function ' end function OnTagDel
 
-' TO DO:
 ' handle profile command
 Private Function OnProfile(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -2890,12 +2889,7 @@ Private Function OnProfile(ByVal Username As String, ByRef dbAccess As udtGetAcc
     U = msgData
     
     If (Len(U) > 0) Then
-        If ((InBot) And (Not (m_DisplayOutput))) Then
-            With frmProfile
-                .lblUsername.Caption = U
-                .Show
-            End With
-        Else
+        If ((InBot = False) Or (m_DisplayOutput)) Then
             PPL = True
     
             ' ...
