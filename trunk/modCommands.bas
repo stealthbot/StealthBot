@@ -57,7 +57,6 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     
     ' store file scope copy of whisper status
     m_WasWhispered = WasWhispered
-    m_DisplayOutput = DisplayOutput
     
     ' replace message variables
     Message = Replace(Message, "%me", IIf(IsLocal, GetCurrentUsername, Username), 1, -1, vbTextCompare)
@@ -82,6 +81,9 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         ElseIf (HasAccess(Username, command.Name, command.Args, outbuf)) Then
             execCommand = True
         End If
+        
+        ' ...
+        m_DisplayOutput = command.PublicOutput
         
         ' ...
         If (execCommand) Then
