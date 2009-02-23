@@ -1255,6 +1255,7 @@
       <rank>50</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -2712,6 +2713,7 @@
       <rank>80</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
