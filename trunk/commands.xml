@@ -3265,7 +3265,7 @@
     </access>
   </command>
 
-  <command name="invite" enabled="true">
+  <command name="invite">
     <aliases />
 
     <documentation>
@@ -3279,7 +3279,8 @@
     </documentation>
 
     <access>
-      <rank></rank>
+      <rank />
+      <flags />
     </access>
   </command>
 

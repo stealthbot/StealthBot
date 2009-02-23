@@ -6149,15 +6149,23 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
                     
             tmpBuf(0) = tmpBuf(0) & " Command is available to everyone"
         Else
-            tmpBuf(0) = tmpBuf(0) & " Requires " & CommandDocs.RequiredRank & _
-                    " access"
+            tmpBuf(0) = tmpBuf(0) & " Requires "
+            
+            If (CommandDocs.RequiredRank > 0) Then
+                tmpBuf(0) = _
+                    tmpBuf(0) & CommandDocs.RequiredRank & " access"
                     
+                If (CommandDocs.RequiredFlags <> vbNullString) Then
+                    tmpBuf(0) = tmpBuf(0) & " or "
+                End If
+            End If
+            
             If (CommandDocs.RequiredFlags <> vbNullString) Then
-                tmpBuf(0) = tmpBuf(0) & " or flags "
+                tmpBuf(0) = tmpBuf(0) & "flags "
                 
                 For I = 1 To Len(CommandDocs.RequiredFlags)
-                    tmpBuf(0) = tmpBuf(0) & _
-                            Mid$(CommandDocs.RequiredFlags, I, 1) & ", "
+                    tmpBuf(0) = _
+                        tmpBuf(0) & Mid$(CommandDocs.RequiredFlags, I, 1) & ", "
                             
                     If (I + 1 = Len(CommandDocs.RequiredFlags)) Then
                         tmpBuf(0) = tmpBuf(0) & "or "

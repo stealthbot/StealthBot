@@ -459,7 +459,13 @@ Private Function GetRank(ByRef AnyNode As IXMLDOMNode) As Integer
         Exit Function
     End If
     
-    GetRank = CInt(temp.text)
+    If (temp.text = vbNullString) Then
+        GetRank = -1
+    
+        Exit Function
+    End If
+    
+    GetRank = CInt(Val(temp.text))
 
 End Function
 

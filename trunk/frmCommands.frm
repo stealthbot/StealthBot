@@ -593,7 +593,14 @@ Private Sub SaveForm()
                 End If
                 Set xmlNode = .TheXMLElement.selectSingleNode("access/rank")
             End If
-            xmlNode.text = txtRank.text
+            
+            If (txtRank.text <> vbNullString) Then
+                xmlNode.text = txtRank.text
+            Else
+                For I = 0 To xmlNode.childNodes.Length - 1
+                    xmlNode.removeChild xmlNode.childNodes(I)
+                Next I
+            End If
         End If
         
         '// txtDescription
@@ -660,25 +667,28 @@ Private Sub SaveForm()
             Set xmlNode = .TheXMLElement.selectSingleNode("access")
             If xmlNode Is Nothing Then
                 Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "access", "")
-                .TheXMLElement.appendChild xmlNewNode
+                Set xmlNode = .TheXMLElement.appendChild(xmlNewNode)
             End If
             
             Set xmlNode = .TheXMLElement.selectSingleNode("access/flags")
             If xmlNode Is Nothing Then
-                Set xmlNewNode = xmlNode.createNode(NODE_ELEMENT, "flags", "")
-                .TheXMLElement.appendChild xmlNewNode
+                Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "flags", "")
+                Set xmlNode = _
+                    .TheXMLElement.selectSingleNode("access").appendChild(xmlNewNode)
             End If
 
-            '// loop through cboFlags and add the text
-            For I = 0 To cboFlags.ListCount - 1
-                Set xmlNewNode = xmlNode.selectSingleNode("flag[text()='" & cboFlags.List(I) & "']")
-                
-                If (xmlNewNode Is Nothing) Then
-                    Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "flag", "")
-                    xmlNewNode.text = cboFlags.List(I)
-                    xmlNode.appendChild xmlNewNode
-                End If
-            Next I
+            If (cboFlags.ListCount > 0) Then
+                '// loop through cboFlags and add the text
+                For I = 0 To cboFlags.ListCount - 1
+                    Set xmlNewNode = xmlNode.selectSingleNode("flag[text()='" & cboFlags.List(I) & "']")
+                    
+                    If (xmlNewNode Is Nothing) Then
+                        Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "flag", "")
+                        xmlNewNode.text = cboFlags.List(I)
+                        xmlNode.appendChild xmlNewNode
+                    End If
+                Next I
+            End If
         End If
         
         
@@ -687,7 +697,9 @@ Private Sub SaveForm()
             If chkDisable.Value = 1 Then
                 Call .TheXMLElement.setAttribute("enabled", "false")
             Else
-                Call .TheXMLElement.setAttribute("enabled", "true")
+                If (.TheXMLElement.getAttribute("enabled") <> vbNullString) Then
+                    Call .TheXMLElement.setAttribute("enabled", "true")
+                End If
             End If
         End If
         
