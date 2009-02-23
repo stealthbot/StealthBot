@@ -98,6 +98,7 @@
       <rank>20</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -127,6 +128,7 @@
       <rank>20</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -151,6 +153,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -179,6 +182,7 @@
       <rank>20</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -199,6 +203,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -240,6 +245,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -261,6 +267,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -291,6 +298,7 @@
       <rank>20</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -330,6 +338,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -351,6 +360,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -372,6 +382,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -447,6 +458,7 @@
                   <rank>100</rank>
                   <flags>
                     <flag>A</flag>
+                    <flag>R</flag>
                   </flags>
                 </access>
               </restriction>
@@ -719,6 +731,7 @@
                   <rank>100</rank>
                   <flags>
                     <flag>A</flag>
+                    <flag>R</flag>
                   </flags>
                 </access>
               </restriction>
@@ -736,6 +749,7 @@
                   <rank>60</rank>
                   <flags>
                     <flag>A</flag>
+                    <flag>R</flag>
                   </flags>
                 </access>
               </restriction>
@@ -868,6 +882,7 @@
       <rank>20</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -889,7 +904,7 @@
     </access>
   </command>
 
-  <command name="about" enabled="true">
+  <command name="about">
     <aliases>
       <alias>version</alias>
       <alias>ver</alias>
@@ -910,6 +925,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -933,6 +949,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -954,6 +971,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -975,6 +993,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -1006,6 +1025,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -1081,6 +1101,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -1175,6 +1196,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -1196,6 +1218,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -1252,6 +1275,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -1275,6 +1299,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -1468,6 +1493,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -1696,6 +1722,7 @@
       <rank>60</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -1725,6 +1752,7 @@
       <rank>60</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -1742,6 +1770,7 @@
       <rank>60</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -1842,6 +1871,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -2059,6 +2089,7 @@
       <rank>70</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -2076,6 +2107,7 @@
       <rank>70</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -2095,6 +2127,7 @@
       <rank>70</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -2112,6 +2145,7 @@
       <rank>70</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -2129,6 +2163,7 @@
       <rank>70</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -2146,6 +2181,7 @@
       <rank>70</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -2166,6 +2202,7 @@
       <rank>70</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -2183,6 +2220,7 @@
       <rank>70</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -2202,6 +2240,7 @@
       <rank>70</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -2355,7 +2394,7 @@
     <access>
       <rank>80</rank>
       <flags>
-        <flag>M</flag>
+        <flag>O</flag>
       </flags>
     </access>
   </command>
@@ -2953,6 +2992,7 @@
       <rank>90</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -2970,6 +3010,7 @@
       <rank>90</rank>
       <flags>
         <flag>A</flag>
+        <flag>R</flag>
       </flags>
     </access>
   </command>
@@ -3429,6 +3470,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -3452,6 +3494,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
@@ -3475,6 +3518,7 @@
         <flag>J</flag>
         <flag>M</flag>
         <flag>O</flag>
+        <flag>R</flag>
         <flag>T</flag>
       </flags>
     </access>
