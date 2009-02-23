@@ -6243,6 +6243,11 @@ Private Function OnHelpAttr(ByVal Username As String, ByRef dbAccess As udtGetAc
     msgData = Replace(msgData, "\", "\\")
     
     ' ...
+    If (Len(msgData) = 0) Then
+        Exit Function
+    End If
+    
+    ' ...
     If (BotVars.CaseSensitiveFlags = False) Then
         msgData = UCase$(msgData)
     End If
@@ -6332,6 +6337,11 @@ Private Function OnHelpRank(ByVal Username As String, ByRef dbAccess As udtGetAc
 
     ' ...
     msgData = Replace(msgData, "\", "\\")
+    
+    ' ...
+    If (Len(msgData) = 0) Then
+        Exit Function
+    End If
         
     ' ...
     Set commands = _
