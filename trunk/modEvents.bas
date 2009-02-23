@@ -362,6 +362,8 @@ End Sub
 Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
     On Error Resume Next
     
+    Dim FT  As FILETIME
+    Dim sT  As SYSTEMTIME
     Dim s() As String
     Dim U   As String
     Dim I   As Integer
@@ -467,7 +469,35 @@ Repeat4:
                 frmChat.AddQ U & "[Sex] " & KeyValue
             End If
             
-        Else
+        ElseIf Left$(KeyName, 7) = "System\" Then
+        
+            If InStr(1, KeyValue, " ", vbTextCompare) > 0 Then '// If it's a FILETIME
+            
+                'Dim FT As FILETIME
+                'Dim sT As SYSTEMTIME
+                
+                FT.dwHighDateTime = CLng(Left$(KeyValue, InStr(1, KeyValue, " ", vbTextCompare)))
+                
+                'On Error Resume Next
+                
+                KeyValue = Mid$(KillNull(KeyValue), InStr(1, KeyValue, " ", vbTextCompare) + 1)
+                'keyvalue = Left$(keyvalue, Len(keyvalue) - 1)
+                
+                FT.dwLowDateTime = KeyValue 'CLng(KeyValue & "0")
+                
+                FileTimeToSystemTime FT, sT
+                
+                With sT
+                    frmChat.AddQ U & Right$(KeyName, Len(KeyName) - 7) & ": " & _
+                        SystemTimeToString(sT) & " (Battle.net time)"
+                End With
+                
+            Else    '// it's a SECONDS type
+                If StrictIsNumeric(KeyValue) Then
+                    'On Error Resume Next
+                    frmChat.AddQ U & "Time Logged: " & ConvertTime(KeyValue, 1)
+                End If
+            End If
             
         End If
         
@@ -477,8 +507,8 @@ Repeat4:
         
         If InStr(1, KeyValue, " ", vbTextCompare) > 0 Then '// If it's a FILETIME
         
-            Dim FT As FILETIME
-            Dim sT As SYSTEMTIME
+            'Dim FT As FILETIME
+            'Dim sT As SYSTEMTIME
             
             FT.dwHighDateTime = CLng(Left$(KeyValue, InStr(1, KeyValue, " ", vbTextCompare)))
             

@@ -565,6 +565,7 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "greet":         Call OnGreet(Username, dbAccess, msgData, InBot, cmdRet())
         Case "allseen":       Call OnAllSeen(Username, dbAccess, msgData, InBot, cmdRet())
         Case "profile":       Call OnProfile(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "accountinfo":   Call OnAccountInfo(Username, dbAccess, msgData, InBot, cmdRet())
         Case "ban":           Call OnBan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "unban":         Call OnUnban(Username, dbAccess, msgData, InBot, cmdRet())
         Case "kick":          Call OnKick(Username, dbAccess, msgData, InBot, cmdRet())
@@ -2904,6 +2905,28 @@ Private Function OnProfile(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ' return message
     cmdRet(0) = tmpBuf
 End Function ' end function OnProfile
+
+' handle accountinfo command
+Private Function OnAccountInfo(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim U      As String
+    Dim tmpBuf As String ' temporary output buffer
+    
+    If ((InBot = False) Or (m_DisplayOutput)) Then
+        PPL = True
+
+        ' ...
+        If (BotVars.WhisperCmds Or m_WasWhispered) Then
+            PPLRespondTo = Username
+        End If
+    End If
+    
+    RequestSystemKeys
+    
+    ' return message
+    cmdRet(0) = tmpBuf
+End Function ' end function OnAccountInfo
 
 ' handle setidle command
 Private Function OnSetIdle(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _

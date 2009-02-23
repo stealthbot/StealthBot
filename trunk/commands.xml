@@ -2257,6 +2257,20 @@
     </access>
   </command>
 
+  <command name="accountinfo">
+    <aliases>
+      <alias>accntinfo</alias>
+    </aliases>
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+
+    <access />
+  </command>
+
   <command name="whispercmds">
     <aliases>
       <alias>wc</alias>
