@@ -900,9 +900,7 @@
         states the application's version information.
       </description>
 
-      <specialnotes>
-        
-      </specialnotes>
+      <specialnotes />
     </documentation>
 
     <access>
@@ -3267,16 +3265,22 @@
     </access>
   </command>
 
-  <command name="invite">
+  <command name="invite" enabled="true">
     <aliases />
 
     <documentation>
       <description>
         invites a specified user into the clan in which the bot is a member.
       </description>
+
+      <specialnotes>
+        
+      </specialnotes>
     </documentation>
 
-    <access />
+    <access>
+      <rank></rank>
+    </access>
   </command>
 
   <command name="makechieftain">

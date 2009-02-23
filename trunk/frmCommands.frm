@@ -652,7 +652,7 @@ Private Sub SaveForm()
         If .TheNodeType = NodeType.nCommand Or .TheNodeType = NodeType.nRestriction Then
             
             '// remove existing flags
-            For Each xmlNode In .TheXMLElement.selectNodes("access/flag")
+            For Each xmlNode In .TheXMLElement.selectNodes("access/flags")
                 .TheXMLElement.selectSingleNode("access").removeChild xmlNode
             Next xmlNode
             
@@ -665,7 +665,7 @@ Private Sub SaveForm()
             
             Set xmlNode = .TheXMLElement.selectSingleNode("access/flags")
             If xmlNode Is Nothing Then
-                Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "access/flags", "")
+                Set xmlNewNode = xmlNode.createNode(NODE_ELEMENT, "flags", "")
                 .TheXMLElement.appendChild xmlNewNode
             End If
 
