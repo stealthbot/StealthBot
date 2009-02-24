@@ -475,7 +475,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                         For I = 0 To UBound(m_DB)
                             ' ...
                             If ((StrComp(m_DB(I).Username, buf, vbTextCompare) = 0) And _
-                                (StrComp(m_DB(I).Type, "User", vbTextCompare) = 0)) Then
+                                (StrComp(m_DB(I).Type, "USER", vbTextCompare) = 0)) Then
                             
                                 ' ...
                                 With m_DB(I)
@@ -1130,7 +1130,7 @@ Private Sub tbsTabs_Click()
     Dim I       As Integer ' ...
     Dim grp     As String  ' ...
     Dim j       As Integer ' ...
-    Dim Pos     As Integer ' ...
+    Dim pos     As Integer ' ...
     Dim blnDuplicateFound As Boolean
 
     ' clear treeview
@@ -1158,12 +1158,12 @@ Private Sub tbsTabs_Click()
                     
                         ' has the group already been added or is database in an
                         ' incorrect order?
-                        Pos = Exists(grp, "Group")
+                        pos = Exists(grp, "Group")
                         
                         ' ... well, does it exist?
-                        If (Pos) Then
+                        If (pos) Then
                             ' make node a child of existing group
-                            Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
+                            Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(pos).Key, _
                                 tvwChild, "Group: " & m_DB(I).Username, m_DB(I).Username, 1)
                         Else
                             ' lets make this guy a parent node for now until we can find
@@ -1232,7 +1232,7 @@ Private Sub tbsTabs_Click()
             ' loop through database... this time looking for users.
             For I = LBound(m_DB) To UBound(m_DB)
                 ' is the entry a user?
-                If (StrComp(m_DB(I).Type, "USER", vbBinaryCompare) = 0) Then
+                If (StrComp(m_DB(I).Type, "USER", vbTextCompare) = 0) Then
                     ' is the user a member of any groups?
                     If (Len(m_DB(I).Groups) And (m_DB(I).Groups <> "%")) Then
                         ' is entry member of multiple groups?
@@ -1246,22 +1246,22 @@ Private Sub tbsTabs_Click()
                         
                         ' ...
                         If (grp = vbNullString) Then
-                            Pos = False
+                            pos = False
                         Else
                             ' search for our group
-                            Pos = Exists(grp, "Group")
+                            pos = Exists(grp, "Group")
                                 
                             ' does our group exist?
-                            If (Pos) Then
+                            If (pos) Then
                                 ' create user node and move into group
-                                Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(Pos).Key, _
+                                Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(pos).Key, _
                                     tvwChild, "User: " & m_DB(I).Username, m_DB(I).Username, 3)
                             End If
                         End If
                     End If
                     
                     ' ...
-                    If (Pos = False) Then
+                    If (pos = False) Then
                         ' create new user node under root
                         Set newNode = trvUsers.Nodes.Add("Database", tvwChild, _
                             "User: " & m_DB(I).Username, m_DB(I).Username, 3)
@@ -1275,6 +1275,9 @@ Private Sub tbsTabs_Click()
                         End With
                     End If
                 End If
+                
+                ' reset our variables
+                pos = False
             Next I
             
             ' enable create user button
