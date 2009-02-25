@@ -179,29 +179,32 @@ Sub psLoadPlugins()
 
             strPlugin = psGetTextStream(File)
             arrPlugin = Split(strPlugin, vbCrLf)
-            curPrefix = Mid(Trim(LCase(arrPlugin(0))), 2)
-            curVersion = Mid(Trim(arrPlugin(1)), 2)
+
+            If (UBound(arrPlugin) >= 1) Then
+               curPrefix = Mid(Trim(LCase(arrPlugin(0))), 2)
+               curVersion = Mid(Trim(arrPlugin(1)), 2)
  
-            '// Check if the file contents are in plugin form
-            If Left(arrPlugin(0), 1) = "'" And Instr(curPrefix, " ") = 0 And UBound(arrPlugin) > 1 Then
+               '// Check if the file contents are in plugin form
+               If Left(arrPlugin(0), 1) = "'" And Instr(curPrefix, " ") = 0 And UBound(arrPlugin) > 1 Then
 
-               '// Check prefix and version validity
-               strPCErr = psPrefixCheck(curPrefix)
-               If Len(strPCErr) > 0 Then
-                  AddChat vbRed, "Did not load plugin in file """ & psFSO.GetFileName(File) & """. " & strPCErr & "."
-               ElseIf psGetNumericVersion(curVersion) < 0 Then
-                  AddChat vbRed, "Did not load plugin in file """ & psFSO.GetFileName(File) & ". Its version """ & curVersion & """ is invalid."
-               Else      
+               '   // Check prefix and version validity
+                  strPCErr = psPrefixCheck(curPrefix)
+                  If Len(strPCErr) > 0 Then
+                     AddChat vbRed, "Did not load plugin in file """ & psFSO.GetFileName(File) & """. " & strPCErr & "."
+                  ElseIf psGetNumericVersion(curVersion) < 0 Then
+                     AddChat vbRed, "Did not load plugin in file """ & psFSO.GetFileName(File) & ". Its version """ & curVersion & """ is invalid."
+                  Else      
 
-                  '// Everything checks out, load this plugin!
-                  psLoadPlugin curPrefix, curVersion, File, strPlugin, arrPlugin
-                  If psPluginEnabled(curPrefix) Then intEnabled = intEnabled + 1
-               End If
+                     '// Everything checks out, load this plugin!
+                     psLoadPlugin curPrefix, curVersion, File, strPlugin, arrPlugin
+                     If psPluginEnabled(curPrefix) Then intEnabled = intEnabled + 1
+                  End If
                
-            Else
+               Else
 
-               '// If this file contains a StealthBot VBScript, convert it to plugin form
-               If UBound(Filter(arrPlugin, "event_", 1, 1)) > -1 Then psConvertToPlugin File, arrPlugin
+                  '// If this file contains a StealthBot VBScript, convert it to plugin form
+                  If UBound(Filter(arrPlugin, "event_", 1, 1)) > -1 Then psConvertToPlugin File, arrPlugin
+               End If
             End If
          End If
       End If
