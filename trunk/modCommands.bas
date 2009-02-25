@@ -2898,7 +2898,7 @@ Private Function OnProfile(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 PPLRespondTo = Username
             End If
         Else
-            frmProfile.lblUsername = Username
+            frmProfile.lblUsername = U
         End If
         
         Call RequestProfile(U)
