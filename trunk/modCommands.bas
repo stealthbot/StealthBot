@@ -2897,6 +2897,8 @@ Private Function OnProfile(ByVal Username As String, ByRef dbAccess As udtGetAcc
             If (BotVars.WhisperCmds Or m_WasWhispered) Then
                 PPLRespondTo = Username
             End If
+        Else
+            frmProfile.lblUsername = Username
         End If
         
         Call RequestProfile(U)
