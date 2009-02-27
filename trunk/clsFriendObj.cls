@@ -38,13 +38,13 @@ Public Property Let Location(ByVal sChannel As String)
     
 End Property
 
-Public Property Get Game() As String
+Public Property Get game() As String
 
-    Game = m_game
+    game = m_game
 
 End Property
 
-Public Property Let Game(ByVal sProduct As String)
+Public Property Let game(ByVal sProduct As String)
 
     m_game = KillNull(sProduct)
 
@@ -135,10 +135,9 @@ Public Function Clone() As Object
     
     ' ...
     Clone.Name = Name
-    Clone.DontDisturb = DontDisturb
-    Clone.Game = Game
-    Clone.LocationID = LocationID
+    Clone.game = game
     Clone.Status = Status
+    Clone.LocationID = LocationID
     Clone.Location = Location
     
 End Function
