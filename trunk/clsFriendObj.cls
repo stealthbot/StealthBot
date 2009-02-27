@@ -127,3 +127,18 @@ Public Property Get DisplayName() As String
     DisplayName = convertUsername(m_username)
 
 End Property
+
+Public Function Clone() As Object
+
+    ' ...
+    Set Clone = New clsFriendObj
+    
+    ' ...
+    Clone.Name = Name
+    Clone.DontDisturb = DontDisturb
+    Clone.Game = Game
+    Clone.LocationID = LocationID
+    Clone.Status = Status
+    Clone.Location = Location
+    
+End Function

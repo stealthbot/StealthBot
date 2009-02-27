@@ -166,23 +166,35 @@ Public Property Get Peons() As Collection
 
 End Property
 
+Public Function GetMember(ByVal Username As String) As Object
+
+    Set GetMember = GetUser(Username)
+
+End Function
+
 Public Function GetUser(ByVal Username As String) As Object
 
-    Dim index As Integer ' ...
+    Dim Index As Integer ' ...
     
     ' ...
     If (StrictIsNumeric(Username)) Then
-        index = CInt(Val(Username))
+        Index = CInt(Val(Username))
     Else
-        index = GetUserIndex(Username)
+        Index = GetUserIndex(Username)
     End If
     
     ' ...
-    If ((index >= 1) And (index <= Members.Count)) Then
-        Set GetUser = Members(index)
+    If ((Index >= 1) And (Index <= Members.Count)) Then
+        Set GetUser = Members(Index)
     Else
         Set GetUser = New clsClanMemberObj
     End If
+
+End Function
+
+Public Function GetMemberIndex(ByVal Username As String) As Integer
+
+    GetMemberIndex = GetUserIndex(Username)
 
 End Function
 
@@ -207,24 +219,36 @@ Public Function GetUserIndex(ByVal Username As String) As Integer
 
 End Function
 
+Public Function GetMemberEx(ByVal Username As String) As Object
+
+    Set GetMemberEx = GetUserEx(Username)
+
+End Function
+
 Public Function GetUserEx(ByVal Username As String) As Object
 
-    Dim index As Integer ' ...
+    Dim Index As Integer ' ...
     
     ' ...
     If (StrictIsNumeric(Username)) Then
-        index = CInt(Val(Username))
+        Index = CInt(Val(Username))
     Else
-        index = GetUserIndexEx(Username)
+        Index = GetUserIndexEx(Username)
     End If
     
     ' ...
-    If ((index >= 1) And (index <= Members.Count)) Then
-        Set GetUserEx = Members(index)
+    If ((Index >= 1) And (Index <= Members.Count)) Then
+        Set GetUserEx = Members(Index)
     Else
         Set GetUserEx = New clsClanMemberObj
     End If
 
+End Function
+
+Public Function GetMemberIndexEx(ByVal Username As String) As Integer
+    
+    GetMemberIndexEx = GetUserIndexEx(Username)
+    
 End Function
 
 Public Function GetUserIndexEx(ByVal Username As String) As Integer
@@ -266,3 +290,21 @@ Public Sub SetMOTD(ByVal MOTD As String)
     Call modWar3Clan.SetClanMOTD(MOTD)
 
 End Sub
+
+Public Function Clone() As Object
+
+    Dim i As Integer ' ...
+
+    ' ...
+    Set Clone = New clsClanObj
+    
+    ' ...
+    Clone.Name = Name
+    Clone.MOTD = MOTD
+    
+    ' ...
+    For i = 1 To Members.Count
+        Clone.Members.Add Members(i).Clone()
+    Next i
+    
+End Function

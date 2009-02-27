@@ -56,10 +56,10 @@ Public Property Get Rank() As Integer
 End Property
 
 ' ...
-Public Property Let Rank(I As Integer)
+Public Property Let Rank(i As Integer)
 
     ' ...
-    m_rank = I
+    m_rank = i
 
 End Property
 
@@ -95,10 +95,10 @@ Public Property Get Status() As Integer
 End Property
 
 ' ...
-Public Property Let Status(I As Integer)
+Public Property Let Status(i As Integer)
 
     ' ...
-    m_status = I
+    m_status = i
 
 End Property
 
@@ -163,4 +163,18 @@ Public Sub KickOut()
     Call RemoveMember(m_name)
 
 End Sub
+
+Public Function Clone() As Object
+
+    ' ...
+    Set Clone = New clsClanMemberObj
+    
+    ' ...
+    Clone.Name = Name
+    Clone.Location = Location
+    Clone.Rank = Rank
+    Clone.Status = Status
+    Clone.JoinTime = JoinTime
+    
+End Function
 
