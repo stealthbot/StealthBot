@@ -155,6 +155,9 @@ Public Property Let Statstring(str As String)
 
     ' ...
     m_stats_string = str
+    
+    ' ...
+    m_stats.Statstring = m_stats_string
 
 End Property
 
@@ -302,14 +305,14 @@ End Function
 
 Public Sub ClearQueue()
     
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
     
     ' ...
-    For I = Queue.Count To 1 Step -1
+    For i = Queue.Count To 1 Step -1
     
-        Queue.Remove I
+        Queue.Remove i
     
-    Next I
+    Next i
     
 
 End Sub
@@ -390,3 +393,29 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
+Public Function Clone() As Object
+
+    Dim i As Integer ' ...
+
+    ' ...
+    Set Clone = New clsUserObj
+    
+    ' ...
+    Clone.Name = Name
+    Clone.Ping = Ping
+    Clone.Flags = Flags
+    Clone.Clan = Clan
+    Clone.CharacterName = CharacterName
+    Clone.game = game
+    Clone.JoinTime = JoinTime
+    Clone.LastTalkTime = LastTalkTime
+    Clone.PassedChannelAuth = PassedChannelAuth
+    Clone.PendingBan = PendingBan
+    Clone.Statstring = Statstring
+    
+    ' ...
+    For i = 1 To Queue.Count
+        Clone.Queue.Add Queue(i).Clone()
+    Next i
+
+End Function

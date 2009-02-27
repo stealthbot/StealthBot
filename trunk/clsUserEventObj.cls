@@ -32,6 +32,9 @@ Private Sub Class_Initialize()
 
     ' ...
     EventTick = GetTickCount()
+    
+    ' ...
+    Set m_stats = New clsUserStats
 
 End Sub
 
@@ -152,6 +155,9 @@ Public Property Let Statstring(str As String)
 
     ' ...
     m_stat_string = str
+    
+    ' ...
+    m_stats.Statstring = str
 
 End Property
 
@@ -168,4 +174,22 @@ Public Property Let IconCode(str As String)
     m_icon_code = str
 
 End Property
+
+Public Function Clone() As Object
+
+    ' ...
+    Set Clone = New clsUserEventObj
+    
+    ' ...
+    Clone.EventID = EventID
+    Clone.EventTick = EventTick
+    Clone.Flags = Flags
+    Clone.GameID = GameID
+    Clone.Clan = Clan
+    Clone.IconCode = IconCode
+    Clone.Message = Message
+    Clone.Ping = Ping
+    Clone.Statstring = Statstring
+
+End Function
 

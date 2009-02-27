@@ -123,4 +123,19 @@ Public Property Get IsActive() As Boolean
 
 End Property
 
+Public Function Clone() As Object
+
+    ' ...
+    Set Clone = New clsBanlistUserObj
+    
+    ' ...
+    Clone.Name = Name
+    Clone.DateOfBan = DateOfBan
+    Clone.IsActive = IsActive
+    Clone.IsDuplicateBan = IsDuplicateBan
+    Clone.Operator = Operator
+    Clone.Reason = Reason
+
+End Function
+
 

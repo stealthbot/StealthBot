@@ -1504,7 +1504,7 @@ Public Function MediaPlayer() As Object
 End Function
 
 Public Function Channel() As Object
-    Set Channel = g_Channel
+    Set Channel = g_Channel.Clone()
 End Function
 
 Public Function Clan() As Object
