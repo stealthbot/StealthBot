@@ -51,7 +51,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         CachePacket StoC, stBNCS, PacketID, Len(PacketData), PacketData
         
         ' Added 2007-06-08 for a packet logging menu feature to aid tech support
-        LogPacketRaw stBNCS, StoC, PacketID, PacketLen, PacketData
+        WritePacketData stBNCS, StoC, PacketID, PacketLen, PacketData
         
         '--------------
         '| Parse      |

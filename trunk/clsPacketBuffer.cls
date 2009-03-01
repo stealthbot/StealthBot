@@ -224,7 +224,7 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     CachePacket CtoS, stMCP, PacketID, Len(strbuf), strbuf
     
     ' ...
-    Call LogPacketRaw(stMCP, CtoS, PacketID, m_bufpos + 3, strbuf)
+    Call WritePacketData(stMCP, CtoS, PacketID, m_bufpos + 3, strbuf)
     
     ' clear buffer contents
     Call Clear
@@ -302,7 +302,7 @@ Public Function SendPacket(Optional PacketID As Byte)
     CachePacket CtoS, stBNCS, PacketID, Len(strbuf), strbuf
     
     ' ...
-    Call LogPacketRaw(stBNCS, CtoS, PacketID, m_bufpos + 4, strbuf)
+    Call WritePacketData(stBNCS, CtoS, PacketID, m_bufpos + 4, strbuf)
     
     ' clear buffer contents
     Call Clear
@@ -377,7 +377,7 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     CachePacket CtoS, stBNLS, PacketID, Len(strbuf), strbuf
     
     ' ...
-    Call LogPacketRaw(stBNLS, CtoS, PacketID, m_bufpos + 3, strbuf)
+    Call WritePacketData(stBNLS, CtoS, PacketID, m_bufpos + 3, strbuf)
     
     ' clear buffer contents
     Call Clear

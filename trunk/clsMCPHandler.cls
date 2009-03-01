@@ -169,7 +169,7 @@ Public Sub ParseMCPPacket(ByVal Data As String)
             CachePacket StoC, stMCP, Asc(Mid$(Data, 3, 1)), Len(Data), Data
     
             ' ...
-            LogPacketRaw stMCP, StoC, Asc(Mid$(Data, 3, 1)), Len(Data), Data
+            WritePacketData stMCP, StoC, Asc(Mid$(Data, 3, 1)), Len(Data), Data
             
             If InStr(1, CommandLine, "-all") > 0 Then _
                 frmChat.AddChat COLOR_BLUE, "MCP RECV 0x" & Right$("00" & Hex(Asc(Mid$(Data, 3, 1))), 2)

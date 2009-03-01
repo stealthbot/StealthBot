@@ -10,7 +10,7 @@ Private Const MAX_PACKET_CACHE_SIZE = 100 ' ...
 Private Type PACKETCACHEITEM
     Direction As enuPL_DirectionTypes
     PKT_Type  As enuPL_ServerTypes
-    ID        As Byte
+    id        As Byte
     Length    As Integer
     Data      As String
     DateTime  As Date
@@ -26,7 +26,7 @@ End Enum
 Private m_cache()     As PACKETCACHEITEM  ' ...
 Private m_cache_count As Integer          ' ...
 
-Public Function CachePacket(Direction As enuPL_DirectionTypes, PKT_Type As enuPL_ServerTypes, ID As Byte, Length As Integer, Data As String)
+Public Function CachePacket(Direction As enuPL_DirectionTypes, PKT_Type As enuPL_ServerTypes, id As Byte, Length As Integer, Data As String)
 
     Dim pkt As PACKETCACHEITEM ' ...
     
@@ -34,7 +34,7 @@ Public Function CachePacket(Direction As enuPL_DirectionTypes, PKT_Type As enuPL
     With pkt
         .Direction = Direction
         .PKT_Type = PKT_Type
-        .ID = ID
+        .id = id
         .Length = Length
         .Data = Data
         .DateTime = Now
@@ -87,11 +87,44 @@ Public Sub DumpPacketCache()
         pkt = m_cache(I)
         
         ' ...
-        LogPacketRaw pkt.PKT_Type, pkt.Direction, pkt.ID, pkt.Length, pkt.Data, pkt.DateTime
+        WritePacketData pkt.PKT_Type, pkt.Direction, pkt.id, pkt.Length, pkt.Data, pkt.DateTime
     Next I
     
     ' ...
     LogPacketTraffic = Traffic
+    
+End Sub
+
+' Written 2007-06-08 to produce packet logs or do other things
+Public Sub WritePacketData(ByVal Server As enuPL_ServerTypes, ByVal Direction As enuPL_DirectionTypes, ByVal PacketID As Long, ByVal PacketLen As Long, ByRef PacketData As String, Optional ByVal DateTime As Date)
+
+    Dim serverType As String ' ...
+    Dim str        As String ' ...
+
+    ' ...
+    Select Case (Server)
+        Case stBNCS: serverType = "BNCS"
+        Case stBNLS: serverType = "BNLS"
+        Case stMCP:  serverType = "MCP"
+    End Select
+    
+    ' ...
+    If (Direction = StoC) Then
+        str = str & _
+            serverType & " S -> C " & " -- Packet ID " & Right$("00" & Hex(PacketID), _
+                2) & "h (" & PacketID & "d) Length " & PacketLen & _
+                    vbNewLine & vbNewLine
+    Else
+        str = str & _
+            serverType & " C -> S " & " -- Packet ID " & Right$("00" & Hex(PacketID), _
+                2) & "h (" & PacketID & "d) Length " & PacketLen & _
+                    vbNewLine & vbNewLine
+    End If
+    
+    str = str & DebugOutput(PacketData) & _
+            vbNewLine
+    
+    g_Logger.WriteSckData str
     
 End Sub
 

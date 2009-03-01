@@ -212,7 +212,7 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     CachePacket StoC, stBNLS, PacketID, Len(Data), Data
     
     ' Added 2007-06-08 for a packet logging menu feature to aid tech support
-    LogPacketRaw BNLS, StoC, PacketID, Len(Data), Data
+    WritePacketData BNLS, StoC, PacketID, Len(Data), Data
     
     'Debug.Print "_-------------------------------------_"
     'Debug.Print DebugOutput(Data)
