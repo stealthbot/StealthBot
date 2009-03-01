@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
 Begin VB.Form frmProfile 
    BackColor       =   &H00000000&
    BorderStyle     =   1  'Fixed Single
@@ -26,7 +26,17 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
+      Enabled         =   -1  'True
       TextRTF         =   $"frmWriteProfile.frx":0CCA
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
    End
    Begin VB.CommandButton cmdDone 
       Caption         =   "&Close"
@@ -55,9 +65,10 @@ Begin VB.Form frmProfile
       _ExtentY        =   4895
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
-      TextRTF         =   $"frmWriteProfile.frx":0D4C
+      TextRTF         =   $"frmWriteProfile.frx":0D45
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -79,7 +90,17 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
-      TextRTF         =   $"frmWriteProfile.frx":0DC7
+      Enabled         =   -1  'True
+      TextRTF         =   $"frmWriteProfile.frx":0DC0
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
    End
    Begin RichTextLib.RichTextBox rtbAge 
       Height          =   285
@@ -92,7 +113,17 @@ Begin VB.Form frmProfile
       _Version        =   393217
       BackColor       =   0
       BorderStyle     =   0
-      TextRTF         =   $"frmWriteProfile.frx":0E49
+      Enabled         =   -1  'True
+      TextRTF         =   $"frmWriteProfile.frx":0E3B
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
    End
    Begin VB.Label Label5 
       BackColor       =   &H00000000&
