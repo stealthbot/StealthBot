@@ -871,6 +871,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -896,7 +897,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1660,9 +1660,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -1960,7 +1960,7 @@ End Sub
 '
 '    If Not BotVars.LockChat Then
 '
-'        If IsWin2000Plus() Then
+'        If g_OSVersion.IsWin2000Plus() Then
 '            GetScrollRange rtbChat.hWnd, SB_VERT, 0, intRange
 '            lngVerticalPos = SendMessage(rtbChat.hWnd, EM_GETTHUMB, 0&, 0&)
 '
@@ -2514,12 +2514,12 @@ Sub Form_Resize()
         
         'sizing + positioning
         
-        'Added IsVista() call within an IIf() statement.
+        'Added IsWindowsVista() call within an IIf() statement.
         'This shrinks the size of the entire layout by a further 80 twips.
         'This will act as a fix for Vista's screen cut off issues.
         '   - FrOzeN
         With lvChannel
-            rtbChat.Width = Me.Width - .Width - IIf(IsVista, 200, 120)
+            rtbChat.Width = Me.Width - .Width - IIf(g_OSVersion.IsWindowsVista, 200, 120)
         
         '    .Width = (Me.Width / 4) - 120 'magic number?
         '    If .Width > (.ColumnHeaders.Item(1).Width + 700) Then
@@ -2565,10 +2565,13 @@ Sub Form_Resize()
         
         'height is based on rtbchat.height + cmdshowhide.height
         If rtbWhispersVisible Then
-            rtbChat.Height = ((Me.ScaleHeight / Screen.TwipsPerPixelY) - (txtPre.Height / Screen.TwipsPerPixelY) - (rtbWhispers.Height / Screen.TwipsPerPixelY)) * (Screen.TwipsPerPixelY)
+            rtbChat.Height = ((Me.ScaleHeight / Screen.TwipsPerPixelY) - (txtPre.Height / _
+                Screen.TwipsPerPixelY) - (rtbWhispers.Height / Screen.TwipsPerPixelY)) * _
+                    (Screen.TwipsPerPixelY)
             rtbWhispers.Move rtbChat.Left, cboSend.Top + cboSend.Height
         Else
-            rtbChat.Height = ((Me.ScaleHeight / Screen.TwipsPerPixelY) - (txtPre.Height / Screen.TwipsPerPixelY)) * (Screen.TwipsPerPixelY)
+            rtbChat.Height = ((Me.ScaleHeight / Screen.TwipsPerPixelY) - (txtPre.Height / _
+                Screen.TwipsPerPixelY)) * (Screen.TwipsPerPixelY)
         End If
         
         lvChannel.Move rtbChat.Left + rtbChat.Width, lblCurrentChannel.Top + lblCurrentChannel.Height
@@ -2594,15 +2597,18 @@ Sub Form_Resize()
         'Minus 80 twips from rtbWhispers.Width if using Vista to fix width issue
         With rtbWhispers
             If .Visible Then
-                .Move rtbChat.Left, cboSend.Top + cboSend.Height, (Me.Width - cmdShowHide.Width - 10 * Screen.TwipsPerPixelX) - IIf(IsVista, 80, 0)
+                .Move rtbChat.Left, cboSend.Top + cboSend.Height, (Me.Width - cmdShowHide.Width - 10 * _
+                    Screen.TwipsPerPixelX) - IIf(g_OSVersion.IsWindowsVista, 80, 0)
             End If
         End With
         
         ListviewTabs.Height = cboSend.Height
-        ListviewTabs.Move lvChannel.Left, cboSend.Top - (Screen.TwipsPerPixelY), lvChannel.Width - cmdShowHide.Width - Screen.TwipsPerPixelX, cboSend.Height '+ 2 * Screen.TwipsPerPixelY
+        ListviewTabs.Move lvChannel.Left, cboSend.Top - (Screen.TwipsPerPixelY), lvChannel.Width - _
+            cmdShowHide.Width - Screen.TwipsPerPixelX, cboSend.Height '+ 2 * Screen.TwipsPerPixelY
         
         If rtbWhispersVisible Then
-            cmdShowHide.Move (((rtbWhispers.Left + rtbWhispers.Width) / Screen.TwipsPerPixelX) + 1) * Screen.TwipsPerPixelX, lvChannel.Top + lvChannel.Height + Screen.TwipsPerPixelY
+            cmdShowHide.Move (((rtbWhispers.Left + rtbWhispers.Width) / Screen.TwipsPerPixelX) + 1) * _
+                Screen.TwipsPerPixelX, lvChannel.Top + lvChannel.Height + Screen.TwipsPerPixelY
         Else
             cmdShowHide.Move ListviewTabs.Left + ListviewTabs.Width, lvChannel.Top + lvChannel.Height
         End If

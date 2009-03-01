@@ -50,7 +50,7 @@ End Function
 
 'Added by FrOzeN on 18th September, 2008.
 'Returns true if Vista, false if not.
-Public Function IsVista() As Boolean
+Public Function IsWindowsVista() As Boolean
     Static CachedResponseAvailable As Boolean
     Static CachedResponse As Boolean
         
@@ -66,5 +66,5 @@ Public Function IsVista() As Boolean
         End If
     End If
     
-    IsVista = CachedResponse
+    IsWindowsVista = CachedResponse
 End Function

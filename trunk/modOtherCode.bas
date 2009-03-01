@@ -3149,7 +3149,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     
         f = FreeFile
 
-        If (IsWin2000Plus()) Then
+        If (g_OSVersion.IsWin2000Plus()) Then
             Call GetScrollRange(rtb.hWnd, SB_VERT, 0, intRange)
             
             lngVerticalPos = SendMessage(rtb.hWnd, EM_GETTHUMB, 0&, 0&)
