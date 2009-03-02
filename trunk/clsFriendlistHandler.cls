@@ -38,7 +38,7 @@ Private Sub Class_Initialize()
     Set g_Friends = New Collection
 End Sub
 
-Public Sub RequestFriendsList(ByRef pBuff As PacketBuffer)
+Public Sub RequestFriendsList(ByRef pBuff As clsPacketBuffer)
     'ResetList
     pBuff.SendPacket &H65
 End Sub
@@ -258,15 +258,15 @@ Public Sub ResetList()
 End Sub
 
 Public Function UsernameToFLIndex(ByVal sUsername As String) As Integer
-    Dim i As Integer
+    Dim I As Integer
     
     If g_Friends.Count > 0 Then
-        For i = 1 To g_Friends.Count
-            If StrComp(sUsername, g_Friends.Item(i).DisplayName, vbTextCompare) = 0 Then
-                UsernameToFLIndex = i
+        For I = 1 To g_Friends.Count
+            If StrComp(sUsername, g_Friends.Item(I).DisplayName, vbTextCompare) = 0 Then
+                UsernameToFLIndex = I
                 Exit Function
             End If
-        Next i
+        Next I
     End If
 End Function
 
