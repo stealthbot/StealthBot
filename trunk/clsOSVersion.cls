@@ -157,6 +157,10 @@ End Property
 Public Property Get IsWindows7() As Boolean
 
     ' ...
+    If ((m_osVer.dwVerMajor = 6) And (m_osVer.dwVerMinor = 1)) Then
+        IsWindows7 = _
+            CBool(m_osVer.PlatformID = VER_NT_WORKSTATION)
+    End If
     
 End Property
 
