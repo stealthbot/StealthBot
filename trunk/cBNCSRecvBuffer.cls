@@ -6,7 +6,7 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "cBNCSRecvBuffer"
+Attribute VB_Name = "clsBNCSRecvBuffer"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
@@ -57,14 +57,14 @@ Public Function GetBuffer() As String
 End Function
 
 Public Function FullPacket() As Boolean
-    Dim lngPacketLen As Long, l As Long
+    Dim lngPacketLen As Long, L As Long
     
     FullPacket = False
     
     If Len(strData) > 0 Then
-        l = InStr(strData, Chr(&HFF))
+        L = InStr(strData, Chr(&HFF))
         
-        If l = 1 Then
+        If L = 1 Then
             lngPacketLen = StringToWord(Mid$(strData, 3, 2))
             
             If (lngPacketLen = 0) Then
@@ -89,15 +89,15 @@ Public Function FullPacket() As Boolean
                         "a valid packet!"
                 frmChat.AddChat RTBColors.ErrorMessageText, "The following data is being purged:"
                 
-                If l > 0 Then
-                    frmChat.AddChat Space$(1) & DebugOutput(Mid$(strData, 1, l - 1))
+                If L > 0 Then
+                    frmChat.AddChat Space$(1) & DebugOutput(Mid$(strData, 1, L - 1))
                 Else
                     frmChat.AddChat Space$(1) & DebugOutput(strData)
                 End If
             End If
             
-            If l > 0 Then
-                strData = Mid$(strData, l)
+            If L > 0 Then
+                strData = Mid$(strData, L)
             Else
                 strData = ""
             End If
@@ -152,7 +152,7 @@ Private Function ToHex(Data As String) As String
     Dim I As Integer
     
     For I = 1 To Len(Data)
-        ToHex = ToHex & Right("00" & Hex(Asc(Mid(Data, I, 1))), 2)
+        ToHex = ToHex & Right("00" & hex(Asc(Mid(Data, I, 1))), 2)
     Next I
 End Function
 
