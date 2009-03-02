@@ -82,7 +82,7 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
         SC.AddCode strContent
     Else
     
-        Dim strFilesToLoad() As String, i As Integer
+        Dim strFilesToLoad() As String, I As Integer
         ReDim strFilesToLoad(0)
         strFilesToLoad(0) = "script.txt"
     
@@ -108,10 +108,10 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
         Close #intFile
     
         '// Load script.txt and any includes
-        For i = 0 To UBound(strFilesToLoad)
+        For I = 0 To UBound(strFilesToLoad)
             strContent = ""
             intFile = FreeFile
-            Path = GetFilePath(strFilesToLoad(i))
+            Path = GetFilePath(strFilesToLoad(I))
             
             Open Path For Input As #intFile
     
@@ -120,7 +120,7 @@ Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
                     Line Input #intFile, strLine
                     
                     If Len(strLine) > 1 Then
-                        If i = 0 Then
+                        If I = 0 Then
                             If Left$(Trim(LCase(strLine)), 8) = "#include" Then strLine = ""
                         End If
                         strContent = strContent & strLine & vbCrLf
@@ -155,7 +155,7 @@ End Function
 
 
 Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
-    Dim i As Integer
+    Dim I As Integer
     Dim Message As String
 
     On Error GoTo ReInitScriptControl_Error
@@ -168,15 +168,15 @@ Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
         SC.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
 
         If g_Channel.Users.Count > 0 Then
-            For i = 1 To g_Channel.Users.Count
+            For I = 1 To g_Channel.Users.Count
                 Message = ""
 
-                With g_Channel.Users(i)
+                With g_Channel.Users(I)
                      'ParseStatstring .Statstring, Message, .Clan
 
                      SC.Run "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, .game, False
                  End With
-             Next i
+             Next I
          End If
     End If
 
@@ -255,6 +255,89 @@ Public Function GetPTLeft(ByVal strPrefix As String, ByVal strTimerName As Strin
     End If
 End Function
 
+Public Sub RunInAll(ParamArray Parameters() As Variant)
+
+    On Error GoTo ERROR_HANDLER
+
+    Dim SC    As ScriptControl
+    Dim I     As Integer ' ...
+    Dim arr() As Variant ' ...
+    
+    ' ...
+    Set SC = frmChat.SControl
+    
+    ' ...
+    arr() = Parameters()
+
+    ' ...
+    For I = 1 To SC.Modules.Count
+        CallByNameEx SC.Modules(I), "Run", VbMethod, arr()
+    Next
+
+    Exit Sub
+    
+ERROR_HANDLER:
+    ' object does not support property or method
+    If (Err.Number = 438) Then
+        Resume Next
+    End If
+
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+        " in RunInAll()."
+    
+    Exit Sub
+    
+End Sub
+
+Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCallType, Optional vArgsArray _
+    As Variant)
+    
+    On Error GoTo ERROR_HANDLER
+    
+    Dim oTLI    As TLI.TLIApplication
+    Dim ProcID  As Long
+    Dim numArgs As Long
+    Dim I       As Long
+    Dim v()     As Variant
+    
+    Set oTLI = New TLIApplication
+
+    ProcID = oTLI.InvokeID(obj, ProcName)
+
+    If (IsMissing(vArgsArray)) Then
+        CallByNameEx = oTLI.InvokeHook(obj, ProcID, CallType)
+    End If
+    
+    If (IsArray(vArgsArray)) Then
+        numArgs = UBound(vArgsArray)
+        
+        ReDim v(numArgs)
+        
+        For I = 0 To numArgs
+            v(I) = vArgsArray(numArgs - I)
+        Next I
+        
+        CallByNameEx = oTLI.InvokeHookArray(obj, ProcID, CallType, v)
+    End If
+    
+    Set oTLI = Nothing
+    
+    Exit Function
+
+ERROR_HANDLER:
+    ' ...
+    If (frmChat.SControl.Error) Then
+        Exit Function
+    End If
+
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+        " in CallByNameEx()."
+        
+    Set oTLI = Nothing
+        
+    Exit Function
+    
+End Function
 
 '// Written by Swent. Gets the time since a plugin timer sub was last executed.
 Public Function GetPTWaiting(ByVal strPrefix As String, ByVal strTimerName As String) As Integer

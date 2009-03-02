@@ -13,7 +13,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Dim UserEvent     As clsUserEventObj
     
     Dim UserIndex     As Integer  ' ...
-    Dim I             As Integer  ' ...
+    Dim i             As Integer  ' ...
     Dim PreviousFlags As Long     ' ...
     Dim Clan          As String
     Dim parsed        As String
@@ -208,7 +208,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         On Error Resume Next
         
         ' ...
-        frmChat.SControl.Run "Event_FlagUpdate", Username, Flags, Ping
+        RunInAll "Event_FlagUpdate", Username, Flags, Ping
     End If
     
     ' ...
@@ -285,7 +285,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     If (g_Channel.Name <> vbNullString) Then
         On Error Resume Next
         
-        frmChat.SControl.Run "Event_ChannelLeave"
+        RunInAll "Event_ChannelLeave"
     End If
 
     frmChat.AddChat RTBColors.JoinedChannelText, "-- Joined channel: ", _
@@ -347,7 +347,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     
     On Error Resume Next
     
-    frmChat.SControl.Run "Event_ChannelJoin", ChannelName, Flags
+    RunInAll "Event_ChannelJoin", ChannelName, Flags
     
     Exit Sub
 
@@ -366,7 +366,7 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
     Dim sT  As SYSTEMTIME
     Dim s() As String
     Dim U   As String
-    Dim I   As Integer
+    Dim i   As Integer
     
     'MsgBox PPL
 
@@ -376,7 +376,7 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
         ' // We're receiving profile information from a scripter request
         ' // No need to do anything at all with it except set Suppress = False after
         ' // the description comes in, and of course hadn it over to the scripters
-        frmChat.SControl.Run "Event_KeyReturn", KeyName, KeyValue
+        RunInAll "Event_KeyReturn", KeyName, KeyValue
         
         If KeyName = "Profile\Description" Then
             SuppressProfileOutput = False
@@ -398,7 +398,7 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
         
         frmWriteProfile.SetFocus
         
-        frmChat.SControl.Run "Event_KeyReturn", KeyName, KeyValue
+        RunInAll "Event_KeyReturn", KeyName, KeyValue
         
     ' Public Profile Listing
     ElseIf PPL = True Then
@@ -413,21 +413,21 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
         
         If KeyName = "Profile\Location" Then
 Repeat2:
-            I = InStr(1, KeyValue, Chr(13))
+            i = InStr(1, KeyValue, Chr(13))
             
             If Len(KeyValue) > 90 Then
-                If I <> 0 Then
-                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - I)
-                    KeyValue = Right(KeyValue, Len(KeyValue) - I)
+                If i <> 0 Then
+                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - i)
+                    KeyValue = Right(KeyValue, Len(KeyValue) - i)
                     
                     GoTo Repeat2
                 Else
                     frmChat.AddQ U & "[Location] " & KeyValue
                 End If
             Else
-                If I <> 0 Then
-                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - I)
-                    KeyValue = Right(KeyValue, Len(KeyValue) - I)
+                If i <> 0 Then
+                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - i)
+                    KeyValue = Right(KeyValue, Len(KeyValue) - i)
                     GoTo Repeat2
                 Else
                     frmChat.AddQ U & "[Location] " & KeyValue
@@ -441,17 +441,17 @@ Repeat2:
             X() = Split(KeyValue, Chr(13))
             ReDim s(0)
             
-            For I = LBound(X) To UBound(X)
-                s(0) = X(I)
+            For i = LBound(X) To UBound(X)
+                s(0) = X(i)
                 
                 If Len(s(0)) > 200 Then s(0) = Left$(s(0), 200)
                 
-                If I = LBound(X) Then
+                If i = LBound(X) Then
                     frmChat.AddQ U & "[Descr] " & s(0)
                 Else
                     frmChat.AddQ U & "[Descr] " & Right(s(0), Len(s(0)) - 1)
                 End If
-            Next I
+            Next i
             
             PPL = False
             
@@ -566,7 +566,7 @@ Repeat4:
             .SetFocus
         End With
         
-        frmChat.SControl.Run "Event_KeyReturn", KeyName, KeyValue
+        RunInAll "Event_KeyReturn", KeyName, KeyValue
         
     End If
 End Sub
@@ -652,7 +652,7 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
 
     On Error Resume Next
     
-    frmChat.SControl.Run "Event_LoggedOn", Username, Product
+    RunInAll "Event_LoggedOn", Username, Product
 End Sub
 
 ' updated 8-10-05 for new logging system
@@ -719,7 +719,7 @@ Public Sub Event_ServerError(ByVal Message As String)
     
     On Error Resume Next
     
-    frmChat.SControl.Run "Event_ServerError", Message
+    RunInAll "Event_ServerError", Message
 End Sub
 
 Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
@@ -734,7 +734,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Const MSG_KICKEDOUT   As String = " kicked you out of the channel!"
     Const MSG_FRIENDS     As String = "Your friends are:"
     
-    Dim I      As Integer
+    Dim i      As Integer
     Dim temp   As String
     Dim bHide  As Boolean
     Dim ToANSI As String
@@ -796,10 +796,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                     (InStr(1, Message, "game", vbTextCompare) = 0)) Then
                     
                 ' ...
-                I = InStrRev(Message, Space$(1))
+                i = InStrRev(Message, Space$(1))
                 
                 ' ...
-                BotVars.Gateway = Mid$(Message, I + 1)
+                BotVars.Gateway = Mid$(Message, i + 1)
                 
                 ' ...
                 SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
@@ -983,7 +983,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     
     On Error Resume Next
     
-    frmChat.SControl.Run "Event_ServerInfo", Message
+    RunInAll "Event_ServerInfo", Message
     
     Exit Sub
     
@@ -1009,7 +1009,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim UserEvent   As clsUserEventObj
     Dim UserObj     As clsUserObj
     
-    Dim I           As Integer ' ...
+    Dim i           As Integer ' ...
     Dim ToANSI      As String  ' ...
     Dim Pos         As Integer ' ...
     Dim PassedQueue As Boolean ' ...
@@ -1113,7 +1113,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal 
         End If
         
         ' ...
-        frmChat.SControl.Run "Event_UserEmote", Username, Flags, Message
+        RunInAll "Event_UserEmote", Username, Flags, Message
     End If
     
     Exit Sub
@@ -1136,7 +1136,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim found        As ListItem ' ...
     
     Dim UserIndex    As Integer ' ...
-    Dim I            As Integer ' ...
+    Dim i            As Integer ' ...
     Dim strCompare   As String  ' ...
     Dim Level        As Byte    ' ...
     Dim StatUpdate   As Boolean ' ...
@@ -1254,20 +1254,20 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 ' ...
                 If (BotVars.ShowStatsIcons) Then
                     ' ...
-                    I = g_Channel.GetUserIndex(Username)
+                    i = g_Channel.GetUserIndex(Username)
                     
                     ' ...
-                    If (I > 0) Then
+                    If (i > 0) Then
                         
                         ' ...
                         If (UserObj.Stats.IconCode <> -1) Then
                             ' ...
-                            If (g_Channel.Users(I).game = "WAR3") Then
+                            If (g_Channel.Users(i).game = "WAR3") Then
                                 ' ...
                                 If (found.SmallIcon = ICWAR3) Then
                                     found.SmallIcon = UserObj.Stats.IconCode
                                 End If
-                            ElseIf (g_Channel.Users(I).game = "W3XP") Then
+                            ElseIf (g_Channel.Users(i).game = "W3XP") Then
                                 ' ...
                                 If (found.SmallIcon = ICWAR3X) Then
                                     found.SmallIcon = UserObj.Stats.IconCode
@@ -1296,7 +1296,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         
         On Error Resume Next
         
-        frmChat.SControl.Run "Event_UserInChannel", Username, Flags, UserObj.Stats.ToString, Ping, _
+        RunInAll "Event_UserInChannel", Username, Flags, UserObj.Stats.ToString, Ping, _
             Product, StatUpdate
     End If
     
@@ -1326,7 +1326,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     
     Dim toCheck     As String
     Dim strCompare  As String
-    Dim I           As Long
+    Dim i           As Long
     Dim temp        As Byte
     Dim Level       As Byte
     Dim L           As Long
@@ -1510,7 +1510,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         
         'frmChat.AddChat vbRed, frmChat.SControl.Error.Number
         
-        frmChat.SControl.Run "Event_UserJoins", Username, Flags, UserObj.Stats.ToString, Ping, _
+        RunInAll "Event_UserJoins", Username, Flags, UserObj.Stats.ToString, Ping, _
             Product, 0, originalstatstring, isbanned
     End If
     
@@ -1528,7 +1528,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     Dim UserObj   As clsUserObj
     
     Dim UserIndex As Integer
-    Dim I         As Integer
+    Dim i         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
     Dim Pos       As Integer
@@ -1607,7 +1607,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
         
         On Error Resume Next
         
-        frmChat.SControl.Run "Event_UserLeaves", Username, Flags
+        RunInAll "Event_UserLeaves", Username, Flags
     End If
     
     Exit Sub
@@ -1630,7 +1630,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
     Dim s             As String
     Dim U             As String
     Dim strCompare    As String
-    Dim I             As Integer
+    Dim i             As Integer
     Dim ColIndex      As Integer
     Dim B             As Boolean
     Dim ToANSI        As String
@@ -1818,7 +1818,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
         End If
     
         ' ...
-        frmChat.SControl.Run "Event_UserTalk", Username, Flags, Message, Ping
+        RunInAll "Event_UserTalk", Username, Flags, Message, Ping
     End If
     
     ' ...
@@ -1833,17 +1833,17 @@ End Sub
 Private Function CheckMessage(Username As String, Message As String) As Boolean
     
     Dim BanningUser As Boolean ' ...
-    Dim I           As Integer ' ...
+    Dim i           As Integer ' ...
     
     ' ...
     If (PhraseBans) Then
         ' ...
-        For I = LBound(Phrases) To UBound(Phrases)
+        For i = LBound(Phrases) To UBound(Phrases)
             ' ...
-            If ((Phrases(I) <> vbNullString) And (Phrases(I) <> Space$(1))) Then
+            If ((Phrases(i) <> vbNullString) And (Phrases(i) <> Space$(1))) Then
                 ' ...
-                If ((InStr(1, Message, Phrases(I), vbTextCompare)) <> 0) Then
-                    Ban Username & " Banned phrase: " & Phrases(I), _
+                If ((InStr(1, Message, Phrases(i), vbTextCompare)) <> 0) Then
+                    Ban Username & " Banned phrase: " & Phrases(i), _
                             (AutoModSafelistValue - 1)
                     
                     BanningUser = True
@@ -1851,7 +1851,7 @@ Private Function CheckMessage(Username As String, Message As String) As Boolean
                     Exit For
                 End If
             End If
-        Next I
+        Next i
     End If
     
     ' ...
@@ -1894,7 +1894,7 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
         
         Case 1:
             frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Version check failed! " & _
-                "The version byte for this attempt was 0x" & Hex(GetVerByte(BotVars.Product)) & "."
+                "The version byte for this attempt was 0x" & hex(GetVerByte(BotVars.Product)) & "."
 
             If (BotVars.BNLS) Then
                 'Check the user has using BNLS server finder enabled
@@ -2144,7 +2144,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         g_lastQueueUser = Username
         
         ' ...
-        frmChat.SControl.Run "Event_WhisperFromUser", Username, Flags, Message, Ping
+        RunInAll "Event_WhisperFromUser", Username, Flags, Message, Ping
     End If
     
     LastWhisperTime = GetTickCount
@@ -2274,7 +2274,7 @@ Public Sub Event_ChannelList(sChannels() As String)
     
     On Error Resume Next
     
-    frmChat.SControl.Run "Event_ChannelList", sChannels
+    RunInAll "Event_ChannelList", sChannels
 End Sub
 
 Public Function CleanUsername(ByVal Username As String) As String

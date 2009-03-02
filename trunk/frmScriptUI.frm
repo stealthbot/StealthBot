@@ -24,6 +24,7 @@ Begin VB.Form frmScriptUI
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
+      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScriptUI.frx":0000
    End
@@ -362,770 +363,770 @@ Private Sub Form_Load()
     
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "Load")
+    RunInAll GetCallBack(vbNullString, 0, "Load")
 End Sub
 
 Private Sub Form_Activate()
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "Activate")
+    RunInAll GetCallBack(vbNullString, 0, "Activate")
 End Sub
 
 Private Sub Form_Click()
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "Click")
+    RunInAll GetCallBack(vbNullString, 0, "Click")
 End Sub
 
 Private Sub Form_DblClick()
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "DblClick")
+    RunInAll GetCallBack(vbNullString, 0, "DblClick")
 End Sub
 
 Private Sub Form_Deactivate()
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "Deactivate")
+    RunInAll GetCallBack(vbNullString, 0, "Deactivate")
 End Sub
 
 Private Sub Form_GotFocus()
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "GotFocus")
+    RunInAll GetCallBack(vbNullString, 0, "GotFocus")
 End Sub
 
 Private Sub Form_Initialize()
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "Initialize")
+    RunInAll GetCallBack(vbNullString, 0, "Initialize")
 End Sub
 
 Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "KeyDown"), KeyCode, Shift
+    RunInAll GetCallBack(vbNullString, 0, "KeyDown"), KeyCode, Shift
 End Sub
 
 Private Sub Form_KeyPress(KeyAscii As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "KeyPress"), KeyAscii
+    RunInAll GetCallBack(vbNullString, 0, "KeyPress"), KeyAscii
 End Sub
 
 Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "KeyUp"), KeyCode, Shift
+    RunInAll GetCallBack(vbNullString, 0, "KeyUp"), KeyCode, Shift
 End Sub
 
 Private Sub Form_LostFocus()
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "LostFocus")
+    RunInAll GetCallBack(vbNullString, 0, "LostFocus")
 End Sub
 
 Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "MouseDown"), Button, Shift, X, Y
+    RunInAll GetCallBack(vbNullString, 0, "MouseDown"), Button, Shift, X, Y
 End Sub
 
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "MoveMouse"), Button, Shift, X, Y
+    RunInAll GetCallBack(vbNullString, 0, "MoveMouse"), Button, Shift, X, Y
 End Sub
 
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "MouseUp"), Button, Shift, X, Y
+    RunInAll GetCallBack(vbNullString, 0, "MouseUp"), Button, Shift, X, Y
 End Sub
 
 Private Sub Form_Paint()
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "Paint")
+    RunInAll GetCallBack(vbNullString, 0, "Paint")
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "QueryUnload"), Cancel, UnloadMode
+    RunInAll GetCallBack(vbNullString, 0, "QueryUnload"), Cancel, UnloadMode
 End Sub
 
 Private Sub Form_Resize()
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "Resize")
+    RunInAll GetCallBack(vbNullString, 0, "Resize")
 End Sub
 
 Private Sub Form_Terminate()
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "Terminate")
+    RunInAll GetCallBack(vbNullString, 0, "Terminate")
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
     On Error Resume Next
 
-    frmChat.SControl.Run GetCallBack(vbNullString, 0, "Unload"), Cancel
+    RunInAll GetCallBack(vbNullString, 0, "Unload"), Cancel
     frmChat.SControl.ExecuteStatement "Call DestroyForm(" & Chr(&H22) & strPrefix & Chr(&H22) & ", " & Chr(&H22) & strFormName & Chr(&H22) & ")"
 End Sub
 
 Private Sub cmd_LostFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmd", Index, "LostFocus")
+    RunInAll GetCallBack("cmd", Index, "LostFocus")
 End Sub
 
 Private Sub cmd_GotFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmd", Index, "GotFocus")
+    RunInAll GetCallBack("cmd", Index, "GotFocus")
 End Sub
 
 Private Sub cmd_KeyPress(Index As Integer, KeyAscii As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmd", Index, "KeyPress"), KeyAscii
+    RunInAll GetCallBack("cmd", Index, "KeyPress"), KeyAscii
 End Sub
 
 Private Sub cmd_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmd", Index, "KeyUp"), KeyCode, Shift
+    RunInAll GetCallBack("cmd", Index, "KeyUp"), KeyCode, Shift
 End Sub
 
 Private Sub cmd_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmd", Index, "MouseDown"), Button, Shift, X, Y
+    RunInAll GetCallBack("cmd", Index, "MouseDown"), Button, Shift, X, Y
 End Sub
 
 Private Sub cmd_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmd", Index, "MouseMove"), Button, Shift, X, Y
+    RunInAll GetCallBack("cmd", Index, "MouseMove"), Button, Shift, X, Y
 End Sub
 
 Private Sub cmd_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmd", Index, "MouseUp"), Button, Shift, X, Y
+    RunInAll GetCallBack("cmd", Index, "MouseUp"), Button, Shift, X, Y
 End Sub
 
 Private Sub cmd_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmd", Index, "KeyDown"), KeyCode, Shift
+    RunInAll GetCallBack("cmd", Index, "KeyDown"), KeyCode, Shift
 End Sub
 
 Private Sub cmd_Click(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmd", Index, "Click")
+    RunInAll GetCallBack("cmd", Index, "Click")
 End Sub
 
 Private Sub ine_StateChanged(Index As Integer, ByVal State As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("ine", Index, "StateChanged"), State
+    RunInAll GetCallBack("ine", Index, "StateChanged"), State
 End Sub
 
 Private Sub lbl_Change(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lbl", Index, "Change")
+    RunInAll GetCallBack("lbl", Index, "Change")
 End Sub
 
 Private Sub lbl_Click(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lbl", Index, "Click")
+    RunInAll GetCallBack("lbl", Index, "Click")
 End Sub
 
 Private Sub lbl_DblClick(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lbl", Index, "DblClick")
+    RunInAll GetCallBack("lbl", Index, "DblClick")
 End Sub
 
 Private Sub lbl_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lbl", Index, "MouseDown"), Button, Shift, X, Y
+    RunInAll GetCallBack("lbl", Index, "MouseDown"), Button, Shift, X, Y
 End Sub
 
 Private Sub lbl_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lbl", Index, "MouseMove"), Button, Shift, X, Y
+    RunInAll GetCallBack("lbl", Index, "MouseMove"), Button, Shift, X, Y
 End Sub
 
 Private Sub lbl_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lbl", Index, "MouseUp"), Button, Shift, X, Y
+    RunInAll GetCallBack("lbl", Index, "MouseUp"), Button, Shift, X, Y
 End Sub
 
 Private Sub lst_Click(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lst", Index, "Click")
+    RunInAll GetCallBack("lst", Index, "Click")
 End Sub
 
 Private Sub lst_DblClick(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lst", Index, "DblClick")
+    RunInAll GetCallBack("lst", Index, "DblClick")
 End Sub
 
 Private Sub lst_GotFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lst", Index, "GotFocus")
+    RunInAll GetCallBack("lst", Index, "GotFocus")
 End Sub
 
 Private Sub lst_ItemCheck(Index As Integer, Item As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lst", Index, "ItemClick"), Item
+    RunInAll GetCallBack("lst", Index, "ItemClick"), Item
 End Sub
 
 Private Sub lst_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lst", Index, "KeyDown"), KeyCode, Shift
+    RunInAll GetCallBack("lst", Index, "KeyDown"), KeyCode, Shift
 End Sub
 
 Private Sub lst_KeyPress(Index As Integer, KeyAscii As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lst", Index, "KeyPress"), KeyAscii
+    RunInAll GetCallBack("lst", Index, "KeyPress"), KeyAscii
 End Sub
 
 Private Sub lst_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lst", Index, "KeyUp"), KeyCode, Shift
+    RunInAll GetCallBack("lst", Index, "KeyUp"), KeyCode, Shift
 End Sub
 
 Private Sub lst_LostFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lst", Index, "LostFocus")
+    RunInAll GetCallBack("lst", Index, "LostFocus")
 End Sub
 
 Private Sub lst_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lst", Index, "MouseDown"), Button, Shift, X, Y
+    RunInAll GetCallBack("lst", Index, "MouseDown"), Button, Shift, X, Y
 End Sub
 
 Private Sub lst_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lst", Index, "MouseMove"), Button, Shift, X, Y
+    RunInAll GetCallBack("lst", Index, "MouseMove"), Button, Shift, X, Y
 End Sub
 
 Private Sub lst_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lst", Index, "MouseUp"), Button, Shift, X, Y
+    RunInAll GetCallBack("lst", Index, "MouseUp"), Button, Shift, X, Y
 End Sub
 
 Private Sub lst_Scroll(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lst", Index, "Scroll")
+    RunInAll GetCallBack("lst", Index, "Scroll")
 End Sub
 
 Private Sub lsv_AfterLabelEdit(Index As Integer, Cancel As Integer, NewString As String)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lsv", Index, "AfterLabelEdit"), Cancel, NewString
+    RunInAll GetCallBack("lsv", Index, "AfterLabelEdit"), Cancel, NewString
 End Sub
 
 Private Sub lsv_BeforeLabelEdit(Index As Integer, Cancel As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lsv", Index, "BeforeLabelEdit"), Cancel
+    RunInAll GetCallBack("lsv", Index, "BeforeLabelEdit"), Cancel
 End Sub
 
 Private Sub lsv_Click(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lsv", Index, "Click")
+    RunInAll GetCallBack("lsv", Index, "Click")
 End Sub
 
 Private Sub lsv_DblClick(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lsv", Index, "DblClick")
+    RunInAll GetCallBack("lsv", Index, "DblClick")
 End Sub
 
 Private Sub lsv_GotFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lsv", Index, "GotFocus")
+    RunInAll GetCallBack("lsv", Index, "GotFocus")
 End Sub
 
 Private Sub lsv_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lsv", Index, "KeyDown"), KeyCode, Shift
+    RunInAll GetCallBack("lsv", Index, "KeyDown"), KeyCode, Shift
 End Sub
 
 Private Sub lsv_KeyPress(Index As Integer, KeyAscii As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lsv", Index, "KeyPress")
+    RunInAll GetCallBack("lsv", Index, "KeyPress")
 End Sub
 
 Private Sub lsv_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lsv", Index, "KeyUp"), KeyCode, Shift
+    RunInAll GetCallBack("lsv", Index, "KeyUp"), KeyCode, Shift
 End Sub
 
 Private Sub lsv_LostFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lsv", Index, "LostFocus")
+    RunInAll GetCallBack("lsv", Index, "LostFocus")
 End Sub
 
 Private Sub lsv_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lsv", Index, "MouseDown"), Button, Shift, X, Y
+    RunInAll GetCallBack("lsv", Index, "MouseDown"), Button, Shift, X, Y
 End Sub
 
 Private Sub lsv_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lsv", Index, "MouseMove"), Button, Shift, X, Y
+    RunInAll GetCallBack("lsv", Index, "MouseMove"), Button, Shift, X, Y
 End Sub
 
 Private Sub lsv_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("lsv", Index, "MouseUp"), Button, Shift, X, Y
+    RunInAll GetCallBack("lsv", Index, "MouseUp"), Button, Shift, X, Y
 End Sub
 
 Private Sub opt_Click(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("opt", Index, "Click")
+    RunInAll GetCallBack("opt", Index, "Click")
 End Sub
 
 Private Sub opt_DblClick(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("opt", Index, "DblClick")
+    RunInAll GetCallBack("opt", Index, "DblClick")
 End Sub
 
 Private Sub opt_GotFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("opt", Index, "GotFocus")
+    RunInAll GetCallBack("opt", Index, "GotFocus")
 End Sub
 
 Private Sub opt_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("opt", Index, "KeyDown"), KeyCode, Shift
+    RunInAll GetCallBack("opt", Index, "KeyDown"), KeyCode, Shift
 End Sub
 
 Private Sub opt_KeyPress(Index As Integer, KeyAscii As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("opt", Index, "KeyPress"), KeyAscii
+    RunInAll GetCallBack("opt", Index, "KeyPress"), KeyAscii
 End Sub
 
 Private Sub opt_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("opt", Index, "KeyUp"), KeyCode, Shift
+    RunInAll GetCallBack("opt", Index, "KeyUp"), KeyCode, Shift
 End Sub
 
 Private Sub opt_LostFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("opt", Index, "LostFocus")
+    RunInAll GetCallBack("opt", Index, "LostFocus")
 End Sub
 
 Private Sub opt_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("opt", Index, "MouseDown"), Button, Shift, X, Y
+    RunInAll GetCallBack("opt", Index, "MouseDown"), Button, Shift, X, Y
 End Sub
 
 Private Sub opt_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("opt", Index, "MouseMove"), Button, Shift, X, Y
+    RunInAll GetCallBack("opt", Index, "MouseMove"), Button, Shift, X, Y
 End Sub
 
 Private Sub opt_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("opt", Index, "MouseUp"), Button, Shift, X, Y
+    RunInAll GetCallBack("opt", Index, "MouseUp"), Button, Shift, X, Y
 End Sub
 
 Private Sub pic_Change(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "Change")
+    RunInAll GetCallBack("pic", Index, "Change")
 End Sub
 
 Private Sub pic_Click(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "Click")
+    RunInAll GetCallBack("pic", Index, "Click")
 End Sub
 
 Private Sub pic_DblClick(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "DblClick")
+    RunInAll GetCallBack("pic", Index, "DblClick")
 End Sub
 
 Private Sub pic_GotFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "GotFocus")
+    RunInAll GetCallBack("pic", Index, "GotFocus")
 End Sub
 
 Private Sub pic_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "KeyDown"), KeyCode, Shift
+    RunInAll GetCallBack("pic", Index, "KeyDown"), KeyCode, Shift
 End Sub
 
 Private Sub pic_KeyPress(Index As Integer, KeyAscii As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "KeyPress"), KeyAscii
+    RunInAll GetCallBack("pic", Index, "KeyPress"), KeyAscii
 End Sub
 
 Private Sub pic_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "KeyUp"), KeyCode, Shift
+    RunInAll GetCallBack("pic", Index, "KeyUp"), KeyCode, Shift
 End Sub
 
 Private Sub pic_LinkClose(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "LinkClose")
+    RunInAll GetCallBack("pic", Index, "LinkClose")
 End Sub
 
 Private Sub pic_LinkError(Index As Integer, LinkErr As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "LinkError"), LinkErr
+    RunInAll GetCallBack("pic", Index, "LinkError"), LinkErr
 End Sub
 
 Private Sub pic_LinkNotify(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "LinkNotify")
+    RunInAll GetCallBack("pic", Index, "LinkNotify")
 End Sub
 
 Private Sub pic_LinkOpen(Index As Integer, Cancel As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "LinkOpen"), Cancel
+    RunInAll GetCallBack("pic", Index, "LinkOpen"), Cancel
 End Sub
 
 Private Sub pic_LostFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "LostFocus")
+    RunInAll GetCallBack("pic", Index, "LostFocus")
 End Sub
 
 Private Sub pic_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "MouseDown"), Button, Shift, X, Y
+    RunInAll GetCallBack("pic", Index, "MouseDown"), Button, Shift, X, Y
 End Sub
 
 Private Sub pic_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "MouseMove"), Button, Shift, X, Y
+    RunInAll GetCallBack("pic", Index, "MouseMove"), Button, Shift, X, Y
 End Sub
 
 Private Sub pic_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "MouseUp"), Button, Shift, X, Y
+    RunInAll GetCallBack("pic", Index, "MouseUp"), Button, Shift, X, Y
 End Sub
 
 Private Sub pic_Paint(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "Paint")
+    RunInAll GetCallBack("pic", Index, "Paint")
 End Sub
 
 Private Sub pic_Resize(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("pic", Index, "Resize")
+    RunInAll GetCallBack("pic", Index, "Resize")
 End Sub
 
 Private Sub rtb_Change(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("rtb", Index, "Change")
+    RunInAll GetCallBack("rtb", Index, "Change")
 End Sub
 
 Private Sub rtb_Click(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("rtb", Index, "Click")
+    RunInAll GetCallBack("rtb", Index, "Click")
 End Sub
 
 Private Sub rtb_DblClick(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("rtb", Index, "DblClick")
+    RunInAll GetCallBack("rtb", Index, "DblClick")
 End Sub
 
 Private Sub rtb_GotFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("rtb", Index, "GotFocus")
+    RunInAll GetCallBack("rtb", Index, "GotFocus")
 End Sub
 
 Private Sub rtb_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("rtb", Index, "KeyDown"), KeyCode, Shift
+    RunInAll GetCallBack("rtb", Index, "KeyDown"), KeyCode, Shift
 End Sub
 
 Private Sub rtb_KeyPress(Index As Integer, KeyAscii As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("rtb", Index, "KeyPress"), KeyAscii
+    RunInAll GetCallBack("rtb", Index, "KeyPress"), KeyAscii
 End Sub
 
 Private Sub rtb_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("rtb", Index, "KeyUp"), KeyCode, Shift
+    RunInAll GetCallBack("rtb", Index, "KeyUp"), KeyCode, Shift
 End Sub
 
 Private Sub rtb_LostFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("rtb", Index, "LostFocus")
+    RunInAll GetCallBack("rtb", Index, "LostFocus")
 End Sub
 
 Private Sub rtb_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("rtb", Index, "MouseDown"), Button, Shift, X, Y
+    RunInAll GetCallBack("rtb", Index, "MouseDown"), Button, Shift, X, Y
 End Sub
 
 Private Sub rtb_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("rtb", Index, "MouseMove"), Button, Shift, X, Y
+    RunInAll GetCallBack("rtb", Index, "MouseMove"), Button, Shift, X, Y
 End Sub
 
 Private Sub rtb_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("rtb", Index, "MouseUp"), Button, Shift, X, Y
+    RunInAll GetCallBack("rtb", Index, "MouseUp"), Button, Shift, X, Y
 End Sub
 
 Private Sub rtb_SelChange(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("rtb", Index, "SelChange")
+    RunInAll GetCallBack("rtb", Index, "SelChange")
 End Sub
 
 Private Sub tmr_Timer(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("tmr", Index, "Timer")
+    RunInAll GetCallBack("tmr", Index, "Timer")
 End Sub
 
 Private Sub txt_Change(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("txt", Index, "Change")
+    RunInAll GetCallBack("txt", Index, "Change")
 End Sub
 
 Private Sub txt_Click(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("txt", Index, "Click")
+    RunInAll GetCallBack("txt", Index, "Click")
 End Sub
 
 Private Sub txt_DblClick(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("txt", Index, "DblClick")
+    RunInAll GetCallBack("txt", Index, "DblClick")
 End Sub
 
 Private Sub txt_LostFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("txt", Index, "LostFocus")
+    RunInAll GetCallBack("txt", Index, "LostFocus")
 End Sub
 
 Private Sub txt_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("txt", Index, "MouseDown"), Button, Shift, X, Y
+    RunInAll GetCallBack("txt", Index, "MouseDown"), Button, Shift, X, Y
 End Sub
 
 Private Sub txt_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("txt", Index, "MouseMove"), Button, Shift, X, Y
+    RunInAll GetCallBack("txt", Index, "MouseMove"), Button, Shift, X, Y
 End Sub
 
 Private Sub txt_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("txt", Index, "MouseUp"), Button, Shift, X, Y
+    RunInAll GetCallBack("txt", Index, "MouseUp"), Button, Shift, X, Y
 End Sub
 
 Private Sub txt_GotFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("txt", Index, "GotFocus")
+    RunInAll GetCallBack("txt", Index, "GotFocus")
 End Sub
 
 Private Sub txt_KeyPress(Index As Integer, KeyAscii As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("txt", Index, "KeyPress"), KeyAscii
+    RunInAll GetCallBack("txt", Index, "KeyPress"), KeyAscii
 End Sub
 
 Private Sub txt_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("txt", Index, "KeyUp"), KeyCode, Shift
+    RunInAll GetCallBack("txt", Index, "KeyUp"), KeyCode, Shift
 End Sub
 
 Private Sub txt_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("txt", Index, "KeyDown"), KeyCode, Shift
+    RunInAll GetCallBack("txt", Index, "KeyDown"), KeyCode, Shift
 End Sub
 
 Private Sub chk_Click(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("chk", Index, "Click")
+    RunInAll GetCallBack("chk", Index, "Click")
 End Sub
 
 Private Sub chk_GotFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("chk", Index, "GotFocus")
+    RunInAll GetCallBack("chk", Index, "GotFocus")
 End Sub
 
 Private Sub chk_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("chk", Index, "KeyDown"), KeyCode, Shift
+    RunInAll GetCallBack("chk", Index, "KeyDown"), KeyCode, Shift
 End Sub
 
 Private Sub chk_KeyPress(Index As Integer, KeyAscii As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("chk", Index, "KeyPress"), KeyAscii
+    RunInAll GetCallBack("chk", Index, "KeyPress"), KeyAscii
 End Sub
 
 Private Sub chk_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("chk", Index, "KeyUp"), KeyCode, Shift
+    RunInAll GetCallBack("chk", Index, "KeyUp"), KeyCode, Shift
 End Sub
 
 Private Sub chk_LostFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("chk", Index, "LostFocus")
+    RunInAll GetCallBack("chk", Index, "LostFocus")
 End Sub
 
 Private Sub chk_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("chk", Index, "MouseDown"), Button, Shift, X, Y
+    RunInAll GetCallBack("chk", Index, "MouseDown"), Button, Shift, X, Y
 End Sub
 
 Private Sub chk_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("chk", Index, "MouseMove"), Button, Shift, X, Y
+    RunInAll GetCallBack("chk", Index, "MouseMove"), Button, Shift, X, Y
 End Sub
 
 Private Sub chk_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("chk", Index, "MouseUp"), Button, Shift, X, Y
+    RunInAll GetCallBack("chk", Index, "MouseUp"), Button, Shift, X, Y
 End Sub
 
 Private Sub cmb_Change(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmb", Index, "Change")
+    RunInAll GetCallBack("cmb", Index, "Change")
 End Sub
 
 Private Sub cmb_Click(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmb", Index, "Click")
+    RunInAll GetCallBack("cmb", Index, "Click")
 End Sub
 
 Private Sub cmb_DblClick(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmb", Index, "DblClick")
+    RunInAll GetCallBack("cmb", Index, "DblClick")
 End Sub
 
 Private Sub cmb_GotFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmb", Index, "GotFocus")
+    RunInAll GetCallBack("cmb", Index, "GotFocus")
 End Sub
 
 Private Sub cmb_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmb", Index, "KeyDown"), KeyCode, Shift
+    RunInAll GetCallBack("cmb", Index, "KeyDown"), KeyCode, Shift
 End Sub
 
 Private Sub cmb_KeyPress(Index As Integer, KeyAscii As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmb", Index, "KeyPress"), KeyAscii
+    RunInAll GetCallBack("cmb", Index, "KeyPress"), KeyAscii
 End Sub
 
 Private Sub cmb_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmb", Index, "KeyUp"), KeyCode, Shift
+    RunInAll GetCallBack("cmb", Index, "KeyUp"), KeyCode, Shift
 End Sub
 
 Private Sub cmb_LostFocus(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmb", Index, "LostFocus")
+    RunInAll GetCallBack("cmb", Index, "LostFocus")
 End Sub
 
 Private Sub cmb_Scroll(Index As Integer)
     On Error Resume Next
     
-    frmChat.SControl.Run GetCallBack("cmb", Index, "Scroll")
+    RunInAll GetCallBack("cmb", Index, "Scroll")
 End Sub
 
 Public Sub AddChat(ParamArray saElements() As Variant)

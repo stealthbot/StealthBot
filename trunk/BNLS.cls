@@ -21,12 +21,12 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Public Sub ServToken(ByRef S As String, ByVal Setting As Byte)
+Public Sub ServToken(ByRef s As String, ByVal Setting As Byte)
     Static Token As String
     
     Select Case Setting
-        Case 0: S = Token
-        Case 1: Token = S
+        Case 0: s = Token
+        Case 1: Token = s
     End Select
 End Sub
 
@@ -180,9 +180,9 @@ Public Sub Send_0x1A(ByVal ProductID As Long, ByVal Flags As Long, ByVal cookie 
     Packet.vLSendPacket &H1A
 End Sub
 
-Public Sub SendGenPacket(ByVal S As String, ByVal PacketID As Byte) 'Send back packets that consist
+Public Sub SendGenPacket(ByVal s As String, ByVal PacketID As Byte) 'Send back packets that consist
                                                                     'entirely of data from BNLS.
-    Packet.InsertNonNTString S
+    Packet.InsertNonNTString s
     Packet.SendPacket PacketID
     
 End Sub
@@ -206,7 +206,7 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     
     If (MDebug("all")) Then
         frmChat.AddChat COLOR_BLUE, "BNLS RECV 0x" & _
-            Right$("00" & Hex(PacketID), 2)
+            Right$("00" & hex(PacketID), 2)
     End If
     
     CachePacket StoC, stBNLS, PacketID, Len(Data), Data
@@ -439,7 +439,7 @@ Sub CloseConnection(Optional ByVal DoNotShow As Byte = 0)
     
     On Error Resume Next
     
-    frmChat.SControl.Run "Event_ServerError", "All connections closed."
+    RunInAll "Event_ServerError", "All connections closed."
 End Sub
 
 Private Sub Send_BNLS0x51()

@@ -49,7 +49,7 @@ Public Function Push(ByRef obj As clsQueueOBj)
     On Error GoTo ERROR_HANDLER
     
     Dim Index As Integer ' ...
-    Dim I     As Integer ' ...
+    Dim i     As Integer ' ...
     
     ' ...
     Index = m_objCount
@@ -57,16 +57,16 @@ Public Function Push(ByRef obj As clsQueueOBj)
     ' ...
     If (m_objCount) Then
         ' ...
-        For I = 0 To m_objCount - 1
+        For i = 0 To m_objCount - 1
             ' ...
-            If (obj.PRIORITY < m_QueueObjs(I).PRIORITY) Then
+            If (obj.PRIORITY < m_QueueObjs(i).PRIORITY) Then
                 ' ...
-                Index = I
+                Index = i
                 
                 ' ...
                 Exit For
             End If
-        Next I
+        Next i
     
         ' ...
         ReDim Preserve m_QueueObjs(0 To m_objCount)
@@ -74,9 +74,9 @@ Public Function Push(ByRef obj As clsQueueOBj)
 
     ' ...
     If (Index < m_objCount) Then
-        For I = m_objCount To Index + 1 Step -1
-            Set m_QueueObjs(I) = m_QueueObjs(I - 1)
-        Next I
+        For i = m_objCount To Index + 1 Step -1
+            Set m_QueueObjs(i) = m_QueueObjs(i - 1)
+        Next i
     End If
     
     ' ...
@@ -91,7 +91,7 @@ Public Function Push(ByRef obj As clsQueueOBj)
     On Error Resume Next
     
     ' ...
-    frmChat.SControl.Run "Event_MessageQueued", m_lastObjID, obj.Message, obj.Tag
+    RunInAll "Event_MessageQueued", m_lastObjID, obj.Message, obj.Tag
     
     ' ...
     m_objCount = (m_objCount + 1)
@@ -113,7 +113,7 @@ Public Function Pop() As clsQueueOBj
 
     On Error GoTo ERROR_HANDLER
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     ' ...
     Set Pop = m_QueueObjs(0)
@@ -158,15 +158,15 @@ Public Function Item(ByVal Index As Integer) As Object
 End Function ' end function Item
 
 ' ...
-Public Function ItemByID(ByVal I As Integer) As Object
+Public Function ItemByID(ByVal i As Integer) As Object
 
     ' ...
     Dim j As Integer ' ...
     
     ' ...
     For j = 0 To (m_objCount - 1)
-        If (m_QueueObjs(I).id = I) Then
-            Set ItemByID = m_QueueObjs(I)
+        If (m_QueueObjs(i).id = i) Then
+            Set ItemByID = m_QueueObjs(i)
         
             Exit Function
         End If
@@ -187,25 +187,25 @@ End Property
 Public Function RemoveLines(ByVal match As String) As Integer
 
     Dim curQueueObj As clsQueueOBj ' ...
-    Dim I           As Integer     ' ...
+    Dim i           As Integer     ' ...
     Dim found       As Integer     ' ...
     
     ' ...
     Do
         ' ...
-        Set curQueueObj = m_QueueObjs(I)
+        Set curQueueObj = m_QueueObjs(i)
 
         ' ...
         If (PrepareCheck(curQueueObj.Message) Like PrepareCheck(match)) Then
-            RemoveItem I
+            RemoveItem i
             
             found = (found + 1)
             
-            I = 0
+            i = 0
         Else
-            I = (I + 1)
+            i = (i + 1)
         End If
-    Loop While (I < Count())
+    Loop While (i < Count())
     
     RemoveLines = found
 
@@ -436,7 +436,7 @@ End Function
 ' ...
 Public Sub RemoveItem(ByVal Index As Integer)
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     ' ...
     If ((Index < 0) Or (Index + 1 > m_objCount)) Then
@@ -446,9 +446,9 @@ Public Sub RemoveItem(ByVal Index As Integer)
     ' ...
     If (m_objCount) Then
         ' ...
-        For I = Index To ((m_objCount - 1) - 1)
-            Set m_QueueObjs(I) = m_QueueObjs(I + 1)
-        Next I
+        For i = Index To ((m_objCount - 1) - 1)
+            Set m_QueueObjs(i) = m_QueueObjs(i + 1)
+        Next i
         
         ' ...
         ReDim Preserve m_QueueObjs(0 To m_objCount - 1)
@@ -462,13 +462,13 @@ Public Sub RemoveItem(ByVal Index As Integer)
 End Sub ' end function RemoveItem
 
 ' ...
-Public Sub RemoveItemByID(ByVal I As Integer)
+Public Sub RemoveItemByID(ByVal i As Integer)
 
     Dim j As Integer ' ...
     
     ' ...
     For j = 0 To (m_objCount - 1)
-        If (m_QueueObjs(I).id = I) Then
+        If (m_QueueObjs(i).id = i) Then
             RemoveItem j
             
             Exit Sub
@@ -480,12 +480,12 @@ End Sub
 ' ...
 Public Sub Clear()
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     ' ...
-    For I = 0 To m_objCount - 1
-        Set m_QueueObjs(I) = Nothing
-    Next I
+    For i = 0 To m_objCount - 1
+        Set m_QueueObjs(i) = Nothing
+    Next i
 
     ' ...
     ReDim m_QueueObjs(0) As clsQueueOBj
