@@ -6,14 +6,14 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "PacketBuffer"
+Attribute VB_Name = "clsPacketBuffer"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Attribute VB_Ext_KEY = "SavedWithClassBuilder6" ,"Yes"
 Attribute VB_Ext_KEY = "Top_Level" ,"Yes"
-' PacketBuffer.cls
+' clsPacketBuffer.cls
 ' Copyright (C) 2008 Eric Evans
 ' ...
 
@@ -176,7 +176,7 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     ' ...
     If (MDebug("all")) Then
         frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & _
-            Right$("00" & Hex(PacketID), 2)
+            Right$("00" & hex(PacketID), 2)
     End If
     
     ' resize temporary data buffer
@@ -247,7 +247,7 @@ Public Function SendPacket(Optional PacketID As Byte)
     ' ...
     If (MDebug("all")) Then
         frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & Right$("00" & _
-            Hex(PacketID), 2)
+            hex(PacketID), 2)
     End If
     
     ' resize temporary data buffer
@@ -323,7 +323,7 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     ' ...
     If (MDebug("all")) Then
         frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & _
-            Right$("00" & Hex(PacketID), 2)
+            Right$("00" & hex(PacketID), 2)
     End If
     
     ' resize temporary data buffer

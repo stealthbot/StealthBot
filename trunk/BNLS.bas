@@ -7,7 +7,7 @@ Option Explicit
 'Public Classes
 Public Packet As New PacketBuffer
 Public NLogin As New cBNLS
-Public ds     As New DataStorage
+Public ds     As New clsDataStorage
 
 Public Function BNLSChecksum(ByVal Password As String, ByVal ServerCode As Long) As Long
 

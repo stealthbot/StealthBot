@@ -118,7 +118,7 @@ Public Const LOAD_FILTERS = 2
 Public Const LOAD_PHRASES = 3
 Public Const LOAD_DB = 4
 
-Public SharedScriptSupport As New ScriptSupportClass
+Public SharedScriptSupport As New clsScriptSupportClass
 Public BNCSBuffer As New cBNCSRecvBuffer
 Public BNLSBuffer As New cBNLSRecvBuffer
 Public GErrorHandler As clsErrorHandler
@@ -217,7 +217,7 @@ Public ExReconMinutes As Long
 Public VoteDuration As Integer
 'Public MonitorForm As frmMonitor
 Public PBuffer As New PacketBuffer
-Public ListToolTip As CTooltip
+Public ListToolTip As clsCTooltip
 Public AwaitingEmailReg As Byte
 Public Passed0x0F As Byte
 Public g_ThisIconCode As Integer

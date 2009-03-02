@@ -1743,7 +1743,7 @@ Private Sub Form_Load()
     
     Set ClanHandler = New clsClanPacketHandler
     Set FriendListHandler = New clsFriendlistHandler
-    Set ListToolTip = New CTooltip
+    Set ListToolTip = New clsCTooltip
     
     Call ReloadConfig
     
