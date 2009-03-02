@@ -11,66 +11,124 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'by David Fritts (aka sneakcharm) (sneakcharm@yahoo.com)
 Option Explicit
 
-Private Const POLYNOMIAL As Long = &HEDB88320
-Private Const INITIALIZE As Long = &HFFFFFFFF
+Private Const CRC32_POLYNOMIAL As Long = &HEDB88320
 
-Private mobjBitwiseOperator As clsBitwiseOperator
-Private mlngCRC32Table(255) As Long
+Private CRC32Table(0 To 255) As Long
 
-Private Sub Class_Initialize()
-    Dim lngBytes As Long, lngBits As Long
-    Dim lngCRC32 As Long, lngTemporaryCRC32 As Long
+'Public Functions
+Private Sub InitCRC32()
 
-    Set mobjBitwiseOperator = New clsBitwiseOperator
+    Static CRC32Initialized As Boolean
     
-    For lngBytes = 0 To 255
-
-        lngCRC32 = lngBytes
-
-        For lngBits = 0 To 7
-            lngTemporaryCRC32 = mobjBitwiseOperator.ShiftRight(lngCRC32, 1)
-
-            If (lngCRC32 And &H1) Then
-                lngCRC32 = lngTemporaryCRC32 Xor POLYNOMIAL
-            Else
-                lngCRC32 = lngTemporaryCRC32
-            End If
-        Next lngBits
-
-        mlngCRC32Table(lngBytes) = lngCRC32
-    Next lngBytes
+    Dim I      As Long
+    Dim j      As Long
+    Dim k      As Long
+    Dim XorVal As Long
+    
+    If (CRC32Initialized) Then
+        Exit Sub
+    End If
+    
+    CRC32Initialized = True
+    
+    For I = 0 To 255
+        k = I
+        
+        For j = 1 To 8
+            If k And 1 Then XorVal = CRC32_POLYNOMIAL Else XorVal = 0
+            If k < 0 Then k = ((k And &H7FFFFFFF) \ 2) Or &H40000000 Else k = k \ 2
+            k = k Xor XorVal
+        Next
+        
+        CRC32Table(I) = k
+    Next
+    
 End Sub
 
-Public Function GenerateCRC32(ByVal strBuffer As String) As Long
-    Dim lngBytes As Long, bytCurrentByte As Byte
-    Dim lngActualValue As Long
-    Dim lngTableValue As Long, lngIndex As Long
-    Dim lngInitializeValue As Long
-    
-    'strBuffer = UnicodeToAscii(strBuffer)
+Public Function CRC32(ByVal Data As String) As Long
 
-    lngInitializeValue = INITIALIZE
+    Dim I As Long
+    Dim j As Long
     
-    For lngBytes = 1 To Len(strBuffer)
-        
-        bytCurrentByte = Asc(Mid$(strBuffer, lngBytes, 1))
-        
-        lngActualValue = mobjBitwiseOperator.ShiftRight(lngInitializeValue, 8)
-        
-        lngIndex = lngInitializeValue And &HFF
-        lngIndex = lngIndex Xor bytCurrentByte
-        lngTableValue = mlngCRC32Table(lngIndex)
-        
-        lngInitializeValue = lngActualValue Xor lngTableValue
-    Next lngBytes
+    Call InitCRC32
     
-    GenerateCRC32 = lngInitializeValue Xor &HFFFFFFFF
+    CRC32 = &HFFFFFFFF
+    
+    For I = 1 To Len(Data)
+        j = CByte(Asc(Mid(Data, I, 1))) Xor (CRC32 And &HFF&)
+        
+        If (CRC32 < 0) Then
+            CRC32 = ((CRC32 And &H7FFFFFFF) \ &H100&) Or &H800000
+        Else
+            CRC32 = CRC32 \ &H100&
+        End If
+            
+        CRC32 = (CRC32 Xor CRC32Table(j))
+    Next
+    
+    CRC32 = (Not (CRC32))
+    
 End Function
 
-Private Sub Class_Terminate()
-    Set mobjBitwiseOperator = Nothing
-End Sub
+'Modified from code given to me by David Fritts (sneakcharm@yahoo.com)
+Public Function ValidateExecutable() As Boolean
+
+    On Error GoTo ValidateExecutable_Error
+    
+    'Dim CRC32          As clsCRC32
+    Dim strFilePath    As String
+    Dim intFreeFile    As Integer
+    Dim strBuffer      As String
+    Dim strFileCRC     As String * 8
+    Dim strComputedCRC As String * 8
+    Dim lngComputedCRC As Long
+
+    'Set CRC32 = New clsCRC32
+    
+    strFilePath = App.Path & "/" & App.EXEName & ".exe"
+    
+    'Generate a CRC for ourselves
+    intFreeFile = FreeFile
+    
+    'read the sections you want to protect
+    Open strFilePath For Binary Access Read As #intFreeFile
+        strBuffer = String$(LOF(intFreeFile) - 8, vbNullChar)
+        
+        Get #intFreeFile, 1, strBuffer
+    Close #intFreeFile
+    
+    'Compute the new CRC
+    lngComputedCRC = CRC32(strBuffer)
+    strComputedCRC = hex$(lngComputedCRC)
+    
+    'Read a CRC from ourselves
+    intFreeFile = FreeFile
+    
+    Open strFilePath For Binary As #intFreeFile
+        Get #intFreeFile, FileLen(strFilePath) - 7, strFileCRC
+    Close #intFreeFile
+    
+    If (StrComp(strComputedCRC, strFileCRC, vbBinaryCompare) = 0) Then
+        ValidateExecutable = True
+    Else
+        ValidateExecutable = False
+    End If
+    
+    'Set CRC32 = Nothing
+
+ValidateExecutable_Exit:
+    Exit Function
+
+ValidateExecutable_Error:
+    ValidateExecutable = True
+    
+    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure " & _
+        "ValidateExecutable of Module modCRC32Checksum"
+        
+    Resume ValidateExecutable_Exit
+    
+End Function
+
 

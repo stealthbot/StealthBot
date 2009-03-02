@@ -1223,7 +1223,7 @@ End Function
 Public Function ZeroOffset(ByVal lInpt As Long, ByVal lDigits As Long) As String
     Dim sOut As String
     
-    sOut = Hex(lInpt)
+    sOut = hex(lInpt)
     ZeroOffset = Right$(String(lDigits, "0") & sOut, lDigits)
 End Function
 
@@ -2034,7 +2034,7 @@ End Sub
 ' collapse array on top of the removed user
 Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     Dim I          As Integer
-    Dim C          As Integer
+    Dim c          As Integer
     Dim NumRemoved As Integer
     Dim iterations As Long
     Dim uBnd       As Integer
@@ -2046,9 +2046,9 @@ Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     While (I <= (uBnd - NumRemoved))
         If (StrComp(sUser, gBans(I).Username, vbTextCompare) = 0) Then
             If (I <> UBound(gBans)) Then
-                For C = I To UBound(gBans)
+                For c = I To UBound(gBans)
                     gBans(I) = gBans(I + 1)
-                Next C
+                Next c
             End If
             
             ' UBound(gBans) - 1 when UBound(gBans) = 0
@@ -2222,7 +2222,7 @@ Public Function FlagDescription(ByVal Flags As Long) As String
         End If
     End If
     
-    FlagDescription = s0ut & " [0x" & Right$("00000000" & Hex(Flags), 8) & "]"
+    FlagDescription = s0ut & " [0x" & Right$("00000000" & hex(Flags), 8) & "]"
 End Function
 
 'Returns TRUE if the specified argument was a command line switch,
@@ -2531,31 +2531,31 @@ End Sub
 ' extracted
 ' 1-based
 Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
-    Dim C           As Integer
+    Dim c           As Integer
     Dim I           As Integer
     Dim TargetSpace As Integer
     
     'one two three
     '   1   2
     
-    C = 0
+    c = 0
     I = 1
     Pos = Pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While ((C < Pos) And (I > 0))
+    While ((c < Pos) And (I > 0))
         TargetSpace = I
         
         I = (InStr(I + 1, str, Space(1), vbBinaryCompare))
         
-        C = (C + 1)
+        c = (c + 1)
     Wend
     
-    If (C >= Pos) Then
-        C = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
+    If (c >= Pos) Then
+        c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
-        If (C > 0) Then
-            GetStringChunk = Mid$(str, TargetSpace, C - (TargetSpace))
+        If (c > 0) Then
+            GetStringChunk = Mid$(str, TargetSpace, c - (TargetSpace))
         Else
             GetStringChunk = Mid$(str, TargetSpace)
         End If

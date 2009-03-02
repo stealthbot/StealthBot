@@ -1559,6 +1559,16 @@ Public Function GetConnectionUptime() As String
     GetConnectionUptime = ConvertTime(uTicks)
 End Function
 
+Public Function CRC32(ByVal str As String) As String
+
+    Dim clsCRC32 As New clsCRC32
+    
+    CRC32 = clsCRC32.CRC32(str)
+    
+    Set clsCRC32 = Nothing
+
+End Function
+
 'Class_Terminate doesn't run when a UI form is created via a script. I made this sub so the bot's Unload sub can explicitly _
     call the code within Class_Terminate to kill all the objects. - FrOzeN
 Public Sub Dispose()

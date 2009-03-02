@@ -1,4 +1,4 @@
-Attribute VB_Name = "UnsignedConversions"
+Attribute VB_Name = "modUnsignedConversions"
 ' From MSDN Knowledge Base: http://support.microsoft.com/kb/q189323/
 
 Option Explicit
