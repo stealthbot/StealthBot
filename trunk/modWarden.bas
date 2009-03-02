@@ -4,7 +4,7 @@ Attribute VB_Name = "modWarden"
 '//Does the job of Maiev.mod
 Private Type RANDOMDATA
     pos                     As Long
-    data                    As String * 20
+    Data                    As String * 20
     Sorc1                   As String * 20
     Sorc2                   As String * 20
 End Type
@@ -52,6 +52,10 @@ Public Sub WardenInit(ByVal lngSeed As Long)
     m_Parse(4) = Addr2Ptr(AddressOf HW0x04)
     m_Parse(5) = Addr2Ptr(AddressOf HW0x05)
     m_ModFolder = App.Path & "\Warden\"
+    
+    If (Dir$(m_ModFolder) = vbNullString) Then
+        MkDir m_ModFolder
+    End If
     
     Call frmChat.AddChat(vbGreen, "[Warden] Initialized!")
 End Sub
@@ -396,9 +400,9 @@ Private Sub InitModule()
     Debug.Print "InitModule()"
     Dim A               As Long
     Dim B               As Long
-    Dim C               As Long
-    C = getInteger(m_Mod, &H18)
-    B = 1 - C
+    Dim c               As Long
+    c = getInteger(m_Mod, &H18)
+    B = 1 - c
     If (B > getInteger(m_Mod, &H14)) Then Exit Sub
     A = getInteger(m_Mod, &H10)
     A = getInteger(m_Mod, A + (B * 4)) + m_Mod
@@ -507,19 +511,19 @@ Private Sub Data_Init(ByRef R As RANDOMDATA, ByVal lngSeed As Long)
     'R.Sorc1 = BSHA1(Left$(s, 2), True, True)
     R.Sorc2 = modSHA1.Warden_SHA1(Right$(s, 2))
     'R.Sorc2 = BSHA1(Right$(s, 2), True, True)
-    R.data = String$(20, 0)
-    R.data = modSHA1.Warden_SHA1(R.Sorc1 & R.data & R.Sorc2)
+    R.Data = String$(20, 0)
+    R.Data = modSHA1.Warden_SHA1(R.Sorc1 & R.Data & R.Sorc2)
     'R.Data = BSHA1(R.Sorc1 & R.Data & R.Sorc2, True, True)
     R.pos = 1
 End Sub
 Private Sub Data_Get_Bytes(ByRef R As RANDOMDATA, ByRef bData() As Byte, ByVal lngBytes As Long)
     Dim I           As Long
     For I = 0 To (lngBytes - 1)
-        bData(I) = Asc(Mid$(R.data, R.pos, 1))
+        bData(I) = Asc(Mid$(R.Data, R.pos, 1))
         R.pos = R.pos + 1
         If (R.pos > 20) Then
             R.pos = 1
-            R.data = modSHA1.Warden_SHA1(R.Sorc1 & R.data & R.Sorc2)
+            R.Data = modSHA1.Warden_SHA1(R.Sorc1 & R.Data & R.Sorc2)
             'R.Data = BSHA1(R.Sorc1 & R.Data & R.Sorc2, True, True)
         End If
     Next I
@@ -527,7 +531,7 @@ End Sub
 Private Sub RC4Key(ByRef bData() As Byte, ByRef B() As Byte, ByVal lngLengh As Long)
     Dim I           As Long
     Dim A           As Long
-    Dim C           As Byte
+    Dim c           As Byte
     Dim bR(255)     As Byte
     B(256) = 0
     B(257) = 0
@@ -538,24 +542,24 @@ Private Sub RC4Key(ByRef bData() As Byte, ByRef B() As Byte, ByVal lngLengh As L
     A = 0
     For I = 0 To 255
         A = (A + B(I) + bR(I)) Mod 256
-        C = B(I)
+        c = B(I)
         B(I) = B(A)
-        B(A) = C
+        B(A) = c
     Next I
 End Sub
 Private Sub RC4CryptStr(ByRef s As String, ByRef bK() As Byte, ByVal pos As Long)
     Dim A           As Long
     Dim B           As Long
-    Dim C           As Byte
+    Dim c           As Byte
     Dim I           As Long
     A = bK(256)
     B = bK(257)
     For I = pos To Len(s)
         A = (A + 1) Mod 256
         B = (B + bK(A)) Mod 256
-        C = bK(A)
+        c = bK(A)
         bK(A) = bK(B)
-        bK(B) = C
+        bK(B) = c
         Mid(s, I, 1) = Chr$(Asc(Mid$(s, I, 1)) Xor bK((CInt(bK(A)) + bK(B)) Mod 256))
     Next I
     bK(256) = A
@@ -564,16 +568,16 @@ End Sub
 Private Sub RC4Crypt(ByRef bData() As Byte, ByRef bK() As Byte, ByVal lngLengh As Long)
     Dim A           As Long
     Dim B           As Long
-    Dim C           As Byte
+    Dim c           As Byte
     Dim I           As Long
     A = bK(256)
     B = bK(257)
     For I = 0 To (lngLengh - 1)
         A = (A + 1) Mod 256
         B = (B + bK(A)) Mod 256
-        C = bK(A)
+        c = bK(A)
         bK(A) = bK(B)
-        bK(B) = C
+        bK(B) = c
         bData(I) = bData(I) Xor bK((CInt(bK(A)) + bK(B)) Mod 256)
     Next I
     bK(256) = A
