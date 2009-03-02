@@ -11,9 +11,7 @@ Public ds     As New DataStorage
 
 Public Function BNLSChecksum(ByVal Password As String, ByVal ServerCode As Long) As Long
 
-    Dim clsCRC32 As clsCRC32
-    
-    Set clsCRC32 = New clsCRC32
+    Dim clsCRC32 As New clsCRC32
 
     BNLSChecksum = _
         clsCRC32.CRC32(Password & Right("0000000" & hex(ServerCode), 8))

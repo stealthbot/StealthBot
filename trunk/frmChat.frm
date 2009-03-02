@@ -871,6 +871,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -896,7 +897,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -6283,14 +6283,11 @@ Private Function GetAuth(ByVal Username As String) As Long
     Static lastAuth     As Long    ' ...
     Static lastAuthName As String  ' ...
     
-    Dim clsCRC32 As clsCRC32 ' ...
-    Dim result   As Integer  ' string variable for storing beta authorization result
-                             ' 0  == unauthorized
-                             ' >0 == authorized
-                                                   
-    ' ...
-    Set clsCRC32 = New clsCRC32
-                      
+    Dim clsCRC32 As New clsCRC32 ' ...
+    Dim result   As Integer      ' string variable for storing beta authorization result
+                                 ' 0  == unauthorized
+                                 ' >0 == authorized
+                                 
     ' ...
     If (lastAuth) Then
         ' ...
