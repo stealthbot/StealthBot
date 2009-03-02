@@ -120,7 +120,7 @@ Public Sub ProcessMenu(hWnd As Long, lngMenuCommand As Long)
     
     ' ...
     If LenB(strCallback) > 0 Then
-        On Error Resume Next
+        'On Error Resume Next
     
         RunInAll "psProcessMenu", strCallback, GetPrefixByID(lngMenuCommand)
     End If
@@ -363,8 +363,8 @@ Public Sub RegisterPluginMenus()
     AddScriptMenuItem dictMenuIDs("ps"), "Check for Updates", "ps_UpdateCheck_Callback", 0, 0
     
     '// Get plugin prefixes and titles
-    strPrefixes = Split(frmChat.SControl.Eval("Join(psPrefixes)"))
-    strTitles = Split(frmChat.SControl.Eval("psTitles"), "|||")
+    strPrefixes = Split(frmChat.SControl.Modules(1).Eval("Join(psPrefixes)"))
+    strTitles = Split(frmChat.SControl.Modules(1).Eval("psTitles"), "|||")
     
     '// Add "Plugin Menus" menu
     If Not CBool(SharedScriptSupport.GetSetting("ps", "menusDisabled")) Then
@@ -391,7 +391,7 @@ Public Sub RegisterPluginMenus()
         '// Add an item in Plugin Menu Display for this plugin
         dictItemIDs("#display|||" & strPrefixes(i)) = AddScriptMenuItem(dictMenuIDs("#display"), strTitles(i), _
                     "ps_display_callback_" & strPrefixes(i), , , CBool(SharedScriptSupport.GetSetting(strPrefixes(i), "menu_display")))
-        frmChat.SControl.AddCode "Sub ps_display_callback_" & strPrefixes(i) & ":PluginMenus_Display_Callback """ & strPrefixes(i) & """: End " & "Sub"
+        frmChat.SControl.Modules(1).AddCode "Sub ps_display_callback_" & strPrefixes(i) & ":PluginMenus_Display_Callback """ & strPrefixes(i) & """: End " & "Sub"
         
         '// Should this plugin's menu be displayed?
         If CBool(SharedScriptSupport.GetSetting(strPrefixes(i), "menu_display")) Then
@@ -413,7 +413,7 @@ Public Sub RegisterPluginMenus()
             AddScriptMenuItem dictMenuIDs(strPrefixes(i)), "Help", "ps_help_callback_" & strPrefixes(i)
             
             '// Create the callback subs
-            frmChat.SControl.AddCode "Sub ps_enabled_callback_" & strPrefixes(i) & ":PluginMenus_Enabled_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
+            frmChat.SControl.Modules(1).AddCode "Sub ps_enabled_callback_" & strPrefixes(i) & ":PluginMenus_Enabled_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
                                      "Sub ps_nvn_callback_" & strPrefixes(i) & ":PluginMenus_NVN_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
                                      "Sub ps_backup_callback_" & strPrefixes(i) & ":PluginMenus_Backup_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
                                      "Sub ps_openfile_callback_" & strPrefixes(i) & ":PluginMenus_OpenFile_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _

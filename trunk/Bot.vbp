@@ -122,7 +122,7 @@ VersionCompanyName="Andy T (Stealth@USEast)"
 VersionFileDescription="StealthBot v2.7"
 VersionLegalCopyright="(c) 2002-2007 Andy T. (Stealth@USEast)"
 VersionProductName="StealthBot v2.7"
-CondComp="BETA = 1 : DEV_RELEASE = 1 : COMPILE_DEBUG = 1"
+CondComp="BETA = 1 : DEV_RELEASE = 1"
 CompilationType=0
 OptimizationType=0
 FavorPentiumPro(tm)=-1

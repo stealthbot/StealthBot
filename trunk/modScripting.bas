@@ -7,13 +7,13 @@ Attribute VB_Name = "modScripting"
 ' */
 Option Explicit
 
-Public VetoNextMessage As Boolean
-Public boolOverride As Boolean
+Public VetoNextMessage   As Boolean
+Public boolOverride      As Boolean
 
-Public dictSettings As Dictionary
+Public dictSettings      As Dictionary
 Public dictTimerInterval As Dictionary
-Public dictTimerEnabled As Dictionary
-Public dictTimerCount As Dictionary
+Public dictTimerEnabled  As Dictionary
+Public dictTimerCount    As Dictionary
 
 Public Sub InitScriptControl(ByRef SC As ScriptControl)
 
@@ -76,6 +76,9 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     ' ...
     If (ReadINI("Override", "DisablePS", GetConfigFilePath()) <> "Y") Then
         ' ...
+        boolOverride = False
+    
+        ' ...
         strPath = GetFilePath("PluginSystem.dat")
         
         ' ...
@@ -86,6 +89,8 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
         Else
             FileToModule SC.Modules(1), strPath
         End If
+    Else
+        boolOverride = True
     End If
         
     ' ...
@@ -249,176 +254,177 @@ ERROR_HANDLER:
     
 End Function
 
-'// Loads the Plugin System
-'//   Called from Form_Load() and mnuReloadScript_Click() in frmChat
-Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
-    Dim Path As String, intFile As Integer, strLine As String, strContent As String, strOverride As String
-
-   On Error GoTo LoadPluginSystem_Error
-
-    strOverride = ReadINI("Override", "DisablePS", GetConfigFilePath())
-    
-    If ReadINI("Override", "DisablePS", GetConfigFilePath()) = "Y" Then
-        boolOverride = True
-    Else
-        If Len(strOverride) = 0 Then WriteINI "Override", "DisablePS", "N"
-        boolOverride = False
-    End If
-
-    '// Reset the Script Control
-    SC.Reset
-    
-    '// Allow UI's unless they've been disabled by the user
-    If ReadINI("Other", "ScriptAllowUI", GetConfigFilePath()) <> "N" Then SC.AllowUI = True
-
-    If Not boolOverride Then
-    
-        '// PluginSystem.dat exists?
-        Path = GetFilePath("PluginSystem.dat")
-        If LenB(Dir$(Path)) = 0 Then
-            Call frmChat.AddChat(vbRed, "Cannot find PluginSystem.dat. It must exist in order to load plugins!")
-            Call frmChat.AddChat(vbYellow, "You may download PluginSystem.dat to your StealthBot folder using the link below.")
-            Call frmChat.AddChat(vbWhite, "http://www.stealthbot.net/p/Users/Swent/index.php?file=PluginSystem.dat")
-            Exit Sub
-        End If
-    Else
-    
-        '// script.txt exists?
-        Path = GetFilePath("script.txt")
-        If LenB(Dir$(Path)) = 0 Then
-            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Failed to load script.txt (file does not exist).")
-            Exit Sub
-        End If
-    End If
-    
-    '// Create scripting objects
-    SC.AddObject "ssc", SharedScriptSupport, True
-    SC.AddObject "scTimer", frmChat.scTimer
-    SC.AddObject "scINet", frmChat.INet
-    SC.AddObject "BotVars", BotVars
-    
-    'Exit Sub
-    
-    If Not boolOverride Then
-    
-        '// Load PluginSystem.dat
-        intFile = FreeFile
-        Open Path For Input As #intFile
-    
-            Do While Not EOF(intFile)
-                strLine = vbNullString
-                Line Input #intFile, strLine
-                If Len(strLine) > 1 Then strContent = strContent & strLine & vbCrLf
-            Loop
-        Close #intFile
-        SC.AddCode strContent
-    Else
-    
-        Dim strFilesToLoad() As String, i As Integer
-        ReDim strFilesToLoad(0)
-        strFilesToLoad(0) = "script.txt"
-    
-        intFile = FreeFile
-        Path = GetFilePath("script.txt")
-        
-        '// Get names of includes (if any)
-        Open Path For Input As #intFile
-            Do While Not EOF(intFile)
-                strLine = ""
-                Line Input #intFile, strLine
-                
-                If Len(strLine) > 1 Then
-                
-                    If Left$(Trim(LCase(strLine)), 8) = "#include" And Len(strLine) > 10 Then
-                        ReDim Preserve strFilesToLoad(UBound(strFilesToLoad) + 1)
-                        strFilesToLoad(UBound(strFilesToLoad)) = Mid(strLine, 10)
-                    ElseIf Left(Trim(LCase(strLine)), 3) = "sub" Then
-                        Exit Do
-                    End If
-                End If
-            Loop
-        Close #intFile
-    
-        '// Load script.txt and any includes
-        For i = 0 To UBound(strFilesToLoad)
-            strContent = ""
-            intFile = FreeFile
-            Path = GetFilePath(strFilesToLoad(i))
-            
-            Open Path For Input As #intFile
-    
-                Do While Not EOF(intFile)
-                    strLine = ""
-                    Line Input #intFile, strLine
-                    
-                    If Len(strLine) > 1 Then
-                        If i = 0 Then
-                            If Left$(Trim(LCase(strLine)), 8) = "#include" Then strLine = ""
-                        End If
-                        strContent = strContent & strLine & vbCrLf
-                    End If
-                Loop
-            Close #intFile
-            SC.AddCode strContent
-            Call frmChat.AddChat(vbGreen, "Script loaded: " & Replace(Path, "\\", "\"))
-        Next
-    End If
-
-LoadScript_Exit:
-
-    Exit Sub
-   
-LoadPluginSystem_Error:
-
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure LoadPluginSystem of Module modScripting"
-    Debug.Print "Using variable: " & Path
-End Sub
-
-
 Public Sub SetVeto(ByVal B As Boolean)
-    VetoNextMessage = B
-End Sub
 
+    VetoNextMessage = B
+    
+End Sub
 
 Public Function GetVeto() As Boolean
+
     GetVeto = VetoNextMessage
     VetoNextMessage = False
+    
 End Function
 
+'// Loads the Plugin System
+'//   Called from Form_Load() and mnuReloadScript_Click() in frmChat
+'Public Sub LoadPluginSystem(ByRef SC As ScriptControl)
+'    Dim Path As String, intFile As Integer, strLine As String, strContent As String, strOverride As String
+'
+'   On Error GoTo LoadPluginSystem_Error
+'
+'    strOverride = ReadINI("Override", "DisablePS", GetConfigFilePath())
+'
+'    If ReadINI("Override", "DisablePS", GetConfigFilePath()) = "Y" Then
+'        boolOverride = True
+'    Else
+'        If Len(strOverride) = 0 Then WriteINI "Override", "DisablePS", "N"
+'        boolOverride = False
+'    End If
+'
+'    '// Reset the Script Control
+'    SC.Reset
+'
+'    '// Allow UI's unless they've been disabled by the user
+'    If ReadINI("Other", "ScriptAllowUI", GetConfigFilePath()) <> "N" Then SC.AllowUI = True
+'
+'    If Not boolOverride Then
+'
+'        '// PluginSystem.dat exists?
+'        Path = GetFilePath("PluginSystem.dat")
+'        If LenB(Dir$(Path)) = 0 Then
+'            Call frmChat.AddChat(vbRed, "Cannot find PluginSystem.dat. It must exist in order to load plugins!")
+'            Call frmChat.AddChat(vbYellow, "You may download PluginSystem.dat to your StealthBot folder using the link below.")
+'            Call frmChat.AddChat(vbWhite, "http://www.stealthbot.net/p/Users/Swent/index.php?file=PluginSystem.dat")
+'            Exit Sub
+'        End If
+'    Else
+'
+'        '// script.txt exists?
+'        Path = GetFilePath("script.txt")
+'        If LenB(Dir$(Path)) = 0 Then
+'            Call frmChat.AddChat(RTBColors.ErrorMessageText, "Failed to load script.txt (file does not exist).")
+'            Exit Sub
+'        End If
+'    End If
+'
+'    '// Create scripting objects
+'    SC.AddObject "ssc", SharedScriptSupport, True
+'    SC.AddObject "scTimer", frmChat.scTimer
+'    SC.AddObject "scINet", frmChat.INet
+'    SC.AddObject "BotVars", BotVars
+'
+'    'Exit Sub
+'
+'    If Not boolOverride Then
+'
+'        '// Load PluginSystem.dat
+'        intFile = FreeFile
+'        Open Path For Input As #intFile
+'
+'            Do While Not EOF(intFile)
+'                strLine = vbNullString
+'                Line Input #intFile, strLine
+'                If Len(strLine) > 1 Then strContent = strContent & strLine & vbCrLf
+'            Loop
+'        Close #intFile
+'        SC.AddCode strContent
+'    Else
+'
+'        Dim strFilesToLoad() As String, i As Integer
+'        ReDim strFilesToLoad(0)
+'        strFilesToLoad(0) = "script.txt"
+'
+'        intFile = FreeFile
+'        Path = GetFilePath("script.txt")
+'
+'        '// Get names of includes (if any)
+'        Open Path For Input As #intFile
+'            Do While Not EOF(intFile)
+'                strLine = ""
+'                Line Input #intFile, strLine
+'
+'                If Len(strLine) > 1 Then
+'
+'                    If Left$(Trim(LCase(strLine)), 8) = "#include" And Len(strLine) > 10 Then
+'                        ReDim Preserve strFilesToLoad(UBound(strFilesToLoad) + 1)
+'                        strFilesToLoad(UBound(strFilesToLoad)) = Mid(strLine, 10)
+'                    ElseIf Left(Trim(LCase(strLine)), 3) = "sub" Then
+'                        Exit Do
+'                    End If
+'                End If
+'            Loop
+'        Close #intFile
+'
+'        '// Load script.txt and any includes
+'        For i = 0 To UBound(strFilesToLoad)
+'            strContent = ""
+'            intFile = FreeFile
+'            Path = GetFilePath(strFilesToLoad(i))
+'
+'            Open Path For Input As #intFile
+'
+'                Do While Not EOF(intFile)
+'                    strLine = ""
+'                    Line Input #intFile, strLine
+'
+'                    If Len(strLine) > 1 Then
+'                        If i = 0 Then
+'                            If Left$(Trim(LCase(strLine)), 8) = "#include" Then strLine = ""
+'                        End If
+'                        strContent = strContent & strLine & vbCrLf
+'                    End If
+'                Loop
+'            Close #intFile
+'            SC.AddCode strContent
+'                        Call frmChat.AddChat(vbGreen, "Script loaded: " & Replace(Path, "\\", "\"))
+'        Next
+'    End If
+'
+'LoadScript_Exit:
+'
+'    Exit Sub
+'
+'LoadPluginSystem_Error:
+'
+'    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure LoadPluginSystem of Module modScripting"
+'    Debug.Print "Using variable: " & Path
+'End Sub
 
-Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
-    Dim i As Integer
-    Dim Message As String
-
-    On Error GoTo ReInitScriptControl_Error
-
-    BotLoaded = True
-    SC.Run "Event_Load"
-
-    If g_Online Then
-        SC.Run "Event_LoggedOn", GetCurrentUsername, BotVars.Product
-        SC.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
-
-        If g_Channel.Users.Count > 0 Then
-            For i = 1 To g_Channel.Users.Count
-                Message = ""
-
-                With g_Channel.Users(i)
-                     'ParseStatstring .Statstring, Message, .Clan
-
-                     SC.Run "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, .game, False
-                 End With
-             Next i
-         End If
-    End If
-
-    On Error GoTo 0
-    Exit Sub
-
-ReInitScriptControl_Error:
-
-    'Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ReInitScriptControl of Module modScripting"
-End Sub
+'Public Sub ReInitScriptControl(ByRef SC As ScriptControl)
+'    Dim i As Integer
+'    Dim Message As String
+'
+'    On Error GoTo ReInitScriptControl_Error
+'
+'    BotLoaded = True
+'    SC.Run "Event_Load"
+'
+'    If g_Online Then
+'        SC.Run "Event_LoggedOn", GetCurrentUsername, BotVars.Product
+'        SC.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
+'
+'        If g_Channel.Users.Count > 0 Then
+'            For i = 1 To g_Channel.Users.Count
+'                Message = ""
+'
+'                With g_Channel.Users(i)
+'                     'ParseStatstring .Statstring, Message, .Clan
+'
+'                     SC.Run "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, .game, False
+'                 End With
+'             Next i
+'         End If
+'    End If
+'
+'    On Error GoTo 0
+'    Exit Sub
+'
+'ReInitScriptControl_Error:
+'
+'    'Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ReInitScriptControl of Module modScripting"
+'End Sub
 
 
 '// Written by Swent. Sets a plugin timer's interval.

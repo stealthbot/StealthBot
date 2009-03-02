@@ -109,7 +109,7 @@ End Function
 
 Public Function NewSendBoxWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
     Const WM_ACTIVATE As Long = 6
-    
+
     NewSendBoxWindowProc = CallWindowProc(SendBox_OldWindowProc, SendBox_hWndSet, Msg, wParam, lParam)
 End Function
 
