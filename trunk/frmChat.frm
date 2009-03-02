@@ -1828,7 +1828,10 @@ Private Sub Form_Load()
     LoadQuickChannels
     LoadQuotes
     
-    LoadPluginSystem SControl
+    'LoadPluginSystem SControl
+    
+    InitScriptControl SControl
+    LoadScripts SControl
 
     'Dim Logger As New clsLogger
    
@@ -1844,6 +1847,8 @@ Private Sub Form_Load()
     s = ReadCfg("Override", "DisableSBNews")
     
     If (LenB(s) = 0) Then DisplayNews
+    
+    InitScripts
     
     If FrmSplashInUse Then frmSplash.SetFocus
     
@@ -1865,8 +1870,8 @@ Private Sub Form_Load()
     #End If
     
     'Now loads scripts when the bot opens, instead of after connecting. - FrOzeN
-    RunInAll "Event_FirstRun"
-    RunInAll "Event_Load"
+    'RunInAll "Event_FirstRun"
+    'RunInAll "Event_Load"
     
     'Dim I As Integer
     'Dim tmp As String
@@ -4376,9 +4381,13 @@ MRS_Continue:
     DeleteMenuItem lMenu, ScriptMenu_ParentID, 5
     ScriptMenu_ParentID = 0
 
-    LoadPluginSystem SControl
+    'LoadPluginSystem SControl
 
-    ReInitScriptControl SControl
+    'ReInitScriptControl SControl
+    
+    InitScriptControl SControl
+    LoadScripts SControl
+    InitScripts
     
     DrawMenuBar frmChat.hWnd
 
@@ -6020,7 +6029,6 @@ Sub Connect()
         End If
         
         SetTitle "Connecting..."
-        AddChat RTBColors.InformationText, "Connecting your bot..."
         
         If ((StrComp(BotVars.Product, "PX2D", vbTextCompare) = 0) Or _
             (StrComp(BotVars.Product, "VD2D", vbTextCompare) = 0)) Then
@@ -6033,13 +6041,13 @@ Sub Connect()
         'NOT 'Disabled due to public version!
 
         #If (BETA = 1) Then
-            Call AddChat(RTBColors.InformationText, "Authorizing your private-release " & _
-                "bot, please wait.")
+            Call AddChat(RTBColors.InformationText, "Authorizing your private-release, " & _
+                "please wait...")
             
             ' ...
             If (GetAuth(BotVars.Username)) Then
                 Call AddChat(RTBColors.SuccessText, _
-                    "Private usage authorized, connecting to Battle.Net.")
+                    "Private usage authorized, connecting your bot...")
                 
                 ' was auth function bypassed?
                 If (AUTH_CHECKED = False) Then
@@ -6059,6 +6067,8 @@ Sub Connect()
                 ' ...
                 Exit Sub
             End If
+        #Else
+            AddChat RTBColors.InformationText, "Connecting your bot..."
         #End If
         
         
