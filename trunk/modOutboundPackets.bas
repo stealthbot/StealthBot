@@ -10,17 +10,17 @@ Public g_username As String
 
 Public Sub Send0x50(Optional lVerByte As Long)
     Dim CAbbr As String, cName As String
-    Dim s As String
+    Dim S As String
 
     With PBuffer
         .InsertDWord &H0 'Protocol ID (Zero)
         
-        s = StrReverse(UCase(ReadCfg("Override", GetProductKey() & "PlatID")))
+        S = StrReverse(UCase(ReadCfg("Override", GetProductKey() & "PlatID")))
         
-        If Len(s) > 0 Then
-            If Len(s) > 4 Then s = Mid$(s, 1, 4)
+        If Len(S) > 0 Then
+            If Len(S) > 4 Then S = Mid$(S, 1, 4)
             
-            .InsertNonNTString s & BotVars.Product 'Platform ID and Product ID
+            .InsertNonNTString S & BotVars.Product 'Platform ID and Product ID
         Else
             .InsertNonNTString "68XI" & BotVars.Product 'Platform ID and Product ID
         End If
@@ -80,6 +80,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
     Dim HashPaths(2) As String  ' Hash file paths
     Dim KeyHash As String       ' CDKey hash
     Dim X As Long               ' Stop control variable
+    Dim lngWardenSeed As Long   ' seed for warden
     
     Path = GetGamePath(BotVars.Product)
     ClientToken = GetTickCount()
@@ -155,9 +156,10 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                 '   ~ FrOzeN
                 
                 'Add warden support
-                'If BotVars.Product = "RATS" Or BotVars.Product = "PXES" Then
-                '    modWarden.InitializeWarden Left$(KeyHash, 4)
-                'End If
+                If BotVars.Product = "RATS" Or BotVars.Product = "PXES" Then
+                    Call CopyMemory(lngWardenSeed, ByVal KeyHash, 4)
+                    Call modWarden.WardenInit(lngWardenSeed)
+                End If
                 
                 If BotVars.Product = "PX2D" Or BotVars.Product = "PX3W" Then
                     Call DecodeCDKey(BotVars.ExpKey, ServerToken, ClientToken, KeyHash, Value1, ProductID, MPQRevision)
@@ -392,8 +394,13 @@ End Sub
 
 Public Sub Send0x5E(ByRef PacketData As String) 'SID_WARDEN
     Dim strWardenPacket As String
-    strWardenPacket = modWarden.HandleWarden(PacketData)
+    'strWardenPacket = modWarden.HandleWarden(PacketData)
 
+    PBuffer.InsertNonNTString PacketData
+    PBuffer.SendPacket &H5E
+    
+    Exit Sub
+    
     If LenB(strWardenPacket) > 0 Then
         PBuffer.InsertNonNTString strWardenPacket
         PBuffer.SendPacket &H5E

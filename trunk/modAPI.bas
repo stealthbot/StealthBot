@@ -165,3 +165,24 @@ Public Const LOCALE_SABBREVCTRYNAME As Long = &H7
 Public Const LOCALE_SENGCOUNTRY     As Long = &H1002
 Public Const LOCALE_SABBREVLANGNAME As Long = &H3
 Public Const LOCALE_SNATIVECTRYNAME As Long = &H8
+
+' some stuff needed for warden
+Public Declare Sub ZeroMemory Lib "kernel32" Alias "RtlZeroMemory" (ByRef Destination As Any, ByVal numbytes As Long)
+Public Declare Function CallWindowProcA Lib "user32" (ByVal lpPrevWndFunc As Long, ByVal hWnd As Long, ByVal uMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+Public Declare Function uncompress Lib "zlib" (ByRef dest As Any, ByRef destLen As Long, ByRef src As Any, ByRef srcLen As Long) As Long
+Public Declare Function LoadLibraryA Lib "kernel32" (ByVal strFilePath As String) As Long
+Public Declare Function GetProcAddress Lib "kernel32" (ByVal hModule As Long, ByVal lpProcName As String) As Long
+
+Public Sub free(ByVal dwPtr As Long)
+    Dim lngHandle   As Long
+    Call CopyMemory(lngHandle, ByVal dwPtr - 4, 4)
+    Call GlobalUnlock(lngHandle)
+    Call GlobalFree(lngHandle)
+End Sub
+
+Public Function malloc(ByVal dwSize As Long) As Long
+    Dim lngHandle   As Long
+    lngHandle = GlobalAlloc(0, dwSize + 4)
+    malloc = GlobalLock(lngHandle) + 4
+    Call CopyMemory(ByVal malloc - 4, lngHandle, 4)
+End Function

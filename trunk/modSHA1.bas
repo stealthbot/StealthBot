@@ -17,15 +17,20 @@ Private Type OneLong
 End Type
 
 'I added this function as a quick solution and better named method to call. The code it uses is still pretty bad. - FrOzeN
-Public Sub Warden_SHA1(Destination() As Byte, ByRef Source() As Byte)
-    Dim strTemp As String, tmpArray() As Byte
+'Public Sub Warden_SHA1(Destination() As Byte, ByRef Source() As Byte)
+Public Function Warden_SHA1(ByVal data As String) As String
+    Dim arrData() As Byte
+    Dim strHash As String, arrHash() As Byte
+    Dim arrRet(20) As Byte
     
-    strTemp = StrConv(Source, vbUnicode)
-    strTemp = SHA1b(strTemp)
+    arrData = StrConv(data, vbFromUnicode)
     
-    StrToByteArray strTemp, tmpArray
-    CopyMemory Destination(0), tmpArray(0), UBound(tmpArray) + 1
-End Sub
+    strHash = SHA1b(data)
+    arrHash = StrConv(strHash, vbFromUnicode)
+    
+    Call CopyMemory(arrRet(0), arrHash(0), 20)
+    Warden_SHA1 = StrConv(arrRet, vbUnicode)
+End Function
 
 Private Function SHA1b(ByVal sIn As String) As String
     Dim bIn() As Byte
@@ -51,7 +56,7 @@ End Sub
 
 Private Function LongToStr(ByVal lVal As Long) As String
     Dim s As String
-    s = Hex$(lVal)
+    s = hex$(lVal)
     
     If Len(s) < 8 Then s = String$(8 - Len(s), "0") & s
     
