@@ -80,6 +80,9 @@ Public Property Get Name() As String
             Name = "Windows 2008"
         ElseIf (IsWindows7) Then
             Name = "Windows 7"
+        Else
+            Name = "Windows NT " & _
+                m_osVer.dwVerMajor & "." & m_osVer.dwVerMinor
         End If
     Else
         If (IsWindows95) Then
@@ -89,6 +92,10 @@ Public Property Get Name() As String
         ElseIf (IsWindowsME) Then
             Name = "Windows ME"
         End If
+    End If
+    
+    If (Name = vbNullString) Then
+        Name = "Unknown"
     End If
     
 End Property
