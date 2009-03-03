@@ -4847,6 +4847,18 @@ Private Sub sckScript_Error(Index As Integer, ByVal Number As Integer, Descripti
 
 End Sub
 
+Private Sub itcScript_StateChanged(Index As Integer, ByVal State As Integer)
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetSCObjByIndexEx("Inet", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_StateChanged", State
+
+End Sub
+
 Private Sub tmrScript_Timer(Index As Integer)
 
     Dim obj As scObj ' ...
