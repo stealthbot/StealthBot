@@ -4786,6 +4786,42 @@ Private Sub sckScript_Connect(Index As Integer)
     
 End Sub
 
+Private Sub sckScript_DataArrival(Index As Integer, ByVal bytesTotal As Long)
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetSCObjByIndexEx("Winsock", Index)
+
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_DataArrival", bytesTotal
+    
+End Sub
+
+Private Sub sckScript_SendComplete(Index As Integer)
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetSCObjByIndexEx("Winsock", Index)
+
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_SendComplete"
+
+End Sub
+
+Private Sub sckScript_SendProgress(Index As Integer, ByVal bytesSent As Long, ByVal bytesRemaining As Long)
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetSCObjByIndexEx("Winsock", Index)
+
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_SendProgress", bytesSent, bytesRemaining
+
+End Sub
+
 Private Sub sckScript_Close(Index As Integer)
 
     Dim obj As scObj ' ...
