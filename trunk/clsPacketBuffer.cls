@@ -61,6 +61,17 @@ End Function ' end function InsertByte
 ' ...
 Public Function GetByte() As Byte
 
+    ' ...
+    If ((m_bufpos + 1) > UBound(m_buf)) Then
+        Exit Function
+    End If
+
+    ' ...
+    GetByte = m_buf(m_bufpos)
+
+    ' ...
+    m_bufpos = (m_bufpos + 1)
+
 End Function ' end function GetByte
 
 ' ...
@@ -78,6 +89,17 @@ End Function ' end function InsertWord
 ' ...
 Public Function GetWORD() As Integer
 
+    ' ...
+    If ((m_bufpos + 2) > UBound(m_buf)) Then
+        Exit Function
+    End If
+
+    ' copy data to buffer
+    Call CopyMemory(GetWORD, m_buf(m_bufpos), 2)
+
+    ' ...
+    m_bufpos = (m_bufpos + 2)
+
 End Function ' end function GetWord
 
 ' ...
@@ -94,6 +116,17 @@ End Function ' end function InsertDWord
 
 ' ...
 Public Function GetDWORD() As Long
+
+    ' ...
+    If ((m_bufpos + 4) > UBound(m_buf)) Then
+        Exit Function
+    End If
+
+    ' copy data to buffer
+    Call CopyMemory(GetDWORD, m_buf(m_bufpos), 4)
+
+    ' ...
+    m_bufpos = (m_bufpos + 4)
 
 End Function ' end function GetDWord
 
@@ -143,12 +176,54 @@ End Function ' end function InsertNTString
 ' ...
 Public Function GetString() As String
 
+    Dim I As Integer ' ...
+
+    ' ...
+    If ((m_bufpos + 1) > UBound(m_buf)) Then
+        Exit Function
+    End If
+
+    ' ...
+    For I = 0 To UBound(m_buf)
+        If (m_buf(I) = &H0) Then
+            Exit For
+        End If
+    Next I
+
+    ' ...
+    If (I < UBound(m_buf) + 1) Then
+        ' ...
+        'GetString = String$(I, Space(1))
+    
+        ' copy data to buffer
+        Call CopyMemory(ByVal GetString, m_buf(m_bufpos), I)
+        
+        ' ...
+        m_bufpos = (m_bufpos + I)
+    End If
+
 End Function ' end function GetString
 
 ' ...
-Public Function Length() As Long
+Public Property Get Length() As Long
+
     Length = m_bufpos
-End Function
+    
+End Property
+
+' ...
+Public Property Get Position() As Long
+
+    Position = m_bufpos
+    
+End Property
+
+' ...
+Public Property Let Position(lng As Long)
+
+    m_bufpos = lng
+    
+End Property
 
 ' ...
 Public Function Clear()
