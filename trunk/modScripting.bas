@@ -308,7 +308,7 @@ Public Function ObjCount(Optional ObjType As String) As Integer
     Dim I As Integer ' ...
 
     Select Case (UCase$(ObjType))
-        Case "TIMER", "WINSOCK", "INET", "FORM"
+        Case "TIMER", "WINSOCK", "INET", "FORM", "MENU"
             For I = 0 To m_objCount - 1
                 If (StrComp(ObjType, m_arrObjs(I).ObjType, vbTextCompare) = 0) Then
                     ObjCount = (ObjCount + 1)
@@ -362,7 +362,21 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
                     frmChat.tmrScript(ObjCount(ObjType))
             
         Case "WINSOCK"
+            If (ObjCount(ObjType) > 0) Then
+                Load frmChat.sckScript(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = _
+                    frmChat.sckScript(ObjCount(ObjType))
+        
         Case "INET"
+            If (ObjCount(ObjType) > 0) Then
+                Load frmChat.itcScript(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = _
+                    frmChat.itcScript(ObjCount(ObjType))
+        
         Case "FORM"
         Case "MENU"
     End Select
