@@ -1613,21 +1613,21 @@ Private Sub Form_Load()
         End If
     End If
     
-    Dim pb As New clsPacketBuffer
+    'Dim pb As New clsPacketBuffer
     
-    With pb
-        .InsertDWord &H1
-        .InsertDWord &H2
-        .InsertNTString "hello", ANSI
-        .InsertNTString "hi", ANSI
-        .InsertWord &H3
-        .Position = 0
-        MsgBox .GetDWORD
-        MsgBox .GetDWORD
-        MsgBox .GetString
-        MsgBox .GetString
-        MsgBox .GetWORD
-    End With
+    'With pb
+    '    .InsertDWord &H1
+    '    .InsertDWord &H2
+    '    .InsertNTString "hello", ANSI
+    '    .InsertNTString "hi", ANSI
+    '    .InsertWord &H3
+    '    .Position = 0
+    '    MsgBox .GetDWORD
+    '    MsgBox .GetDWORD
+    '    MsgBox .GetString
+    '    MsgBox .GetString
+    '    MsgBox .GetWORD
+    'End With
         
     ' SPLASH SCREEN
     If ReadCfg("Main", "ShowSplash") <> "N" Then
@@ -4756,6 +4756,23 @@ End Sub
 
 Private Sub mnuUsers_Click()
     frmDBManager.Show
+End Sub
+
+Private Sub tmrScript_Timer(Index As Integer)
+
+    Dim i As Integer ' ...
+
+    For i = 0 To ObjCount() - 1
+        If (StrComp("Timer", Objects(i).ObjType, vbTextCompare) = 0) Then
+            If (Objects(i).obj.Index = Index) Then
+                SControl.Modules(Objects(i).SCModule.Name).ExecuteStatement _
+                    "Call Timer_" & Objects(i).ObjName & "()"
+                
+                Exit For
+            End If
+        End If
+    Next i
+    
 End Sub
 
 Private Sub txtPre_GotFocus()
