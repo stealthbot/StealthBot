@@ -51,7 +51,7 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
 
     Dim strPath  As String  ' ...
     Dim filename As String  ' ...
-    Dim I        As Integer ' ...
+    Dim i        As Integer ' ...
     
     ' ********************************
     '      LOAD REGULAR SCRIPTS
@@ -109,7 +109,7 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
 ERROR_HANDLER:
 
     ' ...
-    frmChat.AddChat vbRed, "Error: " & Err.description & " in LoadScripts()."
+    frmChat.AddChat vbRed, "Error: " & Err.Description & " in LoadScripts()."
 
     ' ...
     Exit Sub
@@ -191,7 +191,7 @@ End Sub
 
 Public Function InitScripts()
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     ' ...
     RunInAll "Event_Load"
@@ -202,12 +202,12 @@ Public Function InitScripts()
         RunInAll "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
 
         If (g_Channel.Users.Count > 0) Then
-            For I = 1 To g_Channel.Users.Count
-                With g_Channel.Users(I)
+            For i = 1 To g_Channel.Users.Count
+                With g_Channel.Users(i)
                      RunInAll "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, _
                         .game, False
                 End With
-             Next I
+             Next i
          End If
     End If
 
@@ -218,7 +218,7 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
     On Error GoTo ERROR_HANDLER
 
     Dim SC    As ScriptControl
-    Dim I     As Integer ' ...
+    Dim i     As Integer ' ...
     Dim arr() As Variant ' ...
     
     ' ...
@@ -228,8 +228,8 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
     arr() = Parameters()
 
     ' ...
-    For I = 1 To SC.Modules.Count
-        CallByNameEx SC.Modules(I), "Run", VbMethod, arr()
+    For i = 1 To SC.Modules.Count
+        CallByNameEx SC.Modules(i), "Run", VbMethod, arr()
     Next
 
     Exit Sub
@@ -240,7 +240,7 @@ ERROR_HANDLER:
         Resume Next
     End If
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in RunInAll()."
     
     Exit Sub
@@ -255,7 +255,7 @@ Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCa
     Dim oTLI    As TLI.TLIApplication
     Dim ProcID  As Long
     Dim numArgs As Long
-    Dim I       As Long
+    Dim i       As Long
     Dim v()     As Variant
     
     Set oTLI = New TLIApplication
@@ -271,9 +271,9 @@ Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCa
         
         ReDim v(numArgs)
         
-        For I = 0 To numArgs
-            v(I) = vArgsArray(numArgs - I)
-        Next I
+        For i = 0 To numArgs
+            v(i) = vArgsArray(numArgs - i)
+        Next i
         
         CallByNameEx = oTLI.InvokeHookArray(obj, ProcID, CallType, v)
     End If
@@ -288,7 +288,7 @@ ERROR_HANDLER:
         Exit Function
     End If
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in CallByNameEx()."
         
     Set oTLI = Nothing
@@ -305,15 +305,15 @@ End Function
 
 Public Function ObjCount(Optional ObjType As String) As Integer
     
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     Select Case (UCase$(ObjType))
         Case "TIMER", "WINSOCK", "INET", "FORM", "MENU"
-            For I = 0 To m_objCount - 1
-                If (StrComp(ObjType, m_arrObjs(I).ObjType, vbTextCompare) = 0) Then
+            For i = 0 To m_objCount - 1
+                If (StrComp(ObjType, m_arrObjs(i).ObjType, vbTextCompare) = 0) Then
                     ObjCount = (ObjCount + 1)
                 End If
-            Next I
+            Next i
             
         Case Else
             ObjCount = m_objCount
@@ -327,17 +327,17 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
     
     ' redefine array size & check for duplicate controls
     If (m_objCount) Then
-        Dim I As Integer ' loop counter variable
+        Dim i As Integer ' loop counter variable
 
-        For I = 0 To m_objCount - 1
-            If (m_arrObjs(I).SCModule.Name = SCModule.Name) Then
-                If (StrComp(m_arrObjs(I).ObjType, ObjType, vbTextCompare) = 0) Then
-                    If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
+        For i = 0 To m_objCount - 1
+            If (m_arrObjs(i).SCModule.Name = SCModule.Name) Then
+                If (StrComp(m_arrObjs(i).ObjType, ObjType, vbTextCompare) = 0) Then
+                    If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
                         Exit Function
                     End If
                 End If
             End If
-        Next I
+        Next i
         
         ReDim Preserve m_arrObjs(0 To m_objCount)
     Else
@@ -403,20 +403,36 @@ End Sub
 
 Public Function GetObjByNameEx(ByRef SCModule As Module, ByVal ObjType As String, ByVal ObjName As String) As Object
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
     
     ' ...
-    For I = 0 To m_objCount - 1
-        If (m_arrObjs(I).SCModule.Name = SCModule.Name) Then
-            If (StrComp(m_arrObjs(I).ObjType, ObjType, vbTextCompare) = 0) Then
-                If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
-                    Set GetObjByNameEx = m_arrObjs(I).obj
+    For i = 0 To m_objCount - 1
+        If (m_arrObjs(i).SCModule.Name = SCModule.Name) Then
+            If (StrComp(m_arrObjs(i).ObjType, ObjType, vbTextCompare) = 0) Then
+                If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
+                    Set GetObjByNameEx = m_arrObjs(i).obj
     
                     Exit Function
                 End If
             End If
         End If
-    Next I
+    Next i
+
+End Function
+
+Public Function GetSCObjByIndexEx(ByVal ObjType As String, ByVal Index As Integer) As scObj
+
+    Dim i As Integer ' ...
+
+    For i = 0 To ObjCount() - 1
+        If (StrComp(ObjType, Objects(i).ObjType, vbTextCompare) = 0) Then
+            If (m_arrObjs(i).obj.Index = Index) Then
+                GetSCObjByIndexEx = m_arrObjs(i)
+                
+                Exit For
+            End If
+        End If
+    Next i
 
 End Function
 
