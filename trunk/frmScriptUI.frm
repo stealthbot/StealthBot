@@ -9,6 +9,15 @@ Begin VB.Form frmScriptUI
    ClientLeft      =   975
    ClientTop       =   360
    ClientWidth     =   4590
+   BeginProperty Font 
+      Name            =   "Tahoma"
+      Size            =   8.25
+      Charset         =   0
+      Weight          =   400
+      Underline       =   0   'False
+      Italic          =   0   'False
+      Strikethrough   =   0   'False
+   EndProperty
    LinkTopic       =   "Form1"
    ScaleHeight     =   3135
    ScaleWidth      =   4590
@@ -24,7 +33,6 @@ Begin VB.Form frmScriptUI
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
-      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScriptUI.frx":0000
    End
@@ -71,6 +79,15 @@ Begin VB.Form frmScriptUI
       NumItems        =   0
    End
    Begin VB.ListBox lst 
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   255
       Index           =   0
       Left            =   2520
@@ -80,6 +97,15 @@ Begin VB.Form frmScriptUI
       Width           =   255
    End
    Begin VB.ComboBox cmb 
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   315
       Index           =   0
       Left            =   2040
@@ -89,6 +115,15 @@ Begin VB.Form frmScriptUI
       Width           =   390
    End
    Begin VB.OptionButton opt 
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   255
       Index           =   0
       Left            =   1680
@@ -98,6 +133,15 @@ Begin VB.Form frmScriptUI
       Width           =   255
    End
    Begin VB.CheckBox chk 
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   255
       Index           =   0
       Left            =   1320
@@ -107,6 +151,15 @@ Begin VB.Form frmScriptUI
       Width           =   255
    End
    Begin VB.PictureBox pic 
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   255
       Index           =   0
       Left            =   960
@@ -123,6 +176,15 @@ Begin VB.Form frmScriptUI
       Top             =   360
    End
    Begin VB.TextBox txt 
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   285
       Index           =   0
       Left            =   600
@@ -133,6 +195,15 @@ Begin VB.Form frmScriptUI
       Width           =   255
    End
    Begin VB.CommandButton cmd 
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       Height          =   255
       Index           =   0
       Left            =   0
@@ -160,6 +231,15 @@ Begin VB.Form frmScriptUI
    Begin VB.Label lbl 
       BackColor       =   &H00000000&
       Caption         =   "lbl"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Index           =   0
