@@ -1668,175 +1668,406 @@ End Sub
 
 Private Sub txt_Change(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("TextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_Change"
 
 End Sub
 
 Private Sub txt_Click(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("TextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_Click"
 
 End Sub
 
 Private Sub txt_DblClick(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("TextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_DblClick"
 
 End Sub
 
 Private Sub txt_LostFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("TextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_LostFocus"
 
 End Sub
 
 Private Sub txt_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("TextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, X, Y
 
 End Sub
 
 Private Sub txt_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("TextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, X, Y
 
 End Sub
 
 Private Sub txt_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
     
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("TextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, X, Y
 
 End Sub
 
 Private Sub txt_GotFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("TextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_GotFocus"
 
 End Sub
 
 Private Sub txt_KeyPress(Index As Integer, KeyAscii As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("TextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
 
 End Sub
 
 Private Sub txt_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("TextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 
 End Sub
 
 Private Sub txt_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("TextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 
 End Sub
 
 Private Sub chk_Click(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("CheckBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_Click"
 
 End Sub
 
 Private Sub chk_GotFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("CheckBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_GotFocus"
 
 End Sub
 
 Private Sub chk_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("CheckBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 
 End Sub
 
 Private Sub chk_KeyPress(Index As Integer, KeyAscii As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("CheckBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
 
 End Sub
 
 Private Sub chk_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("CheckBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 
 End Sub
 
 Private Sub chk_LostFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("CheckBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_LostFocus"
 
 End Sub
 
 Private Sub chk_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("CheckBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, X, Y
 
 End Sub
 
 Private Sub chk_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
-    ' ...
+    On Error Resume Next
 
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetSCObjByIndexEx("CheckBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, X, Y
 End Sub
 
 Private Sub chk_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("CheckBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, X, Y
 
 End Sub
 
 Private Sub cmb_Change(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ComboBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_Change"
 
 End Sub
 
 Private Sub cmb_Click(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ComboBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_Click"
 
 End Sub
 
 Private Sub cmb_DblClick(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ComboBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_DblClick"
 
 End Sub
 
 Private Sub cmb_GotFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ComboBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_GotFocus"
 
 End Sub
 
 Private Sub cmb_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ComboBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 
 End Sub
 
 Private Sub cmb_KeyPress(Index As Integer, KeyAscii As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ComboBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
 
 End Sub
 
 Private Sub cmb_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ComboBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 
 End Sub
 
 Private Sub cmb_LostFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ComboBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_LostFocus"
 
 End Sub
 
 Private Sub cmb_Scroll(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ComboBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_Scroll"
 
 End Sub
 
