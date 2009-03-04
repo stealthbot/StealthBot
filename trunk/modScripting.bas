@@ -58,7 +58,7 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     ' ********************************
 
     ' ...
-    strPath = App.path & "\scripts\"
+    strPath = App.Path & "\scripts\"
     
     ' ...
     If (Dir(strPath) <> vbNullString) Then
@@ -139,35 +139,32 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
             
             ' ...
             If (Len(strLine) >= 1) Then
-                ' ...
                 If (Left$(strLine, 1) = "#") Then
-                    If (InStr(strLine, " ") <> 0) Then
+                    If (InStr(1, strLine, " ") <> 0) Then
                         Dim strCommand As String ' ...
                     
                         strCommand = _
-                            LCase$(Mid$(strLine, 2, InStr(strLine, " ") - 1))
-                            
-                            If (strCommand = "include") Then
-                                If (Len(LCase$(strLine)) >= 12) Then
-                                    Dim tmp As String ' ...
-                                    
-                                    ' ...
-                                    tmp = _
-                                        LCase$(Mid$(strLine, 11, Len(strLine) - 11))
-                                    
-                                    ' ...
-                                    If (Left$(tmp, 1) = "\") Then
-                                        filePath = App.path & "\scripts\" & tmp
-                                    Else
-                                        filePath = tmp
-                                    End If
-            
-                                    ' ...
-                                    FileToModule ScriptModule, filePath
-                                End If
-                            ElseIf (strCommand = "prefix") Then
+                            LCase$(Mid$(strLine, 2, InStr(1, strLine, " ") - 2))
+
+                        If (strCommand = "include") Then
+                            If (Len(LCase$(strLine)) >= 12) Then
+                                Dim tmp As String ' ...
+                                
                                 ' ...
+                                tmp = _
+                                    LCase$(Mid$(strLine, 11, Len(strLine) - 11))
+                                
+                                ' ...
+                                If (Left$(tmp, 1) = "\") Then
+                                    filePath = App.Path & "\scripts\" & tmp
+                                Else
+                                    filePath = tmp
+                                End If
+        
+                                ' ...
+                                FileToModule ScriptModule, filePath
                             End If
+                        End If
                     End If
                 Else
                     strContent = strContent & strLine & vbCrLf
