@@ -161,6 +161,7 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
+      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -649,97 +650,211 @@ End Sub
 
 Private Sub cmd_LostFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("Button", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_LostFocus"
 
 End Sub
 
 Private Sub cmd_GotFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("Button", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_GotFocus"
 
 End Sub
 
 Private Sub cmd_KeyPress(Index As Integer, KeyAscii As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("Button", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_KeyPress", KeyAscii
 
 End Sub
 
 Private Sub cmd_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("Button", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_KeyUp", KeyCode, Shift
 
 End Sub
 
 Private Sub cmd_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("Button", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_MouseDown", Index, Button, Shift, X, Y
 
 End Sub
 
 Private Sub cmd_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("Button", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_MouseMove", Button, Shift, X, Y
 
 End Sub
 
 Private Sub cmd_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("Button", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_MouseUp", Button, Shift, X, Y
 
 End Sub
 
 Private Sub cmd_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("Button", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_KeyDown", KeyCode, Shift
 
 End Sub
 
 Private Sub cmd_Click(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
-
-End Sub
-
-Private Sub ine_StateChanged(Index As Integer, ByVal State As Integer)
-
+    obj = GetSCObjByIndexEx("Button", Index)
+    
     ' ...
+    obj.SCModule.Run obj.ObjName & "_Click"
 
 End Sub
 
 Private Sub lbl_Change(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("Label", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_Change"
 
 End Sub
 
 Private Sub lbl_Click(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("Label", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_Click"
 
 End Sub
 
 Private Sub lbl_DblClick(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("Label", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_DblClick"
 
 End Sub
 
 Private Sub lbl_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("Label", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_MouseDown", Button, Shift, X, Y
 
 End Sub
 
 Private Sub lbl_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("Label", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_MouseMove", Button, Shift, X, Y
 
 End Sub
 
 Private Sub lbl_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("Label", Index)
+    
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_MouseUp", Button, Shift, X, Y
 
 End Sub
 
