@@ -91,7 +91,7 @@ End Property
 Public Property Get CharacterName() As String
 
     ' ...
-    Name = m_character_name
+    CharacterName = m_character_name
 
 End Property
 
