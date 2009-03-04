@@ -38,7 +38,7 @@ Public Property Get Name() As String
 
 End Property
 
-Public Property Let Name(str As String)
+Public Property Let Name(ByVal str As String)
 
     ' ...
     m_name = str
@@ -60,7 +60,7 @@ Public Property Get Operator() As String
 
 End Property
 
-Public Property Let Operator(str As String)
+Public Property Let Operator(ByVal str As String)
 
     ' ...
     m_operator = str
@@ -74,7 +74,7 @@ Public Property Get DateOfBan() As Date
 
 End Property
 
-Public Property Let DateOfBan(BanDate As Date)
+Public Property Let DateOfBan(ByVal BanDate As Date)
 
     ' ...
     m_banned_date = BanDate
@@ -88,14 +88,14 @@ Public Property Get Reason() As String
 
 End Property
 
-Public Property Let Reason(str As String)
+Public Property Let Reason(ByVal str As String)
 
     ' ...
     m_ban_reason = str
 
 End Property
 
-Public Property Let IsDuplicateBan(bln As Boolean)
+Public Property Let IsDuplicateBan(ByVal bln As Boolean)
 
     ' ...
     m_duplicate_ban = bln
@@ -109,7 +109,7 @@ Public Property Get IsDuplicateBan() As Boolean
 
 End Property
 
-Public Property Let IsActive(bln As Boolean)
+Public Property Let IsActive(ByVal bln As Boolean)
 
     ' ...
     m_active_ban = bln

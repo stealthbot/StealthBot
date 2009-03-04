@@ -78,10 +78,10 @@ Public Property Get Name() As String
 
     ' ...
     Name = modEvents.CleanUsername(m_actual_name)
-
+    
 End Property
 
-Public Property Let Name(str As String)
+Public Property Let Name(ByVal str As String)
 
     ' ...
     m_actual_name = str
@@ -95,7 +95,7 @@ Public Property Get CharacterName() As String
 
 End Property
 
-Public Property Let CharacterName(str As String)
+Public Property Let CharacterName(ByVal str As String)
 
     ' ...
     m_character_name = str
@@ -109,7 +109,7 @@ Public Property Get game() As String
 
 End Property
 
-Public Property Let game(str As String)
+Public Property Let game(ByVal str As String)
 
     ' ...
     m_game = str
@@ -123,7 +123,7 @@ Public Property Get PendingBan() As Boolean
 
 End Property
 
-Public Property Let PendingBan(bln As Boolean)
+Public Property Let PendingBan(ByVal bln As Boolean)
 
     ' ...
     m_pending_ban = bln
@@ -151,7 +151,7 @@ Public Property Get Statstring() As String
 
 End Property
 
-Public Property Let Statstring(str As String)
+Public Property Let Statstring(ByVal str As String)
 
     ' ...
     m_stats_string = str
@@ -168,7 +168,7 @@ Public Property Get Clan() As String
 
 End Property
 
-Public Property Let Clan(str As String)
+Public Property Let Clan(ByVal str As String)
 
     ' ...
     m_clan = str
@@ -189,7 +189,7 @@ Public Property Get Flags() As Long
 
 End Property
 
-Public Property Let Flags(lng As Long)
+Public Property Let Flags(ByVal lng As Long)
 
     ' ...
     m_flags = lng
@@ -203,7 +203,7 @@ Public Property Get PassedChannelAuth() As Boolean
 
 End Property
 
-Public Property Let PassedChannelAuth(bln As Boolean)
+Public Property Let PassedChannelAuth(ByVal bln As Boolean)
 
     ' ...
     m_passed_chan_auth = bln
@@ -231,14 +231,14 @@ Public Property Get Ping() As Long
 
 End Property
 
-Public Property Let Ping(lng As Long)
+Public Property Let Ping(ByVal lng As Long)
 
     ' ...
     m_ping = lng
 
 End Property
 
-Public Property Let LastTalkTime(TDate As Date)
+Public Property Let LastTalkTime(ByVal TDate As Date)
 
     ' ...
     m_last_speak_date = TDate
@@ -253,7 +253,7 @@ Public Property Get LastTalkTime() As Date
 End Property
 
 
-Public Property Let JoinTime(JDate As Date)
+Public Property Let JoinTime(ByVal JDate As Date)
 
     ' ...
     m_join_date = JDate
@@ -399,7 +399,7 @@ Public Function Clone() As Object
 
     ' ...
     Set Clone = New clsUserObj
-    
+
     ' ...
     Clone.Name = Name
     Clone.Ping = Ping

@@ -88,7 +88,7 @@ Private m_hardcore            As Boolean
 Private m_realm               As String
 Private m_are_stats_valid     As Boolean
 
-Public Property Let game(str As String)
+Public Property Let game(ByVal str As String)
 
     ' ...
     m_game = str
@@ -102,7 +102,7 @@ Public Property Get game() As String
 
 End Property
 
-Public Property Let IsValid(bln As Boolean)
+Public Property Let IsValid(ByVal bln As Boolean)
 
     ' ...
     m_are_stats_valid = bln
@@ -130,7 +130,7 @@ Public Property Get IsWCG() As Boolean
 
 End Property
 
-Public Property Let Icon(str As String)
+Public Property Let Icon(ByVal str As String)
 
     ' ...
     m_icon = str
@@ -321,7 +321,7 @@ Public Property Get IconName() As String
 
 End Property
 
-Public Property Let Statstring(str As String)
+Public Property Let Statstring(ByVal str As String)
 
     ' ...
     If (Len(str) < 4) Then
@@ -364,7 +364,7 @@ Public Property Get IsSpawn() As Boolean
 
 End Property
 
-Public Property Let IsSpawn(bln As Boolean)
+Public Property Let IsSpawn(ByVal bln As Boolean)
 
     ' ...
     m_spawn = bln
@@ -378,7 +378,7 @@ Public Property Get Clan() As String
 
 End Property
 
-Public Property Let Clan(str As String)
+Public Property Let Clan(ByVal str As String)
 
     ' ...
     m_clan = str
@@ -392,7 +392,7 @@ Public Property Get Wins() As Long
 
 End Property
 
-Public Property Let Wins(lng As Long)
+Public Property Let Wins(ByVal lng As Long)
 
     ' ...
     m_wins = lng
@@ -406,7 +406,7 @@ Public Property Get LadderRating() As Long
 
 End Property
 
-Public Property Let LadderRating(lng As Long)
+Public Property Let LadderRating(ByVal lng As Long)
 
     ' ...
     m_ladder_rating = lng
@@ -420,7 +420,7 @@ Public Property Get HighLadderRating() As Long
 
 End Property
 
-Public Property Let HighLadderRating(lng As Long)
+Public Property Let HighLadderRating(ByVal lng As Long)
 
     ' ...
     m_high_rating = lng
@@ -434,7 +434,7 @@ Public Property Get LadderRank() As Long
 
 End Property
 
-Public Property Let LadderRank(lng As Long)
+Public Property Let LadderRank(ByVal lng As Long)
 
     ' ...
     m_ladder_rank = lng
@@ -448,7 +448,7 @@ Public Property Get Level() As Long
 
 End Property
 
-Public Property Let Level(lng As Long)
+Public Property Let Level(ByVal lng As Long)
 
     ' ...
     m_level = lng
@@ -462,7 +462,7 @@ Public Property Get CharacterName() As String
 
 End Property
 
-Public Property Let CharacterName(str As String)
+Public Property Let CharacterName(ByVal str As String)
 
     ' ...
     m_character_name = str
@@ -476,10 +476,10 @@ Public Property Get CharacterClassID() As Integer
 
 End Property
 
-Public Property Let CharacterClassID(I As Integer)
+Public Property Let CharacterClassID(ByVal i As Integer)
 
     ' ...
-    m_character_class_id = I
+    m_character_class_id = i
 
 End Property
 
@@ -602,10 +602,10 @@ Public Property Get ActsCompleted() As Integer
 
 End Property
 
-Public Property Let ActsCompleted(I As Integer)
+Public Property Let ActsCompleted(ByVal i As Integer)
 
     ' ...
-    m_acts_completed = I
+    m_acts_completed = i
 
 End Property
 
@@ -738,7 +738,7 @@ Public Property Get Dots() As Long
 
 End Property
 
-Public Property Let Dots(lng As Long)
+Public Property Let Dots(ByVal lng As Long)
 
     ' ...
     m_dots = lng
@@ -752,7 +752,7 @@ Public Property Get Strength() As Long
 
 End Property
 
-Public Property Let Strength(lng As Long)
+Public Property Let Strength(ByVal lng As Long)
 
     ' ...
     m_strength = lng
@@ -766,7 +766,7 @@ Public Property Get Magic() As Long
 
 End Property
 
-Public Property Let Magic(lng As Long)
+Public Property Let Magic(ByVal lng As Long)
 
     ' ...
     m_magic = lng
@@ -780,7 +780,7 @@ Public Property Get Gold() As Long
 
 End Property
 
-Public Property Let Gold(lng As Long)
+Public Property Let Gold(ByVal lng As Long)
 
     ' ...
     m_gold = lng
@@ -794,7 +794,7 @@ Public Property Get Dexterity() As Long
 
 End Property
 
-Public Property Let Dexterity(lng As Long)
+Public Property Let Dexterity(ByVal lng As Long)
 
     ' ...
     m_dexterity = lng
@@ -808,7 +808,7 @@ Public Property Get Vitality() As Long
 
 End Property
 
-Public Property Let Vitality(lng As Long)
+Public Property Let Vitality(ByVal lng As Long)
 
     ' ...
     m_vitality = lng
@@ -822,7 +822,7 @@ Public Property Get Realm() As String
 
 End Property
 
-Public Property Let Realm(str As String)
+Public Property Let Realm(ByVal str As String)
 
     ' ...
     m_realm = str
@@ -1241,27 +1241,27 @@ Private Function WarCraftIII_ToString() As String
 
 End Function
 
-Private Sub MakeArr(str As String, arr() As Integer)
+Private Sub MakeArr(ByVal str As String, ByRef arr() As Integer)
     
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
     
     ' ...
     ReDim arr(0)
     
     ' ...
-    For I = 1 To Len(str)
+    For i = 1 To Len(str)
         ' ...
-        If (I > 1) Then
-            ReDim Preserve arr(0 To I - 1)
+        If (i > 1) Then
+            ReDim Preserve arr(0 To i - 1)
         End If
         
         ' ...
-        arr(I - 1) = Asc(Mid(str, I, 1))
-    Next I
+        arr(i - 1) = Asc(Mid(str, i, 1))
+    Next i
     
 End Sub
 
-Private Function MakeLongGameName(game As String) As String
+Private Function MakeLongGameName(ByVal game As String) As String
 
     ' ...
     Select Case (game)
@@ -1292,9 +1292,9 @@ Private Function MakeLongGameName(game As String) As String
 
 End Function
 
-Private Function MakeRomanNum(num As Integer) As String
+Private Function MakeRomanNum(ByVal Num As Integer) As String
     ' ...
-    Select Case (num)
+    Select Case (Num)
         Case 1: MakeRomanNum = "I"
         Case 2: MakeRomanNum = "II"
         Case 3: MakeRomanNum = "III"

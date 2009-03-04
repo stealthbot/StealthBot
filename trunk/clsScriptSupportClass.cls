@@ -1542,7 +1542,9 @@ Public Function Friends() As Object
 End Function
 
 Public Function Queue() As Object
+
     Set Queue = g_Queue
+
 End Function
 
 Public Function OSVersion() As Object

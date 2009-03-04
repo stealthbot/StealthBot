@@ -32,7 +32,7 @@ Public Property Get Name() As String
 End Property
 
 ' ...
-Public Property Let Name(str As String)
+Public Property Let Name(ByVal str As String)
 
     ' ...
     m_name = str
@@ -56,7 +56,7 @@ Public Property Get Rank() As Integer
 End Property
 
 ' ...
-Public Property Let Rank(i As Integer)
+Public Property Let Rank(ByVal i As Integer)
 
     ' ...
     m_rank = i
@@ -79,7 +79,7 @@ Public Property Get JoinTime() As Date
 End Property
 
 ' ...
-Public Property Let JoinTime(dJoined As Date)
+Public Property Let JoinTime(ByVal dJoined As Date)
 
     ' ...
     m_join_date = dJoined
@@ -95,7 +95,7 @@ Public Property Get Status() As Integer
 End Property
 
 ' ...
-Public Property Let Status(i As Integer)
+Public Property Let Status(ByVal i As Integer)
 
     ' ...
     m_status = i

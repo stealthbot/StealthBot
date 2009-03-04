@@ -52,14 +52,14 @@ Public Property Get EventID() As Long
 
 End Property
 
-Public Property Let EventID(lng As Long)
+Public Property Let EventID(ByVal lng As Long)
 
     ' ...
     m_event_id = lng
 
 End Property
 
-Public Property Let EventTick(lng As Long)
+Public Property Let EventTick(ByVal lng As Long)
 
     ' ...
     m_gtc = lng
@@ -81,7 +81,7 @@ Public Property Get Ping() As Long
 
 End Property
 
-Public Property Let Ping(lng As Long)
+Public Property Let Ping(ByVal lng As Long)
 
     ' ...
     m_ping = lng
@@ -95,7 +95,7 @@ Public Property Get Flags() As Long
 
 End Property
 
-Public Property Let Flags(lng As Long)
+Public Property Let Flags(ByVal lng As Long)
 
     ' ...
     m_flags = lng
@@ -109,7 +109,7 @@ Public Property Get Message() As String
 
 End Property
 
-Public Property Let Message(str As String)
+Public Property Let Message(ByVal str As String)
 
     ' ...
     m_message = str
@@ -123,7 +123,7 @@ Public Property Get GameID() As String
 
 End Property
 
-Public Property Let GameID(str As String)
+Public Property Let GameID(ByVal str As String)
 
     ' ...
     m_game_id = str
@@ -137,7 +137,7 @@ Public Property Get Clan() As String
 
 End Property
 
-Public Property Let Clan(str As String)
+Public Property Let Clan(ByVal str As String)
 
     ' ...
     m_clan = str
@@ -151,7 +151,7 @@ Public Property Get Statstring() As String
 
 End Property
 
-Public Property Let Statstring(str As String)
+Public Property Let Statstring(ByVal str As String)
 
     ' ...
     m_stat_string = str
@@ -168,7 +168,7 @@ Public Property Get IconCode() As String
 
 End Property
 
-Public Property Let IconCode(str As String)
+Public Property Let IconCode(ByVal str As String)
 
     ' ...
     m_icon_code = str
