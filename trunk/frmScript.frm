@@ -386,6 +386,8 @@ Private Sub DestroyObjs()
     For i = m_objCount - 1 To 0 Step -1
         ' ...
     Next i
+    
+    Exit Sub
 
 ERROR_HANDLER:
     
