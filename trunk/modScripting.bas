@@ -378,7 +378,21 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
                     frmChat.itcScript(ObjCount(ObjType))
         
         Case "FORM"
-        Case "MENU"
+            Set obj.obj = New frmScript
+            
+            ' ...
+            frmScript.setName ObjName
+            frmScript.setSCModule SCModule
+            
+        ' i don't think this one is going to work :|
+        'Case "MENU"
+        '    If (ObjCount(ObjType) > 0) Then
+        '        Load frmChat.mnuScript(ObjCount(ObjType))
+        '    End If
+        '
+        '    Set obj.obj = _
+        '            frmChat.mnuScript(ObjCount(ObjType))
+            
     End Select
 
     ' store object

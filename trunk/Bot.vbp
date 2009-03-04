@@ -103,6 +103,7 @@ Class=clsASM; clsASM.cls
 Class=clsCRC32; clsCRC32.cls
 Module=modUnsignedConversions; modUnsignedConversions.bas
 Class=clsBNCSRecvBuffer; cBNCSRecvBuffer.cls
+Form=frmScript.frm
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""

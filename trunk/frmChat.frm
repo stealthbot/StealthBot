@@ -1350,6 +1350,11 @@ Begin VB.Form frmChat
          Caption         =   "Profile Lookup"
       End
    End
+   Begin VB.Menu mnuScript 
+      Caption         =   ""
+      Index           =   0
+      Visible         =   0   'False
+   End
    Begin VB.Menu mnuHelp 
       Caption         =   "&Help"
       NegotiatePosition=   3  'Right
@@ -4772,6 +4777,18 @@ End Sub
 
 Private Sub mnuUsers_Click()
     frmDBManager.Show
+End Sub
+
+Private Sub mnuScript_Click(Index As Integer)
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetSCObjByIndexEx("Menu", Index)
+
+    ' ...
+    obj.SCModule.Run obj.ObjName & "_Click"
+
 End Sub
 
 Private Sub sckScript_Connect(Index As Integer)
