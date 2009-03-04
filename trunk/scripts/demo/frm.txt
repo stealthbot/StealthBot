@@ -1,11 +1,17 @@
 Sub frm_Load()
 
-   frm.CreateObj "ListBox", "lbx"
+   frm.CreateObj "TextBox", "text"
 
-   With frm.GetObjByName("ListBox", "lbx")
+   With frm.GetObjByName("TextBox", "text")
       .Visible = True
    End With
 
    AddChat vbBlue, "frm_Load()"
+
+End Sub
+
+Sub frm_text_Change()
+
+   AddChat vbBlue, "frm_text_Change()"
 
 End Sub
