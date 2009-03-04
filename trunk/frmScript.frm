@@ -1028,73 +1028,169 @@ End Sub
 
 Private Sub lsv_AfterLabelEdit(Index As Integer, Cancel As Integer, NewString As String)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ListView", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_AfterLabelEdit", Cancel, NewString
 
 End Sub
 
 Private Sub lsv_BeforeLabelEdit(Index As Integer, Cancel As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ListView", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_BeforeLabelEdit", Cancel
 
 End Sub
 
 Private Sub lsv_Click(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ListView", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_Click"
 
 End Sub
 
 Private Sub lsv_DblClick(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ListView", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_DblClick"
 
 End Sub
 
 Private Sub lsv_GotFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ListView", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_GotFocus"
 
 End Sub
 
 Private Sub lsv_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ListView", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 
 End Sub
 
 Private Sub lsv_KeyPress(Index As Integer, KeyAscii As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ListView", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
 
 End Sub
 
 Private Sub lsv_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ListView", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 
 End Sub
 
 Private Sub lsv_LostFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ListView", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_LostFocus"
 
 End Sub
 
 Private Sub lsv_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ListView", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, X, Y
 
 End Sub
 
 Private Sub lsv_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ListView", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, X, Y
 
 End Sub
 
 Private Sub lsv_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("ListView", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, X, Y
 
 End Sub
 
