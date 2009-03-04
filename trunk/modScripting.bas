@@ -307,17 +307,15 @@ Public Function ObjCount(Optional ObjType As String) As Integer
     
     Dim I As Integer ' ...
 
-    Select Case (UCase$(ObjType))
-        Case "TIMER", "WINSOCK", "INET", "FORM", "MENU"
-            For I = 0 To m_objCount - 1
-                If (StrComp(ObjType, m_arrObjs(I).ObjType, vbTextCompare) = 0) Then
-                    ObjCount = (ObjCount + 1)
-                End If
-            Next I
-            
-        Case Else
-            ObjCount = m_objCount
-    End Select
+    If (ObjType <> vbNullString) Then
+        For I = 0 To m_objCount - 1
+            If (StrComp(ObjType, m_arrObjs(I).ObjType, vbTextCompare) = 0) Then
+                ObjCount = (ObjCount + 1)
+            End If
+        Next I
+    Else
+        ObjCount = m_objCount
+    End If
 
 End Function
 
@@ -381,8 +379,8 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
             Set obj.obj = New frmScript
             
             ' ...
-            frmScript.setName ObjName
-            frmScript.setSCModule SCModule
+            obj.obj.setName ObjName
+            obj.obj.setSCModule SCModule
             
         ' i don't menus are going to work :|
         'Case "MENU"

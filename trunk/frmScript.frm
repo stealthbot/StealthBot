@@ -161,7 +161,6 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
-      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -318,16 +317,81 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
 
     Select Case (UCase$(ObjType))
         Case "BUTTON"
+            If (ObjCount(ObjType) > 0) Then
+                Load cmd(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = cmd(ObjCount(ObjType))
+        
         Case "CHECKBOX"
+            If (ObjCount(ObjType) > 0) Then
+                Load chk(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = chk(ObjCount(ObjType))
+        
         Case "COMBOXBOX"
+            If (ObjCount(ObjType) > 0) Then
+                Load cmb(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = cmb(ObjCount(ObjType))
+        
         Case "IMAGELIST"
+            If (ObjCount(ObjType) > 0) Then
+                Load iml(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = iml(ObjCount(ObjType))
+        
         Case "LABEL"
+            If (ObjCount(ObjType) > 0) Then
+                Load lbl(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = lbl(ObjCount(ObjType))
+        
         Case "LISTBOX"
+            If (ObjCount(ObjType) > 0) Then
+                Load lst(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = lst(ObjCount(ObjType))
+        
         Case "LISTVIEW"
+            If (ObjCount(ObjType) > 0) Then
+                Load lsv(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = lsv(ObjCount(ObjType))
+        
         Case "OPTIONBUTTON"
+            If (ObjCount(ObjType) > 0) Then
+                Load opt(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = opt(ObjCount(ObjType))
+        
         Case "PICTUREBOX"
+            If (ObjCount(ObjType) > 0) Then
+                Load pic(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = pic(ObjCount(ObjType))
+        
         Case "RICHTEXTBOX"
+            If (ObjCount(ObjType) > 0) Then
+                Load rtb(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = rtb(ObjCount(ObjType))
+        
         Case "TEXTBOX"
+            If (ObjCount(ObjType) > 0) Then
+                Load txt(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = txt(ObjCount(ObjType))
     End Select
 
     ' store our module name & type
@@ -412,7 +476,18 @@ End Sub
 '//Events
 '//////////////////////////////////////////////////////
 
+Private Sub Form_Initialize()
+
+    On Error Resume Next
+
+    ' ...
+    m_sc_module.Run m_name & "_Initialize"
+
+End Sub
+
 Private Sub Form_Load()
+
+    On Error Resume Next
 
     ' ...
     m_sc_module.Run m_name & "_Load"
@@ -421,12 +496,16 @@ End Sub
 
 Private Sub Form_Activate()
 
+    On Error Resume Next
+
     ' ...
     m_sc_module.Run m_name & "_Activate"
 
 End Sub
 
 Private Sub Form_Click()
+
+    On Error Resume Next
 
     ' ...
     m_sc_module.Run m_name & "_Click"
@@ -435,12 +514,16 @@ End Sub
 
 Private Sub Form_DblClick()
 
+    On Error Resume Next
+
     ' ...
     m_sc_module.Run m_name & "_DblClick"
 
 End Sub
 
 Private Sub Form_Deactivate()
+
+    On Error Resume Next
 
     ' ...
     m_sc_module.Run m_name & "_Deactivate"
@@ -449,19 +532,16 @@ End Sub
 
 Private Sub Form_GotFocus()
 
+    On Error Resume Next
+
     ' ...
     m_sc_module.Run m_name & "_GotFocus"
 
 End Sub
 
-Private Sub Form_Initialize()
-
-    ' ...
-    m_sc_module.Run m_name & "_Initialize"
-
-End Sub
-
 Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
+
+    On Error Resume Next
 
     ' ...
     m_sc_module.Run m_name & "_KeyDown", KeyCode, Shift
@@ -470,12 +550,16 @@ End Sub
 
 Private Sub Form_KeyPress(KeyAscii As Integer)
 
+    On Error Resume Next
+
     ' ...
     m_sc_module.Run m_name & "_KeyPress", KeyAscii
 
 End Sub
 
 Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
+
+    On Error Resume Next
 
     ' ...
     m_sc_module.Run m_name & "_KeyUp", KeyCode, Shift
@@ -484,12 +568,16 @@ End Sub
 
 Private Sub Form_LostFocus()
 
+    On Error Resume Next
+
     ' ...
     m_sc_module.Run m_name & "_LostFocus"
 
 End Sub
 
 Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+
+    On Error Resume Next
 
     ' ...
     m_sc_module.Run m_name & "_MouseDown", Button, Shift, X, Y
@@ -498,12 +586,16 @@ End Sub
 
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
     ' ...
     m_sc_module.Run m_name & "_MouseMove", Button, Shift, X, Y
 
 End Sub
 
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+
+    On Error Resume Next
 
     ' ...
     m_sc_module.Run m_name & "_MouseUp", Button, Shift, X, Y
@@ -512,12 +604,16 @@ End Sub
 
 Private Sub Form_Paint()
 
+    On Error Resume Next
+
     ' ...
     m_sc_module.Run m_name & "_Paint"
 
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+
+    On Error Resume Next
 
     ' ...
     m_sc_module.Run m_name & "_QueryUnload", UnloadMode
@@ -526,6 +622,8 @@ End Sub
 
 Private Sub Form_Resize()
 
+    On Error Resume Next
+
     ' ...
     m_sc_module.Run m_name & "_Resize"
 
@@ -533,12 +631,16 @@ End Sub
 
 Private Sub Form_Terminate()
 
+    On Error Resume Next
+
     ' ...
     m_sc_module.Run m_name & "_Terminate"
 
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
+
+    On Error Resume Next
 
     ' ...
     m_sc_module.Run m_name & "_Unload"
