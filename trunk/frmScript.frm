@@ -22,15 +22,6 @@ Begin VB.Form frmScript
    ScaleWidth      =   4680
    StartUpPosition =   3  'Windows Default
    Begin VB.CommandButton cmd 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   0
       Left            =   0
@@ -40,15 +31,6 @@ Begin VB.Form frmScript
       Width           =   255
    End
    Begin VB.TextBox txt 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   285
       Index           =   0
       Left            =   600
@@ -59,15 +41,6 @@ Begin VB.Form frmScript
       Width           =   255
    End
    Begin VB.PictureBox pic 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   0
       Left            =   960
@@ -79,15 +52,6 @@ Begin VB.Form frmScript
       Width           =   255
    End
    Begin VB.CheckBox chk 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   0
       Left            =   1320
@@ -97,15 +61,6 @@ Begin VB.Form frmScript
       Width           =   255
    End
    Begin VB.OptionButton opt 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   0
       Left            =   1680
@@ -115,15 +70,6 @@ Begin VB.Form frmScript
       Width           =   255
    End
    Begin VB.ComboBox cmb 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   315
       Index           =   0
       Left            =   2040
@@ -133,15 +79,6 @@ Begin VB.Form frmScript
       Width           =   390
    End
    Begin VB.ListBox lst 
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       Height          =   255
       Index           =   0
       Left            =   2520
@@ -161,7 +98,6 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
-      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -202,15 +138,6 @@ Begin VB.Form frmScript
    Begin VB.Label lbl 
       BackColor       =   &H00000000&
       Caption         =   "lbl"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   255
       Index           =   0
@@ -1336,175 +1263,406 @@ End Sub
 
 Private Sub pic_Change(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_Change"
 
 End Sub
 
 Private Sub pic_Click(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_Click"
 
 End Sub
 
 Private Sub pic_DblClick(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_DblClick"
 
 End Sub
 
 Private Sub pic_GotFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_GotFocus"
 
 End Sub
 
 Private Sub pic_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 
 End Sub
 
 Private Sub pic_KeyPress(Index As Integer, KeyAscii As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
 
 End Sub
 
 Private Sub pic_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 
 End Sub
 
 Private Sub pic_LinkClose(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_LinkClose"
 
 End Sub
 
 Private Sub pic_LinkError(Index As Integer, LinkErr As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_LinkError", LinkErr
 
 End Sub
 
 Private Sub pic_LinkNotify(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_LinkNotify"
 
 End Sub
 
 Private Sub pic_LinkOpen(Index As Integer, Cancel As Integer)
 
+     On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_LinkOpen", Cancel
 
 End Sub
 
 Private Sub pic_LostFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_LostFocus"
 
 End Sub
 
 Private Sub pic_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, X, Y
 
 End Sub
 
 Private Sub pic_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, X, Y
 
 End Sub
 
 Private Sub pic_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
  
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, X, Y
 
 End Sub
 
 Private Sub pic_Paint(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_Paint"
 
 End Sub
 
 Private Sub pic_Resize(Index As Integer)
 
-    ' ...
+    On Error Resume Next
 
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetSCObjByIndexEx("PictureBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_Resize"
+    
 End Sub
 
 Private Sub rtb_Change(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("RichTextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_Change"
 
 End Sub
 
 Private Sub rtb_Click(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("RichTextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_Click"
 
 End Sub
 
 Private Sub rtb_DblClick(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("RichTextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_DblClick"
 
 End Sub
 
 Private Sub rtb_GotFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("RichTextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_GotFocus"
 
 End Sub
 
 Private Sub rtb_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("RichTextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 
 End Sub
 
 Private Sub rtb_KeyPress(Index As Integer, KeyAscii As Integer)
 
-    ' ...
+    On Error Resume Next
 
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetSCObjByIndexEx("RichTextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
 End Sub
 
 Private Sub rtb_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("RichTextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 
 End Sub
 
 Private Sub rtb_LostFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("RichTextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_LostFocus"
 
 End Sub
 
 Private Sub rtb_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("RichTextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, X, Y
 
 End Sub
 
 Private Sub rtb_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
  
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("RichTextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, X, Y
 
 End Sub
 
 Private Sub rtb_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("RichTextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, X, Y
 
 End Sub
 
 Private Sub rtb_SelChange(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("RichTextBox", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_SelChange"
 
 End Sub
 
