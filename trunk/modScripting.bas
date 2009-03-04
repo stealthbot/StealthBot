@@ -118,6 +118,8 @@ End Sub
 
 Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As String)
 
+    On Error GoTo ERROR_HANDLER
+
     Dim strLine    As String  ' ...
     Dim strContent As String  ' ...
     Dim f          As Integer ' ...
@@ -133,29 +135,42 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
             Line Input #f, strLine
             
             ' ...
-            If (Len(strLine) > 1) Then
+            strLine = Trim(strLine)
+            
+            ' ...
+            If (Len(strLine) >= 1) Then
                 ' ...
-                If (StrComp(Left$(Trim(LCase$(strLine)), 9), "#include ", vbTextCompare) <> 0) Then
-                    strContent = strContent & strLine & vbCrLf
-                Else
-                    ' ...
-                    If (Len(Trim(LCase$(strLine))) >= 11) Then
-                        Dim tmp As String ' ...
-                        
-                        ' ...
-                        tmp = Trim(LCase$(strLine))
-                        tmp = Mid$(strLine, 11, Len(strLine) - 11)
-                        
-                        ' ...
-                        If (Left$(tmp, 1) = "\") Then
-                            filePath = App.path & "\scripts\" & tmp
-                        Else
-                            filePath = tmp
-                        End If
-
-                        ' ...
-                        FileToModule ScriptModule, filePath
+                If (Left$(strLine, 1) = "#") Then
+                    If (InStr(strLine, " ") <> 0) Then
+                        Dim strCommand As String ' ...
+                    
+                        strCommand = _
+                            LCase$(Mid$(strLine, 2, InStr(strLine, " ") - 1))
+                            
+                            If (strCommand = "include") Then
+                                If (Len(LCase$(strLine)) >= 12) Then
+                                    Dim tmp As String ' ...
+                                    
+                                    ' ...
+                                    tmp = _
+                                        LCase$(Mid$(strLine, 11, Len(strLine) - 11))
+                                    
+                                    ' ...
+                                    If (Left$(tmp, 1) = "\") Then
+                                        filePath = App.path & "\scripts\" & tmp
+                                    Else
+                                        filePath = tmp
+                                    End If
+            
+                                    ' ...
+                                    FileToModule ScriptModule, filePath
+                                End If
+                            ElseIf (strCommand = "prefix") Then
+                                ' ...
+                            End If
                     End If
+                Else
+                    strContent = strContent & strLine & vbCrLf
                 End If
             End If
             
@@ -169,6 +184,15 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
 
     ' ...
     ScriptModule.AddCode strContent
+    
+    Exit Function
+    
+ERROR_HANDLER:
+
+    frmChat.AddChat vbRed, _
+        "Error (#" & Err.Number & "): " & Err.description & " in FileToModule()."
+        
+    Exit Function
 
 End Function
 
