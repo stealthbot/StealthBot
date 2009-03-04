@@ -60,7 +60,7 @@ Private Sub Class_Initialize()
     ' ...
     LastTalkTime = UtcNow
     JoinTime = UtcNow
-        
+
 End Sub
 
 Private Sub Class_Terminate()
@@ -251,7 +251,6 @@ Public Property Get LastTalkTime() As Date
     LastTalkTime = m_last_speak_date
 
 End Property
-
 
 Public Property Let JoinTime(ByVal JDate As Date)
 

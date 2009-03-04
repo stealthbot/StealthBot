@@ -167,7 +167,7 @@ Public Property Get IsSilent() As Boolean
 
 End Property
 
-Public Property Let JoinCount(lng As Long)
+Public Property Let JoinCount(ByVal lng As Long)
 
     ' ...
 
@@ -761,7 +761,7 @@ Public Function Clone() As Object
     For i = 1 To Users.Count
         Clone.Users.Add Users(i).Clone()
     Next i
-    
+
     ' ...
     For i = 1 To Banlist.Count
         Clone.Banlist.Add Banlist(i).Clone()

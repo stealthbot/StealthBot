@@ -28,6 +28,13 @@ Private Sub Class_Initialize()
 
 End Sub
 
+Private Sub Class_Terminate()
+
+    ' ...
+    Set m_members = Nothing
+
+End Sub
+
 ' ...
 Public Property Get Name() As String
 
