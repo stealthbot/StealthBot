@@ -58,7 +58,7 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     ' ********************************
 
     ' ...
-    strPath = App.Path & "\scripts\"
+    strPath = App.path & "\scripts\"
     
     ' ...
     If (Dir(strPath) <> vbNullString) Then
@@ -135,12 +135,26 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
             ' ...
             If (Len(strLine) > 1) Then
                 ' ...
-                If (StrComp(Left$(Trim(LCase$(strLine)), 8), "#include", vbTextCompare) <> 0) Then
+                If (StrComp(Left$(Trim(LCase$(strLine)), 9), "#include ", vbTextCompare) <> 0) Then
                     strContent = strContent & strLine & vbCrLf
                 Else
                     ' ...
-                    If (Len(Trim(LCase$(strLine))) > 8) Then
-                        FileToModule ScriptModule, Mid$(Trim(LCase$(strLine)), 9)
+                    If (Len(Trim(LCase$(strLine))) >= 11) Then
+                        Dim tmp As String ' ...
+                        
+                        ' ...
+                        tmp = Trim(LCase$(strLine))
+                        tmp = Mid$(strLine, 11, Len(strLine) - 11)
+                        
+                        ' ...
+                        If (Left$(tmp, 1) = "\") Then
+                            filePath = App.path & "\scripts\" & tmp
+                        Else
+                            filePath = tmp
+                        End If
+
+                        ' ...
+                        FileToModule ScriptModule, filePath
                     End If
                 End If
             End If

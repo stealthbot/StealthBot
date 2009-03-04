@@ -1,0 +1,18 @@
+#include "\demo\frm.txt"
+#include "\demo\sck.txt"
+
+Sub Event_Load()
+
+   CreateObj "Winsock", "sck"
+   
+   With sck
+      .RemoteHost = "uswest.battle.net"
+      .RemotePort = 6112
+      .Connect
+   End With
+
+   CreateObj "Form", "frm"
+
+   frm.Show
+
+End Sub

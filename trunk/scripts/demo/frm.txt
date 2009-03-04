@@ -1,0 +1,11 @@
+Sub frm_Load()
+
+   frm.CreateObj "ListBox", "lbx"
+
+   With frm.GetObjByName("ListBox", "lbx")
+      .Visible = True
+   End With
+
+   AddChat vbBlue, "frm_Load()"
+
+End Sub

@@ -1,0 +1,5 @@
+Sub sck_Connect()
+
+   AddChat vbBlue, "sck_Connect()"
+
+End Sub
