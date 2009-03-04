@@ -23,7 +23,7 @@ Begin VB.Form frmScript
    StartUpPosition =   3  'Windows Default
    Begin VB.CommandButton cmd 
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Tahoma"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -41,7 +41,7 @@ Begin VB.Form frmScript
    End
    Begin VB.TextBox txt 
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Tahoma"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -60,7 +60,7 @@ Begin VB.Form frmScript
    End
    Begin VB.PictureBox pic 
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Tahoma"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -80,7 +80,7 @@ Begin VB.Form frmScript
    End
    Begin VB.CheckBox chk 
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Tahoma"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -98,7 +98,7 @@ Begin VB.Form frmScript
    End
    Begin VB.OptionButton opt 
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Tahoma"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -116,7 +116,7 @@ Begin VB.Form frmScript
    End
    Begin VB.ComboBox cmb 
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Tahoma"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -134,7 +134,7 @@ Begin VB.Form frmScript
    End
    Begin VB.ListBox lst 
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Tahoma"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -203,7 +203,7 @@ Begin VB.Form frmScript
       BackColor       =   &H00000000&
       Caption         =   "lbl"
       BeginProperty Font 
-         Name            =   "MS Sans Serif"
+         Name            =   "Tahoma"
          Size            =   8.25
          Charset         =   0
          Weight          =   400
@@ -1196,61 +1196,141 @@ End Sub
 
 Private Sub opt_Click(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("OptionButton", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_Click"
 
 End Sub
 
 Private Sub opt_DblClick(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("OptionButton", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_DblClick"
 
 End Sub
 
 Private Sub opt_GotFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("OptionButton", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_GotFocus"
 
 End Sub
 
 Private Sub opt_KeyDown(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("OptionButton", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyDown", KeyCode, Shift
 
 End Sub
 
 Private Sub opt_KeyPress(Index As Integer, KeyAscii As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("OptionButton", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyPress", KeyAscii
 
 End Sub
 
 Private Sub opt_KeyUp(Index As Integer, KeyCode As Integer, Shift As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("OptionButton", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_KeyUp", KeyCode, Shift
 
 End Sub
 
 Private Sub opt_LostFocus(Index As Integer)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("OptionButton", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_LostFocus"
 
 End Sub
 
 Private Sub opt_MouseDown(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("OptionButton", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseDown", Button, Shift, X, Y
 
 End Sub
 
 Private Sub opt_MouseMove(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("OptionButton", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseMove", Button, Shift, X, Y
 
 End Sub
 
 Private Sub opt_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X As Single, Y As Single)
 
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
     ' ...
+    obj = GetSCObjByIndexEx("OptionButton", Index)
+    
+    ' ...
+    obj.SCModule.Run m_name & "_" & obj.ObjName & "_MouseUp", Button, Shift, X, Y
 
 End Sub
 
@@ -1423,12 +1503,6 @@ Private Sub rtb_MouseUp(Index As Integer, Button As Integer, Shift As Integer, X
 End Sub
 
 Private Sub rtb_SelChange(Index As Integer)
-
-    ' ...
-
-End Sub
-
-Private Sub tmr_Timer(Index As Integer)
 
     ' ...
 
