@@ -1,6 +1,5 @@
 VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
 Begin VB.Form frmScript 
    BackColor       =   &H00000000&
@@ -58,11 +57,6 @@ Begin VB.Form frmScript
       Top             =   0
       Visible         =   0   'False
       Width           =   255
-   End
-   Begin VB.Timer tmr 
-      Index           =   0
-      Left            =   0
-      Top             =   360
    End
    Begin VB.PictureBox pic 
       BeginProperty Font 
@@ -167,16 +161,9 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
+      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
-   End
-   Begin InetCtlsObjects.Inet ine 
-      Index           =   0
-      Left            =   2280
-      Top             =   360
-      _ExtentX        =   1005
-      _ExtentY        =   1005
-      _Version        =   393216
    End
    Begin MSComctlLib.ImageList iml 
       Index           =   0
@@ -259,6 +246,8 @@ Option Explicit
 
 Private m_name      As String
 Private m_sc_module As Module
+Private m_arrObjs() As modScripting.scObj
+Private m_objCount  As Integer
 
 Public Function setName(ByVal str As String)
 
@@ -284,10 +273,115 @@ Public Function getSCModule() As Module
 
 End Function
 
-Private Function CreateObj()
+Private Function Objects(objIndex As Integer) As scObj
+
+    Objects = m_arrObjs(objIndex)
+
+End Function
+
+Private Function ObjCount(Optional ObjType As String) As Integer
+    
+    Dim I As Integer ' ...
+
+    If (ObjType <> vbNullString) Then
+        For I = 0 To m_objCount - 1
+            If (StrComp(ObjType, m_arrObjs(I).ObjType, vbTextCompare) = 0) Then
+                ObjCount = (ObjCount + 1)
+            End If
+        Next I
+    Else
+        ObjCount = m_objCount
+    End If
+
+End Function
+
+Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As Object
+
+    Dim obj As scObj ' ...
+    
+    ' redefine array size & check for duplicate controls
+    If (m_objCount) Then
+        Dim I As Integer ' loop counter variable
+
+        For I = 0 To m_objCount - 1
+            If (StrComp(m_arrObjs(I).ObjType, ObjType, vbTextCompare) = 0) Then
+                If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
+                    Exit Function
+                End If
+            End If
+        Next I
+        
+        ReDim Preserve m_arrObjs(0 To m_objCount)
+    Else
+        ReDim m_arrObjs(0)
+    End If
+
+    Select Case (UCase$(ObjType))
+        Case "BUTTON"
+        Case "CHECKBOX"
+        Case "COMBOXBOX"
+        Case "IMAGELIST"
+        Case "LABEL"
+        Case "LISTBOX"
+        Case "LISTVIEW"
+        Case "OPTIONBUTTON"
+        Case "PICTUREBOX"
+        Case "RICHTEXTBOX"
+        Case "TEXTBOX"
+    End Select
+
+    ' store our module name & type
+    obj.ObjName = ObjName
+    obj.ObjType = ObjType
+    
+       ' store object
+    m_arrObjs(m_objCount) = obj
+    
+    ' increment object counter
+    m_objCount = (m_objCount + 1)
+
+    ' return object
+    Set CreateObj = obj.obj
+
+End Function
+
+Public Function DeleteObj(ByVal ObjType As String, ByVal ObjName As String) As Object
 
     ' ...
+    
+End Function
 
+Public Function GetObjByName(ByVal ObjType As String, ByVal ObjName As String) As Object
+
+    Dim I As Integer ' ...
+    
+    ' ...
+    For I = 0 To m_objCount - 1
+        If (StrComp(m_arrObjs(I).ObjType, ObjType, vbTextCompare) = 0) Then
+            If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
+                Set GetObjByName = m_arrObjs(I).obj
+
+                Exit Function
+            End If
+        End If
+    Next I
+    
+End Function
+
+Private Function GetSCObjByIndex(ByVal ObjType As String, ByVal Index As Integer) As scObj
+
+    Dim I As Integer ' ...
+
+    For I = 0 To ObjCount() - 1
+        If (StrComp(ObjType, Objects(I).ObjType, vbTextCompare) = 0) Then
+            If (m_arrObjs(I).obj.Index = Index) Then
+                GetSCObjByIndex = m_arrObjs(I)
+                
+                Exit For
+            End If
+        End If
+    Next I
+    
 End Function
 
 Public Sub AddChat(ParamArray saElements() As Variant)
@@ -321,114 +415,133 @@ End Sub
 Private Sub Form_Load()
 
     ' ...
+    m_sc_module.Run m_name & "_Load"
 
 End Sub
 
 Private Sub Form_Activate()
 
     ' ...
+    m_sc_module.Run m_name & "_Activate"
 
 End Sub
 
 Private Sub Form_Click()
 
     ' ...
+    m_sc_module.Run m_name & "_Click"
 
 End Sub
 
 Private Sub Form_DblClick()
 
     ' ...
+    m_sc_module.Run m_name & "_DblClick"
 
 End Sub
 
 Private Sub Form_Deactivate()
 
     ' ...
+    m_sc_module.Run m_name & "_Deactivate"
 
 End Sub
 
 Private Sub Form_GotFocus()
 
     ' ...
+    m_sc_module.Run m_name & "_GotFocus"
 
 End Sub
 
 Private Sub Form_Initialize()
 
     ' ...
+    m_sc_module.Run m_name & "_Initialize"
 
 End Sub
 
 Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
 
     ' ...
+    m_sc_module.Run m_name & "_KeyDown", KeyCode, Shift
 
 End Sub
 
 Private Sub Form_KeyPress(KeyAscii As Integer)
 
     ' ...
+    m_sc_module.Run m_name & "_KeyPress", KeyAscii
 
 End Sub
 
 Private Sub Form_KeyUp(KeyCode As Integer, Shift As Integer)
 
     ' ...
+    m_sc_module.Run m_name & "_KeyUp", KeyCode, Shift
 
 End Sub
 
 Private Sub Form_LostFocus()
 
     ' ...
+    m_sc_module.Run m_name & "_LostFocus"
 
 End Sub
 
 Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
     ' ...
+    m_sc_module.Run m_name & "_MouseDown", Button, Shift, X, Y
 
 End Sub
 
 Private Sub Form_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
     ' ...
+    m_sc_module.Run m_name & "_MouseMove", Button, Shift, X, Y
 
 End Sub
 
 Private Sub Form_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
 
     ' ...
+    m_sc_module.Run m_name & "_MouseUp", Button, Shift, X, Y
 
 End Sub
 
 Private Sub Form_Paint()
 
     ' ...
+    m_sc_module.Run m_name & "_Paint"
 
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
 
     ' ...
+    m_sc_module.Run m_name & "_QueryUnload", UnloadMode
 
 End Sub
 
 Private Sub Form_Resize()
 
     ' ...
+    m_sc_module.Run m_name & "_Resize"
 
 End Sub
 
 Private Sub Form_Terminate()
 
     ' ...
+    m_sc_module.Run m_name & "_Terminate"
 
 End Sub
 
 Private Sub Form_Unload(Cancel As Integer)
 
     ' ...
+    m_sc_module.Run m_name & "_Unload"
 
 End Sub
 
