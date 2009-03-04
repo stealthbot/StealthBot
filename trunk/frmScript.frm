@@ -98,7 +98,6 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
-      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -209,14 +208,14 @@ End Function
 
 Private Function ObjCount(Optional ObjType As String) As Integer
     
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     If (ObjType <> vbNullString) Then
-        For I = 0 To m_objCount - 1
-            If (StrComp(ObjType, m_arrObjs(I).ObjType, vbTextCompare) = 0) Then
+        For i = 0 To m_objCount - 1
+            If (StrComp(ObjType, m_arrObjs(i).ObjType, vbTextCompare) = 0) Then
                 ObjCount = (ObjCount + 1)
             End If
-        Next I
+        Next i
     Else
         ObjCount = m_objCount
     End If
@@ -229,15 +228,15 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
     
     ' redefine array size & check for duplicate controls
     If (m_objCount) Then
-        Dim I As Integer ' loop counter variable
+        Dim i As Integer ' loop counter variable
 
-        For I = 0 To m_objCount - 1
-            If (StrComp(m_arrObjs(I).ObjType, ObjType, vbTextCompare) = 0) Then
-                If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
+        For i = 0 To m_objCount - 1
+            If (StrComp(m_arrObjs(i).ObjType, ObjType, vbTextCompare) = 0) Then
+                If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
                     Exit Function
                 End If
             End If
-        Next I
+        Next i
         
         ReDim Preserve m_arrObjs(0 To m_objCount)
     Else
@@ -346,36 +345,56 @@ End Function
 
 Public Function GetObjByName(ByVal ObjType As String, ByVal ObjName As String) As Object
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
     
     ' ...
-    For I = 0 To m_objCount - 1
-        If (StrComp(m_arrObjs(I).ObjType, ObjType, vbTextCompare) = 0) Then
-            If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
-                Set GetObjByName = m_arrObjs(I).obj
+    For i = 0 To m_objCount - 1
+        If (StrComp(m_arrObjs(i).ObjType, ObjType, vbTextCompare) = 0) Then
+            If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
+                Set GetObjByName = m_arrObjs(i).obj
 
                 Exit Function
             End If
         End If
-    Next I
+    Next i
     
 End Function
 
 Private Function GetSCObjByIndex(ByVal ObjType As String, ByVal Index As Integer) As scObj
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
-    For I = 0 To m_objCount - 1
-        If (StrComp(ObjType, m_arrObjs(I).ObjType, vbTextCompare) = 0) Then
-            If (m_arrObjs(I).obj.Index = Index) Then
-                GetSCObjByIndex = m_arrObjs(I)
+    For i = 0 To m_objCount - 1
+        If (StrComp(ObjType, m_arrObjs(i).ObjType, vbTextCompare) = 0) Then
+            If (m_arrObjs(i).obj.Index = Index) Then
+                GetSCObjByIndex = m_arrObjs(i)
                 
                 Exit For
             End If
         End If
-    Next I
+    Next i
     
 End Function
+
+Private Sub DestroyObjs()
+
+    On Error GoTo ERROR_HANDLER
+
+    Dim i As Integer ' ...
+    
+    ' ...
+    For i = m_objCount - 1 To 0 Step -1
+        ' ...
+    Next i
+
+ERROR_HANDLER:
+    
+    frmChat.AddChat vbRed, _
+        "Error (#" & Err.Number & "): " & Err.description & " in DestroyObjs()."
+        
+    Resume Next
+    
+End Sub
 
 Public Sub AddChat(ParamArray saElements() As Variant)
 
@@ -573,6 +592,9 @@ Private Sub Form_Unload(Cancel As Integer)
 
     ' ...
     m_sc_module.Run m_name & "_Unload"
+    
+    ' clean up
+    DestroyObjs
 
 End Sub
 
