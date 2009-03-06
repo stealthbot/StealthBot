@@ -98,6 +98,7 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
+      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -398,7 +399,7 @@ ERROR_HANDLER:
     
 End Sub
 
-Public Sub AddChat(ParamArray saElements() As Variant)
+Public Sub AddChat(ByVal rtbName As String, ParamArray saElements() As Variant)
 
     Dim arr() As Variant ' ...
     
@@ -406,11 +407,11 @@ Public Sub AddChat(ParamArray saElements() As Variant)
     arr() = saElements
     
     ' ...
-    Call DisplayRichText(frmScriptUI.rtb, arr)
+    Call DisplayRichText(GetObjByName("RichTextBox", rtbName), arr)
     
 End Sub
 
-Public Sub AddChatFont(ParamArray saElements() As Variant)
+Public Sub AddChatFont(ByVal rtbName As String, ParamArray saElements() As Variant)
 
     Dim arr() As Variant ' ...
     
@@ -418,7 +419,7 @@ Public Sub AddChatFont(ParamArray saElements() As Variant)
     arr() = saElements
     
     ' ...
-    Call DisplayRichText(frmScriptUI.rtb, arr)
+    Call DisplayRichText(GetObjByName("RichTextBox", rtbName), arr)
     
 End Sub
 
