@@ -511,25 +511,29 @@ Private Sub DestroyObjs()
         ' ...
         Select Case (UCase$(m_arrObjs(i).ObjType))
             Case "TIMER"
-                If (i > 0) Then
-                    Unload frmChat.tmrScript(i)
+                If (m_arrObjs(i).obj.Index > 0) Then
+                    Unload frmChat.tmrScript(m_arrObjs(i).obj.Index)
                 Else
-                    frmChat.tmrScript(i).Enabled = False
+                    frmChat.tmrScript(0).Enabled = False
                 End If
                 
             Case "WINSOCK"
-                If (i > 0) Then
-                    Unload frmChat.sckScript(i)
+                If (m_arrObjs(i).obj.Index > 0) Then
+                    Unload frmChat.sckScript(m_arrObjs(i).obj.Index)
                 Else
-                    frmChat.sckScript(i).Close
+                    frmChat.sckScript(0).Close
                 End If
                 
             Case "INET"
-                If (i > 0) Then
-                    Unload frmChat.itcScript(i)
+                If (m_arrObjs(i).obj.Index > 0) Then
+                    Unload frmChat.itcScript(m_arrObjs(i).obj.Index)
                 Else
-                    frmChat.itcScript(i).Cancel
+                    frmChat.itcScript(0).Cancel
                 End If
+                
+            Case "FORM"
+                Unload m_arrObjs(i).obj
+                
         End Select
 
         ' ...
