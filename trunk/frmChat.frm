@@ -1701,9 +1701,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5636,8 +5636,6 @@ Private Sub QueueTimer_Timer()
     Dim id       As Integer
     
     If ((g_Queue.Count) And (g_Online)) Then
-        frmChat.AddChat vbRed, "!"
-    
         With g_Queue.Peek
             Message = .Message
             Tag = .Tag
