@@ -19,8 +19,9 @@ Attribute VB_Ext_KEY = "Top_Level" ,"Yes"
 
 Option Explicit
 
-Private m_buf()  As Byte
-Private m_bufpos As Integer
+Private m_buf()   As Byte
+Private m_bufpos  As Integer
+Private m_bufsize As Integer
 
 ' ...
 Private Sub Class_Initialize()
@@ -176,30 +177,28 @@ End Function ' end function InsertNTString
 ' ...
 Public Function GetString() As String
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     ' ...
-    If ((m_bufpos + 1) > UBound(m_buf)) Then
-        Exit Function
-    End If
-
-    ' ...
-    For I = 0 To UBound(m_buf)
-        If (m_buf(I) = &H0) Then
+    For i = m_bufpos To UBound(m_buf) - 1
+        If (m_buf(i) = &H0) Then
             Exit For
         End If
-    Next I
+    Next i
+    
+    ' ...
+    MsgBox m_bufpos & ":" & i
 
     ' ...
-    If (I < UBound(m_buf) + 1) Then
+    If (i < UBound(m_buf) + 1) Then
         ' ...
-        'GetString = String$(I, Space(1))
-    
+        GetString = String$(i, Space$(1))
+            
         ' copy data to buffer
-        Call CopyMemory(ByVal GetString, m_buf(m_bufpos), I)
+        Call CopyMemory(ByVal GetString, m_buf(m_bufpos), i)
         
         ' ...
-        m_bufpos = (m_bufpos + I)
+        m_bufpos = (m_bufpos + (i + 2))
     End If
 
 End Function ' end function GetString
@@ -310,7 +309,7 @@ Public Function SendPacket(Optional PacketID As Byte)
     'Dim pkt    As modPacketBuffer.PACKETCACHEITEM  ' ...
     Dim L      As Long    ' ...
     Dim buf()  As Byte    ' ...
-    Dim I      As Integer ' ...
+    Dim i      As Integer ' ...
     'Dim log    As String  ' ...
     Dim strbuf As String  ' ...
     

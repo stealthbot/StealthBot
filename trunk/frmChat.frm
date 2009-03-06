@@ -887,6 +887,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -912,7 +913,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1634,21 +1634,21 @@ Private Sub Form_Load()
         End If
     End If
     
-    'Dim pb As New clsPacketBuffer
+    Dim pb As New clsPacketBuffer
     
-    'With pb
-    '    .InsertDWord &H1
-    '    .InsertDWord &H2
-    '    .InsertNTString "hello", ANSI
-    '    .InsertNTString "hi", ANSI
-    '    .InsertWord &H3
-    '    .Position = 0
-    '    MsgBox .GetDWORD
-    '    MsgBox .GetDWORD
-    '    MsgBox .GetString
-    '    MsgBox .GetString
-    '    MsgBox .GetWORD
-    'End With
+    With pb
+        .InsertDWord &H1
+        .InsertDWord &H2
+        .InsertNTString "hello", ANSI
+        .InsertNTString "hi", ANSI
+        .InsertWord &H3
+        .Position = 0
+        'MsgBox .GetDWORD
+        'MsgBox .GetDWORD
+        'MsgBox .GetString
+        'MsgBox .GetString
+        'MsgBox .GetWORD
+    End With
         
     ' SPLASH SCREEN
     If ReadCfg("Main", "ShowSplash") <> "N" Then
@@ -1701,9 +1701,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5636,6 +5636,8 @@ Private Sub QueueTimer_Timer()
     Dim id       As Integer
     
     If ((g_Queue.Count) And (g_Online)) Then
+        frmChat.AddChat vbRed, "!"
+    
         With g_Queue.Peek
             Message = .Message
             Tag = .Tag

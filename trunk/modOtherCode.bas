@@ -216,7 +216,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
     Dim Username        As String
     Dim CleanedUsername As String
     Dim i               As Integer
-    Dim Pos             As Integer
+    Dim pos             As Integer
     
     If (LenB(Inpt) > 0) Then
         If (Kick > 2) Then
@@ -252,10 +252,10 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
                     Exit Function
                 End If
                 
-                Pos = g_Channel.GetUserIndex(Username)
+                pos = g_Channel.GetUserIndex(Username)
                 
-                If (Pos > 0) Then
-                    If (g_Channel.Users(Pos).IsOperator) Then
+                If (pos > 0) Then
+                    If (g_Channel.Users(pos).IsOperator) Then
                         Ban = "Error: You cannot ban a channel operator."
                     
                         Exit Function
@@ -1010,7 +1010,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
             If (dbIndex = -1) Then
                 With GetCumulativeAccess
                     .Username = vbNullString
-                    .Access = -1
+                    .Access = 0
                     .Flags = vbNullString
                 End With
             End If
@@ -2530,7 +2530,7 @@ End Sub
 ' Returns a single chunk of a string as if that string were Split() and that chunk
 ' extracted
 ' 1-based
-Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
+Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
     Dim c           As Integer
     Dim i           As Integer
     Dim TargetSpace As Integer
@@ -2540,10 +2540,10 @@ Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
     
     c = 0
     i = 1
-    Pos = Pos
+    pos = pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While ((c < Pos) And (i > 0))
+    While ((c < pos) And (i > 0))
         TargetSpace = i
         
         i = (InStr(i + 1, str, Space(1), vbBinaryCompare))
@@ -2551,7 +2551,7 @@ Public Function GetStringChunk(ByVal str As String, ByVal Pos As Integer)
         c = (c + 1)
     Wend
     
-    If (c >= Pos) Then
+    If (c >= pos) Then
         c = InStr(TargetSpace + 1, str, " ") ' check for another space (more afterwards)
         
         If (c > 0) Then
@@ -2618,7 +2618,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     Const BNET_MSG_LENGTH = 223
     
     Dim lineCount As Long    ' stores line number
-    Dim Pos       As Long    ' stores position of delimiter
+    Dim pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
     Dim Length    As Long    ' stores Length after LinePostfix
     Dim bln       As Boolean ' stores result of delimiter split
@@ -2672,7 +2672,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             If (OversizeDelimiter <> vbNullString) Then
                 ' grab position of delimiter character that is the closest to our
                 ' specified Length
-                Pos = InStrRev(strTmp, OversizeDelimiter, Length, vbTextCompare)
+                pos = InStrRev(strTmp, OversizeDelimiter, Length, vbTextCompare)
             End If
             
             ' if the delimiter we were looking for was found,
@@ -2680,9 +2680,9 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((Pos) And (Pos >= Round(Length / 2))) Then
+            If ((pos) And (pos >= Round(Length / 2))) Then
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, Pos - 1)
+                strTmp = Mid$(strTmp, 1, pos - 1)
                 
                 ' indicate that an additional
                 ' character will require removal

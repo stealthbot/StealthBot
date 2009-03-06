@@ -402,6 +402,14 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
             
             Set obj.obj = _
                     frmChat.tmrScript(ObjCount(ObjType))
+                    
+        'Case "HighResTimer"
+        '    If (ObjCount(ObjType) > 0) Then
+        '        Load frmChat.tmrScriptHR(ObjCount(ObjType))
+        '    End If
+        '
+        '    Set obj.obj = _
+        '            frmChat.tmrScriptHR(ObjCount(ObjType))
             
         Case "WINSOCK"
             If (ObjCount(ObjType) > 0) Then

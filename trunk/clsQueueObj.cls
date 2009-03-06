@@ -19,9 +19,13 @@ Private m_priority As Integer
 Private m_response As String
 Private m_tag      As String
 
-Public Property Let id(ByVal I As Double)
+Public Property Let id(ByVal i As Double)
 
-    m_obj_id = I
+    If (m_obj_id > 0) Then
+        Exit Property
+    End If
+    
+    m_obj_id = i
     
 End Property
 
