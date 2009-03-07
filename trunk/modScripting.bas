@@ -213,7 +213,7 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
     
     ' Me() module-level function
     str = str & "Function ScriptObj()" & vbNewLine
-    str = str & "   Set Self = GetScriptObjByName(GetModuleName())" & vbNewLine
+    str = str & "   Set ScriptObj = GetScriptObjByName(GetModuleName())" & vbNewLine
     str = str & "End Function" & vbNewLine
     
     ' CreateObj() module-level function
