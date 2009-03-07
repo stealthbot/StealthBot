@@ -1,0 +1,29 @@
+Function Name()
+
+   Name = "exec"
+
+End Function
+
+Sub Event_PressedEnter(Text)
+
+   On Error Resume Next
+
+   Dim i
+
+   If Left(LCase(Text), 5) = "/exec" Then
+      VetoThisMessage
+
+      With GetScriptObjByName(Name())
+         .ExecuteStatement Mid(Text, 7)
+      End With
+
+      If (Err.Number) Then
+         For i = 1 To Scripts.Count
+            Scripts.ExecuteStatement Mid(Text, 7)
+         Next
+ 
+         Err.Number = 0
+      End If
+   End If
+
+End Sub
