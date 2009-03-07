@@ -51,7 +51,8 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     Dim CurrentModule As Module
 
     Dim strPath  As String  ' ...
-    Dim filename As String  ' ...
+    Dim fileName As String  ' ...
+    Dim fileExt  As String  ' ...
     Dim i        As Integer ' ...
     
     ' ********************************
@@ -64,18 +65,21 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     ' ...
     If (Dir(strPath) <> vbNullString) Then
         ' ...
-        filename = Dir(strPath)
+        fileName = Dir(strPath)
         
         ' ...
-        Do While (filename <> vbNullString)
+        Do While (fileName <> vbNullString)
             ' ...
-            Set CurrentModule = SC.Modules.Add(filename)
+            If (IsValidFileExtension(GetFileExtension(fileName))) Then
+                ' ...
+                Set CurrentModule = SC.Modules.Add(fileName)
+                
+                ' ...
+                FileToModule CurrentModule, strPath & fileName
+            End If
             
             ' ...
-            FileToModule CurrentModule, strPath & filename
-    
-            ' ...
-            filename = Dir()
+            fileName = Dir()
         Loop
     End If
     
@@ -237,6 +241,44 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
     ScriptModule.AddCode str
     
 End Sub
+
+Private Function GetFileExtension(ByVal fileName As String)
+
+    On Error Resume Next
+
+    ' ...
+    If (InStr(1, fileName, ".") <> 0) Then
+        GetFileExtension = _
+            Mid$(fileName, InStr(1, fileName, ".") + 1)
+    End If
+
+End Function
+
+Private Function IsValidFileExtension(ByVal ext As String) As Boolean
+
+    Dim exts() As String  ' ...
+    Dim i      As Integer ' ...
+
+    ' ...
+    ReDim exts(0 To 2)
+    
+    ' ...
+    exts(0) = "dat"
+    exts(1) = "txt"
+    exts(2) = "vbs"
+    
+    ' ...
+    For i = 0 To UBound(exts) - 1
+        If (StrComp(ext, exts(i), vbTextCompare) = 0) Then
+            IsValidFileExtension = True
+            
+            Exit Function
+        End If
+    Next i
+    
+    IsValidFileExtension = False
+
+End Function
 
 Public Function InitScripts()
 

@@ -12,6 +12,7 @@ Sub Event_PressedEnter(Text)
    If (Left(LCase(Text), 5) = "/exec") Then
       Dim i    ' loop counter
       Dim code ' stores command code
+      Dim bln
 
       ' pull code from command
       code = Mid(Text, 7)
