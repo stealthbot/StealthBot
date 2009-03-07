@@ -179,10 +179,15 @@ End Property
 ' updated by eric
 Public Property Get IsWindowsVista() As Boolean
 
+    frmChat.AddChat vbYellow, "PlatformID: " & m_osVer.PlatformID
+    frmChat.AddChat vbYellow, "VerMajor: " & m_osVer.dwVerMajor
+    frmChat.AddChat vbYellow, "VerMinor: " & m_osVer.dwVerMinor
+
     ' ...
-    If (m_osVer.PlatformID = VER_NT_WORKSTATION) Then
+    If (m_osVer.PlatformID And VER_NT_WORKSTATION) Then
     
-        IsWindowsVista = CBool(m_osVer.dwVerMajor = 6)
+        IsWindowsVista = _
+            (CBool(m_osVer.dwVerMajor = 6) And CBool(m_osVer.dwVerMinor = 2))
     
     End If
     
@@ -190,7 +195,7 @@ End Property
 
 Public Property Get IsWindows2008() As Boolean
 
-    If (m_osVer.PlatformID <> VER_NT_WORKSTATION) Then
+    If (Not (m_osVer.PlatformID And VER_NT_WORKSTATION)) Then
     
         IsWindows2008 = CBool(m_osVer.dwVerMajor = 6)
         
