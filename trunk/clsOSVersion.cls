@@ -18,16 +18,14 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private Declare Function GetVersionEx Lib "Kernel32.dll" Alias "GetVersionExA" (lpVersionInformation As OSVERSIONINFOEX) As Long
+Private Declare Function GetVersionEx Lib "Kernel32.dll" Alias "GetVersionExA" (lpVersionInformation As Any) As Long
   
+Private Const VER_PLATFORM_WIN32_NT    As Long = 2
 Private Const VER_NT_WORKSTATION       As Long = 1
 Private Const VER_NT_DOMAIN_CONTROLLER As Long = 2
 Private Const VER_NT_SERVER            As Long = 3
 
-Private Const VER_PLATFORM_ID_VISTA    As Long = 2
-Private Const VER_PLATFORM_WIN32_NT    As Long = 2
-
-Private Type OSVERSIONINFOEX
+Private Type OSVERSIONINFO
   OSVSize           As Long         'size, in bytes, of this data structure
   dwVerMajor        As Long         'ie NT 3.51, dwVerMajor = 3; NT 4.0, dwVerMajor = 4.
   dwVerMinor        As Long         'ie NT 3.51, dwVerMinor = 51; NT 4.0, dwVerMinor= 0.
@@ -37,6 +35,15 @@ Private Type OSVERSIONINFOEX
   PlatformID        As Long         'Identifies the operating system platform.
   szCSDVersion      As String * 128 'NT: string, such as "Service Pack 3"
                                     'Win9x: string providing arbitrary additional information
+End Type
+
+Private Type OSVERSIONINFOEX
+  OSVSize           As Long
+  dwVerMajor        As Long
+  dwVerMinor        As Long
+  dwBuildNumber     As Long
+  PlatformID        As Long
+  szCSDVersion      As String * 128
   wServicePackMajor As Integer
   wServicePackMinor As Integer
   wSuiteMask        As Integer
@@ -45,7 +52,8 @@ Private Type OSVERSIONINFOEX
 End Type
 
 Private m_isCached As Boolean
-Private m_osVer    As OSVERSIONINFOEX
+Private m_osVer    As OSVERSIONINFO
+Private m_osVerEx  As OSVERSIONINFOEX
 
 Private Sub Class_Initialize()
 
@@ -60,10 +68,24 @@ Private Sub Class_Terminate()
 End Sub
 
 Private Sub GetVersion()
+    
+    Dim bln As Boolean ' ...
 
+    ' ...
     m_osVer.OSVSize = Len(m_osVer)
 
+    ' ...
     If (GetVersionEx(m_osVer) = 1) Then
+        ' ...
+        If (IsWindowsNT) Then
+            m_osVerEx.OSVSize = Len(m_osVerEx)
+        
+            m_isCached = _
+                (GetVersionEx(m_osVerEx) = 1)
+        
+            Exit Sub
+        End If
+    
         m_isCached = True
     End If
 
@@ -87,7 +109,7 @@ Public Property Get Name() As String
             Name = "Windows 7"
         Else
             Name = "Windows NT " & _
-                m_osVer.dwVerMajor & "." & m_osVer.dwVerMinor
+                m_osVerEx.dwVerMajor & "." & m_osVerEx.dwVerMinor
         End If
     Else
         If (IsWindows95) Then
@@ -144,7 +166,7 @@ End Property
 Public Property Get IsWindows2000() As Boolean
 
     IsWindows2000 = _
-        CBool((m_osVer.dwVerMajor = 5) And (m_osVer.dwVerMinor = 0))
+        CBool((m_osVerEx.dwVerMajor = 5) And (m_osVerEx.dwVerMinor = 0))
     
 End Property
 
@@ -152,15 +174,15 @@ End Property
 Public Property Get IsWindowsXP() As Boolean
 
     IsWindowsXP = _
-        CBool(((m_osVer.dwVerMajor = 5) And (m_osVer.dwVerMinor = 1)))
+        CBool(((m_osVerEx.dwVerMajor = 5) And (m_osVerEx.dwVerMinor = 1)))
 
     ' check for winxp 64-bit
     If (IsWindowsXP = False) Then
     
-        If (m_osVer.wProductType = VER_NT_WORKSTATION) Then
+        If (m_osVerEx.wProductType = VER_NT_WORKSTATION) Then
 
             IsWindowsXP = _
-                CBool((m_osVer.dwVerMajor = 5) And (m_osVer.dwVerMinor = 2))
+                CBool((m_osVerEx.dwVerMajor = 5) And (m_osVerEx.dwVerMinor = 2))
         
         End If
         
@@ -173,7 +195,7 @@ Public Property Get IsWindows2003() As Boolean
     If (IsWindowsXP = False) Then
     
         IsWindows2003 = _
-            ((m_osVer.dwVerMajor = 5) And (m_osVer.dwVerMinor = 2))
+            ((m_osVerEx.dwVerMajor = 5) And (m_osVerEx.dwVerMinor = 2))
             
     End If
     
@@ -185,10 +207,10 @@ End Property
 Public Property Get IsWindowsVista() As Boolean
 
     ' ...
-    If (m_osVer.wProductType = VER_NT_WORKSTATION) Then
+    If (m_osVerEx.wProductType = VER_NT_WORKSTATION) Then
     
         IsWindowsVista = _
-            (CBool(m_osVer.dwVerMajor = 6) And (m_osVer.dwVerMinor = 0))
+            (CBool(m_osVerEx.dwVerMajor = 6) And (m_osVerEx.dwVerMinor = 0))
     
     End If
     
@@ -196,11 +218,11 @@ End Property
 
 Public Property Get IsWindows2008() As Boolean
 
-    If (m_osVer.wProductType <> VER_NT_WORKSTATION) Then
+    If (m_osVerEx.wProductType <> VER_NT_WORKSTATION) Then
         
         IsWindows2008 = _
-            CBool(((m_osVer.dwVerMajor = 6) And _
-                         ((m_osVer.dwVerMinor = 0) Or (m_osVer.dwVerMinor = 1))))
+            CBool(((m_osVerEx.dwVerMajor = 6) And _
+                         ((m_osVerEx.dwVerMinor = 0) Or (m_osVerEx.dwVerMinor = 1))))
         
     End If
     
@@ -209,10 +231,10 @@ End Property
 Public Property Get IsWindows7() As Boolean
 
     ' ...
-    If (m_osVer.wProductType = VER_NT_WORKSTATION) Then
+    If (m_osVerEx.wProductType = VER_NT_WORKSTATION) Then
         
         IsWindows7 = _
-            CBool((m_osVer.dwVerMajor = 6) And (m_osVer.dwVerMinor = 1))
+            CBool((m_osVerEx.dwVerMajor = 6) And (m_osVerEx.dwVerMinor = 1))
     
     End If
     
@@ -220,12 +242,12 @@ End Property
 
 Public Property Get IsWin2000Plus() As Boolean
     
-    IsWin2000Plus = CBool(m_osVer.dwVerMajor >= 5)
+    IsWin2000Plus = CBool(m_osVerEx.dwVerMajor >= 5)
 
 End Property
 
 Public Property Get IsWinVistaPlus() As Boolean
     
-    IsWinVistaPlus = CBool(m_osVer.dwVerMajor >= 6)
+    IsWinVistaPlus = CBool(m_osVerEx.dwVerMajor >= 6)
     
 End Property
