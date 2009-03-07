@@ -38,32 +38,32 @@ End Sub ' end function Class_Terminate
 ' ...
 Public Function InsertByte(ByVal Data As Byte)
     ' resize buffer
-    ReDim Preserve m_buf(0 To (m_bufpos + 1))
+    ReDim Preserve m_buf(0 To (m_bufsize + 1))
 
     ' copy data to buffer
-    m_buf(m_bufpos) = Data
+    m_buf(m_bufsize) = Data
     
     ' store buffer Length
-    m_bufpos = (m_bufpos + 1)
+    m_bufsize = (m_bufsize + 1)
 End Function ' end function InsertByte
 
 ' ...
 Public Function InsertByteArr(ByRef Data() As Byte)
     ' resize buffer
-    ReDim Preserve m_buf(0 To (m_bufpos + (UBound(Data) + 1)))
+    ReDim Preserve m_buf(0 To (m_bufsize + (UBound(Data) + 1)))
 
     ' copy data to buffer
-    Call CopyMemory(m_buf(m_bufpos), Data(0), (UBound(Data) + 1))
+    Call CopyMemory(m_buf(m_bufsize), Data(0), (UBound(Data) + 1))
 
     ' store buffer Length
-    m_bufpos = (m_bufpos + (UBound(Data) + 1))
+    m_bufsize = (m_bufsize + (UBound(Data) + 1))
 End Function ' end function InsertByte
 
 ' ...
 Public Function GetByte() As Byte
 
     ' ...
-    If ((m_bufpos + 1) > UBound(m_buf)) Then
+    If ((m_bufpos + 1) > m_bufsize) Then
         Exit Function
     End If
 
@@ -78,20 +78,20 @@ End Function ' end function GetByte
 ' ...
 Public Function InsertWord(ByVal Data As Integer)
     ' resize buffer
-    ReDim Preserve m_buf(0 To (m_bufpos + 2))
+    ReDim Preserve m_buf(0 To (m_bufsize + 2))
 
     ' copy data to buffer
-    Call CopyMemory(m_buf(m_bufpos), Data, 2)
+    Call CopyMemory(m_buf(m_bufsize), Data, 2)
     
     ' store buffer Length
-    m_bufpos = (m_bufpos + 2)
+    m_bufsize = (m_bufsize + 2)
 End Function ' end function InsertWord
 
 ' ...
 Public Function GetWORD() As Integer
 
     ' ...
-    If ((m_bufpos + 2) > UBound(m_buf)) Then
+    If ((m_bufpos + 2) > m_bufsize) Then
         Exit Function
     End If
 
@@ -106,20 +106,20 @@ End Function ' end function GetWord
 ' ...
 Public Function InsertDWord(ByVal Data As Long)
     ' resize data buffer
-    ReDim Preserve m_buf(0 To (m_bufpos + 4))
+    ReDim Preserve m_buf(0 To (m_bufsize + 4))
 
     ' copy data to buffer
-    Call CopyMemory(m_buf(m_bufpos), Data, 4)
+    Call CopyMemory(m_buf(m_bufsize), Data, 4)
     
     ' store buffer Length
-    m_bufpos = (m_bufpos + 4)
+    m_bufsize = (m_bufsize + 4)
 End Function ' end function InsertDWord
 
 ' ...
 Public Function GetDWORD() As Long
 
     ' ...
-    If ((m_bufpos + 4) > UBound(m_buf)) Then
+    If ((m_bufpos + 4) > m_bufsize) Then
         Exit Function
     End If
 
@@ -134,13 +134,13 @@ End Function ' end function GetDWord
 ' ...
 Public Function InsertNonNTString(ByVal Data As String)
     ' resize buffer
-    ReDim Preserve m_buf(0 To (m_bufpos + Len(Data)))
+    ReDim Preserve m_buf(0 To (m_bufsize + Len(Data)))
     
     ' copy data to buffer
-    Call CopyMemory(m_buf(m_bufpos), ByVal Data, Len(Data))
+    Call CopyMemory(m_buf(m_bufsize), ByVal Data, Len(Data))
     
     ' store buffer Length
-    m_bufpos = (m_bufpos + Len(Data))
+    m_bufsize = (m_bufsize + Len(Data))
 End Function ' end function InsertNonNTString
 
 ' ...
@@ -162,43 +162,40 @@ Public Function InsertNTString(ByRef Data As String, _
     End Select
     
     ' resize buffer and include terminating null character
-    ReDim Preserve m_buf(0 To (m_bufpos + (UBound(arrStr) + 2)))
+    ReDim Preserve m_buf(0 To (m_bufsize + (UBound(arrStr) + 2)))
     
     ' ...
     If (Data <> vbNullString) Then
         ' copy data to buffer
-        Call CopyMemory(m_buf(m_bufpos), arrStr(0), (UBound(arrStr) + 1))
+        Call CopyMemory(m_buf(m_bufsize), arrStr(0), (UBound(arrStr) + 1))
     End If
 
     ' store buffer Length
-    m_bufpos = (m_bufpos + (UBound(arrStr) + 2))
+    m_bufsize = (m_bufsize + (UBound(arrStr) + 2))
 End Function ' end function InsertNTString
 
 ' ...
-Public Function GetString() As String
+Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI) As String
 
     Dim i As Integer ' ...
 
     ' ...
-    For i = m_bufpos To UBound(m_buf) - 1
+    For i = m_bufpos To m_bufsize
         If (m_buf(i) = &H0) Then
             Exit For
         End If
     Next i
-    
-    ' ...
-    MsgBox m_bufpos & ":" & i
 
     ' ...
-    If (i < UBound(m_buf) + 1) Then
+    If (i < m_bufsize) Then
         ' ...
-        GetString = String$(i, Space$(1))
+        GetString = String$(i - m_bufpos, Chr$(0))
             
         ' copy data to buffer
-        Call CopyMemory(ByVal GetString, m_buf(m_bufpos), i)
+        Call CopyMemory(ByVal GetString, m_buf(m_bufpos), i - m_bufpos)
         
         ' ...
-        m_bufpos = (m_bufpos + (i + 2))
+        m_bufpos = i + 1
     End If
 
 End Function ' end function GetString
@@ -206,7 +203,7 @@ End Function ' end function GetString
 ' ...
 Public Property Get Length() As Long
 
-    Length = m_bufpos
+    Length = m_bufsize
     
 End Property
 
@@ -233,7 +230,7 @@ Public Function Clear()
     m_buf(0) = 0
     
     ' reset buffer Length
-    m_bufpos = 0
+    m_bufsize = 0
 End Function ' end function Clear
 
 ' ...
@@ -254,29 +251,29 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     End If
     
     ' resize temporary data buffer
-    ReDim buf(m_bufpos + 2)
+    ReDim buf(m_bufsize + 2)
 
      ' copy packet data Length to temporary buffer
-    Call CopyMemory(buf(0), m_bufpos + 3, 2)
+    Call CopyMemory(buf(0), m_bufsize + 3, 2)
     
     ' ...
     buf(2) = PacketID ' packet identification number
 
     ' ...
-    If (m_bufpos) Then
+    If (m_bufsize) Then
         ' copy data from buffer to temporary buffer
-        Call CopyMemory(buf(3), m_buf(0), m_bufpos)
+        Call CopyMemory(buf(3), m_buf(0), m_bufsize)
     End If
     
     ' ...
-    strbuf = String$(m_bufpos + 3, vbNullChar)
+    strbuf = String$(m_bufsize + 3, vbNullChar)
         
     ' ...
-    Call CopyMemory(ByVal strbuf, buf(0), m_bufpos + 3)
+    Call CopyMemory(ByVal strbuf, buf(0), m_bufsize + 3)
     
     ' ...
     'Call frmChat.sckMCP.SendData(strbuf)
-    Call Send(frmChat.sckMCP.SocketHandle, strbuf, m_bufpos + 3, 0)
+    Call Send(frmChat.sckMCP.SocketHandle, strbuf, m_bufsize + 3, 0)
     
     ' ...
     'With pkt
@@ -298,7 +295,7 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     CachePacket CtoS, stMCP, PacketID, Len(strbuf), strbuf
     
     ' ...
-    Call WritePacketData(stMCP, CtoS, PacketID, m_bufpos + 3, strbuf)
+    Call WritePacketData(stMCP, CtoS, PacketID, m_bufsize + 3, strbuf)
     
     ' clear buffer contents
     Call Clear
@@ -325,36 +322,36 @@ Public Function SendPacket(Optional PacketID As Byte)
     End If
     
     ' resize temporary data buffer
-    ReDim buf(m_bufpos + 3)
+    ReDim buf(m_bufsize + 3)
     
     ' ...
     buf(0) = &HFF     ' header
     buf(1) = PacketID ' packet identification number
     
     ' copy packet data Length to temporary buffer
-    Call CopyMemory(buf(2), m_bufpos + 4, 2)
+    Call CopyMemory(buf(2), m_bufsize + 4, 2)
     
     ' ...
-    If (m_bufpos) Then
+    If (m_bufsize) Then
         ' copy data from buffer to temporary buffer
-        Call CopyMemory(buf(4), m_buf(0), m_bufpos)
+        Call CopyMemory(buf(4), m_buf(0), m_bufsize)
     End If
     
     ' ...
-    strbuf = String$(m_bufpos + 4, vbNullChar)
+    strbuf = String$(m_bufsize + 4, vbNullChar)
         
     ' ...
-    Call CopyMemory(ByVal strbuf, buf(0), m_bufpos + 4)
+    Call CopyMemory(ByVal strbuf, buf(0), m_bufsize + 4)
     
     ' ...
     'Call frmChat.sckBNet.SendData(strbuf)
-    Call Send(frmChat.sckBNet.SocketHandle, strbuf, m_bufpos + 4, 0)
+    Call Send(frmChat.sckBNet.SocketHandle, strbuf, m_bufsize + 4, 0)
     
     ' ...
-    'log = String$(m_bufpos + 4, vbNullChar)
+    'log = String$(m_bufsize + 4, vbNullChar)
     
     ' ...
-    'Call CopyMemory(ByVal log, buf(0), m_bufpos + 4)
+    'Call CopyMemory(ByVal log, buf(0), m_bufsize + 4)
     
     ' ...
     'With pkt
@@ -376,7 +373,7 @@ Public Function SendPacket(Optional PacketID As Byte)
     CachePacket CtoS, stBNCS, PacketID, Len(strbuf), strbuf
     
     ' ...
-    Call WritePacketData(stBNCS, CtoS, PacketID, m_bufpos + 4, strbuf)
+    Call WritePacketData(stBNCS, CtoS, PacketID, m_bufsize + 4, strbuf)
     
     ' clear buffer contents
     Call Clear
@@ -401,35 +398,35 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     End If
     
     ' resize temporary data buffer
-    ReDim buf(m_bufpos + 2)
+    ReDim buf(m_bufsize + 2)
 
     ' copy packet data Length to temporary buffer
-    Call CopyMemory(buf(0), m_bufpos + 3, 2)
+    Call CopyMemory(buf(0), m_bufsize + 3, 2)
 
     ' ...
     buf(2) = PacketID ' packet identification number
     
     ' ...
-    If (m_bufpos) Then
+    If (m_bufsize) Then
         ' copy data from buffer to temporary buffer
-        Call CopyMemory(buf(3), m_buf(0), m_bufpos)
+        Call CopyMemory(buf(3), m_buf(0), m_bufsize)
     End If
     
     ' ...
-    strbuf = String$(m_bufpos + 3, vbNullChar)
+    strbuf = String$(m_bufsize + 3, vbNullChar)
         
     ' ...
-    Call CopyMemory(ByVal strbuf, buf(0), m_bufpos + 3)
+    Call CopyMemory(ByVal strbuf, buf(0), m_bufsize + 3)
     
     ' ...
     'Call frmChat.sckBNLS.SendData(strbuf)
-    Call Send(frmChat.sckBNLS.SocketHandle, strbuf, m_bufpos + 3, 0)
+    Call Send(frmChat.sckBNLS.SocketHandle, strbuf, m_bufsize + 3, 0)
     
     ' ...
-    'log = String$(m_bufpos + 3, vbNullChar)
+    'log = String$(m_bufsize + 3, vbNullChar)
     
     ' ...
-    'Call CopyMemory(ByVal log, buf(0), m_bufpos + 3)
+    'Call CopyMemory(ByVal log, buf(0), m_bufsize + 3)
     
     ' ...
     'With pkt
@@ -451,7 +448,7 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     CachePacket CtoS, stBNLS, PacketID, Len(strbuf), strbuf
     
     ' ...
-    Call WritePacketData(stBNLS, CtoS, PacketID, m_bufpos + 3, strbuf)
+    Call WritePacketData(stBNLS, CtoS, PacketID, m_bufsize + 3, strbuf)
     
     ' clear buffer contents
     Call Clear
@@ -462,13 +459,13 @@ Public Function GetPacket(PacketID As Byte) As String
     Dim buf As String ' ...
     
     ' ...
-    buf = String$(m_bufpos + 1, vbNull)
+    buf = String$(m_bufsize + 1, vbNull)
     
     ' ...
-    Call CopyMemory(ByVal buf, m_buf(0), m_bufpos + 1)
+    Call CopyMemory(ByVal buf, m_buf(0), m_bufsize + 1)
 
     ' ...
-    GetPacket = Chr$(&HFF) & Chr$(PacketID) & WordToString((m_bufpos + 1) + 4) & _
+    GetPacket = Chr$(&HFF) & Chr$(PacketID) & WordToString((m_bufsize + 1) + 4) & _
         buf
     
     ' clear buffer contents
@@ -480,13 +477,13 @@ Public Function GetBNLSPacket(PacketID As Byte) As String
     Dim buf As String ' ...
     
     ' ...
-    buf = String$(m_bufpos + 1, vbNull)
+    buf = String$(m_bufsize + 1, vbNull)
     
     ' ...
-    Call CopyMemory(ByVal buf, m_buf(0), m_bufpos + 1)
+    Call CopyMemory(ByVal buf, m_buf(0), m_bufsize + 1)
 
     ' ...
-    GetBNLSPacket = WordToString((m_bufpos + 1) + 3) & Chr$(PacketID) & _
+    GetBNLSPacket = WordToString((m_bufsize + 1) + 3) & Chr$(PacketID) & _
         buf
     
     ' clear buffer contents

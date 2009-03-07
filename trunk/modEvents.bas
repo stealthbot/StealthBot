@@ -4,6 +4,17 @@ Attribute VB_Name = "modEvents"
 
 Option Explicit
 
+Private Const MAX_FILTER_EVENTS = 100
+
+Private Type USERFILTER
+    UserObj   As Object
+    EventObj  As Object
+    EventTime As Date
+End Type
+
+Private m_arrUserEvents() As USERFILTER
+Private m_eventCount      As Integer
+
 Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, ByVal Flags As Long, _
     ByVal Ping As Long, ByVal Product As String, Optional QueuedEventID As Integer = 0)
     

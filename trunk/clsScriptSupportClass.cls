@@ -1587,6 +1587,33 @@ Public Function GetObjByNameEx(ByVal ModuleName As String, ByVal ObjType As Stri
 
 End Function
 
+Public Function GetScriptObjByName(ByVal ScriptName As String) As Object
+
+    Dim i   As Integer ' ...
+    Dim str As String ' ...
+    
+    For i = 1 To frmChat.SControl.Modules.Count
+        str = frmChat.SControl.Modules(i).Eval("Name()")
+        
+        If (StrComp(ScriptName, str, vbTextCompare) = 0) Then
+             Set GetScriptObjByName = frmChat.SControl.Modules(i)
+             
+             Exit Function
+        End If
+    Next i
+    
+    For i = 1 To frmChat.SControl.Modules.Count
+        str = frmChat.SControl.Modules(i).Name
+    
+        If (StrComp(ScriptName, str, vbTextCompare) = 0) Then
+             Set GetScriptObjByName = frmChat.SControl.Modules(i)
+             
+             Exit Function
+        End If
+    Next i
+
+End Function
+
 'Class_Terminate doesn't run when a UI form is created via a script. I made this sub so the bot's Unload sub can explicitly _
     call the code within Class_Terminate to kill all the objects. - FrOzeN
 Public Sub Dispose()

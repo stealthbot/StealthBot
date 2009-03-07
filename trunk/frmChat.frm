@@ -887,7 +887,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -913,6 +912,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1642,12 +1642,14 @@ Private Sub Form_Load()
         .InsertNTString "hello", ANSI
         .InsertNTString "hi", ANSI
         .InsertWord &H3
+        .InsertNTString "sup", ANSI
         .Position = 0
         'MsgBox .GetDWORD
         'MsgBox .GetDWORD
         'MsgBox .GetString
         'MsgBox .GetString
         'MsgBox .GetWORD
+        'MsgBox .GetString
     End With
         
     ' SPLASH SCREEN
@@ -1701,9 +1703,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -5753,6 +5755,10 @@ End Sub
 
 
 Public Sub SControl_Error()
+    If (Err.Number = 0) Then
+        Exit Sub
+    End If
+
     AddChat RTBColors.ErrorMessageText, "Scripting runtime error " & Chr(39) & SControl.Error.Number & Chr(39) & ": (line " & SControl.Error.line & "; column " & SControl.Error.Column & ")"
     AddChat RTBColors.ErrorMessageText, SControl.Error.description & "."
     AddChat RTBColors.ErrorMessageText, "Offending line: >> " & SControl.Error.text
