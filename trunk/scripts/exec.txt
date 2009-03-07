@@ -27,7 +27,7 @@ Sub Event_PressedEnter(Text)
          Next
 
          ' reset our error handler
-         Err.Number = 0s
+         Err.Number = 0
       End If
    End If
 
