@@ -81,7 +81,7 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
                     "reconnection will occur. Please try connecting again in 15-30 minutes, or " & _
                         "contact your Internet Service Provider."
                         
-                miNoProceed = 1
+                miNoProceed = 2
             End If
             
         Case 10060
@@ -121,7 +121,7 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
                 Case MCP
                     GetErrorString = GetErrorString & "The Diablo II Realm server is down."
                     
-                    miNoProceed = 1
+                    miNoProceed = 2
             End Select
             
         Case Else
@@ -129,7 +129,9 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
     End Select
     
     If (miNoProceed > 0) Then
-        UserCancelledConnect = True
+        If (miNoProceed > 1) Then
+            UserCancelledConnect = True
+        End If
     Else
         ExReconMinutes = (BotVars.ReconnectDelay / 1000)
     
