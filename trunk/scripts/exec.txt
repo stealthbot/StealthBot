@@ -29,9 +29,9 @@ Sub Event_PressedEnter(Text)
          ' reset our error handler
          Err.Number = 0
       End If
-   End If
 
-   ' prevent internal processing
-   VetoThisMessage
+      ' prevent internal processing
+      VetoThisMessage
+   End If
    
 End Sub

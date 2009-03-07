@@ -6494,7 +6494,7 @@ Private Function OnScripts(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 frmChat.SControl.Modules(i).Eval("Name()") & _
                     ", "
                     
-            If (Err.Number) Then
+            If (Err.Number = 13) Then
                 If (frmChat.SControl.Modules(i).Name = "Global") Then
                     tmpbuf = tmpbuf & "PluginSystem.dat, "
                 Else
