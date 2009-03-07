@@ -94,7 +94,15 @@ End Sub
 Public Property Get Name() As String
     
     ' ...
-    If (IsWindowsNT) Then
+    If (IsWindowsNT = False) Then
+        If (IsWindows95) Then
+            Name = "Windows 95"
+        ElseIf (IsWindows98) Then
+            Name = "Windows 98"
+        ElseIf (IsWindowsME) Then
+            Name = "Windows ME"
+        End If
+    Else
         If (IsWindows2000) Then
             Name = "Windows 2000"
         ElseIf (IsWindowsXP) Then
@@ -104,20 +112,13 @@ Public Property Get Name() As String
         ElseIf (IsWindowsVista) Then
             Name = "Windows Vista"
         ElseIf (IsWindows2008) Then
-            Name = "Windows 2008"
+            Name = "Windows Server 2008"
         ElseIf (IsWindows7) Then
             Name = "Windows 7"
         Else
-            Name = "Windows NT " & _
-                m_osVerEx.dwVerMajor & "." & m_osVerEx.dwVerMinor
-        End If
-    Else
-        If (IsWindows95) Then
-            Name = "Windows 95"
-        ElseIf (IsWindows98) Then
-            Name = "Windows 98"
-        ElseIf (IsWindowsME) Then
-            Name = "Windows ME"
+            Name = _
+                "Windows NT " & m_osVerEx.dwVerMajor & "." & _
+                        m_osVerEx.dwVerMinor
         End If
     End If
     
