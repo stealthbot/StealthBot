@@ -8,22 +8,32 @@ Sub Event_PressedEnter(Text)
 
    On Error Resume Next
 
-   Dim i
+   ' check for "exec" command
+   If (Left(LCase(Text), 5) = "/exec") Then
+      Dim i    ' loop counter
+      Dim code ' stores command code
 
-   If Left(LCase(Text), 5) = "/exec" Then
-      VetoThisMessage
+      ' pull code from command
+      code = Mid(Text, 7)
 
+      ' call code locally
       With GetScriptObjByName(Name())
-         .ExecuteStatement Mid(Text, 7)
+         .ExecuteStatement code
       End With
 
-      If (Err.Number) Then
+      ' did we fail to find our desired function locally?
+      If (Err.Number = 13) Then
+         ' try to find the function in other scripts
          For i = 1 To Scripts.Count
-            Scripts.ExecuteStatement Mid(Text, 7)
+            Scripts(i).ExecuteStatement code
          Next
- 
+      
+         ' reset our error handler
          Err.Number = 0
       End If
    End If
 
+   ' prevent internal processing
+   VetoThisMessage
+   
 End Sub
