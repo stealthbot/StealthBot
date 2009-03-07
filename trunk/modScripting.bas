@@ -205,10 +205,15 @@ End Function
 Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
 
     Dim str As String ' storage buffer for module code
-
+    
     ' GetModuleName() module-level function
     str = str & "Function GetModuleName()" & vbNewLine
     str = str & "   GetModuleName = " & Chr$(34) & ScriptModule.Name & Chr$(34) & vbNewLine
+    str = str & "End Function" & vbNewLine
+    
+    ' Me() module-level function
+    str = str & "Function ScriptObj()" & vbNewLine
+    str = str & "   Set Self = GetScriptObjByName(GetModuleName())" & vbNewLine
     str = str & "End Function" & vbNewLine
     
     ' CreateObj() module-level function

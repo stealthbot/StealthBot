@@ -17,9 +17,7 @@ Sub Event_PressedEnter(Text)
       code = Mid(Text, 7)
 
       ' call code locally
-      With GetScriptObjByName(Name())
-         .ExecuteStatement code
-      End With
+      ScriptObj.ExecuteStatement code
 
       ' did we fail to find our desired function locally?
       If (Err.Number = 13) Then
@@ -27,9 +25,9 @@ Sub Event_PressedEnter(Text)
          For i = 1 To Scripts.Count
             Scripts(i).ExecuteStatement code
          Next
-      
+
          ' reset our error handler
-         Err.Number = 0
+         Err.Number = 0s
       End If
    End If
 
