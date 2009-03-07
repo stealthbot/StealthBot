@@ -887,6 +887,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -912,7 +913,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -6733,18 +6733,15 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         If (msg_priority < 0) Then
             Dim cmdName    As String ' ...
             Dim spaceIndex As Long   ' ...
+
+            ' ...
+            spaceIndex = InStr(1, Message, Space$(1), vbBinaryCompare)
             
             ' ...
-            If (Len(Message) >= 2) Then
-                ' ...
-                spaceIndex = InStr(1, Message, Space$(1), vbBinaryCompare)
-                
-                ' ...
-                If (spaceIndex) Then
-                    cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 2))
-                Else
-                    cmdName = LCase$(Mid$(Message, 2))
-                End If
+            If (spaceIndex >= 2) Then
+                cmdName = LCase$(Left$(Mid$(Message, 2), spaceIndex - 2))
+            Else
+                cmdName = LCase$(Mid$(Message, 2))
             End If
             
             ' ...
