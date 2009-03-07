@@ -14,10 +14,6 @@ Public Type scObj
     obj      As Object
 End Type
 
-Public dictSettings      As Dictionary
-Public dictTimerInterval As Dictionary
-Public dictTimerEnabled  As Dictionary
-Public dictTimerCount    As Dictionary
 Public VetoNextMessage   As Boolean
 Public boolOverride      As Boolean
 
@@ -51,7 +47,7 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     Dim CurrentModule As Module
 
     Dim strPath  As String  ' ...
-    Dim fileName As String  ' ...
+    Dim filename As String  ' ...
     Dim fileExt  As String  ' ...
     Dim i        As Integer ' ...
     
@@ -65,21 +61,21 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     ' ...
     If (Dir(strPath) <> vbNullString) Then
         ' ...
-        fileName = Dir(strPath)
+        filename = Dir(strPath)
         
         ' ...
-        Do While (fileName <> vbNullString)
+        Do While (filename <> vbNullString)
             ' ...
-            If (IsValidFileExtension(GetFileExtension(fileName))) Then
+            If (IsValidFileExtension(GetFileExtension(filename))) Then
                 ' ...
-                Set CurrentModule = SC.Modules.Add(fileName)
+                Set CurrentModule = SC.Modules.Add(filename)
                 
                 ' ...
-                FileToModule CurrentModule, strPath & fileName
+                FileToModule CurrentModule, strPath & filename
             End If
             
             ' ...
-            fileName = Dir()
+            filename = Dir()
         Loop
     End If
     
@@ -242,14 +238,14 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
     
 End Sub
 
-Private Function GetFileExtension(ByVal fileName As String)
+Private Function GetFileExtension(ByVal filename As String)
 
     On Error Resume Next
 
     ' ...
-    If (InStr(1, fileName, ".") <> 0) Then
+    If (InStr(1, filename, ".") <> 0) Then
         GetFileExtension = _
-            Mid$(fileName, InStr(1, fileName, ".") + 1)
+            Mid$(filename, InStr(1, filename, ".") + 1)
     End If
 
 End Function
@@ -614,89 +610,4 @@ Public Function GetVeto() As Boolean
     
     VetoNextMessage = False
     
-End Function
-
-'// Written by Swent. Sets a plugin timer's interval.
-Public Sub SetPTInterval(ByVal strPrefix As String, ByVal strTimerName As String, ByVal intInterval As Integer)
-    Dim strKey As String
-    strKey = strPrefix & ":" & strTimerName
-
-    dictTimerInterval(strKey) = intInterval
-    dictTimerCount(strKey) = intInterval
-    
-    If Not dictTimerEnabled.Exists(strKey) Then
-       dictTimerEnabled(strKey) = False
-    End If
-End Sub
-
-
-'// Written by Swent. Enables or disables a plugin timer.
-Public Sub SetPTEnabled(ByVal strPrefix As String, ByVal strTimerName As String, ByVal boolEnabled As Boolean)
-    
-    dictTimerEnabled(strPrefix & ":" & strTimerName) = boolEnabled
-End Sub
-
-
-'// Written by Swent. Modifies the count in a running plugin timer.
-Public Sub SetPTCount(ByVal strPrefix As String, ByVal strTimerName As String, ByVal intCount As Integer)
-    
-    dictTimerCount(strPrefix & ":" & strTimerName) = intCount
-End Sub
-
-
-'// Written by Swent. Gets the enabled status of a plugin timer.
-Public Function GetPTEnabled(ByVal strPrefix As String, ByVal strTimerName As String)
-    Dim strKey As String
-    strKey = strPrefix & ":" & strTimerName
-    
-    If dictTimerEnabled.Exists(strKey) Then
-        GetPTEnabled = dictTimerEnabled(strKey)
-    Else
-        GetPTEnabled = -1
-    End If
-End Function
-
-
-'// Written by Swent. Gets a plugin timer's interval setting.
-Public Function GetPTInterval(ByVal strPrefix As String, ByVal strTimerName As String) As Integer
-    Dim strKey As String
-    strKey = strPrefix & ":" & strTimerName
-    
-    If dictTimerInterval.Exists(strKey) Then
-        GetPTInterval = dictTimerInterval(strKey)
-    Else
-        GetPTInterval = -1
-    End If
-End Function
-
-
-'// Written by Swent. Get's the seconds left before a plugin timer sub executes.
-Public Function GetPTLeft(ByVal strPrefix As String, ByVal strTimerName As String) As Integer
-    Dim strKey As String
-    strKey = strPrefix & ":" & strTimerName
-
-    If dictTimerCount.Exists(strKey) Then
-        GetPTLeft = dictTimerCount(strKey)
-    Else
-        GetPTLeft = -1
-    End If
-End Function
-
-'// Written by Swent. Gets the time since a plugin timer sub was last executed.
-Public Function GetPTWaiting(ByVal strPrefix As String, ByVal strTimerName As String) As Integer
-    Dim strKey As String
-    strKey = strPrefix & ":" & strTimerName
-    
-    If dictTimerCount.Exists(strKey) Then
-        GetPTWaiting = dictTimerInterval(strKey) - dictTimerCount(strKey) + 1
-    Else
-        GetPTWaiting = -1
-    End If
-End Function
-
-
-'// Written by Swent. Gets keys for the timer dictionaries.
-Public Function GetPTKeys() As String
-
-    GetPTKeys = Join(dictTimerEnabled.Keys)
 End Function

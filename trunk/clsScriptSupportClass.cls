@@ -14,7 +14,7 @@ Attribute VB_Exposed = False
 '/*
 ' * StealthBot Shared Scripting Class
 ' *
-' * clsScriptSupportClass.cls
+' * clsSharedScriptSupport.cls
 ' *
 ' *
 ' * This class basically mirrors the signatures of several important StealthBot functions
@@ -85,7 +85,7 @@ Attribute VB_Exposed = False
 ' *         just like the bot does (thanks ZergMasterI)
 ' *     - Added a number of Windows API function mirrors (thanks FiftyToo)
 ' *     - Rewrote and integrated several Plugin System functions
-' *         Dsp(), GetSetting(), SetSetting(), TimerInterval(), TimerEnabled(),
+' *         Dsp(), SharedScriptSupport.GetSetting(), SetSetting(), TimerInterval(), TimerEnabled(),
 ' *         GetTimerEnabled(), GetTimeLeft(), and GetTimerWaiting()
 ' *         Note: All integrated functions are backwards compatiable. No current calls need to be modified.
 ' *     - Added two new timer functions
@@ -1089,135 +1089,6 @@ Public Function WinSendMessage(ByVal hWnd As Long, ByVal wMsg As Long, ByVal wPa
     WinSendMessage = SendMessage(hWnd, wMsg, wParam, lParam)
 End Function
 
-
-'// SETSETTING
-'//   Written by Swent. Creates/modifies plugin settings.
-'//   Usage - new setting: SetSetting "prefix", "settingName", value, "setting description", False
-'//   Usage - existing setting: SetSetting "prefix", "settingName", value
-'//   Setting Values() of any Length are now set and retrieved properly (no longer a 255 char max)
-'//   You can now have spaces in your setting names.
-Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal varValue As Variant, _
-                      Optional ByVal strDescription As String, Optional ByVal boolOverwrite As Boolean = True)
-                      
-    Dim strPath As String, arrSetting() As String, i As Integer
-    strPath = BotPath() & "plugins\settings.ini"
-
-    If Len(strDescription) > 0 Then
-        SetSetting strPrefix, strName & " (info)", strDescription, "", True
-    End If
-    
-    If boolOverwrite Or Len(GetConfigEntry(strPrefix, strName, strPath)) = 0 Then
-        If Len(strName & varValue) > 254 Then
-            WriteConfigEntry UCase(strPrefix), strName, Left(varValue, 254 - Len(strName)), strPath
-            arrSetting = Split(strName, "*")
-            If UBound(arrSetting) > 0 Then i = arrSetting(1) + 1 Else i = 1
-            SetSetting strPrefix, arrSetting(0) & "*" & i, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
-        Else
-            WriteConfigEntry UCase(strPrefix), strName, varValue, strPath
-        End If
-    End If
-End Sub
-
-
-'// GETSETTING
-'//   Written by Swent. Retrieves plugin settings.
-Public Function GetSetting(ByVal strPrefix As String, ByVal strName As String)
-    Dim strPath As String, i As Integer, strAppend As String, tmpValue As String, varValue As Variant
-    strPath = BotPath() & "plugins\settings.ini"
-    If LenB(Dir$(strPath)) = 0 Then Exit Function
-    
-    Do
-        If i > 0 Then strAppend = "*" & i
-        tmpValue = GetConfigEntry(strPrefix, Left(strName, Len(strName)) & strAppend, strPath)
-        varValue = varValue & tmpValue
-        If Len(tmpValue) = 0 Then
-            If Len(varValue) = 0 Then varValue = Empty
-            GetSetting = varValue
-            Exit Do
-        End If
-        i = i + 1
-    Loop
-End Function
-
-
-'// PLUGINENABLED
-'//   Enables or disables a plugin.
-Sub PluginEnabled(strPrefix As String, boolEnabled As Boolean)
-    
-    SetSetting strPrefix, "enabled", boolEnabled
-End Sub
-
-
-'// GETPLUGINENABLED
-'//   Gets a plugin's enabled status. Returns -1 if the plugin doesn't exist.
-Function GetPluginEnabled(strPrefix As String)
-    Dim strEnabled As String
-    
-    strEnabled = GetSetting(strPrefix, "enabled")
-    If Len(strEnabled) > 0 Then
-        GetPluginEnabled = CBool(strEnabled)
-    Else
-        GetPluginEnabled = -1
-    End If
-End Function
-
-
-'// TIMERINTERVAL
-'//   Sets a plugin timer's interval. The timer is created if it doesn't exist.
-Public Sub TimerInterval(ByVal strPrefix As String, ByVal strTimerName As String, ByVal intInterval As Integer)
-
-    SetPTInterval strPrefix, strTimerName, Int(intInterval)
-End Sub
-
-
-'// GETTIMERINTERVAL
-'//   Gets a plugin timer's interval setting. This and all further timer functions return -1 if timer doesn't exist.
-Public Function GetTimerInterval(ByVal strPrefix As String, ByVal strTimerName As String)
-
-    GetTimerInterval = GetPTInterval(strPrefix, strTimerName)
-End Function
-
-
-'// TIMERENABLED
-'//   Enables or disables a plugin timer.
-Public Sub TimerEnabled(ByVal strPrefix As String, ByVal strTimerName As String, ByVal boolEnabled As Boolean)
-
-    SetPTEnabled strPrefix, strTimerName, boolEnabled
-End Sub
-
-
-'// GETTIMERENABLED
-'//   Get's the time left (in seconds) until a plugin timer sub is executed.
-Public Function GetTimerEnabled(ByVal strPrefix As String, ByVal strTimerName As String)
-
-    GetTimerEnabled = GetPTEnabled(strPrefix, strTimerName)
-End Function
-
-
-'// TIMELEFT
-'//   Allows you to modify the time left (in seconds) until a plugin timer sub is executed.
-Public Sub TimeLeft(ByVal strPrefix As String, ByVal strTimerName As String, ByVal intCount As Integer)
-
-    SetPTCount strPrefix, strTimerName, Int(intCount)
-End Sub
-
-
-'// GETTIMELEFT
-'//   Get's the time left (in seconds) until a plugin timer sub is executed.
-Public Function GetTimeLeft(ByVal strPrefix As String, ByVal strTimerName As String)
-
-    GetTimeLeft = GetPTLeft(strPrefix, strTimerName)
-End Function
-
-
-'// GETTIMERWAITING
-'//   Get's the time (in seconds) since a plugin timer sub was last executed.
-Public Function GetTimerWaiting(ByVal strPrefix As String, ByVal strTimerName As String)
-
-    GetTimerWaiting = GetPTWaiting(strPrefix, strTimerName)
-End Function
-
-
 '// DSP
 '//     Displays messages via the specified output type and allows for unlimited message Lengths.
 '//     Syntax: Dsp Output, Message, [Username], [Color]
@@ -1252,7 +1123,6 @@ End Sub
 '// RELOADPLUGINMENUS
 '//   Reloads the all plugin menus. All user-added items will be cleared.
 Public Sub ReloadPluginMenus()
-
     Call DeletePluginMenus
     Call RegisterPluginMenus
 End Sub
@@ -1262,7 +1132,7 @@ End Sub
 '//   Removes an entire plugin menu.
 Public Sub RemoveMenuItem(ByVal strPrefix As String, Optional ByVal strName As String)
 
-    If GetSetting("ps", "menusDisabled") Then Exit Sub
+    If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit Sub
     
     DeleteMenuItemByID GetPluginMenu(strPrefix)
 End Sub
@@ -1279,7 +1149,7 @@ End Sub
 Public Sub AddMenuItem(ByVal strPrefix As String, ByVal strName As String, Optional ByVal boolSeparator As Boolean, _
                 Optional ByVal boolDisabled As Boolean, Optional ByVal boolCheckmark As Boolean)
 
-    If GetSetting("ps", "menusDisabled") Then Exit Sub
+    If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit Sub
 
     Dim strCallback As String
     Dim lngMenu As Long, lngItem As Long, intItemCount As Integer
@@ -1308,7 +1178,7 @@ End Sub
 '//   Changes checked status of an item in a plugin menu.
 Public Sub SetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String, ByVal boolChecked As Boolean)
 
-    If GetSetting("ps", "menusDisabled") Then Exit Sub
+    If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit Sub
     
     SetMenuCheck GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolChecked
 End Sub
@@ -1318,7 +1188,7 @@ End Sub
 '//   Get's the checked status of an item in a plugin menu.
 '//   Returns True (checked), False (unchecked), or -1 if it's not a checkmark item
 Public Function GetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
-    If GetSetting("ps", "menusDisabled") Then Exit Function
+    If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit Function
     
     Dim intChange As Integer
     intChange = SetMenuCheck(GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), True)
@@ -1338,7 +1208,7 @@ End Function
 '//   Reverses the checked status of a plugin menu item.
 Public Sub ToggleMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
 
-    If GetSetting("ps", "menusDisabled") Then Exit Sub
+    If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit Sub
     
     SetMenuItemCheck strPrefix, strName, Not GetMenuItemCheck(strPrefix, strName)
 End Sub
@@ -1348,7 +1218,7 @@ End Sub
 '//   Enables or disables a plugin menu item. Disabled items are greyed out and not clickable.
 Public Sub SetMenuItemEnabled(ByVal strPrefix As String, ByVal strName As String, ByVal boolEnabled As Boolean)
 
-    If GetSetting("ps", "menusDisabled") Then Exit Sub
+    If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit Sub
     
     SetMenuEnabled GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolEnabled
 End Sub
@@ -1690,3 +1560,51 @@ Private Sub Class_Terminate()
 '    End If
 End Sub
 
+'// SETSETTING
+'//   Written by Swent. Creates/modifies plugin settings.
+'//   Usage - new setting: SetSetting "prefix", "settingName", value, "setting description", False
+'//   Usage - existing setting: SetSetting "prefix", "settingName", value
+'//   Setting Values() of any Length are now set and retrieved properly (no longer a 255 char max)
+'//   You can now have spaces in your setting names.
+Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal varValue As Variant, _
+                      Optional ByVal strDescription As String, Optional ByVal boolOverwrite As Boolean = True)
+                      
+    Dim strPath As String, arrSetting() As String, i As Integer
+    strPath = BotPath() & "plugins\settings.ini"
+
+    If Len(strDescription) > 0 Then
+        SetSetting strPrefix, strName & " (info)", strDescription, "", True
+    End If
+    
+    If boolOverwrite Or Len(GetConfigEntry(strPrefix, strName, strPath)) = 0 Then
+        If Len(strName & varValue) > 254 Then
+            WriteConfigEntry UCase(strPrefix), strName, Left(varValue, 254 - Len(strName)), strPath
+            arrSetting = Split(strName, "*")
+            If UBound(arrSetting) > 0 Then i = arrSetting(1) + 1 Else i = 1
+            SetSetting strPrefix, arrSetting(0) & "*" & i, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
+        Else
+            WriteConfigEntry UCase(strPrefix), strName, varValue, strPath
+        End If
+    End If
+End Sub
+
+'// GETSETTING
+'//   Written by Swent. Retrieves plugin settings.
+Public Function GetSetting(ByVal strPrefix, ByVal strName)
+    Dim strPath, i, strAppend, tmpValue, varValue
+    strPath = BotPath() & "plugins\settings.ini"
+
+    If LenB(Dir(strPath)) = 0 Then: Exit Function
+    
+    Do
+        If i > 0 Then strAppend = "*" & i
+        tmpValue = GetConfigEntry(strPrefix, Left(strName, Len(strName)) & strAppend, strPath)
+        varValue = varValue & tmpValue
+        If Len(tmpValue) = 0 Then
+            If Len(varValue) = 0 Then varValue = Empty
+            GetSetting = varValue
+            Exit Do
+        End If
+        i = i + 1
+    Loop
+End Function
