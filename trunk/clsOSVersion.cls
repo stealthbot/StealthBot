@@ -180,10 +180,9 @@ End Property
 Public Property Get IsWindowsVista() As Boolean
 
     ' ...
-    If (m_osVer.PlatformID And VER_NT_WORKSTATION) Then
+    If (m_osVer.PlatformID = VER_NT_WORKSTATION) Then
     
-        IsWindowsVista = _
-            CBool((m_osVer.dwVerMajor = 6) And (m_osVer.dwVerMinor = 0))
+        IsWindowsVista = CBool(m_osVer.dwVerMajor = 6)
     
     End If
     
@@ -193,12 +192,7 @@ Public Property Get IsWindows2008() As Boolean
 
     If (m_osVer.PlatformID <> VER_NT_WORKSTATION) Then
     
-        If (m_osVer.dwVerMajor = 6) Then
-        
-            IsWindows2008 = _
-                CBool((m_osVer.dwVerMinor = 0) Or (m_osVer.dwVerMinor = 1))
-        
-        End If
+        IsWindows2008 = CBool(m_osVer.dwVerMajor = 6)
         
     End If
     
