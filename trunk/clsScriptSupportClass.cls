@@ -1587,7 +1587,21 @@ Public Function GetObjByNameEx(ByVal ModuleName As String, ByVal ObjType As Stri
 
 End Function
 
+Public Function Scripts() As Object
+
+    Dim i As Integer ' ...
+
+    Set Scripts = New Collection
+
+    For i = 1 To frmChat.SControl.Modules.Count
+        Scripts.Add frmChat.SControl.Modules(i)
+    Next
+
+End Function
+
 Public Function GetScriptObjByName(ByVal ScriptName As String) As Object
+
+    On Error GoTo ERROR_HANDLER
 
     Dim i   As Integer ' ...
     Dim str As String ' ...
@@ -1596,7 +1610,8 @@ Public Function GetScriptObjByName(ByVal ScriptName As String) As Object
         str = frmChat.SControl.Modules(i).Eval("Name()")
         
         If (StrComp(ScriptName, str, vbTextCompare) = 0) Then
-             Set GetScriptObjByName = frmChat.SControl.Modules(i)
+             Set GetScriptObjByName = _
+                    frmChat.SControl.Modules(i)
              
              Exit Function
         End If
@@ -1606,11 +1621,20 @@ Public Function GetScriptObjByName(ByVal ScriptName As String) As Object
         str = frmChat.SControl.Modules(i).Name
     
         If (StrComp(ScriptName, str, vbTextCompare) = 0) Then
-             Set GetScriptObjByName = frmChat.SControl.Modules(i)
+             Set GetScriptObjByName = _
+                    frmChat.SControl.Modules(i)
              
              Exit Function
         End If
     Next i
+    
+    Exit Function
+    
+ERROR_HANDLER:
+
+    Err.Number = 0
+    
+    Resume Next
 
 End Function
 

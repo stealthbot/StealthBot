@@ -45,4 +45,6 @@ Sub Event_Load()
 
    frm.Show
 
+   GetScriptObjByName("blah.txt").Blah
+
 End Sub

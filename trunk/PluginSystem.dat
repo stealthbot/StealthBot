@@ -1764,11 +1764,11 @@ End Sub
  
 Sub Event_PressedEnter(Text)
 
-   If Left(LCase(Text), 5) = "/exec" Then
-      VetoThisMessage
-      ExecuteGlobal Mid(Text, 7)
-      Exit Sub
-   End If
+   'If Left(LCase(Text), 5) = "/exec" Then
+   '   VetoThisMessage
+   '   ExecuteGlobal Mid(Text, 7)
+   '   Exit Sub
+   'End If
 
    psProcessCmd Text, BotVars.Username, 4
    psExecuteEvent "PressedEnter", Array(Text)

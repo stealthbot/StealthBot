@@ -180,7 +180,7 @@ End Property
 Public Property Get IsWindowsVista() As Boolean
 
     ' ...
-    If (m_osVer.PlatformID = VER_NT_WORKSTATION) Then
+    If (m_osVer.PlatformID And VER_NT_WORKSTATION) Then
     
         IsWindowsVista = _
             CBool((m_osVer.dwVerMajor = 6) And (m_osVer.dwVerMinor = 0))
