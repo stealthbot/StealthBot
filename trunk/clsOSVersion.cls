@@ -18,7 +18,7 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Private Declare Function GetVersionEx Lib "Kernel32.dll" Alias "GetVersionExA" (lpVersionInformation As OSVERSIONINFO) As Long
+Private Declare Function GetVersionEx Lib "Kernel32.dll" Alias "GetVersionExA" (lpVersionInformation As OSVERSIONINFOEX) As Long
   
 Private Const VER_NT_WORKSTATION       As Long = 1
 Private Const VER_NT_DOMAIN_CONTROLLER As Long = 2
@@ -27,20 +27,25 @@ Private Const VER_NT_SERVER            As Long = 3
 Private Const VER_PLATFORM_ID_VISTA    As Long = 2
 Private Const VER_PLATFORM_WIN32_NT    As Long = 2
 
-Private Type OSVERSIONINFO
-  OSVSize         As Long         'size, in bytes, of this data structure
-  dwVerMajor      As Long         'ie NT 3.51, dwVerMajor = 3; NT 4.0, dwVerMajor = 4.
-  dwVerMinor      As Long         'ie NT 3.51, dwVerMinor = 51; NT 4.0, dwVerMinor= 0.
-  dwBuildNumber   As Long         'NT: build number of the OS
-                                  'Win9x: build number of the OS in low-order word.
-                                  '       High-order word contains major & minor ver nos.
-  PlatformID      As Long         'Identifies the operating system platform.
-  szCSDVersion    As String * 128 'NT: string, such as "Service Pack 3"
-                                  'Win9x: string providing arbitrary additional information
+Private Type OSVERSIONINFOEX
+  OSVSize           As Long         'size, in bytes, of this data structure
+  dwVerMajor        As Long         'ie NT 3.51, dwVerMajor = 3; NT 4.0, dwVerMajor = 4.
+  dwVerMinor        As Long         'ie NT 3.51, dwVerMinor = 51; NT 4.0, dwVerMinor= 0.
+  dwBuildNumber     As Long         'NT: build number of the OS
+                                    'Win9x: build number of the OS in low-order word.
+                                    '       High-order word contains major & minor ver nos.
+  PlatformID        As Long         'Identifies the operating system platform.
+  szCSDVersion      As String * 128 'NT: string, such as "Service Pack 3"
+                                    'Win9x: string providing arbitrary additional information
+  wServicePackMajor As Integer
+  wServicePackMinor As Integer
+  wSuiteMask        As Integer
+  wProductType      As Byte
+  wReserved         As Byte
 End Type
 
 Private m_isCached As Boolean
-Private m_osVer    As OSVERSIONINFO
+Private m_osVer    As OSVERSIONINFOEX
 
 Private Sub Class_Initialize()
 
@@ -152,7 +157,7 @@ Public Property Get IsWindowsXP() As Boolean
     ' check for winxp 64-bit
     If (IsWindowsXP = False) Then
     
-        If (m_osVer.PlatformID = VER_NT_WORKSTATION) Then
+        If (m_osVer.wProductType = VER_NT_WORKSTATION) Then
 
             IsWindowsXP = _
                 CBool((m_osVer.dwVerMajor = 5) And (m_osVer.dwVerMinor = 2))
@@ -179,15 +184,11 @@ End Property
 ' updated by eric
 Public Property Get IsWindowsVista() As Boolean
 
-    frmChat.AddChat vbYellow, "PlatformID: " & m_osVer.PlatformID
-    frmChat.AddChat vbYellow, "VerMajor: " & m_osVer.dwVerMajor
-    frmChat.AddChat vbYellow, "VerMinor: " & m_osVer.dwVerMinor
-
     ' ...
-    If (m_osVer.PlatformID And VER_NT_WORKSTATION) Then
+    If (m_osVer.wProductType = VER_NT_WORKSTATION) Then
     
         IsWindowsVista = _
-            (CBool(m_osVer.dwVerMajor = 6) And CBool(m_osVer.dwVerMinor = 2))
+            (CBool(m_osVer.dwVerMajor = 6) And (m_osVer.dwVerMinor = 0))
     
     End If
     
@@ -195,9 +196,11 @@ End Property
 
 Public Property Get IsWindows2008() As Boolean
 
-    If (Not (m_osVer.PlatformID And VER_NT_WORKSTATION)) Then
-    
-        IsWindows2008 = CBool(m_osVer.dwVerMajor = 6)
+    If (m_osVer.wProductType <> VER_NT_WORKSTATION) Then
+        
+        IsWindows2008 = _
+            CBool(((m_osVer.dwVerMajor = 6) And _
+                         ((m_osVer.dwVerMinor = 0) Or (m_osVer.dwVerMinor = 1))))
         
     End If
     
@@ -206,7 +209,7 @@ End Property
 Public Property Get IsWindows7() As Boolean
 
     ' ...
-    If (m_osVer.PlatformID = VER_NT_WORKSTATION) Then
+    If (m_osVer.wProductType = VER_NT_WORKSTATION) Then
         
         IsWindows7 = _
             CBool((m_osVer.dwVerMajor = 6) And (m_osVer.dwVerMinor = 1))
