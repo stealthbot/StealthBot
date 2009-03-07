@@ -7,30 +7,6 @@ Function Name()
 
 End Function
 
-Function Author()
-
-   Author = "Eric[nK]"
-
-End Function
-
-Function MajorVersion()
-
-   MajorVersion = 1
-
-End Function
-
-Function MinorVersion()
-
-   MinorVersion = 0
-
-End Function
-
-Function Revision()
-
-   Revision = 0
-
-End Function
-
 Sub Event_Load()
 
    CreateObj "Winsock", "sck"
@@ -44,7 +20,5 @@ Sub Event_Load()
    CreateObj "Form", "frm"
 
    frm.Show
-
-   GetScriptObjByName("blah.txt").Blah
 
 End Sub
