@@ -232,7 +232,7 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
     str = str & "   Set GetObjByName = _ " & vbNewLine
     str = str & "         GetObjByNameEx(GetModuleName(), ObjType, ObjName)" & vbNewLine
     str = str & "End Function" & vbNewLine
-    
+
     ' store module-level coding
     ScriptModule.AddCode str
     
