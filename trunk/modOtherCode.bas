@@ -427,7 +427,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
     
     On Error GoTo ERROR_HANDLER
 
-    If (frmChat.sckBNet.State = 7) Then
+    If (frmChat.sckBNet.STate = 7) Then
         With PBuffer
             If (frmChat.mnuUTF8.Checked) Then
                 .InsertNTString Message, UTF8
@@ -1470,7 +1470,7 @@ Public Function FlashWindow() As Boolean
         .cbSize = 20
         .dwFlags = FLASHW_ALL Or 12
         .dwTimeout = 0
-        .hWnd = frmChat.hWnd
+        .hWNd = frmChat.hWNd
         .uCount = 0
     End With
     
@@ -1692,7 +1692,7 @@ End Function
 
 Public Sub GetW3LadderProfile(ByVal sPlayer As String, ByVal eType As enuWebProfileTypes)
     If (LenB(sPlayer) > 0) Then
-        ShellExecute frmChat.hWnd, "Open", "http://www.battle.net/war3/ladder/" & _
+        ShellExecute frmChat.hWNd, "Open", "http://www.battle.net/war3/ladder/" & _
             IIf(eType = W3XP, "w3xp", "war3") & "-player-profile.aspx?Gateway=" & _
                 GetW3Realm(sPlayer) & "&PlayerName=" & NameWithoutRealm(sPlayer), 0&, 0&, 0&
     End If
@@ -1885,7 +1885,7 @@ Public Function GetProfilePath(Optional ByVal ProfileIndex As Integer) As String
 End Function
 
 Public Sub OpenReadme()
-    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/readme/", 0, 0, 0
+    ShellExecute frmChat.hWNd, "Open", "http://www.stealthbot.net/readme/", 0, 0, 0
     frmChat.AddChat RTBColors.SuccessText, "You are being taken to the StealthBot Online Readme."
 End Sub
 
@@ -3037,7 +3037,7 @@ Public Function convertAlias(ByVal cmdName As String) As String
         If (Not (Alias Is Nothing)) Then
             '// 09/03/2008 JSM - Modified code to use the <aliases> element
             convertAlias = _
-                Alias.parentNode.parentNode.Attributes.getNamedItem("name").text
+                Alias.parentNode.parentNode.Attributes.getNamedItem("name").Text
             
             Exit Function
         End If
@@ -3119,7 +3119,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     End If
     
     ' ...
-    rtbChatLength = Len(rtb.text)
+    rtbChatLength = Len(rtb.Text)
 
     ' ...
     For i = LBound(saElements) To UBound(saElements) Step 3
@@ -3150,9 +3150,9 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         f = FreeFile
 
         If (g_OSVersion.IsWin2000Plus()) Then
-            Call GetScrollRange(rtb.hWnd, SB_VERT, 0, intRange)
+            Call GetScrollRange(rtb.hWNd, SB_VERT, 0, intRange)
             
-            lngVerticalPos = SendMessage(rtb.hWnd, EM_GETTHUMB, 0&, 0&)
+            lngVerticalPos = SendMessage(rtb.hWNd, EM_GETTHUMB, 0&, 0&)
             
             Diff = ((lngVerticalPos + _
                             (rtb.Height / Screen.TwipsPerPixelY)) - intRange)
@@ -3177,7 +3177,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             With rtb
                 .Visible = False
                 .SelStart = 0
-                .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
+                .SelLength = InStr(1, .Text, vbLf, vbBinaryCompare)
                 .SelFontName = rtb.Font.Name
                 .SelText = ""
                 .Visible = True
@@ -3187,7 +3187,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         s = GetTimeStamp()
         
         With rtb
-            .SelStart = Len(.text)
+            .SelStart = Len(.Text)
             .SelLength = 0
             .SelFontName = rtb.Font.Name
             .SelBold = False
@@ -3212,7 +3212,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                     L = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
                 Wend
             
-                L = Len(rtb.text)
+                L = Len(rtb.Text)
             
                 With rtb
                     .SelStart = L
@@ -3241,7 +3241,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         If (blUnlock) Then
             rtb.Visible = True
             
-            Call SendMessage(rtb.hWnd, WM_VSCROLL, _
+            Call SendMessage(rtb.hWNd, WM_VSCROLL, _
                 SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&)
         End If
     End If

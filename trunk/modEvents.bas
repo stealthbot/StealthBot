@@ -398,13 +398,13 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
         'MsgBox "!!"
     
         If KeyName = "Profile\Age" Then
-            frmWriteProfile.txtAge.text = KeyValue
+            frmWriteProfile.txtAge.Text = KeyValue
         ElseIf KeyName = "Profile\Location" Then
-            frmWriteProfile.txtLoc.text = KeyValue
+            frmWriteProfile.txtLoc.Text = KeyValue
         ElseIf KeyName = "Profile\Description" Then
-            frmWriteProfile.txtDescr.text = KeyValue
+            frmWriteProfile.txtDescr.Text = KeyValue
         ElseIf KeyName = "Profile\Sex" Then
-            frmWriteProfile.txtSex.text = KeyValue
+            frmWriteProfile.txtSex.Text = KeyValue
         End If
         
         frmWriteProfile.SetFocus
@@ -565,7 +565,7 @@ Repeat4:
                     Exit Sub
             End Select
             
-            rtb.text = vbNullString
+            rtb.Text = vbNullString
             
             rtb.SelStart = 0
             rtb.SelLength = 0
@@ -630,7 +630,7 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
         'End If
     End With
     
-    If (frmChat.sckBNLS.State <> 0) Then
+    If (frmChat.sckBNLS.STate <> 0) Then
         frmChat.sckBNLS.Close
     End If
     
@@ -1290,7 +1290,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 
                 If (found.ListSubItems.Count > 0) Then
                     ' ...
-                    found.ListSubItems(1).text = sClan
+                    found.ListSubItems(1).Text = sClan
                 End If
                 
                 ' ...
