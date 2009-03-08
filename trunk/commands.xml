@@ -887,12 +887,6 @@
             </restrictions>
           </argument>
         </string>
-
-        <options>
-          <option s_name="g" l_name="group" />
-          <option s_name="t" l_name="type" />
-          <option s_name="b" l_name="banmessage" />
-        </options>
       </optional>
     </arguments>
 
