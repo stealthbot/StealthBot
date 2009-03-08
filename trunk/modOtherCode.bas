@@ -3250,9 +3250,6 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                 .SelStart = 0
                 .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
                 .SelFontName = rtb.Font.Name
-                
-                'rtbChatLength = (rtbChatLength - .SelLength)
-                
                 .SelText = ""
                 .Visible = True
             End With
@@ -3269,16 +3266,11 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             If .SelUnderline = True Then: .SelUnderline = False
             .SelFontName = rtb.Font.Name
             .SelText = s
-            .SelStart = Len(.text)
         End With
-        
-        'If (LogThis) Then
-        '    Print #f, s;
-        'End If
 
         For i = LBound(saElements) To UBound(saElements) Step 3
             If (InStr(1, saElements(i + 2), Chr(0), vbBinaryCompare) > 0) Then
-                Call KillNull(saElements(i + 2))
+                KillNull saElements(i + 2)
             End If
         
             If ((StrictIsNumeric(saElements(i + 1))) And (Len(saElements(i + 2)) > 0)) Then
@@ -3290,28 +3282,16 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                     L = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
                 Wend
             
+                L = Len(rtb.text)
+            
                 With rtb
-                    .SelStart = Len(.text)
-                    
-                    ' store position of selection
-                    L = .SelStart
-                    
-                    .SelLength = 0
+                    .SelStart = L
                     .SelFontName = saElements(i)
                     .SelColor = saElements(i + 1)
                     .SelText = _
                         saElements(i + 2) & Left$(vbCrLf, -2 * CLng((i + 2) = _
                             UBound(saElements)))
-                        
-                    ' ...
-                    str = str & saElements(i + 2)
-                    
-                    'rtbChatLength = (rtbChatLength + _
-                    '                 Len(s) + _
-                    '                 Len(saElements(I + 1)) + _
-                    '                 Len(Left$(vbCrLf, -2 * CLng((I + 1) = UBound(saElements)))))
-                    
-                    .SelStart = Len(.text)
+                    .SelLength = Len(.SelText)
                 End With
             End If
         Next i
@@ -3325,17 +3305,13 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End If
         End If
 
-        Call ColorModify(rtb, L)
+        ColorModify rtb, L
 
         If (blUnlock) Then
             rtb.Visible = True
             
             Call SendMessage(rtb.hWnd, WM_VSCROLL, _
                 SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&)
-        End If
-        
-        If (LogThis) Then
-            Close #f
         End If
     End If
     
