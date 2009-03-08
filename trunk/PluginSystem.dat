@@ -164,7 +164,8 @@ Sub psLoadPlugins()
    psEventNames = Split("load|firstrun|serverinfo|servererror|usertalk|useremote|whisperfromuser|userjoins|userleaves|" & _
                         "flagupdate|loggedon|loggedoff|userinchannel|channeljoin|channellist|pressedenter|keyreturn|" & _
                         "messagesent|messagequeued|claninfo|clanmemberlist|clanmemberupdate|clanmotd|clanmemberleaves|" & _
-                        "botremovedfromclan|botclanrankchanged|botjoinedclan|botclaninfo|close|shutdown", "|")
+                        "botremovedfromclan|botclanrankchanged|botjoinedclan|botclaninfo|close|shutdown|packetreceived|" & _
+						"packetsent", "|")
 
    '// Get list of allowed plugin file extensions
    extensions = LCase(GetSetting("ps", "allowedExtensions")) & ","
@@ -1850,6 +1851,15 @@ End Sub
 Sub Event_Close()
 
    psExecuteEvent "Close", 0
+End Sub
+
+Sub Event_PacketSent(Protocol, ID, Length, Data)
+   psExecuteEvent "PacketSent", Array(Protocol, ID, Length, Data)
+End Sub
+
+Sub Event_PacketReceived(Protocol, ID, Length, Data)
+
+   psExecuteEvent "PacketReceived", Array(Protocol, ID, Length, Data)
 End Sub
 
 
