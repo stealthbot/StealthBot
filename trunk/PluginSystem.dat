@@ -2058,3 +2058,24 @@ Sub scTimer_Timer()
     Next
 
 End Sub
+
+'// GETSETTING
+'//   Written by Swent. Retrieves plugin settings.
+Public Function GetSetting(ByVal strPrefix, ByVal strName)
+
+    strPath = BotPath() & "plugins\settings.ini"
+
+    'If LenB(Dir(strPath)) = 0 Then: Exit Function
+    
+    Do
+        If i > 0 Then strAppend = "*" & i
+        tmpValue = GetConfigEntry(strPrefix, Left(strName, Len(strName)) & strAppend, strPath)
+        varValue = varValue & tmpValue
+        If Len(tmpValue) = 0 Then
+            If Len(varValue) = 0 Then varValue = Empty
+            GetSetting = varValue
+            Exit Do
+        End If
+        i = i + 1
+    Loop
+End Function

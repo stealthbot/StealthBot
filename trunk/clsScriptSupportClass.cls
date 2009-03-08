@@ -745,7 +745,7 @@ Public Function GetNameByPosition(ByVal X As Integer) As String
     
     With frmChat.lvChannel.ListItems
         If X > 0 And X <= .Count Then
-            GetNameByPosition = .Item(X).text
+            GetNameByPosition = .Item(X).Text
         Else
             GetNameByPosition = ""
         End If
@@ -939,7 +939,7 @@ End Sub
 '// The command must wait before reloading the script so all operations are cleared.
 Public Sub ReloadScript()
 
-    SCReloadTimerID = SetTimer(frmChat.hWnd, 0, 400, AddressOf ScriptReload_TimerProc)
+    SCReloadTimerID = SetTimer(frmChat.hWNd, 0, 400, AddressOf ScriptReload_TimerProc)
     
 End Sub
 
@@ -950,7 +950,7 @@ End Sub
 Public Sub SetSCTimeout(ByVal newValue As Long)
 
     If (newValue > 1 And newValue < 60001) Then
-        SCReloadTimerID = SetTimer(frmChat.hWnd, newValue, 400, AddressOf ScriptReload_TimerProc)
+        SCReloadTimerID = SetTimer(frmChat.hWNd, newValue, 400, AddressOf ScriptReload_TimerProc)
     End If
 End Sub
 
@@ -1085,8 +1085,8 @@ End Function
 
 '// WINSENDMESSAGE
 '//     Mirror function for the Windows API function
-Public Function WinSendMessage(ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-    WinSendMessage = SendMessage(hWnd, wMsg, wParam, lParam)
+Public Function WinSendMessage(ByVal hWNd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+    WinSendMessage = SendMessage(hWNd, wMsg, wParam, lParam)
 End Function
 
 '// DSP
@@ -1132,7 +1132,7 @@ End Sub
 '//   Removes an entire plugin menu.
 Public Sub RemoveMenuItem(ByVal strPrefix As String, Optional ByVal strName As String)
 
-    If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit Sub
+    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
     
     DeleteMenuItemByID GetPluginMenu(strPrefix)
 End Sub
@@ -1149,7 +1149,7 @@ End Sub
 Public Sub AddMenuItem(ByVal strPrefix As String, ByVal strName As String, Optional ByVal boolSeparator As Boolean, _
                 Optional ByVal boolDisabled As Boolean, Optional ByVal boolCheckmark As Boolean)
 
-    If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit Sub
+    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
 
     Dim strCallback As String
     Dim lngMenu As Long, lngItem As Long, intItemCount As Integer
@@ -1178,7 +1178,7 @@ End Sub
 '//   Changes checked status of an item in a plugin menu.
 Public Sub SetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String, ByVal boolChecked As Boolean)
 
-    If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit Sub
+    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
     
     SetMenuCheck GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolChecked
 End Sub
@@ -1188,7 +1188,7 @@ End Sub
 '//   Get's the checked status of an item in a plugin menu.
 '//   Returns True (checked), False (unchecked), or -1 if it's not a checkmark item
 Public Function GetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
-    If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit Function
+    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Function
     
     Dim intChange As Integer
     intChange = SetMenuCheck(GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), True)
@@ -1208,7 +1208,7 @@ End Function
 '//   Reverses the checked status of a plugin menu item.
 Public Sub ToggleMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
 
-    If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit Sub
+    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
     
     SetMenuItemCheck strPrefix, strName, Not GetMenuItemCheck(strPrefix, strName)
 End Sub
@@ -1218,7 +1218,7 @@ End Sub
 '//   Enables or disables a plugin menu item. Disabled items are greyed out and not clickable.
 Public Sub SetMenuItemEnabled(ByVal strPrefix As String, ByVal strName As String, ByVal boolEnabled As Boolean)
 
-    If SharedScriptSupport.GetSetting("ps", "menusDisabled") Then Exit Sub
+    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
     
     SetMenuEnabled GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolEnabled
 End Sub
@@ -1587,24 +1587,3 @@ Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal 
         End If
     End If
 End Sub
-
-'// GETSETTING
-'//   Written by Swent. Retrieves plugin settings.
-Public Function GetSetting(ByVal strPrefix, ByVal strName)
-    Dim strPath, i, strAppend, tmpValue, varValue
-    strPath = BotPath() & "plugins\settings.ini"
-
-    If LenB(Dir(strPath)) = 0 Then: Exit Function
-    
-    Do
-        If i > 0 Then strAppend = "*" & i
-        tmpValue = GetConfigEntry(strPrefix, Left(strName, Len(strName)) & strAppend, strPath)
-        varValue = varValue & tmpValue
-        If Len(tmpValue) = 0 Then
-            If Len(varValue) = 0 Then varValue = Empty
-            GetSetting = varValue
-            Exit Do
-        End If
-        i = i + 1
-    Loop
-End Function

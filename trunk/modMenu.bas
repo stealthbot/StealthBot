@@ -50,14 +50,14 @@ Public Enum MenuAction
 End Enum
 
 'GetMenu returns a handle to the menu
-Public Declare Function GetMenu Lib "user32" (ByVal hWnd As Long) As Long
+Public Declare Function GetMenu Lib "user32" (ByVal hWNd As Long) As Long
 
 'Get Submenu handle
 Public Declare Function GetSubMenu Lib "user32" _
   (ByVal hMenu As Long, ByVal nPos As Long) As Long
 
 'Refresh menu display
-Public Declare Function DrawMenuBar Lib "user32" (ByVal hWnd As Long) As Long
+Public Declare Function DrawMenuBar Lib "user32" (ByVal hWNd As Long) As Long
 
 'Creates a new popup menu or sub-menu
 Public Declare Function CreatePopupMenu Lib "user32" () As Long
@@ -108,7 +108,7 @@ Public Declare Function RemoveMenu Lib "user32" _
 
 'ProcessMenu: Called when the user has clicked a menu item.
 '  Modified by Swent 2/12/08
-Public Sub ProcessMenu(hWnd As Long, lngMenuCommand As Long)
+Public Sub ProcessMenu(hWNd As Long, lngMenuCommand As Long)
     On Error GoTo ERROR_HANDLER
     
     Dim strCallback As String
@@ -152,7 +152,7 @@ End Function
 
 'GetMenuCaptionByCommand: Returns caption for menu item attached to hWnd
 'with ID = lngMenuCommand.
-Public Function GetMenuCaptionByCommand(ByVal hWnd As Long, _
+Public Function GetMenuCaptionByCommand(ByVal hWNd As Long, _
                                      lngMenuCommand As Long) As String
  
   Dim lngRC As Long
@@ -165,7 +165,7 @@ Public Function GetMenuCaptionByCommand(ByVal hWnd As Long, _
   Dim lngFlag As Long
   
   'Get the form's menu bar
-  hMenu = GetMenu(hWnd)
+  hMenu = GetMenu(hWNd)
   If hMenu <> 0 Then
     'Initialize the buffer
     strString = Space$(256)
@@ -309,7 +309,7 @@ Public Function RegisterScriptMenu(ByVal sMenuCaption As String) As Long
     Dim lMenu As Long
     Dim ThisScript_MenuID As Long
     
-    lMenu = GetMenu(frmChat.hWnd)
+    lMenu = GetMenu(frmChat.hWNd)
     
     If ScriptMenu_ParentID = 0 Then
         ScriptMenu_ParentID = AddParentMenu(lMenu, "&Plugins", , 5)
@@ -322,7 +322,7 @@ Public Function RegisterScriptMenu(ByVal sMenuCaption As String) As Long
     ThisScript_MenuID = AddParentMenu(ScriptMenu_ParentID, sMenuCaption)
     
     RegisterScriptMenu = ThisScript_MenuID
-    DrawMenuBar frmChat.hWnd
+    DrawMenuBar frmChat.hWNd
     colDynamicMenus.Add ThisScript_MenuID
 
 End Function
@@ -351,13 +351,13 @@ Public Sub RegisterPluginMenus()
     AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
 
     dictItemIDs("ps|||Enabled") = AddScriptMenuItem(dictMenuIDs("ps"), "Disable Plugins", _
-            "ps_GEnabled_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "enabled")))
+            "ps_GEnabled_Callback", 0, 0, Not CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "enabled")))
 
     dictItemIDs("ps|||New Version Notification") = AddScriptMenuItem(dictMenuIDs("ps"), "Disable New Version Notification", _
-            "ps_GNVN_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "nvn")))
+            "ps_GNVN_Callback", 0, 0, Not CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "nvn")))
 
     dictItemIDs("ps|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs("ps"), "Disable Backup On Updates", _
-            "ps_GBackups_Callback", 0, 0, Not CBool(SharedScriptSupport.GetSetting("ps", "backupUpdates")))
+            "ps_GBackups_Callback", 0, 0, Not CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "backupUpdates")))
 
     AddScriptMenuItem dictMenuIDs("ps"), 0, 0, True
     AddScriptMenuItem dictMenuIDs("ps"), "Check for Updates", "ps_UpdateCheck_Callback", 0, 0
@@ -367,10 +367,10 @@ Public Sub RegisterPluginMenus()
     strTitles = Split(frmChat.SControl.Modules(1).Eval("psTitles"), "|||")
     
     '// Add "Plugin Menus" menu
-    If Not CBool(SharedScriptSupport.GetSetting("ps", "menusDisabled")) Then
+    If Not CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled")) Then
         dictMenuIDs("#display") = RegisterScriptMenu("Plugin Menus")
         AddItemToMenu ScriptMenu_ParentID, 0, True
-        intMenuLimit = SharedScriptSupport.GetSetting("ps", "menuLimit")
+        intMenuLimit = frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menuLimit")
         If Len(intMenuLimit) > 0 Then intMenuLimit = CDbl(intMenuLimit)
     End If
 
@@ -378,7 +378,7 @@ Public Sub RegisterPluginMenus()
     For i = 0 To UBound(strPrefixes)
         
         '// Are plugin menus enabled?
-        If CBool(SharedScriptSupport.GetSetting("ps", "menusDisabled")) Then Exit For
+        If CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled")) Then Exit For
 
         '// Reach plugin menu limit?
         If i >= intMenuLimit And intMenuLimit > -1 Then Exit For
@@ -390,23 +390,23 @@ Public Sub RegisterPluginMenus()
 
         '// Add an item in Plugin Menu Display for this plugin
         dictItemIDs("#display|||" & strPrefixes(i)) = AddScriptMenuItem(dictMenuIDs("#display"), strTitles(i), _
-                    "ps_display_callback_" & strPrefixes(i), , , CBool(SharedScriptSupport.GetSetting(strPrefixes(i), "menu_display")))
+                    "ps_display_callback_" & strPrefixes(i), , , CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(i), "menu_display")))
         frmChat.SControl.Modules(1).AddCode "Sub ps_display_callback_" & strPrefixes(i) & ":PluginMenus_Display_Callback """ & strPrefixes(i) & """: End " & "Sub"
         
         '// Should this plugin's menu be displayed?
-        If CBool(SharedScriptSupport.GetSetting(strPrefixes(i), "menu_display")) Then
+        If CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(i), "menu_display")) Then
             
             '// Register a menu for this plugin and populate with several default items
             dictMenuIDs(strPrefixes(i)) = RegisterScriptMenu(strTitles(i))
             
             dictItemIDs(strPrefixes(i) & "|||Enabled") = AddScriptMenuItem(dictMenuIDs(strPrefixes(i)), "Enabled", _
-                    "ps_enabled_callback_" & strPrefixes(i), , , CBool(SharedScriptSupport.GetSetting(strPrefixes(i), "enabled")))
+                    "ps_enabled_callback_" & strPrefixes(i), , , CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(i), "enabled")))
             
             dictItemIDs(strPrefixes(i) & "|||New Version Notification") = AddScriptMenuItem(dictMenuIDs(strPrefixes(i)), _
-                    "New Version Notification", "ps_nvn_callback_" & strPrefixes(i), , , CBool(SharedScriptSupport.GetSetting(strPrefixes(i), "nvn")))
+                    "New Version Notification", "ps_nvn_callback_" & strPrefixes(i), , , CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(i), "nvn")))
             
             dictItemIDs(strPrefixes(i) & "|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs(strPrefixes(i)), "Backup On Updates", _
-                    "ps_backup_callback_" & strPrefixes(i), , , CBool(SharedScriptSupport.GetSetting(strPrefixes(i), "backup")))
+                    "ps_backup_callback_" & strPrefixes(i), , , CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(i), "backup")))
             
             AddScriptMenuItem dictMenuIDs(strPrefixes(i)), 0, 0, True
             AddScriptMenuItem dictMenuIDs(strPrefixes(i)), "Open File", "ps_openfile_callback_" & strPrefixes(i)
@@ -429,7 +429,7 @@ Public Sub RegisterPluginMenus()
     AddScriptMenuItem dictMenuIDs("#advanced"), 0, 0, True
     
     dictItemIDs("#advanced|||ps") = AddScriptMenuItem(dictMenuIDs("#advanced"), "Debug Mode", _
-                "ps_Debug_Callback", , , CBool(SharedScriptSupport.GetSetting("ps", "debugmode")))
+                "ps_Debug_Callback", , , CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "debugmode")))
 
     '// Add "Help" menu
     lngHelpMenu = RegisterScriptMenu("Help")
@@ -539,7 +539,7 @@ Public Function AddScriptMenuItem(ByVal lMenuHandle As Long, ByVal sItemCaption 
     
     dctCallbacks.Add CStr(lCallbackID), sCallbackFunction
     
-    DrawMenuBar frmChat.hWnd
+    DrawMenuBar frmChat.hWNd
     
     AddScriptMenuItem = lCallbackID
     
@@ -554,7 +554,7 @@ Public Function SetMenuCheck(ByVal lMenuHandle As Long, ByVal lMenuCommandID As 
     
     L = CheckMenuItem(lMenuHandle, lMenuCommandID, IIf(bNewCheckState, MF_CHECKED, MF_UNCHECKED))
     
-    DrawMenuBar frmChat.hWnd
+    DrawMenuBar frmChat.hWNd
     
     If (L And MF_CHECKED) = MF_CHECKED Then
         L = 1
@@ -572,10 +572,10 @@ Public Sub SetMenuEnabled(ByVal lMenuHandle As Long, ByVal lMenuCommandID As Lon
     Dim L As Long
     Dim s As String
     
-    s = GetMenuCaptionByCommand(frmChat.hWnd, lMenuCommandID)
+    s = GetMenuCaptionByCommand(frmChat.hWNd, lMenuCommandID)
     L = ModifyMenu(lMenuHandle, lMenuCommandID, IIf(bNewEnabledState, MF_STRING, MF_GRAYED), lMenuCommandID, s)
     
-    DrawMenuBar frmChat.hWnd
+    DrawMenuBar frmChat.hWNd
     
 End Sub
 
@@ -684,7 +684,7 @@ Public Sub DeleteMenuItemByID(ByVal lId As Long)
     Dim lngParentPosition As Long
     'Dim hParentMenu As Long
     
-    hMenuBar = GetMenu(frmChat.hWnd)
+    hMenuBar = GetMenu(frmChat.hWNd)
     
     L = GetMenuItemCount(lId)
     
