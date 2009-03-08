@@ -1864,7 +1864,6 @@ End Sub
 '// GETPLUGINENABLED
 '//   Gets a plugin's enabled status. Returns -1 if the plugin doesn't exist.
 Function GetPluginEnabled(strPrefix)
-    Dim strEnabled
     
     strEnabled = GetSetting(strPrefix, "enabled")
     If Len(strEnabled) > 0 Then
@@ -1932,7 +1931,7 @@ End Function
 
 '// Written by Swent. Sets a plugin timer's interval.
 Sub SetPTInterval(ByVal strPrefix, ByVal strTimerName, ByVal intInterval)
-    Dim strKey
+
     strKey = strPrefix & ":" & strTimerName
 
     dictTimerInterval(strKey) = intInterval
@@ -1941,12 +1940,13 @@ Sub SetPTInterval(ByVal strPrefix, ByVal strTimerName, ByVal intInterval)
     If Not dictTimerEnabled.Exists(strKey) Then
        dictTimerEnabled(strKey) = False
     End If
+
 End Sub
 
 
 '// Written by Swent. Enables or disables a plugin timer.
 Sub SetPTEnabled(ByVal strPrefix, ByVal strTimerName, ByVal boolEnabled)
-    
+
     dictTimerEnabled(strPrefix & ":" & strTimerName) = boolEnabled
 End Sub
 
@@ -1960,7 +1960,7 @@ End Sub
 
 '// Written by Swent. Gets the enabled status of a plugin timer.
 Function GetPTEnabled(ByVal strPrefix, ByVal strTimerName)
-    Dim strKey
+
     strKey = strPrefix & ":" & strTimerName
     
     If dictTimerEnabled.Exists(strKey) Then
@@ -1973,7 +1973,7 @@ End Function
 
 '// Written by Swent. Gets a plugin timer's interval setting.
 Function GetPTInterval(ByVal strPrefix, ByVal strTimerName)
-    Dim strKey
+
     strKey = strPrefix & ":" & strTimerName
     
     If dictTimerInterval.Exists(strKey) Then
@@ -1986,7 +1986,7 @@ End Function
 
 '// Written by Swent. Get's the seconds left before a plugin timer sub executes.
 Function GetPTLeft(ByVal strPrefix, ByVal strTimerName)
-    Dim strKey
+
     strKey = strPrefix & ":" & strTimerName
 
     If dictTimerCount.Exists(strKey) Then
@@ -2011,31 +2011,32 @@ End Function
 
 '// Written by Swent. Gets keys for the timer dictionaries.
 Function GetPTKeys()
+    GetPTKeys = Join(dictTimerEnabled.Keys())
 
-    GetPTKeys = Join(dictTimerEnabled.Keys)
 End Function
 
 '// Written by Swent. Executes plugin timer subs
 Sub scTimer_Timer()
-    Dim strKeys(), strKey(), i
-    
     On Error Resume Next
+
     GetScriptControl.Error.Clear
+
     strKeys = Split(GetPTKeys)
 
     '// Execute all existing plugin timer subs at the appropriate intervals
     For i = 0 To dictTimerEnabled.Count - 1
+
         strKey = Split(strKeys(i), ":")
     
         '// Is this timer enabled?
-        If GetPTEnabled(strKey(0), strKey(1)) Then
+        If CBool(GetPTEnabled(strKey(0), strKey(1))) Then
     
             '// Is the plugin that this timer belongs to enabled?
             If CBool(GetSetting(strKey(0), "enabled")) Then
     
                 '// Has this timer reached the end of its interval countdown?
                 If GetPTLeft(strKey(0), strKey(1)) = 1 Then
-    
+
                     '// Execute this timer sub
                     Execute "Call " & strKey(0) & "_" & strKey(1) & "_Timer"
     
