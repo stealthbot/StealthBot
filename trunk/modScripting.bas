@@ -327,8 +327,10 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
 
     ' ...
     For i = 1 To SC.Modules.Count
-        str = _
-            SC.Modules(i).CodeObject.GetSettingsEntry("Enabled")
+        If (i > 1) Then
+            str = _
+                SC.Modules(i).CodeObject.GetSettingsEntry("Enabled")
+        End If
             
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
             CallByNameEx SC.Modules(i), "Run", VbMethod, arr()
@@ -340,6 +342,13 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
 ERROR_HANDLER:
     ' object does not support property or method
     If (Err.Number = 438) Then
+        Err.Clear
+    
+        Resume Next
+    End If
+    
+    ' path not found - deletion of running scripts?
+    If (Err.Number = 76) Then
         Err.Clear
     
         Resume Next
