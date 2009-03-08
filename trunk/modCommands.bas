@@ -6482,6 +6482,7 @@ Private Function OnScripts(ByVal Username As String, ByRef dbAccess As udtGetAcc
     
     Dim tmpbuf As String  ' ...
     Dim i      As Integer ' ...
+    Dim str    As String  ' ...
     
     ' ...
     If (frmChat.SControl.Modules.Count) Then
@@ -6491,20 +6492,28 @@ Private Function OnScripts(ByVal Username As String, ByRef dbAccess As udtGetAcc
         ' ...
         For i = 1 To frmChat.SControl.Modules.Count
             tmpbuf = tmpbuf & _
-                frmChat.SControl.Modules(i).Eval("Name()") & _
-                    ", "
+                frmChat.SControl.Modules(i).Eval("Name()")
                     
             If (Err.Number = 13) Then
                 If (frmChat.SControl.Modules(i).Name = "Global") Then
                     If (ReadINI("Override", "DisablePS", GetConfigFilePath()) <> "Y") Then
-                        tmpbuf = tmpbuf & "PluginSystem.dat, "
+                        tmpbuf = tmpbuf & "PluginSystem.dat"
                     End If
                 Else
                     tmpbuf = tmpbuf & _
-                        frmChat.SControl.Modules(i).Name & ", "
+                        frmChat.SControl.Modules(i).Name
                 End If
                 
                 Err.Clear
+            End If
+            
+            str = _
+                frmChat.SControl.Modules(i).CodeObject.GetSettingsEntry("Enabled")
+        
+            If (StrComp(str, "False", vbTextCompare) = 0) Then
+                tmpbuf = tmpbuf & " (disabled), "
+            Else
+                tmpbuf = tmpbuf & ", "
             End If
         Next i
         
