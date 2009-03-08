@@ -221,16 +221,16 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
     str = str & "   Set CreateObj = _ " & vbNewLine
     str = str & "         CreateObjEx(GetModuleName(), ObjType, ObjName)" & vbNewLine
     str = str & "End Function" & vbNewLine
-    
+
     ' DeleteObj() module-level function
     str = str & "Sub DeleteObj(ObjType, ObjName)" & vbNewLine
     str = str & "   Call DeleteObjEx(GetModuleName(), ObjType, ObjName)" & vbNewLine
     str = str & "End Sub" & vbNewLine
     
     ' GetObjByName() module-level function
-    str = str & "Function GetObjByName(ObjType, ObjName)" & vbNewLine
+    str = str & "Function GetObjByName(ObjName)" & vbNewLine
     str = str & "   Set GetObjByName = _ " & vbNewLine
-    str = str & "         GetObjByNameEx(GetModuleName(), ObjType, ObjName)" & vbNewLine
+    str = str & "         GetObjByNameEx(GetModuleName(), ObjName)" & vbNewLine
     str = str & "End Function" & vbNewLine
     
     ' GetSettingsEntry() module-level function
@@ -513,8 +513,8 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
     m_objCount = (m_objCount + 1)
     
     ' create class variable for object
-    SCModule.ExecuteStatement "Set " & ObjName & " = GetObjByName(" & _
-        Chr$(34) & ObjType & Chr$(34) & ", " & Chr$(34) & ObjName & Chr$(34) & ")"
+    SCModule.ExecuteStatement "Set " & ObjName & " = GetObjByName(" & Chr$(34) & _
+        ObjName & Chr$(34) & ")"
 
     ' return object
     Set CreateObjEx = obj.obj
@@ -526,19 +526,17 @@ Public Sub DeleteObjEx(ByRef SCModule As Module, ByVal TimerName As String)
     
 End Sub
 
-Public Function GetObjByNameEx(ByRef SCModule As Module, ByVal ObjType As String, ByVal ObjName As String) As Object
+Public Function GetObjByNameEx(ByRef SCModule As Module, ByVal ObjName As String) As Object
 
     Dim i As Integer ' ...
     
     ' ...
     For i = 0 To m_objCount - 1
         If (m_arrObjs(i).SCModule.Name = SCModule.Name) Then
-            If (StrComp(m_arrObjs(i).ObjType, ObjType, vbTextCompare) = 0) Then
-                If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
-                    Set GetObjByNameEx = m_arrObjs(i).obj
-    
-                    Exit Function
-                End If
+            If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
+                Set GetObjByNameEx = m_arrObjs(i).obj
+
+                Exit Function
             End If
         End If
     Next i

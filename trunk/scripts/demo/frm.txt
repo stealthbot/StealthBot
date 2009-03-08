@@ -2,7 +2,7 @@ Sub frm_Load()
 
    frm.CreateObj "TextBox", "text"
 
-   With frm.GetObjByName("TextBox", "text")
+   With frm.GetObjByName("text")
       .Visible = True
    End With
 

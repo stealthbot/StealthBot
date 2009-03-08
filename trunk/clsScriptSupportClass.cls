@@ -1449,11 +1449,11 @@ Public Function CreateObjEx(ByVal ModuleName As String, ByVal ObjType As String,
 
 End Function
 
-Public Function GetObjByNameEx(ByVal ModuleName As String, ByVal ObjType As String, ByVal ObjName As String) As Object
+Public Function GetObjByNameEx(ByVal ModuleName As String, ByVal ObjName As String) As Object
 
     Set GetObjByNameEx = _
             modScripting.GetObjByNameEx(frmChat.SControl.Modules(ModuleName), _
-                    ObjType, ObjName)
+                    ObjName)
 
 End Function
 

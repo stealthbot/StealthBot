@@ -98,7 +98,6 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
-      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -344,18 +343,16 @@ Public Function DeleteObj(ByVal ObjType As String, ByVal ObjName As String) As O
     
 End Function
 
-Public Function GetObjByName(ByVal ObjType As String, ByVal ObjName As String) As Object
+Public Function GetObjByName(ByVal ObjName As String) As Object
 
     Dim i As Integer ' ...
     
     ' ...
     For i = 0 To m_objCount - 1
-        If (StrComp(m_arrObjs(i).ObjType, ObjType, vbTextCompare) = 0) Then
-            If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
-                Set GetObjByName = m_arrObjs(i).obj
+        If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
+            Set GetObjByName = m_arrObjs(i).obj
 
-                Exit Function
-            End If
+            Exit Function
         End If
     Next i
     
@@ -407,7 +404,7 @@ Public Sub AddChat(ByVal rtbName As String, ParamArray saElements() As Variant)
     arr() = saElements
     
     ' ...
-    Call DisplayRichText(GetObjByName("RichTextBox", rtbName), arr)
+    Call DisplayRichText(GetObjByName(rtbName), arr)
     
 End Sub
 
@@ -419,7 +416,7 @@ Public Sub AddChatFont(ByVal rtbName As String, ParamArray saElements() As Varia
     arr() = saElements
     
     ' ...
-    Call DisplayRichText(GetObjByName("RichTextBox", rtbName), arr)
+    Call DisplayRichText(GetObjByName(rtbName), arr)
     
 End Sub
 
