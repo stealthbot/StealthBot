@@ -340,7 +340,7 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
     Exit Sub
     
 ERROR_HANDLER:
-    ' object does not support property or method
+    ' object does not support property or method - function missing
     If (Err.Number = 438) Then
         Err.Clear
     
