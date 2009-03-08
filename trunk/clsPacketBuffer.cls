@@ -497,6 +497,29 @@ Public Function GetPacket(PacketID As Byte) As String
     Call Clear
 End Function ' end function GetPacket
 
+Public Property Let Data(ByVal str As String)
+
+    ' ...
+    ReDim m_buf(0 To Len(str))
+
+    ' ...
+    Call CopyMemory(m_buf(m_bufsize), str, Len(str))
+    
+    ' ...
+    m_bufsize = Len(str)
+
+End Property
+
+Public Property Get Data() As String
+
+    ' ...
+    Data = String(m_bufsize, Chr$(0))
+
+    ' ...
+    Call CopyMemory(Data, m_buf(0), m_bufsize)
+
+End Property
+
 ' ...
 Public Function GetBNLSPacket(PacketID As Byte) As String
     Dim buf As String ' ...
