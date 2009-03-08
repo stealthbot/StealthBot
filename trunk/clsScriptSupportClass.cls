@@ -745,7 +745,7 @@ Public Function GetNameByPosition(ByVal X As Integer) As String
     
     With frmChat.lvChannel.ListItems
         If X > 0 And X <= .Count Then
-            GetNameByPosition = .Item(X).Text
+            GetNameByPosition = .Item(X).text
         Else
             GetNameByPosition = ""
         End If
@@ -1466,6 +1466,14 @@ Public Function Scripts() As Object
     For i = 1 To frmChat.SControl.Modules.Count
         Scripts.Add frmChat.SControl.Modules(i)
     Next
+
+End Function
+
+Public Function DataBuffer() As Object
+
+    Set DataBuffer = New clsPacketBuffer
+    
+    DataBuffer.setCripple
 
 End Function
 

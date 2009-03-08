@@ -171,8 +171,11 @@ Public Sub ParseMCPPacket(ByVal Data As String)
             ' ...
             WritePacketData stMCP, StoC, Asc(Mid$(Data, 3, 1)), Len(Data), Data
             
+            ' ...
+            RunInAll "Event_PacketReceived", "MCP", Asc(Mid$(Data, 3, 1)), Len(Data), Data
+            
             If InStr(1, CommandLine, "-all") > 0 Then _
-                frmChat.AddChat COLOR_BLUE, "MCP RECV 0x" & Right$("00" & Hex(Asc(Mid$(Data, 3, 1))), 2)
+                frmChat.AddChat COLOR_BLUE, "MCP RECV 0x" & Right$("00" & hex(Asc(Mid$(Data, 3, 1))), 2)
             
             Select Case Asc(Mid$(Data, 3, 1))
                 Case MCP_STARTUP
@@ -187,7 +190,7 @@ Public Sub ParseMCPPacket(ByVal Data As String)
                         Case &HC: RaiseEvent RealmStartup(1, "The server thinks you're not connected to Battle.net! Please try your connection again later.")
                         Case &H7E: RaiseEvent RealmStartup(2, "The Diablo II realm rejected your connection. Your CD-Key may have been banned from realm play. Please try your connection again later.")
                         Case &H7F: RaiseEvent RealmStartup(2, "You have been temporarily IP-banned from the Realm server. Please try connecting again later.")
-                        Case Else: RaiseEvent RealmStartup(2, "Unknown response to MCP_STARTUP: 0x" & Right$("00000000" & Hex(n), 4))
+                        Case Else: RaiseEvent RealmStartup(2, "Unknown response to MCP_STARTUP: 0x" & Right$("00000000" & hex(n), 4))
                     End Select
             
                 Case MCP_CHARCREATE
@@ -200,7 +203,7 @@ Public Sub ParseMCPPacket(ByVal Data As String)
                         Case &H0: RaiseEvent CharCreateResponse(0, "Character creation successful.")
                         Case &H14: RaiseEvent CharCreateResponse(1, "That character name already exists, or exceeds the maximum name Length.")
                         Case &H15: RaiseEvent CharCreateResponse(2, "That character name is invalid.")
-                        Case Else: RaiseEvent CharCreateResponse(3, "Unknown response to MCP_CHARCREATE: 0x" & Right$("00000000" & Hex(n), 4))
+                        Case Else: RaiseEvent CharCreateResponse(3, "Unknown response to MCP_CHARCREATE: 0x" & Right$("00000000" & hex(n), 4))
                     End Select
             
                 Case MCP_CHARLOGON
@@ -214,7 +217,7 @@ Public Sub ParseMCPPacket(ByVal Data As String)
                         Case &H46: RaiseEvent CharLogonResponse(1, "Player not found.")
                         Case &H7A: RaiseEvent CharLogonResponse(2, "Unable to log on to realm character!")
                         Case &H7B: RaiseEvent CharLogonResponse(3, "That character has expired.")
-                        Case Else: RaiseEvent CharLogonResponse(4, "Unknown response to MCP_CHARLOGON: 0x" & Right$("00000000" & Hex(n), 4))
+                        Case Else: RaiseEvent CharLogonResponse(4, "Unknown response to MCP_CHARLOGON: 0x" & Right$("00000000" & hex(n), 4))
                     End Select
             
                 Case MCP_CHARDELETE

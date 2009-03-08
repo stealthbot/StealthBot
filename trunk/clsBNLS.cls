@@ -214,6 +214,9 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     ' Added 2007-06-08 for a packet logging menu feature to aid tech support
     WritePacketData BNLS, StoC, PacketID, Len(Data), Data
     
+    ' ...
+    RunInAll "Event_PacketReceived", "BNLS", PacketID, Len(Data), Data
+    
     'Debug.Print "_-------------------------------------_"
     'Debug.Print DebugOutput(Data)
     

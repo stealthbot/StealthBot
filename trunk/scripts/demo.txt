@@ -22,3 +22,24 @@ Sub Event_Load()
    frm.Show
 
 End Sub
+
+Sub Event_PacketReceived(Protocol, ID, Length, Data)
+   
+   'If (Protocol = "BNCS") Then
+   '   If (ID = &H65) Then
+   '      AddQ "RECEIVED BNCS FRIENDS LIST"
+   '   End If
+   'End If
+
+End Sub
+
+Sub Event_PacketSent(Protocol, ID, Length, Data)
+
+   'If (Protocol = "BNCS") Then
+   '   If (ID = &H65) Then
+   '      AddQ "SENT BNCS FRIENDS LIST REQUEST"
+   '   End If
+   'End If
+
+End Sub
+

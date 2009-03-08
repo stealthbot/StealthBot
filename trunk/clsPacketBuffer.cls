@@ -19,9 +19,22 @@ Attribute VB_Ext_KEY = "Top_Level" ,"Yes"
 
 Option Explicit
 
-Private m_buf()   As Byte
-Private m_bufpos  As Integer
-Private m_bufsize As Integer
+Private m_buf()    As Byte
+Private m_bufpos   As Integer
+Private m_bufsize  As Integer
+Private m_cripple  As Boolean
+
+Private Sub setCripple()
+
+    m_cripple = True
+
+End Sub
+
+Private Property Get Cripple() As Boolean
+
+    Cripple = m_cripple
+
+End Property
 
 ' ...
 Private Sub Class_Initialize()
@@ -292,10 +305,12 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     'PacketCache.Add pkt
     
     ' ...
-    CachePacket CtoS, stMCP, PacketID, Len(strbuf), strbuf
+    CachePacket CtoS, stMCP, PacketID, m_bufsize + 3, strbuf
     
     ' ...
     Call WritePacketData(stMCP, CtoS, PacketID, m_bufsize + 3, strbuf)
+    
+    RunInAll "Event_PacketSent", "MCP", PacketID, m_bufsize + 3, strbuf
     
     ' clear buffer contents
     Call Clear
@@ -319,6 +334,12 @@ Public Function SendPacket(Optional PacketID As Byte)
     If (MDebug("all")) Then
         frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & Right$("00" & _
             hex(PacketID), 2)
+    End If
+    
+    If (Cripple) Then
+        Select Case (PacketID)
+            Case &HE, &HC: Exit Function
+        End Select
     End If
     
     ' resize temporary data buffer
@@ -370,10 +391,12 @@ Public Function SendPacket(Optional PacketID As Byte)
     'PacketCache.Add pkt
     
     ' ...
-    CachePacket CtoS, stBNCS, PacketID, Len(strbuf), strbuf
+    CachePacket CtoS, stBNCS, PacketID, m_bufsize + 4, strbuf
     
     ' ...
     Call WritePacketData(stBNCS, CtoS, PacketID, m_bufsize + 4, strbuf)
+    
+    RunInAll "Event_PacketSent", "BNCS", PacketID, m_bufsize + 4, strbuf
     
     ' clear buffer contents
     Call Clear
@@ -445,10 +468,12 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     'PacketCache.Add pkt
     
     ' ...
-    CachePacket CtoS, stBNLS, PacketID, Len(strbuf), strbuf
+    CachePacket CtoS, stBNLS, PacketID, m_bufsize + 3, strbuf
     
     ' ...
     Call WritePacketData(stBNLS, CtoS, PacketID, m_bufsize + 3, strbuf)
+    
+    RunInAll "Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, strbuf
     
     ' clear buffer contents
     Call Clear
