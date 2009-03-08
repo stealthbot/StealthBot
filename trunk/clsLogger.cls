@@ -50,72 +50,72 @@ Private Sub Class_Teriminate()
 End Sub
 
 ' ...
-Public Function WriteWarning(ByVal sWarning As String, Optional ByVal Source As String)
+Public Function WriteWarning(ByVal sWarning As String, Optional ByVal Source As String, Optional TimeDate As Date)
 
     ' ...
     Source = LCase$(Source)
 
     ' ...
     If (LenB(Source) > 0) Then
-        WriteLine WARNING_MSG, "warning " & Source & " " & sWarning
+        WriteLine WARNING_MSG, "warning " & Source & " " & sWarning, TimeDate
     Else
-        WriteLine WARNING_MSG, "warning " & sWarning
+        WriteLine WARNING_MSG, "warning " & sWarning, TimeDate
     End If
 
 End Function
 
 ' ...
-Public Function WriteError(ByVal sError As String, Optional ByVal Source As String)
+Public Function WriteError(ByVal sError As String, Optional ByVal Source As String, Optional TimeDate As Date)
     
     ' ...
     Source = LCase$(Source)
     
     ' ...
     If (LenB(Source) > 0) Then
-        WriteLine ERROR_MSG, "error " & Source & " " & sError
+        WriteLine ERROR_MSG, "error " & Source & " " & sError, TimeDate
     Else
-        WriteLine ERROR_MSG, "error " & sError
+        WriteLine ERROR_MSG, "error " & sError, TimeDate
     End If
         
 End Function
 
 ' ...
-Public Function WriteEvent(ByVal sTitle As String, ByVal sEvent As String, Optional ByVal Source As String)
+Public Function WriteEvent(ByVal sTitle As String, ByVal sEvent As String, Optional ByVal Source As String, Optional TimeDate As Date)
 
     ' ...
     Source = LCase$(Source)
     
     ' ...
     If (LenB(Source) > 0) Then
-        WriteLine EVENT_MSG, "event " & sTitle & " " & Source & " " & sEvent
+        WriteLine EVENT_MSG, "event " & sTitle & " " & Source & " " & sEvent, TimeDate
     Else
-        WriteLine EVENT_MSG, "event " & sTitle & " " & sEvent
+        WriteLine EVENT_MSG, "event " & sTitle & " " & sEvent, TimeDate
     End If
 
 End Function
 
 ' ...
-Public Function WriteCommand(ByVal sCommand As String)
+Public Function WriteCommand(ByVal sCommand As String, Optional TimeDate As Date)
 
     ' ...
     If (BotVars.LogCommands) Then
-        WriteEvent "command", sCommand
+        WriteEvent "command", sCommand, TimeDate
     End If
 
 End Function
 
 ' ...
-Public Function WriteDatabase(ByVal sEvent As String)
+Public Function WriteDatabase(ByVal sEvent As String, Optional TimeDate As Date)
 
     ' ...
     If (BotVars.LogDBActions) Then
-        WriteEvent "database", sEvent
+        WriteEvent "database", sEvent, TimeDate
     End If
 
 End Function
 
 ' ...
-Public Function WriteDebug(ByVal sDebugMessage As String, Optional ByVal Source As String)
+Public Function WriteDebug(ByVal sDebugMessage As String, Optional ByVal Source As String, Optional TimeDate As Date)
 
     ' ...
     Source = LCase$(Source)
@@ -123,46 +123,46 @@ Public Function WriteDebug(ByVal sDebugMessage As String, Optional ByVal Source 
     ' ...
     If (isDebug) Then
         If (LenB(Source) > 0) Then
-            WriteLine DEBUG_MSG, "debug " & Source & " " & sDebugMessage
+            WriteLine DEBUG_MSG, "debug " & Source & " " & sDebugMessage, TimeDate
         Else
-            WriteLine DEBUG_MSG, "debug " & sDebugMessage
+            WriteLine DEBUG_MSG, "debug " & sDebugMessage, TimeDate
         End If
     End If
 
 End Function
 
 ' ...
-Public Function WriteChat(ByVal sMessage As String)
+Public Function WriteChat(ByVal sMessage As String, Optional TimeDate As Date)
 
     ' ...
     If (BotVars.Logging >= 1) Then
-        WriteLine CHAT_MSG, sMessage
+        WriteLine CHAT_MSG, sMessage, TimeDate
     End If
 
 End Function
 
 ' ...
-Public Function WriteWhisper(ByVal sMessage As String)
+Public Function WriteWhisper(ByVal sMessage As String, Optional TimeDate As Date)
 
     ' ...
     If (BotVars.Logging >= 1) Then
-        WriteLine WHISPER_MSG, sMessage
+        WriteLine WHISPER_MSG, sMessage, TimeDate
     End If
 
 End Function
 
 ' ...
-Public Function WriteSckData(ByVal sMessage As String)
+Public Function WriteSckData(ByVal sMessage As String, Optional TimeDate As Date)
 
     ' ...
     If (LogPacketTraffic) Then
-        WriteLine SCK_MSG, sMessage
+        WriteLine SCK_MSG, sMessage, TimeDate
     End If
 
 End Function
 
 ' ...
-Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal line As String)
+Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal line As String, Optional TimeDate As Date)
 
     On Error GoTo ERROR_HANDLER
 
@@ -200,9 +200,10 @@ Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal line As String)
     If (f > 0) Then
         Select Case (ltype)
             Case CHAT_MSG, WHISPER_MSG, SCK_MSG
-                Print #f, "[" & Timestamp() & "] " & line
+                Print #f, "[" & Timestamp(TimeDate) & "] " & line
             Case Else
-                Print #f, "[" & Datestamp() & " " & Timestamp() & "] " & line
+                Print #f, "[" & Datestamp(TimeDate) & " " & Timestamp(TimeDate) & "] " & _
+                    line
         End Select
         
         ' ...
@@ -227,7 +228,7 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
     Static failed_attempts As Integer
     
     Dim f As Integer ' ...
-    Dim I As Double  ' ...
+    Dim i As Double  ' ...
     
     ' ...
     f = FreeFile
@@ -249,14 +250,14 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
         
         ' ...
         If ((ltype = CHAT_MSG) Or (ltype = WHISPER_MSG)) Then
-            For I = 1 To m_logsCreated.Count
-                If (StrComp(m_logsCreated(I), Path, vbTextCompare) = 0) Then
+            For i = 1 To m_logsCreated.Count
+                If (StrComp(m_logsCreated(i), Path, vbTextCompare) = 0) Then
                     Exit For
                 End If
-            Next I
+            Next i
             
             ' ...
-            If (I >= m_logsCreated.Count + 1) Then
+            If (i >= m_logsCreated.Count + 1) Then
                 m_logsCreated.Add Path
             End If
         End If
@@ -291,21 +292,21 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
             Dim bytes  As Integer ' ...
             
             ' ...
-            For I = UBound(arr) To 0 Step -1
-                bytes = (bytes + Len(arr(I)))
+            For i = UBound(arr) To 0 Step -1
+                bytes = (bytes + Len(arr(i)))
                 
                 If (bytes >= BotVars.MaxLogFileSize) Then
-                    offset = I
+                    offset = i
                     
                     Exit For
                 End If
-            Next I
+            Next i
         
             ' ...
             Open Path For Output As #f
-                For I = offset + 1 To UBound(arr)
-                    Print #f, arr(I)
-                Next I
+                For i = offset + 1 To UBound(arr)
+                    Print #f, arr(i)
+                Next i
             Close #f
         End If
         
@@ -341,39 +342,49 @@ Public Sub RemoveLogsCreated()
 
     On Error Resume Next
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
     
     ' ...
-    For I = 1 To m_logsCreated.Count
-        Kill m_logsCreated(I)
-    Next I
+    For i = 1 To m_logsCreated.Count
+        Kill m_logsCreated(i)
+    Next i
 
 End Sub
 
-Private Function Datestamp() As String
+Private Function Datestamp(Optional TimeDate As Date) As String
 
     ' ...
-    Datestamp = Format(Now, "YYYY-MM-DD")
+    If (DateDiff("s", TimeDate, "00:00:00 12/30/1899") = 0) Then
+        TimeDate = Now
+    End If
+
+    ' ...
+    Datestamp = Format(TimeDate, "YYYY-MM-DD")
 
 End Function
 
-Private Function Timestamp() As String
+Private Function Timestamp(Optional TimeDate As Date) As String
+
+    ' ...
+    If (DateDiff("s", TimeDate, "00:00:00 12/30/1899") = 0) Then
+        TimeDate = Now
+    End If
 
     ' ...
     Select Case (BotVars.TSSetting)
         Case 0
-            Timestamp = Format(Now, "HH:MM:SS AM/PM")
+            Timestamp = Format(TimeDate, "HH:MM:SS AM/PM")
             
         Case 1
-            Timestamp = Format(Now, "HH:MM:SS")
+            Timestamp = Format(TimeDate, "HH:MM:SS")
         
         Case 2
             Timestamp = _
-                Format(Now, "HH:MM:SS") & "." & _
+                Format(TimeDate, "HH:MM:SS") & "." & _
                     Right$("000" & GetCurrentMS, 3)
         
         Case Else
-            Timestamp = Format(Now, "HH:MM:SS AM/PM")
+            Timestamp = Format(TimeDate, "HH:MM:SS AM/PM")
     End Select
 
 End Function

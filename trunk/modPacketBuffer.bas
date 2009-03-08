@@ -13,7 +13,7 @@ Private Type PACKETCACHEITEM
     id        As Byte
     Length    As Integer
     Data      As String
-    DateTime  As Date
+    TimeDate  As Date
 End Type
 
 ' ...
@@ -37,17 +37,17 @@ Public Function CachePacket(Direction As enuPL_DirectionTypes, PKT_Type As enuPL
         .id = id
         .Length = Length
         .Data = Data
-        .DateTime = Now
+        .TimeDate = Now
     End With
     
     ' ...
     If (m_cache_count + 1 >= MAX_PACKET_CACHE_SIZE) Then
-        Dim I As Integer ' ...
+        Dim i As Integer ' ...
         
         ' ...
-        For I = 0 To m_cache_count - 1
-            m_cache(I) = m_cache(I + 1)
-        Next I
+        For i = 0 To m_cache_count - 1
+            m_cache(i) = m_cache(i + 1)
+        Next i
         
         ' ...
         m_cache(m_cache_count) = pkt
@@ -72,7 +72,7 @@ End Function
 Public Sub DumpPacketCache()
     
     Dim pkt     As PACKETCACHEITEM ' ...
-    Dim I       As Integer ' ...
+    Dim i       As Integer ' ...
     Dim Traffic As Boolean ' ...
     
     ' ...
@@ -82,13 +82,14 @@ Public Sub DumpPacketCache()
     LogPacketTraffic = True
     
     ' ...
-    For I = 0 To m_cache_count - 1
+    For i = 0 To m_cache_count - 1
         ' ...
-        pkt = m_cache(I)
+        pkt = m_cache(i)
         
         ' ...
-        WritePacketData pkt.PKT_Type, pkt.Direction, pkt.id, pkt.Length, pkt.Data, pkt.DateTime
-    Next I
+        WritePacketData pkt.PKT_Type, pkt.Direction, pkt.id, pkt.Length, pkt.Data, _
+            pkt.TimeDate
+    Next i
     
     ' ...
     LogPacketTraffic = Traffic
@@ -96,7 +97,7 @@ Public Sub DumpPacketCache()
 End Sub
 
 ' Written 2007-06-08 to produce packet logs or do other things
-Public Sub WritePacketData(ByVal Server As enuPL_ServerTypes, ByVal Direction As enuPL_DirectionTypes, ByVal PacketID As Long, ByVal PacketLen As Long, ByRef PacketData As String, Optional ByVal DateTime As Date)
+Public Sub WritePacketData(ByVal Server As enuPL_ServerTypes, ByVal Direction As enuPL_DirectionTypes, ByVal PacketID As Long, ByVal PacketLen As Long, ByRef PacketData As String, Optional ByVal TimeDate As Date)
 
     Dim serverType As String ' ...
     Dim str        As String ' ...
@@ -111,12 +112,12 @@ Public Sub WritePacketData(ByVal Server As enuPL_ServerTypes, ByVal Direction As
     ' ...
     If (Direction = StoC) Then
         str = str & _
-            serverType & " S -> C " & " -- Packet ID " & Right$("00" & Hex(PacketID), _
+            serverType & " S -> C " & " -- Packet ID " & Right$("00" & hex(PacketID), _
                 2) & "h (" & PacketID & "d) Length " & PacketLen & _
                     vbNewLine & vbNewLine
     Else
         str = str & _
-            serverType & " C -> S " & " -- Packet ID " & Right$("00" & Hex(PacketID), _
+            serverType & " C -> S " & " -- Packet ID " & Right$("00" & hex(PacketID), _
                 2) & "h (" & PacketID & "d) Length " & PacketLen & _
                     vbNewLine & vbNewLine
     End If
@@ -124,7 +125,7 @@ Public Sub WritePacketData(ByVal Server As enuPL_ServerTypes, ByVal Direction As
     str = str & DebugOutput(PacketData) & _
             vbNewLine
     
-    g_Logger.WriteSckData str
+    g_Logger.WriteSckData str, TimeDate
     
 End Sub
 
