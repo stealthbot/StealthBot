@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   165
-   ClientTop       =   855
+   ClientLeft      =   225
+   ClientTop       =   825
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -887,7 +887,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -913,6 +912,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1620,11 +1620,11 @@ Private Sub Form_Load()
     #End If
 
     #If (COMPILE_DEBUG = 0) Then
-        HookWindowProc frmChat.hWNd
-        HookSendBoxWindowProc frmChat.cboSend.hWNd
+        HookWindowProc frmChat.hWnd
+        HookSendBoxWindowProc frmChat.cboSend.hWnd
     #End If
     
-    SendMessage frmChat.cboSend.hWNd, CB_LIMITTEXT, 0, 0
+    SendMessage frmChat.cboSend.hWnd, CB_LIMITTEXT, 0, 0
     
     ' 4/10/06:
     ' CHECK FOR CONFIG.INI PATH HACK
@@ -2546,7 +2546,7 @@ Sub Form_Resize()
                 
                 With nid
                     .cbSize = LenB(nid)
-                    .hWNd = frmChat.hWNd
+                    .hWnd = frmChat.hWnd
                     .uId = ID_TASKBARICON
                     .uFlags = NIF_ICON Or NIF_TIP Or NIF_MESSAGE
                     .uCallBackMessage = WM_ICONNOTIFY
@@ -2576,8 +2576,12 @@ Sub Form_Resize()
         'This shrinks the size of the entire layout by a further 80 twips.
         'This will act as a fix for Vista's screen cut off issues.
         '   - FrOzeN
+        'This issue only occured under Aero, so the fix breaks the GUI for classic themes
+        'on vista. This should be fixed now. ~Pyro
         With lvChannel
-            rtbChat.Width = Me.Width - .Width - IIf(g_OSVersion.IsWindowsVista, 200, 120)
+            'rtbChat.Width = Me.Width - .Width - IIf(g_OSVersion.IsWindowsVista, 200, 120)
+        
+            rtbChat.Width = Me.ScaleWidth - .Width
         
         '    .Width = (Me.Width / 4) - 120 'magic number?
         '    If .Width > (.ColumnHeaders.Item(1).Width + 700) Then
@@ -2720,7 +2724,7 @@ Sub UpdateTrayTooltip()
     If Me.WindowState = vbMinimized Then
         With nid
             .cbSize = LenB(nid)
-            .hWNd = frmChat.hWNd
+            .hWnd = frmChat.hWnd
             .uId = ID_TASKBARICON
             .uFlags = NIF_ICON Or NIF_TIP Or NIF_MESSAGE
             .uCallBackMessage = WM_ICONNOTIFY
@@ -2807,10 +2811,10 @@ Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
 End Sub
 
 Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
-    If (g_Clan.Self.Rank < NewRank) Then
+    If (g_Clan.Self.rank < NewRank) Then
         AddChat RTBColors.SuccessText, "[CLAN] You have been promoted. Your new rank is ", _
                 RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
-    ElseIf (g_Clan.Self.Rank > NewRank) Then
+    ElseIf (g_Clan.Self.rank > NewRank) Then
         AddChat RTBColors.SuccessText, "[CLAN] You have been demoted. Your new rank is ", _
                 RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
     Else
@@ -2818,20 +2822,20 @@ Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
                 GetRank(NewRank), RTBColors.SuccessText, "."
     End If
 
-    g_Clan.Self.Rank = NewRank
+    g_Clan.Self.rank = NewRank
     
     On Error Resume Next
     
     RunInAll "Event_BotClanRankChanged", NewRank
 End Sub
 
-Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal Rank As Byte)
+Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal rank As Byte)
     Set g_Clan = New clsClanObj
     
     With Clan
         .Name = ClanTag
         .DWName = RawClanTag
-        .MyRank = Rank
+        .MyRank = rank
         .isUsed = True
     End With
     
@@ -2854,9 +2858,9 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
             
         RunInAll "Event_BotJoinedClan", ClanTag
     Else
-        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(Rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
+        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
         
-        RunInAll "Event_BotClanInfo", ClanTag, Rank
+        RunInAll "Event_BotClanInfo", ClanTag, rank
     End If
     
     RequestClanList
@@ -2904,7 +2908,7 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
             ' ...
             With ClanMember
                 .Name = Members(i)
-                .Rank = Val(Members(i + 1))
+                .rank = Val(Members(i + 1))
                 .Status = Val(Members(i + 2))
                 .Location = Members(i + 3)
             End With
@@ -2934,7 +2938,7 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
     frmChat.ListviewTabs_Click 0
 End Sub
 
-Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
+Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
     Dim X   As ListItem
     Dim pos As Integer
     
@@ -2942,7 +2946,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     
     If (pos > 0) Then
         With g_Clan.Members(pos)
-            .Rank = Rank
+            .rank = rank
             .Status = IsOnline
             .Location = Location
         End With
@@ -2954,7 +2958,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
         
         ' ...
         With ClanMember
-            .Rank = Rank
+            .rank = rank
             .Status = IsOnline
             .Location = Location
         End With
@@ -2968,13 +2972,13 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     Set X = lvClanList.FindItem(Username)
 
     If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
-        g_Clan.Self.Rank = IIf(Rank = 0, Rank + 1, Rank)
+        g_Clan.Self.rank = IIf(rank = 0, rank + 1, rank)
         AwaitingClanInfo = 1
     End If
     
     If AwaitingClanInfo = 1 Then
         AwaitingClanInfo = 0
-        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(Rank) & "."
+        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(rank) & "."
     End If
     
     If Not (X Is Nothing) Then
@@ -2982,10 +2986,10 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
         Set X = Nothing
     End If
     
-    AddClanMember Username, CInt(Rank), CInt(IsOnline)
+    AddClanMember Username, CInt(rank), CInt(IsOnline)
     
     On Error Resume Next
-    RunInAll "Event_ClanMemberUpdate", Username, Rank, IsOnline
+    RunInAll "Event_ClanMemberUpdate", Username, rank, IsOnline
 End Sub
 
 Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
@@ -3598,7 +3602,7 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, 
                 sProd = g_Channel.Users(aInx).game
 
                 mnuPopWebProfile.Enabled = (sProd = "W3XP" Or sProd = "WAR3")
-                mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And g_Clan.Self.Rank >= 3)
+                mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And g_Clan.Self.rank >= 3)
                 mnuPopKick.Enabled = (MyFlags = 2 Or MyFlags = 18)
                 mnuPopDes.Enabled = (MyFlags = 2 Or MyFlags = 18)
                 mnuPopBan.Enabled = (MyFlags = 2 Or MyFlags = 18)
@@ -3625,7 +3629,7 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
    
     lvhti.pt.X = X / Screen.TwipsPerPixelX
     lvhti.pt.Y = Y / Screen.TwipsPerPixelY
-    lItemIndex = SendMessageAny(lvFriendList.hWNd, LVM_HITTEST, 0, lvhti) + 1
+    lItemIndex = SendMessageAny(lvFriendList.hWnd, LVM_HITTEST, 0, lvhti) + 1
    
     If m_lCurItemIndex <> lItemIndex Then
         m_lCurItemIndex = lItemIndex
@@ -3688,7 +3692,7 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
                     ListToolTip.TipText = sTemp
                 End With
                 
-                Call ListToolTip.Create(lvFriendList.hWNd, CLng(X), CLng(Y))
+                Call ListToolTip.Create(lvFriendList.hWnd, CLng(X), CLng(Y))
             End If
         End If
     End If
@@ -3704,7 +3708,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
    
     lvhti.pt.X = X / Screen.TwipsPerPixelX
     lvhti.pt.Y = Y / Screen.TwipsPerPixelY
-    lItemIndex = SendMessageAny(lvChannel.hWNd, LVM_HITTEST, -1, lvhti) + 1
+    lItemIndex = SendMessageAny(lvChannel.hWnd, LVM_HITTEST, -1, lvhti) + 1
  
     If m_lCurItemIndex <> lItemIndex Then
         m_lCurItemIndex = lItemIndex
@@ -3755,7 +3759,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     
                 End With
                 
-                Call ListToolTip.Create(lvChannel.hWNd, CLng(X), CLng(Y))
+                Call ListToolTip.Create(lvChannel.hWnd, CLng(X), CLng(Y))
             End If
         End If
     End If
@@ -3796,7 +3800,7 @@ Private Sub mnuPublicChannels_Click(Index As Integer)
     'FullJoin mnuChannels(Index).Caption
     
     ' ...
-    AddQ "/join " & mnuPublicChannels(Index).Caption, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/join " & mnuPublicChannels(Index).Caption, Priority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuCustomChannels_Click(Index As Integer)
@@ -3808,7 +3812,7 @@ Private Sub mnuCustomChannels_Click(Index As Integer)
     'FullJoin mnuChannels(Index).Caption
     
     ' ...
-    AddQ "/join " & mnuCustomChannels(Index).Caption, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/join " & mnuCustomChannels(Index).Caption, Priority.CONSOLE_MESSAGE
 End Sub
 
 'Private Sub mnuCCEditor_Click()
@@ -3857,7 +3861,7 @@ Private Sub mnuEditCaught_Click()
         MsgBox "The bot has not caught any phrases yet."
         Exit Sub
     Else
-        ShellExecute Me.hWNd, "Open", GetFilePath("caughtphrases.htm"), 0&, 0&, 0&
+        ShellExecute Me.hWnd, "Open", GetFilePath("caughtphrases.htm"), 0&, 0&, 0&
     End If
 End Sub
 
@@ -3904,7 +3908,7 @@ Private Sub mnuFLpopDemote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
             If (.Index < lvFriendList.ListItems.Count) Then
-              AddQ "/f d " & .text, PRIORITY.CONSOLE_MESSAGE
+              AddQ "/f d " & .text, Priority.CONSOLE_MESSAGE
               'MoveFriend .index, .index + 1
             End If
         End With
@@ -3916,7 +3920,7 @@ Private Sub mnuFLpopPromote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
             If (.Index > 1) Then
-              AddQ "/f p " & .text, PRIORITY.CONSOLE_MESSAGE
+              AddQ "/f p " & .text, Priority.CONSOLE_MESSAGE
               'MoveFriend .index, .index - 1
             End If
         End With
@@ -3941,14 +3945,14 @@ End Sub
 Private Sub mnuFLPopRemove_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         AddQ "/f r " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(lvFriendList.SelectedItem.text), _
-            PRIORITY.CONSOLE_MESSAGE
+            Priority.CONSOLE_MESSAGE
     End If
 End Sub
 
 Private Sub mnuFLPopWhisper_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         AddQ "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(lvFriendList.SelectedItem.text) & _
-            Space(1) & cboSend.text, PRIORITY.CONSOLE_MESSAGE
+            Space(1) & cboSend.text, Priority.CONSOLE_MESSAGE
             
         cboSend.text = ""
     End If
@@ -3966,7 +3970,7 @@ Sub mnuHelpReadme_Click()
 End Sub
 
 Sub mnuHelpWebsite_Click()
-    ShellExecute Me.hWNd, "Open", "http://www.stealthbot.net", 0&, 0&, 0&
+    ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net", 0&, 0&, 0&
 End Sub
 
 Private Sub mnuHideBans_Click()
@@ -4092,13 +4096,13 @@ Private Sub mnuPopAddToFList_Click()
     
     If Not (lvChannel.SelectedItem Is Nothing) Then
         AddQ "/f a " & _
-            IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
+            IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), Priority.CONSOLE_MESSAGE
     End If
 End Sub
 
 Private Sub mnuPopClanWhois_Click()
     If Not (lvClanList.SelectedItem Is Nothing) Then
-        AddQ "/whois " & lvClanList.SelectedItem.text, PRIORITY.CONSOLE_MESSAGE
+        AddQ "/whois " & lvClanList.SelectedItem.text, Priority.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -4107,7 +4111,7 @@ Private Sub mnuPopDes_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
 
     AddQ "/designate " & _
-        IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
+        IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), Priority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopFLProfile_Click()
@@ -4121,7 +4125,7 @@ End Sub
 
 Private Sub mnuPopFLWhois_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
-        AddQ "/whois " & lvFriendList.SelectedItem.text, PRIORITY.CONSOLE_MESSAGE
+        AddQ "/whois " & lvFriendList.SelectedItem.text, Priority.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -4159,7 +4163,7 @@ Private Sub mnuPopSquelch_Click()
     On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/squelch " & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/squelch " & GetSelectedUser, Priority.CONSOLE_MESSAGE, Priority.CONSOLE_MESSAGE
 End Sub
 
 
@@ -4167,7 +4171,7 @@ Private Sub mnuPopUnsquelch_Click()
     'On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/unsquelch " & GetSelectedUser, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/unsquelch " & GetSelectedUser, Priority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopWhisper_Click()
@@ -4177,7 +4181,7 @@ Private Sub mnuPopWhisper_Click()
     If cboSend.text <> vbNullString Then
         AddQ "/w " & _
             IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser) & Space(1) & _
-                cboSend.text, PRIORITY.CONSOLE_MESSAGE
+                cboSend.text, Priority.CONSOLE_MESSAGE
         
         cboSend.AddItem cboSend.text, 0
         cboSend.text = vbNullString
@@ -4198,7 +4202,7 @@ Private Sub mnuPopWhois_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     AddQ "/whois " & _
-        IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
+        IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), Priority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuPopInvite_Click()
@@ -4210,7 +4214,7 @@ Private Sub mnuPopInvite_Click()
     End If
     
     If LenB(sPlayer) > 0 Then
-        If g_Clan.Self.Rank >= 3 Then
+        If g_Clan.Self.rank >= 3 Then
             InviteToClan (reverseUsername(sPlayer))
             AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & GetSelectedUser & ", awaiting reply."
         End If
@@ -4243,7 +4247,7 @@ End Sub
 
 Private Sub mnuQC_Click(Index As Integer)
     If Len(QC(Index)) > 0 Then
-        AddQ "/join " & QC(Index), PRIORITY.CONSOLE_MESSAGE
+        AddQ "/join " & QC(Index), Priority.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -4410,7 +4414,7 @@ MRS_Continue:
     
     ' Reset script custom menu
     ' First, go through the collection and delete each submenu
-    lMenu = GetMenu(frmChat.hWNd)
+    lMenu = GetMenu(frmChat.hWnd)
     
     ' Remove each of the subitems for all of the script menus
     While colDynamicMenus.Count > 0
@@ -4442,7 +4446,7 @@ MRS_Continue:
     LoadScripts SControl
     InitScripts
     
-    DrawMenuBar frmChat.hWNd
+    DrawMenuBar frmChat.hWnd
 
 MRS_Exit:
     On Error GoTo 0
@@ -4474,31 +4478,31 @@ End Sub
 Private Sub mnuStatsBW_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & CleanUsername(GetSelectedUser) & " SEXP", PRIORITY.CONSOLE_MESSAGE
+    AddQ "/stats " & CleanUsername(GetSelectedUser) & " SEXP", Priority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuStatsFT_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & CleanUsername(GetSelectedUser) & " W3XP", PRIORITY.CONSOLE_MESSAGE
+    AddQ "/stats " & CleanUsername(GetSelectedUser) & " W3XP", Priority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuStatsSC_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & CleanUsername(GetSelectedUser) & " STAR", PRIORITY.CONSOLE_MESSAGE
+    AddQ "/stats " & CleanUsername(GetSelectedUser) & " STAR", Priority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuStatsW2_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & CleanUsername(GetSelectedUser) & " W2BN", PRIORITY.CONSOLE_MESSAGE
+    AddQ "/stats " & CleanUsername(GetSelectedUser) & " W2BN", Priority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuStatsW3_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    AddQ "/stats " & CleanUsername(GetSelectedUser) & " WAR3", PRIORITY.CONSOLE_MESSAGE
+    AddQ "/stats " & CleanUsername(GetSelectedUser) & " WAR3", Priority.CONSOLE_MESSAGE
 End Sub
 
 Private Sub mnuTerms_Click()
@@ -4698,7 +4702,7 @@ Private Sub mnuPopKick_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If MyFlags = 2 Or MyFlags = 18 Then
-        AddQ "/kick " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
+        AddQ "/kick " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), Priority.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -4706,7 +4710,7 @@ Private Sub mnuPopBan_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If MyFlags = 2 Or MyFlags = 18 Then
-        AddQ "/ban " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), PRIORITY.CONSOLE_MESSAGE
+        AddQ "/ban " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser), Priority.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -5180,12 +5184,12 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 
                                 If (X(n) <> vbNullString) Then
                                     If (n <> LBound(X)) Then
-                                        AddQ txtPre.text & X(n) & txtPost.text, PRIORITY.CONSOLE_MESSAGE
+                                        AddQ txtPre.text & X(n) & txtPost.text, Priority.CONSOLE_MESSAGE
                                         
                                         cboSend.AddItem txtPre.text & X(n) & txtPost.text, 0
                                     Else
                                         AddQ txtPre.text & cboSend.text & X(n) & txtPost.text, _
-                                            PRIORITY.CONSOLE_MESSAGE
+                                            Priority.CONSOLE_MESSAGE
                                         
                                         cboSend.AddItem txtPre.text & cboSend.text & X(n) & txtPost.text, 0
                                     End If
@@ -5352,7 +5356,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Case S_CTRL 'CTRL+ENTER - rewhisper
                         If LenB(cboSend.text) > 0 Then
                             AddQ "/w " & LastWhisperTo & Space(1) & cboSend.text, _
-                                PRIORITY.CONSOLE_MESSAGE
+                                Priority.CONSOLE_MESSAGE
                                 
                             cboSend.text = vbNullString
                         End If
@@ -5360,7 +5364,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     Case S_CTRLSHIFT 'CTRL+SHIFT+ENTER - reply
                         If LenB(cboSend.text) > 0 Then
                             AddQ "/w " & LastWhisper & Space(1) & cboSend.text, _
-                                PRIORITY.CONSOLE_MESSAGE
+                                Priority.CONSOLE_MESSAGE
                             cboSend.text = vbNullString
                         End If
                 
@@ -5390,7 +5394,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 If (Left$(s, 6) = "/tell ") Then
                                     s = "/w " & Mid$(s, 7)
                                     
-                                    Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
+                                    Call AddQ(OutFilterMsg(s), Priority.CONSOLE_MESSAGE)
                                     
                                     GoTo theEnd
                                     
@@ -5497,7 +5501,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     commandResult = ProcessCommand(GetCurrentUsername, m, _
                                         True, False)
                                 Else
-                                    Call AddQ(OutFilterMsg(s), PRIORITY.CONSOLE_MESSAGE)
+                                    Call AddQ(OutFilterMsg(s), Priority.CONSOLE_MESSAGE)
                                 End If
                                 
                                 'Ignore rest of code as the bot is closing
@@ -5651,7 +5655,7 @@ Private Sub QueueTimer_Timer()
         With g_Queue.Peek
             Message = .Message
             Tag = .Tag
-            pri = .PRIORITY
+            pri = .Priority
             id = .id
         End With
         
@@ -5742,7 +5746,7 @@ Private Sub QueueTimer_Timer()
             Call g_Queue.Pop
             
             ' are we issuing a ban or kick command?
-            If (g_Queue.Peek.PRIORITY = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
+            If (g_Queue.Peek.Priority = Priority.CHANNEL_MODERATION_MESSAGE) Then
                 ' ...
                 delay = BanDelay()
                 
@@ -6112,7 +6116,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
             End If
         
             ' ...
-            Call AddQ("/unsquelch " & GetCurrentUsername, PRIORITY.SPECIAL_MESSAGE)
+            Call AddQ("/unsquelch " & GetCurrentUsername, Priority.SPECIAL_MESSAGE)
         End If
     End If
     
@@ -6707,13 +6711,13 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             
             ' ...
             Select Case (cmdName)
-                Case "designate": msg_priority = PRIORITY.SPECIAL_MESSAGE
-                Case "resign":    msg_priority = PRIORITY.SPECIAL_MESSAGE
-                Case "who":       msg_priority = PRIORITY.SPECIAL_MESSAGE
-                Case "ban":       msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "unban":     msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case "kick":      msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE
-                Case Else:        msg_priority = PRIORITY.MESSAGE_DEFAULT
+                Case "designate": msg_priority = Priority.SPECIAL_MESSAGE
+                Case "resign":    msg_priority = Priority.SPECIAL_MESSAGE
+                Case "who":       msg_priority = Priority.SPECIAL_MESSAGE
+                Case "ban":       msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case "unban":     msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case "kick":      msg_priority = Priority.CHANNEL_MODERATION_MESSAGE
+                Case Else:        msg_priority = Priority.MESSAGE_DEFAULT
             End Select
         End If
         
@@ -6739,7 +6743,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             ' ...
             With Q
                 .Message = Send
-                .PRIORITY = msg_priority
+                .Priority = msg_priority
                 .ResponseTo = vbNullString
                 .Tag = Tag
             End With
@@ -6758,7 +6762,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     delay = 10
                     
                     ' are we issuing a ban or kick command?
-                    If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
+                    If (msg_priority = Priority.CHANNEL_MODERATION_MESSAGE) Then
                         delay = BanDelay()
                     End If
                     
@@ -7205,7 +7209,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     s = ReadCfg(MN, "URLDetect")
     If s = "Y" Then
-        EnableURLDetect rtbChat.hWNd
+        EnableURLDetect rtbChat.hWnd
     Else
         DisableURLDetect
     End If
@@ -7523,7 +7527,7 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
                         
             Call g_Queue.Clear
             
-            SetProcessPriority 0, frmChat.hWNd, ppNormal
+            SetProcessPriority 0, frmChat.hWnd, ppNormal
             
             AddChat RTBColors.TalkBotUsername, "The channel list is most likely not accurate. Please " & _
                 "rejoin the bot to correct this."
@@ -7547,7 +7551,7 @@ Sub SetFloodbotMode(ByVal Mode As Byte)
                 "command in-bot or in-channel."
             AddChat RTBColors.TalkBotUsername, "Type '/efp off' to return to normal."
             
-            SetProcessPriority 0, frmChat.hWNd, ppHigh
+            SetProcessPriority 0, frmChat.hWnd, ppHigh
             
             ReDim gFloodSafelist(0)
             
@@ -8099,11 +8103,11 @@ Sub DisableListviewTabs()
     ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
 End Sub
 
-Sub AddClanMember(ByVal Name As String, Rank As Integer, Online As Integer)
+Sub AddClanMember(ByVal Name As String, rank As Integer, Online As Integer)
     
     Dim visible_rank As Integer
     
-    visible_rank = Rank
+    visible_rank = rank
     
     If visible_rank = 0 Then visible_rank = 1
     If visible_rank > 4 Then visible_rank = 5 '// handle bad ranks
@@ -8128,7 +8132,7 @@ Sub AddClanMember(ByVal Name As String, Rank As Integer, Online As Integer)
     frmChat.ListviewTabs_Click 0
     
     On Error Resume Next
-    RunInAll "Event_ClanInfo", Name, Rank, Online
+    RunInAll "Event_ClanInfo", Name, rank, Online
 End Sub
 
 Private Function GetClanSelectedUser() As String
@@ -8152,7 +8156,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
         
         lvhti.pt.X = X / Screen.TwipsPerPixelX
         lvhti.pt.Y = Y / Screen.TwipsPerPixelY
-        lItemIndex = SendMessageAny(lvClanList.hWNd, LVM_HITTEST, 0, lvhti) + 1
+        lItemIndex = SendMessageAny(lvClanList.hWnd, LVM_HITTEST, 0, lvhti) + 1
         
         If lItemIndex > 0 Then
             lvClanList.ListItems(lItemIndex).Selected = True
@@ -8171,7 +8175,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
                     mnuPopDem.Enabled = False
                     mnuPopPro.Enabled = False
                     
-                    If g_Clan.Self.Rank > 2 Then
+                    If g_Clan.Self.rank > 2 Then
                             
                         mnuPopBNProfile.Enabled = True
                         
@@ -8186,7 +8190,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
                                 
                                 mnuPopPro.Enabled = False
                                 
-                                If g_Clan.Self.Rank = 4 Then
+                                If g_Clan.Self.rank = 4 Then
                                     
                                     mnuPopDem.Enabled = True
                                     mnuPopRem.Enabled = True
@@ -8217,7 +8221,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
             End If
             
             If StrComp(GetClanSelectedUser(), GetCurrentUsername, vbTextCompare) = 0 Then
-                If g_Clan.Self.Rank > 0 Then
+                If g_Clan.Self.rank > 0 Then
                     mnuSP2.Visible = True
                     mnuPopLeaveClan.Visible = True
                 Else
