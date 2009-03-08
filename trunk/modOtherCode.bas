@@ -3168,80 +3168,9 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         
         ' ...
         If (rtb = frmChat.rtbChat) Then
-            ' ...
             LogThis = (BotVars.Logging > 0)
-            
-            ' ...
-            If (LogThis) Then
-                'Do
-                '    ' ...
-                '    filename = _
-                '        GetProfilePath() & "\Logs\" & Format(Date, "YYYY-MM-DD") & _
-                '            IIf(rtbChat_LoopCount, "_" & rtbChat_LoopCount + 1, "") & ".txt"
-                '
-                '    ' ...
-                '    If (Dir$(filename) = vbNullString) Then
-                '        frmChat.MakeLoggingDirectory
-                '
-                '        Open filename For Output As #f
-                '    Else
-                '        Open filename For Append As #f
-                '    End If
-                '
-                '    ' ...
-                '    If ((BotVars.MaxLogFileSize) And (LOF(f) >= BotVars.MaxLogFileSize)) Then
-                '        ' ...
-                '        rtbChat_LoopCount = (rtbChat_LoopCount + 1)
-                '
-                '        ' ...
-                '        LogThis = False
-                '
-                '        ' ...
-                '        Close #f
-                '    Else
-                '        LogThis = True
-                '    End If
-                'Loop While (LogThis = False)
-            End If
-            
         ElseIf (rtb = frmChat.rtbWhispers) Then
-
-            ' ...
             LogThis = (BotVars.Logging > 0)
-            
-            ' ...
-            If (LogThis) Then
-                'Do
-                '    ' ...
-                '    filename = _
-                '        GetProfilePath() & "\Logs\" & Format(Date, "YYYY-MM-DD") & "-WHISPERS" & _
-                '            IIf(rtbWhispers_LoopCount, "_" & rtbChat_LoopCount + 1, "") & ".txt"
-                '
-                '    ' ...
-                '    If (Dir$(filename) = vbNullString) Then
-                '        frmChat.MakeLoggingDirectory
-                '
-                '        Open filename For Output As #f
-                '    Else
-                '        Open filename For Append As #f
-                '    End If
-                '
-                '    ' ...
-                '    If ((BotVars.MaxLogFileSize) And (LOF(f) >= BotVars.MaxLogFileSize)) Then
-                '        ' ...
-                '        rtbWhispers_LoopCount = (rtbWhispers_LoopCount + 1)
-                '
-                '        ' ...
-                '        LogThis = False
-                '
-                '        ' ...
-                '        Close #f
-                '    Else
-                '        LogThis = True
-                '    End If
-                'Loop While (LogThis = False)
-            End If
-
         End If
         
         If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
@@ -3260,12 +3189,13 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         With rtb
             .SelStart = Len(.text)
             .SelLength = 0
-            .SelColor = RTBColors.TimeStamps
-            If .SelBold = True Then: .SelBold = False
-            If .SelItalic = True Then: .SelItalic = False
-            If .SelUnderline = True Then: .SelUnderline = False
             .SelFontName = rtb.Font.Name
+            .SelBold = False
+            .SelItalic = False
+            .SelUnderline = False
+            .SelColor = RTBColors.TimeStamps
             .SelText = s
+            .SelLength = Len(.SelText)
         End With
 
         For i = LBound(saElements) To UBound(saElements) Step 3
@@ -3286,6 +3216,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             
                 With rtb
                     .SelStart = L
+                    .SelLength = 0
                     .SelFontName = saElements(i)
                     .SelColor = saElements(i + 1)
                     .SelText = _
