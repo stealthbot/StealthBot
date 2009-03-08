@@ -74,11 +74,11 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Set command = IsCommand(Message, IsLocal)
 
     ' ...
-    Do While (command.Name <> vbNullString)
+    Do While (command.name <> vbNullString)
         ' ...
         If (command.IsLocal) Then
             execCommand = True
-        ElseIf (HasAccess(Username, command.Name, command.Args, outbuf)) Then
+        ElseIf (HasAccess(Username, command.name, command.Args, outbuf)) Then
             execCommand = True
         End If
         
@@ -97,7 +97,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             End If
             
             ' ...
-            Call executeCommand(Username, dbAccess, command.Name & Space$(1) & command.Args, _
+            Call executeCommand(Username, dbAccess, command.name & Space$(1) & command.Args, _
                     IsLocal, command_return)
                     
             ' ...
@@ -873,9 +873,9 @@ Private Function OnMotd(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     Dim tmpbuf As String
 
-    If (g_Clan.Self.Name <> vbNullString) Then
+    If (g_Clan.Self.name <> vbNullString) Then
         tmpbuf = _
-            "Clan " & g_Clan.Name & " MOTD: " & g_Clan.MOTD
+            "Clan " & g_Clan.name & " MOTD: " & g_Clan.MOTD
     Else
         tmpbuf = "Error: I am not a member of a clan."
     End If
@@ -999,7 +999,7 @@ Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAcces
     End If
 
     ' ...
-    tmpbuf = "I am currently in channel " & g_Channel.Name & " (" & g_Channel.Users.Count & _
+    tmpbuf = "I am currently in channel " & g_Channel.name & " (" & g_Channel.Users.Count & _
         " users present)"
     
     ' return message
@@ -1364,7 +1364,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Next i
     
         ' ...
-        If (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) = 0) Then
+        If (StrComp(g_Channel.name, "Clan " & Clan.name, vbTextCompare) = 0) Then
             ' ...
             ReDim Preserve arrUsers(0)
             
@@ -1376,9 +1376,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 ' ...
                 For i = 1 To g_Clan.Shamans.Count
                     ' ...
-                    If (g_Channel.GetUserIndexEx(g_Clan.Shamans(i).Name) > 0) Then
+                    If (g_Channel.GetUserIndexEx(g_Clan.Shamans(i).name) > 0) Then
                         ' ...
-                        arrUsers(userCount) = g_Clan.Shamans(i).Name
+                        arrUsers(userCount) = g_Clan.Shamans(i).name
     
                         ' ...
                         userCount = (userCount + 1)
@@ -1431,7 +1431,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
         
         ' ...
-        If (StrComp(Left$(g_Channel.Name, 3), "Op ", vbTextCompare) = 0) Then
+        If (StrComp(Left$(g_Channel.name, 3), "Op ", vbTextCompare) = 0) Then
             ' ...
             If (opsCount >= 2) Then
                 ' ...
@@ -1441,10 +1441,10 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 ' ...
                 Exit Function
             End If
-        ElseIf (StrComp(Left$(g_Channel.Name, 5), "Clan ", vbTextCompare) = 0) Then
+        ElseIf (StrComp(Left$(g_Channel.name, 5), "Clan ", vbTextCompare) = 0) Then
             ' ...
             If ((g_Clan.Self.Rank < 4) Or _
-                    (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) <> 0)) Then
+                    (StrComp(g_Channel.name, "Clan " & Clan.name, vbTextCompare) <> 0)) Then
                     
                 ' ...
                 If (opsCount >= 2) Then
@@ -1791,7 +1791,7 @@ Private Function OnRejoin(ByVal Username As String, ByRef dbAccess As udtGetAcce
         Username)
     
     ' rejoin previous channel
-    Call AddQ("/join " & g_Channel.Name, PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
+    Call AddQ("/join " & g_Channel.name, PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
 End Function ' end function OnRejoin
 
 ' handle quickrejoin command
@@ -1800,7 +1800,7 @@ Private Function OnQuickRejoin(ByVal Username As String, ByRef dbAccess As udtGe
     ' This command will make the bot rejoin the current channel.
     
     ' ...
-    Call RejoinChannel(g_Channel.Name)
+    Call RejoinChannel(g_Channel.name)
 End Function ' end function OnRejoin
 
 ' handle forcejoin command
@@ -2503,7 +2503,7 @@ Private Function OnPause(ByVal Username As String, ByRef dbAccess As udtGetAcces
         
             tmpbuf = "Paused/resumed play."
         Else
-            tmpbuf = MediaPlayer.Name & " is not loaded."
+            tmpbuf = MediaPlayer.name & " is not loaded."
         End If
     End If
         
@@ -2524,7 +2524,7 @@ Private Function OnFos(ByVal Username As String, ByRef dbAccess As udtGetAccessR
         
             tmpbuf = "Fade-out stop."
         Else
-            tmpbuf = MediaPlayer.Name & " is not loaded."
+            tmpbuf = MediaPlayer.name & " is not loaded."
         End If
     End If
         
@@ -2662,7 +2662,7 @@ Private Function OnReconnect(ByVal Username As String, ByRef dbAccess As udtGetA
     If (g_Online) Then
         tmp = BotVars.HomeChannel
     
-        BotVars.HomeChannel = g_Channel.Name
+        BotVars.HomeChannel = g_Channel.name
         
         Call frmChat.DoDisconnect
         
@@ -4551,7 +4551,7 @@ Private Function OnPrevious(ByVal Username As String, ByRef dbAccess As udtGetAc
             ' ...
             tmpbuf = "Skipped backwards."
         Else
-            tmpbuf = MediaPlayer.Name & " is not loaded."
+            tmpbuf = MediaPlayer.name & " is not loaded."
         End If
     End If
     
@@ -4641,7 +4641,7 @@ Private Function OnMP3(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     ' ...
     If (BotVars.DisableMP3Commands = False) Then
         If (MediaPlayer.IsLoaded = False) Then
-            tmpbuf = MediaPlayer.Name & " is not loaded."
+            tmpbuf = MediaPlayer.name & " is not loaded."
         Else
             ' ...
             TrackName = MediaPlayer.TrackName
@@ -4652,7 +4652,7 @@ Private Function OnMP3(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             
             ' ...
             If (TrackName = vbNullString) Then
-                tmpbuf = MediaPlayer.Name & " is not currently playing any media."
+                tmpbuf = MediaPlayer.name & " is not currently playing any media."
             Else
                 tmpbuf = "Current MP3 " & _
                     "[" & ListPosition & "/" & ListCount & "]: " & _
@@ -6117,12 +6117,12 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Set CommandDocs = OpenCommand(FindCommand)
     
     ' ...
-    If (CommandDocs.Name = vbNullString) Then
+    If (CommandDocs.name = vbNullString) Then
         ' ...
         Set CommandDocs = OpenCommand(convertAlias(FindCommand))
     
         ' ...
-        If (CommandDocs.Name = vbNullString) Then
+        If (CommandDocs.name = vbNullString) Then
             ' ...
             cmdRet(0) = "Sorry, but no related documentation could be found."
         
@@ -6131,7 +6131,7 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
         End If
     End If
     
-    tmpbuf(0) = "[" & CommandDocs.Name
+    tmpbuf(0) = "[" & CommandDocs.name
     
     If (CommandDocs.Aliases.Count) Then
         tmpbuf(0) = tmpbuf(0) & " (aliases: "
@@ -6151,14 +6151,14 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
     tmpbuf(0) = tmpbuf(0) & ")]: " & CommandDocs.description
     
     ' ...
-    tmpbuf(0) = tmpbuf(0) & Space$(1) & "(Syntax: " & "<trigger>" & CommandDocs.Name
+    tmpbuf(0) = tmpbuf(0) & Space$(1) & "(Syntax: " & "<trigger>" & CommandDocs.name
             
     If (CommandDocs.Parameters.Count) Then
         For i = 1 To CommandDocs.Parameters.Count
             If (CommandDocs.Parameters(i).IsOptional) Then
-                tmpbuf(0) = tmpbuf(0) & " [" & CommandDocs.Parameters(i).Name & "]"
+                tmpbuf(0) = tmpbuf(0) & " [" & CommandDocs.Parameters(i).name & "]"
             Else
-                tmpbuf(0) = tmpbuf(0) & " <" & CommandDocs.Parameters(i).Name & ">"
+                tmpbuf(0) = tmpbuf(0) & " <" & CommandDocs.Parameters(i).name & ">"
             End If
         Next i
     End If
@@ -6483,6 +6483,7 @@ Private Function OnScripts(ByVal Username As String, ByRef dbAccess As udtGetAcc
     Dim tmpbuf As String  ' ...
     Dim i      As Integer ' ...
     Dim str    As String  ' ...
+    Dim name   As String  ' ...
     
     ' ...
     If (frmChat.SControl.Modules.Count) Then
@@ -6491,17 +6492,17 @@ Private Function OnScripts(ByVal Username As String, ByRef dbAccess As udtGetAcc
                  
         ' ...
         For i = 1 To frmChat.SControl.Modules.Count
-            tmpbuf = tmpbuf & _
+            name = _
                 frmChat.SControl.Modules(i).Eval("Name()")
                     
             If (Err.Number = 13) Then
-                If (frmChat.SControl.Modules(i).Name = "Global") Then
+                If (frmChat.SControl.Modules(i).name = "Global") Then
                     If (ReadINI("Override", "DisablePS", GetConfigFilePath()) <> "Y") Then
-                        tmpbuf = tmpbuf & "PluginSystem.dat"
+                        name = "PluginSystem.dat"
                     End If
                 Else
-                    tmpbuf = tmpbuf & _
-                        frmChat.SControl.Modules(i).Name
+                    name = _
+                        frmChat.SControl.Modules(i).name
                 End If
                 
                 Err.Clear
@@ -6511,10 +6512,12 @@ Private Function OnScripts(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 frmChat.SControl.Modules(i).CodeObject.GetSettingsEntry("Enabled")
         
             If (StrComp(str, "False", vbTextCompare) = 0) Then
-                tmpbuf = tmpbuf & " (disabled), "
+                name = "(" & name & "), "
             Else
-                tmpbuf = tmpbuf & ", "
+                name = name & ", "
             End If
+            
+            tmpbuf = tmpbuf & name
         Next i
         
         ' ...
@@ -7377,7 +7380,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
     Set command = OpenCommand(CommandName)
 
     ' ...
-    If (command.Name = vbNullString) Then
+    If (command.name = vbNullString) Then
         Exit Function
     End If
     
@@ -7509,7 +7512,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     Set command = OpenCommand(CommandName)
 
     ' ...
-    If (command.Name = vbNullString) Then
+    If (command.name = vbNullString) Then
         Exit Function
     End If
     
