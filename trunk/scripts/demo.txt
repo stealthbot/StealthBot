@@ -21,6 +21,8 @@ Sub Event_Load()
 
    frm.Show
 
+   AddChat vbRed, GetSettingsEntry("Enabled")
+
 End Sub
 
 Sub Event_PacketReceived(Protocol, ID, Length, Data)

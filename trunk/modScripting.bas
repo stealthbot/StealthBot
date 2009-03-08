@@ -232,6 +232,16 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
     str = str & "   Set GetObjByName = _ " & vbNewLine
     str = str & "         GetObjByNameEx(GetModuleName(), ObjType, ObjName)" & vbNewLine
     str = str & "End Function" & vbNewLine
+    
+    ' GetSettingsEntry() module-level function
+    str = str & "Function GetSettingsEntry(EntryName)" & vbNewLine
+    str = str & "   GetSettingsEntry = GetSettingsEntryEx(GetModuleName(), EntryName)" & vbNewLine
+    str = str & "End Function" & vbNewLine
+    
+    ' WriteSettingsEntry() module-level function
+    str = str & "Sub WriteSettingsEntry(EntryName, EntryValue)" & vbNewLine
+    str = str & "   WriteSettingsEntryEx GetModuleName(), EntryName, EntryValue" & vbNewLine
+    str = str & "End Sub" & vbNewLine
 
     ' store module-level coding
     ScriptModule.AddCode str
@@ -307,6 +317,7 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
     Dim SC    As ScriptControl
     Dim i     As Integer ' ...
     Dim arr() As Variant ' ...
+    Dim str   As String  ' ...
     
     ' ...
     Set SC = frmChat.SControl
@@ -316,7 +327,12 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
 
     ' ...
     For i = 1 To SC.Modules.Count
-        CallByNameEx SC.Modules(i), "Run", VbMethod, arr()
+        str = _
+            SC.Modules(i).CodeObject.GetSettingsEntry("Enabled")
+            
+        If (StrComp(str, "False", vbTextCompare) <> 0) Then
+            CallByNameEx SC.Modules(i), "Run", VbMethod, arr()
+        End If
     Next
 
     Exit Sub
