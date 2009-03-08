@@ -310,7 +310,7 @@ Public Sub AddQ(ByVal sText As String, Optional ByVal msg_priority As Integer = 
     Tag As String = vbNullString)
     
     '// Disabled while in Clan SBs.
-    If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) = 0) And _
+    If ((StrComp(g_Channel.name, "Clan SBs", vbTextCompare) = 0) And _
         (IsStealthBotTech() = False)) Then Exit Sub
     
     '// priority zero reserved for internal usage only
@@ -494,7 +494,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     ' ...
     With GetDBEntry
         .entryType = temp.Type
-        .Name = temp.Username
+        .name = temp.Username
         .Rank = temp.Access
         .Flags = temp.Flags
         .CreatedOn = temp.AddedOn
@@ -1459,12 +1459,20 @@ End Function
 
 Public Function Scripts() As Object
 
-    Dim i As Integer ' ...
+    On Error Resume Next
+
+    Dim i   As Integer ' ...
+    Dim str As String ' ...
 
     Set Scripts = New Collection
 
     For i = 1 To frmChat.SControl.Modules.Count
-        Scripts.Add frmChat.SControl.Modules(i)
+        str = _
+            frmChat.SControl.Modules(i).CodeObject.getSettingsEntry("Public")
+            
+        If (StrComp(str, "False", vbTextCompare) <> 0) Then
+            Scripts.Add frmChat.SControl.Modules(i)
+        End If
     Next
 
 End Function
@@ -1479,7 +1487,7 @@ End Function
 
 Public Function GetScriptObjByName(ByVal ScriptName As String) As Object
 
-    On Error GoTo ERROR_HANDLER
+    On Error Resume Next
 
     Dim i   As Integer ' ...
     Dim str As String ' ...
@@ -1488,31 +1496,37 @@ Public Function GetScriptObjByName(ByVal ScriptName As String) As Object
         str = frmChat.SControl.Modules(i).Eval("Name()")
         
         If (StrComp(ScriptName, str, vbTextCompare) = 0) Then
-             Set GetScriptObjByName = _
+            str = _
+                frmChat.SControl.Modules(i).CodeObject.getSettingsEntry("Public")
+            
+            If (StrComp(str, "False", vbTextCompare) = 0) Then
+                Exit Function
+            End If
+        
+            Set GetScriptObjByName = _
                     frmChat.SControl.Modules(i)
              
-             Exit Function
+            Exit Function
         End If
     Next i
     
     For i = 1 To frmChat.SControl.Modules.Count
-        str = frmChat.SControl.Modules(i).Name
+        str = frmChat.SControl.Modules(i).name
     
         If (StrComp(ScriptName, str, vbTextCompare) = 0) Then
+            str = _
+                frmChat.SControl.Modules(i).CodeObject.getSettingsEntry("Public")
+            
+            If (StrComp(str, "False", vbTextCompare) = 0) Then
+                Exit Function
+            End If
+        
              Set GetScriptObjByName = _
                     frmChat.SControl.Modules(i)
              
              Exit Function
         End If
     Next i
-    
-    Exit Function
-    
-ERROR_HANDLER:
-
-    Err.Number = 0
-    
-    Resume Next
 
 End Function
 
