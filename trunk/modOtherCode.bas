@@ -141,12 +141,12 @@ Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Inte
         
         Select Case StrReverse(Product)
             Case "W2BN": GetVerByte = &H4F
-            Case "STAR": GetVerByte = &HCF
-            Case "SEXP": GetVerByte = &HCF
-            Case "D2DV": GetVerByte = &HB
-            Case "D2XP": GetVerByte = &HB
-            Case "W3XP": GetVerByte = &H14
-            Case "WAR3": GetVerByte = &H14
+            Case "STAR": GetVerByte = &HD3
+            Case "SEXP": GetVerByte = &HD3
+            Case "D2DV": GetVerByte = &HC
+            Case "D2XP": GetVerByte = &HC
+            Case "W3XP": GetVerByte = &H16
+            Case "WAR3": GetVerByte = &H16
         End Select
     Else
         GetVerByte = _
@@ -215,7 +215,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
     
     Dim Username        As String
     Dim CleanedUsername As String
-    Dim i               As Integer
+    Dim I               As Integer
     Dim pos             As Integer
     
     If (LenB(Inpt) > 0) Then
@@ -284,7 +284,7 @@ End Function
 ' This function created in response to http://www.stealthbot.net/forum/index.php?showtopic=20550
 Public Function StripInvalidNameChars(ByVal Username As String) As String
     Dim Allowed(14) As Integer
-    Dim i           As Integer
+    Dim I           As Integer
     Dim j           As Integer
     Dim thisChar    As Integer
     Dim NewUsername As String
@@ -309,8 +309,8 @@ Public Function StripInvalidNameChars(ByVal Username As String) As String
         Allowed(13) = Asc("|")
         Allowed(14) = Asc("*")
         
-        For i = 1 To Len(Username)
-            thisChar = Asc(Mid$(Username, i, 1))
+        For I = 1 To Len(Username)
+            thisChar = Asc(Mid$(Username, I, 1))
             
             ThisCharOK = False
             
@@ -328,7 +328,7 @@ Public Function StripInvalidNameChars(ByVal Username As String) As String
                     End If
                 End If
             End If
-        Next i
+        Next I
         
         StripInvalidNameChars = NewUsername
     End If
@@ -339,10 +339,10 @@ End Function
 '// String("This is an {1} of its {0}.", Array("use", "example")) '// This is an example of its use.
 '// 08/29/2008 JSM - Created
 Public Function StringFormat(Source As String, params() As Variant) As String
-    Dim retval As String, i As Integer
+    Dim retval As String, I As Integer
     retval = Source
-    For i = LBound(params) To UBound(params)
-        retval = Replace(retval, "{" & i & "}", CStr(params(i)))
+    For I = LBound(params) To UBound(params)
+        retval = Replace(retval, "{" & I & "}", CStr(params(I)))
     Next
     StringFormat = retval
 End Function
@@ -427,7 +427,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
     
     On Error GoTo ERROR_HANDLER
 
-    If (frmChat.sckBNet.STate = 7) Then
+    If (frmChat.sckBNet.State = 7) Then
         With PBuffer
             If (frmChat.mnuUTF8.Checked) Then
                 .InsertNTString Message, UTF8
@@ -477,12 +477,12 @@ End Sub
 
 Public Sub APISend(ByRef s As String) '// faster API-based sending for EFP
 
-    Dim i As Long
+    Dim I As Long
     
-    i = Len(s) + 5
+    I = Len(s) + 5
     
-    Call Send(frmChat.sckBNet.SocketHandle, "ÿ" & "" & Chr(i) & _
-        Chr(0) & s & Chr(0), i, 0)
+    Call Send(frmChat.sckBNet.SocketHandle, "ÿ" & "" & Chr(I) & _
+        Chr(0) & s & Chr(0), I, 0)
 End Sub
 
 Public Function Voting(ByVal Mode1 As Byte, Optional Mode2 As Byte, Optional Username As String) As String
@@ -492,15 +492,15 @@ Public Function Voting(ByVal Mode1 As Byte, Optional Mode2 As Byte, Optional Use
     Static VoteMode As Byte
     Static Target   As String
         
-    Dim i           As Integer
+    Dim I           As Integer
     
     Select Case (Mode1)
         Case BVT_VOTE_ADD
-            For i = LBound(Voted) To UBound(Voted)
-                If (StrComp(Voted(i), LCase$(Username), vbTextCompare) = 0) Then
+            For I = LBound(Voted) To UBound(Voted)
+                If (StrComp(Voted(I), LCase$(Username), vbTextCompare) = 0) Then
                     Exit Function
                 End If
-            Next i
+            Next I
             
             Select Case (Mode2)
                 Case BVT_VOTE_ADDYES
@@ -588,17 +588,17 @@ End Function
 Public Function GetAccess(ByVal Username As String, Optional dbType As String = _
     vbNullString) As udtGetAccessResponse
     
-    Dim i   As Integer ' ...
+    Dim I   As Integer ' ...
     Dim bln As Boolean ' ...
 
     'If (Left$(Username, 1) = "*") Then
     '    Username = Mid$(Username, 2)
     'End If
 
-    For i = LBound(DB) To UBound(DB)
-        If (StrComp(DB(i).Username, Username, vbTextCompare) = 0) Then
+    For I = LBound(DB) To UBound(DB)
+        If (StrComp(DB(I).Username, Username, vbTextCompare) = 0) Then
             If (Len(dbType)) Then
-                If (StrComp(DB(i).Type, dbType, vbBinaryCompare) = 0) Then
+                If (StrComp(DB(I).Type, dbType, vbBinaryCompare) = 0) Then
                     bln = True
                 End If
             Else
@@ -607,16 +607,16 @@ Public Function GetAccess(ByVal Username As String, Optional dbType As String = 
                 
             If (bln = True) Then
                 With GetAccess
-                    .Username = DB(i).Username
-                    .Access = DB(i).Access
-                    .Flags = DB(i).Flags
-                    .AddedBy = DB(i).AddedBy
-                    .AddedOn = DB(i).AddedOn
-                    .ModifiedBy = DB(i).ModifiedBy
-                    .ModifiedOn = DB(i).ModifiedOn
-                    .Type = DB(i).Type
-                    .Groups = DB(i).Groups
-                    .BanMessage = DB(i).BanMessage
+                    .Username = DB(I).Username
+                    .Access = DB(I).Access
+                    .Flags = DB(I).Flags
+                    .AddedBy = DB(I).AddedBy
+                    .AddedOn = DB(I).AddedOn
+                    .ModifiedBy = DB(I).ModifiedBy
+                    .ModifiedOn = DB(I).ModifiedOn
+                    .Type = DB(I).Type
+                    .Groups = DB(I).Groups
+                    .BanMessage = DB(I).BanMessage
                 End With
                 
                 Exit Function
@@ -624,7 +624,7 @@ Public Function GetAccess(ByVal Username As String, Optional dbType As String = 
         End If
         
         bln = False
-    Next i
+    Next I
 
     GetAccess.Access = -1
 End Function
@@ -632,19 +632,19 @@ End Function
 Public Function dbLastModified() As Date
 
     Dim temp As Date
-    Dim i    As Integer
+    Dim I    As Integer
     
     temp = "00:00:00 12/30/1899"
     
-    For i = LBound(DB) To UBound(DB)
-        If (DB(i).Username = vbNullString) Then
+    For I = LBound(DB) To UBound(DB)
+        If (DB(I).Username = vbNullString) Then
             Exit For
         End If
     
-        If (DateDiff("s", temp, DB(i).ModifiedOn) > 0) Then
-            temp = DB(i).ModifiedOn
+        If (DateDiff("s", temp, DB(I).ModifiedOn) > 0) Then
+            temp = DB(I).ModifiedOn
         End If
-    Next i
+    Next I
 
     dbLastModified = temp
 
@@ -662,7 +662,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     
     Dim f         As file   ' ...
     Dim fso       As FileSystemObject
-    Dim i         As Integer  ' ...
+    Dim I         As Integer  ' ...
     Dim k         As Integer  ' ...
     Dim j         As Integer  ' ...
     Dim found     As Boolean  ' ...
@@ -708,12 +708,12 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
         End With
     
         ' ...
-        For i = LBound(DB) To UBound(DB)
+        For I = LBound(DB) To UBound(DB)
             ' ...
-            If ((InStr(1, DB(i).Username, "*", vbBinaryCompare) <> 0) Or _
-                (InStr(1, DB(i).Username, "?", vbBinaryCompare) <> 0) Or _
-                    (DB(i).Type = "GAME") Or _
-                    (DB(i).Type = "CLAN")) Then
+            If ((InStr(1, DB(I).Username, "*", vbBinaryCompare) <> 0) Or _
+                (InStr(1, DB(I).Username, "?", vbBinaryCompare) <> 0) Or _
+                    (DB(I).Type = "GAME") Or _
+                    (DB(I).Type = "CLAN")) Then
                                 
                 ' ...
                 If (dynGroups(0).Username <> vbNullString) Then
@@ -721,9 +721,9 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                 End If
                 
                 ' ...
-                dynGroups(UBound(dynGroups)) = DB(i)
+                dynGroups(UBound(dynGroups)) = DB(I)
             End If
-        Next i
+        Next I
         
         ' ...
         dModified = nModified
@@ -735,40 +735,40 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     ' ...
     If (DB(LBound(DB)).Username <> vbNullString) Then
         ' ...
-        For i = LBound(DB) To UBound(DB)
+        For I = LBound(DB) To UBound(DB)
             ' ...
-            If (StrComp(Username, DB(i).Username, vbTextCompare) = 0) Then
+            If (StrComp(Username, DB(I).Username, vbTextCompare) = 0) Then
                 ' ...
                 If ((dbType = vbNullString) Or _
-                        (dbType <> vbNullString) And (StrComp(dbType, DB(i).Type, vbTextCompare) = 0)) Then
+                        (dbType <> vbNullString) And (StrComp(dbType, DB(I).Type, vbTextCompare) = 0)) Then
                 
                     With GetCumulativeAccess
-                        .Username = DB(i).Username & _
-                            IIf(((DB(i).Type <> "%") And (StrComp(DB(i).Type, "USER", vbTextCompare) <> 0)), _
-                                " (" & LCase$(DB(i).Type) & ")", vbNullString)
-                        .Access = DB(i).Access
-                        .Flags = DB(i).Flags
-                        .AddedBy = DB(i).AddedBy
-                        .AddedOn = DB(i).AddedOn
-                        .ModifiedBy = DB(i).ModifiedBy
-                        .ModifiedOn = DB(i).ModifiedOn
-                        .Type = IIf(((DB(i).Type <> "%") And (DB(i).Type <> vbNullString)), _
-                            DB(i).Type, "USER")
-                        .Groups = DB(i).Groups
-                        .BanMessage = DB(i).BanMessage
+                        .Username = DB(I).Username & _
+                            IIf(((DB(I).Type <> "%") And (StrComp(DB(I).Type, "USER", vbTextCompare) <> 0)), _
+                                " (" & LCase$(DB(I).Type) & ")", vbNullString)
+                        .Access = DB(I).Access
+                        .Flags = DB(I).Flags
+                        .AddedBy = DB(I).AddedBy
+                        .AddedOn = DB(I).AddedOn
+                        .ModifiedBy = DB(I).ModifiedBy
+                        .ModifiedOn = DB(I).ModifiedOn
+                        .Type = IIf(((DB(I).Type <> "%") And (DB(I).Type <> vbNullString)), _
+                            DB(I).Type, "USER")
+                        .Groups = DB(I).Groups
+                        .BanMessage = DB(I).BanMessage
                     End With
                     
-                    If ((Len(DB(i).Groups) > 0) And (DB(i).Groups <> "%")) Then
+                    If ((Len(DB(I).Groups) > 0) And (DB(I).Groups <> "%")) Then
                         ' ...
-                        If (InStr(1, DB(i).Groups, ",", vbBinaryCompare) <> 0) Then
+                        If (InStr(1, DB(I).Groups, ",", vbBinaryCompare) <> 0) Then
                             ' ...
-                            Splt() = Split(DB(i).Groups, ",")
+                            Splt() = Split(DB(I).Groups, ",")
                         Else
                             ' ...
                             ReDim Preserve Splt(0)
                             
                             ' ...
-                            Splt(0) = DB(i).Groups
+                            Splt(0) = DB(I).Groups
                         End If
                         
                         ' ...
@@ -816,7 +816,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                                 ' ...
                                 If (dbCount = 0) Then
                                     GetCumulativeAccess.Username = GetCumulativeAccess.Username & _
-                                        IIf((i + 1), Space(1), vbNullString) & "["
+                                        IIf((I + 1), Space(1), vbNullString) & "["
                                 End If
                                         
                                 ' ...
@@ -833,12 +833,12 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                         Next j
                     End If
                     
-                    dbIndex = i
+                    dbIndex = I
         
                     Exit For
                 End If
             End If
-        Next i
+        Next I
     
         ' ...
         If (InStr(1, GetCumulativeAccess.Flags, "I", vbBinaryCompare) = 0) Then
@@ -850,27 +850,27 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                 (GetCumulativeAccess.Type <> "GROUP")) Then
                 
                 ' ...
-                For i = LBound(dynGroups) To UBound(dynGroups)
+                For I = LBound(dynGroups) To UBound(dynGroups)
                     Dim doCheck As Boolean ' ...
                     
-                    If (i <> dbIndex) Then
+                    If (I <> dbIndex) Then
                         ' default type to user
-                        dynGroups(i).Type = IIf(((dynGroups(i).Type <> "%") And (dynGroups(i).Type <> vbNullString)), _
-                            dynGroups(i).Type, "USER")
+                        dynGroups(I).Type = IIf(((dynGroups(I).Type <> "%") And (dynGroups(I).Type <> vbNullString)), _
+                            dynGroups(I).Type, "USER")
                     
-                        If (StrComp(dynGroups(i).Type, "USER", vbTextCompare) = 0) Then
+                        If (StrComp(dynGroups(I).Type, "USER", vbTextCompare) = 0) Then
                             ' ...
                             If ((LCase$(PrepareCheck(Username))) Like _
-                                (LCase$(PrepareCheck(dynGroups(i).Username)))) Then
+                                (LCase$(PrepareCheck(dynGroups(I).Username)))) Then
                                 
                                 ' ...
                                 doCheck = True
                             End If
-                        ElseIf (StrComp(dynGroups(i).Type, "GAME", vbTextCompare) = 0) Then
+                        ElseIf (StrComp(dynGroups(I).Type, "GAME", vbTextCompare) = 0) Then
                             ' ...
                             For j = 1 To g_Channel.Users.Count
                                 If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
-                                    If (StrComp(dynGroups(i).Username, g_Channel.Users(j).game, vbTextCompare) = 0) Then
+                                    If (StrComp(dynGroups(I).Username, g_Channel.Users(j).game, vbTextCompare) = 0) Then
                                         ' ...
                                         doCheck = True
                                     End If
@@ -878,11 +878,11 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                                     Exit For
                                 End If
                             Next j
-                        ElseIf (StrComp(dynGroups(i).Type, "CLAN", vbTextCompare) = 0) Then
+                        ElseIf (StrComp(dynGroups(I).Type, "CLAN", vbTextCompare) = 0) Then
                             ' ...
                             For j = 1 To g_Channel.Users.Count
                                 If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
-                                    If (StrComp(dynGroups(i).Username, g_Channel.Users(j).Clan, vbTextCompare) = 0) Then
+                                    If (StrComp(dynGroups(I).Username, g_Channel.Users(j).Clan, vbTextCompare) = 0) Then
                                         ' ...
                                         doCheck = True
                                     End If
@@ -897,7 +897,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             Dim tmp As udtDatabase ' ...
                             
                             ' ...
-                            tmp = dynGroups(i)
+                            tmp = dynGroups(I)
             
                             ' ...
                             If ((Len(tmp.Groups) > 0) And (tmp.Groups <> "%")) Then
@@ -1002,7 +1002,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                     ' ...
                     bln = False
                     doCheck = False
-                Next i
+                Next I
             End If
         End If
         
@@ -1047,16 +1047,16 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
     
         ' ...
         If (InStr(1, gAcc.Groups, ",", vbBinaryCompare) <> 0) Then
-            Dim i As Integer ' ...
+            Dim I As Integer ' ...
             Dim j As Integer ' ...
         
             ' ...
             Splt() = Split(gAcc.Groups, ",")
             
             ' ...
-            For i = 0 To UBound(Splt)
+            For I = 0 To UBound(Splt)
                 ' ...
-                recAcc = GetCumulativeGroupAccess(Splt(i))
+                recAcc = GetCumulativeGroupAccess(Splt(I))
                     
                 ' ...
                 If (gAcc.Access < recAcc.Access) Then
@@ -1082,7 +1082,7 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
                     ' ...
                     gAcc.BanMessage = recAcc.BanMessage
                 End If
-            Next i
+            Next I
         Else
             ' ...
             recAcc = GetCumulativeGroupAccess(gAcc.Groups)
@@ -1132,21 +1132,21 @@ Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Bool
     
         ' ...
         If (InStr(1, gAcc.Groups, ",", vbBinaryCompare) <> 0) Then
-            Dim i As Integer ' ...
+            Dim I As Integer ' ...
             Dim j As Integer ' ...
         
             ' ...
             Splt() = Split(gAcc.Groups, ",")
             
             ' ...
-            For i = 0 To UBound(Splt)
-                If (StrComp(Splt(i), Check, vbTextCompare) = 0) Then
+            For I = 0 To UBound(Splt)
+                If (StrComp(Splt(I), Check, vbTextCompare) = 0) Then
                     CheckGroup = True
                     
                     Exit Function
                 Else
                     ' ...
-                    recAcc = CheckGroup(Splt(i), Check)
+                    recAcc = CheckGroup(Splt(I), Check)
                 
                     If (recAcc) Then
                         CheckGroup = True
@@ -1154,7 +1154,7 @@ Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Bool
                         Exit Function
                     End If
                 End If
-            Next i
+            Next I
         Else
             If (StrComp(gAcc.Groups, Check, vbTextCompare) = 0) Then
                 CheckGroup = True
@@ -1232,18 +1232,18 @@ Public Function ZeroOffsetEx(ByVal lInpt As Long, ByVal lDigits As Long) As Stri
 End Function
 
 Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long, IconCode As Integer) As Long
-    Dim i As Long
+    Dim I As Long
     
     If ((Flags And USER_BLIZZREP) = USER_BLIZZREP) Then 'Flags = 1: blizzard rep
-        i = ICBLIZZ
+        I = ICBLIZZ
     ElseIf ((Flags And USER_SYSOP) = USER_SYSOP) Then 'Flags = 8: battle.net sysop
-        i = ICSYSOP
+        I = ICSYSOP
     ElseIf (Flags And USER_CHANNELOP&) = USER_CHANNELOP& Then 'op
-        i = ICGAVEL
+        I = ICGAVEL
     ElseIf (Flags And USER_SQUELCHED) = USER_SQUELCHED Then 'squelched
-        i = ICSQUELCH
+        I = ICSQUELCH
     Else
-        i = IconCode
+        I = IconCode
     'Else
     '    Select Case (UCase$(sProduct))
     '        Case Is = "STAR": I = ICSTAR
@@ -1285,11 +1285,11 @@ Public Function GetSmallIcon(ByVal sProduct As String, ByVal Flags As Long, Icon
     '    End Select
     End If
     
-    GetSmallIcon = i
+    GetSmallIcon = I
 End Function
 
 Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flags As Long, ByVal Ping As Long, IconCode As Integer, Optional Clan As String, Optional ForcePosition As Integer)
-    Dim i          As Integer
+    Dim I          As Integer
     Dim LagIcon    As Integer
     Dim isPriority As Integer
     Dim IsSelf     As Boolean
@@ -1331,7 +1331,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
     
     isPriority = (frmChat.lvChannel.ListItems.Count + 1)
     
-    i = GetSmallIcon(Product, Flags, IconCode)
+    I = GetSmallIcon(Product, Flags, IconCode)
     
     'Special Cases
     'If i = ICSQUELCH Then
@@ -1352,8 +1352,8 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         End If
     End If
     
-    If (i > frmChat.imlIcons.ListImages.Count) Then
-        i = frmChat.imlIcons.ListImages.Count
+    If (I > frmChat.imlIcons.ListImages.Count) Then
+        I = frmChat.imlIcons.ListImages.Count
     End If
         
     With frmChat.lvChannel
@@ -1361,7 +1361,7 @@ Public Sub AddName(ByVal Username As String, ByVal Product As String, ByVal Flag
         .Enabled = False
         
         ' ...
-        .ListItems.Add isPriority, , Username, , i
+        .ListItems.Add isPriority, , Username, , I
         
         ' ...
         If (.ColumnHeaders(2).Width > 0) Then
@@ -1395,54 +1395,54 @@ End Sub
 
 Public Function CheckBlock(ByVal Username As String) As Boolean
     Dim s As String
-    Dim i As Integer
+    Dim I As Integer
     
     If (Dir$(GetFilePath("filters.ini")) <> vbNullString) Then
         s = ReadINI("BlockList", "Total", "filters.ini")
         
         If (StrictIsNumeric(s)) Then
-            i = s
+            I = s
         Else
             Exit Function
         End If
         
         Username = PrepareCheck(Username)
         
-        For i = 0 To i
-            s = ReadINI("BlockList", "Filter" & i, "filters.ini")
+        For I = 0 To I
+            s = ReadINI("BlockList", "Filter" & I, "filters.ini")
             
             If (Username Like PrepareCheck(s)) Then
                 CheckBlock = True
                 
                 Exit Function
             End If
-        Next i
+        Next I
     End If
 End Function
 
 Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
         Long) As Boolean
     
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
-    For i = 0 To UBound(gFilters)
-        If (Len(gFilters(i)) > 0) Then
-            If (InStr(1, gFilters(i), "%", vbBinaryCompare) > 0) Then
-                If (InStr(1, Msg, DoReplacements(gFilters(i), Username, Ping), vbTextCompare) > 0) Then
+    For I = 0 To UBound(gFilters)
+        If (Len(gFilters(I)) > 0) Then
+            If (InStr(1, gFilters(I), "%", vbBinaryCompare) > 0) Then
+                If (InStr(1, Msg, DoReplacements(gFilters(I), Username, Ping), vbTextCompare) > 0) Then
                     
                     CheckMsg = True
                     
                     Exit Function
                 End If
             Else
-                If (InStr(1, Msg, gFilters(i), vbTextCompare) <> 0) Then
+                If (InStr(1, Msg, gFilters(I), vbTextCompare) <> 0) Then
                     CheckMsg = True
                     
                     Exit Function
                 End If
             End If
         End If
-    Next i
+    Next I
 End Function
 
 Public Sub UpdateProfile()
@@ -1470,7 +1470,7 @@ Public Function FlashWindow() As Boolean
         .cbSize = 20
         .dwFlags = FLASHW_ALL Or 12
         .dwTimeout = 0
-        .hWNd = frmChat.hWNd
+        .hWnd = frmChat.hWnd
         .uCount = 0
     End With
     
@@ -1491,20 +1491,20 @@ Public Function HTMLToRGBColor(ByVal s As String) As Long
 End Function
 
 Public Function StrictIsNumeric(ByVal sCheck As String) As Boolean
-    Dim i As Long
+    Dim I As Long
     
     StrictIsNumeric = True
     
     If (Len(sCheck) > 0) Then
-        For i = 1 To Len(sCheck)
-            If (Not ((Asc(Mid$(sCheck, i, 1)) >= 48) And _
-                     (Asc(Mid$(sCheck, i, 1)) <= 57))) Then
+        For I = 1 To Len(sCheck)
+            If (Not ((Asc(Mid$(sCheck, I, 1)) >= 48) And _
+                     (Asc(Mid$(sCheck, I, 1)) <= 57))) Then
                 
                 StrictIsNumeric = False
                 
                 Exit Function
             End If
-        Next i
+        Next I
     Else
         StrictIsNumeric = False
     End If
@@ -1533,15 +1533,15 @@ Public Sub LoadCDKeys(ByRef cboCDKey As ComboBox)
 End Sub
 
 Public Sub WriteCDKeys(ByRef cboCDKey As ComboBox)
-    Dim i As Integer
+    Dim I As Integer
     
     Call WriteINI("StoredKeys", "Count", cboCDKey.ListCount + 1)
     
-    For i = 0 To cboCDKey.ListCount
-        If (Len(cboCDKey.List(i)) > 0) Then
-            WriteINI "StoredKeys", "Key" & (i + 1), cboCDKey.List(i)
+    For I = 0 To cboCDKey.ListCount
+        If (Len(cboCDKey.List(I)) > 0) Then
+            WriteINI "StoredKeys", "Key" & (I + 1), cboCDKey.List(I)
         End If
-    Next i
+    Next I
 End Sub
 
 Public Sub GetCountryData(ByRef CountryAbbrev As String, ByRef CountryName As String)
@@ -1632,18 +1632,18 @@ End Function
 ' Assumes that sIn has Length >=1
 Public Function PercentActualUppercase(ByVal sIn As String) As Double
     Dim UppercaseChars As Integer
-    Dim i              As Integer
+    Dim I              As Integer
     
     sIn = Replace$(sIn, Space(1), vbNullString)
     
     If (Len(sIn) > 0) Then
-        For i = 1 To Len(sIn)
-            If (IsAlpha(Asc(Mid$(sIn, i, 1)))) Then
-                If (IsUppercase(Asc(Mid$(sIn, i, 1)))) Then
+        For I = 1 To Len(sIn)
+            If (IsAlpha(Asc(Mid$(sIn, I, 1)))) Then
+                If (IsUppercase(Asc(Mid$(sIn, I, 1)))) Then
                     UppercaseChars = (UppercaseChars + 1)
                 End If
             End If
-        Next i
+        Next I
     
         PercentActualUppercase = _
             CDbl(100 * (UppercaseChars / Len(sIn)))
@@ -1651,20 +1651,20 @@ Public Function PercentActualUppercase(ByVal sIn As String) As Double
 End Function
 
 Public Function MyUCase(ByVal sIn As String) As String
-    Dim i           As Integer
+    Dim I           As Integer
     Dim CurrentByte As Byte
 
     If (LenB(sIn) > 0) Then
-        For i = 1 To Len(sIn)
-            CurrentByte = Asc(Mid$(sIn, i, 1))
+        For I = 1 To Len(sIn)
+            CurrentByte = Asc(Mid$(sIn, I, 1))
             
             If (IsAlpha(CurrentByte)) Then
                 If (Not (IsUppercase(CurrentByte))) Then
-                    Mid$(sIn, i, 1) = _
+                    Mid$(sIn, I, 1) = _
                         Chr(CurrentByte - 32)
                 End If
             End If
-        Next i
+        Next I
     End If
 
     MyUCase = sIn
@@ -1692,26 +1692,26 @@ End Function
 
 Public Sub GetW3LadderProfile(ByVal sPlayer As String, ByVal eType As enuWebProfileTypes)
     If (LenB(sPlayer) > 0) Then
-        ShellExecute frmChat.hWNd, "Open", "http://www.battle.net/war3/ladder/" & _
+        ShellExecute frmChat.hWnd, "Open", "http://www.battle.net/war3/ladder/" & _
             IIf(eType = W3XP, "w3xp", "war3") & "-player-profile.aspx?Gateway=" & _
                 GetW3Realm(sPlayer) & "&PlayerName=" & NameWithoutRealm(sPlayer), 0&, 0&, 0&
     End If
 End Sub
 
 Public Sub DoLastSeen(ByVal Username As String)
-    Dim i     As Integer
+    Dim I     As Integer
     Dim found As Boolean
     
     If (colLastSeen.Count > 0) Then
-        For i = 1 To colLastSeen.Count
-            If (StrComp(colLastSeen.Item(i), Username, _
+        For I = 1 To colLastSeen.Count
+            If (StrComp(colLastSeen.Item(I), Username, _
                 vbTextCompare) = 0) Then
                 
                 found = True
                 
                 Exit For
             End If
-        Next i
+        Next I
     End If
     
     If (Not (found)) Then
@@ -1885,7 +1885,7 @@ Public Function GetProfilePath(Optional ByVal ProfileIndex As Integer) As String
 End Function
 
 Public Sub OpenReadme()
-    ShellExecute frmChat.hWNd, "Open", "http://www.stealthbot.net/readme/", 0, 0, 0
+    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/readme/", 0, 0, 0
     frmChat.AddChat RTBColors.SuccessText, "You are being taken to the StealthBot Online Readme."
 End Sub
 
@@ -1927,7 +1927,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
 End Sub
 
 Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boolean
-    Dim i As Integer
+    Dim I As Integer
     
     ' default to true
     AllowedToTalk = True
@@ -1979,11 +1979,11 @@ Public Function IrrelevantWhisper(ByVal sIn As String, ByVal sUser As String) As
 End Function
 
 Public Sub UpdateSafelistedStatus(ByVal sUser As String, ByVal bStatus As Boolean)
-    Dim i As Integer
+    Dim I As Integer
     
     'i = UsernameToIndex(sUser)
     
-    If i > 0 Then
+    If I > 0 Then
         'colUsersInChannel.Item(i).Safelisted = bStatus
     End If
 End Sub
@@ -1991,29 +1991,29 @@ End Sub
 Public Sub AddBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     Const MAX_BAN_COUNT As Integer = 80
 
-    Dim i      As Integer ' ...
+    Dim I      As Integer ' ...
     Dim bCount As Integer ' ...
     
     ' check for duplicate entry in banlist
-    For i = 0 To UBound(gBans)
-        If (StrComp(gBans(i).Username, StripRealm(sUser), vbTextCompare) = 0) Then
+    For I = 0 To UBound(gBans)
+        If (StrComp(gBans(I).Username, StripRealm(sUser), vbTextCompare) = 0) Then
             Exit Sub
         End If
-    Next i
+    Next I
     
     ' count bans for channel operator
-    For i = 0 To UBound(gBans)
-        If (StrComp(gBans(i).cOperator, cOperator, vbTextCompare) = 0) Then
+    For I = 0 To UBound(gBans)
+        If (StrComp(gBans(I).cOperator, cOperator, vbTextCompare) = 0) Then
             bCount = (bCount + 1)
         End If
-    Next i
+    Next I
     
     ' if ban count for operator greater than operator
     ' max, begin removing oldest bans.
     If (bCount >= MAX_BAN_COUNT) Then
-        For i = 1 To (MAX_BAN_COUNT - 1)
-            gBans(i - 1) = gBans(i)
-        Next i
+        For I = 1 To (MAX_BAN_COUNT - 1)
+            gBans(I - 1) = gBans(I)
+        Next I
         
         With gBans(MAX_BAN_COUNT - 1)
             .Username = StripRealm(sUser)
@@ -2033,7 +2033,7 @@ End Sub
 
 ' collapse array on top of the removed user
 Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
-    Dim i          As Integer
+    Dim I          As Integer
     Dim c          As Integer
     Dim NumRemoved As Integer
     Dim iterations As Long
@@ -2043,11 +2043,11 @@ Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
     
     uBnd = UBound(gBans)
     
-    While (i <= (uBnd - NumRemoved))
-        If (StrComp(sUser, gBans(i).Username, vbTextCompare) = 0) Then
-            If (i <> UBound(gBans)) Then
-                For c = i To UBound(gBans)
-                    gBans(i) = gBans(i + 1)
+    While (I <= (uBnd - NumRemoved))
+        If (StrComp(sUser, gBans(I).Username, vbTextCompare) = 0) Then
+            If (I <> UBound(gBans)) Then
+                For c = I To UBound(gBans)
+                    gBans(I) = gBans(I + 1)
                 Next c
             End If
             
@@ -2062,7 +2062,7 @@ Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
             
             NumRemoved = (NumRemoved + 1)
         Else
-            i = (i + 1)
+            I = (I + 1)
         End If
         
         iterations = (iterations + 1)
@@ -2083,7 +2083,7 @@ Public Sub UnbanBanlistUser(ByVal sUser As String, ByVal cOperator As String)
 End Sub
 
 Public Function isbanned(ByVal sUser As String) As Boolean
-    Dim i As Integer
+    Dim I As Integer
 
     If (InStr(1, sUser, "#", vbBinaryCompare)) Then
         sUser = Left$(sUser, InStr(1, sUser, _
@@ -2092,20 +2092,20 @@ Public Function isbanned(ByVal sUser As String) As Boolean
         Debug.Print sUser
     End If
     
-    For i = 0 To UBound(gBans)
-        If (StrComp(sUser, gBans(i).UsernameActual, _
+    For I = 0 To UBound(gBans)
+        If (StrComp(sUser, gBans(I).UsernameActual, _
             vbTextCompare) = 0) Then
             
             isbanned = True
             
             Exit Function
         End If
-    Next i
+    Next I
 End Function
 
 Public Function IsValidIPAddress(ByVal sIn As String) As Boolean
     Dim s() As String
-    Dim i   As Integer
+    Dim I   As Integer
     
     IsValidIPAddress = True
     
@@ -2113,11 +2113,11 @@ Public Function IsValidIPAddress(ByVal sIn As String) As Boolean
         s() = Split(sIn, ".")
         
         If (UBound(s) = 3) Then
-            For i = 0 To 3
-                If (Not (StrictIsNumeric(s(i)))) Then
+            For I = 0 To 3
+                If (Not (StrictIsNumeric(s(I)))) Then
                     IsValidIPAddress = False
                 End If
-            Next i
+            Next I
         Else
             IsValidIPAddress = False
         End If
@@ -2286,29 +2286,29 @@ End Function
 
 
 Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mType As Byte)
-    Dim i As Integer
+    Dim I As Integer
     
     If UBound(Catch) = 0 Then
         If Catch(0) = vbNullString Then Exit Sub
     End If
     
-    For i = LBound(Catch) To UBound(Catch)
-        If (Catch(i) <> vbNullString) Then
-            If (InStr(1, LCase(Msg), Catch(i), vbTextCompare) <> 0) Then
-                Call CaughtPhrase(Username, Msg, Catch(i), mType)
+    For I = LBound(Catch) To UBound(Catch)
+        If (Catch(I) <> vbNullString) Then
+            If (InStr(1, LCase(Msg), Catch(I), vbTextCompare) <> 0) Then
+                Call CaughtPhrase(Username, Msg, Catch(I), mType)
                 
                 Exit Sub
             End If
         End If
-    Next i
+    Next I
 End Sub
 
 
 Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phrase As String, ByVal mType As Byte)
-    Dim i As Integer
+    Dim I As Integer
     Dim s As String
     
-    i = FreeFile
+    I = FreeFile
     
     If (LenB(ReadCfg("Other", "FlashOnCatchPhrases")) > 0) Then
         Call FlashWindow
@@ -2321,28 +2321,28 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phr
     End Select
     
     If (Dir$(GetProfilePath() & "\caughtphrases.htm") = vbNullString) Then
-        Open GetProfilePath() & "\caughtphrases.htm" For Output As #i
-            Print #i, "<html>"
-        Close #i
+        Open GetProfilePath() & "\caughtphrases.htm" For Output As #I
+            Print #I, "<html>"
+        Close #I
     End If
     
-    Open GetProfilePath() & "\caughtphrases.htm" For Append As #i
-        If (LOF(i) > 10000000) Then
-            Close #i
+    Open GetProfilePath() & "\caughtphrases.htm" For Append As #I
+        If (LOF(I) > 10000000) Then
+            Close #I
             
             Call Kill(GetProfilePath() & "\caughtphrases.htm")
             
-            Open GetProfilePath() & "\caughtphrases.htm" For Output As #i
+            Open GetProfilePath() & "\caughtphrases.htm" For Output As #I
         End If
         
         Msg = Replace(Msg, "<", "&lt;", 1)
         Msg = Replace(Msg, ">", "&gt;", 1)
         
-        Print #i, "<B>" & Format(Date, "MM-dd-yyyy") & " - " & Time & _
+        Print #I, "<B>" & Format(Date, "MM-dd-yyyy") & " - " & Time & _
             " - " & s & Space(1) & Username & ": </B>" & _
                 Replace(Msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
                     "<br>"
-    Close #i
+    Close #I
 End Sub
 
 
@@ -2375,22 +2375,22 @@ End Function
 ' Updated 4/10/06 to support millisecond pauses
 '  If using milliseconds pause for at least 100ms
 Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean = True, Optional ByVal milliseconds As Boolean = False)
-    Dim i As Integer
+    Dim I As Integer
     
     If (AllowEvents) Then
-        For i = 0 To (fSeconds * (IIf(milliseconds, 1, 1000))) \ 100
+        For I = 0 To (fSeconds * (IIf(milliseconds, 1, 1000))) \ 100
             'Debug.Print "sleeping 100ms"
             Call Sleep(100)
             
             DoEvents
-        Next i
+        Next I
     Else
         Call Sleep(fSeconds * (IIf(milliseconds, 1, 1000)))
     End If
 End Sub
 
 Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String, ByVal Target As String, _
-    ByVal TargetType As String, Optional ByVal Rank As Integer, Optional ByVal Flags As String, _
+    ByVal TargetType As String, Optional ByVal rank As Integer, Optional ByVal Flags As String, _
         Optional ByVal Group As String)
     
     'Dim sPath  As String
@@ -2415,8 +2415,8 @@ Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String,
         str = str & " (" & LCase$(TargetType) & ")"
     End If
     
-    If (Rank > 0) Then
-        str = str & " " & Rank
+    If (rank > 0) Then
+        str = str & " " & rank
     End If
     
     If (Flags <> vbNullString) Then
@@ -2532,21 +2532,21 @@ End Sub
 ' 1-based
 Public Function GetStringChunk(ByVal str As String, ByVal pos As Integer)
     Dim c           As Integer
-    Dim i           As Integer
+    Dim I           As Integer
     Dim TargetSpace As Integer
     
     'one two three
     '   1   2
     
     c = 0
-    i = 1
+    I = 1
     pos = pos
     
     ' The string must have at least (pos-1) spaces to be valid
-    While ((c < pos) And (i > 0))
-        TargetSpace = i
+    While ((c < pos) And (I > 0))
+        TargetSpace = I
         
-        i = (InStr(i + 1, str, Space(1), vbBinaryCompare))
+        I = (InStr(I + 1, str, Space(1), vbBinaryCompare))
         
         c = (c + 1)
     Wend
@@ -3037,7 +3037,7 @@ Public Function convertAlias(ByVal cmdName As String) As String
         If (Not (Alias Is Nothing)) Then
             '// 09/03/2008 JSM - Modified code to use the <aliases> element
             convertAlias = _
-                Alias.parentNode.parentNode.Attributes.getNamedItem("name").Text
+                Alias.parentNode.parentNode.Attributes.getNamedItem("name").text
             
             Exit Function
         End If
@@ -3081,7 +3081,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim L              As Long
     Dim lngVerticalPos As Long
     Dim Diff           As Long
-    Dim i              As Integer
+    Dim I              As Integer
     Dim intRange       As Integer
     Dim f              As Integer
     Dim blUnlock       As Boolean
@@ -3101,42 +3101,42 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         Count = 2
     
         ' ...
-        For i = LBound(saElements) To UBound(saElements) Step 2
+        For I = LBound(saElements) To UBound(saElements) Step 2
             ' ...
             ReDim Preserve arr(0 To Count) As Variant
             
             ' ...
-            arr(Count) = saElements(i + 1)
-            arr(Count - 1) = saElements(i)
+            arr(Count) = saElements(I + 1)
+            arr(Count - 1) = saElements(I)
             arr(Count - 2) = rtb.Font.Name
             
             ' ...
             Count = Count + 3
-        Next i
+        Next I
         
         ' ...
         saElements() = arr()
     End If
     
     ' ...
-    rtbChatLength = Len(rtb.Text)
+    rtbChatLength = Len(rtb.text)
 
     ' ...
-    For i = LBound(saElements) To UBound(saElements) Step 3
+    For I = LBound(saElements) To UBound(saElements) Step 3
         ' ...
-        If (i >= UBound(saElements)) Then
+        If (I >= UBound(saElements)) Then
             Exit Sub
         End If
     
         ' ...
-        If (StrictIsNumeric(saElements(i + 1)) = False) Then
+        If (StrictIsNumeric(saElements(I + 1)) = False) Then
             Exit Sub
         End If
         
         ' ...
         Length = _
-            Length + Len(KillNull(saElements(i + 2)))
-    Next i
+            Length + Len(KillNull(saElements(I + 2)))
+    Next I
     
     ' ...
     If (Length = 0) Then
@@ -3150,9 +3150,9 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         f = FreeFile
 
         If (g_OSVersion.IsWin2000Plus()) Then
-            Call GetScrollRange(rtb.hWNd, SB_VERT, 0, intRange)
+            Call GetScrollRange(rtb.hWnd, SB_VERT, 0, intRange)
             
-            lngVerticalPos = SendMessage(rtb.hWNd, EM_GETTHUMB, 0&, 0&)
+            lngVerticalPos = SendMessage(rtb.hWnd, EM_GETTHUMB, 0&, 0&)
             
             Diff = ((lngVerticalPos + _
                             (rtb.Height / Screen.TwipsPerPixelY)) - intRange)
@@ -3177,7 +3177,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             With rtb
                 .Visible = False
                 .SelStart = 0
-                .SelLength = InStr(1, .Text, vbLf, vbBinaryCompare)
+                .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
                 .SelFontName = rtb.Font.Name
                 .SelText = ""
                 .Visible = True
@@ -3187,7 +3187,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         s = GetTimeStamp()
         
         With rtb
-            .SelStart = Len(.Text)
+            .SelStart = Len(.text)
             .SelLength = 0
             .SelFontName = rtb.Font.Name
             .SelBold = False
@@ -3198,34 +3198,34 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             .SelLength = Len(.SelText)
         End With
 
-        For i = LBound(saElements) To UBound(saElements) Step 3
-            If (InStr(1, saElements(i + 2), Chr(0), vbBinaryCompare) > 0) Then
-                KillNull saElements(i + 2)
+        For I = LBound(saElements) To UBound(saElements) Step 3
+            If (InStr(1, saElements(I + 2), Chr(0), vbBinaryCompare) > 0) Then
+                KillNull saElements(I + 2)
             End If
         
-            If ((StrictIsNumeric(saElements(i + 1))) And (Len(saElements(i + 2)) > 0)) Then
-                L = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
+            If ((StrictIsNumeric(saElements(I + 1))) And (Len(saElements(I + 2)) > 0)) Then
+                L = InStr(1, saElements(I + 2), "{\rtf", vbTextCompare)
                 
                 While (L > 0)
-                    Mid$(saElements(i + 2), L + 1, 1) = "/"
+                    Mid$(saElements(I + 2), L + 1, 1) = "/"
                     
-                    L = InStr(1, saElements(i + 2), "{\rtf", vbTextCompare)
+                    L = InStr(1, saElements(I + 2), "{\rtf", vbTextCompare)
                 Wend
             
-                L = Len(rtb.Text)
+                L = Len(rtb.text)
             
                 With rtb
                     .SelStart = L
                     .SelLength = 0
-                    .SelFontName = saElements(i)
-                    .SelColor = saElements(i + 1)
+                    .SelFontName = saElements(I)
+                    .SelColor = saElements(I + 1)
                     .SelText = _
-                        saElements(i + 2) & Left$(vbCrLf, -2 * CLng((i + 2) = _
+                        saElements(I + 2) & Left$(vbCrLf, -2 * CLng((I + 2) = _
                             UBound(saElements)))
                     .SelLength = Len(.SelText)
                 End With
             End If
-        Next i
+        Next I
         
         ' ...
         If (LogThis) Then
@@ -3241,7 +3241,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         If (blUnlock) Then
             rtb.Visible = True
             
-            Call SendMessage(rtb.hWNd, WM_VSCROLL, _
+            Call SendMessage(rtb.hWnd, WM_VSCROLL, _
                 SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&)
         End If
     End If
