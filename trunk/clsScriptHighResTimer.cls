@@ -17,68 +17,80 @@ Private m_tmrObj   As Object
 Private m_interval As Integer
 Private m_counter  As Integer
 
-Private Property Get tmr() As Object
+Public Property Get tmr() As Object
 
     Set tmr = m_tmrObj
 
 End Property
 
-Private Property Let tmr(ByRef o As Object)
+Public Property Let tmr(ByRef o As Object)
 
     Set m_tmrObj = o
 
 End Property
 
-Private Property Get Parent() As Form
+Public Property Get Parent() As Form
 
     Set Parent = m_tmrObj.Parent
 
 End Property
 
-Private Property Get Index() As Integer
+Public Property Get Index() As Integer
 
     Index = m_tmrObj.Index
 
 End Property
 
-Private Property Get Name() As String
+Public Property Get Name() As String
 
     Name = m_tmrObj.Name
 
 End Property
 
-Private Property Get Tag() As String
+Public Property Get Tag() As String
 
     Tag = m_tmrObj.Name
 
 End Property
 
-Private Property Get Interval() As Integer
+Public Property Let Tag(ByVal str As String)
+
+    m_tmrObj.Tag = str
+
+End Property
+
+Public Property Get Interval() As Integer
 
     Interval = m_interval
 
 End Property
 
-Private Property Let Interval(ByVal i As Integer)
+Public Property Let Interval(ByVal I As Integer)
 
-    m_interval = i
+    m_interval = I
 
 End Property
 
-Private Property Get Enabled() As Boolean
+Public Property Get Enabled() As Boolean
 
     Enabled = m_tmrObj.Enabled
 
 End Property
 
-Private Property Get Counter() As Integer
+Public Property Let Enabled(ByVal bln As Boolean)
+
+    m_tmrObj.Enabled = bln
+
+End Property
+
+Public Property Get Counter() As Integer
 
     Counter = m_counter
 
 End Property
 
-Private Property Let Counter(ByVal i As Integer)
+Public Property Let Counter(ByVal I As Integer)
 
-    m_counter = i
+    m_counter = I
     
 End Property
