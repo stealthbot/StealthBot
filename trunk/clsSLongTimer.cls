@@ -15,7 +15,7 @@ Option Explicit
 
 Private m_tmrObj   As Object
 Private m_interval As Integer
-Private m_counter  As Integer
+Private m_counter  As Double
 
 Public Property Get tmr() As Object
 
@@ -49,7 +49,7 @@ End Property
 
 Public Property Get Tag() As String
 
-    Tag = m_tmrObj.Name
+    Tag = m_tmrObj.Tag
 
 End Property
 
@@ -83,13 +83,13 @@ Public Property Let Enabled(ByVal bln As Boolean)
 
 End Property
 
-Public Property Get Counter() As Integer
+Public Property Get Counter() As Double
 
     Counter = m_counter
 
 End Property
 
-Public Property Let Counter(ByVal I As Integer)
+Public Property Let Counter(ByVal I As Double)
 
     m_counter = I
     

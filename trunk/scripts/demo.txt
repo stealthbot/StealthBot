@@ -21,38 +21,38 @@ Sub Event_Load()
 
    frm.Show
 
-   CreateObj "LongTimer", "lt"
+   CreateObj "LongTimer", "LTimer"
 
-   With lt
-      .Interval = 3
+   With LTimer
+      .Interval = 60
+      .Enabled = True
    End With
 
 End Sub
 
-Sub lt_Timer()
+Sub LTimer_Timer()
 
-   AddChat vbBlue, "lt_Timer()"
+   AddChat vbBlue, "LTimer_Timer()"
 
 End Sub
 
-
 Sub Event_PacketReceived(Protocol, ID, Length, Data)
    
-   'If (Protocol = "BNCS") Then
-   '   If (ID = &H65) Then
-   '      AddQ "RECEIVED BNCS FRIENDS LIST"
-   '   End If
-   'End If
+   If (Protocol = "BNCS") Then
+      If (ID = &H65) Then
+         AddChat vbYellow, "RECEIVED BNCS FRIENDS LIST"
+      End If
+   End If
 
 End Sub
 
 Sub Event_PacketSent(Protocol, ID, Length, Data)
 
-   'If (Protocol = "BNCS") Then
-   '   If (ID = &H65) Then
-   '      AddQ "SENT BNCS FRIENDS LIST REQUEST"
-   '   End If
-   'End If
+   If (Protocol = "BNCS") Then
+      If (ID = &H65) Then
+         AddChat vbYellow, "SENT BNCS FRIENDS LIST REQUEST"
+      End If
+   End If
 
 End Sub
 
