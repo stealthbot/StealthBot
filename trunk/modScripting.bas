@@ -473,15 +473,15 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
             Set obj.obj = _
                     frmChat.tmrScript(ObjCount(ObjType))
                     
-        Case "HIGHRESTIMER"
+        Case "LONGTIMER"
             If (ObjCount(ObjType) > 0) Then
-                Load frmChat.tmrScriptHighRes(ObjCount(ObjType))
+                Load frmChat.tmrScriptlong(ObjCount(ObjType))
             End If
         
-            Set obj.obj = New clsScriptHighResTimer
+            Set obj.obj = New clsSLongTimer
         
             obj.obj.tmr = _
-                frmChat.tmrScriptHighRes(ObjCount(ObjType))
+                frmChat.tmrScriptlong(ObjCount(ObjType))
                     
             With obj.obj.tmr
                 .Interval = 1000
@@ -589,6 +589,13 @@ Private Sub DestroyObjs()
                     Unload frmChat.tmrScript(m_arrObjs(I).obj.Index)
                 Else
                     frmChat.tmrScript(0).Enabled = False
+                End If
+                
+            Case "LONGTIMER"
+                If (m_arrObjs(I).obj.Index > 0) Then
+                    Unload frmChat.tmrScriptlong(m_arrObjs(I).obj.Index)
+                Else
+                    frmChat.tmrScriptlong(0).Enabled = False
                 End If
                 
             Case "WINSOCK"
