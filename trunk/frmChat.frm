@@ -892,7 +892,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -918,6 +917,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4786,14 +4786,14 @@ Private Sub tmrScript_Timer(Index As Integer)
     
 End Sub
 
-Private Sub tmrScriptHighRes_Timer(Index As Integer)
+Private Sub tmrScriptLong_Timer(Index As Integer)
 
     On Error Resume Next
 
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("HighResTimer", Index)
+    obj = GetSCObjByIndexEx("LongTimer", Index)
     
     ' ...
     obj.obj.Counter = (obj.obj.Counter + 1)

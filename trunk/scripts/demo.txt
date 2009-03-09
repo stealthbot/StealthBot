@@ -21,7 +21,20 @@ Sub Event_Load()
 
    frm.Show
 
+   CreateObj "LongTimer", "lt"
+
+   With lt
+      .Interval = 3
+   End With
+
 End Sub
+
+Sub lt_Timer()
+
+   AddChat vbBlue, "lt_Timer()"
+
+End Sub
+
 
 Sub Event_PacketReceived(Protocol, ID, Length, Data)
    
