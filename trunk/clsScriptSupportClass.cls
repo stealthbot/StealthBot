@@ -205,7 +205,7 @@ Private DictionaryKeys As String
 Private Type Timer
     id       As Integer
     Script   As Module
-    Code     As String
+    code     As String
     Interval As Integer
 End Type
 
@@ -282,27 +282,6 @@ Public Sub AddChat(ParamArray saElements() As Variant)
 End Sub
 
 
-'// ADDCHATFONT
-'// Same as the function above, but allows for you to specify the FONT used in
-'//     each message.
-'// Format: AddChatFont(Font, Color, Text)
-'// Extensible as far as you need:
-'// AddChat(Font, Color, Text, Font, Color, Text, Font, Color, Text)
-'//     -- will all display on one line.
-'// For example:
-'//     AddChatFont "Courier New", vbRed, "Hello, world!"
-'// will display that phrase in the Courier New font and red color.
-Public Sub AddChatFont(ParamArray saElements() As Variant)
-    Dim arr() As Variant ' ...
-    
-    ' ...
-    arr() = saElements
-    
-    ' ...
-    Call DisplayRichText(frmChat.rtbChat, arr)
-End Sub
-
-
 '// ADDQ (ADD QUEUE)
 '// Adds a string to the message send queue.
 '// Nonzero priority messages will be sent with precedence over 0-priority messages.
@@ -310,7 +289,7 @@ Public Sub AddQ(ByVal sText As String, Optional ByVal msg_priority As Integer = 
     Tag As String = vbNullString)
     
     '// Disabled while in Clan SBs.
-    If ((StrComp(g_Channel.name, "Clan SBs", vbTextCompare) = 0) And _
+    If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) = 0) And _
         (IsStealthBotTech() = False)) Then Exit Sub
     
     '// priority zero reserved for internal usage only
@@ -494,7 +473,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     ' ...
     With GetDBEntry
         .entryType = temp.Type
-        .name = temp.Username
+        .Name = temp.Username
         .Rank = temp.Access
         .Flags = temp.Flags
         .CreatedOn = temp.AddedOn
@@ -939,7 +918,7 @@ End Sub
 '// The command must wait before reloading the script so all operations are cleared.
 Public Sub ReloadScript()
 
-    SCReloadTimerID = SetTimer(frmChat.hWNd, 0, 400, AddressOf ScriptReload_TimerProc)
+    SCReloadTimerID = SetTimer(frmChat.hWnd, 0, 400, AddressOf ScriptReload_TimerProc)
     
 End Sub
 
@@ -950,7 +929,7 @@ End Sub
 Public Sub SetSCTimeout(ByVal newValue As Long)
 
     If (newValue > 1 And newValue < 60001) Then
-        SCReloadTimerID = SetTimer(frmChat.hWNd, newValue, 400, AddressOf ScriptReload_TimerProc)
+        SCReloadTimerID = SetTimer(frmChat.hWnd, newValue, 400, AddressOf ScriptReload_TimerProc)
     End If
 End Sub
 
@@ -1085,8 +1064,8 @@ End Function
 
 '// WINSENDMESSAGE
 '//     Mirror function for the Windows API function
-Public Function WinSendMessage(ByVal hWNd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
-    WinSendMessage = SendMessage(hWNd, wMsg, wParam, lParam)
+Public Function WinSendMessage(ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As Long) As Long
+    WinSendMessage = SendMessage(hWnd, wMsg, wParam, lParam)
 End Function
 
 '// DSP
@@ -1468,7 +1447,7 @@ Public Function Scripts() As Object
 
     For i = 1 To frmChat.SControl.Modules.Count
         str = _
-            frmChat.SControl.Modules(i).CodeObject.getSettingsEntry("Public")
+            frmChat.SControl.Modules(i).CodeObject.GetSettingsEntry("Public")
             
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
             Scripts.Add frmChat.SControl.Modules(i)
@@ -1497,7 +1476,7 @@ Public Function GetScriptObjByName(ByVal ScriptName As String) As Object
         
         If (StrComp(ScriptName, str, vbTextCompare) = 0) Then
             str = _
-                frmChat.SControl.Modules(i).CodeObject.getSettingsEntry("Public")
+                frmChat.SControl.Modules(i).CodeObject.GetSettingsEntry("Public")
             
             If (StrComp(str, "False", vbTextCompare) = 0) Then
                 Exit Function
@@ -1511,11 +1490,11 @@ Public Function GetScriptObjByName(ByVal ScriptName As String) As Object
     Next i
     
     For i = 1 To frmChat.SControl.Modules.Count
-        str = frmChat.SControl.Modules(i).name
+        str = frmChat.SControl.Modules(i).Name
     
         If (StrComp(ScriptName, str, vbTextCompare) = 0) Then
             str = _
-                frmChat.SControl.Modules(i).CodeObject.getSettingsEntry("Public")
+                frmChat.SControl.Modules(i).CodeObject.GetSettingsEntry("Public")
             
             If (StrComp(str, "False", vbTextCompare) = 0) Then
                 Exit Function

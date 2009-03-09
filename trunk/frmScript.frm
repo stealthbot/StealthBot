@@ -408,18 +408,6 @@ Public Sub AddChat(ByVal rtbName As String, ParamArray saElements() As Variant)
     
 End Sub
 
-Public Sub AddChatFont(ByVal rtbName As String, ParamArray saElements() As Variant)
-
-    Dim arr() As Variant ' ...
-    
-    ' ...
-    arr() = saElements
-    
-    ' ...
-    Call DisplayRichText(GetObjByName(rtbName), arr)
-    
-End Sub
-
 '//////////////////////////////////////////////////////
 '//Events
 '//////////////////////////////////////////////////////

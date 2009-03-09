@@ -18,6 +18,11 @@ Begin VB.Form frmChat
    ScaleHeight     =   7950
    ScaleWidth      =   12585
    StartUpPosition =   3  'Windows Default
+   Begin VB.Timer tmrScriptHighRes 
+      Index           =   0
+      Left            =   1680
+      Top             =   120
+   End
    Begin InetCtlsObjects.Inet itcScript 
       Index           =   0
       Left            =   120
@@ -1711,9 +1716,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -1990,147 +1995,6 @@ Sub AddChat(ParamArray saElements() As Variant)
     ' ...
     Call DisplayRichText(frmChat.rtbChat, arr)
 End Sub
-
-Sub AddChatFont(ParamArray saElements() As Variant)
-    Dim arr() As Variant ' ...
-    Dim i     As Integer ' ...
-
-    ' ...
-    arr() = saElements
-    
-    ' ...
-    Call DisplayRichText(frmChat.rtbChat, arr)
-End Sub
-
-
-'RTB ADDCHATFONT SUBROUTINE - originally written by Grok[vL] - modified to support
-'                         logging and timestamps and color decoding
-' AddChatFont allows you to specify FONT, COLOR, MESSAGE and have the message
-'   displayed in that font
-' Created 2/19/2007 based on a suggestion from Imhotep[Nu]
-'Sub AddChatFont(ParamArray saElements() As Variant)
-'    On Error Resume Next
-'
-'    Dim s As String
-'    Dim l As Long, lngVerticalPos As Long
-'    Dim I As Integer, intRange As Integer, f As Integer
-'    Dim blUnlock As Boolean, LogThis As Boolean
-'
-'    If Not BotVars.LockChat Then
-'
-'        If g_OSVersion.IsWin2000Plus() Then
-'            GetScrollRange rtbChat.hWnd, SB_VERT, 0, intRange
-'            lngVerticalPos = SendMessage(rtbChat.hWnd, EM_GETTHUMB, 0&, 0&)
-'
-'            'Debug.Print "ScrollRange: " & intRange & " ; VerticalPos: " & lngVerticalPos & " ; rtbChatHeight " & rtbChat.Height & " ; pix " & rtbChat.Height / Screen.TwipsPerPixelY
-'
-'            If (lngVerticalPos + (rtbChat.Height / Screen.TwipsPerPixelY)) <= intRange Then
-'                'LockWindowUpdate rtbChat.hWnd
-'                rtbChat.Visible = False
-'                blUnlock = True
-'            End If
-'        End If
-'
-'        LogThis = (BotVars.Logging < 2)
-'
-'        If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
-'            With rtbChat
-'                .Visible = False
-'                .SelStart = 0
-'                .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
-'
-'                rtbChatLength = rtbChatLength - .SelLength
-'
-'                If BotVars.Logging < 2 And LOF(i) < BotVars.MaxLogfileSize Then
-'                    i = FreeFile
-'                    Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #i
-'                        Print #i, Left$(.SelText, Len(.SelText) - 2)
-'                    Close #i
-'                End If
-'
-'                .SelText = ""
-'                .Visible = True
-'            End With
-'        End If
-'
-'        s = GetTimeStamp
-'
-'        With rtbChat
-'            .SelStart = Len(.text)
-'            .SelLength = 0
-'            .SelColor = RTBColors.TimeStamps
-'            If .SelBold = True Then .SelBold = False
-'            If .SelItalic = True Then .SelItalic = False
-'            If .SelUnderline = True Then .SelUnderline = False
-'            .SelText = s
-'            .SelStart = Len(.text)
-'        End With
-'
-'        If LogThis Then
-'            f = FreeFile
-'
-'            Open (GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") For Append As #f
-'
-'            If (LOF(f) >= BotVars.MaxLogFileSize) Then
-'                LogThis = False
-'                Close #f
-'            End If
-'        End If
-'
-'        For I = LBound(saElements) To UBound(saElements) Step 3
-'
-'            If InStr(1, saElements(I + 1), Chr(0), vbBinaryCompare) > 0 Then _
-'                KillNull saElements(I + 1)
-'
-'            If InStr(1, saElements(I + 2), Chr(0), vbBinaryCompare) > 0 Then _
-'                KillNull saElements(I + 2)
-'
-'            If Len(saElements(I + 2)) > 0 Then
-'                l = InStr(1, saElements(I + 1), "{\rtf", vbTextCompare)
-'
-'                While (l > 0)
-'                    Mid$(saElements(I + 2), l + 2, 1) = "/"
-'
-'                    l = InStr(1, saElements(I + 2), "{\rtf", vbTextCompare)
-'                Wend
-'
-'                With rtbChat
-'                    .SelStart = Len(.text)
-'                    l = .SelStart
-'                    .SelLength = 0
-'                    .SelFontName = saElements(I)
-'                    .SelColor = saElements(I + 1)
-'                    .SelText = saElements(I + 2) & Left$(vbCrLf, -2 * CLng((I + 2) = UBound(saElements)))
-'
-'                    rtbChatLength = rtbChatLength + Len(s) + Len(saElements(I + 2)) + Len(Left$(vbCrLf, -2 * CLng((I + 2) = UBound(saElements))))
-'
-'                    .SelStart = Len(.text)
-'                End With
-'
-'                ' Fixed 11/21/06 to properly log timestamps
-'                If LogThis Then
-'                    Print #f, s & saElements(I + 2) & Left$(vbCrLf, -2 * CLng((I + 2) = UBound(saElements)));
-'                End If
-'            End If
-'
-'        Next I
-'
-'        Call ColorModify(rtbChat, l)
-'
-'        If LogThis Then
-'            Close #f
-'            LogThis = False
-'        End If
-'
-'        If blUnlock Then
-'            SendMessage rtbChat.hWnd, WM_VSCROLL, SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
-'            'LockWindowUpdate 0&
-'            rtbChat.Visible = True
-'        End If
-'
-'    End If
-'End Sub
-
 
 Sub AddWhisper(ParamArray saElements() As Variant)
     
@@ -4922,6 +4786,29 @@ Private Sub tmrScript_Timer(Index As Integer)
     
 End Sub
 
+Private Sub tmrScriptHighRes_Timer(Index As Integer)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetSCObjByIndexEx("HighResTimer", Index)
+    
+    ' ...
+    obj.obj.Counter = (obj.obj.Counter + 1)
+    
+    ' ...
+    If (obj.obj.Counter >= obj.obj.Interval) Then
+        ' ...
+        obj.SCModule.Run obj.ObjName & "_Timer"
+        
+        ' ...
+        obj.obj.Counter = 0
+    End If
+    
+End Sub
+
 Private Sub txtPre_GotFocus()
     Call cboSend_GotFocus
 End Sub
@@ -7448,7 +7335,7 @@ Function DisplayError(ByVal ErrorNumber As Integer, bytType As Byte, _
 End Function
 
 Sub LoadOutFilters()
-    Const O As String = "Outgoing"
+    Const o As String = "Outgoing"
     Const f As String = "filters.ini"
     
     Dim s   As String
@@ -7459,15 +7346,15 @@ Sub LoadOutFilters()
     
     Catch(0) = vbNullString
     
-    s = ReadINI(O, "Total", f)
+    s = ReadINI(o, "Total", f)
     
     If (Not (StrictIsNumeric(s))) Then
         Exit Sub
     End If
     
     For i = 1 To Val(s)
-        gOutFilters(i).ofFind = Replace(LCase(ReadINI(O, "Find" & i, f)), "¦", " ")
-        gOutFilters(i).ofReplace = Replace(ReadINI(O, "Replace" & i, f), "¦", " ")
+        gOutFilters(i).ofFind = Replace(LCase(ReadINI(o, "Find" & i, f)), "¦", " ")
+        gOutFilters(i).ofReplace = Replace(ReadINI(o, "Replace" & i, f), "¦", " ")
         
         If (i <> Val(s)) Then
             ReDim Preserve gOutFilters(1 To i + 1)

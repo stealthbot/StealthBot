@@ -473,13 +473,15 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
             Set obj.obj = _
                     frmChat.tmrScript(ObjCount(ObjType))
                     
-        'Case "HighResTimer"
-        '    If (ObjCount(ObjType) > 0) Then
-        '        Load frmChat.tmrScriptHR(ObjCount(ObjType))
-        '    End If
-        '
-        '    Set obj.obj = _
-        '            frmChat.tmrScriptHR(ObjCount(ObjType))
+        Case "HIGHRESTIMER"
+            If (ObjCount(ObjType) > 0) Then
+                Load frmChat.tmrScriptHighRes(ObjCount(ObjType))
+            End If
+        
+            Set obj.obj = New clsScriptHighResTimer
+        
+            Set obj.obj.tmr = _
+                    frmChat.tmrScriptHighRes(ObjCount(ObjType))
             
         Case "WINSOCK"
             If (ObjCount(ObjType) > 0) Then
@@ -504,7 +506,7 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
             obj.obj.setName ObjName
             obj.obj.setSCModule SCModule
             
-        ' i don't menus are going to work :|
+        ' i don't think menus are going to work :|
         'Case "MENU"
         '    If (ObjCount(ObjType) > 0) Then
         '        Load frmChat.mnuScript(ObjCount(ObjType))
