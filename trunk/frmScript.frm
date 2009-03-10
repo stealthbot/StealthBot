@@ -98,7 +98,6 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
-      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -375,7 +374,56 @@ Private Function GetSCObjByIndex(ByVal ObjType As String, ByVal Index As Integer
     
 End Function
 
-Private Sub DestroyObjs()
+Public Sub ClearObjs()
+
+    On Error GoTo ERROR_HANDLER
+
+    Dim I As Integer ' ...
+    
+    ' ...
+    For I = m_objCount - 1 To 0 Step -1
+        Select Case (UCase$(m_arrObjs(I).ObjType))
+            Case "CHECKBOX"
+                chk(m_arrObjs(I).obj.Index).Value = vbUnchecked
+                
+            Case "COMBOXBOX"
+                cmb(m_arrObjs(I).obj.Index).text = ""
+            
+            Case "IMAGELIST"
+                iml(m_arrObjs(I).obj.Index).ListImages.Clear
+            
+            Case "LISTBOX"
+                lst(m_arrObjs(I).obj.Index).Clear
+            
+            Case "LISTVIEW"
+                lsv(m_arrObjs(I).obj.Index).ListItems.Clear
+            
+            Case "OPTIONBUTTON"
+                opt(m_arrObjs(I).obj.Index).Value = False
+
+            Case "PICTUREBOX"
+                pic(m_arrObjs(I).obj.Index).Picture = Nothing
+
+            Case "RICHTEXTBOX"
+                rtb(m_arrObjs(I).obj.Index).text = ""
+                
+            Case "TEXTBOX"
+                txt(m_arrObjs(I).obj.Index).text = ""
+        End Select
+    Next I
+
+    Exit Sub
+
+ERROR_HANDLER:
+    
+    frmChat.AddChat vbRed, _
+        "Error (#" & Err.Number & "): " & Err.description & " in ClearObjs()."
+        
+    Resume Next
+    
+End Sub
+
+Public Sub DestroyObjs()
 
     On Error GoTo ERROR_HANDLER
 
@@ -678,8 +726,11 @@ Private Sub Form_Unload(Cancel As Integer)
     ' ...
     m_sc_module.Run m_name & "_Unload"
     
-    ' clean up
-    DestroyObjs
+    ' ...
+    Me.Hide
+    
+    ' ...
+    Cancel = 1
 
 End Sub
 

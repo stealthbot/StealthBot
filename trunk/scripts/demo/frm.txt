@@ -15,3 +15,9 @@ Sub frm_text_Change()
    AddChat vbBlue, "frm_text_Change()"
 
 End Sub
+
+Sub frm_Unload()
+
+   frm.ClearObjs
+
+End Sub

@@ -212,7 +212,7 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
     
     ' GetModuleName() module-level function
     str = str & "Function GetModuleName()" & vbNewLine
-    str = str & "   GetModuleName = " & Chr$(34) & ScriptModule.name & Chr$(34) & vbNewLine
+    str = str & "   GetModuleName = " & Chr$(34) & ScriptModule.Name & Chr$(34) & vbNewLine
     str = str & "End Function" & vbNewLine
     
     ' GetScriptName() module-level function
@@ -305,7 +305,7 @@ Public Function InitScripts()
     ' ...
     If (g_Online) Then
         RunInAll "Event_LoggedOn", GetCurrentUsername, BotVars.Product
-        RunInAll "Event_ChannelJoin", g_Channel.name, g_Channel.Flags
+        RunInAll "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
 
         If (g_Channel.Users.Count > 0) Then
             For I = 1 To g_Channel.Users.Count
@@ -451,7 +451,7 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
         Dim I As Integer ' loop counter variable
 
         For I = 0 To m_objCount - 1
-            If (m_arrObjs(I).SCModule.name = SCModule.name) Then
+            If (m_arrObjs(I).SCModule.Name = SCModule.Name) Then
                 If (StrComp(m_arrObjs(I).ObjType, ObjType, vbTextCompare) = 0) Then
                     If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
                         Exit Function
@@ -556,7 +556,7 @@ Public Function GetObjByNameEx(ByRef SCModule As Module, ByVal ObjName As String
     
     ' ...
     For I = 0 To m_objCount - 1
-        If (m_arrObjs(I).SCModule.name = SCModule.name) Then
+        If (m_arrObjs(I).SCModule.Name = SCModule.Name) Then
             If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
                 Set GetObjByNameEx = m_arrObjs(I).obj
 
@@ -622,6 +622,8 @@ Private Sub DestroyObjs()
                 End If
                 
             Case "FORM"
+                m_arrObjs(I).obj.DestroyObjs
+                
                 Unload m_arrObjs(I).obj
                 
         End Select
