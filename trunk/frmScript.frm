@@ -175,6 +175,7 @@ Private m_name      As String
 Private m_sc_module As Module
 Private m_arrObjs() As modScripting.scObj
 Private m_objCount  As Integer
+Private m_hidden    As Boolean
 
 Public Function setName(ByVal str As String)
 
@@ -557,18 +558,12 @@ End Sub
 '//Events
 '//////////////////////////////////////////////////////
 
-Private Sub Form_Initialize()
-
-    On Error Resume Next
-
-    ' ...
-    m_sc_module.Run m_name & "_Initialize"
-
-End Sub
-
 Private Sub Form_Load()
 
     On Error Resume Next
+    
+    ' ...
+    m_sc_module.Run m_name & "_Initialize"
 
     ' ...
     m_sc_module.Run m_name & "_Load"
@@ -580,6 +575,12 @@ Private Sub Form_Activate()
     On Error Resume Next
 
     ' ...
+    If (m_hidden) Then
+        m_sc_module.Run m_name & "_Load"
+        
+        m_hidden = False
+    End If
+    
     m_sc_module.Run m_name & "_Activate"
 
 End Sub
@@ -728,6 +729,9 @@ Private Sub Form_Unload(Cancel As Integer)
     
     ' ...
     Me.Hide
+    
+    ' ...
+    m_hidden = True
     
     ' ...
     Cancel = 1

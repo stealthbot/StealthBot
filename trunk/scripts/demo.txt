@@ -17,10 +17,6 @@ Sub Event_Load()
       .Connect
    End With
 
-   CreateObj "Form", "frm"
-
-   frm.Show
-
    CreateObj "LongTimer", "LTimer"
 
    With LTimer
@@ -28,11 +24,17 @@ Sub Event_Load()
       .Enabled = True
    End With
 
+   CreateObj "Form", "frm"
+
+   frm.Show
+
 End Sub
 
 Sub LTimer_Timer()
 
    AddChat vbBlue, "LTimer_Timer()"
+
+   frm.Show
 
 End Sub
 
