@@ -146,38 +146,42 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
             If (Len(strLine) >= 1) Then
                 If ((blnCheckOperands) And (Left$(strLine, 1) = "#")) Then
                     If (InStr(1, strLine, " ") <> 0) Then
-                        Dim strCommand As String ' ...
-                    
-                        strCommand = _
-                            LCase$(Mid$(strLine, 2, InStr(1, strLine, " ") - 2))
-
-                        If (strCommand = "include") Then
-                            If (Len(LCase$(strLine)) >= 12) Then
-                                Dim tmp As String ' ...
-                                
-                                ' ...
-                                tmp = _
-                                    LCase$(Mid$(strLine, 11, Len(strLine) - 11))
-                                
-                                ' ...
-                                If (Left$(tmp, 1) = "\") Then
-                                    filePath = App.Path & "\scripts\" & tmp
-                                Else
-                                    filePath = tmp
+                        If (Len(strLine) >= 2) Then
+                            Dim strCommand As String ' ...
+                        
+                            strCommand = _
+                                LCase$(Mid$(strLine, 2, InStr(1, strLine, " ") - 2))
+    
+                            If (strCommand = "include") Then
+                                If (Len(strLine) >= 12) Then
+                                    Dim tmp As String ' ...
+                                    
+                                    ' ...
+                                    tmp = _
+                                        LCase$(Mid$(strLine, 11, Len(strLine) - 11))
+                                    
+                                    ' ...
+                                    If (Left$(tmp, 1) = "\") Then
+                                        filePath = App.Path & "\scripts\" & tmp
+                                    Else
+                                        filePath = tmp
+                                    End If
+            
+                                    ' ...
+                                    FileToModule ScriptModule, filePath
                                 End If
-        
-                                ' ...
-                                FileToModule ScriptModule, filePath
                             End If
                         End If
                     End If
                 Else
-                    ' ...
-                    strContent = strContent & strLine & vbCrLf
-                    
-                    ' ...
                     blnCheckOperands = False
                 End If
+            End If
+            
+            ' ...
+            If (blnCheckOperands = False) Then
+                strContent = _
+                    strContent & strLine & vbCrLf
             End If
             
             ' ...
@@ -208,12 +212,17 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
     
     ' GetModuleName() module-level function
     str = str & "Function GetModuleName()" & vbNewLine
-    str = str & "   GetModuleName = " & Chr$(34) & ScriptModule.Name & Chr$(34) & vbNewLine
+    str = str & "   GetModuleName = " & Chr$(34) & ScriptModule.name & Chr$(34) & vbNewLine
     str = str & "End Function" & vbNewLine
     
-    ' Me() module-level function
-    str = str & "Function ScriptObj()" & vbNewLine
-    str = str & "   Set ScriptObj = GetScriptObjByName(GetModuleName())" & vbNewLine
+    ' GetScriptName() module-level function
+    str = str & "Function GetScriptName()" & vbNewLine
+    str = str & "   On Error Resume Next" & vbNewLine
+    str = str & "   GetScriptName = Name()" & vbNewLine
+    str = str & "   If (LenB(GetScriptName) = 0) Then" & vbNewLine
+    str = str & "      GetScriptName = GetModuleName()" & vbNewLine
+    str = str & "   End If" & vbNewLine
+    str = str & "   Err.Clear" & vbNewLine
     str = str & "End Function" & vbNewLine
     
     ' CreateObj() module-level function
@@ -224,7 +233,7 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
 
     ' DeleteObj() module-level function
     str = str & "Sub DeleteObj(ObjType, ObjName)" & vbNewLine
-    str = str & "   Call DeleteObjEx(GetModuleName(), ObjType, ObjName)" & vbNewLine
+    str = str & "   DeleteObjEx GetModuleName(), ObjType, ObjName" & vbNewLine
     str = str & "End Sub" & vbNewLine
     
     ' GetObjByName() module-level function
@@ -235,12 +244,12 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
     
     ' GetSettingsEntry() module-level function
     str = str & "Function GetSettingsEntry(EntryName)" & vbNewLine
-    str = str & "   GetSettingsEntry = GetSettingsEntryEx(GetModuleName(), EntryName)" & vbNewLine
+    str = str & "   GetSettingsEntry = GetSettingsEntryEx(GetScriptName(), EntryName)" & vbNewLine
     str = str & "End Function" & vbNewLine
     
     ' WriteSettingsEntry() module-level function
     str = str & "Sub WriteSettingsEntry(EntryName, EntryValue)" & vbNewLine
-    str = str & "   WriteSettingsEntryEx GetModuleName(), EntryName, EntryValue" & vbNewLine
+    str = str & "   WriteSettingsEntryEx GetScriptName(), EntryName, EntryValue" & vbNewLine
     str = str & "End Sub" & vbNewLine
 
     ' store module-level coding
@@ -296,7 +305,7 @@ Public Function InitScripts()
     ' ...
     If (g_Online) Then
         RunInAll "Event_LoggedOn", GetCurrentUsername, BotVars.Product
-        RunInAll "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
+        RunInAll "Event_ChannelJoin", g_Channel.name, g_Channel.Flags
 
         If (g_Channel.Users.Count > 0) Then
             For I = 1 To g_Channel.Users.Count
@@ -442,7 +451,7 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
         Dim I As Integer ' loop counter variable
 
         For I = 0 To m_objCount - 1
-            If (m_arrObjs(I).SCModule.Name = SCModule.Name) Then
+            If (m_arrObjs(I).SCModule.name = SCModule.name) Then
                 If (StrComp(m_arrObjs(I).ObjType, ObjType, vbTextCompare) = 0) Then
                     If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
                         Exit Function
@@ -475,13 +484,13 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
                     
         Case "LONGTIMER"
             If (ObjCount(ObjType) > 0) Then
-                Load frmChat.tmrScriptlong(ObjCount(ObjType))
+                Load frmChat.tmrScriptLong(ObjCount(ObjType))
             End If
         
             Set obj.obj = New clsSLongTimer
         
             obj.obj.tmr = _
-                frmChat.tmrScriptlong(ObjCount(ObjType))
+                frmChat.tmrScriptLong(ObjCount(ObjType))
                     
             With obj.obj.tmr
                 .Interval = 1000
@@ -547,7 +556,7 @@ Public Function GetObjByNameEx(ByRef SCModule As Module, ByVal ObjName As String
     
     ' ...
     For I = 0 To m_objCount - 1
-        If (m_arrObjs(I).SCModule.Name = SCModule.Name) Then
+        If (m_arrObjs(I).SCModule.name = SCModule.name) Then
             If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
                 Set GetObjByNameEx = m_arrObjs(I).obj
 
@@ -593,9 +602,9 @@ Private Sub DestroyObjs()
                 
             Case "LONGTIMER"
                 If (m_arrObjs(I).obj.Index > 0) Then
-                    Unload frmChat.tmrScriptlong(m_arrObjs(I).obj.Index)
+                    Unload frmChat.tmrScriptLong(m_arrObjs(I).obj.Index)
                 Else
-                    frmChat.tmrScriptlong(0).Enabled = False
+                    frmChat.tmrScriptLong(0).Enabled = False
                 End If
                 
             Case "WINSOCK"

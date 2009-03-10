@@ -1524,10 +1524,22 @@ Public Function GetSettingsEntryEx(ByVal ScriptName As String, ByVal sEntryName 
     
     ' ...
     GetSettingsEntryEx = ReadINI(ScriptName, sEntryName, Path)
+    
+    ' ...
+    If (InStr(1, GetSettingsEntryEx, " ;") <> 0) Then
+        GetSettingsEntryEx = _
+            Mid$(GetSettingsEntryEx, 1, (InStr(1, GetSettingsEntryEx, " ;") - 1))
+    End If
+    
+    ' ...
+    If (InStr(1, GetSettingsEntryEx, " #") <> 0) Then
+        GetSettingsEntryEx = _
+            Mid$(GetSettingsEntryEx, 1, (InStr(1, GetSettingsEntryEx, " #") - 1))
+    End If
 
 End Function
 
-Public Function WriteSettingsEntryEx(ByVal ScriptName As String, ByVal sEntryName As String, ByVal sValue As String)
+Public Function WriteSettingsEntryEx(ByVal ScriptName As String, ByVal sEntryName As String, ByVal sValue As String, Optional sDescription As String)
 
     Dim Path As String ' ...
     
@@ -1541,7 +1553,8 @@ Public Function WriteSettingsEntryEx(ByVal ScriptName As String, ByVal sEntryNam
     End If
     
     ' ...
-    WriteINI ScriptName, sEntryName, sValue, Path
+    WriteINI ScriptName, sEntryName, sValue & _
+        IIf(Len(sDescription), " ; " & sDescription, ""), Path
 
 End Function
 

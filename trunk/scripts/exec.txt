@@ -27,9 +27,6 @@ Sub Event_PressedEnter(Text)
          For i = 1 To Scripts.Count
             Scripts(i).ExecuteStatement code
          Next
-
-         ' reset our error handler
-         Err.Number = 0
       End If
 
       ' prevent internal processing

@@ -50,14 +50,14 @@ Public Enum MenuAction
 End Enum
 
 'GetMenu returns a handle to the menu
-Public Declare Function GetMenu Lib "user32" (ByVal hWNd As Long) As Long
+Public Declare Function GetMenu Lib "user32" (ByVal hWnd As Long) As Long
 
 'Get Submenu handle
 Public Declare Function GetSubMenu Lib "user32" _
   (ByVal hMenu As Long, ByVal nPos As Long) As Long
 
 'Refresh menu display
-Public Declare Function DrawMenuBar Lib "user32" (ByVal hWNd As Long) As Long
+Public Declare Function DrawMenuBar Lib "user32" (ByVal hWnd As Long) As Long
 
 'Creates a new popup menu or sub-menu
 Public Declare Function CreatePopupMenu Lib "user32" () As Long
@@ -108,7 +108,7 @@ Public Declare Function RemoveMenu Lib "user32" _
 
 'ProcessMenu: Called when the user has clicked a menu item.
 '  Modified by Swent 2/12/08
-Public Sub ProcessMenu(hWNd As Long, lngMenuCommand As Long)
+Public Sub ProcessMenu(hWnd As Long, lngMenuCommand As Long)
     On Error GoTo ERROR_HANDLER
     
     Dim strCallback As String
@@ -152,7 +152,7 @@ End Function
 
 'GetMenuCaptionByCommand: Returns caption for menu item attached to hWnd
 'with ID = lngMenuCommand.
-Public Function GetMenuCaptionByCommand(ByVal hWNd As Long, _
+Public Function GetMenuCaptionByCommand(ByVal hWnd As Long, _
                                      lngMenuCommand As Long) As String
  
   Dim lngRC As Long
@@ -165,7 +165,7 @@ Public Function GetMenuCaptionByCommand(ByVal hWNd As Long, _
   Dim lngFlag As Long
   
   'Get the form's menu bar
-  hMenu = GetMenu(hWNd)
+  hMenu = GetMenu(hWnd)
   If hMenu <> 0 Then
     'Initialize the buffer
     strString = Space$(256)
@@ -309,7 +309,7 @@ Public Function RegisterScriptMenu(ByVal sMenuCaption As String) As Long
     Dim lMenu As Long
     Dim ThisScript_MenuID As Long
     
-    lMenu = GetMenu(frmChat.hWNd)
+    lMenu = GetMenu(frmChat.hWnd)
     
     If ScriptMenu_ParentID = 0 Then
         ScriptMenu_ParentID = AddParentMenu(lMenu, "&Plugins", , 5)
@@ -322,7 +322,7 @@ Public Function RegisterScriptMenu(ByVal sMenuCaption As String) As Long
     ThisScript_MenuID = AddParentMenu(ScriptMenu_ParentID, sMenuCaption)
     
     RegisterScriptMenu = ThisScript_MenuID
-    DrawMenuBar frmChat.hWNd
+    DrawMenuBar frmChat.hWnd
     colDynamicMenus.Add ThisScript_MenuID
 
 End Function
@@ -333,7 +333,7 @@ Public Sub RegisterPluginMenus()
     Dim strPrefixes() As String, strTitles() As String, tmpTitle As String
     Dim lngHelpMenu As Long, lngAdvMenu As Long
     Dim boolAddPrefix As Boolean
-    Dim i As Integer, intLoaded As Integer, intMenuLimit As Integer
+    Dim I As Integer, intLoaded As Integer, intMenuLimit As Integer
 
     Set dictMenuIDs = New Dictionary
     Set dictItemIDs = New Dictionary
@@ -375,49 +375,49 @@ Public Sub RegisterPluginMenus()
     End If
 
     '// Register and populate a menu for each plugin
-    For i = 0 To UBound(strPrefixes)
+    For I = 0 To UBound(strPrefixes)
         
         '// Are plugin menus enabled?
         If CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled")) Then Exit For
 
         '// Reach plugin menu limit?
-        If i >= intMenuLimit And intMenuLimit > -1 Then Exit For
+        If I >= intMenuLimit And intMenuLimit > -1 Then Exit For
 
         '// Format title
-        If strTitles(i) <> strPrefixes(i) Then boolAddPrefix = True Else boolAddPrefix = False
-        If Len(strTitles(i)) > 30 Then strTitles(i) = Left(strTitles(i), 27) & "..."
-        If boolAddPrefix Then strTitles(i) = strTitles(i) & " (" & strPrefixes(i) & ")"
+        If strTitles(I) <> strPrefixes(I) Then boolAddPrefix = True Else boolAddPrefix = False
+        If Len(strTitles(I)) > 30 Then strTitles(I) = Left(strTitles(I), 27) & "..."
+        If boolAddPrefix Then strTitles(I) = strTitles(I) & " (" & strPrefixes(I) & ")"
 
         '// Add an item in Plugin Menu Display for this plugin
-        dictItemIDs("#display|||" & strPrefixes(i)) = AddScriptMenuItem(dictMenuIDs("#display"), strTitles(i), _
-                    "ps_display_callback_" & strPrefixes(i), , , CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(i), "menu_display")))
-        frmChat.SControl.Modules(1).AddCode "Sub ps_display_callback_" & strPrefixes(i) & ":PluginMenus_Display_Callback """ & strPrefixes(i) & """: End " & "Sub"
+        dictItemIDs("#display|||" & strPrefixes(I)) = AddScriptMenuItem(dictMenuIDs("#display"), strTitles(I), _
+                    "ps_display_callback_" & strPrefixes(I), , , CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(I), "menu_display")))
+        frmChat.SControl.Modules(1).AddCode "Sub ps_display_callback_" & strPrefixes(I) & ":PluginMenus_Display_Callback """ & strPrefixes(I) & """: End " & "Sub"
         
         '// Should this plugin's menu be displayed?
-        If CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(i), "menu_display")) Then
+        If CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(I), "menu_display")) Then
             
             '// Register a menu for this plugin and populate with several default items
-            dictMenuIDs(strPrefixes(i)) = RegisterScriptMenu(strTitles(i))
+            dictMenuIDs(strPrefixes(I)) = RegisterScriptMenu(strTitles(I))
             
-            dictItemIDs(strPrefixes(i) & "|||Enabled") = AddScriptMenuItem(dictMenuIDs(strPrefixes(i)), "Enabled", _
-                    "ps_enabled_callback_" & strPrefixes(i), , , CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(i), "enabled")))
+            dictItemIDs(strPrefixes(I) & "|||Enabled") = AddScriptMenuItem(dictMenuIDs(strPrefixes(I)), "Enabled", _
+                    "ps_enabled_callback_" & strPrefixes(I), , , CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(I), "enabled")))
             
-            dictItemIDs(strPrefixes(i) & "|||New Version Notification") = AddScriptMenuItem(dictMenuIDs(strPrefixes(i)), _
-                    "New Version Notification", "ps_nvn_callback_" & strPrefixes(i), , , CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(i), "nvn")))
+            dictItemIDs(strPrefixes(I) & "|||New Version Notification") = AddScriptMenuItem(dictMenuIDs(strPrefixes(I)), _
+                    "New Version Notification", "ps_nvn_callback_" & strPrefixes(I), , , CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(I), "nvn")))
             
-            dictItemIDs(strPrefixes(i) & "|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs(strPrefixes(i)), "Backup On Updates", _
-                    "ps_backup_callback_" & strPrefixes(i), , , CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(i), "backup")))
+            dictItemIDs(strPrefixes(I) & "|||Backup On Updates") = AddScriptMenuItem(dictMenuIDs(strPrefixes(I)), "Backup On Updates", _
+                    "ps_backup_callback_" & strPrefixes(I), , , CBool(frmChat.SControl.Modules(1).CodeObject.GetSetting(strPrefixes(I), "backup")))
             
-            AddScriptMenuItem dictMenuIDs(strPrefixes(i)), 0, 0, True
-            AddScriptMenuItem dictMenuIDs(strPrefixes(i)), "Open File", "ps_openfile_callback_" & strPrefixes(i)
-            AddScriptMenuItem dictMenuIDs(strPrefixes(i)), "Help", "ps_help_callback_" & strPrefixes(i)
+            AddScriptMenuItem dictMenuIDs(strPrefixes(I)), 0, 0, True
+            AddScriptMenuItem dictMenuIDs(strPrefixes(I)), "Open File", "ps_openfile_callback_" & strPrefixes(I)
+            AddScriptMenuItem dictMenuIDs(strPrefixes(I)), "Help", "ps_help_callback_" & strPrefixes(I)
             
             '// Create the callback subs
-            frmChat.SControl.Modules(1).AddCode "Sub ps_enabled_callback_" & strPrefixes(i) & ":PluginMenus_Enabled_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
-                                     "Sub ps_nvn_callback_" & strPrefixes(i) & ":PluginMenus_NVN_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
-                                     "Sub ps_backup_callback_" & strPrefixes(i) & ":PluginMenus_Backup_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
-                                     "Sub ps_openfile_callback_" & strPrefixes(i) & ":PluginMenus_OpenFile_Callback """ & strPrefixes(i) & """:End " & "Sub" & vbCrLf & _
-                                     "Sub ps_help_callback_" & strPrefixes(i) & ":PluginMenus_Help_Callback """ & strPrefixes(i) & """:End " & "Sub"
+            frmChat.SControl.Modules(1).AddCode "Sub ps_enabled_callback_" & strPrefixes(I) & ":PluginMenus_Enabled_Callback """ & strPrefixes(I) & """:End " & "Sub" & vbCrLf & _
+                                     "Sub ps_nvn_callback_" & strPrefixes(I) & ":PluginMenus_NVN_Callback """ & strPrefixes(I) & """:End " & "Sub" & vbCrLf & _
+                                     "Sub ps_backup_callback_" & strPrefixes(I) & ":PluginMenus_Backup_Callback """ & strPrefixes(I) & """:End " & "Sub" & vbCrLf & _
+                                     "Sub ps_openfile_callback_" & strPrefixes(I) & ":PluginMenus_OpenFile_Callback """ & strPrefixes(I) & """:End " & "Sub" & vbCrLf & _
+                                     "Sub ps_help_callback_" & strPrefixes(I) & ":PluginMenus_Help_Callback """ & strPrefixes(I) & """:End " & "Sub"
         End If
     Next
 
@@ -462,14 +462,14 @@ End Function
 
 '// Written by Swent. Gets the prefix associated with a plugin menu item
 Public Function GetPrefixByID(ByVal lngItemID As Long)
-    Dim varKeys() As Variant, varItems() As Variant, i As Integer
+    Dim varKeys() As Variant, varItems() As Variant, I As Integer
 
     varKeys = dictItemIDs.Keys
     varItems = dictItemIDs.Items
     
-    For i = 0 To UBound(varItems)
-        If varItems(i) = lngItemID Then
-            GetPrefixByID = Split(varKeys(i), "|||")(0)
+    For I = 0 To UBound(varItems)
+        If varItems(I) = lngItemID Then
+            GetPrefixByID = Split(varKeys(I), "|||")(0)
         End If
     Next
 End Function
@@ -485,14 +485,14 @@ End Function
 
 '// Written by Swent. Deletes all items in the Plugins menu.
 Public Sub DeletePluginMenus()
-    Dim intMenuCount As Integer, i As Integer
+    Dim intMenuCount As Integer, I As Integer
 
     intMenuCount = GetMenuItemCount(ScriptMenu_ParentID)
 
     '// Is the Plugins menu already empty?
     If intMenuCount < 0 Then Exit Sub
 
-    For i = 0 To intMenuCount
+    For I = 0 To intMenuCount
         RemoveMenu ScriptMenu_ParentID, 0, MF_BYPOSITION
     Next
 End Sub
@@ -539,7 +539,7 @@ Public Function AddScriptMenuItem(ByVal lMenuHandle As Long, ByVal sItemCaption 
     
     dctCallbacks.Add CStr(lCallbackID), sCallbackFunction
     
-    DrawMenuBar frmChat.hWNd
+    DrawMenuBar frmChat.hWnd
     
     AddScriptMenuItem = lCallbackID
     
@@ -554,7 +554,7 @@ Public Function SetMenuCheck(ByVal lMenuHandle As Long, ByVal lMenuCommandID As 
     
     L = CheckMenuItem(lMenuHandle, lMenuCommandID, IIf(bNewCheckState, MF_CHECKED, MF_UNCHECKED))
     
-    DrawMenuBar frmChat.hWNd
+    DrawMenuBar frmChat.hWnd
     
     If (L And MF_CHECKED) = MF_CHECKED Then
         L = 1
@@ -572,10 +572,10 @@ Public Sub SetMenuEnabled(ByVal lMenuHandle As Long, ByVal lMenuCommandID As Lon
     Dim L As Long
     Dim s As String
     
-    s = GetMenuCaptionByCommand(frmChat.hWNd, lMenuCommandID)
+    s = GetMenuCaptionByCommand(frmChat.hWnd, lMenuCommandID)
     L = ModifyMenu(lMenuHandle, lMenuCommandID, IIf(bNewEnabledState, MF_STRING, MF_GRAYED), lMenuCommandID, s)
     
-    DrawMenuBar frmChat.hWNd
+    DrawMenuBar frmChat.hWnd
     
 End Sub
 
@@ -684,7 +684,7 @@ Public Sub DeleteMenuItemByID(ByVal lId As Long)
     Dim lngParentPosition As Long
     'Dim hParentMenu As Long
     
-    hMenuBar = GetMenu(frmChat.hWNd)
+    hMenuBar = GetMenu(frmChat.hWnd)
     
     L = GetMenuItemCount(lId)
     

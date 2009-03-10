@@ -105,6 +105,7 @@ Module=modUnsignedConversions; modUnsignedConversions.bas
 Class=clsBNCSRecvBuffer; cBNCSRecvBuffer.cls
 Form=frmScript.frm
 Class=clsSLongTimer; clsSLongTimer.cls
+Class=clsMenuObj; clsMenuObj.cls
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""
