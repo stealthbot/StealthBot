@@ -1441,18 +1441,24 @@ Public Function Scripts() As Object
     On Error Resume Next
 
     Dim I   As Integer ' ...
-    Dim str As String ' ...
+    Dim str As String  ' ...
 
     Set Scripts = New Collection
 
     For I = 1 To frmChat.SControl.Modules.Count
         str = _
-            frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
-            
+            frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled")
+    
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
-            Scripts.Add frmChat.SControl.Modules(I)
+            str = _
+                frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
+                
+            If (StrComp(str, "False", vbTextCompare) <> 0) Then
+                Scripts.Add frmChat.SControl.Modules(I), _
+                    frmChat.SControl.Modules(I).CodeObject.GetScriptName()
+            End If
         End If
-    Next
+    Next I
 
 End Function
 

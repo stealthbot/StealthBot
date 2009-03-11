@@ -8,29 +8,19 @@ End Function
 
 Sub Event_PressedEnter(Text)
 
-   On Error Resume Next
-
    ' check for "exec" command
    If (Left(LCase(Text), 5) = "/exec") Then
       Dim i    ' loop counter
       Dim code ' stores command code
+
+      ' prevent internal processing
+      VetoThisMessage  
 
       ' pull code from command
       code = Mid(Text, 7)
 
       ' call code locally
       ExecuteGlobal code
-
-      ' did we fail to find a given function locally?
-      If (Err.Number = 13) Then
-         ' try to find the function in other scripts
-         For i = 1 To Scripts.Count
-            Scripts(i).ExecuteStatement code
-         Next
-      End If
-
-      ' prevent internal processing
-      VetoThisMessage
    End If
    
 End Sub
