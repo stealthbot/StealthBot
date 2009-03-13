@@ -24,13 +24,13 @@ Private m_bufpos   As Integer
 Private m_bufsize  As Integer
 Private m_cripple  As Boolean
 
-Private Sub setCripple()
+Public Sub setCripple()
 
     m_cripple = True
 
 End Sub
 
-Private Property Get Cripple() As Boolean
+Public Property Get Cripple() As Boolean
 
     Cripple = m_cripple
 
@@ -190,25 +190,25 @@ End Function ' end function InsertNTString
 ' ...
 Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI) As String
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
 
     ' ...
-    For i = m_bufpos To m_bufsize
-        If (m_buf(i) = &H0) Then
+    For I = m_bufpos To m_bufsize
+        If (m_buf(I) = &H0) Then
             Exit For
         End If
-    Next i
+    Next I
 
     ' ...
-    If (i < m_bufsize) Then
+    If (I < m_bufsize) Then
         ' ...
-        GetString = String$(i - m_bufpos, Chr$(0))
+        GetString = String$(I - m_bufpos, Chr$(0))
             
         ' copy data to buffer
-        Call CopyMemory(ByVal GetString, m_buf(m_bufpos), i - m_bufpos)
+        Call CopyMemory(ByVal GetString, m_buf(m_bufpos), I - m_bufpos)
         
         ' ...
-        m_bufpos = i + 1
+        m_bufpos = I + 1
     End If
 
 End Function ' end function GetString
@@ -321,7 +321,7 @@ Public Function SendPacket(Optional PacketID As Byte)
     'Dim pkt    As modPacketBuffer.PACKETCACHEITEM  ' ...
     Dim L      As Long    ' ...
     Dim buf()  As Byte    ' ...
-    Dim i      As Integer ' ...
+    Dim I      As Integer ' ...
     'Dim log    As String  ' ...
     Dim strbuf As String  ' ...
     
@@ -503,8 +503,8 @@ Public Property Let Data(ByVal str As String)
     ReDim m_buf(0 To Len(str))
 
     ' ...
-    Call CopyMemory(m_buf(m_bufsize), str, Len(str))
-    
+    Call CopyMemory(m_buf(0), ByVal str, Len(str))
+
     ' ...
     m_bufsize = Len(str)
 
@@ -516,7 +516,7 @@ Public Property Get Data() As String
     Data = String(m_bufsize, Chr$(0))
 
     ' ...
-    Call CopyMemory(Data, m_buf(0), m_bufsize)
+    Call CopyMemory(ByVal Data, m_buf(0), m_bufsize)
 
 End Property
 
