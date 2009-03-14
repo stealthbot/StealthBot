@@ -445,6 +445,8 @@ End Function
 
 Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, ByVal ObjName As String) As Object
 
+    On Error Resume Next
+
     Dim obj As scObj ' ...
     
     ' redefine array size & check for duplicate controls
@@ -455,6 +457,8 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
             If (m_arrObjs(I).SCModule.Name = SCModule.Name) Then
                 If (StrComp(m_arrObjs(I).ObjType, ObjType, vbTextCompare) = 0) Then
                     If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
+                        Set CreateObjEx = m_arrObjs(I).obj
+                    
                         Exit Function
                     End If
                 End If

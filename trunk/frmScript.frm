@@ -226,6 +226,8 @@ End Function
 
 Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As Object
 
+    On Error Resume Next
+
     Dim obj As scObj ' ...
     
     ' redefine array size & check for duplicate controls
@@ -235,6 +237,8 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
         For I = 0 To m_objCount - 1
             If (StrComp(m_arrObjs(I).ObjType, ObjType, vbTextCompare) = 0) Then
                 If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
+                    Set CreateObj = m_arrObjs(I).obj
+                
                     Exit Function
                 End If
             End If
@@ -325,6 +329,9 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
             
             Set obj.obj = txt(ObjCount(ObjType))
     End Select
+    
+    ' ...
+    obj.obj.Visible = True
 
     ' store our module name & type
     obj.ObjName = ObjName

@@ -4,15 +4,17 @@ Attribute VB_Name = "modEvents"
 
 Option Explicit
 
-Private Const MAX_FILTER_EVENTS = 100
+Private Const MSG_FILTER_MAX_EVENTS As Long = 100 ' maximum number of storable events
+Private Const MSG_FILTER_DELAY_INT  As Long = 500 ' interval for event count measuring
+Private Const MSG_FILTER_MSG_COUNT  As Long = 3   ' message count maximums
 
-Private Type USERFILTER
+Private Type MSGFILTER
     UserObj   As Object
     EventObj  As Object
     EventTime As Date
 End Type
 
-Private m_arrUserEvents() As USERFILTER
+Private m_arrMsgEvents()  As MSGFILTER
 Private m_eventCount      As Integer
 
 Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, ByVal Flags As Long, _

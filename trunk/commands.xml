@@ -23,6 +23,30 @@
     <access />
   </command>
 
+  <command name="enable">
+    <aliases />
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+
+    <access />
+  </command>
+
+  <command name="disable">
+    <aliases />
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+
+    <access />
+  </command>
+
   <command name="watch">
     <aliases />
 
