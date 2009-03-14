@@ -894,7 +894,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -920,6 +919,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1635,10 +1635,10 @@ Private Sub Form_Load()
     
     ' 4/10/06:
     ' CHECK FOR CONFIG.INI PATH HACK
-    L = InStr(command(), "-cpath ")
+    L = InStr(Command(), "-cpath ")
     
-    If L > 0 And Len(command()) > (L + 7) Then
-        ConfigOverride = Mid$(command(), L + 7)
+    If L > 0 And Len(Command()) > (L + 7) Then
+        ConfigOverride = Mid$(Command(), L + 7)
         
         If InStr(ConfigOverride, " ") > 0 Then
             ConfigOverride = Split(ConfigOverride, " ")(0)
@@ -1718,9 +1718,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -1864,7 +1864,7 @@ Private Sub Form_Load()
             "the terms of the End-User License Agreement available at http://eula.stealthbot.net."
     End If
     
-    CommandLine = command()
+    CommandLine = Command()
     
     If MDebug("debug") Then _
         AddChat RTBColors.ServerInfoText, " * Program executed in debug mode; unhandled packet " & _
@@ -3077,8 +3077,8 @@ Sub Form_Unload(Cancel As Integer)
 
     'Call ChatQueue_Terminate
 
-    DisableURLDetect
-    UnhookWindowProc
+    DisableURLDetect frmChat.rtbChat.hWnd
+    UnhookWindowProc frmChat.hWnd
     UnhookSendBoxWindowProc
     
     'Call SharedScriptSupport.Dispose 'Explicit call the Class_Terminate sub in the ScriptSupportClass to destroy all the forms. - FrOzeN
@@ -3126,7 +3126,7 @@ Sub Form_Unload(Cancel As Integer)
     'Unload frmProfileManager
     Unload frmQuickChannel
     Unload frmRealm
-    Unload frmScriptUI
+    'Unload frmScriptUI
     Unload frmSettings
     Unload frmSplash
     'Unload frmUserManager
@@ -6417,7 +6417,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         Dim I              As Long        ' ...
         Dim currChar       As Long        ' ...
         Dim Send           As String      ' ...
-        Dim command        As String      ' ...
+        Dim Command        As String      ' ...
         Dim GTC            As Double      ' ...
         Dim strUser        As String      ' ...
         Dim nameConversion As Boolean     ' ...
@@ -6470,25 +6470,25 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             ' ...
             If (Index > 2) Then
                 ' ...
-                command = Mid$(strTmp, 2, (Index - 2))
+                Command = Mid$(strTmp, 2, (Index - 2))
 
                 ' ...
-                If ((command = "w") Or _
-                    (command = "whisper") Or _
-                    (command = "m") Or _
-                    (command = "msg") Or _
-                    (command = "message") Or _
-                    (command = "whois") Or _
-                    (command = "where") Or _
-                    (command = "whereis") Or _
-                    (command = "squelch") Or _
-                    (command = "unsquelch") Or _
-                    (command = "ignore") Or _
-                    (command = "unignore") Or _
-                    (command = "ban") Or _
-                    (command = "unban") Or _
-                    (command = "kick") Or _
-                    (command = "designate")) Then
+                If ((Command = "w") Or _
+                    (Command = "whisper") Or _
+                    (Command = "m") Or _
+                    (Command = "msg") Or _
+                    (Command = "message") Or _
+                    (Command = "whois") Or _
+                    (Command = "where") Or _
+                    (Command = "whereis") Or _
+                    (Command = "squelch") Or _
+                    (Command = "unsquelch") Or _
+                    (Command = "ignore") Or _
+                    (Command = "unignore") Or _
+                    (Command = "ban") Or _
+                    (Command = "unban") Or _
+                    (Command = "kick") Or _
+                    (Command = "designate")) Then
         
                     ' ...
                     Splt() = Split(strTmp, Space$(1), 3)
@@ -6496,7 +6496,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                     ' ...
                     If (UBound(Splt) > 0) Then
                         ' ...
-                        command = Splt(0) & Space$(1) & reverseUsername(Splt(1)) & _
+                        Command = Splt(0) & Space$(1) & reverseUsername(Splt(1)) & _
                             Space$(1)
 
                         ' ...
@@ -6516,19 +6516,19 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                             ReDim Preserve Splt(0 To UBound(Splt) - 1)
                         End If
                     End If
-                ElseIf ((command = "f") Or _
-                        (command = "friends")) Then
+                ElseIf ((Command = "f") Or _
+                        (Command = "friends")) Then
                     
                     ' ...
                     Splt() = Split(strTmp, Space$(1), 3)
                     
                     ' ...
-                    command = Splt(0) & Space$(1)
+                    Command = Splt(0) & Space$(1)
                     
                     ' ...
                     If (UBound(Splt) >= 1) Then
                         ' ...
-                        command = command & Splt(1) & Space$(1)
+                        Command = Command & Splt(1) & Space$(1)
                     
                         ' ...
                         If (UBound(Splt) >= 2) Then
@@ -6547,30 +6547,30 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                                         (StrReverse$(BotVars.Product) = "W3XP")) Then
                                         
                                         ' ...
-                                        command = command & reverseUsername(Splt(2)) & _
+                                        Command = Command & reverseUsername(Splt(2)) & _
                                             Space$(1)
                                     Else
                                         ' ...
-                                        command = command & Splt(2) & Space$(1)
+                                        Command = Command & Splt(2) & Space$(1)
                                     End If
                                     
                                     ' ...
                                     If (UBound(Splt) >= 3) Then
-                                        command = command & Splt(3)
+                                        Command = Command & Splt(3)
                                     End If
                             End Select
                         End If
                     End If
                 Else
                     ' ...
-                    command = "/" & command & Space$(1)
+                    Command = "/" & Command & Space$(1)
                     
                     ' ...
-                    strTmp = Mid$(strTmp, Len(command) + 1)
+                    strTmp = Mid$(strTmp, Len(Command) + 1)
                 End If
                 
                 ' ...
-                If (Len(command) >= BNET_MSG_LENGTH) Then
+                If (Len(Command) >= BNET_MSG_LENGTH) Then
                     Exit Sub
                 End If
 
@@ -6611,7 +6611,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         End If
         
         ' ...
-        Call SplitByLen(strTmp, (BNET_MSG_LENGTH - Len(command)), Splt(), vbNullString, _
+        Call SplitByLen(strTmp, (BNET_MSG_LENGTH - Len(Command)), Splt(), vbNullString, _
             " [more]", OversizeDelimiter)
 
         ' ...
@@ -6624,7 +6624,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             
             ' store working copy
             Send = _
-                command & Splt(I)
+                Command & Splt(I)
             
             ' ...
             Set Q = New clsQueueOBj
@@ -7100,7 +7100,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     If s = "Y" Then
         EnableURLDetect rtbChat.hWnd
     Else
-        DisableURLDetect
+        DisableURLDetect frmChat.rtbChat.hWnd
     End If
     
     If BotVars.MaxBacklogSize < 0 Then BotVars.MaxBacklogSize = 10000

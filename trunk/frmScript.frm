@@ -98,6 +98,7 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
+      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -314,6 +315,8 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
             End If
             
             Set obj.obj = rtb(ObjCount(ObjType))
+            
+            EnableURLDetect obj.obj.hWnd
         
         Case "TEXTBOX"
             If (ObjCount(ObjType) > 0) Then
@@ -407,6 +410,8 @@ Public Sub ClearObjs()
 
             Case "RICHTEXTBOX"
                 rtb(m_arrObjs(I).obj.Index).text = ""
+                
+                DisableURLDetect m_arrObjs(I).obj.hWnd
                 
             Case "TEXTBOX"
                 txt(m_arrObjs(I).obj.Index).text = ""

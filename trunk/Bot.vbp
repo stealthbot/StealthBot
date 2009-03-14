@@ -68,7 +68,6 @@ Module=modChatQueue; modChatQueue.bas
 Form=frmDBManager.frm
 Form=frmGameSelection.frm
 Form=frmCommands.frm
-Form=frmScriptUI.frm
 Module=modPacketBuffer; modPacketBuffer.bas
 Class=clsWinamp; clsWinamp.cls
 Class=clsiTunes; clsiTunes.cls

@@ -65,6 +65,11 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
                 
                 ExReconMinutes = (20 * 60)
                 
+                ExReconnectTimerID = SetTimer(0, ExReconnectTimerID, 1000, _
+                    AddressOf ExtendedReconnect_TimerProc)
+    
+                UserCancelledConnect = False
+                
                 miNoProceed = 1
             End If
         
@@ -129,6 +134,8 @@ Public Function GetErrorString(ByVal lErrNum As Long, ByVal Source As enuErrorSo
     End Select
     
     If (miNoProceed > 0) Then
+        UserCancelledConnect = False
+    
         If (miNoProceed > 1) Then
             UserCancelledConnect = True
         End If

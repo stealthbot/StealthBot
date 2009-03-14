@@ -520,6 +520,9 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
             obj.obj.setName ObjName
             obj.obj.setSCModule SCModule
             
+            ' ...
+            HookWindowProc obj.obj.hWnd
+            
         ' i don't think menus are going to work :|
         'Case "MENU"
         '    If (ObjCount(ObjType) > 0) Then
@@ -624,6 +627,8 @@ Private Sub DestroyObjs()
                 
             Case "FORM"
                 m_arrObjs(I).obj.DestroyObjs
+                
+                UnhookWindowProc m_arrObjs(I).obj.hWnd
                 
                 Unload m_arrObjs(I).obj
                 

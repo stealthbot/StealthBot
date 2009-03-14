@@ -50,7 +50,7 @@ Public Sub EnableURLDetect(ByVal hWndTextbox As Long)
     End If
 End Sub
 
-Public Sub DisableURLDetect()
+Public Sub DisableURLDetect(ByVal hWndTextbox As Long)
     If Enabled Then
         Enabled = False
         SendMessage hWndRTB, EM_AUTOURLDETECT, 0, ByVal 0

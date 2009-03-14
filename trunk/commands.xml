@@ -3342,9 +3342,7 @@
         invites a specified user into the clan in which the bot is a member.
       </description>
 
-      <specialnotes>
-        
-      </specialnotes>
+      <specialnotes />
     </documentation>
 
     <access>

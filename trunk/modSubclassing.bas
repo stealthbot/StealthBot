@@ -25,7 +25,7 @@ Public Sub HookWindowProc(ByVal hWnd As Long)
     End If
 End Sub
 
-Public Sub UnhookWindowProc()
+Public Sub UnhookWindowProc(ByVal hWnd As Long)
     If OldWindowProc > 0 Then
         OldWindowProc = SetWindowLong(hWndSet, GWL_WNDPROC, OldWindowProc)
         OldWindowProc = 0

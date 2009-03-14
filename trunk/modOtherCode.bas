@@ -236,6 +236,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
             If (LenB(Username) > 0) Then
                 LastBan = LCase$(Username)
                 
+                CleanedUsername = StripRealm(CleanedUsername)
                 CleanedUsername = StripInvalidNameChars(Username)
 
                 If (SpeakerAccess < 999) Then
@@ -1783,7 +1784,7 @@ Public Function GetFilePath(ByVal filename As String) As String
     Dim s As String
     
     If (InStr(filename, "\") = 0) Then
-        GetFilePath = GetProfilePath() & "\" & filename
+        GetFilePath = GetProfilePath() & filename
         
         s = ReadCfg("FilePaths", filename)
         
@@ -2390,7 +2391,7 @@ Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean
 End Sub
 
 Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String, ByVal Target As String, _
-    ByVal TargetType As String, Optional ByVal rank As Integer, Optional ByVal Flags As String, _
+    ByVal TargetType As String, Optional ByVal Rank As Integer, Optional ByVal Flags As String, _
         Optional ByVal Group As String)
     
     'Dim sPath  As String
@@ -2415,8 +2416,8 @@ Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String,
         str = str & " (" & LCase$(TargetType) & ")"
     End If
     
-    If (rank > 0) Then
-        str = str & " " & rank
+    If (Rank > 0) Then
+        str = str & " " & Rank
     End If
     
     If (Flags <> vbNullString) Then

@@ -327,7 +327,7 @@ End Sub
 '//             use it to control whether or not your command responses display publicly.
 '// CC          CC controls whether or not the command string is passed to the Custom Command processor.
 '//             For scripting purposes I will not allow the user to set CC, it is always 0.
-Public Sub command(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
+Public Sub Command(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
     False, Optional ByVal Whispered As Boolean = False)
     
     ' execute command
@@ -807,6 +807,17 @@ Public Function GetConfigEntry(ByVal sSection As String, ByVal sEntryName As Str
     End If
     
     sFileName = GetFilePath(sFileName)
+
+    If (StrComp(sFileName, App.Path & "\access.ini", vbTextCompare) = 0) Then
+        If (StrComp(sSection, "Flags", vbTextCompare) = 0) Then
+            GetConfigEntry = OpenCommand(sEntryName).RequiredFlags
+        ElseIf (StrComp(sSection, "Numeric", vbTextCompare) = 0) Then
+            GetConfigEntry = OpenCommand(sEntryName).RequiredRank
+        End If
+    
+        Exit Function
+    End If
+    
     GetConfigEntry = ReadINI(sSection, sEntryName, sFileName)
     
 End Function
@@ -830,6 +841,23 @@ Public Sub WriteConfigEntry(ByVal sSection As String, ByVal sEntryName As String
     End If
     
     sFileName = GetFilePath(sFileName)
+    
+    If (StrComp(sFileName, App.Path & "\access.ini", vbTextCompare) = 0) Then
+        Dim cmdObj As Object
+        
+        Set cmdObj = OpenCommand(sEntryName)
+    
+        If (StrComp(sSection, "Flags", vbTextCompare) = 0) Then
+            cmdObj.RequiredFlags = sValue
+        ElseIf (StrComp(sSection, "Numeric", vbTextCompare) = 0) Then
+            cmdObj.RequiredRank = sValue
+        End If
+        
+        cmdObj.Save
+    
+        Exit Sub
+    End If
+
     WriteINI sSection, sEntryName, sValue, sFileName
     
 End Sub
@@ -1206,80 +1234,80 @@ End Sub
 '// CREATEFORM
 '//    Written by Hdx. Creates a Form object that the user can use.
 '//    Returns true if the name/prefix combo is free, and the form is created
-Public Function CreateForm(ByVal strPrefix As String, ByVal strName As String) As Boolean
-    If (obScriptForms.Exists(strPrefix & "|" & strName)) Then
-        CreateForm = False
-        Exit Function
-    Else
-        Dim frmUI As New frmScriptUI
-        frmUI.FillPrefixName strPrefix, strName
-        Load frmUI
-        Call obScriptForms.Add(strPrefix & "|" & strName, frmUI)
-        DictionaryKeys = DictionaryKeys & strPrefix & "|" & strName & vbCrLf
-        CreateForm = True
-    End If
-End Function
+'Public Function CreateForm(ByVal strPrefix As String, ByVal strName As String) As Boolean
+'    If (obScriptForms.Exists(strPrefix & "|" & strName)) Then
+'        CreateForm = False
+'        Exit Function
+'    Else
+'        Dim frmUI As New frmScriptUI
+'        frmUI.FillPrefixName strPrefix, strName
+'        Load frmUI
+'        Call obScriptForms.Add(strPrefix & "|" & strName, frmUI)
+'        DictionaryKeys = DictionaryKeys & strPrefix & "|" & strName & vbCrLf
+'        CreateForm = True
+'    End If
+'End Function
 
 '// DESTROYFORM
 '//   Writtin by Hdx - Will destroy a ScruptUI form, freeing up its name, and memory from the Dictionary
 '//   The Form calls this function upon successful "Unload()", Formes must be re-created after this is called.
-Public Sub DestroyForm(ByVal strPrefix As String, ByVal strForm As String)
-    If (obScriptForms.Exists(strPrefix & "|" & strForm)) Then
-        Dim frmUI As frmScriptUI
-        Set frmUI = obScriptForms.Item(strPrefix & "|" & strForm)
-        frmUI.DestroyObjects
-        Unload frmUI
-        Set frmUI = Nothing
-    End If
-End Sub
+'Public Sub DestroyForm(ByVal strPrefix As String, ByVal strForm As String)
+'    If (obScriptForms.Exists(strPrefix & "|" & strForm)) Then
+'        Dim frmUI As frmScriptUI
+'        Set frmUI = obScriptForms.Item(strPrefix & "|" & strForm)
+'        frmUI.DestroyObjects
+'        Unload frmUI
+'        Set frmUI = Nothing
+'    End If
+'End Sub
 
 '// ADDFORMOBJECT
 '//    Writtin by Hdx - Adds an object of the selected type to a Script's form.
 '//    Returns False if the form does not exits, or the name is already taken
-Public Function AddFormObject(ByVal strPrefix As String, ByVal strFormName As String, ByVal strName As String, ByVal btType As ControlTypes) As Boolean
-    On Error Resume Next
-    If (obScriptForms.Exists(strPrefix & "|" & strFormName)) Then
-        Dim frmUI As frmScriptUI
-        Set frmUI = obScriptForms.Item(strPrefix & "|" & strFormName)
-        Select Case btType
-            Case ControlTypes.btCommandBox:  AddFormObject = frmUI.AddCommandButton(strName)
-            Case ControlTypes.btLabel:       AddFormObject = frmUI.AddLabel(strName)
-            Case ControlTypes.btTextBox:     AddFormObject = frmUI.AddTextBox(strName)
-            Case ControlTypes.btTimer:       AddFormObject = frmUI.AddTimer(strName)
-            Case ControlTypes.btPictureBox:  AddFormObject = frmUI.AddPictureBox(strName)
-            Case ControlTypes.btCheckBox:    AddFormObject = frmUI.AddCheckBox(strName)
-            Case ControlTypes.btOptionBox:   AddFormObject = frmUI.AddOptionBox(strName)
-            Case ControlTypes.btComboBox:    AddFormObject = frmUI.AddComboBox(strName)
-            Case ControlTypes.btListBox:     AddFormObject = frmUI.AddListBox(strName)
-            Case ControlTypes.btShape:       AddFormObject = frmUI.AddShape(strName)
-            Case ControlTypes.btLine:        AddFormObject = frmUI.AddLine(strName)
-            Case ControlTypes.btListView:    AddFormObject = frmUI.AddListView(strName)
-            Case ControlTypes.btImageList:   AddFormObject = frmUI.AddImageList(strName)
-            Case ControlTypes.btINet:        AddFormObject = frmUI.AddINet(strName)
-            Case ControlTypes.btRichTextBox: AddFormObject = frmUI.AddRichTextBox(strName)
-            Case Else: AddFormObject = False
-        End Select
-    Else
-        AddFormObject = False
-    End If
-End Function
+'Public Function AddFormObject(ByVal strPrefix As String, ByVal strFormName As String, ByVal strName As String, ByVal btType As ControlTypes) As Boolean
+'    On Error Resume Next
+'    If (obScriptForms.Exists(strPrefix & "|" & strFormName)) Then
+'        Dim frmUI As frmScriptUI
+'        Set frmUI = obScriptForms.Item(strPrefix & "|" & strFormName)
+'        Select Case btType
+'            Case ControlTypes.btCommandBox:  AddFormObject = frmUI.AddCommandButton(strName)
+'            Case ControlTypes.btLabel:       AddFormObject = frmUI.AddLabel(strName)
+'            Case ControlTypes.btTextBox:     AddFormObject = frmUI.AddTextBox(strName)
+'            Case ControlTypes.btTimer:       AddFormObject = frmUI.AddTimer(strName)
+'            Case ControlTypes.btPictureBox:  AddFormObject = frmUI.AddPictureBox(strName)
+'            Case ControlTypes.btCheckBox:    AddFormObject = frmUI.AddCheckBox(strName)
+'            Case ControlTypes.btOptionBox:   AddFormObject = frmUI.AddOptionBox(strName)
+'            Case ControlTypes.btComboBox:    AddFormObject = frmUI.AddComboBox(strName)
+'            Case ControlTypes.btListBox:     AddFormObject = frmUI.AddListBox(strName)
+'            Case ControlTypes.btShape:       AddFormObject = frmUI.AddShape(strName)
+'            Case ControlTypes.btLine:        AddFormObject = frmUI.AddLine(strName)
+'            Case ControlTypes.btListView:    AddFormObject = frmUI.AddListView(strName)
+'            Case ControlTypes.btImageList:   AddFormObject = frmUI.AddImageList(strName)
+'            Case ControlTypes.btINet:        AddFormObject = frmUI.AddINet(strName)
+'            Case ControlTypes.btRichTextBox: AddFormObject = frmUI.AddRichTextBox(strName)
+'            Case Else: AddFormObject = False
+'        End Select
+'    Else
+'        AddFormObject = False
+'    End If
+'End Function
 
 '// GETUIOBJECT
 '//    Written by Hdx - Retrns the control/form the the specified name. Returns Null if not found.
-Public Function GetUIObject(ByVal strPrefix As String, ByVal strForm As String, Optional ByVal strObject As String = vbNullString) As Object
-    If (obScriptForms.Exists(strPrefix & "|" & strForm)) Then
-        Dim frmUI As frmScriptUI
-        Set frmUI = obScriptForms.Item(strPrefix & "|" & strForm)
-        If (strObject = vbNullString) Then
-            Set GetUIObject = frmUI
-        Else
-            Set GetUIObject = frmUI.GetControl(strObject)
-        End If
-        Set frmUI = Nothing
-    Else
-        Set GetUIObject = Nothing
-    End If
-End Function
+'Public Function GetUIObject(ByVal strPrefix As String, ByVal strForm As String, Optional ByVal strObject As String = vbNullString) As Object
+'    If (obScriptForms.Exists(strPrefix & "|" & strForm)) Then
+'        Dim frmUI As frmScriptUI
+'        Set frmUI = obScriptForms.Item(strPrefix & "|" & strForm)
+'        If (strObject = vbNullString) Then
+'            Set GetUIObject = frmUI
+'        Else
+'            Set GetUIObject = frmUI.GetControl(strObject)
+'        End If
+'        Set frmUI = Nothing
+'    Else
+'        Set GetUIObject = Nothing
+'    End If
+'End Function
 
 ' // ...
 Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional IsLocal As Boolean = False) _
@@ -1578,26 +1606,26 @@ End Sub
 'Re-coded this sub so it properly kills all the UI forms created that are still open. - FrOzeN
 Private Sub Class_Terminate()
 
-    Static Disposed As Boolean
-    
-    If Not Disposed Then
-        Dim I As Integer, strParts() As String, frmTemp As frmScriptUI
-        strParts() = Split(DictionaryKeys, vbCrLf)
-            
-        For I = 0 To UBound(strParts) - 1
-            If obScriptForms.Exists(strParts(I)) Then
-                Set frmTemp = obScriptForms.Item(strParts(I))
-                frmTemp.DestroyObjects
-                Unload frmTemp
-                Set frmTemp = Nothing
-            End If
-        Next I
-        
-        obScriptForms.RemoveAll
-        Set obScriptForms = Nothing
-        
-        Disposed = True
-    End If
+    'Static Disposed As Boolean
+    '
+    'If Not Disposed Then
+    '    Dim I As Integer, strParts() As String, frmTemp As frmScriptUI
+    '    strParts() = Split(DictionaryKeys, vbCrLf)
+    '
+    '    For I = 0 To UBound(strParts) - 1
+    '        If obScriptForms.Exists(strParts(I)) Then
+    '            Set frmTemp = obScriptForms.Item(strParts(I))
+    '            frmTemp.DestroyObjects
+    '            Unload frmTemp
+    '            Set frmTemp = Nothing
+    '        End If
+    '    Next I
+    '
+    '    obScriptForms.RemoveAll
+    '    Set obScriptForms = Nothing
+    '
+    '    Disposed = True
+    'End If
 
     frmChat.SControl.Reset
     'frmChat.SCRestricted.Reset

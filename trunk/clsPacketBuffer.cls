@@ -30,11 +30,11 @@ Public Sub setCripple()
 
 End Sub
 
-Public Property Get Cripple() As Boolean
+Public Function getCripple() As Boolean
 
-    Cripple = m_cripple
+    getCripple = m_cripple
 
-End Property
+End Function
 
 ' ...
 Private Sub Class_Initialize()
@@ -246,6 +246,12 @@ Public Function Clear()
     m_bufsize = 0
 End Function ' end function Clear
 
+Public Function DebugOutput()
+
+    frmChat.AddChat vbRed, modWar3Clan.DebugOutput(Data)
+
+End Function
+
 ' ...
 Public Function SendPacketMCP(Optional PacketID As Byte)
     'Dim pkt    As modPacketBuffer.PACKETCACHEITEM
@@ -336,7 +342,7 @@ Public Function SendPacket(Optional PacketID As Byte)
             hex(PacketID), 2)
     End If
     
-    If (Cripple) Then
+    If (getCripple) Then
         Select Case (PacketID)
             Case &HE, &HC: Exit Function
         End Select
