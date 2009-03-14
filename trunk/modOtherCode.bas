@@ -236,7 +236,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
             If (LenB(Username) > 0) Then
                 LastBan = LCase$(Username)
                 
-                CleanedUsername = StripRealm(CleanedUsername)
+                'CleanedUsername = StripRealm(CleanedUsername)
                 CleanedUsername = StripInvalidNameChars(Username)
 
                 If (SpeakerAccess < 999) Then
