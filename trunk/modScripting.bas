@@ -48,7 +48,7 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     Dim ScriptsUpdated As New Collection
     
     Dim strPath  As String  ' ...
-    Dim fileName As String  ' ...
+    Dim filename As String  ' ...
     Dim fileExt  As String  ' ...
     Dim I        As Integer ' ...
     Dim str      As String  ' ...
@@ -64,21 +64,55 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     ' ...
     If (Dir(strPath) <> vbNullString) Then
         ' ...
-        fileName = Dir(strPath)
+        filename = Dir(strPath)
         
         ' ...
-        Do While (fileName <> vbNullString)
+        Do While (filename <> vbNullString)
             ' ...
-            If (IsValidFileExtension(GetFileExtension(fileName))) Then
+            If (IsValidFileExtension(GetFileExtension(filename))) Then
                 ' ...
-                Set CurrentModule = SC.Modules.Add(CleanFileName(fileName))
+                Set CurrentModule = SC.Modules.Add(CleanFileName(filename))
                 
                 ' ...
-                FileToModule CurrentModule, strPath & fileName
+                If (CurrentModule Is Nothing) Then
+                    frmChat.AddChat vbRed, "Scripting error: " & filename & " could not be " & _
+                        "loaded due to a file naming conflict."
+                Else
+                    ' ...
+                    FileToModule CurrentModule, strPath & filename
+                    
+                    ' ...
+                    str = _
+                        CurrentModule.CodeObject.Script("Name")
+                        
+                    ' ...
+                    If (str <> vbNullString) Then
+                        For I = 1 To SC.Modules.Count
+                            ' ...
+                            If (SC.Modules(I).Name <> CurrentModule.Name) Then
+                                tmp = _
+                                    SC.Modules(I).CodeObject.Script("Name")
+                                    
+                                If (StrComp(str, tmp, vbTextCompare) = 0) Then
+                                    frmChat.AddChat vbRed, "Scripting error: " & filename & " has been " & _
+                                        "temporarily renamed due to a script name conflict."
+
+                                    CurrentModule.ExecuteStatement "Script(""Name"") = " & _
+                                        "GetModuleName()"
+
+                                    Exit For
+                                End If
+                            End If
+                        Next I
+                    End If
+                End If
             End If
             
+            ' clean up
+            Set CurrentModule = Nothing
+            
             ' ...
-            fileName = Dir()
+            filename = Dir()
         Loop
     End If
     
@@ -109,7 +143,7 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     ' ********************************
     '     SET GLOBAL SCRIPT NAMES
     ' ********************************
-    
+
     For I = 1 To SC.Modules.Count
         ' ...
         str = _
@@ -140,6 +174,7 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
         Dim CRC32    As New clsCRC32
         Dim filePath As String
 
+        ' ...
         frmChat.AddChat RTBColors.InformationText, "Checking for script updates..."
         
         ' ...
@@ -196,10 +231,24 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
 ' ...
 ERROR_HANDLER:
 
-    ' ...
-    frmChat.AddChat vbRed, "Error: " & Err.description & " in LoadScripts()."
+    ' object with the given name has already been added
+    If (Err.Number = -2147024809) Then
+        Err.Clear
+    
+        Resume Next
+    End If
+    
+    ' object does not support property or method - function missing
+    If (Err.Number = 438) Then
+        Err.Clear
+    
+        Resume Next
+    End If
 
     ' ...
+    frmChat.AddChat vbRed, _
+        "Error (" & Err.Number & "): " & Err.description & " in LoadScripts()."
+
     Exit Sub
 
 End Sub
@@ -300,8 +349,8 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
 
     On Error Resume Next
 
-    Dim str As String ' storage buffer for module code
-    
+    Dim str As String  ' storage buffer for module code
+
     ' ...
     ScriptModule.ExecuteStatement _
         "Set Script = CreateObject(" & Chr$(34) & "Scripting.Dictionary" & Chr$(34) & ")"
@@ -359,14 +408,14 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
 
 End Sub
 
-Private Function GetFileExtension(ByVal fileName As String)
+Private Function GetFileExtension(ByVal filename As String)
 
     On Error Resume Next
 
     ' ...
-    If (InStr(1, fileName, ".") <> 0) Then
+    If (InStr(1, filename, ".") <> 0) Then
         GetFileExtension = _
-            Mid$(fileName, InStr(1, fileName, ".") + 1)
+            Mid$(filename, InStr(1, filename, ".") + 1)
     End If
 
 End Function
@@ -397,13 +446,13 @@ Private Function IsValidFileExtension(ByVal ext As String) As Boolean
 
 End Function
 
-Private Function CleanFileName(ByVal fileName As String) As String
+Private Function CleanFileName(ByVal filename As String) As String
     
-    CleanFileName = Replace(fileName, " ", "_")
+    CleanFileName = Replace(filename, " ", "_")
     
     If (InStr(1, CleanFileName, ".") <> 0) Then
         CleanFileName = _
-            Left(CleanFileName, InStr(1, CleanFileName, ".") - 1)
+            Left$(CleanFileName, InStr(1, CleanFileName, ".") - 1)
     End If
     
 End Function
