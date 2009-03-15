@@ -3224,8 +3224,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                         saElements(I + 2) & Left$(vbCrLf, -2 * CLng((I + 2) = _
                             UBound(saElements)))
                     str = _
-                        saElements(I + 2) & Left$(vbCrLf, -2 * CLng((I + 2) = _
-                            UBound(saElements)))
+                        str & saElements(I + 2)
                     .SelLength = Len(.SelText)
                 End With
             End If
