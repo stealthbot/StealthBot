@@ -372,10 +372,18 @@ End Function
 
 Public Sub InitScripts()
     
-    Dim I As Integer ' ...
+    Dim I   As Integer ' ...
+    Dim str As String  ' ...
     
     For I = 1 To frmChat.SControl.Modules.Count
-        InitScript frmChat.SControl.Modules(I)
+        If (I > 1) Then
+            str = _
+                frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled")
+        End If
+    
+        If (StrComp(str, "False", vbTextCompare) <> 0) Then
+            InitScript frmChat.SControl.Modules(I)
+        End If
     Next I
 
 End Sub
