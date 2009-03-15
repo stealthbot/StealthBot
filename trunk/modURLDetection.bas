@@ -38,21 +38,29 @@ Public Const CFE_LINK = &H20
 Public Const ENM_LINK = &H4000000
 Public Const SW_SHOW = 5
 
-Public hWndRTB As Long
-Private Enabled As Boolean
+Public hWndRTB As New Dictionary
 
 Public Sub EnableURLDetect(ByVal hWndTextbox As Long)
-    If Not Enabled Then
-        Enabled = True
+
+    On Error Resume Next
+
+    hWndRTB(hWndTextbox) = hWndTextbox
+
+    If (Err.Number = 0) Then
         SendMessage hWndTextbox, EM_SETEVENTMASK, 0, ByVal ENM_LINK Or SendMessage(hWndTextbox, EM_GETEVENTMASK, 0, 0)
         SendMessage hWndTextbox, EM_AUTOURLDETECT, 1, ByVal 0
-        hWndRTB = hWndTextbox
     End If
+        
 End Sub
 
 Public Sub DisableURLDetect(ByVal hWndTextbox As Long)
-    If Enabled Then
-        Enabled = False
-        SendMessage hWndRTB, EM_AUTOURLDETECT, 0, ByVal 0
+
+    On Error Resume Next
+
+    hWndRTB.Remove hWndTextbox
+
+    If (Err.Number = 0) Then
+        SendMessage hWndTextbox, EM_AUTOURLDETECT, 0, ByVal 0
     End If
+
 End Sub

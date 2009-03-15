@@ -1628,7 +1628,6 @@ Private Sub Form_Load()
 
     #If (COMPILE_DEBUG = 0) Then
         HookWindowProc frmChat.hWnd
-        HookSendBoxWindowProc frmChat.cboSend.hWnd
     #End If
     
     SendMessage frmChat.cboSend.hWnd, CB_LIMITTEXT, 0, 0
@@ -2643,7 +2642,7 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     Set X = lvClanList.FindItem(Member)
     
     If (Not (X Is Nothing)) Then
-        lvClanList.ListItems.Remove X.index
+        lvClanList.ListItems.Remove X.Index
         
         lvClanList.Refresh
         
@@ -2814,6 +2813,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     
     If (pos > 0) Then
         With g_Clan.Members(pos)
+            .Name = Name
             .Rank = Rank
             .Status = IsOnline
             .Location = Location
@@ -2826,6 +2826,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
         
         ' ...
         With ClanMember
+            .Name = Username
             .Rank = Rank
             .Status = IsOnline
             .Location = Location
@@ -2850,7 +2851,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     End If
     
     If Not (X Is Nothing) Then
-        lvClanList.ListItems.Remove X.index
+        lvClanList.ListItems.Remove X.Index
         Set X = Nothing
     End If
     
@@ -3081,8 +3082,7 @@ Sub Form_Unload(Cancel As Integer)
 
     DisableURLDetect frmChat.rtbChat.hWnd
     UnhookWindowProc frmChat.hWnd
-    UnhookSendBoxWindowProc
-    
+
     'Call SharedScriptSupport.Dispose 'Explicit call the Class_Terminate sub in the ScriptSupportClass to destroy all the forms. - FrOzeN
     
     'DeconstructSettings
@@ -3659,28 +3659,28 @@ Private Sub mnuCatchPhrases_Click()
     frmCatch.Show
 End Sub
 
-Private Sub mnuPublicChannels_Click(index As Integer)
+Private Sub mnuPublicChannels_Click(Index As Integer)
     ' ...
-    If (StrComp(mnuPublicChannels(index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
+    If (StrComp(mnuPublicChannels(Index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
         Exit Sub
     End If
     
     'FullJoin mnuChannels(Index).Caption
     
     ' ...
-    AddQ "/join " & mnuPublicChannels(index).Caption, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/join " & mnuPublicChannels(Index).Caption, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
-Private Sub mnuCustomChannels_Click(index As Integer)
+Private Sub mnuCustomChannels_Click(Index As Integer)
     ' ...
-    If (StrComp(mnuCustomChannels(index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
+    If (StrComp(mnuCustomChannels(Index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
         Exit Sub
     End If
 
     'FullJoin mnuChannels(Index).Caption
     
     ' ...
-    AddQ "/join " & mnuCustomChannels(index).Caption, PRIORITY.CONSOLE_MESSAGE
+    AddQ "/join " & mnuCustomChannels(Index).Caption, PRIORITY.CONSOLE_MESSAGE
 End Sub
 
 'Private Sub mnuCCEditor_Click()
@@ -3775,7 +3775,7 @@ End Sub
 Private Sub mnuFLpopDemote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.index < lvFriendList.ListItems.Count) Then
+            If (.Index < lvFriendList.ListItems.Count) Then
               AddQ "/f d " & .text, PRIORITY.CONSOLE_MESSAGE
               'MoveFriend .index, .index + 1
             End If
@@ -3787,7 +3787,7 @@ End Sub
 Private Sub mnuFLpopPromote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
-            If (.index > 1) Then
+            If (.Index > 1) Then
               AddQ "/f p " & .text, PRIORITY.CONSOLE_MESSAGE
               'MoveFriend .index, .index - 1
             End If
@@ -4113,9 +4113,9 @@ Private Sub mnuClearedTxt_Click()
 End Sub
 
 
-Private Sub mnuQC_Click(index As Integer)
-    If Len(QC(index)) > 0 Then
-        AddQ "/join " & QC(index), PRIORITY.CONSOLE_MESSAGE
+Private Sub mnuQC_Click(Index As Integer)
+    If Len(QC(Index)) > 0 Then
+        AddQ "/join " & QC(Index), PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -4663,98 +4663,98 @@ Private Sub mnuUsers_Click()
     frmDBManager.Show
 End Sub
 
-Private Sub mnuScript_Click(index As Integer)
+Private Sub mnuScript_Click(Index As Integer)
 
     On Error Resume Next
 
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Menu", index)
+    obj = GetSCObjByIndexEx("Menu", Index)
 
     ' ...
     obj.SCModule.Run obj.ObjName & "_Click"
 
 End Sub
 
-Private Sub sckScript_Connect(index As Integer)
+Private Sub sckScript_Connect(Index As Integer)
 
     On Error Resume Next
 
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Winsock", index)
+    obj = GetSCObjByIndexEx("Winsock", Index)
 
     ' ...
     obj.SCModule.Run obj.ObjName & "_Connect"
     
 End Sub
 
-Private Sub sckScript_DataArrival(index As Integer, ByVal bytesTotal As Long)
+Private Sub sckScript_DataArrival(Index As Integer, ByVal bytesTotal As Long)
 
     On Error Resume Next
 
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Winsock", index)
+    obj = GetSCObjByIndexEx("Winsock", Index)
 
     ' ...
     obj.SCModule.Run obj.ObjName & "_DataArrival", bytesTotal
     
 End Sub
 
-Private Sub sckScript_SendComplete(index As Integer)
+Private Sub sckScript_SendComplete(Index As Integer)
 
     On Error Resume Next
 
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Winsock", index)
+    obj = GetSCObjByIndexEx("Winsock", Index)
 
     ' ...
     obj.SCModule.Run obj.ObjName & "_SendComplete"
 
 End Sub
 
-Private Sub sckScript_SendProgress(index As Integer, ByVal bytesSent As Long, ByVal bytesRemaining As Long)
+Private Sub sckScript_SendProgress(Index As Integer, ByVal bytesSent As Long, ByVal bytesRemaining As Long)
 
     On Error Resume Next
 
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Winsock", index)
+    obj = GetSCObjByIndexEx("Winsock", Index)
 
     ' ...
     obj.SCModule.Run obj.ObjName & "_SendProgress", bytesSent, bytesRemaining
 
 End Sub
 
-Private Sub sckScript_Close(index As Integer)
+Private Sub sckScript_Close(Index As Integer)
 
     On Error Resume Next
 
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Winsock", index)
+    obj = GetSCObjByIndexEx("Winsock", Index)
 
     ' ...
     obj.SCModule.Run obj.ObjName & "_Close"
     
 End Sub
 
-Private Sub sckScript_Error(index As Integer, ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckScript_Error(Index As Integer, ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
 
     On Error Resume Next
 
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Winsock", index)
+    obj = GetSCObjByIndexEx("Winsock", Index)
 
     ' ...
     obj.SCModule.Run obj.ObjName & "_Error", Number, description, Scode, Source, HelpFile, _
@@ -4762,42 +4762,42 @@ Private Sub sckScript_Error(index As Integer, ByVal Number As Integer, descripti
 
 End Sub
 
-Private Sub itcScript_StateChanged(index As Integer, ByVal State As Integer)
+Private Sub itcScript_StateChanged(Index As Integer, ByVal State As Integer)
 
     On Error Resume Next
 
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Inet", index)
+    obj = GetSCObjByIndexEx("Inet", Index)
     
     ' ...
     obj.SCModule.Run obj.ObjName & "_StateChanged", State
 
 End Sub
 
-Private Sub tmrScript_Timer(index As Integer)
+Private Sub tmrScript_Timer(Index As Integer)
 
     On Error Resume Next
 
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Timer", index)
+    obj = GetSCObjByIndexEx("Timer", Index)
     
     ' ...
     obj.SCModule.Run obj.ObjName & "_Timer"
     
 End Sub
 
-Private Sub tmrScriptLong_Timer(index As Integer)
+Private Sub tmrScriptLong_Timer(Index As Integer)
 
     On Error Resume Next
 
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("LongTimer", index)
+    obj = GetSCObjByIndexEx("LongTimer", Index)
     
     ' ...
     obj.obj.Counter = (obj.obj.Counter + 1)
@@ -4983,7 +4983,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     With lvChannel
 
         If (Not (.SelectedItem Is Nothing)) Then
-            I = .SelectedItem.index
+            I = .SelectedItem.Index
         End If
         
         'MsgBox KeyCode
@@ -5941,7 +5941,7 @@ Private Sub tmrFriendlistUpdate_Timer()
     End If
 End Sub
 
-Private Sub tmrSilentChannel_Timer(index As Integer)
+Private Sub tmrSilentChannel_Timer(Index As Integer)
     On Error GoTo ERROR_HANDLER
 
     Dim user    As clsUserObj
@@ -5958,7 +5958,7 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
     End If
 
     ' ...
-    If (index = 0) Then
+    If (Index = 0) Then
         ' ...
         If (frmChat.mnuDisableVoidView.Checked = False) Then
             ' ...
@@ -5994,7 +5994,7 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
     
         ' ...
         tmrSilentChannel(0).Enabled = False
-    ElseIf (index = 1) Then
+    ElseIf (Index = 1) Then
         ' ...
         If (mnuDisableVoidView.Checked = False) Then
             ' ...
@@ -6014,7 +6014,7 @@ Private Sub tmrSilentChannel_Timer(index As Integer)
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error: " & Err.description & " in tmrSilentChannel_Timer(" & index & ")."
+    AddChat vbRed, "Error: " & Err.description & " in tmrSilentChannel_Timer(" & Index & ")."
     
     Exit Sub
 End Sub
@@ -6448,7 +6448,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         
         ' ...
         If (StrComp(Left$(strTmp, 1), "/", vbBinaryCompare) = 0) Then
-            Dim index As Long ' ...
+            Dim Index As Long ' ...
             
             ' ...
             For I = 2 To Len(strTmp)
@@ -6467,12 +6467,12 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             End If
 
             ' ...
-            index = InStr(1, strTmp, Space(1), vbBinaryCompare)
+            Index = InStr(1, strTmp, Space(1), vbBinaryCompare)
             
             ' ...
-            If (index > 2) Then
+            If (Index > 2) Then
                 ' ...
-                Command = Mid$(strTmp, 2, (index - 2))
+                Command = Mid$(strTmp, 2, (Index - 2))
 
                 ' ...
                 If ((Command = "w") Or _
@@ -6755,7 +6755,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Dim s                    As String
     Dim I                    As Integer
     Dim f                    As Integer
-    Dim index                As Integer
+    Dim Index                As Integer
     Dim D2GameConventions    As String
     Dim W3GameConventions    As String
     Dim gameConventions      As String
@@ -7763,7 +7763,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
     Dim I           As Integer ' ...
     Dim CurrentName As String  ' ...
     Dim atChar      As Integer ' ...
-    Dim index       As Integer ' ...
+    Dim Index       As Integer ' ...
     Dim Loops       As Integer ' ...
 
     I = InStr(1, toMatch, " ", vbBinaryCompare)
@@ -7786,13 +7786,13 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
             Dim c As Integer ' ...
             
             If (startIndex > .Count) Then
-                index = 1
+                Index = 1
             Else
-                index = startIndex
+                Index = startIndex
             End If
         
             While (Loops < 2)
-                For I = index To .Count 'for each user
+                For I = Index To .Count 'for each user
                     CurrentName = .Item(I).text
                 
                     If (Len(CurrentName) >= Len(toMatch)) Then
@@ -7816,7 +7816,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                 Next I
                 
                 ' ...
-                index = 1
+                Index = 1
                 
                 ' ...
                 Loops = (Loops + 1)
@@ -7847,9 +7847,9 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         realms(7) = "Northrend"
         
         If (startIndex > UBound(realms)) Then
-            index = 0
+            Index = 0
         Else
-            index = (startIndex - 1)
+            Index = (startIndex - 1)
         End If
         
         ' ...
@@ -7858,7 +7858,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
 
             While (Loops < 2)
                 ' ...
-                For I = index To UBound(realms)
+                For I = Index To UBound(realms)
                     ' ...
                     If (Len(realms(I)) >= Len(tmp)) Then
                         ' ...
@@ -7878,7 +7878,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                 Next I
                 
                 ' ...
-                index = 0
+                Index = 0
                 
                 ' ...
                 Loops = (Loops + 1)
@@ -7886,10 +7886,10 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         Else
             If (tmp = vbNullString) Then
                 ' ...
-                MatchClosest = Left$(toMatch, atChar) & realms(index) & _
+                MatchClosest = Left$(toMatch, atChar) & realms(Index) & _
                         BotVars.AutoCompletePostfix
                     
-                MatchIndex = (index + 1)
+                MatchIndex = (Index + 1)
                     
                 Exit Function
             End If
@@ -8029,7 +8029,7 @@ End Sub
 Private Function GetClanSelectedUser() As String
     With lvClanList
         If Not (.SelectedItem Is Nothing) Then
-            If .SelectedItem.index < 1 Then
+            If .SelectedItem.Index < 1 Then
                 GetClanSelectedUser = vbNullString: Exit Function
             Else
                 GetClanSelectedUser = .SelectedItem.text
@@ -8053,7 +8053,7 @@ Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Singl
             lvClanList.ListItems(lItemIndex).Selected = True
             
             If Not (lvClanList.SelectedItem Is Nothing) Then
-                If lvClanList.SelectedItem.index < 0 Then
+                If lvClanList.SelectedItem.Index < 0 Then
                     
                     mnuPopDem.Enabled = False
                     mnuPopPro.Enabled = False
@@ -8163,7 +8163,7 @@ Private Sub mnuPopDem_Click()
         With PBuffer
             .InsertDWord &H1
             .InsertNTString GetClanSelectedUser
-            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.index).SmallIcon - 1
+            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon - 1
             .SendPacket &H7A
         End With
         
@@ -8177,7 +8177,7 @@ Private Sub mnuPopPro_Click()
         With PBuffer
             .InsertDWord &H3
             .InsertNTString GetClanSelectedUser
-            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.index).SmallIcon + 1
+            .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon + 1
             .SendPacket &H7A
         End With
         
@@ -8197,7 +8197,7 @@ Private Sub mnuPopRem_Click()
                 "StealthBot") = vbYes Then
                 
             With PBuffer
-                If lvClanList.SelectedItem.index > 0 Then
+                If lvClanList.SelectedItem.Index > 0 Then
                     .InsertDWord 1 'lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon
                     .InsertNTString GetClanSelectedUser
                     .SendPacket &H78

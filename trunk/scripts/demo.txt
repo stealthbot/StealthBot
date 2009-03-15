@@ -4,12 +4,12 @@
 ' // script data
 Sub Data()
 
-   Script("Name") = "Demo"
-   Script("Author") = "Eric[nK]"
-   Script("Major") = 1
-   Script("Minor") = 0
-   Script("Revision") = 1
-   Script("UpdateLocation") = ""
+   Script("Name") = "Demo"       ' script name
+   Script("Author") = "Eric[nK]" ' script author
+   Script("Major") = 1           ' script major version
+   Script("Minor") = 0           ' script minor version
+   Script("Revision") = 1        ' script version revision
+   Script("UpdateLocation") = "" ' script download location
 
 End Sub
 

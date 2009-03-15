@@ -42,7 +42,6 @@ Module=modWar3Clan; modWar3Clan.bas
 Class=clsCTooltip; clsCToolTip.cls
 Class=clsFriendObj; clsFriendObj.cls
 Class=clsFriendlistHandler; clsFriendlistHandler.cls
-Module=modURLDetection; modURLDetection.bas
 Form=frmWhisperWindow.frm
 Module=modWhisperWindows; modWhisperWindows.bas
 Module=modSubclassing; modSubclassing.bas

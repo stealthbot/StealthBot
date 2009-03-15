@@ -1,4 +1,4 @@
-Attribute VB_Name = "modSubclassing"
+Attribute VB_Name = "modWindow"
 Option Explicit
 'modSubclassing - project StealthBot
 ' authored 7/28/04 andy@stealthbot.net
