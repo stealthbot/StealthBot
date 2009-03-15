@@ -1491,6 +1491,12 @@ Public Function Scripts() As Object
 
 End Function
 
+Public Function StrConvEx(ByVal str As String, ByVal conv As VbStrConv, Optional ByVal locale As Long) As Variant
+
+    StrConvEx = StrConv(str, conv, locale)
+
+End Function
+
 Public Function DataBufferEx() As Object
 
     Set DataBufferEx = New clsPacketBuffer

@@ -48,7 +48,7 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     Dim ScriptsUpdated As New Collection
     
     Dim strPath  As String  ' ...
-    Dim filename As String  ' ...
+    Dim fileName As String  ' ...
     Dim fileExt  As String  ' ...
     Dim I        As Integer ' ...
     Dim str      As String  ' ...
@@ -64,21 +64,21 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     ' ...
     If (Dir(strPath) <> vbNullString) Then
         ' ...
-        filename = Dir(strPath)
+        fileName = Dir(strPath)
         
         ' ...
-        Do While (filename <> vbNullString)
+        Do While (fileName <> vbNullString)
             ' ...
-            If (IsValidFileExtension(GetFileExtension(filename))) Then
+            If (IsValidFileExtension(GetFileExtension(fileName))) Then
                 ' ...
-                Set CurrentModule = SC.Modules.Add(filename)
+                Set CurrentModule = SC.Modules.Add(CleanFileName(fileName))
                 
                 ' ...
-                FileToModule CurrentModule, strPath & filename
+                FileToModule CurrentModule, strPath & fileName
             End If
             
             ' ...
-            filename = Dir()
+            fileName = Dir()
         Loop
     End If
     
@@ -320,7 +320,7 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
     ' GetScriptName() module-level function
     str = str & "Function GetScriptName()" & vbNewLine
     str = str & "   On Error Resume Next" & vbNewLine
-    str = str & "   GetScriptName = Script(" & Chr$(34) & "Name" & Chr$(34) & ")" & vbNewLine
+    str = str & "   GetScriptName = Script(""Name"")" & vbNewLine
     str = str & "   If (LenB(GetScriptName) = 0) Then" & vbNewLine
     str = str & "      GetScriptName = GetModuleName()" & vbNewLine
     str = str & "   End If" & vbNewLine
@@ -359,14 +359,14 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
 
 End Sub
 
-Private Function GetFileExtension(ByVal filename As String)
+Private Function GetFileExtension(ByVal fileName As String)
 
     On Error Resume Next
 
     ' ...
-    If (InStr(1, filename, ".") <> 0) Then
+    If (InStr(1, fileName, ".") <> 0) Then
         GetFileExtension = _
-            Mid$(filename, InStr(1, filename, ".") + 1)
+            Mid$(fileName, InStr(1, fileName, ".") + 1)
     End If
 
 End Function
@@ -395,6 +395,17 @@ Private Function IsValidFileExtension(ByVal ext As String) As Boolean
     
     IsValidFileExtension = False
 
+End Function
+
+Private Function CleanFileName(ByVal fileName As String) As String
+    
+    CleanFileName = Replace(fileName, " ", "_")
+    
+    If (InStr(1, CleanFileName, ".") <> 0) Then
+        CleanFileName = _
+            Left(CleanFileName, InStr(1, CleanFileName, ".") - 1)
+    End If
+    
 End Function
 
 Public Sub InitScripts()
