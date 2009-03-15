@@ -284,6 +284,9 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
         
     ' ...
     ScriptModule.Run "Data"
+    
+    ' ...
+    ScriptModule.ExecuteStatement "Set DataBuffer = DataBufferEx()"
 
     ' GetModuleName() module-level function
     str = str & "Function GetModuleName()" & vbNewLine

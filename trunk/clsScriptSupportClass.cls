@@ -1496,11 +1496,11 @@ Public Function Scripts() As Object
 
 End Function
 
-Public Function DataBuffer() As Object
+Public Function DataBufferEx() As Object
 
-    Set DataBuffer = New clsPacketBuffer
+    Set DataBufferEx = New clsPacketBuffer
     
-    DataBuffer.setCripple
+    DataBufferEx.setCripple
 
 End Function
 
