@@ -7,8 +7,8 @@ Option Explicit
 
 Private Type NMHDR
     hWndFrom As Long
-    idFrom As Long
-    code As Long
+    idFrom   As Long
+    code     As Long
 End Type
 
 Private Type CHARRANGE
@@ -17,19 +17,19 @@ Private Type CHARRANGE
 End Type
 
 Private Type ENLINK
-    hdr As NMHDR
-    Msg As Long
+    hdr    As NMHDR
+    Msg    As Long
     wParam As Long
     lParam As Long
-    chrg As CHARRANGE
+    chrg   As CHARRANGE
 End Type
 
 Private Type TEXTRANGE
-    chrg As CHARRANGE
+    chrg      As CHARRANGE
     lpstrText As String
 End Type
 
-Public ID_TASKBARICON As Integer
+Public ID_TASKBARICON       As Integer
 Public TASKBARCREATED_MSGID As Long
 
 Private Const WM_NOTIFY = &H4E
