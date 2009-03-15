@@ -1481,16 +1481,11 @@ Public Function Scripts() As Object
 
     For I = 1 To frmChat.SControl.Modules.Count
         str = _
-            frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled")
-    
-        If (StrComp(str, "False", vbTextCompare) <> 0) Then
-            str = _
-                frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
+            frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
                 
-            If (StrComp(str, "False", vbTextCompare) <> 0) Then
-                Scripts.Add frmChat.SControl.Modules(I).CodeObject, _
-                    frmChat.SControl.Modules(I).CodeObject.GetScriptName()
-            End If
+        If (StrComp(str, "False", vbTextCompare) <> 0) Then
+            Scripts.Add frmChat.SControl.Modules(I).CodeObject, _
+                frmChat.SControl.Modules(I).CodeObject.GetScriptName()
         End If
     Next I
 

@@ -52,11 +52,12 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     Dim fileExt  As String  ' ...
     Dim I        As Integer ' ...
     Dim str      As String  ' ...
+    Dim tmp      As String  ' ...
     
     ' ********************************
     '      LOAD REGULAR SCRIPTS
     ' ********************************
-
+    
     ' ...
     strPath = App.Path & "\scripts\"
     
@@ -104,6 +105,29 @@ Public Sub LoadScripts(ByRef SC As ScriptControl)
     Else
         boolOverride = True
     End If
+    
+    ' ********************************
+    '     SET GLOBAL SCRIPT NAMES
+    ' ********************************
+    
+    For I = 1 To SC.Modules.Count
+        ' ...
+        str = _
+            SC.Modules(I).CodeObject.GetScriptName()
+    
+        ' ...
+        If (InStr(1, str, ".") = 0) Then
+            ' ...
+            tmp = _
+                SC.Modules(I).CodeObject.GetSettingsEntry("Public")
+        
+            ' ...
+            If (StrComp(tmp, "False", vbTextCompare) <> 0) Then
+                SC.Modules(1).ExecuteStatement "Set " & str & " = Scripts(" & Chr$(34) & _
+                    str & Chr$(34) & ")"
+            End If
+        End If
+    Next I
     
     ' ********************************
     '      CHECK FOR UPDATES
