@@ -72,6 +72,26 @@ Public Function CRC32(ByVal Data As String) As Long
     
 End Function
 
+Public Function GetFileCRC32(ByVal filePath As String) As Long
+
+    Dim str As String  ' ...
+    Dim tmp As String  ' ...
+    Dim f   As Integer ' ...
+    
+    f = FreeFile
+    
+    Open filePath For Input As #f
+        Do While (EOF(f) = False)
+            Line Input #f, tmp
+            
+            str = str & tmp
+        Loop
+    Close #f
+    
+    GetFileCRC32 = CRC32(str)
+
+End Function
+
 'Modified from code given to me by David Fritts (sneakcharm@yahoo.com)
 Public Function ValidateExecutable() As Boolean
 

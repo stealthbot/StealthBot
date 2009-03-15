@@ -1,40 +1,51 @@
 #include "\demo\frm.txt"
 #include "\demo\sck.txt"
 
-Function Name()
+' // script data
+Sub Data()
 
-   Name = "Demo"
+   Script("Name") = "Demo"
+   Script("Author") = "Eric[nK]"
+   Script("Major") = 1
+   Script("Minor") = 0
+   Script("Revision") = 1
+   Script("UpdateLocation") = ""
 
-End Function
+End Sub
 
 Sub Event_Load()
 
+   ' // create Winsock object
    CreateObj "Winsock", "sck"
    
+   ' // set Winsock object properties
    With sck
       .RemoteHost = "uswest.battle.net"
       .RemotePort = 6112
       .Connect
    End With
-
+ 
+   ' // create LongTimer object
    CreateObj "LongTimer", "LTimer"
 
+   ' // set LongTimer object properties
    With LTimer
       .Interval = 60
       .Enabled = True
    End With
 
+   ' // create Form object
    CreateObj "Form", "frm"
 
+   ' // show form
    frm.Show
 
 End Sub
 
+' LTimer event sub
 Sub LTimer_Timer()
 
    AddChat vbBlue, "LTimer_Timer()"
-
-   frm.Show
 
 End Sub
 

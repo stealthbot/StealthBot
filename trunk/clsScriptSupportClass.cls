@@ -1456,6 +1456,12 @@ Public Function CreateObjEx(ByVal ModuleName As String, ByVal ObjType As String,
 
 End Function
 
+Public Function DestroyObjEx(ByVal ModuleName As String, ByVal ObjName As String) As Object
+
+    modScripting.DestroyObjEx frmChat.SControl.Modules(ModuleName), ObjName
+
+End Function
+
 Public Function GetObjByNameEx(ByVal ModuleName As String, ByVal ObjName As String) As Object
 
     Set GetObjByNameEx = _
@@ -1498,7 +1504,7 @@ Public Function DataBuffer() As Object
 
 End Function
 
-Public Function GetScriptObjByName(ByVal ScriptName As String) As Object
+Public Function GetScriptObjByName(ByVal scriptName As String) As Object
 
     On Error Resume Next
 
@@ -1508,7 +1514,7 @@ Public Function GetScriptObjByName(ByVal ScriptName As String) As Object
     For I = 1 To frmChat.SControl.Modules.Count
         str = frmChat.SControl.Modules(I).Eval("Name()")
         
-        If (StrComp(ScriptName, str, vbTextCompare) = 0) Then
+        If (StrComp(scriptName, str, vbTextCompare) = 0) Then
             str = _
                 frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
             
@@ -1526,7 +1532,7 @@ Public Function GetScriptObjByName(ByVal ScriptName As String) As Object
     For I = 1 To frmChat.SControl.Modules.Count
         str = frmChat.SControl.Modules(I).Name
     
-        If (StrComp(ScriptName, str, vbTextCompare) = 0) Then
+        If (StrComp(scriptName, str, vbTextCompare) = 0) Then
             str = _
                 frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
             
@@ -1543,7 +1549,7 @@ Public Function GetScriptObjByName(ByVal ScriptName As String) As Object
 
 End Function
 
-Public Function GetSettingsEntryEx(ByVal ScriptName As String, ByVal sEntryName As String)
+Public Function GetSettingsEntryEx(ByVal scriptName As String, ByVal sEntryName As String)
     
     Dim Path As String ' ...
     
@@ -1557,7 +1563,7 @@ Public Function GetSettingsEntryEx(ByVal ScriptName As String, ByVal sEntryName 
     End If
     
     ' ...
-    GetSettingsEntryEx = ReadINI(ScriptName, sEntryName, Path)
+    GetSettingsEntryEx = ReadINI(scriptName, sEntryName, Path)
     
     ' ...
     If (InStr(1, GetSettingsEntryEx, " ;") <> 0) Then
@@ -1573,7 +1579,7 @@ Public Function GetSettingsEntryEx(ByVal ScriptName As String, ByVal sEntryName 
 
 End Function
 
-Public Function WriteSettingsEntryEx(ByVal ScriptName As String, ByVal sEntryName As String, ByVal sValue As String, Optional sDescription As String)
+Public Function WriteSettingsEntryEx(ByVal scriptName As String, ByVal sEntryName As String, ByVal sValue As String, Optional sDescription As String)
 
     Dim Path As String ' ...
     
@@ -1587,7 +1593,7 @@ Public Function WriteSettingsEntryEx(ByVal ScriptName As String, ByVal sEntryNam
     End If
     
     ' ...
-    WriteINI ScriptName, sEntryName, sValue & _
+    WriteINI scriptName, sEntryName, sValue & _
         IIf(Len(sDescription), " ; " & sDescription, ""), Path
 
 End Function
