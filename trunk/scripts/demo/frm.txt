@@ -18,8 +18,6 @@ End Sub
 
 Sub frm_Unload(Cancel)
 
-   AddChat vbBlue, "frm_Unload()"
-
    frm.ClearObjs
 
 End Sub
