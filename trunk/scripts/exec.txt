@@ -3,7 +3,7 @@ Option Explicit
 ' // script data
 Sub Data()
 
-   Script("Name") = "Demo"
+   Script("Name") = "exec"
    Script("Author") = "Eric[nK]"
    Script("Major") = 1
    Script("Minor") = 0
