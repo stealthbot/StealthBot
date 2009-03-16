@@ -35,7 +35,6 @@ Module=modBNLSCode; modBNLS.bas
 Module=modAPI; modAPI.bas
 Module=modEnum; modEnum.bas
 Module=modNews; modNews.bas
-Module=modProcessPriority; modProcessPriority.bas
 Module=modProxySupport; modProxySupport.bas
 Module=modUTF8; modUTF8.bas
 Module=modWar3Clan; modWar3Clan.bas

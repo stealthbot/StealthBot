@@ -477,7 +477,11 @@ Public Sub DestroyObj(ByVal ObjName As String)
     End If
     
     ' ...
-    ReDim Preserve m_arrObjs(0 To m_objCount - 1)
+    If (m_objCount > 1) Then
+        ReDim Preserve m_arrObjs(0 To m_objCount - 1)
+    Else
+        ReDim m_arrObjs(0)
+    End If
     
     ' ...
     m_objCount = (m_objCount - 1)
@@ -1170,6 +1174,20 @@ Private Sub lst_Scroll(Index As Integer)
     
     ' ...
     m_sc_module.Run m_name & "_" & obj.ObjName & "_Scroll"
+
+End Sub
+
+Private Sub lsv_ColumnClick(Index As Integer, ByVal ColumnHeader As ColumnHeader)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetSCObjByIndex("ListView", Index)
+    
+    ' ...
+    m_sc_module.Run m_name & "_" & obj.ObjName & "_ColumnClick", ColumnHeader
 
 End Sub
 

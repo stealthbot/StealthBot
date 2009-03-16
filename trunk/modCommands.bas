@@ -468,7 +468,7 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "locktext":      Call OnLockText(Username, dbAccess, msgData, InBot, cmdRet())
         Case "allowmp3":      Call OnAllowMp3(Username, dbAccess, msgData, InBot, cmdRet())
         Case "loadwinamp":    Call OnLoadWinamp(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "efp":           Call OnEfp(Username, dbAccess, msgData, InBot, cmdRet())
+        'Case "efp":           Call OnEfp(Username, dbAccess, msgData, InBot, cmdRet())
         Case "home":          Call OnHome(Username, dbAccess, msgData, InBot, cmdRet())
         Case "clan":          Call OnClan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "peonban":       Call OnPeonBan(Username, dbAccess, msgData, InBot, cmdRet())
@@ -737,39 +737,39 @@ Private Function OnLoadWinamp(ByVal Username As String, ByRef dbAccess As udtGet
 End Function ' end function OnLoadWinamp
 
 ' handle efp command
-Private Function OnEfp(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    ' This command will enable, disable, or check the status of, the Effective Floodbot
-    ' Protection system.  EFP is a system designed to combat floodbot attacks by reducing
-    ' the number of allowable commands, and enhancing the strength of the message queue.
-    
-    Dim tmpbuf As String ' temporary output buffer
-    
-    ' ...
-    msgData = LCase$(msgData)
-
-    If (msgData = "on") Then
-        ' enable efp
-        Call frmChat.SetFloodbotMode(1)
-        
-        tmpbuf = "Emergency floodbot protection enabled."
-    ElseIf (msgData = "off") Then
-        ' disable efp
-        Call frmChat.SetFloodbotMode(0)
-        
-        tmpbuf = "Emergency floodbot protection disabled."
-    ElseIf (msgData = "status") Then
-        If (bFlood) Then
-            frmChat.AddChat RTBColors.TalkBotUsername, "Emergency floodbot protection is " & _
-                "enabled. (No messages can be sent to battle.net.)"
-        Else
-            tmpbuf = "Emergency floodbot protection is disabled."
-        End If
-    End If
-            
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnEfp
+'Private Function OnEfp(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+'    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+'    ' This command will enable, disable, or check the status of, the Effective Floodbot
+'    ' Protection system.  EFP is a system designed to combat floodbot attacks by reducing
+'    ' the number of allowable commands, and enhancing the strength of the message queue.
+'
+'    Dim tmpbuf As String ' temporary output buffer
+'
+'    ' ...
+'    msgData = LCase$(msgData)
+'
+'    If (msgData = "on") Then
+'        ' enable efp
+'        Call frmChat.SetFloodbotMode(1)
+'
+'        tmpbuf = "Emergency floodbot protection enabled."
+'    ElseIf (msgData = "off") Then
+'        ' disable efp
+'        Call frmChat.SetFloodbotMode(0)
+'
+'        tmpbuf = "Emergency floodbot protection disabled."
+'    ElseIf (msgData = "status") Then
+'        If (bFlood) Then
+'            frmChat.AddChat RTBColors.TalkBotUsername, "Emergency floodbot protection is " & _
+'                "enabled. (No messages can be sent to battle.net.)"
+'        Else
+'            tmpbuf = "Emergency floodbot protection is disabled."
+'        End If
+'    End If
+'
+'    ' return message
+'    cmdRet(0) = tmpbuf
+'End Function ' end function OnEfp
 
 ' handle home command
 Private Function OnHome(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _

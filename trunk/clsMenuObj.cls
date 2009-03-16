@@ -43,7 +43,7 @@ Public Property Let Caption(ByVal str As String)
 
 End Property
 
-Public Property Get name() As String
+Public Property Get Name() As String
 
     ' ...
 

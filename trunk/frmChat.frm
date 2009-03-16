@@ -894,6 +894,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -919,7 +920,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1904,7 +1904,7 @@ Private Sub Form_Load()
     If (LenB(s) = 0) Then DisplayNews
     
     InitScriptControl SControl
-    LoadScripts SControl
+    LoadScripts
     
     RunInAll "Event_FirstRun"
     
@@ -4263,16 +4263,12 @@ Private Sub mnuFListRefresh_Click()
 End Sub
 
 Sub mnuReloadScript_Click()
-
-    'ReInitScriptControl SControl
-
-    'Exit Sub
-
-    Dim I As Integer, lMenu As Long
-    'Dim Message As String
     
-    On Error GoTo mnuReloadScript_Click_Error
-    
+    On Error GoTo ERROR_HANDLER
+
+    Dim I     As Integer
+    Dim lMenu As Long
+
     RunInAll "Event_Close"
 
     ' Clear callback list
@@ -4305,22 +4301,19 @@ Sub mnuReloadScript_Click()
     ScriptMenu_ParentID = 0
 
     InitScriptControl SControl
-    LoadScripts SControl
+    LoadScripts
     InitScripts
     
     DrawMenuBar frmChat.hWnd
     
     Exit Sub
 
-mnuReloadScript_Click_Error: ' No code is present
-    'Debug.Print Err.Number & ": " & Err.Description
-    If Err.Number = 438 Then
-        Resume Next
-    Else
-        Debug.Print "Unhandled error in mnuReloadScript_Click()"
-        Debug.Print Err.Number & ": " & Err.description
-        Resume Next
-    End If
+ERROR_HANDLER:
+
+    frmChat.AddChat vbRed, Err.Number
+    
+    Resume Next
+    
 End Sub
 
 'Private Sub mnuSetTop_Click()
@@ -7398,76 +7391,76 @@ Function OutFilterMsg(ByVal strOut As String) As String
     OutFilterMsg = strOut
 End Function
 
-Sub SetFloodbotMode(ByVal Mode As Byte)
-    Dim I   As Integer
-    Dim Add As Byte
-
-    Select Case (Mode)
-        Case 0      'OFF
-            bFlood = False
-            
-            SetNagelStatus frmChat.sckBNet.SocketHandle, True
-                        
-            Call g_Queue.Clear
-            
-            SetProcessPriority 0, frmChat.hWnd, ppNormal
-            
-            AddChat RTBColors.TalkBotUsername, "The channel list is most likely not accurate. Please " & _
-                "rejoin the bot to correct this."
-            
-            ReDim gFloodSafelist(0)
-            
-        Case 1      'ON
-            bFlood = True
-            
-            SetNagelStatus frmChat.sckBNet.SocketHandle, False
-            
-            Call g_Queue.Clear
-            
-            AddChat RTBColors.TalkBotUsername, "You have enabled Emergency Floodbot Protection:"
-            AddChat RTBColors.InformationText, "- All message-queue actions have been suspended."
-            AddChat RTBColors.InformationText, "- No greet messages or command responses will be displayed."
-            AddChat RTBColors.InformationText, "- You can still use any commands from the channel or " & _
-                "in-bot. You may not see their results."
-            AddChat RTBColors.InformationText, "- Any user that joins and IS NOT SAFELISTED will be banned."
-            AddChat RTBColors.InformationText, "- You can add users to the safelist using the safelist " & _
-                "command in-bot or in-channel."
-            AddChat RTBColors.TalkBotUsername, "Type '/efp off' to return to normal."
-            
-            SetProcessPriority 0, frmChat.hWnd, ppHigh
-            
-            ReDim gFloodSafelist(0)
-            
-            For I = 1 To colSafelist.Count
-                If (Not (GetSafelist(colSafelist.Item(I).Name))) Then
-                    gFloodSafelist(UBound(gFloodSafelist)) = _
-                        Replace(PrepareCheck(colSafelist.Item(I).Name), Space(1), _
-                            vbNullString)
-                    
-                    ReDim Preserve gFloodSafelist(UBound(gFloodSafelist) + 1)
-                End If
-            Next I
-            
-            For I = LBound(DB) To UBound(DB)
-                With DB(I)
-                    If (GetShitlist(DB(I).Username)) Then
-                        Add = 1
-                    End If
-                End With
-                
-                If (GetSafelist(DB(I).Username)) Then
-                    Add = 1
-                End If
-                
-                If (Add = 0) Then
-                    gFloodSafelist(UBound(gFloodSafelist)) = _
-                        DB(I).Username
-                    
-                    ReDim Preserve gFloodSafelist(UBound(gFloodSafelist) + 1)
-                End If
-            Next I
-    End Select
-End Sub
+'Sub SetFloodbotMode(ByVal Mode As Byte)
+'    Dim I   As Integer
+'    Dim Add As Byte
+'
+'    Select Case (Mode)
+'        Case 0      'OFF
+'            bFlood = False
+'
+'            SetNagelStatus frmChat.sckBNet.SocketHandle, True
+'
+'            Call g_Queue.Clear
+'
+'            SetProcessPriority 0, frmChat.hWnd, ppNormal
+'
+'            AddChat RTBColors.TalkBotUsername, "The channel list is most likely not accurate. Please " & _
+'                "rejoin the bot to correct this."
+'
+'            ReDim gFloodSafelist(0)
+'
+'        Case 1      'ON
+'            bFlood = True
+'
+'            SetNagelStatus frmChat.sckBNet.SocketHandle, False
+'
+'            Call g_Queue.Clear
+'
+'            AddChat RTBColors.TalkBotUsername, "You have enabled Emergency Floodbot Protection:"
+'            AddChat RTBColors.InformationText, "- All message-queue actions have been suspended."
+'            AddChat RTBColors.InformationText, "- No greet messages or command responses will be displayed."
+'            AddChat RTBColors.InformationText, "- You can still use any commands from the channel or " & _
+'                "in-bot. You may not see their results."
+'            AddChat RTBColors.InformationText, "- Any user that joins and IS NOT SAFELISTED will be banned."
+'            AddChat RTBColors.InformationText, "- You can add users to the safelist using the safelist " & _
+'                "command in-bot or in-channel."
+'            AddChat RTBColors.TalkBotUsername, "Type '/efp off' to return to normal."
+'
+'            SetProcessPriority 0, frmChat.hWnd, ppHigh
+'
+'            ReDim gFloodSafelist(0)
+'
+'            For I = 1 To colSafelist.Count
+'                If (Not (GetSafelist(colSafelist.Item(I).Name))) Then
+'                    gFloodSafelist(UBound(gFloodSafelist)) = _
+'                        Replace(PrepareCheck(colSafelist.Item(I).Name), Space(1), _
+'                            vbNullString)
+'
+'                    ReDim Preserve gFloodSafelist(UBound(gFloodSafelist) + 1)
+'                End If
+'            Next I
+'
+'            For I = LBound(DB) To UBound(DB)
+'                With DB(I)
+'                    If (GetShitlist(DB(I).Username)) Then
+'                        Add = 1
+'                    End If
+'                End With
+'
+'                If (GetSafelist(DB(I).Username)) Then
+'                    Add = 1
+'                End If
+'
+'                If (Add = 0) Then
+'                    gFloodSafelist(UBound(gFloodSafelist)) = _
+'                        DB(I).Username
+'
+'                    ReDim Preserve gFloodSafelist(UBound(gFloodSafelist) + 1)
+'                End If
+'            Next I
+'    End Select
+'End Sub
 
 Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
     'On Error GoTo ERROR_HANDLER
