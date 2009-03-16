@@ -787,7 +787,7 @@ Private Sub Form_Unload(Cancel As Integer)
     m_sc_module.Run m_name & "_Unload", Cancel
     
     ' ...
-    Me.Hide
+    Me.Visible = False
     
     ' ...
     m_hidden = True

@@ -16,7 +16,7 @@ Sub frm_text_Change()
 
 End Sub
 
-Sub frm_Unload()
+Sub frm_Unload(Cancel)
 
    frm.ClearObjs
 
