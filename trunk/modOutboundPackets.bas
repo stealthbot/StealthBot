@@ -8,19 +8,19 @@ Option Explicit
 Public g_username As String
 'Public strWardenPacket As String
 
-Public Sub Send0x50(Optional lVerByte As Long)
+Public Sub Send0x50(Optional ByVal lVerByte As Long = 0)
     Dim CAbbr As String, cName As String
-    Dim S As String
+    Dim s As String
 
     With PBuffer
         .InsertDWord &H0 'Protocol ID (Zero)
         
-        S = StrReverse(UCase(ReadCfg("Override", GetProductKey() & "PlatID")))
+        s = StrReverse(UCase(ReadCfg("Override", GetProductKey() & "PlatID")))
         
-        If Len(S) > 0 Then
-            If Len(S) > 4 Then S = Mid$(S, 1, 4)
+        If Len(s) > 0 Then
+            If Len(s) > 4 Then s = Mid$(s, 1, 4)
             
-            .InsertNonNTString S & BotVars.Product 'Platform ID and Product ID
+            .InsertNonNTString s & BotVars.Product 'Platform ID and Product ID
         Else
             .InsertNonNTString "68XI" & BotVars.Product 'Platform ID and Product ID
         End If
@@ -257,7 +257,7 @@ Public Sub Send0x3A(ByVal ServerToken As Long)
 End Sub
 
 Public Sub Send0x0A()
-    Dim num As Integer
+    Dim Num As Integer
 
     If BotVars.Product <> "VD2D" And BotVars.Product <> "PX2D" And _
         BotVars.Product <> "PX3W" And BotVars.Product <> "3RAW" Then
@@ -280,7 +280,7 @@ Public Sub Send0x0A()
     Randomize
     
     ' ...
-    num = (1 + Rnd() * 1000)
+    Num = (1 + Rnd() * 1000)
     
     ' ...
     With PBuffer
@@ -296,7 +296,7 @@ Public Sub Send0x0A()
         .SendPacket &HB
     End With
     
-    FullJoin BotVars.HomeChannel & ":" & num, 0
+    FullJoin BotVars.HomeChannel & ":" & Num, 0
     
     With PBuffer
         .InsertNTString "/whoami"
