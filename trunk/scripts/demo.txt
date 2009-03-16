@@ -68,10 +68,3 @@ Sub Event_PacketSent(Protocol, ID, Length, Data)
    End If
 
 End Sub
-
-Sub TestDemo()
-
-   AddChat vbBlue, "TestDemo()"
-
-End Sub
-

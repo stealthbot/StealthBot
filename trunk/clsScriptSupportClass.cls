@@ -1485,15 +1485,15 @@ Public Function Scripts() As Object
                 
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
             Scripts.Add frmChat.SControl.Modules(I).CodeObject, _
-                frmChat.SControl.Modules(I).CodeObject.GetScriptName()
+                frmChat.SControl.Modules(I).CodeObject.Script("Name")
         End If
     Next I
 
 End Function
 
-Public Function StrConvEx(ByVal str As String, ByVal conv As VbStrConv, Optional ByVal locale As Long) As Variant
+Public Function StrConvEx(ByVal str As String, ByVal Conv As VbStrConv, Optional ByVal locale As Long) As Variant
 
-    StrConvEx = StrConv(str, conv, locale)
+    StrConvEx = StrConv(str, Conv, locale)
 
 End Function
 
@@ -1607,7 +1607,7 @@ Public Sub Dispose()
 End Sub
 
 Private Sub Class_Initialize()
-    Set obScriptForms = CreateObject("Scripting.Dictionary")
+    'Set obScriptForms = CreateObject("Scripting.Dictionary")
 End Sub
 
 'Re-coded this sub so it properly kills all the UI forms created that are still open. - FrOzeN

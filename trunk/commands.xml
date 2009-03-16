@@ -47,6 +47,18 @@
     <access />
   </command>
 
+  <command name="sdetail">
+    <aliases />
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+
+    <access />
+  </command>
+
   <command name="watch">
     <aliases />
 

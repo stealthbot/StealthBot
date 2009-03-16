@@ -626,6 +626,7 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "scripts":       Call OnScripts(Username, dbAccess, msgData, InBot, cmdRet())
         Case "enable":        Call OnEnable(Username, dbAccess, msgData, InBot, cmdRet())
         Case "disable":       Call OnDisable(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "sdetail":       Call OnSDetail(Username, dbAccess, msgData, InBot, cmdRet())
         Case Else
             blnNoCmd = True
     End Select
@@ -6545,7 +6546,7 @@ Private Function OnEnable(ByVal Username As String, ByRef dbAccess As udtGetAcce
     If (frmChat.SControl.Modules.Count) Then
         For I = 1 To frmChat.SControl.Modules.Count
             Name = _
-                frmChat.SControl.Modules(I).CodeObject.GetScriptName
+                frmChat.SControl.Modules(I).CodeObject.Script("Name")
                 
             If (StrComp(Name, msgData, vbTextCompare) = 0) Then
                 frmChat.SControl.Modules(I).CodeObject.WriteSettingsEntry _
@@ -6575,7 +6576,7 @@ Private Function OnDisable(ByVal Username As String, ByRef dbAccess As udtGetAcc
     If (frmChat.SControl.Modules.Count) Then
         For I = 1 To frmChat.SControl.Modules.Count
             Name = _
-                frmChat.SControl.Modules(I).CodeObject.GetScriptName
+                frmChat.SControl.Modules(I).CodeObject.Script("Name")
                 
             If (StrComp(Name, msgData, vbTextCompare) = 0) Then
                 frmChat.SControl.Modules(I).CodeObject.WriteSettingsEntry _
@@ -6584,6 +6585,47 @@ Private Function OnDisable(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 DestroyObjs frmChat.SControl.Modules(I)
                     
                 cmdRet(0) = Name & " has been disabled."
+            
+                Exit Function
+            End If
+        Next I
+    End If
+    
+    cmdRet(0) = "Error: Could not find specified script."
+    
+End Function
+
+' handle sdetail command
+Private Function OnSDetail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim Name As String  ' ...
+    Dim I    As Integer ' ...
+    
+    ' ...
+    If (frmChat.SControl.Modules.Count) Then
+        For I = 1 To frmChat.SControl.Modules.Count
+            Name = _
+                frmChat.SControl.Modules(I).CodeObject.Script("Name")
+                
+            If (StrComp(Name, msgData, vbTextCompare) = 0) Then
+                Dim version As String ' ...
+                Dim author  As String ' ...
+                
+                version = _
+                    frmChat.SControl.Modules(I).CodeObject.Script("Major")
+                    
+                version = version & "." & _
+                    frmChat.SControl.Modules(I).CodeObject.Script("Minor")
+                    
+                version = version & " Revision " & _
+                    frmChat.SControl.Modules(I).CodeObject.Script("Revision")
+                    
+                author = _
+                    frmChat.SControl.Modules(I).CodeObject.Script("Author")
+                    
+                cmdRet(0) = Name & " v" & version & _
+                    IIf(LenB(author) > 0, " by " & author, "")
             
                 Exit Function
             End If

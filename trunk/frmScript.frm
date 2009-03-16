@@ -346,6 +346,29 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
 
 End Function
 
+Public Sub DestroyObjs()
+
+    On Error GoTo ERROR_HANDLER
+
+    Dim I As Integer ' ...
+    
+    ' ...
+    For I = m_objCount - 1 To 0 Step -1
+        DestroyObj m_arrObjs(I).ObjName
+    Next I
+    
+    ' ...
+    Exit Sub
+
+ERROR_HANDLER:
+    
+    frmChat.AddChat vbRed, _
+        "Error (#" & Err.Number & "): " & Err.description & " in frmScript::DestroyObjs()."
+        
+    Resume Next
+    
+End Sub
+
 Public Sub DestroyObj(ByVal ObjName As String)
 
     On Error GoTo ERROR_HANDLER
@@ -363,12 +386,10 @@ Public Sub DestroyObj(ByVal ObjName As String)
     
     ' ...
     For I = 0 To m_objCount - 1
-        If (m_arrObjs(I).SCModule.Name = m_sc_module.Name) Then
-            If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
-                Index = I
-            
-                Exit For
-            End If
+        If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
+            Index = I
+        
+            Exit For
         End If
     Next I
     
@@ -492,7 +513,7 @@ Public Sub DestroyObj(ByVal ObjName As String)
 ERROR_HANDLER:
     
     frmChat.AddChat vbRed, _
-        "Error (#" & Err.Number & "): " & Err.description & " in DestroyObjs()."
+        "Error (#" & Err.Number & "): " & Err.description & " in frmScript::DestroyObjs()."
         
     Resume Next
     
@@ -580,29 +601,6 @@ ERROR_HANDLER:
     
 End Sub
 
-Public Sub DestroyObjs()
-
-    On Error GoTo ERROR_HANDLER
-
-    Dim I As Integer ' ...
-    
-    ' ...
-    For I = m_objCount - 1 To 0 Step -1
-        DestroyObj m_arrObjs(I).ObjName
-    Next I
-    
-    ' ...
-    Exit Sub
-
-ERROR_HANDLER:
-    
-    frmChat.AddChat vbRed, _
-        "Error (#" & Err.Number & "): " & Err.description & " in DestroyObjs()."
-        
-    Resume Next
-    
-End Sub
-
 Public Sub AddChat(ByVal rtbName As String, ParamArray saElements() As Variant)
 
     Dim arr() As Variant ' ...
@@ -619,7 +617,7 @@ End Sub
 '//Events
 '//////////////////////////////////////////////////////
 
-Private Sub Form_Load()
+Public Sub Initialize()
 
     On Error Resume Next
     
@@ -786,7 +784,7 @@ Private Sub Form_Unload(Cancel As Integer)
     On Error Resume Next
 
     ' ...
-    m_sc_module.Run m_name & "_Unload"
+    m_sc_module.Run m_name & "_Unload", Cancel
     
     ' ...
     Me.Hide

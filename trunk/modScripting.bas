@@ -353,12 +353,7 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
     str = str & "Function GetModuleName()" & vbNewLine
     str = str & "   GetModuleName = " & Chr$(34) & ScriptModule.Name & Chr$(34) & vbNewLine
     str = str & "End Function" & vbNewLine
-    
-    ' GetScriptName() module-level function
-    str = str & "Function GetScriptName()" & vbNewLine
-    str = str & "   GetScriptName = Script(""Name"")" & vbNewLine
-    str = str & "End Function" & vbNewLine
-    
+
     ' CreateObj() module-level function
     str = str & "Function CreateObj(ObjType, ObjName)" & vbNewLine
     str = str & "   Set CreateObj = _ " & vbNewLine
@@ -378,12 +373,12 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
     
     ' GetSettingsEntry() module-level function
     str = str & "Function GetSettingsEntry(EntryName)" & vbNewLine
-    str = str & "   GetSettingsEntry = GetSettingsEntryEx(GetScriptName(), EntryName)" & vbNewLine
+    str = str & "   GetSettingsEntry = GetSettingsEntryEx(Script(""Name""), EntryName)" & vbNewLine
     str = str & "End Function" & vbNewLine
     
     ' WriteSettingsEntry() module-level function
     str = str & "Sub WriteSettingsEntry(EntryName, EntryValue)" & vbNewLine
-    str = str & "   WriteSettingsEntryEx GetScriptName(), EntryName, EntryValue" & vbNewLine
+    str = str & "   WriteSettingsEntryEx Script(""Name""), EntryName, EntryValue" & vbNewLine
     str = str & "End Sub" & vbNewLine
 
     ' store module-level coding
@@ -492,7 +487,7 @@ Public Function UpdateScripts()
             
             For I = 1 To wrkScripts.Count
                 str = str & _
-                    wrkScripts(I).CodeObject.GetScriptName & ", "
+                    wrkScripts(I).CodeObject.Script("Name") & ", "
             Next I
             
             frmChat.AddChat vbGreen, Left$(str, Len(str) - 2)
@@ -803,6 +798,12 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
     ' create class variable for object
     SCModule.ExecuteStatement "Set " & ObjName & " = GetObjByName(" & Chr$(34) & _
         ObjName & Chr$(34) & ")"
+        
+    ' unfortunately creating a new form triggers the scripting events
+    ' too early, so we have to call them manually here.
+    If (UCase$(ObjType) = "FORM") Then
+        obj.obj.Initialize
+    End If
 
     ' return object
     Set CreateObjEx = obj.obj
