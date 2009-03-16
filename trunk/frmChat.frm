@@ -894,7 +894,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -920,6 +919,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4274,9 +4274,7 @@ Sub mnuReloadScript_Click()
     On Error GoTo mnuReloadScript_Click_Error
     
     RunInAll "Event_Close"
-    SControl.Reset
-        
-MRS_Continue:
+
     ' Clear callback list
     dctCallbacks.RemoveAll
     
@@ -4306,28 +4304,22 @@ MRS_Continue:
     DeleteMenuItem lMenu, ScriptMenu_ParentID, 5
     ScriptMenu_ParentID = 0
 
-    'LoadPluginSystem SControl
-
-    'ReInitScriptControl SControl
-    
     InitScriptControl SControl
     LoadScripts SControl
     InitScripts
     
     DrawMenuBar frmChat.hWnd
-
-MRS_Exit:
-    On Error GoTo 0
+    
     Exit Sub
 
 mnuReloadScript_Click_Error: ' No code is present
     'Debug.Print Err.Number & ": " & Err.Description
     If Err.Number = 438 Then
-        Resume MRS_Continue
+        Resume Next
     Else
         Debug.Print "Unhandled error in mnuReloadScript_Click()"
         Debug.Print Err.Number & ": " & Err.description
-        Resume MRS_Exit
+        Resume Next
     End If
 End Sub
 

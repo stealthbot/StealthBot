@@ -260,9 +260,6 @@ Public Function UpdateScripts(ByRef SC As ScriptControl)
                     
                     ' ...
                     Name filePath & ".tmp" As filePath
-                    
-                    ' ...
-                    FileToModule SC.Modules(i), filePath
                 End If
                 
                 ' ...
@@ -279,6 +276,9 @@ Public Function UpdateScripts(ByRef SC As ScriptControl)
             Next i
             
             frmChat.AddChat vbGreen, Left$(str, Len(str) - 2)
+            
+            InitScriptControl SC
+            LoadScripts SC
         Else
             frmChat.AddChat vbGreen, "Scripts are up to date."
         End If
