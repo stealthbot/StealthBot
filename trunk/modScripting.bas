@@ -533,12 +533,12 @@ Public Sub InitScript(ByRef SCModule As Module)
     ' ...
     If (g_Online) Then
         SCModule.Run "Event_LoggedOn", GetCurrentUsername, BotVars.Product
-        SCModule.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
+        SCModule.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.flags
 
         If (g_Channel.Users.Count > 0) Then
             For I = 1 To g_Channel.Users.Count
                 With g_Channel.Users(I)
-                     SCModule.Run "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, _
+                     SCModule.Run "Event_UserInChannel", .DisplayName, .flags, .Stats.ToString, .Ping, _
                         .game, False
                 End With
              Next I
@@ -892,11 +892,11 @@ Public Sub DestroyObjEx(ByVal SCModule As Module, ByVal ObjName As String)
             Else
                 frmChat.itcScript(0).Cancel
             End If
-            
+
         Case "FORM"
-            m_arrObjs(Index).obj.DestroyObjs
-            
             UnhookWindowProc m_arrObjs(Index).obj.hWnd
+        
+            m_arrObjs(Index).obj.DestroyObjs
             
             Unload m_arrObjs(Index).obj
     End Select

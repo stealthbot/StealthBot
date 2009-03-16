@@ -632,14 +632,8 @@ End Sub
 Private Sub Form_Activate()
 
     On Error Resume Next
-
-    ' ...
-    If (m_hidden) Then
-        m_sc_module.Run m_name & "_Load"
-        
-        m_hidden = False
-    End If
     
+    ' ...
     m_sc_module.Run m_name & "_Activate"
 
 End Sub
@@ -746,6 +740,13 @@ End Sub
 Private Sub Form_Paint()
 
     On Error Resume Next
+    
+    ' ...
+    If (m_hidden = True) Then
+        m_sc_module.Run m_name & "_Load"
+        
+        m_hidden = False
+    End If
 
     ' ...
     m_sc_module.Run m_name & "_Paint"
@@ -779,21 +780,24 @@ Private Sub Form_Terminate()
 
 End Sub
 
-Private Sub Form_Unload(Cancel As Integer)
+Public Sub Form_Unload(Cancel As Integer)
 
     On Error Resume Next
 
     ' ...
-    m_sc_module.Run m_name & "_Unload", Cancel
-    
-    ' ...
-    Me.Visible = False
-    
-    ' ...
-    m_hidden = True
-    
-    ' ...
-    Cancel = 1
+    If (m_hidden = False) Then
+        ' ...
+        m_sc_module.Run m_name & "_Unload", Cancel
+        
+        ' ...
+        Me.Hide
+        
+        ' ...
+        m_hidden = True
+        
+        ' ...
+        Cancel = 1
+    End If
 
 End Sub
 
