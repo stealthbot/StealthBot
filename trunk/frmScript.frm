@@ -21,6 +21,20 @@ Begin VB.Form frmScript
    ScaleHeight     =   3090
    ScaleWidth      =   4680
    StartUpPosition =   3  'Windows Default
+   Begin MSComctlLib.TreeView trv 
+      Height          =   615
+      Index           =   0
+      Left            =   2880
+      TabIndex        =   10
+      Top             =   0
+      Visible         =   0   'False
+      Width           =   735
+      _ExtentX        =   1296
+      _ExtentY        =   1085
+      _Version        =   393217
+      Style           =   7
+      Appearance      =   1
+   End
    Begin VB.CommandButton cmd 
       Height          =   255
       Index           =   0
@@ -90,21 +104,20 @@ Begin VB.Form frmScript
    Begin RichTextLib.RichTextBox rtb 
       Height          =   255
       Index           =   0
-      Left            =   840
+      Left            =   360
       TabIndex        =   0
-      Top             =   600
+      Top             =   360
       Visible         =   0   'False
       Width           =   495
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
-      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
    Begin MSComctlLib.ImageList iml 
       Index           =   0
-      Left            =   1560
+      Left            =   960
       Top             =   360
       _ExtentX        =   1005
       _ExtentY        =   1005
@@ -115,7 +128,7 @@ Begin VB.Form frmScript
    Begin MSComctlLib.ListView lsv 
       Height          =   375
       Index           =   0
-      Left            =   600
+      Left            =   0
       TabIndex        =   1
       Top             =   360
       Visible         =   0   'False

@@ -88,9 +88,9 @@ Public Sub LogonToCharacter(ByVal CharName As String)
     End With
 End Sub
 
-Public Sub DeleteCharacter(ByVal CharName As String, Optional ByVal Flags As Integer = &H1)
+Public Sub DeleteCharacter(ByVal CharName As String, Optional ByVal flags As Integer = &H1)
     With PBuffer
-        .InsertWord Flags
+        .InsertWord flags
         .InsertNTString CharName
         
         'Debug.Print "Sending: "
@@ -176,6 +176,10 @@ Public Sub ParseMCPPacket(ByVal Data As String)
             
             If InStr(1, CommandLine, "-all") > 0 Then _
                 frmChat.AddChat COLOR_BLUE, "MCP RECV 0x" & Right$("00" & hex(Asc(Mid$(Data, 3, 1))), 2)
+            
+            If (GetVeto) Then
+                Exit Sub
+            End If
             
             Select Case Asc(Mid$(Data, 3, 1))
                 Case MCP_STARTUP

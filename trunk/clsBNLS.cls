@@ -217,6 +217,10 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     ' ...
     RunInAll "Event_PacketReceived", "BNLS", PacketID, Len(Data), Data
     
+    If (GetVeto) Then
+        Exit Sub
+    End If
+    
     'Debug.Print "_-------------------------------------_"
     'Debug.Print DebugOutput(Data)
     
