@@ -474,7 +474,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     With GetDBEntry
         .entryType = temp.Type
         .Name = temp.Username
-        .Rank = temp.Access
+        .rank = temp.Access
         .Flags = temp.Flags
         .CreatedOn = temp.AddedOn
         .CreatedBy = temp.AddedBy
@@ -1446,6 +1446,17 @@ Public Function CRC32(ByVal str As String) As String
     
     Set clsCRC32 = Nothing
 
+End Function
+
+Public Function Sha1(ByVal data As String) As String
+    Dim a As Long
+    Dim b As Long
+    Dim c As Long
+    Dim d As Long
+    Dim e As Long
+    
+    Call modSHA1.DefaultSHA1(StrConv(data, vbFromUnicode), a, b, c, d, e)
+    Sha1 = LongToStr(a) & LongToStr(b) & LongToStr(c) & LongToStr(d) & LongToStr(e)
 End Function
 
 Public Function CreateObjEx(ByVal ModuleName As String, ByVal ObjType As String, ByVal ObjName As String) As Object

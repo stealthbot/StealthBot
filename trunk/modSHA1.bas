@@ -6,10 +6,10 @@ Option Explicit
     going to leave this the way it is. I fixed up the tabbing a bit. - FrOzeN
 
 Private Type FourBytes
-    A As Byte
-    B As Byte
-    C As Byte
-    D As Byte
+    a As Byte
+    b As Byte
+    c As Byte
+    d As Byte
 End Type
 
 Private Type OneLong
@@ -54,7 +54,7 @@ Private Sub StrToByteArray(ByVal sStr As String, ByRef ary() As Byte)
     CopyMemory ary(0), ByVal sStr, Len(sStr)
 End Sub
 
-Private Function LongToStr(ByVal lVal As Long) As String
+Public Function LongToStr(ByVal lVal As Long) As String
     Dim s As String
     s = hex$(lVal)
     
@@ -66,38 +66,38 @@ Private Function LongToStr(ByVal lVal As Long) As String
                 Chr$(Val("&H0" & Mid$(s, 7, 2)))
 End Function
 
-Private Sub DefaultSHA1(Message() As Byte, h1 As Long, h2 As Long, h3 As Long, h4 As Long, h5 As Long)
-    SHA1 Message, &H5A827999, &H6ED9EBA1, &H8F1BBCDC, &HCA62C1D6, h1, h2, h3, h4, h5
+Public Sub DefaultSHA1(Message() As Byte, h1 As Long, h2 As Long, h3 As Long, h4 As Long, h5 As Long)
+    Sha1 Message, &H5A827999, &H6ED9EBA1, &H8F1BBCDC, &HCA62C1D6, h1, h2, h3, h4, h5
 End Sub
 
-Private Sub SHA1(Message() As Byte, ByVal Key1 As Long, ByVal Key2 As Long, ByVal Key3 As Long, ByVal Key4 As Long, h1 As Long, h2 As Long, h3 As Long, h4 As Long, h5 As Long)
+Public Sub Sha1(Message() As Byte, ByVal Key1 As Long, ByVal Key2 As Long, ByVal Key3 As Long, ByVal Key4 As Long, h1 As Long, h2 As Long, h3 As Long, h4 As Long, h5 As Long)
     Dim U As Long, P As Long
     Dim FB As FourBytes, OL As OneLong
     Dim I As Integer
     Dim W(80) As Long
-    Dim A As Long, B As Long, C As Long, D As Long, E As Long
+    Dim a As Long, b As Long, c As Long, d As Long, e As Long
     Dim T As Long
     
     h1 = &H67452301: h2 = &HEFCDAB89: h3 = &H98BADCFE: h4 = &H10325476: h5 = &HC3D2E1F0
     
-    U = UBound(Message) + 1: OL.L = U32ShiftLeft3(U): A = U \ &H20000000: LSet FB = OL 'U32ShiftRight29(U)
+    U = UBound(Message) + 1: OL.L = U32ShiftLeft3(U): a = U \ &H20000000: LSet FB = OL 'U32ShiftRight29(U)
     
     ReDim Preserve Message(0 To (U + 8 And -64) + 63)
     Message(U) = 128
     
     U = UBound(Message)
-    Message(U - 4) = A
-    Message(U - 3) = FB.D
-    Message(U - 2) = FB.C
-    Message(U - 1) = FB.B
-    Message(U) = FB.A
+    Message(U - 4) = a
+    Message(U - 3) = FB.d
+    Message(U - 2) = FB.c
+    Message(U - 1) = FB.b
+    Message(U) = FB.a
     
     While P < U
         For I = 0 To 15
-            FB.D = Message(P)
-            FB.C = Message(P + 1)
-            FB.B = Message(P + 2)
-            FB.A = Message(P + 3)
+            FB.d = Message(P)
+            FB.c = Message(P + 1)
+            FB.b = Message(P + 2)
+            FB.a = Message(P + 3)
             LSet OL = FB
             W(I) = OL.L
             P = P + 4
@@ -107,61 +107,61 @@ Private Sub SHA1(Message() As Byte, ByVal Key1 As Long, ByVal Key2 As Long, ByVa
             W(I) = U32RotateLeft1(W(I - 3) Xor W(I - 8) Xor W(I - 14) Xor W(I - 16))
         Next I
         
-        A = h1: B = h2: C = h3: D = h4: E = h5
+        a = h1: b = h2: c = h3: d = h4: e = h5
         
         For I = 0 To 19
-            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(A), E), W(I)), Key1), ((B And C) Or ((Not B) And D)))
-            E = D: D = C: C = U32RotateLeft30(B): B = A: A = T
+            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(a), e), W(I)), Key1), ((b And c) Or ((Not b) And d)))
+            e = d: d = c: c = U32RotateLeft30(b): b = a: a = T
         Next I
         
         For I = 20 To 39
-            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(A), E), W(I)), Key2), (B Xor C Xor D))
-            E = D: D = C: C = U32RotateLeft30(B): B = A: A = T
+            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(a), e), W(I)), Key2), (b Xor c Xor d))
+            e = d: d = c: c = U32RotateLeft30(b): b = a: a = T
         Next I
         
         For I = 40 To 59
-            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(A), E), W(I)), Key3), ((B And C) Or (B And D) Or (C And D)))
-            E = D: D = C: C = U32RotateLeft30(B): B = A: A = T
+            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(a), e), W(I)), Key3), ((b And c) Or (b And d) Or (c And d)))
+            e = d: d = c: c = U32RotateLeft30(b): b = a: a = T
         Next I
         
         For I = 60 To 79
-            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(A), E), W(I)), Key4), (B Xor C Xor D))
-            E = D: D = C: C = U32RotateLeft30(B): B = A: A = T
+            T = U32Add(U32Add(U32Add(U32Add(U32RotateLeft5(a), e), W(I)), Key4), (b Xor c Xor d))
+            e = d: d = c: c = U32RotateLeft30(b): b = a: a = T
         Next I
         
-        h1 = U32Add(h1, A): h2 = U32Add(h2, B): h3 = U32Add(h3, C): h4 = U32Add(h4, D): h5 = U32Add(h5, E)
+        h1 = U32Add(h1, a): h2 = U32Add(h2, b): h3 = U32Add(h3, c): h4 = U32Add(h4, d): h5 = U32Add(h5, e)
     Wend
 End Sub
 
-Private Function U32Add(ByVal A As Long, ByVal B As Long) As Long
-    If (A Xor B) < 0 Then
-        U32Add = A + B
+Private Function U32Add(ByVal a As Long, ByVal b As Long) As Long
+    If (a Xor b) < 0 Then
+        U32Add = a + b
     Else
-        U32Add = (A Xor &H80000000) + B Xor &H80000000
+        U32Add = (a Xor &H80000000) + b Xor &H80000000
     End If
 End Function
 
-Private Function U32ShiftLeft3(ByVal A As Long) As Long
-    U32ShiftLeft3 = (A And &HFFFFFFF) * 8
-    If A And &H10000000 Then U32ShiftLeft3 = U32ShiftLeft3 Or &H80000000
+Private Function U32ShiftLeft3(ByVal a As Long) As Long
+    U32ShiftLeft3 = (a And &HFFFFFFF) * 8
+    If a And &H10000000 Then U32ShiftLeft3 = U32ShiftLeft3 Or &H80000000
 End Function
 
-Private Function U32ShiftRight29(ByVal A As Long) As Long
-    U32ShiftRight29 = (A And &HE0000000) \ &H20000000 And 7
+Private Function U32ShiftRight29(ByVal a As Long) As Long
+    U32ShiftRight29 = (a And &HE0000000) \ &H20000000 And 7
 End Function
 
-Private Function U32RotateLeft1(ByVal A As Long) As Long
-    U32RotateLeft1 = (A And &H3FFFFFFF) * 2
-    If A And &H40000000 Then U32RotateLeft1 = U32RotateLeft1 Or &H80000000
-    If A And &H80000000 Then U32RotateLeft1 = U32RotateLeft1 Or 1
+Private Function U32RotateLeft1(ByVal a As Long) As Long
+    U32RotateLeft1 = (a And &H3FFFFFFF) * 2
+    If a And &H40000000 Then U32RotateLeft1 = U32RotateLeft1 Or &H80000000
+    If a And &H80000000 Then U32RotateLeft1 = U32RotateLeft1 Or 1
 End Function
 
-Private Function U32RotateLeft5(ByVal A As Long) As Long
-    U32RotateLeft5 = (A And &H3FFFFFF) * 32 Or (A And &HF8000000) \ &H8000000 And 31
-    If A And &H4000000 Then U32RotateLeft5 = U32RotateLeft5 Or &H80000000
+Private Function U32RotateLeft5(ByVal a As Long) As Long
+    U32RotateLeft5 = (a And &H3FFFFFF) * 32 Or (a And &HF8000000) \ &H8000000 And 31
+    If a And &H4000000 Then U32RotateLeft5 = U32RotateLeft5 Or &H80000000
 End Function
 
-Private Function U32RotateLeft30(ByVal A As Long) As Long
-    U32RotateLeft30 = (A And 1) * &H40000000 Or (A And &HFFFC) \ 4 And &H3FFFFFFF
-    If A And 2 Then U32RotateLeft30 = U32RotateLeft30 Or &H80000000
+Private Function U32RotateLeft30(ByVal a As Long) As Long
+    U32RotateLeft30 = (a And 1) * &H40000000 Or (a And &HFFFC) \ 4 And &H3FFFFFFF
+    If a And 2 Then U32RotateLeft30 = U32RotateLeft30 Or &H80000000
 End Function
