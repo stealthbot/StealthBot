@@ -112,6 +112,7 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
+      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -1077,6 +1078,20 @@ Private Sub lst_ItemCheck(Index As Integer, Item As Integer)
     
     ' ...
     m_sc_module.Run m_name & "_" & obj.ObjName & "_ItemCheck", Item
+
+End Sub
+
+Private Sub lst_ItemClick(Index As Integer, Item As Integer)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetSCObjByIndex("ListBox", Index)
+    
+    ' ...
+    m_sc_module.Run m_name & "_" & obj.ObjName & "_ItemClick", Item
 
 End Sub
 

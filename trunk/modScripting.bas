@@ -921,6 +921,9 @@ Public Sub DestroyObjEx(ByVal SCModule As Module, ByVal ObjName As String)
     ' ...
     m_objCount = (m_objCount - 1)
     
+        ' ...
+    SCModule.ExecuteStatement "Set " & ObjName & " = Nothing"
+    
     ' ...
     Exit Sub
     
