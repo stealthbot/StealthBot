@@ -864,6 +864,12 @@ Public Sub DestroyObjEx(ByVal SCModule As Module, ByVal ObjName As String)
         End If
     Next I
     
+    ' ...
+    If (Index >= m_objCount) Then
+        Exit Sub
+    End If
+    
+    ' ...
     Select Case (UCase$(m_arrObjs(Index).ObjType))
         Case "TIMER"
             If (m_arrObjs(Index).obj.Index > 0) Then
@@ -905,7 +911,7 @@ Public Sub DestroyObjEx(ByVal SCModule As Module, ByVal ObjName As String)
     Set m_arrObjs(Index).obj = Nothing
     
     ' ...
-    If (Index < m_objCount) Then
+    If (Index < m_objCount - 1) Then
         For I = Index To ((m_objCount - 1) - 1)
             m_arrObjs(I) = m_arrObjs(I + 1)
         Next I

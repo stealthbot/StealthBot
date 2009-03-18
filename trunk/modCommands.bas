@@ -900,7 +900,7 @@ Private Function OnInvite(ByVal Username As String, ByRef dbAccess As udtGetAcce
     If (IsW3) Then
         ' is my ranking sufficient to issue
         ' an invitation?
-        If (g_Clan.Self.Rank >= 3) Then
+        If (g_Clan.Self.rank >= 3) Then
             Call InviteToClan(msgData)
             
             tmpbuf = msgData & ": Clan invitation sent."
@@ -930,7 +930,7 @@ Private Function OnDisbandClan(ByVal Username As String, ByRef dbAccess As udtGe
     Dim tmpbuf As String ' temporary output buffer
     
     ' ...
-    If (g_Clan.Self.Rank >= 4) Then
+    If (g_Clan.Self.rank >= 4) Then
         ' ...
         Call DisbandClan
     Else
@@ -950,7 +950,7 @@ Private Function OnMakeChieftain(ByVal Username As String, ByRef dbAccess As udt
     ' ...
     If (Len(msgData) > 0) Then
         ' ...
-        If (g_Clan.Self.Rank >= 4) Then
+        If (g_Clan.Self.rank >= 4) Then
             ' ...
             Call MakeMemberChieftain(reverseUsername(msgData))
         Else
@@ -972,7 +972,7 @@ Private Function OnSetMotd(ByVal Username As String, ByRef dbAccess As udtGetAcc
     Dim tmpbuf As String ' temporary output buffer
 
     If (IsW3) Then
-        If (g_Clan.Self.Rank >= 3) Then
+        If (g_Clan.Self.rank >= 3) Then
             Call SetClanMOTD(msgData)
             
             tmpbuf = "Clan MOTD set."
@@ -1372,7 +1372,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
             ReDim Preserve arrUsers(0)
             
             ' ...
-            If (g_Clan.Self.Rank >= 4) Then
+            If (g_Clan.Self.rank >= 4) Then
                 ' ...
                 frmChat.cboSend.text = vbNullString
             
@@ -1446,7 +1446,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
             End If
         ElseIf (StrComp(Left$(g_Channel.Name, 5), "Clan ", vbTextCompare) = 0) Then
             ' ...
-            If ((g_Clan.Self.Rank < 4) Or _
+            If ((g_Clan.Self.rank < 4) Or _
                     (StrComp(g_Channel.Name, "Clan " & Clan.Name, vbTextCompare) <> 0)) Then
                     
                 ' ...
@@ -5049,7 +5049,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
     Dim tmpbuf     As String  ' temporary output buffer
     Dim dbPath     As String  ' ...
     Dim user       As String  ' ...
-    Dim Rank       As Integer ' ...
+    Dim rank       As Integer ' ...
     Dim flags      As String  ' ...
     Dim found      As Boolean ' ...
     Dim params     As String  ' ...
@@ -5095,7 +5095,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
         ' grab rank & flags
         If (StrictIsNumeric(strArray(1))) Then
             ' grab rank
-            Rank = strArray(1)
+            rank = strArray(1)
             
             ' grab flags
             If (UBound(strArray) >= 2) Then
@@ -5297,13 +5297,13 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
         gAcc = GetCumulativeAccess(user, dbType)
 
         ' is rank valid?
-        If ((Rank <= 0) And (flags = vbNullString) And _
+        If ((rank <= 0) And (flags = vbNullString) And _
                 (sGrp = vbNullString) And (dbType = vbNullString)) Then
             
             tmpbuf = "Error: You have specified an invalid rank."
             
         ' is rank higher than user's rank?
-        ElseIf ((Rank) And (Rank >= dbAccess.Access)) Then
+        ElseIf ((rank) And (rank >= dbAccess.Access)) Then
             tmpbuf = "Error: You do not have sufficient access to assign an entry with the " & _
                 "specified rank."
             
@@ -5461,7 +5461,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                         gAcc.flags = vbNullString
                         
                         ' set rank to specified
-                        gAcc.Access = Rank
+                        gAcc.Access = rank
                     
                         ' set user flags & check for duplicate entries
                         For I = 1 To Len(flags)
@@ -5495,7 +5495,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                 gAcc.flags = vbNullString
             
                 ' set rank to specified
-                gAcc.Access = Rank
+                gAcc.Access = rank
             End If
 
             ' grab path to database
@@ -6578,6 +6578,8 @@ End Function
 Private Function OnDisable(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
+    On Error Resume Next
+    
     Dim Name As String  ' ...
     Dim I    As Integer ' ...
     
@@ -6588,6 +6590,8 @@ Private Function OnDisable(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 frmChat.SControl.Modules(I).CodeObject.Script("Name")
                 
             If (StrComp(Name, msgData, vbTextCompare) = 0) Then
+                frmChat.SControl.Modules(I).Run "Event_Close"
+            
                 frmChat.SControl.Modules(I).CodeObject.WriteSettingsEntry _
                     "Enabled", "False"
                     
@@ -7643,7 +7647,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     Set user = SharedScriptSupport.GetDBEntry(Username, , , "USER")
 
     ' ...
-    If ((user.Rank >= Command.RequiredRank) = False) Then
+    If ((user.rank >= Command.RequiredRank) = False) Then
         ' ...
         If (user.HasAnyFlag(Command.RequiredFlags) = False) Then
             HasAccess = False
@@ -7711,7 +7715,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
                                 ' ...
                                 FailedCheck = True
                             Else
-                                If ((user.Rank >= Restriction.RequiredRank) = False) Then
+                                If ((user.rank >= Restriction.RequiredRank) = False) Then
                                     If (user.HasAnyFlag(Restriction.RequiredFlags) = False) Then
                                         ' ...
                                         FailedCheck = True

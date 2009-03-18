@@ -73,7 +73,7 @@ Public Function Push(ByRef obj As clsQueueOBj)
     End If
 
     ' ...
-    If (Index < m_objCount) Then
+    If (Index < m_objCount - 1) Then
         For I = m_objCount To Index + 1 Step -1
             Set m_QueueObjs(I) = m_QueueObjs(I - 1)
         Next I

@@ -415,111 +415,114 @@ Public Sub DestroyObj(ByVal ObjName As String)
     Next I
     
     ' ...
-    For I = m_objCount - 1 To 0 Step -1
-        Select Case (UCase$(m_arrObjs(I).ObjType))
-            Case "BUTTON"
-                If (m_arrObjs(I).obj.Index > 0) Then
-                    Unload cmd(m_arrObjs(I).obj.Index)
-                Else
-                    cmd(0).Visible = False
-                End If
-            
-            Case "CHECKBOX"
-                If (m_arrObjs(I).obj.Index > 0) Then
-                    Unload chk(m_arrObjs(I).obj.Index)
-                Else
-                    chk(0).Visible = False
-                End If
-            
-            Case "COMBOXBOX"
-                If (m_arrObjs(I).obj.Index > 0) Then
-                    Unload cmb(m_arrObjs(I).obj.Index)
-                Else
-                    cmb(0).Visible = False
-                End If
-            
-            Case "IMAGELIST"
-                If (m_arrObjs(I).obj.Index > 0) Then
-                    Unload iml(m_arrObjs(I).obj.Index)
-                Else
-                    iml(0).ListImages.Clear
-                End If
-            
-            Case "LABEL"
-                If (m_arrObjs(I).obj.Index > 0) Then
-                    Unload lbl(m_arrObjs(I).obj.Index)
-                Else
-                    lbl(0).Visible = False
-                End If
-            
-            Case "LISTBOX"
-                If (m_arrObjs(I).obj.Index > 0) Then
-                    Unload lst(m_arrObjs(I).obj.Index)
-                Else
-                    With lst(0)
-                        .Clear
-                        .Visible = False
-                    End With
-                End If
-            
-            Case "LISTVIEW"
-                If (m_arrObjs(I).obj.Index > 0) Then
-                    Unload lsv(m_arrObjs(I).obj.Index)
-                Else
-                    With lsv(0)
-                        .ListItems.Clear
-                        .Visible = False
-                    End With
-                End If
-            
-            Case "OPTIONBUTTON"
-                If (m_arrObjs(I).obj.Index > 0) Then
-                    Unload opt(m_arrObjs(I).obj.Index)
-                Else
-                    opt(0).Visible = False
-                End If
-            
-            Case "PICTUREBOX"
-                If (m_arrObjs(I).obj.Index > 0) Then
-                    Unload pic(m_arrObjs(I).obj.Index)
-                Else
-                    pic(0).Visible = False
-                End If
-            
-            Case "RICHTEXTBOX"
-                If (m_arrObjs(I).obj.Index > 0) Then
-                    Unload rtb(m_arrObjs(I).obj.Index)
-                Else
-                    With rtb(0)
-                        .text = ""
-                        .Visible = False
-                    End With
-                End If
-            
-            Case "TEXTBOX"
-                If (m_arrObjs(I).obj.Index > 0) Then
-                    Unload txt(m_arrObjs(I).obj.Index)
-                Else
-                    With txt(0)
-                        .text = ""
-                        .Visible = False
-                    End With
-                End If
-                
-            Case "TREEVIEW"
-                If (m_arrObjs(I).obj.Index > 0) Then
-                    Unload trv(m_arrObjs(I).obj.Index)
-                Else
-                    With trv(0)
-                        .Nodes.Clear
-                        .Visible = False
-                    End With
-                End If
-        End Select
+    If (Index >= m_objCount) Then
+        Exit Sub
+    End If
+    
+    ' ...
+    Select Case (UCase$(m_arrObjs(Index).ObjType))
+        Case "BUTTON"
+            If (m_arrObjs(Index).obj.Index > 0) Then
+                Unload cmd(m_arrObjs(Index).obj.Index)
+            Else
+                cmd(0).Visible = False
+            End If
         
-        ' ...
-        Set m_arrObjs(I).obj = Nothing
-    Next I
+        Case "CHECKBOX"
+            If (m_arrObjs(Index).obj.Index > 0) Then
+                Unload chk(m_arrObjs(Index).obj.Index)
+            Else
+                chk(0).Visible = False
+            End If
+        
+        Case "COMBOXBOX"
+            If (m_arrObjs(Index).obj.Index > 0) Then
+                Unload cmb(m_arrObjs(Index).obj.Index)
+            Else
+                cmb(0).Visible = False
+            End If
+        
+        Case "IMAGELIST"
+            If (m_arrObjs(Index).obj.Index > 0) Then
+                Unload iml(m_arrObjs(Index).obj.Index)
+            Else
+                iml(0).ListImages.Clear
+            End If
+        
+        Case "LABEL"
+            If (m_arrObjs(Index).obj.Index > 0) Then
+                Unload lbl(m_arrObjs(Index).obj.Index)
+            Else
+                lbl(0).Visible = False
+            End If
+        
+        Case "LISTBOX"
+            If (m_arrObjs(Index).obj.Index > 0) Then
+                Unload lst(m_arrObjs(Index).obj.Index)
+            Else
+                With lst(0)
+                    .Clear
+                    .Visible = False
+                End With
+            End If
+        
+        Case "LISTVIEW"
+            If (m_arrObjs(Index).obj.Index > 0) Then
+                Unload lsv(m_arrObjs(Index).obj.Index)
+            Else
+                With lsv(0)
+                    .ListItems.Clear
+                    .Visible = False
+                End With
+            End If
+        
+        Case "OPTIONBUTTON"
+            If (m_arrObjs(Index).obj.Index > 0) Then
+                Unload opt(m_arrObjs(Index).obj.Index)
+            Else
+                opt(0).Visible = False
+            End If
+        
+        Case "PICTUREBOX"
+            If (m_arrObjs(Index).obj.Index > 0) Then
+                Unload pic(m_arrObjs(Index).obj.Index)
+            Else
+                pic(0).Visible = False
+            End If
+        
+        Case "RICHTEXTBOX"
+            If (m_arrObjs(Index).obj.Index > 0) Then
+                Unload rtb(m_arrObjs(Index).obj.Index)
+            Else
+                With rtb(0)
+                    .text = ""
+                    .Visible = False
+                End With
+            End If
+        
+        Case "TEXTBOX"
+            If (m_arrObjs(Index).obj.Index > 0) Then
+                Unload txt(m_arrObjs(Index).obj.Index)
+            Else
+                With txt(0)
+                    .text = ""
+                    .Visible = False
+                End With
+            End If
+            
+        Case "TREEVIEW"
+            If (m_arrObjs(Index).obj.Index > 0) Then
+                Unload trv(m_arrObjs(Index).obj.Index)
+            Else
+                With trv(0)
+                    .Nodes.Clear
+                    .Visible = False
+                End With
+            End If
+    End Select
+    
+    ' ...
+    Set m_arrObjs(Index).obj = Nothing
     
     ' ...
     If (Index < m_objCount) Then
