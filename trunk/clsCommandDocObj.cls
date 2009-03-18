@@ -516,7 +516,7 @@ Private Function getFlags(ByRef AnyNode As IXMLDOMNode) As String
     
 End Function
 
-Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) As String
+Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal flags As String) As String
 
     Dim temp As IXMLDOMNode
     Dim flag As IXMLDOMNode
@@ -535,10 +535,15 @@ Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) A
             temp.appendChild(m_database.createNode("element", "flags", vbNullString))
     End If
     
-    For I = 1 To Len(Flags)
-        Set flag = temp.appendChild(m_database.createNode("element", "flag", vbNullString))
+    For I = temp.childNodes.Length - 1 To 0 Step -1
+        temp.removeChild temp.childNodes(I)
+    Next I
+    
+    For I = 1 To Len(flags)
+        Set flag = _
+            temp.appendChild(m_database.createNode("element", "flag", vbNullString))
         
-        flag.text = Mid$(Flags, I, 1)
+        flag.text = Mid$(flags, I, 1)
     Next I
     
     Call Save

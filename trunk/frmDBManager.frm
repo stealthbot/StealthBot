@@ -485,8 +485,8 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                                     .ModifiedOn = Now
                                     
                                     ' ...
-                                    If (InStr(1, .Flags, "S", vbBinaryCompare) = 0) Then
-                                        .Flags = .Flags & "S"
+                                    If (InStr(1, .flags, "S", vbBinaryCompare) = 0) Then
+                                        .flags = .flags & "S"
                                     End If
                                     
                                     ' ...
@@ -519,7 +519,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                             .AddedOn = Now
                             .ModifiedBy = "(console)"
                             .ModifiedOn = Now
-                            .Flags = "S"
+                            .flags = "S"
                             
                             ' ...
                             If (Not (trvUsers.DropHighlight Is Nothing)) Then
@@ -581,8 +581,8 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                                     .ModifiedOn = Now
                                     
                                     ' ...
-                                    If (InStr(1, .Flags, "B", vbBinaryCompare) = 0) Then
-                                        .Flags = .Flags & "B"
+                                    If (InStr(1, .flags, "B", vbBinaryCompare) = 0) Then
+                                        .flags = .flags & "B"
                                     End If
                                     
                                     ' ...
@@ -615,7 +615,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                             .AddedOn = Now
                             .ModifiedBy = "(console)"
                             .ModifiedOn = Now
-                            .Flags = "B"
+                            .flags = "B"
                             .BanMessage = Msg
                             
                             ' ...
@@ -932,7 +932,7 @@ Private Sub btnSave_Click(Index As Integer)
                     ' modifiy user data
                     With m_DB(I)
                         .Access = Val(txtRank.text)
-                        .Flags = txtFlags.text
+                        .flags = txtFlags.text
                         .ModifiedBy = "(console)"
                         .ModifiedOn = Now
                         .BanMessage = txtBanMessage.text
@@ -1501,7 +1501,7 @@ Private Sub trvUsers_NodeClick(ByVal node As MSComctlLib.node)
         End If
         
         ' clear flags from text box
-        txtFlags.text = tmp.Flags
+        txtFlags.text = tmp.flags
         
         ' ...
         If ((tmp.AddedBy = vbNullString) Or (tmp.AddedBy = "%")) Then
@@ -2078,6 +2078,10 @@ End Sub
 
 ' ...
 Private Sub txtRank_Change()
+    If (Val(txtRank.text) > 200) Then
+        txtRank.text = "200"
+    End If
+
     ' enable entry save button
     btnSave(1).Enabled = True
 End Sub
@@ -2105,7 +2109,7 @@ Private Function GetAccess(ByVal Username As String, Optional dbType As String =
                 With GetAccess
                     .Username = m_DB(I).Username
                     .Access = m_DB(I).Access
-                    .Flags = m_DB(I).Flags
+                    .flags = m_DB(I).flags
                     .AddedBy = m_DB(I).AddedBy
                     .AddedOn = m_DB(I).AddedOn
                     .ModifiedBy = m_DB(I).ModifiedBy
@@ -2175,7 +2179,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
             ' ...
             With m_DB(0)
                 .Username = vbNullString
-                .Flags = vbNullString
+                .flags = vbNullString
                 .Access = 0
                 .Groups = vbNullString
                 .AddedBy = vbNullString

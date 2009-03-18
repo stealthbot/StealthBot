@@ -112,6 +112,7 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
+      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -339,6 +340,13 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
             End If
             
             Set obj.obj = txt(ObjCount(ObjType))
+            
+        Case "TREEVIEW"
+            If (ObjCount(ObjType) > 0) Then
+                Load trv(ObjCount(ObjType))
+            End If
+            
+            Set obj.obj = trv(ObjCount(ObjType))
     End Select
     
     ' ...
@@ -494,6 +502,16 @@ Public Sub DestroyObj(ByVal ObjName As String)
                 Else
                     With txt(0)
                         .text = ""
+                        .Visible = False
+                    End With
+                End If
+                
+            Case "TREEVIEW"
+                If (m_arrObjs(I).obj.Index > 0) Then
+                    Unload trv(m_arrObjs(I).obj.Index)
+                Else
+                    With trv(0)
+                        .Nodes.Clear
                         .Visible = False
                     End With
                 End If
@@ -2338,4 +2356,17 @@ Private Sub cmb_Scroll(Index As Integer)
 
 End Sub
 
+Private Sub trv_AfterLabelEdit(Index As Integer, Cancel As Integer, NewString As String)
+
+    On Error Resume Next
+
+    Dim obj As scObj ' ...
+    
+    ' ...
+    obj = GetSCObjByIndex("TreeView", Index)
+    
+    ' ...
+    m_sc_module.Run m_name & "_" & obj.ObjName & "_AfterLabelEdit", Cancel, NewString
+
+End Sub
 
