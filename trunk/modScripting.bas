@@ -61,6 +61,8 @@ End Function
 
 Private Function CleanFileName(ByVal filename As String) As String
     
+    On Error Resume Next
+    
     Dim nameAllow As String  ' ...
     Dim j         As Integer ' ...
     
@@ -68,8 +70,8 @@ Private Function CleanFileName(ByVal filename As String) As String
     nameAllow = "_abcdefghijklmnopqrstuvwxyz"
     
     ' ...
-    CleanFileName = Replace(CleanFileName, " ", "_")
-    
+    CleanFileName = Replace(filename, " ", "_")
+
     ' ...
     CleanFileName = _
         Left$(CleanFileName, InStr(1, CleanFileName, ".") - 1)
@@ -160,7 +162,7 @@ Public Sub LoadScripts()
                     ' ...
                     If (IsScriptNameValid(CurrentModule) = False) Then
                         frmChat.AddChat vbRed, "Scripting error: " & wrkScripts(I) & " has been " & _
-                            "disabled due to a naming issue."
+                            "disabled due to a naming conflict."
                             
                         str = strPath & "\disabled\"
                         
@@ -433,34 +435,38 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
         CurrentModule.CodeObject.Script("Name")
 
     ' ...
-    If (str <> vbNullString) Then
-        ' ...
-        nameAllow = "_abcdefghijklmnopqrstuvwxyz"
-    
-        ' ...
-        For j = 1 To Len(str)
-            If (InStr(1, nameAllow, Mid$(str, j, 1), vbTextCompare) = 0) Then
-                IsScriptNameValid = False
+    If (str = vbNullString) Then
+        IsScriptNameValid = False
                 
+        Exit Function
+    End If
+    
+    ' ...
+    nameAllow = "_abcdefghijklmnopqrstuvwxyz"
+
+    ' ...
+    For j = 1 To Len(str)
+        If (InStr(1, nameAllow, Mid$(str, j, 1), vbTextCompare) = 0) Then
+            IsScriptNameValid = False
+            
+            Exit Function
+        End If
+    Next j
+
+    ' ...
+    For j = 1 To m_sc_control.Modules.Count
+        ' ...
+        If (m_sc_control.Modules(j).Name <> CurrentModule.Name) Then
+            tmp = _
+                m_sc_control.Modules(j).CodeObject.Script("Name")
+                
+            If (StrComp(str, tmp, vbTextCompare) = 0) Then
+                IsScriptNameValid = False
+
                 Exit Function
             End If
-        Next j
-    
-        ' ...
-        For j = 1 To m_sc_control.Modules.Count
-            ' ...
-            If (m_sc_control.Modules(j).Name <> CurrentModule.Name) Then
-                tmp = _
-                    m_sc_control.Modules(j).CodeObject.Script("Name")
-                    
-                If (StrComp(str, tmp, vbTextCompare) = 0) Then
-                    IsScriptNameValid = False
-
-                    Exit Function
-                End If
-            End If
-        Next j
-    End If
+        End If
+    Next j
     
     IsScriptNameValid = True
 
