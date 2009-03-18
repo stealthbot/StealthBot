@@ -6426,7 +6426,7 @@ Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAcc
         End If
     
         ' ...
-        Call PromoteMember(liUser.text, liUser.SmallIcon + 1)
+        Call PromoteMember(reverseUsername(liUser.text), liUser.SmallIcon + 1)
         
         ' ...
         'If (InBot = False) Then
@@ -6470,7 +6470,7 @@ Private Function OnDemote(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
         
         ' ...
-        Call DemoteMember(liUser.text, liUser.SmallIcon - 1)
+        Call DemoteMember(reverseUsername(liUser.text), liUser.SmallIcon - 1)
         
         ' ...
         'If (InBot = False) Then
