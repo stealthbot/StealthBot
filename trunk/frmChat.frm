@@ -1717,9 +1717,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -6369,8 +6369,8 @@ ERROR_HANDLER:
 End Function
 
 ' ...
-Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optional ByVal user As String = _
-    vbNullString, Optional ByVal Tag As String = vbNullString, Optional OversizeDelimiter As String = " ")
+Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optional ByVal user As String = _
+    vbNullString, Optional ByVal Tag As String = vbNullString, Optional OversizeDelimiter As String = " ") As Integer
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -6427,7 +6427,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
         
             ' ...
             If (currChar < 32) Then
-                Exit Sub
+                Exit Function
             End If
         Next I
         
@@ -6558,7 +6558,7 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
                 
                 ' ...
                 If (Len(Command) >= BNET_MSG_LENGTH) Then
-                    Exit Sub
+                    Exit Function
                 End If
 
                 ' ...
@@ -6652,17 +6652,20 @@ Sub AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optiona
             End If
         Next I
         
+        ' ...
+        AddQ = UBound(Splt) + 1
+        
         ' store our tick for future reference
         LastGTC = GTC
     End If
         
-    Exit Sub
+    Exit Function
     
 ERROR_HANDLER:
     Call AddChat(vbRed, "Error: " & Err.description & " in AddQ().")
 
-    Exit Sub
-End Sub
+    Exit Function
+End Function
 
 Private Function BanDelay() As Integer
 

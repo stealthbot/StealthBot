@@ -37,6 +37,10 @@ Public Sub WardenInit(ByVal lngSeed As Long)
         Exit Sub
     End If
     
+    uRan.Data = String(Len(uRan.Data), Chr$(0))
+    uRan.Sorc1 = String(Len(uRan.Sorc1), Chr$(0))
+    uRan.Sorc2 = String(Len(uRan.Sorc2), Chr$(0))
+    
     Call WardenCleanUp
     '//Create new RC4 Keys
     m_Seed = lngSeed
