@@ -6542,6 +6542,7 @@ Private Function OnEnable(ByVal Username As String, ByRef dbAccess As udtGetAcce
     
     Dim Name As String  ' ...
     Dim I    As Integer ' ...
+    Dim str  As String  ' ...
     
     ' ...
     If (frmChat.SControl.Modules.Count) Then
@@ -6550,12 +6551,19 @@ Private Function OnEnable(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 frmChat.SControl.Modules(I).CodeObject.Script("Name")
                 
             If (StrComp(Name, msgData, vbTextCompare) = 0) Then
-                frmChat.SControl.Modules(I).CodeObject.WriteSettingsEntry _
-                    "Enabled", "True"
-                    
-                InitScript frmChat.SControl.Modules(I)
-                    
-                cmdRet(0) = Name & " has been enabled."
+                str = _
+                    frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled")
+            
+                If (StrComp(str, "True", vbTextCompare) = 0) Then
+                    cmdRet(0) = Name & " is already enabled."
+                Else
+                    frmChat.SControl.Modules(I).CodeObject.WriteSettingsEntry _
+                        "Enabled", "True"
+                        
+                    InitScript frmChat.SControl.Modules(I)
+                        
+                    cmdRet(0) = Name & " has been enabled."
+                End If
             
                 Exit Function
             End If
@@ -6584,9 +6592,9 @@ Private Function OnDisable(ByVal Username As String, ByRef dbAccess As udtGetAcc
                     "Enabled", "False"
                     
                 DestroyObjs frmChat.SControl.Modules(I)
-                    
+                
                 cmdRet(0) = Name & " has been disabled."
-            
+                    
                 Exit Function
             End If
         Next I
