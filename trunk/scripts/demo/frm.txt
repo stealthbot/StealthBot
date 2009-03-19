@@ -1,6 +1,7 @@
 Sub frm_Initialize()
 
    frm.CreateObj "TextBox", "text"
+   frm.CreateObj "RichTextBox", "rtb"
 
 End Sub
 
