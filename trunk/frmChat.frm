@@ -65,31 +65,31 @@ Begin VB.Form frmChat
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   7
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1CCA
+            Picture         =   "frmChat.frx":3332
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1F59
+            Picture         =   "frmChat.frx":35C1
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":21E0
+            Picture         =   "frmChat.frx":3848
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":249A
+            Picture         =   "frmChat.frx":3B02
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":2744
+            Picture         =   "frmChat.frx":3DAC
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":2C22
+            Picture         =   "frmChat.frx":428A
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4DF5
+            Picture         =   "frmChat.frx":645D
             Key             =   ""
          EndProperty
       EndProperty
@@ -107,439 +107,439 @@ Begin VB.Form frmChat
       BeginProperty Images {2C247F25-8591-11D1-B16A-00C0F0283628} 
          NumListImages   =   109
          BeginProperty ListImage1 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":6F6F
+            Picture         =   "frmChat.frx":85D7
             Key             =   ""
          EndProperty
          BeginProperty ListImage2 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":9FB5
+            Picture         =   "frmChat.frx":B61D
             Key             =   ""
          EndProperty
          BeginProperty ListImage3 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":D11E
+            Picture         =   "frmChat.frx":E786
             Key             =   ""
          EndProperty
          BeginProperty ListImage4 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1034A
+            Picture         =   "frmChat.frx":119B2
             Key             =   ""
          EndProperty
          BeginProperty ListImage5 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":12952
+            Picture         =   "frmChat.frx":13FBA
             Key             =   ""
          EndProperty
          BeginProperty ListImage6 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":15E1D
+            Picture         =   "frmChat.frx":17485
             Key             =   ""
          EndProperty
          BeginProperty ListImage7 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":18600
+            Picture         =   "frmChat.frx":19C68
             Key             =   ""
          EndProperty
          BeginProperty ListImage8 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1B4E5
+            Picture         =   "frmChat.frx":1CB4D
             Key             =   ""
          EndProperty
          BeginProperty ListImage9 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1B855
+            Picture         =   "frmChat.frx":1CEBD
             Key             =   ""
          EndProperty
          BeginProperty ListImage10 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":1E938
+            Picture         =   "frmChat.frx":1FFA0
             Key             =   ""
          EndProperty
          BeginProperty ListImage11 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":21AE3
+            Picture         =   "frmChat.frx":2314B
             Key             =   ""
          EndProperty
          BeginProperty ListImage12 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":24B2C
+            Picture         =   "frmChat.frx":26194
             Key             =   ""
          EndProperty
          BeginProperty ListImage13 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":27BC8
+            Picture         =   "frmChat.frx":29230
             Key             =   ""
          EndProperty
          BeginProperty ListImage14 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":2AB9F
+            Picture         =   "frmChat.frx":2C207
             Key             =   ""
          EndProperty
          BeginProperty ListImage15 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":2E0E2
+            Picture         =   "frmChat.frx":2F74A
             Key             =   ""
          EndProperty
          BeginProperty ListImage16 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":30A73
+            Picture         =   "frmChat.frx":320DB
             Key             =   ""
          EndProperty
          BeginProperty ListImage17 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":30E3A
+            Picture         =   "frmChat.frx":324A2
             Key             =   ""
          EndProperty
          BeginProperty ListImage18 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":311B0
+            Picture         =   "frmChat.frx":32818
             Key             =   ""
          EndProperty
          BeginProperty ListImage19 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":31538
+            Picture         =   "frmChat.frx":32BA0
             Key             =   ""
          EndProperty
          BeginProperty ListImage20 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":318D1
+            Picture         =   "frmChat.frx":32F39
             Key             =   ""
          EndProperty
          BeginProperty ListImage21 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":31C76
+            Picture         =   "frmChat.frx":332DE
             Key             =   ""
          EndProperty
          BeginProperty ListImage22 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":32028
+            Picture         =   "frmChat.frx":33690
             Key             =   ""
          EndProperty
          BeginProperty ListImage23 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":323ED
+            Picture         =   "frmChat.frx":33A55
             Key             =   ""
          EndProperty
          BeginProperty ListImage24 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":32541
+            Picture         =   "frmChat.frx":33BA9
             Key             =   ""
          EndProperty
          BeginProperty ListImage25 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":345FA
+            Picture         =   "frmChat.frx":35C62
             Key             =   ""
          EndProperty
          BeginProperty ListImage26 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":376B4
+            Picture         =   "frmChat.frx":38D1C
             Key             =   ""
          EndProperty
          BeginProperty ListImage27 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3791E
+            Picture         =   "frmChat.frx":38F86
             Key             =   ""
          EndProperty
          BeginProperty ListImage28 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":37B2F
+            Picture         =   "frmChat.frx":39197
             Key             =   ""
          EndProperty
          BeginProperty ListImage29 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":37D69
+            Picture         =   "frmChat.frx":393D1
             Key             =   ""
          EndProperty
          BeginProperty ListImage30 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":37FCD
+            Picture         =   "frmChat.frx":39635
             Key             =   ""
          EndProperty
          BeginProperty ListImage31 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38228
+            Picture         =   "frmChat.frx":39890
             Key             =   ""
          EndProperty
          BeginProperty ListImage32 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38473
+            Picture         =   "frmChat.frx":39ADB
             Key             =   ""
          EndProperty
          BeginProperty ListImage33 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":386DD
+            Picture         =   "frmChat.frx":39D45
             Key             =   ""
          EndProperty
          BeginProperty ListImage34 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38900
+            Picture         =   "frmChat.frx":39F68
             Key             =   ""
          EndProperty
          BeginProperty ListImage35 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38B2D
+            Picture         =   "frmChat.frx":3A195
             Key             =   ""
          EndProperty
          BeginProperty ListImage36 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38D49
+            Picture         =   "frmChat.frx":3A3B1
             Key             =   ""
          EndProperty
          BeginProperty ListImage37 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":38F80
+            Picture         =   "frmChat.frx":3A5E8
             Key             =   ""
          EndProperty
          BeginProperty ListImage38 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":391CB
+            Picture         =   "frmChat.frx":3A833
             Key             =   ""
          EndProperty
          BeginProperty ListImage39 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39435
+            Picture         =   "frmChat.frx":3AA9D
             Key             =   ""
          EndProperty
          BeginProperty ListImage40 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39638
+            Picture         =   "frmChat.frx":3ACA0
             Key             =   ""
          EndProperty
          BeginProperty ListImage41 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39871
+            Picture         =   "frmChat.frx":3AED9
             Key             =   ""
          EndProperty
          BeginProperty ListImage42 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39AA0
+            Picture         =   "frmChat.frx":3B108
             Key             =   ""
          EndProperty
          BeginProperty ListImage43 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39CFC
+            Picture         =   "frmChat.frx":3B364
             Key             =   ""
          EndProperty
          BeginProperty ListImage44 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":39F46
+            Picture         =   "frmChat.frx":3B5AE
             Key             =   ""
          EndProperty
          BeginProperty ListImage45 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A1B0
+            Picture         =   "frmChat.frx":3B818
             Key             =   ""
          EndProperty
          BeginProperty ListImage46 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A3F3
+            Picture         =   "frmChat.frx":3BA5B
             Key             =   ""
          EndProperty
          BeginProperty ListImage47 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A647
+            Picture         =   "frmChat.frx":3BCAF
             Key             =   ""
          EndProperty
          BeginProperty ListImage48 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3A889
+            Picture         =   "frmChat.frx":3BEF1
             Key             =   ""
          EndProperty
          BeginProperty ListImage49 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3AAF1
+            Picture         =   "frmChat.frx":3C159
             Key             =   ""
          EndProperty
          BeginProperty ListImage50 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3AD50
+            Picture         =   "frmChat.frx":3C3B8
             Key             =   ""
          EndProperty
          BeginProperty ListImage51 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3AFBA
+            Picture         =   "frmChat.frx":3C622
             Key             =   ""
          EndProperty
          BeginProperty ListImage52 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B208
+            Picture         =   "frmChat.frx":3C870
             Key             =   ""
          EndProperty
          BeginProperty ListImage53 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B487
+            Picture         =   "frmChat.frx":3CAEF
             Key             =   ""
          EndProperty
          BeginProperty ListImage54 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B6BC
+            Picture         =   "frmChat.frx":3CD24
             Key             =   ""
          EndProperty
          BeginProperty ListImage55 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3B929
+            Picture         =   "frmChat.frx":3CF91
             Key             =   ""
          EndProperty
          BeginProperty ListImage56 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3BB40
+            Picture         =   "frmChat.frx":3D1A8
             Key             =   ""
          EndProperty
          BeginProperty ListImage57 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3BDAA
+            Picture         =   "frmChat.frx":3D412
             Key             =   ""
          EndProperty
          BeginProperty ListImage58 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3BFE4
+            Picture         =   "frmChat.frx":3D64C
             Key             =   ""
          EndProperty
          BeginProperty ListImage59 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C20D
+            Picture         =   "frmChat.frx":3D875
             Key             =   ""
          EndProperty
          BeginProperty ListImage60 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C460
+            Picture         =   "frmChat.frx":3DAC8
             Key             =   ""
          EndProperty
          BeginProperty ListImage61 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C699
+            Picture         =   "frmChat.frx":3DD01
             Key             =   ""
          EndProperty
          BeginProperty ListImage62 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3C8EF
+            Picture         =   "frmChat.frx":3DF57
             Key             =   ""
          EndProperty
          BeginProperty ListImage63 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3CB60
+            Picture         =   "frmChat.frx":3E1C8
             Key             =   ""
          EndProperty
          BeginProperty ListImage64 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3CDCA
+            Picture         =   "frmChat.frx":3E432
             Key             =   ""
          EndProperty
          BeginProperty ListImage65 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D022
+            Picture         =   "frmChat.frx":3E68A
             Key             =   ""
          EndProperty
          BeginProperty ListImage66 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D247
+            Picture         =   "frmChat.frx":3E8AF
             Key             =   ""
          EndProperty
          BeginProperty ListImage67 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D49A
+            Picture         =   "frmChat.frx":3EB02
             Key             =   ""
          EndProperty
          BeginProperty ListImage68 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D6BD
+            Picture         =   "frmChat.frx":3ED25
             Key             =   ""
          EndProperty
          BeginProperty ListImage69 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3D927
+            Picture         =   "frmChat.frx":3EF8F
             Key             =   ""
          EndProperty
          BeginProperty ListImage70 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3DB67
+            Picture         =   "frmChat.frx":3F1CF
             Key             =   ""
          EndProperty
          BeginProperty ListImage71 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3DDAC
+            Picture         =   "frmChat.frx":3F414
             Key             =   ""
          EndProperty
          BeginProperty ListImage72 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3DFFA
+            Picture         =   "frmChat.frx":3F662
             Key             =   ""
          EndProperty
          BeginProperty ListImage73 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E241
+            Picture         =   "frmChat.frx":3F8A9
             Key             =   ""
          EndProperty
          BeginProperty ListImage74 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E4AB
+            Picture         =   "frmChat.frx":3FB13
             Key             =   ""
          EndProperty
          BeginProperty ListImage75 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E6DE
+            Picture         =   "frmChat.frx":3FD46
             Key             =   ""
          EndProperty
          BeginProperty ListImage76 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3E923
+            Picture         =   "frmChat.frx":3FF8B
             Key             =   ""
          EndProperty
          BeginProperty ListImage77 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3EB5F
+            Picture         =   "frmChat.frx":401C7
             Key             =   ""
          EndProperty
          BeginProperty ListImage78 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3EDCB
+            Picture         =   "frmChat.frx":40433
             Key             =   ""
          EndProperty
          BeginProperty ListImage79 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F035
+            Picture         =   "frmChat.frx":4069D
             Key             =   ""
          EndProperty
          BeginProperty ListImage80 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F27C
+            Picture         =   "frmChat.frx":408E4
             Key             =   ""
          EndProperty
          BeginProperty ListImage81 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F4C4
+            Picture         =   "frmChat.frx":40B2C
             Key             =   ""
          EndProperty
          BeginProperty ListImage82 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F6F0
+            Picture         =   "frmChat.frx":40D58
             Key             =   ""
          EndProperty
          BeginProperty ListImage83 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3F917
+            Picture         =   "frmChat.frx":40F7F
             Key             =   ""
          EndProperty
          BeginProperty ListImage84 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3FB81
+            Picture         =   "frmChat.frx":411E9
             Key             =   ""
          EndProperty
          BeginProperty ListImage85 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3FD86
+            Picture         =   "frmChat.frx":413EE
             Key             =   ""
          EndProperty
          BeginProperty ListImage86 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":3FF81
+            Picture         =   "frmChat.frx":415E9
             Key             =   ""
          EndProperty
          BeginProperty ListImage87 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":401C2
+            Picture         =   "frmChat.frx":4182A
             Key             =   ""
          EndProperty
          BeginProperty ListImage88 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":403D2
+            Picture         =   "frmChat.frx":41A3A
             Key             =   ""
          EndProperty
          BeginProperty ListImage89 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":40643
+            Picture         =   "frmChat.frx":41CAB
             Key             =   ""
          EndProperty
          BeginProperty ListImage90 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":40954
+            Picture         =   "frmChat.frx":41FBC
             Key             =   ""
          EndProperty
          BeginProperty ListImage91 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":40C9A
+            Picture         =   "frmChat.frx":42302
             Key             =   ""
          EndProperty
          BeginProperty ListImage92 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4126B
+            Picture         =   "frmChat.frx":428D3
             Key             =   ""
          EndProperty
          BeginProperty ListImage93 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4183B
+            Picture         =   "frmChat.frx":42EA3
             Key             =   ""
          EndProperty
          BeginProperty ListImage94 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":41DE6
+            Picture         =   "frmChat.frx":4344E
             Key             =   ""
          EndProperty
          BeginProperty ListImage95 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4247B
+            Picture         =   "frmChat.frx":43AE3
             Key             =   ""
          EndProperty
          BeginProperty ListImage96 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":42B0C
+            Picture         =   "frmChat.frx":44174
             Key             =   ""
          EndProperty
          BeginProperty ListImage97 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4319F
+            Picture         =   "frmChat.frx":44807
             Key             =   ""
          EndProperty
          BeginProperty ListImage98 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":43706
+            Picture         =   "frmChat.frx":44D6E
             Key             =   ""
          EndProperty
          BeginProperty ListImage99 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":43C73
+            Picture         =   "frmChat.frx":452DB
             Key             =   ""
          EndProperty
          BeginProperty ListImage100 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":441E5
+            Picture         =   "frmChat.frx":4584D
             Key             =   ""
          EndProperty
          BeginProperty ListImage101 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4478C
+            Picture         =   "frmChat.frx":45DF4
             Key             =   ""
          EndProperty
          BeginProperty ListImage102 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":44D31
+            Picture         =   "frmChat.frx":46399
             Key             =   ""
          EndProperty
          BeginProperty ListImage103 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":452DE
+            Picture         =   "frmChat.frx":46946
             Key             =   ""
          EndProperty
          BeginProperty ListImage104 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":482C1
+            Picture         =   "frmChat.frx":49929
             Key             =   ""
          EndProperty
          BeginProperty ListImage105 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":4DFFE
+            Picture         =   "frmChat.frx":4F666
             Key             =   ""
          EndProperty
          BeginProperty ListImage106 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":53CC3
+            Picture         =   "frmChat.frx":5532B
             Key             =   ""
          EndProperty
          BeginProperty ListImage107 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":598DB
+            Picture         =   "frmChat.frx":5AF43
             Key             =   ""
          EndProperty
          BeginProperty ListImage108 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":5F36E
+            Picture         =   "frmChat.frx":609D6
             Key             =   ""
          EndProperty
          BeginProperty ListImage109 {2C247F27-8591-11D1-B16A-00C0F0283628} 
-            Picture         =   "frmChat.frx":64F9F
+            Picture         =   "frmChat.frx":66607
             Key             =   ""
          EndProperty
       EndProperty
@@ -691,15 +691,15 @@ Begin VB.Form frmChat
          Strikethrough   =   0   'False
       EndProperty
       TabCaption(0)   =   "Channel  "
-      TabPicture(0)   =   "frmChat.frx":6ABBD
+      TabPicture(0)   =   "frmChat.frx":6C225
       Tab(0).ControlEnabled=   -1  'True
       Tab(0).ControlCount=   0
       TabCaption(1)   =   "Friends  "
-      TabPicture(1)   =   "frmChat.frx":6ABD9
+      TabPicture(1)   =   "frmChat.frx":6C241
       Tab(1).ControlEnabled=   0   'False
       Tab(1).ControlCount=   0
       TabCaption(2)   =   "Clan  "
-      TabPicture(2)   =   "frmChat.frx":6ABF5
+      TabPicture(2)   =   "frmChat.frx":6C25D
       Tab(2).ControlEnabled=   0   'False
       Tab(2).ControlCount=   0
    End
@@ -894,11 +894,10 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
-      TextRTF         =   $"frmChat.frx":6AC11
+      TextRTF         =   $"frmChat.frx":6C279
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -920,11 +919,12 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
       OLEDropMode     =   0
-      TextRTF         =   $"frmChat.frx":6AC8C
+      TextRTF         =   $"frmChat.frx":6C2F4
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
          Size            =   9
@@ -1357,18 +1357,6 @@ Begin VB.Form frmChat
          Caption         =   "Profile Lookup"
       End
    End
-   Begin VB.Menu mnuScripts 
-      Caption         =   "Scripts"
-      Visible         =   0   'False
-      Begin VB.Menu mnuScriptSub 
-         Caption         =   "mnuScriptSub"
-         Index           =   0
-         Begin VB.Menu mnuScriptSub2 
-            Caption         =   "mnuScriptSub2"
-            Index           =   0
-         End
-      End
-   End
    Begin VB.Menu mnuHelp 
       Caption         =   "&Help"
       NegotiatePosition=   3  'Right
@@ -1648,24 +1636,6 @@ Private Sub Form_Load()
         End If
     End If
     
-    Dim pb As New clsPacketBuffer
-    
-    With pb
-        .InsertDWord &H1
-        .InsertDWord &H2
-        .InsertNTString "hello", ANSI
-        .InsertNTString "hi", ANSI
-        .InsertWord &H3
-        .InsertNTString "sup", ANSI
-        .Position = 0
-        'MsgBox .GetDWORD
-        'MsgBox .GetDWORD
-        'MsgBox .GetString
-        'MsgBox .GetString
-        'MsgBox .GetWORD
-        'MsgBox .GetString
-    End With
-        
     ' SPLASH SCREEN
     If ReadCfg("Main", "ShowSplash") <> "N" Then
         frmSplash.Show
@@ -1905,6 +1875,7 @@ Private Sub Form_Load()
     
     InitScriptControl SControl
     LoadScripts
+    InitMenus
     
     RunInAll "Event_FirstRun"
     
@@ -1990,7 +1961,7 @@ End Sub
 ' Updated 8/07/07 with greater precision
 Sub AddChat(ParamArray saElements() As Variant)
     Dim arr() As Variant ' ...
-    Dim I     As Integer ' ...
+    Dim i     As Integer ' ...
 
     ' ...
     arr() = saElements
@@ -2015,7 +1986,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
     
     Dim s As String
     Dim L As Long
-    Dim I As Integer
+    Dim i As Integer
     
     If Not BotVars.LockChat Then
         'If ((BotVars.MaxBacklogSize) And (Len(rtbWhispers.text) >= BotVars.MaxBacklogSize)) Then
@@ -2028,7 +1999,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
                 .Visible = False
                 .SelStart = 0
                 .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
-                If BotVars.Logging < 2 Then Print #1, Left$(vbCrLf, -2 * CLng((I + 1) = UBound(saElements)))
+                If BotVars.Logging < 2 Then Print #1, Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
                 .SelText = vbNullString
                 .Visible = True
             End With
@@ -2053,21 +2024,21 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             .SelStart = Len(.text)
         End With
         
-        For I = LBound(saElements) To UBound(saElements) Step 2
-            If InStr(1, saElements(I), Chr(0), vbBinaryCompare) > 0 Then _
-                KillNull saElements(I)
+        For i = LBound(saElements) To UBound(saElements) Step 2
+            If InStr(1, saElements(i), Chr(0), vbBinaryCompare) > 0 Then _
+                KillNull saElements(i)
             
-            If Len(saElements(I + 1)) > 0 Then
+            If Len(saElements(i + 1)) > 0 Then
                 With rtbWhispers
                     .SelStart = Len(.text)
                     L = .SelStart
                     .SelLength = 0
-                    .SelColor = saElements(I)
-                    .SelText = saElements(I + 1) & Left$(vbCrLf, -2 * CLng((I + 1) = UBound(saElements)))
+                    .SelColor = saElements(i)
+                    .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
                     .SelStart = Len(.text)
                 End With
             End If
-        Next I
+        Next i
         
         Call ColorModify(rtbWhispers, L)
     End If
@@ -2604,7 +2575,7 @@ Sub UpdateTrayTooltip()
 End Sub
 
 Private Sub ClanHandler_CandidateList(ByVal Status As Byte, Users() As String)
-    Dim I As Long
+    Dim i As Long
     
     'Valid Status codes:
     '   0x00: Successfully found candidate(s)
@@ -2617,9 +2588,9 @@ Private Sub ClanHandler_CandidateList(ByVal Status As Byte, Users() As String)
         If UBound(Users) > -1 Then
             AddChat RTBColors.InformationText, "Potential clan members:"
             
-            For I = 0 To UBound(Users)
-                AddChat RTBColors.InformationText, Users(I)
-            Next I
+            For i = 0 To UBound(Users)
+                AddChat RTBColors.InformationText, Users(i)
+            Next i
         End If
     End If
 End Sub
@@ -2700,14 +2671,14 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
     Set g_Clan = New clsClanObj
     
     With Clan
-        .Name = ClanTag
+        .name = ClanTag
         .DWName = RawClanTag
         .MyRank = rank
         .isUsed = True
     End With
     
     With g_Clan
-        .Name = ClanTag
+        .name = ClanTag
     End With
     
     Call InitListviewTabs
@@ -2744,7 +2715,7 @@ Private Sub ClanHandler_ClanInvitation(ByVal Token As String, ByVal ClanTag As S
         Clan.Token = Token
         Clan.DWName = RawClanTag
         Clan.Creator = InvitedBy
-        Clan.Name = ClanName
+        Clan.name = ClanName
         If NewClan Then Clan.isNew = 1
         
         With RTBColors
@@ -2757,7 +2728,7 @@ End Sub
 
 Private Sub ClanHandler_ClanMemberList(Members() As String)
     Dim ClanMember As clsClanMemberObj
-    Dim I          As Long
+    Dim i          As Long
     
     ' ...
     If AwaitingClanList = 1 Then
@@ -2768,34 +2739,34 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
         lvClanList.ListItems.Clear
     
         ' ...
-        For I = 0 To UBound(Members) Step 4
+        For i = 0 To UBound(Members) Step 4
             ' ...
             Set ClanMember = New clsClanMemberObj
             
             ' ...
             With ClanMember
-                .Name = Members(I)
-                .rank = Val(Members(I + 1))
-                .Status = Val(Members(I + 2))
-                .Location = Members(I + 3)
+                .name = Members(i)
+                .rank = Val(Members(i + 1))
+                .Status = Val(Members(i + 2))
+                .Location = Members(i + 3)
             End With
 
             ' ...
             g_Clan.Members.Add ClanMember
         
             ' ...
-            If ((Len(Members(I)) > 0) And (UBound(Members) >= I + 1)) Then
+            If ((Len(Members(i)) > 0) And (UBound(Members) >= i + 1)) Then
                 ' ...
-                AddClanMember ClanMember.DisplayName, Val(Members(I + 1)), Val(Members(I + 2))
+                AddClanMember ClanMember.DisplayName, Val(Members(i + 1)), Val(Members(i + 2))
                 
                 ' ...
                 On Error Resume Next
                 
                 ' ...
-                RunInAll "Event_ClanMemberList", ClanMember.DisplayName, Val(Members(I + 1)), _
-                    Val(Members(I + 2))
+                RunInAll "Event_ClanMemberList", ClanMember.DisplayName, Val(Members(i + 1)), _
+                    Val(Members(i + 2))
             End If
-        Next I
+        Next i
     End If
     
     ' ...
@@ -2813,7 +2784,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
     
     If (pos > 0) Then
         With g_Clan.Members(pos)
-            .Name = Username
+            .name = Username
             .rank = rank
             .Status = IsOnline
             .Location = Location
@@ -2826,7 +2797,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
         
         ' ...
         With ClanMember
-            .Name = Username
+            .name = Username
             .rank = rank
             .Status = IsOnline
             .Location = Location
@@ -3143,7 +3114,7 @@ End Sub
 
 
 Public Sub AddFriend(ByVal Username As String, ByVal Product As String, IsOnline As Boolean)
-    Dim I As Integer, OnlineIcon As Integer
+    Dim i As Integer, OnlineIcon As Integer
     Dim f As ListItem
     
     Const ICONLINE = 23
@@ -3154,42 +3125,42 @@ Public Sub AddFriend(ByVal Username As String, ByVal Product As String, IsOnline
     'Everybody Else
     Select Case Product
         Case Is = "STAR"
-            I = ICSTAR
+            i = ICSTAR
         Case Is = "SEXP"
-            I = ICSEXP
+            i = ICSEXP
         Case Is = "D2DV"
-            I = ICD2DV
+            i = ICD2DV
         Case Is = "D2XP"
-            I = ICD2XP
+            i = ICD2XP
         Case Is = "W2BN"
-            I = ICW2BN
+            i = ICW2BN
         Case Is = "WAR3"
-            I = ICWAR3
+            i = ICWAR3
         Case Is = "W3XP"
-            I = ICWAR3X
+            i = ICWAR3X
         Case Is = "CHAT"
-            I = ICCHAT
+            i = ICCHAT
         Case Is = "DRTL"
-            I = ICDIABLO
+            i = ICDIABLO
         Case Is = "DSHR"
-            I = ICDIABLOSW
+            i = ICDIABLOSW
         Case Is = "JSTR"
-            I = ICJSTR
+            i = ICJSTR
         Case Is = "SSHR"
-            I = ICSCSW
+            i = ICSCSW
         Case Else
-            I = ICUNKNOWN
+            i = ICUNKNOWN
     End Select
     
     Set f = lvFriendList.FindItem(Username)
     
     If (f Is Nothing) Then
         With lvFriendList.ListItems
-            .Add , , Username, , I
+            .Add , , Username, , i
             .Item(.Count).ListSubItems.Add , , , OnlineIcon
         End With
     Else
-        f.SmallIcon = I
+        f.SmallIcon = i
         f.ListSubItems.Item(1).ReportIcon = OnlineIcon
         
         Set f = Nothing
@@ -3236,7 +3207,7 @@ Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLInd
     On Error GoTo ERROR_HANDLER
 
     Dim X As ListItem
-    Dim I As Integer
+    Dim i As Integer
     Const ICONLINE = 23
     Const ICOFFLINE = 24
     
@@ -3258,22 +3229,22 @@ Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLInd
                     X.ListSubItems.Item(1).ReportIcon = ICONLINE
                     
                     Select Case .game
-                        Case Is = "STAR": I = ICSTAR
-                        Case Is = "SEXP": I = ICSEXP
-                        Case Is = "D2DV": I = ICD2DV
-                        Case Is = "D2XP": I = ICD2XP
-                        Case Is = "W2BN": I = ICW2BN
-                        Case Is = "WAR3": I = ICWAR3
-                        Case Is = "W3XP": I = ICWAR3X
-                        Case Is = "CHAT": I = ICCHAT
-                        Case Is = "DRTL": I = ICDIABLO
-                        Case Is = "DSHR": I = ICDIABLOSW
-                        Case Is = "JSTR": I = ICJSTR
-                        Case Is = "SSHR": I = ICSCSW
-                        Case Else: I = ICUNKNOWN
+                        Case Is = "STAR": i = ICSTAR
+                        Case Is = "SEXP": i = ICSEXP
+                        Case Is = "D2DV": i = ICD2DV
+                        Case Is = "D2XP": i = ICD2XP
+                        Case Is = "W2BN": i = ICW2BN
+                        Case Is = "WAR3": i = ICWAR3
+                        Case Is = "W3XP": i = ICWAR3X
+                        Case Is = "CHAT": i = ICCHAT
+                        Case Is = "DRTL": i = ICDIABLO
+                        Case Is = "DSHR": i = ICDIABLOSW
+                        Case Is = "JSTR": i = ICJSTR
+                        Case Is = "SSHR": i = ICSCSW
+                        Case Else: i = ICUNKNOWN
                     End Select
                     
-                    X.SmallIcon = I
+                    X.SmallIcon = i
             End Select
         End With
         
@@ -3320,7 +3291,7 @@ ERROR_HANDLER:
 End Sub
 
 Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
  
     ' ...
     If ((mnuPublicChannels(0).Caption <> vbNullString) Or _
@@ -3338,12 +3309,12 @@ Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, X As 
         End If
         
         ' ...
-        For I = 0 To mnuPublicChannels.Count - 1
+        For i = 0 To mnuPublicChannels.Count - 1
             ' ...
-            If (mnuPublicChannels(I).Caption <> vbNullString) Then
-                mnuPublicChannels(I).Visible = True
+            If (mnuPublicChannels(i).Caption <> vbNullString) Then
+                mnuPublicChannels(i).Visible = True
             End If
-        Next I
+        Next i
         
         ' ...
         mnuQCEdit.Visible = False
@@ -3364,7 +3335,7 @@ Public Sub ListviewTabs_Click(PreviousTab As Integer)
             Case LVW_BUTTON_CHANNEL ' = 0 = Channel button clicked
                 ' ...
                 lblCurrentChannel.ToolTipText = "Currently in " & g_Channel.SType() & _
-                    " channel " & g_Channel.Name & " (" & g_Channel.Users.Count & ")"
+                    " channel " & g_Channel.name & " (" & g_Channel.Users.Count & ")"
                 
                 ' ...
                 lvChannel.ZOrder vbBringToFront
@@ -3379,7 +3350,7 @@ Public Sub ListviewTabs_Click(PreviousTab As Integer)
             Case LVW_BUTTON_CLAN ' = 2 = Clan button clicked
                 ' ...
                 lblCurrentChannel.ToolTipText = "Currently viewing " & _
-                    g_Clan.Members.Count & " members of clan " & Clan.Name
+                    g_Clan.Members.Count & " members of clan " & Clan.name
             
                 ' ...
                 lvClanList.ZOrder vbBringToFront
@@ -3634,7 +3605,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
 End Sub
 
 Private Sub mnuBot_Click()
-    Dim I As Integer
+    Dim i As Integer
 
     If IsW3 And g_Connected Then
         mnuIgnoreInvites.Enabled = True
@@ -3646,9 +3617,9 @@ Private Sub mnuBot_Click()
     mnuDash.Visible = False
 
     ' ...
-    For I = 0 To mnuPublicChannels.Count - 1
-        mnuPublicChannels(I).Visible = False
-    Next I
+    For i = 0 To mnuPublicChannels.Count - 1
+        mnuPublicChannels(i).Visible = False
+    Next i
     
     ' ...
     mnuQCEdit.Visible = True
@@ -3661,7 +3632,7 @@ End Sub
 
 Private Sub mnuPublicChannels_Click(Index As Integer)
     ' ...
-    If (StrComp(mnuPublicChannels(Index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
+    If (StrComp(mnuPublicChannels(Index).Caption, g_Channel.name, vbTextCompare) = 0) Then
         Exit Sub
     End If
     
@@ -3673,7 +3644,7 @@ End Sub
 
 Private Sub mnuCustomChannels_Click(Index As Integer)
     ' ...
-    If (StrComp(mnuCustomChannels(Index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
+    If (StrComp(mnuCustomChannels(Index).Caption, g_Channel.name, vbTextCompare) = 0) Then
         Exit Sub
     End If
 
@@ -4206,7 +4177,7 @@ End Sub
 
 Private Sub mnuUpdateVerbytes_Click()
     Dim s As String, ary() As String
-    Dim I As Integer
+    Dim i As Integer
     
     Dim Keys(3) As String
     
@@ -4222,9 +4193,9 @@ Private Sub mnuUpdateVerbytes_Click()
             'W2 SC D2 W3
             ary() = Split(s, " ")
             
-            For I = 0 To 3
-                WriteINI "Override", Keys(I) & "VerByte", ary(I)
-            Next I
+            For i = 0 To 3
+                WriteINI "Override", Keys(i) & "VerByte", ary(i)
+            Next i
             
             AddChat RTBColors.SuccessText, "Your config.ini file has been loaded with current version bytes."
         Else
@@ -4266,7 +4237,7 @@ Sub mnuReloadScript_Click()
     
     On Error GoTo ERROR_HANDLER
 
-    Dim I     As Integer
+    Dim i     As Integer
     Dim lMenu As Long
 
     RunInAll "Event_Close"
@@ -4280,21 +4251,21 @@ Sub mnuReloadScript_Click()
     
     ' Remove each of the subitems for all of the script menus
     While colDynamicMenus.Count > 0
-        I = GetMenuItemCount(colDynamicMenus.Item(1))
+        i = GetMenuItemCount(colDynamicMenus.Item(1))
     
-        For I = 0 To I
+        For i = 0 To i
             DeleteMenuItem ScriptMenu_ParentID, colDynamicMenus.Item(1), 0
-        Next I
+        Next i
         
         colDynamicMenus.Remove 1
     Wend
     
     ' Remove each of the script menus
-    I = GetMenuItemCount(ScriptMenu_ParentID)
+    i = GetMenuItemCount(ScriptMenu_ParentID)
     
-    For I = 0 To I
+    For i = 0 To i
         DeleteMenuItem lMenu, ScriptMenu_ParentID, 0
-    Next I
+    Next i
 
     ' Finally, remove the script menu itself and reset its ID
     DeleteMenuItem lMenu, ScriptMenu_ParentID, 5
@@ -4810,29 +4781,29 @@ Private Sub cboSend_GotFocus()
     ' ...
     On Error Resume Next
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     cboSend.SelStart = cboSendSelStart
     cboSend.SelLength = cboSendSelLength
 
     If (BotVars.NoAutocompletion = False) Then
         ' ..
-        For I = 0 To (Controls.Count - 1)
+        For i = 0 To (Controls.Count - 1)
             ' ...
-            If (TypeOf Controls(I) Is ListView) Or _
-                    (TypeOf Controls(I) Is SSTab) Or _
-                        (TypeOf Controls(I) Is RichTextBox) Or _
-                            (TypeOf Controls(I) Is TextBox) Then
+            If (TypeOf Controls(i) Is ListView) Or _
+                    (TypeOf Controls(i) Is SSTab) Or _
+                        (TypeOf Controls(i) Is RichTextBox) Or _
+                            (TypeOf Controls(i) Is TextBox) Then
                             
                 ' ...
-                If (Controls(I).TabStop = False) Then
-                    Controls(I).Tag = "False"
+                If (Controls(i).TabStop = False) Then
+                    Controls(i).Tag = "False"
                 End If
 
                 ' ...
-                Controls(I).TabStop = False
+                Controls(i).TabStop = False
             End If
-        Next I
+        Next i
     End If
     
     cboSendHadFocus = True
@@ -4850,23 +4821,23 @@ Private Sub cboSend_LostFocus()
     ' ...
     On Error Resume Next
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
     
     If (BotVars.NoAutocompletion = False) Then
         ' ...
-        For I = 0 To (Controls.Count - 1)
+        For i = 0 To (Controls.Count - 1)
             ' ...
-            If (TypeOf Controls(I) Is ListView) Or _
-                    (TypeOf Controls(I) Is TabStrip) Or _
-                        (TypeOf Controls(I) Is RichTextBox) Or _
-                            (TypeOf Controls(I) Is TextBox) Then
+            If (TypeOf Controls(i) Is ListView) Or _
+                    (TypeOf Controls(i) Is TabStrip) Or _
+                        (TypeOf Controls(i) Is RichTextBox) Or _
+                            (TypeOf Controls(i) Is TextBox) Then
                             
                 ' ...
-                If (Controls(I).Tag <> "False") Then
-                    Controls(I).TabStop = True
+                If (Controls(i).Tag <> "False") Then
+                    Controls(i).TabStop = True
                 End If
             End If
-        Next I
+        Next i
     End If
     
     cboSendHadFocus = False
@@ -4939,7 +4910,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
 
     Dim temp As udtGetAccessResponse
     
-    Dim I As Long
+    Dim i As Long
     Dim L As Long
     Dim n As Integer
     Dim c As Integer ',oldSelStart As Integer
@@ -4968,7 +4939,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     With lvChannel
 
         If (Not (.SelectedItem Is Nothing)) Then
-            I = .SelectedItem.Index
+            i = .SelectedItem.Index
         End If
         
         'MsgBox KeyCode
@@ -4976,10 +4947,10 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
         Select Case (KeyCode)
             Case KEY_PGDN 'ALT + PAGEDOWN
                 If Shift = S_ALT Then
-                    If I < .ListItems.Count Then
-                        .ListItems.Item(I + 1).Selected = True
-                        .ListItems.Item(I).Ghosted = False
-                        .ListItems.Item(I + 1).Ghosted = True
+                    If i < .ListItems.Count Then
+                        .ListItems.Item(i + 1).Selected = True
+                        .ListItems.Item(i).Ghosted = False
+                        .ListItems.Item(i + 1).Ghosted = True
                     End If
 
                     cboSend.SetFocus
@@ -4989,10 +4960,10 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
 
             Case KEY_PGUP 'ALT + PAGEUP
                 If Shift = S_ALT Then
-                    If I > 1 Then
-                        .ListItems.Item(I - 1).Selected = True
-                        .ListItems.Item(I).Ghosted = False
-                        .ListItems.Item(I - 1).Ghosted = True
+                    If i > 1 Then
+                        .ListItems.Item(i - 1).Selected = True
+                        .ListItems.Item(i).Ghosted = False
+                        .ListItems.Item(i - 1).Ghosted = True
                     End If
 
                     cboSend.SetFocus
@@ -5014,7 +4985,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
 
             Case KEY_HOME 'ALT+HOME
                 If Shift = S_ALT Then
-                    If (I > 0) Then
+                    If (i > 0) Then
                         .ListItems.Item(1).Selected = True
                         
                         For c = 1 To .ListItems.Count
@@ -5039,7 +5010,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 If Shift = S_ALT Then
                     If (.ListItems.Count > 0) Then
                         .ListItems.Item(.ListItems.Count).Selected = True
-                        .ListItems.Item(I).Ghosted = False
+                        .ListItems.Item(i).Ghosted = False
                         .ListItems.Item(.ListItems.Count).Ghosted = True
     
                         cboSend.SetFocus
@@ -5522,17 +5493,17 @@ Private Sub QueueTimer_Timer()
     Dim Message  As String
     Dim Tag      As String
     Dim Sent     As Byte
-    Dim I        As Integer
+    Dim i        As Integer
     Dim override As Integer
     Dim pri      As Integer
-    Dim id       As Integer
+    Dim ID       As Integer
     
     If ((g_Queue.Count) And (g_Online)) Then
         With g_Queue.Peek
             Message = .Message
             Tag = .Tag
             pri = .PRIORITY
-            id = .id
+            ID = .ID
         End With
         
         ' ...
@@ -5605,7 +5576,7 @@ Private Sub QueueTimer_Timer()
                 
                 'frmChat.AddChat vbRed, Message
                 
-                Call bnetSend(Message, Tag, id)
+                Call bnetSend(Message, Tag, ID)
             End If
         End If
         
@@ -5811,7 +5782,7 @@ Private Sub Timer_Timer()
     
     If IdleMsg <> "Y" Then Exit Sub
     
-    If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) = 0) And _
+    If ((StrComp(g_Channel.name, "Clan SBs", vbTextCompare) = 0) And _
         (IsStealthBotTech = False)) Then Exit Sub
     
     IdleMsg = ReadCfg("Main", "IdleMsg")
@@ -5822,7 +5793,7 @@ Private Sub Timer_Timer()
 
     If IdleWait < 2 Then Exit Sub
     
-    If iCounter >= IdleWait And StrComp(LCase(g_Channel.Name), "op [vl]", vbTextCompare) <> 0 Then
+    If iCounter >= IdleWait And StrComp(LCase(g_Channel.name), "op [vl]", vbTextCompare) <> 0 Then
         iCounter = 0
         'on error resume next
         If IdleType = "msg" Or IdleType = vbNullString Then
@@ -5832,8 +5803,8 @@ Private Sub Timer_Timer()
             End If
             
             IdleMsg = Replace(IdleMsg, "%cpuup", ConvertTime(GetUptimeMS))
-            IdleMsg = Replace(IdleMsg, "%chan", g_Channel.Name)
-            IdleMsg = Replace(IdleMsg, "%c", g_Channel.Name)
+            IdleMsg = Replace(IdleMsg, "%chan", g_Channel.name)
+            IdleMsg = Replace(IdleMsg, "%c", g_Channel.name)
             IdleMsg = Replace(IdleMsg, "%me", GetCurrentUsername)
             IdleMsg = Replace(IdleMsg, "%v", CVERSION)
             IdleMsg = Replace(IdleMsg, "%ver", CVERSION)
@@ -5932,7 +5903,7 @@ Private Sub tmrSilentChannel_Timer(Index As Integer)
     Dim user    As clsUserObj
     Dim Item    As ListItem
     
-    Dim I       As Integer ' ...
+    Dim i       As Integer ' ...
     Dim j       As Integer ' ...
     Dim found   As Boolean ' ...
     Dim WasZero As Boolean ' ...
@@ -6174,12 +6145,12 @@ End Sub
 
 
 Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean = True)
-    Dim I As Integer
+    Dim i As Integer
     If AllowEvents Then
-        For I = 0 To (1000 * fSeconds) \ 100
+        For i = 0 To (1000 * fSeconds) \ 100
             Sleep 100
             DoEvents
-        Next I
+        Next i
     Else
         Sleep fSeconds * 1000
     End If
@@ -6191,7 +6162,7 @@ Private Sub UpTimer_Timer()
     On Error GoTo ERROR_HANDLER
 
     Dim newColor  As Long
-    Dim I         As Integer
+    Dim i         As Integer
     Dim pos       As Integer
     Dim doCheck   As Boolean
 
@@ -6225,9 +6196,9 @@ Private Sub UpTimer_Timer()
         doCheck = True
     
         ' ...
-        For I = 1 To g_Channel.Users.Count
+        For i = 1 To g_Channel.Users.Count
             ' ...
-            With g_Channel.Users(I)
+            With g_Channel.Users(i)
                 ' ...
                 If (g_Channel.Self.IsOperator) Then
                     ' ...
@@ -6289,7 +6260,7 @@ Private Sub UpTimer_Timer()
             
             ' ...
             doCheck = True
-        Next I
+        Next i
     End If
     
     Exit Sub
@@ -6401,7 +6372,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
     ' ...
     If (strTmp <> vbNullString) Then
         Dim Splt()         As String      ' ...
-        Dim I              As Long        ' ...
+        Dim i              As Long        ' ...
         Dim currChar       As Long        ' ...
         Dim Send           As String      ' ...
         Dim Command        As String      ' ...
@@ -6421,34 +6392,34 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
         End If
         
         ' ...
-        For I = 1 To Len(strTmp)
+        For i = 1 To Len(strTmp)
             ' ...
-            currChar = Asc(Mid$(strTmp, I, 1))
+            currChar = Asc(Mid$(strTmp, i, 1))
         
             ' ...
             If (currChar < 32) Then
                 Exit Function
             End If
-        Next I
+        Next i
         
         ' ...
         If (StrComp(Left$(strTmp, 1), "/", vbBinaryCompare) = 0) Then
             Dim Index As Long ' ...
             
             ' ...
-            For I = 2 To Len(strTmp)
+            For i = 2 To Len(strTmp)
                 ' ...
-                currChar = Asc(Mid$(strTmp, I, 1))
+                currChar = Asc(Mid$(strTmp, i, 1))
             
                 ' ...
                 If (currChar <> Asc(Space(1))) Then
                     Exit For
                 End If
-            Next I
+            Next i
             
             ' ...
-            If (I > 2) Then
-                strTmp = "/" & Mid$(strTmp, I)
+            If (i > 2) Then
+                strTmp = "/" & Mid$(strTmp, i)
             End If
 
             ' ...
@@ -6605,13 +6576,13 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
         ReDim Preserve Splt(0 To UBound(Splt))
 
         ' ...
-        For I = LBound(Splt) To UBound(Splt)
+        For i = LBound(Splt) To UBound(Splt)
             ' store current tick
             GTC = GetTickCount()
             
             ' store working copy
             Send = _
-                Command & Splt(I)
+                Command & Splt(i)
             
             ' ...
             Set Q = New clsQueueOBj
@@ -6650,7 +6621,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                     End With
                 End If
             End If
-        Next I
+        Next i
         
         ' ...
         AddQ = UBound(Splt) + 1
@@ -6741,7 +6712,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
 
     Dim default_group_access As udtGetAccessResponse
     Dim s                    As String
-    Dim I                    As Integer
+    Dim i                    As Integer
     Dim f                    As Integer
     Dim Index                As Integer
     Dim D2GameConventions    As String
@@ -6788,13 +6759,13 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     If Mode <> 1 Then
         s = ReadCfg(OT, "ChatFont")
-        If s <> vbNullString And s <> rtbChat.Font.Name Then
-            rtbChat.Font.Name = s
+        If s <> vbNullString And s <> rtbChat.Font.name Then
+            rtbChat.Font.name = s
         End If
         
         s = ReadCfg(OT, "ChanFont")
-        If s <> vbNullString And s <> lvChannel.Font.Name Then
-            lvChannel.Font.Name = s
+        If s <> vbNullString And s <> lvChannel.Font.name Then
+            lvChannel.Font.name = s
         End If
         
         s = ReadCfg(OT, "ChatSize")
@@ -6908,32 +6879,32 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         Dim outbuf      As String
 
         ' ...
-        SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
+        SetTitle GetCurrentUsername & ", online in channel " & g_Channel.name
         
         ' ...
         lvChannel.ListItems.Clear
         
         ' ...
-        For I = 1 To g_Channel.Users.Count
+        For i = 1 To g_Channel.Users.Count
             ' ...
-            Set CurrentUser = g_Channel.Users(I)
+            Set CurrentUser = g_Channel.Users(i)
         
             ' ...
             AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.flags, CurrentUser.Ping, _
                 CurrentUser.Stats.IconCode, CurrentUser.Clan
-        Next I
+        Next i
         
         ' ...
         frmChat.lvFriendList.ListItems.Clear
         
         ' ...
-        For I = 1 To g_Friends.Count
+        For i = 1 To g_Friends.Count
             ' ...
-            Set CurrentUser = g_Friends(I)
+            Set CurrentUser = g_Friends(i)
         
             ' ...
             AddFriend CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Status
-        Next I
+        Next i
     End If
     
     s = ReadCfg(OT, "JoinLeaves")
@@ -7331,7 +7302,7 @@ Sub LoadOutFilters()
     Const f As String = "filters.ini"
     
     Dim s   As String
-    Dim I   As Integer
+    Dim i   As Integer
     
     ReDim gOutFilters(1 To 1)
     ReDim Catch(0)
@@ -7344,28 +7315,28 @@ Sub LoadOutFilters()
         Exit Sub
     End If
     
-    For I = 1 To Val(s)
-        gOutFilters(I).ofFind = Replace(LCase(ReadINI(o, "Find" & I, f)), "¦", " ")
-        gOutFilters(I).ofReplace = Replace(ReadINI(o, "Replace" & I, f), "¦", " ")
+    For i = 1 To Val(s)
+        gOutFilters(i).ofFind = Replace(LCase(ReadINI(o, "Find" & i, f)), "¦", " ")
+        gOutFilters(i).ofReplace = Replace(ReadINI(o, "Replace" & i, f), "¦", " ")
         
-        If (I <> Val(s)) Then
-            ReDim Preserve gOutFilters(1 To I + 1)
+        If (i <> Val(s)) Then
+            ReDim Preserve gOutFilters(1 To i + 1)
         End If
-    Next I
+    Next i
     
     If (Dir$(GetFilePath("catchphrases.txt")) <> vbNullString) Then
-        I = FreeFile
+        i = FreeFile
         
-        Open GetFilePath("catchphrases.txt") For Input As #I
+        Open GetFilePath("catchphrases.txt") For Input As #i
         
-            If (LOF(I) < 2) Then
-                Close #I
+            If (LOF(i) < 2) Then
+                Close #i
                 
                 Exit Sub
             End If
             
-            Do While Not EOF(I)
-                Line Input #I, s
+            Do While Not EOF(i)
+                Line Input #i, s
                 
                 If ((s <> vbNullString) And (s <> " ")) Then
                     Catch(UBound(Catch)) = LCase$(s)
@@ -7377,18 +7348,18 @@ Sub LoadOutFilters()
             'Note: Why did this happen?
             'If Catch(0) = vbNullString Then Catch(0) = "¯"
             
-        Close #I
+        Close #i
     End If
 End Sub
 
 Function OutFilterMsg(ByVal strOut As String) As String
-    Dim I As Integer
+    Dim i As Integer
     
     If (UBound(gOutFilters) > 0) Then
-        For I = LBound(gOutFilters) To UBound(gOutFilters)
-            strOut = Replace(strOut, gOutFilters(I).ofFind, _
-                gOutFilters(I).ofReplace)
-        Next I
+        For i = LBound(gOutFilters) To UBound(gOutFilters)
+            strOut = Replace(strOut, gOutFilters(i).ofFind, _
+                gOutFilters(i).ofReplace)
+        Next i
     End If
     
     OutFilterMsg = strOut
@@ -7545,7 +7516,7 @@ Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
     Dim f As Integer
     Dim Path As String
     Dim temp As String
-    Dim I As Integer
+    Dim i As Integer
     Dim c As Integer
     
     f = FreeFile
@@ -7580,13 +7551,13 @@ Sub LoadArray(ByVal Mode As Byte, ByRef tArray() As String)
                 temp = ReadINI(FI, "Total", "filters.ini")
                 If temp <> vbNullString And CInt(temp) > -1 Then
                     c = Int(temp)
-                    For I = 1 To c
-                        temp = ReadINI(FI, "Filter" & I, "filters.ini")
+                    For i = 1 To c
+                        temp = ReadINI(FI, "Filter" & i, "filters.ini")
                         If temp <> vbNullString Then
                             tArray(UBound(tArray)) = LCase(temp)
-                            If I <> c Then ReDim Preserve tArray(UBound(tArray) + 1)
+                            If i <> c Then ReDim Preserve tArray(UBound(tArray) + 1)
                         End If
-                    Next I
+                    Next i
                 End If
             End If
         End If
@@ -7708,15 +7679,15 @@ Private Function PopupMenuUserCheck() As Boolean
 End Function
 
 Function GetSelectedUsers() As Collection
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     Set GetSelectedUsers = New Collection
     
-    For I = 1 To lvChannel.ListItems.Count
-        If (lvChannel.ListItems(I).Selected) Then
-            Call GetSelectedUsers.Add(lvChannel.ListItems(I).text)
+    For i = 1 To lvChannel.ListItems.Count
+        If (lvChannel.ListItems(i).Selected) Then
+            Call GetSelectedUsers.Add(lvChannel.ListItems(i).text)
         End If
-    Next I
+    Next i
 End Function
 
 Function GetSelectedUser() As String
@@ -7730,7 +7701,7 @@ Function GetSelectedUser() As String
 End Function
 
 Function GetRandomPerson() As String
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
     
     ' ...
     If (g_Channel.Users.Count > 0) Then
@@ -7738,26 +7709,26 @@ Function GetRandomPerson() As String
         Randomize
         
         ' ...
-        I = Int(g_Channel.Users.Count * Rnd + 1)
+        i = Int(g_Channel.Users.Count * Rnd + 1)
 
         ' ...
-        GetRandomPerson = g_Channel.Users(I).DisplayName
+        GetRandomPerson = g_Channel.Users(i).DisplayName
     End If
 End Function
 
 Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) As String
     Dim lstView     As ListView
 
-    Dim I           As Integer ' ...
+    Dim i           As Integer ' ...
     Dim CurrentName As String  ' ...
     Dim atChar      As Integer ' ...
     Dim Index       As Integer ' ...
     Dim Loops       As Integer ' ...
 
-    I = InStr(1, toMatch, " ", vbBinaryCompare)
+    i = InStr(1, toMatch, " ", vbBinaryCompare)
     
-    If (I > 0) Then
-        toMatch = Mid$(toMatch, I + 1)
+    If (i > 0) Then
+        toMatch = Mid$(toMatch, i + 1)
     End If
     
     Select Case (ListviewTabs.Tab)
@@ -7780,8 +7751,8 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
             End If
         
             While (Loops < 2)
-                For I = Index To .Count 'for each user
-                    CurrentName = .Item(I).text
+                For i = Index To .Count 'for each user
+                    CurrentName = .Item(i).text
                 
                     If (Len(CurrentName) >= Len(toMatch)) Then
                         For c = 1 To Len(toMatch) 'for each letter in their name
@@ -7794,14 +7765,14 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                         
                         If (c >= (Len(toMatch) + 1)) Then
                             MatchClosest = _
-                                    .Item(I).text & BotVars.AutoCompletePostfix
+                                    .Item(i).text & BotVars.AutoCompletePostfix
                             
-                            MatchIndex = I
+                            MatchIndex = i
                             
                             Exit Function
                         End If
                     End If
-                Next I
+                Next i
                 
                 ' ...
                 Index = 1
@@ -7846,24 +7817,24 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
 
             While (Loops < 2)
                 ' ...
-                For I = Index To UBound(realms)
+                For i = Index To UBound(realms)
                     ' ...
-                    If (Len(realms(I)) >= Len(tmp)) Then
+                    If (Len(realms(i)) >= Len(tmp)) Then
                         ' ...
-                        If (StrComp(Left$(realms(I), Len(tmp)), tmp, _
+                        If (StrComp(Left$(realms(i), Len(tmp)), tmp, _
                             vbTextCompare) = 0) Then
                             
                             Dim j As Integer ' ...
                         
-                            MatchClosest = Left$(toMatch, atChar) & realms(I) & _
+                            MatchClosest = Left$(toMatch, atChar) & realms(i) & _
                                     BotVars.AutoCompletePostfix
                             
-                            MatchIndex = (I + 1)
+                            MatchIndex = (i + 1)
                             
                             Exit Function
                         End If
                     End If
-                Next I
+                Next i
                 
                 ' ...
                 Index = 0
@@ -7896,9 +7867,9 @@ Function GetChannelString() As String
         GetChannelString = vbNullString
     Else
         Select Case ListviewTabs.Tab
-            Case 0: GetChannelString = g_Channel.Name & " (" & lvChannel.ListItems.Count & ")"
+            Case 0: GetChannelString = g_Channel.name & " (" & lvChannel.ListItems.Count & ")"
             Case 1: GetChannelString = lvFriendList.ListItems.Count & " friends listed"
-            Case 2: GetChannelString = "Clan " & g_Clan.Name & ": " & lvClanList.ListItems.Count & " members."
+            Case 2: GetChannelString = "Clan " & g_Clan.name & ": " & lvClanList.ListItems.Count & " members."
         End Select
     End If
 End Function
@@ -7982,7 +7953,7 @@ Sub DisableListviewTabs()
     ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
 End Sub
 
-Sub AddClanMember(ByVal Name As String, rank As Integer, Online As Integer)
+Sub AddClanMember(ByVal name As String, rank As Integer, Online As Integer)
     
     Dim visible_rank As Integer
     
@@ -7993,10 +7964,10 @@ Sub AddClanMember(ByVal Name As String, rank As Integer, Online As Integer)
     
     '// add user
     
-    Name = KillNull(Name)
+    name = KillNull(name)
     
     With lvClanList
-        .ListItems.Add .ListItems.Count + 1, , Name, , visible_rank
+        .ListItems.Add .ListItems.Count + 1, , name, , visible_rank
         .ListItems(.ListItems.Count).ListSubItems.Add , , , Online + 6
         .ListItems(.ListItems.Count).ListSubItems.Add , , visible_rank
         .SortKey = 2
@@ -8011,7 +7982,7 @@ Sub AddClanMember(ByVal Name As String, rank As Integer, Online As Integer)
     frmChat.ListviewTabs_Click 0
     
     On Error Resume Next
-    RunInAll "Event_ClanInfo", Name, rank, Online
+    RunInAll "Event_ClanInfo", name, rank, Online
 End Sub
 
 Private Function GetClanSelectedUser() As String
@@ -8219,7 +8190,7 @@ End Sub
 Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAlone As Boolean = False)
     On Error GoTo ERROR_HANDLER
 
-    Dim I As Integer
+    Dim i As Integer
     
     If (Not (UserCancelledConnect)) Then
         SetTitle "Disconnected"
@@ -8297,9 +8268,9 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
             .Visible = False
         End With
         
-        For I = 1 To mnuPublicChannels.Count - 1
-            Call Unload(mnuPublicChannels(I))
-        Next I
+        For i = 1 To mnuPublicChannels.Count - 1
+            Call Unload(mnuPublicChannels(i))
+        Next i
         
         If ((Me.WindowState = vbNormal) And _
             (DoNotShow = 0)) Then

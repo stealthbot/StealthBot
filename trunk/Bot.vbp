@@ -103,6 +103,7 @@ Class=clsBNCSRecvBuffer; cBNCSRecvBuffer.cls
 Form=frmScript.frm
 Class=clsSLongTimer; clsSLongTimer.cls
 Class=clsMenuObj; clsMenuObj.cls
+Module=modMenuObj; modMenuObj.bas
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""

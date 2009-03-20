@@ -69,22 +69,14 @@ End Sub
 
 Public Sub EnableURLDetect(ByVal hWndTextbox As Long)
 
-    hWndRTB(hWndTextbox) = hWndTextbox
+    SendMessage hWndTextbox, EM_SETEVENTMASK, 0, ByVal ENM_LINK Or SendMessage(hWndTextbox, EM_GETEVENTMASK, 0, 0)
+    SendMessage hWndTextbox, EM_AUTOURLDETECT, 1, ByVal 0
 
-    If (Err.Number = 0) Then
-        SendMessage hWndTextbox, EM_SETEVENTMASK, 0, ByVal ENM_LINK Or SendMessage(hWndTextbox, EM_GETEVENTMASK, 0, 0)
-        SendMessage hWndTextbox, EM_AUTOURLDETECT, 1, ByVal 0
-    End If
-        
 End Sub
 
 Public Sub DisableURLDetect(ByVal hWndTextbox As Long)
 
-    hWndRTB.Remove hWndTextbox
-
-    If (Err.Number = 0) Then
-        SendMessage hWndTextbox, EM_AUTOURLDETECT, 0, ByVal 0
-    End If
+    SendMessage hWndTextbox, EM_AUTOURLDETECT, 0, ByVal 0
 
 End Sub
 

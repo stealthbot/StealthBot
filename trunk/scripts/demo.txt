@@ -37,6 +37,17 @@ Sub Event_Load()
    ' // create Form object
    CreateObj "Form", "frm"
 
+   ' // create Menu objects
+   CreateObj "Menu", "mnu"
+   CreateObj "Menu", "submnu"
+
+   ' // set submnu as child of mnu
+   submnu.Parent = mnu
+
+   ' // set menu captions
+   mnu.Caption = "menu"
+   submnu.Caption = "submenu"
+
    ' // show form
    frm.Show
 
