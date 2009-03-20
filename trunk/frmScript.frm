@@ -319,6 +319,9 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
             Set obj.obj = New clsMenuObj
             
             ' ...
+            obj.obj.name = getName() & "_" & ObjName
+            
+            ' ...
             obj.obj.Parent = Me
             
             ' ...

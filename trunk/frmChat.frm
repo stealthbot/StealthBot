@@ -21,7 +21,7 @@ Begin VB.Form frmChat
    Begin VB.Timer tmrScriptLong 
       Enabled         =   0   'False
       Index           =   0
-      Left            =   1680
+      Left            =   1200
       Top             =   120
    End
    Begin InetCtlsObjects.Inet itcScript 
@@ -44,17 +44,17 @@ Begin VB.Form frmChat
       Enabled         =   0   'False
       Interval        =   500
       Left            =   5280
-      Top             =   5160
+      Top             =   4560
    End
    Begin VB.Timer cacheTimer 
       Enabled         =   0   'False
       Interval        =   2500
       Left            =   5280
-      Top             =   4680
+      Top             =   4080
    End
    Begin MSComctlLib.ImageList imlClan 
-      Left            =   8280
-      Top             =   4320
+      Left            =   6480
+      Top             =   3360
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -95,8 +95,8 @@ Begin VB.Form frmChat
       EndProperty
    End
    Begin MSComctlLib.ImageList imlIcons 
-      Left            =   8280
-      Top             =   5040
+      Left            =   7080
+      Top             =   3360
       _ExtentX        =   1005
       _ExtentY        =   1005
       BackColor       =   -2147483643
@@ -547,14 +547,14 @@ Begin VB.Form frmChat
    Begin VB.Timer tmrScript 
       Enabled         =   0   'False
       Index           =   0
-      Left            =   1200
-      Top             =   120
+      Left            =   720
+      Top             =   600
    End
    Begin VB.Timer tmrClanUpdate 
       Enabled         =   0   'False
       Interval        =   30000
       Left            =   5760
-      Top             =   4680
+      Top             =   4080
    End
    Begin MSComctlLib.ListView lvChannel 
       Height          =   6375
@@ -606,14 +606,14 @@ Begin VB.Form frmChat
       Index           =   1
       Interval        =   30000
       Left            =   5760
-      Top             =   5160
+      Top             =   4560
    End
    Begin VB.Timer tmrSilentChannel 
       Enabled         =   0   'False
       Index           =   0
       Interval        =   500
       Left            =   6240
-      Top             =   4680
+      Top             =   4080
    End
    Begin VB.ComboBox cboSend 
       BackColor       =   &H00000000&
@@ -704,8 +704,8 @@ Begin VB.Form frmChat
       Tab(2).ControlCount=   0
    End
    Begin MSScriptControlCtl.ScriptControl SCRestricted 
-      Left            =   6960
-      Top             =   3840
+      Left            =   5880
+      Top             =   3360
       _ExtentX        =   1005
       _ExtentY        =   1005
       AllowUI         =   0   'False
@@ -713,18 +713,18 @@ Begin VB.Form frmChat
    Begin VB.Timer quLower 
       Interval        =   5360
       Left            =   6720
-      Top             =   5160
+      Top             =   4560
    End
    Begin MSScriptControlCtl.ScriptControl SControl 
-      Left            =   5520
-      Top             =   3840
+      Left            =   120
+      Top             =   720
       _ExtentX        =   1005
       _ExtentY        =   1005
    End
    Begin VB.Timer tmrFriendlistUpdate 
       Interval        =   10000
-      Left            =   7680
-      Top             =   4680
+      Left            =   7200
+      Top             =   4560
    End
    Begin VB.CommandButton cmdShowHide 
       Caption         =   " ^^^^"
@@ -745,35 +745,35 @@ Begin VB.Form frmChat
       Width           =   245
    End
    Begin MSWinsockLib.Winsock sckMCP 
-      Left            =   6600
-      Top             =   3240
+      Left            =   5280
+      Top             =   2760
       _ExtentX        =   741
       _ExtentY        =   741
       _Version        =   393216
    End
    Begin VB.Timer scTimer 
       Enabled         =   0   'False
-      Left            =   7200
-      Top             =   5160
+      Left            =   1200
+      Top             =   600
    End
    Begin InetCtlsObjects.Inet INet 
-      Left            =   6240
-      Top             =   3840
+      Left            =   5280
+      Top             =   3360
       _ExtentX        =   1005
       _ExtentY        =   1005
       _Version        =   393216
    End
    Begin MSWinsockLib.Winsock sckBNLS 
-      Left            =   6000
-      Top             =   3240
+      Left            =   5760
+      Top             =   2760
       _ExtentX        =   741
       _ExtentY        =   741
       _Version        =   393216
       RemotePort      =   9367
    End
    Begin MSWinsockLib.Winsock sckBNet 
-      Left            =   5520
-      Top             =   3240
+      Left            =   6240
+      Top             =   2760
       _ExtentX        =   741
       _ExtentY        =   741
       _Version        =   393216
@@ -782,15 +782,15 @@ Begin VB.Form frmChat
    Begin VB.Timer QueueTimer 
       Interval        =   1175
       Left            =   6240
-      Top             =   5160
+      Top             =   4560
    End
    Begin VB.Timer UpTimer 
       Left            =   6720
-      Top             =   4680
+      Top             =   4080
    End
    Begin VB.Timer Timer 
       Left            =   7200
-      Top             =   4680
+      Top             =   4080
    End
    Begin MSComctlLib.ListView lvClanList 
       Height          =   6375
@@ -1171,7 +1171,7 @@ Begin VB.Form frmChat
       Begin VB.Menu mnuSep6 
          Caption         =   "-"
       End
-      Begin VB.Menu mnureload 
+      Begin VB.Menu mnuReload 
          Caption         =   "&Reload Config"
       End
       Begin VB.Menu mnuReloadScript 
@@ -1357,6 +1357,20 @@ Begin VB.Form frmChat
          Caption         =   "Profile Lookup"
       End
    End
+   Begin VB.Menu mnuScripting 
+      Caption         =   "Sc&ripting"
+      Begin VB.Menu mnuReloadScripts 
+         Caption         =   "Reload Scripts"
+      End
+      Begin VB.Menu mnuScriptingDash 
+         Caption         =   "-"
+         Index           =   0
+      End
+      Begin VB.Menu mnuModules 
+         Caption         =   "Module(0)"
+         Index           =   0
+      End
+   End
    Begin VB.Menu mnuHelp 
       Caption         =   "&Help"
       NegotiatePosition=   3  'Right
@@ -1501,9 +1515,12 @@ Private AUTH_CHECKED As Boolean
 
 'Forms
 Public SettingsForm As frmSettings
+Public ChatNoScroll As Boolean
 
 Private Const WM_USER = 1024
 Private Const CB_LIMITTEXT = &H141
+Private Const SB_BOTTOM = 7
+Private Const EM_SCROLL = &HB5
 
 Public Sub cacheTimer_Timer()
     ' this code updated 7/23/05 in Chihuahua, Chihuahua, MX
@@ -1785,7 +1802,7 @@ Private Sub Form_Load()
     End With
     
     Call ClearChannel
-    
+
     With lvClanList
         .View = lvwReport
         .SmallIcons = imlClan
@@ -1997,8 +2014,8 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             
             With rtbWhispers
                 .Visible = False
-                .SelStart = 0
-                .SelLength = InStr(1, .text, vbLf, vbBinaryCompare)
+                .selStart = 0
+                .selLength = InStr(1, .text, vbLf, vbBinaryCompare)
                 If BotVars.Logging < 2 Then Print #1, Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
                 .SelText = vbNullString
                 .Visible = True
@@ -2015,13 +2032,13 @@ Sub AddWhisper(ParamArray saElements() As Variant)
         End Select
         
         With rtbWhispers
-            .SelStart = Len(.text)
-            .SelLength = 0
+            .selStart = Len(.text)
+            .selLength = 0
             .SelColor = RTBColors.TimeStamps
             If .SelBold = True Then .SelBold = False
             If .SelItalic = True Then .SelItalic = False
             .SelText = s
-            .SelStart = Len(.text)
+            .selStart = Len(.text)
         End With
         
         For i = LBound(saElements) To UBound(saElements) Step 2
@@ -2030,12 +2047,12 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             
             If Len(saElements(i + 1)) > 0 Then
                 With rtbWhispers
-                    .SelStart = Len(.text)
-                    L = .SelStart
-                    .SelLength = 0
+                    .selStart = Len(.text)
+                    L = .selStart
+                    .selLength = 0
                     .SelColor = saElements(i)
                     .SelText = saElements(i + 1) & Left$(vbCrLf, -2 * CLng((i + 1) = UBound(saElements)))
-                    .SelStart = Len(.text)
+                    .selStart = Len(.text)
                 End With
             End If
         Next i
@@ -3375,8 +3392,8 @@ Private Sub lvChannel_dblClick()
 
     If (Len(s) > 0) Then
         With cboSend
-            .SelStart = cboSendSelStart 'IIf(cboSendSelStart > 0, cboSendSelStart, 0)
-            .SelLength = cboSendSelLength 'IIf(cboSendSelLength > 0, cboSendSelLength + 1, 0)
+            .selStart = cboSendSelStart 'IIf(cboSendSelStart > 0, cboSendSelStart, 0)
+            .selLength = cboSendSelLength 'IIf(cboSendSelLength > 0, cboSendSelLength + 1, 0)
             .SelText = s
             
             ' This is correct - sets the cursor properly
@@ -3396,7 +3413,7 @@ Private Sub lvChannel_KeyUp(KeyCode As Integer, Shift As Integer)
         
         With lvChannel
             If Not (.SelectedItem Is Nothing) Then
-                cboSend.SelStart = Len(cboSend.text)
+                cboSend.selStart = Len(cboSend.text)
                 cboSend.SelText = .SelectedItem.text
     
                 KeyCode = 0
@@ -3412,7 +3429,7 @@ Private Sub lvFriendList_dblClick()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         cboSend.text = cboSend.text & lvFriendList.SelectedItem.text
         cboSend.SetFocus
-        cboSend.SelStart = Len(cboSend.text)
+        cboSend.selStart = Len(cboSend.text)
     End If
 End Sub
 
@@ -3420,7 +3437,7 @@ Private Sub lvClanList_dblClick()
     If Not (lvClanList.SelectedItem Is Nothing) And Len(cboSend.text) < 200 Then
         cboSend.text = cboSend.text & lvClanList.SelectedItem.text
         cboSend.SetFocus
-        cboSend.SelStart = Len(cboSend.text)
+        cboSend.selStart = Len(cboSend.text)
     End If
 End Sub
 
@@ -3926,7 +3943,7 @@ Private Sub mnuPopAddLeft_Click()
         txtPre.text = txtPre.text & GetSelectedUser & " "
         
         cboSend.SetFocus
-        cboSend.SelStart = Len(cboSend.text)
+        cboSend.selStart = Len(cboSend.text)
     End If
 End Sub
 
@@ -4783,8 +4800,8 @@ Private Sub cboSend_GotFocus()
 
     Dim i As Integer ' ...
 
-    cboSend.SelStart = cboSendSelStart
-    cboSend.SelLength = cboSendSelLength
+    cboSend.selStart = cboSendSelStart
+    cboSend.selLength = cboSendSelLength
 
     If (BotVars.NoAutocompletion = False) Then
         ' ..
@@ -4861,21 +4878,21 @@ Private Sub cboSend_KeyUp(KeyCode As Integer, Shift As Integer)
                 If (LenB(LastWhisper) > 0) Then
                     If (Len(.text) >= 3) Then
                         If StrComp(Left$(.text, 3), "/r ", vbTextCompare) = 0 Then
-                            .SelStart = 0
-                            .SelLength = Len(.text)
+                            .selStart = 0
+                            .selLength = Len(.text)
                             .SelText = _
                                 "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(LastWhisper) & " "
-                            .SelStart = Len(.text)
+                            .selStart = Len(.text)
                         End If
                     End If
                     
                     If (Len(.text) >= 7) Then
                         If StrComp(Left$(.text, 7), "/reply ", vbTextCompare) = 0 Then
-                            .SelStart = 0
-                            .SelLength = Len(.text)
+                            .selStart = 0
+                            .selLength = Len(.text)
                             .SelText = _
                                 "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(LastWhisper) & " "
-                            .SelStart = Len(.text)
+                            .selStart = Len(.text)
                         End If
                     End If
                 End If
@@ -4883,8 +4900,8 @@ Private Sub cboSend_KeyUp(KeyCode As Integer, Shift As Integer)
                 If (LenB(LastWhisperTo) > 0) Then
                     If (Len(.text) >= 4) Then
                         If StrComp(Left$(.text, 4), "/rw ", vbTextCompare) = 0 Then
-                            .SelStart = 0
-                            .SelLength = Len(.text)
+                            .selStart = 0
+                            .selLength = Len(.text)
                             
                             If StrComp(LastWhisperTo, "%f%") = 0 Then
                                 .SelText = "/f m "
@@ -4893,7 +4910,7 @@ Private Sub cboSend_KeyUp(KeyCode As Integer, Shift As Integer)
                                     "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(LastWhisperTo) & " "
                             End If
                             
-                            .SelStart = Len(.text)
+                            .selStart = Len(.text)
                         End If
                     End If
                 End If
@@ -4934,7 +4951,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     'AddChat vbRed, "Shift: " & Shift
 
 
-    L = cboSend.SelStart
+    L = cboSend.selStart
 
     With lvChannel
 
@@ -4954,7 +4971,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     End If
 
                     cboSend.SetFocus
-                    cboSend.SelStart = L
+                    cboSend.selStart = L
                     Exit Sub
                 End If
 
@@ -4967,7 +4984,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     End If
 
                     cboSend.SetFocus
-                    cboSend.SelStart = L
+                    cboSend.selStart = L
                     Exit Sub
                 End If
 
@@ -4979,7 +4996,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                             
                     If (Not (.SelectedItem Is Nothing)) Then
                         cboSend.SelText = .SelectedItem.text
-                        cboSend.SelStart = cboSend.SelStart + Len(.SelectedItem.text)
+                        cboSend.selStart = cboSend.selStart + Len(.SelectedItem.text)
                     End If
                 End If
 
@@ -4995,13 +5012,13 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         .ListItems.Item(1).Ghosted = True
     
                         cboSend.SetFocus
-                        cboSend.SelStart = L
+                        cboSend.selStart = L
                     Else
                         If .ListItems.Count > 0 Then
                             .ListItems(1).Selected = True
                             .ListItems(1).Ghosted = True
                             cboSend.SetFocus
-                            cboSend.SelStart = L
+                            cboSend.selStart = L
                         End If
                     End If
                 End If
@@ -5014,11 +5031,15 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         .ListItems.Item(.ListItems.Count).Ghosted = True
     
                         cboSend.SetFocus
-                        cboSend.SelLength = L
+                        cboSend.selLength = L
                     End If
                 End If
                 
             Case KEY_V 'PASTE
+                If (IsScrolling(rtbChat)) Then
+                    SendMessage rtbChat.hWnd, EM_SCROLL, SB_BOTTOM, &H0
+                End If
+            
                 If (Shift = S_CTRL) Then
                     On Error Resume Next
                     
@@ -5077,8 +5098,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 If (Shift = S_CTRL) Then
                     With cboSend
                         .SelText = "ÿcb"
-                        .SelLength = 0
-                        .SelStart = .SelStart + 3
+                        .selLength = 0
+                        .selStart = .selStart + 3
                     End With
                 End If
                 
@@ -5091,8 +5112,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 If (Shift = S_CTRL) Then
                     With cboSend
                         .SelText = "ÿcu"
-                        .SelLength = 0
-                        .SelStart = .SelStart + 3
+                        .selLength = 0
+                        .selStart = .selStart + 3
                     End With
                 End If
                 
@@ -5100,8 +5121,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 If (Shift = S_CTRL) Then
                     With cboSend
                         .SelText = "ÿci"
-                        .SelLength = 0
-                        .SelStart = .SelStart + 3
+                        .selLength = 0
+                        .selStart = .selStart + 3
                     End With
                 End If
                 
@@ -5129,14 +5150,14 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                             strbuf = .text
                             
                             ' ...
-                            If (.SelStart > 0) Then
+                            If (.selStart > 0) Then
                                 ' grab space before cursor
                                 spaceIndex(0) = _
-                                    InStrRev(strbuf, Space$(1), .SelStart, vbBinaryCompare)
+                                    InStrRev(strbuf, Space$(1), .selStart, vbBinaryCompare)
                                 
                                 ' grab space after cursor
                                 spaceIndex(1) = _
-                                    InStr(.SelStart, strbuf, Space$(1), vbBinaryCompare)
+                                    InStr(.selStart, strbuf, Space$(1), vbBinaryCompare)
                             End If
                             
                             ' ...
@@ -5159,7 +5180,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
 
                             ' final check
                             If (res <> vbNullString) Then
-                                Dim SelStart As Long   ' ...
+                                Dim selStart As Long   ' ...
                                 Dim tmp      As String ' ...
 
                                 ' ...
@@ -5171,7 +5192,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 tmp = tmp & res
                                 
                                 ' ...
-                                SelStart = Len(tmp)
+                                selStart = Len(tmp)
                                 
                                 ' ...
                                 If (spaceIndex(1) > 0) Then
@@ -5182,13 +5203,17 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 .text = tmp
                                 
                                 ' ...
-                                .SelStart = SelStart
+                                .selStart = selStart
                             End If
                         End If
                     End With
                 End If
                 
             Case KEY_ENTER
+                If (IsScrolling(rtbChat)) Then
+                    SendMessage rtbChat.hWnd, EM_SCROLL, SB_BOTTOM, &H0
+                End If
+            
                 'n = UsernameToIndex(CurrentUsername)
                 
                 'Debug.Print n
@@ -8326,7 +8351,7 @@ End Sub
 '  in the send combo
 Public Sub RecordcboSendSelInfo()
     'Debug.Print "SelStart: " & cboSend.SelStart & ", SelLength: " & cboSend.SelLength
-    cboSendSelLength = cboSend.SelLength
-    cboSendSelStart = cboSend.SelStart
+    cboSendSelLength = cboSend.selLength
+    cboSendSelStart = cboSend.selStart
 End Sub
 

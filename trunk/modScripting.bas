@@ -30,49 +30,14 @@ Public Function InitMenus()
 
     ' ...
     DestroyMenus
-
-    ' ...
-    Set tmp = New clsMenuObj
-    
-    ' ...
-    tmp.Parent = frmChat
-    tmp.Caption = "Scripting"
-    
-    ' ...
-    DynamicMenus.Add tmp, "mnuScripting"
-    
-    ' ...
-    Set tmp = New clsMenuObj
-    
-    ' ...
-    tmp.Parent = DynamicMenus("mnuScripting")
-    tmp.Caption = "Reload Scripts"
-    
-    ' ...
-    DynamicMenus.Add tmp
-    
-    ' ...
-    Set tmp = New clsMenuObj
-    
-    ' ...
-    tmp.Parent = DynamicMenus("mnuScripting")
-    tmp.Caption = "Check for Updates"
-
-    ' ...
-    DynamicMenus.Add tmp
-    
-    ' ...
-    Set tmp = New clsMenuObj
-    
-    ' ...
-    tmp.Parent = DynamicMenus("mnuScripting")
-    tmp.Caption = "-"
-    
-    ' ...
-    DynamicMenus.Add tmp
     
     ' ...
     For i = 1 To frmChat.SControl.Modules.Count
+        If (i = 1) Then
+            frmChat.mnuScriptingDash(0).Visible = True
+        End If
+    
+        ' ...
         name = _
             frmChat.SControl.Modules(i).CodeObject.Script("Name")
     
@@ -101,7 +66,7 @@ Public Function InitMenus()
     
         ' ...
         tmp.Parent = DynamicMenus("mnu" & name)
-        tmp.Caption = "Open Script"
+        tmp.Caption = "View Script"
         
         ' ...
         DynamicMenus.Add tmp
@@ -923,20 +888,11 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
             HookWindowProc obj.obj.hWnd
             
         Case "MENU"
-            If (ObjCount(ObjType) = 0) Then
-                Dim tmp As New clsMenuObj ' ...
-                
-                ' ...
-                tmp.Parent = _
-                    DynamicMenus("mnu" & SCModule.CodeObject.Script("Name"))
-                tmp.Caption = "-"
-                
-                ' ...
-                DynamicMenus.Add obj.obj
-            End If
-        
             ' ...
             Set obj.obj = New clsMenuObj
+            
+            ' ...
+            obj.obj.name = ObjName
             
             ' ...
             obj.obj.Parent = _

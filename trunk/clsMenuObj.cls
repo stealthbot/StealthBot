@@ -34,6 +34,22 @@ Private Sub Class_Initialize()
 
 End Sub
 
+Public Property Get hWnd() As Long
+
+    hWnd = m_hWnd
+
+End Property
+
+Public Property Let hWnd(ByVal lng As Long)
+
+    If (m_hWnd = 0) Then
+        DeleteMenu
+    End If
+
+    m_hWnd = lng
+
+End Property
+
 Public Property Get HasChildren() As Boolean
 
     HasChildren = m_has_children
