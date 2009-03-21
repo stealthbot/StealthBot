@@ -2,7 +2,7 @@ Attribute VB_Name = "modOtherCode"
 Option Explicit
 
 Public Type COMMAND_DATA
-    name         As String
+    Name         As String
     params       As String
     local        As Boolean
     PublicOutput As Boolean
@@ -2356,7 +2356,7 @@ Public Function DoReplacements(ByVal s As String, Optional Username As String, _
 
     s = Replace(s, "%0", Username, 1)
     s = Replace(s, "%1", GetCurrentUsername, 1)
-    s = Replace(s, "%c", g_Channel.name, 1)
+    s = Replace(s, "%c", g_Channel.Name, 1)
     s = Replace(s, "%bc", BanCount, 1)
     
     If (Ping > -2) Then
@@ -2758,7 +2758,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         If (Len(Message) <= CropLen) Then
             ' ...
             With IsCommand
-                .name = vbNullString
+                .Name = vbNullString
                 .Args = vbNullString
             End With
         
@@ -2944,14 +2944,14 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         ' ...
         If (Index) Then
             With IsCommand
-                .name = Mid$(tmp, 1, Index - 1)
+                .Name = Mid$(tmp, 1, Index - 1)
                 .Args = Mid$(tmp, Index + 1)
             End With
         Else
-            IsCommand.name = tmp
+            IsCommand.Name = tmp
         End If
         
-        IsCommand.name = LCase$(IsCommand.name)
+        IsCommand.Name = LCase$(IsCommand.Name)
 
         With IsCommand
             .IsLocal = IsLocal
@@ -2959,14 +2959,14 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         End With
 
         ' ...
-        If (IsCommand.name <> vbNullString) Then
+        If (IsCommand.Name <> vbNullString) Then
             ' ...
-            If (IsCommand.docs.name = vbNullString) Then
-                IsCommand.name = convertAlias(IsCommand.name)
+            If (IsCommand.docs.Name = vbNullString) Then
+                IsCommand.Name = convertAlias(IsCommand.Name)
             End If
             
             ' ...
-            If ((IsCommand.docs.name = vbNullString) Or _
+            If ((IsCommand.docs.Name = vbNullString) Or _
                     (IsCommand.docs.IsEnabled = False)) Then
             
                 ' ...
@@ -2982,7 +2982,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     End If
     
     With IsCommand
-        .name = vbNullString
+        .Name = vbNullString
         .Args = vbNullString
     End With
         
@@ -3073,26 +3073,22 @@ End Function
 
 Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Variant)
     On Error GoTo ERROR_HANDLER
-    
-    Static rtbChat_LoopCount     As Integer ' ...
-    Static rtbWhispers_LoopCount As Integer ' ...
-    
+   
     Dim arr()          As Variant
     Dim s              As String
     Dim L              As Long
     Dim lngVerticalPos As Long
     Dim Diff           As Long
-    Dim i              As Integer
-    Dim intRange       As Integer
-    Dim f              As Integer
+    Dim i              As Long
+    Dim intRange       As Long
     Dim blUnlock       As Boolean
     Dim LogThis        As Boolean
-    Dim Length         As Integer
-    Dim Count          As Integer
+    Dim Length         As Long
+    Dim Count          As Long
     Dim str            As String
-    Dim arrCount       As Integer
-    Dim selStart       As Integer
-    Dim selLength      As Integer
+    Dim arrCount       As Long
+    Dim selStart       As Long
+    Dim selLength      As Long
 
     ' *****************************************
     '              SANITY CHECKS
@@ -3111,7 +3107,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             ' ...
             arr(Count) = saElements(i + 1)
             arr(Count - 1) = saElements(i)
-            arr(Count - 2) = rtb.Font.name
+            arr(Count - 2) = rtb.Font.Name
             
             ' ...
             Count = Count + 3
@@ -3170,7 +3166,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             With rtb
                 .selStart = 0
                 .selLength = InStr(1, .text, vbLf, vbBinaryCompare)
-                .SelFontName = rtb.Font.name
+                .SelFontName = rtb.Font.Name
                 .SelText = ""
             End With
         End If
@@ -3180,7 +3176,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         With rtb
             .selStart = Len(.text)
             .selLength = 0
-            .SelFontName = rtb.Font.name
+            .SelFontName = rtb.Font.Name
             .SelBold = False
             .SelItalic = False
             .SelUnderline = False
@@ -3291,7 +3287,7 @@ Public Function IsStealthBotTech() As Boolean
         ConfigHacked = False
     End If
     
-    If (StrComp(g_Clan.name, "SBs", vbTextCompare) = 0) Then
+    If (StrComp(g_Clan.Name, "SBs", vbTextCompare) = 0) Then
         InClanSBs = True
     Else
         InClanSBs = False

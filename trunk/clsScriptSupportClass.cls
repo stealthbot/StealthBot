@@ -203,7 +203,7 @@ Private obScriptForms As Object
 Private DictionaryKeys As String
 
 Private Type Timer
-    id       As Integer
+    ID       As Integer
     Script   As Module
     code     As String
     Interval As Integer
@@ -457,7 +457,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     Optional ByRef entryType As String = "USER") As Object
 
     Dim temp   As udtGetAccessResponse
-    Dim I      As Integer
+    Dim i      As Integer
     Dim Splt() As String
     
     temp = GetCumulativeAccess(Username, entryType)
@@ -491,9 +491,9 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
             Splt(0) = temp.Groups
         End If
     
-        For I = LBound(Splt) To UBound(Splt)
-            GetDBEntry.Groups.Add GetDBEntry(Splt(I), , , "GROUP")
-        Next I
+        For i = LBound(Splt) To UBound(Splt)
+            GetDBEntry.Groups.Add GetDBEntry(Splt(i), , , "GROUP")
+        Next i
     End If
 End Function
 
@@ -635,11 +635,11 @@ End Function
 '//  See lDataType constants in GetInternalData() below
 Public Function GetInternalDataByUsername(ByVal sUser As String, ByVal lDataType As Long) As Variant
 
-    Dim I As Integer
+    Dim i As Integer
     
-    I = Channel.GetUserIndex(sUser)
+    i = Channel.GetUserIndex(sUser)
     
-    GetInternalDataByUsername = GetInternalData(I, lDataType)
+    GetInternalDataByUsername = GetInternalData(i, lDataType)
 
 End Function
 
@@ -764,6 +764,10 @@ End Function
 '// CONNECT
 '// Connects the bot. Will disconnect an already-existent connection.
 Public Sub Connect()
+    
+    If (frmChat.sckBNet.State <> sckClosed) Then
+        Exit Sub
+    End If
     
     Call frmChat.DoConnect
     
@@ -1373,15 +1377,15 @@ End Function
 
 Public Function Quotes() As Object
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
     
     ' ...
     Set Quotes = New Collection
     
     ' ...
-    For I = 1 To g_Quotes.Count
-        Quotes.Add g_Quotes(I)
-    Next I
+    For i = 1 To g_Quotes.Count
+        Quotes.Add g_Quotes(i)
+    Next i
     
 End Function
 
@@ -1406,15 +1410,15 @@ End Function
 
 Public Function Friends() As Object
     
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     ' ...
     Set Friends = New Collection
     
     ' ...
-    For I = 1 To g_Friends.Count
-        Friends.Add g_Friends(I).Clone()
-    Next I
+    For i = 1 To g_Friends.Count
+        Friends.Add g_Friends(i).Clone()
+    Next i
     
 End Function
 
@@ -1448,15 +1452,15 @@ Public Function CRC32(ByVal str As String) As String
 
 End Function
 
-Public Function Sha1(ByVal data As String) As String
-    Dim a As Long
-    Dim b As Long
+Public Function Sha1(ByVal Data As String) As String
+    Dim A As Long
+    Dim B As Long
     Dim c As Long
     Dim d As Long
     Dim e As Long
     
-    Call modSHA1.DefaultSHA1(StrConv(data, vbFromUnicode), a, b, c, d, e)
-    Sha1 = LongToStr(a) & LongToStr(b) & LongToStr(c) & LongToStr(d) & LongToStr(e)
+    Call modSHA1.DefaultSHA1(StrConv(Data, vbFromUnicode), A, B, c, d, e)
+    Sha1 = LongToStr(A) & LongToStr(B) & LongToStr(c) & LongToStr(d) & LongToStr(e)
 End Function
 
 Public Function CreateObjEx(ByVal ModuleName As String, ByVal ObjType As String, ByVal ObjName As String) As Object
@@ -1485,20 +1489,20 @@ Public Function Scripts() As Object
 
     On Error Resume Next
 
-    Dim I   As Integer ' ...
+    Dim i   As Integer ' ...
     Dim str As String  ' ...
 
     Set Scripts = New Collection
 
-    For I = 1 To frmChat.SControl.Modules.Count
+    For i = 1 To frmChat.SControl.Modules.Count
         str = _
-            frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
+            frmChat.SControl.Modules(i).CodeObject.GetSettingsEntry("Public")
                 
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
-            Scripts.Add frmChat.SControl.Modules(I).CodeObject, _
-                frmChat.SControl.Modules(I).CodeObject.Script("Name")
+            Scripts.Add frmChat.SControl.Modules(i).CodeObject, _
+                frmChat.SControl.Modules(i).CodeObject.Script("Name")
         End If
-    Next I
+    Next i
 
 End Function
 
@@ -1520,44 +1524,44 @@ Public Function GetScriptObjByName(ByVal scriptName As String) As Object
 
     On Error Resume Next
 
-    Dim I   As Integer ' ...
+    Dim i   As Integer ' ...
     Dim str As String ' ...
     
-    For I = 1 To frmChat.SControl.Modules.Count
-        str = frmChat.SControl.Modules(I).Eval("Name()")
+    For i = 1 To frmChat.SControl.Modules.Count
+        str = frmChat.SControl.Modules(i).Eval("Name()")
         
         If (StrComp(scriptName, str, vbTextCompare) = 0) Then
             str = _
-                frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
+                frmChat.SControl.Modules(i).CodeObject.GetSettingsEntry("Public")
             
             If (StrComp(str, "False", vbTextCompare) = 0) Then
                 Exit Function
             End If
         
             Set GetScriptObjByName = _
-                    frmChat.SControl.Modules(I)
+                    frmChat.SControl.Modules(i)
              
             Exit Function
         End If
-    Next I
+    Next i
     
-    For I = 1 To frmChat.SControl.Modules.Count
-        str = frmChat.SControl.Modules(I).Name
+    For i = 1 To frmChat.SControl.Modules.Count
+        str = frmChat.SControl.Modules(i).Name
     
         If (StrComp(scriptName, str, vbTextCompare) = 0) Then
             str = _
-                frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
+                frmChat.SControl.Modules(i).CodeObject.GetSettingsEntry("Public")
             
             If (StrComp(str, "False", vbTextCompare) = 0) Then
                 Exit Function
             End If
         
              Set GetScriptObjByName = _
-                    frmChat.SControl.Modules(I)
+                    frmChat.SControl.Modules(i)
              
              Exit Function
         End If
-    Next I
+    Next i
 
 End Function
 
@@ -1672,7 +1676,7 @@ End Sub
 Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal varValue As Variant, _
                       Optional ByVal strDescription As String, Optional ByVal boolOverwrite As Boolean = True)
                       
-    Dim strPath As String, arrSetting() As String, I As Integer
+    Dim strPath As String, arrSetting() As String, i As Integer
     strPath = BotPath() & "plugins\settings.ini"
 
     If Len(strDescription) > 0 Then
@@ -1683,8 +1687,8 @@ Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal 
         If Len(strName & varValue) > 254 Then
             WriteConfigEntry UCase(strPrefix), strName, Left(varValue, 254 - Len(strName)), strPath
             arrSetting = Split(strName, "*")
-            If UBound(arrSetting) > 0 Then I = arrSetting(1) + 1 Else I = 1
-            SetSetting strPrefix, arrSetting(0) & "*" & I, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
+            If UBound(arrSetting) > 0 Then i = arrSetting(1) + 1 Else i = 1
+            SetSetting strPrefix, arrSetting(0) & "*" & i, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
         Else
             WriteConfigEntry UCase(strPrefix), strName, varValue, strPath
         End If
