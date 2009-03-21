@@ -55,7 +55,7 @@ Public Sub ScriptReload_TimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal 
         If idEvent > 0 Then
             frmChat.SControl.Timeout = idEvent
         Else
-            Call frmChat.mnuReloadScript_Click
+            Call frmChat.mnuReloadScripts_Click
         End If
         
         hasRunAlready = True

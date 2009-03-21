@@ -42,11 +42,13 @@ End Property
 
 Public Property Let hWnd(ByVal lng As Long)
 
-    If (m_hWnd = 0) Then
+    If (m_hWnd > 0) Then
         DeleteMenu
     End If
 
     m_hWnd = lng
+    
+    CreateMenu
 
 End Property
 
@@ -230,6 +232,7 @@ End Property
 Private Function CreateMenu() As Long
 
     If (m_command_id = 0) Then
+    
         m_command_id = CreatePopupMenu()
     
         AppendMenu m_hWnd, IIf(HasChildren, MF_POPUP, MF_STRING), m_command_id, ""
@@ -237,6 +240,7 @@ Private Function CreateMenu() As Long
         DrawMenuBar m_hWnd
         
         CreateMenu = m_command_id
+        
     End If
 
 End Function
@@ -244,9 +248,11 @@ End Function
 Private Function DeleteMenu() As Long
 
     If (m_command_id > 0) Then
+    
         RemoveMenu m_hWnd, m_command_id, MF_BYCOMMAND
         
         m_command_id = 0
+        
     End If
     
 End Function

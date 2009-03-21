@@ -224,10 +224,13 @@ Public Function RegisterScriptMenu(ByVal sMenuCaption As String) As Long
     Dim lMenu As Long
     Dim ThisScript_MenuID As Long
     
-    lMenu = GetMenu(frmChat.hWnd)
+    lMenu = GetSubMenu(GetMenu(frmChat.hWnd), 5)
+    lMenu = GetSubMenu(lMenu, 2)
     
     If ScriptMenu_ParentID = 0 Then
-        ScriptMenu_ParentID = AddParentMenu(lMenu, "&Plugins", , 5)
+        ScriptMenu_ParentID = lMenu
+
+        AddItemToMenu ScriptMenu_ParentID, "-", True
     End If
     
     If GetMenuItemCount(ScriptMenu_ParentID) = 0 Then

@@ -25,7 +25,7 @@ Private m_sc_control   As Object
 Public Function InitMenus()
 
     Dim tmp  As clsMenuObj ' ...
-    Dim name As String     ' ...
+    Dim Name As String     ' ...
     Dim i    As Integer    ' ...
 
     ' ...
@@ -38,24 +38,25 @@ Public Function InitMenus()
         End If
     
         ' ...
-        name = _
+        Name = _
             frmChat.SControl.Modules(i).CodeObject.Script("Name")
     
         ' ...
         Set tmp = New clsMenuObj
     
         ' ...
-        tmp.Parent = DynamicMenus("mnuScripting")
-        tmp.Caption = name
+        tmp.hWnd = GetSubMenu(GetMenu(frmChat.hWnd), 5)
+ 
+        tmp.Caption = Name
             
         ' ...
-        DynamicMenus.Add tmp, "mnu" & name
+        DynamicMenus.Add tmp, "mnu" & Name
             
         ' ...
         Set tmp = New clsMenuObj
     
         ' ...
-        tmp.Parent = DynamicMenus("mnu" & name)
+        tmp.Parent = DynamicMenus("mnu" & Name)
         tmp.Caption = "Enabled"
         
         ' ...
@@ -65,7 +66,7 @@ Public Function InitMenus()
         Set tmp = New clsMenuObj
     
         ' ...
-        tmp.Parent = DynamicMenus("mnu" & name)
+        tmp.Parent = DynamicMenus("mnu" & Name)
         tmp.Caption = "View Script"
         
         ' ...
@@ -433,7 +434,7 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
 
     ' GetModuleName() module-level function
     str = str & "Function GetModuleName()" & vbNewLine
-    str = str & "   GetModuleName = " & Chr$(34) & ScriptModule.name & Chr$(34) & vbNewLine
+    str = str & "   GetModuleName = " & Chr$(34) & ScriptModule.Name & Chr$(34) & vbNewLine
     str = str & "End Function" & vbNewLine
 
     ' CreateObj() module-level function
@@ -529,7 +530,7 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
     ' ...
     For j = 1 To m_sc_control.Modules.Count
         ' ...
-        If (m_sc_control.Modules(j).name <> CurrentModule.name) Then
+        If (m_sc_control.Modules(j).Name <> CurrentModule.Name) Then
             tmp = _
                 m_sc_control.Modules(j).CodeObject.Script("Name")
                 
@@ -569,7 +570,7 @@ Public Function UpdateScripts()
                 
             If (str <> vbNullString) Then
                 ' ...
-                filePath = App.Path & "\scripts\" & m_sc_control.Modules(i).name
+                filePath = App.Path & "\scripts\" & m_sc_control.Modules(i).Name
             
                 ' ...
                 URLDownloadToFile 0, str, filePath & ".tmp", 0, 0
@@ -642,7 +643,7 @@ Public Sub InitScript(ByRef SCModule As Module)
     ' ...
     If (g_Online) Then
         SCModule.Run "Event_LoggedOn", GetCurrentUsername, BotVars.Product
-        SCModule.Run "Event_ChannelJoin", g_Channel.name, g_Channel.flags
+        SCModule.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.flags
 
         If (g_Channel.Users.Count > 0) Then
             For i = 1 To g_Channel.Users.Count
@@ -814,7 +815,7 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
         Dim i As Integer ' loop counter variable
 
         For i = 0 To m_objCount - 1
-            If (m_arrObjs(i).SCModule.name = SCModule.name) Then
+            If (m_arrObjs(i).SCModule.Name = SCModule.Name) Then
                 If (StrComp(m_arrObjs(i).ObjType, ObjType, vbTextCompare) = 0) Then
                     If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
                         Set CreateObjEx = m_arrObjs(i).obj
@@ -892,7 +893,7 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
             Set obj.obj = New clsMenuObj
             
             ' ...
-            obj.obj.name = ObjName
+            obj.obj.Name = ObjName
             
             ' ...
             obj.obj.Parent = _
@@ -934,7 +935,7 @@ Public Sub DestroyObjs(Optional ByVal SCModule As Object = Nothing)
         If (SCModule Is Nothing) Then
             DestroyObjEx m_arrObjs(i).SCModule, m_arrObjs(i).ObjName
         Else
-            If (SCModule.name = m_arrObjs(i).SCModule.name) Then
+            If (SCModule.Name = m_arrObjs(i).SCModule.Name) Then
                 DestroyObjEx m_arrObjs(i).SCModule, m_arrObjs(i).ObjName
             End If
         End If
@@ -968,7 +969,7 @@ Public Sub DestroyObjEx(ByVal SCModule As Module, ByVal ObjName As String)
     
     ' ...
     For i = 0 To m_objCount - 1
-        If (m_arrObjs(i).SCModule.name = SCModule.name) Then
+        If (m_arrObjs(i).SCModule.Name = SCModule.Name) Then
             If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
                 Index = i
             
@@ -1061,7 +1062,7 @@ Public Function GetObjByNameEx(ByRef SCModule As Module, ByVal ObjName As String
     
     ' ...
     For i = 0 To m_objCount - 1
-        If (m_arrObjs(i).SCModule.name = SCModule.name) Then
+        If (m_arrObjs(i).SCModule.Name = SCModule.Name) Then
             If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
                 Set GetObjByNameEx = m_arrObjs(i).obj
 
