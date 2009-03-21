@@ -6616,12 +6616,11 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             With Q
                 .Message = Send
                 .PRIORITY = msg_priority
-                .ResponseTo = vbNullString
                 .Tag = Tag
             End With
 
             ' ...
-            Call g_Queue.Push(Q)
+            g_Queue.Push Q
             
             ' should we subject this message to the typical delay,
             ' or can we get it out of here a bit faster?  If we

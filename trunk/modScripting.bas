@@ -293,7 +293,7 @@ Public Sub LoadScripts()
         End If
     Next i
     
-    UpdateScripts
+    'UpdateScripts
     
     ' ...
     Exit Sub
