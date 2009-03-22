@@ -190,25 +190,25 @@ End Function ' end function InsertNTString
 ' ...
 Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI) As String
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     ' ...
-    For I = m_bufpos To m_bufsize
-        If (m_buf(I) = &H0) Then
+    For i = m_bufpos To m_bufsize
+        If (m_buf(i) = &H0) Then
             Exit For
         End If
-    Next I
+    Next i
 
     ' ...
-    If (I < m_bufsize) Then
+    If (i < m_bufsize) Then
         ' ...
-        GetString = String$(I - m_bufpos, Chr$(0))
+        GetString = String$(i - m_bufpos, Chr$(0))
             
         ' copy data to buffer
-        Call CopyMemory(ByVal GetString, m_buf(m_bufpos), I - m_bufpos)
+        Call CopyMemory(ByVal GetString, m_buf(m_bufpos), i - m_bufpos)
         
         ' ...
-        m_bufpos = I + 1
+        m_bufpos = i + 1
     End If
 
 End Function ' end function GetString
@@ -246,9 +246,9 @@ Public Function Clear()
     m_bufsize = 0
 End Function ' end function Clear
 
-Public Function DebugOutput()
+Public Function DebugOutput() As String
 
-    frmChat.AddChat vbRed, modWar3Clan.DebugOutput(Data)
+    DebugOutput = modWar3Clan.DebugOutput(Data)
 
 End Function
 
@@ -327,7 +327,7 @@ Public Function SendPacket(Optional PacketID As Byte)
     'Dim pkt    As modPacketBuffer.PACKETCACHEITEM  ' ...
     Dim L      As Long    ' ...
     Dim buf()  As Byte    ' ...
-    Dim I      As Integer ' ...
+    Dim i      As Integer ' ...
     'Dim log    As String  ' ...
     Dim strbuf As String  ' ...
     
