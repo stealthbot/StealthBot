@@ -1773,7 +1773,7 @@ Private Sub Form_Load()
     If s = "True" Then
         Me.WindowState = vbMaximized
     End If
-    
+
     Set ClanHandler = New clsClanPacketHandler
     Set FriendListHandler = New clsFriendlistHandler
     Set ListToolTip = New clsCTooltip
@@ -1850,7 +1850,7 @@ Private Sub Form_Load()
             "information will be displayed."
     
     Randomize
-    
+ 
     ID_TASKBARICON = (Rnd * 100)
     
     TASKBARCREATED_MSGID = RegisterWindowMessage("TaskbarCreated")
@@ -4636,7 +4636,7 @@ Private Sub mnuScript_Click(Index As Integer)
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Menu", Index)
+    obj = GetScriptObjByIndex("Menu", Index)
 
     ' ...
     obj.SCModule.Run obj.ObjName & "_Click"
@@ -4650,7 +4650,7 @@ Private Sub sckScript_Connect(Index As Integer)
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Winsock", Index)
+    obj = GetScriptObjByIndex("Winsock", Index)
 
     ' ...
     obj.SCModule.Run obj.ObjName & "_Connect"
@@ -4664,7 +4664,7 @@ Private Sub sckScript_DataArrival(Index As Integer, ByVal bytesTotal As Long)
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Winsock", Index)
+    obj = GetScriptObjByIndex("Winsock", Index)
 
     ' ...
     obj.SCModule.Run obj.ObjName & "_DataArrival", bytesTotal
@@ -4678,7 +4678,7 @@ Private Sub sckScript_SendComplete(Index As Integer)
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Winsock", Index)
+    obj = GetScriptObjByIndex("Winsock", Index)
 
     ' ...
     obj.SCModule.Run obj.ObjName & "_SendComplete"
@@ -4692,7 +4692,7 @@ Private Sub sckScript_SendProgress(Index As Integer, ByVal bytesSent As Long, By
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Winsock", Index)
+    obj = GetScriptObjByIndex("Winsock", Index)
 
     ' ...
     obj.SCModule.Run obj.ObjName & "_SendProgress", bytesSent, bytesRemaining
@@ -4706,7 +4706,7 @@ Private Sub sckScript_Close(Index As Integer)
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Winsock", Index)
+    obj = GetScriptObjByIndex("Winsock", Index)
 
     ' ...
     obj.SCModule.Run obj.ObjName & "_Close"
@@ -4720,7 +4720,7 @@ Private Sub sckScript_Error(Index As Integer, ByVal Number As Integer, descripti
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Winsock", Index)
+    obj = GetScriptObjByIndex("Winsock", Index)
 
     ' ...
     obj.SCModule.Run obj.ObjName & "_Error", Number, description, Scode, Source, HelpFile, _
@@ -4735,7 +4735,7 @@ Private Sub itcScript_StateChanged(Index As Integer, ByVal State As Integer)
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Inet", Index)
+    obj = GetScriptObjByIndex("Inet", Index)
     
     ' ...
     obj.SCModule.Run obj.ObjName & "_StateChanged", State
@@ -4749,7 +4749,7 @@ Private Sub tmrScript_Timer(Index As Integer)
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("Timer", Index)
+    obj = GetScriptObjByIndex("Timer", Index)
     
     ' ...
     obj.SCModule.Run obj.ObjName & "_Timer"
@@ -4763,7 +4763,7 @@ Private Sub tmrScriptLong_Timer(Index As Integer)
     Dim obj As scObj ' ...
     
     ' ...
-    obj = GetSCObjByIndexEx("LongTimer", Index)
+    obj = GetScriptObjByIndex("LongTimer", Index)
     
     ' ...
     obj.obj.Counter = (obj.obj.Counter + 1)

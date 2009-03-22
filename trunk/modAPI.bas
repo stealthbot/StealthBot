@@ -50,13 +50,13 @@ Public Declare Function Send Lib "ws2_32.dll" Alias "send" _
    (ByVal s As Long, _
     ByVal buf As String, _
     ByVal datalen As Long, _
-    ByVal Flags As Long) As Long
+    ByVal flags As Long) As Long
     
 Public Declare Function SendBytes Lib "ws2_32.dll" Alias "send" _
    (ByVal s As Long, _
     ByRef buf() As Byte, _
     ByVal datalen As Long, _
-    ByVal Flags As Long) As Long
+    ByVal flags As Long) As Long
     
 Public Declare Function DeleteURLCacheEntry Lib "Wininet.dll" _
    Alias "DeleteUrlCacheEntryA" _

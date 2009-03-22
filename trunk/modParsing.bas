@@ -593,14 +593,14 @@ ERROR_HANDLER:
 End Sub
 
 Public Function StrToHex(ByVal String1 As String, Optional ByVal NoSpaces As Boolean = False) As String
-    Dim strTemp As String, strReturn As String, I As Long
+    Dim strTemp As String, strReturn As String, i As Long
     
-    For I = 1 To Len(String1)
-        strTemp = hex(Asc(Mid(String1, I, 1)))
+    For i = 1 To Len(String1)
+        strTemp = hex(Asc(Mid(String1, i, 1)))
         If Len(strTemp) = 1 Then strTemp = "0" & strTemp
         
         strReturn = strReturn & IIf(NoSpaces, "", Space(1)) & strTemp
-    Next I
+    Next i
         
     StrToHex = strReturn
 End Function
@@ -636,7 +636,7 @@ Public Function DecodeD2Key(ByVal Key As String) As String
 
     Dim R As Double, n As Double, n2 As Double, v As Double, _
     v2 As Double, KeyValue As Double, c1 As Integer, c2 As Integer, _
-    c As Byte, I As Integer, aryKey(0 To 15) As String, _
+    c As Byte, i As Integer, aryKey(0 To 15) As String, _
     codeValues As String ', bValid as boolean
     
     On Error GoTo ErrorTrapped
@@ -645,18 +645,18 @@ Public Function DecodeD2Key(ByVal Key As String) As String
     R = 1
     KeyValue = 0
     
-    For I = 1 To 16
+    For i = 1 To 16
     
-        aryKey(I - 1) = Mid$(Key, I, 1)
+        aryKey(i - 1) = Mid$(Key, i, 1)
         
-    Next I
+    Next i
     
-    For I = 0 To 15 Step 2
-        c1 = InStr(1, codeValues, aryKey(I)) - 1
+    For i = 0 To 15 Step 2
+        c1 = InStr(1, codeValues, aryKey(i)) - 1
         If c1 < 0 Then c1 = &HFF
         If c1 > 255 Then c1 = 255
         n = c1 * 3
-        c2 = InStr(1, codeValues, aryKey(I + 1)) - 1
+        c2 = InStr(1, codeValues, aryKey(i + 1)) - 1
         If c2 = -1 Then c2 = &HFF
         If c2 > 255 Then c2 = 255
         n = c2 + n * 8
@@ -670,55 +670,55 @@ Public Function DecodeD2Key(ByVal Key As String) As String
         
         n2 = n
         n2 = RShift(n2, 4)
-        aryKey(I) = GetHexValue(n2)
-        aryKey(I + 1) = GetHexValue(n)
+        aryKey(i) = GetHexValue(n2)
+        aryKey(i + 1) = GetHexValue(n)
         R = LShift(R, 1)
         
 Cont:
 
-    Next I
+    Next i
     
     v = 3
     
-    For I = 0 To 15
+    For i = 0 To 15
     
-        c = GetNumValue(aryKey(I))
+        c = GetNumValue(aryKey(i))
         n = Val(c)
         n2 = v * 2
         n = n Xor n2
         v = v + n
         
-    Next I
+    Next i
     
     v = v And &HFF
     
-    For I = 15 To 0 Step -1
+    For i = 15 To 0 Step -1
     
-        c = Asc(aryKey(I))
+        c = Asc(aryKey(i))
         
-        If I > 8 Then
+        If i > 8 Then
         
-            n = I - 9
+            n = i - 9
             
         Else
         
-            n = &HF - (8 - I)
+            n = &HF - (8 - i)
             
         End If
         
         n = n And &HF
         c2 = Asc(aryKey(n))
-        aryKey(I) = Chr$(c2)
+        aryKey(i) = Chr$(c2)
         aryKey(n) = Chr$(c)
         
-    Next I
+    Next i
     
     v2 = &H13AC9741
     
-    For I = 15 To 0 Step -1
+    For i = 15 To 0 Step -1
     
-        c = Asc(UCase(aryKey(I)))
-        aryKey(I) = Chr$(c)
+        c = Asc(UCase(aryKey(i)))
+        aryKey(i) = Chr$(c)
         
         If Val(c) <= Asc("7") Then
         
@@ -727,19 +727,19 @@ Cont:
             c2 = c2 And 7
             c2 = c2 Xor c
             v = RShift(v, 3)
-            aryKey(I) = Chr$(c2)
+            aryKey(i) = Chr$(c2)
             v2 = v
             
         ElseIf Val(c) < Asc("A") Then
         
-            c2 = CByte(I)
+            c2 = CByte(i)
             c2 = c2 And 1
             c2 = c2 Xor c
-            aryKey(I) = Chr$(c2)
+            aryKey(i) = Chr$(c2)
             
         End If
         
-    Next I
+    Next i
     
     DecodeD2Key = Join(aryKey, vbNullString)
     
@@ -755,25 +755,25 @@ End Function
 Public Function DecodeStarcraftKey(ByVal sKey As String) As String
     Dim n As Double, n2 As Double, v As Double, _
     v2 As Double, c2 As Byte, c As Byte, _
-    bValid As Boolean, I As Integer, aryKey(0 To 12) As String 'r as double, keyvalue as double, c1 as byte
+    bValid As Boolean, i As Integer, aryKey(0 To 12) As String 'r as double, keyvalue as double, c1 as byte
     
-    For I = 1 To 13
+    For i = 1 To 13
     
-        aryKey(I - 1) = Mid$(sKey, I, 1)
+        aryKey(i - 1) = Mid$(sKey, i, 1)
         
-    Next I
+    Next i
     
     v = 3
     
-    For I = 0 To 11
+    For i = 0 To 11
     
-        c = aryKey(I)
+        c = aryKey(i)
         n = Val(c)
         n2 = v * 2
         n = n Xor n2
         v = v + n
         
-    Next I
+    Next i
     
     v = v Mod 10
     
@@ -785,27 +785,27 @@ Public Function DecodeStarcraftKey(ByVal sKey As String) As String
     
     v = 194
     
-    For I = 11 To 0 Step -1
+    For i = 11 To 0 Step -1
     
         If v < 7 Then GoTo continue
-        c = aryKey(I)
+        c = aryKey(i)
         n = CInt(v / 12)
         n2 = v Mod 12
         v = v - 17
         c2 = aryKey(n2)
-        aryKey(I) = c2
+        aryKey(i) = c2
         aryKey(n2) = c
         
-    Next I
+    Next i
     
 continue:
 
     v2 = &H13AC9741
     
-    For I = 11 To 0 Step -1
+    For i = 11 To 0 Step -1
     
-        c = UCase$(aryKey(I))
-        aryKey(I) = c
+        c = UCase$(aryKey(i))
+        aryKey(i) = c
         
         If Asc(c) <= Asc("7") Then
         
@@ -814,19 +814,19 @@ continue:
             c2 = c2 And 7
             c2 = c2 Xor c
             v = RShift(CLng(v), 3)
-            aryKey(I) = c2
+            aryKey(i) = c2
             v2 = v
             
         ElseIf Asc(c) < 65 Then
         
-            c2 = CByte(I)
+            c2 = CByte(i)
             c2 = c2 And 1
             c2 = c2 Xor c
-            aryKey(I) = c2
+            aryKey(i) = c2
             
         End If
         
-    Next I
+    Next i
     
     DecodeStarcraftKey = Join(aryKey, vbNullString)
     
@@ -862,13 +862,13 @@ End Function
 'End Function
 
 Public Function KillNull(ByVal text As String) As String
-    Dim I As Integer
-    I = InStr(1, text, Chr(0))
-    If (I = 0) Then
+    Dim i As Integer
+    i = InStr(1, text, Chr(0))
+    If (i = 0) Then
         KillNull = text
         Exit Function
     End If
-    KillNull = Left$(text, I - 1)
+    KillNull = Left$(text, i - 1)
 End Function
 
 Public Function ParsePing(strData As String) As Long
@@ -932,17 +932,17 @@ End Function
 
 Public Sub NullTruncString(ByRef text As String)
 'on error resume next
-    Dim I As Integer
+    Dim i As Integer
     
-    I = InStr(text, Chr(0))
-    If I = 0 Then Exit Sub
+    i = InStr(text, Chr(0))
+    If i = 0 Then Exit Sub
     
-    text = Left$(text, I - 1)
+    text = Left$(text, i - 1)
 End Sub
 
-Public Sub FullJoin(Channel As String, Optional ByVal I As Long = -1)
-    If I >= 0 Then
-        PBuffer.InsertDWord CLng(I)
+Public Sub FullJoin(Channel As String, Optional ByVal i As Long = -1)
+    If i >= 0 Then
+        PBuffer.InsertDWord CLng(i)
     Else
         PBuffer.InsertDWord &H2
     End If
@@ -952,11 +952,11 @@ End Sub
 
 Public Function HexToStr(ByVal Hex1 As String) As String
 'on error resume next
-    Dim strReturn As String, I As Long
+    Dim strReturn As String, i As Long
     If Len(Hex1) Mod 2 <> 0 Then Exit Function
-    For I = 1 To Len(Hex1) Step 2
-    strReturn = strReturn & Chr(Val("&H" & Mid(Hex1, I, 2)))
-    Next I
+    For i = 1 To Len(Hex1) Step 2
+    strReturn = strReturn & Chr(Val("&H" & Mid(Hex1, i, 2)))
+    Next i
     HexToStr = strReturn
 End Function
 
@@ -1080,16 +1080,16 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
 '    End If
     
     If nKeys > 0 Then
-        Dim I As Integer
+        Dim i As Integer
     
         With PBuffer
             .InsertDWord &H1                    '// #accounts
             .InsertDWord nKeys                  '// #keys
             .InsertNTString CurrentUsername     '// account to update
                                                 '// keys
-            For I = 1 To nKeys
-                .InsertNTString pKeys(I)
-            Next I
+            For i = 1 To nKeys
+                .InsertNTString pKeys(i)
+            Next i
            
             .InsertNTString Location
             .InsertNTString description '// Values()
@@ -1102,12 +1102,12 @@ End Sub
 Public Function StringToDWord(Data As String) As Long
     Dim tmp As String
     tmp = StrToHex(Data)
-    Dim A As String, B As String, c As String, D As String
+    Dim A As String, B As String, c As String, d As String
     A = Mid(tmp, 1, 2)
     B = Mid(tmp, 3, 2)
     c = Mid(tmp, 5, 2)
-    D = Mid(tmp, 7, 2)
-    tmp = D & c & B & A
+    d = Mid(tmp, 7, 2)
+    tmp = d & c & B & A
     StringToDWord = Val("&H" & tmp)
 End Function
 
@@ -1115,19 +1115,19 @@ Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
     Optional ByVal A As Variant, _
     Optional ByVal B As Variant, _
     Optional ByVal c As Variant, _
-    Optional ByVal D As Variant, _
-    Optional ByVal E As Variant, _
+    Optional ByVal d As Variant, _
+    Optional ByVal e As Variant, _
     Optional ByVal f As Variant, _
     Optional ByVal G As Variant, _
     Optional ByVal H As Variant)
     
     nText = Replace(nText, "%S", "%s")
     
-    Dim I As Byte
-    I = 0
+    Dim i As Byte
+    i = 0
     
     Do While (InStr(1, nText, "%s") <> 0)
-        Select Case I
+        Select Case i
             Case 0
                 If IsEmpty(A) Then GoTo theEnd
                 nText = Replace(nText, "%s", A, 1, 1)
@@ -1138,11 +1138,11 @@ Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
                 If IsEmpty(c) Then GoTo theEnd
                 nText = Replace(nText, "%s", c, 1, 1)
             Case 3
-                If IsEmpty(D) Then GoTo theEnd
-                nText = Replace(nText, "%s", D, 1, 1)
+                If IsEmpty(d) Then GoTo theEnd
+                nText = Replace(nText, "%s", d, 1, 1)
             Case 4
-                If IsEmpty(E) Then GoTo theEnd
-                nText = Replace(nText, "%s", E, 1, 1)
+                If IsEmpty(e) Then GoTo theEnd
+                nText = Replace(nText, "%s", e, 1, 1)
             Case 5
                 If IsEmpty(f) Then GoTo theEnd
                 nText = Replace(nText, "%s", f, 1, 1)
@@ -1153,7 +1153,7 @@ Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
                 If IsEmpty(H) Then GoTo theEnd
                 nText = Replace(nText, "%s", H, 1, 1)
         End Select
-        I = I + 1
+        i = i + 1
     Loop
 theEnd:
     Source = Source & nText
@@ -1616,18 +1616,18 @@ End Sub
 'End Sub
 
 Public Sub MakeArray(ByVal text As String, ByRef nArray() As String)
-    Dim I As Long
+    Dim i As Long
     ReDim nArray(0)
-    For I = 0 To Len(text)
-        nArray(I) = Mid$(text, I + 1, 1)
-        If I <> Len(text) Then
+    For i = 0 To Len(text)
+        nArray(i) = Mid$(text, i + 1, 1)
+        If i <> Len(text) Then
             ReDim Preserve nArray(0 To UBound(nArray) + 1)
         End If
-    Next I
+    Next i
 End Sub
 
 Public Function GetRaceAndIcon(ByRef Icon As String, ByRef Race As String, ByVal Product As String, Optional ByRef WCGCode As String) As Integer
-    Dim I As Integer, IMLPos As Integer
+    Dim i As Integer, IMLPos As Integer
     Dim PerTier As Integer
         
     If Product = "3RAW" Then
@@ -1641,38 +1641,38 @@ Public Function GetRaceAndIcon(ByRef Icon As String, ByRef Race As String, ByVal
     Select Case Race
         Case "H"
             IMLPos = 1
-            I = 0
+            i = 0
             Race = "Human"
         Case "N"
             IMLPos = 1 + (PerTier * 1)
-            I = 10
+            i = 10
             Race = "Night Elves"
         Case "U"
             IMLPos = 1 + (PerTier * 2)
-            I = 20
+            i = 20
             Race = "Undead"
         Case "O"
             IMLPos = 1 + (PerTier * 3)
-            I = 30
+            i = 30
             Race = "Orcs"
         Case "R"
             IMLPos = 1 + (PerTier * 4)
-            I = 40
+            i = 40
             Race = "Random"
         Case "T", "D"
             IMLPos = 1 + (PerTier * 5)
-            I = 50
+            i = 50
             Race = "Tournament"
         
         Case Else
             IMLPos = 1 + (PerTier * 5)
-            I = 50
+            i = 50
             Race = "unknown"
             
     End Select
     
     If StrictIsNumeric(Icon) Then
-        I = I + CInt(Icon)
+        i = i + CInt(Icon)
         IMLPos = IMLPos + (CInt(Icon) - 1)
     End If
     
@@ -1704,7 +1704,7 @@ Public Function GetRaceAndIcon(ByRef Icon As String, ByRef Race As String, ByVal
         End Select
     Else
         If Product = "3RAW" Then
-            Select Case I
+            Select Case i
                 'Peon Icon
                 Case 1, 11, 21, 31, 41
                     Icon = "peon"
@@ -1739,7 +1739,7 @@ Public Function GetRaceAndIcon(ByRef Icon As String, ByRef Race As String, ByVal
                     IMLPos = ICUNKNOWN ' 26
             End Select
         Else
-            Select Case I
+            Select Case i
                 'Peon Icon
                 Case 1, 11, 21, 31, 41, 51
                     Icon = "peon"
@@ -1814,7 +1814,7 @@ End Function
 
 '// COLORMODIFY - where L is passed as the start position of the text to be checked
 Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
-    Dim I As Long
+    Dim i As Long
     Dim s As String
     Dim temp As Long
     
@@ -1826,24 +1826,24 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
         If InStr(temp, .text, "ÿc", vbTextCompare) > 0 Then
             .Visible = False
             Do
-                I = InStr(temp, .text, "ÿc", vbTextCompare)
+                i = InStr(temp, .text, "ÿc", vbTextCompare)
                 
-                If StrictIsNumeric(Mid$(.text, I + 2, 1)) Then
-                    s = GetColorVal(Mid$(.text, I + 2, 1))
-                    .SelStart = I - 1
-                    .SelLength = 3
+                If StrictIsNumeric(Mid$(.text, i + 2, 1)) Then
+                    s = GetColorVal(Mid$(.text, i + 2, 1))
+                    .selStart = i - 1
+                    .selLength = 3
                     .SelText = vbNullString
-                    .SelStart = I - 1
-                    .SelLength = Len(.text) - I
+                    .selStart = i - 1
+                    .selLength = Len(.text) - i
                     .SelColor = s
                 Else
-                    Select Case Mid$(.text, I + 2, 1)
+                    Select Case Mid$(.text, i + 2, 1)
                         Case "i"
-                            .SelStart = I - 1
-                            .SelLength = 3
+                            .selStart = i - 1
+                            .selLength = 3
                             .SelText = vbNullString
-                            .SelStart = I - 1
-                            .SelLength = Len(.text) - 1
+                            .selStart = i - 1
+                            .selLength = Len(.text) - 1
                             If .SelItalic = True Then
                                 .SelItalic = False
                             Else
@@ -1851,11 +1851,11 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             End If
                             
                         Case "b", "."       'BOLD
-                            .SelStart = I - 1
-                            .SelLength = 3
+                            .selStart = i - 1
+                            .selLength = 3
                             .SelText = vbNullString
-                            .SelStart = I - 1
-                            .SelLength = Len(.text) - 1
+                            .selStart = i - 1
+                            .selLength = Len(.text) - 1
                             If .SelBold = True Then
                                 .SelBold = False
                             Else
@@ -1863,11 +1863,11 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             End If
                             
                         Case "u", "."       'underline
-                            .SelStart = I - 1
-                            .SelLength = 3
+                            .selStart = i - 1
+                            .selLength = 3
                             .SelText = vbNullString
-                            .SelStart = I - 1
-                            .SelLength = Len(.text) - 1
+                            .selStart = i - 1
+                            .selLength = Len(.text) - 1
                             If .SelUnderline = True Then
                                 .SelUnderline = False
                             Else
@@ -1875,27 +1875,27 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             End If
                             
                         Case ";"
-                            .SelStart = I - 1
-                            .SelLength = 3
+                            .selStart = i - 1
+                            .selLength = 3
                             .SelText = vbNullString
-                            .SelStart = I - 1
-                            .SelLength = Len(.text) - 1
+                            .selStart = i - 1
+                            .selLength = Len(.text) - 1
                             .SelColor = HTMLToRGBColor("8D00CE")    'Purple
                             
                         Case ":"
-                            .SelStart = I - 1
-                            .SelLength = 3
+                            .selStart = i - 1
+                            .selLength = 3
                             .SelText = vbNullString
-                            .SelStart = I - 1
-                            .SelLength = Len(.text) - 1
+                            .selStart = i - 1
+                            .selLength = Len(.text) - 1
                             .SelColor = 186408      '// Lighter green
                             
                         Case "<"
-                            .SelStart = I - 1
-                            .SelLength = 3
+                            .selStart = i - 1
+                            .selLength = 3
                             .SelText = vbNullString
-                            .SelStart = I - 1
-                            .SelLength = Len(.text) - 1
+                            .selStart = i - 1
+                            .selLength = Len(.text) - 1
                             .SelColor = HTMLToRGBColor("00A200")    'Dark green
                         'Case Else: Debug.Print s
                     End Select
@@ -1911,16 +1911,16 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
         
         If InStr(temp, .text, "Á", vbBinaryCompare) > 0 Then
             Do
-                I = InStr(temp, .text, "Á", vbBinaryCompare)
-                s = GetSCColorString(Mid$(.text, I + 1, 1))
+                i = InStr(temp, .text, "Á", vbBinaryCompare)
+                s = GetScriptColorString(Mid$(.text, i + 1, 1))
                 
                 If Len(s) > 0 Then
                     .Visible = False
-                    .SelStart = I - 1
-                    .SelLength = 2
+                    .selStart = i - 1
+                    .selLength = 2
                     .SelText = vbNullString
-                    .SelStart = I - 1
-                    .SelLength = Len(.text) - 1
+                    .selStart = i - 1
+                    .selLength = Len(.text) - 1
                     .SelColor = s
                     .Visible = True
                 End If
@@ -1932,16 +1932,16 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
     End With
 End Sub
 
-Public Function GetSCColorString(ByVal scCC As String) As String
+Public Function GetScriptColorString(ByVal scCC As String) As String
     Select Case Asc(scCC)
-        Case Asc("Q"): GetSCColorString = RGB(93, 93, 93)       'Grey
-        Case Asc("R"): GetSCColorString = RGB(30, 224, 54)      'Green
-        Case Asc("Z"), Asc("X"), Asc("S"): GetSCColorString = RGB(160, 169, 116)    'Yellow
-        Case Asc("Y"), Asc("["), Asc("Y"): GetSCColorString = RGB(231, 38, 82)      'Red
-        Case Asc("V"), Asc("@"): GetSCColorString = RGB(98, 77, 232)      'Blue
-        Case Asc("W"), Asc("P"): GetSCColorString = vbWhite               'White
-        Case Asc("T"), Asc("U"), Asc("V"): GetSCColorString = HTMLToRGBColor("00CCCC") 'cyan/teal
-        Case Else: GetSCColorString = vbNullString
+        Case Asc("Q"): GetScriptColorString = RGB(93, 93, 93)       'Grey
+        Case Asc("R"): GetScriptColorString = RGB(30, 224, 54)      'Green
+        Case Asc("Z"), Asc("X"), Asc("S"): GetScriptColorString = RGB(160, 169, 116)    'Yellow
+        Case Asc("Y"), Asc("["), Asc("Y"): GetScriptColorString = RGB(231, 38, 82)      'Red
+        Case Asc("V"), Asc("@"): GetScriptColorString = RGB(98, 77, 232)      'Blue
+        Case Asc("W"), Asc("P"): GetScriptColorString = vbWhite               'White
+        Case Asc("T"), Asc("U"), Asc("V"): GetScriptColorString = HTMLToRGBColor("00CCCC") 'cyan/teal
+        Case Else: GetScriptColorString = vbNullString
     End Select
 End Function
 

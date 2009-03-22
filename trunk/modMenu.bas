@@ -26,6 +26,41 @@ Public dictItemIDs As Dictionary
 Public Sub ProcessMenu(hWnd As Long, lngMenuCommand As Long)
     On Error GoTo ERROR_HANDLER
     
+    ' is this a dynamic scripting menu?
+    If (GetScriptObjByMenuID(lngMenuCommand).ObjName <> vbNullString) Then
+        MsgBox "!"
+        
+        Exit Sub
+    Else
+        Dim i As Integer ' ...
+        
+        For i = 1 To DynamicMenus.Count
+            If (DynamicMenus(i).ID = lngMenuCommand) Then
+                ' is this a default scripting menu?
+                If (Left$(DynamicMenus(i).Name, 1) = Chr$(0)) Then
+                    Dim s_name   As String ' ...
+                    Dim sub_name As String ' ...
+                    Dim obj      As scObj  ' ...
+
+                    s_name = _
+                        Split(Mid$(DynamicMenus(i).Name, 2))(0)
+                    sub_name = _
+                        Split(Mid$(DynamicMenus(i).Name, 2))(1)
+                        
+                    If (sub_name = "ENABLE|DISABLE") Then
+                        ProcessCommand GetCurrentUsername, "/enable " & s_name, True
+                    ElseIf (sub_name = "VIEWSCRIPT") Then
+                        ProcessCommand GetCurrentUsername, "/disable " & s_name, True
+                    End If
+                End If
+                
+                Exit For
+            End If
+        Next i
+    End If
+    
+    Exit Sub
+    
     Dim strCallback As String
   
     ' Call the callback function installed with this menu item

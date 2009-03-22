@@ -34,6 +34,18 @@ Private Sub Class_Initialize()
 
 End Sub
 
+Public Property Get Name() As String
+
+    Name = m_name
+
+End Property
+
+Public Property Let Name(ByVal str As String)
+
+    m_name = str
+
+End Property
+
 Public Property Get hWnd() As Long
 
     hWnd = m_hWnd

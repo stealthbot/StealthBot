@@ -12,6 +12,7 @@ Public Type scObj
     ObjName  As String
     ObjType  As String
     obj      As Object
+    CallCode As String
 End Type
 
 Public VetoNextMessage As Boolean
@@ -45,8 +46,8 @@ Public Function InitMenus()
         Set tmp = New clsMenuObj
     
         ' ...
+        tmp.Name = Chr$(0) & Name & " ROOT"
         tmp.hWnd = GetSubMenu(GetMenu(frmChat.hWnd), 5)
- 
         tmp.Caption = Name
             
         ' ...
@@ -56,6 +57,7 @@ Public Function InitMenus()
         Set tmp = New clsMenuObj
     
         ' ...
+        tmp.Name = Chr$(0) & Name & " ENABLED"
         tmp.Parent = DynamicMenus("mnu" & Name)
         tmp.Caption = "Enabled"
         
@@ -66,6 +68,7 @@ Public Function InitMenus()
         Set tmp = New clsMenuObj
     
         ' ...
+        tmp.Name = Chr$(0) & Name & " DISABLED"
         tmp.Parent = DynamicMenus("mnu" & Name)
         tmp.Caption = "View Script"
         
@@ -130,24 +133,24 @@ Private Function CleanFileName(ByVal filename As String) As String
     nameAllow = "_abcdefghijklmnopqrstuvwxyz0123456789"
     
     ' ...
-    CleanFileName = Replace(filename, " ", "_")
+    'CleanFileName = Replace(filename, " ", "_")
 
     ' ...
     CleanFileName = _
         Left$(CleanFileName, InStr(1, CleanFileName, ".") - 1)
 
     ' ...
-    For j = 1 To Len(CleanFileName)
-        If (j = 1) Then
-            If (InStr(1, nameAllow, Mid$(CleanFileName, j, 1)) >= 28) Then
-                Mid$(CleanFileName, j, 1) = ""
-            End If
-        End If
-    
-        If (InStr(1, nameAllow, Mid$(CleanFileName, j, 1), vbTextCompare) = 0) Then
-            Mid$(CleanFileName, j, 1) = ""
-        End If
-    Next j
+    'For j = 1 To Len(CleanFileName)
+    '    If (j = 1) Then
+    '        If (InStr(1, nameAllow, Mid$(CleanFileName, j, 1)) >= 28) Then
+    '            Mid$(CleanFileName, j, 1) = ""
+    '        End If
+    '    End If
+    '
+    '    If (InStr(1, nameAllow, Mid$(CleanFileName, j, 1), vbTextCompare) = 0) Then
+    '        Mid$(CleanFileName, j, 1) = ""
+    '    End If
+    'Next j
     
 End Function
 
@@ -190,7 +193,7 @@ Public Sub LoadScripts()
     Dim j        As Integer ' ...
     Dim str      As String  ' ...
     Dim tmp      As String  ' ...
-    
+
     ' ********************************
     '      LOAD REGULAR SCRIPTS
     ' ********************************
@@ -278,21 +281,21 @@ Public Sub LoadScripts()
     '     SET GLOBAL SCRIPT NAMES
     ' ********************************
 
-    For i = 2 To m_sc_control.Modules.Count
-        ' ...
-        str = _
-            m_sc_control.Modules(i).CodeObject.Script("Name")
-    
-        ' ...
-        tmp = _
-            m_sc_control.Modules(i).CodeObject.GetSettingsEntry("Public")
-    
-        ' ...
-        If (StrComp(tmp, "False", vbTextCompare) <> 0) Then
-            m_sc_control.Modules(1).ExecuteStatement "Set " & str & " = Scripts(" & Chr$(34) & _
-                str & Chr$(34) & ")"
-        End If
-    Next i
+    'For i = 2 To m_sc_control.Modules.Count
+    '    ' ...
+    '    str = _
+    '        m_sc_control.Modules(i).CodeObject.Script("Name")
+    '
+    '    ' ...
+    '    tmp = _
+    '        m_sc_control.Modules(i).CodeObject.GetSettingsEntry("Public")
+    '
+    '    ' ...
+    '    If (StrComp(tmp, "False", vbTextCompare) <> 0) Then
+    '        m_sc_control.Modules(1).ExecuteStatement "Set " & str & " = Scripts(" & Chr$(34) & _
+    '            str & Chr$(34) & ")"
+    '    End If
+    'Next i
     
     'UpdateScripts
     
@@ -440,18 +443,24 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
     ' CreateObj() module-level function
     str = str & "Function CreateObj(ObjType, ObjName)" & vbNewLine
     str = str & "   Set CreateObj = _ " & vbNewLine
-    str = str & "         CreateObjEx(GetModuleName(), ObjType, ObjName)" & vbNewLine
+    str = str & "         CreateObj(GetModuleName(), ObjType, ObjName)" & vbNewLine
+    str = str & "End Function" & vbNewLine
+    
+    ' CreateObjEx() module-level function
+    str = str & "Function CreateObjEx(ObjType, ObjName, CallCode)" & vbNewLine
+    str = str & "   Set CreateObj = _ " & vbNewLine
+    str = str & "         CreateObj(GetModuleName(), ObjType, ObjName, CallCode)" & vbNewLine
     str = str & "End Function" & vbNewLine
 
     ' DestroyObj() module-level function
     str = str & "Sub DestroyObj(ObjName)" & vbNewLine
-    str = str & "   DestroyObjEx GetModuleName(), ObjName" & vbNewLine
+    str = str & "   DestroyObj GetModuleName(), ObjName" & vbNewLine
     str = str & "End Sub" & vbNewLine
     
     ' GetObjByName() module-level function
     str = str & "Function GetObjByName(ObjName)" & vbNewLine
     str = str & "   Set GetObjByName = _ " & vbNewLine
-    str = str & "         GetObjByNameEx(GetModuleName(), ObjName)" & vbNewLine
+    str = str & "         IGetObjByName(GetModuleName(), ObjName)" & vbNewLine
     str = str & "End Function" & vbNewLine
     
     ' GetSettingsEntry() module-level function
@@ -511,21 +520,21 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
     nameAllow = "_abcdefghijklmnopqrstuvwxyz0123456789"
 
     ' ...
-    For j = 1 To Len(str)
-        If (j = 1) Then
-            If (InStr(1, nameAllow, Mid$(str, j, 1)) >= 28) Then
-                IsScriptNameValid = False
-            
-                Exit Function
-            End If
-        End If
-    
-        If (InStr(1, nameAllow, Mid$(str, j, 1), vbTextCompare) = 0) Then
-            IsScriptNameValid = False
-            
-            Exit Function
-        End If
-    Next j
+    'For j = 1 To Len(str)
+    '    If (j = 1) Then
+    '        If (InStr(1, nameAllow, Mid$(str, j, 1)) >= 28) Then
+    '            IsScriptNameValid = False
+    '
+    '            Exit Function
+    '        End If
+    '    End If
+    '
+    '    If (InStr(1, nameAllow, Mid$(str, j, 1), vbTextCompare) = 0) Then
+    '        IsScriptNameValid = False
+    '
+    '        Exit Function
+    '    End If
+    'Next j
 
     ' ...
     For j = 1 To m_sc_control.Modules.Count
@@ -804,7 +813,7 @@ Public Function ObjCount(Optional ObjType As String) As Integer
 
 End Function
 
-Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, ByVal ObjName As String) As Object
+Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByVal ObjName As String, Optional CallCode As String) As Object
 
     On Error Resume Next
 
@@ -818,7 +827,7 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
             If (m_arrObjs(i).SCModule.Name = SCModule.Name) Then
                 If (StrComp(m_arrObjs(i).ObjType, ObjType, vbTextCompare) = 0) Then
                     If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
-                        Set CreateObjEx = m_arrObjs(i).obj
+                        Set CreateObj = m_arrObjs(i).obj
                     
                         Exit Function
                     End If
@@ -834,6 +843,7 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
     ' store our module name & type
     obj.ObjName = ObjName
     obj.ObjType = ObjType
+    obj.CallCode = CallCode
 
     ' store our module handle
     Set obj.SCModule = SCModule
@@ -920,7 +930,7 @@ Public Function CreateObjEx(ByRef SCModule As Module, ByVal ObjType As String, B
     End If
 
     ' return object
-    Set CreateObjEx = obj.obj
+    Set CreateObj = obj.obj
 
 End Function
 
@@ -933,10 +943,10 @@ Public Sub DestroyObjs(Optional ByVal SCModule As Object = Nothing)
     ' ...
     For i = m_objCount - 1 To 0 Step -1
         If (SCModule Is Nothing) Then
-            DestroyObjEx m_arrObjs(i).SCModule, m_arrObjs(i).ObjName
+            DestroyObj m_arrObjs(i).SCModule, m_arrObjs(i).ObjName
         Else
             If (SCModule.Name = m_arrObjs(i).SCModule.Name) Then
-                DestroyObjEx m_arrObjs(i).SCModule, m_arrObjs(i).ObjName
+                DestroyObj m_arrObjs(i).SCModule, m_arrObjs(i).ObjName
             End If
         End If
     Next i
@@ -952,7 +962,7 @@ ERROR_HANDLER:
     
 End Sub
 
-Public Sub DestroyObjEx(ByVal SCModule As Module, ByVal ObjName As String)
+Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
 
     On Error GoTo ERROR_HANDLER
 
@@ -1056,7 +1066,7 @@ ERROR_HANDLER:
     
 End Sub
 
-Public Function GetObjByNameEx(ByRef SCModule As Module, ByVal ObjName As String) As Object
+Public Function GetObjByName(ByRef SCModule As Module, ByVal ObjName As String) As Object
 
     Dim i As Integer ' ...
     
@@ -1064,7 +1074,7 @@ Public Function GetObjByNameEx(ByRef SCModule As Module, ByVal ObjName As String
     For i = 0 To m_objCount - 1
         If (m_arrObjs(i).SCModule.Name = SCModule.Name) Then
             If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
-                Set GetObjByNameEx = m_arrObjs(i).obj
+                Set GetObjByName = m_arrObjs(i).obj
 
                 Exit Function
             End If
@@ -1073,14 +1083,41 @@ Public Function GetObjByNameEx(ByRef SCModule As Module, ByVal ObjName As String
 
 End Function
 
-Public Function GetSCObjByIndexEx(ByVal ObjType As String, ByVal Index As Integer) As scObj
+Public Function GetScriptObjByMenuID(ByVal MenuID As Long) As scObj
+
+    Dim i As Integer ' ...
+    Dim j As Integer ' ...
+
+    For i = 0 To ObjCount() - 1
+        If (StrComp("Menu", Objects(i).ObjType, vbTextCompare) = 0) Then
+            If (m_arrObjs(i).obj.ID = MenuID) Then
+                GetScriptObjByMenuID = m_arrObjs(i)
+                
+                Exit Function
+            End If
+        ElseIf (StrComp("Form", Objects(i).ObjType, vbTextCompare) = 0) Then
+            For j = 0 To Objects(i).obj.ObjCount("Menu") - 1
+                If (StrComp("Menu", Objects(i).obj.Objects(j).ObjectType, vbTextCompare) = 0) Then
+                    If (Objects(i).obj.Objects(j).ID = MenuID) Then
+                        GetScriptObjByMenuID = Objects(i)
+            
+                        Exit Function
+                    End If
+                End If
+            Next j
+        End If
+    Next i
+
+End Function
+
+Public Function GetScriptObjByIndex(ByVal ObjType As String, ByVal Index As Integer) As scObj
 
     Dim i As Integer ' ...
 
     For i = 0 To ObjCount() - 1
         If (StrComp(ObjType, Objects(i).ObjType, vbTextCompare) = 0) Then
             If (m_arrObjs(i).obj.Index = Index) Then
-                GetSCObjByIndexEx = m_arrObjs(i)
+                GetScriptObjByIndex = m_arrObjs(i)
                 
                 Exit For
             End If

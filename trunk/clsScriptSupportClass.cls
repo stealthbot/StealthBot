@@ -967,7 +967,7 @@ End Sub
 
 
 
-'// GETSCRIPTCONTROL
+'// GetScriptControl
 '// Returns the Script Control as an object
 Public Function GetScriptControl() As Object
 
@@ -1463,24 +1463,24 @@ Public Function Sha1(ByVal Data As String) As String
     Sha1 = LongToStr(A) & LongToStr(B) & LongToStr(c) & LongToStr(d) & LongToStr(e)
 End Function
 
-Public Function CreateObjEx(ByVal ModuleName As String, ByVal ObjType As String, ByVal ObjName As String) As Object
+Public Function ICreateObj(ByVal ModuleName As String, ByVal ObjType As String, ByVal ObjName As String, Optional CallCode As String) As Object
 
-    Set CreateObjEx = _
-            modScripting.CreateObjEx(frmChat.SControl.Modules(ModuleName), _
-                    ObjType, ObjName)
-
-End Function
-
-Public Function DestroyObjEx(ByVal ModuleName As String, ByVal ObjName As String) As Object
-
-    modScripting.DestroyObjEx frmChat.SControl.Modules(ModuleName), ObjName
+    Set ICreateObj = _
+            modScripting.CreateObj(frmChat.SControl.Modules(ModuleName), _
+                    ObjType, ObjName, CallCode)
 
 End Function
 
-Public Function GetObjByNameEx(ByVal ModuleName As String, ByVal ObjName As String) As Object
+Public Function IDestroyObj(ByVal ModuleName As String, ByVal ObjName As String) As Object
 
-    Set GetObjByNameEx = _
-            modScripting.GetObjByNameEx(frmChat.SControl.Modules(ModuleName), _
+    modScripting.DestroyObj frmChat.SControl.Modules(ModuleName), ObjName
+
+End Function
+
+Public Function IGetObjByName(ByVal ModuleName As String, ByVal ObjName As String) As Object
+
+    Set IGetObjByName = _
+            modScripting.GetObjByName(frmChat.SControl.Modules(ModuleName), _
                     ObjName)
 
 End Function
@@ -1520,7 +1520,7 @@ Public Function DataBufferEx() As Object
 
 End Function
 
-Public Function GetScriptObjByName(ByVal scriptName As String) As Object
+Public Function GetScriptriptObjByName(ByVal scriptName As String) As Object
 
     On Error Resume Next
 
@@ -1538,7 +1538,7 @@ Public Function GetScriptObjByName(ByVal scriptName As String) As Object
                 Exit Function
             End If
         
-            Set GetScriptObjByName = _
+            Set GetScriptriptObjByName = _
                     frmChat.SControl.Modules(i)
              
             Exit Function
@@ -1556,7 +1556,7 @@ Public Function GetScriptObjByName(ByVal scriptName As String) As Object
                 Exit Function
             End If
         
-             Set GetScriptObjByName = _
+             Set GetScriptriptObjByName = _
                     frmChat.SControl.Modules(i)
              
              Exit Function

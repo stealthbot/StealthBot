@@ -3144,15 +3144,17 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
 
     ' ...
     If ((BotVars.LockChat = False) Or (rtb <> frmChat.rtbChat)) Then
+ 
         lngVerticalPos = IsScrolling(rtb)
     
         If (lngVerticalPos) Then
             LockWindowUpdate rtb.hWnd
-            
+
             selStart = rtb.selStart
             selLength = rtb.selLength
         
             blUnlock = True
+            
         End If
         
         ' ...
@@ -3260,6 +3262,7 @@ Public Function IsScrolling(ByRef rtb As RichTextBox) As Long
     Dim range          As Integer
 
     If (g_OSVersion.IsWin2000Plus()) Then
+    
         GetScrollRange rtb.hWnd, SB_VERT, 0, range
         
         lngVerticalPos = SendMessage(rtb.hWnd, EM_GETTHUMB, 0&, 0&)
@@ -3272,6 +3275,7 @@ Public Function IsScrolling(ByRef rtb As RichTextBox) As Long
         If (difference < 0) Then
             IsScrolling = lngVerticalPos
         End If
+        
     End If
 
 End Function
