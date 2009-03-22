@@ -894,7 +894,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -920,6 +919,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -5030,7 +5030,11 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 
             Case KEY_V 'PASTE
                 If (IsScrolling(rtbChat)) Then
+                    LockWindowUpdate rtbChat.hWnd
+                
                     SendMessage rtbChat.hWnd, EM_SCROLL, SB_BOTTOM, &H0
+                    
+                    LockWindowUpdate &H0
                 End If
             
                 If (Shift = S_CTRL) Then
@@ -5204,7 +5208,11 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 
             Case KEY_ENTER
                 If (IsScrolling(rtbChat)) Then
+                    LockWindowUpdate rtbChat.hWnd
+                
                     SendMessage rtbChat.hWnd, EM_SCROLL, SB_BOTTOM, &H0
+                    
+                    LockWindowUpdate &H0
                 End If
             
                 'n = UsernameToIndex(CurrentUsername)

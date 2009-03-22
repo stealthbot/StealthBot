@@ -1082,6 +1082,74 @@ End Sub
 
 '// [[[ PLUGINS MENU ]]]
 
+Sub CreateMenus()
+
+   pluginPrefixes = psPrefixes
+   pluginNames = Split(psTitles, "|||")
+
+   Set tmp = CreateObj("Menu", "mnuOptions")
+   tmp.Caption = "Options"
+
+   Set tmp = CreateObj("Menu", "mnuPluginMenus")
+   tmp.Caption = "Plugin Menus"
+
+   Set tmp = CreateObj("Menu", "mnuDash1")
+   tmp.Caption = "-"
+
+   For i = 0 To UBound(pluginPrefixes)
+      Set tmp = CreateObj("Menu", "mnu" & pluginPrefixes(i))
+
+      tmp.Caption = pluginNames(i) & " (" & pluginPrefixes(i) & ")"
+
+      Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Enabled")
+
+      tmp2.Parent = tmp
+      tmp2.Caption = "Enabled"
+
+      Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Nvm")
+
+      tmp2.Parent = tmp
+      tmp2.Caption = "New Version Notification"
+
+      Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Backup")
+
+      tmp2.Parent = tmp
+      tmp2.Caption = "Backup On Updates"
+
+      
+      Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Dash")
+
+      tmp2.Parent = tmp
+      tmp2.Caption = "-"
+
+      Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Nvm")
+
+      tmp2.Parent = tmp
+      tmp2.Caption = "New Version Notification"
+
+
+      Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Open")
+
+      tmp2.Parent = tmp
+      tmp2.Caption = "Open File"
+
+      Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Help")
+
+      tmp2.Parent = tmp
+      tmp2.Caption = "Help"
+   Next
+
+   Set tmp = CreateObj("Menu", "mnuDash2")
+   tmp.Caption = "-"
+
+   Set tmp = CreateObj("Menu", "mnuAdvanced")
+   tmp.Caption = "Advanced"
+
+   Set tmp = CreateObj("Menu", "mnuHelp")
+   tmp.Caption = "Help"
+
+End Sub
+
 
 '// Called when an item is clicked in the Plugins menu
 Sub psProcessMenu(strCallback, Prefix)
@@ -1650,7 +1718,9 @@ Sub Event_Load()
    Call psLoadPlugins()
 
    '// Register and populate the plugin menus
-   Call ReloadPluginMenus()
+   'Call ReloadPluginMenus()
+   Call CreateMenus()
+   
 
    '// Enable the script timer
    scTimer.Interval = 1000

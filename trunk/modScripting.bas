@@ -443,18 +443,18 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
     ' CreateObj() module-level function
     str = str & "Function CreateObj(ObjType, ObjName)" & vbNewLine
     str = str & "   Set CreateObj = _ " & vbNewLine
-    str = str & "         CreateObj(GetModuleName(), ObjType, ObjName)" & vbNewLine
+    str = str & "         ICreateObj(GetModuleName(), ObjType, ObjName)" & vbNewLine
     str = str & "End Function" & vbNewLine
     
     ' CreateObjEx() module-level function
     str = str & "Function CreateObjEx(ObjType, ObjName, CallCode)" & vbNewLine
-    str = str & "   Set CreateObj = _ " & vbNewLine
-    str = str & "         CreateObj(GetModuleName(), ObjType, ObjName, CallCode)" & vbNewLine
+    str = str & "   Set CreateObjEx = _ " & vbNewLine
+    str = str & "         ICreateObj(GetModuleName(), ObjType, ObjName, CallCode)" & vbNewLine
     str = str & "End Function" & vbNewLine
 
     ' DestroyObj() module-level function
     str = str & "Sub DestroyObj(ObjName)" & vbNewLine
-    str = str & "   DestroyObj GetModuleName(), ObjName" & vbNewLine
+    str = str & "   IDestroyObj GetModuleName(), ObjName" & vbNewLine
     str = str & "End Sub" & vbNewLine
     
     ' GetObjByName() module-level function
@@ -899,6 +899,17 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
             HookWindowProc obj.obj.hWnd
             
         Case "MENU"
+            If (ObjCount("Menu") = 0) Then
+                Dim tmp As New clsMenuObj ' ...
+                
+                tmp.Parent = _
+                    DynamicMenus("mnu" & SCModule.CodeObject.Script("Name"))
+                tmp.Caption = "-"
+                
+                ' ...
+                DynamicMenus.Add tmp
+            End If
+        
             ' ...
             Set obj.obj = New clsMenuObj
             
