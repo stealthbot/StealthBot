@@ -1090,6 +1090,50 @@ Sub CreateMenus()
    Set tmp = CreateObj("Menu", "mnuOptions")
    tmp.Caption = "Options"
 
+   Set tmp = CreateObj("Menu", "mnuOptionsOpenFolder")
+   tmp.Parent = mnuOptions
+   tmp.Caption = "Open plugins folder"
+
+   Set tmp = CreateObj("Menu", "mnuOptionsOpenSettings")
+   tmp.Parent = mnuOptions
+   tmp.Caption = "Open settings.ini"
+
+   Set tmp = CreateObj("Menu", "mnuOptionsDash1")
+   tmp.Parent = mnuOptions
+   tmp.Caption = "-"
+
+   Set tmp = CreateObj("Menu", "mnuOptionsDownload")
+   tmp.Parent = mnuOptions
+   tmp.Caption = "Download Plugins"
+
+   Set tmp = CreateObj("Menu", "mnuOptionsAddCode")
+   tmp.Parent = mnuOptions
+   tmp.Caption = "Add Code Manually"
+
+   Set tmp = CreateObj("Menu", "mnuOptionsDash2")
+   tmp.Parent = mnuOptions
+   tmp.Caption = "-"
+
+   Set tmp = CreateObj("Menu", "mnuOptionsDisablePlugins")
+   tmp.Parent = mnuOptions
+   tmp.Caption = "Disable Plugins"
+
+   Set tmp = CreateObj("Menu", "mnuOptionsDisableNotification")
+   tmp.Parent = mnuOptions
+   tmp.Caption = "Disable New Version Notification"
+
+   Set tmp = CreateObj("Menu", "mnuOptionsDisableBackup")
+   tmp.Parent = mnuOptions
+   tmp.Caption = "Disable Backup On Updates"
+
+   Set tmp = CreateObj("Menu", "mnuOptionsDash3")
+   tmp.Parent = mnuOptions
+   tmp.Caption = "-"
+
+   Set tmp = CreateObj("Menu", "mnuOptionsCheckUpdates")
+   tmp.Parent = mnuOptions
+   tmp.Caption = "Check for Updates"
+
    Set tmp = CreateObj("Menu", "mnuPluginMenus")
    tmp.Caption = "Plugin Menus"
 
@@ -1097,44 +1141,38 @@ Sub CreateMenus()
    tmp.Caption = "-"
 
    For i = 0 To UBound(pluginPrefixes)
-      Set tmp = CreateObj("Menu", "mnu" & pluginPrefixes(i))
+      Set tmp = CreateObj("Menu", "mnuPluginMenus" & pluginPrefixes(i))
+      tmp.Parent = mnuPluginMenus
+      tmp.Caption = pluginNames(i) & " (" & pluginPrefixes(i) & ")"	
 
+      Set tmp = CreateObj("Menu", "mnu" & pluginPrefixes(i))
       tmp.Caption = pluginNames(i) & " (" & pluginPrefixes(i) & ")"
 
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Enabled")
-
       tmp2.Parent = tmp
       tmp2.Caption = "Enabled"
 
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Nvm")
-
       tmp2.Parent = tmp
       tmp2.Caption = "New Version Notification"
 
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Backup")
-
       tmp2.Parent = tmp
       tmp2.Caption = "Backup On Updates"
-
       
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Dash")
-
       tmp2.Parent = tmp
       tmp2.Caption = "-"
 
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Nvm")
-
       tmp2.Parent = tmp
       tmp2.Caption = "New Version Notification"
 
-
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Open")
-
       tmp2.Parent = tmp
       tmp2.Caption = "Open File"
 
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Help")
-
       tmp2.Parent = tmp
       tmp2.Caption = "Help"
    Next
@@ -1145,8 +1183,40 @@ Sub CreateMenus()
    Set tmp = CreateObj("Menu", "mnuAdvanced")
    tmp.Caption = "Advanced"
 
+   Set tmp = CreateObj("Menu", "mnuAdvancedPluginCreator")
+   tmp.Parent = mnuAdvanced
+   tmp.Caption = "Plugin Creator"
+
+   Set tmp = CreateObj("Menu", "mnuAdvancedOpenPluginSystem")
+   tmp.Parent = mnuAdvanced
+   tmp.Caption = "Open PluginSystem.dat"
+
+   Set tmp = CreateObj("Menu", "mnuAdvancedDash1")
+   tmp.Parent = mnuAdvanced
+   tmp.Caption = "-"
+
+   Set tmp = CreateObj("Menu", "mnuAdvancedDebugMode")
+   tmp.Parent = mnuAdvanced
+   tmp.Caption = "Debug Mode"
+
    Set tmp = CreateObj("Menu", "mnuHelp")
    tmp.Caption = "Help"
+
+   Set tmp = CreateObj("Menu", "mnuHelpCommands")
+   tmp.Parent = mnuHelp
+   tmp.Caption = "Plugin System Commands"
+
+   Set tmp = CreateObj("Menu", "mnuHelpGuide")
+   tmp.Parent = mnuHelp
+   tmp.Caption = "The Plugin System Guide"
+
+   Set tmp = CreateObj("Menu", "mnuHelpSupport")
+   tmp.Parent = mnuHelp
+   tmp.Caption = "Scripting and Plugins Support"
+
+   Set tmp = CreateObj("Menu", "mnuHelpAbout")
+   tmp.Parent = mnuHelp
+   tmp.Caption = "About..."
 
 End Sub
 
