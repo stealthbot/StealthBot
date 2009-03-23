@@ -6325,7 +6325,7 @@ Private Function GetAuth(ByVal Username As String) As Long
     ' ...
     If (clsCRC32.CRC32(BETA_AUTH_URL) = BETA_AUTH_URL_CRC32) Then
         result = _
-            CInt(Val(INet.OpenURL(BETA_AUTH_URL & Username)))
+            CInt(Val(INet.OpenURL(BETA_AUTH_URL & Username))) - 1
     End If
 
     ' ...
@@ -6334,13 +6334,13 @@ Private Function GetAuth(ByVal Username As String) As Long
     Loop
     
     ' ...
-    If (result > 0) Then
+    If (result = 0) Then
         ' ...
         lastAuth = result
         lastAuthName = Username
-        
+    
         ' ...
-        GetAuth = lastAuth
+        GetAuth = True
         
         ' ...
         AUTH_CHECKED = True
@@ -8196,7 +8196,11 @@ Private Sub mnuPopRem_Click()
 End Sub
 
 Sub DoConnect()
-    If sckBNLS.State <> 0 Or sckBNet.State <> 0 Then Call DoDisconnect
+
+    If ((sckBNLS.State <> sckClosed) Or (sckBNet.State <> sckClosed)) Then
+        Call DoDisconnect
+    End If
+    
     uTicks = 0
     
     UserCancelledConnect = False

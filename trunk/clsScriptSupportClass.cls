@@ -618,6 +618,14 @@ Public Function BotPath() As String
     
 End Function
 
+Public Sub MkDirEx(ByVal DirPath As String)
+
+    On Error Resume Next
+
+    MkDir DirPath
+
+End Sub
+
 
 '// GETINTERNALUSERCOUNT
 '// Returns the highest index for use when calling GetInternalDataByIndex
@@ -1463,24 +1471,24 @@ Public Function Sha1(ByVal Data As String) As String
     Sha1 = LongToStr(A) & LongToStr(B) & LongToStr(c) & LongToStr(d) & LongToStr(e)
 End Function
 
-Public Function ICreateObj(ByVal ModuleName As String, ByVal ObjType As String, ByVal ObjName As String, Optional CallCode As String) As Object
+Public Function ICreateObj(ByVal ModuleID As String, ByVal ObjType As String, ByVal ObjName As String, Optional CallCode As String) As Object
 
     Set ICreateObj = _
-            modScripting.CreateObj(frmChat.SControl.Modules(ModuleName), _
+            modScripting.CreateObj(frmChat.SControl.Modules(ModuleID), _
                     ObjType, ObjName, CallCode)
 
 End Function
 
-Public Function IDestroyObj(ByVal ModuleName As String, ByVal ObjName As String) As Object
+Public Function IDestroyObj(ByVal ModuleID As String, ByVal ObjName As String) As Object
 
-    modScripting.DestroyObj frmChat.SControl.Modules(ModuleName), ObjName
+    modScripting.DestroyObj frmChat.SControl.Modules(ModuleID), ObjName
 
 End Function
 
-Public Function IGetObjByName(ByVal ModuleName As String, ByVal ObjName As String) As Object
+Public Function IGetObjByName(ByVal ModuleID As String, ByVal ObjName As String) As Object
 
     Set IGetObjByName = _
-            modScripting.GetObjByName(frmChat.SControl.Modules(ModuleName), _
+            modScripting.GetObjByName(frmChat.SControl.Modules(ModuleID), _
                     ObjName)
 
 End Function

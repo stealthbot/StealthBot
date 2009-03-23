@@ -3149,12 +3149,8 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     
         If (lngVerticalPos) Then
             LockWindowUpdate rtb.hWnd
-
-            selStart = rtb.selStart
-            selLength = rtb.selLength
         
             blUnlock = True
-            
         End If
         
         ' ...
@@ -3165,12 +3161,20 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         End If
         
         If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
+            If (blUnlock = False) Then
+                LockWindowUpdate rtb.hWnd
+            End If
+        
             With rtb
                 .selStart = 0
                 .selLength = InStr(1, .text, vbLf, vbBinaryCompare)
                 .SelFontName = rtb.Font.Name
                 .SelText = ""
             End With
+            
+            If (blUnlock = False) Then
+                LockWindowUpdate &H0
+            End If
         End If
         
         s = GetTimeStamp()
@@ -3230,12 +3234,9 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         ColorModify rtb, L
 
         If (blUnlock) Then
-            rtb.selStart = selStart
-            rtb.selLength = selLength
-
             SendMessage rtb.hWnd, WM_VSCROLL, _
                 SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
-                
+            
             LockWindowUpdate &H0
         End If
     End If

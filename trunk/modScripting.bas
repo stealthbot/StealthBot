@@ -404,7 +404,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
     
     ' ...
     If (defaults) Then
-        CreateDefautModuleProcs ScriptModule
+        CreateDefautModuleProcs ScriptModule, filePath
     End If
     
     ' ...
@@ -419,7 +419,7 @@ ERROR_HANDLER:
 
 End Function
 
-Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
+Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module, ByVal ScriptPath As String)
 
     On Error GoTo ERROR_HANDLER
 
@@ -431,36 +431,47 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module)
 
     ' ...
     ScriptModule.Run "Data"
+    
+    ' ...
+    ScriptModule.ExecuteStatement "Script(""Path"") = " & Chr$(34) & _
+        ScriptPath & Chr$(34)
 
     ' ...
     ScriptModule.ExecuteStatement "Set DataBuffer = DataBufferEx()"
 
-    ' GetModuleName() module-level function
-    str = str & "Function GetModuleName()" & vbNewLine
-    str = str & "   GetModuleName = " & Chr$(34) & ScriptModule.Name & Chr$(34) & vbNewLine
+    ' GetModuleID() module-level function
+    str = str & "Function GetModuleID()" & vbNewLine
+    str = str & "   GetModuleID = " & Chr$(34) & ScriptModule.Name & Chr$(34) & vbNewLine
+    str = str & "End Function" & vbNewLine
+    
+    ' GetWorkingDirectory() module-level function
+    str = str & "Function GetWorkingDirectory()" & vbNewLine
+    str = str & "   GetWorkingDirectory = _" & vbNewLine
+    str = str & "       BotPath() & ""Scripts\"" & " & "Script(""Name"") & " & """\""" & vbNewLine
+    str = str & "   MkDirEx GetWorkingDirectory" & vbNewLine
     str = str & "End Function" & vbNewLine
 
     ' CreateObj() module-level function
     str = str & "Function CreateObj(ObjType, ObjName)" & vbNewLine
     str = str & "   Set CreateObj = _ " & vbNewLine
-    str = str & "         ICreateObj(GetModuleName(), ObjType, ObjName)" & vbNewLine
+    str = str & "         ICreateObj(GetModuleID(), ObjType, ObjName)" & vbNewLine
     str = str & "End Function" & vbNewLine
     
     ' CreateObjEx() module-level function
     str = str & "Function CreateObjEx(ObjType, ObjName, CallCode)" & vbNewLine
     str = str & "   Set CreateObjEx = _ " & vbNewLine
-    str = str & "         ICreateObj(GetModuleName(), ObjType, ObjName, CallCode)" & vbNewLine
+    str = str & "         ICreateObj(GetModuleID(), ObjType, ObjName, CallCode)" & vbNewLine
     str = str & "End Function" & vbNewLine
 
     ' DestroyObj() module-level function
     str = str & "Sub DestroyObj(ObjName)" & vbNewLine
-    str = str & "   IDestroyObj GetModuleName(), ObjName" & vbNewLine
+    str = str & "   IDestroyObj GetModuleID(), ObjName" & vbNewLine
     str = str & "End Sub" & vbNewLine
     
     ' GetObjByName() module-level function
     str = str & "Function GetObjByName(ObjName)" & vbNewLine
     str = str & "   Set GetObjByName = _ " & vbNewLine
-    str = str & "         IGetObjByName(GetModuleName(), ObjName)" & vbNewLine
+    str = str & "         IGetObjByName(GetModuleID(), ObjName)" & vbNewLine
     str = str & "End Function" & vbNewLine
     
     ' GetSettingsEntry() module-level function
@@ -499,11 +510,11 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
 
     On Error Resume Next
 
-    Dim j         As Integer ' ...
-    Dim str       As String  ' ...
-    Dim tmp       As String  ' ...
-    Dim nameAllow As String
-    Dim i         As Integer
+    Dim j            As Integer ' ...
+    Dim str          As String  ' ...
+    Dim tmp          As String  ' ...
+    Dim nameDisallow As String
+    Dim i            As Integer
     
     ' ...
     str = _
@@ -517,24 +528,16 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
     End If
     
     ' ...
-    nameAllow = "_abcdefghijklmnopqrstuvwxyz0123456789"
+    nameDisallow = "\/:*?<>|"""
 
     ' ...
-    'For j = 1 To Len(str)
-    '    If (j = 1) Then
-    '        If (InStr(1, nameAllow, Mid$(str, j, 1)) >= 28) Then
-    '            IsScriptNameValid = False
-    '
-    '            Exit Function
-    '        End If
-    '    End If
-    '
-    '    If (InStr(1, nameAllow, Mid$(str, j, 1), vbTextCompare) = 0) Then
-    '        IsScriptNameValid = False
-    '
-    '        Exit Function
-    '    End If
-    'Next j
+    For j = 1 To Len(str)
+        If (InStr(1, nameDisallow, Mid$(str, j, 1), vbTextCompare) <> 0) Then
+            IsScriptNameValid = False
+    
+            Exit Function
+        End If
+    Next j
 
     ' ...
     For j = 1 To m_sc_control.Modules.Count
@@ -551,6 +554,7 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
         End If
     Next j
     
+    ' ...
     IsScriptNameValid = True
 
 End Function
