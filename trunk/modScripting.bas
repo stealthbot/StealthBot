@@ -111,7 +111,7 @@ Private Function IsValidFileExtension(ByVal ext As String) As Boolean
     exts(2) = "vbs"
     
     ' ...
-    For i = 0 To UBound(exts) - 1
+    For i = LBound(exts) To UBound(exts)
         If (StrComp(ext, exts(i), vbTextCompare) = 0) Then
             IsValidFileExtension = True
             
