@@ -3960,7 +3960,7 @@ Private Sub Form_Load()
     Dim nOptLevel As cTreeViewNodes
     Dim lMouseOver As Long
     Dim s As String
-    Dim I As Long, j As Long
+    Dim i As Long, j As Long
     
     '##########################################
     ' TREEVIEW INITIALIZATION CODE
@@ -4063,11 +4063,11 @@ Private Sub Form_Load()
         
         If LenB(Dir$(GetFilePath("AdditionalBNLSservers.txt"))) > 0 Then
             With cboBNLSServer
-                I = FreeFile
+                i = FreeFile
                 
-                Open GetFilePath("AdditionalBNLSservers.txt") For Input As #I
-                    While Not EOF(I)
-                        Line Input #I, s
+                Open GetFilePath("AdditionalBNLSservers.txt") For Input As #i
+                    While Not EOF(i)
+                        Line Input #i, s
                         
                         For j = 0 To .ListCount
                             If StrComp(.List(j), s, vbTextCompare) = 0 Then
@@ -4080,7 +4080,7 @@ Private Sub Form_Load()
                             .AddItem s
                         End If
                     Wend
-                Close #I
+                Close #i
             End With
         End If
     End With
@@ -4273,17 +4273,17 @@ Private Sub Form_Unload(Cancel As Integer)
 End Sub
 
 Sub lblAddCurrentKey_Click()
-    Dim I As Integer
+    Dim i As Integer
     Dim s As String
     
     s = CDKeyReplacements(cboCDKey.text)
     
     If cboCDKey.ListCount > -1 Then
-        For I = 0 To cboCDKey.ListCount
-            If StrComp(cboCDKey.List(I), s, vbTextCompare) = 0 Then
+        For i = 0 To cboCDKey.ListCount
+            If StrComp(cboCDKey.List(i), s, vbTextCompare) = 0 Then
                 Exit Sub
             End If
-        Next I
+        Next i
     End If
     
     cboCDKey.AddItem s
@@ -4362,7 +4362,7 @@ End Function
 Private Function SaveSettings() As Boolean
     Dim s As String
     Dim Clients(6) As String
-    Dim I As Long, j As Long
+    Dim i As Long, j As Long
     
     '// First, CDKey Length check and corresponding stuff that needs to run first:
     Select Case True
@@ -4417,21 +4417,21 @@ Private Function SaveSettings() As Boolean
         Next j
         
         If j >= 0 Or .ListCount > BNLS_SERVER_COUNT Then
-            I = FreeFile
+            i = FreeFile
             
-            Open GetFilePath("AdditionalBNLSservers.txt") For Output As #I
+            Open GetFilePath("AdditionalBNLSservers.txt") For Output As #i
                 s = cboBNLSServer.text
                         
-                Print #I, .text
+                Print #i, .text
                 
                 For j = BNLS_SERVER_COUNT To .ListCount
-                    Print #I, .List(j)
+                    Print #i, .List(j)
                 Next j
-            Close #I
+            Close #i
         End If
     End With
-    
-    WINI "Trigger", txtTrigger.text, secMain
+    ' there is WINI and WriteINI? =\
+    WINI "Trigger", "{" & txtTrigger.text & "}", secMain
     WINI "ConfigVersion", CONFIG_VERSION, secMain
     WINI "Owner", txtOwner.text, secMain
     
@@ -4506,21 +4506,21 @@ Private Function SaveSettings() As Boolean
         If StrictIsNumeric(s) Then
             If Val(s) < 60000 Then
                 If Val(s) > 0 Then
-                    I = Val(s)
+                    i = Val(s)
                 Else
-                    I = 1000
+                    i = 1000
                 End If
             Else
-                I = 60000
+                i = 60000
             End If
         Else
-            I = 1000
+            i = 1000
         End If
     Else
-        I = 1000
+        i = 1000
     End If
     
-    WINI "ReconnectDelay", CStr(I), secMain
+    WINI "ReconnectDelay", CStr(i), secMain
     
     '// Interface Settings
     WINI "ChatFont", txtChatFont.text, secOther
@@ -4555,16 +4555,16 @@ Private Function SaveSettings() As Boolean
     Clients(W3X) = "W3XP"
     Clients(W2) = "W2BN"
 
-    For I = 0 To 6
-        If (chkCBan(I).Value = 1) Then
-            If (GetAccess(Clients(I), "GAME").Username = _
+    For i = 0 To 6
+        If (chkCBan(i).Value = 1) Then
+            If (GetAccess(Clients(i), "GAME").Username = _
                 vbNullString) Then
                 
                 ' redefine array size
                 ReDim Preserve DB(UBound(DB) + 1)
                 
                 With DB(UBound(DB))
-                    .Username = Clients(I)
+                    .Username = Clients(i)
                     .Flags = "B"
                     .ModifiedBy = "(console)"
                     .ModifiedOn = Now
@@ -4583,12 +4583,12 @@ Private Function SaveSettings() As Boolean
                 End If
             Else
                 For j = LBound(DB) To UBound(DB)
-                    If ((StrComp(DB(j).Username, Clients(I), vbTextCompare) = 0) And _
+                    If ((StrComp(DB(j).Username, Clients(i), vbTextCompare) = 0) And _
                         (StrComp(DB(j).Type, "GAME", vbTextCompare) = 0)) Then
                         
                         If (InStr(1, DB(j).Flags, "B", vbBinaryCompare) = 0) Then
                             With DB(j)
-                                .Username = Clients(I)
+                                .Username = Clients(i)
                                 .Flags = "B" & .Flags
                                 .ModifiedBy = "(console)"
                                 .ModifiedOn = Now
@@ -4610,11 +4610,11 @@ Private Function SaveSettings() As Boolean
                 Next j
             End If
         Else
-            If (GetAccess(Clients(I), "GAME").Username <> _
+            If (GetAccess(Clients(i), "GAME").Username <> _
                 vbNullString) Then
 
                 For j = LBound(DB) To UBound(DB)
-                    If ((StrComp(DB(j).Username, Clients(I), vbTextCompare) = 0) And _
+                    If ((StrComp(DB(j).Username, Clients(i), vbTextCompare) = 0) And _
                         (StrComp(DB(j).Type, "GAME", vbTextCompare) = 0)) Then
                         
                         If ((Len(DB(j).Flags) > 1) Or _
@@ -4622,7 +4622,7 @@ Private Function SaveSettings() As Boolean
                             (Len(DB(j).Groups) > 1)) Then
 
                             With DB(j)
-                                .Username = Clients(I)
+                                .Username = Clients(i)
                                 .Flags = Replace(.Flags, "B", vbNullString)
                                 .ModifiedBy = "(console)"
                                 .ModifiedOn = Now
@@ -4637,7 +4637,7 @@ Private Function SaveSettings() As Boolean
                             ' commit modifications
                             Call WriteDatabase(GetFilePath("users.txt"))
                         Else
-                            Call RemoveItem(Clients(I), "users", _
+                            Call RemoveItem(Clients(i), "users", _
                                 "GAME")
                                 
                             ' log actions
@@ -4656,7 +4656,7 @@ Private Function SaveSettings() As Boolean
                 Next j
             End If
         End If
-    Next I
+    Next i
     
     WINI "QuietTime", Cv(chkQuiet.Value), secMain
     WINI "KickOnYell", Cv(chkKOY.Value), secOther
@@ -4781,7 +4781,7 @@ End Sub
 
 Private Sub SaveColors(Optional sPath As String)
     Dim f As Integer
-    Dim I As Integer
+    Dim i As Integer
     
     f = FreeFile
     
@@ -4789,10 +4789,10 @@ Private Sub SaveColors(Optional sPath As String)
     
     Open sPath For Random As #f Len = 4
     
-    For I = LBound(mColors) To UBound(mColors)
-        Put #f, I + 1, CLng(mColors(I))
+    For i = LBound(mColors) To UBound(mColors)
+        Put #f, i + 1, CLng(mColors(i))
         'Debug.Print "Putting color; " & i & ":" & mColors(i)
-    Next I
+    Next i
     
     Close #f
 End Sub
@@ -5127,6 +5127,7 @@ Private Sub InitBasicConfig()
     End With
     
     s = ReadCfg(MN, "Trigger")
+    s = Mid(s, 2, Len(s) - 2)
     txtTrigger.text = s
     
     s = ReadCfg(MN, "Product")
@@ -5357,8 +5358,8 @@ Private Function YesToTrue(ByVal s As String, ByVal bDefault As Integer) As Inte
     End If
 End Function
 
-Private Function Cv(ByVal I As Integer) As String
-    Select Case I
+Private Function Cv(ByVal i As Integer) As String
+    Select Case i
         Case 0: Cv = "N"
         Case 1: Cv = "Y"
     End Select
