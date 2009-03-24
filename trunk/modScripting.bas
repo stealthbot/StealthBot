@@ -85,14 +85,15 @@ Public Function DestroyMenus()
 End Function
 
 Private Function GetFileExtension(ByVal filename As String)
+	
+	Dim arr() As String
 
-    On Error Resume Next
-
-    ' ...
-    If (InStr(1, filename, ".") <> 0) Then
-        GetFileExtension = _
-            Mid$(filename, InStr(1, filename, ".") + 1)
-    End If
+	arr = Split(filename, ".")
+	If UBound(arr) = 0 Then
+		GetFileExtension = ""
+	Else
+		GetFileExtension = arr(UBound(arr))
+	End If
 
 End Function
 
