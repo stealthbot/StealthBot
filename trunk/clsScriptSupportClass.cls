@@ -1372,7 +1372,7 @@ Public Function FileTimeToDate(ByRef strTime As String) As Date
     ' ...
     With FTime
         .dwHighDateTime = _
-            CLng(Left$(strTime, InStr(1, strTime, " ", vbBinaryCompare)))
+            CLng(Left$(strTime, InStr(1, strTime, " ", vbBinaryCompare) - 1))
 
         .dwLowDateTime = _
             CLng(Mid$(strTime, InStr(1, strTime, " ", vbBinaryCompare) + 1))
