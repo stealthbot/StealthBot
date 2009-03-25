@@ -62,10 +62,6 @@ Public Const ICON_START_W3XP& = 25
 Public Const LVM_FIRST = &H1000&
 Public Const LVM_HITTEST = LVM_FIRST + 18
 
-Public Const TIME_ZONE_ID_UNKNOWN = 0
-Public Const TIME_ZONE_ID_STANDARD = 1
-Public Const TIME_ZONE_ID_DAYLIGHT = 2
-
 Public Const CPTALK As Byte = 0
 Public Const CPEMOTE As Byte = 1
 Public Const CPWHISPER As Byte = 2

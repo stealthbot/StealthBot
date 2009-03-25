@@ -33,9 +33,6 @@ Public Declare Function KillTimer Lib "user32" (ByVal hWnd As Long, ByVal nIDEve
 
 Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 
-Public Declare Function GetTimeZoneInformation Lib "Kernel32.dll" _
-(lpTimeZoneInformation As TIME_ZONE_INFORMATION) As Long
-
 Public Declare Function GetTickCount Lib "kernel32" () As Long
 
 Public Declare Function timeGetSystemTime Lib "winmm.dll" (lpTime As MMTIME, ByVal uSize As Long) As Long

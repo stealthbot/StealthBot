@@ -8,7 +8,7 @@ Option Explicit
 'UDTS
 Public Type udtChanList
     Current         As String
-    Flags           As Long
+    flags           As Long
     Designated      As String
     staticDesignee  As String
 End Type
@@ -38,7 +38,7 @@ End Type
 Public Type udtDatabase
     Username    As String
     Access      As Integer
-    Flags       As String
+    flags       As String
     AddedBy     As String
     AddedOn     As Date
     ModifiedBy  As String
@@ -56,7 +56,7 @@ End Type
 Public Type udtGetAccessResponse
     Username    As String
     Access      As Integer
-    Flags       As String
+    flags       As String
     AddedBy     As String
     AddedOn     As Date
     ModifiedBy  As String
@@ -74,7 +74,7 @@ End Type
 Public Type udtMail
     To      As String * 30
     From    As String * 30
-    message As String * 225
+    Message As String * 225
 End Type
 
 Public Type SYSTEMTIME
@@ -113,16 +113,6 @@ Public Type MMTIME
     songPtrPos  As Long
 End Type
 
-Type TIME_ZONE_INFORMATION
-    Bias                    As Long
-    StandardName(0 To 31)   As Integer
-    StandardDate            As SYSTEMTIME
-    StandardBias            As Long
-    DaylightName(0 To 31)   As Integer
-    DaylightDate            As SYSTEMTIME
-    DaylightBias            As Long
-End Type
-
 Public Type POINTAPI
     X As Long
     Y As Long
@@ -130,7 +120,7 @@ End Type
 
 Public Type LVHITTESTINFO
    pt As POINTAPI
-   Flags As Long
+   flags As Long
    iItem As Long
    iSubItem As Long
 End Type
