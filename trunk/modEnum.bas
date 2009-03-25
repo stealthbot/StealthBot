@@ -66,26 +66,10 @@ Public Type udtGetAccessResponse
     BanMessage  As String
 End Type
 
-Public Type FILETIME
-    dwLowDateTime   As Long
-    dwHighDateTime  As Long
-End Type
-
 Public Type udtMail
     To      As String * 30
     From    As String * 30
     Message As String * 225
-End Type
-
-Public Type SYSTEMTIME
-    wYear             As Integer
-    wMonth            As Integer
-    wDayOfWeek        As Integer
-    wDay              As Integer
-    wHour             As Integer
-    wMinute           As Integer
-    wSecond           As Integer
-    wMilliseconds     As Integer
 End Type
    
 Public Type FLASHWINFO
@@ -94,23 +78,6 @@ Public Type FLASHWINFO
     dwFlags     As Long
     uCount      As Long
     dwTimeout   As Long
-End Type
-
-Public Type SMPTE
-    hour        As Byte
-    min         As Byte
-    sec         As Byte
-    frame       As Byte
-    fps         As Byte
-    dummy       As Byte
-    pad(2)      As Byte
-End Type
-
-Public Type MMTIME
-    wType       As Long
-    units       As Long
-    smpteVal    As SMPTE
-    songPtrPos  As Long
 End Type
 
 Public Type POINTAPI
@@ -189,18 +156,4 @@ Public Enum enuPL_DirectionTypes
     CtoS = 1
     StoC = 2
 End Enum
-
-Public Type MENUITEMINFO
-    cbSize      As Long
-    fMask       As Long
-    fType       As Long
-    fState      As Long
-    wID         As Long
-    hSubMenu    As Long
-    hbmpChecked As Long
-    hbmpUnchecked As Long
-    dwItemData  As Long
-    dwTypeData  As String
-    cch         As Long
-End Type
 

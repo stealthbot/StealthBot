@@ -6,15 +6,34 @@ Attribute VB_Name = "modDateTime"
 Option Explicit
 
 ' ...
-Private Declare Function GetSystemTime Lib "Kernel32.dll" () As SYSTEMTIME
-Private Declare Function FileTimeToSystemTime Lib "Kernel32.dll" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
-Private Declare Function SystemTimeToFileTime Lib "Kernel32.dll" (lpSystemTime As SYSTEMTIME, lpFileTime As FILETIME) As Long
-Private Declare Function FileTimeToLocalFileTime Lib "Kernel32.dll" (lpFileTime As FILETIME, lpLocalFileTime As FILETIME) As Long
-Private Declare Function GetTimeZoneInformation Lib "Kernel32.dll" (lpTimeZoneInformation As TIME_ZONE_INFORMATION) As Long
+Public Declare Function GetSystemTime Lib "Kernel32.dll" () As SYSTEMTIME
+Public Declare Function FileTimeToSystemTime Lib "Kernel32.dll" (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
+Public Declare Function SystemTimeToFileTime Lib "Kernel32.dll" (lpSystemTime As SYSTEMTIME, lpFileTime As FILETIME) As Long
+Public Declare Function FileTimeToLocalFileTime Lib "Kernel32.dll" (lpFileTime As FILETIME, lpLocalFileTime As FILETIME) As Long
+Public Declare Function GetTimeZoneInformation Lib "Kernel32.dll" (lpTimeZoneInformation As TIME_ZONE_INFORMATION) As Long
+Public Declare Function timeGetSystemTime Lib "winmm.dll" (lpTime As MMTIME, ByVal uSize As Long) As Long
+Public Declare Function GetTickCount Lib "Kernel32.dll" () As Long
+Public Declare Sub GetLocalTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
 
 Private Const TIME_ZONE_ID_UNKNOWN = 0
 Private Const TIME_ZONE_ID_STANDARD = 1
 Private Const TIME_ZONE_ID_DAYLIGHT = 2
+
+Public Type FILETIME
+    dwLowDateTime   As Long
+    dwHighDateTime  As Long
+End Type
+
+Public Type SYSTEMTIME
+    wYear             As Integer
+    wMonth            As Integer
+    wDayOfWeek        As Integer
+    wDay              As Integer
+    wHour             As Integer
+    wMinute           As Integer
+    wSecond           As Integer
+    wMilliseconds     As Integer
+End Type
 
 Private Type TIME_ZONE_INFORMATION
     Bias                   As Long
@@ -24,6 +43,23 @@ Private Type TIME_ZONE_INFORMATION
     DaylightName(0 To 31)  As Integer
     DaylightDate           As SYSTEMTIME
     DaylightBias           As Long
+End Type
+
+Public Type SMPTE
+    hour        As Byte
+    min         As Byte
+    sec         As Byte
+    frame       As Byte
+    fps         As Byte
+    dummy       As Byte
+    pad(2)      As Byte
+End Type
+
+Public Type MMTIME
+    wType       As Long
+    units       As Long
+    smpteVal    As SMPTE
+    songPtrPos  As Long
 End Type
 
 ' ...

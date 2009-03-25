@@ -4,14 +4,10 @@ Option Explicit
 'modAPI - project StealthBot
 'February 2004 - Stealth [stealth at stealthbot dot net]
 
-Public Declare Sub GetLocalTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
 
 Public Declare Sub ExitProcess Lib "kernel32" (ByVal uExitCode As Long)
 
 Public Declare Function GetForegroundWindow Lib "user32" () As Long
-
-Public Declare Function FileTimeToSystemTime Lib "kernel32" _
-   (lpFileTime As FILETIME, lpSystemTime As SYSTEMTIME) As Long
    
 Public Declare Function SetSockOpt Lib "ws2_32.dll" Alias "setsockopt" (ByVal lSocketHandle As Long, ByVal lSocketLevel As Long, ByVal lOptName As Long, vOptVal As Any, ByVal lOptLen As Long) As Long
 Public Declare Function ntohl Lib "ws2_32.dll" (ByVal netlong As Long) As Long
@@ -32,10 +28,6 @@ Public Declare Function SetTimer Lib "user32" (ByVal hWnd As Long, ByVal nIDEven
 Public Declare Function KillTimer Lib "user32" (ByVal hWnd As Long, ByVal nIDEvent As Long) As Long
 
 Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
-
-Public Declare Function GetTickCount Lib "kernel32" () As Long
-
-Public Declare Function timeGetSystemTime Lib "winmm.dll" (lpTime As MMTIME, ByVal uSize As Long) As Long
 
 'Public Declare Function z Lib "bnetauth.dll" Alias "Z" (ByVal FileExe As String, ByVal FileStormDll As String, ByVal FileBnetDll As String, ByVal HashText As String, ByRef Version As Long, ByRef Checksum As Long, ByVal EXEInfo As String, ByVal mpqName As String) As Long
 'Public Declare Function c Lib "bnetauth.dll" Alias "C" (ByVal outbuf As String, ByVal serverhash As Long, ByVal prodid As Long, ByVal val1 As Long, ByVal val2 As Long, ByVal Seed As Long) As Long '
@@ -91,8 +83,6 @@ Public Declare Function GetWindowTextLength Lib "user32" Alias "GetWindowTextLen
 Public Declare Function PostMessage Lib "user32" Alias "PostMessageA" (ByVal hWnd As Long, ByVal wMsg As Integer, ByVal wParam As Long, ByVal lParam As Long) As Integer
 Public Declare Function SendMessageByString Lib "user32" Alias "SendMessageA" (ByVal hWnd As Long, ByVal wMsg As Long, ByVal wParam As Long, ByVal lParam As String) As Long
 Public Declare Function SetForegroundWindow Lib "user32" (ByVal hWnd As Long) As Long
-
-Public Declare Function Shell_NotifyIcon Lib "shell32.dll" Alias "Shell_NotifyIconA" (ByVal dwMessage As Long, ByRef lpData As NOTIFYICONDATA) As Long
 
 Public Declare Function FindWindowEx Lib "user32" Alias "FindWindowExA" (ByVal hWnd1 As Long, ByVal hWnd2 As Long, ByVal lpsz1 As String, ByVal lpsz2 As String) As Long
 
@@ -154,8 +144,6 @@ Public Declare Function SetActiveWindow Lib "user32" (ByVal hWnd As Long) As Lon
 Public Declare Function GetComputerName Lib "kernel32" Alias "GetComputerNameA" (ByVal sBuffer As String, lSize As Long) As Long
 Public Declare Function GetUserName Lib "advapi32.dll" Alias "GetUserNameA" (ByVal lpBuffer As String, nSize As Long) As Long
 Public Declare Function GetSystemDefaultLCID Lib "kernel32" () As Long
-Public Declare Sub GetSystemTime Lib "kernel32" (lpSystemTime As SYSTEMTIME)
-Public Declare Function SystemTimeToFileTime Lib "kernel32" (lpSystemTime As SYSTEMTIME, lpFileTime As FILETIME) As Long
 Public Declare Function GetFocus Lib "user" () As Integer
 
 Public Const LOCALE_SABBREVCTRYNAME As Long = &H7
