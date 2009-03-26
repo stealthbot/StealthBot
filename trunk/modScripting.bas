@@ -25,6 +25,8 @@ Private m_sc_control   As Object
 
 Public Function InitMenus()
 
+    On Error Resume Next
+
     Dim tmp  As clsMenuObj ' ...
     Dim Name As String     ' ...
     Dim I    As Integer    ' ...
@@ -43,37 +45,41 @@ Public Function InitMenus()
             frmChat.SControl.Modules(I).CodeObject.Script("Name")
     
         ' ...
-        Set tmp = New clsMenuObj
-    
-        ' ...
-        tmp.Name = Chr$(0) & Name & " ROOT"
-        tmp.hWnd = GetSubMenu(GetMenu(frmChat.hWnd), 5)
-        tmp.Caption = Name
+        If (Err.Number = 0) Then
+            Set tmp = New clsMenuObj
+        
+            ' ...
+            tmp.Name = Chr$(0) & Name & " ROOT"
+            tmp.hWnd = GetSubMenu(GetMenu(frmChat.hWnd), 5)
+            tmp.Caption = Name
+                
+            ' ...
+            DynamicMenus.Add tmp, "mnu" & Name
+                
+            ' ...
+            Set tmp = New clsMenuObj
+        
+            ' ...
+            tmp.Name = Chr$(0) & Name & " ENABLED"
+            tmp.Parent = DynamicMenus("mnu" & Name)
+            tmp.Caption = "Enabled"
             
-        ' ...
-        DynamicMenus.Add tmp, "mnu" & Name
+            ' ...
+            DynamicMenus.Add tmp
             
-        ' ...
-        Set tmp = New clsMenuObj
-    
-        ' ...
-        tmp.Name = Chr$(0) & Name & " ENABLED"
-        tmp.Parent = DynamicMenus("mnu" & Name)
-        tmp.Caption = "Enabled"
+            ' ...
+            Set tmp = New clsMenuObj
         
-        ' ...
-        DynamicMenus.Add tmp
+            ' ...
+            tmp.Name = Chr$(0) & Name & " DISABLED"
+            tmp.Parent = DynamicMenus("mnu" & Name)
+            tmp.Caption = "View Script"
+            
+            ' ...
+            DynamicMenus.Add tmp
+        End If
         
-        ' ...
-        Set tmp = New clsMenuObj
-    
-        ' ...
-        tmp.Name = Chr$(0) & Name & " DISABLED"
-        tmp.Parent = DynamicMenus("mnu" & Name)
-        tmp.Caption = "View Script"
-        
-        ' ...
-        DynamicMenus.Add tmp
+        Err.Clear
     Next I
 
 End Function
