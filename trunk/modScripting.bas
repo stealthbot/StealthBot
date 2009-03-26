@@ -252,6 +252,13 @@ Public Sub LoadScripts()
         Next i
     End If
     
+	'// 03/25/2009 create a reference to each script inside each script module. This will let
+	'//            scripters refer to another script using a variable of the same name.
+	For i = 1 To m_sc_control.Modules.Count
+		CreateScriptObjectReferences m_sc_control.Modules(i)
+	Next i
+	
+	
     ' ...
     Set wrkScripts = New Collection
     
@@ -419,6 +426,45 @@ ERROR_HANDLER:
     Exit Function
 
 End Function
+
+'// 03/25/2009 create a reference to each script inside each script module. This will let
+'//            scripters refer to another script using a variable of the same name.
+Private Sub CreateScriptObjectReferences(ByRef ScriptModule As Module)
+
+    On Error Resume Next
+	
+    Dim i   As Integer
+    Dim str As String 
+	Dim sCode As String
+
+	sCode = ""
+	
+    For i = 1 To m_sc_control.Modules.Count
+        str = m_sc_control.Modules(i).CodeObject.GetSettingsEntry("Public")
+                
+        If (StrComp(str, "False", vbTextCompare) <> 0) Then
+			With m_sc_control.Modules(i).CodeObject
+				If .Name <> "" Then
+					sCode = sCode & "Dim " & .Script("Name") & vbNewline
+					sCode = sCode & "Set " & .Script("Name") & " = Scripts(""" & .Script("Name") & """)" & vbNewline
+				End If
+			End With
+        End If
+    Next i
+
+	ScriptModule.AddCode sCode
+
+    Exit Sub
+    
+ERROR_HANDLER:
+
+    ' ...
+    frmChat.AddChat vbRed, _
+        "Error (" & Err.Number & "): " & Err.description & " in CreateScriptObjectReferences()."
+
+    Exit Sub	
+	
+End Sub
 
 Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module, ByVal ScriptPath As String)
 
