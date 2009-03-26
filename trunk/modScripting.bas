@@ -27,20 +27,20 @@ Public Function InitMenus()
 
     Dim tmp  As clsMenuObj ' ...
     Dim Name As String     ' ...
-    Dim i    As Integer    ' ...
+    Dim I    As Integer    ' ...
 
     ' ...
     DestroyMenus
     
     ' ...
-    For i = 1 To frmChat.SControl.Modules.Count
-        If (i = 1) Then
+    For I = 1 To frmChat.SControl.Modules.Count
+        If (I = 1) Then
             frmChat.mnuScriptingDash(0).Visible = True
         End If
     
         ' ...
         Name = _
-            frmChat.SControl.Modules(i).CodeObject.Script("Name")
+            frmChat.SControl.Modules(I).CodeObject.Script("Name")
     
         ' ...
         Set tmp = New clsMenuObj
@@ -74,33 +74,32 @@ Public Function InitMenus()
         
         ' ...
         DynamicMenus.Add tmp
-    Next i
+    Next I
 
 End Function
 
 Public Function DestroyMenus()
 
-    Set m_srootmenu = New clsMenuObj
 
 End Function
 
 Private Function GetFileExtension(ByVal filename As String)
-	
-	Dim arr() As String
+        
+        Dim arr() As String
 
-	arr = Split(filename, ".")
-	If UBound(arr) = 0 Then
-		GetFileExtension = ""
-	Else
-		GetFileExtension = arr(UBound(arr))
-	End If
+        arr = Split(filename, ".")
+        If UBound(arr) = 0 Then
+                GetFileExtension = ""
+        Else
+                GetFileExtension = arr(UBound(arr))
+        End If
 
 End Function
 
 Private Function IsValidFileExtension(ByVal ext As String) As Boolean
 
     Dim exts() As String  ' ...
-    Dim i      As Integer ' ...
+    Dim I      As Integer ' ...
 
     ' ...
     ReDim exts(0 To 2)
@@ -111,13 +110,13 @@ Private Function IsValidFileExtension(ByVal ext As String) As Boolean
     exts(2) = "vbs"
     
     ' ...
-    For i = LBound(exts) To UBound(exts)
-        If (StrComp(ext, exts(i), vbTextCompare) = 0) Then
+    For I = LBound(exts) To UBound(exts)
+        If (StrComp(ext, exts(I), vbTextCompare) = 0) Then
             IsValidFileExtension = True
             
             Exit Function
         End If
-    Next i
+    Next I
     
     IsValidFileExtension = False
 
@@ -185,12 +184,11 @@ Public Sub LoadScripts()
     On Error GoTo ERROR_HANDLER
 
     Dim CurrentModule As Module
-    Dim wrkScripts    As New Collection
-    
+
     Dim strPath  As String  ' ...
     Dim filename As String  ' ...
     Dim fileExt  As String  ' ...
-    Dim i        As Integer ' ...
+    Dim I        As Integer ' ...
     Dim j        As Integer ' ...
     Dim str      As String  ' ...
     Dim tmp      As String  ' ...
@@ -210,37 +208,30 @@ Public Sub LoadScripts()
         ' ...
         Do While (filename <> vbNullString)
             ' ...
-            wrkScripts.Add filename
-            
-            ' ...
-            filename = Dir()
-        Loop
-        
-        For i = 1 To wrkScripts.Count
-            ' ...
-            If (IsValidFileExtension(GetFileExtension(wrkScripts(i)))) Then
+            If (IsValidFileExtension(GetFileExtension(filename))) Then
                 ' ...
-                Set CurrentModule = m_sc_control.Modules.Add(m_sc_control.Modules.Count + 1)
+                Set CurrentModule = _
+                    m_sc_control.Modules.Add(m_sc_control.Modules.Count + 1)
                 
                 ' ...
-                FileToModule CurrentModule, strPath & wrkScripts(i)
+                FileToModule CurrentModule, strPath & filename
 
                 ' ...
                 If (IsScriptNameValid(CurrentModule) = False) Then
-                    CurrentModule.CodeObject.Script("Name") = CleanFileName(wrkScripts(i))
+                    CurrentModule.CodeObject.Script("Name") = CleanFileName(filename)
                 
                     ' ...
                     If (IsScriptNameValid(CurrentModule) = False) Then
-                        frmChat.AddChat vbRed, "Scripting error: " & wrkScripts(i) & " has been " & _
-                            "disabled due to a naming conflict."
+                        frmChat.AddChat vbRed, "Scripting error: " & filename & " has been " & _
+                            "disabled due to a naming issue."
                             
                         str = strPath & "\disabled\"
                         
                         MkDir str
                             
-                        Kill str & wrkScripts(i)
+                        Kill str & filename
     
-                        Name strPath & wrkScripts(i) As str & wrkScripts(i)
+                        Name strPath & filename As str & filename
     
                         InitScriptControl m_sc_control
                         LoadScripts
@@ -249,7 +240,9 @@ Public Sub LoadScripts()
                     End If
                 End If
             End If
-        Next i
+            
+            filename = Dir()
+        Loop
     End If
     
 	'// 03/25/2009 create a reference to each script inside each script module. This will let
@@ -561,7 +554,7 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
     Dim str          As String  ' ...
     Dim tmp          As String  ' ...
     Dim nameDisallow As String
-    Dim i            As Integer
+    Dim I            As Integer
     
     ' ...
     str = _
@@ -611,7 +604,7 @@ Public Function UpdateScripts()
     On Error Resume Next
     
     Dim wrkScripts As New Collection ' ...
-    Dim i          As Integer ' ...
+    Dim I          As Integer ' ...
     Dim str        As String  ' ...
     Dim tmp        As String  ' ...
     
@@ -624,13 +617,13 @@ Public Function UpdateScripts()
         frmChat.AddChat RTBColors.InformationText, "Checking for script updates..."
         
         ' ...
-        For i = 1 To m_sc_control.Modules.Count
+        For I = 1 To m_sc_control.Modules.Count
             str = _
-                m_sc_control.Modules(i).CodeObject.Script("UpdateLocation")
+                m_sc_control.Modules(I).CodeObject.Script("UpdateLocation")
                 
             If (str <> vbNullString) Then
                 ' ...
-                filePath = App.Path & "\scripts\" & m_sc_control.Modules(i).Name
+                filePath = App.Path & "\scripts\" & m_sc_control.Modules(I).Name
             
                 ' ...
                 URLDownloadToFile 0, str, filePath & ".tmp", 0, 0
@@ -638,7 +631,7 @@ Public Function UpdateScripts()
                 ' ...
                 If (CRC32.GetFileCRC32(filePath) <> CRC32.GetFileCRC32(filePath & ".tmp")) Then
                     ' ...
-                    wrkScripts.Add m_sc_control.Modules(i)
+                    wrkScripts.Add m_sc_control.Modules(I)
                 
                     ' ...
                     Kill filePath
@@ -650,15 +643,15 @@ Public Function UpdateScripts()
                 ' ...
                 Kill filePath & ".tmp"
             End If
-        Next i
+        Next I
 
         If (wrkScripts.Count) Then
             str = "Successfully updated the following scripts: "
             
-            For i = 1 To wrkScripts.Count
+            For I = 1 To wrkScripts.Count
                 str = str & _
-                    wrkScripts(i).CodeObject.Script("Name") & ", "
-            Next i
+                    wrkScripts(I).CodeObject.Script("Name") & ", "
+            Next I
             
             frmChat.AddChat vbGreen, Left$(str, Len(str) - 2)
             
@@ -675,19 +668,27 @@ End Function
 
 Public Sub InitScripts()
     
-    Dim i   As Integer ' ...
+    Static reloading As Boolean ' ...
+    
+    Dim I   As Integer ' ...
     Dim str As String  ' ...
     
-    For i = 1 To m_sc_control.Modules.Count
-        If (i > 1) Then
+    If (reloading = False) Then
+        RunInAll "Event_FirstRun"
+        
+        reloading = True
+    End If
+    
+    For I = 1 To m_sc_control.Modules.Count
+        If (I > 1) Then
             str = _
-                m_sc_control.Modules(i).CodeObject.GetSettingsEntry("Enabled")
+                m_sc_control.Modules(I).CodeObject.GetSettingsEntry("Enabled")
         End If
     
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
-            InitScript m_sc_control.Modules(i)
+            InitScript m_sc_control.Modules(I)
         End If
-    Next i
+    Next I
 
 End Sub
 
@@ -695,7 +696,7 @@ Public Sub InitScript(ByRef SCModule As Module)
 
     On Error GoTo ERROR_HANDLER
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
 
     ' ...
     SCModule.Run "Event_Load"
@@ -706,12 +707,12 @@ Public Sub InitScript(ByRef SCModule As Module)
         SCModule.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.flags
 
         If (g_Channel.Users.Count > 0) Then
-            For i = 1 To g_Channel.Users.Count
-                With g_Channel.Users(i)
+            For I = 1 To g_Channel.Users.Count
+                With g_Channel.Users(I)
                      SCModule.Run "Event_UserInChannel", .DisplayName, .flags, .Stats.ToString, .Ping, _
                         .game, False
                 End With
-             Next i
+             Next I
          End If
     End If
     
@@ -745,7 +746,7 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
     On Error GoTo ERROR_HANDLER
 
     Dim SC    As ScriptControl
-    Dim i     As Integer ' ...
+    Dim I     As Integer ' ...
     Dim arr() As Variant ' ...
     Dim str   As String  ' ...
     
@@ -756,14 +757,14 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
     arr() = Parameters()
 
     ' ...
-    For i = 1 To SC.Modules.Count
-        If (i > 1) Then
+    For I = 1 To SC.Modules.Count
+        If (I > 1) Then
             str = _
-                SC.Modules(i).CodeObject.GetSettingsEntry("Enabled")
+                SC.Modules(I).CodeObject.GetSettingsEntry("Enabled")
         End If
 
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
-            CallByNameEx SC.Modules(i), "Run", VbMethod, arr()
+            CallByNameEx SC.Modules(I), "Run", VbMethod, arr()
         End If
     Next
 
@@ -800,7 +801,7 @@ Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCa
     Dim oTLI    As TLI.TLIApplication
     Dim ProcID  As Long
     Dim numArgs As Long
-    Dim i       As Long
+    Dim I       As Long
     Dim v()     As Variant
     
     Set oTLI = New TLIApplication
@@ -816,9 +817,9 @@ Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCa
         
         ReDim v(numArgs)
         
-        For i = 0 To numArgs
-            v(i) = vArgsArray(numArgs - i)
-        Next i
+        For I = 0 To numArgs
+            v(I) = vArgsArray(numArgs - I)
+        Next I
         
         CallByNameEx = oTLI.InvokeHookArray(obj, ProcID, CallType, v)
     End If
@@ -850,14 +851,14 @@ End Function
 
 Public Function ObjCount(Optional ObjType As String) As Integer
     
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
 
     If (ObjType <> vbNullString) Then
-        For i = 0 To m_objCount - 1
-            If (StrComp(ObjType, m_arrObjs(i).ObjType, vbTextCompare) = 0) Then
+        For I = 0 To m_objCount - 1
+            If (StrComp(ObjType, m_arrObjs(I).ObjType, vbTextCompare) = 0) Then
                 ObjCount = (ObjCount + 1)
             End If
-        Next i
+        Next I
     Else
         ObjCount = m_objCount
     End If
@@ -872,19 +873,19 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
     
     ' redefine array size & check for duplicate controls
     If (m_objCount) Then
-        Dim i As Integer ' loop counter variable
+        Dim I As Integer ' loop counter variable
 
-        For i = 0 To m_objCount - 1
-            If (m_arrObjs(i).SCModule.Name = SCModule.Name) Then
-                If (StrComp(m_arrObjs(i).ObjType, ObjType, vbTextCompare) = 0) Then
-                    If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
-                        Set CreateObj = m_arrObjs(i).obj
+        For I = 0 To m_objCount - 1
+            If (m_arrObjs(I).SCModule.Name = SCModule.Name) Then
+                If (StrComp(m_arrObjs(I).ObjType, ObjType, vbTextCompare) = 0) Then
+                    If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
+                        Set CreateObj = m_arrObjs(I).obj
                     
                         Exit Function
                     End If
                 End If
             End If
-        Next i
+        Next I
         
         ReDim Preserve m_arrObjs(0 To m_objCount)
     Else
@@ -1000,18 +1001,18 @@ Public Sub DestroyObjs(Optional ByVal SCModule As Object = Nothing)
 
     On Error GoTo ERROR_HANDLER
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
-    For i = m_objCount - 1 To 0 Step -1
+    For I = m_objCount - 1 To 0 Step -1
         If (SCModule Is Nothing) Then
-            DestroyObj m_arrObjs(i).SCModule, m_arrObjs(i).ObjName
+            DestroyObj m_arrObjs(I).SCModule, m_arrObjs(I).ObjName
         Else
-            If (SCModule.Name = m_arrObjs(i).SCModule.Name) Then
-                DestroyObj m_arrObjs(i).SCModule, m_arrObjs(i).ObjName
+            If (SCModule.Name = m_arrObjs(I).SCModule.Name) Then
+                DestroyObj m_arrObjs(I).SCModule, m_arrObjs(I).ObjName
             End If
         End If
-    Next i
+    Next I
     
     Exit Sub
     
@@ -1028,7 +1029,7 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
 
     On Error GoTo ERROR_HANDLER
 
-    Dim i     As Integer ' ...
+    Dim I     As Integer ' ...
     Dim Index As Integer ' ...
     
     ' ...
@@ -1040,15 +1041,15 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
     Index = m_objCount
     
     ' ...
-    For i = 0 To m_objCount - 1
-        If (m_arrObjs(i).SCModule.Name = SCModule.Name) Then
-            If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
-                Index = i
+    For I = 0 To m_objCount - 1
+        If (m_arrObjs(I).SCModule.Name = SCModule.Name) Then
+            If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
+                Index = I
             
                 Exit For
             End If
         End If
-    Next i
+    Next I
     
     ' ...
     If (Index >= m_objCount) Then
@@ -1098,9 +1099,9 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
     
     ' ...
     If (Index < m_objCount - 1) Then
-        For i = Index To ((m_objCount - 1) - 1)
-            m_arrObjs(i) = m_arrObjs(i + 1)
-        Next i
+        For I = Index To ((m_objCount - 1) - 1)
+            m_arrObjs(I) = m_arrObjs(I + 1)
+        Next I
     End If
     
     ' ...
@@ -1130,61 +1131,61 @@ End Sub
 
 Public Function GetObjByName(ByRef SCModule As Module, ByVal ObjName As String) As Object
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
-    For i = 0 To m_objCount - 1
-        If (m_arrObjs(i).SCModule.Name = SCModule.Name) Then
-            If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
-                Set GetObjByName = m_arrObjs(i).obj
+    For I = 0 To m_objCount - 1
+        If (m_arrObjs(I).SCModule.Name = SCModule.Name) Then
+            If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
+                Set GetObjByName = m_arrObjs(I).obj
 
                 Exit Function
             End If
         End If
-    Next i
+    Next I
 
 End Function
 
 Public Function GetScriptObjByMenuID(ByVal MenuID As Long) As scObj
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     Dim j As Integer ' ...
 
-    For i = 0 To ObjCount() - 1
-        If (StrComp("Menu", Objects(i).ObjType, vbTextCompare) = 0) Then
-            If (m_arrObjs(i).obj.ID = MenuID) Then
-                GetScriptObjByMenuID = m_arrObjs(i)
+    For I = 0 To ObjCount() - 1
+        If (StrComp("Menu", Objects(I).ObjType, vbTextCompare) = 0) Then
+            If (m_arrObjs(I).obj.ID = MenuID) Then
+                GetScriptObjByMenuID = m_arrObjs(I)
                 
                 Exit Function
             End If
-        ElseIf (StrComp("Form", Objects(i).ObjType, vbTextCompare) = 0) Then
-            For j = 0 To Objects(i).obj.ObjCount("Menu") - 1
-                If (StrComp("Menu", Objects(i).obj.Objects(j).ObjectType, vbTextCompare) = 0) Then
-                    If (Objects(i).obj.Objects(j).ID = MenuID) Then
-                        GetScriptObjByMenuID = Objects(i)
+        ElseIf (StrComp("Form", Objects(I).ObjType, vbTextCompare) = 0) Then
+            For j = 0 To Objects(I).obj.ObjCount("Menu") - 1
+                If (StrComp("Menu", Objects(I).obj.Objects(j).ObjectType, vbTextCompare) = 0) Then
+                    If (Objects(I).obj.Objects(j).ID = MenuID) Then
+                        GetScriptObjByMenuID = Objects(I)
             
                         Exit Function
                     End If
                 End If
             Next j
         End If
-    Next i
+    Next I
 
 End Function
 
 Public Function GetScriptObjByIndex(ByVal ObjType As String, ByVal Index As Integer) As scObj
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
 
-    For i = 0 To ObjCount() - 1
-        If (StrComp(ObjType, Objects(i).ObjType, vbTextCompare) = 0) Then
-            If (m_arrObjs(i).obj.Index = Index) Then
-                GetScriptObjByIndex = m_arrObjs(i)
+    For I = 0 To ObjCount() - 1
+        If (StrComp(ObjType, Objects(I).ObjType, vbTextCompare) = 0) Then
+            If (m_arrObjs(I).obj.Index = Index) Then
+                GetScriptObjByIndex = m_arrObjs(I)
                 
                 Exit For
             End If
         End If
-    Next i
+    Next I
 
 End Function
 
