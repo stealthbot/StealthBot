@@ -212,31 +212,30 @@ Public Sub LoadScripts()
                 ' ...
                 Set CurrentModule = _
                     m_sc_control.Modules.Add(m_sc_control.Modules.Count + 1)
-                
-                ' ...
-                FileToModule CurrentModule, strPath & filename
 
                 ' ...
-                If (IsScriptNameValid(CurrentModule) = False) Then
-                    CurrentModule.CodeObject.Script("Name") = CleanFileName(filename)
-                
-                    ' ...
+                If (FileToModule(CurrentModule, strPath & filename)) Then
                     If (IsScriptNameValid(CurrentModule) = False) Then
-                        frmChat.AddChat vbRed, "Scripting error: " & filename & " has been " & _
-                            "disabled due to a naming issue."
+                        CurrentModule.CodeObject.Script("Name") = CleanFileName(filename)
+                    
+                        ' ...
+                        If (IsScriptNameValid(CurrentModule) = False) Then
+                            frmChat.AddChat vbRed, "Scripting error: " & filename & " has been " & _
+                                "disabled due to a naming issue."
+                                
+                            str = strPath & "\disabled\"
                             
-                        str = strPath & "\disabled\"
-                        
-                        MkDir str
+                            MkDir str
+                                
+                            Kill str & filename
+        
+                            Name strPath & filename As str & filename
+        
+                            InitScriptControl m_sc_control
+                            LoadScripts
                             
-                        Kill str & filename
-    
-                        Name strPath & filename As str & filename
-    
-                        InitScriptControl m_sc_control
-                        LoadScripts
-                        
-                        Exit Sub
+                            Exit Sub
+                        End If
                     End If
                 End If
             End If
@@ -328,7 +327,7 @@ ERROR_HANDLER:
 
 End Sub
 
-Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As String, Optional ByVal defaults As Boolean = True)
+Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As String, Optional ByVal defaults As Boolean = True) As Boolean
 
     On Error GoTo ERROR_HANDLER
 
@@ -408,15 +407,13 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
         CreateDefautModuleProcs ScriptModule, filePath
     End If
     
-    ' ...
+    FileToModule = True
+    
     Exit Function
     
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, _
-        "Error (#" & Err.Number & "): " & Err.description & " in FileToModule()."
-        
-    Exit Function
+    FileToModule = False
 
 End Function
 
