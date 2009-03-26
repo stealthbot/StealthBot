@@ -337,10 +337,10 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
     Dim blnCheckOperands As Boolean
     
     ' ...
-    f = FreeFile
+    blnCheckOperands = True
     
     ' ...
-    blnCheckOperands = True
+    f = FreeFile
 
     ' ...
     Open filePath For Input As #f

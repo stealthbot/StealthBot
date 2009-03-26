@@ -6491,12 +6491,10 @@ Private Function OnScripts(ByVal Username As String, ByRef dbAccess As udtGetAcc
     Dim I      As Integer ' ...
     Dim str    As String  ' ...
     Dim Name   As String  ' ...
+    Dim Count  As Integer ' ...
     
     ' ...
     If (frmChat.SControl.Modules.Count) Then
-        tmpbuf = _
-            "Loaded Scripts (" & frmChat.SControl.Modules.Count & "): "
-                 
         ' ...
         For I = 1 To frmChat.SControl.Modules.Count
             If (I = 1) Then
@@ -6508,25 +6506,38 @@ Private Function OnScripts(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 Else
                     Name = "PluginSystem, "
                 End If
+                
+                ' ...
+                tmpbuf = tmpbuf & Name
+                
+                ' ...
+                Count = (Count + 1)
             Else
                 Name = _
                     frmChat.SControl.Modules(I).CodeObject.Script("Name")
-            
-                str = _
-                    frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled")
-            
-                If (StrComp(str, "False", vbTextCompare) = 0) Then
-                    Name = "(" & Name & "), "
-                Else
-                    Name = Name & ", "
+
+                If (Err.Number = 0) Then
+                    str = _
+                        frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled")
+                
+                    If (StrComp(str, "False", vbTextCompare) = 0) Then
+                        Name = "(" & Name & "), "
+                    Else
+                        Name = Name & ", "
+                    End If
+                    
+                    ' ...
+                    tmpbuf = tmpbuf & Name
+                    
+                    ' ...
+                    Count = (Count + 1)
                 End If
             End If
-            
-            tmpbuf = tmpbuf & Name
         Next I
         
         ' ...
-        tmpbuf = Mid$(tmpbuf, 1, Len(tmpbuf) - 2)
+        tmpbuf = _
+            "Loaded Scripts (" & Count & "): " & Mid$(tmpbuf, 1, Len(tmpbuf) - 2)
     Else
         tmpbuf = "There are no scripts currently loaded."
     End If
