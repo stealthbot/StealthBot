@@ -13,6 +13,7 @@ Public Type scObj
     ObjType  As String
     obj      As Object
     CallCode As String
+    Index    As Integer
 End Type
 
 Public VetoNextMessage As Boolean
@@ -60,9 +61,15 @@ Public Function InitMenus()
             Set tmp = New clsMenuObj
         
             ' ...
-            tmp.Name = Chr$(0) & Name & " ENABLED"
+            tmp.Name = Chr$(0) & Name & " ENABLE|DISABLE"
             tmp.Parent = DynamicMenus("mnu" & Name)
             tmp.Caption = "Enabled"
+            
+            If (StrComp(frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled"), _
+                    "False", vbTextCompare) <> 0) Then
+                    
+                tmp.Checked = True
+            End If
             
             ' ...
             DynamicMenus.Add tmp
@@ -71,7 +78,7 @@ Public Function InitMenus()
             Set tmp = New clsMenuObj
         
             ' ...
-            tmp.Name = Chr$(0) & Name & " DISABLED"
+            tmp.Name = Chr$(0) & Name & " VIEW_SCRIPT"
             tmp.Parent = DynamicMenus("mnu" & Name)
             tmp.Caption = "View Script"
             
@@ -86,6 +93,19 @@ End Function
 
 Public Function DestroyMenus()
 
+    Dim I As Integer ' ...
+    
+    For I = DynamicMenus.Count To 1 Step -1
+        
+        If (GetScriptObjByMenuID(DynamicMenus(I).ID).ObjName <> vbNullString) Then
+            DynamicMenus(I).Class_Terminate
+        
+            Set DynamicMenus(I) = Nothing
+            
+            DynamicMenus.Remove I
+        End If
+        
+    Next I
 
 End Function
 
@@ -376,13 +396,11 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
                                     
                                     ' ...
                                     If (Left$(tmp, 1) = "\") Then
-                                        filePath = App.Path & "\scripts\" & tmp
-                                    Else
-                                        filePath = tmp
+                                       tmp = App.Path & "\scripts\" & tmp
                                     End If
-            
+
                                     ' ...
-                                    FileToModule ScriptModule, filePath, False
+                                    FileToModule ScriptModule, tmp, False
                                 End If
                             End If
                         End If
@@ -845,7 +863,7 @@ Public Function ObjCount(Optional ObjType As String) As Integer
 
 End Function
 
-Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByVal ObjName As String, Optional CallCode As String) As Object
+Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByVal ObjName As String, Optional CallCode As String, Optional ByVal Clone As Boolean) As Object
 
     On Error Resume Next
 
@@ -1138,16 +1156,16 @@ Public Function GetScriptObjByMenuID(ByVal MenuID As Long) As scObj
                 
                 Exit Function
             End If
-        ElseIf (StrComp("Form", Objects(I).ObjType, vbTextCompare) = 0) Then
-            For j = 0 To Objects(I).obj.ObjCount("Menu") - 1
-                If (StrComp("Menu", Objects(I).obj.Objects(j).ObjectType, vbTextCompare) = 0) Then
-                    If (Objects(I).obj.Objects(j).ID = MenuID) Then
-                        GetScriptObjByMenuID = Objects(I)
-            
-                        Exit Function
-                    End If
-                End If
-            Next j
+        'ElseIf (StrComp("Form", Objects(I).ObjType, vbTextCompare) = 0) Then
+        '    For j = 0 To Objects(I).obj.ObjCount("Menu") - 1
+        '        If (StrComp("Menu", Objects(I).obj.Objects(j).ObjectType, vbTextCompare) = 0) Then
+        '            If (Objects(I).obj.Objects(j).ID = MenuID) Then
+        '                GetScriptObjByMenuID = Objects(I)
+        '
+        '                Exit Function
+        '            End If
+        '        End If
+        '    Next j
         End If
     Next I
 
@@ -1164,6 +1182,27 @@ Public Function GetScriptObjByIndex(ByVal ObjType As String, ByVal Index As Inte
                 
                 Exit For
             End If
+        End If
+    Next I
+
+End Function
+
+Public Function Scripts() As Object
+
+    On Error Resume Next
+
+    Dim I   As Integer ' ...
+    Dim str As String  ' ...
+
+    Set Scripts = New Collection
+
+    For I = 1 To frmChat.SControl.Modules.Count
+        str = _
+            frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
+                
+        If (StrComp(str, "False", vbTextCompare) <> 0) Then
+            Scripts.Add frmChat.SControl.Modules(I).CodeObject, _
+                frmChat.SControl.Modules(I).CodeObject.Script("Name")
         End If
     Next I
 

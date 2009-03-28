@@ -6571,6 +6571,8 @@ Private Function OnEnable(ByVal Username As String, ByRef dbAccess As udtGetAcce
                     frmChat.SControl.Modules(I).CodeObject.WriteSettingsEntry _
                         "Enabled", "True"
                         
+                    'InitMenus
+                        
                     InitScript frmChat.SControl.Modules(I)
                         
                     cmdRet(0) = Name & " has been enabled."
@@ -6607,6 +6609,8 @@ Private Function OnDisable(ByVal Username As String, ByRef dbAccess As udtGetAcc
                     "Enabled", "False"
                     
                 DestroyObjs frmChat.SControl.Modules(I)
+                
+                'InitMenus
                 
                 cmdRet(0) = Name & " has been disabled."
                     

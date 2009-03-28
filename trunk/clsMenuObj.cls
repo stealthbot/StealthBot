@@ -34,6 +34,13 @@ Private Sub Class_Initialize()
 
 End Sub
 
+Public Sub Class_Terminate()
+
+    ' ...
+    DeleteMenu
+
+End Sub
+
 Public Property Get Name() As String
 
     Name = m_name

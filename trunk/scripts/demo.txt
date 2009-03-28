@@ -9,7 +9,6 @@ Sub Data()
    Script("Major") = 1           ' script major version
    Script("Minor") = 0           ' script minor version
    Script("Revision") = 1        ' script version revision
-   Script("UpdateLocation") = "" ' script download location
 
 End Sub
 
@@ -77,6 +76,12 @@ Sub Event_PacketSent(Protocol, ID, Length, Data)
          AddChat vbYellow, "SENT BNCS FRIENDS LIST REQUEST"
       End If
    End If
+
+End Sub
+
+Sub submnu_Click()
+
+   AddChat vbBlue, "submnu_Click()"
 
 End Sub
 
