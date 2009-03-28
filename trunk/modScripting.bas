@@ -273,13 +273,6 @@ Public Sub LoadScripts()
         End If
     End If
     
-    ' COMMENTED OUT - DUPLICATES THE CODE BELOW
-    '// 03/25/2009 create a reference to each script inside each script module. This will let
-    '//            scripters refer to another script using a variable of the same name.
-    'For I = 1 To m_sc_control.Modules.Count
-    '        CreateScriptObjectReferences m_sc_control.Modules(I)
-    'Next I
-    
     ' ...
     'Set wrkScripts = New Collection
     
@@ -341,6 +334,11 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
     Dim strContent       As String  ' ...
     Dim f                As Integer ' ...
     Dim blnCheckOperands As Boolean
+	Dim lngStartTime	 As Long
+	Dim lngFinishTime	 As Long
+    
+	
+	lngStartTime = GetTickCount()
     
     ' ...
     blnCheckOperands = True
@@ -408,9 +406,15 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
     ' ...
     ScriptModule.AddCode strContent
     
+	lngFinishTime = GetTickCount()
+	
+	
+	
+	
     ' ...
     If (defaults) Then
-        CreateDefautModuleProcs ScriptModule, filePath
+		'// 03/27/2009 52 - Added the number of milliseconds it took to the parameter list
+        CreateDefautModuleProcs ScriptModule, filePath, (lngFinishTime - lngStartTime)
     End If
     
     FileToModule = True
@@ -423,47 +427,7 @@ ERROR_HANDLER:
 
 End Function
 
-' COMMENTED OUT - SEE SET GLOBAL SCRIPT NAMES SECTION OF LOADSCRIPTS
-'// 03/25/2009 create a reference to each script inside each script module. This will let
-'//            scripters refer to another script using a variable of the same name.
-'Private Sub CreateScriptObjectReferences(ByRef ScriptModule As Module)'
-'
-'    On Error Resume Next
-'
-'    Dim I   As Integer
-'    Dim str As String
-'        Dim sCode As String
-'
-'        sCode = ""
-'
-'    For I = 1 To m_sc_control.Modules.Count
-'        str = m_sc_control.Modules(I).CodeObject.GetSettingsEntry("Public")
-'
-'        If (StrComp(str, "False", vbTextCompare) <> 0) Then
-'                        With m_sc_control.Modules(I).CodeObject
-'                                If .Name <> "" Then
-'                                        sCode = sCode & "Dim " & .Script("Name") & vbNewLine
-'                                        sCode = sCode & "Set " & .Script("Name") & " = Scripts(""" & .Script("Name") & """)" & vbNewLine
-'                                End If
-'                        End With
-'        End If
-'    Next I
-'
-'        ScriptModule.AddCode sCode
-'
-'    Exit Sub
-'
-'ERROR_HANDLER:
-'
-'    ' ...
-'    frmChat.AddChat vbRed, _
-'        "Error (" & Err.Number & "): " & Err.description & " in CreateScriptObjectReferences()."'
-'
-'    Exit Sub
-'
-'End Sub
-
-Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module, ByVal ScriptPath As String)
+Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module, ByVal ScriptPath As String, ByVal LoadTime As Long)
 
     On Error GoTo ERROR_HANDLER
 
@@ -480,6 +444,10 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module, ByVal ScriptPa
     ScriptModule.ExecuteStatement "Script(""Path"") = " & Chr$(34) & _
         ScriptPath & Chr$(34)
 
+	'// 03/27/2009 52 - Added default Script property for the load time
+    ScriptModule.ExecuteStatement "Script(""LoadTime"") = " & Chr$(34) & _
+        LoadTime & Chr$(34)
+		
     ' ...
     ScriptModule.ExecuteStatement "Set DataBuffer = DataBufferEx()"
 

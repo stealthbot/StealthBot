@@ -136,11 +136,12 @@ Public vbGrey, vbBrown, vbOrange, vbPink, vbLightBlue
 '// Hold RGB values that make up the color scheme
 Public psColor1, psColor2
 
-Set psSC = GetScriptControl()
+Set psSC = GetScriptControl() '// 03/27/2009 52 - Changed all the code to use this instead of using GetSriptControl() over and over
 Set psFSO = CreateObject("Scripting.FileSystemObject")
 Set psWshShell = CreateObject("WScript.Shell")
 Set psAppShell = CreateObject("Shell.Application")
 Set psLoadError = CreateObject("Scripting.Dictionary")     '// holds load error status (errored or not)
+Set psLoadTimes = CreateObject("Scripting.Dictionary")     '// holds load times for each plugin
 Set psCodeLoaded = CreateObject("Scripting.Dictionary")    '// holds status of plugin code (loaded or not)
 Set psPlugins = CreateObject("Scripting.Dictionary")       '// holds plugin file paths
 Set psVersions = CreateObject("Scripting.Dictionary")      '// holds plugin versions
@@ -227,6 +228,8 @@ End Sub
  
 Sub psLoadPlugin(Prefix, Version, Path, Content, ByVal Lines)
 
+	startGTC = GetGTC()
+
    '// Get the names of all events that exist in this plugin
    psArgsAdded = False
    psEvents.Item(Prefix) = "|"
@@ -291,6 +294,11 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, ByVal Lines)
 
    '// Load this plugin's code
    psLoadCode Prefix, Path, Content
+   
+   '// 03/27/2009 52 - logging load times for each plugin
+   finishGTC = GetGTC()
+   psLoadTimes.Item(Prefix) = finishGTC - startGTC
+   
 End Sub
 
 
@@ -431,7 +439,7 @@ Sub psProcessCmd(ByVal Message, Username, DisplayID)
  
       '// Is this a valid internal plugin system command?
       Select Case strCmdName
-         Case "prefix", "updates", "getplugin", "debug", "lset", "plugins", "nvn", "ext", "phelp", "delplugin", "psnews", "pedit"
+         Case "prefix", "updates", "getplugin", "debug", "lset", "plugins", "nvn", "ext", "phelp", "delplugin", "psnews", "pedit", "ploadtimes"
             VetoThisMessage
          Case Else: Exit Sub
       End Select
@@ -452,6 +460,7 @@ Sub psProcessCmd(ByVal Message, Username, DisplayID)
    Select Case strCmdName
       Case "prefix":    ps_prefix_cmd cmd, cmdPrefix, Username, DisplayID
       Case "updates":   ps_updates_cmd cmd, Username, DisplayID
+	  Case "ploadtimes":ps_ploadtimes_cmd cmd, Username, DisplayID
       Case "getplugin": ps_getplugin_cmd cmd, Username, DisplayID
       Case "debug":     ps_debug_cmd cmd, Username, DisplayID
       Case "plugins":   ps_plugins_cmd cmd, Username, DisplayID
@@ -507,6 +516,17 @@ Sub ps_prefix_cmd(cmd, Prefix, Username, DisplayID)
    SetMenuItemCheck Prefix, "Enabled", boolEnabled
 End Sub
 
+Sub ps_ploadtimes_cmd(cmd, Username, DisplayID)
+	If DisplayID < 4 Then
+		Exit Sub
+	End If
+	
+	AddChat vbCyan, "The length of time (in milliseconds) spent loading a plugin."
+	For Each prefix in psPrefixes
+		AddChat vbCyan, prefix & vbTab & psLoadTimes(prefix) & "ms"
+	Next
+	
+End Sub
 
 '// Displays new plugins and updates available for download - Thanks FiftyToo!
 Sub ps_updates_cmd(cmd, Username, DisplayID)
@@ -2169,7 +2189,8 @@ End Function
 Sub scTimer_Timer()
     On Error Resume Next
 
-    GetScriptControl.Error.Clear
+	'// 52 - changed from GetcriptControl to psSC
+    psSC.Error.Clear
 
     strKeys = Split(GetPTKeys)
 
@@ -2191,10 +2212,11 @@ Sub scTimer_Timer()
                     Execute "Call " & strKey(0) & "_" & strKey(1) & "_Timer"
     
                     '// Handle errors
-                    If GetScriptControl.Error.Number <> 0 Then
+					'// 52 - changed from GetcriptControl to psSC
+                    If psSC.Error.Number <> 0 Then
                         AddChat vbYellow, "The """ & strKey(1) & """ timer in your """ & strKey(0) & """ plugin has been disabled due to an error."
                         SetPTEnabled strKey(0), strKey(1), False
-                        GetScriptControl.Error.Clear
+                        psSC.Error.Clear
                     End If
     
                     '// Reset this timer's countdown
