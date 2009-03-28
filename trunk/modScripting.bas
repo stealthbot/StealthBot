@@ -669,9 +669,17 @@ Public Sub InitScript(ByRef SCModule As Module)
     On Error GoTo ERROR_HANDLER
 
     Dim I As Integer ' ...
+	Dim startTime As Long
+	Dim finishTime As Long
 
     ' ...
+	startTime = GetTickCount()
     SCModule.Run "Event_Load"
+	finishTime = GetTickCount()
+	
+	'// 03/27/2009 52 - Added default Script property for the load time
+    SCModule.ExecuteStatement "Script(""LoadTime"") = CLng(Script(""LoadTime"")) + " & Chr$(34) & _
+        (finishTime - startTime) & Chr$(34)
 
     ' ...
     If (g_Online) Then

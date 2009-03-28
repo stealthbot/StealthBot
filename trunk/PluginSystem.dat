@@ -379,7 +379,15 @@ Sub psExecuteEvent(EventName, Parameters)
             paramString = Left(paramString, Len(paramString) - 1)
          End If
 
+		 startTime = GetGTC()
          Execute("Call " & psPrefixes(i) & "_Event_" & EventName & "(" & paramString & ")")
+		 finishTime = GetGTC()
+ 
+		 '// 03/28/2009 52 - Added the duration of EventLoad to the load time
+		 If LCase(EventName) = "load" Then
+			psLoadTimes(psPrefixes(i)) = psLoadTimes(psPrefixes(i)) + finishTime - startTime
+		 End If 
+		
  
          '// Handle errors
          If Err.Number <> 0 Then
