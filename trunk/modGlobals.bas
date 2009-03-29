@@ -212,7 +212,7 @@ Public ExReconMinutes As Long
 
 Public VoteDuration As Integer
 'Public MonitorForm As frmMonitor
-Public PBuffer As New clsPacketBuffer
+Public PBuffer As New clsDataBuffer
 Public ListToolTip As clsCTooltip
 Public AwaitingEmailReg As Byte
 Public Passed0x0F As Byte

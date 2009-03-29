@@ -190,7 +190,7 @@ End Sub
 Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     On Error GoTo ERROR_HANDLER
     
-    Dim pD        As clsPacketDebuffer
+    Dim pD        As clsDataBuffer
     
     Dim sTemp     As String
     Dim lTemp     As Long
@@ -198,9 +198,9 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     Dim Splt()    As String
     Dim PacketID  As Byte
     
-    Set pD = New clsPacketDebuffer
+    Set pD = New clsDataBuffer
     
-    pD.DebuffPacket Mid$(Data, 4)
+    pD.Data = Mid$(Data, 4)
     
     PacketID = Asc(Mid(Data, 3, 1))
     
@@ -265,14 +265,14 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
             
         Case &H1A ' BNLS_VERSIONCHECKEX2
             If Len(Data) > 12 Then  ' We have a response!
-                pD.Advance 4
+                pD.Position = pD.Position + 4
                 
-                ds.SetVersion pD.DebuffDWORD
-                ds.SetCheckSum pD.DebuffDWORD
-                ds.SetExeInfo pD.DebuffNTString
+                ds.SetVersion pD.GetDWORD
+                ds.SetCheckSum pD.GetDWORD
+                ds.SetExeInfo pD.GetString
                 
-                pD.Advance 4
-                ds.SetVerByte pD.DebuffDWORD
+                pD.Position = pD.Position + 4
+                ds.SetVerByte pD.GetDWORD
                 
                 ' removed cd key hashing @ bnls ~Pyro
                 'Call Send_0x01(BotVars.CDKey)
@@ -322,7 +322,7 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
             End With
             
         Case &H3 'BNLS_LOGONPROOF
-            sTemp = pD.DebuffRaw(20)
+            sTemp = pD.GetRaw(20)
             lTemp = Conv(Mid$(sTemp, 1, 4))
             
             If (lTemp = 0) Then

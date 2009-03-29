@@ -1517,7 +1517,7 @@ End Function
 
 Public Function DataBufferEx() As Object
 
-    Set DataBufferEx = New clsPacketBuffer
+    Set DataBufferEx = New clsDataBuffer
     
     DataBufferEx.setCripple
 

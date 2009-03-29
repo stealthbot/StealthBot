@@ -10,7 +10,7 @@ End Sub
 Public Sub BNCSParsePacket(ByVal PacketData As String)
     On Error GoTo ERROR_HANDLER
 
-    Dim pD          As clsPacketDebuffer ' Packet debuffer object
+    Dim pD          As clsDataBuffer ' Packet debuffer object
     Dim PacketLen   As Long              ' Length of the packet minus the header
     Dim PacketID    As Byte              ' Battle.net packet ID
     Dim s           As String            ' Temporary string
@@ -32,14 +32,14 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     '--------------
     '| Initialize |
     '--------------
-    Set pD = New clsPacketDebuffer
+    Set pD = New clsDataBuffer
     PacketLen = Len(PacketData) - 4
     
     '###########################################################################
     
     If PacketLen >= 0 Then
         ' Start packet debuffer
-        pD.DebuffPacket Mid$(PacketData, 5)
+        pD.Data = Mid$(PacketData, 5)
         ' Get packet ID
         PacketID = Asc(Mid$(PacketData, 2, 1))
         
@@ -75,34 +75,34 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '##########################################################################
             Case &H2D 'SID_ICONDATA
                 If MDebug("debug") Then
-                    pD.DebuffFILETIME
-                    frmChat.AddChat RTBColors.InformationText, "Received Icons file name: ", RTBColors.InformationText, pD.DebuffNTString
+                    pD.GetRaw 8
+                    frmChat.AddChat RTBColors.InformationText, "Received Icons file name: ", RTBColors.InformationText, pD.GetString
                 End If
                 
             '##########################################################################
             Case &H4C 'SID_EXTRAWORK
                 If MDebug("debug") Then
-                    frmChat.AddChat RTBColors.InformationText, "Received Extra Work file name: ", RTBColors.InformationText, pD.DebuffNTString
+                    frmChat.AddChat RTBColors.InformationText, "Received Extra Work file name: ", RTBColors.InformationText, pD.GetString
                 End If
             
             '###########################################################################
             Case &HA 'SID_ENTERCHAT
-                s = pD.DebuffNTString
+                s = pD.GetString
                 Call Event_LoggedOnAs(s, BotVars.Product)
             
             '###########################################################################
             Case &HF 'SID_CHATEVENT
                 ' User information
-                EventID = pD.DebuffDWORD
-                UserFlags = pD.DebuffDWORD
-                UserPing = pD.DebuffDWORD
+                EventID = pD.GetDWORD
+                UserFlags = pD.GetDWORD
+                UserPing = pD.GetDWORD
                 
                 ' (3 defunct DWORDS)
-                pD.Advance (3 * 4)
+                pD.Position = pD.Position + (3 * 4)
                 
                 ' Further user information
-                Username = pD.DebuffNTString
-                s = pD.DebuffNTString   ' Statstring
+                Username = pD.GetString
+                s = pD.GetString   ' Statstring
                 s2 = ""
                 
                 If LenB(s) > 0 Then
@@ -183,15 +183,15 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     
             '###########################################################################
             Case &H19 'SID_MESSAGEBOX
-                pD.Advance 4  'unused DWORD
-                s = pD.DebuffNTString
+                pD.Position = pD.Position + 4  'unused DWORD
+                s = pD.GetString
                 
                 Call Event_ServerError(s)
             
             '###########################################################################
             Case &H25 'SID_PING
                 If BotVars.Spoof = 0 Or g_Online Then
-                    PBuffer.InsertDWord pD.DebuffDWORD
+                    PBuffer.InsertDWord pD.GetDWORD
                     PBuffer.SendPacket &H25
                 End If
             
@@ -201,7 +201,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H3D 'SID_CREATEACCT2
-                L = pD.DebuffDWORD
+                L = pD.GetDWORD
                 
                 B = Event_AccountCreateResponse(L)
                 
@@ -214,12 +214,12 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &H31 'SID_CHANGEPASSWORD
                 ' Hypothetical code for when I decide to implement this
-                ' b = CBool(pd.debuffdword)
+                ' b = CBool(pd.GetDWORD)
                 ' call event_ChangePasswordResponse(b)
             
             '###########################################################################
             Case &H3A 'SID_LOGONRESPONSE2
-                L = pD.DebuffDWORD
+                L = pD.GetDWORD
             
                 Select Case L
                     Case &H0  'Successful login.
@@ -247,7 +247,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         Call frmChat.DoDisconnect
                         
                     Case &H6  'Account has been closed (includes a reason)
-                        s = pD.DebuffNTString
+                        s = pD.GetString
                         Event_LogonEvent 5, s
                         Call frmChat.DoDisconnect
                         
@@ -269,21 +269,21 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 'l: Port
                 
                 If Len(PacketData) > 8 Then
-                    s = pD.DebuffRaw(16) 'MCP chunk 1
+                    s = pD.GetRaw(16) 'MCP chunk 1
                     
                     s2 = ""
                     
                     For L = 1 To 4 ' IP
-                        s2 = s2 & Asc(pD.DebuffRaw(1)) & IIf(L < 4, ".", "")
+                        s2 = s2 & Asc(pD.GetRaw(1)) & IIf(L < 4, ".", "")
                     Next L
                     
                     
-                    L = pD.DebuffDWORD 'Port
+                    L = pD.GetDWORD 'Port
                     L = ntohs(L)        'Fix byte order
                     'Debug.Print l
                     'Debug.Print ntohl(l)
                     
-                    s = s & pD.DebuffRaw(48) 'MCP chunk 2
+                    s = s & pD.GetRaw(48) 'MCP chunk 2
                     
                     With frmChat.sckMCP
                         If .State <> 0 Then .Close
@@ -294,23 +294,23 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     
                     frmRealm.MCPHandler.CurrentChunk = s
                     
-                    s = pD.DebuffNTString
+                    s = pD.GetString
                     frmRealm.MCPHandler.BNetUniqueUsername = s
                     
                     frmChat.sckMCP.Connect
                     
                 Else
-                    pD.Advance 4
-                    L = pD.DebuffDWORD
+                    pD.Position = pD.Position + 4
+                    L = pD.GetDWORD
                     
                     Call Event_RealmStatusError(L)
                     Unload frmRealm
                 End If
                 
             Case &H40 'SID_QUERYREALMS2
-                pD.Advance 12
+                pD.Position = pD.Position + 12
                 
-                s = pD.DebuffNTString
+                s = pD.GetString
                 
                 Call frmChat.AddChat(RTBColors.SuccessText, "[BNET] Battle.net has responded!")
                 Call frmChat.AddChat(RTBColors.InformationText, "[REALM] Opening a connection to the Diablo II Realm...")
@@ -319,23 +319,23 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 
                 
             'Case &H44 'SID_WARCRAFTGENERAL
-                'l = pD.DebuffBYTE ' Subcommand ID
+                'l = pD.GetByte ' Subcommand ID
             
             'Case &H46 'SID_NEWS_INFO
             
             '###########################################################################
             Case &H50 'SID_AUTH_INFO
-                L = pD.DebuffDWORD ' Logon type
+                L = pD.GetDWORD ' Logon type
                 ds.LogonType = L
                 
-                ServerToken = pD.DebuffDWORD
+                ServerToken = pD.GetDWORD
                 ds.SetServerToken ServerToken
                 
-                pD.Advance 4
+                pD.Position = pD.Position + 4
                 
-                s3 = pD.DebuffRaw(8)    ' mpq filetime
-                s = pD.DebuffNTString   ' mpq filename
-                s2 = pD.DebuffNTString  ' ValueString [Hash Command]
+                s3 = pD.GetRaw(8)    ' mpq filetime
+                s = pD.GetString   ' mpq filename
+                s2 = pD.GetString  ' ValueString [Hash Command]
                 
                 ds.SetHashCmd s2
                 
@@ -370,8 +370,8 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &H51 'SID_AUTH_CHECK
                 ' b is being used as a NoProceed boolean
-                L = pD.DebuffDWORD
-                s = pD.DebuffNTString
+                L = pD.GetDWORD
+                s = pD.GetString
                 B = True    'Default action: Do not proceed
                 
                 Select Case L
@@ -436,7 +436,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H52 'SID_AUTH_ACCOUNTCREATE
-                L = pD.DebuffDWORD
+                L = pD.GetDWORD
                 
                 Select Case L
                     Case &H0
@@ -462,9 +462,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 
             '###########################################################################
             Case &H53 'SID_AUTH_ACCOUNTLOGON
-                L = pD.DebuffDWORD
-                s = pD.DebuffRaw(32) 'Salt [s]
-                s2 = pD.DebuffRaw(32) ' Server key [B]
+                L = pD.GetDWORD
+                s = pD.GetRaw(32) 'Salt [s]
+                s2 = pD.GetRaw(32) ' Server key [B]
                 
                 Select Case L
                     Case &H0    'Accepted, requires proof
@@ -504,7 +504,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 
             '###########################################################################
             Case &H54 'SID_AUTH_ACCOUNTLOGONPROOF
-                L = pD.DebuffDWORD
+                L = pD.GetDWORD
                 
                 Select Case L
                     Case &H0   'Success
@@ -516,8 +516,8 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         ' ( the rest is handled by frmEMailReg )
                         
                     Case &HF    'Custom message
-                        pD.Advance 32
-                        s = pD.DebuffNTString
+                        pD.Position = pD.Position + 32
+                        s = pD.GetString
                         Call Event_LogonEvent(5, s)
                         Call frmChat.DoDisconnect
                     
@@ -593,14 +593,14 @@ ERROR_HANDLER:
 End Sub
 
 Public Function StrToHex(ByVal String1 As String, Optional ByVal NoSpaces As Boolean = False) As String
-    Dim strTemp As String, strReturn As String, i As Long
+    Dim strTemp As String, strReturn As String, I As Long
     
-    For i = 1 To Len(String1)
-        strTemp = hex(Asc(Mid(String1, i, 1)))
+    For I = 1 To Len(String1)
+        strTemp = hex(Asc(Mid(String1, I, 1)))
         If Len(strTemp) = 1 Then strTemp = "0" & strTemp
         
         strReturn = strReturn & IIf(NoSpaces, "", Space(1)) & strTemp
-    Next i
+    Next I
         
     StrToHex = strReturn
 End Function
@@ -636,7 +636,7 @@ Public Function DecodeD2Key(ByVal Key As String) As String
 
     Dim R As Double, n As Double, n2 As Double, v As Double, _
     v2 As Double, KeyValue As Double, c1 As Integer, c2 As Integer, _
-    c As Byte, i As Integer, aryKey(0 To 15) As String, _
+    c As Byte, I As Integer, aryKey(0 To 15) As String, _
     codeValues As String ', bValid as boolean
     
     On Error GoTo ErrorTrapped
@@ -645,18 +645,18 @@ Public Function DecodeD2Key(ByVal Key As String) As String
     R = 1
     KeyValue = 0
     
-    For i = 1 To 16
+    For I = 1 To 16
     
-        aryKey(i - 1) = Mid$(Key, i, 1)
+        aryKey(I - 1) = Mid$(Key, I, 1)
         
-    Next i
+    Next I
     
-    For i = 0 To 15 Step 2
-        c1 = InStr(1, codeValues, aryKey(i)) - 1
+    For I = 0 To 15 Step 2
+        c1 = InStr(1, codeValues, aryKey(I)) - 1
         If c1 < 0 Then c1 = &HFF
         If c1 > 255 Then c1 = 255
         n = c1 * 3
-        c2 = InStr(1, codeValues, aryKey(i + 1)) - 1
+        c2 = InStr(1, codeValues, aryKey(I + 1)) - 1
         If c2 = -1 Then c2 = &HFF
         If c2 > 255 Then c2 = 255
         n = c2 + n * 8
@@ -670,55 +670,55 @@ Public Function DecodeD2Key(ByVal Key As String) As String
         
         n2 = n
         n2 = RShift(n2, 4)
-        aryKey(i) = GetHexValue(n2)
-        aryKey(i + 1) = GetHexValue(n)
+        aryKey(I) = GetHexValue(n2)
+        aryKey(I + 1) = GetHexValue(n)
         R = LShift(R, 1)
         
 Cont:
 
-    Next i
+    Next I
     
     v = 3
     
-    For i = 0 To 15
+    For I = 0 To 15
     
-        c = GetNumValue(aryKey(i))
+        c = GetNumValue(aryKey(I))
         n = Val(c)
         n2 = v * 2
         n = n Xor n2
         v = v + n
         
-    Next i
+    Next I
     
     v = v And &HFF
     
-    For i = 15 To 0 Step -1
+    For I = 15 To 0 Step -1
     
-        c = Asc(aryKey(i))
+        c = Asc(aryKey(I))
         
-        If i > 8 Then
+        If I > 8 Then
         
-            n = i - 9
+            n = I - 9
             
         Else
         
-            n = &HF - (8 - i)
+            n = &HF - (8 - I)
             
         End If
         
         n = n And &HF
         c2 = Asc(aryKey(n))
-        aryKey(i) = Chr$(c2)
+        aryKey(I) = Chr$(c2)
         aryKey(n) = Chr$(c)
         
-    Next i
+    Next I
     
     v2 = &H13AC9741
     
-    For i = 15 To 0 Step -1
+    For I = 15 To 0 Step -1
     
-        c = Asc(UCase(aryKey(i)))
-        aryKey(i) = Chr$(c)
+        c = Asc(UCase(aryKey(I)))
+        aryKey(I) = Chr$(c)
         
         If Val(c) <= Asc("7") Then
         
@@ -727,19 +727,19 @@ Cont:
             c2 = c2 And 7
             c2 = c2 Xor c
             v = RShift(v, 3)
-            aryKey(i) = Chr$(c2)
+            aryKey(I) = Chr$(c2)
             v2 = v
             
         ElseIf Val(c) < Asc("A") Then
         
-            c2 = CByte(i)
+            c2 = CByte(I)
             c2 = c2 And 1
             c2 = c2 Xor c
-            aryKey(i) = Chr$(c2)
+            aryKey(I) = Chr$(c2)
             
         End If
         
-    Next i
+    Next I
     
     DecodeD2Key = Join(aryKey, vbNullString)
     
@@ -755,25 +755,25 @@ End Function
 Public Function DecodeStarcraftKey(ByVal sKey As String) As String
     Dim n As Double, n2 As Double, v As Double, _
     v2 As Double, c2 As Byte, c As Byte, _
-    bValid As Boolean, i As Integer, aryKey(0 To 12) As String 'r as double, keyvalue as double, c1 as byte
+    bValid As Boolean, I As Integer, aryKey(0 To 12) As String 'r as double, keyvalue as double, c1 as byte
     
-    For i = 1 To 13
+    For I = 1 To 13
     
-        aryKey(i - 1) = Mid$(sKey, i, 1)
+        aryKey(I - 1) = Mid$(sKey, I, 1)
         
-    Next i
+    Next I
     
     v = 3
     
-    For i = 0 To 11
+    For I = 0 To 11
     
-        c = aryKey(i)
+        c = aryKey(I)
         n = Val(c)
         n2 = v * 2
         n = n Xor n2
         v = v + n
         
-    Next i
+    Next I
     
     v = v Mod 10
     
@@ -785,27 +785,27 @@ Public Function DecodeStarcraftKey(ByVal sKey As String) As String
     
     v = 194
     
-    For i = 11 To 0 Step -1
+    For I = 11 To 0 Step -1
     
         If v < 7 Then GoTo continue
-        c = aryKey(i)
+        c = aryKey(I)
         n = CInt(v / 12)
         n2 = v Mod 12
         v = v - 17
         c2 = aryKey(n2)
-        aryKey(i) = c2
+        aryKey(I) = c2
         aryKey(n2) = c
         
-    Next i
+    Next I
     
 continue:
 
     v2 = &H13AC9741
     
-    For i = 11 To 0 Step -1
+    For I = 11 To 0 Step -1
     
-        c = UCase$(aryKey(i))
-        aryKey(i) = c
+        c = UCase$(aryKey(I))
+        aryKey(I) = c
         
         If Asc(c) <= Asc("7") Then
         
@@ -814,19 +814,19 @@ continue:
             c2 = c2 And 7
             c2 = c2 Xor c
             v = RShift(CLng(v), 3)
-            aryKey(i) = c2
+            aryKey(I) = c2
             v2 = v
             
         ElseIf Asc(c) < 65 Then
         
-            c2 = CByte(i)
+            c2 = CByte(I)
             c2 = c2 And 1
             c2 = c2 Xor c
-            aryKey(i) = c2
+            aryKey(I) = c2
             
         End If
         
-    Next i
+    Next I
     
     DecodeStarcraftKey = Join(aryKey, vbNullString)
     
@@ -862,13 +862,13 @@ End Function
 'End Function
 
 Public Function KillNull(ByVal text As String) As String
-    Dim i As Integer
-    i = InStr(1, text, Chr(0))
-    If (i = 0) Then
+    Dim I As Integer
+    I = InStr(1, text, Chr(0))
+    If (I = 0) Then
         KillNull = text
         Exit Function
     End If
-    KillNull = Left$(text, i - 1)
+    KillNull = Left$(text, I - 1)
 End Function
 
 Public Function ParsePing(strData As String) As Long
@@ -932,17 +932,17 @@ End Function
 
 Public Sub NullTruncString(ByRef text As String)
 'on error resume next
-    Dim i As Integer
+    Dim I As Integer
     
-    i = InStr(text, Chr(0))
-    If i = 0 Then Exit Sub
+    I = InStr(text, Chr(0))
+    If I = 0 Then Exit Sub
     
-    text = Left$(text, i - 1)
+    text = Left$(text, I - 1)
 End Sub
 
-Public Sub FullJoin(Channel As String, Optional ByVal i As Long = -1)
-    If i >= 0 Then
-        PBuffer.InsertDWord CLng(i)
+Public Sub FullJoin(Channel As String, Optional ByVal I As Long = -1)
+    If I >= 0 Then
+        PBuffer.InsertDWord CLng(I)
     Else
         PBuffer.InsertDWord &H2
     End If
@@ -952,11 +952,11 @@ End Sub
 
 Public Function HexToStr(ByVal Hex1 As String) As String
 'on error resume next
-    Dim strReturn As String, i As Long
+    Dim strReturn As String, I As Long
     If Len(Hex1) Mod 2 <> 0 Then Exit Function
-    For i = 1 To Len(Hex1) Step 2
-    strReturn = strReturn & Chr(Val("&H" & Mid(Hex1, i, 2)))
-    Next i
+    For I = 1 To Len(Hex1) Step 2
+    strReturn = strReturn & Chr(Val("&H" & Mid(Hex1, I, 2)))
+    Next I
     HexToStr = strReturn
 End Function
 
@@ -1080,16 +1080,16 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
 '    End If
     
     If nKeys > 0 Then
-        Dim i As Integer
+        Dim I As Integer
     
         With PBuffer
             .InsertDWord &H1                    '// #accounts
             .InsertDWord nKeys                  '// #keys
             .InsertNTString CurrentUsername     '// account to update
                                                 '// keys
-            For i = 1 To nKeys
-                .InsertNTString pKeys(i)
-            Next i
+            For I = 1 To nKeys
+                .InsertNTString pKeys(I)
+            Next I
            
             .InsertNTString Location
             .InsertNTString description '// Values()
@@ -1123,11 +1123,11 @@ Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
     
     nText = Replace(nText, "%S", "%s")
     
-    Dim i As Byte
-    i = 0
+    Dim I As Byte
+    I = 0
     
     Do While (InStr(1, nText, "%s") <> 0)
-        Select Case i
+        Select Case I
             Case 0
                 If IsEmpty(A) Then GoTo theEnd
                 nText = Replace(nText, "%s", A, 1, 1)
@@ -1153,7 +1153,7 @@ Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
                 If IsEmpty(H) Then GoTo theEnd
                 nText = Replace(nText, "%s", H, 1, 1)
         End Select
-        i = i + 1
+        I = I + 1
     Loop
 theEnd:
     Source = Source & nText
@@ -1616,18 +1616,18 @@ End Sub
 'End Sub
 
 Public Sub MakeArray(ByVal text As String, ByRef nArray() As String)
-    Dim i As Long
+    Dim I As Long
     ReDim nArray(0)
-    For i = 0 To Len(text)
-        nArray(i) = Mid$(text, i + 1, 1)
-        If i <> Len(text) Then
+    For I = 0 To Len(text)
+        nArray(I) = Mid$(text, I + 1, 1)
+        If I <> Len(text) Then
             ReDim Preserve nArray(0 To UBound(nArray) + 1)
         End If
-    Next i
+    Next I
 End Sub
 
 Public Function GetRaceAndIcon(ByRef Icon As String, ByRef Race As String, ByVal Product As String, Optional ByRef WCGCode As String) As Integer
-    Dim i As Integer, IMLPos As Integer
+    Dim I As Integer, IMLPos As Integer
     Dim PerTier As Integer
         
     If Product = "3RAW" Then
@@ -1641,38 +1641,38 @@ Public Function GetRaceAndIcon(ByRef Icon As String, ByRef Race As String, ByVal
     Select Case Race
         Case "H"
             IMLPos = 1
-            i = 0
+            I = 0
             Race = "Human"
         Case "N"
             IMLPos = 1 + (PerTier * 1)
-            i = 10
+            I = 10
             Race = "Night Elves"
         Case "U"
             IMLPos = 1 + (PerTier * 2)
-            i = 20
+            I = 20
             Race = "Undead"
         Case "O"
             IMLPos = 1 + (PerTier * 3)
-            i = 30
+            I = 30
             Race = "Orcs"
         Case "R"
             IMLPos = 1 + (PerTier * 4)
-            i = 40
+            I = 40
             Race = "Random"
         Case "T", "D"
             IMLPos = 1 + (PerTier * 5)
-            i = 50
+            I = 50
             Race = "Tournament"
         
         Case Else
             IMLPos = 1 + (PerTier * 5)
-            i = 50
+            I = 50
             Race = "unknown"
             
     End Select
     
     If StrictIsNumeric(Icon) Then
-        i = i + CInt(Icon)
+        I = I + CInt(Icon)
         IMLPos = IMLPos + (CInt(Icon) - 1)
     End If
     
@@ -1704,7 +1704,7 @@ Public Function GetRaceAndIcon(ByRef Icon As String, ByRef Race As String, ByVal
         End Select
     Else
         If Product = "3RAW" Then
-            Select Case i
+            Select Case I
                 'Peon Icon
                 Case 1, 11, 21, 31, 41
                     Icon = "peon"
@@ -1739,7 +1739,7 @@ Public Function GetRaceAndIcon(ByRef Icon As String, ByRef Race As String, ByVal
                     IMLPos = ICUNKNOWN ' 26
             End Select
         Else
-            Select Case i
+            Select Case I
                 'Peon Icon
                 Case 1, 11, 21, 31, 41, 51
                     Icon = "peon"
@@ -1814,7 +1814,7 @@ End Function
 
 '// COLORMODIFY - where L is passed as the start position of the text to be checked
 Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
-    Dim i As Long
+    Dim I As Long
     Dim s As String
     Dim temp As Long
     
@@ -1826,23 +1826,23 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
         If InStr(temp, .text, "ÿc", vbTextCompare) > 0 Then
             .Visible = False
             Do
-                i = InStr(temp, .text, "ÿc", vbTextCompare)
+                I = InStr(temp, .text, "ÿc", vbTextCompare)
                 
-                If StrictIsNumeric(Mid$(.text, i + 2, 1)) Then
-                    s = GetColorVal(Mid$(.text, i + 2, 1))
-                    .selStart = i - 1
+                If StrictIsNumeric(Mid$(.text, I + 2, 1)) Then
+                    s = GetColorVal(Mid$(.text, I + 2, 1))
+                    .selStart = I - 1
                     .selLength = 3
                     .SelText = vbNullString
-                    .selStart = i - 1
-                    .selLength = Len(.text) - i
+                    .selStart = I - 1
+                    .selLength = Len(.text) - I
                     .SelColor = s
                 Else
-                    Select Case Mid$(.text, i + 2, 1)
+                    Select Case Mid$(.text, I + 2, 1)
                         Case "i"
-                            .selStart = i - 1
+                            .selStart = I - 1
                             .selLength = 3
                             .SelText = vbNullString
-                            .selStart = i - 1
+                            .selStart = I - 1
                             .selLength = Len(.text) - 1
                             If .SelItalic = True Then
                                 .SelItalic = False
@@ -1851,10 +1851,10 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             End If
                             
                         Case "b", "."       'BOLD
-                            .selStart = i - 1
+                            .selStart = I - 1
                             .selLength = 3
                             .SelText = vbNullString
-                            .selStart = i - 1
+                            .selStart = I - 1
                             .selLength = Len(.text) - 1
                             If .SelBold = True Then
                                 .SelBold = False
@@ -1863,10 +1863,10 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             End If
                             
                         Case "u", "."       'underline
-                            .selStart = i - 1
+                            .selStart = I - 1
                             .selLength = 3
                             .SelText = vbNullString
-                            .selStart = i - 1
+                            .selStart = I - 1
                             .selLength = Len(.text) - 1
                             If .SelUnderline = True Then
                                 .SelUnderline = False
@@ -1875,26 +1875,26 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             End If
                             
                         Case ";"
-                            .selStart = i - 1
+                            .selStart = I - 1
                             .selLength = 3
                             .SelText = vbNullString
-                            .selStart = i - 1
+                            .selStart = I - 1
                             .selLength = Len(.text) - 1
                             .SelColor = HTMLToRGBColor("8D00CE")    'Purple
                             
                         Case ":"
-                            .selStart = i - 1
+                            .selStart = I - 1
                             .selLength = 3
                             .SelText = vbNullString
-                            .selStart = i - 1
+                            .selStart = I - 1
                             .selLength = Len(.text) - 1
                             .SelColor = 186408      '// Lighter green
                             
                         Case "<"
-                            .selStart = i - 1
+                            .selStart = I - 1
                             .selLength = 3
                             .SelText = vbNullString
-                            .selStart = i - 1
+                            .selStart = I - 1
                             .selLength = Len(.text) - 1
                             .SelColor = HTMLToRGBColor("00A200")    'Dark green
                         'Case Else: Debug.Print s
@@ -1911,15 +1911,15 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
         
         If InStr(temp, .text, "Á", vbBinaryCompare) > 0 Then
             Do
-                i = InStr(temp, .text, "Á", vbBinaryCompare)
-                s = GetScriptColorString(Mid$(.text, i + 1, 1))
+                I = InStr(temp, .text, "Á", vbBinaryCompare)
+                s = GetScriptColorString(Mid$(.text, I + 1, 1))
                 
                 If Len(s) > 0 Then
                     .Visible = False
-                    .selStart = i - 1
+                    .selStart = I - 1
                     .selLength = 2
                     .SelText = vbNullString
-                    .selStart = i - 1
+                    .selStart = I - 1
                     .selLength = Len(.text) - 1
                     .SelColor = s
                     .Visible = True

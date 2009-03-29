@@ -38,7 +38,7 @@ Private Sub Class_Initialize()
     Set g_Friends = New Collection
 End Sub
 
-Public Sub RequestFriendsList(ByRef pBuff As clsPacketBuffer)
+Public Sub RequestFriendsList(ByRef pBuff As clsDataBuffer)
     'ResetList
     pBuff.SendPacket &H65
 End Sub

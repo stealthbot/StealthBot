@@ -6,14 +6,14 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "clsPacketBuffer"
+Attribute VB_Name = "clsDataBuffer"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = True
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Attribute VB_Ext_KEY = "SavedWithClassBuilder6" ,"Yes"
 Attribute VB_Ext_KEY = "Top_Level" ,"Yes"
-' clsPacketBuffer.cls
+' clsDataBuffer.cls
 ' Copyright (C) 2008 Eric Evans
 ' ...
 
@@ -287,7 +287,6 @@ Public Function GetRaw(Optional ByVal Length As Integer = -1) As String
     m_bufpos = m_bufpos + Length
 
 End Function ' end function GetString
-
 
 ' ...
 Public Property Get Length() As Long

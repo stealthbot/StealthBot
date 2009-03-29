@@ -5,7 +5,7 @@ Attribute VB_Name = "modBNLSCode"
 Option Explicit
 
 'Public Classes
-Public Packet As New clsPacketBuffer
+Public Packet As New clsDataBuffer
 Public NLogin As New clsBNLS
 Public ds     As New clsDataStorage
 

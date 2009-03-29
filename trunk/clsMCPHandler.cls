@@ -17,7 +17,7 @@ Attribute VB_Exposed = False
 ' Author    : Stealth
 ' Purpose   : Handle and dispatch MCP packets
 ' Thanks    : Arta[vL]'s BNetDocs, DarkRaven
-' Notes     : Goes with Stealth's modified DM PacketBuffer class.
+' Notes     : Goes with Stealth's modified DM DataBuffer class.
 ' Update    : 4/11/06 to fix realm connection issues; added CharListResponse event
 '---------------------------------------------------------------------------------------
 

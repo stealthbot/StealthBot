@@ -1,5 +1,5 @@
 Attribute VB_Name = "modPacketBuffer"
-' modPacketBuffer.bas
+' modDataBuffer.bas
 ' Copyright (C) 2008 Eric Evans
 
 Option Explicit
@@ -10,7 +10,7 @@ Private Const MAX_PACKET_CACHE_SIZE = 100 ' ...
 Private Type PACKETCACHEITEM
     Direction As enuPL_DirectionTypes
     PKT_Type  As enuPL_ServerTypes
-    id        As Byte
+    ID        As Byte
     Length    As Integer
     Data      As String
     TimeDate  As Date
@@ -26,7 +26,7 @@ End Enum
 Private m_cache()     As PACKETCACHEITEM  ' ...
 Private m_cache_count As Integer          ' ...
 
-Public Function CachePacket(Direction As enuPL_DirectionTypes, PKT_Type As enuPL_ServerTypes, id As Byte, Length As Integer, Data As String)
+Public Function CachePacket(Direction As enuPL_DirectionTypes, PKT_Type As enuPL_ServerTypes, ID As Byte, Length As Integer, Data As String)
 
     Dim pkt As PACKETCACHEITEM ' ...
     
@@ -34,7 +34,7 @@ Public Function CachePacket(Direction As enuPL_DirectionTypes, PKT_Type As enuPL
     With pkt
         .Direction = Direction
         .PKT_Type = PKT_Type
-        .id = id
+        .ID = ID
         .Length = Length
         .Data = Data
         .TimeDate = Now
@@ -42,12 +42,12 @@ Public Function CachePacket(Direction As enuPL_DirectionTypes, PKT_Type As enuPL
     
     ' ...
     If (m_cache_count + 1 >= MAX_PACKET_CACHE_SIZE) Then
-        Dim i As Integer ' ...
+        Dim I As Integer ' ...
         
         ' ...
-        For i = 0 To m_cache_count - 1
-            m_cache(i) = m_cache(i + 1)
-        Next i
+        For I = 0 To m_cache_count - 1
+            m_cache(I) = m_cache(I + 1)
+        Next I
         
         ' ...
         m_cache(m_cache_count) = pkt
@@ -72,7 +72,7 @@ End Function
 Public Sub DumpPacketCache()
     
     Dim pkt     As PACKETCACHEITEM ' ...
-    Dim i       As Integer ' ...
+    Dim I       As Integer ' ...
     Dim Traffic As Boolean ' ...
     
     ' ...
@@ -82,14 +82,14 @@ Public Sub DumpPacketCache()
     LogPacketTraffic = True
     
     ' ...
-    For i = 0 To m_cache_count - 1
+    For I = 0 To m_cache_count - 1
         ' ...
-        pkt = m_cache(i)
+        pkt = m_cache(I)
         
         ' ...
-        WritePacketData pkt.PKT_Type, pkt.Direction, pkt.id, pkt.Length, pkt.Data, _
+        WritePacketData pkt.PKT_Type, pkt.Direction, pkt.ID, pkt.Length, pkt.Data, _
             pkt.TimeDate
-    Next i
+    Next I
     
     ' ...
     LogPacketTraffic = Traffic

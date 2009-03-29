@@ -39,10 +39,10 @@ Const SID_CLANMOTD& = &H7C
 
 Public Event CandidateList(ByVal Status As Byte, ByRef Users() As String)
 Public Event DisbandClanReply(ByVal Success As Boolean)
-Public Event ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal Rank As Byte)
+Public Event ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal rank As Byte)
 Public Event InviteUserReply(ByVal Status As Byte)
 Public Event ClanInvitation(ByVal Token As String, ByVal ClanTag As String, ByVal RawClanTag As String, ByVal ClanName As String, ByVal InvitedBy As String, ByVal NewClan As Boolean)
-Public Event ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
+Public Event ClanMemberUpdate(ByVal Username As String, ByVal rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
 Public Event ClanMemberList(ByRef Members() As String)
 Public Event UnknownClanEvent(ByVal PacketID As Byte, ByVal Data As String)
 Public Event DemoteUserReply(ByVal Success As Boolean)
@@ -67,44 +67,44 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
     Dim bRank As Byte
     Dim bStatus As Byte
     
-    Dim inBuf As New clsPacketDebuffer
-    inBuf.Debuffer = Data
+    Dim inBuf As New clsDataBuffer
+    inBuf.Data = Data
     
     Select Case PacketID
     
         Case SID_FINDCLANCANDIDATES 'Clan candidates
-            inBuf.DebuffRaw 4 'Cookie
-            bStatus = inBuf.DebuffBYTE
-            bRank = inBuf.DebuffBYTE
+            inBuf.GetDWORD 'Cookie
+            bStatus = inBuf.GetByte
+            bRank = inBuf.GetByte
             If (bRank > 0) Then
                 ReDim ary(0 To bRank - 1)
                 For iTemp = 1 To bRank
-                    ary(iTemp - 1) = inBuf.DebuffNTString
+                    ary(iTemp - 1) = inBuf.GetString
                 Next iTemp
             End If
             RaiseEvent CandidateList(bStatus, ary())
             
     
         Case SID_CLANMEMBERUPDATE 'Clan Info Update
-            sTemp = inBuf.DebuffNTString
-            bRank = inBuf.DebuffBYTE
-            bStatus = inBuf.DebuffBYTE
-            sTemp2 = inBuf.DebuffNTString
+            sTemp = inBuf.GetString
+            bRank = inBuf.GetByte
+            bStatus = inBuf.GetByte
+            sTemp2 = inBuf.GetString
             RaiseEvent ClanMemberUpdate(sTemp, bRank, bStatus, sTemp2)
             
             
         Case SID_CLANINFO   'Clan Info
-            inBuf.RemoveBYTE 'Unknown (0)
-            ClanTag = inBuf.DebuffRaw(4)
-            bRank = inBuf.DebuffBYTE
+            inBuf.GetByte 'Unknown (0)
+            ClanTag = Mid(inBuf.Data, inBuf.Position, 4)
+            bRank = inBuf.GetByte
             RaiseEvent ClanInfo(KillNull(StrReverse(ClanTag)), ClanTag, bRank)
             
         Case SID_CHANGERANK 'Action Response
             
             'demote: 1; promote: 3
             
-            iTemp = inBuf.DebuffDWORD
-            bStatus = inBuf.DebuffBYTE
+            iTemp = inBuf.GetDWORD
+            bStatus = inBuf.GetByte
 
             Select Case bStatus
                 Case 0  'success
@@ -122,49 +122,49 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             End Select
             
         Case SID_CLANMEMBERLIST 'Clan listing
-            inBuf.RemoveDWORD
-            bTemp = inBuf.DebuffBYTE
+            inBuf.GetDWORD
+            bTemp = inBuf.GetByte
             ReDim ary(0 To bTemp * 4 - 1)
             For iTemp = 0 To bTemp - 1
-              ary(iTemp * 4) = inBuf.DebuffNTString()
-              ary(iTemp * 4 + 1) = inBuf.DebuffBYTE()
-              ary(iTemp * 4 + 2) = inBuf.DebuffBYTE()
-              ary(iTemp * 4 + 3) = inBuf.DebuffNTString()
+              ary(iTemp * 4) = inBuf.GetString()
+              ary(iTemp * 4 + 1) = inBuf.GetByte()
+              ary(iTemp * 4 + 2) = inBuf.GetByte()
+              ary(iTemp * 4 + 3) = inBuf.GetString()
             Next iTemp
             RaiseEvent ClanMemberList(ary())
             
             
         Case SID_REMOVEMEMBER
-            inBuf.RemoveDWORD
+            inBuf.GetDWORD
             RaiseEvent RemoveUserReply(inBuf.GetByte)
             
-        Case SID_MEMBERLEFT:      RaiseEvent MemberLeaves(inBuf.GetNTString)
-        Case SID_REMOVEDFROMCLAN: RaiseEvent RemovedFromClan(inBuf.DebuffBYTE)
+        Case SID_MEMBERLEFT:      RaiseEvent MemberLeaves(inBuf.GetString)
+        Case SID_REMOVEDFROMCLAN: RaiseEvent RemovedFromClan(inBuf.GetByte)
             
         Case SID_DISBANDCLAN
-            inBuf.RemoveDWORD 'cookie
+            inBuf.GetDWORD 'cookie
             RaiseEvent DisbandClanReply((inBuf.GetByte = 0))
             
             
         Case SID_CLANINVITE, SID_CLANINVITE2
         
-            sTemp = inBuf.DebuffRaw(4)
-            ClanTag = inBuf.DebuffRaw(4)
+            sTemp = inBuf.GetRaw(4)
+            ClanTag = inBuf.GetRaw(4)
             ReDim ary(2)
-            ary(0) = inBuf.DebuffNTString
-            ary(1) = inBuf.DebuffNTString
+            ary(0) = inBuf.GetString
+            ary(1) = inBuf.GetString
             
             RaiseEvent ClanInvitation(sTemp, StrReverse(ClanTag), ClanTag, ary(0), ary(1), (PacketID = SID_CLANINVITE2))
             
         Case SID_CLANREQUEST
-            inBuf.RemoveDWORD
+            inBuf.GetDWORD
             RaiseEvent InviteUserReply(inBuf.GetByte)
             
         Case SID_NEWRANKRECEIVED
 '            (BYTE) - Old rank
 '            (BYTE) - New rank
 '            (STRING) - User who changed your rank
-            inBuf.RemoveBYTE
+            inBuf.GetByte
             RaiseEvent MyRankChange(inBuf.GetByte)
             
         Case SID_CLANUSERINFO
@@ -174,9 +174,9 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             Dim cookie  As Long
             Dim Message As String
             
-            cookie = inBuf.DebuffDWORD
-            inBuf.RemoveDWORD
-            Message = inBuf.GetNTString
+            cookie = inBuf.GetDWORD
+            inBuf.GetDWORD
+            Message = inBuf.GetString
         
             RaiseEvent ClanMOTD(cookie, Message)
 
