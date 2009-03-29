@@ -95,11 +95,13 @@ Public Function DestroyMenus()
 
     Dim I As Integer ' ...
     
+    frmChat.mnuScriptingDash(0).Visible = False
+    
     For I = DynamicMenus.Count To 1 Step -1
         
-        If (GetScriptObjByMenuID(DynamicMenus(I).ID).ObjName <> vbNullString) Then
+        If (Left$(DynamicMenus(I).Name, 1) = Chr$(0)) Then
             DynamicMenus(I).Class_Terminate
-        
+            
             Set DynamicMenus(I) = Nothing
             
             DynamicMenus.Remove I
@@ -354,12 +356,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
     Dim strContent       As String  ' ...
     Dim f                As Integer ' ...
     Dim blnCheckOperands As Boolean
-        Dim lngStartTime         As Long
-        Dim lngFinishTime        As Long
-    
-        
-        lngStartTime = GetTickCount()
-    
+
     ' ...
     blnCheckOperands = True
     
@@ -423,16 +420,10 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
     
     ' ...
     ScriptModule.AddCode strContent
-    
-        lngFinishTime = GetTickCount()
-        
-        
-        
         
     ' ...
     If (defaults) Then
-                '// 03/27/2009 52 - Added the number of milliseconds it took to the parameter list
-        CreateDefautModuleProcs ScriptModule, filePath, (lngFinishTime - lngStartTime)
+        CreateDefautModuleProcs ScriptModule, filePath
     End If
     
     FileToModule = True
@@ -445,7 +436,7 @@ ERROR_HANDLER:
 
 End Function
 
-Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module, ByVal ScriptPath As String, ByVal LoadTime As Long)
+Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module, ByVal ScriptPath As String)
 
     On Error GoTo ERROR_HANDLER
 
@@ -844,14 +835,22 @@ Public Function Objects(objIndex As Integer) As scObj
 
 End Function
 
-Public Function ObjCount(Optional ObjType As String) As Integer
+Private Function ObjCount(Optional ObjType As String, Optional ByVal SCModule As Module = Nothing) As Integer
     
     Dim I As Integer ' ...
 
     If (ObjType <> vbNullString) Then
         For I = 0 To m_objCount - 1
-            If (StrComp(ObjType, m_arrObjs(I).ObjType, vbTextCompare) = 0) Then
-                ObjCount = (ObjCount + 1)
+            If (SCModule Is Nothing) Then
+                If (StrComp(ObjType, m_arrObjs(I).ObjType, vbTextCompare) = 0) Then
+                    ObjCount = (ObjCount + 1)
+                End If
+            Else
+                If (StrComp(SCModule.Name, m_arrObjs(I).SCModule.Name) = 0) Then
+                    If (StrComp(ObjType, m_arrObjs(I).ObjType, vbTextCompare) = 0) Then
+                        ObjCount = (ObjCount + 1)
+                    End If
+                End If
             End If
         Next I
     Else
@@ -946,7 +945,7 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
             HookWindowProc obj.obj.hWnd
             
         Case "MENU"
-            If (ObjCount("Menu") = 0) Then
+            If (ObjCount("Menu", SCModule) = 0) Then
                 Dim tmp As New clsMenuObj ' ...
                 
                 tmp.Parent = _
@@ -1087,6 +1086,9 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
             m_arrObjs(Index).obj.DestroyObjs
             
             Unload m_arrObjs(Index).obj
+            
+        Case "MENU"
+            m_arrObjs(Index).obj.Class_Terminate
     End Select
 
     ' ...

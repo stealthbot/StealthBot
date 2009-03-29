@@ -112,6 +112,7 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
+      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -230,16 +231,16 @@ End Function
 '
 'End Function
 
-Private Function ObjCount(Optional ObjType As String) As Integer
+Public Function ObjCount(Optional ObjType As String) As Integer
     
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
 
     If (ObjType <> vbNullString) Then
-        For i = 0 To m_objCount - 1
-            If (StrComp(ObjType, m_arrObjs(i).ObjType, vbTextCompare) = 0) Then
+        For I = 0 To m_objCount - 1
+            If (StrComp(ObjType, m_arrObjs(I).ObjType, vbTextCompare) = 0) Then
                 ObjCount = (ObjCount + 1)
             End If
-        Next i
+        Next I
     Else
         ObjCount = m_objCount
     End If
@@ -254,17 +255,17 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String, Opti
     
     ' redefine array size & check for duplicate controls
     If (m_objCount) Then
-        Dim i As Integer ' loop counter variable
+        Dim I As Integer ' loop counter variable
 
-        For i = 0 To m_objCount - 1
-            If (StrComp(m_arrObjs(i).ObjType, ObjType, vbTextCompare) = 0) Then
-                If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
-                    Set CreateObj = m_arrObjs(i).obj
+        For I = 0 To m_objCount - 1
+            If (StrComp(m_arrObjs(I).ObjType, ObjType, vbTextCompare) = 0) Then
+                If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
+                    Set CreateObj = m_arrObjs(I).obj
                 
                     Exit Function
                 End If
             End If
-        Next i
+        Next I
         
         ReDim Preserve m_arrObjs(0 To m_objCount)
     Else
@@ -394,12 +395,12 @@ Public Sub DestroyObjs()
 
     On Error GoTo ERROR_HANDLER
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
-    For i = m_objCount - 1 To 0 Step -1
-        DestroyObj m_arrObjs(i).ObjName
-    Next i
+    For I = m_objCount - 1 To 0 Step -1
+        DestroyObj m_arrObjs(I).ObjName
+    Next I
     
     ' ...
     Exit Sub
@@ -417,7 +418,7 @@ Public Sub DestroyObj(ByVal ObjName As String)
 
     On Error GoTo ERROR_HANDLER
 
-    Dim i     As Integer ' ...
+    Dim I     As Integer ' ...
     Dim Index As Integer ' ...
     
     ' ...
@@ -429,13 +430,13 @@ Public Sub DestroyObj(ByVal ObjName As String)
     Index = m_objCount
     
     ' ...
-    For i = 0 To m_objCount - 1
-        If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
-            Index = i
+    For I = 0 To m_objCount - 1
+        If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
+            Index = I
         
             Exit For
         End If
-    Next i
+    Next I
     
     ' ...
     If (Index >= m_objCount) Then
@@ -551,9 +552,9 @@ Public Sub DestroyObj(ByVal ObjName As String)
     
     ' ...
     If (Index < m_objCount) Then
-        For i = Index To ((m_objCount - 1) - 1)
-            m_arrObjs(i) = m_arrObjs(i + 1)
-        Next i
+        For I = Index To ((m_objCount - 1) - 1)
+            m_arrObjs(I) = m_arrObjs(I + 1)
+        Next I
     End If
     
     ' ...
@@ -580,32 +581,32 @@ End Sub
 
 Public Function GetObjByName(ByVal ObjName As String) As Object
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
-    For i = 0 To m_objCount - 1
-        If (StrComp(m_arrObjs(i).ObjName, ObjName, vbTextCompare) = 0) Then
-            Set GetObjByName = m_arrObjs(i).obj
+    For I = 0 To m_objCount - 1
+        If (StrComp(m_arrObjs(I).ObjName, ObjName, vbTextCompare) = 0) Then
+            Set GetObjByName = m_arrObjs(I).obj
 
             Exit Function
         End If
-    Next i
+    Next I
     
 End Function
 
 Private Function GetScriptObjByIndex(ByVal ObjType As String, ByVal Index As Integer) As scObj
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
 
-    For i = 0 To m_objCount - 1
-        If (StrComp(ObjType, m_arrObjs(i).ObjType, vbTextCompare) = 0) Then
-            If (m_arrObjs(i).obj.Index = Index) Then
-                GetScriptObjByIndex = m_arrObjs(i)
+    For I = 0 To m_objCount - 1
+        If (StrComp(ObjType, m_arrObjs(I).ObjType, vbTextCompare) = 0) Then
+            If (m_arrObjs(I).obj.Index = Index) Then
+                GetScriptObjByIndex = m_arrObjs(I)
                 
                 Exit For
             End If
         End If
-    Next i
+    Next I
     
 End Function
 
@@ -613,43 +614,43 @@ Public Sub ClearObjs()
 
     On Error GoTo ERROR_HANDLER
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
-    For i = m_objCount - 1 To 0 Step -1
-        Select Case (UCase$(m_arrObjs(i).ObjType))
+    For I = m_objCount - 1 To 0 Step -1
+        Select Case (UCase$(m_arrObjs(I).ObjType))
             Case "CHECKBOX"
-                chk(m_arrObjs(i).obj.Index).Value = vbUnchecked
+                chk(m_arrObjs(I).obj.Index).Value = vbUnchecked
                 
             Case "COMBOXBOX"
-                cmb(m_arrObjs(i).obj.Index).text = ""
+                cmb(m_arrObjs(I).obj.Index).text = ""
             
             Case "IMAGELIST"
-                iml(m_arrObjs(i).obj.Index).ListImages.Clear
+                iml(m_arrObjs(I).obj.Index).ListImages.Clear
             
             Case "LISTBOX"
-                lst(m_arrObjs(i).obj.Index).Clear
+                lst(m_arrObjs(I).obj.Index).Clear
             
             Case "LISTVIEW"
-                lsv(m_arrObjs(i).obj.Index).ListItems.Clear
+                lsv(m_arrObjs(I).obj.Index).ListItems.Clear
                 
             Case "MENU"
             
             Case "OPTIONBUTTON"
-                opt(m_arrObjs(i).obj.Index).Value = False
+                opt(m_arrObjs(I).obj.Index).Value = False
 
             Case "PICTUREBOX"
-                pic(m_arrObjs(i).obj.Index).Picture = Nothing
+                pic(m_arrObjs(I).obj.Index).Picture = Nothing
 
             Case "RICHTEXTBOX"
-                rtb(m_arrObjs(i).obj.Index).text = ""
+                rtb(m_arrObjs(I).obj.Index).text = ""
                 
-                DisableURLDetect m_arrObjs(i).obj.hWnd
+                DisableURLDetect m_arrObjs(I).obj.hWnd
                 
             Case "TEXTBOX"
-                txt(m_arrObjs(i).obj.Index).text = ""
+                txt(m_arrObjs(I).obj.Index).text = ""
         End Select
-    Next i
+    Next I
 
     Exit Sub
 

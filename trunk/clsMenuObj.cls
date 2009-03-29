@@ -36,8 +36,6 @@ End Sub
 
 Public Sub Class_Terminate()
 
-    MsgBox "!"
-
     ' ...
     DeleteMenu
 
