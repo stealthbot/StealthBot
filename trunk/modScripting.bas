@@ -354,11 +354,11 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
     Dim strContent       As String  ' ...
     Dim f                As Integer ' ...
     Dim blnCheckOperands As Boolean
-	Dim lngStartTime	 As Long
-	Dim lngFinishTime	 As Long
+        Dim lngStartTime         As Long
+        Dim lngFinishTime        As Long
     
-	
-	lngStartTime = GetTickCount()
+        
+        lngStartTime = GetTickCount()
     
     ' ...
     blnCheckOperands = True
@@ -424,14 +424,14 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
     ' ...
     ScriptModule.AddCode strContent
     
-	lngFinishTime = GetTickCount()
-	
-	
-	
-	
+        lngFinishTime = GetTickCount()
+        
+        
+        
+        
     ' ...
     If (defaults) Then
-		'// 03/27/2009 52 - Added the number of milliseconds it took to the parameter list
+                '// 03/27/2009 52 - Added the number of milliseconds it took to the parameter list
         CreateDefautModuleProcs ScriptModule, filePath, (lngFinishTime - lngStartTime)
     End If
     
@@ -461,11 +461,7 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module, ByVal ScriptPa
     ' ...
     ScriptModule.ExecuteStatement "Script(""Path"") = " & Chr$(34) & _
         ScriptPath & Chr$(34)
-
-	'// 03/27/2009 52 - Added default Script property for the load time
-    ScriptModule.ExecuteStatement "Script(""LoadTime"") = " & Chr$(34) & _
-        LoadTime & Chr$(34)
-		
+                
     ' ...
     ScriptModule.ExecuteStatement "Set DataBuffer = DataBufferEx()"
 
@@ -686,18 +682,19 @@ Public Sub InitScript(ByRef SCModule As Module)
 
     On Error GoTo ERROR_HANDLER
 
-    Dim I As Integer ' ...
-	Dim startTime As Long
-	Dim finishTime As Long
+    Dim I          As Integer ' ...
+    Dim startTime  As Long
+    Dim finishTime As Long
 
     ' ...
-	startTime = GetTickCount()
+    startTime = GetTickCount()
+    
     SCModule.Run "Event_Load"
-	finishTime = GetTickCount()
-	
-	'// 03/27/2009 52 - Added default Script property for the load time
-    SCModule.ExecuteStatement "Script(""LoadTime"") = CLng(Script(""LoadTime"")) + " & Chr$(34) & _
-        (finishTime - startTime) & Chr$(34)
+    
+    finishTime = GetTickCount()
+ 
+    '// 03/27/2009 52 - added default Script property for the load time
+    SCModule.CodeObject.Script("InitPerf") = (finishTime - startTime)
 
     ' ...
     If (g_Online) Then

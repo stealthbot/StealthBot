@@ -447,7 +447,7 @@ Sub psProcessCmd(ByVal Message, Username, DisplayID)
  
       '// Is this a valid internal plugin system command?
       Select Case strCmdName
-         Case "prefix", "updates", "getplugin", "debug", "lset", "plugins", "nvn", "ext", "phelp", "delplugin", "psnews", "pedit", "ploadtimes"
+         Case "prefix", "updates", "getplugin", "debug", "lset", "plugins", "nvn", "ext", "phelp", "delplugin", "psnews", "pedit", "pinitperf"
             VetoThisMessage
          Case Else: Exit Sub
       End Select
@@ -468,7 +468,7 @@ Sub psProcessCmd(ByVal Message, Username, DisplayID)
    Select Case strCmdName
       Case "prefix":    ps_prefix_cmd cmd, cmdPrefix, Username, DisplayID
       Case "updates":   ps_updates_cmd cmd, Username, DisplayID
-	  Case "ploadtimes":ps_ploadtimes_cmd cmd, Username, DisplayID
+	  Case "pinitperf":ps_pinitperf_cmd cmd, Username, DisplayID
       Case "getplugin": ps_getplugin_cmd cmd, Username, DisplayID
       Case "debug":     ps_debug_cmd cmd, Username, DisplayID
       Case "plugins":   ps_plugins_cmd cmd, Username, DisplayID
@@ -524,7 +524,7 @@ Sub ps_prefix_cmd(cmd, Prefix, Username, DisplayID)
    SetMenuItemCheck Prefix, "Enabled", boolEnabled
 End Sub
 
-Sub ps_ploadtimes_cmd(cmd, Username, DisplayID)
+Sub ps_pinitperf_cmd(cmd, Username, DisplayID)
 	If DisplayID < 4 Then
 		Exit Sub
 	End If
