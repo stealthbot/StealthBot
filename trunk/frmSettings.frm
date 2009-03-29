@@ -5127,7 +5127,11 @@ Private Sub InitBasicConfig()
     End With
     
     s = ReadCfg(MN, "Trigger")
-    s = Mid(s, 2, Len(s) - 2)
+    If Len(s) > 1 Then
+        s = Mid(s, 2, Len(s) - 2) ' fix it! nou
+    Else
+        s = "."
+    End If
     txtTrigger.text = s
     
     s = ReadCfg(MN, "Product")
