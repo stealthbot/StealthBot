@@ -267,12 +267,12 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
             If Len(Data) > 12 Then  ' We have a response!
                 pD.Position = pD.Position + 4
                 
-                ds.SetVersion pD.GetDWORD
-                ds.SetCheckSum pD.GetDWORD
+                ds.SetVersion pD.GetDWord
+                ds.SetCheckSum pD.GetDWord
                 ds.SetExeInfo pD.GetString
                 
                 pD.Position = pD.Position + 4
-                ds.SetVerByte pD.GetDWORD
+                ds.SetVerByte pD.GetDWord
                 
                 ' removed cd key hashing @ bnls ~Pyro
                 'Call Send_0x01(BotVars.CDKey)

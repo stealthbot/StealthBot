@@ -73,7 +73,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
     Select Case PacketID
     
         Case SID_FINDCLANCANDIDATES 'Clan candidates
-            inBuf.GetDWORD 'Cookie
+            inBuf.GetDWord 'Cookie
             bStatus = inBuf.GetByte
             bRank = inBuf.GetByte
             If (bRank > 0) Then
@@ -103,7 +103,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             
             'demote: 1; promote: 3
             
-            iTemp = inBuf.GetDWORD
+            iTemp = inBuf.GetDWord
             bStatus = inBuf.GetByte
 
             Select Case bStatus
@@ -122,7 +122,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             End Select
             
         Case SID_CLANMEMBERLIST 'Clan listing
-            inBuf.GetDWORD
+            inBuf.GetDWord
             bTemp = inBuf.GetByte
             ReDim ary(0 To bTemp * 4 - 1)
             For iTemp = 0 To bTemp - 1
@@ -135,14 +135,14 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             
             
         Case SID_REMOVEMEMBER
-            inBuf.GetDWORD
+            inBuf.GetDWord
             RaiseEvent RemoveUserReply(inBuf.GetByte)
             
         Case SID_MEMBERLEFT:      RaiseEvent MemberLeaves(inBuf.GetString)
         Case SID_REMOVEDFROMCLAN: RaiseEvent RemovedFromClan(inBuf.GetByte)
             
         Case SID_DISBANDCLAN
-            inBuf.GetDWORD 'cookie
+            inBuf.GetDWord 'cookie
             RaiseEvent DisbandClanReply((inBuf.GetByte = 0))
             
             
@@ -157,7 +157,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             RaiseEvent ClanInvitation(sTemp, StrReverse(ClanTag), ClanTag, ary(0), ary(1), (PacketID = SID_CLANINVITE2))
             
         Case SID_CLANREQUEST
-            inBuf.GetDWORD
+            inBuf.GetDWord
             RaiseEvent InviteUserReply(inBuf.GetByte)
             
         Case SID_NEWRANKRECEIVED
@@ -174,8 +174,8 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             Dim cookie  As Long
             Dim Message As String
             
-            cookie = inBuf.GetDWORD
-            inBuf.GetDWORD
+            cookie = inBuf.GetDWord
+            inBuf.GetDWord
             Message = inBuf.GetString
         
             RaiseEvent ClanMOTD(cookie, Message)

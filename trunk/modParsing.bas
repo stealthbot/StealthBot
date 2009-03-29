@@ -93,9 +93,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &HF 'SID_CHATEVENT
                 ' User information
-                EventID = pD.GetDWORD
-                UserFlags = pD.GetDWORD
-                UserPing = pD.GetDWORD
+                EventID = pD.GetDWord
+                UserFlags = pD.GetDWord
+                UserPing = pD.GetDWord
                 
                 ' (3 defunct DWORDS)
                 pD.Position = pD.Position + (3 * 4)
@@ -191,7 +191,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &H25 'SID_PING
                 If BotVars.Spoof = 0 Or g_Online Then
-                    PBuffer.InsertDWord pD.GetDWORD
+                    PBuffer.InsertDWord pD.GetDWord
                     PBuffer.SendPacket &H25
                 End If
             
@@ -201,7 +201,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H3D 'SID_CREATEACCT2
-                L = pD.GetDWORD
+                L = pD.GetDWord
                 
                 B = Event_AccountCreateResponse(L)
                 
@@ -214,12 +214,12 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &H31 'SID_CHANGEPASSWORD
                 ' Hypothetical code for when I decide to implement this
-                ' b = CBool(pd.GetDWORD)
+                ' b = CBool(pd.GetDWord)
                 ' call event_ChangePasswordResponse(b)
             
             '###########################################################################
             Case &H3A 'SID_LOGONRESPONSE2
-                L = pD.GetDWORD
+                L = pD.GetDWord
             
                 Select Case L
                     Case &H0  'Successful login.
@@ -278,7 +278,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     Next L
                     
                     
-                    L = pD.GetDWORD 'Port
+                    L = pD.GetDWord 'Port
                     L = ntohs(L)        'Fix byte order
                     'Debug.Print l
                     'Debug.Print ntohl(l)
@@ -301,7 +301,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     
                 Else
                     pD.Position = pD.Position + 4
-                    L = pD.GetDWORD
+                    L = pD.GetDWord
                     
                     Call Event_RealmStatusError(L)
                     Unload frmRealm
@@ -325,10 +325,10 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H50 'SID_AUTH_INFO
-                L = pD.GetDWORD ' Logon type
+                L = pD.GetDWord ' Logon type
                 ds.LogonType = L
                 
-                ServerToken = pD.GetDWORD
+                ServerToken = pD.GetDWord
                 ds.SetServerToken ServerToken
                 
                 pD.Position = pD.Position + 4
@@ -370,7 +370,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &H51 'SID_AUTH_CHECK
                 ' b is being used as a NoProceed boolean
-                L = pD.GetDWORD
+                L = pD.GetDWord
                 s = pD.GetString
                 B = True    'Default action: Do not proceed
                 
@@ -436,7 +436,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H52 'SID_AUTH_ACCOUNTCREATE
-                L = pD.GetDWORD
+                L = pD.GetDWord
                 
                 Select Case L
                     Case &H0
@@ -462,7 +462,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 
             '###########################################################################
             Case &H53 'SID_AUTH_ACCOUNTLOGON
-                L = pD.GetDWORD
+                L = pD.GetDWord
                 s = pD.GetRaw(32) 'Salt [s]
                 s2 = pD.GetRaw(32) ' Server key [B]
                 
@@ -504,7 +504,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 
             '###########################################################################
             Case &H54 'SID_AUTH_ACCOUNTLOGONPROOF
-                L = pD.GetDWORD
+                L = pD.GetDWord
                 
                 Select Case L
                     Case &H0   'Success

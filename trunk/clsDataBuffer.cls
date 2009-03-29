@@ -111,6 +111,11 @@ Public Sub GetByteArr(ByRef Data() As Byte, Optional ByVal Length As Integer = -
         Length = m_bufsize
     End If
     
+    ' ...
+    If ((m_bufpos + Length) > m_bufsize) Then
+        Exit Function
+    End If
+    
     ' resize buffer
     ReDim Data(0 To Length)
 
@@ -153,7 +158,7 @@ Public Function InsertWord(ByVal Data As Integer)
 End Function ' end function InsertWord
 
 ' ...
-Public Function GetWORD() As Integer
+Public Function GetWord() As Integer
 
     ' ...
     If ((m_bufpos + 2) > m_bufsize) Then
@@ -161,7 +166,7 @@ Public Function GetWORD() As Integer
     End If
 
     ' copy data to buffer
-    CopyMemory GetWORD, m_buf(m_bufpos), 2
+    CopyMemory GetWord, m_buf(m_bufpos), 2
 
     ' ...
     m_bufpos = (m_bufpos + 2)
@@ -183,7 +188,7 @@ Public Function InsertDWord(ByVal Data As Long)
 End Function ' end function InsertDWord
 
 ' ...
-Public Function GetDWORD() As Long
+Public Function GetDWord() As Long
 
     ' ...
     If ((m_bufpos + 4) > m_bufsize) Then
@@ -191,7 +196,7 @@ Public Function GetDWORD() As Long
     End If
 
     ' copy data to buffer
-    CopyMemory GetDWORD, m_buf(m_bufpos), 4
+    CopyMemory GetDWord, m_buf(m_bufpos), 4
 
     ' ...
     m_bufpos = (m_bufpos + 4)
@@ -276,6 +281,11 @@ Public Function GetRaw(Optional ByVal Length As Integer = -1) As String
     If (Length = -1) Then
         Length = m_bufsize
     End If
+    
+    ' ...
+    If ((m_bufpos + Length) > m_bufsize) Then
+        Exit Function
+    End If
 
     ' ...
     GetRaw = String$(Length, Chr$(0))
@@ -303,7 +313,7 @@ Public Property Get Position() As Long
 End Property
 
 ' ...
-Public Property Let Position(lng As Long)
+Public Property Let Position(ByVal lng As Long)
 
     m_bufpos = lng
     
