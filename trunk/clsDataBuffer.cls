@@ -113,7 +113,7 @@ Public Sub GetByteArr(ByRef Data() As Byte, Optional ByVal Length As Integer = -
     
     ' ...
     If ((m_bufpos + Length) > m_bufsize) Then
-        Exit Function
+        Exit Sub
     End If
     
     ' resize buffer
@@ -202,6 +202,27 @@ Public Function GetDWord() As Long
     m_bufpos = (m_bufpos + 4)
 
 End Function ' end function GetDWord
+
+' ...
+Public Function GetFileTime() As Date
+
+    Dim ft As FILETIME ' ...
+
+    ' ...
+    If ((m_bufpos + 8) > m_bufsize) Then
+        Exit Function
+    End If
+
+    ' copy data to buffer
+    CopyMemory ft, m_buf(m_bufpos), 8
+
+    ' ...
+    m_bufpos = (m_bufpos + 8)
+
+    ' ...
+    GetFileTime = FileTimeToDate(ft)
+
+End Function ' end function GetFileTime
 
 ' ...
 Public Function InsertNonNTString(ByVal Data As String)
