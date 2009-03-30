@@ -1268,14 +1268,14 @@ End Sub
 
 
 '// "Open plugins folder"
-Sub ps_OpenPlugins_Callback()
+Sub mnuOptionsOpenFolder_Click()
 
    psProcessCmd "/pedit plugins", BotVars.Username, 4
 End Sub
 
 
 '// "Open settings.ini"
-Sub ps_OpenSettings_Callback()
+Sub mnuOptionsOpenSettings_Click()
 
    psProcessCmd "/pedit", BotVars.Username, 4
 End Sub
@@ -1335,42 +1335,42 @@ End Sub
 
 
 '// "Options" > "Globally Disable Plugins"
-Sub ps_GEnabled_Callback()
+Sub mnuOptionsDisablePlugins_Click()
 
    PluginMenus_Enabled_Callback "ps"
 End Sub
 
 
 '// "Options" > "Globally Disable NVN"
-Sub ps_GNVN_Callback()
+Sub mnuOptionsDisableNotification_Click()
 
    PluginMenus_NVN_Callback "ps"
 End Sub
 
 
 '// "Options" > "Global Enabled Plugin Backups"
-Sub ps_GBackups_Callback()
+Sub mnuOptionsDisableBackup_Click()
 
    PluginMenus_Backup_Callback "ps"
 End Sub
 
 
 '// "Options" > "Check for Updates"
-Sub ps_UpdateCheck_Callback()
+Sub mnuOptionsCheckUpdates_Click()
 
    Call psAutoUpdate(True)
 End Sub
 
 
 '// "Options" > "Download Plugins"
-Sub ps_GetPlugins_Callback()
+Sub mnuOptionsDownload_Click()
 
    psProcessCmd "/updates", BotVars.Username, 4
 End Sub
 
 
 '// "Options" > "Add Code Manually"
-Sub ps_AddCode_Callback()
+Sub mnuOptionsAddCode_Click()
    On Error Resume Next
 
    '// Get plugin file name
@@ -1462,14 +1462,14 @@ End Sub
 
 
 '// "Advanced" > "Open PluginSystem.dat"
-Sub ps_OpenPS_Callback()
+Sub mnuAdvancedOpenPluginSystem_Click()
 
    psProcessCmd "/pedit ps", BotVars.Username, 4
 End Sub
 
 
 '// "Advanced" > "Plugin Creator"
-Sub ps_PluginCreator_Callback()
+Sub mnuAdvancedPluginCreator_Click()
 
    If psFSO.FileExists("PluginCreator.exe") Then
       psWshShell.Run "PluginCreator.exe"
@@ -1503,7 +1503,7 @@ End Sub
 
 
 '// "Advanced" > "Debug Mode"
-Sub ps_Debug_Callback()
+Sub mnuAdvancedDebugMode_Click()
 
    If GetSetting("ps", "debugmode") Then boolDebugMode = False Else boolDebugMode = True End If
 
@@ -1518,28 +1518,28 @@ End Sub
 
 
 '// "Help" > "Plugin System Commands"
-Sub ps_Help1_Callback()
+Sub mnuHelpCommands_Click()
 
    psProcessCmd "/phelp ps", BotVars.Username, 4
 End Sub
 
 
 '// "Help" > "The Plugin System Guide"
-Sub ps_Help2_Callback
+Sub mnuHelpGuide_Click()
 
    psAppShell.Open PS_SBNET_URL & "showtopic=6052"
 End Sub
 
 
 '// "Help" > "Scripting and Plugins Help"
-Sub ps_Help3_Callback
+Sub mnuHelpSupport_Click()
 
    psAppShell.Open PS_SBNET_URL & "showforum=11"
 End Sub
 
 
 '// "Help" > "About..."
-Sub ps_About_Callback
+Sub mnuHelpAbout_Click()
 
    If Not scINet.StillExecuting Then
       AddChat psColor2, scINet.OpenURL(PS_UPDATE_URL & "psabout.txt") & vbCrLf

@@ -1142,6 +1142,9 @@ End Sub
 '// RELOADPLUGINMENUS
 '//   Reloads the all plugin menus. All user-added items will be cleared.
 Public Sub ReloadPluginMenus()
+    
+    Exit Sub
+
     Call DeletePluginMenus
     Call RegisterPluginMenus
 End Sub
@@ -1150,6 +1153,8 @@ End Sub
 '// REMOVEPLUGINMENU
 '//   Removes an entire plugin menu.
 Public Sub RemoveMenuItem(ByVal strPrefix As String, Optional ByVal strName As String)
+
+    Exit Sub
 
     If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
     
@@ -1167,6 +1172,8 @@ End Sub
 '//     Sub <prefix>_Menu_Callback(ItemName)
 Public Sub AddMenuItem(ByVal strPrefix As String, ByVal strName As String, Optional ByVal boolSeparator As Boolean, _
                 Optional ByVal boolDisabled As Boolean, Optional ByVal boolCheckmark As Boolean)
+
+    Exit Sub
 
     If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
 
@@ -1197,6 +1204,8 @@ End Sub
 '//   Changes checked status of an item in a plugin menu.
 Public Sub SetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String, ByVal boolChecked As Boolean)
 
+    Exit Sub
+
     If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
     
     SetMenuCheck GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolChecked
@@ -1207,6 +1216,9 @@ End Sub
 '//   Get's the checked status of an item in a plugin menu.
 '//   Returns True (checked), False (unchecked), or -1 if it's not a checkmark item
 Public Function GetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
+    
+    Exit Function
+    
     If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Function
     
     Dim intChange As Integer
@@ -1227,6 +1239,8 @@ End Function
 '//   Reverses the checked status of a plugin menu item.
 Public Sub ToggleMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
 
+    Exit Sub
+
     If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
     
     SetMenuItemCheck strPrefix, strName, Not GetMenuItemCheck(strPrefix, strName)
@@ -1236,6 +1250,8 @@ End Sub
 '// SETMENUITEMENABLED
 '//   Enables or disables a plugin menu item. Disabled items are greyed out and not clickable.
 Public Sub SetMenuItemEnabled(ByVal strPrefix As String, ByVal strName As String, ByVal boolEnabled As Boolean)
+
+    Exit Sub
 
     If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
     
@@ -1469,6 +1485,12 @@ Public Function Sha1(ByVal Data As String) As String
     
     Call modSHA1.DefaultSHA1(StrConv(Data, vbFromUnicode), A, B, c, d, e)
     Sha1 = LongToStr(A) & LongToStr(B) & LongToStr(c) & LongToStr(d) & LongToStr(e)
+End Function
+
+Public Function IGetScriptModule(ByVal ModuleID As String) As Object
+
+    Set IGetScriptModule = frmChat.SControl.Modules(ModuleID)
+
 End Function
 
 Public Function ICreateObj(ByVal ModuleID As String, ByVal ObjType As String, ByVal ObjName As String, Optional CallCode As String) As Object

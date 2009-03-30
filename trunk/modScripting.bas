@@ -467,6 +467,11 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module, ByVal ScriptPa
     str = str & "   GetModuleID = " & Chr$(34) & ScriptModule.Name & Chr$(34) & vbNewLine
     str = str & "End Function" & vbNewLine
     
+    ' GetScriptModule() module-level function
+    str = str & "Function GetScriptModule()" & vbNewLine
+    str = str & "   Set GetScriptModule = IGetScriptModule(GetModuleID)" & vbNewLine
+    str = str & "End Function" & vbNewLine
+    
     ' GetWorkingDirectory() module-level function
     str = str & "Function GetWorkingDirectory()" & vbNewLine
     str = str & "   GetWorkingDirectory = _" & vbNewLine
