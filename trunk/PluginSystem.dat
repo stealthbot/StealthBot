@@ -151,6 +151,7 @@ Set dictSettings = CreateObject("Scripting.Dictionary")
 Set dictTimerInterval = CreateObject("Scripting.Dictionary")
 Set dictTimerEnabled = CreateObject("Scripting.Dictionary")
 Set dictTimerCount = CreateObject("Scripting.Dictionary")
+Set pluginMenus = CreateObject("Scripting.Dictionary")
 
 
 '// [[[ PLUGIN LOADING ]]]
@@ -468,7 +469,7 @@ Sub psProcessCmd(ByVal Message, Username, DisplayID)
    Select Case strCmdName
       Case "prefix":    ps_prefix_cmd cmd, cmdPrefix, Username, DisplayID
       Case "updates":   ps_updates_cmd cmd, Username, DisplayID
-	  Case "pinitperf":ps_pinitperf_cmd cmd, Username, DisplayID
+      Case "pinitperf": ps_pinitperf_cmd cmd, Username, DisplayID
       Case "getplugin": ps_getplugin_cmd cmd, Username, DisplayID
       Case "debug":     ps_debug_cmd cmd, Username, DisplayID
       Case "plugins":   ps_plugins_cmd cmd, Username, DisplayID
@@ -521,7 +522,7 @@ Sub ps_prefix_cmd(cmd, Prefix, Username, DisplayID)
 
    '// Toggle enabled checkmark in plugin menu
    If Prefix = "ps" Then boolEnabled = Not arrOnOff(0) Else boolEnabled = arrOnOff(0) End If
-   SetMenuItemCheck Prefix, "Enabled", boolEnabled
+   pluginMenus(Prefix)("Enabled").Checked = boolEnabled
 End Sub
 
 Sub ps_pinitperf_cmd(cmd, Username, DisplayID)
@@ -667,6 +668,10 @@ Sub ps_debug_cmd(cmd, Username, DisplayID)
          SetSetting "ps", "debugmode", arrOnOff(0), "", True
       End If
    End If
+
+   boolEnabled = arrOnOff(0)
+   pluginMenus("ps")("Debug").Checked = boolEnabled
+   
 End Sub
 
 
@@ -743,7 +748,7 @@ Sub ps_nvn_cmd(cmd, Username, DisplayID)
 
             '// Toggle nvn checkmark in plugin menu
             If cmd(1) = "ps" Then boolEnabled = Not arrOnOff(0) Else boolEnabled = arrOnOff(0) End If
-            SetMenuItemCheck cmd(1), "New Version Notification", boolEnabled
+            pluginMenus(cmd(1))("Nvn").Checked = boolEnabled
          End If
       End If
    End If
@@ -1115,6 +1120,8 @@ Sub CreateMenus()
    pluginPrefixes = psPrefixes
    pluginNames = Split(psTitles, "|||")
 
+   Set pluginMenus("ps") = CreateObject("Scripting.Dictionary")	
+
    Set tmp = CreateObj("Menu", "mnuOptions")
    tmp.Caption = "Options"
 
@@ -1146,13 +1153,19 @@ Sub CreateMenus()
    tmp.Parent = mnuOptions
    tmp.Caption = "Disable Plugins"
 
+   Set pluginMenus("ps")("Enabled") = tmp 
+
    Set tmp = CreateObj("Menu", "mnuOptionsDisableNotification")
    tmp.Parent = mnuOptions
    tmp.Caption = "Disable New Version Notification"
 
+   Set pluginMenus("ps")("Nvn") = tmp
+
    Set tmp = CreateObj("Menu", "mnuOptionsDisableBackup")
    tmp.Parent = mnuOptions
    tmp.Caption = "Disable Backup On Updates"
+
+   Set pluginMenus("ps")("Backup") = tmp
 
    Set tmp = CreateObj("Menu", "mnuOptionsDash3")
    tmp.Parent = mnuOptions
@@ -1169,9 +1182,13 @@ Sub CreateMenus()
    tmp.Caption = "-"
 
    For i = 0 To UBound(pluginPrefixes)
+      Set pluginMenus(pluginPrefixes(i)) = CreateObject("Scripting.Dictionary")	
+
       Set tmp = CreateObj("Menu", "mnuPluginMenus" & pluginPrefixes(i))
       tmp.Parent = mnuPluginMenus
-      tmp.Caption = pluginNames(i) & " (" & pluginPrefixes(i) & ")"	
+      tmp.Caption = pluginNames(i) & " (" & pluginPrefixes(i) & ")"
+
+      Set pluginMenus(pluginPrefixes(i))("Menu") = tmp
 
       Set tmp = CreateObj("Menu", "mnu" & pluginPrefixes(i))
       tmp.Caption = pluginNames(i) & " (" & pluginPrefixes(i) & ")"
@@ -1180,29 +1197,35 @@ Sub CreateMenus()
       tmp2.Parent = tmp
       tmp2.Caption = "Enabled"
 
-      Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Nvm")
-      tmp2.Parent = tmp
-      tmp2.Caption = "New Version Notification"
+      Set pluginMenus(pluginPrefixes(i))("Enabled") = tmp2
 
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Backup")
       tmp2.Parent = tmp
       tmp2.Caption = "Backup On Updates"
+
+      Set pluginMenus(pluginPrefixes(i))("Backup") = tmp2
       
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Dash")
       tmp2.Parent = tmp
       tmp2.Caption = "-"
 
-      Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Nvm")
+      Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Nvn")
       tmp2.Parent = tmp
       tmp2.Caption = "New Version Notification"
+
+      Set pluginMenus(pluginPrefixes(i))("Nvn") = tmp2
 
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Open")
       tmp2.Parent = tmp
       tmp2.Caption = "Open File"
 
+      Set pluginMenus(pluginPrefixes(i))("Open") = tmp2
+
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Help")
       tmp2.Parent = tmp
       tmp2.Caption = "Help"
+
+      Set pluginMenus(pluginPrefixes(i))("Help") = tmp2
    Next
 
    Set tmp = CreateObj("Menu", "mnuDash2")
@@ -1226,6 +1249,8 @@ Sub CreateMenus()
    Set tmp = CreateObj("Menu", "mnuAdvancedDebugMode")
    tmp.Parent = mnuAdvanced
    tmp.Caption = "Debug Mode"
+
+   Set pluginMenus("ps")("Debug") = tmp
 
    Set tmp = CreateObj("Menu", "mnuHelp")
    tmp.Caption = "Help"
@@ -1434,6 +1459,7 @@ Sub PluginMenus_Backup_Callback(Prefix)
      Else
         Addchat vbGreen, "Backup On Updates is no longer globally disabed."
      End If
+
    Else
 
      If GetSetting(Prefix, "backup") Then boolEnabled = False Else boolEnabled = True End If
@@ -1443,7 +1469,7 @@ Sub PluginMenus_Backup_Callback(Prefix)
      AddChat arrOnOff(2), "Backup On Updates " & arrOnOff(1) & " for your " & Prefix & " plugin."
    End If
 
-   SetMenuItemCheck Prefix, "Backup On Updates", boolEnabled
+   pluginMenus(Prefix)("Backup").Checked = boolEnabled
 End Sub
 
 
@@ -1512,8 +1538,6 @@ Sub mnuAdvancedDebugMode_Click()
    Else
       psProcessCmd "/debug off", BotVars.Username, 4
    End If
-
-   SetMenuItemCheck "#advanced", "ps", boolDebugMode
 End Sub
 
 
