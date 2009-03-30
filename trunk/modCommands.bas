@@ -6573,8 +6573,6 @@ Private Function OnEnable(ByVal Username As String, ByRef dbAccess As udtGetAcce
                     frmChat.SControl.Modules(i).CodeObject.WriteSettingsEntry _
                         "Enabled", "True"
                         
-                    'InitMenus
-                        
                     InitScript frmChat.SControl.Modules(i)
                         
                     cmdRet(0) = Name & " has been enabled."

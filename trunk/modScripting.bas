@@ -185,9 +185,15 @@ End Function
 Public Sub InitScriptControl(ByVal SC As ScriptControl)
 
     On Error Resume Next
-
+    
+    ' ...
+    frmChat.scTimer.Enabled = False
+    frmChat.INet.Cancel
+    
     ' ...
     DestroyObjs
+    
+    ' ...
     SC.Reset
 
     ' ...
@@ -669,7 +675,7 @@ Public Sub InitScripts()
 
 End Sub
 
-Public Sub InitScript(ByRef SCModule As Module)
+Public Sub InitScript(ByVal SCModule As Module)
 
     On Error GoTo ERROR_HANDLER
 
@@ -680,18 +686,19 @@ Public Sub InitScript(ByRef SCModule As Module)
     ' ...
     startTime = GetTickCount()
     
+    ' ...
     SCModule.Run "Event_Load"
     
+    ' ...
     finishTime = GetTickCount()
  
     '// 03/27/2009 52 - added default Script property for the load time
     SCModule.CodeObject.Script("InitPerf") = (finishTime - startTime)
 
-    ' ...
     If (g_Online) Then
         SCModule.Run "Event_LoggedOn", GetCurrentUsername, BotVars.Product
         SCModule.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.flags
-
+    
         If (g_Channel.Users.Count > 0) Then
             For I = 1 To g_Channel.Users.Count
                 With g_Channel.Users(I)
@@ -722,7 +729,7 @@ ERROR_HANDLER:
 
     frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
         " in InitScript()."
-    
+ 
     Exit Sub
 
 End Sub
@@ -948,9 +955,27 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
             If (ObjCount("Menu", SCModule) = 0) Then
                 Dim tmp As New clsMenuObj ' ...
                 
+                tmp.Name = _
+                    "mnu" & SCModule.CodeObject.Script("Name") & "Dash1"
                 tmp.Parent = _
                     DynamicMenus("mnu" & SCModule.CodeObject.Script("Name"))
                 tmp.Caption = "-"
+                
+                ' ...
+                m_arrObjs(m_objCount).ObjName = tmp.Name
+                m_arrObjs(m_objCount).ObjType = "Menu"
+                
+                ' ...
+                Set m_arrObjs(m_objCount).SCModule = SCModule
+                
+                ' ...
+                Set m_arrObjs(m_objCount).obj = tmp
+                
+                ' ...
+                m_objCount = (m_objCount + 1)
+                
+                ' ...
+                ReDim Preserve m_arrObjs(0 To m_objCount)
                 
                 ' ...
                 DynamicMenus.Add tmp

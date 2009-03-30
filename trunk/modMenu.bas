@@ -75,7 +75,7 @@ Public Sub ProcessMenu(hWnd As Long, lngMenuCommand As Long)
             End If
         Next I
     End If
-    
+
     Exit Sub
     
     Dim strCallback As String

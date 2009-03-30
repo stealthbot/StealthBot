@@ -95,7 +95,7 @@ Public Sub ParseClanPacket(ByVal PacketID As Byte, ByVal Data As String)
             
         Case SID_CLANINFO   'Clan Info
             inBuf.GetByte 'Unknown (0)
-            ClanTag = Mid(inBuf.Data, inBuf.Position, 4)
+            ClanTag = inBuf.GetRaw(4)
             bRank = inBuf.GetByte
             RaiseEvent ClanInfo(KillNull(StrReverse(ClanTag)), ClanTag, bRank)
             

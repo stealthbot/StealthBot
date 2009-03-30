@@ -894,6 +894,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -919,7 +920,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3003,7 +3003,9 @@ Sub Form_Unload(Cancel As Integer)
     
     On Error Resume Next
     
+    RunInAll "Event_LoggedOff"
     RunInAll "Event_Close"
+    RunInAll "Event_Shutdown"
     
     On Error GoTo 0
     
@@ -4237,7 +4239,14 @@ Sub mnuReloadScripts_Click()
     Dim I     As Integer
     Dim lMenu As Long
 
+    RunInAll "Event_LoggedOff"
     RunInAll "Event_Close"
+
+    InitScriptControl SControl
+    LoadScripts
+    InitScripts
+
+    Exit Sub
 
     ' Clear callback list
     dctCallbacks.RemoveAll
@@ -4268,9 +4277,6 @@ Sub mnuReloadScripts_Click()
     DeleteMenuItem lMenu, ScriptMenu_ParentID, 5
     ScriptMenu_ParentID = 0
 
-    InitScriptControl SControl
-    LoadScripts
-    InitScripts
     
     DrawMenuBar frmChat.hWnd
     
