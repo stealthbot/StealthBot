@@ -26,7 +26,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Dim UserEvent     As clsUserEventObj
     
     Dim UserIndex     As Integer  ' ...
-    Dim i             As Integer  ' ...
+    Dim I             As Integer  ' ...
     Dim PreviousFlags As Long     ' ...
     Dim Clan          As String
     Dim parsed        As String
@@ -375,11 +375,11 @@ End Sub
 Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
     On Error Resume Next
     
-    Dim FT  As FILETIME
+    Dim ft  As FILETIME
     Dim sT  As SYSTEMTIME
     Dim s() As String
     Dim U   As String
-    Dim i   As Integer
+    Dim I   As Integer
     
     'MsgBox PPL
 
@@ -426,21 +426,21 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
         
         If KeyName = "Profile\Location" Then
 Repeat2:
-            i = InStr(1, KeyValue, Chr(13))
+            I = InStr(1, KeyValue, Chr(13))
             
             If Len(KeyValue) > 90 Then
-                If i <> 0 Then
-                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - i)
-                    KeyValue = Right(KeyValue, Len(KeyValue) - i)
+                If I <> 0 Then
+                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - I)
+                    KeyValue = Right(KeyValue, Len(KeyValue) - I)
                     
                     GoTo Repeat2
                 Else
                     frmChat.AddQ U & "[Location] " & KeyValue
                 End If
             Else
-                If i <> 0 Then
-                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - i)
-                    KeyValue = Right(KeyValue, Len(KeyValue) - i)
+                If I <> 0 Then
+                    frmChat.AddQ U & "[Location] " & Left$(KeyValue, Len(KeyValue) - I)
+                    KeyValue = Right(KeyValue, Len(KeyValue) - I)
                     GoTo Repeat2
                 Else
                     frmChat.AddQ U & "[Location] " & KeyValue
@@ -454,17 +454,17 @@ Repeat2:
             X() = Split(KeyValue, Chr(13))
             ReDim s(0)
             
-            For i = LBound(X) To UBound(X)
-                s(0) = X(i)
+            For I = LBound(X) To UBound(X)
+                s(0) = X(I)
                 
                 If Len(s(0)) > 200 Then s(0) = Left$(s(0), 200)
                 
-                If i = LBound(X) Then
+                If I = LBound(X) Then
                     frmChat.AddQ U & "[Descr] " & s(0)
                 Else
                     frmChat.AddQ U & "[Descr] " & Right(s(0), Len(s(0)) - 1)
                 End If
-            Next i
+            Next I
             
             PPL = False
             
@@ -489,16 +489,16 @@ Repeat4:
                 'Dim FT As FILETIME
                 'Dim sT As SYSTEMTIME
                 
-                FT.dwHighDateTime = CLng(Left$(KeyValue, InStr(1, KeyValue, " ", vbTextCompare)))
+                ft.dwHighDateTime = CLng(Left$(KeyValue, InStr(1, KeyValue, " ", vbTextCompare)))
                 
                 'On Error Resume Next
                 
                 KeyValue = Mid$(KillNull(KeyValue), InStr(1, KeyValue, " ", vbTextCompare) + 1)
                 'keyvalue = Left$(keyvalue, Len(keyvalue) - 1)
                 
-                FT.dwLowDateTime = KeyValue 'CLng(KeyValue & "0")
+                ft.dwLowDateTime = KeyValue 'CLng(KeyValue & "0")
                 
-                FileTimeToSystemTime FT, sT
+                FileTimeToSystemTime ft, sT
 
                 With sT
                     frmChat.AddQ U & Right$(KeyName, Len(KeyName) - 7) & ": " & _
@@ -523,16 +523,16 @@ Repeat4:
             'Dim FT As FILETIME
             'Dim sT As SYSTEMTIME
             
-            FT.dwHighDateTime = CLng(Left$(KeyValue, InStr(1, KeyValue, " ", vbTextCompare)))
+            ft.dwHighDateTime = CLng(Left$(KeyValue, InStr(1, KeyValue, " ", vbTextCompare)))
             
             'On Error Resume Next
             
             KeyValue = Mid$(KillNull(KeyValue), InStr(1, KeyValue, " ", vbTextCompare) + 1)
             'keyvalue = Left$(keyvalue, Len(keyvalue) - 1)
             
-            FT.dwLowDateTime = KeyValue 'CLng(KeyValue & "0")
+            ft.dwLowDateTime = KeyValue 'CLng(KeyValue & "0")
             
-            FileTimeToSystemTime FT, sT
+            FileTimeToSystemTime ft, sT
             
             With sT
                 frmChat.AddChat RTBColors.ServerInfoText, Right$(KeyName, Len(KeyName) - 7) & ": " & _
@@ -747,7 +747,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
     Const MSG_KICKEDOUT   As String = " kicked you out of the channel!"
     Const MSG_FRIENDS     As String = "Your friends are:"
     
-    Dim i      As Integer
+    Dim I      As Integer
     Dim temp   As String
     Dim bHide  As Boolean
     Dim ToANSI As String
@@ -809,10 +809,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                     (InStr(1, Message, "game", vbTextCompare) = 0)) Then
                     
                 ' ...
-                i = InStrRev(Message, Space$(1))
+                I = InStrRev(Message, Space$(1))
                 
                 ' ...
-                BotVars.Gateway = Mid$(Message, i + 1)
+                BotVars.Gateway = Mid$(Message, I + 1)
                 
                 ' ...
                 SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
@@ -1022,7 +1022,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal flags As Long, ByVal 
     Dim UserEvent   As clsUserEventObj
     Dim UserObj     As clsUserObj
     
-    Dim i           As Integer ' ...
+    Dim I           As Integer ' ...
     Dim ToANSI      As String  ' ...
     Dim pos         As Integer ' ...
     Dim PassedQueue As Boolean ' ...
@@ -1149,7 +1149,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal flags As Long, By
     Dim found        As ListItem ' ...
     
     Dim UserIndex    As Integer ' ...
-    Dim i            As Integer ' ...
+    Dim I            As Integer ' ...
     Dim strCompare   As String  ' ...
     Dim Level        As Byte    ' ...
     Dim StatUpdate   As Boolean ' ...
@@ -1267,20 +1267,20 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal flags As Long, By
                 ' ...
                 If (BotVars.ShowStatsIcons) Then
                     ' ...
-                    i = g_Channel.GetUserIndex(Username)
+                    I = g_Channel.GetUserIndex(Username)
                     
                     ' ...
-                    If (i > 0) Then
+                    If (I > 0) Then
                         
                         ' ...
                         If (UserObj.Stats.IconCode <> -1) Then
                             ' ...
-                            If (g_Channel.Users(i).game = "WAR3") Then
+                            If (g_Channel.Users(I).game = "WAR3") Then
                                 ' ...
                                 If (found.SmallIcon = ICWAR3) Then
                                     found.SmallIcon = UserObj.Stats.IconCode
                                 End If
-                            ElseIf (g_Channel.Users(i).game = "W3XP") Then
+                            ElseIf (g_Channel.Users(I).game = "W3XP") Then
                                 ' ...
                                 If (found.SmallIcon = ICWAR3X) Then
                                     found.SmallIcon = UserObj.Stats.IconCode
@@ -1339,7 +1339,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal flags As Long, ByVal 
     
     Dim toCheck     As String
     Dim strCompare  As String
-    Dim i           As Long
+    Dim I           As Long
     Dim temp        As Byte
     Dim Level       As Byte
     Dim L           As Long
@@ -1541,7 +1541,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal flags As Long)
     Dim UserObj   As clsUserObj
     
     Dim UserIndex As Integer
-    Dim i         As Integer
+    Dim I         As Integer
     Dim ii        As Integer
     Dim Holder()  As Variant
     Dim pos       As Integer
@@ -1644,7 +1644,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal flags As Long, ByVal M
     Dim s             As String
     Dim U             As String
     Dim strCompare    As String
-    Dim i             As Integer
+    Dim I             As Integer
     Dim ColIndex      As Integer
     Dim B             As Boolean
     Dim ToANSI        As String
@@ -1847,17 +1847,17 @@ End Sub
 Private Function CheckMessage(Username As String, Message As String) As Boolean
     
     Dim BanningUser As Boolean ' ...
-    Dim i           As Integer ' ...
+    Dim I           As Integer ' ...
     
     ' ...
     If (PhraseBans) Then
         ' ...
-        For i = LBound(Phrases) To UBound(Phrases)
+        For I = LBound(Phrases) To UBound(Phrases)
             ' ...
-            If ((Phrases(i) <> vbNullString) And (Phrases(i) <> Space$(1))) Then
+            If ((Phrases(I) <> vbNullString) And (Phrases(I) <> Space$(1))) Then
                 ' ...
-                If ((InStr(1, Message, Phrases(i), vbTextCompare)) <> 0) Then
-                    Ban Username & " Banned phrase: " & Phrases(i), _
+                If ((InStr(1, Message, Phrases(I), vbTextCompare)) <> 0) Then
+                    Ban Username & " Banned phrase: " & Phrases(I), _
                             (AutoModSafelistValue - 1)
                     
                     BanningUser = True
@@ -1865,7 +1865,7 @@ Private Function CheckMessage(Username As String, Message As String) As Boolean
                     Exit For
                 End If
             End If
-        Next i
+        Next I
     End If
     
     ' ...
@@ -1923,6 +1923,8 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
                         "or you experienced an error. Try connecting again."
                         
                     If (askedBnls = False) Then
+                        askedBnls = True
+                    
                         'Ask the user if they would like to enable the BNLS Automatic Server finder
                         Dim msgResult As VbMsgBoxResult
                         msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
@@ -1939,8 +1941,6 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
                         Else
                             BotVars.UseAltBnls = False
                         End If
-                        
-                        askedBnls = True
                     End If
                 End If
             Else

@@ -893,6 +893,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -918,7 +919,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1697,9 +1697,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2199,6 +2199,8 @@ Sub Event_BNLSError(ErrorNumber As Integer, description As String)
             DoDisconnect 1, True
             
             If (askedBnls = False) Then
+                askedBnls = True
+            
                 'Ask the user if they would like to enable the BNLS Automatic Server finder
                 Dim msgResult As VbMsgBoxResult
                 
@@ -2216,8 +2218,6 @@ Sub Event_BNLSError(ErrorNumber As Integer, description As String)
                 Else
                     BotVars.UseAltBnls = False
                 End If
-                
-                askedBnls = True
             End If
             
             If (BotVars.UseAltBnls = False) Then
