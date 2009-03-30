@@ -18,6 +18,51 @@ Begin VB.Form frmChat
    ScaleHeight     =   7950
    ScaleWidth      =   12585
    StartUpPosition =   3  'Windows Default
+   Begin MSComctlLib.ListView lvChannel 
+      Height          =   6375
+      Left            =   8880
+      TabIndex        =   1
+      TabStop         =   0   'False
+      Top             =   240
+      Width           =   3705
+      _ExtentX        =   6535
+      _ExtentY        =   11245
+      View            =   3
+      LabelEdit       =   1
+      LabelWrap       =   0   'False
+      HideSelection   =   -1  'True
+      HideColumnHeaders=   -1  'True
+      OLEDragMode     =   1
+      _Version        =   393217
+      SmallIcons      =   "imlIcons"
+      ForeColor       =   10079232
+      BackColor       =   0
+      BorderStyle     =   1
+      Appearance      =   1
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      OLEDragMode     =   1
+      NumItems        =   3
+      BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         Object.Width           =   4145
+      EndProperty
+      BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         SubItemIndex    =   1
+         Object.Width           =   1252
+      EndProperty
+      BeginProperty ColumnHeader(3) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
+         Alignment       =   1
+         SubItemIndex    =   2
+         Object.Width           =   582
+      EndProperty
+   End
    Begin MSScriptControlCtl.ScriptControl SControl 
       Left            =   120
       Top             =   720
@@ -567,51 +612,6 @@ Begin VB.Form frmChat
       Interval        =   30000
       Left            =   5760
       Top             =   4080
-   End
-   Begin MSComctlLib.ListView lvChannel 
-      Height          =   6375
-      Left            =   8880
-      TabIndex        =   1
-      TabStop         =   0   'False
-      Top             =   240
-      Width           =   3705
-      _ExtentX        =   6535
-      _ExtentY        =   11245
-      View            =   3
-      LabelEdit       =   1
-      LabelWrap       =   0   'False
-      HideSelection   =   -1  'True
-      HideColumnHeaders=   -1  'True
-      OLEDragMode     =   1
-      _Version        =   393217
-      SmallIcons      =   "imlIcons"
-      ForeColor       =   10079232
-      BackColor       =   0
-      BorderStyle     =   1
-      Appearance      =   1
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      OLEDragMode     =   1
-      NumItems        =   3
-      BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         Object.Width           =   4145
-      EndProperty
-      BeginProperty ColumnHeader(2) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         SubItemIndex    =   1
-         Object.Width           =   1252
-      EndProperty
-      BeginProperty ColumnHeader(3) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
-         Alignment       =   1
-         SubItemIndex    =   2
-         Object.Width           =   582
-      EndProperty
    End
    Begin VB.Timer tmrSilentChannel 
       Enabled         =   0   'False
@@ -1697,9 +1697,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -3388,11 +3388,57 @@ End Sub
 
 Private Sub lvChannel_KeyUp(KeyCode As Integer, Shift As Integer)
     Const S_ALT = 4
-   
-    If Shift = S_ALT And KeyCode = KEY_ALTN Then
+    
+    If (KeyCode = 93) Then
+        lvChannel_MouseUp 2, Shift, 0, 0
+    ElseIf (KeyCode = KEY_ALTN And Shift = S_ALT) Then
         Dim sStart As Integer
         
         With lvChannel
+            If Not (.SelectedItem Is Nothing) Then
+                cboSend.selStart = Len(cboSend.text)
+                cboSend.SelText = .SelectedItem.text
+    
+                KeyCode = 0
+                Shift = 0
+                
+                Exit Sub
+            End If
+        End With
+    End If
+End Sub
+
+Private Sub lvFriendList_KeyUp(KeyCode As Integer, Shift As Integer)
+    Const S_ALT = 4
+    
+    If (KeyCode = 93) Then
+        lvFriendList_MouseUp 2, Shift, 0, 0
+    ElseIf (KeyCode = KEY_ALTN And Shift = S_ALT) Then
+        Dim sStart As Integer
+        
+        With lvFriendList
+            If Not (.SelectedItem Is Nothing) Then
+                cboSend.selStart = Len(cboSend.text)
+                cboSend.SelText = .SelectedItem.text
+    
+                KeyCode = 0
+                Shift = 0
+                
+                Exit Sub
+            End If
+        End With
+    End If
+End Sub
+
+Private Sub lvClanList_KeyUp(KeyCode As Integer, Shift As Integer)
+    Const S_ALT = 4
+    
+    If (KeyCode = 93) Then
+        lvClanList_MouseUp 2, Shift, 0, 0
+    ElseIf (KeyCode = KEY_ALTN And Shift = S_ALT) Then
+        Dim sStart As Integer
+        
+        With lvClanList
             If Not (.SelectedItem Is Nothing) Then
                 cboSend.selStart = Len(cboSend.text)
                 cboSend.SelText = .SelectedItem.text
@@ -8020,19 +8066,22 @@ Private Function GetClanSelectedUser() As String
     End With
 End Function
 
-Private Sub lvClanList_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = vbRightButton Then
-        lvClanList.SetFocus
+        'lvClanList.SetFocus
         
-        Dim lvhti As LVHITTESTINFO
-        Dim lItemIndex As Long, m_lCurItemIndex As Long
+        Dim lvhti           As LVHITTESTINFO
+        Dim lItemIndex      As Long
+        Dim m_lCurItemIndex As Long
         
-        lvhti.pt.X = X / Screen.TwipsPerPixelX
-        lvhti.pt.Y = Y / Screen.TwipsPerPixelY
-        lItemIndex = SendMessageAny(lvClanList.hWnd, LVM_HITTEST, 0, lvhti) + 1
+        'lvhti.pt.X = X / Screen.TwipsPerPixelX
+        'lvhti.pt.Y = Y / Screen.TwipsPerPixelY
+        'lItemIndex = SendMessageAny(lvClanList.hWnd, LVM_HITTEST, 0, lvhti) + 1
+        
+        lItemIndex = 1
         
         If lItemIndex > 0 Then
-            lvClanList.ListItems(lItemIndex).Selected = True
+            'lvClanList.ListItems(lItemIndex).Selected = True
             
             If Not (lvClanList.SelectedItem Is Nothing) Then
                 If lvClanList.SelectedItem.Index < 0 Then
