@@ -184,15 +184,15 @@ End Function
 
 Public Sub InitScriptControl(ByVal SC As ScriptControl)
 
-    On Error Resume Next
-    
     ' ...
-    frmChat.scTimer.Enabled = False
-    frmChat.INet.Cancel
+    With frmChat
+        .scTimer.Enabled = False
+        .INet.Cancel
+    End With
     
     ' ...
     DestroyObjs
-    
+
     ' ...
     SC.Reset
 
@@ -202,11 +202,11 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
     End If
 
     '// Create scripting objects
-    SC.AddObject "ssc", SharedScriptSupport, True
-    SC.AddObject "scTimer", frmChat.scTimer
-    SC.AddObject "scINet", frmChat.INet
-    SC.AddObject "BotVars", BotVars
-    
+    SC.addObject "ssc", SharedScriptSupport, True
+    SC.addObject "scTimer", frmChat.scTimer
+    SC.addObject "scINet", frmChat.INet
+    SC.addObject "BotVars", BotVars
+
     ' ...
     Set m_sc_control = SC
 
@@ -1141,7 +1141,7 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
     ' ...
     m_objCount = (m_objCount - 1)
     
-        ' ...
+    ' ...
     SCModule.ExecuteStatement "Set " & ObjName & " = Nothing"
     
     ' ...

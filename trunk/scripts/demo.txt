@@ -14,6 +14,9 @@ End Sub
 
 Sub Event_Load()
 
+   ' // create demonstration class
+   Set democls = New CDemoClass
+
    ' // create Winsock object
    CreateObj "Winsock", "sck"
    
@@ -90,3 +93,12 @@ Sub TestDemo()
    AddChat vbBlue, "TestDemo()"
 
 End Sub
+
+' // demonstration class module
+Class CDemoClass
+
+   Sub Class_Initialize()
+      AddChat vbRed, GetModuleID()
+   End Sub
+
+End Class

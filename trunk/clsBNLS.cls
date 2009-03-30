@@ -23,7 +23,7 @@ Option Explicit
 
 Public Sub ServToken(ByRef s As String, ByVal Setting As Byte)
     Static Token As String
-    
+
     Select Case Setting
         Case 0: s = Token
         Case 1: Token = s

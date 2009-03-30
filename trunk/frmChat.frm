@@ -18,6 +18,18 @@ Begin VB.Form frmChat
    ScaleHeight     =   7950
    ScaleWidth      =   12585
    StartUpPosition =   3  'Windows Default
+   Begin MSScriptControlCtl.ScriptControl SControl 
+      Left            =   120
+      Top             =   720
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+   End
+   Begin MSScriptControlCtl.ScriptControl SCRestricted 
+      Left            =   5880
+      Top             =   3360
+      _ExtentX        =   1005
+      _ExtentY        =   1005
+   End
    Begin VB.Timer tmrScriptLong 
       Enabled         =   0   'False
       Index           =   0
@@ -703,23 +715,10 @@ Begin VB.Form frmChat
       Tab(2).ControlEnabled=   0   'False
       Tab(2).ControlCount=   0
    End
-   Begin MSScriptControlCtl.ScriptControl SCRestricted 
-      Left            =   5880
-      Top             =   3360
-      _ExtentX        =   1005
-      _ExtentY        =   1005
-      AllowUI         =   0   'False
-   End
    Begin VB.Timer quLower 
       Interval        =   5360
       Left            =   6720
       Top             =   4560
-   End
-   Begin MSScriptControlCtl.ScriptControl SControl 
-      Left            =   120
-      Top             =   720
-      _ExtentX        =   1005
-      _ExtentY        =   1005
    End
    Begin VB.Timer tmrFriendlistUpdate 
       Interval        =   10000
@@ -894,7 +893,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -920,6 +918,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4244,6 +4243,9 @@ Sub mnuReloadScripts_Click()
 
     InitScriptControl SControl
     LoadScripts
+    
+    Pause 2, True
+    
     InitScripts
 
     Exit Sub
@@ -4284,9 +4286,7 @@ Sub mnuReloadScripts_Click()
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, Err.Number
-    
-    Resume Next
+    frmChat.AddChat vbRed, Err.description
     
 End Sub
 

@@ -27,7 +27,7 @@ Public Sub ProcessMenu(hWnd As Long, lngMenuCommand As Long)
     On Error GoTo ERROR_HANDLER
     
     Dim obj As scObj ' ...
-    
+
     obj = GetScriptObjByMenuID(lngMenuCommand)
     
     ' is this a dynamic scripting menu?
