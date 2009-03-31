@@ -92,10 +92,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         
             ' ...
             Set UserObj = New clsUserObj
-            
-            ' ...
-            'ParseStatstring Message, parsed, Clan
-            
+
             ' ...
             With UserObj
                 .Name = Username
@@ -104,12 +101,6 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                 .Clan = .Stats.Clan
                 .game = Product
             End With
-        
-            ' ...
-            'With frmChat.tmrSilentChannel(0)
-            '    .Enabled = False
-            '    .Enabled = True
-            'End With
         End If
     End If
     
@@ -139,73 +130,43 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         SharedScriptSupport.BotFlags = MyFlags
     End If
     
-    ' ...
-    If (QueuedEventID = 0) Then
-        ' ...
-        If (g_Channel.Self.IsOperator) Then
-            ' we don't want anyone here that isn't
-            ' supposed to be here.
-            If ((PreviousFlags And USER_CHANNELOP&) <> USER_CHANNELOP&) Then
-                g_Channel.CheckUsers
-            Else
-                g_Channel.CheckUser Username
-            End If
-        End If
-    End If
-    
     ' we aren't in a silent channel, are we?
     If (g_Channel.IsSilent) Then
         ' ...
-        AddName Username, Product, flags, Ping, UserObj.Stats.IconCode, Clan
+        AddName Username, Product, flags, Ping, UserObj.Stats.IconCode, _
+            Clan
     Else
         ' ...
         If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
             ' ...
-            pos = checkChannel(Username)
-            
-            ' ...
-            If (pos > 0) Then
+            If (flags <> PreviousFlags) Then
                 ' ...
-                'If (QueuedEventID > 0) Then
-                '    PreviousFlags = UserObj.Queue(QueuedEventID - 1).Flags
-                'End If
-            
-                ' is user being designated?
-                If (((flags And USER_CHANNELOP&) = USER_CHANNELOP&) And _
-                        ((PreviousFlags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
-            
+                If (g_Channel.Self.IsOperator) Then
+                    If ((Username = GetCurrentUsername) And _
+                            ((PreviousFlags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
+                            
+                        g_Channel.CheckUsers
+                    Else
+                        g_Channel.CheckUser Username
+                    End If
+                End If
+                
+                ' ...
+                pos = checkChannel(Username)
+                
+                ' ...
+                If (pos) Then
                     ' ...
                     frmChat.lvChannel.ListItems.Remove pos
                     
                     ' ...
-                    AddName Username, Product, flags, Ping, UserObj.Stats.IconCode, Clan
-                
-                    ' ...
-                    frmChat.AddChat RTBColors.JoinedChannelText, "-- ", RTBColors.JoinedChannelName, _
-                        Username, RTBColors.JoinedChannelText, " has acquired ops."
-                                    
-                ' is user being squelched?
-                ElseIf (((flags And USER_SQUELCHED&) = USER_SQUELCHED&) And _
-                            ((PreviousFlags And USER_SQUELCHED&) <> USER_SQUELCHED&)) Then
-                
-                    ' ...
-                    doUpdate = True
+                    AddName Username, Product, flags, Ping, UserObj.Stats.IconCode, _
+                        Clan, IIf(UserObj.IsOperator, 1, pos)
                     
-                ' is user being unsquelched?
-                ElseIf ((PreviousFlags And USER_SQUELCHED&) = USER_SQUELCHED&) Then
                     ' ...
-                    doUpdate = True
-                End If
-            
-                ' ...
-                If (doUpdate = True) Then
-                    ' ...
-                    If (pos) Then
-                        ' ...
-                        frmChat.lvChannel.ListItems.Remove pos
-                        
-                        ' ...
-                        AddName Username, Product, flags, Ping, UserObj.Stats.IconCode, Clan, pos
+                    If (UserObj.IsOperator) Then
+                        frmChat.AddChat RTBColors.JoinedChannelText, "-- ", RTBColors.JoinedChannelName, _
+                            Username, RTBColors.JoinedChannelText, " has acquired ops."
                     End If
                 End If
             End If
