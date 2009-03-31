@@ -5811,7 +5811,8 @@ Private Function OnAbout(ByVal Username As String, ByRef dbAccess As udtGetAcces
     
     Dim tmpbuf As String ' temporary output buffer
 
-    tmpbuf = ".: " & CVERSION & " by Stealth."
+    tmpbuf = _
+        ".: " & CVERSION & " by the StealthBot Development Team."
     
     ' return message
     cmdRet(0) = tmpbuf
