@@ -429,7 +429,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
         
     ' ...
     If (defaults) Then
-        CreateDefautModuleProcs ScriptModule, filePath
+        CreateDefaultModuleProcs ScriptModule, filePath
     End If
     
     FileToModule = True
@@ -442,7 +442,7 @@ ERROR_HANDLER:
 
 End Function
 
-Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module, ByVal ScriptPath As String)
+Private Sub CreateDefaultModuleProcs(ByRef ScriptModule As Module, ByVal ScriptPath As String)
 
     On Error GoTo ERROR_HANDLER
 
@@ -514,7 +514,7 @@ Private Sub CreateDefautModuleProcs(ByRef ScriptModule As Module, ByVal ScriptPa
 
     ' store module-level coding
     ScriptModule.AddCode str
-    
+
     Exit Sub
     
 ERROR_HANDLER:

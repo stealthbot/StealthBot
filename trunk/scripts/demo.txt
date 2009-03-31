@@ -1,6 +1,8 @@
 #include "\demo\frm.txt"
 #include "\demo\sck.txt"
 
+Set democls = New CDemoClass
+
 ' // script data
 Sub Data()
 
@@ -15,7 +17,7 @@ End Sub
 Sub Event_Load()
 
    ' // create demonstration class
-   Set democls = New CDemoClass
+   'Set democls = New CDemoClass
 
    ' // create Winsock object
    CreateObj "Winsock", "sck"
