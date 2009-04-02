@@ -191,6 +191,8 @@ End Sub
 ' Uses BNCSUtil to decode and hash your cdkey
 ' Returns the ClientToken that should be used to connect
 Public Sub DecodeCDKey(ByVal sCDKey As String, ByVal ServerToken As Long, ByVal ClientToken As Long, ByRef KeyHash As String, ByRef Value1 As Long, ByRef ProductID As Long, ByVal MPQRevision As Long)
+    On Error GoTo ERR_HANDLER
+    
     Dim KDh As Long                     ' Key Decoder handler
     Dim HashSize As Long                ' CDKey hash size in bytes
     Dim result As Long                  ' kd_init() result
@@ -209,7 +211,7 @@ Public Sub DecodeCDKey(ByVal sCDKey As String, ByVal ServerToken As Long, ByVal 
         KDh = kd_create(sCDKey, Len(sCDKey))
             
         If (kd_isValid(KDh) = 0) Then
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your CD-Key is invalid."
+            frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid."
             frmChat.DoDisconnect
             
         Else
@@ -217,7 +219,7 @@ Public Sub DecodeCDKey(ByVal sCDKey As String, ByVal ServerToken As Long, ByVal 
         
             If HashSize <= 0 Then
                 frmChat.AddChat RTBColors.ErrorMessageText, "Your CD-Key is invalid. [kd_calculateHash() <= 0]"
-                frmChat.AddChat RTBColors.ErrorMessageText, "Please make sure you typed your CD-Key correctly. This error is often generated when the CD-Key is not the correct Length."
+                frmChat.AddChat RTBColors.ErrorMessageText, "Please make sure you typed your CD-Key correctly. This error is often generated when the CD-Key is not the correct length."
                 frmChat.DoDisconnect
                 
             Else
@@ -236,6 +238,10 @@ Public Sub DecodeCDKey(ByVal sCDKey As String, ByVal ServerToken As Long, ByVal 
     If KDh > 0 Then
         Call kd_free(KDh)
     End If
+    
+ERR_HANDLER:
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in DecodeCDKey()"
+    frmChat.DoDisconnect
 End Sub
 
 Public Sub Send0x3A(ByVal ServerToken As Long)
