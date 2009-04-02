@@ -143,6 +143,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                 
                 ' For each cdkey...
                 Call DecodeCDKey(BotVars.CDKey, ServerToken, ClientToken, KeyHash, Value1, ProductID, MPQRevision)
+                If KeyHash = vbNullString Then Exit Sub
                 
                 .InsertDWord &H0
                 .InsertDWord Len(BotVars.CDKey)
@@ -163,6 +164,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                 
                 If BotVars.Product = "PX2D" Or BotVars.Product = "PX3W" Then
                     Call DecodeCDKey(BotVars.ExpKey, ServerToken, ClientToken, KeyHash, Value1, ProductID, MPQRevision)
+                    If KeyHash = vbNullString Then Exit Sub
                     
                     .InsertDWord Len(BotVars.ExpKey)
                     .InsertDWord ProductID
@@ -202,6 +204,8 @@ Public Sub DecodeCDKey(ByVal sCDKey As String, ByVal ServerToken As Long, ByVal 
     sCDKey = KillNull(sCDKey)
     
     result = kd_init()
+    
+    KeyHash = vbNullString
     
     If result = 0 Then
         frmChat.AddChat RTBColors.ErrorMessageText, "BNCSUtil: kd_init() failed! Please use BNLS to connect."
