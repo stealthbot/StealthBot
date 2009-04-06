@@ -59,6 +59,18 @@
     <access />
   </command>
 
+  <command name="exec">
+    <aliases />
+
+    <documentation>
+      <description>
+        ...
+      </description>
+    </documentation>
+
+    <access />
+  </command>
+
   <command name="watch">
     <aliases />
 

@@ -629,6 +629,7 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "enable":        Call OnEnable(Username, dbAccess, msgData, InBot, cmdRet())
         Case "disable":       Call OnDisable(Username, dbAccess, msgData, InBot, cmdRet())
         Case "sdetail":       Call OnSDetail(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "exec":          Call OnExec(Username, dbAccess, msgData, InBot, cmdRet())
         Case Else
             blnNoCmd = True
     End Select
@@ -6682,6 +6683,16 @@ Private Function OnSDetail(ByVal Username As String, ByRef dbAccess As udtGetAcc
     End If
     
     cmdRet(0) = "Error: Could not find specified script."
+    
+End Function
+
+' handle exec command
+Private Function OnExec(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    On Error Resume Next
+    
+    frmChat.SControl.ExecuteStatement msgData
     
 End Function
 
