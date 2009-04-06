@@ -45,9 +45,7 @@ End Sub ' end function Class_Terminate
 
 ' ...
 Public Function Push(ByRef obj As clsQueueOBj)
-    
-    '/exec AddQ "3", 3 : AddQ "2", 2
-    
+
     On Error GoTo ERROR_HANDLER
     
     Dim Index As Long ' ...
@@ -90,10 +88,7 @@ Public Function Push(ByRef obj As clsQueueOBj)
     ' ...
     m_objCount = (m_objCount + 1)
     m_lastObjID = (m_lastObjID + 1)
-    
-    ' ...
-    On Error Resume Next
-    
+
     ' ...
     RunInAll "Event_MessageQueued", obj.ID, obj.Message, obj.Tag
     
@@ -101,6 +96,13 @@ Public Function Push(ByRef obj As clsQueueOBj)
     Exit Function
 
 ERROR_HANDLER:
+
+    ' overflow - likely due to message id size
+    If (Err.Number = 6) Then
+        m_lastObjID = 0
+        
+        Resume Next
+    End If
 
     Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsQueue::Push().")
 
