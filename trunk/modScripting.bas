@@ -7,8 +7,6 @@ Attribute VB_Name = "modScripting"
 ' */
 Option Explicit
 
-Private Declare Function InternetCloseHandle Lib "Wininet.dll" (ByVal Handle As Long) As Boolean
-
 Public Type scObj
     SCModule As Module
     ObjName  As String
@@ -189,6 +187,9 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
 
     ' ...
     m_is_reloading = True
+
+    ' ...
+    SC.Reset
     
     ' ...
     frmChat.INet.Cancel
@@ -196,9 +197,6 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
     
     ' ...
     DestroyObjs
-
-    ' ...
-    SC.Reset
 
     ' ...
     If (ReadINI("Other", "ScriptAllowUI", GetConfigFilePath()) <> "N") Then
@@ -1061,7 +1059,9 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
     End If
     
     ' ...
-    SCModule.ExecuteStatement "Set " & ObjName & " = Nothing"
+    If (m_is_reloading = False) Then
+        SCModule.ExecuteStatement "Set " & ObjName & " = Nothing"
+    End If
     
     ' ...
     Select Case (UCase$(m_arrObjs(Index).ObjType))
