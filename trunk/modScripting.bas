@@ -145,7 +145,7 @@ Public Sub LoadScripts()
     'End If
     
     ' ...
-    'InitMenus
+    InitMenus
 
     ' ...
     Exit Sub
@@ -1039,22 +1039,33 @@ End Function
 
 Public Function DestroyMenus()
 
+    On Error GoTo ERROR_HANDLER
+
     Dim I As Integer ' ...
     
     frmChat.mnuScriptingDash(0).Visible = False
     
     For I = DynamicMenus.Count To 1 Step -1
         
-        If (Left$(DynamicMenus(I).Name, 1) = Chr$(0)) Then
-            DynamicMenus(I).Class_Terminate
-            
-            Set DynamicMenus(I) = Nothing
-            
-            DynamicMenus.Remove I
+        If (Len(DynamicMenus(I).Name) > 0) Then
+            If (Left$(DynamicMenus(I).Name, 1) = Chr$(0)) Then
+                DynamicMenus(I).Class_Terminate
+                
+                Set DynamicMenus(I) = Nothing
+                
+                DynamicMenus.Remove I
+            End If
         End If
         
     Next I
-
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    Err.Clear
+    
+    Resume Next
+    
 End Function
 
 Public Function Scripts() As Object
