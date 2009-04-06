@@ -1043,11 +1043,6 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
     End If
     
     ' ...
-    If (m_is_reloading = False) Then
-        SCModule.ExecuteStatement "Set " & ObjName & " = Nothing"
-    End If
-    
-    ' ...
     Select Case (UCase$(m_arrObjs(Index).ObjType))
         Case "TIMER"
             If (m_arrObjs(Index).obj.Index > 0) Then
@@ -1087,6 +1082,11 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
         Case "MENU"
             m_arrObjs(Index).obj.Class_Terminate
     End Select
+    
+    ' ...
+    If (m_is_reloading = False) Then
+        SCModule.ExecuteStatement "Set " & ObjName & " = Nothing"
+    End If
 
     ' ...
     Set m_arrObjs(Index).obj = Nothing
