@@ -14,14 +14,12 @@ Public Type scObj
     obj      As Object
 End Type
 
-Public VetoNextMessage As Boolean
-Public boolOverride    As Boolean
-
-Private m_srootmenu    As New clsMenuObj
-Private m_arrObjs()    As scObj
-Private m_objCount     As Integer
-Private m_sc_control   As Object
+Private m_srootmenu     As New clsMenuObj
+Private m_arrObjs()     As scObj
+Private m_objCount      As Integer
+Private m_sc_control    As Object
 Private m_is_reloading  As Boolean
+Private VetoNextMessage As Boolean
 
 Public Sub InitScriptControl(ByVal SC As ScriptControl)
 
