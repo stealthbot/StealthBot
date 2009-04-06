@@ -18,7 +18,6 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Const MAX_PRIORITY_LEVEL = 100
-Private Const MAX_QUEUE_SIZE = 100
 
 Private m_QueueObjs() As clsQueueOBj
 Private m_objCount    As Long
@@ -47,6 +46,8 @@ End Sub ' end function Class_Terminate
 ' ...
 Public Function Push(ByRef obj As clsQueueOBj)
     
+    '/exec AddQ "3", 3 : AddQ "2", 2
+    
     On Error GoTo ERROR_HANDLER
     
     Dim Index As Long ' ...
@@ -74,7 +75,7 @@ Public Function Push(ByRef obj As clsQueueOBj)
     End If
 
     ' ...
-    If (Index < m_objCount - 1) Then
+    If (Index < m_objCount) Then
         For I = m_objCount To Index + 1 Step -1
             Set m_QueueObjs(I) = m_QueueObjs(I - 1)
         Next I
@@ -253,9 +254,6 @@ Public Sub Clear()
     Dim I As Long ' ...
 
     ' ...
-    m_objCount = 0
-
-    ' ...
     For I = 0 To m_objCount - 1
         Set m_QueueObjs(I) = Nothing
     Next I
@@ -265,5 +263,8 @@ Public Sub Clear()
     
     ' ...
     Set m_QueueObjs(0) = New clsQueueOBj
+    
+    ' ...
+    m_objCount = 0
     
 End Sub ' end sub Clear
