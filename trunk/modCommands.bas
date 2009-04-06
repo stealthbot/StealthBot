@@ -6520,7 +6520,7 @@ Private Function OnScripts(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ' ...
     If (frmChat.SControl.Modules.Count) Then
         ' ...
-        For I = 1 To frmChat.SControl.Modules.Count
+        For I = 2 To frmChat.SControl.Modules.Count
             If (I = 1) Then
                 str = _
                     ReadINI("Override", "DisablePS", GetConfigFilePath())

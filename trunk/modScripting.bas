@@ -37,8 +37,8 @@ Public Function InitMenus()
     DestroyMenus
     
     ' ...
-    For I = 1 To frmChat.SControl.Modules.Count
-        If (I = 1) Then
+    For I = 2 To frmChat.SControl.Modules.Count
+        If (I = 2) Then
             frmChat.mnuScriptingDash(0).Visible = True
         End If
     
@@ -155,32 +155,12 @@ Private Function CleanFileName(ByVal filename As String) As String
     
     On Error Resume Next
     
-    Dim nameAllow As String  ' ...
-    Dim j         As Integer ' ...
-    
     ' ...
-    nameAllow = "_abcdefghijklmnopqrstuvwxyz0123456789"
-    
-    ' ...
-    'CleanFileName = Replace(filename, " ", "_")
+    If (InStr(1, filename, ".") > 1) Then
+        CleanFileName = _
+            Left$(filename, InStr(1, filename, ".") - 1)
+    End If
 
-    ' ...
-    CleanFileName = _
-        Left$(CleanFileName, InStr(1, CleanFileName, ".") - 1)
-
-    ' ...
-    'For j = 1 To Len(CleanFileName)
-    '    If (j = 1) Then
-    '        If (InStr(1, nameAllow, Mid$(CleanFileName, j, 1)) >= 28) Then
-    '            Mid$(CleanFileName, j, 1) = ""
-    '        End If
-    '    End If
-    '
-    '    If (InStr(1, nameAllow, Mid$(CleanFileName, j, 1), vbTextCompare) = 0) Then
-    '        Mid$(CleanFileName, j, 1) = ""
-    '    End If
-    'Next j
-    
 End Function
 
 Public Sub InitScriptControl(ByVal SC As ScriptControl)
@@ -288,23 +268,23 @@ Public Sub LoadScripts()
     ' ********************************
 
     ' ...
-    If (ReadINI("Override", "DisablePS", GetConfigFilePath()) <> "Y") Then
-        ' ...
-        strPath = GetFilePath("PluginSystem.dat")
-        
-        ' ...
-        If (LenB(Dir$(strPath)) = 0) Then
-            Call frmChat.AddChat(vbRed, "Cannot find PluginSystem.dat. It must exist in order to load plugins!")
-            Call frmChat.AddChat(vbYellow, "You may download PluginSystem.dat to your StealthBot folder using the link below.")
-            Call frmChat.AddChat(vbWhite, "http://www.stealthbot.net/p/Users/Swent/index.php?file=PluginSystem.dat")
-        Else
-            FileToModule m_sc_control.Modules(1), strPath
-        End If
-        
-        If (m_sc_control.Modules(1).CodeObject.Script("Name") = vbNullString) Then
-            m_sc_control.Modules(1).CodeObject.Script("Name") = "PluginSystem"
-        End If
-    End If
+    'If (ReadINI("Override", "DisablePS", GetConfigFilePath()) <> "Y") Then
+    '    ' ...
+    '    strPath = GetFilePath("PluginSystem.dat")
+    '
+    '    ' ...
+    '    If (LenB(Dir$(strPath)) = 0) Then
+    '        Call frmChat.AddChat(vbRed, "Cannot find PluginSystem.dat. It must exist in order to load plugins!")
+    '        Call frmChat.AddChat(vbYellow, "You may download PluginSystem.dat to your StealthBot folder using the link below.")
+    '        Call frmChat.AddChat(vbWhite, "http://www.stealthbot.net/p/Users/Swent/index.php?file=PluginSystem.dat")
+    '    Else
+    '        FileToModule m_sc_control.Modules(1), strPath
+    '    End If
+    '
+    '    If (m_sc_control.Modules(1).CodeObject.Script("Name") = vbNullString) Then
+    '        m_sc_control.Modules(1).CodeObject.Script("Name") = "PluginSystem"
+    '    End If
+    'End If
 
     ' ...
     Exit Sub
@@ -543,7 +523,7 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
     Next j
 
     ' ...
-    For j = 1 To m_sc_control.Modules.Count
+    For j = 2 To m_sc_control.Modules.Count
         ' ...
         If (m_sc_control.Modules(j).Name <> CurrentModule.Name) Then
             tmp = _
@@ -572,7 +552,7 @@ Public Function UpdateScripts()
     Dim tmp        As String  ' ...
     
     ' ...
-    If (m_sc_control.Modules.Count) Then
+    If (m_sc_control.Modules.Count > 1) Then
         Dim CRC32    As New clsCRC32
         Dim filePath As String
 
@@ -580,7 +560,7 @@ Public Function UpdateScripts()
         frmChat.AddChat RTBColors.InformationText, "Checking for script updates..."
         
         ' ...
-        For I = 1 To m_sc_control.Modules.Count
+        For I = 2 To m_sc_control.Modules.Count
             str = _
                 m_sc_control.Modules(I).CodeObject.Script("UpdateLocation")
                 
@@ -644,7 +624,7 @@ Public Sub InitScripts()
         reloading = True
     End If
     
-    For I = 1 To m_sc_control.Modules.Count
+    For I = 2 To m_sc_control.Modules.Count
         If (I > 1) Then
             str = _
                 m_sc_control.Modules(I).CodeObject.GetSettingsEntry("Enabled")
@@ -737,7 +717,7 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
     arr() = Parameters()
 
     ' ...
-    For I = 1 To SC.Modules.Count
+    For I = 2 To SC.Modules.Count
         If (I > 1) Then
             str = _
                 SC.Modules(I).CodeObject.GetSettingsEntry("Enabled")
@@ -1209,7 +1189,7 @@ Public Function Scripts() As Object
 
     Set Scripts = New Collection
 
-    For I = 1 To frmChat.SControl.Modules.Count
+    For I = 2 To frmChat.SControl.Modules.Count
         str = _
             frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
                 

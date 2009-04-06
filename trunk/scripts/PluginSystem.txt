@@ -108,7 +108,6 @@
 '//  THE STEALTHBOT PLUGIN SYSTEM    //
 '//**********************************//
 
-
 Const PS_TITLE = "The StealthBot Plugin System"
 Const PS_UPDATE_URL = "http://www.stealthbot.net/p/plugs/"
 Const PS_SBNET_URL = "http://www.stealthbot.net/board/index.php?"
