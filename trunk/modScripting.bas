@@ -416,6 +416,10 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
             
         ' ...
         ScriptModule.ExecuteStatement "Set DataBuffer = DataBufferEx()"
+        
+        ' ...
+        ScriptModule.ExecuteStatement _
+            "Script(""Path"") = " & Chr$(34) & filePath & Chr$(34)
 
         ' ...
         For I = 1 To includes.Count
