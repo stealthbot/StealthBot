@@ -381,7 +381,7 @@ Sub psExecuteEvent(EventName, Parameters)
 
 		 startTime = GetGTC()
          Execute("Call " & psPrefixes(i) & "_Event_" & EventName & "(" & paramString & ")")
-		 finishTime = GetGTC()
+	 	 finishTime = GetGTC()
  
 		 '// 03/28/2009 52 - Added the duration of EventLoad to the load time
 		 If LCase(EventName) = "load" Then
@@ -1006,12 +1006,12 @@ Sub psAutoUpdate(boolMenuClick)
 
    '// Check for plugin system updates
    If GetSetting("ps", "psnvn") or boolMenuClick Then
-      If scINet.StillExecuting Then Exit Sub
+      If scInet.StillExecuting Then Exit Sub
 
       '// Successful connection with the plugins server? If not, stop update checks
-      curPSVersion = scINet.OpenURL(PS_UPDATE_URL & "update.php?action=sctxtver")
+      curPSVersion = scInet.OpenURL(PS_UPDATE_URL & "update.php?action=sctxtver")
       If Len(curPSVersion) = 0 Or Instr(curPSVersion, " ") > 0 Then
-         If boolMenuClick Then Call psCannotConnect()
+         If boolMenuClick Then psCannotConnect()
          Exit Sub
       End If
 
@@ -1038,9 +1038,9 @@ Sub psAutoUpdate(boolMenuClick)
    '// Check for plugin creator updates.
    strPCVer = GetSetting("#internal", "pcvernote")
    If Len(strPCVer) > 0 And Not strPCVer Then
-      If scINet.StillExecuting Then Exit Sub
+      If scInet.StillExecuting Then Exit Sub
 
-      curPCVersion = scINet.OpenURL("http://stealthbot.net/p/plugs/pcver.txt")
+      curPCVersion = scInet.OpenURL("http://stealthbot.net/p/plugs/pcver.txt")
       dblPCVer = GetSetting("#internal", "pcver")
  
       If psFSO.FileExists("PluginCreator.exe") Then    
@@ -1058,9 +1058,9 @@ Sub psAutoUpdate(boolMenuClick)
    '// Check for settings manager updates.
    strSMVer = GetSetting("#internal", "smvernote")
    If Len(strSMVer) > 0 And Not strSMVer Then
-      If scINet.StillExecuting Then Exit Sub
+      If scInet.StillExecuting Then Exit Sub
 
-      curSMVersion = scINet.OpenURL("http://stealthbot.net/p/plugs/smver.txt")
+      curSMVersion = scInet.OpenURL("http://stealthbot.net/p/plugs/smver.txt")
       dblSMVer = GetSetting("#internal", "smver")
 
       If psFSO.FileExists("PluginSettings.exe") Then
@@ -1077,7 +1077,7 @@ Sub psAutoUpdate(boolMenuClick)
 
    '// Check for plugin updates
    If GetSetting("ps", "nvn") Or boolMenuClick Then
-      If scINet.StillExecuting Then Exit Sub
+      If scInet.StillExecuting Then Exit Sub
 
       Content = scInet.OpenURL(PS_UPDATE_URL & "update.php?action=getlist")
       Lines = Split(Content, vbCrLf)
@@ -2042,6 +2042,7 @@ End Sub
 Sub Event_Close()
 
    psExecuteEvent "Close", 0
+
 End Sub
 
 Sub Event_PacketSent(Protocol, ID, Length, Data)

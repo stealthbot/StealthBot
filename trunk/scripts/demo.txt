@@ -95,7 +95,7 @@ Class CDemoClass
 
    ' // demo class default constructor
    Sub Class_Initialize()
-      MsgBox Script("Name")
+      'MsgBox Script("Name")
    End Sub
 
 End Class
