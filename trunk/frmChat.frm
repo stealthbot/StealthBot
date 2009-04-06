@@ -895,6 +895,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -920,7 +921,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -6665,7 +6665,7 @@ Private Function BanDelay() As Integer
         
             ' set random ban delay based primarily on op count
             BanDelay = _
-                (BanDelay + ((1 + Rnd * (OpCount * 2)) * (1 + Rnd * 150)))
+                (BanDelay + ((1 + Rnd * (OpCount * 2)) * (1 + Rnd * 125)))
         End If
     End If
     
