@@ -20,12 +20,12 @@ End Type
 
 Public VetoNextMessage As Boolean
 Public boolOverride    As Boolean
-Public m_is_reloading  As Boolean
 
 Private m_srootmenu    As New clsMenuObj
 Private m_arrObjs()    As scObj
 Private m_objCount     As Integer
 Private m_sc_control   As Object
+Private m_is_reloading  As Boolean
 
 Public Function InitMenus()
 
