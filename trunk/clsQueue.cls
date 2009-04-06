@@ -45,7 +45,7 @@ Private Sub Class_Terminate()
 End Sub ' end function Class_Terminate
 
 ' ...
-Public Function Push(ByVal obj As clsQueueOBj)
+Public Function Push(ByRef obj As clsQueueOBj)
     
     On Error GoTo ERROR_HANDLER
     

@@ -156,7 +156,6 @@ Set pluginMenus = CreateObject("Scripting.Dictionary")
 
 '// [[[ PLUGIN LOADING ]]]
 
-
 Sub psLoadPlugins()
 
    If Not psLatestSB() Then Exit Sub

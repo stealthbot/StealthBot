@@ -5682,20 +5682,12 @@ End Sub
 
 
 Public Sub SControl_Error()
-    If (SControl.Error.Number = 13) Then
-        If (InStr(1, SControl.Error.description, "'Name'", vbTextCompare) <> 0) Then
-            SControl.Error.Clear
-        
-            Exit Sub
-        End If
-    End If
-
     AddChat RTBColors.ErrorMessageText, "Scripting runtime error " & Chr(39) & SControl.Error.Number & Chr(39) & ": (line " & SControl.Error.line & "; column " & SControl.Error.Column & ")"
     AddChat RTBColors.ErrorMessageText, SControl.Error.description & "."
     AddChat RTBColors.ErrorMessageText, "Offending line: >> " & SControl.Error.text
     
+    Err.Clear
     SControl.Error.Clear
-    INet.Cancel
 End Sub
 
 Private Sub sckBNet_Close()

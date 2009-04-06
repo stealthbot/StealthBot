@@ -1,23 +1,17 @@
 #include "\demo\frm.txt"
 #include "\demo\sck.txt"
 
-Set democls = New CDemoClass
+' // store script data
+Script("Name") = "Demo"
+Script("Author") = "Eric[nK]"
+Script("Major") = 1
+Script("Minor") = 0
+Script("Revision") = 1
 
-' // script data
-Sub Data()
-
-   Script("Name") = "Demo"       ' script name
-   Script("Author") = "Eric[nK]" ' script author
-   Script("Major") = 1           ' script major version
-   Script("Minor") = 0           ' script minor version
-   Script("Revision") = 1        ' script version revision
-
-End Sub
+' // create instance of demo class
+Set cls = New CDemoClass
 
 Sub Event_Load()
-
-   ' // create demonstration class
-   'Set democls = New CDemoClass
 
    ' // create Winsock object
    CreateObj "Winsock", "sck"
@@ -96,11 +90,12 @@ Sub TestDemo()
 
 End Sub
 
-' // demonstration class module
+' // demo class module
 Class CDemoClass
 
+   ' // demo class default constructor
    Sub Class_Initialize()
-      AddChat vbRed, GetModuleID()
+      MsgBox Script("Name")
    End Sub
 
 End Class

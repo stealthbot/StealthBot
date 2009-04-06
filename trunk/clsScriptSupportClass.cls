@@ -1548,7 +1548,7 @@ End Function
 Public Function GetSettingsEntryEx(ByVal scriptName As String, ByVal sEntryName As String)
     
     Dim Path As String ' ...
-    
+
     ' ...
     Path = App.Path & "\scripts\scripts.ini"
 

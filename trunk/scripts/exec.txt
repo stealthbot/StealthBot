@@ -1,15 +1,10 @@
 Option Explicit
 
-' // script data
-Sub Data()
-
-   Script("Name") = "exec"
-   Script("Author") = "Eric[nK]"
-   Script("Major") = 1
-   Script("Minor") = 0
-   Script("Revision") = 1
-
-End Sub
+Script("Name") = "exec"
+Script("Author") = "Eric[nK]"
+Script("Major") = 1
+Script("Minor") = 0
+Script("Revision") = 1
 
 Sub Event_PressedEnter(Text)
 

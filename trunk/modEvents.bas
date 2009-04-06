@@ -1057,8 +1057,10 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal flags As Long, ByVal 
         ' ...
         If (AllowedToTalk(Username, Message)) Then
             ' ...
-            frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, Username & _
-                Space$(1), RTBColors.EmoteText, Message & ">"
+            If (GetVeto = False) Then
+                frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, Username & _
+                    Space$(1), RTBColors.EmoteText, Message & ">"
+            End If
             
             ' ...
             If (Catch(0) <> vbNullString) Then
@@ -1404,8 +1406,10 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal flags As Long, ByVal 
             UserStats.Statstring = originalstatstring
         
             ' ...
-            frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
-                RTBColors.JoinText, " has joined the channel using " & UserStats.ToString
+            If (GetVeto = False) Then
+                frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
+                    RTBColors.JoinText, " has joined the channel using " & UserStats.ToString
+            End If
                 
             ' ...
             Set UserStats = Nothing
@@ -1523,10 +1527,14 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal flags As Long)
         If (g_Channel.Users(UserIndex).Queue.Count = 0) Then
             ' ...
             If (JoinMessagesOff = False) Then
-                frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, g_Channel.Users(UserIndex).DisplayName, _
-                    RTBColors.JoinText, " has left the channel."
+                If (GetVeto = False) Then
+                    frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, g_Channel.Users(UserIndex).DisplayName, _
+                        RTBColors.JoinText, " has left the channel."
+                End If
             End If
         End If
+        
+        g_Channel.Users.Remove UserIndex
     Else
         frmChat.AddChat vbRed, "Warning: We have received a leave event for a user that we didn't know " & _
                 "was in the channel.  This may be indicative of a server split or other technical difficulty."
@@ -1579,10 +1587,6 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal flags As Long)
         On Error Resume Next
         
         RunInAll "Event_UserLeaves", Username, flags
-    End If
-    
-    If (UserIndex > 0) Then
-        g_Channel.Users.Remove UserIndex
     End If
     
     Exit Sub
@@ -1719,8 +1723,10 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal flags As Long, ByVal M
                 End If
                 
                 ' ...
-                frmChat.AddChat CaratColor, "<", UsernameColor, Username, CaratColor, "> ", _
-                    TextColor, Message
+                If (GetVeto = False) Then
+                    frmChat.AddChat CaratColor, "<", UsernameColor, Username, CaratColor, "> ", _
+                        TextColor, Message
+                End If
                 
                 ' ...
                 If (Catch(0) <> vbNullString) Then
