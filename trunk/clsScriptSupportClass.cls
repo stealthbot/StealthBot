@@ -1141,25 +1141,21 @@ End Sub
 
 '// RELOADPLUGINMENUS
 '//   Reloads the all plugin menus. All user-added items will be cleared.
-Public Sub ReloadPluginMenus()
-    
-    Exit Sub
-
-    Call DeletePluginMenus
-    Call RegisterPluginMenus
-End Sub
+'Public Sub ReloadPluginMenus()
+'
+'    Call DeletePluginMenus
+'    Call RegisterPluginMenus
+'End Sub
 
 
 '// REMOVEPLUGINMENU
 '//   Removes an entire plugin menu.
-Public Sub RemoveMenuItem(ByVal strPrefix As String, Optional ByVal strName As String)
-
-    Exit Sub
-
-    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
-    
-    DeleteMenuItemByID GetPluginMenu(strPrefix)
-End Sub
+'Public Sub RemoveMenuItem(ByVal strPrefix As String, Optional ByVal strName As String)
+'
+'    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
+'
+'    DeleteMenuItemByID GetPluginMenu(strPrefix)
+'End Sub
 
 
 '// ADDMENUITEM
@@ -1170,93 +1166,83 @@ End Sub
 '//     If boolCheckmark is True, this item has a checkmark
 '//   Add the following sub to your plugin which will be called when any user-added item is clicked:
 '//     Sub <prefix>_Menu_Callback(ItemName)
-Public Sub AddMenuItem(ByVal strPrefix As String, ByVal strName As String, Optional ByVal boolSeparator As Boolean, _
-                Optional ByVal boolDisabled As Boolean, Optional ByVal boolCheckmark As Boolean)
-
-    Exit Sub
-
-    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
-
-    Dim strCallback As String
-    Dim lngMenu As Long, lngItem As Long, intItemCount As Integer
-    
-    lngMenu = GetPluginMenu(strPrefix)
-    intItemCount = GetMenuItemCount(lngMenu)
-
-    '// Insert a separator and warning if this is the first user-added item
-    If intItemCount < 7 Then
-        AddScriptMenuItem lngMenu, 0, 0, 1
-        'AddScriptMenuItem lngMenu, "(use at your own risk)", 0, , 1
-    End If
-
-    '// Create the initial callback sub
-    strCallback = strPrefix & "_item" & intItemCount + 1 & "_callback"
-    frmChat.SControl.Modules(1).AddCode "Sub " & strCallback & ":" & strPrefix & "_Menu_Callback """ & strName & """:End " & "Sub"
-
-    '// Add the menu item
-    lngItem = AddScriptMenuItem(lngMenu, strName, strCallback, boolSeparator, boolDisabled, boolCheckmark)
-    
-    RegisterPluginItem strPrefix, strName, lngItem
-End Sub
+'Public Sub AddMenuItem(ByVal strPrefix As String, ByVal strName As String, Optional ByVal boolSeparator As Boolean, _
+'                Optional ByVal boolDisabled As Boolean, Optional ByVal boolCheckmark As Boolean)
+'
+'    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
+'
+'    Dim strCallback As String
+'    Dim lngMenu As Long, lngItem As Long, intItemCount As Integer
+'
+'    lngMenu = GetPluginMenu(strPrefix)
+'    intItemCount = GetMenuItemCount(lngMenu)
+'
+'    '// Insert a separator and warning if this is the first user-added item
+'    If intItemCount < 7 Then
+'        AddScriptMenuItem lngMenu, 0, 0, 1
+'        'AddScriptMenuItem lngMenu, "(use at your own risk)", 0, , 1
+'    End If
+'
+'    '// Create the initial callback sub
+'    strCallback = strPrefix & "_item" & intItemCount + 1 & "_callback"
+'    frmChat.SControl.Modules(1).AddCode "Sub " & strCallback & ":" & strPrefix & "_Menu_Callback """ & strName & """:End " & "Sub"
+'
+'    '// Add the menu item
+'    lngItem = AddScriptMenuItem(lngMenu, strName, strCallback, boolSeparator, boolDisabled, boolCheckmark)
+'
+'    RegisterPluginItem strPrefix, strName, lngItem
+'End Sub
 
 
 '// SETMENUITEMCHECK
 '//   Changes checked status of an item in a plugin menu.
-Public Sub SetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String, ByVal boolChecked As Boolean)
-
-    Exit Sub
-
-    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
-    
-    SetMenuCheck GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolChecked
-End Sub
+'Public Sub SetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String, ByVal boolChecked As Boolean)
+'
+'    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
+'
+'    SetMenuCheck GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolChecked
+'End Sub
 
 
 '// GETMENUITEMCHECK
 '//   Get's the checked status of an item in a plugin menu.
 '//   Returns True (checked), False (unchecked), or -1 if it's not a checkmark item
-Public Function GetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
-    
-    Exit Function
-    
-    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Function
-    
-    Dim intChange As Integer
-    intChange = SetMenuCheck(GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), True)
-    
-    If intChange = 0 Then
-        SetMenuCheck GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), False
-        GetMenuItemCheck = False
-    ElseIf intChange = 1 Then
-        GetMenuItemCheck = True
-    Else
-        GetMenuItemCheck = -1
-    End If
-End Function
+'Public Function GetMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
+'
+'    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Function
+'
+'    Dim intChange As Integer
+'    intChange = SetMenuCheck(GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), True)
+'
+'    If intChange = 0 Then
+'        SetMenuCheck GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), False
+'        GetMenuItemCheck = False
+'    ElseIf intChange = 1 Then
+'        GetMenuItemCheck = True
+'    Else
+'        GetMenuItemCheck = -1
+'    End If
+'End Function
 
 
 '// TOGGLEMENUITEMCHECK
 '//   Reverses the checked status of a plugin menu item.
-Public Sub ToggleMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
-
-    Exit Sub
-
-    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
-    
-    SetMenuItemCheck strPrefix, strName, Not GetMenuItemCheck(strPrefix, strName)
-End Sub
+'Public Sub ToggleMenuItemCheck(ByVal strPrefix As String, ByVal strName As String)
+'
+'    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
+'
+'    SetMenuItemCheck strPrefix, strName, Not GetMenuItemCheck(strPrefix, strName)
+'End Sub
 
 
 '// SETMENUITEMENABLED
 '//   Enables or disables a plugin menu item. Disabled items are greyed out and not clickable.
-Public Sub SetMenuItemEnabled(ByVal strPrefix As String, ByVal strName As String, ByVal boolEnabled As Boolean)
-
-    Exit Sub
-
-    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
-    
-    SetMenuEnabled GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolEnabled
-End Sub
+'Public Sub SetMenuItemEnabled(ByVal strPrefix As String, ByVal strName As String, ByVal boolEnabled As Boolean)
+'
+'    If frmChat.SControl.Modules(1).CodeObject.GetSetting("ps", "menusDisabled") Then Exit Sub
+'
+'    SetMenuEnabled GetPluginMenu(strPrefix), GetPluginItem(strPrefix, strName), boolEnabled
+'End Sub
 
 
 '// CREATEFORM
@@ -1342,31 +1328,42 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     As Object
     
     Set IsCommand = modOtherCode.IsCommand(str, IsLocal)
+    
 End Function
 
 Public Function OpenCommand(ByVal strCommand As String) As Object
+
     '// ...
     Set OpenCommand = modCommandDocsObj.OpenCommand(strCommand)
+    
 End Function
 
 Public Function CreateCommand(ByVal strCommand As String) As Object
+
     '// ...
     Set CreateCommand = modCommandDocsObj.CreateCommand(strCommand)
+    
 End Function
 
 Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String) As Boolean
+
     '// ...
     IsCorrectSyntax = modCommandCode.IsCorrectSyntax(CommandName, CommandArgs)
+    
 End Function
 
 Public Function HasAccess(ByVal Username As String, ByVal CommandName As String, Optional ByVal CommandArgs As _
     String = vbNullString, Optional ByRef outbuf As String) As Boolean
     
-    HasAccess = modCommandCode.HasAccess(Username, CommandName, CommandArgs, outbuf)
+    HasAccess = _
+        modCommandCode.HasAccess(Username, CommandName, CommandArgs, outbuf)
+    
 End Function
 
 Public Function UtcNow() As Date
+
     UtcNow = modDateTime.UtcNow
+    
 End Function
 
 Public Function Logger() As Object
@@ -1493,11 +1490,11 @@ Public Function IGetScriptModule(ByVal ModuleID As String) As Object
 
 End Function
 
-Public Function ICreateObj(ByVal ModuleID As String, ByVal ObjType As String, ByVal ObjName As String, Optional CallCode As String) As Object
+Public Function ICreateObj(ByVal ModuleID As String, ByVal ObjType As String, ByVal ObjName As String) As Object
 
     Set ICreateObj = _
             modScripting.CreateObj(frmChat.SControl.Modules(ModuleID), _
-                    ObjType, ObjName, CallCode)
+                    ObjType, ObjName)
 
 End Function
 

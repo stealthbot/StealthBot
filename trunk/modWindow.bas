@@ -126,7 +126,7 @@ Public Function NewWindowProc(ByVal hWnd As Long, ByVal Msg As Long, ByVal wPara
         End If
     ElseIf Msg = WM_COMMAND Then
         If lParam = 0 Then
-            Call ProcessMenu(hWnd, wParam)
+            MenuClick hWnd, wParam
         End If
     End If
     

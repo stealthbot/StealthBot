@@ -1664,11 +1664,7 @@ Private Sub Form_Load()
     Set BotVars = New clsBotVars
     Set colQueue = New Collection
     Set colSafelist = New Collection
-    Set dctCallbacks = New Dictionary
-        dctCallbacks.CompareMode = BinaryCompare
-        
-    Set colDynamicMenus = New Collection
-    
+
     'Set dictTimerInterval = New Dictionary
     'Set dictTimerEnabled = New Dictionary
     'Set dictTimerCount = New Dictionary
@@ -1699,9 +1695,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -3070,10 +3066,6 @@ Sub Form_Unload(Cancel As Integer)
     Set colWhisperWindows = Nothing
     Set colLastSeen = Nothing
     Set colSafelist = Nothing
-    Set dctCallbacks = Nothing
-    Set colDynamicMenus = Nothing
-    Set dictMenuIDs = Nothing
-    Set dictItemIDs = Nothing
     Set SharedScriptSupport = Nothing
     Set ds = Nothing
     Set NLogin = Nothing

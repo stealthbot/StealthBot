@@ -6631,9 +6631,7 @@ Private Function OnDisable(ByVal Username As String, ByRef dbAccess As udtGetAcc
                     "Enabled", "False"
                     
                 DestroyObjs frmChat.SControl.Modules(I)
-                
-                'InitMenus
-                
+
                 cmdRet(0) = Name & " has been disabled."
                     
                 Exit Function

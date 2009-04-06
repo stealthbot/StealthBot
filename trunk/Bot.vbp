@@ -61,7 +61,6 @@ Class=clsBotVars; clsBotVars.cls
 Class=clsQueueOBj; clsQueueObj.cls
 Module=modQuickChannels; modQuickChannels.bas
 Module=modTimerProcs; modTimerProcs.bas
-Module=modMenu; modMenu.bas
 Module=modChatQueue; modChatQueue.bas
 Form=frmDBManager.frm
 Form=frmGameSelection.frm

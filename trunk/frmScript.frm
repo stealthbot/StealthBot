@@ -112,6 +112,7 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
+      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -246,7 +247,7 @@ Public Function ObjCount(Optional ObjType As String) As Integer
 
 End Function
 
-Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String, Optional ByVal CallCode As String) As Object
+Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As Object
 
     On Error Resume Next
 
@@ -377,9 +378,8 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String, Opti
     ' store our module name & type
     obj.ObjName = ObjName
     obj.ObjType = ObjType
-    obj.CallCode = CallCode
-    
-       ' store object
+
+    ' store object
     m_arrObjs(m_objCount) = obj
     
     ' increment object counter

@@ -12,8 +12,6 @@ Public Type scObj
     ObjName  As String
     ObjType  As String
     obj      As Object
-    CallCode As String
-    Index    As Integer
 End Type
 
 Public VetoNextMessage As Boolean
@@ -24,144 +22,6 @@ Private m_arrObjs()    As scObj
 Private m_objCount     As Integer
 Private m_sc_control   As Object
 Private m_is_reloading  As Boolean
-
-Public Function InitMenus()
-
-    On Error Resume Next
-
-    Dim tmp  As clsMenuObj ' ...
-    Dim Name As String     ' ...
-    Dim I    As Integer    ' ...
-
-    ' ...
-    DestroyMenus
-    
-    ' ...
-    For I = 2 To frmChat.SControl.Modules.Count
-        If (I = 2) Then
-            frmChat.mnuScriptingDash(0).Visible = True
-        End If
-    
-        ' ...
-        Name = _
-            frmChat.SControl.Modules(I).CodeObject.Script("Name")
-    
-        ' ...
-        If (Err.Number = 0) Then
-            Set tmp = New clsMenuObj
-        
-            ' ...
-            tmp.Name = Chr$(0) & Name & " ROOT"
-            tmp.hWnd = GetSubMenu(GetMenu(frmChat.hWnd), 5)
-            tmp.Caption = Name
-                
-            ' ...
-            DynamicMenus.Add tmp, "mnu" & Name
-                
-            ' ...
-            Set tmp = New clsMenuObj
-        
-            ' ...
-            tmp.Name = Chr$(0) & Name & " ENABLE|DISABLE"
-            tmp.Parent = DynamicMenus("mnu" & Name)
-            tmp.Caption = "Enabled"
-            
-            If (StrComp(frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled"), _
-                    "False", vbTextCompare) <> 0) Then
-                    
-                tmp.Checked = True
-            End If
-            
-            ' ...
-            DynamicMenus.Add tmp
-            
-            ' ...
-            Set tmp = New clsMenuObj
-        
-            ' ...
-            tmp.Name = Chr$(0) & Name & " VIEW_SCRIPT"
-            tmp.Parent = DynamicMenus("mnu" & Name)
-            tmp.Caption = "View Script"
-            
-            ' ...
-            DynamicMenus.Add tmp
-        End If
-        
-        Err.Clear
-    Next I
-
-End Function
-
-Public Function DestroyMenus()
-
-    Dim I As Integer ' ...
-    
-    frmChat.mnuScriptingDash(0).Visible = False
-    
-    For I = DynamicMenus.Count To 1 Step -1
-        
-        If (Left$(DynamicMenus(I).Name, 1) = Chr$(0)) Then
-            DynamicMenus(I).Class_Terminate
-            
-            Set DynamicMenus(I) = Nothing
-            
-            DynamicMenus.Remove I
-        End If
-        
-    Next I
-
-End Function
-
-Private Function GetFileExtension(ByVal filename As String)
-        
-        Dim arr() As String
-
-        arr = Split(filename, ".")
-        If UBound(arr) = 0 Then
-                GetFileExtension = ""
-        Else
-                GetFileExtension = arr(UBound(arr))
-        End If
-
-End Function
-
-Private Function IsValidFileExtension(ByVal ext As String) As Boolean
-
-    Dim exts() As String  ' ...
-    Dim I      As Integer ' ...
-
-    ' ...
-    ReDim exts(0 To 2)
-    
-    ' ...
-    exts(0) = "dat"
-    exts(1) = "txt"
-    exts(2) = "vbs"
-    
-    ' ...
-    For I = LBound(exts) To UBound(exts)
-        If (StrComp(ext, exts(I), vbTextCompare) = 0) Then
-            IsValidFileExtension = True
-            
-            Exit Function
-        End If
-    Next I
-    
-    IsValidFileExtension = False
-
-End Function
-
-Private Function CleanFileName(ByVal filename As String) As String
-    
-    On Error Resume Next
-    
-    ' ...
-    If (InStr(1, filename, ".") > 1) Then
-        CleanFileName = _
-            Left$(filename, InStr(1, filename, ".") - 1)
-    End If
-
-End Function
 
 Public Sub InitScriptControl(ByVal SC As ScriptControl)
 
@@ -285,6 +145,9 @@ Public Sub LoadScripts()
     '        m_sc_control.Modules(1).CodeObject.Script("Name") = "PluginSystem"
     '    End If
     'End If
+    
+    ' ...
+    'InitMenus
 
     ' ...
     Exit Sub
@@ -456,12 +319,6 @@ Private Function GetDefaultModuleProcs(ByVal ScriptID As String, ByVal ScriptPat
     str = str & "   Set CreateObj = _ " & vbNewLine
     str = str & "         ICreateObj(GetModuleID(), ObjType, ObjName)" & vbNewLine
     str = str & "End Function" & vbNewLine
-    
-    ' CreateObjEx() module-level function
-    str = str & "Function CreateObjEx(ObjType, ObjName, CallCode)" & vbNewLine
-    str = str & "   Set CreateObjEx = _ " & vbNewLine
-    str = str & "         ICreateObj(GetModuleID(), ObjType, ObjName, CallCode)" & vbNewLine
-    str = str & "End Function" & vbNewLine
 
     ' DestroyObj() module-level function
     str = str & "Sub DestroyObj(ObjName)" & vbNewLine
@@ -539,73 +396,6 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
     
     ' ...
     IsScriptNameValid = True
-
-End Function
-
-Public Function UpdateScripts()
-
-    On Error Resume Next
-    
-    Dim wrkScripts As New Collection ' ...
-    Dim I          As Integer ' ...
-    Dim str        As String  ' ...
-    Dim tmp        As String  ' ...
-    
-    ' ...
-    If (m_sc_control.Modules.Count > 1) Then
-        Dim CRC32    As New clsCRC32
-        Dim filePath As String
-
-        ' ...
-        frmChat.AddChat RTBColors.InformationText, "Checking for script updates..."
-        
-        ' ...
-        For I = 2 To m_sc_control.Modules.Count
-            str = _
-                m_sc_control.Modules(I).CodeObject.Script("UpdateLocation")
-                
-            If (str <> vbNullString) Then
-                ' ...
-                filePath = App.Path & "\scripts\" & m_sc_control.Modules(I).Name
-            
-                ' ...
-                URLDownloadToFile 0, str, filePath & ".tmp", 0, 0
-                
-                ' ...
-                If (CRC32.GetFileCRC32(filePath) <> CRC32.GetFileCRC32(filePath & ".tmp")) Then
-                    ' ...
-                    wrkScripts.Add m_sc_control.Modules(I)
-                
-                    ' ...
-                    Kill filePath
-                    
-                    ' ...
-                    Name filePath & ".tmp" As filePath
-                End If
-                
-                ' ...
-                Kill filePath & ".tmp"
-            End If
-        Next I
-
-        If (wrkScripts.Count) Then
-            str = "Successfully updated the following scripts: "
-            
-            For I = 1 To wrkScripts.Count
-                str = str & _
-                    wrkScripts(I).CodeObject.Script("Name") & ", "
-            Next I
-            
-            frmChat.AddChat vbGreen, Left$(str, Len(str) - 2)
-            
-            InitScriptControl m_sc_control
-            LoadScripts
-        Else
-            frmChat.AddChat vbGreen, "Scripts are up to date."
-        End If
-        
-        Set CRC32 = Nothing
-    End If
 
 End Function
 
@@ -833,7 +623,7 @@ Private Function ObjCount(Optional ObjType As String, Optional ByVal SCModule As
 
 End Function
 
-Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByVal ObjName As String, Optional CallCode As String, Optional ByVal Clone As Boolean) As Object
+Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByVal ObjName As String) As Object
 
     On Error Resume Next
 
@@ -863,7 +653,6 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
     ' store our module name & type
     obj.ObjName = ObjName
     obj.ObjType = ObjType
-    obj.CallCode = CallCode
 
     ' store our module handle
     Set obj.SCModule = SCModule
@@ -1082,11 +871,6 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
         Case "MENU"
             m_arrObjs(Index).obj.Class_Terminate
     End Select
-    
-    ' ...
-    If (m_is_reloading = False) Then
-        SCModule.ExecuteStatement "Set " & ObjName & " = Nothing"
-    End If
 
     ' ...
     Set m_arrObjs(Index).obj = Nothing
@@ -1106,12 +890,20 @@ Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
     End If
     
     ' ...
+    SCModule.ExecuteStatement "Set " & ObjName & " = Nothing"
+    
+    ' ...
     m_objCount = (m_objCount - 1)
     
     ' ...
     Exit Sub
     
 ERROR_HANDLER:
+
+    ' scripting engine has been reset - likely due to a reload
+    If (Err.Number = -2147467259) Then
+        Resume Next
+    End If
 
     frmChat.AddChat vbRed, _
         "Error (#" & Err.Number & "): " & Err.description & " in DestroyObj()."
@@ -1180,6 +972,93 @@ Public Function GetScriptObjByIndex(ByVal ObjType As String, ByVal Index As Inte
 
 End Function
 
+Public Function InitMenus()
+
+    On Error Resume Next
+
+    Dim tmp  As clsMenuObj ' ...
+    Dim Name As String     ' ...
+    Dim I    As Integer    ' ...
+
+    ' ...
+    DestroyMenus
+    
+    ' ...
+    For I = 2 To frmChat.SControl.Modules.Count
+        If (I = 2) Then
+            frmChat.mnuScriptingDash(0).Visible = True
+        End If
+    
+        ' ...
+        Name = _
+            frmChat.SControl.Modules(I).CodeObject.Script("Name")
+    
+        ' ...
+        If (Err.Number = 0) Then
+            Set tmp = New clsMenuObj
+        
+            ' ...
+            tmp.Name = Chr$(0) & Name & " ROOT"
+            tmp.hWnd = GetSubMenu(GetMenu(frmChat.hWnd), 5)
+            tmp.Caption = Name
+                
+            ' ...
+            DynamicMenus.Add tmp, "mnu" & Name
+                
+            ' ...
+            Set tmp = New clsMenuObj
+        
+            ' ...
+            tmp.Name = Chr$(0) & Name & " ENABLE|DISABLE"
+            tmp.Parent = DynamicMenus("mnu" & Name)
+            tmp.Caption = "Enabled"
+            
+            If (StrComp(frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled"), _
+                    "False", vbTextCompare) <> 0) Then
+                    
+                tmp.Checked = True
+            End If
+            
+            ' ...
+            DynamicMenus.Add tmp
+            
+            ' ...
+            Set tmp = New clsMenuObj
+        
+            ' ...
+            tmp.Name = Chr$(0) & Name & " VIEW_SCRIPT"
+            tmp.Parent = DynamicMenus("mnu" & Name)
+            tmp.Caption = "View Script"
+            
+            ' ...
+            DynamicMenus.Add tmp
+        End If
+        
+        Err.Clear
+    Next I
+
+End Function
+
+Public Function DestroyMenus()
+
+    Dim I As Integer ' ...
+    
+    frmChat.mnuScriptingDash(0).Visible = False
+    
+    For I = DynamicMenus.Count To 1 Step -1
+        
+        If (Left$(DynamicMenus(I).Name, 1) = Chr$(0)) Then
+            DynamicMenus(I).Class_Terminate
+            
+            Set DynamicMenus(I) = Nothing
+            
+            DynamicMenus.Remove I
+        End If
+        
+    Next I
+
+End Function
+
 Public Function Scripts() As Object
 
     On Error Resume Next
@@ -1213,4 +1092,56 @@ Public Function GetVeto() As Boolean
     
     VetoNextMessage = False
     
+End Function
+
+Private Function GetFileExtension(ByVal filename As String)
+        
+    Dim arr() As String
+
+    arr = Split(filename, ".")
+    
+    If UBound(arr) = 0 Then
+        GetFileExtension = ""
+    Else
+        GetFileExtension = arr(UBound(arr))
+    End If
+
+End Function
+
+Private Function IsValidFileExtension(ByVal ext As String) As Boolean
+
+    Dim exts() As String  ' ...
+    Dim I      As Integer ' ...
+
+    ' ...
+    ReDim exts(0 To 2)
+    
+    ' ...
+    exts(0) = "dat"
+    exts(1) = "txt"
+    exts(2) = "vbs"
+    
+    ' ...
+    For I = LBound(exts) To UBound(exts)
+        If (StrComp(ext, exts(I), vbTextCompare) = 0) Then
+            IsValidFileExtension = True
+            
+            Exit Function
+        End If
+    Next I
+    
+    IsValidFileExtension = False
+
+End Function
+
+Private Function CleanFileName(ByVal filename As String) As String
+    
+    On Error Resume Next
+    
+    ' ...
+    If (InStr(1, filename, ".") > 1) Then
+        CleanFileName = _
+            Left$(filename, InStr(1, filename, ".") - 1)
+    End If
+
 End Function
