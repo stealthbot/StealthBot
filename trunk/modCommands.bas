@@ -6556,6 +6556,8 @@ Private Function OnScripts(ByVal Username As String, ByRef dbAccess As udtGetAcc
                     ' ...
                     Count = (Count + 1)
                 End If
+                
+                Err.Clear
             End If
         Next I
         
