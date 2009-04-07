@@ -1185,6 +1185,7 @@ Sub CreateMenus()
       Set tmp = CreateObj("Menu", "mnuPluginMenus" & pluginPrefixes(i))
       tmp.Parent = mnuPluginMenus
       tmp.Caption = pluginNames(i) & " (" & pluginPrefixes(i) & ")"
+      tmp.Checked = Not CBool(GetSetting(pluginPrefixes(i), "menusDisabled"))
 
       Set pluginMenus(pluginPrefixes(i))("Menu") = tmp
 
@@ -1201,6 +1202,7 @@ Sub CreateMenus()
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Enabled")
       tmp2.Parent = tmp
       tmp2.Caption = "Enabled"
+      tmp2.Checked = CBool(GetSetting(pluginPrefixes(i), "enabled"))
 
       Set pluginMenus(pluginPrefixes(i))("Enabled") = tmp2
 
@@ -1212,6 +1214,7 @@ Sub CreateMenus()
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Backup")
       tmp2.Parent = tmp
       tmp2.Caption = "Backup On Updates"
+      tmp2.Checked = CBool(GetSetting(pluginPrefixes(i), "backup"))
 
       Set pluginMenus(pluginPrefixes(i))("Backup") = tmp2
 
@@ -1227,10 +1230,11 @@ Sub CreateMenus()
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Nvn")
       tmp2.Parent = tmp
       tmp2.Caption = "New Version Notification"
+      tmp2.Checked = CBool(GetSetting(pluginPrefixes(i), "nvn"))
 
       psSC.AddCode _
-         "Sub mnu" & pluginPrefixes(i) & "Nvm_Click()" & vbNewLine & _
-         "   PluginMenus_nvm_Callback " & Chr(34) & pluginPrefixes(i) & Chr(34) & vbNewline & _
+         "Sub mnu" & pluginPrefixes(i) & "Nvn_Click()" & vbNewLine & _
+         "   PluginMenus_nvn_Callback " & Chr(34) & pluginPrefixes(i) & Chr(34) & vbNewline & _
          "End Sub"
 
       Set pluginMenus(pluginPrefixes(i))("Nvn") = tmp2
