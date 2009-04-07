@@ -367,7 +367,7 @@ Public Function CommandEx(ByVal Username As String, ByVal Message As String, Opt
         ' ...
         With dbAccess
             .Access = 200
-            .Flags = "A"
+            .flags = "A"
         End With
     Else
         ' ...
@@ -453,7 +453,7 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Optional ByRef Flags, _
+Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Optional ByRef flags, _
     Optional ByRef entryType As String = "USER") As Object
 
     Dim temp   As udtGetAccessResponse
@@ -464,7 +464,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     
     With temp
         Access = .Access
-        Flags = .Flags
+        flags = .flags
     End With
     
     ' ...
@@ -475,7 +475,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
         .entryType = temp.Type
         .Name = temp.Username
         .rank = temp.Access
-        .Flags = temp.Flags
+        .flags = temp.flags
         .CreatedOn = temp.AddedOn
         .CreatedBy = temp.AddedBy
         .ModifiedOn = temp.ModifiedOn
@@ -507,7 +507,7 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
+Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef flags, _
     Optional ByRef entryType As String = "USER") '// yum, Variants >:\
 
     Dim temp As udtGetAccessResponse
@@ -516,7 +516,7 @@ Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
     
     With temp
         Access = .Access
-        Flags = .Flags
+        flags = .flags
     End With
 End Sub
 
@@ -675,7 +675,7 @@ Public Function GetInternalData(ByVal iIndex As Integer, ByVal lDataType As Long
                 GetInternalData = Channel.Users(iIndex).Clan
                 
             Case GID_FLAGS
-                GetInternalData = Channel.Users(iIndex).Flags
+                GetInternalData = Channel.Users(iIndex).flags
             
             Case GID_PING
                 GetInternalData = Channel.Users(iIndex).Ping
@@ -1473,7 +1473,8 @@ Public Function CRC32(ByVal str As String) As String
 
 End Function
 
-Public Function Sha1(ByVal Data As String) As String
+Public Function SHA1(ByVal Data As String) As String
+
     Dim A As Long
     Dim B As Long
     Dim c As Long
@@ -1481,11 +1482,14 @@ Public Function Sha1(ByVal Data As String) As String
     Dim e As Long
     
     Call modSHA1.DefaultSHA1(StrConv(Data, vbFromUnicode), A, B, c, d, e)
-    Sha1 = LongToStr(A) & LongToStr(B) & LongToStr(c) & LongToStr(d) & LongToStr(e)
+    SHA1 = LongToStr(A) & LongToStr(B) & LongToStr(c) & LongToStr(d) & LongToStr(e)
+    
 End Function
 
-Public Function XSha1(ByVal str As String) As String
-    XSha1 = modBNCSutil.HashPassword(str)
+Public Function XSHA1(ByVal str As String) As String
+
+    XSHA1 = modBNCSutil.hashPassword(str)
+    
 End Function
 
 Public Function IGetScriptModule(ByVal ModuleID As String) As Object
