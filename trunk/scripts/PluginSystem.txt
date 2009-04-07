@@ -1388,7 +1388,7 @@ Sub PluginMenus_Display_Callback(Prefix)
    If Not boolEnabled Then
 	pluginMenus(Prefix)("ROOT").Visible = False
    Else
-        AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
+        pluginMenus(Prefix)("ROOT").Visible = True
    End If
 End Sub
 
