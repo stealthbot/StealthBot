@@ -2221,7 +2221,7 @@ Sub scTimer_Timer()
     On Error Resume Next
 
 	'// 52 - changed from GetcriptControl to psSC
-    psSC.Error.Clear
+    GetScriptControl.Error.Clear
 
     strKeys = Split(GetPTKeys)
 
@@ -2244,10 +2244,10 @@ Sub scTimer_Timer()
     
                     '// Handle errors
 					'// 52 - changed from GetcriptControl to psSC
-                    If psSC.Error.Number <> 0 Then
+                    If GetScriptControl.Error.Number <> 0 Then
                         AddChat vbYellow, "The """ & strKey(1) & """ timer in your """ & strKey(0) & """ plugin has been disabled due to an error."
                         SetPTEnabled strKey(0), strKey(1), False
-                        psSC.Error.Clear
+                        GetScriptControl.Error.Clear
                     End If
     
                     '// Reset this timer's countdown
