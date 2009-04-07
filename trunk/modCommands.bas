@@ -4264,14 +4264,16 @@ Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessR
             msgData = Mid$(msgData, 1, 223)
         End If
         
-        If (Len(msgData) >= 5) Then
-            Select Case (LCase$(Left$(msgData, 5)))
-                Case "ops: ", "ops, "
-                    Exit Function
-                    
-                Case "all: ", "all, "
-                    Exit Function
-            End Select
+        If (InBot = False) Then
+            If (Len(msgData) >= 5) Then
+                Select Case (LCase$(Left$(msgData, 5)))
+                    Case "ops: ", "ops, "
+                        Exit Function
+                        
+                    Case "all: ", "all, "
+                        Exit Function
+                End Select
+            End If
         End If
     
         ' ...
