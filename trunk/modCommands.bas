@@ -5812,8 +5812,7 @@ Private Function OnAbout(ByVal Username As String, ByRef dbAccess As udtGetAcces
     
     Dim tmpbuf As String ' temporary output buffer
 
-    tmpbuf = _
-        ".: " & CVERSION & " by the StealthBot Development Team."
+    tmpbuf = ".: " & CVERSION & " :."
     
     ' return message
     cmdRet(0) = tmpbuf
@@ -6302,8 +6301,8 @@ Private Function OnHelpAttr(ByVal Username As String, ByRef dbAccess As udtGetAc
             "./command/access/flags/flag[text()=" & flagstr & "]")
     
     ' ...
-    If (commands.Length > 0) Then
-        For I = 0 To commands.Length - 1
+    If (commands.length > 0) Then
+        For I = 0 To commands.length - 1
             thisCommand = commands(I).parentNode.parentNode.parentNode. _
                 Attributes.getNamedItem("name").text
                 
@@ -6383,8 +6382,8 @@ Private Function OnHelpRank(ByVal Username As String, ByRef dbAccess As udtGetAc
             "./command/access/rank[number() <= " & msgData & "]")
     
     ' ...
-    If (commands.Length > 0) Then
-        For I = 0 To commands.Length - 1
+    If (commands.length > 0) Then
+        For I = 0 To commands.length - 1
             thisCommand = commands(I).parentNode.parentNode.Attributes. _
                 getNamedItem("name").text
                 
