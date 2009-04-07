@@ -1197,11 +1197,21 @@ Sub CreateMenus()
 
       Set pluginMenus(pluginPrefixes(i))("Enabled") = tmp2
 
+      psSC.AddCode _
+         "Sub mnu" & pluginPrefixes(i) & "Enabled_Click()" & vbNewLine & _
+         "   PluginMenus_Enabled_Callback " & Chr(34) & pluginPrefixes(i) & Chr(34) & vbNewline & _
+         "End Sub"
+
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Backup")
       tmp2.Parent = tmp
       tmp2.Caption = "Backup On Updates"
 
       Set pluginMenus(pluginPrefixes(i))("Backup") = tmp2
+
+      psSC.AddCode _
+         "Sub mnu" & pluginPrefixes(i) & "Backup_Click()" & vbNewLine & _
+         "   PluginMenus_Backup_Callback " & Chr(34) & pluginPrefixes(i) & Chr(34) & vbNewline & _
+         "End Sub"
       
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Dash")
       tmp2.Parent = tmp
@@ -1211,6 +1221,11 @@ Sub CreateMenus()
       tmp2.Parent = tmp
       tmp2.Caption = "New Version Notification"
 
+      psSC.AddCode _
+         "Sub mnu" & pluginPrefixes(i) & "Nvm_Click()" & vbNewLine & _
+         "   PluginMenus_nvm_Callback " & Chr(34) & pluginPrefixes(i) & Chr(34) & vbNewline & _
+         "End Sub"
+
       Set pluginMenus(pluginPrefixes(i))("Nvn") = tmp2
 
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Open")
@@ -1219,11 +1234,21 @@ Sub CreateMenus()
 
       Set pluginMenus(pluginPrefixes(i))("Open") = tmp2
 
+      psSC.AddCode _
+         "Sub mnu" & pluginPrefixes(i) & "Open_Click()" & vbNewLine & _
+         "   PluginMenus_OpenFile_Callback " & Chr(34) & pluginPrefixes(i) & Chr(34) & vbNewline & _
+         "End Sub"
+
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Help")
       tmp2.Parent = tmp
       tmp2.Caption = "Help"
 
       Set pluginMenus(pluginPrefixes(i))("Help") = tmp2
+
+     psSC.AddCode _
+         "Sub mnu" & pluginPrefixes(i) & "Help_Click()" & vbNewLine & _
+         "   PluginMenus_Help_Callback " & Chr(34) & pluginPrefixes(i) & Chr(34) & vbNewline & _
+         "End Sub"
    Next
 
    Set tmp = CreateObj("Menu", "mnuDash2")
