@@ -81,15 +81,15 @@ Public Sub LoadScripts()
     If (Dir(strPath) <> vbNullString) Then
         ' ...
         filename = Dir(strPath)
-        
+
         ' ...
         Do While (filename <> vbNullString)
             ' ...
-            Set CurrentModule = _
-                m_sc_control.Modules.Add(m_sc_control.Modules.Count + 1)
-        
-            ' ...
             If (IsValidFileExtension(GetFileExtension(filename))) Then
+                ' ...
+                Set CurrentModule = _
+                    m_sc_control.Modules.Add(m_sc_control.Modules.Count + 1)
+            
                 ' ...
                 If (FileToModule(CurrentModule, strPath & filename) = True) Then
                     If (IsScriptNameValid(CurrentModule) = False) Then
