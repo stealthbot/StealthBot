@@ -4927,7 +4927,7 @@ Private Function OnGetPing(ByVal Username As String, ByRef dbAccess As udtGetAcc
         If (Latency >= -1) Then
             tmpbuf = "Your ping at login was " & Latency & "ms."
         Else
-            tmpbuf = "Your ping cannot be determined at this time."
+            tmpbuf = "I can't see you in the channel."
         End If
     End If
 
