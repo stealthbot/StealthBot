@@ -135,7 +135,7 @@ Public vbGrey, vbBrown, vbOrange, vbPink, vbLightBlue
 '// Hold RGB values that make up the color scheme
 Public psColor1, psColor2
 
-Set psSC = GetScriptControl() '// 03/27/2009 52 - Changed all the code to use this instead of using GetSriptControl() over and over
+Set psSC = GetScriptModule() '// 03/27/2009 52 - Changed all the code to use this instead of using GetSriptControl() over and over
 Set psFSO = CreateObject("Scripting.FileSystemObject")
 Set psWshShell = CreateObject("WScript.Shell")
 Set psAppShell = CreateObject("Shell.Application")
