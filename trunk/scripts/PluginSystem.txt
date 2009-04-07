@@ -1188,8 +1188,15 @@ Sub CreateMenus()
 
       Set pluginMenus(pluginPrefixes(i))("Menu") = tmp
 
+      psSC.AddCode _
+         "Sub mnuPluginMenus" & pluginPrefixes(i) & "_Click()" & vbNewLine & _
+         "   PluginMenus_Display_Callback " & Chr(34) & pluginPrefixes(i) & Chr(34) & vbNewline & _
+         "End Sub"
+
       Set tmp = CreateObj("Menu", "mnu" & pluginPrefixes(i))
       tmp.Caption = pluginNames(i) & " (" & pluginPrefixes(i) & ")"
+
+      Set pluginMenus(pluginPrefixes(i))("ROOT") = tmp
 
       Set tmp2 = CreateObj("Menu", "mnu" & pluginPrefixes(i) & "Enabled")
       tmp2.Parent = tmp
@@ -1371,11 +1378,11 @@ Sub PluginMenus_Display_Callback(Prefix)
    SetSetting Prefix, "menu_display", boolEnabled, "", True
 
    '// Toggle backup checkmark in plugin menu
-   SetMenuItemCheck "#display", Prefix, boolEnabled
+   pluginMenus(Prefix)("Menu").Checked = boolEnabled
 
    '// If it was disabled, remove the menu, otherwise reload
    If Not boolEnabled Then
-	RemoveMenuItem Prefix
+	pluginMenus(Prefix)("ROOT").Visible = False
    Else
         AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
    End If
