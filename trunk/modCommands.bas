@@ -6517,17 +6517,20 @@ Private Function OnScripts(ByVal Username As String, ByRef dbAccess As udtGetAcc
     Dim Count  As Integer ' ...
     
     ' ...
-    If (frmChat.SControl.Modules.Count) Then
+    If (frmChat.SControl.Modules.Count > 1) Then
         ' ...
         For I = 2 To frmChat.SControl.Modules.Count
-            If (I = 1) Then
+            Name = _
+                frmChat.SControl.Modules(I).CodeObject.Script("Name")
+
+            If (Err.Number = 0) Then
                 str = _
-                    ReadINI("Override", "DisablePS", GetConfigFilePath())
+                    frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled")
             
-                If (StrComp(str, "Y", vbTextCompare) = 0) Then
-                    Name = "(PluginSystem), "
+                If (StrComp(str, "False", vbTextCompare) = 0) Then
+                    Name = "(" & Name & "), "
                 Else
-                    Name = "PluginSystem, "
+                    Name = Name & ", "
                 End If
                 
                 ' ...
@@ -6535,29 +6538,9 @@ Private Function OnScripts(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 
                 ' ...
                 Count = (Count + 1)
-            Else
-                Name = _
-                    frmChat.SControl.Modules(I).CodeObject.Script("Name")
-
-                If (Err.Number = 0) Then
-                    str = _
-                        frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled")
-                
-                    If (StrComp(str, "False", vbTextCompare) = 0) Then
-                        Name = "(" & Name & "), "
-                    Else
-                        Name = Name & ", "
-                    End If
-                    
-                    ' ...
-                    tmpbuf = tmpbuf & Name
-                    
-                    ' ...
-                    Count = (Count + 1)
-                End If
-                
-                Err.Clear
             End If
+            
+            Err.Clear
         Next I
         
         ' ...
@@ -6583,7 +6566,7 @@ Private Function OnEnable(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Dim str  As String  ' ...
     
     ' ...
-    If (frmChat.SControl.Modules.Count) Then
+    If (frmChat.SControl.Modules.Count > 1) Then
         For I = 2 To frmChat.SControl.Modules.Count
             Name = _
                 frmChat.SControl.Modules(I).CodeObject.Script("Name")
@@ -6622,7 +6605,7 @@ Private Function OnDisable(ByVal Username As String, ByRef dbAccess As udtGetAcc
     Dim I    As Integer ' ...
     
     ' ...
-    If (frmChat.SControl.Modules.Count) Then
+    If (frmChat.SControl.Modules.Count > 1) Then
         For I = 2 To frmChat.SControl.Modules.Count
             Name = _
                 frmChat.SControl.Modules(I).CodeObject.Script("Name")
@@ -6650,11 +6633,13 @@ End Function
 Private Function OnSDetail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
+    On Error Resume Next
+    
     Dim Name As String  ' ...
     Dim I    As Integer ' ...
     
     ' ...
-    If (frmChat.SControl.Modules.Count) Then
+    If (frmChat.SControl.Modules.Count > 1) Then
         For I = 2 To frmChat.SControl.Modules.Count
             Name = _
                 frmChat.SControl.Modules(I).CodeObject.Script("Name")
