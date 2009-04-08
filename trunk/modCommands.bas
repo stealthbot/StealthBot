@@ -4713,7 +4713,7 @@ Private Function OnPing(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim Latency As Long
     Dim user    As String
     
-    user = msgData
+    user = Split(msgData, " ")(0)
     
     If (user <> vbNullString) Then
         Latency = GetPing(user)
