@@ -895,7 +895,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -921,6 +920,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1118,30 +1118,14 @@ Begin VB.Form frmChat
          Begin VB.Menu mnuEditFilters 
             Caption         =   "Chat Filters"
          End
-         Begin VB.Menu mnuEditDefinitions 
-            Caption         =   "Definitions"
-         End
          Begin VB.Menu mnuClearedTxt 
             Caption         =   "Current Text Log"
          End
          Begin VB.Menu mnuWhisperCleared 
             Caption         =   "Whisper Window Text Log"
          End
-         Begin VB.Menu mnuEditUsers 
-            Caption         =   "Userlist"
-            Visible         =   0   'False
-         End
-         Begin VB.Menu mnuEditMonitor 
-            Caption         =   "Monitor"
-         End
          Begin VB.Menu mnuEditPhrasebans 
             Caption         =   "Phrasebans"
-         End
-         Begin VB.Menu mnuEditScript 
-            Caption         =   "Script File"
-         End
-         Begin VB.Menu mnuEditAccessFlags 
-            Caption         =   "Access/Flags"
          End
          Begin VB.Menu mnuEditQCini 
             Caption         =   "QuickChannels"
@@ -1699,9 +1683,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -3710,7 +3694,8 @@ Private Sub mnuDisconnect2_Click()
 End Sub
 
 Private Sub mnuEditAccessFlags_Click()
-    Shell "notepad " & App.Path & "\commands.xml", vbNormalFocus
+    'Shell "notepad " & App.Path & "\commands.xml", vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", App.Path & "\commands.xml", &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditCaught_Click()
@@ -3723,31 +3708,38 @@ Private Sub mnuEditCaught_Click()
 End Sub
 
 Private Sub mnuEditChangelog_Click()
-    Shell "notepad " & App.Path & "\Changelog.txt", vbNormalFocus
+    'Shell "notepad " & App.Path & "\Changelog.txt", vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", App.Path & "\Changelog.txt", &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditPhrasebans_Click()
-    Shell "notepad " & GetFilePath("phrasebans.txt"), vbNormalFocus
+    'Shell "notepad " & GetFilePath("phrasebans.txt"), vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("phrasebans.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditQCini_Click()
-    Shell "notepad " & GetFilePath("quickchannels.ini"), vbNormalFocus
+    'Shell "notepad " & GetFilePath("quickchannels.ini"), vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("quickchannels.ini"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditSafelist_Click()
-    Shell "notepad " & GetFilePath("safelist.txt"), vbNormalFocus
+    'Shell "notepad " & GetFilePath("safelist.txt"), vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("safelist.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditScript_Click()
-    Shell "notepad " & GetFilePath("script.txt"), vbNormalFocus
+    'Shell "notepad " & GetFilePath("script.txt"), vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("script.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditShitlist_Click()
-    Shell "notepad " & GetFilePath("autobans.txt"), vbNormalFocus
+    'Shell "notepad " & GetFilePath("autobans.txt"), vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("autobans.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditTagbans_Click()
-    Shell "notepad " & GetFilePath("tagbans.txt"), vbNormalFocus
+    'Shell "notepad " & GetFilePath("tagbans.txt"), vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("tagbans.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuFlash_Click()
@@ -4098,7 +4090,9 @@ Private Sub mnuPopWebProfileW3XP_Click()
 End Sub
 
 Private Sub mnuClearedTxt_Click()
-    Shell "notepad " & GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt", vbNormalFocus
+    'Shell "notepad " & GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt", vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt", _
+        &H0, &H0, vbNormalFocus
 End Sub
 
 
@@ -4223,27 +4217,34 @@ Private Sub mnuUpdateVerbytes_Click()
 End Sub
 
 Private Sub mnuWhisperCleared_Click()
-    Shell "notepad " & GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt", vbNormalFocus
+    'Shell "notepad " & GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt", vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt" & ".txt", _
+        &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditConfig_Click()
-    Shell "notepad " & GetConfigFilePath(), vbNormalFocus
+    'Shell "notepad " & GetConfigFilePath(), vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetConfigFilePath(), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditDefinitions_Click()
-    Shell "notepad " & GetFilePath("definitions.ini"), vbNormalFocus
+    'Shell "notepad " & GetFilePath("definitions.ini"), vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("definitions.ini"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditFilters_Click()
-    Shell "notepad " & GetFilePath("filters.ini"), vbNormalFocus
+    'Shell "notepad " & GetFilePath("filters.ini"), vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("filters.ini"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditQuotes_Click()
-    Shell "notepad " & GetFilePath("quotes.txt"), vbNormalFocus
+    'Shell "notepad " & GetFilePath("quotes.txt"), vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("quotes.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditUsers_Click()
-    Shell "notepad " & GetFilePath("users.txt"), vbNormalFocus
+    'Shell "notepad " & GetFilePath("users.txt"), vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("quotes.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuFListRefresh_Click()
@@ -4322,7 +4323,8 @@ Private Sub mnuStatsW3_Click()
 End Sub
 
 Private Sub mnuTerms_Click()
-    Shell "notepad " & App.Path & "\eula.txt", vbNormalFocus
+    'Shell "notepad " & App.Path & "\eula.txt", vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", App.Path & "\eula.txt", &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuFilters_Click()

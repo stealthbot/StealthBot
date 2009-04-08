@@ -119,7 +119,8 @@ Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
                             DynamicMenus(I).Checked = True
                         End If
                     ElseIf (sub_name = "VIEW_SCRIPT") Then
-                        Shell "notepad " & Scripts(s_name).Script("Path"), vbNormalFocus
+                        ShellExecute frmChat.hWnd, "Open", Scripts(s_name).Script("Path"), 0&, 0&, _
+                            vbNormalFocus
                     End If
                 End If
                 
