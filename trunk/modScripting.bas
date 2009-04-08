@@ -1051,7 +1051,7 @@ Public Function DestroyMenus()
             If (Left$(DynamicMenus(I).Name, 1) = Chr$(0)) Then
                 DynamicMenus(I).Class_Terminate
                 
-                Set DynamicMenus(I) = Nothing
+                'Set DynamicMenus(I) = Nothing
                 
                 DynamicMenus.Remove I
             End If
@@ -1062,6 +1062,10 @@ Public Function DestroyMenus()
     Exit Function
     
 ERROR_HANDLER:
+
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+        " in DestroyMenus()."
+
     Err.Clear
     
     Resume Next
