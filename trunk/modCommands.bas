@@ -630,6 +630,7 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "disable":       Call OnDisable(Username, dbAccess, msgData, InBot, cmdRet())
         Case "sdetail":       Call OnSDetail(Username, dbAccess, msgData, InBot, cmdRet())
         Case "exec":          Call OnExec(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "initperf":      Call OnInitPerf(Username, dbAccess, msgData, InBot, cmdRet())
         Case Else
             blnNoCmd = True
     End Select
@@ -6649,23 +6650,38 @@ Private Function OnSDetail(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 frmChat.SControl.Modules(I).CodeObject.Script("Name")
                 
             If (StrComp(Name, msgData, vbTextCompare) = 0) Then
-                Dim Version As String ' ...
-                Dim author  As String ' ...
+                Dim Version  As String ' ...
+                Dim VerTotal As Integer
+                Dim author   As String ' ...
                 
                 Version = _
                     frmChat.SControl.Modules(I).CodeObject.Script("Major")
                     
+                VerTotal = _
+                    Val(frmChat.SControl.Modules(I).CodeObject.Script("Major"))
+                    
                 Version = Version & "." & _
                     frmChat.SControl.Modules(I).CodeObject.Script("Minor")
+                    
+                VerTotal = VerTotal + _
+                    Val(frmChat.SControl.Modules(I).CodeObject.Script("Minor"))
                     
                 Version = Version & " Revision " & _
                     frmChat.SControl.Modules(I).CodeObject.Script("Revision")
                     
+                VerTotal = VerTotal + _
+                    Val(frmChat.SControl.Modules(I).CodeObject.Script("Revision"))
+                    
                 author = _
                     frmChat.SControl.Modules(I).CodeObject.Script("Author")
                     
-                cmdRet(0) = Name & " v" & Version & _
-                    IIf(LenB(author) > 0, " by " & author, "")
+                If ((author = vbNullString) And (VerTotal = 0)) Then
+                    cmdRet(0) = _
+                        "There is no additional information for the " & Name & " script."
+                Else
+                    cmdRet(0) = Name & IIf(VerTotal > 0, " v" & Version, "") & _
+                        IIf(author <> vbNullString, " by " & author, "")
+                End If
             
                 Exit Function
             End If
@@ -6673,6 +6689,45 @@ Private Function OnSDetail(ByVal Username As String, ByRef dbAccess As udtGetAcc
     End If
     
     cmdRet(0) = "Error: Could not find specified script."
+    
+End Function
+
+' handle initperf command
+Private Function OnInitPerf(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    On Error Resume Next
+    
+    Dim I    As Integer ' ...
+    Dim str  As String  ' ...
+    Dim Name As String  ' ...
+
+    ' ...
+    If (frmChat.SControl.Modules.Count > 1) Then
+        cmdRet(0) = "Script initialization performance:"
+    
+        ' ...
+        For I = 2 To frmChat.SControl.Modules.Count
+            Name = _
+                frmChat.SControl.Modules(I).CodeObject.Script("Name")
+
+            If (Err.Number = 0) Then
+                str = _
+                    frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled")
+            
+                If (StrComp(str, "False", vbTextCompare) <> 0) Then
+                    ReDim Preserve cmdRet(0 To I - 1)
+ 
+                    cmdRet(I - 1) = " " & Name & " " & _
+                        frmChat.SControl.Modules(I).CodeObject.Script("InitPerf") & "ms"
+                End If
+            End If
+            
+            Err.Clear
+        Next I
+    Else
+        cmdRet(0) = "There are no scripts currently loaded."
+    End If
     
 End Function
 

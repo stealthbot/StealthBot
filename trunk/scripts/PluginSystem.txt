@@ -524,14 +524,15 @@ Sub ps_prefix_cmd(cmd, Prefix, Username, DisplayID)
 End Sub
 
 Sub ps_pinitperf_cmd(cmd, Username, DisplayID)
-	If DisplayID < 4 Then
-		Exit Sub
-	End If
+   If DisplayID < 4 Then
+      Exit Sub
+   End If
 	
-	AddChat vbCyan, "The length of time (in milliseconds) spent loading a plugin."
-	For Each prefix in psPrefixes
-		AddChat vbCyan, prefix & vbTab & psLoadTimes(prefix) & "ms"
-	Next
+   AddChat vbCyan, "Plugin initialization performance:"
+
+   For Each prefix in psPrefixes
+      AddChat vbCyan, " " & prefix & vbTab & psLoadTimes(prefix) & "ms"
+   Next
 	
 End Sub
 
