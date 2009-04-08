@@ -1057,10 +1057,10 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal flags As Long, ByVal 
         ' ...
         If (AllowedToTalk(Username, Message)) Then
             ' ...
-            If (GetVeto = False) Then
+            'If (GetVeto = False) Then
                 frmChat.AddChat RTBColors.EmoteText, "<", RTBColors.EmoteUsernames, Username & _
                     Space$(1), RTBColors.EmoteText, Message & ">"
-            End If
+            'End If
             
             ' ...
             If (Catch(0) <> vbNullString) Then
@@ -1286,7 +1286,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal flags As Long, By
     
 ERROR_HANDLER:
     Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in Event_UserInChannel().")
-    Call frmChat.AddChat(vbRed, "Error Source: " & Err.Source)
+    Call frmChat.AddChat(vbRed, "Error Source: " & Err.source)
     
     Exit Sub
 End Sub
@@ -1406,10 +1406,10 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal flags As Long, ByVal 
             UserStats.Statstring = originalstatstring
         
             ' ...
-            If (GetVeto = False) Then
+            'If (GetVeto = False) Then
                 frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
                     RTBColors.JoinText, " has joined the channel using " & UserStats.ToString
-            End If
+            'End If
                 
             ' ...
             Set UserStats = Nothing
@@ -1527,10 +1527,10 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal flags As Long)
         If (g_Channel.Users(UserIndex).Queue.Count = 0) Then
             ' ...
             If (JoinMessagesOff = False) Then
-                If (GetVeto = False) Then
+                'If (GetVeto = False) Then
                     frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, g_Channel.Users(UserIndex).DisplayName, _
                         RTBColors.JoinText, " has left the channel."
-                End If
+                'End If
             End If
         End If
         
@@ -1723,10 +1723,10 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal flags As Long, ByVal M
                 End If
                 
                 ' ...
-                If (GetVeto = False) Then
+                'If (GetVeto = False) Then
                     frmChat.AddChat CaratColor, "<", UsernameColor, Username, CaratColor, "> ", _
                         TextColor, Message
-                End If
+                'End If
                 
                 ' ...
                 If (Catch(0) <> vbNullString) Then
@@ -1753,38 +1753,12 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal flags As Long, ByVal M
         End If
         
         ' ...
-        'If (mail) Then
-        '    ' ...
-        '    If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-        '        Dim Msg As udtMail ' ...
-        '
-        '        ' ...
-        '        If (GetMailCount(Username) > 0) Then
-        '            ' ...
-        '            Do
-        '                ' ...
-        '                GetMailMessage Username, Msg
-        '
-        '                ' ...
-        '                If (Len(RTrim(Msg.To)) > 0) Then
-        '                    ' ...
-        '                    frmChat.AddQ "/w " & Username & " Message from " & RTrim$(Msg.From) & ": " & _
-        '                        RTrim$(Msg.Message)
-        '                End If
-        '            Loop While (GetMailCount(Username) > 0)
-        '        End If
-        '    End If
-        'End If
-        
-        ' ...
         Call ProcessCommand(Username, Message, False, False)
         
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         ' call event script function
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        
-        If BotIsClosing Then Exit Sub
-        
+
         On Error Resume Next
         
         ' ...
