@@ -3430,18 +3430,11 @@ Private Function OnTagAdd(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' ..
     If (InStr(1, user, "*", vbBinaryCompare) = 0) Then
         ' ...
-        If (Len(user) = 0) Then
-            ' ...
-            tmpbuf(0) = "Error: The specified tag is invalid."
-        Else
-            ' ...
-            user = "*" & user & "*"
-        End If
+        Call OnAdd(Username, dbAccess, user & tag_msg & " --type CLAN", True, tmpbuf())
+    Else
+        ' ...
+        Call OnAdd(Username, dbAccess, user & tag_msg & " --type USER", True, tmpbuf())
     End If
-
-    ' ...
-    Call OnAdd(Username, dbAccess, user & tag_msg & " --type USER", True, tmpbuf())
-    Call OnAdd(Username, dbAccess, user & tag_msg & " --type CLAN", True, tmpbuf())
     
     ' return message
     cmdRet() = tmpbuf()
