@@ -5318,19 +5318,26 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
         gAcc = GetCumulativeAccess(user, dbType)
 
         ' is rank valid?
-        If ((rank <= 0) And (Flags = vbNullString) And _
-                (sGrp = vbNullString) And (dbType = vbNullString)) Then
+        If ((rank <= 0) And (Flags = vbNullString) And (sGrp = vbNullString)) Then
             
-            tmpbuf = "Error: You have specified an invalid rank."
+            If ((rank = 0) And ((gAcc.Access > 0) Or (gAcc.Flags <> vbNullString) Or _
+                (gAcc.Groups <> vbNullString))) Then
+                Call OnRem(Username, dbAccess, user, InBot, cmdRet)
+            Else
+                cmdRet(0) = "Error: You have specified an invalid rank."
+            End If
+            
+            Exit Function
             
         ' is rank higher than user's rank?
         ElseIf ((rank) And (rank >= dbAccess.Access)) Then
-            tmpbuf = "Error: You do not have sufficient access to assign an entry with the " & _
+            cmdRet(0) = "Error: You do not have sufficient access to assign an entry with the " & _
                 "specified rank."
-            
+            Exit Function
         ' can we modify specified user?
         ElseIf ((gAcc.Access) And (gAcc.Access >= dbAccess.Access)) Then
-            tmpbuf = "Error: You do not have sufficient access to modify the specified entry."
+            cmdRet(0) = "Error: You do not have sufficient access to modify the specified entry."
+            Exit Function
         Else
             ' did we specify flags?
             If (Len(Flags)) Then
