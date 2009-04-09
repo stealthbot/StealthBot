@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
@@ -9,8 +9,8 @@ Begin VB.Form frmChat
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   165
-   ClientTop       =   855
+   ClientLeft      =   225
+   ClientTop       =   825
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -895,6 +895,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -920,7 +921,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1479,6 +1479,8 @@ Attribute VB_Exposed = False
 'StealthBot 11/5/02-Present
 'Source Code Version: 2.6R3+
 Option Explicit
+
+'REVISION #1337!
 
 Private Declare Function RegQueryValueEx Lib "advapi32.dll" Alias "RegQueryValueExA" (ByVal hKey As Long, ByVal lpValueName As String, ByVal lpReserved As Long, lpType As Long, lpData As Any, lpcbData As Long) As Long
     
@@ -3592,7 +3594,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
             
                     'sTemp = sTemp & vbCrLf
                     sTemp = sTemp & "Ping at login: " & .Ping & "ms" & vbCrLf
-                    sTemp = sTemp & "Flags: " & FlagDescription(.flags) & vbCrLf
+                    sTemp = sTemp & "Flags: " & FlagDescription(.Flags) & vbCrLf
                     sTemp = sTemp & vbCrLf
                     sTemp = sTemp & .Stats.ToString
                 
@@ -4493,14 +4495,14 @@ Private Sub mnuUserlistWhois_Click()
     With RTBColors
         If temp.Access > -1 Then
             If temp.Access > 0 Then
-                If temp.flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & temp.Access & " and flags " & temp.flags & "."
+                If temp.Flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with access " & temp.Access & " and flags " & temp.Flags & "."
                 Else
                     AddChat .ConsoleText, "Found user " & s & ", with access " & temp.Access & "."
                 End If
             Else
-                If temp.flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with flags " & temp.flags & "."
+                If temp.Flags <> vbNullString Then
+                    AddChat .ConsoleText, "Found user " & s & ", with flags " & temp.Flags & "."
                 Else
                     AddChat .ConsoleText, "User not found."
                 End If
@@ -5351,7 +5353,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     'End If
                                     
                                     temp.Access = 201
-                                    temp.flags = "A"
+                                    temp.Flags = "A"
                                     
                                     m = OutFilterMsg(s)
                                     
@@ -5506,14 +5508,14 @@ Private Sub QueueTimer_Timer()
     Dim I        As Integer
     Dim override As Integer
     Dim pri      As Integer
-    Dim ID       As Integer
+    Dim id       As Integer
     
     If ((g_Queue.Count) And (g_Online)) Then
         With g_Queue.Peek
             Message = .Message
             Tag = .Tag
             pri = .PRIORITY
-            ID = .ID
+            id = .id
         End With
         
         ' ...
@@ -5586,7 +5588,7 @@ Private Sub QueueTimer_Timer()
                 
                 'frmChat.AddChat vbRed, Message
                 
-                Call bnetSend(Message, Tag, ID)
+                Call bnetSend(Message, Tag, id)
             End If
         End If
         
@@ -6249,7 +6251,7 @@ Private Sub UpTimer_Timer()
                     ' ...
                     If (pos > 0) Then
                         ' ...
-                        newColor = GetNameColor(.flags, .TimeSinceTalk, StrComp(.DisplayName, _
+                        newColor = GetNameColor(.Flags, .TimeSinceTalk, StrComp(.DisplayName, _
                             GetCurrentUsername, vbBinaryCompare) = 0)
                         
                         ' ...
@@ -6954,7 +6956,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             Set CurrentUser = g_Channel.Users(I)
         
             ' ...
-            AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.flags, CurrentUser.Ping, _
+            AddName CurrentUser.DisplayName, CurrentUser.game, CurrentUser.Flags, CurrentUser.Ping, _
                 CurrentUser.Stats.IconCode, CurrentUser.Clan
         Next I
         
