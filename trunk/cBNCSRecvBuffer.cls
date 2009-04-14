@@ -20,7 +20,7 @@ Option Explicit
 
 Private strData As String
 
-Public Sub AddData(Data As String)
+Public Sub AddData(ByVal Data As String)
 '    If InStr(Data, Chr(&HFF)) <> 1 Then
 '        If LenB(strData) > 0 Then
 '            strData = strData & Data

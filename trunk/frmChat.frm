@@ -1685,9 +1685,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2338,9 +2338,11 @@ BNLS_Alt_Finder_Error:
         
         ' ensure that we update our listing on following connection(s)
         GotBNLSList = False
+    
     Else
-        AddChat RTBColors.ErrorMessageText, _
-            "Error (#" & Err.Number & "): " & Err.description & " in FindAltBNLS()"
+        
+        Resume Next
+    
     End If
     
     'Disconnect the bot

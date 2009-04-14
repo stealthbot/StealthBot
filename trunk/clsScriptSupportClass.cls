@@ -702,7 +702,7 @@ Public Function GetInternalData(ByVal iIndex As Integer, ByVal lDataType As Long
     Else
         GetInternalData = -5
     End If
-    
+
 End Function
 
 
@@ -1473,7 +1473,7 @@ Public Function CRC32(ByVal str As String) As String
 
 End Function
 
-Public Function SHA1(ByVal Data As String) As String
+Public Function Sha1(ByVal Data As String) As String
 
     Dim A As Long
     Dim B As Long
@@ -1482,7 +1482,7 @@ Public Function SHA1(ByVal Data As String) As String
     Dim e As Long
     
     Call modSHA1.DefaultSHA1(StrConv(Data, vbFromUnicode), A, B, c, d, e)
-    SHA1 = LongToStr(A) & LongToStr(B) & LongToStr(c) & LongToStr(d) & LongToStr(e)
+    Sha1 = LongToStr(A) & LongToStr(B) & LongToStr(c) & LongToStr(d) & LongToStr(e)
     
 End Function
 

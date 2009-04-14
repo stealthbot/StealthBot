@@ -1059,7 +1059,7 @@
     </documentation>
 
     <access>
-      <rank>40</rank>
+      <rank>1000</rank>
       <flags>
         <flag>A</flag>
         <flag>J</flag>
@@ -1199,7 +1199,7 @@
     </arguments>
 
     <access>
-      <rank>50</rank>
+      <rank>1000</rank>
       <flags>
         <flag>O</flag>
       </flags>
@@ -1830,7 +1830,7 @@
     </access>
   </command>
 
-  <command name="tagcheck">
+  <command name="tagcheck" enabled="false">
     <aliases />
 
     <documentation>
@@ -1962,7 +1962,7 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
+      <rank>1000</rank>
       <flags>
         <flag>O</flag>
       </flags>
@@ -1983,7 +1983,7 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
+      <rank>1000</rank>
       <flags>
         <flag>O</flag>
       </flags>
@@ -2000,7 +2000,7 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
+      <rank>1001</rank>
       <flags>
         <flag>M</flag>
       </flags>
@@ -2036,7 +2036,7 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
+      <rank>1000</rank>
       <flags>
         <flag>O</flag>
       </flags>
@@ -2053,7 +2053,7 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
+      <rank>1000</rank>
       <flags>
         <flag>O</flag>
       </flags>
@@ -2070,7 +2070,7 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
+      <rank>1000</rank>
       <flags>
         <flag>O</flag>
       </flags>
@@ -2087,7 +2087,7 @@
     </documentation>
 
     <access>
-      <rank>70</rank>
+      <rank>1000</rank>
       <flags>
         <flag>O</flag>
       </flags>
@@ -2241,7 +2241,7 @@
     </access>
   </command>
 
-  <command name="tagbans">
+  <command name="tagbans" enabled="false">
     <aliases />
 
     <documentation>
@@ -2259,7 +2259,7 @@
     </access>
   </command>
 
-  <command name="tagadd">
+  <command name="tagadd" enabled="false">
     <aliases>
       <alias>tagban</alias>
       <alias>addtag</alias>
@@ -2280,7 +2280,7 @@
     </access>
   </command>
 
-  <command name="tagdel">
+  <command name="tagdel" enabled="false">
     <aliases />
 
     <documentation>
@@ -3406,7 +3406,7 @@
     </documentation>
 
     <access>
-      <rank />
+      <rank>1000</rank>
       <flags />
     </access>
   </command>

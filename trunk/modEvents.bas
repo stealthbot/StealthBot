@@ -1386,7 +1386,9 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal flags As Long, ByVal 
     
     ' ...
     If ((UserObj.Queue.Count = 0) Or (QueuedEventID = 0)) Then
-        g_Channel.CheckUser Username, UserObj
+        If (g_Channel.Self.IsOperator) Then
+            g_Channel.CheckUser Username, UserObj
+        End If
     End If
     
     ' ...
