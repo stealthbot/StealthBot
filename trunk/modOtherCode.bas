@@ -3254,14 +3254,18 @@ Public Function IsScrolling(ByRef rtb As RichTextBox) As Long
     Dim range          As Integer
 
     If (g_OSVersion.IsWin2000Plus()) Then
-    
+
         GetScrollRange rtb.hWnd, SB_VERT, 0, range
         
         lngVerticalPos = SendMessage(rtb.hWnd, EM_GETTHUMB, 0&, 0&)
         
+        If ((lngVerticalPos = 0) And (range > 0)) Then
+            lngVerticalPos = 1
+        End If
+
         difference = ((lngVerticalPos + (rtb.Height / Screen.TwipsPerPixelY)) - _
             range)
-        
+
         ' In testing it appears that if the value I calcuate as Diff is negative,
         ' the scrollbar is not at the bottom.
         If (difference < 0) Then
