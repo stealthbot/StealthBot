@@ -339,13 +339,13 @@ End Function
 '// EXAMPLE
 '// String("This is an {1} of its {0}.", Array("use", "example")) '// This is an example of its use.
 '// 08/29/2008 JSM - Created
-Public Function StringFormat(Source As String, params() As Variant) As String
-    Dim retval As String, I As Integer
-    retval = Source
+Public Function StringFormat(source As String, params() As Variant) As String
+    Dim retVal As String, I As Integer
+    retVal = source
     For I = LBound(params) To UBound(params)
-        retval = Replace(retval, "{" & I & "}", CStr(params(I)))
+        retVal = Replace(retVal, "{" & I & "}", CStr(params(I)))
     Next
-    StringFormat = retval
+    StringFormat = retVal
 End Function
 
 '// http://www.nonhostile.com/howto-validate-xml-xsd-in-vb6.asp
@@ -2600,7 +2600,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
     Dim lineCount As Long    ' stores line number
     Dim pos       As Long    ' stores position of delimiter
     Dim strTmp    As String  ' stores working copy of StringSplit
-    Dim Length    As Long    ' stores Length after LinePostfix
+    Dim length    As Long    ' stores Length after LinePostfix
     Dim bln       As Boolean ' stores result of delimiter split
     
     ' initialize our array
@@ -2643,7 +2643,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' going to postfix it.  Because of this, we're
             ' going to have to calculate the Length after
             ' the postfix has been accounted for.
-            Length = (SplitLength - Len(LinePostfix))
+            length = (SplitLength - Len(LinePostfix))
         
             ' if we're going to be splitting the oversized
             ' message at a specified character, we need to
@@ -2652,7 +2652,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             If (OversizeDelimiter <> vbNullString) Then
                 ' grab position of delimiter character that is the closest to our
                 ' specified Length
-                pos = InStrRev(strTmp, OversizeDelimiter, Length, vbTextCompare)
+                pos = InStrRev(strTmp, OversizeDelimiter, length, vbTextCompare)
             End If
             
             ' if the delimiter we were looking for was found,
@@ -2660,7 +2660,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
             ' half of the message (this check prevents breaks
             ' in unecessary locations), split the message
             ' accordingly.
-            If ((pos) And (pos >= Round(Length / 2))) Then
+            If ((pos) And (pos >= Round(length / 2))) Then
                 ' truncate message
                 strTmp = Mid$(strTmp, 1, pos - 1)
                 
@@ -2670,7 +2670,7 @@ Public Function SplitByLen(StringSplit As String, SplitLength As Long, ByRef Str
                 bln = True
             Else
                 ' truncate message
-                strTmp = Mid$(strTmp, 1, Length)
+                strTmp = Mid$(strTmp, 1, length)
             End If
             
             ' store truncated message in line
@@ -3062,7 +3062,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     Dim intRange       As Long
     Dim blUnlock       As Boolean
     Dim LogThis        As Boolean
-    Dim Length         As Long
+    Dim length         As Long
     Dim Count          As Long
     Dim str            As String
     Dim arrCount       As Long
@@ -3112,12 +3112,12 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         End If
         
         ' ...
-        Length = _
-            Length + Len(KillNull(saElements(I + 2)))
+        length = _
+            length + Len(KillNull(saElements(I + 2)))
     Next I
     
     ' ...
-    If (Length = 0) Then
+    If (length = 0) Then
         Exit Sub
     End If
 
@@ -3127,7 +3127,10 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         lngVerticalPos = IsScrolling(rtb)
     
         If (lngVerticalPos) Then
-            LockWindowUpdate rtb.hWnd
+            rtb.Visible = False
+        
+            ' below causes smooth scrolling, but also screen flickers :(
+            'LockWindowUpdate rtb.hWnd
         
             blUnlock = True
         End If
@@ -3141,7 +3144,10 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         
         If ((BotVars.MaxBacklogSize) And (rtbChatLength >= BotVars.MaxBacklogSize)) Then
             If (blUnlock = False) Then
-                LockWindowUpdate rtb.hWnd
+                rtb.Visible = False
+            
+                ' below causes smooth scrolling, but also screen flickers :(
+                'LockWindowUpdate rtb.hWnd
             End If
         
             With rtb
@@ -3152,7 +3158,10 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
             End With
             
             If (blUnlock = False) Then
-                LockWindowUpdate &H0
+                rtb.Visible = True
+            
+                ' below causes smooth scrolling, but also screen flickers :(
+                'LockWindowUpdate &H0
             End If
         End If
         
@@ -3215,8 +3224,11 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         If (blUnlock) Then
             SendMessage rtb.hWnd, WM_VSCROLL, _
                 SB_THUMBPOSITION + &H10000 * lngVerticalPos, 0&
-            
-            LockWindowUpdate &H0
+                
+            rtb.Visible = True
+                
+            ' below causes smooth scrolling, but also screen flickers :(
+            'LockWindowUpdate &H0
         End If
     End If
     

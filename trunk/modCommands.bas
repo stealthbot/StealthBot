@@ -2188,7 +2188,7 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
         
         ' ...
         If ((gAcc.Access >= dbAccess.Access) Or _
-            ((InStr(gAcc.Flags, "A") > 0) And (dbAccess.Access <= 100))) Then
+            ((InStr(gAcc.flags, "A") > 0) And (dbAccess.Access <= 100))) Then
 
             tmpbuf = "Error: You do not have enough access to do that."
         Else
@@ -2625,14 +2625,14 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     
     If (Len(U) > 0) Then
         If ((GetAccess(U, dbType).Access = -1) And _
-            (GetAccess(U, dbType).Flags = vbNullString)) Then
+            (GetAccess(U, dbType).flags = vbNullString)) Then
             
             tmpbuf = "User not found."
         ElseIf (GetAccess(U, dbType).Access >= dbAccess.Access) Then
             tmpbuf = "That user has higher or equal access."
-        ElseIf ((InStr(1, GetAccess(U, dbType).Flags, "L") <> 0) And _
+        ElseIf ((InStr(1, GetAccess(U, dbType).flags, "L") <> 0) And _
                 (Not (InBot)) And _
-                (InStr(1, GetAccess(Username, dbType).Flags, "A") = 0) And _
+                (InStr(1, GetAccess(Username, dbType).flags, "A") = 0) And _
                 (GetAccess(Username, dbType).Access <= 99)) Then
             
                 tmpbuf = "Error: That user is Locked."
@@ -3798,10 +3798,10 @@ Private Function OnTagCheck(ByVal Username As String, ByRef dbAccess As udtGetAc
     If (Len(Y) > 0) Then
         gAcc = GetCumulativeAccess(Y)
         
-        If (InStr(1, gAcc.Flags, "B") <> 0) Then
+        If (InStr(1, gAcc.flags, "B") <> 0) Then
             tmpbuf = Y & " has been matched to one or more tagbans"
         
-            If (InStr(1, gAcc.Flags, "S") <> 0) Then
+            If (InStr(1, gAcc.flags, "S") <> 0) Then
                 tmpbuf = tmpbuf & "; however, " & Y & " has also been found on the bot's " & _
                     "safelist and therefore will not be banned"
             End If
@@ -3831,10 +3831,10 @@ Private Function OnSLCheck(ByVal Username As String, ByRef dbAccess As udtGetAcc
     If (Len(Y) > 0) Then
         gAcc = GetCumulativeAccess(Y)
         
-        If (InStr(1, gAcc.Flags, "B") <> 0) Then
+        If (InStr(1, gAcc.flags, "B") <> 0) Then
             tmpbuf = Y & " is on the bot's shitlist"
         
-            If (InStr(1, gAcc.Flags, "S") <> 0) Then
+            If (InStr(1, gAcc.flags, "S") <> 0) Then
                 tmpbuf = tmpbuf & "; however, " & Y & " is also on the " & _
                     "bot's safelist and therefore will not be banned"
             End If
@@ -5040,15 +5040,15 @@ Private Function OnWhoAmI(ByVal Username As String, ByRef dbAccess As udtGetAcce
         tmpbuf = "You are the bot owner, " & Username & "."
     Else
         If (dbAccess.Access > 0) Then
-            If (dbAccess.Flags <> vbNullString) Then
+            If (dbAccess.flags <> vbNullString) Then
                 tmpbuf = dbAccess.Username & " has access " & dbAccess.Access & _
-                    " and flags " & dbAccess.Flags & "."
+                    " and flags " & dbAccess.flags & "."
             Else
                 tmpbuf = dbAccess.Username & " has access " & dbAccess.Access & "."
             End If
         Else
-            If (dbAccess.Flags <> vbNullString) Then
-                tmpbuf = dbAccess.Username & " has flags " & dbAccess.Flags & "."
+            If (dbAccess.flags <> vbNullString) Then
+                tmpbuf = dbAccess.Username & " has flags " & dbAccess.flags & "."
             End If
         End If
     End If
@@ -5071,7 +5071,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
     Dim dbPath     As String  ' ...
     Dim user       As String  ' ...
     Dim rank       As Integer ' ...
-    Dim Flags      As String  ' ...
+    Dim flags      As String  ' ...
     Dim found      As Boolean ' ...
     Dim params     As String  ' ...
     Dim Index      As Integer ' ...
@@ -5120,16 +5120,16 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
             
             ' grab flags
             If (UBound(strArray) >= 2) Then
-                Flags = strArray(2)
+                flags = strArray(2)
             End If
         Else
             ' grab flags
-            Flags = strArray(1)
+            flags = strArray(1)
         End If
         
         ' ...
         If (BotVars.CaseSensitiveFlags = False) Then
-            Flags = UCase$(Flags)
+            flags = UCase$(flags)
         End If
         
         ' do we have any special paramaters?
@@ -5318,9 +5318,9 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
         gAcc = GetCumulativeAccess(user, dbType)
 
         ' is rank valid?
-        If ((rank <= 0) And (Flags = vbNullString) And (sGrp = vbNullString)) Then
+        If ((rank <= 0) And (flags = vbNullString) And (sGrp = vbNullString)) Then
             
-            If ((rank = 0) And ((gAcc.Access > 0) Or (gAcc.Flags <> vbNullString) Or _
+            If ((rank = 0) And ((gAcc.Access > 0) Or (gAcc.flags <> vbNullString) Or _
                 (gAcc.Groups <> vbNullString))) Then
                 Call OnRem(Username, dbAccess, user, InBot, cmdRet)
             Else
@@ -5340,11 +5340,11 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
             Exit Function
         Else
             ' did we specify flags?
-            If (Len(Flags)) Then
+            If (Len(flags)) Then
                 Dim currentCharacter As String ' ...
             
-                For I = 1 To Len(Flags)
-                    currentCharacter = Mid$(Flags, I, 1)
+                For I = 1 To Len(flags)
+                    currentCharacter = Mid$(flags, I, 1)
                 
                     If ((currentCharacter <> "+") And (currentCharacter <> "-")) Then
                         'Select Case (currentCharacter)
@@ -5376,7 +5376,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                     End If
                 Next I
                 
-                If (I < (Len(Flags) + 1)) Then
+                If (I < (Len(flags) + 1)) Then
                     ' return message
                     cmdRet(0) = "Error: You do not have sufficient access to add one or " & _
                         "more flags specified."
@@ -5384,28 +5384,28 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                     Exit Function
                 Else
                     ' are we adding flags?
-                    If (Left$(Flags, 1) = "+") Then
+                    If (Left$(flags, 1) = "+") Then
                         ' remove "+" prefix
-                        Flags = Mid$(Flags, 2)
+                        flags = Mid$(flags, 2)
                     
                         ' ...
-                        If (Len(Flags) > 0) Then
+                        If (Len(flags) > 0) Then
                             ' set user flags & check for duplicate entries
-                            For I = 1 To Len(Flags)
-                                currentCharacter = Mid$(Flags, I, 1)
+                            For I = 1 To Len(flags)
+                                currentCharacter = Mid$(flags, I, 1)
                             
                                 ' is flag valid (alphabetic)?
                                 If (((Asc(currentCharacter) >= Asc("A")) And (Asc(currentCharacter) <= Asc("Z"))) Or _
                                     ((Asc(currentCharacter) >= Asc("a")) And (Asc(currentCharacter) <= Asc("z")))) Then
                                     
-                                    If (InStr(1, gAcc.Flags, currentCharacter, vbBinaryCompare) = 0) Then
-                                        gAcc.Flags = gAcc.Flags & currentCharacter
+                                    If (InStr(1, gAcc.flags, currentCharacter, vbBinaryCompare) = 0) Then
+                                        gAcc.flags = gAcc.flags & currentCharacter
                                     End If
                                 End If
                             Next I
                             
                             ' ...
-                            If (Len(gAcc.Flags) = 0) Then
+                            If (Len(gAcc.flags) = 0) Then
                                 ' return message
                                 cmdRet(0) = "Error: The flag(s) that you have specified are invalid."
                             
@@ -5419,11 +5419,11 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                         End If
 
                     ' are we removing flags?
-                    ElseIf (Left$(Flags, 1) = "-") Then
+                    ElseIf (Left$(flags, 1) = "-") Then
                         Dim tmpFlags As String
                     
                         ' remove "-" prefix
-                        tmpFlags = Mid$(Flags, 2)
+                        tmpFlags = Mid$(flags, 2)
                         
                         ' are we modifying an existing user? we better be!
                         If (gAcc.Username <> vbNullString) Then
@@ -5443,7 +5443,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                                 
                                 ' remove specified flags
                                 For I = 1 To Len(tmpFlags)
-                                    gAcc.Flags = Replace(gAcc.Flags, Mid$(tmpFlags, I, 1), _
+                                    gAcc.flags = Replace(gAcc.flags, Mid$(tmpFlags, I, 1), _
                                         vbNullString)
                                 Next I
                             Else
@@ -5461,7 +5461,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                         End If
                         
                         ' does this entry have any remaining access?
-                        If ((gAcc.Access = 0) And (gAcc.Flags = vbNullString) And _
+                        If ((gAcc.Access = 0) And (gAcc.flags = vbNullString) And _
                             ((gAcc.Groups = vbNullString) Or (gAcc.Groups = "%"))) Then
                             
                             Dim res As Boolean ' ...
@@ -5486,27 +5486,27 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                         'Call DB_remove(user, dbType)
                     
                         ' clear user flags
-                        gAcc.Flags = vbNullString
+                        gAcc.flags = vbNullString
                         
                         ' set rank to specified
                         gAcc.Access = rank
                     
                         ' set user flags & check for duplicate entries
-                        For I = 1 To Len(Flags)
-                            currentCharacter = Mid$(Flags, I, 1)
+                        For I = 1 To Len(flags)
+                            currentCharacter = Mid$(flags, I, 1)
                         
                             ' is flag valid (alphabetic)?
                             If (((Asc(currentCharacter) >= Asc("A")) And (Asc(currentCharacter) <= Asc("Z"))) Or _
                                 ((Asc(currentCharacter) >= Asc("a")) And (Asc(currentCharacter) <= Asc("z")))) Then
                                 
-                                If (InStr(1, gAcc.Flags, currentCharacter, vbBinaryCompare) = 0) Then
-                                    gAcc.Flags = gAcc.Flags & currentCharacter
+                                If (InStr(1, gAcc.flags, currentCharacter, vbBinaryCompare) = 0) Then
+                                    gAcc.flags = gAcc.flags & currentCharacter
                                 End If
                             End If
                         Next I
                         
                         ' ...
-                        If (Len(gAcc.Flags) = 0) Then
+                        If (Len(gAcc.flags) = 0) Then
                             ' return message
                             cmdRet(0) = "Error: The flag(s) that you have specified are invalid."
                         
@@ -5520,7 +5520,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                 'Call DB_remove(user, dbType)
 
                 ' clear flags
-                gAcc.Flags = vbNullString
+                gAcc.flags = vbNullString
             
                 ' set rank to specified
                 gAcc.Access = rank
@@ -5538,7 +5538,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                     With DB(I)
                         .Username = user
                         .Access = gAcc.Access
-                        .Flags = gAcc.Flags
+                        .flags = gAcc.flags
                         .ModifiedBy = Username
                         .ModifiedOn = Now
                         .Type = dbType
@@ -5552,7 +5552,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                     ' log actions
                     If (BotVars.LogDBActions) Then
                         Call LogDBAction(ModEntry, IIf(InBot, "console", Username), DB(I).Username, _
-                            DB(I).Type, DB(I).Access, DB(I).Flags, DB(I).Groups)
+                            DB(I).Type, DB(I).Access, DB(I).flags, DB(I).Groups)
                     End If
                     
                     ' we have found the
@@ -5577,7 +5577,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                     .Username = user
                     .Access = IIf((gAcc.Access >= 0), _
                         gAcc.Access, 0)
-                    .Flags = gAcc.Flags
+                    .flags = gAcc.flags
                     .ModifiedBy = Username
                     .ModifiedOn = Now
                     .AddedBy = Username
@@ -5596,7 +5596,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                 ' log actions
                 If (BotVars.LogDBActions) Then
                     Call LogDBAction(AddEntry, IIf(InBot, "console", Username), DB(UBound(DB)).Username, _
-                        DB(UBound(DB)).Type, DB(UBound(DB)).Access, DB(UBound(DB)).Flags, DB(UBound(DB)).Groups)
+                        DB(UBound(DB)).Type, DB(UBound(DB)).Access, DB(UBound(DB)).flags, DB(UBound(DB)).Groups)
                 End If
             End If
             
@@ -5606,20 +5606,20 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                     gAcc.Access
                 
                 ' was the user given the specified flags, too?
-                If (Len(gAcc.Flags)) Then
+                If (Len(gAcc.flags)) Then
                     ' lets make sure we don't use
                     ' improper grammar because of groups!
                     If (Len(sGrp)) Then
-                        tmpbuf = tmpbuf & ", flags " & gAcc.Flags
+                        tmpbuf = tmpbuf & ", flags " & gAcc.flags
                     Else
-                        tmpbuf = tmpbuf & " and flags " & gAcc.Flags
+                        tmpbuf = tmpbuf & " and flags " & gAcc.flags
                     End If
                 End If
             Else
                 ' was the user given the specified flags?
-                If (Len(gAcc.Flags)) Then
+                If (Len(gAcc.flags)) Then
                     tmpbuf = Chr(34) & user & Chr(34) & " has been given flags " & _
-                        gAcc.Flags
+                        gAcc.flags
                 End If
             End If
             
@@ -5683,9 +5683,9 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
                 Track = Val(strArray(0))
                 
                 For c = 0 To UBound(DB)
-                    gAcc = GetCumulativeAccess(DB(c).Username)
-                    
-                    If (StrComp(gAcc.Type, "USER", vbTextCompare) = 0) Then
+                    If (StrComp(DB(c).Type, "USER", vbTextCompare) = 0) Then
+                        gAcc = GetCumulativeAccess(DB(c).Username)
+                        
                         If (gAcc.Access = Track) Then
                             .To = DB(c).Username
                             
@@ -5697,11 +5697,11 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
                 tmpbuf = tmpbuf & "to users with access " & Track
             Else
                 For c = 0 To UBound(DB)
-                    gAcc = GetCumulativeAccess(DB(c).Username)
-                
-                    For f = 1 To Len(strArray(0))
-                        If (StrComp(gAcc.Type, "USER", vbTextCompare) = 0) Then
-                            If (InStr(1, gAcc.Flags, Mid$(strArray(0), f, 1), _
+                    If (StrComp(DB(c).Type, "USER", vbTextCompare) = 0) Then
+                        gAcc = GetCumulativeAccess(DB(c).Username)
+                    
+                        For f = 1 To Len(gAcc.flags)
+                            If (InStr(1, gAcc.flags, Mid$(strArray(0), f, 1), _
                                 vbBinaryCompare) > 0) Then
                                 
                                 .To = DB(c).Username
@@ -5710,8 +5710,8 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
                                 
                                 Exit For
                             End If
-                        End If
-                    Next f
+                        Next f
+                    End If
                 Next c
                 
                 tmpbuf = tmpbuf & "to users with any of the flags " & strArray(0)
@@ -5973,15 +5973,15 @@ Private Function OnWhoIs(ByVal Username As String, ByRef dbAccess As udtGetAcces
         
         If (gAcc.Username <> vbNullString) Then
             If (gAcc.Access > 0) Then
-                If (gAcc.Flags <> vbNullString) Then
+                If (gAcc.flags <> vbNullString) Then
                     tmpbuf = gAcc.Username & " has access " & gAcc.Access & _
-                        " and flags " & gAcc.Flags & "."
+                        " and flags " & gAcc.flags & "."
                 Else
                     tmpbuf = gAcc.Username & " has access " & gAcc.Access & "."
                 End If
             Else
-                If (gAcc.Flags <> vbNullString) Then
-                    tmpbuf = gAcc.Username & " has flags " & gAcc.Flags & "."
+                If (gAcc.flags <> vbNullString) Then
+                    tmpbuf = gAcc.Username & " has flags " & gAcc.flags & "."
                 End If
             End If
         Else
@@ -6907,7 +6907,7 @@ End Function
 Private Function searchDatabase(ByRef arrReturn() As String, Optional user As String = vbNullString, _
     Optional ByVal match As String = vbNullString, Optional Group As String = vbNullString, _
         Optional dbType As String = vbNullString, Optional lowerBound As Integer = -1, _
-            Optional upperBound As Integer = -1, Optional Flags As String = vbNullString) As Integer
+            Optional upperBound As Integer = -1, Optional flags As String = vbNullString) As Integer
     
     ' ...
     On Error GoTo ERROR_HANDLER
@@ -6933,14 +6933,14 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
         End If
         
         If (gAcc.Access > 0) Then
-            If (gAcc.Flags <> vbNullString) Then
+            If (gAcc.flags <> vbNullString) Then
                 tmpbuf = "Found user " & gAcc.Username & ", with access " & gAcc.Access & _
-                    " and flags " & gAcc.Flags & "."
+                    " and flags " & gAcc.flags & "."
             Else
                 tmpbuf = "Found user " & gAcc.Username & ", with access " & gAcc.Access & "."
             End If
-        ElseIf (gAcc.Flags <> vbNullString) Then
-            tmpbuf = "Found user " & gAcc.Username & ", with flags " & gAcc.Flags & "."
+        ElseIf (gAcc.flags <> vbNullString) Then
+            tmpbuf = "Found user " & gAcc.Username & ", with flags " & gAcc.flags & "."
         Else
             tmpbuf = "No such user(s) found."
         End If
@@ -7021,18 +7021,18 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 End If
                 
                 ' ...
-                If (Flags <> vbNullString) Then
+                If (flags <> vbNullString) Then
                     Dim j As Integer ' ...
                 
-                    For j = 1 To Len(Flags)
-                        If (InStr(1, DB(I).Flags, Mid$(Flags, j, 1), _
+                    For j = 1 To Len(flags)
+                        If (InStr(1, DB(I).flags, Mid$(flags, j, 1), _
                             vbBinaryCompare) = 0) Then
                             
                             Exit For
                         End If
                     Next j
                     
-                    If (j = (Len(Flags) + 1)) Then
+                    If (j = (Len(flags) + 1)) Then
                         ' ...
                         res = IIf(blnChecked, res, True)
                     Else
@@ -7050,7 +7050,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                                 (StrComp(DB(I).Type, "USER", vbTextCompare) <> 0)), _
                             " (" & LCase$(DB(I).Type) & ")", vbNullString) & _
                         IIf(DB(I).Access > 0, "\" & DB(I).Access, vbNullString) & _
-                        IIf(DB(I).Flags <> vbNullString, "\" & DB(I).Flags, vbNullString) & ", "
+                        IIf(DB(I).flags <> vbNullString, "\" & DB(I).flags, vbNullString) & ", "
                     
                     ' increment found counter
                     found = (found + 1)
@@ -7188,7 +7188,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
             ' ...
             With DB(0)
                 .Username = vbNullString
-                .Flags = vbNullString
+                .flags = vbNullString
                 .Access = 0
                 .Groups = vbNullString
                 .AddedBy = vbNullString
@@ -7297,7 +7297,7 @@ Public Function GetSafelist(ByVal Username As String) As Boolean
         gAcc = GetCumulativeAccess(Username, "USER")
         
         ' ...
-        If (InStr(1, gAcc.Flags, "S", vbBinaryCompare) <> 0) Then
+        If (InStr(1, gAcc.flags, "S", vbBinaryCompare) <> 0) Then
             GetSafelist = True
         ElseIf (gAcc.Access >= 20) Then
             GetSafelist = True
@@ -7327,10 +7327,10 @@ Public Function GetShitlist(ByVal Username As String) As String
     gAcc = GetCumulativeAccess(Username, "USER")
     
     ' ...
-    If (InStr(1, gAcc.Flags, "Z", vbBinaryCompare) <> 0) Then
+    If (InStr(1, gAcc.flags, "Z", vbBinaryCompare) <> 0) Then
         ' ...
         Ban = True
-    ElseIf (InStr(1, gAcc.Flags, "B", vbBinaryCompare) <> 0) Then
+    ElseIf (InStr(1, gAcc.flags, "B", vbBinaryCompare) <> 0) Then
         ' ...
         If (GetSafelist(Username) = False) Then
             ' ...
@@ -7479,7 +7479,7 @@ Public Sub LoadDatabase()
                                 .Access = Val(X(1))
                             Else
                                 If X(1) <> "%" Then
-                                    .Flags = X(1)
+                                    .flags = X(1)
                                     
                                     'If InStr(X(1), "S") > 0 Then
                                     '    AddToSafelist .Name
@@ -7493,7 +7493,7 @@ Public Sub LoadDatabase()
                                     .Access = Int(X(2))
                                 Else
                                     If X(2) <> "%" Then
-                                        .Flags = X(2)
+                                        .flags = X(2)
                                     End If
                                 End If
                                 
@@ -7898,7 +7898,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                     '// 09/03/2008 JSM - Modified code to use the <flags> element
                     ElseIf (LCase$(Access.nodeName = "flags")) Then
                         For Each flag In Access.childNodes
-                            If (InStr(1, gAcc.Flags, flag.text, vbBinaryCompare) <> 0) Then
+                            If (InStr(1, gAcc.flags, flag.text, vbBinaryCompare) <> 0) Then
                                 ValidateAccess = True
                                 Exit For
                             End If
@@ -7938,7 +7938,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                                 '// 09/03/2008 JSM - Modified code to use the <flags> element
                                 ElseIf (LCase$(Access.nodeName = "flags")) Then
                                     For Each flag In Access.childNodes
-                                        If (InStr(1, gAcc.Flags, flag.text, vbBinaryCompare) <> 0) Then
+                                        If (InStr(1, gAcc.flags, flag.text, vbBinaryCompare) <> 0) Then
                                             ValidateAccess = True
                                             Exit For
                                         End If
@@ -8078,7 +8078,7 @@ Public Sub WriteDatabase(ByVal U As String)
             If (LenB(DB(I).Username) > 0) Then
                 Print #f, DB(I).Username;
                 Print #f, " " & DB(I).Access;
-                Print #f, " " & IIf(Len(DB(I).Flags) > 0, DB(I).Flags, "%");
+                Print #f, " " & IIf(Len(DB(I).flags) > 0, DB(I).flags, "%");
                 Print #f, " " & IIf(Len(DB(I).AddedBy) > 0, DB(I).AddedBy, "%");
                 Print #f, " " & IIf(DB(I).AddedOn > 0, DateCleanup(DB(I).AddedOn), "%");
                 Print #f, " " & IIf(Len(DB(I).ModifiedBy) > 0, DB(I).ModifiedBy, "%");
