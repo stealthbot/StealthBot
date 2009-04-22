@@ -266,12 +266,12 @@ End Function
 
 Private Function DeleteMenu() As Long
 
-    If (m_command_id > 0) Then
+    If (m_command_id <> 0) Then
     
         RemoveMenu m_hWnd, m_command_id, MF_BYCOMMAND
-        
+            
         m_command_id = 0
-        
+
     End If
     
 End Function

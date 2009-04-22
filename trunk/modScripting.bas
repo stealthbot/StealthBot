@@ -972,7 +972,7 @@ End Function
 
 Public Function InitMenus()
 
-    On Error Resume Next
+    On Error GoTo ERROR_HANDLER
 
     Dim tmp  As clsMenuObj ' ...
     Dim Name As String     ' ...
@@ -1030,6 +1030,17 @@ Public Function InitMenus()
         ' ...
         DynamicMenus.Add tmp
     Next I
+    
+    Exit Function
+        
+ERROR_HANDLER:
+
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+        " in InitMenus()."
+
+    Err.Clear
+    
+    Resume Next
 
 End Function
 
@@ -1046,9 +1057,7 @@ Public Function DestroyMenus()
         If (Len(DynamicMenus(I).Name) > 0) Then
             If (Left$(DynamicMenus(I).Name, 1) = Chr$(0)) Then
                 DynamicMenus(I).Class_Terminate
-                
-                'Set DynamicMenus(I) = Nothing
-                
+
                 DynamicMenus.Remove I
             End If
         End If
