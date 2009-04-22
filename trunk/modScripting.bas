@@ -992,47 +992,43 @@ Public Function InitMenus()
             frmChat.SControl.Modules(I).CodeObject.Script("Name")
     
         ' ...
-        If (Err.Number = 0) Then
-            Set tmp = New clsMenuObj
+        Set tmp = New clsMenuObj
+    
+        ' ...
+        tmp.Name = Chr$(0) & Name & " ROOT"
+        tmp.hWnd = GetSubMenu(GetMenu(frmChat.hWnd), 5)
+        tmp.Caption = Name
+            
+        ' ...
+        DynamicMenus.Add tmp, "mnu" & Name
+            
+        ' ...
+        Set tmp = New clsMenuObj
+    
+        ' ...
+        tmp.Name = Chr$(0) & Name & " ENABLE|DISABLE"
+        tmp.Parent = DynamicMenus("mnu" & Name)
+        tmp.Caption = "Enabled"
         
-            ' ...
-            tmp.Name = Chr$(0) & Name & " ROOT"
-            tmp.hWnd = GetSubMenu(GetMenu(frmChat.hWnd), 5)
-            tmp.Caption = Name
+        If (StrComp(frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled"), _
+                "False", vbTextCompare) <> 0) Then
                 
-            ' ...
-            DynamicMenus.Add tmp, "mnu" & Name
-                
-            ' ...
-            Set tmp = New clsMenuObj
-        
-            ' ...
-            tmp.Name = Chr$(0) & Name & " ENABLE|DISABLE"
-            tmp.Parent = DynamicMenus("mnu" & Name)
-            tmp.Caption = "Enabled"
-            
-            If (StrComp(frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled"), _
-                    "False", vbTextCompare) <> 0) Then
-                    
-                tmp.Checked = True
-            End If
-            
-            ' ...
-            DynamicMenus.Add tmp
-            
-            ' ...
-            Set tmp = New clsMenuObj
-        
-            ' ...
-            tmp.Name = Chr$(0) & Name & " VIEW_SCRIPT"
-            tmp.Parent = DynamicMenus("mnu" & Name)
-            tmp.Caption = "View Script"
-            
-            ' ...
-            DynamicMenus.Add tmp
+            tmp.Checked = True
         End If
         
-        Err.Clear
+        ' ...
+        DynamicMenus.Add tmp
+        
+        ' ...
+        Set tmp = New clsMenuObj
+    
+        ' ...
+        tmp.Name = Chr$(0) & Name & " VIEW_SCRIPT"
+        tmp.Parent = DynamicMenus("mnu" & Name)
+        tmp.Caption = "View Script"
+        
+        ' ...
+        DynamicMenus.Add tmp
     Next I
 
 End Function
