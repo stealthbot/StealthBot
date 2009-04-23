@@ -61,88 +61,84 @@ Public Sub LoadScripts()
     On Error GoTo ERROR_HANDLER
 
     Dim CurrentModule As Module
-
-    Dim strPath  As String  ' ...
-    Dim filename As String  ' ...
-    Dim fileExt  As String  ' ...
-    Dim I        As Integer ' ...
-    Dim j        As Integer ' ...
-    Dim str      As String  ' ...
-    Dim tmp      As String  ' ...
+    Dim Paths         As New Collection
+    Dim strPath       As String  ' ...
+    Dim filename      As String  ' ...
+    Dim fileExt       As String  ' ...
+    Dim I             As Integer ' ...
+    Dim j             As Integer ' ...
+    Dim str           As String  ' ...
+    Dim tmp           As String  ' ...
+    Dim res           As Boolean ' ...
 
     ' ********************************
-    '      LOAD REGULAR SCRIPTS
+    '      LOAD SCRIPTS
     ' ********************************
     
-    ' ...
+    ' set script folder path
     strPath = App.Path & "\scripts\"
     
-    ' ...
+    ' ensure scripts folder exists
     If (Dir(strPath) <> vbNullString) Then
-        ' ...
+        ' grab initial script file name
         filename = Dir(strPath)
+        
+        ' grab script files
+        ' note: if we don't enumerate this list prior to script loading,
+        ' scripting errors can kill further script loading.
+        Do While (filename <> vbNullString)
+            ' add script file to collection
+            Paths.Add filename
+        
+            ' grab next script file name
+            filename = Dir()
+        Loop
 
         ' ...
-        Do While (filename <> vbNullString)
+        For I = 1 To Paths.Count
             ' ...
-            If (IsValidFileExtension(GetFileExtension(filename))) Then
+            If (IsValidFileExtension(GetFileExtension(Paths(I)))) Then
                 ' ...
                 Set CurrentModule = _
                     m_sc_control.Modules.Add(m_sc_control.Modules.Count + 1)
             
                 ' ...
-                If (FileToModule(CurrentModule, strPath & filename) = True) Then
+                res = FileToModule(CurrentModule, strPath & Paths(I))
+            
+                ' ...
+                If (IsScriptNameValid(CurrentModule) = False) Then
+                    ' ...
+                    CurrentModule.CodeObject.Script("Name") = CleanFileName(Paths(I))
+                
+                    ' ...
                     If (IsScriptNameValid(CurrentModule) = False) Then
-                        CurrentModule.CodeObject.Script("Name") = CleanFileName(filename)
-                    
-                        ' ...
-                        If (IsScriptNameValid(CurrentModule) = False) Then
-                            frmChat.AddChat vbRed, "Scripting error: " & filename & " has been " & _
-                                "disabled due to a naming issue."
-                                
-                            str = strPath & "\disabled\"
+                        frmChat.AddChat vbRed, "Scripting error: " & Paths(I) & " has been " & _
+                            "disabled due to a naming issue."
                             
-                            MkDir str
-                                
-                            Kill str & filename
-        
-                            Name strPath & filename As str & filename
-        
-                            InitScriptControl m_sc_control
-                            LoadScripts
+                        str = strPath & "\disabled\"
+                        
+                        MkDir str
                             
-                            Exit Sub
-                        End If
+                        Kill str & Paths(I)
+    
+                        Name strPath & Paths(I) As str & Paths(I)
+    
+                        InitScriptControl m_sc_control
+                        
+                        LoadScripts
+                        
+                        Exit Sub
                     End If
                 End If
+                
+                ' ...
+                If (res = False) Then
+                    CurrentModule.AddCode GetDefaultModuleProcs(CurrentModule.Name, _
+                        Paths(I))
+                End If
             End If
-            
-            filename = Dir()
-        Loop
+        Next I
     End If
-    
-    ' ********************************
-    '      LOAD PLUGIN SYSTEM
-    ' ********************************
-
-    ' ...
-    'If (ReadINI("Override", "DisablePS", GetConfigFilePath()) <> "Y") Then
-    '    ' ...
-    '    strPath = GetFilePath("PluginSystem.dat")
-    '
-    '    ' ...
-    '    If (LenB(Dir$(strPath)) = 0) Then
-    '        Call frmChat.AddChat(vbRed, "Cannot find PluginSystem.dat. It must exist in order to load plugins!")
-    '        Call frmChat.AddChat(vbYellow, "You may download PluginSystem.dat to your StealthBot folder using the link below.")
-    '        Call frmChat.AddChat(vbWhite, "http://www.stealthbot.net/p/Users/Swent/index.php?file=PluginSystem.dat")
-    '    Else
-    '        FileToModule m_sc_control.Modules(1), strPath
-    '    End If
-    '
-    '    If (m_sc_control.Modules(1).CodeObject.Script("Name") = vbNullString) Then
-    '        m_sc_control.Modules(1).CodeObject.Script("Name") = "PluginSystem"
-    '    End If
-    'End If
     
     ' ...
     InitMenus
@@ -153,25 +149,9 @@ Public Sub LoadScripts()
 ' ...
 ERROR_HANDLER:
 
-    ' object does not support property or method - function missing
-    If (Err.Number = 438) Then
-        Err.Clear
-    
-        Resume Next
-    End If
-    
-    ' path/file errors - likely due to duplicate script handling
-    If ((Err.Number = 75) Or (Err.Number = 53)) Then
-        Err.Clear
-    
-        Resume Next
-    End If
-
     ' ...
     frmChat.AddChat vbRed, _
         "Error (" & Err.Number & "): " & Err.description & " in LoadScripts()."
-
-    Exit Sub
 
 End Sub
 
