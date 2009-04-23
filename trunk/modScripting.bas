@@ -410,7 +410,7 @@ End Sub
 
 Public Sub InitScript(ByVal SCModule As Module)
 
-    On Error GoTo ERROR_HANDLER
+    On Error Resume Next
 
     Dim I          As Integer ' ...
     Dim startTime  As Long
@@ -441,35 +441,11 @@ Public Sub InitScript(ByVal SCModule As Module)
              Next I
          End If
     End If
-    
-    Exit Sub
-    
-ERROR_HANDLER:
-
-    ' object does not support property or method - function missing
-    If (Err.Number = 438) Then
-        Err.Clear
-    
-        Resume Next
-    End If
-    
-    ' path not found - deletion of running scripts?
-    If (Err.Number = 76) Then
-        Err.Clear
-    
-        Resume Next
-    End If
-
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
-        " in InitScript()."
- 
-    Exit Sub
-
 End Sub
 
 Public Sub RunInAll(ParamArray Parameters() As Variant)
 
-    On Error GoTo ERROR_HANDLER
+    On Error Resume Next
 
     Dim SC    As ScriptControl
     Dim I     As Integer ' ...
@@ -498,29 +474,6 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
             CallByNameEx SC.Modules(I), "Run", VbMethod, arr()
         End If
     Next
-
-    Exit Sub
-    
-ERROR_HANDLER:
-
-    ' object does not support property or method - function missing
-    If (Err.Number = 438) Then
-        Err.Clear
-    
-        Resume Next
-    End If
-    
-    ' path not found - deletion of running scripts?
-    If (Err.Number = 76) Then
-        Err.Clear
-    
-        Resume Next
-    End If
-
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
-        " in RunInAll()."
-    
-    Exit Sub
     
 End Sub
 
