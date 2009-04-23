@@ -28,7 +28,7 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
 
     ' ...
     SC.Reset
-    
+
     ' ...
     frmChat.INet.Cancel
     frmChat.scTimer.Enabled = False
@@ -266,6 +266,9 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
     Exit Function
     
 ERROR_HANDLER:
+
+    ' ...
+    strContent = ""
 
     FileToModule = False
 
