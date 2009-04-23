@@ -1068,12 +1068,12 @@ Private Function IsValidFileExtension(ByVal ext As String) As Boolean
     Dim I      As Integer ' ...
 
     ' ...
-    ReDim exts(0 To 2)
+    ReDim exts(0 To 1)
     
     ' ...
-    exts(0) = "dat"
-    exts(1) = "txt"
-    exts(2) = "vbs"
+    'exts(0) = "dat"
+    exts(0) = "txt"
+    exts(1) = "vbs"
     
     ' ...
     For I = LBound(exts) To UBound(exts)
