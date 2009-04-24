@@ -18,6 +18,11 @@ Begin VB.Form frmChat
    ScaleHeight     =   7950
    ScaleWidth      =   12585
    StartUpPosition =   3  'Windows Default
+   Begin VB.Timer tmrAccountLock 
+      Interval        =   30000
+      Left            =   1680
+      Top             =   120
+   End
    Begin MSComctlLib.ListView lvChannel 
       Height          =   6375
       Left            =   8880
@@ -895,6 +900,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -920,7 +926,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -4728,6 +4733,21 @@ Private Sub itcScript_StateChanged(Index As Integer, ByVal State As Integer)
     ' ...
     obj.SCModule.Run obj.ObjName & "_StateChanged", State
 
+End Sub
+
+Private Sub tmrAccountLock_Timer()
+    
+    tmrAccountLock.Enabled = False
+    
+    If (g_Online) Then
+        Exit Sub
+    End If
+    
+    AddChat vbRed, "[BNET] Your account appears to be locked, likely due to an excessive number of " & _
+        "invalid logins.  Please try connecting again in 15-20 minutes."
+        
+    DoDisconnect
+    
 End Sub
 
 Private Sub tmrScript_Timer(Index As Integer)

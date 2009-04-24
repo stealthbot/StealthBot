@@ -420,6 +420,8 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 If frmChat.sckBNet.State = 7 And AwaitingEmailReg = 0 And Not B Then
                     Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Sending login information...")
             
+                    frmChat.tmrAccountLock.Enabled = True
+            
                     If ds.LogonType = 2 Then ' NLS! Proceed to 0x52+
                         'If BotVars.BNLS Then
                             ' no more bnls hashing
@@ -1111,7 +1113,7 @@ Public Function StringToDWord(Data As String) As Long
     StringToDWord = Val("&H" & tmp)
 End Function
 
-Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
+Public Sub sPrintF(ByRef source As String, ByVal nText As String, _
     Optional ByVal A As Variant, _
     Optional ByVal B As Variant, _
     Optional ByVal c As Variant, _
@@ -1156,7 +1158,7 @@ Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
         I = I + 1
     Loop
 theEnd:
-    Source = Source & nText
+    source = source & nText
 End Sub
 
 Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As String, ByRef sClan As String) As String
@@ -1495,9 +1497,9 @@ Function MakeLong(X As String) As Long
     CopyMemory MakeLong, ByVal X, 4
 End Function
 
-Public Sub StrCpy(ByRef Source As String, ByVal nText As String)
+Public Sub StrCpy(ByRef source As String, ByVal nText As String)
     'on error resume next
-    Source = Source & nText
+    source = source & nText
 End Sub
 
 Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef flags As Long, ByRef Name As String, ByRef txt As String)
