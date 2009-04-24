@@ -20,8 +20,8 @@ Begin VB.Form frmChat
    StartUpPosition =   3  'Windows Default
    Begin VB.Timer tmrAccountLock 
       Interval        =   30000
-      Left            =   1680
-      Top             =   120
+      Left            =   5280
+      Top             =   5040
    End
    Begin MSComctlLib.ListView lvChannel 
       Height          =   6375
@@ -1543,7 +1543,7 @@ Public Sub cacheTimer_Timer()
         
         For c = 0 To UBound(strArray)
             ' [CHANNELOP]  -  [*CHANNELOP]  -  [CHARACTER@USEast (*CHANNELOP)]
-            If StrComp(UCase(strArray(c)), strArray(c), vbTextCompare) = 0 Then
+            If StrComp(UCase(strArray(c)), strArray(c), vbBinaryCompare) = 0 Then
                 If Left$(strArray(c), 1) = "[" And Right$(strArray(c), 1) = "]" Then
                     strArray(c) = Mid(strArray(c), 2, Len(strArray(c)) - 2)
                 End If
