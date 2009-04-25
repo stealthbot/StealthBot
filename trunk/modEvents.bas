@@ -651,6 +651,8 @@ Public Sub Event_LogonEvent(ByVal Message As Byte, Optional ByVal ExtraInfo As S
             
             sMessage = "Login successful."
             
+            frmChat.tmrAccountLock.Enabled = False
+            
         Case 3:
             lColor = RTBColors.InformationText
             
