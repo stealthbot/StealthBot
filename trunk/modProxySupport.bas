@@ -7,6 +7,21 @@ Option Explicit
 Private Declare Function htons Lib "wsock32.dll" (ByVal hostshort As Integer) As Integer
 Private Declare Function inet_addr Lib "wsock32.dll" (ByVal cp As String) As Long
 
+Public Declare Function gethostbyname Lib "wsock32.dll" (ByVal szHost As String) As Long
+Public Declare Function inet_ntoa Lib "wsock32.dll" (ByVal inaddr As Long) As Long
+Public Declare Function lstrlen Lib "kernel32.dll" Alias "lstrlenA" (ByVal lpString As Any) As Long
+Public Declare Function lstrcpy Lib "kernel32.dll" Alias "lstrcpyA" (ByVal lpString1 As Any, ByVal lpString2 As Any) As Long
+Public Declare Function WSAGetLastError Lib "wsock32.dll" () As Long
+Public Declare Function WSACleanup Lib "wsock32.dll" () As Long
+
+Public Type HOSTENT
+    h_name As Long
+    h_aliases As Long
+    h_addrtype As Integer
+    h_length As Integer
+    h_addr_list As Long
+End Type
+
 Public Const PROXY_LOGIN_FAILED = &H401
 Public Const PROXY_LOGGING_IN = &H402
 Public Const PROXY_IS_NOT_PUBLIC = &H403
@@ -21,6 +36,8 @@ Public Sub LogonToProxy(ByRef ds As Winsock, ByVal sServerIP As String, ByVal lP
     Dim lServer As Long
     Dim buf As String
     Dim lPort1, lPort2 As Long
+    Dim HostInfo As HOSTENT
+    Dim ptrIP As Long
     
     If Socks5 Then
         buf = Chr(5) & Chr(1)
@@ -28,6 +45,23 @@ Public Sub LogonToProxy(ByRef ds As Winsock, ByVal sServerIP As String, ByVal lP
         buf = Chr(4) & Chr(1) 'connect request
     End If
     
+    'Do we have an IP address or a hostname?
+    If Not IsValidIPAddress(sServerIP) Then
+        sServerIP = ResolveHost(sServerIP)
+        
+        If sServerIP = vbNullString Then
+            Call frmChat.AddChat(vbRed, "[PROXY] Unable to resolve hostname. Error code: 0x" & Right(String(8, "0") & Hex(WSAGetLastError()), 8))
+            Call frmChat.DoDisconnect
+            Exit Sub
+        End If
+    End If
+    
+    'Make the IP into a long.
+    lServer = inet_addr(sServerIP)
+            
+    'Copy ip long into a struct with 4 byte members
+    CopyMemory INet(0), lServer, 4
+        
     If Socks5 Then
         'Method (0x00 No authentication)
         buf = buf & Chr(0)
@@ -39,10 +73,6 @@ Public Sub LogonToProxy(ByRef ds As Winsock, ByVal sServerIP As String, ByVal lP
         buf = buf & Chr(0)
         'IPv4 address type (0x01)
         buf = buf & Chr(1)
-        
-        'Copy ip long into a struct with 4 byte members
-        lServer = inet_addr(sServerIP)
-        CopyMemory INet(0), lServer, 4
         
         'dest address
         buf = buf & Chr(INet(0)) & Chr(INet(1)) & Chr(INet(2)) & Chr(INet(3))
@@ -57,9 +87,6 @@ Public Sub LogonToProxy(ByRef ds As Winsock, ByVal sServerIP As String, ByVal lP
         lPort2 = CLng(lPort) - htons(lPort1)
         
         buf = buf & Chr(lPort1) & Chr(lPort2)
-        
-        lServer = inet_addr(sServerIP)
-        CopyMemory INet(0), lServer, 4
     
         buf = buf & Chr(INet(0)) & Chr(INet(1)) & Chr(INet(2)) & Chr(INet(3))
         
