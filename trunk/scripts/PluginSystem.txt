@@ -876,7 +876,7 @@ Sub ps_pedit_cmd(cmd, Username, DisplayID)
          If Not psPrefixExists(cmd(1)) Then Exit Sub
 
 	 If cmd(1) = "ps" Then
-            path = BotPath() & "PluginSystem.dat"
+            path = BotPath() & "\scripts\PluginSystem.txt"
          Else
             path = psPlugins.Item(cmd(1))
          End If
@@ -1016,7 +1016,7 @@ Sub psAutoUpdate(boolMenuClick)
       End If
 
       '// Get local Plugin System version
-      Set myPSFile = psFSO.OpenTextFile(BotPath() & "PluginSystem.dat", 1)
+      Set myPSFile = psFSO.OpenTextFile(BotPath() & "\scripts\PluginSystem.txt", 1)
       myPSVersion = Mid(myPSFile.ReadLine(), 2)
       myPSFile.Close
  
@@ -1026,8 +1026,8 @@ Sub psAutoUpdate(boolMenuClick)
             boolFoundUpdate = True
 
             AddChat vbLightBlue, "Downloading an update for " & PS_TITLE
-            psBackUpFile BotPath() & "PluginSystem.dat", myPSVersion
-            PrintURLToFile "PluginSystem.dat", PS_UPDATE_URL & "getplug.php?plugin=pluginsystem"
+            psBackUpFile BotPath() & "\scripts\PluginSystem.txt", myPSVersion
+            PrintURLToFile BotPath() & "\scripts\PluginSystem.txt", PS_UPDATE_URL & "getplug.php?plugin=pluginsystem"
             AddChat psColor1, "The StealthBot Plugin System has been updated."
             AddChat psColor1, "For a list of changes in this version see: http://stealthbot.net/p/plugs/changelog"
             AddChat psColor2, "Reloading Plugins...": Call ReloadScript()
@@ -1275,7 +1275,7 @@ Sub CreateMenus()
 
    Set tmp = CreateObj("Menu", "mnuAdvancedOpenPluginSystem")
    tmp.Parent = mnuAdvanced
-   tmp.Caption = "Open PluginSystem.dat"
+   tmp.Caption = "Open PluginSystem.txt"
 
    Set tmp = CreateObj("Menu", "mnuAdvancedDash1")
    tmp.Parent = mnuAdvanced
@@ -1522,7 +1522,7 @@ Sub PluginMenus_Help_Callback(Prefix)
 End Sub
 
 
-'// "Advanced" > "Open PluginSystem.dat"
+'// "Advanced" > "Open PluginSystem.txt"
 Sub mnuAdvancedOpenPluginSystem_Click()
 
    psProcessCmd "/pedit ps", BotVars.Username, 4
