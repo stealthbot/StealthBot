@@ -1111,4 +1111,18 @@ Public Property Get CaseSensitiveFlags() As Boolean
 
 End Property
 
+Public Property Get JoinLeaveMessages() As Boolean
+
+    ' ...
+    JoinLeaveMessages = Not JoinMessagesOff
+
+End Property
+
+Public Property Let JoinLeaveMessages(ByVal bln As Boolean)
+
+    ' ...
+    JoinMessagesOff = Not bln
+
+End Property
+
 
