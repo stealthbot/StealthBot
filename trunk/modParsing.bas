@@ -56,9 +56,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         ' ...
         RunInAll "Event_PacketReceived", "BNCS", PacketID, Len(PacketData), PacketData
         
-        If (GetVeto) Then
-            Exit Sub
-        End If
+        'If (GetVeto) Then
+        '    Exit Sub
+        'End If
         
         '--------------
         '| Parse      |

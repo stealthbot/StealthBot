@@ -177,11 +177,11 @@ Public Sub ParseMCPPacket(ByVal Data As String)
             If InStr(1, CommandLine, "-all") > 0 Then _
                 frmChat.AddChat COLOR_BLUE, "MCP RECV 0x" & Right$("00" & hex(Asc(Mid$(Data, 3, 1))), 2)
             
-            If (GetVeto) Then
-                Exit Sub
-            End If
+            'If (GetVeto) Then
+            '    Exit Sub
+            'End If
             
-            Select Case Asc(Mid$(Data, 3, 1))
+            Select Case Asc(Mid$(Data, 3, 1)) '
                 Case MCP_STARTUP
                     
                     n = Conv(Mid$(Data, 4, 4))
