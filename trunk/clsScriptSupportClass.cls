@@ -1378,18 +1378,25 @@ Public Function isDebug() As Boolean
     
 End Function
 
-Public Function FileTimeToDate(ByRef strTime As String) As Date
+Public Function FileTimeToDate(ByVal strTime As Variant, Optional ByVal HighValue As Long = 0) As Date
 
     Dim FTime As FILETIME ' ...
     
     ' ...
-    With FTime
-        .dwLowDateTime = _
-            CLng(Mid$(strTime, InStr(1, strTime, " ", vbBinaryCompare) + 1))
-    
-        .dwHighDateTime = _
-            CLng(Left$(strTime, InStr(1, strTime, " ", vbBinaryCompare)))
-    End With
+    If (HighValue <> 0) Then
+        With FTime
+            .dwLowDateTime = CLng(Val(strTime))
+            .dwHighDateTime = CLng(Val(HighValue))
+        End With
+    Else
+        With FTime
+            .dwLowDateTime = _
+                CLng(Mid$(strTime, InStr(1, strTime, " ", vbBinaryCompare) + 1))
+        
+            .dwHighDateTime = _
+                CLng(Left$(strTime, InStr(1, strTime, " ", vbBinaryCompare)))
+        End With
+    End If
     
     ' ...
     FileTimeToDate = modDateTime.FileTimeToDate(FTime)
@@ -1463,7 +1470,7 @@ Public Function GetConnectionUptime() As String
     GetConnectionUptime = ConvertTime(uTicks)
 End Function
 
-Public Function CRC32(ByVal str As String) As String
+Public Function CRC32(ByRef str As String) As String
 
     Dim clsCRC32 As New clsCRC32
     
@@ -1473,7 +1480,7 @@ Public Function CRC32(ByVal str As String) As String
 
 End Function
 
-Public Function Sha1(ByVal Data As String) As String
+Public Function Sha1(ByRef Data As String) As String
 
     Dim A As Long
     Dim B As Long
@@ -1486,7 +1493,7 @@ Public Function Sha1(ByVal Data As String) As String
     
 End Function
 
-Public Function XSHA1(ByVal str As String) As String
+Public Function XSHA1(ByRef str As String) As String
 
     XSHA1 = modBNCSutil.hashPassword(str)
     
