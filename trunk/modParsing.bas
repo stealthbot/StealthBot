@@ -24,7 +24,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Dim ClanTag     As String            ' User clan tag
     Dim Product     As String            ' User product
     Dim w3icon      As String            ' Warcraft III icon code
-    Dim B           As Boolean           ' Temporary bool
+    Dim b           As Boolean           ' Temporary bool
     Dim sArr()      As String            ' Temp String array
     
     Static ServerToken As Long           ' Server token used in various packets
@@ -39,7 +39,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     
     If PacketLen >= 0 Then
         ' Start packet debuffer
-        pD.Data = Mid$(PacketData, 5)
+        pD.data = Mid$(PacketData, 5)
         ' Get packet ID
         PacketID = Asc(Mid$(PacketData, 2, 1))
         
@@ -59,6 +59,11 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         'If (GetVeto) Then
         '    Exit Sub
         'End If
+        
+        
+        If (modWarden.WardenServerData(warden_context, PacketData)) Then
+          Exit Sub
+        End If
         
         '--------------
         '| Parse      |
@@ -93,9 +98,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &HF 'SID_CHATEVENT
                 ' User information
-                EventID = pD.GetDWord
-                UserFlags = pD.GetDWord
-                UserPing = pD.GetDWord
+                EventID = pD.GetDWORD
+                UserFlags = pD.GetDWORD
+                UserPing = pD.GetDWORD
                 
                 ' (3 defunct DWORDS)
                 pD.Position = pD.Position + (3 * 4)
@@ -191,7 +196,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &H25 'SID_PING
                 If BotVars.Spoof = 0 Or g_Online Then
-                    PBuffer.InsertDWord pD.GetDWord
+                    PBuffer.InsertDWord pD.GetDWORD
                     PBuffer.SendPacket &H25
                 End If
             
@@ -201,11 +206,11 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H3D 'SID_CREATEACCT2
-                L = pD.GetDWord
+                L = pD.GetDWORD
                 
-                B = Event_AccountCreateResponse(L)
+                b = Event_AccountCreateResponse(L)
                 
-                If B Then
+                If b Then
                     Send0x3A ds.GetServerToken
                 Else
                     Call frmChat.DoDisconnect
@@ -219,7 +224,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H3A 'SID_LOGONRESPONSE2
-                L = pD.GetDWord
+                L = pD.GetDWORD
             
                 Select Case L
                     Case &H0  'Successful login.
@@ -278,7 +283,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     Next L
                     
                     
-                    L = pD.GetDWord 'Port
+                    L = pD.GetDWORD 'Port
                     L = ntohs(L)        'Fix byte order
                     'Debug.Print l
                     'Debug.Print ntohl(l)
@@ -301,7 +306,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     
                 Else
                     pD.Position = pD.Position + 4
-                    L = pD.GetDWord
+                    L = pD.GetDWORD
                     
                     Call Event_RealmStatusError(L)
                     Unload frmRealm
@@ -325,10 +330,10 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H50 'SID_AUTH_INFO
-                L = pD.GetDWord ' Logon type
+                L = pD.GetDWORD ' Logon type
                 ds.LogonType = L
                 
-                ServerToken = pD.GetDWord
+                ServerToken = pD.GetDWORD
                 ds.SetServerToken ServerToken
                 
                 pD.Position = pD.Position + 4
@@ -370,13 +375,13 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &H51 'SID_AUTH_CHECK
                 ' b is being used as a NoProceed boolean
-                L = pD.GetDWord
+                L = pD.GetDWORD
                 s = pD.GetString
-                B = True    'Default action: Do not proceed
+                b = True    'Default action: Do not proceed
                 
                 Select Case L
                     Case &H0    'SUCCESS
-                        B = False
+                        b = False
                         Call Event_VersionCheck(0, vbNullString)
                         
                     Case &H100  'OLD Version
@@ -411,13 +416,13 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                     
                     Case Else
                         If (ReadCfg("Override", "Ignore0x51Reply") = "Y") Then
-                            B = False
+                            b = False
                         End If
                         
                         Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unknown 0x51 Response: 0x" & ZeroOffset(L, 4))
                 End Select
                 
-                If frmChat.sckBNet.State = 7 And AwaitingEmailReg = 0 And Not B Then
+                If frmChat.sckBNet.State = 7 And AwaitingEmailReg = 0 And Not b Then
                     Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Sending login information...")
             
                     frmChat.tmrAccountLock.Enabled = True
@@ -438,7 +443,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             
             '###########################################################################
             Case &H52 'SID_AUTH_ACCOUNTCREATE
-                L = pD.GetDWord
+                L = pD.GetDWORD
                 
                 Select Case L
                     Case &H0
@@ -464,7 +469,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 
             '###########################################################################
             Case &H53 'SID_AUTH_ACCOUNTLOGON
-                L = pD.GetDWord
+                L = pD.GetDWORD
                 s = pD.GetRaw(32) 'Salt [s]
                 s2 = pD.GetRaw(32) ' Server key [B]
                 
@@ -506,7 +511,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 
             '###########################################################################
             Case &H54 'SID_AUTH_ACCOUNTLOGONPROOF
-                L = pD.GetDWord
+                L = pD.GetDWORD
                 
                 Select Case L
                     Case &H0   'Success
@@ -541,15 +546,15 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 frmEMailReg.Show
                 
             '###########################################################################
-            Case &H5E 'SID_WARDEN
+            'Case &H5E 'SID_WARDEN
                 'Call Send Warden, strip header from PacketData
                 'Call Send0x5E(Mid$(PacketData, 5))
                 
-                If (Not modWarden.CanHandleWarden()) Then
-                    Call frmChat.AddChat(vbRed, "[Warden] You have received a Warden packet that cannot be handled. As a result, you will be disconnected in two minutes.")
-                End If
+            '    If (Not modWarden.CanHandleWarden()) Then
+            '        Call frmChat.AddChat(vbRed, "[Warden] You have received a Warden packet that cannot be handled. As a result, you will be disconnected in two minutes.")
+            '    End If
                 
-                Call modWarden.WardenOnData(PacketData)
+            '    Call modWarden.WardenOnData(PacketData)
             
             '###########################################################################
             Case Is >= &H65 'Friends List or Clan-related packet
@@ -634,7 +639,7 @@ End Function
 '
 'End Sub
 
-Public Function DecodeD2Key(ByVal Key As String) As String
+Public Function DecodeD2Key(ByVal key As String) As String
 
     Dim R As Double, n As Double, n2 As Double, v As Double, _
     v2 As Double, KeyValue As Double, c1 As Integer, c2 As Integer, _
@@ -649,7 +654,7 @@ Public Function DecodeD2Key(ByVal Key As String) As String
     
     For I = 1 To 16
     
-        aryKey(I - 1) = Mid$(Key, I, 1)
+        aryKey(I - 1) = Mid$(key, I, 1)
         
     Next I
     
@@ -1101,21 +1106,21 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
     End If
 End Sub
 
-Public Function StringToDWord(Data As String) As Long
+Public Function StringToDWord(data As String) As Long
     Dim tmp As String
-    tmp = StrToHex(Data)
-    Dim A As String, B As String, c As String, d As String
-    A = Mid(tmp, 1, 2)
-    B = Mid(tmp, 3, 2)
+    tmp = StrToHex(data)
+    Dim a As String, b As String, c As String, d As String
+    a = Mid(tmp, 1, 2)
+    b = Mid(tmp, 3, 2)
     c = Mid(tmp, 5, 2)
     d = Mid(tmp, 7, 2)
-    tmp = d & c & B & A
+    tmp = d & c & b & a
     StringToDWord = Val("&H" & tmp)
 End Function
 
-Public Sub sPrintF(ByRef source As String, ByVal nText As String, _
-    Optional ByVal A As Variant, _
-    Optional ByVal B As Variant, _
+Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
+    Optional ByVal a As Variant, _
+    Optional ByVal b As Variant, _
     Optional ByVal c As Variant, _
     Optional ByVal d As Variant, _
     Optional ByVal e As Variant, _
@@ -1131,11 +1136,11 @@ Public Sub sPrintF(ByRef source As String, ByVal nText As String, _
     Do While (InStr(1, nText, "%s") <> 0)
         Select Case I
             Case 0
-                If IsEmpty(A) Then GoTo theEnd
-                nText = Replace(nText, "%s", A, 1, 1)
+                If IsEmpty(a) Then GoTo theEnd
+                nText = Replace(nText, "%s", a, 1, 1)
             Case 1
-                If IsEmpty(B) Then GoTo theEnd
-                nText = Replace(nText, "%s", B, 1, 1)
+                If IsEmpty(b) Then GoTo theEnd
+                nText = Replace(nText, "%s", b, 1, 1)
             Case 2
                 If IsEmpty(c) Then GoTo theEnd
                 nText = Replace(nText, "%s", c, 1, 1)
@@ -1158,7 +1163,7 @@ Public Sub sPrintF(ByRef source As String, ByVal nText As String, _
         I = I + 1
     Loop
 theEnd:
-    source = source & nText
+    Source = Source & nText
 End Sub
 
 Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As String, ByRef sClan As String) As String
@@ -1497,14 +1502,14 @@ Function MakeLong(X As String) As Long
     CopyMemory MakeLong, ByVal X, 4
 End Function
 
-Public Sub StrCpy(ByRef source As String, ByVal nText As String)
+Public Sub StrCpy(ByRef Source As String, ByVal nText As String)
     'on error resume next
-    source = source & nText
+    Source = Source & nText
 End Sub
 
-Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef flags As Long, ByRef Name As String, ByRef txt As String)
+Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef Flags As Long, ByRef Name As String, ByRef txt As String)
     'on error resume next
-    Dim A As Long ', b As Long, c As Long, D As Long, E As Long, F As Long
+    Dim a As Long ', b As Long, c As Long, D As Long, E As Long, F As Long
     Dim f As Long
     Dim recvbufpos As Long
     
@@ -1517,7 +1522,7 @@ Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef flags As
     f = MakeLong(Mid$(DataBuf, recvbufpos, 4))
     
     recvbufpos = recvbufpos + 4
-    A = CVL(Mid$(DataBuf, recvbufpos, 4))
+    a = CVL(Mid$(DataBuf, recvbufpos, 4))
     
 '    recvbufpos = recvbufpos + 4
 '    b = MakeLong(Mid$(DataBuf, recvbufpos, 4))
@@ -1532,8 +1537,8 @@ Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef flags As
 '    E = MakeLong(Mid$(DataBuf, recvbufpos, 4))
     
 '    recvbufpos = recvbufpos + 4
-    flags = f
-    Ping = A
+    Flags = f
+    Ping = a
     
     Call StrCpy(Name, KillNull(Mid$(DataBuf, 29)))
     Call StrCpy(txt, KillNull(Mid$(DataBuf, Len(Name) + 30)))
@@ -1964,13 +1969,13 @@ End Function
 
 
 'Originally from DPChat by Zorm - cleaned up and adapted to my needs
-Public Sub ProfileParse(Data As String)
+Public Sub ProfileParse(data As String)
     On Error Resume Next
     Dim X As Integer
     Dim ProfileEnd As String
     Dim SplitProfile() As String
     
-    ProfileEnd = Mid(Data, 17, Len(Data))
+    ProfileEnd = Mid(data, 17, Len(data))
     SplitProfile = Split(ProfileEnd, Chr(&H0))
     
     If AwaitingSystemKeys = 1 Then

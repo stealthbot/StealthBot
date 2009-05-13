@@ -1,680 +1,608 @@
 Attribute VB_Name = "modWarden"
-'// thx to ringo <3
-
-'//Does the job of Maiev.mod
-Private Type RANDOMDATA
-    pos                     As Long
-    Data                    As String * 20
-    Sorc1                   As String * 20
-    Sorc2                   As String * 20
+Public Type WARDENCONTEXT
+  l_Debug As Long
+  l_Module As Long
+  s_MD5 As String * 16
+  s_Key As String * 16
+  l_Product As Long
+  l_Callbacks(0 To 7) As Long
+  l_SocketHandle As Long
+  s_OutKey As String * &H102
+  s_InKey As String * &H102
+  l_ModuleLen As Long
+  s_Module As String
+  l_InitReturn As Long
+  s_RC4Seed As String
+  b_PAGE_CHECK_A As Byte
+  b_MEM_CHECK As Byte
 End Type
-Private m_Parse(5)          As Long
-Private m_CallBack(7)       As Long 'callback function list, for warden
-Private m_Func(2)           As Long 'wardens exports
-Private m_KeyOut(257)       As Byte
-Private m_KeyIn(257)        As Byte
-Private m_Seed              As Long
-Private m_Mod               As Long 'pointer to the module
-Private m_ModMem            As Long 'pointer to wardens memory block
-Private m_ModState          As Byte '0=idle,1=downloading,2=hackyhacky
-Private m_RC4               As Long
-Private m_PKT               As String
-'//Warden download stuff
-Private m_ModName           As String * 16 'the modules name
-Private m_ModFolder         As String 'the warden folder
-Private m_ModKey(15)        As Byte 'key to crypt module with
-Private m_ModLen            As Long 'lengh of downloading module
-Private m_ModPos            As Long 'position in write data for downloading
-Private m_ModData()         As Byte 'module download buffer
 
-Public Sub WardenInit(ByVal lngSeed As Long)
-    Dim bOut(15)        As Byte
-    Dim bIn(15)         As Byte
-    Dim uRan            As RANDOMDATA
-    
+Private Enum SHA1Versions
+  Sha1 = 0
+  BrokenSHA1 = 1
+  LockdownSHA1 = 2
+  WardenSHA1 = 3
+  max = &HFFFFFFFF
+End Enum
+
+Private Type SHA1Context
+  IntermediateHash(0 To 4) As Long
+  LengthLow As Long
+  LengthHigh As Long
+  MessageBlockIndex As Integer
+  MessageBlock(0 To 63) As Byte
+  Computed As Byte
+  Corrupted As Byte
+  Version As SHA1Versions
+End Type
+
+Private Type MD5Context
+  IntermediateHash(0 To 3) As Long
+  LengthLow As Long
+  LengthHigh As Long
+  MessageBlockIndex As Integer
+  MessageBlock(0 To 63) As Byte
+  Computed As Byte
+  Corrupted As Byte
+End Type
+
+Private Type MedivRandomContext
+  Index As Long
+  data(0 To 19) As Byte
+  Source1(0 To 19) As Byte
+  Source2(0 To 19) As Byte
+End Type
+
+Private Declare Sub rc4_init Lib "Warden.dll" (ByVal key As String, ByVal Base As String, ByVal length As Long)
+Private Declare Sub rc4_crypt Lib "Warden.dll" (ByVal key As String, ByVal data As String, ByVal length As Long)
+Private Declare Sub rc4_crypt_data Lib "Warden.dll" (ByVal data As String, ByVal DataLength As Long, ByVal Base As String, ByVal BaseLength As Long)
+
+Private Declare Function sha1_reset Lib "Warden.dll" (ByRef Context As SHA1Context) As Long
+Private Declare Function sha1_input Lib "Warden.dll" (ByRef Context As SHA1Context, ByVal data As String, ByVal length As Long) As Long
+Private Declare Function sha1_digest Lib "Warden.dll" (ByRef Context As SHA1Context, ByVal digest As String) As Long
+Private Declare Function sha1_checksum Lib "Warden.dll" (ByVal data As String, ByVal length As Long, ByVal Version As Long) As Long
+
+Private Declare Function md5_reset Lib "Warden.dll" (ByRef Context As MD5Context) As Long
+Private Declare Function md5_input Lib "Warden.dll" (ByRef Context As MD5Context, ByVal data As String, ByVal length As Long) As Long
+Private Declare Function md5_digest Lib "Warden.dll" (ByRef Context As MD5Context, ByVal digest As String) As Long
+Private Declare Function md5_verify_data Lib "Warden.dll" (ByVal data As String, ByVal length As Long, ByVal CorrectMD5 As String) As Boolean
+
+Private Declare Sub mediv_random_init Lib "Warden.dll" (ByRef Context As MedivRandomContext, ByVal seed As String, ByVal length As Long)
+Private Declare Sub mediv_random_get_bytes Lib "Warden.dll" (ByRef Context As MedivRandomContext, ByVal Buffer As String, ByVal length As Long)
+
+Private Declare Function module_get_uncompressed_size Lib "Warden.dll" (ByVal data As String) As Long
+Private Declare Function module_get_prep_size Lib "Warden.dll" (ByVal data As String) As Long
+Private Declare Function module_decompress Lib "Warden.dll" (ByVal source As String, ByVal SourceLength As Long, ByVal Destination As String, ByVal DestinationLength As Long) As Long
+
+Private Declare Function module_prep Lib "Warden.dll" (ByVal source As String, ByVal Callback As Long) As Long
+Private Declare Function module_init Lib "Warden.dll" (ByVal address As Long, ByVal Callbacks As Long) As Long
+Private Declare Function module_get_init_address Lib "Warden.dll" (ByVal module As Long) As Long
+Private Declare Sub module_init_rc4 Lib "Warden.dll" (ByVal Callback As Long, ByVal InitData As Long, ByVal data As String, ByVal length As Long)
+Private Declare Function module_handle_packet Lib "Warden.dll" (ByVal InitData As Long, ByVal data As String, ByVal length As Long) As Long
+
+
+Private m_CallBack(7)       As Long 'callback function list, for warden
+'//Warden download stuff
+Private m_ModFolder         As String 'the warden folder
+Public warden_context       As WARDENCONTEXT
+Private Const MEDIV_MODULE_INFORMATION As Byte = &H0
+Private Const MEDIV_MODULE_TRANSFER    As Byte = &H1
+Private Const WARDEN_CHEAT_CHECKS      As Byte = &H2
+Private Const WARDEN_NEW_CRYPT_KEYS    As Byte = &H5
+
+
+Public Sub WardenInitRC4(ByRef war_ctx As WARDENCONTEXT, ByVal sSeed As String)
+    Dim ctx             As MedivRandomContext
+    Dim out_seed        As String
+    Dim in_seed         As String
+        
     If (Not CanHandleWarden()) Then
-        Call frmChat.AddChat(vbRed, "[Warden] Warden support has not been initialized because zlib.dll could not be found.")
+        Call frmChat.AddChat(vbRed, "[Warden] Warden support has not been initialized because zlib1.dll or Warden.dll could not be found.")
         Exit Sub
     End If
     
-    uRan.Data = String(Len(uRan.Data), Chr$(0))
-    uRan.Sorc1 = String(Len(uRan.Sorc1), Chr$(0))
-    uRan.Sorc2 = String(Len(uRan.Sorc2), Chr$(0))
     
-    Call WardenCleanUp
+    Call WardenCleanUp(war_ctx)
     '//Create new RC4 Keys
-    m_Seed = lngSeed
-    Call Data_Init(uRan, lngSeed)
-    Call Data_Get_Bytes(uRan, bOut(), 16)
-    Call Data_Get_Bytes(uRan, bIn(), 16)
-    Call RC4Key(bOut(), m_KeyOut(), 16)
-    Call RC4Key(bIn(), m_KeyIn(), 16)
-    m_Parse(0) = Addr2Ptr(AddressOf HW0x00)
-    m_Parse(1) = Addr2Ptr(AddressOf HW0x01)
-    m_Parse(2) = Addr2Ptr(AddressOf HW0x02)
-    m_Parse(3) = Addr2Ptr(AddressOf HW0x03)
-    m_Parse(4) = Addr2Ptr(AddressOf HW0x04)
-    m_Parse(5) = Addr2Ptr(AddressOf HW0x05)
-    m_ModFolder = App.Path & "\Warden\"
+  
+    out_seed = String(16, vbNull)
+    in_seed = String(16, vbNull)
+    war_ctx.s_OutKey = String(&H102, vbNull)
+    war_ctx.s_InKey = String(&H102, vbNull)
+    war_ctx.s_RC4Seed = sSeed
+  
+    Call mediv_random_init(ctx, sSeed, Len(sSeed))
+    Call mediv_random_get_bytes(ctx, out_seed, 16)
+    Call mediv_random_get_bytes(ctx, in_seed, 16)
+    If (MDebug("warden")) Then
+      Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Random Seed: " & StrToHex(sSeed, True))
+      Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Out Seed: " & StrToHex(out_seed))
+      Call frmChat.AddChat(RTBColors.InformationText, "[Warden] In Seed:  " & StrToHex(in_seed))
+    End If
+    Call rc4_init(war_ctx.s_OutKey, out_seed, 16)
+    Call rc4_init(war_ctx.s_InKey, in_seed, 16)
+
     
+On Error GoTo handler 'This is eww I know, but if the folder is empty it'll try and make and kill us all.
+    m_ModFolder = App.Path & "\Warden\"
     If (Dir$(m_ModFolder) = vbNullString) Then
         MkDir m_ModFolder
     End If
-    
+handler:
     Call frmChat.AddChat(vbGreen, "[Warden] Initialized!")
 End Sub
-Public Sub WardenCleanUp()
-    '//Unload any existing module
-    If m_Mod Then
-        Call UnloadModule
-        Call free(m_Mod)
-        Call ZeroMemory(m_Func(0), 12)
-        m_Mod = 0
-        m_ModMem = 0
-    End If
-    m_ModState = 0
-    '//Clear download variables
-    Call ZeroMemory(ByVal m_ModName, 16)
-    Call ZeroMemory(m_ModKey(0), 16)
-    m_ModLen = 0
-    m_ModPos = 0
-    Erase m_ModData()
+Public Sub WardenCleanUp(Context As WARDENCONTEXT)
+  If (Len(Context.s_Module) > 0) Then Context.s_Module = vbNullString
+  Context.b_MEM_CHECK = 0
+  Context.b_PAGE_CHECK_A = 0
 End Sub
-Private Function LoadModule(ByVal lngMod As Long, ByRef strPath As String) As Long
-    Dim bData()         As Byte
-    Dim I               As Long
-    If (lngMod = 0) Then
-        I = FreeFile
-        Open strPath For Binary Lock Read As #I
-            If (LOF(I) < 1) Then
-                Close #I
-                Exit Function
-            End If
-            ReDim bData(LOF(I))
-            Get #I, 1, bData()
-        Close #I
-        lngMod = VarPtr(bData(0))
-    End If
-    If m_Mod Then
-        Call UnloadModule
-        Call free(m_Mod)
-        Call ZeroMemory(m_Func(0), 12)
-    End If
-    m_ModMem = 0
-    m_Mod = PrepareModule(lngMod)
-    If (m_Mod = 0) Then Exit Function
-    Call InitModule
-    If (m_ModMem = 0) Then
-        Call free(m_Mod)
-        Exit Function
-    End If
-    Call CopyMemory(I, ByVal m_ModMem, 4)
-    Call CopyMemory(m_Func(0), ByVal I, 12)
-    Call frmChat.AddChat(vbGreen, "[Warden] Loaded module: ", vbWhite, StrToHex(m_ModName, True) & ".bin")
-    LoadModule = 1
-End Function
-Public Sub WardenOnData(ByRef s As String)
-    Dim lngData         As Long
-    Dim lngLengh        As Long
-    Dim lngID           As Long
+Public Function WardenClientData(ByRef Context As WARDENCONTEXT, sData As String) As Boolean
+  Dim ID As Integer
+  ID = Asc(Mid(sData, 2, 1))
+  WardenClientData = False
     
-    If (Not CanHandleWarden()) Then
-        Exit Sub
-    End If
-    
-    lngLengh = (Len(s) - 4)
-    If (lngLengh < 1) Then Exit Sub
-    lngData = malloc(lngLengh)
-    Call RC4CryptStr(s, m_KeyIn(), 5)
-    lngID = Asc(Mid$(s, 5, 1))
-    If (lngID < 6) Then
-        Call CopyMemory(ByVal lngData, ByVal Mid$(s, 5, lngLengh), lngLengh)
-        Call CallWindowProcA(m_Parse(lngID), lngData, lngID, lngLengh, 0)
-    End If
-    Call free(lngData)
-End Sub
-Private Function HW0x00(ByVal hData As Long, ByVal uMsg As Long, ByVal wLen As Long, ByVal lParam As Long) As Long
-    Dim s           As String
-    Call WardenCleanUp
-    If (wLen < 37) Then Exit Function
-    Call CopyMemory(ByVal m_ModName, ByVal hData + 1, 16)
-    Call CopyMemory(m_ModKey(0), ByVal hData + 17, 16)
-    Call CopyMemory(m_ModLen, ByVal hData + 33, 4)
-    s = m_ModFolder & StrToHex(m_ModName, True) & ".bin"
-    If (Len(Dir$(s)) = 0) Then
-        If (m_ModLen < 50) Or (m_ModLen > 5000000) Then
-            m_ModLen = 0
-            Exit Function
-        End If
-        s = vbNullChar
-        ReDim m_ModData(m_ModLen - 1)
-        m_ModState = 1
-        Call frmChat.AddChat(vbYellow, "[Warden] Downloading module: ", vbWhite, StrToHex(m_ModName, True) & ".bin")
-    Else
-        If (LoadModule(0, s) = 0) Then Exit Function
-        s = Chr$(&H1)
-        m_ModLen = 0
-        m_ModState = 2
-    End If
-    m_ModPos = 0
-    Call RC4CryptStr(s, m_KeyOut(), 1)
-    Call modOutboundPackets.Send0x5E(s)
-    HW0x00 = 1
-End Function
-Private Function HW0x01(ByVal hData As Long, ByVal uMsg As Long, ByVal wLen As Long, ByVal lParam As Long) As Long
-    If (Not m_ModState = 1) Then Exit Function
-    If (m_ModLen = 0) Then Exit Function
-    If (wLen < 4) Then Exit Function
-    Call CopyMemory(m_ModData(m_ModPos), ByVal hData + 3, wLen - 3)
-    m_ModPos = m_ModPos + (wLen - 3)
-    'Debug.Print m_ModPos & " Of " & m_ModLen
-    If (m_ModPos >= m_ModLen) Then
-        m_ModState = 2
-        HW0x01 = HW0x01Ex()
-    Else
-        HW0x01 = 1
-    End If
-End Function
-Private Function HW0x01Ex() As Long
-    On Error GoTo HW0x01ExErr
-    Dim bData()         As Byte
-    Dim I               As Long
-    Dim s               As String
-    ReDim bData(257)
-    Call RC4Key(m_ModKey(), bData(), 16)
-    Call RC4Crypt(m_ModData(), bData(), m_ModLen)
-    Call CopyMemory(I, m_ModData(0), 4)
-    If (I < &H120) Or (I > 5000000) Then GoTo HW0x01ExErr
-    ReDim bData(I - 1)
-    If (Not uncompress(bData(0), I, m_ModData(4), CLng(m_ModLen - &H108)) = 0) Then GoTo HW0x01ExErr
-    m_ModLen = 0
-    m_ModPos = 0
-    Erase m_ModData()
-    s = m_ModFolder & StrToHex(m_ModName, True) & ".bin"
-    I = FreeFile
-    Open s For Binary Lock Write As #I
-        Put #I, 1, bData()
-    Close #I
-    If (LoadModule(VarPtr(bData(0)), s) = 0) Then GoTo HW0x01ExErr
-    m_ModState = 2
-    bData(0) = 1
-    Call RC4Crypt(bData(), m_KeyOut(), 1)
-    Call modOutboundPackets.Send0x5E(Chr$(bData(0)))
-    Erase bData()
-    HW0x01Ex = 1
-    Exit Function
-HW0x01ExErr:
-    Erase m_ModData()
-    m_ModLen = 0
-    m_ModPos = 0
-    m_ModState = 0
-    Debug.Print "HW0x01Ex() Error: " & Err.description
-End Function
-Private Function HW0x02(ByVal hData As Long, ByVal uMsg As Long, ByVal wLen As Long, ByVal lParam As Long) As Long
-    On Error GoTo HW0x02Err
-    'eww, yep
-    Dim s               As String
-    Dim strData         As String
-    Dim P               As Long
-    Dim strOut          As String
-    Dim PosOut          As Long
-    Dim bHeader(6)      As Byte
-    
-    If (Not m_ModState = 2) Then
-        Debug.Print "HW0x02() Error: m_ModState == " & m_ModState & " (needs to be 2)"
-        Exit Function
-    End If
-    
-    If (wLen < 2) Then
-        Debug.Print "HW0x02() Error: wLen == " & wLen & " (needs to be >2)"
-        Exit Function
-    End If
-    
-    s = Space(wLen)
-    Call CopyMemory(ByVal s, ByVal hData, wLen)
-    
-    If (Not Asc(Mid$(s, 2, 1)) = 0) Then
-        Debug.Print "HW0x02() Error: Asc(Mid$(s, 2, 1)) == " & Asc(Mid$(s, 2, 1)) & " (needs to be 0)"
-        Exit Function
-    End If
-    
-    P = 3
-    PosOut = 8
-    strOut = Space(255) 'max size are are send buffer
-    Do Until (P >= wLen)
-        strData = Get0x02Data(s, P)
-        
-        If (Len(strData) = 0) Then
-            Debug.Print "HW0x02() Error: Len(strData) == 0"
-            Exit Function
-        End If
-        
-        Mid$(strOut, PosOut, Len(strData)) = strData
-        PosOut = PosOut + Len(strData)
-    Loop
-    strOut = Left$(strOut, (PosOut - 1))
-    bHeader(0) = &H2
-    Call CopyMemory(bHeader(1), CInt(PosOut - 8), 2)
-    Call CopyMemory(bHeader(3), WardenChecksum(Mid$(strOut, 8)), 4)
-    Call CopyMemory(ByVal strOut, bHeader(0), 7)
-    Call RC4CryptStr(strOut, m_KeyOut(), 1)
-    Call modOutboundPackets.Send0x5E(strOut)
-    HW0x02 = 1
-    Exit Function
-HW0x02Err:
-    Debug.Print "HW0x02() Error: " & Err.description
-End Function
-Private Function HW0x03(ByVal hData As Long, ByVal uMsg As Long, ByVal wLen As Long, ByVal lParam As Long) As Long
-    '//Ignore this
-End Function
-Private Function HW0x04(ByVal hData As Long, ByVal uMsg As Long, ByVal wLen As Long, ByVal lParam As Long) As Long
-    '//Ignore this
-End Function
-Private Function HW0x05(ByVal hData As Long, ByVal uMsg As Long, ByVal wLen As Long, ByVal lParam As Long) As Long
-    Dim ASM             As clsASM
-    Dim bKey(257)       As Byte
-    Dim bData()         As Byte
-    Dim lngRecv         As Long
-    If (Not m_ModState = 2) Then Exit Function
-    Set ASM = New clsASM
-    m_RC4 = 0
-    m_ModState = 0
-    With ASM
-        .push_v32 (4)
-        .push_v32 (VarPtr(m_Seed))
-        .mov__ecx_v32 (m_ModMem)
-        .xor__edx_edx
-        .mov__eax_v32 (m_Func(0))
-        .call_eax
-        .retn 8
-        .Execute
-    End With
-    Set ASM = Nothing
-    If (m_RC4 = 0) Then Exit Function
-    ReDim bData(wLen - 1)
-    Call CopyMemory(bData(0), ByVal hData, wLen)
-    Call CopyMemory(bKey(0), ByVal m_RC4 + 258, 258)
-    Call RC4Crypt(bData(), bKey(), wLen)
-    Call CopyMemory(bKey(0), ByVal m_RC4, 258)
-    m_PKT = vbNullString
-    Set ASM = New clsASM
-    With ASM
-        .push_v32 (VarPtr(lngRecv))
-        .push_v32 (wLen)
-        .push_v32 (VarPtr(bData(0)))
-        .mov__ecx_v32 (m_ModMem)
-        .xor__edx_edx
-        .mov__eax_v32 (m_Func(2))
-        .call_eax
-        .retn 8
-        .Execute
-    End With
-    Set ASM = Nothing
-    If (Len(m_PKT) = 0) Then Exit Function
-    Call RC4CryptStr(m_PKT, bKey(), 1)
-    Call RC4CryptStr(m_PKT, m_KeyOut(), 1)
-    Call CopyMemory(m_KeyOut(0), ByVal m_RC4, 258)
-    Call CopyMemory(m_KeyIn(0), ByVal m_RC4 + 258, 258)
-    m_ModState = 2
-    Call modOutboundPackets.Send0x5E(m_PKT)
-    m_RC4 = 0
-    m_PKT = vbNullString
+  If (ID = &H50) Then
+    Context.l_Product = GetDWORD(Mid$(sData, 13, 4))
+  ElseIf (ID = &H51) Then
+    Call WardenInitRC4(Context, Mid$(sData, 41, 4))
+  End If
 End Function
 
-
-Private Function PrepareModule(ByRef pModule As Long) As Long
-    '//carbon copy port from iagos code
-    Debug.Print "PrepareModule()"
-    Dim dwModuleSize        As Long
-    Dim pNewModule          As Long
-    dwModuleSize = getInteger(pModule, &H0)
-    pNewModule = malloc(dwModuleSize)
-    Call ZeroMemory(ByVal pNewModule, dwModuleSize)
-    Debug.Print "   Allocated " & dwModuleSize & " (0x" & hex(dwModuleSize) & ") bytes for new module"
-    Call CopyMemory(ByVal pNewModule, ByVal pModule, 40)
-    Dim dwSrcLocation       As Long
-    Dim dwDestLocation      As Long
-    Dim dwLimit             As Long
-    dwSrcLocation = &H28 + (getInteger(pNewModule, &H24) * 12)
-    dwDestLocation = getInteger(pModule, &H28)
-    dwLimit = getInteger(pModule, &H0)
-    Dim bSkip               As Boolean
-    Debug.Print "   Copying code sections to module."
-    While (dwDestLocation < dwLimit)
-        Dim dwCount         As Long
-        Call CopyMemory(ByVal VarPtr(dwCount), ByVal pModule + dwSrcLocation, 1)
-        Call CopyMemory(ByVal VarPtr(dwCount) + 1, ByVal pModule + dwSrcLocation + 1, 1)
-        dwSrcLocation = dwSrcLocation + 2
-        If (bSkip = False) Then
-            Call CopyMemory(ByVal pNewModule + dwDestLocation, ByVal pModule + dwSrcLocation, dwCount)
-            dwSrcLocation = dwSrcLocation + dwCount
-        End If
-        bSkip = Not bSkip
-        dwDestLocation = dwDestLocation + dwCount
-    Wend
-    Debug.Print "   Adjusting references to global variables..."
-    dwSrcLocation = getInteger(pModule, 8)
-    dwDestLocation = 0
-    Dim I                       As Long
-    Dim lng0x0C                 As Long
-    Dim lngTest                 As Long
-    Call CopyMemory(lng0x0C, ByVal pNewModule + &HC, 4)
-    While (I < lng0x0C)
-        Call CopyMemory(lngTest, ByVal pNewModule + dwSrcLocation, 1)
-        lngTest = lngTest And &HFF&
-        Call CopyMemory(ByVal VarPtr(lngTest) + 0, ByVal pNewModule + dwSrcLocation + 1, 1)
-        Call CopyMemory(ByVal VarPtr(lngTest) + 1, ByVal pNewModule + dwSrcLocation, 1)
-        dwDestLocation = dwDestLocation + lngTest
-        dwSrcLocation = dwSrcLocation + 2
-        Call insertInteger(pNewModule, dwDestLocation, getInteger(pNewModule, dwDestLocation) + pNewModule)
-        I = I + 1
-    Wend
-    Debug.Print "   Updating API library references.."
-    dwLimit = getInteger(pNewModule, &H20)
-    Dim dwProcStart             As Long
-    Dim szLib                   As String
-    Dim dwProcOffset            As Long
-    Dim hModule                 As Long
-    Dim dwProc                  As Long
-    Dim szFunc                  As String
-    For I = 0 To dwLimit - 1
-        dwProcStart = getInteger(pNewModule, &H1C) + (I * 8)
-        szLib = GetSTR(pNewModule + getInteger(pNewModule, dwProcStart))
-        dwProcOffset = getInteger(pNewModule, dwProcStart + 4)
-        Debug.Print "   Lib: " & szLib
-        hModule = LoadLibraryA(szLib)
-        dwProc = getInteger(pNewModule, dwProcOffset)
-        While dwProc
-            If (dwProc > 0) Then
-                szFunc = GetSTR(pNewModule + dwProc)
-                Debug.Print "       Function: " & szFunc
-                Call insertInteger(pNewModule, dwProcOffset, GetProcAddress(hModule, szFunc))
-            Else
-                dwProc = dwProc And &H7FFFFFFF
-                Debug.Print "       Ordinary: 0x" & hex(dwProc)
-            End If
-            dwProcOffset = dwProcOffset + 4
-            dwProc = getInteger(pNewModule, dwProcOffset)
-        Wend
-    Next I
-    Debug.Print "   Successfully mapped Warden Module to 0x" & hex(pNewModule)
-    PrepareModule = pNewModule
-End Function
-Private Sub InitModule()
-    Debug.Print "InitModule()"
-    Dim A               As Long
-    Dim B               As Long
-    Dim c               As Long
-    c = getInteger(m_Mod, &H18)
-    B = 1 - c
-    If (B > getInteger(m_Mod, &H14)) Then Exit Sub
-    A = getInteger(m_Mod, &H10)
-    A = getInteger(m_Mod, A + (B * 4)) + m_Mod
-    Debug.Print "   Initialize Function is mapped at 0x" & hex(A)
-    m_CallBack(0) = Addr2Ptr(AddressOf SendPacket)
-    m_CallBack(1) = Addr2Ptr(AddressOf CheckModule)
-    m_CallBack(2) = Addr2Ptr(AddressOf ModuleLoad)
-    m_CallBack(3) = Addr2Ptr(AddressOf AllocateMem)
-    m_CallBack(4) = Addr2Ptr(AddressOf FreeMemory)
-    m_CallBack(5) = Addr2Ptr(AddressOf SetRC4Data)
-    m_CallBack(6) = Addr2Ptr(AddressOf GetRC4Data)
-    m_CallBack(7) = VarPtr(m_CallBack(0))
-    Dim ASM         As New clsASM
-    With ASM
-        .mov__ecx_v32 (VarPtr(m_CallBack(7)))
-        .call_ptr (VarPtr(A))
-        .mov__ptr_eax (VarPtr(m_ModMem))
-        .retn 8
-        .Execute
-    End With
-    Set ASM = Nothing
-End Sub
-Private Sub UnloadModule()
-    Dim ASM         As New clsASM
-    With ASM
-        .mov__ecx_v32 (m_ModMem)
-        .call_ptr (VarPtr(m_Func(1)))
-        .retn 8
-        .Execute
-    End With
-    Set ASM = Nothing
-End Sub
-
-
-
-Private Sub SendPacket(ByVal ptrPacket As Long, ByVal dwSize As Long)
-    If (dwSize < 1) Then Exit Sub
-    If (dwSize > 5000) Then Exit Sub
-    m_PKT = Space(dwSize)
-    Call CopyMemory(ByVal m_PKT, ByVal ptrPacket, dwSize)
-    'Debug.Print "Warden.SendPacket() pkt=0x" & Hex(ptrPacket) & ", size=" & dwSize & vbCrLf & GetLog(m_PKT)
-End Sub
-Private Function CheckModule(ByVal ptrMod As Long, ByVal ptrKey As Long) As Long
-    'Debug.Print "Warden.CheckModule() " & ptrMod & "/" & ptrKey
-    'CheckModule = 0 '//Need to download
-    'CheckModule = 1 '//Don't need to download
-    CheckModule = 1
-End Function
-Private Function ModuleLoad(ByVal ptrRC4Key As Long, ByVal pModule As Long, ByVal dwModSize As Long) As Long
-    'Debug.Print "Warden.ModuleLoad() " & ptrMod & "/" & ptrKey
-    'ModuleLoad = 0 '//Need to download
-    'ModuleLoad = 1 '//Don't need to download
-    ModuleLoad = 1
-End Function
-Private Function AllocateMem(ByVal dwSize As Long) As Long
-    AllocateMem = malloc(dwSize)
-End Function
-Private Sub FreeMemory(ByVal dwMemory As Long)
-    Call free(dwMemory)
-    'Debug.Print "Warden.FreeMemory() 0x" & Hex(dwMemory)
-End Sub
-Private Function SetRC4Data(ByVal lpKeys As Long, ByVal dwSize As Long) As Long
-    'Debug.Print "Warden.SetRC4Data() 0x" & Hex(lpKeys) & "/0x" & Hex(dwSize)
-End Function
-Private Function GetRC4Data(ByVal lpBuffer As Long, ByRef dwSize As Long) As Long
-    'Debug.Print "Warden.GetRC4Data() 0x" & Hex(lpBuffer) & "/0x" & Hex(dwSize)
-    'GetRC4Data = 1 'got the keys already
-    'GetRC4Data = 0 'generate new keys
-    GetRC4Data = m_RC4
-    m_RC4 = lpBuffer
+Public Function WardenServerData(ByRef Context As WARDENCONTEXT, sData As String) As Boolean
+  Dim ID As Integer
+  ID = Asc(Mid(sData, 2, 1))
+  WardenServerData = False
+  If (ID = &H5E) Then
+      'frmChat.AddChat vbGreen, "Received Warden packet from Server"
+      
+      Dim sPacket As String
+      Dim opcode As Integer
+      
+      sPacket = Mid$(sData, 5)
+      Call rc4_crypt(Context.s_InKey, sPacket, Len(sPacket))
+      opcode = Asc(Left$(sPacket, 1))
+      
+      'frmChat.AddChat vbWhite, "Packet Data: " & vbNewLine & DebugOutput(sPacket)
+      
+      Select Case opcode
+        Case MEDIV_MODULE_INFORMATION: Call WardenModuleInfo(Context, Mid$(sPacket, 2))
+        Case MEDIV_MODULE_TRANSFER:    Call WardenModuleTransfer(Context, Mid$(sPacket, 2))
+        Case WARDEN_CHEAT_CHECKS:      Call WardenCheatChecks(Context, Mid$(sPacket, 2))
+        Case WARDEN_NEW_CRYPT_KEYS:    Call WardenHandleGeneric(Context, Mid$(sData, 5), opcode)
+        Case Else:                     Call WardenUnknown(Context, sPacket, opcode)
+      End Select
+      WardenServerData = True
+  End If
 End Function
 
-
-
-Private Function getInteger(ByRef bArray As Long, ByVal dwLocation As Long) As Long
-    Call CopyMemory(getInteger, ByVal bArray + dwLocation, 4)
-End Function
-Private Sub insertInteger(ByRef bArray As Long, ByVal dwLocation As Long, ByVal dwValue As Long)
-    Call CopyMemory(ByVal bArray + dwLocation, dwValue, 4)
-End Sub
-Private Function GetSTR(ByRef bArray As Long) As String
-    Dim bTest           As Byte
-    Dim I               As Long
-    Do
-        Call CopyMemory(bTest, ByVal bArray + I, 1)
-        If (bTest = 0) Then
-            If (I = 0) Then Exit Function
-            GetSTR = String(I, 0)
-            Call CopyMemory(ByVal GetSTR, ByVal bArray, I)
-            Exit Function
-        End If
-        I = I + 1
-    Loop
-End Function
 Private Function Addr2Ptr(ByVal lngAddr As Long) As Long
     Addr2Ptr = lngAddr
 End Function
 
-
-
-
-Private Sub Data_Init(ByRef R As RANDOMDATA, ByVal lngSeed As Long)
-    Dim s           As String * 4
-    Call CopyMemory(ByVal s, lngSeed, 4)
-    R.Sorc1 = modSHA1.Warden_SHA1(Left$(s, 2))
-    'R.Sorc1 = BSHA1(Left$(s, 2), True, True)
-    R.Sorc2 = modSHA1.Warden_SHA1(Right$(s, 2))
-    'R.Sorc2 = BSHA1(Right$(s, 2), True, True)
-    R.Data = String$(20, 0)
-    R.Data = modSHA1.Warden_SHA1(R.Sorc1 & R.Data & R.Sorc2)
-    'R.Data = BSHA1(R.Sorc1 & R.Data & R.Sorc2, True, True)
-    R.pos = 1
-End Sub
-Private Sub Data_Get_Bytes(ByRef R As RANDOMDATA, ByRef bData() As Byte, ByVal lngBytes As Long)
-    Dim I           As Long
-    For I = 0 To (lngBytes - 1)
-        bData(I) = Asc(Mid$(R.Data, R.pos, 1))
-        R.pos = R.pos + 1
-        If (R.pos > 20) Then
-            R.pos = 1
-            R.Data = modSHA1.Warden_SHA1(R.Sorc1 & R.Data & R.Sorc2)
-            'R.Data = BSHA1(R.Sorc1 & R.Data & R.Sorc2, True, True)
-        End If
-    Next I
-End Sub
-Private Sub RC4Key(ByRef bData() As Byte, ByRef B() As Byte, ByVal lngLengh As Long)
-    Dim I           As Long
-    Dim A           As Long
-    Dim c           As Byte
-    Dim bR(255)     As Byte
-    B(256) = 0
-    B(257) = 0
-    For I = 0 To 255
-        bR(I) = bData(I Mod lngLengh)
-        B(I) = I
-    Next I
-    A = 0
-    For I = 0 To 255
-        A = (A + B(I) + bR(I)) Mod 256
-        c = B(I)
-        B(I) = B(A)
-        B(A) = c
-    Next I
-End Sub
-Private Sub RC4CryptStr(ByRef s As String, ByRef bK() As Byte, ByVal pos As Long)
-    Dim A           As Long
-    Dim B           As Long
-    Dim c           As Byte
-    Dim I           As Long
-    A = bK(256)
-    B = bK(257)
-    For I = pos To Len(s)
-        A = (A + 1) Mod 256
-        B = (B + bK(A)) Mod 256
-        c = bK(A)
-        bK(A) = bK(B)
-        bK(B) = c
-        Mid(s, I, 1) = Chr$(Asc(Mid$(s, I, 1)) Xor bK((CInt(bK(A)) + bK(B)) Mod 256))
-    Next I
-    bK(256) = A
-    bK(257) = B
-End Sub
-Private Sub RC4Crypt(ByRef bData() As Byte, ByRef bK() As Byte, ByVal lngLengh As Long)
-    Dim A           As Long
-    Dim B           As Long
-    Dim c           As Byte
-    Dim I           As Long
-    A = bK(256)
-    B = bK(257)
-    For I = 0 To (lngLengh - 1)
-        A = (A + 1) Mod 256
-        B = (B + bK(A)) Mod 256
-        c = bK(A)
-        bK(A) = bK(B)
-        bK(B) = c
-        bData(I) = bData(I) Xor bK((CInt(bK(A)) + bK(B)) Mod 256)
-    Next I
-    bK(256) = A
-    bK(257) = B
-End Sub
-Private Function WardenChecksum(ByRef s As String) As Long
-    Dim lngData(4)  As Long
-    Call CopyMemory(lngData(0), ByVal modSHA1.Warden_SHA1(s), 20)
-    WardenChecksum = lngData(0) Xor lngData(1) Xor lngData(2) Xor lngData(3) Xor lngData(4)
-End Function
-Private Function Get0x02Data(ByRef s As String, ByRef P As Long) As String
-    Dim R           As String
-    Dim bTest       As Boolean
-    Dim A           As Long
-    Dim L           As Byte
-    If ((P + 6) >= Len(s)) Then Exit Function
-    bTest = (Asc(Mid(s, P + 1, 1)) = 0)
-    bTest = bTest And (Asc(Mid(s, P + 6, 1)) < &H40)
-    If bTest Then
-        Call CopyMemory(A, ByVal Mid$(s, P + 2, 4), 4)
-        L = Asc(Mid$(s, P + 6, 1))
-        If (A = &H4A3357) And (L = 8) Then R = RingoHexToStr("A3 80 CC 59 00 E8 3F 24")
-        If (A = &H46F428) And (L = 9) Then R = RingoHexToStr("84 C8 0F 84 05 01 00 00 8B")
-        If (A = &H4512E8) And (L = 5) Then R = RingoHexToStr("74 07 8A 43 46")
-        If (A = &H41E237) And (L = 4) Then R = RingoHexToStr("74 38 A0 51")
-        If (A = &H41E23E) And (L = 16) Then R = RingoHexToStr("0F BF 0D 54 EF 6C 00 0F BF 15 58 EF 6C 00 0C 01")
-        If (A = &H41E24F) And (L = 9) Then R = RingoHexToStr("0F BF 35 56 EF 6C 00 A2 51")
-        If (A = &H4BD60F) And (L = 8) Then R = RingoHexToStr("E8 CC 32 FC FF E8 47 F9")
-        If (A = &H46F42A) And (L = 9) Then R = RingoHexToStr("0F 84 05 01 00 00 8B 8E DC")
-        If (A = &H41E25B) And (L = 10) Then R = RingoHexToStr("0F BF 05 52 EF 6C 00 8D 74 06")
-        If (A = &H450240) And (L = 6) Then R = RingoHexToStr("74 72 85 C0 74 6E")
-        If Len(R) Then
-            P = P + 7
-            Get0x02Data = vbNullChar & R
-            Exit Function
-        End If
-    End If
-    If ((P + 29) >= Len(s)) Then Exit Function
-    bTest = (Asc(Mid$(s, P + 29, 1)) < &H80)
-    bTest = bTest And (Asc(Mid$(s, P + 28, 1)) = 0)
-    bTest = bTest And (Asc(Mid$(s, P + 27, 1)) < &H40)
-    If (bTest = False) Then Exit Function
-    Call CopyMemory(A, ByVal Mid$(s, P + 26, 4), 4)
-    Select Case A
-        Case &H10000021
-        Case &H10000050
-        Case &H10000070
-        Case &H100000A1
-        Case &H11000020
-        Case &H11000021
-        Case &H16000030
-        Case &H1700007C
-        Case &H170001E9
-        Case &H19000059
-        Case &H1A0000C3
-        Case &H1F000219
-        Case &H1F000234
-        Case &H20000022
-        Case &H20000049
-        Case &H23000048
-        Case &H24000032
-        Case &H250001EE
-        Case &H250001FE
-        Case &H28000091
-        Case &H2A0000E1
-        Case &H2A0000F1
-        Case &H3000069C
-        Case &H300006D4
-        Case &H300006D7
-        Case &H300007A8
-        Case &H32000121
-        Case &H3700008E
-        Case &H40000081
-        Case &H58000092
-        Case &HC0002D0
-        Case &HD0000E8
-        Case &HE0001FD
-        Case &HE000622
-        Case Else: Exit Function
-    End Select
-    P = P + 30
-    Get0x02Data = vbNullChar
-End Function
-
 Public Function CanHandleWarden() As Boolean
-    CanHandleWarden = (Dir$(App.Path & "\zlib.dll") <> vbNullString)
+    CanHandleWarden = (Dir$(App.Path & "\zlib1.dll") <> vbNullString) And _
+                      (Dir$(App.Path & "\Warden.dll") <> vbNullString)
+End Function
+Private Function GetDWORD(ByVal Value As String) As Long
+    Dim Result As Long
+    CopyMemory Result, ByVal Value, 4
+    GetDWORD = Result
+End Function
+Private Function CreateDWORD(ByVal Value As Long) As String
+    Dim Result As String * 4
+    CopyMemory ByVal Result, Value, 4
+    CreateDWORD = Result
 End Function
 
-Private Function RingoHexToStr(ByVal hex As String) As String
-    RingoHexToStr = String(Len(hex) / 3, 0)
-    Dim iPos As Long
-    For I = 1 To Len(hex) Step 3
-        iPos = iPos + 1
-        Mid$(RingoHexToStr, iPos, 1) = Chr("&H" & Mid$(hex, I, 2))
-    Next I
+
+Private Sub WardenModuleInfo(ByRef Context As WARDENCONTEXT, sData As String)
+  'MEDIV_MODULE_INFORMATION
+  '(BYTE[16]) MD5 Checksum
+  '(BYTE[16]) Module RC4 Seed
+  '(DWORD)    Module Compressed Length
+  
+  Dim pBuf As New clsDataBuffer
+  pBuf.data = sData
+  
+  Context.s_MD5 = pBuf.GetRaw(16)
+  Context.s_Key = pBuf.GetRaw(16)
+  Context.l_ModuleLen = pBuf.GetDWORD
+  
+  If MDebug("warden") Then
+    Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Received Warden 0x00")
+    Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Name:     ", vbWhite, StrToHex(Context.s_MD5, True))
+    Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Key Seed: ", vbWhite, StrToHex(Context.s_Key, True))
+    Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Length:   ", vbWhite, Context.l_ModuleLen)
+  End If
+    
+  If (WardenLoadModule(Context, True)) Then
+    If (WardenInitModule(Context)) Then
+      Call WardenSendData(Context, Chr$(1))
+    Else
+      If (MDebug("warden")) Then
+        Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Corrupted module, Requesting download")
+      End If
+      Call WardenSendData(Context, Chr$(1))
+    End If
+  Else
+    If (MDebug("warden")) Then
+      Call frmChat.AddChat(RTBColors.InformationText, "[Warden] New Module, Requesting download")
+    End If
+    Call WardenSendData(Context, Chr$(0))
+  End If
+End Sub
+
+Private Sub WardenModuleTransfer(ByRef Context As WARDENCONTEXT, sData As String)
+  'MEDIV_MODULE_TRANSFER
+  '(DWORD) Payload Length
+  '(Void)  Payload
+
+  Dim pBuf As New clsDataBuffer
+  Dim data_length As Long
+  
+  pBuf.data = sData
+  data_length = pBuf.GetWord
+  Context.s_Module = Context.s_Module & pBuf.GetRaw(data_length)
+      
+  If (Len(Context.s_Module) = Context.l_ModuleLen) Then
+    If (MDebug("warden")) Then
+      Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Module Download complete")
+    End If
+    
+    If (WardenLoadModule(Context, False)) Then
+      Call WriteFile(m_ModFolder & StrToHex(Context.s_MD5, True) & ".bin", Context.s_Module)
+      If (WardenInitModule(Context)) Then
+        Call WardenSendData(Context, Chr$(1))
+      Else
+        Call WardenSendData(Context, Chr$(0))
+      End If
+    Else
+      Call WardenSendData(Context, Chr$(0))
+    End If
+  End If
+End Sub
+
+Private Sub WardenCheatChecks(ByRef Context As WARDENCONTEXT, sData As String)
+  'WARDEN_CHEAT_CHECKS
+  '(PString[]) Libraries
+  '[void] Commands
+  '  PAGE_CHECK_A
+  '    (DWORD)    SHA1 Seed
+  '    (Byte[20]) SHA1
+  '    (DWORD)    Address
+  '    (Byte)     Length
+  '  MEM_CHECK
+  '    (Byte)  Lib ID
+  '    (DWORD) Address
+  '    (Byte)  Length
+  
+  Dim sNames As String
+  Dim key As Byte
+  Dim lib_length As Long
+  Dim x As Integer
+  Dim Offset As Long
+  Dim mem As String
+  Dim opcode As Byte
+  Dim lib_id As Byte
+  Dim lib_count As Integer
+  Dim sTemp As String
+  
+  Dim tBuffer As New clsDataBuffer
+  Dim pBuffer As New clsDataBuffer
+  pBuffer.data = sData
+  
+  key = Asc(Right(sData, 1))
+  If (MDebug("warden")) Then
+    Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Received Cheat Check")
+    Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Key: 0x" & ZeroOffset(key, 2))
+  End If
+  
+  lib_length = pBuffer.GetByte
+  x = 0
+  
+  Do While (lib_length > 0)
+    x = x + 1
+    sTemp = pBuffer.GetRaw(lib_length)
+    sNames = sNames & Chr$(0) & sTemp
+    If (MDebug("warden")) Then
+      Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Library: (" & x & ") " & sTemp)
+    End If
+    lib_length = pBuffer.GetByte
+  Loop
+  lib_count = x
+  sTemp = vbNullString
+ 
+  Do While (pBuffer.length() >= pBuffer.Position() + 2)
+    opcode = pBuffer.GetByte Xor key
+    
+    If (Context.b_MEM_CHECK = 0 Or Context.b_PAGE_CHECK_A = 0) Then
+      tBuffer.Clear
+      tBuffer.data = pBuffer.GetRaw(6, True)
+      lib_id = tBuffer.GetByte
+      Offset = tBuffer.GetDWORD
+      x = tBuffer.GetByte
+      
+      If (lib_id > lib_count) Then
+        Context.b_PAGE_CHECK_A = opcode
+      Else
+        'Not perfect but works for all know versions of Warden and there data
+        
+        If ((Offset < &H40000000 And lib_id = 0) And (Offset > &H60000000 And lib_id = 0)) _
+           Or (Offset > &H10000000 And lib_id > 0) Then
+          Context.b_PAGE_CHECK_A = opcode
+        Else
+          Context.b_MEM_CHECK = opcode
+        End If
+      End If
+    End If
+    
+    If (opcode = Context.b_PAGE_CHECK_A) Then
+      If (MDebug("warden")) Then
+        Dim page_seed As Long
+        Dim page_sha1 As String
+        Dim page_address As Long
+        page_seed = pBuffer.GetDWORD
+        page_sha1 = pBuffer.GetRaw(20)
+        page_address = pBuffer.GetDWORD
+        x = pBuffer.GetByte
+        Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Opcode: 0x" & ZeroOffset(opcode, 2) & _
+        " Page: " & Right$("   " & x, 3) & " @ 0x" & ZeroOffset(page_address, 8) & _
+        " Seed: 0x" & ZeroOffset(page_seed, 8) & " Hash: " & StrToHex(page_sha1, True))
+      Else
+        Call pBuffer.GetRaw(29) 'remove from the buffer
+      End If
+      sTemp = sTemp & Chr$(0)
+    ElseIf (opcode = Context.b_MEM_CHECK) Then
+      lib_id = pBuffer.GetByte
+      Offset = pBuffer.GetDWORD
+      x = pBuffer.GetByte
+      mem = WardenGetMemorySegment(Context, Offset, CByte(x), opcode, lib_id, sNames)
+      If (mem = vbNullString) Then
+        'sTemp = sTemp & Chr$(1)
+        Exit Sub 'No point in sending it without data
+      Else
+        sTemp = sTemp & Chr$(0) & mem
+      End If
+    Else
+      Call frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Unknown Mem Check Opcode, You will be disconnected soon.")
+      Exit Sub
+    End If
+  Loop
+  
+  tBuffer.Clear
+  tBuffer.InsertByte WARDEN_CHEAT_CHECKS
+  tBuffer.InsertWord Len(sTemp)
+  tBuffer.InsertDWord sha1_checksum(sTemp, Len(sTemp), 0)
+  tBuffer.InsertNonNTString sTemp
+  
+  sTemp = tBuffer.data
+  
+  Call WardenSendData(Context, sTemp)
+End Sub
+
+
+Private Sub WardenHandleGeneric(ByRef Context As WARDENCONTEXT, sData As String, ID As Integer)
+  Dim length As Long
+  Dim tmp As String
+  tmp = sData
+    
+  Call CopyMemory(ByVal Context.l_InitReturn + &H20, ByVal Context.s_OutKey, &H102)
+  length = module_handle_packet(ByVal Context.l_InitReturn, tmp, Len(sData))
+      
+  If (length = Len(sData)) Then
+    If (MDebug("warden")) Then Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Handled packet successfully")
+    Call CopyMemory(ByVal Context.s_OutKey, ByVal Context.l_InitReturn + &H20, &H102)
+    Call CopyMemory(ByVal Context.s_InKey, ByVal Context.l_InitReturn + &H122, &H102)
+  Else
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Failed to handle packet, you will be disconnected soon!")
+  End If
+
+End Sub
+
+Private Sub WardenUnknown(ByRef Context As WARDENCONTEXT, sData As String, ID As Integer)
+  Call frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Unknown Opcode, You may be disconnected soon.")
+  If MDebug("warden") Then
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Unhandled Warden Opcode 0x" & ZeroOffset(ID, 2))
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, "Packet data: " & vbCrLf & DebugOutput(sData))
+  End If
+End Sub
+
+Private Sub WardenSendData(ByRef Context As WARDENCONTEXT, sData As String)
+  Dim pBuffer As New clsDataBuffer
+  Call rc4_crypt(Context.s_OutKey, sData, Len(sData))
+  pBuffer.InsertNonNTString sData
+  pBuffer.SendPacket &H5E
+End Sub
+
+Public Function WardenLoadModule(ByRef Context As WARDENCONTEXT, Optional FromFile As Boolean = False) As Boolean
+  Dim x As Long
+  Dim temp As String
+  Dim data As String
+  
+  If (FromFile) Then
+    If (Dir$(m_ModFolder & StrToHex(Context.s_MD5, True) & ".bin") <> vbNullString) Then
+      Open m_ModFolder & StrToHex(Context.s_MD5, True) & ".bin" For Binary Access Read As #1
+        data = String$(LOF(1), Chr$(0))
+        Get 1, 1, data
+      Close #1
+    Else
+      WardenLoadModule = False
+      Exit Function
+    End If
+  Else
+    data = Context.s_Module
+  End If
+  
+  If md5_verify_data(data, Len(data), Context.s_MD5) Then
+    If (MDebug("warden")) Then Call frmChat.AddChat(RTBColors.InformationText, "[Warden] MD5 Passed")
+    Dim Base As String
+    rc4_crypt_data data, Len(data), Context.s_Key, Len(Context.s_Key)
+    
+    If (Mid(data, Len(data) - &H103, 4) = "NGIS") Then
+      If (MDebug("warden")) Then Call frmChat.AddChat(RTBColors.InformationText, "[Warden] RC4 Passed")
+      x = module_get_uncompressed_size(data)
+      temp = String$(x, Chr$(0))
+      If (Not module_decompress(data, Len(data), temp, x)) Then
+        If (MDebug("warden")) Then Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Decompressions Successful")
+        x = module_get_prep_size(temp)
+        Context.l_Module = module_prep(temp, AddressOf WardenDebugCallback)
+        WardenLoadModule = (Context.l_Module > 0)
+        
+        Exit Function
+      Else
+        If (MDebug("warden")) Then Call frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Decompression Failed")
+      End If
+    Else
+      If (MDebug("warden")) Then Call frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] RC4 Failed")
+    End If
+  Else
+    If (MDebug("warden")) Then Call frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] MD5 Failed")
+  End If
+  WardenLoadModule = False
 End Function
+
+Public Function WardenInitModule(ByRef Context As WARDENCONTEXT) As Boolean
+  Dim address As Long
+  address = module_get_init_address(Context.l_Module) + Context.l_Module
+  
+  If (MDebug("warden")) Then Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Attempting to call init at 0x" & ZeroOffset(address, 8))
+  
+  Context.l_Callbacks(0) = Addr2Ptr(AddressOf WardenSendPacket)
+  Context.l_Callbacks(1) = Addr2Ptr(AddressOf WardenCheckModule)
+  Context.l_Callbacks(2) = Addr2Ptr(AddressOf WardenModuleLoad)
+  Context.l_Callbacks(3) = Addr2Ptr(AddressOf WardenAllocateMem)
+  Context.l_Callbacks(4) = Addr2Ptr(AddressOf WardenFreeMemory)
+  Context.l_Callbacks(5) = Addr2Ptr(AddressOf WardenSetRC4Data)
+  Context.l_Callbacks(6) = Addr2Ptr(AddressOf WardenGetRC4Data)
+  Context.l_Callbacks(7) = VarPtr(Context.l_Callbacks(0))
+  
+  Context.l_InitReturn = module_init(address, VarPtr(Context.l_Callbacks(7)))
+  
+  If (Context.l_InitReturn <> 0) Then
+    If (MDebug("warden")) Then Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Init() = 0x" & ZeroOffset(Context.l_InitReturn, 8))
+    Call module_init_rc4(AddressOf WardenDebugCallback, ByVal Context.l_InitReturn, ByVal Context.s_RC4Seed, Len(Context.s_RC4Seed))
+    
+    Call CopyMemory(ByVal Context.l_InitReturn + &H20, ByVal Context.s_OutKey, &H102)
+    Call CopyMemory(ByVal Context.l_InitReturn + &H122, ByVal Context.s_InKey, &H102)
+  Else
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Init failed, You will be disconnected soon!")
+  End If
+  WardenInitModule = (Context.l_InitReturn <> 0)
+End Function
+
+
+
+Public Sub WardenDebugCallback(ByVal color As Long, ByVal addr As Long, ByVal length As Long)
+  If (Not MDebug("warden")) Then Exit Sub
+  Dim msg As String
+  msg = Space(length)
+  CopyMemory ByVal msg, ByVal addr, length
+  
+  Call frmChat.AddChat(RTBColors.InformationText, "[Warden] ", color, msg)
+End Sub
+Public Sub WriteFile(sPath As String, sData As String)
+  Dim i As Integer
+  i = FreeFile
+  Open sPath For Binary Access Write As #i
+    Put #i, 1, sData
+  Close #1
+End Sub
+
+
+
+Private Sub WardenSendPacket(ByVal ptrPacket As Long, ByVal dwSize As Long)
+  Dim m_PKT As String
+  Dim pBuffer As New clsDataBuffer
+  
+  m_PKT = Space(dwSize)
+  Call CopyMemory(ByVal m_PKT, ByVal ptrPacket, dwSize)
+  If (MDebug("warden")) Then
+    Call frmChat.AddChat(RTBColors.InformationText, "[Warden] SendPacket(0x" & ZeroOffset(ptrPacket, 8) & _
+         ", " & dwSize & ")" & vbNewLine & DebugOutput(m_PKT))
+  End If
+  pBuffer.data = m_PKT
+  pBuffer.SendPacket &H5E
+End Sub
+Private Function WardenCheckModule(ByVal ptrMod As Long, ByVal ptrKey As Long) As Long
+  If (MDebug("warden")) Then
+    Call frmChat.AddChat(RTBColors.InformationText, "[Warden] CheckModule(0x" & ZeroOffset(ptrMod, 8) & _
+         ", 0x" & ZeroOffset(ptrKey, 8) & ")")
+  End If
+  'CheckModule = 0 '//Need to download
+  'CheckModule = 1 '//Don't need to download
+  WardenCheckModule = 1
+End Function
+Private Function WardenModuleLoad(ByVal ptrRC4Key As Long, ByVal pModule As Long, ByVal dwModSize As Long) As Long
+  If (MDebug("warden")) Then
+    Call frmChat.AddChat(RTBColors.InformationText, "[Warden] ModuleLoad(0x" & ZeroOffset(ptrRC4Key, 8) & _
+         ", 0x" & ZeroOffset(pModule, 8) & ", 0x" & ZeroOffset(dwModSize, 8) & ")")
+  End If
+  'ModuleLoad = 0 '//Need to download
+  'ModuleLoad = 1 '//Don't need to download
+  WardenModuleLoad = 1
+End Function
+Private Function WardenAllocateMem(ByVal dwSize As Long) As Long
+  WardenAllocateMem = malloc(dwSize)
+  If (MDebug("warden")) Then
+    Call frmChat.AddChat(RTBColors.InformationText, "[Warden] AllocateMem(" & dwSize & ") = 0x" & ZeroOffset(WardenAllocateMem, 8))
+  End If
+End Function
+Private Sub WardenFreeMemory(ByVal dwMemory As Long)
+  Call free(dwMemory)
+    
+  If (MDebug("warden")) Then
+    Call frmChat.AddChat(RTBColors.InformationText, "[Warden] FreeMem(0x" & ZeroOffset(dwMemory, 8) & ")")
+  End If
+End Sub
+Private Function WardenSetRC4Data(ByVal lpKeys As Long, ByVal dwSize As Long) As Long
+  If (MDebug("warden")) Then
+    Call frmChat.AddChat(RTBColors.InformationText, "[Warden] SetRC4Data(0x" & ZeroOffset(lpKeys, 8) & _
+                         ", 0x" & ZeroOffset(dwSize, 8) & ")")
+  End If
+End Function
+Private Function WardenGetRC4Data(ByVal lpBuffer As Long, ByRef dwSize As Long) As Long
+  If (MDebug("warden")) Then
+    Call frmChat.AddChat(RTBColors.InformationText, "[Warden] GetRC4Data(0x" & ZeroOffset(lpBuffer, 8) & _
+                         ", 0x" & ZeroOffset(dwSize, 8) & ")")
+  End If
+  'GetRC4Data = 1 'got the keys already
+  'GetRC4Data = 0 'generate new keys
+  WardenGetRC4Data = 1
+End Function
+
+Private Function WardenGetMemorySegment(ByRef Context As WARDENCONTEXT, address As Long, length As Long, opcode As Byte, lib_id As Byte, names As String) As String
+  Dim data As String
+  Dim game_client As String
+  Dim lib_name As String
+  If (lib_id > 0) Then lib_name = Split(names & String$(lib_id, Chr$(0)), Chr$(0))(lib_id)
+  
+  game_client = CreateDWORD(Context.l_Product)
+  If (game_client = "PX3W") Then
+    game_client = "3RAW"
+  ElseIf (game_client = "PXES") Then
+    game_client = "RATS"
+  End If
+  
+  If (lib_id > 0) Then
+    data = ReadINI(game_client & "_" & lib_name, ZeroOffset(length, 2) & "_" & ZeroOffset(address, 8), "./Warden.ini")
+  Else
+    data = ReadINI(game_client & "_Mem_Check", ZeroOffset(length, 2) & "_" & ZeroOffset(address, 8), "./Warden.ini")
+  End If
+  
+  WardenGetMemorySegment = vbNullString
+  
+  If data = vbNullString Then
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Could not find memory segment " & length & _
+    " at 0x" & ZeroOffset(address, 8) & " for " & IIf(Len(lib_name) > 0, lib_name, "MEM_CHECK") & ". You will be disconnected soon.")
+    Call frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Make sure you have the latest Warden.ini from http://www.stealthbot.net/board/index.php?showtopic=41491")
+  Else
+    WardenGetMemorySegment = HexToStr(data)
+    If (MDebug("warden")) Then
+      Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Opcode: 0x" & ZeroOffset(opcode, 2) & _
+      " Read: " & Right$("   " & length, 3) & " @ (" & lib_id & ") 0x" & ZeroOffset(address, 8) & _
+      " Data: " & data)
+    End If
+  End If
+End Function
+
+

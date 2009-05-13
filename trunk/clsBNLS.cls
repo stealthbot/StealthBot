@@ -206,7 +206,7 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     
     If (MDebug("all")) Then
         frmChat.AddChat COLOR_BLUE, "BNLS RECV 0x" & _
-            Right$("00" & hex(PacketID), 2)
+            Right$("00" & Hex(PacketID), 2)
     End If
     
     CachePacket StoC, stBNLS, PacketID, Len(Data), Data
@@ -267,12 +267,12 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
             If Len(Data) > 12 Then  ' We have a response!
                 pD.Position = pD.Position + 4
                 
-                ds.SetVersion pD.GetDWord
-                ds.SetCheckSum pD.GetDWord
+                ds.SetVersion pD.GetDWORD
+                ds.SetCheckSum pD.GetDWORD
                 ds.SetExeInfo pD.GetString
                 
                 pD.Position = pD.Position + 4
-                ds.SetVerByte pD.GetDWord
+                ds.SetVerByte pD.GetDWORD
                 
                 ' removed cd key hashing @ bnls ~Pyro
                 'Call Send_0x01(BotVars.CDKey)
@@ -485,12 +485,6 @@ Private Sub Send_BNLS0x51()
         .InsertDWord &H0
 
         .InsertNonNTString KeyHash
-        
-        'Add warden support
-        If BotVars.Product = "RATS" Or BotVars.Product = "PXES" Then
-            Call CopyMemory(lngWardenSeed, ByVal KeyHash, 4)
-            Call modWarden.WardenInit(lngWardenSeed)
-        End If
         
         If ((BotVars.Product = "PX2D") Or _
             (BotVars.Product = "PX3W")) Then

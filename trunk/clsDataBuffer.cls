@@ -52,7 +52,7 @@ Public Function getCripple() As Boolean
 
 End Function
 
-Public Property Let Data(ByVal str As String)
+Public Property Let data(ByVal str As String)
 
     ' ...
     ReDim m_buf(0 To Len(str))
@@ -65,24 +65,24 @@ Public Property Let Data(ByVal str As String)
 
 End Property
 
-Public Property Get Data() As String
+Public Property Get data() As String
 
     ' ...
-    Data = String(m_bufsize, Chr$(0))
+    data = String(m_bufsize, Chr$(0))
 
     ' ...
-    CopyMemory ByVal Data, m_buf(0), m_bufsize
+    CopyMemory ByVal data, m_buf(0), m_bufsize
 
 End Property
 
 ' ...
-Public Function InsertByte(ByVal Data As Byte)
+Public Function InsertByte(ByVal data As Byte)
 
     ' resize buffer
     ReDim Preserve m_buf(0 To (m_bufsize + 1))
 
     ' copy data to buffer
-    m_buf(m_bufsize) = Data
+    m_buf(m_bufsize) = data
     
     ' store buffer Length
     m_bufsize = (m_bufsize + 1)
@@ -90,45 +90,45 @@ Public Function InsertByte(ByVal Data As Byte)
 End Function ' end function InsertByte
 
 ' ...
-Public Function InsertByteArr(ByRef Data() As Byte)
+Public Function InsertByteArr(ByRef data() As Byte)
 
     ' resize buffer
-    ReDim Preserve m_buf(0 To (m_bufsize + (UBound(Data) + 1)))
+    ReDim Preserve m_buf(0 To (m_bufsize + (UBound(data) + 1)))
 
     ' copy data to buffer
-    CopyMemory m_buf(m_bufsize), Data(0), (UBound(Data) + 1)
+    CopyMemory m_buf(m_bufsize), data(0), (UBound(data) + 1)
 
     ' store buffer Length
-    m_bufsize = (m_bufsize + (UBound(Data) + 1))
+    m_bufsize = (m_bufsize + (UBound(data) + 1))
     
 End Function ' end function InsertByte
 
 ' ...
-Public Sub GetByteArr(ByRef Data() As Byte, Optional ByVal Length As Integer = -1)
+Public Sub GetByteArr(ByRef data() As Byte, Optional ByVal length As Integer = -1, Optional Peek As Boolean = False)
 
     ' ...
-    If (Length = -1) Then
-        Length = m_bufsize
+    If (length = -1) Then
+        length = m_bufsize
     End If
     
     ' ...
-    If ((m_bufpos + Length) > m_bufsize) Then
+    If ((m_bufpos + length) > m_bufsize) Then
         Exit Sub
     End If
     
     ' resize buffer
-    ReDim Data(0 To Length)
+    ReDim data(0 To length)
 
     ' copy data to buffer
-    CopyMemory Data(0), m_buf(m_bufpos), Length
+    CopyMemory data(0), m_buf(m_bufpos), length
 
     ' store buffer Length
-    m_bufpos = (m_bufpos + Length)
+    If (Not Peek) Then m_bufpos = (m_bufpos + length)
     
 End Sub      ' end function InsertByte
 
 ' ...
-Public Function GetByte() As Byte
+Public Function GetByte(Optional Peek As Boolean = False) As Byte
 
     ' ...
     If ((m_bufpos + 1) > m_bufsize) Then
@@ -139,18 +139,18 @@ Public Function GetByte() As Byte
     GetByte = m_buf(m_bufpos)
 
     ' ...
-    m_bufpos = (m_bufpos + 1)
+    If (Not Peek) Then m_bufpos = (m_bufpos + 1)
 
 End Function ' end function GetByte
 
 ' ...
-Public Function InsertWord(ByVal Data As Integer)
+Public Function InsertWord(ByVal data As Integer)
 
     ' resize buffer
     ReDim Preserve m_buf(0 To (m_bufsize + 2))
 
     ' copy data to buffer
-    CopyMemory m_buf(m_bufsize), Data, 2
+    CopyMemory m_buf(m_bufsize), data, 2
     
     ' store buffer Length
     m_bufsize = (m_bufsize + 2)
@@ -158,7 +158,7 @@ Public Function InsertWord(ByVal Data As Integer)
 End Function ' end function InsertWord
 
 ' ...
-Public Function GetWord() As Integer
+Public Function GetWord(Optional Peek As Boolean = False) As Integer
 
     ' ...
     If ((m_bufpos + 2) > m_bufsize) Then
@@ -169,18 +169,18 @@ Public Function GetWord() As Integer
     CopyMemory GetWord, m_buf(m_bufpos), 2
 
     ' ...
-    m_bufpos = (m_bufpos + 2)
+    If (Not Peek) Then m_bufpos = (m_bufpos + 2)
 
 End Function ' end function GetWord
 
 ' ...
-Public Function InsertDWord(ByVal Data As Long)
+Public Function InsertDWord(ByVal data As Long)
 
     ' resize data buffer
     ReDim Preserve m_buf(0 To (m_bufsize + 4))
 
     ' copy data to buffer
-    CopyMemory m_buf(m_bufsize), Data, 4
+    CopyMemory m_buf(m_bufsize), data, 4
     
     ' store buffer Length
     m_bufsize = (m_bufsize + 4)
@@ -188,7 +188,7 @@ Public Function InsertDWord(ByVal Data As Long)
 End Function ' end function InsertDWord
 
 ' ...
-Public Function GetDWord() As Long
+Public Function GetDWORD(Optional Peek As Boolean = False) As Long
 
     ' ...
     If ((m_bufpos + 4) > m_bufsize) Then
@@ -196,15 +196,15 @@ Public Function GetDWord() As Long
     End If
 
     ' copy data to buffer
-    CopyMemory GetDWord, m_buf(m_bufpos), 4
+    CopyMemory GetDWORD, m_buf(m_bufpos), 4
 
     ' ...
-    m_bufpos = (m_bufpos + 4)
+    If (Not Peek) Then m_bufpos = (m_bufpos + 4)
 
 End Function ' end function GetDWord
 
 ' ...
-Public Function GetFileTime() As Date
+Public Function GetFileTime(Optional Peek As Boolean = False) As Date
 
     Dim ft As FILETIME ' ...
 
@@ -217,7 +217,7 @@ Public Function GetFileTime() As Date
     CopyMemory ft, m_buf(m_bufpos), 8
 
     ' ...
-    m_bufpos = (m_bufpos + 8)
+    If (Not Peek) Then m_bufpos = (m_bufpos + 8)
 
     ' ...
     GetFileTime = FileTimeToDate(ft)
@@ -225,21 +225,21 @@ Public Function GetFileTime() As Date
 End Function ' end function GetFileTime
 
 ' ...
-Public Function InsertNonNTString(ByVal Data As String)
+Public Function InsertNonNTString(ByVal data As String)
 
     ' resize buffer
-    ReDim Preserve m_buf(0 To (m_bufsize + Len(Data)))
+    ReDim Preserve m_buf(0 To (m_bufsize + Len(data)))
     
     ' copy data to buffer
-    CopyMemory m_buf(m_bufsize), ByVal Data, Len(Data)
+    CopyMemory m_buf(m_bufsize), ByVal data, Len(data)
     
     ' store buffer Length
-    m_bufsize = (m_bufsize + Len(Data))
+    m_bufsize = (m_bufsize + Len(data))
     
 End Function ' end function InsertNonNTString
 
 ' ...
-Public Function InsertNTString(ByRef Data As String, _
+Public Function InsertNTString(ByRef data As String, _
     Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI)
     
     Dim arrStr() As Byte ' ...
@@ -247,20 +247,20 @@ Public Function InsertNTString(ByRef Data As String, _
     ' ...
     Select Case (Encoding)
         Case STRINGENCODING.ANSI
-            arrStr() = StrConv(Data, vbFromUnicode)
+            arrStr() = StrConv(data, vbFromUnicode)
             
         Case STRINGENCODING.UTF8
-            arrStr() = modUTF8.UTF8Encode(Data)
+            arrStr() = modUTF8.UTF8Encode(data)
             
         Case STRINGENCODING.UTF16
-            arrStr() = StrConv(Data, vbUnicode)
+            arrStr() = StrConv(data, vbUnicode)
     End Select
     
     ' resize buffer and include terminating null character
     ReDim Preserve m_buf(0 To (m_bufsize + (UBound(arrStr) + 2)))
     
     ' copy data to buffer
-    If (Data <> vbNullString) Then
+    If (data <> vbNullString) Then
         CopyMemory m_buf(m_bufsize), arrStr(0), (UBound(arrStr) + 1)
     End If
 
@@ -270,59 +270,59 @@ Public Function InsertNTString(ByRef Data As String, _
 End Function ' end function InsertNTString
 
 ' ...
-Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI) As String
+Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI, Optional Peek As Boolean = False) As String
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     ' ...
-    For I = m_bufpos To m_bufsize
-        If (m_buf(I) = &H0) Then
+    For i = m_bufpos To m_bufsize
+        If (m_buf(i) = &H0) Then
             Exit For
         End If
-    Next I
+    Next i
 
     ' ...
-    If (I < m_bufsize) Then
+    If (i < m_bufsize) Then
         ' ...
-        GetString = String$(I - m_bufpos, Chr$(0))
+        GetString = String$(i - m_bufpos, Chr$(0))
             
         ' copy data to buffer
-        CopyMemory ByVal GetString, m_buf(m_bufpos), I - m_bufpos
+        CopyMemory ByVal GetString, m_buf(m_bufpos), i - m_bufpos
         
         ' ...
-        m_bufpos = I + 1
+        If (Not Peek) Then m_bufpos = i + 1
     End If
 
 End Function ' end function GetString
 
 ' ...
-Public Function GetRaw(Optional ByVal Length As Integer = -1) As String
+Public Function GetRaw(Optional ByVal length As Integer = -1, Optional Peek As Boolean = False) As String
 
     ' ...
-    If (Length = -1) Then
-        Length = m_bufsize
+    If (length = -1) Then
+        length = m_bufsize
     End If
     
     ' ...
-    If ((m_bufpos + Length) > m_bufsize) Then
+    If ((m_bufpos + length) > m_bufsize) Then
         Exit Function
     End If
 
     ' ...
-    GetRaw = String$(Length, Chr$(0))
+    GetRaw = String$(length, Chr$(0))
             
     ' copy data to buffer
-    CopyMemory ByVal GetRaw, m_buf(m_bufpos), Length
+    CopyMemory ByVal GetRaw, m_buf(m_bufpos), length
     
     ' ...
-    m_bufpos = m_bufpos + Length
+    If (Not Peek) Then m_bufpos = m_bufpos + length
 
 End Function ' end function GetString
 
 ' ...
-Public Property Get Length() As Long
+Public Property Get length() As Long
 
-    Length = m_bufsize
+    length = m_bufsize
     
 End Property
 
@@ -352,11 +352,13 @@ Public Function Clear()
     ' reset buffer Length
     m_bufsize = 0
     
+    ' reset buffer position
+    m_bufpos = 0
 End Function ' end function Clear
 
 Public Function DebugOutput() As String
 
-    DebugOutput = modWar3Clan.DebugOutput(Data)
+    DebugOutput = modWar3Clan.DebugOutput(data)
 
 End Function
 
@@ -374,7 +376,7 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     ' ...
     If (MDebug("all")) Then
         frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & _
-            Right$("00" & hex(PacketID), 2)
+            Right$("00" & Hex(PacketID), 2)
     End If
     
     ' resize temporary data buffer
@@ -419,7 +421,7 @@ Public Function SendPacket(Optional PacketID As Byte)
 
     Dim L      As Long    ' ...
     Dim buf()  As Byte    ' ...
-    Dim I      As Integer ' ...
+    Dim i      As Integer ' ...
     Dim strbuf As String  ' ...
     
     ' ...
@@ -430,7 +432,7 @@ Public Function SendPacket(Optional PacketID As Byte)
     ' ...
     If (MDebug("all")) Then
         frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & Right$("00" & _
-            hex(PacketID), 2)
+            Hex(PacketID), 2)
     End If
     
     If (getCripple) Then
@@ -472,6 +474,9 @@ Public Function SendPacket(Optional PacketID As Byte)
     ' ...
     RunInAll "Event_PacketSent", "BNCS", PacketID, m_bufsize + 4, strbuf
     
+    'Send Warden Everything thats Sent to Bnet
+    Call modWarden.WardenClientData(warden_context, strbuf)
+    
     ' clear buffer contents
     Clear
     
@@ -491,7 +496,7 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     ' ...
     If (MDebug("all")) Then
         frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & _
-            Right$("00" & hex(PacketID), 2)
+            Right$("00" & Hex(PacketID), 2)
     End If
     
     ' resize temporary data buffer
