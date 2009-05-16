@@ -132,11 +132,11 @@ Public Function ConvertTime(ByVal dblMS As Double, Optional seconds As Byte) As 
 End Function
 
 Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Integer) As Long
-    Dim Key As String ' ...
+    Dim key As String ' ...
     
-    Key = GetProductKey(Product)
+    key = GetProductKey(Product)
     
-    If ((ReadCfg("Override", Key & "VerByte") = vbNullString) Or _
+    If ((ReadCfg("Override", key & "VerByte") = vbNullString) Or _
         (UseHardcode = 1)) Then
         
         Select Case StrReverse(Product)
@@ -150,18 +150,18 @@ Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Inte
         End Select
     Else
         GetVerByte = _
-            CLng(Val("&H" & ReadCfg("Override", Key & "VerByte")))
+            CLng(Val("&H" & ReadCfg("Override", key & "VerByte")))
     End If
     
 End Function
 
 Public Function GetGamePath(ByVal Client As String) As String
-    Dim Key As String
+    Dim key As String
     
-    Key = GetProductKey(Client)
+    key = GetProductKey(Client)
     
-    If (LenB(ReadCfg("Override", Key & "Hashes")) > 0) Then
-        GetGamePath = ReadCfg("Override", Key & "Hashes")
+    If (LenB(ReadCfg("Override", key & "Hashes")) > 0) Then
+        GetGamePath = ReadCfg("Override", key & "Hashes")
         
         If (Right$(GetGamePath, 1) <> "\") Then
             GetGamePath = GetGamePath & "\"
@@ -184,19 +184,19 @@ Public Function GetGamePath(ByVal Client As String) As String
 End Function
 
 Function MKL(Value As Long) As String
-    Dim result As String * 4
+    Dim Result As String * 4
     
-    Call CopyMemory(ByVal result, Value, 4)
+    Call CopyMemory(ByVal Result, Value, 4)
     
-    MKL = result
+    MKL = Result
 End Function
 
 Function MKI(Value As Integer) As String
-    Dim result As String * 2
+    Dim Result As String * 2
     
-    Call CopyMemory(ByVal result, Value, 2)
+    Call CopyMemory(ByVal Result, Value, 2)
     
-    MKI = result
+    MKI = Result
 End Function
 
 Public Function CheckPath(ByVal sPath As String) As Long
@@ -429,7 +429,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
     On Error GoTo ERROR_HANDLER
 
     If (frmChat.sckBNet.State = 7) Then
-        With PBuffer
+        With pBuffer
             If (frmChat.mnuUTF8.Checked) Then
                 .InsertNTString Message, UTF8
             Else
@@ -443,7 +443,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
             ' ...
             g_request_receipt = True
         
-            With PBuffer
+            With pBuffer
                 .SendPacket &H65
             End With
         End If
@@ -1181,7 +1181,7 @@ End Function
 Public Sub RequestSystemKeys()
     AwaitingSystemKeys = 1
     
-    With PBuffer
+    With pBuffer
         .InsertDWord &H1
         .InsertDWord &H4
         .InsertDWord GetTickCount()
@@ -1422,7 +1422,7 @@ Public Function CheckBlock(ByVal Username As String) As Boolean
     End If
 End Function
 
-Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
+Public Function CheckMsg(ByVal msg As String, Optional ByVal Username As String, Optional ByVal Ping As _
         Long) As Boolean
     
     Dim I As Integer ' ...
@@ -1430,14 +1430,14 @@ Public Function CheckMsg(ByVal Msg As String, Optional ByVal Username As String,
     For I = 0 To UBound(gFilters)
         If (Len(gFilters(I)) > 0) Then
             If (InStr(1, gFilters(I), "%", vbBinaryCompare) > 0) Then
-                If (InStr(1, Msg, DoReplacements(gFilters(I), Username, Ping), vbTextCompare) > 0) Then
+                If (InStr(1, msg, DoReplacements(gFilters(I), Username, Ping), vbTextCompare) > 0) Then
                     
                     CheckMsg = True
                     
                     Exit Function
                 End If
             Else
-                If (InStr(1, Msg, gFilters(I), vbTextCompare) <> 0) Then
+                If (InStr(1, msg, gFilters(I), vbTextCompare) <> 0) Then
                     CheckMsg = True
                     
                     Exit Function
@@ -1906,7 +1906,7 @@ Public Sub RemoveBanFromQueue(ByVal sUser As String)
     'frmChat.AddChat vbRed, tmp & "*" & " : " & tmp & strGateway & "*"
 End Sub
 
-Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boolean
+Public Function AllowedToTalk(ByVal sUser As String, ByVal msg As String) As Boolean
     Dim I As Integer
     
     ' default to true
@@ -1931,7 +1931,7 @@ Public Function AllowedToTalk(ByVal sUser As String, ByVal Msg As String) As Boo
     ' ...
     If (Filters) Then
         ' ...
-        If ((CheckBlock(sUser)) Or (CheckMsg(Msg, sUser, -5))) Then
+        If ((CheckBlock(sUser)) Or (CheckMsg(msg, sUser, -5))) Then
             AllowedToTalk = False
         End If
     End If
@@ -2265,7 +2265,7 @@ Public Function checkChannel(ByVal NameToFind As String) As Integer
 End Function
 
 
-Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mType As Byte)
+Public Sub CheckPhrase(ByRef Username As String, ByRef msg As String, ByVal mType As Byte)
     Dim I As Integer
     
     If UBound(Catch) = 0 Then
@@ -2274,8 +2274,8 @@ Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mTyp
     
     For I = LBound(Catch) To UBound(Catch)
         If (Catch(I) <> vbNullString) Then
-            If (InStr(1, LCase(Msg), Catch(I), vbTextCompare) <> 0) Then
-                Call CaughtPhrase(Username, Msg, Catch(I), mType)
+            If (InStr(1, LCase(msg), Catch(I), vbTextCompare) <> 0) Then
+                Call CaughtPhrase(Username, msg, Catch(I), mType)
                 
                 Exit Sub
             End If
@@ -2284,7 +2284,7 @@ Public Sub CheckPhrase(ByRef Username As String, ByRef Msg As String, ByVal mTyp
 End Sub
 
 
-Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phrase As String, ByVal mType As Byte)
+Public Sub CaughtPhrase(ByVal Username As String, ByVal msg As String, ByVal Phrase As String, ByVal mType As Byte)
     Dim I As Integer
     Dim s As String
     
@@ -2315,12 +2315,12 @@ Public Sub CaughtPhrase(ByVal Username As String, ByVal Msg As String, ByVal Phr
             Open GetProfilePath() & "\caughtphrases.htm" For Output As #I
         End If
         
-        Msg = Replace(Msg, "<", "&lt;", 1)
-        Msg = Replace(Msg, ">", "&gt;", 1)
+        msg = Replace(msg, "<", "&lt;", 1)
+        msg = Replace(msg, ">", "&gt;", 1)
         
         Print #I, "<B>" & Format(Date, "MM-dd-yyyy") & " - " & Time & _
             " - " & s & Space(1) & Username & ": </B>" & _
-                Replace(Msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
+                Replace(msg, Phrase, "<i>" & Phrase & "</i>", 1) & _
                     "<br>"
     Close #I
 End Sub

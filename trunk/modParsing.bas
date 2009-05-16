@@ -39,12 +39,12 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     
     If PacketLen >= 0 Then
         ' Start packet debuffer
-        pD.data = Mid$(PacketData, 5)
+        pD.Data = Mid$(PacketData, 5)
         ' Get packet ID
         PacketID = Asc(Mid$(PacketData, 2, 1))
         
         If MDebug("all") Then
-            frmChat.AddChat COLOR_BLUE, "BNET RECV 0x" & hex(PacketID)
+            frmChat.AddChat COLOR_BLUE, "BNET RECV 0x" & Hex(PacketID)
         End If
         
         ' ...
@@ -54,13 +54,17 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         WritePacketData stBNCS, StoC, PacketID, PacketLen, PacketData
         
         ' ...
+        SetPacketVeto False
+        
+        ' ...
         RunInAll "Event_PacketReceived", "BNCS", PacketID, Len(PacketData), PacketData
         
-        'If (GetVeto) Then
-        '    Exit Sub
-        'End If
+        ' Uncommented 05-15-2009 - Scripts have the power to Veto Packets now.
+        If (GetPacketVeto) Then
+            Exit Sub
+        End If
         
-        
+        'This will be taken out when Warden is moved to a script like I want.
         If (modWarden.WardenServerData(warden_context, PacketData)) Then
           Exit Sub
         End If
@@ -196,8 +200,8 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &H25 'SID_PING
                 If BotVars.Spoof = 0 Or g_Online Then
-                    PBuffer.InsertDWord pD.GetDWORD
-                    PBuffer.SendPacket &H25
+                    pBuffer.InsertDWord pD.GetDWORD
+                    pBuffer.SendPacket &H25
                 End If
             
             '###########################################################################
@@ -234,7 +238,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                             If Dii And BotVars.UseRealm Then
                                 Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Asking Battle.net for a list of Realm servers...")
                                 frmRealm.Show
-                                PBuffer.SendPacket &H40
+                                pBuffer.SendPacket &H40
                             Else
                                 Send0x0A
                             End If
@@ -355,7 +359,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 
                 Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Checking version...")
                 
-                If MDebug("-all") Then
+                If MDebug("all") Then
                     frmChat.AddChat COLOR_BLUE, "-- MPQ name: " & s2
                     frmChat.AddChat COLOR_BLUE, "-- Checksum Formula: " & s
                 End If
@@ -533,7 +537,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                         Call frmChat.DoDisconnect
                         
                     Case Else
-                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Unknown response to 0x54: 0x" & Right$("00" & hex(Conv(Mid$(PacketData, 5, 4))), 2))
+                        Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Unknown response to 0x54: 0x" & Right$("00" & Hex(Conv(Mid$(PacketData, 5, 4))), 2))
                         Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET] Hex dump of the packet: ")
                         Call frmChat.AddChat(RTBColors.ErrorMessageText, "[BNET]" & vbCrLf & DebugOutput(PacketData))
                         Call frmChat.DoDisconnect
@@ -603,7 +607,7 @@ Public Function StrToHex(ByVal String1 As String, Optional ByVal NoSpaces As Boo
     Dim strTemp As String, strReturn As String, I As Long
     
     For I = 1 To Len(String1)
-        strTemp = hex(Asc(Mid(String1, I, 1)))
+        strTemp = Hex(Asc(Mid(String1, I, 1)))
         If Len(strTemp) = 1 Then strTemp = "0" & strTemp
         
         strReturn = strReturn & IIf(NoSpaces, "", Space(1)) & strTemp
@@ -784,7 +788,7 @@ Public Function DecodeStarcraftKey(ByVal sKey As String) As String
     
     v = v Mod 10
     
-    If hex(v) = aryKey(12) Then
+    If Hex(v) = aryKey(12) Then
     
         bValid = True
         
@@ -949,12 +953,12 @@ End Sub
 
 Public Sub FullJoin(Channel As String, Optional ByVal I As Long = -1)
     If I >= 0 Then
-        PBuffer.InsertDWord CLng(I)
+        pBuffer.InsertDWord CLng(I)
     Else
-        PBuffer.InsertDWord &H2
+        pBuffer.InsertDWord &H2
     End If
-    PBuffer.InsertNTString Channel
-    PBuffer.SendPacket &HC
+    pBuffer.InsertNTString Channel
+    pBuffer.SendPacket &HC
 End Sub
 
 Public Function HexToStr(ByVal Hex1 As String) As String
@@ -969,15 +973,15 @@ End Function
 
 Public Sub RejoinChannel(Channel As String)
     'on error resume next
-    PBuffer.SendPacket &H10
-    PBuffer.InsertDWord &H2
-    PBuffer.InsertNTString Channel
-    PBuffer.SendPacket &HC
+    pBuffer.SendPacket &H10
+    pBuffer.InsertDWord &H2
+    pBuffer.InsertNTString Channel
+    pBuffer.SendPacket &HC
 End Sub
 
 Public Sub RequestProfile(strUser As String)
     'on error resume next
-    With PBuffer
+    With pBuffer
         .InsertDWord 1
         .InsertDWord 4
         .InsertDWord GetTickCount()
@@ -991,7 +995,7 @@ Public Sub RequestProfile(strUser As String)
 End Sub
 
 Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
-    With PBuffer
+    With pBuffer
         .InsertDWord 1
         .InsertDWord 1
         .InsertDWord GetTickCount()
@@ -1027,7 +1031,7 @@ Public Sub SetProfile(ByVal Location As String, ByVal description As String, Opt
     End If
     
     
-    With PBuffer
+    With pBuffer
         .InsertDWord &H1                    '// #accounts
         .InsertDWord 3                      '// #keys
         
@@ -1089,7 +1093,7 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
     If nKeys > 0 Then
         Dim I As Integer
     
-        With PBuffer
+        With pBuffer
             .InsertDWord &H1                    '// #accounts
             .InsertDWord nKeys                  '// #keys
             .InsertNTString CurrentUsername     '// account to update
@@ -1106,9 +1110,9 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
     End If
 End Sub
 
-Public Function StringToDWord(data As String) As Long
+Public Function StringToDWord(Data As String) As Long
     Dim tmp As String
-    tmp = StrToHex(data)
+    tmp = StrToHex(Data)
     Dim a As String, b As String, c As String, d As String
     a = Mid(tmp, 1, 2)
     b = Mid(tmp, 3, 2)
@@ -1118,7 +1122,7 @@ Public Function StringToDWord(data As String) As Long
     StringToDWord = Val("&H" & tmp)
 End Function
 
-Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
+Public Sub sPrintF(ByRef source As String, ByVal nText As String, _
     Optional ByVal a As Variant, _
     Optional ByVal b As Variant, _
     Optional ByVal c As Variant, _
@@ -1163,7 +1167,7 @@ Public Sub sPrintF(ByRef Source As String, ByVal nText As String, _
         I = I + 1
     Loop
 theEnd:
-    Source = Source & nText
+    source = source & nText
 End Sub
 
 Public Function ParseStatstring(ByVal Statstring As String, ByRef outbuf As String, ByRef sClan As String) As String
@@ -1502,9 +1506,9 @@ Function MakeLong(X As String) As Long
     CopyMemory MakeLong, ByVal X, 4
 End Function
 
-Public Sub StrCpy(ByRef Source As String, ByVal nText As String)
+Public Sub StrCpy(ByRef source As String, ByVal nText As String)
     'on error resume next
-    Source = Source & nText
+    source = source & nText
 End Sub
 
 Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef Flags As Long, ByRef Name As String, ByRef txt As String)
@@ -1969,13 +1973,13 @@ End Function
 
 
 'Originally from DPChat by Zorm - cleaned up and adapted to my needs
-Public Sub ProfileParse(data As String)
+Public Sub ProfileParse(Data As String)
     On Error Resume Next
     Dim X As Integer
     Dim ProfileEnd As String
     Dim SplitProfile() As String
     
-    ProfileEnd = Mid(data, 17, Len(data))
+    ProfileEnd = Mid(Data, 17, Len(Data))
     SplitProfile = Split(ProfileEnd, Chr(&H0))
     
     If AwaitingSystemKeys = 1 Then

@@ -8,7 +8,7 @@ Attribute VB_Name = "modScripting"
 Option Explicit
 
 Public Type scObj
-    SCModule As Module
+    SCModule As module
     ObjName  As String
     ObjType  As String
     obj      As Object
@@ -20,6 +20,7 @@ Private m_objCount      As Integer
 Private m_sc_control    As Object
 Private m_is_reloading  As Boolean
 Private VetoNextMessage As Boolean
+Private VetoNextPacket  As Boolean
 
 Public Sub InitScriptControl(ByVal SC As ScriptControl)
 
@@ -60,7 +61,7 @@ Public Sub LoadScripts()
     ' ...
     On Error GoTo ERROR_HANDLER
 
-    Dim CurrentModule As Module
+    Dim CurrentModule As module
     Dim Paths         As New Collection
     Dim strPath       As String  ' ...
     Dim filename      As String  ' ...
@@ -155,7 +156,7 @@ ERROR_HANDLER:
 
 End Sub
 
-Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As String, Optional ByVal defaults As Boolean = True) As Boolean
+Private Function FileToModule(ByRef ScriptModule As module, ByVal filePath As String, Optional ByVal defaults As Boolean = True) As Boolean
 
     On Error GoTo ERROR_HANDLER
 
@@ -327,7 +328,7 @@ Private Function GetDefaultModuleProcs(ByVal ScriptID As String, ByVal ScriptPat
     
 End Function
 
-Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
+Private Function IsScriptNameValid(ByRef CurrentModule As module) As Boolean
 
     On Error Resume Next
 
@@ -408,7 +409,7 @@ Public Sub InitScripts()
 
 End Sub
 
-Public Sub InitScript(ByVal SCModule As Module)
+Public Sub InitScript(ByVal SCModule As module)
 
     On Error Resume Next
 
@@ -430,12 +431,12 @@ Public Sub InitScript(ByVal SCModule As Module)
 
     If (g_Online) Then
         SCModule.Run "Event_LoggedOn", GetCurrentUsername, BotVars.Product
-        SCModule.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.flags
+        SCModule.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
     
         If (g_Channel.Users.Count > 0) Then
             For I = 1 To g_Channel.Users.Count
                 With g_Channel.Users(I)
-                     SCModule.Run "Event_UserInChannel", .DisplayName, .flags, .Stats.ToString, .Ping, _
+                     SCModule.Run "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, _
                         .game, False
                 End With
              Next I
@@ -533,7 +534,7 @@ Public Function Objects(objIndex As Integer) As scObj
 
 End Function
 
-Private Function ObjCount(Optional ObjType As String, Optional ByVal SCModule As Module = Nothing) As Integer
+Private Function ObjCount(Optional ObjType As String, Optional ByVal SCModule As module = Nothing) As Integer
     
     Dim I As Integer ' ...
 
@@ -557,7 +558,7 @@ Private Function ObjCount(Optional ObjType As String, Optional ByVal SCModule As
 
 End Function
 
-Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByVal ObjName As String) As Object
+Public Function CreateObj(ByRef SCModule As module, ByVal ObjType As String, ByVal ObjName As String) As Object
 
     On Error Resume Next
 
@@ -734,7 +735,7 @@ ERROR_HANDLER:
     
 End Sub
 
-Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
+Public Sub DestroyObj(ByVal SCModule As module, ByVal ObjName As String)
 
     On Error GoTo ERROR_HANDLER
 
@@ -846,7 +847,7 @@ ERROR_HANDLER:
     
 End Sub
 
-Public Function GetObjByName(ByRef SCModule As Module, ByVal ObjName As String) As Object
+Public Function GetObjByName(ByRef SCModule As module, ByVal ObjName As String) As Object
 
     Dim I As Integer ' ...
     
@@ -1034,9 +1035,9 @@ Public Function Scripts() As Object
 
 End Function
 
-Public Sub SetVeto(ByVal B As Boolean)
+Public Sub SetVeto(ByVal b As Boolean)
 
-    VetoNextMessage = B
+    VetoNextMessage = b
     
 End Sub
 
@@ -1045,6 +1046,20 @@ Public Function GetVeto() As Boolean
     GetVeto = VetoNextMessage
     
     VetoNextMessage = False
+    
+End Function
+
+Public Sub SetPacketVeto(ByVal b As Boolean)
+
+    VetoNextPacket = b
+    
+End Sub
+
+Public Function GetPacketVeto() As Boolean
+
+    GetPacketVeto = VetoNextPacket
+    
+    VetoNextPacket = False
     
 End Function
 

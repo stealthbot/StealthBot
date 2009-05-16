@@ -52,7 +52,7 @@ Public Function getCripple() As Boolean
 
 End Function
 
-Public Property Let data(ByVal str As String)
+Public Property Let Data(ByVal str As String)
 
     ' ...
     ReDim m_buf(0 To Len(str))
@@ -65,24 +65,24 @@ Public Property Let data(ByVal str As String)
 
 End Property
 
-Public Property Get data() As String
+Public Property Get Data() As String
 
     ' ...
-    data = String(m_bufsize, Chr$(0))
+    Data = String(m_bufsize, Chr$(0))
 
     ' ...
-    CopyMemory ByVal data, m_buf(0), m_bufsize
+    CopyMemory ByVal Data, m_buf(0), m_bufsize
 
 End Property
 
 ' ...
-Public Function InsertByte(ByVal data As Byte)
+Public Function InsertByte(ByVal Data As Byte)
 
     ' resize buffer
     ReDim Preserve m_buf(0 To (m_bufsize + 1))
 
     ' copy data to buffer
-    m_buf(m_bufsize) = data
+    m_buf(m_bufsize) = Data
     
     ' store buffer Length
     m_bufsize = (m_bufsize + 1)
@@ -90,21 +90,21 @@ Public Function InsertByte(ByVal data As Byte)
 End Function ' end function InsertByte
 
 ' ...
-Public Function InsertByteArr(ByRef data() As Byte)
+Public Function InsertByteArr(ByRef Data() As Byte)
 
     ' resize buffer
-    ReDim Preserve m_buf(0 To (m_bufsize + (UBound(data) + 1)))
+    ReDim Preserve m_buf(0 To (m_bufsize + (UBound(Data) + 1)))
 
     ' copy data to buffer
-    CopyMemory m_buf(m_bufsize), data(0), (UBound(data) + 1)
+    CopyMemory m_buf(m_bufsize), Data(0), (UBound(Data) + 1)
 
     ' store buffer Length
-    m_bufsize = (m_bufsize + (UBound(data) + 1))
+    m_bufsize = (m_bufsize + (UBound(Data) + 1))
     
 End Function ' end function InsertByte
 
 ' ...
-Public Sub GetByteArr(ByRef data() As Byte, Optional ByVal length As Integer = -1, Optional Peek As Boolean = False)
+Public Sub GetByteArr(ByRef Data() As Byte, Optional ByVal length As Integer = -1, Optional Peek As Boolean = False)
 
     ' ...
     If (length = -1) Then
@@ -117,10 +117,10 @@ Public Sub GetByteArr(ByRef data() As Byte, Optional ByVal length As Integer = -
     End If
     
     ' resize buffer
-    ReDim data(0 To length)
+    ReDim Data(0 To length)
 
     ' copy data to buffer
-    CopyMemory data(0), m_buf(m_bufpos), length
+    CopyMemory Data(0), m_buf(m_bufpos), length
 
     ' store buffer Length
     If (Not Peek) Then m_bufpos = (m_bufpos + length)
@@ -144,13 +144,13 @@ Public Function GetByte(Optional Peek As Boolean = False) As Byte
 End Function ' end function GetByte
 
 ' ...
-Public Function InsertWord(ByVal data As Integer)
+Public Function InsertWord(ByVal Data As Integer)
 
     ' resize buffer
     ReDim Preserve m_buf(0 To (m_bufsize + 2))
 
     ' copy data to buffer
-    CopyMemory m_buf(m_bufsize), data, 2
+    CopyMemory m_buf(m_bufsize), Data, 2
     
     ' store buffer Length
     m_bufsize = (m_bufsize + 2)
@@ -174,13 +174,13 @@ Public Function GetWord(Optional Peek As Boolean = False) As Integer
 End Function ' end function GetWord
 
 ' ...
-Public Function InsertDWord(ByVal data As Long)
+Public Function InsertDWord(ByVal Data As Long)
 
     ' resize data buffer
     ReDim Preserve m_buf(0 To (m_bufsize + 4))
 
     ' copy data to buffer
-    CopyMemory m_buf(m_bufsize), data, 4
+    CopyMemory m_buf(m_bufsize), Data, 4
     
     ' store buffer Length
     m_bufsize = (m_bufsize + 4)
@@ -225,21 +225,21 @@ Public Function GetFileTime(Optional Peek As Boolean = False) As Date
 End Function ' end function GetFileTime
 
 ' ...
-Public Function InsertNonNTString(ByVal data As String)
+Public Function InsertNonNTString(ByVal Data As String)
 
     ' resize buffer
-    ReDim Preserve m_buf(0 To (m_bufsize + Len(data)))
+    ReDim Preserve m_buf(0 To (m_bufsize + Len(Data)))
     
     ' copy data to buffer
-    CopyMemory m_buf(m_bufsize), ByVal data, Len(data)
+    CopyMemory m_buf(m_bufsize), ByVal Data, Len(Data)
     
     ' store buffer Length
-    m_bufsize = (m_bufsize + Len(data))
+    m_bufsize = (m_bufsize + Len(Data))
     
 End Function ' end function InsertNonNTString
 
 ' ...
-Public Function InsertNTString(ByRef data As String, _
+Public Function InsertNTString(ByRef Data As String, _
     Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI)
     
     Dim arrStr() As Byte ' ...
@@ -247,20 +247,20 @@ Public Function InsertNTString(ByRef data As String, _
     ' ...
     Select Case (Encoding)
         Case STRINGENCODING.ANSI
-            arrStr() = StrConv(data, vbFromUnicode)
+            arrStr() = StrConv(Data, vbFromUnicode)
             
         Case STRINGENCODING.UTF8
-            arrStr() = modUTF8.UTF8Encode(data)
+            arrStr() = modUTF8.UTF8Encode(Data)
             
         Case STRINGENCODING.UTF16
-            arrStr() = StrConv(data, vbUnicode)
+            arrStr() = StrConv(Data, vbUnicode)
     End Select
     
     ' resize buffer and include terminating null character
     ReDim Preserve m_buf(0 To (m_bufsize + (UBound(arrStr) + 2)))
     
     ' copy data to buffer
-    If (data <> vbNullString) Then
+    If (Data <> vbNullString) Then
         CopyMemory m_buf(m_bufsize), arrStr(0), (UBound(arrStr) + 1)
     End If
 
@@ -272,25 +272,25 @@ End Function ' end function InsertNTString
 ' ...
 Public Function GetString(Optional ByVal Encoding As STRINGENCODING = STRINGENCODING.ANSI, Optional Peek As Boolean = False) As String
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
 
     ' ...
-    For i = m_bufpos To m_bufsize
-        If (m_buf(i) = &H0) Then
+    For I = m_bufpos To m_bufsize
+        If (m_buf(I) = &H0) Then
             Exit For
         End If
-    Next i
+    Next I
 
     ' ...
-    If (i < m_bufsize) Then
+    If (I < m_bufsize) Then
         ' ...
-        GetString = String$(i - m_bufpos, Chr$(0))
+        GetString = String$(I - m_bufpos, Chr$(0))
             
         ' copy data to buffer
-        CopyMemory ByVal GetString, m_buf(m_bufpos), i - m_bufpos
+        CopyMemory ByVal GetString, m_buf(m_bufpos), I - m_bufpos
         
         ' ...
-        If (Not Peek) Then m_bufpos = i + 1
+        If (Not Peek) Then m_bufpos = I + 1
     End If
 
 End Function ' end function GetString
@@ -358,7 +358,7 @@ End Function ' end function Clear
 
 Public Function DebugOutput() As String
 
-    DebugOutput = modWar3Clan.DebugOutput(data)
+    DebugOutput = modWar3Clan.DebugOutput(Data)
 
 End Function
 
@@ -370,13 +370,8 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     
     ' ...
     If (frmChat.sckMCP.State <> sckConnected) Then
+        Clear
         Exit Function
-    End If
-    
-    ' ...
-    If (MDebug("all")) Then
-        frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & _
-            Right$("00" & Hex(PacketID), 2)
     End If
     
     ' resize temporary data buffer
@@ -398,18 +393,30 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
         
     ' ...
     CopyMemory ByVal strbuf, buf(0), m_bufsize + 3
-    
-    ' ...
-    Send frmChat.sckMCP.SocketHandle, strbuf, m_bufsize + 3, 0
 
     ' ...
-    CachePacket CtoS, stMCP, PacketID, m_bufsize + 3, strbuf
-    
-    ' ...
-    WritePacketData stMCP, CtoS, PacketID, m_bufsize + 3, strbuf
+    SetPacketVeto False
     
     ' ...
     RunInAll "Event_PacketSent", "MCP", PacketID, m_bufsize + 3, strbuf
+    
+    ' Added 05-15-2009 - Scripts have the power to Veto Packets now.
+    If (Not GetPacketVeto) Then
+        ' ...
+        If (MDebug("all")) Then
+            frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & _
+                Right$("00" & Hex(PacketID), 2)
+        End If
+    
+        ' ...
+        Send frmChat.sckMCP.SocketHandle, strbuf, m_bufsize + 3, 0
+
+        ' ...
+        CachePacket CtoS, stMCP, PacketID, m_bufsize + 3, strbuf
+    
+        ' ...
+        WritePacketData stMCP, CtoS, PacketID, m_bufsize + 3, strbuf
+    End If
     
     ' clear buffer contents
     Clear
@@ -421,23 +428,20 @@ Public Function SendPacket(Optional PacketID As Byte)
 
     Dim L      As Long    ' ...
     Dim buf()  As Byte    ' ...
-    Dim i      As Integer ' ...
+    Dim I      As Integer ' ...
     Dim strbuf As String  ' ...
     
     ' ...
     If (frmChat.sckBNet.State <> sckConnected) Then
+        Clear
         Exit Function
-    End If
-    
-    ' ...
-    If (MDebug("all")) Then
-        frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & Right$("00" & _
-            Hex(PacketID), 2)
     End If
     
     If (getCripple) Then
         Select Case (PacketID)
-            Case &HE, &HC: Exit Function
+            Case &HE, &HC:
+                Clear
+                Exit Function
         End Select
     End If
     
@@ -463,20 +467,31 @@ Public Function SendPacket(Optional PacketID As Byte)
     CopyMemory ByVal strbuf, buf(0), m_bufsize + 4
     
     ' ...
-    Send frmChat.sckBNet.SocketHandle, strbuf, m_bufsize + 4, 0
-
-    ' ...
-    CachePacket CtoS, stBNCS, PacketID, m_bufsize + 4, strbuf
-    
-    ' ...
-    WritePacketData stBNCS, CtoS, PacketID, m_bufsize + 4, strbuf
+    SetPacketVeto False
     
     ' ...
     RunInAll "Event_PacketSent", "BNCS", PacketID, m_bufsize + 4, strbuf
     
-    'Send Warden Everything thats Sent to Bnet
-    Call modWarden.WardenClientData(warden_context, strbuf)
+    ' Added 05-15-2009 - Scripts have the power to Veto Packets now.
+    If (Not GetPacketVeto) Then
+        ' ...
+        If (MDebug("all")) Then
+            frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & Right$("00" & _
+                Hex(PacketID), 2)
+        End If
     
+        ' ...
+        Send frmChat.sckBNet.SocketHandle, strbuf, m_bufsize + 4, 0
+
+        ' ...
+        CachePacket CtoS, stBNCS, PacketID, m_bufsize + 4, strbuf
+    
+        ' ...
+        WritePacketData stBNCS, CtoS, PacketID, m_bufsize + 4, strbuf
+    
+        'Send Warden Everything thats Sent to Bnet
+        Call modWarden.WardenClientData(warden_context, strbuf)
+    End If
     ' clear buffer contents
     Clear
     
@@ -490,13 +505,8 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     
     ' ...
     If (frmChat.sckBNLS.State <> sckConnected) Then
+        Clear
         Exit Function
-    End If
-    
-    ' ...
-    If (MDebug("all")) Then
-        frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & _
-            Right$("00" & Hex(PacketID), 2)
     End If
     
     ' resize temporary data buffer
@@ -518,18 +528,30 @@ Public Function vLSendPacket(Optional PacketID As Byte)
         
     ' ...
     CopyMemory ByVal strbuf, buf(0), m_bufsize + 3
-    
-    ' ...
-    Send frmChat.sckBNLS.SocketHandle, strbuf, m_bufsize + 3, 0
 
     ' ...
-    CachePacket CtoS, stBNLS, PacketID, m_bufsize + 3, strbuf
-    
-    ' ...
-    WritePacketData stBNLS, CtoS, PacketID, m_bufsize + 3, strbuf
+    SetPacketVeto False
     
     ' ...
     RunInAll "Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, strbuf
+    
+    ' Added 05-15-2009 - Scripts have the power to Veto Packets now.
+    If (Not GetPacketVeto) Then
+        ' ...
+        If (MDebug("all")) Then
+            frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & _
+                Right$("00" & Hex(PacketID), 2)
+        End If
+    
+        ' ...
+        Send frmChat.sckBNLS.SocketHandle, strbuf, m_bufsize + 3, 0
+
+        ' ...
+        CachePacket CtoS, stBNLS, PacketID, m_bufsize + 3, strbuf
+    
+        ' ...
+        WritePacketData stBNLS, CtoS, PacketID, m_bufsize + 3, strbuf
+    End If
     
     ' clear buffer contents
     Clear

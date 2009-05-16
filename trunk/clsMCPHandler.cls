@@ -65,7 +65,7 @@ Public Event RealmStartup(ByVal Status As Byte, ByVal Message As String)
 Public Event CharListResponse(ByVal NumCharacters As Integer)
 
 Public Sub SendStartup()
-    With PBuffer
+    With pBuffer
         .InsertNonNTString msCurrentChunk
         .InsertNTString msBNetUniqueUsername
         .SendPacketMCP MCP_STARTUP
@@ -73,7 +73,7 @@ Public Sub SendStartup()
 End Sub
 
 Public Sub CreateMCPCharacter(ByVal CharType As Long, ByVal CharFlags As Long, ByVal CharName As String)
-    With PBuffer
+    With pBuffer
         .InsertDWord CharType
         .InsertWord CharFlags
         .InsertNTString CharName
@@ -82,15 +82,15 @@ Public Sub CreateMCPCharacter(ByVal CharType As Long, ByVal CharFlags As Long, B
 End Sub
 
 Public Sub LogonToCharacter(ByVal CharName As String)
-    With PBuffer
+    With pBuffer
         .InsertNTString CharName
         .SendPacketMCP MCP_CHARLOGON
     End With
 End Sub
 
-Public Sub DeleteCharacter(ByVal CharName As String, Optional ByVal flags As Integer = &H1)
-    With PBuffer
-        .InsertWord flags
+Public Sub DeleteCharacter(ByVal CharName As String, Optional ByVal Flags As Integer = &H1)
+    With pBuffer
+        .InsertWord Flags
         .InsertNTString CharName
         
         'Debug.Print "Sending: "
@@ -101,18 +101,18 @@ Public Sub DeleteCharacter(ByVal CharName As String, Optional ByVal flags As Int
 End Sub
 
 Public Sub RequestRealmMOTD()
-    PBuffer.SendPacketMCP MCP_MOTD
+    pBuffer.SendPacketMCP MCP_MOTD
 End Sub
 
 Public Sub RequestCharacterList(Optional ByVal NumCharacters = 8)
-    With PBuffer
+    With pBuffer
         .InsertDWord NumCharacters
         .SendPacketMCP MCP_CHARLIST
     End With
 End Sub
 
 Public Sub UpgradeCharacter(ByVal CharName As String)
-    With PBuffer
+    With pBuffer
         .InsertNTString CharName
         .SendPacketMCP MCP_CHARUPGRADE
     End With
@@ -132,7 +132,7 @@ Public Sub LogonToRealm(ByVal cookie As Long, ByVal ServerToken As Long, ByVal R
     
     'frmChat.AddChat vbRed, RealmName
     
-    With PBuffer
+    With pBuffer
         .InsertDWord cookie
         .InsertNonNTString Buffer
         .InsertNTString RealmName
@@ -171,15 +171,17 @@ Public Sub ParseMCPPacket(ByVal Data As String)
             ' ...
             WritePacketData stMCP, StoC, Asc(Mid$(Data, 3, 1)), Len(Data), Data
             
+            If InStr(1, CommandLine, "-all") > 0 Then _
+                frmChat.AddChat COLOR_BLUE, "MCP RECV 0x" & Right$("00" & Hex(Asc(Mid$(Data, 3, 1))), 2)
+                
+            SetPacketVeto False
             ' ...
             RunInAll "Event_PacketReceived", "MCP", Asc(Mid$(Data, 3, 1)), Len(Data), Data
             
-            If InStr(1, CommandLine, "-all") > 0 Then _
-                frmChat.AddChat COLOR_BLUE, "MCP RECV 0x" & Right$("00" & hex(Asc(Mid$(Data, 3, 1))), 2)
-            
-            'If (GetVeto) Then
-            '    Exit Sub
-            'End If
+            'Uncommented 05-15-2009 Hdx - Scripts now have the power to Veto Packets
+            If (GetPacketVeto) Then
+                Exit Sub
+            End If
             
             Select Case Asc(Mid$(Data, 3, 1)) '
                 Case MCP_STARTUP
@@ -194,7 +196,7 @@ Public Sub ParseMCPPacket(ByVal Data As String)
                         Case &HC: RaiseEvent RealmStartup(1, "The server thinks you're not connected to Battle.net! Please try your connection again later.")
                         Case &H7E: RaiseEvent RealmStartup(2, "The Diablo II realm rejected your connection. Your CD-Key may have been banned from realm play. Please try your connection again later.")
                         Case &H7F: RaiseEvent RealmStartup(2, "You have been temporarily IP-banned from the Realm server. Please try connecting again later.")
-                        Case Else: RaiseEvent RealmStartup(2, "Unknown response to MCP_STARTUP: 0x" & Right$("00000000" & hex(n), 4))
+                        Case Else: RaiseEvent RealmStartup(2, "Unknown response to MCP_STARTUP: 0x" & Right$("00000000" & Hex(n), 4))
                     End Select
             
                 Case MCP_CHARCREATE
@@ -207,7 +209,7 @@ Public Sub ParseMCPPacket(ByVal Data As String)
                         Case &H0: RaiseEvent CharCreateResponse(0, "Character creation successful.")
                         Case &H14: RaiseEvent CharCreateResponse(1, "That character name already exists, or exceeds the maximum name Length.")
                         Case &H15: RaiseEvent CharCreateResponse(2, "That character name is invalid.")
-                        Case Else: RaiseEvent CharCreateResponse(3, "Unknown response to MCP_CHARCREATE: 0x" & Right$("00000000" & hex(n), 4))
+                        Case Else: RaiseEvent CharCreateResponse(3, "Unknown response to MCP_CHARCREATE: 0x" & Right$("00000000" & Hex(n), 4))
                     End Select
             
                 Case MCP_CHARLOGON
@@ -221,7 +223,7 @@ Public Sub ParseMCPPacket(ByVal Data As String)
                         Case &H46: RaiseEvent CharLogonResponse(1, "Player not found.")
                         Case &H7A: RaiseEvent CharLogonResponse(2, "Unable to log on to realm character!")
                         Case &H7B: RaiseEvent CharLogonResponse(3, "That character has expired.")
-                        Case Else: RaiseEvent CharLogonResponse(4, "Unknown response to MCP_CHARLOGON: 0x" & Right$("00000000" & hex(n), 4))
+                        Case Else: RaiseEvent CharLogonResponse(4, "Unknown response to MCP_CHARLOGON: 0x" & Right$("00000000" & Hex(n), 4))
                     End Select
             
                 Case MCP_CHARDELETE
