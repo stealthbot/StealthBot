@@ -479,7 +479,7 @@ Private Sub Send_BNLS0x51()
         ' no more bnls key hashing
         '.InsertNonNTString ds.GetKeyHash(1)
         
-        Call DecodeCDKey(BotVars.CDKey, ds.GetServerToken, ds.GetGTC, KeyHash, Value1, ProductID, ds.GetMPQRev)
+        Call DecodeCDKey(BotVars.CDKey, ds.GetServerToken, ds.GetGTC, KeyHash, Value1, ProductID)
         
         .InsertDWord Len(BotVars.CDKey)
         .InsertDWord ProductID
@@ -494,7 +494,7 @@ Private Sub Send_BNLS0x51()
             ' no more bnls key hashing
             '.InsertNonNTString ds.GetKeyHash(2)
             
-            Call DecodeCDKey(BotVars.ExpKey, ds.GetServerToken, ds.GetGTC, KeyHash, Value1, ProductID, ds.GetMPQRev)
+            Call DecodeCDKey(BotVars.ExpKey, ds.GetServerToken, ds.GetGTC, KeyHash, Value1, ProductID)
         
             .InsertDWord Len(BotVars.ExpKey)
             .InsertDWord ProductID

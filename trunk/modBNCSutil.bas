@@ -57,7 +57,7 @@ Public Declare Sub hashPassword_Raw Lib "BNCSutil.dll" Alias "hashPassword" _
 
 ' Broken SHA-1
 Public Declare Sub calcHashBuf Lib "BNCSutil.dll" _
-    (ByVal Data As String, ByVal Length As Long, ByVal Hash As String)
+    (ByVal Data As String, ByVal length As Long, ByVal Hash As String)
 
 ' CD-Key Decoding
 
@@ -122,16 +122,16 @@ Public Declare Function nls_account_logon Lib "BNCSutil.dll" _
 Public Declare Sub nls_get_A Lib "BNCSutil.dll" _
     (ByVal NLS As Long, ByVal Out As String)
 Public Declare Sub nls_get_M1 Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Out As String, ByVal B As String, ByVal Salt As String)
+    (ByVal NLS As Long, ByVal Out As String, ByVal b As String, ByVal Salt As String)
 Public Declare Function nls_check_M2 Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal M2 As String, ByVal B As String, ByVal Salt As String) As Long
+    (ByVal NLS As Long, ByVal M2 As String, ByVal b As String, ByVal Salt As String) As Long
 Public Declare Function nls_check_signature Lib "BNCSutil.dll" _
-    (ByVal Address As Long, ByVal Signature As String) As Long
+    (ByVal address As Long, ByVal Signature As String) As Long
 Public Declare Function nls_account_change_proof Lib "BNCSutil.dll" _
     (ByVal NLS As Long, ByVal Buffer As String, ByVal NewPassword As String, _
-    ByVal B As String, ByVal Salt As String) As Long 'returns a new NLS pointer for the new password
+    ByVal b As String, ByVal Salt As String) As Long 'returns a new NLS pointer for the new password
 Public Declare Sub nls_get_S Lib "BNCSutil.dll" _
-    (ByVal NLS As Long, ByVal Out As String, ByVal B As String, ByVal Salt As String)
+    (ByVal NLS As Long, ByVal Out As String, ByVal b As String, ByVal Salt As String)
 Public Declare Sub nls_get_K Lib "BNCSutil.dll" _
     (ByVal NLS As Long, ByVal Out As String, ByVal s As String)
     
@@ -193,23 +193,23 @@ End Function
 'InfoString does NOT need to be initialized (e.g. InfoString = String$(255, vbNullChar))
 'Returns the file version or 0 on failure.
 Public Function getExeInfo(EXEFile As String, InfoString As String, Optional ByVal Platform As Long = BNCSutil_PLATFORM_WINDOWS) As Long
-    Dim Version As Long, InfoSize As Long, result As Long
+    Dim Version As Long, InfoSize As Long, Result As Long
     Dim I&
     InfoSize = 256
     InfoString = String$(256, vbNullChar)
-    result = getExeInfo_Raw(EXEFile, InfoString, InfoSize, Version, Platform)
-    If result = 0 Then
+    Result = getExeInfo_Raw(EXEFile, InfoString, InfoSize, Version, Platform)
+    If Result = 0 Then
         getExeInfo = 0
         Exit Function
     End If
-    While result > InfoSize
+    While Result > InfoSize
         If InfoSize > 1024 Then
             getExeInfo = 0
             Exit Function
         End If
         InfoSize = InfoSize + 256
         InfoString = String$(InfoSize, vbNullChar)
-        result = getExeInfo_Raw(EXEFile, InfoString, InfoSize, Version, Platform)
+        Result = getExeInfo_Raw(EXEFile, InfoString, InfoSize, Version, Platform)
     Wend
     getExeInfo = Version
     I = InStr(InfoString, vbNullChar)

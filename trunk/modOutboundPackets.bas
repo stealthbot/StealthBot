@@ -142,7 +142,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                 End If
                 
                 ' For each cdkey...
-                Call DecodeCDKey(BotVars.CDKey, ServerToken, ClientToken, KeyHash, Value1, ProductID, MPQRevision)
+                Call DecodeCDKey(BotVars.CDKey, ServerToken, ClientToken, KeyHash, Value1, ProductID)
                 If KeyHash = vbNullString Then Exit Sub
                 
                 .InsertDWord &H0
@@ -153,7 +153,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
                 .InsertNonNTString KeyHash
                                 
                 If BotVars.Product = "PX2D" Or BotVars.Product = "PX3W" Then
-                    Call DecodeCDKey(BotVars.ExpKey, ServerToken, ClientToken, KeyHash, Value1, ProductID, MPQRevision)
+                    Call DecodeCDKey(BotVars.ExpKey, ServerToken, ClientToken, KeyHash, Value1, ProductID)
                     If KeyHash = vbNullString Then Exit Sub
                     
                     .InsertDWord Len(BotVars.ExpKey)
@@ -182,7 +182,8 @@ End Sub
 
 ' Uses BNCSUtil to decode and hash your cdkey
 ' Returns the ClientToken that should be used to connect
-Public Sub DecodeCDKey(ByVal sCDKey As String, ByVal ServerToken As Long, ByVal ClientToken As Long, ByRef KeyHash As String, ByRef Value1 As Long, ByRef ProductID As Long, ByVal MPQRevision As Long)
+' 2009-05-17 - Removed Last Argument MPQRevision, Why the hell was it there?
+Public Sub DecodeCDKey(ByVal sCDKey As String, ByVal ServerToken As Long, ByVal ClientToken As Long, ByRef KeyHash As String, ByRef Value1 As Long, ByRef ProductID As Long)
     Dim KDh As Long                     ' Key Decoder handler
     Dim HashSize As Long                ' CDKey hash size in bytes
     Dim Result As Long                  ' kd_init() result
