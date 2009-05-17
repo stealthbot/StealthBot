@@ -1709,3 +1709,7 @@ Public Function ResolveHostName(ByVal strHostName As String, Optional ByRef errC
     End If
     ResolveHostName = Result
 End Function
+
+Public Sub ForceBNCSPacketParse(ByVal PacketData As String)
+    Call BNCSParsePacket(PacketData)
+End Sub
