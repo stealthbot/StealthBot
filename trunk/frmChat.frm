@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
@@ -10,7 +10,7 @@ Begin VB.Form frmChat
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
    ClientLeft      =   225
-   ClientTop       =   855
+   ClientTop       =   825
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -900,6 +900,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -925,7 +926,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2963,7 +2963,7 @@ Public Function GetLogFilePath() As String
 End Function
 
 Sub Form_Unload(Cancel As Integer)
-    Dim key As String, L As Long
+    Dim Key As String, L As Long
     
     'Me.WindowState = vbNormal
     'Me.Show
@@ -3171,7 +3171,7 @@ End Sub
 Private Sub FriendListHandler_FriendMoved()
     'lvFriendList.ListItems.Clear
     Call FriendListHandler.ResetList
-    Call FriendListHandler.RequestFriendsList(pBuffer)
+    Call FriendListHandler.RequestFriendsList(PBuffer)
 End Sub
 
 Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
@@ -3685,8 +3685,8 @@ Private Sub mnuDisableVoidView_Click()
 End Sub
 
 Private Sub mnuDisconnect2_Click()
-    Dim key As String, L As Long
-    key = GetProductKey()
+    Dim Key As String, L As Long
+    Key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
 '        AttemptedNewVerbyte = False
@@ -4254,7 +4254,7 @@ End Sub
 
 Private Sub mnuFListRefresh_Click()
     lvFriendList.ListItems.Clear
-    Call FriendListHandler.RequestFriendsList(pBuffer)
+    Call FriendListHandler.RequestFriendsList(PBuffer)
 End Sub
 
 Sub mnuReloadScripts_Click()
@@ -4571,8 +4571,8 @@ Sub mnuLock_Click()
 End Sub
 
 Sub mnuDisconnect_Click()
-    Dim key As String, L As Long
-    key = GetProductKey()
+    Dim Key As String, L As Long
+    Key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
 '        AttemptedNewVerbyte = False
@@ -4735,7 +4735,7 @@ Private Sub tmrAccountLock_Timer()
     
     tmrAccountLock.Enabled = False
     
-    If (g_Online) Then
+    If (Not g_Online) Then
         Exit Sub
     End If
     
@@ -5796,7 +5796,7 @@ Private Sub Timer_Timer()
     
     If sckBNet.State = 7 And Not IsW3 Then
         If iCounter Mod 4 = 0 Then
-            pBuffer.SendPacket &H0
+            PBuffer.SendPacket &H0
         End If
     End If
     
@@ -5913,7 +5913,7 @@ Private Sub tmrFriendlistUpdate_Timer()
     If (g_Online) Then
         If (BotVars.UsingDirectFList) Then
             If (lvFriendList.ListItems.Count > 0) Then
-                Call FriendListHandler.RequestFriendsList(pBuffer)
+                Call FriendListHandler.RequestFriendsList(PBuffer)
             End If
         End If
     End If
@@ -7665,7 +7665,7 @@ Private Sub sckBNLS_Connect()
     
     Call Event_BNLSConnected
     
-    With pBuffer
+    With PBuffer
         .InsertNTString "stealth"
         .vLSendPacket &HE
     End With
@@ -8181,7 +8181,7 @@ End Sub
 
 Private Sub mnuPopLeaveClan_Click()
     If MsgBox("Are you sure you want to leave the clan?", vbYesNo, "StealthBot") = vbYes Then
-        With pBuffer
+        With PBuffer
             .InsertDWord &H1    '//cookie
             .InsertNTString GetCurrentUsername
             .SendPacket &H78
@@ -8207,7 +8207,7 @@ End Sub
 Private Sub mnuPopDem_Click()
     If MsgBox("Are you sure you want to demote " & GetClanSelectedUser & "?", vbYesNo, "StealthBot") = vbYes Then
         
-        With pBuffer
+        With PBuffer
             .InsertDWord &H1
             .InsertNTString GetClanSelectedUser
             .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon - 1
@@ -8221,7 +8221,7 @@ End Sub
 
 Private Sub mnuPopPro_Click()
     If MsgBox("Are you sure you want to promote " & GetClanSelectedUser & "?", vbYesNo, "StealthBot") = vbYes Then
-        With pBuffer
+        With PBuffer
             .InsertDWord &H3
             .InsertNTString GetClanSelectedUser
             .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon + 1
@@ -8243,7 +8243,7 @@ Private Sub mnuPopRem_Click()
         If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, _
                 "StealthBot") = vbYes Then
                 
-            With pBuffer
+            With PBuffer
                 If lvClanList.SelectedItem.Index > 0 Then
                     .InsertDWord 1 'lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon
                     .InsertNTString GetClanSelectedUser
