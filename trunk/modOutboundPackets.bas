@@ -12,7 +12,7 @@ Public Sub Send0x50(Optional ByVal lVerByte As Long = 0)
     Dim CAbbr As String, cName As String
     Dim s As String
 
-    With pBuffer
+    With PBuffer
         .InsertDWord &H0 'Protocol ID (Zero)
         
         s = StrReverse(UCase(ReadCfg("Override", GetProductKey() & "PlatID")))
@@ -79,7 +79,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
     Dim MPQRevision As Long     ' MPQ Revision
     Dim HashPaths(2) As String  ' Hash file paths
     Dim KeyHash As String       ' CDKey hash
-    Dim x As Long               ' Stop control variable
+    Dim X As Long               ' Stop control variable
     Dim lngWardenSeed As Long   ' seed for warden
     
     Path = GetGamePath(BotVars.Product)
@@ -114,11 +114,11 @@ Public Sub Send0x51(ByVal ServerToken As Long)
             
     End Select
     
-    x = x Or CheckPath(HashPaths(0))
-    x = x Or CheckPath(HashPaths(1))
-    x = x Or CheckPath(HashPaths(2))
+    X = X Or CheckPath(HashPaths(0))
+    X = X Or CheckPath(HashPaths(1))
+    X = X Or CheckPath(HashPaths(2))
     
-    If x = 1 Then
+    If X = 1 Then
         frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Connection terminated due to missing hash files."
         frmChat.DoDisconnect
     Else
@@ -129,7 +129,7 @@ Public Sub Send0x51(ByVal ServerToken As Long)
         If checkRevision(ValueString, HashPaths(0), HashPaths(1), HashPaths(2), MPQRevision, Checksum) Then
             Version = getExeInfo(HashPaths(0), EXEInfo)
 
-            With pBuffer
+            With PBuffer
                 .InsertDWord ClientToken ' Client token
                 .InsertDWord Version     ' CheckRevision version
                 .InsertDWord Checksum    ' CheckRevision checksum
@@ -241,7 +241,9 @@ Public Sub Send0x3A(ByVal ServerToken As Long)
         PasswordHash = doubleHashPassword(LCase(BotVars.Password), ds.GetGTC, ServerToken)
     End If
     
-    With pBuffer
+    With PBuffer
+        .Clear  'precaution, as we've had some issues with this packet >_>
+        
         .InsertDWord ds.GetGTC
         .InsertDWord ServerToken
         .InsertNonNTString PasswordHash
@@ -257,7 +259,7 @@ Public Sub Send0x0A()
         BotVars.Product <> "PX3W" And BotVars.Product <> "3RAW" Then
         
         If Not BotVars.UseUDP Then
-            With pBuffer
+            With PBuffer
                 If Len(ReadCfg("Override", "UDPString")) = 4 Then
                     .InsertNonNTString ReadCfg("Override", "UDPString")
                 Else
@@ -277,7 +279,7 @@ Public Sub Send0x0A()
     Num = (1 + Rnd() * 1000)
     
     ' ...
-    With pBuffer
+    With PBuffer
         .InsertNTString g_username
         .InsertNTString vbNullString
         .SendPacket &HA
@@ -285,14 +287,14 @@ Public Sub Send0x0A()
     
     RequestSystemKeys
     
-    With pBuffer
+    With PBuffer
         .InsertNonNTString BotVars.Product
         .SendPacket &HB
     End With
     
     FullJoin BotVars.HomeChannel & ":" & Num, 0
     
-    With pBuffer
+    With PBuffer
         .InsertNTString "/whoami"
         .SendPacket &HE
     End With
@@ -305,7 +307,7 @@ Public Sub AttemptAccountCreation()
     
     PasswordHash = hashPassword(LCase(BotVars.Password))
     
-    With pBuffer
+    With PBuffer
         .InsertNonNTString PasswordHash
         .InsertNTString g_username
         .SendPacket &H3D
@@ -315,7 +317,7 @@ End Sub
 
 Public Sub Send0x09(ByVal ServerToken As Long, ByVal UDPValue As Long)
     If BotVars.UseUDP Then
-        With pBuffer
+        With PBuffer
             .InsertDWord ServerToken
             .InsertDWord UDPValue
             .SendPacket &H9
@@ -354,7 +356,7 @@ Public Sub Send0x52()
     sBuffer = String$(NLS_ACCOUNTCREATE_ + Len(g_username), vbNullChar)
     Result = nls_account_create(ds.NLSHandle, sBuffer, NLS_ACCOUNTCREATE_ + Len(g_username))
     
-    With pBuffer
+    With PBuffer
         .InsertNonNTString sBuffer
         .SendPacket &H52
     End With
@@ -366,7 +368,7 @@ Public Sub Send0x53()
     sBuffer = String$(NLS_GET_A_, vbNullChar)
     Call nls_get_A(ds.NLSHandle, sBuffer)
     
-    With pBuffer
+    With PBuffer
         .InsertNonNTString sBuffer
         .InsertNTString g_username
         .SendPacket &H53
@@ -380,7 +382,7 @@ Public Sub Send0x54(ByVal Salt As String, ByVal ServerKey As String)
     
     Call nls_get_M1(ds.NLSHandle, sBuffer, ServerKey, Salt)
     
-    With pBuffer
+    With PBuffer
         .InsertNonNTString sBuffer
         .SendPacket &H54
     End With
@@ -390,14 +392,14 @@ Public Sub Send0x5E(ByRef PacketData As String) 'SID_WARDEN
     Dim strWardenPacket As String
     'strWardenPacket = modWarden.HandleWarden(PacketData)
 
-    pBuffer.InsertNonNTString PacketData
-    pBuffer.SendPacket &H5E
+    PBuffer.InsertNonNTString PacketData
+    PBuffer.SendPacket &H5E
     
     Exit Sub
     
     If LenB(strWardenPacket) > 0 Then
-        pBuffer.InsertNonNTString strWardenPacket
-        pBuffer.SendPacket &H5E
+        PBuffer.InsertNonNTString strWardenPacket
+        PBuffer.SendPacket &H5E
     End If
     
     Static blWarden As Boolean
