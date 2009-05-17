@@ -1,6 +1,7 @@
 VERSION 5.00
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmGameSelection 
+   BackColor       =   &H80000007&
    BorderStyle     =   4  'Fixed ToolWindow
    Caption         =   "Game Selection"
    ClientHeight    =   3600
@@ -101,8 +102,8 @@ Begin VB.Form frmGameSelection
       FullRowSelect   =   -1  'True
       _Version        =   393217
       SmallIcons      =   "imlIcons"
-      ForeColor       =   -2147483640
-      BackColor       =   -2147483643
+      ForeColor       =   16777215
+      BackColor       =   10040064
       Appearance      =   1
       NumItems        =   1
       BeginProperty ColumnHeader(1) {BDD1F052-858B-11D1-B16A-00C0F0283628} 
@@ -128,7 +129,9 @@ Begin VB.Form frmGameSelection
    End
    Begin VB.Label Label1 
       Alignment       =   2  'Center
+      BackColor       =   &H80000007&
       Caption         =   "Which game do you wish to create an entry for?"
+      ForeColor       =   &H00FFFFFF&
       Height          =   495
       Left            =   440
       TabIndex        =   1
@@ -153,7 +156,7 @@ End Sub
 Private Sub cmdOK_Click()
     Dim game As String ' ...
     
-    Select Case (lvGames.SelectedItem.index)
+    Select Case (lvGames.SelectedItem.Index)
         Case 1:  game = "CHAT"
         Case 2:  game = "STAR"
         Case 3:  game = "SSHR"
