@@ -6739,7 +6739,7 @@ Private Function OnExec(ByVal Username As String, ByRef dbAccess As udtGetAccess
 
     frmChat.SControl.ExecuteStatement msgData
     
-    If Err.Number <> 0 Then
+    If ((Err.Number <> 0) And (Not InBot)) Then
         cmdRet(0) = "Error #" & Err.Number & ": " & Err.description
     End If
 End Function
