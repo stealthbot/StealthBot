@@ -2963,7 +2963,7 @@ Public Function GetLogFilePath() As String
 End Function
 
 Sub Form_Unload(Cancel As Integer)
-    Dim Key As String, L As Long
+    Dim key As String, L As Long
     
     'Me.WindowState = vbNormal
     'Me.Show
@@ -3171,7 +3171,7 @@ End Sub
 Private Sub FriendListHandler_FriendMoved()
     'lvFriendList.ListItems.Clear
     Call FriendListHandler.ResetList
-    Call FriendListHandler.RequestFriendsList(PBuffer)
+    Call FriendListHandler.RequestFriendsList(pBuffer)
 End Sub
 
 Private Sub FriendListHandler_FriendRemoved(ByVal Username As String)
@@ -3685,8 +3685,8 @@ Private Sub mnuDisableVoidView_Click()
 End Sub
 
 Private Sub mnuDisconnect2_Click()
-    Dim Key As String, L As Long
-    Key = GetProductKey()
+    Dim key As String, L As Long
+    key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
 '        AttemptedNewVerbyte = False
@@ -4254,7 +4254,7 @@ End Sub
 
 Private Sub mnuFListRefresh_Click()
     lvFriendList.ListItems.Clear
-    Call FriendListHandler.RequestFriendsList(PBuffer)
+    Call FriendListHandler.RequestFriendsList(pBuffer)
 End Sub
 
 Sub mnuReloadScripts_Click()
@@ -4571,8 +4571,8 @@ Sub mnuLock_Click()
 End Sub
 
 Sub mnuDisconnect_Click()
-    Dim Key As String, L As Long
-    Key = GetProductKey()
+    Dim key As String, L As Long
+    key = GetProductKey()
     
 '    If AttemptedNewVerbyte Then
 '        AttemptedNewVerbyte = False
@@ -5690,6 +5690,14 @@ Sub InitBNetConnection()
     'sckBNet.SendData ChrW(1)
     Call Send(sckBNet.SocketHandle, ChrW(1), 1, 0)
     
+    If ((BotVars.Product <> "3RAW") And _
+        (BotVars.Product <> "PX3W") And _
+        (BotVars.Product <> "RATS") And _
+        (BotVars.Product <> "PXES")) Then
+        frmChat.AddChat vbWhite, "not warden product"
+        modWarden.HandleWarden = False
+    End If
+    
     If BotVars.BNLS Then
         NLogin.Send_0x10 BotVars.Product
     Else
@@ -5796,7 +5804,7 @@ Private Sub Timer_Timer()
     
     If sckBNet.State = 7 And Not IsW3 Then
         If iCounter Mod 4 = 0 Then
-            PBuffer.SendPacket &H0
+            pBuffer.SendPacket &H0
         End If
     End If
     
@@ -5913,7 +5921,7 @@ Private Sub tmrFriendlistUpdate_Timer()
     If (g_Online) Then
         If (BotVars.UsingDirectFList) Then
             If (lvFriendList.ListItems.Count > 0) Then
-                Call FriendListHandler.RequestFriendsList(PBuffer)
+                Call FriendListHandler.RequestFriendsList(pBuffer)
             End If
         End If
     End If
@@ -7665,7 +7673,7 @@ Private Sub sckBNLS_Connect()
     
     Call Event_BNLSConnected
     
-    With PBuffer
+    With pBuffer
         .InsertNTString "stealth"
         .vLSendPacket &HE
     End With
@@ -8181,7 +8189,7 @@ End Sub
 
 Private Sub mnuPopLeaveClan_Click()
     If MsgBox("Are you sure you want to leave the clan?", vbYesNo, "StealthBot") = vbYes Then
-        With PBuffer
+        With pBuffer
             .InsertDWord &H1    '//cookie
             .InsertNTString GetCurrentUsername
             .SendPacket &H78
@@ -8207,7 +8215,7 @@ End Sub
 Private Sub mnuPopDem_Click()
     If MsgBox("Are you sure you want to demote " & GetClanSelectedUser & "?", vbYesNo, "StealthBot") = vbYes Then
         
-        With PBuffer
+        With pBuffer
             .InsertDWord &H1
             .InsertNTString GetClanSelectedUser
             .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon - 1
@@ -8221,7 +8229,7 @@ End Sub
 
 Private Sub mnuPopPro_Click()
     If MsgBox("Are you sure you want to promote " & GetClanSelectedUser & "?", vbYesNo, "StealthBot") = vbYes Then
-        With PBuffer
+        With pBuffer
             .InsertDWord &H3
             .InsertNTString GetClanSelectedUser
             .InsertByte lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon + 1
@@ -8243,7 +8251,7 @@ Private Sub mnuPopRem_Click()
         If MsgBox("Are you sure you want to remove this user from the clan?", vbExclamation + vbYesNo, _
                 "StealthBot") = vbYes Then
                 
-            With PBuffer
+            With pBuffer
                 If lvClanList.SelectedItem.Index > 0 Then
                     .InsertDWord 1 'lvClanList.ListItems(lvClanList.SelectedItem.Index).SmallIcon
                     .InsertNTString GetClanSelectedUser

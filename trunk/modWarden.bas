@@ -48,37 +48,37 @@ End Type
 
 Private Type MedivRandomContext
   Index As Long
-  data(0 To 19) As Byte
+  Data(0 To 19) As Byte
   Source1(0 To 19) As Byte
   Source2(0 To 19) As Byte
 End Type
 
 Private Declare Sub rc4_init Lib "Warden.dll" (ByVal key As String, ByVal Base As String, ByVal length As Long)
-Private Declare Sub rc4_crypt Lib "Warden.dll" (ByVal key As String, ByVal data As String, ByVal length As Long)
-Private Declare Sub rc4_crypt_data Lib "Warden.dll" (ByVal data As String, ByVal DataLength As Long, ByVal Base As String, ByVal BaseLength As Long)
+Private Declare Sub rc4_crypt Lib "Warden.dll" (ByVal key As String, ByVal Data As String, ByVal length As Long)
+Private Declare Sub rc4_crypt_data Lib "Warden.dll" (ByVal Data As String, ByVal DataLength As Long, ByVal Base As String, ByVal BaseLength As Long)
 
 Private Declare Function sha1_reset Lib "Warden.dll" (ByRef Context As SHA1Context) As Long
-Private Declare Function sha1_input Lib "Warden.dll" (ByRef Context As SHA1Context, ByVal data As String, ByVal length As Long) As Long
+Private Declare Function sha1_input Lib "Warden.dll" (ByRef Context As SHA1Context, ByVal Data As String, ByVal length As Long) As Long
 Private Declare Function sha1_digest Lib "Warden.dll" (ByRef Context As SHA1Context, ByVal digest As String) As Long
-Private Declare Function sha1_checksum Lib "Warden.dll" (ByVal data As String, ByVal length As Long, ByVal Version As Long) As Long
+Private Declare Function sha1_checksum Lib "Warden.dll" (ByVal Data As String, ByVal length As Long, ByVal Version As Long) As Long
 
 Private Declare Function md5_reset Lib "Warden.dll" (ByRef Context As MD5Context) As Long
-Private Declare Function md5_input Lib "Warden.dll" (ByRef Context As MD5Context, ByVal data As String, ByVal length As Long) As Long
+Private Declare Function md5_input Lib "Warden.dll" (ByRef Context As MD5Context, ByVal Data As String, ByVal length As Long) As Long
 Private Declare Function md5_digest Lib "Warden.dll" (ByRef Context As MD5Context, ByVal digest As String) As Long
-Private Declare Function md5_verify_data Lib "Warden.dll" (ByVal data As String, ByVal length As Long, ByVal CorrectMD5 As String) As Boolean
+Private Declare Function md5_verify_data Lib "Warden.dll" (ByVal Data As String, ByVal length As Long, ByVal CorrectMD5 As String) As Boolean
 
 Private Declare Sub mediv_random_init Lib "Warden.dll" (ByRef Context As MedivRandomContext, ByVal seed As String, ByVal length As Long)
 Private Declare Sub mediv_random_get_bytes Lib "Warden.dll" (ByRef Context As MedivRandomContext, ByVal Buffer As String, ByVal length As Long)
 
-Private Declare Function module_get_uncompressed_size Lib "Warden.dll" (ByVal data As String) As Long
-Private Declare Function module_get_prep_size Lib "Warden.dll" (ByVal data As String) As Long
+Private Declare Function module_get_uncompressed_size Lib "Warden.dll" (ByVal Data As String) As Long
+Private Declare Function module_get_prep_size Lib "Warden.dll" (ByVal Data As String) As Long
 Private Declare Function module_decompress Lib "Warden.dll" (ByVal source As String, ByVal SourceLength As Long, ByVal Destination As String, ByVal DestinationLength As Long) As Long
 
 Private Declare Function module_prep Lib "Warden.dll" (ByVal source As String, ByVal Callback As Long) As Long
 Private Declare Function module_init Lib "Warden.dll" (ByVal address As Long, ByVal Callbacks As Long) As Long
 Private Declare Function module_get_init_address Lib "Warden.dll" (ByVal module As Long) As Long
-Private Declare Sub module_init_rc4 Lib "Warden.dll" (ByVal Callback As Long, ByVal InitData As Long, ByVal data As String, ByVal length As Long)
-Private Declare Function module_handle_packet Lib "Warden.dll" (ByVal InitData As Long, ByVal data As String, ByVal length As Long) As Long
+Private Declare Sub module_init_rc4 Lib "Warden.dll" (ByVal Callback As Long, ByVal InitData As Long, ByVal Data As String, ByVal length As Long)
+Private Declare Function module_handle_packet Lib "Warden.dll" (ByVal InitData As Long, ByVal Data As String, ByVal length As Long) As Long
 
 
 Private m_CallBack(7)       As Long 'callback function list, for warden
@@ -90,17 +90,19 @@ Private Const MEDIV_MODULE_TRANSFER    As Byte = &H1
 Private Const WARDEN_CHEAT_CHECKS      As Byte = &H2
 Private Const WARDEN_NEW_CRYPT_KEYS    As Byte = &H5
 
+Public HandleWarden As Boolean
 
 Public Sub WardenInitRC4(ByRef war_ctx As WARDENCONTEXT, ByVal sSeed As String)
     Dim ctx             As MedivRandomContext
     Dim out_seed        As String
     Dim in_seed         As String
-        
+    
     If (Not CanHandleWarden()) Then
         Call frmChat.AddChat(vbRed, "[Warden] Warden support has not been initialized because zlib1.dll or Warden.dll could not be found.")
         Exit Sub
     End If
     
+    HandleWarden = True
     
     Call WardenCleanUp(war_ctx)
     '//Create new RC4 Keys
@@ -111,6 +113,8 @@ Public Sub WardenInitRC4(ByRef war_ctx As WARDENCONTEXT, ByVal sSeed As String)
     war_ctx.s_InKey = String(&H102, vbNull)
     war_ctx.s_RC4Seed = sSeed
   
+    On Error GoTo DLL_ERROR:
+    
     Call mediv_random_init(ctx, sSeed, Len(sSeed))
     Call mediv_random_get_bytes(ctx, out_seed, 16)
     Call mediv_random_get_bytes(ctx, in_seed, 16)
@@ -130,6 +134,11 @@ On Error GoTo handler 'This is eww I know, but if the folder is empty it'll try 
     End If
 handler:
     Call frmChat.AddChat(vbGreen, "[Warden] Initialized!")
+    Exit Sub
+    
+DLL_ERROR:
+    Call frmChat.AddChat(vbRed, "[Warden] Error #" & Err.Number & ": " & Err.description)
+    HandleWarden = False
 End Sub
 Public Sub WardenCleanUp(Context As WARDENCONTEXT)
   If (Len(Context.s_Module) > 0) Then Context.s_Module = vbNullString
@@ -138,6 +147,9 @@ Public Sub WardenCleanUp(Context As WARDENCONTEXT)
 End Sub
 Public Function WardenClientData(ByRef Context As WARDENCONTEXT, sData As String) As Boolean
   Dim ID As Integer
+  
+  If Not HandleWarden Then Exit Function
+  
   ID = Asc(Mid(sData, 2, 1))
   WardenClientData = False
     
@@ -150,6 +162,7 @@ End Function
 
 Public Function WardenServerData(ByRef Context As WARDENCONTEXT, sData As String) As Boolean
   Dim ID As Integer
+  
   ID = Asc(Mid(sData, 2, 1))
   WardenServerData = False
   If (ID = &H5E) Then
@@ -157,6 +170,11 @@ Public Function WardenServerData(ByRef Context As WARDENCONTEXT, sData As String
       
       Dim sPacket As String
       Dim opcode As Integer
+      
+      If Not HandleWarden Then
+        Call frmChat.AddChat(vbRed, "[Warden] Warden has been detected, and was not handled. You will be disconnected in approximately 2 minutes.")
+        Exit Function
+      End If
       
       sPacket = Mid$(sData, 5)
       Call rc4_crypt(Context.s_InKey, sPacket, Len(sPacket))
@@ -202,7 +220,7 @@ Private Sub WardenModuleInfo(ByRef Context As WARDENCONTEXT, sData As String)
   '(DWORD)    Module Compressed Length
   
   Dim pBuf As New clsDataBuffer
-  pBuf.data = sData
+  pBuf.Data = sData
   
   Context.s_MD5 = pBuf.GetRaw(16)
   Context.s_Key = pBuf.GetRaw(16)
@@ -240,7 +258,7 @@ Private Sub WardenModuleTransfer(ByRef Context As WARDENCONTEXT, sData As String
   Dim pBuf As New clsDataBuffer
   Dim data_length As Long
   
-  pBuf.data = sData
+  pBuf.Data = sData
   data_length = pBuf.GetWord
   Context.s_Module = Context.s_Module & pBuf.GetRaw(data_length)
       
@@ -279,7 +297,7 @@ Private Sub WardenCheatChecks(ByRef Context As WARDENCONTEXT, sData As String)
   Dim sNames As String
   Dim key As Byte
   Dim lib_length As Long
-  Dim x As Integer
+  Dim X As Integer
   Dim Offset As Long
   Dim mem As String
   Dim opcode As Byte
@@ -289,7 +307,7 @@ Private Sub WardenCheatChecks(ByRef Context As WARDENCONTEXT, sData As String)
   
   Dim tBuffer As New clsDataBuffer
   Dim pBuffer As New clsDataBuffer
-  pBuffer.data = sData
+  pBuffer.Data = sData
   
   key = Asc(Right(sData, 1))
   If (MDebug("warden")) Then
@@ -298,18 +316,18 @@ Private Sub WardenCheatChecks(ByRef Context As WARDENCONTEXT, sData As String)
   End If
   
   lib_length = pBuffer.GetByte
-  x = 0
+  X = 0
   
   Do While (lib_length > 0)
-    x = x + 1
+    X = X + 1
     sTemp = pBuffer.GetRaw(lib_length)
     sNames = sNames & Chr$(0) & sTemp
     If (MDebug("warden")) Then
-      Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Library: (" & x & ") " & sTemp)
+      Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Library: (" & X & ") " & sTemp)
     End If
     lib_length = pBuffer.GetByte
   Loop
-  lib_count = x
+  lib_count = X
   sTemp = vbNullString
  
   Do While (pBuffer.length() >= pBuffer.Position() + 2)
@@ -317,10 +335,10 @@ Private Sub WardenCheatChecks(ByRef Context As WARDENCONTEXT, sData As String)
     
     If (Context.b_MEM_CHECK = 0 Or Context.b_PAGE_CHECK_A = 0) Then
       tBuffer.Clear
-      tBuffer.data = pBuffer.GetRaw(6, True)
+      tBuffer.Data = pBuffer.GetRaw(6, True)
       lib_id = tBuffer.GetByte
       Offset = tBuffer.GetDWORD
-      x = tBuffer.GetByte
+      X = tBuffer.GetByte
       
       If (lib_id > lib_count) Then
         Context.b_PAGE_CHECK_A = opcode
@@ -344,9 +362,9 @@ Private Sub WardenCheatChecks(ByRef Context As WARDENCONTEXT, sData As String)
         page_seed = pBuffer.GetDWORD
         page_sha1 = pBuffer.GetRaw(20)
         page_address = pBuffer.GetDWORD
-        x = pBuffer.GetByte
+        X = pBuffer.GetByte
         Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Opcode: 0x" & ZeroOffset(opcode, 2) & _
-        " Page: " & Right$("   " & x, 3) & " @ 0x" & ZeroOffset(page_address, 8) & _
+        " Page: " & Right$("   " & X, 3) & " @ 0x" & ZeroOffset(page_address, 8) & _
         " Seed: 0x" & ZeroOffset(page_seed, 8) & " Hash: " & StrToHex(page_sha1, True))
       Else
         Call pBuffer.GetRaw(29) 'remove from the buffer
@@ -355,8 +373,8 @@ Private Sub WardenCheatChecks(ByRef Context As WARDENCONTEXT, sData As String)
     ElseIf (opcode = Context.b_MEM_CHECK) Then
       lib_id = pBuffer.GetByte
       Offset = pBuffer.GetDWORD
-      x = pBuffer.GetByte
-      mem = WardenGetMemorySegment(Context, Offset, CByte(x), opcode, lib_id, sNames)
+      X = pBuffer.GetByte
+      mem = WardenGetMemorySegment(Context, Offset, CByte(X), opcode, lib_id, sNames)
       If (mem = vbNullString) Then
         'sTemp = sTemp & Chr$(1)
         Exit Sub 'No point in sending it without data
@@ -375,7 +393,7 @@ Private Sub WardenCheatChecks(ByRef Context As WARDENCONTEXT, sData As String)
   tBuffer.InsertDWord sha1_checksum(sTemp, Len(sTemp), 0)
   tBuffer.InsertNonNTString sTemp
   
-  sTemp = tBuffer.data
+  sTemp = tBuffer.Data
   
   Call WardenSendData(Context, sTemp)
 End Sub
@@ -415,36 +433,36 @@ Private Sub WardenSendData(ByRef Context As WARDENCONTEXT, sData As String)
 End Sub
 
 Public Function WardenLoadModule(ByRef Context As WARDENCONTEXT, Optional FromFile As Boolean = False) As Boolean
-  Dim x As Long
+  Dim X As Long
   Dim temp As String
-  Dim data As String
+  Dim Data As String
   
   If (FromFile) Then
     If (Dir$(m_ModFolder & StrToHex(Context.s_MD5, True) & ".bin") <> vbNullString) Then
       Open m_ModFolder & StrToHex(Context.s_MD5, True) & ".bin" For Binary Access Read As #1
-        data = String$(LOF(1), Chr$(0))
-        Get 1, 1, data
+        Data = String$(LOF(1), Chr$(0))
+        Get 1, 1, Data
       Close #1
     Else
       WardenLoadModule = False
       Exit Function
     End If
   Else
-    data = Context.s_Module
+    Data = Context.s_Module
   End If
   
-  If md5_verify_data(data, Len(data), Context.s_MD5) Then
+  If md5_verify_data(Data, Len(Data), Context.s_MD5) Then
     If (MDebug("warden")) Then Call frmChat.AddChat(RTBColors.InformationText, "[Warden] MD5 Passed")
     Dim Base As String
-    rc4_crypt_data data, Len(data), Context.s_Key, Len(Context.s_Key)
+    rc4_crypt_data Data, Len(Data), Context.s_Key, Len(Context.s_Key)
     
-    If (Mid(data, Len(data) - &H103, 4) = "NGIS") Then
+    If (Mid(Data, Len(Data) - &H103, 4) = "NGIS") Then
       If (MDebug("warden")) Then Call frmChat.AddChat(RTBColors.InformationText, "[Warden] RC4 Passed")
-      x = module_get_uncompressed_size(data)
-      temp = String$(x, Chr$(0))
-      If (Not module_decompress(data, Len(data), temp, x)) Then
+      X = module_get_uncompressed_size(Data)
+      temp = String$(X, Chr$(0))
+      If (Not module_decompress(Data, Len(Data), temp, X)) Then
         If (MDebug("warden")) Then Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Decompressions Successful")
-        x = module_get_prep_size(temp)
+        X = module_get_prep_size(temp)
         Context.l_Module = module_prep(temp, AddressOf WardenDebugCallback)
         WardenLoadModule = (Context.l_Module > 0)
         
@@ -501,10 +519,10 @@ Public Sub WardenDebugCallback(ByVal color As Long, ByVal addr As Long, ByVal le
   Call frmChat.AddChat(RTBColors.InformationText, "[Warden] ", color, msg)
 End Sub
 Public Sub WriteFile(sPath As String, sData As String)
-  Dim i As Integer
-  i = FreeFile
-  Open sPath For Binary Access Write As #i
-    Put #i, 1, sData
+  Dim I As Integer
+  I = FreeFile
+  Open sPath For Binary Access Write As #I
+    Put #I, 1, sData
   Close #1
 End Sub
 
@@ -520,7 +538,7 @@ Private Sub WardenSendPacket(ByVal ptrPacket As Long, ByVal dwSize As Long)
     Call frmChat.AddChat(RTBColors.InformationText, "[Warden] SendPacket(0x" & ZeroOffset(ptrPacket, 8) & _
          ", " & dwSize & ")" & vbNewLine & DebugOutput(m_PKT))
   End If
-  pBuffer.data = m_PKT
+  pBuffer.Data = m_PKT
   pBuffer.SendPacket &H5E
 End Sub
 Private Function WardenCheckModule(ByVal ptrMod As Long, ByVal ptrKey As Long) As Long
@@ -571,7 +589,7 @@ Private Function WardenGetRC4Data(ByVal lpBuffer As Long, ByRef dwSize As Long) 
 End Function
 
 Private Function WardenGetMemorySegment(ByRef Context As WARDENCONTEXT, address As Long, length As Long, opcode As Byte, lib_id As Byte, names As String) As String
-  Dim data As String
+  Dim Data As String
   Dim game_client As String
   Dim lib_name As String
   If (lib_id > 0) Then lib_name = Split(names & String$(lib_id, Chr$(0)), Chr$(0))(lib_id)
@@ -584,23 +602,23 @@ Private Function WardenGetMemorySegment(ByRef Context As WARDENCONTEXT, address 
   End If
   
   If (lib_id > 0) Then
-    data = ReadINI(game_client & "_" & lib_name, ZeroOffset(length, 2) & "_" & ZeroOffset(address, 8), "./Warden.ini")
+    Data = ReadINI(game_client & "_" & lib_name, ZeroOffset(length, 2) & "_" & ZeroOffset(address, 8), "./Warden.ini")
   Else
-    data = ReadINI(game_client & "_Mem_Check", ZeroOffset(length, 2) & "_" & ZeroOffset(address, 8), "./Warden.ini")
+    Data = ReadINI(game_client & "_Mem_Check", ZeroOffset(length, 2) & "_" & ZeroOffset(address, 8), "./Warden.ini")
   End If
   
   WardenGetMemorySegment = vbNullString
   
-  If data = vbNullString Then
+  If Data = vbNullString Then
     Call frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Could not find memory segment " & length & _
     " at 0x" & ZeroOffset(address, 8) & " for " & IIf(Len(lib_name) > 0, lib_name, "MEM_CHECK") & ". You will be disconnected soon.")
     Call frmChat.AddChat(RTBColors.ErrorMessageText, "[Warden] Make sure you have the latest Warden.ini from http://www.stealthbot.net/board/index.php?showtopic=41491")
   Else
-    WardenGetMemorySegment = HexToStr(data)
+    WardenGetMemorySegment = HexToStr(Data)
     If (MDebug("warden")) Then
       Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Opcode: 0x" & ZeroOffset(opcode, 2) & _
       " Read: " & Right$("   " & length, 3) & " @ (" & lib_id & ") 0x" & ZeroOffset(address, 8) & _
-      " Data: " & data)
+      " Data: " & Data)
     End If
   End If
 End Function
