@@ -197,8 +197,8 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &H25 'SID_PING
                 If BotVars.Spoof = 0 Or g_Online Then
-                    pBuffer.InsertDWord pD.GetDWORD
-                    pBuffer.SendPacket &H25
+                    PBuffer.InsertDWord pD.GetDWORD
+                    PBuffer.SendPacket &H25
                 End If
             
             '###########################################################################
@@ -235,7 +235,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                             If Dii And BotVars.UseRealm Then
                                 Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Asking Battle.net for a list of Realm servers...")
                                 frmRealm.Show
-                                pBuffer.SendPacket &H40
+                                PBuffer.SendPacket &H40
                             Else
                                 Send0x0A
                             End If
@@ -613,236 +613,6 @@ Public Function StrToHex(ByVal String1 As String, Optional ByVal NoSpaces As Boo
     StrToHex = strReturn
 End Function
 
-'Public Sub DecodeCDKey(ByVal sCDKey As String, ByRef dProductId As Double, ByRef dValue1 As Double, ByRef dValue2 As Double)
-'    sCDKey = Replace(sCDKey, "-", vbNullString)
-'    sCDKey = Replace(sCDKey, " ", vbNullString)
-'    sCDKey = KillNull(sCDKey)
-'
-'    If Len(sCDKey) = 13 Then
-'        sCDKey = DecodeStarcraftKey(sCDKey)
-'    ElseIf Len(sCDKey) = 16 Then
-'        sCDKey = DecodeD2Key(sCDKey)
-'        'addchat vbBlue, "Decoded Diablo II CDKey: " & vbCrLf & DebugOutput(sCDKey)
-'    Else
-'        Exit Sub
-'    End If
-'
-'    dProductId = Val("&H" & Left$(sCDKey, 2))
-'
-'    If Len(sCDKey) = 13 Then
-'        dValue1 = Val(Mid$(sCDKey, 3, 7))
-'        dValue2 = Val(Mid$(sCDKey, 10, 3))
-'
-'    ElseIf Len(sCDKey) = 16 Then
-'        dValue1 = Val("&H" & Mid$(sCDKey, 3, 6))
-'        dValue2 = Val("&H" & Mid$(sCDKey, 9))
-'    End If
-'
-'End Sub
-
-Public Function DecodeD2Key(ByVal key As String) As String
-
-    Dim R As Double, n As Double, n2 As Double, v As Double, _
-    v2 As Double, KeyValue As Double, c1 As Integer, c2 As Integer, _
-    c As Byte, I As Integer, aryKey(0 To 15) As String, _
-    codeValues As String ', bValid as boolean
-    
-    On Error GoTo ErrorTrapped
-    
-    codeValues = "246789BCDEFGHJKMNPRTVWXZ"
-    R = 1
-    KeyValue = 0
-    
-    For I = 1 To 16
-    
-        aryKey(I - 1) = Mid$(key, I, 1)
-        
-    Next I
-    
-    For I = 0 To 15 Step 2
-        c1 = InStr(1, codeValues, aryKey(I)) - 1
-        If c1 < 0 Then c1 = &HFF
-        If c1 > 255 Then c1 = 255
-        n = c1 * 3
-        c2 = InStr(1, codeValues, aryKey(I + 1)) - 1
-        If c2 = -1 Then c2 = &HFF
-        If c2 > 255 Then c2 = 255
-        n = c2 + n * 8
-        
-        If n >= &H100 Then
-        
-            n = n - &H100
-            KeyValue = KeyValue Or R
-            
-        End If
-        
-        n2 = n
-        n2 = RShift(n2, 4)
-        aryKey(I) = GetHexValue(n2)
-        aryKey(I + 1) = GetHexValue(n)
-        R = LShift(R, 1)
-        
-Cont:
-
-    Next I
-    
-    v = 3
-    
-    For I = 0 To 15
-    
-        c = GetNumValue(aryKey(I))
-        n = Val(c)
-        n2 = v * 2
-        n = n Xor n2
-        v = v + n
-        
-    Next I
-    
-    v = v And &HFF
-    
-    For I = 15 To 0 Step -1
-    
-        c = Asc(aryKey(I))
-        
-        If I > 8 Then
-        
-            n = I - 9
-            
-        Else
-        
-            n = &HF - (8 - I)
-            
-        End If
-        
-        n = n And &HF
-        c2 = Asc(aryKey(n))
-        aryKey(I) = Chr$(c2)
-        aryKey(n) = Chr$(c)
-        
-    Next I
-    
-    v2 = &H13AC9741
-    
-    For I = 15 To 0 Step -1
-    
-        c = Asc(UCase(aryKey(I)))
-        aryKey(I) = Chr$(c)
-        
-        If Val(c) <= Asc("7") Then
-        
-            v = v2
-            c2 = v And &HF
-            c2 = c2 And 7
-            c2 = c2 Xor c
-            v = RShift(v, 3)
-            aryKey(I) = Chr$(c2)
-            v2 = v
-            
-        ElseIf Val(c) < Asc("A") Then
-        
-            c2 = CByte(I)
-            c2 = c2 And 1
-            c2 = c2 Xor c
-            aryKey(I) = Chr$(c2)
-            
-        End If
-        
-    Next I
-    
-    DecodeD2Key = Join(aryKey, vbNullString)
-    
-    Erase aryKey()
-    
-    Exit Function
-    
-ErrorTrapped:
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, "D2/W2 CDKey decoding error occurred!")
-    Call frmChat.AddChat(RTBColors.ErrorMessageText, Err.Number & ": " & Err.description)
-End Function
-
-Public Function DecodeStarcraftKey(ByVal sKey As String) As String
-    Dim n As Double, n2 As Double, v As Double, _
-    v2 As Double, c2 As Byte, c As Byte, _
-    bValid As Boolean, I As Integer, aryKey(0 To 12) As String 'r as double, keyvalue as double, c1 as byte
-    
-    For I = 1 To 13
-    
-        aryKey(I - 1) = Mid$(sKey, I, 1)
-        
-    Next I
-    
-    v = 3
-    
-    For I = 0 To 11
-    
-        c = aryKey(I)
-        n = Val(c)
-        n2 = v * 2
-        n = n Xor n2
-        v = v + n
-        
-    Next I
-    
-    v = v Mod 10
-    
-    If Hex(v) = aryKey(12) Then
-    
-        bValid = True
-        
-    End If
-    
-    v = 194
-    
-    For I = 11 To 0 Step -1
-    
-        If v < 7 Then GoTo continue
-        c = aryKey(I)
-        n = CInt(v / 12)
-        n2 = v Mod 12
-        v = v - 17
-        c2 = aryKey(n2)
-        aryKey(I) = c2
-        aryKey(n2) = c
-        
-    Next I
-    
-continue:
-
-    v2 = &H13AC9741
-    
-    For I = 11 To 0 Step -1
-    
-        c = UCase$(aryKey(I))
-        aryKey(I) = c
-        
-        If Asc(c) <= Asc("7") Then
-        
-            v = v2
-            c2 = v And &HFF
-            c2 = c2 And 7
-            c2 = c2 Xor c
-            v = RShift(CLng(v), 3)
-            aryKey(I) = c2
-            v2 = v
-            
-        ElseIf Asc(c) < 65 Then
-        
-            c2 = CByte(I)
-            c2 = c2 And 1
-            c2 = c2 Xor c
-            aryKey(I) = c2
-            
-        End If
-        
-    Next I
-    
-    DecodeStarcraftKey = Join(aryKey, vbNullString)
-    
-    Erase aryKey()
-    
-End Function
-
-
 Public Function LShift(ByVal pnValue As Long, ByVal pnShift As Long) As Double
     'on error resume next
     LShift = CDbl(pnValue * (2 ^ pnShift))
@@ -853,21 +623,6 @@ Public Function RShift(ByVal pnValue As Long, ByVal pnShift As Long) As Double
     'on error resume next
     RShift = CDbl(pnValue \ (2 ^ pnShift))
 End Function
-
-'Private Function HexToDec(ByVal sHex As String) As Long
-''on error resume next
-'    Dim i As Integer
-'    Dim nDec As Long
-'    Const HexChar As String = "0123456789ABCDEF"
-'
-'
-'
-'    For i = Len(sHex) To 1 Step -1
-'        nDec = nDec + (InStr(1, HexChar, Mid(sHex, i, 1)) - 1) * 16 ^ (Len(sHex) - i)
-'    Next i
-'    HexToDec = CStr(nDec)
-'
-'End Function
 
 Public Function KillNull(ByVal text As String) As String
     Dim I As Integer
@@ -886,12 +641,12 @@ Public Function ParsePing(strData As String) As Long
     CopyMemory ParsePing, ByVal strPing$, 4
 End Function
 
-Public Function CVL(X As String) As Long
+Public Function CVL(x As String) As Long
     'on error resume next
-    If Len(X) < 4 Then
+    If Len(x) < 4 Then
         Exit Function
     End If
-    CopyMemory CVL, ByVal X, 4
+    CopyMemory CVL, ByVal x, 4
 End Function
 
 
@@ -950,12 +705,12 @@ End Sub
 
 Public Sub FullJoin(Channel As String, Optional ByVal I As Long = -1)
     If I >= 0 Then
-        pBuffer.InsertDWord CLng(I)
+        PBuffer.InsertDWord CLng(I)
     Else
-        pBuffer.InsertDWord &H2
+        PBuffer.InsertDWord &H2
     End If
-    pBuffer.InsertNTString Channel
-    pBuffer.SendPacket &HC
+    PBuffer.InsertNTString Channel
+    PBuffer.SendPacket &HC
 End Sub
 
 Public Function HexToStr(ByVal Hex1 As String) As String
@@ -970,15 +725,15 @@ End Function
 
 Public Sub RejoinChannel(Channel As String)
     'on error resume next
-    pBuffer.SendPacket &H10
-    pBuffer.InsertDWord &H2
-    pBuffer.InsertNTString Channel
-    pBuffer.SendPacket &HC
+    PBuffer.SendPacket &H10
+    PBuffer.InsertDWord &H2
+    PBuffer.InsertNTString Channel
+    PBuffer.SendPacket &HC
 End Sub
 
 Public Sub RequestProfile(strUser As String)
     'on error resume next
-    With pBuffer
+    With PBuffer
         .InsertDWord 1
         .InsertDWord 4
         .InsertDWord GetTickCount()
@@ -992,7 +747,7 @@ Public Sub RequestProfile(strUser As String)
 End Sub
 
 Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
-    With pBuffer
+    With PBuffer
         .InsertDWord 1
         .InsertDWord 1
         .InsertDWord GetTickCount()
@@ -1028,7 +783,7 @@ Public Sub SetProfile(ByVal Location As String, ByVal description As String, Opt
     End If
     
     
-    With pBuffer
+    With PBuffer
         .InsertDWord &H1                    '// #accounts
         .InsertDWord 3                      '// #keys
         
@@ -1090,7 +845,7 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
     If nKeys > 0 Then
         Dim I As Integer
     
-        With pBuffer
+        With PBuffer
             .InsertDWord &H1                    '// #accounts
             .InsertDWord nKeys                  '// #keys
             .InsertNTString CurrentUsername     '// account to update
@@ -1495,133 +1250,18 @@ Public Function GetCharacterName(ByVal Statstring As String, ByVal Start As Byte
     GetCharacterName = InStr(Start, Statstring, ",") + 1
 End Function
 
-Function MakeLong(X As String) As Long
+Function MakeLong(x As String) As Long
  'on error resume next
-    If Len(X) < 4 Then
+    If Len(x) < 4 Then
         Exit Function
     End If
-    CopyMemory MakeLong, ByVal X, 4
+    CopyMemory MakeLong, ByVal x, 4
 End Function
 
 Public Sub StrCpy(ByRef source As String, ByVal nText As String)
     'on error resume next
     source = source & nText
 End Sub
-
-Public Sub GetValues(ByVal DataBuf As String, ByRef Ping As Long, ByRef Flags As Long, ByRef Name As String, ByRef txt As String)
-    'on error resume next
-    Dim a As Long ', b As Long, c As Long, D As Long, E As Long, F As Long
-    Dim f As Long
-    Dim recvbufpos As Long
-    
-    Name = vbNullString
-    txt = vbNullString
-    
-    'Debug.Print DebugOutput(DataBuf)
-    
-    recvbufpos = 9
-    f = MakeLong(Mid$(DataBuf, recvbufpos, 4))
-    
-    recvbufpos = recvbufpos + 4
-    a = CVL(Mid$(DataBuf, recvbufpos, 4))
-    
-'    recvbufpos = recvbufpos + 4
-'    b = MakeLong(Mid$(DataBuf, recvbufpos, 4))
-'
-'    recvbufpos = recvbufpos + 4
-'    c = MakeLong(Mid$(DataBuf, recvbufpos, 4))
-'
-'    recvbufpos = recvbufpos + 4
-'    D = MakeLong(Mid$(DataBuf, recvbufpos, 4))
-'
-'    recvbufpos = recvbufpos + 4
-'    E = MakeLong(Mid$(DataBuf, recvbufpos, 4))
-    
-'    recvbufpos = recvbufpos + 4
-    Flags = f
-    Ping = a
-    
-    Call StrCpy(Name, KillNull(Mid$(DataBuf, 29)))
-    Call StrCpy(txt, KillNull(Mid$(DataBuf, Len(Name) + 30)))
-End Sub
-
-'Public Sub ParseBinary(strData As String)
-'
-'   On Error GoTo ParseBinary_Error
-'
-'    If Len(strData) < 5 Then Exit Sub
-'    Dim usrFlags As Long, Ping As Long, usrName As String, usrText As String
-'    Dim Statstring As String, Product As String * 4
-'    Dim W3Icon As String, InitStatstring As String, sClan As String
-'    Dim PacketID As Byte
-'
-'    GetValues strData, Ping, usrFlags, usrName, usrText
-'
-''    If usrFlags = 10 Then: usrFlags = usrFlags + 6
-''    If usrFlags = 12 Then: usrFlags = usrFlags + 6
-'
-'    PacketID = Asc(Mid$(strData, 5, 1))
-'
-'    If (PacketID = ID_JOIN Or PacketID = ID_USER Or PacketID = ID_FLAGupdate) Then
-'        InitStatstring = usrText
-'
-'        Product = ParseStatString(usrText, Statstring, sClan)
-'        Product = StrReverse(Product)
-'
-'        If Product = "WAR3" Or Product = "W3XP" Then
-'            'Debug.Print usrText '//for that war3 statstring sniffage
-'            If Len(usrText) > 4 Then W3Icon = StrReverse(Mid$(usrText, 6, 4))
-'        End If
-'    End If
-'
-'    'usrFlags = CLng(Val(FlagsIDsplt(strData)))
-'
-'    'If Asc(Mid$(strData, 5, 1)) <> 5 Then Debug.Print Hex(Asc(Mid$(strData, 5, 1)))
-'
-'    Select Case PacketID
-'        Case ID_WHISPFROM
-'            If Not bFlood Then
-'                frmChat.Event_WhisperFromUser usrName, usrFlags, usrText, False
-'            End If
-'
-'        Case ID_TALK
-'            frmChat.Event_UserTalk usrName, usrFlags, usrText, Ping, False
-'
-'        Case ID_EMOTE
-'            If Not bFlood Then
-'                frmChat.Event_UserEmote usrName, usrFlags, usrText, False
-'            End If
-'
-'        Case ID_JOIN: frmChat.Event_UserJoins usrName, usrFlags, Statstring, Ping, Product, sClan, InitStatstring, W3Icon
-'        Case ID_BROADCAST: frmChat.Event_ServerInfo "[Broadcast from " & usrName & "]: " & usrText, False
-'        Case ID_USER: If Not bFlood Then frmChat.Event_UserInChannel usrName, usrFlags, Statstring, Ping, Product, sClan, InitStatstring, W3Icon
-'        Case ID_FLAGS: If Not bFlood Then frmChat.Event_FlagsUpdate usrName, usrFlags, usrText, Ping, InitStatstring
-'        Case ID_ERROR: frmChat.Event_ServerError usrText, False
-'        Case ID_WHISPTO: frmChat.Event_WhisperToUser usrName, usrFlags, usrText, Ping, False
-'        Case ID_CHAN: frmChat.Event_JoinedChannel usrText, usrFlags, False
-'        Case ID_INFO: If Not bFlood Then frmChat.Event_ServerInfo usrText, False
-'        Case ID_LEAVE: If Not bFlood Then frmChat.Event_UserLeaves usrName, usrFlags, False, W3Icon
-'        Case 0: Exit Sub
-'        Case Else
-'            On Error Resume Next
-'            'Debug.Print strData
-'            If InStr(1, Command(), "-debug", vbTextCompare) > 0 Then
-'                AddChat RTBColors.ErrorMessageText, "Unhandled packet 0x" & IIf(Len(CStr(Hex(Asc(Mid$(strData, 2, 1))))) = 1, "0" & Hex(Asc(Mid$(strData, 2, 1))), Hex(Asc(Mid$(strData, 2, 1))))
-'                AddChat RTBColors.ErrorMessageText, "Packet data: " & vbCrLf & DebugOutput(strData)
-'            End If
-'    End Select
-'    Exit Sub
-'Errz:
-'    AddChat RTBColors.SuccessText, "Trapped error: " & Err.Number & ": " & Err.Description
-'
-'ParseBinary_Exit:
-'    Exit Sub
-'
-'ParseBinary_Error:
-'
-'    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParseBinary of Module modParsing"
-'    Resume ParseBinary_Exit
-'End Sub
 
 Public Sub MakeArray(ByVal text As String, ByRef nArray() As String)
     Dim I As Long
@@ -1972,7 +1612,7 @@ End Function
 'Originally from DPChat by Zorm - cleaned up and adapted to my needs
 Public Sub ProfileParse(Data As String)
     On Error Resume Next
-    Dim X As Integer
+    Dim x As Integer
     Dim ProfileEnd As String
     Dim SplitProfile() As String
     

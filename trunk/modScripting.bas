@@ -431,12 +431,12 @@ Public Sub InitScript(ByVal SCModule As module)
 
     If (g_Online) Then
         RunInSingle SCModule, "Event_LoggedOn", GetCurrentUsername, BotVars.Product
-        RunInSingle SCModule, "Event_ChannelJoin", g_Channel.Name, g_Channel.flags
+        RunInSingle SCModule, "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
     
         If (g_Channel.Users.Count > 0) Then
             For I = 1 To g_Channel.Users.Count
                 With g_Channel.Users(I)
-                     RunInSingle SCModule, "Event_UserInChannel", .DisplayName, .flags, .Stats.ToString, .Ping, _
+                     RunInSingle SCModule, "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, _
                         .game, False
                 End With
              Next I
@@ -449,36 +449,23 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
     On Error Resume Next
 
     Dim SC    As ScriptControl
-    Dim I     As Integer ' ...
-    Dim arr() As Variant ' ...
-    Dim str   As String  ' ...
+    Dim I     As Integer
+    Dim arr() As Variant
+    Dim str   As String
     Dim veto  As Boolean
     
     veto = False
     
-    ' ...
     Set SC = m_sc_control
     
-    ' ...
     If (m_is_reloading) Then
         Exit Function
     End If
 
-    ' ...
     arr() = Parameters()
 
-    ' ...
     For I = 2 To SC.Modules.Count
-        'If (I > 1) Then
-        '    str = _
-        '        SC.Modules(I).CodeObject.GetSettingsEntry("Enabled")
-        'End If
-
-        'If (StrComp(str, "False", vbTextCompare) <> 0) Then
-        '    veto = CallByNameEx(SC.Modules(I), "Run", VbMethod, arr()) Or veto
-        'End If
-        
-        veto = RunInSingle(SC.Modules(I), arr())
+        veto = RunInSingle(SC.Modules(I), arr()) Or veto
     Next
     
     RunInAll = veto
@@ -489,17 +476,15 @@ Public Function RunInSingle(obj As Object, ParamArray Parameters() As Variant) A
 
     On Error Resume Next
 
-    Dim I     As Integer ' ...
-    Dim arr() As Variant ' ...
-    Dim str   As String  ' ...
+    Dim I     As Integer
+    Dim arr() As Variant
+    Dim str   As String
     RunInSingle = False
     
-    ' ...
     If (m_is_reloading) Then
         Exit Function
     End If
 
-    ' ...
     arr() = Parameters()
 
     str = obj.CodeObject.GetSettingsEntry("Enabled")
