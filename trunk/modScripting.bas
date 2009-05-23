@@ -563,9 +563,6 @@ ERROR_HANDLER:
         " in CallByNameEx()."
         
     Set oTLI = Nothing
-        
-    Exit Function
-    
 End Function
 
 Public Function Objects(objIndex As Integer) As scObj
