@@ -740,7 +740,7 @@ Private Sub Form_KeyDown(KeyCode As Integer, Shift As Integer)
     On Error Resume Next
 
     ' ...
-    RunInSingle m_sc_module, m_name & "_KeyDown", keybode, Shift
+    RunInSingle m_sc_module, m_name & "_KeyDown", KeyCode, Shift
 
 End Sub
 

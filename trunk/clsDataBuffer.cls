@@ -527,7 +527,7 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     CopyMemory ByVal strbuf, buf(0), m_bufsize + 3
 
     ' ...
-    veto = RunInAllEx("Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, strbuf)
+    veto = RunInAll("Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, strbuf)
     
     If (Not veto) Then
         ' ...

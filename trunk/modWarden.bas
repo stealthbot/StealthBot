@@ -1,4 +1,6 @@
 Attribute VB_Name = "modWarden"
+Option Explicit
+
 Public Type WARDENCONTEXT
   l_Debug As Long
   l_Module As Long
@@ -100,8 +102,6 @@ Public Sub WardenInitRC4(ByRef war_ctx As WARDENCONTEXT)
         Exit Sub
     End If
     
-    HandleWarden = True
-    
     Call WardenCleanUp(war_ctx)
     '//Create new RC4 Keys
   
@@ -116,7 +116,7 @@ Public Sub WardenInitRC4(ByRef war_ctx As WARDENCONTEXT)
     Call mediv_random_get_bytes(ctx, out_seed, 16)
     Call mediv_random_get_bytes(ctx, in_seed, 16)
     If (MDebug("warden")) Then
-      Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Random Seed: " & StrToHex(sSeed, True))
+      Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Random Seed: " & StrToHex(war_ctx.s_RC4Seed, True))
       Call frmChat.AddChat(RTBColors.InformationText, "[Warden] Out Seed: " & StrToHex(out_seed))
       Call frmChat.AddChat(RTBColors.InformationText, "[Warden] In Seed:  " & StrToHex(in_seed))
     End If
@@ -135,7 +135,6 @@ handler:
     
 DLL_ERROR:
     Call frmChat.AddChat(vbRed, "[Warden] Error #" & Err.Number & ": " & Err.description)
-    HandleWarden = False
 End Sub
 Public Sub WardenCleanUp(Context As WARDENCONTEXT)
   If (Len(Context.s_Module) > 0) Then Context.s_Module = vbNullString
@@ -147,8 +146,6 @@ End Sub
 Public Function WardenClientData(ByRef Context As WARDENCONTEXT, sData As String) As Boolean
   Dim ID As Integer
   
-  If Not HandleWarden Then Exit Function
-  
   ID = Asc(Mid(sData, 2, 1))
   WardenClientData = False
     
@@ -156,7 +153,7 @@ Public Function WardenClientData(ByRef Context As WARDENCONTEXT, sData As String
     Context.l_Product = GetDWORD(Mid$(sData, 13, 4))
   ElseIf (ID = &H51) Then
     Context.s_RC4Seed = Mid$(sData, 41, 4)
-    AddChat vbYellow, "Warden seed: " & StrToHex(Context.s_RC4Seed)
+    frmChat.AddChat vbYellow, "Warden seed: " & StrToHex(Context.s_RC4Seed)
   End If
 End Function
 
