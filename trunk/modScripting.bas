@@ -431,12 +431,12 @@ Public Sub InitScript(ByVal SCModule As module)
 
     If (g_Online) Then
         RunInSingle SCModule, "Event_LoggedOn", GetCurrentUsername, BotVars.Product
-        RunInSingle SCModule, "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
+        RunInSingle SCModule, "Event_ChannelJoin", g_Channel.Name, g_Channel.flags
     
         If (g_Channel.Users.Count > 0) Then
             For I = 1 To g_Channel.Users.Count
                 With g_Channel.Users(I)
-                     RunInSingle SCModule, "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, _
+                     RunInSingle SCModule, "Event_UserInChannel", .DisplayName, .flags, .Stats.ToString, .Ping, _
                         .game, False
                 End With
              Next I
@@ -469,15 +469,18 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
 
     ' ...
     For I = 2 To SC.Modules.Count
-        If (I > 1) Then
-            str = _
-                SC.Modules(I).CodeObject.GetSettingsEntry("Enabled")
-        End If
+        'If (I > 1) Then
+        '    str = _
+        '        SC.Modules(I).CodeObject.GetSettingsEntry("Enabled")
+        'End If
 
-        If (StrComp(str, "False", vbTextCompare) <> 0) Then
-            veto = CallByNameEx(SC.Modules(I), "Run", VbMethod, arr()) Or veto
-        End If
+        'If (StrComp(str, "False", vbTextCompare) <> 0) Then
+        '    veto = CallByNameEx(SC.Modules(I), "Run", VbMethod, arr()) Or veto
+        'End If
+        
+        veto = RunInSingle(SC.Modules(I), arr())
     Next
+    
     RunInAll = veto
     
 End Function
@@ -500,6 +503,7 @@ Public Function RunInSingle(obj As Object, ParamArray Parameters() As Variant) A
     arr() = Parameters()
 
     str = obj.CodeObject.GetSettingsEntry("Enabled")
+    
     If (StrComp(str, "False", vbTextCompare) <> 0) Then
         RunInSingle = CallByNameEx(obj, "Run", VbMethod, arr())
     End If
@@ -545,6 +549,7 @@ Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCa
     Set oTLI = Nothing
     
     CallByNameEx = GetVeto
+    
     SetVeto veto
     
     Exit Function
@@ -552,6 +557,7 @@ Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCa
 ERROR_HANDLER:
 
     CallByNameEx = GetVeto
+    
     SetVeto veto
     
     ' ...
@@ -563,6 +569,7 @@ ERROR_HANDLER:
         " in CallByNameEx()."
         
     Set oTLI = Nothing
+    
 End Function
 
 Public Function Objects(objIndex As Integer) As scObj
