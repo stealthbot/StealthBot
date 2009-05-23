@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
@@ -10,7 +10,7 @@ Begin VB.Form frmChat
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
    ClientLeft      =   225
-   ClientTop       =   825
+   ClientTop       =   855
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -4628,7 +4628,7 @@ Private Sub mnuScript_Click(Index As Integer)
     obj = GetScriptObjByIndex("Menu", Index)
 
     ' ...
-    obj.SCModule.Run obj.ObjName & "_Click"
+    RunInSingle obj.SCModule, obj.ObjName & "_Click"
 
 End Sub
 
@@ -4642,7 +4642,8 @@ Private Sub sckScript_Connect(Index As Integer)
     obj = GetScriptObjByIndex("Winsock", Index)
 
     ' ...
-    obj.SCModule.Run obj.ObjName & "_Connect"
+    RunInSingle obj.SCModule, obj.ObjName & "_Connect"
+    
     
 End Sub
 
@@ -4656,7 +4657,7 @@ Private Sub sckScript_DataArrival(Index As Integer, ByVal bytesTotal As Long)
     obj = GetScriptObjByIndex("Winsock", Index)
 
     ' ...
-    obj.SCModule.Run obj.ObjName & "_DataArrival", bytesTotal
+    RunInSingle obj.SCModule, obj.ObjName & "_DataArrival", bytesTotal
     
 End Sub
 
@@ -4670,7 +4671,7 @@ Private Sub sckScript_SendComplete(Index As Integer)
     obj = GetScriptObjByIndex("Winsock", Index)
 
     ' ...
-    obj.SCModule.Run obj.ObjName & "_SendComplete"
+    RunInSingle obj.SCModule, obj.ObjName & "_SendComplete"
 
 End Sub
 
@@ -4684,7 +4685,7 @@ Private Sub sckScript_SendProgress(Index As Integer, ByVal bytesSent As Long, By
     obj = GetScriptObjByIndex("Winsock", Index)
 
     ' ...
-    obj.SCModule.Run obj.ObjName & "_SendProgress", bytesSent, bytesRemaining
+    RunInSingle obj.SCModule, obj.ObjName & "_SendProgress", bytesSent, bytesRemaining
 
 End Sub
 
@@ -4698,11 +4699,11 @@ Private Sub sckScript_Close(Index As Integer)
     obj = GetScriptObjByIndex("Winsock", Index)
 
     ' ...
-    obj.SCModule.Run obj.ObjName & "_Close"
+    RunInSingle obj.SCModule, obj.ObjName & "_Close"
     
 End Sub
 
-Private Sub sckScript_Error(Index As Integer, ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckScript_Error(Index As Integer, ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
 
     On Error Resume Next
 
@@ -4712,8 +4713,7 @@ Private Sub sckScript_Error(Index As Integer, ByVal Number As Integer, descripti
     obj = GetScriptObjByIndex("Winsock", Index)
 
     ' ...
-    obj.SCModule.Run obj.ObjName & "_Error", Number, description, Scode, source, HelpFile, _
-        HelpContext, CancelDisplay
+    RunInSingle obj.SCModule, obj.ObjName & "_Error", Number, description, Scode, Source, HelpFile, HelpContext, CancelDisplay
 
 End Sub
 
@@ -4727,7 +4727,7 @@ Private Sub itcScript_StateChanged(Index As Integer, ByVal State As Integer)
     obj = GetScriptObjByIndex("Inet", Index)
     
     ' ...
-    obj.SCModule.Run obj.ObjName & "_StateChanged", State
+    RunInSingle obj.SCModule, obj.ObjName & "_StateChanged", State
 
 End Sub
 
@@ -4756,7 +4756,7 @@ Private Sub tmrScript_Timer(Index As Integer)
     obj = GetScriptObjByIndex("Timer", Index)
     
     ' ...
-    obj.SCModule.Run obj.ObjName & "_Timer"
+    RunInSingle obj.SCModule, obj.ObjName & "_Timer"
     
 End Sub
 
@@ -4775,7 +4775,7 @@ Private Sub tmrScriptLong_Timer(Index As Integer)
     ' ...
     If (obj.obj.Counter >= obj.obj.Interval) Then
         ' ...
-        obj.SCModule.Run obj.ObjName & "_Timer"
+        RunInSingle obj.SCModule, obj.ObjName & "_Timer"
         
         ' ...
         obj.obj.Counter = 0
@@ -5259,11 +5259,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                             '    BNCSBuffer.VoidTrimBuffer
                             'End If
                             
-                            SetVeto False
+                            Vetoed = RunInAll("Event_PressedEnter", cboSend.text)
                             
-                            RunInAll "Event_PressedEnter", cboSend.text
-                            
-                            Vetoed = GetVeto
                             
                             If (Not (Vetoed)) Then
                                 s = txtPre.text & cboSend.text & txtPost.text
@@ -5690,14 +5687,6 @@ Sub InitBNetConnection()
     'sckBNet.SendData ChrW(1)
     Call Send(sckBNet.SocketHandle, ChrW(1), 1, 0)
     
-    If ((BotVars.Product <> "3RAW") And _
-        (BotVars.Product <> "PX3W") And _
-        (BotVars.Product <> "RATS") And _
-        (BotVars.Product <> "PXES")) Then
-        frmChat.AddChat vbWhite, "not warden product"
-        modWarden.HandleWarden = False
-    End If
-    
     If BotVars.BNLS Then
         NLogin.Send_0x10 BotVars.Product
     Else
@@ -5705,7 +5694,7 @@ Sub InitBNetConnection()
     End If
 End Sub
 
-Private Sub sckBNet_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckBNet_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     Call Event_BNetError(Number, description)
 End Sub
 
@@ -5747,7 +5736,7 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Private Sub sckMCP_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckMCP_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     If Not g_Online Then
         ' This message is ignored if we've been online for awhile.
         AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & description
@@ -7371,11 +7360,11 @@ End Sub
 
 'returns OK to Proceed
 Function DisplayError(ByVal ErrorNumber As Integer, bytType As Byte, _
-    ByVal source As enuErrorSources) As Boolean
+    ByVal Source As enuErrorSources) As Boolean
     
     Dim s As String
     
-    s = GErrorHandler.GetErrorString(ErrorNumber, source)
+    s = GErrorHandler.GetErrorString(ErrorNumber, Source)
     
     If (LenB(s) > 0) Then
         Select Case (bytType)
@@ -7755,7 +7744,7 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Private Sub sckBNLS_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckBNLS_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     Call Event_BNLSError(Number, description)
 End Sub
 

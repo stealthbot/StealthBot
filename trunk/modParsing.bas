@@ -26,6 +26,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Dim w3icon      As String            ' Warcraft III icon code
     Dim b           As Boolean           ' Temporary bool
     Dim sArr()      As String            ' Temp String array
+    Dim veto        As Boolean
     
     Static ServerToken As Long           ' Server token used in various packets
     
@@ -52,15 +53,11 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         
         ' Added 2007-06-08 for a packet logging menu feature to aid tech support
         WritePacketData stBNCS, StoC, PacketID, PacketLen, PacketData
-        
+                
         ' ...
-        SetPacketVeto False
+        veto = RunInAll("Event_PacketReceived", "BNCS", PacketID, Len(PacketData), PacketData)
         
-        ' ...
-        RunInAll "Event_PacketReceived", "BNCS", PacketID, Len(PacketData), PacketData
-        
-        ' Uncommented 05-15-2009 - Scripts have the power to Veto Packets now.
-        If (GetPacketVeto) Then
+        If (veto) Then
             Exit Sub
         End If
         

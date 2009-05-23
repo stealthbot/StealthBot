@@ -3695,13 +3695,13 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
         If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
             tmpbuf(0) = "Error: The specified username is invalid."
         Else
-            Dim Msg As String ' ...
+            Dim msg As String ' ...
             
             ' ...
-            Msg = Mid$(msgData, Index + 1)
+            msg = Mid$(msgData, Index + 1)
         
             ' ...
-            shit_msg = user & shit_msg & " --type USER --banmsg " & Msg
+            shit_msg = user & shit_msg & " --type USER --banmsg " & msg
         End If
     Else
         ' ...
@@ -4962,7 +4962,7 @@ End Function ' end function OnCheckMail
 Private Function OnInbox(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim Msg      As udtMail
+    Dim msg      As udtMail
     Dim tmpbuf() As String ' temporary output buffer
     Dim mcount   As Integer
     Dim Index    As Integer
@@ -4990,13 +4990,13 @@ Private Function OnInbox(ByVal Username As String, ByRef dbAccess As udtGetAcces
         ' ...
         Do
             ' ...
-            GetMailMessage Username, Msg
+            GetMailMessage Username, msg
             
             ' ...
-            If (Len(RTrim(Msg.To)) > 0) Then
+            If (Len(RTrim(msg.To)) > 0) Then
                 ' ...
-                tmpbuf(Index) = "Message from " & RTrim$(Msg.From) & ": " & _
-                    RTrim$(Msg.Message)
+                tmpbuf(Index) = "Message from " & RTrim$(msg.From) & ": " & _
+                    RTrim$(msg.Message)
                     
                 ' ...
                 Index = Index + 1
@@ -6616,7 +6616,8 @@ Private Function OnDisable(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 frmChat.SControl.Modules(I).CodeObject.Script("Name")
                 
             If (StrComp(Name, msgData, vbTextCompare) = 0) Then
-                frmChat.SControl.Modules(I).Run "Event_Close"
+                RunInSingle frmChat.SControl.Modules(I), "Event_Close"
+                
             
                 frmChat.SControl.Modules(I).CodeObject.WriteSettingsEntry _
                     "Enabled", "False"

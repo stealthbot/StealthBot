@@ -421,7 +421,7 @@ Public Sub InitScript(ByVal SCModule As module)
     startTime = GetTickCount()
     
     ' ...
-    SCModule.Run "Event_Load"
+    RunInSingle SCModule, "Event_Load"
     
     ' ...
     finishTime = GetTickCount()
@@ -430,13 +430,13 @@ Public Sub InitScript(ByVal SCModule As module)
     SCModule.CodeObject.Script("InitPerf") = (finishTime - startTime)
 
     If (g_Online) Then
-        SCModule.Run "Event_LoggedOn", GetCurrentUsername, BotVars.Product
-        SCModule.Run "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
+        RunInSingle SCModule, "Event_LoggedOn", GetCurrentUsername, BotVars.Product
+        RunInSingle SCModule, "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
     
         If (g_Channel.Users.Count > 0) Then
             For I = 1 To g_Channel.Users.Count
                 With g_Channel.Users(I)
-                     SCModule.Run "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, _
+                     RunInSingle SCModule, "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, _
                         .game, False
                 End With
              Next I
@@ -444,7 +444,7 @@ Public Sub InitScript(ByVal SCModule As module)
     End If
 End Sub
 
-Public Sub RunInAll(ParamArray Parameters() As Variant)
+Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
 
     On Error Resume Next
 
@@ -452,13 +452,16 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
     Dim I     As Integer ' ...
     Dim arr() As Variant ' ...
     Dim str   As String  ' ...
+    Dim veto  As Boolean
+    
+    veto = False
     
     ' ...
     Set SC = m_sc_control
     
     ' ...
     If (m_is_reloading) Then
-        Exit Sub
+        Exit Function
     End If
 
     ' ...
@@ -472,14 +475,39 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
         End If
 
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
-            CallByNameEx SC.Modules(I), "Run", VbMethod, arr()
+            veto = CallByNameEx(SC.Modules(I), "Run", VbMethod, arr()) Or veto
         End If
     Next
+    RunInAll = veto
     
-End Sub
+End Function
+
+Public Function RunInSingle(obj As Object, ParamArray Parameters() As Variant) As Boolean
+
+    On Error Resume Next
+
+    Dim I     As Integer ' ...
+    Dim arr() As Variant ' ...
+    Dim str   As String  ' ...
+    RunInSingle = False
+    
+    ' ...
+    If (m_is_reloading) Then
+        Exit Function
+    End If
+
+    ' ...
+    arr() = Parameters()
+
+    str = obj.CodeObject.GetSettingsEntry("Enabled")
+    If (StrComp(str, "False", vbTextCompare) <> 0) Then
+        RunInSingle = CallByNameEx(obj, "Run", VbMethod, arr())
+    End If
+    
+End Function
 
 Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCallType, Optional vArgsArray _
-    As Variant)
+    As Variant) As Boolean 'Added 2009-05-22 - Hdx
     
     On Error GoTo ERROR_HANDLER
     
@@ -488,13 +516,17 @@ Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCa
     Dim numArgs As Long
     Dim I       As Long
     Dim v()     As Variant
+    Dim veto    As Boolean
     
     Set oTLI = New TLIApplication
 
     ProcID = oTLI.InvokeID(obj, ProcName)
+    veto = GetVeto
+    
 
     If (IsMissing(vArgsArray)) Then
-        CallByNameEx = oTLI.InvokeHook(obj, ProcID, CallType)
+        'CallByNameEx = oTLI.InvokeHook(obj, ProcID, CallType)
+        Call oTLI.InvokeHook(obj, ProcID, CallType)
     End If
     
     If (IsArray(vArgsArray)) Then
@@ -506,14 +538,22 @@ Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCa
             v(I) = vArgsArray(numArgs - I)
         Next I
         
-        CallByNameEx = oTLI.InvokeHookArray(obj, ProcID, CallType, v)
+        'CallByNameEx = oTLI.InvokeHookArray(obj, ProcID, CallType, v)
+        Call oTLI.InvokeHookArray(obj, ProcID, CallType, v)
     End If
     
     Set oTLI = Nothing
     
+    CallByNameEx = GetVeto
+    SetVeto veto
+    
     Exit Function
 
 ERROR_HANDLER:
+
+    CallByNameEx = GetVeto
+    SetVeto veto
+    
     ' ...
     If (frmChat.SControl.Error) Then
         Exit Function
@@ -1046,20 +1086,6 @@ Public Function GetVeto() As Boolean
     GetVeto = VetoNextMessage
     
     VetoNextMessage = False
-    
-End Function
-
-Public Sub SetPacketVeto(ByVal b As Boolean)
-
-    VetoNextPacket = b
-    
-End Sub
-
-Public Function GetPacketVeto() As Boolean
-
-    GetPacketVeto = VetoNextPacket
-    
-    VetoNextPacket = False
     
 End Function
 

@@ -72,9 +72,9 @@ Private Declare Sub mediv_random_get_bytes Lib "Warden.dll" (ByRef Context As Me
 
 Private Declare Function module_get_uncompressed_size Lib "Warden.dll" (ByVal Data As String) As Long
 Private Declare Function module_get_prep_size Lib "Warden.dll" (ByVal Data As String) As Long
-Private Declare Function module_decompress Lib "Warden.dll" (ByVal source As String, ByVal SourceLength As Long, ByVal Destination As String, ByVal DestinationLength As Long) As Long
+Private Declare Function module_decompress Lib "Warden.dll" (ByVal Source As String, ByVal SourceLength As Long, ByVal Destination As String, ByVal DestinationLength As Long) As Long
 
-Private Declare Function module_prep Lib "Warden.dll" (ByVal source As String, ByVal Callback As Long) As Long
+Private Declare Function module_prep Lib "Warden.dll" (ByVal Source As String, ByVal Callback As Long) As Long
 Private Declare Function module_init Lib "Warden.dll" (ByVal address As Long, ByVal Callbacks As Long) As Long
 Private Declare Function module_get_init_address Lib "Warden.dll" (ByVal module As Long) As Long
 Private Declare Sub module_init_rc4 Lib "Warden.dll" (ByVal Callback As Long, ByVal InitData As Long, ByVal Data As String, ByVal length As Long)
@@ -90,9 +90,7 @@ Private Const MEDIV_MODULE_TRANSFER    As Byte = &H1
 Private Const WARDEN_CHEAT_CHECKS      As Byte = &H2
 Private Const WARDEN_NEW_CRYPT_KEYS    As Byte = &H5
 
-Public HandleWarden As Boolean
-
-Public Sub WardenInitRC4(ByRef war_ctx As WARDENCONTEXT, ByVal sSeed As String)
+Public Sub WardenInitRC4(ByRef war_ctx As WARDENCONTEXT)
     Dim ctx             As MedivRandomContext
     Dim out_seed        As String
     Dim in_seed         As String
@@ -111,11 +109,10 @@ Public Sub WardenInitRC4(ByRef war_ctx As WARDENCONTEXT, ByVal sSeed As String)
     in_seed = String(16, vbNull)
     war_ctx.s_OutKey = String(&H102, vbNull)
     war_ctx.s_InKey = String(&H102, vbNull)
-    war_ctx.s_RC4Seed = sSeed
   
     On Error GoTo DLL_ERROR:
     
-    Call mediv_random_init(ctx, sSeed, Len(sSeed))
+    Call mediv_random_init(ctx, war_ctx.s_RC4Seed, Len(war_ctx.s_RC4Seed))
     Call mediv_random_get_bytes(ctx, out_seed, 16)
     Call mediv_random_get_bytes(ctx, in_seed, 16)
     If (MDebug("warden")) Then
@@ -144,6 +141,8 @@ Public Sub WardenCleanUp(Context As WARDENCONTEXT)
   If (Len(Context.s_Module) > 0) Then Context.s_Module = vbNullString
   Context.b_MEM_CHECK = 0
   Context.b_PAGE_CHECK_A = 0
+  Context.s_InKey = String$(&H102, Chr$(0))
+  Context.s_OutKey = String$(&H102, Chr$(0))
 End Sub
 Public Function WardenClientData(ByRef Context As WARDENCONTEXT, sData As String) As Boolean
   Dim ID As Integer
@@ -156,7 +155,8 @@ Public Function WardenClientData(ByRef Context As WARDENCONTEXT, sData As String
   If (ID = &H50) Then
     Context.l_Product = GetDWORD(Mid$(sData, 13, 4))
   ElseIf (ID = &H51) Then
-    Call WardenInitRC4(Context, Mid$(sData, 41, 4))
+    Context.s_RC4Seed = Mid$(sData, 41, 4)
+    AddChat vbYellow, "Warden seed: " & StrToHex(Context.s_RC4Seed)
   End If
 End Function
 
@@ -171,9 +171,8 @@ Public Function WardenServerData(ByRef Context As WARDENCONTEXT, sData As String
       Dim sPacket As String
       Dim opcode As Integer
       
-      If Not HandleWarden Then
-        Call frmChat.AddChat(vbRed, "[Warden] Warden has been detected, and was not handled. You will be disconnected in approximately 2 minutes.")
-        Exit Function
+      If (Context.s_InKey = String(&H102, Chr$(0))) Then
+        Call WardenInitRC4(Context)
       End If
       
       sPacket = Mid$(sData, 5)

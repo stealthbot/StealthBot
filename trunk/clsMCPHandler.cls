@@ -154,6 +154,7 @@ Public Sub ParseMCPPacket(ByVal Data As String)
     Dim NullPos As Integer
     Dim Expiry As Date
     Dim IncompletePacketInBuffer As Boolean
+    Dim veto As Boolean
     
     sBuffer = sBuffer & Data
     
@@ -174,13 +175,11 @@ Public Sub ParseMCPPacket(ByVal Data As String)
             If InStr(1, CommandLine, "-all") > 0 Then _
                 frmChat.AddChat COLOR_BLUE, "MCP RECV 0x" & Right$("00" & Hex(Asc(Mid$(Data, 3, 1))), 2)
                 
-            SetPacketVeto False
             ' ...
-            RunInAll "Event_PacketReceived", "MCP", Asc(Mid$(Data, 3, 1)), Len(Data), Data
+            veto = RunInAll("Event_PacketReceived", "MCP", Asc(Mid$(Data, 3, 1)), Len(Data), Data)
             
-            'Uncommented 05-15-2009 Hdx - Scripts now have the power to Veto Packets
-            If (GetPacketVeto) Then
-                Exit Sub
+            If (veto) Then
+                  Exit Sub
             End If
             
             Select Case Asc(Mid$(Data, 3, 1)) '

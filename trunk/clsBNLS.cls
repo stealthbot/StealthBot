@@ -197,6 +197,7 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     Dim lCheckSum As Long
     Dim Splt()    As String
     Dim PacketID  As Byte
+    Dim veto      As Boolean
     
     Set pD = New clsDataBuffer
     
@@ -214,12 +215,10 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     ' Added 2007-06-08 for a packet logging menu feature to aid tech support
     WritePacketData BNLS, StoC, PacketID, Len(Data), Data
     
-    SetPacketVeto False
     ' ...
-    RunInAll "Event_PacketReceived", "BNLS", PacketID, Len(Data), Data
+    veto = RunInAll("Event_PacketReceived", "BNLS", PacketID, Len(Data), Data)
     
-    'Uncommented 05-15-2009 Hdx - Scripts now have the power to Veto Packets
-    If (GetPacketVeto) Then
+    If (veto) Then
         Exit Sub
     End If
     

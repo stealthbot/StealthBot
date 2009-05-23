@@ -367,6 +367,7 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
 
     Dim buf()  As Byte   ' ...
     Dim strbuf As String ' ...
+    Dim veto   As Boolean
     
     ' ...
     If (frmChat.sckMCP.State <> sckConnected) Then
@@ -395,13 +396,10 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     CopyMemory ByVal strbuf, buf(0), m_bufsize + 3
 
     ' ...
-    SetPacketVeto False
+    veto = RunInAll("Event_PacketSent", "MCP", PacketID, m_bufsize + 3, strbuf)
     
-    ' ...
-    RunInAll "Event_PacketSent", "MCP", PacketID, m_bufsize + 3, strbuf
+    If (Not veto) Then
     
-    ' Added 05-15-2009 - Scripts have the power to Veto Packets now.
-    If (Not GetPacketVeto) Then
         ' ...
         If (MDebug("all")) Then
             frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & _
@@ -430,6 +428,7 @@ Public Function SendPacket(Optional PacketID As Byte)
     Dim buf()  As Byte    ' ...
     Dim I      As Integer ' ...
     Dim strbuf As String  ' ...
+    Dim veto   As Boolean
     
     ' ...
     If (frmChat.sckBNet.State <> sckConnected) Then
@@ -467,13 +466,10 @@ Public Function SendPacket(Optional PacketID As Byte)
     CopyMemory ByVal strbuf, buf(0), m_bufsize + 4
     
     ' ...
-    SetPacketVeto False
+    veto = RunInAll("Event_PacketSent", "BNCS", PacketID, m_bufsize + 4, strbuf)
     
-    ' ...
-    RunInAll "Event_PacketSent", "BNCS", PacketID, m_bufsize + 4, strbuf
+    If (Not veto) Then
     
-    ' Added 05-15-2009 - Scripts have the power to Veto Packets now.
-    If (Not GetPacketVeto) Then
         ' ...
         If (MDebug("all")) Then
             frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & Right$("00" & _
@@ -502,6 +498,7 @@ Public Function vLSendPacket(Optional PacketID As Byte)
 
     Dim buf()  As Byte   ' ...
     Dim strbuf As String ' ...
+    Dim veto   As Boolean
     
     ' ...
     If (frmChat.sckBNLS.State <> sckConnected) Then
@@ -530,13 +527,9 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     CopyMemory ByVal strbuf, buf(0), m_bufsize + 3
 
     ' ...
-    SetPacketVeto False
+    veto = RunInAllEx("Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, strbuf)
     
-    ' ...
-    RunInAll "Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, strbuf
-    
-    ' Added 05-15-2009 - Scripts have the power to Veto Packets now.
-    If (Not GetPacketVeto) Then
+    If (Not veto) Then
         ' ...
         If (MDebug("all")) Then
             frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & _

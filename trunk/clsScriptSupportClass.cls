@@ -102,9 +102,8 @@ Attribute VB_Exposed = False
 ' *         For a detailed explination of each event and examples visit:
 ' *            http://www.stealthbot.net/board/index.php?showtopic=27969
 ' *     - Added GetBotVersionNumber() function which returns only the numerical value of the bot version
-' *     - Added VetoThisPacket() function -- use in Event_PacketSent to prevent the
-' *         Packet in the event's arguments from being sent to Battle.net Or in Event_PacketReceived
-' *         to prevent the bot from handeling the packet at all.
+' *     - VetoThisMessage() Now works in PacketSent, And PacketReceived, Will prevent it from being sent,
+' *         or parsed, respectivly.
 ' *
 ' *     (version 2.6R3, scripting system build 21)
 ' *     - GetNameByPosition() boundary checks fixed (thanks Scio)
@@ -887,18 +886,6 @@ Public Sub VetoThisMessage()
     SetVeto True
     
 End Sub
-
-
-'// VETOTHISPACKET
-'// Used with _PacketSent and _PacketReceived
-'// For Use when a script wants to handle a packet eintirely
-Public Sub VetoThisPacket()
-
-    SetPacketVeto True
-    
-End Sub
-
-
 
 '// PRINTURLTOFILE
 '// Mirror function for the Windows API URLDownloadToFile() function

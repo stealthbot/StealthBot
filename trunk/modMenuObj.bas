@@ -92,7 +92,7 @@ Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
     If (obj.ObjName <> vbNullString) Then
         On Error Resume Next
 
-        obj.SCModule.Run obj.ObjName & "_Click"
+        RunInSingle obj.SCModule, obj.ObjName & "_Click"
     Else
         Dim I As Integer ' ...
         
