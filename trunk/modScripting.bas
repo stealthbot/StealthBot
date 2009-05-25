@@ -431,12 +431,12 @@ Public Sub InitScript(ByVal SCModule As module)
 
     If (g_Online) Then
         RunInSingle SCModule, "Event_LoggedOn", GetCurrentUsername, BotVars.Product
-        RunInSingle SCModule, "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
+        RunInSingle SCModule, "Event_ChannelJoin", g_Channel.Name, g_Channel.flags
     
         If (g_Channel.Users.Count > 0) Then
             For I = 1 To g_Channel.Users.Count
                 With g_Channel.Users(I)
-                     RunInSingle SCModule, "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, _
+                     RunInSingle SCModule, "Event_UserInChannel", .DisplayName, .flags, .Stats.ToString, .Ping, _
                         .game, False
                 End With
              Next I
@@ -465,7 +465,13 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
     arr() = Parameters()
 
     For I = 2 To SC.Modules.Count
-        veto = RunInSingle(SC.Modules(I), arr()) Or veto
+        'str = SC.Modules(I).CodeObject.GetSettingsEntry("Enabled")
+    
+        'If (StrComp(str, "False", vbTextCompare) <> 0) Then
+        '    RunInAll = CallByNameEx(SC.Modules(I), "Run", VbMethod, arr())
+        'End If
+    
+        veto = RunInSingle(SC.Modules(I), arr())
     Next
     
     RunInAll = veto
