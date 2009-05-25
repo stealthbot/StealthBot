@@ -444,7 +444,7 @@ Public Sub InitScript(ByVal SCModule As module)
     End If
 End Sub
 
-Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
+Public Sub RunInAll(ParamArray Parameters() As Variant)
 
     On Error Resume Next
 
@@ -452,14 +452,11 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
     Dim I     As Integer
     Dim arr() As Variant
     Dim str   As String
-    Dim veto  As Boolean
-    
-    veto = False
-    
+
     Set SC = m_sc_control
     
     If (m_is_reloading) Then
-        Exit Function
+        Exit Sub
     End If
 
     arr() = Parameters()
@@ -467,22 +464,22 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
     For I = 2 To SC.Modules.Count
         CallByNameEx SC.Modules(I), "Run", VbMethod, arr()
     Next
-    
-    RunInAll = veto
-    
-End Function
 
-Public Function RunInSingle(obj As Object, ParamArray Parameters() As Variant) As Boolean
+End Sub
+
+Public Sub RunInSingle(ByRef obj As module, ParamArray Parameters() As Variant)
 
     On Error Resume Next
 
     Dim I     As Integer
     Dim arr() As Variant
     Dim str   As String
-    RunInSingle = False
+    
+    ' reset veto for new scripting call
+    SetVeto False
     
     If (m_is_reloading) Then
-        Exit Function
+        Exit Sub
     End If
 
     arr() = Parameters()
@@ -490,13 +487,13 @@ Public Function RunInSingle(obj As Object, ParamArray Parameters() As Variant) A
     str = obj.CodeObject.GetSettingsEntry("Enabled")
     
     If (StrComp(str, "False", vbTextCompare) <> 0) Then
-        RunInSingle = CallByNameEx(obj, "Run", VbMethod, arr())
+        CallByNameEx obj, "Run", VbMethod, arr()
     End If
     
-End Function
+End Sub
 
-Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCallType, Optional vArgsArray _
-    As Variant) As Boolean 'Added 2009-05-22 - Hdx
+Public Sub CallByNameEx(obj As Object, ProcName As String, CallType As VbCallType, Optional vArgsArray _
+    As Variant)
     
     On Error GoTo ERROR_HANDLER
     
@@ -505,13 +502,10 @@ Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCa
     Dim numArgs As Long
     Dim I       As Long
     Dim v()     As Variant
-    Dim veto    As Boolean
-    
+
     Set oTLI = New TLIApplication
 
     ProcID = oTLI.InvokeID(obj, ProcName)
-    veto = GetVeto
-    
 
     If (IsMissing(vArgsArray)) Then
         'CallByNameEx = oTLI.InvokeHook(obj, ProcID, CallType)
@@ -532,22 +526,14 @@ Public Function CallByNameEx(obj As Object, ProcName As String, CallType As VbCa
     End If
     
     Set oTLI = Nothing
-    
-    CallByNameEx = GetVeto
-    
-    SetVeto veto
-    
-    Exit Function
+
+    Exit Sub
 
 ERROR_HANDLER:
 
-    CallByNameEx = GetVeto
-    
-    SetVeto veto
-    
     ' ...
     If (frmChat.SControl.Error) Then
-        Exit Function
+        Exit Sub
     End If
 
     frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
@@ -555,7 +541,7 @@ ERROR_HANDLER:
         
     Set oTLI = Nothing
     
-End Function
+End Sub
 
 Public Function Objects(objIndex As Integer) As scObj
 

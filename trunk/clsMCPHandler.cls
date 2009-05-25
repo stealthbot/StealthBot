@@ -88,9 +88,9 @@ Public Sub LogonToCharacter(ByVal CharName As String)
     End With
 End Sub
 
-Public Sub DeleteCharacter(ByVal CharName As String, Optional ByVal Flags As Integer = &H1)
+Public Sub DeleteCharacter(ByVal CharName As String, Optional ByVal flags As Integer = &H1)
     With pBuffer
-        .InsertWord Flags
+        .InsertWord flags
         .InsertNTString CharName
         
         'Debug.Print "Sending: "
@@ -176,10 +176,10 @@ Public Sub ParseMCPPacket(ByVal Data As String)
                 frmChat.AddChat COLOR_BLUE, "MCP RECV 0x" & Right$("00" & Hex(Asc(Mid$(Data, 3, 1))), 2)
                 
             ' ...
-            veto = RunInAll("Event_PacketReceived", "MCP", Asc(Mid$(Data, 3, 1)), Len(Data), Data)
+            RunInAll "Event_PacketReceived", "MCP", Asc(Mid$(Data, 3, 1)), Len(Data), Data
             
-            If (veto) Then
-                  Exit Sub
+            If (GetVeto) Then
+                Exit Sub
             End If
             
             Select Case Asc(Mid$(Data, 3, 1)) '

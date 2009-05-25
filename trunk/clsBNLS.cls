@@ -168,11 +168,11 @@ Public Sub Send_0x14(ByVal sIndex As Long, ByVal sAccount As String, ByVal sData
     Packet.vLSendPacket &H14
 End Sub
 
-Public Sub Send_0x1A(ByVal ProductID As Long, ByVal Flags As Long, ByVal cookie As Long, _
+Public Sub Send_0x1A(ByVal ProductID As Long, ByVal flags As Long, ByVal cookie As Long, _
     ByVal Timestamp As String, ByVal MPQName As String, ByVal ChecksumFormula As String)    'BNLS_VERSIONCHECKEX2
 
     Packet.InsertDWord ProductID
-    Packet.InsertDWord Flags
+    Packet.InsertDWord flags
     Packet.InsertDWord cookie
     Packet.InsertNonNTString Timestamp
     Packet.InsertNTString MPQName
@@ -216,9 +216,9 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     WritePacketData BNLS, StoC, PacketID, Len(Data), Data
     
     ' ...
-    veto = RunInAll("Event_PacketReceived", "BNLS", PacketID, Len(Data), Data)
+    RunInAll "Event_PacketReceived", "BNLS", PacketID, Len(Data), Data
     
-    If (veto) Then
+    If (GetVeto) Then
         Exit Sub
     End If
     

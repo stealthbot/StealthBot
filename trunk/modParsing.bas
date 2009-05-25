@@ -55,9 +55,9 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         WritePacketData stBNCS, StoC, PacketID, PacketLen, PacketData
                 
         ' ...
-        veto = RunInAll("Event_PacketReceived", "BNCS", PacketID, Len(PacketData), PacketData)
+        RunInAll "Event_PacketReceived", "BNCS", PacketID, Len(PacketData), PacketData
         
-        If (veto) Then
+        If (GetVeto) Then
             Exit Sub
         End If
         
@@ -197,8 +197,8 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &H25 'SID_PING
                 If BotVars.Spoof = 0 Or g_Online Then
-                    PBuffer.InsertDWord pD.GetDWORD
-                    PBuffer.SendPacket &H25
+                    pBuffer.InsertDWord pD.GetDWORD
+                    pBuffer.SendPacket &H25
                 End If
             
             '###########################################################################
@@ -235,7 +235,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                             If Dii And BotVars.UseRealm Then
                                 Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Asking Battle.net for a list of Realm servers...")
                                 frmRealm.Show
-                                PBuffer.SendPacket &H40
+                                pBuffer.SendPacket &H40
                             Else
                                 Send0x0A
                             End If
@@ -641,12 +641,12 @@ Public Function ParsePing(strData As String) As Long
     CopyMemory ParsePing, ByVal strPing$, 4
 End Function
 
-Public Function CVL(x As String) As Long
+Public Function CVL(X As String) As Long
     'on error resume next
-    If Len(x) < 4 Then
+    If Len(X) < 4 Then
         Exit Function
     End If
-    CopyMemory CVL, ByVal x, 4
+    CopyMemory CVL, ByVal X, 4
 End Function
 
 
@@ -705,12 +705,12 @@ End Sub
 
 Public Sub FullJoin(Channel As String, Optional ByVal I As Long = -1)
     If I >= 0 Then
-        PBuffer.InsertDWord CLng(I)
+        pBuffer.InsertDWord CLng(I)
     Else
-        PBuffer.InsertDWord &H2
+        pBuffer.InsertDWord &H2
     End If
-    PBuffer.InsertNTString Channel
-    PBuffer.SendPacket &HC
+    pBuffer.InsertNTString Channel
+    pBuffer.SendPacket &HC
 End Sub
 
 Public Function HexToStr(ByVal Hex1 As String) As String
@@ -725,15 +725,15 @@ End Function
 
 Public Sub RejoinChannel(Channel As String)
     'on error resume next
-    PBuffer.SendPacket &H10
-    PBuffer.InsertDWord &H2
-    PBuffer.InsertNTString Channel
-    PBuffer.SendPacket &HC
+    pBuffer.SendPacket &H10
+    pBuffer.InsertDWord &H2
+    pBuffer.InsertNTString Channel
+    pBuffer.SendPacket &HC
 End Sub
 
 Public Sub RequestProfile(strUser As String)
     'on error resume next
-    With PBuffer
+    With pBuffer
         .InsertDWord 1
         .InsertDWord 4
         .InsertDWord GetTickCount()
@@ -747,7 +747,7 @@ Public Sub RequestProfile(strUser As String)
 End Sub
 
 Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
-    With PBuffer
+    With pBuffer
         .InsertDWord 1
         .InsertDWord 1
         .InsertDWord GetTickCount()
@@ -783,7 +783,7 @@ Public Sub SetProfile(ByVal Location As String, ByVal description As String, Opt
     End If
     
     
-    With PBuffer
+    With pBuffer
         .InsertDWord &H1                    '// #accounts
         .InsertDWord 3                      '// #keys
         
@@ -845,7 +845,7 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
     If nKeys > 0 Then
         Dim I As Integer
     
-        With PBuffer
+        With pBuffer
             .InsertDWord &H1                    '// #accounts
             .InsertDWord nKeys                  '// #keys
             .InsertNTString CurrentUsername     '// account to update
@@ -1250,12 +1250,12 @@ Public Function GetCharacterName(ByVal Statstring As String, ByVal Start As Byte
     GetCharacterName = InStr(Start, Statstring, ",") + 1
 End Function
 
-Function MakeLong(x As String) As Long
+Function MakeLong(X As String) As Long
  'on error resume next
-    If Len(x) < 4 Then
+    If Len(X) < 4 Then
         Exit Function
     End If
-    CopyMemory MakeLong, ByVal x, 4
+    CopyMemory MakeLong, ByVal X, 4
 End Function
 
 Public Sub StrCpy(ByRef source As String, ByVal nText As String)
@@ -1612,7 +1612,7 @@ End Function
 'Originally from DPChat by Zorm - cleaned up and adapted to my needs
 Public Sub ProfileParse(Data As String)
     On Error Resume Next
-    Dim x As Integer
+    Dim X As Integer
     Dim ProfileEnd As String
     Dim SplitProfile() As String
     

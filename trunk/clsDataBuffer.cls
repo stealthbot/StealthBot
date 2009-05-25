@@ -396,9 +396,9 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     CopyMemory ByVal strbuf, buf(0), m_bufsize + 3
 
     ' ...
-    veto = RunInAll("Event_PacketSent", "MCP", PacketID, m_bufsize + 3, strbuf)
+    RunInAll "Event_PacketSent", "MCP", PacketID, m_bufsize + 3, strbuf
     
-    If (Not veto) Then
+    If (Not GetVeto) Then
     
         ' ...
         If (MDebug("all")) Then
@@ -466,9 +466,9 @@ Public Function SendPacket(Optional PacketID As Byte)
     CopyMemory ByVal strbuf, buf(0), m_bufsize + 4
     
     ' ...
-    veto = RunInAll("Event_PacketSent", "BNCS", PacketID, m_bufsize + 4, strbuf)
+    RunInAll "Event_PacketSent", "BNCS", PacketID, m_bufsize + 4, strbuf
     
-    If (Not veto) Then
+    If (Not GetVeto) Then
     
         ' ...
         If (MDebug("all")) Then
@@ -527,9 +527,9 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     CopyMemory ByVal strbuf, buf(0), m_bufsize + 3
 
     ' ...
-    veto = RunInAll("Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, strbuf)
+    RunInAll "Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, strbuf
     
-    If (Not veto) Then
+    If (Not GetVeto) Then
         ' ...
         If (MDebug("all")) Then
             frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & _
