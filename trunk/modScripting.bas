@@ -458,11 +458,18 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
     If (m_is_reloading) Then
         Exit Sub
     End If
+    
+    ' reset veto for new scripting call
+    SetVeto False
 
     arr() = Parameters()
 
     For I = 2 To SC.Modules.Count
-        CallByNameEx SC.Modules(I), "Run", VbMethod, arr()
+        str = SC.Modules(I).CodeObject.GetSettingsEntry("Enabled")
+        
+        If (StrComp(str, "False", vbTextCompare) <> 0) Then
+            CallByNameEx SC.Modules(I), "Run", VbMethod, arr()
+        End If
     Next
 
 End Sub
@@ -475,12 +482,12 @@ Public Sub RunInSingle(ByRef obj As module, ParamArray Parameters() As Variant)
     Dim arr() As Variant
     Dim str   As String
     
-    ' reset veto for new scripting call
-    SetVeto False
-    
     If (m_is_reloading) Then
         Exit Sub
     End If
+    
+    ' reset veto for new scripting call
+    SetVeto False
 
     arr() = Parameters()
 
