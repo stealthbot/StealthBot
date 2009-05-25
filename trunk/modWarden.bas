@@ -150,10 +150,10 @@ Public Function WardenClientData(ByRef Context As WARDENCONTEXT, sData As String
   WardenClientData = False
     
   If (ID = &H50) Then
+    WardenCleanup Context
     Context.l_Product = GetDWORD(Mid$(sData, 13, 4))
   ElseIf (ID = &H51) Then
     Context.s_RC4Seed = Mid$(sData, 41, 4)
-    frmChat.AddChat vbYellow, "Warden seed: " & StrToHex(Context.s_RC4Seed)
   End If
 End Function
 
