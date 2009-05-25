@@ -465,13 +465,7 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
     arr() = Parameters()
 
     For I = 2 To SC.Modules.Count
-        'str = SC.Modules(I).CodeObject.GetSettingsEntry("Enabled")
-    
-        'If (StrComp(str, "False", vbTextCompare) <> 0) Then
-        '    RunInAll = CallByNameEx(SC.Modules(I), "Run", VbMethod, arr())
-        'End If
-    
-        veto = RunInSingle(SC.Modules(I), arr())
+        CallByNameEx SC.Modules(I), "Run", VbMethod, arr()
     Next
     
     RunInAll = veto
