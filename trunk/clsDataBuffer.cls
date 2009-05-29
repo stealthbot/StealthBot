@@ -486,7 +486,8 @@ Public Function SendPacket(Optional PacketID As Byte)
         WritePacketData stBNCS, CtoS, PacketID, m_bufsize + 4, strbuf
     
         'Send Warden Everything thats Sent to Bnet
-        Call modWarden.WardenClientData(warden_context, strbuf)
+        Call WardenClientData(WardenInstance, strbuf)
+        
     End If
     ' clear buffer contents
     Clear

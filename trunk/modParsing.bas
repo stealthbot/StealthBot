@@ -62,8 +62,8 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         End If
         
         'This will be taken out when Warden is moved to a script like I want.
-        If (modWarden.WardenServerData(warden_context, PacketData)) Then
-          Exit Sub
+        If (WardenServerData(WardenInstance, PacketData)) Then
+            Exit Sub
         End If
         
         '--------------
@@ -197,8 +197,8 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
             '###########################################################################
             Case &H25 'SID_PING
                 If BotVars.Spoof = 0 Or g_Online Then
-                    pBuffer.InsertDWord pD.GetDWORD
-                    pBuffer.SendPacket &H25
+                    PBuffer.InsertDWord pD.GetDWORD
+                    PBuffer.SendPacket &H25
                 End If
             
             '###########################################################################
@@ -235,7 +235,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                             If Dii And BotVars.UseRealm Then
                                 Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Asking Battle.net for a list of Realm servers...")
                                 frmRealm.Show
-                                pBuffer.SendPacket &H40
+                                PBuffer.SendPacket &H40
                             Else
                                 Send0x0A
                             End If
@@ -705,12 +705,12 @@ End Sub
 
 Public Sub FullJoin(Channel As String, Optional ByVal I As Long = -1)
     If I >= 0 Then
-        pBuffer.InsertDWord CLng(I)
+        PBuffer.InsertDWord CLng(I)
     Else
-        pBuffer.InsertDWord &H2
+        PBuffer.InsertDWord &H2
     End If
-    pBuffer.InsertNTString Channel
-    pBuffer.SendPacket &HC
+    PBuffer.InsertNTString Channel
+    PBuffer.SendPacket &HC
 End Sub
 
 Public Function HexToStr(ByVal Hex1 As String) As String
@@ -725,15 +725,15 @@ End Function
 
 Public Sub RejoinChannel(Channel As String)
     'on error resume next
-    pBuffer.SendPacket &H10
-    pBuffer.InsertDWord &H2
-    pBuffer.InsertNTString Channel
-    pBuffer.SendPacket &HC
+    PBuffer.SendPacket &H10
+    PBuffer.InsertDWord &H2
+    PBuffer.InsertNTString Channel
+    PBuffer.SendPacket &HC
 End Sub
 
 Public Sub RequestProfile(strUser As String)
     'on error resume next
-    With pBuffer
+    With PBuffer
         .InsertDWord 1
         .InsertDWord 4
         .InsertDWord GetTickCount()
@@ -747,7 +747,7 @@ Public Sub RequestProfile(strUser As String)
 End Sub
 
 Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
-    With pBuffer
+    With PBuffer
         .InsertDWord 1
         .InsertDWord 1
         .InsertDWord GetTickCount()
@@ -783,7 +783,7 @@ Public Sub SetProfile(ByVal Location As String, ByVal description As String, Opt
     End If
     
     
-    With pBuffer
+    With PBuffer
         .InsertDWord &H1                    '// #accounts
         .InsertDWord 3                      '// #keys
         
@@ -845,7 +845,7 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
     If nKeys > 0 Then
         Dim I As Integer
     
-        With pBuffer
+        With PBuffer
             .InsertDWord &H1                    '// #accounts
             .InsertDWord nKeys                  '// #keys
             .InsertNTString CurrentUsername     '// account to update
@@ -865,17 +865,17 @@ End Sub
 Public Function StringToDWord(Data As String) As Long
     Dim tmp As String
     tmp = StrToHex(Data)
-    Dim a As String, b As String, c As String, d As String
-    a = Mid(tmp, 1, 2)
+    Dim A As String, b As String, c As String, d As String
+    A = Mid(tmp, 1, 2)
     b = Mid(tmp, 3, 2)
     c = Mid(tmp, 5, 2)
     d = Mid(tmp, 7, 2)
-    tmp = d & c & b & a
+    tmp = d & c & b & A
     StringToDWord = Val("&H" & tmp)
 End Function
 
 Public Sub sPrintF(ByRef source As String, ByVal nText As String, _
-    Optional ByVal a As Variant, _
+    Optional ByVal A As Variant, _
     Optional ByVal b As Variant, _
     Optional ByVal c As Variant, _
     Optional ByVal d As Variant, _
@@ -892,8 +892,8 @@ Public Sub sPrintF(ByRef source As String, ByVal nText As String, _
     Do While (InStr(1, nText, "%s") <> 0)
         Select Case I
             Case 0
-                If IsEmpty(a) Then GoTo theEnd
-                nText = Replace(nText, "%s", a, 1, 1)
+                If IsEmpty(A) Then GoTo theEnd
+                nText = Replace(nText, "%s", A, 1, 1)
             Case 1
                 If IsEmpty(b) Then GoTo theEnd
                 nText = Replace(nText, "%s", b, 1, 1)
