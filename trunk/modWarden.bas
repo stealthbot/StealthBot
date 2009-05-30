@@ -98,7 +98,7 @@ Public Sub WardenInitRC4(ByRef war_ctx As WARDENCONTEXT)
     Dim in_seed         As String
     
     If (Not CanHandleWarden()) Then
-        Call frmChat.AddChat(vbRed, "[Warden] Warden support has not been initialized because zlib1.dll or Warden.dll could not be found.")
+        Call frmChat.AddChat(vbRed, "[Warden] Warden support has not been initilized because zlib1.dll or Warden.dll could not be found.")
         Exit Sub
     End If
     
@@ -163,12 +163,11 @@ Public Function WardenServerData(ByRef Context As WARDENCONTEXT, sData As String
   ID = Asc(Mid(sData, 2, 1))
   WardenServerData = False
   If (ID = &H5E) Then
-      Call frmChat.AddChat(vbGreen, "[Warden] Warden has been detected. Attempting to handle...")
-      
       Dim sPacket As String
       Dim opcode As Integer
       
       If (Context.s_InKey = String(&H102, Chr$(0))) Then
+        Call frmChat.AddChat(vbGreen, "[Warden] Warden has been detected. Attempting to handle...")
         Call WardenInitRC4(Context)
       End If
       
