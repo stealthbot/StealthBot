@@ -1,9 +1,6 @@
 Attribute VB_Name = "modGlobals"
 'modGlobals - global variables and constants
 
-'Warden Instance
-Public WardenInstance As Long
-
 'CONSTANTS
 Public CVERSION As String
 Public Const REVISION As String = ""

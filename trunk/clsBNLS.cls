@@ -445,6 +445,8 @@ Sub CloseConnection(Optional ByVal DoNotShow As Byte = 0)
     
     SetTitle "Disconnected"
     
+    g_Online = False
+    
     On Error Resume Next
     
     RunInAll "Event_ServerError", "All connections closed."
