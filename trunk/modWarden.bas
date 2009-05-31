@@ -130,7 +130,7 @@ On Error GoTo handler 'This is eww I know, but if the folder is empty it'll try 
         MkDir m_ModFolder
     End If
 handler:
-    Call frmChat.AddChat(vbGreen, "[Warden] Warden support initilized.")
+    'Call frmChat.AddChat(vbGreen, "[Warden] Warden support initilized.")
     Exit Sub
     
 DLL_ERROR:
@@ -167,7 +167,7 @@ Public Function WardenServerData(ByRef Context As WARDENCONTEXT, sData As String
       Dim opcode As Integer
       
       If (Context.s_InKey = String(&H102, Chr$(0))) Then
-        Call frmChat.AddChat(vbGreen, "[Warden] Warden has been detected. Attempting to handle...")
+        'Call frmChat.AddChat(vbGreen, "[Warden] Warden has been detected. Attempting to handle...")
         Call WardenInitRC4(Context)
       End If
       
