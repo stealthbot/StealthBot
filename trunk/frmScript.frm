@@ -112,7 +112,6 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
-      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -287,7 +286,7 @@ Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String) As O
             
             Set obj.obj = chk(ObjCount(ObjType))
         
-        Case "COMBOXBOX"
+        Case "COMBOBOX"
             If (ObjCount(ObjType) > 0) Then
                 Load cmb(ObjCount(ObjType))
             End If
@@ -458,7 +457,7 @@ Public Sub DestroyObj(ByVal ObjName As String)
                 chk(0).Visible = False
             End If
         
-        Case "COMBOXBOX"
+        Case "COMBOBOX"
             If (m_arrObjs(Index).obj.Index > 0) Then
                 Unload cmb(m_arrObjs(Index).obj.Index)
             Else
