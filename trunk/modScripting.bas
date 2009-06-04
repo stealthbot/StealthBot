@@ -8,7 +8,7 @@ Attribute VB_Name = "modScripting"
 Option Explicit
 
 Public Type scObj
-    SCModule As module
+    SCModule As Module
     ObjName  As String
     ObjType  As String
     obj      As Object
@@ -61,7 +61,7 @@ Public Sub LoadScripts()
     ' ...
     On Error GoTo ERROR_HANDLER
 
-    Dim CurrentModule As module
+    Dim CurrentModule As Module
     Dim Paths         As New Collection
     Dim strPath       As String  ' ...
     Dim filename      As String  ' ...
@@ -156,7 +156,7 @@ ERROR_HANDLER:
 
 End Sub
 
-Private Function FileToModule(ByRef ScriptModule As module, ByVal filePath As String, Optional ByVal defaults As Boolean = True) As Boolean
+Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As String, Optional ByVal defaults As Boolean = True) As Boolean
 
     On Error GoTo ERROR_HANDLER
 
@@ -328,7 +328,7 @@ Private Function GetDefaultModuleProcs(ByVal ScriptID As String, ByVal ScriptPat
     
 End Function
 
-Private Function IsScriptNameValid(ByRef CurrentModule As module) As Boolean
+Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
 
     On Error Resume Next
 
@@ -409,7 +409,7 @@ Public Sub InitScripts()
 
 End Sub
 
-Public Sub InitScript(ByVal SCModule As module)
+Public Sub InitScript(ByVal SCModule As Module)
 
     On Error Resume Next
 
@@ -431,12 +431,12 @@ Public Sub InitScript(ByVal SCModule As module)
 
     If (g_Online) Then
         RunInSingle SCModule, "Event_LoggedOn", GetCurrentUsername, BotVars.Product
-        RunInSingle SCModule, "Event_ChannelJoin", g_Channel.Name, g_Channel.flags
+        RunInSingle SCModule, "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
     
         If (g_Channel.Users.Count > 0) Then
             For I = 1 To g_Channel.Users.Count
                 With g_Channel.Users(I)
-                     RunInSingle SCModule, "Event_UserInChannel", .DisplayName, .flags, .Stats.ToString, .Ping, _
+                     RunInSingle SCModule, "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, _
                         .game, False
                 End With
              Next I
@@ -444,23 +444,25 @@ Public Sub InitScript(ByVal SCModule As module)
     End If
 End Sub
 
-Public Sub RunInAll(ParamArray Parameters() As Variant)
+Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
 
     On Error Resume Next
 
-    Dim SC    As ScriptControl
-    Dim I     As Integer
-    Dim arr() As Variant
-    Dim str   As String
+    Dim SC      As ScriptControl
+    Dim I       As Integer
+    Dim arr()   As Variant
+    Dim str     As String
+    Dim oldVeto As Boolean
+    Dim veto    As Boolean
 
     Set SC = m_sc_control
     
     If (m_is_reloading) Then
-        Exit Sub
+        Exit Function
     End If
     
-    ' reset veto for new scripting call
-    SetVeto False
+    oldVeto = GetVeto 'Keeps the old veto, for recursion, and Sets to false.
+    veto = False      'Just to be sure
 
     arr() = Parameters()
 
@@ -469,25 +471,28 @@ Public Sub RunInAll(ParamArray Parameters() As Variant)
         
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
             CallByNameEx SC.Modules(I), "Run", VbMethod, arr()
+            veto = veto Or GetVeto 'Did they veto it, or was it already vetod?
         End If
     Next
+    
+    SetVeto oldVeto 'Reset the old veto, this is for recursion
+    RunInAll = veto 'Was this particular event vetoed?
+End Function
 
-End Sub
-
-Public Sub RunInSingle(ByRef obj As module, ParamArray Parameters() As Variant)
+Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Variant) As Boolean
 
     On Error Resume Next
 
     Dim I     As Integer
     Dim arr() As Variant
     Dim str   As String
-    
+    Dim oldVeto As Boolean
+        
     If (m_is_reloading) Then
-        Exit Sub
+        Exit Function
     End If
     
-    ' reset veto for new scripting call
-    SetVeto False
+    oldVeto = GetVeto  'Keeps the old veto, for recursion, and Sets to false.
 
     arr() = Parameters()
 
@@ -497,7 +502,9 @@ Public Sub RunInSingle(ByRef obj As module, ParamArray Parameters() As Variant)
         CallByNameEx obj, "Run", VbMethod, arr()
     End If
     
-End Sub
+    RunInSingle = GetVeto 'Was this particular event vetoed?
+    SetVeto oldVeto 'Reset the old veto, this is for recursion
+End Function
 
 Public Sub CallByNameEx(obj As Object, ProcName As String, CallType As VbCallType, Optional vArgsArray _
     As Variant)
@@ -515,7 +522,6 @@ Public Sub CallByNameEx(obj As Object, ProcName As String, CallType As VbCallTyp
     ProcID = oTLI.InvokeID(obj, ProcName)
 
     If (IsMissing(vArgsArray)) Then
-        'CallByNameEx = oTLI.InvokeHook(obj, ProcID, CallType)
         Call oTLI.InvokeHook(obj, ProcID, CallType)
     End If
     
@@ -528,7 +534,6 @@ Public Sub CallByNameEx(obj As Object, ProcName As String, CallType As VbCallTyp
             v(I) = vArgsArray(numArgs - I)
         Next I
         
-        'CallByNameEx = oTLI.InvokeHookArray(obj, ProcID, CallType, v)
         Call oTLI.InvokeHookArray(obj, ProcID, CallType, v)
     End If
     
@@ -556,7 +561,7 @@ Public Function Objects(objIndex As Integer) As scObj
 
 End Function
 
-Private Function ObjCount(Optional ObjType As String, Optional ByVal SCModule As module = Nothing) As Integer
+Private Function ObjCount(Optional ObjType As String, Optional ByVal SCModule As Module = Nothing) As Integer
     
     Dim I As Integer ' ...
 
@@ -580,7 +585,7 @@ Private Function ObjCount(Optional ObjType As String, Optional ByVal SCModule As
 
 End Function
 
-Public Function CreateObj(ByRef SCModule As module, ByVal ObjType As String, ByVal ObjName As String) As Object
+Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByVal ObjName As String) As Object
 
     On Error Resume Next
 
@@ -757,7 +762,7 @@ ERROR_HANDLER:
     
 End Sub
 
-Public Sub DestroyObj(ByVal SCModule As module, ByVal ObjName As String)
+Public Sub DestroyObj(ByVal SCModule As Module, ByVal ObjName As String)
 
     On Error GoTo ERROR_HANDLER
 
@@ -869,7 +874,7 @@ ERROR_HANDLER:
     
 End Sub
 
-Public Function GetObjByName(ByRef SCModule As module, ByVal ObjName As String) As Object
+Public Function GetObjByName(ByRef SCModule As Module, ByVal ObjName As String) As Object
 
     Dim I As Integer ' ...
     

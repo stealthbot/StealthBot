@@ -396,14 +396,10 @@ Public Function SendPacketMCP(Optional PacketID As Byte)
     CopyMemory ByVal strbuf, buf(0), m_bufsize + 3
 
     ' ...
-    RunInAll "Event_PacketSent", "MCP", PacketID, m_bufsize + 3, strbuf
-    
-    If (Not GetVeto) Then
-    
+    If (Not RunInAll("Event_PacketSent", "MCP", PacketID, m_bufsize + 3, strbuf)) Then
         ' ...
         If (MDebug("all")) Then
-            frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & _
-                Right$("00" & Hex(PacketID), 2)
+            frmChat.AddChat COLOR_BLUE, "MCP SEND 0x" & ZeroOffset(PacketID, 2)
         End If
     
         ' ...
@@ -466,14 +462,11 @@ Public Function SendPacket(Optional PacketID As Byte)
     CopyMemory ByVal strbuf, buf(0), m_bufsize + 4
     
     ' ...
-    RunInAll "Event_PacketSent", "BNCS", PacketID, m_bufsize + 4, strbuf
-    
-    If (Not GetVeto) Then
+    If (Not RunInAll("Event_PacketSent", "BNCS", PacketID, m_bufsize + 4, strbuf)) Then
     
         ' ...
         If (MDebug("all")) Then
-            frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & Right$("00" & _
-                Hex(PacketID), 2)
+            frmChat.AddChat COLOR_BLUE, "BNET SEND 0x" & ZeroOffset(PacketID, 2)
         End If
     
         ' ...
@@ -527,13 +520,10 @@ Public Function vLSendPacket(Optional PacketID As Byte)
     CopyMemory ByVal strbuf, buf(0), m_bufsize + 3
 
     ' ...
-    RunInAll "Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, strbuf
-    
-    If (Not GetVeto) Then
+    If (Not RunInAll("Event_PacketSent", "BNLS", PacketID, m_bufsize + 3, strbuf)) Then
         ' ...
         If (MDebug("all")) Then
-            frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & _
-                Right$("00" & Hex(PacketID), 2)
+            frmChat.AddChat COLOR_BLUE, "BNLS SEND 0x" & ZeroOffset(PacketID, 2)
         End If
     
         ' ...

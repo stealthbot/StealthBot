@@ -45,7 +45,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         PacketID = Asc(Mid$(PacketData, 2, 1))
         
         If MDebug("all") Then
-            frmChat.AddChat COLOR_BLUE, "BNET RECV 0x" & Hex(PacketID)
+            frmChat.AddChat COLOR_BLUE, "BNET RECV 0x" & ZeroOffset(PacketID, 2)
         End If
         
         ' ...
@@ -55,9 +55,7 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
         WritePacketData stBNCS, StoC, PacketID, PacketLen, PacketData
                 
         ' ...
-        RunInAll "Event_PacketReceived", "BNCS", PacketID, Len(PacketData), PacketData
-        
-        If (GetVeto) Then
+        If (RunInAll("Event_PacketReceived", "BNCS", PacketID, Len(PacketData), PacketData)) Then
             Exit Sub
         End If
         
@@ -357,8 +355,12 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
                 Call frmChat.AddChat(RTBColors.InformationText, "[BNET] Checking version...")
                 
                 If MDebug("all") Then
-                    frmChat.AddChat COLOR_BLUE, "-- MPQ name: " & s2
-                    frmChat.AddChat COLOR_BLUE, "-- Checksum Formula: " & s
+                    frmChat.AddChat COLOR_BLUE, "-- MPQ name: " & s
+                    If (InStr(1, s, "lockdown", vbTextCompare)) Then
+                        frmChat.AddChat COLOR_BLUE, "-- Checksum Seed: " & StrToHex(s2, True)
+                    Else
+                        frmChat.AddChat COLOR_BLUE, "-- Checksum Formula: " & s2
+                    End If
                 End If
                 
                 If BotVars.BNLS Then

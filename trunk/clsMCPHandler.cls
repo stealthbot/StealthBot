@@ -65,7 +65,7 @@ Public Event RealmStartup(ByVal Status As Byte, ByVal Message As String)
 Public Event CharListResponse(ByVal NumCharacters As Integer)
 
 Public Sub SendStartup()
-    With pBuffer
+    With PBuffer
         .InsertNonNTString msCurrentChunk
         .InsertNTString msBNetUniqueUsername
         .SendPacketMCP MCP_STARTUP
@@ -73,7 +73,7 @@ Public Sub SendStartup()
 End Sub
 
 Public Sub CreateMCPCharacter(ByVal CharType As Long, ByVal CharFlags As Long, ByVal CharName As String)
-    With pBuffer
+    With PBuffer
         .InsertDWord CharType
         .InsertWord CharFlags
         .InsertNTString CharName
@@ -82,15 +82,15 @@ Public Sub CreateMCPCharacter(ByVal CharType As Long, ByVal CharFlags As Long, B
 End Sub
 
 Public Sub LogonToCharacter(ByVal CharName As String)
-    With pBuffer
+    With PBuffer
         .InsertNTString CharName
         .SendPacketMCP MCP_CHARLOGON
     End With
 End Sub
 
-Public Sub DeleteCharacter(ByVal CharName As String, Optional ByVal flags As Integer = &H1)
-    With pBuffer
-        .InsertWord flags
+Public Sub DeleteCharacter(ByVal CharName As String, Optional ByVal Flags As Integer = &H1)
+    With PBuffer
+        .InsertWord Flags
         .InsertNTString CharName
         
         'Debug.Print "Sending: "
@@ -101,18 +101,18 @@ Public Sub DeleteCharacter(ByVal CharName As String, Optional ByVal flags As Int
 End Sub
 
 Public Sub RequestRealmMOTD()
-    pBuffer.SendPacketMCP MCP_MOTD
+    PBuffer.SendPacketMCP MCP_MOTD
 End Sub
 
 Public Sub RequestCharacterList(Optional ByVal NumCharacters = 8)
-    With pBuffer
+    With PBuffer
         .InsertDWord NumCharacters
         .SendPacketMCP MCP_CHARLIST
     End With
 End Sub
 
 Public Sub UpgradeCharacter(ByVal CharName As String)
-    With pBuffer
+    With PBuffer
         .InsertNTString CharName
         .SendPacketMCP MCP_CHARUPGRADE
     End With
@@ -132,7 +132,7 @@ Public Sub LogonToRealm(ByVal cookie As Long, ByVal ServerToken As Long, ByVal R
     
     'frmChat.AddChat vbRed, RealmName
     
-    With pBuffer
+    With PBuffer
         .InsertDWord cookie
         .InsertNonNTString Buffer
         .InsertNTString RealmName
@@ -151,10 +151,11 @@ Public Sub ParseMCPPacket(ByVal Data As String)
     
     Dim CharName As String, StringRaw As String, Statstring As String
     Dim Position As Long, n As Long, PacketLen As Long, seconds As Long
-    Dim NullPos As Integer
-    Dim Expiry As Date
+    Dim NullPos  As Integer
+    Dim Expiry   As Date
     Dim IncompletePacketInBuffer As Boolean
-    Dim veto As Boolean
+    Dim veto     As Boolean
+    Dim PacketID As Byte
     
     sBuffer = sBuffer & Data
     
@@ -165,20 +166,20 @@ Public Sub ParseMCPPacket(ByVal Data As String)
         
         If Len(sBuffer) >= PacketLen Then
             Data = Mid$(sBuffer, 1, PacketLen)
+            PacketID = Asc(Mid$(Data, 3, 1))
             
             ' ...
-            CachePacket StoC, stMCP, Asc(Mid$(Data, 3, 1)), Len(Data), Data
+            CachePacket StoC, stMCP, PacketID, Len(Data), Data
     
             ' ...
-            WritePacketData stMCP, StoC, Asc(Mid$(Data, 3, 1)), Len(Data), Data
+            WritePacketData stMCP, StoC, PacketID, Len(Data), Data
             
-            If InStr(1, CommandLine, "-all") > 0 Then _
-                frmChat.AddChat COLOR_BLUE, "MCP RECV 0x" & Right$("00" & Hex(Asc(Mid$(Data, 3, 1))), 2)
+            If InStr(1, CommandLine, "-all") > 0 Then
+                frmChat.AddChat COLOR_BLUE, "MCP RECV 0x" & ZeroOffset(PacketID, 2)
+            End If
                 
             ' ...
-            RunInAll "Event_PacketReceived", "MCP", Asc(Mid$(Data, 3, 1)), Len(Data), Data
-            
-            If (GetVeto) Then
+            If (RunInAll("Event_PacketReceived", "MCP", Asc(Mid$(Data, 3, 1)), Len(Data), Data)) Then
                 Exit Sub
             End If
             

@@ -168,11 +168,11 @@ Public Sub Send_0x14(ByVal sIndex As Long, ByVal sAccount As String, ByVal sData
     Packet.vLSendPacket &H14
 End Sub
 
-Public Sub Send_0x1A(ByVal ProductID As Long, ByVal flags As Long, ByVal cookie As Long, _
+Public Sub Send_0x1A(ByVal ProductID As Long, ByVal Flags As Long, ByVal cookie As Long, _
     ByVal Timestamp As String, ByVal MPQName As String, ByVal ChecksumFormula As String)    'BNLS_VERSIONCHECKEX2
 
     Packet.InsertDWord ProductID
-    Packet.InsertDWord flags
+    Packet.InsertDWord Flags
     Packet.InsertDWord cookie
     Packet.InsertNonNTString Timestamp
     Packet.InsertNTString MPQName
@@ -206,8 +206,7 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     PacketID = Asc(Mid(Data, 3, 1))
     
     If (MDebug("all")) Then
-        frmChat.AddChat COLOR_BLUE, "BNLS RECV 0x" & _
-            Right$("00" & Hex(PacketID), 2)
+        frmChat.AddChat COLOR_BLUE, "BNLS RECV 0x" & ZeroOffset(PacketID, 2)
     End If
     
     CachePacket StoC, stBNLS, PacketID, Len(Data), Data
@@ -216,9 +215,7 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
     WritePacketData BNLS, StoC, PacketID, Len(Data), Data
     
     ' ...
-    RunInAll "Event_PacketReceived", "BNLS", PacketID, Len(Data), Data
-    
-    If (GetVeto) Then
+    If (RunInAll("Event_PacketReceived", "BNLS", PacketID, Len(Data), Data)) Then
         Exit Sub
     End If
     
@@ -316,7 +313,7 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
         Case &H2 'BNLS_LOGONCHALLENGE
             sTemp = Mid$(Data, 4)
             
-            With pBuffer
+            With PBuffer
                 .InsertNonNTString sTemp
                 .InsertNTString BotVars.Username
                 .SendPacket &H53
@@ -360,9 +357,9 @@ Public Sub ParsePacket(Data As String) 'Parse Incoming BNLS Packets
             
         Case &H4 'BNLS_CREATEACCOUNT
             sTemp = Mid$(Data, 4, 64)
-            pBuffer.InsertNonNTString sTemp
-            pBuffer.InsertNTString BotVars.Username
-            pBuffer.SendPacket &H52
+            PBuffer.InsertNonNTString sTemp
+            PBuffer.InsertNTString BotVars.Username
+            PBuffer.SendPacket &H52
             
         Case &H5 'BNLS_CHANGECHALLENGE
             sTemp = Mid(Data, 4, 32)
@@ -462,7 +459,7 @@ Private Sub Send_BNLS0x51()
     ClientToken = GetTickCount()
     ds.SetGTC ClientToken
     
-    With pBuffer
+    With PBuffer
         .InsertDWord ds.GetGTC
         .InsertDWord ds.GetVersion
         .InsertDWord ds.GetChecksum
