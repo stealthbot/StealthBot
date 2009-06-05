@@ -22,16 +22,17 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     
     On Error GoTo ERROR_HANDLER
 
-    Dim UserObj       As clsUserObj
-    Dim UserEvent     As clsUserEventObj
+    Dim UserObj         As clsUserObj
+    Dim PreviousUserObj As clsUserObj
+    Dim UserEvent       As clsUserEventObj
     
-    Dim UserIndex     As Integer  ' ...
-    Dim I             As Integer  ' ...
-    Dim PreviousFlags As Long     ' ...
-    Dim Clan          As String
-    Dim parsed        As String
-    Dim pos           As Integer  ' ...
-    Dim doUpdate      As Boolean  ' ...
+    Dim UserIndex       As Integer  ' ...
+    Dim I               As Integer  ' ...
+    Dim PreviousFlags   As Long     ' ...
+    Dim Clan            As String
+    Dim parsed          As String
+    Dim pos             As Integer  ' ...
+    Dim doUpdate        As Boolean  ' ...
     
     ' if our username is for some reason null, we don't
     ' want to continue, possibly causing further errors
@@ -158,15 +159,22 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                 If (pos) Then
                     ' ...
                     frmChat.lvChannel.ListItems.Remove pos
-                    
+                
                     ' ...
-                    AddName Username, Product, flags, Ping, UserObj.Stats.IconCode, _
-                        Clan, IIf(UserObj.IsOperator, 1, pos)
-                    
-                    ' ...
-                    If (UserObj.IsOperator) Then
+                    If ((UserObj.IsOperator) And _
+                            ((PreviousFlags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
+                            
+                        ' ...
+                        AddName Username, Product, flags, Ping, UserObj.Stats.IconCode, _
+                            Clan, 1
+                        
+                        ' ...
                         frmChat.AddChat RTBColors.JoinedChannelText, "-- ", RTBColors.JoinedChannelName, _
                             Username, RTBColors.JoinedChannelText, " has acquired ops."
+                    Else
+                        ' ...
+                        AddName Username, Product, flags, Ping, UserObj.Stats.IconCode, _
+                            Clan, pos
                     End If
                 End If
             End If
@@ -1615,7 +1623,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal flags As Long, ByVal M
     Dim strCompare    As String
     Dim I             As Integer
     Dim ColIndex      As Integer
-    Dim B             As Boolean
+    Dim b             As Boolean
     Dim ToANSI        As String
     Dim BanningUser   As Boolean
     Dim UsernameColor As Long ' ...
@@ -1853,7 +1861,7 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
         
         Case 1:
             frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Version check failed! " & _
-                "The version byte for this attempt was 0x" & hex(GetVerByte(BotVars.Product)) & "."
+                "The version byte for this attempt was 0x" & Hex(GetVerByte(BotVars.Product)) & "."
 
             If (BotVars.BNLS) Then
                 'Check the user has using BNLS server finder enabled
@@ -2040,14 +2048,14 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal flags As Long, 
         '####### Mail check
         If (mail) Then
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim Msg As udtMail
+                Dim msg As udtMail
                 
                 If (GetMailCount(Username) > 0) Then
-                    Call GetMailMessage(Username, Msg)
+                    Call GetMailMessage(Username, msg)
                     
-                    If (Len(RTrim(Msg.To)) > 0) Then
+                    If (Len(RTrim(msg.To)) > 0) Then
                         frmChat.AddQ "/w " & Username & " Message from " & _
-                            RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
+                            RTrim$(msg.From) & ": " & RTrim$(msg.Message)
                     End If
                 End If
             End If
@@ -2168,18 +2176,18 @@ Public Sub Event_WhisperToUser(ByVal Username As String, ByVal flags As Long, By
     End If
 End Sub
 
-Public Function Event_AccountCreateResponse(ByVal result As Long) As Boolean
+Public Function Event_AccountCreateResponse(ByVal Result As Long) As Boolean
     Dim Success As Boolean
     Dim sOut    As String
     
-    Success = (result = 0)
+    Success = (Result = 0)
     
-    Select Case (result)
+    Select Case (Result)
         Case 1, 6: sOut = "Your desired account name does not contain enough alphanumeric characters."
         Case 2:    sOut = "Your desired account name contains invalid characters."
         Case 3:    sOut = "Your desired account name contains a banned word."
         Case 4:    sOut = "Your desired account name already exists."
-        Case Else: sOut = "Unknown response to 0x3D. Result code: " & result
+        Case Else: sOut = "Unknown response to 0x3D. Result code: " & Result
     End Select
     
     If (Success) Then
