@@ -206,7 +206,7 @@ Private DictionaryKeys As String
 
 Private Type Timer
     ID       As Integer
-    Script   As module
+    Script   As Module
     code     As String
     Interval As Integer
 End Type
@@ -369,7 +369,7 @@ Public Function CommandEx(ByVal Username As String, ByVal Message As String, Opt
         ' ...
         With dbAccess
             .Access = 200
-            .Flags = "A"
+            .flags = "A"
         End With
     Else
         ' ...
@@ -455,7 +455,7 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Optional ByRef Flags, _
+Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Optional ByRef flags, _
     Optional ByRef entryType As String = "USER") As Object
 
     Dim temp   As udtGetAccessResponse
@@ -466,7 +466,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     
     With temp
         Access = .Access
-        Flags = .Flags
+        flags = .flags
     End With
     
     ' ...
@@ -476,8 +476,8 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     With GetDBEntry
         .entryType = temp.Type
         .Name = temp.Username
-        .Rank = temp.Access
-        .Flags = temp.Flags
+        .rank = temp.Access
+        .flags = temp.flags
         .CreatedOn = temp.AddedOn
         .CreatedBy = temp.AddedBy
         .ModifiedOn = temp.ModifiedOn
@@ -509,7 +509,7 @@ End Function
 '// The scripting control isn't the greatest.
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
-Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
+Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef flags, _
     Optional ByRef entryType As String = "USER") '// yum, Variants >:\
 
     Dim temp As udtGetAccessResponse
@@ -518,7 +518,7 @@ Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
     
     With temp
         Access = .Access
-        Flags = .Flags
+        flags = .flags
     End With
 End Sub
 
@@ -677,7 +677,7 @@ Public Function GetInternalData(ByVal iIndex As Integer, ByVal lDataType As Long
                 GetInternalData = Channel.Users(iIndex).Clan
                 
             Case GID_FLAGS
-                GetInternalData = Channel.Users(iIndex).Flags
+                GetInternalData = Channel.Users(iIndex).flags
             
             Case GID_PING
                 GetInternalData = Channel.Users(iIndex).Ping
@@ -1559,6 +1559,8 @@ End Function
 
 Public Function GetSettingsEntryEx(ByVal scriptName As String, ByVal sEntryName As String)
     
+    On Error Resume Next
+    
     Dim Path As String ' ...
 
     ' ...
@@ -1589,6 +1591,8 @@ End Function
 
 Public Function WriteSettingsEntryEx(ByVal scriptName As String, ByVal sEntryName As String, ByVal sValue As String, Optional sDescription As String)
 
+    On Error GoTo ERROR_HANDLER
+
     Dim Path As String ' ...
     
     ' ...
@@ -1604,6 +1608,21 @@ Public Function WriteSettingsEntryEx(ByVal scriptName As String, ByVal sEntryNam
     WriteINI scriptName, sEntryName, sValue & _
         IIf(Len(sDescription), " ; " & sDescription, ""), Path
 
+    Exit Function
+
+ERROR_HANDLER:
+
+    Dim f As Integer
+    
+    f = FreeFile
+
+    MkDirEx App.Path & "\scripts\"
+    
+    Open App.Path & "\scripts\scripts.ini" For Output As #f
+    Close #f
+    
+    Resume Next
+    
 End Function
 
 
