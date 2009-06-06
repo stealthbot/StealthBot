@@ -900,7 +900,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -926,6 +925,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -5680,6 +5680,7 @@ Private Sub sckBNet_Connect()
     If MDebug("all") Then
         AddChat COLOR_BLUE, "BNET CONNECT"
     End If
+    WardenInstance = modWarden.WardenInitilize(sckBNet.SocketHandle)
         
     If (Not (BotVars.UseProxy)) Then
         InitBNetConnection
@@ -5687,7 +5688,6 @@ Private Sub sckBNet_Connect()
         LogonToProxy sckBNet, BotVars.Server, 6112, BotVars.ProxyIsSocks5
     End If
     
-    WardenInstance = modWarden.WardenInitilize(sckBNet.SocketHandle)
 End Sub
 
 Sub InitBNetConnection()

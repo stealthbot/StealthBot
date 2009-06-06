@@ -62,22 +62,23 @@ Private Const WARDEN_SEND              As Long = &H0
 Private Const WARDEN_RECV              As Long = &H1
 Private Const WARDEN_BNCS              As Long = &H2
 
-Private Const WARDEN_IGNORE                  As Long = &H0 '//Not a warden packet, Handle internally
-Private Const WARDEN_SUCCESS                 As Long = &H1 '//All Went Well, Don't handle the packet Internally
-Private Const WARDEN_UNKNOWN_PROTOCOL        As Long = &H2 '//Not used, will be when adding support for MCP/UDP
-Private Const WARDEN_UNKNOWN_SUBID           As Long = &H3 '//Unknown Sub-ID [Not 0x00, 0x01, 0x02, or 0x05]
-Private Const WARDEN_RAW_FAILURE             As Long = &H4 '//The module was not able to handle the packet itself
-Private Const WARDEN_PACKET_FAILURE          As Long = &H5 '//Something went HORRIBLY wrong in warden_packet, should NEVER happen.
-Private Const WARDEN_INIT_FAILURE            As Long = &H6 '//Calling Init() in the module failed
-Private Const WARDEN_LOAD_FILE_FAILURE       As Long = &H7 '//Could not load module from file [Not to bad, prolly just dosen't exist]
-Private Const WARDEN_LOAD_MD5_FAILURE        As Long = &H8 '//Failed MD5 checksum when loading module [Either Bad tranfer or HD file corrupt]
-Private Const WARDEN_LOAD_INVALID_SIGNATURE  As Long = &H9 '//Module failed RSA verification
-Private Const WARDEN_LOAD_DECOMPRESS_FAILURE As Long = &HA '//Module failed to decompress properly
-Private Const WARDEN_LOAD_PREP_FAILURE       As Long = &HB '//Module prepare failed, Usually if module is corrupt
-Private Const WARDEN_CHECK_UNKNOWN_COMMAND   As Long = &HC '//Unknown sub-command in CHEAT_CHECKS
-Private Const WARDEN_CHECK_TO_MANY_LIBS      As Long = &HD '//There were more then 4 libraries in a single 0x02 packet [this is eww yes, but I'll figure out a beter way later]
-Private Const WARDEN_MEM_UNKNOWN_PRODUCT     As Long = &HE '//The product from 0x50 != WC3, SC, or D2
-Private Const WARDEN_MEM_UNKNOWN_SEGMENT     As Long = &HF '//Could not read segment from ini file
+Private Const WARDEN_IGNORE                  As Long = &H0  '//Not a warden packet, Handle internally
+Private Const WARDEN_SUCCESS                 As Long = &H1  '//All Went Well, Don't handle the packet Internally
+Private Const WARDEN_UNKNOWN_PROTOCOL        As Long = &H2  '//Not used, will be when adding support for MCP/UDP
+Private Const WARDEN_UNKNOWN_SUBID           As Long = &H3  '//Unknown Sub-ID [Not 0x00, 0x01, 0x02, or 0x05]
+Private Const WARDEN_RAW_FAILURE             As Long = &H4  '//The module was not able to handle the packet itself
+Private Const WARDEN_PACKET_FAILURE          As Long = &H5  '//Something went HORRIBLY wrong in warden_packet, should NEVER happen.
+Private Const WARDEN_INIT_FAILURE            As Long = &H6  '//Calling Init() in the module failed
+Private Const WARDEN_LOAD_FILE_FAILURE       As Long = &H7  '//Could not load module from file [Not to bad, prolly just dosen't exist]
+Private Const WARDEN_LOAD_MD5_FAILURE        As Long = &H8  '//Failed MD5 checksum when loading module [Either Bad tranfer or HD file corrupt]
+Private Const WARDEN_LOAD_INVALID_SIGNATURE  As Long = &H9  '//Module failed RSA verification
+Private Const WARDEN_LOAD_DECOMPRESS_FAILURE As Long = &HA  '//Module failed to decompress properly
+Private Const WARDEN_LOAD_PREP_FAILURE       As Long = &HB  '//Module prepare failed, Usually if module is corrupt
+Private Const WARDEN_CHECK_UNKNOWN_COMMAND   As Long = &HC  '//Unknown sub-command in CHEAT_CHECKS
+Private Const WARDEN_CHECK_TO_MANY_LIBS      As Long = &HD  '//There were more then 4 libraries in a single 0x02 packet [this is eww yes, but I'll figure out a beter way later]
+Private Const WARDEN_MEM_UNKNOWN_PRODUCT     As Long = &HE  '//The product from 0x50 != WC3, SC, or D2
+Private Const WARDEN_MEM_UNKNOWN_SEGMENT     As Long = &HF  '//Could not read segment from ini file
+Private Const WARDEN_INVALID_INSTANCE        As Long = &H10 '//Instance passed to this function was invalid
 
 Public WardenInstance As Long
 
@@ -96,6 +97,14 @@ Public Function WardenData(Instance As Long, sData As String, Send As Boolean) A
 
   ID = Asc(Mid(sData, 2, 1))
   Data = Mid$(sData, 5)
+  
+  If (Instance = 0) Then
+    If (MDebug("warden")) Then
+        frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Attempted to call Data() with invalid instance."
+    End If
+    WardenData = False
+    Exit Function
+  End If
   
   Result = warden_data(Instance, WARDEN_BNCS Or IIf(Send, WARDEN_SEND, WARDEN_RECV), ID, Data, Len(Data))
   
@@ -168,6 +177,10 @@ Public Function WardenData(Instance As Long, sData As String, Send As Boolean) A
         If (MDebug("warden")) Then
             frmChat.AddChat RTBColors.InformationText, "[Warden] Packet Data: " & vbNewLine & DebugOutput(Data)
         End If
+        
+    Case WARDEN_INVALID_INSTANCE: '//The instance passed to this function was invalid
+        frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] An Invalid instance was passed to Data, Did Init() fail?"
+        
   End Select
     
   WardenData = (Result <> WARDEN_IGNORE)
