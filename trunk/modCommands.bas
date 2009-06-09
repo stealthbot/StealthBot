@@ -4706,10 +4706,9 @@ Private Function OnPing(ByVal Username As String, ByRef dbAccess As udtGetAccess
     Dim tmpbuf  As String ' temporary output buffer
     Dim Latency As Long
     Dim user    As String
-    
-    user = Split(msgData, " ")(0)
-    
-    If (user <> vbNullString) Then
+
+    If (Not (msgData = vbNullString)) Then
+        user = Split(msgData, " ")(0)
         Latency = GetPing(user)
         
         If (Latency >= -1) Then
@@ -4717,6 +4716,8 @@ Private Function OnPing(ByVal Username As String, ByRef dbAccess As udtGetAccess
         Else
             tmpbuf = "I can't see " & user & " in the channel."
         End If
+    Else
+        tmpbuf = "Please specify a user to ping."
     End If
     
     ' return message
