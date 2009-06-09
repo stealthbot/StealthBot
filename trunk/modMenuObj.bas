@@ -119,8 +119,12 @@ Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
                             DynamicMenus(I).Checked = True
                         End If
                     ElseIf (sub_name = "VIEW_SCRIPT") Then
-                        ShellExecute frmChat.hWnd, "Open", Scripts(s_name).Script("Path"), 0&, 0&, _
-                            vbNormalFocus
+                        If (ReadCfg("Override", "ScriptViewer") = vbNullString) Then
+                            ShellExecute frmChat.hWnd, "Open", Scripts(s_name).Script("Path"), 0&, 0&, _
+                                vbNormalFocus
+                        Else
+                            Shell ReadCfg("Override", "ScriptViewer") & Space(1) & Scripts(s_name).Script("Path")
+                        End If
                     End If
                 End If
                 
