@@ -115,15 +115,15 @@ HelpContextID="0"
 Description="StealthBot"
 CompatibleMode="0"
 MajorVer=2
-MinorVer=6
-RevisionVer=999
+MinorVer=7
+RevisionVer=0
 AutoIncrementVer=0
 ServerSupportFiles=0
 VersionCompanyName="Andy T (Stealth@USEast)"
 VersionFileDescription="StealthBot v2.7"
 VersionLegalCopyright="(c) 2002-2007 Andy T. (Stealth@USEast)"
 VersionProductName="StealthBot v2.7"
-CondComp="BETA = 1"
+CondComp="BETA = 1 : DEV_RELEASE = 2"
 CompilationType=0
 OptimizationType=0
 FavorPentiumPro(tm)=-1
