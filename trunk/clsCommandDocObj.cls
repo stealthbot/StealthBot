@@ -453,7 +453,7 @@ Private Function getNotes(ByRef AnyNode As IXMLDOMNode) As String
         Exit Function
     End If
     
-    Set temp = AnyNode.selectSingleNode("documentation/notes")
+    Set temp = AnyNode.selectSingleNode("documentation/specialnotes")
     If (temp Is Nothing) Then
         Exit Function
     End If
@@ -469,14 +469,14 @@ Private Function setNotes(ByRef AnyNode As IXMLDOMNode, ByVal Notes As String) A
         Exit Function
     End If
    
-    Set temp = AnyNode.selectSingleNode("documentation/notes")
+    Set temp = AnyNode.selectSingleNode("documentation/specialnotes")
     If (temp Is Nothing) Then
         Set temp = AnyNode.selectSingleNode("documentation")
         If (temp Is Nothing) Then
             Set temp = AnyNode.appendChild(m_database.createNode("element", "documentation", vbNullString))
         End If
         
-        Set temp = temp.appendChild(m_database.createNode("element", "notes", vbNullString))
+        Set temp = temp.appendChild(m_database.createNode("element", "specialnotes", vbNullString))
     End If
     
     temp.text = Notes
