@@ -79,6 +79,48 @@ Public Function OpenCommand(ByVal strCommand As String) As Boolean
     
 End Function
 
+'// 06/13/2009 JSM - Created function
+Public Function CreateCommand(ByVal strCommand As String) As Boolean
+
+    Dim l_command             As IXMLDOMElement
+    Dim l_aliases             As IXMLDOMElement
+    Dim l_documentation       As IXMLDOMElement
+    Dim l_description         As IXMLDOMElement
+    Dim l_arguments           As IXMLDOMElement
+    Dim l_Access              As IXMLDOMElement
+        
+    Call OpenDatabase
+    
+    '// create elements
+    Set l_command = m_database.createElement("command")
+    Set l_aliases = m_database.createElement("aliases")
+    Set l_documentation = m_database.createElement("documentation")
+    Set l_description = m_database.createElement("description")
+    Set l_arguments = m_database.createElement("arguments")
+    Set l_Access = m_database.createElement("access")
+    
+    '// set the command name
+    Call l_command.setAttribute("name", strCommand)
+    
+    '// create heirarchy
+    Call l_command.appendChild(l_aliases)
+    Call l_command.appendChild(l_documentation)
+    Call l_documentation.appendChild(l_description)
+    Call l_command.appendChild(l_arguments)
+    Call l_command.appendChild(l_Access)
+    
+    
+    '// append it to the database
+    Call m_database.documentElement.appendChild(l_command)
+    
+    '// save this crap :)
+    Call Save
+        
+    
+End Function
+
+
+
 Public Function Save() As Boolean
 
     Dim XML As clsXML ' ...
@@ -208,7 +250,7 @@ Private Function getRestrictions(ByRef ParameterNode As IXMLDOMNode) As Collecti
     
     Set Restrictions = ParameterNode.selectNodes("restrictions")
     
-    If (Restrictions.Length = 0) Then
+    If (Restrictions.length = 0) Then
         Exit Function
     End If
     
@@ -230,7 +272,7 @@ End Function
 Private Function getAliases(ByRef AnyNode As IXMLDOMNode) As Collection
 
     Dim Alias   As IXMLDOMNode
-    Dim Aliases As IXMLDOMNodeList
+    Dim aliases As IXMLDOMNodeList
     
     Set getAliases = New Collection
     
@@ -239,10 +281,10 @@ Private Function getAliases(ByRef AnyNode As IXMLDOMNode) As Collection
     End If
     
     '// 09/03/2008 JSM - Modified code to use the <aliases> element
-    Set Aliases = AnyNode.selectNodes("aliases/alias")
+    Set aliases = AnyNode.selectNodes("aliases/alias")
     
-    If ((Aliases Is Nothing) = False) Then
-        For Each Alias In Aliases
+    If ((aliases Is Nothing) = False) Then
+        For Each Alias In aliases
             getAliases.Add Alias.text
         Next
     End If
@@ -252,7 +294,7 @@ End Function
 Private Function setAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Collection) As Collection
 
     Dim Alias   As IXMLDOMNode
-    Dim Aliases As IXMLDOMNodeList
+    Dim aliases As IXMLDOMNodeList
     Dim I       As Integer
     
     If (AnyNode Is Nothing) Then
@@ -260,10 +302,10 @@ Private Function setAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Coll
     End If
     
     '// 09/03/2008 JSM - Modified code to use the <aliases> element
-    Set Aliases = AnyNode.selectNodes("aliases/alias")
+    Set aliases = AnyNode.selectNodes("aliases/alias")
     
-    If ((Aliases Is Nothing) = False) Then
-        For Each Alias In Aliases
+    If ((aliases Is Nothing) = False) Then
+        For Each Alias In aliases
             '// 09/03/2008 JSM - Modified code to use the <aliases> element
             AnyNode.selectSingleNode("aliases").removeChild Alias
         Next
@@ -516,7 +558,7 @@ Private Function getFlags(ByRef AnyNode As IXMLDOMNode) As String
     
 End Function
 
-Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal flags As String) As String
+Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) As String
 
     Dim temp As IXMLDOMNode
     Dim flag As IXMLDOMNode
@@ -535,15 +577,15 @@ Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal flags As String) A
             temp.appendChild(m_database.createNode("element", "flags", vbNullString))
     End If
     
-    For I = temp.childNodes.Length - 1 To 0 Step -1
+    For I = temp.childNodes.length - 1 To 0 Step -1
         temp.removeChild temp.childNodes(I)
     Next I
     
-    For I = 1 To Len(flags)
+    For I = 1 To Len(Flags)
         Set flag = _
             temp.appendChild(m_database.createNode("element", "flag", vbNullString))
         
-        flag.text = Mid$(flags, I, 1)
+        flag.text = Mid$(Flags, I, 1)
     Next I
     
     Call Save
@@ -556,13 +598,13 @@ Public Property Get Name() As String
     
 End Property
 
-Public Property Get Aliases() As Collection
+Public Property Get aliases() As Collection
 
-    Set Aliases = getAliases(m_command_node)
+    Set aliases = getAliases(m_command_node)
     
 End Property
 
-Public Property Let Aliases(ByVal col As Collection)
+Public Property Let aliases(ByVal col As Collection)
 
     setAliases m_command_node, col
 
