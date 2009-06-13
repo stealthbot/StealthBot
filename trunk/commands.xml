@@ -4,7 +4,7 @@
 
     <documentation>
       <description>
-        ...
+        dumps temporary packet information to a file.
       </description>
     </documentation>
 
@@ -16,11 +16,13 @@
 
     <documentation>
       <description>
-        ...
+        lists all of the bot's currently loaded scripts.
       </description>
     </documentation>
 
-    <access />
+    <access>
+	  <rank>50</rank>
+	</access>
   </command>
 
   <command name="enable">
@@ -28,11 +30,13 @@
 
     <documentation>
       <description>
-        ...
+        enables the specified script.
       </description>
     </documentation>
 
-    <access />
+    <access>
+	  <rank>90</rank>
+	</access>
   </command>
 
   <command name="disable">
@@ -40,11 +44,13 @@
 
     <documentation>
       <description>
-        ...
+        disables the specified script.
       </description>
     </documentation>
 
-    <access />
+    <access>
+	  <rank>90</rank>
+	</access>
   </command>
 
   <command name="sdetail">
@@ -64,7 +70,7 @@
 
     <documentation>
       <description>
-        ...
+        executes the provided visual basic script code.
       </description>
     </documentation>
 
@@ -88,7 +94,7 @@
 
     <documentation>
       <description>
-        ...
+        makes the specified user's name appear red inbot.
       </description>
     </documentation>
 
@@ -100,7 +106,7 @@
 
     <documentation>
       <description>
-        ...
+        returns the watched user's name to normal.
       </description>
     </documentation>
 
@@ -114,7 +120,7 @@
 
     <documentation>
       <description>
-        ...
+        clears all of the text in the bot's chat window.
       </description>
     </documentation>
 
@@ -126,11 +132,13 @@
 
     <documentation>
       <description>
-        ...
+        connects the bot to Battle.net.
       </description>
     </documentation>
 
-    <access />
+    <access>
+	  <rank>100</rank>
+	</access>
   </command>
 
   <command name="disconnect">
@@ -138,11 +146,13 @@
 
     <documentation>
       <description>
-        ...
+        disconnects the bot from Battle.net.
       </description>
     </documentation>
 
-    <access />
+    <access>
+	  <rank>100</rank>
+	</access>
   </command>
 
   <command name="find">
@@ -182,7 +192,7 @@
 
     <documentation>
       <description>
-        ...
+        lists all of the members of the specified group.
       </description>
     </documentation>
 
@@ -190,7 +200,7 @@
       <argument name="group">
         <documentation>
           <description>
-            ...
+            the group.
           </description>
         </documentation>
       </argument>
@@ -214,7 +224,7 @@
 
     <documentation>
       <description>
-        ...
+        retreives any stored mail for the requesting user.
       </description>
     </documentation>
 
@@ -236,7 +246,7 @@
 
     <documentation>
       <description>
-        ...
+        states the specified users's rank and flags.
       </description>
     </documentation>
 
@@ -474,9 +484,10 @@
     <arguments>
       <argument name="username">
         <documentation>
-          <description />
+          <description>
+			the name of the user to modify.
+		  </description>
 
-          <specialnotes />
         </documentation>
       </argument>
 
@@ -485,7 +496,7 @@
           <argument name="rank">
             <documentation>
               <description>
-                ...
+                the rank to set the user to.
               </description>
             </documentation>
           </argument>
@@ -495,7 +506,7 @@
           <argument name="attributes">
             <documentation>
               <description>
-                ...
+                the attributes to give the user.
               </description>
             </documentation>
 
@@ -503,7 +514,7 @@
               <restriction name="FLAG_A">
                 <documentation>
                   <description>
-                    ...
+                    database administrator.
                   </description>
                 </documentation>
 
@@ -520,7 +531,7 @@
               <restriction name="FLAG_B">
                 <documentation>
                   <description>
-                    ...
+                    shitlisted.
                   </description>
                 </documentation>
 
@@ -538,7 +549,7 @@
               <restriction name="FLAG_C">
                 <documentation>
                   <description>
-                    ...
+                    clan commands.
                   </description>
                 </documentation>
 
@@ -555,7 +566,7 @@
               <restriction name="FLAG_D">
                 <documentation>
                   <description>
-                    ...
+                    auto-designation.
                   </description>
                 </documentation>
 
@@ -572,7 +583,7 @@
               <restriction name="FLAG_E">
                 <documentation>
                   <description>
-                    ...
+                    n/a
                   </description>
                 </documentation>
 
@@ -589,7 +600,7 @@
               <restriction name="FLAG_F">
                 <documentation>
                   <description>
-                    ...
+                    friend.
                   </description>
                 </documentation>
 
@@ -606,7 +617,7 @@
               <restriction name="FLAG_G">
                 <documentation>
                   <description>
-                    ...
+                    general.
                   </description>
                 </documentation>
 
@@ -623,7 +634,7 @@
               <restriction name="FLAG_H">
                 <documentation>
                   <description>
-                    ...
+                    n/a
                   </description>
                 </documentation>
 
@@ -640,7 +651,7 @@
               <restriction name="FLAG_I">
                 <documentation>
                   <description>
-                    ...
+                    ignored from broad database entries. (client/clan access and wildcards)
                   </description>
                 </documentation>
 
@@ -657,7 +668,7 @@
               <restriction name="FLAG_J">
                 <documentation>
                   <description>
-                    ...
+                    n/a
                   </description>
                 </documentation>
 
@@ -674,7 +685,7 @@
               <restriction name="FLAG_K">
                 <documentation>
                   <description>
-                    ...
+                    n/a
                   </description>
                 </documentation>
 
@@ -691,7 +702,7 @@
               <restriction name="FLAG_L">
                 <documentation>
                   <description>
-                    ...
+                    locked from modification.
                   </description>
                 </documentation>
 
@@ -708,7 +719,7 @@
               <restriction name="FLAG_M">
                 <documentation>
                   <description>
-                    ...
+                    n/a
                   </description>
                 </documentation>
 
@@ -725,7 +736,7 @@
               <restriction name="FLAG_N">
                 <documentation>
                   <description>
-                    ...
+                    n/a
                   </description>
                 </documentation>
 
@@ -742,7 +753,7 @@
               <restriction name="FLAG_O">
                 <documentation>
                   <description>
-                    ...
+                    operator commands.
                   </description>
                 </documentation>
 
@@ -759,7 +770,7 @@
               <restriction name="FLAG_P">
                 <documentation>
                   <description>
-                    ...
+                    protected.
                   </description>
                 </documentation>
 
@@ -776,7 +787,7 @@
               <restriction name="FLAG_Q">
                 <documentation>
                   <description>
-                    ...
+                    n/a
                   </description>
                 </documentation>
 
@@ -793,7 +804,7 @@
               <restriction name="FLAG_R">
                 <documentation>
                   <description>
-                    ...
+                    n/a
                   </description>
                 </documentation>
 
@@ -811,7 +822,7 @@
               <restriction name="FLAG_S">
                 <documentation>
                   <description>
-                    ...
+                    safelisted.
                   </description>
                 </documentation>
 
@@ -829,7 +840,7 @@
               <restriction name="FLAG_T">
                 <documentation>
                   <description>
-                    ...
+                    speech commands.
                   </description>
                 </documentation>
 
@@ -846,7 +857,7 @@
               <restriction name="FLAG_U">
                 <documentation>
                   <description>
-                    ...
+                    n/a
                   </description>
                 </documentation>
 
@@ -863,7 +874,7 @@
               <restriction name="FLAG_V">
                 <documentation>
                   <description>
-                    ...
+                    n/a
                   </description>
                 </documentation>
 
@@ -880,7 +891,7 @@
               <restriction name="FLAG_W">
                 <documentation>
                   <description>
-                    ...
+                    n/a
                   </description>
                 </documentation>
 
@@ -897,7 +908,7 @@
               <restriction name="FLAG_X">
                 <documentation>
                   <description>
-                    ...
+                    n/a
                   </description>
                 </documentation>
 
@@ -914,7 +925,7 @@
               <restriction name="FLAG_Y">
                 <documentation>
                   <description>
-                    ...
+                    n/a
                   </description>
                 </documentation>
 
@@ -931,7 +942,7 @@
               <restriction name="FLAG_Z">
                 <documentation>
                   <description>
-                    ...
+                    n/a
                   </description>
                 </documentation>
 
@@ -1059,7 +1070,7 @@
     </documentation>
 
     <access>
-      <rank>1000</rank>
+      <rank>40</rank>
       <flags>
         <flag>A</flag>
         <flag>J</flag>
@@ -1199,7 +1210,7 @@
     </arguments>
 
     <access>
-      <rank>1000</rank>
+      <rank>50</rank>
       <flags>
         <flag>O</flag>
       </flags>
@@ -1233,7 +1244,7 @@
     </arguments>
 
     <access>
-      <rank>50</rank>
+      <rank>60</rank>
       <flags>
         <flag>T</flag>
       </flags>
@@ -1422,7 +1433,7 @@
     </arguments>
 
     <access>
-      <rank>50</rank>
+      <rank>60</rank>
       <flags>
         <flag>T</flag>
       </flags>
@@ -1701,7 +1712,7 @@
 
     <documentation>
       <description>
-        ...
+        reports the number of users currently on the bot's internal ban list.
       </description>
     </documentation>
 
@@ -1777,7 +1788,7 @@
 
     <documentation>
       <description>
-        ...
+        checks if the specified user is on the bot's shitlist.
       </description>
     </documentation>
 
@@ -1785,7 +1796,7 @@
       <argument name="username">
         <documentation>
           <description>
-            ...
+            the name of the user to check.
           </description>
         </documentation>
       </argument>
@@ -1807,7 +1818,7 @@
 
     <documentation>
       <description>
-        ...
+        displays database information regarding the specified user.
       </description>
     </documentation>
 
@@ -1815,7 +1826,7 @@
       <argument name="username">
         <documentation>
           <description>
-            ...
+            the user.
           </description>
         </documentation>
       </argument>
@@ -1895,7 +1906,7 @@
       <argument name="username">
         <documentation>
           <description>
-            ...
+            the name of the user to be banned.
           </description>
         </documentation>
       </argument>
@@ -1962,7 +1973,7 @@
     </documentation>
 
     <access>
-      <rank>1000</rank>
+      <rank>50</rank>
       <flags>
         <flag>O</flag>
       </flags>
@@ -1983,7 +1994,7 @@
     </documentation>
 
     <access>
-      <rank>1000</rank>
+      <rank>60</rank>
       <flags>
         <flag>O</flag>
       </flags>
@@ -2000,7 +2011,7 @@
     </documentation>
 
     <access>
-      <rank>1001</rank>
+      <rank>80</rank>
       <flags>
         <flag>M</flag>
       </flags>
@@ -2036,7 +2047,7 @@
     </documentation>
 
     <access>
-      <rank>1000</rank>
+      <rank>60</rank>
       <flags>
         <flag>O</flag>
       </flags>
@@ -2053,7 +2064,7 @@
     </documentation>
 
     <access>
-      <rank>1000</rank>
+      <rank>70</rank>
       <flags>
         <flag>O</flag>
       </flags>
@@ -2070,7 +2081,7 @@
     </documentation>
 
     <access>
-      <rank>1000</rank>
+      <rank>70</rank>
       <flags>
         <flag>O</flag>
       </flags>
@@ -2087,7 +2098,7 @@
     </documentation>
 
     <access>
-      <rank>1000</rank>
+      <rank>70</rank>
       <flags>
         <flag>O</flag>
       </flags>
@@ -2118,7 +2129,7 @@
 
     <documentation>
       <description>
-        ...
+        enables, disables, or displays the status of the bot's IP banning system.
       </description>
     </documentation>
 
@@ -2376,7 +2387,7 @@
 
     <documentation>
       <description>
-        ...
+        gets the bot's account's information from Battle.net.
       </description>
     </documentation>
 
@@ -2407,7 +2418,7 @@
 
     <documentation>
       <description>
-        The "filter" command will filter any incoming messages containing the specified phrase.
+        filters any incoming messages containing the specified phrase.
       </description>
     </documentation>
 
@@ -2424,7 +2435,7 @@
 
     <documentation>
       <description>
-        The "block" command will filter any incoming message from the specified user.
+        filters any incoming message from the specified user.
       </description>
     </documentation>
 
@@ -2441,7 +2452,7 @@
 
     <documentation>
       <description>
-        The "allowmp3" command enables or disables the use of mp3 commands.
+        enables or disables the use of mp3 commands.
       </description>
     </documentation>
 
@@ -2460,7 +2471,7 @@
 
     <documentation>
       <description>
-        The "kickonyell" command will enable or disable kicking on yell.
+        enables or disables kicking on yell.
       </description>
     </documentation>
 
@@ -2480,7 +2491,7 @@
 
     <documentation>
       <description>
-        ...
+        lists all of the bot's currently banned clients.
       </description>
     </documentation>
 
@@ -2499,7 +2510,7 @@
 
     <documentation>
       <description>
-        ...
+        adds the specified client to the bot's list of banned clients.
       </description>
     </documentation>
 
@@ -2507,7 +2518,7 @@
       <argument name="game">
         <documentation>
           <description>
-            ...
+            the four character code of the client to add.
           </description>
         </documentation>
       </argument>
@@ -2528,7 +2539,7 @@
 
     <documentation>
       <description>
-        ...
+        removes the specified client from the bot's list of banned clients.
       </description>
     </documentation>
 
@@ -2536,7 +2547,7 @@
       <argument name="game">
         <documentation>
           <description>
-            ...
+            the client to remove.
           </description>
         </documentation>
       </argument>
@@ -2722,7 +2733,7 @@
       <argument name="trigger">
         <documentation>
           <description>
-            ...
+            the command indentifier to set to.
           </description>
         </documentation>
       </argument>
@@ -3214,7 +3225,7 @@
 
     <documentation>
       <description>
-        ...
+        displays the clan's current Message of the Day.
       </description>
     </documentation>
 
@@ -3406,7 +3417,7 @@
     </documentation>
 
     <access>
-      <rank>1000</rank>
+      <rank>70</rank>
       <flags />
     </access>
   </command>
@@ -3418,7 +3429,7 @@
 
     <documentation>
       <description>
-        ...
+        makes the specified clan member the chieftain of the bot's clan.
       </description>
     </documentation>
 
@@ -3430,7 +3441,7 @@
 
     <documentation>
       <description>
-        ...
+        disbands the bot's current clan.
       </description>
     </documentation>
 
@@ -3531,7 +3542,7 @@
 
     <documentation>
       <description>
-        ...
+        provides additional information on a command such as the format, parameters, and a description of its function.
       </description>
     </documentation>
 
@@ -3555,7 +3566,7 @@
 
     <documentation>
       <description>
-        ...
+        lists each of the commands available to the specified attribute.
       </description>
     </documentation>
 
@@ -3579,7 +3590,7 @@
 
     <documentation>
       <description>
-        ...
+        lists each of the commands available to the specified rank.
       </description>
     </documentation>
 
