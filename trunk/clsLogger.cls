@@ -29,11 +29,14 @@ Private Enum LOG_TYPES
 End Enum
 
 Private m_logsCreated As Collection ' ...
+Private m_logPath     As String     ' the path to the log file
 
 Private Sub Class_Initialize()
 
     ' ...
     Set m_logsCreated = New Collection
+    
+    m_logPath = App.Path & "\logs\"
 
 End Sub
 
@@ -49,15 +52,27 @@ Private Sub Class_Teriminate()
 
 End Sub
 
+Public Property Get LogPath() As String
+    LogPath = m_logPath
+End Property
+
+Public Property Let LogPath(ByVal value As String)
+    m_logPath = value
+    
+    If (Not (Right$(m_logPath, 1) = "\")) Then
+        m_logPath = m_logPath & "\"
+    End If
+End Property
+
 ' ...
-Public Function WriteWarning(ByVal sWarning As String, Optional ByVal Source As String, Optional TimeDate As Date)
+Public Function WriteWarning(ByVal sWarning As String, Optional ByVal source As String, Optional TimeDate As Date)
 
     ' ...
-    Source = LCase$(Source)
+    source = LCase$(source)
 
     ' ...
-    If (LenB(Source) > 0) Then
-        WriteLine WARNING_MSG, "warning " & Source & " " & sWarning, TimeDate
+    If (LenB(source) > 0) Then
+        WriteLine WARNING_MSG, "warning " & source & " " & sWarning, TimeDate
     Else
         WriteLine WARNING_MSG, "warning " & sWarning, TimeDate
     End If
@@ -65,14 +80,14 @@ Public Function WriteWarning(ByVal sWarning As String, Optional ByVal Source As 
 End Function
 
 ' ...
-Public Function WriteError(ByVal sError As String, Optional ByVal Source As String, Optional TimeDate As Date)
+Public Function WriteError(ByVal sError As String, Optional ByVal source As String, Optional TimeDate As Date)
     
     ' ...
-    Source = LCase$(Source)
+    source = LCase$(source)
     
     ' ...
-    If (LenB(Source) > 0) Then
-        WriteLine ERROR_MSG, "error " & Source & " " & sError, TimeDate
+    If (LenB(source) > 0) Then
+        WriteLine ERROR_MSG, "error " & source & " " & sError, TimeDate
     Else
         WriteLine ERROR_MSG, "error " & sError, TimeDate
     End If
@@ -80,14 +95,14 @@ Public Function WriteError(ByVal sError As String, Optional ByVal Source As Stri
 End Function
 
 ' ...
-Public Function WriteEvent(ByVal sTitle As String, ByVal sEvent As String, Optional ByVal Source As String, Optional TimeDate As Date)
+Public Function WriteEvent(ByVal sTitle As String, ByVal sEvent As String, Optional ByVal source As String, Optional TimeDate As Date)
 
     ' ...
-    Source = LCase$(Source)
+    source = LCase$(source)
     
     ' ...
-    If (LenB(Source) > 0) Then
-        WriteLine EVENT_MSG, "event " & sTitle & " " & Source & " " & sEvent, TimeDate
+    If (LenB(source) > 0) Then
+        WriteLine EVENT_MSG, "event " & sTitle & " " & source & " " & sEvent, TimeDate
     Else
         WriteLine EVENT_MSG, "event " & sTitle & " " & sEvent, TimeDate
     End If
@@ -115,15 +130,15 @@ Public Function WriteDatabase(ByVal sEvent As String, Optional TimeDate As Date)
 End Function
 
 ' ...
-Public Function WriteDebug(ByVal sDebugMessage As String, Optional ByVal Source As String, Optional TimeDate As Date)
+Public Function WriteDebug(ByVal sDebugMessage As String, Optional ByVal source As String, Optional TimeDate As Date)
 
     ' ...
-    Source = LCase$(Source)
+    source = LCase$(source)
     
     ' ...
     If (isDebug) Then
-        If (LenB(Source) > 0) Then
-            WriteLine DEBUG_MSG, "debug " & Source & " " & sDebugMessage, TimeDate
+        If (LenB(source) > 0) Then
+            WriteLine DEBUG_MSG, "debug " & source & " " & sDebugMessage, TimeDate
         Else
             WriteLine DEBUG_MSG, "debug " & sDebugMessage, TimeDate
         End If
@@ -173,23 +188,23 @@ Private Function WriteLine(ByVal ltype As LOG_TYPES, ByVal line As String, Optio
     Select Case (ltype)
         Case WARNING_MSG, ERROR_MSG, EVENT_MSG, DEBUG_MSG
             filePath = _
-                (App.Path & "\logs\master.txt")
+                (m_logPath & "master.txt")
         
         Case COMMAND_MSG
             filePath = _
-                (App.Path & "\logs\commands.txt")
+                (m_logPath & "commands.txt")
                 
         Case CHAT_MSG
             filePath = _
-                (App.Path & "\logs\" & Datestamp() & ".txt")
+                (m_logPath & Datestamp() & ".txt")
                 
         Case WHISPER_MSG
             filePath = _
-                (App.Path & "\logs\" & Datestamp() & "-WHISPERS.txt")
+                (m_logPath & Datestamp() & "-WHISPERS.txt")
                 
         Case SCK_MSG
             filePath = _
-                (App.Path & "\logs\" & Datestamp() & "-PACKETLOG.txt")
+                (m_logPath & Datestamp() & "-PACKETLOG.txt")
                 
     End Select
     
@@ -228,7 +243,7 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
     Static failed_attempts As Integer
     
     Dim f As Integer ' ...
-    Dim i As Double  ' ...
+    Dim I As Double  ' ...
     
     ' ...
     f = FreeFile
@@ -250,14 +265,14 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
         
         ' ...
         If ((ltype = CHAT_MSG) Or (ltype = WHISPER_MSG)) Then
-            For i = 1 To m_logsCreated.Count
-                If (StrComp(m_logsCreated(i), Path, vbTextCompare) = 0) Then
+            For I = 1 To m_logsCreated.Count
+                If (StrComp(m_logsCreated(I), Path, vbTextCompare) = 0) Then
                     Exit For
                 End If
-            Next i
+            Next I
             
             ' ...
-            If (i >= m_logsCreated.Count + 1) Then
+            If (I >= m_logsCreated.Count + 1) Then
                 m_logsCreated.Add Path
             End If
         End If
@@ -292,21 +307,21 @@ Private Function OpenLog(ByVal ltype As LOG_TYPES, ByVal Path As String) As Inte
             Dim bytes  As Integer ' ...
             
             ' ...
-            For i = UBound(arr) To 0 Step -1
-                bytes = (bytes + Len(arr(i)))
+            For I = UBound(arr) To 0 Step -1
+                bytes = (bytes + Len(arr(I)))
                 
                 If (bytes >= BotVars.MaxLogFileSize) Then
-                    offset = i
+                    offset = I
                     
                     Exit For
                 End If
-            Next i
+            Next I
         
             ' ...
             Open Path For Output As #f
-                For i = offset + 1 To UBound(arr)
-                    Print #f, arr(i)
-                Next i
+                For I = offset + 1 To UBound(arr)
+                    Print #f, arr(I)
+                Next I
             Close #f
         End If
         
@@ -342,12 +357,12 @@ Public Sub RemoveLogsCreated()
 
     On Error Resume Next
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
-    For i = 1 To m_logsCreated.Count
-        Kill m_logsCreated(i)
-    Next i
+    For I = 1 To m_logsCreated.Count
+        Kill m_logsCreated(I)
+    Next I
 
 End Sub
 

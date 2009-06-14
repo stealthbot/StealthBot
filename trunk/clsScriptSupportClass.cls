@@ -1571,7 +1571,10 @@ Public Function GetSettingsEntryEx(ByVal scriptName As String, ByVal sEntryName 
     Dim Path As String ' ...
 
     ' ...
-    Path = App.Path & "\scripts\scripts.ini"
+    Path = ReadCfg("FilePaths", "Scripts.ini")
+    If (Path = vbNullString) Then
+        Path = App.Path & "\scripts\scripts.ini"
+    End If
 
     ' ...
     If (LenB(Dir(Path)) = 0) Then
@@ -1603,7 +1606,10 @@ Public Function WriteSettingsEntryEx(ByVal scriptName As String, ByVal sEntryNam
     Dim Path As String ' ...
     
     ' ...
-    Path = App.Path & "\scripts\scripts.ini"
+    Path = ReadCfg("FilePaths", "Scripts.ini")
+    If (Path = vbNullString) Then
+        Path = App.Path & "\scripts\scripts.ini"
+    End If
 
     ' ...
     If (LenB(Dir(Path)) = 0) Then
@@ -1623,9 +1629,14 @@ ERROR_HANDLER:
     
     f = FreeFile
 
-    MkDirEx App.Path & "\scripts\"
+    If (ReadCfg("FilePaths", "Scripts") = vbNullString) Then
+        MkDirEx App.Path & "\scripts\"
+    Else
+        MkDirEx ReadCfg("FilePaths", "Scripts")
+    End If
     
-    Open App.Path & "\scripts\scripts.ini" For Output As #f
+    Open Path For Output As #f
+    
     Close #f
     
     Resume Next

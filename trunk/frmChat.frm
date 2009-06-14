@@ -1626,10 +1626,10 @@ Private Sub Form_Load()
     #End If
 
     #If (COMPILE_DEBUG = 0) Then
-        HookWindowProc frmChat.hwnd
+        HookWindowProc frmChat.hWnd
     #End If
     
-    SendMessage frmChat.cboSend.hwnd, CB_LIMITTEXT, 0, 0
+    SendMessage frmChat.cboSend.hWnd, CB_LIMITTEXT, 0, 0
     
     ' 4/10/06:
     ' CHECK FOR CONFIG.INI PATH HACK
@@ -2378,7 +2378,7 @@ Sub Form_Resize()
                 
                 With nid
                     .cbSize = LenB(nid)
-                    .hwnd = frmChat.hwnd
+                    .hWnd = frmChat.hWnd
                     .uId = ID_TASKBARICON
                     .uFlags = NIF_ICON Or NIF_TIP Or NIF_MESSAGE
                     .uCallBackMessage = WM_ICONNOTIFY
@@ -2556,7 +2556,7 @@ Sub UpdateTrayTooltip()
     If Me.WindowState = vbMinimized Then
         With nid
             .cbSize = LenB(nid)
-            .hwnd = frmChat.hwnd
+            .hWnd = frmChat.hWnd
             .uId = ID_TASKBARICON
             .uFlags = NIF_ICON Or NIF_TIP Or NIF_MESSAGE
             .uCallBackMessage = WM_ICONNOTIFY
@@ -3053,8 +3053,8 @@ Sub Form_Unload(Cancel As Integer)
 
     'Call ChatQueue_Terminate
 
-    DisableURLDetect frmChat.rtbChat.hwnd
-    UnhookWindowProc frmChat.hwnd
+    DisableURLDetect frmChat.rtbChat.hWnd
+    UnhookWindowProc frmChat.hWnd
 
     'Call SharedScriptSupport.Dispose 'Explicit call the Class_Terminate sub in the ScriptSupportClass to destroy all the forms. - FrOzeN
     
@@ -3488,7 +3488,7 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
    
     lvhti.pt.X = X / Screen.TwipsPerPixelX
     lvhti.pt.Y = Y / Screen.TwipsPerPixelY
-    lItemIndex = SendMessageAny(lvFriendList.hwnd, LVM_HITTEST, 0, lvhti) + 1
+    lItemIndex = SendMessageAny(lvFriendList.hWnd, LVM_HITTEST, 0, lvhti) + 1
    
     If m_lCurItemIndex <> lItemIndex Then
         m_lCurItemIndex = lItemIndex
@@ -3551,7 +3551,7 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Sin
                     ListToolTip.TipText = sTemp
                 End With
                 
-                Call ListToolTip.Create(lvFriendList.hwnd, CLng(X), CLng(Y))
+                Call ListToolTip.Create(lvFriendList.hWnd, CLng(X), CLng(Y))
             End If
         End If
     End If
@@ -3567,7 +3567,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
    
     lvhti.pt.X = X / Screen.TwipsPerPixelX
     lvhti.pt.Y = Y / Screen.TwipsPerPixelY
-    lItemIndex = SendMessageAny(lvChannel.hwnd, LVM_HITTEST, -1, lvhti) + 1
+    lItemIndex = SendMessageAny(lvChannel.hWnd, LVM_HITTEST, -1, lvhti) + 1
  
     If m_lCurItemIndex <> lItemIndex Then
         m_lCurItemIndex = lItemIndex
@@ -3618,7 +3618,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single
                     
                 End With
                 
-                Call ListToolTip.Create(lvChannel.hwnd, CLng(X), CLng(Y))
+                Call ListToolTip.Create(lvChannel.hWnd, CLng(X), CLng(Y))
             End If
         End If
     End If
@@ -3713,7 +3713,7 @@ End Sub
 
 Private Sub mnuEditAccessFlags_Click()
     'Shell "notepad " & App.Path & "\commands.xml", vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", App.Path & "\commands.xml", &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", App.Path & "\commands.xml", &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditCaught_Click()
@@ -3721,43 +3721,43 @@ Private Sub mnuEditCaught_Click()
         MsgBox "The bot has not caught any phrases yet."
         Exit Sub
     Else
-        ShellExecute Me.hwnd, "Open", GetFilePath("caughtphrases.htm"), 0&, 0&, 0&
+        ShellExecute Me.hWnd, "Open", GetFilePath("caughtphrases.htm"), 0&, 0&, 0&
     End If
 End Sub
 
 Private Sub mnuEditChangelog_Click()
     'Shell "notepad " & App.Path & "\Changelog.txt", vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", App.Path & "\Changelog.txt", &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", App.Path & "\Changelog.txt", &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditPhrasebans_Click()
     'Shell "notepad " & GetFilePath("phrasebans.txt"), vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", GetFilePath("phrasebans.txt"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("phrasebans.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditQCini_Click()
     'Shell "notepad " & GetFilePath("quickchannels.ini"), vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", GetFilePath("quickchannels.ini"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("quickchannels.ini"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditSafelist_Click()
     'Shell "notepad " & GetFilePath("safelist.txt"), vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", GetFilePath("safelist.txt"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("safelist.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditScript_Click()
     'Shell "notepad " & GetFilePath("script.txt"), vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", GetFilePath("script.txt"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("script.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditShitlist_Click()
     'Shell "notepad " & GetFilePath("autobans.txt"), vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", GetFilePath("autobans.txt"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("autobans.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditTagbans_Click()
     'Shell "notepad " & GetFilePath("tagbans.txt"), vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", GetFilePath("tagbans.txt"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("tagbans.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuFlash_Click()
@@ -3837,7 +3837,7 @@ Sub mnuHelpReadme_Click()
 End Sub
 
 Sub mnuHelpWebsite_Click()
-    ShellExecute Me.hwnd, "Open", "http://www.stealthbot.net", 0&, 0&, 0&
+    ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net", 0&, 0&, 0&
 End Sub
 
 Private Sub mnuHideBans_Click()
@@ -4109,7 +4109,7 @@ End Sub
 
 Private Sub mnuClearedTxt_Click()
     'Shell "notepad " & GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt", vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt", _
+    ShellExecute frmChat.hWnd, "Open", GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt", _
         &H0, &H0, vbNormalFocus
 End Sub
 
@@ -4236,33 +4236,33 @@ End Sub
 
 Private Sub mnuWhisperCleared_Click()
     'Shell "notepad " & GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt", vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt" & ".txt", _
+    ShellExecute frmChat.hWnd, "Open", GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt" & ".txt", _
         &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditConfig_Click()
     'Shell "notepad " & GetConfigFilePath(), vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", GetConfigFilePath(), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetConfigFilePath(), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditDefinitions_Click()
     'Shell "notepad " & GetFilePath("definitions.ini"), vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", GetFilePath("definitions.ini"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("definitions.ini"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditFilters_Click()
     'Shell "notepad " & GetFilePath("filters.ini"), vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", GetFilePath("filters.ini"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("filters.ini"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditQuotes_Click()
     'Shell "notepad " & GetFilePath("quotes.txt"), vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", GetFilePath("quotes.txt"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("quotes.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuEditUsers_Click()
     'Shell "notepad " & GetFilePath("users.txt"), vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", GetFilePath("quotes.txt"), &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", GetFilePath("quotes.txt"), &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuFListRefresh_Click()
@@ -4342,7 +4342,7 @@ End Sub
 
 Private Sub mnuTerms_Click()
     'Shell "notepad " & App.Path & "\eula.txt", vbNormalFocus
-    ShellExecute frmChat.hwnd, "Open", App.Path & "\eula.txt", &H0, &H0, vbNormalFocus
+    ShellExecute frmChat.hWnd, "Open", App.Path & "\eula.txt", &H0, &H0, vbNormalFocus
 End Sub
 
 Private Sub mnuFilters_Click()
@@ -5047,9 +5047,9 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 
             Case KEY_V 'PASTE
                 If (IsScrolling(rtbChat)) Then
-                    LockWindowUpdate rtbChat.hwnd
+                    LockWindowUpdate rtbChat.hWnd
                 
-                    SendMessage rtbChat.hwnd, EM_SCROLL, SB_BOTTOM, &H0
+                    SendMessage rtbChat.hWnd, EM_SCROLL, SB_BOTTOM, &H0
                     
                     LockWindowUpdate &H0
                 End If
@@ -5225,9 +5225,9 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                 
             Case KEY_ENTER
                 If (IsScrolling(rtbChat)) Then
-                    LockWindowUpdate rtbChat.hwnd
+                    LockWindowUpdate rtbChat.hWnd
                 
-                    SendMessage rtbChat.hwnd, EM_SCROLL, SB_BOTTOM, &H0
+                    SendMessage rtbChat.hWnd, EM_SCROLL, SB_BOTTOM, &H0
                     
                     LockWindowUpdate &H0
                 End If
@@ -6405,7 +6405,7 @@ Private Function ReplaceEnvironmentVars(ByVal str As String) As String
 
     Dim I     As Integer
     Dim Name  As String
-    Dim Value As String
+    Dim value As String
     Dim tmp   As String
     
     tmp = str
@@ -6416,10 +6416,10 @@ Private Function ReplaceEnvironmentVars(ByVal str As String) As String
         Name = _
             Mid$(Environ$(I), 1, InStr(1, Environ$(I), "=") - 1)
 
-        Value = _
+        value = _
             Mid$(Environ$(I), InStr(1, Environ$(I), "=") + 1)
 
-        tmp = Replace(tmp, "%" & Name & "%", Value)
+        tmp = Replace(tmp, "%" & Name & "%", value)
     
         I = I + 1
     Wend
@@ -7153,9 +7153,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     s = ReadCfg(MN, "URLDetect")
     If s = "Y" Then
-        EnableURLDetect rtbChat.hwnd
+        EnableURLDetect rtbChat.hWnd
     Else
-        DisableURLDetect frmChat.rtbChat.hwnd
+        DisableURLDetect frmChat.rtbChat.hWnd
     End If
     
     If BotVars.MaxBacklogSize < 0 Then BotVars.MaxBacklogSize = 10000
@@ -7330,6 +7330,11 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         BotVars.ChatDelay = 500
     Else
         BotVars.ChatDelay = CLng(Val(s))
+    End If
+    
+    s = ReadCfg("FilePaths", "Logs")
+    If (Not (s = vbNullString)) Then
+        g_Logger.LogPath = s
     End If
 
     Call ChatQueue_Initialize

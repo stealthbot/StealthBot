@@ -77,7 +77,13 @@ Public Sub LoadScripts()
     ' ********************************
     
     ' set script folder path
-    strPath = App.Path & "\scripts\"
+    strPath = ReadCfg("FilePaths", "Scripts")
+    If (strPath = vbNullString) Then
+        strPath = App.Path & "\scripts\"
+    ElseIf (Not (Right$(strPath, 1) = "\")) Then
+        strPath = strPath & "\"
+    End If
+
     
     ' ensure scripts folder exists
     If (Dir(strPath) <> vbNullString) Then
