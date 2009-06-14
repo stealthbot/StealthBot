@@ -17,7 +17,7 @@ End Type
 Private m_arrMsgEvents()  As MSGFILTER
 Private m_eventCount      As Integer
 
-Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, ByVal flags As Long, _
+Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, ByVal Flags As Long, _
     ByVal Ping As Long, ByVal Product As String, Optional QueuedEventID As Integer = 0)
     
     On Error GoTo ERROR_HANDLER
@@ -59,7 +59,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                 ' ...
                 With UserEvent
                     .EventID = ID_USERFLAGS
-                    .flags = flags
+                    .Flags = Flags
                     .Ping = Ping
                     .GameID = Product
                 End With
@@ -68,12 +68,12 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                 UserObj.Queue.Add UserEvent
             Else
                 ' ...
-                PreviousFlags = UserObj.flags
+                PreviousFlags = UserObj.Flags
             End If
         Else
             ' ...
             PreviousFlags = _
-                UserObj.Queue(QueuedEventID - 1).flags
+                UserObj.Queue(QueuedEventID - 1).Flags
         End If
         
         ' ...
@@ -107,7 +107,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     
     ' ...
     With UserObj
-        .flags = flags
+        .Flags = Flags
         .Ping = Ping
     End With
     
@@ -124,7 +124,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     If (StrComp(Username, GetCurrentUsername, vbBinaryCompare) = 0) Then
         ' assign my current flags to the
         ' relevant internal variable
-        MyFlags = flags
+        MyFlags = Flags
         
         ' assign my current flags to the
         ' relevant scripting variable
@@ -134,13 +134,13 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     ' we aren't in a silent channel, are we?
     If (g_Channel.IsSilent) Then
         ' ...
-        AddName Username, Product, flags, Ping, UserObj.Stats.IconCode, _
+        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, _
             Clan
     Else
         ' ...
         If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
             ' ...
-            If (flags <> PreviousFlags) Then
+            If (Flags <> PreviousFlags) Then
                 ' ...
                 If (g_Channel.Self.IsOperator) Then
                     If ((Username = GetCurrentUsername) And _
@@ -165,7 +165,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                             ((PreviousFlags And USER_CHANNELOP&) <> USER_CHANNELOP&)) Then
                             
                         ' ...
-                        AddName Username, Product, flags, Ping, UserObj.Stats.IconCode, _
+                        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, _
                             Clan, 1
                         
                         ' ...
@@ -173,7 +173,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                             Username, RTBColors.JoinedChannelText, " has acquired ops."
                     Else
                         ' ...
-                        AddName Username, Product, flags, Ping, UserObj.Stats.IconCode, _
+                        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, _
                             Clan, pos
                     End If
                 End If
@@ -190,7 +190,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
         On Error Resume Next
         
         ' ...
-        RunInAll "Event_FlagUpdate", Username, flags, Ping
+        RunInAll "Event_FlagUpdate", Username, Flags, Ping
     End If
     
     ' ...
@@ -202,7 +202,7 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal flags As Long)
+Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
     On Error GoTo ERROR_HANDLER
 
     Dim mailCount As Integer ' ...
@@ -231,7 +231,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal flags As Long)
     ' ...
     With g_Channel
         .Name = ChannelName
-        .flags = flags
+        .Flags = Flags
         .JoinTime = UtcNow
     End With
     
@@ -329,7 +329,7 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal flags As Long)
     
     On Error Resume Next
     
-    RunInAll "Event_ChannelJoin", ChannelName, flags
+    RunInAll "Event_ChannelJoin", ChannelName, Flags
     
     Exit Sub
 
@@ -588,6 +588,8 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
         .AddChat RTBColors.InformationText, "[BNET] Logged on as ", RTBColors.SuccessText, Username, _
             RTBColors.InformationText, "."
             
+        .tmrAccountLock.Enabled = False
+        
         .UpTimer.Interval = 1000
         
         .Timer.Interval = 30000
@@ -985,7 +987,7 @@ Public Sub Event_SomethingUnknown(ByVal UnknownString As String)
         "as possible, copy/paste this entire message."
 End Sub
 
-Public Sub Event_UserEmote(ByVal Username As String, ByVal flags As Long, ByVal Message As String, _
+Public Sub Event_UserEmote(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
     Optional QueuedEventID As Integer = 0)
     
     On Error GoTo ERROR_HANDLER
@@ -1020,7 +1022,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal flags As Long, ByVal 
                 ' ...
                 With UserEvent
                     .EventID = ID_EMOTE
-                    .flags = flags
+                    .Flags = Flags
                     .Message = Message
                 End With
                 
@@ -1099,7 +1101,7 @@ Public Sub Event_UserEmote(ByVal Username As String, ByVal flags As Long, ByVal 
         End If
         
         ' ...
-        RunInAll "Event_UserEmote", Username, flags, Message
+        RunInAll "Event_UserEmote", Username, Flags, Message
     End If
     
     Exit Sub
@@ -1111,7 +1113,7 @@ ERROR_HANDLER:
 End Sub
 
 'Ping, Product, Clan, InitStatstring, W3Icon
-Public Sub Event_UserInChannel(ByVal Username As String, ByVal flags As Long, ByVal Message As String, _
+Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
     ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal originalstatstring As String, _
         Optional ByVal w3icon As String, Optional QueuedEventID As Integer = 0)
 
@@ -1161,7 +1163,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal flags As Long, By
                 ' ...
                 With UserEvent
                     .EventID = ID_USER
-                    .flags = flags
+                    .Flags = Flags
                     .Ping = Ping
                     .GameID = Product
                     .Clan = sClan
@@ -1183,7 +1185,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal flags As Long, By
     ' ...
     With UserObj
         .Name = Username
-        .flags = flags
+        .Flags = Flags
         .game = Product
         .Ping = Ping
         .JoinTime = g_Channel.JoinTime
@@ -1208,7 +1210,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal flags As Long, By
         'frmChat.AddChat vbRed, UserObj.Stats.IconCode
     
         ' ...
-        AddName Username, Product, flags, Ping, UserObj.Stats.IconCode, sClan
+        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, sClan
             
         ' ...
         frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString()
@@ -1282,7 +1284,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal flags As Long, By
         
         On Error Resume Next
         
-        RunInAll "Event_UserInChannel", Username, flags, UserObj.Stats.ToString, Ping, _
+        RunInAll "Event_UserInChannel", Username, Flags, UserObj.Stats.ToString, Ping, _
             Product, StatUpdate
     End If
     
@@ -1301,7 +1303,7 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Public Sub Event_UserJoins(ByVal Username As String, ByVal flags As Long, ByVal Message As String, _
+Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
     ByVal Ping As Long, ByVal Product As String, ByVal sClan As String, ByVal originalstatstring As String, _
         ByVal w3icon As String, Optional QueuedEventID As Integer = 0)
                 
@@ -1352,7 +1354,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal flags As Long, ByVal 
             ' ...
             With UserObj
                 .Name = Username
-                .flags = flags
+                .Flags = Flags
                 .Ping = Ping
                 .game = Product
                 .JoinTime = UtcNow
@@ -1369,7 +1371,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal flags As Long, ByVal 
                 ' ...
                 With UserEvent
                     .EventID = ID_JOIN
-                    .flags = flags
+                    .Flags = Flags
                     .Ping = Ping
                     .GameID = Product
                     .Statstring = originalstatstring
@@ -1428,7 +1430,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal flags As Long, ByVal 
         End If
         
         ' ...
-        AddName Username, Product, flags, Ping, UserObj.Stats.IconCode, sClan
+        AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, sClan
         
         ' ...
         frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString
@@ -1500,7 +1502,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal flags As Long, ByVal 
         
         'frmChat.AddChat vbRed, frmChat.SControl.Error.Number
         
-        RunInAll "Event_UserJoins", Username, flags, UserObj.Stats.ToString, Ping, _
+        RunInAll "Event_UserJoins", Username, Flags, UserObj.Stats.ToString, Ping, _
             Product, 0, originalstatstring, isbanned
     End If
     
@@ -1512,7 +1514,7 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Public Sub Event_UserLeaves(ByVal Username As String, ByVal flags As Long)
+Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
     On Error GoTo ERROR_HANDLER
 
     Dim UserObj   As clsUserObj
@@ -1598,7 +1600,7 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal flags As Long)
         
         On Error Resume Next
         
-        RunInAll "Event_UserLeaves", Username, flags
+        RunInAll "Event_UserLeaves", Username, Flags
     End If
     
     Exit Sub
@@ -1609,7 +1611,7 @@ ERROR_HANDLER:
     Exit Sub
 End Sub
 
-Public Sub Event_UserTalk(ByVal Username As String, ByVal flags As Long, ByVal Message As String, _
+Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, _
         ByVal Ping As Long, Optional QueuedEventID As Integer = 0)
     
     On Error GoTo ERROR_HANDLER
@@ -1654,7 +1656,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal flags As Long, ByVal M
                 ' ...
                 With UserEvent
                     .EventID = ID_TALK
-                    .flags = flags
+                    .Flags = Flags
                     .Ping = Ping
                     .Message = Message
                 End With
@@ -1709,7 +1711,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal flags As Long, ByVal M
                     UsernameColor = RTBColors.ErrorMessageText
                     
                 ' is user an operator?
-                ElseIf ((flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
+                ElseIf ((Flags And USER_CHANNELOP&) = USER_CHANNELOP&) Then
                     ' ...
                     UsernameColor = RTBColors.TalkUsernameOp
                 Else
@@ -1718,7 +1720,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal flags As Long, ByVal M
                 End If
                 
                 ' ...
-                If (((flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or ((flags And USER_SYSOP&) = _
+                If (((Flags And USER_BLIZZREP&) = USER_BLIZZREP&) Or ((Flags And USER_SYSOP&) = _
                         USER_SYSOP&)) Then
                         
                     ' ...
@@ -1785,7 +1787,7 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal flags As Long, ByVal M
         End If
     
         ' ...
-        RunInAll "Event_UserTalk", Username, flags, Message, Ping
+        RunInAll "Event_UserTalk", Username, Flags, Message, Ping
     End If
     
     ' ...
@@ -1976,7 +1978,7 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
     End If
 End Sub
 
-Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal flags As Long, ByVal Message As String, ByVal Ping As Long)
+Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long)
     'Dim s       As String
     Dim lCarats As Long
     Dim WWIndex As Integer
@@ -2041,7 +2043,7 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal flags As Long, 
                 
         lCarats = RTBColors.WhisperCarats
         
-        If (flags And &H1) Then
+        If (Flags And &H1) Then
             lCarats = COLOR_BLUE
         End If
         
@@ -2111,14 +2113,14 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal flags As Long, 
         g_lastQueueUser = Username
         
         ' ...
-        RunInAll "Event_WhisperFromUser", Username, flags, Message, Ping
+        RunInAll "Event_WhisperFromUser", Username, Flags, Message, Ping
     End If
     
     LastWhisperTime = GetTickCount
 End Sub
 
 ' Flags and ping are deliberately not used at this time
-Public Sub Event_WhisperToUser(ByVal Username As String, ByVal flags As Long, ByVal Message As String, ByVal Ping As Long)
+Public Sub Event_WhisperToUser(ByVal Username As String, ByVal Flags As Long, ByVal Message As String, ByVal Ping As Long)
     Dim WWIndex As Integer
     Dim ToANSI  As String
     

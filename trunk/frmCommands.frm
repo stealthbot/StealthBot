@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmCommands 
    BackColor       =   &H00000000&
    BorderStyle     =   3  'Fixed Dialog
@@ -58,7 +58,7 @@ Begin VB.Form frmCommands
       Appearance      =   1
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   15
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -419,12 +419,12 @@ Private Sub PopulateTreeView()
         Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
         '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
         '//                  something, even if nothing matches the XPath expression.
-        For I = 0 To (xmlArgs.Length - 1)
+        For I = 0 To (xmlArgs.length - 1)
             ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").text
             Set nArg = trvCommands.Nodes.Add(nCommand, tvwChild, , ArgumentName)
             Set xmlArgRestricions = xmlArgs(I).selectNodes("restrictions/restriction")
             
-            For j = 0 To (xmlArgRestricions.Length - 1)
+            For j = 0 To (xmlArgRestricions.length - 1)
                 restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").text
                 Set nArgRestriction = trvCommands.Nodes.Add(nArg, tvwChild, , restrictionName)
             Next j
@@ -597,7 +597,7 @@ Private Sub SaveForm()
             If (txtRank.text <> vbNullString) Then
                 xmlNode.text = txtRank.text
             Else
-                For I = 0 To xmlNode.childNodes.Length - 1
+                For I = 0 To xmlNode.childNodes.length - 1
                     xmlNode.removeChild xmlNode.childNodes(I)
                 Next I
             End If
@@ -908,7 +908,7 @@ Private Sub cboFlags_Change()
     If (BotVars.CaseSensitiveFlags = False) Then
         cboFlags.text = UCase$(cboFlags.text)
         
-        cboFlags.SelStart = Len(cboFlags.text)
+        cboFlags.selStart = Len(cboFlags.text)
     End If
     
 End Sub
@@ -922,8 +922,8 @@ Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
         '// Make sure it doesnt have a space
         If InStr(cboFlags.text, " ") Then
             MsgBox "Flags cannot contain spaces.", vbOKOnly + vbCritical, Me.Caption
-            cboFlags.SelStart = 1
-            cboFlags.SelLength = Len(cboFlags.text)
+            cboFlags.selStart = 1
+            cboFlags.selLength = Len(cboFlags.text)
             Exit Sub
         End If
         '// Make sure its not already a flag
@@ -967,8 +967,8 @@ Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
         '// Make sure it doesnt have a space
         If InStr(cboAlias.text, " ") Then
             MsgBox "Aliases cannot contain spaces.", vbOKOnly + vbCritical, Me.Caption
-            cboAlias.SelStart = 1
-            cboAlias.SelLength = Len(cboAlias.text)
+            cboAlias.selStart = 1
+            cboAlias.selLength = Len(cboAlias.text)
             Exit Sub
         End If
         '// Make sure its not already an alias
