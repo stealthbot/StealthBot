@@ -367,10 +367,10 @@ Private Sub Form_Load()
         tNode.BackColor = txtRank.BackColor
     Next
     
-    SendMessage trvCommands.hwnd, 4381&, 0, txtRank.BackColor
-    lStyle = GetWindowLong(trvCommands.hwnd, -16&)
-    SetWindowLong trvCommands.hwnd, -16&, lStyle And (Not 2&)
-    SetWindowLong trvCommands.hwnd, -16&, lStyle
+    SendMessage trvCommands.hWnd, 4381&, 0, txtRank.BackColor
+    lStyle = GetWindowLong(trvCommands.hWnd, -16&)
+    SetWindowLong trvCommands.hWnd, -16&, lStyle And (Not 2&)
+    SetWindowLong trvCommands.hWnd, -16&, lStyle
     
     Call ResetForm
     Call PopulateTreeView
@@ -438,11 +438,16 @@ Private Sub PopulateTreeView()
         For I = 0 To (xmlArgs.length - 1)
             ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").text
             Set nArg = trvCommands.Nodes.Add(nCommand, tvwChild, , ArgumentName)
+            nArg.BackColor = txtRank.BackColor
+            nArg.ForeColor = vbWhite
+            
             Set xmlArgRestricions = xmlArgs(I).selectNodes("restrictions/restriction")
             
             For j = 0 To (xmlArgRestricions.length - 1)
                 restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").text
                 Set nArgRestriction = trvCommands.Nodes.Add(nArg, tvwChild, , restrictionName)
+                nArgRestriction.BackColor = txtRank.BackColor
+                nArgRestriction.ForeColor = vbWhite
             Next j
         Next I
         
@@ -547,7 +552,9 @@ Private Sub trvCommands_NodeClick(ByVal node As MSComctlLib.node)
     '// grab the node from the xpath
     Set xmlElement = m_CommandsDoc.selectSingleNode(xpath)
     Call PrepareForm(nt, xmlElement)
-
+    
+    node.BackColor = txtRank.BackColor
+    node.ForeColor = vbWhite
 End Sub
 
 '// Call this sub whenever the form controls have been changed
