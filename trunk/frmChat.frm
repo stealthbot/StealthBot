@@ -2432,14 +2432,6 @@ Sub Form_Resize()
         lvClanList.Width = lvChannel.Width
         cboSend.Width = rtbChat.Width
         
-        If txtPre.Visible Then
-            cboSend.Width = cboSend.Width - txtPre.Width
-        End If
-        
-        If txtPost.Visible Then
-            cboSend.Width = cboSend.Width - txtPost.Width
-        End If
-        
         With cmdShowHide
             If rtbWhispersVisible Then
                 'Debug.Print "-> " & rtbWhispers.Height
@@ -2475,12 +2467,13 @@ Sub Form_Resize()
         
         If txtPre.Visible Then
             txtPre.Move rtbChat.Left, rtbChat.Top + rtbChat.Height + (Screen.TwipsPerPixelY / 3)
-            cboSend.Move txtPre.Left + txtPre.Width, txtPre.Top
+            cboSend.Move txtPre.Left + txtPre.Width, txtPre.Top, rtbChat.Width - txtPre.Width
         Else
             cboSend.Move rtbChat.Left, rtbChat.Top + rtbChat.Height + (Screen.TwipsPerPixelY / 3)
         End If
         
         If txtPost.Visible Then
+            cboSend.Width = cboSend.Width - txtPost.Width
             txtPost.Move cboSend.Left + cboSend.Width, cboSend.Top
         End If
         
@@ -6405,7 +6398,7 @@ Private Function ReplaceEnvironmentVars(ByVal str As String) As String
 
     Dim I     As Integer
     Dim Name  As String
-    Dim value As String
+    Dim Value As String
     Dim tmp   As String
     
     tmp = str
@@ -6416,10 +6409,10 @@ Private Function ReplaceEnvironmentVars(ByVal str As String) As String
         Name = _
             Mid$(Environ$(I), 1, InStr(1, Environ$(I), "=") - 1)
 
-        value = _
+        Value = _
             Mid$(Environ$(I), InStr(1, Environ$(I), "=") + 1)
 
-        tmp = Replace(tmp, "%" & Name & "%", value)
+        tmp = Replace(tmp, "%" & Name & "%", Value)
     
         I = I + 1
     Wend
