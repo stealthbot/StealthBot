@@ -132,11 +132,11 @@ Public Function ConvertTime(ByVal dblMS As Double, Optional seconds As Byte) As 
 End Function
 
 Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Integer) As Long
-    Dim key As String ' ...
+    Dim Key As String ' ...
     
-    key = GetProductKey(Product)
+    Key = GetProductKey(Product)
     
-    If ((ReadCfg("Override", key & "VerByte") = vbNullString) Or _
+    If ((ReadCfg("Override", Key & "VerByte") = vbNullString) Or _
         (UseHardcode = 1)) Then
         
         Select Case StrReverse(Product)
@@ -150,18 +150,18 @@ Public Function GetVerByte(Product As String, Optional ByVal UseHardcode As Inte
         End Select
     Else
         GetVerByte = _
-            CLng(Val("&H" & ReadCfg("Override", key & "VerByte")))
+            CLng(Val("&H" & ReadCfg("Override", Key & "VerByte")))
     End If
     
 End Function
 
 Public Function GetGamePath(ByVal Client As String) As String
-    Dim key As String
+    Dim Key As String
     
-    key = GetProductKey(Client)
+    Key = GetProductKey(Client)
     
-    If (LenB(ReadCfg("Override", key & "Hashes")) > 0) Then
-        GetGamePath = ReadCfg("Override", key & "Hashes")
+    If (LenB(ReadCfg("Override", Key & "Hashes")) > 0) Then
+        GetGamePath = ReadCfg("Override", Key & "Hashes")
         
         If (Right$(GetGamePath, 1) <> "\") Then
             GetGamePath = GetGamePath & "\"
@@ -239,7 +239,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
                 'CleanedUsername = StripRealm(CleanedUsername)
                 CleanedUsername = StripInvalidNameChars(Username)
 
-                If (SpeakerAccess < 999) Then
+                If (SpeakerAccess < 200) Then
                     If ((GetSafelist(CleanedUsername)) Or (GetSafelist(Username))) Then
                         Ban = "Error: That user is safelisted."
                         
@@ -429,7 +429,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
     On Error GoTo ERROR_HANDLER
 
     If (frmChat.sckBNet.State = 7) Then
-        With pBuffer
+        With PBuffer
             If (frmChat.mnuUTF8.Checked) Then
                 .InsertNTString Message, UTF8
             Else
@@ -443,7 +443,7 @@ Public Sub bnetSend(ByVal Message As String, Optional ByVal Tag As String = vbNu
             ' ...
             g_request_receipt = True
         
-            With pBuffer
+            With PBuffer
                 .SendPacket &H65
             End With
         End If
@@ -1181,7 +1181,7 @@ End Function
 Public Sub RequestSystemKeys()
     AwaitingSystemKeys = 1
     
-    With pBuffer
+    With PBuffer
         .InsertDWord &H1
         .InsertDWord &H4
         .InsertDWord GetTickCount()

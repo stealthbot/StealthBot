@@ -17,6 +17,7 @@ Begin VB.Form frmCommands
       Italic          =   0   'False
       Strikethrough   =   0   'False
    EndProperty
+   Icon            =   "frmCommands.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
@@ -94,9 +95,9 @@ Begin VB.Form frmCommands
          BackColor       =   &H00993300&
          ForeColor       =   &H00FFFFFF&
          Height          =   315
-         ItemData        =   "frmCommands.frx":0000
+         ItemData        =   "frmCommands.frx":1CCA
          Left            =   3600
-         List            =   "frmCommands.frx":0002
+         List            =   "frmCommands.frx":1CCC
          TabIndex        =   12
          Top             =   600
          Width           =   700
@@ -105,9 +106,9 @@ Begin VB.Form frmCommands
          BackColor       =   &H00993300&
          ForeColor       =   &H00FFFFFF&
          Height          =   315
-         ItemData        =   "frmCommands.frx":0004
+         ItemData        =   "frmCommands.frx":1CCE
          Left            =   1605
-         List            =   "frmCommands.frx":0006
+         List            =   "frmCommands.frx":1CD0
          TabIndex        =   9
          Top             =   600
          Width           =   1245
@@ -358,6 +359,19 @@ Private Sub Form_Load()
     
     Call m_CommandsDoc.Load(App.Path & "\commands.xml")
     
+    'Change tree view background and foreground color.
+    Dim lStyle As Long
+    Dim tNode As node
+    
+    For Each tNode In trvCommands.Nodes
+        tNode.BackColor = txtRank.BackColor
+    Next
+    
+    SendMessage trvCommands.hwnd, 4381&, 0, txtRank.BackColor
+    lStyle = GetWindowLong(trvCommands.hwnd, -16&)
+    SetWindowLong trvCommands.hwnd, -16&, lStyle And (Not 2&)
+    SetWindowLong trvCommands.hwnd, -16&, lStyle
+    
     Call ResetForm
     Call PopulateTreeView
     
@@ -406,6 +420,8 @@ Private Sub PopulateTreeView()
     For Each xmlCommand In m_CommandsDoc.documentElement.childNodes
         CommandName = xmlCommand.Attributes.getNamedItem("name").text
         Set nCommand = trvCommands.Nodes.Add(, , , CommandName)
+        nCommand.BackColor = txtRank.BackColor
+        nCommand.ForeColor = vbWhite
         
         '// 08/30/2008 JSM - check if this command is the first alphabetically
         If defaultNode Is Nothing Then
