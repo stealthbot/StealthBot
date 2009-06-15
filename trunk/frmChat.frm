@@ -901,6 +901,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -926,7 +927,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1911,6 +1911,8 @@ Private Sub Form_Load()
 '    BotVars.ProxyPort = 1080
     'BotVars.ProxyIsSocks5 = True
 
+    lvFriendList.ColumnHeaders(2).Width = imlIcons.ImageWidth
+    lvClanList.ColumnHeaders(2).Width = imlClan.ImageWidth
 End Sub
 
 Private Sub Form_GotFocus()

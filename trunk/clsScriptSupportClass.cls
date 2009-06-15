@@ -459,7 +459,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     Optional ByRef entryType As String = "USER") As Object
 
     Dim temp   As udtGetAccessResponse
-    Dim I      As Integer
+    Dim i      As Integer
     Dim Splt() As String
     
     temp = GetCumulativeAccess(Username, entryType)
@@ -493,9 +493,9 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
             Splt(0) = temp.Groups
         End If
     
-        For I = LBound(Splt) To UBound(Splt)
-            GetDBEntry.Groups.Add GetDBEntry(Splt(I), , , "GROUP")
-        Next I
+        For i = LBound(Splt) To UBound(Splt)
+            GetDBEntry.Groups.Add GetDBEntry(Splt(i), , , "GROUP")
+        Next i
     End If
 End Function
 
@@ -645,11 +645,11 @@ End Function
 '//  See lDataType constants in GetInternalData() below
 Public Function GetInternalDataByUsername(ByVal sUser As String, ByVal lDataType As Long) As Variant
 
-    Dim I As Integer
+    Dim i As Integer
     
-    I = Channel.GetUserIndex(sUser)
+    i = Channel.GetUserIndex(sUser)
     
-    GetInternalDataByUsername = GetInternalData(I, lDataType)
+    GetInternalDataByUsername = GetInternalData(i, lDataType)
 
 End Function
 
@@ -1412,15 +1412,15 @@ End Function
 
 Public Function Quotes() As Object
 
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
     
     ' ...
     Set Quotes = New Collection
     
     ' ...
-    For I = 1 To g_Quotes.Count
-        Quotes.Add g_Quotes(I)
-    Next I
+    For i = 1 To g_Quotes.Count
+        Quotes.Add g_Quotes(i)
+    Next i
     
 End Function
 
@@ -1445,15 +1445,15 @@ End Function
 
 Public Function Friends() As Object
     
-    Dim I As Integer ' ...
+    Dim i As Integer ' ...
 
     ' ...
     Set Friends = New Collection
     
     ' ...
-    For I = 1 To g_Friends.Count
-        Friends.Add g_Friends(I).Clone()
-    Next I
+    For i = 1 To g_Friends.Count
+        Friends.Add g_Friends(i).Clone()
+    Next i
     
 End Function
 
@@ -1487,7 +1487,7 @@ Public Function CRC32(ByRef str As String) As String
 
 End Function
 
-Public Function Sha1(ByRef Data As String) As String
+Public Function Sha1(ByRef Data As String, Optional ByVal inHex As Boolean = False) As String
 
     Dim a As Long
     Dim b As Long
@@ -1496,14 +1496,26 @@ Public Function Sha1(ByRef Data As String) As String
     Dim e As Long
     
     Call modSHA1.DefaultSHA1(StrConv(Data, vbFromUnicode), a, b, c, d, e)
-    Sha1 = LongToStr(a) & LongToStr(b) & LongToStr(c) & LongToStr(d) & LongToStr(e)
     
+    If inHex Then
+        Sha1 = LCase(Hex(a) & Hex(b) & Hex(c) & Hex(d) & Hex(e))
+    Else
+        Sha1 = LongToStr(a) & LongToStr(b) & LongToStr(c) & LongToStr(d) & LongToStr(e)
+    End If
 End Function
 
-Public Function XSHA1(ByRef str As String) As String
-
+Public Function XSHA1(ByRef str As String, Optional ByVal inHex As Boolean = False) As String
+    Dim i As Integer
+    Dim s As String
+    
     XSHA1 = modBNCSutil.hashPassword(str)
     
+    If inHex Then
+        For i = 1 To Len(XSHA1)
+            s = s & LCase(Hex(Asc(Mid(XSHA1, i, 1))))
+        Next
+        XSHA1 = s
+    End If
 End Function
 
 Public Function IGetScriptModule(ByVal ModuleID As String) As Object
@@ -1705,7 +1717,7 @@ End Sub
 Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal varValue As Variant, _
                       Optional ByVal strDescription As String, Optional ByVal boolOverwrite As Boolean = True)
                       
-    Dim strPath As String, arrSetting() As String, I As Integer
+    Dim strPath As String, arrSetting() As String, i As Integer
     strPath = BotPath() & "plugins\settings.ini"
 
     If Len(strDescription) > 0 Then
@@ -1716,8 +1728,8 @@ Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal 
         If Len(strName & varValue) > 254 Then
             WriteConfigEntry UCase(strPrefix), strName, Left(varValue, 254 - Len(strName)), strPath
             arrSetting = Split(strName, "*")
-            If UBound(arrSetting) > 0 Then I = arrSetting(1) + 1 Else I = 1
-            SetSetting strPrefix, arrSetting(0) & "*" & I, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
+            If UBound(arrSetting) > 0 Then i = arrSetting(1) + 1 Else i = 1
+            SetSetting strPrefix, arrSetting(0) & "*" & i, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
         Else
             WriteConfigEntry UCase(strPrefix), strName, varValue, strPath
         End If
