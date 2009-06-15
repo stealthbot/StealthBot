@@ -104,7 +104,6 @@ Class=clsSLongTimer; clsSLongTimer.cls
 Class=clsMenuObj; clsMenuObj.cls
 Module=modMenuObj; modMenuObj.bas
 Module=modRegistry; modRegistry.bas
-Class=clsNLS; clsNLS.cls
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""
