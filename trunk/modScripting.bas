@@ -101,24 +101,26 @@ Public Sub LoadScripts()
             filename = Dir()
         Loop
 
-        ' ...
-        For I = 1 To Paths.Count
-            ' ...
+        ' Cycle through each of the files.
+        For I = 1 To Paths.count
+            ' Does the file have the extension for a script?
             If (IsValidFileExtension(GetFileExtension(Paths(I)))) Then
-                ' ...
+                ' Add a new module to the script control.
                 Set CurrentModule = _
-                    m_sc_control.Modules.Add(m_sc_control.Modules.Count + 1)
+                    m_sc_control.Modules.Add(m_sc_control.Modules.count + 1)
             
-                ' ...
+                ' Load the file into the module.
                 res = FileToModule(CurrentModule, strPath & Paths(I))
             
-                ' ...
+                ' Does the script have a valid name?
                 If (IsScriptNameValid(CurrentModule) = False) Then
-                    ' ...
+                    ' No. Try to fix it.
                     CurrentModule.CodeObject.Script("Name") = CleanFileName(Paths(I))
                 
-                    ' ...
+                    ' Is it valid now?
                     If (IsScriptNameValid(CurrentModule) = False) Then
+                        ' No, disable it.
+                        
                         frmChat.AddChat vbRed, "Scripting error: " & Paths(I) & " has been " & _
                             "disabled due to a naming issue."
                             
@@ -150,6 +152,8 @@ Public Sub LoadScripts()
     ' ...
     InitMenus
 
+    frmChat.AddChat vbGreen, "Scripts loaded."
+        
     ' ...
     Exit Sub
 
@@ -250,7 +254,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
             "Script(""Path"") = " & Chr$(34) & filePath & Chr$(34)
 
         ' ...
-        For I = 1 To includes.Count
+        For I = 1 To includes.count
             FileToModule ScriptModule, includes(I), False
         Next
 
@@ -368,7 +372,7 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
     Next j
 
     ' ...
-    For j = 2 To m_sc_control.Modules.Count
+    For j = 2 To m_sc_control.Modules.count
         ' ...
         If (m_sc_control.Modules(j).Name <> CurrentModule.Name) Then
             tmp = _
@@ -402,7 +406,7 @@ Public Sub InitScripts()
         reloading = True
     End If
     
-    For I = 2 To m_sc_control.Modules.Count
+    For I = 2 To m_sc_control.Modules.count
         If (I > 1) Then
             str = _
                 m_sc_control.Modules(I).CodeObject.GetSettingsEntry("Enabled")
@@ -439,8 +443,8 @@ Public Sub InitScript(ByVal SCModule As Module)
         RunInSingle SCModule, "Event_LoggedOn", GetCurrentUsername, BotVars.Product
         RunInSingle SCModule, "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
     
-        If (g_Channel.Users.Count > 0) Then
-            For I = 1 To g_Channel.Users.Count
+        If (g_Channel.Users.count > 0) Then
+            For I = 1 To g_Channel.Users.count
                 With g_Channel.Users(I)
                      RunInSingle SCModule, "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, _
                         .game, False
@@ -472,7 +476,7 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
 
     arr() = Parameters()
 
-    For I = 2 To SC.Modules.Count
+    For I = 2 To SC.Modules.count
         str = SC.Modules(I).CodeObject.GetSettingsEntry("Enabled")
         
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
@@ -952,7 +956,7 @@ Public Function InitMenus()
     DestroyMenus
     
     ' ...
-    For I = 2 To frmChat.SControl.Modules.Count
+    For I = 2 To frmChat.SControl.Modules.count
         If (I = 2) Then
             frmChat.mnuScriptingDash(0).Visible = True
         End If
@@ -1022,7 +1026,7 @@ Public Function DestroyMenus()
     
     frmChat.mnuScriptingDash(0).Visible = False
     
-    For I = DynamicMenus.Count To 1 Step -1
+    For I = DynamicMenus.count To 1 Step -1
         
         If (Len(DynamicMenus(I).Name) > 0) Then
             If (Left$(DynamicMenus(I).Name, 1) = Chr$(0)) Then
@@ -1056,7 +1060,7 @@ Public Function Scripts() As Object
 
     Set Scripts = New Collection
 
-    For I = 2 To frmChat.SControl.Modules.Count
+    For I = 2 To frmChat.SControl.Modules.count
         str = _
             frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
                 
