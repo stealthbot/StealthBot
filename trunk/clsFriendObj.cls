@@ -76,31 +76,31 @@ End Property
 
 Public Property Get IsMutual() As Boolean
 
-    IsMutual = (Status >= 1)
+    IsMutual = (Status And 1)
 
 End Property
 
 Public Property Get IsAway() As Boolean
 
-    IsAway = (Status = 4)
+    IsAway = (Status And 4)
 
 End Property
 
 Public Property Get DontDisturb() As Boolean
 
-    DontDisturb = (Status = 2)
+    DontDisturb = (Status And 2)
 
 End Property
 
 Public Property Get IsOnline() As Boolean
 
-    IsOnline = (LocationID > 0)
+    IsOnline = (LocationID <> 0)
 
 End Property
 
 Public Property Get IsInChannel() As Boolean
 
-    IsInChannel = (LocationID = 2)
+    IsInChannel = (LocationID And 2)
 
 End Property
 
