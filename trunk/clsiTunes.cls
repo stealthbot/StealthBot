@@ -174,7 +174,7 @@ Public Sub PausePlayback()
     End If
 
     ' ...
-    m_iTunesObj.PlayPause
+    m_iTunesObj.Pause
 
 End Sub
 
@@ -274,8 +274,8 @@ Public Property Get IsPaused() As Boolean
     End If
 
     ' ...
-    IsPaused = False
-
+    IsPaused = ((m_iTunesObj.PlayerState = 0) And (Not (m_iTunesObj.PlayerPosition = 0)))
+    
 End Property
 
 Public Property Get TrackLength() As Long
@@ -293,5 +293,88 @@ Public Property Get TrackLength() As Long
     ' ...
     TrackLength = m_iTunesObj.CurrentTrack.Finish
 
+End Property
+
+Public Sub FadeOutToStop()
+
+    ' ...
+    If (IsLoaded() = False) Then
+        Exit Sub
+    End If
+    
+    ' iTunes can't fade-out, so we'll just stop it.
+    QuitPlayback
+End Sub
+
+' ...
+Public Property Let Volume(ByVal lngVol As Long)
+
+    ' ...
+    If (IsLoaded() = False) Then
+        Exit Property
+    End If
+
+    m_iTunesObj.SoundVolume = lngVol
+    
+End Property
+
+' ...
+Public Property Get Volume() As Long
+
+    ' ...
+    If (IsLoaded() = False) Then
+        Exit Property
+    End If
+
+    Volume = m_iTunesObj.SoundVolume
+    
+End Property
+
+' ...
+Public Property Let Shuffle(ByVal blnShuffle As Boolean)
+
+    ' ...
+    If (IsLoaded() = False) Then
+        Exit Property
+    End If
+
+    m_iTunesObj.CurrentPlaylist.Shuffle = blnShuffle
+    
+End Property
+
+' ...
+Public Property Get Shuffle() As Boolean
+
+    ' ...
+    If (IsLoaded() = False) Then
+        Exit Property
+    End If
+
+    Shuffle = m_iTunesObj.CurrentPlaylist.Shuffle
+    
+End Property
+
+' ...
+Public Property Let Repeat(ByVal blnRepeat As Boolean)
+
+    ' ...
+    If (IsLoaded() = False) Then
+        Exit Property
+    End If
+
+    m_iTunesObj.CurrentPlaylist.SongRepeat = CInt(blnRepeat)
+    
+End Property
+
+' ...
+Public Property Get Repeat() As Boolean
+
+    ' ...
+    If (IsLoaded() = False) Then
+        Exit Property
+    End If
+
+    Repeat = CBool(m_iTunesObj.CurrentPlaylist.SongRepeat)
+    
 End Property
 
