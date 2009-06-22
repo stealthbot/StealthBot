@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
 Begin VB.Form frmScript 
    BackColor       =   &H00000000&
@@ -191,7 +191,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private m_name      As String
-Private m_sc_module As module
+Private m_sc_module As Module
 Private m_arrObjs() As modScripting.scObj
 Private m_objCount  As Integer
 Private m_hidden    As Boolean
@@ -210,7 +210,7 @@ Public Function getName() As String
 
 End Function
 
-Public Function setSCModule(ByRef SCModule As module)
+Public Function setSCModule(ByRef SCModule As Module)
 
     If (m_sc_module Is Nothing) Then
         Set m_sc_module = SCModule
@@ -218,9 +218,17 @@ Public Function setSCModule(ByRef SCModule As module)
 
 End Function
 
-Public Function GetScriptModule() As module
+Public Function GetScriptModule() As Module
 
     Set GetScriptModule = m_sc_module
+
+End Function
+
+'// 6/22/2009 JSM - Adding wrapper function for MsgBox inside VB6 rather than
+'//                 the scripting control. This keeps the focus on the form.
+Public Function ShowMsgBox(text As String, opts As Integer, title As String)
+
+        Call MsgBox(text, opts, title)
 
 End Function
 
