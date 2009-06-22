@@ -1453,11 +1453,11 @@ Public Sub UpdateProfile()
     s = MediaPlayer.TrackName
     
     If (s = vbNullString) Then
-        SetProfile "", ":[ ProfileAmp ]:" & vbCrLf & "WinAmp is not currently playing " & _
+        SetProfile "", ":[ ProfileAmp ]:" & vbCrLf & MediaPlayer.Name & " is not currently playing " & _
                 vbCrLf & "Last updated " & Time & ", " & Format(Date, "d-MM-yyyy") & vbCrLf & _
                     CVERSION & " - http://www.stealthbot.net"
     Else
-        SetProfile "", ":[ ProfileAmp ]:" & vbCrLf & "WinAmp is currently playing: " & _
+        SetProfile "", ":[ ProfileAmp ]:" & vbCrLf & MediaPlayer.Name & " is currently playing: " & _
                 vbCrLf & s & vbCrLf & "Last updated " & Time & ", " & Format(Date, "d-MM-yyyy") & _
                     vbCrLf & CVERSION & " - http://www.stealthbot.net"
     End If
