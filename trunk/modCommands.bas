@@ -7486,7 +7486,7 @@ Public Sub LoadDatabase()
                             .BanMessage = vbNullString
                             .Flags = vbNullString
                             .Groups = vbNullString
-                            .ModifiedBy = "(Console)"
+                            .ModifiedBy = "2.6r3Import"
                             .ModifiedOn = Now
                             .Type = "USER"
                             
