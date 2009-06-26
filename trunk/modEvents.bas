@@ -418,17 +418,17 @@ Repeat2:
             
         ElseIf KeyName = "Profile\Description" Then
         
-            Dim X() As String
+            Dim x() As String
             
-            X() = Split(KeyValue, Chr(13))
+            x() = Split(KeyValue, Chr(13))
             ReDim s(0)
             
-            For I = LBound(X) To UBound(X)
-                s(0) = X(I)
+            For I = LBound(x) To UBound(x)
+                s(0) = x(I)
                 
                 If Len(s(0)) > 200 Then s(0) = Left$(s(0), 200)
                 
-                If I = LBound(X) Then
+                If I = LBound(x) Then
                     frmChat.AddQ U & "[Descr] " & s(0)
                 Else
                     frmChat.AddQ U & "[Descr] " & Right(s(0), Len(s(0)) - 1)
@@ -826,11 +826,20 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
             Dim tmp        As String
             Dim banpos     As Integer ' ...
             Dim j          As Integer
+            Dim Reason     As String
             
             If (InStr(1, Message, MSG_BANNED, vbTextCompare) > 0) Then
                 ' ...
                 user = Left$(Message, _
                     (InStr(1, Message, MSG_BANNED, vbBinaryCompare) - 1))
+                
+                Reason = Mid$(Message, InStr(1, Message, MSG_BANNED, vbBinaryCompare) + Len(MSG_BANNED) + 1) ' trim out username and banned message
+                If (InStr(1, Reason, " (", vbBinaryCompare)) Then 'Did they give a message?
+                  Reason = Mid$(Reason, InStr(1, Reason, " (") + 2) 'trim out the banning name (Note, when banned by a rep using Len(Username) won't work as its banned "By a Blizzard Representative")
+                  Reason = Left$(Reason, Len(Reason) - 2) 'Trim off the trailing ")."
+                Else
+                  Reason = vbNullString
+                End If
                 
                 ' ...
                 If (Len(user) > 0) Then
@@ -865,6 +874,7 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
                                 .Operator = Username
                                 .DateOfBan = UtcNow
                                 .IsDuplicateBan = (g_Channel.IsOnBanList(user) > 0)
+                                .Reason = Reason
                             End With
                         
                             ' ...
@@ -1706,7 +1716,8 @@ Public Sub Event_UserTalk(ByVal Username As String, ByVal Flags As Long, ByVal M
             ' ...
             If (AllowedToTalk(Username, Message)) Then
                 ' are we watching the user?
-                If (StrComp(WatchUser, Username, vbTextCompare) = 0) Then
+                'If (StrComp(WatchUser, Username, vbTextCompare) = 0) Then
+                If (PrepareCheck(Username) Like PrepareCheck(WatchUser)) Then
                     ' ...
                     UsernameColor = RTBColors.ErrorMessageText
                     
@@ -2050,14 +2061,14 @@ Public Sub Event_WhisperFromUser(ByVal Username As String, ByVal Flags As Long, 
         '####### Mail check
         If (mail) Then
             If (StrComp(Left$(Message, 6), "!inbox", vbTextCompare) = 0) Then
-                Dim msg As udtMail
+                Dim Msg As udtMail
                 
                 If (GetMailCount(Username) > 0) Then
-                    Call GetMailMessage(Username, msg)
+                    Call GetMailMessage(Username, Msg)
                     
-                    If (Len(RTrim(msg.To)) > 0) Then
+                    If (Len(RTrim(Msg.To)) > 0) Then
                         frmChat.AddQ "/w " & Username & " Message from " & _
-                            RTrim$(msg.From) & ": " & RTrim$(msg.Message)
+                            RTrim$(Msg.From) & ": " & RTrim$(Msg.Message)
                     End If
                 End If
             End If
@@ -2222,20 +2233,20 @@ End Function
 
 '11/22/07 - Hdx - Pass the channel listing (0x0B) directly off to scriptors for there needs. (What other use is there?)
 Public Sub Event_ChannelList(sChannels() As String)
-    Dim X As Integer
+    Dim x As Integer
         
     If (MDebug("all")) Then
         frmChat.AddChat RTBColors.InformationText, "Received Channel List: "
     End If
     
-    For X = 0 To UBound(sChannels)
+    For x = 0 To UBound(sChannels)
         ' ...
         If (frmChat.mnuPublicChannels(0).Caption <> vbNullString) Then
             Call Load(frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.Count))
         End If
         
-        frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.Count - 1).Caption = sChannels(X)
-    Next X
+        frmChat.mnuPublicChannels(frmChat.mnuPublicChannels.Count - 1).Caption = sChannels(x)
+    Next x
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' call event script function

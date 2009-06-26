@@ -27,6 +27,7 @@ Private m_modified_on As Date
 Private m_modified_by As String
 Private m_groups      As Collection
 Private m_lastseen    As Date
+Private m_ban_message As String
 
 ' ...
 Private Sub Class_Initialize()
@@ -36,14 +37,14 @@ Private Sub Class_Initialize()
 End Sub
 
 ' ...
-Public Property Get entryType() As String
+Public Property Get EntryType() As String
 
-    entryType = m_type
+    EntryType = m_type
 
 End Property
 
 ' ...
-Public Property Let entryType(ByVal strType As String)
+Public Property Let EntryType(ByVal strType As String)
     
     m_type = strType
 
@@ -94,28 +95,28 @@ End Property
 ' ...
 Public Function IsInGroup(ByVal GroupName As String) As Boolean
 
-    Dim i   As Integer ' ...
+    Dim I   As Integer ' ...
     Dim pos As Integer ' ...
     
     ' ...
-    For i = 1 To Groups.Count
+    For I = 1 To Groups.Count
         ' ...
-        pos = InStr(1, Groups(i).Name, Space$(1), vbBinaryCompare)
+        pos = InStr(1, Groups(I).Name, Space$(1), vbBinaryCompare)
         
         ' ...
         If (pos > 0) Then
-            Groups(i).Name = Mid$(Groups(i).Name, 1, pos - 1)
+            Groups(I).Name = Mid$(Groups(I).Name, 1, pos - 1)
         End If
     
         ' ...
-        If (StrComp(GroupName, Groups(i).Name, vbTextCompare) = 0) Then
+        If (StrComp(GroupName, Groups(I).Name, vbTextCompare) = 0) Then
             ' ...
             IsInGroup = True
             
             ' ...
             Exit Function
         End If
-    Next i
+    Next I
 
 End Function
 
@@ -134,38 +135,38 @@ End Function ' end function HasFlag
 ' ...
 Public Function HasAnyFlag(ByVal strFlags As String, Optional ByVal CaseSensitive As Boolean = True) As Boolean
     
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
-    For i = 1 To Len(strFlags)
+    For I = 1 To Len(strFlags)
         If (CaseSensitive) Then
-            HasAnyFlag = (InStr(1, m_flags, Mid$(strFlags, i, 1), vbBinaryCompare) <> 0)
+            HasAnyFlag = (InStr(1, m_flags, Mid$(strFlags, I, 1), vbBinaryCompare) <> 0)
         Else
-            HasAnyFlag = (InStr(1, m_flags, Mid$(strFlags, i, 1), vbTextCompare) <> 0)
+            HasAnyFlag = (InStr(1, m_flags, Mid$(strFlags, I, 1), vbTextCompare) <> 0)
         End If
         
         If (HasAnyFlag) Then
             Exit Function
         End If
-    Next i
+    Next I
     
 End Function ' end function HasAnyFlag
 
 ' ...
 Public Function HasFlags(ByVal strFlags As String, Optional ByVal CaseSensitive As Boolean = True) As Boolean
     
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
-    For i = 1 To Len(strFlags)
+    For I = 1 To Len(strFlags)
         If (CaseSensitive) Then
-            HasFlags = (InStr(1, m_flags, Mid$(strFlags, i, 1), vbBinaryCompare) <> 0)
+            HasFlags = (InStr(1, m_flags, Mid$(strFlags, I, 1), vbBinaryCompare) <> 0)
         Else
-            HasFlags = (InStr(1, m_flags, Mid$(strFlags, i, 1), vbTextCompare) <> 0)
+            HasFlags = (InStr(1, m_flags, Mid$(strFlags, I, 1), vbTextCompare) <> 0)
         End If
         
         If (HasFlags = False) Then
             Exit Function
         End If
-    Next i
+    Next I
     
 End Function ' end function HasFlags
 
@@ -258,3 +259,16 @@ Public Property Get MembersOf() As Collection
         
     End If
 End Property
+
+
+Public Property Get BanMessage() As String
+    BanMessage = m_ban_message
+End Property
+
+Public Property Let BanMessage(ByVal sBanMessage As String)
+  m_ban_message = sBanMessage
+End Property
+
+Public Sub AddGroup(ByVal sGroup As String)
+    m_groups.Add sGroup, sGroup
+End Sub

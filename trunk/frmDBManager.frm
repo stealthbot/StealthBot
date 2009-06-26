@@ -25,7 +25,6 @@ Begin VB.Form frmDBManager
    ScaleHeight     =   6255
    ScaleWidth      =   6735
    StartUpPosition =   1  'CenterOwner
-   WhatsThisButton =   -1  'True
    WhatsThisHelp   =   -1  'True
    Begin MSComDlg.CommonDialog CommonDialog 
       Left            =   2880
@@ -66,7 +65,6 @@ Begin VB.Form frmDBManager
       _ExtentY        =   556
       MultiRow        =   -1  'True
       Style           =   1
-      Separators      =   -1  'True
       TabMinWidth     =   176
       _Version        =   393216
       BeginProperty Tabs {1EFB6598-857C-11D1-B16A-00C0F0283628} 
@@ -574,7 +572,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
     ElseIf ((dbType = 1) Or (dbType = 2)) Then
         
         Dim user As String ' ...
-        Dim msg  As String ' ...
+        Dim Msg  As String ' ...
     
         Open strPath For Input As #f
             ' ...
@@ -589,7 +587,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                         user = Left$(buf, InStr(1, buf, Space$(1), vbBinaryCompare) - 1)
                         
                         ' ...
-                        msg = Mid$(buf, Len(user) + 1)
+                        Msg = Mid$(buf, Len(user) + 1)
                     Else
                         user = buf
                     End If
@@ -645,7 +643,7 @@ Public Sub ImportDatabase(strPath As String, dbType As Integer)
                             .ModifiedBy = "(console)"
                             .ModifiedOn = Now
                             .Flags = "B"
-                            .BanMessage = msg
+                            .BanMessage = Msg
                             
                             ' ...
                             If (Not (trvUsers.DropHighlight Is Nothing)) Then
@@ -674,8 +672,7 @@ End Sub
 
 ' ...
 Private Sub btnCreateUser_Click()
-    Static userCount As Integer ' ...
-    
+    Dim userCount    As Integer ' ...
     Dim newNode      As node    ' ...
     Dim gAcc         As udtGetAccessResponse
     Dim Username     As String  ' ...
@@ -683,7 +680,8 @@ Private Sub btnCreateUser_Click()
     ' ...
     Do
         ' ...
-        Username = "New_User_#" & (userCount + 1)
+        userCount = userCount + 1
+        Username = "New_User_#" & userCount
     Loop While (GetAccess(Username, "User").Username <> vbNullString)
         
     ' redefine array to support new entry
@@ -703,14 +701,14 @@ Private Sub btnCreateUser_Click()
     If (Not (trvUsers.SelectedItem Is Nothing)) Then
         ' is the item really just the root item?
         If (trvUsers.SelectedItem.Index = 1) Then
-            Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.key, _
+            Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
                 tvwChild, "User: " & Username, Username, 3)
                 
         Else
             ' is the item a group?
             If (StrComp(trvUsers.SelectedItem.Tag, "Group", vbTextCompare) = 0) Then
                 ' create new node under group node
-                Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.key, tvwChild, _
+                Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, tvwChild, _
                     "User: " & Username, Username, 3)
     
                 ' ...
@@ -721,7 +719,7 @@ Private Sub btnCreateUser_Click()
                 ' is our parent a group?
                 If (StrComp(trvUsers.SelectedItem.Parent.Tag, "Group", vbTextCompare) = 0) Then
                     ' create new node under group node
-                    Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Parent.key, tvwChild, _
+                    Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Parent.Key, tvwChild, _
                         "User: " & Username, Username, 3)
                 
                     ' set group settings on new database entry
@@ -754,9 +752,6 @@ Private Sub btnCreateUser_Click()
         
         ' open entry name for editing
         Call trvUsers.StartLabelEdit
-        
-        ' increment user count
-        userCount = (userCount + 1)
     End If
 End Sub
 
@@ -795,13 +790,13 @@ Private Sub btnCreateGroup_Click()
             ' is the item reall just the root node?
             If (trvUsers.SelectedItem.Index = 1) Then
                 ' ...
-                Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.key, _
+                Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
                     tvwChild, "Group: " & GroupName, GroupName, 1)
             Else
                 ' ...
                 If (StrComp(trvUsers.SelectedItem.Tag, "Group", vbTextCompare) = 0) Then
                     ' ...
-                    Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.key, _
+                    Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Key, _
                         tvwChild, "Group: " & GroupName, GroupName, 1)
     
                     ' ...
@@ -810,7 +805,7 @@ Private Sub btnCreateGroup_Click()
                     End With
                 Else
                     ' ...
-                    Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Parent.key, _
+                    Set newNode = trvUsers.Nodes.Add(trvUsers.SelectedItem.Parent.Key, _
                         tvwChild, "Group: " & GroupName, GroupName, 1)
                         
                     ' ...
@@ -1192,7 +1187,7 @@ Private Sub tbsTabs_Click()
                         ' ... well, does it exist?
                         If (pos) Then
                             ' make node a child of existing group
-                            Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(pos).key, _
+                            Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(pos).Key, _
                                 tvwChild, "Group: " & m_DB(I).Username, m_DB(I).Username, 1)
                         Else
                             ' lets make this guy a parent node for now until we can find
@@ -1283,7 +1278,7 @@ Private Sub tbsTabs_Click()
                             ' does our group exist?
                             If (pos) Then
                                 ' create user node and move into group
-                                Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(pos).key, _
+                                Set newNode = trvUsers.Nodes.Add(trvUsers.Nodes(pos).Key, _
                                     tvwChild, "User: " & m_DB(I).Username, m_DB(I).Username, 3)
                             End If
                         End If

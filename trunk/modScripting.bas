@@ -102,12 +102,12 @@ Public Sub LoadScripts()
         Loop
 
         ' Cycle through each of the files.
-        For I = 1 To Paths.count
+        For I = 1 To Paths.Count
             ' Does the file have the extension for a script?
             If (IsValidFileExtension(GetFileExtension(Paths(I)))) Then
                 ' Add a new module to the script control.
                 Set CurrentModule = _
-                    m_sc_control.Modules.Add(m_sc_control.Modules.count + 1)
+                    m_sc_control.Modules.Add(m_sc_control.Modules.Count + 1)
             
                 ' Load the file into the module.
                 res = FileToModule(CurrentModule, strPath & Paths(I))
@@ -254,7 +254,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
             "Script(""Path"") = " & Chr$(34) & filePath & Chr$(34)
 
         ' ...
-        For I = 1 To includes.count
+        For I = 1 To includes.Count
             FileToModule ScriptModule, includes(I), False
         Next
 
@@ -372,7 +372,7 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
     Next j
 
     ' ...
-    For j = 2 To m_sc_control.Modules.count
+    For j = 2 To m_sc_control.Modules.Count
         ' ...
         If (m_sc_control.Modules(j).Name <> CurrentModule.Name) Then
             tmp = _
@@ -406,7 +406,7 @@ Public Sub InitScripts()
         reloading = True
     End If
     
-    For I = 2 To m_sc_control.Modules.count
+    For I = 2 To m_sc_control.Modules.Count
         If (I > 1) Then
             str = _
                 m_sc_control.Modules(I).CodeObject.GetSettingsEntry("Enabled")
@@ -443,8 +443,8 @@ Public Sub InitScript(ByVal SCModule As Module)
         RunInSingle SCModule, "Event_LoggedOn", GetCurrentUsername, BotVars.Product
         RunInSingle SCModule, "Event_ChannelJoin", g_Channel.Name, g_Channel.Flags
     
-        If (g_Channel.Users.count > 0) Then
-            For I = 1 To g_Channel.Users.count
+        If (g_Channel.Users.Count > 0) Then
+            For I = 1 To g_Channel.Users.Count
                 With g_Channel.Users(I)
                      RunInSingle SCModule, "Event_UserInChannel", .DisplayName, .Flags, .Stats.ToString, .Ping, _
                         .game, False
@@ -476,7 +476,7 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
 
     arr() = Parameters()
 
-    For I = 2 To SC.Modules.count
+    For I = 2 To SC.Modules.Count
         str = SC.Modules(I).CodeObject.GetSettingsEntry("Enabled")
         
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
@@ -600,6 +600,9 @@ Public Function CreateObj(ByRef SCModule As Module, ByVal ObjType As String, ByV
     On Error Resume Next
 
     Dim obj As scObj ' ...
+    
+    Set CreateObj = Nothing
+    If (Not ValidObjectName(ObjName)) Then Exit Function
     
     ' redefine array size & check for duplicate controls
     If (m_objCount) Then
@@ -956,7 +959,7 @@ Public Function InitMenus()
     DestroyMenus
     
     ' ...
-    For I = 2 To frmChat.SControl.Modules.count
+    For I = 2 To frmChat.SControl.Modules.Count
         If (I = 2) Then
             frmChat.mnuScriptingDash(0).Visible = True
         End If
@@ -1026,7 +1029,7 @@ Public Function DestroyMenus()
     
     frmChat.mnuScriptingDash(0).Visible = False
     
-    For I = DynamicMenus.count To 1 Step -1
+    For I = DynamicMenus.Count To 1 Step -1
         
         If (Len(DynamicMenus(I).Name) > 0) Then
             If (Left$(DynamicMenus(I).Name, 1) = Chr$(0)) Then
@@ -1060,7 +1063,7 @@ Public Function Scripts() As Object
 
     Set Scripts = New Collection
 
-    For I = 2 To frmChat.SControl.Modules.count
+    For I = 2 To frmChat.SControl.Modules.Count
         str = _
             frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
                 
@@ -1136,4 +1139,19 @@ Private Function CleanFileName(ByVal filename As String) As String
             Left$(filename, InStr(1, filename, ".") - 1)
     End If
 
+End Function
+
+'06/26/09 - Hdx Vary crappy function to check if Object names are valid, a-z0-9_ and 1st chr a-z
+Public Function ValidObjectName(sName As String) As Boolean
+  Dim x As Integer
+  Dim sValid As String
+  
+  sValid = "0123456789_abcdefghijklmnopqrstuvwxyz"
+  ValidObjectName = False
+  
+  For x = 1 To Len(sName)
+    If (Not InStr(1, Mid$(sName, x, 1), Left(sValid, IIf(x = 1, 26, 37)), vbTextCompare)) Then Exit Function
+  Next x
+  
+  ValidObjectName = True
 End Function

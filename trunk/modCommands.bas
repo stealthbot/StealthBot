@@ -3695,13 +3695,13 @@ Private Function OnShitAdd(ByVal Username As String, ByRef dbAccess As udtGetAcc
         If (InStr(1, user, Space(1), vbBinaryCompare) <> 0) Then
             tmpbuf(0) = "Error: The specified username is invalid."
         Else
-            Dim msg As String ' ...
+            Dim Msg As String ' ...
             
             ' ...
-            msg = Mid$(msgData, Index + 1)
+            Msg = Mid$(msgData, Index + 1)
         
             ' ...
-            shit_msg = user & shit_msg & " --type USER --banmsg " & msg
+            shit_msg = user & shit_msg & " --type USER --banmsg " & Msg
         End If
     Else
         ' ...
@@ -4963,7 +4963,7 @@ End Function ' end function OnCheckMail
 Private Function OnInbox(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim msg      As udtMail
+    Dim Msg      As udtMail
     Dim tmpbuf() As String ' temporary output buffer
     Dim mcount   As Integer
     Dim Index    As Integer
@@ -4991,13 +4991,13 @@ Private Function OnInbox(ByVal Username As String, ByRef dbAccess As udtGetAcces
         ' ...
         Do
             ' ...
-            GetMailMessage Username, msg
+            GetMailMessage Username, Msg
             
             ' ...
-            If (Len(RTrim(msg.To)) > 0) Then
+            If (Len(RTrim(Msg.To)) > 0) Then
                 ' ...
-                tmpbuf(Index) = "Message from " & RTrim$(msg.From) & ": " & _
-                    RTrim$(msg.Message)
+                tmpbuf(Index) = "Message from " & RTrim$(Msg.From) & ": " & _
+                    RTrim$(Msg.Message)
                     
                 ' ...
                 Index = Index + 1
@@ -6169,15 +6169,15 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
     
     tmpbuf(0) = "[" & CommandDocs.Name
     
-    If (CommandDocs.Aliases.Count) Then
+    If (CommandDocs.aliases.Count) Then
         tmpbuf(0) = tmpbuf(0) & " (aliases: "
     Else
         tmpbuf(0) = tmpbuf(0) & " (aliases: none"
     End If
     
-    If (CommandDocs.Aliases.Count) Then
-        For I = 1 To CommandDocs.Aliases.Count
-            tmpbuf(0) = tmpbuf(0) & CommandDocs.Aliases(I) & ", "
+    If (CommandDocs.aliases.Count) Then
+        For I = 1 To CommandDocs.aliases.Count
+            tmpbuf(0) = tmpbuf(0) & CommandDocs.aliases(I) & ", "
         Next I
         
         tmpbuf(0) = Mid$(tmpbuf(0), 1, Len(tmpbuf(0)) - Len(", "))
@@ -7449,17 +7449,17 @@ End Function
 Public Sub LoadDatabase()
     On Error Resume Next
 
-    Dim gA    As udtDatabase
+    Dim gA     As udtDatabase
     
-    Dim s     As String
-    Dim X()   As String
-    Dim Path  As String
-    Dim I     As Integer
-    Dim f     As Integer
-    Dim found As Boolean
+    Dim s      As String
+    Dim x()    As String
+    Dim Path   As String
+    Dim I      As Integer
+    Dim f      As Integer
+    Dim found  As Boolean
+    Dim SaveDB As Boolean
     
     ReDim DB(0)
-    
     Path = GetFilePath("users.txt")
     
     If Dir$(Path) <> vbNullString Then
@@ -7472,19 +7472,29 @@ Public Sub LoadDatabase()
                 Line Input #f, s
                 
                 If InStr(1, s, " ", vbTextCompare) > 0 Then
-                    X() = Split(s, " ", 10)
+                    x() = Split(s, " ", 10)
                     
-                    If UBound(X) > 0 Then
+                    If UBound(x) > 0 Then
                         ReDim Preserve DB(I)
                         
                         With DB(I)
-                            .Username = X(0)
+                            .Username = x(0)
                             
-                            If StrictIsNumeric(X(1)) Then
-                                .Access = Val(X(1))
+                            .Access = 0
+                            .AddedOn = Now
+                            .AddedBy = "2.6r3Import"
+                            .BanMessage = vbNullString
+                            .Flags = vbNullString
+                            .Groups = vbNullString
+                            .ModifiedBy = "(Console)"
+                            .ModifiedOn = Now
+                            .Type = "USER"
+                            
+                            If StrictIsNumeric(x(1)) Then
+                                .Access = Val(x(1))
                             Else
-                                If X(1) <> "%" Then
-                                    .Flags = X(1)
+                                If x(1) <> "%" Then
+                                    .Flags = x(1)
                                     
                                     'If InStr(X(1), "S") > 0 Then
                                     '    AddToSafelist .Name
@@ -7493,37 +7503,37 @@ Public Sub LoadDatabase()
                                 End If
                             End If
                             
-                            If UBound(X) > 1 Then
-                                If StrictIsNumeric(X(2)) Then
-                                    .Access = Int(X(2))
+                            If UBound(x) > 1 Then
+                                If StrictIsNumeric(x(2)) Then
+                                    .Access = Int(x(2))
                                 Else
-                                    If X(2) <> "%" Then
-                                        .Flags = X(2)
+                                    If x(2) <> "%" Then
+                                        .Flags = x(2)
                                     End If
                                 End If
                                 
                                 '  0        1       2       3      4        5          6       7     8
                                 ' username access flags addedby addedon modifiedby modifiedon type banmsg
-                                If UBound(X) > 2 Then
-                                    .AddedBy = X(3)
+                                If UBound(x) > 2 Then
+                                    .AddedBy = x(3)
                                     
-                                    If UBound(X) > 3 Then
-                                        .AddedOn = CDate(Replace(X(4), "_", " "))
+                                    If UBound(x) > 3 Then
+                                        .AddedOn = CDate(Replace(x(4), "_", " "))
                                         
-                                        If UBound(X) > 4 Then
-                                            .ModifiedBy = X(5)
+                                        If UBound(x) > 4 Then
+                                            .ModifiedBy = x(5)
                                             
-                                            If UBound(X) > 5 Then
-                                                .ModifiedOn = CDate(Replace(X(6), "_", " "))
+                                            If UBound(x) > 5 Then
+                                                .ModifiedOn = CDate(Replace(x(6), "_", " "))
 
-                                                If UBound(X) > 6 Then
-                                                    .Type = X(7)
+                                                If UBound(x) > 6 Then
+                                                    .Type = x(7)
                                                     
-                                                    If UBound(X) > 7 Then
-                                                        .Groups = X(8)
+                                                    If UBound(x) > 7 Then
+                                                        .Groups = x(8)
                                                         
-                                                        If UBound(X) > 8 Then
-                                                            .BanMessage = X(9)
+                                                        If UBound(x) > 8 Then
+                                                            .BanMessage = x(9)
                                                         End If
                                                     End If
                                                 End If
@@ -7541,6 +7551,7 @@ Public Sub LoadDatabase()
                             If .Type = "" Or .Type = "%" Then
                                 .Type = "USER"
                             End If
+                            SaveDB = (.AddedOn = Now) Or SaveDB
                         End With
 
                         I = I + 1
@@ -7577,10 +7588,11 @@ Public Sub LoadDatabase()
                 .ModifiedBy = "(console)"
                 .ModifiedOn = Now
             End With
-            
-            Call WriteDatabase(Path)
+            SaveDB = True
         End If
     End If
+    
+    If (SaveDB) Then Call WriteDatabase(Path)
 End Sub
 
 Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String) As Boolean

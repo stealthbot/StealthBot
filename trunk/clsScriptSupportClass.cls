@@ -104,6 +104,7 @@ Attribute VB_Exposed = False
 ' *     - Added GetBotVersionNumber() function which returns only the numerical value of the bot version
 ' *     - VetoThisMessage() Now works in PacketSent, And PacketReceived, Will prevent it from being sent,
 ' *         or parsed, respectivly.
+' *     - Added GetCommands(Option FilePath) function, Will return a collection of CommandDocObjs for each <command> element in the passed file
 ' *
 ' *     (version 2.6R3, scripting system build 21)
 ' *     - GetNameByPosition() boundary checks fixed (thanks Scio)
@@ -456,13 +457,13 @@ End Function
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
 Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Optional ByRef Flags, _
-    Optional ByRef entryType As String = "USER") As Object
+    Optional ByRef EntryType As String = "USER") As Object
 
     Dim temp   As udtGetAccessResponse
-    Dim i      As Integer
+    Dim I      As Integer
     Dim Splt() As String
     
-    temp = GetCumulativeAccess(Username, entryType)
+    temp = GetCumulativeAccess(Username, EntryType)
     
     With temp
         Access = .Access
@@ -474,7 +475,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     
     ' ...
     With GetDBEntry
-        .entryType = temp.Type
+        .EntryType = temp.Type
         .Name = temp.Username
         .Rank = temp.Access
         .Flags = temp.Flags
@@ -493,9 +494,9 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
             Splt(0) = temp.Groups
         End If
     
-        For i = LBound(Splt) To UBound(Splt)
-            GetDBEntry.Groups.Add GetDBEntry(Splt(i), , , "GROUP")
-        Next i
+        For I = LBound(Splt) To UBound(Splt)
+            GetDBEntry.Groups.Add GetDBEntry(Splt(I), , , "GROUP")
+        Next I
     End If
 End Function
 
@@ -510,11 +511,11 @@ End Function
 '// Pass it the username and it will pass you the person's access and flags.
 '// If the name is not in the database, it will return -1 / null flags.
 Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
-    Optional ByRef entryType As String = "USER") '// yum, Variants >:\
+    Optional ByRef EntryType As String = "USER") '// yum, Variants >:\
 
     Dim temp As udtGetAccessResponse
     
-    temp = GetAccess(Username, entryType)
+    temp = GetAccess(Username, EntryType)
     
     With temp
         Access = .Access
@@ -645,11 +646,11 @@ End Function
 '//  See lDataType constants in GetInternalData() below
 Public Function GetInternalDataByUsername(ByVal sUser As String, ByVal lDataType As Long) As Variant
 
-    Dim i As Integer
+    Dim I As Integer
     
-    i = Channel.GetUserIndex(sUser)
+    I = Channel.GetUserIndex(sUser)
     
-    GetInternalDataByUsername = GetInternalData(i, lDataType)
+    GetInternalDataByUsername = GetInternalData(I, lDataType)
 
 End Function
 
@@ -730,11 +731,11 @@ End Function
 '// GETNAMEBYPOSITION
 '// Returns the name of the person at position X in the channel list.
 '// Positions are 1-based. Returns an empty string if the user isn't present
-Public Function GetNameByPosition(ByVal X As Integer) As String
+Public Function GetNameByPosition(ByVal x As Integer) As String
     
     With frmChat.lvChannel.ListItems
-        If X > 0 And X <= .Count Then
-            GetNameByPosition = .Item(X).text
+        If x > 0 And x <= .Count Then
+            GetNameByPosition = .Item(x).text
         Else
             GetNameByPosition = ""
         End If
@@ -1076,7 +1077,7 @@ Public Sub GetWinCursorPos(ByRef lCursorX As Long, ByRef lCursorY As Long)
     
     GetCursorPos PAPI
     
-    lCursorX = PAPI.X
+    lCursorX = PAPI.x
     lCursorY = PAPI.Y
 End Sub
 
@@ -1412,15 +1413,15 @@ End Function
 
 Public Function Quotes() As Object
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
     Set Quotes = New Collection
     
     ' ...
-    For i = 1 To g_Quotes.Count
-        Quotes.Add g_Quotes(i)
-    Next i
+    For I = 1 To g_Quotes.Count
+        Quotes.Add g_Quotes(I)
+    Next I
     
 End Function
 
@@ -1445,15 +1446,15 @@ End Function
 
 Public Function Friends() As Object
     
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
 
     ' ...
     Set Friends = New Collection
     
     ' ...
-    For i = 1 To g_Friends.Count
-        Friends.Add g_Friends(i).Clone()
-    Next i
+    For I = 1 To g_Friends.Count
+        Friends.Add g_Friends(I).Clone()
+    Next I
     
 End Function
 
@@ -1505,14 +1506,14 @@ Public Function Sha1(ByRef Data As String, Optional ByVal inHex As Boolean = Fal
 End Function
 
 Public Function XSHA1(ByRef str As String, Optional ByVal inHex As Boolean = False) As String
-    Dim i As Integer
+    Dim I As Integer
     Dim s As String
     
     XSHA1 = modBNCSutil.hashPassword(str)
     
     If inHex Then
-        For i = 1 To Len(XSHA1)
-            s = s & LCase(Hex(Asc(Mid(XSHA1, i, 1))))
+        For I = 1 To Len(XSHA1)
+            s = s & LCase(Hex(Asc(Mid(XSHA1, I, 1))))
         Next
         XSHA1 = s
     End If
@@ -1717,7 +1718,7 @@ End Sub
 Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal varValue As Variant, _
                       Optional ByVal strDescription As String, Optional ByVal boolOverwrite As Boolean = True)
                       
-    Dim strPath As String, arrSetting() As String, i As Integer
+    Dim strPath As String, arrSetting() As String, I As Integer
     strPath = BotPath() & "plugins\settings.ini"
 
     If Len(strDescription) > 0 Then
@@ -1728,8 +1729,8 @@ Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal 
         If Len(strName & varValue) > 254 Then
             WriteConfigEntry UCase(strPrefix), strName, Left(varValue, 254 - Len(strName)), strPath
             arrSetting = Split(strName, "*")
-            If UBound(arrSetting) > 0 Then i = arrSetting(1) + 1 Else i = 1
-            SetSetting strPrefix, arrSetting(0) & "*" & i, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
+            If UBound(arrSetting) > 0 Then I = arrSetting(1) + 1 Else I = 1
+            SetSetting strPrefix, arrSetting(0) & "*" & I, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
         Else
             WriteConfigEntry UCase(strPrefix), strName, varValue, strPath
         End If
@@ -1749,3 +1750,31 @@ End Function
 Public Sub ForceBNCSPacketParse(ByVal PacketData As String)
     Call BNCSParsePacket(PacketData)
 End Sub
+
+Public Function GetCommands(Optional ByVal Database As String = vbNullString) As Collection
+    Set GetCommands = modCommandDocsObj.GetCommands(Database)
+End Function
+
+Public Function GetUserDatabase() As Collection
+    Dim x As Integer
+    Dim temp As New clsDBEntryObj
+    Set GetUserDatabase = New Collection
+    For x = LBound(DB) To UBound(DB)
+        If (Len(DB(x).Username) > 0) Then
+            With temp
+                .Name = DB(x).Username
+                .Rank = DB(x).Access
+                .CreatedOn = DB(x).AddedOn
+                .CreatedBy = DB(x).AddedBy
+                .BanMessage = DB(x).BanMessage
+                .Flags = DB(x).Flags
+                .AddGroup DB(x).Groups
+                .ModifiedBy = DB(x).ModifiedBy
+                .ModifiedOn = DB(x).ModifiedOn
+                .EntryType = DB(x).Type
+            End With
+            GetUserDatabase.Add temp, DB(x).Username
+        End If
+    Next x
+    Set temp = Nothing
+End Function
