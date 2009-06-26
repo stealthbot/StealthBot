@@ -112,7 +112,6 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
-      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -227,10 +226,14 @@ End Function
 
 '// 6/22/2009 JSM - Adding wrapper function for MsgBox inside VB6 rather than
 '//                 the scripting control. This keeps the focus on the form.
-Public Function ShowMsgBox(text As String, opts As Integer, title As String)
+Public Function ShowMsgBox(Text As String, opts As Integer, Title As String)
 
-        Call MsgBox(text, opts, title)
+        Call MsgBox(Text, opts, Title)
 
+End Function
+
+Public Function ShowInputBox(Text As String, Title As String, Default As String) As String
+  ShowInputBox = InputBox(Text, Title, Default)
 End Function
 
 'Public Function Objects(objIndex As Integer) As scObj
@@ -531,7 +534,7 @@ Public Sub DestroyObj(ByVal ObjName As String)
                 Unload rtb(m_arrObjs(Index).obj.Index)
             Else
                 With rtb(0)
-                    .text = ""
+                    .Text = ""
                     .Visible = False
                 End With
             End If
@@ -541,7 +544,7 @@ Public Sub DestroyObj(ByVal ObjName As String)
                 Unload txt(m_arrObjs(Index).obj.Index)
             Else
                 With txt(0)
-                    .text = ""
+                    .Text = ""
                     .Visible = False
                 End With
             End If
@@ -633,7 +636,7 @@ Public Sub ClearObjs()
                 chk(m_arrObjs(I).obj.Index).Value = vbUnchecked
                 
             Case "COMBOXBOX"
-                cmb(m_arrObjs(I).obj.Index).text = ""
+                cmb(m_arrObjs(I).obj.Index).Text = ""
             
             Case "IMAGELIST"
                 iml(m_arrObjs(I).obj.Index).ListImages.Clear
@@ -653,12 +656,12 @@ Public Sub ClearObjs()
                 pic(m_arrObjs(I).obj.Index).Picture = Nothing
 
             Case "RICHTEXTBOX"
-                rtb(m_arrObjs(I).obj.Index).text = ""
+                rtb(m_arrObjs(I).obj.Index).Text = ""
                 
                 DisableURLDetect m_arrObjs(I).obj.hWnd
                 
             Case "TEXTBOX"
-                txt(m_arrObjs(I).obj.Index).text = ""
+                txt(m_arrObjs(I).obj.Index).Text = ""
         End Select
     Next I
 
