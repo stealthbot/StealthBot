@@ -104,9 +104,9 @@ Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
                     Dim sub_name As String ' ...
 
                     s_name = _
-                        Split(Mid$(DynamicMenus(I).Name, 2))(0)
+                        Split(Mid$(DynamicMenus(I).Name, 2), Chr$(0))(0)
                     sub_name = _
-                        Split(Mid$(DynamicMenus(I).Name, 2))(1)
+                        Split(Mid$(DynamicMenus(I).Name, 2), Chr$(0))(1)
                         
                     If (sub_name = "ENABLE|DISABLE") Then
                         If (DynamicMenus(I).Checked) Then

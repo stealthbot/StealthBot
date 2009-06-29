@@ -972,7 +972,7 @@ Public Function InitMenus()
         Set tmp = New clsMenuObj
     
         ' ...
-        tmp.Name = Chr$(0) & Name & " ROOT"
+        tmp.Name = Chr$(0) & Name & Chr$(0) & "ROOT"
         tmp.hWnd = GetSubMenu(GetMenu(frmChat.hWnd), 5)
         tmp.Caption = Name
             
@@ -983,7 +983,7 @@ Public Function InitMenus()
         Set tmp = New clsMenuObj
     
         ' ...
-        tmp.Name = Chr$(0) & Name & " ENABLE|DISABLE"
+        tmp.Name = Chr$(0) & Name & Chr$(0) & "ENABLE|DISABLE"
         tmp.Parent = DynamicMenus("mnu" & Name)
         tmp.Caption = "Enabled"
         
@@ -1000,7 +1000,7 @@ Public Function InitMenus()
         Set tmp = New clsMenuObj
     
         ' ...
-        tmp.Name = Chr$(0) & Name & " VIEW_SCRIPT"
+        tmp.Name = Chr$(0) & Name & Chr$(0) & "VIEW_SCRIPT"
         tmp.Parent = DynamicMenus("mnu" & Name)
         tmp.Caption = "View Script"
         
@@ -1141,16 +1141,16 @@ Private Function CleanFileName(ByVal filename As String) As String
 
 End Function
 
-'06/26/09 - Hdx Vary crappy function to check if Object names are valid, a-z0-9_ and 1st chr a-z
+'06/26/09 - Hdx Vary crappy function to check if Object names are valid, a-z0-9_ and 1st chr a-z (eventually should be a regexp)
 Public Function ValidObjectName(sName As String) As Boolean
   Dim x As Integer
   Dim sValid As String
   
-  sValid = "0123456789_abcdefghijklmnopqrstuvwxyz"
+  sValid = "abcdefghijklmnopqrstuvwxyz0123456789_"
   ValidObjectName = False
   
   For x = 1 To Len(sName)
-    If (Not InStr(1, Mid$(sName, x, 1), Left(sValid, IIf(x = 1, 26, 37)), vbTextCompare)) Then Exit Function
+    If (InStr(1, Left(sValid, IIf(x = 1, 26, 37)), Mid$(sName, x, 1), vbTextCompare) = 0) Then Exit Function
   Next x
   
   ValidObjectName = True
