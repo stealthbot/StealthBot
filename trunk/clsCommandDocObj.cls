@@ -71,7 +71,7 @@ Public Function OpenCommand(ByVal strCommand As String) As Boolean
         Exit Function
     End If
     
-    Set m_command_node = m_command_node.selectSingleNode("./command[@name='" & strCommand & "']")
+    Set m_command_node = m_command_node.selectSingleNode("./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "']")
     
     If (m_command_node Is Nothing) Then
         Exit Function
@@ -285,7 +285,7 @@ Private Function getAliases(ByRef AnyNode As IXMLDOMNode) As Collection
     
     If ((aliases Is Nothing) = False) Then
         For Each Alias In aliases
-            getAliases.Add Alias.text
+            getAliases.Add Alias.Text
         Next
     End If
 
@@ -316,7 +316,7 @@ Private Function setAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Coll
         Set Alias = _
             AnyNode.selectSingleNode("aliases").appendChild(m_database.createNode("element", "alias", vbNullString))
         
-        Alias.text = AliasCol(I)
+        Alias.Text = AliasCol(I)
     Next
     
     Call Save
@@ -335,7 +335,7 @@ Private Function getName(ByRef AnyNode As IXMLDOMNode) As String
     If (temp Is Nothing) Then
         Exit Function
     End If
-    getName = temp.text
+    getName = temp.Text
 
 End Function
 
@@ -357,7 +357,7 @@ Private Function getMatchMessage(ByRef AnyNode As IXMLDOMNode) As String
         Exit Function
     End If
     
-    getMatchMessage = temp.text
+    getMatchMessage = temp.Text
 
 End Function
 
@@ -376,7 +376,7 @@ Private Function getEnabled(ByRef AnyNode As IXMLDOMNode) As Boolean
         Exit Function
     End If
     
-    If (temp.text = "false") Then
+    If (temp.Text = "false") Then
         getEnabled = False
     End If
 
@@ -397,9 +397,9 @@ Private Function setEnabled(ByRef AnyNode As IXMLDOMNode, ByVal Enabled As Boole
     End If
 
     If (Enabled = True) Then
-        temp.text = "true"
+        temp.Text = "true"
     Else
-        temp.text = "false"
+        temp.Text = "false"
     End If
     
     Call Save
@@ -418,7 +418,7 @@ Private Function getDescription(ByRef AnyNode As IXMLDOMNode) As String
     If (temp Is Nothing) Then
         Exit Function
     End If
-    getDescription = temp.text
+    getDescription = temp.Text
 
 End Function
 
@@ -439,7 +439,7 @@ Private Function setDescription(ByRef AnyNode As IXMLDOMNode, ByVal description 
         Set temp = temp.appendChild(m_database.createNode("element", "description", vbNullString))
     End If
     
-    temp.text = description
+    temp.Text = description
     
     Call Save
 
@@ -457,7 +457,7 @@ Private Function getNotes(ByRef AnyNode As IXMLDOMNode) As String
     If (temp Is Nothing) Then
         Exit Function
     End If
-    getNotes = temp.text
+    getNotes = temp.Text
 
 End Function
 
@@ -479,7 +479,7 @@ Private Function setNotes(ByRef AnyNode As IXMLDOMNode, ByVal Notes As String) A
         Set temp = temp.appendChild(m_database.createNode("element", "specialnotes", vbNullString))
     End If
     
-    temp.text = Notes
+    temp.Text = Notes
     
     Call Save
     
@@ -501,13 +501,13 @@ Private Function GetRank(ByRef AnyNode As IXMLDOMNode) As Integer
         Exit Function
     End If
     
-    If (temp.text = vbNullString) Then
+    If (temp.Text = vbNullString) Then
         GetRank = -1
     
         Exit Function
     End If
     
-    GetRank = CInt(Val(temp.text))
+    GetRank = CInt(Val(temp.Text))
 
 End Function
 
@@ -531,7 +531,7 @@ Private Function setRank(ByRef AnyNode As IXMLDOMNode, ByVal Rank As Integer) As
         Set temp = temp.appendChild(m_database.createNode("element", "rank", vbNullString))
     End If
 
-    temp.text = Rank
+    temp.Text = Rank
     
     Call Save
 
@@ -553,7 +553,7 @@ Private Function getFlags(ByRef AnyNode As IXMLDOMNode) As String
     End If
     
     For Each flag In temp
-        getFlags = getFlags & flag.text
+        getFlags = getFlags & flag.Text
     Next
     
 End Function
@@ -585,7 +585,7 @@ Private Function setFlags(ByRef AnyNode As IXMLDOMNode, ByVal Flags As String) A
         Set flag = _
             temp.appendChild(m_database.createNode("element", "flag", vbNullString))
         
-        flag.text = Mid$(Flags, I, 1)
+        flag.Text = Mid$(Flags, I, 1)
     Next I
     
     Call Save
