@@ -76,7 +76,7 @@ Public Function OpenCommand(ByVal strCommand As String) As Boolean
         Exit Function
     End If
     
-    Set m_command_node = m_command_node.selectSingleNode("./command[@name='" & strCommand & "']")
+	Set m_command_node = m_command_node.selectSingleNode("./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "']")
     Set m_aliases = getAliases(m_command_node)
     Set m_params = getParameters(m_command_node)
     
