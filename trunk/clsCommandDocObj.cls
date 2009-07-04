@@ -33,8 +33,10 @@ Private m_enabled        As Boolean
 Private Sub Class_Initialize()
 
     Set m_database = New DOMDocument60
-    Set m_params = New Collection
-    Set m_aliases = New Collection
+    
+    '// 06/23/2009 JSM - initializing these as Nothing
+    Set m_params = Nothing
+    Set m_aliases = Nothing
     
 End Sub
 
@@ -60,18 +62,24 @@ Public Function OpenCommand(ByVal strCommand As String) As Boolean
     
     Dim command_access_node   As IXMLDOMNode
     Dim command_documentation As IXMLDOMNode
-    Dim command_parameters    As IXMLDOMNodeList
+    Dim command_Parameters    As IXMLDOMNodeList
     Dim command_aliases       As IXMLDOMNodeList
     Dim Alias                 As IXMLDOMNode
     Dim attrs                 As IXMLDOMAttribute
     
     Set m_command_node = m_database.documentElement
+    Set m_aliases = Nothing
+    Set m_params = Nothing
+    
 
     If (m_command_node Is Nothing) Then
         Exit Function
     End If
     
-    Set m_command_node = m_command_node.selectSingleNode("./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "']")
+    Set m_command_node = m_command_node.selectSingleNode("./command[@name='" & strCommand & "']")
+    Set m_aliases = getAliases(m_command_node)
+    Set m_params = getParameters(m_command_node)
+    
     
     If (m_command_node Is Nothing) Then
         Exit Function
@@ -86,7 +94,7 @@ Public Function CreateCommand(ByVal strCommand As String) As Boolean
     Dim l_aliases             As IXMLDOMElement
     Dim l_documentation       As IXMLDOMElement
     Dim l_description         As IXMLDOMElement
-    Dim l_arguments           As IXMLDOMElement
+    Dim l_Parameters           As IXMLDOMElement
     Dim l_Access              As IXMLDOMElement
         
     Call OpenDatabase
@@ -96,7 +104,7 @@ Public Function CreateCommand(ByVal strCommand As String) As Boolean
     Set l_aliases = m_database.createElement("aliases")
     Set l_documentation = m_database.createElement("documentation")
     Set l_description = m_database.createElement("description")
-    Set l_arguments = m_database.createElement("arguments")
+    Set l_Parameters = m_database.createElement("arguments")
     Set l_Access = m_database.createElement("access")
     
     '// set the command name
@@ -106,7 +114,7 @@ Public Function CreateCommand(ByVal strCommand As String) As Boolean
     Call l_command.appendChild(l_aliases)
     Call l_command.appendChild(l_documentation)
     Call l_documentation.appendChild(l_description)
-    Call l_command.appendChild(l_arguments)
+    Call l_command.appendChild(l_Parameters)
     Call l_command.appendChild(l_Access)
     
     
@@ -119,9 +127,48 @@ Public Function CreateCommand(ByVal strCommand As String) As Boolean
     
 End Function
 
+Public Function NewParameter(argName As String, argIsOptional As Boolean, Optional argDataType As String)
+    
+    Dim param As clsCommandParamsObj
+    
+    '// create a new parameter
+    Set param = New clsCommandParamsObj
+    With param
+        .Name = argName
+        .IsOptional = argIsOptional
+        If argIsOptional Then
+            .DataType = argDataType
+        End If
+    End With
+    
+    Set NewParameter = param
+    
+End Function
+
+
+Public Function NewRestriction(argName As String, argRequiredRank As Integer, argRequiredFlags As String)
+
+    Dim res As clsCommandRestrictionObj
+        
+    '// create a new restriction
+    Set res = New clsCommandRestrictionObj
+    With res
+        .Name = argName
+        .RequiredRank = argRequiredRank
+        .RequiredFlags = argRequiredFlags
+    End With
+    
+    Set NewRestriction = res
+        
+End Function
+
 
 
 Public Function Save() As Boolean
+
+    setAliases m_command_node, m_aliases
+    setParameters m_command_node, m_params
+    
 
     Dim XML As clsXML ' ...
     
@@ -168,75 +215,74 @@ Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
     For Each Parameter In Parameters
         Set temp = New clsCommandParamsObj
         
+        On Error Resume Next
         With temp
             .Name = getName(Parameter)
             .Restrictions = getRestrictions(Parameter)
             .IsOptional = False
+            .description = Parameter.selectSingleNode("documentation/description").Text
+            .SpecialNotes = Parameter.selectSingleNode("documentation/specialnotes").Text
         End With
+        On Error GoTo 0
         
         getParameters.Add temp
         
         Set temp = Nothing
     Next
     
-    ' ...
     Set Parameters = CommandNode.selectNodes("arguments/optional/number/argument")
     
-    ' ...
     If (Not (Parameters Is Nothing)) Then
-        ' ...
+        
         For Each Parameter In Parameters
-            ' ...
+            
             Set temp = New clsCommandParamsObj
             
-            ' ...
+            On Error Resume Next
             With temp
                 .Name = getName(Parameter)
-                .dataType = "number"
+                .DataType = "number"
                 .Restrictions = getRestrictions(Parameter)
                 .IsOptional = True
+                .description = Parameter.selectSingleNode("documentation/description").Text
+                .SpecialNotes = Parameter.selectSingleNode("documentation/specialnotes").Text
             End With
+            On Error GoTo 0
             
-            ' ...
             getParameters.Add temp
             
-            ' ...
             Set temp = Nothing
         Next
     End If
     
-    ' ...
     Set Parameters = CommandNode.selectNodes("arguments/optional/string/argument")
     
-    ' ...
     If (Not (Parameters Is Nothing)) Then
-        ' ...
         For Each Parameter In Parameters
-            ' ...
             Set temp = New clsCommandParamsObj
             
-            ' ...
+            On Error Resume Next
             With temp
                 .Name = getName(Parameter)
-                .dataType = "string"
+                .DataType = "string"
                 .Restrictions = getRestrictions(Parameter)
                 .IsOptional = True
+                .description = Parameter.selectSingleNode("documentation/description").Text
+                .SpecialNotes = Parameter.selectSingleNode("documentation/specialnotes").Text
             End With
+            On Error GoTo 0
             
-            ' ...
             getParameters.Add temp
             
-            ' ...
             Set temp = Nothing
         Next
     End If
-
-    ' ...
+    
     Set Parameters = Nothing
 
 End Function
 
-Private Function getRestrictions(ByRef ParameterNode As IXMLDOMNode) As Collection
+Private Function getRestrictions(ByRef parameterNode As IXMLDOMNode) As Collection
 
     Dim Restriction  As IXMLDOMNode
     Dim Restrictions As IXMLDOMNodeList
@@ -244,11 +290,11 @@ Private Function getRestrictions(ByRef ParameterNode As IXMLDOMNode) As Collecti
     
     Set getRestrictions = New Collection
     
-    If (ParameterNode Is Nothing) Then
+    If (parameterNode Is Nothing) Then
         Exit Function
     End If
     
-    Set Restrictions = ParameterNode.selectNodes("restrictions")
+    Set Restrictions = parameterNode.selectNodes("restrictions")
     
     If (Restrictions.length = 0) Then
         Exit Function
@@ -291,6 +337,97 @@ Private Function getAliases(ByRef AnyNode As IXMLDOMNode) As Collection
 
 End Function
 
+Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol As Collection) As Collection
+    
+    Dim argumentNode                  As IXMLDOMNode
+    Dim argumentsNode                 As IXMLDOMNode
+    Dim argumentsOptionalNode         As IXMLDOMNode
+    Dim argumentsOptionalStringNode   As IXMLDOMNode
+    Dim argumentsOptionalNumberNode   As IXMLDOMNode
+    
+    Dim newNode                       As IXMLDOMNode
+    Dim node                          As IXMLDOMNode
+    Dim Parameter                     As clsCommandParamsObj
+    Dim I                             As Integer
+    
+    If (AnyNode Is Nothing) Then
+        Exit Function
+    End If
+    
+    '// add a new arguments node
+    Set argumentsNode = AnyNode.selectSingleNode("arguments")
+    
+    For Each node In argumentsNode.childNodes
+        argumentsNode.removeChild node
+    Next node
+    
+    
+    '// add the the new arguments node if necessary
+    If ParameterCol.Count > 0 Then
+        
+        '// loop through the parameters
+        For I = 1 To ParameterCol.Count
+            
+            Set Parameter = ParameterCol(I)
+            
+            Set argumentNode = m_database.createNode("element", "argument", vbNullString)
+            
+            '// @name
+            Set newNode = m_database.createNode("attribute", "name", vbNullString)
+            newNode.Text = Parameter.Name
+            argumentNode.Attributes.setNamedItem newNode
+            
+            '// documentation
+            Set newNode = m_database.createNode("element", "documentation", vbNullString)
+            argumentNode.appendChild newNode
+            
+            '// documentation/description
+            Set newNode = m_database.createNode("element", "description", vbNullString)
+            newNode.Text = Parameter.description
+            argumentNode.selectSingleNode("documentation").appendChild newNode
+            
+            '// documentation/specialnotes
+            Set newNode = m_database.createNode("element", "specialnotes", vbNullString)
+            newNode.Text = Parameter.SpecialNotes
+            argumentNode.selectSingleNode("documentation").appendChild newNode
+            
+            If Parameter.IsOptional = False Then
+                '// add to argumentsNode
+                argumentsNode.appendChild argumentNode
+            Else
+                '// make sure the optional node exists
+                If (argumentsNode.selectSingleNode("optional") Is Nothing) Then
+                    Set argumentsOptionalNode = m_database.createNode("element", "optional", vbNullString)
+                End If
+            
+                '// this value has already been validated in the property setter
+                '// make sure the optional/<datatype> node exists
+                If (argumentsOptionalNode.selectSingleNode(Parameter.DataType) Is Nothing) Then
+                    argumentsOptionalNode.appendChild m_database.createNode("element", Parameter.DataType, vbNullString)
+                End If
+                
+                '// add to optional/<datatype> node
+                argumentsOptionalNode.selectSingleNode(Parameter.DataType).appendChild argumentNode
+                
+            End If
+        Next
+        
+        '// add the optional node if necessary
+        If Not (argumentsOptionalNode Is Nothing) Then
+            argumentsNode.appendChild argumentsOptionalNode
+        End If
+    
+    End If
+    
+    
+    
+    
+    
+End Function
+
+
+
+
 Private Function setAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Collection) As Collection
 
     Dim Alias   As IXMLDOMNode
@@ -319,7 +456,7 @@ Private Function setAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Coll
         Alias.Text = AliasCol(I)
     Next
     
-    Call Save
+    'Call Save
 
 End Function
 
@@ -600,14 +737,12 @@ End Property
 
 Public Property Get aliases() As Collection
 
-    Set aliases = getAliases(m_command_node)
+    If (m_aliases Is Nothing) Then
+        Set m_aliases = getAliases(m_command_node)
+    End If
     
-End Property
-
-Public Property Let aliases(ByVal col As Collection)
-
-    setAliases m_command_node, col
-
+    Set aliases = m_aliases
+    
 End Property
 
 Public Property Get IsEnabled() As Boolean
@@ -678,6 +813,10 @@ End Property
 
 Public Property Get Parameters() As Collection
     
-    Set Parameters = getParameters(m_command_node)
+    If (m_params Is Nothing) Then
+        Set m_params = getParameters(m_command_node)
+    End If
+    
+    Set Parameters = m_params
 
 End Property

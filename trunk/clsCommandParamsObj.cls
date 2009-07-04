@@ -30,138 +30,88 @@ Private m_data_max       As Integer
 Private m_data_pattern   As String
 
 Private Sub Class_Initialize()
-
-    ' ...
+    
     Set m_restrictions = New Collection
-
+    
 End Sub
 
 Private Sub Class_Terminate()
-
-    ' ...
+    
     Set m_restrictions = Nothing
 
 End Sub
 
 Public Property Get Restrictions() As Collection
-
-    ' ...
     Set Restrictions = m_restrictions
-
 End Property
-
-Public Property Let Restrictions(ByRef restrics As Collection)
-
-    ' ...
-    Set m_restrictions = restrics
-
+Public Property Let Restrictions(col As Collection)
+    Set m_restrictions = col
 End Property
-
-Public Property Get dataType() As String
-
-    ' ...
-    dataType = m_data_type
-
+Public Property Get DataType() As String
+    DataType = m_data_type
 End Property
-
-Public Property Let Name(str As String)
-
-    ' ...
-    m_name = str
-
-End Property
-
-Public Property Get Name() As String
-
-    ' ...
-    Name = m_name
-
-End Property
-
-Public Property Let dataType(strType As String)
-
-    ' ...
+Public Property Let DataType(strType As String)
+    Select Case LCase(strType)
+        Case "string"
+        Case "number"
+        Case Else
+            '// default to string
+            m_data_type = "string"
+    End Select
     m_data_type = strType
-
 End Property
-
-Public Property Get pattern() As String
-
-    ' ...
-    pattern = m_data_pattern
-
+Public Property Get Name() As String
+    Name = m_name
 End Property
-
-Public Property Let pattern(strPattern As String)
-
-    ' ...
+Public Property Let Name(str As String)
+    m_name = str
+End Property
+Public Property Get description() As String
+    description = m_description
+End Property
+Public Property Let description(str As String)
+    m_description = str
+End Property
+Public Property Get SpecialNotes() As String
+    SpecialNotes = m_special_notes
+End Property
+Public Property Let SpecialNotes(str As String)
+    m_special_notes = str
+End Property
+Public Property Get Pattern() As String
+    Pattern = m_data_pattern
+End Property
+Public Property Let Pattern(strPattern As String)
     m_data_pattern = strPattern
-
 End Property
-
 Public Property Get min() As Long
-
-    ' ...
     min = m_data_min
-
 End Property
-
 Public Property Let min(Val As Long)
-
-    ' ...
     m_data_min = Val
-
 End Property
-
-Public Property Get max() As Long
-
-    ' ...
-    max = m_data_max
-
+Public Property Get Max() As Long
+    Max = m_data_max
 End Property
-
-Public Property Let max(Val As Long)
-
-    ' ...
+Public Property Let Max(Val As Long)
     m_data_max = Val
-
 End Property
-
 Public Property Get minLength() As Long
-
-    ' ...
-
+    '// TODO
 End Property
-
 Public Property Let minLength(Val As Long)
-
-    ' ...
-
+    '// TODO
 End Property
-
 Public Property Get maxLength() As Long
-
-    ' ...
-
+    '// TODO
 End Property
-
 Public Property Let maxLength(Val As Long)
-
-    ' ...
-
+    '// TODO
 End Property
-
 Public Property Get IsOptional() As Boolean
-
-    ' ...
     IsOptional = m_optional
-
 End Property
 
 Public Property Let IsOptional(bln As Boolean)
-
-    ' ...
     m_optional = bln
-
 End Property
-
