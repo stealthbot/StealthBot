@@ -56,7 +56,7 @@ Public Property Let DataType(strType As String)
         Case "number"
         Case Else
             '// default to string
-            m_data_type = "string"
+            strType = "string"
     End Select
     m_data_type = strType
 End Property

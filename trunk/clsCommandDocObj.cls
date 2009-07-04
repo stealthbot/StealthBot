@@ -284,9 +284,9 @@ End Function
 
 Private Function getRestrictions(ByRef parameterNode As IXMLDOMNode) As Collection
 
-    Dim Restriction  As IXMLDOMNode
-    Dim Restrictions As IXMLDOMNodeList
-    Dim temp         As clsCommandRestrictionObj
+    Dim RestrictionNode  As IXMLDOMNode
+    Dim RestrictionsNode As IXMLDOMNode
+    Dim temp             As clsCommandRestrictionObj
     
     Set getRestrictions = New Collection
     
@@ -294,21 +294,19 @@ Private Function getRestrictions(ByRef parameterNode As IXMLDOMNode) As Collecti
         Exit Function
     End If
     
-    Set Restrictions = parameterNode.selectNodes("restrictions")
+    Set RestrictionsNode = parameterNode.selectSingleNode("restrictions")
     
-    If (Restrictions.length = 0) Then
+    If (RestrictionsNode Is Nothing) Then
         Exit Function
     End If
     
-    Set Restrictions = Restrictions.Item(0).selectNodes("restriction")
-    
-    For Each Restriction In Restrictions
+    For Each RestrictionNode In RestrictionsNode.selectNodes("restriction")
         Set temp = New clsCommandRestrictionObj
         With temp
-            .Name = getName(Restriction)
-            .MatchMessage = getMatchMessage(Restriction)
-            .RequiredFlags = getFlags(Restriction)
-            .RequiredRank = GetRank(Restriction)
+            .Name = getName(RestrictionNode)
+            .MatchMessage = getMatchMessage(RestrictionNode)
+            .RequiredFlags = getFlags(RestrictionNode)
+            .RequiredRank = GetRank(RestrictionNode)
         End With
         getRestrictions.Add temp
         Set temp = Nothing
@@ -344,17 +342,19 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
     Dim argumentsOptionalNode         As IXMLDOMNode
     Dim argumentsOptionalStringNode   As IXMLDOMNode
     Dim argumentsOptionalNumberNode   As IXMLDOMNode
+    Dim RestrictionNode               As IXMLDOMNode
     
     Dim newNode                       As IXMLDOMNode
     Dim node                          As IXMLDOMNode
     Dim Parameter                     As clsCommandParamsObj
+    Dim Restriction                   As clsCommandRestrictionObj
     Dim I                             As Integer
     
     If (AnyNode Is Nothing) Then
         Exit Function
     End If
     
-    '// add a new arguments node
+    '// get the arguments node
     Set argumentsNode = AnyNode.selectSingleNode("arguments")
     
     For Each node In argumentsNode.childNodes
@@ -391,6 +391,11 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
             newNode.Text = Parameter.SpecialNotes
             argumentNode.selectSingleNode("documentation").appendChild newNode
             
+            '// restrictions
+            If Parameter.Restrictions.Count > 0 Then
+                setRestrictions argumentNode, Parameter.Restrictions
+            End If
+            
             If Parameter.IsOptional = False Then
                 '// add to argumentsNode
                 argumentsNode.appendChild argumentNode
@@ -423,6 +428,67 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
     
     
     
+End Function
+
+Private Function setRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef RestrictionCol As Collection) As Collection
+    
+    Dim RestrictionNode                  As IXMLDOMNode
+    
+    Dim newNode                          As IXMLDOMNode
+    Dim node                             As IXMLDOMNode
+    Dim Restriction                      As clsCommandRestrictionObj
+    Dim I                                As Integer
+    
+    If (AnyNode Is Nothing) Then
+        Exit Function
+    End If
+    
+    '// add our restrictions node
+    AnyNode.appendChild m_database.createNode("element", "restrictions", vbNullString)
+    
+    '// loop through argument restrictions
+    For Each Restriction In RestrictionCol
+        
+        '// create our restriction node
+        Set RestrictionNode = m_database.createNode("element", "restriction", vbNullString)
+        AnyNode.selectSingleNode("restrictions").appendChild RestrictionNode
+
+        '// name attribute
+        Set newNode = m_database.createNode("attribute", "name", vbNullString)
+        newNode.Text = Restriction.Name
+        RestrictionNode.Attributes.setNamedItem newNode
+        
+        '// create the match element if necessary
+        If Restriction.MatchMessage <> "" Then
+            '// add the match element
+            RestrictionNode.appendChild m_database.createNode("element", "match", vbNullString)
+            
+            '// set he message attribute
+            Set newNode = m_database.createNode("attribute", "message", vbNullString)
+            newNode.Text = Restriction.MatchMessage
+            RestrictionNode.selectSingleNode("match").Attributes.setNamedItem newNode
+        End If
+        
+        '// create the access node
+        RestrictionNode.appendChild m_database.createNode("element", "access", vbNullString)
+        
+        '// create the rank noode
+        RestrictionNode.selectSingleNode("access").appendChild m_database.createNode("element", "rank", vbNullString)
+        RestrictionNode.selectSingleNode("access/rank").Text = Restriction.RequiredRank
+        
+        '// create the flags node
+        RestrictionNode.selectSingleNode("access").appendChild m_database.createNode("element", "flags", vbNullString)
+        
+        '// add a flag element for each flag
+        For I = 1 To Len(Restriction.RequiredFlags)
+            Set newNode = m_database.createNode("element", "flag", vbNullString)
+            newNode.Text = Mid(Restriction.RequiredFlags, I, 1)
+            RestrictionNode.selectSingleNode("access/flags").appendChild newNode
+        Next I
+                        
+    Next Restriction
+    
+
 End Function
 
 

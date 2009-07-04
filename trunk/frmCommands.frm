@@ -265,10 +265,10 @@ End Type
 Private Sub cmdAliasAdd_Click()
 
     ' ...
-    cboAlias.AddItem cboAlias.text
+    cboAlias.AddItem cboAlias.Text
     
     ' ...
-    cboAlias.text = ""
+    cboAlias.Text = ""
     
     Call FormIsDirty
 
@@ -280,7 +280,7 @@ Private Sub cmdAliasRemove_Click()
     
     ' ...
     For I = 0 To cboAlias.ListCount - 1
-        If (StrComp(cboAlias.text, cboAlias.List(I), vbTextCompare) = 0) Then
+        If (StrComp(cboAlias.Text, cboAlias.List(I), vbTextCompare) = 0) Then
             cboAlias.RemoveItem I
             
             Exit For
@@ -288,7 +288,7 @@ Private Sub cmdAliasRemove_Click()
     Next I
     
     ' ...
-    cboAlias.text = ""
+    cboAlias.Text = ""
     
     Call FormIsDirty
 
@@ -302,10 +302,10 @@ End Sub
 Private Sub cmdFlagAdd_Click()
 
     ' ...
-    cboFlags.AddItem cboFlags.text
+    cboFlags.AddItem cboFlags.Text
     
     ' ...
-    cboFlags.text = ""
+    cboFlags.Text = ""
     
     Call FormIsDirty
 
@@ -317,7 +317,7 @@ Private Sub cmdFlagRemove_Click()
     
     ' ...
     For I = 0 To cboFlags.ListCount - 1
-        If (StrComp(cboFlags.text, cboFlags.List(I), vbBinaryCompare) = 0) Then
+        If (StrComp(cboFlags.Text, cboFlags.List(I), vbBinaryCompare) = 0) Then
             cboFlags.RemoveItem I
             
             Exit For
@@ -325,7 +325,7 @@ Private Sub cmdFlagRemove_Click()
     Next I
     
     ' ...
-    cboFlags.text = ""
+    cboFlags.Text = ""
     
     Call FormIsDirty
 
@@ -418,7 +418,7 @@ Private Sub PopulateTreeView()
 
     '// loop through all child nodes
     For Each xmlCommand In m_CommandsDoc.documentElement.childNodes
-        CommandName = xmlCommand.Attributes.getNamedItem("name").text
+        CommandName = xmlCommand.Attributes.getNamedItem("name").Text
         Set nCommand = trvCommands.Nodes.Add(, , , CommandName)
         nCommand.BackColor = txtRank.BackColor
         nCommand.ForeColor = vbWhite
@@ -427,7 +427,7 @@ Private Sub PopulateTreeView()
         If defaultNode Is Nothing Then
             Set defaultNode = nCommand
         Else
-            If StrComp(defaultNode.text, nCommand.text) > 0 Then
+            If StrComp(defaultNode.Text, nCommand.Text) > 0 Then
                 Set defaultNode = nCommand
             End If
         End If
@@ -436,7 +436,7 @@ Private Sub PopulateTreeView()
         '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
         '//                  something, even if nothing matches the XPath expression.
         For I = 0 To (xmlArgs.length - 1)
-            ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").text
+            ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").Text
             Set nArg = trvCommands.Nodes.Add(nCommand, tvwChild, , ArgumentName)
             nArg.BackColor = txtRank.BackColor
             nArg.ForeColor = vbWhite
@@ -444,7 +444,7 @@ Private Sub PopulateTreeView()
             Set xmlArgRestricions = xmlArgs(I).selectNodes("restrictions/restriction")
             
             For j = 0 To (xmlArgRestricions.length - 1)
-                restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").text
+                restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
                 Set nArgRestriction = trvCommands.Nodes.Add(nArg, tvwChild, , restrictionName)
                 nArgRestriction.BackColor = txtRank.BackColor
                 nArgRestriction.ForeColor = vbWhite
@@ -571,19 +571,19 @@ End Sub
 Private Function GetNodeInfo(node As MSComctlLib.node, ByRef CommandName As String, ByRef ArgumentName As String, ByRef restrictionName As String) As NodeType
     If node.Parent Is Nothing Then
         GetNodeInfo = NodeType.nCommand
-        CommandName = node.text
+        CommandName = node.Text
         ArgumentName = ""
         restrictionName = ""
     ElseIf node.Parent.Parent Is Nothing Then
         GetNodeInfo = NodeType.nArgument
-        CommandName = node.Parent.text
-        ArgumentName = node.text
+        CommandName = node.Parent.Text
+        ArgumentName = node.Text
         restrictionName = ""
     Else
         GetNodeInfo = NodeType.nRestriction
-        CommandName = node.Parent.Parent.text
-        ArgumentName = node.Parent.text
-        restrictionName = node.text
+        CommandName = node.Parent.Parent.Text
+        ArgumentName = node.Parent.Text
+        restrictionName = node.Text
     End If
 End Function
 
@@ -617,8 +617,8 @@ Private Sub SaveForm()
                 Set xmlNode = .TheXMLElement.selectSingleNode("access/rank")
             End If
             
-            If (txtRank.text <> vbNullString) Then
-                xmlNode.text = txtRank.text
+            If (txtRank.Text <> vbNullString) Then
+                xmlNode.Text = txtRank.Text
             Else
                 For I = 0 To xmlNode.childNodes.length - 1
                     xmlNode.removeChild xmlNode.childNodes(I)
@@ -627,7 +627,7 @@ Private Sub SaveForm()
         End If
         
         '// txtDescription
-        If .TheNodeType = NodeType.nCommand Or .TheNodeType = NodeType.nArgument Or .TheNodeType = NodeType.nRestriction Then
+        If .TheNodeType = NodeType.nCommand Or .TheNodeType = NodeType.nArgument Then
             Set xmlNode = .TheXMLElement.selectSingleNode("documentation/description")
             If xmlNode Is Nothing Then
                 Set xmlNode = .TheXMLElement.selectSingleNode("documentation")
@@ -643,7 +643,7 @@ Private Sub SaveForm()
                 End If
                 Set xmlNode = .TheXMLElement.selectSingleNode("documentation/description")
             End If
-            xmlNode.text = txtDescription.text
+            xmlNode.Text = txtDescription.Text
         End If
         
         '// txtSpecialNotes
@@ -663,7 +663,7 @@ Private Sub SaveForm()
                 End If
                 Set xmlNode = .TheXMLElement.selectSingleNode("documentation/specialnotes")
             End If
-            xmlNode.text = txtSpecialNotes.text
+            xmlNode.Text = txtSpecialNotes.Text
         End If
 
         '// cboAlias
@@ -673,7 +673,7 @@ Private Sub SaveForm()
             Next xmlNode
             For I = 0 To cboAlias.ListCount - 1
                 Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "alias", "")
-                xmlNewNode.text = cboAlias.List(I)
+                xmlNewNode.Text = cboAlias.List(I)
                 .TheXMLElement.selectSingleNode("aliases").appendChild xmlNewNode
             Next I
         End If
@@ -707,7 +707,7 @@ Private Sub SaveForm()
                     
                     If (xmlNewNode Is Nothing) Then
                         Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "flag", "")
-                        xmlNewNode.text = cboFlags.List(I)
+                        xmlNewNode.Text = cboFlags.List(I)
                         xmlNode.appendChild xmlNewNode
                     End If
                 Next I
@@ -759,7 +759,7 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             lblRank.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("access/rank")
             If Not (xmlNode Is Nothing) Then
-                txtRank.text = xmlNode.text
+                txtRank.Text = xmlNode.Text
             End If
             '// cboAlias
             cboAlias.Enabled = True
@@ -767,7 +767,7 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             cmdAliasAdd.Enabled = True
             cmdAliasRemove.Enabled = True
             For Each xmlNode In xmlElement.selectNodes("aliases/alias")
-                cboAlias.AddItem xmlNode.text
+                cboAlias.AddItem xmlNode.Text
             Next xmlNode
             '// cboFlags
             cboFlags.Enabled = True
@@ -775,10 +775,10 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             cmdFlagAdd.Enabled = True
             cmdFlagRemove.Enabled = True
             For Each xmlNode In xmlElement.selectNodes("access/flags/flag")
-                cboFlags.AddItem xmlNode.text
+                cboFlags.AddItem xmlNode.Text
             Next xmlNode
             If (cboFlags.ListCount) Then
-                cboFlags.text = cboFlags.List(0)
+                cboFlags.Text = cboFlags.List(0)
             End If
             
             '// txtDescription
@@ -786,14 +786,14 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             lblDescription.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/description")
             If Not (xmlNode Is Nothing) Then
-                txtDescription.text = xmlNode.text
+                txtDescription.Text = xmlNode.Text
             End If
             '// txtSpecialNotes
             txtSpecialNotes.Enabled = True
             lblSpecialNotes.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/specialnotes")
             If Not (xmlNode Is Nothing) Then
-                txtSpecialNotes.text = xmlNode.text
+                txtSpecialNotes.Text = xmlNode.Text
             End If
             '// chkDisable
             chkDisable.Enabled = True
@@ -829,14 +829,14 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             lblDescription.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/description")
             If Not (xmlNode Is Nothing) Then
-                txtDescription.text = xmlNode.text
+                txtDescription.Text = xmlNode.Text
             End If
             '// txtSpecialNotes
             txtSpecialNotes.Enabled = True
             lblSpecialNotes.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/specialnotes")
             If Not (xmlNode Is Nothing) Then
-                txtSpecialNotes.text = xmlNode.text
+                txtSpecialNotes.Text = xmlNode.Text
             End If
             '// chkDisable
             'chkDisable.Enabled = True
@@ -848,7 +848,7 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             lblRank.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("access/rank")
             If Not (xmlNode Is Nothing) Then
-                txtRank.text = xmlNode.text
+                txtRank.Text = xmlNode.Text
             End If
             '// cboAlias
             'cboAlias.Enabled = True
@@ -859,15 +859,15 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             '// cboFlags
             cboFlags.Enabled = True
             lblFlags.Enabled = True
-            For Each xmlNode In xmlElement.selectNodes("access/flag")
-                cboFlags.AddItem xmlNode.text
+            For Each xmlNode In xmlElement.selectNodes("access/flags/flag")
+                cboFlags.AddItem xmlNode.Text
             Next xmlNode
             '// txtDescription
             txtDescription.Enabled = True
             lblDescription.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/description")
             If Not (xmlNode Is Nothing) Then
-                txtDescription.text = xmlNode.text
+                txtDescription.Text = xmlNode.Text
             End If
             '// txtSpecialNotes
             'txtSpecialNotes.Enabled = True
@@ -897,11 +897,11 @@ End Sub
 '// 08/29/2008 JSM - Created
 Private Sub ResetForm()
     
-    txtRank.text = ""
+    txtRank.Text = ""
     cboAlias.Clear
     cboFlags.Clear
-    txtDescription.text = ""
-    txtSpecialNotes.text = ""
+    txtDescription.Text = ""
+    txtSpecialNotes.Text = ""
     chkDisable.Value = 0
     
     txtRank.Enabled = False
@@ -929,9 +929,9 @@ End Sub
 Private Sub cboFlags_Change()
 
     If (BotVars.CaseSensitiveFlags = False) Then
-        cboFlags.text = UCase$(cboFlags.text)
+        cboFlags.Text = UCase$(cboFlags.Text)
         
-        cboFlags.selStart = Len(cboFlags.text)
+        cboFlags.selStart = Len(cboFlags.Text)
     End If
     
 End Sub
@@ -943,23 +943,23 @@ Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
     '// Enter
     If KeyCode = 13 Then
         '// Make sure it doesnt have a space
-        If InStr(cboFlags.text, " ") Then
+        If InStr(cboFlags.Text, " ") Then
             MsgBox "Flags cannot contain spaces.", vbOKOnly + vbCritical, Me.Caption
             cboFlags.selStart = 1
-            cboFlags.selLength = Len(cboFlags.text)
+            cboFlags.selLength = Len(cboFlags.Text)
             Exit Sub
         End If
         '// Make sure its not already a flag
         For I = 0 To cboFlags.ListCount - 1
-            If cboFlags.List(I) = cboFlags.text Then
-                cboFlags.text = ""
+            If cboFlags.List(I) = cboFlags.Text Then
+                cboFlags.Text = ""
                 Exit Sub
             End If
         Next I
         
         '// If we made it this far, it should be safe to add it to the list
-        cboFlags.AddItem cboFlags.text
-        cboFlags.text = ""
+        cboFlags.AddItem cboFlags.Text
+        cboFlags.Text = ""
         Call FormIsDirty
     End If
 
@@ -968,9 +968,9 @@ Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
         For I = 0 To cboFlags.ListCount - 1
             '// If the current text is already in the list, lets delete it. Otherwise,
             '// this code should behave like a normal delete keypress.
-            If cboFlags.List(I) = cboFlags.text Then
+            If cboFlags.List(I) = cboFlags.Text Then
                 cboFlags.RemoveItem I
-                cboFlags.text = ""
+                cboFlags.Text = ""
                 Call FormIsDirty
                 Exit Sub
             End If
@@ -988,16 +988,16 @@ Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
     '// Enter
     If KeyCode = 13 Then
         '// Make sure it doesnt have a space
-        If InStr(cboAlias.text, " ") Then
+        If InStr(cboAlias.Text, " ") Then
             MsgBox "Aliases cannot contain spaces.", vbOKOnly + vbCritical, Me.Caption
             cboAlias.selStart = 1
-            cboAlias.selLength = Len(cboAlias.text)
+            cboAlias.selLength = Len(cboAlias.Text)
             Exit Sub
         End If
         '// Make sure its not already an alias
         For I = 0 To cboAlias.ListCount - 1
-            If cboAlias.List(I) = cboAlias.text Then
-                cboAlias.text = ""
+            If cboAlias.List(I) = cboAlias.Text Then
+                cboAlias.Text = ""
                 Exit Sub
             End If
         Next I
@@ -1007,8 +1007,8 @@ Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
         '// should probably be in its own function.
         
         '// If we made it this far, it should be safe to add it to the list
-        cboAlias.AddItem cboAlias.text
-        cboAlias.text = ""
+        cboAlias.AddItem cboAlias.Text
+        cboAlias.Text = ""
         Call FormIsDirty
     End If
     
@@ -1017,9 +1017,9 @@ Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
         For I = 0 To cboAlias.ListCount - 1
             '// If the current text is already in the list, lets delete it. Otherwise,
             '// this code should behave like a normal delete keypress.
-            If cboAlias.List(I) = cboAlias.text Then
+            If cboAlias.List(I) = cboAlias.Text Then
                 cboAlias.RemoveItem I
-                cboAlias.text = ""
+                cboAlias.Text = ""
                 Call FormIsDirty
                 Exit Sub
             End If
