@@ -735,7 +735,7 @@ Public Function GetNameByPosition(ByVal x As Integer) As String
     
     With frmChat.lvChannel.ListItems
         If x > 0 And x <= .Count Then
-            GetNameByPosition = .Item(x).text
+            GetNameByPosition = .Item(x).Text
         Else
             GetNameByPosition = ""
         End If
@@ -1332,26 +1332,26 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     
 End Function
 
-Public Function OpenCommand(ByVal strCommand As String) As Object
-
-    '// ...
-    Set OpenCommand = modCommandDocsObj.OpenCommand(strCommand)
-    
-End Function
-
+'Public Function OpenCommand(ByVal strCommand As String) As Object
+'
+'    '// ...
+'    Set OpenCommand = modCommandDocsObj.OpenCommand(strCommand)
+'
+'End Function
+'
 '// 06/13/2009 JSM - Created Function
-Public Function DeleteCommand(ByVal strCommand As String) As Object
-
-    Set DeleteCommand = modCommandDocsObj.DeleteCommand(strCommand)
-    
-End Function
-
-Public Function CreateCommand(ByVal strCommand As String) As Object
-
-    '// ...
-    Set CreateCommand = modCommandDocsObj.CreateCommand(strCommand)
-    
-End Function
+'Public Function DeleteCommand(ByVal strCommand As String) As Object
+'
+'    Set DeleteCommand = modCommandDocsObj.DeleteCommand(strCommand)
+'
+'End Function
+'
+'Public Function CreateCommand(ByVal strCommand As String) As Object
+'
+'    '// ...
+'    Set CreateCommand = modCommandDocsObj.CreateCommand(strCommand)
+'
+'End Function
 
 Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String) As Boolean
 
@@ -1545,6 +1545,27 @@ Public Function IGetObjByName(ByVal ModuleID As String, ByVal ObjName As String)
             modScripting.GetObjByName(frmChat.SControl.Modules(ModuleID), _
                     ObjName)
 
+End Function
+
+Public Function ICreateCommand(ByVal scriptName As String, ByVal CommandName As String) As Object
+    Dim Command As clsCommandDocObj
+    Set Command = New clsCommandDocObj
+    Call Command.CreateCommand(CommandName, scriptName)
+    Call Command.OpenCommand(CommandName, scriptName)
+    Set ICreateCommand = Command
+End Function
+Public Function IOpenCommand(ByVal scriptName As String, ByVal CommandName As String) As Object
+    Dim Command As clsCommandDocObj
+    Set Command = New clsCommandDocObj
+    Call Command.OpenCommand(CommandName, scriptName)
+    Set IOpenCommand = Command
+End Function
+Public Function IDeleteCommand(ByVal scriptName As String, ByVal CommandName As String) As Object
+    Dim Command As clsCommandDocObj
+    Set Command = New clsCommandDocObj
+    Call Command.OpenCommand(CommandName, scriptName)
+    Call Command.Delete
+    Set IDeleteCommand = Command
 End Function
 
 Public Function Scripts() As Object

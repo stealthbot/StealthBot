@@ -328,6 +328,24 @@ Private Function GetDefaultModuleProcs(ByVal ScriptID As String, ByVal ScriptPat
     str = str & "   GetSettingsEntry = GetSettingsEntryEx(Script(""Name""), EntryName)" & vbNewLine
     str = str & "End Function" & vbNewLine
     
+    ' CreateCommand() module-level function
+    str = str & "Function CreateCommand(commandName)" & vbNewLine
+    str = str & "   Set CreateCommand = _ " & vbNewLine
+    str = str & "         ICreateCommand(Script(""Name""), commandName)" & vbNewLine
+    str = str & "End Function" & vbNewLine
+    
+    ' OpenCommand() module-level function
+    str = str & "Function OpenCommand(commandName)" & vbNewLine
+    str = str & "   Set OpenCommand = _ " & vbNewLine
+    str = str & "         IOpenCommand(Script(""Name""), commandName)" & vbNewLine
+    str = str & "End Function" & vbNewLine
+    
+    ' DeleteCommand() module-level function
+    str = str & "Function DeleteCommand(commandName)" & vbNewLine
+    str = str & "   Set DeleteCommand = _ " & vbNewLine
+    str = str & "         IDeleteCommand(Script(""Name""), commandName)" & vbNewLine
+    str = str & "End Function" & vbNewLine
+    
     ' WriteSettingsEntry() module-level function
     str = str & "Sub WriteSettingsEntry(EntryName, EntryValue)" & vbNewLine
     str = str & "   WriteSettingsEntryEx Script(""Name""), EntryName, EntryValue" & vbNewLine

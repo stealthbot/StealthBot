@@ -58,7 +58,7 @@ Public Function OpenDatabase(Optional ByVal DatabasePath As String = vbNullStrin
     
 End Function
 
-Public Function OpenCommand(ByVal strCommand As String) As Boolean
+Public Function OpenCommand(ByVal strCommand As String, Optional ByVal strScriptOwner As String) As Boolean
     
     Dim command_access_node   As IXMLDOMNode
     Dim command_documentation As IXMLDOMNode
@@ -66,20 +66,29 @@ Public Function OpenCommand(ByVal strCommand As String) As Boolean
     Dim command_aliases       As IXMLDOMNodeList
     Dim Alias                 As IXMLDOMNode
     Dim attrs                 As IXMLDOMAttribute
+    Dim xpath                 As String
+    
+    Call OpenDatabase
     
     Set m_command_node = m_database.documentElement
     Set m_aliases = Nothing
     Set m_params = Nothing
+    
     
 
     If (m_command_node Is Nothing) Then
         Exit Function
     End If
     
-	Set m_command_node = m_command_node.selectSingleNode("./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "']")
+    If strScriptOwner = vbNullString Then
+        xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "']"
+    Else
+        xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "' and @owner = '" & strScriptOwner & "']"
+    End If
+    
+    Set m_command_node = m_command_node.selectSingleNode(xpath)
     Set m_aliases = getAliases(m_command_node)
     Set m_params = getParameters(m_command_node)
-    
     
     If (m_command_node Is Nothing) Then
         Exit Function
@@ -88,13 +97,13 @@ Public Function OpenCommand(ByVal strCommand As String) As Boolean
 End Function
 
 '// 06/13/2009 JSM - Created function
-Public Function CreateCommand(ByVal strCommand As String) As Boolean
+Public Function CreateCommand(ByVal strCommand As String, Optional ByVal strScriptOwner As String) As Boolean
 
     Dim l_command             As IXMLDOMElement
     Dim l_aliases             As IXMLDOMElement
     Dim l_documentation       As IXMLDOMElement
     Dim l_description         As IXMLDOMElement
-    Dim l_Parameters           As IXMLDOMElement
+    Dim l_Parameters          As IXMLDOMElement
     Dim l_Access              As IXMLDOMElement
         
     Call OpenDatabase
@@ -109,6 +118,12 @@ Public Function CreateCommand(ByVal strCommand As String) As Boolean
     
     '// set the command name
     Call l_command.setAttribute("name", strCommand)
+    
+    '// set the owner if necessary
+    If strScriptOwner <> vbNullString Then
+        Call l_command.setAttribute("owner", strScriptOwner)
+    End If
+    
     
     '// create heirarchy
     Call l_command.appendChild(l_aliases)

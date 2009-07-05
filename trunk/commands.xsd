@@ -122,6 +122,7 @@
               </xsd:element>
             </xsd:sequence>
             <xsd:attribute name="name" type="xsd:string" />
+			<xsd:attribute name="owner" type="xsd:string" />
             <xsd:attribute name="token" type="xsd:string" />
             <xsd:attribute name="enabled" type="xsd:string" />
           </xsd:complexType>
