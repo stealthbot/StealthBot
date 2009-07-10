@@ -505,6 +505,8 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
     
     SetVeto oldVeto 'Reset the old veto, this is for recursion
     RunInAll = veto 'Was this particular event vetoed?
+    
+    frmChat.SControl.Error.Clear
 End Function
 
 Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Variant) As Boolean

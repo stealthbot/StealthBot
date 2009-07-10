@@ -6742,7 +6742,8 @@ Private Function OnExec(ByVal Username As String, ByRef dbAccess As udtGetAccess
     frmChat.SControl.ExecuteStatement msgData
     
     If ((Err.Number <> 0) And (Not InBot)) Then
-        cmdRet(0) = "Error #" & Err.Number & ": " & Err.description
+        cmdRet(0) = "Error executing: #" & Err.Number & " - " & Err.description
+        Err.Clear
     End If
 End Function
 
@@ -7643,7 +7644,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
             If (Parameter.IsOptional) Then
                 If (Command.Parameters.Count > I) Then
                     If (Command.Parameters.Item(I + 1).IsOptional) Then
-                        If (Parameter.dataType = "number") Then
+                        If (Parameter.DataType = "number") Then
                             If (StrictIsNumeric(Splt(loopCount)) = False) Then
                                 bln = True
                             End If
@@ -7658,7 +7659,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
         
             If (bln = False) Then
                 ' ...
-                If (Parameter.dataType = "number") Then
+                If (Parameter.DataType = "number") Then
                     Dim lVal As Long
 
                     If (StrictIsNumeric(Splt(loopCount)) = False) Then
@@ -7675,11 +7676,11 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
                     '    Exit Function
                     'End If
                     
-                ElseIf (Parameter.dataType = "string") Then
+                ElseIf (Parameter.DataType = "string") Then
                     Set regex = New RegExp
                 
                     With regex
-                        .pattern = Parameter.pattern
+                        .Pattern = Parameter.Pattern
                         .Global = True
                     End With
                     
@@ -7797,7 +7798,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
             ' ...
             If (Parameter.IsOptional) Then
                 ' ...
-                If (Parameter.dataType = "number") Then
+                If (Parameter.DataType = "number") Then
                     ' ...
                     If (StrictIsNumeric(Splt(loopCount)) = False) Then
                         bln = True
@@ -7811,7 +7812,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
                 
                     For Each Restriction In Parameter.Restrictions
                         With regex
-                            .pattern = Restriction.MatchMessage
+                            .Pattern = Restriction.MatchMessage
                             .Global = True
                         End With
 
