@@ -631,6 +631,8 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "sdetail":       Call OnSDetail(Username, dbAccess, msgData, InBot, cmdRet())
         Case "exec":          Call OnExec(Username, dbAccess, msgData, InBot, cmdRet())
         Case "initperf":      Call OnInitPerf(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "unblock":       Call OnUnblock(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "unfilter":      Call OnUnfilter(Username, dbAccess, msgData, InBot, cmdRet())
         Case Else
             blnNoCmd = True
     End Select
@@ -2001,7 +2003,7 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Dim tmpCount  As Integer
     Dim BanCount  As Integer
     Dim I         As Integer
-    Dim j         As Integer ' ...
+    Dim J         As Integer ' ...
     Dim userCount As Integer ' ...
     
     ' redefine array size
@@ -2024,15 +2026,15 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
         ' ...
         If (g_Channel.Banlist(I).IsDuplicateBan = False) Then
             ' ...
-            For j = 1 To g_Channel.Banlist.Count
+            For J = 1 To g_Channel.Banlist.Count
                 ' ...
-                If (StrComp(g_Channel.Banlist(j).DisplayName, g_Channel.Banlist(I).DisplayName, _
+                If (StrComp(g_Channel.Banlist(J).DisplayName, g_Channel.Banlist(I).DisplayName, _
                         vbTextCompare) = 0) Then
                 
                     ' ...
                     userCount = (userCount + 1)
                 End If
-            Next j
+            Next J
             
             ' ...
             tmpbuf(tmpCount) = _
@@ -2756,6 +2758,38 @@ Private Function OnBlock(ByVal Username As String, ByRef dbAccess As udtGetAcces
     cmdRet(0) = tmpbuf
 End Function ' end function OnBlock
 
+Private Function OnUnblock(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim z As String
+    Dim I As Integer
+    Dim Total As Integer
+    
+    z = ReadINI("BlockList", "Total", "filters.ini")
+    
+    If (StrictIsNumeric(z)) Then
+        Total = Int(z)
+        
+        For I = 0 To Total
+            If (LCase(msgData) = LCase(ReadINI("BlockList", "Filter" & I, "filters.ini"))) Then
+                Exit For
+            ElseIf (I = Total) Then
+                cmdRet(0) = """" & msgData & """ is not blocked."
+                Exit Function
+            End If
+        Next
+        If I < Total Then
+            For I = I To (Total - 1)
+                WriteINI "BlockList", "Filter" & I, ReadINI("BlockList", "Filter" & (I + 1), "filters.ini"), "filters.ini"
+            Next
+        End If
+        WriteINI "BlockList", "Total", (Total - 1), "filters.ini"
+        cmdRet(0) = "Removed """ & msgData & """ from the blocked users list."
+    Else
+        cmdRet(0) = "Your filters file has been edited manually and is no longer valid. Please delete it."
+    End If
+End Function
+
 ' handle idletime command
 Private Function OnIdleTime(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -3035,6 +3069,40 @@ Private Function OnFilter(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' return message
     cmdRet(0) = tmpbuf
 End Function ' end function OnFilter
+
+Private Function OnUnfilter(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    Dim z As String
+    Dim I As Integer
+    Dim Total As Integer
+    
+    z = ReadINI("TextFilters", "Total", "filters.ini")
+    
+    If (StrictIsNumeric(z)) Then
+        Total = Int(z)
+        
+        For I = 0 To Total
+            If (LCase(msgData) = LCase(ReadINI("TextFilters", "Filter" & I, "filters.ini"))) Then
+                Exit For
+            ElseIf (I = Total) Then
+                cmdRet(0) = """" & msgData & """ is not filtered."
+                Exit Function
+            End If
+        Next
+        If I < Total Then
+            For I = I To (Total - 1)
+                WriteINI "TextFilters", "Filter" & I, ReadINI("TextFilters", "Filter" & (I + 1), "filters.ini"), "filters.ini"
+            Next
+        End If
+        WriteINI "TextFilters", "Total", (Total - 1), "filters.ini"
+        cmdRet(0) = "Removed """ & msgData & """ from the message filter list."
+    Else
+        cmdRet(0) = "Your filters file has been edited manually and is no longer valid. Please delete it."
+    End If
+    
+    Call frmChat.LoadArray(LOAD_FILTERS, gFilters())
+End Function
 
 ' handle trigger command
 Private Function OnTrigger(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -5226,7 +5294,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                         ' do we have a valid parameter Length?
                         If (Len(pmsg)) Then
                             Dim Splt() As String
-                            Dim j      As Integer
+                            Dim J      As Integer
                         
                             If (InStr(1, pmsg, ",", vbBinaryCompare) <> 0) Then
                                 ' we no longer officially support the use of multiple
@@ -5244,11 +5312,11 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                                 Splt(0) = pmsg
                             End If
                             
-                            For j = 0 To UBound(Splt)
+                            For J = 0 To UBound(Splt)
                                 Dim tmp As udtGetAccessResponse ' ...
                                 
                                 ' ...
-                                tmp = GetAccess(Splt(j), "GROUP")
+                                tmp = GetAccess(Splt(J), "GROUP")
                             
                                 If (dbAccess.Access < tmp.Access) Then
                                     cmdRet(0) = "Error: You do not have sufficient access to " & _
@@ -5257,7 +5325,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                                     Exit Function
                                 End If
                                 
-                                If ((StrComp(Splt(j), user, vbTextCompare) = 0) And _
+                                If ((StrComp(Splt(J), user, vbTextCompare) = 0) And _
                                     (dbType = "GROUP")) Then
                                     
                                     cmdRet(0) = "Error: You cannot make a group a member of " & _
@@ -5283,9 +5351,9 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                                         End If
                                     End If
                                 End If
-                            Next j
+                            Next J
                             
-                            If (j < (UBound(Splt) + 1)) Then
+                            If (J < (UBound(Splt) + 1)) Then
                                 cmdRet(0) = "Error: The specified group(s) could " & _
                                     "not be found."
                                     
@@ -6737,7 +6805,7 @@ End Function
 Private Function OnExec(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    On Error Resume Next
+    'On Error Resume Next
 
     frmChat.SControl.ExecuteStatement msgData
     
@@ -7028,17 +7096,17 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 
                 ' ...
                 If (Flags <> vbNullString) Then
-                    Dim j As Integer ' ...
+                    Dim J As Integer ' ...
                 
-                    For j = 1 To Len(Flags)
-                        If (InStr(1, DB(I).Flags, Mid$(Flags, j, 1), _
+                    For J = 1 To Len(Flags)
+                        If (InStr(1, DB(I).Flags, Mid$(Flags, J, 1), _
                             vbBinaryCompare) = 0) Then
                             
                             Exit For
                         End If
-                    Next j
+                    Next J
                     
-                    If (j = (Len(Flags) + 1)) Then
+                    If (J = (Len(Flags) + 1)) Then
                         ' ...
                         res = IIf(blnChecked, res, True)
                     Else
@@ -7180,7 +7248,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
     If (found) Then
         Dim bak As udtDatabase ' ...
         
-        Dim j   As Integer ' ...
+        Dim J   As Integer ' ...
         
         ' ...
         bak = DB(I)
@@ -7204,9 +7272,9 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
             End With
         Else
             ' ...
-            For j = I To UBound(DB) - 1
-                DB(j) = DB(j + 1)
-            Next j
+            For J = I To UBound(DB) - 1
+                DB(J) = DB(J + 1)
+            Next J
             
             ' redefine array size
             ReDim Preserve DB(UBound(DB) - 1)
@@ -7236,18 +7304,18 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                                 
                                 Splt() = Split(DB(I).Groups, ",")
                                 
-                                For j = LBound(Splt) To UBound(Splt)
-                                    If (StrComp(bak.Username, Splt(j), vbTextCompare) = 0) Then
+                                For J = LBound(Splt) To UBound(Splt)
+                                    If (StrComp(bak.Username, Splt(J), vbTextCompare) = 0) Then
                                         innerfound = True
                                     
                                         Exit For
                                     End If
-                                Next j
+                                Next J
                             
                                 If (innerfound) Then
                                     Dim k As Integer ' ...
                                     
-                                    For k = (j + 1) To UBound(Splt)
+                                    For k = (J + 1) To UBound(Splt)
                                         Splt(k - 1) = Splt(k)
                                     Next k
                                     

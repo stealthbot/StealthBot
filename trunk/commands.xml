@@ -2423,7 +2423,24 @@
     </documentation>
 
     <access>
-      <rank>80</rank>
+      <rank>100</rank>
+      <flags>
+        <flag>M</flag>
+      </flags>
+    </access>
+  </command>
+  
+    <command name="unfilter">
+    <aliases />
+
+    <documentation>
+      <description>
+        stops filtering any incoming messages containing the specified phrase.
+      </description>
+    </documentation>
+
+    <access>
+      <rank>100</rank>
       <flags>
         <flag>M</flag>
       </flags>
@@ -2440,7 +2457,24 @@
     </documentation>
 
     <access>
-      <rank>80</rank>
+      <rank>100</rank>
+      <flags>
+        <flag>M</flag>
+      </flags>
+    </access>
+  </command>
+  
+    <command name="unblock">
+    <aliases />
+
+    <documentation>
+      <description>
+        stops filtering any incoming message from the specified user.
+      </description>
+    </documentation>
+
+    <access>
+      <rank>100</rank>
       <flags>
         <flag>M</flag>
       </flags>
