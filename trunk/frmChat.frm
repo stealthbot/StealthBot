@@ -1,10 +1,10 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
@@ -902,6 +902,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -927,7 +928,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1994,7 +1994,7 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             With rtbWhispers
                 .Visible = False
                 .selStart = 0
-                .selLength = InStr(1, .text, vbLf, vbBinaryCompare)
+                .selLength = InStr(1, .Text, vbLf, vbBinaryCompare)
                 If BotVars.Logging < 2 Then Print #1, Left$(vbCrLf, -2 * CLng((I + 1) = UBound(saElements)))
                 .SelText = vbNullString
                 .Visible = True
@@ -2011,13 +2011,13 @@ Sub AddWhisper(ParamArray saElements() As Variant)
         End Select
         
         With rtbWhispers
-            .selStart = Len(.text)
+            .selStart = Len(.Text)
             .selLength = 0
             .SelColor = RTBColors.TimeStamps
             If .SelBold = True Then .SelBold = False
             If .SelItalic = True Then .SelItalic = False
             .SelText = s
-            .selStart = Len(.text)
+            .selStart = Len(.Text)
         End With
         
         For I = LBound(saElements) To UBound(saElements) Step 2
@@ -2026,12 +2026,12 @@ Sub AddWhisper(ParamArray saElements() As Variant)
             
             If Len(saElements(I + 1)) > 0 Then
                 With rtbWhispers
-                    .selStart = Len(.text)
+                    .selStart = Len(.Text)
                     L = .selStart
                     .selLength = 0
                     .SelColor = saElements(I)
                     .SelText = saElements(I + 1) & Left$(vbCrLf, -2 * CLng((I + 1) = UBound(saElements)))
-                    .selStart = Len(.text)
+                    .selStart = Len(.Text)
                 End With
             End If
         Next I
@@ -2585,7 +2585,7 @@ Private Sub ClanHandler_CandidateList(ByVal Status As Byte, Users() As String)
         End If
     End If
     
-    RunInAll "Event_ClanCandidateList", Status, Users
+    RunInAll "Event_ClanCandidateList", Status, ConvertStringArray(Users)
 End Sub
 
 Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
@@ -3351,7 +3351,7 @@ Private Sub lvChannel_dblClick()
             .SelText = s
             
             ' This is correct - sets the cursor properly
-            cboSendSelStart = Len(.text)
+            cboSendSelStart = Len(.Text)
             cboSendSelLength = 0
             
             .SetFocus
@@ -3369,8 +3369,8 @@ Private Sub lvChannel_KeyUp(KeyCode As Integer, Shift As Integer)
         
         With lvChannel
             If Not (.SelectedItem Is Nothing) Then
-                cboSend.selStart = Len(cboSend.text)
-                cboSend.SelText = .SelectedItem.text
+                cboSend.selStart = Len(cboSend.Text)
+                cboSend.SelText = .SelectedItem.Text
     
                 KeyCode = 0
                 Shift = 0
@@ -3391,8 +3391,8 @@ Private Sub lvFriendList_KeyUp(KeyCode As Integer, Shift As Integer)
         
         With lvFriendList
             If Not (.SelectedItem Is Nothing) Then
-                cboSend.selStart = Len(cboSend.text)
-                cboSend.SelText = .SelectedItem.text
+                cboSend.selStart = Len(cboSend.Text)
+                cboSend.SelText = .SelectedItem.Text
     
                 KeyCode = 0
                 Shift = 0
@@ -3413,8 +3413,8 @@ Private Sub lvClanList_KeyUp(KeyCode As Integer, Shift As Integer)
         
         With lvClanList
             If Not (.SelectedItem Is Nothing) Then
-                cboSend.selStart = Len(cboSend.text)
-                cboSend.SelText = .SelectedItem.text
+                cboSend.selStart = Len(cboSend.Text)
+                cboSend.SelText = .SelectedItem.Text
     
                 KeyCode = 0
                 Shift = 0
@@ -3427,17 +3427,17 @@ End Sub
 
 Private Sub lvFriendList_dblClick()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
-        cboSend.text = cboSend.text & lvFriendList.SelectedItem.text
+        cboSend.Text = cboSend.Text & lvFriendList.SelectedItem.Text
         cboSend.SetFocus
-        cboSend.selStart = Len(cboSend.text)
+        cboSend.selStart = Len(cboSend.Text)
     End If
 End Sub
 
 Private Sub lvClanList_dblClick()
-    If Not (lvClanList.SelectedItem Is Nothing) And Len(cboSend.text) < 200 Then
-        cboSend.text = cboSend.text & lvClanList.SelectedItem.text
+    If Not (lvClanList.SelectedItem Is Nothing) And Len(cboSend.Text) < 200 Then
+        cboSend.Text = cboSend.Text & lvClanList.SelectedItem.Text
         cboSend.SetFocus
-        cboSend.selStart = Len(cboSend.text)
+        cboSend.selStart = Len(cboSend.Text)
     End If
 End Sub
 
@@ -3467,7 +3467,7 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, 
             mnuPopWebProfile.Enabled = False
         End If
         
-        mnuPopup.Tag = lvChannel.SelectedItem.text 'Record which user is selected at time of right-clicking. - FrOzeN
+        mnuPopup.Tag = lvChannel.SelectedItem.Text 'Record which user is selected at time of right-clicking. - FrOzeN
         
         PopupMenu mnuPopup
     End If
@@ -3493,12 +3493,12 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, x As Sin
         If m_lCurItemIndex = 0 Then   ' no item under the mouse pointer
             ListToolTip.Destroy
         Else
-            ListToolTip.title = "Information for " & lvFriendList.ListItems(m_lCurItemIndex).text
+            ListToolTip.Title = "Information for " & lvFriendList.ListItems(m_lCurItemIndex).Text
             
             Dim sTemp As String
             
             If ((lItemIndex > 0) And (g_Friends.Count > 0)) Then
-                lItemIndex = FriendListHandler.UsernameToFLIndex(lvFriendList.ListItems(m_lCurItemIndex).text)
+                lItemIndex = FriendListHandler.UsernameToFLIndex(lvFriendList.ListItems(m_lCurItemIndex).Text)
             
                 With g_Friends.Item(lItemIndex)
 '                    Private Const FRL_OFFLINE& = &H0
@@ -3576,8 +3576,8 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single
             'UserAccess = GetCumulativeAccess(lvChannel.ListItems(m_lCurItemIndex).text, "USER")
         
             ' ...
-            ListToolTip.title = _
-                "Information for " & lvChannel.ListItems(m_lCurItemIndex).text
+            ListToolTip.Title = _
+                "Information for " & lvChannel.ListItems(m_lCurItemIndex).Text
                 
             ' ...
             'If (UserAccess.Name <> vbNullString) Then
@@ -3599,7 +3599,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single
             'End If
                 
             
-            lItemIndex = g_Channel.GetUserIndex(lvChannel.ListItems(m_lCurItemIndex).text)
+            lItemIndex = g_Channel.GetUserIndex(lvChannel.ListItems(m_lCurItemIndex).Text)
             
             If (lItemIndex > 0) Then
                 With g_Channel.Users(lItemIndex)
@@ -3676,7 +3676,7 @@ End Sub
 'End Sub
 
 Sub mnuClearWW_Click()
-    rtbWhispers.text = ""
+    rtbWhispers.Text = ""
     AddWhisper RTBColors.ConsoleText, ">> Whisper window cleared."
 End Sub
 
@@ -3772,7 +3772,7 @@ Private Sub mnuFLpopDemote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
             If (.Index < lvFriendList.ListItems.Count) Then
-              AddQ "/f d " & .text, PRIORITY.CONSOLE_MESSAGE
+              AddQ "/f d " & .Text, PRIORITY.CONSOLE_MESSAGE
               'MoveFriend .index, .index + 1
             End If
         End With
@@ -3784,7 +3784,7 @@ Private Sub mnuFLpopPromote_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
         With lvFriendList.SelectedItem
             If (.Index > 1) Then
-              AddQ "/f p " & .text, PRIORITY.CONSOLE_MESSAGE
+              AddQ "/f p " & .Text, PRIORITY.CONSOLE_MESSAGE
               'MoveFriend .index, .index - 1
             End If
         End With
@@ -3795,11 +3795,11 @@ End Sub
 Private Sub MoveFriend(startPos As Integer, endPos As Integer)
     With lvFriendList.ListItems
         If (startPos > endPos) Then
-            .Add endPos, , .Item(startPos).text, , .Item(startPos).SmallIcon
+            .Add endPos, , .Item(startPos).Text, , .Item(startPos).SmallIcon
             .Item(endPos).ListSubItems.Add , , , .Item(startPos + 1).ListSubItems.Item(1).ReportIcon
             .Remove startPos + 1
         Else
-            .Add endPos + 1, , .Item(startPos).text, .Item(startPos).Icon, .Item(startPos).SmallIcon
+            .Add endPos + 1, , .Item(startPos).Text, .Item(startPos).Icon, .Item(startPos).SmallIcon
             .Item(endPos + 1).ListSubItems.Add , , , .Item(startPos).ListSubItems.Item(1).ReportIcon
             .Remove startPos
         End If
@@ -3808,17 +3808,17 @@ End Sub
 
 Private Sub mnuFLPopRemove_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
-        AddQ "/f r " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(lvFriendList.SelectedItem.text), _
+        AddQ "/f r " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(lvFriendList.SelectedItem.Text), _
             PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
 Private Sub mnuFLPopWhisper_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
-        AddQ "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(lvFriendList.SelectedItem.text) & _
-            Space(1) & cboSend.text, PRIORITY.CONSOLE_MESSAGE
+        AddQ "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(lvFriendList.SelectedItem.Text) & _
+            Space(1) & cboSend.Text, PRIORITY.CONSOLE_MESSAGE
             
-        cboSend.text = ""
+        cboSend.Text = ""
     End If
 End Sub
 
@@ -3946,12 +3946,12 @@ Private Sub mnuPopAddLeft_Click()
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
     If txtPre.Enabled Then 'fix for topic 25290 -a
-        If Dii Then txtPre.text = "/w *" Else txtPre.text = "/w "
+        If Dii Then txtPre.Text = "/w *" Else txtPre.Text = "/w "
         
-        txtPre.text = txtPre.text & GetSelectedUser & " "
+        txtPre.Text = txtPre.Text & GetSelectedUser & " "
         
         cboSend.SetFocus
-        cboSend.selStart = Len(cboSend.text)
+        cboSend.selStart = Len(cboSend.Text)
     End If
 End Sub
 
@@ -3966,7 +3966,7 @@ End Sub
 
 Private Sub mnuPopClanWhois_Click()
     If Not (lvClanList.SelectedItem Is Nothing) Then
-        AddQ "/whois " & lvClanList.SelectedItem.text, PRIORITY.CONSOLE_MESSAGE
+        AddQ "/whois " & lvClanList.SelectedItem.Text, PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -3980,16 +3980,16 @@ End Sub
 
 Private Sub mnuPopFLProfile_Click()
     If Not lvFriendList.SelectedItem Is Nothing Then
-        RequestProfile CleanUsername(lvFriendList.SelectedItem.text)
+        RequestProfile CleanUsername(lvFriendList.SelectedItem.Text)
     
-        frmProfile.lblUsername.Caption = lvFriendList.SelectedItem.text
+        frmProfile.lblUsername.Caption = lvFriendList.SelectedItem.Text
         frmProfile.Show
     End If
 End Sub
 
 Private Sub mnuPopFLWhois_Click()
     If Not (lvFriendList.SelectedItem Is Nothing) Then
-        AddQ "/whois " & lvFriendList.SelectedItem.text, PRIORITY.CONSOLE_MESSAGE
+        AddQ "/whois " & lvFriendList.SelectedItem.Text, PRIORITY.CONSOLE_MESSAGE
     End If
 End Sub
 
@@ -4042,21 +4042,21 @@ Private Sub mnuPopWhisper_Click()
     On Error Resume Next
     If Not PopupMenuUserCheck Then Exit Sub 'Check user selected is the same one that was right-clicked on. - FrOzeN
     
-    If cboSend.text <> vbNullString Then
+    If cboSend.Text <> vbNullString Then
         AddQ "/w " & _
             IIf(Dii And usingGameConventions, "*", "") & CleanUsername(GetSelectedUser) & Space(1) & _
-                cboSend.text, PRIORITY.CONSOLE_MESSAGE
+                cboSend.Text, PRIORITY.CONSOLE_MESSAGE
         
-        cboSend.AddItem cboSend.text, 0
-        cboSend.text = vbNullString
+        cboSend.AddItem cboSend.Text, 0
+        cboSend.Text = vbNullString
         cboSend.SetFocus
     End If
 End Sub
 
 Sub mnuClear_Click()
-    rtbChat.text = vbNullString
+    rtbChat.Text = vbNullString
     rtbChatLength = 0
-    rtbWhispers.text = vbNullString
+    rtbWhispers.Text = vbNullString
     AddChat RTBColors.InformationText, "Chat and whisper windows cleared."
     cboSend.SetFocus
 End Sub
@@ -4889,32 +4889,32 @@ Private Sub cboSend_KeyUp(KeyCode As Integer, Shift As Integer)
         Case KEY_SPACE
             With cboSend
                 If (LenB(LastWhisper) > 0) Then
-                    If (Len(.text) >= 3) Then
-                        If StrComp(Left$(.text, 3), "/r ", vbTextCompare) = 0 Then
+                    If (Len(.Text) >= 3) Then
+                        If StrComp(Left$(.Text, 3), "/r ", vbTextCompare) = 0 Then
                             .selStart = 0
-                            .selLength = Len(.text)
+                            .selLength = Len(.Text)
                             .SelText = _
                                 "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(LastWhisper) & " "
-                            .selStart = Len(.text)
+                            .selStart = Len(.Text)
                         End If
                     End If
                     
-                    If (Len(.text) >= 7) Then
-                        If StrComp(Left$(.text, 7), "/reply ", vbTextCompare) = 0 Then
+                    If (Len(.Text) >= 7) Then
+                        If StrComp(Left$(.Text, 7), "/reply ", vbTextCompare) = 0 Then
                             .selStart = 0
-                            .selLength = Len(.text)
+                            .selLength = Len(.Text)
                             .SelText = _
                                 "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(LastWhisper) & " "
-                            .selStart = Len(.text)
+                            .selStart = Len(.Text)
                         End If
                     End If
                 End If
                 
                 If (LenB(LastWhisperTo) > 0) Then
-                    If (Len(.text) >= 4) Then
-                        If StrComp(Left$(.text, 4), "/rw ", vbTextCompare) = 0 Then
+                    If (Len(.Text) >= 4) Then
+                        If StrComp(Left$(.Text, 4), "/rw ", vbTextCompare) = 0 Then
                             .selStart = 0
-                            .selLength = Len(.text)
+                            .selLength = Len(.Text)
                             
                             If StrComp(LastWhisperTo, "%f%") = 0 Then
                                 .SelText = "/f m "
@@ -4923,7 +4923,7 @@ Private Sub cboSend_KeyUp(KeyCode As Integer, Shift As Integer)
                                     "/w " & IIf(Dii And usingGameConventions, "*", "") & CleanUsername(LastWhisperTo) & " "
                             End If
                             
-                            .selStart = Len(.text)
+                            .selStart = Len(.Text)
                         End If
                     End If
                 End If
@@ -5008,8 +5008,8 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     'Unfinished business - suggestion from Engel
                                             
                     If (Not (.SelectedItem Is Nothing)) Then
-                        cboSend.SelText = .SelectedItem.text
-                        cboSend.selStart = cboSend.selStart + Len(.SelectedItem.text)
+                        cboSend.SelText = .SelectedItem.Text
+                        cboSend.selStart = cboSend.selStart + Len(.SelectedItem.Text)
                     End If
                 End If
 
@@ -5069,19 +5069,19 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 
                                 If (x(n) <> vbNullString) Then
                                     If (n <> LBound(x)) Then
-                                        AddQ txtPre.text & x(n) & txtPost.text, PRIORITY.CONSOLE_MESSAGE
+                                        AddQ txtPre.Text & x(n) & txtPost.Text, PRIORITY.CONSOLE_MESSAGE
                                         
-                                        cboSend.AddItem txtPre.text & x(n) & txtPost.text, 0
+                                        cboSend.AddItem txtPre.Text & x(n) & txtPost.Text, 0
                                     Else
-                                        AddQ txtPre.text & cboSend.text & x(n) & txtPost.text, _
+                                        AddQ txtPre.Text & cboSend.Text & x(n) & txtPost.Text, _
                                             PRIORITY.CONSOLE_MESSAGE
                                         
-                                        cboSend.AddItem txtPre.text & cboSend.text & x(n) & txtPost.text, 0
+                                        cboSend.AddItem txtPre.Text & cboSend.Text & x(n) & txtPost.Text, 0
                                     End If
                                 End If
                             Next n
                             
-                            cboSend.text = vbNullString
+                            cboSend.Text = vbNullString
                             
                             MultiLinePaste = True
                         End If
@@ -5164,7 +5164,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         ' ...
                         If (user = vbNullString) Then
                             ' ...
-                            strbuf = .text
+                            strbuf = .Text
                             
                             ' ...
                             If (.selStart > 0) Then
@@ -5180,9 +5180,9 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                             ' ...
                             If (spaceIndex(0) > 0) Then
                                 user = Mid$(strbuf, spaceIndex(0), _
-                                    IIf(spaceIndex(1), spaceIndex(1) - spaceIndex(0), Len(.text)))
+                                    IIf(spaceIndex(1), spaceIndex(1) - spaceIndex(0), Len(.Text)))
                             Else
-                                user = Mid$(strbuf, 1, IIf(spaceIndex(1), spaceIndex(1) - 1, Len(.text)))
+                                user = Mid$(strbuf, 1, IIf(spaceIndex(1), spaceIndex(1) - 1, Len(.Text)))
                             End If
                             
                             ' ...
@@ -5217,7 +5217,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 End If
                                 
                                 ' ...
-                                .text = tmp
+                                .Text = tmp
                                 
                                 ' ...
                                 .selStart = selStart
@@ -5247,18 +5247,18 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
             
                 Select Case (Shift)
                     Case S_CTRL 'CTRL+ENTER - rewhisper
-                        If LenB(cboSend.text) > 0 Then
-                            AddQ "/w " & LastWhisperTo & Space(1) & cboSend.text, _
+                        If LenB(cboSend.Text) > 0 Then
+                            AddQ "/w " & LastWhisperTo & Space(1) & cboSend.Text, _
                                 PRIORITY.CONSOLE_MESSAGE
                                 
-                            cboSend.text = vbNullString
+                            cboSend.Text = vbNullString
                         End If
                         
                     Case S_CTRLSHIFT 'CTRL+SHIFT+ENTER - reply
-                        If LenB(cboSend.text) > 0 Then
-                            AddQ "/w " & LastWhisper & Space(1) & cboSend.text, _
+                        If LenB(cboSend.Text) > 0 Then
+                            AddQ "/w " & LastWhisper & Space(1) & cboSend.Text, _
                                 PRIORITY.CONSOLE_MESSAGE
-                            cboSend.text = vbNullString
+                            cboSend.Text = vbNullString
                         End If
                 
                     Case Else 'normal ENTER - old rules apply
@@ -5268,19 +5268,19 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                         '    Highlighted = False
                         'End If
                     
-                        If (LenB(cboSend.text) > 0) Then
+                        If (LenB(cboSend.Text) > 0) Then
                             On Error Resume Next
                             
                             'If (g_Channel.IsSilent) And Not mnuDisableVoidView.Checked Then
                             '    BNCSBuffer.VoidTrimBuffer
                             'End If
                             
-                            If (Not RunInAll("Event_PressedEnter", cboSend.text)) Then
+                            If (Not RunInAll("Event_PressedEnter", cboSend.Text)) Then
                                 
                                 s = vbNullString
-                                If txtPre.Visible Then s = txtPre.text
-                                s = s & cboSend.text
-                                If txtPost.Visible Then s = s & txtPost.text
+                                If txtPre.Visible Then s = txtPre.Text
+                                s = s & cboSend.Text
+                                If txtPost.Visible Then s = s & txtPost.Text
                             
                                 If (Left$(s, 6) = "/tell ") Then
                                     s = "/w " & Mid$(s, 7)
@@ -5402,9 +5402,9 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                 
                             End If
 theEnd:
-                            cboSend.AddItem cboSend.text, 0
+                            cboSend.AddItem cboSend.Text, 0
                             
-                            cboSend.text = vbNullString
+                            cboSend.Text = vbNullString
                             
                             If Me.WindowState <> vbMinimized Then
                                 cboSend.SetFocus
@@ -5501,7 +5501,7 @@ Private Sub cboSend_KeyPress(KeyAscii As Integer)
         End If
     End With
     
-    If Len(cboSend.text) > 223 Then
+    If Len(cboSend.Text) > 223 Then
         cboSend.ForeColor = vbRed
     Else
         cboSend.ForeColor = vbWhite
@@ -5662,7 +5662,7 @@ End Sub
 Public Sub SControl_Error()
     AddChat RTBColors.ErrorMessageText, "Scripting runtime error " & Chr(39) & SControl.Error.Number & Chr(39) & ": (line " & SControl.Error.line & "; column " & SControl.Error.Column & ")"
     AddChat RTBColors.ErrorMessageText, SControl.Error.description & "."
-    AddChat RTBColors.ErrorMessageText, "Offending line: >> " & SControl.Error.text
+    AddChat RTBColors.ErrorMessageText, "Offending line: >> " & SControl.Error.Text
     
     Err.Clear
     SControl.Error.Clear
@@ -7309,8 +7309,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     s = ReadCfg(MN, "UseRealm")
     If s = "Y" Then BotVars.UseRealm = True Else BotVars.UseRealm = False
     
-    txtPre.text = ""
-    txtPost.text = ""
+    txtPre.Text = ""
+    txtPost.Text = ""
     
     s = ReadCfg(OT, "DisablePrefix")
     If s = "Y" Then txtPre.Visible = False Else txtPre.Visible = True
@@ -7774,7 +7774,7 @@ End Sub
 'This function checks if the user selected when right-clicked is the same one when they click on the menu option. - FrOzeN
 Private Function PopupMenuUserCheck() As Boolean
     If Not (lvChannel.SelectedItem Is Nothing) Then
-        If mnuPopup.Tag <> lvChannel.SelectedItem.text Then
+        If mnuPopup.Tag <> lvChannel.SelectedItem.Text Then
             PopupMenuUserCheck = False
             Exit Function
         End If
@@ -7790,7 +7790,7 @@ Function GetSelectedUsers() As Collection
     
     For I = 1 To lvChannel.ListItems.Count
         If (lvChannel.ListItems(I).Selected) Then
-            Call GetSelectedUsers.Add(lvChannel.ListItems(I).text)
+            Call GetSelectedUsers.Add(lvChannel.ListItems(I).Text)
         End If
     Next I
 End Function
@@ -7802,7 +7802,7 @@ Function GetSelectedUser() As String
         Exit Function
     End If
     
-    GetSelectedUser = lvChannel.SelectedItem.text
+    GetSelectedUser = lvChannel.SelectedItem.Text
 End Function
 
 Function GetRandomPerson() As String
@@ -7857,7 +7857,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
         
             While (Loops < 2)
                 For I = Index To .Count 'for each user
-                    CurrentName = .Item(I).text
+                    CurrentName = .Item(I).Text
                 
                     If (Len(CurrentName) >= Len(toMatch)) Then
                         For c = 1 To Len(toMatch) 'for each letter in their name
@@ -7870,7 +7870,7 @@ Function MatchClosest(ByVal toMatch As String, Optional startIndex As Long = 1) 
                         
                         If (c >= (Len(toMatch) + 1)) Then
                             MatchClosest = _
-                                    .Item(I).text & BotVars.AutoCompletePostfix
+                                    .Item(I).Text & BotVars.AutoCompletePostfix
                             
                             MatchIndex = I
                             
@@ -8092,7 +8092,7 @@ Private Function GetClanSelectedUser() As String
             If .SelectedItem.Index < 1 Then
                 GetClanSelectedUser = vbNullString: Exit Function
             Else
-                GetClanSelectedUser = reverseUsername(.SelectedItem.text)
+                GetClanSelectedUser = reverseUsername(.SelectedItem.Text)
             End If
         End If
     End With

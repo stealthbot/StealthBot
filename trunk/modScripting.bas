@@ -1175,3 +1175,13 @@ Public Function ValidObjectName(sName As String) As Boolean
   
   ValidObjectName = True
 End Function
+
+Public Function ConvertStringArray(sArr() As String) As Variant()
+  Dim vArr() As Variant
+  Dim x As Integer
+  ReDim vArr(LBound(sArr) To UBound(sArr))
+  For x = LBound(sArr) To UBound(sArr)
+    vArr(x) = CVar(sArr(x))
+  Next x
+  ConvertStringArray = vArr
+End Function

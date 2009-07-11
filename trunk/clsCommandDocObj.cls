@@ -29,6 +29,7 @@ Private m_required_flags As String
 Private m_description    As String
 Private m_special_notes  As String
 Private m_enabled        As Boolean
+Private m_owner          As String
 
 Private Sub Class_Initialize()
 
@@ -83,7 +84,8 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal strScript
     If strScriptOwner = vbNullString Then
         xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "']"
     Else
-        xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "' and @owner = '" & strScriptOwner & "']"
+        xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "' and " & _
+                          "translate(@owner, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') = '" & strScriptOwner & "']"
     End If
     
     Set m_command_node = m_command_node.selectSingleNode(xpath)
@@ -557,6 +559,20 @@ Private Function getName(ByRef AnyNode As IXMLDOMNode) As String
 
 End Function
 
+Private Function getOwner(ByRef AnyNode As IXMLDOMNode) As String
+    Dim temp As IXMLDOMNode
+    
+    If (AnyNode Is Nothing) Then
+        Exit Function
+    End If
+    
+    Set temp = AnyNode.Attributes.getNamedItem("owner")
+    If (temp Is Nothing) Then
+        Exit Function
+    End If
+    getOwner = temp.Text
+End Function
+
 Private Function getMatchMessage(ByRef AnyNode As IXMLDOMNode) As String
 
     Dim temp As IXMLDOMNode
@@ -816,6 +832,12 @@ Public Property Get Name() As String
     
 End Property
 
+Public Property Get Owner() As String
+
+    Owner = getOwner(m_command_node)
+    
+End Property
+
 Public Property Get aliases() As Collection
 
     If (m_aliases Is Nothing) Then
@@ -842,6 +864,12 @@ Public Property Let Name(strName As String)
     
     m_name = strName
 
+End Property
+
+Public Property Let Owner(strOwner As String)
+
+    m_owner = strOwner
+    
 End Property
 
 Public Property Get RequiredRank() As Integer
