@@ -123,7 +123,7 @@ Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
                             ShellExecute frmChat.hWnd, "Open", Scripts(s_name).Script("Path"), 0&, 0&, _
                                 vbNormalFocus
                         Else
-                            Shell ReadCfg("Override", "ScriptViewer") & Space(1) & Scripts(s_name).Script("Path")
+                            Shell Chr(34) & ReadCfg("Override", "ScriptViewer") & Chr(34) & Space(1) & Chr(34) & Scripts(s_name).Script("Path") & Chr(34)
                         End If
                     End If
                 End If
