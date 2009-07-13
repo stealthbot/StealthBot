@@ -286,7 +286,7 @@ End Function
 Public Function StripInvalidNameChars(ByVal Username As String) As String
     Dim Allowed(14) As Integer
     Dim I           As Integer
-    Dim J           As Integer
+    Dim j           As Integer
     Dim thisChar    As Integer
     Dim NewUsername As String
     Dim ThisCharOK  As Boolean
@@ -317,11 +317,11 @@ Public Function StripInvalidNameChars(ByVal Username As String) As String
             
             If (Not (IsAlpha(thisChar))) Then
                 If (Not (IsNumber(thisChar))) Then
-                    For J = 0 To UBound(Allowed)
-                        If (thisChar = Allowed(J)) Then
+                    For j = 0 To UBound(Allowed)
+                        If (thisChar = Allowed(j)) Then
                             ThisCharOK = True
                         End If
-                    Next J
+                    Next j
                     
                     If (Not (ThisCharOK)) Then
                         NewUsername = Replace(NewUsername, Chr(thisChar), _
@@ -665,7 +665,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     Dim fso       As FileSystemObject
     Dim I         As Integer  ' ...
     Dim k         As Integer  ' ...
-    Dim J         As Integer  ' ...
+    Dim j         As Integer  ' ...
     Dim found     As Boolean  ' ...
     Dim dbIndex   As Integer  ' ...
     Dim dbCount   As Integer  ' ...
@@ -773,9 +773,9 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                         End If
                         
                         ' ...
-                        For J = 0 To UBound(Splt)
+                        For j = 0 To UBound(Splt)
                             ' ...
-                            gAcc = GetCumulativeGroupAccess(Splt(J))
+                            gAcc = GetCumulativeGroupAccess(Splt(j))
                         
                             ' ...
                             If (GetCumulativeAccess.Access < gAcc.Access) Then
@@ -831,7 +831,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             
                             ' ...
                             bln = False
-                        Next J
+                        Next j
                     End If
                     
                     dbIndex = I
@@ -869,28 +869,28 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             End If
                         ElseIf (StrComp(dynGroups(I).Type, "GAME", vbTextCompare) = 0) Then
                             ' ...
-                            For J = 1 To g_Channel.Users.Count
-                                If (StrComp(Username, g_Channel.Users(J).DisplayName, vbTextCompare) = 0) Then
-                                    If (StrComp(dynGroups(I).Username, g_Channel.Users(J).game, vbTextCompare) = 0) Then
+                            For j = 1 To g_Channel.Users.Count
+                                If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
+                                    If (StrComp(dynGroups(I).Username, g_Channel.Users(j).game, vbTextCompare) = 0) Then
                                         ' ...
                                         doCheck = True
                                     End If
                                     
                                     Exit For
                                 End If
-                            Next J
+                            Next j
                         ElseIf (StrComp(dynGroups(I).Type, "CLAN", vbTextCompare) = 0) Then
                             ' ...
-                            For J = 1 To g_Channel.Users.Count
-                                If (StrComp(Username, g_Channel.Users(J).DisplayName, vbTextCompare) = 0) Then
-                                    If (StrComp(dynGroups(I).Username, g_Channel.Users(J).Clan, vbTextCompare) = 0) Then
+                            For j = 1 To g_Channel.Users.Count
+                                If (StrComp(Username, g_Channel.Users(j).DisplayName, vbTextCompare) = 0) Then
+                                    If (StrComp(dynGroups(I).Username, g_Channel.Users(j).Clan, vbTextCompare) = 0) Then
                                         ' ...
                                         doCheck = True
                                     End If
                                     
                                     Exit For
                                 End If
-                            Next J
+                            Next j
                         End If
                         
                         ' ...
@@ -915,9 +915,9 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                                 End If
                                 
                                 ' ...
-                                For J = 0 To UBound(Splt)
+                                For j = 0 To UBound(Splt)
                                     ' ...
-                                    gAcc = GetCumulativeGroupAccess(Splt(J))
+                                    gAcc = GetCumulativeGroupAccess(Splt(j))
                                 
                                     ' ...
                                     If (tmp.Access < gAcc.Access) Then
@@ -943,7 +943,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                                         ' ...
                                         tmp.BanMessage = gAcc.BanMessage
                                     End If
-                                Next J
+                                Next j
                             End If
     
                             ' ...
@@ -956,19 +956,19 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             End If
                             
                             ' ...
-                            For J = 1 To Len(tmp.Flags)
+                            For j = 1 To Len(tmp.Flags)
                                 ' ...
-                                If (InStr(1, GetCumulativeAccess.Flags, Mid$(tmp.Flags, J, 1), _
+                                If (InStr(1, GetCumulativeAccess.Flags, Mid$(tmp.Flags, j, 1), _
                                         vbBinaryCompare) = 0) Then
                                     
                                     ' ...
                                     GetCumulativeAccess.Flags = GetCumulativeAccess.Flags & _
-                                        Mid$(tmp.Flags, J, 1)
+                                        Mid$(tmp.Flags, j, 1)
                                     
                                     ' ...
                                     bln = True
                                 End If
-                            Next J
+                            Next j
                             
                             ' ...
                             If ((GetCumulativeAccess.BanMessage = vbNullString) Or _
@@ -1049,7 +1049,7 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
         ' ...
         If (InStr(1, gAcc.Groups, ",", vbBinaryCompare) <> 0) Then
             Dim I As Integer ' ...
-            Dim J As Integer ' ...
+            Dim j As Integer ' ...
         
             ' ...
             Splt() = Split(gAcc.Groups, ",")
@@ -1065,16 +1065,16 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
                 End If
                 
                 ' ...
-                For J = 1 To Len(recAcc.Flags)
+                For j = 1 To Len(recAcc.Flags)
                     ' ...
-                    If (InStr(1, gAcc.Flags, Mid$(recAcc.Flags, J, 1), _
+                    If (InStr(1, gAcc.Flags, Mid$(recAcc.Flags, j, 1), _
                         vbBinaryCompare) = 0) Then
                         
                         ' ...
                         gAcc.Flags = gAcc.Flags & _
-                            Mid$(recAcc.Flags, J, 1)
+                            Mid$(recAcc.Flags, j, 1)
                     End If
-                Next J
+                Next j
                 
                 ' ...
                 If ((gAcc.BanMessage = vbNullString) Or _
@@ -1094,16 +1094,16 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
             End If
             
             ' ...
-            For J = 1 To Len(recAcc.Flags)
+            For j = 1 To Len(recAcc.Flags)
                 ' ...
-                If (InStr(1, gAcc.Flags, Mid$(recAcc.Flags, J, 1), _
+                If (InStr(1, gAcc.Flags, Mid$(recAcc.Flags, j, 1), _
                     vbBinaryCompare) = 0) Then
                     
                     ' ...
                     gAcc.Flags = gAcc.Flags & _
-                        Mid$(recAcc.Flags, J, 1)
+                        Mid$(recAcc.Flags, j, 1)
                 End If
-            Next J
+            Next j
             
             ' ...
             If ((gAcc.BanMessage = vbNullString) Or _
@@ -1134,7 +1134,7 @@ Public Function CheckGroup(ByVal Group As String, ByVal Check As String) As Bool
         ' ...
         If (InStr(1, gAcc.Groups, ",", vbBinaryCompare) <> 0) Then
             Dim I As Integer ' ...
-            Dim J As Integer ' ...
+            Dim j As Integer ' ...
         
             ' ...
             Splt() = Split(gAcc.Groups, ",")
@@ -2828,32 +2828,22 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                     bln = True
                 Else
                     ' ...
-                    If (StrComp(Left$(tmp, Len(CurrentUsername)), CurrentUsername, vbTextCompare) = 0) Then
+                    If (((PrepareCheck(LCase$(CurrentUsername)) & ":") Like PrepareCheck(LCase$(Left$(tmp, InStr(1, tmp, ": "))))) Or _
+                        ((PrepareCheck(LCase$(GetCurrentUsername)) & ":") Like PrepareCheck(LCase$(Left$(tmp, InStr(1, tmp, ": ")))))) Then
+
+                        ' ...
+                        CropLen = (CropLen + (InStr(1, tmp, ": ") + 1))
                         
                         ' ...
-                        If ((Mid$(tmp, Len(CurrentUsername) + 1, 2) = ": ") Or _
-                            (Mid$(tmp, Len(CurrentUsername) + 1, 2) = ", ")) Then
-                                
-                            ' ...
-                            CropLen = (CropLen + (Len(CurrentUsername) + 2))
-                                
-                            ' ...
-                            bln = True
-                        End If
-                        
-                    ElseIf (StrComp(Left$(tmp, Len(GetCurrentUsername)), GetCurrentUsername, vbTextCompare) = 0) Then
+                        bln = True
+                    ElseIf (((PrepareCheck(LCase$(CurrentUsername)) & ",") Like PrepareCheck(LCase$(Left$(tmp, InStr(1, tmp, ", "))))) Or _
+                            ((PrepareCheck(LCase$(GetCurrentUsername)) & ",") Like PrepareCheck(LCase$(Left$(tmp, InStr(1, tmp, ", ")))))) Then
+
+                        ' ...
+                        CropLen = (CropLen + (InStr(1, tmp, ", ") + 1))
                         
                         ' ...
-                        If ((Mid$(tmp, Len(GetCurrentUsername) + 1, 2) = ": ") Or _
-                            (Mid$(tmp, Len(GetCurrentUsername) + 1, 2) = ", ")) Then
-                                
-                            ' ...
-                            CropLen = (CropLen + (Len(GetCurrentUsername) + 2))
-                                
-                            ' ...
-                            bln = True
-                        End If
-                        
+                        bln = True
                     Else
                         ' ...
                         If ((StrComp(Left$(Message, Len("ops: ")), "ops: ", vbTextCompare) = 0) Or _
