@@ -1380,7 +1380,7 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
             ' ...
             If (g_Clan.Self.Rank >= 4) Then
                 ' ...
-                frmChat.cboSend.text = vbNullString
+                frmChat.cboSend.Text = vbNullString
             
                 ' ...
                 For I = 1 To g_Clan.Shamans.Count
@@ -2003,7 +2003,7 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
     Dim tmpCount  As Integer
     Dim BanCount  As Integer
     Dim I         As Integer
-    Dim J         As Integer ' ...
+    Dim j         As Integer ' ...
     Dim userCount As Integer ' ...
     
     ' redefine array size
@@ -2026,15 +2026,15 @@ Private Function OnBanned(ByVal Username As String, ByRef dbAccess As udtGetAcce
         ' ...
         If (g_Channel.Banlist(I).IsDuplicateBan = False) Then
             ' ...
-            For J = 1 To g_Channel.Banlist.Count
+            For j = 1 To g_Channel.Banlist.Count
                 ' ...
-                If (StrComp(g_Channel.Banlist(J).DisplayName, g_Channel.Banlist(I).DisplayName, _
+                If (StrComp(g_Channel.Banlist(j).DisplayName, g_Channel.Banlist(I).DisplayName, _
                         vbTextCompare) = 0) Then
                 
                     ' ...
                     userCount = (userCount + 1)
                 End If
-            Next J
+            Next j
             
             ' ...
             tmpbuf(tmpCount) = _
@@ -4878,8 +4878,9 @@ Private Function OnQuote(ByVal Username As String, ByRef dbAccess As udtGetAcces
     tmpbuf = "Quote: " & _
         GetRandomQuote
     
-    If (Len(tmpbuf) = 0) Then
-        tmpbuf = "Error reading quotes, or no quote file exists."
+    ' this was len() = 0, which doesn't work cause we add "Quote:" above -andy
+    If (Len(tmpbuf) < 8) Then
+        tmpbuf = "Error reading your quotes, or no quote file exists."
     ElseIf (Len(tmpbuf) > 223) Then
         ' try one more time
         tmpbuf = "Quote: " & _
@@ -5294,7 +5295,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                         ' do we have a valid parameter Length?
                         If (Len(pmsg)) Then
                             Dim Splt() As String
-                            Dim J      As Integer
+                            Dim j      As Integer
                         
                             If (InStr(1, pmsg, ",", vbBinaryCompare) <> 0) Then
                                 ' we no longer officially support the use of multiple
@@ -5312,11 +5313,11 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                                 Splt(0) = pmsg
                             End If
                             
-                            For J = 0 To UBound(Splt)
+                            For j = 0 To UBound(Splt)
                                 Dim tmp As udtGetAccessResponse ' ...
                                 
                                 ' ...
-                                tmp = GetAccess(Splt(J), "GROUP")
+                                tmp = GetAccess(Splt(j), "GROUP")
                             
                                 If (dbAccess.Access < tmp.Access) Then
                                     cmdRet(0) = "Error: You do not have sufficient access to " & _
@@ -5325,7 +5326,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                                     Exit Function
                                 End If
                                 
-                                If ((StrComp(Splt(J), user, vbTextCompare) = 0) And _
+                                If ((StrComp(Splt(j), user, vbTextCompare) = 0) And _
                                     (dbType = "GROUP")) Then
                                     
                                     cmdRet(0) = "Error: You cannot make a group a member of " & _
@@ -5351,9 +5352,9 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                                         End If
                                     End If
                                 End If
-                            Next J
+                            Next j
                             
-                            If (J < (UBound(Splt) + 1)) Then
+                            If (j < (UBound(Splt) + 1)) Then
                                 cmdRet(0) = "Error: The specified group(s) could " & _
                                     "not be found."
                                     
@@ -6378,7 +6379,7 @@ Private Function OnHelpAttr(ByVal Username As String, ByRef dbAccess As udtGetAc
     If (commands.length > 0) Then
         For I = 0 To commands.length - 1
             thisCommand = commands(I).parentNode.parentNode.parentNode. _
-                Attributes.getNamedItem("name").text
+                Attributes.getNamedItem("name").Text
                 
             If (StrComp(thisCommand, lastCommand, vbTextCompare) <> 0) Then
                 tmpbuf = tmpbuf & thisCommand & ", "
@@ -6459,7 +6460,7 @@ Private Function OnHelpRank(ByVal Username As String, ByRef dbAccess As udtGetAc
     If (commands.length > 0) Then
         For I = 0 To commands.length - 1
             thisCommand = commands(I).parentNode.parentNode.Attributes. _
-                getNamedItem("name").text
+                getNamedItem("name").Text
                 
             If (StrComp(thisCommand, lastCommand, vbTextCompare) <> 0) Then
                 tmpbuf = tmpbuf & thisCommand & ", "
@@ -6523,7 +6524,7 @@ Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAcc
         End If
     
         ' ...
-        Call PromoteMember(reverseUsername(liUser.text), liUser.SmallIcon + 1)
+        Call PromoteMember(reverseUsername(liUser.Text), liUser.SmallIcon + 1)
         
         ' ...
         'If (InBot = False) Then
@@ -6567,7 +6568,7 @@ Private Function OnDemote(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
         
         ' ...
-        Call DemoteMember(reverseUsername(liUser.text), liUser.SmallIcon - 1)
+        Call DemoteMember(reverseUsername(liUser.Text), liUser.SmallIcon - 1)
         
         ' ...
         'If (InBot = False) Then
@@ -7096,17 +7097,17 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 
                 ' ...
                 If (Flags <> vbNullString) Then
-                    Dim J As Integer ' ...
+                    Dim j As Integer ' ...
                 
-                    For J = 1 To Len(Flags)
-                        If (InStr(1, DB(I).Flags, Mid$(Flags, J, 1), _
+                    For j = 1 To Len(Flags)
+                        If (InStr(1, DB(I).Flags, Mid$(Flags, j, 1), _
                             vbBinaryCompare) = 0) Then
                             
                             Exit For
                         End If
-                    Next J
+                    Next j
                     
-                    If (J = (Len(Flags) + 1)) Then
+                    If (j = (Len(Flags) + 1)) Then
                         ' ...
                         res = IIf(blnChecked, res, True)
                     Else
@@ -7248,7 +7249,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
     If (found) Then
         Dim bak As udtDatabase ' ...
         
-        Dim J   As Integer ' ...
+        Dim j   As Integer ' ...
         
         ' ...
         bak = DB(I)
@@ -7272,9 +7273,9 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
             End With
         Else
             ' ...
-            For J = I To UBound(DB) - 1
-                DB(J) = DB(J + 1)
-            Next J
+            For j = I To UBound(DB) - 1
+                DB(j) = DB(j + 1)
+            Next j
             
             ' redefine array size
             ReDim Preserve DB(UBound(DB) - 1)
@@ -7304,18 +7305,18 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
                                 
                                 Splt() = Split(DB(I).Groups, ",")
                                 
-                                For J = LBound(Splt) To UBound(Splt)
-                                    If (StrComp(bak.Username, Splt(J), vbTextCompare) = 0) Then
+                                For j = LBound(Splt) To UBound(Splt)
+                                    If (StrComp(bak.Username, Splt(j), vbTextCompare) = 0) Then
                                         innerfound = True
                                     
                                         Exit For
                                     End If
-                                Next J
+                                Next j
                             
                                 If (innerfound) Then
                                     Dim k As Integer ' ...
                                     
-                                    For k = (J + 1) To UBound(Splt)
+                                    For k = (j + 1) To UBound(Splt)
                                         Splt(k - 1) = Splt(k)
                                     Next k
                                     
@@ -7967,7 +7968,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
             Dim flag        As IXMLDOMNode
         
             ' ...
-            If (StrComp(Command.Attributes.getNamedItem("name").text, _
+            If (StrComp(Command.Attributes.getNamedItem("name").Text, _
                 CWord, vbTextCompare) = 0) Then
                 
                 ' ...
@@ -7976,7 +7977,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                 ' ...
                 For Each Access In accessGroup.childNodes
                     If (LCase$(Access.nodeName) = "rank") Then
-                        If ((gAcc.Access) >= (Val(Access.text))) Then
+                        If ((gAcc.Access) >= (Val(Access.Text))) Then
                             ValidateAccess = True
                         
                             Exit For
@@ -7984,7 +7985,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                     '// 09/03/2008 JSM - Modified code to use the <flags> element
                     ElseIf (LCase$(Access.nodeName = "flags")) Then
                         For Each flag In Access.childNodes
-                            If (InStr(1, gAcc.Flags, flag.text, vbBinaryCompare) <> 0) Then
+                            If (InStr(1, gAcc.Flags, flag.Text, vbBinaryCompare) <> 0) Then
                                 ValidateAccess = True
                                 Exit For
                             End If
@@ -8007,7 +8008,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                     
                     ' ...
                     For Each Restriction In Restrictions
-                        If (StrComp(Restriction.Attributes.getNamedItem("name").text, _
+                        If (StrComp(Restriction.Attributes.getNamedItem("name").Text, _
                             restrictionName, vbTextCompare) = 0) Then
                             
                             ' ...
@@ -8016,7 +8017,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                             ' ...
                             For Each Access In accessGroup.childNodes
                                 If (LCase$(Access.nodeName) = "rank") Then
-                                    If ((gAcc.Access) >= (Val(Access.text))) Then
+                                    If ((gAcc.Access) >= (Val(Access.Text))) Then
                                         ValidateAccess = True
                                     
                                         Exit For
@@ -8024,7 +8025,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                                 '// 09/03/2008 JSM - Modified code to use the <flags> element
                                 ElseIf (LCase$(Access.nodeName = "flags")) Then
                                     For Each flag In Access.childNodes
-                                        If (InStr(1, gAcc.Flags, flag.text, vbBinaryCompare) <> 0) Then
+                                        If (InStr(1, gAcc.Flags, flag.Text, vbBinaryCompare) <> 0) Then
                                             ValidateAccess = True
                                             Exit For
                                         End If

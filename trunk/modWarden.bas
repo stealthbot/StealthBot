@@ -6,7 +6,7 @@ Private Enum SHA1Versions
   BrokenSHA1 = 1
   LockdownSHA1 = 2
   WardenSHA1 = 3
-  max = &HFFFFFFFF
+  Max = &HFFFFFFFF
 End Enum
 
 Private Type SHA1Context
@@ -112,11 +112,11 @@ Public Function WardenData(Instance As Long, sData As String, Send As Boolean) A
     Case WARDEN_SUCCESS: '//All Went Well, Don't handle the packet Internally
         If (MDebug("warden")) Then
             Select Case Asc(Left$(Data, 1))
-                Case 0:    frmChat.AddChat RTBColors.InformationText, "[Warden] Handeled Module Information"
-                Case 1:    frmChat.AddChat RTBColors.InformationText, "[Warden] Handeled Module Transfer"
-                Case 2:    frmChat.AddChat RTBColors.InformationText, "[Warden] Handeled Cheat Check"
-                Case 5:    frmChat.AddChat RTBColors.InformationText, "[Warden] Handeled New Crypt Keys"
-                Case Else: frmChat.AddChat RTBColors.InformationText, "[Warden] Handeled Unknown 0x" & ZeroOffset(Asc(Left(Data, 1)), 2)
+                Case 0:    frmChat.AddChat RTBColors.InformationText, "[Warden] Handled Module Information"
+                Case 1:    frmChat.AddChat RTBColors.InformationText, "[Warden] Handled Module Transfer"
+                Case 2:    frmChat.AddChat RTBColors.InformationText, "[Warden] Handled Cheat Check"
+                Case 5:    frmChat.AddChat RTBColors.InformationText, "[Warden] Handled New Crypt Keys"
+                Case Else: frmChat.AddChat RTBColors.InformationText, "[Warden] Handled Unknown 0x" & ZeroOffset(Asc(Left(Data, 1)), 2)
             End Select
         End If
     'case WARDEN_UNKNOWN_PROTOCOL '//Not used, will be when adding support for MCP/UDP

@@ -1933,24 +1933,18 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
             
             frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your CD-key is for another game."
-            
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] For more information, visit " & _
-                "http://www.blizzard.com/support/?id=awr0639p ."
         
         Case 5:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
             
             frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your CD-key is banned. " & _
-                "For more information, visit http://www.blizzard.com/support/?id=asc0638p ."
+                "For more information, visit http://us.blizzard.com/support/article.xml?locale=en_US&articleId=20637 ."
         
         Case 6:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
             
             frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your CD-key is currently in " & _
                 "use under the owner name: " & ExtraInfo & "."
-            
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] For more information, visit " & _
-                "http://www.blizzard.com/support/?id=asc0729p ."
         
         Case 7:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
@@ -1962,23 +1956,14 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
             
             frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your expansion CD-key is currently " & _
                 "in use under the owner name: " & ExtraInfo & "."
-            
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] For more information, visit " & _
-                "http://www.blizzard.com/support/?id=asc0729p ."
         
         Case 9:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
-            
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your expansion CD-key is banned. " & _
-                "For more information, visit http://www.blizzard.com/support/?id=asc0638p ."
         
         Case 10:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Version check passed!"
             
             frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Your expansion CD-key is for the wrong game."
-            
-            frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] For more information, visit " & _
-                "http://www.blizzard.com/support/?id=awr0639p ."
         
         Case Else
             frmChat.AddChat RTBColors.ErrorMessageText, "Unhandled 0x51 response! Value: " & Message
