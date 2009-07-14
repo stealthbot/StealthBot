@@ -2828,16 +2828,16 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                     bln = True
                 Else
                     ' ...
-                    If (((PrepareCheck(LCase$(CurrentUsername)) & ":") Like PrepareCheck(LCase$(Left$(tmp, InStr(1, tmp, ": "))))) Or _
-                        ((PrepareCheck(LCase$(GetCurrentUsername)) & ":") Like PrepareCheck(LCase$(Left$(tmp, InStr(1, tmp, ": ")))))) Then
+                    If (UsernameRegex(CurrentUsername & ":", Left$(tmp, InStr(1, tmp, ": "))) Or _
+                        UsernameRegex(GetCurrentUsername & ":", Left$(tmp, InStr(1, tmp, ": ")))) Then
 
                         ' ...
                         CropLen = (CropLen + (InStr(1, tmp, ": ") + 1))
                         
                         ' ...
                         bln = True
-                    ElseIf (((PrepareCheck(LCase$(CurrentUsername)) & ",") Like PrepareCheck(LCase$(Left$(tmp, InStr(1, tmp, ", "))))) Or _
-                            ((PrepareCheck(LCase$(GetCurrentUsername)) & ",") Like PrepareCheck(LCase$(Left$(tmp, InStr(1, tmp, ", ")))))) Then
+                    ElseIf (UsernameRegex(CurrentUsername & ",", Left$(tmp, InStr(1, tmp, ", "))) Or _
+                        UsernameRegex(GetCurrentUsername & ",", Left$(tmp, InStr(1, tmp, ", ")))) Then
 
                         ' ...
                         CropLen = (CropLen + (InStr(1, tmp, ", ") + 1))
@@ -2965,6 +2965,21 @@ ERROR_HANDLER:
     Exit Function
 End Function
 
+Public Function UsernameRegex(ByVal Username As String, ByVal sPattern As String) As Boolean
+    Dim prepName As String
+    Dim prepPatt As String
+
+    prepName = Replace(Username, "[", "{")
+    prepName = Replace(prepName, "]", "}")
+    prepName = LCase$(prepName)
+    
+    prepPatt = Replace(sPattern, "\[", "{")
+    prepPatt = Replace(prepPatt, "\]", "}")
+    prepPatt = LCase$(prepPatt)
+
+    UsernameRegex = (prepName Like prepPatt)
+End Function
+
 ' ...
 Public Function convertAlias(ByVal cmdName As String) As String
     ' ...
@@ -3009,7 +3024,7 @@ Public Function convertAlias(ByVal cmdName As String) As String
         If (Not (Alias Is Nothing)) Then
             '// 09/03/2008 JSM - Modified code to use the <aliases> element
             convertAlias = _
-                Alias.parentNode.parentNode.Attributes.getNamedItem("name").text
+                Alias.parentNode.parentNode.Attributes.getNamedItem("name").Text
             
             Exit Function
         End If
@@ -3089,7 +3104,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
     End If
     
     ' ...
-    rtbChatLength = Len(rtb.text)
+    rtbChatLength = Len(rtb.Text)
 
     ' ...
     For I = LBound(saElements) To UBound(saElements) Step 3
@@ -3144,7 +3159,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         
             With rtb
                 .selStart = 0
-                .selLength = InStr(1, .text, vbLf, vbBinaryCompare)
+                .selLength = InStr(1, .Text, vbLf, vbBinaryCompare)
                 .SelFontName = rtb.Font.Name
                 .SelText = ""
             End With
@@ -3160,7 +3175,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
         s = GetTimeStamp()
         
         With rtb
-            .selStart = Len(.text)
+            .selStart = Len(.Text)
             .selLength = 0
             .SelFontName = rtb.Font.Name
             .SelBold = False
@@ -3185,7 +3200,7 @@ Public Sub DisplayRichText(ByRef rtb As RichTextBox, ByRef saElements() As Varia
                     L = InStr(1, saElements(I + 2), "{\rtf", vbTextCompare)
                 Wend
             
-                L = Len(rtb.text)
+                L = Len(rtb.Text)
             
                 With rtb
                     .selStart = L
