@@ -597,20 +597,20 @@ Public Sub BNCSParsePacket(ByVal PacketData As String)
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in BNCSParsePacket()."
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & " in BNCSParsePacket()."
     
     Exit Sub
 End Sub
 
 Public Function StrToHex(ByVal String1 As String, Optional ByVal NoSpaces As Boolean = False) As String
-    Dim strTemp As String, strReturn As String, I As Long
+    Dim strTemp As String, strReturn As String, i As Long
     
-    For I = 1 To Len(String1)
-        strTemp = Hex(Asc(Mid(String1, I, 1)))
+    For i = 1 To Len(String1)
+        strTemp = Hex(Asc(Mid(String1, i, 1)))
         If Len(strTemp) = 1 Then strTemp = "0" & strTemp
         
         strReturn = strReturn & IIf(NoSpaces, "", Space(1)) & strTemp
-    Next I
+    Next i
         
     StrToHex = strReturn
 End Function
@@ -626,14 +626,14 @@ Public Function RShift(ByVal pnValue As Long, ByVal pnShift As Long) As Double
     RShift = CDbl(pnValue \ (2 ^ pnShift))
 End Function
 
-Public Function KillNull(ByVal text As String) As String
-    Dim I As Integer
-    I = InStr(1, text, Chr(0))
-    If (I = 0) Then
-        KillNull = text
+Public Function KillNull(ByVal Text As String) As String
+    Dim i As Integer
+    i = InStr(1, Text, Chr(0))
+    If (i = 0) Then
+        KillNull = Text
         Exit Function
     End If
-    KillNull = Left$(text, I - 1)
+    KillNull = Left$(Text, i - 1)
 End Function
 
 Public Function ParsePing(strData As String) As Long
@@ -643,12 +643,12 @@ Public Function ParsePing(strData As String) As Long
     CopyMemory ParsePing, ByVal strPing$, 4
 End Function
 
-Public Function CVL(X As String) As Long
+Public Function CVL(x As String) As Long
     'on error resume next
-    If Len(X) < 4 Then
+    If Len(x) < 4 Then
         Exit Function
     End If
-    CopyMemory CVL, ByVal X, 4
+    CopyMemory CVL, ByVal x, 4
 End Function
 
 
@@ -695,19 +695,19 @@ Public Function GetNumValue(ByVal c As String) As Long
     
 End Function
 
-Public Sub NullTruncString(ByRef text As String)
+Public Sub NullTruncString(ByRef Text As String)
 'on error resume next
-    Dim I As Integer
+    Dim i As Integer
     
-    I = InStr(text, Chr(0))
-    If I = 0 Then Exit Sub
+    i = InStr(Text, Chr(0))
+    If i = 0 Then Exit Sub
     
-    text = Left$(text, I - 1)
+    Text = Left$(Text, i - 1)
 End Sub
 
-Public Sub FullJoin(Channel As String, Optional ByVal I As Long = -1)
-    If I >= 0 Then
-        PBuffer.InsertDWord CLng(I)
+Public Sub FullJoin(Channel As String, Optional ByVal i As Long = -1)
+    If i >= 0 Then
+        PBuffer.InsertDWord CLng(i)
     Else
         PBuffer.InsertDWord &H2
     End If
@@ -717,11 +717,11 @@ End Sub
 
 Public Function HexToStr(ByVal Hex1 As String) As String
 'on error resume next
-    Dim strReturn As String, I As Long
+    Dim strReturn As String, i As Long
     If Len(Hex1) Mod 2 <> 0 Then Exit Function
-    For I = 1 To Len(Hex1) Step 2
-    strReturn = strReturn & Chr(Val("&H" & Mid(Hex1, I, 2)))
-    Next I
+    For i = 1 To Len(Hex1) Step 2
+    strReturn = strReturn & Chr(Val("&H" & Mid(Hex1, i, 2)))
+    Next i
     HexToStr = strReturn
 End Function
 
@@ -759,17 +759,17 @@ Public Sub RequestSpecificKey(ByVal sUsername As String, ByVal sKey As String)
     End With
 End Sub
 
-Public Sub SetProfile(ByVal Location As String, ByVal description As String, Optional ByVal Sex As String = vbNullString)
+Public Sub SetProfile(ByVal Location As String, ByVal Description As String, Optional ByVal Sex As String = vbNullString)
     'Dim i As Byte
     Const MAX_DESCR As Long = 510
     Const MAX_SEX As Long = 200
     Const MAX_LOC As Long = 200
     
     '// Sanity checks
-    If LenB(description) = 0 Then
-        description = Space(1)
-    ElseIf Len(description) > MAX_DESCR Then
-        description = Left$(description, MAX_DESCR)
+    If LenB(Description) = 0 Then
+        Description = Space(1)
+    ElseIf Len(Description) > MAX_DESCR Then
+        Description = Left$(Description, MAX_DESCR)
     End If
     
     If LenB(Sex) = 0 Then
@@ -796,7 +796,7 @@ Public Sub SetProfile(ByVal Location As String, ByVal description As String, Opt
         .InsertNTString "Profile\Sex"
                                             '// Values()
         .InsertNTString Location
-        .InsertNTString description
+        .InsertNTString Description
         .InsertNTString Sex
         
         .SendPacket &H27
@@ -807,14 +807,17 @@ End Sub
 '//  Will not ERASE if a field is left blank
 '// 2007-06-07: SEX value is ignored because Blizzard removed that
 '//     field from profiles
-Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
+'// 2009-07-14: corrected a problem in this method, thanks Jack (t=42494) -andy
+'//     method was erasing profile data
+Public Sub SetProfileEx(ByVal Location As String, ByVal Description As String)
     'Dim i As Byte
     Const MAX_DESCR As Long = 510
     Const MAX_SEX As Long = 200
     Const MAX_LOC As Long = 200
     
-    Dim nKeys As Integer
+    Dim nKeys As Integer, i As Integer
     Dim pKeys(1 To 3) As String
+    Dim pData(1 To 3) As String
     
     If (LenB(Location) > 0) Then
         If (Len(Location) > MAX_LOC) Then
@@ -823,41 +826,34 @@ Public Sub SetProfileEx(ByVal Location As String, ByVal description As String)
         
         nKeys = nKeys + 1
         pKeys(nKeys) = "Profile\Location"
+        pData(nKeys) = Location
     End If
     
     '// Sanity checks
-    If (LenB(description) > 0) Then
-        If (Len(description) > MAX_DESCR) Then
-            description = Left$(description, MAX_DESCR)
+    If (LenB(Description) > 0) Then
+        If (Len(Description) > MAX_DESCR) Then
+            Description = Left$(Description, MAX_DESCR)
         End If
         
         nKeys = nKeys + 1
         pKeys(nKeys) = "Profile\Description"
+        pData(nKeys) = Description
     End If
         
-'    If LenB(Sex) = 0 Then
-'        If Len(Sex) > MAX_SEX Then
-'            Sex = Left$(Sex, MAX_SEX)
-'        End If
-'
-'        nKeys = nKeys + 1
-'        pKeys(nKeys) = "Profile\Sex"
-'    End If
-    
     If nKeys > 0 Then
-        Dim I As Integer
-    
         With PBuffer
             .InsertDWord &H1                    '// #accounts
             .InsertDWord nKeys                  '// #keys
             .InsertNTString CurrentUsername     '// account to update
                                                 '// keys
-            For I = 1 To nKeys
-                .InsertNTString pKeys(I)
-            Next I
+            For i = 1 To nKeys
+                .InsertNTString pKeys(i)
+            Next i
            
-            .InsertNTString Location
-            .InsertNTString description '// Values()
+            '// Values()
+            For i = 1 To nKeys
+                .InsertNTString pData(i)
+            Next i
             
             .SendPacket &H27
         End With
@@ -888,11 +884,11 @@ Public Sub sPrintF(ByRef source As String, ByVal nText As String, _
     
     nText = Replace(nText, "%S", "%s")
     
-    Dim I As Byte
-    I = 0
+    Dim i As Byte
+    i = 0
     
     Do While (InStr(1, nText, "%s") <> 0)
-        Select Case I
+        Select Case i
             Case 0
                 If IsEmpty(a) Then GoTo theEnd
                 nText = Replace(nText, "%s", a, 1, 1)
@@ -918,7 +914,7 @@ Public Sub sPrintF(ByRef source As String, ByVal nText As String, _
                 If IsEmpty(H) Then GoTo theEnd
                 nText = Replace(nText, "%s", H, 1, 1)
         End Select
-        I = I + 1
+        i = i + 1
     Loop
 theEnd:
     source = source & nText
@@ -1086,7 +1082,7 @@ ParseStatString_Exit:
 
 ParseStatString_Error:
 
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure ParseStatString of Module modParsing"
+    Debug.Print "Error " & Err.Number & " (" & Err.Description & ") in procedure ParseStatString of Module modParsing"
     outbuf = "- Error parsing statstring. [" & Replace(Statstring, Chr(0), "") & "]"
     
     Resume ParseStatString_Exit
@@ -1252,12 +1248,12 @@ Public Function GetCharacterName(ByVal Statstring As String, ByVal Start As Byte
     GetCharacterName = InStr(Start, Statstring, ",") + 1
 End Function
 
-Function MakeLong(X As String) As Long
+Function MakeLong(x As String) As Long
  'on error resume next
-    If Len(X) < 4 Then
+    If Len(x) < 4 Then
         Exit Function
     End If
-    CopyMemory MakeLong, ByVal X, 4
+    CopyMemory MakeLong, ByVal x, 4
 End Function
 
 Public Sub StrCpy(ByRef source As String, ByVal nText As String)
@@ -1265,19 +1261,19 @@ Public Sub StrCpy(ByRef source As String, ByVal nText As String)
     source = source & nText
 End Sub
 
-Public Sub MakeArray(ByVal text As String, ByRef nArray() As String)
-    Dim I As Long
+Public Sub MakeArray(ByVal Text As String, ByRef nArray() As String)
+    Dim i As Long
     ReDim nArray(0)
-    For I = 0 To Len(text)
-        nArray(I) = Mid$(text, I + 1, 1)
-        If I <> Len(text) Then
+    For i = 0 To Len(Text)
+        nArray(i) = Mid$(Text, i + 1, 1)
+        If i <> Len(Text) Then
             ReDim Preserve nArray(0 To UBound(nArray) + 1)
         End If
-    Next I
+    Next i
 End Sub
 
 Public Function GetRaceAndIcon(ByRef Icon As String, ByRef Race As String, ByVal Product As String, Optional ByRef WCGCode As String) As Integer
-    Dim I As Integer, IMLPos As Integer
+    Dim i As Integer, IMLPos As Integer
     Dim PerTier As Integer
         
     If Product = "3RAW" Then
@@ -1291,38 +1287,38 @@ Public Function GetRaceAndIcon(ByRef Icon As String, ByRef Race As String, ByVal
     Select Case Race
         Case "H"
             IMLPos = 1
-            I = 0
+            i = 0
             Race = "Human"
         Case "N"
             IMLPos = 1 + (PerTier * 1)
-            I = 10
+            i = 10
             Race = "Night Elves"
         Case "U"
             IMLPos = 1 + (PerTier * 2)
-            I = 20
+            i = 20
             Race = "Undead"
         Case "O"
             IMLPos = 1 + (PerTier * 3)
-            I = 30
+            i = 30
             Race = "Orcs"
         Case "R"
             IMLPos = 1 + (PerTier * 4)
-            I = 40
+            i = 40
             Race = "Random"
         Case "T", "D"
             IMLPos = 1 + (PerTier * 5)
-            I = 50
+            i = 50
             Race = "Tournament"
         
         Case Else
             IMLPos = 1 + (PerTier * 5)
-            I = 50
+            i = 50
             Race = "unknown"
             
     End Select
     
     If StrictIsNumeric(Icon) Then
-        I = I + CInt(Icon)
+        i = i + CInt(Icon)
         IMLPos = IMLPos + (CInt(Icon) - 1)
     End If
     
@@ -1354,7 +1350,7 @@ Public Function GetRaceAndIcon(ByRef Icon As String, ByRef Race As String, ByVal
         End Select
     Else
         If Product = "3RAW" Then
-            Select Case I
+            Select Case i
                 'Peon Icon
                 Case 1, 11, 21, 31, 41
                     Icon = "peon"
@@ -1389,7 +1385,7 @@ Public Function GetRaceAndIcon(ByRef Icon As String, ByRef Race As String, ByVal
                     IMLPos = ICUNKNOWN ' 26
             End Select
         Else
-            Select Case I
+            Select Case i
                 'Peon Icon
                 Case 1, 11, 21, 31, 41, 51
                     Icon = "peon"
@@ -1464,7 +1460,7 @@ End Function
 
 '// COLORMODIFY - where L is passed as the start position of the text to be checked
 Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
-    Dim I As Long
+    Dim i As Long
     Dim s As String
     Dim temp As Long
     
@@ -1473,27 +1469,27 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
     temp = L
     
     With rtb
-        If InStr(temp, .text, "ÿc", vbTextCompare) > 0 Then
+        If InStr(temp, .Text, "ÿc", vbTextCompare) > 0 Then
             .Visible = False
             Do
-                I = InStr(temp, .text, "ÿc", vbTextCompare)
+                i = InStr(temp, .Text, "ÿc", vbTextCompare)
                 
-                If StrictIsNumeric(Mid$(.text, I + 2, 1)) Then
-                    s = GetColorVal(Mid$(.text, I + 2, 1))
-                    .selStart = I - 1
+                If StrictIsNumeric(Mid$(.Text, i + 2, 1)) Then
+                    s = GetColorVal(Mid$(.Text, i + 2, 1))
+                    .selStart = i - 1
                     .selLength = 3
                     .SelText = vbNullString
-                    .selStart = I - 1
-                    .selLength = Len(.text) - I
+                    .selStart = i - 1
+                    .selLength = Len(.Text) - i
                     .SelColor = s
                 Else
-                    Select Case Mid$(.text, I + 2, 1)
+                    Select Case Mid$(.Text, i + 2, 1)
                         Case "i"
-                            .selStart = I - 1
+                            .selStart = i - 1
                             .selLength = 3
                             .SelText = vbNullString
-                            .selStart = I - 1
-                            .selLength = Len(.text) - 1
+                            .selStart = i - 1
+                            .selLength = Len(.Text) - 1
                             If .SelItalic = True Then
                                 .SelItalic = False
                             Else
@@ -1501,11 +1497,11 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             End If
                             
                         Case "b", "."       'BOLD
-                            .selStart = I - 1
+                            .selStart = i - 1
                             .selLength = 3
                             .SelText = vbNullString
-                            .selStart = I - 1
-                            .selLength = Len(.text) - 1
+                            .selStart = i - 1
+                            .selLength = Len(.Text) - 1
                             If .SelBold = True Then
                                 .SelBold = False
                             Else
@@ -1513,11 +1509,11 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             End If
                             
                         Case "u", "."       'underline
-                            .selStart = I - 1
+                            .selStart = i - 1
                             .selLength = 3
                             .SelText = vbNullString
-                            .selStart = I - 1
-                            .selLength = Len(.text) - 1
+                            .selStart = i - 1
+                            .selLength = Len(.Text) - 1
                             If .SelUnderline = True Then
                                 .SelUnderline = False
                             Else
@@ -1525,59 +1521,59 @@ Public Sub ColorModify(ByRef rtb As RichTextBox, ByRef L As Long)
                             End If
                             
                         Case ";"
-                            .selStart = I - 1
+                            .selStart = i - 1
                             .selLength = 3
                             .SelText = vbNullString
-                            .selStart = I - 1
-                            .selLength = Len(.text) - 1
+                            .selStart = i - 1
+                            .selLength = Len(.Text) - 1
                             .SelColor = HTMLToRGBColor("8D00CE")    'Purple
                             
                         Case ":"
-                            .selStart = I - 1
+                            .selStart = i - 1
                             .selLength = 3
                             .SelText = vbNullString
-                            .selStart = I - 1
-                            .selLength = Len(.text) - 1
+                            .selStart = i - 1
+                            .selLength = Len(.Text) - 1
                             .SelColor = 186408      '// Lighter green
                             
                         Case "<"
-                            .selStart = I - 1
+                            .selStart = i - 1
                             .selLength = 3
                             .SelText = vbNullString
-                            .selStart = I - 1
-                            .selLength = Len(.text) - 1
+                            .selStart = i - 1
+                            .selLength = Len(.Text) - 1
                             .SelColor = HTMLToRGBColor("00A200")    'Dark green
                         'Case Else: Debug.Print s
                     End Select
                 End If
                 temp = temp + 1
                 
-            Loop While InStr(temp, .text, "ÿc", vbTextCompare) > 0
+            Loop While InStr(temp, .Text, "ÿc", vbTextCompare) > 0
             .Visible = True
         End If
         
         '// Check for SC color codes
         temp = L
         
-        If InStr(temp, .text, "Á", vbBinaryCompare) > 0 Then
+        If InStr(temp, .Text, "Á", vbBinaryCompare) > 0 Then
             Do
-                I = InStr(temp, .text, "Á", vbBinaryCompare)
-                s = GetScriptColorString(Mid$(.text, I + 1, 1))
+                i = InStr(temp, .Text, "Á", vbBinaryCompare)
+                s = GetScriptColorString(Mid$(.Text, i + 1, 1))
                 
                 If Len(s) > 0 Then
                     .Visible = False
-                    .selStart = I - 1
+                    .selStart = i - 1
                     .selLength = 2
                     .SelText = vbNullString
-                    .selStart = I - 1
-                    .selLength = Len(.text) - 1
+                    .selStart = i - 1
+                    .selLength = Len(.Text) - 1
                     .SelColor = s
                     .Visible = True
                 End If
                 
                 temp = temp + 1
                 
-            Loop While InStr(temp, .text, "Á", vbBinaryCompare) > 0
+            Loop While InStr(temp, .Text, "Á", vbBinaryCompare) > 0
         End If
     End With
 End Sub
@@ -1614,7 +1610,7 @@ End Function
 'Originally from DPChat by Zorm - cleaned up and adapted to my needs
 Public Sub ProfileParse(Data As String)
     On Error Resume Next
-    Dim X As Integer
+    Dim x As Integer
     Dim ProfileEnd As String
     Dim SplitProfile() As String
     
