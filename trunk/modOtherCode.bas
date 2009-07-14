@@ -2827,8 +2827,32 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                     ' ...
                     bln = True
                 Else
-                    ' ...
-                    If (UsernameRegex(CurrentUsername & ":", Left$(tmp, InStr(1, tmp, ": "))) Or _
+                    If (StrComp(Left$(tmp, Len(CurrentUsername)), CurrentUsername, vbTextCompare) = 0) Then
+                        
+                        ' ...
+                        If ((Mid$(tmp, Len(CurrentUsername) + 1, 2) = ": ") Or _
+                            (Mid$(tmp, Len(CurrentUsername) + 1, 2) = ", ")) Then
+                                
+                            ' ...
+                            CropLen = (CropLen + (Len(CurrentUsername) + 2))
+                                
+                            ' ...
+                            bln = True
+                        End If
+                        
+                    ElseIf (StrComp(Left$(tmp, Len(GetCurrentUsername)), GetCurrentUsername, vbTextCompare) = 0) Then
+                        
+                        ' ...
+                        If ((Mid$(tmp, Len(GetCurrentUsername) + 1, 2) = ": ") Or _
+                            (Mid$(tmp, Len(GetCurrentUsername) + 1, 2) = ", ")) Then
+                                
+                            ' ...
+                            CropLen = (CropLen + (Len(GetCurrentUsername) + 2))
+                                
+                            ' ...
+                            bln = True
+                        End If
+                    ElseIf (UsernameRegex(CurrentUsername & ":", Left$(tmp, InStr(1, tmp, ": "))) Or _
                         UsernameRegex(GetCurrentUsername & ":", Left$(tmp, InStr(1, tmp, ": ")))) Then
 
                         ' ...
