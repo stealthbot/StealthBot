@@ -83,11 +83,29 @@ Private Const WARDEN_INVALID_INSTANCE        As Long = &H10 '//Instance passed t
 Public WardenInstance As Long
 
 Public Sub WardenCleanup(Instance As Long)
-  Call warden_cleanup(Instance)
+  On Error GoTo trap
+  If (Not Instance = 0) Then Call warden_cleanup(Instance)
+  Exit Sub
+  
+trap:
+  If (Err.Number = 53) Then
+    frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Warden.dll not found, Warden support will not work."
+    frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Make sure you've got the latest Warden data from http://www.stealthbot.net/board/index.php?showtopic=41491"
+    Err.Clear
+  End If
 End Sub
 
 Public Function WardenInitilize(ByVal SocketHandle As Long) As Long
+  On Error GoTo trap
   WardenInitilize = warden_init(SocketHandle)
+  Exit Function
+  
+trap:
+  If (Err.Number = 53) Then
+    frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Warden.dll not found, Warden support will not work."
+    frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Make sure you've got the latest Warden data from http://www.stealthbot.net/board/index.php?showtopic=41491"
+    Err.Clear
+  End If
 End Function
 
 Public Function WardenData(Instance As Long, sData As String, Send As Boolean) As Boolean
