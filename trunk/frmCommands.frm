@@ -25,6 +25,16 @@ Begin VB.Form frmCommands
    ScaleWidth      =   9330
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
+   Begin VB.ComboBox cboCommandGroup 
+      BackColor       =   &H00993300&
+      ForeColor       =   &H00FFFFFF&
+      Height          =   315
+      Left            =   120
+      Style           =   2  'Dropdown List
+      TabIndex        =   20
+      Top             =   360
+      Width           =   3855
+   End
    Begin VB.CommandButton cmdAliasAdd 
       Caption         =   "+"
       Height          =   315
@@ -42,19 +52,19 @@ Begin VB.Form frmCommands
       Width           =   270
    End
    Begin MSComctlLib.TreeView trvCommands 
-      Height          =   4935
+      Height          =   4575
       Left            =   120
       TabIndex        =   11
-      Top             =   390
+      Top             =   750
       Width           =   3855
       _ExtentX        =   6800
-      _ExtentY        =   8705
+      _ExtentY        =   8070
       _Version        =   393217
       Indentation     =   575
       LabelEdit       =   1
       LineStyle       =   1
       Sorted          =   -1  'True
-      Style           =   7
+      Style           =   6
       FullRowSelect   =   -1  'True
       Appearance      =   1
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -257,10 +267,56 @@ Private Type SelectedElement
     TheNodeType As NodeType
     TheXMLElement As IXMLDOMElement
     IsDirty As Boolean
-    CommandName As String
+    commandName As String
     ArgumentName As String
     restrictionName As String
 End Type
+
+
+Private Declare Function SendMessageLong Lib "user32" Alias "SendMessageA" _
+    (ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, _
+    ByVal lParam As Long) As Long
+Private Const WM_SETREDRAW As Long = &HB
+Private Const TV_FIRST As Long = &H1100
+Private Const TVM_GETNEXTITEM As Long = (TV_FIRST + 10)
+Private Const TVM_DELETEITEM As Long = (TV_FIRST + 1)
+Private Const TVGN_ROOT As Long = &H0
+
+
+' Quicky clear the treeview identified by the hWnd parameter
+Sub ClearTreeViewNodes(ByRef trv As TreeView)
+    
+    Dim hWnd As Long
+    Dim hItem As Long
+    
+    hWnd = trv.hWnd
+    
+    
+    ' lock the window update to avoid flickering
+    SendMessageLong hWnd, WM_SETREDRAW, False, &O0
+
+    ' clear the treeview
+    Do
+        hItem = SendMessageLong(hWnd, TVM_GETNEXTITEM, TVGN_ROOT, 0)
+        If hItem <= 0 Then Exit Do
+        SendMessageLong hWnd, TVM_DELETEITEM, &O0, hItem
+    Loop
+    
+    ' unlock the window
+    SendMessageLong hWnd, WM_SETREDRAW, True, &O0
+End Sub
+
+
+Private Sub cboCommandGroup_Click()
+    If PromptToSaveChanges() = True Then
+        ResetForm
+        If cboCommandGroup.ListIndex = 0 Then
+            Call PopulateTreeView
+        Else
+            Call PopulateTreeView(cboCommandGroup.Text)
+        End If
+    End If
+End Sub
 
 Private Sub cmdAliasAdd_Click()
 
@@ -373,6 +429,7 @@ Private Sub Form_Load()
     SetWindowLong trvCommands.hWnd, -16&, lStyle
     
     Call ResetForm
+    Call PopulateOwnerComboBox
     Call PopulateTreeView
     
     Exit Sub
@@ -392,8 +449,33 @@ Private Sub Form_Unload(Cancel As Integer)
     Set m_CommandsDoc = Nothing
 End Sub
 
-'// Reads commands.xml and
-Private Sub PopulateTreeView()
+
+Private Sub PopulateOwnerComboBox()
+    
+    On Error Resume Next
+
+    Dim I   As Integer
+    Dim str As String
+
+    cboCommandGroup.Clear
+    cboCommandGroup.AddItem "Internal Bot Commands"
+    
+    For I = 2 To frmChat.SControl.Modules.Count
+        str = frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
+        If (StrComp(str, "False", vbTextCompare) <> 0) Then
+            cboCommandGroup.AddItem frmChat.SControl.Modules(I).CodeObject.Script("Name")
+        End If
+    Next I
+    cboCommandGroup.ListIndex = 0
+    
+End Sub
+
+
+
+Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
+    
+    Dim xpath             As String
+    
     Dim xmlCommand        As IXMLDOMNode
     Dim xmlArgs           As IXMLDOMNodeList
     Dim xmlArgRestricions As IXMLDOMNodeList
@@ -402,7 +484,7 @@ Private Sub PopulateTreeView()
     Dim nArg              As node
     Dim nArgRestriction   As node
     
-    Dim CommandName       As String
+    Dim commandName       As String
     Dim ArgumentName      As String
     Dim restrictionName   As String
     
@@ -414,47 +496,69 @@ Private Sub PopulateTreeView()
     Dim I                 As Integer
 
     '// reset the treeview
-    trvCommands.Nodes.Clear
+    If trvCommands.Nodes.Count > 0 Then
+        trvCommands.Nodes(1).Selected = True
+    End If
+    Call ClearTreeViewNodes(trvCommands)
+    
+    '// create xpath expression based on strScriptOwner
+    If strScriptOwner = vbNullString Then
+        xpath = "/commands/command"
+        'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
+    Else
+        xpath = "/commands/command[@owner='" & strScriptOwner & "']"
+        'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
+    End If
 
     '// loop through all child nodes
-    For Each xmlCommand In m_CommandsDoc.documentElement.childNodes
-        CommandName = xmlCommand.Attributes.getNamedItem("name").Text
-        Set nCommand = trvCommands.Nodes.Add(, , , CommandName)
-        nCommand.BackColor = txtRank.BackColor
-        nCommand.ForeColor = vbWhite
-        
-        '// 08/30/2008 JSM - check if this command is the first alphabetically
-        If defaultNode Is Nothing Then
-            Set defaultNode = nCommand
-        Else
-            If StrComp(defaultNode.Text, nCommand.Text) > 0 Then
+    For Each xmlCommand In m_CommandsDoc.documentElement.selectNodes(xpath)
+
+        '// skip commands that have an owner attribute if we are only showing internal commands
+        If strScriptOwner = vbNullString And (xmlCommand.Attributes.getNamedItem("owner") Is Nothing) Or _
+           strScriptOwner <> vbNullString And Not (xmlCommand.Attributes.getNamedItem("owner") Is Nothing) Then
+
+
+            commandName = xmlCommand.Attributes.getNamedItem("name").Text
+            Set nCommand = trvCommands.Nodes.Add(, , , commandName)
+            nCommand.BackColor = txtRank.BackColor
+            nCommand.ForeColor = vbWhite
+            
+            '// 08/30/2008 JSM - check if this command is the first alphabetically
+            If defaultNode Is Nothing Then
                 Set defaultNode = nCommand
+            Else
+                If StrComp(defaultNode.Text, nCommand.Text) > 0 Then
+                    Set defaultNode = nCommand
+                End If
             End If
-        End If
+            
+            Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
+            '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
+            '//                  something, even if nothing matches the XPath expression.
+            For I = 0 To (xmlArgs.length - 1)
+                ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").Text
+                Set nArg = trvCommands.Nodes.Add(nCommand, tvwChild, , ArgumentName)
+                nArg.BackColor = txtRank.BackColor
+                nArg.ForeColor = vbWhite
+                
+                Set xmlArgRestricions = xmlArgs(I).selectNodes("restrictions/restriction")
+                
+                For j = 0 To (xmlArgRestricions.length - 1)
+                    restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
+                    Set nArgRestriction = trvCommands.Nodes.Add(nArg, tvwChild, , restrictionName)
+                    nArgRestriction.BackColor = txtRank.BackColor
+                    nArgRestriction.ForeColor = vbWhite
+                Next j
+            Next I
         
-        Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
-        '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
-        '//                  something, even if nothing matches the XPath expression.
-        For I = 0 To (xmlArgs.length - 1)
-            ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").Text
-            Set nArg = trvCommands.Nodes.Add(nCommand, tvwChild, , ArgumentName)
-            nArg.BackColor = txtRank.BackColor
-            nArg.ForeColor = vbWhite
-            
-            Set xmlArgRestricions = xmlArgs(I).selectNodes("restrictions/restriction")
-            
-            For j = 0 To (xmlArgRestricions.length - 1)
-                restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
-                Set nArgRestriction = trvCommands.Nodes.Add(nArg, tvwChild, , restrictionName)
-                nArgRestriction.BackColor = txtRank.BackColor
-                nArgRestriction.ForeColor = vbWhite
-            Next j
-        Next I
+        End If
         
     Next
     
     '// 08/30/2008 JSM - click the first command alphabetically
-    trvCommands_NodeClick defaultNode
+    If Not (defaultNode Is Nothing) Then
+        trvCommands_NodeClick defaultNode
+    End If
     
     
 End Sub
@@ -474,7 +578,7 @@ Private Function PromptToSaveChanges() As Boolean
         End If
         
         '// Get the message for the prompt
-        options = Array(.CommandName, .ArgumentName, .restrictionName)
+        options = Array(.commandName, .ArgumentName, .restrictionName)
         Select Case .TheNodeType
             Case NodeType.nCommand
                 sMessage = StringFormat("You have not saved your changes to {0}. Do you want to save them now?", options)
@@ -508,7 +612,7 @@ End Function
 Private Sub trvCommands_NodeClick(ByVal node As MSComctlLib.node)
 
     Dim nt As NodeType
-    Dim CommandName As String
+    Dim commandName As String
     Dim ArgumentName As String
     Dim restrictionName As String
     Dim options() As Variant '// <-- boo
@@ -523,11 +627,11 @@ Private Sub trvCommands_NodeClick(ByVal node As MSComctlLib.node)
     End If
     
     '// figure out what type of node was clicked on
-    nt = GetNodeInfo(node, CommandName, ArgumentName, restrictionName)
+    nt = GetNodeInfo(node, commandName, ArgumentName, restrictionName)
     '// create an array for the StringFormat function, this function will replace
     '// the {0} {1} and {2} with their respective Values() found below
     '//                {0}           {1}             {2}
-    options = Array(CommandName, ArgumentName, restrictionName)
+    options = Array(commandName, ArgumentName, restrictionName)
     
     Select Case nt
         Case NodeType.nCommand
@@ -545,7 +649,7 @@ Private Sub trvCommands_NodeClick(ByVal node As MSComctlLib.node)
     End Select
     
     '// Update m_SelectedElement so we know which element we are viewing
-    Let m_SelectedElement.CommandName = CommandName
+    Let m_SelectedElement.commandName = commandName
     Let m_SelectedElement.ArgumentName = ArgumentName
     Let m_SelectedElement.restrictionName = restrictionName
     
@@ -568,20 +672,20 @@ End Sub
 
 '// Checks the hiarchy of the treenodes to determine what type of node it is.
 '// 08/29/2008 JSM - Created
-Private Function GetNodeInfo(node As MSComctlLib.node, ByRef CommandName As String, ByRef ArgumentName As String, ByRef restrictionName As String) As NodeType
+Private Function GetNodeInfo(node As MSComctlLib.node, ByRef commandName As String, ByRef ArgumentName As String, ByRef restrictionName As String) As NodeType
     If node.Parent Is Nothing Then
         GetNodeInfo = NodeType.nCommand
-        CommandName = node.Text
+        commandName = node.Text
         ArgumentName = ""
         restrictionName = ""
     ElseIf node.Parent.Parent Is Nothing Then
         GetNodeInfo = NodeType.nArgument
-        CommandName = node.Parent.Text
+        commandName = node.Parent.Text
         ArgumentName = node.Text
         restrictionName = ""
     Else
         GetNodeInfo = NodeType.nRestriction
-        CommandName = node.Parent.Parent.Text
+        commandName = node.Parent.Parent.Text
         ArgumentName = node.Parent.Text
         restrictionName = node.Text
     End If
@@ -923,6 +1027,10 @@ Private Sub ResetForm()
     cmdFlagRemove.Enabled = False
     
     chkDisable.Visible = False
+    
+    m_SelectedElement.IsDirty = False
+    cmdSave.Enabled = False
+    cmdDiscard.Enabled = False
     
 End Sub
 
