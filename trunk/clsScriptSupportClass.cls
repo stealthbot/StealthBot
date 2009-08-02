@@ -330,7 +330,7 @@ End Function
 '//             use it to control whether or not your command responses display publicly.
 '// CC          CC controls whether or not the command string is passed to the Custom Command processor.
 '//             For scripting purposes I will not allow the user to set CC, it is always 0.
-Public Sub Command(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
+Public Sub command(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
     False, Optional ByVal Whispered As Boolean = False)
     
     ' execute command
@@ -1324,14 +1324,18 @@ End Sub
 '    End If
 'End Function
 
+'// 07/08/2009 JSM
+'// These methods have been abstracted using the IOpenCommand, IDeleteCommand, iCreateCommand
+'// and IIsCommand. The implementation is inside modScripting, which creates dynamic functions
+'// that automatically pass the script name.
 ' // ...
-Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional IsLocal As Boolean = False) _
-    As Object
-    
-    Set IsCommand = modOtherCode.IsCommand(str, IsLocal)
-    
-End Function
-
+'Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional IsLocal As Boolean = False) _
+'    As Object
+'
+'    Set IsCommand = modOtherCode.IsCommand(str, IsLocal)
+'
+'End Function
+'
 'Public Function OpenCommand(ByVal strCommand As String) As Object
 '
 '    '// ...
@@ -1353,18 +1357,18 @@ End Function
 '
 'End Function
 
-Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String) As Boolean
+Public Function IsCorrectSyntax(ByVal commandName As String, ByVal commandArgs As String) As Boolean
 
     '// ...
-    IsCorrectSyntax = modCommandCode.IsCorrectSyntax(CommandName, CommandArgs)
+    IsCorrectSyntax = modCommandCode.IsCorrectSyntax(commandName, commandArgs)
     
 End Function
 
-Public Function HasAccess(ByVal Username As String, ByVal CommandName As String, Optional ByVal CommandArgs As _
+Public Function HasAccess(ByVal Username As String, ByVal commandName As String, Optional ByVal commandArgs As _
     String = vbNullString, Optional ByRef outbuf As String) As Boolean
     
     HasAccess = _
-        modCommandCode.HasAccess(Username, CommandName, CommandArgs, outbuf)
+        modCommandCode.HasAccess(Username, commandName, commandArgs, outbuf)
     
 End Function
 
@@ -1547,25 +1551,34 @@ Public Function IGetObjByName(ByVal ModuleID As String, ByVal ObjName As String)
 
 End Function
 
-Public Function ICreateCommand(ByVal scriptName As String, ByVal CommandName As String) As Object
-    Dim Command As clsCommandDocObj
-    Set Command = New clsCommandDocObj
-    Call Command.CreateCommand(CommandName, scriptName)
-    Call Command.OpenCommand(CommandName, scriptName)
-    Set ICreateCommand = Command
+Public Function ICreateCommand(ByVal scriptName As String, ByVal commandName As String) As Object
+    Dim command As clsCommandDocObj
+    Set command = New clsCommandDocObj
+    Call command.CreateCommand(commandName, scriptName)
+    Call command.OpenCommand(commandName, scriptName)
+    Set ICreateCommand = command
 End Function
-Public Function IOpenCommand(ByVal scriptName As String, ByVal CommandName As String) As Object
-    Dim Command As clsCommandDocObj
-    Set Command = New clsCommandDocObj
-    Call Command.OpenCommand(CommandName, scriptName)
-    Set IOpenCommand = Command
+Public Function IOpenCommand(ByVal scriptName As String, ByVal commandName As String) As Object
+    Dim command As clsCommandDocObj
+    Set command = New clsCommandDocObj
+    If command.OpenCommand(commandName, scriptName) Then
+        Set IOpenCommand = command
+    End If
 End Function
-Public Function IDeleteCommand(ByVal scriptName As String, ByVal CommandName As String) As Object
-    Dim Command As clsCommandDocObj
-    Set Command = New clsCommandDocObj
-    Call Command.OpenCommand(CommandName, scriptName)
-    Call Command.Delete
-    Set IDeleteCommand = Command
+Public Function IDeleteCommand(ByVal scriptName As String, ByVal commandName As String) As Object
+    Dim command As clsCommandDocObj
+    Set command = New clsCommandDocObj
+    Call command.OpenCommand(commandName, scriptName)
+    Call command.Delete
+    Set IDeleteCommand = command
+End Function
+
+Public Function IIsCommand(ByVal scriptName As String, ByVal commandText As String, ByVal strUsername As String) As Collection
+    Dim command  As clsCommandDocObj
+    Dim commands As Collection
+    Set command = New clsCommandDocObj
+    Set commands = command.IsCommand(commandText, strUsername, scriptName)
+    Set IIsCommand = commands
 End Function
 
 Public Function Scripts() As Object

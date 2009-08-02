@@ -43,7 +43,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     
     On Error GoTo ERROR_HANDLER
     
-    Dim Command          As clsCommandObj
+    Dim command          As clsCommandObj
     Dim dbAccess         As udtGetAccessResponse
     Dim I                As Integer
     Dim Count            As Integer
@@ -71,21 +71,21 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     End If
 
     ' ...
-    Set Command = IsCommand(Message, IsLocal)
+    Set command = IsCommand(Message, IsLocal)
 
     ' ...
-    Do While (Command.Name <> vbNullString)
+    Do While (command.Name <> vbNullString)
         ' ...
-        If (Command.IsLocal) Then
+        If (command.IsLocal) Then
             execCommand = True
-        ElseIf (HasAccess(Username, Command.Name, Command.Args, outbuf)) Then
+        ElseIf (HasAccess(Username, command.Name, command.args, outbuf)) Then
             execCommand = True
         Else
             execCommand = False
         End If
         
         ' ...
-        m_DisplayOutput = Command.PublicOutput
+        m_DisplayOutput = command.publicOutput
         
         ' ...
         If (execCommand) Then
@@ -99,7 +99,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             End If
             
             ' ...
-            Call executeCommand(Username, dbAccess, Command.Name & Space$(1) & Command.Args, _
+            Call executeCommand(Username, dbAccess, command.Name & Space$(1) & command.args, _
                     IsLocal, command_return)
                     
             ' ...
@@ -117,7 +117,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                         ' ...
                         If (IsLocal) Then
                             ' ...
-                            If (Command.PublicOutput) Then
+                            If (command.publicOutput) Then
                                 AddQ command_return(I), PRIORITY.CONSOLE_MESSAGE
                             Else
                                 frmChat.AddChat RTBColors.ConsoleText, command_return(I)
@@ -148,7 +148,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         End If
         
         ' ...
-        Set Command = IsCommand(vbNullString, IsLocal)
+        Set command = IsCommand(vbNullString, IsLocal)
         
         ' ...
         Count = (Count + 1)
@@ -166,7 +166,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     End If
     
     'Unload memory - FrOzeN
-    Set Command = Nothing
+    Set command = Nothing
     
     Exit Function
     
@@ -177,7 +177,7 @@ ERROR_HANDLER:
         " in ProcessCommand().")
 
     'Unload memory - FrOzeN
-    Set Command = Nothing
+    Set command = Nothing
 
     ' return command failure result
     ProcessCommand = False
@@ -6256,7 +6256,7 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
     tmpbuf(0) = tmpbuf(0) & ")]: " & CommandDocs.description
     
     ' ...
-    tmpbuf(0) = tmpbuf(0) & Space$(1) & "(Syntax: " & "<trigger>" & CommandDocs.Name
+    tmpbuf(0) = tmpbuf(0) & Space$(1) & "(Syntax: " & BotVars.Trigger & CommandDocs.Name
             
     If (CommandDocs.Parameters.Count) Then
         For I = 1 To CommandDocs.Parameters.Count
@@ -7669,19 +7669,19 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
     
     On Error GoTo ERROR_HANDLER
     
-    Dim Command As clsCommandDocObj
+    Dim command As clsCommandDocObj
     Dim regex   As RegExp
     Dim matches As MatchCollection
     
     ' ...
-    Set Command = OpenCommand(CommandName)
+    Set command = OpenCommand(CommandName)
 
     ' ...
-    If (Command.Name = vbNullString) Then
+    If (command.Name = vbNullString) Then
         Exit Function
     End If
     
-    If (Command.Parameters.Count) Then
+    If (command.Parameters.Count) Then
         Dim Parameter   As clsCommandParamsObj
         Dim Restriction As clsCommandRestrictionObj
         Dim Splt()      As String
@@ -7693,8 +7693,8 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
         ' ...
         spaceIndex = InStr(1, CommandArgs, Space$(1), vbBinaryCompare)
         
-        If ((spaceIndex <> 0) And (Command.Parameters.Count > 1)) Then
-            Splt() = Split(CommandArgs, Space$(1), Command.Parameters.Count)
+        If ((spaceIndex <> 0) And (command.Parameters.Count > 1)) Then
+            Splt() = Split(CommandArgs, Space$(1), command.Parameters.Count)
         Else
             If (CommandArgs = vbNullString) Then
                 IsCorrectSyntax = False
@@ -7707,12 +7707,12 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
             Splt(0) = CommandArgs
         End If
         
-        For I = 1 To Command.Parameters.Count
-            Set Parameter = Command.Parameters(I)
+        For I = 1 To command.Parameters.Count
+            Set Parameter = command.Parameters(I)
 
             If (Parameter.IsOptional) Then
-                If (Command.Parameters.Count > I) Then
-                    If (Command.Parameters.Item(I + 1).IsOptional) Then
+                If (command.Parameters.Count > I) Then
+                    If (command.Parameters.Item(I + 1).IsOptional) Then
                         If (Parameter.DataType = "number") Then
                             If (StrictIsNumeric(Splt(loopCount)) = False) Then
                                 bln = True
@@ -7799,23 +7799,23 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     
     On Error GoTo ERROR_HANDLER
     
-    Dim Command     As clsCommandDocObj
+    Dim command     As clsCommandDocObj
     Dim user        As clsDBEntryObj
     Dim regex       As RegExp
     Dim matches     As MatchCollection
     Dim FailedCheck As Boolean
     
     ' ...
-    Set Command = OpenCommand(CommandName)
+    Set command = OpenCommand(CommandName)
 
     ' ...
-    If (Command.Name = vbNullString) Then
+    If (command.Name = vbNullString) Then
         Exit Function
     End If
     
     ' console-only access
-    If ((Command.RequiredRank = -1) And _
-            (Command.RequiredFlags = vbNullString)) Then
+    If ((command.RequiredRank = -1) And _
+            (command.RequiredFlags = vbNullString)) Then
     
         HasAccess = False
     
@@ -7826,9 +7826,9 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     Set user = SharedScriptSupport.GetDBEntry(Username, , , "USER")
 
     ' ...
-    If ((user.Rank >= Command.RequiredRank) = False) Then
+    If ((user.Rank >= command.RequiredRank) = False) Then
         ' ...
-        If (user.HasAnyFlag(Command.RequiredFlags) = False) Then
+        If (user.HasAnyFlag(command.RequiredFlags) = False) Then
             HasAccess = False
             
             Exit Function
@@ -7836,7 +7836,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     End If
     
     ' ...
-    If (Command.Parameters.Count) Then
+    If (command.Parameters.Count) Then
         Dim Parameter   As clsCommandParamsObj
         Dim Restriction As clsCommandRestrictionObj
         Dim Splt()      As String
@@ -7852,14 +7852,14 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
             Splt(0) = CommandArgs
         End If
         
-        For I = 1 To Command.Parameters.Count
+        For I = 1 To command.Parameters.Count
             ' ...
             If (loopCount > UBound(Splt)) Then
                 Exit For
             End If
         
             ' ...
-            Set Parameter = Command.Parameters(I)
+            Set Parameter = command.Parameters(I)
             
             'frmChat.AddChat vbRed, Parameter.dataType
             'frmChat.AddChat vbRed, StrictIsNumeric(splt(loopCount))
@@ -7945,7 +7945,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
     ' ...
     If (Len(CWord) > 0) Then
         Dim commands As DOMDocument60
-        Dim Command  As IXMLDOMNode
+        Dim command  As IXMLDOMNode
         
         ' ...
         Set commands = New DOMDocument60
@@ -7962,17 +7962,17 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
         Call commands.Load(App.Path & "\commands.xml")
         
         ' ...
-        For Each Command In commands.documentElement.childNodes
+        For Each command In commands.documentElement.childNodes
             Dim accessGroup As IXMLDOMNode
             Dim Access      As IXMLDOMNode
             Dim flag        As IXMLDOMNode
         
             ' ...
-            If (StrComp(Command.Attributes.getNamedItem("name").Text, _
+            If (StrComp(command.Attributes.getNamedItem("name").Text, _
                 CWord, vbTextCompare) = 0) Then
                 
                 ' ...
-                Set accessGroup = Command.selectSingleNode("access")
+                Set accessGroup = command.selectSingleNode("access")
                 
                 ' ...
                 For Each Access In accessGroup.childNodes
@@ -8004,7 +8004,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                     Dim Restriction  As IXMLDOMNode
                     
                     ' ...
-                    Set Restrictions = Command.selectNodes("restrictions/restriction")
+                    Set Restrictions = command.selectNodes("restrictions/restriction")
                     
                     ' ...
                     For Each Restriction In Restrictions

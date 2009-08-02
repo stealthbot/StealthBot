@@ -3,6 +3,24 @@ Attribute VB_Name = "modCommandDocsObj"
 ' Copyright (C) 2007 Eric Evans
 ' ...
 
+
+'// 07/08/2009 JSM
+'// Separated this code from the scripting system. I have modified the XML
+'// schema to allow us to track the script that creates each command. This
+'// change allows us to disable or delete the commands along with the script
+'// itself. We will be able to better organize the commands in the treeview
+'// in frmCommands.
+'//
+'// Internally, these methods will work the same. They will NOT include the
+'// commands from scripts. The scripts use IOpenCommand, ICreateCommand, and
+'// IDeleteCommand in the SSC. This has been implemented into the scripting
+'// module as OpenCommand, CreateCommand, and DeleteCommand. The methods
+'// automatically pass the script name to the SSC methods. All scripts without
+'// a name will have an owner="" in the command element of the XML document.
+'// Unnamed scripts that create commands will be managed in an "Unknown" group
+'// in frmCommands.
+
+
 Option Explicit
 
 ' ...

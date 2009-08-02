@@ -346,6 +346,13 @@ Private Function GetDefaultModuleProcs(ByVal ScriptID As String, ByVal ScriptPat
     str = str & "         IDeleteCommand(Script(""Name""), commandName)" & vbNewLine
     str = str & "End Function" & vbNewLine
     
+    ' IsCommand() module-level function
+    str = str & "Function IsCommand(commandText, username)" & vbNewLine
+    str = str & "   Set IsCommand = _ " & vbNewLine
+    str = str & "         IIsCommand(Script(""Name""), commandText, username)" & vbNewLine
+    str = str & "End Function" & vbNewLine
+    
+    
     ' WriteSettingsEntry() module-level function
     str = str & "Sub WriteSettingsEntry(EntryName, EntryValue)" & vbNewLine
     str = str & "   WriteSettingsEntryEx Script(""Name""), EntryName, EntryValue" & vbNewLine

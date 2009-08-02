@@ -59,15 +59,28 @@ Private m_menus As Collection
 
 Public Function DynamicMenus() As Collection
 
+    On Error GoTo ERROR_HANDLER
+    
     If (m_menus Is Nothing) Then
         Set m_menus = New Collection
     End If
     
     Set DynamicMenus = m_menus
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    
+    frmChat.AddChat vbRed, _
+        "Error (#" & Err.Number & "): " & Err.description & " in modMenuObj.GetMenuByID()."
+        
+    Resume Next
 
 End Function
 
 Public Function GetMenuByID(ByVal lng As Long) As Object
+
+    On Error GoTo ERROR_HANDLER
 
     Dim I As Integer ' ...
     
@@ -80,9 +93,21 @@ Public Function GetMenuByID(ByVal lng As Long) As Object
         End If
     Next I
 
+    Exit Function
+    
+ERROR_HANDLER:
+    
+    frmChat.AddChat vbRed, _
+        "Error (#" & Err.Number & "): " & Err.description & " in modMenuObj.GetMenuByID()."
+        
+    Resume Next
+
 End Function
 
 Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
+    
+    On Error GoTo ERROR_HANDLER
+    
     Dim obj As scObj ' ...
 
     ' ...
@@ -132,4 +157,13 @@ Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
             End If
         Next I
     End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    
+    frmChat.AddChat vbRed, _
+        "Error (#" & Err.Number & "): " & Err.description & " in modMenuObj.MenuClick()."
+        
+    Resume Next
 End Sub

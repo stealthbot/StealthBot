@@ -13,48 +13,59 @@ Set cls = New CDemoClass
 
 Sub Event_Load()
 
-   ' // create Winsock object
-   CreateObj "Winsock", "sck"
-   
-   ' // set Winsock object properties
-   With sck
-      .RemoteHost = "uswest.battle.net"
-      .RemotePort = 6112
-      .Connect
-   End With
- 
-   ' // create LongTimer object
-   CreateObj "LongTimer", "LTimer"
+	'// create demo command
+	'Dim demoCommand
+	'Set demoCommand = OpenCommand("demo")
+	'If demoCommand Is Nothing Then
+	'	Set demoCommand = CreateCommand("demo")
+	'	demoCommand.RequiredRank = 1
+	'	demoCommand.Save
+	'End If
+	'Set demoCommand = Nothing
 
-   ' // set LongTimer object properties
-   With LTimer
-      .Interval = 60
-      .Enabled = True
-   End With
 
-   ' // create Form object
-   CreateObj "Form", "frm"
+	' // create Winsock object
+	'CreateObj "Winsock", "sck"
 
-   ' // create Menu objects
-   CreateObj "Menu", "mnu"
-   CreateObj "Menu", "submnu"
+	' // set Winsock object properties
+	'With sck
+	'	.RemoteHost = "uswest.battle.net"
+	'	.RemotePort = 6112
+	'	.Connect
+	'End With
 
-   ' // set submnu as child of mnu
-   submnu.Parent = mnu
+	' // create LongTimer object
+	'CreateObj "LongTimer", "LTimer"
 
-   ' // set menu captions
-   mnu.Caption = "menu"
-   submnu.Caption = "submenu"
+	' // set LongTimer object properties
+	'With LTimer
+	'	.Interval = 60
+	'	.Enabled = True
+	'End With
 
-   ' // show form
-   frm.Show
+	' // create Form object
+	'CreateObj "Form", "frm"
+
+	' // create Menu objects
+	'CreateObj "Menu", "mnu"
+	'CreateObj "Menu", "submnu"
+
+	' // set submnu as child of mnu
+	'submnu.Parent = mnu
+
+	' // set menu captions
+	'mnu.Caption = "menu"
+	'submnu.Caption = "submenu"
+
+	' // show form
+	'frm.Show
 
 End Sub
 
 ' LTimer event sub
 Sub LTimer_Timer()
 
-   AddChat vbBlue, "LTimer_Timer()"
+   'AddChat vbBlue, "LTimer_Timer()"
 
 End Sub
 
@@ -89,6 +100,59 @@ Sub TestDemo()
    AddChat vbBlue, "TestDemo()"
 
 End Sub
+
+Sub Event_PressedEnter(Text)
+
+	'TestCommand Text, BotVars.Username
+	
+End Sub
+
+Sub Event_UserTalk(Username, Flags, Message, Ping)
+	
+	'TestCommand Message, Username
+
+End Sub
+
+Private Sub TestCommand(strText, strUsername)
+
+	'// testing command stuff
+	Set cmds = IsCommand(strText, strUsername)
+	If cmds.Count > 0 Then
+		For Each cmd In cmds
+			If cmd.HasAccess = True Then
+			
+				If cmd.docs.Name = "demo" And cmd.HasCorrectSyntax = True Then
+					'// have the awesome command
+					AddQ "I know I am awesome, " & strUsername & ", but why did you use " & cmd.Arguments.Count & " argument to tell me that?"				
+				End If
+			
+				DebugCommand cmd
+
+			End If
+		Next
+	End If
+
+End Sub
+
+
+Sub DebugCommand(ByRef cmd)
+
+	'// using a fixed width font
+	f = "Lucida Console"
+
+	AddChat f, vbGreen, "Command.Name             ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Name, f, vbWhite, "]"
+	AddChat f, vbGreen, "Command.Args             ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Args, f, vbWhite, "]"
+	AddChat f, vbGreen, "Command.HasAccess        ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.HasAccess, f, vbWhite, "]"
+	AddChat f, vbGreen, "Command.PublicOutput     ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.PublicOutput, f, vbWhite, "]"
+	AddChat f, vbGreen, "Command.HasCorrectSyntax ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.HasCorrectSyntax, f, vbWhite, "]"
+	If cmd.PublicOutput Then AddQ "Command.Args := " & "[" & cmd.Args & "]"
+	For Each arg In cmd.Arguments
+		If cmd.PublicOutput Then AddQ "  Command.Argument := " & "[" & arg & "]"
+		AddChat f, vbGreen, "  Argument               ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, arg , f, vbWhite, "]"
+	Next
+	AddChat f, vbCyan, "------------------------------------------------------"
+End Sub
+
 
 ' // demo class module
 Class CDemoClass
