@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.0#0"; "vbalTreeView6.ocx"
 Begin VB.Form frmSettings 
    BackColor       =   &H00000000&
@@ -3961,7 +3961,8 @@ Private Sub Form_Load()
     Dim nOptLevel As cTreeViewNodes
     Dim lMouseOver As Long
     Dim s As String
-    Dim I As Long, j As Long
+    Dim serverList() As String
+    Dim I As Long, j As Long, k As Long
     
     '##########################################
     ' TREEVIEW INITIALIZATION CODE
@@ -4083,6 +4084,27 @@ Private Sub Form_Load()
                     Wend
                 Close #I
             End With
+        End If
+        
+        ' Get some servers from the status page. (these should always be online)
+        s = frmChat.INet.OpenURL("http://toshley.net/py/bnls_recommended.php")
+        If (LenB(s) > 0) Then
+            serverList = Split(s, vbCrLf)
+            For k = 0 To (UBound(serverList) - 1)
+                s = serverList(k)
+                
+                ' Why doesn't combo box have an exists() method? ><
+                For j = 0 To .ListCount
+                    If StrComp(.List(j), s, vbTextCompare) = 0 Then
+                        j = -1
+                        Exit For
+                    End If
+                Next j
+                        
+                If j >= 0 Then
+                    .AddItem s
+                End If
+            Next
         End If
     End With
     
