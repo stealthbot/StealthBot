@@ -902,7 +902,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -928,7 +927,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1624,9 +1622,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2292,22 +2290,29 @@ Public Sub FindAltBNLS()
             
             ' ...
             If ((strReturn = vbNullString) Or (Right(strReturn, 2) <> vbCrLf)) Then
-                ' ...
-                AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured when trying to locate an alternative BNLS server. " & _
-                    "Visit http://stealthbot.net/ and check the Technical Support forum for more information."
+                
+                strReturn = INet.OpenURL("http://stealthbot.net/p/bnls.php")
+                If ((strReturn = vbNullString) Or (Left(strReturn, 1) <> vbLf)) Then
+                    ' ...
+                    AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured when trying to locate an alternative BNLS server. " & _
+                        "Visit http://stealthbot.net/ and check the Technical Support forum for more information."
             
-                ' ...
-                Call DoDisconnect
+                    ' ...
+                    Call DoDisconnect
             
-                ' ...
-                GotBNLSList = False
+                    ' ...
+                    GotBNLSList = False
             
-                ' ...
-                Exit Sub
+                    ' ...
+                    Exit Sub
+                Else
+                    ' Split the page up into an array of servers.
+                    strBNLS() = Split(strReturn, vbLf)
+                End If
+            Else
+                ' Split the page up into an array of servers.
+                strBNLS() = Split(strReturn, vbCrLf)
             End If
-            
-            ' ...
-            strBNLS() = Split(strReturn, vbCrLf)
             
             'Mark GotBNLSList as True so it's no longer downloaded for each attempt
             GotBNLSList = True
