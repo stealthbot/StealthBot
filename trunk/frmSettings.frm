@@ -4087,7 +4087,11 @@ Private Sub Form_Load()
         End If
         
         ' Get some servers from the status page. (these should always be online)
-        s = frmChat.INet.OpenURL("http://toshley.net/py/bnls_recommended.php")
+        If (LenB(ReadCfg("Override", "BNLSSource")) > 0) Then
+            s = frmChat.INet.OpenURL(ReadCfg("Override", "BNLSSource"))
+        Else
+            s = frmChat.INet.OpenURL("http://toshley.net/py/bnls_recommended.php")
+        End If
         If ((LenB(s) > 0) And (Right(s, 2) = vbCrLf)) Then
             serverList = Split(s, vbCrLf)
             For k = 0 To (UBound(serverList) - 1)
