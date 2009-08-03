@@ -308,12 +308,16 @@ End Sub
 
 
 Private Sub cboCommandGroup_Click()
+
+    Dim scriptName As String
+
     If PromptToSaveChanges() = True Then
         ResetForm
         If cboCommandGroup.ListIndex = 0 Then
             Call PopulateTreeView
         Else
-            Call PopulateTreeView(cboCommandGroup.Text)
+            scriptName = Mid$(cboCommandGroup.Text, 1, InStr(1, cboCommandGroup.Text, "(") - 2)
+            Call PopulateTreeView(scriptName)
         End If
     End If
 End Sub
@@ -419,7 +423,7 @@ Private Sub Form_Load()
     Dim lStyle As Long
     Dim tNode As node
     
-    For Each tNode In trvCommands.Nodes
+    For Each tNode In trvCommands.nodes
         tNode.BackColor = txtRank.BackColor
     Next
     
@@ -456,14 +460,32 @@ Private Sub PopulateOwnerComboBox()
 
     Dim I   As Integer
     Dim str As String
+    Dim commandCount As Integer
+    Dim scriptName As String
+    Dim commandDoc As clsCommandDocObj
+    Dim options() As Variant '// <-- boo
+    
+    Set commandDoc = New clsCommandDocObj
 
     cboCommandGroup.Clear
-    cboCommandGroup.AddItem "Internal Bot Commands"
+    
+    
+    '// get the script name and number of commands
+    scriptName = "Internal Bot Commands"
+    commandCount = commandDoc.GetCommandCount()
+    options = Array(scriptName, commandCount)
+    '// add the item
+    cboCommandGroup.AddItem StringFormat("{0} ({1})", options)
     
     For I = 2 To frmChat.SControl.Modules.Count
         str = frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
-            cboCommandGroup.AddItem frmChat.SControl.Modules(I).CodeObject.Script("Name")
+            '// get the script name and number of commands
+            scriptName = frmChat.SControl.Modules(I).CodeObject.Script("Name")
+            commandCount = commandDoc.GetCommandCount(scriptName)
+            options = Array(scriptName, commandCount)
+            '// add the item
+            cboCommandGroup.AddItem StringFormat("{0} ({1})", options)
         End If
     Next I
     cboCommandGroup.ListIndex = 0
@@ -496,8 +518,8 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     Dim I                 As Integer
 
     '// reset the treeview
-    If trvCommands.Nodes.Count > 0 Then
-        trvCommands.Nodes(1).Selected = True
+    If trvCommands.nodes.Count > 0 Then
+        trvCommands.nodes(1).Selected = True
     End If
     Call ClearTreeViewNodes(trvCommands)
     
@@ -519,7 +541,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
 
 
             commandName = xmlCommand.Attributes.getNamedItem("name").Text
-            Set nCommand = trvCommands.Nodes.Add(, , , commandName)
+            Set nCommand = trvCommands.nodes.Add(, , , commandName)
             nCommand.BackColor = txtRank.BackColor
             nCommand.ForeColor = vbWhite
             
@@ -537,7 +559,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
             '//                  something, even if nothing matches the XPath expression.
             For I = 0 To (xmlArgs.length - 1)
                 ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").Text
-                Set nArg = trvCommands.Nodes.Add(nCommand, tvwChild, , ArgumentName)
+                Set nArg = trvCommands.nodes.Add(nCommand, tvwChild, , ArgumentName)
                 nArg.BackColor = txtRank.BackColor
                 nArg.ForeColor = vbWhite
                 
@@ -545,7 +567,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
                 
                 For j = 0 To (xmlArgRestricions.length - 1)
                     restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
-                    Set nArgRestriction = trvCommands.Nodes.Add(nArg, tvwChild, , restrictionName)
+                    Set nArgRestriction = trvCommands.nodes.Add(nArg, tvwChild, , restrictionName)
                     nArgRestriction.BackColor = txtRank.BackColor
                     nArgRestriction.ForeColor = vbWhite
                 Next j
@@ -853,8 +875,6 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
     
     Dim xmlNode As IXMLDOMNode
     
-    '// Reset controls
-    Call ResetForm
     
     Select Case nt
         Case NodeType.nCommand
@@ -1006,6 +1026,7 @@ Private Sub ResetForm()
     cboFlags.Clear
     txtDescription.Text = ""
     txtSpecialNotes.Text = ""
+    fraCommand.Caption = ""
     chkDisable.Value = 0
     
     txtRank.Enabled = False
@@ -1027,6 +1048,7 @@ Private Sub ResetForm()
     cmdFlagRemove.Enabled = False
     
     chkDisable.Visible = False
+    
     
     m_SelectedElement.IsDirty = False
     cmdSave.Enabled = False

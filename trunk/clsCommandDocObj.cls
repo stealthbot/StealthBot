@@ -49,13 +49,15 @@ Private Sub Class_Terminate()
     
 End Sub
 
-Public Function OpenDatabase(Optional ByVal DatabasePath As String = vbNullString)
+Public Function OpenDatabase(Optional ByVal DatabasePath As String = vbNullString, Optional ByVal forceLoad As Boolean = False)
 
     If (DatabasePath = vbNullString) Then
         DatabasePath = App.Path & "\commands.xml"
     End If
     
-    m_database.Load DatabasePath
+    If forceLoad = True Or m_database.childNodes.length = 0 Then
+        m_database.Load DatabasePath
+    End If
     
 End Function
 
@@ -332,11 +334,45 @@ Private Function StripQuotes(ByVal strText As String) As String
 
 End Function
 
+Public Function GetCommandCount(Optional ByVal strScriptOwner As String = vbNullString) As Integer
+
+    On Error GoTo ERROR_HANDLER
+    
+    Dim nodes                 As IXMLDOMNodeList
+    Dim xpath                 As String
+    
+    
+    OpenDatabase
+    
+    '// create xpath expression based on strScriptOwner
+    If strScriptOwner = vbNullString Then
+        xpath = "/commands/command"
+    Else
+        xpath = "/commands/command[@owner='" & strScriptOwner & "']"
+    End If
+    
+    Set nodes = m_database.selectNodes(xpath)
+    
+    GetCommandCount = nodes.length
+    
+    Set nodes = Nothing
+    
+    Exit Function
+
+ERROR_HANDLER:
+    Set nodes = Nothing
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.GetCommands().")
+
+    Exit Function
+    
+End Function
+
+
 
 
 '// This function returns a clsCommandObj that is populated with instance of the command
 '// object.
-Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, Optional ByVal strScriptOwner As String) As Collection
+Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, Optional ByVal strScriptOwner As String = vbNullString) As Collection
     
     On Error GoTo ERROR_HANDLER
     
@@ -704,7 +740,6 @@ Public Function NewRestriction(argName As String, argRequiredRank As Integer, ar
     Set NewRestriction = res
         
 End Function
-
 
 
 Public Function Save() As Boolean
