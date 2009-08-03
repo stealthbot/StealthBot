@@ -902,7 +902,6 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -928,7 +927,6 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
-      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -2300,9 +2298,10 @@ Public Sub FindAltBNLS()
                 strReturn = INet.OpenURL("http://stealthbot.net/p/bnls.php")
                 If ((strReturn = vbNullString) Or (Left(strReturn, 1) <> vbLf)) Then
                     ' ...
-                    AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured when trying to locate an alternative BNLS server. " & _
-                        "Visit http://stealthbot.net/ and check the Technical Support forum for more information."
-            
+                    AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured while trying to locate an alternative BNLS server."
+                    AddChat RTBColors.ErrorMessageText, "[BNLS]   You may not be connected to the internet or may be having DNS resolution issues."
+                    AddChat RTBColors.ErrorMessageText, "[BNLS]   Visit http://stealthbot.net/ and check the Technical Support forum for more information."
+                    
                     ' ...
                     Call DoDisconnect
             
