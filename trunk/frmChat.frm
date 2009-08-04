@@ -1,16 +1,16 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
    ClientLeft      =   225
-   ClientTop       =   855
+   ClientTop       =   825
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -902,6 +902,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -927,6 +928,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1496,7 +1498,8 @@ Option Explicit
 'REVISION #1337!
 
 Private Declare Function RegQueryValueEx Lib "advapi32.dll" Alias "RegQueryValueExA" (ByVal hKey As Long, ByVal lpValueName As String, ByVal lpReserved As Long, lpType As Long, lpData As Any, lpcbData As Long) As Long
-    
+Private Declare Function bind Lib "ws2_32.dll" (ByVal s As Long, ByRef name As sockaddr_in, ByVal namelen As Long) As Long
+
 'Classes
 Public WithEvents ClanHandler As clsClanPacketHandler
 Attribute ClanHandler.VB_VarHelpID = -1
@@ -1519,6 +1522,13 @@ Private Const WM_USER = 1024
 Private Const CB_LIMITTEXT = &H141
 Private Const SB_BOTTOM = 7
 Private Const EM_SCROLL = &HB5
+
+Private Type SockAddr
+    sin_family As Integer
+    sin_port As Integer
+    sin_addr As String * 4
+    sin_zero As String * 8
+End Type
 
 ' LET IT BEGIN
 Private Sub Form_Load()
@@ -2658,10 +2668,10 @@ Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
 End Sub
 
 Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
-    If (g_Clan.Self.rank < NewRank) Then
+    If (g_Clan.Self.Rank < NewRank) Then
         AddChat RTBColors.SuccessText, "[CLAN] You have been promoted. Your new rank is ", _
                 RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
-    ElseIf (g_Clan.Self.rank > NewRank) Then
+    ElseIf (g_Clan.Self.Rank > NewRank) Then
         AddChat RTBColors.SuccessText, "[CLAN] You have been demoted. Your new rank is ", _
                 RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
     Else
@@ -2669,25 +2679,25 @@ Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
                 GetRank(NewRank), RTBColors.SuccessText, "."
     End If
 
-    g_Clan.Self.rank = NewRank
+    g_Clan.Self.Rank = NewRank
     
     On Error Resume Next
     
     RunInAll "Event_BotClanRankChanged", NewRank
 End Sub
 
-Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal rank As Byte)
+Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal Rank As Byte)
     Set g_Clan = New clsClanObj
     
     With Clan
-        .Name = ClanTag
+        .name = ClanTag
         .DWName = RawClanTag
-        .MyRank = rank
+        .MyRank = Rank
         .isUsed = True
     End With
     
     With g_Clan
-        .Name = ClanTag
+        .name = ClanTag
     End With
     
     Call InitListviewTabs
@@ -2705,9 +2715,9 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
             
         RunInAll "Event_BotJoinedClan", ClanTag
     Else
-        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
+        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(Rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
         
-        RunInAll "Event_BotClanInfo", ClanTag, rank
+        RunInAll "Event_BotClanInfo", ClanTag, Rank
     End If
     
     RequestClanList
@@ -2724,7 +2734,7 @@ Private Sub ClanHandler_ClanInvitation(ByVal Token As String, ByVal ClanTag As S
         Clan.Token = Token
         Clan.DWName = RawClanTag
         Clan.Creator = InvitedBy
-        Clan.Name = ClanName
+        Clan.name = ClanName
         If NewClan Then Clan.isNew = 1
         
         With RTBColors
@@ -2756,8 +2766,8 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
             
             ' ...
             With ClanMember
-                .Name = Members(I)
-                .rank = Val(Members(I + 1))
+                .name = Members(I)
+                .Rank = Val(Members(I + 1))
                 .Status = Val(Members(I + 2))
                 .Location = Members(I + 3)
             End With
@@ -2787,7 +2797,7 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
     frmChat.ListviewTabs_Click 0
 End Sub
 
-Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
+Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
     Dim x   As ListItem
     Dim pos As Integer
     
@@ -2795,8 +2805,8 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
     
     If (pos > 0) Then
         With g_Clan.Members(pos)
-            .Name = Username
-            .rank = rank
+            .name = Username
+            .Rank = Rank
             .Status = IsOnline
             .Location = Location
         End With
@@ -2808,8 +2818,8 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
         
         ' ...
         With ClanMember
-            .Name = Username
-            .rank = rank
+            .name = Username
+            .Rank = Rank
             .Status = IsOnline
             .Location = Location
         End With
@@ -2823,13 +2833,13 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
     Set x = lvClanList.FindItem(Username)
 
     If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
-        g_Clan.Self.rank = IIf(rank = 0, rank + 1, rank)
+        g_Clan.Self.Rank = IIf(Rank = 0, Rank + 1, Rank)
         AwaitingClanInfo = 1
     End If
     
     If AwaitingClanInfo = 1 Then
         AwaitingClanInfo = 0
-        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(rank) & "."
+        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(Rank) & "."
     End If
     
     If Not (x Is Nothing) Then
@@ -2837,10 +2847,10 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
         Set x = Nothing
     End If
     
-    AddClanMember Username, CInt(rank), CInt(IsOnline)
+    AddClanMember Username, CInt(Rank), CInt(IsOnline)
     
     On Error Resume Next
-    RunInAll "Event_ClanMemberUpdate", Username, rank, IsOnline
+    RunInAll "Event_ClanMemberUpdate", Username, Rank, IsOnline
 End Sub
 
 Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
@@ -3322,7 +3332,7 @@ Public Sub ListviewTabs_Click(PreviousTab As Integer)
             Case LVW_BUTTON_CHANNEL ' = 0 = Channel button clicked
                 ' ...
                 lblCurrentChannel.ToolTipText = "Currently in " & g_Channel.SType() & _
-                    " channel " & g_Channel.Name & " (" & g_Channel.Users.Count & ")"
+                    " channel " & g_Channel.name & " (" & g_Channel.Users.Count & ")"
                 
                 ' ...
                 lvChannel.ZOrder vbBringToFront
@@ -3337,7 +3347,7 @@ Public Sub ListviewTabs_Click(PreviousTab As Integer)
             Case LVW_BUTTON_CLAN ' = 2 = Clan button clicked
                 ' ...
                 lblCurrentChannel.ToolTipText = "Currently viewing " & _
-                    g_Clan.Members.Count & " members of clan " & Clan.Name
+                    g_Clan.Members.Count & " members of clan " & Clan.name
             
                 ' ...
                 lvClanList.ZOrder vbBringToFront
@@ -3474,7 +3484,7 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, 
                 sProd = g_Channel.Users(aInx).game
 
                 mnuPopWebProfile.Enabled = (sProd = "W3XP" Or sProd = "WAR3")
-                mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And g_Clan.Self.rank >= 3)
+                mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And g_Clan.Self.Rank >= 3)
                 mnuPopKick.Enabled = (MyFlags = 2 Or MyFlags = 18)
                 mnuPopDes.Enabled = (MyFlags = 2 Or MyFlags = 18)
                 mnuPopBan.Enabled = (MyFlags = 2 Or MyFlags = 18)
@@ -3669,7 +3679,7 @@ End Sub
 
 Private Sub mnuPublicChannels_Click(Index As Integer)
     ' ...
-    If (StrComp(mnuPublicChannels(Index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
+    If (StrComp(mnuPublicChannels(Index).Caption, g_Channel.name, vbTextCompare) = 0) Then
         Exit Sub
     End If
     
@@ -3681,7 +3691,7 @@ End Sub
 
 Private Sub mnuCustomChannels_Click(Index As Integer)
     ' ...
-    If (StrComp(mnuCustomChannels(Index).Caption, g_Channel.Name, vbTextCompare) = 0) Then
+    If (StrComp(mnuCustomChannels(Index).Caption, g_Channel.name, vbTextCompare) = 0) Then
         Exit Sub
     End If
 
@@ -4099,7 +4109,7 @@ Private Sub mnuPopInvite_Click()
     End If
     
     If LenB(sPlayer) > 0 Then
-        If g_Clan.Self.rank >= 3 Then
+        If g_Clan.Self.Rank >= 3 Then
             InviteToClan (reverseUsername(sPlayer))
             AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & GetSelectedUser & ", awaiting reply."
         End If
@@ -5846,7 +5856,7 @@ Private Sub Timer_Timer()
     
     If IdleMsg <> "Y" Then Exit Sub
     
-    If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) = 0) And _
+    If ((StrComp(g_Channel.name, "Clan SBs", vbTextCompare) = 0) And _
         (IsStealthBotTech = False)) Then Exit Sub
     
     IdleMsg = ReadCfg("Main", "IdleMsg")
@@ -5857,7 +5867,7 @@ Private Sub Timer_Timer()
 
     If IdleWait < 2 Then Exit Sub
     
-    If iCounter >= IdleWait And StrComp(LCase(g_Channel.Name), "op [vl]", vbTextCompare) <> 0 Then
+    If iCounter >= IdleWait And StrComp(LCase(g_Channel.name), "op [vl]", vbTextCompare) <> 0 Then
         iCounter = 0
         'on error resume next
         If IdleType = "msg" Or IdleType = vbNullString Then
@@ -5867,8 +5877,8 @@ Private Sub Timer_Timer()
             End If
             
             IdleMsg = Replace(IdleMsg, "%cpuup", ConvertTime(GetUptimeMS))
-            IdleMsg = Replace(IdleMsg, "%chan", g_Channel.Name)
-            IdleMsg = Replace(IdleMsg, "%c", g_Channel.Name)
+            IdleMsg = Replace(IdleMsg, "%chan", g_Channel.name)
+            IdleMsg = Replace(IdleMsg, "%c", g_Channel.name)
             IdleMsg = Replace(IdleMsg, "%me", GetCurrentUsername)
             IdleMsg = Replace(IdleMsg, "%v", CVERSION)
             IdleMsg = Replace(IdleMsg, "%ver", CVERSION)
@@ -6437,7 +6447,7 @@ End Function
 Private Function ReplaceEnvironmentVars(ByVal str As String) As String
 
     Dim I     As Integer
-    Dim Name  As String
+    Dim name  As String
     Dim Value As String
     Dim tmp   As String
     
@@ -6446,13 +6456,13 @@ Private Function ReplaceEnvironmentVars(ByVal str As String) As String
     I = 1
 
     While (Environ$(I) <> "")
-        Name = _
+        name = _
             Mid$(Environ$(I), 1, InStr(1, Environ$(I), "=") - 1)
 
         Value = _
             Mid$(Environ$(I), InStr(1, Environ$(I), "=") + 1)
 
-        tmp = Replace(tmp, "%" & Name & "%", Value)
+        tmp = Replace(tmp, "%" & name & "%", Value)
     
         I = I + 1
     Wend
@@ -6886,13 +6896,13 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     
     If Mode <> 1 Then
         s = ReadCfg(OT, "ChatFont")
-        If s <> vbNullString And s <> rtbChat.Font.Name Then
-            rtbChat.Font.Name = s
+        If s <> vbNullString And s <> rtbChat.Font.name Then
+            rtbChat.Font.name = s
         End If
         
         s = ReadCfg(OT, "ChanFont")
-        If s <> vbNullString And s <> lvChannel.Font.Name Then
-            lvChannel.Font.Name = s
+        If s <> vbNullString And s <> lvChannel.Font.name Then
+            lvChannel.Font.name = s
         End If
         
         s = ReadCfg(OT, "ChatSize")
@@ -7003,7 +7013,7 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         Dim outbuf      As String
 
         ' ...
-        SetTitle GetCurrentUsername & ", online in channel " & g_Channel.Name
+        SetTitle GetCurrentUsername & ", online in channel " & g_Channel.name
         
         ' ...
         lvChannel.ListItems.Clear
@@ -7391,9 +7401,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         Err.Clear
     
         If (ReadCfg(MN, "LocalIP") <> vbNullString) Then
-            If (Err.Number = 0) Then: sckBNet.Bind , ReadCfg(MN, "LocalIP")
-            If (Err.Number = 0) Then: sckBNLS.Bind , ReadCfg(MN, "LocalIP")
-            If (Err.Number = 0) Then: sckMCP.Bind , ReadCfg(MN, "LocalIP")
+            If (Err.Number = 0) Then: sckBNet.bind , ReadCfg(MN, "LocalIP")
+            If (Err.Number = 0) Then: sckBNLS.bind , ReadCfg(MN, "LocalIP")
+            If (Err.Number = 0) Then: sckMCP.bind , ReadCfg(MN, "LocalIP")
         End If
     End If
     
@@ -7998,9 +8008,9 @@ Function GetChannelString() As String
         GetChannelString = vbNullString
     Else
         Select Case ListviewTabs.Tab
-            Case 0: GetChannelString = g_Channel.Name & " (" & lvChannel.ListItems.Count & ")"
+            Case 0: GetChannelString = g_Channel.name & " (" & lvChannel.ListItems.Count & ")"
             Case 1: GetChannelString = lvFriendList.ListItems.Count & " friends listed"
-            Case 2: GetChannelString = "Clan " & g_Clan.Name & ": " & lvClanList.ListItems.Count & " members."
+            Case 2: GetChannelString = "Clan " & g_Clan.name & ": " & lvClanList.ListItems.Count & " members."
         End Select
     End If
 End Function
@@ -8080,21 +8090,21 @@ Sub DisableListviewTabs()
     ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
 End Sub
 
-Sub AddClanMember(ByVal Name As String, rank As Integer, Online As Integer)
+Sub AddClanMember(ByVal name As String, Rank As Integer, Online As Integer)
     
     Dim visible_rank As Integer
     
-    visible_rank = rank
+    visible_rank = Rank
     
     If visible_rank = 0 Then visible_rank = 1
     If visible_rank > 4 Then visible_rank = 5 '// handle bad ranks
     
     '// add user
     
-    Name = KillNull(Name)
+    name = KillNull(name)
     
     With lvClanList
-        .ListItems.Add .ListItems.Count + 1, , Name, , visible_rank
+        .ListItems.Add .ListItems.Count + 1, , name, , visible_rank
         .ListItems(.ListItems.Count).ListSubItems.Add , , , Online + 6
         .ListItems(.ListItems.Count).ListSubItems.Add , , visible_rank
         .SortKey = 2
@@ -8109,7 +8119,7 @@ Sub AddClanMember(ByVal Name As String, rank As Integer, Online As Integer)
     frmChat.ListviewTabs_Click 0
     
     On Error Resume Next
-    RunInAll "Event_ClanInfo", Name, rank, Online
+    RunInAll "Event_ClanInfo", name, Rank, Online
 End Sub
 
 Private Function GetClanSelectedUser() As String
@@ -8155,7 +8165,7 @@ Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single,
                     mnuPopDem.Enabled = False
                     mnuPopPro.Enabled = False
                     
-                    If g_Clan.Self.rank > 2 Then
+                    If g_Clan.Self.Rank > 2 Then
                             
                         mnuPopBNProfile.Enabled = True
                         
@@ -8170,7 +8180,7 @@ Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single,
                                 
                                 mnuPopPro.Enabled = False
                                 
-                                If g_Clan.Self.rank = 4 Then
+                                If g_Clan.Self.Rank = 4 Then
                                     
                                     mnuPopDem.Enabled = True
                                     mnuPopRem.Enabled = True
@@ -8201,7 +8211,7 @@ Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single,
             End If
             
             If StrComp(GetClanSelectedUser(), GetCurrentUsername, vbTextCompare) = 0 Then
-                If g_Clan.Self.rank > 0 Then
+                If g_Clan.Self.Rank > 0 Then
                     mnuSP2.Visible = True
                     mnuPopLeaveClan.Visible = True
                 Else

@@ -633,6 +633,7 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "initperf":      Call OnInitPerf(Username, dbAccess, msgData, InBot, cmdRet())
         Case "unblock":       Call OnUnblock(Username, dbAccess, msgData, InBot, cmdRet())
         Case "unfilter":      Call OnUnfilter(Username, dbAccess, msgData, InBot, cmdRet())
+        Case "localip":       Call OnLocalIP(Username, dbAccess, msgData, InBot, cmdRet())
         Case Else
             blnNoCmd = True
     End Select
@@ -645,6 +646,15 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
     ' was a command found? return.
     executeCommand = (Not (blnNoCmd))
 End Function
+
+' handle localip command
+Private Function OnLocalIP(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
+    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
+    
+    ' ...
+    cmdRet(0) = "Your local IPv4 IP address is: " & frmChat.sckBNet.LocalIP
+    
+End Function ' end function OnConnect
 
 ' handle connect command
 Private Function OnConnect(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -7665,7 +7675,7 @@ Public Sub LoadDatabase()
     If (SaveDB) Then Call WriteDatabase(Path)
 End Sub
 
-Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs As String) As Boolean
+Public Function IsCorrectSyntax(ByVal commandName As String, ByVal commandArgs As String) As Boolean
     
     On Error GoTo ERROR_HANDLER
     
@@ -7674,7 +7684,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
     Dim matches As MatchCollection
     
     ' ...
-    Set command = OpenCommand(CommandName)
+    Set command = OpenCommand(commandName)
 
     ' ...
     If (command.Name = vbNullString) Then
@@ -7691,12 +7701,12 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
         Dim spaceIndex  As Integer
         
         ' ...
-        spaceIndex = InStr(1, CommandArgs, Space$(1), vbBinaryCompare)
+        spaceIndex = InStr(1, commandArgs, Space$(1), vbBinaryCompare)
         
         If ((spaceIndex <> 0) And (command.Parameters.Count > 1)) Then
-            Splt() = Split(CommandArgs, Space$(1), command.Parameters.Count)
+            Splt() = Split(commandArgs, Space$(1), command.Parameters.Count)
         Else
-            If (CommandArgs = vbNullString) Then
+            If (commandArgs = vbNullString) Then
                 IsCorrectSyntax = False
                 
                 Exit Function
@@ -7704,7 +7714,7 @@ Public Function IsCorrectSyntax(ByVal CommandName As String, ByVal CommandArgs A
         
             ReDim Preserve Splt(0)
         
-            Splt(0) = CommandArgs
+            Splt(0) = commandArgs
         End If
         
         For I = 1 To command.Parameters.Count
@@ -7794,7 +7804,7 @@ ERROR_HANDLER:
     Exit Function
 End Function
 
-Public Function HasAccess(ByVal Username As String, ByVal CommandName As String, Optional ByVal CommandArgs As _
+Public Function HasAccess(ByVal Username As String, ByVal commandName As String, Optional ByVal commandArgs As _
     String = vbNullString, Optional ByRef outbuf As String) As Boolean
     
     On Error GoTo ERROR_HANDLER
@@ -7806,7 +7816,7 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
     Dim FailedCheck As Boolean
     
     ' ...
-    Set command = OpenCommand(CommandName)
+    Set command = OpenCommand(commandName)
 
     ' ...
     If (command.Name = vbNullString) Then
@@ -7844,12 +7854,12 @@ Public Function HasAccess(ByVal Username As String, ByVal CommandName As String,
         Dim bln         As Boolean
         Dim I           As Integer
         
-        If (InStr(1, CommandArgs, Space$(1), vbBinaryCompare) <> 0) Then
-            Splt() = Split(CommandArgs, Space$(1))
+        If (InStr(1, commandArgs, Space$(1), vbBinaryCompare) <> 0) Then
+            Splt() = Split(commandArgs, Space$(1))
         Else
             ReDim Preserve Splt(0)
             
-            Splt(0) = CommandArgs
+            Splt(0) = commandArgs
         End If
         
         For I = 1 To command.Parameters.Count

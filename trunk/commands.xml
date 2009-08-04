@@ -11,6 +11,18 @@
     <access />
   </command>
 
+  <command name="localip">
+    <aliases />
+
+    <documentation>
+      <description>
+        dumps temporary packet information to a file.
+      </description>
+    </documentation>
+
+    <access />
+  </command>
+
   <command name="scripts">
     <aliases />
 
