@@ -3972,9 +3972,9 @@ Private Sub Form_Load()
     
     With tvw
         
-        .Nodes.Clear
+        .nodes.Clear
         
-        Set nRoot = .Nodes.Add(, etvwFirst, "root", "StealthBot Settings")
+        Set nRoot = .nodes.Add(, etvwFirst, "root", "StealthBot Settings")
             nRoot.MouseOverForeColor = lMouseOver
         
             Set nTopLevel = nRoot.Children
@@ -4087,10 +4087,9 @@ Private Sub Form_Load()
         End If
         
         ' Get some servers from the status page. (these should always be online)
+        s = vbNullString
         If (LenB(ReadCfg("Override", "BNLSSource")) > 0) Then
             s = frmChat.INet.OpenURL(ReadCfg("Override", "BNLSSource"))
-        Else
-            s = frmChat.INet.OpenURL("http://toshley.net/py/bnls_recommended.php")
         End If
         If ((LenB(s) > 0) And (Right(s, 2) = vbCrLf)) Then
             serverList = Split(s, vbCrLf)
