@@ -62,7 +62,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Message = Replace(Message, "%me", IIf(IsLocal, GetCurrentUsername, Username), 1, -1, vbTextCompare)
     
     ' ...
-    If (Left$(Message, 3) = "///") Then
+    If ((IsLocal) And (Left$(Message, 3) = "///")) Then
         ' ...
         AddQ Mid$(Message, 3)
         

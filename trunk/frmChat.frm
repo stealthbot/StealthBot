@@ -1496,7 +1496,12 @@ Option Explicit
 'REVISION #1337!
 
 Private Declare Function RegQueryValueEx Lib "advapi32.dll" Alias "RegQueryValueExA" (ByVal hKey As Long, ByVal lpValueName As String, ByVal lpReserved As Long, lpType As Long, lpData As Any, lpcbData As Long) As Long
+
 Private Declare Function bind Lib "ws2_32.dll" (ByVal s As Long, ByRef Name As sockaddr_in, ByVal namelen As Long) As Long
+Private Declare Function inet_addr Lib "wsock32.dll" (ByVal cp As String) As Long
+Private Declare Function htons Lib "wsock32.dll" (ByVal hostshort As Long) As Integer
+Private Declare Function WSAGetLastError Lib "wsock32.dll" () As Integer
+Private Const AF_INET = 2
 
 'Classes
 Public WithEvents ClanHandler As clsClanPacketHandler
@@ -6150,6 +6155,7 @@ Sub Connect()
                 AddChat RTBColors.ErrorMessageText, "Already connected."
                 Exit Sub
             End If
+    
             
             If Not BotVars.UseProxy Then
                 .RemoteHost = BotVars.Server
@@ -6168,8 +6174,21 @@ Sub Connect()
                     Exit Sub
                 End If
             End If
+            
+           '             Dim blah As sockaddr_in
+           '
+           '             blah.sin_family = AF_INET
+            'blah.sin_addr = inet_addr("192.168.1.155")
+            'blah.sin_port = 0
+           ' blah.sin_zero = 0
+            
+            'sckBNet.bind , "192.168.1.155"
+            
+            'bind sckBNet.SocketHandle, blah, LenB(blah)
+            'MsgBox WSAGetLastError
 
             If Not BotVars.BNLS Then .Connect
+
         End With
         
     End If
