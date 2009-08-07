@@ -54,6 +54,7 @@
       </xsd:sequence>
       <xsd:attribute name="name" type="xsd:string" />
       <xsd:attribute name="type" type="xsd:string" />
+      <xsd:attribute name="optional" type="xsd:string" />
     </xsd:complexType>
   </xsd:element>
   

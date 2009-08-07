@@ -3000,9 +3000,10 @@ Private Function OnSetIdle(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ' ...
     If (LenB(U) > 0) Then
         ' ...
-        If (Left$(U, 1) = "/") Then
+        Do While (Left$(U, 1) = "/")
             U = Mid$(U, 2)
-        End If
+            If LenB(U) = 0 Then Exit Function
+        Loop
         
         ' ...
         Call WriteINI("Main", "IdleMsg", U)
@@ -6776,6 +6777,7 @@ Private Function OnSDetail(ByVal Username As String, ByRef dbAccess As udtGetAcc
 End Function
 
 ' handle initperf command
+' To-Do: Make this have an optional parameter for the script name, to limit the result.
 Private Function OnInitPerf(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     

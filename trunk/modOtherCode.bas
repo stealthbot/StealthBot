@@ -2984,9 +2984,12 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in IsCommand().")
+    If (Err.Number = 93) Then
+        Err.Clear
+        Exit Function
+    End If
     
-    Exit Function
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Number & ": " & Err.description & " in IsCommand().")
 End Function
 
 Public Function UsernameRegex(ByVal Username As String, ByVal sPattern As String) As Boolean
