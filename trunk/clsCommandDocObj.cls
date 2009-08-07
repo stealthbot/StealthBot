@@ -346,7 +346,7 @@ Public Function GetCommandCount(Optional ByVal strScriptOwner As String = vbNull
     
     '// create xpath expression based on strScriptOwner
     If strScriptOwner = vbNullString Then
-        xpath = "/commands/command"
+        xpath = "/commands/command[not(@owner)]"
     Else
         xpath = "/commands/command[@owner='" & strScriptOwner & "']"
     End If
@@ -641,7 +641,8 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal strScript
     End If
     
     If strScriptOwner = vbNullString Then
-        xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "']"
+        xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "' and " & _
+                          "not(@owner)]"
     Else
         xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "' and " & _
                           "translate(@owner, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') = '" & LCase(strScriptOwner) & "']"

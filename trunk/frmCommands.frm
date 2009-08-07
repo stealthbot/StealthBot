@@ -525,7 +525,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     
     '// create xpath expression based on strScriptOwner
     If strScriptOwner = vbNullString Then
-        xpath = "/commands/command"
+        xpath = "/commands/command[not(@owner)]"
         'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
     Else
         xpath = "/commands/command[@owner='" & strScriptOwner & "']"
@@ -534,46 +534,39 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
 
     '// loop through all child nodes
     For Each xmlCommand In m_CommandsDoc.documentElement.selectNodes(xpath)
-
-        '// skip commands that have an owner attribute if we are only showing internal commands
-        If strScriptOwner = vbNullString And (xmlCommand.Attributes.getNamedItem("owner") Is Nothing) Or _
-           strScriptOwner <> vbNullString And Not (xmlCommand.Attributes.getNamedItem("owner") Is Nothing) Then
-
-
-            commandName = xmlCommand.Attributes.getNamedItem("name").Text
-            Set nCommand = trvCommands.nodes.Add(, , , commandName)
-            nCommand.BackColor = txtRank.BackColor
-            nCommand.ForeColor = vbWhite
-            
-            '// 08/30/2008 JSM - check if this command is the first alphabetically
-            If defaultNode Is Nothing Then
-                Set defaultNode = nCommand
-            Else
-                If StrComp(defaultNode.Text, nCommand.Text) > 0 Then
-                    Set defaultNode = nCommand
-                End If
-            End If
-            
-            Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
-            '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
-            '//                  something, even if nothing matches the XPath expression.
-            For I = 0 To (xmlArgs.length - 1)
-                ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").Text
-                Set nArg = trvCommands.nodes.Add(nCommand, tvwChild, , ArgumentName)
-                nArg.BackColor = txtRank.BackColor
-                nArg.ForeColor = vbWhite
-                
-                Set xmlArgRestricions = xmlArgs(I).selectNodes("restrictions/restriction")
-                
-                For j = 0 To (xmlArgRestricions.length - 1)
-                    restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
-                    Set nArgRestriction = trvCommands.nodes.Add(nArg, tvwChild, , restrictionName)
-                    nArgRestriction.BackColor = txtRank.BackColor
-                    nArgRestriction.ForeColor = vbWhite
-                Next j
-            Next I
+    
+        commandName = xmlCommand.Attributes.getNamedItem("name").Text
+        Set nCommand = trvCommands.nodes.Add(, , , commandName)
+        nCommand.BackColor = txtRank.BackColor
+        nCommand.ForeColor = vbWhite
         
+        '// 08/30/2008 JSM - check if this command is the first alphabetically
+        If defaultNode Is Nothing Then
+            Set defaultNode = nCommand
+        Else
+            If StrComp(defaultNode.Text, nCommand.Text) > 0 Then
+                Set defaultNode = nCommand
+            End If
         End If
+        
+        Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
+        '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
+        '//                  something, even if nothing matches the XPath expression.
+        For I = 0 To (xmlArgs.length - 1)
+            ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").Text
+            Set nArg = trvCommands.nodes.Add(nCommand, tvwChild, , ArgumentName)
+            nArg.BackColor = txtRank.BackColor
+            nArg.ForeColor = vbWhite
+            
+            Set xmlArgRestricions = xmlArgs(I).selectNodes("restrictions/restriction")
+            
+            For j = 0 To (xmlArgRestricions.length - 1)
+                restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
+                Set nArgRestriction = trvCommands.nodes.Add(nArg, tvwChild, , restrictionName)
+                nArgRestriction.BackColor = txtRank.BackColor
+                nArgRestriction.ForeColor = vbWhite
+            Next j
+        Next I
         
     Next
     
