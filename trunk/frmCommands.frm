@@ -877,6 +877,8 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             Set xmlNode = xmlElement.selectSingleNode("access/rank")
             If Not (xmlNode Is Nothing) Then
                 txtRank.Text = xmlNode.Text
+            Else
+                txtRank.Text = vbNullString
             End If
             '// cboAlias
             cboAlias.Enabled = True
