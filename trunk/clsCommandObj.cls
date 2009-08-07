@@ -42,10 +42,10 @@ End Property
 Public Property Let Name(strName As String)
     m_name = strName
 End Property
-Public Property Get args() As String
-    args = m_args
+Public Property Get Args() As String
+    Args = m_args
 End Property
-Public Property Let args(strArgs As String)
+Public Property Let Args(strArgs As String)
     m_args = strArgs
 End Property
 Public Property Get Arguments() As Collection
@@ -60,10 +60,10 @@ End Property
 Public Property Let IsLocal(bln As Boolean)
     m_local = bln
 End Property
-Public Property Get publicOutput() As Boolean
-    publicOutput = m_publicOutput
+Public Property Get PublicOutput() As Boolean
+    PublicOutput = m_publicOutput
 End Property
-Public Property Let publicOutput(bln As Boolean)
+Public Property Let PublicOutput(bln As Boolean)
     m_publicOutput = bln
 End Property
 

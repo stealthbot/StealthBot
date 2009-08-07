@@ -580,15 +580,13 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
     '// all done here
     Exit Function
     
-    
-    
-
-
 ERROR_HANDLER:
+    If (Err.Number = 93) Then
+        Err.Clear
+        Exit Function
+    End If
+    
     Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.IsCommand().")
-
-    Exit Function
-
 End Function
 
 '// This function will split a message into separate commands. This message should NOT
