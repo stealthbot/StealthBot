@@ -108,7 +108,7 @@ Public Property Get docs() As clsCommandDocObj
     If m_command_docs Is Nothing Then
         '// this command is nothing, lets create it
         Set m_command_docs = New clsCommandDocObj
-        m_command_docs.OpenCommand (m_name)
+        Call m_command_docs.OpenCommand(m_name, Chr$(0))
         Set docs = m_command_docs
     Else
         '// this command already has a value, lets make sure its still valid

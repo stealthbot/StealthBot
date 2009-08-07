@@ -479,7 +479,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         '// EXAMPLE COMMAND STRING
         '// all: add SammyHagar 200
         If (hasTrigger = False) And (messageLen > 5) Then
-            If (Left$(Message, 3) = "all") And (Mid$(Message, 4, 2) = ": " Or Mid$(Message, 4, 2) = ", ") Then
+            If (Not StrComp(Left$(Message, 3), "all", vbTextCompare)) And (Mid$(Message, 4, 2) = ": " Or Mid$(Message, 4, 2) = ", ") Then
                 publicOutput = True
                 cropLen = 6
                 hasTrigger = True
@@ -490,7 +490,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         '// EXAMPLE COMMAND STRING
         '// ops: add SammyHagar 200
         If (hasTrigger = False) And (messageLen > 5) Then
-            If (Left$(Message, 3) = "ops") And (Mid$(Message, 4, 2) = ": " Or Mid$(Message, 4, 2) = ", ") Then
+            If (Not StrComp(Left$(Message, 3), "ops", vbTextCompare)) And (Mid$(Message, 4, 2) = ": " Or Mid$(Message, 4, 2) = ", ") Then
                 If (g_Channel.Self.IsOperator) Then
                     publicOutput = True
                     cropLen = 6
@@ -643,6 +643,8 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal strScript
     If strScriptOwner = vbNullString Then
         xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "' and " & _
                           "not(@owner)]"
+    ElseIf strScriptOwner = Chr$(0) Then
+        xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "']"
     Else
         xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "' and " & _
                           "translate(@owner, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz') = '" & LCase(strScriptOwner) & "']"

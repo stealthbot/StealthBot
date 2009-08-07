@@ -99,8 +99,10 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             End If
             
             ' ...
-            Call executeCommand(Username, dbAccess, command.Name & Space$(1) & command.args, _
+            If (LenB(command.docs.Owner) = 0) Then 'Is it a built in command?
+                Call executeCommand(Username, dbAccess, command.Name & Space$(1) & command.args, _
                     IsLocal, command_return)
+            End If
                     
             ' ...
             If (DisplayOutput) Then
