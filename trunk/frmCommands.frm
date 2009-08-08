@@ -553,7 +553,13 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
         '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
         '//                  something, even if nothing matches the XPath expression.
         For I = 0 To (xmlArgs.length - 1)
+        
             ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").Text
+            If (Not xmlArgs(I).Attributes.getNamedItem("optional") Is Nothing) Then
+                If (xmlArgs(I).Attributes.getNamedItem("optional").Text = "1") Then
+                    ArgumentName = "[" & ArgumentName & "]"
+                End If
+            End If
             Set nArg = trvCommands.nodes.Add(nCommand, tvwChild, , ArgumentName)
             nArg.BackColor = txtRank.BackColor
             nArg.ForeColor = vbWhite
@@ -703,6 +709,9 @@ Private Function GetNodeInfo(node As MSComctlLib.node, ByRef commandName As Stri
         commandName = node.Parent.Parent.Text
         ArgumentName = node.Parent.Text
         restrictionName = node.Text
+    End If
+    If (Left$(ArgumentName, 1) = "[" And Right$(ArgumentName, 1) = "]") Then
+        ArgumentName = Mid$(ArgumentName, 2, Len(ArgumentName) - 2)
     End If
 End Function
 
@@ -956,6 +965,12 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             Set xmlNode = xmlElement.selectSingleNode("documentation/specialnotes")
             If Not (xmlNode Is Nothing) Then
                 txtSpecialNotes.Text = xmlNode.Text
+            End If
+            
+            If (Not xmlElement.Attributes.getNamedItem("optional") Is Nothing) Then
+                If (xmlElement.Attributes.getNamedItem("optional").Text = "1") Then
+                    fraCommand.Caption = fraCommand.Caption & " - Optional"
+                End If
             End If
             '// chkDisable
             'chkDisable.Enabled = True
