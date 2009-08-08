@@ -5394,12 +5394,14 @@ Function CDKeyReplacements(ByVal inString As String) As String
 End Function
 
 Sub SaveFontSettings()
-    If Not (StrComp(InitChanFont, txtChanFont.Text)) Then
+    If (StrComp(InitChanFont, txtChanFont.Text, vbTextCompare)) Then
         WINI "ChanFont", txtChanFont.Text, secOther
         frmChat.lvChannel.Font.Name = txtChanFont.Text
+        frmChat.lvClanList.Font.Name = txtChanFont.Text
+        frmChat.lvFriendList.Font.Name = txtChanFont.Text
     End If
     
-    If Not (StrComp(InitChatFont, txtChatFont.Text)) Then
+    If (StrComp(InitChatFont, txtChatFont.Text, vbTextCompare)) Then
         WINI "ChatFont", txtChatFont.Text, secOther
         frmChat.rtbChat.Font.Name = txtChatFont.Text
     End If
@@ -5407,6 +5409,8 @@ Sub SaveFontSettings()
     If Not InitChanSize = CInt(txtChanSize.Text) Then
         WINI "ChanSize", txtChanSize.Text, secOther
         frmChat.lvChannel.Font.Size = CInt(txtChanSize.Text)
+        frmChat.lvClanList.Font.Size = CInt(txtChanSize.Text)
+        frmChat.lvFriendList.Font.Size = CInt(txtChanSize.Text)
     End If
     
     If Not InitChatSize = CInt(txtChatSize.Text) Then

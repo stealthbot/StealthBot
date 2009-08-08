@@ -6917,9 +6917,10 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             rtbChat.Font.Name = s
         End If
         
-        s = ReadCfg(OT, "ChanFont")
         If s <> vbNullString And s <> lvChannel.Font.Name Then
             lvChannel.Font.Name = s
+            lvClanList.Font.Name = s
+            lvFriendList.Font.Name = s
         End If
         
         s = ReadCfg(OT, "ChatSize")
@@ -6933,6 +6934,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         If StrictIsNumeric(s) Then
             If CInt(s) <> lvChannel.Font.Size Then
                 lvChannel.Font.Size = s
+                lvClanList.Font.Size = s
+                lvFriendList.Font.Size = s
             End If
         End If
     End If
