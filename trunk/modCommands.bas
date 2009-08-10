@@ -4809,29 +4809,12 @@ End Function ' end function OnPing
 Private Function OnAddQuote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    Dim f      As Integer
-    Dim U      As String
-    Dim Y      As String
     Dim tmpbuf As String ' temporary output buffer
     
-    f = FreeFile
-    
-    U = msgData
-    
-    If (Len(U)) Then
-        Y = Dir$(GetFilePath("quotes.txt"))
-        
-        If (Len(Y) = 0) Then
-            Open GetFilePath("quotes.txt") For Output As #f
-                Print #f, U
-            Close #f
-        Else
-            Open Y For Append As #f
-                Print #f, U
-            Close #f
-        End If
-            
+    If (g_Quotes.Add(msgData)) Then
         tmpbuf = "Quote added!"
+    Else
+        tmpbuf = "Quote add failed."
     End If
     
     ' return message
@@ -4889,7 +4872,7 @@ Private Function OnQuote(ByVal Username As String, ByRef dbAccess As udtGetAcces
     Dim tmpbuf As String ' temporary output buffer
 
     tmpbuf = "Quote: " & _
-        GetRandomQuote
+        g_Quotes.GetRandomQuote
     
     ' this was len() = 0, which doesn't work cause we add "Quote:" above -andy
     If (Len(tmpbuf) < 8) Then
@@ -4897,7 +4880,7 @@ Private Function OnQuote(ByVal Username As String, ByRef dbAccess As udtGetAcces
     ElseIf (Len(tmpbuf) > 223) Then
         ' try one more time
         tmpbuf = "Quote: " & _
-            GetRandomQuote
+            g_Quotes.GetRandomQuote
         
         If (Len(tmpbuf) > 223) Then
             'too long? too bad. truncate
@@ -8066,101 +8049,6 @@ ERROR_HANDLER::
     ValidateAccess = False
 
     Exit Function
-End Function
-
-Public Function LoadQuotes(Optional strPath As String = vbNullString)
-    Dim f As Integer
-    Dim s As String
-
-    Set g_Quotes = New Collection
-    
-    If (strPath = vbNullString) Then
-        strPath = App.Path & "\quotes.txt"
-    End If
-    
-    If (LenB(Dir$(strPath)) > 0) Then
-        f = FreeFile
-        
-        Open (GetFilePath("quotes.txt")) For Input As #f
-            If (LOF(f) > 1) Then
-                Do
-                    Line Input #f, s
-                    
-                    s = Trim(s)
-                    
-                    If (LenB(s) > 0) Then
-                        g_Quotes.Add s
-                    End If
-                Loop Until EOF(f)
-            End If
-        Close #f
-    End If
-End Function
-
-' requires public
-Public Function GetRandomQuote() As String
-    On Error GoTo GetRandomQuote_Error
-
-    Dim colQuotes As Collection
-    
-    Dim Rand      As Integer
-    Dim f         As Integer
-    Dim s         As String
-    
-    Set colQuotes = New Collection
-
-    If LenB(Dir$(GetFilePath("quotes.txt"))) > 0 Then
-    
-        f = FreeFile
-        Open (GetFilePath("quotes.txt")) For Input As #f
-        
-        If LOF(f) > 1 Then
-        
-            Do
-                Line Input #f, s
-                
-                s = Trim(s)
-                
-                If LenB(s) > 0 Then
-                    colQuotes.Add s
-                End If
-            Loop Until EOF(f)
-            
-            Randomize
-            Rand = Rnd * colQuotes.Count
-            
-            If Rand <= 0 Then
-                Rand = 1
-            End If
-            
-            If Len(colQuotes.Item(Rand)) < 1 Then
-                Randomize
-                Rand = Rnd * colQuotes.Count
-                
-                If Rand <= 0 Then
-                    Rand = 1
-                End If
-            End If
-            
-            GetRandomQuote = colQuotes.Item(Rand)
-
-        End If
-        
-        Close #f
-        
-    End If
-    
-    If Left$(GetRandomQuote, 1) = "/" Then GetRandomQuote = " " & GetRandomQuote
-
-GetRandomQuote_Exit:
-    Set colQuotes = Nothing
-    
-    Exit Function
-
-GetRandomQuote_Error:
-
-    Debug.Print "Error " & Err.Number & " (" & Err.description & ") in procedure GetRandomQuote of Module modCommandCode"
-    Resume GetRandomQuote_Exit
 End Function
 
 ' Writes database to disk

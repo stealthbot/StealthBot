@@ -1417,16 +1417,8 @@ End Function
 
 Public Function Quotes() As Object
 
-    Dim I As Integer ' ...
-    
-    ' ...
-    Set Quotes = New Collection
-    
-    ' ...
-    For I = 1 To g_Quotes.Count
-        Quotes.Add g_Quotes(I)
-    Next I
-    
+    Set Quotes = g_Quotes
+
 End Function
 
 ' // ...

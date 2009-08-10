@@ -1801,7 +1801,6 @@ Private Sub Form_Load()
     cboSend.SetFocus
     
     LoadQuickChannels
-    LoadQuotes
     InitScriptControl SControl
     
     On Error Resume Next
@@ -5908,7 +5907,7 @@ Private Sub Timer_Timer()
             IdleMsg = Replace(IdleMsg, "%bc", BanCount)
             IdleMsg = Replace(IdleMsg, "%botup", ConvertTime(uTicks))
             IdleMsg = Replace(IdleMsg, "%mp3", Replace(MediaPlayer.TrackName, "&", "+"))
-            IdleMsg = Replace(IdleMsg, "%quote", GetRandomQuote)
+            IdleMsg = Replace(IdleMsg, "%quote", g_Quotes.GetRandomQuote)
             IdleMsg = Replace(IdleMsg, "%rnd", GetRandomPerson)
             IdleMsg = Replace(IdleMsg, "%t", Time$)
             
@@ -5936,7 +5935,7 @@ Private Sub Timer_Timer()
             End If
  
         ElseIf IdleType = "quote" Then
-            U = GetRandomQuote
+            U = g_Quotes.GetRandomQuote
             If Len(U) > 217 Then GoTo Error
             IdleMsg = "/me : " & U
             
@@ -6937,9 +6936,10 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             rtbChat.Font.Name = s
         End If
         
-        s = ReadCfg(OT, "ChanFont")
         If s <> vbNullString And s <> lvChannel.Font.Name Then
             lvChannel.Font.Name = s
+            lvClanList.Font.Name = s
+            lvFriendList.Font.Name = s
         End If
         
         s = ReadCfg(OT, "ChatSize")
@@ -6953,6 +6953,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         If StrictIsNumeric(s) Then
             If CInt(s) <> lvChannel.Font.Size Then
                 lvChannel.Font.Size = s
+                lvClanList.Font.Size = s
+                lvFriendList.Font.Size = s
             End If
         End If
     End If
@@ -7274,6 +7276,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     'LoadSafelist
     LoadArray LOAD_PHRASES, Phrases()
     LoadArray LOAD_FILTERS, gFilters()
+    
+    ' reload g_Quotes on config reload. -Ribose/2009-08-10
+    Set g_Quotes = New clsQuotesObj
     
     's = readcfg(ot, "SendDelay")
     'If strictisnumeric(s) Then
