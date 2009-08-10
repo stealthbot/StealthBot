@@ -1708,7 +1708,7 @@ Private Sub Form_Load()
     'Support for recording maxmized position. - FrOzeN
     s = ReadCfg("Position", "Maximized")
     
-    If s = "True" Then
+    If s = "Y" Then
         Me.WindowState = vbMaximized
     End If
 
@@ -2203,42 +2203,48 @@ End Sub
 
 Sub Event_BNLSError(ErrorNumber As Integer, description As String)
     If sckBNet.State <> 7 Then
-    
         sckBNet.Close
         
-        'Check the user has using BNLS server finder enabled
-        If BotVars.UseAltBnls = True Then
-            Call FindAltBNLS
-        ElseIf BotVars.UseAltBnls = False Then
+        Dim blnFinderDisabled As Boolean
+        blnFinderDisabled = ((ReadCfg("Override", "ForceDisableBNLSFinder")) = "Y")
+        
+        ' Check the user has using BNLS server finder enabled
+        ' do they have the finder disabled or is the override set?
+        If (BotVars.UseAltBnls = False) Or (blnFinderDisabled = True) Then
             AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & description
             
             UserCancelledConnect = False
             
             DoDisconnect 1, True
             
-            If (askedBnls = False) Then
-                askedBnls = True
-            
-                'Ask the user if they would like to enable the BNLS Automatic Server finder
-                Dim msgResult As VbMsgBoxResult
+            ' check if user has overrided BNLS finder dialog -- they don't want to know about it!
+            If blnFinderDisabled = False Then
+                ' check if we've already asked the user
+                If (askedBnls = False) Then
+                    ' set to true so that recursion does not occur
+                    askedBnls = True
                 
-                msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
-                                   "Would you like to enable the BNLS Automatic Server Finder?", _
-                                   vbYesNo, "BNLS Error")
-                
-                'Save their answer to the config, and the call this procedure again to reevaluate what to do
-                WriteINI "Main", "UseAltBNLS", IIf(msgResult = vbYes, "Y", "N")
-                
-                If (msgResult = vbYes) Then
-                    BotVars.UseAltBnls = True
+                    'Ask the user if they would like to enable the BNLS Automatic Server finder
+                    Dim msgResult As VbMsgBoxResult
                     
-                    Call Event_BNLSError(ErrorNumber, description)
-                Else
-                    BotVars.UseAltBnls = False
+                    msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
+                                       "Would you like to enable the BNLS Automatic Server Finder?", _
+                                       vbYesNo, "BNLS Error")
+                    
+                    'Save their answer to the config, and the call this procedure again to reevaluate what to do
+                    WriteINI "Main", "UseAltBNLS", IIf(msgResult = vbYes, "Y", "N")
+                    
+                    If (msgResult = vbYes) Then
+                        BotVars.UseAltBnls = True
+                        
+                        Call Event_BNLSError(ErrorNumber, description)
+                    Else
+                        BotVars.UseAltBnls = False
+                    End If
                 End If
             End If
             
-            If (BotVars.UseAltBnls = False) Then
+            If (BotVars.UseAltBnls = False) Or (blnFinderDisabled = True) Then
                 DisplayError ErrorNumber, 0, BNLS
             End If
             
@@ -2257,6 +2263,9 @@ Sub Event_BNLSError(ErrorNumber As Integer, description As String)
             '    ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
             '        AddressOf Reconnect_TimerProc)
             'End If
+        Else
+            ' we can use the finder
+            Call FindAltBNLS
         End If
     End If
 End Sub
@@ -2281,7 +2290,7 @@ Public Sub FindAltBNLS()
     
     'Notify user the current BNLS server failed
     'If (intCounter > 1) Then
-        AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BNLSServer & " failed."
+    AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BNLSServer & " failed."
     'End If
     
     'Notify user other BNLS servers are being located
@@ -2292,7 +2301,7 @@ Public Sub FindAltBNLS()
         Dim strReturn As String
         
         'Reset the counter
-        intCounter = 1
+        intCounter = 0
                 
         If (INet.StillExecuting = False) Then
             ' store first bnls server used so that we can avoid connecting to it again
@@ -2317,8 +2326,11 @@ Public Sub FindAltBNLS()
                     ' ...
                     Call DoDisconnect
             
-                    ' ...
+                    ' ensure that we update our listing on following connection(s)
                     GotBNLSList = False
+                    
+                    ' ensure checker starts at 0 again on following connection(s)
+                    intCounter = 0
             
                     ' ...
                     Exit Sub
@@ -2346,16 +2358,17 @@ Public Sub FindAltBNLS()
             "and check the Technical Support forum for more information."
     End If
     
-    ' ...
-    If (StrComp(strBNLS(intCounter), firstServer, vbTextCompare) = 0) Then
+    ' keep increasing counter until we find a server that is valid and isn't the same as the first one
+    Do While (StrComp(strBNLS(intCounter), firstServer, vbTextCompare) = 0) Or (LenB(strBNLS(intCounter)) = 0)
         intCounter = intCounter + 1
         
         If intCounter > UBound(strBNLS) Then
             'All BNLS servers have been tried and failed
             Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://stealthbot.net/ " & _
                 "and check the Technical Support forum for more information."
+            Exit Do
         End If
-    End If
+    Loop
     
     ' ...
     BotVars.BNLSServer = strBNLS(intCounter)
@@ -2367,7 +2380,7 @@ Public Sub FindAltBNLS()
     End With
     
     ' ...
-    AddChat RTBColors.InformationText, "[BNLS] Connecting to " & BotVars.BNLSServer & "..."
+    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
 
     Exit Sub
     
@@ -2379,6 +2392,9 @@ BNLS_Alt_Finder_Error:
         
         ' ensure that we update our listing on following connection(s)
         GotBNLSList = False
+        
+        ' ensure checker starts at 0 again on following connection(s)
+        intCounter = 0
     
     Else
         
@@ -2671,10 +2687,10 @@ Private Sub ClanHandler_RemovedFromClan(ByVal Status As Byte)
 End Sub
 
 Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
-    If (g_Clan.Self.rank < NewRank) Then
+    If (g_Clan.Self.Rank < NewRank) Then
         AddChat RTBColors.SuccessText, "[CLAN] You have been promoted. Your new rank is ", _
                 RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
-    ElseIf (g_Clan.Self.rank > NewRank) Then
+    ElseIf (g_Clan.Self.Rank > NewRank) Then
         AddChat RTBColors.SuccessText, "[CLAN] You have been demoted. Your new rank is ", _
                 RTBColors.InformationText, GetRank(NewRank), RTBColors.SuccessText, "."
     Else
@@ -2682,20 +2698,20 @@ Private Sub ClanHandler_MyRankChange(ByVal NewRank As Byte)
                 GetRank(NewRank), RTBColors.SuccessText, "."
     End If
 
-    g_Clan.Self.rank = NewRank
+    g_Clan.Self.Rank = NewRank
     
     On Error Resume Next
     
     RunInAll "Event_BotClanRankChanged", NewRank
 End Sub
 
-Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal rank As Byte)
+Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As String, ByVal Rank As Byte)
     Set g_Clan = New clsClanObj
     
     With Clan
         .Name = ClanTag
         .DWName = RawClanTag
-        .MyRank = rank
+        .MyRank = Rank
         .isUsed = True
     End With
     
@@ -2718,9 +2734,9 @@ Private Sub ClanHandler_ClanInfo(ByVal ClanTag As String, ByVal RawClanTag As St
             
         RunInAll "Event_BotJoinedClan", ClanTag
     Else
-        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
+        AddChat RTBColors.SuccessText, "[CLAN] You are a ", RTBColors.InformationText, GetRank(Rank), RTBColors.SuccessText, " in ", RTBColors.InformationText, "Clan " & ClanTag, RTBColors.SuccessText, "."
         
-        RunInAll "Event_BotClanInfo", ClanTag, rank
+        RunInAll "Event_BotClanInfo", ClanTag, Rank
     End If
     
     RequestClanList
@@ -2770,7 +2786,7 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
             ' ...
             With ClanMember
                 .Name = Members(I)
-                .rank = Val(Members(I + 1))
+                .Rank = Val(Members(I + 1))
                 .Status = Val(Members(I + 2))
                 .Location = Members(I + 3)
             End With
@@ -2800,7 +2816,7 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
     frmChat.ListviewTabs_Click 0
 End Sub
 
-Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
+Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
     Dim x   As ListItem
     Dim pos As Integer
     
@@ -2809,7 +2825,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
     If (pos > 0) Then
         With g_Clan.Members(pos)
             .Name = Username
-            .rank = rank
+            .Rank = Rank
             .Status = IsOnline
             .Location = Location
         End With
@@ -2822,7 +2838,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
         ' ...
         With ClanMember
             .Name = Username
-            .rank = rank
+            .Rank = Rank
             .Status = IsOnline
             .Location = Location
         End With
@@ -2836,13 +2852,13 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
     Set x = lvClanList.FindItem(Username)
 
     If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
-        g_Clan.Self.rank = IIf(rank = 0, rank + 1, rank)
+        g_Clan.Self.Rank = IIf(Rank = 0, Rank + 1, Rank)
         AwaitingClanInfo = 1
     End If
     
     If AwaitingClanInfo = 1 Then
         AwaitingClanInfo = 0
-        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(rank) & "."
+        AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(Rank) & "."
     End If
     
     If Not (x Is Nothing) Then
@@ -2850,10 +2866,10 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal rank As
         Set x = Nothing
     End If
     
-    AddClanMember Username, CInt(rank), CInt(IsOnline)
+    AddClanMember Username, CInt(Rank), CInt(IsOnline)
     
     On Error Resume Next
-    RunInAll "Event_ClanMemberUpdate", Username, rank, IsOnline
+    RunInAll "Event_ClanMemberUpdate", Username, Rank, IsOnline
 End Sub
 
 Private Sub ClanHandler_ClanMOTD(ByVal cookie As Long, ByVal Message As String)
@@ -3133,7 +3149,11 @@ Sub Form_Unload(Cancel As Integer)
     ' Added this instead of End to try and fix some system tray crashes 2009-0211-andy
     '  It was used in some capacity before since the API was already declared
     '   in modAPI...
-    Call ExitProcess(0)
+    ' added preprocessor check; the bot was ending the VB6 IDE's process too! - ribose
+    ' if it was compiled with the debugger, we don't allow minimizing to tray anyway
+    #If Not COMPILE_DEBUG = 1 Then
+        Call ExitProcess(0)
+    #End If
 End Sub
 
 
@@ -3487,7 +3507,7 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, 
                 sProd = g_Channel.Users(aInx).game
 
                 mnuPopWebProfile.Enabled = (sProd = "W3XP" Or sProd = "WAR3")
-                mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And g_Clan.Self.rank >= 3)
+                mnuPopInvite.Enabled = (mnuPopWebProfile.Enabled And g_Clan.Self.Rank >= 3)
                 mnuPopKick.Enabled = (MyFlags = 2 Or MyFlags = 18)
                 mnuPopDes.Enabled = (MyFlags = 2 Or MyFlags = 18)
                 mnuPopBan.Enabled = (MyFlags = 2 Or MyFlags = 18)
@@ -4112,7 +4132,7 @@ Private Sub mnuPopInvite_Click()
     End If
     
     If LenB(sPlayer) > 0 Then
-        If g_Clan.Self.rank >= 3 Then
+        If g_Clan.Self.Rank >= 3 Then
             InviteToClan (reverseUsername(sPlayer))
             AddChat RTBColors.InformationText, "[CLAN] Invitation sent to " & GetSelectedUser & ", awaiting reply."
         End If
@@ -6917,10 +6937,9 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
             rtbChat.Font.Name = s
         End If
         
+        s = ReadCfg(OT, "ChanFont")
         If s <> vbNullString And s <> lvChannel.Font.Name Then
             lvChannel.Font.Name = s
-            lvClanList.Font.Name = s
-            lvFriendList.Font.Name = s
         End If
         
         s = ReadCfg(OT, "ChatSize")
@@ -6934,8 +6953,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         If StrictIsNumeric(s) Then
             If CInt(s) <> lvChannel.Font.Size Then
                 lvChannel.Font.Size = s
-                lvClanList.Font.Size = s
-                lvFriendList.Font.Size = s
             End If
         End If
     End If
@@ -8110,11 +8127,11 @@ Sub DisableListviewTabs()
     ListviewTabs.TabEnabled(LVW_BUTTON_CLAN) = False
 End Sub
 
-Sub AddClanMember(ByVal Name As String, rank As Integer, Online As Integer)
+Sub AddClanMember(ByVal Name As String, Rank As Integer, Online As Integer)
     
     Dim visible_rank As Integer
     
-    visible_rank = rank
+    visible_rank = Rank
     
     If visible_rank = 0 Then visible_rank = 1
     If visible_rank > 4 Then visible_rank = 5 '// handle bad ranks
@@ -8139,7 +8156,7 @@ Sub AddClanMember(ByVal Name As String, rank As Integer, Online As Integer)
     frmChat.ListviewTabs_Click 0
     
     On Error Resume Next
-    RunInAll "Event_ClanInfo", Name, rank, Online
+    RunInAll "Event_ClanInfo", Name, Rank, Online
 End Sub
 
 Private Function GetClanSelectedUser() As String
@@ -8185,7 +8202,7 @@ Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single,
                     mnuPopDem.Enabled = False
                     mnuPopPro.Enabled = False
                     
-                    If g_Clan.Self.rank > 2 Then
+                    If g_Clan.Self.Rank > 2 Then
                             
                         mnuPopBNProfile.Enabled = True
                         
@@ -8200,7 +8217,7 @@ Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single,
                                 
                                 mnuPopPro.Enabled = False
                                 
-                                If g_Clan.Self.rank = 4 Then
+                                If g_Clan.Self.Rank = 4 Then
                                     
                                     mnuPopDem.Enabled = True
                                     mnuPopRem.Enabled = True
@@ -8231,7 +8248,7 @@ Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single,
             End If
             
             If StrComp(GetClanSelectedUser(), GetCurrentUsername, vbTextCompare) = 0 Then
-                If g_Clan.Self.rank > 0 Then
+                If g_Clan.Self.Rank > 0 Then
                     mnuSP2.Visible = True
                     mnuPopLeaveClan.Visible = True
                 Else
@@ -8483,7 +8500,7 @@ Public Sub RecordWindowPosition(Optional Maximized As Boolean = False)
         WriteINI "Position", "Width", Int(Me.Width / Screen.TwipsPerPixelX)
     End If
     
-    WriteINI "Position", "Maximized", CStr(Maximized)
+    WriteINI "Position", "Maximized", IIf(Maximized, "Y", "N")
     WriteINI "Main", "ConfigVersion", CONFIG_VERSION
 End Sub
 
@@ -8499,4 +8516,6 @@ Public Sub RecordcboSendSelInfo()
     cboSendSelLength = cboSend.selLength
     cboSendSelStart = cboSend.selStart
 End Sub
+
+
 
