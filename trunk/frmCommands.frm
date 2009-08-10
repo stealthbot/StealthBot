@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.0#0"; "vbalTreeView6.ocx"
 Begin VB.Form frmCommands 
    BackColor       =   &H00000000&
    BorderStyle     =   3  'Fixed Dialog
@@ -25,13 +25,35 @@ Begin VB.Form frmCommands
    ScaleWidth      =   9330
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
+   Begin vbalTreeViewLib6.vbalTreeView trvCommands 
+      Height          =   4695
+      Left            =   120
+      TabIndex        =   20
+      Top             =   720
+      Width           =   3855
+      _ExtentX        =   6800
+      _ExtentY        =   8281
+      BackColor       =   10040064
+      ForeColor       =   16777215
+      LineStyle       =   0
+      Style           =   5
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
    Begin VB.ComboBox cboCommandGroup 
       BackColor       =   &H00993300&
       ForeColor       =   &H00FFFFFF&
       Height          =   315
       Left            =   120
       Style           =   2  'Dropdown List
-      TabIndex        =   20
+      TabIndex        =   19
       Top             =   360
       Width           =   3855
    End
@@ -39,7 +61,7 @@ Begin VB.Form frmCommands
       Caption         =   "+"
       Height          =   315
       Left            =   7010
-      TabIndex        =   19
+      TabIndex        =   18
       Top             =   840
       Width           =   270
    End
@@ -47,35 +69,9 @@ Begin VB.Form frmCommands
       Caption         =   "-"
       Height          =   315
       Left            =   8725
-      TabIndex        =   17
+      TabIndex        =   16
       Top             =   840
       Width           =   270
-   End
-   Begin MSComctlLib.TreeView trvCommands 
-      Height          =   4575
-      Left            =   120
-      TabIndex        =   11
-      Top             =   750
-      Width           =   3855
-      _ExtentX        =   6800
-      _ExtentY        =   8070
-      _Version        =   393217
-      Indentation     =   575
-      LabelEdit       =   1
-      LineStyle       =   1
-      Sorted          =   -1  'True
-      Style           =   6
-      FullRowSelect   =   -1  'True
-      Appearance      =   1
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Tahoma"
-         Size            =   9.75
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
    End
    Begin VB.Frame fraCommand 
       BackColor       =   &H00000000&
@@ -89,7 +85,7 @@ Begin VB.Form frmCommands
          Caption         =   "&Discard Changes"
          Height          =   300
          Left            =   2760
-         TabIndex        =   14
+         TabIndex        =   13
          Top             =   4680
          Width           =   1815
       End
@@ -97,7 +93,7 @@ Begin VB.Form frmCommands
          Caption         =   "&Save Changes"
          Height          =   300
          Left            =   600
-         TabIndex        =   13
+         TabIndex        =   12
          Top             =   4680
          Width           =   1815
       End
@@ -108,7 +104,7 @@ Begin VB.Form frmCommands
          ItemData        =   "frmCommands.frx":1CCA
          Left            =   3600
          List            =   "frmCommands.frx":1CCC
-         TabIndex        =   12
+         TabIndex        =   11
          Top             =   600
          Width           =   700
       End
@@ -170,7 +166,7 @@ Begin VB.Form frmCommands
          Caption         =   "+"
          Height          =   315
          Left            =   4388
-         TabIndex        =   16
+         TabIndex        =   15
          Top             =   600
          Width           =   270
       End
@@ -178,7 +174,7 @@ Begin VB.Form frmCommands
          Caption         =   "-"
          Height          =   315
          Left            =   3200
-         TabIndex        =   18
+         TabIndex        =   17
          Top             =   600
          Width           =   270
       End
@@ -240,7 +236,7 @@ Begin VB.Form frmCommands
       ForeColor       =   &H00FFFFFF&
       Height          =   195
       Left            =   150
-      TabIndex        =   15
+      TabIndex        =   14
       Top             =   165
       Width           =   990
    End
@@ -257,9 +253,9 @@ Private m_SelectedElement As SelectedElement
 
 '// Enums
 Private Enum NodeType
-    nCommand
-    nArgument
-    nRestriction
+    nCommand = 0
+    nArgument = 1
+    nRestriction = 2
 End Enum
 
 '// Stores information about the selected node in the treeview
@@ -284,8 +280,12 @@ Private Const TVGN_ROOT As Long = &H0
 
 
 ' Quicky clear the treeview identified by the hWnd parameter
-Sub ClearTreeViewNodes(ByRef trv As TreeView)
+Sub ClearTreeViewNodes(ByRef trv As vbalTreeView)
     
+    trv.nodes.Clear
+    Exit Sub
+    
+    '// Below code is no longer necesarry thanks to a better treeview. :) -Pyro
     Dim hWnd As Long
     Dim hItem As Long
     
@@ -420,17 +420,18 @@ Private Sub Form_Load()
     Call m_CommandsDoc.Load(App.Path & "\commands.xml")
     
     'Change tree view background and foreground color.
-    Dim lStyle As Long
-    Dim tNode As node
+    ' // (REMOVED 8/9/09: changed to a better treeview -Pyro)
+    'Dim lStyle As Long
+    'Dim tNode As node
     
-    For Each tNode In trvCommands.nodes
-        tNode.BackColor = txtRank.BackColor
-    Next
+    'For Each tNode In trvCommands.nodes
+    '    tNode.BackColor = txtRank.BackColor
+    'Next
     
-    SendMessage trvCommands.hWnd, 4381&, 0, txtRank.BackColor
-    lStyle = GetWindowLong(trvCommands.hWnd, -16&)
-    SetWindowLong trvCommands.hWnd, -16&, lStyle And (Not 2&)
-    SetWindowLong trvCommands.hWnd, -16&, lStyle
+    'SendMessage trvCommands.hWnd, 4381&, 0, txtRank.BackColor
+    'lStyle = GetWindowLong(trvCommands.hWnd, -16&)
+    'SetWindowLong trvCommands.hWnd, -16&, lStyle And (Not 2&)
+    'SetWindowLong trvCommands.hWnd, -16&, lStyle
     
     Call ResetForm
     Call PopulateOwnerComboBox
@@ -502,16 +503,16 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     Dim xmlArgs           As IXMLDOMNodeList
     Dim xmlArgRestricions As IXMLDOMNodeList
 
-    Dim nCommand          As node
-    Dim nArg              As node
-    Dim nArgRestriction   As node
+    Dim nCommand          As cTreeViewNode
+    Dim nArg              As cTreeViewNode
+    Dim nArgRestriction   As cTreeViewNode
     
     Dim commandName       As String
     Dim ArgumentName      As String
     Dim restrictionName   As String
     
     '// 08/30/2008 JSM - used to get the first command alphabetically
-    Dim defaultNode       As node
+    Dim defaultNode       As cTreeViewNode
     
     '// Counters
     Dim j                 As Integer
@@ -536,9 +537,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     For Each xmlCommand In m_CommandsDoc.documentElement.selectNodes(xpath)
     
         commandName = xmlCommand.Attributes.getNamedItem("name").Text
-        Set nCommand = trvCommands.nodes.Add(, , , commandName)
-        nCommand.BackColor = txtRank.BackColor
-        nCommand.ForeColor = vbWhite
+        Set nCommand = trvCommands.nodes.Add(trvCommands.nodes.Parent, etvwChild, commandName, commandName)
         
         '// 08/30/2008 JSM - check if this command is the first alphabetically
         If defaultNode Is Nothing Then
@@ -560,17 +559,14 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
                     ArgumentName = "[" & ArgumentName & "]"
                 End If
             End If
-            Set nArg = trvCommands.nodes.Add(nCommand, tvwChild, , ArgumentName)
-            nArg.BackColor = txtRank.BackColor
-            nArg.ForeColor = vbWhite
+            
+            Set nArg = trvCommands.nodes.Add(nCommand, etvwChild, commandName & "." & ArgumentName, ArgumentName)
             
             Set xmlArgRestricions = xmlArgs(I).selectNodes("restrictions/restriction")
             
             For j = 0 To (xmlArgRestricions.length - 1)
                 restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
-                Set nArgRestriction = trvCommands.nodes.Add(nArg, tvwChild, , restrictionName)
-                nArgRestriction.BackColor = txtRank.BackColor
-                nArgRestriction.ForeColor = vbWhite
+                Set nArgRestriction = trvCommands.nodes.Add(nArg, etvwChild, commandName & "." & ArgumentName & "." & restrictionName, restrictionName)
             Next j
         Next I
         
@@ -630,7 +626,7 @@ End Function
 
 
 '// 08/28/2008 JSM - Created
-Private Sub trvCommands_NodeClick(ByVal node As MSComctlLib.node)
+Private Sub trvCommands_NodeClick(node As cTreeViewNode)
 
     Dim nt As NodeType
     Dim commandName As String
@@ -677,9 +673,6 @@ Private Sub trvCommands_NodeClick(ByVal node As MSComctlLib.node)
     '// grab the node from the xpath
     Set xmlElement = m_CommandsDoc.selectSingleNode(xpath)
     Call PrepareForm(nt, xmlElement)
-    
-    node.BackColor = txtRank.BackColor
-    node.ForeColor = vbWhite
 End Sub
 
 '// Call this sub whenever the form controls have been changed
@@ -693,25 +686,31 @@ End Sub
 
 '// Checks the hiarchy of the treenodes to determine what type of node it is.
 '// 08/29/2008 JSM - Created
-Private Function GetNodeInfo(node As MSComctlLib.node, ByRef commandName As String, ByRef ArgumentName As String, ByRef restrictionName As String) As NodeType
-    If node.Parent Is Nothing Then
-        GetNodeInfo = NodeType.nCommand
-        commandName = node.Text
-        ArgumentName = ""
-        restrictionName = ""
-    ElseIf node.Parent.Parent Is Nothing Then
-        GetNodeInfo = NodeType.nArgument
-        commandName = node.Parent.Text
-        ArgumentName = node.Text
-        restrictionName = ""
-    Else
-        GetNodeInfo = NodeType.nRestriction
-        commandName = node.Parent.Parent.Text
-        ArgumentName = node.Parent.Text
-        restrictionName = node.Text
-    End If
-    If (Left$(ArgumentName, 1) = "[" And Right$(ArgumentName, 1) = "]") Then
-        ArgumentName = Mid$(ArgumentName, 2, Len(ArgumentName) - 2)
+Private Function GetNodeInfo(node As cTreeViewNode, ByRef commandName As String, ByRef ArgumentName As String, ByRef restrictionName As String) As NodeType
+    Dim s() As String
+    
+    If LenB(node.Key) > 0 Then
+        s = Split(node.Key, ".")
+        Select Case UBound(s)
+            Case 0
+                commandName = s(0)
+                ArgumentName = vbNullString
+                restrictionName = vbNullString
+                GetNodeInfo = nCommand
+            Case 1
+                commandName = s(0)
+                ArgumentName = s(1)
+                restrictionName = vbNullString
+                GetNodeInfo = nArgument
+            Case 2
+                commandName = s(0)
+                ArgumentName = s(1)
+                restrictionName = s(2)
+                GetNodeInfo = nRestriction
+        End Select
+        If (Left$(ArgumentName, 1) = "[" And Right$(ArgumentName, 1) = "]") Then
+            ArgumentName = Mid$(ArgumentName, 2, Len(ArgumentName) - 2)
+        End If
     End If
 End Function
 
