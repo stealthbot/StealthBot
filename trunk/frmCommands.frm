@@ -616,10 +616,12 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     Next
     
     '// 08/30/2008 JSM - click the first command alphabetically
+    ' fixed to work with SelectedNodeChanged() -Ribose/2009-08-10
     If Not (defaultNode Is Nothing) Then
-        trvCommands_NodeClick defaultNode
+        defaultNode.Selected = True
+    Else
+        trvCommands_SelectedNodeChanged
     End If
-    
     
 End Sub
 
@@ -666,11 +668,12 @@ Private Function PromptToSaveChanges() As Boolean
 
 End Function
 
-
-
 '// 08/28/2008 JSM - Created
-Private Sub trvCommands_NodeClick(node As cTreeViewNode)
+' moved to _SelectedNodeChanged -Ribose
+' if no node is selected (such as none existing), now disables all fields -Ribose/2009-08-10
+Private Sub trvCommands_SelectedNodeChanged()
 
+    Dim node As cTreeViewNode
     Dim nt As NodeType
     Dim commandName As String
     Dim ArgumentName As String
@@ -679,6 +682,12 @@ Private Sub trvCommands_NodeClick(node As cTreeViewNode)
     
     Dim xpath As String
     Dim xmlElement As IXMLDOMElement
+    
+    Set node = trvCommands.SelectedItem
+    If node Is Nothing Then
+        Call ResetForm
+        Exit Sub
+    End If
     
     '// This function will prompt the user to save changes if necessary. If the
     '// return value is false, then the use clicked cancel so we should gtfo of here.
