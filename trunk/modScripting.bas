@@ -568,7 +568,12 @@ Public Sub CallByNameEx(obj As Object, ProcName As String, CallType As VbCallTyp
         ReDim v(numArgs)
         
         For I = 0 To numArgs
-            v(I) = vArgsArray(numArgs - I)
+            ' corrected object passing -Ribose/2009-08-10
+            If IsObject(vArgsArray(numArgs - I)) Then
+                Set v(I) = vArgsArray(numArgs - I)
+            Else
+                Let v(I) = vArgsArray(numArgs - I)
+            End If
         Next I
         
         Call oTLI.InvokeHookArray(obj, ProcID, CallType, v)

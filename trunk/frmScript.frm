@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Begin VB.Form frmScript 
    BackColor       =   &H00000000&
    Caption         =   "Scripting UI"
@@ -112,6 +112,7 @@ Begin VB.Form frmScript
       _ExtentX        =   873
       _ExtentY        =   450
       _Version        =   393217
+      Enabled         =   -1  'True
       ScrollBars      =   2
       TextRTF         =   $"frmScript.frx":0000
    End
@@ -226,14 +227,30 @@ End Function
 
 '// 6/22/2009 JSM - Adding wrapper function for MsgBox inside VB6 rather than
 '//                 the scripting control. This keeps the focus on the form.
-Public Function ShowMsgBox(Text As String, opts As Integer, Title As String)
+' made parameters optional, like the VBs equivalents -Ribose/2009-08-10
+Public Function ShowMsgBox(ByVal Text As String, Optional ByVal opts As VbMsgBoxStyle = vbOKOnly, _
+        Optional ByVal Title As String = vbNullString) As VbMsgBoxResult
 
-        Call MsgBox(Text, opts, Title)
+    ShowMsgBox = MsgBox(Text, opts, Title)
 
 End Function
 
-Public Function ShowInputBox(Text As String, Title As String, Default As String) As String
-  ShowInputBox = InputBox(Text, Title, Default)
+' wrapper function for InputBox, too!
+' made parameters optional, like the VBs equivalents -Ribose/2009-08-10
+Public Function ShowInputBox(ByVal Text As String, Optional ByVal Title As String = vbNullString, _
+        Optional ByVal Default As String = vbNullString, Optional ByVal XPos As Integer = -1, _
+        Optional ByVal YPos As Integer = -1) As String
+
+    If XPos = -1 And YPos = -1 Then
+        ShowInputBox = InputBox(Text, Title, Default)
+    ElseIf XPos = -1 Then
+        ShowInputBox = InputBox(Text, Title, Default, , YPos)
+    ElseIf YPos = -1 Then
+        ShowInputBox = InputBox(Text, Title, Default, XPos)
+    Else
+        ShowInputBox = InputBox(Text, Title, Default, XPos, YPos)
+    End If
+    
 End Function
 
 'Public Function Objects(objIndex As Integer) As scObj
@@ -554,7 +571,7 @@ Public Sub DestroyObj(ByVal ObjName As String)
                 Unload trv(m_arrObjs(Index).obj.Index)
             Else
                 With trv(0)
-                    .Nodes.Clear
+                    .nodes.Clear
                     .Visible = False
                 End With
             End If
