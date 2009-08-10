@@ -5,7 +5,7 @@ Public Type COMMAND_DATA
     Name         As String
     params       As String
     local        As Boolean
-    PublicOutput As Boolean
+    publicOutput As Boolean
 End Type
 
 'Read/WriteIni code thanks to ickis
@@ -2372,7 +2372,7 @@ Public Sub Pause(ByVal fSeconds As Single, Optional ByVal AllowEvents As Boolean
 End Sub
 
 Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String, ByVal Target As String, _
-    ByVal TargetType As String, Optional ByVal Rank As Integer, Optional ByVal Flags As String, _
+    ByVal TargetType As String, Optional ByVal rank As Integer, Optional ByVal Flags As String, _
         Optional ByVal Group As String)
     
     'Dim sPath  As String
@@ -2397,8 +2397,8 @@ Public Sub LogDBAction(ByVal ActionType As enuDBActions, ByVal Caller As String,
         str = str & " (" & LCase$(TargetType) & ")"
     End If
     
-    If (Rank > 0) Then
-        str = str & " " & Rank
+    If (rank > 0) Then
+        str = str & " " & rank
     End If
     
     If (Flags <> vbNullString) Then
@@ -2714,14 +2714,14 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     Const CMD_DELIMITER As String = "; "
 
     Static Message    As String  ' ...
-    Static CropLen    As Integer ' ...
-    Static HasTrigger As Boolean ' ...
+    Static cropLen    As Integer ' ...
+    Static hasTrigger As Boolean ' ...
 
     Dim Index        As Integer ' ...
     Dim bln          As Boolean ' ...
     Dim tmp          As String  ' ...
     Dim console      As Boolean ' ...
-    Dim PublicOutput As Boolean ' ...
+    Dim publicOutput As Boolean ' ...
     
     ' ...
     Set IsCommand = New clsCommandObj
@@ -2732,11 +2732,11 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         Message = str
         
         ' reset our statics
-        CropLen = 0
-        HasTrigger = False
+        cropLen = 0
+        hasTrigger = False
     Else
         ' ...
-        If (Len(Message) <= CropLen) Then
+        If (Len(Message) <= cropLen) Then
             ' ...
             With IsCommand
                 .Name = vbNullString
@@ -2758,21 +2758,21 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                 Exit Function
             ElseIf (Left$(Message, 2) = "//") Then
                 ' ...
-                PublicOutput = True
+                publicOutput = True
                 
                 ' ...
-                If (CropLen = 0) Then
-                    CropLen = Len("//")
+                If (cropLen = 0) Then
+                    cropLen = Len("//")
                 End If
             Else
                 ' ...
-                If (CropLen = 0) Then
-                    CropLen = Len("/")
+                If (cropLen = 0) Then
+                    cropLen = Len("/")
                 End If
             End If
         Else
             ' ...
-            CropLen = Len(Message)
+            cropLen = Len(Message)
 
             ' ...
             Exit Function
@@ -2780,8 +2780,8 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     End If
     
     ' ...
-    If (CropLen) Then
-        tmp = Mid$(Message, CropLen + 1)
+    If (cropLen) Then
+        tmp = Mid$(Message, cropLen + 1)
     Else
         tmp = Message
     End If
@@ -2791,20 +2791,20 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         ' ...
         If (Left$(tmp, Len(BotVars.TriggerLong)) = BotVars.TriggerLong) Then
             ' ...
-            CropLen = (CropLen + Len(BotVars.TriggerLong))
+            cropLen = (cropLen + Len(BotVars.TriggerLong))
         
             ' ...
             If (StrComp(Left$(tmp, Len(CurrentUsername) + 1), CurrentUsername & Space(1), _
                     vbTextCompare) = 0) Then
                 
                 ' ...
-                CropLen = (CropLen + Len(CurrentUsername))
+                cropLen = (cropLen + Len(CurrentUsername))
                 
             ElseIf (StrComp(Left$(tmp, Len(GetCurrentUsername) + 1), GetCurrentUsername & Space(1), _
                     vbTextCompare) = 0) Then
                 
                 ' ...
-                CropLen = (CropLen + Len(GetCurrentUsername))
+                cropLen = (cropLen + Len(GetCurrentUsername))
                 
             End If
             
@@ -2812,17 +2812,17 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
             bln = True
         Else
             ' ...
-            If (HasTrigger = False) Then
+            If (hasTrigger = False) Then
                 ' ...
                 If (StrComp(tmp, "?trigger", vbTextCompare) = 0) Then
                     ' ...
-                    CropLen = (CropLen + Len("?"))
+                    cropLen = (cropLen + Len("?"))
                 
                     ' ...
                     bln = True
                 ElseIf (StrComp(tmp, "!inbox", vbTextCompare) = 0) Then
                     ' ...
-                    CropLen = (CropLen + Len("!"))
+                    cropLen = (cropLen + Len("!"))
                 
                     ' ...
                     bln = True
@@ -2834,7 +2834,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                             (Mid$(tmp, Len(CurrentUsername) + 1, 2) = ", ")) Then
                                 
                             ' ...
-                            CropLen = (CropLen + (Len(CurrentUsername) + 2))
+                            cropLen = (cropLen + (Len(CurrentUsername) + 2))
                                 
                             ' ...
                             bln = True
@@ -2847,7 +2847,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                             (Mid$(tmp, Len(GetCurrentUsername) + 1, 2) = ", ")) Then
                                 
                             ' ...
-                            CropLen = (CropLen + (Len(GetCurrentUsername) + 2))
+                            cropLen = (cropLen + (Len(GetCurrentUsername) + 2))
                                 
                             ' ...
                             bln = True
@@ -2856,7 +2856,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                         UsernameRegex(GetCurrentUsername & ":", Left$(tmp, InStr(1, tmp, ": ")))) Then
 
                         ' ...
-                        CropLen = (CropLen + (InStr(1, tmp, ": ") + 1))
+                        cropLen = (cropLen + (InStr(1, tmp, ": ") + 1))
                         
                         ' ...
                         bln = True
@@ -2864,7 +2864,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                         UsernameRegex(GetCurrentUsername & ",", Left$(tmp, InStr(1, tmp, ", ")))) Then
 
                         ' ...
-                        CropLen = (CropLen + (InStr(1, tmp, ", ") + 1))
+                        cropLen = (cropLen + (InStr(1, tmp, ", ") + 1))
                         
                         ' ...
                         bln = True
@@ -2876,7 +2876,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                             ' ...
                             If (g_Channel.Self.IsOperator) Then
                                 ' ...
-                                CropLen = (CropLen + 5)
+                                cropLen = (cropLen + 5)
             
                                 ' ...
                                 bln = True
@@ -2886,7 +2886,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                                 (StrComp(Left$(Message, Len("all, ")), "all, ", vbTextCompare) = 0)) Then
                             
                             ' ...
-                            CropLen = (CropLen + 5)
+                            cropLen = (cropLen + 5)
                                 
                             ' ...
                             bln = True
@@ -2900,15 +2900,15 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
         ' ...
         If (bln) Then
             ' ...
-            tmp = Mid$(Message, CropLen + 1)
+            tmp = Mid$(Message, cropLen + 1)
             
             ' ...
-            HasTrigger = True
+            hasTrigger = True
         End If
     End If
     
     ' ...
-    If (HasTrigger) Then
+    If (hasTrigger) Then
         ' check our message for a command delimiter
         Index = InStr(Len(BotVars.TriggerLong) + 1, tmp, CMD_DELIMITER, _
             vbBinaryCompare)
@@ -2921,18 +2921,18 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
             tmp = Mid$(tmp, 1, Index - 1)
             
             ' ...
-            CropLen = (CropLen + (Len(tmp) + Len(CMD_DELIMITER)))
+            cropLen = (cropLen + (Len(tmp) + Len(CMD_DELIMITER)))
         Else
             ' ...
-            CropLen = Len(Message)
+            cropLen = Len(Message)
         End If
     Else
         ' ...
-        CropLen = Len(Message)
+        cropLen = Len(Message)
     End If
     
     ' ...
-    If ((IsLocal) Or (HasTrigger)) Then
+    If ((IsLocal) Or (hasTrigger)) Then
         ' ...
         Index = InStr(1, tmp, Space$(1), vbBinaryCompare)
         
@@ -2950,7 +2950,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
 
         With IsCommand
             .IsLocal = IsLocal
-            .PublicOutput = PublicOutput
+            .publicOutput = publicOutput
         End With
 
         ' ...
@@ -3313,28 +3313,12 @@ End Function
 Public Function IsStealthBotTech() As Boolean
     Dim ConfigHacked As Boolean
     Dim InClanSBs As Boolean
-    Dim TechName As Boolean
     
-    If (ReadCfg("Override", "TechOverride") = "sbth4x") Then
-        ConfigHacked = True
-    Else
-        ConfigHacked = False
-    End If
+    ConfigHacked = CBool(ReadCfg("Override", "TechOverride") = "sbth4x")
     
-    If (StrComp(g_Clan.Name, "SBs", vbTextCompare) = 0) Then
-        InClanSBs = True
-    Else
-        InClanSBs = False
-    End If
+    InClanSBs = CBool(StrComp(g_Clan.Name, "SBs", vbTextCompare) = 0)
     
-    If (InStr(1, CurrentUsername, "tech", vbTextCompare) > 0) Then
-        TechName = True
-    Else
-        TechName = False
-    End If
-    
-    IsStealthBotTech = ((InClanSBs) Or ((ConfigHacked) And (TechName)))
-        
+    IsStealthBotTech = (InClanSBs Or ConfigHacked)
 End Function
 
 Public Function ResolveHost(ByVal strHostName As String) As String
