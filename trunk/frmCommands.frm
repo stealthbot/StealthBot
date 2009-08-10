@@ -26,20 +26,20 @@ Begin VB.Form frmCommands
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
    Begin vbalTreeViewLib6.vbalTreeView trvCommands 
-      Height          =   4695
+      Height          =   4575
       Left            =   120
       TabIndex        =   20
-      Top             =   720
+      Top             =   840
       Width           =   3855
       _ExtentX        =   6800
-      _ExtentY        =   8281
+      _ExtentY        =   8070
       BackColor       =   10040064
       ForeColor       =   16777215
       LineStyle       =   0
       Style           =   5
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   8.25
+         Size            =   9.75
          Charset         =   0
          Weight          =   400
          Underline       =   0   'False
@@ -49,8 +49,17 @@ Begin VB.Form frmCommands
    End
    Begin VB.ComboBox cboCommandGroup 
       BackColor       =   &H00993300&
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   9.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
       ForeColor       =   &H00FFFFFF&
-      Height          =   315
+      Height          =   360
       Left            =   120
       Style           =   2  'Dropdown List
       TabIndex        =   19
@@ -336,16 +345,16 @@ End Sub
 
 Private Sub cmdAliasRemove_Click()
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
-    For i = 0 To cboAlias.ListCount - 1
-        If (StrComp(cboAlias.Text, cboAlias.List(i), vbTextCompare) = 0) Then
-            cboAlias.RemoveItem i
+    For I = 0 To cboAlias.ListCount - 1
+        If (StrComp(cboAlias.Text, cboAlias.List(I), vbTextCompare) = 0) Then
+            cboAlias.RemoveItem I
             
             Exit For
         End If
-    Next i
+    Next I
     
     ' ...
     cboAlias.Text = ""
@@ -373,16 +382,16 @@ End Sub
 
 Private Sub cmdFlagRemove_Click()
 
-    Dim i As Integer ' ...
+    Dim I As Integer ' ...
     
     ' ...
-    For i = 0 To cboFlags.ListCount - 1
-        If (StrComp(cboFlags.Text, cboFlags.List(i), vbBinaryCompare) = 0) Then
-            cboFlags.RemoveItem i
+    For I = 0 To cboFlags.ListCount - 1
+        If (StrComp(cboFlags.Text, cboFlags.List(I), vbBinaryCompare) = 0) Then
+            cboFlags.RemoveItem I
             
             Exit For
         End If
-    Next i
+    Next I
     
     ' ...
     cboFlags.Text = ""
@@ -459,7 +468,7 @@ Private Sub PopulateOwnerComboBox()
     
     On Error Resume Next
 
-    Dim i   As Integer
+    Dim I   As Integer
     Dim str As String
     Dim commandCount As Integer
     Dim scriptName As String
@@ -478,17 +487,17 @@ Private Sub PopulateOwnerComboBox()
     '// add the item
     cboCommandGroup.AddItem StringFormat("{0} ({1})", options)
     
-    For i = 2 To frmChat.SControl.Modules.Count
-        str = frmChat.SControl.Modules(i).CodeObject.GetSettingsEntry("Public")
+    For I = 2 To frmChat.SControl.Modules.Count
+        str = frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
             '// get the script name and number of commands
-            scriptName = frmChat.SControl.Modules(i).CodeObject.Script("Name")
+            scriptName = frmChat.SControl.Modules(I).CodeObject.Script("Name")
             commandCount = commandDoc.GetCommandCount(scriptName)
             options = Array(scriptName, commandCount)
             '// add the item
             cboCommandGroup.AddItem StringFormat("{0} ({1})", options)
         End If
-    Next i
+    Next I
     cboCommandGroup.ListIndex = 0
     
 End Sub
@@ -520,7 +529,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     
     '// Counters
     Dim j                 As Integer
-    Dim i                 As Integer
+    Dim I                 As Integer
     Dim x                 As Integer
 
     '// reset the treeview
@@ -585,24 +594,24 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
             Set xmlArgs = xmlCommand.selectNodes("arguments/argument")
             '// 08/29/2008 JSM - removed 'Not (xmlArgs Is Nothing)' condition. xmlArgs will always be
             '//                  something, even if nothing matches the XPath expression.
-            For i = 0 To (xmlArgs.length - 1)
+            For I = 0 To (xmlArgs.length - 1)
             
-                ArgumentName = xmlArgs(i).Attributes.getNamedItem("name").Text
-                If (Not xmlArgs(i).Attributes.getNamedItem("optional") Is Nothing) Then
-                    If (xmlArgs(i).Attributes.getNamedItem("optional").Text = "1") Then
+                ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").Text
+                If (Not xmlArgs(I).Attributes.getNamedItem("optional") Is Nothing) Then
+                    If (xmlArgs(I).Attributes.getNamedItem("optional").Text = "1") Then
                         ArgumentName = "[" & ArgumentName & "]"
                     End If
                 End If
                 
                 Set nArg = trvCommands.nodes.Add(nCommand, etvwChild, commandName & "." & ArgumentName, ArgumentName)
                 
-                Set xmlArgRestricions = xmlArgs(i).selectNodes("restrictions/restriction")
+                Set xmlArgRestricions = xmlArgs(I).selectNodes("restrictions/restriction")
                 
                 For j = 0 To (xmlArgRestricions.length - 1)
                     restrictionName = xmlArgRestricions(j).Attributes.getNamedItem("name").Text
                     Set nArgRestriction = trvCommands.nodes.Add(nArg, etvwChild, commandName & "." & ArgumentName & "." & restrictionName, restrictionName)
                 Next j
-            Next i
+            Next I
         End If '// Len(commandName) > 0
     Next
     
@@ -704,18 +713,6 @@ Private Sub trvCommands_NodeClick(node As cTreeViewNode)
     Call ResetForm
     Call PrepareForm(nt, xmlElement)
     
-    Select Case nt
-        Case NodeType.nCommand
-            fraCommand.Caption = StringFormat("{0}", options)
-            chkDisable.Caption = StringFormat("Disable {0} command", options)
-        Case NodeType.nArgument
-            fraCommand.Caption = StringFormat("{0} => {1}", options)
-            chkDisable.Caption = StringFormat("Disable {1} argument", options)
-        Case NodeType.nRestriction
-            fraCommand.Caption = StringFormat("{0} => {1} => {2}", options)
-            chkDisable.Caption = StringFormat("Disable {2} restriction", options)
-    End Select
-    
 End Sub
 
 '// Call this sub whenever the form controls have been changed
@@ -766,7 +763,7 @@ Private Sub SaveForm()
     Dim xmlNewNode As IXMLDOMNode
     Dim clsXML As New clsXML
 
-    Dim i As Integer
+    Dim I As Integer
     
     With m_SelectedElement
         '// txtRank
@@ -790,9 +787,9 @@ Private Sub SaveForm()
             If (txtRank.Text <> vbNullString) Then
                 xmlNode.Text = txtRank.Text
             Else
-                For i = 0 To xmlNode.childNodes.length - 1
-                    xmlNode.removeChild xmlNode.childNodes(i)
-                Next i
+                For I = 0 To xmlNode.childNodes.length - 1
+                    xmlNode.removeChild xmlNode.childNodes(I)
+                Next I
             End If
         End If
         
@@ -841,11 +838,11 @@ Private Sub SaveForm()
             For Each xmlNode In .TheXMLElement.selectNodes("aliases/alias")
                 .TheXMLElement.selectSingleNode("aliases").removeChild xmlNode
             Next xmlNode
-            For i = 0 To cboAlias.ListCount - 1
+            For I = 0 To cboAlias.ListCount - 1
                 Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "alias", "")
-                xmlNewNode.Text = cboAlias.List(i)
+                xmlNewNode.Text = cboAlias.List(I)
                 .TheXMLElement.selectSingleNode("aliases").appendChild xmlNewNode
-            Next i
+            Next I
         End If
         
         '// cboFlags
@@ -872,15 +869,15 @@ Private Sub SaveForm()
 
             If (cboFlags.ListCount > 0) Then
                 '// loop through cboFlags and add the text
-                For i = 0 To cboFlags.ListCount - 1
-                    Set xmlNewNode = xmlNode.selectSingleNode("flag[text()='" & cboFlags.List(i) & "']")
+                For I = 0 To cboFlags.ListCount - 1
+                    Set xmlNewNode = xmlNode.selectSingleNode("flag[text()='" & cboFlags.List(I) & "']")
                     
                     If (xmlNewNode Is Nothing) Then
                         Set xmlNewNode = m_CommandsDoc.createNode(NODE_ELEMENT, "flag", "")
-                        xmlNewNode.Text = cboFlags.List(i)
+                        xmlNewNode.Text = cboFlags.List(I)
                         xmlNode.appendChild xmlNewNode
                     End If
-                Next i
+                Next I
             End If
         End If
         
@@ -918,7 +915,9 @@ End Sub
 Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
     
     Dim xmlNode As IXMLDOMNode
+    Dim options() As Variant '// <-- boo
     
+    options = Array(m_SelectedElement.commandName, m_SelectedElement.ArgumentName, m_SelectedElement.restrictionName)
     
     Select Case nt
         Case NodeType.nCommand
@@ -974,6 +973,11 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
                 chkDisable.Value = 0
             End If
             
+            '// custom captions
+            fraCommand.Caption = StringFormat("{0}", options)
+            chkDisable.Caption = StringFormat("Disable {0} command", options)
+            
+            
         Case NodeType.nArgument
             '// txtRank
             'txtRank.Enabled = True
@@ -1008,15 +1012,26 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             If Not (xmlNode Is Nothing) Then
                 txtSpecialNotes.Text = xmlNode.Text
             End If
-            
-            If (Not xmlElement.Attributes.getNamedItem("optional") Is Nothing) Then
-                If (xmlElement.Attributes.getNamedItem("optional").Text = "1") Then
-                    fraCommand.Caption = fraCommand.Caption & " - Optional"
-                End If
-            End If
+
             '// chkDisable
             'chkDisable.Enabled = True
             'chkDisable.Visible = True
+            
+            '// special captions
+            If (Not xmlElement.Attributes.getNamedItem("optional") Is Nothing) Then
+                If (xmlElement.Attributes.getNamedItem("optional").Text = "1") Then
+                    fraCommand.Caption = StringFormat("{0} => {1} - Optional", options)
+                End If
+            Else
+                fraCommand.Caption = StringFormat("{0} => {1}", options)
+            End If
+            
+            
+            
+            chkDisable.Caption = StringFormat("Disable {1} argument", options)
+            
+            
+            
             
         Case NodeType.nRestriction
             '// txtRank
@@ -1055,6 +1070,17 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             '// chkDisable
             'chkDisable.Enabled = True
             'chkDisable.Visible = True
+            
+            '// special captions
+            If (Not xmlElement.parentNode.parentNode.Attributes.getNamedItem("optional") Is Nothing) Then
+                If (xmlElement.parentNode.parentNode.Attributes.getNamedItem("optional").Text = "1") Then
+                    fraCommand.Caption = StringFormat("{0} => {1} - Optional => {2}", options)
+                End If
+            Else
+                fraCommand.Caption = StringFormat("{0} => {1} => {2}", options)
+            End If
+            
+            chkDisable.Caption = StringFormat("Disable {2} restriction", options)
             
     End Select
     
@@ -1120,7 +1146,7 @@ End Sub
 
 '// 08/29/2008 JSM - Created
 Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
-    Dim i As Integer
+    Dim I As Integer
     
     '// Enter
     If KeyCode = 13 Then
@@ -1132,12 +1158,12 @@ Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
             Exit Sub
         End If
         '// Make sure its not already a flag
-        For i = 0 To cboFlags.ListCount - 1
-            If cboFlags.List(i) = cboFlags.Text Then
+        For I = 0 To cboFlags.ListCount - 1
+            If cboFlags.List(I) = cboFlags.Text Then
                 cboFlags.Text = ""
                 Exit Sub
             End If
-        Next i
+        Next I
         
         '// If we made it this far, it should be safe to add it to the list
         cboFlags.AddItem cboFlags.Text
@@ -1147,16 +1173,16 @@ Private Sub cboFlags_KeyDown(KeyCode As Integer, Shift As Integer)
 
     '// Delete
     If KeyCode = 46 Then
-        For i = 0 To cboFlags.ListCount - 1
+        For I = 0 To cboFlags.ListCount - 1
             '// If the current text is already in the list, lets delete it. Otherwise,
             '// this code should behave like a normal delete keypress.
-            If cboFlags.List(i) = cboFlags.Text Then
-                cboFlags.RemoveItem i
+            If cboFlags.List(I) = cboFlags.Text Then
+                cboFlags.RemoveItem I
                 cboFlags.Text = ""
                 Call FormIsDirty
                 Exit Sub
             End If
-        Next i
+        Next I
     End If
     
     
@@ -1165,7 +1191,7 @@ End Sub
 
 '// 08/29/2008 JSM - Created
 Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
-    Dim i As Integer
+    Dim I As Integer
     
     '// Enter
     If KeyCode = 13 Then
@@ -1177,12 +1203,12 @@ Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
             Exit Sub
         End If
         '// Make sure its not already an alias
-        For i = 0 To cboAlias.ListCount - 1
-            If cboAlias.List(i) = cboAlias.Text Then
+        For I = 0 To cboAlias.ListCount - 1
+            If cboAlias.List(I) = cboAlias.Text Then
                 cboAlias.Text = ""
                 Exit Sub
             End If
-        Next i
+        Next I
             
         '// TODO: Make sure its not an alias for another command. Must loop through the
         '// m_CommandsDoc elements to get all aliases and make sure its unique. This logic
@@ -1196,16 +1222,16 @@ Private Sub cboAlias_KeyDown(KeyCode As Integer, Shift As Integer)
     
     '// Delete
     If KeyCode = 46 Then
-        For i = 0 To cboAlias.ListCount - 1
+        For I = 0 To cboAlias.ListCount - 1
             '// If the current text is already in the list, lets delete it. Otherwise,
             '// this code should behave like a normal delete keypress.
-            If cboAlias.List(i) = cboAlias.Text Then
-                cboAlias.RemoveItem i
+            If cboAlias.List(I) = cboAlias.Text Then
+                cboAlias.RemoveItem I
                 cboAlias.Text = ""
                 Call FormIsDirty
                 Exit Sub
             End If
-        Next i
+        Next I
     End If
     
 End Sub
