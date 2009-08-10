@@ -686,16 +686,10 @@ Private Sub trvCommands_NodeClick(node As cTreeViewNode)
     
     Select Case nt
         Case NodeType.nCommand
-            fraCommand.Caption = StringFormat("{0}", options)
-            chkDisable.Caption = StringFormat("Disable {0} command", options)
             xpath = StringFormat("/commands/command[@name='{0}']", options)
         Case NodeType.nArgument
-            fraCommand.Caption = StringFormat("{0} => {1}", options)
-            chkDisable.Caption = StringFormat("Disable {1} argument", options)
             xpath = StringFormat("/commands/command[@name='{0}']/arguments/argument[@name='{1}']", options)
         Case NodeType.nRestriction
-            fraCommand.Caption = StringFormat("{0} => {1} => {2}", options)
-            chkDisable.Caption = StringFormat("Disable {2} restriction", options)
             xpath = StringFormat("/commands/command[@name='{0}']/arguments/argument[@name='{1}']/restrictions/restriction[@name='{2}']", options)
     End Select
     
@@ -706,7 +700,22 @@ Private Sub trvCommands_NodeClick(node As cTreeViewNode)
     
     '// grab the node from the xpath
     Set xmlElement = m_CommandsDoc.selectSingleNode(xpath)
+    
+    Call ResetForm
     Call PrepareForm(nt, xmlElement)
+    
+    Select Case nt
+        Case NodeType.nCommand
+            fraCommand.Caption = StringFormat("{0}", options)
+            chkDisable.Caption = StringFormat("Disable {0} command", options)
+        Case NodeType.nArgument
+            fraCommand.Caption = StringFormat("{0} => {1}", options)
+            chkDisable.Caption = StringFormat("Disable {1} argument", options)
+        Case NodeType.nRestriction
+            fraCommand.Caption = StringFormat("{0} => {1} => {2}", options)
+            chkDisable.Caption = StringFormat("Disable {2} restriction", options)
+    End Select
+    
 End Sub
 
 '// Call this sub whenever the form controls have been changed
