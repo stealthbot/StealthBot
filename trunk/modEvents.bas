@@ -33,6 +33,7 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
     Dim parsed          As String
     Dim pos             As Integer  ' ...
     Dim doUpdate        As Boolean  ' ...
+    Dim Displayed       As Boolean  ' stores whether this event has been displayed by another event in the RTB
     
     ' if our username is for some reason null, we don't
     ' want to continue, possibly causing further errors
@@ -168,9 +169,20 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                         AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, _
                             Clan, 1
                         
-                        ' ...
-                        frmChat.AddChat RTBColors.JoinedChannelText, "-- ", RTBColors.JoinedChannelName, _
-                            Username, RTBColors.JoinedChannelText, " has acquired ops."
+                        ' default to display this event
+                        Displayed = False
+                        
+                        ' check whether it has been
+                        If QueuedEventID > 0 And UserObj.Queue.Count >= QueuedEventID Then
+                            Set userevent = UserObj.Queue(QueuedEventID)
+                            Displayed = userevent.Displayed
+                        End If
+                        
+                        ' display if it has not
+                        If Not Displayed Then
+                            frmChat.AddChat RTBColors.JoinedChannelText, "-- ", RTBColors.JoinedChannelName, _
+                                Username, RTBColors.JoinedChannelText, " has acquired ops."
+                        End If
                     Else
                         ' ...
                         AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, _
@@ -1137,6 +1149,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim Clan         As String  ' ...
     Dim pos          As Integer ' ...
     Dim showUpdate   As Boolean ' ...
+    Dim Displayed    As Boolean ' whether this event has been displayed in the RTB (if combined with another)
 
     If (LenB(Username) < 1) Then
         Exit Sub
@@ -1229,9 +1242,22 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
         If ((UserObj.Queue.Count = 0) Or (QueuedEventID > 0)) Then
             ' ...
             If (JoinMessagesOff = False) Then
-                ' ...
-                frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", RTBColors.JoinUsername, _
-                    Username & " [" & Ping & "ms]", RTBColors.JoinText, " is using " & UserObj.Stats.ToString
+                ' default to display this event
+                Displayed = False
+                
+                ' check whether it has been
+                If QueuedEventID > 0 And UserObj.Queue.Count >= QueuedEventID Then
+                    Set userevent = UserObj.Queue(QueuedEventID)
+                    Displayed = userevent.Displayed
+                End If
+                
+                ' display if it has not already been
+                If Not Displayed Then
+                    frmChat.AddChat RTBColors.JoinText, "-- Stats updated: ", _
+                        IIf(AcqOps, RTBColors.TalkUsernameOp, RTBColors.JoinUsername), Username, _
+                        RTBColors.JoinUsername, " [" & Ping & "ms]", _
+                        RTBColors.JoinText, " is using " & UserObj.Stats.ToString & "."
+                End If
             End If
             
             ' ...
@@ -1328,6 +1354,8 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
     Dim BanningUser As Boolean ' ...
     Dim pStats      As String
     Dim isbanned    As Boolean
+    Dim AcqOps      As Boolean
+    Dim ToDisplay   As Boolean
     
     If (Len(Username) < 1) Then
         Exit Sub
@@ -1413,33 +1441,90 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
         ' GUI
         ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     
-        ' ...
+        ' if we have join/leaves on
         If (JoinMessagesOff = False) Then
             Dim UserStats As clsUserStats ' ...
             
-            ' ...
+            ' create user stats object
             Set UserStats = New clsUserStats
 
-            ' ...
+            ' store o.s.s. in users stats object
             UserStats.Statstring = originalstatstring
-        
-            ' ...
-            'If (GetVeto = False) Then
-                frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, Username & " [" & Ping & "ms]", _
-                    RTBColors.JoinText, " has joined the channel using " & UserStats.ToString
-            'End If
+            
+            ' does this event have events delayed after it?
+            If QueuedEventID > 0 And UserObj.Queue.Count > 0 Then
                 
-            ' ...
+                ' loop through the events occuring after this one
+                For I = QueuedEventID To UserObj.Queue.Count
+                
+                    ' get the event
+                    Set userevent = UserObj.Queue(I)
+                    
+                    ' default to not combine with userjoins
+                    ToDisplay = False
+                    
+                    Select Case userevent.EventID
+                    
+                        ' user flags update
+                        Case ID_USERFLAGS
+                            ' will combine with userjoins
+                            ToDisplay = True
+                            
+                            ' is operator
+                            If userevent.Flags And 2 Then
+                                AcqOps = True
+                            End If
+                            
+                        ' user stats update / user in channel
+                        Case ID_USER
+                            ' will combine with userjoins
+                            ToDisplay = True
+                            
+                            ' is stats different / provided?
+                            If LenB(userevent.Statstring) > 0 Then
+                                If StrComp(userevent.Statstring, originalstatstring) Then
+                                    ' create new stats object over other stats object
+                                    Set UserStats = New clsUserStats
+                                    
+                                    ' store stats update stats in object used in userjoins message generation
+                                    UserStats.Statstring = userevent.Statstring
+                                End If
+                            End If
+                        
+                    End Select
+                    
+                    ' if we're going to combine this event with userjoins ...
+                    If ToDisplay Then
+                        ' ... then set .displayed on the queue'd event so it is not displayed separately
+                        userevent.Displayed = True
+                        
+                        ' also update in collection
+                        UserObj.Queue.Remove I
+                        UserObj.Queue.Add userevent, , , I - 1
+                    End If
+                    
+                Next I
+                
+            End If
+            
+            ' display message
+            frmChat.AddChat RTBColors.JoinText, "-- ", _
+                IIf(AcqOps, RTBColors.TalkUsernameOp, RTBColors.JoinUsername), Username, _
+                RTBColors.JoinUsername, " [" & Ping & "ms]", _
+                RTBColors.JoinText, " has joined the channel using " & UserStats.ToString, _
+                RTBColors.JoinUsername, IIf(AcqOps, " and acquired ops", vbNullString), RTBColors.JoinText, "."
+                
+            ' dispose user stats instance
             Set UserStats = Nothing
         End If
         
-        ' ...
+        ' add to user list
         AddName Username, Product, Flags, Ping, UserObj.Stats.IconCode, sClan
         
-        ' ...
+        ' update caption
         frmChat.lblCurrentChannel.Caption = frmChat.GetChannelString
         
-        ' ...
+        ' focus on channel tab
         frmChat.ListviewTabs_Click 0
         
         ' flash window
@@ -1447,15 +1532,15 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
             FlashWindow
         End If
         
-        ' ...
+        ' update last seen info
         Call DoLastSeen(Username)
         
-        ' ...
+        ' check is banned
         isbanned = (UserObj.PendingBan)
         
         'frmChat.AddChat vbRed, IsBanned
         
-        ' ...
+        ' if not banned...
         If (isbanned = False) Then
             ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
             ' Greet message
@@ -1546,7 +1631,8 @@ Public Sub Event_UserLeaves(ByVal Username As String, ByVal Flags As Long)
             ' ...
             If (JoinMessagesOff = False) Then
                 'If (GetVeto = False) Then
-                    frmChat.AddChat RTBColors.JoinText, "-- ", RTBColors.JoinUsername, g_Channel.Users(UserIndex).DisplayName, _
+                    frmChat.AddChat RTBColors.JoinText, "-- ", _
+                        IIf(g_Channel.Users(UserIndex).IsOperator, RTBColors.TalkUsernameOp, RTBColors.JoinUsername), g_Channel.Users(UserIndex).DisplayName, _
                         RTBColors.JoinText, " has left the channel."
                 'End If
             End If

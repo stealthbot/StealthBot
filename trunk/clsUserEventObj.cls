@@ -27,6 +27,7 @@ Private m_clan        As String
 Private m_game_id     As String
 Private m_icon_code   As String
 Private m_stat_string As String
+Private m_displayed   As Boolean
 
 Private Sub Class_Initialize()
 
@@ -173,6 +174,21 @@ Public Property Let IconCode(ByVal str As String)
     ' ...
     m_icon_code = str
 
+End Property
+
+Public Property Get Displayed() As Boolean
+
+    ' returns whether this event has been displayed in the RTB, useful for combining events
+    ' in messages if chatdelay > 0, such as ops acquired and stats updates
+    Displayed = m_displayed
+    
+End Property
+
+Public Property Let Displayed(ByVal bln As Boolean)
+
+    ' sets whether this event has been displayed in the RTB
+    m_displayed = bln
+    
 End Property
 
 Public Function Clone() As Object

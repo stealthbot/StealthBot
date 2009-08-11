@@ -1045,13 +1045,10 @@ Public Function GetApphInstance() As Long
 End Function
 
 
-
 '// DOSTATSTRINGPARSE
 '//     Parses a statstring given to you by GetInternalData (or elsewhere)
 '//     Returns the parsed user-message string you see in join/leave messages
-'//     You will need to provide the clan tag separately by another GetInternalData() request
-'//         if you wish to use it in parsing
-Public Function DoStatstringParse(ByVal sStatstring As String, ByVal sClanTag As String) As String
+Public Function DoStatstringParse(ByVal sStatstring As String) As String
     'Dim sBuffer As String
     Dim UserStats As clsUserStats
     
@@ -1067,6 +1064,26 @@ Public Function DoStatstringParse(ByVal sStatstring As String, ByVal sClanTag As
     DoStatstringParse = UserStats.ToString
     
     ' ...
+    Set UserStats = Nothing
+End Function
+
+
+'// GETUSERSTATS
+'//     Parses a statstring given to you by GetInerrnalData
+'//     Returns the parsed stats object.
+Public Function GetUserStats(ByVal sStatstring As String) As Object
+    Dim UserStats As clsUserStats
+    
+    ' create userstats object
+    Set UserStats = New clsUserStats
+    
+    ' set statstring in object, parses
+    UserStats.Statstring = sStatstring
+    
+    ' set as return
+    Set GetUserStats = UserStats
+    
+    ' clean up
     Set UserStats = Nothing
 End Function
 
