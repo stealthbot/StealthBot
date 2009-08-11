@@ -1209,7 +1209,7 @@ End Property
 
 Public Property Get QueueCreditRate() As Long
 
-    CreditRate = m_lCreditRate
+    QueueCreditRate = m_lCreditRate
 
 End Property
 
