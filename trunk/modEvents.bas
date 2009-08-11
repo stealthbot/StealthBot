@@ -174,8 +174,8 @@ Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, 
                         
                         ' check whether it has been
                         If QueuedEventID > 0 And UserObj.Queue.Count >= QueuedEventID Then
-                            Set userevent = UserObj.Queue(QueuedEventID)
-                            Displayed = userevent.Displayed
+                            Set UserEvent = UserObj.Queue(QueuedEventID)
+                            Displayed = UserEvent.Displayed
                         End If
                         
                         ' display if it has not
@@ -1150,6 +1150,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim pos          As Integer ' ...
     Dim showUpdate   As Boolean ' ...
     Dim Displayed    As Boolean ' whether this event has been displayed in the RTB (if combined with another)
+    Dim AcqOps       As Boolean
 
     If (LenB(Username) < 1) Then
         Exit Sub
@@ -1247,8 +1248,8 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 
                 ' check whether it has been
                 If QueuedEventID > 0 And UserObj.Queue.Count >= QueuedEventID Then
-                    Set userevent = UserObj.Queue(QueuedEventID)
-                    Displayed = userevent.Displayed
+                    Set UserEvent = UserObj.Queue(QueuedEventID)
+                    Displayed = UserEvent.Displayed
                 End If
                 
                 ' display if it has not already been
@@ -1458,12 +1459,12 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                 For I = QueuedEventID To UserObj.Queue.Count
                 
                     ' get the event
-                    Set userevent = UserObj.Queue(I)
+                    Set UserEvent = UserObj.Queue(I)
                     
                     ' default to not combine with userjoins
                     ToDisplay = False
                     
-                    Select Case userevent.EventID
+                    Select Case UserEvent.EventID
                     
                         ' user flags update
                         Case ID_USERFLAGS
@@ -1471,7 +1472,7 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                             ToDisplay = True
                             
                             ' is operator
-                            If userevent.Flags And 2 Then
+                            If UserEvent.Flags And 2 Then
                                 AcqOps = True
                             End If
                             
@@ -1481,13 +1482,13 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                             ToDisplay = True
                             
                             ' is stats different / provided?
-                            If LenB(userevent.Statstring) > 0 Then
-                                If StrComp(userevent.Statstring, originalstatstring) Then
+                            If LenB(UserEvent.Statstring) > 0 Then
+                                If StrComp(UserEvent.Statstring, originalstatstring) Then
                                     ' create new stats object over other stats object
                                     Set UserStats = New clsUserStats
                                     
                                     ' store stats update stats in object used in userjoins message generation
-                                    UserStats.Statstring = userevent.Statstring
+                                    UserStats.Statstring = UserEvent.Statstring
                                 End If
                             End If
                         
@@ -1496,11 +1497,11 @@ Public Sub Event_UserJoins(ByVal Username As String, ByVal Flags As Long, ByVal 
                     ' if we're going to combine this event with userjoins ...
                     If ToDisplay Then
                         ' ... then set .displayed on the queue'd event so it is not displayed separately
-                        userevent.Displayed = True
+                        UserEvent.Displayed = True
                         
                         ' also update in collection
                         UserObj.Queue.Remove I
-                        UserObj.Queue.Add userevent, , , I - 1
+                        UserObj.Queue.Add UserEvent, , , I - 1
                     End If
                     
                 Next I
