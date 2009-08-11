@@ -90,7 +90,7 @@ Public Sub WardenCleanup(Instance As Long)
 trap:
   If (Err.Number = 53) Then
     frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Warden.dll not found, Warden support will not work."
-    frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Make sure you've got the latest Warden data from http://www.stealthbot.net/board/index.php?showtopic=41491"
+    frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Make sure you've got the latest Warden data from http://www.stealthbot.net/redir/warden/"
     Err.Clear
   End If
 End Sub
@@ -103,7 +103,7 @@ Public Function WardenInitilize(ByVal SocketHandle As Long) As Long
 trap:
   If (Err.Number = 53) Then
     frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Warden.dll not found, Warden support will not work."
-    frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Make sure you've got the latest Warden data from http://www.stealthbot.net/board/index.php?showtopic=41491"
+    frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Make sure you've got the latest Warden data from http://www.stealthbot.net/redir/warden/"
     Err.Clear
   End If
 End Function
@@ -190,7 +190,7 @@ Public Function WardenData(Instance As Long, sData As String, Send As Boolean) A
         
     Case WARDEN_MEM_UNKNOWN_SEGMENT: '//Could not read segment from ini file
         frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Could not read segment from Warden.ini, you will be disconnected soon"
-        frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Make sure you've got the latest Warden data from http://www.stealthbot.net/board/index.php?showtopic=41491"
+        frmChat.AddChat RTBColors.ErrorMessageText, "[Warden] Make sure you've got the latest Warden data from http://www.stealthbot.net/redir/warden/"
         
         If (MDebug("warden")) Then
             frmChat.AddChat RTBColors.InformationText, "[Warden] Packet Data: " & vbNewLine & DebugOutput(Data)

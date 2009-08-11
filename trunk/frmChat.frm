@@ -1625,9 +1625,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.icons = imlIcons
+    lvChannel.Icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.icons = imlIcons
+    lvClanList.Icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2298,7 +2298,7 @@ Public Sub FindAltBNLS()
                     ' ...
                     AddChat RTBColors.ErrorMessageText, "[BNLS] An error occured while trying to locate an alternative BNLS server."
                     AddChat RTBColors.ErrorMessageText, "[BNLS]   You may not be connected to the internet or may be having DNS resolution issues."
-                    AddChat RTBColors.ErrorMessageText, "[BNLS]   Visit http://stealthbot.net/ and check the Technical Support forum for more information."
+                    AddChat RTBColors.ErrorMessageText, "[BNLS]   Visit http://www.stealthbot.net/ and check the Technical Support forum for more information."
                     
                     ' ...
                     Call DoDisconnect
@@ -2321,14 +2321,14 @@ Public Sub FindAltBNLS()
             GotBNLSList = True
         Else
             'The Inet control seems to still be running
-            Err.Raise FIND_ALT_BNLS_ERROR, , "Unable to use BNLS server finder. Visit http://stealthbot.net/ " & _
+            Err.Raise FIND_ALT_BNLS_ERROR, , "Unable to use BNLS server finder. Visit http://www.stealthbot.net/ " & _
                 "and check the Technical Support forum for more information."
         End If
     End If
     
     If intCounter > UBound(strBNLS) Then
         'All BNLS servers have been tried and failed
-        Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://stealthbot.net/ " & _
+        Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://www.stealthbot.net/ " & _
             "and check the Technical Support forum for more information."
     End If
     
@@ -2338,7 +2338,7 @@ Public Sub FindAltBNLS()
         
         If intCounter > UBound(strBNLS) Then
             'All BNLS servers have been tried and failed
-            Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://stealthbot.net/ " & _
+            Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://www.stealthbot.net/ " & _
                 "and check the Technical Support forum for more information."
         End If
     End If
@@ -4232,7 +4232,7 @@ Private Sub mnuUpdateVerbytes_Click()
     Keys(3) = "W3"
     
     If Not INet.StillExecuting Then
-        s = INet.OpenURL("http://www.stealthbot.net/verbytes/versionbytes.txt")
+        s = INet.OpenURL("http://www.stealthbot.net/sb/verbytes/versionbytes.txt")
         
         If Len(s) = 11 Then
             'W2 SC D2 W3

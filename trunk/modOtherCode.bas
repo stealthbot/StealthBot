@@ -1513,7 +1513,7 @@ Public Sub ReadyINet()
 End Sub
 
 Public Function GetNewsURL() As String
-    GetNewsURL = "http://www.stealthbot.net/getver3.php?vc=" & VERCODE
+    GetNewsURL = "http://www.stealthbot.net/sb/getver3.php?vc=" & VERCODE
 End Function
 
 Public Function HTMLToRGBColor(ByVal s As String) As Long
@@ -1894,7 +1894,7 @@ Public Function GetProfilePath(Optional ByVal ProfileIndex As Integer) As String
 End Function
 
 Public Sub OpenReadme()
-    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/readme/", 0, 0, 0
+    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/redir/readme/", 0, 0, 0
     frmChat.AddChat RTBColors.SuccessText, "You are being taken to the StealthBot Online Readme."
 End Sub
 
