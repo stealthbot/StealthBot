@@ -602,7 +602,7 @@ Public Property Get ActsCompleted() As Integer
 
 End Property
 
-Public Property Let ActsCompleted(ByVal i As Integer)
+Public Property Let ActsCompleted(ByVal I As Integer)
 
     ' ...
     m_acts_completed = i
@@ -864,7 +864,7 @@ Public Property Get ToString() As String
     End Select
     
     ' ...
-    buf = buf & "."
+    'buf = buf & "."
     
     ' ...
     ToString = buf

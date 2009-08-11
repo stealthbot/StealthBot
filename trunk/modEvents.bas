@@ -16,6 +16,7 @@ End Type
 
 Private m_arrMsgEvents()  As MSGFILTER
 Private m_eventCount      As Integer
+Private m_skipUICEvents   As Boolean
 
 Public Sub Event_FlagsUpdate(ByVal Username As String, ByVal Message As String, ByVal Flags As Long, _
     ByVal Ping As Long, ByVal Product As String, Optional QueuedEventID As Integer = 0)
@@ -334,6 +335,9 @@ Public Sub Event_JoinedChannel(ByVal ChannelName As String, ByVal Flags As Long)
             frmChat.AddChat vbRed, "You have joined Clan SBs. For the consideration of the Technical Support Staff: greet, idle, and all scripted messages have been temporarily disabled."
     End If
     
+    If (m_skipUICEvents) And ((StrComp(BotVars.HomeChannel, ChannelName, vbTextCompare) = 0) Or (g_Channel.IsSilent())) Then
+        m_skipUICEvents = False
+    End If
     
     ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' call event script function
@@ -630,6 +634,8 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
     If (BotVars.UsingDirectFList) Then
         Call frmChat.FriendListHandler.RequestFriendsList(PBuffer)
     End If
+    
+    m_skipUICEvents = True
     
     Call FullJoin(BotVars.HomeChannel, 5)
     Call FullJoin(BotVars.HomeChannel, 2)
@@ -1153,6 +1159,12 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim AcqOps       As Boolean
 
     If (LenB(Username) < 1) Then
+        Exit Sub
+    End If
+
+    ' if this is the public channel before the home channel,
+    ' skip userinchannel events for quick loading! -Ribose/2009-08-11
+    If m_skipUICEvents Then
         Exit Sub
     End If
 
