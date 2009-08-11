@@ -508,9 +508,6 @@ End Sub
 
 Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     
-	BREAK ME
-	
-	
     Dim commandNodes      As IXMLDOMNodeList
     Dim totalCommands     As Integer
     Dim commandNameArray() As Variant
