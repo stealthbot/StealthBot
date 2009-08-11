@@ -259,7 +259,7 @@ Option Explicit
 
 Private m_CommandsDoc As DOMDocument60
 Private m_SelectedElement As SelectedElement
-
+Private m_blnClearingNodes As Boolean
 '// Enums
 Private Enum NodeType
     nCommand = 0
@@ -278,41 +278,39 @@ Private Type SelectedElement
 End Type
 
 
-Private Declare Function SendMessageLong Lib "user32" Alias "SendMessageA" _
-    (ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, _
-    ByVal lParam As Long) As Long
-Private Const WM_SETREDRAW As Long = &HB
-Private Const TV_FIRST As Long = &H1100
-Private Const TVM_GETNEXTITEM As Long = (TV_FIRST + 10)
-Private Const TVM_DELETEITEM As Long = (TV_FIRST + 1)
-Private Const TVGN_ROOT As Long = &H0
+'Private Declare Function SendMessageLong Lib "user32" Alias "SendMessageA" _
+'    (ByVal hWnd As Long, ByVal Msg As Long, ByVal wParam As Long, _
+'    ByVal lParam As Long) As Long
+'Private Const WM_SETREDRAW As Long = &HB
+'Private Const TV_FIRST As Long = &H1100
+'Private Const TVM_GETNEXTITEM As Long = (TV_FIRST + 10)
+'Private Const TVM_DELETEITEM As Long = (TV_FIRST + 1)
+'Private Const TVGN_ROOT As Long = &H0
 
 
 ' Quicky clear the treeview identified by the hWnd parameter
 Sub ClearTreeViewNodes(ByRef trv As vbalTreeView)
     
-    trv.nodes.Clear
-    Exit Sub
+    m_blnClearingNodes = True    trv.nodes.Clear
+    m_blnClearingNodes = False
     
     '// Below code is no longer necesarry thanks to a better treeview. :) -Pyro
-    Dim hWnd As Long
-    Dim hItem As Long
-    
-    hWnd = trv.hWnd
-    
-    
+    'Dim hWnd As Long
+    'Dim hItem As Long
+    '
+    'hWnd = trv.hWnd
+    '
+    '
     ' lock the window update to avoid flickering
-    SendMessageLong hWnd, WM_SETREDRAW, False, &O0
-
+    'SendMessageLong hWnd, WM_SETREDRAW, False, &O0
+    '
     ' clear the treeview
-    Do
-        hItem = SendMessageLong(hWnd, TVM_GETNEXTITEM, TVGN_ROOT, 0)
-        If hItem <= 0 Then Exit Do
-        SendMessageLong hWnd, TVM_DELETEITEM, &O0, hItem
-    Loop
-    
-    ' unlock the window
-    SendMessageLong hWnd, WM_SETREDRAW, True, &O0
+    'Do
+    '    hItem = SendMessageLong(hWnd, TVM_GETNEXTITEM, TVGN_ROOT, 0)
+    '    If hItem <= 0 Then Exit Do
+    '    SendMessageLong hWnd, TVM_DELETEITEM, &O0, hItem
+    'Loop
+    '    ' unlock the window    'SendMessageLong hWnd, WM_SETREDRAW, True, &O0    
 End Sub
 
 
@@ -683,7 +681,7 @@ Private Sub trvCommands_SelectedNodeChanged()
     Dim xpath As String
     Dim xmlElement As IXMLDOMElement
     
-    Set node = trvCommands.SelectedItem
+    If m_blnClearingNodes Then Exit Sub        Set node = trvCommands.SelectedItem
     If node Is Nothing Then
         Call ResetForm
         Exit Sub
