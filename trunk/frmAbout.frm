@@ -113,7 +113,7 @@ Begin VB.Form frmAbout
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   375
-      Left            =   120
+      Left            =   360
       TabIndex        =   7
       Top             =   480
       UseMnemonic     =   0   'False
@@ -122,7 +122,7 @@ Begin VB.Form frmAbout
    Begin VB.Label lblURL 
       Alignment       =   2  'Center
       BackColor       =   &H00000000&
-      Caption         =   "Online ReadMe"
+      Caption         =   "StealthBot Wiki"
       BeginProperty Font 
          Name            =   "Tahoma"
          Size            =   8.25
@@ -244,7 +244,7 @@ Begin VB.Form frmAbout
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   480
-      Left            =   120
+      Left            =   360
       TabIndex        =   0
       Top             =   120
       Width           =   7995
@@ -271,10 +271,10 @@ Begin VB.Form frmAbout
       EndProperty
       ForeColor       =   &H00FFFFFF&
       Height          =   495
-      Left            =   240
+      Left            =   360
       TabIndex        =   2
       Top             =   5280
-      Width           =   6975
+      Width           =   6855
    End
 End
 Attribute VB_Name = "frmAbout"
@@ -303,31 +303,23 @@ Private Sub Form_Load()
     AddLine "All Blizzard copyrights are (c) 1996 to present Blizzard Entertainment."
     AddLine "For a detailed listing of Blizzard copyrights, please visit"
     AddLine "  http://www.blizzard.com/copyright.shtml"
-    AddLine "For any further legal information and copyrights regarding StealthBot and the StealthBot website, visit"
+    AddLine "For any further legal information regarding StealthBot and the StealthBot website, visit"
     AddLine "  http://www.stealthbot.net/legal/web/"
     AddCrLf
-    AddLine "- Grok[vL] - AddChat and DebugOutput are invaluable"
-    AddLine "- Skywing[vL] and Yoni[vL] for their development and maintenance of the BNLS system"
-    AddLine "- Hdx for his maintenance of the JBLS server at jbls.org"
-    AddLine "- Barumonk and Pr0pHeT]ZeR0["
+    AddLine "- Hdx for his continued help and maintenance of the JBLS server at jbls.org"
     AddLine "- The staff and users at StealthBot.net for their continued support"
     AddCrLf
-    AddLine "- 6th period Intro to Programming, sophomore year in high school (2002), and my teacher Mr. P"
-    AddCrLf
-    AddLine "- Thanks to all of my beta testers and people who suggested features to me -- StealthBot wouldn't be possible without you, you know who you are"
+    AddLine "- Thanks to all of the beta testers and people who suggested features to me -- StealthBot wouldn't be possible without you"
     AddLine "- Thanks to Retain, Jack, Hdx, and Berzerker, for their long lists of suggestions and bug reports"
-    AddLine "- Thanks to UserLoser and Eric for their help with Diablo II Realm-related things"
     AddLine "- Thanks to PhiX for his excellent continued support help on StealthBot.net"
     AddCrLf
-    AddLine "- My website administrators, liQuid, MetaLMilitiA and Eric for their continued help in managing the stealthbot.net forums"
-    AddLine "- Eric, DaRk-FeAnOr and Ethereal for their help regarding Warcraft III"
-    AddLine "- Arta[vL]'s BNetDocs and BNU-Camel's OpenBNetDocs wiki, as references for all things BNCS-related"
+    AddLine "- My website administrators, Distant, MetaLMilitiA, Hdx and Eric for their continued help in managing the stealthbot.net forums"
     AddLine "- LW-Killbound for the splash screen image"
     AddCrLf
     AddLine "- And, an extra-special thanks to:"
     AddLine "-> The tech support people on StealthBot.net and in Clan SBS, for giving their time"
     AddLine "-> The people who have donated to the StealthBot project - you can find a current list at http://contributors.stealthbot.net - THANK YOU!"
-                             
+    
     lblBottom.Caption = "(c)2002-2009 Andy Trevino - all rights reserved." & vbCrLf & "Use of this program is subject to the License Agreement found at http://eula.stealthbot.net."
 End Sub
 
@@ -377,7 +369,7 @@ Private Sub lblURL_Click(Index As Integer)
     ElseIf Index = 0 Then
         ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net", 0&, 0&, 0&
     ElseIf Index = 6 Then
-        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/readme/", 0&, 0&, 0&
+        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/redir/wiki/", 0&, 0&, 0&
     ElseIf Index = 5 Then
         ShellExecute Me.hWnd, "Open", "http://contributors.stealthbot.net", 0&, 0&, 0&
     End If

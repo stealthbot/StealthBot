@@ -607,12 +607,6 @@ Public Sub Event_LoggedOnAs(Username As String, Product As String)
         frmChat.sckBNLS.Close
     End If
     
-    'INetQueue inqReset
-    
-    'FullJoin BotVars.HomeChannel, 1
-
-    QueueLoad = (QueueLoad + 2)
-    
     Call frmChat.UpdateTrayTooltip
     
     If (ExReconnectTimerID > 0) Then

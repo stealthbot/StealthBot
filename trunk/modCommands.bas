@@ -78,7 +78,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         ' ...
         If (command.IsLocal) Then
             execCommand = True
-        ElseIf (HasAccess(Username, command.Name, command.args, outbuf)) Then
+        ElseIf (HasAccess(Username, command.Name, command.Args, outbuf)) Then
             execCommand = True
         Else
             execCommand = False
@@ -100,7 +100,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             
             ' ...
             If (LenB(command.docs.Owner) = 0) Then 'Is it a built in command?
-                Call executeCommand(Username, dbAccess, command.Name & Space$(1) & command.args, _
+                Call executeCommand(Username, dbAccess, command.Name & Space$(1) & command.Args, _
                     IsLocal, command_return)
             End If
                     
@@ -1480,9 +1480,9 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
         End If
         
         ' ...
-        If (QueueLoad > 0) Then
-            Call Pause(2, True, False)
-        End If
+        'If (QueueLoad > 0) Then
+        '    Call Pause(2, True, False)
+        'End If
         
         ' designate user
         Call bnetSend("/designate " & reverseUsername(msgData))
@@ -1514,9 +1514,6 @@ Private Function OnGiveUp(ByVal Username As String, ByRef dbAccess As udtGetAcce
                 'Call Pause(200, True, True)
             Next I
         End If
-        
-        ' ...
-        QueueLoad = (QueueLoad + 1)
 
         ' ...
         ReDim arrUsers(0)
@@ -1736,7 +1733,7 @@ Private Function OnSetHome(ByVal Username As String, ByRef dbAccess As udtGetAcc
     
     BotVars.HomeChannel = msgData
     
-    tmpbuf = "Home channel set to [ " & msgData & " ]"
+    tmpbuf = "Home channel set to """ & msgData & """."
     
     ' return message
     cmdRet(0) = tmpbuf
@@ -2257,7 +2254,7 @@ Private Function OnDesignate(ByVal Username As String, ByRef dbAccess As udtGetA
             Call AddQ("/designate " & msgData, , Username)
             
             ' ...
-            tmpbuf = "I have designated [ " & msgData & " ]"
+            tmpbuf = "I have designated " & msgData & "."
         Else
             ' ...
             tmpbuf = "Error: The bot does not have ops."
@@ -4811,11 +4808,12 @@ Private Function OnAddQuote(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     Dim tmpbuf As String ' temporary output buffer
     
-    If (g_Quotes.Add(msgData)) Then
-        tmpbuf = "Quote added!"
-    Else
-        tmpbuf = "Quote add failed."
+    If (g_Quotes Is Nothing) Then
+        Set g_Quotes = New Collection
     End If
+    
+    g_Quotes.Add (msgData)
+    tmpbuf = "Quote added!"
     
     ' return message
     cmdRet(0) = tmpbuf

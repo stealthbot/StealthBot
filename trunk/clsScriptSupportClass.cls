@@ -917,7 +917,8 @@ End Sub
 '// Pads the queue so further messages will be sent more slowly
 Public Sub PadQueueCounter()
     
-    QueueLoad = QueueLoad + 1
+    'QueueLoad = QueueLoad + 1
+    'Does nothing now
 
 End Sub
 

@@ -16,6 +16,7 @@ Attribute VB_Exposed = False
 '#########################################################################################
 ' CHANGES:
 ' 2009-07-16 initial port -andy
+' 2009-08-11 added BanDelay(), formerly private in frmChat -andy
 '#########################################################################################
 
 ' (original)
@@ -58,6 +59,7 @@ Public Function GetDelay(ByVal sText As String) As Long
     byteCost = m_lCostPerByte
     
     If Credits < m_lMaxCredits Then
+        ' Adjust credits up
         Credits = Credits + ((GetTickCount() - LastSent) / CreditRate)
         
         If Credits > m_lMaxCredits Then
@@ -106,20 +108,14 @@ End Sub
 '//            out.putLocalSetting(getName(), "credit rate", "8");
 Private Sub Class_Initialize()
     ' Set defaults for public variables
-    Call Me.FullReset
-End Sub
-
-Public Sub FullReset()
-    LastSent = GetTickCount()
     Me.StartingCredits = 750
     Me.ThreshholdBytes = 65
     Me.CostPerByte = 12
-    Me.CostPerByteOverThreshhold = 15
     Me.CostPerPacket = 190
+    Me.CostPerByteOverThreshhold = 15
     Me.MaxCredits = 750
     Me.CreditRate = 8
 End Sub
-
 
 '#########################################################################################
 '#########################################################################################
@@ -209,6 +205,54 @@ Public Property Let CreditRate(ByVal lCreditRate As Long)
     m_lCreditRate = lCreditRate
 
 End Property
+
+Public Function BanDelay() As Long
+    ' define default error handler
+    On Error GoTo ERROR_HANDLER
+    
+    ' base ban delay
+    ' The base delay serves two functions: it prevents likely ineffectual attempts at
+    ' banning fast floodbots & it provides a small window for bots without similar ban
+    ' delay functions to do banning without incurring the high risk of double bans.
+    ' The base delay prevents banning at any lower interval than what is specified.
+    BanDelay = 100
+
+    ' do we have ops?
+    If (g_Channel.Self.IsOperator) Then
+        Dim OpCount As Integer
+        Dim j       As Integer
+        
+        ' loop through users in channel
+        For j = 1 To g_Channel.Users.Count
+            ' is user an operator?
+            If (g_Channel.Users(j).IsOperator) Then
+                OpCount = (OpCount + 1)
+            End If
+        Next j
+        
+        ' do we have more than one op?
+        If (OpCount > 1) Then
+            ' seed rnd function
+            Randomize
+            
+            ' set random ban delay based primarily on op count
+            BanDelay = _
+                (BanDelay + ((1 + Rnd * (OpCount * 2)) * (1 + Rnd * 125)))
+        End If
+    End If
+    
+    ' exit procedure
+    Exit Function
+
+' default error handler
+ERROR_HANDLER:
+    ' display error message
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in BanDelay().")
+
+    ' exit procedure
+    Exit Function
+
+End Function
 '#########################################################################################
 '#########################################################################################
 

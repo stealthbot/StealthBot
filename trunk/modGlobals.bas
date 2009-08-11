@@ -73,29 +73,29 @@ Public uTicks As Long
 Public ForcedJoinsOn As Byte
 Public ReconnectTimerID As Long
 Public ExReconnectTimerID As Long
+Public UnsquelchTimerID As Long
 Public SCReloadTimerID As Long
 Public ClanAcceptTimerID As Long
+Public QueueTimerID As Long
 Public AutoChatFilter As Long
-
 Public rtbWhispersVisible As Boolean
 Public cboSendHadFocus As Boolean
 Public cboSendSelStart As Long
 Public cboSendSelLength As Long
-
 Public RealmError As Boolean
-
 Public PacketLogFilePath As String
 Public LogPacketTraffic As Boolean
-
 Public ScriptMenu_ParentID As Long
-
 Public CfgVersion As Long
 
 Public VoteInitiator As udtGetAccessResponse
 
 Public g_Queue As New clsQueue
 Public g_OSVersion As New clsOSVersion
-'Public g_Logger As New clsLogger
+Public SharedScriptSupport As New clsScriptSupportClass
+Public BNCSBuffer As New clsBNCSRecvBuffer
+Public BNLSBuffer As New clsBNLSRecvBuffer
+Public GErrorHandler As clsErrorHandler
 
 Public AttemptedFirstReconnect As Boolean
 
@@ -116,22 +116,18 @@ Public Const LOAD_FILTERS = 2
 Public Const LOAD_PHRASES = 3
 Public Const LOAD_DB = 4
 
-Public SharedScriptSupport As New clsScriptSupportClass
-Public BNCSBuffer As New clsBNCSRecvBuffer
-Public BNLSBuffer As New clsBNLSRecvBuffer
-Public GErrorHandler As clsErrorHandler
-
 Public g_Connected As Boolean
 Public g_Online As Boolean
 Public AwaitingSystemKeys As Byte
 Public AwaitingSelfRemoval As Byte
 'Public AttemptedNewVerbyte As Boolean
 
-Public g_Quotes As clsQuotesObj
+Public g_Quotes As Collection
 Public g_Channel As New clsChannelObj
 Public g_Logger As New clsLogger
 Public g_Clan As New clsClanObj
 Public g_Friends As New Collection
+Public g_BNCSQueue As New clsBNCSQueue
 
 Public UserCancelledConnect As Boolean
 
@@ -181,8 +177,6 @@ Public colLastSeen As Collection
 Public colProfiles As Collection
 
 Public LastWhisperTime As Long
-Public QueueLoad As Long
-Public QueueMaster As Long
 
 'ARRAYS
 Public Phrases() As String

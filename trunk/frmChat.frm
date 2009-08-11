@@ -2,15 +2,15 @@ VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "Msinet.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
-   ClientLeft      =   225
-   ClientTop       =   855
+   ClientLeft      =   165
+   ClientTop       =   735
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -66,8 +66,8 @@ Begin VB.Form frmChat
    Begin VB.Timer tmrAccountLock 
       Enabled         =   0   'False
       Interval        =   30000
-      Left            =   5280
-      Top             =   5040
+      Left            =   6240
+      Top             =   4560
    End
    Begin MSScriptControlCtl.ScriptControl SControl 
       Left            =   120
@@ -723,11 +723,6 @@ Begin VB.Form frmChat
       Tab(2).ControlEnabled=   0   'False
       Tab(2).ControlCount=   0
    End
-   Begin VB.Timer quLower 
-      Interval        =   5360
-      Left            =   6720
-      Top             =   4560
-   End
    Begin VB.Timer tmrFriendlistUpdate 
       Interval        =   10000
       Left            =   7200
@@ -786,11 +781,6 @@ Begin VB.Form frmChat
       _ExtentY        =   741
       _Version        =   393216
       RemotePort      =   6112
-   End
-   Begin VB.Timer QueueTimer 
-      Interval        =   1175
-      Left            =   6240
-      Top             =   4560
    End
    Begin VB.Timer UpTimer 
       Left            =   6720
@@ -1536,7 +1526,7 @@ End Type
 ' LET IT BEGIN
 Private Sub Form_Load()
     Dim s As String
-    Dim f As Integer ', i As Integer
+    Dim f As Integer
     Dim L As Long
     Dim FrmSplashInUse As Boolean
     
@@ -1708,7 +1698,7 @@ Private Sub Form_Load()
     'Support for recording maxmized position. - FrOzeN
     s = ReadCfg("Position", "Maximized")
     
-    If s = "Y" Then
+    If s = "True" Then
         Me.WindowState = vbMaximized
     End If
 
@@ -1793,14 +1783,11 @@ Private Sub Form_Load()
     
     TASKBARCREATED_MSGID = RegisterWindowMessage("TaskbarCreated")
     
-    'BNCSUtil Version Check
-'    If Not bncsutil_checkVersion(BNCSUTIL_VERSION) Then
-'        AddChat RTBColors.ErrorMessageText, "Warning: You are using an outdated copy of BNCSUtil.dll. Some features may not function correctly."
-'    End If
-    
     cboSend.SetFocus
     
     LoadQuickChannels
+    ' no quotes?
+    'LoadQuotes
     InitScriptControl SControl
     
     On Error Resume Next
@@ -2202,48 +2189,42 @@ End Sub
 
 Sub Event_BNLSError(ErrorNumber As Integer, description As String)
     If sckBNet.State <> 7 Then
+    
         sckBNet.Close
         
-        Dim blnFinderDisabled As Boolean
-        blnFinderDisabled = ((ReadCfg("Override", "ForceDisableBNLSFinder")) = "Y")
-        
-        ' Check the user has using BNLS server finder enabled
-        ' do they have the finder disabled or is the override set?
-        If (BotVars.UseAltBnls = False) Or (blnFinderDisabled = True) Then
+        'Check the user has using BNLS server finder enabled
+        If BotVars.UseAltBnls = True Then
+            Call FindAltBNLS
+        ElseIf BotVars.UseAltBnls = False Then
             AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & description
             
             UserCancelledConnect = False
             
             DoDisconnect 1, True
             
-            ' check if user has overrided BNLS finder dialog -- they don't want to know about it!
-            If blnFinderDisabled = False Then
-                ' check if we've already asked the user
-                If (askedBnls = False) Then
-                    ' set to true so that recursion does not occur
-                    askedBnls = True
+            If (askedBnls = False) Then
+                askedBnls = True
+            
+                'Ask the user if they would like to enable the BNLS Automatic Server finder
+                Dim msgResult As VbMsgBoxResult
                 
-                    'Ask the user if they would like to enable the BNLS Automatic Server finder
-                    Dim msgResult As VbMsgBoxResult
+                msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
+                                   "Would you like to enable the BNLS Automatic Server Finder?", _
+                                   vbYesNo, "BNLS Error")
+                
+                'Save their answer to the config, and the call this procedure again to reevaluate what to do
+                WriteINI "Main", "UseAltBNLS", IIf(msgResult = vbYes, "Y", "N")
+                
+                If (msgResult = vbYes) Then
+                    BotVars.UseAltBnls = True
                     
-                    msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
-                                       "Would you like to enable the BNLS Automatic Server Finder?", _
-                                       vbYesNo, "BNLS Error")
-                    
-                    'Save their answer to the config, and the call this procedure again to reevaluate what to do
-                    WriteINI "Main", "UseAltBNLS", IIf(msgResult = vbYes, "Y", "N")
-                    
-                    If (msgResult = vbYes) Then
-                        BotVars.UseAltBnls = True
-                        
-                        Call Event_BNLSError(ErrorNumber, description)
-                    Else
-                        BotVars.UseAltBnls = False
-                    End If
+                    Call Event_BNLSError(ErrorNumber, description)
+                Else
+                    BotVars.UseAltBnls = False
                 End If
             End If
             
-            If (BotVars.UseAltBnls = False) Or (blnFinderDisabled = True) Then
+            If (BotVars.UseAltBnls = False) Then
                 DisplayError ErrorNumber, 0, BNLS
             End If
             
@@ -2262,9 +2243,6 @@ Sub Event_BNLSError(ErrorNumber As Integer, description As String)
             '    ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
             '        AddressOf Reconnect_TimerProc)
             'End If
-        Else
-            ' we can use the finder
-            Call FindAltBNLS
         End If
     End If
 End Sub
@@ -2289,7 +2267,7 @@ Public Sub FindAltBNLS()
     
     'Notify user the current BNLS server failed
     'If (intCounter > 1) Then
-    AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BNLSServer & " failed."
+        AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BNLSServer & " failed."
     'End If
     
     'Notify user other BNLS servers are being located
@@ -2300,7 +2278,7 @@ Public Sub FindAltBNLS()
         Dim strReturn As String
         
         'Reset the counter
-        intCounter = 0
+        intCounter = 1
                 
         If (INet.StillExecuting = False) Then
             ' store first bnls server used so that we can avoid connecting to it again
@@ -2325,11 +2303,8 @@ Public Sub FindAltBNLS()
                     ' ...
                     Call DoDisconnect
             
-                    ' ensure that we update our listing on following connection(s)
+                    ' ...
                     GotBNLSList = False
-                    
-                    ' ensure checker starts at 0 again on following connection(s)
-                    intCounter = 0
             
                     ' ...
                     Exit Sub
@@ -2357,17 +2332,16 @@ Public Sub FindAltBNLS()
             "and check the Technical Support forum for more information."
     End If
     
-    ' keep increasing counter until we find a server that is valid and isn't the same as the first one
-    Do While (StrComp(strBNLS(intCounter), firstServer, vbTextCompare) = 0) Or (LenB(strBNLS(intCounter)) = 0)
+    ' ...
+    If (StrComp(strBNLS(intCounter), firstServer, vbTextCompare) = 0) Then
         intCounter = intCounter + 1
         
         If intCounter > UBound(strBNLS) Then
             'All BNLS servers have been tried and failed
             Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://stealthbot.net/ " & _
                 "and check the Technical Support forum for more information."
-            Exit Do
         End If
-    Loop
+    End If
     
     ' ...
     BotVars.BNLSServer = strBNLS(intCounter)
@@ -2379,7 +2353,7 @@ Public Sub FindAltBNLS()
     End With
     
     ' ...
-    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
+    AddChat RTBColors.InformationText, "[BNLS] Connecting to " & BotVars.BNLSServer & "..."
 
     Exit Sub
     
@@ -2391,9 +2365,6 @@ BNLS_Alt_Finder_Error:
         
         ' ensure that we update our listing on following connection(s)
         GotBNLSList = False
-        
-        ' ensure checker starts at 0 again on following connection(s)
-        intCounter = 0
     
     Else
         
@@ -3148,11 +3119,7 @@ Sub Form_Unload(Cancel As Integer)
     ' Added this instead of End to try and fix some system tray crashes 2009-0211-andy
     '  It was used in some capacity before since the API was already declared
     '   in modAPI...
-    ' added preprocessor check; the bot was ending the VB6 IDE's process too! - ribose
-    ' if it was compiled with the debugger, we don't allow minimizing to tray anyway
-    #If Not COMPILE_DEBUG = 1 Then
-        Call ExitProcess(0)
-    #End If
+    Call ExitProcess(0)
 End Sub
 
 
@@ -3762,7 +3729,6 @@ Private Sub mnuDisconnect2_Click()
 End Sub
 
 Private Sub mnuEditAccessFlags_Click()
-    'Shell "notepad " & App.Path & "\commands.xml", vbNormalFocus
     ShellExecute frmChat.hWnd, "Open", App.Path & "\commands.xml", &H0, &H0, vbNormalFocus
 End Sub
 
@@ -3776,7 +3742,6 @@ Private Sub mnuEditCaught_Click()
 End Sub
 
 Private Sub mnuEditChangelog_Click()
-    'Shell "notepad " & App.Path & "\Changelog.txt", vbNormalFocus
     ShellExecute frmChat.hWnd, "Open", App.Path & "\Changelog.txt", &H0, &H0, vbNormalFocus
 End Sub
 
@@ -5566,155 +5531,90 @@ Private Sub cboSend_KeyPress(KeyAscii As Integer)
     End If
 End Sub
 
-Private Sub quLower_Timer()
-    On Error GoTo ERROR_HANDLER
 
-    If QueueLoad > 0 Then QueueLoad = QueueLoad - 1
-    If QueueMaster > 0 Then QueueMaster = QueueMaster - 2
-    If QueueMaster < 0 Then QueueMaster = 0
-    Dim gA As udtGetAccessResponse
-    
-    If Unsquelching Then Unsquelching = False
-    
-    Exit Sub
-    
-ERROR_HANDLER:
-
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in quLower_Timer()."
-
-    Exit Sub
-End Sub
-
-
-Private Sub QueueTimer_Timer()
-    On Error GoTo ERROR_HANDLER
-
-    Static delay As Integer
-    Static Count As Integer
-
-    Dim Message  As String
-    Dim Tag      As String
-    Dim Sent     As Byte
-    Dim I        As Integer
-    Dim override As Integer
-    Dim pri      As Integer
-    Dim ID       As Integer
-    
-    If ((g_Queue.Count) And (g_Online)) Then
-        With g_Queue.Peek
-            Message = .Message
-            Tag = .Tag
-            pri = .PRIORITY
-            ID = .ID
-        End With
-        
-        ' ...
-        'If (pri = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
-        '    ' ...
-        '    If (Left$(Message, 5) = "/ban ") Then
-        '        Dim user As String ' ...
-        '
-        '        ' ...
-        '        If (Len(Message) >= 6) Then
-        '            user = Mid$(Message, 6)
-        '
-        '            If (InStr(user, " ") <> 0) Then
-        '                user = Mid$(user, 1, InStr(user, " ") - 1)
-        '            End If
-        '        End If
-        '
-        '        ' ...
-        '        If ((g_Channel.IsOnRecentBanList(user)) Or _
-        '                (g_Channel.IsOnRecentBanList(StripRealm(user)))) Then
-        '
-        '            ' ...
-        '            'AddChat vbRed, "FOUND ONE!"
-        '
-        '            ' ...
-        '            Call g_Queue.Pop
-        '
-        '            ' ...
-        '            Call QueueTimer_Timer
-        '
-        '            ' ...
-        '            Exit Sub
-        '        End If
-        '    End If
-        'End If
-        
-        'frmChat.AddChat vbYellow, Message
-        
-        If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
-            '// This is a dummy queue message faking a 70-character queue entry
-            QueueLoad = (QueueLoad + 1)
-            QueueMaster = (QueueMaster + 3)
-            
-            ' ...
-            Call g_Queue.Pop
-        Else
-            If ((StrComp(Left$(Message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
-                (StrComp(Left$(Message, 10), "/unignore ", vbTextCompare) = 0)) Then
-                
-                ' ...
-                Unsquelching = True
-            End If
-
-            If ((QueueLoad < 3) And (QueueMaster < 16)) Then
-                If (Len(Message) <= 70) Then
-                    QueueLoad = (QueueLoad + 1)
-                    QueueMaster = (QueueMaster + 3)
-                ElseIf (Len(Message) <= 130) Then
-                    QueueLoad = (QueueLoad + 2)
-                    QueueMaster = (QueueMaster + 5)
-                ElseIf (Len(Message) <= 170) Then
-                    QueueLoad = (QueueLoad + 3)
-                    QueueMaster = (QueueMaster + 7)
-                Else
-                    QueueLoad = (QueueLoad + 4)
-                    QueueMaster = (QueueMaster + 9)
-                End If
-                
-                Sent = 1
-                
-                'frmChat.AddChat vbRed, Message
-                
-                Call bnetSend(Message, Tag, ID)
-            End If
-        End If
-        
-        If ((QueueMaster >= 15) And ((QueueTimer.Interval - delay) <> 2400)) Then
-            QueueTimer.Interval = 2400 ' 2400
-        ElseIf ((QueueMaster < 15) And ((QueueTimer.Interval - delay) = 2400)) Then
-            QueueTimer.Interval = 1175 ' 1175
-        Else
-            QueueTimer.Interval = 1175 ' 1175
-        End If
-        
-        If (Sent = 1) Then
-            ' ...
-            Call g_Queue.Pop
-            
-            ' are we issuing a ban or kick command?
-            If (g_Queue.Peek.PRIORITY = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
-                ' ...
-                delay = BanDelay()
-                
-                ' ...
-                QueueTimer.Interval = (QueueTimer.Interval + delay)
-            End If
-        End If
-
-    End If
-    
-    Exit Sub
-    
-ERROR_HANDLER:
-
-    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in QueueTimer_Timer()."
-
-    Exit Sub
-
-End Sub
+'Private Sub QueueTimer_Timer()
+'    On Error GoTo ERROR_HANDLER
+'
+'    Static delay As Integer
+'    Static Count As Integer
+'
+'    Dim Message  As String
+'    Dim Tag      As String
+'    Dim Sent     As Byte
+'    Dim I        As Integer
+'    Dim override As Integer
+'    Dim pri      As Integer
+'    Dim ID       As Integer
+'
+'    If ((g_Queue.Count) And (g_Online)) Then
+'        With g_Queue.Peek
+'            Message = .Message
+'            Tag = .Tag
+'            pri = .PRIORITY
+'            ID = .ID
+'        End With
+'
+'        If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
+'            '// This is a dummy queue message faking a 70-character queue entry
+'            QueueLoad = (QueueLoad + 1)
+'            QueueMaster = (QueueMaster + 3)
+'
+'            ' ...
+'            Call g_Queue.Pop
+'        Else
+'            If ((StrComp(Left$(Message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
+'                (StrComp(Left$(Message, 10), "/unignore ", vbTextCompare) = 0)) Then
+'
+'                ' ...
+'                Unsquelching = True
+'            End If
+'
+'            If ((QueueLoad < 3) And (QueueMaster < 16)) Then
+'                If (Len(Message) <= 70) Then
+'                    QueueLoad = (QueueLoad + 1)
+'                    QueueMaster = (QueueMaster + 3)
+'                ElseIf (Len(Message) <= 130) Then
+'                    QueueLoad = (QueueLoad + 2)
+'                    QueueMaster = (QueueMaster + 5)
+'                ElseIf (Len(Message) <= 170) Then
+'                    QueueLoad = (QueueLoad + 3)
+'                    QueueMaster = (QueueMaster + 7)
+'                Else
+'                    QueueLoad = (QueueLoad + 4)
+'                    QueueMaster = (QueueMaster + 9)
+'                End If
+'
+'                Sent = 1
+'
+'                Call bnetSend(Message, Tag, ID)
+'            End If
+'        End If
+'
+'        If (Sent = 1) Then
+'            ' ...
+'            Call g_Queue.Pop
+'
+'            ' are we issuing a ban or kick command?
+'            If (g_Queue.Peek.PRIORITY = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
+'                ' ...
+'                delay = g_BNCSQueue.BanDelay()
+'
+'                ' ...
+'                QueueTimer.Interval = (QueueTimer.Interval + delay)
+'            End If
+'        End If
+'
+'    End If
+'
+'    Exit Sub
+'
+'ERROR_HANDLER:
+'
+'    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in QueueTimer_Timer()."
+'
+'    Exit Sub
+'
+'End Sub
 
 
 Public Sub SControl_Error()
@@ -6507,27 +6407,38 @@ Private Function ReplaceEnvironmentVars(ByVal str As String) As String
 
 End Function
 
+
+
+
 ' ...
 Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Optional ByVal user As String = _
     vbNullString, Optional ByVal Tag As String = vbNullString, Optional OversizeDelimiter As String = " ") As Integer
-    
-    ' ...
+
     On Error GoTo ERROR_HANDLER
     
     ' maximum size of battle.net messages
     Const BNET_MSG_LENGTH = 223
-
-    ' ...
+    
+    Dim Splt()         As String      ' ...
+    Dim strTmp         As String
+    Dim I              As Long        ' ...
+    Dim currChar       As Long        ' ...
+    Dim Send           As String      ' ...
+    Dim command        As String      ' ...
+    Dim GTC            As Double      ' ...
+    Dim strUser        As String      ' ...
+    Dim nameConversion As Boolean     ' ...
+    Dim Q              As clsQueueOBj ' ...
+    Dim j              As Integer     ' ...
+    Dim delay          As Integer     ' ...
+    Dim Index          As Long        ' ...
+    '
     Static LastGTC  As Double
     Static BanCount As Integer
-    
-    ' ...
-    Dim strTmp As String
-    
-    ' ...
+
     strTmp = Message
     
-    ' ...
+    ' cap priority at 100
     If (msg_priority > 100) Then
         msg_priority = 100
     End If
@@ -6539,19 +6450,6 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
     
     ' ...
     If (strTmp <> vbNullString) Then
-        Dim Splt()         As String      ' ...
-        Dim I              As Long        ' ...
-        Dim currChar       As Long        ' ...
-        Dim Send           As String      ' ...
-        Dim command        As String      ' ...
-        Dim GTC            As Double      ' ...
-        Dim strUser        As String      ' ...
-        Dim nameConversion As Boolean     ' ...
-        Dim Q              As clsQueueOBj ' ...
-        Dim j              As Integer     ' ...
-        Dim delay          As Integer     ' ...
-        
-        ' ...
         ReDim Splt(0)
     
         ' check for tabs and replace with spaces (2005-09-23)
@@ -6559,46 +6457,41 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             strTmp = Replace$(strTmp, Chr$(9), Space(4))
         End If
         
-        ' ...
+        ' check for invalid characters in the message
         For I = 1 To Len(strTmp)
-            ' ...
             currChar = Asc(Mid$(strTmp, I, 1))
         
-            ' ...
             If (currChar < 32) Then
                 Exit Function
             End If
         Next I
         
-        ' ...
+        ' is this an internal or battle.net command?
         If (StrComp(Left$(strTmp, 1), "/", vbBinaryCompare) = 0) Then
-            Dim Index As Long ' ...
-            
-            ' ...
+            ' if so, we have extra work to do
             For I = 2 To Len(strTmp)
-                ' ...
                 currChar = Asc(Mid$(strTmp, I, 1))
             
-                ' ...
+                ' find the first non-space after the /
                 If (currChar <> Asc(Space(1))) Then
                     Exit For
                 End If
             Next I
             
-            ' ...
-            If (I > 2) Then
+            ' if we found a non-space, strip everything
+            If (I >= 2) Then
                 strTmp = "/" & Mid$(strTmp, I)
             End If
 
-            ' ...
+            ' Find the next instance of a space (the end of the command word)
             Index = InStr(1, strTmp, Space(1), vbBinaryCompare)
             
-            ' ...
+            ' is it a valid command word?
             If (Index > 2) Then
-                ' ...
+                ' extract the command word
                 command = LCase$(Mid$(strTmp, 2, (Index - 2)))
 
-                ' ...
+                ' test it for being battle.net commands we need to process now
                 If ((command = "w") Or _
                     (command = "whisper") Or _
                     (command = "m") Or _
@@ -6642,6 +6535,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                             ReDim Preserve Splt(0 To UBound(Splt) - 1)
                         End If
                     End If
+                    
                 ElseIf ((command = "f") Or _
                         (command = "friends")) Then
                     
@@ -6744,16 +6638,15 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
         ' ...
         ReDim Preserve Splt(0 To UBound(Splt))
 
-        ' ...
+        ' add to the queue!
         For I = LBound(Splt) To UBound(Splt)
             ' store current tick
             GTC = GetTickCount()
             
             ' store working copy
-            Send = _
-                command & Splt(I)
+            Send = command & Splt(I)
             
-            ' ...
+            ' create the queue object
             Set Q = New clsQueueOBj
             
             ' ...
@@ -6763,7 +6656,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                 .Tag = Tag
             End With
 
-            ' ...
+            ' add it
             g_Queue.Push Q
             
             ' should we subject this message to the typical delay,
@@ -6778,16 +6671,19 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                     
                     ' are we issuing a ban or kick command?
                     If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
-                        delay = BanDelay()
+                        delay = g_BNCSQueue.BanDelay()
                     End If
-                    
-                    ' set the delay before our next queue cycle
-                    With frmChat.QueueTimer
-                        .Enabled = False
-                        .Interval = delay
-                        .Enabled = True
-                    End With
                 End If
+            End If
+            
+            ' If queueTimerID is 0 the timer is idle right now, so reset it
+            If QueueTimerID = 0 Then
+                If delay = 0 Then
+                    delay = g_BNCSQueue.GetDelay(g_Queue.Peek.Message)
+                End If
+            
+                ' set the delay before our next queue cycle
+                QueueTimerID = SetTimer(0&, 0&, delay, AddressOf QueueTimerProc)
             End If
         Next I
         
@@ -6806,77 +6702,27 @@ ERROR_HANDLER:
     Exit Function
 End Function
 
-Private Function BanDelay() As Integer
-
-    ' define default error handler
-    On Error GoTo ERROR_HANDLER
-    
-    ' base ban delay
-    ' The base delay serves two functions: it prevents likely ineffectual attempts at
-    ' banning fast floodbots & it provides a small window for bots without similar ban
-    ' delay functions to do banning without incurring the high risk of double bans.
-    ' The base delay prevents banning at any lower interval than what is specified.
-    BanDelay = 100
-
-    ' do we have ops?
-    If (g_Channel.Self.IsOperator) Then
-        Dim OpCount As Integer ' ...
-        Dim j       As Integer ' ...
-        
-        ' loop through users in channel
-        For j = 1 To g_Channel.Users.Count
-            ' is user an operator?
-            If (g_Channel.Users(j).IsOperator) Then
-                OpCount = (OpCount + 1)
-            End If
-        Next j
-        
-        ' do we have more than one op?
-        If (OpCount > 1) Then
-            ' seed rnd function
-            Randomize
-        
-            ' set random ban delay based primarily on op count
-            BanDelay = _
-                (BanDelay + ((1 + Rnd * (OpCount * 2)) * (1 + Rnd * 125)))
-        End If
-    End If
-    
-    ' exit procedure
-    Exit Function
-
-' default error handler
-ERROR_HANDLER:
-    ' display error message
-    Call AddChat(vbRed, "Error: " & Err.description & " in BanDelay().")
-
-    ' exit procedure
-    Exit Function
-
-End Function
 
 Sub ClearChannel()
-    ' ...
+    ' reset channel object
     Set g_Channel = Nothing
-    
-    ' ...
     Set g_Channel = New clsChannelObj
-
-    ' ...
-    lvChannel.ListItems.Clear
     
-    ' ...
+    ' clear channel UI elements
+    lvChannel.ListItems.Clear
     lblCurrentChannel.Caption = vbNullString
     
-    ' ...
+    ' reset this random boolean
     PassedClanMotdCheck = False
 End Sub
+
 
 Sub ReloadConfig(Optional Mode As Byte = 0)
     On Error GoTo ERROR_HANDLER
 
     Const MN                 As String = "Main"
     Const OT                 As String = "Other"
+    Const OV                 As String = "Override"
 
     Dim default_group_access As udtGetAccessResponse
     Dim s                    As String
@@ -7277,9 +7123,6 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     LoadArray LOAD_PHRASES, Phrases()
     LoadArray LOAD_FILTERS, gFilters()
     
-    ' reload g_Quotes on config reload. -Ribose/2009-08-10
-    Set g_Quotes = New clsQuotesObj
-    
     's = readcfg(ot, "SendDelay")
     'If strictisnumeric(s) Then
     '    quSend.Interval = s
@@ -7383,6 +7226,49 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
     Else
         BotVars.MediaPlayer = "Winamp"
     End If
+    
+    ' Load some queue stuff, reluctantly
+    s = ReadCfg(OV, "QueueMaxCredits")
+    If StrictIsNumeric(s) And Val(s) > 0 Then
+        BotVars.QueueMaxCredits = Val(s)
+        g_BNCSQueue.MaxCredits = Val(s)
+    End If
+    
+    s = ReadCfg(OV, "QueueCostPerPacket")
+    If StrictIsNumeric(s) And Val(s) > 0 Then
+        BotVars.QueueCostPerPacket = Val(s)
+        g_BNCSQueue.CostPerPacket = Val(s)
+    End If
+    
+    s = ReadCfg(OV, "QueueCostPerByte")
+    If StrictIsNumeric(s) And Val(s) > 0 Then
+        BotVars.QueueCostPerByte = Val(s)
+        g_BNCSQueue.CostPerByte = Val(s)
+    End If
+    
+    s = ReadCfg(OV, "QueueCostPerByteOverThreshhold")
+    If StrictIsNumeric(s) And Val(s) > 0 Then
+        BotVars.QueueCostPerByteOverThreshhold = Val(s)
+        g_BNCSQueue.CostPerByteOverThreshhold = Val(s)
+    End If
+    
+    s = ReadCfg(OV, "QueueStartingCredits")
+    If StrictIsNumeric(s) And Val(s) > 0 Then
+        BotVars.QueueStartingCredits = Val(s)
+        g_BNCSQueue.StartingCredits = Val(s)
+    End If
+    
+    s = ReadCfg(OV, "QueueThreshholdBytes")
+    If StrictIsNumeric(s) And Val(s) > 0 Then
+        BotVars.QueueThreshholdBytes = Val(s)
+        g_BNCSQueue.ThreshholdBytes = Val(s)
+    End If
+    
+    s = ReadCfg(OV, "QueueCreditRate")
+    If StrictIsNumeric(s) And Val(s) > 0 Then
+        BotVars.QueueCreditRate = Val(s)
+        g_BNCSQueue.CreditRate = Val(s)
+    End If
 
     s = ReadCfg(MN, "UseRealm")
     If s = "Y" Then BotVars.UseRealm = True Else BotVars.UseRealm = False
@@ -7423,19 +7309,8 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
 
     Call ChatQueue_Initialize
 
-    'If BotVars.Logging < 2 Then
-    '    MakeLoggingDirectory
-    '
-    '    If dir$(GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt") = vbNullString Then
-    '        Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & ".txt" For Output As #1
-    '        Close #1
-    '    End If
-    '
-    '    If dir$(GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt") = vbNullString Then
-    '        Open GetProfilePath() & "\Logs\" & Format(Date, "yyyy-MM-dd") & "-WHISPERS.txt" For Output As #1
-    '        Close #1
-    '    End If
-    'End If
+    ' I reluctantly add the queue variables here.
+    
     
     If (g_Online) Then
         Call g_Channel.CheckUsers
@@ -8505,7 +8380,7 @@ Public Sub RecordWindowPosition(Optional Maximized As Boolean = False)
         WriteINI "Position", "Width", Int(Me.Width / Screen.TwipsPerPixelX)
     End If
     
-    WriteINI "Position", "Maximized", IIf(Maximized, "Y", "N")
+    WriteINI "Position", "Maximized", CStr(Maximized)
     WriteINI "Main", "ConfigVersion", CONFIG_VERSION
 End Sub
 
@@ -8521,6 +8396,4 @@ Public Sub RecordcboSendSelInfo()
     cboSendSelLength = cboSend.selLength
     cboSendSelStart = cboSend.selStart
 End Sub
-
-
 

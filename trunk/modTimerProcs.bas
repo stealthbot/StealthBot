@@ -78,3 +78,83 @@ Public Function ClanInviteTimerProc2(ByVal hWnd As Long, ByVal uMsg As Long, ByV
     Call KillTimer(frmClanInvite.hWnd, ClanAcceptTimerID)
     Call frmClanInvite.cmdDecline_Click
 End Function
+
+
+' Timer procedure for the queue
+Public Sub QueueTimerProc(ByVal hWnd As Long, ByVal uMsg As Long, ByVal idEvent As Long, ByVal dwTimer As Long)
+    Dim NewDelay As Long
+    Dim ExtraDelay As Long
+
+    Dim Message  As String
+    Dim Tag      As String
+    Dim Sent     As Boolean
+    Dim I        As Integer
+    Dim override As Integer
+    Dim pri      As Integer
+    Dim ID       As Integer
+    
+    Call KillTimer(0&, QueueTimerID)
+    QueueTimerID = 0
+    
+    On Error GoTo ERROR_HANDLER
+    
+    If ((g_Queue.Count) And (g_Online)) Then
+        With g_Queue.Peek
+            Message = .Message
+            Tag = .Tag
+            pri = .PRIORITY
+            ID = .ID
+        End With
+        
+        If (StrComp(Message, "%%%%%blankqueuemessage%%%%%", vbBinaryCompare) = 0) Then
+            '// This is a dummy queue message faking a 70-character queue entry
+            ' just pop and move on
+            Call g_Queue.Pop
+        Else
+            If ((StrComp(Left$(Message, 11), "/unsquelch ", vbTextCompare) = 0) Or _
+                (StrComp(Left$(Message, 10), "/unignore ", vbTextCompare) = 0)) Then
+                
+                ' Prep the rest of the bot because we're about to get a bunch of
+                '  channel updates
+                Unsquelching = True
+                ' Set our 2second timer to remove the flag
+                UnsquelchTimerID = SetTimer(0&, 0&, 1500, _
+                    AddressOf UnsquelchTimerProc)
+            End If
+              
+            Call bnetSend(Message, Tag, ID)
+            Call g_Queue.Pop
+            
+            ' OK, we've sent our message, now figure out the delay to the next one
+            If (g_Queue.Count) Then
+                With g_Queue.Peek()
+                    NewDelay = g_BNCSQueue.GetDelay(.Message)
+                    
+                    If .PRIORITY = PRIORITY.CHANNEL_MODERATION_MESSAGE Then
+                        ExtraDelay = g_BNCSQueue.BanDelay()
+                    End If
+                End With
+                
+                QueueTimerID = SetTimer(0&, 0&, NewDelay + ExtraDelay, _
+                    AddressOf QueueTimerProc)
+            End If
+        End If
+    End If
+    
+    Exit Sub
+    
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in QueueTimer_Timer()."
+
+    Exit Sub
+End Sub
+
+' Timer procedure to remove the Unsquelch boolean
+Public Sub UnsquelchTimerProc()
+    If Unsquelching Then
+        Unsquelching = False
+    End If
+    
+    Call KillTimer(0&, UnsquelchTimerID)
+    UnsquelchTimerID = 0
+End Sub

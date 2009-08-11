@@ -101,6 +101,15 @@ Private m_retain_old_bans               As Boolean
 Private m_store_all_bans                As Boolean
 Private m_use_alt_bnls                  As Boolean
 Private m_case_sensitive_flags          As Boolean
+' Queue stuff
+Private m_lMaxCredits                   As Long
+Private m_lCostPerPacket                As Long
+Private m_lCostPerByte                  As Long
+Private m_lCostPerByteOverThreshhold    As Long
+Private m_lStartingCredits              As Long
+Private m_lThreshholdBytes              As Long
+Private m_lCreditRate                   As Long
+
 
 Public Property Get Username() As String
     
@@ -1125,4 +1134,88 @@ Public Property Let JoinLeaveMessages(ByVal bln As Boolean)
 
 End Property
 
+' ############## QUEUE VARIABLES
+Public Property Get QueueMaxCredits() As Long
 
+    QueueMaxCredits = m_lMaxCredits
+
+End Property
+
+Public Property Let QueueMaxCredits(ByVal lMaxCredits As Long)
+
+    m_lMaxCredits = lMaxCredits
+
+End Property
+
+Public Property Get QueueCostPerPacket() As Long
+
+    QueueCostPerPacket = m_lCostPerPacket
+
+End Property
+
+Public Property Let QueueCostPerPacket(ByVal lCostPerPacket As Long)
+
+    m_lCostPerPacket = lCostPerPacket
+
+End Property
+
+Public Property Get QueueCostPerByte() As Long
+
+    QueueCostPerByte = m_lCostPerByte
+
+End Property
+
+Public Property Let QueueCostPerByte(ByVal lCostPerByte As Long)
+
+    m_lCostPerByte = lCostPerByte
+
+End Property
+
+Public Property Get QueueCostPerByteOverThreshhold() As Long
+
+    QueueCostPerByteOverThreshhold = m_lCostPerByteOverThreshhold
+
+End Property
+
+Public Property Let QueueCostPerByteOverThreshhold(ByVal lCostPerByteOverThreshhold As Long)
+
+    m_lCostPerByteOverThreshhold = lCostPerByteOverThreshhold
+
+End Property
+
+Public Property Get QueueStartingCredits() As Long
+
+    QueueStartingCredits = m_lStartingCredits
+
+End Property
+
+Public Property Let QueueStartingCredits(ByVal lStartingCredits As Long)
+
+    m_lStartingCredits = lStartingCredits
+
+End Property
+
+Public Property Get QueueThreshholdBytes() As Long
+
+    QueueThreshholdBytes = m_lThreshholdBytes
+
+End Property
+
+Public Property Let QueueThreshholdBytes(ByVal lThreshholdBytes As Long)
+
+    m_lThreshholdBytes = lThreshholdBytes
+
+End Property
+
+Public Property Get QueueCreditRate() As Long
+
+    CreditRate = m_lCreditRate
+
+End Property
+
+Public Property Let QueueCreditRate(ByVal lCreditRate As Long)
+
+    QueueCreditRate = lCreditRate
+
+End Property
+' ############## END QUEUE VARIABLES
