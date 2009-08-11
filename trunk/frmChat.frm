@@ -1698,7 +1698,7 @@ Private Sub Form_Load()
     'Support for recording maxmized position. - FrOzeN
     s = ReadCfg("Position", "Maximized")
     
-    If s = "True" Then
+    If s = "Y" Then
         Me.WindowState = vbMaximized
     End If
 
@@ -1786,8 +1786,6 @@ Private Sub Form_Load()
     cboSend.SetFocus
     
     LoadQuickChannels
-    ' no quotes?
-    'LoadQuotes
     InitScriptControl SControl
     
     On Error Resume Next
@@ -2189,42 +2187,48 @@ End Sub
 
 Sub Event_BNLSError(ErrorNumber As Integer, description As String)
     If sckBNet.State <> 7 Then
-    
         sckBNet.Close
         
-        'Check the user has using BNLS server finder enabled
-        If BotVars.UseAltBnls = True Then
-            Call FindAltBNLS
-        ElseIf BotVars.UseAltBnls = False Then
+        Dim blnFinderDisabled As Boolean
+        blnFinderDisabled = ((ReadCfg("Override", "ForceDisableBNLSFinder")) = "Y")
+        
+        ' Check the user has using BNLS server finder enabled
+        ' do they have the finder disabled or is the override set?
+        If (BotVars.UseAltBnls = False) Or (blnFinderDisabled = True) Then
             AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & description
             
             UserCancelledConnect = False
             
             DoDisconnect 1, True
             
-            If (askedBnls = False) Then
-                askedBnls = True
-            
-                'Ask the user if they would like to enable the BNLS Automatic Server finder
-                Dim msgResult As VbMsgBoxResult
+            ' check if user has overrided BNLS finder dialog -- they don't want to know about it!
+            If blnFinderDisabled = False Then
+                ' check if we've already asked the user
+                If (askedBnls = False) Then
+                    ' set to true so that recursion does not occur
+                    askedBnls = True
                 
-                msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
-                                   "Would you like to enable the BNLS Automatic Server Finder?", _
-                                   vbYesNo, "BNLS Error")
-                
-                'Save their answer to the config, and the call this procedure again to reevaluate what to do
-                WriteINI "Main", "UseAltBNLS", IIf(msgResult = vbYes, "Y", "N")
-                
-                If (msgResult = vbYes) Then
-                    BotVars.UseAltBnls = True
+                    'Ask the user if they would like to enable the BNLS Automatic Server finder
+                    Dim msgResult As VbMsgBoxResult
                     
-                    Call Event_BNLSError(ErrorNumber, description)
-                Else
-                    BotVars.UseAltBnls = False
+                    msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
+                                       "Would you like to enable the BNLS Automatic Server Finder?", _
+                                       vbYesNo, "BNLS Error")
+                    
+                    'Save their answer to the config, and the call this procedure again to reevaluate what to do
+                    WriteINI "Main", "UseAltBNLS", IIf(msgResult = vbYes, "Y", "N")
+                    
+                    If (msgResult = vbYes) Then
+                        BotVars.UseAltBnls = True
+                        
+                        Call Event_BNLSError(ErrorNumber, description)
+                    Else
+                        BotVars.UseAltBnls = False
+                    End If
                 End If
             End If
             
-            If (BotVars.UseAltBnls = False) Then
+            If (BotVars.UseAltBnls = False) Or (blnFinderDisabled = True) Then
                 DisplayError ErrorNumber, 0, BNLS
             End If
             
@@ -2243,6 +2247,9 @@ Sub Event_BNLSError(ErrorNumber As Integer, description As String)
             '    ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
             '        AddressOf Reconnect_TimerProc)
             'End If
+        Else
+            ' we can use the finder
+            Call FindAltBNLS
         End If
     End If
 End Sub
@@ -2267,7 +2274,7 @@ Public Sub FindAltBNLS()
     
     'Notify user the current BNLS server failed
     'If (intCounter > 1) Then
-        AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BNLSServer & " failed."
+    AddChat RTBColors.ErrorMessageText, "[BNLS] Connection to " & BotVars.BNLSServer & " failed."
     'End If
     
     'Notify user other BNLS servers are being located
@@ -2278,7 +2285,7 @@ Public Sub FindAltBNLS()
         Dim strReturn As String
         
         'Reset the counter
-        intCounter = 1
+        intCounter = 0
                 
         If (INet.StillExecuting = False) Then
             ' store first bnls server used so that we can avoid connecting to it again
@@ -2303,8 +2310,11 @@ Public Sub FindAltBNLS()
                     ' ...
                     Call DoDisconnect
             
-                    ' ...
+                    ' ensure that we update our listing on following connection(s)
                     GotBNLSList = False
+                    
+                    ' ensure checker starts at 0 again on following connection(s)
+                    intCounter = 0
             
                     ' ...
                     Exit Sub
@@ -2332,16 +2342,17 @@ Public Sub FindAltBNLS()
             "and check the Technical Support forum for more information."
     End If
     
-    ' ...
-    If (StrComp(strBNLS(intCounter), firstServer, vbTextCompare) = 0) Then
+    ' keep increasing counter until we find a server that is valid and isn't the same as the first one
+    Do While (StrComp(strBNLS(intCounter), firstServer, vbTextCompare) = 0) Or (LenB(strBNLS(intCounter)) = 0)
         intCounter = intCounter + 1
         
         If intCounter > UBound(strBNLS) Then
             'All BNLS servers have been tried and failed
             Err.Raise FIND_ALT_BNLS_ERROR, , "All the BNLS servers have failed. Visit http://www.stealthbot.net/ " & _
                 "and check the Technical Support forum for more information."
+            Exit Do
         End If
-    End If
+    Loop
     
     ' ...
     BotVars.BNLSServer = strBNLS(intCounter)
@@ -2353,7 +2364,7 @@ Public Sub FindAltBNLS()
     End With
     
     ' ...
-    AddChat RTBColors.InformationText, "[BNLS] Connecting to " & BotVars.BNLSServer & "..."
+    AddChat RTBColors.InformationText, "[BNLS] Connecting to the BNLS server at " & BotVars.BNLSServer & "..."
 
     Exit Sub
     
@@ -2365,6 +2376,9 @@ BNLS_Alt_Finder_Error:
         
         ' ensure that we update our listing on following connection(s)
         GotBNLSList = False
+        
+        ' ensure checker starts at 0 again on following connection(s)
+        intCounter = 0
     
     Else
         
@@ -3119,7 +3133,11 @@ Sub Form_Unload(Cancel As Integer)
     ' Added this instead of End to try and fix some system tray crashes 2009-0211-andy
     '  It was used in some capacity before since the API was already declared
     '   in modAPI...
-    Call ExitProcess(0)
+    ' added preprocessor check; the bot was ending the VB6 IDE's process too! - ribose
+    ' if it was compiled with the debugger, we don't allow minimizing to tray anyway
+    #If Not COMPILE_DEBUG = 1 Then
+        Call ExitProcess(0)
+    #End If
 End Sub
 
 
@@ -8380,7 +8398,7 @@ Public Sub RecordWindowPosition(Optional Maximized As Boolean = False)
         WriteINI "Position", "Width", Int(Me.Width / Screen.TwipsPerPixelX)
     End If
     
-    WriteINI "Position", "Maximized", CStr(Maximized)
+    WriteINI "Position", "Maximized", IIf(Maximized, "Y", "N")
     WriteINI "Main", "ConfigVersion", CONFIG_VERSION
 End Sub
 
