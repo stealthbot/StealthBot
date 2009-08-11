@@ -28,7 +28,7 @@ Begin VB.Form frmCommands
    Begin vbalTreeViewLib6.vbalTreeView trvCommands 
       Height          =   4575
       Left            =   120
-      TabIndex        =   20
+      TabIndex        =   1
       Top             =   840
       Width           =   3855
       _ExtentX        =   6800
@@ -62,7 +62,7 @@ Begin VB.Form frmCommands
       Height          =   360
       Left            =   120
       Style           =   2  'Dropdown List
-      TabIndex        =   19
+      TabIndex        =   0
       Top             =   360
       Width           =   3855
    End
@@ -70,7 +70,7 @@ Begin VB.Form frmCommands
       Caption         =   "+"
       Height          =   315
       Left            =   7010
-      TabIndex        =   18
+      TabIndex        =   4
       Top             =   840
       Width           =   270
    End
@@ -78,7 +78,7 @@ Begin VB.Form frmCommands
       Caption         =   "-"
       Height          =   315
       Left            =   8725
-      TabIndex        =   16
+      TabIndex        =   8
       Top             =   840
       Width           =   270
    End
@@ -87,7 +87,7 @@ Begin VB.Form frmCommands
       ForeColor       =   &H00FFFFFF&
       Height          =   5175
       Left            =   4080
-      TabIndex        =   0
+      TabIndex        =   14
       Top             =   240
       Width           =   5055
       Begin VB.CommandButton cmdDiscard 
@@ -113,7 +113,7 @@ Begin VB.Form frmCommands
          ItemData        =   "frmCommands.frx":1CCA
          Left            =   3600
          List            =   "frmCommands.frx":1CCC
-         TabIndex        =   11
+         TabIndex        =   6
          Top             =   600
          Width           =   700
       End
@@ -124,7 +124,7 @@ Begin VB.Form frmCommands
          ItemData        =   "frmCommands.frx":1CCE
          Left            =   1605
          List            =   "frmCommands.frx":1CD0
-         TabIndex        =   9
+         TabIndex        =   3
          Top             =   600
          Width           =   1245
       End
@@ -134,7 +134,7 @@ Begin VB.Form frmCommands
          Height          =   307
          Left            =   240
          MaxLength       =   25
-         TabIndex        =   6
+         TabIndex        =   2
          Top             =   608
          Width           =   1215
       End
@@ -144,7 +144,7 @@ Begin VB.Form frmCommands
          ForeColor       =   &H00FFFFFF&
          Height          =   495
          Left            =   240
-         TabIndex        =   5
+         TabIndex        =   11
          Top             =   4200
          Visible         =   0   'False
          Width           =   4695
@@ -156,7 +156,7 @@ Begin VB.Form frmCommands
          Left            =   240
          MultiLine       =   -1  'True
          ScrollBars      =   2  'Vertical
-         TabIndex        =   2
+         TabIndex        =   9
          Top             =   1200
          Width           =   4695
       End
@@ -167,7 +167,7 @@ Begin VB.Form frmCommands
          Left            =   240
          MultiLine       =   -1  'True
          ScrollBars      =   2  'Vertical
-         TabIndex        =   1
+         TabIndex        =   10
          Top             =   3120
          Width           =   4695
       End
@@ -175,7 +175,7 @@ Begin VB.Form frmCommands
          Caption         =   "+"
          Height          =   315
          Left            =   4388
-         TabIndex        =   15
+         TabIndex        =   7
          Top             =   600
          Width           =   270
       End
@@ -183,7 +183,7 @@ Begin VB.Form frmCommands
          Caption         =   "-"
          Height          =   315
          Left            =   3200
-         TabIndex        =   17
+         TabIndex        =   5
          Top             =   600
          Width           =   270
       End
@@ -193,7 +193,7 @@ Begin VB.Form frmCommands
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   1605
-         TabIndex        =   10
+         TabIndex        =   19
          Top             =   360
          Width           =   1215
       End
@@ -203,7 +203,7 @@ Begin VB.Form frmCommands
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   240
-         TabIndex        =   8
+         TabIndex        =   18
          Top             =   360
          Width           =   1215
       End
@@ -213,7 +213,7 @@ Begin VB.Form frmCommands
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   3600
-         TabIndex        =   7
+         TabIndex        =   17
          Top             =   360
          Width           =   975
       End
@@ -223,7 +223,7 @@ Begin VB.Form frmCommands
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   240
-         TabIndex        =   4
+         TabIndex        =   16
          Top             =   960
          Width           =   2175
       End
@@ -233,7 +233,7 @@ Begin VB.Form frmCommands
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   240
-         TabIndex        =   3
+         TabIndex        =   15
          Top             =   2880
          Width           =   2175
       End
@@ -245,7 +245,7 @@ Begin VB.Form frmCommands
       ForeColor       =   &H00FFFFFF&
       Height          =   195
       Left            =   150
-      TabIndex        =   14
+      TabIndex        =   20
       Top             =   165
       Width           =   990
    End
