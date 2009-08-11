@@ -291,7 +291,8 @@ End Type
 ' Quicky clear the treeview identified by the hWnd parameter
 Sub ClearTreeViewNodes(ByRef trv As vbalTreeView)
     
-    m_blnClearingNodes = True    trv.nodes.Clear
+    m_blnClearingNodes = True
+    trv.nodes.Clear
     m_blnClearingNodes = False
     
     '// Below code is no longer necesarry thanks to a better treeview. :) -Pyro
