@@ -14,14 +14,28 @@ Set cls = New CDemoClass
 Sub Event_Load()
 
 	'// create demo command
-	'Dim demoCommand
-	'Set demoCommand = OpenCommand("demo")
-	'If demoCommand Is Nothing Then
-	'	Set demoCommand = CreateCommand("demo")
-	'	demoCommand.RequiredRank = 1
-	'	demoCommand.Save
-	'End If
-	'Set demoCommand = Nothing
+	Dim demoCommand
+	Set demoCommand = OpenCommand("demo")
+	If demoCommand Is Nothing Then
+		Set demoCommand = CreateCommand("demo")
+		demoCommand.RequiredRank = 1
+
+		With demoCommand.NewParameter("Word", False, "Word")
+			.Description "A 'Word' Argument is a One word string, no spaces are allowed!"
+		End With
+
+
+		With demoCommand.NewParameter("Number", False, "Number")
+			.Description "A 'Number' Argument is like a 'Word' argument, but it must pass IsNumberic()"
+		End With
+
+		With demoCommand.NewParameter("String", False, "String")
+			.Description "A 'String' Argument is a series of words, if it starts with a '" & chr(34) & "' it will attempt to find the ending '" & chr(34) & "', You can escape '" & chr(34) & "'s but putting a \ in front of them, '\" & chr(34) & "', You can escape '\'s by putting another '\' in front of them '\\'"
+		End With
+
+		demoCommand.Save
+	End If
+	Set demoCommand = Nothing
 
 
 	' // create Winsock object
@@ -151,6 +165,20 @@ Sub DebugCommand(ByRef cmd)
 		AddChat f, vbGreen, "  Argument               ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, arg , f, vbWhite, "]"
 	Next
 	AddChat f, vbCyan, "------------------------------------------------------"
+End Sub
+
+Sub Event_Command(Command, Response)
+	Select Case LCase(Command.Name)
+		Case "demo":
+			If (Not Command.IsValidCommand) Then
+				Response(0) = "Use the proper syntx for this command! /demo <word> <number> <string>"
+			Else
+				Response(0) = "Your Parameters were as follows"
+				Response(1) = "Word:   " & Command.Argument("Word")
+				Response(2) = "Number: " & Command.Argument("Number")
+				Response(3) = "String: " & Command.Argument("String")
+			End If
+	End Select
 End Sub
 
 

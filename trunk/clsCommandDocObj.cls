@@ -64,7 +64,7 @@ End Function
 Public Function HasAccess(ByRef cmd As clsCommandObj, ByVal strUsername As String) As Boolean
 
     '// TODO: Move code from modCommandCode.HasAccess to here
-    HasAccess = modCommandCode.HasAccess(strUsername, cmd.Name, cmd.args)
+    HasAccess = modCommandCode.HasAccess(strUsername, cmd.Name, cmd.Args)
     
 
 End Function
@@ -73,7 +73,7 @@ End Function
 Public Function HasCorrectSyntax(ByRef cmd As clsCommandObj) As Boolean
     
     '// TODO: Move code from modCommandCode.IsCorrectSyntax to here
-    HasCorrectSyntax = modCommandCode.IsCorrectSyntax(cmd.Name, cmd.args)
+    HasCorrectSyntax = modCommandCode.IsCorrectSyntax(cmd.Name, cmd.Args)
     
 End Function
 
@@ -118,8 +118,8 @@ Private Function CreateCommandInstance(ByRef commandString As String, ByVal strU
     Set cmd = New clsCommandObj
     With cmd
         .Name = commandName
-        .args = commandArgs
-        .docs = Me
+        .Args = commandArgs
+        '.docs = Me
         .Arguments = SplitArguments(commandArgs)
         .Username = strUsername
     End With
@@ -147,7 +147,7 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
     Dim I           As Integer   '// counter
     Dim L, r        As String    '// temp vars to store the left and right characters
     Dim tmp()       As String    '// array of words
-    Dim word        As String    '// stores the word
+    Dim Word        As String    '// stores the word
     Dim multiword   As String    '// stores the text of a multi-word argument
     Dim insideArg   As Boolean   '// used to check if a word begins a multi-word argument
     
@@ -165,8 +165,8 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
     '// it to the collection, and then return
     If InStr(1, strArgString, " ") < 1 Then
     
-        word = StripQuotes(Replace(strArgString, "\""", Chr(0)))
-        If InStr(1, word, """") > 0 Then
+        Word = StripQuotes(Replace(strArgString, "\""", Chr(0)))
+        If InStr(1, Word, """") > 0 Then
             '// this is bad... words cannot contain unescaped "
             'Err.Raise -1, 0&, ""Words cannot contain unescaped """. Args =: " & strArgString
             Set SplitArguments = Nothing
@@ -174,9 +174,9 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
             Exit Function
         End If
         
-        word = Replace(word, Chr(0), """")
+        Word = Replace(Word, Chr(0), """")
     
-        SplitArguments.Add word
+        SplitArguments.Add Word
         Exit Function
     End If
     
@@ -187,22 +187,22 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
     '// loop through each element and group the arguments
     tmp = Split(strArgString)
     For I = LBound(tmp) To UBound(tmp)
-        word = tmp(I)
+        Word = tmp(I)
         '// allow for escaping quotes
-        word = Replace(word, "\""", Chr(0))
+        Word = Replace(Word, "\""", Chr(0))
         
         '// if the length is 2 or more then then l and r should be the first and last character
-        If Len(word) > 1 Then
-            L = Left$(word, 1)
-            r = Right$(word, 1)
+        If Len(Word) > 1 Then
+            L = Left$(Word, 1)
+            r = Right$(Word, 1)
         '// if the length is 1, then we need to set either l or r to "" depending on insideArg
-        ElseIf Len(word) > 0 Then
+        ElseIf Len(Word) > 0 Then
             If insideArg = False Then
-                L = Left$(word, 1)
+                L = Left$(Word, 1)
                 r = ""
             Else
                 L = ""
-                r = Right$(word, 1)
+                r = Right$(Word, 1)
             End If
         Else
             L = ""
@@ -221,7 +221,7 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
             End If
             
             '// ok this is a single word arg, but we still need to fail if it contains a "
-            If InStr(1, word, """") > 0 Then
+            If InStr(1, Word, """") > 0 Then
                 '// this is bad... words cannot contain unescaped "
                 'Err.Raise -1, 0&, "Words cannot contain unescaped "". Args =: " & strArgString
                 Set SplitArguments = Nothing
@@ -229,19 +229,19 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
                 Exit Function
             End If
             
-            word = Replace(word, Chr(0), """")
+            Word = Replace(Word, Chr(0), """")
         
         ElseIf (L = """") And (insideArg = False) Then
         
             '// we are, lets start the multiword and set our bit
-            multiword = word & " "
+            multiword = Word & " "
             insideArg = True
             
 '// check if this word ENDS with a " and we ARE inside an arg
         ElseIf (r = """") And (insideArg = True) Then
         
             '// we are, lets end the multiword, add it to the collect, and reset our vars
-            multiword = multiword & word
+            multiword = multiword & Word
             SplitArguments.Add Replace(StripQuotes(multiword), Chr(0), """")
             insideArg = False
             multiword = ""
@@ -249,14 +249,14 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
 '// check if we are inside a word, if so then we append it to multi word and be done with it
         ElseIf (insideArg = True) Then
         
-            multiword = multiword & word & " "
+            multiword = multiword & Word & " "
             
 '// we are not inside a word, then this must be a separate argument so we need to add it
         ElseIf (r <> """") And (L <> """") And (insideArg = False) Then
         
         
             '// make sure this word does not have any " inside it.
-            If InStr(1, word, """") > 0 Then
+            If InStr(1, Word, """") > 0 Then
                 '// this is bad... words cannot contain unescaped "
                 'Err.Raise -1, 0&, "Words cannot contain unescaped "". Args =: " & strArgString
                 Set SplitArguments = Nothing
@@ -265,8 +265,8 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
             End If
             
             '// if there is no text and not inside a word, then we should ignore it
-            If Len(word) > 0 Then
-                SplitArguments.Add Replace(StripQuotes(word), Chr(0), """")
+            If Len(Word) > 0 Then
+                SplitArguments.Add Replace(StripQuotes(Word), Chr(0), """")
                 insideArg = False
                 multiword = ""
             End If
@@ -391,7 +391,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
     Dim commandIndex   As Integer
     Dim commandString  As String
     Dim commandStrings As Collection
-    Dim publicOutput   As Boolean '// if true, then the output should be sent to the channel
+    Dim PublicOutput   As Boolean '// if true, then the output should be sent to the channel
     Dim IsLocal        As Boolean '// if true, then this command was enter via the chat window
     
     
@@ -450,11 +450,11 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         
         '// at this point, if message begins with // than public output should be true
         If (Left$(Message, 2) = "//") Then
-            publicOutput = True
+            PublicOutput = True
             cropLen = 3
             hasTrigger = True
         Else
-            publicOutput = False
+            PublicOutput = False
             cropLen = 2
             hasTrigger = True
         End If
@@ -470,7 +470,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         '// EXAMPLE COMMAND STRING
         '// .add SammyHagar 200
         If (Left$(Message, Len(BotVars.TriggerLong)) = BotVars.TriggerLong) Then
-            publicOutput = True
+            PublicOutput = True
             cropLen = Len(BotVars.TriggerLong) + 1
             hasTrigger = True
         End If
@@ -480,7 +480,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         '// all: add SammyHagar 200
         If (hasTrigger = False) And (messageLen > 5) Then
             If (Not StrComp(Left$(Message, 3), "all", vbTextCompare)) And (Mid$(Message, 4, 2) = ": " Or Mid$(Message, 4, 2) = ", ") Then
-                publicOutput = True
+                PublicOutput = True
                 cropLen = 6
                 hasTrigger = True
             End If
@@ -492,7 +492,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         If (hasTrigger = False) And (messageLen > 5) Then
             If (Not StrComp(Left$(Message, 3), "ops", vbTextCompare)) And (Mid$(Message, 4, 2) = ": " Or Mid$(Message, 4, 2) = ", ") Then
                 If (g_Channel.Self.IsOperator) Then
-                    publicOutput = True
+                    PublicOutput = True
                     cropLen = 6
                     hasTrigger = True
                 End If
@@ -506,7 +506,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
             If StrComp(Left$(Message, Len(botUsername)), botUsername, vbTextCompare) = 0 And _
                 (Mid$(Message, Len(botUsername) + 1, 2) = ": " Or Mid$(Message, Len(botUsername) + 1, 2) = ", ") Then
                 
-                publicOutput = True
+                PublicOutput = True
                 cropLen = Len(botUsername) + 3
                 hasTrigger = True
             
@@ -520,7 +520,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
             If StrComp(Left$(Message, Len(botRawUsername)), botRawUsername, vbTextCompare) = 0 And _
                 (Mid$(Message, Len(botRawUsername) + 1, 2) = ": " Or Mid$(Message, Len(botRawUsername) + 1, 2) = ", ") Then
                 
-                publicOutput = True
+                PublicOutput = True
                 cropLen = Len(botRawUsername) + 3
                 hasTrigger = True
             
@@ -534,7 +534,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
             If (UsernameRegex(botUsername, Left(Message, InStr(1, Message, ": ") - 1)) Or _
                 UsernameRegex(botRawUsername, Left$(Message, InStr(1, Message, ": ") - 1))) Then
                 
-                publicOutput = True
+                PublicOutput = True
                 cropLen = InStr(1, Message, ": ") + 2
                 hasTrigger = True
             End If
@@ -543,7 +543,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
             If (UsernameRegex(botUsername, Left$(Message, InStr(1, Message, ", ") - 1)) Or _
                 UsernameRegex(botRawUsername, Left$(Message, InStr(1, Message, ", ") - 1))) Then
                 
-                publicOutput = True
+                PublicOutput = True
                 cropLen = InStr(1, Message, ", ") + 2
                 hasTrigger = True
             End If
@@ -570,7 +570,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
         If Not (command Is Nothing) Then
             '// we only want to add the command if it is enabled
             If command.docs.IsEnabled = True Then
-                command.publicOutput = publicOutput
+                command.PublicOutput = PublicOutput
                 command.IsLocal = IsLocal
                 IsCommand.Add command
             End If
@@ -709,11 +709,11 @@ End Function
 
 Public Function NewParameter(argName As String, argIsOptional As Boolean, Optional argDataType As String)
     
-    Dim param As clsCommandParamsObj
+    Dim Param As clsCommandParamsObj
     
     '// create a new parameter
-    Set param = New clsCommandParamsObj
-    With param
+    Set Param = New clsCommandParamsObj
+    With Param
         .Name = argName
         .IsOptional = argIsOptional
         If argIsOptional Then
@@ -721,7 +721,7 @@ Public Function NewParameter(argName As String, argIsOptional As Boolean, Option
         End If
     End With
     
-    Set NewParameter = param
+    Set NewParameter = Param
     
 End Function
 
@@ -799,6 +799,15 @@ Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
             .Name = getName(Parameter)
             .Restrictions = getRestrictions(Parameter)
             .IsOptional = False
+            If (Not Parameter.Attributes.getNamedItem("optional") Is Nothing) Then
+                If (Parameter.Attributes.getNamedItem("optional").Text = "1") Then
+                    .IsOptional = True
+                End If
+            End If
+            .DataType = "String"
+            If (Not Parameter.Attributes.getNamedItem("type") Is Nothing) Then
+                .DataType = Parameter.Attributes.getNamedItem("type").Text
+            End If
             .description = Parameter.selectSingleNode("documentation/description").Text
             .SpecialNotes = Parameter.selectSingleNode("documentation/specialnotes").Text
         End With
@@ -808,55 +817,6 @@ Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
         
         Set temp = Nothing
     Next
-    
-    Set Parameters = CommandNode.selectNodes("arguments/optional/number/argument")
-    
-    If (Not (Parameters Is Nothing)) Then
-        
-        For Each Parameter In Parameters
-            
-            Set temp = New clsCommandParamsObj
-            
-            On Error Resume Next
-            With temp
-                .Name = getName(Parameter)
-                .DataType = "number"
-                .Restrictions = getRestrictions(Parameter)
-                .IsOptional = True
-                .description = Parameter.selectSingleNode("documentation/description").Text
-                .SpecialNotes = Parameter.selectSingleNode("documentation/specialnotes").Text
-            End With
-            On Error GoTo 0
-            
-            getParameters.Add temp
-            
-            Set temp = Nothing
-        Next
-    End If
-    
-    Set Parameters = CommandNode.selectNodes("arguments/optional/string/argument")
-    
-    If (Not (Parameters Is Nothing)) Then
-        For Each Parameter In Parameters
-            Set temp = New clsCommandParamsObj
-            
-            On Error Resume Next
-            With temp
-                .Name = getName(Parameter)
-                .DataType = "string"
-                .Restrictions = getRestrictions(Parameter)
-                .IsOptional = True
-                .description = Parameter.selectSingleNode("documentation/description").Text
-                .SpecialNotes = Parameter.selectSingleNode("documentation/specialnotes").Text
-            End With
-            On Error GoTo 0
-            
-            getParameters.Add temp
-            
-            Set temp = Nothing
-        Next
-    End If
-    
     Set Parameters = Nothing
 
 End Function
@@ -975,38 +935,19 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
                 setRestrictions argumentNode, Parameter.Restrictions
             End If
             
-            If Parameter.IsOptional = False Then
-                '// add to argumentsNode
-                argumentsNode.appendChild argumentNode
-            Else
-                '// make sure the optional node exists
-                If (argumentsNode.selectSingleNode("optional") Is Nothing) Then
-                    Set argumentsOptionalNode = m_database.createNode("element", "optional", vbNullString)
-                End If
+            If Parameter.IsOptional Then
+                Set newNode = m_database.createNode("attribute", "optional", vbNullString)
+                newNode.Text = "1"
+                argumentNode.Attributes.setNamedItem newNode
+            End If
             
-                '// this value has already been validated in the property setter
-                '// make sure the optional/<datatype> node exists
-                If (argumentsOptionalNode.selectSingleNode(Parameter.DataType) Is Nothing) Then
-                    argumentsOptionalNode.appendChild m_database.createNode("element", Parameter.DataType, vbNullString)
-                End If
-                
-                '// add to optional/<datatype> node
-                argumentsOptionalNode.selectSingleNode(Parameter.DataType).appendChild argumentNode
-                
+            If (Not StrComp(Parameter.DataType, "string", vbTextCompare) = 0) Then
+                Set newNode = m_database.createNode("attribute", "type", vbNullString)
+                newNode.Text = Parameter.DataType
+                argumentNode.Attributes.setNamedItem newNode
             End If
         Next
-        
-        '// add the optional node if necessary
-        If Not (argumentsOptionalNode Is Nothing) Then
-            argumentsNode.appendChild argumentsOptionalNode
-        End If
-    
     End If
-    
-    
-    
-    
-    
 End Function
 
 Private Function setRestrictions(ByRef AnyNode As IXMLDOMNode, ByRef RestrictionCol As Collection) As Collection
@@ -1487,6 +1428,7 @@ Public Property Let Notes(ByVal strNotes As String)
     setNotes m_command_node, strNotes
 
 End Property
+
 
 Public Property Get Parameters() As Collection
     

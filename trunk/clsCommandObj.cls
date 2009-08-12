@@ -29,6 +29,7 @@ Private m_args         As String
 Private m_arguments    As Collection
 Private m_local        As Boolean
 Private m_publicOutput As Boolean
+Private m_xmlarguments As Dictionary
 
 Public Property Get Username() As String
     Username = m_username
@@ -47,6 +48,7 @@ Public Property Get Args() As String
 End Property
 Public Property Let Args(strArgs As String)
     m_args = strArgs
+    Call SplitArguments
 End Property
 Public Property Get Arguments() As Collection
     Set Arguments = m_arguments
@@ -92,6 +94,8 @@ Public Sub Class_Initialize()
     Set m_arguments = New Collection
     m_local = False
     m_publicOutput = False
+    Set m_xmlarguments = New Dictionary
+    m_xmlarguments.CompareMode = TextCompare
     
 End Sub
 
@@ -127,3 +131,77 @@ Public Property Let docs(ByRef cmd As clsCommandDocObj)
     Set m_command_docs = cmd
 End Property
 
+Private Function StripNumeric(ByRef sString As String) As String
+    Dim sTemp As String
+    sTemp = StripWord(sString)
+    If (IsNumeric(sTemp)) Then
+        StripNumeric = sTemp
+    ElseIf LenB(sTemp) > 0 Then
+        sString = sTemp & Space(1) & sString
+    End If
+End Function
+
+Private Function StripWord(ByRef sString As String) As String
+    Dim I As Integer
+    I = InStr(sString, Space(1))
+    If (I > 0) Then
+        StripWord = Left$(sString, I - 1)
+        sString = Mid$(sString, I + 1)
+    ElseIf Len(sString) > 0 Then
+        StripWord = sString
+        sString = vbNullString
+    End If
+End Function
+
+Private Function StripString(ByRef sString As String) As String
+    Dim I As Integer
+    If (Left$(sString, 1) = Chr$(34)) Then
+        sString = Replace$(sString, "\\", Chr$(1))
+        sString = Replace$(sString, "\" & Chr(34), Chr$(2))
+        I = InStr(2, sString, Chr$(34))
+        If (I > 2) Then
+            sString = Replace$(sString, Chr$(1), "\")
+            sString = Replace$(sString, Chr$(2), Chr$(34))
+            StripString = Left$(Mid$(sString, 2), I - 2)
+            sString = Mid$(sString, I + 1)
+        Else
+            sString = Replace$(sString, Chr$(1), "\")
+            sString = Replace$(sString, Chr$(2), Chr$(34))
+            StripString = sString
+            sString = vbNullString
+        End If
+    Else
+        StripString = sString
+        sString = vbNullString
+    End If
+End Function
+
+Private Sub SplitArguments()
+    Dim sArgs       As String
+    Dim I           As Integer
+    Dim Param       As clsCommandParamsObj
+    Dim Restriction As clsCommandRestrictionObj
+    Dim sTemp       As String
+    sArgs = Me.Args
+    
+    For Each Param In Me.docs.Parameters
+        Select Case LCase(Param.DataType)
+            Case "word":    sTemp = StripWord(sArgs)
+            Case "numeric": sTemp = StripNumeric(sArgs)
+            Case "number":  sTemp = StripNumeric(sArgs)
+            Case "string":  sTemp = StripString(sArgs)
+        End Select
+        If (LenB(sTemp) = 0 And Not Param.IsOptional) Then
+            IsValidCommand = False
+        End If
+        m_xmlarguments(Param.Name) = sTemp
+    Next
+End Sub
+
+Public Function Argument(sName As String) As String
+    If (m_xmlarguments.Exists(sName)) Then
+        Argument = m_xmlarguments.Item(sName)
+    Else
+        Argument = vbNullString
+    End If
+End Function

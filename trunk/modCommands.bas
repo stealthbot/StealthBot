@@ -43,6 +43,8 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     
     On Error GoTo ERROR_HANDLER
     
+    Dim docs             As New clsCommandDocObj
+    Dim commands         As Collection
     Dim command          As clsCommandObj
     Dim dbAccess         As udtGetAccessResponse
     Dim I                As Integer
@@ -71,10 +73,9 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     End If
 
     ' ...
-    Set command = IsCommand(Message, IsLocal)
+    Set commands = docs.IsCommand(Message, IIf(IsLocal, modGlobals.CurrentUsername, Username), Chr$(0))
 
-    ' ...
-    Do While (command.Name <> vbNullString)
+    For Each command In commands
         ' ...
         If (command.IsLocal) Then
             execCommand = True
@@ -85,7 +86,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         End If
         
         ' ...
-        m_DisplayOutput = command.publicOutput
+        m_DisplayOutput = command.PublicOutput
         
         ' ...
         If (execCommand) Then
@@ -93,6 +94,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             If (IsLocal) Then
                 With dbAccess
                     .Access = 201
+                    .Flags = "A"
                 End With
             Else
                 dbAccess = GetCumulativeAccess(Username)
@@ -102,6 +104,18 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             If (LenB(command.docs.Owner) = 0) Then 'Is it a built in command?
                 Call executeCommand(Username, dbAccess, command.Name & Space$(1) & command.Args, _
                     IsLocal, command_return)
+            Else
+                Dim script_response As New Dictionary
+                Call RunInSingle(modScripting.GetModuleByName(command.docs.Owner), "Event_Command", _
+                    command, script_response)
+                
+                ReDim Preserve command_return(0 To script_response.Count)
+                For I = 0 To script_response.Count
+                    command_return(I) = script_response.Item(I)
+                Next I
+                
+                script_response.RemoveAll
+                Set script_response = Nothing
             End If
                     
             ' ...
@@ -119,7 +133,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                         ' ...
                         If (IsLocal) Then
                             ' ...
-                            If (command.publicOutput) Then
+                            If (command.PublicOutput) Then
                                 AddQ command_return(I), PRIORITY.CONSOLE_MESSAGE
                             Else
                                 frmChat.AddChat RTBColors.ConsoleText, command_return(I)
@@ -150,25 +164,21 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         End If
         
         ' ...
-        Set command = IsCommand(vbNullString, IsLocal)
-        
-        ' ...
-        Count = (Count + 1)
-        
-        ' ...
         execCommand = False
-    Loop
+    Next
         
     ' ...
     If (IsLocal) Then
         ' ...
-        If ((bln = False) And (Count = 0)) Then
+        If ((bln = False) And (commands.Count = 0)) Then
             AddQ Message
         End If
     End If
     
     'Unload memory - FrOzeN
     Set command = Nothing
+    Set docs = Nothing
+    Set commands = Nothing
     
     Exit Function
     
@@ -186,248 +196,6 @@ ERROR_HANDLER:
     
     Exit Function
 End Function
-
-' prepares commands for processing, and calls helper functions associated with
-' processing
-'Public Function ProcessCommand3(ByVal Username As String, ByVal Message As String, _
-'    Optional ByVal InBot As Boolean = False, Optional ByVal WhisperedIn As Boolean = False) As Boolean
-'
-'    ' default error response for commands
-'    On Error GoTo ERROR_HANDLER
-'
-'    ' stores the access response for use when commands are
-'    ' issued via console
-'    Dim ConsoleAccessResponse As udtGetAccessResponse
-'
-'    Dim i            As Integer ' loop counter
-'    Dim tmpmsg       As String  ' stores local copy of message
-'    Dim cmdRet()     As String  ' stores output of commands
-'    Dim PublicOutput As Boolean ' stores result of public command
-'                                ' output check (used for displaying command
-'                                ' output when issuing via console)
-'
-'    ' create single command data array element for safe bounds checking
-'    ReDim Preserve cmdRet(0)
-'
-'    ' create console access response structure
-'    With ConsoleAccessResponse
-'        .Access = 201
-'        .Flags = "A"
-'    End With
-'
-'    m_Username = Username
-'    m_IsLocal = InBot
-'    m_WasWhispered = WhisperedIn
-'
-'    If (m_console) Then
-'        m_dbAccess = ConsoleAccessResponse
-'    Else
-'        m_dbAccess = GetCumulativeAccess(Username, "USER")
-'    End If
-'
-'    ' store local copy of message
-'    tmpmsg = Message
-'
-'    ' replace message variables
-'    tmpmsg = Replace(tmpmsg, "%me", IIf((InBot), CurrentUsername, Username), 1)
-'
-'    ' check for command identifier when command
-'    ' is not issued from within console
-'    If (Not (InBot)) Then
-'        ' we're going to mute our own access for now to prevent users from
-'        ' using the "say" command to gain full control over the bot.
-'        If (StrComp(Username, CurrentUsername, vbBinaryCompare) = 0) Then
-'            Exit Function
-'        End If
-'
-'        ' check for commands using universal command identifier (?)
-'        If (StrComp(Left$(tmpmsg, Len("?trigger")), "?trigger", vbTextCompare) = 0) Then
-'            ' remove universal command identifier from message
-'            tmpmsg = Mid$(tmpmsg, 2)
-'
-'        ' check for commands using command identifier
-'        ElseIf ((Len(tmpmsg) >= Len(BotVars.TriggerLong)) And _
-'                (Left$(tmpmsg, Len(BotVars.TriggerLong)) = BotVars.TriggerLong)) Then
-'
-'            ' remove command identifier from message
-'            tmpmsg = Mid$(tmpmsg, Len(BotVars.TriggerLong) + 1)
-'
-'            ' check for command identifier and name combination
-'            ' (e.g., .Eric[nK] say hello)
-'            If (Len(tmpmsg) >= (Len(CurrentUsername) + 1)) Then
-'                If (StrComp(Left$(tmpmsg, Len(CurrentUsername) + 1), _
-'                    CurrentUsername & Space(1), vbTextCompare) = 0) Then
-'
-'                    ' remove username (and space) from message
-'                    tmpmsg = Mid$(tmpmsg, Len(CurrentUsername) + 2)
-'                End If
-'            End If
-'
-'        ' check for commands using either name and colon (and space),
-'        ' or name and comma (and space)
-'        ' (e.g., Eric[nK]: say hello; and, Eric[nK], say hello)
-'        ElseIf ((Len(tmpmsg) >= (Len(CurrentUsername) + 2)) And _
-'                ((StrComp(Left$(tmpmsg, Len(CurrentUsername) + 2), CurrentUsername & ": ", _
-'                  vbTextCompare) = 0) Or _
-'                 (StrComp(Left$(tmpmsg, Len(CurrentUsername) + 2), CurrentUsername & ", ", _
-'                  vbTextCompare) = 0))) Then
-'
-'            ' remove username (and colon/comma) from message
-'            tmpmsg = Mid$(tmpmsg, Len(CurrentUsername) + 3)
-'        Else
-'            ' allow commands without any command identifier if
-'            ' commands are sent via whisper
-'            'If (Not (WhisperedIn)) Then
-'            '    ' return negative result indicating that message does not contain
-'            '    ' a valid command identifier
-'            '    ProcessCommand = False
-'            '
-'            '    ' exit function
-'            '    Exit Function
-'            'End If
-'
-'            ' return negative result indicating that message does not contain
-'            ' a valid command identifier
-'            ProcessCommand3 = False
-'
-'            ' exit function
-'            Exit Function
-'        End If
-'    Else
-'        ' remove slash (/) from in-console message
-'        tmpmsg = Mid$(tmpmsg, 2)
-'
-'        ' check for second slash indicating
-'        ' public output
-'        If (Left$(tmpmsg, 1) = "/") Then
-'            ' enable public display of command
-'            PublicOutput = True
-'
-'            ' remove second slash (/) from in-console
-'            ' message
-'            tmpmsg = Mid$(tmpmsg, 2)
-'        End If
-'    End If
-'
-'    ' check for multiple command syntax if not issued from
-'    ' within the console
-'    If ((Not (InBot)) And _
-'        (InStr(1, tmpmsg, "; ", vbBinaryCompare) > 0)) Then
-'
-'        Dim X() As String  ' ...
-'
-'        ' split message
-'        X = Split(tmpmsg, "; ")
-'
-'        ' loop through commands
-'        For i = 0 To UBound(X)
-'            Dim tmpX As String ' ...
-'
-'            ' store local copy of message
-'            tmpX = X(i)
-'
-'            ' can we check for a command identifier without
-'            ' causing an rte?
-'            If (Len(tmpX) >= Len(BotVars.TriggerLong)) Then
-'                ' check for presence of command identifer
-'                If (Left$(tmpX, Len(BotVars.TriggerLong)) = BotVars.TriggerLong) Then
-'                    ' remove command identifier from message
-'                    tmpX = Mid$(tmpX, Len(BotVars.TriggerLong) + 1)
-'                End If
-'            End If
-'
-'            ' execute command
-'            ProcessCommand3 = ExecuteCommand(Username, GetCumulativeAccess(Username, _
-'                "USER"), tmpX, InBot, cmdRet())
-'
-'            If (ProcessCommand3) Then
-'                ' display command response
-'                If (cmdRet(0) <> vbNullString) Then
-'                    Dim j As Integer ' ...
-'
-'                    ' loop through command response
-'                    For j = 0 To UBound(cmdRet)
-'                        If ((InBot) And (Not (PublicOutput))) Then
-'                            ' display message on screen
-'                            Call frmChat.AddChat(RTBColors.ConsoleText, cmdRet(j))
-'                        Else
-'                            ' send message to battle.net
-'                            If (WhisperedIn) Then
-'                                ' whisper message
-'                                Call AddQ("/w " & Username & Space$(1) & cmdRet(j), _
-'                                    PRIORITY.COMMAND_RESPONSE_MESSAGE, Username)
-'                            Else
-'                                ' send standard message
-'                                Call AddQ(cmdRet(j), PRIORITY.COMMAND_RESPONSE_MESSAGE, _
-'                                    Username)
-'                            End If
-'                        End If
-'                    Next j
-'                End If
-'            End If
-'        Next i
-'    Else
-'        ' send command to main processor
-'        If (InBot) Then
-'            ' execute command
-'            ProcessCommand3 = ExecuteCommand(Username, ConsoleAccessResponse, tmpmsg, _
-'                InBot, cmdRet())
-'        Else
-'            ' execute command
-'            ProcessCommand3 = ExecuteCommand(Username, GetCumulativeAccess(Username, _
-'                "USER"), tmpmsg, InBot, cmdRet())
-'        End If
-'
-'        If (ProcessCommand3) Then
-'            ' display command response
-'            If (cmdRet(0) <> vbNullString) Then
-'                ' loop through command response
-'                For i = 0 To UBound(cmdRet)
-'                    If ((InBot) And (Not (PublicOutput))) Then
-'                        ' display message on screen
-'                        Call frmChat.AddChat(RTBColors.ConsoleText, cmdRet(i))
-'                    Else
-'                        ' display message
-'                        If ((WhisperedIn) Or _
-'                           ((BotVars.WhisperCmds) And (Not (InBot)))) Then
-'
-'                            ' whisper message
-'                            Call AddQ("/w " & Username & _
-'                                Space(1) & cmdRet(i), PRIORITY.COMMAND_RESPONSE_MESSAGE, _
-'                                    Username)
-'                        Else
-'                            ' send standard message
-'                            Call AddQ(cmdRet(i), PRIORITY.COMMAND_RESPONSE_MESSAGE, _
-'                                Username)
-'                        End If
-'                    End If
-'                Next i
-'            End If
-'        Else
-'            ' send command directly to Battle.net if
-'            ' command is found to be invalid and issued
-'            ' internally
-'            If (InBot) Then
-'                Call AddQ(Message, PRIORITY.CONSOLE_MESSAGE, "(console)")
-'            End If
-'        End If
-'    End If
-'
-'    ' break out of function before reaching error
-'    ' handler
-'    Exit Function
-'
-'' default (if all else fails) error handler to keep erroneous
-'' commands and/or input formats from killing me
-'ERROR_HANDLER:
-'    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: " & Err.description & _
-'        " in ProcessCommand().")
-'
-'    ' return command failure result
-'    ProcessCommand3 = False
-'
-'    Exit Function
-'End Function ' end function ProcessCommand
 
 ' command processing helper function
 Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _

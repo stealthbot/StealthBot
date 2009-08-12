@@ -53,7 +53,8 @@ End Property
 Public Property Let DataType(strType As String)
     Select Case LCase(strType)
         Case "string"
-        Case "number"
+        Case "number", "numeric"
+        Case "word"
         Case Else
             '// default to string
             strType = "string"

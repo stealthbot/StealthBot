@@ -1107,6 +1107,17 @@ Public Function Scripts() As Object
 
 End Function
 
+Public Function GetModuleByName(ByVal ScriptName) As Module
+    Dim I As Integer
+    
+    For I = 2 To frmChat.SControl.Modules.Count
+        If (StrComp(frmChat.SControl.Modules(I).CodeObject.Script("Name"), ScriptName, vbTextCompare) = 0) Then
+            Set GetModuleByName = frmChat.SControl.Modules(I)
+            Exit Function
+        End If
+    Next I
+End Function
+
 Public Sub SetVeto(ByVal b As Boolean)
 
     VetoNextMessage = b
