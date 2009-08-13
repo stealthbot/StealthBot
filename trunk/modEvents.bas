@@ -1952,43 +1952,22 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
     Select Case (Message)
         Case 0:
             frmChat.AddChat RTBColors.SuccessText, "[BNET] Client version accepted!"
+            
+            ' if using server finder
+            If ((BotVars.BNLS) And (BotVars.UseAltBnls)) Then
+                ' save BNLS server so future instances of the bot won't need to get the list, connection succeeded
+                WriteINI "Main", "BNLSServer", BotVars.BNLSServer
+            End If
         
         Case 1:
             frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Version check failed! " & _
                 "The version byte for this attempt was 0x" & Hex(GetVerByte(BotVars.Product)) & "."
 
             If (BotVars.BNLS) Then
-                'Check the user has using BNLS server finder enabled
-                If BotVars.UseAltBnls = True Then
-                    LocatingAltBNLS = True
-                    frmChat.sckBNet.Close
-                    
-                    Call frmChat.FindAltBNLS
-                    Exit Sub
-                ElseIf BotVars.UseAltBnls = False Then
-                    frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] BNLS has not been updated yet, " & _
-                        "or you experienced an error. Try connecting again."
-                        
-                    If (askedBnls = False) Then
-                        askedBnls = True
-                    
-                        'Ask the user if they would like to enable the BNLS Automatic Server finder
-                        Dim msgResult As VbMsgBoxResult
-                        msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
-                                           "Would you like to enable the BNLS Automatic Server Finder?", _
-                                           vbYesNo, "BNLS Error")
-                        
-                        'Save their answer to the config, and the call this procedure again to reevaluate what to do
-                        WriteINI "Main", "UseAltBNLS", IIf(msgResult = vbYes, "Y", "N")
-                        
-                        If (msgResult = vbYes) Then
-                            BotVars.UseAltBnls = True
-                            
-                            Call Event_VersionCheck(Message, ExtraInfo)
-                        Else
-                            BotVars.UseAltBnls = False
-                        End If
-                    End If
+                If (frmChat.CheckFindAltBNLS("[BNET] BNLS has not been updated yet, " & _
+                        "or you experienced an error. Try connecting again.")) Then
+                    ' if we are using the finder, then don't close all connections
+                    Message = 0
                 End If
             Else
                 frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] Please ensure you " & _
@@ -1997,8 +1976,6 @@ Public Sub Event_VersionCheck(Message As Long, ExtraInfo As String)
                 
                 frmChat.AddChat RTBColors.ErrorMessageText, "[BNET] In addition, you can try " & _
                     "choosing ""Update version bytes from StealthBot.net"" from the Bot menu."
-                
-                'Message = 0
             End If
         
         Case 2:

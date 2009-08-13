@@ -4509,14 +4509,13 @@ Private Function SaveSettings() As Boolean
     'special case, proxyissocks5 didn't like being set properly
     WINI "ProxyIsSocks5", IIf(optSocks5.Value, "Y", "N"), secMain
     WINI "UDP", Cv(chkUDP.Value), secMain
-    WINI "UseAltBNLS", Cv(chkBNLSAlt.Value), secMain
     
     'Don't save this value until the user has been prompted once, or at least specifically enabled it
-    If chkBNLSAlt.Value = vbChecked Then
-        BotVars.UseAltBnls = True
-    Else
-        BotVars.UseAltBnls = False
+    s = ReadCfg(secMain, "UseAltBNLS")
+    If ((s = "Y") Or (s = "N") Or (chkBNLSAlt.Value = vbChecked)) Then
+        WINI "UseAltBNLS", Cv(chkBNLSAlt.Value), secMain
     End If
+    BotVars.UseAltBnls = ((s = "Y") Or (chkBNLSAlt.Value = vbChecked))
     
     '// this section must written _absolutely correctly_ or the SetTimer API call will fail
     s = txtReconDelay.Text

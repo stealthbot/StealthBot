@@ -2185,75 +2185,36 @@ Sub Event_BNLSDataError(Message As Byte)
     End If
 End Sub
 
-Sub Event_BNLSError(ErrorNumber As Integer, description As String)
-    If sckBNet.State <> 7 Then
-        sckBNet.Close
+Private Sub Event_BNLSError(ErrorNumber As Integer, description As String)
+    If Not CheckFindAltBNLS("[BNLS] Error " & ErrorNumber & ": " & description) Then
+        ' if we aren't using the finder display the error
+        DisplayError ErrorNumber, 0, BNLS    End IfEnd Sub' this function will return whether we are going to use the finder' it will ask the user, once during connection if UseAltBNLS=""' otherwise, it will start the finder if UseAltBNLS="Y"' otherwise, it won't do anything if UseAltBNLS="N"Public Function CheckFindAltBNLS(ByVal ErrorMessage As String) As Boolean    Dim s As String    Static askedBnls As Boolean        CheckFindAltBNLS = False        sckBNet.Close        s = ReadCfg("Main", "UseAltBnls")        ' Check the user has using BNLS server finder enabled    If (s = "Y") Then        ' we can use the finder        LocatingAltBNLS = True        Call FindAltBNLS    Else        ' check if we don't have UseAltBnls set        AddChat RTBColors.ErrorMessageText, ErrorMessage        
+        UserCancelledConnect = False
         
-        Dim blnFinderDisabled As Boolean
-        blnFinderDisabled = ((ReadCfg("Override", "ForceDisableBNLSFinder")) = "Y")
+        DoDisconnect 1, True
         
-        ' Check the user has using BNLS server finder enabled
-        ' do they have the finder disabled or is the override set?
-        If (BotVars.UseAltBnls = False) Or (blnFinderDisabled = True) Then
-            AddChat RTBColors.ErrorMessageText, "[BNLS] Error " & ErrorNumber & ": " & description
-            
-            UserCancelledConnect = False
-            
-            DoDisconnect 1, True
-            
-            ' check if user has overrided BNLS finder dialog -- they don't want to know about it!
-            If blnFinderDisabled = False Then
-                ' check if we've already asked the user
-                If (askedBnls = False) Then
-                    ' set to true so that recursion does not occur
-                    askedBnls = True
+        ' if the finder is set to N in the config, don't ask.
+        If s = "N" Then askedBnls = True
+                ' check if we've already asked the user        If (askedBnls = False) Then            ' set to true so that recursion does not occur            askedBnls = True                    'Ask the user if they would like to enable the BNLS Automatic Server finder            Dim msgResult As VbMsgBoxResult            
+            msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
+                               "Would you like to enable the BNLS Automatic Server Finder?", _                               vbYesNo, "BNLS Error")            
+            If (msgResult = vbYes) Then
+                ' save their answer to the config
+                WriteINI "Main", "UseAltBNLS", "Y"
+                BotVars.UseAltBnls = True
                 
-                    'Ask the user if they would like to enable the BNLS Automatic Server finder
-                    Dim msgResult As VbMsgBoxResult
-                    
-                    msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
-                                       "Would you like to enable the BNLS Automatic Server Finder?", _
-                                       vbYesNo, "BNLS Error")
-                    
-                    'Save their answer to the config, and the call this procedure again to reevaluate what to do
-                    WriteINI "Main", "UseAltBNLS", IIf(msgResult = vbYes, "Y", "N")
-                    
-                    If (msgResult = vbYes) Then
-                        BotVars.UseAltBnls = True
-                        
-                        Call Event_BNLSError(ErrorNumber, description)
-                    Else
-                        BotVars.UseAltBnls = False
-                    End If
-                End If
+                ' we can use the finder
+                LocatingAltBNLS = True
+                Call FindAltBNLS
+            Else
+                ' save their answer to the config
+                WriteINI "Main", "UseAltBNLS", "N"
+                BotVars.UseAltBnls = False
             End If
-            
-            If (BotVars.UseAltBnls = False) Or (blnFinderDisabled = True) Then
-                DisplayError ErrorNumber, 0, BNLS
-            End If
-            
-            'If DisplayError(ErrorNumber, 0, BNLS) Then
-            '    UserCancelledConnect = False
-            '    Call DoDisconnect(1, True)
-            'Else
-            '    Call DoDisconnect
-            '    SetTitle "Disconnected"
-            'End If
-            
-            'If Not UserCancelledConnect Then
-            '    AddChat vbRed, BotVars.ReconnectDelay
-            '
-            '
-            '    ReconnectTimerID = SetTimer(0, 0, BotVars.ReconnectDelay, _
-            '        AddressOf Reconnect_TimerProc)
-            'End If
-        Else
-            ' we can use the finder
-            Call FindAltBNLS
         End If
     End If
-End Sub
-
+    
+    ' return the BotVars    CheckFindAltBNLS = BotVars.UseAltBnlsEnd Function
 'Locates alternative BNLS servers for the bot to use if the current one fails
 'Added by FrOzeN on 2/sep/09
 'Last updated by FrOzeN on 4/sep/09
