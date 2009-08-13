@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "Msinet.ocx"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "Tabctl32.ocx"
 Begin VB.Form frmChat 
@@ -10,7 +10,7 @@ Begin VB.Form frmChat
    Caption         =   ":: StealthBot &version :: Disconnected ::"
    ClientHeight    =   7950
    ClientLeft      =   165
-   ClientTop       =   735
+   ClientTop       =   855
    ClientWidth     =   12585
    ForeColor       =   &H00000000&
    Icon            =   "frmChat.frx":0000
@@ -892,6 +892,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -917,6 +918,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -1625,9 +1627,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
@@ -2188,16 +2190,49 @@ End Sub
 Private Sub Event_BNLSError(ErrorNumber As Integer, description As String)
     If Not CheckFindAltBNLS("[BNLS] Error " & ErrorNumber & ": " & description) Then
         ' if we aren't using the finder display the error
-        DisplayError ErrorNumber, 0, BNLS    End IfEnd Sub' this function will return whether we are going to use the finder' it will ask the user, once during connection if UseAltBNLS=""' otherwise, it will start the finder if UseAltBNLS="Y"' otherwise, it won't do anything if UseAltBNLS="N"Public Function CheckFindAltBNLS(ByVal ErrorMessage As String) As Boolean    Dim s As String    Static askedBnls As Boolean        CheckFindAltBNLS = False        sckBNet.Close        s = ReadCfg("Main", "UseAltBnls")        ' Check the user has using BNLS server finder enabled    If (s = "Y") Then        ' we can use the finder        LocatingAltBNLS = True        Call FindAltBNLS    Else        ' check if we don't have UseAltBnls set        AddChat RTBColors.ErrorMessageText, ErrorMessage        
+        DisplayError ErrorNumber, 0, BNLS
+    End If
+End Sub
+
+' this function will return whether we are going to use the finder
+' it will ask the user, once during connection if UseAltBNLS=""
+' otherwise, it will start the finder if UseAltBNLS="Y"
+' otherwise, it won't do anything if UseAltBNLS="N"
+Public Function CheckFindAltBNLS(ByVal ErrorMessage As String) As Boolean
+    Dim s As String
+    Static askedBnls As Boolean
+    
+    CheckFindAltBNLS = False
+    
+    sckBNet.Close
+    
+    s = ReadCfg("Main", "UseAltBnls")
+    ' Check the user has using BNLS server finder enabled
+    If (s = "Y") Then
+        ' we can use the finder
+        LocatingAltBNLS = True
+        Call FindAltBNLS
+    Else
+        ' check if we don't have UseAltBnls set
+        AddChat RTBColors.ErrorMessageText, ErrorMessage
         UserCancelledConnect = False
         
         DoDisconnect 1, True
         
         ' if the finder is set to N in the config, don't ask.
         If s = "N" Then askedBnls = True
-                ' check if we've already asked the user        If (askedBnls = False) Then            ' set to true so that recursion does not occur            askedBnls = True                    'Ask the user if they would like to enable the BNLS Automatic Server finder            Dim msgResult As VbMsgBoxResult            
+             
+        ' check if we've already asked the user
+        If (askedBnls = False) Then
+            ' set to true so that recursion does not occur
+            askedBnls = True
+            
+            'Ask the user if they would like to enable the BNLS Automatic Server finder
+            Dim msgResult As VbMsgBoxResult
             msgResult = MsgBox("BNLS Server Error." & vbCrLf & vbCrLf & _
-                               "Would you like to enable the BNLS Automatic Server Finder?", _                               vbYesNo, "BNLS Error")            
+                               "Would you like to enable the BNLS Automatic Server Finder?", _
+                               vbYesNo, "BNLS Error")
+            
             If (msgResult = vbYes) Then
                 ' save their answer to the config
                 WriteINI "Main", "UseAltBNLS", "Y"
@@ -2214,7 +2249,11 @@ Private Sub Event_BNLSError(ErrorNumber As Integer, description As String)
         End If
     End If
     
-    ' return the BotVars    CheckFindAltBNLS = BotVars.UseAltBnlsEnd Function
+    ' return the BotVars
+    CheckFindAltBNLS = BotVars.UseAltBnls
+End Function
+
+
 'Locates alternative BNLS servers for the bot to use if the current one fails
 'Added by FrOzeN on 2/sep/09
 'Last updated by FrOzeN on 4/sep/09
