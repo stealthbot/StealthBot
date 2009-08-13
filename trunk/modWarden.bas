@@ -37,27 +37,39 @@ Private Type MedivRandomContext
   Source2(0 To 19) As Byte
 End Type
 
-Private Declare Sub rc4_init Lib "Warden.dll" (ByVal Key As String, ByVal Base As String, ByVal length As Long)
-Private Declare Sub rc4_crypt Lib "Warden.dll" (ByVal Key As String, ByVal Data As String, ByVal length As Long)
+Private Declare Sub rc4_init Lib "Warden.dll" (ByVal Key As String, ByVal Base As String, ByVal Length As Long)
+Private Declare Sub rc4_crypt Lib "Warden.dll" (ByVal Key As String, ByVal Data As String, ByVal Length As Long)
 Private Declare Sub rc4_crypt_data Lib "Warden.dll" (ByVal Data As String, ByVal DataLength As Long, ByVal Base As String, ByVal BaseLength As Long)
 
 Private Declare Function sha1_reset Lib "Warden.dll" (ByRef Context As SHA1Context) As Long
-Private Declare Function sha1_input Lib "Warden.dll" (ByRef Context As SHA1Context, ByVal Data As String, ByVal length As Long) As Long
+Private Declare Function sha1_input Lib "Warden.dll" (ByRef Context As SHA1Context, ByVal Data As String, ByVal Length As Long) As Long
 Private Declare Function sha1_digest Lib "Warden.dll" (ByRef Context As SHA1Context, ByVal digest As String) As Long
-Private Declare Function sha1_checksum Lib "Warden.dll" (ByVal Data As String, ByVal length As Long, ByVal Version As Long) As Long
+Private Declare Function sha1_checksum Lib "Warden.dll" (ByVal Data As String, ByVal Length As Long, ByVal Version As Long) As Long
 
 Private Declare Function md5_reset Lib "Warden.dll" (ByRef Context As MD5Context) As Long
-Private Declare Function md5_input Lib "Warden.dll" (ByRef Context As MD5Context, ByVal Data As String, ByVal length As Long) As Long
+Private Declare Function md5_input Lib "Warden.dll" (ByRef Context As MD5Context, ByVal Data As String, ByVal Length As Long) As Long
 Private Declare Function md5_digest Lib "Warden.dll" (ByRef Context As MD5Context, ByVal digest As String) As Long
-Private Declare Function md5_verify_data Lib "Warden.dll" (ByVal Data As String, ByVal length As Long, ByVal CorrectMD5 As String) As Boolean
+Private Declare Function md5_verify_data Lib "Warden.dll" (ByVal Data As String, ByVal Length As Long, ByVal CorrectMD5 As String) As Boolean
 
-Private Declare Sub mediv_random_init Lib "Warden.dll" (ByRef Context As MedivRandomContext, ByVal seed As String, ByVal length As Long)
-Private Declare Sub mediv_random_get_bytes Lib "Warden.dll" (ByRef Context As MedivRandomContext, ByVal Buffer As String, ByVal length As Long)
+Private Declare Sub mediv_random_init Lib "Warden.dll" (ByRef Context As MedivRandomContext, ByVal seed As String, ByVal Length As Long)
+Private Declare Sub mediv_random_get_bytes Lib "Warden.dll" (ByRef Context As MedivRandomContext, ByVal Buffer As String, ByVal Length As Long)
 
 Private Declare Function warden_init Lib "Warden.dll" (ByVal SocketHandle As Long) As Long
-Private Declare Function warden_data Lib "Warden.dll" (ByVal Instance As Long, ByVal Direction As Long, ByVal PacketID As Long, ByVal Data As String, ByVal length As Long) As Long
+Private Declare Function warden_data Lib "Warden.dll" (ByVal Instance As Long, ByVal Direction As Long, ByVal PacketID As Long, ByVal Data As String, ByVal Length As Long) As Long
 Private Declare Function warden_cleanup Lib "Warden.dll" (ByVal Instance As Long) As Long
+Private Declare Function warden_set_data_file Lib "Warden.dll" (ByVal Instance As Long, ByVal File As String, ByVal Length As Long) As Long
+Private Declare Function warden_config Lib "Warden.dll" (ByVal Instance As Long, ByVal ConfigBit As Long, ByVal Enabled As Byte) As Long
 
+Public Const WARDEN_CONFIG_SAVE_CHECKS    As Long = 1  '//Save Information about cheat checks (Opcode 0x02) to Data File
+Public Const WARDEN_CONFIG_SAVE_UNKNOWN   As Long = 2  '//Save Unknown information (use in conjunction with Debug mode to get new Warden offsets)
+Public Const WARDEN_CONFIG_LOG_CHECKS     As Long = 4  '//Log ALL information about checks that happen, in real time
+Public Const WARDEN_CONFIG_LOG_PACKETS    As Long = 8  '//Log ALL decoded Warden packet data
+Public Const WARDEN_CONFIG_DEBUG_MODE     As Long = 16 '//Debug mode, does a lot of shit u.u
+Public Const WARDEN_CONFIG_USE_GAME_FILES As Long = 32 '//Will attempt to grab unknown Mem Check offsets from the game file specified
+                                                       '//  Will try to load library the file, using the path specified in the INI EXA:
+                                                       '//[Files_WAR3]
+                                                       '//Default=C:\Program Files\Warcraft III\WAR3.exe
+                                                       '//Game.dll=C:\Program Files\Warcraft III\Game.dll
 Private Const WARDEN_SEND              As Long = &H0
 Private Const WARDEN_RECV              As Long = &H1
 Private Const WARDEN_BNCS              As Long = &H2
@@ -97,7 +109,19 @@ End Sub
 
 Public Function WardenInitilize(ByVal SocketHandle As Long) As Long
   On Error GoTo trap
-  WardenInitilize = warden_init(SocketHandle)
+  Dim INIPath As String
+  Dim Instance As Long
+  
+  Instance = warden_init(SocketHandle)
+  
+  If (Instance > 0) Then
+  
+    INIPath = GetFilePath("Warden.ini")
+  
+    warden_set_data_file Instance, INIPath, Len(INIPath)
+    
+    WardenInitilize = Instance
+  End If
   Exit Function
   
 trap:
