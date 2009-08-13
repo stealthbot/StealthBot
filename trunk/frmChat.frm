@@ -4304,8 +4304,12 @@ Private Sub mnuFListRefresh_Click()
 End Sub
 
 Private Sub mnuEditScriptINI_Click()
-    'Shell "notepad " & GetConfigFilePath(), vbNormalFocus
-    ShellExecute frmChat.hWnd, "Open", GetFilePath("scripts\scripts.ini"), &H0, &H0, vbNormalFocus
+    If (ReadCfg("Override", "ScriptViewer") = vbNullString) Then
+        ShellExecute frmChat.hWnd, "Open", GetFilePath("scripts\scripts.ini"), 0&, 0&, _
+            vbNormalFocus
+    Else
+        Shell Chr(34) & ReadCfg("Override", "ScriptViewer") & Chr(34) & Space(1) & Chr(34) & GetFilePath("scripts\scripts.ini") & Chr(34)
+    End If
 End Sub
 
 Sub mnuReloadScripts_Click()
