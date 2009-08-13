@@ -1285,24 +1285,12 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                 ' ...
                 If (BotVars.ShowStatsIcons) Then
                     ' ...
-                    I = g_Channel.GetUserIndex(Username)
-                    
-                    ' ...
-                    If (I > 0) Then
-                        
+                    If (UserObj.Stats.IconCode <> -1) Then
                         ' ...
-                        If (UserObj.Stats.IconCode <> -1) Then
-                            ' ...
-                            If (g_Channel.Users(I).game = "WAR3") Then
-                                ' ...
-                                If (found.SmallIcon = ICWAR3) Then
-                                    found.SmallIcon = UserObj.Stats.IconCode
-                                End If
-                            ElseIf (g_Channel.Users(I).game = "W3XP") Then
-                                ' ...
-                                If (found.SmallIcon = ICWAR3X) Then
-                                    found.SmallIcon = UserObj.Stats.IconCode
-                                End If
+                        If ((UserObj.game = "WAR3") Or (UserObj.game = "W3XP")) Then
+                            ' if the icon in the list is not the icon found by stats, update
+                            If (found.SmallIcon <> UserObj.Stats.IconCode) Then
+                                found.SmallIcon = UserObj.Stats.IconCode
                             End If
                         End If
                     End If
