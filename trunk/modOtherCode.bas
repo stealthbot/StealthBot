@@ -364,16 +364,54 @@ End Function
 
 '// Utility Function for joining strings
 '// EXAMPLE
-'// String("This is an {1} of its {0}.", Array("use", "example")) '// This is an example of its use.
+'// StringFormat("This is an {1} of its {0}.", Array("use", "example")) '// OUTPUT: This is an example of its use.
 '// 08/29/2008 JSM - Created
 Public Function StringFormat(source As String, params() As Variant) As String
+    
+    On Error GoTo ERROR_HANDLER:
+
     Dim retVal As String, I As Integer
     retVal = source
     For I = LBound(params) To UBound(params)
         retVal = Replace(retVal, "{" & I & "}", CStr(params(I)))
     Next
     StringFormat = retVal
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in StringFormat().")
+
+    StringFormat = vbNullString
+    
 End Function
+
+
+'// Utility Function for joining strings
+'// EXAMPLE
+'// StringFormat("This is an {1} of its {0}.", "use", "example") '// OUTPUT: This is an example of its use.
+'// 08/14/2009 JSM - Created
+Public Function StringFormatA(source As String, ParamArray params() As Variant)
+
+    On Error GoTo ERROR_HANDLER:
+
+    Dim retVal As String, I As Integer
+    retVal = source
+    For I = LBound(params) To UBound(params)
+        retVal = Replace(retVal, "{" & I & "}", CStr(params(I)))
+    Next
+    StringFormatA = retVal
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in StringFormatA().")
+
+
+    StringFormatA = vbNullString
+    
+End Function
+
 
 '// http://www.nonhostile.com/howto-validate-xml-xsd-in-vb6.asp
 '// 08/31/2008 JSM - Created
