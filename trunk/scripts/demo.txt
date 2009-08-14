@@ -13,29 +13,28 @@ Set cls = New CDemoClass
 
 Sub Event_Load()
 
-	'// create demo command
-	Dim demoCommand
-	Set demoCommand = OpenCommand("demo")
-	If demoCommand Is Nothing Then
-		Set demoCommand = CreateCommand("demo")
-		demoCommand.RequiredRank = 1
-
-		With demoCommand.NewParameter("Word", False, "Word")
-			.Description "A 'Word' Argument is a One word string, no spaces are allowed!"
+	
+	Dim soundexCommand, soundexWordParameter
+	'// check if command exists
+	Set soundexCommand = OpenCommand("soundex")
+	If soundexCommand Is Nothing Then
+		'// it does not, lets create the command
+		Set soundexCommand = CreateCommand("soundex")
+		With soundexCommand
+			'// ... and add a property
+			Set soundexWordParameter = .NewParameter("word", False, "word")
+			With soundexWordParameter
+				.Description = "The word you wish to calculate the soundex value of."
+			End With
+			.Parameters.Add soundexWordParameter
+			'// set the access level required to use this command
+			.RequiredRank = 1
+			'// save the command
+			.Save
 		End With
-
-
-		With demoCommand.NewParameter("Number", False, "Number")
-			.Description "A 'Number' Argument is like a 'Word' argument, but it must pass IsNumberic()"
-		End With
-
-		With demoCommand.NewParameter("String", False, "String")
-			.Description "A 'String' Argument is a series of words, if it starts with a '" & chr(34) & "' it will attempt to find the ending '" & chr(34) & "', You can escape '" & chr(34) & "'s but putting a \ in front of them, '\" & chr(34) & "', You can escape '\'s by putting another '\' in front of them '\\'"
-		End With
-
-		demoCommand.Save
 	End If
-	Set demoCommand = Nothing
+	Set soundexWordParameter = Nothing
+	Set soundexCommand = Nothing
 
 
 	' // create Winsock object
@@ -85,21 +84,21 @@ End Sub
 
 Sub Event_PacketReceived(Protocol, ID, Length, Data)
    
-   If (Protocol = "BNCS") Then
-      If (ID = &H65) Then
-         AddChat vbYellow, "RECEIVED BNCS FRIENDS LIST"
-      End If
-   End If
+'   If (Protocol = "BNCS") Then
+'      If (ID = &H65) Then
+'         AddChat vbYellow, "RECEIVED BNCS FRIENDS LIST"
+'      End If
+'   End If
 
 End Sub
 
 Sub Event_PacketSent(Protocol, ID, Length, Data)
 
-   If (Protocol = "BNCS") Then
-      If (ID = &H65) Then
-         AddChat vbYellow, "SENT BNCS FRIENDS LIST REQUEST"
-      End If
-   End If
+'   If (Protocol = "BNCS") Then
+'      If (ID = &H65) Then
+'         AddChat vbYellow, "SENT BNCS FRIENDS LIST REQUEST"
+'      End If
+'   End If
 
 End Sub
 
@@ -111,44 +110,80 @@ End Sub
 
 Sub TestDemo()
 
-   AddChat vbBlue, "TestDemo()"
+'   AddChat vbBlue, "TestDemo()"
 
-End Sub
-
-Sub Event_PressedEnter(Text)
-
-	'TestCommand Text, BotVars.Username
-	
 End Sub
 
 Sub Event_UserTalk(Username, Flags, Message, Ping)
-	
-	'TestCommand Message, Username
-
+    HandleCommand Message, Username, 1
+End Sub
+Sub Event_WhisperFromUser(Username, Flags, Message, Ping)
+	HandleCommand Message, Username, 3
+End Sub
+Sub Event_PressedEnter(Text)
+	HandleCommand Text, BotVars.Username, 4
 End Sub
 
-Private Sub TestCommand(strText, strUsername)
+
+Private Sub HandleCommand(strText, strUsername, Origin)
 
 	'// testing command stuff
 	Set cmds = IsCommand(strText, strUsername)
 	If cmds.Count > 0 Then
 		For Each cmd In cmds
-			If cmd.HasAccess = True Then
-			
-				If cmd.docs.Name = "demo" And cmd.HasCorrectSyntax = True Then
-					'// have the awesome command
-					AddQ "I know I am awesome, " & strUsername & ", but why did you use " & cmd.Arguments.Count & " argument to tell me that?"				
-				End If
-			
-				DebugCommand cmd
 
-			End If
+'// debug all commands
+DebugCommand cmd
+
+
+			'// this doesnt work yet
+			'If cmd.HasAccess = True Then
+				
+				'// this doesnt work yet either
+				'If cmd.docs.Name = "soundex" And cmd.HasCorrectSyntax = True Then
+				If cmd.docs.Name = "soundex" Then
+					'// have the soundex command do something
+					Dsp Origin, Soundex(cmd.Argument("word"))
+				'ElseIf cmd.docs.Name = "othercommand"
+				'	'// do othercommand stuff
+				Else
+					'// debug any command that is not handled
+					DebugCommand cmd
+				End If
+			'End If
 		Next
 	End If
 
 End Sub
 
+Function Soundex(ByVal word)
+    Dim result
+    Dim i, acode
+    Dim dcode, oldCode
+    
+    ' soundex is case-insensitive
+    word = UCase(word)
+    ' the first letter is copied in the result
+    Soundex = Left(word, 1)
+    oldCode = Asc(Mid("01230120022455012623010202", Asc(word) - 64))
+    
+    For i = 2 To Len(word)
+        acode = Asc(Mid(word, i, 1)) - 64
+        ' discard non-alphabetic chars
+        If acode >= 1 And acode <= 26 Then
+            ' convert to a digit
+            dcode = Asc(Mid("01230120022455012623010202", acode, 1))
+            ' don't insert repeated digits
+            If dcode <> 48 And dcode <> oldCode Then
+                Soundex = Soundex & Chr(dcode)
+                If Len(Soundex) = 4 Then Exit For
+            End If
+            oldCode = dcode
+        End If
+    Next
+End Function
 
+'// outputs detailed information about a command
 Sub DebugCommand(ByRef cmd)
 
 	'// using a fixed width font
@@ -160,25 +195,17 @@ Sub DebugCommand(ByRef cmd)
 	AddChat f, vbGreen, "Command.PublicOutput     ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.PublicOutput, f, vbWhite, "]"
 	AddChat f, vbGreen, "Command.HasCorrectSyntax ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.HasCorrectSyntax, f, vbWhite, "]"
 	If cmd.PublicOutput Then AddQ "Command.Args := " & "[" & cmd.Args & "]"
+	i = 0
 	For Each arg In cmd.Arguments
-		If cmd.PublicOutput Then AddQ "  Command.Argument := " & "[" & arg & "]"
-		AddChat f, vbGreen, "  Argument               ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, arg , f, vbWhite, "]"
+		If cmd.PublicOutput Then AddQ "  Command.Arguments(" & i & ") := " & "[" & arg & "]"
+		AddChat f, vbGreen, "  Arguments(" & i & ")" & vbTab, f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, arg , f, vbWhite, "]"
+		i = i + 1
+	Next
+	For Each parm In cmd.docs.Parameters
+		If cmd.PublicOutput Then AddQ "  Command.Argument(" & parm.Name & ") := " & "[" & cmd.Argument(parm.Name) & "]"
+		AddChat f, vbGreen, "  Argument(""" & parm.Name & """)" & vbTab, f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Argument(parm.Name) , f, vbWhite, "]"
 	Next
 	AddChat f, vbCyan, "------------------------------------------------------"
-End Sub
-
-Sub Event_Command(Command, Response)
-	Select Case LCase(Command.Name)
-		Case "demo":
-			If (Not Command.IsValidCommand) Then
-				Response(0) = "Use the proper syntx for this command! /demo <word> <number> <string>"
-			Else
-				Response(0) = "Your Parameters were as follows"
-				Response(1) = "Word:   " & Command.Argument("Word")
-				Response(2) = "Number: " & Command.Argument("Number")
-				Response(3) = "String: " & Command.Argument("String")
-			End If
-	End Select
 End Sub
 
 
