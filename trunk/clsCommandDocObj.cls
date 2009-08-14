@@ -638,6 +638,8 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal strScript
         Exit Function
     End If
     
+    strCommand = Replace(strCommand, "'", "&apos;")
+    
     If strScriptOwner = vbNullString Then
         xpath = "./command[translate(@name, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')='" & LCase(strCommand) & "' and " & _
                           "not(@owner)]"
