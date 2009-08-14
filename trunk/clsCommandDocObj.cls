@@ -946,6 +946,8 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
                 newNode.Text = Parameter.DataType
                 argumentNode.Attributes.setNamedItem newNode
             End If
+            
+            argumentsNode.appendChild argumentNode
         Next
     End If
 End Function
