@@ -24,7 +24,7 @@ Attribute VB_Name = "modCommandDocsObj"
 Option Explicit
 
 ' ...
-Public Function OpenCommand(ByVal strCommand As String) As clsCommandDocObj
+Public Function OpenCommand(ByVal strCommand As String, Optional strScriptOwner As String = vbNullString) As clsCommandDocObj
     
     ' ...
     Set OpenCommand = New clsCommandDocObj
@@ -38,7 +38,7 @@ Public Function OpenCommand(ByVal strCommand As String) As clsCommandDocObj
     
     ' ...
     OpenCommand.OpenDatabase
-    OpenCommand.OpenCommand strCommand
+    OpenCommand.OpenCommand strCommand, strScriptOwner
     
 End Function
 

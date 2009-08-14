@@ -5981,7 +5981,7 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
     End If
     
     ' ...
-    Set CommandDocs = OpenCommand(FindCommand)
+    Set CommandDocs = OpenCommand(FindCommand, Chr$(0))
     
     ' ...
     If (CommandDocs.Name = vbNullString) Then
