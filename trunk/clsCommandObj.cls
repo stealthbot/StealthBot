@@ -131,16 +131,19 @@ Public Property Let docs(ByRef cmd As clsCommandDocObj)
     Set m_command_docs = cmd
 End Property
 
+
+'Strips (removes) and returns a Numeric argument from the passed string
 Private Function StripNumeric(ByRef sString As String) As String
     Dim sTemp As String
     sTemp = StripWord(sString)
-    If (IsNumeric(sTemp)) Then
+    If (StrictIsNumeric(sTemp)) Then
         StripNumeric = sTemp
     ElseIf LenB(sTemp) > 0 Then
         sString = sTemp & Space(1) & sString
     End If
 End Function
 
+'Strips (removes) and returns a Word argument from the passed string
 Private Function StripWord(ByRef sString As String) As String
     Dim I As Integer
     I = InStr(sString, Space(1))
@@ -153,6 +156,14 @@ Private Function StripWord(ByRef sString As String) As String
     End If
 End Function
 
+'Strips (removes) and returns a String argument from the passed string
+'EXAs:
+'This is a String -> This is a String
+'This is a "String" -> This is a "String"
+'"This is a String" -> This is a String
+'"This is a \"String\"" -> This is a "String"
+'"This is a \\\"String\"" -> This is a \"String"
+'"This is a \String" -> This is a \String
 Private Function StripString(ByRef sString As String) As String
     Dim I As Integer
     If (Left$(sString, 1) = Chr$(34)) Then
@@ -176,6 +187,11 @@ Private Function StripString(ByRef sString As String) As String
     End If
 End Function
 
+'Will Split up the Arguments for this instance of the command, Based on the XML specs of this command.
+'EXA: .Mail Username This is a message!
+'Creates a Dictionary as such:
+'  Dict("Username") = "Username"
+'  Dict("Message")  = "This is a message!"
 Private Sub SplitArguments()
     Dim sArgs       As String
     Dim I           As Integer

@@ -369,9 +369,9 @@ Private Sub lblURL_Click(Index As Integer)
     ElseIf Index = 0 Then
         ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net", 0&, 0&, 0&
     ElseIf Index = 6 Then
-        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/redir/wiki/", 0&, 0&, 0&
+        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/sb/redir/wiki/", 0&, 0&, 0&
     ElseIf Index = 5 Then
-        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/redir/contributors/", 0&, 0&, 0&
+        ShellExecute Me.hWnd, "Open", "http://www.stealthbot.net/sb/redir/contributors/", 0&, 0&, 0&
     End If
 End Sub
 

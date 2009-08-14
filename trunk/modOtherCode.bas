@@ -5,7 +5,7 @@ Public Type COMMAND_DATA
     Name         As String
     params       As String
     local        As Boolean
-    publicOutput As Boolean
+    PublicOutput As Boolean
 End Type
 
 'Read/WriteIni code thanks to ickis
@@ -688,7 +688,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
     
     Dim gAcc      As udtGetAccessResponse ' ...
     
-    Dim f         As file   ' ...
+    Dim f         As File   ' ...
     Dim fso       As FileSystemObject
     Dim I         As Integer  ' ...
     Dim k         As Integer  ' ...
@@ -1894,7 +1894,7 @@ Public Function GetProfilePath(Optional ByVal ProfileIndex As Integer) As String
 End Function
 
 Public Sub OpenReadme()
-    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/redir/readme/", 0, 0, 0
+    ShellExecute frmChat.hWnd, "Open", "http://www.stealthbot.net/sb/redir/readme/", 0, 0, 0
     frmChat.AddChat RTBColors.SuccessText, "You are being taken to the StealthBot Online Readme."
 End Sub
 
@@ -2748,7 +2748,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
     Dim bln          As Boolean ' ...
     Dim tmp          As String  ' ...
     Dim console      As Boolean ' ...
-    Dim publicOutput As Boolean ' ...
+    Dim PublicOutput As Boolean ' ...
     
     ' ...
     Set IsCommand = New clsCommandObj
@@ -2785,7 +2785,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
                 Exit Function
             ElseIf (Left$(Message, 2) = "//") Then
                 ' ...
-                publicOutput = True
+                PublicOutput = True
                 
                 ' ...
                 If (cropLen = 0) Then
@@ -2977,7 +2977,7 @@ Public Function IsCommand(Optional ByVal str As String = vbNullString, Optional 
 
         With IsCommand
             .IsLocal = IsLocal
-            .publicOutput = publicOutput
+            .PublicOutput = PublicOutput
         End With
 
         ' ...
