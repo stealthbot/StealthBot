@@ -4,7 +4,7 @@ Begin VB.Form frmCommands
    BackColor       =   &H00000000&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Command Manager"
-   ClientHeight    =   5535
+   ClientHeight    =   6150
    ClientLeft      =   45
    ClientTop       =   435
    ClientWidth     =   9330
@@ -21,18 +21,18 @@ Begin VB.Form frmCommands
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   5535
+   ScaleHeight     =   6150
    ScaleWidth      =   9330
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
    Begin vbalTreeViewLib6.vbalTreeView trvCommands 
-      Height          =   4575
+      Height          =   5175
       Left            =   120
       TabIndex        =   1
       Top             =   840
       Width           =   3855
       _ExtentX        =   6800
-      _ExtentY        =   8070
+      _ExtentY        =   9128
       BackColor       =   10040064
       ForeColor       =   16777215
       LineStyle       =   0
@@ -66,53 +66,59 @@ Begin VB.Form frmCommands
       Top             =   360
       Width           =   3855
    End
-   Begin VB.CommandButton cmdAliasAdd 
-      Caption         =   "+"
-      Height          =   315
-      Left            =   7010
-      TabIndex        =   4
-      Top             =   840
-      Width           =   270
-   End
-   Begin VB.CommandButton cmdFlagRemove 
-      Caption         =   "-"
-      Height          =   315
-      Left            =   8725
-      TabIndex        =   8
-      Top             =   840
-      Width           =   270
-   End
    Begin VB.Frame fraCommand 
       BackColor       =   &H00000000&
       ForeColor       =   &H00FFFFFF&
-      Height          =   5175
-      Left            =   4080
-      TabIndex        =   14
-      Top             =   240
+      Height          =   5895
+      Left            =   4200
+      TabIndex        =   12
+      Top             =   120
       Width           =   5055
-      Begin VB.CommandButton cmdDiscard 
-         Caption         =   "&Discard Changes"
+      Begin VB.CommandButton cmdDeleteCommand 
+         Caption         =   "&Delete Command"
          Height          =   300
-         Left            =   2760
+         Left            =   3480
+         TabIndex        =   14
+         Top             =   5400
+         Width           =   1455
+      End
+      Begin VB.CommandButton cmdFlagRemove 
+         Caption         =   "-"
+         Height          =   315
+         Left            =   4680
+         TabIndex        =   8
+         Top             =   600
+         Width           =   270
+      End
+      Begin VB.CommandButton cmdAliasAdd 
+         Caption         =   "+"
+         Height          =   315
+         Left            =   2900
+         TabIndex        =   4
+         Top             =   600
+         Width           =   270
+      End
+      Begin VB.CommandButton cmdDiscard 
+         Caption         =   "Di&scard Changes"
+         Height          =   300
+         Left            =   1860
          TabIndex        =   13
-         Top             =   4680
-         Width           =   1815
+         Top             =   5400
+         Width           =   1455
       End
       Begin VB.CommandButton cmdSave 
          Caption         =   "&Save Changes"
          Height          =   300
-         Left            =   600
-         TabIndex        =   12
-         Top             =   4680
-         Width           =   1815
+         Left            =   240
+         TabIndex        =   15
+         Top             =   5400
+         Width           =   1455
       End
       Begin VB.ComboBox cboFlags 
          BackColor       =   &H00993300&
          ForeColor       =   &H00FFFFFF&
          Height          =   315
-         ItemData        =   "frmCommands.frx":1CCA
          Left            =   3600
-         List            =   "frmCommands.frx":1CCC
          TabIndex        =   6
          Top             =   600
          Width           =   700
@@ -121,9 +127,7 @@ Begin VB.Form frmCommands
          BackColor       =   &H00993300&
          ForeColor       =   &H00FFFFFF&
          Height          =   315
-         ItemData        =   "frmCommands.frx":1CCE
          Left            =   1605
-         List            =   "frmCommands.frx":1CD0
          TabIndex        =   3
          Top             =   600
          Width           =   1245
@@ -145,7 +149,7 @@ Begin VB.Form frmCommands
          Height          =   495
          Left            =   240
          TabIndex        =   11
-         Top             =   4200
+         Top             =   4920
          Visible         =   0   'False
          Width           =   4695
       End
@@ -163,7 +167,7 @@ Begin VB.Form frmCommands
       Begin VB.TextBox txtSpecialNotes 
          BackColor       =   &H00993300&
          ForeColor       =   &H00FFFFFF&
-         Height          =   1095
+         Height          =   1695
          Left            =   240
          MultiLine       =   -1  'True
          ScrollBars      =   2  'Vertical
@@ -174,7 +178,7 @@ Begin VB.Form frmCommands
       Begin VB.CommandButton cmdFlagAdd 
          Caption         =   "+"
          Height          =   315
-         Left            =   4388
+         Left            =   4380
          TabIndex        =   7
          Top             =   600
          Width           =   270
@@ -182,7 +186,7 @@ Begin VB.Form frmCommands
       Begin VB.CommandButton cmdAliasRemove 
          Caption         =   "-"
          Height          =   315
-         Left            =   3200
+         Left            =   3210
          TabIndex        =   5
          Top             =   600
          Width           =   270
@@ -193,7 +197,7 @@ Begin VB.Form frmCommands
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   1605
-         TabIndex        =   19
+         TabIndex        =   20
          Top             =   360
          Width           =   1215
       End
@@ -203,7 +207,7 @@ Begin VB.Form frmCommands
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   240
-         TabIndex        =   18
+         TabIndex        =   19
          Top             =   360
          Width           =   1215
       End
@@ -213,7 +217,7 @@ Begin VB.Form frmCommands
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   3600
-         TabIndex        =   17
+         TabIndex        =   18
          Top             =   360
          Width           =   975
       End
@@ -223,7 +227,7 @@ Begin VB.Form frmCommands
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   240
-         TabIndex        =   16
+         TabIndex        =   17
          Top             =   960
          Width           =   2175
       End
@@ -233,19 +237,19 @@ Begin VB.Form frmCommands
          ForeColor       =   &H00FFFFFF&
          Height          =   255
          Left            =   240
-         TabIndex        =   15
+         TabIndex        =   16
          Top             =   2880
          Width           =   2175
       End
    End
-   Begin VB.Label Label1 
+   Begin VB.Label lblCommandList 
       AutoSize        =   -1  'True
       BackStyle       =   0  'Transparent
       Caption         =   "Command List"
       ForeColor       =   &H00FFFFFF&
       Height          =   195
       Left            =   150
-      TabIndex        =   20
+      TabIndex        =   21
       Top             =   165
       Width           =   990
    End
@@ -365,10 +369,48 @@ Private Sub cmdAliasRemove_Click()
 
 End Sub
 
+
 '// 08/30/2008 JSM - Created
 Private Sub cmdDiscard_Click()
     Call PrepareForm(m_SelectedElement.TheNodeType, m_SelectedElement.TheXMLElement)
 End Sub
+
+Private Sub cmdDeleteCommand_Click()
+    
+    Dim scriptName As String
+    Dim doc As clsCommandDocObj
+
+    scriptName = Mid$(cboCommandGroup.Text, 1, InStr(1, cboCommandGroup.Text, "(") - 2)
+
+
+    If vbYes <> MsgBox(StringFormatA("Are you sure you want to delete the {0} command for the {1} script?", m_SelectedElement.commandName, scriptName), vbYesNo + vbQuestion, frmCommands.Caption) Then
+        Exit Sub
+    End If
+    
+    
+    
+    Set doc = New clsCommandDocObj
+    
+    Call doc.OpenCommand(m_SelectedElement.commandName, scriptName)
+    Call doc.Delete
+    Call doc.Save
+    Set doc = Nothing
+    
+    m_SelectedElement.IsDirty = False
+    
+    Set m_CommandsDoc = Nothing
+    Set m_CommandsDoc = New DOMDocument60
+    Call m_CommandsDoc.Load(App.Path & "\commands.xml")
+    
+    Call PopulateOwnerComboBox
+    Call ResetForm
+    Call PopulateTreeView(scriptName)
+    
+    
+
+End Sub
+
+
 
 Private Sub cmdFlagAdd_Click()
 
@@ -495,9 +537,12 @@ Private Sub PopulateOwnerComboBox()
             '// get the script name and number of commands
             scriptName = frmChat.SControl.Modules(I).CodeObject.Script("Name")
             commandCount = commandDoc.GetCommandCount(scriptName)
-            options = Array(scriptName, commandCount)
-            '// add the item
-            cboCommandGroup.AddItem StringFormat("{0} ({1})", options)
+            '// only add the commands if there is at least 1 command to show
+            If commandCount > 0 Then
+                options = Array(scriptName, commandCount)
+                '// add the item
+                cboCommandGroup.AddItem StringFormat("{0} ({1})", options)
+            End If
         End If
     Next I
     cboCommandGroup.ListIndex = 0
@@ -538,6 +583,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
     If trvCommands.nodes.Count > 0 Then
         trvCommands.nodes(1).Selected = True
     End If
+    
     Call ClearTreeViewNodes(trvCommands)
     
     '// create xpath expression based on strScriptOwner
@@ -545,7 +591,7 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
         xpath = "/commands/command[not(@owner)]"
         'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
     Else
-        xpath = "/commands/command[@owner='" & strScriptOwner & "']"
+        xpath = StringFormatA("/commands/command[@owner='{0}']", strScriptOwner)
         'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
     End If
     
@@ -572,10 +618,10 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
         If Len(commandName) > 0 Then
             '// create xpath expression based on strScriptOwner
             If strScriptOwner = vbNullString Then
-                xpath = "/commands/command[@name='" & commandName & "' and not(@owner)]"
+                xpath = StringFormatA("/commands/command[@name='{0}' and not(@owner)]", commandName)
                 'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , "Internal Commands")
             Else
-                xpath = "/commands/command[@name='" & commandName & "' and @owner='" & strScriptOwner & "']"
+                xpath = StringFormatA("/commands/command[@name='{0}' and @owner='{1}']", commandName, strScriptOwner)
                 'Set nRoot = trvCommands.Nodes.Add(, etvwFirst, , strScriptOwner & " Commands")
             End If
     
@@ -601,8 +647,15 @@ Private Sub PopulateTreeView(Optional strScriptOwner As String = vbNullString)
                 ArgumentName = xmlArgs(I).Attributes.getNamedItem("name").Text
                 If (Not xmlArgs(I).Attributes.getNamedItem("optional") Is Nothing) Then
                     If (xmlArgs(I).Attributes.getNamedItem("optional").Text = "1") Then
-                        ArgumentName = "[" & ArgumentName & "]"
+                        ArgumentName = StringFormatA("[{0}]", ArgumentName)
                     End If
+                End If
+                
+                '// Add the datatype to the argument name
+                If (Not xmlArgs(I).Attributes.getNamedItem("type") Is Nothing) Then
+                    ArgumentName = StringFormatA("{0} ({1})", ArgumentName, xmlArgs(I).Attributes.getNamedItem("type").Text)
+                Else
+                    ArgumentName = StringFormatA("{0} ({1})", ArgumentName, "String")
                 End If
                 
                 Set nArg = trvCommands.nodes.Add(nCommand, etvwChild, commandName & "." & ArgumentName, ArgumentName)
@@ -724,7 +777,11 @@ Private Sub trvCommands_SelectedNodeChanged()
     Set xmlElement = m_CommandsDoc.selectSingleNode(xpath)
     
     Call ResetForm
-    Call PrepareForm(nt, xmlElement)
+    
+    '// if there are no comment elements then we do not need to prepare the form
+    If Not (xmlElement Is Nothing) Then
+        Call PrepareForm(nt, xmlElement)
+    End If
     
 End Sub
 
@@ -761,8 +818,12 @@ Private Function GetNodeInfo(node As cTreeViewNode, ByRef commandName As String,
                 restrictionName = s(2)
                 GetNodeInfo = nRestriction
         End Select
-        If (Left$(ArgumentName, 1) = "[" And Right$(ArgumentName, 1) = "]") Then
-            ArgumentName = Mid$(ArgumentName, 2, Len(ArgumentName) - 2)
+        '// strip the [ ] around optional parameters
+        If Left$(ArgumentName, 1) = "[" Then
+            ArgumentName = Mid$(ArgumentName, 2, InStr(1, ArgumentName, "]") - 2)
+        End If
+        If (InStr(1, ArgumentName, "(") >= 0 And Right$(ArgumentName, 1) = ")") Then
+            ArgumentName = Mid$(ArgumentName, 1, InStr(1, ArgumentName, "(") - 2)
         End If
     End If
 End Function
@@ -921,6 +982,14 @@ Private Sub SaveForm()
     
 End Sub
 
+Private Function PrepString(ByVal str As String)
+    Dim retVal As String
+    retVal = str
+    retVal = Replace(retVal, vbLf, vbCrLf)
+    retVal = Replace(retVal, vbTab, vbNullString)
+    PrepString = retVal
+End Function
+
 
 '// When a node in the treeview is clicked, it should locate the XML element that was
 '// used to create the node and call this method to populate appropriate form controls.
@@ -968,14 +1037,14 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             lblDescription.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/description")
             If Not (xmlNode Is Nothing) Then
-                txtDescription.Text = xmlNode.Text
+                txtDescription.Text = PrepString(xmlNode.Text)
             End If
             '// txtSpecialNotes
             txtSpecialNotes.Enabled = True
             lblSpecialNotes.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/specialnotes")
             If Not (xmlNode Is Nothing) Then
-                txtSpecialNotes.Text = xmlNode.Text
+                txtSpecialNotes.Text = PrepString(xmlNode.Text)
             End If
             '// chkDisable
             chkDisable.Enabled = True
@@ -990,6 +1059,9 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             fraCommand.Caption = StringFormat("{0}", options)
             chkDisable.Caption = StringFormat("Disable {0} command", options)
             
+            If cboCommandGroup.ListIndex > 0 Then
+                cmdDeleteCommand.Enabled = True
+            End If
             
         Case NodeType.nArgument
             '// txtRank
@@ -1016,14 +1088,14 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             lblDescription.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/description")
             If Not (xmlNode Is Nothing) Then
-                txtDescription.Text = xmlNode.Text
+                txtDescription.Text = PrepString(xmlNode.Text)
             End If
             '// txtSpecialNotes
             txtSpecialNotes.Enabled = True
             lblSpecialNotes.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/specialnotes")
             If Not (xmlNode Is Nothing) Then
-                txtSpecialNotes.Text = xmlNode.Text
+                txtSpecialNotes.Text = PrepString(xmlNode.Text)
             End If
 
             '// chkDisable
@@ -1071,7 +1143,7 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
             lblDescription.Enabled = True
             Set xmlNode = xmlElement.selectSingleNode("documentation/description")
             If Not (xmlNode Is Nothing) Then
-                txtDescription.Text = xmlNode.Text
+                txtDescription.Text = PrepString(xmlNode.Text)
             End If
             '// txtSpecialNotes
             'txtSpecialNotes.Enabled = True
@@ -1144,6 +1216,7 @@ Private Sub ResetForm()
     m_SelectedElement.IsDirty = False
     cmdSave.Enabled = False
     cmdDiscard.Enabled = False
+    cmdDeleteCommand.Enabled = False
     
 End Sub
 

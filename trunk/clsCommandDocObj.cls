@@ -707,7 +707,7 @@ Public Function CreateCommand(ByVal strCommand As String, Optional ByVal strScri
     
 End Function
 
-Public Function NewParameter(argName As String, argIsOptional As Boolean, Optional argDataType As String)
+Public Function NewParameter(argName As String, argIsOptional As Boolean, Optional argDataType As String = "String")
     
     Dim Param As clsCommandParamsObj
     
@@ -716,9 +716,7 @@ Public Function NewParameter(argName As String, argIsOptional As Boolean, Option
     With Param
         .Name = argName
         .IsOptional = argIsOptional
-        If argIsOptional Then
-            .DataType = argDataType
-        End If
+        .DataType = argDataType
     End With
     
     Set NewParameter = Param
