@@ -6336,22 +6336,22 @@ Private Function OnScripts(ByVal Username As String, ByRef dbAccess As udtGetAcc
     
     On Error Resume Next
     
-    Dim tmpbuf As String  ' ...
-    Dim I      As Integer ' ...
-    Dim str    As String  ' ...
-    Dim Name   As String  ' ...
-    Dim Count  As Integer ' ...
+    Dim tmpbuf  As String  ' ...
+    Dim I       As Integer ' ...
+    Dim str     As String  ' ...
+    Dim Name    As String  ' ...
+    Dim Count   As Integer ' ...
     
     ' ...
     If (frmChat.SControl.Modules.Count > 1) Then
         ' ...
         For I = 2 To frmChat.SControl.Modules.Count
             Name = _
-                frmChat.SControl.Modules(I).CodeObject.Script("Name")
+                modScripting.GetScriptName(CStr(I))
 
             If (Err.Number = 0) Then
                 str = _
-                    frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled")
+                    SharedScriptSupport.GetSettingsEntry("Enabled", Name)
             
                 If (StrComp(str, "False", vbTextCompare) = 0) Then
                     Name = "(" & Name & "), "
@@ -6387,25 +6387,25 @@ Private Function OnEnable(ByVal Username As String, ByRef dbAccess As udtGetAcce
     
     On Error Resume Next
     
-    Dim Name As String  ' ...
-    Dim I    As Integer ' ...
-    Dim str  As String  ' ...
+    Dim ModName As String
+    Dim Name    As String  ' ...
+    Dim I       As Integer ' ...
+    Dim str     As String  ' ...
 
     ' ...
     If (frmChat.SControl.Modules.Count > 1) Then
         For I = 2 To frmChat.SControl.Modules.Count
             Name = _
-                frmChat.SControl.Modules(I).CodeObject.Script("Name")
+                modScripting.GetScriptName(CStr(I))
                 
             If (StrComp(Name, msgData, vbTextCompare) = 0) Then
                 str = _
-                    frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled")
+                    SharedScriptSupport.GetSettingsEntry("Enabled", Name)
             
                 If (StrComp(str, "True", vbTextCompare) = 0) Then
                     cmdRet(0) = Name & " is already enabled."
                 Else
-                    frmChat.SControl.Modules(I).CodeObject.WriteSettingsEntry _
-                        "Enabled", "True"
+                    SharedScriptSupport.WriteSettingsEntry "Enabled", "True", , Name
                         
                     InitScript frmChat.SControl.Modules(I)
                         
@@ -6427,21 +6427,19 @@ Private Function OnDisable(ByVal Username As String, ByRef dbAccess As udtGetAcc
     
     On Error Resume Next
     
-    Dim Name As String  ' ...
-    Dim I    As Integer ' ...
+    Dim Name    As String  ' ...
+    Dim I       As Integer ' ...
     
     ' ...
     If (frmChat.SControl.Modules.Count > 1) Then
         For I = 2 To frmChat.SControl.Modules.Count
             Name = _
-                frmChat.SControl.Modules(I).CodeObject.Script("Name")
+                modScripting.GetScriptName(CStr(I))
                 
             If (StrComp(Name, msgData, vbTextCompare) = 0) Then
                 RunInSingle frmChat.SControl.Modules(I), "Event_Close"
                 
-            
-                frmChat.SControl.Modules(I).CodeObject.WriteSettingsEntry _
-                    "Enabled", "False"
+                SharedScriptSupport.WriteSettingsEntry "Enabled", "False", , Name
                     
                 DestroyObjs frmChat.SControl.Modules(I)
 
@@ -6462,14 +6460,17 @@ Private Function OnSDetail(ByVal Username As String, ByRef dbAccess As udtGetAcc
     
     On Error Resume Next
     
-    Dim Name As String  ' ...
-    Dim I    As Integer ' ...
+    Dim ModName As String
+    Dim Name    As String  ' ...
+    Dim I       As Integer ' ...
     
     ' ...
     If (frmChat.SControl.Modules.Count > 1) Then
         For I = 2 To frmChat.SControl.Modules.Count
+            ModName = frmChat.SControl.Modules(I).Name
+            
             Name = _
-                frmChat.SControl.Modules(I).CodeObject.Script("Name")
+                modScripting.GetScriptName(CStr(I))
                 
             If (StrComp(Name, msgData, vbTextCompare) = 0) Then
                 Dim Version  As String ' ...
@@ -6477,25 +6478,25 @@ Private Function OnSDetail(ByVal Username As String, ByRef dbAccess As udtGetAcc
                 Dim author   As String ' ...
                 
                 Version = _
-                    frmChat.SControl.Modules(I).CodeObject.Script("Major")
+                    modScripting.GetScriptValue(ModName, "Major")
                     
                 VerTotal = _
-                    Val(frmChat.SControl.Modules(I).CodeObject.Script("Major"))
+                    Val(modScripting.GetScriptValue(ModName, "Major"))
                     
                 Version = Version & "." & _
-                    frmChat.SControl.Modules(I).CodeObject.Script("Minor")
+                    modScripting.GetScriptValue(ModName, "Minor")
                     
                 VerTotal = VerTotal + _
-                    Val(frmChat.SControl.Modules(I).CodeObject.Script("Minor"))
+                    Val(modScripting.GetScriptValue(ModName, "Minor"))
                     
                 Version = Version & " Revision " & _
-                    frmChat.SControl.Modules(I).CodeObject.Script("Revision")
+                    modScripting.GetScriptValue(ModName, "Revision")
                     
                 VerTotal = VerTotal + _
-                    Val(frmChat.SControl.Modules(I).CodeObject.Script("Revision"))
+                    Val(modScripting.GetScriptValue(ModName, "Revision"))
                     
                 author = _
-                    frmChat.SControl.Modules(I).CodeObject.Script("Author")
+                    modScripting.GetScriptValue(ModName, "Author")
                     
                 If ((author = vbNullString) And (VerTotal = 0)) Then
                     cmdRet(0) = _
@@ -6521,9 +6522,10 @@ Private Function OnInitPerf(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     On Error Resume Next
     
-    Dim I    As Integer ' ...
-    Dim str  As String  ' ...
-    Dim Name As String  ' ...
+    Dim ModName As String
+    Dim Name    As String  ' ...
+    Dim I       As Integer ' ...
+    Dim str     As String  ' ...
 
     ' ...
     If (frmChat.SControl.Modules.Count > 1) Then
@@ -6531,18 +6533,20 @@ Private Function OnInitPerf(ByVal Username As String, ByRef dbAccess As udtGetAc
     
         ' ...
         For I = 2 To frmChat.SControl.Modules.Count
+            ModName = frmChat.SControl.Modules(I).Name
+            
             Name = _
-                frmChat.SControl.Modules(I).CodeObject.Script("Name")
+                modScripting.GetScriptName(CStr(I))
 
             If (Err.Number = 0) Then
                 str = _
-                    frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Enabled")
+                    SharedScriptSupport.GetSettingsEntry("Enabled", Name)
             
                 If (StrComp(str, "False", vbTextCompare) <> 0) Then
                     ReDim Preserve cmdRet(0 To I - 1)
  
                     cmdRet(I - 1) = " " & Name & " " & _
-                        frmChat.SControl.Modules(I).CodeObject.Script("InitPerf") & "ms"
+                        modScripting.GetScriptValue(ModName, "InitPerf") & "ms"
                 End If
             End If
             
@@ -6558,14 +6562,35 @@ End Function
 Private Function OnExec(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
     
-    'On Error Resume Next
+    On Error GoTo ERROR_HANDLER
+    
+    Dim ErrType As String
 
     frmChat.SControl.ExecuteStatement msgData
     
-    If ((Err.Number <> 0) And (Not InBot)) Then
-        cmdRet(0) = "Error executing: #" & Err.Number & " - " & Err.description
-        Err.Clear
-    End If
+    Exit Function
+    
+ERROR_HANDLER:
+    
+    With frmChat.SControl
+        ErrType = "runtime"
+        
+        If InStr(1, .Error.source, "compilation", vbBinaryCompare) > 0 Then ErrType = "parsing"
+        
+        If InBot Then
+            frmChat.AddChat RTBColors.ErrorMessageText, _
+                "Execution " & ErrType & " error " & Chr(39) & .Error.Number & Chr(39) & _
+                ": (column " & .Error.Column & ")"
+            frmChat.AddChat RTBColors.ErrorMessageText, .Error.description
+        Else
+            cmdRet(0) = "Execution " & ErrType & " error " & Chr(39) & .Error.Number & Chr(39) & _
+                ": " & .Error.description
+        End If
+        .Error.Clear
+    End With
+    
+    Resume Next
+    
 End Function
 
 ' requires public

@@ -1391,24 +1391,32 @@ Public Function HasAccess(ByVal Username As String, ByVal commandName As String,
     
 End Function
 
+'// UTCNOW
+'// Returns the current UTC time and date value
 Public Function UtcNow() As Date
 
     UtcNow = modDateTime.UtcNow
     
 End Function
 
+'// LOGGER
+'// Returns the logger object
 Public Function Logger() As Object
 
     Set Logger = g_Logger
 
 End Function
 
+'// ISDEBUG
+'// Returns whether the bot was started with the debug command line
 Public Function isDebug() As Boolean
 
     isDebug = modGlobals.isDebug()
     
 End Function
 
+'// FILETIMETODATE
+'// Returns a date/time from two long values, as either "value value" or value, value
 Public Function FileTimeToDate(ByVal strTime As Variant, Optional ByVal HighValue As Long = 0) As Date
 
     Dim FTime As FILETIME ' ...
@@ -1422,10 +1430,10 @@ Public Function FileTimeToDate(ByVal strTime As Variant, Optional ByVal HighValu
     Else
         With FTime
             .dwLowDateTime = _
-                CLng(Mid$(strTime, InStr(1, strTime, " ", vbBinaryCompare) + 1))
+                UnsignedToLong(CDbl(Mid$(strTime, InStr(1, strTime, " ", vbBinaryCompare) + 1)))
         
             .dwHighDateTime = _
-                CLng(Left$(strTime, InStr(1, strTime, " ", vbBinaryCompare)))
+                UnsignedToLong(CDbl(Left$(strTime, InStr(1, strTime, " ", vbBinaryCompare))))
         End With
     End If
     
@@ -1434,31 +1442,40 @@ Public Function FileTimeToDate(ByVal strTime As Variant, Optional ByVal HighValu
     
 End Function
 
+'// QUOTES
+'// Returns the quotes object
 Public Function Quotes() As Object
 
     Set Quotes = g_Quotes
 
 End Function
 
-' // ...
+'// MEDIAPLAYER
+'// Returns the WinAmp or iTunes media player object
 Public Function MediaPlayer() As Object
 
     Set MediaPlayer = modMediaPlayer.MediaPlayer()
     
 End Function
 
+'// CHANNEL
+'// Returns the channel object
 Public Function Channel() As Object
 
     Set Channel = g_Channel.Clone()
     
 End Function
 
+'// CLAN
+'// Returns the clan object
 Public Function Clan() As Object
 
     Set Clan = g_Clan.Clone()
     
 End Function
 
+'// FRIENDS
+'// Returns a collection of friends objects
 Public Function Friends() As Object
     
     Dim I As Integer ' ...
@@ -1473,26 +1490,36 @@ Public Function Friends() As Object
     
 End Function
 
+'// QUEUE
+'// Returns the queue object
 Public Function Queue() As Object
 
     Set Queue = g_Queue
 
 End Function
 
+'// OSVERSION
+'// Returns an object with properties returning operating system information
 Public Function OSVersion() As Object
 
     Set OSVersion = New clsOSVersion
 
 End Function
 
+'// GETSYSTEMUPTIME
+'// Returns the amount of time your system has been up
 Public Function GetSystemUptime() As String
     GetSystemUptime = ConvertTime(GetUptimeMS)
 End Function
 
+'// GETCONNECTIONUPTIME
+'// Returns the amount of time your bot has been online
 Public Function GetConnectionUptime() As String
     GetConnectionUptime = ConvertTime(uTicks)
 End Function
 
+'// CRC32
+'// Returns the result of a standard CRC32 hash
 Public Function CRC32(ByRef str As String) As String
 
     Dim clsCRC32 As New clsCRC32
@@ -1503,6 +1530,8 @@ Public Function CRC32(ByRef str As String) As String
 
 End Function
 
+'// SHA1
+'// Returns the result of a standard Sha-1 hash
 Public Function Sha1(ByRef Data As String, Optional ByVal inHex As Boolean = False) As String
 
     Dim a As Long
@@ -1520,6 +1549,8 @@ Public Function Sha1(ByRef Data As String, Optional ByVal inHex As Boolean = Fal
     End If
 End Function
 
+'// XSHA1
+'// Returns the result of a non-standard Battle.net "broken" Sha-1 hash
 Public Function XSHA1(ByRef str As String, Optional ByVal inHex As Boolean = False) As String
     Dim I As Integer
     Dim s As String
@@ -1534,99 +1565,269 @@ Public Function XSHA1(ByRef str As String, Optional ByVal inHex As Boolean = Fal
     End If
 End Function
 
-Public Function IGetScriptModule(ByVal ModuleID As String) As Object
+'// GETSCRIPTMODULE
+'// Returns the currently executing script module object
+Public Function GetScriptModule() As Object
 
-    Set IGetScriptModule = frmChat.SControl.Modules(ModuleID)
+    Set GetScriptModule = modScripting.GetCallingScriptModule
 
 End Function
 
-Public Function ICreateObj(ByVal ModuleID As String, ByVal ObjType As String, ByVal ObjName As String) As Object
+'// GETMODULEID
+'// Returns a script module's ID
+'// This ID is a string from 2 to the amount of scripts loaded + 1
+'// PARAMETERS
+'//     ScriptName - if provided, this function will return that script's module ID
+'//                  if ommitted, this function will return the currently executing script module ID
+Public Function GetModuleID(Optional ByVal ScriptName As String = vbNullString) As String
 
-    Set ICreateObj = _
+    GetModuleID = modScripting.GetModuleID(ScriptName)
+
+End Function
+
+'// GETSCRIPTNAME
+'// Returns a script's stored name
+'// PARAMETERS
+'//     ModuleID - if provided, this function will return the script name of the provided script module
+'//                if ommitted, this function will return the currently executing script's stored name
+Public Function GetScriptName(Optional ByVal ModuleID As String = vbNullString) As String
+
+    GetScriptName = modScripting.GetScriptName(ModuleID)
+
+End Function
+
+'// GETWORKINGDIRECTORY
+'// Returns the working directory for your script
+'// Use this as a place to store script configurations, databases, or other data for your script
+'// It is recommended to use this over BotPath() for script-specific information
+'// PARAMETERS
+'//     ScriptName - if provided, this function will return that script's working directory
+'//                  if ommitted, this function will return the currently executing script's working directory
+Public Function GetWorkingDirectory(Optional ByVal ScriptName As String = vbNullString) As String
+
+    If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
+    
+    GetWorkingDirectory = BotPath() & "Scripts\" & ScriptName & "\"
+   
+    MkDir GetWorkingDirectory
+
+End Function
+
+'// CREATEOBJ
+'// Creates a script-specific object for use with your script
+'// Returns the object as a result of the function, and makes ObjName directly accessible by the ObjName.Method syntax
+'// PARAMETERS
+'//     ObjType -    this will be one of the following:
+'//                  "Timer" - a script timer to do stuff after an interval (in milliseconds)
+'//                  "LongTimer" - a script timer to do stuff after an interval (in seconds - like the old PluginSystem)
+'//                  "Winsock" - a Windows Socket, allowing you to connect to remote servers
+'//                  "Inet" - a script Inet control allowing easy access to the HTML source of a website
+'//                  "Form" - a window UI fully accessible to the script
+'//                  "Menu" - a script menu UI that appears under the Scripting > (Script Name) menu, but can be moved elsewhere (such as into a form)
+'//     ObjName -    the name of the object
+'//                  this must be valid as a variable name in script
+'//     ScriptName - if provided, this function will create the object for the provided script
+'//                  if ommitted, this function will create the object for the currently executing script
+Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String, Optional ByVal ScriptName As String = vbNullString) As Object
+
+    Dim ModuleID As String
+    
+    ModuleID = modScripting.GetModuleID(ScriptName)
+
+    Set CreateObj = _
             modScripting.CreateObj(frmChat.SControl.Modules(ModuleID), _
                     ObjType, ObjName)
 
 End Function
 
-Public Function IDestroyObj(ByVal ModuleID As String, ByVal ObjName As String) As Object
+'// DESTROYOBJ
+'// Destroys an object created with CreateObj
+'// PARAMETERS
+'//     ObjName -    the name of the object
+'//     ScriptName - if provided, this function will destroy the object for the provided script
+'//                  if ommitted, this function will destroy the object for the currently executing script
+Public Function DestroyObj(ByVal ObjName As String, Optional ByVal ScriptName As String = vbNullString) As Object
+
+    Dim ModuleID As String
+    
+    ModuleID = modScripting.GetModuleID(ScriptName)
 
     modScripting.DestroyObj frmChat.SControl.Modules(ModuleID), ObjName
 
 End Function
 
-Public Function IGetObjByName(ByVal ModuleID As String, ByVal ObjName As String) As Object
+'// GETOBJBYNAME
+'// Returns an object created with CreateObj
+'// PARAMETERS
+'//     ObjName -    the name of the object
+'//     ScriptName - if provided, this function will get the object for the provided script
+'//                  if ommitted, this function will get the object for the currently executing script
+Public Function GetObjByName(ByVal ObjName As String, Optional ByVal ScriptName As String = vbNullString) As Object
 
-    Set IGetObjByName = _
+    Dim ModuleID As String
+    
+    ModuleID = modScripting.GetModuleID(ScriptName)
+
+    Set GetObjByName = _
             modScripting.GetObjByName(frmChat.SControl.Modules(ModuleID), _
                     ObjName)
 
 End Function
 
-Public Function ICreateCommand(ByVal scriptName As String, ByVal commandName As String) As Object
+'// CREATECOMMAND
+'// Creates a command for your script
+'// Returns the CommandDocs object after creation for modifications and saving
+'// PARAMETERS
+'//     commandName - the name of the new command
+'//     ScriptName -  if provided, this function will create the command for the specified script
+'//                   if ommitted, this function will create the command for the currently executing script
+Public Function CreateCommand(ByVal commandName As String, Optional ByVal ScriptName As String = vbNullString) As Object
+
     Dim command As clsCommandDocObj
-    Set command = New clsCommandDocObj
-    Call command.CreateCommand(commandName, scriptName)
-    Call command.OpenCommand(commandName, scriptName)
-    Set ICreateCommand = command
-End Function
-Public Function IOpenCommand(ByVal scriptName As String, ByVal commandName As String) As Object
-    Dim command As clsCommandDocObj
-    Set command = New clsCommandDocObj
-    If command.OpenCommand(commandName, scriptName) Then
-        Set IOpenCommand = command
-    End If
-End Function
-Public Function IDeleteCommand(ByVal scriptName As String, ByVal commandName As String) As Object
-    Dim command As clsCommandDocObj
-    Set command = New clsCommandDocObj
-    Call command.OpenCommand(commandName, scriptName)
-    Call command.Delete
-    Set IDeleteCommand = command
-End Function
-
-Public Function IIsCommand(ByVal scriptName As String, ByVal commandText As String, ByVal strUsername As String) As Collection
-    Dim command  As clsCommandDocObj
-    Dim commands As Collection
-    Set command = New clsCommandDocObj
-    Set commands = command.IsCommand(commandText, strUsername, scriptName)
-    Set IIsCommand = commands
-End Function
-
-Public Function Scripts() As Object
-
-    On Error Resume Next
-
-    Set Scripts = modScripting.Scripts()
-
-End Function
-
-Public Function GetScriptByName(ByVal scriptName As String) As Object
-
-    On Error Resume Next
-
-    Set GetScriptByName = Scripts(scriptName)
-
-End Function
-
-Public Function StrConvEx(ByVal str As String, ByVal Conv As VbStrConv, Optional ByVal locale As Long) As Variant
-
-    StrConvEx = StrConv(str, Conv, locale)
-
-End Function
-
-Public Function DataBufferEx() As Object
-
-    Set DataBufferEx = New clsDataBuffer
     
-    DataBufferEx.setCripple
+    If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
+    
+    Set command = New clsCommandDocObj
+    
+    Call command.CreateCommand(commandName, ScriptName)
+    Call command.OpenCommand(commandName, ScriptName)
+    
+    Set CreateCommand = command
+    
+    Set command = Nothing
+    
+End Function
+
+'// OPENCOMMAND
+'// Returns the CommandDocs object of a script command
+'// PARAMETERS
+'//     commandName - the name of the command
+'//     ScriptName -  if provided, this function will get the command for the specified script
+'//                   if ommitted, this function will get the command for the currently executing script
+Public Function OpenCommand(ByVal commandName As String, Optional ByVal ScriptName As String = vbNullString) As Object
+    
+    Dim command As clsCommandDocObj
+    
+    If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
+    
+    Set command = New clsCommandDocObj
+    
+    If command.OpenCommand(commandName, ScriptName) Then
+        Set OpenCommand = command
+    End If
+    
+    Set command = Nothing
+    
+End Function
+
+'// DELETECOMMAND
+'// Deletes a command for a script
+'// PARAMETERS
+'//     commandName - the name of the command
+'//     ScriptName -  if provided, this function will delete the command for the specified script
+'//                   if ommitted, this function will delete the command for the currently executing script
+Public Function DeleteCommand(ByVal commandName As String, Optional ByVal ScriptName As String = vbNullString) As Object
+    
+    Dim command As clsCommandDocObj
+    
+    If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
+    
+    Set command = New clsCommandDocObj
+    
+    Call command.OpenCommand(commandName, ScriptName)
+    Call command.Delete
+    
+    Set DeleteCommand = command
+    
+    Set command = Nothing
+    
+End Function
+
+'// ISCOMMAND
+'// Pass a message a user sent
+'// Returns a Command instance object specifying whether they have access to the command
+'// and whether it has the correct syntax among other things
+'// PARAMETERS
+'//     commandText - the sent message
+'//     strUsername - the user's username
+'//     ScriptName -  if provided, this function will check for commands created in the specified script
+'//                   if ommitted, this function will check for commands created in the currently executing script
+Public Function IsCommand(ByVal commandText As String, ByVal strUsername As String, Optional ByVal ScriptName As String = vbNullString) As Collection
+
+    Dim command As New clsCommandDocObj
+    Dim commands As Collection
+    
+    If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
+    
+    Set commands = command.IsCommand(commandText, strUsername, ScriptName)
+    
+    Set IsCommand = commands
+    
+    Set command = Nothing
+    Set commands = Nothing
+    
+End Function
+
+'// LET SCRIPT
+'// Stores a script value for the currently executing script
+'// It is recommended to store values in "Name", "Author",
+'// "Major", "Minor", and "Revision" at the beginning of
+'// your script, outside of any functions
+'// PARAMETERS
+'//     Key -   the key to store the value in
+'//     Value - the value to store for this key
+'// EXAMPLE USAGE
+'//     Script("Name") = "MyScript"
+Public Property Let Script(ByVal Key As String, ByVal Value As Variant)
+
+    modScripting.SetScriptValue modScripting.GetModuleID(), Key, Value
+
+End Property
+
+'// GET SCRIPT
+'// Gets a script value for the currently executing script
+'// PARAMETERS
+'//     Key - the key
+'//           by default, the bot uses the following keys:
+'//           "Name" -     the name of the script
+'//           "Path" -     the path to the script
+'//           "InitPerf" - the number of milliseconds it took to execute Event_Load
+'//           "Author" -   the author(s) of the script
+'//           "Major" -    the major version number of the script
+'//           "Minor" -    the minor version number of the script
+'//           "Revision" - the revision version number of the script
+'// EXAMPLE USAGE
+'//     AddChat vbGreen, "My script was made by " & Script("Author") & "!"
+Public Property Get Script(ByVal Key As String) As Variant
+
+    Script = modScripting.GetScriptValue(modScripting.GetModuleID(), Key)
+
+End Property
+
+'// GETSCRIPTOBJECT
+'// Gets a standard Scripting.Dictionary for a script containing the script's values
+'// PARAMETRS
+'//     ScriptName - if provided, this function will return the specified script's values object
+'//                  if ommitted, this function will return the currently executing script's values object
+Public Function GetScriptObject(Optional ByVal ScriptName As String) As Object
+
+    Set GetScriptObject = modScripting.GetScriptObject(modScripting.GetModuleID(ScriptName))
 
 End Function
 
-Public Function GetSettingsEntryEx(ByVal scriptName As String, ByVal sEntryName As String)
+'// GETSETTINGSENTRY
+'// Retrieves a value from settings.ini for your script
+'// PARAMETERS
+'//     sEntryName - the name of the entry to look up
+'//     ScriptName - if provided, this function will return the specified script's setting
+'//                  if ommitted, this function will return the currently executing script's setting
+Public Function GetSettingsEntry(ByVal sEntryName As String, Optional ByVal ScriptName As String = vbNullString) As String
     
     On Error Resume Next
     
     Dim Path As String ' ...
+    
+    If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
 
     ' ...
     Path = ReadCfg("FilePaths", "Scripts.ini")
@@ -1641,28 +1842,37 @@ Public Function GetSettingsEntryEx(ByVal scriptName As String, ByVal sEntryName 
     End If
     
     ' ...
-    GetSettingsEntryEx = ReadINI(scriptName, sEntryName, Path)
+    GetSettingsEntry = ReadINI(ScriptName, sEntryName, Path)
     
     ' ...
-    If (InStr(1, GetSettingsEntryEx, " ;") <> 0) Then
-        GetSettingsEntryEx = _
-            Mid$(GetSettingsEntryEx, 1, (InStr(1, GetSettingsEntryEx, " ;") - 1))
+    If (InStr(1, GetSettingsEntry, " ;") <> 0) Then
+        GetSettingsEntry = _
+            Mid$(GetSettingsEntry, 1, (InStr(1, GetSettingsEntry, " ;") - 1))
     End If
     
     ' ...
-    If (InStr(1, GetSettingsEntryEx, " #") <> 0) Then
-        GetSettingsEntryEx = _
-            Mid$(GetSettingsEntryEx, 1, (InStr(1, GetSettingsEntryEx, " #") - 1))
+    If (InStr(1, GetSettingsEntry, " #") <> 0) Then
+        GetSettingsEntry = _
+            Mid$(GetSettingsEntry, 1, (InStr(1, GetSettingsEntry, " #") - 1))
     End If
 
 End Function
 
-Public Function WriteSettingsEntryEx(ByVal scriptName As String, ByVal sEntryName As String, ByVal sValue As String, Optional sDescription As String)
+'// WRITESETTINGSENTRY
+'// Stores a value to settings.ini for your script
+'// PARAMETERS
+'//     sEntryName - the name of the entry to store in
+'//     sValue -     the value to store in the entry
+'//     ScriptName - if provided, this function will write the setting for the specified script
+'//                  if ommitted, this function will write the setting for the currently executing script
+Public Sub WriteSettingsEntry(ByVal sEntryName As String, ByVal sValue As String, Optional sDescription As String, Optional ByVal ScriptName As String = vbNullString)
 
     On Error GoTo ERROR_HANDLER
 
     Dim Path As String ' ...
     
+    If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
+    
     ' ...
     Path = ReadCfg("FilePaths", "Scripts.ini")
     If (Path = vbNullString) Then
@@ -1676,10 +1886,10 @@ Public Function WriteSettingsEntryEx(ByVal scriptName As String, ByVal sEntryNam
     End If
     
     ' ...
-    WriteINI scriptName, sEntryName, sValue & _
+    WriteINI ScriptName, sEntryName, sValue & _
         IIf(Len(sDescription), " ; " & sDescription, ""), Path
 
-    Exit Function
+    Exit Sub
 
 ERROR_HANDLER:
 
@@ -1699,8 +1909,110 @@ ERROR_HANDLER:
     
     Resume Next
     
+End Sub
+
+'// SCRIPTS
+'// Gets a collection of all scripts
+Public Function Scripts() As Object
+
+    On Error Resume Next
+
+    Set Scripts = modScripting.Scripts()
+
 End Function
 
+'// GETSCRIPTBYNAME
+'// Gets a script by its name
+Public Function GetScriptByName(ByVal ScriptName As String) As Object
+
+    On Error Resume Next
+
+    Set GetScriptByName = Scripts(ScriptName)
+
+End Function
+
+'// STRCONVEX
+'// Mirrors the VB6 StrConv function
+Public Function StrConvEx(ByVal str As String, ByVal Conv As VbStrConv, Optional ByVal locale As Long) As Variant
+
+    StrConvEx = StrConv(str, Conv, locale)
+
+End Function
+
+'// DATABUFFER
+'// Gets the databuffer for the currently executing script
+'// This databuffer will be constant for the duration of your script, so remember when to clear it!
+Public Function DataBuffer() As Object
+
+    Set DataBuffer = modScripting.GetDefaultDataBuffer(modScripting.GetModuleID)
+
+End Function
+
+'// DATABUFFEREX
+'// Gets an instance of a databuffer for the currently executing script
+'// This will return a new one everytime!
+Public Function DataBufferEx() As Object
+
+    Set DataBufferEx = New clsDataBuffer
+    
+    DataBufferEx.setCripple
+
+End Function
+
+'// RESOLVEHOSTNAME
+'// Returns the IP address resolved from the given host
+Public Function ResolveHostName(ByVal strHostName As String, Optional ByRef errCode As Long = 0) As String
+    Dim Result As String
+    Result = ResolveHost(strHostName)
+    If Result = vbNullString Then
+        errCode = WSAGetLastError()
+    End If
+    ResolveHostName = Result
+End Function
+
+'// FORCEBNCSPACKETPARSE
+'// Pass a complete Battle.net packet into this and the bot will parse it
+Public Sub ForceBNCSPacketParse(ByVal PacketData As String)
+    Call BNCSParsePacket(PacketData)
+End Sub
+
+'// GETCOMMANDS
+'// Gets a collection of stored commands
+Public Function GetCommands(Optional ByVal Database As String = vbNullString) As Collection
+    Set GetCommands = modCommandDocsObj.GetCommands(Database)
+End Function
+
+'// GETUSERDATABASE
+'// Gets a collection of users in the database
+Public Function GetUserDatabase() As Collection
+    Dim x As Integer
+    Dim temp As New clsDBEntryObj
+    Set GetUserDatabase = New Collection
+    For x = LBound(DB) To UBound(DB)
+        If (Len(DB(x).Username) > 0) Then
+            With temp
+                .Name = DB(x).Username
+                .Rank = DB(x).Access
+                .CreatedOn = DB(x).AddedOn
+                .CreatedBy = DB(x).AddedBy
+                .BanMessage = DB(x).BanMessage
+                .Flags = DB(x).Flags
+                .AddGroup DB(x).Groups
+                .ModifiedBy = DB(x).ModifiedBy
+                .ModifiedOn = DB(x).ModifiedOn
+                .EntryType = DB(x).Type
+            End With
+            GetUserDatabase.Add temp, DB(x).Username
+        End If
+    Next x
+    Set temp = Nothing
+End Function
+
+'// GETCURRENTUSERNAME
+'// Will return the current username for the bot, as Battle.net sees it
+Public Function GetCurrentUsername()
+    GetCurrentUsername = modGlobals.CurrentUsername
+End Function
 
 'Class_Terminate doesn't run when a UI form is created via a script. I made this sub so the bot's Unload sub can explicitly _
     call the code within Class_Terminate to kill all the objects. - FrOzeN
@@ -1753,79 +2065,3 @@ Private Sub Class_Terminate()
 '        Set obScriptForms = Nothing
 '    End If
 End Sub
-
-'// SETSETTING
-'//   Written by Swent. Creates/modifies plugin settings.
-'//   Usage - new setting: SetSetting "prefix", "settingName", value, "setting description", False
-'//   Usage - existing setting: SetSetting "prefix", "settingName", value
-'//   Setting Values() of any Length are now set and retrieved properly (no longer a 255 char max)
-'//   You can now have spaces in your setting names.
-Public Sub SetSetting(ByVal strPrefix As String, ByVal strName As String, ByVal varValue As Variant, _
-                      Optional ByVal strDescription As String, Optional ByVal boolOverwrite As Boolean = True)
-                      
-    Dim strPath As String, arrSetting() As String, I As Integer
-    strPath = BotPath() & "plugins\settings.ini"
-
-    If Len(strDescription) > 0 Then
-        SetSetting strPrefix, strName & " (info)", strDescription, "", True
-    End If
-    
-    If boolOverwrite Or Len(GetConfigEntry(strPrefix, strName, strPath)) = 0 Then
-        If Len(strName & varValue) > 254 Then
-            WriteConfigEntry UCase(strPrefix), strName, Left(varValue, 254 - Len(strName)), strPath
-            arrSetting = Split(strName, "*")
-            If UBound(arrSetting) > 0 Then I = arrSetting(1) + 1 Else I = 1
-            SetSetting strPrefix, arrSetting(0) & "*" & I, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
-        Else
-            WriteConfigEntry UCase(strPrefix), strName, varValue, strPath
-        End If
-    End If
-End Sub
-
-'Returns the IP address resolved from the given host.
-Public Function ResolveHostName(ByVal strHostName As String, Optional ByRef errCode As Long = 0) As String
-    Dim Result As String
-    Result = ResolveHost(strHostName)
-    If Result = vbNullString Then
-        errCode = WSAGetLastError()
-    End If
-    ResolveHostName = Result
-End Function
-
-Public Sub ForceBNCSPacketParse(ByVal PacketData As String)
-    Call BNCSParsePacket(PacketData)
-End Sub
-
-Public Function GetCommands(Optional ByVal Database As String = vbNullString) As Collection
-    Set GetCommands = modCommandDocsObj.GetCommands(Database)
-End Function
-
-Public Function GetUserDatabase() As Collection
-    Dim x As Integer
-    Dim temp As New clsDBEntryObj
-    Set GetUserDatabase = New Collection
-    For x = LBound(DB) To UBound(DB)
-        If (Len(DB(x).Username) > 0) Then
-            With temp
-                .Name = DB(x).Username
-                .Rank = DB(x).Access
-                .CreatedOn = DB(x).AddedOn
-                .CreatedBy = DB(x).AddedBy
-                .BanMessage = DB(x).BanMessage
-                .Flags = DB(x).Flags
-                .AddGroup DB(x).Groups
-                .ModifiedBy = DB(x).ModifiedBy
-                .ModifiedOn = DB(x).ModifiedOn
-                .EntryType = DB(x).Type
-            End With
-            GetUserDatabase.Add temp, DB(x).Username
-        End If
-    Next x
-    Set temp = Nothing
-End Function
-
-
-'Will return the current username for the bot, As Battle.net sees it
-Public Function GetCurrentUsername()
-    GetCurrentUsername = modGlobals.CurrentUsername
-End Function

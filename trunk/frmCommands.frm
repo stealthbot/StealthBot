@@ -560,14 +560,17 @@ Private Sub PopulateOwnerComboBox()
     cboCommandGroup.AddItem StringFormat("{0} ({1})", options)
     
     For I = 2 To frmChat.SControl.Modules.Count
-        str = frmChat.SControl.Modules(I).CodeObject.GetSettingsEntry("Public")
+        ScriptName = _
+            modScripting.GetScriptName(CStr(I))
+        str = _
+            SharedScriptSupport.GetSettingsEntry("Public", ScriptName)
+        
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
             '// get the script name and number of commands
-            scriptName = frmChat.SControl.Modules(I).CodeObject.Script("Name")
-            commandCount = commandDoc.GetCommandCount(scriptName)
+            commandCount = commandDoc.GetCommandCount(ScriptName)
             '// only add the commands if there is at least 1 command to show
             If commandCount > 0 Then
-                options = Array(scriptName, commandCount)
+                options = Array(ScriptName, commandCount)
                 '// add the item
                 cboCommandGroup.AddItem StringFormat("{0} ({1})", options)
             End If

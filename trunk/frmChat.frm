@@ -5638,12 +5638,7 @@ End Sub
 
 
 Public Sub SControl_Error()
-    AddChat RTBColors.ErrorMessageText, "Scripting runtime error " & Chr(39) & SControl.Error.Number & Chr(39) & ": (line " & SControl.Error.line & "; column " & SControl.Error.Column & ")"
-    AddChat RTBColors.ErrorMessageText, SControl.Error.description & "."
-    AddChat RTBColors.ErrorMessageText, "Offending line: >> " & SControl.Error.Text
-    
-    Err.Clear
-    SControl.Error.Clear
+    Call modScripting.SC_Error
 End Sub
 
 Private Sub sckBNet_Close()

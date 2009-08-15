@@ -1,10 +1,14 @@
-'0.979999
+'0.98
 '// ^^ Ignore this version line, but DO NOT remove/modify it
 
+'// This script (the plugin system) is no longer supported as of version 2.7, and is provided for backwards compatibility.
+'// Use the Scripting Forum on stealthbot.net to convert or request someone else to convert your plugins
+'// from plugin form to script form, or use this script to load your unconverted plugins from the /plugins/ folder.
+'// ~Ribose
 
 '// The StealthBot Plugin System - StealthBot 2.7 Development Version
-'//    by Swent
-'//      Last modified 11:54 PM 3/11/2008
+'//    by Xellos, Swent, help from FiftyToo
+'//      Last modified 7/29/2009 ~Ribose
 
 '// The StealthBot Plugin System allows StealthBot to load, run, and update plugins written in VBScript
 '//    This code remains external to allow for automatic updates, and for viewing/tweaking by advanced scriptors.
@@ -13,24 +17,20 @@
 '// This file will be updated periodically to provide new plugin features and capabilities between StealthBot versions.
 
 
-'// TODO BEFORE PUBLIC RELEASE
-'// 	* Change version check to 2.7
-
-
 '//**********************************//
 '//  CHANGE LOG                      //
 '//**********************************//
  
 '// The full change log can be found here: http://stealthbot.net/p/plugs/changelog
 
-'// ver .98 (BETA)
+'// ver .98
 
 '//   [MODIFICATIONS]
 '//   *Integrated portions of the Plugin System into the StealthBot internals to improve functionality.
 '//   *Modified the Plugin System to make it compatiable with StealthBot v2.7
 '//      -You can now use the FirstRun, MessageSent, Shutdown, LoggedOff, and the 9 new clan-related events in your plugins (see SSC)
-'//      -Added the new Event arguements: Banned (UserJoins) and StatUpdate (UserInChannel) - see the SSC
-'//         ~These will be automatically added to any UserJoins/UserInChannel events found missing them (Thanks Draco)
+'//      -Added the new Event arguements: Banned (UserJoins), StatUpdate (UserInChannel), and Ping (WhisperFromUser) - see the SSC
+'//         ~These will be automatically added to any UserJoins/UserInChannel/WhisperFromUser events found missing them (Thanks Draco)
 '//      -For compatibility reasons there is now a version check. You must have SB v2.7 or higher to use the Plugin System.
 '//   *Modified the external .plugins response with an enabled/disabled indicator
 '//      -Prefixes of disabled plugins are inside parenthesis
@@ -42,12 +42,12 @@
 '//      -Changes to settings.ini now take effect after immediately after saving the file (You do not need to type "/lset" or hit Reload Script)
 '//   *Opened up the updates, getplugin and delplugin commands to external usage by Bot Owner only (Thanks RoNiN)
 '//      -In the external updates output, only prefixes are displayed. Key: New, [Updated], (Installed)
-'//   *Increased plugin load efficiency -- load time should be noticeably decreased (Thanks ZergMasterI)
+'//   *Increased plugin load efficiency -- load time should be noticeably decreased (Thanks Ribose)
 '//   *Replaced all Plugin System usaged of vbBlue with vbLightBlue, which is much easier on the eyes
 '//   *Plugin and Plugin System update checks now only take place once after connection
 '//   *Improved error handling during plugin load. Loading errors will now be more descriptive (Thanks ZergMaster)
 '//      -Plugins with errors on load will be disabled automatically (to avoid the constant error messages on every event)
-'//   *Improved plugin error handling while plugins are being loaded (Thanks ZergMasterI)
+'//   *Improved plugin error handling while plugins are being loaded (Thanks Ribose)
 '//      -If errors are recieved during plugin loading the erroring plugin will be blocked (temporarily disabled) to stop errors on every event
 '//         ~In the /plugins response, blocked plugins' status will be "Error"
 '//      -All other errors recieved will show correct line and column numbers as well if debug mode is on
@@ -64,17 +64,16 @@
 '//   *Added double-slash Plugin System commands. Inside bot type "//command" to have the response displayed publicly.
 '//      -This will work for all Plugin System commands except /updates and /psnews
 '//   *Added Plugin System help in /phelp command -- displays command names and explanations (Thanks raylu)
-'//   *Added support for colons on the 4th phelp line (important notes) -- use "\c" for colon (Thanks ZergMasterI)
+'//   *Added support for colons on the 4th phelp line (important notes) -- use "\c" for colon (Thanks Ribose)
 '//   *Added some helpful links at the completion of the installation (Thanks Snap)
 '//   *Added StealthBot menu support for the Plugin System
 '//      -In the new Plugins menu you'll find menus for each plugin
 '//      -In these menus you can change enabled, nvn, and backup statuses, as well items for help and opening the plugin file
 '//      -There is also a main help menu which provides links to revelant forums/threads.
 '//      -5 subs/functions have been added to help you add and work with menu items for your plugin. See the SSC.
-'//      -You can disable plugin menu creation by setting the menusDisabled PS setting to True (Thanks ZergMasterI)
+'//      -You can disable plugin menu creation by setting the menusDisabled PS setting to True (Thanks Ribose)
 '//   *Implemented #define's Plugin Creator. Can be executed from the Plugin System menu (Thanks #define)
 '//   *Implemented plugin statistics system by Snap. See http://snapnjacks.com/stats.php
-'//   *Added the /exec command to the Plugin System due to its common usage. Only works from inside the bot.
 
 '//   [NEW COMMANDS]
 '//    /delplugin <prefix>
@@ -87,8 +86,6 @@
 '//         ~You can use a filename (ex: pmPeltMe.plug) in place of <prefix>, as long as it's in the plugins folder
 '//         ~You can open your settings.ini file by omitting the <prefix> parameter
 '//         ~You can open your plugins folder by using "plugins" for <prefix> (Thanks Jack)
-'//    /exec <code>
-'//      -Executes a line of VBScript code. Can only be used from inside the bot with "/" as the trigger.
 
 '//   [BUG FIXES]
 '//   *Fixed a bug in the debug command...lol (Thanks Jack)
@@ -152,6 +149,13 @@ Set dictTimerEnabled = CreateObject("Scripting.Dictionary")
 Set dictTimerCount = CreateObject("Scripting.Dictionary")
 Set pluginMenus = CreateObject("Scripting.Dictionary")
 
+'// script information ~Ribose
+Script("Name") = "PluginSystem"
+Script("Author") = "Xellos, Swent"
+Script("Major") = 0
+Script("Minor") = 98
+Script("Revision") = 0
+Script("Description") = PS_TITLE
 
 '// [[[ PLUGIN LOADING ]]]
 
@@ -233,34 +237,37 @@ Sub psLoadPlugin(Prefix, Version, Path, Content, ByVal Lines)
    psArgsAdded = False
    psEvents.Item(Prefix) = "|"
    For i = 0 to UBound(Lines)
-      curLine = Trim(LCase(Lines(i)))
+      curLine = Lines(i)
 
-      If Instr(curLine, "event_") > 0 Then
+      '// Check for a split line
+      If Right(curLine, 1) = "_" And i < UBound(Lines) Then
+        curLine = curLine & Lines(i + 1)
+        intLine = i + 1
+      Else
+        intLine = i
+      End If
+
+      If Instr(1, curLine, "event_", 1) > 0 Then
 
          For j = 0 to UBound(psEventNames)
-            curEventLine = "sub " & Prefix & "_event_" & psEventNames(j)
-            If Left(curLine, Len(curEventLine)) = curEventLine Then
+            curEventLine = "sub " & LCase(Prefix) & "_event_" & psEventNames(j)
+            If Left(Trim(LCase(curLine)), Len(curEventLine)) = curEventLine Then
                psEvents.Item(Prefix) = psEvents.Item(Prefix) & psEventNames(j) & "|"
             End If
          Next
-
-         '// Check for a split line
-         If Right(curLine, 1) = "_" And i < UBound(Lines) Then
-           curLine = curLine & Trim(LCase(Lines(i + 1)))
-           intLine = i + 1
-         Else
-           intLine = i
-         End If
- 
+         
          '// If it's a UserJoins or UserInChannel event, make sure the new arguments exist (updated for WhisperFromUser - Pyro)
-         If Instr(curLine, "userjoins") > 0 And Instr(curLine, "banned") = 0 Then
+         If Instr(1, curLine, "userjoins", 1) > 0 And Instr(1, curLine, "banned", 1) = 0 Then
             psAddArg Prefix, intLine, "UserJoins", "OriginalStatString", "Banned", Lines, Path
-         ElseIf Instr(curLine, "userinchannel") > 0 And Instr(curLine, "statupdate") = 0 Then
+         ElseIf Instr(1, curLine, "userinchannel", 1) > 0 And Instr(1, curLine, "statupdate", 1) = 0 Then
             psAddArg Prefix, intLine, "UserInChannel", "Product", "StatUpdate", Lines, Path
-		 ElseIf Instr(curLine, "whisperfromuser") > 0 And Instr(curLine, "ping") = 0 Then
+		 ElseIf Instr(1, curLine, "whisperfromuser", 1) > 0 And Instr(1, curLine, "ping", 1) = 0 Then
             psAddArg Prefix, intLine, "WhisperFromUser", "Message", "Ping", Lines, Path
          End If
       End If
+      
+      '// check for calls to setsetting and add required args
+      psCheckSetSetting Prefix, intLine, curLine, Lines, Path
    Next
 
    '// Store the plugin's path and version
@@ -341,14 +348,67 @@ End Sub
 
 Sub psAddArg(Prefix, Index, EventName, LastArg, NewArg, Lines, Path)
 
-   For i = 0 to UBound(Lines)
-     If i = Index Then Lines(i) = Replace(Lines(i), LCase(LastArg), LastArg & ", " & NewArg, 1, -1, 1)
-   Next
-
+   Lines(Index) = Replace(Lines(Index), LastArg, LastArg & ", " & NewArg, 1, -1, 1)
+   
    psNewContent = Join(Lines, vbCrLf)
    Set pFile = psFSO.OpenTextFile(Path, 2, 1)
    pFile.WriteLine psNewContent
    pFile.Close
+   psArgsAdded = True
+End Sub
+
+Sub psCheckSetSetting(Prefix, Index, ByVal LineText, Lines, Path)
+   commaCount = 0
+   isInString = False
+   curChar = vbNullString
+   If Left(LCase(LineText), 10) = "setsetting " Or InStr(1, LineText, " setsetting(", 1) > 0 Or _
+      InStr(1, LineText, " setsetting ", 1) > 0 Then
+      For j = 1 To Len(LineText)
+         curChar = Mid(LineText, j, 1)
+         Select Case curChar
+            Case ","
+               If Not isInString Then commaCount = commaCount + 1
+            Case Chr(34) ' "
+               isInString = Not isInString
+         End Select
+      Next
+      LineText = RTrim(LineText)
+      Select Case commaCount 
+         Case 4
+            'setsetting "prefix", "name", value, , override
+            If Len(Trim(Split(LineText, ",")(3))) = 0 Then
+               LineText = Replace(LineText, "," & Split(LineText, ",")(3) & ",", ", vbNullString,")
+            'setsetting "prefix", "name", value, "comment", override
+            Else
+               Exit Sub
+            End If
+         Case 3
+            'setsetting "prefix", "name", value, "comment"
+            If Right(LineText, 1) = ")" Then
+               LineText = Left(LineText, Len(LineText) - 1) & ", True)"
+            Else
+               LineText = LineText & ", True"
+            End If
+         Case 2
+            'setsetting "prefix", "name", value
+            If Right(LineText, 1) = ")" Then
+               LineText = Left(LineText, Len(LineText) - 1) & ", vbNullString, True)"
+            Else
+               LineText = LineText & ", vbNullString, True"
+            End If
+      End Select
+   Else
+      Exit Sub
+   End If
+   
+   Lines(Index) = LineText
+   
+   psNewContent = Join(Lines, vbCrLf)
+   
+   'Set pFile = psFSO.OpenTextFile(Path, 2, 1)
+   'pFile.WriteLine psNewContent
+   'pFile.Close
+   
    psArgsAdded = True
 End Sub
 
@@ -1049,7 +1109,7 @@ Sub psAutoUpdate(boolMenuClick)
                boolFoundUpdate = True
                psFSO.DeleteFile BotPath() & "PluginCreator.exe"
                AddChat vbGreen, "An update is available for your Plugin Creator. To download hit Plugins > Advanced > Plugin Creator"
-               SetSetting "#internal", "pcvernote", True
+               SetSetting "#internal", "pcvernote", True, "", True
             End If       
          End If
       End If
@@ -1069,7 +1129,7 @@ Sub psAutoUpdate(boolMenuClick)
                boolFoundUpdate = True
                psFSO.DeleteFile "PluginSettings.exe"
                AddChat vbGreen, "An update is available for your Plugin Settings Manager. To download hit Plugins > Settings Manager"
-               SetSetting "#internal", "smvernote", True
+               SetSetting "#internal", "smvernote", True, "", True
             End If
          End If
       End If
@@ -1369,8 +1429,8 @@ Sub ps_SettingsManager_Callback()
          AddChat vbWhite, "http://stealthbot.net/p/plugs/PluginSettings.exe"
       End If
 
-      SetSetting "#internal", "smver", curSMVersion
-      SetSetting "#internal", "smvernote", False
+      SetSetting "#internal", "smver", curSMVersion, "", True
+      SetSetting "#internal", "smvernote", False, "", True
    End If
 End Sub
 
@@ -1557,8 +1617,8 @@ Sub mnuAdvancedPluginCreator_Click()
          AddChat vbWhite, "http://stealthbot.net/p/plugs/PluginCreator.exe"
       End If
 
-      SetSetting "#internal", "pcver", curPCVersion
-      SetSetting "#internal", "pcvernote", False
+      SetSetting "#internal", "pcver", curPCVersion, "", True
+      SetSetting "#internal", "pcvernote", False, "", True
    End If
 End Sub
 
@@ -1699,8 +1759,8 @@ End Function
 
 Function psLatestSB()
 
-   If (GetBotVersionNumber() < 2.6) Then
-      AddChat vbRed, "Error: You must have StealthBot v2.7 to use the Plugin System."
+   If (GetBotVersionNumber() < 2.7) Then
+      AddChat vbRed, "Error: You must have StealthBot v2.7 to use this version of the Plugin System."
       AddChat vbRed, "Please download the latest version of StealthBot: http://www.stealthbot.net/board/getsb.php"
    Else
       psLatestSB = True
@@ -1825,7 +1885,7 @@ Sub psCreatePSSettings()
    SetSetting "#internal", "pcver", PS_PC_VER, "", False
    SetSetting "#internal", "pcvernote", False, "", False
    SetSetting "#internal", "smver", PS_SM_VER, "", False
-   SetSetting "#internal", "smvernote", False
+   SetSetting "#internal", "smvernote", False, "", True
 End Sub
 
 
@@ -2095,7 +2155,7 @@ End Sub
 '//   Enables or disables a plugin.
 Sub PluginEnabled(strPrefix, boolEnabled)
     
-    SetSetting strPrefix, "enabled", boolEnabled
+    SetSetting strPrefix, "enabled", boolEnabled, "", True
 End Sub
 
 
@@ -2301,6 +2361,7 @@ End Sub
 
 '// GETSETTING
 '//   Written by Swent. Retrieves plugin settings.
+'//     This function was moved back to the pluginsystem.txt v0.98 from the SSC.
 Public Function GetSetting(ByVal strPrefix, ByVal strName)
 
     strPath = BotPath() & "plugins\settings.ini"
@@ -2319,3 +2380,33 @@ Public Function GetSetting(ByVal strPrefix, ByVal strName)
         i = i + 1
     Loop
 End Function
+
+'// SETSETTING
+'//   Written by Swent. Creates/modifies plugin settings.
+'//   Usage - new setting: SetSetting "prefix", "settingName", value, "setting description", False
+'//   Usage - existing setting: SetSetting "prefix", "settingName", value, "", True
+'//   Setting Values() of any Length are now set and retrieved properly (no longer a 255 char max)
+'//   You can now have spaces in your setting names.
+'//     This function was moved back to the pluginsystem.txt v0.98 from the SSC, thus the optional arguments were lost.
+'//     This pluginsystem will check for and correct beta plugins who omit one or both of the last arguments. ~Ribose
+Public Sub SetSetting(ByVal strPrefix, ByVal strName, ByVal varValue, _
+                      ByVal strDescription, ByVal boolOverwrite)
+                      
+    Dim strPath, arrSetting, I
+    strPath = BotPath() & "plugins\settings.ini"
+
+    If Len(strDescription) > 0 Then
+        SetSetting strPrefix, strName & " (info)", strDescription, "", True
+    End If
+    
+    If boolOverwrite Or Len(GetConfigEntry(strPrefix, strName, strPath)) = 0 Then
+        If Len(strName & varValue) > 254 Then
+            WriteConfigEntry UCase(strPrefix), strName, Left(varValue, 254 - Len(strName)), strPath
+            arrSetting = Split(strName, "*")
+            If UBound(arrSetting) > 0 Then I = arrSetting(1) + 1 Else I = 1
+            SetSetting strPrefix, arrSetting(0) & "*" & I, Mid(varValue, 255 - Len(strName)), strDescription, boolOverwrite
+        Else
+            WriteConfigEntry UCase(strPrefix), strName, varValue, strPath
+        End If
+    End If
+End Sub

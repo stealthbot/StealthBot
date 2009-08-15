@@ -122,7 +122,7 @@ Public AwaitingSystemKeys As Byte
 Public AwaitingSelfRemoval As Byte
 'Public AttemptedNewVerbyte As Boolean
 
-Public g_Quotes As Collection
+Public g_Quotes As New clsQuotesObj
 Public g_Channel As New clsChannelObj
 Public g_Logger As New clsLogger
 Public g_Clan As New clsClanObj
