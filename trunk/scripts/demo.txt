@@ -13,28 +13,45 @@ Set cls = New CDemoClass
 
 Sub Event_Load()
 
+	Dim Command, Parameter
 	
-	Dim soundexCommand, soundexWordParameter
 	'// check if command exists
-	Set soundexCommand = OpenCommand("soundex")
-	If soundexCommand Is Nothing Then
-		'// it does not, lets create the command
-		Set soundexCommand = CreateCommand("soundex")
-		With soundexCommand
+	Set Command = OpenCommand("soundex")
+	If Command Is Nothing Then
+		'// It does not, lets create the command
+		Set Command = CreateCommand("soundex")
+		With Command
 			'// ... and add a property
-			Set soundexWordParameter = .NewParameter("word", False, "word")
-			With soundexWordParameter
+			Set Parameter = .NewParameter("word", False, "word")
+			With Parameter
 				.Description = "The word you wish to calculate the soundex value of."
 			End With
-			.Parameters.Add soundexWordParameter
+			.Parameters.Add Parameter
 			'// set the access level required to use this command
 			.RequiredRank = 1
 			'// save the command
 			.Save
 		End With
 	End If
-	Set soundexWordParameter = Nothing
-	Set soundexCommand = Nothing
+	
+	Set Command = OpenCommand("fibi")
+	If Command Is Nothing Then
+		Set Command = CreateCommand("fibi")
+		With Command
+			.Description = "Retreives a number from the Fibonacci sequance."
+			.RequiredRank = 1
+			Set Parameter = .NewParameter("Number", False, "Numeric")
+			With Parameter
+				.Description = "The index in the Fibonacci sequance you wish to grab."
+				.SpecialNotes = "Must be less then 10"
+			End With
+			.Parameters.Add Parameter
+			.Save
+		End With
+	End If
+	
+	Set Parameter = Nothing
+	Set Command = Nothing
 
 
 	' // create Winsock object
@@ -77,41 +94,31 @@ End Sub
 
 ' LTimer event sub
 Sub LTimer_Timer()
-
    'AddChat vbBlue, "LTimer_Timer()"
-
 End Sub
 
 Sub Event_PacketReceived(Protocol, ID, Length, Data)
-   
-'   If (Protocol = "BNCS") Then
-'      If (ID = &H65) Then
-'         AddChat vbYellow, "RECEIVED BNCS FRIENDS LIST"
-'      End If
-'   End If
-
+	'If (Protocol = "BNCS") Then
+	'	If (ID = &H65) Then
+	'		AddChat vbYellow, "RECEIVED BNCS FRIENDS LIST"
+	'	End If
+	'End If
 End Sub
 
 Sub Event_PacketSent(Protocol, ID, Length, Data)
-
-'   If (Protocol = "BNCS") Then
-'      If (ID = &H65) Then
-'         AddChat vbYellow, "SENT BNCS FRIENDS LIST REQUEST"
-'      End If
-'   End If
-
+	'If (Protocol = "BNCS") Then
+	'	If (ID = &H65) Then
+	'		AddChat vbYellow, "SENT BNCS FRIENDS LIST REQUEST"
+	'	End If
+	'End If
 End Sub
 
 Sub submnu_Click()
-
-   AddChat vbBlue, "submnu_Click()"
-
+   'AddChat vbBlue, "submnu_Click()"
 End Sub
 
 Sub TestDemo()
-
-'   AddChat vbBlue, "TestDemo()"
-
+	'AddChat vbBlue, "TestDemo()"
 End Sub
 
 Sub Event_UserTalk(Username, Flags, Message, Ping)
@@ -121,7 +128,7 @@ Sub Event_WhisperFromUser(Username, Flags, Message, Ping)
 	HandleCommand Message, Username, 3
 End Sub
 Sub Event_PressedEnter(Text)
-	HandleCommand Text, BotVars.Username, 4
+	HandleCommand Text, GetCurrentUsername, 4
 End Sub
 
 
@@ -131,26 +138,17 @@ Private Sub HandleCommand(strText, strUsername, Origin)
 	Set cmds = IsCommand(strText, strUsername)
 	If cmds.Count > 0 Then
 		For Each cmd In cmds
-
-'// debug all commands
-DebugCommand cmd
-
-
-			'// this doesnt work yet
-			'If cmd.HasAccess = True Then
-				
-				'// this doesnt work yet either
-				'If cmd.docs.Name = "soundex" And cmd.HasCorrectSyntax = True Then
-				If cmd.docs.Name = "soundex" Then
-					'// have the soundex command do something
-					Dsp Origin, Soundex(cmd.Argument("word"))
-				'ElseIf cmd.docs.Name = "othercommand"
-				'	'// do othercommand stuff
-				Else
-					'// debug any command that is not handled
-					DebugCommand cmd
+			If cmd.HasAccess = True Then	
+				If LCase(cmd.Name) = "soundex" Then
+					If Cmd.IsValidCommand = True Then
+						'// have the soundex command do something
+						Dsp Origin, Soundex(cmd.Argument("word"))
+					Else
+						'//They Did not use a valid syntax for this command
+						Dsp Origin, "The proper syntax for this command is: "  & BotVars.Trigger & "SoundEx <Word>"
+					End If
 				End If
-			'End If
+			End If
 		Next
 	End If
 
@@ -207,6 +205,28 @@ Sub DebugCommand(ByRef cmd)
 	Next
 	AddChat f, vbCyan, "------------------------------------------------------"
 End Sub
+
+Sub Event_Command(Command, Response)
+	Select Case LCase(Command.Name)
+		Case "fibi":
+			If (Command.IsValidCommand) Then
+				If(Command.Argument("Number") < 1 Or Command.Argument("Number") > 10) Then
+					Response(0) = "Fibinacci Command is limited to 1-10"
+				Else
+					Response(0) = "The number at position " & Command.Argument("Number") & " in the Fibinacci sequance is: " & GetFibiIndex(Command.Argument("Number"), 1, 0, 1)
+				End If
+			Else
+				Response(0) = "Proper syntax for this command is: .Fibi <Number>"
+			End If
+	End Select
+End Sub
+Function GetFibiIndex(Index, Position, LastNumber, Number)
+	If (CInt(Index) = CInt(Position)) Then
+		GetFibiIndex = LastNumber
+	Else
+		GetFibiIndex = GetFibiIndex(Index, Position + 1, Number, LastNumber + Number)
+	End If
+End Function
 
 
 ' // demo class module

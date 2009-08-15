@@ -105,6 +105,7 @@ Attribute VB_Exposed = False
 ' *     - VetoThisMessage() Now works in PacketSent, And PacketReceived, Will prevent it from being sent,
 ' *         or parsed, respectivly.
 ' *     - Added GetCommands(Option FilePath) function, Will return a collection of CommandDocObjs for each <command> element in the passed file
+' *     - Added GetCurrentUsername() function, Will return the Bot's current username, as Battle.net sees it.
 ' *
 ' *     (version 2.6R3, scripting system build 21)
 ' *     - GetNameByPosition() boundary checks fixed (thanks Scio)
@@ -1821,4 +1822,10 @@ Public Function GetUserDatabase() As Collection
         End If
     Next x
     Set temp = Nothing
+End Function
+
+
+'Will return the current username for the bot, As Battle.net sees it
+Public Function GetCurrentUsername()
+    GetCurrentUsername = modGlobals.CurrentUsername
 End Function

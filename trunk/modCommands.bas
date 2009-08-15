@@ -95,12 +95,12 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                 Call executeCommand(Username, dbAccess, command.Name & Space$(1) & command.Args, _
                     IsLocal, command_return)
             Else
-                Dim script_response As New Collection
+                Dim script_response As New Dictionary
                 Call RunInSingle(modScripting.GetModuleByName(command.docs.Owner), "Event_Command", _
                     command, script_response)
                 
                 ReDim Preserve command_return(0 To script_response.Count)
-                For I = 1 To script_response.Count
+                For I = 0 To script_response.Count
                     command_return(I) = script_response.Item(I)
                 Next I
                 
