@@ -193,7 +193,7 @@ Sub DebugCommand(ByRef cmd)
 	AddChat f, vbGreen, "Command.Args             ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Args, f, vbWhite, "]"
 	AddChat f, vbGreen, "Command.HasAccess        ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.HasAccess, f, vbWhite, "]"
 	AddChat f, vbGreen, "Command.PublicOutput     ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.PublicOutput, f, vbWhite, "]"
-	AddChat f, vbGreen, "Command.HasCorrectSyntax ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.HasCorrectSyntax, f, vbWhite, "]"
+	AddChat f, vbGreen, "Command.IsValidCommand   ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.IsValidCommand, f, vbWhite, "]"
 	If cmd.PublicOutput Then AddQ "Command.Args := " & "[" & cmd.Args & "]"
 	i = 0
 	For Each arg In cmd.Arguments

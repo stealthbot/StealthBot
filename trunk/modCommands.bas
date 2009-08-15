@@ -100,7 +100,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                     command, script_response)
                 
                 ReDim Preserve command_return(0 To script_response.Count)
-                For I = 0 To script_response.Count
+                For I = 1 To script_response.Count
                     command_return(I) = script_response.Item(I)
                 Next I
                 

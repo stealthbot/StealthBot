@@ -118,7 +118,7 @@ Public Property Get docs() As clsCommandDocObj
         Set docs = m_command_docs
     Else
         '// this command already has a value, lets make sure its still valid
-        If m_command_docs.Name = m_name Then
+        If StrComp(m_command_docs.Name, m_name, TextCompare) = 0 Then
             '// all good, lets return it
             Set docs = m_command_docs
         Else
