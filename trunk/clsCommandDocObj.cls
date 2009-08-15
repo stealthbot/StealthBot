@@ -122,7 +122,7 @@ Private Function CreateCommandInstance(ByRef commandString As String, ByVal strU
     '// ok this is actually a command, lets create the object
     Set cmd = New clsCommandObj
     With cmd
-        .Name = commandName
+        .Name = Me.Name
         .Args = commandArgs
         '.docs = Me
         .Arguments = SplitArguments(commandArgs)
@@ -134,7 +134,7 @@ Private Function CreateCommandInstance(ByRef commandString As String, ByVal strU
     Exit Function
 
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObj.CreateCommandObject().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.CreateCommandObject().")
 
     Exit Function
 
@@ -299,7 +299,7 @@ Private Function SplitArguments(ByVal strArgString As String) As Collection
     Exit Function
 
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObj.SplitArguments().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.SplitArguments().")
 
     Exit Function
 
@@ -366,7 +366,7 @@ Public Function GetCommandCount(Optional ByVal strScriptOwner As String = vbNull
 
 ERROR_HANDLER:
     Set nodes = Nothing
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObj.GetCommands().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.GetCommands().")
 
     Exit Function
     
@@ -591,7 +591,7 @@ ERROR_HANDLER:
         Exit Function
     End If
     
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in clsCommandDocObj.IsCommand().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in clsCommandDocObj.IsCommand().")
 End Function
 
 '// This function will split a message into separate commands. This message should NOT
@@ -813,7 +813,7 @@ Private Function getParameters(ByRef CommandNode As IXMLDOMNode) As Collection
             If (Not Parameter.Attributes.getNamedItem("type") Is Nothing) Then
                 .DataType = Parameter.Attributes.getNamedItem("type").Text
             End If
-            .Description = Parameter.selectSingleNode("documentation/description").Text
+            .description = Parameter.selectSingleNode("documentation/description").Text
             .SpecialNotes = Parameter.selectSingleNode("documentation/specialnotes").Text
         End With
         On Error GoTo 0
@@ -927,7 +927,7 @@ Private Function setParameters(ByRef AnyNode As IXMLDOMNode, ByRef ParameterCol 
             
             '// documentation/description
             Set newNode = m_database.createNode("element", "description", vbNullString)
-            newNode.Text = Parameter.Description
+            newNode.Text = Parameter.description
             argumentNode.selectSingleNode("documentation").appendChild newNode
             
             '// documentation/specialnotes
@@ -1166,7 +1166,7 @@ Private Function getDescription(ByRef AnyNode As IXMLDOMNode) As String
 
 End Function
 
-Private Function setDescription(ByRef AnyNode As IXMLDOMNode, ByVal Description As String) As String
+Private Function setDescription(ByRef AnyNode As IXMLDOMNode, ByVal description As String) As String
 
     Dim temp As IXMLDOMNode
     
@@ -1183,7 +1183,7 @@ Private Function setDescription(ByRef AnyNode As IXMLDOMNode, ByVal Description 
         Set temp = temp.appendChild(m_database.createNode("element", "description", vbNullString))
     End If
     
-    temp.Text = Description
+    temp.Text = description
     
     Call Save
 
@@ -1412,13 +1412,13 @@ Public Property Let RequiredFlags(ByVal str As String)
 
 End Property
 
-Public Property Get Description() As String
+Public Property Get description() As String
     
-    Description = getDescription(m_command_node)
+    description = getDescription(m_command_node)
 
 End Property
 
-Public Property Let Description(ByVal strDescription As String)
+Public Property Let description(ByVal strDescription As String)
     
     setDescription m_command_node, strDescription
 

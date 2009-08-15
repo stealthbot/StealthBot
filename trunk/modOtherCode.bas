@@ -380,7 +380,7 @@ Public Function StringFormat(source As String, params() As Variant) As String
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in StringFormat().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in StringFormat().")
 
     StringFormat = vbNullString
     
@@ -405,7 +405,7 @@ Public Function StringFormatA(source As String, ParamArray params() As Variant)
     Exit Function
     
 ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.Description & " in StringFormatA().")
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in StringFormatA().")
 
 
     StringFormatA = vbNullString
@@ -3102,6 +3102,7 @@ Public Function convertAlias(ByVal cmdName As String) As String
         End If
     
         cmdName = Replace(cmdName, "\", "\\")
+        cmdName = Replace(cmdName, "'", "&apos;")
 
         '// 09/03/2008 JSM - Modified code to use the <aliases> element
         Set Alias = _
