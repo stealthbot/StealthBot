@@ -4,7 +4,7 @@ Begin VB.Form frmCommands
    BackColor       =   &H00000000&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Command Manager"
-   ClientHeight    =   6150
+   ClientHeight    =   7050
    ClientLeft      =   45
    ClientTop       =   435
    ClientWidth     =   9330
@@ -21,10 +21,38 @@ Begin VB.Form frmCommands
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   6150
+   ScaleHeight     =   7050
    ScaleWidth      =   9330
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
+   Begin VB.Frame Frame1 
+      BackColor       =   &H00000000&
+      Caption         =   "Command Syntax"
+      ForeColor       =   &H00FFFFFF&
+      Height          =   855
+      Left            =   120
+      TabIndex        =   22
+      Top             =   6120
+      Width           =   9135
+      Begin VB.Label lblSyntaxString 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Label1"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   495
+         Left            =   240
+         TabIndex        =   23
+         Top             =   240
+         Width           =   8655
+      End
+   End
    Begin vbalTreeViewLib6.vbalTreeView trvCommands 
       Height          =   5175
       Left            =   120
@@ -999,7 +1027,16 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
     Dim xmlNode As IXMLDOMNode
     Dim options() As Variant '// <-- boo
     
+    Dim cmd As clsCommandDocObj
+    Set cmd = New clsCommandDocObj
+    
+    '// TODO: Make this work for the selected script
+    Call cmd.OpenCommand(m_SelectedElement.commandName, Chr$(0))
+    lblSyntaxString.Caption = cmd.SyntaxString
+    
     options = Array(m_SelectedElement.commandName, m_SelectedElement.ArgumentName, m_SelectedElement.restrictionName)
+    
+    
     
     Select Case nt
         Case NodeType.nCommand
@@ -1217,6 +1254,9 @@ Private Sub ResetForm()
     cmdSave.Enabled = False
     cmdDiscard.Enabled = False
     cmdDeleteCommand.Enabled = False
+    
+    lblSyntaxString.Caption = ""
+    lblSyntaxString.ForeColor = RTBColors.ConsoleText
     
 End Sub
 

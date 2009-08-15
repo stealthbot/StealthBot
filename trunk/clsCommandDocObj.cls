@@ -1166,6 +1166,69 @@ Private Function getDescription(ByRef AnyNode As IXMLDOMNode) As String
 
 End Function
 
+'Syntax: .add <username> [rank] [attributes].  Requires 20 access or flags A, or R.
+Private Function getSyntaxString(ByRef AnyNode As IXMLDOMNode) As String
+
+    Dim temp As IXMLDOMNode
+    Dim retVal As String
+    Dim P As clsCommandParamsObj
+    
+    
+    
+    If (AnyNode Is Nothing) Then
+        Exit Function
+    End If
+    
+    '// add the command name and trigger
+    retVal = StringFormatA("Syntax: {0}{1} ", BotVars.Trigger, Me.Name)
+    
+    '// add the parameters
+    For Each P In Me.Parameters
+        retVal = StringFormatA("{0}{2}{1}{3}, ", _
+                    retVal, _
+                    P.Name, _
+                    IIf(P.IsOptional, "[", "<"), _
+                    IIf(P.IsOptional, "]", ">"))
+    Next
+    
+    If Me.Parameters.Count > 0 Then
+        '// strip last ", " and add period
+        retVal = Mid(retVal, 1, Len(retVal) - 2) & ". "
+    Else
+        '// strip the last space and add period
+        retVal = Mid(retVal, 1, Len(retVal) - 1) & ". "
+    End If
+
+    '// add the rank/flags information
+    If (Me.RequiredRank <> -1) And (Len(Me.RequiredFlags) > 0) Then
+        '// available outside the console
+        
+        If (Me.RequiredRank <> -1) Then
+            retVal = StringFormatA("{0} Requires {1} access", retVal, Me.RequiredRank)
+            If (Len(Me.RequiredFlags) = 0) Then
+                retVal = StringFormatA("{0}.", retVal)
+            End If
+        End If
+        
+        If (Len(Me.RequiredFlags) = 0) Then
+            If (Me.RequiredFlags <> -1) Then
+                retVal = StringFormatA("{0} or flags {1}.", retVal, Me.RequiredFlags)
+            Else
+                retVal = StringFormatA("{0} Requires flags {1}.", retVal, Me.RequiredFlags)
+            End If
+        End If
+        
+    Else
+        '// console only
+        retVal = StringFormatA("{0} Command is only available to the console. To enable this command, set an access and flags", retVal)
+    End If
+    
+    getSyntaxString = retVal
+
+End Function
+
+
+
 Private Function setDescription(ByRef AnyNode As IXMLDOMNode, ByVal description As String) As String
 
     Dim temp As IXMLDOMNode
@@ -1422,6 +1485,12 @@ Public Property Let description(ByVal strDescription As String)
     
     setDescription m_command_node, strDescription
 
+End Property
+
+Public Property Get SyntaxString() As String
+    
+    SyntaxString = getSyntaxString(m_command_node)
+    
 End Property
 
 Public Property Get Notes() As String
