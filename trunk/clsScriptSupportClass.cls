@@ -1376,18 +1376,18 @@ End Sub
 '
 'End Function
 
-Public Function IsCorrectSyntax(ByVal commandName As String, ByVal commandArgs As String) As Boolean
+Public Function IsCorrectSyntax(ByVal commandName As String, ByVal commandArgs As String, Optional scriptName As String = vbNullString) As Boolean
 
     '// ...
-    IsCorrectSyntax = modCommandCode.IsCorrectSyntax(commandName, commandArgs)
+    IsCorrectSyntax = modCommandCode.IsCorrectSyntax(commandName, commandArgs, scriptName)
     
 End Function
 
 Public Function HasAccess(ByVal Username As String, ByVal commandName As String, Optional ByVal commandArgs As _
-    String = vbNullString, Optional ByRef outbuf As String) As Boolean
+    String = vbNullString, Optional scriptName As String = vbNullString) As Boolean
     
     HasAccess = _
-        modCommandCode.HasAccess(Username, commandName, commandArgs, outbuf)
+        modCommandCode.HasAccess(Username, commandName, commandArgs, scriptName)
     
 End Function
 

@@ -7417,274 +7417,70 @@ Public Sub LoadDatabase()
     If (SaveDB) Then Call WriteDatabase(Path)
 End Sub
 
-Public Function IsCorrectSyntax(ByVal commandName As String, ByVal commandArgs As String) As Boolean
+'08/15/09 - Hdx - Converted to use clsCommandObj to check if the command has valid syntax
+'Removed outBuff ... What use was it?
+Public Function IsCorrectSyntax(ByVal commandName As String, ByVal commandArgs As String, Optional scriptOwner As String = vbNullString) As Boolean
     
     On Error GoTo ERROR_HANDLER
     
-    Dim command As clsCommandDocObj
-    Dim regex   As RegExp
-    Dim matches As MatchCollection
+    Dim docs As clsCommandDocObj
+    Dim command As New clsCommandObj
     
-    ' ...
-    Set command = OpenCommand(commandName)
-
-    ' ...
-    If (command.Name = vbNullString) Then
-        Exit Function
-    End If
-    
-    If (command.Parameters.Count) Then
-        Dim Parameter   As clsCommandParamsObj
-        Dim Restriction As clsCommandRestrictionObj
-        Dim Splt()      As String
-        Dim loopCount   As Integer
-        Dim bln         As Boolean
-        Dim I           As Integer
-        Dim spaceIndex  As Integer
-        
-        ' ...
-        spaceIndex = InStr(1, commandArgs, Space$(1), vbBinaryCompare)
-        
-        If ((spaceIndex <> 0) And (command.Parameters.Count > 1)) Then
-            Splt() = Split(commandArgs, Space$(1), command.Parameters.Count)
-        Else
-            If (commandArgs = vbNullString) Then
-                IsCorrectSyntax = False
-                
-                Exit Function
-            End If
-        
-            ReDim Preserve Splt(0)
-        
-            Splt(0) = commandArgs
-        End If
-        
-        For I = 1 To command.Parameters.Count
-            Set Parameter = command.Parameters(I)
-
-            If (Parameter.IsOptional) Then
-                If (command.Parameters.Count > I) Then
-                    If (command.Parameters.Item(I + 1).IsOptional) Then
-                        If (Parameter.DataType = "number") Then
-                            If (StrictIsNumeric(Splt(loopCount)) = False) Then
-                                bln = True
-                            End If
-                        Else
-                            IsCorrectSyntax = False
-                            
-                            Exit Function
-                        End If
-                    End If
-                End If
-            End If
-        
-            If (bln = False) Then
-                ' ...
-                If (Parameter.DataType = "number") Then
-                    Dim lVal As Long
-
-                    If (StrictIsNumeric(Splt(loopCount)) = False) Then
-                        IsCorrectSyntax = False
-                        
-                        Exit Function
-                    End If
-
-                    'lVal = val(splt(loopCount))
-                    
-                    'If ((lVal < parameter.min) Or (lVal > parameter.max)) Then
-                    '    IsCorrectSyntax = False
-                    '
-                    '    Exit Function
-                    'End If
-                    
-                ElseIf (Parameter.DataType = "string") Then
-                    Set regex = New RegExp
-                
-                    With regex
-                        .Pattern = Parameter.Pattern
-                        .Global = True
-                    End With
-                    
-                    Set matches = regex.Execute(Splt(loopCount))
-                    
-                    If (matches.Count = 0) Then
-                        IsCorrectSyntax = False
-                        
-                        Exit Function
-                    Else
-                        If (matches.Item(0).Value <> Splt(loopCount)) Then
-                            IsCorrectSyntax = False
-                            
-                            Exit Function
-                        End If
-                    End If
-                    
-                    Set regex = Nothing
-                End If
-                
-                ' ...
-                If (Parameter.IsOptional) Then
-                    Exit For
-                End If
-            
-                ' ...
-                loopCount = (loopCount + 1)
-            End If
-            
-            ' ...
-            bln = False
-        Next I
-    End If
-    
-    IsCorrectSyntax = True
-    
-    Exit Function
-    
-ERROR_HANDLER:
-    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in IsCorrectSyntax().")
-    
-    Exit Function
-End Function
-
-Public Function HasAccess(ByVal Username As String, ByVal commandName As String, Optional ByVal commandArgs As _
-    String = vbNullString, Optional ByRef outbuf As String) As Boolean
-    
-    On Error GoTo ERROR_HANDLER
-    
-    Dim command     As clsCommandDocObj
-    Dim user        As clsDBEntryObj
-    Dim regex       As RegExp
-    Dim matches     As MatchCollection
-    Dim FailedCheck As Boolean
-    
-    ' ...
-    Set command = OpenCommand(commandName)
-
-    ' ...
-    If (command.Name = vbNullString) Then
-        Exit Function
-    End If
-    
-    ' console-only access
-    If ((command.RequiredRank = -1) And _
-            (command.RequiredFlags = vbNullString)) Then
-    
-        HasAccess = False
-    
-        Exit Function
-    End If
-    
-    ' ...
-    Set user = SharedScriptSupport.GetDBEntry(Username, , , "USER")
-
-    ' ...
-    If ((user.Rank >= command.RequiredRank) = False) Then
-        ' ...
-        If (user.HasAnyFlag(command.RequiredFlags) = False) Then
-            HasAccess = False
-            
+    Set docs = OpenCommand(commandName, scriptOwner)
+    If (docs Is Nothing) Then
+        Set docs = OpenCommand(convertAlias(commandName), scriptOwner)
+        If (docs Is Nothing) Then
+            IsCorrectSyntax = False
             Exit Function
         End If
     End If
     
-    ' ...
-    If (command.Parameters.Count) Then
-        Dim Parameter   As clsCommandParamsObj
-        Dim Restriction As clsCommandRestrictionObj
-        Dim Splt()      As String
-        Dim loopCount   As Integer
-        Dim bln         As Boolean
-        Dim I           As Integer
-        
-        If (InStr(1, commandArgs, Space$(1), vbBinaryCompare) <> 0) Then
-            Splt() = Split(commandArgs, Space$(1))
-        Else
-            ReDim Preserve Splt(0)
-            
-            Splt(0) = commandArgs
+    With command
+        .Name = docs.Name
+        .Args = commandArgs
+        IsCorrectSyntax = .IsValid
+    End With
+    
+    Set docs = Nothing
+    Set command = Nothing
+    Exit Function
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: " & Err.description & " in IsCorrectSyntax().")
+End Function
+
+'08/15/09 - Hdx - Converted to use clsCommandObj to check if the user has enough access
+'Removed outBuff ... What use was it?
+Public Function HasAccess(ByVal Username As String, ByVal commandName As String, Optional ByVal commandArgs As _
+    String = vbNullString, Optional scriptOwner As String = vbNullString) As Boolean
+    
+    On Error GoTo ERROR_HANDLER
+    
+    Dim docs As clsCommandDocObj
+    Dim command As clsCommandObj
+    
+    Set docs = OpenCommand(commandName, scriptOwner)
+    If (docs Is Nothing) Then
+        Set docs = OpenCommand(convertAlias(commandName), scriptOwner)
+        If (docs Is Nothing) Then
+            HasAccess = False
+            Exit Function
         End If
-        
-        For I = 1 To command.Parameters.Count
-            ' ...
-            If (loopCount > UBound(Splt)) Then
-                Exit For
-            End If
-        
-            ' ...
-            Set Parameter = command.Parameters(I)
-            
-            'frmChat.AddChat vbRed, Parameter.dataType
-            'frmChat.AddChat vbRed, StrictIsNumeric(splt(loopCount))
-            
-            ' ...
-            If (Parameter.IsOptional) Then
-                ' ...
-                If (Parameter.DataType = "number") Then
-                    ' ...
-                    If (StrictIsNumeric(Splt(loopCount)) = False) Then
-                        bln = True
-                    End If
-                End If
-            End If
-        
-            If (bln = False) Then
-                If (Parameter.Restrictions.Count) Then
-                    Set regex = New RegExp
-                
-                    For Each Restriction In Parameter.Restrictions
-                        With regex
-                            .Pattern = Restriction.MatchMessage
-                            .Global = True
-                        End With
-
-                        Set matches = regex.Execute(Splt(loopCount))
-
-                        If (matches.Count > 0) Then
-                            If ((Restriction.RequiredRank = -1) And _
-                                    (Restriction.RequiredFlags = vbNullString)) Then
-                                    
-                                ' ...
-                                FailedCheck = True
-                            Else
-                                If ((user.Rank >= Restriction.RequiredRank) = False) Then
-                                    If (user.HasAnyFlag(Restriction.RequiredFlags) = False) Then
-                                        ' ...
-                                        FailedCheck = True
-                                    End If
-                                End If
-                            End If
-                            
-                            If (FailedCheck) Then
-                                outbuf = "Error: You do not have sufficient access to perform the specified " & _
-                                    "action."
-                                HasAccess = False
-                                
-                                Exit Function
-                            End If
-                        End If
-                    Next
-                    
-                    Set regex = Nothing
-                End If
-                
-                ' ...
-                loopCount = (loopCount + 1)
-            End If
-            
-            ' ...
-            bln = False
-            FailedCheck = False
-        Next I
     End If
     
-    HasAccess = True
+    With command
+        .Name = docs.Name
+        .Args = commandArgs
+        .Username = Username
+        HasAccess = .HasAccess
+    End With
     
+    Set docs = Nothing
+    Set command = Nothing
     Exit Function
-
+    
 ERROR_HANDLER:
     frmChat.AddChat vbRed, "Error: " & Err.description & " in HasAccess()."
-    
-    Exit Function
 End Function
 
 Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord As String, _

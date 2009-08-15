@@ -61,23 +61,6 @@ Public Function OpenDatabase(Optional ByVal DatabasePath As String = vbNullStrin
     
 End Function
 
-Public Function HasAccess(ByRef cmd As clsCommandObj, ByVal strUsername As String) As Boolean
-
-    '// TODO: Move code from modCommandCode.HasAccess to here
-    HasAccess = modCommandCode.HasAccess(strUsername, cmd.Name, cmd.Args)
-    
-
-End Function
-
-
-Public Function HasCorrectSyntax(ByRef cmd As clsCommandObj) As Boolean
-    
-    '// TODO: Move code from modCommandCode.IsCorrectSyntax to here
-    HasCorrectSyntax = modCommandCode.IsCorrectSyntax(cmd.Name, cmd.Args)
-    
-End Function
-
-
 '// this function takes a string and will return a clsCommandObj object. If strOwnerName is missing or vbNullstring
 '// then this function will check for an internal command. All triggers should be removed from strText
 '// and Len(strText) > 0. This function does NOT consider multiple commands contained inside

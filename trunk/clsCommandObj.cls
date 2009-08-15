@@ -21,7 +21,7 @@ Option Explicit
 '// is returned to a script module by using the abstract IsCommand() method.
 
 
-Private m_validCommand As Boolean
+Private m_valid        As Boolean
 Private m_command_docs As clsCommandDocObj
 Private m_name         As String
 Private m_username     As String
@@ -71,12 +71,12 @@ Public Property Let PublicOutput(bln As Boolean)
 End Property
 
 
-Public Property Get IsValidCommand() As Boolean
+Public Property Get IsValid() As Boolean
     If (Not m_splithasrun) Then SplitArguments
-    IsValidCommand = m_validCommand
+    IsValid = m_valid
 End Property
-Public Property Let IsValidCommand(bln As Boolean)
-    m_validCommand = bln
+Public Property Let IsValid(bln As Boolean)
+    m_valid = bln
 End Property
 Public Property Get HasAccess() As Boolean
     If (Not m_splithasrun) Then SplitArguments
@@ -86,7 +86,7 @@ End Property
 Public Sub Class_Initialize()
     
     '// initialize values
-    m_validCommand = False
+    m_valid = False
     Set m_command_docs = New clsCommandDocObj
     m_name = vbNullString
     m_username = vbNullString
@@ -220,7 +220,7 @@ On Error GoTo ERROR_HANDLER
         m_hasaccess = True
     End If
     
-    IsValidCommand = True
+    IsValid = True
     
     For Each Param In Me.docs.Parameters
         Select Case LCase(Param.DataType)
@@ -244,7 +244,7 @@ On Error GoTo ERROR_HANDLER
         Next
         
         If (LenB(sTemp) = 0 And Not Param.IsOptional) Then
-            IsValidCommand = False
+            IsValid = False
         End If
         m_xmlarguments(Param.Name) = sTemp
     Next

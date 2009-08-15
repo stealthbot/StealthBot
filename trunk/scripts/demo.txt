@@ -140,7 +140,7 @@ Private Sub HandleCommand(strText, strUsername, Origin)
 		For Each cmd In cmds
 			If cmd.HasAccess = True Then	
 				If LCase(cmd.Name) = "soundex" Then
-					If Cmd.IsValidCommand = True Then
+					If Cmd.IsValid = True Then
 						'// have the soundex command do something
 						Dsp Origin, Soundex(cmd.Argument("word"))
 					Else
@@ -187,11 +187,11 @@ Sub DebugCommand(ByRef cmd)
 	'// using a fixed width font
 	f = "Lucida Console"
 
-	AddChat f, vbGreen, "Command.Name             ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Name, f, vbWhite, "]"
-	AddChat f, vbGreen, "Command.Args             ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Args, f, vbWhite, "]"
-	AddChat f, vbGreen, "Command.HasAccess        ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.HasAccess, f, vbWhite, "]"
-	AddChat f, vbGreen, "Command.PublicOutput     ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.PublicOutput, f, vbWhite, "]"
-	AddChat f, vbGreen, "Command.IsValidCommand   ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.IsValidCommand, f, vbWhite, "]"
+	AddChat f, vbGreen, "Command.Name         ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Name, f, vbWhite, "]"
+	AddChat f, vbGreen, "Command.Args         ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Args, f, vbWhite, "]"
+	AddChat f, vbGreen, "Command.HasAccess    ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.HasAccess, f, vbWhite, "]"
+	AddChat f, vbGreen, "Command.PublicOutput ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.PublicOutput, f, vbWhite, "]"
+	AddChat f, vbGreen, "Command.IsValid      ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.IsValidCommand, f, vbWhite, "]"
 	If cmd.PublicOutput Then AddQ "Command.Args := " & "[" & cmd.Args & "]"
 	i = 0
 	For Each arg In cmd.Arguments
@@ -209,7 +209,7 @@ End Sub
 Sub Event_Command(Command, Response)
 	Select Case LCase(Command.Name)
 		Case "fibi":
-			If (Command.IsValidCommand) Then
+			If (Command.IsValid) Then
 				If(Command.Argument("Number") < 1 Or Command.Argument("Number") > 10) Then
 					Response(0) = "Fibinacci Command is limited to 1-10"
 				Else
