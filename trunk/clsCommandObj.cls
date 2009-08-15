@@ -30,6 +30,8 @@ Private m_arguments    As Collection
 Private m_local        As Boolean
 Private m_publicOutput As Boolean
 Private m_xmlarguments As Dictionary
+Private m_hasaccess    As Boolean
+Private m_splithasrun  As Boolean
 
 Public Property Get Username() As String
     Username = m_username
@@ -48,7 +50,6 @@ Public Property Get Args() As String
 End Property
 Public Property Let Args(strArgs As String)
     m_args = strArgs
-    Call SplitArguments
 End Property
 Public Property Get Arguments() As Collection
     Set Arguments = m_arguments
@@ -71,16 +72,15 @@ End Property
 
 
 Public Property Get IsValidCommand() As Boolean
+    If (Not m_splithasrun) Then SplitArguments
     IsValidCommand = m_validCommand
 End Property
 Public Property Let IsValidCommand(bln As Boolean)
     m_validCommand = bln
 End Property
 Public Property Get HasAccess() As Boolean
-    HasAccess = m_command_docs.HasAccess(Me, m_username)
-End Property
-Public Property Get HasCorrectSyntax() As Boolean
-    HasCorrectSyntax = m_command_docs.HasCorrectSyntax(Me)
+    If (Not m_splithasrun) Then SplitArguments
+    HasAccess = m_hasaccess
 End Property
 
 Public Sub Class_Initialize()
@@ -96,6 +96,8 @@ Public Sub Class_Initialize()
     m_publicOutput = False
     Set m_xmlarguments = New Dictionary
     m_xmlarguments.CompareMode = TextCompare
+    m_hasaccess = False
+    m_splithasrun = False
     
 End Sub
 
@@ -192,13 +194,31 @@ End Function
 'Creates a Dictionary as such:
 '  Dict("Username") = "Username"
 '  Dict("Message")  = "This is a message!"
+'This also checks the user's access to use this command in the specific restriction context.
 Private Sub SplitArguments()
+On Error GoTo ERROR_HANDLER
     Dim sArgs       As String
     Dim I           As Integer
     Dim Param       As clsCommandParamsObj
     Dim Restriction As clsCommandRestrictionObj
     Dim sTemp       As String
+    Dim dbAccess    As udtGetAccessResponse
+    dbAccess = GetCumulativeAccess(Me.Username)
     sArgs = Me.Args
+    
+    
+    If (IsLocal) Then
+      dbAccess.Access = 201
+      dbAccess.Flags = "A"
+    End If
+    
+    If (dbAccess.Access >= Me.docs.RequiredRank) Then
+        m_hasaccess = True
+    End If
+    
+    If (CheckForAnyFlags(Me.docs.RequiredFlags, dbAccess.Flags)) Then
+        m_hasaccess = True
+    End If
     
     For Each Param In Me.docs.Parameters
         Select Case LCase(Param.DataType)
@@ -207,17 +227,59 @@ Private Sub SplitArguments()
             Case "number":  sTemp = StripNumeric(sArgs)
             Case "string":  sTemp = StripString(sArgs)
         End Select
+        
+        For Each Restriction In Param.Restrictions 'Loop Through the Restrictions
+            If (LenB(sTemp) > 0) Then
+                If (PrepareCheck(sTemp) Like Restriction.MatchMessage) Then 'If they match (regex)
+                    'If Rank = -1 It means it's missing, and it MUST have Flags. Or if Rank > User's Access
+                    If (Restriction.RequiredRank = -1 Or Restriction.RequiredRank > dbAccess.Access) Then
+                        If (Not CheckForAnyFlags(Restriction.RequiredFlags, dbAccess.Flags)) Then
+                            m_hasaccess = False
+                        End If
+                    End If
+                End If
+            End If
+        Next
+        
         If (LenB(sTemp) = 0 And Not Param.IsOptional) Then
             IsValidCommand = False
         End If
         m_xmlarguments(Param.Name) = sTemp
     Next
+    
+    If (IsLocal) Then m_hasaccess = True
+    m_splithasrun = True
+
+    Exit Sub
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: #" & Err.Number & ": " & Err.description & " in clsCommandObj.SplitArguments().")
 End Sub
 
 Public Function Argument(sName As String) As String
+    If (Not m_splithasrun) Then SplitArguments
     If (m_xmlarguments.Exists(sName)) Then
         Argument = m_xmlarguments.Item(sName)
     Else
         Argument = vbNullString
     End If
+End Function
+
+Private Function CheckForAnyFlags(sNeeded As String, sHave As String) As Boolean
+On Error GoTo ERROR_HANDLER
+    Dim I As Integer
+    CheckForAnyFlags = False
+    
+    If (LenB(sHave) = 0) Then Exit Function
+    
+    For I = 1 To Len(sNeeded)
+        If (InStr(1, sHave, Mid(sNeeded, I, 1), vbTextCompare) > 0) Then
+            CheckForAnyFlags = True
+            Exit Function
+        End If
+    Next
+
+    Exit Function
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: #" & Err.Number & ": " & Err.description & " in clsCommandObj.CheckForAnyFlags().")
 End Function

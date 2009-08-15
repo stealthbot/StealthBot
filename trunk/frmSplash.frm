@@ -113,3 +113,8 @@ Private Sub Form_Load()
       Case Else: Label1.Caption = "[ " & CVERSION & " ]"
     End Select
 End Sub
+
+Private Sub Logo_Click()
+    frmChat.Show
+    Unload Me
+End Sub

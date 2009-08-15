@@ -76,20 +76,10 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     Set commands = docs.IsCommand(Message, IIf(IsLocal, modGlobals.CurrentUsername, Username), Chr$(0))
 
     For Each command In commands
-        ' ...
-        If (command.IsLocal) Then
-            execCommand = True
-        ElseIf (HasAccess(Username, command.Name, command.Args, outbuf)) Then
-            execCommand = True
-        Else
-            execCommand = False
-        End If
-        
-        ' ...
         m_DisplayOutput = command.PublicOutput
         
         ' ...
-        If (execCommand) Then
+        If (command.HasAccess) Then
             ' ...
             If (IsLocal) Then
                 With dbAccess
@@ -105,7 +95,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                 Call executeCommand(Username, dbAccess, command.Name & Space$(1) & command.Args, _
                     IsLocal, command_return)
             Else
-                Dim script_response As New Dictionary
+                Dim script_response As New Collection
                 Call RunInSingle(modScripting.GetModuleByName(command.docs.Owner), "Event_Command", _
                     command, script_response)
                 
@@ -114,7 +104,6 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                     command_return(I) = script_response.Item(I)
                 Next I
                 
-                script_response.RemoveAll
                 Set script_response = Nothing
             End If
                     
@@ -6918,7 +6907,7 @@ ERROR_HANDLER:
     Exit Function
 End Function
 
-Public Function RemoveItem(ByVal rItem As String, file As String, Optional ByVal dbType As String = _
+Public Function RemoveItem(ByVal rItem As String, File As String, Optional ByVal dbType As String = _
     vbNullString) As String
     
     Dim s()        As String
@@ -6929,12 +6918,12 @@ Public Function RemoveItem(ByVal rItem As String, file As String, Optional ByVal
     
     f = FreeFile
     
-    If Dir$(GetFilePath(file & ".txt")) = vbNullString Then
+    If Dir$(GetFilePath(File & ".txt")) = vbNullString Then
         RemoveItem = "No %msgex% file found. Create one using .add, .addtag, or .shitlist."
         Exit Function
     End If
     
-    Open (GetFilePath(file & ".txt")) For Input As #f
+    Open (GetFilePath(File & ".txt")) For Input As #f
     If LOF(f) < 2 Then
         RemoveItem = "The %msgex% file is empty."
         Close #f
@@ -6971,7 +6960,7 @@ Successful:
     
     RemoveItem = "Successfully removed %msgex% " & Chr(34) & rItem & Chr(34) & "."
     
-    Open (GetFilePath(file & ".txt")) For Output As #f
+    Open (GetFilePath(File & ".txt")) For Output As #f
         For Counter = LBound(s) To UBound(s)
             If s(Counter) <> vbNullString And s(Counter) <> " " Then Print #f, s(Counter)
         Next Counter
@@ -7699,7 +7688,7 @@ ERROR_HANDLER:
 End Function
 
 Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord As String, _
-    Optional ByVal ARGUMENT As String = vbNullString, Optional ByVal restrictionName As String = _
+    Optional ByVal Argument As String = vbNullString, Optional ByVal restrictionName As String = _
         vbNullString) As Boolean
     
     ' ...
@@ -7757,7 +7746,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                 Next
                 
                 ' ...
-                If (ARGUMENT <> vbNullString) Then
+                If (Argument <> vbNullString) Then
                     ' ...
                 End If
                 
