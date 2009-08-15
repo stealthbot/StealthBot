@@ -212,7 +212,7 @@ On Error GoTo ERROR_HANDLER
       dbAccess.Flags = "A"
     End If
     
-    If (dbAccess.Access >= Me.docs.RequiredRank) Then
+    If (dbAccess.Access >= Me.docs.RequiredRank And Me.docs.RequiredRank > -1) Then
         m_hasaccess = True
     End If
     
