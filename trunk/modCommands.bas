@@ -29,7 +29,7 @@ Option Explicit
 'Private m_dbAccess     As udtGetAccessResponse
 'Private m_username     As String  ' ...
 'Private m_IsLocal      As Boolean ' ...
-Private m_WasWhispered  As Boolean ' ...
+Private m_waswhispered  As Boolean ' ...
 Private m_DisplayOutput As Boolean ' ...
 
 Public flood    As String ' ...?
@@ -58,7 +58,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     ReDim Preserve command_return(0)
     
     ' store file scope copy of whisper status
-    m_WasWhispered = WasWhispered
+    m_waswhispered = WasWhispered
     
     ' replace message variables
     Message = Replace(Message, "%me", IIf(IsLocal, GetCurrentUsername, Username), 1, -1, vbTextCompare)
@@ -81,6 +81,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
         ' ...
         If (command.HasAccess) Then
             ' ...
+            command.WasWhispered = WasWhispered
             If (IsLocal) Then
                 With dbAccess
                     .Access = 201
@@ -95,16 +96,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                 Call executeCommand(Username, dbAccess, command.Name & Space$(1) & command.Args, _
                     IsLocal, command_return)
             Else
-                Dim script_response As New Dictionary
-                Call RunInSingle(modScripting.GetModuleByName(command.docs.Owner), "Event_Command", _
-                    command, script_response)
-                
-                ReDim Preserve command_return(0 To script_response.Count)
-                For I = 0 To script_response.Count
-                    command_return(I) = script_response.Item(I)
-                Next I
-                
-                Set script_response = Nothing
+                Call RunInSingle(modScripting.GetModuleByName(command.docs.Owner), "Event_Command", command)
             End If
                     
             ' ...
@@ -139,17 +131,6 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                     Next I
                 End If
             End If
-        Else
-            ' ...
-            If ((DisplayOutput) And (LenB(outbuf))) Then
-                ' ...
-                If ((BotVars.WhisperCmds) Or (WasWhispered)) Then
-                    AddQ "/w " & Username & Space$(1) & outbuf, _
-                            PRIORITY.COMMAND_RESPONSE_MESSAGE
-                Else
-                    AddQ outbuf, PRIORITY.COMMAND_RESPONSE_MESSAGE
-                End If
-            End If
         End If
         
         ' ...
@@ -174,8 +155,8 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
 ' default (if all else fails) error handler to keep erroneous
 ' commands and/or input formats from killing me
 ERROR_HANDLER:
-    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: " & Err.description & _
-        " in ProcessCommand().")
+    Call frmChat.AddChat(RTBColors.ConsoleText, "Error: #" & Err.Number & ": " & Err.description & _
+        " in modCommandCode.ProcessCommand().")
 
     'Unload memory - FrOzeN
     Set command = Nothing
@@ -2705,7 +2686,7 @@ Private Function OnProfile(ByVal Username As String, ByRef dbAccess As udtGetAcc
             PPL = True
     
             ' ...
-            If (BotVars.WhisperCmds Or m_WasWhispered) Then
+            If (BotVars.WhisperCmds Or m_waswhispered) Then
                 PPLRespondTo = Username
             End If
         Else
@@ -2730,7 +2711,7 @@ Private Function OnAccountInfo(ByVal Username As String, ByRef dbAccess As udtGe
         PPL = True
 
         ' ...
-        If (BotVars.WhisperCmds Or m_WasWhispered) Then
+        If (BotVars.WhisperCmds Or m_waswhispered) Then
             PPLRespondTo = Username
         End If
     End If

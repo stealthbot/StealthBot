@@ -32,6 +32,7 @@ Private m_publicOutput As Boolean
 Private m_xmlarguments As Dictionary
 Private m_hasaccess    As Boolean
 Private m_splithasrun  As Boolean
+Private m_waswhispered As Boolean
 
 Public Property Get Username() As String
     Username = m_username
@@ -69,8 +70,6 @@ End Property
 Public Property Let PublicOutput(bln As Boolean)
     m_publicOutput = bln
 End Property
-
-
 Public Property Get IsValid() As Boolean
     If (Not m_splithasrun) Then SplitArguments
     IsValid = m_valid
@@ -81,6 +80,12 @@ End Property
 Public Property Get HasAccess() As Boolean
     If (Not m_splithasrun) Then SplitArguments
     HasAccess = m_hasaccess
+End Property
+Public Property Get WasWhispered() As Boolean
+    WasWhispered = m_waswhispered
+End Property
+Public Property Let WasWhispered(bValue As Boolean)
+    m_waswhispered = bValue
 End Property
 
 Public Sub Class_Initialize()
@@ -98,6 +103,7 @@ Public Sub Class_Initialize()
     m_xmlarguments.CompareMode = TextCompare
     m_hasaccess = False
     m_splithasrun = False
+    m_waswhispered = False
     
 End Sub
 
@@ -284,4 +290,29 @@ On Error GoTo ERROR_HANDLER
     Exit Function
 ERROR_HANDLER:
     Call frmChat.AddChat(vbRed, "Error: #" & Err.Number & ": " & Err.description & " in clsCommandObj.CheckForAnyFlags().")
+End Function
+
+'The Respond function 52 Wanted
+'This will respond in the proper style based on how the command was used.
+'This will messup emote responses /me if it is not public output or whisper commands is turned on.
+'If your response MUST be a specific style, Use AddQ or DSP
+Public Function Respond(strResponse As String) As Boolean
+On Error GoTo ERROR_HANDLER
+    If (IsLocal) Then
+        If (PublicOutput) Then
+            frmChat.AddQ strResponse, PRIORITY.CONSOLE_MESSAGE
+        Else
+            frmChat.AddChat RTBColors.ConsoleText, strResponse
+        End If
+    Else
+        If ((BotVars.WhisperCmds) Or (WasWhispered)) Then
+            frmChat.AddQ "/w " & Username & Space$(1) & strResponse, PRIORITY.COMMAND_RESPONSE_MESSAGE
+        Else
+            frmChat.AddQ strResponse, PRIORITY.COMMAND_RESPONSE_MESSAGE
+        End If
+    End If
+    Exit Function
+    
+ERROR_HANDLER:
+    Call frmChat.AddChat(vbRed, "Error: #" & Err.Number & ": " & Err.description & " in clsCommandObj.Respond().")
 End Function

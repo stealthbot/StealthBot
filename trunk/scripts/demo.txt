@@ -1,6 +1,6 @@
 #include "\demo\frm.txt"
 #include "\demo\sck.txt"
-
+Option Explicit
 ' // store script data
 Script("Name") = "Demo"
 Script("Author") = "Eric[nK]"
@@ -9,6 +9,7 @@ Script("Minor") = 0
 Script("Revision") = 1
 
 ' // create instance of demo class
+Dim cls
 Set cls = New CDemoClass
 
 Sub Event_Load()
@@ -135,17 +136,19 @@ End Sub
 Private Sub HandleCommand(strText, strUsername, Origin)
 
 	'// testing command stuff
-	Set cmds = IsCommand(strText, strUsername)
-	If cmds.Count > 0 Then
-		For Each cmd In cmds
-			If cmd.HasAccess = True Then	
-				If LCase(cmd.Name) = "soundex" Then
+	Dim Cmd, Cmds
+	Set Cmds = IsCommand(strText, strUsername)
+	If Cmds.Count > 0 Then
+		For Each Cmd In Cmds
+			If (Origin = 3) Then Cmd.WasWhispered = True
+			If Cmd.HasAccess = True Then
+				If LCase(Cmd.Name) = "soundex" Then
 					If Cmd.IsValid = True Then
 						'// have the soundex command do something
-						Dsp Origin, Soundex(cmd.Argument("word"))
+						Cmd.Respond "The SoundEx for '" & Cmd.Argument("Word") & "' is " & SoundEx(Cmd.Argument("Word"))
 					Else
 						'//They Did not use a valid syntax for this command
-						Dsp Origin, "The proper syntax for this command is: "  & BotVars.Trigger & "SoundEx <Word>"
+						Cmd.Respond "The proper syntax for this command is: "  & BotVars.Trigger & "SoundEx <Word>"
 					End If
 				End If
 			End If
@@ -195,28 +198,26 @@ Sub DebugCommand(ByRef cmd)
 	If cmd.PublicOutput Then AddQ "Command.Args := " & "[" & cmd.Args & "]"
 	i = 0
 	For Each arg In cmd.Arguments
-		If cmd.PublicOutput Then AddQ "  Command.Arguments(" & i & ") := " & "[" & arg & "]"
 		AddChat f, vbGreen, "  Arguments(" & i & ")" & vbTab, f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, arg , f, vbWhite, "]"
 		i = i + 1
 	Next
 	For Each parm In cmd.docs.Parameters
-		If cmd.PublicOutput Then AddQ "  Command.Argument(" & parm.Name & ") := " & "[" & cmd.Argument(parm.Name) & "]"
 		AddChat f, vbGreen, "  Argument(""" & parm.Name & """)" & vbTab, f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Argument(parm.Name) , f, vbWhite, "]"
 	Next
 	AddChat f, vbCyan, "------------------------------------------------------"
 End Sub
 
-Sub Event_Command(Command, Response)
+Sub Event_Command(Command)
 	Select Case LCase(Command.Name)
 		Case "fibi":
 			If (Command.IsValid) Then
 				If(Command.Argument("Number") < 1 Or Command.Argument("Number") > 10) Then
-					Response(0) = "Fibinacci Command is limited to 1-10"
+					Command.Respond "Fibinacci Command is limited to 1-10"
 				Else
-					Response(0) = "The number at position " & Command.Argument("Number") & " in the Fibinacci sequance is: " & GetFibiIndex(Command.Argument("Number"), 1, 0, 1)
+					Command.Respond "The number at position " & Command.Argument("Number") & " in the Fibinacci sequance is: " & GetFibiIndex(Command.Argument("Number"), 1, 0, 1)
 				End If
 			Else
-				Response(0) = "Proper syntax for this command is: .Fibi <Number>"
+				Command.Respond "Proper syntax for this command is: .Fibi <Number>"
 			End If
 	End Select
 End Sub
