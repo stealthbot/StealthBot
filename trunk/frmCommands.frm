@@ -38,7 +38,7 @@ Begin VB.Form frmCommands
          BackStyle       =   0  'Transparent
          Caption         =   "Command Requirements"
          ForeColor       =   &H00FFFFFF&
-         Height          =   375
+         Height          =   420
          Left            =   240
          TabIndex        =   24
          Top             =   435
