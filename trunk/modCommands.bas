@@ -5987,28 +5987,24 @@ Private Function OnHelp(ByVal Username As String, ByRef dbAccess As udtGetAccess
         End If
     End If
     
-    tmpbuf(0) = "[" & CommandDocs.Name
+    tmpbuf(0) = CommandDocs.Name
     
     If (CommandDocs.aliases.Count) Then
         tmpbuf(0) = tmpbuf(0) & " (aliases: "
-    Else
-        tmpbuf(0) = tmpbuf(0) & " (aliases: none"
-    End If
-    
-    If (CommandDocs.aliases.Count) Then
+        
         For I = 1 To CommandDocs.aliases.Count
             tmpbuf(0) = tmpbuf(0) & CommandDocs.aliases(I) & ", "
         Next I
         
-        tmpbuf(0) = Mid$(tmpbuf(0), 1, Len(tmpbuf(0)) - Len(", "))
+        tmpbuf(0) = Mid$(tmpbuf(0), 1, Len(tmpbuf(0)) - Len(", ")) & ")"
     End If
 
     ' ...
-    tmpbuf(0) = tmpbuf(0) & ")]: " & CommandDocs.description
+    tmpbuf(0) = tmpbuf(0) & ": " & CommandDocs.description
     
     ' ...
     tmpbuf(0) = tmpbuf(0) & Space$(1) & "(Syntax: " & BotVars.Trigger & CommandDocs.Name
-            
+    
     If (CommandDocs.Parameters.Count) Then
         For I = 1 To CommandDocs.Parameters.Count
             If (CommandDocs.Parameters(I).IsOptional) Then

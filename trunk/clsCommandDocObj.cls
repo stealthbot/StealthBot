@@ -1156,32 +1156,25 @@ Private Function getSyntaxString(ByRef AnyNode As IXMLDOMNode) As String
     Dim retVal As String
     Dim P As clsCommandParamsObj
     
-    
-    
     If (AnyNode Is Nothing) Then
         Exit Function
     End If
     
-    '// add the command name and trigger
-    retVal = StringFormatA("Syntax: {0}{1} ", BotVars.Trigger, Me.Name)
+    '// add the command name
+    retVal = StringFormatA("{0} ", Me.Name)
     
     '// add the parameters
     For Each P In Me.Parameters
-        retVal = StringFormatA("{0}{2}{1}{3}, ", _
+        retVal = StringFormatA("{0}{2}{1}{3} ", _
                     retVal, _
                     P.Name, _
                     IIf(P.IsOptional, "[", "<"), _
                     IIf(P.IsOptional, "]", ">"))
     Next
     
-    If Me.Parameters.Count > 0 Then
-        '// strip last ", " and add period
-        retVal = Mid(retVal, 1, Len(retVal) - 2) & ". "
-    Else
-        '// strip the last space and add period
-        retVal = Mid(retVal, 1, Len(retVal) - 1) & ". "
-    End If
-
+    '// strip the last space and add period
+    retVal = Mid(retVal, 1, Len(retVal) - 1) & ". "
+    
     '// add the rank/flags information
     If (Me.RequiredRank <> -1) And (Len(Me.RequiredFlags) > 0) Then
         '// available outside the console
@@ -1201,9 +1194,12 @@ Private Function getSyntaxString(ByRef AnyNode As IXMLDOMNode) As String
             End If
         End If
         
+        '// prepend Syntax: <trigger>
+        retVal = StringFormatA("Syntax: {0}{1}", BotVars.Trigger, retVal)
+        
     Else
-        '// console only
-        retVal = StringFormatA("{0} Command is only available to the console. To enable this command, set an access and flags", retVal)
+        '// console only, prepend Syntax: / and append message
+        retVal = StringFormatA("Syntax: /{0} Command is only available to the console. To allow other users to use this command, set the command's flags requirement or rank requirement.", retVal)
     End If
     
     getSyntaxString = retVal
