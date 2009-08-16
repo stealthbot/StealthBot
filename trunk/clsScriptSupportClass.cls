@@ -622,14 +622,6 @@ Public Function BotPath() As String
     
 End Function
 
-Public Sub MkDirEx(ByVal DirPath As String)
-
-    On Error Resume Next
-
-    MkDir DirPath
-
-End Sub
-
 
 '// GETINTERNALUSERCOUNT
 '// Returns the highest index for use when calling GetInternalDataByIndex
@@ -1579,9 +1571,9 @@ End Function
 '// PARAMETERS
 '//     ScriptName - if provided, this function will return that script's module ID
 '//                  if ommitted, this function will return the currently executing script module ID
-Public Function GetModuleID(Optional ByVal ScriptName As String = vbNullString) As String
+Public Function GetModuleID(Optional ByVal scriptName As String = vbNullString) As String
 
-    GetModuleID = modScripting.GetModuleID(ScriptName)
+    GetModuleID = modScripting.GetModuleID(scriptName)
 
 End Function
 
@@ -1603,12 +1595,14 @@ End Function
 '// PARAMETERS
 '//     ScriptName - if provided, this function will return that script's working directory
 '//                  if ommitted, this function will return the currently executing script's working directory
-Public Function GetWorkingDirectory(Optional ByVal ScriptName As String = vbNullString) As String
+Public Function GetWorkingDirectory(Optional ByVal scriptName As String = vbNullString) As String
 
-    If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
+    If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
-    GetWorkingDirectory = BotPath() & "Scripts\" & ScriptName & "\"
-   
+    GetWorkingDirectory = BotPath() & "Scripts\" & scriptName & "\"
+    
+    On Error Resume Next
+    
     MkDir GetWorkingDirectory
 
 End Function
@@ -1628,11 +1622,11 @@ End Function
 '//                  this must be valid as a variable name in script
 '//     ScriptName - if provided, this function will create the object for the provided script
 '//                  if ommitted, this function will create the object for the currently executing script
-Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String, Optional ByVal ScriptName As String = vbNullString) As Object
+Public Function CreateObj(ByVal ObjType As String, ByVal ObjName As String, Optional ByVal scriptName As String = vbNullString) As Object
 
     Dim ModuleID As String
     
-    ModuleID = modScripting.GetModuleID(ScriptName)
+    ModuleID = modScripting.GetModuleID(scriptName)
 
     Set CreateObj = _
             modScripting.CreateObj(frmChat.SControl.Modules(ModuleID), _
@@ -1646,11 +1640,11 @@ End Function
 '//     ObjName -    the name of the object
 '//     ScriptName - if provided, this function will destroy the object for the provided script
 '//                  if ommitted, this function will destroy the object for the currently executing script
-Public Function DestroyObj(ByVal ObjName As String, Optional ByVal ScriptName As String = vbNullString) As Object
+Public Function DestroyObj(ByVal ObjName As String, Optional ByVal scriptName As String = vbNullString) As Object
 
     Dim ModuleID As String
     
-    ModuleID = modScripting.GetModuleID(ScriptName)
+    ModuleID = modScripting.GetModuleID(scriptName)
 
     modScripting.DestroyObj frmChat.SControl.Modules(ModuleID), ObjName
 
@@ -1662,11 +1656,11 @@ End Function
 '//     ObjName -    the name of the object
 '//     ScriptName - if provided, this function will get the object for the provided script
 '//                  if ommitted, this function will get the object for the currently executing script
-Public Function GetObjByName(ByVal ObjName As String, Optional ByVal ScriptName As String = vbNullString) As Object
+Public Function GetObjByName(ByVal ObjName As String, Optional ByVal scriptName As String = vbNullString) As Object
 
     Dim ModuleID As String
     
-    ModuleID = modScripting.GetModuleID(ScriptName)
+    ModuleID = modScripting.GetModuleID(scriptName)
 
     Set GetObjByName = _
             modScripting.GetObjByName(frmChat.SControl.Modules(ModuleID), _
@@ -1681,16 +1675,16 @@ End Function
 '//     commandName - the name of the new command
 '//     ScriptName -  if provided, this function will create the command for the specified script
 '//                   if ommitted, this function will create the command for the currently executing script
-Public Function CreateCommand(ByVal commandName As String, Optional ByVal ScriptName As String = vbNullString) As Object
+Public Function CreateCommand(ByVal commandName As String, Optional ByVal scriptName As String = vbNullString) As Object
 
     Dim command As clsCommandDocObj
     
-    If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
+    If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
     Set command = New clsCommandDocObj
     
-    Call command.CreateCommand(commandName, ScriptName)
-    Call command.OpenCommand(commandName, ScriptName)
+    Call command.CreateCommand(commandName, scriptName)
+    Call command.OpenCommand(commandName, scriptName)
     
     Set CreateCommand = command
     
@@ -1704,15 +1698,15 @@ End Function
 '//     commandName - the name of the command
 '//     ScriptName -  if provided, this function will get the command for the specified script
 '//                   if ommitted, this function will get the command for the currently executing script
-Public Function OpenCommand(ByVal commandName As String, Optional ByVal ScriptName As String = vbNullString) As Object
+Public Function OpenCommand(ByVal commandName As String, Optional ByVal scriptName As String = vbNullString) As Object
     
     Dim command As clsCommandDocObj
     
-    If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
+    If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
     Set command = New clsCommandDocObj
     
-    If command.OpenCommand(commandName, ScriptName) Then
+    If command.OpenCommand(commandName, scriptName) Then
         Set OpenCommand = command
     End If
     
@@ -1726,15 +1720,15 @@ End Function
 '//     commandName - the name of the command
 '//     ScriptName -  if provided, this function will delete the command for the specified script
 '//                   if ommitted, this function will delete the command for the currently executing script
-Public Function DeleteCommand(ByVal commandName As String, Optional ByVal ScriptName As String = vbNullString) As Object
+Public Function DeleteCommand(ByVal commandName As String, Optional ByVal scriptName As String = vbNullString) As Object
     
     Dim command As clsCommandDocObj
     
-    If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
+    If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
     Set command = New clsCommandDocObj
     
-    Call command.OpenCommand(commandName, ScriptName)
+    Call command.OpenCommand(commandName, scriptName)
     Call command.Delete
     
     Set DeleteCommand = command
@@ -1752,14 +1746,14 @@ End Function
 '//     strUsername - the user's username
 '//     ScriptName -  if provided, this function will check for commands created in the specified script
 '//                   if ommitted, this function will check for commands created in the currently executing script
-Public Function IsCommand(ByVal commandText As String, ByVal strUsername As String, Optional ByVal ScriptName As String = vbNullString) As Collection
+Public Function IsCommand(ByVal commandText As String, ByVal strUsername As String, Optional ByVal scriptName As String = vbNullString) As Collection
 
     Dim command As New clsCommandDocObj
     Dim commands As Collection
     
-    If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
+    If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
-    Set commands = command.IsCommand(commandText, strUsername, ScriptName)
+    Set commands = command.IsCommand(commandText, strUsername, scriptName)
     
     Set IsCommand = commands
     
@@ -1809,9 +1803,9 @@ End Property
 '// PARAMETRS
 '//     ScriptName - if provided, this function will return the specified script's values object
 '//                  if ommitted, this function will return the currently executing script's values object
-Public Function GetScriptObject(Optional ByVal ScriptName As String) As Object
+Public Function GetScriptObject(Optional ByVal scriptName As String) As Object
 
-    Set GetScriptObject = modScripting.GetScriptObject(modScripting.GetModuleID(ScriptName))
+    Set GetScriptObject = modScripting.GetScriptObject(modScripting.GetModuleID(scriptName))
 
 End Function
 
@@ -1821,13 +1815,13 @@ End Function
 '//     sEntryName - the name of the entry to look up
 '//     ScriptName - if provided, this function will return the specified script's setting
 '//                  if ommitted, this function will return the currently executing script's setting
-Public Function GetSettingsEntry(ByVal sEntryName As String, Optional ByVal ScriptName As String = vbNullString) As String
+Public Function GetSettingsEntry(ByVal sEntryName As String, Optional ByVal scriptName As String = vbNullString) As String
     
     On Error Resume Next
     
     Dim Path As String ' ...
     
-    If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
+    If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
 
     ' ...
     Path = ReadCfg("FilePaths", "Scripts.ini")
@@ -1842,7 +1836,7 @@ Public Function GetSettingsEntry(ByVal sEntryName As String, Optional ByVal Scri
     End If
     
     ' ...
-    GetSettingsEntry = ReadINI(ScriptName, sEntryName, Path)
+    GetSettingsEntry = ReadINI(scriptName, sEntryName, Path)
     
     ' ...
     If (InStr(1, GetSettingsEntry, " ;") <> 0) Then
@@ -1865,13 +1859,13 @@ End Function
 '//     sValue -     the value to store in the entry
 '//     ScriptName - if provided, this function will write the setting for the specified script
 '//                  if ommitted, this function will write the setting for the currently executing script
-Public Sub WriteSettingsEntry(ByVal sEntryName As String, ByVal sValue As String, Optional sDescription As String, Optional ByVal ScriptName As String = vbNullString)
+Public Sub WriteSettingsEntry(ByVal sEntryName As String, ByVal sValue As String, Optional sDescription As String, Optional ByVal scriptName As String = vbNullString)
 
     On Error GoTo ERROR_HANDLER
 
     Dim Path As String ' ...
     
-    If ScriptName = vbNullString Then ScriptName = modScripting.GetScriptName
+    If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
     ' ...
     Path = ReadCfg("FilePaths", "Scripts.ini")
@@ -1886,7 +1880,7 @@ Public Sub WriteSettingsEntry(ByVal sEntryName As String, ByVal sValue As String
     End If
     
     ' ...
-    WriteINI ScriptName, sEntryName, sValue & _
+    WriteINI scriptName, sEntryName, sValue & _
         IIf(Len(sDescription), " ; " & sDescription, ""), Path
 
     Exit Sub
@@ -1923,11 +1917,11 @@ End Function
 
 '// GETSCRIPTBYNAME
 '// Gets a script by its name
-Public Function GetScriptByName(ByVal ScriptName As String) As Object
+Public Function GetScriptByName(ByVal scriptName As String) As Object
 
     On Error Resume Next
 
-    Set GetScriptByName = Scripts(ScriptName)
+    Set GetScriptByName = Scripts(scriptName)
 
 End Function
 
