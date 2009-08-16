@@ -1892,9 +1892,17 @@ ERROR_HANDLER:
     f = FreeFile
 
     If (ReadCfg("FilePaths", "Scripts") = vbNullString) Then
-        MkDirEx App.Path & "\scripts\"
+        On Error Resume Next
+        
+        MkDir App.Path & "\scripts\"
+        
+        On Error GoTo ERROR_HANDLER
     Else
-        MkDirEx ReadCfg("FilePaths", "Scripts")
+        On Error Resume Next
+        
+        MkDir ReadCfg("FilePaths", "Scripts")
+        
+        On Error GoTo ERROR_HANDLER
     End If
     
     Open Path For Output As #f

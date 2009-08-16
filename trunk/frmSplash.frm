@@ -104,6 +104,7 @@ Private Sub Form_Load()
     sDate = LCase(Month(Now()) & "/" & Day(Now()))
     
     Select Case sDate
+      Case "2/21":  IsBirthday "Ribose", 1992
       Case "3/18":  IsBirthday "Pyro", 1992
       Case "5/9":   IsBirthday "Snap", 1987
       Case "4/3":   IsBirthday "Stealth", 1987
