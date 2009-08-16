@@ -4,7 +4,7 @@ Begin VB.Form frmCommands
    BackColor       =   &H00000000&
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Command Manager"
-   ClientHeight    =   7050
+   ClientHeight    =   7185
    ClientLeft      =   45
    ClientTop       =   435
    ClientWidth     =   9330
@@ -21,7 +21,7 @@ Begin VB.Form frmCommands
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   7050
+   ScaleHeight     =   7185
    ScaleWidth      =   9330
    ShowInTaskbar   =   0   'False
    StartUpPosition =   1  'CenterOwner
@@ -29,14 +29,24 @@ Begin VB.Form frmCommands
       BackColor       =   &H00000000&
       Caption         =   "Command Syntax"
       ForeColor       =   &H00FFFFFF&
-      Height          =   855
+      Height          =   975
       Left            =   120
       TabIndex        =   22
       Top             =   6120
       Width           =   9135
-      Begin VB.Label lblSyntaxString 
+      Begin VB.Label lblRequirements 
          BackStyle       =   0  'Transparent
-         Caption         =   "Label1"
+         Caption         =   "Command Requirements"
+         ForeColor       =   &H00FFFFFF&
+         Height          =   375
+         Left            =   240
+         TabIndex        =   24
+         Top             =   435
+         Width           =   8655
+      End
+      Begin VB.Label lblSyntax 
+         BackStyle       =   0  'Transparent
+         Caption         =   "Command Syntax"
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -46,8 +56,9 @@ Begin VB.Form frmCommands
             Italic          =   0   'False
             Strikethrough   =   0   'False
          EndProperty
-         Height          =   495
-         Left            =   240
+         ForeColor       =   &H00808000&
+         Height          =   255
+         Left            =   260
          TabIndex        =   23
          Top             =   240
          Width           =   8655
@@ -352,17 +363,19 @@ End Sub
 
 Private Sub cboCommandGroup_Click()
 
-    Dim scriptName As String
-
     If PromptToSaveChanges() = True Then
-        ResetForm
-        If cboCommandGroup.ListIndex = 0 Then
-            Call PopulateTreeView
-        Else
-            scriptName = Mid$(cboCommandGroup.Text, 1, InStr(1, cboCommandGroup.Text, "(") - 2)
-            Call PopulateTreeView(scriptName)
-        End If
+        
+        Call ResetForm
+        Call PopulateTreeView(getScriptOwner())
+        
+        '// getScriptOwner() contains this logic already
+        'If cboCommandGroup.ListIndex = 0 Then
+        '    Call PopulateTreeView
+        'Else
+        '    Call PopulateTreeView(getScriptOwner())
+        'End If
     End If
+    
 End Sub
 
 Private Sub cmdAliasAdd_Click()
@@ -560,17 +573,17 @@ Private Sub PopulateOwnerComboBox()
     cboCommandGroup.AddItem StringFormat("{0} ({1})", options)
     
     For I = 2 To frmChat.SControl.Modules.Count
-        ScriptName = _
+        scriptName = _
             modScripting.GetScriptName(CStr(I))
         str = _
-            SharedScriptSupport.GetSettingsEntry("Public", ScriptName)
+            SharedScriptSupport.GetSettingsEntry("Public", scriptName)
         
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
             '// get the script name and number of commands
-            commandCount = commandDoc.GetCommandCount(ScriptName)
+            commandCount = commandDoc.GetCommandCount(scriptName)
             '// only add the commands if there is at least 1 command to show
             If commandCount > 0 Then
-                options = Array(ScriptName, commandCount)
+                options = Array(scriptName, commandCount)
                 '// add the item
                 cboCommandGroup.AddItem StringFormat("{0} ({1})", options)
             End If
@@ -1021,6 +1034,18 @@ Private Function PrepString(ByVal str As String)
     PrepString = retVal
 End Function
 
+Function getScriptOwner() As String
+    
+    '// return vbNullstring if internal commands is selected, otherwise the script name
+    If cboCommandGroup.ListIndex = 0 Then
+        getScriptOwner = vbNullString
+    Else
+        getScriptOwner = Mid$(cboCommandGroup.Text, 1, InStr(1, cboCommandGroup.Text, "(") - 2)
+    End If
+    
+End Function
+
+
 
 '// When a node in the treeview is clicked, it should locate the XML element that was
 '// used to create the node and call this method to populate appropriate form controls.
@@ -1029,13 +1054,22 @@ Private Sub PrepareForm(nt As NodeType, xmlElement As IXMLDOMElement)
     
     Dim xmlNode As IXMLDOMNode
     Dim options() As Variant '// <-- boo
+    Dim requirements As String
+    
     
     Dim cmd As clsCommandDocObj
     Set cmd = New clsCommandDocObj
     
-    '// TODO: Make this work for the selected script
-    Call cmd.OpenCommand(m_SelectedElement.commandName, Chr$(0))
-    lblSyntaxString.Caption = cmd.SyntaxString
+    Call cmd.OpenCommand(m_SelectedElement.commandName, getScriptOwner())
+    
+    '// lblSyntax
+    lblSyntax.Caption = cmd.SyntaxString
+    
+    '// lblRequirements
+    lblRequirements.Caption = cmd.RequirementsString
+    
+    
+    
     
     options = Array(m_SelectedElement.commandName, m_SelectedElement.ArgumentName, m_SelectedElement.restrictionName)
     
@@ -1258,8 +1292,8 @@ Private Sub ResetForm()
     cmdDiscard.Enabled = False
     cmdDeleteCommand.Enabled = False
     
-    lblSyntaxString.Caption = ""
-    lblSyntaxString.ForeColor = RTBColors.ConsoleText
+    lblSyntax.Caption = ""
+    lblSyntax.ForeColor = RTBColors.ConsoleText
     
 End Sub
 

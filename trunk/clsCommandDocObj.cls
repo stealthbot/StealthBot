@@ -1149,14 +1149,13 @@ Private Function getDescription(ByRef AnyNode As IXMLDOMNode) As String
 
 End Function
 
-'Syntax: .add <username> [rank] [attributes].  Requires 20 access or flags A, or R.
-Private Function getSyntaxString(ByRef AnyNode As IXMLDOMNode) As String
+'Syntax: .add <username> [rank] [attributes]
+Private Function getSyntaxString() As String
 
-    Dim temp As IXMLDOMNode
     Dim retVal As String
     Dim P As clsCommandParamsObj
     
-    If (AnyNode Is Nothing) Then
+    If (m_command_node Is Nothing) Then
         Exit Function
     End If
     
@@ -1172,13 +1171,29 @@ Private Function getSyntaxString(ByRef AnyNode As IXMLDOMNode) As String
                     IIf(P.IsOptional, "]", ">"))
     Next
     
-    '// strip the last space and add period
-    retVal = Mid(retVal, 1, Len(retVal) - 1) & ". "
+    '// add the trigger
+    retVal = StringFormatA("{1}{0}", _
+        retVal, _
+        IIf((Me.RequiredRank <> -1) Or (Len(Me.RequiredFlags) > 0), BotVars.Trigger, "/"))
     
-    '// add the rank/flags information
-    If (Me.RequiredRank <> -1) And (Len(Me.RequiredFlags) > 0) Then
+    getSyntaxString = retVal
+
+End Function
+
+
+Private Function getRequirementsString()
+
+    Dim retVal As String
+    
+    If (m_command_node Is Nothing) Then
+        Exit Function
+    End If
+
+    If (Me.RequiredRank <> -1) Or (Len(Me.RequiredFlags) > 0) Then
         '// available outside the console
+        retVal = ""
         
+        '// add access requirements if necessary
         If (Me.RequiredRank <> -1) Then
             retVal = StringFormatA("{0} Requires {1} access", retVal, Me.RequiredRank)
             If (Len(Me.RequiredFlags) = 0) Then
@@ -1186,23 +1201,21 @@ Private Function getSyntaxString(ByRef AnyNode As IXMLDOMNode) As String
             End If
         End If
         
-        If (Len(Me.RequiredFlags) = 0) Then
-            If (Me.RequiredFlags <> -1) Then
-                retVal = StringFormatA("{0} or flags {1}.", retVal, Me.RequiredFlags)
+        '// add flag requirements, if necessary, taking into account the existinance of an access requirements
+        If (Len(Me.RequiredFlags) <> 0) Then
+            If (Me.RequiredRank <> -1) Then
+                retVal = StringFormatA("{0} or one of the following flags: {1}.", retVal, Me.RequiredFlags)
             Else
-                retVal = StringFormatA("{0} Requires flags {1}.", retVal, Me.RequiredFlags)
+                retVal = StringFormatA("{0} Requires one of the following flags: {1}.", retVal, Me.RequiredFlags)
             End If
         End If
-        
-        '// prepend Syntax: <trigger>
-        retVal = StringFormatA("Syntax: {0}{1}", BotVars.Trigger, retVal)
-        
-    Else
-        '// console only, prepend Syntax: / and append message
-        retVal = StringFormatA("Syntax: /{0} Command is only available to the console. To allow other users to use this command, set the command's flags requirement or rank requirement.", retVal)
-    End If
     
-    getSyntaxString = retVal
+    Else
+        '// console only, lets show the generic blurb
+        retVal = "Command is only available to the console. To allow other users to use this command, set the command's flags requirement or rank requirement."
+    End If
+
+    getRequirementsString = retVal
 
 End Function
 
@@ -1468,7 +1481,13 @@ End Property
 
 Public Property Get SyntaxString() As String
     
-    SyntaxString = getSyntaxString(m_command_node)
+    SyntaxString = getSyntaxString()
+    
+End Property
+
+Public Property Get RequirementsString() As String
+    
+    RequirementsString = getRequirementsString()
     
 End Property
 
