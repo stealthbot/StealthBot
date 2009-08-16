@@ -3,8 +3,8 @@ Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
 Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.ocx"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
@@ -1480,7 +1480,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 'StealthBot 11/5/02-Present
-'Source Code Version: 2.7RC1
+'Source Code Version: 2.7RC2
 Option Explicit
 
 'REVISION #1337!
@@ -1537,7 +1537,7 @@ Private Sub Form_Load()
                 ZeroOffsetEx(App.REVISION, 3) & " Development Release " & "40"
         #ElseIf (DEV_RELEASE = 2) Then
             CVERSION = "StealthBot v" & App.Major & "." & App.Minor & _
-                " Release Candidate " & "1 - Build " & App.REVISION
+                " Release Candidate " & "2 - Build " & App.REVISION
         #Else
             CVERSION = "StealthBot Beta v" & App.Major & "." & App.Minor & _
                 ZeroOffsetEx(App.REVISION, 3) & " Stable"
@@ -1625,9 +1625,9 @@ Private Sub Form_Load()
     End With
         
     lvChannel.View = lvwReport
-    lvChannel.Icons = imlIcons
+    lvChannel.icons = imlIcons
     lvClanList.View = lvwReport
-    lvClanList.Icons = imlIcons
+    lvClanList.icons = imlIcons
     
     ReDim Phrases(0)
     ReDim ClientBans(0)
