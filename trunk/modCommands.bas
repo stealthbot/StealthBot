@@ -172,18 +172,33 @@ End Function
 Public Function DispatchCommand(Command As clsCommandObj)
     DispatchCommand = True
     Select Case LCase(Command.Name)
-        Case "about":    Call modCommandsInfo.OnAbout(Command)
-        Case "find":     Call modCommandsInfo.OnFind(Command)
-        Case "findattr": Call modCommandsInfo.OnFindAttr(Command)
-        Case "findgrp":  Call modCommandsInfo.OnFindGrp(Command)
-        Case "help":     Call modCommandsInfo.OnHelp(Command)
-        Case "owner":    Call modCommandsInfo.OnOwner(Command)
-        Case "ping":     Call modCommandsInfo.OnPing(Command)
-        Case "pingme":   Call modCommandsInfo.OnPingMe(Command)
-        Case "server":   Call modCommandsInfo.OnServer(Command)
-        Case "time":     Call modCommandsInfo.OnTime(Command)
-        Case "whoami":   Call modCommandsInfo.OnWhoAmI(Command)
-        Case "whois":    Call modCommandsInfo.OnWhoIs(Command)
+        Case "about":        Call modCommandsInfo.OnAbout(Command)
+        Case "accountinfo":  Call modCommandsInfo.OnAccountInfo(Command)
+        Case "allseen":      Call modCommandsInfo.OnAllSeen(Command)
+        Case "detail":       Call modCommandsInfo.OnDetail(Command)
+        Case "find":         Call modCommandsInfo.OnFind(Command)
+        Case "findattr":     Call modCommandsInfo.OnFindAttr(Command)
+        Case "findgrp":      Call modCommandsInfo.OnFindGrp(Command)
+        Case "help":         Call modCommandsInfo.OnHelp(Command)
+        Case "helpattr":     Call modCommandsInfo.OnHelpAttr(Command)
+        Case "helprank":     Call modCommandsInfo.OnHelpRank(Command)
+        Case "info":         Call modCommandsInfo.OnInfo(Command)
+        Case "initperf":     Call modCommandsInfo.OnInitPerf(Command)
+        Case "lastwhisper":  Call modCommandsInfo.OnLastWhisper(Command)
+        Case "localip":      Call modCommandsInfo.OnLocalIp(Command)
+        Case "owner":        Call modCommandsInfo.OnOwner(Command)
+        Case "ping":         Call modCommandsInfo.OnPing(Command)
+        Case "pingme":       Call modCommandsInfo.OnPingMe(Command)
+        Case "profile":      Call modCommandsInfo.OnProfile(Command)
+        Case "scriptdetail": Call modCommandsInfo.OnScriptDetail(Command)
+        Case "scripts":      Call modCommandsInfo.OnScripts(Command)
+        Case "server":       Call modCommandsInfo.OnServer(Command)
+        Case "time":         Call modCommandsInfo.OnTime(Command)
+        Case "trigger":      Call modCommandsInfo.OnTrigger(Command)
+        Case "uptime":       Call modCommandsInfo.OnUptime(Command)
+        Case "where":        Call modCommandsInfo.OnWhere(Command)
+        Case "whoami":       Call modCommandsInfo.OnWhoAmI(Command)
+        Case "whois":        Call modCommandsInfo.OnWhoIs(Command)
         Case Else: DispatchCommand = False
     End Select
 End Function
@@ -240,7 +255,6 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "disbandclan":   Call OnDisbandClan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "makechieftain": Call OnMakeChieftain(Username, dbAccess, msgData, InBot, cmdRet())
         Case "setmotd":       Call OnSetMotd(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "where":         Call OnWhere(Username, dbAccess, msgData, InBot, cmdRet())
         Case "quiettime":     Call OnQuietTime(Username, dbAccess, msgData, InBot, cmdRet())
         Case "roll":          Call OnRoll(Username, dbAccess, msgData, InBot, cmdRet())
         Case "sweepban":      Call OnSweepBan(Username, dbAccess, msgData, InBot, cmdRet())
@@ -296,7 +310,6 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "setidle":       Call OnSetIdle(Username, dbAccess, msgData, InBot, cmdRet())
         Case "idletype":      Call OnIdleType(Username, dbAccess, msgData, InBot, cmdRet())
         Case "filter":        Call OnFilter(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "trigger":       Call OnTrigger(Username, dbAccess, msgData, InBot, cmdRet())
         Case "settrigger":    Call OnSetTrigger(Username, dbAccess, msgData, InBot, cmdRet())
         Case "levelban":      Call OnLevelBan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "d2levelban":    Call OnD2LevelBan(Username, dbAccess, msgData, InBot, cmdRet())
@@ -326,17 +339,11 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "slcheck":       Call OnSLCheck(Username, dbAccess, msgData, InBot, cmdRet())
         Case "readfile":      Call OnReadFile(Username, dbAccess, msgData, InBot, cmdRet())
         Case "greet":         Call OnGreet(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "allseen":       Call OnAllSeen(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "profile":       Call OnProfile(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "accountinfo":   Call OnAccountInfo(Username, dbAccess, msgData, InBot, cmdRet())
         Case "ban":           Call OnBan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "unban":         Call OnUnban(Username, dbAccess, msgData, InBot, cmdRet())
         Case "kick":          Call OnKick(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "lastwhisper":   Call OnLastWhisper(Username, dbAccess, msgData, InBot, cmdRet())
         Case "say":           Call OnSay(Username, dbAccess, msgData, InBot, cmdRet())
         Case "expand":        Call OnExpand(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "detail":        Call OnDetail(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "info":          Call OnInfo(Username, dbAccess, msgData, InBot, cmdRet())
         Case "shout":         Call OnShout(Username, dbAccess, msgData, InBot, cmdRet())
         Case "voteban":       Call OnVoteBan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "votekick":      Call OnVoteKick(Username, dbAccess, msgData, InBot, cmdRet())
@@ -345,7 +352,6 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "cancel":        Call OnCancel(Username, dbAccess, msgData, InBot, cmdRet())
         Case "back":          Call OnBack(Username, dbAccess, msgData, InBot, cmdRet())
         Case "previous":      Call OnPrevious(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "uptime":        Call OnUptime(Username, dbAccess, msgData, InBot, cmdRet())
         Case "away":          Call OnAway(Username, dbAccess, msgData, InBot, cmdRet())
         Case "mp3":           Call OnMP3(Username, dbAccess, msgData, InBot, cmdRet())
         Case "addquote":      Call OnAddQuote(Username, dbAccess, msgData, InBot, cmdRet())
@@ -367,22 +373,16 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         'Case "monitor":       Call OnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
         'Case "unmonitor":     Call OnUnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
         'Case "online":        Call OnOnline(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "helpattr":      Call OnHelpAttr(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "helprank":      Call OnHelpRank(Username, dbAccess, msgData, InBot, cmdRet())
         Case "promote":       Call OnPromote(Username, dbAccess, msgData, InBot, cmdRet())
         Case "demote":        Call OnDemote(Username, dbAccess, msgData, InBot, cmdRet())
         Case "connect":       Call OnConnect(Username, dbAccess, msgData, InBot, cmdRet())
         Case "disconnect":    Call OnDisconnect(Username, dbAccess, msgData, InBot, cmdRet())
         Case "motd":          Call OnMotd(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "scripts":       Call OnScripts(Username, dbAccess, msgData, InBot, cmdRet())
         Case "enable":        Call OnEnable(Username, dbAccess, msgData, InBot, cmdRet())
         Case "disable":       Call OnDisable(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "sdetail":       Call OnSDetail(Username, dbAccess, msgData, InBot, cmdRet())
         Case "exec":          Call OnExec(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "initperf":      Call OnInitPerf(Username, dbAccess, msgData, InBot, cmdRet())
         Case "unblock":       Call OnUnblock(Username, dbAccess, msgData, InBot, cmdRet())
         Case "unfilter":      Call OnUnfilter(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "localip":       Call OnLocalIP(Username, dbAccess, msgData, InBot, cmdRet())
         Case Else
             blnNoCmd = True
     End Select
@@ -395,15 +395,6 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
     ' was a command found? return.
     executeCommand = (Not (blnNoCmd))
 End Function
-
-' handle localip command
-Private Function OnLocalIP(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    ' ...
-    cmdRet(0) = "Your local IPv4 IP address is: " & frmChat.sckBNet.LocalIP
-    
-End Function ' end function OnConnect
 
 ' handle connect command
 Private Function OnConnect(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -749,30 +740,6 @@ Private Function OnSetMotd(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ' return message
     cmdRet(0) = tmpbuf
 End Function ' end function OnSetMotd
-
-' handle where command
-Private Function OnWhere(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    ' This command will state the channel that the bot is currently
-    ' residing in.  Battle.net uses this command to display basic
-    ' user data, such as game type, and channel or game name.
-    
-    Dim tmpbuf As String ' temporary output buffer
-    
-    ' if sent from within the bot, send "where" command
-    ' directly to Battle.net
-    If (InBot) Then
-        Call AddQ("/where " & msgData, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
-            "(console)")
-    End If
-
-    ' ...
-    tmpbuf = "I am currently in channel " & g_Channel.Name & " (" & g_Channel.Users.Count & _
-        " users present)"
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnWhere
 
 ' handle quiettime command
 Private Function OnQuietTime(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -2681,61 +2648,6 @@ Private Function OnTagDel(ByVal Username As String, ByRef dbAccess As udtGetAcce
     cmdRet() = tmpbuf()
 End Function ' end function OnTagDel
 
-' handle profile command
-Private Function OnProfile(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim U      As String
-    Dim tmpbuf As String ' temporary output buffer
-    
-    U = msgData
-    
-    If (Len(U) > 0) Then
-        If ((InBot = False) Or (m_DisplayOutput)) Then
-            PPL = True
-    
-            ' ...
-            If (BotVars.WhisperCmds Or m_waswhispered) Then
-                PPLRespondTo = Username
-            End If
-            
-            ' request the profile
-            Call RequestProfile(U)
-        Else
-            ' request the profile
-            Call RequestProfile(U)
-            
-            ' prepare the form
-            frmProfile.PrepareForProfile U, False
-        End If
-    End If
-
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnProfile
-
-' handle accountinfo command
-Private Function OnAccountInfo(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim U      As String
-    Dim tmpbuf As String ' temporary output buffer
-    
-    If ((InBot = False) Or (m_DisplayOutput)) Then
-        PPL = True
-
-        ' ...
-        If (BotVars.WhisperCmds Or m_waswhispered) Then
-            PPLRespondTo = Username
-        End If
-    End If
-    
-    RequestSystemKeys
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnAccountInfo
-
 ' handle setidle command
 Private Function OnSetIdle(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -2865,29 +2777,6 @@ Private Function OnUnfilter(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     Call frmChat.LoadArray(LOAD_FILTERS, gFilters())
 End Function
-
-' handle trigger command
-Private Function OnTrigger(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-
-    ' ...
-    If (LenB(BotVars.TriggerLong) = 1) Then
-        ' ...
-        tmpbuf = "The bot's current trigger is " & _
-            Chr$(34) & Space$(1) & BotVars.TriggerLong & Space$(1) & Chr$(34) & _
-                " (Alt + 0" & Asc(BotVars.TriggerLong) & ")"
-    Else
-        ' ...
-        tmpbuf = "The bot's current trigger is " & _
-            Chr$(34) & Space$(1) & BotVars.TriggerLong & Space$(1) & Chr$(34) & _
-                " (Length: " & Len(BotVars.TriggerLong) & ")"
-    End If
-
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnTrigger
 
 ' handle settrigger command
 Private Function OnSetTrigger(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -3860,62 +3749,6 @@ Private Function OnGreet(ByVal Username As String, ByRef dbAccess As udtGetAcces
     cmdRet(0) = tmpbuf
 End Function ' end function OnGreet
 
-' handle allseen command
-Private Function OnAllSeen(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf() As String ' temporary output buffer
-    Dim tmpCount As Integer
-    Dim I        As Integer
-
-    ' redefine array size
-    ReDim Preserve tmpbuf(tmpCount)
-
-    ' prefix message with "Last 15 users seen"
-    tmpbuf(tmpCount) = "Last 15 users seen: "
-    
-    ' were there any users seen?
-    If (colLastSeen.Count = 0) Then
-        tmpbuf(tmpCount) = tmpbuf(tmpCount) & "(list is empty)"
-    Else
-        For I = 1 To colLastSeen.Count
-            ' append user to list
-            tmpbuf(tmpCount) = tmpbuf(tmpCount) & _
-                colLastSeen.Item(I) & ", "
-            
-            If (Len(tmpbuf(tmpCount)) > 90) Then
-                If (I < colLastSeen.Count) Then
-                    ' redefine array size
-                    ReDim Preserve tmpbuf(tmpCount + 1)
-                    
-                    ' clear new array index
-                    tmpbuf(tmpCount + 1) = vbNullString
-                    
-                    ' remove ending comma from index
-                    tmpbuf(tmpCount) = Mid$(tmpbuf(tmpCount), 1, _
-                        Len(tmpbuf(tmpCount)) - Len(", "))
-                
-                    ' postfix [more] to end of entry
-                    tmpbuf(tmpCount) = tmpbuf(tmpCount) & " [more]"
-                    
-                    ' increment loop counter
-                    tmpCount = (tmpCount + 1)
-                End If
-            End If
-        Next I
-        
-        ' check for ending comma
-        If (Right$(tmpbuf(tmpCount), 2) = ", ") Then
-            ' remove ending comma from index
-            tmpbuf(tmpCount) = Mid$(tmpbuf(tmpCount), 1, _
-                Len(tmpbuf(tmpCount)) - Len(", "))
-        End If
-    End If
-    
-    ' return message
-    cmdRet() = tmpbuf()
-End Function ' end function OnAllSeen
-
 ' handle ban command
 Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -4055,25 +3888,6 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
     cmdRet(0) = tmpbuf
 End Function ' end function OnKick
 
-' handle lastwhisper command
-Private Function OnLastWhisper(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-    
-    If (LastWhisper <> vbNullString) Then
-        tmpbuf = "The last whisper to this bot was from " & LastWhisper & " at " & _
-            FormatDateTime(LastWhisperFromTime, vbLongTime) & " on " & _
-                FormatDateTime(LastWhisperFromTime, vbLongDate) & "."
-        
-    Else
-        tmpbuf = "The bot has not been whispered since it logged on."
-    End If
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnLastWhisper
-
 ' handle say command
 Private Function OnSay(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -4132,71 +3946,6 @@ Private Function OnExpand(ByVal Username As String, ByRef dbAccess As udtGetAcce
     ' return message
     cmdRet(0) = tmpbuf
 End Function ' end function OnExpand
-
-' handle detail command
-Private Function OnDetail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-
-    tmpbuf = GetDBDetail(msgData)
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnDetail
-
-' handle info command
-Private Function OnInfo(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim user      As String
-    Dim UserIndex As Integer
-    Dim tmpbuf()  As String ' temporary output buffer
-    
-    ' ...
-    user = msgData
-    
-    ' ...
-    If (Len(user) > 0) Then
-        ' ...
-        ReDim Preserve tmpbuf(0 To 1)
-    
-        ' ...
-        UserIndex = g_Channel.GetUserIndex(user)
-        
-        ' ...
-        If (UserIndex > 0) Then
-            ' ...
-            With g_Channel.Users(UserIndex)
-                ' ...
-                tmpbuf(0) = "User " & .DisplayName & " is logged on using " & _
-                    ProductCodeToFullName(.game)
-                
-                ' ...
-                If (.IsOperator) Then
-                    tmpbuf(0) = tmpbuf(0) & " with ops, and a ping time of " & .Ping & "ms."
-                Else
-                    tmpbuf(0) = tmpbuf(0) & " with a ping time of " & .Ping & "ms."
-                End If
-                
-                ' ...
-                tmpbuf(1) = "He/she has been present in the channel for " & _
-                    ConvertTime(.TimeInChannel(), 1) & "."
-            End With
-        Else
-            ' ...
-            ReDim Preserve tmpbuf(0)
-        
-            ' ...
-            tmpbuf(0) = "No such user is present."
-        End If
-    Else
-        Exit Function
-    End If
-    
-    ' return message
-    cmdRet() = tmpbuf()
-End Function ' end function OnInfo
 
 ' handle shout command
 Private Function OnShout(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -4414,19 +4163,6 @@ Private Function OnPrevious(ByVal Username As String, ByRef dbAccess As udtGetAc
     ' return message
     cmdRet(0) = tmpbuf
 End Function ' end function OnPrev
-
-' handle uptime command
-Private Function OnUptime(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-
-    tmpbuf = "System uptime " & ConvertTime(GetUptimeMS) & ", connection uptime " & _
-        ConvertTime(uTicks) & "."
-        
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnUptime
 
 ' handle away command
 Private Function OnAway(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -5628,183 +5364,6 @@ End Function ' end function OnClear
 'End Function ' end function OnOnline
 
 
-' handle helpattr command
-Private Function OnHelpAttr(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    On Error GoTo ERROR_HANDLER
-    
-    Dim tmpbuf      As String  ' temporary output buffer
-    Dim I           As Integer ' ...
-    Dim xmldoc      As DOMDocument60
-    Dim commands    As IXMLDOMNodeList
-    Dim flagstr     As String
-    Dim lastCommand As String
-    Dim thisCommand As String
-        
-    ' ...
-    Set xmldoc = New DOMDocument60
-    
-    ' ...
-    If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
-        Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
-            "working directory.")
-            
-        Exit Function
-    End If
-    
-    ' ...
-    xmldoc.Load App.Path & "\commands.xml"
-    
-    ' ...
-    If (InStr(1, msgData, "'", vbBinaryCompare) > 0) Then
-        Exit Function
-    End If
-
-    ' ...
-    msgData = Replace(msgData, "\", "\\")
-    
-    ' ...
-    If (Len(msgData) = 0) Then
-        Exit Function
-    End If
-    
-    ' ...
-    If (BotVars.CaseSensitiveFlags = False) Then
-        msgData = UCase$(msgData)
-    End If
-    
-    ' ...
-    For I = 1 To Len(msgData)
-        flagstr = flagstr & _
-            "'" & Mid$(msgData, I, 1) & "' or "
-    Next I
-    
-    ' ...
-    flagstr = _
-        Left$(flagstr, Len(flagstr) - 3)
-        
-    ' ...
-    Set commands = _
-        xmldoc.documentElement.selectNodes( _
-            "./command/access/flags/flag[text()=" & flagstr & "]")
-    
-    ' ...
-    If (commands.length > 0) Then
-        For I = 0 To commands.length - 1
-            thisCommand = commands(I).parentNode.parentNode.parentNode. _
-                Attributes.getNamedItem("name").Text
-                
-            If (StrComp(thisCommand, lastCommand, vbTextCompare) <> 0) Then
-                tmpbuf = tmpbuf & thisCommand & ", "
-            End If
-            
-            lastCommand = thisCommand
-        Next I
-        
-        ' ...
-        tmpbuf = _
-            Left$(tmpbuf, Len(tmpbuf) - 2)
-        
-        tmpbuf = "Commands available to specified flag(s): " & tmpbuf
-    Else
-        tmpbuf = "No commands are available to the given flag(s)."
-    End If
-    
-    ' ...
-    cmdRet(0) = tmpbuf
-    
-    Exit Function
-    
-ERROR_HANDLER:
-    frmChat.AddChat vbRed, _
-        "Error (#" & Err.Number & "): " & Err.description & " in OnHelpAttr()."
-
-    Exit Function
-
-End Function ' end function OnHelpAttr
-
-' handle helprank command
-Private Function OnHelpRank(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    On Error GoTo ERROR_HANDLER
-    
-    Dim tmpbuf      As String  ' temporary output buffer
-    Dim I           As Integer ' ...
-    Dim xmldoc      As DOMDocument60
-    Dim commands    As IXMLDOMNodeList
-    Dim flagstr     As String
-    Dim lastCommand As String
-    Dim thisCommand As String
-        
-    ' ...
-    Set xmldoc = New DOMDocument60
-    
-    ' ...
-    If (Dir$(App.Path & "\commands.xml") = vbNullString) Then
-        Call frmChat.AddChat(RTBColors.ConsoleText, "Error: The XML database could not be found in the " & _
-            "working directory.")
-            
-        Exit Function
-    End If
-    
-    ' ...
-    xmldoc.Load App.Path & "\commands.xml"
-    
-    ' ...
-    If (InStr(1, msgData, "'", vbBinaryCompare) > 0) Then
-        Exit Function
-    End If
-
-    ' ...
-    msgData = Replace(msgData, "\", "\\")
-    
-    ' ...
-    If (Len(msgData) = 0) Then
-        Exit Function
-    End If
-        
-    ' ...
-    Set commands = _
-        xmldoc.documentElement.selectNodes( _
-            "./command/access/rank[number() <= " & msgData & "]")
-    
-    ' ...
-    If (commands.length > 0) Then
-        For I = 0 To commands.length - 1
-            thisCommand = commands(I).parentNode.parentNode.Attributes. _
-                getNamedItem("name").Text
-                
-            If (StrComp(thisCommand, lastCommand, vbTextCompare) <> 0) Then
-                tmpbuf = tmpbuf & thisCommand & ", "
-            End If
-            
-            lastCommand = thisCommand
-        Next I
-        
-        ' ...
-        tmpbuf = _
-            Left$(tmpbuf, Len(tmpbuf) - 2)
-        
-        tmpbuf = "Commands available to specified rank: " & tmpbuf
-    Else
-        tmpbuf = "No commands are available to the given rank."
-    End If
-    
-    ' ...
-    cmdRet(0) = tmpbuf
-    
-    Exit Function
-    
-ERROR_HANDLER:
-    frmChat.AddChat vbRed, _
-        "Error (#" & Err.Number & "): " & Err.description & " in OnHelpAttr()."
-
-    Exit Function
-
-End Function ' end function OnHelpRank
-
 ' handle promote command
 Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -5893,57 +5452,6 @@ Private Function OnDemote(ByVal Username As String, ByRef dbAccess As udtGetAcce
     End If
 End Function
 
-' handle scripts command
-Private Function OnScripts(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    On Error Resume Next
-    
-    Dim tmpbuf  As String  ' ...
-    Dim I       As Integer ' ...
-    Dim str     As String  ' ...
-    Dim Name    As String  ' ...
-    Dim Count   As Integer ' ...
-    
-    ' ...
-    If (frmChat.SControl.Modules.Count > 1) Then
-        ' ...
-        For I = 2 To frmChat.SControl.Modules.Count
-            Name = _
-                modScripting.GetScriptName(CStr(I))
-
-            If (Err.Number = 0) Then
-                str = _
-                    SharedScriptSupport.GetSettingsEntry("Enabled", Name)
-            
-                If (StrComp(str, "False", vbTextCompare) = 0) Then
-                    Name = "(" & Name & "), "
-                Else
-                    Name = Name & ", "
-                End If
-                
-                ' ...
-                tmpbuf = tmpbuf & Name
-                
-                ' ...
-                Count = (Count + 1)
-            End If
-            
-            Err.Clear
-        Next I
-        
-        ' ...
-        tmpbuf = _
-            "Loaded Scripts (" & Count & "): " & Mid$(tmpbuf, 1, Len(tmpbuf) - 2)
-    Else
-        tmpbuf = "There are no scripts currently loaded."
-    End If
-    
-    ' ...
-    cmdRet(0) = tmpbuf
-    
-End Function
-
 ' handle enable command
 Private Function OnEnable(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -6014,110 +5522,6 @@ Private Function OnDisable(ByVal Username As String, ByRef dbAccess As udtGetAcc
     End If
     
     cmdRet(0) = "Error: Could not find specified script."
-    
-End Function
-
-' handle sdetail command
-Private Function OnSDetail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    On Error Resume Next
-    
-    Dim ModName As String
-    Dim Name    As String  ' ...
-    Dim I       As Integer ' ...
-    
-    ' ...
-    If (frmChat.SControl.Modules.Count > 1) Then
-        For I = 2 To frmChat.SControl.Modules.Count
-            ModName = frmChat.SControl.Modules(I).Name
-            
-            Name = _
-                modScripting.GetScriptName(CStr(I))
-                
-            If (StrComp(Name, msgData, vbTextCompare) = 0) Then
-                Dim Version  As String ' ...
-                Dim VerTotal As Integer
-                Dim author   As String ' ...
-                
-                Version = _
-                    modScripting.GetScriptValue(ModName, "Major")
-                    
-                VerTotal = _
-                    Val(modScripting.GetScriptValue(ModName, "Major"))
-                    
-                Version = Version & "." & _
-                    modScripting.GetScriptValue(ModName, "Minor")
-                    
-                VerTotal = VerTotal + _
-                    Val(modScripting.GetScriptValue(ModName, "Minor"))
-                    
-                Version = Version & " Revision " & _
-                    modScripting.GetScriptValue(ModName, "Revision")
-                    
-                VerTotal = VerTotal + _
-                    Val(modScripting.GetScriptValue(ModName, "Revision"))
-                    
-                author = _
-                    modScripting.GetScriptValue(ModName, "Author")
-                    
-                If ((author = vbNullString) And (VerTotal = 0)) Then
-                    cmdRet(0) = _
-                        "There is no additional information for the " & Name & " script."
-                Else
-                    cmdRet(0) = Name & IIf(VerTotal > 0, " v" & Version, "") & _
-                        IIf(author <> vbNullString, " by " & author, "")
-                End If
-            
-                Exit Function
-            End If
-        Next I
-    End If
-    
-    cmdRet(0) = "Error: Could not find specified script."
-    
-End Function
-
-' handle initperf command
-' To-Do: Make this have an optional parameter for the script name, to limit the result.
-Private Function OnInitPerf(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    On Error Resume Next
-    
-    Dim ModName As String
-    Dim Name    As String  ' ...
-    Dim I       As Integer ' ...
-    Dim str     As String  ' ...
-
-    ' ...
-    If (frmChat.SControl.Modules.Count > 1) Then
-        cmdRet(0) = "Script initialization performance:"
-    
-        ' ...
-        For I = 2 To frmChat.SControl.Modules.Count
-            ModName = frmChat.SControl.Modules(I).Name
-            
-            Name = _
-                modScripting.GetScriptName(CStr(I))
-
-            If (Err.Number = 0) Then
-                str = _
-                    SharedScriptSupport.GetSettingsEntry("Enabled", Name)
-            
-                If (StrComp(str, "False", vbTextCompare) <> 0) Then
-                    ReDim Preserve cmdRet(0 To I - 1)
- 
-                    cmdRet(I - 1) = " " & Name & " " & _
-                        modScripting.GetScriptValue(ModName, "InitPerf") & "ms"
-                End If
-            End If
-            
-            Err.Clear
-        Next I
-    Else
-        cmdRet(0) = "There are no scripts currently loaded."
-    End If
     
 End Function
 
@@ -7230,46 +6634,6 @@ WriteDatabase_Error:
     
     Resume WriteDatabase_Exit
 End Sub
-
-Private Function GetDBDetail(ByVal Username As String) As String
-    Dim sRetAdd As String, sRetMod As String
-    Dim I As Integer
-    
-    For I = 0 To UBound(DB)
-        With DB(I)
-            If (StrComp(Username, .Username, vbTextCompare) = 0) Then
-                If .AddedBy <> "%" And LenB(.AddedBy) > 0 Then
-                    sRetAdd = .Username & " was added by " & .AddedBy & " on " & _
-                        .AddedOn & "."
-                End If
-                
-                If ((.ModifiedBy <> "%") And (LenB(.ModifiedBy) > 0)) Then
-                    If ((.AddedOn <> .ModifiedOn) Or (.AddedBy <> .ModifiedBy)) Then
-                        sRetMod = " The entry was last modified by " & .ModifiedBy & _
-                            " on " & .ModifiedOn & "."
-                    Else
-                        sRetMod = " The entry has not been modified since it was added."
-                    End If
-                End If
-                
-                If ((LenB(sRetAdd) > 0) Or (LenB(sRetMod) > 0)) Then
-                    If (LenB(sRetAdd) > 0) Then
-                        GetDBDetail = sRetAdd & sRetMod
-                    Else
-                        'no add, but we could have a modify
-                        GetDBDetail = sRetMod
-                    End If
-                Else
-                    GetDBDetail = "No detailed information is available for that user."
-                End If
-                
-                Exit Function
-            End If
-        End With
-    Next I
-    
-    GetDBDetail = "That user was not found in the database."
-End Function
 
 ' requires public
 Public Function DateCleanup(ByVal TDate As Date) As String

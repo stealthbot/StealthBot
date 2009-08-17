@@ -72,8 +72,10 @@
     </access>
   </command>
 
-  <command name="sdetail">
-    <aliases />
+  <command name="scriptdetail">
+    <aliases>
+      <alias>sdetail</alias>
+    </aliases>
 
     <documentation>
       <description>Returns additional details about the specified script.</description>
