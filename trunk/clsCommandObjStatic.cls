@@ -460,13 +460,9 @@ Private Function CreateCommandInstance(ByRef commandString As String, ByVal strU
         commandArgs = tmp(1)
     End If
     
-    '// make sure that this command exists for strScriptOwner
-    doc.OpenCommand commandName, strScriptOwner
-    If (doc Is Nothing) Then
+    If (Not doc.OpenCommand(commandName, strScriptOwner)) Then
         'Is this an alias for some other command?
-        doc.OpenCommand convertAlias(commandName), strScriptOwner
-        
-        If (doc Is Nothing) Then
+        If (Not doc.OpenCommand(convertAlias(commandName), strScriptOwner)) Then
             '// this is not a command, we are done here
             Set CreateCommandInstance = Nothing
             Exit Function
