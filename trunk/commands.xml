@@ -2799,6 +2799,7 @@
 
     <documentation>
       <description>Begins playback in the currently selected media player.</description>
+      <specialnotes>If a song is specified, it will attempt to play that song.</specialnotes>
     </documentation>
     
     <arguments>

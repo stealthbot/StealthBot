@@ -211,6 +211,23 @@ Public Function DispatchCommand(Command As clsCommandObj)
         Case "motd":          Call modCommandsClan.OnMOTD(Command)
         Case "promote":       Call modCommandsClan.OnPromote(Command)
         Case "setmotd":       Call modCommandsClan.OnSetMOTD(Command)
+        
+        'Media Player comands
+        Case "allowmp3":      Call modCommandsMP3.OnAllowMp3(Command)
+        Case "fos":           Call modCommandsMP3.OnFOS(Command)
+        Case "loadwinamp":    Call modCommandsMP3.OnLoadWinamp(Command)
+        Case "mp3":           Call modCommandsMP3.OnMP3(Command)
+        Case "next":          Call modCommandsMP3.OnNext(Command)
+        Case "pause":         Call modCommandsMP3.OnPause(Command)
+        Case "play":          Call modCommandsMP3.OnPlay(Command)
+        Case "previous":      Call modCommandsMP3.OnPrevious(Command)
+        Case "repeat":        Call modCommandsMP3.OnRepeat(Command)
+        Case "setvol":        Call modCommandsMP3.OnSetVol(Command)
+        Case "shuffle":       Call modCommandsMP3.OnShuffle(Command)
+        Case "stop":          Call modCommandsMP3.OnStop(Command)
+        Case "useitunes":     Call modCommandsMP3.OnUseiTunes(Command)
+        Case "usewinamp":     Call modCommandsMP3.OnUseWinamp(Command)
+        
         Case Else: DispatchCommand = False
     End Select
 End Function
@@ -256,8 +273,6 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "dump":          Call OnDump(Username, dbAccess, msgData, InBot, cmdRet())
         Case "quit":          Call OnQuit(Username, dbAccess, msgData, InBot, cmdRet())
         Case "locktext":      Call OnLockText(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "allowmp3":      Call OnAllowMp3(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "loadwinamp":    Call OnLoadWinamp(Username, dbAccess, msgData, InBot, cmdRet())
         'Case "efp":           Call OnEfp(Username, dbAccess, msgData, InBot, cmdRet())
         Case "home":          Call OnHome(Username, dbAccess, msgData, InBot, cmdRet())
         Case "peonban":       Call OnPeonBan(Username, dbAccess, msgData, InBot, cmdRet())
@@ -284,7 +299,6 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "quickrejoin":   Call OnQuickRejoin(Username, dbAccess, msgData, InBot, cmdRet())
         Case "plugban":       Call OnPlugBan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "clientbans":    Call OnClientBans(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "setvol":        Call OnSetVol(Username, dbAccess, msgData, InBot, cmdRet())
         Case "cadd":          Call OnCAdd(Username, dbAccess, msgData, InBot, cmdRet())
         Case "cdel":          Call OnCDel(Username, dbAccess, msgData, InBot, cmdRet())
         Case "banned":        Call OnBanned(Username, dbAccess, msgData, InBot, cmdRet())
@@ -292,17 +306,8 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "ipban":         Call OnIPBan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "unipban":       Call OnUnIPBan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "designate":     Call OnDesignate(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "shuffle":       Call OnShuffle(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "repeat":        Call OnRepeat(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "next":          Call OnNext(Username, dbAccess, msgData, InBot, cmdRet())
         Case "protect":       Call OnProtect(Username, dbAccess, msgData, InBot, cmdRet())
         Case "whispercmds":   Call OnWhisperCmds(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "stop":          Call OnStop(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "play":          Call OnPlay(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "useitunes":     Call OnUseiTunes(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "usewinamp":     Call OnUseWinamp(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "pause":         Call OnPause(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "fos":           Call OnFos(Username, dbAccess, msgData, InBot, cmdRet())
         Case "rem":           Call OnRem(Username, dbAccess, msgData, InBot, cmdRet())
         Case "reconnect":     Call OnReconnect(Username, dbAccess, msgData, InBot, cmdRet())
         Case "unigpriv":      Call OnUnIgPriv(Username, dbAccess, msgData, InBot, cmdRet())
@@ -357,9 +362,7 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "tally":         Call OnTally(Username, dbAccess, msgData, InBot, cmdRet())
         Case "cancel":        Call OnCancel(Username, dbAccess, msgData, InBot, cmdRet())
         Case "back":          Call OnBack(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "previous":      Call OnPrevious(Username, dbAccess, msgData, InBot, cmdRet())
         Case "away":          Call OnAway(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "mp3":           Call OnMP3(Username, dbAccess, msgData, InBot, cmdRet())
         Case "addquote":      Call OnAddQuote(Username, dbAccess, msgData, InBot, cmdRet())
         Case "ignore":        Call OnIgnore(Username, dbAccess, msgData, InBot, cmdRet())
         Case "quote":         Call OnQuote(Username, dbAccess, msgData, InBot, cmdRet())
@@ -444,57 +447,6 @@ Private Function OnLockText(ByVal Username As String, ByRef dbAccess As udtGetAc
     
     Call frmChat.mnuLock_Click
 End Function ' end function OnLockText
-
-' handle allowmp3 command
-Private Function OnAllowMp3(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    ' This command will enable or disable the use of media player-related commands.
-    
-    Dim tmpbuf As String ' temporary output buffer
-
-    If (BotVars.DisableMP3Commands) Then
-        tmpbuf = "Allowing MP3 commands."
-        
-        BotVars.DisableMP3Commands = False
-    Else
-        tmpbuf = "MP3 commands are now disabled."
-        
-        BotVars.DisableMP3Commands = True
-    End If
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnAllowMp3
-
-' handle loadwinamp command
-Private Function OnLoadWinamp(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    ' This command will run Winamp from the default directory, or the directory
-    ' specified within the configuration file.
-    
-    Dim clsWinamp As clsWinamp
-    Dim tmpbuf    As String  ' temporary output buffer
-    Dim bln       As Boolean ' ...
-    
-    ' ...
-    Set clsWinamp = New clsWinamp
-
-    ' ...
-    bln = clsWinamp.Start(ReadCfg("Other", "WinampPath"))
-       
-    ' ...
-    If (bln) Then
-        tmpbuf = "Winamp loaded."
-    Else
-        tmpbuf = "There was an error loading Winamp."
-    End If
-    
-    ' ...
-    Set clsWinamp = Nothing
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnLoadWinamp
 
 ' handle efp command
 'Private Function OnEfp(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -1464,40 +1416,6 @@ Private Function OnClientBans(ByVal Username As String, ByRef dbAccess As udtGet
     cmdRet() = tmpbuf()
 End Function ' end function OnClientBans
 
-' handle setvol command
-Private Function OnSetVol(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    ' This command will set the volume of the media player to the level
-    ' specified by the user.
-    
-    Dim tmpbuf As String ' temporary output buffer
-    Dim lngVol As Long   ' ...
-    Dim strVol As String
-
-    strVol = msgData
-    
-    If (BotVars.DisableMP3Commands = False) Then
-        If (StrictIsNumeric(strVol)) Then
-            lngVol = CLng(strVol)
-            
-        
-            If (lngVol > 100) Then
-                lngVol = 100
-                strVol = 100
-            End If
-            
-            MediaPlayer.Volume = lngVol
-
-            tmpbuf = "Volume set to " & strVol & "%."
-        Else
-            tmpbuf = "Error: Invalid volume level (0-100)."
-        End If
-    End If
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnSetVol
-
 ' handle cadd command
 Private Function OnCAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -1822,97 +1740,6 @@ Private Function OnDesignate(ByVal Username As String, ByRef dbAccess As udtGetA
     cmdRet(0) = tmpbuf
 End Function ' end function OnDesignate
 
-' handle shuffle command
-Private Function OnShuffle(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    ' This command will toggle the usage of the selected media player's
-    ' shuffling feature.
-    
-    Dim tmpbuf As String ' temporary output buffer
-    
-    ' ...
-    If (BotVars.DisableMP3Commands = False) Then
-        ' ...
-        If (MediaPlayer.Shuffle) Then
-            ' ...
-            MediaPlayer.Shuffle = False
-            
-            ' ...
-            tmpbuf = "The shuffle option has been disabled for the selected " & _
-                "media player."
-        Else
-            ' ...
-            MediaPlayer.Shuffle = True
-            
-            ' ...
-            tmpbuf = "The shuffle option has been enabled for the selected " & _
-                "media player."
-        End If
-    End If
-        
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnShuffle
-
-' handle repeat command
-Private Function OnRepeat(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    ' This command will toggle the usage of the selected media player's
-    ' repeat feature.
-    
-    Dim tmpbuf As String ' temporary output buffer
-    
-    ' ...
-    If (BotVars.DisableMP3Commands = False) Then
-        ' ...
-        If (MediaPlayer.Repeat) Then
-            ' ...
-            MediaPlayer.Repeat = False
-            
-            ' ...
-            tmpbuf = "The repeat option has been disabled for the selected " & _
-                "media player."
-        Else
-            ' ...
-            MediaPlayer.Repeat = True
-            
-            ' ...
-            tmpbuf = "The repeat option has been enabled for the selected " & _
-                "media player."
-        End If
-    End If
-        
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnRepeat
-
-' handle next command
-Private Function OnNext(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-
-    ' ...
-    If (BotVars.DisableMP3Commands = False) Then
-        'Dim pos As Integer ' ...
-        
-        ' ...
-        'pos = MediaPlayer.PlaylistPosition
-    
-        ' ...
-        'Call MediaPlayer.PlayTrack(pos + 1)
-        
-        ' ...
-        Call MediaPlayer.NextTrack
-        
-        ' ...
-        tmpbuf = "Skipped forwards."
-    End If
-        
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnNext
-
 ' handle protect command
 Private Function OnProtect(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -1983,129 +1810,6 @@ Private Function OnWhisperCmds(ByVal Username As String, ByRef dbAccess As udtGe
     ' return message
     cmdRet(0) = tmpbuf
 End Function ' end function OnWhisperCmds
-
-' handle stop command
-Private Function OnStop(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-
-    ' ...
-    If (BotVars.DisableMP3Commands = False) Then
-        ' ...
-        Call MediaPlayer.QuitPlayback
-    
-        ' ...
-        tmpbuf = "Stopped playback."
-    End If
-        
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnStop
-
-' handle play command
-Private Function OnPlay(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-    Dim Track  As Long   ' ...
-    
-    ' ...
-    If (BotVars.DisableMP3Commands = False) Then
-        ' ...
-        If (MediaPlayer.IsLoaded() = False) Then
-            MediaPlayer.Start
-        End If
-
-        ' ...
-        MediaPlayer.PlayTrack msgData
-        
-        ' ...
-        tmpbuf = "Playback started."
-    End If
-
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnPlay
-
-' handle useitunes command
-Private Function OnUseiTunes(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-    
-    ' ...
-    BotVars.MediaPlayer = "iTunes"
-    
-    ' ...
-    tmpbuf = "iTunes is ready."
-    
-    ' ...
-    Call WriteINI("Other", "MediaPlayer", "iTunes")
-        
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnUseiTunes
-
-' handle usewinamp command
-Private Function OnUseWinamp(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-    
-    ' ...
-    BotVars.MediaPlayer = "Winamp"
-    
-    ' ...
-    tmpbuf = "Winamp is ready."
-    
-    ' ...
-    Call WriteINI("Other", "MediaPlayer", "Winamp")
-
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnUseWinamp
-
-' handle pause command
-Private Function OnPause(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-    
-    If (BotVars.DisableMP3Commands = False) Then
-        If (MediaPlayer.IsLoaded()) Then
-            Call MediaPlayer.PausePlayback
-        
-            tmpbuf = "Paused/resumed play."
-        Else
-            tmpbuf = MediaPlayer.Name & " is not loaded."
-        End If
-    End If
-        
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnPause
-
-' handle fos command
-Private Function OnFos(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim hWndWA As Long
-    Dim tmpbuf As String ' temporary output buffer
-
-   If (BotVars.DisableMP3Commands = False) Then
-        If (MediaPlayer.IsLoaded()) Then
-            MediaPlayer.FadeOutToStop
-        
-            tmpbuf = "Fade-out stop."
-        Else
-            tmpbuf = MediaPlayer.Name & " is not loaded."
-        End If
-    End If
-        
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnFos
 
 ' handle rem command
 Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -3976,36 +3680,9 @@ Private Function OnBack(ByVal Username As String, ByRef dbAccess As udtGetAccess
             ' set away message
             AwayMsg = vbNullString
         End If
-    Else
-        ' ...
-        Call OnPrevious(Username, dbAccess, msgData, InBot, cmdRet())
     End If
 
 End Function ' end function OnBack
-
-' handle prev command
-Private Function OnPrevious(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-    Dim hWndWA As Long   ' ...
-    
-    ' ...
-    If (BotVars.DisableMP3Commands = False) Then
-        If (MediaPlayer.IsLoaded()) Then
-            ' ...
-            MediaPlayer.PreviousTrack
-        
-            ' ...
-            tmpbuf = "Skipped backwards."
-        Else
-            tmpbuf = MediaPlayer.Name & " is not loaded."
-        End If
-    End If
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnPrev
 
 ' handle away command
 Private Function OnAway(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -4061,52 +3738,6 @@ Private Function OnAway(ByVal Username As String, ByRef dbAccess As udtGetAccess
     ' return message
     cmdRet(0) = tmpbuf
 End Function ' end function OnAway
-
-' handle mp3 command
-Private Function OnMP3(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-
-    Dim tmpbuf       As String  ' temporary output buffer
-    Dim TrackName    As String  ' ...
-    Dim ListPosition As Long    ' ...
-    Dim ListCount    As Long    ' ...
-    Dim TrackTime    As Long    ' ...
-    Dim TrackLength  As Long    ' ...
-    
-    ' ...
-    If (BotVars.DisableMP3Commands = False) Then
-        If (MediaPlayer.IsLoaded = False) Then
-            tmpbuf = MediaPlayer.Name & " is not loaded."
-        Else
-            ' ...
-            TrackName = MediaPlayer.TrackName
-            ListPosition = MediaPlayer.PlaylistPosition
-            ListCount = MediaPlayer.PlaylistCount
-            TrackTime = MediaPlayer.TrackTime
-            TrackLength = MediaPlayer.TrackLength
-            
-            ' ...
-            If (TrackName = vbNullString) Then
-                tmpbuf = MediaPlayer.Name & " is not currently playing any media."
-            Else
-                tmpbuf = "Current MP3 " & _
-                    "[" & ListPosition & "/" & ListCount & "]: " & _
-                        TrackName & " (" & SecondsToString(TrackTime) & _
-                            "/" & SecondsToString(TrackLength)
-                
-                ' ...
-                If (MediaPlayer.IsPaused) Then
-                    tmpbuf = tmpbuf & ", paused)"
-                Else
-                    tmpbuf = tmpbuf & ")"
-                End If
-            End If
-        End If
-    End If
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnMP3
 
 ' handle addquote command
 Private Function OnAddQuote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -6666,22 +6297,6 @@ Public Function reverseUsername(ByVal Username As String) As String
     If (reverseUsername = vbNullString) Then
         reverseUsername = Username
     End If
-End Function
-
-Public Function SecondsToString(ByVal seconds As Long) As String
-    Dim temp  As Long
-    Dim mins  As Long
-    Dim hours As Long
-    temp = seconds
-    
-    hours = temp Mod 3600
-    temp = temp - (hours * 3600)
-    
-    mins = temp Mod 60
-    temp = temp - (mins * 60)
-    
-    SecondsToString = IIf(hours, Right$("00" & hours, 2) & ":", vbNullString) & _
-        Right$("00" & mins, 2) & ":" & Right$("00" & temp, 2)
 End Function
 
 Public Function SearchDatabase(ByRef arrReturn() As String, Optional Username As String = vbNullString, _
