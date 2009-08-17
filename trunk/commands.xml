@@ -759,9 +759,9 @@
     </access>
   </command>
 
-  <command name="getping">
+  <command name="pingme">
     <aliases>
-      <alias>pingme</alias>
+      <alias>getping</alias>
     </aliases>
 
     <documentation>

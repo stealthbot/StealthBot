@@ -33,6 +33,7 @@ Private m_xmlarguments As Dictionary
 Private m_hasaccess    As Boolean
 Private m_splithasrun  As Boolean
 Private m_waswhispered As Boolean
+Private m_response     As Collection
 
 Public Property Get Username() As String
     Username = m_username
@@ -104,6 +105,7 @@ Public Sub Class_Initialize()
     m_hasaccess = False
     m_splithasrun = False
     m_waswhispered = False
+    Set m_response = New Collection
     
 End Sub
 
@@ -292,25 +294,51 @@ ERROR_HANDLER:
     Call frmChat.AddChat(vbRed, "Error: #" & Err.Number & ": " & Err.description & " in clsCommandObj.CheckForAnyFlags().")
 End Function
 
-'The Respond function 52 Wanted
+'Adds a line to the response queue
+Public Sub Respond(strResponse As String)
+    m_response.Add strResponse
+End Sub
+
+'Cleares the response queue
+Public Sub ClearResponse()
+    Do While m_response.Count
+      m_response.Remove 1
+    Loop
+End Sub
+
+'Gets the Response Queue
+Public Function GetResponse() As Collection
+    Set GetResponse = m_response
+End Function
+
 'This will respond in the proper style based on how the command was used.
 'This will messup emote responses /me if it is not public output or whisper commands is turned on.
 'If your response MUST be a specific style, Use AddQ or DSP
-Public Function Respond(strResponse As String) As Boolean
+Public Function SendResponse()
 On Error GoTo ERROR_HANDLER
+    Dim I As Integer
     If (IsLocal) Then
         If (PublicOutput) Then
-            frmChat.AddQ strResponse, PRIORITY.CONSOLE_MESSAGE
+            For I = 1 To m_response.Count
+                frmChat.AddQ m_response.Item(I), PRIORITY.CONSOLE_MESSAGE
+            Next I
         Else
-            frmChat.AddChat RTBColors.ConsoleText, strResponse
+            For I = 1 To m_response.Count
+                frmChat.AddChat RTBColors.ConsoleText, m_response.Item(I)
+            Next I
         End If
     Else
         If ((BotVars.WhisperCmds) Or (WasWhispered)) Then
-            frmChat.AddQ "/w " & Username & Space$(1) & strResponse, PRIORITY.COMMAND_RESPONSE_MESSAGE
+            For I = 1 To m_response.Count
+                frmChat.AddQ "/w " & Username & Space$(1) & m_response.Item(I), PRIORITY.COMMAND_RESPONSE_MESSAGE
+            Next I
         Else
-            frmChat.AddQ strResponse, PRIORITY.COMMAND_RESPONSE_MESSAGE
+            For I = 1 To m_response.Count
+                frmChat.AddQ m_response.Item(I), PRIORITY.COMMAND_RESPONSE_MESSAGE
+            Next I
         End If
     End If
+    ClearResponse
     Exit Function
     
 ERROR_HANDLER:

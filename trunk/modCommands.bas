@@ -45,7 +45,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     
     Dim docs             As New clsCommandDocObj
     Dim commands         As Collection
-    Dim command          As clsCommandObj
+    Dim Command          As clsCommandObj
     Dim dbAccess         As udtGetAccessResponse
     Dim I                As Integer
     Dim Count            As Integer
@@ -75,13 +75,13 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     ' ...
     Set commands = docs.IsCommand(Message, IIf(IsLocal, modGlobals.CurrentUsername, Username), Chr$(0))
 
-    For Each command In commands
-        m_DisplayOutput = command.PublicOutput
+    For Each Command In commands
+        m_DisplayOutput = Command.PublicOutput
         
         ' ...
-        If (command.HasAccess) Then
+        If (Command.HasAccess) Then
             ' ...
-            command.WasWhispered = WasWhispered
+            Command.WasWhispered = WasWhispered
             If (IsLocal) Then
                 With dbAccess
                     .Access = 201
@@ -92,11 +92,14 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             End If
             
             ' ...
-            If (LenB(command.docs.Owner) = 0) Then 'Is it a built in command?
-                Call executeCommand(Username, dbAccess, command.Name & Space$(1) & command.Args, _
-                    IsLocal, command_return)
+            If (LenB(Command.docs.Owner) = 0) Then 'Is it a built in command?
+                If (Not executeCommand(Username, dbAccess, Command.Name & Space$(1) & Command.Args, IsLocal, command_return)) Then
+                    Call DispatchCommand(Command)
+                    Command.SendResponse
+                End If
             Else
-                Call RunInSingle(modScripting.GetModuleByName(command.docs.Owner), "Event_Command", command)
+                Call RunInSingle(modScripting.GetModuleByName(Command.docs.Owner), "Event_Command", Command)
+                Command.SendResponse
             End If
                     
             ' ...
@@ -114,7 +117,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
                         ' ...
                         If (IsLocal) Then
                             ' ...
-                            If (command.PublicOutput) Then
+                            If (Command.PublicOutput) Then
                                 AddQ command_return(I), PRIORITY.CONSOLE_MESSAGE
                             Else
                                 frmChat.AddChat RTBColors.ConsoleText, command_return(I)
@@ -146,7 +149,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
     End If
     
     'Unload memory - FrOzeN
-    Set command = Nothing
+    Set Command = Nothing
     Set docs = Nothing
     Set commands = Nothing
     
@@ -159,12 +162,24 @@ ERROR_HANDLER:
         " in modCommandCode.ProcessCommand().")
 
     'Unload memory - FrOzeN
-    Set command = Nothing
+    Set Command = Nothing
 
     ' return command failure result
     ProcessCommand = False
     
     Exit Function
+End Function
+
+'This is the replacement for ExecuteCommand, Uses the new clsCommandObj, Should be cleaner.
+Public Function DispatchCommand(Command As clsCommandObj)
+    DispatchCommand = True
+    Select Case LCase(Command.Name)
+        Case "owner":  Call modCommandsInfo.OnOwner(Command)
+        Case "ping":   Call modCommandsInfo.OnPing(Command)
+        Case "pingme": Call modCommandsInfo.OnPingMe(Command)
+        Case "time":   Call modCommandsInfo.OnTime(Command)
+        Case Else: DispatchCommand = False
+    End Select
 End Function
 
 ' command processing helper function
@@ -327,16 +342,12 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "uptime":        Call OnUptime(Username, dbAccess, msgData, InBot, cmdRet())
         Case "away":          Call OnAway(Username, dbAccess, msgData, InBot, cmdRet())
         Case "mp3":           Call OnMP3(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "ping":          Call OnPing(Username, dbAccess, msgData, InBot, cmdRet())
         Case "addquote":      Call OnAddQuote(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "owner":         Call OnOwner(Username, dbAccess, msgData, InBot, cmdRet())
         Case "ignore":        Call OnIgnore(Username, dbAccess, msgData, InBot, cmdRet())
         Case "quote":         Call OnQuote(Username, dbAccess, msgData, InBot, cmdRet())
         Case "unignore":      Call OnUnignore(Username, dbAccess, msgData, InBot, cmdRet())
         Case "cq":            Call OnCQ(Username, dbAccess, msgData, InBot, cmdRet())
         Case "scq":           Call OnSCQ(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "time":          Call OnTime(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "getping":       Call OnGetPing(Username, dbAccess, msgData, InBot, cmdRet())
         Case "checkmail":     Call OnCheckMail(Username, dbAccess, msgData, InBot, cmdRet())
         Case "inbox":         Call OnInbox(Username, dbAccess, msgData, InBot, cmdRet())
         Case "whoami":        Call OnWhoAmI(Username, dbAccess, msgData, InBot, cmdRet())
@@ -4515,31 +4526,6 @@ Private Function OnMP3(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     cmdRet(0) = tmpbuf
 End Function ' end function OnMP3
 
-' handle ping command
-Private Function OnPing(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf  As String ' temporary output buffer
-    Dim Latency As Long
-    Dim user    As String
-
-    If (Not (msgData = vbNullString)) Then
-        user = Split(msgData, " ")(0)
-        Latency = GetPing(user)
-        
-        If (Latency >= -1) Then
-            tmpbuf = user & "'s ping at login was " & Latency & "ms."
-        Else
-            tmpbuf = "I can't see " & user & " in the channel."
-        End If
-    Else
-        tmpbuf = "Please specify a user to ping."
-    End If
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnPing
-
 ' handle addquote command
 Private Function OnAddQuote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -4556,23 +4542,6 @@ Private Function OnAddQuote(ByVal Username As String, ByRef dbAccess As udtGetAc
     ' return message
     cmdRet(0) = tmpbuf
 End Function ' end function OnAddQuote
-
-' handle owner command
-Private Function OnOwner(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-    
-    If (LenB(BotVars.BotOwner)) Then
-        tmpbuf = "This bot's owner is " & _
-            BotVars.BotOwner & "."
-    Else
-        tmpbuf = "There is no owner currently set."
-    End If
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnOwner
 
 ' handle ignore command
 Private Function OnIgnore(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -4683,53 +4652,6 @@ Private Function OnSCQ(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     ' return message
     cmdRet(0) = tmpbuf
 End Function ' end function OnCQ
-
-' handle time command
-Private Function OnTime(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-
-    tmpbuf = "The current time on this computer is " & Time & " on " & _
-        Format(Date, "MM-dd-yyyy") & "."
-            
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnTime
-
-' handle getping command
-Private Function OnGetPing(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf  As String ' temporary output buffer
-    Dim Latency As Long
-
-    If (InBot) Then
-        If (g_Online) Then
-            ' grab current latency
-            Latency = GetPing(GetCurrentUsername)
-        
-            ' ...
-            tmpbuf = "Your ping at login was " & Latency & "ms."
-        Else
-            ' ...
-            tmpbuf = "Error: You are not connected."
-        End If
-    Else
-        ' ...
-        Latency = GetPing(Username)
-    
-        ' ...
-        If (Latency >= -1) Then
-            tmpbuf = "Your ping at login was " & Latency & "ms."
-        Else
-            tmpbuf = "I can't see you in the channel."
-        End If
-    End If
-
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnGetPing
 
 ' handle checkmail command
 Private Function OnCheckMail(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -7426,7 +7348,7 @@ Public Function IsCorrectSyntax(ByVal commandName As String, ByVal commandArgs A
     On Error GoTo ERROR_HANDLER
     
     Dim docs As clsCommandDocObj
-    Dim command As New clsCommandObj
+    Dim Command As New clsCommandObj
     
     Set docs = OpenCommand(commandName, scriptOwner)
     If (docs Is Nothing) Then
@@ -7437,14 +7359,14 @@ Public Function IsCorrectSyntax(ByVal commandName As String, ByVal commandArgs A
         End If
     End If
     
-    With command
+    With Command
         .Name = docs.Name
         .Args = commandArgs
         IsCorrectSyntax = .IsValid
     End With
     
     Set docs = Nothing
-    Set command = Nothing
+    Set Command = Nothing
     Exit Function
     
 ERROR_HANDLER:
@@ -7459,7 +7381,7 @@ Public Function HasAccess(ByVal Username As String, ByVal commandName As String,
     On Error GoTo ERROR_HANDLER
     
     Dim docs As clsCommandDocObj
-    Dim command As clsCommandObj
+    Dim Command As clsCommandObj
     
     Set docs = OpenCommand(commandName, scriptOwner)
     If (docs Is Nothing) Then
@@ -7470,7 +7392,7 @@ Public Function HasAccess(ByVal Username As String, ByVal commandName As String,
         End If
     End If
     
-    With command
+    With Command
         .Name = docs.Name
         .Args = commandArgs
         .Username = Username
@@ -7478,7 +7400,7 @@ Public Function HasAccess(ByVal Username As String, ByVal commandName As String,
     End With
     
     Set docs = Nothing
-    Set command = Nothing
+    Set Command = Nothing
     Exit Function
     
 ERROR_HANDLER:
@@ -7495,7 +7417,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
     ' ...
     If (Len(CWord) > 0) Then
         Dim commands As DOMDocument60
-        Dim command  As IXMLDOMNode
+        Dim Command  As IXMLDOMNode
         
         ' ...
         Set commands = New DOMDocument60
@@ -7512,17 +7434,17 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
         Call commands.Load(App.Path & "\commands.xml")
         
         ' ...
-        For Each command In commands.documentElement.childNodes
+        For Each Command In commands.documentElement.childNodes
             Dim accessGroup As IXMLDOMNode
             Dim Access      As IXMLDOMNode
             Dim flag        As IXMLDOMNode
         
             ' ...
-            If (StrComp(command.Attributes.getNamedItem("name").Text, _
+            If (StrComp(Command.Attributes.getNamedItem("name").Text, _
                 CWord, vbTextCompare) = 0) Then
                 
                 ' ...
-                Set accessGroup = command.selectSingleNode("access")
+                Set accessGroup = Command.selectSingleNode("access")
                 
                 ' ...
                 For Each Access In accessGroup.childNodes
@@ -7554,7 +7476,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                     Dim Restriction  As IXMLDOMNode
                     
                     ' ...
-                    Set Restrictions = command.selectNodes("restrictions/restriction")
+                    Set Restrictions = Command.selectNodes("restrictions/restriction")
                     
                     ' ...
                     For Each Restriction In Restrictions
