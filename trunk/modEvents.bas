@@ -1157,6 +1157,7 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
     Dim showUpdate   As Boolean ' ...
     Dim Displayed    As Boolean ' whether this event has been displayed in the RTB (if combined with another)
     Dim AcqOps       As Boolean
+    Dim NewIcon      As Long    ' temp store new icon
 
     If (LenB(Username) < 1) Then
         Exit Sub
@@ -1289,8 +1290,9 @@ Public Sub Event_UserInChannel(ByVal Username As String, ByVal Flags As Long, By
                         ' ...
                         If ((UserObj.game = "WAR3") Or (UserObj.game = "W3XP")) Then
                             ' if the icon in the list is not the icon found by stats, update
-                            If (found.SmallIcon <> UserObj.Stats.IconCode) Then
-                                found.SmallIcon = UserObj.Stats.IconCode
+                            NewIcon = GetSmallIcon(UserObj.game, UserObj.Flags, UserObj.Stats.IconCode)
+                            If (found.SmallIcon <> NewIcon) Then
+                                found.SmallIcon = NewIcon
                             End If
                         End If
                     End If
