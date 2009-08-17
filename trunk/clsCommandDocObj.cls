@@ -109,7 +109,7 @@ Private Function CreateCommandInstance(ByRef commandString As String, ByVal strU
         .Args = commandArgs
         '.docs = Me
         .Arguments = SplitArguments(commandArgs)
-        .Username = strUsername
+        .UserName = strUsername
     End With
     
     '// all good in the hood :)
@@ -375,7 +375,7 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
     
     
     '// used for creating command instaces
-    Dim command        As clsCommandObj
+    Dim Command        As clsCommandObj
     Dim commandIndex   As Integer
     Dim commandString  As String
     Dim commandStrings As Collection
@@ -554,13 +554,13 @@ Public Function IsCommand(ByVal strText As String, ByVal strUsername As String, 
     For commandIndex = 1 To commandStrings.Count
         commandString = commandStrings(commandIndex)
         '// lets try to parse this command and add it to the collection
-        Set command = CreateCommandInstance(commandString, strUsername, strScriptOwner)
-        If Not (command Is Nothing) Then
+        Set Command = CreateCommandInstance(commandString, strUsername, strScriptOwner)
+        If Not (Command Is Nothing) Then
             '// we only want to add the command if it is enabled
-            If command.docs.IsEnabled = True Then
-                command.PublicOutput = PublicOutput
-                command.IsLocal = IsLocal
-                IsCommand.Add command
+            If Command.docs.IsEnabled = True Then
+                Command.PublicOutput = PublicOutput
+                Command.IsLocal = IsLocal
+                IsCommand.Add Command
             End If
         End If
     Next
@@ -611,7 +611,7 @@ Public Function OpenCommand(ByVal strCommand As String, Optional ByVal strScript
     Dim command_documentation As IXMLDOMNode
     Dim command_Parameters    As IXMLDOMNodeList
     Dim command_aliases       As IXMLDOMNodeList
-    Dim Alias                 As IXMLDOMNode
+    Dim alias                 As IXMLDOMNode
     Dim attrs                 As IXMLDOMAttribute
     Dim xpath                 As String
     
@@ -842,7 +842,7 @@ End Function
 
 Private Function getAliases(ByRef AnyNode As IXMLDOMNode) As Collection
 
-    Dim Alias   As IXMLDOMNode
+    Dim alias   As IXMLDOMNode
     Dim aliases As IXMLDOMNodeList
     
     Set getAliases = New Collection
@@ -855,8 +855,8 @@ Private Function getAliases(ByRef AnyNode As IXMLDOMNode) As Collection
     Set aliases = AnyNode.selectNodes("aliases/alias")
     
     If ((aliases Is Nothing) = False) Then
-        For Each Alias In aliases
-            getAliases.Add Alias.Text
+        For Each alias In aliases
+            getAliases.Add alias.Text
         Next
     End If
 
@@ -1006,7 +1006,7 @@ End Function
 
 Private Function setAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Collection) As Collection
 
-    Dim Alias   As IXMLDOMNode
+    Dim alias   As IXMLDOMNode
     Dim aliases As IXMLDOMNodeList
     Dim I       As Integer
     
@@ -1018,18 +1018,18 @@ Private Function setAliases(ByRef AnyNode As IXMLDOMNode, ByRef AliasCol As Coll
     Set aliases = AnyNode.selectNodes("aliases/alias")
     
     If ((aliases Is Nothing) = False) Then
-        For Each Alias In aliases
+        For Each alias In aliases
             '// 09/03/2008 JSM - Modified code to use the <aliases> element
-            AnyNode.selectSingleNode("aliases").removeChild Alias
+            AnyNode.selectSingleNode("aliases").removeChild alias
         Next
     End If
     
     For I = 1 To AliasCol.Count
         '// 09/03/2008 JSM - Modified code to use the <aliases> element
-        Set Alias = _
+        Set alias = _
             AnyNode.selectSingleNode("aliases").appendChild(m_database.createNode("element", "alias", vbNullString))
         
-        Alias.Text = AliasCol(I)
+        alias.Text = AliasCol(I)
     Next
     
     'Call Save
@@ -1176,8 +1176,23 @@ Private Function getSyntaxString() As String
         retVal, _
         IIf((Me.RequiredRank <> -1) Or (Len(Me.RequiredFlags) > 0), BotVars.Trigger, "/"))
     
-    getSyntaxString = retVal
+    getSyntaxString = Trim$(retVal)
 
+End Function
+
+'alias1, alias2, alias3
+Private Function getAliasString()
+    Dim retVal As String
+    Dim I As Integer
+    If (aliases.Count > 0) Then
+        For I = 1 To aliases.Count
+            retVal = StringFormatA("{0}{1}{2}", _
+                retVal, _
+                CStr(aliases.Item(I)), _
+                IIf(I = aliases.Count, vbNullString, ", "))
+        Next I
+    End If
+    getAliasString = retVal
 End Function
 
 
@@ -1482,6 +1497,12 @@ End Property
 Public Property Get SyntaxString() As String
     
     SyntaxString = getSyntaxString()
+    
+End Property
+
+Public Property Get AliasString() As String
+    
+    AliasString = getAliasString()
     
 End Property
 

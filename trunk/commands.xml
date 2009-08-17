@@ -1,11 +1,11 @@
 <commands xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
   <command name="dump">
     <aliases />
-	
+    
     <documentation>
       <description>Dumps temporary packet information to a file.</description>
     </documentation>
-	
+    
     <access />
   </command>
 
@@ -15,7 +15,7 @@
     <documentation>
       <description>Displays the local IP address used to connect to Battle.net.</description>
     </documentation>
-	
+    
     <access />
   </command>
 
@@ -24,7 +24,7 @@
 
     <documentation>
       <description>Lists all of the bot's currently loaded scripts.</description>
-	  <specialnotes>Names encased in parenthesis means the script is disabled.</specialnotes>
+      <specialnotes>Names encased in parenthesis means the script is disabled.</specialnotes>
     </documentation>
 
     <access>
@@ -39,14 +39,14 @@
       <description>Enables the specified script.</description>
     </documentation>
 
-	<arguments>
-	  <argument name="script" type="string">
-		<documentation>
-		  <description>The name of the script you want to enable.</description>
-		</documentation>
-	  </argument>
-	</arguments>
-	
+    <arguments>
+      <argument name="script" type="string">
+        <documentation>
+          <description>The name of the script you want to enable.</description>
+        </documentation>
+      </argument>
+    </arguments>
+    
     <access>
       <rank>90</rank>
     </access>
@@ -59,14 +59,14 @@
       <description>Disables the specified script.</description>
     </documentation>
 
-	<arguments>
-	  <argument name="script" type="string">
-		  <documentation>
-		    <description>The name of the script you want to disable.</description>
-		  </documentation>
-	  </argument>
-	</arguments>
-	
+    <arguments>
+      <argument name="script" type="string">
+          <documentation>
+            <description>The name of the script you want to disable.</description>
+          </documentation>
+      </argument>
+    </arguments>
+    
     <access>
       <rank>90</rank>
     </access>
@@ -78,18 +78,18 @@
     <documentation>
       <description>Returns additional details about the specified script.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="script" type="string">
-		  <documentation>
-			<description>The name of the script you want to get information about.</description>
-		  </documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="script" type="string">
+          <documentation>
+            <description>The name of the script you want to get information about.</description>
+          </documentation>
+      </argument>
+    </arguments>
 
     <access>
-	  <rank>90</rank>
-	</access>
+      <rank>90</rank>
+    </access>
   </command>
 
   <command name="exec">
@@ -98,14 +98,14 @@
     <documentation>
       <description>Executes the provided visual basic script code.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="code" type="string">
-		  <documentation>
-			<description>The raw VBS code to be executed.</description>
-		  </documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="code" type="string">
+          <documentation>
+            <description>The raw VBS code to be executed.</description>
+          </documentation>
+      </argument>
+    </arguments>
 
     <access />
   </command>
@@ -116,14 +116,14 @@
     <documentation>
       <description>Returns initialization performance information about currently loaded scripts.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="script" type="string" optional="1">
-		  <documentation>
-			<description>The name of the script you want to get information about.</description>
-		  </documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="script" type="string" optional="1">
+          <documentation>
+            <description>The name of the script you want to get information about.</description>
+          </documentation>
+      </argument>
+    </arguments>
 
     <access />
   </command>
@@ -133,17 +133,17 @@
 
     <documentation>
       <description>Makes the specified user's name appear red inbot.</description>
-	  <specialnotes>The username specified may include wildcards.</specialnotes>
+      <specialnotes>The username specified may include wildcards.</specialnotes>
     </documentation>
-	
-	<arguments>
-	  <argument name="username" type="word">
-		  <documentation>
-			<description>The name of the person you wish to watch.</description>
-			<specialnotes>May contain wildcards</specialnotes>
-		  </documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="username" type="word">
+          <documentation>
+            <description>The name of the person you wish to watch.</description>
+            <specialnotes>May contain wildcards</specialnotes>
+          </documentation>
+      </argument>
+    </arguments>
 
     <access />
   </command>
@@ -200,31 +200,23 @@
     </aliases>
 
     <documentation>
-      <description>Displays a user's or group's rank and flags.</description>
-	  <specialnotes>The username may contain wildcards.</specialnotes>
+      <description>Finds users who match the search criteria.</description>
+      <specialnotes>The username may contain wildcards.</specialnotes>
     </documentation>
 
     <arguments>
-	
-      <argument name="username" type="word" optional="1">
+      <argument name="Username/Rank" type="word">
         <documentation>
-          <description>The username to search for.</description>
-		  <specialnotes>May contain wildcards.</specialnotes>
+          <description>The username to search for, May contain Wildcards, Or the Rank to search for.</description>
         </documentation>
       </argument>
 
-      <argument name="LowerBound" type="numeic" optional="1">
+      <argument name="UpperRank" type="numeic" optional="1">
         <documentation>
-		  <description>Find users with this access or above.</description>
-		</documentation>
-	  </argument>
-
-      <argument name="UpperBound" type="numeic" optional="1">
-        <documentation>
-		  <description>Find users with this access or below.</description>
-		  <specialnotes>Must have LowerBound supplied with it.</specialnotes>
-		</documentation>
-	  </argument>
+          <description>Will find users Between this rank and the rank specified in the first parameter</description>
+          <specialnotes>The first parameter must be numeric.</specialnotes>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -271,7 +263,7 @@
 
     <documentation>
       <description>Retreives any stored mail for the requesting user.</description>
-	  <specialnotes>The 'inbox' version can be used with the bot's trigger or, '!'. EXA: !inbox</specialnotes>
+      <specialnotes>The 'inbox' version can be used with the bot's trigger or, '!'. EXA: !inbox</specialnotes>
     </documentation>
 
     <access>
@@ -317,14 +309,14 @@
     <documentation>
       <description>States a random value between 0 and the specified value. (Defaults to 100)</description>
     </documentation>
-	
-	<arguments>
+    
+    <arguments>
       <argument name="value" type="numeic" optional="1">
         <documentation>
-		  <description>The maximum value to roll.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+          <description>The maximum value to roll.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>20</rank>
@@ -520,7 +512,7 @@
         </documentation>
       </argument>
 
-	  <argument name="attributes" type="word" optional="1">
+      <argument name="attributes" type="word" optional="1">
         <documentation>
           <description>The attributes to give the user.</description>
         </documentation>
@@ -786,7 +778,7 @@
 
     <documentation>
       <description>States the current string used for command identification.</description>
-	  <specialnotes>This command can be executed with the trigger '?', EXA: ?trigger</specialnotes>
+      <specialnotes>This command can be executed with the trigger '?', EXA: ?trigger</specialnotes>
     </documentation>
 
     <access>
@@ -1343,7 +1335,7 @@
     <documentation>
       <description>Instructs the bot to remove a specified user from the bot's friends list.</description>
     </documentation>
-	
+    
     <arguments>
       <argument name="username" type="word">
         <documentation>
@@ -1351,7 +1343,7 @@
         </documentation>
       </argument>
     </arguments>
-	
+    
     <access>
       <rank>60</rank>
       <flags>
@@ -1497,7 +1489,7 @@
     <documentation>
       <description>States if a specified user matches a tagban.</description>
     </documentation>
-	
+    
     <arguments>
       <argument name="username" type="word">
         <documentation>
@@ -1521,7 +1513,7 @@
     <documentation>
       <description>Instructs the bot to add a specified user to the bot's friends list.</description>
     </documentation>
-	
+    
     <arguments>
       <argument name="username" type="word">
         <documentation>
@@ -1544,20 +1536,20 @@
     <documentation>
       <description>Temporarily removes a user from the channel.</description>
     </documentation>
-	
+    
     <arguments>
       <argument name="username" type="word">
         <documentation>
           <description>The user to remove from the channel.</description>
-		  <specialnotes>The username may include wildcards.</specialnotes>
+          <specialnotes>The username may include wildcards.</specialnotes>
         </documentation>
       </argument>
-	  
-	  <argument name="reason" type="string" optional="1">
-	    <documentation>
-		  <description>The reason why this user was removed from the channel.</description>
-		</documentation>
-	  </argument>
+      
+      <argument name="reason" type="string" optional="1">
+        <documentation>
+          <description>The reason why this user was removed from the channel.</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -1579,15 +1571,15 @@
       <argument name="username" type="word">
         <documentation>
           <description>The name of the user to be banned.</description>
-		  <specialnotes>The username may include wildcards.</specialnotes>
+          <specialnotes>The username may include wildcards.</specialnotes>
         </documentation>
       </argument>
-	  
-	  <argument name="reason" type="string" optional="1">
-	    <documentation>
-		  <description>The reason why this user was removed from the channel.</description>
-		</documentation>
-	  </argument>
+      
+      <argument name="reason" type="string" optional="1">
+        <documentation>
+          <description>The reason why this user was removed from the channel.</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -1609,7 +1601,7 @@
       <argument name="username" type="word">
         <documentation>
           <description>The name of the user to be unbanned.</description>
-		  <specialnotes>The username may include wildcards.</specialnotes>
+          <specialnotes>The username may include wildcards.</specialnotes>
         </documentation>
       </argument>
     </arguments>
@@ -1652,7 +1644,7 @@
     <documentation>
       <description>States the currently active phrasebans.</description>
     </documentation>
-	
+    
     <access>
       <rank>50</rank>
       <flags>
@@ -1671,12 +1663,12 @@
     </documentation>
 
     <arguments>  
-	  <argument name="phrase" type="string">
-	    <documentation>
-		  <description>The phrase to be added to the ban list.</description>
-		</documentation>
-	  </argument>
-    </arguments>	
+      <argument name="phrase" type="string">
+        <documentation>
+          <description>The phrase to be added to the ban list.</description>
+        </documentation>
+      </argument>
+    </arguments>    
 
     <access>
       <rank>60</rank>
@@ -1694,18 +1686,18 @@
     </documentation>
 
     <arguments>  
-	  <argument name="criteria" type="word">
-	    <documentation>
-		  <description>The Flags or Rank of the users to send this message to.</description>
-		</documentation>
-	  </argument>
-	  <argument name="message" type="string">
-	    <documentation>
-		  <description>The message to be stored for the users.</description>
-		</documentation>
-	  </argument>
+      <argument name="criteria" type="word">
+        <documentation>
+          <description>The Flags or Rank of the users to send this message to.</description>
+        </documentation>
+      </argument>
+      <argument name="message" type="string">
+        <documentation>
+          <description>The message to be stored for the users.</description>
+        </documentation>
+      </argument>
     </arguments>
-	
+    
     <access>
       <rank>80</rank>
       <flags>
@@ -1720,13 +1712,13 @@
     <documentation>
       <description>Defines a message for use during channel protection.</description>
     </documentation>
-	
+    
     <arguments>  
-	  <argument name="message" type="string">
-	    <documentation>
-		  <description>The message to be used when banning uders from the channel.</description>
-		</documentation>
-	  </argument>
+      <argument name="message" type="string">
+        <documentation>
+          <description>The message to be used when banning uders from the channel.</description>
+        </documentation>
+      </argument>
     </arguments>
     
     <access>
@@ -1745,13 +1737,13 @@
     <documentation>
       <description>Removes a phrase from the phrasebans list.</description>
     </documentation>
-	
+    
     <arguments>  
-	  <argument name="phrase" type="string">
-	    <documentation>
-		  <description>The phrase to remove from the list.</description>
-		</documentation>
-	  </argument>
+      <argument name="phrase" type="string">
+        <documentation>
+          <description>The phrase to remove from the list.</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -1813,18 +1805,18 @@
     <documentation>
       <description>Instructs the bot to squelch and ban a specified user.</description>
     </documentation>
-	
+    
     <arguments>  
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The user to be ipbanned.</description>
-		</documentation>
-	  </argument>
-	  <argument name="message" type="string">
-	    <documentation>
-		  <description>The message to be used when banning the user.</description>
-		</documentation>
-	  </argument>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The user to be ipbanned.</description>
+        </documentation>
+      </argument>
+      <argument name="message" type="string">
+        <documentation>
+          <description>The message to be used when banning the user.</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -1845,11 +1837,11 @@
     </documentation>
 
     <arguments>  
-	  <argument name="subcommand" type="word">
-	    <documentation>
-		  <description>The sub-command to use. 'On', 'Off', or 'Status'</description>
-		</documentation>
-	  </argument>
+      <argument name="subcommand" type="word">
+        <documentation>
+          <description>The sub-command to use. 'On', 'Off', or 'Status'</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -1899,13 +1891,13 @@
     <documentation>
       <description>Removes a specified user from the shitlist.</description>
     </documentation>
-	
+    
     <arguments>  
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The user to remove from the shitlist.</description>
-		</documentation>
-	  </argument>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The user to remove from the shitlist.</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -1927,12 +1919,12 @@
     </documentation>
 
     <arguments>  
-	  <argument name="user" type="word">
-	    <documentation>
-		  <description>The username or group to add to the safelist.</description>
-		  <specialnotes>May include wildcards.</specialnotes>
-		</documentation>
-	  </argument>
+      <argument name="user" type="word">
+        <documentation>
+          <description>The username or group to add to the safelist.</description>
+          <specialnotes>May include wildcards.</specialnotes>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -1950,13 +1942,13 @@
     <documentation>
       <description>Removes a safelist entry for a specifed user or group of users.</description>
     </documentation>
-	
+    
     <arguments>  
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The username or group to remove from the safelist.</description>
-		</documentation>
-	  </argument>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The username or group to remove from the safelist.</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -2009,13 +2001,13 @@
     <documentation>
       <description>Adds a specified tag to the tagban list.</description>
     </documentation>
-	
+    
     <arguments>  
-	  <argument name="tag" type="word">
-	    <documentation>
-		  <description>The tag to add to the ban list.</description>
-		</documentation>
-	  </argument>
+      <argument name="tag" type="word">
+        <documentation>
+          <description>The tag to add to the ban list.</description>
+        </documentation>
+      </argument>
     </arguments>
       
     <access>
@@ -2033,15 +2025,15 @@
     <documentation>
       <description>Removes a specifed tag from the tagban list.</description>
     </documentation>
-	
+    
     <arguments>  
-	  <argument name="tag" type="word">
-	    <documentation>
-		  <description>The tag to remove from the ban list.</description>
-		</documentation>
-	  </argument>
+      <argument name="tag" type="word">
+        <documentation>
+          <description>The tag to remove from the ban list.</description>
+        </documentation>
+      </argument>
     </arguments>
-	
+    
     <access>
       <rank>70</rank>
       <flags>
@@ -2059,20 +2051,20 @@
     <documentation>
       <description>Adds a specified user to the shitlist.</description>
     </documentation>
-	
-	<arguments>  
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The username or group to add to the shitlist.</description>
-		  <specialnotes>Wildcards are allowed.</specialnotes>
-		</documentation>
-	  </argument>
-	  
-	  <argument name="message" type="string" optional="1">
-	    <documentation>
-		  <description>The message to be used when banning this person.</description>
-		</documentation>
-	  </argument>
+    
+    <arguments>  
+      <argument name="username" type="word">
+        <documentation>
+          <description>The username or group to add to the shitlist.</description>
+          <specialnotes>Wildcards are allowed.</specialnotes>
+        </documentation>
+      </argument>
+      
+      <argument name="message" type="string" optional="1">
+        <documentation>
+          <description>The message to be used when banning this person.</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -2090,13 +2082,13 @@
     <documentation>
       <description>Allows the requesting user to enable, disable, or check the status of, channel protection.</description>
     </documentation>
-	
-	<arguments>  
-	  <argument name="subcommand" type="word">
-	    <documentation>
-		  <description>The subcommand to use, must be: 'on', 'off', or 'status'</description>
-		</documentation>
-	  </argument>
+    
+    <arguments>  
+      <argument name="subcommand" type="word">
+        <documentation>
+          <description>The subcommand to use, must be: 'on', 'off', or 'status'</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -2113,19 +2105,19 @@
     <documentation>
       <description>Enables, disables, or changes the settings of, a welcome message.</description>
     </documentation>
-	
-	<arguments>  
-	  <argument name="subcommand1" type="word">
-	    <documentation>
-		  <description>The subcommand to use, must be: 'on', 'off', or 'whisper'</description>
-		</documentation>
-	  </argument>
-	  
-	  <argument name="subcommand2" type="word">
-	    <documentation>
-		  <description>The whisper subcommand to use, must be: 'on', or 'off'</description>
-		</documentation>
-	  </argument>
+    
+    <arguments>  
+      <argument name="subcommand1" type="word">
+        <documentation>
+          <description>The subcommand to use, must be: 'on', 'off', or 'whisper'</description>
+        </documentation>
+      </argument>
+      
+      <argument name="subcommand2" type="word">
+        <documentation>
+          <description>The whisper subcommand to use, must be: 'on', or 'off'</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -2141,16 +2133,16 @@
 
     <documentation>
       <description>States the specified user's Battle.net user profile.</description>
-	  <specialnotes>If used in the bot, will display profile information in a special window.</specialnotes>
+      <specialnotes>If used in the bot, will display profile information in a special window.</specialnotes>
     </documentation>
-	
-	<arguments>
-	  <argument name="Username" type="word">
-	    <documentation>
-		  <description>The username of the person to get profile information for.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="Username" type="word">
+        <documentation>
+          <description>The username of the person to get profile information for.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>80</rank>
@@ -2180,13 +2172,13 @@
     <documentation>
       <description>Toggles or displays the use of private messaging as a means for delivering command responses.</description>
     </documentation>
-	
-	<arguments>  
-	  <argument name="subcommand" type="word">
-	    <documentation>
-		  <description>The subcommand to use, if it is 'status' command will respond with the status. If not, it will toggle whisper responses.</description>
-		</documentation>
-	  </argument>
+    
+    <arguments>  
+      <argument name="subcommand" type="word">
+        <documentation>
+          <description>The subcommand to use, if it is 'status' command will respond with the status. If not, it will toggle whisper responses.</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -2204,14 +2196,14 @@
       <description>Filters any incoming messages containing the specified phrase.</description>
     </documentation>
 
-	<arguments>
-	  <argument name="filter" type="string">
-	    <documentation>
-		  <description>The phrase to filter, may contains wildcards.</description>
-		</documentation>
-	  </argument>
+    <arguments>
+      <argument name="filter" type="string">
+        <documentation>
+          <description>The phrase to filter, may contains wildcards.</description>
+        </documentation>
+      </argument>
     </arguments>
-	
+    
     <access>
       <rank>100</rank>
       <flags>
@@ -2227,12 +2219,12 @@
       <description>Stops filtering any incoming messages containing the specified phrase.</description>
     </documentation>
 
-	<arguments>
-	  <argument name="filter" type="string">
-	    <documentation>
-		  <description>The phrase to unfilter, may contains wildcards.</description>
-		</documentation>
-	  </argument>
+    <arguments>
+      <argument name="filter" type="string">
+        <documentation>
+          <description>The phrase to unfilter, may contains wildcards.</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -2250,12 +2242,12 @@
       <description>Filters any incoming message from the specified user.</description>
     </documentation>
 
-	<arguments>
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The username to block, may contains wildcards.</description>
-		</documentation>
-	  </argument>
+    <arguments>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The username to block, may contains wildcards.</description>
+        </documentation>
+      </argument>
     </arguments>
         
     <access>
@@ -2273,12 +2265,12 @@
       <description>Stops filtering any incoming message from the specified user.</description>
     </documentation>
 
-	<arguments>
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The username to block, may contains wildcards.</description>
-		</documentation>
-	  </argument>
+    <arguments>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The username to block, may contains wildcards.</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -2312,13 +2304,13 @@
     <documentation>
       <description>Enables, disables, or displays the status of kicking users from the channel when they yell.</description>
     </documentation>
-	
-	<arguments>  
-	  <argument name="subcommand" type="word">
-	    <documentation>
-		  <description>The subcommand to use, must be: 'on', 'off', or 'status'</description>
-		</documentation>
-	  </argument>
+    
+    <arguments>  
+      <argument name="subcommand" type="word">
+        <documentation>
+          <description>The subcommand to use, must be: 'on', 'off', or 'status'</description>
+        </documentation>
+      </argument>
     </arguments>
 
     <access>
@@ -2360,15 +2352,15 @@
       <argument name="game" type="word">
         <documentation>
           <description>The four character code of the client to add.</description>
-		  <specialnotes>
-		    STAR - Starcraft Original
-			SEXP - Starcraft BroodWars
-			D2DV - Diablo II
-			D2XP - Diablo II: Lord of Destructions
-			W2BN - Warcraft II: Battle.Net Eddition
-			WAR3 - Warcraft III: Reign of Chaos
-			W3XP - Warcraft III: The Frozen Throne
-		  </specialnotes>
+          <specialnotes>
+            STAR - Starcraft Original
+            SEXP - Starcraft BroodWars
+            D2DV - Diablo II
+            D2XP - Diablo II: Lord of Destructions
+            W2BN - Warcraft II: Battle.Net Eddition
+            WAR3 - Warcraft III: Reign of Chaos
+            W3XP - Warcraft III: The Frozen Throne
+          </specialnotes>
         </documentation>
       </argument>
     </arguments>
@@ -2461,17 +2453,17 @@
     <aliases />
 
     <documentation>
-	  <description>Will set the bot's idle to the specified message.</description>
+      <description>Will set the bot's idle to the specified message.</description>
     </documentation>
 
-	<arguments>
-	  <argument name="message" type="string">
-	    <documentation>
-		  <description>The message to be used, Leading '/'s will be stripped.</description>
-		</documentation>
-	  </argument>
-	</arguments>
-	
+    <arguments>
+      <argument name="message" type="string">
+        <documentation>
+          <description>The message to be used, Leading '/'s will be stripped.</description>
+        </documentation>
+      </argument>
+    </arguments>
+    
     <access>
       <rank>80</rank>
       <flags>
@@ -2486,20 +2478,20 @@
     <documentation>
       <description>Set the bot's idle message to the specified type.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="type" type="word">
-	    <documentation>
-		  <description>The type to set the idle to, [Message, Quote, Uptime, MP3]</description>
-		  <specialnotes>
-		    Message, Msg: The bot will send the message set by the command 'setidle'.
-			Quotes, Quote: The bot will send a randomly select line from it's quotes database.
-			Uptime: The bot will send a message detailing how long the system, and connection has bee active.
-			MP3: The bot will send a message with details about the current song playing in the local computer's media player.
-		  </specialnotes>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="type" type="word">
+        <documentation>
+          <description>The type to set the idle to, [Message, Quote, Uptime, MP3]</description>
+          <specialnotes>
+            Message, Msg: The bot will send the message set by the command 'setidle'.
+            Quotes, Quote: The bot will send a randomly select line from it's quotes database.
+            Uptime: The bot will send a message detailing how long the system, and connection has bee active.
+            MP3: The bot will send a message with details about the current song playing in the local computer's media player.
+          </specialnotes>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>80</rank>
@@ -2518,14 +2510,14 @@
       <description>Sets the bot's idle delay to the specified numer of minutes.</description>
     </documentation>
 
-	<arguments>
-	  <argument name="delay" type="numeric">
-	    <documentation>
-		  <description>The number of minuets between each idle message.</description>
-		</documentation>
-	  </argument>
-	</arguments>
-	
+    <arguments>
+      <argument name="delay" type="numeric">
+        <documentation>
+          <description>The number of minuets between each idle message.</description>
+        </documentation>
+      </argument>
+    </arguments>
+    
     <access>
       <rank>80</rank>
       <flags>
@@ -2573,16 +2565,16 @@
 
     <documentation>
       <description>Designates the specified user as heir to the channel moderator position.</description>
-	  <specialnotes>The bot must have operator status in the channel.</specialnotes>
+      <specialnotes>The bot must have operator status in the channel.</specialnotes>
     </documentation>
-	
-	<arguments>
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The username to designate.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The username to designate.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>80</rank>
@@ -2654,14 +2646,14 @@
       <description>Removes a specified user from the bot's database.</description>
     </documentation>
 
-	<arguments>
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The username or group to remove from the database.</description>
-		</documentation>
-	  </argument>
-	</arguments>
-	
+    <arguments>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The username or group to remove from the database.</description>
+        </documentation>
+      </argument>
+    </arguments>
+    
     <access>
       <rank>80</rank>
       <flags>
@@ -2677,14 +2669,14 @@
     <documentation>
       <description>Sets the bot's home channel to the channel specified.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="channel" type="string">
-	    <documentation>
-	      <description>The channel to set as home.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="channel" type="string">
+        <documentation>
+          <description>The channel to set as home.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>80</rank>
@@ -2700,14 +2692,14 @@
     <documentation>
       <description>Enables or disables the use of idle messages.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="subcommand" type="word">
-	    <documentation>
-		  <description>'On' or 'Off', to enable or disable the idle.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="subcommand" type="word">
+        <documentation>
+          <description>'On' or 'Off', to enable or disable the idle.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>80</rank>
@@ -2768,14 +2760,14 @@
     <documentation>
       <description>Changes the selected media player's volume to the specified level.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="volume" type="numeric">
-	    <documentation>
-		  <description>The value to set the volume to, in percentage (0-100).</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="volume" type="numeric">
+        <documentation>
+          <description>The value to set the volume to, in percentage (0-100).</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>80</rank>
@@ -2806,14 +2798,14 @@
     <documentation>
       <description>Begins playback in the currently selected media player.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="song" type="string" optional="1">
-	    <documentation>
-		  <description>The number, title, or partial title of the song you wish to play.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="song" type="string" optional="1">
+        <documentation>
+          <description>The number, title, or partial title of the song you wish to play.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>80</rank>
@@ -2863,14 +2855,14 @@
     <documentation>
       <description>Will attempt to ban all users within the specified channel.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="channel" type="string">
-	    <documentation>
-		  <description>The bot will attempt to ban the users who are in this channel.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="channel" type="string">
+        <documentation>
+          <description>The bot will attempt to ban the users who are in this channel.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>90</rank>
@@ -2888,14 +2880,14 @@
     <documentation>
       <description>Attempts to ignore (squelch) all users within the specified channel.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="channel" type="string">
-	    <documentation>
-		  <description>The bot will attempt to squilch the users who are in this channel.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="channel" type="string">
+        <documentation>
+          <description>The bot will attempt to squilch the users who are in this channel.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>90</rank>
@@ -2913,27 +2905,27 @@
     <documentation>
       <description>Allows the requesting user to check or change the status of idle banning.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="subcommand" type="word">
-	    <documentation>
-		  <description>The Sub Command to use, On, Off, Kick, Wait/Delay, Status</description>
-		  <specialnotes>
-		    'On [Time]': Turn idlebans on, if time is specified, sets the delay in seconds.
-			'Off': Disables idlebans
-			'Kick [On/Off]': Changes the system to kick the user instead of ban them.
-			'Wait/Delay Time': Changes the delay before kicking/banning idles users to Time seconds.
+    
+    <arguments>
+      <argument name="subcommand" type="word">
+        <documentation>
+          <description>The Sub Command to use, On, Off, Kick, Wait/Delay, Status</description>
+          <specialnotes>
+            'On [Time]': Turn idlebans on, if time is specified, sets the delay in seconds.
+            'Off': Disables idlebans
+            'Kick [On/Off]': Changes the system to kick the user instead of ban them.
+            'Wait/Delay Time': Changes the delay before kicking/banning idles users to Time seconds.
             'Status': Displays information, Delay time, Kick or Ban, Enabled or disabled
           </specialnotes>
-		</documentation>
-	  </argument>
-	  
-	  <argument name="value" type="word">
-	    <documentation>
-		  <description>Subcommand specific value, On, Off, or number of seconds.</description>
-		</documentation>
+        </documentation>
       </argument>
-	</arguments>
+      
+      <argument name="value" type="word">
+        <documentation>
+          <description>Subcommand specific value, On, Off, or number of seconds.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>90</rank>
@@ -2950,14 +2942,14 @@
       <description>Changes the bot's CD-Key configuration entry to the one specified.</description>
     </documentation>
 
-	<arguments>
-	  <argument name="key" type="string">
-	    <documentation>
-		  <description>The new cdkey to use in the bot.</description>
-		</documentation>
-	  </argument>
-	</arguments>
-	
+    <arguments>
+      <argument name="key" type="string">
+        <documentation>
+          <description>The new cdkey to use in the bot.</description>
+        </documentation>
+      </argument>
+    </arguments>
+    
     <access>
       <rank>90</rank>
       <flags>
@@ -2972,14 +2964,14 @@
     <documentation>
       <description>Changes the bot's expansion CD-Key configuration entry to the one specified.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="key" type="string">
-	    <documentation>
-		  <description>The new cdkey to use in the bot.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="key" type="string">
+        <documentation>
+          <description>The new cdkey to use in the bot.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>90</rank>
@@ -2995,20 +2987,20 @@
     <documentation>
       <description>Adds a specified user to the bot's shitlist and will then attempt to ban and ignore the user.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The user or group to exile.</description>
-		</documentation>
-	  </argument>
-	  
-	  <argument name="reason" type="string" optional="1">
-	    <documentation>
-		  <description>The reason the user is being exiled.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The user or group to exile.</description>
+        </documentation>
+      </argument>
+      
+      <argument name="reason" type="string" optional="1">
+        <documentation>
+          <description>The reason the user is being exiled.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>90</rank>
@@ -3025,14 +3017,14 @@
     <documentation>
       <description>Removes a specified user from the bot's shitlist, and will then attempt to unban and unignore the user.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The user or group to unexile.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The user or group to unexile.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>90</rank>
@@ -3068,27 +3060,27 @@
     <documentation>
       <description>Enables or disables clan channel privacy status.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="subcommand" type="word">
-	    <documentation>
-		  <description>The subcommand to use, Private, Public, Mail, MOTD</description>
-		  <specialnotes>
-		    Private: Will make the channel only avalible to clan members.
-			Public: Will allow anyone to join the channel.
-			Mail Message: Will send a message to everyone in your clan who opted to get mail.
-			MOTD Message: Will set your clan's MOTD to Message, Must have oporaters status to use.
-		  </specialnotes>
-		</documentation>
-	  </argument>
-	  
-	  <argument name="message" type="string">
-	    <documentation>
-		  <description>The message to be mailed/set.</description>
-		</documentation>
-	  </argument>
-	</arguments>
-	
+    
+    <arguments>
+      <argument name="subcommand" type="word">
+        <documentation>
+          <description>The subcommand to use, Private, Public, Mail, MOTD</description>
+          <specialnotes>
+            Private: Will make the channel only avalible to clan members.
+            Public: Will allow anyone to join the channel.
+            Mail Message: Will send a message to everyone in your clan who opted to get mail.
+            MOTD Message: Will set your clan's MOTD to Message, Must have oporaters status to use.
+          </specialnotes>
+        </documentation>
+      </argument>
+      
+      <argument name="message" type="string">
+        <documentation>
+          <description>The message to be mailed/set.</description>
+        </documentation>
+      </argument>
+    </arguments>
+    
     <access>
       <rank>90</rank>
       <flags>
@@ -3103,26 +3095,26 @@
     <documentation>
       <description>Enables, disables, changes, or displays the channel password protection.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="subcommand" type="word">
-	    <documentation>
-		  <description>The subcommand to use, On, Off, Status.</description>
-		  <specialnotes>
-		    On/Set PASSWORD: Will enable channel password prtection, and set the password to PASSWORD.
-			Off/Kill/Clear: Will disable channel password protection.
-			Time/Delay/Wait TIME: Will set the delay to TIME, TIME must be greater than 0 and less than 256.
-			Info/Status: Will display information ont eh current status of channel password protection.
-		  </specialnotes>
-		</documentation>
-	  </argument>
-	  
-	  <argument name="value" type="string">
-	    <documentation>
-		  <description>The value to be used by the commands. (Password, or Delay time)</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="subcommand" type="word">
+        <documentation>
+          <description>The subcommand to use, On, Off, Status.</description>
+          <specialnotes>
+            On/Set PASSWORD: Will enable channel password prtection, and set the password to PASSWORD.
+            Off/Kill/Clear: Will disable channel password protection.
+            Time/Delay/Wait TIME: Will set the delay to TIME, TIME must be greater than 0 and less than 256.
+            Info/Status: Will display information ont eh current status of channel password protection.
+          </specialnotes>
+        </documentation>
+      </argument>
+      
+      <argument name="value" type="string">
+        <documentation>
+          <description>The value to be used by the commands. (Password, or Delay time)</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>90</rank>
@@ -3138,15 +3130,15 @@
     <documentation>
       <description>States the contents of a specified file within the bot's directory.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="file" type="string">
-	    <documentation>
-		  <description>The file you wish to read</description>
-		  <specialnotes>My not contain '..' or '.ini', and may not be the follow file types: CON, PRN, AUX, CLOCK$, NUL, COM1, COM2, COM3, COM4, COM5, COM6, COM7, COM8, COM9, LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, LPT9</specialnotes>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="file" type="string">
+        <documentation>
+          <description>The file you wish to read</description>
+          <specialnotes>My not contain '..' or '.ini', and may not be the follow file types: CON, PRN, AUX, CLOCK$, NUL, COM1, COM2, COM3, COM4, COM5, COM6, COM7, COM8, COM9, LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, LPT9</specialnotes>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>90</rank>
@@ -3162,14 +3154,14 @@
     <documentation>
       <description>Makes the bot join the specified channel.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="channel" type="string">
-	    <documentation>
-		  <description>The channel the bot is to join.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="channel" type="string">
+        <documentation>
+          <description>The channel the bot is to join.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>90</rank>
@@ -3202,14 +3194,14 @@
     <documentation>
       <description>Promotes the specified user in the current WarCraft III clan.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The user to promote.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The user to promote.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access />
   </command>
@@ -3235,14 +3227,14 @@
     <documentation>
       <description>Demotes the specified user in the current WarCraft III clan.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The user to demote.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The user to demote.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access />
   </command>
@@ -3268,14 +3260,14 @@
     <documentation>
       <description>Changes the configuration entry for the username to the username specified.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The username to use next time you login.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The username to use next time you login.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>90</rank>
@@ -3291,14 +3283,14 @@
     <documentation>
       <description>Changes the configuration entry for the password to the password specified.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="password" type="string">
-	    <documentation>
-		  <description>The password to use next time you login.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="password" type="string">
+        <documentation>
+          <description>The password to use next time you login.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>90</rank>
@@ -3314,14 +3306,14 @@
     <documentation>
       <description>Changes the configuration entry for the server to the server specified.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="server" type="word">
-	    <documentation>
-		  <description>The server to use next time you login.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="server" type="word">
+        <documentation>
+          <description>The server to use next time you login.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>90</rank>
@@ -3338,7 +3330,7 @@
 
     <documentation>
       <description>Makes the bot rejoin the current channel.</description>
-	  <specialnotes>This will cause the bot to gracefully join another channel and return. Uses the bot's chat queue, may be slow.</specialnotes>
+      <specialnotes>This will cause the bot to gracefully join another channel and return. Uses the bot's chat queue, may be slow.</specialnotes>
     </documentation>
 
     <access>
@@ -3357,7 +3349,7 @@
 
     <documentation>
       <description>Makes the bot rejoin the current channel.</description>
-	  <specialnotes>This will actually cause the bot to leave chat, and rejoin, as opposed to joining another channel and returning. Bypasses the chat queue, so is faster.</specialnotes>
+      <specialnotes>This will actually cause the bot to leave chat, and rejoin, as opposed to joining another channel and returning. Bypasses the chat queue, so is faster.</specialnotes>
     </documentation>
 
     <access />
@@ -3372,14 +3364,14 @@
     <documentation>
       <description>Makes the bot forcefully (attempt to create if not exists) join the specified channel.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="channel" type="string">
-	    <documentation>
-		  <description>The channel to attempt to join.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="channel" type="string">
+        <documentation>
+          <description>The channel to attempt to join.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access />
   </command>
@@ -3392,14 +3384,14 @@
     <documentation>
       <description>Enables/disables the use of quiettime, or displays the current status of quiet time.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="subcommand" type="word">
-	    <documentation>
-		  <description>The sub commands to use, On, Off, or Status, To turn on, turn off, or display the status of quiet time respectivly.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="subcommand" type="word">
+        <documentation>
+          <description>The sub commands to use, On, Off, or Status, To turn on, turn off, or display the status of quiet time respectivly.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>90</rank>
@@ -3418,14 +3410,14 @@
     <documentation>
       <description>Designates the specified user and resigns from channel moderator position.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The user to give ops to.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The user to give ops to.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>90</rank>
@@ -3442,14 +3434,14 @@
       <description>Invites a specified user into the clan in which the bot is a member.</description>
       <specialnotes>The bot must be a Shamon or Cheiftain of the clan.</specialnotes>
     </documentation>
-	
-	<arguments>
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The user to invite.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The user to invite.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>70</rank>
@@ -3460,21 +3452,21 @@
   <command name="makechieftain">
     <aliases>
       <alias>makechief</alias>
-	  <alias>givecheif</alias>
+      <alias>givecheif</alias>
     </aliases>
 
     <documentation>
       <description>Makes the specified clan member the chieftain of the bot's clan.</description>
-	  <specialnotes>The bot must be the cheiftain of the clan.</specialnotes>
+      <specialnotes>The bot must be the cheiftain of the clan.</specialnotes>
     </documentation>
-	
-	<arguments>
-	  <argument name="username" type="word">
-	    <documentation>
-		  <description>The user to give cheiftain to.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="username" type="word">
+        <documentation>
+          <description>The user to give cheiftain to.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access />
   </command>
@@ -3495,14 +3487,14 @@
     <documentation>
       <description>Sets the clan's message of the day.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="message" type="string">
-	    <documentation>
-		  <description>The MOTD to set.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="message" type="string">
+        <documentation>
+          <description>The MOTD to set.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>100</rank>
@@ -3565,14 +3557,14 @@
     <documentation>
       <description>Enables, disables, or displays the status of WarCraft III peon banning.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="subcommand" type="word">
-	    <documentation>
-		  <description>The sub commands to use, On, Off, or Status, To turn on, turn off, or display the status of Warcraft III peon banning respectivly.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="subcommand" type="word">
+        <documentation>
+          <description>The sub commands to use, On, Off, or Status, To turn on, turn off, or display the status of Warcraft III peon banning respectivly.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>100</rank>
@@ -3588,14 +3580,19 @@
     <documentation>
       <description>Provides additional information on a command such as the format, parameters, and a description of its function.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="command" type="word">
-	    <documentation>
-		  <description>The command you wish to retrieve information about.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="Command" type="word">
+        <documentation>
+          <description>The command you wish to retrieve information about.</description>
+        </documentation>
+      </argument>
+      <argument name="ScriptOwner" type="string" optional="1">
+        <documentation>
+          <description>The script that this command is registered to.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>20</rank>
@@ -3618,14 +3615,14 @@
     <documentation>
       <description>Lists each of the commands available to the specified attribute.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="flags" type="word">
-	    <documentation>
-		  <description>The flags you wish to gather commands for. The list will return commands that math ONE or more of these flags.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="flags" type="word">
+        <documentation>
+          <description>The flags you wish to gather commands for. The list will return commands that math ONE or more of these flags.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>20</rank>
@@ -3648,14 +3645,14 @@
     <documentation>
       <description>Lists each of the commands available to the specified rank.</description>
     </documentation>
-	
-	<arguments>
-	  <argument name="rank" type="numeric">
-	    <documentation>
-		  <description>The maximum rank you wish to find commands for.</description>
-		</documentation>
-	  </argument>
-	</arguments>
+    
+    <arguments>
+      <argument name="rank" type="numeric">
+        <documentation>
+          <description>The maximum rank you wish to find commands for.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>20</rank>
