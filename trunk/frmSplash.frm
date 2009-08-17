@@ -21,7 +21,7 @@ Begin VB.Form frmSplash
       BackColor       =   &H00000000&
       BeginProperty Font 
          Name            =   "Tahoma"
-         Size            =   14.25
+         Size            =   11.25
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
