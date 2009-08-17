@@ -28,7 +28,7 @@ Private m_ModuleValues  As Collection
 Private m_DataBuffers   As Collection
 Private VetoNextMessage As Boolean
 Private VetoNextPacket  As Boolean
-
+Private m_ScriptObservers  As Collection
 
 Public Sub InitScriptControl(ByVal SC As ScriptControl)
 
@@ -62,6 +62,8 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
     Set m_ModuleValues = New Collection
     
     Set m_DataBuffers = New Collection
+    
+    Set m_ScriptObservers = New Collection
     
     ' ...
     m_is_reloading = False
@@ -183,7 +185,7 @@ ERROR_HANDLER:
 
     ' ...
     frmChat.AddChat vbRed, _
-        "Error (" & Err.Number & "): " & Err.description & " in LoadScripts()."
+        "Error (" & Err.Number & "): " & Err.Description & " in LoadScripts()."
 
 End Sub
 
@@ -589,6 +591,8 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
     Dim oldVeto As Boolean
     Dim oldEM   As Module
     Dim Proc    As Procedure
+    Dim obsers  As Collection
+    Dim obser   As Module
         
     If (m_is_reloading) Then
         Exit Function
@@ -620,9 +624,23 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
     End If
     
     m_IsEventError = False
-    Set m_ExecutingMdl = oldEM ' got back to old reference
-    
     RunInSingle = GetVeto 'Was this particular event vetoed?
+    
+    'Call any scripts that are observing this one
+    Set obsers = GetScriptObservers(GetScriptName(obj.Name), False)
+    For I = 1 To obsers.Count
+        Set obser = GetModuleByName(obsers.Item(I))
+        If (Not obser Is Nothing) Then 'Is the script real/loaded?
+            str = SharedScriptSupport.GetSettingsEntry("Enabled", obsers.Item(I))
+            If (StrComp(str, "False", vbTextCompare) <> 0) Then 'Is it off?
+                Set m_ExecutingMdl = obser
+                CallByNameEx obser, "Run", VbMethod, arr
+            End If
+        End If
+        Set obser = Nothing
+    Next I
+    
+    Set m_ExecutingMdl = oldEM ' got back to old reference
     SetVeto oldVeto 'Reset the old veto, this is for recursion
     
     ' if this is the outermost of a recursion, make sure errors clear after this
@@ -678,7 +696,7 @@ ERROR_HANDLER:
         Exit Sub
     End If
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in CallByNameEx()."
         
     Set oTLI = Nothing
@@ -894,7 +912,7 @@ Public Sub DestroyObjs(Optional ByVal SCModule As Object = Nothing)
 ERROR_HANDLER:
     
     frmChat.AddChat vbRed, _
-        "Error (#" & Err.Number & "): " & Err.description & " in DestroyObjs()."
+        "Error (#" & Err.Number & "): " & Err.Description & " in DestroyObjs()."
         
     Resume Next
     
@@ -1008,7 +1026,7 @@ ERROR_HANDLER:
     End If
 
     frmChat.AddChat vbRed, _
-        "Error (#" & Err.Number & "): " & Err.description & " in DestroyObj()."
+        "Error (#" & Err.Number & "): " & Err.Description & " in DestroyObj()."
         
     Resume Next
     
@@ -1140,7 +1158,7 @@ Public Function InitMenus()
         
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in InitMenus()."
 
     Err.Clear
@@ -1173,7 +1191,7 @@ Public Function DestroyMenus()
     
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in DestroyMenus()."
 
     Err.Clear
@@ -1342,7 +1360,7 @@ Public Sub SC_Error()
         frmChat.AddChat RTBColors.ErrorMessageText, _
             "Scripting " & ErrType & " error " & Chr(39) & .Error.Number & Chr(39) & _
             " in " & Name & ": (line " & .Error.line & "; column " & .Error.Column & ")"
-        frmChat.AddChat RTBColors.ErrorMessageText, .Error.description
+        frmChat.AddChat RTBColors.ErrorMessageText, .Error.Description
         frmChat.AddChat RTBColors.ErrorMessageText, "Offending line: >> " & .Error.Text
         .Error.Clear
     End With
@@ -1373,7 +1391,7 @@ Public Function GetScriptValue(ModuleID As String, Key As String) As Variant
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetScriptValue()."
 
     Err.Clear
@@ -1402,7 +1420,7 @@ Public Sub SetScriptValue(ByVal ModuleID As String, ByVal Key As String, ByVal V
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in SetScriptValue()."
 
     Err.Clear
@@ -1423,7 +1441,7 @@ Public Function GetCallingScriptModule() As Module
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetCallingScriptModule()."
 
     Err.Clear
@@ -1466,7 +1484,7 @@ Public Function GetModuleID(Optional ByVal scriptName As String = vbNullString) 
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetModuleID()."
 
     Err.Clear
@@ -1498,7 +1516,7 @@ Public Function GetScriptName(Optional ByVal ModuleID As String = vbNullString) 
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetScriptName()."
 
     Err.Clear
@@ -1532,7 +1550,7 @@ Public Function GetScriptObject(Optional ByVal ModuleID As String = vbNullString
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetScriptObject()."
 
     Err.Clear
@@ -1559,11 +1577,71 @@ Public Function GetDefaultDataBuffer(ByVal ModuleID As String) As Object
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
         " in GetDefaultDataBuffer()."
 
     Err.Clear
     
     Resume Next
 
+End Function
+
+'Adds a Observer/Observie pair to the ScriptObservers collection.
+'Observer\x0Observie
+'Checks for duplicates, Ignoring cases of corse.
+'Also prevents Observing yourself
+Public Sub AddScriptObserver(ByVal ModuleName As String, ByVal sTargetScript As String)
+On Error GoTo ERROR_HANDLER
+    Dim I As Integer
+    Dim observed As Collection
+    
+    If (StrComp(ModuleName, sTargetScript, vbTextCompare) = 0) Then
+        Exit Sub
+    End If
+    
+    Set observed = GetScriptObservers(ModuleName)
+
+    For I = 1 To observed.Count
+        If (StrComp(observed.Item(I), sTargetScript, vbTextCompare) = 0) Then
+            Set observed = Nothing
+            Exit Sub
+        End If
+    Next I
+    Set observed = Nothing
+    
+    m_ScriptObservers.Add ModuleName & Chr$(0) & sTargetScript
+    
+    Exit Sub
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.AddScriptObserver()"
+End Sub
+
+'Returns a collection of scripts that the passed script is currently observing, or being observed by
+'Needs a better name...
+Public Function GetScriptObservers(sScriptName As String, Optional IsObserver As Boolean = True) As Collection
+On Error GoTo ERROR_HANDLER
+
+    Dim I As Integer
+    Dim sObserver As String
+    Dim sObservie As String
+
+    Set GetScriptObservers = New Collection
+
+    For I = 1 To m_ScriptObservers.Count
+        If (InStr(m_ScriptObservers.Item(I), Chr$(0))) Then
+            sObserver = Split(m_ScriptObservers.Item(I), Chr$(0))(0)
+            sObservie = Split(m_ScriptObservers.Item(I), Chr$(0))(1)
+            
+            
+            If (StrComp(sObserver, sScriptName, vbTextCompare) = 0 And IsObserver) Then
+                GetScriptObservers.Add sObservie
+            ElseIf (StrComp(sObservie, sScriptName, vbTextCompare) = 0 And IsObserver = False) Then
+                GetScriptObservers.Add sObserver
+            End If
+        End If
+    Next I
+
+    Exit Function
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.GetScriptObservers()"
 End Function

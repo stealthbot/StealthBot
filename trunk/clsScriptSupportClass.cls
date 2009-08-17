@@ -106,6 +106,9 @@ Attribute VB_Exposed = False
 ' *         or parsed, respectivly.
 ' *     - Added GetCommands(Option FilePath) function, Will return a collection of CommandDocObjs for each <command> element in the passed file
 ' *     - Added GetCurrentUsername() function, Will return the Bot's current username, as Battle.net sees it.
+' *     - Added ObserveScript() function, Will duplicate script specific events for the specified script, to yours
+' *     - Added GetObserved() function, Will return a collection of script names you are observing
+' *     - Added GetObservers() function, Will return a collection of script names that are obsering your script
 ' *
 ' *     (version 2.6R3, scripting system build 21)
 ' *     - GetNameByPosition() boundary checks fixed (thanks Scio)
@@ -1777,6 +1780,23 @@ Public Property Let Script(ByVal Key As String, ByVal Value As Variant)
     modScripting.SetScriptValue modScripting.GetModuleID(), Key, Value
 
 End Property
+
+'// Add the currently runnign script as an Observer of the Specified script
+'// The current script will have all events of the observed script duplicated and executed
+Public Sub ObserveScript(ByVal Script As String)
+    modScripting.AddScriptObserver modScripting.GetScriptName, Script
+End Sub
+
+'// Returns a collection of script names that this script is observing
+Public Function GetObserved() As Collection
+    Set GetObserved = modScripting.GetScriptObservers(modScripting.GetScriptName, True)
+End Function
+'// Returns a collection of script names that are observing this script
+Public Function GetObservers() As Collection
+    Set GetObservers = modScripting.GetScriptObservers(modScripting.GetScriptName, False)
+End Function
+
+
 
 '// GET SCRIPT
 '// Gets a script value for the currently executing script
