@@ -1751,16 +1751,15 @@ End Function
 '//                   if ommitted, this function will check for commands created in the currently executing script
 Public Function IsCommand(ByVal commandText As String, ByVal strUsername As String, Optional ByVal scriptName As String = vbNullString) As Collection
 
-    Dim Command As New clsCommandDocObj
     Dim commands As Collection
     
     If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
-    Set commands = Command.IsCommand(commandText, strUsername, scriptName)
+    ' 08/17/2009 - 52 - using static class method
+    Set commands = clsCommandObj.IsCommand(commandText, strUsername, scriptName)
     
     Set IsCommand = commands
     
-    Set Command = Nothing
     Set commands = Nothing
     
 End Function
