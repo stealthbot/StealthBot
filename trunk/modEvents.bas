@@ -381,20 +381,10 @@ Public Sub Event_KeyReturn(ByVal KeyName As String, ByVal KeyValue As String)
         End If
     
     ElseIf ProfileRequest = True Then
-    
-        'MsgBox "!!"
-    
-        If KeyName = "Profile\Age" Then
-            frmWriteProfile.txtAge.Text = KeyValue
-        ElseIf KeyName = "Profile\Location" Then
-            frmWriteProfile.txtLoc.Text = KeyValue
-        ElseIf KeyName = "Profile\Description" Then
-            frmWriteProfile.txtDescr.Text = KeyValue
-        ElseIf KeyName = "Profile\Sex" Then
-            frmWriteProfile.txtSex.Text = KeyValue
-        End If
         
-        frmWriteProfile.SetFocus
+        'MsgBox "!!"
+        
+        frmProfile.SetKey KeyName, KeyValue
         
         RunInAll "Event_KeyReturn", KeyName, KeyValue
         
@@ -532,37 +522,8 @@ Repeat4:
         End If
         
     Else
-        Dim rtb As RichTextBox
         
-        With frmProfile
-            .Show
-            
-            'frmChat.AddChat vbWhite, "[Profile] " & KeyName & " == " & KeyValue
-            
-            Select Case KeyName
-                Case "Profile\Age"
-                    Set rtb = .rtbAge
-                Case "Profile\Location"
-                    Set rtb = .rtbLocation
-                Case "Profile\Description"
-                    Set rtb = .rtbProfile
-                Case "Profile\Sex"
-                    Set rtb = .rtbSex
-                Case Else
-                    Exit Sub
-            End Select
-            
-            rtb.Text = vbNullString
-            
-            rtb.selStart = 0
-            rtb.selLength = 0
-            rtb.SelColor = vbWhite
-            rtb.SelText = KeyValue
-            
-            Call ColorModify(rtb, 0)
-            
-            .SetFocus
-        End With
+        frmProfile.SetKey KeyName, KeyValue
         
         RunInAll "Event_KeyReturn", KeyName, KeyValue
         

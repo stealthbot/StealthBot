@@ -892,6 +892,7 @@ Begin VB.Form frmChat
       _ExtentY        =   2990
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -917,6 +918,7 @@ Begin VB.Form frmChat
       _ExtentY        =   11668
       _Version        =   393217
       BackColor       =   0
+      Enabled         =   -1  'True
       ReadOnly        =   -1  'True
       ScrollBars      =   2
       AutoVerbMenu    =   -1  'True
@@ -3126,7 +3128,7 @@ Sub Form_Unload(Cancel As Integer)
     Unload frmSplash
     'Unload frmUserManager
     Unload frmWhisperWindow
-    Unload frmWriteProfile
+    'Unload frmWriteProfile
     
     ' Added this instead of End to try and fix some system tray crashes 2009-0211-andy
     '  It was used in some capacity before since the API was already declared
@@ -4015,9 +4017,8 @@ End Sub
 Private Sub mnuPopFLProfile_Click()
     If Not lvFriendList.SelectedItem Is Nothing Then
         RequestProfile CleanUsername(lvFriendList.SelectedItem.Text)
-    
-        frmProfile.lblUsername.Caption = lvFriendList.SelectedItem.Text
-        frmProfile.Show
+        
+        frmProfile.PrepareForProfile lvFriendList.SelectedItem.Text, False
     End If
 End Sub
 
@@ -4395,8 +4396,7 @@ Private Sub mnuPopPLookup_Click()
     
     RequestProfile CleanUsername(GetSelectedUser)
     
-    frmProfile.lblUsername.Caption = GetSelectedUser
-    frmProfile.Show
+    frmProfile.PrepareForProfile GetSelectedUser, False
 End Sub
 
 Private Sub mnuPopCopy_Click()
@@ -4409,7 +4409,7 @@ Private Sub mnuPopCopy_Click()
 End Sub
 
 Private Sub mnuProfile_Click()
-    frmWriteProfile.Show
+    frmProfile.PrepareForProfile vbNullString, True
 End Sub
 
 Private Sub mnuQCEdit_Click()
@@ -8176,8 +8176,7 @@ Private Sub mnuPopLeaveClan_Click()
 End Sub
 
 Private Sub mnuPopBNProfile_Click()
-    frmProfile.lblUsername.Caption = GetClanSelectedUser
-    RequestProfile GetClanSelectedUser
+    frmProfile.PrepareForProfile GetClanSelectedUser, False
 End Sub
 
 Private Sub mnuPopBNWebProfileW3XP_Click()

@@ -2700,11 +2700,16 @@ Private Function OnProfile(ByVal Username As String, ByRef dbAccess As udtGetAcc
             If (BotVars.WhisperCmds Or m_waswhispered) Then
                 PPLRespondTo = Username
             End If
+            
+            ' request the profile
+            Call RequestProfile(U)
         Else
-            frmProfile.lblUsername = U
+            ' request the profile
+            Call RequestProfile(U)
+            
+            ' prepare the form
+            frmProfile.PrepareForProfile U, False
         End If
-        
-        Call RequestProfile(U)
     End If
 
     ' return message

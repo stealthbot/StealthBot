@@ -31,7 +31,6 @@ Form=frmRealm.frm
 Form=frmSettings.frm
 Form=frmSplash.frm
 Form=frmProfile.frm
-Form=frmWriteProfile.frm
 Module=modBNLSCode; modBNLS.bas
 Module=modAPI; modAPI.bas
 Module=modEnum; modEnum.bas
