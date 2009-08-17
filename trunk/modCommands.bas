@@ -173,33 +173,44 @@ End Function
 Public Function DispatchCommand(Command As clsCommandObj)
     DispatchCommand = True
     Select Case LCase(Command.Name)
-        Case "about":        Call modCommandsInfo.OnAbout(Command)
-        Case "accountinfo":  Call modCommandsInfo.OnAccountInfo(Command)
-        Case "allseen":      Call modCommandsInfo.OnAllSeen(Command)
-        Case "detail":       Call modCommandsInfo.OnDetail(Command)
-        Case "find":         Call modCommandsInfo.OnFind(Command)
-        Case "findattr":     Call modCommandsInfo.OnFindAttr(Command)
-        Case "findgrp":      Call modCommandsInfo.OnFindGrp(Command)
-        Case "help":         Call modCommandsInfo.OnHelp(Command)
-        Case "helpattr":     Call modCommandsInfo.OnHelpAttr(Command)
-        Case "helprank":     Call modCommandsInfo.OnHelpRank(Command)
-        Case "info":         Call modCommandsInfo.OnInfo(Command)
-        Case "initperf":     Call modCommandsInfo.OnInitPerf(Command)
-        Case "lastwhisper":  Call modCommandsInfo.OnLastWhisper(Command)
-        Case "localip":      Call modCommandsInfo.OnLocalIp(Command)
-        Case "owner":        Call modCommandsInfo.OnOwner(Command)
-        Case "ping":         Call modCommandsInfo.OnPing(Command)
-        Case "pingme":       Call modCommandsInfo.OnPingMe(Command)
-        Case "profile":      Call modCommandsInfo.OnProfile(Command)
-        Case "scriptdetail": Call modCommandsInfo.OnScriptDetail(Command)
-        Case "scripts":      Call modCommandsInfo.OnScripts(Command)
-        Case "server":       Call modCommandsInfo.OnServer(Command)
-        Case "time":         Call modCommandsInfo.OnTime(Command)
-        Case "trigger":      Call modCommandsInfo.OnTrigger(Command)
-        Case "uptime":       Call modCommandsInfo.OnUptime(Command)
-        Case "where":        Call modCommandsInfo.OnWhere(Command)
-        Case "whoami":       Call modCommandsInfo.OnWhoAmI(Command)
-        Case "whois":        Call modCommandsInfo.OnWhoIs(Command)
+        'Bot information commands
+        Case "about":         Call modCommandsInfo.OnAbout(Command)
+        Case "accountinfo":   Call modCommandsInfo.OnAccountInfo(Command)
+        Case "allseen":       Call modCommandsInfo.OnAllSeen(Command)
+        Case "detail":        Call modCommandsInfo.OnDetail(Command)
+        Case "find":          Call modCommandsInfo.OnFind(Command)
+        Case "findattr":      Call modCommandsInfo.OnFindAttr(Command)
+        Case "findgrp":       Call modCommandsInfo.OnFindGrp(Command)
+        Case "help":          Call modCommandsInfo.OnHelp(Command)
+        Case "helpattr":      Call modCommandsInfo.OnHelpAttr(Command)
+        Case "helprank":      Call modCommandsInfo.OnHelpRank(Command)
+        Case "info":          Call modCommandsInfo.OnInfo(Command)
+        Case "initperf":      Call modCommandsInfo.OnInitPerf(Command)
+        Case "lastwhisper":   Call modCommandsInfo.OnLastWhisper(Command)
+        Case "localip":       Call modCommandsInfo.OnLocalIp(Command)
+        Case "owner":         Call modCommandsInfo.OnOwner(Command)
+        Case "ping":          Call modCommandsInfo.OnPing(Command)
+        Case "pingme":        Call modCommandsInfo.OnPingMe(Command)
+        Case "profile":       Call modCommandsInfo.OnProfile(Command)
+        Case "scriptdetail":  Call modCommandsInfo.OnScriptDetail(Command)
+        Case "scripts":       Call modCommandsInfo.OnScripts(Command)
+        Case "server":        Call modCommandsInfo.OnServer(Command)
+        Case "time":          Call modCommandsInfo.OnTime(Command)
+        Case "trigger":       Call modCommandsInfo.OnTrigger(Command)
+        Case "uptime":        Call modCommandsInfo.OnUptime(Command)
+        Case "where":         Call modCommandsInfo.OnWhere(Command)
+        Case "whoami":        Call modCommandsInfo.OnWhoAmI(Command)
+        Case "whois":         Call modCommandsInfo.OnWhoIs(Command)
+        
+        'Clan related commands
+        Case "clan":          Call modCommandsClan.OnClan(Command)
+        Case "demote":        Call modCommandsClan.OnDemote(Command)
+        Case "disbandclan":   Call modCommandsClan.OnDisbandClan(Command)
+        Case "invite":        Call modCommandsClan.OnInvite(Command)
+        Case "makechieftain": Call modCommandsClan.OnMakeChieftain(Command)
+        Case "motd":          Call modCommandsClan.OnMOTD(Command)
+        Case "promote":       Call modCommandsClan.OnPromote(Command)
+        Case "setmotd":       Call modCommandsClan.OnSetMOTD(Command)
         Case Else: DispatchCommand = False
     End Select
 End Function
@@ -249,13 +260,7 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "loadwinamp":    Call OnLoadWinamp(Username, dbAccess, msgData, InBot, cmdRet())
         'Case "efp":           Call OnEfp(Username, dbAccess, msgData, InBot, cmdRet())
         Case "home":          Call OnHome(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "clan":          Call OnClan(Username, dbAccess, msgData, InBot, cmdRet())
         Case "peonban":       Call OnPeonBan(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "invite":        Call OnInvite(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "createclan":    Call OnCreateClan(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "disbandclan":   Call OnDisbandClan(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "makechieftain": Call OnMakeChieftain(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "setmotd":       Call OnSetMotd(Username, dbAccess, msgData, InBot, cmdRet())
         Case "quiettime":     Call OnQuietTime(Username, dbAccess, msgData, InBot, cmdRet())
         Case "roll":          Call OnRoll(Username, dbAccess, msgData, InBot, cmdRet())
         Case "sweepban":      Call OnSweepBan(Username, dbAccess, msgData, InBot, cmdRet())
@@ -374,11 +379,8 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         'Case "monitor":       Call OnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
         'Case "unmonitor":     Call OnUnMonitor(Username, dbAccess, msgData, InBot, cmdRet())
         'Case "online":        Call OnOnline(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "promote":       Call OnPromote(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "demote":        Call OnDemote(Username, dbAccess, msgData, InBot, cmdRet())
         Case "connect":       Call OnConnect(Username, dbAccess, msgData, InBot, cmdRet())
         Case "disconnect":    Call OnDisconnect(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "motd":          Call OnMotd(Username, dbAccess, msgData, InBot, cmdRet())
         Case "enable":        Call OnEnable(Username, dbAccess, msgData, InBot, cmdRet())
         Case "disable":       Call OnDisable(Username, dbAccess, msgData, InBot, cmdRet())
         Case "exec":          Call OnExec(Username, dbAccess, msgData, InBot, cmdRet())
@@ -539,51 +541,6 @@ Private Function OnHome(ByVal Username As String, ByRef dbAccess As udtGetAccess
         Username)
 End Function ' end function OnHome
 
-' handle clan command
-Private Function OnClan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    ' This command will allow the use of Battle.net's /clan command without requiring
-    ' users be given the ability to use the bot's say command.
-    
-    Dim tmpbuf As String ' temporary output buffer
-
-    Select Case (LCase$(msgData))
-        Case "public", "pub"
-            ' is bot a channel operator?
-            If (g_Channel.Self.IsOperator) Then
-                ' ...
-                tmpbuf = "Clan channel is now public."
-                
-                ' set clan channel to public
-                Call AddQ("/clan public", PRIORITY.CHANNEL_MODERATION_MESSAGE, _
-                    Username)
-            Else
-                tmpbuf = "Error: The bot must have ops to change clan privacy status."
-            End If
-            
-        Case "private", "priv"
-            ' is bot a channel operator?
-            If (g_Channel.Self.IsOperator) Then
-                ' ...
-                tmpbuf = "Clan channel is now private."
-                
-                ' set clan channel to private
-                Call AddQ("/clan private", PRIORITY.CHANNEL_MODERATION_MESSAGE, _
-                    Username)
-            Else
-                tmpbuf = "Error: The bot must have ops to change clan privacy status."
-            End If
-            
-        Case Else
-            ' set clan channel to specified
-            Call AddQ("/clan " & msgData, PRIORITY.COMMAND_RESPONSE_MESSAGE, _
-                Username)
-    End Select
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnClan
-
 ' handle peonban command
 Private Function OnPeonBan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
     ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
@@ -626,121 +583,6 @@ Private Function OnPeonBan(ByVal Username As String, ByRef dbAccess As udtGetAcc
     ' return message
     cmdRet(0) = tmpbuf
 End Function ' end function OnPeonBan
-
-' handle OnMOTD command
-Private Function OnMotd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String
-
-    If (g_Clan.Self.Name <> vbNullString) Then
-        tmpbuf = _
-            "Clan " & g_Clan.Name & " MOTD: " & g_Clan.MOTD
-    Else
-        tmpbuf = "Error: I am not a member of a clan."
-    End If
-    
-    cmdRet(0) = tmpbuf
-End Function ' end function onMOTD
-
-' handle invite command
-Private Function OnInvite(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    ' This command will send an invitation to the specified user to join the
-    ' clan that the bot is currently either a Shaman or Chieftain of.  This
-    ' command will only work if the bot is logged on using WarCraft III, and
-    ' is either a Shaman, or a Chieftain of the clan in question.
-    
-    Dim tmpbuf As String ' temporary output buffer
-
-    ' are we using warcraft iii?
-    If (IsW3) Then
-        ' is my ranking sufficient to issue
-        ' an invitation?
-        If (g_Clan.Self.Rank >= 3) Then
-            Call InviteToClan(msgData)
-            
-            tmpbuf = msgData & ": Clan invitation sent."
-        Else
-            tmpbuf = "Error: The bot must hold Shaman or Chieftain rank to invite users."
-        End If
-    End If
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnInvite
-
-' handle createclan command
-Private Function OnCreateClan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-    
-    ' return message
-    cmdRet(0) = vbNullString
-End Function ' end function OnCreateClan
-
-' handle disbandclan command
-Private Function OnDisbandClan(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-    
-    ' ...
-    If (g_Clan.Self.Rank >= 4) Then
-        ' ...
-        Call DisbandClan
-    Else
-        tmpbuf = "Error: You must be a chieftain to execute this command."
-    End If
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnDisbandClan
-
-' handle makechieftain command
-Private Function OnMakeChieftain(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    Dim tmpbuf As String ' temporary output buffer
-    
-    ' ...
-    If (Len(msgData) > 0) Then
-        ' ...
-        If (g_Clan.Self.Rank >= 4) Then
-            ' ...
-            Call MakeMemberChieftain(reverseUsername(msgData))
-        Else
-            tmpbuf = "Error: You must be a chieftain to execute this command."
-        End If
-    End If
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnMakeChieftain
-
-' handle setmotd command
-Private Function OnSetMotd(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    ' This command will set the clan channel's Message Of The Day.  This
-    ' command will only work if the bot is logged on using WarCraft III,
-    ' and is either a Shaman or a Chieftain of the clan in question.
-    
-    Dim tmpbuf As String ' temporary output buffer
-
-    If (IsW3) Then
-        If (g_Clan.Self.Rank >= 3) Then
-            Call SetClanMOTD(msgData)
-            
-            tmpbuf = "Clan MOTD set."
-        Else
-            tmpbuf = "Error: Shaman or Chieftain rank is required to set the MOTD."
-        End If
-    End If
-    
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnSetMotd
 
 ' handle quiettime command
 Private Function OnQuietTime(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
@@ -5363,95 +5205,6 @@ End Function ' end function OnClear
 '    ' return message
 '    cmdRet = Split(tmpBuf, vbNewLine)
 'End Function ' end function OnOnline
-
-
-' handle promote command
-Private Function OnPromote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    ' ...
-    If (Len(msgData) > 0) Then
-        Dim liUser As ListItem ' ...
-        
-        ' ...
-        Set liUser = _
-            frmChat.lvClanList.FindItem(msgData)
-    
-        ' ...
-        If (liUser Is Nothing) Then
-            ' ...
-            cmdRet(0) = "Error: The specified user is not currently a member of " & _
-                    "this clan."
-                    
-            ' ...
-            Exit Function
-        End If
-        
-        ' ...
-        If (liUser.SmallIcon >= 3) Then
-            ' ...
-            cmdRet(0) = "Error: The specified user is already at the highest promotable " & _
-                    "ranking."
-        
-            ' ...
-            Exit Function
-        End If
-    
-        ' ...
-        Call PromoteMember(reverseUsername(liUser.Text), liUser.SmallIcon + 1)
-        
-        ' ...
-        'If (InBot = False) Then
-        '    ' ...
-        '    cmdRet(0) = Chr$(34) & liUser.text & Chr$(34) & " has been promoted to " & _
-        '            GetRank(liUser.SmallIcon + 1) & "."
-        'End If
-    End If
-End Function
-
-' handle demote command
-Private Function OnDemote(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-    
-    ' ...
-    If (Len(msgData) > 0) Then
-        Dim liUser As ListItem ' ...
-        
-        ' ...
-        Set liUser = _
-            frmChat.lvClanList.FindItem(msgData)
-    
-        ' ...
-        If (liUser Is Nothing) Then
-            ' ...
-            cmdRet(0) = "Error: The specified user is not currently a member of " & _
-                    "this clan."
-                    
-            ' ...
-            Exit Function
-        End If
-        
-        ' ...
-        If (liUser.SmallIcon <= 1) Then
-            ' ...
-            cmdRet(0) = "Error: The specified user is already at the lowest demoteable " & _
-                    "ranking."
-        
-            ' ...
-            Exit Function
-        End If
-        
-        ' ...
-        Call DemoteMember(reverseUsername(liUser.Text), liUser.SmallIcon - 1)
-        
-        ' ...
-        'If (InBot = False) Then
-        '    ' ...
-        '    cmdRet(0) = Chr$(34) & liUser.text & Chr$(34) & " has been demoted to " & _
-        '            GetRank(liUser.SmallIcon - 1) & "."
-        'End If
-    End If
-End Function
 
 ' handle enable command
 Private Function OnEnable(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _

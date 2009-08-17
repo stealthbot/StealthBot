@@ -3076,7 +3076,7 @@
         </documentation>
       </argument>
       
-      <argument name="message" type="string">
+      <argument name="message" type="string" optional="1">
         <documentation>
           <description>The message to be mailed/set.</description>
         </documentation>
