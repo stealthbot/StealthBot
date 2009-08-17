@@ -145,10 +145,10 @@ Public Sub MenuClick(hWnd As Long, lngMenuCommand As Long)
                         End If
                     ElseIf (sub_name = "VIEW_SCRIPT") Then
                         If (ReadCfg("Override", "ScriptViewer") = vbNullString) Then
-                            ShellExecute frmChat.hWnd, "Open", modScripting.GetScriptValue(GetModuleID(s_name), "Path"), 0&, 0&, _
+                            ShellExecute frmChat.hWnd, "Open", GetModuleByName(s_name).CodeObject.Script("Path"), 0&, 0&, _
                                 vbNormalFocus
                         Else
-                            Shell Chr(34) & ReadCfg("Override", "ScriptViewer") & Chr(34) & Space(1) & Chr(34) & modScripting.GetScriptValue(GetModuleID(s_name), "Path") & Chr(34)
+                            Shell Chr(34) & ReadCfg("Override", "ScriptViewer") & Chr(34) & Space(1) & Chr(34) & GetModuleByName(s_name).CodeObject.Script("Path") & Chr(34)
                         End If
                     End If
                 End If

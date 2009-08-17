@@ -24,8 +24,6 @@ Private m_is_reloading  As Boolean
 Private m_ExecutingMdl  As Module
 Private m_TempMdlName   As String
 Private m_IsEventError  As Boolean
-Private m_ModuleValues  As Collection
-Private m_DataBuffers   As Collection
 Private VetoNextMessage As Boolean
 Private VetoNextPacket  As Boolean
 Private m_ScriptObservers  As Collection
@@ -58,10 +56,6 @@ Public Sub InitScriptControl(ByVal SC As ScriptControl)
 
     ' ...
     Set m_sc_control = SC
-    
-    Set m_ModuleValues = New Collection
-    
-    Set m_DataBuffers = New Collection
     
     Set m_ScriptObservers = New Collection
     
@@ -138,7 +132,7 @@ Public Sub LoadScripts()
                 ' Does the script have a valid name?
                 If (IsScriptNameValid(CurrentModule) = False) Then
                     ' No. Try to fix it.
-                    SetScriptValue CurrentModule.Name, "Name", CleanFileName(m_TempMdlName)
+                    CurrentModule.CodeObject.Script("Name") = CleanFileName(m_TempMdlName)
                 
                     ' Is it valid now?
                     If (IsScriptNameValid(CurrentModule) = False) Then
@@ -244,7 +238,7 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
                                     
                                     ' ...
                                     If (Left$(tmp, 1) = "\") Then
-                                       tmp = App.Path & "\scripts\" & tmp
+                                       tmp = App.Path & "\scripts" & tmp
                                     End If
 
                                     ' ...
@@ -282,26 +276,27 @@ Private Function FileToModule(ByRef ScriptModule As Module, ByVal filePath As St
         Loop
     Close #f
   
-    ' ...
+    ' if we are not loading an include, set it up
     If (defaults) Then
-        ' add the module values dictionary, will be at index module.name - 1 in this collection
-        ' this dictionary is accessed by scripts with SSC.Script()
-        ' using scripting dictionary, otherwise impossible to find if script(key) exists
-        m_ModuleValues.Add New Scripting.Dictionary
+        ' store module-level functions
+        ScriptModule.ExecuteStatement GetDefaultModuleProcs()
         
-        ' Script() dictionary will be case insensitive
-        m_ModuleValues.Item(Val(ScriptModule.Name) - 1).CompareMode = Scripting.CompareMethod.TextCompare
+        ' create Script object
+        ScriptModule.ExecuteStatement "Set Script = CreateObject(""Scripting.Dictionary"")"
         
-        ' add the default databuffer for this script, will be at index module.name - 1 in this collection
-        m_DataBuffers.Add New clsDataBuffer
+        ' make Script object keys case-insensitive
+        ScriptModule.CodeObject.Script.CompareMode = Scripting.CompareMethod.TextCompare
+        
+        ' create default DataBuffer object
+        ScriptModule.ExecuteStatement "Set DataBuffer = DataBufferEx()"
         
         ' set the path Script() value
-        SetScriptValue ScriptModule.Name, "Path", filePath
+        ScriptModule.CodeObject.Script("Path") = filePath
         
         ' add includes to end of code, process the same for includes in includes
         For I = 1 To includes.Count
             FileToModule ScriptModule, includes(I), False
-        Next
+        Next I
         
         ' add content
         ScriptModule.AddCode strContent
@@ -326,84 +321,81 @@ ERROR_HANDLER:
 
 End Function
 
-' bye bye for now -Ribose
-'Private Function GetDefaultModuleProcs(ByVal ScriptID As String, ByVal ScriptPath As String) As String
-'
-'    Dim str As String ' storage buffer for module code
-'
-'    ' GetModuleID() module-level function
-'    str = str & "Function GetModuleID()" & vbNewLine
-'    str = str & "   GetModuleID = " & Chr$(34) & ScriptID & Chr$(34) & vbNewLine
-'    str = str & "End Function" & vbNewLine
-'
-'    ' GetScriptModule() module-level function
-'    str = str & "Function GetScriptModule()" & vbNewLine
-'    str = str & "   Set GetScriptModule = IGetScriptModule(GetModuleID)" & vbNewLine
-'    str = str & "End Function" & vbNewLine
-'
-'    ' GetWorkingDirectory() module-level function
-'    str = str & "Function GetWorkingDirectory()" & vbNewLine
-'    str = str & "   GetWorkingDirectory = _" & vbNewLine
-'    str = str & "       BotPath() & ""Scripts\"" & " & "Script(""Name"") & " & """\""" & vbNewLine
-'    str = str & "   MkDirEx GetWorkingDirectory" & vbNewLine
-'    str = str & "End Function" & vbNewLine
-'
-'    ' CreateObj() module-level function
-'    str = str & "Function CreateObj(ObjType, ObjName)" & vbNewLine
-'    str = str & "   Set CreateObj = _ " & vbNewLine
-'    str = str & "         ICreateObj(GetModuleID(), ObjType, ObjName)" & vbNewLine
-'    str = str & "End Function" & vbNewLine
-'
-'    ' DestroyObj() module-level function
-'    str = str & "Sub DestroyObj(ObjName)" & vbNewLine
-'    str = str & "   IDestroyObj GetModuleID(), ObjName" & vbNewLine
-'    str = str & "End Sub" & vbNewLine
-'
-'    ' GetObjByName() module-level function
-'    str = str & "Function GetObjByName(ObjName)" & vbNewLine
-'    str = str & "   Set GetObjByName = _ " & vbNewLine
-'    str = str & "         IGetObjByName(GetModuleID(), ObjName)" & vbNewLine
-'    str = str & "End Function" & vbNewLine
-'
-'    ' GetSettingsEntry() module-level function
-'    str = str & "Function GetSettingsEntry(EntryName)" & vbNewLine
-'    str = str & "   GetSettingsEntry = GetSettingsEntryEx(Script(""Name""), EntryName)" & vbNewLine
-'    str = str & "End Function" & vbNewLine
-'
-'    ' CreateCommand() module-level function
-'    str = str & "Function CreateCommand(commandName)" & vbNewLine
-'    str = str & "   Set CreateCommand = _ " & vbNewLine
-'    str = str & "         ICreateCommand(Script(""Name""), commandName)" & vbNewLine
-'    str = str & "End Function" & vbNewLine
-'
-'    ' OpenCommand() module-level function
-'    str = str & "Function OpenCommand(commandName)" & vbNewLine
-'    str = str & "   Set OpenCommand = _ " & vbNewLine
-'    str = str & "         IOpenCommand(Script(""Name""), commandName)" & vbNewLine
-'    str = str & "End Function" & vbNewLine
-'
-'    ' DeleteCommand() module-level function
-'    str = str & "Function DeleteCommand(commandName)" & vbNewLine
-'    str = str & "   Set DeleteCommand = _ " & vbNewLine
-'    str = str & "         IDeleteCommand(Script(""Name""), commandName)" & vbNewLine
-'    str = str & "End Function" & vbNewLine
-'
-'    ' IsCommand() module-level function
-'    str = str & "Function IsCommand(commandText, username)" & vbNewLine
-'    str = str & "   Set IsCommand = _ " & vbNewLine
-'    str = str & "         IIsCommand(Script(""Name""), commandText, username)" & vbNewLine
-'    str = str & "End Function" & vbNewLine
-'
-'
-'    ' WriteSettingsEntry() module-level function
-'    str = str & "Sub WriteSettingsEntry(EntryName, EntryValue)" & vbNewLine
-'    str = str & "   WriteSettingsEntryEx Script(""Name""), EntryName, EntryValue" & vbNewLine
-'    str = str & "End Sub" & vbNewLine
-'
-'    ' store module-level coding
-'    GetDefaultModuleProcs = str
-'
-'End Function
+
+Private Function GetDefaultModuleProcs() As String
+
+    Dim str As String ' storage buffer for module code
+
+    ' GetModuleID() module-level function
+    str = str & "Function GetModuleID()" & vbNewLine
+    str = str & "   GetModuleID = SSC.GetModuleID(Script(""Name""))" & vbNewLine
+    str = str & "End Function" & vbNewLine
+
+    ' GetScriptModule() module-level function
+    str = str & "Function GetScriptModule()" & vbNewLine
+    str = str & "   Set GetScriptModule = SSC.GetScriptModule(Script(""Name""))" & vbNewLine
+    str = str & "End Function" & vbNewLine
+
+    ' GetWorkingDirectory() module-level function
+    str = str & "Function GetWorkingDirectory()" & vbNewLine
+    str = str & "   GetWorkingDirectory = SSC.GetWorkingDirectory(Script(""Name""))" & vbNewLine
+    str = str & "End Function" & vbNewLine
+
+    ' CreateObj() module-level function
+    str = str & "Function CreateObj(ObjType, ObjName)" & vbNewLine
+    str = str & "   Set CreateObj = _ " & vbNewLine
+    str = str & "         SSC.CreateObj(ObjType, ObjName, Script(""Name""))" & vbNewLine
+    str = str & "End Function" & vbNewLine
+
+    ' DestroyObj() module-level function
+    str = str & "Sub DestroyObj(ObjName)" & vbNewLine
+    str = str & "   SSC.DestroyObj ObjName, Script(""Name"")" & vbNewLine
+    str = str & "End Sub" & vbNewLine
+
+    ' GetObjByName() module-level function
+    str = str & "Function GetObjByName(ObjName)" & vbNewLine
+    str = str & "   Set GetObjByName = _ " & vbNewLine
+    str = str & "         SSC.GetObjByName(ObjName, Script(""Name""))" & vbNewLine
+    str = str & "End Function" & vbNewLine
+
+    ' GetSettingsEntry() module-level function
+    str = str & "Function GetSettingsEntry(EntryName)" & vbNewLine
+    str = str & "   GetSettingsEntry = SSC.GetSettingsEntry(EntryName, Script(""Name""))" & vbNewLine
+    str = str & "End Function" & vbNewLine
+
+    ' WriteSettingsEntry() module-level function
+    str = str & "Sub WriteSettingsEntry(EntryName, EntryValue)" & vbNewLine
+    str = str & "   SSC.WriteSettingsEntry EntryName, EntryValue, Script(""Name"")" & vbNewLine
+    str = str & "End Sub" & vbNewLine
+
+    ' CreateCommand() module-level function
+    str = str & "Function CreateCommand(commandName)" & vbNewLine
+    str = str & "   Set CreateCommand = _ " & vbNewLine
+    str = str & "         SSC.CreateCommand(commandName, Script(""Name""))" & vbNewLine
+    str = str & "End Function" & vbNewLine
+
+    ' OpenCommand() module-level function
+    str = str & "Function OpenCommand(commandName)" & vbNewLine
+    str = str & "   Set OpenCommand = _ " & vbNewLine
+    str = str & "         SSC.OpenCommand(ommandName, Script(""Name""))" & vbNewLine
+    str = str & "End Function" & vbNewLine
+
+    ' DeleteCommand() module-level function
+    str = str & "Function DeleteCommand(commandName)" & vbNewLine
+    str = str & "   Set DeleteCommand = _ " & vbNewLine
+    str = str & "         SSC.DeleteCommand(commandName, Script(""Name""))" & vbNewLine
+    str = str & "End Function" & vbNewLine
+
+    ' IsCommand() module-level function
+    str = str & "Function IsCommand(commandText, username)" & vbNewLine
+    str = str & "   Set IsCommand = _ " & vbNewLine
+    str = str & "         SSC.IsCommand(commandText, username, Script(""Name""))" & vbNewLine
+    str = str & "End Function" & vbNewLine
+
+    ' store module-level coding
+    GetDefaultModuleProcs = str
+
+End Function
 
 Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
 
@@ -416,7 +408,7 @@ Private Function IsScriptNameValid(ByRef CurrentModule As Module) As Boolean
     Dim I            As Integer
     
     ' ...
-    str = GetScriptValue(CurrentModule.Name, "Name")
+    str = GetScriptName(CurrentModule.Name)
 
     ' ...
     If (str = vbNullString) Then
@@ -501,7 +493,7 @@ Public Sub InitScript(ByVal SCModule As Module)
     finishTime = GetTickCount()
  
     '// 03/27/2009 52 - added default Script property for the load time
-    SetScriptValue SCModule.Name, "InitPerf", (finishTime - startTime)
+    SCModule.CodeObject.Script("InitPerf") = (finishTime - startTime)
 
     If (g_Online) Then
         RunInSingle SCModule, "Event_LoggedOn", GetCurrentUsername, BotVars.Product
@@ -548,7 +540,8 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
     For I = 2 To SC.Modules.Count
         Set obj = SC.Modules(I)
         Set m_ExecutingMdl = obj
-        str = SharedScriptSupport.GetSettingsEntry("Enabled", GetScriptName(CStr(I)))
+        
+        str = SC.CodeObject.GetSettingsEntry("Enabled")
         
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
             
@@ -601,18 +594,19 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
     oldVeto = GetVeto  'Keeps the old veto, for recursion, and Sets to false.
     
     Set oldEM = m_ExecutingMdl ' keep old module reference, for recursion
+    
+    Set m_ExecutingMdl = obj
+    m_IsEventError = (StrComp(arr(0), "Event_Error", vbBinaryCompare) = 0)
 
     arr() = Parameters()
+    
     'If Obj is nothing then we are 'running' an internal event
     'This is so scriptors can observe internal events, like Internal Commands
     If (obj Is Nothing) Then
         str = "True"
     Else
-        str = SharedScriptSupport.GetSettingsEntry("Enabled", GetScriptName(obj.Name))
+        str = obj.CodeObject.GetSettingsEntry("Enabled")
     End If
-    
-    Set m_ExecutingMdl = obj
-    m_IsEventError = (StrComp(arr(0), "Event_Error", vbBinaryCompare) = 0)
     
     If (Not StrComp(str, "False", vbTextCompare) = 0) Then
         If (Not obj Is Nothing) Then CallByNameEx obj, "Run", VbMethod, arr()
@@ -1343,7 +1337,7 @@ Public Sub SC_Error()
             ErrType = "parsing"
         Else
             ' check if the script is planning to handle errors itself, if Script("HandleErrors") = True, then call event_error
-            If ((StrComp(GetScriptValue(m_ExecutingMdl.Name, "HandleErrors"), _
+            If ((StrComp(m_ExecutingMdl.CodeObject.Script("HandleErrors"), _
                          "True", vbTextCompare) = 0) And _
                          (m_IsEventError = False)) Then
                 ' call Event_Error(ErrObj)
@@ -1365,82 +1359,36 @@ Public Sub SC_Error()
     
 End Sub
 
-' returns the result of Script(Key) for the specified module
-Public Function GetScriptValue(ModuleID As String, Key As String) As Variant
-    
-    On Error GoTo ERROR_HANDLER
-    
-    Dim ScriptValues As Scripting.Dictionary
-    
-    ' get the Script() object for this module
-    Set ScriptValues = GetScriptObject(ModuleID)
-    
-    ' if this object is nothing, exit (return Empty)
-    If ScriptValues Is Nothing Then Exit Function
-    
-    ' if the key exists, return it, otherwise return Empty
-    If ScriptValues.Exists(Key) Then
-        GetScriptValue = ScriptValues.Item(Key)
-    Else
-        GetScriptValue = Empty
-    End If
-
-    Exit Function
-
-ERROR_HANDLER:
-
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
-        " in GetScriptValue()."
-
-    Err.Clear
-    
-    Resume Next
-    
-End Function
-
-' sets the Script(Key) = Value for the specified module
-Public Sub SetScriptValue(ByVal ModuleID As String, ByVal Key As String, ByVal Value As Variant)
-    
-    On Error GoTo ERROR_HANDLER
-    
-    Dim ScriptValues As Scripting.Dictionary
-    
-    ' get the Script() object for this module
-    Set ScriptValues = GetScriptObject(ModuleID)
-    
-    ' if this object is nothing then exit
-    If ScriptValues Is Nothing Then Exit Sub
-    
-    ' set value to key
-    ScriptValues.Item(Key) = Value
-
-    Exit Sub
-
-ERROR_HANDLER:
-
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
-        " in SetScriptValue()."
-
-    Err.Clear
-    
-    Resume Next
-    
-End Sub
-
 ' get currently executing module (can be nothing!)
-Public Function GetCallingScriptModule() As Module
+Public Function GetScriptModule(Optional ByVal scriptName As String = vbNullString) As Module
 
     On Error GoTo ERROR_HANDLER
     
-    ' return the stored executing module
-    Set GetCallingScriptModule = m_ExecutingMdl
-
+    Dim I As Integer
+    
+    ' only loop if the scriptname was provided
+    If LenB(scriptName) > 0 Then
+        ' loop through modules
+        For I = 2 To m_sc_control.Modules.Count
+            ' if Script("Name") = ScriptName then
+            If StrComp(GetScriptName(CStr(I)), scriptName, vbTextCompare) = 0 Then
+                ' return this module
+                Set GetScriptModule = m_sc_control.Modules(I)
+                
+                Exit Function
+            End If
+        Next I
+    Else
+        ' return currently executing
+        Set GetScriptModule = m_ExecutingMdl
+    End If
+    
     Exit Function
 
 ERROR_HANDLER:
 
     frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
-        " in GetCallingScriptModule()."
+        " in GetScriptModule()."
 
     Err.Clear
     
@@ -1498,17 +1446,22 @@ Public Function GetScriptName(Optional ByVal ModuleID As String = vbNullString) 
 
     On Error GoTo ERROR_HANDLER
     
+    Dim Module As Module
+    
     ' if not provided
     If (LenB(ModuleID) = 0) Then
         ' use currently executing module ID
         ModuleID = GetModuleID
     End If
     
-    ' get Script() value "Name"
-    GetScriptName = GetScriptValue(ModuleID, "Name")
+    If StrictIsNumeric(ModuleID) = False Then Exit Function
     
-    ' return what was provided if not found
-    If GetScriptName = Empty Then GetScriptName = ModuleID
+    Set Module = m_sc_control.Modules(ModuleID)
+    
+    If Module Is Nothing Then Exit Function
+    
+    ' get Script() value "Name"
+    GetScriptName = Module.CodeObject.Script("Name")
     
     Exit Function
 
@@ -1521,67 +1474,6 @@ ERROR_HANDLER:
     
     Resume Next
     
-End Function
-
-' gets the Script() dictionary, or nothing if module ID not found
-' if not provided, gets currently executing module's Script() object
-Public Function GetScriptObject(Optional ByVal ModuleID As String = vbNullString) As Scripting.Dictionary
-
-    On Error GoTo ERROR_HANDLER
-    
-    ' if not provided
-    If (LenB(ModuleID) = 0) Then
-        ' use currently executing module ID
-        ModuleID = GetModuleID
-    End If
-    
-    ' check if module ID is valid
-    If StrictIsNumeric(ModuleID) Then
-        ' check if module exists
-        If Val(ModuleID) >= 2 And Val(ModuleID) <= m_sc_control.Modules.Count Then
-            ' return this module's Script() object
-            Set GetScriptObject = m_ModuleValues.Item(CInt(Val(ModuleID)) - 1)
-        End If
-    End If
-    
-    Exit Function
-
-ERROR_HANDLER:
-
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
-        " in GetScriptObject()."
-
-    Err.Clear
-    
-    Resume Next
-
-End Function
-
-' get the databuffer object stored for this script
-Public Function GetDefaultDataBuffer(ByVal ModuleID As String) As Object
-
-    On Error GoTo ERROR_HANDLER
-    
-    ' check if module ID is valid
-    If StrictIsNumeric(ModuleID) Then
-        ' check if module exists
-        If Val(ModuleID) >= 2 And Val(ModuleID) <= m_sc_control.Modules.Count Then
-            ' return this module's DataBuffer() object
-            Set GetDefaultDataBuffer = m_DataBuffers.Item(CInt(Val(ModuleID)) - 1)
-        End If
-    End If
-    
-    Exit Function
-
-ERROR_HANDLER:
-
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
-        " in GetDefaultDataBuffer()."
-
-    Err.Clear
-    
-    Resume Next
-
 End Function
 
 'Adds a Observer/Observie pair to the ScriptObservers collection.

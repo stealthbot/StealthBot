@@ -1562,9 +1562,12 @@ End Function
 
 '// GETSCRIPTMODULE
 '// Returns the currently executing script module object
-Public Function GetScriptModule() As Object
-
-    Set GetScriptModule = modScripting.GetCallingScriptModule
+'// PARAMETERS
+'//     ScriptName - if provided, this function will return that script's module
+'//                  if ommitted, this function will return the currently executing script module
+Public Function GetScriptModule(Optional ByVal scriptName As String = vbNullString) As Object
+    
+    Set GetScriptModule = modScripting.GetScriptModule(scriptName)
 
 End Function
 
@@ -1677,12 +1680,14 @@ End Function
 '// PARAMETERS
 '//     commandName - the name of the new command
 '//     ScriptName -  if provided, this function will create the command for the specified script
+'//                   vbNullString to get internal commands
+'//                   Chr(0) to get commands from any script
 '//                   if ommitted, this function will create the command for the currently executing script
-Public Function CreateCommand(ByVal commandName As String, Optional ByVal scriptName As String = vbNullString) As Object
+Public Function CreateCommand(ByVal commandName As String, Optional ByVal scriptName As String) As Object
 
     Dim Command As clsCommandDocObj
     
-    If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
+    If IsMissing(scriptName) Then scriptName = modScripting.GetScriptName
     
     Set Command = New clsCommandDocObj
     
@@ -1700,12 +1705,14 @@ End Function
 '// PARAMETERS
 '//     commandName - the name of the command
 '//     ScriptName -  if provided, this function will get the command for the specified script
+'//                   vbNullString to get internal commands
+'//                   Chr(0) to get commands from any script
 '//                   if ommitted, this function will get the command for the currently executing script
-Public Function OpenCommand(ByVal commandName As String, Optional ByVal scriptName As String = vbNullString) As Object
+Public Function OpenCommand(ByVal commandName As String, Optional ByVal scriptName As String) As Object
     
     Dim Command As clsCommandDocObj
     
-    If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
+    If IsMissing(scriptName) Then scriptName = modScripting.GetScriptName
     
     Set Command = New clsCommandDocObj
     
@@ -1722,12 +1729,14 @@ End Function
 '// PARAMETERS
 '//     commandName - the name of the command
 '//     ScriptName -  if provided, this function will delete the command for the specified script
+'//                   vbNullString to get internal commands
+'//                   Chr(0) to get commands from any script
 '//                   if ommitted, this function will delete the command for the currently executing script
-Public Function DeleteCommand(ByVal commandName As String, Optional ByVal scriptName As String = vbNullString) As Object
+Public Function DeleteCommand(ByVal commandName As String, Optional ByVal scriptName As String) As Object
     
     Dim Command As clsCommandDocObj
     
-    If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
+    If IsMissing(scriptName) Then scriptName = modScripting.GetScriptName
     
     Set Command = New clsCommandDocObj
     
@@ -1748,12 +1757,14 @@ End Function
 '//     commandText - the sent message
 '//     strUsername - the user's username
 '//     ScriptName -  if provided, this function will check for commands created in the specified script
+'//                   vbNullString to get internal commands
+'//                   Chr(0) to get commands from any script
 '//                   if ommitted, this function will check for commands created in the currently executing script
-Public Function IsCommand(ByVal commandText As String, ByVal strUsername As String, Optional ByVal scriptName As String = vbNullString) As Collection
+Public Function IsCommand(ByVal commandText As String, ByVal strUsername As String, Optional ByVal scriptName As String) As Collection
 
     Dim commands As Collection
     
-    If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
+    If IsMissing(scriptName) Then scriptName = modScripting.GetScriptName
     
     ' 08/17/2009 - 52 - using static class method
     Set commands = clsCommandObj.IsCommand(commandText, strUsername, scriptName)
@@ -1763,22 +1774,6 @@ Public Function IsCommand(ByVal commandText As String, ByVal strUsername As Stri
     Set commands = Nothing
     
 End Function
-
-'// LET SCRIPT
-'// Stores a script value for the currently executing script
-'// It is recommended to store values in "Name", "Author",
-'// "Major", "Minor", and "Revision" at the beginning of
-'// your script, outside of any functions
-'// PARAMETERS
-'//     Key -   the key to store the value in
-'//     Value - the value to store for this key
-'// EXAMPLE USAGE
-'//     Script("Name") = "MyScript"
-Public Property Let Script(ByVal Key As String, ByVal Value As Variant)
-
-    modScripting.SetScriptValue modScripting.GetModuleID(), Key, Value
-
-End Property
 
 '// Add the currently runnign script as an Observer of the Specified script
 '// The current script will have all events of the observed script duplicated and executed
@@ -1790,42 +1785,10 @@ End Sub
 Public Function GetObserved() As Collection
     Set GetObserved = modScripting.GetScriptObservers(modScripting.GetScriptName, True)
 End Function
+
 '// Returns a collection of script names that are observing this script
 Public Function GetObservers() As Collection
     Set GetObservers = modScripting.GetScriptObservers(modScripting.GetScriptName, False)
-End Function
-
-
-
-'// GET SCRIPT
-'// Gets a script value for the currently executing script
-'// PARAMETERS
-'//     Key - the key
-'//           by default, the bot uses the following keys:
-'//           "Name" -     the name of the script
-'//           "Path" -     the path to the script
-'//           "InitPerf" - the number of milliseconds it took to execute Event_Load
-'//           "Author" -   the author(s) of the script
-'//           "Major" -    the major version number of the script
-'//           "Minor" -    the minor version number of the script
-'//           "Revision" - the revision version number of the script
-'// EXAMPLE USAGE
-'//     AddChat vbGreen, "My script was made by " & Script("Author") & "!"
-Public Property Get Script(ByVal Key As String) As Variant
-
-    Script = modScripting.GetScriptValue(modScripting.GetModuleID(), Key)
-
-End Property
-
-'// GETSCRIPTOBJECT
-'// Gets a standard Scripting.Dictionary for a script containing the script's values
-'// PARAMETRS
-'//     ScriptName - if provided, this function will return the specified script's values object
-'//                  if ommitted, this function will return the currently executing script's values object
-Public Function GetScriptObject(Optional ByVal scriptName As String) As Object
-
-    Set GetScriptObject = modScripting.GetScriptObject(modScripting.GetModuleID(scriptName))
-
 End Function
 
 '// GETSETTINGSENTRY
@@ -1933,7 +1896,7 @@ ERROR_HANDLER:
 End Sub
 
 '// SCRIPTS
-'// Gets a collection of all scripts
+'// Gets a collection of all script CodeObjects, allowing direct access via the object.method syntax
 Public Function Scripts() As Object
 
     On Error Resume Next
@@ -1957,15 +1920,6 @@ End Function
 Public Function StrConvEx(ByVal str As String, ByVal Conv As VbStrConv, Optional ByVal locale As Long) As Variant
 
     StrConvEx = StrConv(str, Conv, locale)
-
-End Function
-
-'// DATABUFFER
-'// Gets the databuffer for the currently executing script
-'// This databuffer will be constant for the duration of your script, so remember when to clear it!
-Public Function DataBuffer() As Object
-
-    Set DataBuffer = modScripting.GetDefaultDataBuffer(modScripting.GetModuleID)
 
 End Function
 

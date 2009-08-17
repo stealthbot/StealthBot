@@ -238,10 +238,10 @@ On Error GoTo ERROR_HANDLER
         If (Script Is Nothing) Then
             Command.Respond "Could not find the script specified."
         Else
-            If (Not StrComp(SharedScriptSupport.GetSettingsEntry("Enabled", modScripting.GetScriptName(Name)), "False", vbTextCompare) = 1) Then
+            If (Not StrComp(Script.CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 1) Then
                 Command.Respond StringFormatA("The Script {0} loaded in {1}ms.", _
-                    modScripting.GetScriptName(Script.Name), _
-                    modScripting.GetScriptValue(Script.Name, "InitPerf"))
+                    Script.CodeObject.Script("Name"), _
+                    Script.CodeObject.Script("InitPerf"))
             Else
                 Command.Respond "That script is currently disabled."
             End If
@@ -256,16 +256,16 @@ On Error GoTo ERROR_HANDLER
             For I = 2 To frmChat.SControl.Modules.Count
                 Set Script = frmChat.SControl.Modules(I)
                 
-                If (Not StrComp(SharedScriptSupport.GetSettingsEntry("Enabled", Name), "False", vbTextCompare) = 0) Then
+                If (Not StrComp(Script.CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 0) Then
                     If (Command.IsLocal And Not Command.PublicOutput) Then
                         Command.Respond StringFormatA(" '{0}' loaded in {1}ms.", _
-                            modScripting.GetScriptName(Script.Name), _
-                            modScripting.GetScriptValue(Script.Name, "InitPerf"))
+                            Script.CodeObject.Script("Name"), _
+                            Script.CodeObject.Script("InitPerf"))
                     Else
                         strRet = StringFormatA("{0} '{1}' {2}ms{3}", _
                             strRet, _
-                            modScripting.GetScriptName(Script.Name), _
-                            modScripting.GetScriptValue(Script.Name, "InitPerf"), _
+                            Script.CodeObject.Script("Name"), _
+                            Script.CodeObject.Script("InitPerf"), _
                             IIf(I = frmChat.SControl.Modules.Count, vbNullString, ","))
                     End If
                 End If
@@ -369,22 +369,22 @@ On Error GoTo ERROR_HANDLER
             Dim Author   As String
             
             Version = StringFormatA("{0}.{1} Revision {2}", _
-                modScripting.GetScriptValue(Script.Name, "Major"), _
-                modScripting.GetScriptValue(Script.Name, "Minor"), _
-                modScripting.GetScriptValue(Script.Name, "Revision"))
+                Script.CodeObject.Script("Major"), _
+                Script.CodeObject.Script("Minor"), _
+                Script.CodeObject.Script("Revision"))
                 
-            VerTotal = Val(modScripting.GetScriptValue(Script.Name, "Major")) _
-                     + Val(modScripting.GetScriptValue(Script.Name, "Minor")) _
-                     + Val(modScripting.GetScriptValue(Script.Name, "Revision"))
+            VerTotal = Val(Script.CodeObject.Script("Major")) _
+                     + Val(Script.CodeObject.Script("Minor")) _
+                     + Val(Script.CodeObject.Script("Revision"))
                      
-            Author = modScripting.GetScriptValue(Script.Name, "Author")
+            Author = Script.CodeObject.Script("Author")
             
             If ((LenB(Author) = 0) And (VerTotal = 0)) Then
                 Command.Respond StringFormatA("There is no additional information for the '{0}' script.", _
-                    modScripting.GetScriptName(Script.Name))
+                    Script.CodeObject.Script("Name"))
             Else
                 Command.Respond StringFormatA("{0}{1}{2}", _
-                    modScripting.GetScriptName(Script.Name), _
+                    Script.CodeObject.Script("Name"), _
                     IIf(VerTotal > 0, " v" & Version, vbNullString), _
                     IIf(LenB(Author) > 0, " by " & Author, vbNullString))
             End If
