@@ -84,7 +84,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             Command.WasWhispered = WasWhispered
             If (IsLocal) Then
                 With dbAccess
-                    .Access = 201
+                    .Rank = 201
                     .Flags = "A"
                 End With
             Else
@@ -178,6 +178,7 @@ Public Function DispatchCommand(Command As clsCommandObj)
         Case "ping":   Call modCommandsInfo.OnPing(Command)
         Case "pingme": Call modCommandsInfo.OnPingMe(Command)
         Case "time":   Call modCommandsInfo.OnTime(Command)
+        Case "whoami": Call modCommandsInfo.OnWhoAmI(Command)
         Case Else: DispatchCommand = False
     End Select
 End Function
@@ -350,7 +351,6 @@ Public Function executeCommand(ByVal Username As String, ByRef dbAccess As udtGe
         Case "scq":           Call OnSCQ(Username, dbAccess, msgData, InBot, cmdRet())
         Case "checkmail":     Call OnCheckMail(Username, dbAccess, msgData, InBot, cmdRet())
         Case "inbox":         Call OnInbox(Username, dbAccess, msgData, InBot, cmdRet())
-        Case "whoami":        Call OnWhoAmI(Username, dbAccess, msgData, InBot, cmdRet())
         Case "add":           Call OnAdd(Username, dbAccess, msgData, InBot, cmdRet())
         Case "mmail":         Call OnMMail(Username, dbAccess, msgData, InBot, cmdRet())
         Case "bmail":         Call OnBMail(Username, dbAccess, msgData, InBot, cmdRet())
@@ -1934,7 +1934,7 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
         End If
         
         ' ...
-        If (dbAccess.Access <= 100) Then
+        If (dbAccess.Rank <= 100) Then
             If ((GetSafelist(tmpAcc)) Or (GetSafelist(msgFirstPart))) Then
                 ' return message
                 cmdRet(0) = "Error: That user is safelisted."
@@ -1947,8 +1947,8 @@ Private Function OnIPBan(ByVal Username As String, ByRef dbAccess As udtGetAcces
         gAcc = GetAccess(msgFirstPart)
         
         ' ...
-        If ((gAcc.Access >= dbAccess.Access) Or _
-            ((InStr(gAcc.Flags, "A") > 0) And (dbAccess.Access <= 100))) Then
+        If ((gAcc.Rank >= dbAccess.Rank) Or _
+            ((InStr(gAcc.Flags, "A") > 0) And (dbAccess.Rank <= 100))) Then
 
             tmpbuf = "Error: You do not have enough access to do that."
         Else
@@ -2384,16 +2384,16 @@ Private Function OnRem(ByVal Username As String, ByRef dbAccess As udtGetAccessR
     user = GetAccess(U, dbType)
     
     If (Len(U) > 0) Then
-        If ((GetAccess(U, dbType).Access = -1) And _
+        If ((GetAccess(U, dbType).Rank = -1) And _
             (GetAccess(U, dbType).Flags = vbNullString)) Then
             
             tmpbuf = "User not found."
-        ElseIf (GetAccess(U, dbType).Access >= dbAccess.Access) Then
+        ElseIf (GetAccess(U, dbType).Rank >= dbAccess.Rank) Then
             tmpbuf = "That user has higher or equal access."
         ElseIf ((InStr(1, GetAccess(U, dbType).Flags, "L") <> 0) And _
                 (Not (InBot)) And _
                 (InStr(1, GetAccess(Username, dbType).Flags, "A") = 0) And _
-                (GetAccess(Username, dbType).Access <= 99)) Then
+                (GetAccess(Username, dbType).Rank <= 99)) Then
             
                 tmpbuf = "Error: That user is Locked."
         Else
@@ -3946,7 +3946,7 @@ Private Function OnBan(ByVal Username As String, ByRef dbAccess As udtGetAccessR
                     frmChat.AddQ "/ban " & msgData
                 Else
                     Y = Ban(U & IIf(banmsg <> vbNullString, Space$(1) & banmsg, _
-                        vbNullString), dbAccess.Access)
+                        vbNullString), dbAccess.Rank)
                 End If
             End If
             
@@ -4028,7 +4028,7 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
             End If
             
             If (InStr(1, U, "*", vbTextCompare) > 0) Then
-                If (dbAccess.Access >= 100) Then
+                If (dbAccess.Rank >= 100) Then
                     tmpbuf = WildCardBan(U, banmsg, 0)
                 Else
                     tmpbuf = WildCardBan(U, banmsg, 0)
@@ -4038,7 +4038,7 @@ Private Function OnKick(ByVal Username As String, ByRef dbAccess As udtGetAccess
                     frmChat.AddQ "/kick " & msgData
                 Else
                     Y = Ban(U & IIf(Len(banmsg) > 0, Space$(1) & banmsg, vbNullString), _
-                        dbAccess.Access, 1)
+                        dbAccess.Rank, 1)
                     
                     If (Len(Y) > 1) Then
                         tmpbuf = Y
@@ -4554,7 +4554,7 @@ Private Function OnIgnore(ByVal Username As String, ByRef dbAccess As udtGetAcce
     
     If (U <> vbNullString) Then
         ' ...
-        If (GetAccess(U).Access >= dbAccess.Access) Then
+        If (GetAccess(U).Rank >= dbAccess.Rank) Then
             ' ...
             tmpbuf = "That user has equal or higher access."
         Else
@@ -4727,7 +4727,7 @@ Private Function OnInbox(ByVal Username As String, ByRef dbAccess As udtGetAcces
             End If
         Loop While (GetMailCount(Username) > 0)
     Else
-        If (dbAccess.Access > 0) Then
+        If (dbAccess.Rank > 0) Then
             tmpbuf(0) = "You do not currently have any messages " & _
                 "in your inbox."
         End If
@@ -4747,39 +4747,6 @@ Private Function OnInbox(ByVal Username As String, ByRef dbAccess As udtGetAcces
         Next I
     End If
 End Function ' end function OnGetMail
-
-' handle whoami command
-Private Function OnWhoAmI(ByVal Username As String, ByRef dbAccess As udtGetAccessResponse, _
-    ByVal msgData As String, ByVal InBot As Boolean, ByRef cmdRet() As String) As Boolean
-
-    Dim tmpbuf As String ' temporary output buffer
-
-    If (InBot) Then
-        tmpbuf = "You are the bot console."
-        
-        If (g_Online) Then
-            Call AddQ("/whoami", PRIORITY.CONSOLE_MESSAGE)
-        End If
-    ElseIf (dbAccess.Access = 1000) Then
-        tmpbuf = "You are the bot owner, " & Username & "."
-    Else
-        If (dbAccess.Access > 0) Then
-            If (dbAccess.Flags <> vbNullString) Then
-                tmpbuf = dbAccess.Username & " has access " & dbAccess.Access & _
-                    " and flags " & dbAccess.Flags & "."
-            Else
-                tmpbuf = dbAccess.Username & " has access " & dbAccess.Access & "."
-            End If
-        Else
-            If (dbAccess.Flags <> vbNullString) Then
-                tmpbuf = dbAccess.Username & " has flags " & dbAccess.Flags & "."
-            End If
-        End If
-    End If
-
-    ' return message
-    cmdRet(0) = tmpbuf
-End Function ' end function OnWhoAmI
 
 ' TO DO:
 ' handle add command
@@ -4973,7 +4940,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                                 ' ...
                                 tmp = GetAccess(Splt(j), "GROUP")
                             
-                                If (dbAccess.Access < tmp.Access) Then
+                                If (dbAccess.Rank < tmp.Rank) Then
                                     cmdRet(0) = "Error: You do not have sufficient access to " & _
                                         "add a member to the specified group."
                                         
@@ -5044,7 +5011,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
         ' is rank valid?
         If ((Rank <= 0) And (Flags = vbNullString) And (sGrp = vbNullString)) Then
             
-            If ((Rank = 0) And ((gAcc.Access > 0) Or (gAcc.Flags <> vbNullString) Or _
+            If ((Rank = 0) And ((gAcc.Rank > 0) Or (gAcc.Flags <> vbNullString) Or _
                 (gAcc.Groups <> vbNullString))) Then
                 Call OnRem(Username, dbAccess, user, InBot, cmdRet)
             Else
@@ -5054,12 +5021,12 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
             Exit Function
             
         ' is rank higher than user's rank?
-        ElseIf ((Rank) And (Rank >= dbAccess.Access)) Then
+        ElseIf ((Rank) And (Rank >= dbAccess.Rank)) Then
             cmdRet(0) = "Error: You do not have sufficient access to assign an entry with the " & _
                 "specified rank."
             Exit Function
         ' can we modify specified user?
-        ElseIf ((gAcc.Access) And (gAcc.Access >= dbAccess.Access)) Then
+        ElseIf ((gAcc.Rank) And (gAcc.Rank >= dbAccess.Rank)) Then
             cmdRet(0) = "Error: You do not have sufficient access to modify the specified entry."
             Exit Function
         Else
@@ -5073,27 +5040,27 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                     If ((currentCharacter <> "+") And (currentCharacter <> "-")) Then
                         'Select Case (currentCharacter)
                         '    Case "A" ' administrator
-                        '        If (dbAccess.Access <= 100) Then
+                        '        If (dbAccess.Rank <= 100) Then
                         '            Exit For
                         '        End If
                         '
                         '    Case "B" ' banned
-                        '        If (dbAccess.Access < 70) Then
+                        '        If (dbAccess.Rank < 70) Then
                         '            Exit For
                         '        End If
                         '
                         '    Case "D" ' designated
-                        '        If (dbAccess.Access < 100) Then
+                        '        If (dbAccess.Rank < 100) Then
                         '            Exit For
                         '        End If
                         '
                         '    Case "L" ' locked
-                        '        If (dbAccess.Access < 70) Then
+                        '        If (dbAccess.Rank < 70) Then
                         '            Exit For
                         '        End If
                         '
                         '    Case "S" ' safelisted
-                        '        If (dbAccess.Access < 70) Then
+                        '        If (dbAccess.Rank < 70) Then
                         '            Exit For
                         '        End If
                         'End Select
@@ -5185,7 +5152,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                         End If
                         
                         ' does this entry have any remaining access?
-                        If ((gAcc.Access = 0) And (gAcc.Flags = vbNullString) And _
+                        If ((gAcc.Rank = 0) And (gAcc.Flags = vbNullString) And _
                             ((gAcc.Groups = vbNullString) Or (gAcc.Groups = "%"))) Then
                             
                             Dim res As Boolean ' ...
@@ -5213,7 +5180,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                         gAcc.Flags = vbNullString
                         
                         ' set rank to specified
-                        gAcc.Access = Rank
+                        gAcc.Rank = Rank
                     
                         ' set user flags & check for duplicate entries
                         For I = 1 To Len(Flags)
@@ -5247,7 +5214,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                 gAcc.Flags = vbNullString
             
                 ' set rank to specified
-                gAcc.Access = Rank
+                gAcc.Rank = Rank
             End If
 
             ' grab path to database
@@ -5261,7 +5228,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                     ' modify database entry
                     With DB(I)
                         .Username = user
-                        .Access = gAcc.Access
+                        .Rank = gAcc.Rank
                         .Flags = gAcc.Flags
                         .ModifiedBy = Username
                         .ModifiedOn = Now
@@ -5276,7 +5243,7 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                     ' log actions
                     If (BotVars.LogDBActions) Then
                         Call LogDBAction(ModEntry, IIf(InBot, "console", Username), DB(I).Username, _
-                            DB(I).Type, DB(I).Access, DB(I).Flags, DB(I).Groups)
+                            DB(I).Type, DB(I).Rank, DB(I).Flags, DB(I).Groups)
                     End If
                     
                     ' we have found the
@@ -5299,8 +5266,8 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
 
                 With DB(UBound(DB))
                     .Username = user
-                    .Access = IIf((gAcc.Access >= 0), _
-                        gAcc.Access, 0)
+                    .Rank = IIf((gAcc.Rank >= 0), _
+                        gAcc.Rank, 0)
                     .Flags = gAcc.Flags
                     .ModifiedBy = Username
                     .ModifiedOn = Now
@@ -5320,14 +5287,14 @@ Public Function OnAdd(ByVal Username As String, ByRef dbAccess As udtGetAccessRe
                 ' log actions
                 If (BotVars.LogDBActions) Then
                     Call LogDBAction(AddEntry, IIf(InBot, "console", Username), DB(UBound(DB)).Username, _
-                        DB(UBound(DB)).Type, DB(UBound(DB)).Access, DB(UBound(DB)).Flags, DB(UBound(DB)).Groups)
+                        DB(UBound(DB)).Type, DB(UBound(DB)).Rank, DB(UBound(DB)).Flags, DB(UBound(DB)).Groups)
                 End If
             End If
             
             ' check for errors & create message
-            If (gAcc.Access > 0) Then
+            If (gAcc.Rank > 0) Then
                 tmpbuf = Chr(34) & user & Chr(34) & " has been given access " & _
-                    gAcc.Access
+                    gAcc.Rank
                 
                 ' was the user given the specified flags, too?
                 If (Len(gAcc.Flags)) Then
@@ -5410,7 +5377,7 @@ Private Function OnMMail(ByVal Username As String, ByRef dbAccess As udtGetAcces
                     If (StrComp(DB(c).Type, "USER", vbTextCompare) = 0) Then
                         gAcc = GetCumulativeAccess(DB(c).Username)
                         
-                        If (gAcc.Access = Track) Then
+                        If (gAcc.Rank = Track) Then
                             .To = DB(c).Username
                             
                             Call AddMail(temp)
@@ -5696,12 +5663,12 @@ Private Function OnWhoIs(ByVal Username As String, ByRef dbAccess As udtGetAcces
         gAcc = GetCumulativeAccess(U)
         
         If (gAcc.Username <> vbNullString) Then
-            If (gAcc.Access > 0) Then
+            If (gAcc.Rank > 0) Then
                 If (gAcc.Flags <> vbNullString) Then
-                    tmpbuf = gAcc.Username & " has access " & gAcc.Access & _
+                    tmpbuf = gAcc.Username & " has access " & gAcc.Rank & _
                         " and flags " & gAcc.Flags & "."
                 Else
-                    tmpbuf = gAcc.Username & " has access " & gAcc.Access & "."
+                    tmpbuf = gAcc.Username & " has access " & gAcc.Rank & "."
                 End If
             Else
                 If (gAcc.Flags <> vbNullString) Then
@@ -6683,12 +6650,12 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 " (" & LCase$(gAcc.Type) & ")"
         End If
         
-        If (gAcc.Access > 0) Then
+        If (gAcc.Rank > 0) Then
             If (gAcc.Flags <> vbNullString) Then
-                tmpbuf = "Found user " & gAcc.Username & ", with access " & gAcc.Access & _
+                tmpbuf = "Found user " & gAcc.Username & ", with access " & gAcc.Rank & _
                     " and flags " & gAcc.Flags & "."
             Else
-                tmpbuf = "Found user " & gAcc.Username & ", with access " & gAcc.Access & "."
+                tmpbuf = "Found user " & gAcc.Username & ", with access " & gAcc.Rank & "."
             End If
         ElseIf (gAcc.Flags <> vbNullString) Then
             tmpbuf = "Found user " & gAcc.Username & ", with flags " & gAcc.Flags & "."
@@ -6750,8 +6717,8 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                 
                 ' ...
                 If ((lowerBound >= 0) And (upperBound >= 0)) Then
-                    If ((DB(I).Access >= lowerBound) And _
-                        (DB(I).Access <= upperBound)) Then
+                    If ((DB(I).Rank >= lowerBound) And _
+                        (DB(I).Rank <= upperBound)) Then
                         
                         ' ...
                         res = IIf(blnChecked, res, True)
@@ -6761,7 +6728,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                     
                     blnChecked = True
                 ElseIf (lowerBound >= 0) Then
-                    If (DB(I).Access = lowerBound) Then
+                    If (DB(I).Rank = lowerBound) Then
                         ' ...
                         res = IIf(blnChecked, res, True)
                     Else
@@ -6800,7 +6767,7 @@ Private Function searchDatabase(ByRef arrReturn() As String, Optional user As St
                         IIf(((DB(I).Type <> "%") And _
                                 (StrComp(DB(I).Type, "USER", vbTextCompare) <> 0)), _
                             " (" & LCase$(DB(I).Type) & ")", vbNullString) & _
-                        IIf(DB(I).Access > 0, "\" & DB(I).Access, vbNullString) & _
+                        IIf(DB(I).Rank > 0, "\" & DB(I).Rank, vbNullString) & _
                         IIf(DB(I).Flags <> vbNullString, "\" & DB(I).Flags, vbNullString) & ", "
                     
                     ' increment found counter
@@ -6940,7 +6907,7 @@ Public Function DB_remove(ByVal entry As String, Optional ByVal dbType As String
             With DB(0)
                 .Username = vbNullString
                 .Flags = vbNullString
-                .Access = 0
+                .Rank = 0
                 .Groups = vbNullString
                 .AddedBy = vbNullString
                 .ModifiedBy = vbNullString
@@ -7050,7 +7017,7 @@ Public Function GetSafelist(ByVal Username As String) As Boolean
         ' ...
         If (InStr(1, gAcc.Flags, "S", vbBinaryCompare) <> 0) Then
             GetSafelist = True
-        ElseIf (gAcc.Access >= 20) Then
+        ElseIf (gAcc.Rank >= 20) Then
             GetSafelist = True
         End If
     Else
@@ -7186,7 +7153,7 @@ End Function
 '
 '    Open temp For Output As #n
 '        For I = LBound(DB) To UBound(DB)
-'            Print #n, DB(I).Username & Space(1) & DB(I).Access & Space(1) & DB(I).Flags
+'            Print #n, DB(I).Username & Space(1) & DB(I).Rank & Space(1) & DB(I).Flags
 '        Next I
 '    Close #n
 'End Sub
@@ -7226,7 +7193,7 @@ Public Sub LoadDatabase()
                         With DB(I)
                             .Username = x(0)
                             
-                            .Access = 0
+                            .Rank = 0
                             .AddedOn = Now
                             .AddedBy = "2.6r3Import"
                             .BanMessage = vbNullString
@@ -7237,7 +7204,7 @@ Public Sub LoadDatabase()
                             .Type = "USER"
                             
                             If StrictIsNumeric(x(1)) Then
-                                .Access = Val(x(1))
+                                .Rank = Val(x(1))
                             Else
                                 If x(1) <> "%" Then
                                     .Flags = x(1)
@@ -7251,7 +7218,7 @@ Public Sub LoadDatabase()
                             
                             If UBound(x) > 1 Then
                                 If StrictIsNumeric(x(2)) Then
-                                    .Access = Int(x(2))
+                                    .Rank = Int(x(2))
                                 Else
                                     If x(2) <> "%" Then
                                         .Flags = x(2)
@@ -7290,8 +7257,8 @@ Public Sub LoadDatabase()
                                 
                             End If
                             
-                            If .Access > 200 Then
-                                .Access = 200
+                            If .Rank > 200 Then
+                                .Rank = 200
                             End If
                             
                             If .Type = "" Or .Type = "%" Then
@@ -7328,7 +7295,7 @@ Public Sub LoadDatabase()
             With DB(UBound(DB))
                 .Username = BotVars.BotOwner
                 .Type = "USER"
-                .Access = 200
+                .Rank = 200
                 .AddedBy = "(console)"
                 .AddedOn = Now
                 .ModifiedBy = "(console)"
@@ -7449,7 +7416,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                 ' ...
                 For Each Access In accessGroup.childNodes
                     If (LCase$(Access.nodeName) = "rank") Then
-                        If ((gAcc.Access) >= (Val(Access.Text))) Then
+                        If ((gAcc.Rank) >= (Val(Access.Text))) Then
                             ValidateAccess = True
                         
                             Exit For
@@ -7489,7 +7456,7 @@ Private Function ValidateAccess(ByRef gAcc As udtGetAccessResponse, ByVal CWord 
                             ' ...
                             For Each Access In accessGroup.childNodes
                                 If (LCase$(Access.nodeName) = "rank") Then
-                                    If ((gAcc.Access) >= (Val(Access.Text))) Then
+                                    If ((gAcc.Rank) >= (Val(Access.Text))) Then
                                         ValidateAccess = True
                                     
                                         Exit For
@@ -7541,7 +7508,7 @@ Public Sub WriteDatabase(ByVal U As String)
             ' ...
             If (LenB(DB(I).Username) > 0) Then
                 Print #f, DB(I).Username;
-                Print #f, " " & DB(I).Access;
+                Print #f, " " & DB(I).Rank;
                 Print #f, " " & IIf(Len(DB(I).Flags) > 0, DB(I).Flags, "%");
                 Print #f, " " & IIf(Len(DB(I).AddedBy) > 0, DB(I).AddedBy, "%");
                 Print #f, " " & IIf(DB(I).AddedOn > 0, DateCleanup(DB(I).AddedOn), "%");

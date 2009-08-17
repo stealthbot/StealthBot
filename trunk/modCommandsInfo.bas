@@ -48,7 +48,33 @@ Public Function OnTime(Command As clsCommandObj) As Boolean
 End Function
 
 
+' handle whoami command
+Public Function OnWhoAmI(Command As clsCommandObj) As Boolean
+    Dim dbAccess As udtGetAccessResponse
 
-
-
-
+    If (Command.IsLocal) Then
+        Command.Respond "You are the bot console."
+        
+        If (g_Online) Then
+            Call frmChat.AddQ("/whoami", PRIORITY.CONSOLE_MESSAGE)
+        End If
+    Else
+        dbAccess = GetCumulativeAccess(Command.Username)
+        If (dbAccess.Rank = 1000) Then
+            Command.Respond "You are the bot owner, " & Command.Username & "."
+        Else
+            If (dbAccess.Rank > 0) Then
+                If (LenB(dbAccess.Flags) > 0) Then
+                    Command.Respond dbAccess.Username & " holds rank " & dbAccess.Rank & _
+                        " and flags " & dbAccess.Flags & "."
+                Else
+                    Command.Respond dbAccess.Username & " holds rank " & dbAccess.Rank & "."
+                End If
+            Else
+                If (LenB(dbAccess.Flags) > 0) Then
+                    Command.Respond dbAccess.Username & " has flags " & dbAccess.Flags & "."
+                End If
+            End If
+        End If
+    End If
+End Function

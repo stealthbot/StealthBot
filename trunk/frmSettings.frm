@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{CA5A8E1E-C861-4345-8FF8-EF0A27CD4236}#1.0#0"; "vbalTreeView6.ocx"
 Begin VB.Form frmSettings 
    BackColor       =   &H00000000&
@@ -4596,7 +4596,7 @@ Private Function SaveSettings() As Boolean
                 ' log actions
                 If (BotVars.LogDBActions) Then
                     Call LogDBAction(AddEntry, "console", DB(UBound(DB)).Username, "game", _
-                        DB(UBound(DB)).Access, DB(UBound(DB)).Flags)
+                        DB(UBound(DB)).Rank, DB(UBound(DB)).Flags)
                 End If
             Else
                 For j = LBound(DB) To UBound(DB)
@@ -4614,7 +4614,7 @@ Private Function SaveSettings() As Boolean
                             ' log actions
                             If (BotVars.LogDBActions) Then
                                 Call LogDBAction(ModEntry, "console", DB(j).Username, "game", _
-                                    DB(j).Access, DB(j).Flags)
+                                    DB(j).Rank, DB(j).Flags)
                             End If
                             
                             ' commit modifications
@@ -4635,7 +4635,7 @@ Private Function SaveSettings() As Boolean
                         (StrComp(DB(j).Type, "GAME", vbTextCompare) = 0)) Then
                         
                         If ((Len(DB(j).Flags) > 1) Or _
-                            (DB(j).Access > 0) Or _
+                            (DB(j).Rank > 0) Or _
                             (Len(DB(j).Groups) > 1)) Then
 
                             With DB(j)
@@ -4648,7 +4648,7 @@ Private Function SaveSettings() As Boolean
                             ' log actions
                             If (BotVars.LogDBActions) Then
                                 Call LogDBAction(ModEntry, "console", DB(j).Username, "game", _
-                                    DB(j).Access, DB(j).Flags)
+                                    DB(j).Rank, DB(j).Flags)
                             End If
                             
                             ' commit modifications
@@ -4660,7 +4660,7 @@ Private Function SaveSettings() As Boolean
                             ' log actions
                             If (BotVars.LogDBActions) Then
                                 Call LogDBAction(RemEntry, "console", DB(j).Username, "game", _
-                                    DB(j).Access, DB(j).Flags)
+                                    DB(j).Rank, DB(j).Flags)
                             End If
                             
                             ' reload database entries

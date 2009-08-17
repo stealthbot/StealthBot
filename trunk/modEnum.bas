@@ -8,7 +8,7 @@ Option Explicit
 'UDTS
 Public Type udtChanList
     Current         As String
-    flags           As Long
+    Flags           As Long
     Designated      As String
     staticDesignee  As String
 End Type
@@ -37,8 +37,8 @@ End Type
 
 Public Type udtDatabase
     Username    As String
-    Access      As Integer
-    flags       As String
+    Rank        As Integer
+    Flags       As String
     AddedBy     As String
     AddedOn     As Date
     ModifiedBy  As String
@@ -55,8 +55,8 @@ End Type
 
 Public Type udtGetAccessResponse
     Username    As String
-    Access      As Integer
-    flags       As String
+    Rank        As Integer
+    Flags       As String
     AddedBy     As String
     AddedOn     As Date
     ModifiedBy  As String
@@ -81,13 +81,13 @@ Public Type FLASHWINFO
 End Type
 
 Public Type POINTAPI
-    X As Long
+    x As Long
     Y As Long
 End Type
 
 Public Type LVHITTESTINFO
    pt As POINTAPI
-   flags As Long
+   Flags As Long
    iItem As Long
    iSubItem As Long
 End Type

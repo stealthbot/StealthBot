@@ -1,8 +1,8 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
 Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmChat 
@@ -1564,10 +1564,10 @@ Private Sub Form_Load()
     
     ' 4/10/06:
     ' CHECK FOR CONFIG.INI PATH HACK
-    L = InStr(command(), "-cpath ")
+    L = InStr(Command(), "-cpath ")
     
-    If L > 0 And Len(command()) > (L + 7) Then
-        ConfigOverride = Mid$(command(), L + 7)
+    If L > 0 And Len(Command()) > (L + 7) Then
+        ConfigOverride = Mid$(Command(), L + 7)
         
         If InStr(ConfigOverride, " ") > 0 Then
             ConfigOverride = Split(ConfigOverride, " ")(0)
@@ -1771,7 +1771,7 @@ Private Sub Form_Load()
             "the terms of the End-User License Agreement available at http://eula.stealthbot.net."
     End If
     
-    CommandLine = command()
+    CommandLine = Command()
     
     If MDebug("debug") Then _
         AddChat RTBColors.ServerInfoText, " * Program executed in debug mode; unhandled packet " & _
@@ -4037,7 +4037,7 @@ Private Sub mnuPopSafelist_Click()
     
     toSafe = GetSelectedUser
     
-    gAcc.Access = 1000
+    gAcc.Rank = 1000
     
     Call ProcessCommand(GetCurrentUsername, "/safeadd " & toSafe, True, False)
 End Sub
@@ -4052,7 +4052,7 @@ Private Sub mnuPopShitlist_Click()
     
     toBan = GetSelectedUser
     
-    gAcc.Access = 1000
+    gAcc.Rank = 1000
     
     Call ProcessCommand(GetCurrentUsername, "/shitadd " & toBan, True, False)
 End Sub
@@ -4551,12 +4551,12 @@ Private Sub mnuUserlistWhois_Click()
     temp = GetAccess(s)
     
     With RTBColors
-        If temp.Access > -1 Then
-            If temp.Access > 0 Then
+        If temp.Rank > -1 Then
+            If temp.Rank > 0 Then
                 If temp.Flags <> vbNullString Then
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & temp.Access & " and flags " & temp.Flags & "."
+                    AddChat .ConsoleText, "Found user " & s & ", with rank " & temp.Rank & " and flags " & temp.Flags & "."
                 Else
-                    AddChat .ConsoleText, "Found user " & s & ", with access " & temp.Access & "."
+                    AddChat .ConsoleText, "Found user " & s & ", with rank " & temp.Rank & "."
                 End If
             Else
                 If temp.Flags <> vbNullString Then
@@ -5427,7 +5427,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                                     '    End If
                                     'End If
                                     
-                                    temp.Access = 201
+                                    temp.Rank = 201
                                     temp.Flags = "A"
                                     
                                     m = OutFilterMsg(s)
@@ -6439,7 +6439,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
     Dim I              As Long        ' ...
     Dim currChar       As Long        ' ...
     Dim Send           As String      ' ...
-    Dim command        As String      ' ...
+    Dim Command        As String      ' ...
     Dim GTC            As Double      ' ...
     Dim strUser        As String      ' ...
     Dim nameConversion As Boolean     ' ...
@@ -6504,25 +6504,25 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             ' is it a valid command word?
             If (Index > 2) Then
                 ' extract the command word
-                command = LCase$(Mid$(strTmp, 2, (Index - 2)))
+                Command = LCase$(Mid$(strTmp, 2, (Index - 2)))
 
                 ' test it for being battle.net commands we need to process now
-                If ((command = "w") Or _
-                    (command = "whisper") Or _
-                    (command = "m") Or _
-                    (command = "msg") Or _
-                    (command = "message") Or _
-                    (command = "whois") Or _
-                    (command = "where") Or _
-                    (command = "whereis") Or _
-                    (command = "squelch") Or _
-                    (command = "unsquelch") Or _
-                    (command = "ignore") Or _
-                    (command = "unignore") Or _
-                    (command = "ban") Or _
-                    (command = "unban") Or _
-                    (command = "kick") Or _
-                    (command = "designate")) Then
+                If ((Command = "w") Or _
+                    (Command = "whisper") Or _
+                    (Command = "m") Or _
+                    (Command = "msg") Or _
+                    (Command = "message") Or _
+                    (Command = "whois") Or _
+                    (Command = "where") Or _
+                    (Command = "whereis") Or _
+                    (Command = "squelch") Or _
+                    (Command = "unsquelch") Or _
+                    (Command = "ignore") Or _
+                    (Command = "unignore") Or _
+                    (Command = "ban") Or _
+                    (Command = "unban") Or _
+                    (Command = "kick") Or _
+                    (Command = "designate")) Then
         
                     ' ...
                     Splt() = Split(strTmp, Space$(1), 3)
@@ -6530,7 +6530,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                     ' ...
                     If (UBound(Splt) > 0) Then
                         ' ...
-                        command = Splt(0) & Space$(1) & reverseUsername(Splt(1)) & _
+                        Command = Splt(0) & Space$(1) & reverseUsername(Splt(1)) & _
                             Space$(1)
 
                         ' ...
@@ -6551,19 +6551,19 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                         End If
                     End If
                     
-                ElseIf ((command = "f") Or _
-                        (command = "friends")) Then
+                ElseIf ((Command = "f") Or _
+                        (Command = "friends")) Then
                     
                     ' ...
                     Splt() = Split(strTmp, Space$(1), 3)
                     
                     ' ...
-                    command = Splt(0) & Space$(1)
+                    Command = Splt(0) & Space$(1)
                     
                     ' ...
                     If (UBound(Splt) >= 1) Then
                         ' ...
-                        command = command & Splt(1) & Space$(1)
+                        Command = Command & Splt(1) & Space$(1)
                     
                         ' ...
                         If (UBound(Splt) >= 2) Then
@@ -6582,30 +6582,30 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
                                         (StrReverse$(BotVars.Product) = "W3XP")) Then
                                         
                                         ' ...
-                                        command = command & reverseUsername(Splt(2)) & _
+                                        Command = Command & reverseUsername(Splt(2)) & _
                                             Space$(1)
                                     Else
                                         ' ...
-                                        command = command & Splt(2) & Space$(1)
+                                        Command = Command & Splt(2) & Space$(1)
                                     End If
                                     
                                     ' ...
                                     If (UBound(Splt) >= 3) Then
-                                        command = command & Splt(3)
+                                        Command = Command & Splt(3)
                                     End If
                             End Select
                         End If
                     End If
                 Else
                     ' ...
-                    command = "/" & command & Space$(1)
+                    Command = "/" & Command & Space$(1)
                     
                     ' ...
-                    strTmp = Mid$(strTmp, Len(command) + 1)
+                    strTmp = Mid$(strTmp, Len(Command) + 1)
                 End If
                 
                 ' ...
-                If (Len(command) >= BNET_MSG_LENGTH) Then
+                If (Len(Command) >= BNET_MSG_LENGTH) Then
                     Exit Function
                 End If
 
@@ -6647,7 +6647,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
         End If
         
         ' ...
-        Call SplitByLen(strTmp, (BNET_MSG_LENGTH - Len(command)), Splt(), vbNullString, _
+        Call SplitByLen(strTmp, (BNET_MSG_LENGTH - Len(Command)), Splt(), vbNullString, _
             " [more]", OversizeDelimiter)
 
         ' ...
@@ -6659,7 +6659,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             GTC = GetTickCount()
             
             ' store working copy
-            Send = command & Splt(I)
+            Send = Command & Splt(I)
             
             ' create the queue object
             Set Q = New clsQueueOBj

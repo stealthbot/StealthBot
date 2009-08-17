@@ -334,7 +334,7 @@ End Function
 '//             use it to control whether or not your command responses display publicly.
 '// CC          CC controls whether or not the command string is passed to the Custom Command processor.
 '//             For scripting purposes I will not allow the user to set CC, it is always 0.
-Public Sub command(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
+Public Sub Command(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
     False, Optional ByVal Whispered As Boolean = False)
     
     ' execute command
@@ -373,7 +373,7 @@ Public Function CommandEx(ByVal Username As String, ByVal Message As String, Opt
     
         ' ...
         With dbAccess
-            .Access = 200
+            .Rank = 200
             .Flags = "A"
         End With
     Else
@@ -470,7 +470,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     temp = GetCumulativeAccess(Username, EntryType)
     
     With temp
-        Access = .Access
+        Access = .Rank
         Flags = .Flags
     End With
     
@@ -481,7 +481,7 @@ Public Function GetDBEntry(ByVal Username As String, Optional ByRef Access, Opti
     With GetDBEntry
         .EntryType = temp.Type
         .Name = temp.Username
-        .Rank = temp.Access
+        .Rank = temp.Rank
         .Flags = temp.Flags
         .CreatedOn = temp.AddedOn
         .CreatedBy = temp.AddedBy
@@ -522,7 +522,7 @@ Public Sub GetStdDBEntry(ByVal Username As String, ByRef Access, ByRef Flags, _
     temp = GetAccess(Username, EntryType)
     
     With temp
-        Access = .Access
+        Access = .Rank
         Flags = .Flags
     End With
 End Sub
@@ -1680,18 +1680,18 @@ End Function
 '//                   if ommitted, this function will create the command for the currently executing script
 Public Function CreateCommand(ByVal commandName As String, Optional ByVal scriptName As String = vbNullString) As Object
 
-    Dim command As clsCommandDocObj
+    Dim Command As clsCommandDocObj
     
     If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
-    Set command = New clsCommandDocObj
+    Set Command = New clsCommandDocObj
     
-    Call command.CreateCommand(commandName, scriptName)
-    Call command.OpenCommand(commandName, scriptName)
+    Call Command.CreateCommand(commandName, scriptName)
+    Call Command.OpenCommand(commandName, scriptName)
     
-    Set CreateCommand = command
+    Set CreateCommand = Command
     
-    Set command = Nothing
+    Set Command = Nothing
     
 End Function
 
@@ -1703,17 +1703,17 @@ End Function
 '//                   if ommitted, this function will get the command for the currently executing script
 Public Function OpenCommand(ByVal commandName As String, Optional ByVal scriptName As String = vbNullString) As Object
     
-    Dim command As clsCommandDocObj
+    Dim Command As clsCommandDocObj
     
     If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
-    Set command = New clsCommandDocObj
+    Set Command = New clsCommandDocObj
     
-    If command.OpenCommand(commandName, scriptName) Then
-        Set OpenCommand = command
+    If Command.OpenCommand(commandName, scriptName) Then
+        Set OpenCommand = Command
     End If
     
-    Set command = Nothing
+    Set Command = Nothing
     
 End Function
 
@@ -1725,18 +1725,18 @@ End Function
 '//                   if ommitted, this function will delete the command for the currently executing script
 Public Function DeleteCommand(ByVal commandName As String, Optional ByVal scriptName As String = vbNullString) As Object
     
-    Dim command As clsCommandDocObj
+    Dim Command As clsCommandDocObj
     
     If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
-    Set command = New clsCommandDocObj
+    Set Command = New clsCommandDocObj
     
-    Call command.OpenCommand(commandName, scriptName)
-    Call command.Delete
+    Call Command.OpenCommand(commandName, scriptName)
+    Call Command.Delete
     
-    Set DeleteCommand = command
+    Set DeleteCommand = Command
     
-    Set command = Nothing
+    Set Command = Nothing
     
 End Function
 
@@ -1751,16 +1751,16 @@ End Function
 '//                   if ommitted, this function will check for commands created in the currently executing script
 Public Function IsCommand(ByVal commandText As String, ByVal strUsername As String, Optional ByVal scriptName As String = vbNullString) As Collection
 
-    Dim command As New clsCommandDocObj
+    Dim Command As New clsCommandDocObj
     Dim commands As Collection
     
     If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
-    Set commands = command.IsCommand(commandText, strUsername, scriptName)
+    Set commands = Command.IsCommand(commandText, strUsername, scriptName)
     
     Set IsCommand = commands
     
-    Set command = Nothing
+    Set Command = Nothing
     Set commands = Nothing
     
 End Function
@@ -2014,7 +2014,7 @@ Public Function GetUserDatabase() As Collection
         If (Len(DB(x).Username) > 0) Then
             With temp
                 .Name = DB(x).Username
-                .Rank = DB(x).Access
+                .Rank = DB(x).Rank
                 .CreatedOn = DB(x).AddedOn
                 .CreatedBy = DB(x).AddedBy
                 .BanMessage = DB(x).BanMessage

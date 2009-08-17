@@ -274,7 +274,7 @@ Public Function Ban(ByVal Inpt As String, SpeakerAccess As Integer, Optional Kic
                     End If
                 End If
                 
-                If (GetCumulativeAccess(Username).Access >= SpeakerAccess) Then
+                If (GetCumulativeAccess(Username).Rank >= SpeakerAccess) Then
                     Ban = "Error: You do not have sufficient access to do that."
                     
                     Exit Function
@@ -612,14 +612,14 @@ Public Function Voting(ByVal Mode1 As Byte, Optional Mode2 As Byte, Optional Use
                         
                     Case BVT_VOTE_BAN
                         If (VotesYes > VotesNo) Then
-                            Voting = Ban(Target & " Banned by vote", VoteInitiator.Access)
+                            Voting = Ban(Target & " Banned by vote", VoteInitiator.Rank)
                         Else
                             Voting = "Ban vote failed."
                         End If
                         
                     Case BVT_VOTE_KICK
                         If (VotesYes > VotesNo) Then
-                            Voting = Ban(Target & " Kicked by vote", VoteInitiator.Access, 1)
+                            Voting = Ban(Target & " Kicked by vote", VoteInitiator.Rank, 1)
                         Else
                             Voting = "Kick vote failed."
                         End If
@@ -674,7 +674,7 @@ Public Function GetAccess(ByVal Username As String, Optional dbType As String = 
             If (bln = True) Then
                 With GetAccess
                     .Username = DB(I).Username
-                    .Access = DB(I).Access
+                    .Rank = DB(I).Rank
                     .Flags = DB(I).Flags
                     .AddedBy = DB(I).AddedBy
                     .AddedOn = DB(I).AddedOn
@@ -692,7 +692,7 @@ Public Function GetAccess(ByVal Username As String, Optional dbType As String = 
         bln = False
     Next I
 
-    GetAccess.Access = -1
+    GetAccess.Rank = -1
 End Function
 
 Public Function dbLastModified() As Date
@@ -812,7 +812,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                         .Username = DB(I).Username & _
                             IIf(((DB(I).Type <> "%") And (StrComp(DB(I).Type, "USER", vbTextCompare) <> 0)), _
                                 " (" & LCase$(DB(I).Type) & ")", vbNullString)
-                        .Access = DB(I).Access
+                        .Rank = DB(I).Rank
                         .Flags = DB(I).Flags
                         .AddedBy = DB(I).AddedBy
                         .AddedOn = DB(I).AddedOn
@@ -843,9 +843,9 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             gAcc = GetCumulativeGroupAccess(Splt(j))
                         
                             ' ...
-                            If (GetCumulativeAccess.Access < gAcc.Access) Then
+                            If (GetCumulativeAccess.Rank < gAcc.Rank) Then
                                 ' ...
-                                GetCumulativeAccess.Access = gAcc.Access
+                                GetCumulativeAccess.Rank = gAcc.Rank
                                 
                                 ' ...
                                 bln = True
@@ -985,8 +985,8 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                                     gAcc = GetCumulativeGroupAccess(Splt(j))
                                 
                                     ' ...
-                                    If (tmp.Access < gAcc.Access) Then
-                                        tmp.Access = gAcc.Access
+                                    If (tmp.Rank < gAcc.Rank) Then
+                                        tmp.Rank = gAcc.Rank
                                     End If
                                     
                                     ' ...
@@ -1012,9 +1012,9 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
                             End If
     
                             ' ...
-                            If (GetCumulativeAccess.Access < tmp.Access) Then
+                            If (GetCumulativeAccess.Rank < tmp.Rank) Then
                                 ' ...
-                                GetCumulativeAccess.Access = tmp.Access
+                                GetCumulativeAccess.Rank = tmp.Rank
                                 
                                 ' ...
                                 bln = True
@@ -1076,7 +1076,7 @@ Public Function GetCumulativeAccess(ByVal Username As String, Optional dbType As
             If (dbIndex = -1) Then
                 With GetCumulativeAccess
                     .Username = vbNullString
-                    .Access = 0
+                    .Rank = 0
                     .Flags = vbNullString
                 End With
             End If
@@ -1125,8 +1125,8 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
                 recAcc = GetCumulativeGroupAccess(Splt(I))
                     
                 ' ...
-                If (gAcc.Access < recAcc.Access) Then
-                    gAcc.Access = recAcc.Access
+                If (gAcc.Rank < recAcc.Rank) Then
+                    gAcc.Rank = recAcc.Rank
                 End If
                 
                 ' ...
@@ -1154,8 +1154,8 @@ Private Function GetCumulativeGroupAccess(ByVal Group As String) As udtGetAccess
             recAcc = GetCumulativeGroupAccess(gAcc.Groups)
         
             ' ...
-            If (gAcc.Access < recAcc.Access) Then
-                gAcc.Access = recAcc.Access
+            If (gAcc.Rank < recAcc.Rank) Then
+                gAcc.Rank = recAcc.Rank
             End If
             
             ' ...
@@ -2410,7 +2410,7 @@ Public Function DoReplacements(ByVal s As String, Optional Username As String, _
     End If
     
     s = Replace(s, "%v", CVERSION, 1)
-    s = Replace(s, "%a", IIf(gAcc.Access >= 0, gAcc.Access, "0"), 1)
+    s = Replace(s, "%a", IIf(gAcc.Rank >= 0, gAcc.Rank, "0"), 1)
     s = Replace(s, "%f", IIf(gAcc.Flags <> vbNullString, gAcc.Flags, "<none>"), 1)
     s = Replace(s, "%t", Time$, 1)
     s = Replace(s, "%d", Date, 1)

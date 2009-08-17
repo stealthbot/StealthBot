@@ -216,11 +216,11 @@ On Error GoTo ERROR_HANDLER
     
     
     If (IsLocal) Then
-      dbAccess.Access = 201
+      dbAccess.Rank = 201
       dbAccess.Flags = "A"
     End If
     
-    If (dbAccess.Access >= Me.docs.RequiredRank And Me.docs.RequiredRank > -1) Then
+    If (dbAccess.Rank >= Me.docs.RequiredRank And Me.docs.RequiredRank > -1) Then
         m_hasaccess = True
     End If
     
@@ -242,7 +242,7 @@ On Error GoTo ERROR_HANDLER
             If (LenB(sTemp) > 0) Then
                 If (PrepareCheck(sTemp) Like Restriction.MatchMessage) Then 'If they match (regex)
                     'If Rank = -1 It means it's missing, and it MUST have Flags. Or if Rank > User's Access
-                    If (Restriction.RequiredRank = -1 Or Restriction.RequiredRank > dbAccess.Access) Then
+                    If (Restriction.RequiredRank = -1 Or Restriction.RequiredRank > dbAccess.Rank) Then
                         If (Not CheckForAnyFlags(Restriction.RequiredFlags, dbAccess.Flags)) Then
                             m_hasaccess = False
                         End If
