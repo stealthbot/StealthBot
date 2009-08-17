@@ -94,6 +94,7 @@ Public Function ProcessCommand(ByVal Username As String, ByVal Message As String
             If (LenB(Command.docs.Owner) = 0) Then 'Is it a built in command?
                 If (Not executeCommand(Username, dbAccess, Command.Name & Space$(1) & Command.Args, IsLocal, command_return)) Then
                     Call DispatchCommand(Command)
+                    Call RunInSingle(Nothing, "Event_Command", Command)
                     Command.SendResponse
                 End If
             Else

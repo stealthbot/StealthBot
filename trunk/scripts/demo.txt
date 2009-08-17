@@ -7,6 +7,7 @@ Script("Author") = "Eric[nK]"
 Script("Major") = 1
 Script("Minor") = 0
 Script("Revision") = 1
+ObserveScript("") 'Lets Observe the Internal bot events
 
 ' // create instance of demo class
 Dim cls
@@ -14,82 +15,82 @@ Set cls = New CDemoClass
 
 Sub Event_Load()
 
-	Dim Command, Parameter
-	
-	'// check if command exists
-	Set Command = OpenCommand("soundex")
-	If Command Is Nothing Then
-		'// It does not, lets create the command
-		Set Command = CreateCommand("soundex")
-		With Command
-			'// ... and add a property
-			Set Parameter = .NewParameter("word", False, "word")
-			With Parameter
-				.Description = "The word you wish to calculate the soundex value of."
-			End With
-			.Parameters.Add Parameter
-			'// set the access level required to use this command
-			.RequiredRank = 1
-			'// save the command
-			.Save
-		End With
-	End If
-	
-	Set Command = OpenCommand("fibi")
-	If Command Is Nothing Then
-		Set Command = CreateCommand("fibi")
-		With Command
-			.Description = "Retreives a number from the Fibonacci sequance."
-			.RequiredRank = 1
-			Set Parameter = .NewParameter("Number", False, "Numeric")
-			With Parameter
-				.Description = "The index in the Fibonacci sequance you wish to grab."
-				.SpecialNotes = "Must be less then 10"
-			End With
-			.Parameters.Add Parameter
-			.Save
-		End With
-	End If
-	
-	Set Parameter = Nothing
-	Set Command = Nothing
+    Dim Command, Parameter
+    
+    '// check if command exists
+    Set Command = OpenCommand("soundex")
+    If Command Is Nothing Then
+        '// It does not, lets create the command
+        Set Command = CreateCommand("soundex")
+        With Command
+            '// ... and add a property
+            Set Parameter = .NewParameter("word", False, "word")
+            With Parameter
+                .Description = "The word you wish to calculate the soundex value of."
+            End With
+            .Parameters.Add Parameter
+            '// set the access level required to use this command
+            .RequiredRank = 1
+            '// save the command
+            .Save
+        End With
+    End If
+    
+    Set Command = OpenCommand("fibi")
+    If Command Is Nothing Then
+        Set Command = CreateCommand("fibi")
+        With Command
+            .Description = "Retreives a number from the Fibonacci sequance."
+            .RequiredRank = 1
+            Set Parameter = .NewParameter("Number", False, "Numeric")
+            With Parameter
+                .Description = "The index in the Fibonacci sequance you wish to grab."
+                .SpecialNotes = "Must be less then 10"
+            End With
+            .Parameters.Add Parameter
+            .Save
+        End With
+    End If
+    
+    Set Parameter = Nothing
+    Set Command = Nothing
 
 
-	' // create Winsock object
-	'CreateObj "Winsock", "sck"
+    ' // create Winsock object
+    'CreateObj "Winsock", "sck"
 
-	' // set Winsock object properties
-	'With sck
-	'	.RemoteHost = "uswest.battle.net"
-	'	.RemotePort = 6112
-	'	.Connect
-	'End With
+    ' // set Winsock object properties
+    'With sck
+    '    .RemoteHost = "uswest.battle.net"
+    '    .RemotePort = 6112
+    '    .Connect
+    'End With
 
-	' // create LongTimer object
-	'CreateObj "LongTimer", "LTimer"
+    ' // create LongTimer object
+    'CreateObj "LongTimer", "LTimer"
 
-	' // set LongTimer object properties
-	'With LTimer
-	'	.Interval = 60
-	'	.Enabled = True
-	'End With
+    ' // set LongTimer object properties
+    'With LTimer
+    '    .Interval = 60
+    '    .Enabled = True
+    'End With
 
-	' // create Form object
-	'CreateObj "Form", "frm"
+    ' // create Form object
+    'CreateObj "Form", "frm"
 
-	' // create Menu objects
-	'CreateObj "Menu", "mnu"
-	'CreateObj "Menu", "submnu"
+    ' // create Menu objects
+    'CreateObj "Menu", "mnu"
+    'CreateObj "Menu", "submnu"
 
-	' // set submnu as child of mnu
-	'submnu.Parent = mnu
+    ' // set submnu as child of mnu
+    'submnu.Parent = mnu
 
-	' // set menu captions
-	'mnu.Caption = "menu"
-	'submnu.Caption = "submenu"
+    ' // set menu captions
+    'mnu.Caption = "menu"
+    'submnu.Caption = "submenu"
 
-	' // show form
-	'frm.Show
+    ' // show form
+    'frm.Show
 
 End Sub
 
@@ -99,19 +100,19 @@ Sub LTimer_Timer()
 End Sub
 
 Sub Event_PacketReceived(Protocol, ID, Length, Data)
-	'If (Protocol = "BNCS") Then
-	'	If (ID = &H65) Then
-	'		AddChat vbYellow, "RECEIVED BNCS FRIENDS LIST"
-	'	End If
-	'End If
+    'If (Protocol = "BNCS") Then
+    '    If (ID = &H65) Then
+    '        AddChat vbYellow, "RECEIVED BNCS FRIENDS LIST"
+    '    End If
+    'End If
 End Sub
 
 Sub Event_PacketSent(Protocol, ID, Length, Data)
-	'If (Protocol = "BNCS") Then
-	'	If (ID = &H65) Then
-	'		AddChat vbYellow, "SENT BNCS FRIENDS LIST REQUEST"
-	'	End If
-	'End If
+    'If (Protocol = "BNCS") Then
+    '    If (ID = &H65) Then
+    '        AddChat vbYellow, "SENT BNCS FRIENDS LIST REQUEST"
+    '    End If
+    'End If
 End Sub
 
 Sub submnu_Click()
@@ -119,41 +120,41 @@ Sub submnu_Click()
 End Sub
 
 Sub TestDemo()
-	'AddChat vbBlue, "TestDemo()"
+    'AddChat vbBlue, "TestDemo()"
 End Sub
 
 Sub Event_UserTalk(Username, Flags, Message, Ping)
     HandleCommand Message, Username, 1
 End Sub
 Sub Event_WhisperFromUser(Username, Flags, Message, Ping)
-	HandleCommand Message, Username, 3
+    HandleCommand Message, Username, 3
 End Sub
 Sub Event_PressedEnter(Text)
-	HandleCommand Text, GetCurrentUsername, 4
+    HandleCommand Text, GetCurrentUsername, 4
 End Sub
 
 
 Private Sub HandleCommand(strText, strUsername, Origin)
 
-	'// testing command stuff
-	Dim Cmd, Cmds
-	Set Cmds = IsCommand(strText, strUsername)
-	If Cmds.Count > 0 Then
-		For Each Cmd In Cmds
-			If (Origin = 3) Then Cmd.WasWhispered = True
-			If Cmd.HasAccess = True Then
-				If LCase(Cmd.Name) = "soundex" Then
-					If Cmd.IsValid = True Then
-						'// have the soundex command do something
-						Cmd.Respond "The SoundEx for '" & Cmd.Argument("Word") & "' is " & SoundEx(Cmd.Argument("Word"))
-					Else
-						'//They Did not use a valid syntax for this command
-						Cmd.Respond "The proper syntax for this command is: "  & BotVars.Trigger & "SoundEx <Word>"
-					End If
-				End If
-			End If
-		Next
-	End If
+    '// testing command stuff
+    Dim Cmd, Cmds
+    Set Cmds = IsCommand(strText, strUsername)
+    If Cmds.Count > 0 Then
+        For Each Cmd In Cmds
+            If (Origin = 3) Then Cmd.WasWhispered = True
+            If Cmd.HasAccess = True Then
+                If LCase(Cmd.Name) = "soundex" Then
+                    If Cmd.IsValid = True Then
+                        '// have the soundex command do something
+                        Cmd.Respond "The SoundEx for '" & Cmd.Argument("Word") & "' is " & SoundEx(Cmd.Argument("Word"))
+                    Else
+                        '//They Did not use a valid syntax for this command
+                        Cmd.Respond "The proper syntax for this command is: "  & BotVars.Trigger & "SoundEx <Word>"
+                    End If
+                End If
+            End If
+        Next
+    End If
 
 End Sub
 
@@ -187,46 +188,50 @@ End Function
 '// outputs detailed information about a command
 Sub DebugCommand(ByRef cmd)
 
-	'// using a fixed width font
-	f = "Lucida Console"
+    '// using a fixed width font
+    f = "Lucida Console"
 
-	AddChat f, vbGreen, "Command.Name         ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Name, f, vbWhite, "]"
-	AddChat f, vbGreen, "Command.Args         ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Args, f, vbWhite, "]"
-	AddChat f, vbGreen, "Command.HasAccess    ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.HasAccess, f, vbWhite, "]"
-	AddChat f, vbGreen, "Command.PublicOutput ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.PublicOutput, f, vbWhite, "]"
-	AddChat f, vbGreen, "Command.IsValid      ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.IsValidCommand, f, vbWhite, "]"
-	If cmd.PublicOutput Then AddQ "Command.Args := " & "[" & cmd.Args & "]"
-	i = 0
-	For Each arg In cmd.Arguments
-		AddChat f, vbGreen, "  Arguments(" & i & ")" & vbTab, f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, arg , f, vbWhite, "]"
-		i = i + 1
-	Next
-	For Each parm In cmd.docs.Parameters
-		AddChat f, vbGreen, "  Argument(""" & parm.Name & """)" & vbTab, f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Argument(parm.Name) , f, vbWhite, "]"
-	Next
-	AddChat f, vbCyan, "------------------------------------------------------"
+    AddChat f, vbGreen, "Command.Name         ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Name, f, vbWhite, "]"
+    AddChat f, vbGreen, "Command.Args         ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Args, f, vbWhite, "]"
+    AddChat f, vbGreen, "Command.HasAccess    ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.HasAccess, f, vbWhite, "]"
+    AddChat f, vbGreen, "Command.PublicOutput ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.PublicOutput, f, vbWhite, "]"
+    AddChat f, vbGreen, "Command.IsValid      ", f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.IsValidCommand, f, vbWhite, "]"
+    If cmd.PublicOutput Then AddQ "Command.Args := " & "[" & cmd.Args & "]"
+    i = 0
+    For Each arg In cmd.Arguments
+        AddChat f, vbGreen, "  Arguments(" & i & ")" & vbTab, f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, arg , f, vbWhite, "]"
+        i = i + 1
+    Next
+    For Each parm In cmd.docs.Parameters
+        AddChat f, vbGreen, "  Argument(""" & parm.Name & """)" & vbTab, f, vbCyan , ":= ", f, vbWhite, "[", f, vbYellow, cmd.Argument(parm.Name) , f, vbWhite, "]"
+    Next
+    AddChat f, vbCyan, "------------------------------------------------------"
 End Sub
 
 Sub Event_Command(Command)
-	Select Case LCase(Command.Name)
-		Case "fibi":
-			If (Command.IsValid) Then
-				If(Command.Argument("Number") < 1 Or Command.Argument("Number") > 10) Then
-					Command.Respond "Fibinacci Command is limited to 1-10"
-				Else
-					Command.Respond "The number at position " & Command.Argument("Number") & " in the Fibinacci sequance is: " & GetFibiIndex(Command.Argument("Number"), 1, 0, 1)
-				End If
-			Else
-				Command.Respond "Proper syntax for this command is: .Fibi <Number>"
-			End If
-	End Select
+    If(Command.Docs.Owner = Script("Name")) Then 'Its one of our Commands
+        Select Case LCase(Command.Name)
+            Case "fibi":
+                If (Command.IsValid) Then
+                    If(Command.Argument("Number") < 1 Or Command.Argument("Number") > 10) Then
+                        Command.Respond "Fibinacci Command is limited to 1-10"
+                    Else
+                        Command.Respond "The number at position " & Command.Argument("Number") & " in the Fibinacci sequance is: " & GetFibiIndex(Command.Argument("Number"), 1, 0, 1)
+                    End If
+                Else
+                    Command.Respond "Proper syntax for this command is: .Fibi <Number>"
+                End If
+        End Select
+    ElseIf (Command.Docs.Owner = vbNullString) Then 'Its a internal Command!
+        Command.Respond "Demo Event_Command Observer for internal command " & Command.Name
+    End If
 End Sub
 Function GetFibiIndex(Index, Position, LastNumber, Number)
-	If (CInt(Index) = CInt(Position)) Then
-		GetFibiIndex = LastNumber
-	Else
-		GetFibiIndex = GetFibiIndex(Index, Position + 1, Number, LastNumber + Number)
-	End If
+    If (CInt(Index) = CInt(Position)) Then
+        GetFibiIndex = LastNumber
+    Else
+        GetFibiIndex = GetFibiIndex(Index, Position + 1, Number, LastNumber + Number)
+    End If
 End Function
 
 

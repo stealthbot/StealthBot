@@ -185,7 +185,7 @@ ERROR_HANDLER:
 
     ' ...
     frmChat.AddChat vbRed, _
-        "Error (" & Err.Number & "): " & Err.Description & " in LoadScripts()."
+        "Error (" & Err.Number & "): " & Err.description & " in LoadScripts()."
 
 End Sub
 
@@ -603,43 +603,41 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
     Set oldEM = m_ExecutingMdl ' keep old module reference, for recursion
 
     arr() = Parameters()
-
-    str = SharedScriptSupport.GetSettingsEntry("Enabled", GetScriptName(obj.Name))
+    'If Obj is nothing then we are 'running' an internal event
+    'This is so scriptors can observe internal events, like Internal Commands
+    If (obj Is Nothing) Then
+        str = "True"
+    Else
+        str = SharedScriptSupport.GetSettingsEntry("Enabled", GetScriptName(obj.Name))
+    End If
     
     Set m_ExecutingMdl = obj
     m_IsEventError = (StrComp(arr(0), "Event_Error", vbBinaryCompare) = 0)
     
-    If (StrComp(str, "False", vbTextCompare) <> 0) Then
-        '' check if module has the procedure before calling it!
-        'For Each Proc In obj.Procedures
-        '    If StrComp(Proc.Name, arr(0), vbTextCompare) = 0 Then
-        '        ' it does, count args
-        '        If Proc.numArgs = UBound(arr) Then
-        '            ' call it
-        CallByNameEx obj, "Run", VbMethod, arr()
-        '        End If
-        '        Exit For
-        '    End If
-        'Next Proc
+    If (Not StrComp(str, "False", vbTextCompare) = 0) Then
+        If (Not obj Is Nothing) Then CallByNameEx obj, "Run", VbMethod, arr()
+        RunInSingle = GetVeto 'Was this particular event vetoed?
+        
+        'Call any scripts that are observing this one
+        If (Not obj Is Nothing) Then
+            Set obsers = GetScriptObservers(GetScriptName(obj.Name), False)
+        Else
+            Set obsers = GetScriptObservers(vbNullString, False)
+        End If
+        For I = 1 To obsers.Count
+            Set obser = GetModuleByName(obsers.Item(I))
+            If (Not obser Is Nothing) Then 'Is the script real/loaded?
+                str = SharedScriptSupport.GetSettingsEntry("Enabled", obsers.Item(I))
+                If (StrComp(str, "False", vbTextCompare) <> 0) Then 'Is it off?
+                    Set m_ExecutingMdl = obser
+                    CallByNameEx obser, "Run", VbMethod, arr
+                End If
+            End If
+            Set obser = Nothing
+        Next I
     End If
     
     m_IsEventError = False
-    RunInSingle = GetVeto 'Was this particular event vetoed?
-    
-    'Call any scripts that are observing this one
-    Set obsers = GetScriptObservers(GetScriptName(obj.Name), False)
-    For I = 1 To obsers.Count
-        Set obser = GetModuleByName(obsers.Item(I))
-        If (Not obser Is Nothing) Then 'Is the script real/loaded?
-            str = SharedScriptSupport.GetSettingsEntry("Enabled", obsers.Item(I))
-            If (StrComp(str, "False", vbTextCompare) <> 0) Then 'Is it off?
-                Set m_ExecutingMdl = obser
-                CallByNameEx obser, "Run", VbMethod, arr
-            End If
-        End If
-        Set obser = Nothing
-    Next I
-    
     Set m_ExecutingMdl = oldEM ' got back to old reference
     SetVeto oldVeto 'Reset the old veto, this is for recursion
     
@@ -696,7 +694,7 @@ ERROR_HANDLER:
         Exit Sub
     End If
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
         " in CallByNameEx()."
         
     Set oTLI = Nothing
@@ -912,7 +910,7 @@ Public Sub DestroyObjs(Optional ByVal SCModule As Object = Nothing)
 ERROR_HANDLER:
     
     frmChat.AddChat vbRed, _
-        "Error (#" & Err.Number & "): " & Err.Description & " in DestroyObjs()."
+        "Error (#" & Err.Number & "): " & Err.description & " in DestroyObjs()."
         
     Resume Next
     
@@ -1026,7 +1024,7 @@ ERROR_HANDLER:
     End If
 
     frmChat.AddChat vbRed, _
-        "Error (#" & Err.Number & "): " & Err.Description & " in DestroyObj()."
+        "Error (#" & Err.Number & "): " & Err.description & " in DestroyObj()."
         
     Resume Next
     
@@ -1158,7 +1156,7 @@ Public Function InitMenus()
         
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
         " in InitMenus()."
 
     Err.Clear
@@ -1191,7 +1189,7 @@ Public Function DestroyMenus()
     
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
         " in DestroyMenus()."
 
     Err.Clear
@@ -1360,7 +1358,7 @@ Public Sub SC_Error()
         frmChat.AddChat RTBColors.ErrorMessageText, _
             "Scripting " & ErrType & " error " & Chr(39) & .Error.Number & Chr(39) & _
             " in " & Name & ": (line " & .Error.line & "; column " & .Error.Column & ")"
-        frmChat.AddChat RTBColors.ErrorMessageText, .Error.Description
+        frmChat.AddChat RTBColors.ErrorMessageText, .Error.description
         frmChat.AddChat RTBColors.ErrorMessageText, "Offending line: >> " & .Error.Text
         .Error.Clear
     End With
@@ -1391,7 +1389,7 @@ Public Function GetScriptValue(ModuleID As String, Key As String) As Variant
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
         " in GetScriptValue()."
 
     Err.Clear
@@ -1420,7 +1418,7 @@ Public Sub SetScriptValue(ByVal ModuleID As String, ByVal Key As String, ByVal V
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
         " in SetScriptValue()."
 
     Err.Clear
@@ -1441,7 +1439,7 @@ Public Function GetCallingScriptModule() As Module
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
         " in GetCallingScriptModule()."
 
     Err.Clear
@@ -1484,7 +1482,7 @@ Public Function GetModuleID(Optional ByVal scriptName As String = vbNullString) 
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
         " in GetModuleID()."
 
     Err.Clear
@@ -1516,7 +1514,7 @@ Public Function GetScriptName(Optional ByVal ModuleID As String = vbNullString) 
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
         " in GetScriptName()."
 
     Err.Clear
@@ -1550,7 +1548,7 @@ Public Function GetScriptObject(Optional ByVal ModuleID As String = vbNullString
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
         " in GetScriptObject()."
 
     Err.Clear
@@ -1577,7 +1575,7 @@ Public Function GetDefaultDataBuffer(ByVal ModuleID As String) As Object
 
 ERROR_HANDLER:
 
-    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.Description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
         " in GetDefaultDataBuffer()."
 
     Err.Clear
@@ -1613,7 +1611,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.AddScriptObserver()"
+    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modScripting.AddScriptObserver()"
 End Sub
 
 'Returns a collection of scripts that the passed script is currently observing, or being observed by
@@ -1643,5 +1641,5 @@ On Error GoTo ERROR_HANDLER
 
     Exit Function
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.Description & " in modScripting.GetScriptObservers()"
+    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modScripting.GetScriptObservers()"
 End Function
