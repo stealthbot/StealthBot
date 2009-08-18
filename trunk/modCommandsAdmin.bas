@@ -3,11 +3,11 @@ Option Explicit
 'This module will hold all the commands that relate to Andmistering the bot, Changing settings
 'Editing the database, etc..
 
-Public Function OnClear(Command As clsCommandObj) As Boolean
+Public Sub OnClear(Command As clsCommandObj)
     frmChat.mnuClear_Click
-End Function
+End Sub
 
-Public Function OnDisable(Command As clsCommandObj) As Boolean
+Public Sub OnDisable(Command As clsCommandObj)
     Dim Module As Module
     Dim Name   As String
     
@@ -29,13 +29,13 @@ Public Function OnDisable(Command As clsCommandObj) As Boolean
     Else
         Command.Respond "Error: You must specify a script."
     End If
-End Function
+End Sub
 
-Public Function OnDump(Command As clsCommandObj) As Boolean
+Public Sub OnDump(Command As clsCommandObj)
     Call DumpPacketCache
-End Function
+End Sub
 
-Public Function OnEnable(Command As clsCommandObj) As Boolean
+Public Sub OnEnable(Command As clsCommandObj)
     Dim Module As Module
     Dim Name   As String
     
@@ -56,19 +56,19 @@ Public Function OnEnable(Command As clsCommandObj) As Boolean
     Else
         Command.Respond "Error: You must specify a script."
     End If
-End Function
+End Sub
 
-Public Function OnLockText(Command As clsCommandObj) As Boolean
+Public Sub OnLockText(Command As clsCommandObj)
     Call frmChat.mnuLock_Click
-End Function
+End Sub
 
-Public Function OnQuit(Command As clsCommandObj) As Boolean
+Public Sub OnQuit(Command As clsCommandObj)
     BotIsClosing = True
     Unload frmChat
     Set frmChat = Nothing
-End Function
+End Sub
 
-Public Function OnSetExpKey(Command As clsCommandObj) As Boolean
+Public Sub OnSetExpKey(Command As clsCommandObj)
     Dim strKey As String
     If (Command.IsValid) Then
         strKey = Replace$(Command.Argument("Key"), "-", vbNullString)
@@ -89,9 +89,9 @@ Public Function OnSetExpKey(Command As clsCommandObj) As Boolean
     Else
         Command.Respond "You must specify a cdkey."
     End If
-End Function
+End Sub
 
-Public Function OnSetHome(Command As clsCommandObj) As Boolean
+Public Sub OnSetHome(Command As clsCommandObj)
     If (Command.IsValid) Then
         Call WriteINI("Main", "HomeChan", Command.Argument("Channel"))
         BotVars.HomeChannel = Command.Argument("Channel")
@@ -99,9 +99,9 @@ Public Function OnSetHome(Command As clsCommandObj) As Boolean
     Else
         Command.Respond "You must specify a channel."
     End If
-End Function
+End Sub
 
-Public Function OnSetKey(Command As clsCommandObj) As Boolean
+Public Sub OnSetKey(Command As clsCommandObj)
     Dim strKey As String
     If (Command.IsValid) Then
         strKey = Replace$(Command.Argument("Key"), "-", vbNullString)
@@ -122,9 +122,9 @@ Public Function OnSetKey(Command As clsCommandObj) As Boolean
     Else
         Command.Respond "You must specify a cdkey."
     End If
-End Function
+End Sub
 
-Public Function OnSetName(Command As clsCommandObj) As Boolean
+Public Sub OnSetName(Command As clsCommandObj)
     If (Command.IsValid) Then
         Call WriteINI("Main", "Username", Command.Argument("Username"))
         BotVars.Username = Command.Argument("Username")
@@ -132,9 +132,9 @@ Public Function OnSetName(Command As clsCommandObj) As Boolean
     Else
         Command.Respond "You must specify a username."
     End If
-End Function
+End Sub
 
-Public Function OnSetPass(Command As clsCommandObj) As Boolean
+Public Sub OnSetPass(Command As clsCommandObj)
     If (Command.IsValid) Then
         Call WriteINI("Main", "Password", Command.Argument("Password"))
         BotVars.Password = Command.Argument("Password")
@@ -142,9 +142,9 @@ Public Function OnSetPass(Command As clsCommandObj) As Boolean
     Else
         Command.Respond "You must specify a password."
     End If
-End Function
+End Sub
 
-Public Function OnSetServer(Command As clsCommandObj) As Boolean
+Public Sub OnSetServer(Command As clsCommandObj)
     If (Command.IsValid) Then
         Call WriteINI("Main", "Server", Command.Argument("Server"))
         BotVars.Server = Command.Argument("Server")
@@ -152,9 +152,9 @@ Public Function OnSetServer(Command As clsCommandObj) As Boolean
     Else
         Command.Respond "You must specify a server."
     End If
-End Function
+End Sub
 
-Public Function OnSetTrigger(Command As clsCommandObj) As Boolean
+Public Sub OnSetTrigger(Command As clsCommandObj)
     If (Command.IsValid) Then
         Call WriteINI("Main", "Trigger", StringFormatA("{{0}}", Command.Argument("Trigger")))
         BotVars.Trigger = Command.Argument("Trigger")
@@ -162,9 +162,9 @@ Public Function OnSetTrigger(Command As clsCommandObj) As Boolean
     Else
         Command.Respond "You must specify a trigger."
     End If
-End Function
+End Sub
 
-Public Function OnWhisperCmds(Command As clsCommandObj) As Boolean
+Public Sub OnWhisperCmds(Command As clsCommandObj)
     If (StrComp(Command.Argument("SubCommand"), "status", vbTextCompare) = 0) Then
         Command.Respond StringFormatA("Command responses will be {0}.", _
             IIf(BotVars.WhisperCmds, "whispered back", "displayed publicly"))
@@ -179,7 +179,7 @@ Public Function OnWhisperCmds(Command As clsCommandObj) As Boolean
             Command.Respond "Command responses will now be whispered back."
         End If
     End If
-End Function
+End Sub
 
 
 

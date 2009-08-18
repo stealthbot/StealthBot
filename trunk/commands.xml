@@ -415,23 +415,6 @@
     </access>
   </command>
 
-  <command name="designated" token="operator">
-    <aliases>
-      <alias>des</alias>
-    </aliases>
-
-    <documentation>
-      <description>States the currently designated user.</description>
-    </documentation>
-
-    <access>
-      <rank>20</rank>
-      <flags>
-        <flag>O</flag>
-      </flags>
-    </access>
-  </command>
-
   <command name="scq">
     <aliases />
 
@@ -1441,6 +1424,14 @@
     <documentation>
       <description>States the minimum level permissible for WarCraft III users joining the channel.</description>
     </documentation>
+    
+    <arguments>
+      <argument name="Level" type="numeric" optional="1">
+        <documentation>
+          <description>The minum level a user has to be to not be banned.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>60</rank>
@@ -1458,6 +1449,14 @@
     <documentation>
       <description>States the minimum level permissible for Diablo II users joining the channel.</description>
     </documentation>
+    
+    <arguments>
+      <argument name="Level" type="numeric" optional="1">
+        <documentation>
+          <description>The minum level a user has to be to not be banned.</description>
+        </documentation>
+      </argument>
+    </arguments>
 
     <access>
       <rank>60</rank>
@@ -2342,7 +2341,7 @@
     </documentation>
     
     <arguments>  
-      <argument name="subcommand" type="word">
+      <argument name="subcommand" type="word" optional="1">
         <documentation>
           <description>The subcommand to use, must be: 'on', 'off', or 'status'</description>
         </documentation>
@@ -2594,18 +2593,19 @@
     </access>
   </command>
 
-  <command name="designate" token="operator">
+  <command name="des" token="operator">
     <aliases>
-      <alias>des</alias>
+      <alias>designate</alias>
+      <alias>designated</alias>
     </aliases>
 
     <documentation>
-      <description>Designates the specified user as heir to the channel moderator position.</description>
+      <description>Designates or displays the heir to the channel moderator position.</description>
       <specialnotes>The bot must have operator status in the channel.</specialnotes>
     </documentation>
     
     <arguments>
-      <argument name="username" type="word">
+      <argument name="UserName" type="word" optional="1">
         <documentation>
           <description>The username to designate.</description>
         </documentation>
@@ -3172,8 +3172,38 @@
       <argument name="file" type="string">
         <documentation>
           <description>The file you wish to read</description>
-          <specialnotes>My not contain '..' or '.ini', and may not be the follow file types: CON, PRN, AUX, CLOCK$, NUL, COM1, COM2, COM3, COM4, COM5, COM6, COM7, COM8, COM9, LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, LPT9</specialnotes>
         </documentation>
+        <restrictions>
+          <restriction name="INI_FILES">
+            <documentation>
+              <description>Configuration (.ini) files.</description>
+            </documentation>
+            
+            <match message="\.[iI][nN][iI]$" />
+            
+            <access />
+          </restriction>
+          
+          <restriction name="PARENT_DIRECTORIES">
+            <documentation>
+              <description>Files outside the bot's folder. (..)</description>
+            </documentation>
+            
+            <match message="\.\./" />
+            
+            <access />
+          </restriction>
+
+          <restriction name="DRIVE_PATHS">
+            <documentation>
+              <description>Fully qualified paths: 'C:\File.txt'</description>
+            </documentation>
+            
+            <match message="^[a-zA-Z]:[\\/]" />
+            
+            <access />
+          </restriction>
+        </restrictions>
       </argument>
     </arguments>
 
@@ -3423,7 +3453,7 @@
     </documentation>
     
     <arguments>
-      <argument name="subcommand" type="word">
+      <argument name="subcommand" type="word" optional="1">
         <documentation>
           <description>The sub commands to use, On, Off, or Status, To turn on, turn off, or display the status of quiet time respectivly.</description>
         </documentation>
@@ -3596,7 +3626,7 @@
     </documentation>
     
     <arguments>
-      <argument name="subcommand" type="word">
+      <argument name="subcommand" type="word" optional="1">
         <documentation>
           <description>The sub commands to use, On, Off, or Status, To turn on, turn off, or display the status of Warcraft III peon banning respectivly.</description>
         </documentation>

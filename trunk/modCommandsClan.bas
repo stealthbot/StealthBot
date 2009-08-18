@@ -2,7 +2,7 @@ Attribute VB_Name = "modCommandsClan"
 Option Explicit
 'This modules contains all the commands that have to do with Warcraft III's Clan system
 
-Public Function OnClan(Command As clsCommandObj) As Boolean
+Public Sub OnClan(Command As clsCommandObj)
     ' This command will allow the use of Battle.net's /clan command without requiring
     ' users be given the ability to use the bot's say command.
 
@@ -56,9 +56,9 @@ Public Function OnClan(Command As clsCommandObj) As Boolean
                 End If
         End Select
     End If
-End Function
+End Sub
 
-Public Function OnDemote(Command As clsCommandObj) As Boolean
+Public Sub OnDemote(Command As clsCommandObj)
     If (Command.IsValid) Then
         If (IsW3) Then
             If (LenB(g_Clan.Self.Name) > 0) Then
@@ -83,9 +83,9 @@ Public Function OnDemote(Command As clsCommandObj) As Boolean
             End If
         End If
     End If
-End Function
+End Sub
 
-Public Function OnDisbandClan(Command As clsCommandObj)
+Public Sub OnDisbandClan(Command As clsCommandObj)
     If (IsW3) Then
         If (LenB(g_Clan.Self.Name) > 0) Then
             If (g_Clan.Self.Rank >= 4) Then
@@ -97,9 +97,9 @@ Public Function OnDisbandClan(Command As clsCommandObj)
             Command.Respond "Error: I am not a member of a clan."
         End If
     End If
-End Function
+End Sub
 
-Public Function OnInvite(Command As clsCommandObj) As Boolean
+Public Sub OnInvite(Command As clsCommandObj)
     ' This command will send an invitation to the specified user to join the
     ' clan that the bot is currently either a Shaman or Chieftain of.  This
     ' command will only work if the bot is logged on using WarCraft III, and
@@ -117,9 +117,9 @@ Public Function OnInvite(Command As clsCommandObj) As Boolean
             Command.Respond "Error: The bot must be a Shaman or Chieftain in it's clan to invite users."
         End If
     End If
-End Function
+End Sub
 
-Public Function OnMakeChieftain(Command As clsCommandObj) As Boolean
+Public Sub OnMakeChieftain(Command As clsCommandObj)
     If (IsW3) Then
         If (g_Clan.Self.Rank >= 4) Then
             If (Command.IsValid) Then
@@ -131,17 +131,17 @@ Public Function OnMakeChieftain(Command As clsCommandObj) As Boolean
             Command.Respond "Error: The bot must be the Chieftain in it's clan to use this command."
         End If
     End If
-End Function
+End Sub
 
-Public Function OnMOTD(Command As clsCommandObj) As Boolean
+Public Sub OnMOTD(Command As clsCommandObj)
     If (LenB(g_Clan.Self.Name) > 0) Then
         Command.Respond StringFormatA("Clan {0}'s MOTD: {1}", g_Clan.Name, g_Clan.MOTD)
     Else
         Command.Respond "Error: I am not a member of a clan."
     End If
-End Function
+End Sub
 
-Public Function OnPromote(Command As clsCommandObj) As Boolean
+Public Sub OnPromote(Command As clsCommandObj)
     If (Command.IsValid) Then
         If (IsW3) Then
             If (LenB(g_Clan.Self.Name) > 0) Then
@@ -166,10 +166,10 @@ Public Function OnPromote(Command As clsCommandObj) As Boolean
             End If
         End If
     End If
-End Function
+End Sub
 
 
-Public Function OnSetMOTD(Command As clsCommandObj)
+Public Sub OnSetMOTD(Command As clsCommandObj)
     ' This command will set the clan channel's Message Of The Day.  This
     ' command will only work if the bot is logged on using WarCraft III,
     ' and is either a Shaman or a Chieftain of the clan in question.
@@ -186,6 +186,6 @@ Public Function OnSetMOTD(Command As clsCommandObj)
     Else
         Command.Respond "You must specify a message to set."
     End If
-End Function
+End Sub
 
 

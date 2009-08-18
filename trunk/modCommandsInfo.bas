@@ -3,11 +3,11 @@ Option Explicit
 'This module will hold all of the 'Info' Commands
 'Commands that return information, but have really no functionality
 
-Public Function OnAbout(Command As clsCommandObj)
+Public Sub OnAbout(Command As clsCommandObj)
     Command.Respond ".: " & CVERSION & " :."
-End Function
+End Sub
 
-Public Function OnAccountInfo(Command As clsCommandObj) As Boolean
+Public Sub OnAccountInfo(Command As clsCommandObj)
     If ((Not Command.IsLocal) Or Command.PublicOutput) Then
         PPL = True
         If ((BotVars.WhisperCmds Or Command.WasWhispered) And (Not Command.IsLocal)) Then
@@ -15,10 +15,10 @@ Public Function OnAccountInfo(Command As clsCommandObj) As Boolean
         End If
     End If
     RequestSystemKeys
-End Function
+End Sub
 
 ' handle allseen command
-Public Function OnAllSeen(Command As clsCommandObj) As Boolean
+Public Sub OnAllSeen(Command As clsCommandObj)
     Dim retVal As String
     Dim I      As Integer
 
@@ -34,9 +34,9 @@ Public Function OnAllSeen(Command As clsCommandObj) As Boolean
         Next I
     End If
     Command.Respond retVal
-End Function
+End Sub
 
-Public Function OnDetail(Command As clsCommandObj) As Boolean
+Public Sub OnDetail(Command As clsCommandObj)
     If (Command.IsValid) Then
         Dim sRetAdd As String, sRetMod As String
         Dim I As Integer
@@ -66,25 +66,25 @@ Public Function OnDetail(Command As clsCommandObj) As Boolean
                         Command.Respond "No detailed information is available for that user."
                     End If
                     
-                    Exit Function
+                    Exit Sub
                 End If
             End With
         Next I
         
         Command.Respond "That user was not found in the database."
     End If
-End Function
+End Sub
 
-Public Function OnFind(Command As clsCommandObj) As Boolean
+Public Sub OnFind(Command As clsCommandObj)
     Dim dbAccess      As udtGetAccessResponse
     Dim bufResponse() As String
     Dim strResponse   As Variant
     
-    If (Not Command.IsValid) Then Exit Function
+    If (Not Command.IsValid) Then Exit Sub
     
     If (Dir$(GetFilePath("users.txt")) = vbNullString) Then
        Command.Respond "No userlist available. Place a users.txt file in the bot's root directory."
-       Exit Function
+       Exit Sub
     End If
     
     ReDim Preserve bufResponse(0)
@@ -114,9 +114,9 @@ Public Function OnFind(Command As clsCommandObj) As Boolean
     For Each strResponse In bufResponse
         Command.Respond CStr(strResponse)
     Next
-End Function
+End Sub
 
-Public Function OnFindAttr(Command As clsCommandObj) As Boolean
+Public Sub OnFindAttr(Command As clsCommandObj)
     Dim bufResponse() As String
     Dim strResponse   As Variant
     
@@ -126,9 +126,9 @@ Public Function OnFindAttr(Command As clsCommandObj) As Boolean
     For Each strResponse In bufResponse
         Command.Respond CStr(strResponse)
     Next
-End Function
+End Sub
 
-Public Function OnFindGrp(Command As clsCommandObj) As Boolean
+Public Sub OnFindGrp(Command As clsCommandObj)
     Dim bufResponse() As String
     Dim strResponse   As Variant
     
@@ -138,9 +138,9 @@ Public Function OnFindGrp(Command As clsCommandObj) As Boolean
     For Each strResponse In bufResponse
         Command.Respond CStr(strResponse)
     Next
-End Function
+End Sub
 
-Public Function OnHelp(Command As clsCommandObj)
+Public Sub OnHelp(Command As clsCommandObj)
     Dim strCommand As String
     Dim strScript  As String
     Dim docs       As clsCommandDocObj
@@ -165,9 +165,9 @@ Public Function OnHelp(Command As clsCommandObj)
     End If
     Set docs = Nothing
     
-End Function
+End Sub
 
-Public Function OnHelpAttr(Command As clsCommandObj)
+Public Sub OnHelpAttr(Command As clsCommandObj)
 On Error GoTo ERROR_HANDLER
     
     Dim tmpbuf      As String
@@ -181,13 +181,13 @@ On Error GoTo ERROR_HANDLER
         End If
     End If
     
-    Exit Function
+    Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnHelpAttr()."
-End Function
+    frmChat.AddChat vbRed, "Error: #" & Err.number & ": " & Err.description & " in modCommandsInfo.OnHelpAttr()."
+End Sub
 
-Public Function OnHelpRank(Command As clsCommandObj)
+Public Sub OnHelpRank(Command As clsCommandObj)
 On Error GoTo ERROR_HANDLER
     
     Dim tmpbuf      As String
@@ -201,13 +201,13 @@ On Error GoTo ERROR_HANDLER
         End If
     End If
     
-    Exit Function
+    Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnHelpRank()."
-End Function
+    frmChat.AddChat vbRed, "Error: #" & Err.number & ": " & Err.description & " in modCommandsInfo.OnHelpRank()."
+End Sub
 
-Public Function OnInfo(Command As clsCommandObj) As Boolean
+Public Sub OnInfo(Command As clsCommandObj)
     Dim UserIndex As Integer
     
     If (Command.IsValid) Then
@@ -225,9 +225,9 @@ Public Function OnInfo(Command As clsCommandObj) As Boolean
             Command.Respond "No such user is present."
         End If
     End If
-End Function
+End Sub
 
-Public Function OnInitPerf(Command As clsCommandObj) As Boolean
+Public Sub OnInitPerf(Command As clsCommandObj)
 On Error GoTo ERROR_HANDLER
     
     Dim ModName As String
@@ -280,12 +280,12 @@ On Error GoTo ERROR_HANDLER
         End If
     End If
         
-    Exit Function
+    Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnInitPerf()."
-End Function
+    frmChat.AddChat vbRed, "Error: #" & Err.number & ": " & Err.description & " in modCommandsInfo.OnInitPerf()."
+End Sub
 
-Public Function OnLastWhisper(Command As clsCommandObj) As Boolean
+Public Sub OnLastWhisper(Command As clsCommandObj)
     If (LenB(LastWhisper) > 0) Then
         Command.Respond StringFormatA("The last whisper to this bot was from {0} at {1} on {2}.", _
             LastWhisper, _
@@ -294,21 +294,21 @@ Public Function OnLastWhisper(Command As clsCommandObj) As Boolean
     Else
         Command.Respond "The bot has not been whispered since it logged on."
     End If
-End Function
+End Sub
 
-Public Function OnLocalIp(Command As clsCommandObj) As Boolean
+Public Sub OnLocalIp(Command As clsCommandObj)
     Command.Respond StringFormatA("{0} local IPv4 IP address is: {1}", IIf(Command.IsLocal, "Your", "My"), frmChat.sckBNet.LocalIP)
-End Function
+End Sub
 
-Public Function OnOwner(Command As clsCommandObj) As Boolean
+Public Sub OnOwner(Command As clsCommandObj)
     If (LenB(BotVars.BotOwner)) Then
         Command.Respond "This bot's owner is " & BotVars.BotOwner & "."
     Else
         Command.Respond "There is no owner currently set."
     End If
-End Function
+End Sub
 
-Public Function OnPing(Command As clsCommandObj) As Boolean
+Public Sub OnPing(Command As clsCommandObj)
     Dim Latency As Long
     If (Command.IsValid) Then
         Latency = GetPing(Command.Argument("Username"))
@@ -320,9 +320,9 @@ Public Function OnPing(Command As clsCommandObj) As Boolean
     Else
         Command.Respond "Please specify a user to ping."
     End If
-End Function
+End Sub
 
-Public Function OnPingMe(Command As clsCommandObj) As Boolean
+Public Sub OnPingMe(Command As clsCommandObj)
     Dim Latency As Long
     If (Command.IsLocal) Then
         If (g_Online) Then
@@ -338,9 +338,9 @@ Public Function OnPingMe(Command As clsCommandObj) As Boolean
             Command.Respond "I can not see you in the channel."
         End If
     End If
-End Function
+End Sub
 
-Public Function OnProfile(Command As clsCommandObj)
+Public Sub OnProfile(Command As clsCommandObj)
     If (Command.IsValid) Then
         If ((Not Command.IsLocal) Or (Command.PublicOutput)) Then
             PPL = True
@@ -355,9 +355,9 @@ Public Function OnProfile(Command As clsCommandObj)
             frmProfile.PrepareForProfile Command.Argument("Username"), False
         End If
     End If
-End Function
+End Sub
 
-Public Function OnScriptDetail(Command As clsCommandObj) As Boolean
+Public Sub OnScriptDetail(Command As clsCommandObj)
 On Error GoTo ERROR_HANDLER
     
     Dim Script As Module
@@ -393,12 +393,12 @@ On Error GoTo ERROR_HANDLER
             End If
         End If
     End If
-    Exit Function
+    Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnScriptDetail()."
-End Function
+    frmChat.AddChat vbRed, "Error: #" & Err.number & ": " & Err.description & " in modCommandsInfo.OnScriptDetail()."
+End Sub
 
-Public Function OnScripts(Command As clsCommandObj) As Boolean
+Public Sub OnScripts(Command As clsCommandObj)
 On Error GoTo ERROR_HANDLER
     
     Dim retVal  As String
@@ -427,13 +427,13 @@ On Error GoTo ERROR_HANDLER
         Command.Respond "There are no scripts currently loaded."
     End If
     
-    Exit Function
+    Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnScripts()."
-End Function
+    frmChat.AddChat vbRed, "Error: #" & Err.number & ": " & Err.description & " in modCommandsInfo.OnScripts()."
+End Sub
 
 
-Public Function OnServer(Command As clsCommandObj)
+Public Sub OnServer(Command As clsCommandObj)
     Dim RemoteHost   As String
     Dim RemoteHostIP As String
     
@@ -445,13 +445,13 @@ Public Function OnServer(Command As clsCommandObj)
     Else
         Command.Respond "I am currently connected to " & RemoteHost & " (" & RemoteHostIP & ")."
     End If
-End Function
+End Sub
 
-Public Function OnTime(Command As clsCommandObj) As Boolean
+Public Sub OnTime(Command As clsCommandObj)
     Command.Respond "The current time on this computer is " & Time & " on " & Format(Date, "MM-dd-yyyy") & "."
-End Function
+End Sub
 
-Public Function OnTrigger(Command As clsCommandObj) As Boolean
+Public Sub OnTrigger(Command As clsCommandObj)
     If (LenB(BotVars.TriggerLong) = 1) Then
         Command.Respond StringFormatA("The bot's current trigger is {0} {1} {0} (Alt +0{2})", _
             Chr$(34), BotVars.TriggerLong, Asc(BotVars.TriggerLong))
@@ -459,21 +459,21 @@ Public Function OnTrigger(Command As clsCommandObj) As Boolean
         Command.Respond StringFormatA("The bot's current trigger is {0} {1} {0} (Length: {2})", _
           Chr$(34), BotVars.TriggerLong, Len(BotVars.TriggerLong))
     End If
-End Function
+End Sub
 
-Public Function OnUptime(Command As clsCommandObj) As Boolean
+Public Sub OnUptime(Command As clsCommandObj)
     Command.Respond StringFormatA("System uptime {0}, connection uptime {1}.", ConvertTime(GetUptimeMS), ConvertTime(uTicks))
-End Function
+End Sub
 
-Public Function OnWhere(Command As clsCommandObj)
+Public Sub OnWhere(Command As clsCommandObj)
     If (Command.IsLocal) Then
         Call frmChat.AddQ("/where " & Command.Args, PRIORITY.COMMAND_RESPONSE_MESSAGE, "(console)")
     End If
 
     Command.Respond StringFormatA("I am currently in channel {0} ({1} users present)", g_Channel.Name, g_Channel.Users.Count)
-End Function
+End Sub
 
-Public Function OnWhoAmI(Command As clsCommandObj) As Boolean
+Public Sub OnWhoAmI(Command As clsCommandObj)
     Dim dbAccess As udtGetAccessResponse
 
     If (Command.IsLocal) Then
@@ -501,9 +501,9 @@ Public Function OnWhoAmI(Command As clsCommandObj) As Boolean
             End If
         End If
     End If
-End Function
+End Sub
 
-Public Function OnWhoIs(Command As clsCommandObj)
+Public Sub OnWhoIs(Command As clsCommandObj)
     Dim dbAccess As udtGetAccessResponse
     
     If (Command.IsValid) Then
@@ -529,7 +529,7 @@ Public Function OnWhoIs(Command As clsCommandObj)
             Command.Respond "There was no such user found."
         End If
     End If
-End Function
+End Sub
 
 
 Private Function GetAllCommandsFor(Optional Rank As Integer = -1, Optional Flags As String = vbNullString) As String
@@ -593,5 +593,17 @@ On Error GoTo ERROR_HANDLER
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.GetAllCommandsFor()."
+    frmChat.AddChat vbRed, "Error: #" & Err.number & ": " & Err.description & " in modCommandsInfo.GetAllCommandsFor()."
+End Function
+
+Public Function GetPing(ByVal Username As String) As Long
+    Dim I As Integer
+    
+    I = g_Channel.GetUserIndex(Username)
+    
+    If I > 0 Then
+        GetPing = g_Channel.Users(I).Ping
+    Else
+        GetPing = -3
+    End If
 End Function
