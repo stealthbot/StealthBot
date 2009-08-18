@@ -688,7 +688,7 @@ Private Function getAliasString()
 End Function
 
 
-Private Function getRequirementsString()
+Private Function getRequirementsString(Optional bShort As Boolean = False)
 
     Dim retVal As String
     
@@ -702,7 +702,7 @@ Private Function getRequirementsString()
         
         '// add access requirements if necessary
         If (Me.RequiredRank <> -1) Then
-            retVal = StringFormatA("{0} Requires {1} access", retVal, Me.RequiredRank)
+            retVal = StringFormatA("{0} Requires rank {1}", retVal, Me.RequiredRank)
             If (Len(Me.RequiredFlags) = 0) Then
                 retVal = StringFormatA("{0}.", retVal)
             End If
@@ -719,7 +719,10 @@ Private Function getRequirementsString()
     
     Else
         '// console only, lets show the generic blurb
-        retVal = "Command is only available to the console. To allow other users to use this command, set the command's flags requirement or rank requirement."
+        retVal = "Command is only available to the console."
+        If (Not bShort) Then
+            retVal = StringFormatA("{0} To allow other users to use this command, set the command's flags requirement or rank requirement.", retVal)
+        End If
     End If
 
     getRequirementsString = retVal
@@ -1000,7 +1003,13 @@ End Property
 
 Public Property Get RequirementsString() As String
     
-    RequirementsString = getRequirementsString()
+    RequirementsString = getRequirementsString(False)
+    
+End Property
+
+Public Property Get RequirementsStringShort()
+    
+    RequirementsStringShort = getRequirementsString(True)
     
 End Property
 

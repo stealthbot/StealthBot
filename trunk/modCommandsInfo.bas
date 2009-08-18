@@ -152,12 +152,15 @@ Public Function OnHelp(Command As clsCommandObj)
     If (LenB(docs.Name) = 0) Then
         Command.Respond "Sorry, but no related documentation could be found."
     Else
-        If (docs.aliases.Count > 0) Then
-            Command.Respond StringFormatA("[{0} (Alises: {4})]: {1} (Syntax: {2}). {3}", _
-            docs.Name, docs.description, docs.SyntaxString, docs.RequirementsString, docs.AliasString)
+        If (docs.aliases.Count > 1) Then
+            Command.Respond StringFormatA("[{0} (Aliases: {4})]: {1} (Syntax: {2}). {3}", _
+            docs.Name, docs.description, docs.SyntaxString, docs.RequirementsStringShort, docs.AliasString)
+        If (docs.aliases.Count = 1) Then
+            Command.Respond StringFormatA("[{0} (Alias: {4})]: {1} (Syntax: {2}). {3}", _
+            docs.Name, docs.description, docs.SyntaxString, docs.RequirementsStringShort, docs.AliasString)
         Else
             Command.Respond StringFormatA("[{0}]: {1} (Syntax: {2}). {3}", _
-            docs.Name, docs.description, docs.SyntaxString, docs.RequirementsString)
+            docs.Name, docs.description, docs.SyntaxString, docs.RequirementsStringShort)
         End If
     End If
     Set docs = Nothing
@@ -294,7 +297,7 @@ Public Function OnLastWhisper(Command As clsCommandObj) As Boolean
 End Function
 
 Public Function OnLocalIp(Command As clsCommandObj) As Boolean
-    Command.Respond "Your local IPv4 IP address is: " & frmChat.sckBNet.LocalIP
+    Command.Respond StringFormatA("{0} local IPv4 IP address is: {1}", IIf(Command.IsLocal, "Your", "My"), frmChat.sckBNet.LocalIP)
 End Function
 
 Public Function OnOwner(Command As clsCommandObj) As Boolean
@@ -535,7 +538,7 @@ On Error GoTo ERROR_HANDLER
     Dim tmpbuf      As String
     Dim I           As Integer
     Dim xmldoc      As New DOMDocument60
-    Dim commands    As IXMLDOMNodeList
+    Dim Commands    As IXMLDOMNodeList
     Dim xpath       As String
     Dim lastCommand As String
     Dim thisCommand As String
@@ -567,14 +570,14 @@ On Error GoTo ERROR_HANDLER
     
     xmldoc.Load GetFilePath("commands.xml")
     
-    Set commands = xmldoc.documentElement.selectNodes(xpath)
+    Set Commands = xmldoc.documentElement.selectNodes(xpath)
 
-    If (commands.length > 0) Then
-        For I = 0 To commands.length - 1
+    If (Commands.length > 0) Then
+        For I = 0 To Commands.length - 1
             If (LenB(Flags) > 0) Then
-                thisCommand = commands(I).parentNode.parentNode.parentNode.Attributes.getNamedItem("name").Text
+                thisCommand = Commands(I).parentNode.parentNode.parentNode.Attributes.getNamedItem("name").Text
             Else
-                thisCommand = commands(I).parentNode.parentNode.Attributes.getNamedItem("name").Text
+                thisCommand = Commands(I).parentNode.parentNode.Attributes.getNamedItem("name").Text
             End If
             
             If (StrComp(thisCommand, lastCommand, vbTextCompare) <> 0) Then

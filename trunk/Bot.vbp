@@ -110,6 +110,7 @@ Module=modStaticClasses; modStaticClasses.bas
 Module=modCommandsClan; modCommandsClan.bas
 Module=modCommandsMP3; modCommandsMP3.bas
 Module=modCommandsChat; modCommandsChat.bas
+Module=modCommandsAdmin; modCommandsAdmin.bas
 IconForm="frmChat"
 Startup="frmChat"
 HelpFile=""
