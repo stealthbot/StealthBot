@@ -3146,7 +3146,7 @@
         </documentation>
       </argument>
       
-      <argument name="value" type="string">
+      <argument name="value" type="string" optional="1">
         <documentation>
           <description>The value to be used by the commands. (Password, or Delay time)</description>
         </documentation>

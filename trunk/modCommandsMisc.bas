@@ -2,6 +2,26 @@ Attribute VB_Name = "modCommandsMisc"
 Option Explicit
 'This modules holds all other command code that i couldnt think of which catergory it fell info :P
 
+Public Sub OnBMail(Command As clsCommandObj)
+    Dim temp       As udtMail
+    Dim strArray() As String
+    
+    If (Command.IsValid) Then
+        If (Command.IsLocal) Then
+            If (LenB(Command.Username) = 0) Then Command.Username = BotVars.Username
+        End If
+        With temp
+            .To = Command.Argument("Recipient")
+            .From = Command.Username
+            .Message = Command.Argument("Message")
+        End With
+        Command.Respond StringFormatA("Added mail for {0}.", temp.To)
+        Call AddMail(temp)
+    Else
+        Command.Respond "Error: You must supply a recipient and a message."
+    End If
+End Sub
+
 Public Sub OnCheckMail(Command As clsCommandObj)
     Dim Count As Integer
     
@@ -30,7 +50,7 @@ ERROR_HANDLER:
         
         If InStr(1, .Error.source, "compilation", vbBinaryCompare) > 0 Then ErrType = "parsing"
         
-        Command.Respond StringFormatA("Execution {0} error #{1}: {2}", ErrType, .Error.number, .Error.description)
+        Command.Respond StringFormatA("Execution {0} error #{1}: {2}", ErrType, .Error.Number, .Error.description)
         
         .Error.Clear
     End With
@@ -80,6 +100,56 @@ ERROR_HANDLER:
     Command.Respond "Evaluation error."
 End Sub
 
+Public Sub OnMMail(Command As clsCommandObj)
+    Dim temp     As udtMail
+    Dim Rank     As Long
+    Dim Flags    As String
+    Dim I        As Integer
+    Dim X        As Integer
+    Dim dbAccess As udtGetAccessResponse
+    
+    If (Command.IsValid) Then
+        If (Command.IsLocal) Then
+            If (LenB(Command.Username) = 0) Then Command.Username = BotVars.Username
+        End If
+        
+        temp.From = Command.Username
+        temp.Message = Command.Argument("Message")
+        
+        If (StrictIsNumeric(Command.Argument("Criteria"))) Then
+            Rank = Val(Command.Argument("Criteria"))
+            
+            For I = 0 To UBound(DB)
+                If (StrComp(DB(I).Type, "USER", vbTextCompare) = 0) Then
+                    dbAccess = GetCumulativeAccess(DB(I).Username)
+                    If (dbAccess.Rank = Rank) Then
+                        temp.To = DB(I).Username
+                        Call AddMail(temp)
+                    End If
+                End If
+            Next I
+            Command.Respond StringFormatA("Mass mailing to users with rank {0} complete.", Rank)
+        Else
+            Flags = Command.Argument("Criteria")
+            For I = 0 To UBound(DB)
+                If (StrComp(DB(I).Type, "USER", vbTextCompare) = 0) Then
+                    dbAccess = GetCumulativeAccess(DB(I).Username)
+                    For X = 1 To Len(Flags)
+                        If (InStr(1, dbAccess.Flags, Mid$(Flags, X, 1), IIf(BotVars.CaseSensitiveFlags, vbBinaryCompare, vbTextCompare)) > 0) Then
+                            temp.To = DB(I).Username
+                            Call AddMail(temp)
+                            Exit For
+                        End If
+                    Next X
+                End If
+            Next I
+            Command.Respond StringFormatA("Mass mailing to users with any of the flags {0} complete.", Flags)
+        End If
+    Else
+        Command.Respond StringFormatA("Format: {0}mmail <flag(s)> <message> OR {0}mmail <access> <message>", IIf(Command.IsLocal, "/", BotVars.Trigger))
+    End If
+End Sub
+
 Public Sub OnReadFile(Command As clsCommandObj)
     On Error GoTo ERROR_HANDLER
     Dim sFilePath   As String
@@ -122,7 +192,7 @@ End Sub
 
 Public Sub OnRoll(Command As clsCommandObj)
     Dim maxValue As Long
-    Dim number   As Long
+    Dim Number   As Long
 
     If (LenB(Command.Argument("Value")) > 0) Then
         maxValue = Abs(Val(Command.Argument("Value")))
@@ -131,9 +201,9 @@ Public Sub OnRoll(Command As clsCommandObj)
     End If
     
     Randomize
-    number = CLng(Rnd * maxValue)
+    Number = CLng(Rnd * maxValue)
     
-    Command.Respond StringFormatA("Random number (0-{0}): {1}", maxValue, number)
+    Command.Respond StringFormatA("Random number (0-{0}): {1}", maxValue, Number)
 End Sub
 
 

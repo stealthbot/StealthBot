@@ -278,35 +278,35 @@ End Sub
 '//  *** Please ensure that your flags are in a string format, "ABCDEF",
 '//         ALL uppercase and with no repeating letters, or the bot will become
 '//         somewhat confused.
-
-Public Function CommandEx(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
-    False) As String
-    
-    Dim dbAccess           As udtGetAccessResponse
-    Dim command_response() As String
-    Dim bln                As Boolean
-
-    ' ...
-    If (IsLocal) Then
-        ' ...
-        Username = "(console)"
-    
-        ' ...
-        With dbAccess
-            .Rank = 200
-            .Flags = "A"
-        End With
-    Else
-        ' ...
-        dbAccess = GetCumulativeAccess(Username)
-    End If
-
-    ' execute command
-    bln = executeCommand(Username, dbAccess, Message, IsLocal, command_response)
-    
-    ' ...
-    CommandEx = Join(command_response, Chr$(0))
-End Function
+'//Removed 08/18/09 - Hdx This is no longer needed use ObserveScript(), or Command()
+'Public Function CommandEx(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
+'    False) As String
+'
+'    Dim dbAccess           As udtGetAccessResponse
+'    Dim command_response() As String
+'    Dim bln                As Boolean
+'
+'    ' ...
+'    If (IsLocal) Then
+'        ' ...
+'        Username = "(console)"
+'
+'        ' ...
+'        With dbAccess
+'            .Rank = 200
+'            .Flags = "A"
+'        End With
+'    Else
+'        ' ...
+'        dbAccess = GetCumulativeAccess(Username)
+'    End If
+'
+'    ' execute command
+'    bln = executeCommand(Username, dbAccess, Message, IsLocal, command_response)
+'
+'    ' ...
+'    CommandEx = Join(command_response, Chr$(0))
+'End Function
 
 
 
@@ -647,11 +647,11 @@ End Function
 '// GETNAMEBYPOSITION
 '// Returns the name of the person at position X in the channel list.
 '// Positions are 1-based. Returns an empty string if the user isn't present
-Public Function GetNameByPosition(ByVal x As Integer) As String
+Public Function GetNameByPosition(ByVal X As Integer) As String
     
     With frmChat.lvChannel.ListItems
-        If x > 0 And x <= .Count Then
-            GetNameByPosition = .Item(x).Text
+        If X > 0 And X <= .Count Then
+            GetNameByPosition = .Item(X).Text
         Else
             GetNameByPosition = ""
         End If
@@ -1011,7 +1011,7 @@ Public Sub GetWinCursorPos(ByRef lCursorX As Long, ByRef lCursorY As Long)
     
     GetCursorPos PAPI
     
-    lCursorX = PAPI.x
+    lCursorX = PAPI.X
     lCursorY = PAPI.Y
 End Sub
 
@@ -1887,26 +1887,26 @@ End Function
 '// GETUSERDATABASE
 '// Gets a collection of users in the database
 Public Function GetUserDatabase() As Collection
-    Dim x As Integer
+    Dim X As Integer
     Dim temp As New clsDBEntryObj
     Set GetUserDatabase = New Collection
-    For x = LBound(DB) To UBound(DB)
-        If (Len(DB(x).Username) > 0) Then
+    For X = LBound(DB) To UBound(DB)
+        If (Len(DB(X).Username) > 0) Then
             With temp
-                .Name = DB(x).Username
-                .Rank = DB(x).Rank
-                .CreatedOn = DB(x).AddedOn
-                .CreatedBy = DB(x).AddedBy
-                .BanMessage = DB(x).BanMessage
-                .Flags = DB(x).Flags
-                .AddGroup DB(x).Groups
-                .ModifiedBy = DB(x).ModifiedBy
-                .ModifiedOn = DB(x).ModifiedOn
-                .EntryType = DB(x).Type
+                .Name = DB(X).Username
+                .Rank = DB(X).Rank
+                .CreatedOn = DB(X).AddedOn
+                .CreatedBy = DB(X).AddedBy
+                .BanMessage = DB(X).BanMessage
+                .Flags = DB(X).Flags
+                .AddGroup DB(X).Groups
+                .ModifiedBy = DB(X).ModifiedBy
+                .ModifiedOn = DB(X).ModifiedOn
+                .EntryType = DB(X).Type
             End With
-            GetUserDatabase.Add temp, DB(x).Username
+            GetUserDatabase.Add temp, DB(X).Username
         End If
-    Next x
+    Next X
     Set temp = Nothing
 End Function
 

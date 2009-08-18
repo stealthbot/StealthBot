@@ -184,7 +184,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.number & ": " & Err.description & " in modCommandsInfo.OnHelpAttr()."
+    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnHelpAttr()."
 End Sub
 
 Public Sub OnHelpRank(Command As clsCommandObj)
@@ -204,7 +204,7 @@ On Error GoTo ERROR_HANDLER
     Exit Sub
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.number & ": " & Err.description & " in modCommandsInfo.OnHelpRank()."
+    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnHelpRank()."
 End Sub
 
 Public Sub OnInfo(Command As clsCommandObj)
@@ -282,7 +282,7 @@ On Error GoTo ERROR_HANDLER
         
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.number & ": " & Err.description & " in modCommandsInfo.OnInitPerf()."
+    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnInitPerf()."
 End Sub
 
 Public Sub OnLastWhisper(Command As clsCommandObj)
@@ -395,7 +395,7 @@ On Error GoTo ERROR_HANDLER
     End If
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.number & ": " & Err.description & " in modCommandsInfo.OnScriptDetail()."
+    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnScriptDetail()."
 End Sub
 
 Public Sub OnScripts(Command As clsCommandObj)
@@ -429,7 +429,7 @@ On Error GoTo ERROR_HANDLER
     
     Exit Sub
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.number & ": " & Err.description & " in modCommandsInfo.OnScripts()."
+    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.OnScripts()."
 End Sub
 
 
@@ -593,7 +593,7 @@ On Error GoTo ERROR_HANDLER
     Exit Function
     
 ERROR_HANDLER:
-    frmChat.AddChat vbRed, "Error: #" & Err.number & ": " & Err.description & " in modCommandsInfo.GetAllCommandsFor()."
+    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandsInfo.GetAllCommandsFor()."
 End Function
 
 Public Function GetPing(ByVal Username As String) As Long
@@ -606,4 +606,126 @@ Public Function GetPing(ByVal Username As String) As Long
     Else
         GetPing = -3
     End If
+End Function
+
+Private Function SearchDatabase(ByRef arrReturn() As String, Optional Username As String = vbNullString, _
+    Optional ByVal match As String = vbNullString, Optional Group As String = vbNullString, _
+        Optional dbType As String = vbNullString, Optional lowerBound As Integer = -1, _
+            Optional upperBound As Integer = -1, Optional Flags As String = vbNullString) As Integer
+    
+    On Error GoTo ERROR_HANDLER
+    
+    Dim I        As Integer
+    Dim found    As Integer
+    Dim tmpbuf   As String
+    
+    If (LenB(Username) > 0) Then
+        Dim dbAccess As udtGetAccessResponse
+        dbAccess = GetAccess(Username, dbType)
+        
+        If (Not (dbAccess.Type = "%") And (Not StrComp(dbAccess.Type, "USER", vbTextCompare) = 0)) Then
+            dbAccess.Username = dbAccess.Username & " (" & LCase$(dbAccess.Type) & ")"
+        End If
+        
+        If (dbAccess.Rank > 0) Then
+            tmpbuf = "Found user " & dbAccess.Username & ", who holds rank " & dbAccess.Rank & _
+                IIf(Len(dbAccess.Flags) > 0, " and flags " & dbAccess.Flags, vbNullString) & "."
+        ElseIf (LenB(dbAccess.Flags) > 0) Then
+            tmpbuf = "Found user " & dbAccess.Username & ", with flags " & dbAccess.Flags & "."
+        Else
+            tmpbuf = "No such user(s) found."
+        End If
+    Else
+        For I = LBound(DB) To UBound(DB)
+            Dim res        As Boolean
+            Dim blnChecked As Boolean
+        
+            If (LenB(DB(I).Username) > 0) Then
+                If (LenB(match) > 0) Then
+                    If (Left$(match, 1) = "!") Then
+                        res = (Not (LCase$(PrepareCheck(DB(I).Username)) Like (LCase$(Mid$(match, 2)))))
+                    Else
+                        res = (LCase$(PrepareCheck(DB(I).Username)) Like (LCase$(match)))
+                    End If
+                    blnChecked = True
+                End If
+                
+                If (LenB(Group) > 0) Then
+                    If (StrComp(DB(I).Groups, Group, vbTextCompare) = 0) Then
+                        res = IIf(blnChecked, res, True)
+                    Else
+                        res = False
+                    End If
+                    blnChecked = True
+                End If
+
+                If (LenB(dbType) > 0) Then
+                    If (StrComp(DB(I).Type, dbType, vbTextCompare) = 0) Then
+                        res = IIf(blnChecked, res, True)
+                    Else
+                        res = False
+                    End If
+                    blnChecked = True
+                End If
+                
+                If ((lowerBound >= 0) And (upperBound >= 0)) Then
+                    If ((DB(I).Rank >= lowerBound) And (DB(I).Rank <= upperBound)) Then
+                        res = IIf(blnChecked, res, True)
+                    Else
+                        res = False
+                    End If
+                    blnChecked = True
+                ElseIf (lowerBound >= 0) Then
+                    If (DB(I).Rank = lowerBound) Then
+                        res = IIf(blnChecked, res, True)
+                    Else
+                        res = False
+                    End If
+                    blnChecked = True
+                End If
+                
+                If (LenB(Flags) > 0) Then
+                    Dim j As Integer
+                
+                    For j = 1 To Len(Flags)
+                        If (InStr(1, DB(I).Flags, Mid$(Flags, j, 1), vbBinaryCompare) = 0) Then
+                            Exit For
+                        End If
+                    Next j
+                    
+                    If (j = (Len(Flags) + 1)) Then
+                        res = IIf(blnChecked, res, True)
+                    Else
+                        res = False
+                    End If
+                    blnChecked = True
+                End If
+                
+                If (res = True) Then
+                    tmpbuf = tmpbuf & DB(I).Username
+                    If (Not (DB(I).Type = "%") And (Not StrComp(DB(I).Type, "USER", vbTextCompare) = 0)) Then
+                        tmpbuf = StringFormatA("{0} ({1})", tmpbuf, LCase$(DB(I).Type))
+                    End If
+                    tmpbuf = StringFormatA("{0}{1}{2}, ", tmpbuf, _
+                        IIf(DB(I).Rank > 0, "\" & DB(I).Rank, vbNullString), _
+                        IIf(LenB(DB(I).Flags) > 0, "\" & DB(I).Flags, vbNullString))
+                    found = (found + 1)
+                End If
+            End If
+            
+            res = False
+            blnChecked = False
+        Next I
+
+        If (found = 0) Then
+            arrReturn(0) = "No such user(s) found."
+        Else
+            Call SplitByLen(Mid$(tmpbuf, 1, Len(tmpbuf) - Len(", ")), 180, arrReturn(), "User(s) found: ", " [more]", ", ")
+        End If
+    End If
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in modCommandCode.SearchDatabase()."
 End Function

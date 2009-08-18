@@ -2,11 +2,63 @@ Attribute VB_Name = "modCommandsOps"
 Option Explicit
 'This module will hold all commands that have to deal with holding operator over a channel
 
+Public Enum CacheChanneListEnum
+    enRetrieve = 0
+    enAdd = 1
+    enReset = 255
+End Enum
+
+
 Public Sub OnCancel(Command As clsCommandObj)
     If (VoteDuration > 0) Then
         Command.Respond Voting(BVT_VOTE_END, BVT_VOTE_CANCEL)
     Else
         Command.Respond "No vote in progress."
+    End If
+End Sub
+
+Public Sub OnChPw(Command As clsCommandObj)
+    Dim Delay As Integer
+    If (Command.IsValid) Then
+        Select Case (LCase$(Command.Argument("SubCommand")))
+            Case "on", "set":
+                If (LenB(Command.Argument("Value")) > 0) Then
+                
+                    BotVars.ChannelPassword = Command.Argument("Value")
+                    If (BotVars.ChannelPasswordDelay <= 0) Then BotVars.ChannelPasswordDelay = 30
+                    
+                    Command.Respond StringFormatA("Channel password protection enabled, delay set to {0}.", BotVars.ChannelPasswordDelay)
+                Else
+                    Command.Respond "Error: You must supply a password."
+                End If
+            
+            Case "off", "clear":
+                BotVars.ChannelPassword = vbNullString
+                BotVars.ChannelPasswordDelay = 0
+                Command.Respond "Channel password protection disabled."
+            
+            Case "time", "delay", "wait":
+                If (StrictIsNumeric(Command.Argument("Value"))) Then
+                    Delay = Val(Command.Argument("Value"))
+                    If ((Delay < 256) And (Delay > 0)) Then
+                        BotVars.ChannelPasswordDelay = CByte(Delay)
+                        Command.Respond StringFormatA("Channel password delay set to {0}.", Delay)
+                    Else
+                        Command.Respond "Error: Invalid channel delay."
+                    End If
+                Else
+                    Command.Respond "Error: Invalid channel delay."
+                End If
+            
+            Case Else:
+            
+                If ((LenB(BotVars.ChannelPassword) = 0) Or (BotVars.ChannelPasswordDelay = 0)) Then
+                    Command.Respond "Channel password protection is disabled."
+                Else
+                    Command.Respond StringFormatA("Channel password protection is enabled. Password [{0}], Delay [{1}].", _
+                        BotVars.ChannelPassword, BotVars.ChannelPasswordDelay)
+                End If
+        End Select
     End If
 End Sub
 
@@ -291,6 +343,39 @@ Public Sub OnResign(Command As clsCommandObj)
     Call frmChat.AddQ("/resign", PRIORITY.SPECIAL_MESSAGE, Command.Username)
 End Sub
 
+Public Sub OnSweepBan(Command As clsCommandObj)
+    ' This command will grab the listing of users in the specified channel
+    ' using Battle.net's "who" command, and will then begin banning each
+    ' user from the current channel using Battle.net's "ban" command.
+    If (Command.IsValid) Then
+        If (g_Channel.Self.IsOperator) Then
+            ' Changed 08-18-09 - Hdx - Uses the new Channel cache function, Eventually to beremoved to script
+            'Call CacheChannelList(vbNullString, 255, "ban ")
+            Call CacheChannelList(enReset, "ban ")
+            Call frmChat.AddQ("/who " & Command.Argument("Channel"), PRIORITY.CHANNEL_MODERATION_MESSAGE, Command.Username, "request_receipt")
+        Else
+            Command.Respond "Error: The bot is not currently a channel operator."
+        End If
+    End If
+End Sub
+
+Public Sub OnSweepIgnore(Command As clsCommandObj)
+    ' This command will grab the listing of users in the specified channel
+    ' using Battle.net's "who" command, and will then begin ignoring each
+    ' user using Battle.net's "squelch" command.  This command is often used
+    ' instead of "sweepban" to temporarily ban all users on a given ip address
+    ' without actually immediately banning them from the channel.  This is
+    ' useful if a user wishes to stay below Battle.net's limitations on bans,
+    ' and still prevent a number of users from joining the channel for a
+    ' temporary amount of time.
+    If (Command.IsValid) Then
+        ' Changed 08-18-09 - Hdx - Uses the new Channel cache function, Eventually to be removed to script
+        'Call CacheChannelList(vbNullString, 255, "squelch ")
+        Call CacheChannelList(enReset, "squelch ")
+        Call frmChat.AddQ("/who " & Command.Argument("Channel"), PRIORITY.CHANNEL_MODERATION_MESSAGE, Command.Username, "request_receipt")
+    End If
+End Sub
+
 Public Sub OnTally(Command As clsCommandObj)
     If (VoteDuration > 0) Then
         Command.Respond Voting(BVT_VOTE_TALLY)
@@ -307,3 +392,48 @@ Private Function GetOpsCount(Optional strIgnore As String = vbNullString) As Int
         End If
     Next I
 End Function
+
+
+'This is called in ChannelBan/Squelch to reset, and cache the users in a channel
+'Then again in frmChat.tmrCache, to get a list of users and ban/squelch them
+'The CS/CB commands AddQ "/Who Channel" and have a "request_receipt" message
+'Then in Event_ServerInfo() it checks if it has a "request_receipt" if it does it call this function
+'This is vary fucking ugly, we NEED to move this to a script whenever possible.
+'Public Function CacheChannelList(ByVal Inpt As String, ByVal Mode As Byte, Optional ByRef Typ As String) As String
+Public Function CacheChannelList(ByVal eMode As CacheChanneListEnum, ByRef Data As String) As String
+    Static colData             As New Collection
+    Static sToken              As String
+    Static bChannelListFollows As Boolean 'renamed this variable for clarity
+    
+    Dim sTemp As String
+    
+    'If(Mode = 255) Then
+    If (eMode = enReset) Then
+        Do While colData.Count > 0
+            colData.Remove 1
+        Loop
+        sToken = Data
+        bChannelListFollows = False
+    End If
+    
+    If (Not InStr(1, LCase$(Data), "users in channel ", vbTextCompare) = 0) Then
+        ' we weren't expecting a channel list, but we are now
+        bChannelListFollows = True
+    Else
+        If (bChannelListFollows = True) Then ' if we're expecting a channel list, process it
+            Select Case (eMode)
+                Case enRetrieve ' RETRIEVE
+                    ' Merge all the cache array items into one comma-delimited string
+                    Do While colData.Count > 0
+                        sTemp = StringFormatA("{0}{1}, ", sTemp, colData.Item(1))
+                        colData.Remove 1
+                    Loop
+                    Data = sToken
+                    CacheChannelList = sTemp
+                Case enAdd  ' ADD
+                    colData.Add Data
+            End Select
+        End If
+    End If
+End Function
+

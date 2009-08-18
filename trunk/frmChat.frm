@@ -1,10 +1,10 @@
 VERSION 5.00
 Object = "{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}#1.0#0"; "msscript.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
-Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "mswinsck.ocx"
-Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "msinet.ocx"
-Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "richtx32.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{248DD890-BB45-11CF-9ABC-0080C7E7B78D}#1.0#0"; "MSWINSCK.OCX"
+Object = "{48E59290-9880-11CF-9754-00AA00C00908}#1.0#0"; "MSINET.OCX"
+Object = "{3B7C8863-D78F-101B-B9B5-04021C009402}#1.2#0"; "RICHTX32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form frmChat 
    BackColor       =   &H00000000&
    Caption         =   ":: StealthBot &version :: Disconnected ::"
@@ -1536,7 +1536,7 @@ Private Sub Form_Load()
     ' COMPILER FLAGS
     #If (BETA = 1) Then
         strBeta = "Beta "
-    #Else
+        #Else
         strBeta = vbNullString
     #End If
     
@@ -1846,21 +1846,18 @@ Public Sub cacheTimer_Timer()
         
         Caching = False
         
-        ' ...
-        ret = cache(vbNullString, 0, Y)
+        ' Changed 08-18-09 - Hdx - Uses the new Channel cache function, Eventually to beremoved to script
+        'ret = CacheChannelList(vbNullString, 0, Y)
+        ret = CacheChannelList(enRetrieve, Y)
         
         ' ...
         lPos = InStr(1, ret, ", ", vbBinaryCompare)
         
         ' ...
         If (lPos) Then
-            ' ...
             strArray() = Split(ret, ", ")
         Else
-            ' ...
             ReDim Preserve strArray(0)
-            
-            ' ...
             strArray(0) = ret
         End If
         
@@ -1871,23 +1868,6 @@ Public Sub cacheTimer_Timer()
                     strArray(c) = Mid(strArray(c), 2, Len(strArray(c)) - 2)
                 End If
             End If
-        
-            'n = InStr(strArray(C), "(*")
-            
-            'If n > 0 Then
-            '    ' This covers Character@USeast (*Username)
-            '
-            '    strArray(C) = Mid$(strArray(C), n + 2)
-            '    strArray(C) = Left$(strArray(C), Len(strArray(C)) - 1)
-            'Else
-            '    n = InStr(strArray(C), "*")
-            '
-            '    ' This covers *Username
-            '
-            '    If n > 0 Then
-            '        strArray(C) = Mid$(strArray(C), n + 1)
-            '    End If
-            'End If
             
             strArray(c) = convertUsername(CleanUsername(strArray(c)))
             
@@ -1924,7 +1904,7 @@ Private Sub Form_GotFocus()
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.number & "): " & Err.description & " in Form_GotFocus()."
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in Form_GotFocus()."
 
     Exit Sub
 End Sub
@@ -2364,7 +2344,7 @@ Public Sub FindAltBNLS()
 BNLS_Alt_Finder_Error:
 
     'Display the error message to the user
-    If Err.number = FIND_ALT_BNLS_ERROR Then
+    If Err.Number = FIND_ALT_BNLS_ERROR Then
         AddChat RTBColors.ErrorMessageText, "[BNLS] " & Err.description
         
         ' ensure that we update our listing on following connection(s)
@@ -2561,7 +2541,7 @@ Sub Form_Resize()
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.number & "): " & Err.description & " in Form_Resize()."
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in Form_Resize()."
 End Sub
 
 Function GenerateTooltip() As String
@@ -2613,7 +2593,7 @@ End Sub
 Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     AddChat vbYellow, "[CLAN] " & Member & " has left the clan."
     
-    Dim x   As ListItem
+    Dim X   As ListItem
     Dim pos As Integer
     
     pos = g_Clan.GetUserIndexEx(Member)
@@ -2625,14 +2605,14 @@ Private Sub ClanHandler_MemberLeaves(ByVal Member As String)
     
     Member = convertUsername(Member)
 
-    Set x = lvClanList.FindItem(Member)
+    Set X = lvClanList.FindItem(Member)
     
-    If (Not (x Is Nothing)) Then
-        lvClanList.ListItems.Remove x.Index
+    If (Not (X Is Nothing)) Then
+        lvClanList.ListItems.Remove X.Index
         
         lvClanList.Refresh
         
-        Set x = Nothing
+        Set X = Nothing
     End If
     
     On Error Resume Next
@@ -2794,7 +2774,7 @@ Private Sub ClanHandler_ClanMemberList(Members() As String)
 End Sub
 
 Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As Byte, ByVal IsOnline As Byte, ByVal Location As String)
-    Dim x   As ListItem
+    Dim X   As ListItem
     Dim pos As Integer
     
     pos = g_Clan.GetUserIndexEx(Username)
@@ -2826,7 +2806,7 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
     
     Username = convertUsername(Username)
     
-    Set x = lvClanList.FindItem(Username)
+    Set X = lvClanList.FindItem(Username)
 
     If StrComp(Username, CurrentUsername, vbTextCompare) = 0 Then
         g_Clan.Self.Rank = IIf(Rank = 0, Rank + 1, Rank)
@@ -2838,9 +2818,9 @@ Private Sub ClanHandler_ClanMemberUpdate(ByVal Username As String, ByVal Rank As
         AddChat RTBColors.SuccessText, "[CLAN] Member update: ", RTBColors.InformationText, Username, RTBColors.SuccessText, " is now a " & GetRank(Rank) & "."
     End If
     
-    If Not (x Is Nothing) Then
-        lvClanList.ListItems.Remove x.Index
-        Set x = Nothing
+    If Not (X Is Nothing) Then
+        lvClanList.ListItems.Remove X.Index
+        Set X = Nothing
     End If
     
     AddClanMember Username, CInt(Rank), CInt(IsOnline)
@@ -3227,27 +3207,27 @@ End Sub
 Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLIndex As Byte)
     On Error GoTo ERROR_HANDLER
 
-    Dim x As ListItem
+    Dim X As ListItem
     Dim I As Integer
     Const ICONLINE = 23
     Const ICOFFLINE = 24
     
-    Set x = lvFriendList.FindItem(Username)
+    Set X = lvFriendList.FindItem(Username)
     
-    If Not (x Is Nothing) Then
+    If Not (X Is Nothing) Then
         With g_Friends.Item(FLIndex)
             Select Case .LocationID
                 Case FRL_OFFLINE
-                    x.SmallIcon = ICUNKNOWN
+                    X.SmallIcon = ICUNKNOWN
                     
-                    x.ListSubItems.Item(1).ReportIcon = ICOFFLINE
+                    X.ListSubItems.Item(1).ReportIcon = ICOFFLINE
                     
                 Case Else
-                    If x.ListSubItems.Item(1).ReportIcon = ICOFFLINE Then
+                    If X.ListSubItems.Item(1).ReportIcon = ICOFFLINE Then
                         'Friend is now online - notify user?
                     End If
                     
-                    x.ListSubItems.Item(1).ReportIcon = ICONLINE
+                    X.ListSubItems.Item(1).ReportIcon = ICONLINE
                     
                     Select Case .game
                         Case Is = "STAR": I = ICSTAR
@@ -3265,18 +3245,18 @@ Private Sub FriendListHandler_FriendUpdate(ByVal Username As String, ByVal FLInd
                         Case Else: I = ICUNKNOWN
                     End Select
                     
-                    x.SmallIcon = I
+                    X.SmallIcon = I
             End Select
         End With
         
     End If
     
-    Set x = Nothing
+    Set X = Nothing
     
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.number & "): " & Err.description & " in FriendUpdate()."
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in FriendUpdate()."
     
     Exit Sub
 End Sub
@@ -3287,7 +3267,7 @@ Private Sub INet_StateChanged(ByVal State As Integer)
     End If
 End Sub
 
-Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, Y As Single)
+Private Sub lblCurrentChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Dim I As Integer ' ...
  
     ' ...
@@ -3331,7 +3311,7 @@ Public Sub ListviewTabs_Click(PreviousTab As Integer)
         Select Case CurrentTab
             Case LVW_BUTTON_CHANNEL ' = 0 = Channel button clicked
                 ' ...
-                lblCurrentChannel.ToolTipText = "Currently in " & g_Channel.SType() & _
+                lblCurrentChannel.ToolTipText = "Currently in " & g_Channel.sType() & _
                     " channel " & g_Channel.Name & " (" & g_Channel.Users.Count & ")"
                 
                 ' ...
@@ -3467,7 +3447,7 @@ Private Sub lvClanList_dblClick()
     End If
 End Sub
 
-Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, Y As Single)
+Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Dim aInx As Integer
     Dim sProd As String * 4
     
@@ -3499,17 +3479,17 @@ Private Sub lvChannel_MouseUp(Button As Integer, Shift As Integer, x As Single, 
     End If
 End Sub
 
-Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, x As Single, Y As Single)
+Private Sub lvFriendList_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = vbRightButton Then
         PopupMenu mnuFLpop
     End If
 End Sub
 
-Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, x As Single, Y As Single)
+Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Dim lvhti As LVHITTESTINFO
     Dim lItemIndex As Long
    
-    lvhti.pt.x = x / Screen.TwipsPerPixelX
+    lvhti.pt.X = X / Screen.TwipsPerPixelX
     lvhti.pt.Y = Y / Screen.TwipsPerPixelY
     lItemIndex = SendMessageAny(lvFriendList.hWnd, LVM_HITTEST, 0, lvhti) + 1
    
@@ -3574,13 +3554,13 @@ Private Sub lvFriendList_MouseMove(Button As Integer, Shift As Integer, x As Sin
                     ListToolTip.TipText = sTemp
                 End With
                 
-                Call ListToolTip.Create(lvFriendList.hWnd, CLng(x), CLng(Y))
+                Call ListToolTip.Create(lvFriendList.hWnd, CLng(X), CLng(Y))
             End If
         End If
     End If
 End Sub
 
-Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single, Y As Single)
+Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, X As Single, Y As Single)
     Dim lvhti As LVHITTESTINFO
     Dim lItemIndex As Long
     Dim sOutBuf As String
@@ -3588,7 +3568,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single
     Dim UserAccess As udtGetAccessResponse
     Dim Clan As String
    
-    lvhti.pt.x = x / Screen.TwipsPerPixelX
+    lvhti.pt.X = X / Screen.TwipsPerPixelX
     lvhti.pt.Y = Y / Screen.TwipsPerPixelY
     lItemIndex = SendMessageAny(lvChannel.hWnd, LVM_HITTEST, -1, lvhti) + 1
  
@@ -3641,7 +3621,7 @@ Private Sub lvChannel_MouseMove(Button As Integer, Shift As Integer, x As Single
                     
                 End With
                 
-                Call ListToolTip.Create(lvChannel.hWnd, CLng(x), CLng(Y))
+                Call ListToolTip.Create(lvChannel.hWnd, CLng(X), CLng(Y))
             End If
         End If
     End If
@@ -4321,13 +4301,13 @@ Sub mnuReloadScripts_Click()
 ERROR_HANDLER:
 
     ' Cannot call this method while the script is executing
-    If (Err.number = -2147467259) Then
+    If (Err.Number = -2147467259) Then
         frmChat.AddChat vbRed, "Error: Script is still executing."
         
         Exit Sub
     End If
 
-    frmChat.AddChat vbRed, "Error (#" & Err.number & "): " & Err.description & _
+    frmChat.AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & _
         " in mnuReloadScripts_Click()."
     
 End Sub
@@ -4498,7 +4478,7 @@ Private Sub rtbWhispers_KeyPress(KeyAscii As Integer)
     cboSend.SelText = Chr$(KeyAscii)
 End Sub
 
-Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, x As Single, Y As Single)
+Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
     If Button = 1 And Len(rtbChat.SelText) > 0 Then
@@ -4509,7 +4489,7 @@ Private Sub rtbChat_MouseUp(Button As Integer, Shift As Integer, x As Single, Y 
     End If
 End Sub
 
-Private Sub rtbWhispers_MouseUp(Button As Integer, Shift As Integer, x As Single, Y As Single)
+Private Sub rtbWhispers_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     On Error Resume Next
     
     If Button = 1 And Len(rtbWhispers.SelText) > 0 Then
@@ -4755,7 +4735,7 @@ Private Sub sckScript_Close(Index As Integer)
     
 End Sub
 
-Private Sub sckScript_Error(Index As Integer, ByVal number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckScript_Error(Index As Integer, ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
 
     On Error Resume Next
 
@@ -4765,7 +4745,7 @@ Private Sub sckScript_Error(Index As Integer, ByVal number As Integer, descripti
     obj = GetScriptObjByIndex("Winsock", Index)
 
     ' ...
-    RunInSingle obj.SCModule, obj.ObjName & "_Error", number, description, Scode, source, HelpFile, HelpContext, CancelDisplay
+    RunInSingle obj.SCModule, obj.ObjName & "_Error", Number, description, Scode, source, HelpFile, HelpContext, CancelDisplay
 
 End Sub
 
@@ -4980,7 +4960,7 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
     Dim L As Long
     Dim n As Integer
     Dim c As Integer ',oldSelStart As Integer
-    Dim x() As String
+    Dim X() As String
     Dim m As String
     Dim s As String ',sClosest As String
     Dim Vetoed As Boolean
@@ -5097,22 +5077,22 @@ Private Sub cboSend_KeyDown(KeyCode As Integer, Shift As Integer)
                     On Error Resume Next
                     
                     If (InStr(1, Clipboard.GetText, Chr(13), vbTextCompare) <> 0) Then
-                        x() = Split(Clipboard.GetText, Chr(10))
+                        X() = Split(Clipboard.GetText, Chr(10))
                         
-                        If UBound(x) > 0 Then
-                            For n = LBound(x) To UBound(x)
-                                x(n) = Replace(x(n), Chr(13), vbNullString)
+                        If UBound(X) > 0 Then
+                            For n = LBound(X) To UBound(X)
+                                X(n) = Replace(X(n), Chr(13), vbNullString)
                                 
-                                If (x(n) <> vbNullString) Then
-                                    If (n <> LBound(x)) Then
-                                        AddQ txtPre.Text & x(n) & txtPost.Text, PRIORITY.CONSOLE_MESSAGE
+                                If (X(n) <> vbNullString) Then
+                                    If (n <> LBound(X)) Then
+                                        AddQ txtPre.Text & X(n) & txtPost.Text, PRIORITY.CONSOLE_MESSAGE
                                         
-                                        cboSend.AddItem txtPre.Text & x(n) & txtPost.Text, 0
+                                        cboSend.AddItem txtPre.Text & X(n) & txtPost.Text, 0
                                     Else
-                                        AddQ txtPre.Text & cboSend.Text & x(n) & txtPost.Text, _
+                                        AddQ txtPre.Text & cboSend.Text & X(n) & txtPost.Text, _
                                             PRIORITY.CONSOLE_MESSAGE
                                         
-                                        cboSend.AddItem txtPre.Text & cboSend.Text & x(n) & txtPost.Text, 0
+                                        cboSend.AddItem txtPre.Text & cboSend.Text & X(n) & txtPost.Text, 0
                                     End If
                                 End If
                             Next n
@@ -5471,7 +5451,7 @@ theEnd:
     Exit Sub
 
 ERROR_HANDLER:
-    AddChat RTBColors.ErrorMessageText, "Error " & Err.number & " (" & Err.description & ") " & _
+    AddChat RTBColors.ErrorMessageText, "Error " & Err.Number & " (" & Err.description & ") " & _
         "in procedure cboSend_KeyDown"
         
     Exit Sub
@@ -5679,8 +5659,8 @@ Sub InitBNetConnection()
     End If
 End Sub
 
-Private Sub sckBNet_Error(ByVal number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    Call Event_BNetError(number, description)
+Private Sub sckBNet_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+    Call Event_BNetError(Number, description)
 End Sub
 
 Private Sub sckMCP_Close()
@@ -5716,15 +5696,15 @@ Private Sub sckMCP_DataArrival(ByVal bytesTotal As Long)
     
 ERROR_HANDLER:
     AddChat vbRed, _
-        "Error (#" & Err.number & "): " & Err.description & " in sckMCP_DataArrival()."
+        "Error (#" & Err.Number & "): " & Err.description & " in sckMCP_DataArrival()."
 
     Exit Sub
 End Sub
 
-Private Sub sckMCP_Error(ByVal number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+Private Sub sckMCP_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
     If Not g_Online Then
         ' This message is ignored if we've been online for awhile.
-        AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & number & ": " & description
+        AddChat RTBColors.ErrorMessageText, "[REALM] Server error " & Number & ": " & description
         RealmError = True
         Unload frmRealm
     End If
@@ -5878,7 +5858,7 @@ Send:
 
 ERROR_HANDLER:
 
-    AddChat vbRed, "Error (#" & Err.number & "): " & Err.description & " in Timer_Timer()."
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in Timer_Timer()."
     
     Exit Sub
     
@@ -6284,7 +6264,7 @@ Private Sub UpTimer_Timer()
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.number & "): " & Err.description & " in UpTimer_Timer()."
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in UpTimer_Timer()."
 
     Exit Sub
     
@@ -6438,7 +6418,7 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
     Dim nameConversion As Boolean     ' ...
     Dim Q              As clsQueueOBj ' ...
     Dim j              As Integer     ' ...
-    Dim delay          As Integer     ' ...
+    Dim Delay          As Integer     ' ...
     Dim Index          As Long        ' ...
     '
     Static LastGTC  As Double
@@ -6675,23 +6655,23 @@ Function AddQ(ByVal Message As String, Optional msg_priority As Integer = -1, Op
             If (g_Queue.Count() = 1) Then
                 If (GTC - LastGTC >= 10000) Then
                     ' set default message delay when queue is empty (in ms)
-                    delay = 10
+                    Delay = 10
                     
                     ' are we issuing a ban or kick command?
                     If (msg_priority = PRIORITY.CHANNEL_MODERATION_MESSAGE) Then
-                        delay = g_BNCSQueue.BanDelay()
+                        Delay = g_BNCSQueue.BanDelay()
                     End If
                 End If
             End If
             
             ' If queueTimerID is 0 the timer is idle right now, so reset it
             If QueueTimerID = 0 Then
-                If delay = 0 Then
-                    delay = g_BNCSQueue.GetDelay(g_Queue.Peek.Message)
+                If Delay = 0 Then
+                    Delay = g_BNCSQueue.GetDelay(g_Queue.Peek.Message)
                 End If
             
                 ' set the delay before our next queue cycle
-                QueueTimerID = SetTimer(0&, 0&, delay, AddressOf QueueTimerProc)
+                QueueTimerID = SetTimer(0&, 0&, Delay, AddressOf QueueTimerProc)
             End If
         Next I
         
@@ -7326,17 +7306,17 @@ Sub ReloadConfig(Optional Mode As Byte = 0)
         Err.Clear
     
         If (ReadCfg(MN, "LocalIP") <> vbNullString) Then
-            If (Err.number = 0) Then: sckBNet.bind , ReadCfg(MN, "LocalIP")
-            If (Err.number = 0) Then: sckBNLS.bind , ReadCfg(MN, "LocalIP")
-            If (Err.number = 0) Then: sckMCP.bind , ReadCfg(MN, "LocalIP")
+            If (Err.Number = 0) Then: sckBNet.bind , ReadCfg(MN, "LocalIP")
+            If (Err.Number = 0) Then: sckBNLS.bind , ReadCfg(MN, "LocalIP")
+            If (Err.Number = 0) Then: sckMCP.bind , ReadCfg(MN, "LocalIP")
         End If
     End If
     
     Exit Sub
 
 ERROR_HANDLER:
-    If (Err.number = 10049) Then
-        AddChat vbRed, "Error (#" & Err.number & "): " & Err.description & " in ReloadConfig()."
+    If (Err.Number = 10049) Then
+        AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in ReloadConfig()."
     End If
     
     Resume Next
@@ -7573,7 +7553,7 @@ Private Sub sckBNet_DataArrival(ByVal bytesTotal As Long)
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.number & "): " & Err.description & " in sckBNet_DataArrival()."
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in sckBNet_DataArrival()."
     
     Exit Sub
 End Sub
@@ -7723,13 +7703,13 @@ Private Sub sckBNLS_DataArrival(ByVal bytesTotal As Long)
     
 ERROR_HANDLER:
     AddChat vbRed, _
-        "Error (#" & Err.number & "): " & Err.description & " in sckBNLS_DataArrival()."
+        "Error (#" & Err.Number & "): " & Err.description & " in sckBNLS_DataArrival()."
 
     Exit Sub
 End Sub
 
-Private Sub sckBNLS_Error(ByVal number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
-    Call Event_BNLSError(number, description)
+Private Sub sckBNLS_Error(ByVal Number As Integer, description As String, ByVal Scode As Long, ByVal source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+    Call Event_BNLSError(Number, description)
 End Sub
 
 'This function checks if the user selected when right-clicked is the same one when they click on the menu option. - FrOzeN
@@ -8059,7 +8039,7 @@ Private Function GetClanSelectedUser() As String
     End With
 End Function
 
-Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, x As Single, Y As Single)
+Private Sub lvClanList_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
     If Button = vbRightButton Then
         'lvClanList.SetFocus
         
@@ -8365,7 +8345,7 @@ Sub DoDisconnect(Optional ByVal DoNotShow As Byte = 0, Optional ByVal LeaveUCCAl
     Exit Sub
     
 ERROR_HANDLER:
-    AddChat vbRed, "Error (#" & Err.number & "): " & Err.description & " in DoDisconnect()."
+    AddChat vbRed, "Error (#" & Err.Number & "): " & Err.description & " in DoDisconnect()."
     
     Exit Sub
 End Sub

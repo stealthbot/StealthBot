@@ -735,7 +735,10 @@ Public Sub Event_ServerInfo(ByVal Username As String, ByVal Message As String)
         Caching = True
     
         ' ...
-        cache Message, 1
+        
+        ' Changed 08-18-09 - Hdx - Uses the new Channel cache function, Eventually to beremoved to script
+        'Call CacheChannelList(Message, 1)
+        Call CacheChannelList(enAdd, Message)
         
         ' ...
         'With frmChat.cacheTimer
