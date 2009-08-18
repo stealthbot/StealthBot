@@ -188,74 +188,6 @@ Public Enum BanTypes
     btUnban = 2
 End Enum
 
-Public Enum ControlTypes
-    btCommandBox = 0
-    btLabel = 1
-    btTextBox = 2
-    btTimer = 3
-    btPictureBox = 4
-    btCheckBox = 5
-    btOptionBox = 6
-    btComboBox = 7
-    btListBox = 8
-    btShape = 9
-    btLine = 10
-    btListView = 11
-    btImageList = 12
-    btINet = 13
-    btRichTextBox = 14
-End Enum
-
-Private obScriptForms As Object
-Private DictionaryKeys As String
-
-Private Type Timer
-    ID       As Integer
-    Script   As Module
-    code     As String
-    Interval As Integer
-End Type
-
-'Private Timers     As Collection
-'Private TimerCount As Integer
-
-' ...
-'Public Function setInterval(ScriptModule As Module, strCode As String, intInterval As Integer) As Integer
-'
-'    On Error Resume Next
-'
-'    Dim tmr As Timer ' ...
-'
-'    ' ...
-'    With tmr
-'        .ID = TimerCount + 1
-'        Set .Script = ScriptModule
-'        .Code = strCode
-'        .Interval = intInterval
-'    End With
-'
-'    ' ...
-'    Timers.Add tmr, TimerCount
-'
-'    ' ...
-'    setInterval = TimerCount
-'
-'    ' ...
-'    TimerCount = TimerCount + 1
-'
-'End Function
-
-' ...
-'Public Sub clearInterval(ScriptModule As Module, intIntervalID As Integer)
-'
-'    On Error Resume Next'
-'
-'    ' ...
-'    Timers.Remove intIntervalID
-'
-'End Sub
-
-
 '/* ******************************************************************************************
 ' *
 ' *
@@ -298,19 +230,9 @@ Public Function AddQ(ByVal sText As String, Optional ByVal msg_priority As Integ
     '// Disabled while in Clan SBs.
     If ((StrComp(g_Channel.Name, "Clan SBs", vbTextCompare) = 0) And _
         (IsStealthBotTech() = False)) Then Exit Function
-    
-    '// priority zero reserved for internal usage only
-    'If (msg_priority = 0) Then
-    '    msg_priority = 1
-    'End If
 
     '// ...
     AddQ = frmChat.AddQ(sText, msg_priority, g_lastQueueUser, Tag)
-    
-    '// ...
-    'If (g_lastQueueUser <> vbNullString) Then
-    '    g_lastQueueUser = vbNullString
-    'End If
 End Function
 
 
@@ -332,8 +254,6 @@ End Function
 '// InBot       defines whether or not the command has been issued from inside the bot. If it has,
 '//             the trigger is temporarily changed to "/". Basically, for scripting purposes you can
 '//             use it to control whether or not your command responses display publicly.
-'// CC          CC controls whether or not the command string is passed to the Custom Command processor.
-'//             For scripting purposes I will not allow the user to set CC, it is always 0.
 Public Sub Command(ByVal Username As String, ByVal Message As String, Optional ByVal IsLocal As Boolean = _
     False, Optional ByVal Whispered As Boolean = False)
     
@@ -2002,48 +1922,7 @@ Public Sub Dispose()
     Call Class_Terminate
 End Sub
 
-Private Sub Class_Initialize()
-    'Set obScriptForms = CreateObject("Scripting.Dictionary")
-End Sub
-
 'Re-coded this sub so it properly kills all the UI forms created that are still open. - FrOzeN
 Private Sub Class_Terminate()
-
-    'Static Disposed As Boolean
-    '
-    'If Not Disposed Then
-    '    Dim I As Integer, strParts() As String, frmTemp As frmScriptUI
-    '    strParts() = Split(DictionaryKeys, vbCrLf)
-    '
-    '    For I = 0 To UBound(strParts) - 1
-    '        If obScriptForms.Exists(strParts(I)) Then
-    '            Set frmTemp = obScriptForms.Item(strParts(I))
-    '            frmTemp.DestroyObjects
-    '            Unload frmTemp
-    '            Set frmTemp = Nothing
-    '        End If
-    '    Next I
-    '
-    '    obScriptForms.RemoveAll
-    '    Set obScriptForms = Nothing
-    '
-    '    Disposed = True
-    'End If
-
     frmChat.SControl.Reset
-    'frmChat.SCRestricted.Reset
-    
-'    'Check objects exist before attempting to unload them - FrOzeN
-'    If obScriptForms.Count <> 0 Then
-'
-'        'Go through and destroy all the Forms the user has created
-'        Dim X As Integer
-'
-'        For X = 0 To obScriptForms.Count
-'            Unload obScriptForms.Item(X)
-'            Call obScriptForms.Remove(X)
-'        Next X
-'
-'        Set obScriptForms = Nothing
-'    End If
 End Sub
