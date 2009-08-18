@@ -377,7 +377,7 @@ Private Function GetDefaultModuleProcs() As String
     ' OpenCommand() module-level function
     str = str & "Function OpenCommand(commandName)" & vbNewLine
     str = str & "   Set OpenCommand = _ " & vbNewLine
-    str = str & "         SSC.OpenCommand(ommandName, Script(""Name""))" & vbNewLine
+    str = str & "         SSC.OpenCommand(commandName, Script(""Name""))" & vbNewLine
     str = str & "End Function" & vbNewLine
 
     ' DeleteCommand() module-level function
