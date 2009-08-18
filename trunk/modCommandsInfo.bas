@@ -155,7 +155,7 @@ Public Function OnHelp(Command As clsCommandObj)
         If (docs.aliases.Count > 1) Then
             Command.Respond StringFormatA("[{0} (Aliases: {4})]: {1} (Syntax: {2}). {3}", _
             docs.Name, docs.description, docs.SyntaxString, docs.RequirementsStringShort, docs.AliasString)
-        If (docs.aliases.Count = 1) Then
+        ElseIf (docs.aliases.Count = 1) Then
             Command.Respond StringFormatA("[{0} (Alias: {4})]: {1} (Syntax: {2}). {3}", _
             docs.Name, docs.description, docs.SyntaxString, docs.RequirementsStringShort, docs.AliasString)
         Else
@@ -538,7 +538,7 @@ On Error GoTo ERROR_HANDLER
     Dim tmpbuf      As String
     Dim I           As Integer
     Dim xmldoc      As New DOMDocument60
-    Dim Commands    As IXMLDOMNodeList
+    Dim commands    As IXMLDOMNodeList
     Dim xpath       As String
     Dim lastCommand As String
     Dim thisCommand As String
@@ -570,14 +570,14 @@ On Error GoTo ERROR_HANDLER
     
     xmldoc.Load GetFilePath("commands.xml")
     
-    Set Commands = xmldoc.documentElement.selectNodes(xpath)
+    Set commands = xmldoc.documentElement.selectNodes(xpath)
 
-    If (Commands.length > 0) Then
-        For I = 0 To Commands.length - 1
+    If (commands.length > 0) Then
+        For I = 0 To commands.length - 1
             If (LenB(Flags) > 0) Then
-                thisCommand = Commands(I).parentNode.parentNode.parentNode.Attributes.getNamedItem("name").Text
+                thisCommand = commands(I).parentNode.parentNode.parentNode.Attributes.getNamedItem("name").Text
             Else
-                thisCommand = Commands(I).parentNode.parentNode.Attributes.getNamedItem("name").Text
+                thisCommand = commands(I).parentNode.parentNode.Attributes.getNamedItem("name").Text
             End If
             
             If (StrComp(thisCommand, lastCommand, vbTextCompare) <> 0) Then
