@@ -157,7 +157,6 @@ Public LastWhisperFromTime As Date
 Public LastWhisperTo As String
 Public Caching As Boolean
 Public UserTracker(14) As String
-Public AwayMsg As String
 Public Dii As Boolean
 Public PPL As Boolean
 Public PPLRespondTo As String

@@ -240,7 +240,7 @@ On Error GoTo ERROR_HANDLER
         
         For Each Restriction In Param.Restrictions 'Loop Through the Restrictions
             If (LenB(sTemp) > 0) Then
-                If (PrepareCheck(sTemp) Like Restriction.MatchMessage) Then 'If they match (regex)
+                If (CheckMatch(Restriction.MatchMessage, sTemp)) Then 'If they match (regex)
                     'If Rank = -1 It means it's missing, and it MUST have Flags. Or if Rank > User's Access
                     If (Restriction.RequiredRank = -1 Or Restriction.RequiredRank > dbAccess.Rank) Then
                         If (Not CheckForAnyFlags(Restriction.RequiredFlags, dbAccess.Flags)) Then
@@ -343,4 +343,17 @@ On Error GoTo ERROR_HANDLER
     
 ERROR_HANDLER:
     Call frmChat.AddChat(vbRed, "Error: #" & Err.Number & ": " & Err.description & " in clsCommandObj.Respond().")
+End Function
+
+Private Function CheckMatch(sExpression As String, sData As String) As Boolean
+On Error GoTo ERROR_HANDLER
+    Dim mRegExp  As New regExp
+    mRegExp.Global = True
+    mRegExp.Pattern = sExpression
+    CheckMatch = mRegExp.Test(sData)
+    
+    Exit Function
+    
+ERROR_HANDLER:
+    frmChat.AddChat vbRed, "Error: #" & Err.Number & ": " & Err.description & " in clsCommandObj.CheckMatch()"
 End Function

@@ -1108,7 +1108,24 @@
         <restrictions>
           <restriction name="COMMAND_USAGE">
             <match message="^[/]" />
-
+            <access>
+              <rank>100</rank>
+              <flags>
+                <flag>T</flag>
+              </flags>
+            </access>
+          </restriction>
+          <restriction name="OPS_USAGE">
+            <match message="^[oO][pP][sS][,:] " />
+            <access>
+              <rank>100</rank>
+              <flags>
+                <flag>T</flag>
+              </flags>
+            </access>
+          </restriction>
+          <restriction name="ALL_USAGE">
+            <match message="^[aA][lL][lL][,:] " />
             <access>
               <rank>100</rank>
               <flags>
@@ -1140,9 +1157,26 @@
         <restrictions>
           <restriction name="COMMAND_USAGE">
             <match message="^[/]" />
-
             <access>
-              <rank>60</rank>
+              <rank>100</rank>
+              <flags>
+                <flag>T</flag>
+              </flags>
+            </access>
+          </restriction>
+          <restriction name="OPS_USAGE">
+            <match message="^[oO][pP][sS][,:] " />
+            <access>
+              <rank>100</rank>
+              <flags>
+                <flag>T</flag>
+              </flags>
+            </access>
+          </restriction>
+          <restriction name="ALL_USAGE">
+            <match message="^[aA][lL][lL][,:] " />
+            <access>
+              <rank>100</rank>
               <flags>
                 <flag>T</flag>
               </flags>
@@ -1153,7 +1187,7 @@
     </arguments>
 
     <access>
-      <rank>50</rank>
+      <rank>60</rank>
       <flags>
         <flag>T</flag>
       </flags>
