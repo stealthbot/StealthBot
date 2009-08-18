@@ -1602,14 +1602,21 @@ End Function
 '//     ScriptName - if provided, this function will return that script's working directory
 '//                  if ommitted, this function will return the currently executing script's working directory
 Public Function GetWorkingDirectory(Optional ByVal scriptName As String = vbNullString) As String
-
-    If scriptName = vbNullString Then scriptName = modScripting.GetScriptName
     
+    ' if none provided, get current script name
+    If LenB(scriptName) = 0 Then scriptName = modScripting.GetScriptName
+    
+    ' if we are in /exec or something, return vbnullstring
+    If LenB(scriptName) = 0 Then Exit Function
+    
+    ' return working directory
     GetWorkingDirectory = BotPath() & "Scripts\" & scriptName & "\"
     
     On Error Resume Next
     
-    MkDir GetWorkingDirectory
+    If LenB(Dir$(GetWorkingDirectory, vbDirectory)) = 0 Then
+        MkDir GetWorkingDirectory
+    End If
 
 End Function
 

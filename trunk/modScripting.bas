@@ -465,7 +465,7 @@ Public Sub InitScripts()
     
     For I = 2 To m_sc_control.Modules.Count
         If (I > 1) Then
-            tmp = SharedScriptSupport.GetSettingsEntry("Enabled", GetScriptName(CStr(I)))
+            tmp = m_sc_control.Modules(I).CodeObject.GetSettingsEntry("Enabled")
         End If
 
         If (StrComp(tmp, "False", vbTextCompare) <> 0) Then
@@ -541,7 +541,7 @@ Public Function RunInAll(ParamArray Parameters() As Variant) As Boolean
         Set obj = SC.Modules(I)
         Set m_ExecutingMdl = obj
         
-        str = SC.CodeObject.GetSettingsEntry("Enabled")
+        str = obj.CodeObject.GetSettingsEntry("Enabled")
         
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
             
@@ -621,7 +621,7 @@ Public Function RunInSingle(ByRef obj As Module, ParamArray Parameters() As Vari
         For I = 1 To obsers.Count
             Set obser = GetModuleByName(obsers.Item(I))
             If (Not obser Is Nothing) Then 'Is the script real/loaded?
-                str = SharedScriptSupport.GetSettingsEntry("Enabled", obsers.Item(I))
+                str = obser.CodeObject.GetSettingsEntry("Enabled")
                 If (StrComp(str, "False", vbTextCompare) <> 0) Then 'Is it off?
                     Set m_ExecutingMdl = obser
                     CallByNameEx obser, "Run", VbMethod, arr
@@ -1125,7 +1125,7 @@ Public Function InitMenus()
         tmp.Parent = DynamicMenus("mnu" & Name)
         tmp.Caption = "Enabled"
         
-        If (StrComp(SharedScriptSupport.GetSettingsEntry("Enabled", Name), _
+        If (StrComp(GetModuleByName(Name).CodeObject.GetSettingsEntry("Enabled"), _
                 "False", vbTextCompare) <> 0) Then
                 
             tmp.Checked = True
@@ -1206,7 +1206,7 @@ Public Function Scripts() As Object
     For I = 2 To frmChat.SControl.Modules.Count
         scriptName = GetScriptName(CStr(I))
         
-        str = SharedScriptSupport.GetSettingsEntry("Public", scriptName)
+        str = GetScriptModule.CodeObject.GetSettingsEntry("Public")
         
         If (StrComp(str, "False", vbTextCompare) <> 0) Then
             Scripts.Add frmChat.SControl.Modules(I).CodeObject, scriptName

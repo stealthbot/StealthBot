@@ -407,7 +407,7 @@ On Error GoTo ERROR_HANDLER
     If (frmChat.SControl.Modules.Count > 1) Then
         For I = 2 To frmChat.SControl.Modules.Count
             Name = modScripting.GetScriptName(CStr(I))
-            Enabled = Not (StrComp(SharedScriptSupport.GetSettingsEntry("Enabled", Name), "False", vbTextCompare) = 0)
+            Enabled = Not (StrComp(GetModuleByName(Name).CodeObject.GetSettingsEntry("Enabled"), "False", vbTextCompare) = 0)
                 
             retVal = StringFormatA("{0}{1}{2}{3}{4}", _
                 retVal, _

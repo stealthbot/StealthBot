@@ -4843,27 +4843,28 @@ Private Function OnEnable(ByVal Username As String, ByRef dbAccess As udtGetAcce
     
     On Error Resume Next
     
-    Dim ModName As String
-    Dim Name    As String  ' ...
-    Dim I       As Integer ' ...
-    Dim str     As String  ' ...
+    Dim Module As Module
+    Dim Name   As String  ' ...
+    Dim I      As Integer ' ...
+    Dim str    As String  ' ...
 
     ' ...
     If (frmChat.SControl.Modules.Count > 1) Then
         For I = 2 To frmChat.SControl.Modules.Count
+            Set Module = frmChat.SControl.Modules(I)
             Name = _
                 modScripting.GetScriptName(CStr(I))
                 
             If (StrComp(Name, msgData, vbTextCompare) = 0) Then
                 str = _
-                    SharedScriptSupport.GetSettingsEntry("Enabled", Name)
+                    Module.CodeObject.GetSettingsEntry("Enabled")
             
                 If (StrComp(str, "True", vbTextCompare) = 0) Then
                     cmdRet(0) = Name & " is already enabled."
                 Else
-                    SharedScriptSupport.WriteSettingsEntry "Enabled", "True", , Name
-                        
-                    InitScript frmChat.SControl.Modules(I)
+                    Module.CodeObject.WriteSettingsEntry "Enabled", "True"
+                    
+                    InitScript Module
                         
                     cmdRet(0) = Name & " has been enabled."
                 End If
@@ -4883,21 +4884,24 @@ Private Function OnDisable(ByVal Username As String, ByRef dbAccess As udtGetAcc
     
     On Error Resume Next
     
-    Dim Name    As String  ' ...
-    Dim I       As Integer ' ...
+    Dim Module As Module
+    Dim Name   As String  ' ...
+    Dim I      As Integer ' ...
     
     ' ...
     If (frmChat.SControl.Modules.Count > 1) Then
         For I = 2 To frmChat.SControl.Modules.Count
+            Set Module = frmChat.SControl.Modules(I)
+            
             Name = _
                 modScripting.GetScriptName(CStr(I))
                 
             If (StrComp(Name, msgData, vbTextCompare) = 0) Then
-                RunInSingle frmChat.SControl.Modules(I), "Event_Close"
+                RunInSingle Module, "Event_Close"
                 
-                SharedScriptSupport.WriteSettingsEntry "Enabled", "False", , Name
+                Module.CodeObject.WriteSettingsEntry "Enabled", "False"
                     
-                DestroyObjs frmChat.SControl.Modules(I)
+                DestroyObjs Module
 
                 cmdRet(0) = Name & " has been disabled."
                     
